@@ -40,11 +40,17 @@ public class ApportionConfig {
 
 
     //Persister Config
-    @Value("${persister.save.apportion.request.topic}")
-    private String requestTopic;
+    @Value("${persister.save.bill.apportion.request.topic}")
+    private String billRequestTopic;
 
-    @Value("${persister.save.apportion.response.topic}")
-    private String responseTopic;
+    @Value("${persister.save.bill.apportion.response.topic}")
+    private String billResponseTopic;
+
+    @Value("${persister.save.demand.apportion.request.topic}")
+    private String demandRequestTopic;
+
+    @Value("${persister.save.demand.apportion.response.topic}")
+    private String demandResponseTopic;
 
     //MDMS
     @Value("${egov.mdms.host}")

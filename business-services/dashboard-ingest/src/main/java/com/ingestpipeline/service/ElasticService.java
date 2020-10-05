@@ -17,7 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -303,6 +308,33 @@ public class ElasticService implements IESService {
 
 		return Boolean.TRUE;
 	}
+	
+	@Override
+    public List searchMultiple(String index, String searchQuery) throws Exception {
+
+        String url = indexServiceHost + index + indexServiceHostSearch;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        LOGGER.info("searching searchMultiple ES for query::" + searchQuery + "::on::" + index + "::ON URL::" + url);
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(searchQuery, headers);
+
+        try {
+			ResponseEntity<Object> response = retryTemplate.postForEntity(url,requestEntity);
+
+            Map responseNode = new ObjectMapper().convertValue(response.getBody(), Map.class);
+			Map hits = (Map)responseNode.get("hits");
+            if((Integer)hits.get("total") >=1)
+                return (List) ((ArrayList)hits.get("hits"));
+
+        } catch (HttpClientErrorException e) {
+            e.printStackTrace();
+            LOGGER.error("client error while searchMultiple searching ES : " + e.getMessage());
+
+        }
+        return null;
+    }
 	
 	private IncomingData setIncomingData(String index, String version, Object documentValue) {
 		IncomingData incomingData = new IncomingData();

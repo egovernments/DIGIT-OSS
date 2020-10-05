@@ -62,6 +62,7 @@ public class EnrichmentConsumer implements KafkaConsumer {
 			Map updatedIncomingData = enrichmentService.enrichData(incomingData);
 
 			if(esPushDirect) {
+				LOGGER.info("##esPushDirect## : "+esPushDirect);
 				elasticService.push(incomingData);
 			} else {
 				LOGGER.info("Pushing to:: {} :: docId:: {}" , enrichedDataTopic, " docId:: "+docId);

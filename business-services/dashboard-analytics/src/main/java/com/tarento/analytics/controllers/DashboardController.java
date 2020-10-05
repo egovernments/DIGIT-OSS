@@ -154,7 +154,7 @@ public class DashboardController {
 				requestInfo.setModuleLevel(Constants.Modules.HOME_REVENUE);
 			}
 
-			Object responseData = clientServiceFactory.get(requestInfo.getVisualizationCode()).getAggregatedData(requestInfo, user.getRoles());
+				Object responseData = clientServiceFactory.get(requestInfo.getVisualizationCode()).getAggregatedData(requestInfo, user.getRoles());
 			response = ResponseGenerator.successResponse(responseData);
 
 		} catch (AINException e) {

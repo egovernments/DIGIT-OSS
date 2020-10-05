@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -51,6 +51,7 @@ public interface IESService {
      */
     Map search(String index, String query) throws Exception;
     
+    List searchMultiple(String index, String query) throws Exception;
     Boolean push(Map requestBody) throws Exception;
 
 

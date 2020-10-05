@@ -440,11 +440,14 @@ public class QueryServiceImpl implements QueryService {
 			while(filtersItr.hasNext()) { 
 				Entry<String, Object> entry = filtersItr.next();
 				if(null != requestQueryMaps.get(entry.getKey()) && !String.valueOf(entry.getValue()).equals(Constants.Filters.FILTER_ALL)) {
+					// Filters in put filters are added as esfilters usign mapping in requestQueryMap
 					String esQueryKey = requestQueryMaps.get(entry.getKey()).asText();
 					request.getEsFilters().put(esQueryKey, entry.getValue());
 				}
 			}
+
 			ElasticSearchDictator dictator = elasticSearchDao.createSearchDictatorV2(request, indexName, "", dateReferenceField);
+
 			SearchRequest searchRequest = elasticSearchDao.buildElasticSearchQuery(dictator);
 			JsonNode querySegment = mapper.readTree(searchRequest.source().toString());
 			objectNode = (ObjectNode) querySegment;
@@ -452,7 +455,8 @@ public class QueryServiceImpl implements QueryService {
 			objectNode.put(Constants.JsonPaths.AGGS, mapper.readTree(aggrQuery).get(Constants.JsonPaths.AGGS));
 		} catch (Exception ex) {
 			logger.error("Encountered an Exception while parsing the JSON : " + ex.getMessage());
-		}
+			throw new RuntimeException(ex);
+	    }
 	    return objectNode; 
 		
 	}

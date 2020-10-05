@@ -43,6 +43,15 @@ public class MetricChartResponseHandler implements IResponseHandler{
     @Autowired
     ResponseRecorder responseRecorder;
 
+
+    /**
+     * Adds the data into ResponseResponder
+     * @param request
+     * @param aggregations
+     * @return
+     * @throws IOException
+     */
+
     @Override
     public AggregateDto translate(AggregateRequestDto request, ObjectNode aggregations) throws IOException {
         List<Data> dataList = new ArrayList<>();
@@ -51,7 +60,8 @@ public class MetricChartResponseHandler implements IResponseHandler{
 
         JsonNode aggregationNode = aggregations.get(AGGREGATIONS);
         JsonNode chartNode = null; 
-        
+
+        // Fetches the chart config
         if(request.getVisualizationCode().charAt(0) == insightPrefix) { 
         	String internalChartId = request.getVisualizationCode().substring(1);
         	chartNode = configurationLoader.get(API_CONFIG_JSON).get(internalChartId);
@@ -63,15 +73,25 @@ public class MetricChartResponseHandler implements IResponseHandler{
         List<Double> totalValues = new ArrayList<>();
         String chartName = chartNode.get(CHART_NAME).asText();
         String action = chartNode.get(ACTION).asText();
-        
+
+
+        /*
+        * Aggreagation paths are the name of aggregations
+        * Could have been inferred from aggregationNode i.e from query Dont know why it was added in config?
+        * */
         List<Double> percentageList = new ArrayList<>();
         ArrayNode aggrsPaths = (ArrayNode) chartNode.get(AGGS_PATH);
+
+        /*
+        * Sums all value of all aggrsPaths i.e all aggregations
+        * */
 
         aggrsPaths.forEach(headerPath -> {
             List<JsonNode> values =  aggregationNode.findValues(headerPath.asText());
             values.stream().parallel().forEach(value -> {
                 List<JsonNode> valueNodes = value.findValues(VALUE).isEmpty() ? value.findValues(DOC_COUNT) : value.findValues(VALUE);
                 Double sum = valueNodes.stream().mapToDouble(o -> o.asDouble()).sum();
+                // Why is aggrsPaths.size()==2 required? Is there validation if action = PERCENTAGE and aggrsPaths > 2
                 if(action.equals(PERCENTAGE) && aggrsPaths.size()==2){
                     percentageList.add(sum);
                 } else {

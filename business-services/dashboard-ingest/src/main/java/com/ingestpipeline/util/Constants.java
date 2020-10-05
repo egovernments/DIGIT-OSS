@@ -58,6 +58,7 @@ public interface Constants {
 	
 	public interface DomainConfigurations { 
 		public static final String COLLECTION_DOMAIN_CONFIG = "DomainConfig";
+		public static final String ENHANCE_DOMAIN_CONFIG = "EnhanceDomainConfig";
 	}
 	
 	public interface PipelineRules {

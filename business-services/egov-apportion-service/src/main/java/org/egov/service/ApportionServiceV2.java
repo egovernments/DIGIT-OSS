@@ -63,7 +63,7 @@ public class ApportionServiceV2 {
         ApportionV2 apportion;
 
         //Save the request through persister
-        producer.push(config.getRequestTopic(), request);
+        producer.push(config.getBillRequestTopic(), request);
 
         //Fetch the required MDMS data
         Object masterData = mdmsService.mDMSCall(request.getRequestInfo(), request.getTenantId());
@@ -101,7 +101,7 @@ public class ApportionServiceV2 {
         }
 
         //Save the response through persister
-        producer.push(config.getResponseTopic(), request);
+        producer.push(config.getBillResponseTopic(), request);
         return bills;
     }
 
@@ -140,7 +140,7 @@ public class ApportionServiceV2 {
         ApportionV2 apportion;
 
         //Save the request through persister
-        producer.push(config.getRequestTopic(), request);
+        producer.push(config.getDemandRequestTopic(), request);
 
         //Fetch the required MDMS data
         Object masterData = mdmsService.mDMSCall(request.getRequestInfo(), request.getTenantId());
@@ -168,7 +168,7 @@ public class ApportionServiceV2 {
 
 
         //Save the response through persister
-        producer.push(config.getResponseTopic(), request);
+        producer.push(config.getDemandResponseTopic(), request);
         return demands;
     }
 

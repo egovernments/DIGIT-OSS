@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.ingestpipeline.model.SourceReferences;
@@ -24,6 +25,7 @@ import com.google.common.hash.Hashing;
 import com.ingestpipeline.config.DomainConfig;
 import com.ingestpipeline.config.DomainConfigFactory;
 import com.ingestpipeline.configfactory.CollectionDomainConfig;
+import com.ingestpipeline.configfactory.EnhanceDomainConfig;
 import com.ingestpipeline.model.DomainIndexConfig;
 import com.ingestpipeline.model.TargetData;
 import com.ingestpipeline.repository.ElasticSearchRepository;
@@ -57,7 +59,8 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 
 	private static final String BUSINESS_SERVICE = "businessService";
 	private static final String DATA_OBJECT = "dataObject";
-	private static final String DATA_CONTEXT = "dataContext"; 
+	private static final String DATA_CONTEXT = "dataContext";
+	private static final String DATA_ENHANCEMENT = "dataEnhancement";
 
 	@Autowired
 	private ElasticSearchRepository elasticRepository;
@@ -104,7 +107,8 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 			LOGGER.info("indexConfig ## "+indexConfig);
 			if(indexConfig != null){
 				String indexName = indexConfig.getIndexName();
-				String query = indexConfig.getQuery();
+
+				String query = indexConfig.getQuery();					
 
 				try {
 					ObjectNode queryNode = new ObjectMapper().readValue(query, ObjectNode.class);
@@ -115,7 +119,8 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 						String arg = ref.getFieldName();
 						String argVal = copyNode.findValue(arg).asText();
 						String[] values = argVal.split(ref.getSeperator());
-						String[] exps = ref.getExpression().split(ref.getSeperator());
+
+						String[] exps = ref.getExpression().split(ref.getSeperator());		
 
 						for(int i=0; i<exps.length; i++){
 							if(values[i] != null)
@@ -140,6 +145,7 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 					if(domainNode != null){
 						Object transDomainResponse = enrichTransform.transform(domainNode, businessTypeVal.toString());
 						incomingData.put("domainObject", transDomainResponse);
+						enhanceData(incomingData);
 
 					} else {
 						LOGGER.info("Fetching record from ES for domain:: {} failed ",  businessTypeVal);
@@ -213,6 +219,86 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 		String authString = String.format("%s:%s", userName, password);
 		byte[] encodedAuthString = Base64.encodeBase64(authString.getBytes(Charset.forName(US_ASCII)));
 		return String.format(BASIC_AUTH, new String(encodedAuthString));
+	}
+	
+	/**
+	 * This method used to add the external index data into the es index
+	 * 
+	 * @param incomingData
+	 * @return
+	 */
+	private Map enhanceData(Map incomingData) {
+		DomainConfig domainConfig = domainConfigFactory.getConfiguration(DATA_ENHANCEMENT);
+		LOGGER.info("enhanceDomainConfig ## "+domainConfig);
+
+		if(domainConfig instanceof EnhanceDomainConfig	) {
+			// prepare the query required based on incoming data businessType
+			ObjectNode incomingNode = new ObjectMapper().convertValue(incomingData.get(DATA_OBJECT), ObjectNode.class);
+			ObjectNode copyNode = incomingNode.deepCopy();
+			String businessTypeVal = copyNode.findValue(BUSINESS_SERVICE).asText();
+
+			DomainIndexConfig indexConfig = domainConfig.getIndexConfig(businessTypeVal.toString());
+			LOGGER.info("indexConfig ## "+indexConfig);
+			if(indexConfig != null){
+				String indexName = indexConfig.getIndexName();
+				String query = indexConfig.getQuery();
+							
+
+				try {
+					ObjectNode queryNode = new ObjectMapper().readValue(query, ObjectNode.class);
+					LOGGER.info("queryNode 114 ## "+queryNode.toString());
+
+					Map<String, Object> expValMap = new HashMap<>();
+					// Source references to be prepare a map of fieldName & value
+					for (SourceReferences ref : indexConfig.getSourceReferences()){
+						String arg = ref.getFieldName();
+						LOGGER.info("arg350## " + arg);
+						String argVal = copyNode.findValue(arg).asText();
+						String[] values = argVal.split(ref.getSeperator());
+						String[] exps = ref.getExpression().split(ref.getSeperator());
+						
+						for(int i=0; i<exps.length; i++){
+							if(i < values.length && values[i] != null)
+								expValMap.put(exps[i], values[i]);
+						}
+					}
+
+					// To use produce the value of fieldNames and replace the query field value
+					for (TargetReferences ref : indexConfig.getTargetReferences()) {
+						String[] exps = ref.getExpression().split(ref.getSeperator());
+
+						StringBuffer buff = new StringBuffer();
+						for(String exp : exps){
+							buff.append(expValMap.get(exp)+ref.getSeperator());
+						}
+						ref.setValue(buff.substring(0,buff.length()-1));
+						JSONUtil.replaceFieldValue(queryNode, ref.getArgument(), ref.getValue());
+
+					}
+					LOGGER.info("Enhance Query node "+ queryNode);
+					List domainNode = elasticService.searchMultiple(indexName, queryNode.toString());
+					if(domainNode != null){
+						Object transDomainResponse = enrichTransform.transformEnhanceData(domainNode, businessTypeVal.toString());
+						Object domainObject = incomingData.get("domainObject");
+						Map domainMap = (Map) domainObject;
+						domainMap.put("assessmentsDetails", transDomainResponse);
+
+					} else {
+						LOGGER.info("Fetching record from ES for domain:: {} failed ",  businessTypeVal);
+					}
+					LOGGER.info("Enhance Data Transformed");
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					LOGGER.error("Pre-processing Enhance data - failed  :: {}" , e.getMessage());
+				}
+			} else {
+				LOGGER.info("No enhance indexConfig for businessType::  {}",businessTypeVal);
+			}
+
+		}
+
+		return incomingData;
 	}
 
 }

@@ -1,0 +1,12 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "assessmentNumber": "assessmentNumber",
+      "assessmentDate": "assessmentDate",
+      "financialYear": "financialYear",
+      "status" : "status",
+      "propertyId": "propertyId"      
+    }
+  }
+]

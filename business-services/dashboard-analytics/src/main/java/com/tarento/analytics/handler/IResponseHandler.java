@@ -90,7 +90,7 @@ public interface IResponseHandler {
 
 	/**
 	 * Prepare aggregated dato for a chart node
-	 *
+	 * Also sets the drillChart Value
 	 * @param chartNode
 	 * @param dataList - data plots object
 	 * @return

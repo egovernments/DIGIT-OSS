@@ -2,6 +2,11 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.1 - 2020-09-01
+
+- Added README and LOCALSETUP
+- Changes in assessment indexing
+
 ## 1.1.0 - 2020-06-23
 
 - Added typescript definition generation plugin

@@ -2,6 +2,11 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.1 - 2020-09-01
+
+- Added LOCALSETUP.md and README.md
+- updated Plot object to support String dataType
+
 ## 1.1.0 - 2020-06-24
 
 - Added typescript definition generation plugin

@@ -130,5 +130,7 @@ public class Constants {
 
 	public static final SimpleDateFormat DASHBOARD_DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy");
 
+	//data type
+	public static final String STRING_DATATYPE = "string";
 
 }

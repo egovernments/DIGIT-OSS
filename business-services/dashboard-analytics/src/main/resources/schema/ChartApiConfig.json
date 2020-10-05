@@ -1,4 +1,46 @@
 {
+  "wardDrillDown": {
+    "kind": "drillDown",
+    "chartName": "Ward",
+    "queries": [
+      {
+        "module": "PT",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\r\n     \"AGGR\":{\r\n        \"filter\":{\r\n           \"bool\":{\r\n              \"must_not\":[\r\n                 {\r\n                    \"term\":{\r\n                       \"dataObject.tenantId.keyword\":\"tenant\"\r\n                    }\r\n                 },\r\n                 {\r\n                    \"terms\":{\r\n                       \"dataObject.paymentDetails.bill.status.keyword\":[\r\n                          \"Cancelled\"\r\n                       ]\r\n                    }\r\n                 }\r\n              ]\r\n           }\r\n        },\r\n        \"aggs\":{\r\n           \"Ward \":{\r\n              \"terms\":{\r\n                 \"field\":\"domainObject.ward.name.keyword\",\r\n                 \"size\":200\r\n              },\r\n              \"aggs\":{\r\n                 \"ULB\":{\r\n                    \"terms\":{\r\n                       \"field\":\"domainObject.tenantId.keyword\",\r\n                       \"size\":200\r\n                    },\r\n                    \"aggs\":{\r\n                       \"Receipt Number\":{\r\n                          \"terms\":{\r\n                             \"field\":\"dataObject.paymentDetails.receiptNumber.keyword\"\r\n                          },\r\n                          \"aggs\":{\r\n                             \"Amount Collected\":{\r\n                                \"sum\":{\r\n                                   \"field\":\"dataObject.paymentDetails.totalAmountPaid\"\r\n                                }\r\n                             },\r\n                             \"Payment Mode\":{\r\n                                \"terms\":{\r\n                                   \"field\":\"dataObject.paymentMode.keyword\"\r\n                                }\r\n                             }\r\n                          }\r\n                       }\r\n                    }\r\n                 }\r\n              }\r\n           }\r\n        }\r\n     }\r\n  }}"
+      }
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Ward",
+    "aggregationPaths": [
+      "ULB",
+      "Receipt Number",
+      "Amount Collected",
+      "Payment Mode"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "ULB": "string"
+      },
+      {
+        "Receipt Number": "string"
+      },
+      {
+        "Amount Collected": "amount"
+      },
+      {
+        "Payment Mode": "string"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
 
 
   "todaysCollectionv2": {

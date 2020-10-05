@@ -77,9 +77,9 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
 
                 if (plotMap.size() > 0) {
                     Map<String, Plot> plots = new LinkedHashMap<>();
-                    Plot sno = new Plot(SERIAL_NUMBER, null, TABLE_TEXT);
+                    Plot sno = new Plot(SERIAL_NUMBER, TABLE_TEXT);
                     sno.setLabel("" + idx[0]++);
-                    Plot plotkey = new Plot(plotLabel.isEmpty() ? TABLE_KEY : plotLabel, null, TABLE_TEXT);
+                    Plot plotkey = new Plot(plotLabel.isEmpty() ? TABLE_KEY : plotLabel, TABLE_TEXT);
                     plotkey.setLabel(key);
 
                     plots.put(SERIAL_NUMBER, sno);

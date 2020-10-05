@@ -45,6 +45,9 @@ public class PieChartResponseHandler implements IResponseHandler {
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
         ArrayNode aggrsPaths = (ArrayNode) chartNode.get(IResponseHandler.AGGS_PATH);
 
+        /**
+         * For every aggregation on plot object is added
+         */
         aggrsPaths.forEach(headerPath -> {
             aggregationNode.findValues(headerPath.asText()).stream().parallel().forEach(valueNode->{
                 if(valueNode.has(BUCKETS)){

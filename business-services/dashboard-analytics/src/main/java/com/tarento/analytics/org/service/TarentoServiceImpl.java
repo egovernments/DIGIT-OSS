@@ -97,7 +97,12 @@ public class TarentoServiceImpl implements ClientService {
 			if(continueWithInsight) { 
 				String insightVisualizationCode = insightPrefix  + request.getVisualizationCode(); 
 				request.setVisualizationCode(insightVisualizationCode);
+				/*
+						Data is fetched with updated RequestDates (updated in getInsightsDate which subtracted one interval from the dates)
+				*
+				* */
 				executeConfiguredQueries(chartNode, insightAggrObjectNode, insightNodes, request, interval);
+
 				request.setChartNode(chartNode);
 				responseHandler = responseHandlerFactory.getInstance(chartType);
 				if(insightAggrObjectNode.fields().hasNext()){
@@ -111,6 +116,15 @@ public class TarentoServiceImpl implements ClientService {
 		return aggregateDto;
 	}
 
+	/**
+	 * Executes queries and enriches the respons in aggrObjectNode
+	 * @param chartNode The Chart Config defined in ChartApiConfig.json
+	 * @param aggrObjectNode Object in which response is enriched
+	 * @param nodes Don't know why passed as argument should have been defined in function itself
+	 * @param request The API request
+	 * @param interval Interval ( eg: Month) defines in RequestDate in AggregateRequestDto noot needed as seperate argument as it can
+	 *                 be fetched from  AggregateRequestDto
+	 */
 	private void executeConfiguredQueries(ObjectNode chartNode, ObjectNode aggrObjectNode, ObjectNode nodes, AggregateRequestDto request, String interval) {
 		preHandle(request, chartNode, mdmsApiMappings);
 
@@ -132,13 +146,20 @@ public class TarentoServiceImpl implements ClientService {
 					nodes.set(indexName,aggrNode.get(Constants.JsonPaths.AGGREGATIONS));
 				}catch (Exception e) {
 					logger.error("Encountered an Exception while Executing the Query : " + e.getMessage());
+					throw new RuntimeException(e);
 				}
 				aggrObjectNode.set(Constants.JsonPaths.AGGREGATIONS, nodes);
 
 			}
 		});
 	}
-	
+
+	/**
+	 * Updates the RequestDate for insight data
+	 * @param request
+	 * @param insightInterval
+	 * @return
+	 */
 	private Boolean getInsightsDate(AggregateRequestDto request, String insightInterval) { 
 		Long daysBetween = daysBetween(Long.parseLong(request.getRequestDate().getStartDate()), 
 				Long.parseLong(request.getRequestDate().getEndDate()));
