@@ -179,6 +179,7 @@ const getPropertyData = async (action, state, dispatch) => {
     setCardVisibility(state, action, dispatch);
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
+    dispatch(prepareFinalObject("PropertyOld",{}));
   } catch (e) {
     console.log(e);
   }
@@ -271,6 +272,7 @@ const getApplicationData = async (action, state, dispatch) => {
     set(payload, 'Properties[0].documents', documents)
     dispatch(prepareFinalObject("DocumentsPrefill", documents && Array.isArray(documents) && documents.length > 0 ? true : false));
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
+    dispatch(prepareFinalObject("PropertyOld",cloneDeep(payload.Properties[0])));
     setCardVisibility(state, action, dispatch);
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     // Prefilling radio buttons
