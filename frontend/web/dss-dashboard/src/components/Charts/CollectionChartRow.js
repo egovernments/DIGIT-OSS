@@ -12,6 +12,7 @@ import Arrow_Downward from '../../images/arrows/Arrow_Downward.svg'
 import Arrow_Upward from '../../images/arrows/Arrow_Upward.svg'
 import moment from 'moment';
 import { removeSignFromInsightData } from '../../utils/commons';
+import { isMobile } from 'react-device-detect';
 
 class CollectionChartRow extends React.Component {
 	constructor(props) {
@@ -99,7 +100,7 @@ class CollectionChartRow extends React.Component {
 							{/* <NFormatter value={data.value} nType={data.valueSymbol} /> */}
 						</div>
 						{data.insight_data &&
-						<div style={{ marginTop:"-8px",whiteSpace:"nowrap"}}>
+						<div style={{ marginTop:"-8px",whiteSpace:"nowrap"                     ,  position: isMobile?'absolute':"unset",right: '10px'}}>
 							<React.Fragment>
 								<span style={{ marginLeft: "2vh",fontSize:'initial',paddingRight: "8px" }}>
 									<img src={insightIcon} style={{ height: "12px", color: insightColor }} />

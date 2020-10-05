@@ -189,13 +189,15 @@ class Dashboard extends Component {
       }).value();
 
 
-      return (<Cards>
+      return (<Cards style={{    maxWidth:isMobile? '85vw':'auto'}}>
         <Card style={{ overflow: 'initial'}}>
           <div className={classes.heading} onClick={this.goback.bind(this)}>
             <ArrowBack /> <span style={{ marginTop: 'auto', marginBottom: 'auto' }}>Back</span>
           </div>
         </Card>
+        <div    style={{    maxWidth:isMobile? '85vw':'auto'}}>
         <UiTable
+      
           data={newData}
           columnData={columnData}
           needHash={false}
@@ -208,6 +210,8 @@ class Dashboard extends Component {
           excelName={"All ULBs"}
 
         />
+        </div>
+ 
       </Cards >)
     } else {
       return null;

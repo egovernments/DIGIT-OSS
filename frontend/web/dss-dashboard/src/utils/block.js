@@ -136,7 +136,11 @@ const addPages = (elem, cityLogo,pdfHeader) => {
                                 pdf.text(pdfHeader,60,30,0,0,0)
                             }
                             if (body) {
-                                pdf.addImage(body, 'PNG', 5, 5, 50, 48)
+                                try{
+                                    pdf.addImage(body, 'PNG', 5, 5, 50, 48)
+                                }catch(e){
+                                    console.log(e);
+                                }
                             }
                             if (dataUrl) {
                                 pdf.addImage(dataUrl, 'JPG', 0, 55, hw.imgWidth - 50, 0);
