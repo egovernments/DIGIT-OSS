@@ -342,7 +342,7 @@ public class VoucherServiceImpl implements VoucherService {
 				}
 				return (String) response;
 			} catch (Exception e) {
-				throw new VoucherCustomException(ProcessStatus.FAILED, "Failed to fetch service attribute");
+				throw new VoucherCustomException(ProcessStatus.FAILED, "Failed to fetch service attribute: " + e.getMessage());
 			}
 		}
 		return null;
@@ -356,7 +356,7 @@ public class VoucherServiceImpl implements VoucherService {
 				res.append(responseSource.get(key)).append(".");
 			}
 		}
-		response = res.deleteCharAt(res.length() - 1);
+		response = res.length() != 0 ? res.deleteCharAt(res.length() - 1).toString() : null;
 		return response;
 	}
 
