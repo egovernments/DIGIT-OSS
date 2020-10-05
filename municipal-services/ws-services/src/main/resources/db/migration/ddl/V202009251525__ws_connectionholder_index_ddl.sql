@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS index_eg_ws_connectionholder_userid ON eg_ws_connectionholder (userid);

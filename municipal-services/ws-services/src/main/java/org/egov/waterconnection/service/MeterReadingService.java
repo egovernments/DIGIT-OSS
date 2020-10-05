@@ -36,9 +36,6 @@ public class MeterReadingService {
 	@Autowired
 	private WaterServicesUtil waterServiceUtil;
 	
-	@Autowired
-	private MasterDataService masterDataService;
-
 	@SuppressWarnings("unchecked")
 	public void process(WaterConnectionRequest request, String topic) {
 		try {

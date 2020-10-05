@@ -81,7 +81,7 @@ public class NotificationUtil {
 	 * @param localizationMessage The localization messages
 	 * @return message for the specific code
 	 */
-	private String getMessageTemplate(String notificationCode, String localizationMessage) {
+	public String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
 		path = path.replace("{}", notificationCode);
 		String message = null;
@@ -120,9 +120,14 @@ public class NotificationUtil {
 	 * @param localizationMessage
 	 * @return message template
 	 */
-	public String getCustomizedMsgForSMS(String action, String applicationStatus, String localizationMessage) {
+	public String getCustomizedMsgForSMS(String action, String applicationStatus, String localizationMessage, int reqType) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+		if(reqType == WCConstants.UPDATE_APPLICATION){
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+		}
+		if(reqType == WCConstants.MODIFY_CONNECTION){
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+		}
 		return getMessageTemplate(builder.toString(), localizationMessage);
 	}
 
@@ -132,9 +137,14 @@ public class NotificationUtil {
 	 * @param localizationMessage
 	 * @return In app message template
 	 */
-	public String getCustomizedMsgForInApp(String action, String applicationStatus, String localizationMessage) {
+	public String getCustomizedMsgForInApp(String action, String applicationStatus, String localizationMessage, int reqType) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
+		}
+		if (reqType == WCConstants.MODIFY_CONNECTION) {
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
+		}
 		return getMessageTemplate(builder.toString(), localizationMessage);
 	}
 	
@@ -154,6 +164,7 @@ public class NotificationUtil {
 	 * @param request EventRequest Object
 	 */
 	public void sendEventNotification(EventRequest request) {
+		log.info("Event: " + request.toString());
 		producer.push(config.getSaveUserEventsTopic(), request);
 	}
 	

@@ -5,6 +5,6 @@ import org.egov.waterconnection.web.models.WaterConnectionRequest;
 
 public interface WaterActionValidator {
 
-	ValidatorResult validate(WaterConnectionRequest waterConnectionRequest, boolean isUpdate);
+	ValidatorResult validate(WaterConnectionRequest waterConnectionRequest, int reqType);
 
 }

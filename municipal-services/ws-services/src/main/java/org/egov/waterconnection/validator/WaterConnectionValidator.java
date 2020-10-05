@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.tracer.model.CustomException;
-import org.egov.waterconnection.web.models.ValidatorResult;
-import org.egov.waterconnection.web.models.WaterConnection;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
+import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.service.MeterInfoValidator;
 import org.egov.waterconnection.service.PropertyValidator;
 import org.egov.waterconnection.service.WaterFieldValidator;
+import org.egov.waterconnection.web.models.ValidatorResult;
+import org.egov.waterconnection.web.models.WaterConnection;
+import org.egov.waterconnection.web.models.WaterConnectionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -37,22 +38,22 @@ public class WaterConnectionValidator {
 	/**Used strategy pattern for avoiding multiple if else condition
 	 * 
 	 * @param waterConnectionRequest
-	 * @param isUpdate
+	 * @param reqType
 	 */
-	public void validateWaterConnection(WaterConnectionRequest waterConnectionRequest, boolean isUpdate) {
+	public void validateWaterConnection(WaterConnectionRequest waterConnectionRequest, int reqType) {
 		Map<String, String> errorMap = new HashMap<>();
 		if (StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getProcessInstance())
 				|| StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction())) {
 			errorMap.put("INVALID_ACTION", "Workflow obj can not be null or action can not be empty!!");
 			throw new CustomException(errorMap);
 		}
-		ValidatorResult isPropertyValidated = propertyValidator.validate(waterConnectionRequest, isUpdate);
+		ValidatorResult isPropertyValidated = propertyValidator.validate(waterConnectionRequest, reqType);
 		if (!isPropertyValidated.isStatus())
 			errorMap.putAll(isPropertyValidated.getErrorMessage());
-		ValidatorResult isWaterFieldValidated = waterFieldValidator.validate(waterConnectionRequest, isUpdate);
+		ValidatorResult isWaterFieldValidated = waterFieldValidator.validate(waterConnectionRequest, reqType);
 		if (!isWaterFieldValidated.isStatus())
 			errorMap.putAll(isWaterFieldValidated.getErrorMessage());
-		ValidatorResult isMeterInfoValidated = meterInfoValidator.validate(waterConnectionRequest, isUpdate);
+		ValidatorResult isMeterInfoValidated = meterInfoValidator.validate(waterConnectionRequest, reqType);
 		if (!isMeterInfoValidated.isStatus())
 			errorMap.putAll(isMeterInfoValidated.getErrorMessage());
 
@@ -78,10 +79,10 @@ public class WaterConnectionValidator {
 	 * @param request water connection request
 	 * @param searchResult water connection search result
 	 */
-	public void validateUpdate(WaterConnectionRequest request, WaterConnection searchResult) {
+	public void validateUpdate(WaterConnectionRequest request, WaterConnection searchResult, int reqType) {
 		validateAllIds(request.getWaterConnection(), searchResult);
 		validateDuplicateDocuments(request);
-		setFieldsFromSearch(request,searchResult);
+		setFieldsFromSearch(request, searchResult, reqType);
 		
 	}
    
@@ -123,7 +124,9 @@ public class WaterConnectionValidator {
 	 * @param request Water connection request
 	 * @param searchResult water connection search result
 	 */
-	private void setFieldsFromSearch(WaterConnectionRequest request, WaterConnection searchResult) {
-		request.getWaterConnection().setConnectionNo(searchResult.getConnectionNo());
+	private void setFieldsFromSearch(WaterConnectionRequest request, WaterConnection searchResult, int reqType) {
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			request.getWaterConnection().setConnectionNo(searchResult.getConnectionNo());
+		}
 	}
 }

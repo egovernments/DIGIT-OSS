@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 public class PropertyValidator implements WaterActionValidator {
 
 	@Override
-	public ValidatorResult validate(WaterConnectionRequest waterConnectionRequest, boolean isUpdate) {
+	public ValidatorResult validate(WaterConnectionRequest waterConnectionRequest, int reqType) {
 		Map<String, String> errorMap = new HashMap<>();
 		if(StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getPropertyId())) {
 			errorMap.put("INVALID_PROPERTY_UUID", "Property uuid should not be empty");
