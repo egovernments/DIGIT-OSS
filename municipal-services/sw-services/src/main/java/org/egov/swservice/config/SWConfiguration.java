@@ -25,43 +25,43 @@ public class SWConfiguration {
 	private Integer defaultOffset;
 	
 
-    @Value("${egov.idgen.scid.name}")
-    private String sewerageIdGenName;
+    	@Value("${egov.idgen.scid.name}")
+    	private String sewerageIdGenName;
 
-    @Value("${egov.idgen.scid.format}")
-    private String sewerageIdGenFormat;
+    	@Value("${egov.idgen.scid.format}")
+    	private String sewerageIdGenFormat;
     
-    @Value("${egov.idgen.scapid.name}")
-    private String sewerageApplicationIdGenName;
+    	@Value("${egov.idgen.scapid.name}")
+    	private String sewerageApplicationIdGenName;
 
-    @Value("${egov.idgen.scapid.format}")
-    private String sewerageApplicationIdGenFormat;
+    	@Value("${egov.idgen.scapid.format}")
+    	private String sewerageApplicationIdGenFormat;
     
-    //Idgen Config
-    @Value("${egov.idgen.host}")
-    private String idGenHost;
+    	//Idgen Config
+    	@Value("${egov.idgen.host}")
+    	private String idGenHost;
 
-    @Value("${egov.idgen.path}")
-    private String idGenPath;
+    	@Value("${egov.idgen.path}")
+    	private String idGenPath;
     
-    // Workflow
-    @Value("${create.sw.workflow.name}")
-    private String businessServiceValue;
+    	// Workflow
+    	@Value("${create.sw.workflow.name}")
+    	private String businessServiceValue;
 
-    @Value("${workflow.context.path}")
-    private String wfHost;
+    	@Value("${workflow.context.path}")
+    	private String wfHost;
 
-    @Value("${workflow.transition.path}")
-    private String wfTransitionPath;
+    	@Value("${workflow.transition.path}")
+    	private String wfTransitionPath;
 
-    @Value("${workflow.businessservice.search.path}")
-    private String wfBusinessServiceSearchPath;
+    	@Value("${workflow.businessservice.search.path}")
+    	private String wfBusinessServiceSearchPath;
 
-    @Value("${is.external.workflow.enabled}")
-    private Boolean isExternalWorkFlowEnabled;
+    	@Value("${is.external.workflow.enabled}")
+    	private Boolean isExternalWorkFlowEnabled;
     
-    @Value("${egov.sewerageservice.updatesewerageconnection.workflow.topic}")
-    private String workFlowUpdateTopic;
+    	@Value("${egov.sewerageservice.updatesewerageconnection.workflow.topic}")
+    	private String workFlowUpdateTopic;
     
 
 	// Localization
@@ -96,25 +96,25 @@ public class SWConfiguration {
 	@Value("${egov.user.event.notification.enabled}")
 	private Boolean isUserEventsNotificationEnabled;
 	
-    //User Configuration
-    @Value("${egov.user.host}")
-    private String userHost;
+    	//User Configuration
+    	@Value("${egov.user.host}")
+    	private String userHost;
 
-    @Value("${egov.user.context.path}")
-    private String userContextPath;
+    	@Value("${egov.user.context.path}")
+    	private String userContextPath;
 
-    @Value("${egov.user.search.path}")
-    private String userSearchEndpoint;
+    	@Value("${egov.user.search.path}")
+    	private String userSearchEndpoint;
     
-    // sewerage connection Calculator
-    @Value("${egov.sw.calculation.host}")
-    private String calculatorHost;
+    	// sewerage connection Calculator
+    	@Value("${egov.sw.calculation.host}")
+    	private String calculatorHost;
 
-    @Value("${egov.sw.calculation.endpoint}")
-    private String calculateEndpoint;
+    	@Value("${egov.sw.calculation.endpoint}")
+    	private String calculateEndpoint;
     
-    @Value("${egov.receipt.businessservice}")
-    private String receiptBusinessservice;
+    	@Value("${egov.receipt.businessservice}")
+    	private String receiptBusinessservice;
     
 	// sewerage notification links configuration
 
@@ -139,19 +139,19 @@ public class SWConfiguration {
 	@Value("${sw.fileStore.link}")
 	private String fileStoreLink;
 
-	@Value("${sw.shortener.url}")
+	@Value("${egov.shortener.url}")
 	private String shortenerURL;
 	
 	@Value("${egov.pdfservice.host}")
-    private String pdfServiceHost;
+    	private String pdfServiceHost;
     
-    @Value("${egov.filestore.host}")
-    private String fileStoreHost;
+    	@Value("${egov.filestore.host}")
+    	private String fileStoreHost;
     
-    @Value("${sw.editnotification.topic}")
-    private String editNotificationTopic;
+    	@Value("${sw.editnotification.topic}")
+    	private String editNotificationTopic;
     
-    @Value("${sw.consume.filestoreids.topic}")
+    	@Value("${sw.consume.filestoreids.topic}")
 	private String fileStoreIdsTopic;
 
 	@Value("${egov.sewerageservice.savefilestoreIds}")
@@ -160,4 +160,27 @@ public class SWConfiguration {
 	@Value("${workflow.process.search.path}")
 	private String wfProcessSearchPath;
 
+	@Value("${egov.user.create.path}")
+	private String userCreateEndPoint;
+
+	@Value("${egov.user.update.path}")
+	private String userUpdateEndPoint;
+	
+	@Value("${modify.sw.workflow.name}")
+	private String modifySWBusinessServiceName;
+
+	@Value("${egov.msg.download.receipt.link}")
+	private String receiptDownloadLink;
+
+	@Value("${egov.collection.host}")
+	private String collectionHost;
+
+	@Value("${egov.collectiom.payment.search}")
+	private String paymentSearch;
+
+	@Value("${egov.usr.events.download.receipt.link}")
+	private String userEventReceiptDownloadLink;
+
+	@Value("${egov.usr.events.pay.link}")
+	private String userEventApplicationPayLink;
 }

@@ -28,20 +28,20 @@ public class SewerageConnectionValidator {
 	/**Used strategy pattern for avoiding multiple if else condition
 	 * 
 	 * @param sewerageConnectionRequest SewarageConnectionRequest is request for create or update
-	 * @param isUpdate True for update and false for create
+	 * @param reqType True for update and false for create
 	 */
-	public void validateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest, boolean isUpdate) {
+	public void validateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest, int reqType) {
 		Map<String, String> errorMap = new HashMap<>();
 		if (sewerageConnectionRequest.getSewerageConnection().getProcessInstance() == null || StringUtils
 				.isEmpty(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
 			errorMap.put("INVALID_ACTION", "Workflow obj can not be null or action can not be empty!!");
 			throw new CustomException(errorMap);
 		}
-		ValidatorResult isPropertyValidated = propertyValidator.validate(sewerageConnectionRequest, isUpdate);
+		ValidatorResult isPropertyValidated = propertyValidator.validate(sewerageConnectionRequest, reqType);
 		if (!isPropertyValidated.isStatus()) {
 			errorMap.putAll(isPropertyValidated.getErrorMessage());
 		}
-		ValidatorResult isSewerageFieldValidated = sewerageFieldValidator.validate(sewerageConnectionRequest, isUpdate);
+		ValidatorResult isSewerageFieldValidated = sewerageFieldValidator.validate(sewerageConnectionRequest, reqType);
 		if (!isSewerageFieldValidated.isStatus()) {
 			errorMap.putAll(isSewerageFieldValidated.getErrorMessage());
 		}

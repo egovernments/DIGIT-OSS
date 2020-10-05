@@ -13,32 +13,80 @@ import org.springframework.util.StringUtils;
 public class SewerageFieldValidator implements SewerageActionValidator {
 
 	@Override
-	public ValidatorResult validate(SewerageConnectionRequest sewerageConnectionRequest, boolean isUpdate) {
+	public ValidatorResult validate(SewerageConnectionRequest sewerageConnectionRequest, int reqType) {
 		Map<String, String> errorMap = new HashMap<>();
-		if (isUpdate) {
-			if (SWConstants.ACTIVATE_CONNECTION_CONST.equalsIgnoreCase(
-					sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
-				if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionType())) {
-					errorMap.put("INVALID_SEWERAGE_CONNECTION_TYPE", "Connection type should not be empty");
-				}
-				if (StringUtils
-						.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionExecutionDate())) {
-					errorMap.put("INVALID_CONNECTION_EXECUTION_DATE", "Connection execution date should not be empty");
-				}
-			}
-			if (SWConstants.APPROVE_CONNECTION_CONST.equalsIgnoreCase(
-					sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
-				if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getRoadType())) {
-					errorMap.put("INVALID_ROAD_TYPE", "Road type should not be empty");
-				}
-				if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getRoadCuttingArea())) {
-					errorMap.put("INVALID_ROAD_CUTTING_AREA", "Road cutting area should not be empty");
-				}
-			}
+		switch (reqType){
+			case SWConstants.UPDATE_APPLICATION:
+				validateUpdateRequest(sewerageConnectionRequest, errorMap);
+			    break;
+			case SWConstants.MODIFY_CONNECTION:
+				validateModifyRequest(sewerageConnectionRequest, errorMap);
+			default:
+				break;
 		}
 		if (!errorMap.isEmpty())
 			return new ValidatorResult(false, errorMap);
 		return new ValidatorResult(true, errorMap);
+	}
+
+	public void validateUpdateRequest(SewerageConnectionRequest sewerageConnectionRequest, Map<String, String> errorMap) {
+		if (SWConstants.ACTIVATE_CONNECTION_CONST.equalsIgnoreCase(
+				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
+			if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionType())) {
+				errorMap.put("INVALID_SEWERAGE_CONNECTION_TYPE", "Connection type should not be empty");
+			}
+			if (StringUtils
+					.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionExecutionDate())) {
+				errorMap.put("INVALID_CONNECTION_EXECUTION_DATE", "Connection execution date should not be empty");
+			}
+		}
+		if (SWConstants.APPROVE_CONNECTION_CONST.equalsIgnoreCase(
+				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
+			if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getRoadType())) {
+				errorMap.put("INVALID_ROAD_TYPE", "Road type should not be empty");
+			}
+			if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getRoadCuttingArea())) {
+				errorMap.put("INVALID_ROAD_CUTTING_AREA", "Road cutting area should not be empty");
+			}
+		}
+	}
+
+	public void validateModifyRequest(SewerageConnectionRequest sewerageConnectionRequest, Map<String, String> errorMap) {
+		if (SWConstants.APPROVE_CONNECTION.equalsIgnoreCase(
+				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
+			if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionType())) {
+				errorMap.put("INVALID_SEWERAGE_CONNECTION_TYPE", "Connection type should not be empty");
+			}
+			if (StringUtils
+					.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionExecutionDate())) {
+				errorMap.put("INVALID_CONNECTION_EXECUTION_DATE", "Connection execution date should not be empty");
+
+			}
+			if (sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom() != null) {
+				if (System.currentTimeMillis() > sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom()) {
+					errorMap.put("DATE_EFFECTIVE_FROM_IN_PAST", "Date effective from cannot be past");
+				}
+				if ((sewerageConnectionRequest.getSewerageConnection().getConnectionExecutionDate() != null)
+						&& (sewerageConnectionRequest.getSewerageConnection()
+						.getConnectionExecutionDate() > sewerageConnectionRequest.getSewerageConnection()
+						.getDateEffectiveFrom())) {
+
+					errorMap.put("DATE_EFFECTIVE_FROM_LESS_THAN_EXCECUTION_DATE",
+							"Date effective from cannot be before connection execution date");
+				}
+
+			}
+		}
+		if (SWConstants.SUBMIT_APPLICATION_CONST
+				.equals(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())
+				|| SWConstants.APPROVE_CONNECTION.equalsIgnoreCase(
+				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
+			if (sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom() == null
+					|| sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom() < 0
+					|| sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom() == 0) {
+				errorMap.put("INVALID_DATE_EFFECTIVE_FROM", "Date effective from cannot be null or negative");
+			}
+		}
 	}
 
 }

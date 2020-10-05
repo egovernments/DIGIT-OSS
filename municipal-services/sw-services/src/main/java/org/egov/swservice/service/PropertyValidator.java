@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 public class PropertyValidator implements SewerageActionValidator {
 
 	@Override
-	public ValidatorResult validate(SewerageConnectionRequest sewerageConnectionRequest, boolean isUpdate) {
+	public ValidatorResult validate(SewerageConnectionRequest sewerageConnectionRequest, int reqType) {
 		Map<String, String> errorMap = new HashMap<>();
 		
 		if(StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getPropertyId())) {

@@ -56,7 +56,6 @@ public class SewerageDaoImpl implements SewerageDao {
 		String query = swQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
 		if (query == null)
 			return Collections.emptyList();
-		log.debug("Constructed query is:: " + query);
 		List<SewerageConnection> sewerageConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
 				sewarageRowMapper);
 		if (sewerageConnectionList == null) {
