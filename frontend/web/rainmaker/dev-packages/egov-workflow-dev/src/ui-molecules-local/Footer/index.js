@@ -76,13 +76,14 @@ class Footer extends React.Component {
     }
 
     if (item.isLast) {
-      const url =
+      let url =
         process.env.NODE_ENV === "development"
           ? item.buttonUrl
           : item.buttonUrl;
 
           /* Quick fix for edit mutation application */
-      if(url.includes('pt-mutation/apply')){     
+      if(url.includes('pt-mutation/apply')){   
+        url=url+'&mode=MODIFY' ; 
         window.location.href=url.replace("/pt-mutation/",'');
         return;
       }

@@ -1,18 +1,13 @@
 import {
-  getBreak,
   getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,
-  getLabel,
-  getLabelWithValue,
-  convertEpochToDate,
-  getLabelWithValueIfNotNull
+
+  getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import get from "lodash/get";
-import { gotoApplyWithStep, getLabelIfNotNull } from "../../utils/index";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { checkValueForNA } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { checkValueForNA } from "../../utils";
+import { getLabelIfNotNull } from "../../utils/index";
 
 
 const showComponent = (dispatch, componentJsonPath, display) => {
@@ -51,7 +46,7 @@ export const transfereeSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-      
+
       }
     }
   },
@@ -62,7 +57,7 @@ export const transfereeSummary = getCommonGrayCard({
       className: "owner-summary",
       scheama: getCommonGrayCard({
         ownerContainer: getCommonContainer({
-          ownerName: getLabelWithValue(
+          ownerName: getLabelWithValueForModifiedLabel(
             {
               labelName: "Name",
               labelKey: "PT_OWNERSHIP_INFO_NAME"
@@ -70,9 +65,12 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath:
                 "Property.ownersTemp[0].name",
-                callBack: checkValueForNA
-            }
-          ), ownerFatherHusbandName: getLabelWithValue(
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].name", callBack: checkValueForNA },
+          ), ownerFatherHusbandName: getLabelWithValueForModifiedLabel(
             {
               labelName: "Guardian's Name",
               labelKey: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
@@ -80,9 +78,12 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath:
                 "Property.ownersTemp[0].fatherOrHusbandName",
-                callBack: checkValueForNA
-            }
-          ),  ownerGender: getLabelWithValue(
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].fatherOrHusbandName", callBack: checkValueForNA },
+          ), ownerGender: getLabelWithValueForModifiedLabel(
             {
               labelName: "Gender",
               labelKey: "PT_OWNERSHIP_INFO_GENDER"
@@ -90,9 +91,12 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath:
                 "Property.ownersTemp[0].gender",
-                callBack: checkValueForNA
-            }
-          ), ownerType: getLabelWithValue(
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].gender", callBack: checkValueForNA },
+          ), ownerType: getLabelWithValueForModifiedLabel(
             {
               labelName: "Type of Ownership",
               labelKey: "PT_FORM3_OWNERSHIP_TYPE"
@@ -100,10 +104,13 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath:
                 "Property.ownershipCategoryTemp",
-                callBack: checkValueForNA
-            }
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownershipCategoryTemp", callBack: checkValueForNA },
           ),
-          mobileNo: getLabelWithValue(
+          mobileNo: getLabelWithValueForModifiedLabel(
             {
               labelName: "Mobile No.",
               labelKey: "PT_OWNERSHIP_INFO_MOBILE_NO"
@@ -111,9 +118,12 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath:
                 "Property.ownersTemp[0].mobileNumber",
-                callBack: checkValueForNA
-            }
-          ),  ownerEmail: getLabelWithValue(
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].mobileNumber", callBack: checkValueForNA },
+          ), ownerEmail: getLabelWithValueForModifiedLabel(
             {
               labelName: "Email",
               labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
@@ -121,10 +131,13 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath:
                 "Property.ownersTemp[0].emailId",
-                callBack: checkValueForNA
-            }
-          ),       
-          ownerDob: getLabelWithValue(
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].emailId", callBack: checkValueForNA },
+          ),
+          ownerDob: getLabelWithValueForModifiedLabel(
             {
               labelName: "Special Category",
               labelKey: "PT_OWNERSHIP_INFO_USER_CATEGORY"
@@ -132,13 +145,16 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath:
                 "Property.ownersTemp[0].ownerType",
-                callBack: checkValueForNA
+              callBack: checkValueForNA
               // callBack: value => {
               //   return convertEpochToDate(value);
               // }
-            }
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].ownerType", callBack: checkValueForNA },
           ),
-          ownerAddress: getLabelWithValue(
+          ownerAddress: getLabelWithValueForModifiedLabel(
             {
               labelName: "Correspondence Address",
               labelKey: "PT_OWNERSHIP_INFO_CORR_ADDR"
@@ -146,8 +162,11 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath:
                 "Property.ownersTemp[0].permanentAddress",
-                callBack: checkValueForNA
-            }
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].permanentAddress", callBack: checkValueForNA },
           ),
           ownerSpecialDocumentType: getLabelIfNotNull(
             {
@@ -155,9 +174,12 @@ export const transfereeSummary = getCommonGrayCard({
               labelKey: "PT_OWNERSHIP_SPECIAL_CATEGORY_DOCUMENT_TYPE"
             },
             {
-              jsonPath:"Property.ownersTemp[0].documentType",
-              callBack: checkValueForNA     
-              }
+              jsonPath: "Property.ownersTemp[0].documentType",
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].documentType", callBack: checkValueForNA },
           ),
           ownerDocumentId: getLabelIfNotNull(
             {
@@ -165,11 +187,14 @@ export const transfereeSummary = getCommonGrayCard({
               labelKey: "PT_OWNERSHIP_DOCUMENT_ID"
             },
             {
-              jsonPath:"Property.ownersTemp[0].documentUid",
-                callBack: checkValueForNA
-            }
+              jsonPath: "Property.ownersTemp[0].documentUid",
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].documentUid", callBack: checkValueForNA },
           ),
-          
+
         }),
       }),
       items: [],
@@ -184,17 +209,17 @@ export const transfereeSummary = getCommonGrayCard({
     type: "array"
   },
   beforeInitScreen: (action, state, dispatch) => {
-    const categoryDocumentIDJsonPath= "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.props.style";
+    const categoryDocumentIDJsonPath = "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.props.style";
 
-    const categoryDocumentTypeJsonPath="components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style";
-    
-    
+    const categoryDocumentTypeJsonPath = "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style";
+
+
     // if(categoryType === "NONE"){
-    
+
     //    dispatch(handleField("search-preview", categoryDocumentIDJsonPath, "display","none"));
     //    dispatch(handleField("search-preview", categoryDocumentTypeJsonPath, "display","none"));
 
-      
+
     // }
   },
 });
@@ -252,7 +277,7 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
     }
   },
   body: getCommonContainer({
-    institutionName: getLabelWithValue(
+    institutionName: getLabelWithValueForModifiedLabel(
       {
         labelName: "Name of Institution",
         labelKey: "PT_OWNERSHIP_INSTI_NAME"
@@ -260,10 +285,13 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       {
         jsonPath:
           "Property.institutionTemp.institutionName",
-          callBack: checkValueForNA
-      }
+        callBack: checkValueForNA
+      }, {
+      labelKey: "PTM_OLD_LABEL_NAME"
+    },
+      { jsonPath: "PropertyOld.institutionTemp.institutionName", callBack: checkValueForNA },
     ),
-    designation: getLabelWithValue(
+    designation: getLabelWithValueForModifiedLabel(
       {
         labelName: "Designation",
         labelKey: "PT_OWNERSHIP_INFO_DESIGNATION"
@@ -271,11 +299,14 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       {
         jsonPath:
           "Property.institutionTemp.designation",
-          callBack: checkValueForNA
-      }
+        callBack: checkValueForNA
+      }, {
+      labelKey: "PTM_OLD_LABEL_NAME"
+    },
+      { jsonPath: "PropertyOld.institutionTemp.designation", callBack: checkValueForNA },
     ),
 
-    institutionType: getLabelWithValue(
+    institutionType: getLabelWithValueForModifiedLabel(
       {
         labelName: "Type Of Institution",
         labelKey: "PT_OWNERSHIP_INSTI_TYPE"
@@ -286,9 +317,12 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
         // callBack: value => {
         //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
         // }
-      }
+      }, {
+      labelKey: "PTM_OLD_LABEL_NAME"
+    },
+      { jsonPath: "PropertyOld.institutionTemp.institutionName", callBack: checkValueForNA },
     ),
-    institutionOwnershipType: getLabelWithValue(
+    institutionOwnershipType: getLabelWithValueForModifiedLabel(
       {
         labelName: "Type Of Ownership",
         labelKey: "PT_INSTI_OWNERSHIP_TYPE"
@@ -299,10 +333,13 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
         // callBack: value => {
         //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
         // }
-      }
+      }, {
+      labelKey: "PTM_OLD_LABEL_NAME"
+    },
+      { jsonPath: "PropertyOld.ownershipCategoryTemp", callBack: checkValueForNA },
     ),
-   
-    authorizedPersonName: getLabelWithValue(
+
+    authorizedPersonName: getLabelWithValueForModifiedLabel(
       {
         labelName: "Name of Authorized Person",
         labelKey: "PT_OWNERSHIP_INFO_NAME_OF_AUTH"
@@ -310,9 +347,12 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       {
         jsonPath: "Property.institutionTemp.name",
         callBack: checkValueForNA
-      }
+      }, {
+      labelKey: "PTM_OLD_LABEL_NAME"
+    },
+      { jsonPath: "PropertyOld.institutionTemp.name", callBack: checkValueForNA },
     ),
-    landlineNumber: getLabelWithValue(
+    landlineNumber: getLabelWithValueForModifiedLabel(
       {
         labelName: "Telephone No.",
         labelKey: "PT_OWNERSHIP_INFO_TEL_NO"
@@ -320,11 +360,14 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       {
         jsonPath:
           "Property.institutionTemp.landlineNumber",
-          callBack: checkValueForNA
-      }
+        callBack: checkValueForNA
+      }, {
+      labelKey: "PTM_OLD_LABEL_NAME"
+    },
+      { jsonPath: "PropertyOld.institutionTemp.landlineNumber", callBack: checkValueForNA },
     ),
-    
-    mobileNumber: getLabelWithValue(
+
+    mobileNumber: getLabelWithValueForModifiedLabel(
       {
         labelName: "Mobile No. of Authorized Person",
         labelKey: "PT_OWNERSHIP_INFO_MOBILE_NO"
@@ -332,11 +375,14 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       {
         jsonPath:
           "Property.institutionTemp.mobileNumber",
-          callBack: checkValueForNA
-      }
+        callBack: checkValueForNA
+      }, {
+      labelKey: "PTM_OLD_LABEL_NAME"
+    },
+      { jsonPath: "PropertyOld.institutionTemp.mobileNumber", callBack: checkValueForNA },
     ),
-    
-    officialAddress: getLabelWithValue(
+
+    officialAddress: getLabelWithValueForModifiedLabel(
       {
         labelName: "Official Correspondence Address",
         labelKey: "PT_OWNERSHIP_INFO_CORR_ADDR"
@@ -344,8 +390,11 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       {
         jsonPath:
           "Property.institutionTemp.correspondenceAddress",
-          callBack: checkValueForNA
-      }
+        callBack: checkValueForNA
+      }, {
+      labelKey: "PTM_OLD_LABEL_NAME"
+    },
+      { jsonPath: "PropertyOld.institutionTemp.correspondenceAddress", callBack: checkValueForNA },
     )
   })
 });
