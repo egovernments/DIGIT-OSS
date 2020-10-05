@@ -70,8 +70,10 @@ public class EstimationService {
 			Map<String, Object> masterData) {
 		if (StringUtils.isEmpty((criteria.getSewerageConnection()))
 				&& !StringUtils.isEmpty(criteria.getConnectionNo())) {
-			criteria.setSewerageConnection(calculatorUtil.getSewerageConnection(requestInfo, criteria.getConnectionNo(),
-					criteria.getTenantId()));
+			List<SewerageConnection> sewerageConnectionList = calculatorUtil.getSewerageConnection(requestInfo, criteria.getConnectionNo(),
+					criteria.getTenantId());
+			SewerageConnection sewerageConnection = calculatorUtil.getSewerageConnectionObject(sewerageConnectionList);
+			criteria.setSewerageConnection(sewerageConnection);
 		}
 		if (criteria.getSewerageConnection() == null || StringUtils.isEmpty(criteria.getConnectionNo())) {
 			StringBuilder builder = new StringBuilder();
@@ -129,7 +131,6 @@ public class EstimationService {
 		BigDecimal sewerageCharge = BigDecimal.ZERO;
 		if (billingSlabMaster.get(SWCalculationConstant.SW_BILLING_SLAB_MASTER) == null)
 			throw new CustomException("INVALID_BILLING_SLAB", "Billing Slab are Empty");
-		ObjectMapper mapper = new ObjectMapper();
 		List<BillingSlab> mappingBillingSlab;
 		try {
 			mappingBillingSlab = mapper.readValue(

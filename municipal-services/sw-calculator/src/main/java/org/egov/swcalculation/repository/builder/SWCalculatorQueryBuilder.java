@@ -26,6 +26,10 @@ public class SWCalculatorQueryBuilder {
 		addClauseIfRequired(preparedStatement, query);
 		query.append(" conn.tenantid = ? ");
 		preparedStatement.add(tenantId);
+		
+		//Add not null condition
+		addClauseIfRequired(preparedStatement, query);
+		query.append(" conn.connectionno is not null");
 		return query.toString();
 	}
 

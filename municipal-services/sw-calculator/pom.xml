@@ -6,7 +6,7 @@
 
 	<groupId>org.egov</groupId>
 	<artifactId>sw-calculator</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>sw_service_calculation</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -152,6 +152,12 @@
 						<typeNaming>org.egov.swcalculation.web.models.Demand$StatusEnum:DemandStatus</typeNaming>
 						<typeNaming>org.egov.swcalculation.web.models.Connection$StatusEnum:ConnectionStatus</typeNaming>
 					</customTypeNaming>
+					<customTypeMappings>
+						<customTypeMapping>org.egov.swcalculation.web.models.users.User:User</customTypeMapping>
+						<customTypeMapping>org.egov.common.contract.request.User:User</customTypeMapping>
+						<customTypeMapping>org.egov.common.contract.request.RequestInfo:RequestInfo</customTypeMapping>
+						<customTypeMapping>org.egov.common.contract.response.ResponseInfo:ResponseInfo</customTypeMapping>
+					</customTypeMappings>
 					<namespace>Digit</namespace>
 					<debug>true</debug>
 					<outputKind>module</outputKind>

@@ -169,5 +169,15 @@ public class SWCalculationConfiguration {
 	@Value("${egov.demand.minimum.payable.amount}")
 	 private BigDecimal minimumPayableAmount;
     
+	@Value("${egov.property.service.host}")
+	private String propertyHost;
+
+	@Value("${egov.property.searchendpoint}")
+	private String searchPropertyEndPoint;
 	
+	@Value("${workflow.workDir.path}")
+	private String workflowHost;
+
+	@Value("${workflow.process.search.path}")
+	private String searchWorkflowProcessEndPoint;
 }

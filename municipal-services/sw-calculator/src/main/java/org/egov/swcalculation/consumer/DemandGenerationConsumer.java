@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.swcalculation.config.SWCalculationConfiguration;
+import org.egov.swcalculation.validator.SWCalculationWorkflowValidator;
 import org.egov.swcalculation.web.models.CalculationCriteria;
 import org.egov.swcalculation.web.models.CalculationReq;
 import org.egov.swcalculation.producer.SWCalculationProducer;
@@ -39,6 +40,8 @@ public class DemandGenerationConsumer {
 	@Autowired
 	private MasterDataService mDataService;
 
+	@Autowired
+	private SWCalculationWorkflowValidator swCalculationWorkflowValidator;
 	/**
 	 * Listen the topic for processing the batch records.
 	 * 
@@ -122,6 +125,10 @@ public class DemandGenerationConsumer {
 	 */
 	private void generateDemandInBatch(CalculationReq request, Map<String, Object> masterMap, String errorTopic) {
 		try {
+			for(CalculationCriteria criteria : request.getCalculationCriteria()){
+				Boolean genratedemand = true;
+				swCalculationWorkflowValidator.nonMeterconnectionValidation(request.getRequestInfo(),criteria.getTenantId(),criteria.getConnectionNo(),genratedemand);
+			}
 			sWCalculationServiceImpl.bulkDemandGeneration(request, masterMap);
 			StringBuilder str = new StringBuilder("Demand generated Successfully. For records : ").append(request.getCalculationCriteria());
 			log.info(str.toString());
