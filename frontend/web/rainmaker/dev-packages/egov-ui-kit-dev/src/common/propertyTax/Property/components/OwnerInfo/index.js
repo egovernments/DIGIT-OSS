@@ -178,7 +178,7 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_ID", localizationLabelsData),
               value: checkDocument(owner).documentUid || "NA",
-              oldValue: oldPropertydetails  && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners)&& getTranslatedLabel("PT_" + (checkDocument(oldPropertydetails.owners[index]).documentUid).toUpperCase(), localizationLabelsData) || "NA",
+              oldValue: oldPropertydetails  && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners)&& checkDocument(oldPropertydetails.owners[index]).documentUid|| "NA",
             }
           )
         ],
