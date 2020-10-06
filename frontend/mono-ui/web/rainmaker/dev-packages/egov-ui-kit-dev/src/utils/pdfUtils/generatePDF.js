@@ -6,6 +6,7 @@ import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { set } from "lodash";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
+import { logoNotFoundImage } from "./logoNotFound";
 import pdfFonts from "./vfs_fonts";
 
 
@@ -234,9 +235,9 @@ export const getDocumentsCard = (documentsUploadRedux) => {
 export const generateKeyValue = (preparedFinalObject, containerObject) => {
     let keyValue = []
     Object.keys(containerObject).map(keys => {
-        const labelObject = containerObject[keys].children.label.children.key.props;
+        const labelObject = get(containerObject[keys],'children.label.children.key.props', get(containerObject[keys],'children.label1.children.key.props',{}));
         const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
-        const valueObject = containerObject[keys].children.value.children.key.props;
+        const valueObject = get(containerObject[keys],'children.value.children.key.props',get(containerObject[keys],'children.value1.children.key.props',{}));
         let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
         value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
         value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
@@ -356,6 +357,7 @@ const getHeaderCard = (applicationData, logo) => {
         layout: "noBorders"
     }
     let body = [];
+    logo=logo&&logo!=null||logoNotFoundImage;
     body.push({
         image: logo,
         width: 60,
