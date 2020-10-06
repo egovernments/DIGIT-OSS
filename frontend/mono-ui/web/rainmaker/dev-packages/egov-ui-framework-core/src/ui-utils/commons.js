@@ -256,7 +256,7 @@ export const setDocuments = async (
   businessService
 ) => {
   let uploadedDocData = get(payload, sourceJsonPath, []);
-  uploadedDocData = uploadedDocData && uploadedDocData.filter(document => document && Object.keys(document).length > 0 && document.active);
+  // uploadedDocData = uploadedDocData && uploadedDocData.filter(document => document && Object.keys(document).length > 0 && document.active);
   const fileStoreIds =
     uploadedDocData &&
     uploadedDocData
