@@ -5,7 +5,7 @@
 
     <groupId>org.egov</groupId>
     <artifactId>egov-erp-edcr</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>4.0.0</version>
 
     <packaging>pom</packaging>
 
@@ -41,7 +41,7 @@
             <url>http://repo.egovernments.org/nexus/content/groups/public/</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
+                <updatePolicy>never</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
@@ -89,7 +89,7 @@
         <app.version>${project.version}</app.version>
 
         <!-- Application core dependency versions -->
-        <erp-version>1.0.0-SNAPSHOT</erp-version>
+        <erp-version>4.0.0</erp-version>
 
         <!-- Application server provided dependency versions -->
         <hibernate-version>5.1.10.Final</hibernate-version>
