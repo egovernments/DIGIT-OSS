@@ -7,7 +7,7 @@
         <mirror>
             <id>nexus</id>
             <mirrorOf>central</mirrorOf>
-            <url>http://repo.egovernments.org/nexus/content/groups/public/</url>
+            <url>https://nexus-repo.egovernments.org/nexus/content/groups/public/</url>
         </mirror>
     </mirrors>
 	
