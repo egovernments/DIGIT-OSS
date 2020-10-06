@@ -6,10 +6,19 @@ import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { set } from "lodash";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
-import { logoNotFoundImage } from "./logoNotFound";
+import logoNotFound from'./logoNotFound.png';
 import pdfFonts from "./vfs_fonts";
 
-
+// const getLogoUrl = (tenantId)=>{
+//     let logoUrl=`/${commonConfig.tenantId}-egov-assets/${tenantId}/logo.png`;
+//     const state=store.getState()||{};
+//     const {common={}}=state;
+//     const {cities=[]}=common;
+//     cities.map(city=>{if(city.code==tenantId){
+//         logoUrl=city.logoId;
+//     }})
+//     return logoUrl;
+// }
 
 const vfs = { ...pdfFonts.vfs }
 const font = {
@@ -344,7 +353,7 @@ export const loadUlbLogo = tenantid => {
         localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
         canvas = null;
     };
-    img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+    img.src = `https://s3.ap-south-1.amazonaws.com/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
 };
 
 const getHeaderCard = (applicationData, logo) => {
@@ -357,7 +366,7 @@ const getHeaderCard = (applicationData, logo) => {
         layout: "noBorders"
     }
     let body = [];
-    logo=logo&&logo!=null||logoNotFoundImage;
+    logo=logo&&logo!=null||logoNotFound;
     body.push({
         image: logo,
         width: 60,
