@@ -133,4 +133,8 @@ public class Constants {
 	//data type
 	public static final String STRING_DATATYPE = "string";
 
+	public static final String MDMS_REQUESTINFO = "{\"RequestInfo\":{\"authToken\":\"\"},\"MdmsCriteria\":{\"tenantId\":\"{TENANTID_PLACEHOLDER}\",\"moduleDetails\":[{\"moduleName\":\"tenant\",\"masterDetails\":[{\"name\":\"tenants\"}]}]}}";
+
+	public static final String TENANTID_PLACEHOLDER = "{TENANTID_PLACEHOLDER}";
+
 }

@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.tarento.analytics.constant.Constants.MDMS_REQUESTINFO;
+import static com.tarento.analytics.constant.Constants.TENANTID_PLACEHOLDER;
+
 @Component
 public class MdmsApiMappings {
 
@@ -50,8 +53,8 @@ public class MdmsApiMappings {
     @Autowired
     private ObjectMapper mapper;
 
-    @Value("${egov.mdms-service.request}")
-    private  String REQUEST_INFO_STR ;//="{\"RequestInfo\":{\"authToken\":\"\"},\"MdmsCriteria\":{\"tenantId\":\"pb\",\"moduleDetails\":[{\"moduleName\":\"tenant\",\"masterDetails\":[{\"name\":\"tenants\"}]}]}}";
+    @Value("${egov.statelevel.tenantId}")
+    private  String stateLevelTenantId ;
 
     public String valueOf(String code){
         return codeValues.getOrDefault(code, null);
@@ -80,6 +83,8 @@ public class MdmsApiMappings {
 
     @PostConstruct
     public void loadMdmsService() throws Exception {
+
+        String REQUEST_INFO_STR = MDMS_REQUESTINFO.replace(TENANTID_PLACEHOLDER,stateLevelTenantId);
 
         JsonNode requestInfo = mapper.readTree(REQUEST_INFO_STR);
         try {
