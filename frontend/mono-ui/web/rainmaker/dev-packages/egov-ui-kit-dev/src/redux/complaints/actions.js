@@ -6,6 +6,8 @@ import difference from "lodash/difference";
 import uniq from "lodash/uniq";
 import commonConfig from "config/common.js";
 
+import {  toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+
 //checking users there in action history
 const checkUsers = (dispatch, state, actionHistory, hasUsers, tenantId) => {
   if (hasUsers) {
@@ -147,6 +149,16 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite) => {
       dispatch(complaintFetchComplete(payload, overWrite));
     } catch (error) {
       dispatch(complaintFetchError(error.message));
+      dispatch(
+        toggleSnackbarAndSetText(
+          true,
+          {
+             labelKey: error.message,
+             labelName: error.message
+          },
+          "error"
+        )
+      );
     }
   };
 };

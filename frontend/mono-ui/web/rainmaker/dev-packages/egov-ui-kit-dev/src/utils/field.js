@@ -92,7 +92,7 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, disabled, onTextFieldI
           <AutoSuggestDropdown
             {...rest}
             {...fieldProps}
-            dataSource={fieldProps && fieldProps.dropDownData}
+            dataSource={fieldProps && fieldProps.dropDownData || []}
             onChange={(chosenRequest, index) => {
               handleFieldChange(fieldKey, chosenRequest.value);
             }}

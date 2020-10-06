@@ -19,12 +19,12 @@ class ComplaintAssigned extends Component {
   };
 
   render() {
-    let { employeeDetails, fetchSuccess } = this.props;
+    let { employeeDetails, fetchSuccess,loading } = this.props;
     const isReassign = window.location.href.includes("complaint-reassigned")
       ? true
       : false;
     return (
-      <Screen loading={!fetchSuccess} className="padding-0">
+      <Screen loading={loading} className="padding-0">
         <div className="success-message-main-screen">
           {employeeDetails && employeeDetails.employeeName && (
             <SuccessMessage
@@ -46,6 +46,7 @@ class ComplaintAssigned extends Component {
               backgroundColor={"#22b25f"}
             />
           )}
+          
           <div className="responsive-action-button-cont">
             <Button
               id="resolve-success-continue"
@@ -69,6 +70,7 @@ const getNameFromId = (obj, id, defaultValue) => {
 const mapStateToProps = (state, ownProps) => {
   const { complaints } = state;
   const { departmentById, designationsById, employeeById } = state.common;
+  const {loading=false,error=false,errorMessage=""}=complaints;
   let selectedComplaint =
     complaints["byId"][
       decodeURIComponent(window.location.href.split("/").pop())
@@ -96,7 +98,7 @@ const mapStateToProps = (state, ownProps) => {
   };
   const fetchSuccess =
     employeeDetails && employeeDetails.employeeName ? true : false;
-  return { employeeDetails, fetchSuccess };
+  return { employeeDetails, fetchSuccess ,loading ,errorMessage ,error};
 };
 
 const mapDispatchToProps = dispatch => {
