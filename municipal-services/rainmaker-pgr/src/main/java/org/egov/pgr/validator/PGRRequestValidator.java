@@ -270,7 +270,7 @@ public class PGRRequestValidator {
 			Pattern pattern = Pattern.compile(PGRConstants.SERVICE_REQID_REGEX);
 			for(String id: criteria.getServiceRequestId()) {
 				Matcher matcher = pattern.matcher(id);
-				if(!matcher.find() || id.length() >= 20) {
+				if(!matcher.find() || id.length() >= 30) {
 					errorMap.put(ErrorConstants.INVALID_EG_PGR_SERVICE_REQ_ID_CODE, ErrorConstants.INVALID_EG_PGR_SERVICE_REQ_ID_MSG + id);
 				}
 			}
