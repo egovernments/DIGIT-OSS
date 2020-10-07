@@ -35,7 +35,7 @@ export const registrationSummaryDetails = {
     }, {
     labelKey: "PTM_OLD_LABEL_NAME"
   },
-    { jsonPath: "PropertyOld.additionalDetails.reasonForTransfer", callBack: checkValueForNA },
+    { jsonPath: "PropertyOld.additionalDetails.marketValue", callBack: checkValueForNA },
   ),
   documentNo: getLabelWithValueForModifiedLabel(
     {

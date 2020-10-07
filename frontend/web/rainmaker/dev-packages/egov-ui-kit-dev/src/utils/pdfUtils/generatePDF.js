@@ -353,7 +353,7 @@ export const loadUlbLogo = tenantid => {
         localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
         canvas = null;
     };
-    img.src = `https://s3.ap-south-1.amazonaws.com/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+    img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
 };
 
 const getHeaderCard = (applicationData, logo) => {
