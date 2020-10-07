@@ -3,6 +3,7 @@ package org.egov.infra.persist.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.egov.infra.persist.web.contract.TopicMap;
 import org.egov.tracer.KafkaConsumerErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,10 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
-import org.springframework.kafka.listener.config.ContainerProperties;
+import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer2;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
@@ -65,16 +68,22 @@ public class PersisterConsumerConfig {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
 
-        return new DefaultKafkaConsumerFactory<>(props);
+        JsonDeserializer jsonDeserializer = new JsonDeserializer<>(Object.class,false);
+
+        ErrorHandlingDeserializer2<String> errorHandlingDeserializer
+                = new ErrorHandlingDeserializer2<>(jsonDeserializer);
+
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), errorHandlingDeserializer);
     }
 
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.getContainerProperties().setErrorHandler(stoppingErrorHandler);
+        factory.getContainerProperties();
         factory.setConcurrency(3);
         factory.getContainerProperties().setPollTimeout(30000);
+        factory.setErrorHandler(kafkaConsumerErrorHandler);
 
         log.info("Custom KafkaListenerContainerFactory built...");
         return factory;
@@ -85,9 +94,9 @@ public class PersisterConsumerConfig {
     public KafkaMessageListenerContainer<String, String> container() throws Exception {
         ContainerProperties properties = new ContainerProperties(this.topics.toArray(new String[topics.size()]));
         // set more properties
-        properties.setPauseEnabled(true);
-        properties.setPauseAfter(0);
-        properties.setGenericErrorHandler(kafkaConsumerErrorHandler);
+     //   properties.setPauseEnabled(true);
+     //   properties.setPauseAfter(0);
+     //   properties.setGenericErrorHandler(kafkaConsumerErrorHandler);
         properties.setMessageListener(indexerMessageListener);
 
         log.info("Custom KafkaListenerContainer built...");
