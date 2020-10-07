@@ -1442,7 +1442,7 @@ class FormWizardDataEntry extends Component {
                         errorCode = "ERR07_DEMAND_ENTER_THE_DATA";
                       }
 
-                      if(collectedAmount<0)
+                      if(collectedAmount<=0)
                       {
                         errorCode = "ERR08_DEMAND_ENTER_THE_DATA";
                       }
