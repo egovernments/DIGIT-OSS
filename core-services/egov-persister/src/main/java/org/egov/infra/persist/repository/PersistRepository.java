@@ -1,13 +1,10 @@
 package org.egov.infra.persist.repository;
 
-import static java.util.Objects.isNull;
-
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.infra.persist.web.contract.JsonMap;
 import org.egov.infra.persist.web.contract.TypeEnum;
@@ -17,14 +14,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.JsonPath;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONArray;
+import static java.util.Objects.isNull;
 
 @Repository
 @Slf4j
@@ -51,9 +47,9 @@ public class PersistRepository {
         }
     }
 
-    public void persist(String query, List<JsonMap> jsonMaps, String jsonData, String baseJsonPath) {
+    public void persist(String query, List<JsonMap> jsonMaps, Object jsonObj, String baseJsonPath) {
 
-        List<Object[]> rows = getRows(jsonMaps,jsonData,baseJsonPath);
+        List<Object[]> rows = getRows(jsonMaps,jsonObj,baseJsonPath);
 
         try {
             if( ! rows.isEmpty()) {
@@ -68,10 +64,9 @@ public class PersistRepository {
     }
 
 
-    public List<Object[]> getRows(List<JsonMap> jsonMaps, String jsonData, String baseJsonPath) {
-        Object document = Configuration.defaultConfiguration().jsonProvider().parse(jsonData);
+    public List<Object[]> getRows(List<JsonMap> jsonMaps, Object jsonObj, String baseJsonPath) {
 
-        List<LinkedHashMap<String, Object>> dataSource = extractData(baseJsonPath, document);
+        List<LinkedHashMap<String, Object>> dataSource = extractData(baseJsonPath, jsonObj);
 
         List<Object[]> rows = new ArrayList<>();
 
@@ -103,7 +98,7 @@ public class PersistRepository {
                 if (jsonPath.contains("{")) {
                     String attribute = jsonPath.substring(jsonPath.indexOf("{") + 1, jsonPath.indexOf("}"));
                     jsonPath = jsonPath.replace("{".concat(attribute).concat("}"), "\"" + rawDataRecord.get(attribute).toString() + "\"");
-                    JSONArray jsonArray = JsonPath.read(document, jsonPath);
+                    JSONArray jsonArray = JsonPath.read(jsonObj, jsonPath);
                     row.add(jsonArray.get(0));
 
                     continue;
@@ -119,14 +114,14 @@ public class PersistRepository {
                 }
 
                 else if ((type.equals(TypeEnum.ARRAY)) && dbType.equals(TypeEnum.STRING)) {
-					List<Object> list1 = JsonPath.read(document, jsonPath);
-					if (CollectionUtils.isEmpty(list1)) {
-						value = null;
-					} else {
-						value = StringUtils.join(list1.get(i), ",");
-						value = value.toString().substring(2, value.toString().lastIndexOf("]") - 1).replace("\"", "");
-					}
-				}
+                    List<Object> list1 = JsonPath.read(jsonObj, jsonPath);
+                    if (CollectionUtils.isEmpty(list1)) {
+                        value = null;
+                    } else {
+                        value = StringUtils.join(list1.get(i), ",");
+                        value = value.toString().substring(2, value.toString().lastIndexOf("]") - 1).replace("\"", "");
+                    }
+                }
 
                 else if (jsonPath.contains("*.")) {
                     jsonPath = jsonPath.substring(jsonPath.lastIndexOf("*.") + 2);
@@ -134,7 +129,7 @@ public class PersistRepository {
                 }
 
                 else if (!(type.equals(TypeEnum.CURRENTDATE) || jsonPath.startsWith("default"))) {
-                    value = JsonPath.read(document, jsonPath);
+                    value = JsonPath.read(jsonObj, jsonPath);
                 }
 
                 if (jsonPath.startsWith("default"))
@@ -219,7 +214,7 @@ public class PersistRepository {
 
     /**
      * Fetch leaf node value recursively based on json path from java represented json tree
-     * 
+     *
      * @param jsonTree Java represented json tree
      * @param jsonPath Path of leaf node
      * @return Value of leaf node
@@ -256,7 +251,7 @@ public class PersistRepository {
     /**
      * Check if leaf node, is null,
      *  for ex, user has optional address in config, if address is null in datasource skip persisting to address table
-     *  
+     *
      * @param baseJsonPath Base json path
      * @param jsonTree Java represented json tree
      * @return If node not available, return true, else false
