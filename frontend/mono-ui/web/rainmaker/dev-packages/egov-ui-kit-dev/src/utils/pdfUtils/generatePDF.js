@@ -366,7 +366,7 @@ const getHeaderCard = (applicationData, logo) => {
         layout: "noBorders"
     }
     let body = [];
-    logo=logo&&logo!=null||logoNotFound;
+    logo=logo!=null && logo ||logoNotFound;
     body.push({
         image: logo,
         width: 60,
@@ -651,6 +651,8 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     }
 
 };
+
+
 
 export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
     if (typeof mSewaApp === "undefined")
