@@ -305,8 +305,13 @@ public class MigrationService {
 
 			payment.setPaymentStatus(PaymentStatusEnum.CANCELLED);
 			payment.setInstrumentStatus(InstrumentStatusEnum.CANCELLED);
+			Bill bill = payment.getPaymentDetails().get(0).getBill();
+			bill.setStatus(Bill.StatusEnum.CANCELLED);
+            bill.setIsCancelled(true);
+            
 		} else {
 
+			payment.setInstrumentStatus(InstrumentStatusEnum.APPROVED);
 			if ((payment.getPaymentMode().toString()).equalsIgnoreCase(ONLINE.name())
 					|| payment.getPaymentMode().toString().equalsIgnoreCase(CARD.name())
 					|| (receiptHeaderStatus.equalsIgnoreCase(ReceiptStatus.REMITTED.toString()))) {
