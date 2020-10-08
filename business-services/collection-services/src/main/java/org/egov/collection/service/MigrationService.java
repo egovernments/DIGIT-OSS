@@ -22,6 +22,7 @@ import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentResponse;
 import org.egov.collection.model.RequestInfoWrapper;
+import org.egov.collection.model.enums.InstrumentStatusEnum;
 import org.egov.collection.model.enums.PaymentModeEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.model.enums.ReceiptStatus;
@@ -84,7 +85,7 @@ public class MigrationService {
     public void migrate(RequestInfo requestInfo, Integer offsetFromApi,  Integer batchSize, String tenantId) throws JsonProcessingException {
     	
         List<String> tenantIdList =jdbcTemplate.queryForList(TENANT_QUERY,String.class);
-        for(String tenantIdEntry:tenantIdList){
+        for(String tenantIdEntry : tenantIdList){
         
         	Integer offset = offsetFromApi;
         	
@@ -266,6 +267,7 @@ public class MigrationService {
 
         Payment payment = new Payment();
 
+        newBill.setStatus(StatusEnum.ACTIVE);
         BigDecimal totalAmount = newBill.getTotalAmount();
         BigDecimal totalAmountPaid = receipt.getInstrument().getAmount();
         newBill.setAmountPaid(totalAmountPaid);
@@ -299,15 +301,21 @@ public class MigrationService {
 
 		String receiptHeaderStatus = receipt.getBill().get(0).getBillDetails().get(0).getStatus();
 		
-		if (!receiptHeaderStatus.equalsIgnoreCase(PaymentStatusEnum.CANCELLED.toString())) {
+		if (receiptHeaderStatus.equalsIgnoreCase(PaymentStatusEnum.CANCELLED.toString())) {
+
+			payment.setPaymentStatus(PaymentStatusEnum.CANCELLED);
+			payment.setInstrumentStatus(InstrumentStatusEnum.CANCELLED);
+		} else {
 
 			if ((payment.getPaymentMode().toString()).equalsIgnoreCase(ONLINE.name())
 					|| payment.getPaymentMode().toString().equalsIgnoreCase(CARD.name())
 					|| (receiptHeaderStatus.equalsIgnoreCase(ReceiptStatus.REMITTED.toString()))) {
-				
+
 				payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
+				payment.setInstrumentStatus(InstrumentStatusEnum.REMITTED);
 			} else {
 				payment.setPaymentStatus(PaymentStatusEnum.NEW);
+				payment.setInstrumentStatus(InstrumentStatusEnum.APPROVED);
 			}
 		}
 
@@ -336,8 +344,15 @@ public class MigrationService {
         paymentDetail.setTenantId(receipt.getTenantId());
         paymentDetail.setReceiptNumber(receipt.getReceiptNumber());
         paymentDetail.setManualReceiptNumber(receipt.getBill().get(0).getBillDetails().get(0).getManualReceiptNumber());
-        paymentDetail.setManualReceiptDate(receipt.getBill().get(0).getBillDetails().get(0).getManualReceiptDate());
-        paymentDetail.setReceiptDate(receipt.getReceiptDate());
+
+        Long manualRcptDate = receipt.getBill().get(0).getBillDetails().get(0).getManualReceiptDate();
+		if (null != manualRcptDate && manualRcptDate == 0) {
+			paymentDetail.setManualReceiptDate(null);
+		} else {
+			paymentDetail.setManualReceiptDate(manualRcptDate);
+		}
+        
+		paymentDetail.setReceiptDate(receipt.getReceiptDate());
         paymentDetail.setReceiptType(receipt.getBill().get(0).getBillDetails().get(0).getReceiptType());
         paymentDetail.setBusinessService(receipt.getBill().get(0).getBillDetails().get(0).getBusinessService());
 
