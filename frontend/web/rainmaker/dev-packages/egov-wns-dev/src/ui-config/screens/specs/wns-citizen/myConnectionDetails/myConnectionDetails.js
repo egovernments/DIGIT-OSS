@@ -11,7 +11,11 @@ export const fetchData = async (action, state, dispatch) => {
         {
             key: "mobileNumber",
             value: JSON.parse(getUserInfo()).mobileNumber
-        }        
+        }   ,
+        {
+            key: "searchType",
+            value: 'CONNECTION'
+        }  
     ]
 
     const response = await getWSMyResults(queryObject, "CONNECTION", dispatch);

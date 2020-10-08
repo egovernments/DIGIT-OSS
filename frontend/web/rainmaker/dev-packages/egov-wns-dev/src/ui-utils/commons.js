@@ -2,11 +2,11 @@ import commonConfig from "config/common.js";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists } from "../ui-config/screens/specs/utils";
+import { convertDateToEpoch, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 export const serviceConst = {
     "WATER": "WATER",
@@ -347,15 +347,15 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
 
 export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
     let rValue = false;
-    if(applyScreenObject.hasOwnProperty("property") &&
+    if (applyScreenObject.hasOwnProperty("property") &&
         applyScreenObject['property'] !== undefined &&
-        applyScreenObject["property"] !== ""){        
-        rValue =true;
-        if(isModifyMode()){
+        applyScreenObject["property"] !== "") {
+        rValue = true;
+        if (isModifyMode()) {
             return rValue
         }
     }
-    if ( rValue &&
+    if (rValue &&
         applyScreenObject.hasOwnProperty("water") &&
         applyScreenObject["water"] !== undefined &&
         applyScreenObject["water"] !== "" &&
@@ -381,9 +381,9 @@ export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
 }
 
 export const validateConnHolderDetails = (holderData) => {
-    if(holderData.connectionHolders==null){
+    if (holderData.connectionHolders == null) {
         return true
-    }else if( holderData.connectionHolders && holderData.connectionHolders.length > 0){
+    } else if (holderData.connectionHolders && holderData.connectionHolders.length > 0) {
         let holderOwners = holderData.connectionHolders;
         let valid = [];
         for (let i = 0; i < holderOwners.length; i++) {
@@ -409,15 +409,15 @@ export const validateConnHolderDetails = (holderData) => {
 
 export const validateFeildsForWater = (applyScreenObject) => {
     let rValue = false;
-    if(applyScreenObject.hasOwnProperty("property") &&
+    if (applyScreenObject.hasOwnProperty("property") &&
         applyScreenObject['property'] !== undefined &&
-        applyScreenObject["property"] !== ""){        
-        rValue =true;
-        if(isModifyMode()){
+        applyScreenObject["property"] !== "") {
+        rValue = true;
+        if (isModifyMode()) {
             return rValue
         }
     }
-    if ( rValue &&
+    if (rValue &&
         applyScreenObject.hasOwnProperty("property") &&
         applyScreenObject['property'] !== undefined &&
         applyScreenObject["property"] !== "" &&
@@ -439,11 +439,11 @@ export const validateFeildsForWater = (applyScreenObject) => {
 
 export const validateFeildsForSewerage = (applyScreenObject) => {
     let rValue = false;
-    if(applyScreenObject.hasOwnProperty("property") &&
+    if (applyScreenObject.hasOwnProperty("property") &&
         applyScreenObject['property'] !== undefined &&
-        applyScreenObject["property"] !== ""){        
-        rValue =true;
-        if(isModifyMode()){
+        applyScreenObject["property"] !== "") {
+        rValue = true;
+        if (isModifyMode()) {
             return rValue
         }
     }
@@ -506,7 +506,7 @@ const validatePropertyOwners = (applyScreenObject) => {
 }
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-    let currentDoc = (isModifyMode()) ? 'ModifyConnectionDocuments' : 'Documents'; 
+    let currentDoc = (isModifyMode()) ? 'ModifyConnectionDocuments' : 'Documents';
     let documents = get(
         state,
         `screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.${currentDoc}`,
@@ -815,30 +815,30 @@ export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
     }
 };
 export const dataExists = (code, temp) => {
-    return temp.some(function(el) {
+    return temp.some(function (el) {
         return el.code === code;
-    }); 
+    });
 }
 export const checkValue = (i, documentTypea, temp, dataList) => {
-    for(var j=i; j < dataList.length; j++) {
+    for (var j = i; j < dataList.length; j++) {
         let isCheck = dataExists(dataList[j].code, temp);
-        if(documentTypea == dataList[j].documentType && !isCheck){
+        if (documentTypea == dataList[j].documentType && !isCheck) {
             return dataList[j];
         }
     }
 }
 export const getDisplayDocFormat = (dataList) => {
     var tempDoc = [];
-    for(var i=0; i < dataList.length; i++) {
-        if(i == 0 ) {
+    for (var i = 0; i < dataList.length; i++) {
+        if (i == 0) {
             tempDoc[i] = dataList[i];
         } else {
-            let getNextDoc = checkValue(i, tempDoc[i-1].documentType, tempDoc, dataList);
-            if(getNextDoc) {
+            let getNextDoc = checkValue(i, tempDoc[i - 1].documentType, tempDoc, dataList);
+            if (getNextDoc) {
                 tempDoc[i] = getNextDoc;
             } else {
-                tempDoc[i] = dataList.find(function(el) {
-                return tempDoc.find((o, i) => { return (el.code != o.code && !dataExists(el.code, tempDoc)) } );
+                tempDoc[i] = dataList.find(function (el) {
+                    return tempDoc.find((o, i) => { return (el.code != o.code && !dataExists(el.code, tempDoc)) });
                 });
             }
         }
@@ -861,7 +861,7 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 export const applyForWater = async (state, dispatch) => {
     let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
-    let method = waterId ? "UPDATE" : "CREATE"; 
+    let method = waterId ? "UPDATE" : "CREATE";
     try {
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.tenantId");
         let response;
@@ -896,14 +896,14 @@ export const applyForWater = async (state, dispatch) => {
             queryObject.additionalDetails.locality = queryObject.property.address.locality.code;
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
-            if(isModifyMode()){
+            if (isModifyMode()) {
                 set(queryObject, "waterSource", getWaterSource(queryObject.waterSource, queryObject.waterSubSource));
             }
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
-            dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));            
-            if(isModifyMode()){
+            dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
+            if (isModifyMode()) {
                 response.WaterConnection = await getPropertyObj(response.WaterConnection);
-                response.WaterConnection[0].water=true;
+                response.WaterConnection[0].water = true;
                 let waterSource = response.WaterConnection[0].waterSource.split(".");
                 response.WaterConnection[0].waterSource = waterSource[0];
                 response.WaterConnection[0].service = "Water";
@@ -911,7 +911,9 @@ export const applyForWater = async (state, dispatch) => {
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }
-            setApplicationNumberBox(state, dispatch);
+            if (!isModifyMode()) {
+                setApplicationNumberBox(state, dispatch);
+            }
         }
         return true;
     } catch (error) {
@@ -924,7 +926,7 @@ export const applyForWater = async (state, dispatch) => {
 export const applyForSewerage = async (state, dispatch) => {
     let queryObject = parserFunction(state);
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
-    let method = sewerId ? "UPDATE" : "CREATE";    
+    let method = sewerId ? "UPDATE" : "CREATE";
     try {
         const tenantId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].property.tenantId");
         let response;
@@ -957,14 +959,16 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
-            if(isModifyMode()){
+            if (isModifyMode()) {
                 response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
-                response.SewerageConnections[0].sewerage=true;
+                response.SewerageConnections[0].sewerage = true;
                 response.SewerageConnections[0].service = "Sewerage";
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }
-            setApplicationNumberBox(state, dispatch);
+            if (!isModifyMode()) {
+                setApplicationNumberBox(state, dispatch);
+            }
         }
         return true;
     } catch (error) {
@@ -1022,7 +1026,7 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             if (typeof queryObjectForUpdateSewerage.additionalDetails !== 'object') {
                 queryObjectForUpdateSewerage.additionalDetails = {};
             }
-            queryObjectForUpdateSewerage.additionalDetails.locality = queryObjectForUpdateSewerage.property.address.locality.code;  
+            queryObjectForUpdateSewerage.additionalDetails.locality = queryObjectForUpdateSewerage.property.address.locality.code;
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater });
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdateSewerage });
             let searchQueryObjectWater = [
@@ -1049,7 +1053,9 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
         }
-        setApplicationNumberBox(state, dispatch);
+        if (!isModifyMode()) {
+            setApplicationNumberBox(state, dispatch);
+        }
         return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -1603,7 +1609,7 @@ export const billingPeriodMDMS = (toPeriod, payloadbillingPeriod, service) => {
     return toPeriod + demandExipryDate;
 }
 
-export const downloadBill = (receiptQueryString,mode) => {
+export const downloadBill = (receiptQueryString, mode) => {
     const FETCHBILL = {
         GET: {
             URL: "/billing-service/bill/v2/_fetchbill",
@@ -1643,17 +1649,17 @@ export const downloadBill = (receiptQueryString,mode) => {
                 { key: "demandId", value: demandId },
                 { key: "tenantId", value: tenant }
             ]
-            let billTotalAmount=payloadReceiptDetails.Bill[0].totalAmount;
+            let billTotalAmount = payloadReceiptDetails.Bill[0].totalAmount;
 
             httpRequest(
                 "post",
                 "/billing-service/demand/_search",
                 "_demand",
                 queryString
-            ).then((getDemandBills)=>{
-                let demandAmount = getDemandBills.Demands[0].demandDetails.reduce((accum,item) => accum + item.taxAmount, 0);
-                let partiallyPaid = getDemandBills.Demands[0].demandDetails.reduce((accm,item) => accm + item.collectionAmount, 0);
-                if(billTotalAmount <= 0) {
+            ).then((getDemandBills) => {
+                let demandAmount = getDemandBills.Demands[0].demandDetails.reduce((accum, item) => accum + item.taxAmount, 0);
+                let partiallyPaid = getDemandBills.Demands[0].demandDetails.reduce((accm, item) => accm + item.collectionAmount, 0);
+                if (billTotalAmount <= 0) {
                     // We do have Advance. This value is already adjusted from the actual demand.
                     // i.e. The entire demand is adjusted hence billTotalAmount becomes <= 0
                     payloadReceiptDetails.Bill[0].AdvanceAdjustedValue = partiallyPaid > 0 ? partiallyPaid : 0;
@@ -1661,7 +1667,7 @@ export const downloadBill = (receiptQueryString,mode) => {
                     // We have some Bill Amount. There are two possibilities.
                     // 1 - There was some advance and it is adjusted
                     // 2 - This is the balance of the previous Bill amount after partial payment - no adjustment
-                    if(partiallyPaid >= 0) {
+                    if (partiallyPaid >= 0) {
                         //There is some amount paid partially. Hence AdvanceAdjusted must be 0
                         payloadReceiptDetails.Bill[0].AdvanceAdjustedValue = 0;
                     } else {
@@ -1671,7 +1677,7 @@ export const downloadBill = (receiptQueryString,mode) => {
 
                 // We need to calculate Arrears only when the bill[0].totalAmount is > 0
                 // Else we have advance Amount.
-                if(billTotalAmount > 0) {
+                if (billTotalAmount > 0) {
                     sortData.shift();
                     let totalAmount = 0;
                     let previousArrears = 0;
@@ -1682,42 +1688,42 @@ export const downloadBill = (receiptQueryString,mode) => {
                     payloadReceiptDetails.Bill[0].arrearAmount = previousArrears.toFixed(2);
                 }
 
-            payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
-            httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], requestBody).then((payloadbillingPeriod) => {
-                console.log(payloadbillingPeriod);
-                let waterMeteredDemandExipryDate = 0, waterNonMeteredDemandExipryDate = 0, sewerageNonMeteredDemandExpiryDate = 0;
-                const service = (payloadReceiptDetails.Bill && payloadReceiptDetails.Bill.length > 0 && payloadReceiptDetails.Bill[0].businessService) ? payloadReceiptDetails.Bill[0].businessService : 'WS';
-                if (service === 'WS' &&
-                    payloadbillingPeriod.MdmsRes['ws-services-masters'] &&
-                    payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod !== undefined &&
-                    payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod !== null) {
-                    payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod.forEach(obj => {
-                        if (obj.connectionType === 'Metered' && getQueryArg(window.location.href, "connectionType") === "Metered") {
-                            payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
-                        } else if (obj.connectionType === 'Non Metered' && getQueryArg(window.location.href, "connectionType") === "Non Metered") {
-                            payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
-                        }
-                    });
-                }
+                payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
+                httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], requestBody).then((payloadbillingPeriod) => {
+                    console.log(payloadbillingPeriod);
+                    let waterMeteredDemandExipryDate = 0, waterNonMeteredDemandExipryDate = 0, sewerageNonMeteredDemandExpiryDate = 0;
+                    const service = (payloadReceiptDetails.Bill && payloadReceiptDetails.Bill.length > 0 && payloadReceiptDetails.Bill[0].businessService) ? payloadReceiptDetails.Bill[0].businessService : 'WS';
+                    if (service === 'WS' &&
+                        payloadbillingPeriod.MdmsRes['ws-services-masters'] &&
+                        payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod !== undefined &&
+                        payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod !== null) {
+                        payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod.forEach(obj => {
+                            if (obj.connectionType === 'Metered' && getQueryArg(window.location.href, "connectionType") === "Metered") {
+                                payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
+                            } else if (obj.connectionType === 'Non Metered' && getQueryArg(window.location.href, "connectionType") === "Non Metered") {
+                                payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
+                            }
+                        });
+                    }
 
-                if (service === "SW" &&
-                    payloadbillingPeriod.MdmsRes['sw-services-calculation'] &&
-                    payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== undefined &&
-                    payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== null) {
-                    payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod.forEach(obj => {
-                        if (obj.connectionType === 'Non Metered') {
-                            payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
-                        }
-                    });
-                }
+                    if (service === "SW" &&
+                        payloadbillingPeriod.MdmsRes['sw-services-calculation'] &&
+                        payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== undefined &&
+                        payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== null) {
+                        payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod.forEach(obj => {
+                            if (obj.connectionType === 'Non Metered') {
+                                payloadReceiptDetails.Bill[0].billDetails[0]['expiryDate'] = payloadReceiptDetails.Bill[0].billDetails[0].toPeriod + obj.demandExpiryDate;
+                            }
+                        });
+                    }
 
-                httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-                    .then(res => {
-                        downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
-                    });
+                    httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+                        .then(res => {
+                            downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
+                        });
+                })
             })
         })
-    })
     } catch (exception) {
         alert('Some Error Occured while downloading Bill!');
     }
@@ -1778,7 +1784,7 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
 
 };
 // to download application 
-export const downloadApp = async (wnsConnection, type, mode,dispatch) => {
+export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
     let estFileStrID = wnsConnection[0].additionalDetails.estimationFileStoreId
     let sanFileStrID = wnsConnection[0].additionalDetails.sanctionFileStoreId
 
@@ -1949,87 +1955,87 @@ export const downloadApp = async (wnsConnection, type, mode,dispatch) => {
     }
 }
 
-export const getDomainLink = () =>{
+export const getDomainLink = () => {
     let link = "";
-    if(process.env.NODE_ENV !== "development"){
-       link += "/"+process.env.REACT_APP_NAME.toLowerCase()
+    if (process.env.NODE_ENV !== "development") {
+        link += "/" + process.env.REACT_APP_NAME.toLowerCase()
     }
     return link
 }
 
-export const isActiveProperty = (propertyObj) =>{
-    if(propertyObj.status === 'INACTIVE' || propertyObj.status === 'INWORKFLOW' ){      
-      return false;
+export const isActiveProperty = (propertyObj) => {
+    if (propertyObj.status === 'INACTIVE' || propertyObj.status === 'INWORKFLOW') {
+        return false;
     }
     return true;
 }
-export const isEditAction = () =>{
+export const isEditAction = () => {
     let isMode = getQueryArg(window.location.href, "action");
     return (isMode && isMode.toUpperCase() === 'EDIT');
 }
-export const isModifyMode = () =>{
+export const isModifyMode = () => {
     let isMode = getQueryArg(window.location.href, "mode");
     return (isMode && isMode.toUpperCase() === 'MODIFY');
 }
 
-export const isModifyModeAction = () =>{
+export const isModifyModeAction = () => {
     let isMode = getQueryArg(window.location.href, "modeaction");
     return (isMode && isMode.toUpperCase() === 'EDIT');
 }
 
 export const showHideFieldsFirstStep = (dispatch, propertyId, value) => {
-    if(propertyId){
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID",
-          "props.value",
-          propertyId
-        )
-      );
+    if (propertyId) {
+        dispatch(
+            handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID",
+                "props.value",
+                propertyId
+            )
+        );
     }
     dispatch(
         handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails",
-        "visible",
-        value
+            "apply",
+            "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails",
+            "visible",
+            value
         )
     );
     dispatch(
         handleField(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.Details",
-          "visible",
-          value
+            "apply",
+            "components.div.children.formwizardFirstStep.children.Details",
+            "visible",
+            value
         )
     );
     dispatch(
         handleField(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.ownerDetails",
-          "visible",
-          value
+            "apply",
+            "components.div.children.formwizardFirstStep.children.ownerDetails",
+            "visible",
+            value
         )
     );
     dispatch(
         handleField(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.connectionHolderDetails",
-          "visible",
-          value
+            "apply",
+            "components.div.children.formwizardFirstStep.children.connectionHolderDetails",
+            "visible",
+            value
         )
     );
 }
 
 export const getWaterSource = (waterSource, waterSubSource) => {
     //Check waterSource has both major and minor
-    if(waterSource && waterSource != "NA") {
+    if (waterSource && waterSource != "NA") {
         let source = waterSource.split(".");
-        if(source[0] && source[0] !== "NA" && source[1] && source[1] !== "NA") {
+        if (source[0] && source[0] !== "NA" && source[1] && source[1] !== "NA") {
             return waterSource;
         }
-        if(waterSubSource && waterSubSource !== 'NA') {
+        if (waterSubSource && waterSubSource !== 'NA') {
             waterSource += "." + waterSubSource;
         }
     }
@@ -2045,16 +2051,16 @@ export const isWorkflowExists = async (queryObj) => {
             queryObj
         );
         let isApplicationApproved = false;
-        if(payload && payload.ProcessInstances && payload.ProcessInstances.length > 0){          
-          for(let pInstance of payload.ProcessInstances) {
-              isApplicationApproved = pInstance.state.isTerminateState;
-              if(!isApplicationApproved) {
-                  break;
-              }
-          }          
+        if (payload && payload.ProcessInstances && payload.ProcessInstances.length > 0) {
+            for (let pInstance of payload.ProcessInstances) {
+                isApplicationApproved = pInstance.state.isTerminateState;
+                if (!isApplicationApproved) {
+                    break;
+                }
+            }
         }
         return isApplicationApproved;
     } catch (error) {
         console.log(error);
-    }    
+    }
 }
