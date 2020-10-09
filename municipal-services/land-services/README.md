@@ -27,7 +27,7 @@ This service is the major service supporting bpa-services which handles the data
 
 ### Swagger API Contract
 
-- [Swagger API](https://app.swaggerhub.com/apis/egov-foundation/Building-plan/1.0.0)
+- [Swagger API](https://github.com/egovernments/municipal-services/blob/master/docs/bpa/bpa-service.yaml)
 
 ## Service Details
 
