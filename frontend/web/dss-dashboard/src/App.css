@@ -599,3 +599,14 @@ button:focus {
     color: #000000;
     margin: 0 3px 2px 0 !important;
 }
+
+
+
+@media only screen and (max-width: 1000px) {
+
+    .dss-date-range{
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+  }

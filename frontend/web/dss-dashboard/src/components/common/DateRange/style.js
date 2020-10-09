@@ -199,7 +199,7 @@ trans: {
     actions: {
         display: 'flex',
             justifyContent: 'center',
-                margin: '10px 0 107px 0'
+                margin: '10px 0 10px 0'
     }
 }
 })

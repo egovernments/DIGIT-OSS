@@ -238,15 +238,14 @@ class DateRange extends React.Component {
           <DateRangePicker
             onChange={this.onChange}
             showSelectionPreview={true}
-
+            className={'dss-date-range'}
             staticRanges={staticRanges}
             moveRangeOnFirstSelection={false}
             months={isMobile ? 1 : 2}
             showMonthAndYearPickers={true}
             ranges={this.state.range}
             direction="horizontal"
-          />;
-
+          />
         </DialogContent>
         <DialogActions className={classes.actions}>
           <Button className={classes.cancelbtn} onClick={this.handleCancel.bind(this)}>

@@ -45,7 +45,7 @@ class UiTableHead extends Component {
               <TableCell
                 key={column.id}
                 // stickyHeader={column.stickyHeader}
-                align={(column.numeric === true) ? 'right' : 'left'}
+                align={(column.numeric === true) ? 'left' : 'left'}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
                 style={{ width: this.props.width ? this.props.width : 'auto' }}
