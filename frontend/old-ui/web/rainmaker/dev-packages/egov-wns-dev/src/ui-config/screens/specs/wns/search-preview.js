@@ -672,9 +672,10 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       let connectionNo = payload.WaterConnection[0].connectionNo;
       let queryObjForSearchApplications = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNo }, { key: "isConnectionSearch", value: true }]
       let oldApplicationPayload = await getSearchResults(queryObjForSearchApplications);
-      oldApplicationPayload.WaterConnection = oldApplicationPayload.WaterConnection.filter(row => {
-        return row.applicationType !== "MODIFY_WATER_CONNECTION"
-      })
+      oldApplicationPayload.WaterConnection = oldApplicationPayload.WaterConnection.sort((row1,row2)=>row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+      if(oldApplicationPayload.WaterConnection.length>1){
+        oldApplicationPayload.WaterConnection.shift();
+      }
       const waterSource=oldApplicationPayload.WaterConnection[0].waterSource||'';
       oldApplicationPayload.WaterConnection[0].waterSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[0];
       oldApplicationPayload.WaterConnection[0].waterSubSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[1];
