@@ -123,7 +123,7 @@ class EnhancedTable extends React.Component {
   cellClick(row, event) {
     if (typeof this.props.cellClick === 'function') {
       this.props.cellClick(row);
-     
+
     }
   }
   renderALLULBTable(n, idx) {
@@ -189,7 +189,12 @@ class EnhancedTable extends React.Component {
     }
     return items;
   }
-
+  convertToDateString(value, rowName) {
+    if (rowName === 'Complaint Date') {
+      return value && Number(value) && new Date(Number(value)).toLocaleDateString();
+    }
+    return value;
+  }
 
   getFilter(value) {
     switch (_.toUpper(value)) {
@@ -304,13 +309,14 @@ class EnhancedTable extends React.Component {
             <TableCell key={d}
               align={((_.get(_.find(columnData, c => c.id === d), 'numeric') || false))
                 /*    ? 'right' : 'left'}  to  make numbers to right align if needed */
-                ? 'right' : 'left'}
+                ? 'left' : 'left'}
               component='td' scope='row' data-title={d} >
               {title === 'CUSTOM' ?
                 d === this.props.column ?
                   <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
                   : (typeof n[d] === 'object') ?
-                    n[d][1]
+
+                    this.convertToDateString(n[d][1], d)
                     :
                     <div style={{ marginTop: "-8px", whiteSpace: "nowrap" }}>
                       <React.Fragment>
@@ -326,7 +332,7 @@ class EnhancedTable extends React.Component {
                 d === this.props.column ?
                   <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
                   : (typeof n[d] === 'object') ?
-                    n[d][1]
+                    this.convertToDateString(n[d][1], d)
                     :
                     <div style={{ marginTop: "-8px", whiteSpace: "nowrap" }}>
                       <React.Fragment>
