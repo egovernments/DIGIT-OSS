@@ -48,9 +48,11 @@ Module is used to apply for Building Plan Approval, Building Plan Occupancy Cert
 
 - dcr-services ( get and validate Edcr data ) 
 
+- noc-service ( Apply and approval of NOC )
+
 ### Swagger API Contract
 
-- [Swagger API](https://app.swaggerhub.com/apis/egov-foundation/Building-plan/1.0.0)
+- [Swagger API](https://github.com/egovernments/municipal-services/blob/master/docs/bpa/bpa-service.yaml)
 
 ## Service Details
 
