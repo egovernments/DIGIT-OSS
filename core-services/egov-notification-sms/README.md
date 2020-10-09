@@ -1,9 +1,26 @@
-Notification SMS services consumes SMS from the kafka notification topic and 
-process them to send it to an external 3rd party service.
+# egov-notification-sms service
+
+Notification SMS service consumes SMS from the kafka notification topic and process them to send it to an third party service.
+
+### DB UML Diagram
+
+- NA
+
+### Service Dependencies
+- NA
+
+### Swagger API Contract
+
+- NA
+
+## Service Details
+
+This service is a consumer, which means it reads from the kafka queue and doesn’t provide facility to be accessed through API calls, there’s no REST layer here. The producers willing to integrate with this consumer will be posting a JSON  onto the topic configured at ‘kafka.topics.notification.sms.name’.
+The notification-sms service reads from the queue and sends the sms to the mentioned phone number using one of the SMS providers configured. 
 
 The implementation of the consumer is present in the directory `src/main/java/org/egov/web/notification/sms/service/impl`.
 
-There are current below providers available
+These are current providers available
 - Generic
 - Console
 - MSDG
@@ -90,3 +107,10 @@ Any SMS which expire due to kafka lags, or some other internal issues, they will
 
 If a `backup` topic has not been configured, then in an event of an error the same will be delivered to `kafka.topics.error.sms`
 
+### Kafka Consumers
+`egov.core.notification.sms` : egov-notification-sms listens to this topic to get the data
+
+
+### Kafka Producers
+
+- NA
