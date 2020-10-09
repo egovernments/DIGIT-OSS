@@ -25,7 +25,7 @@ export default function NFormatterTest(value, type, symbol, commaSeparated = fal
                         return `${Rformatter.format(value || 0)}`
                     } else {
                         if (!commaSeparated) {
-                            return value;
+                            return Rformatter.format((value).toFixed(2) || 0);
                             // let nvalue = Rformatter.format((value).toFixed(2) || 0).replace('₹ ', '');
                             // var right = nvalue.substring(nvalue.length - 12, nvalue.length);
                             // var left = nvalue.substring(0, nvalue.length - 12).replace(',', '');
@@ -53,7 +53,7 @@ export default function NFormatterTest(value, type, symbol, commaSeparated = fal
         case "percentage":
         case "Percentage":
             const Pformatter = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 });
-            return `${Pformatter.format(value)} %`;
+            return `${Pformatter.format(value.toFixed(2))} %`;
         case "text":
         case "Text":
             return value;
