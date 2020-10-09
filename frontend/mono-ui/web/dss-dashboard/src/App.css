@@ -600,13 +600,23 @@ button:focus {
     margin: 0 3px 2px 0 !important;
 }
 
-
+.dss-date-range div div button i{
+padding: 0px !important;
+}
 
 @media only screen and (max-width: 1000px) {
 
     .dss-date-range{
-        display: flex;
+        display: flex!important;
         flex-direction: column;
         overflow: hidden;
+        align-items: center;
+        justify-items: center;
+    }
+    .dss-date-range div{
+      width: 20em!important;
+    }
+    .dss-date-time-filter{
+        padding: 10px 10px;
     }
   }
