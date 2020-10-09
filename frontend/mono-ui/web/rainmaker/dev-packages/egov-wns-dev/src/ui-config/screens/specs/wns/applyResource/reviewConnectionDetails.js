@@ -238,6 +238,10 @@ const getPropertyDetails = {
             {
               jsonPath: "applyScreenOld.property.propertyType",
               callBack: handleNA,
+              localePrefix: {
+                moduleName: "WS",
+                masterName: "PROPTYPE"
+              }
             }
           ),
           reviewPropertyUsageType: getLabelWithValueForModifiedLabel(
@@ -246,7 +250,7 @@ const getPropertyDetails = {
               labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
             },
             {
-              jsonPath: "applyScreenOld.property.usageCategory",
+              jsonPath: "applyScreen.property.usageCategory",
               callBack: handleNA,
               localePrefix: {
                 moduleName: "WS",
@@ -259,10 +263,10 @@ const getPropertyDetails = {
             {
               jsonPath: "applyScreenOld.property.usageCategory",
               callBack: handleNA,
-              // localePrefix: {
-              // moduleName: "WS",
-              // masterName: "PROPUSGTYPE"
-              // }
+              localePrefix: {
+                moduleName: "WS",
+                masterName: "PROPUSGTYPE"
+              }
             }
 
           ),

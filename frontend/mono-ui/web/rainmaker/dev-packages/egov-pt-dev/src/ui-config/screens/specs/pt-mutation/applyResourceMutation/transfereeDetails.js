@@ -384,7 +384,7 @@ const commonApplicantInformation = () => {
 };
 
 const institutionTypeInformation = () => {
-  return getCommonCard(
+  return getCommonGrayCard(
     {
       institutionTypeDetailsContainer: getCommonContainer({
 
@@ -443,7 +443,7 @@ const institutionTypeInformation = () => {
     })
 };
 const institutionInformation = () => {
-  return getCommonCard(
+  return getCommonGrayCard(
     {
       header: getCommonTitle(
         {
