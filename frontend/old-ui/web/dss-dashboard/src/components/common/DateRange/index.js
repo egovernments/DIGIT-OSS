@@ -234,7 +234,7 @@ class DateRange extends React.Component {
         <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#fe7a51' }}>
           {this.state.title}
         </DialogTitle>
-        <DialogContent dividers>
+        <DialogContent dividers className={"dss-date-time-filter"}>
           <DateRangePicker
             onChange={this.onChange}
             showSelectionPreview={true}
