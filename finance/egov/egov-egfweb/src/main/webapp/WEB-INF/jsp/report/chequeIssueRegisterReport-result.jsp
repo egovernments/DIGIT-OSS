@@ -138,7 +138,7 @@
 											<td class="blueborderfortd"><div align="center">
 													<a
 														href='/services/EGF/report/chequeIssueRegisterReport-bankAdviceExcel.action?instrumentHeaderId=<s:property value="instrumentHeaderId" />'>
-														<s:text name="instrument.bankadvice" />
+														<s:text name="instrument.chequeissueadvice" />
 													</a>
 												</div></td>
 											<s:if
