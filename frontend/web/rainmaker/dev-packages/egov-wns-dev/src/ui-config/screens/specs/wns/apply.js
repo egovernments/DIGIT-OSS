@@ -460,6 +460,12 @@ export const getData = async (action, state, dispatch) => {
     getApplyPropertyDetails(queryObject, dispatch, propertyID)
   }
 };
+const  getApplicationNoLabel= () => {
+  if (isModifyMode()&& !isModifyModeAction()) {
+    return "WS_ACKNO_CONNECTION_NO_LABEL";
+  }
+  return  "WS_ACKNO_APP_NO_LABEL" ;
+}
 
 const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
   let payload = await getPropertyResults(queryObject, dispatch);
@@ -636,6 +642,8 @@ let mode = getQueryArg(window.location.href, "mode");
     } else {
       modifyLink = "/wns/apply"
     }
+    set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberSewerage.props.mode",isModifyMode() && !isModifyModeAction());
+    set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.props.mode",isModifyMode() && !isModifyModeAction());
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.url", modifyLink)
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.isMode", isMode)
     return action;

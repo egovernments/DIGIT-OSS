@@ -276,11 +276,11 @@ export const propertyDetails={
       labelKey: "WS_OLD_LABEL_NAME"
     },
     {
-      jsonPath: "WaterConnectionOld[0].property.usageCategory",
+      jsonPath: "WaterConnectionOld[0].property.units[0].usageCategory",
       callBack: handleNA,
       localePrefix: {
         moduleName: "WS",
-        masterName: "PROPUSGTYPE"
+        masterName: "PROPSUBUSGTYPE"
       }
       
     }

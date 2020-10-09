@@ -48,20 +48,23 @@ class LabelContainer extends React.Component {
 		if (typeof fieldValue === "boolean") {
 			fieldValue = fieldValue ? getLocaleLabels("SCORE_YES", "SCORE_YES") : getLocaleLabels("SCORE_NO", "SCORE_NO");
 		}
-
 		let fieldLabel =
 			typeof fieldValue === "string"
 				? getLocaleLabels(
 					fieldValue,
 
-					localePrefix && !isEmpty(localePrefix)
+					localePrefix && localePrefix.moduleName
 						? appendModulePrefix(fieldValue, localePrefix)
 						: fieldValue,
 					localizationLabels
 				)
 				: fieldValue;
-		let labelValue = fieldValue ;
+
 		let lebelName = translatedLabel
+
+
+		let labelValue = fieldValue?fieldLabel: fieldValue ;
+		
 		labelValue =
 			checkValueForNA && typeof checkValueForNA === "function"
 				? checkValueForNA(labelValue)
