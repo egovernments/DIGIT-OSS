@@ -298,4 +298,13 @@ public class PropertyConfiguration {
 
     @Value("${state.level.tenant.id}")
     private String stateLevelTenantId;
+    
+	@Value("${egov.calculation.demand.create.endpoint}")
+	private String createDemandEndpoint;
+	
+	@Value("${egov.calculation.demand.update.endpoint}")
+	private String updateDemandEndpoint;
+	
+	@Value("${egbs.demand.search.endpoint}")
+	private String egbsSearchDemand;
 }

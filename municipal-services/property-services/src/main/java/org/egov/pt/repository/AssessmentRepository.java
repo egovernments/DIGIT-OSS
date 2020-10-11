@@ -75,5 +75,19 @@ public class AssessmentRepository {
 		return assessments.get(0);
 	}
 
+	public List<Assessment> getAssessmentsFromDBByPropertyId(Assessment assessment) {
+
+		AssessmentSearchCriteria criteria = AssessmentSearchCriteria.builder()
+				.propertyIds(Collections.singleton(assessment.getPropertyId())).tenantId(assessment.getTenantId())
+				.build();
+
+		List<Assessment> assessments = getAssessments(criteria);
+
+		if (CollectionUtils.isEmpty(assessments))
+			throw new CustomException("ASSESSMENT_NOT_FOUND",
+					"No assessments are found in DB for the property: " + assessment.getPropertyId());
+
+		return assessments;
+	}
 
 }

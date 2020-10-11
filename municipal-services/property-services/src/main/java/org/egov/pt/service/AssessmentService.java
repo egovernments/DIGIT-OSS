@@ -2,15 +2,15 @@ package org.egov.pt.service;
 
 import static org.egov.pt.util.PTConstants.ASSESSMENT_BUSINESSSERVICE;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.*;
 import org.egov.pt.models.enums.Status;
-import org.egov.pt.models.user.UserDetailResponse;
-import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.models.workflow.State;
@@ -19,9 +19,13 @@ import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.validator.AssessmentValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
+import org.egov.pt.web.contracts.DemandRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AssessmentService {
@@ -62,6 +66,8 @@ public class AssessmentService {
 		this.workflowService = workflowService;
 		this.calculationService = calculationService;
 	}
+	@Autowired
+	private ObjectMapper mapper;
 
 	/**
 	 * Method to create an assessment asynchronously.
@@ -89,7 +95,38 @@ public class AssessmentService {
 		return request.getAssessment();
 	}
 
+	public Assessment createLegacyAssessments(AssessmentRequest request) {
+		Property property = utils.getPropertyForAssessment(request);
+		validator.validateAssessmentCreate(request, property);
+		Assessment actualAssessment = request.getAssessment();
+		DemandRequest demandRequest = mapper.convertValue(actualAssessment.getAdditionalDetails(), DemandRequest.class);
+		List<Demand> demands = demandRequest.getDemands();
+		if (demands == null || demands.isEmpty())
+			throw new CustomException("No_DEMAND", "No demand added for the property");
+		validator.filterDemands(demands);
 
+		for (Demand demand : demands) {
+			AssessmentRequest assessmentRequest = enrichLegacyAssessment(actualAssessment, demand.getTaxPeriodFrom(),
+					request.getRequestInfo());
+			assessmentEnrichmentService.enrichAssessmentCreate(assessmentRequest);
+			producer.push(props.getCreateAssessmentTopic(), assessmentRequest);
+		}
+
+		calculationService.saveDemands(demands, request.getRequestInfo());
+		return actualAssessment;
+	}
+
+	private AssessmentRequest enrichLegacyAssessment(Assessment assessment, Long fromDate, RequestInfo requestInfo) {
+		assessment.setAdditionalDetails(null);
+		assessment.setFinancialYear(getFinancialYear(fromDate));
+		return AssessmentRequest.builder().requestInfo(requestInfo).assessment(assessment).build();
+	}
+
+	private String getFinancialYear(Long fromDate) {
+		LocalDate ld = Instant.ofEpochMilli(fromDate).atZone(ZoneId.systemDefault()).toLocalDate();
+		return String.valueOf(ld.getYear()).concat("-").concat(String.valueOf(ld.getYear() + 1).substring(2, 4));
+	}
+	
 	/**
 	 * Method to update an assessment asynchronously.
 	 *
@@ -157,6 +194,36 @@ public class AssessmentService {
 			producer.push(props.getUpdateAssessmentTopic(), request);
 		}
 		return request.getAssessment();
+	}
+	
+	public Assessment updateLegacyAssessments(AssessmentRequest request) {
+		Property property = utils.getPropertyForAssessment(request);
+		Assessment actualAssessment = request.getAssessment();
+		RequestInfo requestInfo = request.getRequestInfo();
+		DemandRequest demandRequest = mapper.convertValue(actualAssessment.getAdditionalDetails(), DemandRequest.class);
+		List<Demand> demands = demandRequest.getDemands();
+		if (demands == null || demands.isEmpty())
+			throw new CustomException("NO_DEMAND", "No demand added for the property");
+		validator.validateLegacyDemands(demands, actualAssessment.getPropertyId(), actualAssessment.getTenantId());
+		List<Assessment> assessmentsFromDB = repository.getAssessmentsFromDBByPropertyId(actualAssessment);
+		for (Demand demand : demands) {
+			if (demand.getId() == null) {
+				AssessmentRequest assessmentRequest = enrichLegacyAssessment(actualAssessment,
+						demand.getTaxPeriodFrom(), requestInfo);
+				assessmentEnrichmentService.enrichAssessmentCreate(assessmentRequest);
+				producer.push(props.getCreateAssessmentTopic(), assessmentRequest);
+			}
+
+		}
+		for (Assessment assessment : assessmentsFromDB) {
+			AssessmentRequest assessmentRequest = AssessmentRequest.builder().requestInfo(requestInfo)
+					.assessment(assessment).build();
+			assessmentEnrichmentService.enrichAssessmentUpdate(assessmentRequest, property);
+			producer.push(props.getUpdateAssessmentTopic(), assessmentRequest);
+		}
+		calculationService.updateDemands(demands, request.getRequestInfo());
+
+		return actualAssessment;
 	}
 
 	public List<Assessment> searchAssessments(AssessmentSearchCriteria criteria){

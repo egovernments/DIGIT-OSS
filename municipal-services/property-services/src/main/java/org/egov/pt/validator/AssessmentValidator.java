@@ -1,5 +1,6 @@
 package org.egov.pt.validator;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,26 +11,35 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AssessmentSearchCriteria;
+import org.egov.pt.models.Demand;
+import org.egov.pt.models.DemandDetail;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.UnitUsage;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.repository.AssessmentRepository;
+import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.util.ErrorConstants;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.AssessmentRequest;
+import org.egov.pt.web.contracts.DemandResponse;
+import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
+import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AssessmentValidator {
@@ -45,6 +55,12 @@ public class AssessmentValidator {
 
 	@Autowired
 	private PropertyConfiguration config;
+	
+	@Autowired
+	private ObjectMapper mapper;
+	
+	@Autowired
+    private ServiceRequestRepository serviceRequestRepository;
 
 
 	public void validateAssessmentCreate(AssessmentRequest assessmentRequest, Property property) {
@@ -342,6 +358,79 @@ public class AssessmentValidator {
 	 */
 	private static <T> boolean listEqualsIgnoreOrder(List<T> list1, List<T> list2) {
 		return new HashSet<>(list1).equals(new HashSet<>(list2));
+	}
+	
+	public void filterDemands(List<Demand> demands) {
+		Map<String, DemandDetail> demandDetailMap = new HashMap<>();
+		Map<String, String> errorMap = new HashMap<>();
+
+		validateDemandDetails(demands, errorMap);
+		if (!CollectionUtils.isEmpty(errorMap))
+			throw new CustomException(errorMap);
+
+		for (Demand demand : demands) {
+			demandDetailMap.clear();
+			for (DemandDetail dmdDetail : demand.getDemandDetails()) {
+
+				demandDetailMap.put(dmdDetail.getTaxHeadMasterCode(), dmdDetail);
+			}
+			demand.setDemandDetails(new ArrayList<>(demandDetailMap.values()));
+		}
+
+	}
+
+	public void validateLegacyDemands(List<Demand> demands, String propertyId, String tenantId) {
+
+		List<String> demandIds = new ArrayList<>();
+		Map<String, String> errorMap = new HashMap<>();
+
+		for (Demand demand : demands) {
+			if (!propertyId.equalsIgnoreCase(demand.getConsumerCode())) {
+				throw new CustomException("INVALID_DEMAND", "The demand is not matching with the property");
+			}
+			if (demand.getId() != null) {
+				demandIds.add(demand.getId());
+			}
+		}
+		validateDemandDetails(demands,errorMap);
+		if (!CollectionUtils.isEmpty(errorMap))
+			throw new CustomException(errorMap);
+		
+		StringBuilder uri = new StringBuilder(config.getEgbsHost()).append(config.getEgbsSearchDemand())
+				.append("?tenantId=").append(tenantId).append("&consumerCode=").append(propertyId);
+		Object res;
+		try {
+			res = serviceRequestRepository.fetchResult(uri, new RequestInfoWrapper()).orElse(null);
+		} catch (ServiceCallException e) {
+			throw e;
+		}
+		DemandResponse demandRes = mapper.convertValue(res, DemandResponse.class);
+		List<String> dmdIdsFromDB = demandRes.getDemands().stream().map(Demand::getId).collect(Collectors.toList());
+
+		if (!listEqualsIgnoreOrder(dmdIdsFromDB, demandIds)) {
+			throw new CustomException("INVALID_DEMAND", "The demand is missing for the property");
+		}
+	}
+	
+	private void validateDemandDetails(List<Demand> demands, Map<String, String> errorMap) {
+
+		for (Demand demand : demands) {
+			for (DemandDetail demandDetail : demand.getDemandDetails()) {
+
+				BigDecimal tax = demandDetail.getTaxAmount();
+				BigDecimal collection = demandDetail.getCollectionAmount();
+				if (tax.compareTo(BigDecimal.ZERO) >= 0
+						&& (tax.compareTo(collection) < 0 || collection.compareTo(BigDecimal.ZERO) < 0)) {
+					errorMap.put("INVALID_DEMAND_DEATIL",
+							"collection amount cannot not be greater than taxAmount or Negative in case of positive tax");
+				} else if (tax.compareTo(BigDecimal.ZERO) < 0 && collection.compareTo(BigDecimal.ZERO) != 0
+						&& collection.compareTo(tax) != 0) {
+					errorMap.put("INVALID_DEMAND_DEATIL",
+							"collection amount should be equal to 'ZERO' or tax amount in case of negative Tax");
+
+				}
+			}
+		}
 	}
 
 }

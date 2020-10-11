@@ -1,12 +1,15 @@
 package org.egov.pt.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.Demand;
 import org.egov.pt.models.Property;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.AssessmentRequest;
+import org.egov.pt.web.contracts.DemandRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +75,26 @@ public class CalculationService {
 //       return calculationReq;
 //     }
 
+	public void saveDemands(List<Demand> demands, RequestInfo requestInfo) {
 
+		DemandRequest demandRequest = DemandRequest.builder().requestInfo(requestInfo).demands(demands).build();
 
+		StringBuilder url = new StringBuilder(config.getCalculationHost()).append(config.getCalculationContextPath())
+				.append(config.getCreateDemandEndpoint());
 
+		serviceRequestRepository.fetchResult(url, demandRequest);
+
+	}
+
+	public void updateDemands(List<Demand> demands, RequestInfo requestInfo) {
+
+		DemandRequest demandRequest = DemandRequest.builder().requestInfo(requestInfo).demands(demands).build();
+
+		StringBuilder url = new StringBuilder(config.getCalculationHost()).append(config.getCalculationContextPath())
+				.append(config.getUpdateDemandEndpoint());
+
+		serviceRequestRepository.fetchResult(url, demandRequest);
+
+	}
 
 }
