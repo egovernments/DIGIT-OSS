@@ -392,7 +392,7 @@ public class AssessmentValidator {
 				demandIds.add(demand.getId());
 			}
 		}
-		validateDemandDetails(demands,errorMap);
+		validateDemandDetailsForUpdate(demands,errorMap);
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
 		
@@ -410,6 +410,21 @@ public class AssessmentValidator {
 		if (!listEqualsIgnoreOrder(dmdIdsFromDB, demandIds)) {
 			throw new CustomException("INVALID_DEMAND", "The demand is missing for the property");
 		}
+	}
+	
+	private void validateDemandDetailsForUpdate(List<Demand> demands, Map<String, String> errorMap) {
+
+		Map<String, DemandDetail> demandDetailMap = new HashMap<>();
+		for (Demand demand : demands) {
+			demandDetailMap.clear();
+			for (DemandDetail dmdDetail : demand.getDemandDetails()) {
+				if (demandDetailMap.containsKey(dmdDetail.getTaxHeadMasterCode()))
+					throw new CustomException("DUPLICATE_DEMAND", "Duplicate demand is added.");
+				else
+					demandDetailMap.put(dmdDetail.getTaxHeadMasterCode(), dmdDetail);
+			}
+		}
+		validateDemandDetails(demands, errorMap);
 	}
 	
 	private void validateDemandDetails(List<Demand> demands, Map<String, String> errorMap) {
