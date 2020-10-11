@@ -361,5 +361,12 @@ public class CalculatorConstants {
 	
 	public static final String DEMAND_UPDATE_FAILED = "DEMAND_UPDATE_FAILED";
 	public static final String DEMAND_UPDATE_FAILED_MSG = "Demand Updation Failed";
+	
+	public static final String MDMS_CITYWISE_CONFIG_KEY = "citywiseconfig";
+	public static final String MODULE_TENANT = "tenant";
+	public static final String MDMS_REBATE_PENALTY_CINFIG_PATH = "$.MdmsRes.tenant.citywiseconfig[?(@.config=='ptCalculateRebateAndPenalty')].enabledCities";
+
+	public static final String INVALID_TENANT_ID_MDMS_KEY = "INVALID TENANTID";
+	public static final String INVALID_TENANT_ID_MDMS_MSG = "No data found for this tenentID";
 
 }

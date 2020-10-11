@@ -9,8 +9,11 @@ import java.util.stream.Collectors;
 
 import com.jayway.jsonpath.JsonPath;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.MdmsResponse;
+import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.calculator.repository.Repository;
 import org.egov.pt.calculator.util.CalculatorConstants;
 import org.egov.pt.calculator.util.CalculatorUtils;
@@ -333,4 +336,23 @@ public class MasterDataService {
 		return masterMap;
 	}
 	
+	public List<List<String>> getRebateAndInterestEnabledCities(String tenantId) {
+		String tenant = tenantId.split(".")[0];
+		StringBuilder uri = new StringBuilder(calculatorUtils.getMdmsSearchUrl());
+		List<MasterDetail> masterDetails = new ArrayList<>();
+		masterDetails.add(MasterDetail.builder().name(MDMS_CITYWISE_CONFIG_KEY).build());
+		List<ModuleDetail> moduleDetails = new ArrayList<>();
+		moduleDetails.add(ModuleDetail.builder().moduleName(MODULE_TENANT).masterDetails(masterDetails).build());
+		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(tenant).moduleDetails(moduleDetails).build();
+		MdmsCriteriaReq req = MdmsCriteriaReq.builder().requestInfo(new RequestInfo()).mdmsCriteria(mdmsCriteria)
+				.build();
+
+		try {
+			Object result = repository.fetchResult(uri, req);
+			return JsonPath.read(result, MDMS_REBATE_PENALTY_CINFIG_PATH);
+		} catch (Exception e) {
+			throw new CustomException(INVALID_TENANT_ID_MDMS_KEY, INVALID_TENANT_ID_MDMS_MSG);
+		}
+	}
+
 }
