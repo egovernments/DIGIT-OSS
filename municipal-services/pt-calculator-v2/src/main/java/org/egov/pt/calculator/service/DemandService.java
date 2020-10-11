@@ -571,5 +571,36 @@ public class DemandService {
 		BigDecimal newTaxAmountForLatestDemandDetail = latestDetailInfo.getLatestDemandDetail().getTaxAmount().add(diff);
 		latestDetailInfo.getLatestDemandDetail().setTaxAmount(newTaxAmountForLatestDemandDetail);
 	}
+	
+	public DemandResponse createPTDemands(List<Demand> demands, RequestInfo requestInfo) {
+
+		DemandRequest demandReq = DemandRequest.builder().demands(demands).requestInfo(requestInfo).build();
+		String url = new StringBuilder().append(configs.getBillingServiceHost())
+				.append(configs.getDemandCreateEndPoint()).toString();
+		DemandResponse res = new DemandResponse();
+
+		try {
+			res = restTemplate.postForObject(url, demandReq, DemandResponse.class);
+
+		} catch (HttpClientErrorException e) {
+			throw new ServiceCallException(e.getResponseBodyAsString());
+		}
+		return res;
+	}
+
+	public DemandResponse updatePTDemands(List<Demand> demands, RequestInfo requestInfo) {
+		DemandRequest demandReq = DemandRequest.builder().demands(demands).requestInfo(requestInfo).build();
+		String url = new StringBuilder().append(configs.getBillingServiceHost())
+				.append(configs.getDemandUpdateEndPoint()).toString();
+		DemandResponse res = new DemandResponse();
+
+		try {
+			res = restTemplate.postForObject(url, demandReq, DemandResponse.class);
+
+		} catch (HttpClientErrorException e) {
+			throw new ServiceCallException(e.getResponseBodyAsString());
+		}
+		return res;
+	}
 
 }
