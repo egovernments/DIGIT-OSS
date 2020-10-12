@@ -1,7 +1,7 @@
-# eGov SmartCity eGovernance Suite [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+# eGov Coexistence [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Join the chat at https://gitter.im/egovernments/eGov](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/egovernments/eGov?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](http://ci.egovernments.org/buildStatus/icon?job=eGov-Github-Develop)](http://ci.egovernments.org/job/eGov-Github-Develop/) [![][codacy img]][codacy] [![][versioneye img]][versioneye]
+[![Build Status](https://jenkins.egovernments.org/buildStatus/icon?job=egov-coexistence-build)](https://jenkins.egovernments.org/view/Coexistence%20Builds/job/egov-coexistence-build/) [![][codacy img]][codacy] [![][versioneye img]][versioneye]
 
 eGovernments Foundation transforms urban governance with the use of scalable and replicable technology solutions that enable efficient and effective municipal operations, better decision making, and contact-less urban service delivery.
 
@@ -12,7 +12,7 @@ eGovernments Foundation has been in the forefront of implementing eGovernance so
 Our primary business motivator is to increase the footprint of eGovernance across the country and help adoption in as many ULBs as possible. Going opensource with our products is a measure in this direction. It also gives us the ability to tap into the immense talent pool in India for strengthening and improving our cities. Open source also blends well with our ethical fabric of being open and transparent in our business.
 
 #### Issue Tracking
-Report issues via the [eGov Opensource JIRA][].
+Report issues via the [eGov Coexistence JIRA][].
 #### License
 The eGov suit is released under version 3.0 of the [GPL][].
 #### Powered By
@@ -274,7 +274,7 @@ Browser:-
 
 [Git]: https://git-scm.com/downloads
 [JDK8 build]: http://www.oracle.com/technetwork/java/javase/downloads
-[eGov Opensource JIRA]: http://issues.egovernments.org/browse/PHOENIX
+[eGov Coexistence JIRA]: https://digit-discuss.atlassian.net/jira/software/projects/FINANCE/boards/26
 [Wildfly Customized]: http://devops.egovernments.org/downloads/wildfly/wildfly-latest.zip
 [Eclipse Mars]: https://eclipse.org/downloads/packages/release/Mars/M1
 [Elastic Search]: https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-2.4.1.zip
