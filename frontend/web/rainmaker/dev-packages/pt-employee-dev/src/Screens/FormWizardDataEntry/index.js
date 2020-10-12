@@ -2195,6 +2195,7 @@ class FormWizardDataEntry extends Component {
           Properties: properties
         }
       );
+     showSpinner();
       const demandData = [];
       const demandDetails = [];
       let datas = getFinalData() || [];
@@ -2313,7 +2314,11 @@ class FormWizardDataEntry extends Component {
       //     }
       //   })
       // }
-    
+      showSpinner();
+
+      if(demandData[0].demandDetails[0].taxAmount!==null)
+      {
+
         let createDemandResponse = await httpRequest(
         `billing-service/demand/${propertyMethodAction}`,
         `${propertyMethodAction}`,
@@ -2333,12 +2338,21 @@ class FormWizardDataEntry extends Component {
           Demands: demandData
         }
       );
+      showSpinner();
       this.setState({
         assessedPropertyDetails: createPropertyResponse,
         assessedDemandDetails: createDemandResponse,
         // selected: index,
         formValidIndexArray: [...formValidIndexArray, selected]
       });
+    }
+    else 
+    {
+      alert("Demand is not generated, Contact administrator");
+    }   
+
+
+      
       hideSpinner();
       const callToggleBarSnackbar = (labelKey, labelName, status = "error") => {
         this.props.toggleSnackbarAndSetText(
