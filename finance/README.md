@@ -23,17 +23,17 @@ This section contains steps that are involved in build and deploy the applicatio
 FAQ related to various deployment and development issues are discussed [here][FAQ]
 
 ## Setup with auto installer
-* Clone the eGov repository (development is done on the develop branch).
+* Clone the eGov Coexistence repository (development is done on the master branch).
 ```bash
 $ mkdir -p ${HOME}/egovgithub && cd egovgithub
-$ git clone  -b develop --single-branch  https://github.com/egovernments/egov-smartcity-suite.git
+$ git clone  -b master --single-branch  https://github.com/egovernments/egov-coexistence.git
 ```
 * First time setup which will install the stacks, build the source code, and deploys the artifact to Wildfly
 ```bash
 $ cd ${HOME}/egovgithub/eGov && make all
 ```
 -----
-* To install the prerequisites Phoenix stacks
+* To install the prerequisites Coexistence stacks
 ```bash
 $ cd ${HOME}/egovgithub/eGov &&  make install
 ```
@@ -76,12 +76,11 @@ $ id -un
 ```
 
 #### Building Source
-1. Clone the eGov repository (development is done on the `develop` branch.
+1. Clone the eGov Coexisteence repository (development is done on the `master` branch)
 ```bash
 $ mkdir egovgithub
 $ cd egovgithub
-$ git clone https://github.com/egovernments/egov-smartcity-suite.git
-$ git checkout develop
+$ git clone https://github.com/egovernments/egov-coexistence.git
 ```
 2. Change directory to `<CLONED_REPO_DIR>/egov/egov-config/src/main/resources/config/` and create a file called `egov-erp-<username>.properties` and enter the following values based on your environment config.
 
@@ -209,7 +208,7 @@ This section gives more details regarding developing and contributing to eGov su
 #### Repository Structure
 `egov` - folder contains all the source code of eGov opensource projects
 #### Check out sources
-`git clone git@github.com:egovernments/egov-smartcity-suite.git` or `git clone https://github.com/egovernments/egov-smartcity-suite.git`
+`git clone git@github.com:egovernments/egov-coexistence.git` or `git clone https://github.com/egovernments/egov-coexistence.git`
 #### Prerequisites
 
 * Install your favorite IDE for java project. Recommended Eclipse or IntelliJ IDEA
