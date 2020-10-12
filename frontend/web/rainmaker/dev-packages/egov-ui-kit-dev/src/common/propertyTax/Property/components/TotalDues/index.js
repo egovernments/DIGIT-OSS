@@ -4,6 +4,8 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { TotalDuesButton } from "./components";
 import { withRouter } from "react-router-dom";
 import "./index.css";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
@@ -14,9 +16,46 @@ const labelStyle = {
   paddingRight: "20px",
 };
 
+const getExcludedUlbs = (tenantId) => {
+  let isEnabled;
+  let tenantid = getTenantId().split(".")[0];
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantid,
+      moduleDetails: [
+       {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "citywiseconfig"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+   httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    ).then(payload => {payload.MdmsRes.tenant.citywiseconfig.forEach( item => {
+      if(item.config === 'ptCitizenPayButton'){
+        isEnabled = item.enabledCities.includes(getTenantId()) && process.env.REACT_APP_NAME === "Citizen" ? false : true;
+      }
+    })})
+  } catch (e) {
+    console.log(e);
+  }
+  return isEnabled;
+}
+
 const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
   const envURL='/egov-common/pay';
   const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
+  const isDiasbled = getExcludedUlbs(tenantId);
   return (
     <div className="">
       <div className="col-xs-6 col-sm-3 flex-child">
@@ -35,7 +74,7 @@ const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
           {/* <TotalDuesButton labelText="PT_TOTALDUES_VIEW" /> */}
         </div>
       )}
-      {totalBillAmountDue > 0 && process.env.REACT_APP_NAME !== "Citizen" && (
+      {totalBillAmountDue > 0 && process.env.REACT_APP_NAME !== "Citizen" && isDiasbled && (
         <div className="col-xs-6 col-sm-3 flex-child " >
           <div style={{ float: "right" }}>
           <TotalDuesButton labelText="PT_TOTALDUES_PAY" onClickAction={() => {
