@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.1 - 2020-10-09
+- Ignore and start server even Kafka topic is missing
+
 ## 1.1.0 - 2020-06-22
 
 - Handling the Payment Request to persist the vouchers.
