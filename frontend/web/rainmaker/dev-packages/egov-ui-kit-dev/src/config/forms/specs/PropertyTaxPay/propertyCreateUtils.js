@@ -34,6 +34,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   properties[0].units && properties[0].units.map((unit) => {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
+     constructionType:unit.ConstructionType
     };
     unit.tenantId = properties[0].tenantId;
      unit.usageCategory =
@@ -55,11 +56,14 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
     properties[0].documents = [];
     Object.keys(documentsUploadRedux).map((key) => {
+      if(documentsUploadRedux[key].documents)
+      {
       properties[0].documents.push({
         documentType:documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value,
         fileStoreId: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileStoreId,
         documentUid: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileStoreId,
       });
+    }
     });
   }
 

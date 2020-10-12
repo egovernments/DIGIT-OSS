@@ -4,8 +4,10 @@ import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { hideSpinner } from "egov-ui-kit/redux/common/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getBusinessServiceNextAction } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
-import { get } from "lodash";
+import { get, set, isEqual } from "lodash";
 import store from "ui-redux/store";
+import commonConfig from "config/common.js";
+import cloneDeep from "lodash/cloneDeep";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -355,6 +357,30 @@ const createProperty = async (Properties, action, props) => {
   const { documentsUploadRedux, newProperties, propertiesEdited } = props;
   const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
   const propertyMethodAction = action;
+  let  ownershipCategory = get(propertyPayload, "ownershipCategory",'');
+  
+  let  usageCategory = get(propertyPayload, "usageCategory",'');
+
+
+
+  if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
+  {
+    set(propertyPayload, "ownershipCategory",'INDIVIDUAL.SINGLEOWNER');
+  }
+
+  if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.MULTIPLEOWNERS")
+  {
+    set(propertyPayload, "ownershipCategory",'INDIVIDUAL.MULTIPLEOWNERS');
+  }
+
+  if(usageCategory==="RESIDENTIAL.RESIDENTIAL")
+  {
+    set(propertyPayload, "usageCategory",'RESIDENTIAL');
+  }
+  if(usageCategory==="NONRESIDENTIAL.NONRESIDENTIAL")
+  {
+    set(propertyPayload, "usageCategory",'NONRESIDENTIAL');
+  }
 
 
   if (action === "_update") {
@@ -468,3 +494,17 @@ export const getPurpose = () => {
   const purpose = getQueryArg(window.location.href, "purpose") || PROPERTY_FORM_PURPOSE.DEFAULT;
   return purpose;
 }
+
+
+export const getPropertyInfoScreenUrl = (propertyId, tenantId) => {
+  const url = process.env.REACT_APP_NAME === "Citizen" ?
+    `/property-tax/my-properties/property/${propertyId}/${tenantId}` : `/property-tax/property/${propertyId}/${tenantId}`;
+  return url;
+}
+
+export const getCommonTenant = () => {
+  return commonConfig.tenantId;
+}
+
+
+

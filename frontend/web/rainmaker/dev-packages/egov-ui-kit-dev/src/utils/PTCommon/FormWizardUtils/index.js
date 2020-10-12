@@ -292,6 +292,8 @@ export const convertToOldPTObject = (newObject) => {
     //   builtUpArea: unit.unitArea,
     // };
     unit.unitArea = unit.constructionDetail.builtUpArea;
+    unit.ConstructionType = unit.constructionDetail.constructionType;
+
     return { ...unit }
   })
   property["propertyDetails"] = [propertyDetails];
@@ -462,7 +464,9 @@ export const getTargetPropertiesDetails = (propertyDetails, self) => {
     selectedPropertyDetails[lastIndex].buildUpArea =
       selectedPropertyDetails[lastIndex] &&
       selectedPropertyDetails[lastIndex].buildUpArea &&
-      convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+      //convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+      selectedPropertyDetails[lastIndex].buildUpArea;
+
   }
   selectedPropertyDetails[lastIndex].units =
     //selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
@@ -622,9 +626,10 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
   const filteredUnitsArray = unitsArray && unitsArray.filter((item) => item !== null);
   const mapIdWithIndex = billingSlabs.reduce(
     (res, curr) => {
+      let i =0;
       const obj = {
         id: curr.split("|")[0],
-        index: curr.split("|")[1],
+        index: curr.split("|")[1]? curr.split("|")[1] :i++,
       };
       res["mappedIds"].push(obj);
       res["idsArray"].push(curr.split("|")[0]);
@@ -644,7 +649,18 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
 
   let finalData = mapIdWithIndex.mappedIds.reduce(
     (res, curr) => {
-      const { floorNo } = filteredUnitsArray[curr.index];
+      const PropertyType = get(prepareFormData, "Properties[0].propertyDetails[0].propertyType"); 
+
+      let floorNo = 0;
+
+      if(PropertyType === "VACANT" )
+      {
+      floorNo = 0;
+      }
+      else
+      {
+        const { floorNo } =  filteredUnitsArray && filteredUnitsArray[curr.index];
+      }    
       if (res.floorObj.hasOwnProperty(floorNo)) {
         res.floorObj[floorNo]++;
       } else {
@@ -797,7 +813,6 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
     let uom = plotDetails.fields && plotDetails.fields.measuringUnit && plotDetails.fields.measuringUnit.value;
     floorDetails_0.fields.builtArea.floatingLabelText = `Built Area(${uom})`;
   }
-
   if (basicInformation && basicInformation.fields.typeOfUsage.value && basicInformation.fields.typeOfBuilding.value) {
     let pathFormKeyObject = getPlotAndFloorFormConfigPath(basicInformation.fields.typeOfUsage.value, basicInformation.fields.typeOfBuilding.value);
     return !isEmpty(pathFormKeyObject) ? (
@@ -809,7 +824,7 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
   } else {
     return null;
   }
-};  */
+};  */ 
  export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
   let { basicInformation, plotDetails, floorDetails_0, prepareFormData = {} } = self.props.form;
   if (plotDetails && floorDetails_0 && floorDetails_0.fields.builtArea) {
@@ -822,8 +837,8 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
       prepareFormData.Properties.length > 0 &&
       get(prepareFormData, "Properties[0].propertyDetails[0].additionalDetails.constructionYear", null)
     ) {
-      basicInformation.fields.datePicker.value = prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear;
-    }
+      basicInformation.fields.datePicker.value = new Date(prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear);
+      }
   }
   if (plotDetails) {
     for (let i = 0; i < get(plotDetails, "fields.floorCount.value", 0); i++) {
