@@ -5,6 +5,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import toolbarStyles from './UiTableHeaderStyle'
+import { convertLabelValue } from '../../../utils/commons';
 
 class UiTableHead extends Component {
   createSortHandler = property => event => {
@@ -58,10 +59,10 @@ class UiTableHead extends Component {
                     onClick={this.createSortHandler(column.id)}
                   >
 
-                    {column.label + (column.colType === 'amount' ? ' (In ' + Globfilter['Denomination'] + ')' : ' ')}
+                    {convertLabelValue(column.label)+ (column.colType === 'amount' ? ' (In ' + Globfilter['Denomination'] + ')' : ' ')}
                   </TableSortLabel>
                     :
-                    <span>{column.label}</span>
+                    <span>{convertLabelValue(column.label) }</span>
                 }
               </TableCell>
             );
