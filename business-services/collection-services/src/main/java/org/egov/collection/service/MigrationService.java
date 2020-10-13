@@ -334,15 +334,15 @@ public class MigrationService {
         paymentDetail.setTotalAmountPaid(totalAmountPaid);
         payment.setPaymentDetails(Arrays.asList(paymentDetail));
 	    
-	Bill bill = payment.getPaymentDetails().get(0).getBill();
-	if (payment.getPaymentStatus().equals(PaymentStatusEnum.CANCELLED))) {
-		
-		bill.setStatus(Bill.StatusEnum.CANCELLED);
-        	bill.setIsCancelled(true);	
-	}else{	
-		bill.setStatus(Bill.StatusEnum.ACTIVE);
-        	bill.setIsCancelled(false);
-	}
+		Bill bill = payment.getPaymentDetails().get(0).getBill();
+		if (payment.getPaymentStatus().equals(PaymentStatusEnum.CANCELLED)) {
+
+			bill.setStatus(Bill.StatusEnum.CANCELLED);
+			bill.setIsCancelled(true);
+		} else {
+			bill.setStatus(Bill.StatusEnum.ACTIVE);
+			bill.setIsCancelled(false);
+		}
 
         return payment;
 
