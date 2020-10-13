@@ -46,6 +46,7 @@ class EnhancedTable extends React.Component {
     if (nextProp.data !== this.props.data) {
       this.setState({
         // data: nextProp.data,
+        page: 0,
         tableData: nextProp.data
       })
     }
@@ -123,7 +124,6 @@ class EnhancedTable extends React.Component {
   cellClick(row, event) {
     if (typeof this.props.cellClick === 'function') {
       this.props.cellClick(row);
-
     }
   }
   renderALLULBTable(n, idx) {
