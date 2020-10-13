@@ -305,9 +305,6 @@ public class MigrationService {
 
 			payment.setPaymentStatus(PaymentStatusEnum.CANCELLED);
 			payment.setInstrumentStatus(InstrumentStatusEnum.CANCELLED);
-			Bill bill = payment.getPaymentDetails().get(0).getBill();
-			bill.setStatus(Bill.StatusEnum.CANCELLED);
-            bill.setIsCancelled(true);
             
 		} else {
 
@@ -336,6 +333,16 @@ public class MigrationService {
         paymentDetail.setTotalDue(totalAmount.subtract(totalAmountPaid));
         paymentDetail.setTotalAmountPaid(totalAmountPaid);
         payment.setPaymentDetails(Arrays.asList(paymentDetail));
+	    
+	Bill bill = payment.getPaymentDetails().get(0).getBill();
+	if (payment.getPaymentStatus().equals(PaymentStatusEnum.CANCELLED))) {
+		
+		bill.setStatus(Bill.StatusEnum.CANCELLED);
+        	bill.setIsCancelled(true);	
+	}else{	
+		bill.setStatus(Bill.StatusEnum.ACTIVE);
+        	bill.setIsCancelled(false);
+	}
 
         return payment;
 
