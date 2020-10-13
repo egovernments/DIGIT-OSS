@@ -36,3 +36,11 @@ export const fetchLocalisationRequest = (language) => {
     const reqBody = {}
     return { reqHeaders, reqBody, reqUrl };
 }
+export const convertLabelValue=(label='')=>{
+    switch(label){
+        case "Boundary":
+            return 'City';
+        default:
+            return label;
+    }
+}

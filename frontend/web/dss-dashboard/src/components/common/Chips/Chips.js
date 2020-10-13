@@ -1,6 +1,7 @@
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import { withStyles } from '@material-ui/core/styles';
+import { convertLabelValue } from '../../../utils/commons';
 
 const useStyles = {
 	root: {
@@ -36,7 +37,7 @@ class Chips extends React.Component {
 						variant="outlined"
 						size="small"
 						// avatar={<Avatar>{label ? label : ''}</Avatar>}
-						label={` ${label&&label!="" ? label +' : ' : ''}${value[4]}`}
+						label={` ${label&&label!="" ? convertLabelValue(label) +' : ' : ''}${value[4]}`}
 						style={{ width: 'max-content' }}
 						clickable
 						onDelete={this.handleClick}
@@ -48,7 +49,7 @@ class Chips extends React.Component {
 							variant="outlined"
 							size="small"
 							// avatar={<Avatar>{label ? label : ''}</Avatar>}
-							label={` ${label&&label!="" ? label +' : ' : ''}${value[4]}`}
+							label={` ${label&&label!="" ? convertLabelValue(label) +' : ' : ''}${value[4]}`}
 							clickable
 							onDelete={this.handleClick}
 							onClick={this.handleClick}
