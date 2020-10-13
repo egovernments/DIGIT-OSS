@@ -1392,7 +1392,15 @@ export const resetFieldsForConnection = (state, dispatch) => {
       ""
     )
   );
-
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
+      "props.value",
+      ""
+    )
+  );
+  
   dispatch(
     handleField(
       "search",

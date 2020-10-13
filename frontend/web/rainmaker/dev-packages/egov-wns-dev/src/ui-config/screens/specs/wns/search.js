@@ -138,6 +138,8 @@ const employeeSearchResults = {
     // dispatch(handleField("search-preview",
     // "components",
     // "div", {}));
+    dispatch(prepareFinalObject('searchConnection',{}))
+    dispatch(prepareFinalObject('searchScreen',{}))
     dispatch(unMountScreen("apply"));
     dispatch(unMountScreen("search-preview"));
     getMDMSData(action, dispatch);
