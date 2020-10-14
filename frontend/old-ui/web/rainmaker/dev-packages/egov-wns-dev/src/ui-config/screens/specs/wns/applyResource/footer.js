@@ -14,36 +14,18 @@ import {
   applyForWater, applyForWaterOrSewerage,
 
   findAndReplace,
-
-
-
-
-
-
-
-
   isActiveProperty,
-
   isModifyMode,
   isModifyModeAction, prepareDocumentsUploadData,
-
   pushTheDocsUploadedToRedux,
-
-
-
-
-
-
   serviceConst,
-
-
-
   showHideFieldsFirstStep, validateConnHolderDetails, validateFeildsForBothWaterAndSewerage,
-
   validateFeildsForSewerage, validateFeildsForWater, isEditAction
 } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
+import commonConfig from "config/common.js";
+
 const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
@@ -122,7 +104,7 @@ const getMdmsData = async (state, dispatch) => {
   );
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId, moduleDetails: [
+       tenantId: commonConfig.tenantId, moduleDetails: [
         { moduleName: "ws-services-masters", masterDetails: [{ name: "Documents" }] },
         { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }] }
       ]
@@ -556,7 +538,6 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {
-      getMdmsData(state, dispatch);
       isFormValid = await applyForWaterOrSewerage(state, dispatch);
       let combinedArray = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
       if (isFormValid) { moveToSuccess(combinedArray, dispatch) }
@@ -594,7 +575,6 @@ const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatc
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {
-      getMdmsData(state, dispatch);
       isFormValid = await applyForWaterOrSewerage(state, dispatch);
       let combinedArray = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
       if (isFormValid) { moveToSuccess(combinedArray, dispatch) }

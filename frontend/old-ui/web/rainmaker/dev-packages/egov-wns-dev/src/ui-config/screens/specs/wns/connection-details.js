@@ -134,7 +134,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
     }
   } else if (service === serviceConst.WATER) {
-    let payloadData = await getSearchResults(queryObject);
+    let payloadData = await getSearchResults(queryObject,true);
     if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
       payloadData.WaterConnection = sortpayloadDataObj(payloadData.WaterConnection);
       let waterConnection = getActiveConnectionObj(payloadData.WaterConnection);

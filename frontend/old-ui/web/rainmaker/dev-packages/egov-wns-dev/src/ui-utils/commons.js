@@ -129,7 +129,7 @@ export const getPropertyObj = async (waterConnection) => {
 }
 
 
-export const getSearchResults = async queryObject => {
+export const getSearchResults = async (queryObject,filter=false) => {
     try {
         const response = await httpRequest(
             "post",
@@ -141,8 +141,11 @@ export const getSearchResults = async queryObject => {
             return response;
         }
         let currentTime=new Date().getTime();
+        if(filter){
         response.WaterConnection=response.WaterConnection.filter(app=>currentTime>app.dateEffectiveFrom&&(app.applicationStatus=='APPROVED' || app.applicationStatus=='CONNECTION_ACTIVATED'));
         response.WaterConnection=response.WaterConnection.sort((row1,row2)=>row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+        }
+        
         let result = findAndReplace(response, null, "NA");
         result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
         let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
