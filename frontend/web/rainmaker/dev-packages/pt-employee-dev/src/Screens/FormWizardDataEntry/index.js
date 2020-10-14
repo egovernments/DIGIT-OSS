@@ -2320,12 +2320,20 @@ class FormWizardDataEntry extends Component {
       //     }
       //   })
       // }
-      showSpinner();
+      for (let i = 0; i < demandData.length; i++) {
+      
+        for (let j = 0; j < demandData[i].demandDetails.length; j++) {
 
-      if(demandData[0].demandDetails[0].taxAmount!==null)
-      {
+         if(demandData[i].demandDetails[j].taxAmount===null)
+         {
+           alert(" The demand has null value, dont submit multiple times")
+         }
+       }
+ 
+      }
+      showSpinner();         
 
-        let createDemandResponse = await httpRequest(
+       let createDemandResponse = await httpRequest(
         `billing-service/demand/${propertyMethodAction}`,
         `${propertyMethodAction}`,
         propertyMethodAction == "create"
@@ -2351,11 +2359,8 @@ class FormWizardDataEntry extends Component {
         // selected: index,
         formValidIndexArray: [...formValidIndexArray, selected]
       });
-    }
-    else 
-    {
-      alert("Demand is not generated, Contact administrator");
-    }   
+    
+   
 
 
       
