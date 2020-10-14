@@ -91,7 +91,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
    */
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNumber }];
   if (service === serviceConst.SEWERAGE) {
-    let payloadData = await getSearchResultsForSewerage(queryObject, dispatch);
+    let payloadData = await getSearchResultsForSewerage(queryObject, dispatch,true);
     if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
       payloadData.SewerageConnections = sortpayloadDataObj(payloadData.SewerageConnections);
 
