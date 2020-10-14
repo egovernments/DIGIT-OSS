@@ -3,6 +3,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { assessProperty, createProperty, routeTo } from "./formActionUtils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -355,3 +356,7 @@ export const getFormattedEstimate = (estimateResponse = [{}], adhocPenaltyAmt = 
 }
 
 
+export const getFromObject= (object, path, defaultValue)=> {
+  var result = object == null ? null : get(object, path,defaultValue);
+  return result === null ? defaultValue : result;
+}

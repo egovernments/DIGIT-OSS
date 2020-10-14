@@ -4,7 +4,7 @@ import store from "egov-ui-framework/ui-redux/store";
 import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { set } from "lodash";
-import get from "lodash/get";
+import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import pdfMake from "pdfmake/build/pdfmake";
 import logoNotFound from'./logoNotFound.png';
 import pdfFonts from "./vfs_fonts";
@@ -206,11 +206,11 @@ const getMultiItemCard = (header, items, color = 'grey') => {
 export const getMultiItems = (preparedFinalObject, cardInfo, sourceArrayJsonPath) => {
     let multiItem = [];
     let removedElements = [];
-    const arrayLength = get(preparedFinalObject, sourceArrayJsonPath, []).length;
+    const arrayLength = getFromObject(preparedFinalObject, sourceArrayJsonPath, []).length;
     for (let i = 0; i < arrayLength; i++) {
         let items = [];
         items = generateKeyValue(preparedFinalObject, cardInfo);
-        let sourceArray = get(preparedFinalObject, sourceArrayJsonPath, []);
+        let sourceArray = getFromObject(preparedFinalObject, sourceArrayJsonPath, []);
         removedElements.push(sourceArray.shift());
         set(preparedFinalObject, sourceArrayJsonPath, sourceArray);
         multiItem.push({ items });
@@ -244,10 +244,10 @@ export const getDocumentsCard = (documentsUploadRedux) => {
 export const generateKeyValue = (preparedFinalObject, containerObject) => {
     let keyValue = []
     Object.keys(containerObject).map(keys => {
-        const labelObject = get(containerObject[keys],'children.label.children.key.props', get(containerObject[keys],'children.label1.children.key.props',{}));
+        const labelObject = getFromObject(containerObject[keys],'children.label.children.key.props', getFromObject(containerObject[keys],'children.label1.children.key.props',{}));
         const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
-        const valueObject = get(containerObject[keys],'children.value.children.key.props',get(containerObject[keys],'children.value1.children.key.props',{}));
-        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        const valueObject = getFromObject(containerObject[keys],'children.value.children.key.props',getFromObject(containerObject[keys],'children.value1.children.key.props',{}));
+        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(getFromObject(preparedFinalObject, valueObject.jsonPath, '')) : getFromObject(preparedFinalObject, valueObject.jsonPath, '');
         value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
         value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
         keyValue.push({ key, value });
@@ -260,7 +260,7 @@ export const generateKeyValueForModify = (preparedFinalObject, containerObject) 
         const labelObject = containerObject[keys].children.label1.children.key.props;
         const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
         const valueObject = containerObject[keys].children.value1.children.key.props;
-        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(getFromObject(preparedFinalObject, valueObject.jsonPath, '')) : getFromObject(preparedFinalObject, valueObject.jsonPath, '');
         value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
         value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
         keyValue.push({ key, value });

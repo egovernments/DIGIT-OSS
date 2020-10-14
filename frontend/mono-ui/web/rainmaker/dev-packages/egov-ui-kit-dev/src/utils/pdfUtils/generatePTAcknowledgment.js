@@ -1,5 +1,5 @@
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
-import get from "lodash/get";
+import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import { getAssessmentInfo, getUnitInfo } from "../../common/propertyTax/Property/components/AssessmentInfo";
 import { getOwnerInfo } from "../../common/propertyTax/Property/components/OwnerInfo";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
@@ -7,15 +7,15 @@ import { generatePDF, getDocumentsCard, getMultipleItemCard } from "./generatePD
 
 export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "acknowledgement.pdf") => {
 
-    property.subOwnershipCategory = get(property, 'propertyDetails[0].subOwnershipCategory', '');
-    const unitCard = getUnitInfo(get(property, "propertyDetails[0].units", []), property);
+    property.subOwnershipCategory = getFromObject(property, 'propertyDetails[0].subOwnershipCategory', '');
+    const unitCard = getUnitInfo(getFromObject(property, "propertyDetails[0].units", []), property);
     let unitInfoCard = []
     if (unitCard.length >= 1) {
         let unitItems = [];
         unitCard.map((unit, index) => {
             if (unit.length > 1) {
                 let unitItem = { items: unit[0] }
-                if (get(property, 'propertyDetails[0].propertySubType', '') !== "SHAREDPROPERTY") {
+                if (getFromObject(property, 'propertyDetails[0].propertySubType', '') !== "SHAREDPROPERTY") {
                     unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`, `PROPERTYTAX_FLOOR_${index}`);
                 }
                 let subItems = [];
@@ -37,7 +37,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
                 unitItems.push(unitItem)
             } else {
                 let unitItem = { items: unit[0] }
-                if (get(property, 'propertyDetails[0].propertySubType', '') !== "SHAREDPROPERTY") {
+                if (getFromObject(property, 'propertyDetails[0].propertySubType', '') !== "SHAREDPROPERTY") {
                     unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`, `PROPERTYTAX_FLOOR_${index}`);
                 }
                 unitItems.push(unitItem)
@@ -49,7 +49,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     const ownerInfo = getOwnerInfo(property, generalMDMSDataById);
     const addressCard = getAddressItems(property);
     const ownerCard = getMultipleItemCard(ownerInfo, 'PT_OWNER');
-    const assessmentCard = getAssessmentInfo(get(property, 'propertyDetails[0]', {}), generalMDMSDataById,property);
+    const assessmentCard = getAssessmentInfo(getFromObject(property, 'propertyDetails[0]', {}), generalMDMSDataById,property);
     const documentCard = getDocumentsCard(property.documentsUploaded);
 
     let pdfData = {

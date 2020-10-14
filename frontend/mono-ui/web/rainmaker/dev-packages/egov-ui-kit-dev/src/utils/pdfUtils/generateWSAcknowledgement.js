@@ -1,7 +1,7 @@
 import { propertyDetails, locationDetails, propertyOwnerDetail, connectionHolderDetails, connectionHolderSameAsOwnerDetails } from "egov-wns/ui-config/screens/specs/wns/applyResource/review-trade";
 import { connDetailsWater, connDetailsSewerage } from "egov-wns/ui-config/screens/specs/wns/applyResource/task-connectiondetails";
 import { plumberDetails, roadDetails, additionDetailsWater, additionDetailsSewerage, activateDetailsMeter, activateDetailsNonMeter } from "egov-wns/ui-config/screens/specs/wns/applyResource/review-owner";
-import get from "lodash/get";
+import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import { reviewModificationsEffectiveDate } from "egov-wns/ui-config/screens/specs/wns/applyResource/reviewModificationsEffective";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard, generateKeyValueForModify } from "./generatePDF";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -44,8 +44,8 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     }
 
 
-    let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
-    let WaterConnection = get(preparedFinalObject, 'WaterConnection[0]', {});
+    let UlbLogoForPdf = getFromObject(preparedFinalObject, 'UlbLogoForPdf', '');
+    let WaterConnection = getFromObject(preparedFinalObject, 'WaterConnection[0]', {});
     let isMode = (WaterConnection.applicationType !== null) ? WaterConnection.applicationType.split("_")[0] : "";
     let reviewModificationsEffective = [];
     let plumberDetail = [];
@@ -78,7 +78,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     } else {
         ownerDetail = generateKeyValue(preparedFinalObject, propertyOwnerDetail);
     }
-    const documentsUploadRedux = get(preparedFinalObject, 'DocumentsData', []);
+    const documentsUploadRedux = getFromObject(preparedFinalObject, 'DocumentsData', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     const tenantId = getQueryArg(window.location.href, "tenantId");
 
