@@ -27,7 +27,7 @@ const waterAndSewerageSearchAndResult = {
         const businessServiceData = JSON.parse(
             localStorageGet("businessServiceData")
         );
-
+        dispatch(prepareFinalObject("searchScreen",{}));
         const data = find(businessServiceData, { businessService: "NewTL" });
         const { states } = data || [];
         getData(action, state, dispatch).then(responseAction => {
