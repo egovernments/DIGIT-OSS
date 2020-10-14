@@ -157,7 +157,7 @@ export const getSearchResults = async (queryObject,filter=false) => {
     } catch (error) { console.log(error) }
 };
 
-export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
+export const getSearchResultsForSewerage = async (queryObject, dispatch,filter=false) => {
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
@@ -169,6 +169,11 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
         if (response.SewerageConnections && response.SewerageConnections.length == 0) {
             dispatch(toggleSpinner());
             return response;
+        }
+        let currentTime=new Date().getTime();
+        if(filter){
+        response.SewerageConnections=response.SewerageConnections.filter(app=>currentTime>app.dateEffectiveFrom&&(app.applicationStatus=='APPROVED' || app.applicationStatus=='CONNECTION_ACTIVATED'));
+        response.SewerageConnections=response.SewerageConnections.sort((row1,row2)=>row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
         let result = findAndReplace(response, null, "NA");
         result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
