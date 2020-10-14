@@ -617,6 +617,6 @@ padding: 0px !important;
       width: 20em!important;
     }
     .dss-date-time-filter{
-        padding: 10px 10px;
+        padding: 10px 5px !important
     }
   }
