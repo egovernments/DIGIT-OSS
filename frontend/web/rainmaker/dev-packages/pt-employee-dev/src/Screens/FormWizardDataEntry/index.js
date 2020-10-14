@@ -2210,6 +2210,12 @@ class FormWizardDataEntry extends Component {
       const demandObject = {};
       let finaYr = "";
       const dmdObj = {};
+
+      if(datas.length===0)
+      {
+        alert("The localstorage data is not fetched")
+      }
+
       demandResponse.forEach(obj => {
         let generalmdms = Object.keys(generalMDMSDataById.TaxPeriod).map(
           (years, keys) => {
