@@ -3,7 +3,7 @@ import { nocSummaryDetail } from "egov-firenoc/ui-config/screens/specs/fire-noc/
 import { propertyLocationSummaryDetail, propertySummaryDetails } from "egov-firenoc/ui-config/screens/specs/fire-noc/summaryResource/propertySummary";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
+import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import QRCode from "qrcode";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
@@ -54,10 +54,10 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
     propertySummaryDetails.buildingUsageType.localiseValue = true;
     propertySummaryDetails.buildingUsageSubType.localiseValue = true;
 
-    let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
-    let FireNOC = get(preparedFinalObject, 'FireNOCs[0]', {});
+    let UlbLogoForPdf = getFromObject(preparedFinalObject, 'UlbLogoForPdf', '');
+    let FireNOC = getFromObject(preparedFinalObject, 'FireNOCs[0]', {});
 
-    const documentsUploadRedux = get(preparedFinalObject, 'FireNOCs[0].fireNOCDetails.additionalDetail.documents', []);
+    const documentsUploadRedux = getFromObject(preparedFinalObject, 'FireNOCs[0].fireNOCDetails.additionalDetail.documents', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
 
     const nocSummary = generateKeyValue(preparedFinalObject, nocSummaryDetail);
@@ -66,7 +66,7 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
 
     let applicantSummary = []
     let applicantSummaryInfo = []
-    const ownershipType = get(FireNOC, "fireNOCDetails.applicantDetails.ownerShipType", "");
+    const ownershipType = getFromObject(FireNOC, "fireNOCDetails.applicantDetails.ownerShipType", "");
     if (ownershipType.startsWith("INSTITUTION")) {
         applicantSummary = generateKeyValue(preparedFinalObject, institutionSummaryDetail)
     } else if (ownershipType.includes("SINGLEOWNER")) {
@@ -77,14 +77,14 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
     }
     let applicationDate = nullToNa(
         epochToDate(
-            get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicationDate", "NA")
+            getFromObject(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicationDate", "NA")
         )
     );
     let data = {};
     data.city = nullToNa(
         getMessageFromLocalization(
             `TENANT_TENANTS_${getTransformedLocale(
-                get(
+                getFromObject(
                     preparedFinalObject,
                     "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
                     "NA"
@@ -93,21 +93,21 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
         )
     );
     data.door = nullToNa(
-        get(
+        getFromObject(
             preparedFinalObject,
             "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo",
             "NA"
         )
     );
     data.buildingName = nullToNa(
-        get(
+        getFromObject(
             preparedFinalObject,
             "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName",
             "NA"
         )
     );
     data.street = nullToNa(
-        get(
+        getFromObject(
             preparedFinalObject,
             "FireNOCs[0].fireNOCDetails.propertyDetails.address.street",
             "NA"
@@ -116,7 +116,7 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
     data.mohalla = nullToNa(
         getMessageFromLocalization(
             `revenue.locality.${getTransformedLocale(
-                get(
+                getFromObject(
                     preparedFinalObject,
                     "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
                     "NA"
@@ -133,7 +133,7 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
         data.city
     );
     data.propertyType = nullToNa(
-        get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.noOfBuildings", "NA")
+        getFromObject(preparedFinalObject, "FireNOCs[0].fireNOCDetails.noOfBuildings", "NA")
     );
     let qrText = `Application: ${FireNOC.fireNOCDetails.applicationNumber}, Date: ${
         applicationDate

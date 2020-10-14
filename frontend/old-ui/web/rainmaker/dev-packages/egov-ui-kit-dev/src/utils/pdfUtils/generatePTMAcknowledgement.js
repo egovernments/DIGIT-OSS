@@ -2,7 +2,7 @@ import { mutationSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutat
 import { transfereeInstitutionSummaryDetails, transfereeSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/searchPreviewResource/transfereeSummary";
 import { transferorInstitutionSummaryDetails, transferorSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/searchPreviewResource/transferorSummary";
 import { registrationSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/summaryResource/registrationSummary";
-import get from "lodash/get";
+import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
@@ -14,13 +14,13 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     transferorInstitutionSummaryDetails.institutionType.localiseValue=true;
     const mutationDetails = generateKeyValue(preparedFinalObject, mutationSummaryDetails);
     const registrationDetails = generateKeyValue(preparedFinalObject, registrationSummaryDetails);
-    let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
-    let property = get(preparedFinalObject, 'Property', {});
-    let transfereeOwners = get(
+    let UlbLogoForPdf = getFromObject(preparedFinalObject, 'UlbLogoForPdf', '');
+    let property = getFromObject(preparedFinalObject, 'Property', {});
+    let transfereeOwners = getFromObject(
         property,
         "ownersTemp", []
     );
-    let transferorOwners = get(
+    let transferorOwners = getFromObject(
         property,
         "ownersInit", []
     );
@@ -47,9 +47,9 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     }
     let transferorDetails = []
     let transferorDetailsInfo = []
-    if (get(property, "ownershipCategoryInit", "").startsWith("INSTITUTION")) {
+    if (getFromObject(property, "ownershipCategoryInit", "").startsWith("INSTITUTION")) {
         transferorDetails = generateKeyValue(preparedFinalObject, transferorInstitutionSummaryDetails)
-    } else if (get(property, "ownershipCategoryInit", "").includes("SINGLEOWNER")) {
+    } else if (getFromObject(property, "ownershipCategoryInit", "").includes("SINGLEOWNER")) {
         transferorDetails = generateKeyValue(preparedFinalObject, transferorSummaryDetails)
     } else {
         transferorDetailsInfo = getMultiItems(preparedFinalObject, transferorSummaryDetails, 'Property.ownersTemp[0]')
@@ -57,17 +57,17 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     }
     let transfereeDetails = []
     let transfereeDetailsInfo = []
-    if (get(property, "ownershipCategoryTemp", "").startsWith("INSTITUTION")) {
+    if (getFromObject(property, "ownershipCategoryTemp", "").startsWith("INSTITUTION")) {
         transfereeDetails = generateKeyValue(preparedFinalObject, transfereeInstitutionSummaryDetails)
-    } else if (get(property, "ownershipCategoryTemp", "").includes("SINGLEOWNER")) {
+    } else if (getFromObject(property, "ownershipCategoryTemp", "").includes("SINGLEOWNER")) {
         transfereeDetails = generateKeyValue(preparedFinalObject, transfereeSummaryDetails)
     } else {
         transfereeDetailsInfo = getMultiItems(preparedFinalObject, transfereeSummaryDetails, 'Property.ownersInit[0]')
         transfereeDetails = getMultipleItemCard(transferorDetailsInfo, 'PT_OWNER')
     }
 
-    const addressCard = getAddressItems(get(preparedFinalObject, 'Property', {}));
-    const documentsUploadRedux = get(preparedFinalObject, 'documentsUploadRedux', []);
+    const addressCard = getAddressItems(getFromObject(preparedFinalObject, 'Property', {}));
+    const documentsUploadRedux = getFromObject(preparedFinalObject, 'documentsUploadRedux', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     let pdfData = {
         header: "PTM_ACKNOWLEDGEMENT", tenantId: property.tenantId,
@@ -77,7 +77,7 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
             { header: "PT_PROPERTY_ADDRESS_SUB_HEADER", items: addressCard },
             { header: 'PT_MUTATION_TRANSFEROR_DETAILS', items: transferorDetails, type: transferorDetailsInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: 'PT_MUTATION_TRANSFEREE_DETAILS', items: transfereeDetails, type: transfereeDetailsInfo.length > 1 ? 'multiItem' : 'singleItem' },
-            { header: "PT_MUTATION_DETAILS", items: mutationDetails, hide: !get(preparedFinalObject, 'PropertyConfiguration[0].Mutation.MutationDetails', false) },
+            { header: "PT_MUTATION_DETAILS", items: mutationDetails, hide: !getFromObject(preparedFinalObject, 'PropertyConfiguration[0].Mutation.MutationDetails', false) },
             { header: "PT_MUTATION_REGISTRATION_DETAILS", items: registrationDetails },
             { header: 'PT_SUMMARY_DOCUMENTS_HEADER', items: documentCard }]
     }

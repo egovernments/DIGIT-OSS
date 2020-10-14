@@ -1,6 +1,7 @@
 import { tradeInstitutionDetails, tradeOwnerDetails } from "egov-tradelicence/ui-config/screens/specs/tradelicence/applyResource/review-owner";
 import { tradeAccessoriesDetails, tradeLocationDetails, tradeReviewDetails, tradetypeDetails } from "egov-tradelicence/ui-config/screens/specs/tradelicence/applyResource/review-trade";
-import get from "lodash/get";
+import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
+
 import { generateKeyValue, generatePDF, getDocumentsCard, getEstimateCardDetails, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
 export const generateTLAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
@@ -29,23 +30,23 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
     tradeInstitutionDetails.reviewownershipType.localiseValue = true;
     tradeInstitutionDetails.reviewsubOwnership.localiseValue = true;
 
-    let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
-    let License = get(preparedFinalObject, 'Licenses[0]', {});
+    let UlbLogoForPdf = getFromObject(preparedFinalObject, 'UlbLogoForPdf', '');
+    let License = getFromObject(preparedFinalObject, 'Licenses[0]', {});
 
     let tradeTypeSummary = []
     let tradeTypeSummaryInfo = []
-    if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.tradeUnits', []).length === 1) {
+    if (getFromObject(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.tradeUnits', []).length === 1) {
         tradeTypeSummary = generateKeyValue(preparedFinalObject, tradetypeDetails); //
-    } else if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.tradeUnits', []).length > 1) {
+    } else if (getFromObject(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.tradeUnits', []).length > 1) {
         tradeTypeSummaryInfo = getMultiItems(preparedFinalObject, tradetypeDetails, 'Licenses[0].tradeLicenseDetail.tradeUnits')
         tradeTypeSummary = getMultipleItemCard(tradeTypeSummaryInfo, "TL_TRADE_UNIT");
     }
 
     let tradeAccessoriesSummary = []
     let tradeAccessoriesSummaryInfo = []
-    if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length === 1) {
+    if (getFromObject(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length === 1) {
         tradeAccessoriesSummary = generateKeyValue(preparedFinalObject, tradeAccessoriesDetails); //
-    } else if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length > 1) {
+    } else if (getFromObject(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length > 1) {
         tradeAccessoriesSummaryInfo = getMultiItems(preparedFinalObject, tradeAccessoriesDetails, 'Licenses[0].tradeLicenseDetail.accessories')
         tradeAccessoriesSummary = getMultipleItemCard(tradeAccessoriesSummaryInfo, "TL_TRADE_ACCESSORY");
     }
@@ -53,7 +54,7 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
     let tradeOwnerSummary = []
     let tradeOwnerSummaryInfo = []
 
-    const ownershipType = get(License, "tradeLicenseDetail.subOwnerShipCategory", "");
+    const ownershipType = getFromObject(License, "tradeLicenseDetail.subOwnerShipCategory", "");
     if (ownershipType.startsWith("INSTITUTION")) {
         tradeOwnerSummary = generateKeyValue(preparedFinalObject, tradeInstitutionDetails);
     } else if (ownershipType.includes("SINGLEOWNER")) {
@@ -63,9 +64,9 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
         tradeOwnerSummary = getMultipleItemCard(tradeOwnerSummaryInfo, 'TL_OWNER');
     }
 
-    const documentsUploadRedux = get(preparedFinalObject, 'LicensesTemp[0].reviewDocData', []);
+    const documentsUploadRedux = getFromObject(preparedFinalObject, 'LicensesTemp[0].reviewDocData', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
-    const estimateDetails = getEstimateCardDetails(get(preparedFinalObject, 'LicensesTemp[0].estimateCardData', []))
+    const estimateDetails = getEstimateCardDetails(getFromObject(preparedFinalObject, 'LicensesTemp[0].estimateCardData', []))
     const tradeReviewSummary = generateKeyValue(preparedFinalObject, tradeReviewDetails);
     const tradeLocationSummary = generateKeyValue(preparedFinalObject, tradeLocationDetails);
 
