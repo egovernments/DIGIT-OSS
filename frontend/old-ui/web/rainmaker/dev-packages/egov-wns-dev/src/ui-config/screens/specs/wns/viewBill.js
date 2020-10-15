@@ -122,7 +122,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
   let viewBillTooltip = [], data;
   if (service === serviceConst.WATER) {
     let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails, dispatch);
-    let payload = await getSearchResults(queryObjForSearch);
+    let payload = await getSearchResults(queryObjForSearch,true);
     let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: consumerCode }, { key: "businessService", value: "WS" }];
     data = await fetchBill(queryObjectForFetchBill, dispatch);
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
@@ -164,7 +164,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
     }
   } else if (service === serviceConst.SEWERAGE) {
     let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: consumerCode }, { key: "businessService", value: "SW" }];
-    let payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
+    let payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch,true);
     data = await fetchBill(queryObjectForFetchBill, dispatch)
     let viewBillTooltip = []
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
