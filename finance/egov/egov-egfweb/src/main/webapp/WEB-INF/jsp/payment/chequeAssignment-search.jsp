@@ -160,7 +160,7 @@
 		function validateSearch() {
 
 			document.forms[0].action = '/services/EGF/payment/chequeAssignment-search.action';
-			document.forms[0].submit();
+			//document.forms[0].submit();
 
 			return true;
 		}

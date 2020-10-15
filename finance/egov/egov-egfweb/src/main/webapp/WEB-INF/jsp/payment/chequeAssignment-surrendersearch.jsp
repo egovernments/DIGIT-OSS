@@ -146,7 +146,7 @@
 	<script>
 		function onSubmit() {
 			document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-searchChequesForSurrender.action';
-			document.chequeAssignment.submit();
+			//document.chequeAssignment.submit();
 		}
 		var date = '<s:date name="currentDate" format="dd/MM/yyyy"/>';
 		function loadBankAccount(obj) {

@@ -462,7 +462,7 @@ function onSubmit()
 		 var msg = confirm("<s:text name='msg.insuff.bank.bal.do.you.want.to.process'/>");
 		 if (msg == true) {
 			 document.dbpform.action = '/services/EGF/payment/directBankPayment-create.action';
-			 document.dbpform.submit();
+			 //document.dbpform.submit();
 			return true;
 		 } else {
 			 undoLoadingMask();
@@ -471,7 +471,7 @@ function onSubmit()
 		}
 	else{
 		document.dbpform.action = '/services/EGF/payment/directBankPayment-create.action';
-		document.dbpform.submit();
+		//document.dbpform.submit();
 	}
 		
 }
