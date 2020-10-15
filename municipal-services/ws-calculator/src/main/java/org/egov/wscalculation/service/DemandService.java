@@ -510,6 +510,32 @@ public class DemandService {
 						+ consumerCodes.toString());
 			Demand demand = searchResult.get(0);
 			demand.setDemandDetails(getUpdatedDemandDetails(calculation, demand.getDemandDetails()));
+
+			if(isForConnectionNo){
+				WaterConnection connection = calculation.getWaterConnection();
+				if (connection == null) {
+					List<WaterConnection> waterConnectionList = calculatorUtils.getWaterConnection(requestInfo,
+							calculation.getConnectionNo(),calculation.getTenantId());
+					int size = waterConnectionList.size();
+					connection = waterConnectionList.get(size-1);
+
+				}
+
+				if(connection.getApplicationType().equalsIgnoreCase("MODIFY_WATER_CONNECTION")){
+					WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder().waterConnection(connection)
+							.requestInfo(requestInfo).build();
+					Property property = wsCalculationUtil.getProperty(waterConnectionRequest);
+					User owner = property.getOwners().get(0).toCommonUser();
+					if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+						owner = waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).toCommonUser();
+					}
+					if(!(demand.getPayer().getUuid().equalsIgnoreCase(owner.getUuid())))
+						demand.setPayer(owner);
+				}
+
+
+			}
+
 			demands.add(demand);
 		}
 

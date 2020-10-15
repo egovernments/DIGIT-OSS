@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import static org.egov.waterconnection.constants.WCConstants.SEARCH_TYPE_CONNECTION;
 
 @Component
 public class WsQueryBuilder {
@@ -37,12 +38,12 @@ public class WsQueryBuilder {
     
 	private static final String WATER_SEARCH_QUERY = "SELECT conn.*, wc.*, document.*, plumber.*, wc.connectionCategory, wc.connectionType, wc.waterSource,"
 			+ " wc.meterId, wc.meterInstallationDate, wc.pipeSize, wc.noOfTaps, wc.proposedPipeSize, wc.proposedTaps, wc.connection_id as connection_Id, wc.connectionExecutionDate, wc.initialmeterreading, wc.appCreatedDate,"
-			+ " wc.detailsprovidedby, wc.estimationfileStoreId , wc.sanctionfileStoreId , wc.estimationLetterDate, "
+			+ " wc.detailsprovidedby, wc.estimationfileStoreId , wc.sanctionfileStoreId , wc.estimationLetterDate,"
 			+ " conn.id as conn_id, conn.tenantid, conn.applicationNo, conn.applicationStatus, conn.status, conn.connectionNo, conn.oldConnectionNo, conn.property_id, conn.roadcuttingarea,"
 			+ " conn.action, conn.adhocpenalty, conn.adhocrebate, conn.adhocpenaltyreason, conn.applicationType, conn.dateEffectiveFrom,"
 			+ " conn.adhocpenaltycomment, conn.adhocrebatereason, conn.adhocrebatecomment, conn.createdBy as ws_createdBy, conn.lastModifiedBy as ws_lastModifiedBy,"
 			+ " conn.createdTime as ws_createdTime, conn.lastModifiedTime as ws_lastModifiedTime, "
-			+ " conn.locality, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id,"
+			+ " conn.locality, conn.isoldapplication, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id,"
 			+ " plumber.name as plumber_name, plumber.licenseno,"
 			+ " plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress,"
 			+ " plumber.relationship, " + holderSelectValues
@@ -79,13 +80,16 @@ public class WsQueryBuilder {
 				return null;
 		StringBuilder query = new StringBuilder(WATER_SEARCH_QUERY);
 		boolean propertyIdsPresent = false;
+		
+		String propertyIdQuery = " (conn.property_id in (";
+
 		if (!StringUtils.isEmpty(criteria.getMobileNumber()) || !StringUtils.isEmpty(criteria.getPropertyId())) {
 			Set<String> propertyIds = new HashSet<>();
 			List<Property> propertyList = waterServicesUtil.propertySearchOnCriteria(criteria, requestInfo);
 			propertyList.forEach(property -> propertyIds.add(property.getId()));
 			if (!propertyIds.isEmpty()) {
 				addClauseIfRequired(preparedStatement, query);
-				query.append(" (conn.property_id in (").append(createQuery(propertyIds)).append(" )");
+				query.append(propertyIdQuery).append(createQuery(propertyIds)).append(" )");
 				addToPreparedStatement(preparedStatement, propertyIds);
 				propertyIdsPresent = true;
 			}
@@ -159,6 +163,12 @@ public class WsQueryBuilder {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.applicationType = ? ");
 			preparedStatement.add(criteria.getApplicationType());
+		}
+		if(!StringUtils.isEmpty(criteria.getSearchType())
+				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION)){
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" conn.isoldapplication = ? ");
+			preparedStatement.add(Boolean.FALSE);
 		}
 		query.append(ORDER_BY_CLAUSE);
 		return addPaginationWrapper(query.toString(), preparedStatement, criteria);

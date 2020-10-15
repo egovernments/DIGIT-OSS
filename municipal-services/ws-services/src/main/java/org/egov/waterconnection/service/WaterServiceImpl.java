@@ -29,6 +29,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import static org.egov.waterconnection.constants.WCConstants.APPROVE_CONNECTION;
+
 @Component
 public class WaterServiceImpl implements WaterService {
 
@@ -228,9 +230,26 @@ public class WaterServiceImpl implements WaterService {
 		wfIntegrator.callWorkFlow(waterConnectionRequest, property);
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
+		// setting oldApplication Flag
+		markOldApplication(waterConnectionRequest);
 		//check for edit and send edit notification
 		waterDaoImpl.pushForEditNotification(waterConnectionRequest);
 		enrichmentService.postForMeterReading(waterConnectionRequest, WCConstants.MODIFY_CONNECTION);
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
+	}
+
+	public void markOldApplication(WaterConnectionRequest waterConnectionRequest) {
+		if (waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase(APPROVE_CONNECTION)) {
+			String currentModifiedApplicationNo = waterConnectionRequest.getWaterConnection().getApplicationNo();
+			List<WaterConnection> previousConnectionsList = getAllWaterApplications(waterConnectionRequest);
+
+			for(WaterConnection waterConnection:previousConnectionsList){
+				if(!waterConnection.getOldApplication() && !(waterConnection.getApplicationNo().equalsIgnoreCase(currentModifiedApplicationNo))){
+					waterConnection.setOldApplication(Boolean.TRUE);
+					WaterConnectionRequest previousWaterConnectionRequest = WaterConnectionRequest.builder().requestInfo(waterConnectionRequest.getRequestInfo()).waterConnection(waterConnection).build();
+					waterDao.updateWaterConnection(previousWaterConnectionRequest,Boolean.TRUE);
+				}
+			}
+		}
 	}
 }
