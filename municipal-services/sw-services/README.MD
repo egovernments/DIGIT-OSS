@@ -1,55 +1,59 @@
-
-
-# eGov Sewerage Service
-
-
-
+# SW-Services
 This module created to manage Sewerage Service connections against a Property in the system.
 
-### Work Flow
-- Create
+### DB UML Diagram
+- To Do
+
+### Service Dependencies
+- egov-mdms service
+- property-service
+- egov-idgen
+- egov-persister
+- sw-calculator
+- egov-filestore
+- pdf-service
+
+### Swagger API Contract
+
+- Please refer to the [Swagger API contarct](https://app.swaggerhub.com/apis/egov-foundation/Water-Sewerage-1.0/1.0.0#/free) for ws-services to understand the structure of APIs and to have visualization of all internal APIs.
+
+## Service Details
+
+**Functionality:**
+- Apply for sewerage connection.
+- Searching for sewerage connections/application.
+- Can take different action based on state (Workflow) 
+- Notification based on the application state.```
+
+### API Details
+
+`BasePath` /sw-services/swc/[API endpoint]
+
+##### Method
+
+a) `_create`
+
    - Sewerage Service connection created by calling sw-services/swc/_create api.
+   
    - The response contains the SewerageConnection object with its assigned ApplicationId of that SewerageService Connection.
-- Update
-   -  Created SewerageService application needs to be approved and activated, and these are done by calling the sw-services/swc/_update api.
-    - Once the application activated new Sewerage Connection Number will be generated, and the same would be updated in the SewerageConnection Object.
-- Search
-   -  SewerageService Application/Connection  can be searched based on several search parameters as detailed in the swagger yaml [[ Water Sewerage API ](https://app.swaggerhub.com/apis/egov-foundation/Water-Sewerage-1.0/1.0.0#/free)].
+   
+b) `_update`
 
-### Project Structure 
-*Packages*
- - config - Contains all the configuration properties related to module
- - consumer - Contains all the kafka consumers
- - producer - Contains kafka producer
- - repository - Fetch data from dependent micro services
- - repository/rowmapper - Rowmappers to convert db query results to object
- - repository/builder - Contains query builder for search 
- - service - Consists of all services containing the business logic.
- - util - Contains utility functions and constants.
- - validator - Contains all validation code
- - web/controllers - Controllers for the app.
- - web/models - POJO for the module.
- 
-### Resources
-- Swagger API Yaml [Swagger API](https://app.swaggerhub.com/apis/egov-foundation/Water-Sewerage-1.0/1.0.0#/free)
-- Postman collection for all the API's can be found in the [Postman Collection](sw-services-postman.json)
+  -  Created SewerageService application needs to be approved and activated, and these are done by calling the sw-services/swc/_update api.
+  
+  - Once the application activated new Sewerage Connection Number will be generated, and the same would be updated in the SewerageConnection Object.
 
+c) `_search`
 
-## Build & Run
-    mvn clean install
-    java -jar target/sw-service-1.0.0-SNAPSHOT.jar
-    
-## Dependencies
-- Postgres database to store Sewerage Connection data.
+   -  SewerageService Application/Connection  can be searched based on several search parameters as detailed in the swagger yaml given above.
 
-- Property Service to validate the PropertyId.
+### Kafka Consumers
 
-- ID Gen Module to generate unique SewerageApplicationId and SewerageConnectionId.
-
-- Persister module for persistence.
-
-- SW calculator module to calculate fee and tax for the given SewerageService Application / Connection.
-
-- MDMS service to verify master data
-
-- SMSNotification Service to send notifications related to registration and payment
+- Following are the Consumer topic.
+    - **save-sw-connection**, **update-sw-connection**, **update-sw-workflow**, **editnotificationsewerage** and **egov.collection.payment-create** this topic are use to create notification to send to sewerage connection owner.
+### Kafka Producers
+- Following are the Producer topic.
+    - **save-sw-connection** :- This topic is used to create new sewerage connection application in the system.
+    - **update-sw-connection** :- This topic is used to update the existing sewerage connection application in the systen.
+    - **update-sw-workflow** :- This topic is used to update the process instance of the sewerage connection application.
+    - **egov.core.notification.sms** :- This topic is used to send noification to the phone number of the sewerage connection owner.

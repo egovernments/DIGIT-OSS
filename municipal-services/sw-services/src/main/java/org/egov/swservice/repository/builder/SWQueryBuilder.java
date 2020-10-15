@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import static org.egov.swservice.util.SWConstants.SEARCH_TYPE_CONNECTION;
 
 @Component
 public class SWQueryBuilder {
@@ -40,7 +41,7 @@ public class SWQueryBuilder {
 			+ " conn.roadcuttingarea, conn.action, conn.adhocpenalty, conn.adhocrebate, conn.createdBy as sw_createdBy,"
 			+ " conn.lastModifiedBy as sw_lastModifiedBy, conn.createdTime as sw_createdTime, conn.lastModifiedTime as sw_lastModifiedTime, "
 			+ " conn.adhocpenaltyreason, conn.adhocpenaltycomment, conn.adhocrebatereason, conn.adhocrebatecomment, conn.applicationType, conn.dateEffectiveFrom,"
-			+ " conn.locality, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id, plumber.name as plumber_name, plumber.licenseno,"
+			+ " conn.locality, conn.isoldapplication, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id, plumber.name as plumber_name, plumber.licenseno,"
 			+ " plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress, plumber.relationship, " + holderSelectValues +
 			" FROM eg_sw_connection conn "
 	+  INNER_JOIN_STRING 
@@ -153,6 +154,12 @@ public class SWQueryBuilder {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.applicationType = ? ");
 			preparedStatement.add(criteria.getApplicationType());
+		}
+		if(!StringUtils.isEmpty(criteria.getSearchType())
+				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION)){
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" conn.isoldapplication = ? ");
+			preparedStatement.add(Boolean.FALSE);
 		}
 		
 		//Add OrderBy clause
