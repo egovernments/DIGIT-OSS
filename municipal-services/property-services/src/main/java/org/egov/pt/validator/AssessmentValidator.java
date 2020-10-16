@@ -438,6 +438,8 @@ public class AssessmentValidator {
 	private void validateDemandDetails(List<Demand> demands, Map<String, String> errorMap) {
 
 		for (Demand demand : demands) {
+			BigDecimal totalTax = BigDecimal.ZERO;
+			BigDecimal totalCollection = BigDecimal.ZERO;
 			for (DemandDetail demandDetail : demand.getDemandDetails()) {
 
 				BigDecimal tax = demandDetail.getTaxAmount();
@@ -452,6 +454,13 @@ public class AssessmentValidator {
 							"collection amount should be equal to 'ZERO' or tax amount in case of negative Tax");
 
 				}
+				totalTax.add(tax);
+				totalCollection.add(collection);
+			}
+			if (totalCollection.compareTo(totalTax) > 0) {
+				errorMap.put("INVALID_DEMAND_COLLECTION",
+						"Total tax collection should not be greater than total tax for the year.");
+
 			}
 		}
 	}
