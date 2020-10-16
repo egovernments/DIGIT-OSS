@@ -371,7 +371,10 @@ public class AssessmentValidator {
 		for (Demand demand : demands) {
 			demandDetailMap.clear();
 			for (DemandDetail dmdDetail : demand.getDemandDetails()) {
-
+				if (dmdDetail.getTaxAmount() == null)
+					dmdDetail.setTaxAmount(BigDecimal.ZERO);
+				if (dmdDetail.getCollectionAmount() == null)
+					dmdDetail.setCollectionAmount(BigDecimal.ZERO);
 				demandDetailMap.put(dmdDetail.getTaxHeadMasterCode(), dmdDetail);
 			}
 			demand.setDemandDetails(new ArrayList<>(demandDetailMap.values()));
@@ -420,8 +423,13 @@ public class AssessmentValidator {
 			for (DemandDetail dmdDetail : demand.getDemandDetails()) {
 				if (demandDetailMap.containsKey(dmdDetail.getTaxHeadMasterCode()))
 					throw new CustomException("DUPLICATE_DEMAND", "Duplicate demand is added.");
-				else
+				else{
+					if (dmdDetail.getTaxAmount() == null)
+						dmdDetail.setTaxAmount(BigDecimal.ZERO);
+					if (dmdDetail.getCollectionAmount() == null)
+						dmdDetail.setCollectionAmount(BigDecimal.ZERO);
 					demandDetailMap.put(dmdDetail.getTaxHeadMasterCode(), dmdDetail);
+				}
 			}
 		}
 		validateDemandDetails(demands, errorMap);
