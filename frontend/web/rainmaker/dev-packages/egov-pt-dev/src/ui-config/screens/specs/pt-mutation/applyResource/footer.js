@@ -224,10 +224,22 @@ const validateMobileNumber = (state) => {
     if (names.includes(owner.name)) {
       err = "OWNER_NAME_SAME";
     }
-  })
-  newOwners.map(owner => {
-    if (mobileNumbers.includes(owner.mobileNumber)) {
-      err = "OWNER_NUMBER_SAME";
+    const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
+    // const names = owners.map(owner => {
+    //   return owner.name
+    // })
+    // const mobileNumbers = owners.map(owner => {
+    //   if (owner.status == "ACTIVE") {
+    //     return owner.mobileNumber;
+    //   }
+    // })
+    // newOwners.map(owner => {
+    //   if (mobileNumbers.includes(owner.mobileNumber)) {
+    //     err = "OWNER_NUMBER_SAME";
+    //   }
+    // })
+    if (!err && ownershipCategoryTemp.includes('MULTIPLEOWNERS') && newOwners.length == 1) {
+      err = "OWNERSHIPTYPE_CANNOT_BE_MULTIPLE";
     }
   })
 
