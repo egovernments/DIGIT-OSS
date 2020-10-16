@@ -87,6 +87,8 @@ public class WorkflowIntegrator {
 	 */
 	public void callWorkFlow(TradeLicenseRequest tradeLicenseRequest) {
 		TradeLicense currentLicense = tradeLicenseRequest.getLicenses().get(0);
+		if(currentLicense.getStatus()!=null && currentLicense.getStatus().equalsIgnoreCase(STATUS_INITIATED))
+			return;
 		String wfTenantId = currentLicense.getTenantId();
 		String businessServiceFromMDMS = tradeLicenseRequest.getLicenses().isEmpty()?null:currentLicense.getBusinessService();
 		if (businessServiceFromMDMS == null)
