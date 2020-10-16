@@ -18,6 +18,7 @@ import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.validator.AssessmentValidator;
+import org.egov.pt.validator.DemandValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.DemandRequest;
 import org.egov.tracer.model.CustomException;
@@ -66,8 +67,12 @@ public class AssessmentService {
 		this.workflowService = workflowService;
 		this.calculationService = calculationService;
 	}
+
 	@Autowired
 	private ObjectMapper mapper;
+
+	@Autowired
+	private DemandValidator demandValidator;
 
 	/**
 	 * Method to create an assessment asynchronously.
@@ -103,7 +108,7 @@ public class AssessmentService {
 		List<Demand> demands = demandRequest.getDemands();
 		if (demands == null || demands.isEmpty())
 			throw new CustomException("No_DEMAND", "No demand added for the property");
-		validator.filterDemands(demands);
+		demandValidator.validateAndfilterDemands(demands,actualAssessment.getPropertyId(), actualAssessment.getTenantId());
 
 		for (Demand demand : demands) {
 			AssessmentRequest assessmentRequest = enrichLegacyAssessment(actualAssessment, demand.getTaxPeriodFrom(),
@@ -204,7 +209,7 @@ public class AssessmentService {
 		List<Demand> demands = demandRequest.getDemands();
 		if (demands == null || demands.isEmpty())
 			throw new CustomException("NO_DEMAND", "No demand added for the property");
-		validator.validateLegacyDemands(demands, actualAssessment.getPropertyId(), actualAssessment.getTenantId());
+		demandValidator.validateLegacyDemands(demands, actualAssessment.getPropertyId(), actualAssessment.getTenantId());
 		List<Assessment> assessmentsFromDB = repository.getAssessmentsFromDBByPropertyId(actualAssessment);
 		for (Demand demand : demands) {
 			if (demand.getId() == null) {
