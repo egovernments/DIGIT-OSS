@@ -78,7 +78,7 @@ public class PropertyService {
 		propertyValidator.validateCreateRequest(request);
 		enrichmentService.enrichCreateRequest(request);
 		userService.createUser(request);
-		if (config.getIsWorkflowEnabled())
+		if (config.getIsWorkflowEnabled() && ! "LEGACY_RECORD".equals(request.getProperty().getSource()))
 			wfService.updateWorkflow(request, CREATE_PROCESS_CONSTANT);
 		util.setdataForNotification(request, CREATE_PROCESS_CONSTANT);
 		producer.push(config.getSavePropertyTopic(), request);
