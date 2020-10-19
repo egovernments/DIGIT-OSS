@@ -218,6 +218,48 @@ const addRoundOffToFee = (fees, billDetails) => {
 
   return totalSwat-currentYearSwat.length === 0 ? 0 :currentYearSwat[0] && currentYearSwat[0].amount;
 } 
+
+const calcTax = (fees, billDetails) => {
+  let finalTaxamount = 0;
+  let curretYearTax = 0
+  let curretYearRebate = 0
+  let curretYearPromotionalRebate = 0  
+
+    if(billDetails[0] && billDetails[0].amount!==0)
+    {
+      billDetails[0].billAccountDetails.forEach( (billAccountDetail)=> {
+   
+        if (billAccountDetail.taxHeadCode === "PT_PROMOTIONAL_REBATE") {
+          curretYearRebate = billAccountDetail.amount;
+        }
+        if (billAccountDetail.taxHeadCode === "PT_TIME_REBATE") {
+          curretYearPromotionalRebate = billAccountDetail.amount;
+        }
+        if (billAccountDetail.taxHeadCode === "PT_TAX") {
+          curretYearTax = billAccountDetail.amount;
+        }
+      });
+    }
+
+  
+  finalTaxamount = curretYearTax+curretYearRebate+curretYearPromotionalRebate;
+
+  fees.forEach( (fee)=> {
+
+    if (fee.name.labelKey === "PT_TAX" && finalTaxamount===0 ) {
+      fee.value = 0;
+    }
+    if (fee.name.labelKey === "PT_TIME_REBATE" && finalTaxamount===0 ) {
+      fee.value = 0;
+    }
+    if (fee.name.labelKey === "PT_PROMOTIONAL_REBATE" && finalTaxamount===0 ) {
+      fee.value = 0;
+    }
+  });
+
+  return fees;
+}; 
+
 const mapStateToProps = (state, ownProps) => {
 
   const { screenConfiguration } = state;
@@ -233,10 +275,14 @@ const mapStateToProps = (state, ownProps) => {
 
   const businesService=get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
   const fees = formatTaxHeaders(sortBillDetails(get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []))[0],businesService);  // const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.estimateCardData", []);
+
   const billDetails = get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []);
   let totalAmount = 0;
   let current = 0;
   let arrears=0;
+  let Rebate = 0
+  let PromotionalRebate = 0  
+  let finalarrears = 0
 
   const finalData=getFinalData();
 
@@ -281,16 +327,34 @@ const mapStateToProps = (state, ownProps) => {
             arrears = arrears+ billDetails[i].billAccountDetails[j].amount; 
             }
         }
+        if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TIME_REBATE" )   {     
+          if(billDetails[i].fromPeriod!==latestYear)
+              {        
+                Rebate = Rebate+ billDetails[i].billAccountDetails[j].amount; 
+              }
+          }
+          if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_PROMOTIONAL_REBATE" )   {     
+            if(billDetails[i].fromPeriod!==latestYear)
+                {        
+                  PromotionalRebate = PromotionalRebate+ billDetails[i].billAccountDetails[j].amount; 
+                }
+            
+              }
+              finalarrears = arrears+PromotionalRebate+Rebate;
+
       } 
     }
   }  
 
+  
    addInterestToFee(fees, billDetails);
    addRoundOffToFee(fees, billDetails);
    addRebateToFee(fees, billDetails);
    addProRebateToFee(fees, billDetails);
    addSwatToFee(fees, billDetails);
-   if (fees&&fees.length>0) {
+   calcTax(fees, billDetails);
+
+  if (fees&&fees.length>0) {
 
     for(let i=0;i<fees.length;i++)
     {
@@ -319,7 +383,7 @@ else
     header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },
     fees,
     totalAmount: totalAmount.toFixed(2),
-    arrears : arrears.toFixed(2),
+    arrears : finalarrears.toFixed(2),
     businesService, contactNumber, email
   };
   return { estimate};
