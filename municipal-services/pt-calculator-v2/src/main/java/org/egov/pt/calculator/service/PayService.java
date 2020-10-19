@@ -29,6 +29,9 @@ public class PayService {
 
 	@Autowired
 	private CalculatorUtils utils;
+	
+	@Autowired
+	private MasterDataService mDataService;
 
 	/**
 	 * Updates the incoming demand with latest rebate, penalty and interest values if applicable
@@ -56,19 +59,26 @@ public class PayService {
 			}
 		}
 
+		Map<String, List<String>> cityConfig = mDataService.getRebateAndInterestDisabledCities(demand.getTenantId());
+		List<String> rebateDisabledCities = cityConfig.get(REBATE_DISABLED_CITIES);
+		List<String> interestDisabledCities = cityConfig.get(INTEREST_DISABLED_CITIES);
 		//Rebate Calculation
 		if (demandNotCollected) {
-			rebate = getRebate(demand, jsonMasterMap.get(REBATE_MASTER), payments);
-			promotionalRebate = getRebate(demand, jsonMasterMap.get(PROMOTIONAL_REBATE_MASTER), payments);
 
-			estimates.put(PT_TIME_REBATE, rebate.setScale(2, 2).negate());
+			if (rebateDisabledCities != null && !rebateDisabledCities.contains(demand.getTenantId())) {
+				rebate = getRebate(demand, jsonMasterMap.get(REBATE_MASTER), payments);
+				estimates.put(PT_TIME_REBATE, rebate.setScale(2, 2).negate());
+			}
+			promotionalRebate = getRebate(demand, jsonMasterMap.get(PROMOTIONAL_REBATE_MASTER), payments);
 			estimates.put(PT_PROMOTIONAL_REBATE, promotionalRebate.setScale(2, 2).negate());
 		}
 
 		//Interest Calculation
 		if (demandNotCollected) {
-			interest = getInterestCurrent(demand, payments, taxPeriods, jsonMasterMap.get(INTEREST_MASTER));
-			estimates.put(PT_TIME_INTEREST, interest.setScale(2, 2));
+			if (interestDisabledCities != null && !interestDisabledCities.contains(demand.getTenantId())) {
+				interest = getInterestCurrent(demand, payments, taxPeriods, jsonMasterMap.get(INTEREST_MASTER));
+				estimates.put(PT_TIME_INTEREST, interest.setScale(2, 2));
+			}
 		}
 		
 		return estimates;

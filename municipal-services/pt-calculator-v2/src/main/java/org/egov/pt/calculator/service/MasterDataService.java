@@ -17,8 +17,6 @@ import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.calculator.repository.Repository;
 import org.egov.pt.calculator.util.CalculatorConstants;
 import org.egov.pt.calculator.util.CalculatorUtils;
-import org.egov.pt.calculator.util.Configurations;
-import org.egov.pt.calculator.web.models.CalculationCriteria;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.demand.TaxHeadMaster;
 import org.egov.pt.calculator.web.models.demand.TaxHeadMasterResponse;
@@ -46,9 +44,6 @@ public class MasterDataService {
 	
 	@Autowired
 	private CalculatorUtils calculatorUtils;
-
-	@Autowired
-	private Configurations config;
 	
 	/**
 	 * Fetches Financial Year from Mdms Api
@@ -336,20 +331,25 @@ public class MasterDataService {
 		return masterMap;
 	}
 	
-	public List<List<String>> getRebateAndInterestEnabledCities(String tenantId) {
-		String tenant = tenantId.split(".")[0];
-		StringBuilder uri = new StringBuilder(calculatorUtils.getMdmsSearchUrl());
+	public Map<String, List<String>> getRebateAndInterestDisabledCities(String tenantId) {
+		Map<String, List<String>> tenantConfigMap = new HashMap<>();
+		String tenant = tenantId.split("\\.")[0];
+		StringBuilder mdmsUrl = new StringBuilder(calculatorUtils.getMdmsSearchUrl());
 		List<MasterDetail> masterDetails = new ArrayList<>();
 		masterDetails.add(MasterDetail.builder().name(MDMS_CITYWISE_CONFIG_KEY).build());
 		List<ModuleDetail> moduleDetails = new ArrayList<>();
 		moduleDetails.add(ModuleDetail.builder().moduleName(MODULE_TENANT).masterDetails(masterDetails).build());
 		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(tenant).moduleDetails(moduleDetails).build();
-		MdmsCriteriaReq req = MdmsCriteriaReq.builder().requestInfo(new RequestInfo()).mdmsCriteria(mdmsCriteria)
-				.build();
+		MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().requestInfo(new RequestInfo())
+				.mdmsCriteria(mdmsCriteria).build();
 
 		try {
-			Object result = repository.fetchResult(uri, req);
-			return JsonPath.read(result, MDMS_REBATE_PENALTY_CINFIG_PATH);
+			Object result = repository.fetchResult(mdmsUrl, mdmsCriteriaReq);
+			List<List<String>> rebateDisabledCities = JsonPath.read(result, MDMS_REBATE_CINFIG_PATH);
+			List<List<String>> interestDisabledCities = JsonPath.read(result, MDMS_REBATE_CINFIG_PATH);
+			tenantConfigMap.put(REBATE_DISABLED_CITIES, rebateDisabledCities.get(0));
+			tenantConfigMap.put(INTEREST_DISABLED_CITIES, interestDisabledCities.get(0));
+			return tenantConfigMap;
 		} catch (Exception e) {
 			throw new CustomException(INVALID_TENANT_ID_MDMS_KEY, INVALID_TENANT_ID_MDMS_MSG);
 		}
