@@ -1,5 +1,6 @@
 package org.egov.pt.calculator.util;
 
+import static java.util.Objects.isNull;
 import static org.egov.pt.calculator.util.CalculatorConstants.ALLOWED_RECEIPT_STATUS;
 import static org.egov.pt.calculator.util.CalculatorConstants.ASSESSMENTNUMBER_FIELD_SEARCH;
 import static org.egov.pt.calculator.util.CalculatorConstants.BUSINESSSERVICE_FIELD_FOR_SEARCH_URL;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +73,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.Getter;
 
@@ -766,4 +770,32 @@ public class CalculatorUtils {
 	    }
 
 
+	    public static JsonNode jsonMerge(JsonNode mainNode, JsonNode updateNode) {
+
+	        if(isNull(mainNode) || mainNode.isNull())
+	            return updateNode;
+	        if (isNull(updateNode) || updateNode.isNull())
+	            return mainNode;
+
+	        Iterator<String> fieldNames = updateNode.fieldNames();
+	        while (fieldNames.hasNext()) {
+
+	            String fieldName = fieldNames.next();
+	            JsonNode jsonNode = mainNode.get(fieldName);
+	            // if field exists and is an embedded object
+	            if (jsonNode != null && jsonNode.isObject()) {
+	                jsonMerge(jsonNode, updateNode.get(fieldName));
+	            }
+	            else {
+	                if (mainNode instanceof ObjectNode) {
+	                    // Overwrite field
+	                    JsonNode value = updateNode.get(fieldName);
+	                    ((ObjectNode) mainNode).put(fieldName, value);
+	                }
+	            }
+
+	        }
+
+	        return mainNode;
+	    }
 }

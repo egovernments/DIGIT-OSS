@@ -1,16 +1,40 @@
 package org.egov.pt.calculator.service;
 
-import java.math.BigDecimal;
-import java.util.*;
+import static org.egov.pt.calculator.util.CalculatorConstants.HUNDRED;
+import static org.egov.pt.calculator.util.CalculatorConstants.INTEREST_DISABLED_CITIES;
+import static org.egov.pt.calculator.util.CalculatorConstants.INTEREST_MASTER;
+import static org.egov.pt.calculator.util.CalculatorConstants.PROMOTIONAL_REBATE_MASTER;
+import static org.egov.pt.calculator.util.CalculatorConstants.PT_PROMOTIONAL_REBATE;
+import static org.egov.pt.calculator.util.CalculatorConstants.PT_ROUNDOFF;
+import static org.egov.pt.calculator.util.CalculatorConstants.PT_TIME_INTEREST;
+import static org.egov.pt.calculator.util.CalculatorConstants.PT_TIME_REBATE;
+import static org.egov.pt.calculator.util.CalculatorConstants.REBATE_DISABLED_CITIES;
+import static org.egov.pt.calculator.util.CalculatorConstants.REBATE_MASTER;
+import static org.egov.pt.calculator.util.CalculatorConstants.SERVICE_FIELD_VALUE_PT;
+import static org.egov.pt.calculator.util.CalculatorConstants.TAXES_TO_BE_CONSIDERD;
 
-import static org.egov.pt.calculator.util.CalculatorConstants.*;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.web.models.TaxHeadEstimate;
 import org.egov.pt.calculator.web.models.collections.Payment;
-import org.egov.pt.calculator.web.models.demand.*;
+import org.egov.pt.calculator.web.models.demand.BillAccountDetail;
+import org.egov.pt.calculator.web.models.demand.Demand;
+import org.egov.pt.calculator.web.models.demand.DemandDetail;
+import org.egov.pt.calculator.web.models.demand.TaxPeriod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.minidev.json.JSONArray;
 
@@ -71,6 +95,25 @@ public class PayService {
 			}
 			promotionalRebate = getRebate(demand, jsonMasterMap.get(PROMOTIONAL_REBATE_MASTER), payments);
 			estimates.put(PT_PROMOTIONAL_REBATE, promotionalRebate.setScale(2, 2).negate());
+
+			Object additionalDetails = demand.getAdditionalDetails();
+
+			String rebateAutocalculateValue = "{\"rebateAutoCalculate\" : \"true\"}";
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			JsonNode rebateAutocalculateNode = null;
+			try {
+				rebateAutocalculateNode = objectMapper.readTree(rebateAutocalculateValue);
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			JsonNode additionalDetailsNode = objectMapper.convertValue(additionalDetails, JsonNode.class);
+
+			demand.setAdditionalDetails(CalculatorUtils.jsonMerge(additionalDetailsNode, rebateAutocalculateNode));
 		}
 
 		//Interest Calculation
@@ -79,6 +122,25 @@ public class PayService {
 				interest = getInterestCurrent(demand, payments, taxPeriods, jsonMasterMap.get(INTEREST_MASTER));
 				estimates.put(PT_TIME_INTEREST, interest.setScale(2, 2));
 			}
+
+			Object additionalDetails = demand.getAdditionalDetails();
+
+			String interestAutocalculate = "{\"interestAutoCalculate\" : \"true\"}";
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			JsonNode interestAutocalculateNode = null;
+			try {
+				interestAutocalculateNode = objectMapper.readTree(interestAutocalculate);
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			JsonNode additionalDetailsNode = objectMapper.convertValue(additionalDetails, JsonNode.class);
+
+			demand.setAdditionalDetails(CalculatorUtils.jsonMerge(additionalDetailsNode, interestAutocalculateNode));
 		}
 		
 		return estimates;
