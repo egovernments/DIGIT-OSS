@@ -298,12 +298,14 @@ public class TradeLicenseService {
             List<String> endStates = Collections.nCopies(tradeLicenseRequest.getLicenses().size(),STATUS_APPROVED);
             switch (businessServicefromPath) {
                 case businessService_TL:
-                    if (config.getIsExternalWorkFlowEnabled() && tradeLicenseRequest.getLicenses().get(0).getStatus()!=null 
-                    && !tradeLicenseRequest.getLicenses().get(0).getStatus().equalsIgnoreCase(STATUS_INITIATED)) {
-                        wfIntegrator.callWorkFlow(tradeLicenseRequest);
-                    } else {
+				if (config.getIsExternalWorkFlowEnabled()) {
+					if (tradeLicenseRequest.getLicenses().get(0).getAction() != null && !tradeLicenseRequest
+							.getLicenses().get(0).getAction().equalsIgnoreCase(TL_ACTION_INITIATE)) {
+						wfIntegrator.callWorkFlow(tradeLicenseRequest);
+					}
+				} else {
                         TLWorkflowService.updateStatus(tradeLicenseRequest);
-                    }
+                }
                     break;
 
                 case businessService_BPA:
