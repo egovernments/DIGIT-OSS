@@ -65,6 +65,8 @@
 	src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/services/egi'/>"> </script>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252" />
+<script type="text/javascript"
+	src="/services/EGF/resources/javascript/autocomplete-debug.js"></script>
 <title>Journal voucher Modify</title>
 </head>
 
