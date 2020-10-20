@@ -355,7 +355,9 @@ const assessProperty = async (action, props) => {
 
 const createProperty = async (Properties, action, props) => {
   const { documentsUploadRedux, newProperties, propertiesEdited } = props;
-  const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
+  let propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
+  
+
   const propertyMethodAction = action;
   let  ownershipCategory = get(propertyPayload, "ownershipCategory",'');
   

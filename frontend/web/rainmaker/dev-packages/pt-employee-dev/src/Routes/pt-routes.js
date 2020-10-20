@@ -35,6 +35,10 @@ const FormWizardDataEntry = Loadable({
   loader: () => import("../Screens/FormWizardDataEntry"),
   loading: Loading
 });
+const DCB = Loadable({
+  loader: () => import("../Screens/DCB"),
+  loading: Loading
+});
 const PaymentSuccess = Loadable({
   loader: () => import("../Screens/PaymentSuccess"),
   loading: Loading
@@ -115,6 +119,17 @@ const routes = [
   {
     path: "property-tax/assessment-form-dataentry",
     component:FormWizardDataEntry,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideTitle:true
+      // hideBackButton: true,
+    }
+
+  },
+  {
+    path: "property-tax/demand-and-collection",
+    component:DCB,
     needsAuthentication: true,
     options: {
       hideFooter: true,

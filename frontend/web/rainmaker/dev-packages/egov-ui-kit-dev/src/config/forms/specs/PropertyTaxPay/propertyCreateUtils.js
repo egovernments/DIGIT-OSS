@@ -13,6 +13,13 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
   }; 
+
+  if(window.location.href.includes('dataentry'))
+  {
+    properties[0].source = "LEGACY_RECORD"
+    properties[0].status = "ACTIVE"
+
+  }
   if (properties[0].owners && properties[0].owners.length) {
     properties[0].owners.map((obj) => {
       if (obj.documents && Array.isArray(obj.documents) && obj.documents.length) {
