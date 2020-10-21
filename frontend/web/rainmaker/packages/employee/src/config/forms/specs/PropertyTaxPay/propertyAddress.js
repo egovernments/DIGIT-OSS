@@ -143,8 +143,9 @@ const formConfig = {
         dispatch(fetchGeneralMDMSData(
           null,
           "BillingService",
-          [{masterName:"TaxPeriod",filter:"[?(@.service=='PT')]"}, {masterName:"TaxHeadMaster",filter:"[?(@.service=='PT')]"}],
+          ["TaxPeriod","TaxHeadMaster"],
           "",
+        //  [{masterName:"TaxPeriod",filter:"[?(@.service=='PT')]"}, {masterName:"TaxHeadMaster",filter:"[?(@.service=='PT')]"}],
           field.value
         ));
       },
