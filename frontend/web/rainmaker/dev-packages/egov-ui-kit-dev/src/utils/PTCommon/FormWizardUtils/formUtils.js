@@ -244,7 +244,7 @@ export const formWizardConstants = {
   },
   [PROPERTY_FORM_PURPOSE.UPDATE]: {
     header: 'PT_UPDATE_PROPERTY',
-    parentButton: 'PT_UPDATE',
+    parentButton: 'EDIT_PROPERTY',
     isSubHeader: true,
     isFinancialYear: false,
     buttonLabel: 'PT_UPDATE_PROPERTY_BUTTON',

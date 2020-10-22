@@ -18,87 +18,45 @@ class DemandCollection extends React.Component {
   render() {
     const { prepareFinalObject, preparedFinalObject,Properties = [] } = this.props;
     const finalData=getFinalData();
- 
-   let firstdisplay_year = [];
-   firstdisplay_year = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[0].financialYear}]`, '');
-   let secondYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[1].financialYear}]`, '');
-   let thirdYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[2].financialYear}]`, '');
-   let fourthYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[3].financialYear}]`, '');
-   let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, '');
-   let dummyarray = [];
-
-   if (firstdisplay_year.length === 0 && secondYear.length !==0 && thirdYear.length !==0 && fourthYear.length !==0) {
-    dummyarray[0] = null;    
-
-    if (demands_data[0] != null) {
-     for (let i = 0; i < demands_data.length; i++) {
-      if (demands_data[i] != null) {
-       dummyarray[i + 1] = demands_data[i];
-      }
-     }
-    } else {
-     dummyarray = demands_data;
-
-    }
-  }
-  
-  else if(firstdisplay_year.length === 0 && secondYear.length ===0 && thirdYear.length !==0 && fourthYear.length !==0)
-  {
-    dummyarray[0] = null;    
-    dummyarray[1] = null;    
-    if(demands_data[0] != null) {
-      for (let i = 0; i < demands_data.length; i++) {
-       if (demands_data[i] != null) {
-        dummyarray[i + 2] = demands_data[i];
-       }
-      }
-     } else {
-      dummyarray = demands_data; 
-     }
-  }
-
-  else if(firstdisplay_year.length === 0 && secondYear.length ===0 && thirdYear.length ===0 && fourthYear.length !==0)
-  {
-    dummyarray[0] = null;    
-    dummyarray[1] = null;    
-    dummyarray[2] = null;    
-    if(demands_data[0] != null) {
-      for (let i = 0; i < demands_data.length; i++) {
-       if (demands_data[i] != null) {
-        dummyarray[i + 3] = demands_data[i];
-       }
-      }
-     } else {
-      dummyarray = demands_data;
- 
-     }
-  }
-  else if(firstdisplay_year.length === 0 && secondYear.length ===0 && thirdYear.length ===0 && fourthYear.length ===0)
-  {
-    dummyarray[0] = null;    
-    dummyarray[1] = null;    
-    dummyarray[2] = null; 
-    dummyarray[3] = null;       
-    if(demands_data[0] != null) {
-      for (let i = 0; i < demands_data.length; i++) {
-       if (demands_data[i] != null) {
-        dummyarray[i + 4] = demands_data[i];
-       }
-      }
-     } else {
-      dummyarray = demands_data;
- 
-     }
-  }
-  
-   else {
-    dummyarray = demands_data;
-   }
+     
+    let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`);
+    
+    let dummyarray = [];
 
 
-   //set(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand`,'');
+    //changing index of yearly data
 
-   set(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, dummyarray);
+    for(let i=0; demands_data && i< demands_data.length;i++)
+        {
+              for(let j=0; finalData && j<finalData.length;j++)
+              {
+                  if(demands_data[i] && demands_data[i].demand[finalData[j].financialYear]!== undefined)
+                  {
+                    dummyarray[j] = demands_data[i];
+                  }
+              }
+        }
+
+
+    //making null of no demand years data
+
+        let newarray = [];
+
+        for(let i=0; finalData && i<finalData.length;i++)
+        {
+          let YearExist = get(dummyarray, `[${i}].demand[${finalData[i].financialYear}]`);
+          if(YearExist)
+          {
+            set(newarray, `[${i}]`, dummyarray[i]);
+          }  
+          else
+          {
+            set(newarray, `[${i}]`, undefined);        
+          }
+        }   
+
+
+        set(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, newarray);
 
 
     const getYear =
@@ -133,13 +91,29 @@ class DemandCollection extends React.Component {
                                 // max={taxData.isDebit?-1:0}
                                 type="number"
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
-                                onChange={(e) => {
-                                  if (e.target.value.includes(".")) return
-                                  let value = "";
-                                  value = e.target.value;
+                                onChange={(e) => {  
+                                 
+                                   let value = "";
+                                  /*value = e.target.value;
+                                  if(e.target.value.includes("."))
+                                  {
+                                     
+                                    value = '';
+                                    alert( "Integer numbers are only allowed.");  
+                                        
+                                  } */
+                                  if (e.target.value.includes(".")) 
+                                  {  
+                                   alert( "Integer numbers are only allowed.");
+                                   return value = "" ;
+                                  }
+                                  value = e.target.value;                                
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code)
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`, taxData.isDebit?(Math.sign(value)===-1?value:-value):value)
-                                }}
+                                                            	
+                                   }
+
+                                  }
                                 onWheel={event => { event.preventDefault(); }}
                               />
                             </div>

@@ -184,12 +184,12 @@ class Property extends Component {
     }
   };
   editDemand= () =>{
+    const {  propertyId, tenantId } = this.props;
 
-     const { latestPropertyDetails, propertyId,setRoute, tenantId } = this.props;
-    const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
-    if(process.env.REACT_APP_NAME !='citizen'){
-    setRoute(`/property-tax/assessment-form-dataentry?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=false&mode=editDemand&propertyId=${propertyId}&tenantId=${tenantId}`);
-  }
+    if(process.env.REACT_APP_NAME !='citizen'){  
+
+  this.props.history.push(`/property-tax/demand-and-collection?propertyId=${propertyId}&edit=true`);
+    }
     // this.setState({
     //   dialogueOpen: true,
     //   urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
@@ -394,19 +394,26 @@ class Property extends Component {
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
           <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
           <Button
+              onClick={() => this.onAssessPayClick()}
+              label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}
+              primary={true}
+              style={{ lineHeight: "auto", minWidth: "inherit" }}
+            />
+          <Button
               label={
                 <Label buttonLabel={true}
-                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
+                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} 
+                  fontSize="16px"
                   color="#fe7a51" />
               }
               onClick={() => this.onEditPropertyClick()}
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+              //labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
               buttonStyle={{ border: "1px solid #fe7a51" }}
               style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
-            />
+            />            
             <Button
-              onClick={() => this.onAssessPayClick()}
-              label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}
+              onClick={() => this.editDemand()}
+              label={<Label buttonLabel={true} label="PT_EDIT_DATAENTRY_DEMAND" fontSize="16px" />}
               primary={true}
               style={{ lineHeight: "auto", minWidth: "inherit" }}
             />
