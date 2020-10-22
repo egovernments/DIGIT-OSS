@@ -28,7 +28,6 @@ import { connect } from "react-redux";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { displayFormErrors } from "egov-ui-kit/redux/form/actions";
-import { httpRequest } from "egov-ui-kit/utils/api";
 import {
   getQueryValue,
   getFinancialYearFromQuery,
@@ -81,6 +80,8 @@ import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { httpRequest as httpRequestnew } from "egov-ui-framework/ui-utils/api";
 
 class FormWizardDataEntry extends Component {
   state = {
@@ -148,7 +149,7 @@ class FormWizardDataEntry extends Component {
           [
             {
               key: "tenantId",
-              value: tenantId
+              value: getTenantId()
             },
             {
               key: "consumerCode",
@@ -441,83 +442,23 @@ class FormWizardDataEntry extends Component {
     }
   };
 
-  componentDidMount = async () => {
+  fetchDemand = async (taxData) => {
+
     let {
       location,
       generalMDMSDataById,
-      fetchMDMDDocumentTypeSuccess,
-      renderCustomTitleForPt,
       showSpinner,
-      hideSpinner,
-      fetchGeneralMDMSData,
-      history,
-      cities,
-      finalData
+      hideSpinner,     
+      prepareFinalObject
     } = this.props;
+
     let { search } = location;
-    let { resetForm } = this;
-
-    this.unlisten = history.listen((location, action) => {
-      resetForm();
-    });
-
-    showSpinner();
-    const { selected, finlYear } = this.state;
-
-    const isReasses = Boolean(
-      getQueryValue(search, "isReassesment").replace("false", "")
-    );
-    const propertyId = getQueryValue(search, "propertyId");
-    const isReassesment = Boolean(
-      getQueryValue(search, "isReassesment").replace("false", "")
-    );
-    const tenantId = getQueryValue(search, "tenantId") || getTenantId();
-    const draftUuid = getQueryValue(search, "uuid");
-    const edit = getQueryValue(search, "edit");
-    // const tenantId1 = getTenantId() || "uk";
-
-    const assessmentId =
-      getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
-
-      fetchGeneralMDMSData(
-        null,
-        "PropertyTax",
-        [
-          "Floor",
-          "OccupancyType",
-          "OwnerShipCategory",
-          "ConstructionType",
-          "OwnerType",
-          "PropertySubType",
-          "PropertyType",
-          "SubOwnerShipCategory",
-          "UsageCategoryDetail",
-          "UsageCategoryMajor",
-          "UsageCategoryMinor",
-          "UsageCategorySubMinor",
-          "Rebate",
-          "Penalty",
-          "Interest",
-          "FireCess",
-          "RoadType",
-          "Thana"
-        ],
-        "",
-        tenantId
-      );
-      fetchGeneralMDMSData(
-        null,
-        "BillingService",
-        ["TaxPeriod", "TaxHeadMaster"],
-        "",
-        tenantId
-      );
 
 
+   // const data =  get(this.state.prepareFinalObject,"taxData", null)
 
-
-  if(edit)
-  {
+     
+   
     const demandPropertyResponse = await httpRequest(
       "billing-service/demand/_search",
       "_get",
@@ -532,25 +473,35 @@ class FormWizardDataEntry extends Component {
         }
       ]
     );
-    {   
+    {
+    {
+      demandPropertyResponse.length != []
+        ? prepareFinalObject(
+            "DemandPropertiesResponse",
+            demandPropertyResponse
+          )
+        : [];
+    }
+    
+      
   
 
-      {
+     /*  {
         demandPropertyResponse.length != []
           ? prepareFinalObject(
               "DemandPropertiesResponse",
               demandPropertyResponse
             )
           : [];
-      }
+      } */
 
     
 
       const { generalMDMSDataById, getYearList } = this.props;
 
-      console.log('prasad this.props in did mount', this.props);
+      
 
-      console.log('prasad generalMDMSDataById', generalMDMSDataById);
+      
 
       let finalYear = "";
       let newkey = "";
@@ -691,7 +642,121 @@ class FormWizardDataEntry extends Component {
 
   
     }
+  
   }
+
+  componentDidMount = async () => {
+    let {
+      location,
+      generalMDMSDataById,
+      fetchMDMDDocumentTypeSuccess,
+      renderCustomTitleForPt,
+      showSpinner,
+      hideSpinner,
+      fetchGeneralMDMSData,
+      history,
+      cities,
+      finalData
+    } = this.props;
+    let { search } = location;
+    let { resetForm } = this;
+
+    this.unlisten = history.listen((location, action) => {
+      resetForm();
+    });
+
+    showSpinner();
+    const { selected, finlYear } = this.state;
+
+    const isReasses = Boolean(
+      getQueryValue(search, "isReassesment").replace("false", "")
+    );
+    const propertyId = getQueryValue(search, "propertyId");
+    const isReassesment = Boolean(
+      getQueryValue(search, "isReassesment").replace("false", "")
+    );
+    const tenantId = getQueryValue(search, "tenantId") || getTenantId();
+    const draftUuid = getQueryValue(search, "uuid");
+    const edit = getQueryValue(search, "edit");
+    // const tenantId1 = getTenantId() || "uk";
+
+    const assessmentId =
+      getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
+
+      fetchGeneralMDMSData(
+        null,
+        "PropertyTax",
+        [
+          "Floor",
+          "OccupancyType",
+          "OwnerShipCategory",
+          "ConstructionType",
+          "OwnerType",
+          "PropertySubType",
+          "PropertyType",
+          "SubOwnerShipCategory",
+          "UsageCategoryDetail",
+          "UsageCategoryMajor",
+          "UsageCategoryMinor",
+          "UsageCategorySubMinor",
+          "Rebate",
+          "Penalty",
+          "Interest",
+          "FireCess",
+          "RoadType",
+          "Thana"
+        ],
+        "",
+        tenantId
+      );
+      fetchGeneralMDMSData(
+        null,
+        "BillingService",
+        ["TaxPeriod", "TaxHeadMaster"],
+        "",
+        tenantId
+      );
+
+      let taxData;
+
+   let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: "uk",
+      moduleDetails: [
+       {
+          moduleName: "BillingService",
+          masterDetails: [
+            {
+              name: "TaxPeriod",
+            },
+            {
+              name: "TaxHeadMaster",
+            }
+          ]
+        },       
+      ]
+    }
+  };
+  try {
+    const payload =  await httpRequestnew(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    taxData = payload.MdmsRes.BillingService;
+
+   // dispatch(prepareFinalObject("taxData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+
+
+  this.fetchDemand(taxData)
+
+
+  
       //await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
 
       if (selected > 2) {
@@ -2161,11 +2226,9 @@ class FormWizardDataEntry extends Component {
         }
       ]
     );
-    console.log("prasad demandPropertyResponse", demandResponsenew);
 
     const propertyMethodAction = demandResponsenew.Demands.length>0? "_update" : "_create";
 
-    console.log("prasad propertyMethodAction", propertyMethodAction);
 
 
 
@@ -2266,7 +2329,7 @@ class FormWizardDataEntry extends Component {
                 demandDetail=dR.demandDetails && dR.demandDetails.filter((dD)=>{
                   return dD.id===demandValue.ID
                 });
-                demandDetail=demandDetail.length>0?demandDetail[0]:{};
+                demandDetail= demandDetail && demandDetail.length>0?demandDetail[0]:{};
               }
               demandDetails1.push({
                 ...demandDetail,
@@ -2378,7 +2441,6 @@ class FormWizardDataEntry extends Component {
 
  
   };
-
   pay = async () => {
     const { callPGService, callDraft } = this;
     const financialYearFromQuery = getFinancialYearFromQuery();
