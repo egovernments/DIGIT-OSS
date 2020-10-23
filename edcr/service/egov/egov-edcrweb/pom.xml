@@ -53,7 +53,7 @@
 	<parent>
 		<artifactId>egov-erp-edcr</artifactId>
 		<groupId>org.egov</groupId>
-		<version>1.0.0</version>
+		<version>4.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 

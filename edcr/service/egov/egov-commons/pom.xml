@@ -35,7 +35,7 @@
 	<parent>
 		<artifactId>egov-erp-edcr</artifactId>
 		<groupId>org.egov</groupId>
-		<version>1.0.0</version>
+		<version>4.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>org.egov</groupId>
 			<artifactId>egov-egi</artifactId>
-			<version>1.0.0</version>
+			<version>4.0.0</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.egov</groupId>
 			<artifactId>egov-config</artifactId>
-			<version>1.0.0</version>
+			<version>4.0.0</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
