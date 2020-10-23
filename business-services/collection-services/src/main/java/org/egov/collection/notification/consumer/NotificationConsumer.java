@@ -134,7 +134,7 @@ public class NotificationConsumer {
 			for(PaymentDetail detail: receipt.getPaymentDetails()) {
 				Bill bill = detail.getBill();
 				if (businessServiceAllowed.contains(detail.getBusinessService())) {
-					String phNo = bill.getMobileNumber();
+					String phNo = bill.getMobileNumber() != null ? bill.getMobileNumber() : receipt.getMobileNumber();
 					String message = buildSmsBody(bill, detail, receiptReq.getRequestInfo());
 					if (!StringUtils.isEmpty(message)) {
 						Map<String, Object> request = new HashMap<>();
