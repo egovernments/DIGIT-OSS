@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.egov</groupId>
-        <artifactId>egov-erp-edcr</artifactId>
-       <version>4.0.0</version>
+        <groupId>org.egov.edcr</groupId>
+        <artifactId>egov-erp</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>egov-erp-edcr-ear</artifactId>
+    <artifactId>egov-ear</artifactId>
     <packaging>ear</packaging>
 
     <name>e-governments edcr erp ear</name>
@@ -16,23 +15,24 @@
     <dependencies>
         <!-- EAR Web Dependencies Starts -->
         <dependency>
-            <groupId>org.egov</groupId>
+            <groupId>org.egov.edcr</groupId>
             <artifactId>egov-egiweb</artifactId>
-            <version>${erp-version}</version>
+           <version>1.0.1-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
-            <groupId>org.egov</groupId>
+            <groupId>org.egov.edcr</groupId>
             <artifactId>egov-edcrweb</artifactId>
-            <version>${erp-version}</version>
+           <version>1.0.1-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <!-- EAR Web Dependencies Ends -->
 
         <!-- EAR Java Dependencies Starts -->
         <dependency>
-            <groupId>org.egov</groupId>
+            <groupId>org.egov.edcr</groupId>
             <artifactId>egov-egi</artifactId>
+						<version>1.0.1-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-logging</artifactId>
@@ -41,16 +41,19 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.egov</groupId>
+            <groupId>org.egov.edcr</groupId>
             <artifactId>egov-config</artifactId>
-        </dependency>
+<version>1.0.1-SNAPSHOT</version>
+ </dependency>
         <dependency>
-            <groupId>org.egov</groupId>
+            <groupId>org.egov.edcr</groupId>
             <artifactId>egov-commons</artifactId>
+ <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.egov</groupId>
+            <groupId>org.egov.edcr</groupId>
             <artifactId>egov-edcr</artifactId>
+<version>1.0.1-SNAPSHOT</version>
         </dependency>
         <!-- EAR Java Dependencies Ends -->
 
@@ -90,12 +93,12 @@
                     <version>6</version>
                     <modules>
                         <webModule>
-                            <groupId>org.egov</groupId>
+                            <groupId>org.egov.edcr</groupId>
                             <artifactId>egov-egiweb</artifactId>
                             <contextRoot>/egi</contextRoot>
                         </webModule>
                         <webModule>
-                            <groupId>org.egov</groupId>
+                            <groupId>org.egov.edcr</groupId>
                             <artifactId>egov-edcrweb</artifactId>
                             <contextRoot>/edcr</contextRoot>
                         </webModule>
