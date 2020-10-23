@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+    <modelVersion>1.0.0</modelVersion>
 
     <groupId>org.egov</groupId>
     <artifactId>egov-erp-edcr</artifactId>
-    <version>4.0.0</version>
+    <version>1.0.0</version>
 
     <packaging>pom</packaging>
 
@@ -89,7 +89,7 @@
         <app.version>${project.version}</app.version>
 
         <!-- Application core dependency versions -->
-        <erp-version>4.0.0</erp-version>
+        <erp-version>1.0.0</erp-version>
 
         <!-- Application server provided dependency versions -->
         <hibernate-version>5.1.10.Final</hibernate-version>

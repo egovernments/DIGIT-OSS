@@ -51,9 +51,9 @@
     <parent>
         <artifactId>egov-erp-edcr</artifactId>
         <groupId>org.egov</groupId>
-        <version>4.0.0</version>
+        <version>1.0.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
+    <modelVersion>1.0.0</modelVersion>
 
     <name>e-governments config</name>
     <artifactId>egov-config</artifactId>
