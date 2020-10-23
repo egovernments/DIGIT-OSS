@@ -69,7 +69,7 @@
         <dependency>
             <groupId>org.egov.edcr</groupId>
             <artifactId>egov-config</artifactId>
- <version>1.0.0</version>
+					 <version>1.0.1-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>

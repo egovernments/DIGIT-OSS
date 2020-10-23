@@ -71,8 +71,8 @@
     </pluginRepositories>
 
     <modules>
-    	<module>egov-config</module>
-    <module>egov-egi</module>
+    	 <module>egov-config</module>
+       <module>egov-egi</module>
         <module>egov-commons</module>
         <module>egov-edcr</module>
         <module>egov-egiweb</module>
