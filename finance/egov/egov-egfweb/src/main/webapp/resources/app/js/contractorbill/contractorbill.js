@@ -507,7 +507,8 @@ function loadWorkOrder(contractorId){
 						{
 								selected="selected";
 						}
-						$('#workOrder').append($('<option '+ selected +'>').text(value.name).attr('value', value.orderNumber));
+						var textToDisplay=value.name +"-" +value.orderNumber;
+						$('#workOrder').append($('<option '+ selected +'>').text(textToDisplay) .attr('value', value.orderNumber));
 					});
 				});
 

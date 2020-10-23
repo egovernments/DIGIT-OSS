@@ -176,6 +176,9 @@
 									<s:date name="%{#attr.currentRowObject.voucherdate}"
 										format="dd/MM/yyyy" />
 								</display:column>
+								<display:column title="Bank Account" style="text-align:center;">
+									<s:property value="%{#attr.currentRowObject.accountNumber}" />
+								</display:column>	
 								<display:column title="Source" style="text-align:center;">
 									<s:property value="%{#attr.currentRowObject.source}" />
 								</display:column>

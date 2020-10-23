@@ -50,15 +50,15 @@
 
 package org.egov.payment.dao;
 
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.egov.commons.CVoucherHeader;
 import org.egov.model.payment.Paymentheader;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
 
 /**
  * TODO Brief Description of the purpose of the class/interface
@@ -67,6 +67,7 @@ import java.util.List;
  * @version 1.00
  */
 @Transactional(readOnly = true)
+@Service("paymentheaderHibernateDAO")
 public class PaymentheaderHibernateDAO {
     @Transactional
     public Paymentheader update(final Paymentheader entity) {
