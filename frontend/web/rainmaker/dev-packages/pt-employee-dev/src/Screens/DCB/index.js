@@ -752,8 +752,10 @@ class FormWizardDataEntry extends Component {
     console.log(e);
   }
 
-
-  this.fetchDemand(taxData)
+  if(edit)
+  {
+    this.fetchDemand(taxData)
+  }
 
 
   
