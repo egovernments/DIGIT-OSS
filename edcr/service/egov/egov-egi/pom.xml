@@ -54,7 +54,7 @@
         <groupId>org.egov</groupId>
         <version>1.0.0</version>
     </parent>
-    <modelVersion>1.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <name>e-governments egi</name>
     <artifactId>egov-egi</artifactId>
