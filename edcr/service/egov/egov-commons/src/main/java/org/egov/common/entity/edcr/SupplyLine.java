@@ -1,5 +1,6 @@
 /*
- * eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+ * eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency
+,
  * accountability and the service delivery of the government  organizations.
  *
  *  Copyright (C) <2019>  eGovernments Foundation
@@ -44,73 +45,44 @@
  *
  *  In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
+
 package org.egov.common.entity.edcr;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Map;
 
 /**
- * 
- * @author pradeep
+ * @author vinoth
  *
- * PoJo used to keep distance from the external entities like monuments, government building, river etc
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class DistanceToExternalEntity implements Serializable {
+public class SupplyLine implements Serializable {
 
-    private static final long serialVersionUID = -4379805246519538610L;
-    private List<BigDecimal> monuments = new ArrayList<>();
-    private List<BigDecimal> govtBuildings = new ArrayList<>();
-    private List<River> rivers = new ArrayList<River>();
-    private Drinage drinage;
-    private Footpath footpath;
+    private static final long serialVersionUID = 90L;
 
-    public List<BigDecimal> getMonuments() {
-        return monuments;
+    // List of all supply lines
+    private List<Measurement> supplyLines = new ArrayList<>();
+
+    // Key: Color code, Value: List of dimensions like distances, length
+    private Map<Integer, List<BigDecimal>> distances = Collections.emptyMap();
+
+    public List<Measurement> getSupplyLines() {
+        return supplyLines;
     }
 
-    public void setMonuments(List<BigDecimal> monuments) {
-        this.monuments = monuments;
+    public void setSupplyLines(List<Measurement> supplyLines) {
+        this.supplyLines = supplyLines;
     }
 
-    public List<BigDecimal> getGovtBuildings() {
-        return govtBuildings;
+    public Map<Integer, List<BigDecimal>> getDistances() {
+        return distances;
     }
 
-    public void setGovtBuildings(List<BigDecimal> govtBuildings) {
-        this.govtBuildings = govtBuildings;
-    }
-
-    public List<River> getRivers() {
-        return rivers;
-    }
-
-    public void addRivers(River river) {
-        this.getRivers().add(river);
-    }
-
-    public void setRivers(List<River> rivers) {
-        this.rivers = rivers;
-    }
-
-    public Drinage getDrinage() {
-        return drinage;
-    }
-
-    public void setDrinage(Drinage drinage) {
-        this.drinage = drinage;
-    }
-
-    public Footpath getFootpath() {
-        return footpath;
-    }
-
-    public void setFootpath(Footpath footpath) {
-        this.footpath = footpath;
+    public void setDistances(Map<Integer, List<BigDecimal>> distances) {
+        this.distances = distances;
     }
 
 }

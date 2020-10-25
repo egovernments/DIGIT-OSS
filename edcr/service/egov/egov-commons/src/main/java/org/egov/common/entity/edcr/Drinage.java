@@ -44,73 +44,47 @@
  *
  *  In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
+
 package org.egov.common.entity.edcr;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Map;
 
 /**
- * 
- * @author pradeep
+ * @author vinoth
  *
- * PoJo used to keep distance from the external entities like monuments, government building, river etc
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class DistanceToExternalEntity implements Serializable {
+public class Drinage implements Serializable {
+    
+    private static final long serialVersionUID = 101L;
 
-    private static final long serialVersionUID = -4379805246519538610L;
-    private List<BigDecimal> monuments = new ArrayList<>();
-    private List<BigDecimal> govtBuildings = new ArrayList<>();
-    private List<River> rivers = new ArrayList<River>();
-    private Drinage drinage;
-    private Footpath footpath;
+    private List<Measurement> drinages = new ArrayList<>();
 
-    public List<BigDecimal> getMonuments() {
-        return monuments;
+    /*
+     * Key: Color code, Value: List of distances from building to drainage. When key having value 0 means no color
+     * code used.
+     */
+    private Map<Integer, List<BigDecimal>> distancesFromBuilding = Collections.emptyMap();
+
+    public List<Measurement> getDrinages() {
+        return drinages;
     }
 
-    public void setMonuments(List<BigDecimal> monuments) {
-        this.monuments = monuments;
+    public void setDrinages(List<Measurement> drinages) {
+        this.drinages = drinages;
     }
 
-    public List<BigDecimal> getGovtBuildings() {
-        return govtBuildings;
+    public Map<Integer, List<BigDecimal>> getDistancesFromBuilding() {
+        return distancesFromBuilding;
     }
 
-    public void setGovtBuildings(List<BigDecimal> govtBuildings) {
-        this.govtBuildings = govtBuildings;
+    public void setDistancesFromBuilding(Map<Integer, List<BigDecimal>> distancesFromBuilding) {
+        this.distancesFromBuilding = distancesFromBuilding;
     }
-
-    public List<River> getRivers() {
-        return rivers;
-    }
-
-    public void addRivers(River river) {
-        this.getRivers().add(river);
-    }
-
-    public void setRivers(List<River> rivers) {
-        this.rivers = rivers;
-    }
-
-    public Drinage getDrinage() {
-        return drinage;
-    }
-
-    public void setDrinage(Drinage drinage) {
-        this.drinage = drinage;
-    }
-
-    public Footpath getFootpath() {
-        return footpath;
-    }
-
-    public void setFootpath(Footpath footpath) {
-        this.footpath = footpath;
-    }
-
+    
+    
 }
