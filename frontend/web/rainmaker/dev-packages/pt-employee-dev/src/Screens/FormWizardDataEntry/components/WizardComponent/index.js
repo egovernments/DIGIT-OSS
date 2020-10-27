@@ -103,19 +103,7 @@ const WizardComponent = ({
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{ marginRight: 45, width: "30%" }}
           />}
-          {selected == 4 &&  <Button
-              label={
-                <Label buttonLabel={true}
-                  label={"Add Demand "} fontSize="16px"
-                  color="#fe7a51" />
-              }
-              onClick={
-              () => {history.push(`/property-tax/demand-and-collection?propertyId=${propertyId}`)}       
-              }
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
-            />}
+       
 
 
           <Button

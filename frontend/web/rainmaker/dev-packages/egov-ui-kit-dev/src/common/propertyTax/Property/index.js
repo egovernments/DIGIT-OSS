@@ -206,7 +206,7 @@ class Property extends Component {
       );
     } else if(selPropertyDetails.source === "LEGACY_RECORD"){
 
-      this.props.history.push(`/property-tax/assessment-form-dataentry?assessmentId=0&purpose=edit&propertyId=${propertyId}&tenantId=${tenantId}`);
+      this.props.history.push(`/property-tax/assessment-form-dataentry?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenantId}`);
       }
       
     else
