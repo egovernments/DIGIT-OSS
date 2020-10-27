@@ -10,7 +10,7 @@ import "./index.css";
 const options = [
   { value: "Male", label: <Label label="PT_FORM3_MALE" /> },
   { value: "Female", label: <Label label="PT_FORM3_FEMALE" /> },
-  { value: "Transgender", label: <Label label="PT_FORM3_TRANSGENDER" /> },
+  { value: "OTHERS", label: <Label label="PT_FORM3_TRANSGENDER" /> },
 ];
 
 // const guardianOptions = [{ value: "Husband", label: <Label label="Husband" /> }, { value: "Father ", label: <Label label="Father" /> }];

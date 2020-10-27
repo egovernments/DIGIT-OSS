@@ -1,7 +1,5 @@
 import React from "react";
 import { Icon } from "components";
-import Label from "egov-ui-kit/utils/translationNode";
-
 
 const titleStyle = {
   display: "flex",
@@ -13,12 +11,7 @@ const getTitle = (length) => (
     <span>
       <Icon action="social" name="person" />
     </span>
-    <Label
-      labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-      label={'COMMON_OWNER'}
-      secondaryText={'-' + (length)}
-      fontSize="18px"
-    />
+    <span style={{ marginLeft: 4 }}>Owner-{length}</span>
   </div>
 );
 

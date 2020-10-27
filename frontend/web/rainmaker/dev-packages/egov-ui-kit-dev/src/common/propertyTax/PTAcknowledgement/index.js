@@ -39,6 +39,12 @@ class PTAcknowledgement extends React.Component {
     this.setState({ propertyId: propertyId });
     loadUlbLogo(tenantId);
   };
+  onDCBClick = () => {
+    const { location } = this.props;
+    const { search } = location;
+    const propertyId = getQueryValue(search, "propertyId");
+    store.dispatch(setRoute(`/property-tax/demand-and-collection?propertyId=${propertyId}`));
+  };
   onGoHomeClick = () => {
     process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/pt-mutation/propertySearch")) : store.dispatch(setRoute("/property-tax"));
   };
@@ -166,6 +172,7 @@ class PTAcknowledgement extends React.Component {
     let ptSubMsg = {};
     let Button1 = { name: "", onClick: "", visibility: false };
     let Button2 = { name: "", onClick: "", visibility: false };
+    let Button3 = { name: "", onClick: "", visibility: false };
     let downloadButton = { menu: downloadMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
     let printButton = { menu: printMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
     let statusIcon = {};
@@ -199,6 +206,8 @@ class PTAcknowledgement extends React.Component {
       };
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
       Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
+      Button3 = { name: "PT_ADD_DEMAND", buttonClick: this.onDCBClick, visibility: true };
+
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
     } else if (purpose === PROPERTY_FORM_PURPOSE.UPDATE && status === "success") {
@@ -528,6 +537,14 @@ class PTAcknowledgement extends React.Component {
                           style={{ lineHeight: "auto", minWidth: "inherit", width: "200px" }}
                         />
                       )}
+                     {Button3 && Button3.visibility && (
+                        <Button
+                          onClick={Button3.buttonClick}
+                          label={<Label buttonLabel={true} label={Button3.name} fontSize="16px" />}
+                          primary={true}
+                          style={{ lineHeight: "auto", minWidth: "inherit", width: "200px", backgroundColor: "white" }}
+                        />
+                      )}
                     </div>
                     <div className="button-container col-xs-12 col-md-4 col-lg-2 property-info-access-btn" style={{ float: "right", right: "30px" }}>
                       {Button2 && Button2.visibility && (
@@ -539,6 +556,7 @@ class PTAcknowledgement extends React.Component {
                         />
                       )}
                     </div>
+                   
                   </div>
                 </div>
               </div>

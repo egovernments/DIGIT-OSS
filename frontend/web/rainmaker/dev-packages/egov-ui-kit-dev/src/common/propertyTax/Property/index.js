@@ -204,7 +204,13 @@ class Property extends Component {
         { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
         "error"
       );
-    } else {
+    } else if(selPropertyDetails.source === "LEGACY_RECORD"){
+
+      this.props.history.push(`/property-tax/assessment-form-dataentry?assessmentId=0&purpose=edit&propertyId=${propertyId}&tenantId=${tenantId}`);
+      }
+      
+    else
+    {
       this.props.history.push(getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.UPDATE, -1, assessmentNo));
       // this.setState({
       //   dialogueOpen: true,

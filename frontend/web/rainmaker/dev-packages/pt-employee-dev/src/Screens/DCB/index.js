@@ -2699,7 +2699,7 @@ class FormWizardDataEntry extends Component {
 
     //this.fetchdata();
 
-    if (mode == "editDemand" && selected == 3 && editDemand == false) {
+    if (mode == "edit" && selected == 3 && editDemand == false) {
       this.setState({
         editDemand: true,
         selected: 4,
