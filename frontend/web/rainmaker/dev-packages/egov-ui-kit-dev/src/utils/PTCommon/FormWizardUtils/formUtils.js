@@ -363,6 +363,10 @@ const createProperty = async (Properties, action, props) => {
   
   let  usageCategory = get(propertyPayload, "usageCategory",'');
 
+  let  isLegacy = get(propertyPayload, "source",'');
+
+
+
 
 
   if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
@@ -385,6 +389,8 @@ const createProperty = async (Properties, action, props) => {
   }
 
 
+  if(isLegacy !== "LEGACY_RECORD")
+  {
   if (action === "_update") {
     const workflow = {
       "businessService": "PT.CREATE",
@@ -397,6 +403,7 @@ const createProperty = async (Properties, action, props) => {
       propertyPayload.workflow = workflow
     }
   }
+}
   try {
     propertyPayload.creationReason = action == '_create' ? 'CREATE' : 'UPDATE';
     const propertyResponse = await httpRequest(
