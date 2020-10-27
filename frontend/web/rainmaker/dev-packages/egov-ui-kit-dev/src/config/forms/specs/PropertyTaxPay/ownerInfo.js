@@ -72,7 +72,7 @@ const formConfig = {
       localePrefix: "PT_RELATION",
       floatingLabelText: "PT_FORM3_RELATIONSHIP",
       hintText: "",
-      dropDownData: [{ label: "Father", value: "FATHER" }, { label: "Husband", value: "HUSBAND" }],
+      dropDownData: [{ label: "Father", value: "FATHER" }, { label: "Husband", value: "HUSBAND" }, { label: "Mother", value: "MOTHER" }],
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     },
     ownerCategory: {
