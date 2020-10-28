@@ -124,9 +124,10 @@ public class PropertyValidator {
 		List<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toList());
 		List<String> uuidsNotFound = new ArrayList<>();
 
+		if(! "LEGACY_RECORD".equals(request.getProperty().getSource().toString())){
 		if(!property.getWorkflow().getBusinessService().equalsIgnoreCase(configs.getUpdatePTWfName()))
 			errorMap.put("EG_PT_UPDATE_PROPERTY_WF_ERROR", "Invalid Workflow name for update, please provide the proper workflow information");
-
+		}
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_UUID_ERROR", "Invalid owners found in request : " + uuidsNotFound);
 
