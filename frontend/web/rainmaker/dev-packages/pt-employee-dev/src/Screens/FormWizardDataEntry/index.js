@@ -621,7 +621,7 @@ class FormWizardDataEntry extends Component {
 
     let buttonLabel = "PT_COMMONS_NEXT";
     if (index == 3) {
-      propertyId ? buttonLabel = 'PT_UPDATE_PROPERTY' :  buttonLabel = "PT_CREATE_PROPERTY" ;
+      propertyId ? buttonLabel = 'PT_UPDATE_PROPERTY' :  buttonLabel = "PT_ADD_ASSESS_PROPERTY" ;
     } else if (index == 5) {
       buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 6) {

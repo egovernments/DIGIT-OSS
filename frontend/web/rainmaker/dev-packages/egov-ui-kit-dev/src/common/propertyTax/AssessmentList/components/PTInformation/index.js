@@ -134,7 +134,7 @@ class PTInformation extends React.Component {
           <Card
             textChildren={
               <div id="property-review-form" className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-                {totalBillAmountDue > 0 && (
+                {(
                   <Card
                     textChildren={
                       <TotalDues
