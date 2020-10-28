@@ -89,7 +89,7 @@ class AssessmentHistory extends Component {
 
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
-                            <Button
+                           {/*  <Button
                                 label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.REASSESS].parentButton} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
@@ -106,7 +106,7 @@ class AssessmentHistory extends Component {
                                     }
                                     // lastElement.onClick();
                                 }}
-                            ></Button>
+                            ></Button> */}
                         </div>
 
                     </div >
