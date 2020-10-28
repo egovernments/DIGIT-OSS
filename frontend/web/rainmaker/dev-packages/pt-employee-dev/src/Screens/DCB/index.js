@@ -1062,14 +1062,14 @@ class FormWizardDataEntry extends Component {
     let isAssesment = Boolean(
       getQueryValue(search, "isAssesment").replace("false", "")
     ); */
-
+    let edit = getQueryValue(search, "edit");
     let buttonLabel = "";
    
     if (index == 0) {
       buttonLabel = "PT_COMMONS_NEXT"
     }
     else if (index == 1) {
-      buttonLabel = "PT_CREATE_DEMAND"
+      edit ? buttonLabel = "PT_UPDATE_DEMAND": buttonLabel = "PT_CREATE_DEMAND"
     }
     else if (index == 2) {
       buttonLabel = "PT_HOME";
@@ -1080,41 +1080,23 @@ class FormWizardDataEntry extends Component {
   getMessageHeader() {
     let { search } = this.props.location;
 
-    let isReassesment = Boolean(
-      getQueryValue(search, "isReassesment").replace("false", "")
-    );
-    let isAssesment = Boolean(
-      getQueryValue(search, "isAssesment").replace("false", "")
-    );
+    let buttonLabel = "";
 
-    let buttonLabel = "PT_PROPERTY_DEMAND_ADD_SUCCESS";
+    let edit = getQueryValue(search, "edit");
 
-   /*  isAssesment
-      ? (buttonLabel = "PT_PROPERTY_ASSESS_SUCCESS")
-      : isReassesment
-      ? (buttonLabel = "PT_PROPERTY_REASSESS_SUCCESS")
-      : (buttonLabel = "PT_PROPERTY_DEMAND_ADD_SUCCESS"); */
+    edit?buttonLabel="PT_PROPERTY_DEMAND_UPDATE_SUCCESS":buttonLabel="PT_PROPERTY_DEMAND_ADD_SUCCESS";
 
     return buttonLabel;
   }
   getMessage() {
-    const { location = {} } = this.props;
-    let { search = "" } = location;
+    let { search } = this.props.location;
 
- /*    let isReassesment = Boolean(
-      getQueryValue(search, "isReassesment").replace("false", "")
-    );
-    let isAssesment = Boolean(
-      getQueryValue(search, "isAssesment").replace("false", "")
-    ); */
+    let edit = getQueryValue(search, "edit");
 
-    let buttonLabel = "PT_PROPERTY_DEMAND_ASSESS_NOTIFICATION";
 
-   /*  isAssesment
-      ? (buttonLabel = "PT_PROPERTY_ASSESS_NOTIFICATION")
-      : isReassesment
-      ? (buttonLabel = "PT_PROPERTY_REASSESS_NOTIFICATION")
-      : (buttonLabel = "PT_PROPERTY_ADD_NOTIFICATION"); */
+    let buttonLabel = "";
+
+    edit?buttonLabel="PT_PROPERTY_DEMAND_ASSESS_UPDATE_NOTIFICATION":buttonLabel="PT_PROPERTY_DEMAND_ADD_ASSESS_NOTIFICATION";
 
     return buttonLabel;
   }
@@ -2143,7 +2125,6 @@ class FormWizardDataEntry extends Component {
           Demands: demandData
         }
       );
-      showSpinner();
       this.setState({
         assessedPropertyDetails: createPropertyResponse,
         assessedDemandDetails: createDemandResponse,
@@ -2261,11 +2242,11 @@ class FormWizardDataEntry extends Component {
     let currentYearData = [];
     let fromDate;
     let toDate;
- /*    let demandResponse = DemandPropertiesResponse
+    let demandResponse = DemandPropertiesResponse
       ? DemandPropertiesResponse.Demands
         ? DemandPropertiesResponse.Demands.reverse()
         : []
-      : []; */
+      : [];
     const demandObject = {};
     let finaYr = "";
     const dmdObj = {};
@@ -2274,8 +2255,8 @@ class FormWizardDataEntry extends Component {
     {
       alert("The localstorage data is not fetched")
     }
-
- /*    demandResponse.forEach(obj => {
+ 
+    demandResponse.forEach(obj => {
       let generalmdms = Object.keys(generalMDMSDataById.TaxPeriod).map(
         (years, keys) => {
           if (
@@ -2292,10 +2273,8 @@ class FormWizardDataEntry extends Component {
       });
       demandObject[obj.taxPeriodFrom] = { ...obj };
       dmdObj[finaYr] = { ...obj };
-    }); */
-    const demandDetails1 = [];
-
-     const searchPropertyResponse = await httpRequest(
+    });
+    const createPropertyResponse = await httpRequest(
       "property-services/property/_search",
       "_search",
       [
@@ -2309,10 +2288,10 @@ class FormWizardDataEntry extends Component {
         }
       ]
     );
-
     demandsData.forEach((demand, index) => {
       demand &&
         Object.keys(demand.demand).forEach((dataYear, key) => {
+          const demandDetails1 = [];
           const dR = dmdObj[dataYear] || {};
           demand.demand &&
             demand.demand[dataYear].forEach((demandValue, ind) => {
@@ -2331,7 +2310,7 @@ class FormWizardDataEntry extends Component {
                 demandDetail=dR.demandDetails && dR.demandDetails.filter((dD)=>{
                   return dD.id===demandValue.ID
                 });
-                demandDetail= demandDetail && demandDetail.length>0?demandDetail[0]:{};
+                demandDetail=demandDetail.length>0?demandDetail[0]:{};
               }
               demandDetails1.push({
                 ...demandDetail,
@@ -2361,28 +2340,29 @@ class FormWizardDataEntry extends Component {
             }
           }
 
-         demandData.push({
+          demandData.push({
             ...dR,
             tenantId: getTenantId(),
-            consumerCode: propertyId,
+            consumerCode: get(
+              createPropertyResponse,
+              "Properties[0].propertyId"
+            ),
             consumerType: get(
-              searchPropertyResponse,
+              createPropertyResponse,
               "Properties[0].propertyType"
             ),
-            consumerCode: propertyId,
-            consumerType: "VACANT",
             businessService: "PT",
             taxPeriodFrom: fromDate,
             taxPeriodTo: toDate,
             payer: {
               ...get(dR, "payer", {}),
               uuid: get(
-                searchPropertyResponse,
+                createPropertyResponse,
                 "Properties[0].owners[0].uuid"
               )
             },
             demandDetails: demandDetails1
-          }); 
+          });
         });
     });
 
