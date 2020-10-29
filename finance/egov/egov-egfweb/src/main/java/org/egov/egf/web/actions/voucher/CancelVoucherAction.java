@@ -386,7 +386,7 @@ public class CancelVoucherAction extends BaseFormAction {
 						(CVoucherHeader) persistenceService.find("from CVoucherHeader  where id=?", b.longValue()));
 		} else if (voucherHeader.getType().equalsIgnoreCase(FinancialConstants.STANDARD_VOUCHER_TYPE_CONTRA)) {
 			contraVoucherQry = "from CVoucherHeader vh where vh.status =" + FinancialConstants.CREATEDVOUCHERSTATUS
-					+ " and ( vh.isConfirmed != 1 or vh.isConfirmed is null) ";
+					+ " and ( vh.isConfirmed != 1 or vh.isConfirmed is null) and vh.refvhId is null ";
 			persistenceService.findAllBy(contraVoucherQry + filterQry);
 			voucherList.addAll(persistenceService.findAllBy(contraVoucherQry + filterQry));
 		}
