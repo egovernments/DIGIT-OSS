@@ -192,6 +192,44 @@ public class PropertyQueryBuilder {
 		return addPaginationWrapper(withClauseQuery, preparedStmtList, criteria);
 	}
 	
+	public String getPropertyQueryForBulkSearch(PropertyCriteria criteria, List<Object> preparedStmtList) {
+
+		Boolean isEmpty = CollectionUtils.isEmpty(criteria.getPropertyIds())
+				&& CollectionUtils.isEmpty(criteria.getUuids());
+
+		if(isEmpty)
+			throw new CustomException("EG_PT_SEARCH_ERROR"," No propertyid or uuid given for the property Bulk search");
+
+		StringBuilder builder = new StringBuilder(QUERY);
+		Boolean appendAndQuery = false;
+
+		if (!ObjectUtils.isEmpty(criteria.getTenantId())) {
+			builder.append(" property.tenantid=?");
+			preparedStmtList.add(criteria.getTenantId());
+			appendAndQuery = true;
+		}
+
+		Set<String> propertyIds = criteria.getPropertyIds();
+		if (!CollectionUtils.isEmpty(propertyIds)) {
+			if(appendAndQuery)
+				builder.append(AND_QUERY);
+			builder.append("property.propertyid IN (").append(createQuery(propertyIds)).append(")");
+			addToPreparedStatementWithUpperCase(preparedStmtList, propertyIds);
+			appendAndQuery= true;
+		}
+
+		Set<String> uuids = criteria.getUuids();
+		if (!CollectionUtils.isEmpty(uuids)) {
+
+			if(appendAndQuery)
+				builder.append(AND_QUERY);
+			builder.append("property.id IN (").append(createQuery(uuids)).append(")");
+			addToPreparedStatement(preparedStmtList, uuids);
+			appendAndQuery= true;
+		}
+		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
+	}
+
 
 	public String getPropertyIdsQuery(Set<String> ownerIds, List<Object> preparedStmtList) {
 
@@ -225,6 +263,12 @@ public class PropertyQueryBuilder {
 	private void addToPreparedStatement(List<Object> preparedStmtList, Set<String> ids) {
 		ids.forEach(id -> {
 			preparedStmtList.add(id);
+		});
+	}
+	
+	private void addToPreparedStatementWithUpperCase(List<Object> preparedStmtList, Set<String> ids) {
+		ids.forEach(id -> {
+			preparedStmtList.add(id.toUpperCase());
 		});
 	}
 

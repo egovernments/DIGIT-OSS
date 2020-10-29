@@ -27,6 +27,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.Sets;
+import org.springframework.util.ObjectUtils;
 
 @Repository
 public class PropertyRepository {
@@ -78,7 +79,12 @@ public class PropertyRepository {
 			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
 		return getPropertyAuditBulk(criteria);
 	}
-
+	
+	public List<Property> getPropertiesForBulkSearch(PropertyCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = queryBuilder.getPropertyQueryForBulkSearch(criteria, preparedStmtList);
+		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+	}
 	/**
 	 * Returns list of properties based on the given propertyCriteria with owner
 	 * fields populated from user service
@@ -185,6 +191,21 @@ public class PropertyRepository {
 		}
 
 		return false;
+	}
+	
+	public List<String> fetchIds(PropertyCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String basequery = "select id from eg_pt_property";
+		StringBuilder builder = new StringBuilder(basequery);
+		if (!ObjectUtils.isEmpty(criteria.getTenantId())) {
+			builder.append(" where tenantid=?");
+			preparedStmtList.add(criteria.getTenantId());
+		}
+		String orderbyClause = " order by lastmodifiedtime,id offset ? limit ?";
+		builder.append(orderbyClause);
+		preparedStmtList.add(criteria.getOffset());
+		preparedStmtList.add(criteria.getLimit());
+		return jdbcTemplate.query(builder.toString(), preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
 	}
 
 }

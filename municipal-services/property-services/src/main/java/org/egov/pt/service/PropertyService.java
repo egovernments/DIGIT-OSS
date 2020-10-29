@@ -290,15 +290,56 @@ public class PropertyService {
 		return properties;
 	}
 
+	public List<Property> searchPropertyPlainAuditSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
+		List<Property> properties = getPropertiesPlainAuditSearch(criteria, requestInfo);
+		for(Property property:properties)
+			enrichmentService.enrichBoundary(property,requestInfo);
+		return properties;
+	}
+	
 	public List<Property> searchPropertyPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
 		List<Property> properties = getPropertiesPlainSearch(criteria, requestInfo);
 		for(Property property:properties)
 			enrichmentService.enrichBoundary(property,requestInfo);
 		return properties;
 	}
-
-
+	
 	List<Property> getPropertiesPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+			criteria.setLimit(config.getMaxSearchLimit());
+		if (criteria.getLimit() == null)
+			criteria.setLimit(config.getDefaultLimit());
+		if (criteria.getOffset() == null)
+			criteria.setOffset(config.getDefaultOffset());
+		PropertyCriteria propertyCriteria = new PropertyCriteria();
+		if (criteria.getUuids() != null || criteria.getPropertyIds() != null) {
+			if (criteria.getUuids() != null)
+				propertyCriteria.setUuids(criteria.getUuids());
+			if (criteria.getPropertyIds() != null)
+				propertyCriteria.setPropertyIds(criteria.getPropertyIds());
+
+		} else {
+			List<String> uuids = repository.fetchIds(criteria);
+			if (uuids.isEmpty())
+				return Collections.emptyList();
+			propertyCriteria.setUuids(new HashSet<>(uuids));
+		}
+		propertyCriteria.setLimit(criteria.getLimit());
+		List<Property> properties = repository.getPropertiesForBulkSearch(propertyCriteria);
+		if (properties.isEmpty())
+			return Collections.emptyList();
+		Set<String> ownerIds = properties.stream().map(Property::getOwners).flatMap(List::stream)
+				.map(OwnerInfo::getUuid).collect(Collectors.toSet());
+
+		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
+		userSearchRequest.setUuid(ownerIds);
+		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+		util.enrichOwner(userDetailResponse, properties);
+		return properties;
+	}
+
+
+	List<Property> getPropertiesPlainAuditSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
 
 		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
 			criteria.setLimit(config.getMaxSearchLimit());
