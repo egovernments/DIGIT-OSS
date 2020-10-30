@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.egov</groupId>
+    <groupId>org.egov.edcr</groupId>
     <artifactId>egov-erp-edcr-impl</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -85,7 +85,7 @@
         <app.version>${project.version}</app.version>
 
         <!-- Application core dependency versions -->
-        <erp-version>4.0.0</erp-version>
+        <erp-version>1.0.1-SNAPSHOT</erp-version>
 
         <!-- Application server provided dependency versions -->
         <hibernate-version>5.1.10.Final</hibernate-version>
@@ -193,7 +193,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.egov</groupId>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-egi</artifactId>
                 <version>${erp-version}</version>
                 <exclusions>
@@ -204,27 +204,17 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.egov</groupId>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-config</artifactId>
                 <version>${erp-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.egov</groupId>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-commons</artifactId>
                 <version>${erp-version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.egov</groupId>
-                <artifactId>egov-eis</artifactId>
-                <version>${erp-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.egov</groupId>
-                <artifactId>egov-portal</artifactId>
-                <version>${erp-version}</version>
-            </dependency>
 	    	<dependency>
-                <groupId>org.egov</groupId>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-edcr</artifactId>
                 <version>${erp-version}</version>
             </dependency>
