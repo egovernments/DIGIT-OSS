@@ -208,7 +208,7 @@ class OwnerInfo extends Component {
               }
               : {
                 key: getTranslatedLabel("PT_FORM3_OWNERSHIP_TYPE", localizationLabelsData),
-                value: getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${subOwnershipCategory}`) || getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`)
+                value: getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${subOwnershipCategory}`).replace(".", "_") || getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`)
                 // (institution &&
                 //   institution.type &&
                 //   generalMDMSDataById &&
