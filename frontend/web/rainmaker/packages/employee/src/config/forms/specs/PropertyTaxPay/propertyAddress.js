@@ -2,11 +2,13 @@ import { pincode, mohalla, street, colony, houseNumber, dummy } from "egov-ui-ki
 import { handleFieldChange, setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
 import { prepareFormData, fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import set from "lodash/set";
 import get from "lodash/get";
-import { getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from '../../../common'
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 
 // const Search = <Icon action="action" name="home" color="#30588c" />;
 
@@ -183,25 +185,27 @@ const formConfig = {
     roadType: {
       id: "roadType",
       jsonPath: "Properties[0].propertyDetails[0].additionalDetails.roadType",
-      localePrefix: { moduleName: "PropertyTax", masterName: "RoadType" },
+      //localePrefix: { moduleName: "PropertyTax", masterName: "RoadType" },
       type: "singleValueList",
       floatingLabelText: "PT_PROPERTY_ADDRESS_ROAD_TYPE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       fullWidth: true,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       numcols: 6,
+      labelsFromLocalisation: true,
     },
-    thanaType: {
+   thanaType: {
       id: "Thana",
       jsonPath: "Properties[0].propertyDetails[0].additionalDetails.thana",
-      localePrefix: { moduleName: "PropertyTax", masterName: "Thana" },
+      //localePrefix: { moduleName: "PROPERTYTAX_THANA_", masterName: "Thana" },
       type: "singleValueList",
       floatingLabelText: "PT_PROPERTY_ADDRESS_THANA",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       fullWidth: true,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       numcols: 6,
-    },
+      labelsFromLocalisation: true,
+    }, 
   },
   afterInitForm: (action, store, dispatch) => {
     let tenantId = getTenantId();
@@ -215,16 +219,21 @@ const formConfig = {
         });
 
       dispatch(setFieldProperty("propertyAddress", "roadType", "dropDownData", roadTypeData));
+      const locale = getLocale() || "en_IN";
+      const localizationLabelsData = initLocalizationLabels(locale);
 
      const thanaData =
       get(loadMdmsData, "PropertyTax.Thana") &&
       Object.values(get(loadMdmsData, "PropertyTax.Thana")).map((item, index) => {
-      return { value: item.code, label: item.name };
+
+      return { value: item.code, 
+        label: getTranslatedLabel(
+          ('PROPERTYTAX_THANA_' + tenantId.replace(".", "_").toUpperCase() + "_" + item.code.toUpperCase()), localizationLabelsData) };
       });
       console.log("thanaData------->>>",thanaData)
       dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
-      dispatch(setFieldProperty("propertyAddress", "thanaType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
-      dispatch(setFieldProperty("propertyAddress", "roadType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "label", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
+      dispatch(setFieldProperty("propertyAddress", "roadType", "label", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
 
     const { PT } = citiesByModule || {};
     if (PT) {
