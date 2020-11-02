@@ -1,5 +1,6 @@
 package org.egov.encryption;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.encryption.config.EncProperties;
@@ -37,10 +38,10 @@ class EncryptionServiceRestConnection {
         return objectMapper.readTree(response.getBody()).get(0);
     }
 
-    Object callDecrypt(Object ciphertext) throws IOException {
-        ResponseEntity<String> response = restTemplate.postForEntity(encProperties.getEgovEncHost() + encProperties.getEgovEncDecryptPath(),
-                ciphertext, String.class);
-        return objectMapper.readTree(response.getBody());
+    JsonNode callDecrypt(Object ciphertext) throws IOException {
+        ResponseEntity<JsonNode> response = restTemplate.postForEntity(
+                encProperties.getEgovEncHost() + encProperties.getEgovEncDecryptPath(), ciphertext, JsonNode.class);
+        return response.getBody();
     }
 
 }
