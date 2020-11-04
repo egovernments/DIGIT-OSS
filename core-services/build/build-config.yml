@@ -234,5 +234,5 @@ config:
 
   - name: "builds/core-services/libraries/enc-client"
     build:
-      - work-dir: "enc-client"
+      - work-dir: "libraries/enc-client"
         image-name: "enc-client"
