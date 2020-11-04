@@ -5,6 +5,8 @@ import static org.egov.collection.model.enums.InstrumentTypesEnum.ONLINE;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.AuditDetails;
+import org.egov.collection.model.MigrationCount;
+import org.egov.collection.model.MigrationCountRowMapper;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentResponse;
@@ -44,8 +48,10 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -72,6 +78,9 @@ public class MigrationService {
     
     @Autowired
     private ObjectMapper mapper;
+    
+    @Autowired
+    private MigrationCountRowMapper migrationCountRowMapper;
 
     @Autowired
     public MigrationService(ApplicationProperties properties, ServiceRequestRepository serviceRequestRepository,CollectionProducer producer) {
@@ -79,44 +88,94 @@ public class MigrationService {
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
     }
+    
+    public static final String COUNT_QUERY = "select count(*) from egcl_receiptheader_v1 where tenantid=?;";
 
     public static final String TENANT_QUERY = "select distinct tenantid from egcl_receiptheader_v1 order by tenantid;";
+    
+    public static final String BATCH_INSERT_QUERY = "INSERT INTO egcl_payment_migration (id,batch,batchsize,createdtime,tenantid,recordCount) VALUES (?,?,?,?,?,?);";
+    
+    public static final String MIGARTION_POINT_QUERY ="select id,batch,batchsize,createdtime,tenantid,recordCount from egcl_payment_migration as migration where tenantid = ? and createdtime = (select max(createdtime) from egcl_payment_migration where tenantid = ?);";
 
-    public void migrate(RequestInfo requestInfo, Integer offsetFromApi,  Integer batchSize, String tenantId) throws JsonProcessingException {
+    
+    
+    public void migrate(RequestInfo requestInfo, Integer offset,  Integer batchSize, List<String> tenantIdList) throws JsonProcessingException {
     	
-        List<String> tenantIdList =jdbcTemplate.queryForList(TENANT_QUERY,String.class);
-        for(String tenantIdEntry : tenantIdList){
-        
-        	Integer offset = offsetFromApi;
-        	
-			if (tenantId != null && !tenantIdEntry.equalsIgnoreCase(tenantId)) {
-				continue;
-			} else {
-				tenantId = null;
-				offsetFromApi = 0;
-			}
-        	
-                while(true){
-                    long startTime = System.currentTimeMillis();
-                    ReceiptSearchCriteria_v1 criteria_v1 = ReceiptSearchCriteria_v1.builder()
-                            .offset(offset).limit(batchSize).tenantId(tenantIdEntry).build();
-                    List<Receipt_v1> receipts = collectionService.fetchReceipts(criteria_v1);
-                    if(CollectionUtils.isEmpty(receipts))
-                        break;
-                    migrateReceipt(requestInfo, receipts);
-                    
-                    log.info("Total receipts migrated: " + offset + "for tenantId : " + tenantIdEntry);
-                    offset += batchSize;
-                    
-                    long endtime = System.currentTimeMillis();
-                    long elapsetime = endtime - startTime;
-                    System.out.println("\n\nBatch Elapsed Time--->"+elapsetime+"\n\n");
-                }
-        }
+		if (CollectionUtils.isEmpty(tenantIdList))
+			tenantIdList = jdbcTemplate.queryForList(TENANT_QUERY, String.class);
+		
 
+		 ReceiptSearchCriteria_v1 receipt_criteria_v1 = ReceiptSearchCriteria_v1.builder()
+					.offset(offset)
+					.limit(batchSize)
+					.build();
+		 
+		for (int i = 0; i < tenantIdList.size(); i++) {
+			
+			String tenantIdEntry = tenantIdList.get(i);
+
+			org.egov.collection.model.MigrationCount migrationCount = getMigrationCountForTenant(tenantIdList.get(i));
+
+			if (ObjectUtils.isEmpty(migrationCount) || migrationCount.getId() == null) {
+
+				receipt_criteria_v1.setTenantId(tenantIdEntry);
+			} else {
+
+				long count = getTenantCount(tenantIdEntry);
+				if (migrationCount.getRecordCount() >= count)
+					continue;
+				else {
+
+					receipt_criteria_v1.setTenantId(tenantIdEntry);
+					receipt_criteria_v1.setOffset(migrationCount.getOffset() + migrationCount.getLimit());
+				}
+
+			}
+			
+			migrateSingleTenant(requestInfo, receipt_criteria_v1);
+		}
+		
     }
 
+	private void migrateSingleTenant(RequestInfo requestInfo,ReceiptSearchCriteria_v1 receipt_criteria_v1) {
+		
+		// fetching records till empty results
+		while(true){
+			
+		    long startTime = System.currentTimeMillis();
+		    List<Receipt_v1> receipts = collectionService.fetchReceipts(receipt_criteria_v1);
+		    if(CollectionUtils.isEmpty(receipts))
+		        break;
+		    migrateReceipt(requestInfo, receipts);
+
+		    // Inset batch count in db
+            jdbcTemplate.update(BATCH_INSERT_QUERY, new PreparedStatementSetter() {
+				@Override
+				public void setValues(PreparedStatement ps) throws SQLException {
+					
+					ps.setString(1, UUID.randomUUID().toString());
+					ps.setInt(2, receipt_criteria_v1.getOffset()); // batch
+					ps.setInt(3, receipt_criteria_v1.getLimit()); // batchsize
+					ps.setLong(4, System.currentTimeMillis());
+					ps.setString(5,receipt_criteria_v1.getTenantId());
+					ps.setInt(6, receipt_criteria_v1.getOffset() + receipt_criteria_v1.getLimit()); // recordCount
+					
+				}
+			});
+		    
+		    log.info("Total receipts migrated between : " + receipt_criteria_v1.getOffset() + " AND " + receipt_criteria_v1.getLimit() + "for tenantId : " + receipt_criteria_v1.getTenantId());
+		    // update offset
+		    receipt_criteria_v1.setOffset(receipt_criteria_v1.getOffset() + receipt_criteria_v1.getLimit());
+
+			long endtime = System.currentTimeMillis();
+			long elapsetime = endtime - startTime;
+			log.info("\n\n Batch Elapsed Time---> " + elapsetime + "\n\n");
+		}
+	}
+
     public void migrateReceipt(RequestInfo requestInfo, List<Receipt_v1> receipts){
+    	
+    	
     	
         List<Payment> paymentList = new ArrayList<Payment>();
         
@@ -451,5 +510,17 @@ public class MigrationService {
 		return builder;
 
 	}
+	
+	
+	   public long getTenantCount(String tenantid){
+	       long count = jdbcTemplate.queryForObject(COUNT_QUERY, new Object[]{tenantid} ,Integer.class);
+	       return count;
+	   }
+
+	    public MigrationCount getMigrationCountForTenant(String tenantId){
+	    	
+	    	MigrationCount migrationCount = jdbcTemplate.query(MIGARTION_POINT_QUERY, new Object[] { tenantId, tenantId }, migrationCountRowMapper);
+	        return migrationCount;
+	    }
 
 }

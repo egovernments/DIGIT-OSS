@@ -158,12 +158,12 @@ public class PaymentController {
     @RequestMapping(value = "/_migrate", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> workflow(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper,@RequestParam(required = false) Integer offset,
-                                      @RequestParam(required = false) String tenantId, @RequestParam(required = true) Integer batchSize) throws JsonProcessingException {
+                                      @RequestParam(required = false) List<String> tenantIdList, @RequestParam(required = true) Integer batchSize) throws JsonProcessingException {
 
         if(null == offset)
             offset = 0;
 
-        migrationService.migrate(requestInfoWrapper.getRequestInfo(), offset, batchSize, tenantId);
+        migrationService.migrate(requestInfoWrapper.getRequestInfo(), offset, batchSize, tenantIdList);
         return new ResponseEntity<>(HttpStatus.OK );
 
     }
