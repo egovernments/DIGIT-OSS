@@ -106,12 +106,13 @@ public class MigrationService {
 		
 
 		 ReceiptSearchCriteria_v1 receipt_criteria_v1 = ReceiptSearchCriteria_v1.builder()
-					.offset(offset)
+					.offset(0)
 					.limit(batchSize)
 					.build();
 		 
 		for (int i = 0; i < tenantIdList.size(); i++) {
 			
+			receipt_criteria_v1.setOffset(0);
 			String tenantIdEntry = tenantIdList.get(i);
 
 			org.egov.collection.model.MigrationCount migrationCount = getMigrationCountForTenant(tenantIdList.get(i));
