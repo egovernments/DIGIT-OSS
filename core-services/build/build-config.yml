@@ -231,3 +231,8 @@ config:
       - work-dir: "mailbot"
         image-name: "mailbot"
         dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/libraries/enc-client"
+    build:
+      - work-dir: "enc-client"
+        image-name: "enc-client"
