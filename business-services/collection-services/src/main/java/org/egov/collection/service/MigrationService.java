@@ -83,8 +83,8 @@ public class MigrationService {
     private MigrationCountRowMapper migrationCountRowMapper;
 
     @Autowired
-    public MigrationService(ApplicationProperties properties, ServiceRequestRepository serviceRequestRepository,CollectionProducer producer) {
-        this.properties = properties;
+    public MigrationService(ApplicationProperties appProperties, ServiceRequestRepository serviceRequestRepository,CollectionProducer producer) {
+        this.properties = appProperties;
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
     }
@@ -141,6 +141,7 @@ public class MigrationService {
 
 	private void migrateSingleTenant(RequestInfo requestInfo,ReceiptSearchCriteria_v1 receipt_criteria_v1) {
 		
+		int count = 0;
 		// fetching records till empty results
 		while(true){
 			
@@ -148,7 +149,7 @@ public class MigrationService {
 		    List<Receipt_v1> receipts = collectionService.fetchReceipts(receipt_criteria_v1);
 		    if(CollectionUtils.isEmpty(receipts))
 		        break;
-		    migrateReceipt(requestInfo, receipts);
+		    migrateReceipt(requestInfo, receipts, count++);
 
 		    // Inset batch count in db
             jdbcTemplate.update(BATCH_INSERT_QUERY, new PreparedStatementSetter() {
@@ -175,8 +176,7 @@ public class MigrationService {
 		}
 	}
 
-    public void migrateReceipt(RequestInfo requestInfo, List<Receipt_v1> receipts){
-    	
+    public void migrateReceipt(RequestInfo requestInfo, List<Receipt_v1> receipts, int count){
     	
     	
         List<Payment> paymentList = new ArrayList<Payment>();
@@ -190,8 +190,9 @@ public class MigrationService {
 		}
         
         PaymentResponse paymentResponse = new PaymentResponse(new ResponseInfo(), paymentList);
-        producer.producer(properties.getCollectionMigrationTopicName(), properties
-                .getCollectionMigrationTopicKey(), paymentResponse);
+        
+        String key = String.valueOf(count%3);
+        producer.producer(properties.getCollectionMigrationTopicName(), key, paymentResponse);
     }
 
 	private Bill convertBillToNew(Bill_v1 bill_v1, AuditDetails_v1 oldAuditDetails) {
