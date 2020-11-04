@@ -113,6 +113,7 @@ public class MigrationService {
 		for (int i = 0; i < tenantIdList.size(); i++) {
 			
 			receipt_criteria_v1.setOffset(0);
+
 			String tenantIdEntry = tenantIdList.get(i);
 
 			org.egov.collection.model.MigrationCount migrationCount = getMigrationCountForTenant(tenantIdList.get(i));

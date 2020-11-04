@@ -40,7 +40,7 @@ public class PaymentQueryBuilder {
             " FROM egcl_payment py  " +
             " INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id " +
             " INNER JOIN egcl_bill bill ON bill.id = pyd.billid " +
-            " INNER JOIN egcl_billdetial bd ON bd.billid = bill.id " +
+            " INNER JOIN egcl_billdetail bd ON bd.billid = bill.id " +
             " INNER JOIN egcl_billaccountdetail bacdt ON bacdt.billdetailid = bd.id  ";
 
     private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
@@ -81,7 +81,7 @@ public class PaymentQueryBuilder {
             "            :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime);";
 
 
-    public static final String INSERT_BILLDETAIL_SQL = "INSERT INTO egcl_billdetial(" +
+    public static final String INSERT_BILLDETAIL_SQL = "INSERT INTO egcl_billdetail(" +
             "            id, tenantid, demandid, billid, amount, amountpaid, fromperiod," +
             "            toperiod, additionaldetails," +
             "            channel, voucherheader, boundary," +
@@ -124,7 +124,7 @@ public class PaymentQueryBuilder {
 
     public static final String COPY_BILL_SQL = "INSERT INTO egcl_bill_audit SELECT * FROM egcl_bill WHERE id = :id;";
 
-    public static final String COPY_BILLDETAIL_SQL = "INSERT INTO egcl_billdetial_audit SELECT * FROM egcl_billdetial WHERE id = :id;";
+    public static final String COPY_BILLDETAIL_SQL = "INSERT INTO egcl_billdetail_audit SELECT * FROM egcl_billdetail WHERE id = :id;";
 
     public static final String FILESTOREID_UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET filestoreid=:filestoreid WHERE id=:id;";
 
@@ -143,7 +143,7 @@ public class PaymentQueryBuilder {
     public static final String UPDATE_BILL_SQL = "UPDATE egcl_bill SET additionaldetails=:additionaldetails,createdby=:createdby,createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,\n" +
             "lastmodifiedtime=:lastmodifiedtime WHERE id=:id;";
 
-    public static final String UPDATE_BILLDETAIL_SQL = "UPDATE egcl_billdetial SET additionaldetails=:additionaldetails, voucherheader=:voucherheader," +
+    public static final String UPDATE_BILLDETAIL_SQL = "UPDATE egcl_billdetail SET additionaldetails=:additionaldetails, voucherheader=:voucherheader," +
             " manualreceiptnumber=:manualreceiptnumber, manualreceiptdate=:manualreceiptdate, billdescription=:billdescription,displaymessage=:displaymessage," +
             "createdby=:createdby, createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime WHERE id=:id ";
     
@@ -158,7 +158,7 @@ public class PaymentQueryBuilder {
 			+ "ad.billdetailid AS ad_billdetailid, ad.order AS ad_order, ad.amount AS ad_amount, ad.adjustedamount AS ad_adjustedamount, "
 			+ "ad.taxheadcode AS ad_taxheadcode, ad.demanddetailid as ad_demanddetailid, ad.isactualdemand AS ad_isactualdemand, b.additionaldetails as b_additionaldetails,  "
 			+ "bd.additionaldetails as bd_additionaldetails,  ad.additionaldetails as ad_additionaldetails "
-			+ "FROM egcl_bill b LEFT OUTER JOIN egcl_billdetial bd ON b.id = bd.billid AND b.tenantid = bd.tenantid "
+			+ "FROM egcl_bill b LEFT OUTER JOIN egcl_billdetail bd ON b.id = bd.billid AND b.tenantid = bd.tenantid "
 			+ "LEFT OUTER JOIN egcl_billaccountdetail ad ON bd.id = ad.billdetailid AND bd.tenantid = ad.tenantid "
 			+ "WHERE b.id IN (:id);"; 
 
