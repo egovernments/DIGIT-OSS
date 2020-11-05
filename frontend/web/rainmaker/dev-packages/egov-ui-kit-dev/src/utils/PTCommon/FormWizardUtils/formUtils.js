@@ -382,6 +382,11 @@ const createProperty = async (Properties, action, props) => {
   if(usageCategory==="RESIDENTIAL.RESIDENTIAL")
   {
     set(propertyPayload, "usageCategory",'RESIDENTIAL');
+    for(let i=0; propertyPayload.units && i<propertyPayload.units.length; i++)
+    {
+    propertyPayload.units[i].usageCategory = 'RESIDENTIAL';
+    }
+
   }
   if(usageCategory==="NONRESIDENTIAL.NONRESIDENTIAL")
   {

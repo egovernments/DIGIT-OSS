@@ -16,7 +16,7 @@ const formConfig = {
       disabled: true,
       numcols: 4,
     },
-    ...subUsageType,
+    //...subUsageType,
     ...occupancy,
     ...constructionType,
     ...innerDimensions,
