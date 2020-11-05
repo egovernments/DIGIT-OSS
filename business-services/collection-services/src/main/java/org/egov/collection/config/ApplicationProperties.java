@@ -203,6 +203,10 @@ public class ApplicationProperties {
 
     @Value("${kafka.topics.collection.migrate.key}")
     private String collectionMigrationTopicKey;
+    
+    @Value("${kafka.topic.migration.batch.count}")
+    private String migrationCountTopic;
+
 
 
 

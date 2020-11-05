@@ -5,16 +5,21 @@ import static org.egov.collection.model.enums.InstrumentTypesEnum.ONLINE;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.MigrationCount;
+import org.egov.collection.model.MigrationCountRequest;
 import org.egov.collection.model.MigrationCountRowMapper;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
@@ -42,7 +47,6 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -58,7 +62,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MigrationService {
 
 
-    private ApplicationProperties properties;
+    private ApplicationProperties appProperties;
 
     private ServiceRequestRepository serviceRequestRepository;
 
@@ -78,7 +82,7 @@ public class MigrationService {
 
     @Autowired
     public MigrationService(ApplicationProperties appProperties, ServiceRequestRepository serviceRequestRepository,CollectionProducer producer) {
-        this.properties = appProperties;
+        this.appProperties = appProperties;
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
     }
@@ -135,7 +139,6 @@ public class MigrationService {
 
 	private void migrateSingleTenant(RequestInfo requestInfo,ReceiptSearchCriteria_v1 receipt_criteria_v1) {
 		
-		int count = 0;
 		// fetching records till empty results
 		while(true){
 			
@@ -143,24 +146,26 @@ public class MigrationService {
 		    List<Receipt_v1> receipts = collectionService.fetchReceipts(receipt_criteria_v1);
 		    if(CollectionUtils.isEmpty(receipts))
 		        break;
-		    migrateReceipt(requestInfo, receipts, count++);
+		    migrateReceipt(requestInfo, receipts);
 
-		    // Inset batch count in db
-            jdbcTemplate.update(BATCH_INSERT_QUERY, new PreparedStatementSetter() {
-				@Override
-				public void setValues(PreparedStatement ps) throws SQLException {
-					
-					ps.setString(1, UUID.randomUUID().toString());
-					ps.setInt(2, receipt_criteria_v1.getOffset()); // batch
-					ps.setInt(3, receipt_criteria_v1.getLimit()); // batchsize
-					ps.setLong(4, System.currentTimeMillis());
-					ps.setString(5,receipt_criteria_v1.getTenantId());
-					ps.setInt(6, receipt_criteria_v1.getOffset() + receipt_criteria_v1.getLimit()); // recordCount
-					
-				}
-			});
+            MigrationCount migrationCount = new MigrationCount();
+            migrationCount.setId(UUID.randomUUID().toString());
+            migrationCount.setOffset(receipt_criteria_v1.getOffset());
+            migrationCount.setLimit(receipt_criteria_v1.getLimit());
+            migrationCount.setTenantid(receipt_criteria_v1.getTenantId());
+            migrationCount.setRecordCount(receipt_criteria_v1.getOffset() + receipt_criteria_v1.getLimit());
+            
+            MigrationCountRequest request = MigrationCountRequest.builder()
+            		.requestInfo(requestInfo)
+            		.migrationCount(migrationCount)
+            		.build();
+            
+            producer.producer(appProperties.getMigrationCountTopic(),"", request);
+
 		    
-		    log.info("Total receipts migrated between : " + receipt_criteria_v1.getOffset() + " AND " + receipt_criteria_v1.getLimit() + "for tenantId : " + receipt_criteria_v1.getTenantId());
+			log.info("Total receipts migrated between : " + receipt_criteria_v1.getOffset() + " AND "
+					+ receipt_criteria_v1.getLimit() + "for tenantId : " + receipt_criteria_v1.getTenantId()
+					+ " in time " + System.currentTimeMillis());
 		    // update offset
 		    receipt_criteria_v1.setOffset(receipt_criteria_v1.getOffset() + receipt_criteria_v1.getLimit());
 
@@ -170,7 +175,7 @@ public class MigrationService {
 		}
 	}
 
-    public void migrateReceipt(RequestInfo requestInfo, List<Receipt_v1> receipts, int count){
+    public void migrateReceipt(RequestInfo requestInfo, List<Receipt_v1> receipts){
     	
     	
         List<Payment> paymentList = new ArrayList<Payment>();
@@ -186,7 +191,7 @@ public class MigrationService {
         PaymentResponse paymentResponse = new PaymentResponse(new ResponseInfo(), paymentList);
         
         String key = UUID.randomUUID().toString();
-        producer.producer(properties.getCollectionMigrationTopicName(), key, paymentResponse);
+        producer.producer(appProperties.getCollectionMigrationTopicName(), key, paymentResponse);
     }
 
 	private Bill convertBillToNew(Bill_v1 bill_v1, AuditDetails_v1 oldAuditDetails) {
@@ -498,8 +503,8 @@ public class MigrationService {
 
 	private StringBuilder getBillSearchURI(String tenantId, Set<String> billIds, String service) {
 		
-		StringBuilder builder = new StringBuilder(properties.getBillingServiceHostName());
-		builder.append(properties.getSearchBill()).append("?");
+		StringBuilder builder = new StringBuilder(appProperties.getBillingServiceHostName());
+		builder.append(appProperties.getSearchBill()).append("?");
 		builder.append("tenantId=").append(tenantId);
 		builder.append("&service=").append(service);
 		builder.append("&billId=").append(billIds.toString().replace("[","").replace("]",""));
