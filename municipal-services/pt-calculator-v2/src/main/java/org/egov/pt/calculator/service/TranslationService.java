@@ -151,7 +151,7 @@ public class TranslationService {
                     // unitAdditionalMap.put("commonArea",);
                     // unitAdditionalMap.put("garageArea",);
                     // unitAdditionalMap.put("bathroomArea",);
-                    // unitAdditionalMap.put("constructionDate",);
+                    unitAdditionalMap.put("constructionDate",unit.getConstructionDetail().getConstructionDate());
 
 
                 unitMap.put("additionalDetails", unitAdditionalMap);
