@@ -206,7 +206,7 @@ class PTAcknowledgement extends React.Component {
       };
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
       Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
-      Button3 = { name: "PT_ADD_DEMAND", buttonClick: this.onDCBClick, visibility: true };
+      Button3 = { name: "PT_ADD_DEMAND", buttonClick: this.onDCBClick, visibility:   process.env.REACT_APP_NAME === "Citizen" ?false:true };
 
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
