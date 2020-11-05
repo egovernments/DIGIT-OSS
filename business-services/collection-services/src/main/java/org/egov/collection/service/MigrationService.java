@@ -7,14 +7,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -191,7 +185,7 @@ public class MigrationService {
         
         PaymentResponse paymentResponse = new PaymentResponse(new ResponseInfo(), paymentList);
         
-        String key = String.valueOf(count%3);
+        String key = UUID.randomUUID().toString();
         producer.producer(properties.getCollectionMigrationTopicName(), key, paymentResponse);
     }
 
