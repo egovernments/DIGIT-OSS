@@ -45,8 +45,8 @@ public class DemandService {
 	@Autowired
 	private Configurations configs;
 
-	// @Autowired
-	// private AssessmentService assessmentService;
+	@Autowired
+	private AssessmentService assessmentService;
 
 	@Autowired
 	private CalculatorUtils utils;
@@ -110,15 +110,15 @@ public class DemandService {
 			if(advanceCarryforwardEstimate.isPresent())
 				newTax = advanceCarryforwardEstimate.get().getEstimateAmount();
 
-			Demand oldDemand = utils.getLatestDemandForCurrentFinancialYear(request.getRequestInfo(),criteria);
+			//Demand oldDemand = utils.getLatestDemandForCurrentFinancialYear(request.getRequestInfo(),criteria);
 
 			// true represents that the demand should be updated from this call
 			BigDecimal carryForwardCollectedAmount = getCarryForwardAndCancelOldDemand(newTax, criteria,
-					request.getRequestInfo(),oldDemand, true);
+					request.getRequestInfo(), true);
 
 			if (carryForwardCollectedAmount.doubleValue() >= 0.0) {
 
-				Demand demand = prepareDemand(property, calculation ,oldDemand);
+				Demand demand = prepareDemand(property, calculation ,request.getRequestInfo());
 
 				// Add billingSLabs in demand additionalDetails as map with key calculationDescription
 				demand.setAdditionalDetails(Collections.singletonMap(BILLINGSLAB_KEY, calculation.getBillingSlabIds()));
@@ -287,7 +287,7 @@ public class DemandService {
 	 * @return
 	 */
 	protected BigDecimal getCarryForwardAndCancelOldDemand(BigDecimal newTax, CalculationCriteria criteria, RequestInfo requestInfo
-			,Demand demand, boolean cancelDemand) {
+			, boolean cancelDemand) {
 
 		Property property = criteria.getProperty();
 
@@ -296,7 +296,7 @@ public class DemandService {
 
 		if(null == property.getPropertyId()) return carryForward;
 
-	//	Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
+	     Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
 		
 		if(null == demand) return carryForward;
 
@@ -326,6 +326,36 @@ public class DemandService {
 		return carryForward;
 	}
 
+	public Demand getLatestDemandForCurrentFinancialYear(RequestInfo requestInfo, Property property) {
+
+		Assessment assessment = Assessment.builder().propertyId(property.getPropertyId())
+				.tenantId(property.getTenantId())
+				.assessmentYear(property.getPropertyDetails().get(0).getFinancialYear()).build();
+
+		List<Assessment> assessments = assessmentService.getMaxAssessment(assessment);
+
+		if (CollectionUtils.isEmpty(assessments))
+			return null;
+
+		Assessment latestAssessment = assessments.get(0);
+		log.debug(" the latest assessment : " + latestAssessment);
+
+		DemandResponse res = mapper.convertValue(
+				repository.fetchResult(utils.getDemandSearchUrl(latestAssessment), new RequestInfoWrapper(requestInfo)),
+				DemandResponse.class);
+		BigDecimal totalCollectedAmount = res.getDemands().get(0).getDemandDetails().stream()
+				.map(d -> d.getCollectionAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		if (totalCollectedAmount.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) != 0) {
+			// The total collected amount is fractional most probably because of
+			// previous
+			// round off dropping prior to BS/CS 1.1 release
+			throw new CustomException("INVALID_COLLECT_AMOUNT",
+					"The collected amount is fractional, please contact support for data correction");
+		}
+
+		return res.getDemands().get(0);
+	}
 	/**
 	 * Prepares Demand object based on the incoming calculation object and property
 	 * 
@@ -333,7 +363,7 @@ public class DemandService {
 	 * @param calculation
 	 * @return
 	 */
-	private Demand prepareDemand(Property property, Calculation calculation,Demand demand) {
+	private Demand prepareDemand(Property property, Calculation calculation,RequestInfo requestInfo) {
 
 		String tenantId = property.getTenantId();
 		PropertyDetail detail = property.getPropertyDetails().get(0);
@@ -345,7 +375,7 @@ public class DemandService {
 		else
 			owner = detail.getOwners().iterator().next();
 		
-	//	Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
+	  Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
 
 		List<DemandDetail> details = new ArrayList<>();
 

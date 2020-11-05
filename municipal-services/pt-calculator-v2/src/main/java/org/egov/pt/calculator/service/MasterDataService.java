@@ -75,7 +75,8 @@ public class MasterDataService {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String,Map<String, Object>> getFinancialYear(String tenantId,RequestInfo requestInfo,Set<String> assessmentYears) {
-		MdmsCriteriaReq mdmsCriteriaReq = calculatorUtils.getFinancialYearRequest(requestInfo, assessmentYears, tenantId);
+		String tenant = tenantId.split("\\.")[0];
+		MdmsCriteriaReq mdmsCriteriaReq = calculatorUtils.getFinancialYearRequest(requestInfo, assessmentYears, tenant);
 		StringBuilder url = calculatorUtils.getMdmsSearchUrl();
 		Object res = repository.fetchResult(url, mdmsCriteriaReq);
 		Map<String,Map<String, Object>> financialYearMap = new HashMap<>();
