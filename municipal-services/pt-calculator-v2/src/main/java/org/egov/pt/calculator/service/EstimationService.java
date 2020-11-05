@@ -287,8 +287,7 @@ public class EstimationService {
 			BigDecimal taxRate = getVacantTaxRate(masterMap, propertyDetail.getUsageCategoryMajor());
 			BigDecimal multipleFactor = BigDecimal.ONE;
 			BigDecimal landAV = carpetArea.multiply(unitRate).multiply(multipleFactor).multiply(monthMultiplier);
-			BigDecimal taxAmount = landAV.multiply(taxRate).divide(HUNDRED);
-
+			BigDecimal taxAmount = landAV.multiply(taxRate).divide(HUNDRED).setScale(2, 2);
 			return TaxHeadEstimate.builder().taxHeadCode(PT_TAX).estimateAmount(taxAmount).build();
 
 		}
@@ -344,17 +343,11 @@ public class EstimationService {
 						// assessment year.
 						BigDecimal appreciationDepreciation = getAppreciationDepreciation(masterMap, unit, fromDate);
 						BigDecimal appreDepreAmount = carpetArea.multiply(unitRate).multiply(appreciationDepreciation)
-								.multiply(monthMultiplier);
-						BigDecimal landAV = carpetArea.multiply(unitRate).multiply(appreciationDepreciation)
-								.multiply(monthMultiplier);
+								.multiply(monthMultiplier).divide(HUNDRED);
+						BigDecimal landAV = carpetArea.multiply(unitRate).multiply(monthMultiplier);
 
-						if (unit.getOccupancyType().equals(RENTED)) {
-							landAV = landAV.add(appreDepreAmount);
-						} else {
-							landAV = landAV.subtract(appreDepreAmount);
-						}
-
-						unitTaxAmount = landAV.multiply(taxRate);
+						landAV = landAV.add(appreDepreAmount);
+						unitTaxAmount = landAV.multiply(taxRate).divide(HUNDRED);
 						exemption = exemption.add(unitTaxAmount.multiply(exemptionRate).divide(HUNDRED));
 					}
 
@@ -363,7 +356,7 @@ public class EstimationService {
 							MessageFormat.format(BILLING_SLAB_MATCH_ERROR_MESSAGE, unit.getConstructionType()));
 				}
 
-				taxAmount = taxAmount.add(unitTaxAmount).add(unoccupiedLandTaxAmount);
+				taxAmount = taxAmount.add(unitTaxAmount).add(unoccupiedLandTaxAmount).setScale(2, 2);
 			}
 
 			return TaxHeadEstimate.builder().taxHeadCode(PT_TAX).estimateAmount(taxAmount).build();
@@ -384,6 +377,7 @@ public class EstimationService {
 			LinkedHashMap deprAppr = (LinkedHashMap)val;
 			LinkedHashMap ageOfBuilding;
 			try {
+				if(unit.getOccupancyType().equalsIgnoreCase(deprAppr.get("occupancyType").toString())){
 				ageOfBuilding = (LinkedHashMap) deprAppr.get("ageOfBuilding");
 
 				if(ageOfBuilding.get("yearTo") == null){
@@ -392,6 +386,7 @@ public class EstimationService {
 
 				if (((int) ageOfBuilding.get("yearFrom")) <= age && ((int) ageOfBuilding.get("yearTo")) >= age) {
 					return BigDecimal.valueOf(Long.valueOf((int) deprAppr.get("depreciationAppreciation")));
+				}
 				}
 			} catch (Exception e) {
 				log.error("Error while retriving Depreciation Appreciation", e);
