@@ -92,6 +92,8 @@ public class DemandService {
 
 
 		Map<String, Calculation> propertyCalculationMap = estimationService.getEstimationPropertyMap(request,masterMap);
+		
+		if(generateDemand)
 		for (CalculationCriteria criteria : criterias) {
 
 			Property property = criteria.getProperty();
