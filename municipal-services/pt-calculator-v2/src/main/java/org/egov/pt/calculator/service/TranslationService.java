@@ -110,7 +110,7 @@ public class TranslationService {
         // propertyDetail.put("adhocExemption", );
         // propertyDetail.put("adhocPenalty",);
         LinkedHashMap additionalDetails = (LinkedHashMap) property.getAdditionalDetails();
-		String constructionYear = (String) additionalDetails.get("constructionDate");
+		String constructionYear = (String) additionalDetails.get("constructionYear");
 		long constructionDate = Instant.parse(constructionYear).toEpochMilli();
         List<Map<String, Object>> owners = new LinkedList<>();
 
