@@ -573,7 +573,7 @@ public class EstimationService {
 		PropertyDetail detail = property.getPropertyDetails().get(0);
 		String tenantId = property.getTenantId();
 		LinkedHashMap additionalDetails = (LinkedHashMap) detail.getAdditionalDetails();
-		String roadType = (String) additionalDetails.get(ROAD_TYPE_JSON_STRING);
+		String roadType = additionalDetails ==null ? "" : (String) additionalDetails.get(ROAD_TYPE_JSON_STRING);
 		// TODO ward
 		BillingSlabSearchCriteria slabSearchCriteria = BillingSlabSearchCriteria.builder().tenantId(tenantId).ward("")
 				.propertyType(detail.getPropertyType()).roadType(roadType)
