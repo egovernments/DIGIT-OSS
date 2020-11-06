@@ -30,6 +30,7 @@ import static org.egov.pt.calculator.util.CalculatorConstants.ROOMS_AREA_MULTIPL
 import static org.egov.pt.calculator.util.CalculatorConstants.TAXHEADMASTER_MASTER_KEY;
 import static org.egov.pt.calculator.util.CalculatorConstants.TAX_RATE;
 import static org.egov.pt.calculator.util.CalculatorConstants.USAGE_SUB_MINOR_MASTER;
+import static org.egov.pt.calculator.util.CalculatorConstants.PT_ROUNDOFF;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -395,7 +396,7 @@ public class EstimationService {
 
 		}
 
-		return null;
+		return BigDecimal.ZERO;
 
 	}
 
@@ -511,6 +512,7 @@ public class EstimationService {
 		BigDecimal penalty = BigDecimal.ZERO;
 		BigDecimal exemption = BigDecimal.ZERO;
 		BigDecimal rebate = BigDecimal.ZERO;
+		BigDecimal roundOff = BigDecimal.ZERO;
 		BigDecimal ptTax = BigDecimal.ZERO;
 
 		for (TaxHeadEstimate estimate : estimates) {
@@ -549,11 +551,13 @@ public class EstimationService {
 			estimates.add(decimalEstimate);
 			if (decimalEstimate.getEstimateAmount().compareTo(BigDecimal.ZERO) >= 0)
 				taxAmt = taxAmt.add(decimalEstimate.getEstimateAmount());
-			else
+			else if (decimalEstimate.getTaxHeadCode().equalsIgnoreCase(PT_ROUNDOFF)) {
+				roundOff = roundOff.add(decimalEstimate.getEstimateAmount());
+			} else
 				rebate = rebate.add(decimalEstimate.getEstimateAmount());
 		}
 
-		BigDecimal totalAmount = taxAmt.add(penalty).subtract(rebate);
+		BigDecimal totalAmount = taxAmt.add(penalty).subtract(rebate).add(roundOff);
 		// false in the argument represents that the demand shouldn't be updated from
 		// this call
 		return Calculation.builder().totalAmount(totalAmount).taxAmount(taxAmt).penalty(penalty).exemption(exemption)
