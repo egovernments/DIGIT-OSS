@@ -111,7 +111,7 @@ public class TranslationService {
         // propertyDetail.put("adhocPenalty",);
         LinkedHashMap additionalDetails = (LinkedHashMap) property.getAdditionalDetails();
 		String constructionYear = (String) additionalDetails.get("constructionYear");
-		long constructionDate = Instant.parse(constructionYear).toEpochMilli();
+		long constructionDate = constructionYear == null ? 0 : Instant.parse(constructionYear).toEpochMilli();
         List<Map<String, Object>> owners = new LinkedList<>();
 
         property.getOwners().forEach(ownerInfo -> {
