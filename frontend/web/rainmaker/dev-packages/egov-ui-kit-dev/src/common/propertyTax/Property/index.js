@@ -369,6 +369,13 @@ class Property extends Component {
     if (receiptsByYr) {
       assessmentHistory = this.getAssessmentHistory(selPropertyDetails, receiptsByYr.receiptDetailsArray);
     }
+    let isMigratedProperty =false;
+
+    if(selPropertyDetails.source!=="MUNICIPAL_RECORDS")
+    {
+      isMigratedProperty =true;
+    }
+
  /*    let button;
     if(process.env.REACT_APP_NAME !='Citizen' && propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD' && Payments.length <= 0){
     button =
@@ -398,16 +405,18 @@ class Property extends Component {
           />
         }
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
-          <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
-        {/*   <Button
+        {!isMigratedProperty && 
+
+         <Button
               onClick={() => this.onAssessPayClick()}
               label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}
               primary={true}
               style={{ lineHeight: "auto", minWidth: "inherit", marginLeft:"10px" }}
-            />          </div>
+            />  
+        }        
 
-                      <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
- */}
+                      
+         
            <Button
               label={
                 <Label buttonLabel={true}
@@ -419,17 +428,17 @@ class Property extends Component {
               //labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
              // buttonStyle={{ border: "1px solid #fe7a51" }}
              style={{ lineHeight: "auto", minWidth: "inherit" }}
-             />    {/* </div>
+             />   
+              {isMigratedProperty && 
 
-             <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
- */}
+
               <Button
               onClick={() => this.editDemand()}
               label={<Label buttonLabel={true} label="PT_EDIT_DATAENTRY_DEMAND" fontSize="16px" />}
               primary={true}
               style={{ lineHeight: "auto", minWidth: "inherit" }}
             />
-          </div>
+          }
         </div>
         {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}
       </Screen>
