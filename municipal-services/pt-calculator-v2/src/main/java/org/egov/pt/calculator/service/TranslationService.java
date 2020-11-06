@@ -1,7 +1,6 @@
 package org.egov.pt.calculator.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.calculator.repository.Repository;
@@ -16,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 // import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
@@ -109,7 +109,9 @@ public class TranslationService {
 
         // propertyDetail.put("adhocExemption", );
         // propertyDetail.put("adhocPenalty",);
-
+        LinkedHashMap additionalDetails = (LinkedHashMap) property.getAdditionalDetails();
+		String constructionYear = (String) additionalDetails.get("constructionDate");
+		long constructionDate = Instant.parse(constructionYear).toEpochMilli();
         List<Map<String, Object>> owners = new LinkedList<>();
 
         property.getOwners().forEach(ownerInfo -> {
@@ -151,7 +153,7 @@ public class TranslationService {
                     // unitAdditionalMap.put("commonArea",);
                     // unitAdditionalMap.put("garageArea",);
                     // unitAdditionalMap.put("bathroomArea",);
-                    unitAdditionalMap.put("constructionDate",unit.getConstructionDetail().getConstructionDate());
+                    unitAdditionalMap.put("constructionDate",constructionDate);
 
 
                 unitMap.put("additionalDetails", unitAdditionalMap);
