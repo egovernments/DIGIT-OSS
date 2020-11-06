@@ -181,7 +181,7 @@ public class MigrationService {
         List<Payment> paymentList = new ArrayList<Payment>();
         
 		for (Receipt_v1 receipt : receipts) {
-
+			
 			Bill newBill = convertBillToNew(receipt.getBill().get(0), receipt.getAuditDetails());
 
 			Payment payment = transformToPayment(requestInfo, receipt, newBill);
@@ -339,7 +339,7 @@ public class MigrationService {
         
         payment.setId(UUID.randomUUID().toString());
         payment.setTenantId(receipt.getTenantId());
-        payment.setTotalDue(totalAmount.subtract(totalAmountPaid));
+        payment.setTotalDue(totalAmount);
         payment.setTotalAmountPaid(totalAmountPaid);
         payment.setTransactionNumber(receipt.getInstrument().getTransactionNumber());
         payment.setTransactionDate(receipt.getReceiptDate());
@@ -391,7 +391,7 @@ public class MigrationService {
         paymentDetail.setBill(newBill);
         paymentDetail.setPaymentId(payment.getId());
     	paymentDetail.setBillId(newBill.getId());
-        paymentDetail.setTotalDue(totalAmount.subtract(totalAmountPaid));
+        paymentDetail.setTotalDue(totalAmount);
         paymentDetail.setTotalAmountPaid(totalAmountPaid);
         payment.setPaymentDetails(Arrays.asList(paymentDetail));
 	    
