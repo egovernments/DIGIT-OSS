@@ -33,7 +33,9 @@ import static org.egov.pt.calculator.util.CalculatorConstants.USAGE_SUB_MINOR_MA
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -76,8 +78,6 @@ import org.egov.pt.calculator.web.models.property.Unit;
 import org.egov.pt.calculator.web.models.property.UnitAdditionalDetails;
 import org.egov.pt.calculator.web.models.propertyV2.PropertyV2;
 import org.egov.tracer.model.CustomException;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -370,7 +370,8 @@ public class EstimationService {
 
 		List<Object> depreciationAppreciation = masterMap.get(DEPRECIATION_APPRECIATION);
 		int assessmentYear = Integer.parseInt(fromDate.split("-")[0]);
-		LocalDate constructionYear = LocalDate.ofEpochDay(unit.getAdditionalDetails().getConstructionDate());
+		LocalDate constructionYear = Instant.ofEpochMilli(unit.getAdditionalDetails().getConstructionDate())
+				.atZone(ZoneId.systemDefault()).toLocalDate();
 		int age = assessmentYear - constructionYear.getYear();
 
 		for (Object val : depreciationAppreciation) {
