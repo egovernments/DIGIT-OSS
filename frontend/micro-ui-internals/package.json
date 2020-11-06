@@ -1,0 +1,10 @@
+{
+  "name": "egovernments",
+  "version": "1.0.0",
+  "main": "index.js",
+  "workspaces": ["packages/*"],
+  "repository": "git@github.com:egovernments/digit-ui-internals.git",
+  "author": "Abhinav Kushwaha <abhinav.kushwaha@egovernments.org>",
+  "license": "MIT",
+  "private": true
+}

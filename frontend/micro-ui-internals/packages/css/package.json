@@ -1,0 +1,10 @@
+{
+  "name": "@egovernments/digit-ui-css",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "normalize.css": "^8.0.1"
+  },
+  "devDependencies": {}
+}
