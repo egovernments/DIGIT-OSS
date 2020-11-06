@@ -27,8 +27,7 @@ const Declaration = ({ open, closeDialogue, selected, updateIndex }) => {
         </div>,
       ]}
       bodyStyle={{ backgroundColor: "#ffffff" }}
-      isClose={true}
-      handleClose={closeDialogue}
+      isClose={false}
       onRequestClose={closeDialogue}
       contentStyle={{ width: "35%" }}
     />

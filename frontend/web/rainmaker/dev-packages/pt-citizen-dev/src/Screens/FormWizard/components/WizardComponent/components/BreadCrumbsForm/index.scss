@@ -13,7 +13,7 @@
   display: block;
   float: left;
   font-size: 12px;
-  line-height: 48px;
+  height: 48px;
   color: white;
   position: relative;
   width: 25%;
@@ -32,6 +32,11 @@
 }
 .breadcrumb-form a:last-child {
   border-radius: 0 2px 2px 0; /*this was to prevent glitches on hover*/
+}
+
+.breadcrumb-form a:focus {
+  outline: none;
+  text-decoration: none;
 }
 
 /*adding the arrows for the breadcrumb-forms using rotated pseudo elements*/
@@ -86,4 +91,8 @@
 
 .form-tab-index {
   font-size: 12px;
+}
+
+.breadcrumb-content {
+  width: 75%;
 }

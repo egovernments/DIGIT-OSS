@@ -322,3 +322,23 @@ div[class^="MuiPaper-root"],
     display: block;
   }
 }
+div.ownerCategoryIdType div:nth-child(1) {width: 100%;}
+div#ownerCategoryIdType div[class^="MuiFormControl-root"] {width: 100% !important;}
+div#ownerCategory div[class^="MuiFormControl-root"] {width: 100% !important;}
+div#ownerRelationship div[class^="MuiFormControl-root"] {width: 100% !important;}
+div#typeOfOwnership div[class^="MuiFormControl-root"] {width: 100% !important;}
+
+
+
+.basicInformation {.rainwaterHarvesting {
+  height: 100px!important;
+}
+
+}
+input[type="radio"]:checked {
+  border: 1px solid #fe7a51;
+}
+
+input[type="radio"]:checked:before {
+  background: #fe7a51;
+}
