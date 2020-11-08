@@ -32,6 +32,7 @@ import static org.egov.pt.calculator.util.CalculatorConstants.TAX_RATE;
 import static org.egov.pt.calculator.util.CalculatorConstants.USAGE_SUB_MINOR_MASTER;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ROUNDOFF;
 import static org.egov.pt.calculator.util.CalculatorConstants.MIXED;
+import static org.egov.pt.calculator.util.CalculatorConstants.GROUND_FLOOR_NUMBER;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -317,7 +318,11 @@ public class EstimationService {
 						unitTaxAmount = landAV.multiply(taxRate);
 
 						if (unoccupiedLandCount == 0) {
-							BigDecimal unoccupiedLandArea = propertyDetail.getLandArea().subtract(unit.getUnitArea());
+							BigDecimal totalBuiltupArea = units.stream()
+									.filter(unitDetail -> GROUND_FLOOR_NUMBER.equals(unitDetail.getFloorNo()))
+									.map(Unit::getUnitArea).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+							BigDecimal unoccupiedLandArea = propertyDetail.getLandArea().subtract(totalBuiltupArea);
 							BigDecimal unoccupiedLandAV = unoccupiedLandArea.multiply(unitRate).multiply(multipleFactor)
 									.multiply(monthMultiplier);
 							unoccupiedLandTaxAmount = unoccupiedLandAV.multiply(taxRate);
