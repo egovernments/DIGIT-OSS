@@ -331,6 +331,8 @@ public class CalculatorConstants {
 
 	public static final String NONRESIDENTIAL = "NONRESIDENTIAL";
 	
+	public static final String MIXED = "MIXED";
+	
 	public static final String BUILTUP = "BUILTUP";
 
 	public static final String RENTED = "RENTED";

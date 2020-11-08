@@ -31,6 +31,7 @@ import static org.egov.pt.calculator.util.CalculatorConstants.TAXHEADMASTER_MAST
 import static org.egov.pt.calculator.util.CalculatorConstants.TAX_RATE;
 import static org.egov.pt.calculator.util.CalculatorConstants.USAGE_SUB_MINOR_MASTER;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ROUNDOFF;
+import static org.egov.pt.calculator.util.CalculatorConstants.MIXED;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -324,6 +325,7 @@ public class EstimationService {
 						}
 
 					} else if (unit.getUsageCategoryMajor().equals(RESIDENTIAL)) {
+						BigDecimal appreDepreAmount;
 						UnitAdditionalDetails unitAdtlDetails = unit.getAdditionalDetails();
 						BigDecimal carpetArea = BigDecimal.ZERO;
 						if (unitAdtlDetails.isInnerDimensionsKnown()) {
@@ -342,9 +344,14 @@ public class EstimationService {
 						BigDecimal exemptionRate = getExemptionRate(masterMap, unit);
 						// 26-12 TODO: add todate and fromdat instead of
 						// assessment year.
-						BigDecimal appreciationDepreciation = getAppreciationDepreciation(masterMap, unit, fromDate);
-						BigDecimal appreDepreAmount = carpetArea.multiply(unitRate).multiply(appreciationDepreciation)
-								.multiply(monthMultiplier).divide(HUNDRED);
+						if (MIXED.equalsIgnoreCase(propertyDetail.getUsageCategoryMajor())) {
+							appreDepreAmount = BigDecimal.ZERO;
+						} else {
+							BigDecimal appreciationDepreciation = getAppreciationDepreciation(masterMap, unit,
+									fromDate);
+							appreDepreAmount = carpetArea.multiply(unitRate).multiply(appreciationDepreciation)
+									.multiply(monthMultiplier).divide(HUNDRED);
+						}
 						BigDecimal landAV = carpetArea.multiply(unitRate).multiply(monthMultiplier);
 
 						landAV = landAV.add(appreDepreAmount);
