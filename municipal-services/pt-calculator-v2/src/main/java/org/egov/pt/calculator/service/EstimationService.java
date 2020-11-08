@@ -316,7 +316,7 @@ public class EstimationService {
 						unitTaxAmount = landAV.multiply(taxRate);
 
 						if (unoccupiedLandCount == 0) {
-							BigDecimal unoccupiedLandArea = propertyDetail.getLandArea();
+							BigDecimal unoccupiedLandArea = propertyDetail.getLandArea().subtract(unit.getUnitArea());
 							BigDecimal unoccupiedLandAV = unoccupiedLandArea.multiply(unitRate).multiply(multipleFactor)
 									.multiply(monthMultiplier);
 							unoccupiedLandTaxAmount = unoccupiedLandAV.multiply(taxRate);
@@ -488,6 +488,7 @@ public class EstimationService {
 	 */
 	private Calculation getCalculation(RequestInfo requestInfo, CalculationCriteria criteria,
 			Map<String, Object> masterMap) {
+		
 		Map<String, List> estimatesAndBillingSlabs = getEstimationMap(criteria, requestInfo, masterMap);
 		List<TaxHeadEstimate> estimates = estimatesAndBillingSlabs.get("estimates");
 		List<String> billingSlabIds = estimatesAndBillingSlabs.get("billingSlabIds");
