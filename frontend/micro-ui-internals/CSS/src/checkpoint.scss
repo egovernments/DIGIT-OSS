@@ -1,0 +1,46 @@
+.checkpoint-done {
+  @apply flex;
+
+  h2 {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    @apply border-b border-solid border-primary-main bg-primary-main;
+  }
+
+  header {
+    @apply text-heading-s ml-md;
+
+    p{
+      margin-top: 4px;
+      @apply text-heading-s text-text-secondary
+    }
+  }
+
+}
+
+.checkpoint {
+  @apply flex;
+
+  h2 {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    @apply border-b border-solid border-border bg-border;
+  }
+
+  header {
+    @apply text-heading-s ml-md;
+
+    p{
+      margin-top: 4px;
+      @apply text-heading-s text-text-secondary
+    }
+  }
+}
+
+.checkpoint-connect {
+  height: 45px;
+  margin-left: 12px;
+  @apply border-l border-solid border-border;
+}
