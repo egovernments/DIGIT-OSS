@@ -17,9 +17,11 @@
   "scripts": {
     "start": "run-s build:** start:dev",
     "start:dev": "run-p dev:**",
+    "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
     "dev:pgr": "cd packages/modules/pgr && yarn start",
     "dev:example": "cd example && yarn start",
+    "build:libraries": "cd packages/libraries && yarn build",
     "build:components": "cd packages/react-components && yarn build",
     "build:pgr": "cd packages/modules/pgr && yarn build"
   },
