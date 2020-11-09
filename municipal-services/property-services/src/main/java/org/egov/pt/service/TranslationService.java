@@ -152,9 +152,10 @@ public class TranslationService {
                 if(masterData.length >= 1)
                     unitMap.put("usageCategoryMajor", masterData[0]);
 
-                if(masterData.length >= 2)
+                if(masterData.length >= 2){
                     unitMap.put("usageCategoryMinor", masterData[1]);
                     unitMap.put("usageCategorySubMinor", masterData[1]);
+                }   
 
                 if(masterData.length >= 3)
                     unitMap.put("usageCategorySubMinor", masterData[2]);
