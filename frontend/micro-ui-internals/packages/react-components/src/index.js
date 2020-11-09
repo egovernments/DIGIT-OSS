@@ -13,7 +13,7 @@ import CardLabelError from "./CardLabelError";
 import CardTextButton from "./CardTextButton";
 import RadioButtons from "./RadioButtons";
 import Dropdown from "./Dropdown";
-import Textinput from "./Textinput";
+import TextInput from "./TextInput";
 import TextArea from "./TextArea";
 import Banner from "./Banner";
 import CardSubHeader from "./CardSubHeader";
@@ -28,8 +28,6 @@ import OTPInput from "./OTPInput";
 import LocationSearch from "./LocationSearch";
 import UploadImages from "./UploadImages";
 import ImageViewer from "./ImageViewer";
-
-import "https://unpkg.com/@egovernments/digit-ui.css@1.0.4/dist/index.min.css";
 
 export {
   Body,
@@ -47,7 +45,7 @@ export {
   CardTextButton,
   RadioButtons,
   Dropdown,
-  Textinput,
+  TextInput,
   TextArea,
   Banner,
   CardSubHeader,
