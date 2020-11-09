@@ -11,7 +11,6 @@
   },
   "scripts": {
     "start": "gulp build",
-    "dev": "postcss src/index.scss -o example/dev.css --no-map --env development",
     "build:prod": "NODE_ENV=production gulp build",
     "prepublish": "yarn build:prod",
     "deploy": "gulp && cp -R svg example && cp -R img example && gh-pages -d example"
