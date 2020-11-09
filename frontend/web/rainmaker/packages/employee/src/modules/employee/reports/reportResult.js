@@ -16,7 +16,7 @@ import "datatables.net-responsive-dt";
 import JSZip from "jszip/dist/jszip";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfFonts from "./vfs_fonts";
 import "datatables.net-buttons/js/buttons.html5.js"; // HTML 5 file export
 import "datatables.net-buttons/js/buttons.flash.js"; // Flash file export
 import "datatables.net-buttons/js/buttons.colVis.min.js";
@@ -26,7 +26,9 @@ import commonConfig from "config/common.js";
 import { getTenantId, setReturnUrl, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+
+
 window.JSZip = JSZip;
 
 var sumColumn = [];
@@ -47,7 +49,7 @@ class ShowField extends Component {
       .DataTable()
       .destroy(true);
   }
-
+ 
   componentWillUpdate() {
     let { flag } = this.props;
     if (flag == 1) {
@@ -65,7 +67,7 @@ class ShowField extends Component {
       moduleName: _this.props.match.params.moduleName,
     });
     _this.subHeader(_this.props.match.params.moduleName);
-  }
+   }
 
   componentWillReceiveProps(nextprops) {
     this.setState({
@@ -99,6 +101,23 @@ class ShowField extends Component {
     let reportTitle = this.getReportTitle();
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
 
+    function processDoc(doc) {
+      //
+      // https://pdfmake.github.io/docs/fonts/custom-fonts-client-side/
+      //
+      // Update pdfmake's global font list, using the fonts available in
+      // the customized vfs_fonts.js file 
+      pdfMake.fonts = {
+        Hind:{
+          normal: 'Hind-Regular.ttf',
+          bold: 'Hind-Regular.ttf',
+          italics: 'Hind-Regular.ttf',
+          bolditalics: 'Hind-Regular.ttf',
+        }
+      };
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;                
+      doc.defaultStyle.font = "Hind";
+    }
     const buttons = [
       {
         text: "<span>Download as : </span>",
@@ -112,11 +131,12 @@ class ShowField extends Component {
         orientation: orientation,
         pageSize: pageSize,
         footer: true,
-        customize: function(doc) {
+        customize: function(doc) {        
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "NagarSewa System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
-        },
+          processDoc(doc);
+        },       
         className: "report-pdf-button",
       },
       {
