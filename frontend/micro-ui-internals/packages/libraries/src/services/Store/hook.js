@@ -6,7 +6,7 @@ export const useStore = (defaultConfig, { deltaConfig, stateCode, cityCode, modu
   const [defaultStore, setDefaultStore] = React.useState({});
 
   React.useEffect(() => {
-    const config = window.eGov.Config.mergeConfig(defaultConfig, deltaConfig);
+    const config = window.Digit.Config.mergeConfig(defaultConfig, deltaConfig);
     StoreService.defaultData(stateCode, cityCode, moduleCode).then((defaultData) => {
       const store = { config, ...defaultData };
       console.log("store:", store);
