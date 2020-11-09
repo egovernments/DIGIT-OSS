@@ -16,7 +16,6 @@ import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import printJS from 'print-js';
 import axios from 'axios';
 
-
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
   let modifiedArray = originalArray.filter(element => {
@@ -537,6 +536,8 @@ let getModifiedPayment = (payments) =>{
   let swatchatha=0;
   let currentDate=convertDateToEpoch(new Date());
   payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.amount!==0)
+    {
     if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
       billdetail.billAccountDetails.forEach(billAccountDetail =>{
         switch (billAccountDetail.taxHeadCode) {
@@ -575,7 +576,7 @@ let getModifiedPayment = (payments) =>{
             penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_TIME_REBATE":
-            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_ROUNDOFF":
             roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
@@ -584,7 +585,7 @@ let getModifiedPayment = (payments) =>{
             interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_PROMOTIONAL_REBATE":
-            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
             break;
           case "SWATCHATHA_TAX":
             swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
@@ -594,13 +595,16 @@ let getModifiedPayment = (payments) =>{
         }
       })
     }
+  }
   })
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear);
+  let totalAmount =   get(payments, `[0].paymentDetails[0].bill.totalAmount`,null);
+  set(payments, `[0].paymentDetails[0].bill.totalAmount`, totalAmount.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, -rebate.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
 }
 else if(payments[0].paymentDetails[0].businessService === 'TL'){
@@ -662,10 +666,27 @@ else if(payments[0].paymentDetails[0].businessService === 'TL'){
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocPenalty`, adhocPenalty);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
 }
-
   return payments;
 }
 
+const getBankname = async(payment) =>{
+  const ifscCode = payment[0].ifscCode;
+  let payload;
+  if (ifscCode) {
+    payload = await axios.get(`https://ifsc.razorpay.com/${ifscCode}`);
+    console.log("===================>",payload);
+    if (payload.data === "Not Found") {
+      set(payment, `[0].bankName`, "");
+      set(payment, `[0].branchName`, "");
+    } else {
+      const bankName = get(payload.data, "BANK");
+      const bankBranch = get(payload.data, "BRANCH");
+      set(payment, `[0].bankName`, bankName);
+      set(payment, `[0].branchName`, bankBranch);
+    }
+  }
+  return payment;
+}
 export const download = (receiptQueryString, mode = "download") => {
   const FETCHRECEIPT = {
     GET: {
@@ -680,18 +701,13 @@ export const download = (receiptQueryString, mode = "download") => {
     },
   };
   try {
-    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then(async(payloadReceiptDetails) => {
       let queryStr = {};
+      payloadReceiptDetails.Payments = await getBankname(payloadReceiptDetails.Payments);
       payloadReceiptDetails.Payments = getModifiedPayment(payloadReceiptDetails.Payments);
       if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT') {
         queryStr = [
           { key: "key", value: "consolidatedreceipt" },
-          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-        ]
-      }
-      else if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL') {
-        queryStr = [
-          { key: "key", value: "tl-receipt" },
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
         ]
       }

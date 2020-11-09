@@ -148,8 +148,8 @@ function FeesEstimateCard(props) {
               let textRight = fee.value ? (
                 <Grid xs={4} align="right">
                   <LabelContainer
-                    labelName={Math.abs(fee.value)}
-                    labelKey={Math.abs(fee.value)}
+                    labelName={fee.value}
+                    labelKey={fee.value}
                     style={styles.taxStyles}
                   />
                 </Grid>
