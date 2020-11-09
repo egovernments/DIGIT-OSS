@@ -28,6 +28,8 @@ import commonConfig from "config/common.js";
 import { Button, Card } from "components";
 import "./index.css";
 import PTHeader from "../../common/PTHeader";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 const innerDivStyle = {
   padding: "0",
@@ -120,6 +122,31 @@ class Property extends Component {
         ],
       },
     };
+    const tenantRequestBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "tenant",
+            masterDetails: [
+              {
+                name: "citywiseconfig",
+                filter: "[?(@.config=='ptCitizenPayButton')]"
+              }
+            ]
+          }
+        ]
+      },
+    };
+    let citywiseconfig = httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        tenantRequestBody
+    ).then(res => {
+      this.setState({citywiseconfig: res.MdmsRes.tenant.citywiseconfig});
+    });
     fetchGeneralMDMSData(requestBody, "PropertyTax", [
       "Floor",
       "UsageCategoryMajor",
@@ -402,6 +429,7 @@ class Property extends Component {
             totalBillAmountDue={totalBillAmountDue}
             documentsUploaded={documentsUploaded}
             toggleSnackbarAndSetText={this.props.toggleSnackbarAndSetText}
+            citywiseconfig={this.state.citywiseconfig}
           />
         }
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>

@@ -11,6 +11,25 @@
 .search-bar div div svg{
   top:50!important;
 }
+@media only screen and (max-width: 551px) {
+  .search-bar div div svg{
+
+  display: inline-block !important;
+  color: rgb(150, 150, 150)!important;
+  fill: currentcolor !important;
+  height: 24px !important;
+  width: 24px !important;
+  user-select: none !important;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  bottom: 0px !important;
+  top: 14px !important;
+  margin: auto !important;
+  cursor: pointer !important;
+  left: 10px !important;
+  }
+}
 
 .backgroundWhite{
   background-color: white !important;

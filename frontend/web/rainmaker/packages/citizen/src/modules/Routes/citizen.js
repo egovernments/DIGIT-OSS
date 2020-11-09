@@ -9,8 +9,8 @@ import Profile from "modules/citizen/User/Profile";
 
 import LandingPage from "modules/citizen/LandingPage";
 //import CitizenDashboard from "modules/citizen/CitizenDashboard";
-import HowItWorks from "modules/citizen/HowItWorks";
-import TlHowItWorks from "../../ui-views/TlHowItworks";
+//mport HowItWorks from "modules/citizen/HowItWorks";
+import HowItWorks from "../../ui-views/HowItWorks";
 
 import ContactUs from "modules/citizen/ContactUs";
 import MyNotifications from "modules/citizen/MyNotifications";
@@ -122,7 +122,7 @@ const routes = [
   },
   {
     path: "trade-license/how-it-works",
-    component: TlHowItWorks,
+    component: HowItWorks,
     needsAuthentication: true,
     options: {
       hideFooter: true,

@@ -2,11 +2,11 @@ import { sortDropdown } from "egov-ui-kit/utils/PTCommon";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 import { removeForm ,setFieldProperty} from "egov-ui-kit/redux/form/actions";
 import { removeFormKey } from "./utils/removeFloors";
-import { prepareDropDownData,floorUtilFunction} from "./utils/reusableFields";
+import { prepareDropDownData} from "./utils/reusableFields";
 import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
-import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
 const constructionyears =[{value:"2019",label:"2019-20"},{value:"2018",label:"2018-19"}];
 const formConfig = {
@@ -102,7 +102,9 @@ const formConfig = {
   beforeInitForm: (action, store) => {
     try {
       let state = store.getState();
-      localStorageSet("previousFloorNo", -1);
+      //localStorageSet("previousFloorNo", -1);
+      let previousFloorNo = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].noOfFloors",null);
+      localStorageSet("previousFloorNo", previousFloorNo);
       var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
       var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
       const mergedMaster = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
@@ -162,3 +164,25 @@ const getAbsentMasterObj = (master1Arr, master2Arr, propToCompare) => {
   }, []);
   return master1Arr.filter((item) => propArray.indexOf(item.code) === -1);
 };
+
+ const floorUtilFunction=({ formKey, field, dispatch, state }) => 
+  {
+      {
+        //removeFormKey(formKey, field, dispatch, state);
+    var previousFloorNo = localStorageGet("previousFloorNo") || -1;
+    localStorageSet("previousFloorNo", field.value);
+    // dispatch(toggleSpinner());
+    if (previousFloorNo > field.value) {
+    for (var i = field.value; i < previousFloorNo; i++) {
+          if (state.form.hasOwnProperty(`customSelect_${i}`)) {
+          dispatch(removeForm(`customSelect_${i}`));
+          }
+        for (var variable in state.form) {
+            if (state.form.hasOwnProperty(variable) && variable.startsWith(`floorDetails_${i}`)) {
+              dispatch(removeForm(variable));       
+              }
+         }
+        }
+      }
+    } 
+  }

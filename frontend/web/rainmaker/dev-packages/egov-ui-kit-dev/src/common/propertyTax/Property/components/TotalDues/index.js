@@ -5,6 +5,7 @@ import { TotalDuesButton } from "./components";
 import { withRouter } from "react-router-dom";
 import { downloadBill } from "egov-common/ui-utils/commons";
 import "./index.css";
+import get from "lodash/get";
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
@@ -25,7 +26,9 @@ class TotalDues extends React.Component {
     });
   };
   render() {
-    const { totalBillAmountDue, consumerCode, tenantId, history } = this.props;
+    const { totalBillAmountDue, consumerCode, tenantId, history, citywiseconfig} = this.props;
+    let disabledCities = get(citywiseconfig, "[0].enabledCities");
+
     const envURL = "/egov-common/pay";
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
@@ -61,7 +64,7 @@ class TotalDues extends React.Component {
             /> */}
           </div>
         )}
-        {totalBillAmountDue > 0 && (
+        {totalBillAmountDue > 0 && (process.env.REACT_APP_NAME !== "Citizen" || !disabledCities.includes(tenantId)) && (
           <div id="pt-flex-child-button" className="col-xs-12 col-sm-3 flex-child-button">
             <div style={{ float: "right" }}>
               <TotalDuesButton

@@ -17,7 +17,7 @@ const formConfig = {
       hintText: "PT_FORM3_OWNER_NAME_PLACEHOLDER",
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,64}$/i,
+      pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,_:;“”‘’]{1,64}$/i,
       errorMessage: "PT_NAME_ERROR_MESSAGE",
     },
     ownerMobile: {
@@ -37,7 +37,7 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME",
       hintText: "PT_FORM3_GUARDIAN_PLACEHOLDER",
-      pattern: /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,64}$/i,
+      pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,_:;“”‘’]{1,64}$/i,
       required: true,
       errorMessage: "PT_NAME_ERROR_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
@@ -69,7 +69,7 @@ const formConfig = {
       localePrefix: "PT_RELATION",
       floatingLabelText: "PT_FORM3_RELATIONSHIP",
       hintText: "",
-      dropDownData: [{ label: "Father", value: "FATHER" }, { label: "Husband", value: "HUSBAND" }],
+      dropDownData: [{ label: "Father", value: "FATHER" }, { label: "Husband", value: "HUSBAND" }, { label: "Mother", value: "MOTHER" }],
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     },
     ownerCategory: {
@@ -258,10 +258,14 @@ const formConfig = {
       });      
       const finalYear=finalData[0].financialYear;
 
+
       // let financialYearFromQuery = window.location.search.split("FY=")[1];
       // financialYearFromQuery = financialYearFromQuery.split("&")[0];
       
       const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes),finalYear);
+
+
+      
       set(action, "form.fields.ownerCategory.dropDownData", dropdownData);
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
       if (ownerShipType === "INDIVIDUAL.SINGLEOWNER") {

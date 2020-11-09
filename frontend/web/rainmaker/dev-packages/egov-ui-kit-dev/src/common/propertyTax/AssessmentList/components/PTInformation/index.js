@@ -106,7 +106,8 @@ class PTInformation extends React.Component {
       totalBillAmountDue,
       documentsUploaded,
       toggleSnackbarAndSetText,
-      cities
+      cities,
+      citywiseconfig
     } = this.props;
     let logoUrl = ""; 
     let corpCity = "";
@@ -142,6 +143,7 @@ class PTInformation extends React.Component {
                         tenantId={properties.tenantId}
                         consumerCode={properties.propertyId}
                         totalBillAmountDue={totalBillAmountDue}
+                        citywiseconfig={citywiseconfig}                        
                       />
                     }
                     style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}

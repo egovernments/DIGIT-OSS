@@ -180,7 +180,8 @@ const AssessmentList = ({ properties,
   totalBillAmountDue,
   loadMdmsData,
   documentsUploaded,
-  toggleSnackbarAndSetText
+  toggleSnackbarAndSetText,
+  citywiseconfig
 }) => {
   return items.length == 0 ? (
     <BlankAssessment
@@ -214,7 +215,8 @@ const AssessmentList = ({ properties,
         loadMdmsData={loadMdmsData}
         documentsUploaded={documentsUploaded}
         toggleSnackbarAndSetText={toggleSnackbarAndSetText}
-         />)
+        citywiseconfig={citywiseconfig}
+      />)
 
 
 

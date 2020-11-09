@@ -206,7 +206,7 @@ class Footer extends React.Component {
           1
         );
       const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
-          if(item.code=="TL_CEMP"&&item.tenantId===tenantId)
+          if((item.code=="TL_CEMP"&&item.tenantId===tenantId) || item.code == "CITIZEN")
           return true;
         })
        const rolecheck= rolearray.length>0? true: false;
@@ -215,7 +215,9 @@ class Footer extends React.Component {
         label: "Edit",
         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
         link: () => {
-          this.props.setRoute(
+          process.env.REACT_APP_NAME === "Citizen" ? this.props.setRoute(
+            `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+          ) : this.props.setRoute(
             `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
           );
         }
