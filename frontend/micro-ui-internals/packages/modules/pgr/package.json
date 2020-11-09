@@ -1,6 +1,20 @@
 {
   "name": "@egovernments/digit-ui-module-pgr",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.modern.js",
+  "source": "src/Module.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "build": "microbundle-crl --no-compress --format modern,cjs"
+  },
+  "dependencies": {
+    "@egovernments/digit-ui-react-components": "^1.0.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
+  }
 }
