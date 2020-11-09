@@ -4,7 +4,7 @@ import { Body } from "@egovernments/digit-ui-react-components";
 const Module = () => {
   return (
     <Body>
-      <p>PGR</p>
+      <p>PGR App</p>
     </Body>
   );
 };

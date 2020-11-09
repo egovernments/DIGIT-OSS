@@ -9,7 +9,8 @@
     "dist"
   ],
   "scripts": {
-    "build:pkg": "microbundle-crl --no-compress --format modern,cjs"
+    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "build": "microbundle-crl --no-compress --format modern,cjs"
   },
   "dependencies": {
     "@egovernments/digit-ui-react-components": "^1.0.0",
