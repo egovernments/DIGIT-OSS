@@ -1,5 +1,5 @@
 {
-  "name": "@egovernments/egov-ui-react-components",
+  "name": "@egovernments/digit-ui-react-components",
   "version": "1.0.0",
   "license": "MIT",
   "main": "dist/index.js",
