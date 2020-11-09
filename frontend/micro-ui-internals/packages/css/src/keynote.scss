@@ -1,0 +1,20 @@
+.key-note-pair{
+    @apply mb-md;
+    
+    h3{
+        margin-bottom: 4px;
+        @apply font-bold text-text-primary text-heading-s;
+    }
+
+    p{
+        @apply text-text-primary text-body-l;
+    }
+}
+
+@screen dt{
+    .key-note-pair{
+        p{
+            @apply text-body-l-dt
+        }
+    }
+}

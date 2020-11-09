@@ -1,0 +1,32 @@
+.image-viewer-wrap{
+    height: 100vh;
+    @apply bg-text-primary p-md;
+
+        svg{
+            @apply absolute h-6 w-6;
+            right: 16px;
+        }
+
+        img{
+            @apply max-w-full h-auto;
+            margin-top: 40%;
+        }
+}
+
+@screen dt{
+    .image-viewer-wrap{
+        @apply relative bg-text-primary p-md;
+
+        svg{
+            @apply absolute h-6 w-6;
+            right: 16px;
+        }
+
+        img{
+            width: auto;
+            height: auto;
+            max-width: 640px;
+            margin: auto;
+        }
+    }
+}

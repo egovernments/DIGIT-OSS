@@ -1,0 +1,28 @@
+/*@import 'normalize.css';*/
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap');
+
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+
+@import "./body.scss";
+@import "./navbar.scss";
+@import "./card.scss";
+@import "./radiobtn.scss";
+@import "./selectdropdown.scss";
+@import "./textfields.scss";
+@import "./bannercomponents.scss";
+@import "./datewrap.scss";
+@import "./datatable.scss";
+@import "./checkpoint.scss";
+@import "./checkbox.scss";
+@import "./inputotp.scss";
+@import "./map.scss";
+@import "./submiterrors.scss";
+@import "./ratingstar.scss";
+@import "./keynote.scss";
+@import "./statushighlight.scss";
+@import "./imageviewer.scss";
