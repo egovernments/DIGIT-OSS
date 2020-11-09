@@ -3,9 +3,9 @@ import { initServices } from "./services/index";
 import { initI18n } from "./translations/index";
 
 const initConfig = () => {
-  window.eGov = window.eGov || {};
-  window.eGov.Config = window.eGov.Config || {};
-  window.eGov.Config = { ...window.eGov.Config, mergeConfig };
+  window.Digit = window.Digit || {};
+  window.Digit.Config = window.Digit.Config || {};
+  window.Digit.Config = { ...window.Digit.Config, mergeConfig };
 };
 
 const initLibraries = () => {

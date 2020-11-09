@@ -1,9 +1,9 @@
 import { useStore } from "./Store/hook";
 
 export const initServices = () => {
-  window.eGov = window.eGov || {};
-  window.eGov.Services = window.eGov.Services || {};
-  window.eGov.Services = { ...window.eGov.Services, useStore };
+  window.Digit = window.Digit || {};
+  window.Digit.Services = window.Digit.Services || {};
+  window.Digit.Services = { ...window.Digit.Services, useStore };
 };
 
 export { useStore };
