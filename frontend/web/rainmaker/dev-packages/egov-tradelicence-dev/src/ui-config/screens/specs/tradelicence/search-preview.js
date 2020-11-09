@@ -226,20 +226,20 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
      state,
      "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
    );
-  set(action, "screenConfig.components.footer", {})
+  //set(action, "screenConfig.components.footer", {})
   if(process.env.REACT_APP_NAME === "Citizen" )
   {
-    const footer = footerReview(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId,
-      financialYear
-    );
+  //   const footer = footerReview(
+  //     action,
+  //     state,
+  //     dispatch,
+  //     status,
+  //     applicationNumber,
+  //     tenantId,
+  //     financialYear
+  //   );
 
-  set(action, "screenConfig.components.footer", footer)
+  // set(action, "screenConfig.components.footer", footer)
 
    //if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
     if(payloadStatus ==="APPROVED" && payloadType ==="NEW" && ((currentDatetoEpoch<LicenseExpiryDate && currentDatetoEpoch>=limitEpochDate )||(currentDatetoEpoch>LicenseExpiryDate)))
@@ -270,7 +270,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         "visible",
         false
       ))
-      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
+      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
       // dispatch(
       //   handleField(
       //     "search-preview",
@@ -279,7 +279,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       //     false
       //   )
       // );
-      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
+      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
 
       // dispatch(
       //   handleField(
@@ -300,8 +300,8 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       ));
      //set(action, "screenConfig.components.footer", {})
 
-         set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton", {})
-         set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton", {})
+         set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton", {})
+         set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton", {})
 
     //  set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
 
@@ -528,7 +528,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       );
       setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
-      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.disabled", false)
+      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton.props.disabled", false)
 
       //
       // dispatch(
@@ -539,7 +539,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       //     false
       //   )
       // );
-      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.disabled", false)
+      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton.props.disabled", false)
 
       // dispatch(
       //   handleField(

@@ -842,7 +842,7 @@ const screenConfig = {
       window.location.href,
       "applicationNumber"
     );
-    const licenseNumber = get(state.screenConfiguration.preparedFinalObject,"Licenses[0].licenseNumber");
+    const licenseNumber = getQueryArg(window.location.href, "licenseNumber");
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const data = getAcknowledgementCard(

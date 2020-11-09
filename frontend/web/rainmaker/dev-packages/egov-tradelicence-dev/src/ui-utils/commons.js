@@ -172,7 +172,7 @@ export const updatePFOforSearchResults = async (
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-  if (isEditRenewal) {
+  if (isEditRenewal && !(get(state.screenConfiguration.preparedFinalObject, "Licenses[0].status") === "INITIATED")) {
     const nextYear = generateNextFinancialYear(state);
     dispatch(
       prepareFinalObject("Licenses[0].financialYear", nextYear));
@@ -375,7 +375,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
 
     set(queryObject[0], "tenantId", tenantId);
-    if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL") {
+    if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL" || get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "RENEWAL") {
       set(queryObject[0], "workflowCode", "EDITRENEWAL");
       set(queryObject[0], "applicationType", "RENEWAL");
     } else {
@@ -467,11 +467,17 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let updateResponse = [];
       
-         if (!isEditFlow) {       
+      if (!isEditFlow) {
+         if(queryObject[0].applicationType === "RENEWAL" && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")
+         {
+         }
+        else{
           updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
-          Licenses: queryObject
-        })
-      }         
+            Licenses: queryObject
+           })
+         }
+
+      }       
       //Renewal flow
 /* 
       if (isRenewal  ) {
@@ -503,8 +509,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         { key: "tenantId", value: updatedTenant },
         { key: "applicationNumber", value: updatedApplicationNo }
       ];
-      let searchResponse = await getSearchResults(searchQueryObject);
-      if (isEditFlow) {
+      // let searchResponse = await getSearchResults(searchQueryObject);
+      let searchResponse = updateResponse;
+      if (isEditFlow || (isRenewal && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")) {
         searchResponse = { Licenses: queryObject };
       } else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
