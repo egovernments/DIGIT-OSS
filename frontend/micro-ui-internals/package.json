@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "workspaces": [
-    "example*",
+    "example",
     "packages/*",
     "packages/modules/*"
   ],
@@ -11,6 +11,9 @@
   "author": "Abhinav Kushwaha <abhinav.kushwaha@egovernments.org>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": ">=14"
+  },
   "devDependencies": {
     "husky": ">=4",
     "lint-staged": ">=10",
