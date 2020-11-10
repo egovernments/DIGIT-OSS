@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import BackButton from "../../@egovernments/components/js/BackButton";
-import Card from "../../@egovernments/components/js/Card";
-import CardHeader from "../../@egovernments/components/js/CardHeader";
-import CardText from "../../@egovernments/components/js/CardText";
-import RadioButtons from "../../@egovernments/components/js/RadioButtons";
-import SubmitBar from "../../@egovernments/components/js/SubmitBar";
-import { Storage } from "../../@egovernments/digit-utils/services/Storage";
+
+import { BackButton, Card, CardHeader, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
 
 const ReasonPage = () => {
   const { t } = useTranslation();
@@ -16,13 +11,13 @@ const ReasonPage = () => {
   const [selected, setSelected] = useState("");
 
   const onRadioChange = (value) => {
-    let reopenDetails = Storage.get(`reopen.${id}`);
-    Storage.set(`reopen.${id}`, { ...reopenDetails, reason: value });
+    let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
+    Digit.SessionStorage.set(`reopen.${id}`, { ...reopenDetails, reason: value });
     setSelected(value);
   };
 
   return (
-    <>
+    <React.Fragment>
       <BackButton>Back</BackButton>
       <Card>
         <CardHeader>{t(`CS_HEADER_REOPEN_COMPLAINT`)}</CardHeader>
@@ -48,7 +43,7 @@ const ReasonPage = () => {
           <SubmitBar label="Next" />
         </Link>
       </Card>
-    </>
+    </React.Fragment>
   );
 };
 

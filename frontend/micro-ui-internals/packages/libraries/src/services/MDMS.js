@@ -1,6 +1,6 @@
 import Urls from "./urls";
-import { GetCitiesWithi18nKeys } from "./utils";
-import { Request } from "./Utils/Request";
+// import { GetCitiesWithi18nKeys } from "./utils";
+import { Request, GetCitiesWithi18nKeys } from "./Utils/Request";
 
 const initRequestBody = (tenantId) => ({
   MdmsCriteria: {

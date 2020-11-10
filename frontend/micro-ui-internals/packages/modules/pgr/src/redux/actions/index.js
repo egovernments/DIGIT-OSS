@@ -1,4 +1,4 @@
-import { FETCH_COMPLAINTS, FETCH_LOCALITIES } from "./types";
+import { FETCH_BUSINESS_SERVICE_BY_ID, FETCH_COMPLAINTS, FETCH_LOCALITIES } from "./types";
 //import { LocalizationService } from "../../@egovernments/digit-utils/services/Localization/service";
 //import { LocationService } from "../../@egovernments/digit-utils/services/Location";
 //import { LocalityService } from "../../@egovernments/digit-utils/services/Localities";
@@ -33,7 +33,6 @@ export const updateLocalizationResources = () => async (dispatch, getState) => {
 };
 
 export const searchComplaints = (filters = {}) => async (dispatch, getState) => {
-  debugger;
   let city = "amritsar";
   const { stateInfo } = getState();
   let { ServiceWrappers } = await Digit.PGRService.search(`${stateInfo.code}.${city}`, filters);
@@ -41,5 +40,13 @@ export const searchComplaints = (filters = {}) => async (dispatch, getState) => 
   dispatch({
     type: FETCH_COMPLAINTS,
     payload: { complaints: ServiceWrappers },
+  });
+};
+
+export const fetchBusinessServiceById = (businessId) => async (dispatch, getState) => {
+  const businessServiceDetails = await Digit.workflowService.getByBusinessId(getState().cityCode, businessId);
+  dispatch({
+    type: FETCH_BUSINESS_SERVICE_BY_ID,
+    payload: { businessServiceDetails },
   });
 };

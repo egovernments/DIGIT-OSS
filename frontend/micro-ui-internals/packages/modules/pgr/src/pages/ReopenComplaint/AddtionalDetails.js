@@ -2,13 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import BackButton from "../../@egovernments/components/js/BackButton";
-import Card from "../../@egovernments/components/js/Card";
-import CardHeader from "../../@egovernments/components/js/CardHeader";
-import CardText from "../../@egovernments/components/js/CardText";
-import SubmitBar from "../../@egovernments/components/js/SubmitBar";
-import TextArea from "../../@egovernments/components/js/TextArea";
-import { Storage } from "../../@egovernments/digit-utils/services/Storage";
+import { BackButton, Card, CardHeader, CardText, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { updateComplaints } from "../../redux/actions/index";
 
 const AddtionalDetails = ({ history }) => {
@@ -43,8 +37,8 @@ const AddtionalDetails = ({ history }) => {
   };
 
   function reopenComplaint() {
-    let reopenDetails = Storage.get(`reopen.${id}`);
-    let complaintDetails = Storage.get(`complaint.${id}`);
+    let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
+    let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
 
     complaintDetails.workflow = getUpdatedWorkflow(
       reopenDetails,
@@ -68,8 +62,8 @@ const AddtionalDetails = ({ history }) => {
 
   function textInput(e) {
     // setDetails(e.target.value);
-    let reopenDetails = Storage.get(`reopen.${id}`);
-    Storage.set(`reopen.${id}`, {
+    let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
+    Digit.SessionStorage.set(`reopen.${id}`, {
       ...reopenDetails,
       addtionalDetail: e.target.value,
     });

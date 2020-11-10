@@ -33,7 +33,6 @@ const RatingAndFeedBack = () => {
   };
 
   const onSubmit = () => {
-    console.log("object-------->");
     let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
     complaintDetails.service.rating = rating;
     complaintDetails.workflow = {

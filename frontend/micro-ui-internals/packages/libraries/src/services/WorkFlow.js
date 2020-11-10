@@ -1,6 +1,6 @@
 import { Storage } from "./utils/Storage";
 import Urls from "./urls";
-import { Request } from "./utils";
+import { Request } from "./Utils/Request";
 
 export const WorkflowService = {
   init: (stateCode = "pb", businessServices = "PGR") =>

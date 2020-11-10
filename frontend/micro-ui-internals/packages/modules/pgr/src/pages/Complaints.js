@@ -12,7 +12,7 @@ const ComplaintsPage = () => {
   console.log("state is:", state);
   const { t } = useTranslation();
 
-  const complaints = [];
+  const complaints = state.complaints.list;
   const getComplaints = useCallback(() => dispatch(searchComplaints()), [dispatch]);
 
   useEffect(() => {
@@ -21,6 +21,7 @@ const ComplaintsPage = () => {
 
   return (
     <React.Fragment>
+      {console.log("complaints:", complaints)}
       <BackButton>Back</BackButton>
       <Header>{t("CS_HOME_MY_COMPLAINTS")}</Header>
       {complaints &&

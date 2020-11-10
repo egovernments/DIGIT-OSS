@@ -15,6 +15,7 @@ const Complaint = (props) => {
   const handleClick = () => {
     history.push(`/complaint/details/${serviceRequestId}`);
   };
+
   return (
     <Card>
       <div onClick={handleClick}>
@@ -29,9 +30,7 @@ const Complaint = (props) => {
             <div>
               <CardCaption>{t(`SERVICEDEFS.${serviceCode.toUpperCase()}`)}</CardCaption>
             </div>
-            <div>
-              <>{Digit.DateUtils.ConvertTimestampToDate(data.auditDetails.createdTime)} </>
-            </div>
+            <div>{Digit.DateUtils.ConvertTimestampToDate(data.auditDetails.createdTime)}</div>
           </div>
           <div
             style={{

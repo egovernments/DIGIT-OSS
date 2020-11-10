@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Card from "../../@egovernments/components/js/Card";
-import SubmitBar from "../../@egovernments/components/js/SubmitBar";
 import { Link, useParams } from "react-router-dom";
+
+import { Card, SubmitBar, BackButton } from "@egovernments/digit-ui-react-components";
 import ImageUploaderHandler from "../../components/ImageUploadHandler";
-import { Storage } from "../../@egovernments/digit-utils/services/Storage";
-import BackButton from "../../@egovernments/components/js/BackButton";
+
 import { useTranslation } from "react-i18next";
 
 const UploadPhoto = () => {
@@ -27,7 +26,7 @@ const UploadPhoto = () => {
   };
 
   useEffect(() => {
-    let reopenDetails = Storage.get(`reopen.${id}`);
+    let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
     Storage.set(`reopen.${id}`, { ...reopenDetails, verificationDocuments });
   }, [verificationDocuments, id]);
 
