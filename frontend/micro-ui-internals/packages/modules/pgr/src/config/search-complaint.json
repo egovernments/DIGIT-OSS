@@ -1,0 +1,88 @@
+[
+  {
+    "id": "form",
+    "component": "form",
+    "submit": "form-submit",
+    "fields": [
+      {
+        "id": "form-section-1",
+        "component": "form-section",
+        "title": "Section 1",
+        "fields": [
+          {
+            "name": "complaint-mobile-no",
+            "id": "complaint-mobile-no",
+            "type": "text",
+            "component": "input-field",
+            "label": "ES_CREATECOMPLAINT_MOBILE_NUMBER",
+            "placeholder": "CORE_COMMON_MOBILE_NUMBER_PLACEHOLDER"
+          },
+          {
+            "name": "complaint-no",
+            "id": "complaint-no",
+            "type": "text",
+            "component": "input-field",
+            "label": "CS_COMPLAINT_SUBMITTED_COMPLAINT_NO",
+            "placeholder": "ES_MYCOMPLAINTS_COMPLAINT_NO"
+          },
+          {
+            "name": "ulb",
+            "id": "ulb",
+            "component": "input-select",
+            "placeholder": "",
+            "label": "City",
+            "mdmsdetails": {
+              "type": "citymodule",
+              "details": {
+                "tenantId": "pb",
+                "moduleDetails": [{ "moduleName": "tenant", "masterDetails": [{ "name": "citymodule" }, { "name": "tenants" }] }]
+              }
+            },
+            "options": [
+              {
+                "id": "amritsar",
+                "text": "Amritsar",
+                "value": "amritsar"
+              },
+              {
+                "id": "ludhiana",
+                "text": "Ludhiana",
+                "value": "ludhiana"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "submit",
+        "id": "submit",
+        "type": "submit",
+        "component": "button",
+        "placeholder": "",
+        "text": "ES_MYCOMPLAINTS_SEARCH_BUTTON"
+      }
+    ]
+  },
+  {
+    "resultTable": [
+      {
+        "key": "propertyId",
+        "title": "PropertyId id",
+        "style": "link",
+        "link": true
+      },
+      {
+        "key": "address.city",
+        "title": "City",
+        "translate": true,
+        "i18nPrefix": "tenant_tenants_pb_"
+      },
+      {
+        "key": "address.locality.code",
+        "title": "Locality",
+        "translate": true,
+        "i18nPrefix": "{cityCode}_revenue_"
+      }
+    ]
+  }
+]
