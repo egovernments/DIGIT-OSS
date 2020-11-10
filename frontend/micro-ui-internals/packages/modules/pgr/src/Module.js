@@ -14,9 +14,7 @@ const Module = ({ deltaConfig = {}, stateCode, cityCode, moduleCode }) => {
   }
   return (
     <Provider store={getStore(store)}>
-      <Router>
-        <Route path="/pgr/citizen" component={CitizenApp} />
-      </Router>
+      <CitizenApp />
     </Provider>
   );
 };

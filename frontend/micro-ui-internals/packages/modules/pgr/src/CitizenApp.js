@@ -1,14 +1,18 @@
 import React from "react";
 import { Route, BrowserRouter as Router } from "react-router-dom";
+import RatingAndFeedBack from "./pages/Rating/Rating";
 
 const Create = () => {
-  return <>Create Complaint</>;
+  console.log("hi");
+  return <div>Create Complaint</div>;
 };
 
 const App = () => {
+  console.log("citizen app loaded");
   return (
     <Router>
-      <Route path="/" component={Create} />
+      <Route exact path="/" component={Create} />
+      <Route exact path="/rating" component={RatingAndFeedBack} />
     </Router>
   );
 };
