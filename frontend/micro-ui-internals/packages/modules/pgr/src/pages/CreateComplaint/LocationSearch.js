@@ -1,10 +1,12 @@
 import React from "react";
-import Card from "../../@egovernments/components/js/Card";
-import CardHeader from "../../@egovernments/components/js/CardHeader";
-import CardText from "../../@egovernments/components/js/CardText";
-import LocationSearch from "../../@egovernments/components/js/LocationSearch";
-import SubmitBar from "../../@egovernments/components/js/SubmitBar";
-import LinkLabel from "../../@egovernments/components/js/LinkLabel";
+import {
+  Card,
+  CardHeader,
+  CardText,
+  LocationSearch,
+  SubmitBar,
+  LinkLabel,
+} from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 

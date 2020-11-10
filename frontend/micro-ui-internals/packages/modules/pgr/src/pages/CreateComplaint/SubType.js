@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
-import Card from "../../@egovernments/components/js/Card";
-import CardHeader from "../../@egovernments/components/js/CardHeader";
-import CardText from "../../@egovernments/components/js/CardText";
-import RadioButtons from "../../@egovernments/components/js/RadioButtons";
-import SubmitBar from "../../@egovernments/components/js/SubmitBar";
+import {
+  Card,
+  CardHeader,
+  CardText,
+  RadioButtons,
+  SubmitBar,
+  CardCaption
+} from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 // import { useSelector } from "react-redux";
-import { Storage } from "../../@egovernments/digit-utils/services/Storage";
+import { SessionStorage } from "@egovernments/digit-ui-libraries";
 import { useTranslation } from "react-i18next";
-import CardCaption from "../../@egovernments/components/js/CardCaption";
 
 const SubType = (props) => {
   const { t } = useTranslation();
-  const subType = Storage.get("complaintType");
+  const subType = SessionStorage.get("complaintType");
   const [subMenu, setSubMenu] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
-    const subMenuIds = Storage.get("serviceDefs").filter(
+    const subMenuIds = SessionStorage.get("serviceDefs").filter(
       (def) => def.menuPath === subType.key
     );
     setSubMenu(

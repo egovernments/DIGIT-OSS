@@ -2,6 +2,7 @@ import { FETCH_LOCALITIES } from "./types";
 //import { LocalizationService } from "../../@egovernments/digit-utils/services/Localization/service";
 //import { LocationService } from "../../@egovernments/digit-utils/services/Location";
 //import { LocalityService } from "../../@egovernments/digit-utils/services/Localities";
+import createComplaint from "./complaint";
 
 export const fetchLocalities = (city) => async (dispatch, getState) => {
   city = city.toLowerCase();
@@ -31,3 +32,5 @@ export const updateLocalizationResources = () => async (dispatch, getState) => {
   await Digit.LocalizationService.getLocale({ modules: [`rainmaker-pb.${city}`], locale: lng, tenantId: `pb.${city}` });
   await Digit.LocalizationService.getLocale({ modules: ["rainmaker-common", "rainmaker-pgr"], locale: lng, tenantId: "pb" });
 };
+
+export { createComplaint };

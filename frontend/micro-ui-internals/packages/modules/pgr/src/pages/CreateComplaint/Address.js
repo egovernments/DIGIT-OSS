@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Card from "../../@egovernments/components/js/Card";
-import CardHeader from "../../@egovernments/components/js/CardHeader";
-import CardSubHeader from "../../@egovernments/components/js/CardSubHeader";
-import CardText from "../../@egovernments/components/js/CardText";
-import CardLabel from "../../@egovernments/components/js/CardLabel";
-import Dropdown from "../../@egovernments/components/js/Dropdown";
-import SubmitBar from "../../@egovernments/components/js/SubmitBar";
-// import RadioButtons from "../../@egovernments/components/js/RadioButtons";
+import {
+  Card,
+  CardHeader,
+  CardSubHeader,
+  CardText,
+  CardLabel,
+  Dropdown,
+  SubmitBar,
+  // RadioButtons,
+} from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchLocalities } from "../../redux/actions";
+// import { fetchLocalities } from "../../redux/actions";
 import { useTranslation } from "react-i18next";
 
 const Address = (props) => {
@@ -35,7 +37,7 @@ const Address = (props) => {
   }, [localities, cities]);
 
   async function selectCity(city) {
-    await dispatch(fetchLocalities(city));
+    // await dispatch(fetchLocalities(city));
   }
   function selectLocalities(locality) {
     let localityDetails = appState.localities.localityList.find(

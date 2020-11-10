@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import Card from "../../@egovernments/components/js/Card";
-import CardHeader from "../../@egovernments/components/js/CardHeader";
-import CardSubHeader from "../../@egovernments/components/js/CardSubHeader";
-import CardText from "../../@egovernments/components/js/CardText";
-import CardLabel from "../../@egovernments/components/js/CardLabel";
-import Textinput from "../../@egovernments/components/js/Textinput";
-import SubmitBar from "../../@egovernments/components/js/SubmitBar";
-import LinkLabel from "../../@egovernments/components/js/LinkLabel";
+import {
+  Card,
+  CardHeader,
+  CardSubHeader,
+  CardText,
+  CardLabel,
+  Textinput,
+  SubmitBar,
+  LinkLabel,
+} from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 

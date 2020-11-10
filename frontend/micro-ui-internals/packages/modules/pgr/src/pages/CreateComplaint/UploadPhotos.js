@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Card from "../../@egovernments/components/js/Card";
-import CardHeader from "../../@egovernments/components/js/CardHeader";
-import CardText from "../../@egovernments/components/js/CardText";
-import SubmitBar from "../../@egovernments/components/js/SubmitBar";
-import UploadImages from "../../@egovernments/components/js/UploadImages";
-import LinkLabel from "../../@egovernments/components/js/LinkLabel";
-import { Link } from "react-router-dom";
 import {
-  Filestorage,
-  Filefetch,
-} from "../../@egovernments/digit-utils/services/Filestorage";
+  Card,
+  CardHeader,
+  CardText,
+  SubmitBar,
+  UploadImages,
+  LinkLabel,
+} from "@egovernments/digit-ui-react-components";
+import { Link } from "react-router-dom";
+// import {
+//   Filestorage,
+//   Filefetch,
+// } from "@egovernments/digit-utils/services/Filestorage";
 import { useTranslation } from "react-i18next";
 
 const UploadPhotos = (props) => {
@@ -68,18 +70,18 @@ const UploadPhotos = (props) => {
   }
 
   async function uploadImage() {
-    const response = await Filestorage(image);
+    // const response = await Filestorage(image);
     setUploadedImagesIds(addUploadedImageIds(response));
   }
 
   async function submit() {
-    if (uploadedImagesIds !== null) {
-      const res = await Filefetch(
-        [uploadedImagesIds[uploadedImagesIds.length - 1]],
-        "pb.amritsar"
-      );
-      addImageThumbnails(res);
-    }
+    // if (uploadedImagesIds !== null) {
+    //   const res = await Filefetch(
+    //     [uploadedImagesIds[uploadedImagesIds.length - 1]],
+    //     "pb.amritsar"
+    //   );
+    //   addImageThumbnails(res);
+    // }
   }
 
   function deleteImage(img) {

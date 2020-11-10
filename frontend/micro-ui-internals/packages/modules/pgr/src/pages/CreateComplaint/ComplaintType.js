@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import Card from "../../@egovernments/components/js/Card";
-import CardHeader from "../../@egovernments/components/js/CardHeader";
-import CardText from "../../@egovernments/components/js/CardText";
-import RadioButtons from "../../@egovernments/components/js/RadioButtons";
-import SubmitBar from "../../@egovernments/components/js/SubmitBar";
-import { MdmsService } from "../../@egovernments/digit-utils/services/MDMS";
-import { Storage } from "../../@egovernments/digit-utils/services/Storage";
+import {
+  Card,
+  CardHeader,
+  CardText,
+  RadioButtons,
+  SubmitBar,
+} from "@egovernments/digit-ui-react-components";
+import { MDMSService } from "@egovernments/digit-ui-libraries";
+import { SessionStorage } from "@egovernments/digit-ui-libraries";
 import { useTranslation } from "react-i18next";
 
 const CreateComplaint = (props) => {
@@ -39,8 +41,8 @@ const CreateComplaint = (props) => {
         },
       };
 
-      const serviceDefs = await MdmsService.getDataByCriteria(criteria);
-      Storage.set("serviceDefs", serviceDefs);
+      const serviceDefs = await MDMSService.getDataByCriteria(criteria);
+      SessionStorage.set("serviceDefs", serviceDefs);
       var __localMenu__ = [];
       await Promise.all(
         serviceDefs.map((def) => {
@@ -63,7 +65,7 @@ const CreateComplaint = (props) => {
 
   function selected(type) {
     setSelectedOption(type);
-    Storage.set("complaintType", type);
+    SessionStorage.set("complaintType", type);
   }
 
   function onSave() {
