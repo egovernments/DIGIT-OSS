@@ -112,7 +112,7 @@ const CreateComplaint = ({ match, history }) => {
     },
   };
 
-  //const [createComplaintParams, setComplaintParams] = useState(complaintParams);
+  // const [createComplaintParams, setComplaintParams] = useState(complaintParams);
 
   useEffect(() => {
     if (appState.complaints && appState.complaints.responseInfo) {
@@ -120,13 +120,13 @@ const CreateComplaint = ({ match, history }) => {
     }
   }, [appState.complaints]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (details) {
-  //       await dispatch(createComplaint(complaintParams));
-  //     }
-  //   })();
-  // }, [details]);
+  useEffect(() => {
+    (async () => {
+      if (details) {
+        await dispatch(createComplaint(complaintParams));
+      }
+    })();
+  }, [details]);
 
   const savePincode = (val) => {
     setPincode(val);

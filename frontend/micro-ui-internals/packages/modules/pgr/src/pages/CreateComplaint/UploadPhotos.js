@@ -32,6 +32,7 @@ const UploadPhotos = (props) => {
   useEffect(() => {
     (async () => {
       if (uploadedImagesIds !== null) {
+        console.log("uploadedImageids", uploadedImagesIds)
         await submit();
         setRerender(rerender + 1);
       }
@@ -42,6 +43,7 @@ const UploadPhotos = (props) => {
     if (uploadedImagesIds === null) {
       var arr = [];
     } else {
+      console.log("uploaded image ids")
       arr = uploadedImagesIds;
     }
     return [...arr, imageIdData.data.files[0].fileStoreId];
@@ -67,6 +69,7 @@ const UploadPhotos = (props) => {
     if (e.target.files[0] && e.target.files[0].size > 2097152) {
       alert("File is too big!");
     } else {
+      console.log("got image")
       setImage(e.target.files[0]);
     }
   }
@@ -141,6 +144,7 @@ const UploadPhotos = (props) => {
           </div>
         </Link>
       ) : null}
+      <h2 onClick={()=>console.log("state",uploadedImagesThumbs, uploadedImagesIds )}>state console</h2>
     </Card>
   );
 };
