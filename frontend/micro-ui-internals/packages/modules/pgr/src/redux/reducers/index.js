@@ -2,9 +2,7 @@ import { combineReducers } from "redux";
 import { Enums } from "@egovernments/digit-ui-libraries";
 //import ConfigActionTypes from "../../@egovernments/digit-utils/enums/ConfigActionTypes";
 import { FETCH_LOCALITIES, CHANGE_LANGUAGE, FETCH_ALL_BUSINESSS_SERVICES, FETCH_BUSINESS_SERVICE_BY_ID } from "../actions/types";
-
 import complaintReducer from "./complaintReducer";
-
 // const { ConfigActionTypes } = Digit.Enums.ConfigActionTypes;
 const { ConfigActionTypes } = Enums;
 
