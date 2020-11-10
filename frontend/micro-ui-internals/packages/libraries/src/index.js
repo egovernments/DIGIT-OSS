@@ -7,6 +7,7 @@ import { LocationService } from "./services/Location";
 import { LocalityService } from "./services/Localities";
 import { LocalizationService } from "./services/Localization/service";
 import { PGRService } from "./services/PGR";
+import * as dateUtils from "./services/Utils/Date";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -24,6 +25,7 @@ const initLibraries = () => {
   setupLibraries("LocalityService", LocalityService);
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
+  setupLibraries("DateUtils", dateUtils);
   initI18n();
 };
 

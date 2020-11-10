@@ -1,4 +1,4 @@
-import { FETCH_LOCALITIES } from "./types";
+import { FETCH_COMPLAINTS, FETCH_LOCALITIES } from "./types";
 //import { LocalizationService } from "../../@egovernments/digit-utils/services/Localization/service";
 //import { LocationService } from "../../@egovernments/digit-utils/services/Location";
 //import { LocalityService } from "../../@egovernments/digit-utils/services/Localities";
@@ -16,7 +16,7 @@ export const fetchLocalities = (city) => async (dispatch, getState) => {
 
 export const updateComplaints = (data) => async (dispatch, getState) => {
   const { cityCode } = getState();
-  let ServiceWrappers = await PGRService.update(data, cityCode);
+  let ServiceWrappers = await Digit.PGRService.update(data, cityCode);
 
   dispatch({
     type: UPDATE_COMPLAINT,
@@ -30,4 +30,16 @@ export const updateLocalizationResources = () => async (dispatch, getState) => {
   const lng = getState().currentLanguage.language || "en";
   await Digit.LocalizationService.getLocale({ modules: [`rainmaker-pb.${city}`], locale: lng, tenantId: `pb.${city}` });
   await Digit.LocalizationService.getLocale({ modules: ["rainmaker-common", "rainmaker-pgr"], locale: lng, tenantId: "pb" });
+};
+
+export const searchComplaints = (filters = {}) => async (dispatch, getState) => {
+  debugger;
+  let city = "amritsar";
+  const { stateInfo } = getState();
+  let { ServiceWrappers } = await Digit.PGRService.search(`${stateInfo.code}.${city}`, filters);
+  console.log("ServiceWrappers::::", ServiceWrappers);
+  dispatch({
+    type: FETCH_COMPLAINTS,
+    payload: { complaints: ServiceWrappers },
+  });
 };
