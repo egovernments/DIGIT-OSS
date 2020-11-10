@@ -542,7 +542,7 @@ class PTAcknowledgement extends React.Component {
                           onClick={Button3.buttonClick}
                           label={<Label buttonLabel={true} label={Button3.name} fontSize="16px" />}
                           primary={true}
-                          style={{ lineHeight: "auto", minWidth: "inherit", width: "200px", backgroundColor: "white" }}
+                          style={{ marginLeft :"20px",lineHeight: "auto", minWidth: "inherit", width: "200px", backgroundColor: "white" }}
                         />
                       )}
                     </div>
