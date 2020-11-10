@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CameraSvg } from "./svgindex";
 import { DeleteBtn } from "./svgindex";
 
@@ -13,10 +13,15 @@ const MiniUpload = (props) => {
 };
 
 const UploadImages = (props) => {
-  if (props.thumbnails && props.thumbnails.length > 0) {
+  const [thumbnails, setThumbnails] = useState(props.thumbnails ? props.thumbnails : null);
+  useEffect(() => {
+    setThumbnails(props.thumbnails);
+  }, [props.thumbnails]);
+
+  if (thumbnails && thumbnails.length > 0) {
     return (
       <div className="multi-upload-wrap">
-        {props.thumbnails.map((thumbnail, index) => {
+        {thumbnails.map((thumbnail, index) => {
           return (
             <div key={index}>
               {/* <img src={deleteBtn} onClick={props.onDelete} className="delete" alt="delete"/> */}
@@ -25,7 +30,7 @@ const UploadImages = (props) => {
             </div>
           );
         })}
-        {props.thumbnails.length < 3 ? <MiniUpload /> : null}
+        {thumbnails.length < 3 ? <MiniUpload /> : null}
       </div>
     );
   } else {

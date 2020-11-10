@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const UploadPhotos = (props) => {
+  // const Filestorage = Digit.UploadServices.Filestorage;
+  // const Filefetch = Digit.UploadPhotos.Filefetch;
   const { t } = useTranslation();
   const [image, setImage] = useState(null);
   const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(null);
@@ -52,7 +54,7 @@ const UploadPhotos = (props) => {
   }
 
   function getImage(e) {
-    if (e.target.files[0].size > 2097152) {
+    if (e.target.files[0] && e.target.files[0].size > 2097152) {
       alert("File is too big!");
     } else {
       setImage(e.target.files[0]);
@@ -60,18 +62,15 @@ const UploadPhotos = (props) => {
   }
 
   async function uploadImage() {
-    // const response = await Filestorage(image);
+    const response = await Digit.UploadServices.Filestorage(image);
     setUploadedImagesIds(addUploadedImageIds(response));
   }
 
   async function submit() {
-    // if (uploadedImagesIds !== null) {
-    //   const res = await Filefetch(
-    //     [uploadedImagesIds[uploadedImagesIds.length - 1]],
-    //     "pb.amritsar"
-    //   );
-    //   addImageThumbnails(res);
-    // }
+    if (uploadedImagesIds !== null) {
+      const res = await Digit.UploadServices.Filefetch([uploadedImagesIds[uploadedImagesIds.length - 1]], "pb.amritsar");
+      addImageThumbnails(res);
+    }
   }
 
   function deleteImage(img) {

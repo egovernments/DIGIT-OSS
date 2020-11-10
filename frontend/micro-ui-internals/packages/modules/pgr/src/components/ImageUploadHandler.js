@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CardHeader, CardText, UploadImages } from "@egovernments/digit-ui-react-components";
-import { Filestorage, Filefetch } from "../@egovernments/digit-utils/services/Filestorage";
+// import { Filestorage, Filefetch } from "../@egovernments/digit-utils/services/Filestorage";
 
 const ImageUploaderHandler = (props) => {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ const ImageUploaderHandler = (props) => {
   );
 
   const uploadImage = useCallback(async () => {
-    const response = await Filestorage(image);
+    const response = await Digit.UploadServices.Filestorage(image);
     setUploadedImagesIds(addUploadedImageIds(response));
   }, [addUploadedImageIds, image]);
 
@@ -45,7 +45,7 @@ const ImageUploaderHandler = (props) => {
 
   const submit = useCallback(async () => {
     if (uploadedImagesIds !== null) {
-      const res = await Filefetch([uploadedImagesIds[uploadedImagesIds.length - 1]], "pb.amritsar");
+      const res = await Digit.UploadServices.Filefetch([uploadedImagesIds[uploadedImagesIds.length - 1]], "pb.amritsar");
       addImageThumbnails(res);
     }
   }, [addImageThumbnails, uploadedImagesIds]);
@@ -94,7 +94,7 @@ const ImageUploaderHandler = (props) => {
 
   return (
     // <Card>
-    <>
+    <React.Fragment>
       <CardHeader>{props.header}</CardHeader>
 
       <CardText>
@@ -113,7 +113,7 @@ const ImageUploaderHandler = (props) => {
       >
         <SubmitBar label="Next" />
       </Link> */}
-    </>
+    </React.Fragment>
   );
 };
 

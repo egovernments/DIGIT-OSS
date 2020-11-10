@@ -70,7 +70,7 @@ const AddtionalDetails = ({ history }) => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <BackButton>Back</BackButton>
       <Card>
         <CardHeader>{t("CS_ADDCOMPLAINT_PROVIDE_ADDITIONAL_DETAILS")}</CardHeader>
@@ -80,7 +80,7 @@ const AddtionalDetails = ({ history }) => {
           <SubmitBar label={`${t("CS_HEADER_REOPEN_COMPLAINT")}`} />
         </div>
       </Card>
-    </>
+    </React.Fragment>
   );
 };
 

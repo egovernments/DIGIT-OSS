@@ -27,11 +27,11 @@ const UploadPhoto = () => {
 
   useEffect(() => {
     let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
-    Storage.set(`reopen.${id}`, { ...reopenDetails, verificationDocuments });
+    Digit.SessionStorage.set(`reopen.${id}`, { ...reopenDetails, verificationDocuments });
   }, [verificationDocuments, id]);
 
   return (
-    <>
+    <React.Fragment>
       <BackButton>Back</BackButton>
       <Card>
         <ImageUploaderHandler header={t("CS_ADDCOMPLAINT_UPLOAD_PHOTO")} cardText="" onPhotoChange={handleUpload} />
@@ -40,7 +40,7 @@ const UploadPhoto = () => {
           <SubmitBar label="Next" />
         </Link>
       </Card>
-    </>
+    </React.Fragment>
   );
 };
 

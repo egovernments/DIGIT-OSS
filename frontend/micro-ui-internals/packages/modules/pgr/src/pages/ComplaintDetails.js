@@ -41,7 +41,6 @@ const ComplaintDetailsPage = () => {
   }, [getComplaint, getBusinessServiceById, id]);
 
   const state = useSelector((state) => state);
-  console.log("state::::", state);
   const selectedComplaint = selectComplaints(state);
 
   const selectedWorkFlow = selectWorkflow(state);
@@ -102,7 +101,6 @@ const ComplaintDetailsPage = () => {
                 <CardSubHeader>{t(`${LOCALIZATION_KEY_CS_COMPLAINT}_COMPLAINT_TIMELINE`)}</CardSubHeader>
                 {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
                 <ConnectingCheckPoints>
-                  {console.log("complaintHistory:", complaintHistory)}
                   {complaintHistory.map((history, index) => {
                     return (
                       <React.Fragment key={index}>

@@ -68,7 +68,6 @@ const useComplaintHistory = (processInstance) => {
 
   useEffect(() => {
     const history = getHistory(processInstance);
-    console.log("history--->", history);
     setComplaintHistory(history);
   }, [processInstance, getHistory]);
 

@@ -14,9 +14,7 @@ const DynamicConfig = (props) => {
 
   function onSubmit() {}
 
-  function onChange() {
-    console.log("clicked");
-  }
+  function onChange() {}
 
   const configParams = {
     config: configState[Pages.TEST],

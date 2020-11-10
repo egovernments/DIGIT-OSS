@@ -9,7 +9,6 @@ import { BackButton, Header } from "@egovernments/digit-ui-react-components";
 const ComplaintsPage = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  console.log("state is:", state);
   const { t } = useTranslation();
 
   const complaints = state.complaints.list;
@@ -21,7 +20,6 @@ const ComplaintsPage = () => {
 
   return (
     <React.Fragment>
-      {console.log("complaints:", complaints)}
       <BackButton>Back</BackButton>
       <Header>{t("CS_HOME_MY_COMPLAINTS")}</Header>
       {complaints &&
