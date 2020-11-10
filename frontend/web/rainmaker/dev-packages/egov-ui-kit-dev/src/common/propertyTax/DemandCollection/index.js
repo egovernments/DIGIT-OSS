@@ -107,6 +107,15 @@ class DemandCollection extends React.Component {
                                    alert( "Integer numbers are only allowed.");
                                    return value = "" ;
                                   }
+
+                                  if(taxData.code === 'SWATCHATHA_TAX' ||taxData.code === 'PT_TIME_INTEREST' )
+                                  {
+                                      if (Math.sign(e.target.value)===-1) 
+                                      {  
+                                      alert( "Negitive numbers are not allowed.");
+                                      return value = "" ;
+                                      }
+                                  }
                                   value = e.target.value;                                
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code)
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`, taxData.isDebit?(Math.sign(value)===-1?value:-value):value)
