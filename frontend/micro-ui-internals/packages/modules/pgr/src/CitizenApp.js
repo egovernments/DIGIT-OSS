@@ -1,14 +1,11 @@
 import React from "react";
+import { CreateComplaint } from "./pages/CreateComplaint/index";
 import { Route, BrowserRouter as Router } from "react-router-dom";
-
-const Create = () => {
-  return <>Create Complaint</>;
-};
 
 const App = () => {
   return (
     <Router>
-      <Route path="/" component={Create} />
+      <Route path="/" component={CreateComplaint} />
     </Router>
   );
 };

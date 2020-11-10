@@ -12,7 +12,7 @@ export const useStore = (defaultConfig, { deltaConfig, stateCode, cityCode, modu
       console.log("store:", store);
       setDefaultStore(store);
     });
-  }, [defaultConfig, deltaConfig, stateCode, cityCode, moduleCode]);
+  }, [defaultConfig, stateCode, cityCode, moduleCode]);
 
   return defaultStore;
 };
