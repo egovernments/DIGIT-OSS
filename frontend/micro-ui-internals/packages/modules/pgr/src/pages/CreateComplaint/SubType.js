@@ -7,16 +7,13 @@ import { useTranslation } from "react-i18next";
 
 const SubType = (props) => {
   const { t } = useTranslation();
-  console.log("subytype");
   const SessionStorage = Digit.SessionStorage;
   const subType = SessionStorage.get("complaintType");
-  console.log("subtype", subType);
   const [subMenu, setSubMenu] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
     const subMenuIds = SessionStorage.get("serviceDefs").filter((def) => def.menuPath === subType.key);
-    console.log(subMenuIds);
     setSubMenu(
       subMenuIds.map((id) => ({
         key: id.serviceCode,

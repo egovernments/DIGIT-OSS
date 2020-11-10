@@ -9,7 +9,6 @@ import { updateComplaints } from "../../redux/actions/index";
 import { useTranslation } from "react-i18next";
 
 const RatingAndFeedBack = () => {
-  console.log("Digit.SessionStorage:", Digit.SessionStorage);
   const { id } = useParams();
   const { handleSubmit } = useForm();
   const { t } = useTranslation();
