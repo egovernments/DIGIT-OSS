@@ -8,6 +8,7 @@ import { LocalityService } from "./services/Localities";
 import { LocalizationService } from "./services/Localization/service";
 import { PGRService } from "./services/PGR";
 import { MdmsService } from "./services/MDMS";
+import { UploadServices } from "./services/UploadServices"
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -26,6 +27,7 @@ const initLibraries = () => {
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
   setupLibraries("MDMSService", MdmsService);
+  setupLibraries("UploadServices",UploadServices);
   initI18n();
 };
 

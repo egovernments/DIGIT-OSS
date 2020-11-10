@@ -9,12 +9,15 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 // import { useSelector } from "react-redux";
-import { SessionStorage } from "@egovernments/digit-ui-libraries";
+// import { SessionStorage } from "@egovernments/digit-ui-libraries";
 import { useTranslation } from "react-i18next";
 
 const SubType = (props) => {
   const { t } = useTranslation();
+  console.log("subytype");
+  const SessionStorage = Digit.SessionStorage;
   const subType = SessionStorage.get("complaintType");
+  console.log("subtype",subType)
   const [subMenu, setSubMenu] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -22,10 +25,11 @@ const SubType = (props) => {
     const subMenuIds = SessionStorage.get("serviceDefs").filter(
       (def) => def.menuPath === subType.key
     );
+    console.log(subMenuIds);
     setSubMenu(
       subMenuIds.map((id) => ({
         key: id.serviceCode,
-        name: t(id.i18nKey),
+        name: t("SERVICEDEFS."+id.serviceCode.toUpperCase()),
       }))
     );
   }, []);

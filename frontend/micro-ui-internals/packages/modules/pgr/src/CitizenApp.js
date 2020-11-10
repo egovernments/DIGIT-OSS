@@ -6,7 +6,7 @@ import RatingAndFeedBack from "./pages/Rating/Rating";
 const App = () => {
   return (
     <Router>
-      <Route path="/" component={CreateComplaint} />
+      <Route path="/create-complaint" component={CreateComplaint} />
       <Route exact path="/rating" component={RatingAndFeedBack} />
     </Router>
   );

@@ -11,18 +11,26 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-// import { fetchLocalities } from "../../redux/actions";
+import { fetchLocalities } from "../../redux/actions";
 import { useTranslation } from "react-i18next";
 
 const Address = (props) => {
+  const SessionStorage = Digit.SessionStorage;
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
+  const [rerender, setRerender] = useState(1);
   const appState = useSelector((state) => state);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const cities = [];
   var localities = [];
+
+  useEffect(()=>{
+    if(SessionStorage.get("city_complaint")){
+      setSelectedCity(SessionStorage.get("city_complaint"));
+    }
+  },[])
 
   useEffect(() => {
     appState.cities.map((city) => cities.push(city.name));
@@ -31,13 +39,16 @@ const Address = (props) => {
         localities.push(locality.name)
       );
     }
-    if (appState.localities.city) {
-      setSelectedCity(appState.localities.city);
-    }
+    // if (appState.localities.city) {
+    //   setSelectedCity(appState.localities.city);
+    // }
   }, [localities, cities]);
 
   async function selectCity(city) {
-    // await dispatch(fetchLocalities(city));
+    setSelectedCity(city)
+    const SessionStorage = Digit.SessionStorage;
+    SessionStorage.set("city_complaint",city);
+    await dispatch(fetchLocalities(city));
   }
   function selectLocalities(locality) {
     let localityDetails = appState.localities.localityList.find(
@@ -60,9 +71,9 @@ const Address = (props) => {
       <CardLabel>{t("MYCITY_CODE_LABEL")} *</CardLabel>
       <Dropdown
         isMandatory
+        selected={selectedCity}
         option={cities}
         select={selectCity}
-        set={appState.localities.city}
       />
       <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")} *</CardLabel>
       {/* <RadioButtons options={["Ajit Nagar", "Patel Nagar"]}/> */}
@@ -70,6 +81,7 @@ const Address = (props) => {
       <Link to="/create-complaint/landmark" onClick={save}>
         <SubmitBar label={t("PT_COMMONS_NEXT")} />
       </Link>
+      {/* <p onClick={() =>console.log(selectedCity, selectedLocality)}>state display</p> */}
     </Card>
   );
 };

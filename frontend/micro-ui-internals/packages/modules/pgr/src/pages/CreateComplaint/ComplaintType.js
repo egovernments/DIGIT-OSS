@@ -9,11 +9,13 @@ import {
   RadioButtons,
   SubmitBar,
 } from "@egovernments/digit-ui-react-components";
-import { MDMSService } from "@egovernments/digit-ui-libraries";
-import { SessionStorage } from "@egovernments/digit-ui-libraries";
+// import { MDMSService } from "@egovernments/digit-ui-libraries";
+// import { SessionStorage } from "@egovernments/digit-ui-libraries";
 import { useTranslation } from "react-i18next";
 
 const CreateComplaint = (props) => {
+  const SessionStorage = Digit.SessionStorage;
+  const MDMSService = Digit.MDMSService;
   const appState = useSelector((state) => state);
   const history = useHistory();
   const { register, handleSubmit } = useForm();
@@ -41,8 +43,9 @@ const CreateComplaint = (props) => {
         },
       };
 
-      const serviceDefs = await MDMSService.getDataByCriteria(criteria);
+      const serviceDefs = (await MDMSService.getDataByCriteria(criteria))["RAINMAKER-PGR"].ServiceDefs;
       SessionStorage.set("serviceDefs", serviceDefs);
+      console.log("servicedefs",serviceDefs )
       var __localMenu__ = [];
       await Promise.all(
         serviceDefs.map((def) => {
@@ -61,7 +64,7 @@ const CreateComplaint = (props) => {
       );
       setLocalMenu(__localMenu__);
     })();
-  }, [appState, t]);
+  }, [appState]);
 
   function selected(type) {
     setSelectedOption(type);

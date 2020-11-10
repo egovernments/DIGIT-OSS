@@ -5,7 +5,7 @@ import {
   CardSubHeader,
   CardText,
   CardLabel,
-  Textinput,
+  TextInput,
   SubmitBar,
   LinkLabel,
 } from "@egovernments/digit-ui-react-components";
@@ -30,7 +30,7 @@ const Pincode = (props) => {
         {t("CS_ADDCOMPLAINT_CHANGE_PINCODE_TEXT")}
       </CardText>
       <CardLabel>{t("CORE_COMMON_PINCODE")}</CardLabel>
-      <Textinput onChange={textInput} />
+      <TextInput onChange={textInput} />
       <Link
         to="/create-complaint/address"
         onClick={() => {
