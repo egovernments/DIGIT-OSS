@@ -1,7 +1,12 @@
 import mergeConfig from "./config/mergeConfig";
 import { useStore } from "./services/index";
 import { initI18n } from "./translations/index";
+import { Storage } from "./services/utils/Storage";
 import Enums from "./enums/index";
+import { LocationService } from "./services/Location";
+import { LocalityService } from "./services/Localities";
+import { LocalizationService } from "./services/Localization/service";
+import { PGRService } from "./services/PGR";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -14,6 +19,11 @@ const initLibraries = () => {
   setupLibraries("Services", { useStore });
   setupLibraries("Translation", { initI18n });
   setupLibraries("Enums", Enums);
+  setupLibraries("SessionStorage", Storage);
+  setupLibraries("LocationService", LocationService);
+  setupLibraries("LocalityService", LocalityService);
+  setupLibraries("LocalizationService", LocalizationService);
+  setupLibraries("PGRService", PGRService);
   initI18n();
 };
 
