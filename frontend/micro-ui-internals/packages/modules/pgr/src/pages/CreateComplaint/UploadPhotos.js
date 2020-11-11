@@ -5,7 +5,7 @@ import {
   CardText,
   SubmitBar,
   UploadImages,
-  LinkLabel,
+  LinkButton,
 } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 // import {
@@ -139,12 +139,9 @@ const UploadPhotos = (props) => {
       </Link>
       {props.skip ? (
         <Link to="/create-complaint/details">
-          <div className="skipButton">
-            <LinkLabel>{t("CORE_COMMON_SKIP_CONTINUE")}</LinkLabel>
-          </div>
+            <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")}/>
         </Link>
       ) : null}
-      <h2 onClick={()=>console.log("state",uploadedImagesThumbs, uploadedImagesIds )}>state console</h2>
     </Card>
   );
 };

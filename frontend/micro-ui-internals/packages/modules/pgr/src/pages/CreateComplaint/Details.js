@@ -5,7 +5,7 @@ import {
   CardText,
   TextArea,
   SubmitBar,
-  LinkLabel
+  LinkButton
 } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -39,9 +39,7 @@ const Details = (props) => {
       </Link>
       {props.skip ? (
         <Link to="/create-complaint/submission">
-          <div className="skipButton">
-            <LinkLabel> {t("CORE_COMMON_SKIP_CONTINUE")}</LinkLabel>
-          </div>
+            <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")}/>
         </Link>
       ) : null}
     </Card>

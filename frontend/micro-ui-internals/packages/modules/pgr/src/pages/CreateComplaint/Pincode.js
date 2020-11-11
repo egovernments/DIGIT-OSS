@@ -7,7 +7,7 @@ import {
   CardLabel,
   TextInput,
   SubmitBar,
-  LinkLabel,
+  LinkButton,
 } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -41,9 +41,7 @@ const Pincode = (props) => {
       </Link>
       {props.skip ? (
         <Link to="/create-complaint/address">
-          <div className="skipButton">
-            <LinkLabel>{t("CORE_COMMON_SKIP_CONTINUE")}</LinkLabel>
-          </div>
+            <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")}/>
         </Link>
       ) : null}
     </Card>
