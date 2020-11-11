@@ -2,11 +2,6 @@ import Axios from "axios";
 //import { connectAdvanced } from "react-redux";
 import { Storage } from "./Storage";
 
-const citAuth = "c54c09cd-56c5-4193-a59d-76c3867500c8";
-
-Storage.set("citizen.token", citAuth);
-window.sessionStorage.setItem("citizen.token", citAuth);
-
 Axios.interceptors.request.use((req) => {
   document.body.classList.add("loader");
   return req;
