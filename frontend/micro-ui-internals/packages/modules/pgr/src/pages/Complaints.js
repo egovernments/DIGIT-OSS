@@ -20,7 +20,6 @@ const ComplaintsPage = () => {
 
   return (
     <React.Fragment>
-      <BackButton>Back</BackButton>
       <Header>{t("CS_HOME_MY_COMPLAINTS")}</Header>
       {complaints &&
         complaints.length > 0 &&

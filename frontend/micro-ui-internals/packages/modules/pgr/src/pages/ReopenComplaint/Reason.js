@@ -18,7 +18,7 @@ const ReasonPage = () => {
 
   return (
     <React.Fragment>
-      <BackButton>Back</BackButton>
+      {/* <BackButton>Back</BackButton> */}
       <Card>
         <CardHeader>{t(`CS_HEADER_REOPEN_COMPLAINT`)}</CardHeader>
         {/* <LanguageSelect /> */}

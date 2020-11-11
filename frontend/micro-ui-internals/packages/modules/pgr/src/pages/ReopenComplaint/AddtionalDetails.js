@@ -71,7 +71,6 @@ const AddtionalDetails = ({ history }) => {
 
   return (
     <React.Fragment>
-      <BackButton>Back</BackButton>
       <Card>
         <CardHeader>{t("CS_ADDCOMPLAINT_PROVIDE_ADDITIONAL_DETAILS")}</CardHeader>
         <CardText>{t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_TEXT")}</CardText>

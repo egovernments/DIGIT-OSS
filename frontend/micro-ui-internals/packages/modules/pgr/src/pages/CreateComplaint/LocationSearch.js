@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardHeader, CardText, LocationSearch, SubmitBar, LinkLabel } from "@egovernments/digit-ui-react-components";
+import { Card, CardHeader, CardText, LocationSearch, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -18,14 +18,7 @@ const CreateComplaint = (props) => {
 
       <Link to="/create-complaint/pincode">
         <SubmitBar label={t("PT_COMMONS_NEXT")} />
-        {props.skip ? (
-          <div className="skipButton">
-            <LinkLabel style={{ textAlign: "center" }}>
-              {/* Skip and Continue */}
-              {t("CORE_COMMON_SKIP_CONTINUE")}
-            </LinkLabel>
-          </div>
-        ) : null}
+        {props.skip ? <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")} /> : null}
       </Link>
     </Card>
   );

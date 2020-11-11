@@ -32,7 +32,6 @@ const UploadPhoto = () => {
 
   return (
     <React.Fragment>
-      <BackButton>Back</BackButton>
       <Card>
         <ImageUploaderHandler header={t("CS_ADDCOMPLAINT_UPLOAD_PHOTO")} cardText="" onPhotoChange={handleUpload} />
 

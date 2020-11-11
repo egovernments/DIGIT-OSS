@@ -86,7 +86,7 @@ const ComplaintDetailsPage = () => {
 
   return (
     <React.Fragment>
-      <BackButton>Back</BackButton>
+      {/* <BackButton>Back</BackButton> */}
       <Header>{t("CS_HEADER_COMPLAINT_SUMMARY")}</Header>
 
       {Object.keys(complaintDetails).length > 0 && (

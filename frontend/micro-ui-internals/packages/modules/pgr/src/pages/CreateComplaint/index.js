@@ -155,7 +155,7 @@ const CreateComplaint = ({ match, history }) => {
   return (
     // <div><h2>create complaints</h2> <BackButton>Backs</BackButton></div>
     <React.Fragment>
-      {!details && <BackButton onClick={() => history.goBack()} />}
+      {/* {!details && <BackButton onClick={() => history.goBack()} />} */}
       {/* <Route
         path={match.url + "/onboarding"}
         component={(props) => <UserOnboarding />}

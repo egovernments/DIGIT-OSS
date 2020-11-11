@@ -8,7 +8,6 @@ initLibraries();
 
 ReactDOM.render(
   <>
-    {/* <p>Topbar</p> */}
     <PGRApp stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
   </>,
   document.getElementById("root")

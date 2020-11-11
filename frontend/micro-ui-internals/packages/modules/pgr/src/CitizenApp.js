@@ -8,7 +8,7 @@ import AddtionalDetails from "./pages/ReopenComplaint/AddtionalDetails";
 import ReasonPage from "./pages/ReopenComplaint/Reason";
 import UploadPhoto from "./pages/ReopenComplaint/UploadPhoto";
 import Response from "./pages/Response";
-import { AppContainer, Body, TopBar } from "@egovernments/digit-ui-react-components";
+import { AppContainer, Body, TopBar, BackButton } from "@egovernments/digit-ui-react-components";
 
 const App = () => {
   return (
@@ -17,6 +17,7 @@ const App = () => {
         <TopBar />
         <AppContainer>
           {/* <Route exact path="/" component={Create} /> */}
+          <BackButton>Back</BackButton>
           <Route path="/" component={CreateComplaint} />
           <Route path="/complaints" component={ComplaintsPage} />
           <Route exact path="/rate/:id" component={RatingAndFeedBack} />
