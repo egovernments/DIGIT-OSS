@@ -21,7 +21,7 @@ const CreateComplaint = (props) => {
   useEffect(() => {
     (async () => {
       const criteria = {
-        type: "serviceDef",
+        type: "serviceDefs",
         details: {
           tenantId: appState.stateInfo.code,
           moduleDetails: [
@@ -37,7 +37,7 @@ const CreateComplaint = (props) => {
         },
       };
 
-      const serviceDefs = (await MDMSService.getDataByCriteria(criteria))["RAINMAKER-PGR"].ServiceDefs;
+      const serviceDefs = await MDMSService.getDataByCriteria(criteria);
       SessionStorage.set("serviceDefs", serviceDefs);
       var __localMenu__ = [];
       await Promise.all(

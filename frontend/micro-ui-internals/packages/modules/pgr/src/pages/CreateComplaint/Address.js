@@ -55,6 +55,7 @@ const Address = (props) => {
 
   function save() {
     props.save(selectedCity, selectedLocality);
+    SessionStorage.del("city_complaint");
   }
   return (
     <Card>

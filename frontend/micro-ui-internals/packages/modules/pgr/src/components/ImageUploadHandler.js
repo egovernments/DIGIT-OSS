@@ -10,6 +10,22 @@ const ImageUploaderHandler = (props) => {
   const [uploadedImagesIds, setUploadedImagesIds] = useState(null);
   const [rerender, setRerender] = useState(1);
 
+  useEffect(() => {
+    if (image) {
+      uploadImage();
+    }
+  }, [image]);
+
+  useEffect(() => {
+    (async () => {
+      if (uploadedImagesIds !== null) {
+        await submit();
+        setRerender(rerender + 1);
+        props.onPhotoChange(uploadedImagesIds);
+      }
+    })();
+  }, [uploadedImagesIds]);
+
   const addUploadedImageIds = useCallback(
     (imageIdData) => {
       if (uploadedImagesIds === null) {
@@ -27,21 +43,27 @@ const ImageUploaderHandler = (props) => {
     setUploadedImagesIds(addUploadedImageIds(response));
   }, [addUploadedImageIds, image]);
 
-  const addImageThumbnails = useCallback(
-    (thumbnailsData) => {
-      var keys = Object.keys(thumbnailsData.data);
-      var index = keys.findIndex((key) => key === "fileStoreIds");
-      if (index > -1) {
-        keys.splice(index, 1);
-      }
-      var thumbnails = [];
-      if (uploadedImagesThumbs !== null) {
-        thumbnails = uploadedImagesThumbs;
-      }
-      setUploadedImagesThumbs([...thumbnails, { image: thumbnailsData.data[keys[0]].split(",")[2], key: keys[0] }]);
-    },
-    [uploadedImagesThumbs]
-  );
+  function addImageThumbnails(thumbnailsData) {
+    var keys = Object.keys(thumbnailsData.data);
+    var index = keys.findIndex((key) => key === "fileStoreIds");
+    if (index > -1) {
+      keys.splice(index, 1);
+    }
+    var thumbnails = [];
+    if (uploadedImagesThumbs !== null) {
+      thumbnails = uploadedImagesThumbs;
+    }
+    setUploadedImagesThumbs([...thumbnails, { image: thumbnailsData.data[keys[0]].split(",")[2], key: keys[0] }]);
+  }
+
+  function getImage(e) {
+    if (e.target.files[0] && e.target.files[0].size > 2097152) {
+      alert("File is too big!");
+    } else {
+      console.log("got image");
+      setImage(e.target.files[0]);
+    }
+  }
 
   const submit = useCallback(async () => {
     if (uploadedImagesIds !== null) {
@@ -49,22 +71,6 @@ const ImageUploaderHandler = (props) => {
       addImageThumbnails(res);
     }
   }, [addImageThumbnails, uploadedImagesIds]);
-
-  useEffect(() => {
-    if (image) {
-      uploadImage();
-    }
-  }, [image]);
-
-  useEffect(() => {
-    (async () => {
-      if (uploadedImagesIds !== null) {
-        await submit();
-        setRerender(rerender + 1);
-        props.onPhotoChange(uploadedImagesIds);
-      }
-    })();
-  }, [uploadedImagesIds]);
 
   function getImage(e) {
     setImage(e.target.files[0]);
