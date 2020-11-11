@@ -28,7 +28,7 @@ import OTPInput from "./OTPInput";
 import LocationSearch from "./LocationSearch";
 import UploadImages from "./UploadImages";
 import ImageViewer from "./ImageViewer";
-
+import { ImageUploadHandler } from "./ImageUploadHandler";
 export {
   Body,
   TopBar,
@@ -63,4 +63,5 @@ export {
   LocationSearch,
   UploadImages,
   ImageViewer,
+  ImageUploadHandler,
 };
