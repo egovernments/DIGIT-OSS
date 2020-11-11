@@ -87,14 +87,17 @@ import org.egov.eis.service.EisCommonService;
 import org.egov.eis.web.actions.workflow.GenericWorkFlowAction;
 import org.egov.infra.admin.master.entity.AppConfig;
 import org.egov.infra.admin.master.entity.AppConfigValues;
+import org.egov.infra.admin.master.entity.City;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigService;
 import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.utils.StringUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -145,6 +148,7 @@ import com.exilant.eGov.src.transactions.VoucherTypeForULB;
 public class PreApprovedVoucherAction extends GenericWorkFlowAction {
     private final static String FORWARD = "Forward";
     private static final long serialVersionUID = 1L;
+    private String heading = "";
     private VoucherService voucherService;
     private CVoucherHeader voucherHeader = new CVoucherHeader();
     private EgBillregister egBillregister = new EgBillregister();
@@ -182,6 +186,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 
     @Autowired
     private MicroserviceUtils microserviceUtils;
+  
 
     private static final Logger LOGGER = Logger.getLogger(PreApprovedVoucherAction.class);
     protected FinancialYearHibernateDAO financialYearDAO;
@@ -516,6 +521,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                     Long.valueOf(parameters.get(VHID)[0]));
             from = FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL;
         }
+        heading = ReportUtil.getCityName();
         getMasterDataForBillVoucher();
         getHeaderMandateFields();
         return "view";
@@ -585,7 +591,9 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
         return "view";
     }
 
-    @ValidationErrorPage("billview")
+
+
+	@ValidationErrorPage("billview")
     @SkipValidation
     @Action(value = "/voucher/preApprovedVoucher-save")
     public String save() throws ValidationException {
@@ -1280,7 +1288,13 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
     public void setVoucherHeader(final CVoucherHeader voucherHeader) {
         this.voucherHeader = voucherHeader;
     }
+    public String getHeading() {
+ 		return heading;
+ 	}
 
+ 	public void setHeading(String heading) {
+ 		this.heading = heading;
+ 	}
     public void setBillsAccountingService(final BillsAccountingService mngr) {
         billsAccountingService = mngr;
     }

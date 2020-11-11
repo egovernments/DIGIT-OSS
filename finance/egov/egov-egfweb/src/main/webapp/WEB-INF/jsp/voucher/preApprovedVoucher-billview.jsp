@@ -60,10 +60,10 @@
 <script>
 	function checkBillIdBillview(){
 		if(document.getElementById('id').value!=''){
-			document.getElementById('aa_approve').disabled=true;
+ 			document.getElementById('aa_approve').disabled=true;
 		}else{
-			document.getElementById('aa_approve').disabled=false;
-		}
+ 			document.getElementById('aa_approve').disabled=false;
+ 		}
 		if('<s:property value="voucherHeader.id"/>' ==''){
 			document.getElementById('print').disabled=true;
 		}else{

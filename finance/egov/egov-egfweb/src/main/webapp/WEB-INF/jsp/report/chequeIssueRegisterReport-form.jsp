@@ -189,7 +189,7 @@ function printCheque(id)
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 				<tr>
 					<td width="10%">&nbsp;</td>
-					<td class="bluebox" width="10%"><s:text name="lbl.bank.name" />:<span
+					<td class="bluebox" width="10%"><s:text name="lbl.bank.branch.name" />:<span
 						class="bluebox"><span class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:select name="bank" id="bank"
 							list="dropdownData.bankList" listKey="bankBranchId"
