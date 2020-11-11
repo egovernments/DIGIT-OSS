@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import Complaint from "../components/Complaint";
 import { searchComplaints } from "../redux/actions";
-import { BackButton, Header } from "@egovernments/digit-ui-react-components";
+import { Header } from "@egovernments/digit-ui-react-components";
 
 const ComplaintsPage = () => {
   const dispatch = useDispatch();
