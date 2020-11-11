@@ -1,4 +1,4 @@
-import { Storage } from "./utils/Storage";
+import { Storage } from "./Utils/Storage";
 import Urls from "./urls";
 import { Request } from "./Utils/Request";
 
