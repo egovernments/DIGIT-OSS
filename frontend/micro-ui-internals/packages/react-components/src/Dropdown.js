@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
 
   useEffect(() => {
     props.selectedVal ? setValue(props.selectedVal) : null;
@@ -18,12 +18,15 @@ const TextField = (props) => {
 
 const Dropdown = (props) => {
   const [dropdownStatus, setDropdownStatus] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
+
+  useEffect(() => {
+    setSelectedOption(props.selected);
+  }, [props.selected]);
 
   function dropdownSwitch() {
     var current = dropdownStatus;
-    console.log(dropdownStatus);
     setDropdownStatus(!current);
   }
 
@@ -32,13 +35,13 @@ const Dropdown = (props) => {
   }
 
   function onSelect(selectedOption) {
+    props.select(selectedOption);
     setSelectedOption(selectedOption);
     setDropdownStatus(false);
   }
 
   function setFilter(val) {
     setFilterVal(val);
-    console.log(val);
   }
 
   return (
@@ -53,9 +56,9 @@ const Dropdown = (props) => {
         <div className="options-card">
           {props.option
             .filter((option) => option.toUpperCase().includes(filterVal.toUpperCase()))
-            .map((option) => {
+            .map((option, index) => {
               return (
-                <p key={option} onClick={() => onSelect(option)}>
+                <p key={index} onClick={() => onSelect(option)}>
                   {option}
                 </p>
               );

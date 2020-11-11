@@ -8,8 +8,7 @@ initLibraries();
 
 ReactDOM.render(
   <>
-    <p>Topbar</p>
-    <PGRApp deltaConfig={} stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
+    <PGRApp stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
   </>,
   document.getElementById("root")
 );

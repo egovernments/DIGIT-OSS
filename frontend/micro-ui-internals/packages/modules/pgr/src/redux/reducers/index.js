@@ -1,9 +1,14 @@
 import { combineReducers } from "redux";
-import { FETCH_LOCALITIES, CHANGE_LANGUAGE } from "../actions/types";
+import { Enums } from "@egovernments/digit-ui-libraries";
+//import ConfigActionTypes from "../../@egovernments/digit-utils/enums/ConfigActionTypes";
+import { FETCH_LOCALITIES, CHANGE_LANGUAGE, FETCH_ALL_BUSINESSS_SERVICES, FETCH_BUSINESS_SERVICE_BY_ID } from "../actions/types";
+import complaintReducer from "./complaintReducer";
+// const { ConfigActionTypes } = Digit.Enums.ConfigActionTypes;
+const { ConfigActionTypes } = Enums;
 
 const configReducer = (defaultConfig) => (state = defaultConfig, action) => {
   switch (action.type) {
-    case Digit.Enums.ConfigActionTypes.CONFIG_UPDATE:
+    case ConfigActionTypes.CONFIG_UPDATE:
       return [...state, action.payload];
     default:
       return state;
@@ -45,6 +50,7 @@ const localityReducer = (state = [], action) => {
       return {
         ...state,
         localityList: action.payload.localityList,
+        city: action.payload.City,
       };
     default:
       return state;
@@ -59,7 +65,6 @@ const localeReducer = (defaultLocales) => (state = defaultLocales, action) => {
 };
 
 const currentLanguageReducer = (state = {}, action) => {
-  console.log("lang action", action);
   switch (action.type) {
     case CHANGE_LANGUAGE:
       return { ...state, language: action.payload };
@@ -76,6 +81,20 @@ const stateInfoReducer = (defaultStateInfo) => (state = defaultStateInfo, action
   return state;
 };
 
+const businessServiceReducer = (state = {}, action) => {
+  switch (action.type) {
+    case FETCH_ALL_BUSINESSS_SERVICES:
+      return { ...state, businessServices: action.payload };
+    case FETCH_BUSINESS_SERVICE_BY_ID:
+      return {
+        ...state,
+        businessService: action.payload.businessServiceDetails,
+      };
+    default:
+      return state;
+  }
+};
+
 const getRootReducer = (defaultStore) =>
   combineReducers({
     config: configReducer(defaultStore.config),
@@ -87,6 +106,10 @@ const getRootReducer = (defaultStore) =>
     languages: languageReducer(defaultStore.languages),
     cityCode: cityCodeReducer(defaultStore.cityCode),
     stateInfo: stateInfoReducer(defaultStore.stateInfo),
+    // businessService: businessServiceReducer(defaultStore.businessServices),
+    businessService: businessServiceReducer,
+    complaints: complaintReducer,
+    // complaints: complaintReducer,
   });
 
 export default getRootReducer;
