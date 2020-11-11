@@ -4,6 +4,7 @@ import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
 import static org.egov.pt.util.PTConstants.BILL_AMOUNT_PATH;
 import static org.egov.pt.util.PTConstants.BILL_NODEMAND_ERROR_CODE;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -243,5 +244,15 @@ public class PropertyUtil extends CommonUtils {
 
 		return userInfo.getType().equalsIgnoreCase("SYSTEM")
 				&& userInfo.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()).contains("ANONYMOUS");
+	}
+
+	public List<OwnerInfo> getCopyOfOwners(List<OwnerInfo> owners) {
+
+		List<OwnerInfo> copyOwners = new ArrayList<>();
+		owners.forEach(owner -> {
+
+			copyOwners.add(new OwnerInfo(owner));
+		});
+		return copyOwners;
 	}
 }
