@@ -1331,6 +1331,12 @@ class FormWizardDataEntry extends Component {
                       previousKey = key;
                     }
 
+                    if (data.demand[data1][data2].PT_TAXHEAD === "PT_TIME_REBATE"           || data.demand[data1][data2].PT_TAXHEAD === "PT_PROMOTIONAL_REBATE" && data.demand[data1][data2].PT_DEMAND ==='0') 
+                    {  
+                    hasPropertyTax = true;  
+                      data.demand[data1][data2].PT_DEMAND = -0;                   
+                     
+                    }
                     // }
                   }
                 });                
