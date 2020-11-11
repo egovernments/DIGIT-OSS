@@ -1,11 +1,21 @@
 import React from "react";
-import { Body } from "@egovernments/digit-ui-react-components";
+import { Route, BrowserRouter as Router } from "react-router-dom";
+import { Provider } from "react-redux";
 
-const Module = () => {
+import getStore from "./redux/store";
+import defaultConfig from "./config";
+import CitizenApp from "./CitizenApp";
+
+const Module = ({ deltaConfig = {}, stateCode, cityCode, moduleCode }) => {
+  const store = Digit.Services.useStore(defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode });
+
+  if (Object.keys(store).length === 0) {
+    return <div>Loading</div>;
+  }
   return (
-    <Body>
-      <p>PGR App</p>
-    </Body>
+    <Provider store={getStore(store)}>
+      <CitizenApp />
+    </Provider>
   );
 };
 

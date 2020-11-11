@@ -1,6 +1,6 @@
 import Urls from "./urls";
-import { GetCitiesWithi18nKeys } from "./utils";
-import { Request } from "./Utils/Request";
+// import { GetCitiesWithi18nKeys } from "./utils";
+import { Request, GetCitiesWithi18nKeys } from "./Utils/Request";
 
 const initRequestBody = (tenantId) => ({
   MdmsCriteria: {
@@ -34,12 +34,16 @@ const GetEgovLocations = (MdmsRes) => {
   }));
 };
 
+const GetServiceDefs = (MdmsRes) => MdmsRes["RAINMAKER-PGR"].ServiceDefs.filter((def) => def.active);
+
 const transformResponse = (type, MdmsRes, moduleCode = "PGR") => {
   switch (type) {
     case "citymodule":
       return GetCitiesWithi18nKeys(MdmsRes, moduleCode);
     case "egovLocation":
       return GetEgovLocations(MdmsRes);
+    case "serviceDefs":
+      return GetServiceDefs(MdmsRes);
     default:
       return MdmsRes;
   }
