@@ -116,6 +116,14 @@ class DemandCollection extends React.Component {
                                       return value = "" ;
                                       }
                                   }
+                                  if(taxData.code === 'PT_TAX')
+                                  {
+                                      if (Math.sign(e.target.value)===-1) 
+                                      {  
+                                      alert( "Please enter valid value for Property tax");
+                                      return value = "" ;
+                                      }
+                                  }
                                   value = e.target.value;                                
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code)
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`, taxData.isDebit?(Math.sign(value)===-1?value:-value):value)
