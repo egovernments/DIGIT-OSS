@@ -8,13 +8,11 @@ import AddtionalDetails from "./pages/ReopenComplaint/AddtionalDetails";
 import ReasonPage from "./pages/ReopenComplaint/Reason";
 import UploadPhoto from "./pages/ReopenComplaint/UploadPhoto";
 import Response from "./pages/Response";
-import { AppContainer, Body, TopBar, BackButton } from "@egovernments/digit-ui-react-components";
+import { AppContainer, BackButton } from "@egovernments/digit-ui-react-components";
 
 const App = () => {
   return (
     <Router>
-      <Body>
-        <TopBar />
         <AppContainer>
           {/* <Route exact path="/" component={Create} /> */}
           <BackButton>Back</BackButton>
@@ -28,7 +26,6 @@ const App = () => {
           <Route path="/create-complaint" component={CreateComplaint} />
           <Route path="/response" component={Response} />
         </AppContainer>
-      </Body>
     </Router>
   );
 };
