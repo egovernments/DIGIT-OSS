@@ -16,20 +16,20 @@
   .card-text {
     @apply text-text-secondary text-body-l align-middle text-left mb-lg;
 
-    span{
-      @apply text-text-primary
+    span {
+      @apply text-text-primary;
     }
   }
 
-  .card-text-primary{
-    @apply text-text-primary text-body-l
+  .card-text-primary {
+    @apply text-text-primary text-body-l;
   }
 
-  .card-text-button{
-    @apply text-primary-main text-text-btn
+  .card-text-button {
+    @apply text-primary-main text-text-btn;
   }
 
-  .card-label{
+  .card-label {
     @apply font-bold text-legend text-text-primary mb-md;
   }
 
@@ -37,18 +37,17 @@
     @apply block font-bold text-legend text-error mb-md;
   }
 
-  .card-link{
-    @apply block text-center text-link text-link-normal mt-md
+  .card-link {
+    @apply block text-center text-link text-link-normal mt-md;
   }
 }
 
 .submit-bar {
   @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full;
 
-  header{
+  header {
     @apply font-rc font-medium text-legend text-white leading-10;
   }
-
 }
 
 @screen dt {
@@ -64,25 +63,24 @@
     padding-left: 16px;
     padding-top: 16px;
     .card-header {
-      @apply text-heading-xl-dt
+      @apply text-heading-xl-dt;
     }
 
     .card-sub-header {
-      @apply text-heading-l-dt
+      @apply text-heading-l-dt;
     }
 
     .card-caption {
-      @apply text-caption-xl-dt
+      @apply text-caption-xl-dt;
     }
 
-    .card-text, .card-text-primary{
-      @apply text-body-l-dt
-    }
-    
-    .card-link{
-      @apply text-left
+    .card-text,
+    .card-text-primary {
+      @apply text-body-l-dt;
     }
 
+    .card-link {
+      @apply text-left;
+    }
   }
-
 }

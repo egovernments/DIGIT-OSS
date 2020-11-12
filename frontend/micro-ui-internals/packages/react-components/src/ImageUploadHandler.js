@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { CardHeader, CardText, UploadImages } from "@egovernments/digit-ui-react-components";
 // import { Filestorage, Filefetch } from "../@egovernments/digit-utils/services/Filestorage";
 
-const ImageUploaderHandler = (props) => {
+export const ImageUploadHandler = (props) => {
   const { t } = useTranslation();
   const [image, setImage] = useState(null);
   const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(null);
@@ -122,5 +122,3 @@ const ImageUploaderHandler = (props) => {
     </React.Fragment>
   );
 };
-
-export default ImageUploaderHandler;
