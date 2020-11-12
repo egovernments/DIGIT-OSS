@@ -1,27 +1,25 @@
 import React from "react";
-import { Card, CardHeader, CardText, LocationSearch, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LocationSearchCard } from "@egovernments/digit-ui-react-components";
 
-const CreateComplaint = (props) => {
+const LocationSearch = (props) => {
   let { t } = useTranslation();
+  const history = useHistory();
+  function onSave() {
+    // props.save(selectedOption.key);
+    history.push("/create-complaint/pincode");
+  }
   return (
-    <Card>
-      <CardHeader>{t("CS_ADDCOMPLAINT_PIN_LOCATION")}</CardHeader>
-      <CardText>
-        {/* Click and hold to drop the pin to complaint location. If you are not
-        able to pin the location you can skip the continue for next step. */}
-        {t("CS_ADDCOMPLAINT_PIN_LOCATION_TEXT")}
-      </CardText>
-
-      <LocationSearch />
-
-      <Link to="/create-complaint/pincode">
-        <SubmitBar label={t("PT_COMMONS_NEXT")} />
-        {props.skip ? <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")} /> : null}
-      </Link>
-    </Card>
+    <LocationSearchCard
+      header={t("CS_ADDCOMPLAINT_PIN_LOCATION")}
+      cardText={t("CS_ADDCOMPLAINT_PIN_LOCATION_TEXT")}
+      nextText={t("PT_COMMONS_NEXT")}
+      skipAndContinueText={t("CORE_COMMON_SKIP_CONTINUE")}
+      skip={true}
+      onSave={onSave}
+    />
   );
 };
 
-export default CreateComplaint;
+export default LocationSearch;

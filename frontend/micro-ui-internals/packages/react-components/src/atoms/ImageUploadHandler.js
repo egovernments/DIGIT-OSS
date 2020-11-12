@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CardHeader, CardText, UploadImages } from "@egovernments/digit-ui-react-components";
+import CardHeader from "./CardHeader";
+import CardText from "./CardHeader";
+import UploadImages from "./UploadImages";
 // import { Filestorage, Filefetch } from "../@egovernments/digit-utils/services/Filestorage";
 
 export const ImageUploadHandler = (props) => {

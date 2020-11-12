@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Card, CardSubHeader, CardHeader, CardText, CardLabel, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { TextInputCard } from "@egovernments/digit-ui-react-components";
 
 const Landmark = (props) => {
   const { t } = useTranslation();
+  const history = useHistory();
   const [landmark, setLandmark] = useState(null);
 
   function textInput(e) {
@@ -13,22 +15,20 @@ const Landmark = (props) => {
 
   function save() {
     props.save(landmark);
+    history.push("/create-complaint/upload-photos");
   }
 
   return (
-    <Card>
-      <CardSubHeader>{t("CS_ADDCOMPLAINT_COMPLAINT_LOCATION")}</CardSubHeader>
-      <CardHeader>{t("CS_PROVIDE_LANDMARK")}</CardHeader>
-      <CardText>
-        {/* Provide the landmark to help us reach the complaint location easily. */}
-        {t("CS_PROVIDE_LANDMARK_TEXT")}
-      </CardText>
-      <CardLabel>{t("CS_ADDCOMPLAINT_LANDMARK")}</CardLabel>
-      <TextArea onChange={textInput}></TextArea>
-      <Link to="/create-complaint/upload-photos" onClick={save}>
-        <SubmitBar label="Next" />
-      </Link>
-    </Card>
+    <TextInputCard
+      header={t("CS_PROVIDE_LANDMARK")}
+      subHeader={t("CS_ADDCOMPLAINT_COMPLAINT_LOCATION")}
+      cardText={t("CS_PROVIDE_LANDMARK_TEXT")}
+      CardLabel={t("CS_ADDCOMPLAINT_LANDMARK")}
+      nextText={t("PT_COMMONS_NEXT")}
+      skip={false}
+      onSave={save}
+      textInput={textInput}
+    />
   );
 };
 
