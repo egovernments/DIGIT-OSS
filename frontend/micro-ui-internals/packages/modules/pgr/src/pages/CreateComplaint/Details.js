@@ -25,11 +25,11 @@ const Details = (props) => {
         {t("CS_ADDITIONAL_DETAILS_TEXT")}
       </CardText>
       <TextArea onChange={textInput}></TextArea>
-      <Link to="/create-complaint/submission" onClick={submitComplaint}>
+      <Link to="/create-complaint/response" onClick={submitComplaint}>
         <SubmitBar label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")} />
       </Link>
       {props.skip ? (
-        <Link to="/create-complaint/submission">
+        <Link to="/create-complaint/response">
           <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")} />
         </Link>
       ) : null}
