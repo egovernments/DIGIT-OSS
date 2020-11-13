@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { BackButton } from "@egovernments/digit-ui-react-components";
 // import UserOnboarding from "../UserOnboarding/index";
 import SubType from "./SubType";
 import LocationSearch from "./LocationSearch";
@@ -13,8 +12,6 @@ import UploadPhotos from "./UploadPhotos";
 import Details from "./Details";
 import Response from "../Response";
 import { createComplaint } from "../../redux/actions/index";
-// import { SessionStorage } from "@egovernments/digit-ui-libraries";
-// // import ComplaintTypeConfig from "./ComplaintTypeConfig";
 import ComplaintType from "./ComplaintType";
 
 const CreateComplaint = ({ match, history }) => {
