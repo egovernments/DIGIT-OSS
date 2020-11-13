@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardSubHeader,
-  CardText,
-  CardLabel,
-  Dropdown,
-  SubmitBar,
-  // RadioButtons,
-} from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
 import { fetchLocalities } from "../../redux/actions";
 import { useTranslation } from "react-i18next";
+import { CityMohalla } from "@egovernments/digit-ui-react-components";
 
 const Address = (props) => {
   const SessionStorage = Digit.SessionStorage;
@@ -22,6 +14,7 @@ const Address = (props) => {
   const appState = useSelector((state) => state);
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const history = useHistory();
 
   const cities = [];
   var localities = [];
@@ -56,25 +49,30 @@ const Address = (props) => {
   function save() {
     props.save(selectedCity, selectedLocality);
     SessionStorage.del("city_complaint");
+    history.push("/create-complaint/landmark");
   }
+
+  function onSkip() {
+    history.push("/create-complaint/landmark");
+  }
+
   return (
-    <Card>
-      <CardSubHeader>{t("CS_ADDCOMPLAINT_COMPLAINT_LOCATION")}</CardSubHeader>
-      <CardHeader>{t("CS_ADDCOMPLAINT_PROVIDE_COMPLAINT_ADDRESS")}</CardHeader>
-      <CardText>
-        {/* Choose the locality/mohalla of the complaint from the list given below. */}
-        {t("CS_CHOOSE_CITY_MOHALLA_TEXT")}
-      </CardText>
-      <CardLabel>{t("MYCITY_CODE_LABEL")} *</CardLabel>
-      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} />
-      <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")} *</CardLabel>
-      {/* <RadioButtons options={["Ajit Nagar", "Patel Nagar"]}/> */}
-      <Dropdown isMandatory option={localities} select={selectLocalities} />
-      <Link to="/create-complaint/landmark" onClick={save}>
-        <SubmitBar label={t("PT_COMMONS_NEXT")} />
-      </Link>
-      {/* <p onClick={() =>console.log(selectedCity, selectedLocality)}>state display</p> */}
-    </Card>
+    <CityMohalla
+      header={t("CS_ADDCOMPLAINT_PROVIDE_COMPLAINT_ADDRESS")}
+      subHeader={t("CS_ADDCOMPLAINT_COMPLAINT_LOCATION")}
+      cardText={t("CS_CHOOSE_CITY_MOHALLA_TEXT")}
+      CardLabelCity={t("MYCITY_CODE_LABEL")}
+      cardLabelMohalla={t("CS_CREATECOMPLAINT_MOHALLA")}
+      nextText={t("PT_COMMONS_NEXT")}
+      isMandatory
+      selectedCity={selectedCity}
+      onSave={save}
+      cities={cities}
+      selectCity={selectCity}
+      localities={localities}
+      selectLocalities={selectLocalities}
+      onSkip={onSkip}
+    />
   );
 };
 

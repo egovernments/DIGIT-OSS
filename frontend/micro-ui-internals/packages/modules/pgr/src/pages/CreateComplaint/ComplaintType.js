@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Card, CardHeader, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 // import { MDMSService } from "@egovernments/digit-ui-libraries";
 // import { SessionStorage } from "@egovernments/digit-ui-libraries";
 import { useTranslation } from "react-i18next";
+// import TypeSelectCard from "@egovernments/digit-ui-react-components/src/molecules/TypeSelectCard";
 
 const CreateComplaint = (props) => {
   const SessionStorage = Digit.SessionStorage;
@@ -73,16 +74,25 @@ const CreateComplaint = (props) => {
     }
   }
   return (
-    <Card>
-      <CardHeader>{t("CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER")}</CardHeader>
-      <CardText>
-        {/* Select the option related to your complaint from the list given below.
-        If the complaint type you are looking for is not listed select others. */}
-        {t("CS_COMPLAINT_TYPE_TEXT")}
-      </CardText>
-      {localMenu ? <RadioButtons selectedOption={selectedOption} options={localMenu} optionsKey="name" onSelect={selected} /> : null}
-      <SubmitBar label={t("PT_COMMONS_NEXT")} onSubmit={onSave} />
-    </Card>
+    // <Card>
+    //   <CardHeader>{t("CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER")}</CardHeader>
+    //   <CardText>
+    //     {/* Select the option related to your complaint from the list given below.
+    //     If the complaint type you are looking for is not listed select others. */}
+    //     {t("CS_COMPLAINT_TYPE_TEXT")}
+    //   </CardText>
+    //   {localMenu ? <RadioButtons selectedOption={selectedOption} options={localMenu} optionsKey="name" onSelect={selected} /> : null}
+    //   <SubmitBar label={t("PT_COMMONS_NEXT")} onSubmit={onSave} />
+    // </Card>
+    <TypeSelectCard
+      complaintTypePlaceHolder={t("CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER")}
+      cardText={t("CS_COMPLAINT_TYPE_TEXT")}
+      submitBarLabel={t("PT_COMMONS_NEXT")}
+      selectedOption={selectedOption}
+      menu={localMenu}
+      selected={selected}
+      onSave={onSave}
+    />
   );
 };
 

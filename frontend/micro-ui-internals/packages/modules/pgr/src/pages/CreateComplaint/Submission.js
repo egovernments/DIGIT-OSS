@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  SubmitBar, 
-  Card,
-  Banner,
-  CardText,
-} from "@egovernments/digit-ui-react-components";
+import { SubmitBar, Card, Banner, CardText } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
