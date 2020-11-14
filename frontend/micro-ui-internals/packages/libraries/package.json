@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-libraries",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,umd",
-    "start": "microbundle-crl watch --no-compress --format modern,umd"
+    "start": "microbundle-crl watch --no-compress --format modern,umd",
+    "prepublish": "yarn build"
   },
   "peerDependencies": {
     "react": "^17.0.0"
