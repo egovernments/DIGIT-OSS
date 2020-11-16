@@ -58,15 +58,7 @@ export const getAddressItems = (properties) => {
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_THANA", localizationLabelsData),
         value: additionalDetails && additionalDetails.thana && getTranslatedLabel(('PROPERTYTAX_THANA_' + tenantId.replace(".", "_").toUpperCase() + "_" + additionalDetails.thana.toUpperCase()), localizationLabelsData) || "NA",
-      },
-      {
-        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: getTranslatedLabel((
-          tenantId.replace(".", "_") +
-          "_REVENUE_" +
-          address.locality.code
-        ).toUpperCase(), localizationLabelsData) || "NA",
-      }
+      } 
     ]
   );
 }
