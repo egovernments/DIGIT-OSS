@@ -30,6 +30,8 @@ import "./index.css";
 import PTHeader from "../../common/PTHeader";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
 
 const innerDivStyle = {
   padding: "0",
@@ -178,6 +180,8 @@ class Property extends Component {
       { key: "consumerCodes", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId },
     ]);
+
+    loadUlbLogo(this.props.match.params.tenantId);
   };
 
   onListItemClick = (item, index) => {
@@ -370,6 +374,14 @@ class Property extends Component {
   closeYearRangeDialogue = () => {
     this.setState({ dialogueOpen: false });
   };
+  download() {
+    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
+    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
+  }
+  print() {
+    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
+    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, 'print');
+  }
 
   render() {
     const {
@@ -415,7 +427,7 @@ class Property extends Component {
     } */
     return (
       <Screen className={clsName}>
-        <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} />
+        <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} downloadPrintButton={true} download={() => this.download()} print={() => this.print()} />
         {
           <AssessmentList
             onItemClick={this.onListItemClick}

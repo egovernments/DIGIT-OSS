@@ -143,7 +143,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //       ]
 //     );
 //   };
-const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
+export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   //const { units=[], noOfFloors } = propertyDetails || {};
 
   const { units = [], noOfFloors,additionalDetails={} } = propertyDetails || {};
@@ -191,7 +191,7 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   
 };
 
-const getUnitInfo = (units = []) => {
+export const getUnitInfo = (units = []) => {
   units = units || [];
   let floors = [];
   units.map((unit, index) => {
@@ -257,7 +257,7 @@ const getUnitInfo = (units = []) => {
 
 
 
-const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
+export const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
 let hideSubsectionLabel=false;
   let assessmentItems = [];
   let subUnitItems = [];

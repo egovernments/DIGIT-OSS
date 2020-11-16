@@ -1,14 +1,14 @@
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import get from "lodash/get";
 import { getAssessmentInfo, getUnitInfo } from "../../common/propertyTax/Property/components/AssessmentInfo";
-import { getOwnerInfo } from "../../common/propertyTax/Property/components/OwnerInfo";
+import { getOwnerInformation } from "../../common/propertyTax/Property/components/OwnerInfo";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generatePDF, getDocumentsCard, getMultipleItemCard } from "./generatePDF";
 
 export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "acknowledgement.pdf") => {
 
     property.subOwnershipCategory = get(property, 'propertyDetails[0].subOwnershipCategory', '');
-    const unitCard = getUnitInfo(get(property, "propertyDetails[0].units", []), property);
+    const unitCard = getUnitInfo(get(property, "propertyDetails[0].units", []));
     let unitInfoCard = []
     if (unitCard.length >= 1) {
         let unitItems = [];
@@ -46,10 +46,10 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
         unitInfoCard = unitItems
     }
     property.owners = property.owners.filter(owner => owner.status == "ACTIVE")
-    const ownerInfo = getOwnerInfo(property, generalMDMSDataById);
+    const ownerInfo = getOwnerInformation(property, generalMDMSDataById);
     const addressCard = getAddressItems(property);
     const ownerCard = getMultipleItemCard(ownerInfo, 'PT_OWNER');
-    const assessmentCard = getAssessmentInfo(get(property, 'propertyDetails[0]', {}), generalMDMSDataById,property);
+    const assessmentCard = getAssessmentInfo(get(property, 'propertyDetails[0]', {}), generalMDMSDataById);
     const documentCard = getDocumentsCard(property.documentsUploaded);
 
     let pdfData = {
