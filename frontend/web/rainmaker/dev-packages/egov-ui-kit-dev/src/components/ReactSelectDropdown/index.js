@@ -163,6 +163,7 @@ class ReactSelectDropdown extends React.Component {
       updateDependentFields,
       beforeFieldChange,
       disabled,
+      menuHeight,
       ...rest
     } = this.props;
 
@@ -236,6 +237,7 @@ class ReactSelectDropdown extends React.Component {
     // inputValue = {result}
      isDisabled={disabled}
      isSearchable = "true"
+     maxMenuHeight = {menuHeight}
      //defaultValue ={label}
      /*  floatingLabelShrinkStyle={floatingLabelBaseShrinkStyle}
      floatingLabelFixed={true}      

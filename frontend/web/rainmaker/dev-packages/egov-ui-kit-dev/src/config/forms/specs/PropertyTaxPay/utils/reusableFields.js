@@ -385,6 +385,7 @@ export const floorName = {
     required: true,
     jsonPath: "Properties[0].propertyDetails[0].units[0].floorNo",
     hideField: true,
+    menuHeight:"110px"
   },
 };
 

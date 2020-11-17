@@ -193,6 +193,7 @@ const formConfig = {
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       numcols: 6,
       labelsFromLocalisation: true,
+      menuHeight:"85px"
     },
    thanaType: {
       id: "Thana",
