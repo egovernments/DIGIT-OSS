@@ -32,7 +32,7 @@ import ImageViewer from "./atoms/ImageViewer";
 import { ImageUploadHandler } from "./atoms/ImageUploadHandler";
 import ActionBar from "./atoms/ActionBar";
 import Menu from "./atoms/Menu";
-
+import Table from "./atoms/Table";
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
 import TextInputCard from "./molecules/TextInputCard";
@@ -81,4 +81,5 @@ export {
   LocationSearchCard,
   TextInputCard,
   CityMohalla,
+  Table,
 };

@@ -1,6 +1,7 @@
 import React from "react";
 
 const RadioButtons = (props) => {
+  console.log("PROPS:-", props);
   var selected = props.selectedOption;
 
   function selectOption(value) {
@@ -20,6 +21,7 @@ const RadioButtons = (props) => {
                   value={option}
                   checked={selected === option ? 1 : 0}
                   onChange={() => selectOption(option)}
+                  {...props}
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>

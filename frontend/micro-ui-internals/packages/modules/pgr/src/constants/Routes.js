@@ -1,7 +1,8 @@
 const CREATE_COMPLAINT_PATH = "/create-complaint/";
 const REOPEN_COMPLAINT_PATH = "/reopen/";
 import { PGR_EMPLOYEE_COMPLAINT_DETAILS, PGR_EMPLOYEE_CREATE_COMPLAINT } from "./Employee";
-export const PgrRoutes = {
+
+export const Citizen = {
   ComplaintsPage: "/complaints",
   RatingAndFeedBack: "/rate/:id",
   ComplaintDetailsPage: "/complaint/details/:id",
@@ -20,7 +21,8 @@ export const PgrRoutes = {
   DynamicConfig: `${CREATE_COMPLAINT_PATH}dynamic-config`,
 };
 
-export const EmployeeRoutes = {
+export const Employee = {
+  Inbox: "/inbox",
   ComplaintDetails: PGR_EMPLOYEE_COMPLAINT_DETAILS,
   CreateComplaint: PGR_EMPLOYEE_CREATE_COMPLAINT,
 };
