@@ -1,7 +1,7 @@
 const CREATE_COMPLAINT_PATH = "/create-complaint/";
 const REOPEN_COMPLAINT_PATH = "/reopen/";
 
-export const PgrRoutes = {
+export const Citizen = {
   ComplaintsPage: "/complaints",
   RatingAndFeedBack: "/rate/:id",
   ComplaintDetailsPage: "/complaint/details/:id",
@@ -18,4 +18,8 @@ export const PgrRoutes = {
   UploadPhotos: `${CREATE_COMPLAINT_PATH}upload-photos`,
   Details: `${CREATE_COMPLAINT_PATH}details`,
   DynamicConfig: `${CREATE_COMPLAINT_PATH}dynamic-config`,
+};
+
+export const Employee = {
+  Inbox: "/inbox",
 };

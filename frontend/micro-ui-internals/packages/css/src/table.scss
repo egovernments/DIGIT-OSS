@@ -1,0 +1,16 @@
+.table {
+  background-color: #fafafa;
+
+  thead {
+    th {
+      padding: 20px 18px;
+      @apply font-bold heading-l;
+    }
+  }
+
+  .tbody {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+}

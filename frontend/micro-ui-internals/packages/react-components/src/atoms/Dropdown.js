@@ -17,6 +17,7 @@ const TextField = (props) => {
 };
 
 const Dropdown = (props) => {
+  console.log("props:::::>>>", props);
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
@@ -45,7 +46,7 @@ const Dropdown = (props) => {
   }
 
   return (
-    <div className="select-wrap">
+    <div className="select-wrap" style={{ ...props.style }}>
       <div className={dropdownStatus ? "select-active" : "select"}>
         <TextField setFilter={setFilter} selectedVal={selectedOption} filterVal={filterVal} onClick={dropdownOn} />
         {/* <img src={ArrowDown} alt="Arrow Down"/> */}

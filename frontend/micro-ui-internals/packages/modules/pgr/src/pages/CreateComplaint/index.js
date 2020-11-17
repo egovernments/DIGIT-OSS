@@ -16,7 +16,7 @@ import { createComplaint } from "../../redux/actions/index";
 // import { SessionStorage } from "@egovernments/digit-ui-libraries";
 // // import ComplaintTypeConfig from "./ComplaintTypeConfig";
 import ComplaintType from "./ComplaintType";
-import { PgrRoutes } from "../../constants/Routes";
+import { Citizen } from "../../constants/Routes";
 
 const CreateComplaint = ({ match, history }) => {
   const SessionStorage = Digit.SessionStorage;
@@ -166,15 +166,15 @@ const CreateComplaint = ({ match, history }) => {
         component={(props) => <ComplaintType save={saveComplaintType} />}
         // component={(props) => <ComplaintTypeConfig />}
       />
-      <Route path={PgrRoutes.SubType} component={(props) => <SubType save={saveComplaintType} />} />
-      <Route path={PgrRoutes.LocationSearch} component={(props) => <LocationSearch skip={true} />} />
-      <Route path={PgrRoutes.Pincode} component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} />} />
-      <Route path={PgrRoutes.Address} component={(props) => <Address save={saveAddress} />} />
-      <Route path={PgrRoutes.Landmark} component={(props) => <Landmark save={saveLandmark} />} />
-      <Route path={PgrRoutes.UploadPhotos} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} />} />
-      <Route path={PgrRoutes.Details} component={(props) => <Details submitComplaint={submitComplaint} skip={true} />} />
-      <Route path={PgrRoutes.Response} component={(props) => <Response />} />
-      <Route path={PgrRoutes.DynamicConfig} component={(props) => <DynamicConfig />} />
+      <Route path={Citizen.SubType} component={(props) => <SubType save={saveComplaintType} />} />
+      <Route path={Citizen.LocationSearch} component={(props) => <LocationSearch skip={true} />} />
+      <Route path={Citizen.Pincode} component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} />} />
+      <Route path={Citizen.Address} component={(props) => <Address save={saveAddress} />} />
+      <Route path={Citizen.Landmark} component={(props) => <Landmark save={saveLandmark} />} />
+      <Route path={Citizen.UploadPhotos} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} />} />
+      <Route path={Citizen.Details} component={(props) => <Details submitComplaint={submitComplaint} skip={true} />} />
+      <Route path={Citizen.Response} component={(props) => <Response />} />
+      <Route path={Citizen.DynamicConfig} component={(props) => <DynamicConfig />} />
     </React.Fragment>
   );
 };

@@ -1,0 +1,13 @@
+.myTable {
+  background-color: #fafafa;
+}
+
+th {
+  padding: 20px 18px;
+}
+
+tbody {
+  border: none;
+  padding: 0;
+  margin: 0;
+}

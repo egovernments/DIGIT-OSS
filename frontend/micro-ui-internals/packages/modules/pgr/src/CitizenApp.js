@@ -8,7 +8,7 @@ import AddtionalDetails from "./pages/ReopenComplaint/AddtionalDetails";
 import ReasonPage from "./pages/ReopenComplaint/Reason";
 import UploadPhoto from "./pages/ReopenComplaint/UploadPhoto";
 import Response from "./pages/Response";
-import { PgrRoutes } from "./constants/Routes";
+import { Citizen } from "./constants/Routes";
 import { AppContainer, BackButton } from "@egovernments/digit-ui-react-components";
 
 const App = () => {
@@ -18,14 +18,14 @@ const App = () => {
         {/* <Route exact path="/" component={Create} /> */}
         <BackButton>Back</BackButton>
         {/* <Route path="/" component={CreateComplaint} /> */}
-        <Route path={PgrRoutes.ComplaintsPage} component={ComplaintsPage} />
-        <Route exact path={PgrRoutes.RatingAndFeedBack} component={RatingAndFeedBack} />
-        <Route path={PgrRoutes.ComplaintDetailsPage} component={ComplaintDetailsPage} />
-        <Route exact path={PgrRoutes.ReasonPage} component={ReasonPage} />
-        <Route path={PgrRoutes.UploadPhoto} component={UploadPhoto} />
-        <Route path={PgrRoutes.AddtionalDetails} component={AddtionalDetails} />
-        <Route path={PgrRoutes.CreateComplaint} component={CreateComplaint} />
-        <Route path={PgrRoutes.Response} component={Response} />
+        <Route path={Citizen.ComplaintsPage} component={ComplaintsPage} />
+        <Route exact path={Citizen.RatingAndFeedBack} component={RatingAndFeedBack} />
+        <Route path={Citizen.ComplaintDetailsPage} component={ComplaintDetailsPage} />
+        <Route exact path={Citizen.ReasonPage} component={ReasonPage} />
+        <Route path={Citizen.UploadPhoto} component={UploadPhoto} />
+        <Route path={Citizen.AddtionalDetails} component={AddtionalDetails} />
+        <Route path={Citizen.CreateComplaint} component={CreateComplaint} />
+        <Route path={Citizen.Response} component={Response} />
       </AppContainer>
     </Router>
   );

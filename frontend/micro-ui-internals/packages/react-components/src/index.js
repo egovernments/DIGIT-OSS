@@ -29,6 +29,7 @@ import LocationSearch from "./atoms/LocationSearch";
 import UploadImages from "./atoms/UploadImages";
 import ImageViewer from "./atoms/ImageViewer";
 import { ImageUploadHandler } from "./atoms/ImageUploadHandler";
+import Table from "./atoms/Table";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -74,4 +75,5 @@ export {
   LocationSearchCard,
   TextInputCard,
   CityMohalla,
+  Table,
 };
