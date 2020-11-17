@@ -1177,3 +1177,13 @@ img, video {
       height: auto;
       max-width: 640px;
       margin: auto; } }
+
+.table {
+  background-color: #fafafa; }
+  .table thead th {
+    padding: 20px 18px;
+    font-weight: 700; }
+  .table .tbody {
+    border: none;
+    padding: 0;
+    margin: 0; }

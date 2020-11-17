@@ -18,7 +18,7 @@ const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref)
   );
 });
 
-const Table = ({ data, columns, getCellProps }) => {
+const Table = ({ data, columns, getCellProps, style }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
     {
       columns,
@@ -48,7 +48,7 @@ const Table = ({ data, columns, getCellProps }) => {
   );
 
   return (
-    <table style={{ backgroundColor: "#fafafa" }} {...getTableProps()}>
+    <table style={{ backgroundColor: "#fafafa", ...style }} {...getTableProps()}>
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>

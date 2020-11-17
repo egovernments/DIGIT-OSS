@@ -30,6 +30,7 @@ import UploadImages from "./atoms/UploadImages";
 import ImageViewer from "./atoms/ImageViewer";
 import { ImageUploadHandler } from "./atoms/ImageUploadHandler";
 import Table from "./atoms/Table";
+import Label from "./atoms/Label";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -75,5 +76,6 @@ export {
   LocationSearchCard,
   TextInputCard,
   CityMohalla,
+  Label,
   Table,
 };

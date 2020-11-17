@@ -1,6 +1,7 @@
 import { CheckBox } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import ComplaintsLink from "./inbox/ComplaintLinks";
 import ComplaintTable from "./inbox/ComplaintTable";
 import Filter from "./inbox/Filter";
 import SearchComplaint from "./inbox/search";
@@ -51,24 +52,37 @@ const DesktopInbox = (props) => {
   );
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "270px 925px", gridTemplateRows: "30% 740px auto", columnGap: "24px" }}>
-      <Filter onFilterChange={(filters) => props.onFilterChange(filters)} />
-      {/* <SearchComplaint /> */}
-      <ComplaintTable
-        data={props.data}
-        columns={columns}
-        getCellProps={(cellInfo) => {
-          return {
-            style: {
-              padding: "20px 18px",
-              fontSize: "16px",
-              borderTop: "1px solid grey",
-              textAlign: "left",
-              verticalAlign: "middle",
-            },
-          };
-        }}
-      />
+    <div
+      style={{
+        display: "flex",
+      }}
+    >
+      <div style={{ width: "270px" }}>
+        <ComplaintsLink />
+        <div style={{ marginTop: "16px" }}>
+          <Filter onFilterChange={(filters) => props.onFilterChange(filters)} />
+        </div>
+      </div>
+      <div style={{ marginLeft: "24px", width: "874px" }}>
+        <SearchComplaint />
+        <div style={{ marginTop: "24px" }}>
+          <ComplaintTable
+            data={props.data}
+            columns={columns}
+            getCellProps={(cellInfo) => {
+              return {
+                style: {
+                  padding: "20px 18px",
+                  fontSize: "16px",
+                  borderTop: "1px solid grey",
+                  textAlign: "left",
+                  verticalAlign: "middle",
+                },
+              };
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,10 +1,11 @@
 import React from "react";
-const { Card, TextInput } = require("@egovernments/digit-ui-react-components");
+const { Card, TextInput, Label } = require("@egovernments/digit-ui-react-components");
 
 const SearchComplaint = () => {
   const textInput = () => {};
   return (
-    <div style={{ gridColumn: "2", gridRow: "1" }}>
+    <div style={{ padding: "16px", backgroundColor: "#fff" }}>
+      <Label>Hi</Label>
       <TextInput onChange={textInput}></TextInput>
     </div>
   );
