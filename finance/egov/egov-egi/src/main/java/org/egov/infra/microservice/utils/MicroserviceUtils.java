@@ -733,9 +733,28 @@ public class MicroserviceUtils {
     }
 
     public List<EmployeeInfo> getEmployee(Long empId, Date toDay, String departmentId, String designationId) {
-        return this.getEmployeeBySearchCriteria(new EmployeeSearchCriteria().builder().asOnDate(getEpochDate(toDay))
-                .ids(Collections.singletonList(empId)).departments(Collections.singletonList(departmentId))
-                .designations(Collections.singletonList(designationId)).build());
+       EmployeeSearchCriteria creiteria = this.prepareEmployeeSearchQueryBuilder(empId, toDay, departmentId,
+               designationId);
+        return this.getEmployeeBySearchCriteria(creiteria);
+    }
+
+    private EmployeeSearchCriteria prepareEmployeeSearchQueryBuilder(Long empId, Date toDay, String departmentId,
+            String designationId) {
+        EmployeeSearchCriteria criteria = new EmployeeSearchCriteria().builder().build();
+        if (empId != null && empId != 0) {
+            criteria.setIds(Collections.singletonList(empId));
+        }
+        if (toDay != null) {
+            criteria.setAsOnDate(getEpochDate(toDay));
+        }
+        if (departmentId != null && !departmentId.isEmpty()) {
+            criteria.setDepartments(Collections.singletonList(departmentId));
+        }
+        if (designationId != null && !designationId.isEmpty()) {
+            criteria.setDesignations(Collections.singletonList(designationId));
+        }
+        return criteria;
+
     }
 
     public EmployeeInfo getEmployeeById(Long empId) {
