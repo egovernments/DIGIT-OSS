@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import {
   Card,
   CardLabel,
+  CardLabelDesc,
   CardSubHeader,
   ConnectingCheckPoints,
   CheckPoint,
@@ -14,6 +15,8 @@ import {
   PopUp,
   HeaderBar,
   ImageViewer,
+  TextInput,
+  TextArea,
 } from "@egovernments/digit-ui-react-components";
 
 import { Close } from "../../Icons";
@@ -32,8 +35,8 @@ const MapView = (props) => {
   );
 };
 
-const Heading = () => {
-  return <h1 className="heading-m">Complaint Geolocation</h1>;
+const Heading = (props) => {
+  return <h1 className="heading-m">{props.label}</h1>;
 };
 
 const CloseBtn = (props) => {
@@ -48,6 +51,8 @@ export const ComplaintDetails = (props) => {
   let { id } = useParams();
   const [fullscreen, setFullscreen] = useState(false);
   const [imageZoom, setImageZoom] = useState(null);
+  const [actionCalled, setACtionCalled] = useState(true);
+
   function zoomView() {
     setFullscreen(!fullscreen);
   }
@@ -57,7 +62,6 @@ export const ComplaintDetails = (props) => {
   }
 
   function zoomImage(imageSource) {
-    console.log("imageSource", imageSource);
     setImageZoom(imageSource);
   }
 
@@ -90,15 +94,32 @@ export const ComplaintDetails = (props) => {
       </Card>
       {fullscreen ? (
         <PopUp>
-          <div className="zoom-view">
-            <HeaderBar main={<Heading />} end={<CloseBtn onClick={() => close()} />} />
-            <div className="zoom-view-main">
+          <div className="popup-module">
+            <HeaderBar main={<Heading label="Complaint Geolocation" />} end={<CloseBtn onClick={() => close()} />} />
+            <div className="popup-module-main">
               <img src="https://via.placeholder.com/912x568" />
             </div>
           </div>
         </PopUp>
       ) : null}
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
+      {actionCalled ? (
+        <PopUp>
+          <div className="popup-module">
+            <HeaderBar main={<Heading label="Assign Complaint" />} end={<CloseBtn onClick={() => close()} />} />
+            <div className="popup-module-main">
+              <Card>
+                <CardLabel>Employee Name</CardLabel>
+                <TextInput />
+                <CardLabel>Comments</CardLabel>
+                <TextArea />
+                <CardLabel>Supporting Documents</CardLabel>
+                <CardLabelDesc>Only .jpg and .pdf files. 5 MB max file size.</CardLabelDesc>
+              </Card>
+            </div>
+          </div>
+        </PopUp>
+      ) : null}
     </React.Fragment>
   );
 };

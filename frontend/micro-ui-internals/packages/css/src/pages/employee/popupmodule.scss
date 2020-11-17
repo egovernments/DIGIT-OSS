@@ -1,9 +1,9 @@
 @screen dt{
-    .zoom-view{
+    .popup-module{
         width: fit-content;
         margin: auto;
         @apply bg-white;
-        .zoom-view-main{
+        .popup-module-main{
             @apply px-lg pb-lg;
         }
     }

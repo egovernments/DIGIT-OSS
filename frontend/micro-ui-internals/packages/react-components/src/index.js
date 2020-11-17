@@ -10,6 +10,7 @@ import CardCaption from "./atoms/CardCaption";
 import CardHeader from "./atoms/CardHeader";
 import CardText from "./atoms/CardText";
 import CardLabel from "./atoms/CardLabel";
+import CardLabelDesc from "./atoms/CardLabelDesc";
 import CardLabelError from "./atoms/CardLabelError";
 import CardTextButton from "./atoms/CardTextButton";
 import RadioButtons from "./atoms/RadioButtons";
@@ -56,6 +57,7 @@ export {
   CardHeader,
   CardText,
   CardLabel,
+  CardLabelDesc,
   CardLabelError,
   CardTextButton,
   RadioButtons,

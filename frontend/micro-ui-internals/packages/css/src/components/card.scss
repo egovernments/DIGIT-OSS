@@ -37,6 +37,10 @@
     @apply block font-bold text-legend text-error mb-md;
   }
 
+  .card-label-desc{
+    @apply font-bold text-text-secondary text-heading-s mb-md;
+  }
+
   .card-link {
     @apply block text-center text-link text-link-normal mt-md;
   }
