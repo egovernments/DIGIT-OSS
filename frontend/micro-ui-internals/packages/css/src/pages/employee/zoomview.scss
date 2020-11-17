@@ -1,0 +1,10 @@
+@screen dt{
+    .zoom-view{
+        width: fit-content;
+        margin: auto;
+        @apply bg-white;
+        .zoom-view-main{
+            @apply px-lg pb-lg;
+        }
+    }
+}

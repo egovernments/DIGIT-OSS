@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import { BackButton, ActionBar, Menu, SubmitBar } from "@egovernments/digit-ui-react-components";
@@ -8,17 +8,20 @@ import Inbox from "./Inbox";
 import { Employee } from "../../constants/Routes";
 
 const Complaint = () => {
+  const [displayMenu, setDisplayMenu] = useState(false);
   return (
     <React.Fragment>
-      <BackButton>Back</BackButton>
-      <Switch>
-        <Route path={Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails />} />
-        <Route path={Employee.CreateComplaint} component={() => <CreateComplaint />} />
-        <Route path={Employee.Inbox} component={Inbox} />
-      </Switch>
+      <div className="ground-container">
+        <BackButton>Back</BackButton>
+        <Switch>
+          <Route path={Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails />} />
+          <Route path={Employee.CreateComplaint} component={() => <CreateComplaint />} />
+          <Route path={Employee.Inbox} component={Inbox} />
+        </Switch>
+      </div>
       <ActionBar>
-        <Menu options={["Assign Complaint", "Reject Complaint"]} />
-        <SubmitBar label="Take Action" />
+        {displayMenu ? <Menu options={["Assign Complaint", "Reject Complaint"]} /> : null}
+        <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
       </ActionBar>
     </React.Fragment>
   );

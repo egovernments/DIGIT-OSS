@@ -33,6 +33,9 @@ import { ImageUploadHandler } from "./atoms/ImageUploadHandler";
 import ActionBar from "./atoms/ActionBar";
 import Menu from "./atoms/Menu";
 import Table from "./atoms/Table";
+import PopUp from "./atoms/PopUp";
+import HeaderBar from "./atoms/HeaderBar";
+
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
 import TextInputCard from "./molecules/TextInputCard";
@@ -82,4 +85,6 @@ export {
   TextInputCard,
   CityMohalla,
   Table,
+  PopUp,
+  HeaderBar,
 };
