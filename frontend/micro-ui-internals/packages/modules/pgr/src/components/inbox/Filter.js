@@ -43,6 +43,7 @@ const Filter = (props) => {
     },
   });
 
+  //TODO: Move this to separate hook
   useEffect(() => {
     (async () => {
       const criteria = {
