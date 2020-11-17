@@ -18,6 +18,15 @@ export const Row = (props) => {
   );
 };
 
+export const MediaRow = (props) => {
+  return (
+    <div>
+      <h2>{props.label}</h2>
+      <span>{props.children}</span>
+    </div>
+  );
+};
+
 export const StatusTable = (props) => {
   if (props.dataObject) {
     return (

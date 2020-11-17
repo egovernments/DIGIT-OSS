@@ -1,6 +1,7 @@
 import Body from "./atoms/Body";
 import TopBar from "./atoms/TopBar";
 import AppContainer from "./atoms/AppContainer";
+import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
 import Header from "./atoms/Header";
 import LinkLabel from "./atoms/LinkLabel";
 import BackButton from "./atoms/BackButton";
@@ -19,7 +20,7 @@ import Banner from "./atoms/Banner";
 import CardSubHeader from "./atoms/CardSubHeader";
 import SubmitBar from "./atoms/SubmitBar";
 import LinkButton from "./atoms/LinkButton";
-import { StatusTable, Row, LastRow } from "./atoms/StatusTable";
+import { StatusTable, Row, LastRow, MediaRow } from "./atoms/StatusTable";
 import DisplayPhotos from "./atoms/DisplayPhotos";
 import { ConnectingCheckPoints, CheckPoint } from "./atoms/ConnectingCheckPoints";
 import Rating from "./atoms/Rating";
@@ -29,6 +30,8 @@ import LocationSearch from "./atoms/LocationSearch";
 import UploadImages from "./atoms/UploadImages";
 import ImageViewer from "./atoms/ImageViewer";
 import { ImageUploadHandler } from "./atoms/ImageUploadHandler";
+import ActionBar from "./atoms/ActionBar";
+import Menu from "./atoms/Menu";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -39,7 +42,10 @@ export {
   Body,
   TopBar,
   AppContainer,
+  EmployeeAppContainer,
   Header,
+  ActionBar,
+  Menu,
   LinkLabel,
   BackButton,
   Card,
@@ -60,6 +66,7 @@ export {
   StatusTable,
   Row,
   LastRow,
+  MediaRow,
   DisplayPhotos,
   ConnectingCheckPoints,
   CheckPoint,

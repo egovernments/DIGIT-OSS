@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import getStore from "./redux/store";
 import defaultConfig from "./config";
 import CitizenApp from "./CitizenApp";
+import EmployeeApp from "./EmployeeApp";
 
 const Module = ({ deltaConfig = {}, stateCode, cityCode, moduleCode }) => {
   const store = Digit.Services.useStore(defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode });
@@ -14,7 +15,8 @@ const Module = ({ deltaConfig = {}, stateCode, cityCode, moduleCode }) => {
   }
   return (
     <Provider store={getStore(store)}>
-      <CitizenApp />
+      {/* <CitizenApp /> */}
+      <EmployeeApp />
     </Provider>
   );
 };

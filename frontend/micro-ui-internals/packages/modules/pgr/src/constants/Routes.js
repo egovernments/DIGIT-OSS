@@ -1,6 +1,6 @@
 const CREATE_COMPLAINT_PATH = "/create-complaint/";
 const REOPEN_COMPLAINT_PATH = "/reopen/";
-
+import { PGR_EMPLOYEE_COMPLAINT_DETAILS, PGR_EMPLOYEE_CREATE_COMPLAINT } from "./Employee";
 export const PgrRoutes = {
   ComplaintsPage: "/complaints",
   RatingAndFeedBack: "/rate/:id",
@@ -18,4 +18,9 @@ export const PgrRoutes = {
   UploadPhotos: `${CREATE_COMPLAINT_PATH}upload-photos`,
   Details: `${CREATE_COMPLAINT_PATH}details`,
   DynamicConfig: `${CREATE_COMPLAINT_PATH}dynamic-config`,
+};
+
+export const EmployeeRoutes = {
+  ComplaintDetails: PGR_EMPLOYEE_COMPLAINT_DETAILS,
+  CreateComplaint: PGR_EMPLOYEE_CREATE_COMPLAINT,
 };
