@@ -16,6 +16,7 @@ import static org.egov.pt.calculator.util.CalculatorConstants.HUNDRED;
 import static org.egov.pt.calculator.util.CalculatorConstants.NONRESIDENTIAL;
 import static org.egov.pt.calculator.util.CalculatorConstants.ONE_TIME_PENALTY_JSON_STRING;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ADHOC_PENALTY;
+import static org.egov.pt.calculator.util.CalculatorConstants.PT_ADHOC_REBATE;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ESTIMATE_BILLINGSLABS_UNMATCH_VACANCT;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ESTIMATE_BILLINGSLABS_UNMATCH_VACANT_MSG;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_LATE_ASSESSMENT_PENALTY;
@@ -235,6 +236,7 @@ public class EstimationService {
 		estimates.add(ptTaxHead);
 		estimates.add(getLateAssessmentPenaltyTaxhead(property));
 		estimates.add(getAdHocPenaltyTaxhead(property));
+		estimates.add(getAdHocRebateTaxhead(property));
 		estimates.add(getUsageExemptionTaxhead(exemption));
 		log.info("estimates", estimates);
 		Map<String, List> estimatesAndBillingSlabs = new HashMap<>();
@@ -259,6 +261,12 @@ public class EstimationService {
 		BigDecimal tax = property.getPropertyDetails().get(0).getAdhocPenalty()==null ? 
 				BigDecimal.ZERO : property.getPropertyDetails().get(0).getAdhocPenalty();
 		return TaxHeadEstimate.builder().taxHeadCode(PT_ADHOC_PENALTY).estimateAmount(tax).build();
+	}
+	
+	private TaxHeadEstimate getAdHocRebateTaxhead(Property property) {
+		BigDecimal tax = property.getPropertyDetails().get(0).getAdhocExemption()==null ? 
+				BigDecimal.ZERO : property.getPropertyDetails().get(0).getAdhocExemption();
+		return TaxHeadEstimate.builder().taxHeadCode(PT_ADHOC_REBATE).estimateAmount(tax).build();
 	}
 
 	private TaxHeadEstimate getLateAssessmentPenaltyTaxhead(Property property) {
@@ -361,7 +369,7 @@ public class EstimationService {
 
 						landAV = landAV.add(appreDepreAmount);
 						unitTaxAmount = landAV.multiply(taxRate).divide(HUNDRED);
-						exemption = exemption.add(unitTaxAmount.multiply(exemptionRate).divide(HUNDRED));
+						//exemption = exemption.add(unitTaxAmount.multiply(exemptionRate).divide(HUNDRED));
 					}
 
 				} else {

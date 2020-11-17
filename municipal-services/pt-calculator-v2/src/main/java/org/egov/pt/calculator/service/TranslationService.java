@@ -107,8 +107,8 @@ public class TranslationService {
         propertyDetail.put("source", assessment.getSource().toString());
         propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
-        // propertyDetail.put("adhocExemption", );
-        // propertyDetail.put("adhocPenalty",);
+        propertyDetail.put("adhocExemption", assessment.getAdditionalDetails().get("adhocExemption"));
+        propertyDetail.put("adhocPenalty",assessment.getAdditionalDetails().get("adhocPenalty"));
         LinkedHashMap additionalDetails = (LinkedHashMap) property.getAdditionalDetails();
 		String constructionYear = additionalDetails ==null ? null : (String) additionalDetails.get("constructionYear");
 		long constructionDate = constructionYear == null ? 0 : Instant.parse(constructionYear).toEpochMilli();
