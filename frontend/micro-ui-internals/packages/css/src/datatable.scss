@@ -4,6 +4,11 @@
   div{
     @apply flex border-b border-border pb-sm mb-sm;
 
+    span{
+      width: 70%;
+      display: contents;
+    }
+
     h2{
       width: 30%;
       @apply font-bold text-heading-s;

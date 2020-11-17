@@ -345,6 +345,8 @@ img, video {
     display: flex; }
 
 @media (min-width: 780px) {
+  .employee-app-container {
+    width: 100%; }
   .app-container {
     width: 960px;
     margin-left: auto;
@@ -480,7 +482,6 @@ img, video {
   .submit-bar {
     width: 240px; }
   .card {
-    max-width: 960px;
     margin-left: auto;
     margin-right: auto;
     padding-right: 320px;
@@ -897,6 +898,9 @@ img, video {
     border-color: rgba(214, 213, 212, var(--border-opacity));
     padding-bottom: 8px;
     margin-bottom: 8px; }
+    .data-table div span {
+      width: 70%;
+      display: contents; }
     .data-table div h2 {
       width: 30%;
       font-weight: 700; }
@@ -1177,3 +1181,27 @@ img, video {
       height: auto;
       max-width: 640px;
       margin: auto; } }
+
+.action-bar-wrap {
+  -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.16);
+  width: 100%;
+  --bg-opacity:1;
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, var(--bg-opacity));
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 24px;
+  text-align: right; }
+
+@media (min-width: 780px) {
+  .action-bar-wrap {
+    -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.16);
+    width: 100%;
+    --bg-opacity:1;
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, var(--bg-opacity));
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: right; } }

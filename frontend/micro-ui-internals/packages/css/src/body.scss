@@ -59,6 +59,10 @@
 }
 
 @screen dt{
+
+  .employee-app-container{
+    @apply w-full
+  }
   
   .app-container{
     width: 960px;
