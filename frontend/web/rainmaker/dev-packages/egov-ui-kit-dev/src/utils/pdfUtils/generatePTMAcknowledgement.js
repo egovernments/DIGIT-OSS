@@ -71,8 +71,8 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     const documentCard = getDocumentsCard(documentsUploadRedux);
     let pdfData = {
         header: "PTM_ACKNOWLEDGEMENT", tenantId: property.tenantId,
-        applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
-        additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,
+        applicationNoHeader: 'PT_PROPERTY_PTUID', applicationNoValue: property.propertyId,
+        additionalHeader: "PT_APPLICATION_NO_LABEL", additionalHeaderValue: property.acknowldgementNumber,
         cards: [
             { header: "PT_PROPERTY_ADDRESS_SUB_HEADER", items: addressCard },
             { header: 'PT_MUTATION_TRANSFEROR_DETAILS', items: transferorDetails, type: transferorDetailsInfo.length > 1 ? 'multiItem' : 'singleItem' },

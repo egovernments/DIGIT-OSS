@@ -63,8 +63,8 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
 
     let legacyPdfData = {
         header: "PT_ACKNOWLEDGEMENT", tenantId: property.tenantId,
-        applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
-        additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,
+        applicationNoHeader: 'PT_PROPERTY_PTUID', applicationNoValue: property.propertyId,
+        additionalHeader: "PT_APPLICATION_NO_LABEL", additionalHeaderValue: property.acknowldgementNumber,
         cards: [
             { header: "PT_PROPERTY_ADDRESS_SUB_HEADER", items: addressCard },
             { header: "PT_ASSESMENT_INFO_SUB_HEADER", items: assessmentCard },
@@ -74,8 +74,8 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     }
     let assessmentPdfData = {
         header: "PT_ACKNOWLEDGEMENT", tenantId: property.tenantId,
-        applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
-        additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,
+        applicationNoHeader: 'PT_PROPERTY_PTUID', applicationNoValue: property.propertyId,
+        additionalHeader: "PT_APPLICATION_NO_LABEL", additionalHeaderValue: property.acknowldgementNumber,
         cards: [
             { header: "PT_PROPERTY_ADDRESS_SUB_HEADER", items: addressCard },
             { header: "PT_ASSESMENT_INFO_SUB_HEADER", items: assessmentCard },

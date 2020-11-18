@@ -33,7 +33,7 @@ const getLabel = (value, type = 'key') => {
     switch (type) {
         case 'key':
             label = {
-                "text": value ? value : 'NA',
+                "text": value ? getLocaleLabels(value,value)  : 'NA',
                 "style": "pdf-card-key",
                 "border": [
                     false,
@@ -45,7 +45,7 @@ const getLabel = (value, type = 'key') => {
             break;
         case 'value':
             label = {
-                "text": value ? value : 'NA',
+                "text": value ? getLocaleLabels(value,value) : 'NA',
                 "style": "pdf-card-value",
                 "border": [
                     false,
@@ -58,7 +58,7 @@ const getLabel = (value, type = 'key') => {
 
         case 'header':
             label = {
-                "text": value ? value : ' ',
+                "text": value ? getLocaleLabels(value,value) : ' ',
                 "style": "pdf-card-sub-header",
                 "border": [
                     false,
@@ -94,7 +94,7 @@ const getLabel = (value, type = 'key') => {
             break;
         default:
             label = {
-                "text": value ? value : ' ',
+                "text": value ? getLocaleLabels(value,value) : ' ',
                 "style": "pdf-card-key",
                 "border": [
                     false,
