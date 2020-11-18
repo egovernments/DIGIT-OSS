@@ -564,14 +564,14 @@ class PTAcknowledgement extends React.Component {
           />
         </div>
         <div className="print-application-conainer" style={{ position: "fixed", opacity: 0, zIndex: -9999, height: "100%" }}>
-          {properties && (
+ {/*          {properties && (
             <PTInformation
               properties={properties}
               generalMDMSDataById={generalMDMSDataById}
               documentsUploaded={this.props.documentsUploaded}
               totalBillAmountDue={this.props.totalBillAmountDue}
             />
-          )}
+          )} */}
         </div>
       </div>
     );
