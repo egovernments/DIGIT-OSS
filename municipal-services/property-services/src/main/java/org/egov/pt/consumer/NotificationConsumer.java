@@ -47,7 +47,7 @@ public class NotificationConsumer {
 			if (topic.equalsIgnoreCase(configs.getCreateAssessmentTopic()) || topic.equalsIgnoreCase(configs.getUpdateAssessmentTopic())) {
 
 				AssessmentRequest request = mapper.convertValue(record, AssessmentRequest.class);
-				//assessmentNotificationService.process(topic, request);
+				assessmentNotificationService.process(topic, request);
 			} else if (topic.equalsIgnoreCase(configs.getSavePropertyTopic()) || topic.equalsIgnoreCase(configs.getUpdatePropertyTopic())) {
 
 				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);
@@ -61,7 +61,7 @@ public class NotificationConsumer {
 					notifService.sendNotificationForMutation(request);
 				} else {
 
-					//notifService.sendNotificationForUpdate(request);
+					notifService.sendNotificationForUpdate(request);
 				}
 			}
 
