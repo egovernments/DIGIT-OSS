@@ -13,7 +13,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "build:prod": "./build.sh"
   },
   "eslintConfig": {
     "extends": [
