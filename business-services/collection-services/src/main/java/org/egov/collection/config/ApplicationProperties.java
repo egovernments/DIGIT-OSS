@@ -207,5 +207,4 @@ public class ApplicationProperties {
     @Value("${kafka.topic.migration.batch.count}")
     private String migrationCountTopic;
 
-
 }

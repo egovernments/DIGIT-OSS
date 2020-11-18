@@ -258,6 +258,7 @@ public class MigrationService {
 			BillDetail detail = BillDetail.builder()
 				.manualReceiptNumber(oldDetail.getManualReceiptNumber())
 				.cancellationRemarks(oldDetail.getCancellationRemarks())
+				.additionalDetails(oldDetail.getAdditionalDetails())
 				.manualReceiptDate(oldDetail.getManualReceiptDate())
 				.billDescription(oldDetail.getBillDescription())
 				.collectionType(oldDetail.getCollectionType())
@@ -384,7 +385,7 @@ public class MigrationService {
 
         AuditDetails auditDetails = getAuditDetail(receipt.getAuditDetails());
         payment.setAuditDetails(auditDetails);
-        payment.setAdditionalDetails((JsonNode)receipt.getBill().get(0).getAdditionalDetails());
+        payment.setAdditionalDetails((JsonNode)receipt.getBill().get(0).getBillDetails().get(0).getAdditionalDetails());
 
         PaymentDetail paymentDetail = getPaymentDetail(receipt, auditDetails, requestInfo);
     	
