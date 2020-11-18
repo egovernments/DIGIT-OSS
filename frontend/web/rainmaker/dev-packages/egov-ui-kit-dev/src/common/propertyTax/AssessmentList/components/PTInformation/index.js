@@ -118,7 +118,13 @@ class PTInformation extends React.Component {
       const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties,"tenantId"));
       ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0] ,"city.ulbGrade")}` : "MUNICIPAL CORPORATION";
     }
-   
+     let isLegary ;
+
+     if (properties && properties.source==='LEGACY_RECORD')
+     {
+      isLegary =true;
+     }
+  
     return (
       <div className="form-without-button-cont-generic">
         {label && (
@@ -191,8 +197,9 @@ class PTInformation extends React.Component {
                   ownershipTransfer={true}
                   viewHistory={true}
                 ></OwnerInfo>
-                <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
-                <div id="property-assess-form">
+                        {!isLegary &&
+            <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo> }
+           <div id="property-assess-form">
                   <AssessmentHistory></AssessmentHistory>
                   <PaymentHistory></PaymentHistory>
                   <ApplicationHistory></ApplicationHistory>
