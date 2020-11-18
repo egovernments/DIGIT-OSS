@@ -432,7 +432,7 @@ class FormWizardDataEntry extends Component {
     const isReviewPage = selected === 3;
     switch (ownerType) {
       case "INDIVIDUAL.SINGLEOWNER":
-        return <OwnerInfoHOC disabled={propertiesEdited} />;
+        return <OwnerInfoHOC  />;
       case "INDIVIDUAL.MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
@@ -441,7 +441,6 @@ class FormWizardDataEntry extends Component {
             }}
             handleRemoveOwner={this.handleRemoveOwner}
             ownerDetails={this.state.ownerInfoArr}
-            disabled={propertiesEdited}
           />
         );
       case "INSTITUTIONALPRIVATE":
@@ -541,7 +540,7 @@ class FormWizardDataEntry extends Component {
         );
         return (
           <div>
-            <OwnershipTypeHOC disabled={propertiesEdited} />
+            <OwnershipTypeHOC />
             {getOwnerDetails(ownerType)}
           </div>
         );
