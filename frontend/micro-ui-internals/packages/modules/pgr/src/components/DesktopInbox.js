@@ -53,9 +53,12 @@ const DesktopInbox = (props) => {
 
   return (
     <div
-      style={{
-        display: "flex",
-      }}
+      // style={{
+      //   display: "flex",
+      //   justifyContent: "center",
+      //   border: "1px solid black",
+      // }}
+      className="inbox-container"
     >
       <div style={{ width: "270px" }}>
         <ComplaintsLink />

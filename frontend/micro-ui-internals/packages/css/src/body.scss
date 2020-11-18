@@ -56,8 +56,12 @@
 }
 
 @screen dt {
+  .employee-app-container {
+    @apply w-full;
+  }
+
   .app-container {
-    width: 1150px;
+    width: 960px;
     margin-left: auto;
     margin-right: auto;
   }

@@ -1,11 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
 import initLibraries from "@egovernments/digit-ui-libraries";
 import PGRApp from "@egovernments/digit-ui-module-pgr";
 import { Body, TopBar } from "@egovernments/digit-ui-react-components";
 import "@egovernments/digit-ui-css/dist/index.css";
-
 initLibraries();
 
 const userServiceData = {
@@ -38,7 +36,7 @@ Digit.SessionStorage.set("citizen.token", citAuth);
 ReactDOM.render(
   <>
     <Body>
-      <TopBar />
+      {/* <TopBar /> */}
       <PGRApp stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
     </Body>
   </>,
