@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import { LOCALIZATION_KEY } from "../constants/Localization";
+
 import {
   BackButton,
   Card,
@@ -22,9 +24,6 @@ import { selectWorkflow } from "../selectors/processInstance";
 import useComplaintHistory from "../hooks/useComplaintHistory";
 
 const ComplaintDetailsPage = () => {
-  const LOCALIZATION_KEY_CS_COMPLAINT = "CS_COMPLAINT_DETAILS";
-  const LOCALIZATION_KEY_CS_COMMON = "CS_COMMON";
-
   let { t } = useTranslation();
   let { id } = useParams();
   const dispatch = useDispatch();
@@ -77,9 +76,9 @@ const ComplaintDetailsPage = () => {
 
     let formattedAddress = getFormatedAddress(address);
     return {
-      [t(`${LOCALIZATION_KEY_CS_COMMON}_COMPLAINT_NO`)]: serviceRequestId,
-      [t(`${LOCALIZATION_KEY_CS_COMMON}_COMPLAINT_STATUS`)]: t(`${LOCALIZATION_KEY_CS_COMMON}_${applicationStatus}`),
-      [t(`${LOCALIZATION_KEY_CS_COMPLAINT}_SUBMISSION_DATE`)]: Digit.DateUtils.ConvertTimestampToDate(createdTime),
+      [t(`${LOCALIZATION_KEY.CS_COMMON}_COMPLAINT_NO`)]: serviceRequestId,
+      [t(`${LOCALIZATION_KEY.CS_COMMON}_COMPLAINT_STATUS`)]: t(`${LOCALIZATION_KEY.CS_COMMON}_${applicationStatus}`),
+      [t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_SUBMISSION_DATE`)]: Digit.DateUtils.ConvertTimestampToDate(createdTime),
       Address: formattedAddress,
     };
   };
@@ -87,7 +86,7 @@ const ComplaintDetailsPage = () => {
   return (
     <React.Fragment>
       {/* <BackButton>Back</BackButton> */}
-      <Header>{t("CS_HEADER_COMPLAINT_SUMMARY")}</Header>
+      <Header>{t(`${LOCALIZATION_KEY.CS_HEADER}_COMPLAINT_SUMMARY`)}</Header>
 
       {Object.keys(complaintDetails).length > 0 && (
         <React.Fragment>
@@ -98,14 +97,14 @@ const ComplaintDetailsPage = () => {
           {
             <React.Fragment>
               <Card>
-                <CardSubHeader>{t(`${LOCALIZATION_KEY_CS_COMPLAINT}_COMPLAINT_TIMELINE`)}</CardSubHeader>
+                <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
                 {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
                 <ConnectingCheckPoints>
                   {complaintHistory.map((history, index) => {
                     return (
-                      <React.Fragment key={index}>
-                        <CheckPoint label={t(`${LOCALIZATION_KEY_CS_COMMON}_${history.applicationStatus}`)} info={history.text} isCompleted={true} />
-                      </React.Fragment>
+                      <span key={index}>
+                        <CheckPoint label={t(`${LOCALIZATION_KEY.CS_COMMON}_${history.applicationStatus}`)} info={history.text} isCompleted={true} />
+                      </span>
                     );
                   })}
                 </ConnectingCheckPoints>
@@ -113,7 +112,7 @@ const ComplaintDetailsPage = () => {
             </React.Fragment>
           }
           <Card>
-            <CardSubHeader>{t(`${LOCALIZATION_KEY_CS_COMMON}_COMMENTS`)}</CardSubHeader>
+            <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
             <TextArea />
             <SubmitBar label="Send" />
           </Card>

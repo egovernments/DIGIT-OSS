@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Card, CardHeader, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const CreateComplaint = (props) => {
   const SessionStorage = Digit.SessionStorage;
@@ -39,14 +40,14 @@ const CreateComplaint = (props) => {
   }
   return (
     <Card>
-      <CardHeader>{t("CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER")}</CardHeader>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_COMPLAINT_TYPE_PLACEHOLDER`)}</CardHeader>
       <CardText>
         {/* Select the option related to your complaint from the list given below.
         If the complaint type you are looking for is not listed select others. */}
-        {t("CS_COMPLAINT_TYPE_TEXT")}
+        {t(`${LOCALIZATION_KEY.CS_COMPLAINT}_TYPE_TEXT`)}
       </CardText>
       {localMenu ? <RadioButtons selectedOption={selectedOption} options={localMenu} optionsKey="name" onSelect={selected} /> : null}
-      <SubmitBar label={t("PT_COMMONS_NEXT")} onSubmit={onSave} />
+      <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={onSave} />
     </Card>
   );
 };

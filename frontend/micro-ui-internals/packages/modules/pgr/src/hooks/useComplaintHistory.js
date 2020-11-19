@@ -32,7 +32,7 @@ const useComplaintHistory = (processInstance) => {
         return (
           <React.Fragment>
             {nextAction.map(({ action }, index) => (
-              <Link to={`/${action.toLowerCase()}/${obj.businessId}`}>
+              <Link key={index} to={`/${action.toLowerCase()}/${obj.businessId}`}>
                 <span
                   style={{
                     color: "#F47738",

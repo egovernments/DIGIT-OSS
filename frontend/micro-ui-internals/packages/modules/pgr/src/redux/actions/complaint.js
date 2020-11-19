@@ -50,8 +50,9 @@ const createComplaint = ({
       verificationDocuments: uploadedImages,
     },
   };
-
+  console.log("inside action");
   const response = await Digit.PGRService.create(data, cityCode);
+  console.log("response", response);
   dispatch({
     type: CREATE_COMPLAINT,
     payload: response,

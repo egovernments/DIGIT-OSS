@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, CardHeader, CardText, TextArea, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const Details = (props) => {
   const [details, setDetails] = useState(null);
@@ -18,19 +19,19 @@ const Details = (props) => {
   return (
     <Card>
       {/* <CardHeader>Provide Additional Details</CardHeader> */}
-      <CardHeader>{t("CS_ADDCOMPLAINT_PROVIDE_ADDITIONAL_DETAILS")}</CardHeader>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_ADDITIONAL_DETAILS`)}</CardHeader>
       <CardText>
         {/* If you think apart from information provided till now additional details
         are required to resolve complaint, provide it below: */}
-        {t("CS_ADDITIONAL_DETAILS_TEXT")}
+        {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_TEXT`)}
       </CardText>
       <TextArea onChange={textInput}></TextArea>
-      <Link to="/create-complaint/submission" onClick={submitComplaint}>
-        <SubmitBar label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")} />
+      <Link to="/create-complaint/response" onClick={submitComplaint}>
+        <SubmitBar label={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT`)} />
       </Link>
       {props.skip ? (
-        <Link to="/create-complaint/submission">
-          <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")} />
+        <Link to="/create-complaint/response">
+          <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} />
         </Link>
       ) : null}
     </Card>

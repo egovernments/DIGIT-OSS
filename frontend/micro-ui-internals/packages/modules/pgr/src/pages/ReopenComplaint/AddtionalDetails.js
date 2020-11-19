@@ -2,8 +2,10 @@ import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+
 import { BackButton, Card, CardHeader, CardText, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { updateComplaints } from "../../redux/actions/index";
+import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const AddtionalDetails = ({ history }) => {
   // const [details, setDetails] = useState(null);
@@ -72,11 +74,11 @@ const AddtionalDetails = ({ history }) => {
   return (
     <React.Fragment>
       <Card>
-        <CardHeader>{t("CS_ADDCOMPLAINT_PROVIDE_ADDITIONAL_DETAILS")}</CardHeader>
-        <CardText>{t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_TEXT")}</CardText>
+        <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_ADDITIONAL_DETAILS`)}</CardHeader>
+        <CardText>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_TEXT`)}</CardText>
         <TextArea onChange={textInput}></TextArea>
         <div onClick={reopenComplaint}>
-          <SubmitBar label={`${t("CS_HEADER_REOPEN_COMPLAINT")}`} />
+          <SubmitBar label={t(`${LOCALIZATION_KEY.CS_HEADER}_REOPEN_COMPLAINT`)} />
         </div>
       </Card>
     </React.Fragment>

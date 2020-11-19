@@ -24,7 +24,7 @@ const Submission = (props) => {
         app.
       </CardText>
       <Link to="/create-complaint">
-        <SubmitBar label="Go back to home page" />
+        <SubmitBar label={`${LOCALIZATION_KEY.CORE_COMMON}_GO_TO_HOME`} />
       </Link>
     </Card>
   );

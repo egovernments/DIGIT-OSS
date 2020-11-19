@@ -2,7 +2,7 @@ import React from "react";
 
 export const CheckPoint = (props) => {
   return (
-    <div className={props.isCompleted ? "checkpoint-done" : "checkpoint"}>
+    <div className={props.isCompleted ? "checkpoint-done" : "checkpoint"} key={props.keyValue}>
       <h2></h2>
       <header>
         {props.label}
@@ -18,12 +18,12 @@ export const ConnectingCheckPoints = (props) => {
       <React.Fragment>
         {props.children.map((child, index) => {
           return props.children.length === ++index ? (
-            child
+            <div key={index}>{child}</div>
           ) : (
-            <React.Fragment key={index}>
+            <div key={index}>
               {child}
               <div className="checkpoint-connect"></div>
-            </React.Fragment>
+            </div>
           );
         })}
       </React.Fragment>

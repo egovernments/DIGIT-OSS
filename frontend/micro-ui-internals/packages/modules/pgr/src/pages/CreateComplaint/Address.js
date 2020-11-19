@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchLocalities } from "../../redux/actions";
 import { useTranslation } from "react-i18next";
+import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const Address = (props) => {
   const SessionStorage = Digit.SessionStorage;
@@ -59,19 +60,19 @@ const Address = (props) => {
   }
   return (
     <Card>
-      <CardSubHeader>{t("CS_ADDCOMPLAINT_COMPLAINT_LOCATION")}</CardSubHeader>
-      <CardHeader>{t("CS_ADDCOMPLAINT_PROVIDE_COMPLAINT_ADDRESS")}</CardHeader>
+      <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_COMPLAINT_LOCATION`)}</CardSubHeader>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_COMPLAINT_ADDRESS`)}</CardHeader>
       <CardText>
         {/* Choose the locality/mohalla of the complaint from the list given below. */}
-        {t("CS_CHOOSE_CITY_MOHALLA_TEXT")}
+        {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_CITY_MOHALLA_TEXT`)}
       </CardText>
       <CardLabel>{t("MYCITY_CODE_LABEL")} *</CardLabel>
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} />
-      <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")} *</CardLabel>
+      <CardLabel>{t(`${LOCALIZATION_KEY.CS_CREATECOMPLAINT}_MOHALLA`)} *</CardLabel>
       {/* <RadioButtons options={["Ajit Nagar", "Patel Nagar"]}/> */}
       <Dropdown isMandatory option={localities} select={selectLocalities} />
       <Link to="/create-complaint/landmark" onClick={save}>
-        <SubmitBar label={t("PT_COMMONS_NEXT")} />
+        <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       </Link>
       {/* <p onClick={() =>console.log(selectedCity, selectedLocality)}>state display</p> */}
     </Card>

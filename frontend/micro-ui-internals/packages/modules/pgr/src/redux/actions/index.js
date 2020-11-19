@@ -34,9 +34,9 @@ export const updateLocalizationResources = () => async (dispatch, getState) => {
 };
 
 export const searchComplaints = (filters = {}) => async (dispatch, getState) => {
-  let city = "amritsar";
-  const { stateInfo } = getState();
-  let { ServiceWrappers } = await Digit.PGRService.search(`${stateInfo.code}.${city}`, filters);
+  const { cityCode } = getState();
+
+  let { ServiceWrappers } = await Digit.PGRService.search(`${cityCode}`, filters);
   dispatch({
     type: FETCH_COMPLAINTS,
     payload: { complaints: ServiceWrappers },

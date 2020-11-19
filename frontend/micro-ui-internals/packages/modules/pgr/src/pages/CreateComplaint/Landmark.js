@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, CardSubHeader, CardHeader, CardText, CardLabel, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const Landmark = (props) => {
   const { t } = useTranslation();
@@ -17,16 +18,16 @@ const Landmark = (props) => {
 
   return (
     <Card>
-      <CardSubHeader>{t("CS_ADDCOMPLAINT_COMPLAINT_LOCATION")}</CardSubHeader>
-      <CardHeader>{t("CS_PROVIDE_LANDMARK")}</CardHeader>
+      <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_COMPLAINT_LOCATION`)}</CardSubHeader>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_LANDMARK`)}</CardHeader>
       <CardText>
         {/* Provide the landmark to help us reach the complaint location easily. */}
-        {t("CS_PROVIDE_LANDMARK_TEXT")}
+        {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_LANDMARK_TEXT`)}
       </CardText>
-      <CardLabel>{t("CS_ADDCOMPLAINT_LANDMARK")}</CardLabel>
+      <CardLabel>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_LANDMARK`)}</CardLabel>
       <TextArea onChange={textInput}></TextArea>
       <Link to="/create-complaint/upload-photos" onClick={save}>
-        <SubmitBar label="Next" />
+        <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       </Link>
     </Card>
   );

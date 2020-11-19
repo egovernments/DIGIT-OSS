@@ -17,6 +17,7 @@ export const PGRService = {
       url: Urls.PGR_Create,
       data: details,
       useCache: true,
+      userInfo: true,
       method: "POST",
       params: { tenantId: stateCode },
       auth: true,
