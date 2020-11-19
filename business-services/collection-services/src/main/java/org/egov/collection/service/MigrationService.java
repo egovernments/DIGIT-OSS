@@ -385,7 +385,7 @@ public class MigrationService {
 
         AuditDetails auditDetails = getAuditDetail(receipt.getAuditDetails());
         payment.setAuditDetails(auditDetails);
-        payment.setAdditionalDetails((JsonNode)receipt.getBill().get(0).getBillDetails().get(0).getAdditionalDetails());
+        payment.setAdditionalDetails((JsonNode)receipt.getBill().get(0).getAdditionalDetails());
 
         PaymentDetail paymentDetail = getPaymentDetail(receipt, auditDetails, requestInfo);
     	
