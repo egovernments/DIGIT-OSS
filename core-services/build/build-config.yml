@@ -236,3 +236,10 @@ config:
     build:
       - work-dir: "libraries/enc-client"
         image-name: "enc-client"
+
+
+  - name: "builds/core-services/nlp-engine"
+    build:
+      - work-dir: "nlp-engine"
+        image-name: "nlp-engine"
+        dockerfile: "nlp-engine/Dockerfile"
