@@ -1,12 +1,23 @@
 import { Card } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const ComplaintsLink = () => {
-  const links = [
+const ComplaintsLink = ({ isMobile }) => {
+  const allLinks = [
     { text: "New Complaint", link: "/" },
     { text: "Reports", link: "/" },
     { text: "Dashboard", link: "/" },
   ];
+
+  const [links, setLinks] = useState(allLinks);
+
+  useEffect(() => {
+    if (isMobile) {
+      const mobileLinks = links.filter((link) => {
+        return link.text !== "Dashboard";
+      });
+      setLinks(mobileLinks);
+    }
+  }, []);
 
   const GetLogo = () => (
     <div className="header">

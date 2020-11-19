@@ -6,7 +6,7 @@ const MobileInbox = ({ complaints }) => (
   <Card>
     <div className="inbox-container">
       <div className="filters-container">
-        <ComplaintsLink />
+        <ComplaintsLink isMobile={true} />
       </div>
     </div>
   </Card>

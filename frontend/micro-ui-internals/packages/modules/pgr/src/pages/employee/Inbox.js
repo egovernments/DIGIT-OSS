@@ -22,8 +22,8 @@ const Inbox = () => {
     getComplaints();
   }, [getComplaints]);
 
-  return complaints ? <DesktopInbox data={complaints} onFilterChange={handleFilterChange} /> : "";
-  // return complaints ? <MobileInbox data={complaints} onFilterChange={handleFilterChange} /> : "";
+  //return complaints ? <DesktopInbox data={complaints} onFilterChange={handleFilterChange} /> : "";
+  return complaints ? <MobileInbox data={complaints} onFilterChange={handleFilterChange} /> : "";
 };
 
 export default Inbox;
