@@ -5,7 +5,7 @@ const Menu = (props) => {
     <div className="menu-wrap">
       {props.options.map((option, index) => {
         return (
-          <div>
+          <div key={index}>
             <p>{option}</p>
           </div>
         );

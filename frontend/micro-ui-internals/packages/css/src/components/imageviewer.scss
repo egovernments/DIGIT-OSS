@@ -15,7 +15,8 @@
 
 @screen dt{
     .image-viewer-wrap{
-        @apply relative bg-text-primary p-md;
+        
+        @apply flex fixed top-0 left-0 w-full h-full z-10 bg-text-primary p-md;
 
         svg{
             @apply absolute h-6 w-6;

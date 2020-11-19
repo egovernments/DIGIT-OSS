@@ -1,0 +1,10 @@
+@screen dt{
+    .popup-module{
+        width: fit-content;
+        margin: auto;
+        @apply bg-white;
+        .popup-module-main{
+            @apply px-lg pb-lg;
+        }
+    }
+}

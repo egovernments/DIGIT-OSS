@@ -7,16 +7,16 @@ const SearchComplaint = () => {
     return <span>Clear Search</span>;
   };
   return (
-    <div style={{ backgroundColor: "#fff", display: "flex", alignItems: "center" }}>
-      <div style={{ display: "flex", padding: "16px 40px" }}>
-        <span style={{ display: "flex", flexDirection: "column" }}>
+    <div className="search-complaint-container">
+      <div className="complaint-input-container">
+        <span className="complaint-input">
           <Label>Complaint No.</Label>
-          <TextInput style={{ width: "280px" }} onChange={textInput}></TextInput>
+          <TextInput style={{ width: "280px", marginBottom: "8px" }} onChange={textInput}></TextInput>
           {clearAll()}
         </span>
-        <span>
+        <span className="mobile-input">
           <Label>Mobile No.</Label>
-          <TextInput style={{ width: "280px", marginLeft: "16px" }} onChange={textInput}></TextInput>
+          <TextInput style={{ width: "280px" }} onChange={textInput}></TextInput>
         </span>
       </div>
       <div>

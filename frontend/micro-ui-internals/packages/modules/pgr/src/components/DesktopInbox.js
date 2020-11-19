@@ -60,13 +60,13 @@ const DesktopInbox = (props) => {
       // }}
       className="inbox-container"
     >
-      <div style={{ width: "270px" }}>
+      <div className="filters-container">
         <ComplaintsLink />
-        <div style={{ marginTop: "16px" }}>
+        <div className="filter">
           <Filter onFilterChange={(filters) => props.onFilterChange(filters)} />
         </div>
       </div>
-      <div style={{ marginLeft: "24px", width: "874px" }}>
+      <div className="search-container">
         <SearchComplaint />
         <div style={{ marginTop: "24px" }}>
           <ComplaintTable

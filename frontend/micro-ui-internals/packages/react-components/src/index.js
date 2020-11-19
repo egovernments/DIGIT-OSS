@@ -10,6 +10,7 @@ import CardCaption from "./atoms/CardCaption";
 import CardHeader from "./atoms/CardHeader";
 import CardText from "./atoms/CardText";
 import CardLabel from "./atoms/CardLabel";
+import CardLabelDesc from "./atoms/CardLabelDesc";
 import CardLabelError from "./atoms/CardLabelError";
 import CardTextButton from "./atoms/CardTextButton";
 import RadioButtons from "./atoms/RadioButtons";
@@ -34,6 +35,8 @@ import ActionBar from "./atoms/ActionBar";
 import Menu from "./atoms/Menu";
 import Table from "./atoms/Table";
 import Label from "./atoms/Label";
+import PopUp from "./atoms/PopUp";
+import HeaderBar from "./atoms/HeaderBar";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -55,6 +58,7 @@ export {
   CardHeader,
   CardText,
   CardLabel,
+  CardLabelDesc,
   CardLabelError,
   CardTextButton,
   RadioButtons,
@@ -85,4 +89,6 @@ export {
   CityMohalla,
   Label,
   Table,
+  PopUp,
+  HeaderBar,
 };

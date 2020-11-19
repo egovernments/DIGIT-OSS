@@ -1,3 +1,4 @@
+import { Card } from "@egovernments/digit-ui-react-components";
 import React from "react";
 
 const ComplaintsLink = () => {
@@ -8,17 +9,17 @@ const ComplaintsLink = () => {
   ];
 
   const GetLogo = () => (
-    <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid #D6D5D4" }}>
-      <span style={{ backgroundColor: "#F47738", padding: "12px", radius: "4px" }}>Logo</span> <span style={{ padding: "0 16px" }}>Complaints</span>
+    <div className="header">
+      <span className="logo">Logo</span> <span className="text">Complaints</span>
     </div>
   );
 
   return (
-    <div style={{ backgroundColor: "#fff" }}>
+    <div className="complaint-links-container">
       {GetLogo()}
-      <div style={{ display: "flex", padding: "10px", flexDirection: "column", alignItems: "left", marginLeft: "64px" }}>
+      <div className="body">
         {links.map(({ link, text }) => (
-          <span style={{ padding: "8px" }}>
+          <span className="link">
             <a href={link}>{text}</a>
           </span>
         ))}

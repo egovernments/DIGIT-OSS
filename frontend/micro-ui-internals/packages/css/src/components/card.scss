@@ -37,13 +37,21 @@
     @apply block font-bold text-legend text-error mb-md;
   }
 
+  .card-label-desc{
+    @apply font-bold text-text-secondary text-heading-s mb-md;
+  }
+
   .card-link {
     @apply block text-center text-link text-link-normal mt-md;
   }
 }
 
 .submit-bar {
-  @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full;
+  @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none;
+
+  &:focus{
+    @apply outline-none;
+  }
 
   header {
     @apply font-rc font-medium text-legend text-white leading-10;
@@ -61,6 +69,7 @@
     padding-right: 320px;
     padding-left: 16px;
     padding-top: 16px;
+
     .card-header {
       @apply text-heading-xl-dt;
     }
@@ -82,4 +91,20 @@
       @apply text-left;
     }
   }
+
+  .header-wrap{
+    @apply flex mb-md;
+
+    .header-start{
+      margin-right: auto;
+    }
+
+    .header-content{
+    }
+
+    .header-end{
+      margin-left: auto;
+    }
+  }
+
 }

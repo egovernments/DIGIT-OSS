@@ -125,8 +125,8 @@ const Filter = (props) => {
   };
 
   return (
-    <div style={{ padding: "16px", backgroundColor: "rgb(250, 250, 250)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div className="filter-card">
+      <div class="heading">
         <CardCaption>FILTER BY:</CardCaption>
         <div>Clear all</div>
       </div>
