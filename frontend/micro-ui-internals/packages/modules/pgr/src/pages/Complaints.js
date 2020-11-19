@@ -22,7 +22,7 @@ const ComplaintsPage = () => {
 
   return (
     <React.Fragment>
-      <Header>{t(`${LOCALIZATION_KEY}_MY_COMPLAINTS`)}</Header>
+      <Header>{t(`${LOCALIZATION_KEY.CS_HOME}_MY_COMPLAINTS`)}</Header>
       {complaints &&
         complaints.length > 0 &&
         complaints.map(({ service }, index) => (

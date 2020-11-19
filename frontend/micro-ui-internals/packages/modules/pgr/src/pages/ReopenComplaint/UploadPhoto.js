@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { Card, SubmitBar, BackButton } from "@egovernments/digit-ui-react-components";
-import ImageUploaderHandler from "../../components/ImageUploadHandler";
+import { Card, SubmitBar, BackButton, ImageUploadHandler } from "@egovernments/digit-ui-react-components";
+// import ImageUploaderHandler from "../../components/ImageUploadHandler";
 
 import { LOCALIZATION_KEY } from "../../constants/Localization";
 

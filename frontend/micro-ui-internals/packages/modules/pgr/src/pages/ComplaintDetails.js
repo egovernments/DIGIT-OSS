@@ -102,9 +102,9 @@ const ComplaintDetailsPage = () => {
                 <ConnectingCheckPoints>
                   {complaintHistory.map((history, index) => {
                     return (
-                      <React.Fragment key={index}>
+                      <span key={index}>
                         <CheckPoint label={t(`${LOCALIZATION_KEY.CS_COMMON}_${history.applicationStatus}`)} info={history.text} isCompleted={true} />
-                      </React.Fragment>
+                      </span>
                     );
                   })}
                 </ConnectingCheckPoints>

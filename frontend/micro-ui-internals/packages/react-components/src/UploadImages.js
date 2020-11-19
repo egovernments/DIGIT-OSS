@@ -22,7 +22,6 @@ const UploadImages = (props) => {
               {/* <img src={deleteBtn} onClick={props.onDelete} className="delete" alt="delete"/> */}
               <DeleteBtn
                 onClick={() => {
-                  console.log("delete");
                   props.onDelete(thumbnail);
                 }}
                 className="delete"

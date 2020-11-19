@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { CardHeader, CardText, UploadImages } from "@egovernments/digit-ui-react-components";
 // import { Filestorage, Filefetch } from "../@egovernments/digit-utils/services/Filestorage";
 
-const ImageUploaderHandler = (props) => {
+export const ImageUploadHandler = (props) => {
   const { t } = useTranslation();
   const [image, setImage] = useState(null);
   const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(null);
@@ -60,7 +60,6 @@ const ImageUploaderHandler = (props) => {
     if (e.target.files[0] && e.target.files[0].size > 2097152) {
       alert("File is too big!");
     } else {
-      console.log("got image");
       setImage(e.target.files[0]);
     }
   }
@@ -122,5 +121,3 @@ const ImageUploaderHandler = (props) => {
     </React.Fragment>
   );
 };
-
-export default ImageUploaderHandler;
