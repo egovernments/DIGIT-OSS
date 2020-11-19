@@ -36,6 +36,7 @@ import { ImageUploadHandler } from "./atoms/ImageUploadHandler";
 import ActionBar from "./atoms/ActionBar";
 import Menu from "./atoms/Menu";
 import Table from "./atoms/Table";
+import Label from "./atoms/Label";
 import PopUp from "./atoms/PopUp";
 import HeaderBar from "./atoms/HeaderBar";
 import Toast from "./atoms/Toast";
@@ -91,6 +92,7 @@ export {
   LocationSearchCard,
   TextInputCard,
   CityMohalla,
+  Label,
   Table,
   PopUp,
   HeaderBar,

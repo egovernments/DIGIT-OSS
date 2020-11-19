@@ -5,7 +5,7 @@ import { useTable, useRowSelect } from "react-table";
 const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = React.useRef();
   const resolvedRef = ref || defaultRef;
-
+  console.log("resolvedRef::::", resolvedRef);
   React.useEffect(() => {
     resolvedRef.current.indeterminate = indeterminate;
   }, [resolvedRef, indeterminate]);
@@ -13,12 +13,12 @@ const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref)
   return (
     <React.Fragment>
       <input type="checkbox" ref={resolvedRef} {...rest} />
-      {/* <CheckBox /> */}
+      {/* <CheckBox ref={resolvedRef} {...rest} /> */}
     </React.Fragment>
   );
 });
 
-const Table = ({ data, columns, getCellProps }) => {
+const Table = ({ data, columns, getCellProps, style }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
     {
       columns,
@@ -48,14 +48,12 @@ const Table = ({ data, columns, getCellProps }) => {
   );
 
   return (
-    <table style={{ backgroundColor: "#fafafa" }} {...getTableProps()}>
+    <table className="table" {...getTableProps()}>
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
-              <th style={{ padding: "20px 18px", fontSize: "16px", textAlign: "left", verticalAlign: "middle" }} {...column.getHeaderProps()}>
-                {column.render("Header")}
-              </th>
+              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
             ))}
           </tr>
         ))}
@@ -68,7 +66,7 @@ const Table = ({ data, columns, getCellProps }) => {
               {row.cells.map((cell) => {
                 return (
                   <td
-                    style={{ padding: "20px 18px", fontSize: "16px", borderTop: "1px solid grey", textAlign: "left", verticalAlign: "middle" }}
+                    // style={{ padding: "20px 18px", fontSize: "16px", borderTop: "1px solid grey", textAlign: "left", verticalAlign: "middle" }}
                     {...cell.getCellProps([
                       // {
                       //   className: cell.column.className,

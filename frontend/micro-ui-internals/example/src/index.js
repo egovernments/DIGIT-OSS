@@ -29,7 +29,7 @@ const userServiceData = {
 };
 
 Digit.SessionStorage.set("citizen.userServiceData", userServiceData);
-const citAuth = "da40258e-9598-44fe-8262-4d08a00c8bd1";
+const citAuth = "9ee85f07-1031-428a-8292-b360e3d8ce65";
 
 Digit.SessionStorage.set("citizen.token", citAuth);
 

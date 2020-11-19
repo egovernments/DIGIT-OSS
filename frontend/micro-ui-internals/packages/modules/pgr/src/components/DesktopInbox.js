@@ -1,6 +1,7 @@
 import { CheckBox } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import ComplaintsLink from "./inbox/ComplaintLinks";
 import ComplaintTable from "./inbox/ComplaintTable";
 import Filter from "./inbox/Filter";
 import SearchComplaint from "./inbox/search";
@@ -51,24 +52,40 @@ const DesktopInbox = (props) => {
   );
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "270px 925px", gridTemplateRows: "30% 740px auto", columnGap: "24px" }}>
-      <Filter onFilterChange={(filters) => props.onFilterChange(filters)} />
-      {/* <SearchComplaint /> */}
-      <ComplaintTable
-        data={props.data}
-        columns={columns}
-        getCellProps={(cellInfo) => {
-          return {
-            style: {
-              padding: "20px 18px",
-              fontSize: "16px",
-              borderTop: "1px solid grey",
-              textAlign: "left",
-              verticalAlign: "middle",
-            },
-          };
-        }}
-      />
+    <div
+      // style={{
+      //   display: "flex",
+      //   justifyContent: "center",
+      //   border: "1px solid black",
+      // }}
+      className="inbox-container"
+    >
+      <div className="filters-container">
+        <ComplaintsLink />
+        <div className="filter">
+          <Filter onFilterChange={(filters) => props.onFilterChange(filters)} />
+        </div>
+      </div>
+      <div className="search-container">
+        <SearchComplaint />
+        <div style={{ marginTop: "24px" }}>
+          <ComplaintTable
+            data={props.data}
+            columns={columns}
+            getCellProps={(cellInfo) => {
+              return {
+                style: {
+                  padding: "20px 18px",
+                  fontSize: "16px",
+                  borderTop: "1px solid grey",
+                  textAlign: "left",
+                  verticalAlign: "middle",
+                },
+              };
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

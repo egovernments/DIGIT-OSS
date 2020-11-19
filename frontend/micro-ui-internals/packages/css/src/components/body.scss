@@ -13,7 +13,6 @@
     @apply font-light px-sm border-solid border-l border-white border-opacity-100
 }*/
 
-
 .h1 {
   @apply font-rc text-heading-xl text-text-primary font-bold mb-md ml-md;
 }
@@ -21,8 +20,8 @@
 .link-label {
   @apply block text-link text-link-normal mb-md ml-md;
 
-  &:hover{
-    @apply text-link-hover
+  &:hover {
+    @apply text-link-hover;
   }
 }
 
@@ -30,41 +29,38 @@
   width: fit-content;
   @apply block border-solid border-b border-text-primary font-rc text-text-primary text-text-btn ml-sm mt-md;
 
-  label{
+  label {
     @apply inline mr-sm align-middle;
   }
 
-  p{
+  p {
     @apply inline float-right;
   }
-
 }
 
-.back-btn2{
+.back-btn2 {
   width: fit-content;
   @apply flex border-solid border-b border-text-primary font-rc text-text-primary text-text-btn ml-sm mb-md;
 
-  img{
-    @apply flex 
+  img {
+    @apply flex;
   }
 
-  svg{
-    @apply flex 
+  svg {
+    @apply flex;
   }
 
-  p{
-    @apply flex
+  p {
+    @apply flex;
   }
-
 }
 
-@screen dt{
-
-  .employee-app-container{
-    @apply w-full
+@screen dt {
+  .employee-app-container {
+    @apply w-full;
   }
-  
-  .app-container{
+
+  .app-container {
     width: 960px;
     margin-left: auto;
     margin-right: auto;
@@ -72,11 +68,11 @@
 
   .h1 {
     margin-left: 0;
-    @apply text-heading-xl-dt
+    @apply text-heading-xl-dt;
   }
 
-  .link-label{
-    margin-left:0;
+  .link-label {
+    margin-left: 0;
   }
 
   .back-btn {
