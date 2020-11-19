@@ -27,10 +27,6 @@ const CreateComplaint = ({ match, history }) => {
   const [complaintType, setComplaintType] = useState(null);
   const [uploadedImageIds, setUploadedImageIds] = useState([]);
 
-  const citAuth = "c54c09cd-56c5-4193-a59d-76c3867500c8";
-  SessionStorage.set("citizen.token", citAuth);
-  window.sessionStorage.setItem("citizen.token", citAuth);
-
   const complaintParams = {
     RequestInfo: {
       apiId: "Rainmaker",
