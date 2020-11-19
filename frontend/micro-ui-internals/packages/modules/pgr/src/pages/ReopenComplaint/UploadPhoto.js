@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { Card, SubmitBar, BackButton } from "@egovernments/digit-ui-react-components";
 import ImageUploaderHandler from "../../components/ImageUploadHandler";
 
-import { useTranslation } from "react-i18next";
+import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const UploadPhoto = () => {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ const UploadPhoto = () => {
   return (
     <React.Fragment>
       <Card>
-        <ImageUploaderHandler header={t("CS_ADDCOMPLAINT_UPLOAD_PHOTO")} cardText="" onPhotoChange={handleUpload} />
+        <ImageUploaderHandler header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)} cardText="" onPhotoChange={handleUpload} />
 
         <Link to={`/reopen/addional-details/${id}`}>
           <SubmitBar label="Next" />

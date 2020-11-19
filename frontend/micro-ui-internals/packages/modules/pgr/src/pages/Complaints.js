@@ -6,6 +6,8 @@ import Complaint from "../components/Complaint";
 import { searchComplaints } from "../redux/actions";
 import { Header } from "@egovernments/digit-ui-react-components";
 
+import { LOCALIZATION_KEY } from "../constants/Localization";
+
 const ComplaintsPage = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
@@ -20,7 +22,7 @@ const ComplaintsPage = () => {
 
   return (
     <React.Fragment>
-      <Header>{t("CS_HOME_MY_COMPLAINTS")}</Header>
+      <Header>{t(`${LOCALIZATION_KEY}_MY_COMPLAINTS`)}</Header>
       {complaints &&
         complaints.length > 0 &&
         complaints.map(({ service }, index) => (
