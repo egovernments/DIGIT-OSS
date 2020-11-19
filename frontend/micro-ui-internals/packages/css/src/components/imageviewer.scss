@@ -3,13 +3,13 @@
     @apply bg-text-primary p-md;
 
         svg{
-            @apply absolute h-6 w-6;
             right: 16px;
+            @apply absolute h-6 w-6;
         }
 
         img{
-            @apply max-w-full h-auto;
             margin-top: 40%;
+            @apply max-w-full h-auto;
         }
 }
 
@@ -19,8 +19,8 @@
         @apply flex fixed top-0 left-0 w-full h-full z-10 bg-text-primary p-md;
 
         svg{
-            @apply absolute h-6 w-6;
             right: 16px;
+            @apply absolute h-6 w-6;
         }
 
         img{

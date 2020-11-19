@@ -25,6 +25,7 @@ const UploadImages = (props) => {
                   props.onDelete(thumbnail);
                 }}
                 className="delete"
+                fill="#d4351c"
               />
               <img src={thumbnail} alt="uploaded thumbnail" />
             </div>

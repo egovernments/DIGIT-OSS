@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Card,
@@ -17,6 +17,9 @@ import {
   ImageViewer,
   TextInput,
   TextArea,
+  UploadFile,
+  ButtonSelector,
+  Toast,
 } from "@egovernments/digit-ui-react-components";
 
 import { Close } from "../../Icons";
@@ -51,14 +54,30 @@ export const ComplaintDetails = (props) => {
   let { id } = useParams();
   const [fullscreen, setFullscreen] = useState(false);
   const [imageZoom, setImageZoom] = useState(null);
-  const [actionCalled, setACtionCalled] = useState(true);
+  const [actionCalled, setActionCalled] = useState(false);
+  const [toast, setToast] = useState(false);
+
+  useEffect(() => {
+    console.log("action", props.action);
+    setActionCalled(props.action);
+  }, [props.action]);
 
   function zoomView() {
     setFullscreen(!fullscreen);
   }
 
-  function close() {
-    setFullscreen(!fullscreen);
+  function close(state) {
+    switch (state) {
+      case fullscreen:
+        setFullscreen(!fullscreen);
+        break;
+      case actionCalled:
+        setActionCalled(!actionCalled);
+        break;
+      default:
+        console.log(state);
+        break;
+    }
   }
 
   function zoomImage(imageSource) {
@@ -67,6 +86,16 @@ export const ComplaintDetails = (props) => {
 
   function onCloseImageZoom() {
     setImageZoom(null);
+  }
+
+  function onAssign() {
+    setActionCalled(false);
+    setToast(true);
+    setTimeout(() => setToast(false), 2000);
+  }
+
+  function closeToast() {
+    setToast(false);
   }
 
   return (
@@ -95,7 +124,7 @@ export const ComplaintDetails = (props) => {
       {fullscreen ? (
         <PopUp>
           <div className="popup-module">
-            <HeaderBar main={<Heading label="Complaint Geolocation" />} end={<CloseBtn onClick={() => close()} />} />
+            <HeaderBar main={<Heading label="Complaint Geolocation" />} end={<CloseBtn onClick={() => close(fullscreen)} />} />
             <div className="popup-module-main">
               <img src="https://via.placeholder.com/912x568" />
             </div>
@@ -106,7 +135,7 @@ export const ComplaintDetails = (props) => {
       {actionCalled ? (
         <PopUp>
           <div className="popup-module">
-            <HeaderBar main={<Heading label="Assign Complaint" />} end={<CloseBtn onClick={() => close()} />} />
+            <HeaderBar main={<Heading label="Assign Complaint" />} end={<CloseBtn onClick={() => close(actionCalled)} />} />
             <div className="popup-module-main">
               <Card>
                 <CardLabel>Employee Name</CardLabel>
@@ -115,11 +144,17 @@ export const ComplaintDetails = (props) => {
                 <TextArea />
                 <CardLabel>Supporting Documents</CardLabel>
                 <CardLabelDesc>Only .jpg and .pdf files. 5 MB max file size.</CardLabelDesc>
+                <UploadFile />
               </Card>
+              <div className="popup-module-action-bar">
+                <ButtonSelector theme="border" label="Cancel" />
+                <ButtonSelector label="Assign" onSubmit={onAssign} />
+              </div>
             </div>
           </div>
         </PopUp>
       ) : null}
+      {toast && <Toast label="Complaint assigned successfully!" onClose={closeToast} />}
     </React.Fragment>
   );
 };

@@ -5,7 +5,7 @@ const Menu = (props) => {
     <div className="menu-wrap">
       {props.options.map((option, index) => {
         return (
-          <div key={index}>
+          <div key={index} onClick={() => props.onSelect(option)}>
             <p>{option}</p>
           </div>
         );

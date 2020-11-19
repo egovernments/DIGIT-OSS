@@ -9,18 +9,24 @@ import { Employee } from "../../constants/Routes";
 
 const Complaint = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
+  const [popup, setPopup] = useState(false);
+  function popupCall(option) {
+    console.log("option", option);
+    setDisplayMenu(false);
+    setPopup(true);
+  }
   return (
     <React.Fragment>
       <div className="ground-container">
         <BackButton>Back</BackButton>
         <Switch>
-          <Route path={Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails />} />
+          <Route path={Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails action={popup} />} />
           <Route path={Employee.CreateComplaint} component={() => <CreateComplaint />} />
           <Route path={Employee.Inbox} component={Inbox} />
         </Switch>
       </div>
       <ActionBar>
-        {displayMenu ? <Menu options={["Assign Complaint", "Reject Complaint"]} /> : null}
+        {displayMenu ? <Menu options={["Assign Complaint", "Reject Complaint"]} onSelect={popupCall} /> : null}
         <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
       </ActionBar>
     </React.Fragment>

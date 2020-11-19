@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import initLibraries from "@egovernments/digit-ui-libraries";
 import PGRApp from "@egovernments/digit-ui-module-pgr";
 import { Body, TopBar } from "@egovernments/digit-ui-react-components";
-import "@egovernments/digit-ui-css/dist/index.css";
+import "@egovernments/digit-ui-css/example/index.css";
 initLibraries();
 
 const userServiceData = {
