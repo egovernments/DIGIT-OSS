@@ -8,6 +8,7 @@ const Urls = {
   },
   pgr_search: `/pgr-services/v2/request/_search`,
   pgr_update: `/pgr-services/v2/request/_update`,
+  PGR_Create: `/pgr-services/v2/request/_create`,
 };
 
 export default Urls;

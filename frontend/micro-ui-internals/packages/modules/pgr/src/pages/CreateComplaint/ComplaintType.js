@@ -3,8 +3,6 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Card, CardHeader, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
-// import { MDMSService } from "@egovernments/digit-ui-libraries";
-// import { SessionStorage } from "@egovernments/digit-ui-libraries";
 import { useTranslation } from "react-i18next";
 
 const CreateComplaint = (props) => {
@@ -18,46 +16,13 @@ const CreateComplaint = (props) => {
   const [localMenu, setLocalMenu] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      const criteria = {
-        type: "serviceDefs",
-        details: {
-          tenantId: appState.stateInfo.code,
-          moduleDetails: [
-            {
-              moduleName: "RAINMAKER-PGR",
-              masterDetails: [
-                {
-                  name: "ServiceDefs",
-                },
-              ],
-            },
-          ],
-        },
-      };
-
-      const serviceDefs = await MDMSService.getDataByCriteria(criteria);
-      SessionStorage.set("serviceDefs", serviceDefs);
-      var __localMenu__ = [];
-      await Promise.all(
-        serviceDefs.map((def) => {
-          if (!__localMenu__.find((e) => e.key === def.menuPath)) {
-            def.menuPath === ""
-              ? __localMenu__.push({
-                  name: t("SERVICEDEFS.OTHERS"),
-                  key: def.menuPath,
-                })
-              : __localMenu__.push({
-                  name: t("SERVICEDEFS." + def.menuPath.toUpperCase()),
-                  key: def.menuPath,
-                });
-          }
-        })
-      );
-      setLocalMenu(__localMenu__);
-    })();
-  }, [appState]);
+  useEffect(
+    () =>
+      (async () => {
+        setLocalMenu(await Digit.GetServiceDefinitions.getMenu(appState.stateInfo.code, t));
+      })(),
+    [appState]
+  );
 
   function selected(type) {
     setSelectedOption(type);

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardText, RadioButtons, SubmitBar, CardCaption } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import { SessionStorage } from "@egovernments/digit-ui-libraries";
 import { useTranslation } from "react-i18next";
 
 const SubType = (props) => {
@@ -13,13 +11,7 @@ const SubType = (props) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
-    const subMenuIds = SessionStorage.get("serviceDefs").filter((def) => def.menuPath === subType.key);
-    setSubMenu(
-      subMenuIds.map((id) => ({
-        key: id.serviceCode,
-        name: t("SERVICEDEFS." + id.serviceCode.toUpperCase()),
-      }))
-    );
+    setSubMenu(Digit.GetServiceDefinitions.getSubMenu(subType, t));
   }, []);
 
   function selected(item) {

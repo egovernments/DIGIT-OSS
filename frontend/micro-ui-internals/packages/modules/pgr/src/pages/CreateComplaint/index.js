@@ -17,7 +17,7 @@ import { createComplaint } from "../../redux/actions/index";
 // // import ComplaintTypeConfig from "./ComplaintTypeConfig";
 import ComplaintType from "./ComplaintType";
 
-const CreateComplaint = ({ match, history }) => {
+const CreateComplaint = ({ match: { path }, history }) => {
   const SessionStorage = Digit.SessionStorage;
   const dispatch = useDispatch();
   const appState = useSelector((state) => state);
@@ -29,86 +29,30 @@ const CreateComplaint = ({ match, history }) => {
   const [complaintType, setComplaintType] = useState(null);
   const [uploadedImageIds, setUploadedImageIds] = useState([]);
 
-  const citAuth = "c54c09cd-56c5-4193-a59d-76c3867500c8";
-  SessionStorage.set("citizen.token", citAuth);
-  window.sessionStorage.setItem("citizen.token", citAuth);
+  // const citAuth = "c54c09cd-56c5-4193-a59d-76c3867500c8";
+  // SessionStorage.set("citizen.token", citAuth);
+  // window.sessionStorage.setItem("citizen.token", citAuth);
 
   const complaintParams = {
-    RequestInfo: {
-      apiId: "Rainmaker",
-      action: "",
-      did: 1,
-      key: "",
-      msgId: "20170310130900|en_IN",
-      requesterId: "",
-      ts: Date.now(),
-      ver: ".01",
-      userInfo: {
-        id: 23349,
-        uuid: "530968f3-76b3-4fd1-b09d-9e22eb1f85df",
-        userName: "9404052047",
-        name: "Aniket T",
-        mobileNumber: "9404052047",
-        emailId: "xc@gmail.com",
-        locale: null,
-        type: "CITIZEN",
-        roles: [
-          {
-            name: "Citizen",
-            code: "CITIZEN",
-            tenantId: "pb",
-          },
-        ],
-        active: true,
-        tenantId: "pb",
-      },
-      authToken: citAuth,
-    },
-    service: {
-      tenantId: appState.cityCode,
-      serviceCode: complaintType,
-      description: details,
-      accountId: "7b2561e8-901b-40a2-98b7-7e627fc5b1d6",
-      additionalDetail: {},
-      applicationStatus: null,
-      source: "whatsapp",
-      rating: 4,
-      address: {
-        doorNo: "2",
-        plotNo: "10",
-        landmark: "Near City Hall",
-        city: city,
-        district: city,
-        region: city,
-        state: appState.stateInfo.name,
-        country: "India",
-        pincode: pincode,
-        buildingName: "Safalya",
-        street: "10th main",
-        locality: {
-          code: locality !== null ? locality.code : "",
-          name: locality !== null ? locality.name : "",
-        },
-        geoLocation: {
-          // latitude: 21,
-          // longitude: 56,
-          // additionalDetails: {},
-        },
-      },
-    },
-    workflow: {
-      action: "APPLY",
-      assignes: [],
-      comments: "Street light is not working",
-      verificationDocuments: uploadedImageIds.map((url) => {
-        return {
-          documentType: "PHOTO",
-          fileStore: url,
-          documentUid: "",
-          additionalDetails: {},
-        };
-      }),
-    },
+    cityCode: appState.cityCode,
+    complaintType: complaintType,
+    description: details,
+    landmark: landmark !== null ? landmark : "",
+    city: city,
+    district: city,
+    region: city,
+    state: appState.stateInfo.name,
+    pincode: pincode,
+    localityCode: locality !== null ? locality.code : "",
+    localityName: locality !== null ? locality.name : "",
+    uploadedImages: uploadedImageIds.map((url) => {
+      return {
+        documentType: "PHOTO",
+        fileStore: url,
+        documentUid: "",
+        additionalDetails: {},
+      };
+    }),
   };
 
   // const [createComplaintParams, setComplaintParams] = useState(complaintParams);
@@ -152,29 +96,21 @@ const CreateComplaint = ({ match, history }) => {
     imageUrls === null ? setUploadedImageIds([]) : setUploadedImageIds(imageUrls);
   };
   return (
-    // <div><h2>create complaints</h2> <BackButton>Backs</BackButton></div>
     <React.Fragment>
-      {/* {!details && <BackButton onClick={() => history.goBack()} />} */}
       {/* <Route
         path={match.url + "/onboarding"}
         component={(props) => <UserOnboarding />}
       /> */}
-      <Route
-        exact
-        path={match.url + "/"}
-        component={(props) => <ComplaintType save={saveComplaintType} />}
-        // component={(props) => <ComplaintTypeConfig />}
-      />
-      <Route path={match.url + "/subtype"} component={(props) => <SubType save={saveComplaintType} />} />
-      <Route path={match.url + "/location"} component={(props) => <LocationSearch skip={true} />} />
-      <Route path={match.url + "/pincode"} component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} />} />
-      <Route path={match.url + "/address"} component={(props) => <Address save={saveAddress} />} />
-      <Route path={match.url + "/landmark"} component={(props) => <Landmark save={saveLandmark} />} />
-      <Route path={match.url + "/upload-photos"} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} />} />
-      <Route path={match.url + "/details"} component={(props) => <Details submitComplaint={submitComplaint} skip={true} />} />
-      <Route path={match.url + "/submission"} component={(props) => <Response />} />
-      <Route path={match.url + "/dynamic-config"} component={(props) => <DynamicConfig />} />
-      <p onClick={() => {}}></p>
+      <Route exact path={`${path}/`} component={(props) => <ComplaintType save={saveComplaintType} />} />
+      <Route path={`${path}/subtype`} component={(props) => <SubType save={saveComplaintType} />} />
+      <Route path={`${path}/location`} component={(props) => <LocationSearch skip={true} />} />
+      <Route path={`${path}/pincode`} component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} />} />
+      <Route path={`${path}/address`} component={(props) => <Address save={saveAddress} />} />
+      <Route path={`${path}/landmark`} component={(props) => <Landmark save={saveLandmark} />} />
+      <Route path={`${path}/upload-photos`} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} />} />
+      <Route path={`${path}/details`} component={(props) => <Details submitComplaint={submitComplaint} skip={true} />} />
+      <Route path={`${path}/submission`} component={(props) => <Response />} />
+      <Route path={`${path}/dynamic-config`} component={(props) => <DynamicConfig />} />
     </React.Fragment>
   );
 };

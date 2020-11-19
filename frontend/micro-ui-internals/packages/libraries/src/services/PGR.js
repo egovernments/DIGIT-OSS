@@ -14,11 +14,12 @@ export const PGRService = {
     }),
   create: (details, stateCode = "pb") =>
     Request({
-      url: Urls.MDMS,
+      url: Urls.PGR_Create,
       data: details,
       useCache: true,
       method: "POST",
       params: { tenantId: stateCode },
+      auth: true,
     }),
   update: (details, stateCode = "pb") =>
     Request({

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  SubmitBar, 
-  Card,
-  Banner,
-  CardText,
-} from "@egovernments/digit-ui-react-components";
+import { SubmitBar, Card, Banner, CardText } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -20,6 +15,7 @@ const BannerPicker = ({ appState }) => {
 
 const Submission = (props) => {
   const appState = useSelector((state) => state);
+  console.log("appstate", appState);
   return (
     <Card>
       <BannerPicker appState={appState} />
