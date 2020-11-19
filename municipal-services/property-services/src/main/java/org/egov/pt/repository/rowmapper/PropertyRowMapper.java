@@ -177,6 +177,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				.constructionDetail(consDetail)
 				.floorNo(rs.getInt("floorno"))
 				.arv(rs.getBigDecimal("arv"))
+				.additionalDetails(getadditionalDetail(rs, "unitadditionaldetails"))
 				.id(unitId)
 				.build();
 		
