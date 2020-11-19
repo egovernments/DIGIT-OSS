@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 //   Filefetch,
 // } from "@egovernments/digit-utils/services/Filestorage";
 import { useTranslation } from "react-i18next";
+import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const UploadPhotos = (props) => {
   // const Filestorage = Digit.UploadServices.Filestorage;
@@ -97,14 +98,14 @@ const UploadPhotos = (props) => {
 
   return (
     <Card>
-      <CardHeader>{t("CS_ADDCOMPLAINT_UPLOAD_PHOTO")}</CardHeader>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)}</CardHeader>
 
       <CardText>
         {/* Click on the icon below to upload the complaint photos as evidence. You
         can capture photos directly through your camera or upload from your
         Gallery. If you do not have complaint photo, you can skip the continue
         for next step. */}
-        {t("CS_ADDCOMPLAINT_UPLOAD_PHOTO_TEXT")}
+        {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO_TEXT`)}
       </CardText>
 
       <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} />
@@ -114,7 +115,7 @@ const UploadPhotos = (props) => {
       </Link>
       {props.skip ? (
         <Link to="/create-complaint/details">
-          <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")} />
+          <LinkButton label={t(`${LOCALIZATION_KEY.CS_COMMON}_SKIP_CONTINUE`)} />
         </Link>
       ) : null}
     </Card>

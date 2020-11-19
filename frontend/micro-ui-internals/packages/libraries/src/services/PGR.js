@@ -17,6 +17,7 @@ export const PGRService = {
       url: Urls.MDMS,
       data: details,
       useCache: true,
+      userInfo: true,
       method: "POST",
       params: { tenantId: stateCode },
     }),

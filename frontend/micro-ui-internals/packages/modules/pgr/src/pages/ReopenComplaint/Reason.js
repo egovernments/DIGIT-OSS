@@ -40,7 +40,7 @@ const ReasonPage = () => {
           ]}
         />
         <Link to={`/reopen/upload-photo/${id}`}>
-          <SubmitBar label="Next" />
+          <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
         </Link>
       </Card>
     </React.Fragment>

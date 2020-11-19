@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, CardHeader, CardSubHeader, CardText, CardLabel, TextInput, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const Pincode = (props) => {
   const [pincode, setPincode] = useState(null);
@@ -13,14 +14,14 @@ const Pincode = (props) => {
   }
   return (
     <Card>
-      <CardSubHeader>{t("CS_ADDCOMPLAINT_COMPLAINT_LOCATION")}</CardSubHeader>
-      <CardHeader>{t("CS_ADDCOMPLAINT_PINCODE")}</CardHeader>
+      <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_COMPLAINT_LOCATION`)}</CardSubHeader>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PINCODE`)}</CardHeader>
       <CardText>
         {/* If you know the pincode of the complaint address, provide below. It will
         help us identify complaint location easily or you can skip and continue */}
-        {t("CS_ADDCOMPLAINT_CHANGE_PINCODE_TEXT")}
+        {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_CHANGE_PINCODE_TEXT`)}
       </CardText>
-      <CardLabel>{t("CORE_COMMON_PINCODE")}</CardLabel>
+      <CardLabel>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE`)}</CardLabel>
       <TextInput onChange={textInput} />
       <Link
         to="/create-complaint/address"
@@ -28,11 +29,11 @@ const Pincode = (props) => {
           props.save(pincode);
         }}
       >
-        <SubmitBar label={t("PT_COMMONS_NEXT")} />
+        <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       </Link>
       {props.skip ? (
         <Link to="/create-complaint/address">
-          <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")} />
+          <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} />
         </Link>
       ) : null}
     </Card>
