@@ -29,6 +29,9 @@ import LocationSearch from "./LocationSearch";
 import UploadImages from "./UploadImages";
 import ImageViewer from "./ImageViewer";
 import { ImageUploadHandler } from "./ImageUploadHandler";
+import DateWrap from "./DateWrap";
+import KeyNote from "./KeyNote";
+
 export {
   Body,
   TopBar,
@@ -64,4 +67,6 @@ export {
   UploadImages,
   ImageViewer,
   ImageUploadHandler,
+  DateWrap,
+  KeyNote,
 };

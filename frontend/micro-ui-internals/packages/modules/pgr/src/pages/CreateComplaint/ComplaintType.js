@@ -12,7 +12,6 @@ const CreateComplaint = (props) => {
   const appState = useSelector((state) => state);
   const history = useHistory();
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
   const { t } = useTranslation();
   const [localMenu, setLocalMenu] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);

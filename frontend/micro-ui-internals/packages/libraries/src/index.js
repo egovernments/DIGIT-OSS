@@ -12,6 +12,7 @@ import { WorkflowService } from "./services/WorkFlow";
 import { MdmsService } from "./services/MDMS";
 import { UploadServices } from "./services/UploadServices";
 import { GetServiceDefinitions } from "./services/ServiceDefinitions";
+import { Complaint } from "./services/Complaint";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -34,6 +35,7 @@ const initLibraries = () => {
   setupLibraries("MDMSService", MdmsService);
   setupLibraries("UploadServices", UploadServices);
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
+  setupLibraries("Complaint", Complaint);
   initI18n();
 };
 
