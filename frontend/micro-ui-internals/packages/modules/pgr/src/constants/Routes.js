@@ -17,5 +17,6 @@ export const PgrRoutes = {
   Landmark: `${CREATE_COMPLAINT_PATH}landmark`,
   UploadPhotos: `${CREATE_COMPLAINT_PATH}upload-photos`,
   Details: `${CREATE_COMPLAINT_PATH}details`,
+  CreateComplaintResponse: `${CREATE_COMPLAINT_PATH}response`,
   DynamicConfig: `${CREATE_COMPLAINT_PATH}dynamic-config`,
 };
