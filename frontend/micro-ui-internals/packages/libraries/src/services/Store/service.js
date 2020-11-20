@@ -6,7 +6,7 @@ import { WorkflowService } from "../WorkFlow";
 export const StoreService = {
   defaultData: async (stateCode, cityCode, moduleCode) => {
     const { MdmsRes } = await MdmsService.init(stateCode);
-    const { BusinessServices } = await WorkflowService.init(cityCode, moduleCode);
+    const { BusinessServices } = (await WorkflowService.init(cityCode, moduleCode)) || {};
     const stateInfo = MdmsRes["common-masters"].StateInfo[0];
     let cities = GetCitiesWithi18nKeys(MdmsRes, moduleCode);
 
