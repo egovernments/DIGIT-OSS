@@ -68,7 +68,7 @@ const Address = (props) => {
       </CardText>
       <CardLabel>{t("MYCITY_CODE_LABEL")} *</CardLabel>
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} />
-      <CardLabel>{t(`${CS_CREATECOMPLAINT}_MOHALLA`)} *</CardLabel>
+      <CardLabel>{t(`${LOCALIZATION_KEY.CS_CREATECOMPLAINT}_MOHALLA`)} *</CardLabel>
       {/* <RadioButtons options={["Ajit Nagar", "Patel Nagar"]}/> */}
       <Dropdown isMandatory option={localities} select={selectLocalities} />
       <Link to="/create-complaint/landmark" onClick={save}>
