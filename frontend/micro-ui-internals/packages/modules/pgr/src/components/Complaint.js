@@ -36,7 +36,7 @@ const Complaint = (props) => {
         <div className="status-highlight">
           <p>Open</p>
         </div>
-        <div style={{ marginTop: "1rem" }}>
+        <div>
           {/* {t("CS_COMMON_" + applicationStatus.toUpperCase())} */}
           {/* {console.log(
             serviceRequestId,
