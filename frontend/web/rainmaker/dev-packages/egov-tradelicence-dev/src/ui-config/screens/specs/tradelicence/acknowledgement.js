@@ -19,6 +19,8 @@ import { generatePdfAndDownload } from "./acknowledgementResource/applicationSuc
 import generateReceipt from "../utils/receiptPdf";
 import { beforeInitFn } from "../../specs/tradelicence/search-preview";
 import {downloadAcknowledgementForm} from "../utils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 const abc = (state,
   dispatch,
@@ -845,7 +847,7 @@ const screenConfig = {
     const licenseNumber = getQueryArg(window.location.href, "licenseNumber");
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const data = getAcknowledgementCard(
+    let data = getAcknowledgementCard(
       state,
       dispatch,
       purpose,
@@ -856,7 +858,21 @@ const screenConfig = {
       financialYear,
       tenant
     );
+  
+
     set(action, "screenConfig.components.div.children", data);
+
+
+    let result = licenseNumber.includes("UK");
+
+
+    if(!result)    {   
+
+      set(action, "screenConfig.components.div.children.header.children.licenseNumber", {}); 
+
+    }   
+   
+
     beforeInitFn(action, state, dispatch, applicationNumber);
     loadReceiptGenerationData(applicationNumber, tenant);
     return action;
