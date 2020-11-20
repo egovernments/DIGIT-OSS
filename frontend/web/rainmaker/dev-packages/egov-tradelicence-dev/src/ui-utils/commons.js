@@ -434,7 +434,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           { key: "applicationNumber", value: queryObject[0].applicationNumber }
         ];
         const renewalResponse = await getSearchResults(renewalSearchQueryObject);
-        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
+        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]) ?  get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]) : queryObject[0].wfDocuments;
 
       /* for (let i = 1; i <= renewalDocuments.length; i++) {
           if (i > renewalDocuments.length) {
@@ -445,6 +445,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           renewalDocuments.splice(0, 1);
         } */
 
+        if(queryObject[0].licenseNumber!==null)
+        {
         for (let i = 1; i <= documents.length; i++) {
           if (i > renewalDocuments.length) {
             renewalDocuments.push(documents[i-1])
@@ -455,8 +457,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
              renewalDocuments.push(documents[i-1])
              }
           }
+         }
         }
-
         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
 
