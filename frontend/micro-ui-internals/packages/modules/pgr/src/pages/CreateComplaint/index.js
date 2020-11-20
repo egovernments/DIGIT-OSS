@@ -13,8 +13,6 @@ import UploadPhotos from "./UploadPhotos";
 import Details from "./Details";
 import Response from "../Response";
 import { createComplaint } from "../../redux/actions/index";
-// import { SessionStorage } from "@egovernments/digit-ui-libraries";
-// // import ComplaintTypeConfig from "./ComplaintTypeConfig";
 import ComplaintType from "./ComplaintType";
 import { PgrRoutes } from "../../constants/Routes";
 
@@ -98,17 +96,6 @@ const CreateComplaint = ({ match, history }) => {
         path={match.url + "/onboarding"}
         component={(props) => <UserOnboarding />}
       /> */}
-
-      {/* <Route exact path={`${path}/`} component={(props) => <ComplaintType save={saveComplaintType} />} />
-      <Route path={`${path}/subtype`} component={(props) => <SubType save={saveComplaintType} />} />
-      <Route path={`${path}/location`} component={(props) => <LocationSearch skip={true} />} />
-      <Route path={`${path}/pincode`} component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} />} />
-      <Route path={`${path}/address`} component={(props) => <Address save={saveAddress} />} />
-      <Route path={`${path}/landmark`} component={(props) => <Landmark save={saveLandmark} />} />
-      <Route path={`${path}/upload-photos`} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} />} />
-      <Route path={`${path}/details`} component={(props) => <Details submitComplaint={submitComplaint} skip={true} />} />
-      <Route path={`${path}/submission`} component={(props) => <Response />} />
-      <Route path={`${path}/dynamic-config`} component={(props) => <DynamicConfig />} /> */}
       <Route
         exact
         path={PgrRoutes.CreateComplaint}
