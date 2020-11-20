@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardHeader, CardText, SubmitBar, UploadImages, LinkButton, ImageUploadHandler } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
+import { Card, SubmitBar, LinkButton, ImageUploadHandler } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
@@ -16,7 +16,6 @@ const UploadPhotos = (props) => {
     <Card>
       {/* <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} /> */}
       <ImageUploadHandler header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)} cardText="" onPhotoChange={handleUpload} />
-      {console.log("uploadedImagesIds:", uploadedImagesIds)}
       <Link to="/create-complaint/details" onClick={() => props.save(uploadedImagesIds)}>
         <SubmitBar label="Next" />
       </Link>
