@@ -139,7 +139,43 @@ const callBackForApply = async (state, dispatch) => {
     })
   propertyPayload.additionalDetails.documentDate = 1581490792377;
 
-  if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+  propertyPayload.ownersTemp.map(owner => {
+    if (owner.documentUid && owner.documentType) {
+      owner.documents = [{}]
+      owner.documents[0].fileStoreId = owner.documentUid;
+      owner.documents[0].documentType = owner.documentType;
+      owner.documents[0].documentUid = owner.documentUid;
+    }
+  })
+  propertyPayload.additionalDetails.documentDate = convertDateToEpoch(
+    propertyPayload.additionalDetails.documentDate);
+
+  if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
+    propertyPayload.ownersTemp.map(owner => {
+      owner.status = "ACTIVE";
+      // owner.ownerType = 'NONE';
+    })
+    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
+    delete propertyPayload.ownersTemp;
+  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
+    propertyPayload.ownersTemp.map(owner => {
+      owner.status = "ACTIVE";
+      owner.ownerType = 'NONE';
+    })
+    propertyPayload.institution = null;
+    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
+    delete propertyPayload.ownersTemp;
+  } else if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+    propertyPayload.owners.map(owner => {
+      owner.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    })
+    propertyPayload.institution = {};
+    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
+    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
+    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
+    propertyPayload.institution.tenantId = tenantId;
+    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
+
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
     propertyPayload.institutionTemp.status = "ACTIVE";
