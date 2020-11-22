@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchLocalities } from "../../redux/actions";
+import { fetchLocalities } from "../../../redux/actions";
 import { useTranslation } from "react-i18next";
 import { CityMohalla } from "@egovernments/digit-ui-react-components";
 
@@ -61,7 +61,7 @@ const Address = (props) => {
       header={t("CS_ADDCOMPLAINT_PROVIDE_COMPLAINT_ADDRESS")}
       subHeader={t("CS_ADDCOMPLAINT_COMPLAINT_LOCATION")}
       cardText={t("CS_CHOOSE_CITY_MOHALLA_TEXT")}
-      CardLabelCity={t("MYCITY_CODE_LABEL")}
+      cardLabelCity={t("MYCITY_CODE_LABEL")}
       cardLabelMohalla={t("CS_CREATECOMPLAINT_MOHALLA")}
       nextText={t("PT_COMMONS_NEXT")}
       isMandatory

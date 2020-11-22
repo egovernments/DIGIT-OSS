@@ -2,8 +2,8 @@ import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
-import Complaint from "../components/Complaint";
-import { searchComplaints } from "../redux/actions";
+import Complaint from "../../components/Complaint";
+import { searchComplaints } from "../../redux/actions";
 import { Header } from "@egovernments/digit-ui-react-components";
 
 const ComplaintsPage = () => {

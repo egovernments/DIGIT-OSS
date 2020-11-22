@@ -11,9 +11,9 @@ import Landmark from "./Landmark";
 import UploadPhotos from "./UploadPhotos";
 import Details from "./Details";
 import Response from "../Response";
-import { createComplaint } from "../../redux/actions/index";
+import { createComplaint } from "../../../redux/actions/index";
 import ComplaintType from "./ComplaintType";
-import { Citizen } from "../../constants/Routes";
+import { Citizen } from "../../../constants/Routes";
 
 const CreateComplaint = ({ match, history }) => {
   const SessionStorage = Digit.SessionStorage;
@@ -26,6 +26,9 @@ const CreateComplaint = ({ match, history }) => {
   const [details, setDetails] = useState("");
   const [complaintType, setComplaintType] = useState(null);
   const [uploadedImageIds, setUploadedImageIds] = useState([]);
+
+  const citAuth = Digit.SessionStorage.get("citizen.token");
+  console.log(citAuth);
 
   const complaintParams = {
     RequestInfo: {

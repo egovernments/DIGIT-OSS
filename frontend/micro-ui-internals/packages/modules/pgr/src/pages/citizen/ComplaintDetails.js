@@ -16,10 +16,10 @@ import {
   CheckPoint,
 } from "@egovernments/digit-ui-react-components";
 
-import { selectComplaints } from "../selectors/complaint";
-import { fetchBusinessServiceById, searchComplaints } from "../redux/actions";
-import { selectWorkflow } from "../selectors/processInstance";
-import useComplaintHistory from "../hooks/useComplaintHistory";
+import { selectComplaints } from "../../selectors/complaint";
+import { fetchBusinessServiceById, searchComplaints } from "../../redux/actions";
+import { selectWorkflow } from "../../selectors/processInstance";
+import useComplaintHistory from "../../hooks/useComplaintHistory";
 
 const ComplaintDetailsPage = () => {
   const LOCALIZATION_KEY_CS_COMPLAINT = "CS_COMPLAINT_DETAILS";
