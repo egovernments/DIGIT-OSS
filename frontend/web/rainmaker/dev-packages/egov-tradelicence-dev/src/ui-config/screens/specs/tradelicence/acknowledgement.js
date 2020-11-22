@@ -863,7 +863,7 @@ const screenConfig = {
     set(action, "screenConfig.components.div.children", data);
 
 
-    let result = licenseNumber.includes("UK");
+    let result = licenseNumber && licenseNumber.includes("UK");
 
 
     if(!result)    {   
