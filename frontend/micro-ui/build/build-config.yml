@@ -8,7 +8,8 @@
 # -
 # -
 config:
-  - name: build/digit-ui
+-   name: builds/digit-ui
     build:
-     - work-dir: ./
-       image-name: digit-ui
+    - work-dir: ./
+    #  dockerfile: web/rainmaker/docker/citizen/Dockerfile
+      image-name: digit-ui
