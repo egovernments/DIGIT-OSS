@@ -1,3 +1,4 @@
+
 # Persister
 ### Egov persister service
 Egov-Persister is a service running independently on seperate server. This service reads the kafka topics and put the messages in DB. We write a yml configuration and put the file path in application.properties.
@@ -76,6 +77,14 @@ The bulk persister have the following two settings:
 | `persister.batch.size`  | 100           | The batch size for bulk update                  |
     
 Any kafka topic containing data which has to be bulk persisted should have '-batch' appended at the end of topic name example: save-pt-assessment-batch
+
+### Persister Config Versioning
+
+ - Each persister config has a version attribute which signifies the service version, this version can contain custom DSL; defined here, https://github.com/zafarkhaja/jsemver#external-dsl
+ - Every incoming request [via kafka] is expected to have a version attribute set, [jsonpath, $.RequestInfo.ver] if versioning is to be applied.
+ - If the request version is absent or invalid [not semver] in the incoming request, then a default version defined by the following property in application.properties`default.version=1.0.0` is used.
+ - The request version is then matched against the loaded persister configs and applied appropriately.
+
     
 ### Kafka Consumers
 
