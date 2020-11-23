@@ -12,4 +12,4 @@ ENV WORK_DIR=/var/web/v2ui
 RUN mkdir -p ${WORK_DIR}
 
 COPY --from=build /app/build ${WORK_DIR}/
-COPY --from=build /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/builds/nginx.conf /etc/nginx/conf.d/default.conf
