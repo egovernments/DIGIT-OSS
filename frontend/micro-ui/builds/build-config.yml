@@ -1,5 +1,5 @@
 config:
   - name: builds/digit-ui
-      build:
+    build:
          - work-dir: ./
            image-name: digit-ui
