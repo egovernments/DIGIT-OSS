@@ -1,5 +1,6 @@
 config:
 -   name: builds/digit-ui
     build:
-    - work-dir: ./
+    - work-dir: web
+      dockerfile: web/docker/Dockerfile
       image-name: digit-ui

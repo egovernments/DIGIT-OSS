@@ -2,6 +2,7 @@
   "name": "digit-ui",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/digit-ui",
   "dependencies": {
     "@egovernments/digit-ui-libraries": "^1.0.0",
     "@egovernments/digit-ui-module-pgr": "^1.0.0",
@@ -13,8 +14,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "build:prod": "./build.sh"
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
