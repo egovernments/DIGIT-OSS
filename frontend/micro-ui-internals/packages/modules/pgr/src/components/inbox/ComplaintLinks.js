@@ -26,16 +26,18 @@ const ComplaintsLink = ({ isMobile }) => {
   );
 
   return (
-    <div className="complaint-links-container">
-      {GetLogo()}
-      <div className="body">
-        {links.map(({ link, text }, index) => (
-          <span className="link" key={index}>
-            <a href={link}>{text}</a>
-          </span>
-        ))}
+    <Card>
+      <div className="complaint-links-container">
+        {GetLogo()}
+        <div className="body">
+          {links.map(({ link, text }, index) => (
+            <span className="link" key={index}>
+              <a href={link}>{text}</a>
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

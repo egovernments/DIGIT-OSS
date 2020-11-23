@@ -17,6 +17,7 @@
       .body {
         padding: 10px;
         @apply flex items-start flex-col ml-xl;
+        margin-left: 51px;
 
         .link {
           @apply p-sm text-link-normal;
