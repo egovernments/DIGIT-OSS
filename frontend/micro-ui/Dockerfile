@@ -7,7 +7,7 @@ COPY ${WORK_DIR} .
 RUN yarn build:prod
 
 FROM nginx:mainline-alpine
-ENV WORK_DIR=/var/web/v2ui
+ENV WORK_DIR=/var/web/digit-ui
 
 RUN mkdir -p ${WORK_DIR}
 
