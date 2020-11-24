@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { BackButton } from "@egovernments/digit-ui-react-components";
 // import UserOnboarding from "../UserOnboarding/index";
@@ -14,7 +14,7 @@ import Details from "./Details";
 import Response from "../Response";
 import { createComplaint } from "../../redux/actions/index";
 import ComplaintType from "./ComplaintType";
-import { PgrRoutes } from "../../constants/Routes";
+import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const CreateComplaint = ({ match, history }) => {
   const SessionStorage = Digit.SessionStorage;
@@ -91,27 +91,27 @@ const CreateComplaint = ({ match, history }) => {
     imageUrls === null ? setUploadedImageIds([]) : setUploadedImageIds(imageUrls);
   };
   return (
-    <React.Fragment>
+    <Switch>
       {/* <Route
         path={match.url + "/onboarding"}
         component={(props) => <UserOnboarding />}
       /> */}
       <Route
         exact
-        path={PgrRoutes.CreateComplaint}
+        path={getRoute(match, PgrRoutes.CreateComplaintStart)}
         component={(props) => <ComplaintType save={saveComplaintType} />}
         // component={(props) => <ComplaintTypeConfig />}
       />
-      <Route path={PgrRoutes.SubType} component={(props) => <SubType save={saveComplaintType} />} />
-      <Route path={PgrRoutes.LocationSearch} component={(props) => <LocationSearch skip={true} />} />
-      <Route path={PgrRoutes.Pincode} component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} />} />
-      <Route path={PgrRoutes.Address} component={(props) => <Address save={saveAddress} />} />
-      <Route path={PgrRoutes.Landmark} component={(props) => <Landmark save={saveLandmark} />} />
-      <Route path={PgrRoutes.UploadPhotos} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} />} />
-      <Route path={PgrRoutes.Details} component={(props) => <Details submitComplaint={submitComplaint} skip={true} />} />
-      <Route path={PgrRoutes.CreateComplaintResponse} component={(props) => <Response />} />
-      <Route path={PgrRoutes.DynamicConfig} component={(props) => <DynamicConfig />} />
-    </React.Fragment>
+      <Route path={getRoute(match, PgrRoutes.SubType)} component={(props) => <SubType save={saveComplaintType} />} />
+      <Route path={getRoute(match, PgrRoutes.LocationSearch)} component={(props) => <LocationSearch skip={true} />} />
+      <Route path={getRoute(match, PgrRoutes.Pincode)} component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} />} />
+      <Route path={getRoute(match, PgrRoutes.Address)} component={(props) => <Address save={saveAddress} />} />
+      <Route path={getRoute(match, PgrRoutes.Landmark)} component={(props) => <Landmark save={saveLandmark} />} />
+      <Route path={getRoute(match, PgrRoutes.UploadPhotos)} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} />} />
+      <Route path={getRoute(match, PgrRoutes.Details)} component={(props) => <Details submitComplaint={submitComplaint} skip={true} />} />
+      <Route path={getRoute(match, PgrRoutes.CreateComplaintResponse)} component={(props) => <Response />} />
+      <Route path={getRoute(match, PgrRoutes.DynamicConfig)} component={(props) => <DynamicConfig />} />
+    </Switch>
   );
 };
 

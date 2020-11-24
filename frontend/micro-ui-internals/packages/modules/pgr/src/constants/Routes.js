@@ -10,13 +10,17 @@ export const PgrRoutes = {
   AddtionalDetails: `${REOPEN_COMPLAINT_PATH}addional-details/:id`,
   CreateComplaint: "/create-complaint",
   Response: "/response",
-  SubType: `${CREATE_COMPLAINT_PATH}subtype`,
-  LocationSearch: `${CREATE_COMPLAINT_PATH}location`,
-  Pincode: `${CREATE_COMPLAINT_PATH}pincode`,
-  Address: `${CREATE_COMPLAINT_PATH}address`,
-  Landmark: `${CREATE_COMPLAINT_PATH}landmark`,
-  UploadPhotos: `${CREATE_COMPLAINT_PATH}upload-photos`,
-  Details: `${CREATE_COMPLAINT_PATH}details`,
-  CreateComplaintResponse: `${CREATE_COMPLAINT_PATH}response`,
-  DynamicConfig: `${CREATE_COMPLAINT_PATH}dynamic-config`,
+
+  CreateComplaintStart: "",
+  SubType: `/subtype`,
+  LocationSearch: `/location`,
+  Pincode: `/pincode`,
+  Address: `/address`,
+  Landmark: `/landmark`,
+  UploadPhotos: `/upload-photos`,
+  Details: `/details`,
+  CreateComplaintResponse: `/response`,
+  DynamicConfig: `/dynamic-config`,
 };
+
+export const getRoute = (match, route) => `${match.path}${route}`;
