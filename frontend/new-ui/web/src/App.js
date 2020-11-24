@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Switch, Link } from "react-router-dom";
 import PGRApp from "@egovernments/digit-ui-module-pgr";
-import { Body, TopBar } from "@egovernments/digit-ui-react-components";
+import { Body, Header, TopBar } from "@egovernments/digit-ui-react-components";
 
 const GetLink = ({ to, children }) => (
   <Link to={to} style={{ marginLeft: 16 }}>
