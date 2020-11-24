@@ -7,9 +7,15 @@ import App from './App';
 
 initLibraries();
 
-const citAuth = "c54c09cd-56c5-4193-a59d-76c3867500c8";
+const token = window.localStorage.getItem("token");
+const citizenToken = window.localStorage.getItem("Citizen.token");
+const employeeToken = window.localStorage.getItem("Employee.token");
 
-window.Digit.SessionStorage.set("citizen.token", citAuth);
+const isLoggedIn = token || citizenToken || employeeToken;
+const isCitizenLogin = token === citizenToken;
+
+
+window.Digit.SessionStorage.set("citizen.token", citizenToken);
 
 ReactDOM.render(
   <React.StrictMode>
