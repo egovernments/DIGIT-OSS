@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Card, CardHeader, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
+import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const CreateComplaint = (props) => {
   const SessionStorage = Digit.SessionStorage;
@@ -32,9 +33,9 @@ const CreateComplaint = (props) => {
   function onSave() {
     if (selectedOption.key === "") {
       props.save({ key: "Others", name: "Others" });
-      history.push("/create-complaint/location");
+      history.push(getRoute(props.match, PgrRoutes.LocationSearch));
     } else {
-      history.push("/create-complaint/subtype");
+      history.push(getRoute(props.match, PgrRoutes.SubType));
     }
   }
   return (

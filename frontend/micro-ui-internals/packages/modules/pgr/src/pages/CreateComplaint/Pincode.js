@@ -3,6 +3,7 @@ import { Card, CardHeader, CardSubHeader, CardText, CardLabel, TextInput, Submit
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
+import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const Pincode = (props) => {
   const [pincode, setPincode] = useState(null);
@@ -24,7 +25,7 @@ const Pincode = (props) => {
       <CardLabel>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE`)}</CardLabel>
       <TextInput onChange={textInput} />
       <Link
-        to="/create-complaint/address"
+        to={getRoute(props.match, PgrRoutes.Address)}
         onClick={() => {
           props.save(pincode);
         }}
@@ -32,7 +33,7 @@ const Pincode = (props) => {
         <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       </Link>
       {props.skip ? (
-        <Link to="/create-complaint/address">
+        <Link to={getRoute(props.match, PgrRoutes.Address)}>
           <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} />
         </Link>
       ) : null}

@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Banner, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { PgrRoutes, getRoute } from "../constants/Routes";
 
 const GetActionMessage = ({ action }) => {
   if (action === "REOPEN") {
@@ -36,7 +37,7 @@ const Response = (props) => {
         The notification along with complaint number is sent to your registered mobile number. You can track the complaint status using mobile or web
         app.
       </CardText>
-      <Link to="/create-complaint">
+      <Link to={getRoute(props.match, PgrRoutes.CreateComplaintStart)}>
         <SubmitBar label="Go back to home page" />
       </Link>
     </Card>
