@@ -3,6 +3,7 @@ import { Card, CardHeader, CardText, RadioButtons, SubmitBar, CardCaption } from
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
+import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const SubType = (props) => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const SubType = (props) => {
       </CardText>
 
       <RadioButtons selectedOption={selectedOption} options={subMenu} optionsKey="name" onSelect={selected} />
-      <Link to="/create-complaint/location" onClick={onSave}>
+      <Link to={getRoute(props.match, PgrRoutes.LocationSearch)} onClick={onSave}>
         <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       </Link>
     </Card>

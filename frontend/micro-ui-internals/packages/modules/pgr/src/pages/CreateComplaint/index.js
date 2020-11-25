@@ -99,18 +99,23 @@ const CreateComplaint = ({ match, history }) => {
       <Route
         exact
         path={getRoute(match, PgrRoutes.CreateComplaintStart)}
-        component={(props) => <ComplaintType save={saveComplaintType} />}
+        component={(props) => <ComplaintType save={saveComplaintType} match={match} />}
         // component={(props) => <ComplaintTypeConfig />}
       />
-      <Route path={getRoute(match, PgrRoutes.SubType)} component={(props) => <SubType save={saveComplaintType} />} />
-      <Route path={getRoute(match, PgrRoutes.LocationSearch)} component={(props) => <LocationSearch skip={true} />} />
-      <Route path={getRoute(match, PgrRoutes.Pincode)} component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} />} />
-      <Route path={getRoute(match, PgrRoutes.Address)} component={(props) => <Address save={saveAddress} />} />
-      <Route path={getRoute(match, PgrRoutes.Landmark)} component={(props) => <Landmark save={saveLandmark} />} />
-      <Route path={getRoute(match, PgrRoutes.UploadPhotos)} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} />} />
-      <Route path={getRoute(match, PgrRoutes.Details)} component={(props) => <Details submitComplaint={submitComplaint} skip={true} />} />
-      <Route path={getRoute(match, PgrRoutes.CreateComplaintResponse)} component={(props) => <Response />} />
-      <Route path={getRoute(match, PgrRoutes.DynamicConfig)} component={(props) => <DynamicConfig />} />
+      <Route path={getRoute(match, PgrRoutes.SubType)} component={(props) => <SubType save={saveComplaintType} match={match} />} />
+      <Route path={getRoute(match, PgrRoutes.LocationSearch)} component={(props) => <LocationSearch skip={true} match={match} />} />
+      <Route
+        path={getRoute(match, PgrRoutes.Pincode)}
+        component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} match={match} />}
+      />
+      <Route path={getRoute(match, PgrRoutes.Address)} component={(props) => <Address save={saveAddress} match={match} />} />
+      <Route path={getRoute(match, PgrRoutes.Landmark)} component={(props) => <Landmark save={saveLandmark} match={match} />} />
+      <Route path={getRoute(match, PgrRoutes.UploadPhotos)} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} match={match} />} />
+      <Route
+        path={getRoute(match, PgrRoutes.Details)}
+        component={(props) => <Details submitComplaint={submitComplaint} skip={true} match={match} />}
+      />
+      <Route path={getRoute(match, PgrRoutes.CreateComplaintResponse)} component={(props) => <Response match={match} />} />
     </Switch>
   );
 };

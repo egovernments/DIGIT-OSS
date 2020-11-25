@@ -31,7 +31,7 @@ const userServiceData = {
 };
 
 Digit.SessionStorage.set("citizen.userServiceData", userServiceData);
-const citAuth = "da40258e-9598-44fe-8262-4d08a00c8bd1";
+const citAuth = "f13dc84e-ad59-42cb-84c9-973abfcfae18";
 
 Digit.SessionStorage.set("citizen.token", citAuth);
 window.sessionStorage.setItem("citizen.token", citAuth);
