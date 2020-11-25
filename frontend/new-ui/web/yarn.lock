@@ -1149,9 +1149,9 @@
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.8.tgz#56dbff657e022f491c7f8bd60e4eef7e859af3e2"
-  integrity sha512-vIRfEJcKZFDXecSyAEkmaa63p1+43x6/vKyQKBynacWsscaWtmfxN8UXQPjzyV9uMxw06xlSx0HX8QA7kog11w==
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.12.tgz#27b98f3845d79bd655f7f1713cdc8ef0a61e2756"
+  integrity sha512-jq+Vu3y0OcIFFkvYx99x2SSrQVb3D9tOgUP0kG29qk4YI2bWIaJzTYH6UgRpg9zhuqxtaYG/jngKumLKeI2aPQ==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1162,9 +1162,9 @@
     react-i18next "^11.7.3"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.8.tgz#462e57209a5dc68b41dbf3e4b69facf4c3266804"
-  integrity sha512-ZRaO2cynKSMXl8ZFlUxindBstdoAO1HtnedR+I+zw/c1hRQN3m5wz4FFztkOsps4O+3lmGKozhcxsF1ImYe/qA==
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.12.tgz#0133fd9c2b8ae991f08ab5d1b86d9fb0f81fbb1d"
+  integrity sha512-15oMdjWq4H41vMN65cp7JCdFw5EAixVFH3SVQgIknUUQQkiMpMFp4RXBHM7ssnTDWqdgky6J13Jo14PvByY5Lg==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1179,9 +1179,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.8.tgz#2ae9c1aff3ed040a16309aaa0c80ed7a3fef282a"
-  integrity sha512-hOu1XA2YwbLCt29pCVG7SaswtXggA0Oy5vYDO/IhBWEBZph0SY5YJw/F15Ponw3LFQ8dR913r6I/SzG4FrAPVA==
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.12.tgz#e82b7e968a40ad7b44116f587f81651e8857f43c"
+  integrity sha512-RojO3Zo2q8NY/Z7hw2Om53g+NrYHEwBKHMFxZklDXFCJg6hjTOLncF8nPhrytgA4KKT+vSRq4tcxvuN6zaZpUQ==
 
 "@eslint/eslintrc@^0.2.1":
   version "0.2.1"
@@ -6991,9 +6991,9 @@ lodash.uniq@^4.5.0:
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 loglevel@^1.6.8:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.7.0.tgz#728166855a740d59d38db01cf46f042caa041bb0"
-  integrity sha512-i2sY04nal5jDcagM3FMfG++T69GEEM8CYuOfeOIvmXzOIcwE9a/CJPR0MFM97pYMj/u10lzz7/zd7+qwhrBTqQ==
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.7.1.tgz#005fde2f5e6e47068f935ff28573e125ef72f197"
+  integrity sha512-Hesni4s5UkWkwCGJMQGAh71PaLUmKFM60dHvq0zi/vDhhrzuk+4GgNbTXJ12YYQJn6ZKBDNIjYcuQGKudvqrIw==
 
 loose-envify@^1.1.0, loose-envify@^1.2.0, loose-envify@^1.3.1, loose-envify@^1.4.0:
   version "1.4.0"
