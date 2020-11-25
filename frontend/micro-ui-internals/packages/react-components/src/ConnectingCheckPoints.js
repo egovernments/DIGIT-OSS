@@ -7,6 +7,7 @@ export const CheckPoint = (props) => {
       <header>
         {props.label}
         {props.info ? <p>{props.info}</p> : null}
+        {props.customChild ? props.customChild : null}
       </header>
     </div>
   );
@@ -20,7 +21,7 @@ export const ConnectingCheckPoints = (props) => {
           return props.children.length === ++index ? (
             <div key={index}>{child}</div>
           ) : (
-            <div key={index}>
+            <div key={index} className="checkpoint-connect-wrap">
               {child}
               <div className="checkpoint-connect"></div>
             </div>

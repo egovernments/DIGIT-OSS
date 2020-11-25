@@ -910,6 +910,10 @@ img, video {
     padding: 0;
     margin: 0; }
 
+.checkpoint-connect-wrap {
+  padding-bottom: 40px;
+  position: relative; }
+
 .checkpoint-done {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -925,7 +929,8 @@ img, video {
     border-style: solid;
     --bg-opacity:1;
     background-color: #f47738;
-    background-color: rgba(244, 119, 56, var(--bg-opacity)); }
+    background-color: rgba(244, 119, 56, var(--bg-opacity));
+    z-index: 10; }
   .checkpoint-done header {
     margin-left: 16px; }
     .checkpoint-done header p {
@@ -949,7 +954,8 @@ img, video {
     border-style: solid;
     --bg-opacity:1;
     background-color: #d6d5d4;
-    background-color: rgba(214, 213, 212, var(--bg-opacity)); }
+    background-color: rgba(214, 213, 212, var(--bg-opacity));
+    z-index: 10; }
   .checkpoint header {
     margin-left: 16px; }
     .checkpoint header p {
@@ -959,8 +965,11 @@ img, video {
       color: rgba(80, 90, 95, var(--text-opacity)); }
 
 .checkpoint-connect {
-  height: 45px;
   margin-left: 12px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
   --border-opacity:1;
   border-color: #d6d5d4;
   border-left: 1px;
