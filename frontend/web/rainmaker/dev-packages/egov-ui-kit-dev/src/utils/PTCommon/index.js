@@ -404,7 +404,7 @@ export const transformPropertyDataToAssessInfo = (data) => {
       configFloor = cloneDeep(configFloor);
       Object.keys(configFloor["fields"]).forEach((item) => {
         let jsonPath = configFloor["fields"][item]["jsonPath"];
-        jsonPath = jsonPath.replace(/units\[[0-9]\]/g, "units[" + unitIndex + "]");
+        jsonPath =  jsonPath && jsonPath.replace(/units\[[0-9]\]/g, "units[" + unitIndex + "]");
         configFloor["fields"][item].jsonPath = jsonPath;
         let valueInJSON = get(data, jsonPath);
         if (valueInJSON === null) {
