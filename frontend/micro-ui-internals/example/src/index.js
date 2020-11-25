@@ -5,6 +5,7 @@ import { Route, BrowserRouter as Router, Switch, Link } from "react-router-dom";
 import initLibraries from "@egovernments/digit-ui-libraries";
 import PGRApp from "@egovernments/digit-ui-module-pgr";
 import { Body, TopBar, Header } from "@egovernments/digit-ui-react-components";
+import "@egovernments/digit-ui-css/example/index.css";
 
 initLibraries();
 
@@ -32,6 +33,7 @@ const userServiceData = {
 
 Digit.SessionStorage.set("citizen.userServiceData", userServiceData);
 const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
+console.log("citAUth", citAuth);
 
 Digit.SessionStorage.set("citizen.token", citAuth);
 window.sessionStorage.setItem("citizen.token", citAuth);

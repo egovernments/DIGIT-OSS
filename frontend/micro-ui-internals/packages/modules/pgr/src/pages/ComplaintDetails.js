@@ -102,9 +102,12 @@ const ComplaintDetailsPage = () => {
                 <ConnectingCheckPoints>
                   {complaintHistory.map((history, index) => {
                     return (
-                      <span key={index}>
-                        <CheckPoint label={t(`${LOCALIZATION_KEY.CS_COMMON}_${history.applicationStatus}`)} info={history.text} isCompleted={true} />
-                      </span>
+                      <CheckPoint
+                        key={index}
+                        label={t(`${LOCALIZATION_KEY.CS_COMMON}_${history.applicationStatus}`)}
+                        info={history.text}
+                        isCompleted={true}
+                      />
                     );
                   })}
                 </ConnectingCheckPoints>
