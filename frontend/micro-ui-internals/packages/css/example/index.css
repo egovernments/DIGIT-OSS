@@ -1177,3 +1177,32 @@ img, video {
       height: auto;
       max-width: 640px;
       margin: auto; } }
+
+.telephone {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin-bottom: 16px; }
+  .telephone img, .telephone svg {
+    height: 22px;
+    width: 20px;
+    color: #f47738;
+    color: rgba(244, 119, 56, var(--text-opacity));
+    margin-left: 8px; }
+  .telephone img, .telephone p, .telephone svg {
+    --text-opacity:1; }
+  .telephone p {
+    color: #0b0c0c;
+    color: rgba(11, 12, 12, var(--text-opacity));
+    font-size: 16px;
+    line-height: 24px;
+    padding-left: 8px; }
+
+.call {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }

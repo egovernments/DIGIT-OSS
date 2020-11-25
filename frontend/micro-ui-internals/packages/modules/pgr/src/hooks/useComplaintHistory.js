@@ -1,6 +1,8 @@
+import { TelePhone } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { ConvertTimestampToDate } from "../../../../libraries/src/services/Utils/Date";
 import { PGR_BASE } from "../constants/Routes";
 //import { WorkflowService } from "../@egovernments/digit-utils/services/WorkFlowService";
 
@@ -16,15 +18,38 @@ const useComplaintHistory = (processInstance) => {
     const GetAction = (action) => t(`CS_COMMON_${action}`);
 
     switch (key) {
+      case "PENDINGFORREASSIGNMENT":
+        return (
+          <React.Fragment>
+            <div>
+              <strong>{t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)}</strong>
+            </div>
+          </React.Fragment>
+        );
+      case "PENDINGFORASSIGNMENT":
+        let complaintFiledDate = ConvertTimestampToDate(obj.auditDetails.createdTime);
+        return (
+          complaintFiledDate && (
+            <React.Fragment>
+              <div>
+                <strong>{t(`CS_COMMON_COMPLAINT_FILED`)}</strong>
+              </div>
+              <div>{complaintFiledDate}</div>
+            </React.Fragment>
+          )
+        );
+
       case "PENDINGATLME":
         let assignes = obj.assignes != null && obj.assignes[0];
         let { name, mobileNumber } = assignes;
+        const assignedTo = t("CS_COMMON_COMPLAINT_ASSIGNED_TO");
         return (
           name &&
           mobileNumber && (
             <React.Fragment>
               <span>
-                assigned to {name} {mobileNumber}
+                {/* {t(`CS_COMMON_COMPLAINT_ASSIGNED_TO`)} {name} <a href={`tel:${mobileNumber}`}>{mobileNumber}</a> */}
+                <TelePhone mobile={mobileNumber} text={`${assignedTo} ${name}`} />
               </span>
             </React.Fragment>
           )
@@ -32,6 +57,9 @@ const useComplaintHistory = (processInstance) => {
       case "RESOLVED":
         return (
           <React.Fragment>
+            <div>
+              <strong> {t(`CS_COMMON_COMPLAINT_RESOLVED`)}</strong>
+            </div>
             {nextAction.map(({ action }, index) => (
               <Link key={index} to={`${PGR_BASE}${action.toLowerCase()}/${obj.businessId}`}>
                 <span
