@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { PGR_BASE } from "../constants/Routes";
 //import { WorkflowService } from "../@egovernments/digit-utils/services/WorkFlowService";
 
 const useComplaintHistory = (processInstance) => {
@@ -32,7 +33,7 @@ const useComplaintHistory = (processInstance) => {
         return (
           <React.Fragment>
             {nextAction.map(({ action }, index) => (
-              <Link key={index} to={`/${action.toLowerCase()}/${obj.businessId}`}>
+              <Link key={index} to={`${PGR_BASE}${action.toLowerCase()}/${obj.businessId}`}>
                 <span
                   style={{
                     color: "#F47738",

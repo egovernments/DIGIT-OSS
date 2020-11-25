@@ -1,3 +1,5 @@
+export const PGR_BASE = "/digit-ui/pgr/citizen/";
+
 const CREATE_COMPLAINT_PATH = "/create-complaint/";
 const REOPEN_COMPLAINT_PATH = "/reopen/";
 
