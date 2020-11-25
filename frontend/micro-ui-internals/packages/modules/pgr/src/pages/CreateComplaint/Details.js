@@ -3,6 +3,7 @@ import { Card, CardHeader, CardText, TextArea, SubmitBar, LinkButton } from "@eg
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
+import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const Details = (props) => {
   const [details, setDetails] = useState(null);
@@ -26,11 +27,11 @@ const Details = (props) => {
         {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_TEXT`)}
       </CardText>
       <TextArea onChange={textInput}></TextArea>
-      <Link to="/create-complaint/response" onClick={submitComplaint}>
+      <Link to={getRoute(props.match, PgrRoutes.CreateComplaintResponse)} onClick={submitComplaint}>
         <SubmitBar label={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT`)} />
       </Link>
       {props.skip ? (
-        <Link to="/create-complaint/response">
+        <Link to={getRoute(props.match, PgrRoutes.CreateComplaintResponse)}>
           <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} />
         </Link>
       ) : null}

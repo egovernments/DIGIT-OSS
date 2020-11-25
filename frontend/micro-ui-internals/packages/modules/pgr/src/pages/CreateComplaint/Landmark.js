@@ -3,6 +3,7 @@ import { Card, CardSubHeader, CardHeader, CardText, CardLabel, TextArea, SubmitB
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
+import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const Landmark = (props) => {
   const { t } = useTranslation();
@@ -26,7 +27,7 @@ const Landmark = (props) => {
       </CardText>
       <CardLabel>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_LANDMARK`)}</CardLabel>
       <TextArea onChange={textInput}></TextArea>
-      <Link to="/create-complaint/upload-photos" onClick={save}>
+      <Link to={getRoute(props.match, PgrRoutes.UploadPhotos)} onClick={save}>
         <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       </Link>
     </Card>

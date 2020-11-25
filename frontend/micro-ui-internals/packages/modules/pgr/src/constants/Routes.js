@@ -22,7 +22,6 @@ export const PgrRoutes = {
   UploadPhotos: `/upload-photos`,
   Details: `/details`,
   CreateComplaintResponse: `/response`,
-  DynamicConfig: `/dynamic-config`,
 };
 
 export const getRoute = (match, route) => `${match.path}${route}`;

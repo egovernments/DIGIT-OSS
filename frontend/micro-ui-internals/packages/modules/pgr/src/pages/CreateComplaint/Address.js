@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchLocalities } from "../../redux/actions";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
+import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const Address = (props) => {
   const SessionStorage = Digit.SessionStorage;
@@ -71,7 +72,7 @@ const Address = (props) => {
       <CardLabel>{t(`${LOCALIZATION_KEY.CS_CREATECOMPLAINT}_MOHALLA`)} *</CardLabel>
       {/* <RadioButtons options={["Ajit Nagar", "Patel Nagar"]}/> */}
       <Dropdown isMandatory option={localities} select={selectLocalities} />
-      <Link to="/create-complaint/landmark" onClick={save}>
+      <Link to={getRoute(props.match, PgrRoutes.Landmark)} onClick={save}>
         <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       </Link>
       {/* <p onClick={() =>console.log(selectedCity, selectedLocality)}>state display</p> */}
