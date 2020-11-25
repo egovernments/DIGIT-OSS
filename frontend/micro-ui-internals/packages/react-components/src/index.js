@@ -46,6 +46,8 @@ import LocationSearchCard from "./molecules/LocationSearchCard";
 import TextInputCard from "./molecules/TextInputCard";
 import CityMohalla from "./molecules/CityMohalla";
 
+import DetailsCard from "./molecules/DetailsCard";
+
 export {
   Body,
   TopBar,
@@ -92,6 +94,7 @@ export {
   LocationSearchCard,
   TextInputCard,
   CityMohalla,
+  DetailsCard,
   Label,
   Table,
   PopUp,

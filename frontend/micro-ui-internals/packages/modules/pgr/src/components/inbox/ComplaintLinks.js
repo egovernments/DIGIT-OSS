@@ -1,7 +1,7 @@
 import { Card } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 
-const ComplaintsLink = ({ isMobile }) => {
+const ComplaintsLink = ({ isMobile, data }) => {
   const allLinks = [
     { text: "New Complaint", link: "/" },
     { text: "Reports", link: "/" },
@@ -26,7 +26,7 @@ const ComplaintsLink = ({ isMobile }) => {
   );
 
   return (
-    <Card>
+    <Card style={{ paddingRight: 0 }}>
       <div className="complaint-links-container">
         {GetLogo()}
         <div className="body">

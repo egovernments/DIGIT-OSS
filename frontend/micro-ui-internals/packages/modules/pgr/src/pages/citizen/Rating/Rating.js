@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
 import { Card, CardHeader, CardLabel, Rating, CheckBox, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
-import { updateComplaints } from "../../redux/actions/index";
+import { updateComplaints } from "../../../redux/actions/index";
 //import { Storage } from "../../@egovernments/digit-utils/services/Storage";
 import { useTranslation } from "react-i18next";
 

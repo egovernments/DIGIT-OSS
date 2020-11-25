@@ -50,9 +50,9 @@ const SubType = (props) => {
     // </Card>
     <TypeSelectCard
       cardCaption={subType.name}
-      complaintTypePlaceHolder="CS_ADDCOMPLAINT_COMPLAINT_SUBTYPE_PLACEHOLDER"
-      cardText="CS_COMPLAINT_SUBTYPE_TEXT"
-      submitBarLabel="PT_COMMONS_NEXT"
+      complaintTypePlaceHolder={t("CS_ADDCOMPLAINT_COMPLAINT_SUBTYPE_PLACEHOLDER")}
+      cardText={t("CS_COMPLAINT_SUBTYPE_TEXT")}
+      submitBarLabel={t("PT_COMMONS_NEXT")}
       selectedOption={selectedOption}
       menu={subMenu}
       selected={selected}

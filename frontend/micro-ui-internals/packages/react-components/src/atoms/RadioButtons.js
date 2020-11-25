@@ -1,19 +1,20 @@
 import React from "react";
 
 const RadioButtons = (props) => {
-  console.log("PROPS:-", props);
-  var selected = props.selectedOption;
+  var selected = props.selectedoption;
 
   function selectOption(value) {
+    console.log("value,,,,,", value);
     selected = value;
     props.onSelect(value);
   }
   return (
     <div className="radio-wrap">
       {props.options.map((option) => {
-        if (props.optionsKey) {
+        console.log("option----", option);
+        if (props.optionskey) {
           return (
-            <div key={option[props.optionsKey]}>
+            <div key={option[props.optionskey]}>
               <span className="radio-btn-wrap">
                 <input
                   className="radio-btn"
@@ -25,7 +26,7 @@ const RadioButtons = (props) => {
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label>{option[props.optionsKey]}</label>
+              <label>{option[props.optionskey]}</label>
             </div>
           );
         } else {

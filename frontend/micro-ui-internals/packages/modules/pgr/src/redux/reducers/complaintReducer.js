@@ -1,4 +1,4 @@
-import { APPLY_FILTER, CREATE_COMPLAINT, FETCH_COMPLAINTS, UPDATE_COMPLAINT } from "../actions/types";
+import { APPLY_INBOX_FILTER, CREATE_COMPLAINT, FETCH_COMPLAINTS, UPDATE_COMPLAINT } from "../actions/types";
 
 function complaintReducer(state = {}, action) {
   switch (action.type) {
@@ -8,8 +8,9 @@ function complaintReducer(state = {}, action) {
       return { ...state, list: action.payload.complaints };
     case UPDATE_COMPLAINT:
       return { ...state, response: action.payload };
-    case APPLY_FILTER:
-      return { ...state, filters: action.payload.filters };
+    case APPLY_INBOX_FILTER:
+      console.log("response::::>", action.payload);
+      return { ...state, response: action.payload.response.instances };
     default:
       return state;
   }

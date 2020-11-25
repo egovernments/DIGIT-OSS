@@ -17,7 +17,6 @@ const TextField = (props) => {
 };
 
 const Dropdown = (props) => {
-  console.log("props:::::>>>", props);
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");

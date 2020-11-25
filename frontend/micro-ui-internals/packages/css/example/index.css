@@ -1218,6 +1218,8 @@ img, video {
   .action-bar-wrap {
     -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.16);
+    position: fixed;
+    bottom: 0;
     width: 100%;
     --bg-opacity:1;
     background-color: #fff;
@@ -1262,7 +1264,7 @@ img, video {
     padding: 20px 18px;
     font-weight: 700;
     vertical-align: middle;
-    text-align: center; }
+    text-align: left; }
   .table tbody {
     border: none;
     padding: 0;
@@ -1428,10 +1430,7 @@ img, video {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-align: end;
-  -ms-flex-align: end;
-  align-items: flex-end; }
+  flex-direction: column; }
   .details-container .detail {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1443,12 +1442,10 @@ img, video {
     -ms-flex-line-pack: space-evenly;
     align-content: space-evenly; }
     .details-container .detail .label {
-      width: "150px";
+      width: 138px;
       padding-bottom: 16px; }
     .details-container .detail .label, .details-container .detail .name {
       padding-top: 16px; }
-    .details-container .detail .name {
-      margin-left: 24px; }
 
 @media (min-width: 780px) {
   .popup-module {

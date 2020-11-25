@@ -1,13 +1,13 @@
 .details-container {
-  @apply flex flex-col items-end;
+  @apply flex flex-col;
   .detail {
     @apply flex flex-row content-evenly;
     .label {
-      width: "150px";
+      width: 138px;
       @apply pt-md pb-md;
     }
     .name {
-      @apply pt-md ml-lg;
+      @apply pt-md;
     }
   }
 }

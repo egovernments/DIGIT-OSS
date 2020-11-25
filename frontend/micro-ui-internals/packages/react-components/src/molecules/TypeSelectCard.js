@@ -12,7 +12,7 @@ const TypeSelectCard = ({ complaintTypePlaceHolder, cardText, submitBarLabel, se
     <Card>
       <CardHeader>{`${complaintTypePlaceHolder}`}</CardHeader>
       <CardText>{`${cardText}`}</CardText>
-      {menu ? <RadioButtons selectedOption={selectedOption} options={menu} optionsKey="name" onSelect={selected} /> : null}
+      {menu ? <RadioButtons selectedoption={selectedOption} options={menu} optionskey="name" onSelect={selected} /> : null}
       <SubmitBar label={`${submitBarLabel}`} onSubmit={onSave} />
     </Card>
   );

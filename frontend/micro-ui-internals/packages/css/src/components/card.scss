@@ -37,7 +37,7 @@
     @apply block font-bold text-legend text-error mb-md;
   }
 
-  .card-label-desc{
+  .card-label-desc {
     @apply font-bold text-text-secondary text-heading-s mb-md;
   }
 
@@ -49,7 +49,7 @@
 .submit-bar {
   @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none;
 
-  &:focus{
+  &:focus {
     @apply outline-none;
   }
 
@@ -92,19 +92,18 @@
     }
   }
 
-  .header-wrap{
+  .header-wrap {
     @apply flex mb-md;
 
-    .header-start{
+    .header-start {
       margin-right: auto;
     }
 
-    .header-content{
+    .header-content {
     }
 
-    .header-end{
+    .header-end {
       margin-left: auto;
     }
   }
-
 }
