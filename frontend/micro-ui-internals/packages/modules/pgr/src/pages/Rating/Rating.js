@@ -35,6 +35,7 @@ const RatingAndFeedBack = () => {
   const onSubmit = () => {
     let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
     complaintDetails.service.rating = rating;
+    complaintDetails.service.additionalDetail = selection;
     complaintDetails.workflow = {
       action: "RATE",
       comments: comment,
@@ -45,6 +46,8 @@ const RatingAndFeedBack = () => {
 
   const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
 
+  let lables = ["_SERVICES", "_RESOLUTION_TIME", "_QUALITY_OF_WORK", "_OTHERS"];
+
   return (
     <React.Fragment>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -54,11 +57,10 @@ const RatingAndFeedBack = () => {
           {/* <CardLabel>How would you rate your experience with us?</CardLabel> */}
           <CardLabel>{t(`${LOCALIZATION_KEY.CS_COMPLAINT}_RATE_TEXT`)}</CardLabel>
           <Rating currentRating={rating} maxRating={5} onFeedback={(e, ref, i) => feedback(e, ref, i)} />
-          <CardLabel>{t(`${CS_FEEDBACK}_WHAT_WAS_GOOD`)}</CardLabel>
-          <CheckBox onChange={onSelect} label={t(`${LOCALIZATION_KEY.CS_FEEDBACK}_SERVICES`)} />
-          <CheckBox onChange={onSelect} label={t(`${LOCALIZATION_KEY.CS_FEEDBACK}_RESOLUTION_TIME`)} />
-          <CheckBox onChange={onSelect} label={t(`${LOCALIZATION_KEY.CS_FEEDBACK}_QUALITY_OF_WORK`)} />
-          <CheckBox onChange={onSelect} label={t(`${LOCALIZATION_KEY.CS_FEEDBACK}_OTHERS`)} />
+          <CardLabel>{t(`${LOCALIZATION_KEY.CS_FEEDBACK}_WHAT_WAS_GOOD`)}</CardLabel>
+          {lables.map((lable, index) => (
+            <CheckBox key={index} onChange={onSelect} label={t(`${LOCALIZATION_KEY.CS_FEEDBACK}${lable}`)} />
+          ))}
           <CardLabel>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardLabel>
           <TextArea onChange={onComments}></TextArea>
           <SubmitBar label={t(`${LOCALIZATION_KEY.CS_COMMON}_SUBMIT`)} />
