@@ -28,6 +28,7 @@ import {
 import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import useComplaintDetails from "../../hooks/useComplaintDetails";
+import useWorkflowDetails from "../../hooks/useWorkflowDetails";
 
 const MapView = (props) => {
   return (
@@ -64,8 +65,10 @@ export const ComplaintDetails = (props) => {
   const [toast, setToast] = useState(false);
   const tenantId = "pb.amritsar";
   const statusTable = useComplaintDetails({ tenantId, id });
+  const workflowDetails = useWorkflowDetails({ tenantId, id });
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
+
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
@@ -125,7 +128,10 @@ export const ComplaintDetails = (props) => {
         <CardLabel>Complaint Details</CardLabel>
         <StatusTable>
           {Object.keys(statusTable)
-            .filter((k) => k !== "CS_COMPLAINT_DETAILS_GEOLOCATION" && k !== "thumbnails" && k !== "CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS")
+            .filter(
+              (k) =>
+                k !== "CS_COMPLAINT_DETAILS_GEOLOCATION" && k !== "thumbnails" && k !== "workflow" && k !== "CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS"
+            )
             .map((k) => (
               <Row key={k} label={t(k)} text={statusTable[k]} />
             ))}

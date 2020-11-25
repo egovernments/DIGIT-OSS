@@ -43,9 +43,11 @@ const useComplaintDetails = ({ tenantId, id }) => {
 
       if (ComplaintDetailsResponse && serviceDefs) {
         const ids = ComplaintDetailsResponse.workflow.verificationDocuments
-          .filter((doc) => doc.documentType === "PHOTO")
-          .map((photo) => photo.fileStoreId);
-        const thumbnails = await getThumbnails(ids, tenantId);
+          ? ComplaintDetailsResponse.workflow.verificationDocuments.filter((doc) => doc.documentType === "PHOTO").map((photo) => photo.fileStoreId)
+          : null;
+
+        const thumbnails = ids ? await getThumbnails(ids, tenantId) : null;
+
         const details = {
           CS_COMPLAINT_DETAILS_COMPLAINT_NO: id,
           CS_COMPLAINT_DETAILS_COMPLAINT_TYPE: serviceDefs.find((def) => def.serviceCode === ComplaintDetailsResponse.service.serviceCode).menuPath,
@@ -56,6 +58,7 @@ const useComplaintDetails = ({ tenantId, id }) => {
           CS_COMPLAINT_DETAILS_GEOLOCATION: ComplaintDetailsResponse.service.address.geolocation,
           CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS: ComplaintDetailsResponse.service.additionalDetail,
           thumbnails: thumbnails,
+          workflow: ComplaintDetailsResponse.workflow,
         };
         setComplaintDetails(details);
       } else {
