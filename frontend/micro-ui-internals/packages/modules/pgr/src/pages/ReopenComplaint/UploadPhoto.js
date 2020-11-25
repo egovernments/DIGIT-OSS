@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Card, SubmitBar, BackButton, ImageUploadHandler } from "@egovernments/digit-ui-react-components";
 
 import { LOCALIZATION_KEY } from "../../constants/Localization";
+import { PGR_BASE } from "../../constants/Routes";
 
 const UploadPhoto = () => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const UploadPhoto = () => {
     <React.Fragment>
       <Card>
         <ImageUploadHandler header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)} cardText="" onPhotoChange={handleUpload} />
-        <Link to={`/reopen/addional-details/${id}`}>
+        <Link to={`${PGR_BASE}reopen/addional-details/${id}`}>
           <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
         </Link>
       </Card>
