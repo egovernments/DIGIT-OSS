@@ -8,6 +8,8 @@ const Urls = {
   },
   pgr_search: `/pgr-services/v2/request/_search`,
   pgr_update: `/pgr-services/v2/request/_update`,
+  FileStore: "/filestore/v1/files",
+  FileFetch: "/filestore/v1/files/url",
 };
 
 export default Urls;

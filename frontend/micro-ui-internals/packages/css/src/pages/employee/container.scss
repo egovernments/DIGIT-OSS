@@ -9,7 +9,8 @@
 
 @screen dt{
     .ground-container{
-        @apply px-md pt-md;
+        margin-bottom: 56px;
+        @apply p-md ;
     }   
     .heading-m{
         @apply font-bold text-text-primary text-heading-m-dt ml-md pt-sm;

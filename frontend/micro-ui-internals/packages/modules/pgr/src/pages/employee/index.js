@@ -25,10 +25,10 @@ const Complaint = () => {
           <Route path={Employee.Inbox} component={Inbox} />
         </Switch>
       </div>
-      <ActionBar>
+      {/* <ActionBar>
         {displayMenu ? <Menu options={["Assign Complaint", "Reject Complaint"]} onSelect={popupCall} /> : null}
         <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
-      </ActionBar>
+      </ActionBar> */}
     </React.Fragment>
   );
 };

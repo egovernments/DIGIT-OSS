@@ -1466,9 +1466,8 @@ img, video {
 
 @media (min-width: 780px) {
   .ground-container {
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-top: 16px; }
+    margin-bottom: 56px;
+    padding: 16px; }
   .heading-m {
     font-weight: 700;
     --text-opacity:1;

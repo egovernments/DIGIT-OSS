@@ -54,6 +54,7 @@ export const Request = async ({ method = "POST", url, data = {}, useCache = fals
   } else {
     params._ = Date.now();
   }
+  console.log("data params", data, params);
   const res = await Axios({ method, url, data, params });
   if (useCache) {
     Storage.set(key, res.data);

@@ -2,7 +2,7 @@ import Urls from "./urls";
 import { Request } from "./Utils/Request";
 
 export const PGRService = {
-  search: (stateCode = "pb", fiters = {}) =>
+  search: (stateCode = "pb", filters = {}) =>
     Request({
       url: Urls.pgr_search,
       useCache: false,
@@ -10,7 +10,7 @@ export const PGRService = {
       method: "POST",
       auth: true,
       userService: true,
-      params: { tenantId: stateCode, ...fiters },
+      params: { tenantId: stateCode, ...filters },
     }),
   create: (details, stateCode = "pb") =>
     Request({
