@@ -13,6 +13,10 @@ const Details = (props) => {
     props.submitComplaint(details);
   }
 
+  function skipSubmitComplaint() {
+    props.submitComplaint();
+  }
+
   function textInput(e) {
     setDetails(e.target.value);
   }
@@ -31,7 +35,7 @@ const Details = (props) => {
         <SubmitBar label={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT`)} />
       </Link>
       {props.skip ? (
-        <Link to={getRoute(props.match, PgrRoutes.CreateComplaintResponse)}>
+        <Link to={getRoute(props.match, PgrRoutes.CreateComplaintResponse)} onClick={skipSubmitComplaint}>
           <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} />
         </Link>
       ) : null}
