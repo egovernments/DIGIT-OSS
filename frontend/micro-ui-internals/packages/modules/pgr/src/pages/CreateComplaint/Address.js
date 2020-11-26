@@ -7,14 +7,15 @@ import {
   CardLabel,
   Dropdown,
   SubmitBar,
+  CardLabelError,
   // RadioButtons,
 } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchLocalities } from "../../redux/actions";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
 import { PgrRoutes, getRoute } from "../../constants/Routes";
+import { useHistory } from "react-router-dom";
 
 const Address = (props) => {
   const SessionStorage = Digit.SessionStorage;
@@ -24,9 +25,11 @@ const Address = (props) => {
   const appState = useSelector((state) => state);
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [valid, setValid] = useState(true);
 
   const cities = [];
   var localities = [];
+  const history = useHistory();
 
   useEffect(() => {
     if (SessionStorage.get("city_complaint")) {
@@ -56,8 +59,13 @@ const Address = (props) => {
   }
 
   function save() {
-    props.save(selectedCity, selectedLocality);
-    SessionStorage.del("city_complaint");
+    if (selectedLocality === null) {
+      setValid(false);
+    } else {
+      props.save(selectedCity, selectedLocality);
+      SessionStorage.del("city_complaint");
+      history.push(getRoute(props.match, PgrRoutes.Landmark));
+    }
   }
   return (
     <Card>
@@ -67,14 +75,13 @@ const Address = (props) => {
         {/* Choose the locality/mohalla of the complaint from the list given below. */}
         {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_CITY_MOHALLA_TEXT`)}
       </CardText>
+      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
       <CardLabel>{t("MYCITY_CODE_LABEL")} *</CardLabel>
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} />
       <CardLabel>{t(`${LOCALIZATION_KEY.CS_CREATECOMPLAINT}_MOHALLA`)} *</CardLabel>
       {/* <RadioButtons options={["Ajit Nagar", "Patel Nagar"]}/> */}
       <Dropdown isMandatory option={localities} select={selectLocalities} />
-      <Link to={getRoute(props.match, PgrRoutes.Landmark)} onClick={save}>
-        <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
-      </Link>
+      <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={save} />
       {/* <p onClick={() =>console.log(selectedCity, selectedLocality)}>state display</p> */}
     </Card>
   );

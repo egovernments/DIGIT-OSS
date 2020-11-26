@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Card, CardHeader, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Card, CardHeader, CardLabelError, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
 import { PgrRoutes, getRoute } from "../../constants/Routes";
@@ -16,6 +16,7 @@ const CreateComplaint = (props) => {
   const { t } = useTranslation();
   const [localMenu, setLocalMenu] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [valid, setValid] = useState(true);
 
   useEffect(
     () =>
@@ -31,11 +32,15 @@ const CreateComplaint = (props) => {
   }
 
   function onSave() {
-    if (selectedOption.key === "") {
-      props.save({ key: "Others", name: "Others" });
-      history.push(getRoute(props.match, PgrRoutes.LocationSearch));
+    if (selectedOption === null) {
+      setValid(false);
     } else {
-      history.push(getRoute(props.match, PgrRoutes.SubType));
+      if (selectedOption.key === "") {
+        props.save({ key: "Others", name: "Others" });
+        history.push(getRoute(props.match, PgrRoutes.LocationSearch));
+      } else {
+        history.push(getRoute(props.match, PgrRoutes.SubType));
+      }
     }
   }
   return (
@@ -46,6 +51,7 @@ const CreateComplaint = (props) => {
         If the complaint type you are looking for is not listed select others. */}
         {t(`${LOCALIZATION_KEY.CS_COMPLAINT}_TYPE_TEXT`)}
       </CardText>
+      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
       {localMenu ? <RadioButtons selectedOption={selectedOption} options={localMenu} optionsKey="name" onSelect={selected} /> : null}
       <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={onSave} />
     </Card>

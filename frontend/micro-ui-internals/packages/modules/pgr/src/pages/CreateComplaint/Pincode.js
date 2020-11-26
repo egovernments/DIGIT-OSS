@@ -1,17 +1,42 @@
 import React, { useState } from "react";
-import { Card, CardHeader, CardSubHeader, CardText, CardLabel, TextInput, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import {
+  Card,
+  CardHeader,
+  CardSubHeader,
+  CardText,
+  CardLabel,
+  TextInput,
+  SubmitBar,
+  LinkButton,
+  CardLabelError,
+} from "@egovernments/digit-ui-react-components";
+import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
 import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const Pincode = (props) => {
   const [pincode, setPincode] = useState(null);
+  const [valid, setValid] = useState(true);
 
   const { t } = useTranslation();
+  const history = useHistory();
 
   function textInput(e) {
     setPincode(e.target.value);
+  }
+
+  function onSave() {
+    if (pincode === null) {
+      setValid(false);
+    } else {
+      props.save(pincode);
+      history.push(getRoute(props.match, PgrRoutes.Address));
+    }
+  }
+
+  function skip() {
+    history.push(getRoute(props.match, PgrRoutes.Address));
   }
   return (
     <Card>
@@ -23,20 +48,10 @@ const Pincode = (props) => {
         {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_CHANGE_PINCODE_TEXT`)}
       </CardText>
       <CardLabel>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE`)}</CardLabel>
+      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
       <TextInput onChange={textInput} />
-      <Link
-        to={getRoute(props.match, PgrRoutes.Address)}
-        onClick={() => {
-          props.save(pincode);
-        }}
-      >
-        <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
-      </Link>
-      {props.skip ? (
-        <Link to={getRoute(props.match, PgrRoutes.Address)}>
-          <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} />
-        </Link>
-      ) : null}
+      <SubmitBar onSubmit={onSave} label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
+      {props.skip ? <LinkButton onClick={skip} label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} /> : null}
     </Card>
   );
 };
