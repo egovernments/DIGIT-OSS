@@ -9,6 +9,7 @@ export const fetchLocalities = (city) => async (dispatch, getState) => {
   const { stateInfo } = getState();
   let response = await Digit.LocationService.getLocalities({ tenantId: `${stateInfo.code}.${city}` });
   let localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+  console.log("get localityList:", localityList);
   dispatch({
     type: FETCH_LOCALITIES,
     payload: { localityList },
