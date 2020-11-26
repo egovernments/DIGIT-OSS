@@ -27,7 +27,7 @@ const Pincode = (props) => {
   }
 
   function onSave() {
-    if (pincode === null) {
+    if (pincode === null || pincode === "") {
       setValid(false);
     } else {
       props.save(pincode);
@@ -48,7 +48,7 @@ const Pincode = (props) => {
         {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_CHANGE_PINCODE_TEXT`)}
       </CardText>
       <CardLabel>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE`)}</CardLabel>
-      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE_NOT_ENTERED`)}</CardLabelError>}
       <TextInput onChange={textInput} />
       <SubmitBar onSubmit={onSave} label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       {props.skip ? <LinkButton onClick={skip} label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} /> : null}

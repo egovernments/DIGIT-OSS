@@ -40,7 +40,7 @@ const SubType = (props) => {
         Select the option of your choice from the list given below. */}
         {t(`${LOCALIZATION_KEY.CS_COMPLAINT}_SUBTYPE_TEXT`)}
       </CardText>
-      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ERROR_COMPLAINT_SUBTYPE`)}</CardLabelError>}
       <RadioButtons selectedOption={selectedOption} options={subMenu} optionsKey="name" onSelect={selected} />
       <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={onSave} />
     </Card>

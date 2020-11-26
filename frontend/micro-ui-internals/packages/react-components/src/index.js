@@ -33,10 +33,12 @@ import DateWrap from "./DateWrap";
 import KeyNote from "./KeyNote";
 import TelePhone from "./TelePhone";
 import GreyOutText from "./GreyOutText";
+import HomeLink from "./HomeLink";
 
 export {
   Body,
   TopBar,
+  HomeLink,
   AppContainer,
   Header,
   LinkLabel,

@@ -28,3 +28,12 @@
 @import "./imageviewer.scss";
 @import "./telephone.scss";
 @import "./grey.scss";
+
+
+.home-link {
+  margin-left: 16px;
+  margin-bottom: 16px;
+  a {
+    color: #1D70B8;
+  }
+}
