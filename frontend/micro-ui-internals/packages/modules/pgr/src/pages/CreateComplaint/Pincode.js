@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -18,20 +18,39 @@ import { PgrRoutes, getRoute } from "../../constants/Routes";
 const Pincode = (props) => {
   const [pincode, setPincode] = useState(props.pincode);
   const [valid, setValid] = useState(true);
-
+  const [possible, setPossible] = useState(true);
+  const PincodeMap = Digit.PincodeMap;
   const { t } = useTranslation();
   const history = useHistory();
-
   function textInput(e) {
     setPincode(e.target.value);
   }
 
+  useEffect(() => {
+    if (pincode) {
+      if (pincode.toString().length < 6 || pincode.toString().length > 7) {
+        if (pincode.toString().length === 5) {
+          setTimeout(() => setValid(false), 100);
+        } else {
+          setTimeout(() => setValid(false), 1000);
+        }
+      } else {
+        setValid(true);
+        setPossible(true);
+      }
+    }
+  }, [pincode]);
+
   function onSave() {
-    if (pincode === null || pincode === "") {
+    if (pincode === null || pincode === "" || valid === false) {
       setValid(false);
     } else {
-      props.save(pincode);
-      history.push(getRoute(props.match, PgrRoutes.Address));
+      if (Object.keys(PincodeMap).includes(pincode)) {
+        props.save(pincode.toString());
+        history.push(getRoute(props.match, PgrRoutes.Address));
+      } else {
+        setPossible(false);
+      }
     }
   }
 
@@ -48,7 +67,8 @@ const Pincode = (props) => {
         {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_CHANGE_PINCODE_TEXT`)}
       </CardText>
       <CardLabel>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE`)}</CardLabel>
-      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE_NOT_ENTERED`)}</CardLabelError>}
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE_INVALID`)}</CardLabelError>}
+      {possible ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE_NOT_SERVICEABLE`)}</CardLabelError>}
       <TextInput onChange={textInput} value={pincode} />
       <SubmitBar onSubmit={onSave} label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       {props.skip ? <LinkButton onClick={skip} label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} /> : null}

@@ -28,6 +28,7 @@ const CreateComplaint = ({ match, history }) => {
   const [complaintType, setComplaintType] = useState(null);
   const [toSubmitComplaint, setToSubmitComplaint] = useState(false);
   const [uploadedImageIds, setUploadedImageIds] = useState([]);
+  const [adressList, setAddressList] = useState({});
 
   const complaintParams = {
     cityCode: appState.cityCode,
@@ -68,6 +69,12 @@ const CreateComplaint = ({ match, history }) => {
     })();
   }, [toSubmitComplaint]);
 
+  useEffect(() => {
+    if (pincode) {
+      setAddressList({ city: "Amritsar", localities: Digit.PincodeMap[pincode] });
+    }
+  }, [pincode]);
+
   const savePincode = (val) => {
     setPincode(val);
   };
@@ -75,6 +82,7 @@ const CreateComplaint = ({ match, history }) => {
   const saveAddress = (city, locality) => {
     setCity(city);
     setLocality(locality);
+    console.log(city, locality, complaintParams);
   };
 
   const saveLandmark = (landmark) => {
@@ -114,7 +122,7 @@ const CreateComplaint = ({ match, history }) => {
         path={getRoute(match, PgrRoutes.Pincode)}
         component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} match={match} pincode={pincode} />}
       />
-      <Route path={getRoute(match, PgrRoutes.Address)} component={(props) => <Address save={saveAddress} match={match} />} />
+      <Route path={getRoute(match, PgrRoutes.Address)} component={(props) => <Address list={adressList} save={saveAddress} match={match} />} />
       <Route path={getRoute(match, PgrRoutes.Landmark)} component={(props) => <Landmark save={saveLandmark} match={match} />} />
       <Route path={getRoute(match, PgrRoutes.UploadPhotos)} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} match={match} />} />
       <Route
