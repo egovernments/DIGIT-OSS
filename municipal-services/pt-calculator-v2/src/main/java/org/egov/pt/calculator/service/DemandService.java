@@ -112,15 +112,15 @@ public class DemandService {
 			if(advanceCarryforwardEstimate.isPresent())
 				newTax = advanceCarryforwardEstimate.get().getEstimateAmount();
 
-			//Demand oldDemand = utils.getLatestDemandForCurrentFinancialYear(request.getRequestInfo(),criteria);
+			Demand oldDemand = utils.getLatestDemandForCurrentFinancialYear(request.getRequestInfo(),criteria);
 
 			// true represents that the demand should be updated from this call
 			BigDecimal carryForwardCollectedAmount = getCarryForwardAndCancelOldDemand(newTax, criteria,
-					request.getRequestInfo(), true);
+					request.getRequestInfo(),oldDemand, true);
 
 			if (carryForwardCollectedAmount.doubleValue() >= 0.0) {
 
-				Demand demand = prepareDemand(property, calculation ,request.getRequestInfo());
+				Demand demand = prepareDemand(property, calculation ,oldDemand);
 
 				// Add billingSLabs in demand additionalDetails as map with key calculationDescription
 				demand.setAdditionalDetails(Collections.singletonMap(BILLINGSLAB_KEY, calculation.getBillingSlabIds()));
@@ -289,7 +289,7 @@ public class DemandService {
 	 * @return
 	 */
 	protected BigDecimal getCarryForwardAndCancelOldDemand(BigDecimal newTax, CalculationCriteria criteria, RequestInfo requestInfo
-			, boolean cancelDemand) {
+			, Demand demand,boolean cancelDemand) {
 
 		Property property = criteria.getProperty();
 
@@ -298,7 +298,7 @@ public class DemandService {
 
 		if(null == property.getPropertyId()) return carryForward;
 
-	     Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
+	    // Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
 		
 		if(null == demand) return carryForward;
 
@@ -365,7 +365,7 @@ public class DemandService {
 	 * @param calculation
 	 * @return
 	 */
-	private Demand prepareDemand(Property property, Calculation calculation,RequestInfo requestInfo) {
+	private Demand prepareDemand(Property property, Calculation calculation,Demand demand) {
 
 		String tenantId = property.getTenantId();
 		PropertyDetail detail = property.getPropertyDetails().get(0);
@@ -377,7 +377,7 @@ public class DemandService {
 		else
 			owner = detail.getOwners().iterator().next();
 		
-	  Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
+	   // Demand demand = utils.getLatestDemandForCurrentFinancialYear(requestInfo, property);
 
 		List<DemandDetail> details = new ArrayList<>();
 
