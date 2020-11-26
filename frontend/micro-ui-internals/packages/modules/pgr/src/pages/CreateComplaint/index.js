@@ -20,7 +20,7 @@ const CreateComplaint = ({ match, history }) => {
   const SessionStorage = Digit.SessionStorage;
   const dispatch = useDispatch();
   const appState = useSelector((state) => state);
-  const [pincode, setPincode] = useState(null);
+  const [pincode, setPincode] = useState("");
   const [city, setCity] = useState(null);
   const [locality, setLocality] = useState(null);
   const [landmark, setLandmark] = useState(null);
@@ -106,10 +106,13 @@ const CreateComplaint = ({ match, history }) => {
         // component={(props) => <ComplaintTypeConfig />}
       />
       <Route path={getRoute(match, PgrRoutes.SubType)} component={(props) => <SubType save={saveComplaintType} match={match} />} />
-      <Route path={getRoute(match, PgrRoutes.LocationSearch)} component={(props) => <LocationSearch skip={true} match={match} />} />
+      <Route
+        path={getRoute(match, PgrRoutes.LocationSearch)}
+        component={(props) => <LocationSearch save={(val) => savePincode(val)} skip={true} match={match} />}
+      />
       <Route
         path={getRoute(match, PgrRoutes.Pincode)}
-        component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} match={match} />}
+        component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} match={match} pincode={pincode} />}
       />
       <Route path={getRoute(match, PgrRoutes.Address)} component={(props) => <Address save={saveAddress} match={match} />} />
       <Route path={getRoute(match, PgrRoutes.Landmark)} component={(props) => <Landmark save={saveLandmark} match={match} />} />

@@ -46,6 +46,7 @@ const ComplaintDetailsPage = (props) => {
   const selectedComplaint = selectComplaints(state);
 
   const selectedWorkFlow = selectWorkflow(state);
+
   const historyData = useComplaintHistory(selectedWorkFlow, props.match.path);
 
   const [imageZoom, setImageZoom] = useState(null);
@@ -92,8 +93,11 @@ const ComplaintDetailsPage = (props) => {
   const getFormatedAddress = ({ landmark, buildingName, plotNo, street, locality }) => {
     return (
       <span>
-        {landmark} <br /> {buildingName} <br />
-        {plotNo} {street} {t(`${cityCode()}_ADMIN_${locality.code}`)} <br /> {t(`TENANT_TENANTS_${cityCode()}`)}
+        <p>{landmark}</p> <p>{buildingName}</p>
+        <p>
+          {plotNo} {street} {t(`revenue.locality.${locality.code}`)}{" "}
+        </p>{" "}
+        {t(`TENANT_TENANTS_${cityCode()}`)}
       </span>
     );
   };

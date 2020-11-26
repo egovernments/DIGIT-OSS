@@ -1,4 +1,4 @@
-import { TelePhone, GreyOutText } from "@egovernments/digit-ui-react-components";
+import { TelePhone, GreyOutText, Rating } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { ConvertTimestampToDate } from "../../../../libraries/src/services/Utils
 //import { WorkflowService } from "../@egovernments/digit-utils/services/WorkFlowService";
 
 const useComplaintHistory = (processInstance, path) => {
+  const complaint = Digit.SessionStorage.get(`complaint.${id}`);
   const [complaintHistory, setComplaintHistory] = useState([]);
 
   let { t } = useTranslation();
@@ -34,7 +35,7 @@ const useComplaintHistory = (processInstance, path) => {
       case "PENDINGATLME":
         let assignes = obj.assignes != null && obj.assignes[0];
         let { name, mobileNumber } = assignes;
-        const assignedTo = t("CS_COMMON_COMPLAINT_ASSIGNED_TO");
+        const assignedTo = `${t("CS_COMMON_COMPLAINT_ASSIGNED_TO")} to`;
         return (
           name &&
           mobileNumber && (
@@ -59,10 +60,17 @@ const useComplaintHistory = (processInstance, path) => {
                 </span>
               </Link>
             ))}
+            {/*       
+            {complaint[0] && complaint[0].service.rating && (
+              <div>
+                You rated
+                <Rating currentRating={3} maxRating={5} />
+              </div>
+            )} */}
           </React.Fragment>
         );
       case "CLOSEDAFTERRESOLUTION":
-        return <span>{t("CS_COMMON_CLOSED_AFTER_RESOLUTION")}</span>;
+        return <span>{t("CS_COMMON_CLOSEDAFTERRESOLUTION")}</span>;
 
       default:
       // code block

@@ -1,12 +1,25 @@
 import React, { useEffect } from "react";
 import { SearchIconSvg } from "./svgindex";
 
+const GetPinCode = (places) => {
+  console.log("Places addre component:", places.address_components);
+  let postalCode = null;
+  places.address_components.forEach((place) => {
+    let hasPostalCode = place.types.includes("postal_code");
+    postalCode = hasPostalCode ? place.long_name : null;
+  });
+  console.log("GetPinCode:", postalCode);
+  return postalCode;
+};
+
 const LocationSearch = (props) => {
   useEffect(() => {
     const script = document.createElement("script");
+    //AIzaSyCvzuo69lmgwc2XoqhACHcQhrGLALBUZAU
+    const key = "AIzaSyCbVz7R7btwMPqVLnd7Pnhra_c62SJHYws";
 
     async function mapScriptCall() {
-      script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDdKOqX6EPEX9djPm-vL_8zv0HBF8z0Qjg&callback=initAutocomplete&libraries=places";
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initAutocomplete&libraries=places`;
       script.async = true;
       script.defer = true;
 
@@ -32,11 +45,15 @@ const LocationSearch = (props) => {
 
         searchBox.addListener("places_changed", () => {
           const places = searchBox.getPlaces();
+          console.log("places", places);
 
           if (places.length === 0) {
             return;
           } // Clear out the old markers.
-
+          let pincode = GetPinCode(places[0]);
+          if (pincode) {
+            props.onChange(pincode);
+          }
           markers.forEach((marker) => {
             marker.setMap(null);
           });
@@ -65,7 +82,7 @@ const LocationSearch = (props) => {
                 position: place.geometry.location,
               })
             );
-
+            console.log("place.geometry.location:", place.geometry.location);
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
               bounds.union(place.geometry.viewport);

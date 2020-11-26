@@ -16,7 +16,7 @@ import { LOCALIZATION_KEY } from "../../constants/Localization";
 import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const Pincode = (props) => {
-  const [pincode, setPincode] = useState(null);
+  const [pincode, setPincode] = useState(props.pincode);
   const [valid, setValid] = useState(true);
 
   const { t } = useTranslation();
@@ -49,7 +49,7 @@ const Pincode = (props) => {
       </CardText>
       <CardLabel>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE`)}</CardLabel>
       {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CORE_COMMON}_PINCODE_NOT_ENTERED`)}</CardLabelError>}
-      <TextInput onChange={textInput} />
+      <TextInput onChange={textInput} value={pincode} />
       <SubmitBar onSubmit={onSave} label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
       {props.skip ? <LinkButton onClick={skip} label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} /> : null}
     </Card>

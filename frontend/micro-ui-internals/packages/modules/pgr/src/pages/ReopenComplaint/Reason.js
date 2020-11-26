@@ -21,7 +21,7 @@ const ReasonPage = (props) => {
     <React.Fragment>
       {/* <BackButton>Back</BackButton> */}
       <Card>
-        <CardHeader>{t(`${LOCALIZATION_KEY.CS_REOPEN}_REOPEN_COMPLAINT`)}</CardHeader>
+        <CardHeader>{t(`${LOCALIZATION_KEY.CS_REOPEN}_COMPLAINT`)}</CardHeader>
         {/* <LanguageSelect /> */}
         <CardText>
           {/* Select the option related to your complaint from the list given below.

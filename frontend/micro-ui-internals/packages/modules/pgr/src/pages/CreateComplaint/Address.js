@@ -40,7 +40,7 @@ const Address = (props) => {
   useEffect(() => {
     appState.cities.map((city) => cities.push(city.name));
     if (appState.localities.localityList) {
-      appState.localities.localityList.map((locality) => localities.push(locality.name));
+      appState.localities.localityList.map((locality) => localities.push(t(locality.code)));
     }
     // if (appState.localities.city) {
     //   setSelectedCity(appState.localities.city);

@@ -33,7 +33,7 @@ const userServiceData = {
 
 Digit.SessionStorage.set("citizen.userServiceData", userServiceData);
 // const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
-const citAuth = "1992c999-59a4-4d8c-aa96-8c2b84170260";
+const citAuth = "f13dc84e-ad59-42cb-84c9-973abfcfae18";
 console.log("citAUth", citAuth);
 
 Digit.SessionStorage.set("citizen.token", citAuth);

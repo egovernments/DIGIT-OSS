@@ -7,6 +7,10 @@ import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const CreateComplaint = (props) => {
   let { t } = useTranslation();
+
+  const handleLocationChange = (pincode) => {
+    props.save(pincode);
+  };
   return (
     <Card>
       <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PIN_LOCATION`)}</CardHeader>
@@ -16,7 +20,7 @@ const CreateComplaint = (props) => {
         {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PIN_LOCATION_TEXT`)}
       </CardText>
 
-      <LocationSearch />
+      <LocationSearch onChange={handleLocationChange} />
 
       <Link to={getRoute(props.match, PgrRoutes.Pincode)}>
         <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
