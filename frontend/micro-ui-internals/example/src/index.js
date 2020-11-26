@@ -32,8 +32,8 @@ const userServiceData = {
 };
 
 Digit.SessionStorage.set("citizen.userServiceData", userServiceData);
-const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
-// const citAuth = "1992c999-59a4-4d8c-aa96-8c2b84170260";
+// const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
+const citAuth = "1992c999-59a4-4d8c-aa96-8c2b84170260";
 console.log("citAUth", citAuth);
 
 Digit.SessionStorage.set("citizen.token", citAuth);
@@ -51,7 +51,6 @@ ReactDOM.render(
       <TopBar />
       <Switch>
         <Route path="/digit-ui/pgr">
-          <p>PGR</p>
           <PGRApp stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
         </Route>
         <Route>
