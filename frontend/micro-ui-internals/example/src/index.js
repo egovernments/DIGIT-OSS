@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { Route, BrowserRouter as Router, Switch, Link } from "react-router-dom";
 
 import initLibraries from "@egovernments/digit-ui-libraries";
-import PGRApp from "@egovernments/digit-ui-module-pgr";
-import { Body, TopBar, Header } from "@egovernments/digit-ui-react-components";
+import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
+import { Body, TopBar } from "@egovernments/digit-ui-react-components";
 import "@egovernments/digit-ui-css/example/index.css";
 
 initLibraries();
@@ -39,25 +39,16 @@ console.log("citAUth", citAuth);
 Digit.SessionStorage.set("citizen.token", citAuth);
 window.sessionStorage.setItem("citizen.token", citAuth);
 
-const GetLink = ({ to, children }) => (
-  <Link to={to} style={{ marginLeft: 16 }}>
-    {children}
-  </Link>
-);
-
 ReactDOM.render(
   <Router>
     <Body>
       <TopBar />
       <Switch>
         <Route path="/digit-ui/pgr">
-          <PGRApp stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
+          <PGRModule stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
         </Route>
         <Route>
-          <Header>Home page</Header>
-          <GetLink to="/digit-ui/pgr/citizen/create-complaint">Create Complaint</GetLink>
-          <br />
-          <GetLink to="/digit-ui/pgr/citizen/complaints">My Complaint</GetLink>
+          <PGRLinks />
         </Route>
       </Switch>
     </Body>

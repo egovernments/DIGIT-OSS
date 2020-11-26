@@ -367,7 +367,16 @@ img, video {
   padding: 16px;
   width: 100%; }
   .navbar img {
-    height: 24px; }
+    min-width: 78px;
+    height: 24px;
+    padding-right: 8px;
+    margin-right: 8px;
+    border-right: 1px solid #fff; }
+  .navbar img, .navbar span {
+    display: inline-block; }
+  .navbar span {
+    line-height: 24px;
+    vertical-align: middle; }
 
 .card {
   --bg-opacity:1;
@@ -1224,3 +1233,9 @@ img, video {
   --text-opacity:1;
   color: #505a5f;
   color: rgba(80, 90, 95, var(--text-opacity)); }
+
+.home-link {
+  margin-left: 16px;
+  margin-bottom: 16px; }
+  .home-link a {
+    color: #1d70b8; }
