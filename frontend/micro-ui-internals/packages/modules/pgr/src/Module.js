@@ -5,8 +5,9 @@ import { Provider } from "react-redux";
 import getStore from "./redux/store";
 import defaultConfig from "./config";
 import CitizenApp from "./CitizenApp";
+import { Header, HomeLink } from "@egovernments/digit-ui-react-components";
 
-const Module = ({ deltaConfig = {}, stateCode, cityCode, moduleCode }) => {
+export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode }) => {
   const match = useRouteMatch();
   const store = Digit.Services.useStore(defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode });
 
@@ -27,4 +28,10 @@ const Module = ({ deltaConfig = {}, stateCode, cityCode, moduleCode }) => {
   );
 };
 
-export default Module;
+export const PGRLinks = () => (
+  <React.Fragment>
+    <Header>Complaints</Header>
+    <HomeLink to="/digit-ui/pgr/citizen/create-complaint">List a Complaint</HomeLink>
+    <HomeLink to="/digit-ui/pgr/citizen/complaints">My Complaints</HomeLink>
+  </React.Fragment>
+);
