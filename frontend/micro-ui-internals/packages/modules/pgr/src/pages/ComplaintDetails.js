@@ -128,7 +128,7 @@ const ComplaintDetailsPage = (props) => {
           <Card>
             <CardSubHeader>{t(`SERVICEDEFS.${complaintDetails.service.serviceCode.toUpperCase()}`)}</CardSubHeader>
             <StatusTable dataObject={getTableData()}></StatusTable>
-            {files.length && <DisplayPhotos srcs={[]} onClick={zoomImage} />}
+            {files.length > 0 && <DisplayPhotos srcs={[]} onClick={zoomImage} />}
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>
           {
