@@ -22,8 +22,9 @@ import {
 import { selectComplaints } from "../selectors/complaint";
 import { fetchBusinessServiceById, searchComplaints } from "../redux/actions";
 import { selectWorkflow } from "../selectors/processInstance";
-import useComplaintHistory from "../hooks/useComplaintHistory";
+// import useComplaintHistory from "../hooks/useComplaintHistory";
 import { ImageViewer } from "@egovernments/digit-ui-react-components";
+import getComplaintHistory from "../hooks/useComplaintHistory";
 
 const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
@@ -47,21 +48,16 @@ const ComplaintDetailsPage = (props) => {
 
   const selectedWorkFlow = selectWorkflow(state);
 
-  const historyData = useComplaintHistory(selectedWorkFlow, props.match.path);
+  // const historyData = console.log("historyData:", historyData);
 
   const [imageZoom, setImageZoom] = useState(null);
 
   useEffect(() => {
-    if (historyData) {
-      Promise.all(historyData)
-        .then((values) => {
-          setComplaintHistory(values);
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
+    if (selectedComplaint.length > 0) {
+      const historyData = getComplaintHistory(selectedWorkFlow, props.match.path, t, selectedComplaint[0]);
+      setComplaintHistory(historyData);
     }
-  }, [historyData]);
+  }, [selectedWorkFlow, props.match.path, t, selectedComplaint]);
 
   const GetImageIds = (images) => {
     let imageIds = [];

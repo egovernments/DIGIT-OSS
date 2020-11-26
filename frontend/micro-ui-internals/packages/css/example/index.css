@@ -1116,6 +1116,22 @@ img, video {
   .rating-star-wrap {
     width: 40%; } }
 
+.rating-with-text {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  justify-items: center;
+  place-items: center;
+  width: 100%; }
+  .rating-with-text svg {
+    width: 24px;
+    height: 38px;
+    display: block;
+    margin-right: 8px; }
+
 .key-note-pair {
   margin-bottom: 16px; }
   .key-note-pair h3 {
