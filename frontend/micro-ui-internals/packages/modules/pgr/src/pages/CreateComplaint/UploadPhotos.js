@@ -32,7 +32,7 @@ const UploadPhotos = (props) => {
     <Card>
       {/* <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} /> */}
       <ImageUploadHandler header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)} cardText="" onPhotoChange={handleUpload} />
-      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_ERROR_MESSAGE`)}</CardLabelError>}
       <SubmitBar label="Next" onSubmit={save} />
       {props.skip ? <LinkButton label={t(`${LOCALIZATION_KEY.CS_COMMON}_SKIP_CONTINUE`)} onClick={skip} /> : null}
     </Card>

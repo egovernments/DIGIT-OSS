@@ -51,7 +51,7 @@ const CreateComplaint = (props) => {
         If the complaint type you are looking for is not listed select others. */}
         {t(`${LOCALIZATION_KEY.CS_COMPLAINT}_TYPE_TEXT`)}
       </CardText>
-      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ERROR_COMPLAINT_TYPE`)}</CardLabelError>}
       {localMenu ? <RadioButtons selectedOption={selectedOption} options={localMenu} optionsKey="name" onSelect={selected} /> : null}
       <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={onSave} />
     </Card>

@@ -16,9 +16,11 @@ const Landmark = (props) => {
   }
 
   function save() {
-    if (landmark === null) {
+    if (landmark === null || landmark === "") {
+      console.log(landmark);
       setValid(false);
     } else {
+      console.log(landmark);
       props.save(landmark);
       history.push(getRoute(props.match, PgrRoutes.UploadPhotos));
     }
@@ -33,7 +35,7 @@ const Landmark = (props) => {
         {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_LANDMARK_TEXT`)}
       </CardText>
       <CardLabel>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_LANDMARK`)}</CardLabel>
-      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_LANDMARK_ERROR`)}</CardLabelError>}
       <TextArea onChange={textInput}></TextArea>
       <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={save} />
     </Card>

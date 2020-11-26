@@ -59,7 +59,7 @@ const Address = (props) => {
   }
 
   function save() {
-    if (selectedLocality === null) {
+    if (selectedLocality === null || selectedLocality === "") {
       setValid(false);
     } else {
       props.save(selectedCity, selectedLocality);
@@ -75,7 +75,7 @@ const Address = (props) => {
         {/* Choose the locality/mohalla of the complaint from the list given below. */}
         {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_CITY_MOHALLA_TEXT`)}
       </CardText>
-      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_LOCATION_ERROR`)}</CardLabelError>}
       <CardLabel>{t("MYCITY_CODE_LABEL")} *</CardLabel>
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} />
       <CardLabel>{t(`${LOCALIZATION_KEY.CS_CREATECOMPLAINT}_MOHALLA`)} *</CardLabel>
