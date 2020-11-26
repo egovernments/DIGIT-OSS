@@ -13,6 +13,7 @@ import { MdmsService } from "./services/MDMS";
 import { UploadServices } from "./services/UploadServices";
 import { GetServiceDefinitions } from "./services/ServiceDefinitions";
 import { Complaint } from "./services/Complaint";
+import { PincodeMap } from "./services/PincodeMap";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -36,6 +37,7 @@ const initLibraries = () => {
   setupLibraries("UploadServices", UploadServices);
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
   setupLibraries("Complaint", Complaint);
+  setupLibraries("PincodeMap", PincodeMap);
   initI18n();
 };
 
