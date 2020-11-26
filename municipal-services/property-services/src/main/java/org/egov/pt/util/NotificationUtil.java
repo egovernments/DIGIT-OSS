@@ -76,7 +76,7 @@ public class NotificationUtil {
      */
     public String getMessageTemplate(String notificationCode, String localizationMessage) {
 
-        String path = "$..messages[?(@.code==\"{}\")].message";
+        String path = "$.messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);
         String message = "";
         try {

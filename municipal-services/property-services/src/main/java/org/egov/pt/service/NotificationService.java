@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -168,9 +169,9 @@ public class NotificationService {
 		String msg = null;
 		
 		Boolean isCreate =  CREATE_PROCESS_CONSTANT.equalsIgnoreCase(wf.getNotificationAction());
-		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
+		String state = wf.getId() != null ? getStateFromWf(wf, configs.getIsWorkflowEnabled()) : WF_NO_WORKFLOW;
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = state != WF_NO_WORKFLOW ? getLocalisedState(wf.getState().getState(), completeMsgs) : "";
 		switch (state) {
 
 		case WF_NO_WORKFLOW:
@@ -213,14 +214,12 @@ public class NotificationService {
 	 */
 	private String getMsgForUpdate(Property property, String msgCode, String completeMsgs, String createUpdateReplaceString) {
 		
-		String url = notifUtil.getShortenedUrl(
-					   configs.getUiAppHost().concat(configs.getViewPropertyLink()
-					  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
-					  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
+//		String url = notifUtil.getShortenedUrl(
+//					   configs.getUiAppHost().concat(configs.getViewPropertyLink()
+//					  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
+//					  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
 		
-		return notifUtil.getMessageTemplate(msgCode, completeMsgs)
-				.replace(NOTIFICATION_PROPERTY_LINK, url)
-				.replace(NOTIFICATION_UPDATED_CREATED_REPLACE, createUpdateReplaceString);
+		return notifUtil.getMessageTemplate(msgCode, completeMsgs);
 	}
 	
 	
@@ -374,8 +373,8 @@ public class NotificationService {
         MdmsCriteriaReq req = MdmsCriteriaReq.builder().requestInfo(new RequestInfo()).mdmsCriteria(mdmsCriteria).build();
 
         try {
-            Object result = serviceRequestRepository.fetchResult(uri, req);
-            return JsonPath.read(result,"$.MdmsRes.tenant.citywiseconfig[?(@.config=='ptSendUpdateSMS')].enabledCities");
+            Optional<Object> result = serviceRequestRepository.fetchResult(uri, req);
+            return JsonPath.read(result.get(),"$.MdmsRes.tenant.citywiseconfig[?(@.config=='ptSendUpdateSMS')].enabledCities");
         } catch (Exception e) {
             throw new CustomException(ErrorConstants.INVALID_TENANT_ID_MDMS_KEY,
                     ErrorConstants.INVALID_TENANT_ID_MDMS_MSG);
