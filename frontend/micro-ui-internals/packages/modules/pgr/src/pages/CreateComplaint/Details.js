@@ -7,18 +7,14 @@ import { PgrRoutes, getRoute } from "../../constants/Routes";
 
 const Details = (props) => {
   const [details, setDetails] = useState(null);
-  const [valid, setValid] = useState(true);
+  // const [valid, setValid] = useState(true);
 
   let { t } = useTranslation();
   const history = useHistory();
 
   function submitComplaint() {
-    if (details === null) {
-      setValid(false);
-    } else {
-      props.submitComplaint(details);
-      history.push(getRoute(props.match, PgrRoutes.CreateComplaintResponse));
-    }
+    details ? props.submitComplaint(details) : null;
+    history.push(getRoute(props.match, PgrRoutes.CreateComplaintResponse));
   }
 
   function skip() {
@@ -39,7 +35,7 @@ const Details = (props) => {
         are required to resolve complaint, provide it below: */}
         {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_TEXT`)}
       </CardText>
-      {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>}
+      {/* {valid ? null : <CardLabelError>{t("CS_ADDCOMPLAINT_ERROR_MESSAGE")}</CardLabelError>} */}
       <TextArea onChange={textInput}></TextArea>
       <SubmitBar label={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT`)} onSubmit={submitComplaint} />
       {props.skip ? <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} onClick={skip} /> : null}

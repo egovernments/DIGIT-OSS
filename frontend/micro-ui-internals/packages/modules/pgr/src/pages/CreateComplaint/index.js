@@ -116,7 +116,7 @@ const CreateComplaint = ({ match, history }) => {
       <Route path={getRoute(match, PgrRoutes.UploadPhotos)} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} match={match} />} />
       <Route
         path={getRoute(match, PgrRoutes.Details)}
-        component={(props) => <Details submitComplaint={submitComplaint} skip={true} match={match} />}
+        component={(props) => <Details submitComplaint={submitComplaint} skip={false} match={match} />}
       />
       <Route path={getRoute(match, PgrRoutes.CreateComplaintResponse)} component={(props) => <Response match={match} />} />
     </Switch>
