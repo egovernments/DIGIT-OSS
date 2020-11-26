@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import { BackButton, Card, CardHeader, CardText, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { updateComplaints } from "../../redux/actions/index";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
-import { PGR_BASE } from "../../constants/Routes";
 
 const AddtionalDetails = (props) => {
   // const [details, setDetails] = useState(null);

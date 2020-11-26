@@ -16,22 +16,24 @@ import {
   SubmitBar,
   ConnectingCheckPoints,
   CheckPoint,
+  DisplayPhotos,
 } from "@egovernments/digit-ui-react-components";
 
 import { selectComplaints } from "../selectors/complaint";
 import { fetchBusinessServiceById, searchComplaints } from "../redux/actions";
 import { selectWorkflow } from "../selectors/processInstance";
 import useComplaintHistory from "../hooks/useComplaintHistory";
+import { ImageViewer } from "@egovernments/digit-ui-react-components";
 
-const ComplaintDetailsPage = () => {
+const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
   const dispatch = useDispatch();
 
+  const [files, setFiles] = useState([]);
+
   const [complaintHistory, setComplaintHistory] = useState([]);
-
   const getComplaint = useCallback((id) => dispatch(searchComplaints({ serviceRequestId: id })), [dispatch]);
-
   const getBusinessServiceById = useCallback((id) => dispatch(fetchBusinessServiceById(id)), [dispatch]);
 
   useEffect(() => {
@@ -40,10 +42,15 @@ const ComplaintDetailsPage = () => {
   }, [getComplaint, getBusinessServiceById, id]);
 
   const state = useSelector((state) => state);
+
   const selectedComplaint = selectComplaints(state);
 
+  console.log("selected complaint:", selectedComplaint);
+
   const selectedWorkFlow = selectWorkflow(state);
-  const historyData = useComplaintHistory(selectedWorkFlow);
+  const historyData = useComplaintHistory(selectedWorkFlow, props.match.path);
+
+  const [imageZoom, setImageZoom] = useState(null);
 
   useEffect(() => {
     if (historyData) {
@@ -57,6 +64,28 @@ const ComplaintDetailsPage = () => {
     }
   }, [historyData]);
 
+  const GetImageIds = (images) => {
+    let imageIds = [];
+    imageIds = images.map((image) => {
+      return image.id;
+    });
+    return imageIds;
+  };
+
+  useEffect(() => {
+    async function getImages() {
+      console.log("selected:", selectedComplaint.length);
+      if (selectedComplaint.length > 0 && selectedComplaint[0].workflow && selectedComplaint[0].workflow.verificationDocuments) {
+        debugger;
+        const imageIds = GetImageIds(selectedComplaint[0].workflow.verificationDocuments);
+        const files = await Digit.UploadServices.Filefetch(imageIds, state.cityCode);
+        console.log("files", files);
+        setFiles(files);
+      }
+    }
+    getImages();
+  }, [selectedComplaint]);
+
   let complaintDetails = {};
 
   if (selectedComplaint.length > 0) {
@@ -66,14 +95,17 @@ const ComplaintDetailsPage = () => {
   let cityCode = () => state.cityCode.toUpperCase().replace(".", "_");
 
   const getFormatedAddress = ({ landmark, buildingName, plotNo, street, locality }) => {
-    return `${landmark}, ${buildingName}, ${plotNo ? "Plot no-" + plotNo : ""}, ${street}, ${t(locality.code)}, ${t(`TENANT_TENANTS_${cityCode()}`)}`;
+    return (
+      <span>
+        {landmark} <br /> {buildingName} <br />
+        {plotNo} {street} {t(`${cityCode()}_ADMIN_${locality.code}`)} <br /> {t(`TENANT_TENANTS_${cityCode()}`)}
+      </span>
+    );
   };
 
   const getTableData = () => {
     let { serviceRequestId, applicationStatus, auditDetails, address } = complaintDetails.service;
-
     let { createdTime } = auditDetails;
-
     let formattedAddress = getFormatedAddress(address);
     return {
       [t(`${LOCALIZATION_KEY.CS_COMMON}_COMPLAINT_NO`)]: serviceRequestId,
@@ -82,6 +114,14 @@ const ComplaintDetailsPage = () => {
       Address: formattedAddress,
     };
   };
+
+  function zoomImage(imageSource) {
+    setImageZoom(imageSource);
+  }
+
+  function onCloseImageZoom() {
+    setImageZoom(null);
+  }
 
   return (
     <React.Fragment>
@@ -93,6 +133,8 @@ const ComplaintDetailsPage = () => {
           <Card>
             <CardSubHeader>{t(`SERVICEDEFS.${complaintDetails.service.serviceCode.toUpperCase()}`)}</CardSubHeader>
             <StatusTable dataObject={getTableData()}></StatusTable>
+            <DisplayPhotos srcs={["https://picsum.photos/150/", "https://picsum.photos/150/", "https://picsum.photos/150/"]} onClick={zoomImage} />
+            {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>
           {
             <React.Fragment>
@@ -101,11 +143,7 @@ const ComplaintDetailsPage = () => {
                 {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
                 <ConnectingCheckPoints>
                   {complaintHistory.map((history, index) => {
-                    return (
-                      <span key={index}>
-                        <CheckPoint info={history.text} isCompleted={true} />
-                      </span>
-                    );
+                    return <CheckPoint key={index} customChild={history.text} isCompleted={true} />;
                   })}
                 </ConnectingCheckPoints>
               </Card>

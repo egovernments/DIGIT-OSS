@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Card, DateWrap, KeyNote } from "@egovernments/digit-ui-react-components";
 import { CardSubHeader } from "@egovernments/digit-ui-react-components";
 import { LOCALIZATION_KEY } from "../constants/Localization";
-import { PGR_BASE } from "../constants/Routes";
+
 // import { ConvertTimestampToDate } from "../@egovernments/digit-utils/services/date";
 
 const Complaint = (props) => {
@@ -15,7 +15,7 @@ const Complaint = (props) => {
   const { t } = useTranslation();
 
   const handleClick = () => {
-    history.push(`${PGR_BASE}complaint/details/${serviceRequestId}`);
+    history.push(`${props.path}/complaint/details/${serviceRequestId}`);
   };
 
   return (

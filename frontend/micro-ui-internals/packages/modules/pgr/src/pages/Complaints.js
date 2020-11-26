@@ -27,7 +27,7 @@ const ComplaintsPage = (props) => {
         complaints.length > 0 &&
         complaints.map(({ service }, index) => (
           <div key={index}>
-            <Complaint data={service} />
+            <Complaint data={service} path={props.match.path} />
           </div>
         ))}
     </React.Fragment>

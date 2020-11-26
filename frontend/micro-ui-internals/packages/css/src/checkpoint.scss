@@ -1,4 +1,4 @@
-.checkpoint-connect-wrap{
+.checkpoint-connect-wrap {
   padding-bottom: 40px;
   @apply relative;
 }
@@ -15,12 +15,11 @@
   header {
     @apply text-heading-s ml-md;
 
-    p{
+    p {
       margin-top: 4px;
-      @apply text-heading-s text-text-secondary
+      @apply text-heading-s text-text-secondary;
     }
   }
-
 }
 
 .checkpoint {
@@ -36,9 +35,9 @@
   header {
     @apply text-heading-s ml-md;
 
-    p{
+    p {
       margin-top: 4px;
-      @apply text-heading-s text-text-secondary
+      @apply text-heading-s text-text-secondary;
     }
   }
 }

@@ -1,12 +1,11 @@
-import { TelePhone } from "@egovernments/digit-ui-react-components";
+import { TelePhone, GreyOutText } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { ConvertTimestampToDate } from "../../../../libraries/src/services/Utils/Date";
-import { PGR_BASE } from "../constants/Routes";
 //import { WorkflowService } from "../@egovernments/digit-utils/services/WorkFlowService";
 
-const useComplaintHistory = (processInstance) => {
+const useComplaintHistory = (processInstance, path) => {
   const [complaintHistory, setComplaintHistory] = useState([]);
 
   let { t } = useTranslation();
@@ -19,22 +18,15 @@ const useComplaintHistory = (processInstance) => {
 
     switch (key) {
       case "PENDINGFORREASSIGNMENT":
-        return (
-          <React.Fragment>
-            <div>
-              <strong>{t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)}</strong>
-            </div>
-          </React.Fragment>
-        );
+        return <React.Fragment>{t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)}</React.Fragment>;
+
       case "PENDINGFORASSIGNMENT":
         let complaintFiledDate = ConvertTimestampToDate(obj.auditDetails.createdTime);
         return (
           complaintFiledDate && (
             <React.Fragment>
-              <div>
-                <strong>{t(`CS_COMMON_COMPLAINT_FILED`)}</strong>
-              </div>
-              <div>{complaintFiledDate}</div>
+              {t(`CS_COMMON_COMPLAINT_FILED`)}
+              <GreyOutText>{complaintFiledDate}</GreyOutText>
             </React.Fragment>
           )
         );
@@ -47,21 +39,16 @@ const useComplaintHistory = (processInstance) => {
           name &&
           mobileNumber && (
             <React.Fragment>
-              <span>
-                {/* {t(`CS_COMMON_COMPLAINT_ASSIGNED_TO`)} {name} <a href={`tel:${mobileNumber}`}>{mobileNumber}</a> */}
-                <TelePhone mobile={mobileNumber} text={`${assignedTo} ${name}`} />
-              </span>
+              <TelePhone mobile={mobileNumber} text={`${assignedTo} ${name}`} />
             </React.Fragment>
           )
         );
       case "RESOLVED":
         return (
           <React.Fragment>
-            <div>
-              <strong> {t(`CS_COMMON_COMPLAINT_RESOLVED`)}</strong>
-            </div>
+            <div>{t(`CS_COMMON_COMPLAINT_RESOLVED`)}</div>
             {nextAction.map(({ action }, index) => (
-              <Link key={index} to={`${PGR_BASE}${action.toLowerCase()}/${obj.businessId}`}>
+              <Link key={index} to={`${path}/${action.toLowerCase()}/${obj.businessId}`}>
                 <span
                   style={{
                     color: "#F47738",

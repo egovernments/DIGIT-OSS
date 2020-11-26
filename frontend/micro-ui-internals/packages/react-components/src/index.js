@@ -32,6 +32,7 @@ import { ImageUploadHandler } from "./ImageUploadHandler";
 import DateWrap from "./DateWrap";
 import KeyNote from "./KeyNote";
 import TelePhone from "./TelePhone";
+import GreyOutText from "./GreyOutText";
 
 export {
   Body,
@@ -71,4 +72,5 @@ export {
   DateWrap,
   KeyNote,
   TelePhone,
+  GreyOutText,
 };
