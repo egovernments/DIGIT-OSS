@@ -45,8 +45,6 @@ const ComplaintDetailsPage = (props) => {
 
   const selectedComplaint = selectComplaints(state);
 
-  console.log("selected complaint:", selectedComplaint);
-
   const selectedWorkFlow = selectWorkflow(state);
   const historyData = useComplaintHistory(selectedWorkFlow, props.match.path);
 
@@ -74,12 +72,9 @@ const ComplaintDetailsPage = (props) => {
 
   useEffect(() => {
     async function getImages() {
-      console.log("selected:", selectedComplaint.length);
       if (selectedComplaint.length > 0 && selectedComplaint[0].workflow && selectedComplaint[0].workflow.verificationDocuments) {
-        debugger;
         const imageIds = GetImageIds(selectedComplaint[0].workflow.verificationDocuments);
         const files = await Digit.UploadServices.Filefetch(imageIds, state.cityCode);
-        console.log("files", files);
         setFiles(files);
       }
     }
