@@ -51,7 +51,6 @@ ReactDOM.render(
       <TopBar />
       <Switch>
         <Route path="/digit-ui/pgr">
-          <p>PGR</p>
           <PGRApp stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
         </Route>
         <Route>
