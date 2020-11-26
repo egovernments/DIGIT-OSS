@@ -62,7 +62,7 @@ const useComplaintHistory = (processInstance, path) => {
           </React.Fragment>
         );
       case "CLOSEDAFTERRESOLUTION":
-        return <span>Complaint Resolved</span>;
+        return <span>{t("CS_COMMON_CLOSED_AFTER_RESOLUTION")}</span>;
 
       default:
       // code block
