@@ -11,8 +11,12 @@ const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 
 function SimpleTooltips(props) {
   const { val, icon, ...rest } = props;
+
+   let position = props.className && props.className==="totaldues-tooltip-icon"? { display: "inline-flex", position: "absolute",
+   left: "159px",
+   top: "34px" } : { display: "inline-flex" }
   return (
-    <div style={{ display: "inline-flex" }} {...rest}>
+    <div style={position} {...rest}>
       <Tooltip
         title={<LabelContainer labelName={val.value} labelKey={val.key} />}
       >
