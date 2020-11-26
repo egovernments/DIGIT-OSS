@@ -6,8 +6,9 @@ import { useParams } from "react-router-dom";
 import { BackButton, Card, CardHeader, CardText, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { updateComplaints } from "../../redux/actions/index";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
+import { PGR_BASE } from "../../constants/Routes";
 
-const AddtionalDetails = ({ history }) => {
+const AddtionalDetails = (props) => {
   // const [details, setDetails] = useState(null);
 
   let { id } = useParams();
@@ -18,9 +19,9 @@ const AddtionalDetails = ({ history }) => {
   useEffect(() => {
     const { response } = appState.complaints;
     if (response && response.responseInfo.status === "successful") {
-      history.push("/response");
+      props.history.push(`${props.match.path}/response`);
     }
-  }, [appState.complaints, history]);
+  }, [appState.complaints, props.history]);
 
   const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
 

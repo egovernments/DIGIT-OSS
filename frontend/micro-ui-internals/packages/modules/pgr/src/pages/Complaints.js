@@ -8,7 +8,7 @@ import { Header } from "@egovernments/digit-ui-react-components";
 
 import { LOCALIZATION_KEY } from "../constants/Localization";
 
-const ComplaintsPage = () => {
+const ComplaintsPage = (props) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { t } = useTranslation();

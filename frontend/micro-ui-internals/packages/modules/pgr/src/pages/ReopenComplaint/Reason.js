@@ -4,9 +4,9 @@ import { Link, useParams } from "react-router-dom";
 import { BackButton, Card, CardHeader, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
 
 import { LOCALIZATION_KEY } from "../../constants/Localization";
-import { PGR_BASE } from "../../constants/Routes";
+import { getRoute, PgrRoutes, PGR_BASE } from "../../constants/Routes";
 
-const ReasonPage = () => {
+const ReasonPage = (props) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const [selected, setSelected] = useState("");
@@ -40,7 +40,7 @@ const ReasonPage = () => {
             t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_FOUR`),
           ]}
         />
-        <Link to={`${PGR_BASE}reopen/upload-photo/${id}`}>
+        <Link to={`${props.match.path}/upload-photo/${id}`}>
           <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
         </Link>
       </Card>

@@ -26,6 +26,7 @@ const CreateComplaint = ({ match, history }) => {
   const [landmark, setLandmark] = useState(null);
   const [details, setDetails] = useState("");
   const [complaintType, setComplaintType] = useState(null);
+  const [toSubmitComplaint, setToSubmitComplaint] = useState(false);
   const [uploadedImageIds, setUploadedImageIds] = useState([]);
 
   const complaintParams = {
@@ -60,11 +61,12 @@ const CreateComplaint = ({ match, history }) => {
 
   useEffect(() => {
     (async () => {
-      if (details) {
+      if (toSubmitComplaint) {
         await dispatch(createComplaint(complaintParams));
+        setToSubmitComplaint(false);
       }
     })();
-  }, [details]);
+  }, [toSubmitComplaint]);
 
   const savePincode = (val) => {
     setPincode(val);
@@ -80,7 +82,8 @@ const CreateComplaint = ({ match, history }) => {
   };
 
   const submitComplaint = async (details) => {
-    setDetails(details);
+    details && details !== "" ? setDetails(details) : null;
+    setToSubmitComplaint(true);
   };
 
   const saveComplaintType = (type) => {

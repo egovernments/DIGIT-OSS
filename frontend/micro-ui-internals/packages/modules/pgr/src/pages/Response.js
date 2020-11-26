@@ -29,7 +29,6 @@ const BannerPicker = ({ response }) => {
 
 const Response = (props) => {
   const appState = useSelector((state) => state);
-  console.log("appstate", appState);
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}
