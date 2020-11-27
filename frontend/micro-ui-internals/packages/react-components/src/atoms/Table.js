@@ -5,7 +5,6 @@ import { useTable, useRowSelect } from "react-table";
 const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = React.useRef();
   const resolvedRef = ref || defaultRef;
-  console.log("resolvedRef::::", resolvedRef);
   React.useEffect(() => {
     resolvedRef.current.indeterminate = indeterminate;
   }, [resolvedRef, indeterminate]);

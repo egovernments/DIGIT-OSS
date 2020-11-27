@@ -32,6 +32,7 @@ const requestInfo = () => ({
 
 const userServiceData = Storage.get("citizen.userServiceData");
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
+  console.log("params received:::::>", params);
   let key = "";
   if (method.toUpperCase() === "POST") {
     data.RequestInfo = {

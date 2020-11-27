@@ -33,6 +33,7 @@ import UploadFile from "./atoms/UploadFile";
 import UploadImages from "./atoms/UploadImages";
 import ImageViewer from "./atoms/ImageViewer";
 import { ImageUploadHandler } from "./atoms/ImageUploadHandler";
+import ActionLinks from "./atoms/ActionLinks";
 import ActionBar from "./atoms/ActionBar";
 import Menu from "./atoms/Menu";
 import Table from "./atoms/Table";
@@ -45,12 +46,13 @@ import KeyNote from "./atoms/KeyNote";
 import TelePhone from "./atoms/TelePhone";
 import GreyOutText from "./atoms/GreyOutText";
 import HomeLink from "./atoms/HomeLink";
-import ActionLinks from "./atoms/ActionLinks";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
 import TextInputCard from "./molecules/TextInputCard";
 import CityMohalla from "./molecules/CityMohalla";
+import DetailsCard from "./molecules/DetailsCard";
+
 export {
   Body,
   TopBar,
@@ -98,6 +100,7 @@ export {
   LocationSearchCard,
   TextInputCard,
   CityMohalla,
+  DetailsCard,
   Label,
   Table,
   PopUp,

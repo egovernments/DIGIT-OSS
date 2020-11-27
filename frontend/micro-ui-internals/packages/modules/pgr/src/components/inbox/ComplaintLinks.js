@@ -1,12 +1,23 @@
 import { Card } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const ComplaintsLink = () => {
-  const links = [
+const ComplaintsLink = ({ isMobile, data }) => {
+  const allLinks = [
     { text: "New Complaint", link: "/" },
     { text: "Reports", link: "/" },
     { text: "Dashboard", link: "/" },
   ];
+
+  const [links, setLinks] = useState(allLinks);
+
+  useEffect(() => {
+    if (isMobile) {
+      const mobileLinks = links.filter((link) => {
+        return link.text !== "Dashboard";
+      });
+      setLinks(mobileLinks);
+    }
+  }, []);
 
   const GetLogo = () => (
     <div className="header">
@@ -15,16 +26,18 @@ const ComplaintsLink = () => {
   );
 
   return (
-    <div className="complaint-links-container">
-      {GetLogo()}
-      <div className="body">
-        {links.map(({ link, text }) => (
-          <span className="link">
-            <a href={link}>{text}</a>
-          </span>
-        ))}
+    <Card style={{ paddingRight: 0 }}>
+      <div className="complaint-links-container">
+        {GetLogo()}
+        <div className="body">
+          {links.map(({ link, text }, index) => (
+            <span className="link" key={index}>
+              <a href={link}>{text}</a>
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

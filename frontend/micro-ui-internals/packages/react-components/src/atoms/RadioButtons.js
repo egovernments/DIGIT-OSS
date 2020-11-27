@@ -1,16 +1,17 @@
 import React from "react";
 
 const RadioButtons = (props) => {
-  console.log("PROPS:-", props);
   var selected = props.selectedoption;
 
   function selectOption(value) {
+    console.log("value,,,,,", value);
     selected = value;
     props.onSelect(value);
   }
   return (
     <div className="radio-wrap">
       {props.options.map((option) => {
+        console.log("option----", option);
         if (props.optionskey) {
           return (
             <div key={option[props.optionskey]}>

@@ -1,4 +1,4 @@
-import { APPLY_FILTER, FETCH_BUSINESS_SERVICE_BY_ID, FETCH_COMPLAINTS, FETCH_LOCALITIES, UPDATE_COMPLAINT } from "./types";
+import { APPLY_FILTER, APPLY_INBOX_FILTER, FETCH_BUSINESS_SERVICE_BY_ID, FETCH_COMPLAINTS, FETCH_LOCALITIES, UPDATE_COMPLAINT } from "./types";
 //import { LocalizationService } from "../../@egovernments/digit-utils/services/Localization/service";
 //import { LocationService } from "../../@egovernments/digit-utils/services/Location";
 //import { LocalityService } from "../../@egovernments/digit-utils/services/Localities";
@@ -51,11 +51,13 @@ export const fetchBusinessServiceById = (businessId) => async (dispatch, getStat
   });
 };
 
-export const applyFilters = (filters) => (dispatch) => {
+export const applyInboxFilters = (filters) => async (dispatch) => {
   console.log("filters in action:", filters);
+  let response = await Digit.PGRService.inboxFilter(filters);
+  console.log("response>>", response);
   dispatch({
-    type: APPLY_FILTER,
-    payload: { filters },
+    type: APPLY_INBOX_FILTER,
+    payload: { response },
   });
 };
 

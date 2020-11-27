@@ -16,9 +16,9 @@ const DesktopInbox = (props) => {
         Cell: (row) => {
           return (
             <div>
-              <a href="http://google.com">{row.row.original.service.serviceRequestId}</a>
+              <a href="http://google.com">{row.row.original["serviceRequestId"]}</a>
               <br />
-              <span style={{ marginTop: "4px", color: "#505A5F" }}>{row.row.original.service.serviceCode}</span>
+              <span style={{ marginTop: "4px", color: "#505A5F" }}>{row.row.original["complaintSubType"]}</span>
             </div>
           );
         },
@@ -26,25 +26,25 @@ const DesktopInbox = (props) => {
       {
         Header: "Locality",
         Cell: (row) => {
-          return GetCell(row.row.original.service.address.locality.code);
+          return GetCell(row.row.original["locality"]);
         },
       },
       {
         Header: "Status",
         Cell: (row) => {
-          return GetCell(row.row.original.service.applicationStatus);
+          return GetCell(row.row.original["applicationStatus"]);
         },
       },
       {
         Header: "Task Owner",
         Cell: (row) => {
-          return GetCell(row.row.original.service.citizen.userName);
+          return GetCell(row.row.original["taskOwner"]);
         },
       },
       {
         Header: "SLA Remaining",
         Cell: (row) => {
-          return GetCell(row.row.original.service.tenantId);
+          return GetCell(row.row.original["businesssServiceSla"]);
         },
       },
     ],
@@ -63,11 +63,11 @@ const DesktopInbox = (props) => {
       <div className="filters-container">
         <ComplaintsLink />
         <div className="filter">
-          <Filter onFilterChange={(filters) => props.onFilterChange(filters)} />
+          <Filter onFilterChange={props.onFilterChange} />
         </div>
       </div>
       <div className="search-container">
-        <SearchComplaint />
+        <SearchComplaint onSubmit={props.onSubmit} />
         <div style={{ marginTop: "24px" }}>
           <ComplaintTable
             data={props.data}

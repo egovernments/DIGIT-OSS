@@ -2,7 +2,6 @@ import React from "react";
 import { CheckSvg } from "./svgindex";
 
 const CheckBox = ({ onChange, label, ref, ...props }) => {
-  console.log("props2:::::", ref);
   return (
     <div className="checkbox-wrap">
       <input type="checkbox" onChange={onChange} value={label} {...props} ref={ref} />
