@@ -1703,9 +1703,7 @@ public class MicroserviceUtils {
     }
     
     private void preparePaymentSearchQueryString(PaymentSearchCriteria searchCriteria, StringBuilder url) {
-        if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
-            url.append("&tenantId=").append(searchCriteria.getTenantId());
-        }
+        url.append("&tenantId=").append(searchCriteria.getTenantId());
         if (CollectionUtils.isNotEmpty(searchCriteria.getReceiptNumbers())) {
             url.append("&receiptNumbers=").append(StringUtils.join(searchCriteria.getReceiptNumbers(), ","));
         }
