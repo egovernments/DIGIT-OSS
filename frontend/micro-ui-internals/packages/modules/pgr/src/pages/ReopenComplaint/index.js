@@ -11,6 +11,7 @@ import UploadPhoto from "./UploadPhoto";
 import AddtionalDetails from "./AddtionalDetails";
 
 const ReopenComplaint = ({ match, history }) => {
+  console.log("match:", match);
   return (
     <Switch>
       <Route exact path={getRoute(match, PgrRoutes.ReasonPage)} component={() => <ReasonPage match={match} />} />
