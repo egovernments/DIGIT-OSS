@@ -12,18 +12,35 @@ const GetPinCode = (places) => {
   return postalCode;
 };
 
+const loadGoogleMaps = (callback) => {
+  const id = "google-maps-script";
+  const key1 = "AIzaSyCbVz7R7btwMPqVLnd7Pnhra";
+  const key2 = "c62SJHYws";
+  const url = `https://maps.googleapis.com/maps/api/js?key=${key1}_${key2}&libraries=places`;
+  const isScriptExist = document.getElementById(id);
+
+  if (!isScriptExist) {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.async = true;
+    script.defer = true;
+    script.src = url;
+    script.id = id;
+    script.onload = function () {
+      if (callback) callback();
+    };
+    document.body.appendChild(script);
+  }
+
+  if (isScriptExist && callback) callback();
+};
+
 const LocationSearch = (props) => {
   useEffect(() => {
-    const script = document.createElement("script");
     //AIzaSyCvzuo69lmgwc2XoqhACHcQhrGLALBUZAU
-    const key = "AIzaSyCbVz7R7btwMPqVLnd7Pnhra_c62SJHYws";
 
     async function mapScriptCall() {
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initAutocomplete&libraries=places`;
-      script.async = true;
-      script.defer = true;
-
-      window.initAutocomplete = function () {
+      const initAutocomplete = function () {
         const map = new window.google.maps.Map(document.getElementById("map"), {
           center: {
             lat: 28.5355,
@@ -93,14 +110,10 @@ const LocationSearch = (props) => {
           map.fitBounds(bounds);
         });
       };
+
+      loadGoogleMaps(initAutocomplete);
     }
     mapScriptCall();
-
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
   }, []);
 
   return (
