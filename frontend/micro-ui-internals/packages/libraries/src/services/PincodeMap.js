@@ -1,70 +1,70 @@
 export const PincodeMap = {
   143001: [
     {
-      code: "SUN04",
+      code: "admin.locality.SUN04",
       name: "Ajit Nagar",
     },
 
     {
-      code: "SUN11",
+      code: "admin.locality.SUN11",
       name: "Back Side 33 KVA Grid Patiala Road",
     },
 
     {
-      code: "SUN12",
+      code: "admin.locality.SUN12",
       name: "Back Side 66 KVA Grid Patiala Road",
     },
 
     {
-      code: "SUN13",
+      code: "admin.locality.SUN13",
       name: "Back Side Civil Courts Colony",
     },
 
     {
-      code: "SUN20",
+      code: "admin.locality.SUN20",
       name: "Backside Brijbala Hospital",
     },
 
     {
-      code: "SUN35",
+      code: "admin.locality.SUN35",
       name: "Bigharwal Chowk to Railway Station",
     },
   ],
   143002: [
     {
-      code: "SUN54",
+      code: "admin.locality.SUN54",
       name: "Deedar Tailor to Mata Modi Park- West Side",
     },
     {
-      code: "SUN56",
+      code: "admin.locality.SUN56",
       name: "Dental College",
     },
     {
-      code: "SUN75",
+      code: "admin.locality.SUN75",
       name: "Gaushala, Arora Colony",
     },
     {
-      code: "SUN80",
+      code: "admin.locality.SUN80",
       name: "Gugga Maadi Road (east side)",
     },
     {
-      code: "SUN84",
+      code: "admin.locality.SUN84",
       name: "Gurudwara Niai Sahib Street 1",
     },
     {
-      code: "SUN105",
+      code: "admin.locality.SUN105",
       name: "Jaura Khoo to Saraffa Bazaar (Southern Side)",
     },
     {
-      code: "SUN132",
+      code: "admin.locality.SUN132",
       name: "Mohalla Akalgarh Gurudwara",
     },
     {
-      code: "SUN138",
+      code: "admin.locality.SUN138",
       name: "Mohalla Bhojeka (both sides)",
     },
     {
-      code: "SUN150",
+      code: "admin.locality.SUN150",
       name: "Mohalla Rajan Wala (both sides)",
     },
   ],

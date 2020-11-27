@@ -17,13 +17,13 @@ import {
   ConnectingCheckPoints,
   CheckPoint,
   DisplayPhotos,
+  ImageViewer,
 } from "@egovernments/digit-ui-react-components";
 
 import { selectComplaints } from "../selectors/complaint";
 import { fetchBusinessServiceById, searchComplaints } from "../redux/actions";
 import { selectWorkflow } from "../selectors/processInstance";
 // import useComplaintHistory from "../hooks/useComplaintHistory";
-import { ImageViewer } from "@egovernments/digit-ui-react-components";
 import getComplaintHistory from "../hooks/useComplaintHistory";
 
 const ComplaintDetailsPage = (props) => {
@@ -136,11 +136,13 @@ const ComplaintDetailsPage = (props) => {
               <Card>
                 <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
                 {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
-                <ConnectingCheckPoints>
-                  {complaintHistory.map((history, index) => {
-                    return <CheckPoint key={index} customChild={history.text} isCompleted={true} />;
-                  })}
-                </ConnectingCheckPoints>
+                {complaintHistory && (
+                  <ConnectingCheckPoints>
+                    {complaintHistory.map((history, index) => {
+                      return <CheckPoint key={index} customChild={history.text} isCompleted={true} />;
+                    })}
+                  </ConnectingCheckPoints>
+                )}
               </Card>
             </React.Fragment>
           }

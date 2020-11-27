@@ -18,7 +18,7 @@ Axios.interceptors.response.use(
   }
 );
 
-const requestInfo = {
+const requestInfo = () => ({
   apiId: "Rainmaker",
   action: "",
   did: 1,
@@ -28,7 +28,7 @@ const requestInfo = {
   ts: 1513579888683,
   ver: ".01",
   authToken: Storage.get("citizen.token"),
-};
+});
 
 const userServiceData = Storage.get("citizen.userServiceData");
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
@@ -38,7 +38,7 @@ export const Request = async ({ method = "POST", url, data = {}, useCache = fals
       apiId: "Rainmaker",
     };
     if (auth) {
-      data.RequestInfo = { ...data.RequestInfo, ...requestInfo };
+      data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
     if (userService) {
       data.RequestInfo = { ...data.RequestInfo, ...userServiceData };
