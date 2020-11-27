@@ -20,11 +20,11 @@ import {
   ImageViewer,
 } from "@egovernments/digit-ui-react-components";
 
-import { selectComplaints } from "../selectors/complaint";
-import { fetchBusinessServiceById, searchComplaints } from "../redux/actions";
-import { selectWorkflow } from "../selectors/processInstance";
+import { selectComplaints } from "../../selectors/complaint";
+import { fetchBusinessServiceById, searchComplaints } from "../../redux/actions";
+import { selectWorkflow } from "../../selectors/processInstance";
 
-import getTimeLineFromProcessInstance from "../hooks/useComplaintHistory";
+import getTimeLineFromProcessInstance from "../../hooks/useComplaintHistory";
 
 const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
