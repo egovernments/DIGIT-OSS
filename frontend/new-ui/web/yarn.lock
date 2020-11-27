@@ -1149,9 +1149,9 @@
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.13.tgz#11e27a569651ce6aa417c39305007a7a78fefb5b"
-  integrity sha512-ZpGHZEJ4yJmAMRFSzbvAzMA6Zv8eYhmsMk7xJcR6T1lcnnHV2+LM5jiibVFSM69jeT9L+2fS0QRxGshrcNdC4Q==
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.14.tgz#cfdf5b708c49287196f6c26852ab1690740c6207"
+  integrity sha512-CoTPZ6MkITFl090t9OhdHaoe30ARt5RYAS+Ts9oNoHT6LED7NyX/aamKEhixm7fHw5BAzWsXvK6xNBu0xvJp4w==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1162,9 +1162,9 @@
     react-i18next "^11.7.3"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.13.tgz#485e8c1da56f088aec5a0b7160087df4a35fad7a"
-  integrity sha512-E8+25F2gXDw2Ma2uMP2ICrQ4IOpsEtIT/TbSNPzrV5j3ZaI8ZYyf6UHueAFm5ODwrqYol64osqfoiCjBXJpvog==
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.14.tgz#2dfb711fa1ab17551e2e5f44b2ea32bc0c61c0e2"
+  integrity sha512-FgY9FJZwBkr7asNKFAJ59MuTWd5cBU6q6gBggwSL+L2up7mkPk3EaGBLJJxUsQvPP3VPiXn0SaSOTSXvatSRIw==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1179,9 +1179,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.13.tgz#a4709511930de657b16973b92f6921360b764a4b"
-  integrity sha512-wOL4u8VKogLHFpX/5yoCx2AcxecW+s2TFX8NKcaJDLDqiup1Te7+6i3ezdrIe4mKM3uM4wi3x13qFvCoFkHPeg==
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.14.tgz#cda6448d161f5676aa5427461e0e1054b4d60986"
+  integrity sha512-3mdQjq3fd/UoNkDhBbQAHF5dEYYUQBeOxRqDuOHHRJmjOwfQMS+MlqIsvdHIwtBOofk6OJZ0QIPm9NCuzqkkDA==
 
 "@eslint/eslintrc@^0.2.1":
   version "0.2.1"
