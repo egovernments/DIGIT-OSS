@@ -20,14 +20,14 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode })
   return (
     <Provider store={getStore(store)}>
       {/* <CitizenApp /> */}
-      <EmployeeApp />
-      {/* <Router>
+      {/* <EmployeeApp /> */}
+      <Router>
         <Switch>
           <Route path={`${match.path}/citizen`}>
             <CitizenApp />
           </Route>
         </Switch>
-      </Router>*/}
+      </Router>
     </Provider>
   );
 };

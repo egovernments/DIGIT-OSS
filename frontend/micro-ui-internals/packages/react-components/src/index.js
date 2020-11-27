@@ -1,12 +1,7 @@
 import Body from "./atoms/Body";
-<<<<<<< HEAD
-import TopBar from "./atoms//TopBar";
-import AppContainer from "./atoms/AppContainer";
-=======
 import TopBar from "./atoms/TopBar";
 import AppContainer from "./atoms/AppContainer";
 import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
->>>>>>> 8510f5561f217fa2ca2080d39a6031ab66dec15b
 import Header from "./atoms/Header";
 import LinkLabel from "./atoms/LinkLabel";
 import BackButton from "./atoms/BackButton";
@@ -15,17 +10,6 @@ import CardCaption from "./atoms/CardCaption";
 import CardHeader from "./atoms/CardHeader";
 import CardText from "./atoms/CardText";
 import CardLabel from "./atoms/CardLabel";
-<<<<<<< HEAD
-import CardLabelError from "./atoms/CardLabelError";
-import CardTextButton from "./atoms/CardTextButton";
-import RadioButtons from "./atoms/RadioButtons";
-import Dropdown from "./atoms/Dropdown";
-import TextInput from "./atoms/TextInput";
-import TextArea from "./atoms/TextArea";
-import Banner from "./atoms/Banner";
-import CardSubHeader from "./atoms/CardSubHeader";
-=======
->>>>>>> 8510f5561f217fa2ca2080d39a6031ab66dec15b
 import CardLabelDesc from "./atoms/CardLabelDesc";
 import CardLabelError from "./atoms/CardLabelError";
 import CardTextButton from "./atoms/CardTextButton";
