@@ -6,6 +6,7 @@ import { PgrRoutes, getRoute } from "../constants/Routes";
 import { useTranslation } from "react-i18next";
 
 const GetActionMessage = ({ action }) => {
+  const { t } = useTranslation();
   if (action === "REOPEN") {
     return t(`CS_COMMON_COMPLAINT_REOPENED`);
   } else {

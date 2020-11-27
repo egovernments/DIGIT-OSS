@@ -32,16 +32,17 @@ const Address = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    console.log("list", props.list);
+    // console.log("list", props.list);
     if (SessionStorage.get("city_complaint")) {
       setSelectedCity(SessionStorage.get("city_complaint"));
     }
   }, []);
 
   useEffect(() => {
+    console.log("object keys", Object.keys(props.list).length > 0);
     if (Object.keys(props.list).length > 0) {
       cities.push(props.list.city);
-      props.list.localities.map((locality) => localities.push(t(locality.code)));
+      props.list.localities.map((locality) => localities.push(t(`admin.locality.${locality.code}`)));
     } else {
       appState.cities.map((city) => cities.push(city.name));
       if (appState.localities.localityList) {
@@ -57,10 +58,13 @@ const Address = (props) => {
     setSelectedCity(city);
     const SessionStorage = Digit.SessionStorage;
     SessionStorage.set("city_complaint", city);
+    // console.log("dispatch??");
     await dispatch(fetchLocalities(city));
   }
   function selectLocalities(locality) {
+    // console.log("=================locality", locality);
     let localityDetails = appState.localities.localityList.find((o) => o.name === locality);
+    // console.log("===================localitydetails===================", localityDetails, appState.localities);
     setSelectedLocality(localityDetails);
   }
 
@@ -86,7 +90,7 @@ const Address = (props) => {
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} />
       <CardLabel>{t(`${LOCALIZATION_KEY.CS_CREATECOMPLAINT}_MOHALLA`)} *</CardLabel>
       {/* <RadioButtons options={["Ajit Nagar", "Patel Nagar"]}/> */}
-      {console.log("localitiessdasd", localities)}
+      {/* {console.log("localitiessdasd", localities)} */}
       <Dropdown isMandatory option={localities} select={selectLocalities} />
       <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={save} />
       {/* <p onClick={() =>console.log(selectedCity, selectedLocality)}>state display</p> */}
