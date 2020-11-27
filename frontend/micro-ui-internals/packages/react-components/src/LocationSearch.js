@@ -43,8 +43,8 @@ const LocationSearch = (props) => {
       const initAutocomplete = function () {
         const map = new window.google.maps.Map(document.getElementById("map"), {
           center: {
-            lat: 28.5355,
-            lng: 77.391,
+            lat: 31.6160638,
+            lng: 74.8978579,
           },
           zoom: 15,
           mapTypeId: "roadmap",
