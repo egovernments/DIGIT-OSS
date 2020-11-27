@@ -41,7 +41,7 @@ const Address = (props) => {
   useEffect(() => {
     if (Object.keys(props.list).length > 0) {
       cities.push(props.list.city);
-      props.list.localities.map((locality) => localities.push(t(locality.code)));
+      props.list.localities.map((locality) => localities.push(t("CORE_COMMON" + locality.code)));
     } else {
       appState.cities.map((city) => cities.push(city.name));
       if (appState.localities.localityList) {
@@ -57,10 +57,12 @@ const Address = (props) => {
     setSelectedCity(city);
     const SessionStorage = Digit.SessionStorage;
     SessionStorage.set("city_complaint", city);
+    console.log("dispatch??");
     await dispatch(fetchLocalities(city));
   }
   function selectLocalities(locality) {
     let localityDetails = appState.localities.localityList.find((o) => o.name === locality);
+    console.log("localitydetails", localityDetails);
     setSelectedLocality(localityDetails);
   }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Card,
   CardHeader,
@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../constants/Localization";
 import { PgrRoutes, getRoute } from "../../constants/Routes";
+import _ from "lodash";
 
 const Pincode = (props) => {
   const [pincode, setPincode] = useState(props.pincode);
@@ -26,15 +27,22 @@ const Pincode = (props) => {
     setPincode(e.target.value);
   }
 
+  const debounceSetState = _.debounce(() => {
+    console.log("hmmm");
+    setValid(false);
+  }, 1000);
+
+  const callValid = useCallback(() => debounceSetState, []);
+
   useEffect(() => {
     if (pincode) {
+      console.log(pincode);
       if (pincode.toString().length < 6 || pincode.toString().length > 7) {
-        if (pincode.toString().length === 5) {
-          setTimeout(() => setValid(false), 100);
-        } else {
-          setTimeout(() => setValid(false), 1000);
-        }
+        callValid();
       } else {
+        console.log("debouncestate cancell");
+        console.log(debounceSetState.cancel());
+        debounceSetState.cancel();
         setValid(true);
         setPossible(true);
       }
