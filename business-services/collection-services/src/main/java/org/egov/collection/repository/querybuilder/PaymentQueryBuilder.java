@@ -3,12 +3,10 @@ package org.egov.collection.repository.querybuilder;
 import static java.util.stream.Collectors.toSet;
 
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentSearchCriteria;
@@ -17,6 +15,7 @@ import org.egov.collection.web.contract.BillAccountDetail;
 import org.egov.collection.web.contract.BillDetail;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,25 +26,36 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class PaymentQueryBuilder {
 
 
+    @Autowired
+    private ApplicationProperties config;
 
-    public static final String SELECT_PAYMENT_SQL = "SELECT py.*,pyd.*,bill.*,bd.*,bacdt.*, " +
+
+    public static final String SELECT_PAYMENT_SQL = "SELECT py.*,pyd.*," +
             "py.id as py_id,py.tenantId as py_tenantId,py.totalAmountPaid as py_totalAmountPaid,py.createdBy as py_createdBy,py.createdtime as py_createdtime," +
             "py.lastModifiedBy as py_lastModifiedBy,py.lastmodifiedtime as py_lastmodifiedtime,py.additionalDetails as py_additionalDetails," +
             "pyd.id as pyd_id, pyd.tenantId as pyd_tenantId, pyd.manualreceiptnumber as manualreceiptnumber,pyd.manualreceiptdate as manualreceiptdate, pyd.createdBy as pyd_createdBy,pyd.createdtime as pyd_createdtime,pyd.lastModifiedBy as pyd_lastModifiedBy," +
             "pyd.lastmodifiedtime as pyd_lastmodifiedtime,pyd.additionalDetails as pyd_additionalDetails," +
-            "bill.createdby as bill_createdby,bill.createdtime as bill_createdtime,bill.lastmodifiedby as bill_lastmodifiedby," +
-            "bill.lastmodifiedtime as bill_lastmodifiedtime,bill.id as bill_id," +
-            "bill.status as bill_status,bill.additionalDetails as bill_additionalDetails," +
-            "bill.tenantid as bill_tenantid,bill.totalamount as bill_totalamount," +
-            "bd.id as bd_id,bd.tenantid as bd_tenantid,bd.additionalDetails as bd_additionalDetails," +
-            "bacdt.id as bacdt_id,bacdt.tenantid as bacdt_tenantid, bacdt.amount as bacdt_amount, bacdt.adjustedamount as bacdt_adjustedamount, "
-            + "bacdt.additionalDetails as bacdt_additionalDetails" +
+            " FROM egcl_payment py  " +
+            " INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id ";
+
+
+    /*public static final String ID_QUERY = "SELECT py.id " +
             " FROM egcl_payment py  " +
             " INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id " +
             " INNER JOIN egcl_bill bill ON bill.id = pyd.billid " +
-            " INNER JOIN egcl_billdetial bd ON bd.billid = bill.id " +
-            " INNER JOIN egcl_billaccountdetail bacdt ON bacdt.billdetailid = bd.id  ";
+            " INNER JOIN egcl_billdetial bd ON bd.billid = bill.id " ;*/
 
+
+
+    public static final String ID_QUERY = "WITH py_filtered as (" +
+            "select id from egcl_payment as py_inner {{WHERE_CLAUSE}} ) " +
+            " SELECT py.id as id FROM py_filtered as py " +
+            " INNER JOIN egcl_paymentdetail as pyd ON pyd.paymentid = py.id and pyd.tenantid= :tenantId " +
+            " INNER JOIN egcl_bill bill ON bill.id = pyd.billid " +
+            " INNER JOIN egcl_billdetial bd ON bd.billid = bill.id and bd.tenantid = :tenantId; ";
+
+    
+    
     private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY py_id) offset_ FROM " +
             "({baseQuery})" +
@@ -129,6 +139,7 @@ public class PaymentQueryBuilder {
 
     public static final String COPY_BILLDETAIL_SQL = "INSERT INTO egcl_billdetial_audit SELECT * FROM egcl_billdetial WHERE id = :id;";
 
+    public static final String FILESTOREID_UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET filestoreid=:filestoreid WHERE id=:id;";
 
 
     // Payment update queries
@@ -147,8 +158,8 @@ public class PaymentQueryBuilder {
     public static final String UPDATE_BILLDETAIL_SQL = "UPDATE egcl_billdetial SET additionaldetails=:additionaldetails, voucherheader=:voucherheader," +
             " manualreceiptnumber=:manualreceiptnumber, manualreceiptdate=:manualreceiptdate, billdescription=:billdescription,displaymessage=:displaymessage," +
             "createdby=:createdby, createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime WHERE id=:id ";
-    
-    
+
+
 	public static final String BILL_BASE_QUERY = "SELECT b.id AS b_id, b.tenantid AS b_tenantid, b.iscancelled AS b_iscancelled, b.businessservice AS b_businessservice, "
 			+ "b.billnumber AS b_billnumber, b.billdate AS b_billdate, b.consumercode AS b_consumercode, b.createdby AS b_createdby, b.status as b_status, b.minimumamounttobepaid AS b_minimumamounttobepaid, "
 			+ "b.totalamount AS b_totalamount, b.partpaymentallowed AS b_partpaymentallowed, b.isadvanceallowed as b_isadvanceallowed, "
@@ -161,15 +172,15 @@ public class PaymentQueryBuilder {
 			+ "bd.additionaldetails as bd_additionaldetails,  ad.additionaldetails as ad_additionaldetails "
 			+ "FROM egcl_bill b LEFT OUTER JOIN egcl_billdetial bd ON b.id = bd.billid AND b.tenantid = bd.tenantid "
 			+ "LEFT OUTER JOIN egcl_billaccountdetail ad ON bd.id = ad.billdetailid AND bd.tenantid = ad.tenantid "
-			+ "WHERE b.id IN (:id);"; 
+			+ "WHERE b.id IN (:id);";
 
 
 
 	public static String getBillQuery() {
 		return BILL_BASE_QUERY;
 	}
-	
-	
+
+
     public static MapSqlParameterSource getParametersForPaymentCreate(Payment payment) {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
@@ -305,15 +316,37 @@ public class PaymentQueryBuilder {
 
 
 
-    public static String getPaymentSearchQuery(PaymentSearchCriteria searchCriteria,
+    public static String getPaymentSearchQuery(List<String> ids,
+                                               Map<String, Object> preparedStatementValues) {
+        StringBuilder selectQuery = new StringBuilder(SELECT_PAYMENT_SQL);
+        addClauseIfRequired(preparedStatementValues, selectQuery);
+        selectQuery.append(" py.id IN (:id)  ");
+        preparedStatementValues.put("id", ids);
+        return addOrderByClause(selectQuery);
+    }
+
+
+    public static String getPaymentSearchQueryForPlainSearch(PaymentSearchCriteria searchCriteria,
                                                Map<String, Object> preparedStatementValues) {
         StringBuilder selectQuery = new StringBuilder(SELECT_PAYMENT_SQL);
 
         addWhereClause(selectQuery, preparedStatementValues, searchCriteria);
 
-        addOrderByClause(selectQuery);
 
-        return addPaginationClause(selectQuery, preparedStatementValues, searchCriteria);
+        return addOrderByClause(selectQuery);
+
+    }
+
+
+
+    public String getIdQuery(PaymentSearchCriteria searchCriteria, Map<String, Object> preparedStatementValues){
+    	StringBuilder whereClause = new StringBuilder();
+        addWhereClause(whereClause, preparedStatementValues, searchCriteria);
+        whereClause.append(" ORDER BY py_inner.transactiondate DESC ").toString();
+        addPagination(whereClause,preparedStatementValues,searchCriteria);
+        String query = ID_QUERY.replace("{{WHERE_CLAUSE}}",whereClause.toString());
+
+        return query;
     }
 
 
@@ -323,31 +356,25 @@ public class PaymentQueryBuilder {
         if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             if(searchCriteria.getTenantId().split("\\.").length > 1) {
-                selectQuery.append(" py.tenantId =:tenantId");
+                selectQuery.append(" py_inner.tenantId =:tenantId");
                 preparedStatementValues.put("tenantId", searchCriteria.getTenantId());
             }
             else {
-                selectQuery.append(" py.tenantId LIKE :tenantId");
+                selectQuery.append(" py_inner.tenantId LIKE :tenantId");
                 preparedStatementValues.put("tenantId", searchCriteria.getTenantId() + "%");
             }
 
         }
-        
+
         if(!CollectionUtils.isEmpty(searchCriteria.getIds())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" py.id IN (:id)  ");
-            preparedStatementValues.put("id", searchCriteria.getIds());	
-        }
-
-        if (searchCriteria.getReceiptNumbers() != null && !searchCriteria.getReceiptNumbers().isEmpty()) {
-            addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" pyd.receiptNumber IN (:receiptnumber)  ");
-            preparedStatementValues.put("receiptnumber", searchCriteria.getReceiptNumbers());
+            selectQuery.append(" py_inner.id IN (:id)  ");
+            preparedStatementValues.put("id", searchCriteria.getIds());
         }
 
         if (!CollectionUtils.isEmpty(searchCriteria.getStatus())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" UPPER(py.paymentstatus) in (:status)");
+            selectQuery.append(" UPPER(py_inner.paymentstatus) in (:status)");
             preparedStatementValues.put("status",
                     searchCriteria.getStatus()
                             .stream()
@@ -358,7 +385,7 @@ public class PaymentQueryBuilder {
 
         if (!CollectionUtils.isEmpty(searchCriteria.getInstrumentStatus())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" UPPER(py.instrumentStatus) in (:instrumentStatus)");
+            selectQuery.append(" UPPER(py_inner.instrumentStatus) in (:instrumentStatus)");
             preparedStatementValues.put("instrumentStatus",
                     searchCriteria.getInstrumentStatus()
                             .stream()
@@ -370,7 +397,7 @@ public class PaymentQueryBuilder {
         if (!CollectionUtils.isEmpty(searchCriteria.getPaymentModes())) {
 
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" UPPER(py.paymentMode) in (:paymentMode)");
+            selectQuery.append(" UPPER(py_inner.paymentMode) in (:paymentMode)");
             preparedStatementValues.put("paymentMode",
                     searchCriteria.getPaymentModes()
                             .stream()
@@ -381,25 +408,25 @@ public class PaymentQueryBuilder {
 
         if (StringUtils.isNotBlank(searchCriteria.getMobileNumber())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" py.mobileNumber = :mobileNumber");
+            selectQuery.append(" py_inner.mobileNumber = :mobileNumber");
             preparedStatementValues.put("mobileNumber", searchCriteria.getMobileNumber());
         }
 
         if (StringUtils.isNotBlank(searchCriteria.getTransactionNumber())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" py.transactionNumber = :transactionNumber");
+            selectQuery.append(" py_inner.transactionNumber = :transactionNumber");
             preparedStatementValues.put("transactionNumber", searchCriteria.getTransactionNumber());
         }
 
         if (searchCriteria.getFromDate() != null) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" py.transactionDate >= :fromDate");
+            selectQuery.append(" py_inner.transactionDate >= :fromDate");
             preparedStatementValues.put("fromDate", searchCriteria.getFromDate());
         }
 
         if (searchCriteria.getToDate() != null) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" py.transactionDate <= :toDate");
+            selectQuery.append(" py_inner.transactionDate <= :toDate");
             Calendar c = Calendar.getInstance();
             c.setTime(new Date(searchCriteria.getToDate()));
             c.add(Calendar.DATE, 1);
@@ -410,44 +437,120 @@ public class PaymentQueryBuilder {
 
         if (!CollectionUtils.isEmpty(searchCriteria.getPayerIds())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" py.payerid IN (:payerid)  ");
+            selectQuery.append(" py_inner.payerid IN (:payerid)  ");
             preparedStatementValues.put("payerid", searchCriteria.getPayerIds());
         }
-        
-        if (!CollectionUtils.isEmpty(searchCriteria.getBusinessServices())) {
+
+        addPaymentDetailWhereClause(selectQuery, preparedStatementValues, searchCriteria);
+        addBillWhereCluase(selectQuery, preparedStatementValues, searchCriteria);
+
+
+/*        if (searchCriteria.getReceiptNumbers() != null && !searchCriteria.getReceiptNumbers().isEmpty()) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" pyd.receiptNumber IN (:receiptnumber)  ");
+            preparedStatementValues.put("receiptnumber", searchCriteria.getReceiptNumbers());
+        }
+
+		if (!CollectionUtils.isEmpty(searchCriteria.getBusinessServices())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" pyd.businessService IN (:businessService)  ");
             preparedStatementValues.put("businessService", searchCriteria.getBusinessServices());
         }
 
+ 		if (!CollectionUtils.isEmpty(searchCriteria.getBillIds())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" pyd.billid in (:billid)");
+            preparedStatementValues.put("billid", searchCriteria.getBillIds());
+        }
+        
         if (!CollectionUtils.isEmpty(searchCriteria.getConsumerCodes())) {
 
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" bill.consumerCode in (:consumerCodes)");
             preparedStatementValues.put("consumerCodes", searchCriteria.getConsumerCodes());
-        }
+        }*/
+
+
+    }
+
+
+    private static void addPaymentDetailWhereClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
+                                           PaymentSearchCriteria searchCriteria){
+
+        StringBuilder paymentDetailQuery = new StringBuilder(" id in (select pyd.paymentid from egcl_paymentdetail as pyd ");
+        Map<String, Object> paymentDetailPreparedStatementValues = new HashMap<>();
+
+        if (!CollectionUtils.isEmpty(searchCriteria.getBusinessServices())) {
+            addClauseIfRequired(paymentDetailPreparedStatementValues, paymentDetailQuery);
+            paymentDetailQuery.append(" pyd.businessService IN (:businessService)  ");
+            preparedStatementValues.put("businessService", searchCriteria.getBusinessServices());
+            paymentDetailPreparedStatementValues.put("businessService", searchCriteria.getBusinessServices());
+          }
 
         if (!CollectionUtils.isEmpty(searchCriteria.getBillIds())) {
-            addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" pyd.billid in (:billid)");
+            addClauseIfRequired(paymentDetailPreparedStatementValues, paymentDetailQuery);
+            paymentDetailQuery.append(" pyd.billid in (:billid)");
             preparedStatementValues.put("billid", searchCriteria.getBillIds());
+            paymentDetailPreparedStatementValues.put("billid", searchCriteria.getBillIds());
+        }
+
+        if (searchCriteria.getReceiptNumbers() != null && !searchCriteria.getReceiptNumbers().isEmpty()) {
+            addClauseIfRequired(paymentDetailPreparedStatementValues, paymentDetailQuery);
+            paymentDetailQuery.append(" pyd.receiptNumber IN (:receiptnumber)  ");
+            preparedStatementValues.put("receiptnumber", searchCriteria.getReceiptNumbers());
+            paymentDetailPreparedStatementValues.put("receiptnumber", searchCriteria.getReceiptNumbers());
+        }
+
+        if (!paymentDetailPreparedStatementValues.isEmpty()){
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(paymentDetailQuery).append(") ");
         }
 
     }
 
 
-    private static String addPaginationClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
-                                              PaymentSearchCriteria criteria) {
 
-            String finalQuery = PAGINATION_WRAPPER.replace("{baseQuery}", selectQuery);
-            preparedStatementValues.put("offset", criteria.getOffset());
-            preparedStatementValues.put("limit", criteria.getOffset() + criteria.getLimit());
+    private static void addBillWhereCluase(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
+                                           PaymentSearchCriteria searchCriteria){
+        if (!CollectionUtils.isEmpty(searchCriteria.getConsumerCodes())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" id in (select paymentid from egcl_paymentdetail as pyd where pyd.billid in ( select id from egcl_bill as bill where bill.consumercode in (:consumerCodes)) )" );
+            preparedStatementValues.put("consumerCodes", searchCriteria.getConsumerCodes());
+        }
+    }
 
-            return finalQuery;
+
+
+    /*
+	 * Wraps pagination around the base query
+	 * @param query The query for which pagination has to be done
+	 * @param preparedStmtList The object list to send the params
+	 * @param criteria The object containg the search params
+	 * @return Query with pagination
+	 */
+    private void addPagination(StringBuilder query,Map<String, Object> preparedStatementValues,PaymentSearchCriteria criteria){
+        int limit = config.getDefaultLimit();
+        int offset = 0;
+        query.append(" OFFSET :offset ");
+        query.append(" LIMIT :limit ");
+
+        if(criteria.getLimit()!=null && criteria.getLimit()<=config.getMaxSearchLimit())
+            limit = criteria.getLimit();
+
+        if(criteria.getLimit()!=null && criteria.getLimit()>config.getMaxSearchLimit())
+            limit = config.getMaxSearchLimit();
+
+        if(criteria.getOffset()!=null)
+            offset = criteria.getOffset();
+
+        preparedStatementValues.put("offset", offset);
+        preparedStatementValues.put("limit", limit);
+
     }
 
     private static String addOrderByClause(StringBuilder selectQuery) {
-        return selectQuery.append(" ORDER BY py.transactiondate DESC ").toString();
+         return selectQuery.append(" ORDER BY py.transactiondate DESC ").toString();
+
     }
 
 
@@ -500,7 +603,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("additionaldetails", getJsonb(payment.getAdditionalDetails()));
         sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
         sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
-        
+
         return sqlParameterSource;
 
     }

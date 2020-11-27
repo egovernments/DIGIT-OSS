@@ -1,39 +1,15 @@
 package org.egov.collection.repository;
 
 import static java.util.Collections.reverseOrder;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.COPY_BILLDETAIL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.COPY_BILL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.COPY_PAYMENTDETAIL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.COPY_PAYMENT_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_BILLACCOUNTDETAIL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_BILLDETAIL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_BILL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_PAYMENTDETAIL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_PAYMENT_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.STATUS_UPDATE_BILL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.STATUS_UPDATE_PAYMENTDETAIL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.STATUS_UPDATE_PAYMENT_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.UPDATE_BILLDETAIL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.UPDATE_BILL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.UPDATE_PAYMENTDETAIL_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.UPDATE_PAYMENT_SQL;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForBillAccountDetailCreate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentCreate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentDetailCreate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentDetailStatusUpdate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentDetailUpdate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentStatusUpdate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentUpdate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillCreate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillDetailCreate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillDetailUpdate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillStatusUpdate;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillUpdate;
+import static org.egov.collection.config.CollectionServiceConstants.KEY_FILESTOREID;
+import static org.egov.collection.config.CollectionServiceConstants.KEY_ID;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -48,6 +24,7 @@ import org.egov.collection.repository.rowmapper.PaymentRowMapper;
 import org.egov.collection.web.contract.Bill;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -116,11 +93,16 @@ public class PaymentRepository {
 
     public List<Payment> fetchPayments(PaymentSearchCriteria paymentSearchCriteria){
         Map<String, Object> preparedStatementValues = new HashMap<>();
-        String query = paymentQueryBuilder.getPaymentSearchQuery(paymentSearchCriteria, preparedStatementValues);
-        log.info("Query: "+query);
-        log.info("preparedStatementValues: "+preparedStatementValues);
-        List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues,paymentRowMapper);
-        if(!CollectionUtils.isEmpty(payments)) {
+        List<String> ids = fetchPaymentIdsByCriteria(paymentSearchCriteria);
+
+        if(CollectionUtils.isEmpty(ids))
+            return new LinkedList<>();
+
+        String query = paymentQueryBuilder.getPaymentSearchQuery(ids, preparedStatementValues);
+        log.info("Query: " + query);
+        log.info("preparedStatementValues: " + preparedStatementValues);
+        List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues, paymentRowMapper);
+        if (!CollectionUtils.isEmpty(payments)) {
             Set<String> billIds = new HashSet<>();
             for(Payment payment : payments) {
             	billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
@@ -215,6 +197,36 @@ public class PaymentRepository {
         }
     }
 
+    public void updateFileStoreId(List<Map<String, String>> idToFileStoreIdMaps) {
 
+        List<MapSqlParameterSource> fileStoreIdSource = new ArrayList<>();
+
+        idToFileStoreIdMaps.forEach(map -> {
+            MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+            sqlParameterSource.addValue("id", map.get(KEY_ID));
+            sqlParameterSource.addValue("filestoreid", map.get(KEY_FILESTOREID));
+            fileStoreIdSource.add(sqlParameterSource);
+        });
+
+        namedParameterJdbcTemplate.batchUpdate(FILESTOREID_UPDATE_PAYMENT_SQL, fileStoreIdSource.toArray(new MapSqlParameterSource[0]));
+
+    }
+
+
+    public List<String> fetchPaymentIds(PaymentSearchCriteria paymentSearchCriteria) {
+
+        Map<String, Object> preparedStatementValues = new HashMap<>();
+        preparedStatementValues.put("offset", paymentSearchCriteria.getOffset());
+        preparedStatementValues.put("limit", paymentSearchCriteria.getLimit());
+
+        return namedParameterJdbcTemplate.query("SELECT id from egcl_payment ORDER BY createdtime offset " + ":offset " + "limit :limit", preparedStatementValues, new SingleColumnRowMapper<>(String.class));
+
+    }
+
+    public List<String> fetchPaymentIdsByCriteria(PaymentSearchCriteria paymentSearchCriteria) {
+        Map<String, Object> preparedStatementValues = new HashMap<>();
+        String query = paymentQueryBuilder.getIdQuery(paymentSearchCriteria, preparedStatementValues);
+        return namedParameterJdbcTemplate.query(query, preparedStatementValues, new SingleColumnRowMapper<>(String.class));
+    }
 
 }

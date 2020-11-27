@@ -198,5 +198,14 @@ public class ApplicationProperties {
     private String mdmsSearchEndpoint;
 
 
+    @Value("${collection.search.max.limit}")
+    private Integer defaultLimit;
+
+    @Value("${collection.search.default.limit}")
+    private Integer maxSearchLimit;
+
+
+
+
 
 }

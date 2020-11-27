@@ -249,6 +249,15 @@ public class CollectionServiceConstants {
 
     public static final String MASTER_COLLECTIONMODESNOTALLOWED_KEY = "collectionModesNotAllowed";
 
+    public static final String KEY_ID = "id";
+
+    public static final String KEY_FILESTOREID = "filestoreid";
+
+    public static final String KEY_PDF_JOBS = "jobs";
+
+    public static final String KEY_PDF_ENTITY_ID = "entityid";
+
+    public static final String KEY_PDF_FILESTOREID = "filestoreids";
 
 
 
