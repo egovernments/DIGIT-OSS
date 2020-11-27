@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardHeader, CardText, SubmitBar, UploadImages, LinkButton } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
-// import {
-//   Filestorage,
-//   Filefetch,
-// } from "@egovernments/digit-utils/services/Filestorage";
+import React, { useState } from "react";
+import { Card, SubmitBar, LinkButton, ImageUploadHandler, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LOCALIZATION_KEY } from "../../../constants/Localization";
+import { PgrRoutes, getRoute } from "../../../constants/Routes";
 
 const UploadPhotos = (props) => {
-  // const Filestorage = Digit.UploadServices.Filestorage;
-  // const Filefetch = Digit.UploadPhotos.Filefetch;
   const { t } = useTranslation();
-  const [image, setImage] = useState(null);
-  const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(null);
   const [uploadedImagesIds, setUploadedImagesIds] = useState(null);
-  const [rerender, setRerender] = useState(1);
+  const [valid, setValid] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     if (image) {
@@ -39,23 +34,17 @@ const UploadPhotos = (props) => {
     }
     return [...arr, imageIdData.data.files[0].fileStoreId];
   }
+  const handleUpload = (ids) => {
+    setUploadedImagesIds(ids);
+  };
 
-  function addImageThumbnails(thumbnailsData) {
-    var keys = Object.keys(thumbnailsData.data);
-    var index = keys.findIndex((key) => key === "fileStoreIds");
-    if (index > -1) {
-      keys.splice(index, 1);
-    }
-    var thumbnails = [];
-    if (uploadedImagesThumbs !== null) {
-      thumbnails = uploadedImagesThumbs;
-    }
-    setUploadedImagesThumbs([...thumbnails, { image: thumbnailsData.data[keys[0]].split(",")[2], key: keys[0] }]);
+  function skip() {
+    history.push(getRoute(props.match, PgrRoutes.Details));
   }
 
-  function getImage(e) {
-    if (e.target.files[0] && e.target.files[0].size > 2097152) {
-      alert("File is too big!");
+  function save() {
+    if (uploadedImagesIds === null) {
+      setValid(false);
     } else {
       setImage(e.target.files[0]);
     }
@@ -87,36 +76,19 @@ const UploadPhotos = (props) => {
       var arr = uploadedImagesIds;
       arr.splice(index, 1);
       setUploadedImagesIds(arr);
-    }
 
-    var thumbs = uploadedImagesThumbs;
-    thumbs.splice(deleteImageKey[1], 1);
-    setUploadedImagesThumbs(thumbs);
-    setRerender(rerender + 1);
+      props.save(uploadedImagesIds);
+      history.push(getRoute(props.match, PgrRoutes.Details));
+    }
   }
 
   return (
     <Card>
-      <CardHeader>{t("CS_ADDCOMPLAINT_UPLOAD_PHOTO")}</CardHeader>
-
-      <CardText>
-        {/* Click on the icon below to upload the complaint photos as evidence. You
-        can capture photos directly through your camera or upload from your
-        Gallery. If you do not have complaint photo, you can skip the continue
-        for next step. */}
-        {t("CS_ADDCOMPLAINT_UPLOAD_PHOTO_TEXT")}
-      </CardText>
-
-      <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} />
-
-      <Link to="/create-complaint/details" onClick={() => props.save(uploadedImagesIds)}>
-        <SubmitBar label="Next" />
-      </Link>
-      {props.skip ? (
-        <Link to="/create-complaint/details">
-          <LinkButton label={t("CORE_COMMON_SKIP_CONTINUE")} />
-        </Link>
-      ) : null}
+      {/* <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} /> */}
+      <ImageUploadHandler header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)} cardText="" onPhotoChange={handleUpload} />
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_ERROR_MESSAGE`)}</CardLabelError>}
+      <SubmitBar label="Next" onSubmit={save} />
+      {props.skip ? <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} onClick={skip} /> : null}
     </Card>
   );
 };

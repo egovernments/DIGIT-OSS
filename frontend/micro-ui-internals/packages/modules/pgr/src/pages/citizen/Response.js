@@ -2,17 +2,21 @@ import React from "react";
 import { Card, Banner, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { PgrRoutes, getRoute } from "../../constants/Routes";
+import { useTranslation } from "react-i18next";
 
 const GetActionMessage = ({ action }) => {
+  const { t } = useTranslation();
   if (action === "REOPEN") {
-    return "Complaint Reopened";
+    return t(`CS_COMMON_COMPLAINT_REOPENED`);
   } else {
-    return "Complaint Submitted";
+    return t(`CS_COMMON_COMPLAINT_SUBMITTED`);
   }
 };
 
 const BannerPicker = ({ response }) => {
   const { complaints } = response;
+
   if (complaints && complaints.response && complaints.response.responseInfo) {
     return (
       <Banner
@@ -22,21 +26,19 @@ const BannerPicker = ({ response }) => {
       />
     );
   } else {
-    return <Banner message="Complaint Not Submitted" successful={false} />;
+    return <Banner message={t("CS_COMMON_COMPLAINT_NOT_SUBMITTED")} successful={false} />;
   }
 };
 
 const Response = (props) => {
+  const { t } = useTranslation();
   const appState = useSelector((state) => state);
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}
-      <CardText>
-        The notification along with complaint number is sent to your registered mobile number. You can track the complaint status using mobile or web
-        app.
-      </CardText>
-      <Link to="/create-complaint">
-        <SubmitBar label="Go back to home page" />
+      <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
+      <Link to={getRoute(props.match, PgrRoutes.CreateComplaintStart)}>
+        <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>
   );

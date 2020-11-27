@@ -1,34 +1,44 @@
 import React, { useState } from "react";
-import { Card, CardSubHeader, CardHeader, CardText, CardLabel, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
-import { Link, useHistory } from "react-router-dom";
+import { Card, CardSubHeader, CardHeader, CardText, CardLabel, TextArea, SubmitBar, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { TextInputCard } from "@egovernments/digit-ui-react-components";
+import { LOCALIZATION_KEY } from "../../../constants/Localization";
+import { PgrRoutes, getRoute } from "../../../constants/Routes";
 
 const Landmark = (props) => {
   const { t } = useTranslation();
-  const history = useHistory();
   const [landmark, setLandmark] = useState(null);
+  const history = useHistory();
+  const [valid, setValid] = useState(true);
 
   function textInput(e) {
     setLandmark(e.target.value);
   }
 
   function save() {
-    props.save(landmark);
-    history.push("/create-complaint/upload-photos");
+    if (landmark === null || landmark === "") {
+      console.log(landmark);
+      setValid(false);
+    } else {
+      console.log(landmark);
+      props.save(landmark);
+      history.push(getRoute(props.match, PgrRoutes.UploadPhotos));
+    }
   }
 
   return (
-    <TextInputCard
-      header={t("CS_PROVIDE_LANDMARK")}
-      subHeader={t("CS_ADDCOMPLAINT_COMPLAINT_LOCATION")}
-      cardText={t("CS_PROVIDE_LANDMARK_TEXT")}
-      CardLabel={t("CS_ADDCOMPLAINT_LANDMARK")}
-      nextText={t("PT_COMMONS_NEXT")}
-      skip={false}
-      onSave={save}
-      textInput={textInput}
-    />
+    <Card>
+      <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_COMPLAINT_LOCATION`)}</CardSubHeader>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_LANDMARK`)}</CardHeader>
+      <CardText>
+        {/* Provide the landmark to help us reach the complaint location easily. */}
+        {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_LANDMARK_TEXT`)}
+      </CardText>
+      <CardLabel>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_LANDMARK`)}</CardLabel>
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_LANDMARK_ERROR`)}</CardLabelError>}
+      <TextArea onChange={textInput}></TextArea>
+      <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={save} />
+    </Card>
   );
 };
 

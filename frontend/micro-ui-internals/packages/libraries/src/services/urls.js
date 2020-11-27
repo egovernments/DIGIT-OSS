@@ -6,10 +6,13 @@ const Urls = {
   location: {
     localities: `/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality`,
   },
+
   pgr_search: `/pgr-services/v2/request/_search`,
   pgr_update: `/pgr-services/v2/request/_update`,
   FileStore: "/filestore/v1/files",
+
   FileFetch: "/filestore/v1/files/url",
+  PGR_Create: `/pgr-services/v2/request/_create`,
 };
 
 export default Urls;
