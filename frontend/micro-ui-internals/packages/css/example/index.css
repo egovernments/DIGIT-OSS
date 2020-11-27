@@ -1292,7 +1292,7 @@ img, video {
     padding: 20px 18px;
     font-weight: 700;
     vertical-align: middle;
-    text-align: center; }
+    text-align: left; }
   .table tbody {
     border: none;
     padding: 0;
@@ -1451,6 +1451,30 @@ img, video {
     color: #fff;
     color: rgba(255, 255, 255, var(--text-opacity)); }
 
+.details-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column; }
+  .details-container .detail {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-line-pack: space-evenly;
+    align-content: space-evenly; }
+    .details-container .detail .label {
+      width: 138px;
+      padding-bottom: 16px; }
+    .details-container .detail .label, .details-container .detail .name {
+      padding-top: 16px; }
+
 .telephone {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1580,7 +1604,8 @@ img, video {
       -webkit-box-direction: normal;
       -ms-flex-direction: column;
       flex-direction: column;
-      margin-left: 64px; }
+      margin-left: 64px;
+      margin-left: 51px; }
       .inbox-container .filters-container .complaint-links-container .body .link {
         padding: 8px;
         --text-opacity:1;
