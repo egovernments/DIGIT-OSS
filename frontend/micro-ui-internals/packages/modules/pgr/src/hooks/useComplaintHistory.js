@@ -22,8 +22,9 @@ const GetReopenInstance = (obj, t) => {
 };
 
 const getResolvedInstance = async (obj, path, t, key) => {
+  console.log("wating....");
   let nextAction = await Digit.workflowService.getNextAction("pb", key);
-
+  console.log("finish....");
   let actions = nextAction.map(({ action }, index) => (
     <Link key={index} to={`${path}/${action.toLowerCase()}/${obj.businessId}`}>
       <ActionLinks>{GetTranslatedAction(action, t)}</ActionLinks>
@@ -40,7 +41,7 @@ const getNextState = async (obj, path, t, complaint) => {
   // let { t } = useTranslation();
   const key = obj.state.applicationStatus;
 
-  const getRatingInstance = (rating) => <Rating text="You rated" withText={true} currentRating={rating} maxRating={5} onFeedback={() => {}} />;
+  const getRatingInstance = async (rating) => <Rating text="You rated" withText={true} currentRating={rating} maxRating={5} onFeedback={() => {}} />;
 
   switch (key) {
     case "PENDINGFORREASSIGNMENT":
@@ -70,13 +71,17 @@ const getNextState = async (obj, path, t, complaint) => {
         )
       );
     case "RESOLVED":
+      {
+        console.log("complaint.workflow.action:", complaint.workflow.action);
+      }
+
       return (
         <React.Fragment>
           {complaint.workflow.action === "RESOLVE" && !complaint.service.rating && (
             <React.Fragment> {await getResolvedInstance(obj, path, t, key)} </React.Fragment>
           )}
+          {complaint.workflow.action === "RATE" && <React.Fragment> {await getRatingInstance(complaint.service.rating)} </React.Fragment>}
           {complaint.workflow.action === "REOPEN" && <React.Fragment>{GetReopenInstance(obj, t)} </React.Fragment>}
-          {complaint.workflow.action === "RATE" && <React.Fragment> {getRatingInstance(complaint.service.rating)} </React.Fragment>}
         </React.Fragment>
       );
     case "CLOSEDAFTERRESOLUTION":
@@ -96,6 +101,7 @@ const getComplaintHistory = async (processInstance, path, t, complaint) => {
         text: await getNextState(instance, path, t, complaint),
       };
     });
+    console.log(">>>", history);
     return history;
   }
 };
@@ -106,8 +112,8 @@ const getTimeLineFromProcessInstance = async (processInstance, path, t, complain
   console.log("timeline:", timeline);
   if (timeline) {
     timelineList = await Promise.all(timeline);
-    console.log("timelineList:", timelineList);
   }
+  console.log("timelineList:", timelineList);
 
   return timelineList;
 };
