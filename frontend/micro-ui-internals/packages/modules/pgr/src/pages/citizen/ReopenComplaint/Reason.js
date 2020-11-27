@@ -1,21 +1,31 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
-import { BackButton, Card, CardHeader, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { BackButton, Card, CardHeader, CardLabelError, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
 
 import { LOCALIZATION_KEY } from "../../../constants/Localization";
 import { getRoute, PgrRoutes, PGR_BASE } from "../../../constants/Routes";
 
 const ReasonPage = (props) => {
+  const history = useHistory();
   const { t } = useTranslation();
   const { id } = useParams();
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(null);
+  const [valid, setValid] = useState(true);
 
   const onRadioChange = (value) => {
     let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
     Digit.SessionStorage.set(`reopen.${id}`, { ...reopenDetails, reason: value });
     setSelected(value);
   };
+
+  function onSave() {
+    if (selected === null) {
+      setValid(false);
+    } else {
+      history.push(`${props.match.path}/upload-photo/${id}`);
+    }
+  }
 
   return (
     <React.Fragment>
@@ -28,6 +38,7 @@ const ReasonPage = (props) => {
         If the complaint type you are looking for is not listed select others.{" "} */}
           {/* {t(`${TRANSLATION_KEY}_OPTION_ONE`)} */}
         </CardText>
+        {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ERROR_REOPEN_REASON`)}</CardLabelError>}
         <RadioButtons
           // handleChange={onRadioChange}
           onSelect={onRadioChange}
@@ -40,9 +51,8 @@ const ReasonPage = (props) => {
             t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_FOUR`),
           ]}
         />
-        <Link to={`${props.match.path}/upload-photo/${id}`}>
-          <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
-        </Link>
+
+        <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={onSave} />
       </Card>
     </React.Fragment>
   );

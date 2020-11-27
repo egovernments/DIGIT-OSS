@@ -55,10 +55,14 @@ const ComplaintDetailsPage = (props) => {
   const [imageZoom, setImageZoom] = useState(null);
 
   useEffect(() => {
-    if (selectedComplaint.length > 0) {
-      const historyData = getComplaintHistory(selectedWorkFlow, props.match.path, t, selectedComplaint[0]);
-      setComplaintHistory(historyData);
-    }
+    const getTimelineValues = async () => {
+      if (selectedComplaint.length > 0) {
+        const historyData = await getTimeLineFromProcessInstance(selectedWorkFlow, props.match.path, t, selectedComplaint[0]);
+        console.log("history data", historyData);
+        setComplaintHistory(historyData);
+      }
+    };
+    getTimelineValues();
   }, [selectedWorkFlow, props.match.path, t, selectedComplaint]);
 
   const GetImageIds = (images) => {
@@ -138,7 +142,8 @@ const ComplaintDetailsPage = (props) => {
               <Card>
                 <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
                 {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
-                {complaintHistory && (
+                {console.log("complaintHistory:", complaintHistory)}
+                {complaintHistory && complaintHistory.length > 0 && (
                   <ConnectingCheckPoints>
                     {complaintHistory.map((history, index) => {
                       return <CheckPoint key={index} customChild={history.text} isCompleted={true} />;

@@ -8,6 +8,7 @@
 
 @import "tailwindcss/utilities";
 
+
 @import "./components/body.scss";
 @import "./components/navbar.scss";
 @import "./components/card.scss";
@@ -34,16 +35,16 @@
 @import "./components/toast.scss";
 @import "./components/telephone.scss";
 @import "./components/grey.scss";
+@import "./components/actionLink.scss";
 
 @import "./pages/employee/popupmodule.scss";
 @import "./pages/employee/container.scss";
 @import "./pages/employee/inbox.scss";
 
-
 .home-link {
   margin-left: 16px;
   margin-bottom: 16px;
   a {
-    color: #1D70B8;
+    color: #1d70b8;
   }
 }
