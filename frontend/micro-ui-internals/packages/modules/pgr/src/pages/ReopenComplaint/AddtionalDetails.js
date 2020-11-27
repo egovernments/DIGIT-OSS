@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import { BackButton, Card, CardHeader, CardText, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { updateComplaints } from "../../redux/actions/index";
@@ -9,7 +9,7 @@ import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const AddtionalDetails = (props) => {
   // const [details, setDetails] = useState(null);
-
+  const history = useHistory();
   let { id } = useParams();
   const dispatch = useDispatch();
   const appState = useSelector((state) => state);
@@ -18,7 +18,7 @@ const AddtionalDetails = (props) => {
   useEffect(() => {
     const { response } = appState.complaints;
     if (response && response.responseInfo.status === "successful") {
-      props.history.push(`${props.match.path}/response`);
+      history.push(`${props.match.path}/response`);
     }
   }, [appState.complaints, props.history]);
 

@@ -32,7 +32,6 @@ const Address = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    console.log("list", props.list);
     if (SessionStorage.get("city_complaint")) {
       setSelectedCity(SessionStorage.get("city_complaint"));
     }

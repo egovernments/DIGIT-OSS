@@ -59,6 +59,18 @@ const ComplaintDetailsPage = (props) => {
     }
   }, [selectedWorkFlow, props.match.path, t, selectedComplaint]);
 
+  useEffect(() => {
+    if (complaintHistory) {
+      Promise.all(complaintHistory)
+        .then((values) => {
+          setComplaintHistory(values);
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    }
+  }, [complaintHistory]);
+
   const GetImageIds = (images) => {
     let imageIds = [];
     imageIds = images.map((image) => {

@@ -8,11 +8,9 @@ import { ConvertTimestampToDate } from "../../../../libraries/src/services/Utils
 // const useComplaintHistory = (processInstance, path) => {
 // const [complaintHistory, setComplaintHistory] = useState([]);
 
-const getNextState = (obj, path, t, complaint) => {
-  console.log("obj:", complaint);
+const getNextState = async (obj, path, t, complaint) => {
   // let { t } = useTranslation();
   const key = obj.state.applicationStatus;
-
   const GetAction = (action) => t(`CS_COMMON_${action}`);
 
   switch (key) {
@@ -43,12 +41,18 @@ const getNextState = (obj, path, t, complaint) => {
         )
       );
     case "RESOLVED":
-      let nextAction = obj.nextActions;
+      // let nextAction = obj.nextActions;
+      let nextAction = await Digit.workflowService.getNextAction("pb", key);
+      let reopenDate = ConvertTimestampToDate(obj.auditDetails.createdTime);
       return (
         <React.Fragment>
-          <div>{t(`CS_COMMON_COMPLAINT_RESOLVED`)}</div>
-
-          {!complaint.service.rating &&
+          {complaint.workflow.action === "REOPEN" ? (
+            <div>{t(`CS_COMMON_COMPLAINT_REOPENED`)}</div>
+          ) : (
+            (<div>{t(`CS_COMMON_COMPLAINT_RESOLVED`)}</div>)()
+          )}
+          {complaint.workflow.action !== "REOPEN" &&
+            !complaint.service.rating &&
             nextAction.map(({ action }, index) => (
               <Link key={index} to={`${path}/${action.toLowerCase()}/${obj.businessId}`}>
                 <span
@@ -61,11 +65,16 @@ const getNextState = (obj, path, t, complaint) => {
                 </span>
               </Link>
             ))}
-
-          {complaint.service.rating && (
+          {console.log("complaint.service.rating:", complaint.service.rating)}
+          {complaint.workflow.action !== "REOPEN" && complaint.service.rating && (
             <div>
-              <Rating text="You rated" withText={true} currentRating={3} maxRating={5} />
+              <Rating text="You rated" withText={true} currentRating={complaint.service.rating} maxRating={5} />
             </div>
+          )}
+          {complaint.workflow.action === "REOPEN" && (
+            <React.Fragment>
+              <GreyOutText>{reopenDate}</GreyOutText>
+            </React.Fragment>
           )}
         </React.Fragment>
       );
@@ -80,10 +89,10 @@ const getNextState = (obj, path, t, complaint) => {
 const getComplaintHistory = (processInstance, path, t, complaint) => {
   if (Object.keys(processInstance).length > 0) {
     let { ProcessInstances } = processInstance;
-    let history = ProcessInstances.map((instance) => {
+    let history = ProcessInstances.map(async (instance) => {
       return {
         applicationStatus: instance.state.applicationStatus,
-        text: getNextState(instance, path, t, complaint),
+        text: await getNextState(instance, path, t, complaint),
       };
     });
     return history;

@@ -1,7 +1,6 @@
 import React from "react";
 
 const TextInput = (props) => {
-  console.log("prps", props);
   return (
     <React.Fragment>
       {props.isMandatory ? (
