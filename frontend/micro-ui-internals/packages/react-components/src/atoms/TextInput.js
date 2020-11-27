@@ -1,7 +1,6 @@
 import React from "react";
 
 const TextInput = (props) => {
-  console.log("props:::::ref::::", props);
   return (
     <React.Fragment>
       {props.isMandatory ? (
@@ -9,7 +8,6 @@ const TextInput = (props) => {
           type="text"
           name={props.name}
           className="card-input-error"
-          style={{ ...props.style }}
           placeholder={props.placeholder}
           onChange={props.onChange}
           ref={props.inputRef}
@@ -20,7 +18,6 @@ const TextInput = (props) => {
           type="text"
           name={props.name}
           className="card-input"
-          style={{ ...props.style }}
           placeholder={props.placeholder}
           onChange={props.onChange}
           ref={props.inputRef}

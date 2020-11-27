@@ -23,7 +23,6 @@ import {
 import { selectComplaints } from "../../selectors/complaint";
 import { fetchBusinessServiceById, searchComplaints } from "../../redux/actions";
 import { selectWorkflow } from "../../selectors/processInstance";
-
 import getTimeLineFromProcessInstance from "../../hooks/useComplaintHistory";
 
 const ComplaintDetailsPage = (props) => {

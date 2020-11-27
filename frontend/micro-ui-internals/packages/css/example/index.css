@@ -1510,6 +1510,11 @@ img, video {
   color: #505a5f;
   color: rgba(80, 90, 95, var(--text-opacity)); }
 
+.action-link {
+  --text-opacity:1;
+  color: #f47738;
+  color: rgba(244, 119, 56, var(--text-opacity)); }
+
 @media (min-width: 780px) {
   .popup-module {
     width: -webkit-fit-content;
