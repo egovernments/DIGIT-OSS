@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import { BackButton, Card, CardHeader, CardText, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { updateComplaints } from "../../redux/actions/index";
@@ -18,7 +18,7 @@ const AddtionalDetails = (props) => {
   useEffect(() => {
     const { response } = appState.complaints;
     if (response && response.responseInfo.status === "successful") {
-      history.push(`${props.match.path}/response`);
+      history.push(`${props.match.path}/response/:${id}`);
     }
   }, [appState.complaints, props.history]);
 

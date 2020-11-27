@@ -1,4 +1,5 @@
 import { TelePhone, GreyOutText, Rating } from "@egovernments/digit-ui-react-components";
+import { ActionLinks } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -8,7 +9,7 @@ import { ConvertTimestampToDate } from "../../../../libraries/src/services/Utils
 // const useComplaintHistory = (processInstance, path) => {
 // const [complaintHistory, setComplaintHistory] = useState([]);
 
-const GetAction = (action, t) => t(`CS_COMMON_${action}`);
+const GetTranslatedAction = (action, t) => t(`CS_COMMON_${action}`);
 
 const GetReopenInstance = (obj, t) => {
   let reopenDate = ConvertTimestampToDate(obj.auditDetails.createdTime);
@@ -21,19 +22,11 @@ const GetReopenInstance = (obj, t) => {
 };
 
 const getResolvedInstance = async (obj, path, t, key) => {
-  console.log("obj:", obj);
   let nextAction = await Digit.workflowService.getNextAction("pb", key);
 
   let actions = nextAction.map(({ action }, index) => (
     <Link key={index} to={`${path}/${action.toLowerCase()}/${obj.businessId}`}>
-      <span
-        style={{
-          color: "#F47738",
-          marginLeft: index !== 0 ? "0.5rem" : "0",
-        }}
-      >
-        {GetAction(action, t)}
-      </span>
+      <ActionLinks>{GetTranslatedAction(action, t)}</ActionLinks>
     </Link>
   ));
   return (
@@ -47,9 +40,7 @@ const getNextState = async (obj, path, t, complaint) => {
   // let { t } = useTranslation();
   const key = obj.state.applicationStatus;
 
-  const getRatingInstance = (rating) => {
-    <Rating text="You rated" withText={true} currentRating={rating} maxRating={5} />;
-  };
+  const getRatingInstance = (rating) => <Rating text="You rated" withText={true} currentRating={rating} maxRating={5} onFeedback={() => {}} />;
 
   switch (key) {
     case "PENDINGFORREASSIGNMENT":
@@ -81,13 +72,11 @@ const getNextState = async (obj, path, t, complaint) => {
     case "RESOLVED":
       return (
         <React.Fragment>
-          {complaint.workflow.action === "RESOLVED" && !complaint.service.rating && (
+          {complaint.workflow.action === "RESOLVE" && !complaint.service.rating && (
             <React.Fragment> {await getResolvedInstance(obj, path, t, key)} </React.Fragment>
           )}
           {complaint.workflow.action === "REOPEN" && <React.Fragment>{GetReopenInstance(obj, t)} </React.Fragment>}
-          {complaint.workflow.action === "RESOLVED" && complaint.service.rating && (
-            <React.Fragment> {getRatingInstance(complaint.service.rating)} </React.Fragment>
-          )}
+          {complaint.workflow.action === "RATE" && <React.Fragment> {getRatingInstance(complaint.service.rating)} </React.Fragment>}
         </React.Fragment>
       );
     case "CLOSEDAFTERRESOLUTION":

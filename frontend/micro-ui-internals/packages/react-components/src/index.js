@@ -34,6 +34,7 @@ import KeyNote from "./KeyNote";
 import TelePhone from "./TelePhone";
 import GreyOutText from "./GreyOutText";
 import HomeLink from "./HomeLink";
+import ActionLinks from "./ActionLinks";
 
 export {
   Body,
@@ -75,4 +76,5 @@ export {
   KeyNote,
   TelePhone,
   GreyOutText,
+  ActionLinks,
 };
