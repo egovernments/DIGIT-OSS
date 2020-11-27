@@ -13,6 +13,7 @@ const TextInput = (props) => {
           placeholder={props.placeholder}
           onChange={props.onChange}
           ref={props.inputRef}
+          value={props.value}
         />
       ) : (
         <input
@@ -23,6 +24,7 @@ const TextInput = (props) => {
           placeholder={props.placeholder}
           onChange={props.onChange}
           ref={props.inputRef}
+          value={props.value}
         />
       )}
     </React.Fragment>

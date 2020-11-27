@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // import UserOnboarding from "../UserOnboarding/index";
 import SubType from "./SubType";
@@ -13,99 +13,44 @@ import Details from "./Details";
 import Response from "../Response";
 import { createComplaint } from "../../../redux/actions/index";
 import ComplaintType from "./ComplaintType";
-import { Citizen } from "../../../constants/Routes";
+import { PgrRoutes, getRoute } from "../../../constants/Routes";
 
 const CreateComplaint = ({ match, history }) => {
   const SessionStorage = Digit.SessionStorage;
   const dispatch = useDispatch();
   const appState = useSelector((state) => state);
-  const [pincode, setPincode] = useState(null);
+  const [pincode, setPincode] = useState("");
   const [city, setCity] = useState(null);
   const [locality, setLocality] = useState(null);
   const [landmark, setLandmark] = useState(null);
   const [details, setDetails] = useState("");
   const [complaintType, setComplaintType] = useState(null);
+  const [toSubmitComplaint, setToSubmitComplaint] = useState(false);
   const [uploadedImageIds, setUploadedImageIds] = useState([]);
-
   const citAuth = Digit.SessionStorage.get("citizen.token");
   console.log(citAuth);
+  const [adressList, setAddressList] = useState({});
 
   const complaintParams = {
-    RequestInfo: {
-      apiId: "Rainmaker",
-      action: "",
-      did: 1,
-      key: "",
-      msgId: "20170310130900|en_IN",
-      requesterId: "",
-      ts: Date.now(),
-      ver: ".01",
-      userInfo: {
-        id: 23349,
-        uuid: "530968f3-76b3-4fd1-b09d-9e22eb1f85df",
-        userName: "9404052047",
-        name: "Aniket T",
-        mobileNumber: "9404052047",
-        emailId: "xc@gmail.com",
-        locale: null,
-        type: "CITIZEN",
-        roles: [
-          {
-            name: "Citizen",
-            code: "CITIZEN",
-            tenantId: "pb",
-          },
-        ],
-        active: true,
-        tenantId: "pb",
-      },
-      authToken: citAuth,
-    },
-    service: {
-      tenantId: appState.cityCode,
-      serviceCode: complaintType,
-      description: details,
-      accountId: "7b2561e8-901b-40a2-98b7-7e627fc5b1d6",
-      additionalDetail: {},
-      applicationStatus: null,
-      source: "whatsapp",
-      rating: 4,
-      address: {
-        doorNo: "2",
-        plotNo: "10",
-        landmark: "Near City Hall",
-        city: city,
-        district: city,
-        region: city,
-        state: appState.stateInfo.name,
-        country: "India",
-        pincode: pincode,
-        buildingName: "Safalya",
-        street: "10th main",
-        locality: {
-          code: locality !== null ? locality.code : "",
-          name: locality !== null ? locality.name : "",
-        },
-        geoLocation: {
-          // latitude: 21,
-          // longitude: 56,
-          // additionalDetails: {},
-        },
-      },
-    },
-    workflow: {
-      action: "APPLY",
-      assignes: [],
-      comments: "Street light is not working",
-      verificationDocuments: uploadedImageIds.map((url) => {
-        return {
-          documentType: "PHOTO",
-          fileStore: url,
-          documentUid: "",
-          additionalDetails: {},
-        };
-      }),
-    },
+    cityCode: appState.cityCode,
+    complaintType: complaintType,
+    description: details,
+    landmark: landmark !== null ? landmark : "",
+    city: city,
+    district: city,
+    region: city,
+    state: appState.stateInfo.name,
+    pincode: pincode,
+    localityCode: locality !== null ? locality.code : "",
+    localityName: locality !== null ? locality.name : "",
+    uploadedImages: uploadedImageIds.map((url) => {
+      return {
+        documentType: "PHOTO",
+        fileStore: url,
+        documentUid: "",
+        additionalDetails: {},
+      };
+    }),
   };
 
   // const [createComplaintParams, setComplaintParams] = useState(complaintParams);
@@ -118,11 +63,18 @@ const CreateComplaint = ({ match, history }) => {
 
   useEffect(() => {
     (async () => {
-      if (details) {
+      if (toSubmitComplaint) {
         await dispatch(createComplaint(complaintParams));
+        setToSubmitComplaint(false);
       }
     })();
-  }, [details]);
+  }, [toSubmitComplaint]);
+
+  useEffect(() => {
+    if (pincode) {
+      setAddressList({ city: "Amritsar", localities: Digit.PincodeMap[pincode] });
+    }
+  }, [pincode]);
 
   const savePincode = (val) => {
     setPincode(val);
@@ -131,6 +83,7 @@ const CreateComplaint = ({ match, history }) => {
   const saveAddress = (city, locality) => {
     setCity(city);
     setLocality(locality);
+    console.log(city, locality, complaintParams);
   };
 
   const saveLandmark = (landmark) => {
@@ -138,7 +91,8 @@ const CreateComplaint = ({ match, history }) => {
   };
 
   const submitComplaint = async (details) => {
-    setDetails(details);
+    details && details !== "" ? setDetails(details) : null;
+    setToSubmitComplaint(true);
   };
 
   const saveComplaintType = (type) => {
@@ -149,29 +103,35 @@ const CreateComplaint = ({ match, history }) => {
     imageUrls === null ? setUploadedImageIds([]) : setUploadedImageIds(imageUrls);
   };
   return (
-    // <div><h2>create complaints</h2> <BackButton>Backs</BackButton></div>
-    <React.Fragment>
-      {/* {!details && <BackButton onClick={() => history.goBack()} />} */}
+    <Switch>
       {/* <Route
         path={match.url + "/onboarding"}
         component={(props) => <UserOnboarding />}
       /> */}
       <Route
         exact
-        path={match.url + "/"}
-        component={(props) => <ComplaintType save={saveComplaintType} />}
+        path={getRoute(match, PgrRoutes.CreateComplaintStart)}
+        component={(props) => <ComplaintType save={saveComplaintType} match={match} />}
         // component={(props) => <ComplaintTypeConfig />}
       />
-      <Route path={Citizen.SubType} component={(props) => <SubType save={saveComplaintType} />} />
-      <Route path={Citizen.LocationSearch} component={(props) => <LocationSearch skip={true} />} />
-      <Route path={Citizen.Pincode} component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} />} />
-      <Route path={Citizen.Address} component={(props) => <Address save={saveAddress} />} />
-      <Route path={Citizen.Landmark} component={(props) => <Landmark save={saveLandmark} />} />
-      <Route path={Citizen.UploadPhotos} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} />} />
-      <Route path={Citizen.Details} component={(props) => <Details submitComplaint={submitComplaint} skip={true} />} />
-      <Route path={Citizen.Response} component={(props) => <Response />} />
-      <Route path={Citizen.DynamicConfig} component={(props) => <DynamicConfig />} />
-    </React.Fragment>
+      <Route path={getRoute(match, PgrRoutes.SubType)} component={(props) => <SubType save={saveComplaintType} match={match} />} />
+      <Route
+        path={getRoute(match, PgrRoutes.LocationSearch)}
+        component={(props) => <LocationSearch save={(val) => savePincode(val)} skip={true} match={match} />}
+      />
+      <Route
+        path={getRoute(match, PgrRoutes.Pincode)}
+        component={(props) => <Pincode save={(val) => savePincode(val)} skip={true} match={match} pincode={pincode} />}
+      />
+      <Route path={getRoute(match, PgrRoutes.Address)} component={(props) => <Address list={adressList} save={saveAddress} match={match} />} />
+      <Route path={getRoute(match, PgrRoutes.Landmark)} component={(props) => <Landmark save={saveLandmark} match={match} />} />
+      <Route path={getRoute(match, PgrRoutes.UploadPhotos)} component={(props) => <UploadPhotos save={saveImagesUrl} skip={true} match={match} />} />
+      <Route
+        path={getRoute(match, PgrRoutes.Details)}
+        component={(props) => <Details submitComplaint={submitComplaint} skip={false} match={match} />}
+      />
+      <Route path={getRoute(match, PgrRoutes.CreateComplaintResponse)} component={(props) => <Response match={match} />} />
+    </Switch>
   );
 };
 

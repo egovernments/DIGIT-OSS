@@ -33,7 +33,17 @@
 @import "./components/uploadcomponents.scss";
 @import "./components/toast.scss";
 @import "./components/detailscontainer.scss";
+@import "./components/telephone.scss";
+@import "./components/grey.scss";
 
 @import "./pages/employee/popupmodule.scss";
 @import "./pages/employee/container.scss";
 @import "./pages/employee/inbox.scss";
+
+.home-link {
+  margin-left: 16px;
+  margin-bottom: 16px;
+  a {
+    color: #1d70b8;
+  }
+}

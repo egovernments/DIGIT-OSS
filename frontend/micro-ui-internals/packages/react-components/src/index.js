@@ -40,6 +40,11 @@ import Label from "./atoms/Label";
 import PopUp from "./atoms/PopUp";
 import HeaderBar from "./atoms/HeaderBar";
 import Toast from "./atoms/Toast";
+import DateWrap from "./atoms/DateWrap";
+import KeyNote from "./atoms/KeyNote";
+import TelePhone from "./atoms/TelePhone";
+import GreyOutText from "./atoms/GreyOutText";
+import HomeLink from "./atoms/HomeLink";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -51,6 +56,7 @@ import DetailsCard from "./molecules/DetailsCard";
 export {
   Body,
   TopBar,
+  HomeLink,
   AppContainer,
   EmployeeAppContainer,
   Header,
@@ -100,4 +106,8 @@ export {
   PopUp,
   HeaderBar,
   Toast,
+  DateWrap,
+  KeyNote,
+  TelePhone,
+  GreyOutText,
 };

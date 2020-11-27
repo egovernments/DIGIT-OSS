@@ -33,9 +33,9 @@ export const StatusTable = (props) => {
       <div className="data-table">
         {Object.keys(props.dataObject).map((name, index) => {
           if (++index === Object.keys(props.dataObject).length) {
-            return <LastRow key={name} label={name} text={props.dataObject[name]} />;
+            return <LastRow key={index} label={name} text={props.dataObject[name]} />;
           }
-          return <Row key={name} label={name} text={props.dataObject[name]} />;
+          return <Row key={index} label={name} text={props.dataObject[name]} />;
         })}
       </div>
     );

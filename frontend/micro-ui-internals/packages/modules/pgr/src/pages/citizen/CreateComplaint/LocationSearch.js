@@ -1,25 +1,33 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Card, CardHeader, CardText, LocationSearch, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { LocationSearchCard } from "@egovernments/digit-ui-react-components";
+import { LOCALIZATION_KEY } from "../../../constants/Localization";
+import { PgrRoutes, getRoute } from "../../../constants/Routes";
 
-const LocationSearch = (props) => {
+const CreateComplaint = (props) => {
   let { t } = useTranslation();
-  const history = useHistory();
-  function onSave() {
-    // props.save(selectedOption.key);
-    history.push("/create-complaint/pincode");
-  }
+
+  const handleLocationChange = (pincode) => {
+    props.save(pincode);
+  };
   return (
-    <LocationSearchCard
-      header={t("CS_ADDCOMPLAINT_PIN_LOCATION")}
-      cardText={t("CS_ADDCOMPLAINT_PIN_LOCATION_TEXT")}
-      nextText={t("PT_COMMONS_NEXT")}
-      skipAndContinueText={t("CORE_COMMON_SKIP_CONTINUE")}
-      skip={true}
-      onSave={onSave}
-    />
+    <Card>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PIN_LOCATION`)}</CardHeader>
+      <CardText>
+        {/* Click and hold to drop the pin to complaint location. If you are not
+        able to pin the location you can skip the continue for next step. */}
+        {t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PIN_LOCATION_TEXT`)}
+      </CardText>
+
+      <LocationSearch onChange={handleLocationChange} />
+
+      <Link to={getRoute(props.match, PgrRoutes.Pincode)}>
+        <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
+        {props.skip ? <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} /> : null}
+      </Link>
+    </Card>
   );
 };
 
-export default LocationSearch;
+export default CreateComplaint;

@@ -20,9 +20,15 @@ import {
   UploadFile,
   ButtonSelector,
   Toast,
+  ActionBar,
+  Menu,
+  SubmitBar,
 } from "@egovernments/digit-ui-react-components";
 
 import { Close } from "../../Icons";
+import { useTranslation } from "react-i18next";
+import useComplaintDetails from "../../hooks/useComplaintDetails";
+import useWorkflowDetails from "../../hooks/useWorkflowDetails";
 
 const MapView = (props) => {
   return (
@@ -52,15 +58,32 @@ const CloseBtn = (props) => {
 
 export const ComplaintDetails = (props) => {
   let { id } = useParams();
+  const { t } = useTranslation();
   const [fullscreen, setFullscreen] = useState(false);
   const [imageZoom, setImageZoom] = useState(null);
-  const [actionCalled, setActionCalled] = useState(false);
+  // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
+  const tenantId = "pb.amritsar";
+  const statusTable = useComplaintDetails({ tenantId, id });
+  const workflowDetails = useWorkflowDetails({ tenantId, id });
+  const [displayMenu, setDisplayMenu] = useState(false);
+  const [popup, setPopup] = useState(false);
 
+  function popupCall(option) {
+    console.log("option", option);
+    setDisplayMenu(false);
+    setPopup(true);
+  }
   useEffect(() => {
-    console.log("action", props.action);
-    setActionCalled(props.action);
-  }, [props.action]);
+    (async () => {
+      const assignWorkflow = await Digit.workflowService.getByBusinessId(tenantId, id);
+      console.log("aassign", assignWorkflow);
+    })();
+  }, [statusTable]);
+  // useEffect(() => {
+  //   console.log("action", props.action);
+  //   setActionCalled(props.action);
+  // }, [props.action]);
 
   function zoomView() {
     setFullscreen(!fullscreen);
@@ -71,8 +94,8 @@ export const ComplaintDetails = (props) => {
       case fullscreen:
         setFullscreen(!fullscreen);
         break;
-      case actionCalled:
-        setActionCalled(!actionCalled);
+      case popup:
+        setPopup(!popup);
         break;
       default:
         console.log(state);
@@ -89,7 +112,7 @@ export const ComplaintDetails = (props) => {
   }
 
   function onAssign() {
-    setActionCalled(false);
+    setPopup(false);
     setToast(true);
     setTimeout(() => setToast(false), 2000);
   }
@@ -104,16 +127,25 @@ export const ComplaintDetails = (props) => {
         <CardSubHeader>Complaint Summary</CardSubHeader>
         <CardLabel>Complaint Details</CardLabel>
         <StatusTable>
-          <Row label="complaint number" text={id} />
-          <MediaRow label="Geolocation">
-            <MapView onClick={zoomView} />
-          </MediaRow>
+          {Object.keys(statusTable)
+            .filter(
+              (k) =>
+                k !== "CS_COMPLAINT_DETAILS_GEOLOCATION" && k !== "thumbnails" && k !== "workflow" && k !== "CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS"
+            )
+            .map((k) => (
+              <Row key={k} label={t(k)} text={statusTable[k]} />
+            ))}
+          {1 === 1 ? null : (
+            <MediaRow label="CS_COMPLAINT_DETAILS_GEOLOCATION">
+              <MapView onClick={zoomView} />
+            </MediaRow>
+          )}
           <LastRow label="landmark" text="SBI Bank" />
         </StatusTable>
-        <DisplayPhotos
+        {/* <DisplayPhotos
           srcs={["https://via.placeholder.com/150", "https://via.placeholder.com/150", "https://via.placeholder.com/150"]}
           onClick={zoomImage}
-        />
+        /> */}
       </Card>
       <Card>
         <ConnectingCheckPoints>
@@ -132,10 +164,10 @@ export const ComplaintDetails = (props) => {
         </PopUp>
       ) : null}
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
-      {actionCalled ? (
+      {popup ? (
         <PopUp>
           <div className="popup-module">
-            <HeaderBar main={<Heading label="Assign Complaint" />} end={<CloseBtn onClick={() => close(actionCalled)} />} />
+            <HeaderBar main={<Heading label="Assign Complaint" />} end={<CloseBtn onClick={() => close(popup)} />} />
             <div className="popup-module-main">
               <Card>
                 <CardLabel>Employee Name</CardLabel>
@@ -155,6 +187,10 @@ export const ComplaintDetails = (props) => {
         </PopUp>
       ) : null}
       {toast && <Toast label="Complaint assigned successfully!" onClose={closeToast} />}
+      <ActionBar>
+        {displayMenu ? <Menu options={["Assign Complaint", "Reject Complaint"]} onSelect={popupCall} /> : null}
+        <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
+      </ActionBar>
     </React.Fragment>
   );
 };

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-
-import { Card, SubmitBar, BackButton, ImageUploadHandler } from "@egovernments/digit-ui-react-components";
-// import ImageUploaderHandler from "../../components/ImageUploadHandler";
-
 import { useTranslation } from "react-i18next";
 
-const UploadPhoto = () => {
+import { Card, SubmitBar, BackButton, ImageUploadHandler } from "@egovernments/digit-ui-react-components";
+
+import { LOCALIZATION_KEY } from "../../../constants/Localization";
+
+const UploadPhoto = (props) => {
   const { t } = useTranslation();
   let { id } = useParams();
   const [verificationDocuments, setVerificationDocuments] = useState([]);
@@ -33,10 +33,9 @@ const UploadPhoto = () => {
   return (
     <React.Fragment>
       <Card>
-        <ImageUploadHandler header={t("CS_ADDCOMPLAINT_UPLOAD_PHOTO")} cardText="" onPhotoChange={handleUpload} />
-
-        <Link to={`/reopen/addional-details/${id}`}>
-          <SubmitBar label="Next" />
+        <ImageUploadHandler header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)} cardText="" onPhotoChange={handleUpload} />
+        <Link to={`${props.match.path}/addional-details/${id}`}>
+          <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
         </Link>
       </Card>
     </React.Fragment>

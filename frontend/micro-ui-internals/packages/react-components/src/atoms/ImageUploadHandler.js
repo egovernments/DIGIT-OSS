@@ -62,7 +62,6 @@ export const ImageUploadHandler = (props) => {
     if (e.target.files[0] && e.target.files[0].size > 2097152) {
       alert("File is too big!");
     } else {
-      console.log("got image");
       setImage(e.target.files[0]);
     }
   }

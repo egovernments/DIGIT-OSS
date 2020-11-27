@@ -1,3 +1,7 @@
+.checkpoint-connect-wrap {
+  padding-bottom: 40px;
+  @apply relative;
+}
 .checkpoint-done {
   @apply flex;
 
@@ -5,18 +9,17 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    @apply border-b border-solid border-primary-main bg-primary-main;
+    @apply border-b border-solid border-primary-main bg-primary-main z-10;
   }
 
   header {
     @apply text-heading-s ml-md;
 
-    p{
+    p {
       margin-top: 4px;
-      @apply text-heading-s text-text-secondary
+      @apply text-heading-s text-text-secondary;
     }
   }
-
 }
 
 .checkpoint {
@@ -26,21 +29,20 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    @apply border-b border-solid border-border bg-border;
+    @apply border-b border-solid border-border bg-border z-10;
   }
 
   header {
     @apply text-heading-s ml-md;
 
-    p{
+    p {
       margin-top: 4px;
-      @apply text-heading-s text-text-secondary
+      @apply text-heading-s text-text-secondary;
     }
   }
 }
 
 .checkpoint-connect {
-  height: 45px;
   margin-left: 12px;
-  @apply border-l border-solid border-border;
+  @apply absolute top-0 left-0 h-full border-l border-solid border-border;
 }

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-
 import { BackButton, Card, CardHeader, CardText, RadioButtons, SubmitBar } from "@egovernments/digit-ui-react-components";
 
-const ReasonPage = () => {
+import { LOCALIZATION_KEY } from "../../../constants/Localization";
+import { getRoute, PgrRoutes, PGR_BASE } from "../../../constants/Routes";
+
+const ReasonPage = (props) => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const TRANSLATION_KEY = "CS_REOPEN";
   const [selected, setSelected] = useState("");
 
   const onRadioChange = (value) => {
@@ -20,7 +21,7 @@ const ReasonPage = () => {
     <React.Fragment>
       {/* <BackButton>Back</BackButton> */}
       <Card>
-        <CardHeader>{t(`CS_HEADER_REOPEN_COMPLAINT`)}</CardHeader>
+        <CardHeader>{t(`${LOCALIZATION_KEY.CS_REOPEN}_COMPLAINT`)}</CardHeader>
         {/* <LanguageSelect /> */}
         <CardText>
           {/* Select the option related to your complaint from the list given below.
@@ -33,14 +34,14 @@ const ReasonPage = () => {
           selectedOption={selected}
           // selected={(value) => setSelected(value)}
           options={[
-            t(`${TRANSLATION_KEY}_OPTION_ONE`),
-            t(`${TRANSLATION_KEY}_OPTION_TWO`),
-            t(`${TRANSLATION_KEY}_OPTION_THREE`),
-            t(`${TRANSLATION_KEY}_OPTION_FOUR`),
+            t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_ONE`),
+            t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_TWO`),
+            t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_THREE`),
+            t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_FOUR`),
           ]}
         />
-        <Link to={`/reopen/upload-photo/${id}`}>
-          <SubmitBar label="Next" />
+        <Link to={`${props.match.path}/upload-photo/${id}`}>
+          <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
         </Link>
       </Card>
     </React.Fragment>

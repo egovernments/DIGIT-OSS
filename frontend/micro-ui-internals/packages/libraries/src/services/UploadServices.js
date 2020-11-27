@@ -1,5 +1,5 @@
 import Axios from "axios";
-
+import Urls from "./urls";
 export const UploadServices = {
   Filestorage: async (filedata) => {
     const formData = new FormData();
@@ -9,7 +9,7 @@ export const UploadServices = {
     formData.append("module", "property-upload");
     var config = {
       method: "post",
-      url: "/filestore/v1/files",
+      url: Urls.FileStore,
       data: formData,
     };
 
@@ -19,7 +19,7 @@ export const UploadServices = {
   Filefetch: async (filesArray, tenantId) => {
     var config = {
       method: "get",
-      url: "/filestore/v1/files/url",
+      url: Urls.FileFetch,
       params: {
         tenantId: tenantId,
         fileStoreIds: filesArray.join(","),

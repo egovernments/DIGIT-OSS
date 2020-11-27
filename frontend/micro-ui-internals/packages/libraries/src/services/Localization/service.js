@@ -39,7 +39,11 @@ const LocalizationStore = {
   },
 
   updateResources: (locale, messages) => {
+    console.log("locale:", locale);
+    console.log("messages:", messages);
+
     let locales = TransformArrayToObj(messages);
+    console.log("locales::", locales);
     i18next.addResources(locale.split("_")[0], "translations", locales);
   },
 };
@@ -55,7 +59,14 @@ export const LocalizationService = {
       messages.push(...data.messages);
     }
     LocalizationStore.store(locale, modules, messages);
+    console.log("locale");
     LocalizationStore.updateResources(locale, messages);
     return messages;
+  },
+  updateResources: (locale = "en_IN", messages) => {
+    if (locale.indexOf("_IN") === -1) {
+      locale += "_IN";
+    }
+    LocalizationStore.updateResources(locale, messages);
   },
 };

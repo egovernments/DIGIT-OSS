@@ -9,6 +9,7 @@ export const fetchLocalities = (city) => async (dispatch, getState) => {
   const { stateInfo } = getState();
   let response = await Digit.LocationService.getLocalities({ tenantId: `${stateInfo.code}.${city}` });
   let localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+  console.log("get localityList:", localityList);
   dispatch({
     type: FETCH_LOCALITIES,
     payload: { localityList },
@@ -34,9 +35,9 @@ export const updateLocalizationResources = () => async (dispatch, getState) => {
 };
 
 export const searchComplaints = (filters = {}) => async (dispatch, getState) => {
-  let city = "amritsar";
-  const { stateInfo } = getState();
-  let { ServiceWrappers } = await Digit.PGRService.search(`${stateInfo.code}.${city}`, filters);
+  const { cityCode } = getState();
+
+  let { ServiceWrappers } = await Digit.PGRService.search(`${cityCode}`, filters);
   dispatch({
     type: FETCH_COMPLAINTS,
     payload: { complaints: ServiceWrappers },
