@@ -1,4 +1,5 @@
 import { TelePhone, GreyOutText, Rating } from "@egovernments/digit-ui-react-components";
+import { ActionLinks } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -8,12 +9,39 @@ import { ConvertTimestampToDate } from "../../../../libraries/src/services/Utils
 // const useComplaintHistory = (processInstance, path) => {
 // const [complaintHistory, setComplaintHistory] = useState([]);
 
-const getNextState = (obj, path, t, complaint) => {
-  console.log("obj:", complaint);
+const GetTranslatedAction = (action, t) => t(`CS_COMMON_${action}`);
+
+const GetReopenInstance = (obj, t) => {
+  let reopenDate = ConvertTimestampToDate(obj.auditDetails.createdTime);
+  return (
+    <React.Fragment>
+      <div>{t(`CS_COMMON_COMPLAINT_REOPENED`)}</div>
+      <GreyOutText>{reopenDate}</GreyOutText>
+    </React.Fragment>
+  );
+};
+
+const getResolvedInstance = async (obj, path, t, key) => {
+  console.log("wating....");
+  let nextAction = await Digit.workflowService.getNextAction("pb", key);
+  console.log("finish....");
+  let actions = nextAction.map(({ action }, index) => (
+    <Link key={index} to={`${path}/${action.toLowerCase()}/${obj.businessId}`}>
+      <ActionLinks>{GetTranslatedAction(action, t)}</ActionLinks>
+    </Link>
+  ));
+  return (
+    <div>
+      {t(`CS_COMMON_COMPLAINT_RESOLVED`)} <div>{actions}</div>
+    </div>
+  );
+};
+
+const getNextState = async (obj, path, t, complaint) => {
   // let { t } = useTranslation();
   const key = obj.state.applicationStatus;
 
-  const GetAction = (action) => t(`CS_COMMON_${action}`);
+  const getRatingInstance = async (rating) => <Rating text="You rated" withText={true} currentRating={rating} maxRating={5} onFeedback={() => {}} />;
 
   switch (key) {
     case "PENDINGFORREASSIGNMENT":
@@ -43,30 +71,17 @@ const getNextState = (obj, path, t, complaint) => {
         )
       );
     case "RESOLVED":
-      let nextAction = obj.nextActions;
+      {
+        console.log("complaint.workflow.action:", complaint.workflow.action);
+      }
+
       return (
         <React.Fragment>
-          <div>{t(`CS_COMMON_COMPLAINT_RESOLVED`)}</div>
-
-          {!complaint.service.rating &&
-            nextAction.map(({ action }, index) => (
-              <Link key={index} to={`${path}/${action.toLowerCase()}/${obj.businessId}`}>
-                <span
-                  style={{
-                    color: "#F47738",
-                    marginLeft: index !== 0 ? "0.5rem" : "0",
-                  }}
-                >
-                  {GetAction(action)}
-                </span>
-              </Link>
-            ))}
-
-          {complaint.service.rating && (
-            <div>
-              <Rating text="You rated" withText={true} currentRating={3} maxRating={5} />
-            </div>
+          {complaint.workflow.action === "RESOLVE" && !complaint.service.rating && (
+            <React.Fragment> {await getResolvedInstance(obj, path, t, key)} </React.Fragment>
           )}
+          {complaint.workflow.action === "RATE" && <React.Fragment> {await getRatingInstance(complaint.service.rating)} </React.Fragment>}
+          {complaint.workflow.action === "REOPEN" && <React.Fragment>{GetReopenInstance(obj, t)} </React.Fragment>}
         </React.Fragment>
       );
     case "CLOSEDAFTERRESOLUTION":
@@ -77,17 +92,30 @@ const getNextState = (obj, path, t, complaint) => {
   }
 };
 
-const getComplaintHistory = (processInstance, path, t, complaint) => {
+const getComplaintHistory = async (processInstance, path, t, complaint) => {
   if (Object.keys(processInstance).length > 0) {
     let { ProcessInstances } = processInstance;
-    let history = ProcessInstances.map((instance) => {
+    let history = ProcessInstances.map(async (instance) => {
       return {
         applicationStatus: instance.state.applicationStatus,
-        text: getNextState(instance, path, t, complaint),
+        text: await getNextState(instance, path, t, complaint),
       };
     });
+    console.log(">>>", history);
     return history;
   }
+};
+
+const getTimeLineFromProcessInstance = async (processInstance, path, t, complaint) => {
+  let timelineList = [];
+  let timeline = await getComplaintHistory(processInstance, path, t, complaint);
+  console.log("timeline:", timeline);
+  if (timeline) {
+    timelineList = await Promise.all(timeline);
+  }
+  console.log("timelineList:", timelineList);
+
+  return timelineList;
 };
 
 //const history = getHistory(processInstance);
@@ -97,4 +125,4 @@ const getComplaintHistory = (processInstance, path, t, complaint) => {
 //   setComplaintHistory(history);
 // }, [processInstance, getHistory]);
 
-export default getComplaintHistory;
+export default getTimeLineFromProcessInstance;

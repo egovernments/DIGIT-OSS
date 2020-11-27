@@ -1,0 +1,28 @@
+.data-table {
+  @apply mb-lg text-text-primary;
+
+  div{
+    @apply flex border-b border-border pb-sm mb-sm;
+
+    span{
+      width: 70%;
+      display: contents;
+    }
+
+    h2{
+      width: 30%;
+      @apply font-bold text-heading-s;
+    }
+
+    p{
+      width: 70%;
+      @apply text-heading-s;
+    }
+  }
+
+  .row-last{
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+}

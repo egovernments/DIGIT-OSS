@@ -33,5 +33,7 @@
   "files": [
     "dist"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "react-table": "^7.6.1"
+  }
 }

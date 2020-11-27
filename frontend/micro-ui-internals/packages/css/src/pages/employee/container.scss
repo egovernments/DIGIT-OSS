@@ -1,0 +1,18 @@
+.icon-bg-secondary{
+    @apply flex bg-secondary w-12 h-12;
+
+    svg{
+        margin: auto;
+        @apply w-6 h-6;
+    }
+}
+
+@screen dt{
+    .ground-container{
+        margin-bottom: 56px;
+        @apply p-md ;
+    }   
+    .heading-m{
+        @apply font-bold text-text-primary text-heading-m-dt ml-md pt-sm;
+    }
+}

@@ -5,6 +5,8 @@ import { Provider } from "react-redux";
 import getStore from "./redux/store";
 import defaultConfig from "./config";
 import CitizenApp from "./CitizenApp";
+
+import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink } from "@egovernments/digit-ui-react-components";
 
 export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode }) => {
@@ -17,13 +19,15 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode })
 
   return (
     <Provider store={getStore(store)}>
-      <Router>
+      {/* <CitizenApp /> */}
+      <EmployeeApp />
+      {/* <Router>
         <Switch>
           <Route path={`${match.path}/citizen`}>
             <CitizenApp />
           </Route>
         </Switch>
-      </Router>
+      </Router>*/}
     </Provider>
   );
 };
