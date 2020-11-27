@@ -31,7 +31,7 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode })
 export const PGRLinks = () => (
   <React.Fragment>
     <Header>Complaints</Header>
-    <HomeLink to="/digit-ui/pgr/citizen/create-complaint">List a Complaint</HomeLink>
+    <HomeLink to="/digit-ui/pgr/citizen/create-complaint">File a Complaint</HomeLink>
     <HomeLink to="/digit-ui/pgr/citizen/complaints">My Complaints</HomeLink>
   </React.Fragment>
 );

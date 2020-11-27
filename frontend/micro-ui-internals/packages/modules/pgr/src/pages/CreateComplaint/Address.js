@@ -45,7 +45,7 @@ const Address = (props) => {
     } else {
       appState.cities.map((city) => cities.push(city.name));
       if (appState.localities.localityList) {
-        appState.localities.localityList.map((locality) => localities.push(t(`admin.locality.${locality.code}`)));
+        appState.localities.localityList.map((locality) => localities.push(t(locality.code)));
       }
     }
     // if (appState.localities.city) {
