@@ -7,12 +7,12 @@ import App from './App';
 
 initLibraries();
 
-const token = window.localStorage.getItem("token");
+// const token = window.localStorage.getItem("token");
 const citizenToken = window.localStorage.getItem("Citizen.token");
-const employeeToken = window.localStorage.getItem("Employee.token");
+// const employeeToken = window.localStorage.getItem("Employee.token");
 
-const isLoggedIn = token || citizenToken || employeeToken;
-const isCitizenLogin = token === citizenToken;
+// const isLoggedIn = token || citizenToken || employeeToken;
+// const isCitizenLogin = token === citizenToken;
 
 
 window.Digit.SessionStorage.set("citizen.token", citizenToken);
