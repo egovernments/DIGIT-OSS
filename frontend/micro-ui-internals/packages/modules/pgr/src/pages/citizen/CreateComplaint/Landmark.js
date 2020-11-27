@@ -17,10 +17,8 @@ const Landmark = (props) => {
 
   function save() {
     if (landmark === null || landmark === "") {
-      console.log(landmark);
       setValid(false);
     } else {
-      console.log(landmark);
       props.save(landmark);
       history.push(getRoute(props.match, PgrRoutes.UploadPhotos));
     }

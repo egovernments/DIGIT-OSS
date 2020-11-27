@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Route, BrowserRouter as Router, Switch, Link } from "react-router-dom";
+
 import initLibraries from "@egovernments/digit-ui-libraries";
 import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Body, TopBar } from "@egovernments/digit-ui-react-components";
 import "@egovernments/digit-ui-css/example/index.css";
 
@@ -31,10 +32,9 @@ const userServiceData = {
 };
 
 Digit.SessionStorage.set("citizen.userServiceData", userServiceData);
-
-const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
-
-console.log("citAUth", citAuth);
+// const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
+const citAuth = "6b6a9591-bd10-456c-b532-adb010d5648b";
+// console.log("citAUth", citAuth);
 
 Digit.SessionStorage.set("citizen.token", citAuth);
 window.sessionStorage.setItem("citizen.token", citAuth);
@@ -42,18 +42,15 @@ window.sessionStorage.setItem("citizen.token", citAuth);
 ReactDOM.render(
   <Router>
     <Body>
-      {/* <TopBar /> */}
-      {/* <PGRApp stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" /> */}
-
       <TopBar />
-      {/* <Switch> */}
-      {/* <Route path="/digit-ui/pgr"> */}
-      <PGRModule stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
-      {/* </Route> */}
-      {/* <Route>
+      <Switch>
+        <Route path="/digit-ui/pgr">
+          <PGRModule stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
+        </Route>
+        <Route>
           <PGRLinks />
-        </Route> */}
-      {/* </Switch> */}
+        </Route>
+      </Switch>
     </Body>
   </Router>,
   document.getElementById("root")
