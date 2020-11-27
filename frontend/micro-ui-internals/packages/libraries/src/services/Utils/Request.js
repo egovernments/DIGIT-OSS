@@ -45,19 +45,19 @@ export const Request = async ({ method = "POST", url, data = {}, useCache = fals
     }
   }
 
-  if (useCache) {
-    key = `${method.toUpperCase()}.${url}.${JSON.stringify(params, null, 0)}.${JSON.stringify(data, null, 0)}`;
-    const value = Storage.get(key);
-    if (value) {
-      return value;
-    }
-  } else {
-    params._ = Date.now();
-  }
+  // if (useCache) {
+  //   key = `${method.toUpperCase()}.${url}.${JSON.stringify(params, null, 0)}.${JSON.stringify(data, null, 0)}`;
+  //   const value = Storage.get(key);
+  //   if (value) {
+  //     return value;
+  //   }
+  // } else {
+  //   params._ = Date.now();
+  // }
   const res = await Axios({ method, url, data, params });
-  if (useCache) {
-    Storage.set(key, res.data);
-  }
+  // if (useCache) {
+  //   Storage.set(key, res.data);
+  // }
 
   return res.data;
 };
