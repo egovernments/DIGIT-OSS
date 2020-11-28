@@ -16,7 +16,7 @@ export const StoreService = {
     };
     initData.selectedLanguage = initData.languages[0].value;
     await LocalizationService.getLocale({
-      modules: initData.localizationModules.map((module) => module.value),
+      modules: [`rainmaker-${stateCode.toLowerCase()}`, ...initData.localizationModules.map((module) => module.value)],
       locale: initData.selectedLanguage,
       tenantId: stateCode,
     });
@@ -24,14 +24,14 @@ export const StoreService = {
     return initData;
   },
   defaultData: async (stateCode, cityCode, moduleCode, language) => {
-    const WorkFlowPromise = WorkflowService.init(cityCode, moduleCode);
+    // const WorkFlowPromise = WorkflowService.init(stateCode, moduleCode);
     const LocalePromise = LocalizationService.getLocale({
-      modules: [`rainmaker-${moduleCode.toLowerCase()}`, `rainmaker-${stateCode.toLowerCase()}`, `rainmaker-${cityCode.toLowerCase()}`],
+      modules: [`rainmaker-${moduleCode.toLowerCase()}`, `rainmaker-${cityCode.toLowerCase()}`],
       locale: language,
       tenantId: stateCode,
     });
-    const { BusinessServices } = await WorkFlowPromise;
+    // const { BusinessServices } = await WorkFlowPromise;
     await LocalePromise;
-    return { businessServices: BusinessServices };
+    return {};
   },
 };

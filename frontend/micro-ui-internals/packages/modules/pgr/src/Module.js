@@ -12,8 +12,8 @@ import { getI18n } from "react-i18next";
 
 export const PGRReducers = getRootReducer;
 
-export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "PGR" }) => {
-  const match = useRouteMatch();
+export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "PGR", userType }) => {
+  const { path } = useRouteMatch();
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;
   const store = Digit.Services.useStore(defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode, language });
@@ -22,29 +22,36 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
     return <Loader />;
   }
 
-  console.log("pgr", state, store);
+  console.log("pgr", userType, state, store);
   console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
 
-  return (
-    <Router>
-      <Switch>
-        <Route path={`${match.path}/citizen`}>
-          {/* <CitizenApp /> */}
-          <h2>citizen</h2>
-        </Route>
-        <Route path={`${match.path}/employee`}>
-          {/* <CitizenApp /> */}
-          <h2>employee</h2>
-        </Route>
-      </Switch>
-    </Router>
-  );
+  if (userType === "citizen") {
+    return <CitizenApp />;
+  }
+
+  return <h2>employee: {path}</h2>;
+
+  // return (
+  //   <Route>
+  //     <Switch>
+  //       <Route path={`${path}/citizen`}>
+  //         {/* <CitizenApp /> */}
+  //         <h2>citizen</h2>
+  //       </Route>
+  //       <Route path={`${path}/employee`}>
+  //         {/* <CitizenApp /> */}
+  //         <h2>employee</h2>
+  //       </Route>
+  //       <Route><h1>pgr home</h1></Route>
+  //     </Switch>
+  //   </Route>
+  // );
 };
 
-export const PGRLinks = ({ matchPath = "/digit-ui/pgr" }) => (
+export const PGRLinks = ({ matchPath }) => (
   <React.Fragment>
     <Header>Complaints</Header>
-    <HomeLink to={`${matchPath}/citizen/create-complaint`}>File a Complaint</HomeLink>
-    <HomeLink to={`${matchPath}/citizen/complaints`}>My Complaints</HomeLink>
+    <HomeLink to={`${matchPath}/create-complaint`}>File a Complaint</HomeLink>
+    <HomeLink to={`${matchPath}/complaints`}>My Complaints</HomeLink>
   </React.Fragment>
 );
