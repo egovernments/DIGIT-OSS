@@ -24,7 +24,6 @@ const Complaint = () => {
         <Switch>
           <Route path={match.url + Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails action={popup} />} />
           <Route path={match.url + Employee.CreateComplaint} component={() => <CreateComplaint />} />
-          {console.log("route in employee ap", match.url + Employee.CreateComplaint)}
           <Route path={match.url + Employee.Inbox} component={Inbox} />
         </Switch>
       </div>

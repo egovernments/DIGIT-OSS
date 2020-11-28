@@ -55,7 +55,6 @@ export const LocalizationService = {
       messages.push(...data.messages);
     }
     LocalizationStore.store(locale, modules, messages);
-    console.log("locale");
     LocalizationStore.updateResources(locale, messages);
     return messages;
   },

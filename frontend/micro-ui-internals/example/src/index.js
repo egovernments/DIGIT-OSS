@@ -35,8 +35,6 @@ Digit.SessionStorage.set("citizen.userServiceData", userServiceData);
 
 const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
 
-console.log("citAUth", citAuth);
-
 Digit.SessionStorage.set("citizen.token", citAuth);
 window.sessionStorage.setItem("citizen.token", citAuth);
 

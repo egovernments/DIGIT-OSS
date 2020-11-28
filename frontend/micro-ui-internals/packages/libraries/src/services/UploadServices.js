@@ -25,6 +25,7 @@ export const UploadServices = {
         fileStoreIds: filesArray.join(","),
       },
     };
-    return await Axios(config);
+    const res = await Axios(config);
+    return res;
   },
 };

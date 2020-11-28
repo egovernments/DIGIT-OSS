@@ -14,7 +14,7 @@ export const CheckPoint = (props) => {
 };
 
 export const ConnectingCheckPoints = (props) => {
-  if (props.children.length >= 1) {
+  if (props.children && props.children.length >= 1) {
     return (
       <React.Fragment>
         {props.children.map((child, index) => {

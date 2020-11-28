@@ -32,7 +32,7 @@ const requestInfo = () => ({
 
 const userServiceData = Storage.get("citizen.userServiceData");
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
-  console.log("params received:::::>", params);
+  // console.log("params received:::::>", params);
   let key = "";
   if (method.toUpperCase() === "POST") {
     data.RequestInfo = {
@@ -55,7 +55,7 @@ export const Request = async ({ method = "POST", url, data = {}, useCache = fals
   } else {
     params._ = Date.now();
   }
-  console.log("data params", data, params);
+  // console.log("data params", data, params);
   // if (useCache) {
   //   key = `${method.toUpperCase()}.${url}.${JSON.stringify(params, null, 0)}.${JSON.stringify(data, null, 0)}`;
   //   const value = Storage.get(key);
