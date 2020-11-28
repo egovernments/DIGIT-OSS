@@ -97,19 +97,19 @@ const businessServiceReducer = (state = {}, action) => {
 
 const getRootReducer = (defaultStore) =>
   combineReducers({
-    config: configReducer(defaultStore.config),
+    // config: configReducer(defaultStore.config),
     formData: formDataReducer,
-    locales: localeReducer(defaultStore.locales),
-    cities: cityReducer(defaultStore.cities),
-    localities: localityReducer,
-    currentLanguage: currentLanguageReducer,
-    languages: languageReducer(defaultStore.languages),
-    cityCode: cityCodeReducer(defaultStore.cityCode),
-    stateInfo: stateInfoReducer(defaultStore.stateInfo),
+    // locales: localeReducer(defaultStore.locales),
+    // cities: cityReducer(defaultStore.cities),
+    // localities: localityReducer,
+    // currentLanguage: currentLanguageReducer,
+    // languages: languageReducer(defaultStore.languages),
+    // cityCode: cityCodeReducer(defaultStore.cityCode),
+    // stateInfo: stateInfoReducer(defaultStore.stateInfo),
     // businessService: businessServiceReducer(defaultStore.businessServices),
-    businessService: businessServiceReducer,
-    complaints: complaintReducer,
+    // businessService: businessServiceReducer,
     // complaints: complaintReducer,
+    complaints: complaintReducer,
   });
 
 export default getRootReducer;

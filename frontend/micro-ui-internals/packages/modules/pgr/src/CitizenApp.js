@@ -9,7 +9,7 @@ import ReasonPage from "./pages/citizen/ReopenComplaint/Reason";
 import UploadPhoto from "./pages/citizen/ReopenComplaint/UploadPhoto";
 import Response from "./pages/citizen/Response";
 import { PgrRoutes, getRoute } from "./constants/Routes";
-import { useRouteMatch } from "react-router-dom";
+import { Route, BrowserRouter as Router, useRouteMatch } from "react-router-dom";
 import { AppContainer, BackButton } from "@egovernments/digit-ui-react-components";
 
 const App = () => {

@@ -1,3 +1,3 @@
-import { useStore } from "./Store/hook";
+import { useStore, useInitStore } from "./Store/hook";
 
-export { useStore };
+export { useStore, useInitStore };

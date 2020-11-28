@@ -2,21 +2,21 @@ import Axios from "axios";
 //import { connectAdvanced } from "react-redux";
 import { Storage } from "./Storage";
 
-Axios.interceptors.request.use((req) => {
-  document.body.classList.add("loader");
-  return req;
-});
+// Axios.interceptors.request.use((req) => {
+//   document.body.classList.add("loader");
+//   return req;
+// });
 
-Axios.interceptors.response.use(
-  (res) => {
-    document.body.classList.remove("loader");
-    return res;
-  },
-  (err) => {
-    document.body.classList.remove("loader");
-    return err;
-  }
-);
+// Axios.interceptors.response.use(
+//   (res) => {
+//     document.body.classList.remove("loader");
+//     return res;
+//   },
+//   (err) => {
+//     document.body.classList.remove("loader");
+//     return err;
+//   }
+// );
 
 const requestInfo = () => ({
   apiId: "Rainmaker",
@@ -30,10 +30,8 @@ const requestInfo = () => ({
   authToken: Storage.get("citizen.token"),
 });
 
-const userServiceData = Storage.get("citizen.userServiceData");
+const userServiceData = () => Storage.get("citizen.userServiceData");
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
-  console.log("params received:::::>", params);
-  let key = "";
   if (method.toUpperCase() === "POST") {
     data.RequestInfo = {
       apiId: "Rainmaker",
@@ -42,20 +40,11 @@ export const Request = async ({ method = "POST", url, data = {}, useCache = fals
       data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
     if (userService) {
-      data.RequestInfo = { ...data.RequestInfo, ...userServiceData };
+      data.RequestInfo = { ...data.RequestInfo, ...userServiceData() };
     }
   }
 
-  if (useCache) {
-    key = `${method.toUpperCase()}.${url}.${JSON.stringify(params, null, 0)}.${JSON.stringify(data, null, 0)}`;
-    const value = Storage.get(key);
-    if (value) {
-      return value;
-    }
-  } else {
-    params._ = Date.now();
-  }
-  console.log("data params", data, params);
+  // let key = "";
   // if (useCache) {
   //   key = `${method.toUpperCase()}.${url}.${JSON.stringify(params, null, 0)}.${JSON.stringify(data, null, 0)}`;
   //   const value = Storage.get(key);
