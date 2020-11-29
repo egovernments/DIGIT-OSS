@@ -13,7 +13,7 @@ const AddtionalDetails = (props) => {
   const history = useHistory();
   let { id } = useParams();
   const dispatch = useDispatch();
-  const appState = useSelector((state) => state);
+  const appState = useSelector((state) => state)["common"];
   let { t } = useTranslation();
 
   useEffect(() => {

@@ -32,7 +32,7 @@ const BannerPicker = ({ response }) => {
 
 const Response = (props) => {
   const { t } = useTranslation();
-  const appState = useSelector((state) => state);
+  const appState = useSelector((state) => state)["common"];
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}

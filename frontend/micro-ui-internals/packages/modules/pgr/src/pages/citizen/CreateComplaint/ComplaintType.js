@@ -11,7 +11,7 @@ import { PgrRoutes, getRoute } from "../../../constants/Routes";
 const CreateComplaint = (props) => {
   const SessionStorage = Digit.SessionStorage;
   const MDMSService = Digit.MDMSService;
-  const appState = useSelector((state) => state);
+  const appState = useSelector((state) => state)["common"];
   const history = useHistory();
   const { register, handleSubmit } = useForm();
   const { t } = useTranslation();
@@ -22,7 +22,9 @@ const CreateComplaint = (props) => {
   useEffect(
     () =>
       (async () => {
-        setLocalMenu(await Digit.GetServiceDefinitions.getMenu(appState.stateInfo.code, t));
+        const res = await Digit.GetServiceDefinitions.getMenu(appState.stateInfo.code, t);
+        console.log("response of service defs", res);
+        setLocalMenu(res);
       })(),
     [appState]
   );

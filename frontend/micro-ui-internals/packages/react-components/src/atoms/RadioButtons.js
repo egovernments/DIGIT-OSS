@@ -11,8 +11,8 @@ const RadioButtons = (props) => {
   return (
     <div className="radio-wrap">
       {props.options.map((option) => {
-        console.log("option----", option);
         if (props.optionskey) {
+          console.log("option----", option[props.optionskey]);
           return (
             <div key={option[props.optionskey]}>
               <span className="radio-btn-wrap">
@@ -22,7 +22,6 @@ const RadioButtons = (props) => {
                   value={option}
                   checked={selected === option ? 1 : 0}
                   onChange={() => selectOption(option)}
-                  {...props}
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>

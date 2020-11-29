@@ -27,7 +27,7 @@ const Address = (props) => {
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [rerender, setRerender] = useState(1);
-  const appState = useSelector((state) => state);
+  const appState = useSelector((state) => state)["common"];
   const dispatch = useDispatch();
   const { t } = useTranslation();
 

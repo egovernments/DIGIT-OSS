@@ -28,7 +28,7 @@ const Filter = (props) => {
     setFilters({ ...filters, assigned: value });
   };
 
-  const appState = useSelector((state) => state);
+  const appState = useSelector((state) => state)["common"];
 
   console.log("appstate:::>>", appState);
 
