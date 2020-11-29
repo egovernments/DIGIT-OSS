@@ -1,9 +1,10 @@
 import React from "react";
+import { QueryCache, ReactQueryCacheProvider } from "react-query";
 import { Provider } from "react-redux";
 import { Route, BrowserRouter as Router, Switch, useRouteMatch, Redirect } from "react-router-dom";
 import { getI18n } from "react-i18next";
-import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
-import { Body, TopBar, Loader } from "@egovernments/digit-ui-react-components";
+import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr/src/Module";
+import { Body, TopBar, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
 
 import getStore from "./redux/store";
 
@@ -32,6 +33,8 @@ const AppHome = ({ userType }) => {
   return <h1>Employee home</h1>;
 };
 
+const PrivatePage = () => <h2>Private</h2>;
+
 const DigitUIApp = ({ stateCode }) => {
   return (
     <Switch>
@@ -41,6 +44,7 @@ const DigitUIApp = ({ stateCode }) => {
       <Route path="/digit-ui/citizen">
         <AppModules stateCode={stateCode} userType="citizen" />
       </Route>
+      <PrivateRoute exact path="/digit-ui/private" component={PrivatePage} />
       <Route>
         <Redirect to="/digit-ui/citizen" />
       </Route>
@@ -50,6 +54,7 @@ const DigitUIApp = ({ stateCode }) => {
 
 export const DigitUI = ({ stateCode }) => {
   const initData = Digit.Services.useInitStore(stateCode);
+  const queryCache = new QueryCache();
 
   if (Object.keys(initData).length === 0) {
     return <Loader page={true} />;
@@ -59,12 +64,14 @@ export const DigitUI = ({ stateCode }) => {
 
   return (
     <Provider store={getStore(initData, { pgr: PGRReducers(initData) })}>
-      <Router>
-        <Body>
-          <TopBar state={initData?.stateInfo?.name} img={initData?.stateInfo?.logoUrl} />
-          <DigitUIApp stateCode={stateCode} />
-        </Body>
-      </Router>
+      <ReactQueryCacheProvider queryCache={queryCache}>
+        <Router>
+          <Body>
+            <TopBar state={initData?.stateInfo?.name} img={initData?.stateInfo?.logoUrl} />
+            <DigitUIApp stateCode={stateCode} />
+          </Body>
+        </Router>
+      </ReactQueryCacheProvider>
     </Provider>
   );
 };
