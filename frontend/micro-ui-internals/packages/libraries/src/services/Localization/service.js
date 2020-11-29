@@ -40,7 +40,7 @@ const LocalizationStore = {
 
   updateResources: (locale, messages) => {
     let locales = TransformArrayToObj(messages);
-    i18next.addResources(locale.split("_")[0], "translations", locales);
+    i18next.addResources(locale, "translations", locales);
   },
 };
 

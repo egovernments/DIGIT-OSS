@@ -260,6 +260,65 @@ img, video {
     -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1); } }
 
+.module-loader, .page-loader {
+  text-align: center; }
+
+.page-loader {
+  padding-top: 88px; }
+
+.module-loader {
+  padding: 16px; }
+
+@-webkit-keyframes ldio-pjg92h09b2o {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg); }
+  to {
+    -webkit-transform: translate(-50%, -50%) rotate(1turn);
+    transform: translate(-50%, -50%) rotate(1turn); } }
+
+@keyframes ldio-pjg92h09b2o {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg); }
+  to {
+    -webkit-transform: translate(-50%, -50%) rotate(1turn);
+    transform: translate(-50%, -50%) rotate(1turn); } }
+
+.ldio-pjg92h09b2o div {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  border: 12px solid #22394d;
+  border-top-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: ldio-pjg92h09b2o 1s linear infinite;
+  animation: ldio-pjg92h09b2o 1s linear infinite;
+  top: 50px;
+  left: 50px; }
+
+.loadingio-spinner-rolling-faewnb8ux8 {
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+  overflow: hidden;
+  background: none; }
+
+.ldio-pjg92h09b2o {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  -webkit-transform: translateZ(0) scale(0.48);
+  transform: translateZ(0) scale(0.48);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0; }
+
+.ldio-pjg92h09b2o div {
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box; }
+
 .body-container {
   --bg-opacity:1;
   background-color: #e3e3e3;
@@ -369,16 +428,9 @@ img, video {
   padding: 16px;
   width: 100%; }
   .navbar img {
+    display: inline-block;
     min-width: 78px;
-    height: 24px;
-    padding-right: 8px;
-    margin-right: 8px;
-    border-right: 1px solid #fff; }
-  .navbar img, .navbar span {
-    display: inline-block; }
-  .navbar span {
-    line-height: 24px;
-    vertical-align: middle; }
+    height: 24px; }
 
 .card {
   --bg-opacity:1;

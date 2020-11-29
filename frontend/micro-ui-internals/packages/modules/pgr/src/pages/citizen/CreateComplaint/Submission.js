@@ -22,7 +22,7 @@ const Submission = (props) => {
         The notification along with complaint number is sent to your registered mobile number. You can track the complaint status using mobile or web
         app.
       </CardText>
-      <Link to="/digit-ui">
+      <Link to="/digit-ui/">
         <SubmitBar label={`${LOCALIZATION_KEY.CORE_COMMON}_GO_TO_HOME`} />
       </Link>
     </Card>

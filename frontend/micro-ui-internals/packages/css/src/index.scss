@@ -8,6 +8,8 @@
 
 @import "tailwindcss/utilities";
 
+@import "./components/loader.scss";
+
 @import "./components/body.scss";
 @import "./components/navbar.scss";
 @import "./components/card.scss";
@@ -44,6 +46,7 @@
 .home-link {
   margin-left: 16px;
   margin-bottom: 16px;
+
   a {
     color: #1d70b8;
   }

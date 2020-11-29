@@ -1,5 +1,5 @@
 import Body from "./atoms/Body";
-
+import { Loader } from "./atoms/Loader";
 import TopBar from "./atoms/TopBar";
 import AppContainer from "./atoms/AppContainer";
 import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
@@ -56,6 +56,7 @@ import DetailsCard from "./molecules/DetailsCard";
 
 export {
   Body,
+  Loader,
   TopBar,
   HomeLink,
   AppContainer,
