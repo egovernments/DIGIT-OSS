@@ -1,5 +1,5 @@
 import mergeConfig from "./config/mergeConfig";
-import { useStore } from "./services/index";
+import { useStore, useInitStore } from "./services/index";
 import { initI18n } from "./translations/index";
 import { Storage } from "./services/Utils/Storage";
 import Enums from "./enums/index";
@@ -23,7 +23,7 @@ const setupLibraries = (Library, props) => {
 
 const initLibraries = () => {
   setupLibraries("Config", { mergeConfig });
-  setupLibraries("Services", { useStore });
+  setupLibraries("Services", { useStore, useInitStore });
   setupLibraries("Translation", { initI18n });
   setupLibraries("Enums", Enums);
   setupLibraries("SessionStorage", Storage);
@@ -41,6 +41,6 @@ const initLibraries = () => {
   initI18n();
 };
 
-export { Enums };
+export { initLibraries, Enums };
 
-export default initLibraries;
+// export default initLibraries;

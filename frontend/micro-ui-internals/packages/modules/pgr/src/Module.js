@@ -1,41 +1,57 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Switch, useRouteMatch } from "react-router-dom";
-import { Provider } from "react-redux";
+import { useSelector } from "react-redux";
 
-import getStore from "./redux/store";
+import getRootReducer from "./redux/reducers";
 import defaultConfig from "./config";
 import CitizenApp from "./CitizenApp";
 
 import EmployeeApp from "./EmployeeApp";
-import { Header, HomeLink } from "@egovernments/digit-ui-react-components";
+import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
+import { getI18n } from "react-i18next";
 
-export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode }) => {
-  const match = useRouteMatch();
-  const store = Digit.Services.useStore(defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode });
+export const PGRReducers = getRootReducer;
+
+export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "PGR", userType }) => {
+  const { path } = useRouteMatch();
+  const state = useSelector((state) => state);
+  const language = state?.common?.selectedLanguage;
+  const store = Digit.Services.useStore(defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode, language });
 
   if (Object.keys(store).length === 0) {
-    return <div>Loading</div>;
+    return <Loader />;
   }
 
-  return (
-    <Provider store={getStore(store)}>
-      {/* <CitizenApp /> */}
-      <EmployeeApp />
-      {/* <Router>
-        <Switch>
-          <Route path={`${match.path}/citizen`}>
-            <CitizenApp />
-          </Route>
-        </Switch>
-      </Router>*/}
-    </Provider>
-  );
+  console.log("pgr", userType, state, store);
+  console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
+
+  if (userType === "citizen") {
+    return <CitizenApp />;
+  }
+
+  return <h2>employee: {path}</h2>;
+
+  // return (
+  //   <Route>
+  //     <Switch>
+  //       <Route path={`${path}/citizen`}>
+  //         {/* <CitizenApp /> */}
+  //         <h2>citizen</h2>
+  //       </Route>
+  //       <Route path={`${path}/employee`}>
+  //         {/* <CitizenApp /> */}
+  //         <h2>employee</h2>
+  //       </Route>
+  //       <Route><h1>pgr home</h1></Route>
+  //     </Switch>
+  //   </Route>
+  // );
 };
 
-export const PGRLinks = () => (
+export const PGRLinks = ({ matchPath }) => (
   <React.Fragment>
     <Header>Complaints</Header>
-    <HomeLink to="/digit-ui/pgr/citizen/create-complaint">List a Complaint</HomeLink>
-    <HomeLink to="/digit-ui/pgr/citizen/complaints">My Complaints</HomeLink>
+    <HomeLink to={`${matchPath}/create-complaint`}>File a Complaint</HomeLink>
+    <HomeLink to={`${matchPath}/complaints`}>My Complaints</HomeLink>
   </React.Fragment>
 );

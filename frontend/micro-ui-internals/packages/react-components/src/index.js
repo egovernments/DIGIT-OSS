@@ -1,4 +1,5 @@
 import Body from "./atoms/Body";
+import { Loader } from "./atoms/Loader";
 import TopBar from "./atoms/TopBar";
 import AppContainer from "./atoms/AppContainer";
 import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
@@ -10,6 +11,7 @@ import CardCaption from "./atoms/CardCaption";
 import CardHeader from "./atoms/CardHeader";
 import CardText from "./atoms/CardText";
 import CardLabel from "./atoms/CardLabel";
+import CardLabelDesc from "./atoms/CardLabelDesc";
 import CardLabelError from "./atoms/CardLabelError";
 import CardTextButton from "./atoms/CardTextButton";
 import RadioButtons from "./atoms/RadioButtons";
@@ -18,7 +20,6 @@ import TextInput from "./atoms/TextInput";
 import TextArea from "./atoms/TextArea";
 import Banner from "./atoms/Banner";
 import CardSubHeader from "./atoms/CardSubHeader";
-import CardLabelDesc from "./atoms/CardLabelDesc";
 import SubmitBar from "./atoms/SubmitBar";
 import ButtonSelector from "./atoms/ButtonSelector";
 import LinkButton from "./atoms/LinkButton";
@@ -55,6 +56,7 @@ import DetailsCard from "./molecules/DetailsCard";
 
 export {
   Body,
+  Loader,
   TopBar,
   HomeLink,
   AppContainer,

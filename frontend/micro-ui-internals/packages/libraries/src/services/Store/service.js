@@ -4,30 +4,34 @@ import { GetCitiesWithi18nKeys } from "../Utils/Request";
 import { WorkflowService } from "../WorkFlow";
 
 export const StoreService = {
-  defaultData: async (stateCode, cityCode, moduleCode) => {
+  digitInitData: async (stateCode) => {
     const { MdmsRes } = await MdmsService.init(stateCode);
-    const { BusinessServices } = (await WorkflowService.init(cityCode, moduleCode)) || {};
     const stateInfo = MdmsRes["common-masters"].StateInfo[0];
-    let cities = GetCitiesWithi18nKeys(MdmsRes, moduleCode);
-
-    const defaultData = {
+    const initData = {
       languages: stateInfo.hasLocalisation ? stateInfo.languages : [{ label: "ENGLISH", value: "en_IN" }],
       stateInfo: { code: stateInfo.code, name: stateInfo.name, logoUrl: stateInfo.logoUrl },
-      cities,
-      cityCode,
-      businessServices: BusinessServices,
+      localizationModules: stateInfo.localizationModules,
+      modules: MdmsRes?.tenant?.citymodule,
+      tenants: MdmsRes?.tenant?.tenants.map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant })),
     };
-
-    defaultData.locales = await LocalizationService.getLocale({
-      modules: [
-        "rainmaker-common",
-        `rainmaker-${moduleCode.toLowerCase()}`,
-        `rainmaker-${stateCode.toLowerCase()}`,
-        `rainmaker-${cityCode.toLowerCase()}`,
-      ],
-      locale: defaultData.languages[0].value,
+    initData.selectedLanguage = initData.languages[0].value;
+    await LocalizationService.getLocale({
+      modules: [`rainmaker-${stateCode.toLowerCase()}`, ...initData.localizationModules.map((module) => module.value)],
+      locale: initData.selectedLanguage,
       tenantId: stateCode,
     });
-    return defaultData;
+
+    return initData;
+  },
+  defaultData: async (stateCode, cityCode, moduleCode, language) => {
+    // const WorkFlowPromise = WorkflowService.init(stateCode, moduleCode);
+    const LocalePromise = LocalizationService.getLocale({
+      modules: [`rainmaker-${moduleCode.toLowerCase()}`, `rainmaker-${cityCode.toLowerCase()}`],
+      locale: language,
+      tenantId: stateCode,
+    });
+    // const { BusinessServices } = await WorkFlowPromise;
+    await LocalePromise;
+    return {};
   },
 };
