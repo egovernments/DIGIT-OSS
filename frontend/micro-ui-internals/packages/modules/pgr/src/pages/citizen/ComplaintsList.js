@@ -10,7 +10,7 @@ import Complaint from "../../components/Complaint";
 const useComplaintsList = () => {
   const User = Digit.SessionStorage.get("User");
   // TODO: move city to state
-  const { isLoading, error, data } = useQuery("complaintsList", () => Digit.PGRService.search("pb.amritsar", { userName: User.mobileNumber }));
+  const { isLoading, error, data } = useQuery("complaintsList", () => Digit.PGRService.search("pb.amritsar", { mobileNumber: User.mobileNumber }));
   return { isLoading, error, data };
 };
 
