@@ -7,15 +7,14 @@ import { LOCALIZATION_KEY } from "../constants/Localization";
 
 // import { ConvertTimestampToDate } from "../@egovernments/digit-utils/services/date";
 
-const Complaint = (props) => {
-  let { data } = props;
+const Complaint = ({ data, path }) => {
   let { serviceCode, serviceRequestId, applicationStatus } = data;
 
   const history = useHistory();
   const { t } = useTranslation();
 
   const handleClick = () => {
-    history.push(`${props.path}/complaint/details/${serviceRequestId}`);
+    history.push(`${path}/${serviceRequestId}`);
   };
 
   return (

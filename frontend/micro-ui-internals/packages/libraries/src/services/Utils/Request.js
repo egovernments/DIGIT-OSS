@@ -20,14 +20,14 @@ import { Storage } from "./Storage";
 
 const requestInfo = () => ({
   apiId: "Rainmaker",
-  action: "",
-  did: 1,
-  key: "",
-  msgId: "20170310130900|en_IN",
-  requesterId: "",
-  ts: 1513579888683,
-  ver: ".01",
-  authToken: Storage.get("citizen.token"),
+  // action: "",
+  // did: 1,
+  // key: "",
+  // msgId: "20170310130900|en_IN",
+  // requesterId: "",
+  // ts: 1513579888683,
+  // ver: ".01",
+  authToken: Storage.get("User").token,
 });
 
 const userServiceData = () => Storage.get("citizen.userServiceData");

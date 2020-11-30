@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import getRootReducer from "./redux/reducers";
 import defaultConfig from "./config";
-import CitizenApp from "./CitizenApp";
+import CitizenApp from "./pages/citizen";
 
 import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
@@ -29,7 +29,7 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
     return <CitizenApp />;
   }
 
-  return <h2>employee: {path}</h2>;
+  return <EmployeeApp />;
 
   // return (
   //   <Route>
