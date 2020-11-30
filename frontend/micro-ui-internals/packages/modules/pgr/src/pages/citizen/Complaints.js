@@ -10,7 +10,7 @@ import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 const ComplaintsPage = (props) => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const state = useSelector((state) => state.pgr);
   const { t } = useTranslation();
 
   const complaints = state.complaints.list;

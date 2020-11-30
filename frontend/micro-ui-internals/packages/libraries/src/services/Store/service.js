@@ -24,13 +24,11 @@ export const StoreService = {
     return initData;
   },
   defaultData: async (stateCode, cityCode, moduleCode, language) => {
-    // const WorkFlowPromise = WorkflowService.init(stateCode, moduleCode);
     const LocalePromise = LocalizationService.getLocale({
       modules: [`rainmaker-${moduleCode.toLowerCase()}`, `rainmaker-${cityCode.toLowerCase()}`],
       locale: language,
       tenantId: stateCode,
     });
-    // const { BusinessServices } = await WorkFlowPromise;
     await LocalePromise;
     return {};
   },
