@@ -107,7 +107,7 @@ const getRootReducer = (defaultStore) =>
     // cityCode: cityCodeReducer(defaultStore.cityCode),
     // stateInfo: stateInfoReducer(defaultStore.stateInfo),
     // businessService: businessServiceReducer(defaultStore.businessServices),
-    // businessService: businessServiceReducer,
+    businessService: businessServiceReducer,
     // complaints: complaintReducer,
     complaints: complaintReducer,
   });

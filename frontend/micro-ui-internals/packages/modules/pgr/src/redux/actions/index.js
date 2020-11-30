@@ -34,7 +34,9 @@ export const updateLocalizationResources = () => async (dispatch, getState) => {
 };
 
 export const searchComplaints = (filters = {}) => async (dispatch, getState) => {
-  const { cityCode } = getState();
+  console.log("getState:", getState());
+  let { cityCode } = getState();
+  cityCode = "pb.amritsar"; //TODO: fetch it from store
 
   let { ServiceWrappers } = (await Digit.PGRService.search(`${cityCode}`, filters)) || {};
   dispatch({
@@ -44,7 +46,9 @@ export const searchComplaints = (filters = {}) => async (dispatch, getState) => 
 };
 
 export const fetchBusinessServiceById = (businessId) => async (dispatch, getState) => {
-  const businessServiceDetails = await Digit.workflowService.getByBusinessId(getState().cityCode, businessId);
+  let cityCode = "pb.amritsar"; //TODO: fetch it from store
+  const businessServiceDetails = await Digit.workflowService.getByBusinessId(cityCode, businessId);
+  console.log("businessServiceDetails:", businessServiceDetails);
   dispatch({
     type: FETCH_BUSINESS_SERVICE_BY_ID,
     payload: { businessServiceDetails },

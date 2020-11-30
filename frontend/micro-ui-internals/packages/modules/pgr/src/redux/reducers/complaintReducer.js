@@ -9,7 +9,6 @@ function complaintReducer(state = {}, action) {
     case UPDATE_COMPLAINT:
       return { ...state, response: action.payload };
     case APPLY_INBOX_FILTER:
-      console.log("response::::>", action.payload);
       return { ...state, response: action.payload.response.instances };
     default:
       return state;
