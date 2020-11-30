@@ -24,18 +24,18 @@ import { selectComplaints } from "../../selectors/complaint";
 import { fetchBusinessServiceById, searchComplaints } from "../../redux/actions";
 import { selectWorkflow } from "../../selectors/processInstance";
 import getTimeLineFromProcessInstance from "../../hooks/useComplaintHistory";
+import TimeLine from "./CreateComplaint/TimeLine";
+import useWorkflowDetails from "../../hooks/useWorkflowDetails";
 
 const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
   const dispatch = useDispatch();
 
-  const LOCALIZATION_KEY_CS_COMPLAINT = "CS_COMPLAINT_DETAILS";
-  const LOCALIZATION_KEY_CS_COMMON = "CS_COMMON";
-
   const [files, setFiles] = useState([]);
 
   const [complaintHistory, setComplaintHistory] = useState([]);
+
   const getComplaint = useCallback((id) => dispatch(searchComplaints({ serviceRequestId: id })), [dispatch]);
   const getBusinessServiceById = useCallback((id) => dispatch(fetchBusinessServiceById(id)), [dispatch]);
 
@@ -45,25 +45,28 @@ const ComplaintDetailsPage = (props) => {
   }, [getComplaint, getBusinessServiceById, id]);
 
   const state = useSelector((state) => state);
-
+  let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
+  const timeLineData = useWorkflowDetails({ tenantId: cityCodeVal, id });
+  console.log("timeLineData:", timeLineData);
   const selectedComplaint = selectComplaints(state);
 
-  const selectedWorkFlow = selectWorkflow(state);
-
+  console.log("selectedComplaint:>>", selectedComplaint);
+  console.log(">>state>>", state);
+  // const selectedWorkFlow = selectWorkflow(state.pgr);
   // const historyData = console.log("historyData:", historyData);
 
   const [imageZoom, setImageZoom] = useState(null);
 
-  useEffect(() => {
-    const getTimelineValues = async () => {
-      if (selectedComplaint.length > 0) {
-        const historyData = await getTimeLineFromProcessInstance(selectedWorkFlow, props.match.path, t, selectedComplaint[0]);
-        console.log("history data", historyData);
-        setComplaintHistory(historyData);
-      }
-    };
-    getTimelineValues();
-  }, [selectedWorkFlow, props.match.path, t, selectedComplaint]);
+  // useEffect(() => {
+  //   const getTimelineValues = async () => {
+  //     if (selectedComplaint.length > 0) {
+  //       const historyData = await getTimeLineFromProcessInstance(selectedWorkFlow, props.match.path, t, selectedComplaint[0]);
+  //       console.log("history data", historyData);
+  //       setComplaintHistory(historyData);
+  //     }
+  //   };
+  //   getTimelineValues();
+  // }, [selectedWorkFlow, props.match.path, t, selectedComplaint]);
 
   const GetImageIds = (images) => {
     let imageIds = [];
@@ -90,7 +93,8 @@ const ComplaintDetailsPage = (props) => {
     complaintDetails = selectedComplaint[0];
     Digit.SessionStorage.set(`complaint.${complaintDetails.service.serviceRequestId}`, complaintDetails);
   }
-  let cityCode = () => state.cityCode.toUpperCase().replace(".", "_");
+  //let cityCode = () => state.cityCode.toUpperCase().replace(".", "_");
+  let cityCode = () => "pb.amritsar".toUpperCase().replace(".", "_");
 
   const getFormatedAddress = ({ landmark, buildingName, plotNo, street, locality }) => {
     return (
@@ -140,16 +144,15 @@ const ComplaintDetailsPage = (props) => {
           {
             <React.Fragment>
               <Card>
-                <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
+                {/* <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader> */}
                 {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
                 {console.log("complaintHistory:", complaintHistory)}
-                {complaintHistory && complaintHistory.length > 0 && (
-                  <ConnectingCheckPoints>
-                    {complaintHistory.map((history, index) => {
-                      return <CheckPoint key={index} customChild={history.text} isCompleted={true} />;
-                    })}
-                  </ConnectingCheckPoints>
-                )}
+                <TimeLine
+                  data={timeLineData}
+                  serviceRequestId={selectedComplaint[0].service.serviceRequestId}
+                  complaintWorkflow={selectedComplaint[0].workflow}
+                  rating={selectedComplaint[0].service.rating}
+                />
               </Card>
             </React.Fragment>
           }
