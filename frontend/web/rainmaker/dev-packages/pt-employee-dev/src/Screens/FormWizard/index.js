@@ -1328,9 +1328,10 @@ class FormWizard extends Component {
   estimate = async () => {
     let { hideSpinner, location ,showSpinner} = this.props;
     let { search } = location;
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
-    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    if (isAssesment || isReassesment) {
+    
+    let isAssesment = getQueryValue(search, "purpose");
+
+    if (isAssesment ) {
       let prepareFormData = { ...this.props.prepareFormData };
       showSpinner();
       const financialYearFromQuery = getFinancialYearFromQuery();
