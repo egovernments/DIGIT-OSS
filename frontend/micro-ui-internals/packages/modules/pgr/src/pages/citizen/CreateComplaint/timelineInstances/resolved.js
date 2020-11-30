@@ -7,31 +7,32 @@ import Reopen from "./reopen";
 
 //const GetTranslatedAction = (action, t) => t(`CS_COMMON_${action}`);
 
-const Resolved = ({ action, nextActions, rating, serviceRequestId, path, text, reopenDate }) => {
+const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate }) => {
   const { t } = useTranslation();
   if (action === "RESOLVE") {
-    let actions = nextActions.map((action, index) => (
-      <Link key={index} to={`${path}/${action}/${serviceRequestId}`}>
-        <ActionLinks>{action}</ActionLinks>
-      </Link>
-    ));
+    let actions =
+      nextActions &&
+      nextActions.map((action, index) => (
+        <Link key={index} to={`/${action}/${serviceRequestId}`}>
+          <ActionLinks>{action}</ActionLinks>
+        </Link>
+      ));
     return (
       <div>
         {t(`CS_COMMON_COMPLAINT_RESOLVED`)} <div>{actions}</div>
       </div>
     );
   } else if (action === "RATE" && rating) {
-    console.log("rating:", rating);
     return (
       <React.Fragment>
         <div>{t(`CS_COMMON_COMPLAINT_RESOLVED`)}</div>
         <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={rating} />
       </React.Fragment>
     );
-  } else if (action === "REOPEN" && rating) {
+  } else if (action === "REOPEN") {
     return <Reopen text={t(`CS_COMMON_COMPLAINT_REOPENED`)} reopenDate={reopenDate} />;
   } else {
-    console.log("action not found");
+    return <React.Fragment></React.Fragment>;
   }
 };
 

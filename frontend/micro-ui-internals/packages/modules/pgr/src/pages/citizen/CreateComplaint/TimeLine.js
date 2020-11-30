@@ -13,11 +13,11 @@ import StarRated from "./timelineInstances/StarRated";
 const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
   const { t } = useTranslation();
   // let GetComplaintInstance = ({}) => {
-  let { timeline, nextActions, auditDetails } = data;
-  console.log("timeline:", timeline, "nextActions:", nextActions);
+  let { timeline } = data;
+  console.log("timeline:", timeline);
   console.log(" complaintWorkflow.action:", complaintWorkflow.action);
 
-  const getCheckPoint = ({ status, caption, auditDetails }) => {
+  const getCheckPoint = ({ status, caption, auditDetails, timeLineActions }) => {
     switch (status) {
       case "PENDINGFORREASSIGNMENT":
         return <PendingForReassignment text={t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)} />;
@@ -35,10 +35,10 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
         return (
           <Resolved
             action={complaintWorkflow.action}
-            nextActions={nextActions}
+            nextActions={timeLineActions}
             rating={rating}
             serviceRequestId={serviceRequestId}
-            reopenDate={auditDetails.lastModifiedTime}
+            reopenDate={ConvertTimestampToDate(auditDetails.lastModifiedTime)}
           />
         );
 
@@ -54,16 +54,16 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
     <React.Fragment>
       <Card>
         <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
+        {console.log("timeline", timeline)}
         {timeline && timeline.length > 0 && (
           <ConnectingCheckPoints>
-            {timeline.map(({ status, caption, auditDetails }, index) => {
+            {timeline.map(({ status, caption, auditDetails, timeLineActions }, index) => {
               console.log("timeline.length:", status, timeline.length - 1, index);
               {
                 return (
                   <CheckPoint
                     isCompleted={index === 0 ? true : false}
-                    customChild={getCheckPoint({ status, caption, auditDetails })}
-                    index={index}
+                    customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })}
                   ></CheckPoint>
                 );
               }

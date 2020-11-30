@@ -6,24 +6,10 @@ import { useTranslation } from "react-i18next";
 
 import { LOCALIZATION_KEY } from "../../constants/Localization";
 
-import {
-  BackButton,
-  Card,
-  Header,
-  CardSubHeader,
-  StatusTable,
-  TextArea,
-  SubmitBar,
-  ConnectingCheckPoints,
-  CheckPoint,
-  DisplayPhotos,
-  ImageViewer,
-} from "@egovernments/digit-ui-react-components";
+import { Card, Header, CardSubHeader, StatusTable, TextArea, SubmitBar, DisplayPhotos, ImageViewer } from "@egovernments/digit-ui-react-components";
 
 import { selectComplaints } from "../../selectors/complaint";
 import { fetchBusinessServiceById, searchComplaints } from "../../redux/actions";
-import { selectWorkflow } from "../../selectors/processInstance";
-import getTimeLineFromProcessInstance from "../../hooks/useComplaintHistory";
 import TimeLine from "./CreateComplaint/TimeLine";
 import useWorkflowDetails from "../../hooks/useWorkflowDetails";
 
@@ -50,23 +36,7 @@ const ComplaintDetailsPage = (props) => {
   console.log("timeLineData:", timeLineData);
   const selectedComplaint = selectComplaints(state);
 
-  console.log("selectedComplaint:>>", selectedComplaint);
-  console.log(">>state>>", state);
-  // const selectedWorkFlow = selectWorkflow(state.pgr);
-  // const historyData = console.log("historyData:", historyData);
-
   const [imageZoom, setImageZoom] = useState(null);
-
-  // useEffect(() => {
-  //   const getTimelineValues = async () => {
-  //     if (selectedComplaint.length > 0) {
-  //       const historyData = await getTimeLineFromProcessInstance(selectedWorkFlow, props.match.path, t, selectedComplaint[0]);
-  //       console.log("history data", historyData);
-  //       setComplaintHistory(historyData);
-  //     }
-  //   };
-  //   getTimelineValues();
-  // }, [selectedWorkFlow, props.match.path, t, selectedComplaint]);
 
   const GetImageIds = (images) => {
     let imageIds = [];
@@ -143,9 +113,6 @@ const ComplaintDetailsPage = (props) => {
           </Card>
           {
             <React.Fragment>
-              {/* <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader> */}
-              {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
-              {console.log("complaintHistory:", complaintHistory)}
               <TimeLine
                 data={timeLineData}
                 serviceRequestId={selectedComplaint[0].service.serviceRequestId}
