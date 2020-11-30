@@ -143,17 +143,15 @@ const ComplaintDetailsPage = (props) => {
           </Card>
           {
             <React.Fragment>
-              <Card>
-                {/* <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader> */}
-                {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
-                {console.log("complaintHistory:", complaintHistory)}
-                <TimeLine
-                  data={timeLineData}
-                  serviceRequestId={selectedComplaint[0].service.serviceRequestId}
-                  complaintWorkflow={selectedComplaint[0].workflow}
-                  rating={selectedComplaint[0].service.rating}
-                />
-              </Card>
+              {/* <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader> */}
+              {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
+              {console.log("complaintHistory:", complaintHistory)}
+              <TimeLine
+                data={timeLineData}
+                serviceRequestId={selectedComplaint[0].service.serviceRequestId}
+                complaintWorkflow={selectedComplaint[0].workflow}
+                rating={selectedComplaint[0].service.rating}
+              />
             </React.Fragment>
           }
           <Card>

@@ -15,6 +15,7 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
   // let GetComplaintInstance = ({}) => {
   let { timeline, nextActions, auditDetails } = data;
   console.log("timeline:", timeline, "nextActions:", nextActions);
+  console.log(" complaintWorkflow.action:", complaintWorkflow.action);
 
   const getCheckPoint = ({ status, caption, auditDetails }) => {
     switch (status) {
@@ -27,28 +28,19 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
 
       case "PENDINGATLME":
         let { name, mobileNumber } = caption[0];
-        const assignedTo = `${t("CS_COMMON_COMPLAINT_ASSIGNED_TO")} to`;
+        const assignedTo = `${t("CS_COMMON_COMPLAINT_ASSIGNED_TO")}`;
         return <PendingAtLME name={name} mobile={mobileNumber} text={assignedTo} />;
 
       case "RESOLVED":
-        console.log("complaint.workflow.action:", nextActions);
-        {
-          complaintWorkflow.action === "RESOLVE" && !rating && (
-            <React.Fragment>
-              <Resolved nextActions={nextActions} serviceRequestId={serviceRequestId} text={t(`CS_COMMON_COMPLAINT_RESOLVED`)} />
-            </React.Fragment>
-          );
-        }
-        {
-          complaintWorkflow.action === "RATE" && (
-            <React.Fragment>
-              <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={rating} />{" "}
-            </React.Fragment>
-          );
-        }
-        {
-          complaintWorkflow === "REOPEN" && <Reopen text={t(`CS_COMMON_COMPLAINT_REOPENED`)} reopenDate={auditDetails.lastModifiedTime} />;
-        }
+        return (
+          <Resolved
+            action={complaintWorkflow.action}
+            nextActions={nextActions}
+            rating={rating}
+            serviceRequestId={serviceRequestId}
+            reopenDate={auditDetails.lastModifiedTime}
+          />
+        );
 
       case "CLOSEDAFTERRESOLUTION":
         return <span>{t("CS_COMMON_CLOSEDAFTERRESOLUTION")}</span>;
@@ -65,11 +57,16 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
         {timeline && timeline.length > 0 && (
           <ConnectingCheckPoints>
             {timeline.map(({ status, caption, auditDetails }, index) => {
+              console.log("timeline.length:", status, timeline.length - 1, index);
               {
-                return getCheckPoint({ status, caption, auditDetails });
+                return (
+                  <CheckPoint
+                    isCompleted={index === 0 ? true : false}
+                    customChild={getCheckPoint({ status, caption, auditDetails })}
+                    index={index}
+                  ></CheckPoint>
+                );
               }
-
-              // return <CheckPoint key={index} customChild={history.text} isCompleted={true} />;
             })}
           </ConnectingCheckPoints>
         )}
