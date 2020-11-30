@@ -11,7 +11,7 @@ import { useRouteMatch, Switch } from "react-router-dom";
 import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 
 import { ComplaintsList } from "./ComplaintsList";
-import { ComplaintsDetail } from "./ComplaintDetail";
+// import { ComplaintsDetail } from "./ComplaintDetail";
 // import ComplaintsPage from "./Complaints";
 import ComplaintDetailsPage from "./ComplaintDetails";
 
@@ -40,7 +40,7 @@ const App = () => {
         <Route exact path={getRoute(match, PgrRoutes.RatingAndFeedBack)} component={() => <RatingAndFeedBack match={match} />} /> */}
 
         <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
-        <PrivateRoute exact path={`${path}/complaints`} component={ComplaintsList} />
+        <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
         <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
       </AppContainer>
     </Switch>
