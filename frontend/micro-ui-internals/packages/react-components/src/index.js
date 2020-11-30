@@ -54,6 +54,8 @@ import TextInputCard from "./molecules/TextInputCard";
 import CityMohalla from "./molecules/CityMohalla";
 import DetailsCard from "./molecules/DetailsCard";
 
+import { PrivateRoute } from "./atoms/PrivateRoute";
+
 export {
   Body,
   Loader,
@@ -113,4 +115,5 @@ export {
   TelePhone,
   GreyOutText,
   ActionLinks,
+  PrivateRoute,
 };

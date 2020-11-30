@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import getRootReducer from "./redux/reducers";
 import defaultConfig from "./config";
-import CitizenApp from "./CitizenApp";
+import CitizenApp from "./pages/citizen";
 
 import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";

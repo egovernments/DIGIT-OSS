@@ -36,7 +36,9 @@ Digit.SessionStorage.set("citizen.userServiceData", userServiceData);
 
 const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
 
-Digit.SessionStorage.set("citizen.token", citAuth);
-window.sessionStorage.setItem("citizen.token", citAuth);
+console.log("citAUth", citAuth);
+
+Digit.SessionStorage.set("User", { token: citAuth, mobileNumber: "9404052047" });
+// window.sessionStorage.setItem("citizen.token", citAuth);
 
 ReactDOM.render(<DigitUI stateCode="pb" />, document.getElementById("root"));

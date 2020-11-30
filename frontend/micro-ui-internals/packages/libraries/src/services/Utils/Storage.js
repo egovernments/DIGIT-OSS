@@ -6,7 +6,7 @@ const localStoreSupport = () => {
   }
 };
 const storageClass = window.sessionStorage;
-const k = (key) => `eGov.Rainmaker.${key}`;
+const k = (key) => `Digit.${key}`;
 export const Storage = {
   get: (key) => {
     if (localStoreSupport() && key) {
