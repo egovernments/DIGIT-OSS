@@ -3,8 +3,8 @@ const Reopen = ({ text, reopenDate }) => {
   // let reopenDate = ConvertTimestampToDate(obj.auditDetails.createdTime);
   return (
     <React.Fragment>
-      <div>{text}</div>
-      <GreyOutText>{reopenDate}</GreyOutText>
+      {text}
+      <p>{reopenDate}</p>
     </React.Fragment>
   );
 };

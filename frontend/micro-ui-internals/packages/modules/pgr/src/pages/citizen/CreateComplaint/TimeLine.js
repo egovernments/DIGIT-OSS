@@ -1,4 +1,3 @@
-import { ConvertTimestampToDate } from "@egovernments/digit-ui-libraries/src/services/Utils/Date";
 import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, TelePhone } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -14,7 +13,6 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
   const { t } = useTranslation();
   // let GetComplaintInstance = ({}) => {
   let { timeline, nextActions, auditDetails } = data;
-  console.log("timeline:", timeline, "nextActions:", nextActions);
 
   const getCheckPoint = ({ status, caption, auditDetails }) => {
     switch (status) {
@@ -22,58 +20,45 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
         return <PendingForReassignment text={t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)} />;
 
       case "PENDINGFORASSIGNMENT":
-        let complaintFiledDate = ConvertTimestampToDate(auditDetails.createdTime);
-        return <PendingForAssignment complaintFiledDate={complaintFiledDate} text={t(`CS_COMMON_COMPLAINT_FILED`)} />;
+        return <PendingForAssignment complaintFiledDate={auditDetails.created} text={t(`CS_COMMON_COMPLAINT_FILED`)} />;
 
       case "PENDINGATLME":
         let { name, mobileNumber } = caption[0];
-        const assignedTo = `${t("CS_COMMON_COMPLAINT_ASSIGNED_TO")} to`;
+        const assignedTo = `${t("CS_COMMON_COMPLAINT_ASSIGNED_TO")}`;
         return <PendingAtLME name={name} mobile={mobileNumber} text={assignedTo} />;
 
       case "RESOLVED":
-        console.log("complaint.workflow.action:", nextActions);
-        {
-          complaintWorkflow.action === "RESOLVE" && !rating && (
-            <React.Fragment>
+        switch (complaintWorkflow.action) {
+          case "RESOLVE":
+            return !rating ? (
               <Resolved nextActions={nextActions} serviceRequestId={serviceRequestId} text={t(`CS_COMMON_COMPLAINT_RESOLVED`)} />
-            </React.Fragment>
-          );
-        }
-        {
-          complaintWorkflow.action === "RATE" && (
-            <React.Fragment>
-              <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={rating} />{" "}
-            </React.Fragment>
-          );
-        }
-        {
-          complaintWorkflow === "REOPEN" && <Reopen text={t(`CS_COMMON_COMPLAINT_REOPENED`)} reopenDate={auditDetails.lastModifiedTime} />;
-        }
+            ) : null;
 
+          case "RATE":
+            return <StarRated text={t(`CS_ADDCOMPLAINT_YOU_RATED`)} rating={rating} />;
+
+          case "REOPEN":
+            return <Reopen text={t(`CS_COMMON_COMPLAINT_REOPENED`)} reopenDate={auditDetails.lastModifiedTime} />;
+        }
+        break;
       case "CLOSEDAFTERRESOLUTION":
-        return <span>{t("CS_COMMON_CLOSEDAFTERRESOLUTION")}</span>;
+        return <React.Fragment>{t("CS_COMMON_CLOSEDAFTERRESOLUTION")}</React.Fragment>;
 
       default:
-        return <span>{status}</span>;
+        return <React.Fragment>{status}</React.Fragment>;
     }
   };
 
   return (
     <React.Fragment>
-      <Card>
-        <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
-        {timeline && timeline.length > 0 && (
-          <ConnectingCheckPoints>
-            {timeline.map(({ status, caption, auditDetails }, index) => {
-              {
-                return getCheckPoint({ status, caption, auditDetails });
-              }
-
-              // return <CheckPoint key={index} customChild={history.text} isCompleted={true} />;
-            })}
-          </ConnectingCheckPoints>
-        )}
-      </Card>
+      <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
+      {timeline && timeline.length > 0 && (
+        <ConnectingCheckPoints>
+          {timeline.map(({ status, caption, auditDetails }, index) => {
+            return <CheckPoint key={index} customChild={getCheckPoint({ status, caption, auditDetails })} isCompleted={false} />;
+          })}
+        </ConnectingCheckPoints>
+      )}
     </React.Fragment>
   );
 };

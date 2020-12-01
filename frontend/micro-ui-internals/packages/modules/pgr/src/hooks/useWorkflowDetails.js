@@ -15,9 +15,12 @@ const useWorkflowDetails = ({ tenantId, id }) => {
             timeline: processInstances.map((state) => ({
               status: state.state.applicationStatus,
               caption: state.assignes ? state.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
-              auditDetails: state.auditDetails,
+              auditDetails: {
+                created: Digit.DateUtils.ConvertTimestampToDate(state.auditDetails.createdTime),
+                lastModified: Digit.DateUtils.ConvertTimestampToDate(state.auditDetails.lastModifiedTime),
+              },
             })),
-            nextActions: processInstances[processInstances.length - 1].state.actions
+            nextActions: processInstances[processInstances.length - 1].state.nextActions
               ? processInstances[processInstances.length - 1].state.actions.map((action) => action.action)
               : null,
           };

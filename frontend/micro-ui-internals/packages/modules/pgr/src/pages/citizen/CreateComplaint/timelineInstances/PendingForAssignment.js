@@ -5,7 +5,7 @@ const PendingForAssignment = ({ text, complaintFiledDate }) => {
   return (
     <React.Fragment>
       {text}
-      <GreyOutText>{complaintFiledDate}</GreyOutText>
+      <p>{complaintFiledDate}</p>
     </React.Fragment>
   );
 };

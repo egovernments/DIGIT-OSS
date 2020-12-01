@@ -1555,9 +1555,11 @@ img, video {
 .call {
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  font-size: 16px;
+  line-height: 24px; }
 
-.grey {
+.call, .grey {
   --text-opacity:1;
   color: #505a5f;
   color: rgba(80, 90, 95, var(--text-opacity)); }
