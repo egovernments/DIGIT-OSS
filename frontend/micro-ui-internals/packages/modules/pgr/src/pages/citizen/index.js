@@ -10,12 +10,11 @@ import { PgrRoutes, getRoute } from "../../constants/Routes";
 import { useRouteMatch, Switch } from "react-router-dom";
 import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 
+import { CreateComplaint } from "./Create";
 import { ComplaintsList } from "./ComplaintsList";
 // import { ComplaintsDetail } from "./ComplaintDetail";
 // import ComplaintsPage from "./Complaints";
 import ComplaintDetailsPage from "./ComplaintDetails";
-
-const CreateComplaint = () => <h2>create complaint</h2>;
 
 const App = () => {
   const { path, url } = useRouteMatch();

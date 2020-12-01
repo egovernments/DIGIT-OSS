@@ -6,7 +6,7 @@
   }
 
   .card-sub-header {
-    @apply text-text-primary text-heading-l font-bold align-middle text-left mb-lg;
+    @apply text-text-secondary text-caption-xl font-bold align-middle text-left;
   }
 
   .card-caption {
@@ -99,8 +99,7 @@
       margin-right: auto;
     }
 
-    .header-content {
-    }
+    .header-content {}
 
     .header-end {
       margin-left: auto;
