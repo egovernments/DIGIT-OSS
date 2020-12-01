@@ -7,14 +7,15 @@ const SelectComplaintType = ({ config, onSelect }) => {
   const goNext = () => {
     onSelect("test");
   };
-  const [complaintType, setComplaintType] = useState(null);
+  const [complaintType, setComplaintType] = useState({});
   const textParams = config.texts;
   const inputParams = config.inputs;
+  const SessionStorage = Digit.SessionStorage;
   const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
 
   function selectedValue(value) {
     setComplaintType(value);
-    console.log(value);
+    SessionStorage.set("complaintType", value);
   }
   return (
     <TypeSelectCard
@@ -23,7 +24,8 @@ const SelectComplaintType = ({ config, onSelect }) => {
       {...{ menu: menu }}
       {...{ optionsKey: "name" }}
       {...{ selected: selectedValue }}
-      {...{ selectedoption: complaintType }}
+      {...{ selectedOption: complaintType }}
+      {...{ onSave: goNext }}
     />
   );
 };
