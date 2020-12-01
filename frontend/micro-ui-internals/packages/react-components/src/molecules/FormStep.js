@@ -13,7 +13,8 @@ const FormStep = ({ children, config, onSelect }) => {
   };
 
   const inputs = config.inputs?.map((input, index) => {
-    return <TextInput key={index} name={input.name} inputRef={register} />;
+    if (input.type === "text") return <TextInput key={index} name={input.name} inputRef={register(input.validation)} />;
+    if (input.type === "textarea") return <textarea></textarea>;
   });
 
   return (
