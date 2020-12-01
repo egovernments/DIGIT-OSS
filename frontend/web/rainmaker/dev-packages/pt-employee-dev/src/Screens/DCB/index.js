@@ -2753,6 +2753,7 @@ class FormWizardDataEntry extends Component {
       propertyId
     );
 
+    const wPropertyId = getQueryValue(search, "propertyId");
     return (
       <div className="wizard-form-main-cont">
         <div className="form-header">
@@ -2780,6 +2781,8 @@ class FormWizardDataEntry extends Component {
           history={history}
           onPayButtonClick={onPayButtonClick}
           nextButtonEnabled={nextButtonEnabled}
+          tenantId = {getTenantId()}
+          propertyId = {wPropertyId}
         />
       </div>
     );

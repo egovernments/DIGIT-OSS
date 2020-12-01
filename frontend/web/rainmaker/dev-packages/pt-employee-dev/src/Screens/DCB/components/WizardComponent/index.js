@@ -27,6 +27,8 @@ const WizardComponent = ({
   nextLabel,
   history,
   nextButtonEnabled,
+  propertyId,
+  tenantId
 }) => {
   ((selected == 1 || selected == 2)
     ? ((selected == 1) ? (backLabel = 'PT_APPLICATION_BUTTON_DOWN_CONF') : (backLabel = 'PT_ASSESS_PAY_FOR_NEW_YEAR'))
@@ -70,7 +72,15 @@ const WizardComponent = ({
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{ marginRight: 45, width: "30%" }}
           />} 
-      
+           {selected ==2 &&<Button
+            label={<Label buttonLabel={true} label={'PT_DEMAND_PAY'} color="#fe7a51" />}
+            onClick={() => {              
+              history.push(`../../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}&businessService=PT`) 
+              }}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+            buttonStyle={{ border: "1px solid #fe7a51" }}
+            style={{ marginRight: 45, width: "30%" }}
+          /> }   
    
             <Button
             label={<Label buttonLabel={true} label={nextLabel} color="#fff" />}
