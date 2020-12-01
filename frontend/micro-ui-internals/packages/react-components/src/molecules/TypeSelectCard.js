@@ -9,7 +9,6 @@ import RadioButtons from "../atoms/RadioButtons";
 import SubmitBar from "../atoms/SubmitBar";
 
 const TypeSelectCard = ({ headerCaption, header, cardText, submitBarLabel, selectedOption, menu, optionsKey, selected, onSave }) => {
-  console.log("typeselectcard", menu, optionsKey, selectedOption);
   return (
     <Card>
       <CardCaption>{headerCaption}</CardCaption>

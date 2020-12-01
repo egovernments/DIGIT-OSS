@@ -5,11 +5,13 @@ import useComplaintTypes from "../../../../hooks/useComplaintTypes";
 
 const SelectComplaintType = ({ config, onSelect }) => {
   const goNext = () => {
-    onSelect("test");
+    onSelect(complaintType);
   };
-  const [complaintType, setComplaintType] = useState({});
+  const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
+  // console.log("------------=============================++++++++",__initComplaintType__)
+  const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});
+  console.log("------------=============================++++++++", complaintType);
   const textParams = config.texts;
-  const inputParams = config.inputs;
   const SessionStorage = Digit.SessionStorage;
   const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
 
@@ -20,7 +22,6 @@ const SelectComplaintType = ({ config, onSelect }) => {
   return (
     <TypeSelectCard
       {...textParams}
-      {...inputParams}
       {...{ menu: menu }}
       {...{ optionsKey: "name" }}
       {...{ selected: selectedValue }}
