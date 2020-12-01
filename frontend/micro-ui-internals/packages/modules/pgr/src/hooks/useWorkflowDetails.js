@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 
 const useWorkflowDetails = ({ tenantId, id }) => {
   const [workflowDetails, setWorkflowDetails] = useState({});
-
+  let role = Digit.SessionStorage.get("role") || "CITIZEN"; // ToDo:store in session storage
+  // let actions =
+  // (selectedState.actions &&
+  //   selectedState.actions.filter((state) => {
+  //     return state.roles.includes(role);
+  //   })) ||
+  // [];
   useEffect(() => {
     (async () => {
       const workflow = await Digit.workflowService.getByBusinessId((tenantId = "pb.amritsar"), id);
@@ -19,6 +25,9 @@ const useWorkflowDetails = ({ tenantId, id }) => {
                 created: Digit.DateUtils.ConvertTimestampToDate(state.auditDetails.createdTime),
                 lastModified: Digit.DateUtils.ConvertTimestampToDate(state.auditDetails.lastModifiedTime),
               },
+              timeLineActions: state.state.actions
+                ? state.state.actions.filter((action) => action.roles.includes(role)).map((action) => action.action)
+                : null,
             })),
             nextActions: processInstances[processInstances.length - 1].state.nextActions
               ? processInstances[processInstances.length - 1].state.actions.map((action) => action.action)

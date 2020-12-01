@@ -1,6 +1,6 @@
 import React from "react";
 // import { CreateComplaint } from "./pages/citizen/CreateComplaint/index";
-// import { ReopenComplaint } from "./pages/citizen/ReopenComplaint/index";
+import { ReopenComplaint } from "./ReopenComplaint/index";
 // import RatingAndFeedBack from "./pages/citizen/Rating/Rating";
 // import AddtionalDetails from "./pages/citizen/ReopenComplaint/AddtionalDetails";
 // import ReasonPage from "./pages/citizen/ReopenComplaint/Reason";
@@ -42,6 +42,7 @@ const App = () => {
         <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
         <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
         <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
+        <PrivateRoute path={`${path}/reopen`} component={ReopenComplaint} />
       </AppContainer>
     </Switch>
   );

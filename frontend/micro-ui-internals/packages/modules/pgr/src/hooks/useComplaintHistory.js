@@ -23,6 +23,7 @@ const GetReopenInstance = (obj, t) => {
 
 const getResolvedInstance = async (obj, path, t, key) => {
   let nextAction = await Digit.workflowService.getNextAction("pb", key);
+  let role = Storage.get("role") || "CITIZEN"; // ToDo:
   let actions = nextAction.map(({ action }, index) => (
     <Link key={index} to={`${path}/${action.toLowerCase()}/${obj.businessId}`}>
       <ActionLinks>{GetTranslatedAction(action, t)}</ActionLinks>

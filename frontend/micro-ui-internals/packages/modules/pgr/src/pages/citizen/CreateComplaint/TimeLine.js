@@ -12,9 +12,9 @@ import StarRated from "./timelineInstances/StarRated";
 const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
   const { t } = useTranslation();
   // let GetComplaintInstance = ({}) => {
-  let { timeline, nextActions, auditDetails } = data;
+  let { timeline } = data;
 
-  const getCheckPoint = ({ status, caption, auditDetails }) => {
+  const getCheckPoint = ({ status, caption, auditDetails, timeLineActions }) => {
     switch (status) {
       case "PENDINGFORREASSIGNMENT":
         return <PendingForReassignment text={t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)} />;
@@ -28,19 +28,15 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
         return <PendingAtLME name={name} mobile={mobileNumber} text={assignedTo} />;
 
       case "RESOLVED":
-        switch (complaintWorkflow.action) {
-          case "RESOLVE":
-            return !rating ? (
-              <Resolved nextActions={nextActions} serviceRequestId={serviceRequestId} text={t(`CS_COMMON_COMPLAINT_RESOLVED`)} />
-            ) : null;
-
-          case "RATE":
-            return <StarRated text={t(`CS_ADDCOMPLAINT_YOU_RATED`)} rating={rating} />;
-
-          case "REOPEN":
-            return <Reopen text={t(`CS_COMMON_COMPLAINT_REOPENED`)} reopenDate={auditDetails.lastModifiedTime} />;
-        }
-        break;
+        return (
+          <Resolved
+            action={complaintWorkflow.action}
+            nextActions={timeLineActions}
+            rating={rating}
+            serviceRequestId={serviceRequestId}
+            reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
+          />
+        );
       case "CLOSEDAFTERRESOLUTION":
         return <React.Fragment>{t("CS_COMMON_CLOSEDAFTERRESOLUTION")}</React.Fragment>;
 
@@ -54,8 +50,10 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
       <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
       {timeline && timeline.length > 0 && (
         <ConnectingCheckPoints>
-          {timeline.map(({ status, caption, auditDetails }, index) => {
-            return <CheckPoint key={index} customChild={getCheckPoint({ status, caption, auditDetails })} isCompleted={false} />;
+          {timeline.map(({ status, caption, auditDetails, timeLineActions }, index) => {
+            return (
+              <CheckPoint isCompleted={index === 0 ? true : false} customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })} />
+            );
           })}
         </ConnectingCheckPoints>
       )}

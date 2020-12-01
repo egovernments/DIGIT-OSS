@@ -17,9 +17,11 @@ const AddtionalDetails = (props) => {
   let { t } = useTranslation();
 
   useEffect(() => {
-    const { response } = appState.complaints;
-    if (response && response.responseInfo.status === "successful") {
-      history.push(`${props.match.path}/response/:${id}`);
+    if (appState.complaints) {
+      const { response } = appState.complaints;
+      if (response && response.responseInfo.status === "successful") {
+        history.push(`${props.match.path}/response/:${id}`);
+      }
     }
   }, [appState.complaints, props.history]);
 

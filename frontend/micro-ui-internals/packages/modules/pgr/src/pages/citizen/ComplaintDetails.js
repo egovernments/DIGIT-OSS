@@ -105,7 +105,6 @@ const ComplaintDetailsPage = (props) => {
               rating={selectedComplaint[0].service.rating}
             />
           </Card>
-
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
             <TextArea />
