@@ -53,10 +53,13 @@ import LocationSearchCard from "./molecules/LocationSearchCard";
 import TextInputCard from "./molecules/TextInputCard";
 import CityMohalla from "./molecules/CityMohalla";
 import DetailsCard from "./molecules/DetailsCard";
+import InputCard from "./molecules/InputCard";
+import FormStep from "./molecules/FormStep";
 
 import { PrivateRoute } from "./atoms/PrivateRoute";
 
 export {
+  // Atoms
   Body,
   Loader,
   TopBar,
@@ -116,4 +119,7 @@ export {
   GreyOutText,
   ActionLinks,
   PrivateRoute,
+  // Molecule
+  InputCard,
+  FormStep,
 };

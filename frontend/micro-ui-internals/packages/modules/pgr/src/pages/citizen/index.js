@@ -1,6 +1,7 @@
 import React from "react";
 // import { CreateComplaint } from "./pages/citizen/CreateComplaint/index";
 import { ReopenComplaint } from "./ReopenComplaint/index";
+import RatingAndFeedBack from "./Rating/Rating";
 // import RatingAndFeedBack from "./pages/citizen/Rating/Rating";
 // import AddtionalDetails from "./pages/citizen/ReopenComplaint/AddtionalDetails";
 // import ReasonPage from "./pages/citizen/ReopenComplaint/Reason";
@@ -10,12 +11,11 @@ import { PgrRoutes, getRoute } from "../../constants/Routes";
 import { useRouteMatch, Switch } from "react-router-dom";
 import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 
+import { CreateComplaint } from "./Create";
 import { ComplaintsList } from "./ComplaintsList";
 // import { ComplaintsDetail } from "./ComplaintDetail";
 // import ComplaintsPage from "./Complaints";
 import ComplaintDetailsPage from "./ComplaintDetails";
-
-const CreateComplaint = () => <h2>create complaint</h2>;
 
 const App = () => {
   const { path, url } = useRouteMatch();
@@ -43,6 +43,7 @@ const App = () => {
         <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
         <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
         <PrivateRoute path={`${path}/reopen`} component={ReopenComplaint} />
+        <PrivateRoute path={`${path}/rate/:id`} component={RatingAndFeedBack} />
       </AppContainer>
     </Switch>
   );
