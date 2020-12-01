@@ -87,7 +87,7 @@ function totalAmount(arr) {
 }
 
 function FeesEstimateCard(props) {
-  const { classes, estimate, businesService } = props;
+  let { classes, estimate, businesService } = props;
 
   const total = estimate.totalAmount;
   const arrears = estimate.arrears;
@@ -107,6 +107,37 @@ function FeesEstimateCard(props) {
       value: arrears
     });
   }
+
+  if(estimate.businesService==='PT')
+    {
+    for (let i=0;i<estimate.fees.length;i++)
+      {
+          if(estimate.fees[i].name.labelKey==='PT_TAX')
+          {
+            estimate.fees[i].name.labelKey='PT_COMMON_PAY_TAX';
+          }
+          if(estimate.fees[i].name.labelKey==='PT_TIME_INTEREST')
+          {
+            estimate.fees[i].name.labelKey='PT_COMMON_PAY_TIME_INTEREST';
+          }
+          if(estimate.fees[i].name.labelKey==='COMMON_ARREARS')
+          {
+            estimate.fees[i].name.labelKey='PT_COMMON_PAY_ARREARS';
+          }
+          if(estimate.fees[i].name.labelKey==='SWATCHATHA_TAX')
+          {
+            estimate.fees[i].name.labelKey='PT_COMMON_PAY_SWATCHATHA_TAX';
+          }
+          if(estimate.fees[i].name.labelKey==='PT_TIME_REBATE')
+          {
+            estimate.fees[i].name.labelKey='PT_COMMON_PAY_TIME_REBATE';
+          }
+          if(estimate.fees[i].name.labelKey==='PT_PROMOTIONAL_REBATE')
+          {
+            estimate.fees[i].name.labelKey='PT_COMMON_PAY_PROMOTIONAL_REBATE';
+          }
+      }
+    } 
 
   return (
     <Grid container>
