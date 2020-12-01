@@ -65,7 +65,7 @@ import {
   getHeaderLabel,
   validateUnitandPlotSize,
   normalizePropertyDetails,
-  getImportantDates,
+  //getImportantDates,
   renderPlotAndFloorDetails,
   removeAdhocIfDifferentFY,
   getBusinessServiceNextAction
@@ -135,7 +135,7 @@ class FormWizard extends Component {
     const assessmentId = getQueryValue(search, "assessmentId");
     const tenantId = getQueryValue(search, "tenantId");
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
-    getImportantDates(this);
+    //getImportantDates(this);
     try {
       let currentDraft;
      
@@ -850,7 +850,7 @@ class FormWizard extends Component {
             displayFormErrorsAction("basicInformation");
           }
         }
-        getImportantDates(this);
+        //getImportantDates(this);
         break;
       case 2:
         if (
