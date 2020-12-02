@@ -329,7 +329,7 @@ export const superArea = {
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     toolTip: true,
     toolTipMessage: "PT_SUPER_AREA_TOOLTIP_MESSAGE",
-    required: true,
+    //required: true,
     numcols: 4,
     hideField: false,
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
