@@ -102,24 +102,7 @@ export const ImageUploadHandler = (props) => {
   return (
     // <Card>
     <React.Fragment>
-      <CardHeader>{props.header}</CardHeader>
-
-      <CardText>
-        {/* Click on the icon below to upload the complaint photos as evidence. You
-        can capture photos directly through your camera or upload from your
-        Gallery. If you do not have complaint photo, you can skip the continue
-        for next step. */}
-        {t("CS_ADDCOMPLAINT_UPLOAD_PHOTO_TEXT")}
-      </CardText>
-
       <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} />
-
-      {/* <Link
-        to="/create-complaint/details"
-        onClick={() => props.save(uploadedImagesIds)}
-      >
-        <SubmitBar label="Next" />
-      </Link> */}
     </React.Fragment>
   );
 };

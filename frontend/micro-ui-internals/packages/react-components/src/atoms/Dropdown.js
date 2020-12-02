@@ -20,7 +20,7 @@ const Dropdown = (props) => {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
-
+  console.log("dropdown data is diaplyed here %%%%%%%%%%%5", props.option);
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);

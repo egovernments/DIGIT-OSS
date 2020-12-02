@@ -9,6 +9,10 @@ import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteM
 import SelectComplaintType from "./Steps/SelectComplaintType";
 import SelectSubType from "./Steps/SelectSubType";
 import SelectPincode from "./Steps/SelectPincode";
+import SelectAddress from "./Steps/SelectAddress";
+import SelectLandmark from "./Steps/SelectLandmark";
+import SelectImages from "./Steps/SelectImages";
+import SelectDetails from "./Steps/SelectDetails";
 
 const Step2 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSelect} />;
 const Step3 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSelect} />;
@@ -43,12 +47,34 @@ export const CreateComplaint = () => {
   };
 
   const selectSubType = (subType) => {
-    updateParams("complaintType", subType);
+    setParams({ ...params, subType });
     history.push(`${path}/pincode`);
   };
 
   const selectPincode = (pincode) => {
-    updateParams("pincode", pincode);
+    setParams({ ...params, pincode });
+    console.log("index --->", pincode);
+    history.push(`${path}/address`);
+  };
+
+  const selectAddress = (address) => {
+    setParams({ ...params, address });
+    history.push(`${path}/landmark`);
+  };
+
+  const saveLandmark = (landmark) => {
+    setParams({ ...params, landmark });
+    history.push(`${path}/upload-photos`);
+  };
+
+  const saveImagesUrl = (imageUrls) => {
+    setParams({ ...params, imageUrls });
+    history.push(`${path}/additional-details`);
+  };
+
+  const submitComplaint = (details) => {
+    details && details !== "" ? setDetails(details) : null;
+    // setToSubmitComplaint(true);
   };
 
   const updateParams = (param, value) => {
@@ -68,6 +94,21 @@ export const CreateComplaint = () => {
       <Route path={`${path}/pincode`}>
         <SelectPincode config={stepItems[2]} onSelect={selectPincode} />
       </Route>
+      <Route path={`${path}/address`}>
+        <SelectAddress config={stepItems[3]} onSelect={selectAddress} />
+      </Route>
+      <Route path={`${path}/landmark`}>
+        <SelectLandmark config={stepItems[4]} onSelect={saveLandmark} />
+      </Route>
+      <Route path={`${path}/upload-photos`}>
+        <SelectImages config={stepItems[5]} onSelect={saveImagesUrl} />
+      </Route>
+      <Route path={`${path}/additional-details`}>
+        <SelectDetails config={stepItems[6]} onSelect={submitComplaint} />
+      </Route>
+      {/* <Route path={`${path}/submission`}>
+        <Submission config={stepItems[7]} />
+      </Route> */}
       <Route>
         <Redirect to={`${url}/complaint-type`} />
       </Route>

@@ -8,9 +8,7 @@ const SelectComplaintType = ({ config, onSelect }) => {
     onSelect(complaintType);
   };
   const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
-  // console.log("------------=============================++++++++",__initComplaintType__)
   const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});
-  console.log("------------=============================++++++++", complaintType);
   const textParams = config.texts;
   const SessionStorage = Digit.SessionStorage;
   const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
