@@ -92,8 +92,8 @@ public class SearchReceiptAction extends SearchFormAction {
     private Long userId = (long) -1;
     private String instrumentType;
     private String receiptNumber;
-    private Date fromDate;
-    private Date toDate;
+    private Long fromDate;
+    private Long toDate;
     private Integer searchStatus = -1;
     private String target = "new";
     private String manualReceiptNumber;
@@ -143,21 +143,7 @@ public class SearchReceiptAction extends SearchFormAction {
         this.receiptNumber = receiptNumber;
     }
 
-    public Date getFromDate() {
-        return fromDate;
-    }
-
-    public void setFromDate(final Date fromDate) {
-        this.fromDate = fromDate;
-    }
-
-    public Date getToDate() {
-        return toDate;
-    }
-
-    public void setToDate(final Date toDate) {
-        this.toDate = toDate;
-    }
+   
 
     @Action(value = "/receipts/searchReceipt-reset")
     public String reset() {
@@ -345,7 +331,9 @@ public class SearchReceiptAction extends SearchFormAction {
         }
         if (getToDate() != null) {
             criteriaString.append(" and receipt.receiptdate < ? ");
-            params.add(DateUtils.add(toDate, Calendar.DATE, 1));
+            //params.add(DateUtils.add(toDate, Calendar.DATE, 1));
+            Long todates = toDate + 1 * 24 * 60 * 60 * 1000;
+            params.add(todates);
         }
         if (getServiceTypeId() != null) {
             criteriaString.append(" and receipt.service.id = ? ");
@@ -439,4 +427,21 @@ public class SearchReceiptAction extends SearchFormAction {
     public void setCollectionVersion(String collectionVersion) {
         this.collectionVersion = collectionVersion;
     }
+    
+    public Long getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Long fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Long getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Long toDate) {
+        this.toDate = toDate;
+    }
+
 }

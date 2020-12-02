@@ -47,10 +47,13 @@
  */
 package org.egov.collection.web.actions.receipts;
 
+import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,10 +85,12 @@ import org.egov.infra.microservice.models.BankAccountServiceMapping;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.BusinessService;
 import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.utils.DateUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
+import org.egov.utils.Constants;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -127,6 +132,8 @@ public class BankRemittanceAction extends BaseFormAction {
     private Integer positionUser;
     private Integer designationId;
     private Date remittanceDate;
+    private String selectedRowsId;
+
     @Autowired
     private transient FinancialYearDAO financialYearDAO;
     @Autowired
@@ -142,8 +149,8 @@ public class BankRemittanceAction extends BaseFormAction {
     private Long finYearId;
     private RemittanceServiceImpl remittanceService;
     private String voucherNumber;
-    private Date fromDate;
-    private Date toDate;
+    private Long fromDate;
+    private Long toDate;
     private Integer pageSize;
     private String remittanceAmount;
     private static final String REMITTANCE_LIST = "REMITTANCE_LIST";
@@ -151,6 +158,9 @@ public class BankRemittanceAction extends BaseFormAction {
     private String remitAccountNumber;
     private List<ReceiptBean> resultList = new ArrayList<>();
     private List<ReceiptBean> finalList = new ArrayList<>();
+    final SimpleDateFormat dateFomatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+
 
     /**
      * @param collectionsUtil the collectionsUtil to set
@@ -205,10 +215,8 @@ public class BankRemittanceAction extends BaseFormAction {
             final Object bankAccountResult = bankAccountQry.uniqueResult();
             remitAccountNumber = (String) bankAccountResult;
         }
-
         populateRemittanceList();
-
-        if (fromDate != null && toDate != null && toDate.before(fromDate))
+        if (fromDate != null && toDate != null && toDate > fromDate)
             addActionError(getText("bankremittance.before.fromdate"));
         if (!hasErrors() && accountNumberId != null) {
             final List<String> serviceCodeList = new ArrayList<>(0);
@@ -219,9 +227,18 @@ public class BankRemittanceAction extends BaseFormAction {
                 serviceCodeList.add(basm.getBusinessDetails());
             }
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
-            resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("", StringUtils.join(serviceCodeList, ","),
-                    StringUtils.join(fundCodeSet, ","), fromDate == null ? financialYear.getStartingDate() : fromDate,
-                    toDate == null ? financialYear.getEndingDate() : toDate, CollectionConstants.INSTRUMENT_NEW_STATUS);
+            if (fromDate != null && toDate != null) {
+                resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("",
+                        StringUtils.join(serviceCodeList, ","), StringUtils.join(fundCodeSet, ","), fromDate, toDate,
+                        CollectionConstants.INSTRUMENT_NEW_STATUS);
+            } else if (financialYear != null && financialYear.getStartingDate() != null
+                    && financialYear.getEndingDate() != null) {
+                Long dateInLongFromDate = financialYear.getStartingDate().getTime();
+                Long dateInLongToDate = financialYear.getEndingDate().getTime();
+                resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("",
+                        StringUtils.join(serviceCodeList, ","), StringUtils.join(fundCodeSet, ","), dateInLongFromDate,
+                        dateInLongToDate, CollectionConstants.INSTRUMENT_NEW_STATUS);
+            }
             if (fromDate != null && toDate != null)
                 pageSize = resultList.size();
             else
@@ -247,6 +264,7 @@ public class BankRemittanceAction extends BaseFormAction {
     @ValidationErrorPage(value = "error")
     @Action(value = "/receipts/bankRemittance-create")
     public String create() {
+        prepareBankRemittanceList();
         final long startTimeMillis = System.currentTimeMillis();
         if (accountNumberId == null || accountNumberId.isEmpty() || accountNumberId.equalsIgnoreCase("-1"))
             throw new ValidationException(Arrays.asList(new ValidationError("Please select Account number",
@@ -265,6 +283,33 @@ public class BankRemittanceAction extends BaseFormAction {
         bank = bankAcc.getBankbranch().getBank().getName();
         totalCashAmount = getSum(finalList);
         return INDEX;
+    }
+    
+    public List<ReceiptBean> prepareBankRemittanceList() {
+        finalList = new ArrayList<>();
+        String[] selectedRowsIdArray;
+        if (selectedRowsId != null)
+            selectedRowsIdArray = selectedRowsId.split(";,");
+        else
+            selectedRowsIdArray = new String[0];
+        for (int i = 0; i < selectedRowsIdArray.length; i++) {
+            ReceiptBean receipt = new ReceiptBean();
+            String[] items = selectedRowsIdArray[i].split("\\~");
+            receipt.setService(items[0]);
+            receipt.setFund(items[1]);
+            receipt.setDepartment(items[2]);
+            receipt.setInstrumentAmount(BigDecimal.valueOf(Double.valueOf(items[3])));
+            receipt.setInstrumentType(items[4]);
+            if (items[5] != null && !items[5].isEmpty()) {
+                String item = items[5];
+                if (item.contains(";"))
+                    item = items[5].replace(";", "");
+                receipt.setReceiptDate(item);
+            }
+            receipt.setSelected(true);
+            finalList.add(receipt);
+        }
+        return finalList;
     }
 
     private void populateNames(List<CollectionBankRemittanceReport> bankRemittanceList) {
@@ -303,7 +348,6 @@ public class BankRemittanceAction extends BaseFormAction {
         super.validate();
         populateRemittanceList();
         listData();
-        final SimpleDateFormat dateFomatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         if (receiptDateArray != null) {
             final String[] filterReceiptDateArray = removeNullValue(receiptDateArray);
             final String receiptEndDate = filterReceiptDateArray[filterReceiptDateArray.length - 1];
@@ -601,26 +645,26 @@ public class BankRemittanceAction extends BaseFormAction {
         this.voucherNumber = voucherNumber;
     }
 
-    public Date getFromDate() {
+
+    public Long getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Date fromDate) {
+    public void setFromDate(Long fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Date getToDate() {
+    public Long getToDate() {
         return toDate;
     }
 
-    public void setToDate(Date toDate) {
+    public void setToDate(Long toDate) {
         this.toDate = toDate;
     }
 
     public Integer getPageSize() {
         return pageSize;
     }
-
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
@@ -671,6 +715,13 @@ public class BankRemittanceAction extends BaseFormAction {
 
     public void setFinalList(List<ReceiptBean> finalList) {
         this.finalList = finalList;
+    }
+    public String getSelectedRowsId() {
+        return selectedRowsId;
+    }
+
+    public void setSelectedRowsId(String selectedRowsId) {
+        this.selectedRowsId = selectedRowsId;
     }
 
 }

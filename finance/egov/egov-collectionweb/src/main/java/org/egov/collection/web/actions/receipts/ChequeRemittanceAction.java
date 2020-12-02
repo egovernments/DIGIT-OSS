@@ -48,6 +48,7 @@
 
 package org.egov.collection.web.actions.receipts;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -147,8 +148,8 @@ public class ChequeRemittanceAction extends BaseFormAction {
     private Long finYearId;
     private RemittanceServiceImpl remittanceService;
     private String voucherNumber;
-    private Date fromDate;
-    private Date toDate;
+    private Long fromDate;
+    private Long toDate;
     private Integer pageSize;
     private String remittanceAmount;
     private static final String REMITTANCE_LIST = "REMITTANCE_LIST";
@@ -191,10 +192,9 @@ public class ChequeRemittanceAction extends BaseFormAction {
         }
 
         populateRemittanceList();
-        if (fromDate != null && toDate != null && toDate.before(fromDate))
+        if (fromDate != null && toDate != null && (toDate>fromDate))
             addActionError(getText("bankremittance.before.fromdate"));
         if (!hasErrors() && accountNumberId != null) {
-
             final List<String> serviceCodeList = new ArrayList<>(0);
             List<BankAccountServiceMapping> mappings = microserviceUtils
                     .getBankAcntServiceMappingsByBankAcc(accountNumberId.toString(), null);
@@ -205,12 +205,17 @@ public class ChequeRemittanceAction extends BaseFormAction {
             fundQuery.setString("accountNumberId", accountNumberId);
             List<String> fundCodeList = fundQuery.list();
             final String fundCode = fundCodeList != null && !fundCodeList.isEmpty() ? fundCodeList.get(0).toString() : null;
-
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
-            receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
-                    StringUtils.join(serviceCodeList, ","), fundCode,
-                    fromDate == null ? financialYear.getStartingDate() : fromDate,
-                    toDate == null ? financialYear.getEndingDate() : toDate);
+            if (fromDate != null && toDate != null) {
+                receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
+                        StringUtils.join(serviceCodeList, ","), fundCode, fromDate, toDate);
+            } else if (financialYear != null && financialYear.getStartingDate() != null
+                    && financialYear.getEndingDate() != null) {
+                Long dateInLongFromDate = financialYear.getStartingDate().getTime();
+                Long dateInLongToDate = financialYear.getEndingDate().getTime();
+                receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
+                        StringUtils.join(serviceCodeList, ","), fundCode, dateInLongFromDate, dateInLongToDate);
+            }
             if (fromDate != null && toDate != null)
                 pageSize = receiptBeanList.size();
             else
@@ -589,19 +594,21 @@ public class ChequeRemittanceAction extends BaseFormAction {
         this.voucherNumber = voucherNumber;
     }
 
-    public Date getFromDate() {
+    
+
+    public Long getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Date fromDate) {
+    public void setFromDate(Long fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Date getToDate() {
+    public Long getToDate() {
         return toDate;
     }
 
-    public void setToDate(Date toDate) {
+    public void setToDate(Long toDate) {
         this.toDate = toDate;
     }
 

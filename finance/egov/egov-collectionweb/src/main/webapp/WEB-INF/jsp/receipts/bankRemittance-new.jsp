@@ -206,6 +206,7 @@
 	}
 	
 	function validate() {
+		resetSelectedRowsId();
 		dom.get("bankselectionerror").style.display = "none";
 		dom.get("accountselectionerror").style.display = "none";
 		dom.get("selectremittanceerror").style.display = "none";
@@ -347,6 +348,37 @@
 		}
 		return false;
 	}
+	
+	var selectedRowsId=new Array();
+	function resetSelectedRowsId(){
+		var list = document.getElementsByName('instrumentAmount');
+			console.log(list,"---list")
+			   selectedRowsId = new Array();
+				for(var index=0;index<list.length;index++){
+					var obj = document.getElementById('selected_'+index);;
+					console.log(obj,"obj")
+					if(obj.checked == true){
+						console.log(currentRow,"currentRow");
+					selectedRowsId.push(document.getElementsByName("finalList["+index+"].service")[0].value+"~"+
+							document.getElementsByName("finalList["+index+"].fund")[0].value+"~"+
+							document.getElementsByName("finalList["+index+"].department")[0].value+"~"+
+							document.getElementsByName("finalList["+index+"].instrumentAmount")[0].value+"~"+
+							document.getElementsByName("finalList["+index+"].instrumentType")[0].value+"~"+
+							document.getElementsByName("finalList["+index+"].receiptDate")[0].value +";"	);
+	
+					}
+					document.getElementsByName("finalList["+index+"].service")[0].disabled = true;
+					document.getElementsByName("finalList["+index+"].fund")[0].disabled =true;
+					document.getElementsByName("finalList["+index+"].department")[0].disabled =true;
+					document.getElementsByName("finalList["+index+"].instrumentAmount")[0].disabled =true;
+					document.getElementsByName("finalList["+index+"].instrumentType")[0].disabled =true;
+					document.getElementsByName("finalList["+index+"].receiptDate")[0].disabled =true;
+					document.getElementsByName('finalList["+index+"].selected').disabled = true;
+					
+				}
+				document.getElementById('selectedRowsId').value = selectedRowsId;
+		}
+		
 
 	//DeSelect all receipts
 	function deSelectAll() {
@@ -519,7 +551,7 @@
 						</tr>
 					</table>
 				</div>
-
+					<input type="hidden" name="selectedRowsId"  id ="selectedRowsId" value="${selectedRowsId}" />
 				<div align="left" class="mandatorycoll">
 					<s:text name="common.mandatoryfields" />
 				</div>

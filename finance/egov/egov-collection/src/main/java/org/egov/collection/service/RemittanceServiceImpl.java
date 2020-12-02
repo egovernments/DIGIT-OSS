@@ -234,7 +234,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                             receipts = microserviceUtils.getReceipts(PaymentStatusEnum.NEW.name(),
                                     receipt.getService(),
                                     receipt.getFund(), receipt.getDepartment(), receipt.getReceiptDate());
-                            if (receipts != null) {
+                            if (receipts != null && !receipts.isEmpty()) {
                                 paymentIdSet = new HashSet<>();
                                 for (Receipt r : receipts) {
                                     receiptMap.put(r.getPaymentId(), r);
@@ -247,7 +247,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                             receipts = microserviceUtils.getReceipts(CollectionConstants.RECEIPT_STATUS_APPROVED,
                                     receipt.getService(),
                                     receipt.getFund(), receipt.getDepartment(), receipt.getReceiptDate());
-                            if (receipts != null) {
+                            if (receipts != null && !receipts.isEmpty()) {
                                 for (Receipt r : receipts) {
                                     receiptMap.put(r.getBill().get(0).getBillDetails().get(0).getReceiptNumber(), r);
                                     receiptIds.add(r.getBill().get(0).getBillDetails().get(0).getId());
@@ -255,7 +255,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                             }
                             break;
                         }
-
+                        if (receipts != null && !receipts.isEmpty()) {
                         instrumentsList = microserviceUtils.getInstrumentsByReceiptIds(
                                 CollectionConstants.INSTRUMENTTYPE_NAME_CASH, CollectionConstants.INSTRUMENT_NEW_STATUS,
                                 StringUtils.join(receiptIds, ","));
@@ -298,6 +298,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                 }
             }
         }
+     }
         
         if (totalCashVoucherAmt.compareTo(totalCashAmt) != 0) {
             String validationMessage = "There is a difference of amount " + totalCashAmt.subtract(totalCashVoucherAmt)
@@ -553,7 +554,7 @@ public class RemittanceServiceImpl extends RemittanceService {
      */
     @Override
     public List<ReceiptBean> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
-            final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate, String instrumentStatus) {
+            final String serviceCodes, final String fundCodes, final Long startDate, final Long endDate, String instrumentStatus) {
      // TODO : need to make this call to mdms
 //        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
         List<Instrument> instruments = microserviceUtils.getInstruments(CollectionConstants.INSTRUMENTTYPE_NAME_CASH, TransactionType.Debit,
@@ -789,7 +790,7 @@ public class RemittanceServiceImpl extends RemittanceService {
      */
     @Override
     public List<ReceiptBean> findChequeRemittanceDetailsForServiceAndFund(final String boundaryIdList,
-            final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate) {
+            final String serviceCodes, final String fundCodes, final Long startDate, final Long endDate) {
         // TODO : need to make this call to mdms
 //        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
         String instrumentTypes = CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE + ","
@@ -816,8 +817,8 @@ public class RemittanceServiceImpl extends RemittanceService {
                     .ids(new HashSet(receiptIds))
                     .status(Collections.singleton(PaymentStatusEnum.NEW.name()))
                     .businessServices(Arrays.asList(serviceCodes.split(",")).stream().collect(Collectors.toSet()))
-                    .fromDate(startDate.getTime())
-                    .toDate(endDate.getTime())
+                    .fromDate(startDate)
+                    .toDate(endDate)
                     .build()
                     );
             payments.stream().filter(payment -> receiptInstrumentMap.containsKey(payment.getId())).forEach(payment -> {
@@ -1078,5 +1079,6 @@ public class RemittanceServiceImpl extends RemittanceService {
         query.setParameter("voucherNumber", voucherHeaderId);
         return query.list();
     }
+
 
 }

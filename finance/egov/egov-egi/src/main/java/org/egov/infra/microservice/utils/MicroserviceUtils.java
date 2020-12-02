@@ -55,6 +55,7 @@ import static org.egov.infra.utils.DateUtils.toDefaultDateTimeFormat;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -159,6 +160,7 @@ import org.egov.infra.utils.DateUtils;
 import org.egov.infra.web.support.ui.Inbox;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.jfree.util.Log;
+import org.joda.time.DateTime;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -998,7 +1000,7 @@ public class MicroserviceUtils {
         return this.getInstrumentsBySearchCriteria(contract);
     }
 
-    public List<Receipt> getReceipts(String ids, String status, String serviceCodes, Date fromDate, Date toDate) {
+    public List<Receipt> getReceipts(String ids, String status, String serviceCodes, Long fromDate, Long toDate) {
         ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
                 .status(Arrays.stream(status.split(",")).collect(Collectors.toSet())).fromDate(fromDate).toDate(toDate)
                 .receiptNumbers(Arrays.stream(ids.split(",")).collect(Collectors.toSet()))
@@ -1050,10 +1052,10 @@ public class MicroserviceUtils {
             url.append("&businessCodes=").append(StringUtils.join(criteria.getBusinessCodes(), ","));
         }
         if (criteria.getFromDate() != null) {
-            url.append("&fromDate=").append(criteria.getFromDate().getTime());
+            url.append("&fromDate=").append(criteria.getFromDate());
         }
         if (criteria.getToDate() != null) {
-            url.append("&toDate=").append(criteria.getToDate().getTime());
+            url.append("&toDate=").append(criteria.getToDate());
         }
         if (StringUtils.isNotBlank(criteria.getClassification())) {
             url.append("&classification=").append(criteria.getClassification());
@@ -1068,22 +1070,34 @@ public class MicroserviceUtils {
 
     public List<Receipt> getReceipts(String status, String serviceCode, String fund, String department,
             String receiptDate) {
+        Long dateInLong = 0l;
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date;
+        try {
+            date = formatter.parse(receiptDate);
+            dateInLong = date.getTime();
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Long todates = dateInLong + 1 * 24 * 60 * 60 * 1000;
         ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
                 .status(Arrays.stream(status.split(",")).collect(Collectors.toSet()))
                 .businessCodes(Arrays.stream(serviceCode.split(",")).collect(Collectors.toSet())).fund(fund)
-                .department(department).fromDate(DateUtils.toDateUsingDefaultPattern(receiptDate))
-                .toDate(DateUtils.toDateUsingDefaultPattern(receiptDate)).build();
+                .department(department).fromDate(dateInLong)
+                .toDate(todates).build();
         return this.getReceipt(criteria);
     }
 
-    public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
+    public List<Receipt> searchReciepts(String classification, Long fromDate, Long toDate, String businessCode,
             String receiptNo) {
 
         return this.searchReciepts(classification, fromDate, toDate, businessCode, Arrays.asList(receiptNo));
 
     }
 
-    public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
+    public List<Receipt> searchReciepts(String classification, Long fromDate, Long toDate, String businessCode,
             List<String> receiptNos) {
         ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder().fromDate(fromDate).toDate(toDate)
                 .businessCodes(businessCode != null ? Arrays.stream(businessCode.split(",")).collect(Collectors.toSet())
@@ -1703,7 +1717,8 @@ public class MicroserviceUtils {
     }
     
     private void preparePaymentSearchQueryString(PaymentSearchCriteria searchCriteria, StringBuilder url) {
-        url.append("&tenantId=").append(getTenentId());
+        searchCriteria.setTenantId(getTenentId());
+        url.append("tenantId=").append(searchCriteria.getTenantId());
         if (CollectionUtils.isNotEmpty(searchCriteria.getReceiptNumbers())) {
             url.append("&receiptNumbers=").append(StringUtils.join(searchCriteria.getReceiptNumbers(), ","));
         }
