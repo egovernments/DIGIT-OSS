@@ -78,4 +78,10 @@ export const newComplaintSteps = [
       },
     ],
   },
+  {
+    texts: {
+      cardText: "CS_COMMON_TRACK_COMPLAINT_TEXT",
+      nextText: "CORE_COMMON_GO_TO_HOME",
+    },
+  },
 ];

@@ -27,7 +27,7 @@ const FormStep = ({ children, config, onSelect, onSkip }) => {
     }
     if (input.type === "textarea")
       return (
-        <React.Fragment>
+        <React.Fragment key={index}>
           <CardLabel>{input.label}</CardLabel>
           <TextArea key={index} name={input.name} inputRef={register(input.validation)}></TextArea>
         </React.Fragment>

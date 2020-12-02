@@ -55,6 +55,7 @@ import CityMohalla from "./molecules/CityMohalla";
 import DetailsCard from "./molecules/DetailsCard";
 import InputCard from "./molecules/InputCard";
 import FormStep from "./molecules/FormStep";
+import RatingCard from "./molecules/RatingCard";
 
 import { PrivateRoute } from "./atoms/PrivateRoute";
 
@@ -122,4 +123,5 @@ export {
   // Molecule
   InputCard,
   FormStep,
+  RatingCard,
 };

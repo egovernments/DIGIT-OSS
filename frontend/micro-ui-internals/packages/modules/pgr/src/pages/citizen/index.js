@@ -1,7 +1,7 @@
 import React from "react";
 // import { CreateComplaint } from "./pages/citizen/CreateComplaint/index";
 import { ReopenComplaint } from "./ReopenComplaint/index";
-import RatingAndFeedBack from "./Rating/Rating";
+import SelectRating from "./Rating/SelectRating";
 // import RatingAndFeedBack from "./pages/citizen/Rating/Rating";
 // import AddtionalDetails from "./pages/citizen/ReopenComplaint/AddtionalDetails";
 // import ReasonPage from "./pages/citizen/ReopenComplaint/Reason";
@@ -43,7 +43,7 @@ const App = () => {
         <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
         <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
         <PrivateRoute path={`${path}/reopen`} component={ReopenComplaint} />
-        <PrivateRoute path={`${path}/rate/:id`} component={RatingAndFeedBack} />
+        <PrivateRoute path={`${path}/rate/:id`} component={SelectRating} />
       </AppContainer>
     </Switch>
   );

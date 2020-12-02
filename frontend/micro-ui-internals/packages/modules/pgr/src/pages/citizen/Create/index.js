@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { createComplaint } from "../../../redux/actions/index";
+
 import { FormStep, SubmitBar, TextInput } from "@egovernments/digit-ui-react-components";
 
 import { newComplaintSteps } from "./config";
@@ -13,6 +16,7 @@ import SelectAddress from "./Steps/SelectAddress";
 import SelectLandmark from "./Steps/SelectLandmark";
 import SelectImages from "./Steps/SelectImages";
 import SelectDetails from "./Steps/SelectDetails";
+import Response from "./Steps/Response";
 
 const Step2 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSelect} />;
 const Step3 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSelect} />;
@@ -22,6 +26,10 @@ export const CreateComplaint = () => {
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const appState = useSelector((state) => state)["common"];
+  console.log("appstate form index", appState);
   const [params, setParams] = useState({});
   const [submitForm, setSubmitForm] = useState(false);
 
@@ -47,34 +55,65 @@ export const CreateComplaint = () => {
   };
 
   const selectSubType = (subType) => {
-    setParams({ ...params, subType });
+    const { key, name } = subType;
+    const complaintType = key;
+    setParams({ ...params, complaintType });
     history.push(`${path}/pincode`);
   };
 
-  const selectPincode = (pincode) => {
-    setParams({ ...params, pincode });
-    console.log("index --->", pincode);
+  const selectPincode = (_pincode) => {
+    if (_pincode) {
+      const { pincode } = _pincode;
+      setParams({ ...params, pincode });
+      console.log("index --->", pincode);
+    }
     history.push(`${path}/address`);
   };
 
   const selectAddress = (address) => {
-    setParams({ ...params, address });
+    const cityCode = address.city.code;
+    const city = address.city.name;
+    const district = address.city.name;
+    const region = address.city.name;
+    const state = "Punjab";
+    const localityCode = address.locality.code;
+    const localityName = address.locality.name;
+    setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName });
     history.push(`${path}/landmark`);
   };
 
-  const saveLandmark = (landmark) => {
+  const saveLandmark = (_landmark) => {
+    const { landmark } = _landmark;
     setParams({ ...params, landmark });
     history.push(`${path}/upload-photos`);
   };
 
-  const saveImagesUrl = (imageUrls) => {
-    setParams({ ...params, imageUrls });
+  const saveImagesUrl = (images) => {
+    const uploadedImages = images?.map((url) => {
+      return {
+        documentType: "PHOTO",
+        fileStore: url,
+        documentUid: "",
+        additionalDetails: {},
+      };
+    });
+    setParams({ ...params, uploadedImages });
     history.push(`${path}/additional-details`);
   };
 
-  const submitComplaint = (details) => {
-    details && details !== "" ? setDetails(details) : null;
-    // setToSubmitComplaint(true);
+  const submitComplaint = async (_details) => {
+    if (_details) {
+      const { details } = _details;
+      details && details !== "" ? setParams({ ...params, details }) : null;
+    }
+    console.log("index params", params);
+    // submit complaint through actions
+    await dispatch(createComplaint(params));
+    history.push(`${path}/response`);
+  };
+
+  const backToHome = () => {
+    history.push(`${path}/`);
   };
 
   const updateParams = (param, value) => {
@@ -106,9 +145,9 @@ export const CreateComplaint = () => {
       <Route path={`${path}/additional-details`}>
         <SelectDetails config={stepItems[6]} onSelect={submitComplaint} />
       </Route>
-      {/* <Route path={`${path}/submission`}>
-        <Submission config={stepItems[7]} />
-      </Route> */}
+      <Route path={`${path}/response`}>
+        <Response config={stepItems[7]} onSelect={backToHome} />
+      </Route>
       <Route>
         <Redirect to={`${url}/complaint-type`} />
       </Route>

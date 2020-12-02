@@ -6,7 +6,7 @@ const useTenants = () => {
   console.log("tenantInfo", tenantInfo);
   const [tenants, setTenants] = useState(null);
   useEffect(() => {
-    setTenants(tenantInfo.filter((tenant) => tenant.type === "CITY").map((tenant) => tenant.code));
+    setTenants(tenantInfo.filter((tenant) => tenant.type === "CITY"));
   }, [tenantInfo]);
   return tenants;
 };

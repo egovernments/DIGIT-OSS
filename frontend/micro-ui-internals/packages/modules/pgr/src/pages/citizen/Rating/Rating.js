@@ -21,6 +21,9 @@ const RatingAndFeedBack = () => {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
 
+  let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
+  console.log("complaintDetails", complaintDetails);
+
   const onSelect = (e) => {
     setSelection([...selection, e.target.value]);
   };
@@ -35,6 +38,7 @@ const RatingAndFeedBack = () => {
 
   const onSubmit = () => {
     let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
+    console.log("complaintDetails", complaintDetails);
     complaintDetails.service.rating = rating;
     complaintDetails.service.additionalDetail = selection;
     complaintDetails.workflow = {

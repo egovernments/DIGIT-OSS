@@ -16,10 +16,12 @@ const SelectAddress = ({ config, onSelect }) => {
   //   const __localities = useLocalities({ city: selectedCity });
 
   useEffect(async () => {
-    let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity });
-    let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
-    setLocalities(__localityList);
-    Digit.SessionStorage.set("selected_localities", __localityList);
+    if (selectedCity) {
+      let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
+      let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+      setLocalities(__localityList);
+      Digit.SessionStorage.set("selected_localities", __localityList);
+    }
   }, [selectedCity]);
 
   function selectCity(city) {
@@ -34,10 +36,14 @@ const SelectAddress = ({ config, onSelect }) => {
     Digit.SessionStorage.set("locality_complaint", locality);
   }
 
+  function onSubmit() {
+    onSelect({ locality: selectedLocality, city: selectedCity });
+  }
+
   return (
-    <FormStep config={config} onSelect={onSelect}>
+    <FormStep config={config} onSelect={onSubmit}>
       <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} />
+      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="name" />
       {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
       {selectedCity && localities && (
         <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} />
