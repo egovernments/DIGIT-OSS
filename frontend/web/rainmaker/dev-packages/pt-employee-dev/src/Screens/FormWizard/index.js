@@ -1309,9 +1309,12 @@ class FormWizard extends Component {
 
   getEstimates = async () => {
     let { search } = this.props.location;
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
-    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-   if (isAssesment || isReassesment) {
+   // let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    //let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+
+    const purpose = getQueryValue(search, "purpose");
+    const isAssesment = (purpose==="assess")?true:false;
+   if (isAssesment) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
           window.scrollTo(0, 0);
@@ -1329,11 +1332,15 @@ class FormWizard extends Component {
     let { hideSpinner, location ,showSpinner} = this.props;
     let { search } = location;
     
-    let isAssesment = getQueryValue(search, "purpose");
+    const purpose = getQueryValue(search, "purpose");
+    const isAssess = (purpose==="assess")?true:false;
+     console.log("prasad isAssess in estimate call ", isAssess);
 
-    if (isAssesment ) {
+   if (isAssess ) {
       let prepareFormData = { ...this.props.prepareFormData };
+
       showSpinner();
+
       const financialYearFromQuery = getFinancialYearFromQuery();
       try {
         const financeYear = { financialYear: financialYearFromQuery };
@@ -1373,6 +1380,7 @@ class FormWizard extends Component {
           );
       }
     }
+    
 
   };
 
