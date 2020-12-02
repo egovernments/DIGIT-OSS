@@ -83,8 +83,9 @@ class ReviewForm extends Component {
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
     const { generalMDMSDataById = {},location={} } = this.props;
     const { search } = location;
-    const isReassess = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    const isAssess = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+   // const isReassess = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    const purpose = getQueryValue(search, "purpose");
+    const isAssess = (purpose==="assess")?true:false;
     return (
       <div>
         <Card
@@ -98,7 +99,7 @@ class ReviewForm extends Component {
                 />
 
               </div>
-              {(isAssess||isReassess) && <PropertyTaxDetailsCard
+              {isAssess && <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 addRebateBox={addRebateBox}

@@ -1311,7 +1311,7 @@ class FormWizard extends Component {
     let { search } = this.props.location;
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    if (isAssesment || isReassesment) {
+   if (isAssesment || isReassesment) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
           window.scrollTo(0, 0);
