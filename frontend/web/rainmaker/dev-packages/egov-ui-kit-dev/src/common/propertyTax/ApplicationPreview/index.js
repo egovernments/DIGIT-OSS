@@ -11,7 +11,7 @@ import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { FETCHASSESSMENTS, PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { getLocale, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-import { generatePdfFromDiv, getQueryValue } from "egov-ui-kit/utils/PTCommon";
+import { generatePdfFromDiv, getQueryValue,getFinancialYearFromQuery } from "egov-ui-kit/utils/PTCommon";
 import Label from "egov-ui-kit/utils/translationNode";
 import WorkFlowContainer from "egov-workflow/ui-containers-local/WorkFlowContainer";
 import get from "lodash/get";
@@ -22,7 +22,10 @@ import AssessmentInfo from "../Property/components/AssessmentInfo";
 import DocumentsInfo from "../Property/components/DocumentsInfo";
 import OwnerInfo from "../Property/components/OwnerInfo";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
+import PropertyTaxDetailsCard from "../Property/components/PropertyTaxDetails";
 import "./index.css";
+import CalculationDetails from "../Property/components/CalculationDetails"
+import {  createAssessmentPayload } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 
 
 const innerDivStyle = {
@@ -59,6 +62,8 @@ class ApplicationPreview extends Component {
       dialogueOpen: false,
       urlToAppend: "",
       showAssessmentHistory: false,
+      estimates:null,
+      calculationDetails:false
     };
   }
 
@@ -320,9 +325,47 @@ class ApplicationPreview extends Component {
     return filteredCity ? get(filteredCity[0], "logoId") : "";
   }
 
+  estimate = async (additionalDetails)=>{
+    var {properties,prepareFormData} = this.props;
+    const financialYearFromQuery = getFinancialYearFromQuery();
+    const financeYear = { financialYear: financialYearFromQuery };
+    financeYear.financialYear =  "2019-20";
+
+    if(properties && properties.propertyId){
+      const assessmentPayload = createAssessmentPayload(properties, financeYear);
+      if(additionalDetails){
+        assessmentPayload.additionalDetails = additionalDetails;
+      }
+      let estimateResponse = await httpRequest(
+        "pt-calculator-v2/propertytax/_estimate",
+        "_estimate",
+        [],
+        {
+          Assessment: assessmentPayload
+        }
+      );
+      this.setState({
+        estimates:estimateResponse.Calculation
+      })
+    }
+}
+
+updateEstimate = ()=>{
+
+  if(this.props.prepareFormData.Properties[0].propertyDetails[0]){
+    this.estimate(this.props.prepareFormData.Properties[0].propertyDetails[0])
+  }
+}
+openCalculationDetails = () => {
+  this.setState({ calculationDetails: true });
+};
+closeCalculationDetails = () => {
+  this.setState({ calculationDetails: false });
+};
   render() {
-    const { location, documentsUploaded } = this.props;
+    const { location, documentsUploaded,auth } = this.props;
     const { search } = location;
+    let roles,approver;
     const applicationNumber = getQueryValue(search, "applicationNumber");
     const { generalMDMSDataById, properties, cities } = this.props;
     const applicationType = this.getApplicationType();
@@ -365,7 +408,16 @@ class ApplicationPreview extends Component {
       const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties, "tenantId"));
       ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0], "city.ulbGrade")}` : "MUNICIPAL CORPORATION";
     }
-
+    if(!this.state.estimates && properties.propertyId){
+      this.estimate();
+    }
+    roles = auth && auth.userInfo.roles
+    approver =roles && roles.filter(function(role){
+      if(role.code == "PTAPPROVER"){
+        return role;
+      }
+    })
+    
     return <div>
       <Screen className={""}>
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} />
@@ -431,10 +483,22 @@ class ApplicationPreview extends Component {
                     </div> */}
                     </div>
                   </div>
+                 {this.state.estimates && approver && approver.length>0 && <PropertyTaxDetailsCard
+                estimationDetails={this.state.estimates}
+                importantDates=""
+                openCalculationDetails={this.openCalculationDetails}
+                // optionSelected={this.state.valueSelected}
+                updateEstimate = {this.updateEstimate}
+              />}
                   <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                   <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
                   <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></OwnerInfo>
                   <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
+                  <CalculationDetails
+                    open={this.state.calculationDetails}
+                    data={this.props.calculationScreenData}
+                    closeDialogue={() => this.closeCalculationDetails()}
+                  />
                 </div>
               }
             />
@@ -454,7 +518,7 @@ class ApplicationPreview extends Component {
 
 
 const mapStateToProps = (state, ownProps) => {
-  const { common = {}, screenConfiguration = {} } = state;
+  const { common = {}, screenConfiguration = {},auth } = state;
   const { generalMDMSDataById } = common || {};
   const { propertiesById, loading, } = state.properties || {};
   const { location } = ownProps;
@@ -463,7 +527,7 @@ const mapStateToProps = (state, ownProps) => {
   const { preparedFinalObject = {} } = screenConfiguration;
   const { PTApplication = {} } = preparedFinalObject;
   const { propertyId = '' } = PTApplication;
-  const { cities } = state.common || [];
+  const { cities, prepareFormData} = state.common || [];
 
 
 
@@ -471,7 +535,7 @@ const mapStateToProps = (state, ownProps) => {
   const { documentsUploaded } = properties || [];
   return {
     ownProps,
-    generalMDMSDataById, properties, documentsUploaded, propertyId, cities
+    generalMDMSDataById, properties, documentsUploaded, propertyId, cities,prepareFormData,auth
   };
 };
 

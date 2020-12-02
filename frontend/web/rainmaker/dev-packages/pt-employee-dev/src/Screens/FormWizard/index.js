@@ -1342,7 +1342,6 @@ class FormWizard extends Component {
     
     const purpose = getQueryValue(search, "purpose");
     const isAssess = (purpose==="assess")?true:false;
-     console.log("prasad isAssess in estimate call ", isAssess);
 
    if (isAssess ) {
       let prepareFormData = { ...this.props.prepareFormData };

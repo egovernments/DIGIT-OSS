@@ -1,0 +1,38 @@
+.reset-rebate-action-button {
+    color: #fe7a51 !important;
+    width: 230px;
+    height: 48px;
+}
+#additionalRebate > div > div.pt-rebate-box-btn > div.reset-rebate-action-button > button > div > div > span > div > div {
+    color: #fe7a51 !important;
+}
+.test{
+    display: flex !important;
+    .reset-rebate-action-button {
+        color: #fe7a51 !important;
+        width: 230px;
+        height: 48px;
+    }
+}
+.add-rebate-box{
+    padding: 10px !important;
+    padding-bottom: 36px !important;
+    .pt-emp-penalty-charges, .pt-emp-rebate-charges{
+        margin:14px 0px !important;
+    }
+
+}
+.pt-rebate-box-btn{
+    .add-rebate-action-button{
+        box-shadow: none !important;
+        background: white !important;
+        display: flex !important;
+
+        button{
+            display: flex !important;
+            margin:auto !important;
+            width:auto !important;
+
+        }
+    }
+}

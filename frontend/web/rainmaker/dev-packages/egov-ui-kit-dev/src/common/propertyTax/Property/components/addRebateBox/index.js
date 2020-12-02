@@ -7,6 +7,8 @@ import {
   displayFormErrors
 } from "egov-ui-kit/redux/form/actions";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import "./index.css";
 
 const labelStyle = {
   fontFamily: "Roboto",
@@ -83,7 +85,8 @@ class AddRebateExemption extends React.Component {
       totalAmount,
       displayFormErrors,
       adhocPenalty,
-      additionalRebate
+      additionalRebate,
+      handleClose
     } = this.props;
     let { adhocExemption } = this.props;
     const { exemptValue } = this.state;
@@ -103,6 +106,7 @@ class AddRebateExemption extends React.Component {
           exemptValue !== null &&
             this.props.handleFieldChange("adhocExemption", exemptValue);
           updateEstimate();
+          handleClose()
         } else {
           displayFormErrors("additionalRebate");
         }
@@ -113,6 +117,7 @@ class AddRebateExemption extends React.Component {
         displayFormErrors("additionalRebate");
       } else {
         updateEstimate();
+        handleClose()
       }
     }
   };
@@ -142,7 +147,7 @@ class AddRebateExemption extends React.Component {
         initialTaxValue:totalAmount
       })
     }
-    adhocExemption = { ...adhocExemption, value: exemptValue };
+    // adhocExemption = { ...adhocExemption, value: exemptValue };
     return (
       <div className="add-rebate-box">
         <div className="pt-emp-penalty-charges col-xs-12">
@@ -153,8 +158,11 @@ class AddRebateExemption extends React.Component {
           />
           <div className="adhocPenalty col-sm-6 col-xs-12">
             <TextField
-              onChange={(e, value) => handleFieldChange("adhocPenalty", value)}
+              onChange={(e, value) =>{ handleFieldChange("adhocPenalty", value)
+              prepareFinalObject("adhocExemptionPenalty.adhocPenalty",value)
+            }}
               {...adhocPenalty}
+              // value = {adhocPenalty}
             />
           </div>
           <div className="adhocPenaltyReason col-sm-6 col-xs-12">
@@ -167,7 +175,7 @@ class AddRebateExemption extends React.Component {
             <div className="col-sm-6 col-xs-12">
               <TextField
                 onChange={(e, value) =>
-                  handleFieldChange("otherPenaltyReason", value)
+                  prepareFinalObject("adhocExemptionPenalty.otherPenaltyReason", value)
                 }
                 fullWidth={true}
                 {...otherPenaltyReason}
@@ -182,7 +190,10 @@ class AddRebateExemption extends React.Component {
             labelStyle={labelStyle} />
           <div className="adhocExemption col-sm-6 col-xs-12">
            <TextField
-              onChange={(e, value) => handleFieldChange("adhocExemption", value)}
+              onChange={(e, value) =>{
+                handleFieldChange("adhocExemption", value)
+                prepareFinalObject("adhocExemptionPenalty.adhocExemption", value)}
+              }
               {...adhocExemption}
             />
           </div>
@@ -195,8 +206,10 @@ class AddRebateExemption extends React.Component {
           {showExtraExemptField && (
             <div className="col-sm-6 col-xs-12">
               <TextField
-                onChange={(e, value) =>
+                onChange={(e, value) =>{
                   handleFieldChange("otherExemptionReason", value)
+                  prepareFinalObject("adhocExemptionPenalty.adhocOtherExemptionReason", value)
+                }
                 }
                 fullWidth={true}
                 {...otherExemptionReason}
@@ -223,12 +236,16 @@ class AddRebateExemption extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { form } = state;
+  const { form,screenConfiguration } = state;
   const { additionalRebate } = form;
   const { fields } = additionalRebate || {};
+  const { preparedFinalObject } = screenConfiguration;
+
+  let { estimateResponse = [], adhocExemptionPenalty = {} } = preparedFinalObject;
+
   const { adhocExemption, adhocPenalty } =
     (additionalRebate && additionalRebate.fields) || {};
-  return { additionalRebate, fields, adhocExemption, adhocPenalty };
+  return { additionalRebate, fields, adhocExemption, adhocPenalty,adhocExemptionPenalty,estimateResponse:[...estimateResponse] };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -237,7 +254,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(
         setFieldProperty(formKey, fieldKey, propertyName, propertyValue)
       ),
-    displayFormErrors: formKey => dispatch(displayFormErrors(formKey))
+    displayFormErrors: formKey => dispatch(displayFormErrors(formKey)),
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value))
   };
 };
 

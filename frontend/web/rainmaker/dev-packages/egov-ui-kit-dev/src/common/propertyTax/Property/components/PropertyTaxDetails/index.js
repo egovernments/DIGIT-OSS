@@ -1,14 +1,21 @@
 import React from "react";
-import { Divider, Button } from "components";
+import { Divider, Button,Dialog } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Card, CardHeader, CardText } from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
 import isUndefined from "lodash/isUndefined";
 import "./index.css";
+import formHoc from "egov-ui-kit/hocs/form";
+import AddRebateExemption from "../addRebateBox"
+// import AddRebateExemption from "../Property/components/addRebateBox"
+
+
+const AddRebatePopUp = formHoc({ formKey: "additionalRebate", path: "PropertyTaxPay" })(AddRebateExemption);
 
 class PropertyTaxDetails extends React.Component {
   state = {
-    isExpanded: true
+    isExpanded: true,
+    showRebateBox: false,
   };
 
   toggleExpander = () =>
@@ -21,28 +28,25 @@ class PropertyTaxDetails extends React.Component {
     //   .getElementsByClassName("tax-calculation-card-header")[0]
     //   .addEventListener("click", this.toggleExpander);
   };
-
+  addRebateBox = (show) => {
+    this.setState({
+      showRebateBox: show,
+    });
+  };
   render() {
     const {
       estimationDetails,
       importantDates,
       addRebateBox,
       optionSelected,
-      openCalculationDetails
+      openCalculationDetails,
+      updateEstimate
     } = this.props;
 
    
     const { taxHeadEstimates, totalAmount } = estimationDetails && estimationDetails[0] || {};  
     
-    console.log("prasad estimationDetails", estimationDetails);
-
-    
-    const annualValue  = estimationDetails && estimationDetails.annualValue;
-    const carpetArea  = estimationDetails && estimationDetails.carpetArea;     
-      
-    
-    console.log("prasad estimationDetails annualValue", annualValue);
-    console.log("prasad estimationDetails carpetArea", carpetArea);
+  
 
 
     const { fireCess, intrest, penalty, rebate } = importantDates;
@@ -141,44 +145,11 @@ class PropertyTaxDetails extends React.Component {
                           </div>
                         )
                       );
-                    })}
+                    })}                    
                         
-                          <div className="clearfix" style={{ marginBottom: 8 }}>
-                            <div className="col-sm-9 col-xs-9" style={{ padding: 0 }}>
-                              <Label label={"annualValue"} />
-                            </div>
-                            <div 
-                            //className="col-sm-3 col-xs-3" 
-                            
-                            style={{padding:0,whiteSpace:"no-wrap"}}>
-                              <Label
-                                containerStyle={{ textAlign: "right" }}
-                                className="pt-rf-price"
-                                label={
-                                  estimationDetails && estimationDetails.annualValue 
-                                }
-                              />
-                            </div>
-                          </div>
-                          <div className="clearfix" style={{ marginBottom: 8 }}>
-                            <div className="col-sm-9 col-xs-9" style={{ padding: 0 }}>
-                              <Label label={"carpetValue"} />
-                            </div>
-                            <div 
-                            //className="col-sm-3 col-xs-3" 
-                            
-                            style={{padding:0,whiteSpace:"no-wrap"}}>
-                              <Label
-                                containerStyle={{ textAlign: "right" }}
-                                className="pt-rf-price"
-                                label={
-                                  "10"
-                                }
-                              />
-                            </div>
-                          </div>
-                      
+                       
                    
+
                   <Divider
                     className="reciept-divider"
                     inset={true}
@@ -227,10 +198,26 @@ class PropertyTaxDetails extends React.Component {
                   }}
                   onClick={
                   //  ()=> console.log('clicked')
-                    () => addRebateBox(true)
+                    () => this.addRebateBox(true)
                   }
                 />
               </div> 
+              <div className="pt-rebate-exemption-box">
+                <Dialog
+                    open={this.state.showRebateBox}
+                    children={[
+                    <div className="pt-rebate-box">
+                        <AddRebatePopUp handleClose={() => this.addRebateBox(false)} updateEstimate= {updateEstimate} />
+                    </div>,
+                    ]}
+                    bodyStyle={{ backgroundColor: "#ffffff" }}
+                    isClose={true}
+                    handleClose={() => this.addRebateBox(false)}
+                    onRequestClose={() => this.addRebateBox(false)}
+                    contentStyle={{ width: "56%" }}
+                    contentClassName="rebate-modal-content"
+                />
+            </div> 
                 <div
                   style={{ padding: 0 }}
                   className="col-sm-6"
