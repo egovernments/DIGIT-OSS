@@ -615,7 +615,9 @@ class FormWizard extends Component {
     let { search } = this.props.location;
 
     let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    //let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    const purpose = getQueryValue(search, "purpose");
+    const isAssesment = (purpose==="assess")?true:false;
 
     let buttonLabel = "PT_COMMONS_NEXT";
     if (index == 4) {
