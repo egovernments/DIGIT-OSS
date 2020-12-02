@@ -619,9 +619,15 @@ class FormWizard extends Component {
     const purpose = getQueryValue(search, "purpose");
     const isAssesment = (purpose==="assess")?true:false;
 
+    const isUpdate = (purpose==="update")?true:false;
+
     let buttonLabel = "PT_COMMONS_NEXT";
     if (index == 4) {
       isAssesment ? buttonLabel = 'PT_ASSESS_PROPERTY' : (isReassesment ? buttonLabel = "PT_UPDATE_ASSESSMENT" : buttonLabel = "PT_ADD_ASSESS_PROPERTY");
+      if(isUpdate)
+      { 
+        buttonLabel = 'PT_UPDATE_PROPERTY';
+      }
     } else if (index == 5) {
       buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 6) {
