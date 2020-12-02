@@ -15,7 +15,7 @@ const useLocalities = ({ city }) => {
 
   useEffect(() => {
     if (localityList) {
-      const __localities = localityList.map((locality) => locality.code);
+      const __localities = localityList;
       console.log("uselocalities++++++++++++", __localities);
       setLocalities(__localities);
     }
