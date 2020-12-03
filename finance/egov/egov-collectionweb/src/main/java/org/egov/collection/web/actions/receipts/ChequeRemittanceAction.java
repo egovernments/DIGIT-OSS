@@ -209,8 +209,9 @@ public class ChequeRemittanceAction extends BaseFormAction {
             if (fromDate != null && toDate != null) {
                 Long fromDateInLong=fromDate.getTime();
                 Long toDateInLong=toDate.getTime();
+                Long todates = toDateInLong + 1 * 24 * 60 * 60 * 1000;
                 receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
-                        StringUtils.join(serviceCodeList, ","), fundCode, fromDateInLong, toDateInLong);
+                        StringUtils.join(serviceCodeList, ","), fundCode, fromDateInLong, todates);
             } else if (financialYear != null && financialYear.getStartingDate() != null
                     && financialYear.getEndingDate() != null) {
                 Long dateInLongFromDate = financialYear.getStartingDate().getTime();

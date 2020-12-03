@@ -230,8 +230,9 @@ public class BankRemittanceAction extends BaseFormAction {
             if (fromDate != null && toDate != null) {
                 Long fromDateInLong=fromDate.getTime();
                 Long toDateInLong=toDate.getTime();
+                Long todates = toDateInLong + 1 * 24 * 60 * 60 * 1000;
                 resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("",
-                        StringUtils.join(serviceCodeList, ","), StringUtils.join(fundCodeSet, ","), fromDateInLong, toDateInLong,
+                        StringUtils.join(serviceCodeList, ","), StringUtils.join(fundCodeSet, ","), fromDateInLong, todates,
                         CollectionConstants.INSTRUMENT_NEW_STATUS);
             } else if (financialYear != null && financialYear.getStartingDate() != null
                     && financialYear.getEndingDate() != null) {
