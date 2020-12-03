@@ -54,5 +54,10 @@ public class Calculation   {
 
         @JsonProperty("billingSlabIds")
         private List<String> billingSlabIds;
-}
 
+	    @JsonProperty("carpetArea")
+	    private BigDecimal carpetArea;
+
+	    @JsonProperty("landAV")
+	    private BigDecimal landAV;
+}

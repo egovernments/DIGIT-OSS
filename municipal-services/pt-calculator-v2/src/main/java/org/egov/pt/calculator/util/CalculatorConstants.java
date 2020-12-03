@@ -302,7 +302,7 @@ public class CalculatorConstants {
 
 	
 	public static final String PT_ESTIMATE_BILLINGSLABS_UNMATCH_VACANCT = "PT_ESTIMATE_BILLINGSLABS_UNMATCH";
-	public static final String PT_ESTIMATE_BILLINGSLABS_UNMATCH_VACANT_MSG = "Incorrect count of {count} billing slabs has been found for the given VACANT LAND property detail";
+	public static final String PT_ESTIMATE_BILLINGSLABS_UNMATCH_VACANT_MSG = "Incorrect count of {0} billing slabs has been found for the given VACANT LAND property detail";
 
 	public static final String PT_ESTIMATE_BILLINGSLABS_UNMATCH = "PT_ESTIMATE_BILLINGSLABS_UNMATCH";
 	public static final String PT_ESTIMATE_BILLINGSLABS_UNMATCH_MSG = "more than one billing slab with ids : {ids} has been found for the given unit : ";

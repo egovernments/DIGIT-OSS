@@ -41,6 +41,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -229,10 +230,12 @@ public class EstimationService {
 			throw new CustomException(BILLING_SLAB_MATCH_ERROR_CODE, BILLING_SLAB_MATCH_ERROR_PROPERTY_MESSAGE);
 		}
 
-		TaxHeadEstimate ptTaxHead = getPropertyTaxhead(criteria, filteredBillingSlabs, timeBasedExemptionMasterMap,
+		Map<String,Object> extimationDetails = getPropertyTaxhead(criteria, filteredBillingSlabs, timeBasedExemptionMasterMap,
 				exemption);
-
-		List<TaxHeadEstimate> estimates = new ArrayList<TaxHeadEstimate>();
+		TaxHeadEstimate ptTaxHead = (TaxHeadEstimate) extimationDetails.get("ESTIMATION");
+        BigDecimal landAv = (BigDecimal) extimationDetails.get("LANDAV");
+        BigDecimal carpetArea = (BigDecimal) extimationDetails.get("LANDAREA");
+		List<TaxHeadEstimate> estimates = new ArrayList<>();
 		estimates.add(ptTaxHead);
 		estimates.add(getLateAssessmentPenaltyTaxhead(property));
 		estimates.add(getAdHocPenaltyTaxhead(property));
@@ -243,6 +246,8 @@ public class EstimationService {
 		estimatesAndBillingSlabs.put("estimates", estimates);
 		estimatesAndBillingSlabs.put("billingSlabIds",
 				filteredBillingSlabs.stream().map(slab -> slab.getId()).collect(Collectors.toList()));
+		estimatesAndBillingSlabs.put("LANDAREA", Arrays.asList(carpetArea));
+		estimatesAndBillingSlabs.put("LANDAV", Arrays.asList(landAv));
 
 		return estimatesAndBillingSlabs;
 	}
@@ -275,9 +280,10 @@ public class EstimationService {
 		return TaxHeadEstimate.builder().taxHeadCode(PT_LATE_ASSESSMENT_PENALTY).estimateAmount(amount).build();
 	}
 
-	private TaxHeadEstimate getPropertyTaxhead(CalculationCriteria criteria, List<BillingSlab> filteredBillingSlabs,
+	private Map<String,Object> getPropertyTaxhead(CalculationCriteria criteria, List<BillingSlab> filteredBillingSlabs,
 			Map<String, JSONArray> masterMap, BigDecimal exemption) {
 
+		Map<String,Object> taxDetailsMap = new HashMap<>();
 		Property property = criteria.getProperty();
 		List<BillingSlab> usedSlabs = new ArrayList<BillingSlab>();
 		List<Unit> units = property.getPropertyDetails().get(0).getUnits();
@@ -299,13 +305,20 @@ public class EstimationService {
 			BigDecimal multipleFactor = BigDecimal.ONE;
 			BigDecimal landAV = carpetArea.multiply(unitRate).multiply(multipleFactor).multiply(monthMultiplier);
 			BigDecimal taxAmount = landAV.multiply(taxRate).divide(HUNDRED).setScale(2, 2);
-			return TaxHeadEstimate.builder().taxHeadCode(PT_TAX).estimateAmount(taxAmount).build();
+			
+			TaxHeadEstimate taxheadEstimate = TaxHeadEstimate.builder().taxHeadCode(PT_TAX).estimateAmount(taxAmount).build();
+
+			taxDetailsMap.put("LANDAREA",carpetArea);
+			taxDetailsMap.put("LANDAV", landAV);
+			taxDetailsMap.put("ESTIMATION",taxheadEstimate);
+			return taxDetailsMap;
 
 		}
 
 		// builtup AV = unitArea * unit rate * multiplier factor *12
 		if (propertyDetail.getPropertyType().equalsIgnoreCase(BUILTUP)) {
-
+            BigDecimal totalCarpetArea =BigDecimal.ZERO;
+            BigDecimal totalLandAV =BigDecimal.ZERO;
 			BigDecimal taxAmount = BigDecimal.ZERO;
 			int unoccupiedLandCount = 0;
 			BigDecimal unoccupiedLandTaxAmount = BigDecimal.ZERO;
@@ -321,10 +334,10 @@ public class EstimationService {
 						BigDecimal unitRate = BigDecimal.valueOf(filteredBillingSlabs.get(0).getUnitRate());
 						BigDecimal taxRate = getTaxRate(masterMap, unit);
 						BigDecimal multipleFactor = getMultipleFactor(masterMap, unit);
-
 						BigDecimal landAV = carpetArea.multiply(multipleFactor).multiply(monthMultiplier);
 						unitTaxAmount = landAV.multiply(taxRate);
-
+						totalCarpetArea = totalCarpetArea.add(carpetArea);
+						totalLandAV = totalLandAV.add(landAV);
 						if (unoccupiedLandCount == 0) {
 							BigDecimal totalBuiltupArea = units.stream()
 									.filter(unitDetail -> GROUND_FLOOR_NUMBER.equals(unitDetail.getFloorNo()))
@@ -366,10 +379,12 @@ public class EstimationService {
 									.multiply(monthMultiplier).divide(HUNDRED);
 						}
 						BigDecimal landAV = carpetArea.multiply(unitRate).multiply(monthMultiplier);
-
+						
 						landAV = landAV.add(appreDepreAmount);
 						unitTaxAmount = landAV.multiply(taxRate).divide(HUNDRED);
 						//exemption = exemption.add(unitTaxAmount.multiply(exemptionRate).divide(HUNDRED));
+						totalCarpetArea = totalCarpetArea.add(carpetArea);
+						totalLandAV = totalLandAV.add(landAV);
 					}
 
 				} else {
@@ -379,8 +394,13 @@ public class EstimationService {
 
 				taxAmount = taxAmount.add(unitTaxAmount).add(unoccupiedLandTaxAmount).setScale(2, 2);
 			}
-
-			return TaxHeadEstimate.builder().taxHeadCode(PT_TAX).estimateAmount(taxAmount).build();
+			
+			TaxHeadEstimate taxheadEstimate = TaxHeadEstimate.builder().taxHeadCode(PT_TAX).estimateAmount(taxAmount).build();
+			taxDetailsMap.put("LANDAREA",totalCarpetArea);
+			taxDetailsMap.put("LANDAV", totalLandAV);
+			taxDetailsMap.put("ESTIMATION",taxheadEstimate);
+			
+			return taxDetailsMap;
 
 		}
 
@@ -512,6 +532,8 @@ public class EstimationService {
 		Map<String, List> estimatesAndBillingSlabs = getEstimationMap(criteria, requestInfo, masterMap);
 		List<TaxHeadEstimate> estimates = estimatesAndBillingSlabs.get("estimates");
 		List<String> billingSlabIds = estimatesAndBillingSlabs.get("billingSlabIds");
+		List<BigDecimal> carpertArea = estimatesAndBillingSlabs.get("LANDAREA");
+		List<BigDecimal> landAV = estimatesAndBillingSlabs.get("LANDAV");
 
 		Property property = criteria.getProperty();
 		PropertyDetail detail = property.getPropertyDetails().get(0);
@@ -583,7 +605,7 @@ public class EstimationService {
 		// this call
 		return Calculation.builder().totalAmount(totalAmount).taxAmount(taxAmt).penalty(penalty).exemption(exemption)
 				.rebate(rebate).fromDate(fromDate).toDate(toDate).tenantId(tenantId).serviceNumber(assessmentNumber)
-				.taxHeadEstimates(estimates).billingSlabIds(billingSlabIds).build();
+				.taxHeadEstimates(estimates).billingSlabIds(billingSlabIds).carpetArea(carpertArea.get(0)).landAV(landAV.get(0)).build();
 	}
 
 	/**
