@@ -1,2 +1,2 @@
-export const PGR_EMPLOYEE_COMPLAINT_DETAILS = "/employee/complaint/details/";
-export const PGR_EMPLOYEE_CREATE_COMPLAINT = "/employee/complaint/create";
+export const PGR_EMPLOYEE_COMPLAINT_DETAILS = "/complaint/details/";
+export const PGR_EMPLOYEE_CREATE_COMPLAINT = "/complaint/create";

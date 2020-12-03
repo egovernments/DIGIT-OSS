@@ -22,9 +22,8 @@ const GetReopenInstance = (obj, t) => {
 };
 
 const getResolvedInstance = async (obj, path, t, key) => {
-  console.log("wating....");
   let nextAction = await Digit.workflowService.getNextAction("pb", key);
-  console.log("finish....");
+  let role = Storage.get("role") || "CITIZEN"; // ToDo:
   let actions = nextAction.map(({ action }, index) => (
     <Link key={index} to={`${path}/${action.toLowerCase()}/${obj.businessId}`}>
       <ActionLinks>{GetTranslatedAction(action, t)}</ActionLinks>
@@ -109,12 +108,9 @@ const getComplaintHistory = async (processInstance, path, t, complaint) => {
 const getTimeLineFromProcessInstance = async (processInstance, path, t, complaint) => {
   let timelineList = [];
   let timeline = await getComplaintHistory(processInstance, path, t, complaint);
-  console.log("timeline:", timeline);
   if (timeline) {
     timelineList = await Promise.all(timeline);
   }
-  console.log("timelineList:", timelineList);
-
   return timelineList;
 };
 

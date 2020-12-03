@@ -28,6 +28,7 @@ const createComplaint = ({
     localityName,
     uploadedImages,
   });
+  console.log("from actions", response);
   dispatch({
     type: CREATE_COMPLAINT,
     payload: response,

@@ -5,15 +5,14 @@ import CardHeader from "../atoms/CardHeader";
 import CardText from "../atoms/CardText";
 import SubmitBar from "../atoms/SubmitBar";
 import LinkButton from "../atoms/LinkButton";
-import CardSubHeader from "../atoms/CardSubHeader";
+import CardCaption from "../atoms/CardCaption";
 import TextInput from "../atoms/TextInput";
 
 const InputCard = ({ children, texts = {}, submit = false, inputs = [], inputRef, onNext, onSkip }) => {
   // TODO: inputs handle
-  console.log(texts.header, submit);
   return (
     <Card>
-      {texts.subHeader && <CardSubHeader>{texts.subHeader}</CardSubHeader>}
+      {texts.headerCaption && <CardCaption>{texts.headerCaption}</CardCaption>}
       <CardHeader>{texts.header}</CardHeader>
       <CardText>{texts.cardText}</CardText>
       {children}

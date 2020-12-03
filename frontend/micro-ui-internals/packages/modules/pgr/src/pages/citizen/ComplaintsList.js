@@ -6,6 +6,7 @@ import { useRouteMatch } from "react-router-dom";
 import { Card, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { LOCALE } from "../../constants/Localization";
 import Complaint from "../../components/Complaint";
+import { useSelector } from "react-redux";
 
 const useComplaintsList = () => {
   const User = Digit.SessionStorage.get("User");

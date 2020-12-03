@@ -14,7 +14,7 @@ const BannerPicker = ({ appState }) => {
 };
 
 const Submission = (props) => {
-  const appState = useSelector((state) => state);
+  const appState = useSelector((state) => state)["common"];
   return (
     <Card>
       <BannerPicker appState={appState} />

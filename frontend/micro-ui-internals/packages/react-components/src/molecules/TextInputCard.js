@@ -22,7 +22,6 @@ const TextInputCard = ({ header, subHeader, cardText, cardLabel, nextText, skipA
       </CardText>
       <CardLabel>{cardLabel}</CardLabel>
       <TextInput onChange={textInput} />
-
       <SubmitBar label={nextText} onSubmit={onSave} />
       {skip ? <LinkButton label={skipAndContinueText} onClick={onSkip} /> : null}
     </Card>

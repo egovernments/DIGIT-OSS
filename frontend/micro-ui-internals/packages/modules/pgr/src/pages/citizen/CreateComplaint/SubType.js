@@ -34,7 +34,7 @@ const SubType = (props) => {
   return (
     <Card>
       <CardCaption>{subType.name}</CardCaption>
-      <CardHeader>Choose Complaint Sub-Type</CardHeader>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_COMPLAINT_SUBTYPE_PLACEHOLDER`)}</CardHeader>
       <CardText>
         {/* The complaint type you have chosen has following complaint sub-types.
         Select the option of your choice from the list given below. */}

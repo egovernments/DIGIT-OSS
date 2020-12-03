@@ -6,9 +6,7 @@ import Complaint from "./pages/employee/index";
 const App = () => {
   return (
     <EmployeeAppContainer>
-      <Router>
-        <Complaint />
-      </Router>
+      <Complaint />
     </EmployeeAppContainer>
   );
 };

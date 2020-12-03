@@ -21,10 +21,10 @@ const Complaint = () => {
     <React.Fragment>
       <div className="ground-container">
         <BackButton>Back</BackButton>
+        {console.log("match.url:", match.url)}
+        {console.log("Employee.CreateComplaint:", Employee.CreateComplaint)}
         <Switch>
-          <Route path={match.url + Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails action={popup} />} />
           <Route path={match.url + Employee.CreateComplaint} component={() => <CreateComplaint />} />
-          {console.log("route in employee ap", match.url + Employee.CreateComplaint)}
           <Route path={match.url + Employee.Inbox} component={Inbox} />
         </Switch>
       </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-const DisplayPhotos = ({ srcs, onClick }) => {
+const DisplayPhotos = (props) => {
   return (
     <div className="photos-wrap">
       {props.srcs.map((source, index) => {

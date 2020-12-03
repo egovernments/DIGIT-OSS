@@ -18,7 +18,8 @@ import { PgrRoutes, getRoute } from "../../../constants/Routes";
 const CreateComplaint = ({ match, history }) => {
   const SessionStorage = Digit.SessionStorage;
   const dispatch = useDispatch();
-  const appState = useSelector((state) => state);
+  const appState = useSelector((state) => state)["common"];
+  console.log("appstate", appState);
   const [pincode, setPincode] = useState("");
   const [city, setCity] = useState(null);
   const [locality, setLocality] = useState(null);

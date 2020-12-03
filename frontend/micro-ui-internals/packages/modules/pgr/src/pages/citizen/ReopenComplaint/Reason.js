@@ -28,33 +28,29 @@ const ReasonPage = (props) => {
   }
 
   return (
-    <React.Fragment>
-      {/* <BackButton>Back</BackButton> */}
-      <Card>
-        <CardHeader>{t(`${LOCALIZATION_KEY.CS_REOPEN}_COMPLAINT`)}</CardHeader>
-        {/* <LanguageSelect /> */}
-        <CardText>
-          {/* Select the option related to your complaint from the list given below.
+    <Card>
+      <CardHeader>{t(`${LOCALIZATION_KEY.CS_REOPEN}_COMPLAINT`)}</CardHeader>
+      <CardText>
+        {/* Select the option related to your complaint from the list given below.
         If the complaint type you are looking for is not listed select others.{" "} */}
-          {/* {t(`${TRANSLATION_KEY}_OPTION_ONE`)} */}
-        </CardText>
-        {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ERROR_REOPEN_REASON`)}</CardLabelError>}
-        <RadioButtons
-          // handleChange={onRadioChange}
-          onSelect={onRadioChange}
-          selectedOption={selected}
-          // selected={(value) => setSelected(value)}
-          options={[
-            t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_ONE`),
-            t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_TWO`),
-            t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_THREE`),
-            t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_FOUR`),
-          ]}
-        />
+        {/* {t(`${TRANSLATION_KEY}_OPTION_ONE`)} */}
+      </CardText>
+      {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ERROR_REOPEN_REASON`)}</CardLabelError>}
+      <RadioButtons
+        // handleChange={onRadioChange}
+        onSelect={onRadioChange}
+        selectedOption={selected}
+        // selected={(value) => setSelected(value)}
+        options={[
+          t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_ONE`),
+          t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_TWO`),
+          t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_THREE`),
+          t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_FOUR`),
+        ]}
+      />
 
-        <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={onSave} />
-      </Card>
-    </React.Fragment>
+      <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={onSave} />
+    </Card>
   );
 };
 

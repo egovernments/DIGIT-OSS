@@ -56,6 +56,15 @@ const CloseBtn = (props) => {
   );
 };
 
+const TLCaption = ({ data }) => {
+  return (
+    <div>
+      <p>{data.name}</p>
+      <p>{data.mobileNumber}</p>
+    </div>
+  );
+};
+
 export const ComplaintDetails = (props) => {
   let { id } = useParams();
   const { t } = useTranslation();
@@ -65,7 +74,9 @@ export const ComplaintDetails = (props) => {
   const [toast, setToast] = useState(false);
   const tenantId = "pb.amritsar";
   const statusTable = useComplaintDetails({ tenantId, id });
+  console.log("statusTable", statusTable);
   const workflowDetails = useWorkflowDetails({ tenantId, id });
+  console.log("workflowDetails", workflowDetails);
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
 
@@ -93,6 +104,7 @@ export const ComplaintDetails = (props) => {
     switch (state) {
       case fullscreen:
         setFullscreen(!fullscreen);
+
         break;
       case popup:
         setPopup(!popup);
@@ -109,6 +121,26 @@ export const ComplaintDetails = (props) => {
 
   function onCloseImageZoom() {
     setImageZoom(null);
+  }
+
+  function onActionSelect(action) {
+    switch (action) {
+      case "ASSIGN":
+        setPopup(true);
+        setDisplayMenu(false);
+        break;
+      case "REASSIGN":
+        setPopup(true);
+        setDisplayMenu(false);
+        break;
+      case "REJECT":
+        alert("COMPLAINT REJECTED");
+        setDisplayMenu(false);
+        break;
+      default:
+        console.log("action not known");
+        setDisplayMenu(false);
+    }
   }
 
   function onAssign() {
@@ -132,26 +164,37 @@ export const ComplaintDetails = (props) => {
               (k) =>
                 k !== "CS_COMPLAINT_DETAILS_GEOLOCATION" && k !== "thumbnails" && k !== "workflow" && k !== "CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS"
             )
-            .map((k) => (
-              <Row key={k} label={t(k)} text={statusTable[k]} />
-            ))}
+            .map((k, i, arr) =>
+              arr.length - 1 === i ? <LastRow key={k} label={t(k)} text={statusTable[k]} /> : <Row key={k} label={t(k)} text={statusTable[k]} />
+            )}
           {1 === 1 ? null : (
             <MediaRow label="CS_COMPLAINT_DETAILS_GEOLOCATION">
               <MapView onClick={zoomView} />
             </MediaRow>
           )}
-          <LastRow label="landmark" text="SBI Bank" />
         </StatusTable>
-        {/* <DisplayPhotos
-          srcs={["https://via.placeholder.com/150", "https://via.placeholder.com/150", "https://via.placeholder.com/150"]}
-          onClick={zoomImage}
-        /> */}
+        {statusTable.thumbnails && statusTable.thumbnails.length !== 0 ? <DisplayPhotos srcs={statusTable.thumbnails} onClick={zoomImage} /> : null}
       </Card>
       <Card>
-        <ConnectingCheckPoints>
-          <CheckPoint isCompleted={true} label="Pending For assignment" />
-          <CheckPoint isCompleted={false} label="Complaint Filed" info="12/08/20 Naval Kishore" />
-        </ConnectingCheckPoints>
+        {workflowDetails.timeline && workflowDetails.timeline.length === 1 ? (
+          <CheckPoint isCompleted={true} label={workflowDetails.timeline[0].status} />
+        ) : (
+          <ConnectingCheckPoints>
+            {workflowDetails.timeline &&
+              workflowDetails.timeline.map((checkpoint, index, arr) => {
+                return arr.length - 1 === index ? (
+                  <CheckPoint key={index} isCompleted={false} label={t(checkpoint.status)} />
+                ) : (
+                  <CheckPoint
+                    key={index}
+                    isCompleted={true}
+                    label={t(checkpoint.status)}
+                    customChild={checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null}
+                  />
+                );
+              })}
+          </ConnectingCheckPoints>
+        )}
       </Card>
       {fullscreen ? (
         <PopUp>
@@ -188,7 +231,7 @@ export const ComplaintDetails = (props) => {
       ) : null}
       {toast && <Toast label="Complaint assigned successfully!" onClose={closeToast} />}
       <ActionBar>
-        {displayMenu ? <Menu options={["Assign Complaint", "Reject Complaint"]} onSelect={popupCall} /> : null}
+        {displayMenu && workflowDetails.nextActions ? <Menu options={workflowDetails.nextActions} onSelect={onActionSelect} /> : null}
         <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
       </ActionBar>
     </React.Fragment>

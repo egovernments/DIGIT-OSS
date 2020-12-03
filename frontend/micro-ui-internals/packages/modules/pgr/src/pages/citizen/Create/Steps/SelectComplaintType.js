@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { InputCard } from "@egovernments/digit-ui-react-components";
+import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
+import useComplaintTypes from "../../../../hooks/useComplaintTypes";
 
 const SelectComplaintType = ({ config, onSelect }) => {
   const goNext = () => {
-    onSelect("test");
+    onSelect(complaintType);
   };
+  const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
+  const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});
+  const textParams = config.texts;
+  const SessionStorage = Digit.SessionStorage;
+  const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
+
+  function selectedValue(value) {
+    setComplaintType(value);
+    SessionStorage.set("complaintType", value);
+  }
   return (
-    <InputCard {...config} onNext={goNext}>
-      <h1>test</h1>
-    </InputCard>
+    <TypeSelectCard
+      {...textParams}
+      {...{ menu: menu }}
+      {...{ optionsKey: "name" }}
+      {...{ selected: selectedValue }}
+      {...{ selectedOption: complaintType }}
+      {...{ onSave: goNext }}
+    />
   );
 };
 

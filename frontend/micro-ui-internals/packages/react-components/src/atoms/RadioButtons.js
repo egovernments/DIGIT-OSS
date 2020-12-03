@@ -1,8 +1,9 @@
 import React from "react";
+import isEqual from "lodash/isEqual";
 
 const RadioButtons = (props) => {
   var selected = props.selectedoption;
-
+  console.log("selected option", selected);
   function selectOption(value) {
     console.log("value,,,,,", value);
     selected = value;
@@ -11,7 +12,6 @@ const RadioButtons = (props) => {
   return (
     <div className="radio-wrap">
       {props.options.map((option) => {
-        console.log("option----", option);
         if (props.optionskey) {
           return (
             <div key={option[props.optionskey]}>
@@ -20,9 +20,8 @@ const RadioButtons = (props) => {
                   className="radio-btn"
                   type="radio"
                   value={option}
-                  checked={selected === option ? 1 : 0}
+                  checked={isEqual(selected, option) ? 1 : 0}
                   onChange={() => selectOption(option)}
-                  {...props}
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>

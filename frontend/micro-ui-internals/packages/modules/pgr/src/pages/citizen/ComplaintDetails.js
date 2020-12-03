@@ -12,6 +12,8 @@ import {
   Header,
   CardSubHeader,
   StatusTable,
+  Row,
+  LastRow,
   TextArea,
   SubmitBar,
   ConnectingCheckPoints,
@@ -22,20 +24,14 @@ import {
 
 import { selectComplaints } from "../../selectors/complaint";
 import { fetchBusinessServiceById, searchComplaints } from "../../redux/actions";
-import { selectWorkflow } from "../../selectors/processInstance";
-import getTimeLineFromProcessInstance from "../../hooks/useComplaintHistory";
+import useComplaintDetails from "../../hooks/useComplaintDetails";
+import TimeLine from "./CreateComplaint/TimeLine";
+import useWorkflowDetails from "../../hooks/useWorkflowDetails";
 
 const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
   const dispatch = useDispatch();
-
-  const LOCALIZATION_KEY_CS_COMPLAINT = "CS_COMPLAINT_DETAILS";
-  const LOCALIZATION_KEY_CS_COMMON = "CS_COMMON";
-
-  const [files, setFiles] = useState([]);
-
-  const [complaintHistory, setComplaintHistory] = useState([]);
   const getComplaint = useCallback((id) => dispatch(searchComplaints({ serviceRequestId: id })), [dispatch]);
   const getBusinessServiceById = useCallback((id) => dispatch(fetchBusinessServiceById(id)), [dispatch]);
 
@@ -45,44 +41,24 @@ const ComplaintDetailsPage = (props) => {
   }, [getComplaint, getBusinessServiceById, id]);
 
   const state = useSelector((state) => state);
-
+  let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
+  const statusTableData = useComplaintDetails({ tenantId: cityCodeVal, id });
+  const statusTableFlags = [
+    "CS_COMPLAINT_DETAILS_COMPLAINT_NO",
+    "CS_COMPLAINT_DETAILS_APPLICATION_STATUS",
+    "CS_COMPLAINT_FILED_DATE",
+    "CS_COMPLAINT_DETAILS_LANDMARK",
+    "CS_COMPLAINT_DETAILS_DOOR",
+    "CS_COMPLAINT_DETAILS_BUILDING_NAME",
+    "CS_COMPLAINT_DETAILS_PLOT_NO",
+    "CS_COMPLAINT_DETAILS_STREET",
+    "CS_COMPLAINT_DETAILS_LOCALITY",
+    "CS_COMPLAINT_DETAILS_CITY",
+  ];
+  const timeLineData = useWorkflowDetails({ tenantId: cityCodeVal, id });
   const selectedComplaint = selectComplaints(state);
 
-  const selectedWorkFlow = selectWorkflow(state);
-
-  // const historyData = console.log("historyData:", historyData);
-
   const [imageZoom, setImageZoom] = useState(null);
-
-  useEffect(() => {
-    const getTimelineValues = async () => {
-      if (selectedComplaint.length > 0) {
-        const historyData = await getTimeLineFromProcessInstance(selectedWorkFlow, props.match.path, t, selectedComplaint[0]);
-        console.log("history data", historyData);
-        setComplaintHistory(historyData);
-      }
-    };
-    getTimelineValues();
-  }, [selectedWorkFlow, props.match.path, t, selectedComplaint]);
-
-  const GetImageIds = (images) => {
-    let imageIds = [];
-    imageIds = images.map((image) => {
-      return image.id;
-    });
-    return imageIds;
-  };
-
-  useEffect(() => {
-    async function getImages() {
-      if (selectedComplaint.length > 0 && selectedComplaint[0].workflow && selectedComplaint[0].workflow.verificationDocuments) {
-        const imageIds = GetImageIds(selectedComplaint[0].workflow.verificationDocuments);
-        const files = await Digit.UploadServices.Filefetch(imageIds, state.cityCode);
-        setFiles(files);
-      }
-    }
-    getImages();
-  }, [selectedComplaint]);
 
   let complaintDetails = {};
 
@@ -90,31 +66,6 @@ const ComplaintDetailsPage = (props) => {
     complaintDetails = selectedComplaint[0];
     Digit.SessionStorage.set(`complaint.${complaintDetails.service.serviceRequestId}`, complaintDetails);
   }
-  let cityCode = () => state.cityCode.toUpperCase().replace(".", "_");
-
-  const getFormatedAddress = ({ landmark, buildingName, plotNo, street, locality }) => {
-    return (
-      <span>
-        <p>{landmark}</p> <p>{buildingName}</p>
-        <p>
-          {plotNo} {street} {t(`revenue.locality.${locality.code}`)}{" "}
-        </p>{" "}
-        {t(`TENANT_TENANTS_${cityCode()}`)}
-      </span>
-    );
-  };
-
-  const getTableData = () => {
-    let { serviceRequestId, applicationStatus, auditDetails, address } = complaintDetails.service;
-    let { createdTime } = auditDetails;
-    let formattedAddress = getFormatedAddress(address);
-    return {
-      [t(`${LOCALIZATION_KEY.CS_COMMON}_COMPLAINT_NO`)]: serviceRequestId,
-      [t(`${LOCALIZATION_KEY.CS_COMMON}_COMPLAINT_STATUS`)]: t(`${LOCALIZATION_KEY.CS_COMMON}_${applicationStatus}`),
-      [t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_SUBMISSION_DATE`)]: Digit.DateUtils.ConvertTimestampToDate(createdTime),
-      Address: formattedAddress,
-    };
-  };
 
   function zoomImage(imageSource) {
     setImageZoom(imageSource);
@@ -126,33 +77,34 @@ const ComplaintDetailsPage = (props) => {
 
   return (
     <React.Fragment>
-      {/* <BackButton>Back</BackButton> */}
       <Header>{t(`${LOCALIZATION_KEY.CS_HEADER}_COMPLAINT_SUMMARY`)}</Header>
 
       {Object.keys(complaintDetails).length > 0 && (
         <React.Fragment>
           <Card>
             <CardSubHeader>{t(`SERVICEDEFS.${complaintDetails.service.serviceCode.toUpperCase()}`)}</CardSubHeader>
-            <StatusTable dataObject={getTableData()}></StatusTable>
-            {files.length > 0 && <DisplayPhotos srcs={[]} onClick={zoomImage} />}
+            <StatusTable>
+              {statusTableFlags.map((flag, index, arr) =>
+                arr.length - 1 === index ? (
+                  <LastRow key={index} label={t(flag)} text={t(statusTableData[flag])} />
+                ) : (
+                  <Row key={index} label={t(flag)} text={t(statusTableData[flag])} />
+                )
+              )}
+            </StatusTable>
+            {statusTableData.thumbnails && statusTableData.thumbnails.length !== 0 ? (
+              <DisplayPhotos srcs={statusTableData.thumbnails} onClick={zoomImage} />
+            ) : null}
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>
-          {
-            <React.Fragment>
-              <Card>
-                <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
-                {/* <StatusTable dataObject={getTableData()}></StatusTable> */}
-                {console.log("complaintHistory:", complaintHistory)}
-                {complaintHistory && complaintHistory.length > 0 && (
-                  <ConnectingCheckPoints>
-                    {complaintHistory.map((history, index) => {
-                      return <CheckPoint key={index} customChild={history.text} isCompleted={true} />;
-                    })}
-                  </ConnectingCheckPoints>
-                )}
-              </Card>
-            </React.Fragment>
-          }
+          <Card>
+            <TimeLine
+              data={timeLineData}
+              serviceRequestId={selectedComplaint[0].service.serviceRequestId}
+              complaintWorkflow={selectedComplaint[0].workflow}
+              rating={selectedComplaint[0].service.rating}
+            />
+          </Card>
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
             <TextArea />
