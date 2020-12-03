@@ -21,7 +21,7 @@ const Dropdown = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
 
-  console.log("props in dropdown", props.option, props.optionKey);
+  console.log("props in dropdown", props.option, props.optionKey, props.t);
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
@@ -50,7 +50,15 @@ const Dropdown = (props) => {
       <div className={dropdownStatus ? "select-active" : "select"}>
         <TextField
           setFilter={setFilter}
-          selectedVal={selectedOption ? (props.optionKey ? selectedOption[props.optionKey] : selectedOption) : null}
+          selectedVal={
+            selectedOption
+              ? props.t
+                ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
+                : props.optionKey
+                ? selectedOption[props.optionKey]
+                : selectedOption
+              : null
+          }
           filterVal={filterVal}
           onClick={dropdownOn}
         />
@@ -62,9 +70,12 @@ const Dropdown = (props) => {
             {props.option
               .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
               .map((option, index) => {
+                if (props.t) {
+                  console.log(props.t(option[props.optionKey]));
+                }
                 return (
                   <p key={index} onClick={() => onSelect(option)}>
-                    {option[props.optionKey]}
+                    {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}
                   </p>
                 );
               })}

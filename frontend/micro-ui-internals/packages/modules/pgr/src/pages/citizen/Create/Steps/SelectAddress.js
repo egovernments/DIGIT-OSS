@@ -46,7 +46,7 @@ const SelectAddress = ({ config, onSelect }) => {
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="name" />
       {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
       {selectedCity && localities && (
-        <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} />
+        <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />
       )}
     </FormStep>
   );

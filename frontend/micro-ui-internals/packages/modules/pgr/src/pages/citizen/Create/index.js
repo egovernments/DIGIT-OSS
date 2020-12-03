@@ -113,7 +113,7 @@ export const CreateComplaint = () => {
   };
 
   const backToHome = () => {
-    history.push(`${path}/`);
+    history.push(`/digit-ui`);
   };
 
   const updateParams = (param, value) => {
