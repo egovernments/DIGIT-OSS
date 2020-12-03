@@ -231,10 +231,20 @@ const formConfig = {
         label: getTranslatedLabel(
           ('PROPERTYTAX_THANA_' + tenantId.replace(".", "_").toUpperCase() + "_" + item.code.toUpperCase()), localizationLabelsData) };
       });
-      console.log("thanaData------->>>",thanaData)
+      console.log("thanaData------->>>",thanaData);
+
+      //let isRequired = process.env.REACT_APP_NAME === "Citizen"? false:true;
+      let isRequired = true;
+
+      if(window.location.href.includes('dataentry'))
+      {
+        isRequired=false;
+      }
+      
       dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
       dispatch(setFieldProperty("propertyAddress", "thanaType", "label", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
       dispatch(setFieldProperty("propertyAddress", "roadType", "label", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
+      dispatch(setFieldProperty("propertyAddress", "roadType", "required", isRequired));
 
     const { PT } = citiesByModule || {};
     if (PT) {
