@@ -1,5 +1,5 @@
 {
-  "name": "@egovernments/digit-ui-module-pgr",
+  "name": "@egovernments/digit-ui-module-fsm",
   "version": "1.0.14",
   "license": "MIT",
   "main": "dist/index.js",
