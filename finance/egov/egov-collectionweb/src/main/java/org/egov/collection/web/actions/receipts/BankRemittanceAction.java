@@ -149,8 +149,8 @@ public class BankRemittanceAction extends BaseFormAction {
     private Long finYearId;
     private RemittanceServiceImpl remittanceService;
     private String voucherNumber;
-    private Long fromDate;
-    private Long toDate;
+    private Date fromDate;
+    private Date toDate;
     private Integer pageSize;
     private String remittanceAmount;
     private static final String REMITTANCE_LIST = "REMITTANCE_LIST";
@@ -216,7 +216,7 @@ public class BankRemittanceAction extends BaseFormAction {
             remitAccountNumber = (String) bankAccountResult;
         }
         populateRemittanceList();
-        if (fromDate != null && toDate != null && toDate > fromDate)
+        if (fromDate != null && toDate != null && toDate.before(fromDate))
             addActionError(getText("bankremittance.before.fromdate"));
         if (!hasErrors() && accountNumberId != null) {
             final List<String> serviceCodeList = new ArrayList<>(0);
@@ -228,8 +228,10 @@ public class BankRemittanceAction extends BaseFormAction {
             }
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
             if (fromDate != null && toDate != null) {
+                Long fromDateInLong=fromDate.getTime();
+                Long toDateInLong=toDate.getTime();
                 resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("",
-                        StringUtils.join(serviceCodeList, ","), StringUtils.join(fundCodeSet, ","), fromDate, toDate,
+                        StringUtils.join(serviceCodeList, ","), StringUtils.join(fundCodeSet, ","), fromDateInLong, toDateInLong,
                         CollectionConstants.INSTRUMENT_NEW_STATUS);
             } else if (financialYear != null && financialYear.getStartingDate() != null
                     && financialYear.getEndingDate() != null) {
@@ -644,21 +646,19 @@ public class BankRemittanceAction extends BaseFormAction {
     public void setVoucherNumber(final String voucherNumber) {
         this.voucherNumber = voucherNumber;
     }
-
-
-    public Long getFromDate() {
+    public Date getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Long fromDate) {
+    public void setFromDate(Date fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Long getToDate() {
+    public Date getToDate() {
         return toDate;
     }
 
-    public void setToDate(Long toDate) {
+    public void setToDate(Date toDate) {
         this.toDate = toDate;
     }
 

@@ -92,8 +92,8 @@ public class SearchReceiptAction extends SearchFormAction {
     private Long userId = (long) -1;
     private String instrumentType;
     private String receiptNumber;
-    private Long fromDate;
-    private Long toDate;
+    private Date fromDate;
+    private Date toDate;
     private Integer searchStatus = -1;
     private String target = "new";
     private String manualReceiptNumber;
@@ -199,9 +199,10 @@ public class SearchReceiptAction extends SearchFormAction {
     public String search() {
         target = "searchresult";
         collectionVersion = ApplicationThreadLocals.getCollectionVersion();
-
+        Long fromDateInLong=getFromDate().getTime();
+        Long toDateInLong=getToDate().getTime();
         List<ReceiptHeader> receiptList = new ArrayList<>();
-        List<Receipt> receipts = microserviceUtils.searchReciepts("MISCELLANEOUS", getFromDate(), getToDate(), getServiceTypeId(),
+        List<Receipt> receipts = microserviceUtils.searchReciepts("MISCELLANEOUS", fromDateInLong, toDateInLong, getServiceTypeId(),
                 (getReceiptNumber() != null && !getReceiptNumber().isEmpty() && !"".equalsIgnoreCase(getReceiptNumber()))
                         ? getReceiptNumber() : null);
         
@@ -331,9 +332,8 @@ public class SearchReceiptAction extends SearchFormAction {
         }
         if (getToDate() != null) {
             criteriaString.append(" and receipt.receiptdate < ? ");
-            //params.add(DateUtils.add(toDate, Calendar.DATE, 1));
-            Long todates = toDate + 1 * 24 * 60 * 60 * 1000;
-            params.add(todates);
+            params.add(DateUtils.add(toDate, Calendar.DATE, 1));
+            params.add(toDate);
         }
         if (getServiceTypeId() != null) {
             criteriaString.append(" and receipt.service.id = ? ");
@@ -427,21 +427,20 @@ public class SearchReceiptAction extends SearchFormAction {
     public void setCollectionVersion(String collectionVersion) {
         this.collectionVersion = collectionVersion;
     }
-    
-    public Long getFromDate() {
+
+    public Date getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Long fromDate) {
+    public void setFromDate(Date fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Long getToDate() {
+    public Date getToDate() {
         return toDate;
     }
 
-    public void setToDate(Long toDate) {
+    public void setToDate(Date toDate) {
         this.toDate = toDate;
     }
-
 }
