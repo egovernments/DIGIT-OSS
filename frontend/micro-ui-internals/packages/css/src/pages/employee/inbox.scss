@@ -30,6 +30,9 @@
         @apply p-md bg-white;
         .heading {
           @apply flex justify-between;
+          .clearAll {
+            display: none;
+          }
         }
       }
     }

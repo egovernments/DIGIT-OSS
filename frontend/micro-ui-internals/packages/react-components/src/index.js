@@ -56,6 +56,8 @@ import DetailsCard from "./molecules/DetailsCard";
 import InputCard from "./molecules/InputCard";
 import FormStep from "./molecules/FormStep";
 import RatingCard from "./molecules/RatingCard";
+import SearchAction from "./molecules/SearchAction";
+import FilterAction from "./molecules/FilterAction";
 
 import { PrivateRoute } from "./atoms/PrivateRoute";
 
@@ -124,4 +126,6 @@ export {
   InputCard,
   FormStep,
   RatingCard,
+  SearchAction,
+  FilterAction,
 };

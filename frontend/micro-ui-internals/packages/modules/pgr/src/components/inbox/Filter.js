@@ -157,41 +157,42 @@ const Filter = (props) => {
   };
 
   return (
-    <div className="filter-card">
-      {console.log("filters", filters)}
-      <div class="heading">
-        <CardCaption>FILTER BY:</CardCaption>
-        <div>Clear all</div>
-      </div>
-      <div>
-        <RadioButtons onSelect={onRadioChange} selectedComplaintType={selectAssigned} options={["Assigned To Me", "Assigned To ALL"]} />
-        <div>
-          <div>
-            <CardLabel>Complaint Type *</CardLabel>
-            <Dropdown option={localMenu} selected={selectedComplaintType} select={complaintType} style={{ width: "100%" }} />
-
-            {filters.serviceCodes.length > 0 &&
-              filters.serviceCodes.map((value, index) => {
-                return <span onClick={() => onRemoveComplaintType(index)}>{value}</span>;
-              })}
-          </div>
-          <div>
-            <CardLabel>Locality *</CardLabel>
-            <Dropdown option={["SUN1", "SUN2"]} selected={selectedLocality} select={onSelectLocality} style={{ width: "100%" }} />
-            {filters.localities.length > 0 &&
-              filters.localities.map((value, index) => {
-                return <span onClick={() => onRemoveLocality(index)}>{value}</span>;
-              })}
-          </div>
+    <div className="filter">
+      <div className="filter-card">
+        <div class="heading">
+          <CardCaption>FILTER BY:</CardCaption>
+          <div className="clearAll">Clear all</div>
         </div>
         <div>
+          <RadioButtons onSelect={onRadioChange} selectedComplaintType={selectAssigned} options={["Assigned To Me", "Assigned To ALL"]} />
           <div>
-            {assignmentOptions.map((option) => (
-              <CheckBox
-                onChange={(e) => handleAssignmentChange(e, option.type)}
-                label={`${option.lable} (${pendingComplaintCount.pendingForAssignment})`}
-              />
-            ))}
+            <div>
+              <CardLabel>Complaint Type *</CardLabel>
+              <Dropdown option={localMenu} selected={selectedComplaintType} select={complaintType} style={{ width: "100%" }} />
+
+              {filters.serviceCodes.length > 0 &&
+                filters.serviceCodes.map((value, index) => {
+                  return <span onClick={() => onRemoveComplaintType(index)}>{value}</span>;
+                })}
+            </div>
+            <div>
+              <CardLabel>Locality *</CardLabel>
+              <Dropdown option={["SUN1", "SUN2"]} selected={selectedLocality} select={onSelectLocality} style={{ width: "100%" }} />
+              {filters.localities.length > 0 &&
+                filters.localities.map((value, index) => {
+                  return <span onClick={() => onRemoveLocality(index)}>{value}</span>;
+                })}
+            </div>
+          </div>
+          <div>
+            <div>
+              {assignmentOptions.map((option) => (
+                <CheckBox
+                  onChange={(e) => handleAssignmentChange(e, option.type)}
+                  label={`${option.lable} (${pendingComplaintCount.pendingForAssignment})`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

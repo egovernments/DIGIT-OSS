@@ -27,14 +27,8 @@ const Complaint = ({ data, path }) => {
         <KeyNote keyValue={t(`${LOCALIZATION_KEY.CS_COMMON}_COMPLAINT_NO`)} note={serviceRequestId} />
 
         <div className="status-highlight">
-          <p>Open</p>
+          <p>{t("CORE_COMMON_OPEN")}</p>
         </div>
-        {/* {t("CS_COMMON_" + applicationStatus.toUpperCase())} */}
-        {/* {console.log(
-          serviceRequestId,
-          "applicationStatus.toLowerCase():",
-          applicationStatus.toLowerCase()
-        )} */}
         {t(`${LOCALIZATION_KEY.CS_COMMON}_${applicationStatus}`)}
       </Card>
     </React.Fragment>

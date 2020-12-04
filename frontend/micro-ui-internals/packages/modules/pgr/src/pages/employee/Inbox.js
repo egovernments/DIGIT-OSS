@@ -8,11 +8,10 @@ import { applyInboxFilters } from "../../redux/actions";
 const Inbox = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-
   const { t } = useTranslation();
   const [isDesktop, setIsDesktop] = useState(true);
   const getFilteredComplaints = useCallback((params) => dispatch(applyInboxFilters(params)), [dispatch]);
-  const complaints = state.complaints.response || [];
+  const complaints = state.pgr.complaints.response || [];
 
   console.log("complaints:::::>", complaints);
 
@@ -38,8 +37,8 @@ const Inbox = () => {
     getFilteredComplaints();
   }, [getFilteredComplaints]);
 
-  return complaints.length > 0 ? <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSubmit={onSubmit} /> : "";
-  // return complaints ? <MobileInbox data={tableData} onFilterChange={handleFilterChange} /> : "";
+  // return complaints.length > 0 ? <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSubmit={onSubmit} /> : "";
+  return complaints ? <MobileInbox data={complaints} onFilterChange={handleFilterChange} /> : "";
 };
 
 export default Inbox;

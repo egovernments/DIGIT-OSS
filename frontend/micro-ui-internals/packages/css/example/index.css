@@ -1356,25 +1356,22 @@ img, video {
       vertical-align: middle;
       padding: "20px 18px"; }
 
-@media (min-width: 780px) {
-  .popup-wrap {
-    background: rgba(0, 0, 0, 0.7);
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    z-index: 10;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    min-height: 100vh; } }
+.popup-wrap {
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  min-height: 100vh; }
 
-.upload-wrap {
+.popup-wrap, .upload-wrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  width: 100%;
+  width: 100%; }
+
+.upload-wrap {
   height: 10rem;
   --bg-opacity:1;
   background-color: #fafafa;
@@ -1386,7 +1383,13 @@ img, video {
   --border-opacity:1;
   border: 1px dashed #d6d5d4;
   border-color: rgba(214, 213, 212, var(--border-opacity)); }
-  .upload-wrap img, .upload-wrap svg {
+  .upload-wrap img {
+    display: block;
+    margin-top: 58px;
+    margin-left: calc(50% - 23px);
+    height: 42px;
+    width: 46px; }
+  .upload-wrap svg {
     display: block;
     margin-top: 58px;
     margin-left: calc(50% - 23px);
@@ -1394,7 +1397,6 @@ img, video {
     width: 46px; }
   .upload-wrap input {
     position: absolute;
-    width: 100%;
     height: 100%;
     opacity: 0;
     top: 0; }
@@ -1508,7 +1510,12 @@ img, video {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
-  flex-direction: column; }
+  flex-direction: column;
+  margin: 8px;
+  padding: 16px 8px;
+  --bg-opacity:1;
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, var(--bg-opacity)); }
   .details-container .detail {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1517,12 +1524,19 @@ img, video {
     -webkit-box-direction: normal;
     -ms-flex-direction: row;
     flex-direction: row;
-    -ms-flex-line-pack: space-evenly;
-    align-content: space-evenly; }
+    -webkit-box-align: baseline;
+    -ms-flex-align: baseline;
+    align-items: baseline; }
     .details-container .detail .label {
       width: 138px;
-      padding-bottom: 16px; }
-    .details-container .detail .label, .details-container .detail .name {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      --text-opacity:1;
+      color: #0b0c0c;
+      color: rgba(11, 12, 12, var(--text-opacity));
+      margin-bottom: 16px; }
+    .details-container .detail .name {
       padding-top: 16px; }
 
 .telephone {
@@ -1569,6 +1583,69 @@ img, video {
   font-size: 16px;
   line-height: 24px;
   margin-right: 24px; }
+
+.details-card {
+  --bg-opacity:1;
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, var(--bg-opacity));
+  margin: 8px;
+  padding: 8px 8px 24px;
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16); }
+  .details-card .card-label {
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 23px;
+    --text-opacity:1;
+    color: #0b0c0c;
+    color: rgba(11, 12, 12, var(--text-opacity));
+    margin-bottom: 16px; }
+
+.searchBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin: 8px; }
+  .searchBox .searchAction {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    --text-opacity:1;
+    color: #f47738;
+    color: rgba(244, 119, 56, var(--text-opacity)); }
+    .searchBox .searchAction .searchText {
+      margin-left: 8px; }
+
+.popup-module {
+  width: 100%;
+  --bg-opacity:1;
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, var(--bg-opacity));
+  padding: 16px; }
+  .popup-module .popup-module-main {
+    width: 100%;
+    padding: 8px;
+    height: 100%; }
+  .popup-module .popup-module-action-bar {
+    grid-gap: 16px;
+    gap: 16px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end; }
 
 @media (min-width: 780px) {
   .popup-module {
@@ -1685,6 +1762,8 @@ img, video {
         -webkit-box-pack: justify;
         -ms-flex-pack: justify;
         justify-content: space-between; }
+        .inbox-container .filters-container .filter .filter-card .heading .clearAll {
+          display: none; }
 
 @media (min-width: 780px) {
   .inbox-container {
