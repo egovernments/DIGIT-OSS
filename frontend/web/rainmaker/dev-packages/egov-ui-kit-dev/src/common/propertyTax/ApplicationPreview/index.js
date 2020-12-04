@@ -344,6 +344,18 @@ class ApplicationPreview extends Component {
           Assessment: assessmentPayload
         }
       );
+      if(estimateResponse.Calculation){
+        estimateResponse.Calculation[0].taxHeadEstimates.push(
+          {taxHeadCode: "Carpet area", 
+          estimateAmount:estimateResponse.Calculation[0].carpetArea,  
+          category: "TAX"}
+        )
+        estimateResponse.Calculation[0].taxHeadEstimates.push(
+          {taxHeadCode: "Annual Value", 
+          estimateAmount:estimateResponse.Calculation[0].landAV,  
+          category: "TAX"}
+        )
+      }
       this.setState({
         estimates:estimateResponse.Calculation
       })
