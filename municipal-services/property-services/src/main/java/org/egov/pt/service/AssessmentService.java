@@ -21,6 +21,7 @@ import org.egov.pt.validator.AssessmentValidator;
 import org.egov.pt.validator.DemandValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.DemandRequest;
+import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,7 +86,7 @@ public class AssessmentService {
 		validator.validateAssessmentCreate(request, property);
 		assessmentEnrichmentService.enrichAssessmentCreate(request);
 
-		if(config.getIsAssessmentWorkflowEnabled()){
+		if (config.getIsAssessmentWorkflowEnabled()) {
 			assessmentEnrichmentService.enrichWorkflowForInitiation(request);
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(request.getRequestInfo(),
 					Collections.singletonList(request.getAssessment().getWorkflow()));
@@ -307,6 +308,19 @@ public class AssessmentService {
 
 	}
 
+	public void saveAssessmentOnPropertyApprove(PropertyRequest request) {
+		RequestInfo requestInfo = request.getRequestInfo();
+		Property property = request.getProperty();
+		String finYear = utils.getCurrentFinYearValue();
+		Assessment assessment = Assessment.builder().additionalDetails(property.getAdditionalDetails())
+				.assessmentDate(Instant.now().toEpochMilli()).propertyId(property.getPropertyId())
+				.source(Assessment.Source.MUNICIPAL_RECORDS).status(Status.ACTIVE).financialYear(finYear)
+				.tenantId(property.getTenantId()).build();
 
+		AssessmentRequest assessmentRequest = AssessmentRequest.builder().requestInfo(requestInfo)
+				.assessment(assessment).build();
+
+		createAssessment(assessmentRequest);
+	}
 
 }

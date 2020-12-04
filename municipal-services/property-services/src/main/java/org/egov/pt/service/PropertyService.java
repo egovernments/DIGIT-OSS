@@ -3,6 +3,7 @@ package org.egov.pt.service;
 import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
+import static org.egov.pt.util.PTConstants.WF_ACTION_APPROVE;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -65,7 +66,8 @@ public class PropertyService {
     @Autowired
 	private CalculationService calculatorService;
 
-
+    @Autowired
+    private AssessmentService assessmentService;
     
 	/**
 	 * Enriches the Request and pushes to the Queue
@@ -154,6 +156,9 @@ public class PropertyService {
 				/*
 				 * If property is In Workflow then continue
 				 */
+				if (WF_ACTION_APPROVE.equalsIgnoreCase(request.getProperty().getWorkflow().getAction())) {
+					assessmentService.saveAssessmentOnPropertyApprove(request);
+				}
 				producer.push(config.getUpdatePropertyTopic(), request);
 			}
 

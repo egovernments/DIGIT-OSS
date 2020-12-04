@@ -190,6 +190,7 @@ public class PTConstants {
 	
 	public static final String CREATE_NOTIF_CODE = "PT_NOTIF_CREATE";
 	
+	public static final String WF_ACTION_APPROVE = "APPROVE";
 	
 	/* ASSESSMENT CONSTANTS */
 	
