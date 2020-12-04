@@ -9,6 +9,7 @@ initLibraries();
 
 // const token = window.localStorage.getItem("token");
 const citizenToken = window.localStorage.getItem("Citizen.token");
+const citizenInfo = window.localStorage.getItem("Citizen.user-info");
 // const employeeToken = window.localStorage.getItem("Employee.token");
 
 // const isLoggedIn = token || citizenToken || employeeToken;
@@ -16,6 +17,8 @@ const citizenToken = window.localStorage.getItem("Citizen.token");
 
 
 window.Digit.SessionStorage.set("citizen.token", citizenToken);
+window.Digit.SessionStorage.set("citizen.userServiceData", { userInfo: citizenInfo });
+window.Digit.SessionStorage.set("User", { token: citizenToken, mobileNumber: citizenInfo.mobileNumber });
 
 ReactDOM.render(
   <React.StrictMode>
