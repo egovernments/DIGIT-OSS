@@ -163,7 +163,7 @@ public class PropertyService {
 				 */
 				producer.push(config.getUpdatePropertyTopic(), request);
 				if (WF_ACTION_APPROVE.equalsIgnoreCase(request.getProperty().getWorkflow().getAction())) {
-					assessmentService.saveAssessmentOnPropertyApprove(request);
+					//assessmentService.saveAssessmentOnPropertyApprove(request);
 				}
 			}
 
