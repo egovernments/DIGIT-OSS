@@ -1,6 +1,5 @@
 package org.egov.pt.util;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,12 +40,5 @@ public class AssessmentUtils extends CommonUtils {
 
         return properties.get(0);
     }
-
-	public String getCurrentFinYearValue() {
-		LocalDate date = LocalDate.now();
-		int currentMonth = date.getMonthValue();
-		int finStartYear = currentMonth > 3 ? date.getYear() : date.getYear() - 1;
-		return String.valueOf(finStartYear).concat("-").concat(String.valueOf(finStartYear + 1).substring(2, 4));
-	}
 
 }
