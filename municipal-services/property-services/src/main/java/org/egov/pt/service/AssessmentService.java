@@ -311,7 +311,7 @@ public class AssessmentService {
 	public void saveAssessmentOnPropertyApprove(PropertyRequest request) {
 		RequestInfo requestInfo = request.getRequestInfo();
 		Property property = request.getProperty();
-		String finYear = getCurrentFinYearValue();
+		String finYear = utils.getCurrentFinYearValue();
 		Assessment assessment = Assessment.builder().additionalDetails(property.getAdditionalDetails())
 				.assessmentDate(Instant.now().toEpochMilli()).propertyId(property.getPropertyId())
 				.source(Assessment.Source.MUNICIPAL_RECORDS).status(Status.ACTIVE).financialYear(finYear)
@@ -321,13 +321,6 @@ public class AssessmentService {
 				.assessment(assessment).build();
 
 		createAssessment(assessmentRequest);
-	}
-
-	public String getCurrentFinYearValue() {
-		LocalDate date = LocalDate.now();
-		int currentMonth = date.getMonthValue();
-		int finStartYear = currentMonth > 3 ? date.getYear() : date.getYear() - 1;
-		return String.valueOf(finStartYear).concat("-").concat(String.valueOf(finStartYear + 1).substring(2, 4));
 	}
 
 }

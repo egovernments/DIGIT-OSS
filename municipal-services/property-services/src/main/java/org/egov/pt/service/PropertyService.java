@@ -26,6 +26,7 @@ import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -66,9 +67,13 @@ public class PropertyService {
     @Autowired
 	private CalculationService calculatorService;
 
-    @Autowired
+    
     private AssessmentService assessmentService;
     
+	@Autowired
+	public PropertyService(@Lazy AssessmentService assessmentService) {
+		this.assessmentService = assessmentService;
+	}
 	/**
 	 * Enriches the Request and pushes to the Queue
 	 *
