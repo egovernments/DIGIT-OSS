@@ -161,10 +161,10 @@ public class PropertyService {
 				/*
 				 * If property is In Workflow then continue
 				 */
+				producer.push(config.getUpdatePropertyTopic(), request);
 				if (WF_ACTION_APPROVE.equalsIgnoreCase(request.getProperty().getWorkflow().getAction())) {
 					assessmentService.saveAssessmentOnPropertyApprove(request);
 				}
-				producer.push(config.getUpdatePropertyTopic(), request);
 			}
 
 		} else {
