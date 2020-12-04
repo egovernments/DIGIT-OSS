@@ -346,12 +346,12 @@ class ApplicationPreview extends Component {
       );
       if(estimateResponse.Calculation){
         estimateResponse.Calculation[0].taxHeadEstimates.push(
-          {taxHeadCode: "Carpet area", 
+          {taxHeadCode: "PT_CARPET_AREA", 
           estimateAmount:estimateResponse.Calculation[0].carpetArea,  
           category: "TAX"}
         )
         estimateResponse.Calculation[0].taxHeadEstimates.push(
-          {taxHeadCode: "Annual Value", 
+          {taxHeadCode: "PT_ANNUAL_VALUE", 
           estimateAmount:estimateResponse.Calculation[0].landAV,  
           category: "TAX"}
         )
