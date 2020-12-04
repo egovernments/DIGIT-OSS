@@ -3,7 +3,6 @@ package org.egov.pt.service;
 import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.WF_ACTION_APPROVE;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,7 +25,6 @@ import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -67,13 +65,6 @@ public class PropertyService {
     @Autowired
 	private CalculationService calculatorService;
 
-    
-    private AssessmentService assessmentService;
-    
-	@Autowired
-	public PropertyService(@Lazy AssessmentService assessmentService) {
-		this.assessmentService = assessmentService;
-	}
 	/**
 	 * Enriches the Request and pushes to the Queue
 	 *
@@ -162,9 +153,6 @@ public class PropertyService {
 				 * If property is In Workflow then continue
 				 */
 				producer.push(config.getUpdatePropertyTopic(), request);
-				if (WF_ACTION_APPROVE.equalsIgnoreCase(request.getProperty().getWorkflow().getAction())) {
-					//assessmentService.saveAssessmentOnPropertyApprove(request);
-				}
 			}
 
 		} else {

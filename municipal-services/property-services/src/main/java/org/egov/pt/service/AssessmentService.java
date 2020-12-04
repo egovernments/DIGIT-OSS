@@ -308,19 +308,4 @@ public class AssessmentService {
 
 	}
 
-	public void saveAssessmentOnPropertyApprove(PropertyRequest request) {
-		RequestInfo requestInfo = request.getRequestInfo();
-		Property property = request.getProperty();
-		String finYear = utils.getCurrentFinYearValue();
-		Assessment assessment = Assessment.builder().additionalDetails(property.getAdditionalDetails())
-				.assessmentDate(Instant.now().toEpochMilli()).propertyId(property.getPropertyId())
-				.source(Assessment.Source.MUNICIPAL_RECORDS).status(Status.ACTIVE).financialYear(finYear)
-				.tenantId(property.getTenantId()).build();
-
-		AssessmentRequest assessmentRequest = AssessmentRequest.builder().requestInfo(requestInfo)
-				.assessment(assessment).build();
-
-		createAssessment(assessmentRequest);
-	}
-
 }
