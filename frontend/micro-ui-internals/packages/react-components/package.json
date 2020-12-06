@@ -10,21 +10,32 @@
   },
   "scripts": {
     "example": "cd example && npm run start",
-    "build": "microbundle-crl --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "build": "microbundle --no-compress --format modern,cjs",
+    "start": "microbundle watch --no-compress --format modern,cjs",
     "prepare": "yarn build",
     "prepublish": "yarn build",
     "predeploy": "cd example && yarn install && yarn run build",
-    "deploy": "gh-pages -d example/build"
+    "deploy": "gh-pages -d example/build",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "peerDependencies": {
     "react": "^17.0.0",
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^6.1.10",
+    "@storybook/addon-essentials": "^6.1.10",
+    "@storybook/addon-links": "^6.1.10",
+    "@storybook/node-logger": "^6.1.10",
+    "@storybook/preset-create-react-app": "^3.1.5",
+    "@storybook/react": "^6.1.10",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
     "gh-pages": "^2.2.0",
+    "husky": ">=4",
+    "lint-staged": ">=10",
+    "microbundle": "^0.12.4",
     "microbundle-crl": "^0.13.10",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
@@ -36,5 +47,17 @@
   ],
   "dependencies": {
     "react-table": "^7.6.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
