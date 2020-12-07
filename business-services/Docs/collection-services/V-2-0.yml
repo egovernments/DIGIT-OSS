@@ -48,14 +48,14 @@ paths:
           in: query
           description: Transaction date, here search will happen as Transaction date is greater or equal to given fromDate.
           required: false
-          type: string
-          format: varchar
+          type: integer
+          format: int64
         - name: toDate
           in: query
           description: Transaction date, here search will happen as Transaction date is lesser or equal to given toDate.
           required: false
-          type: string
-          format: varchar
+          type: integer
+          format: int64
         - name: status
           in: query
           description: Search based on the status of the Payment.
