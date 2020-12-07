@@ -73,9 +73,9 @@ export const ImageUploadHandler = (props) => {
     }
   }, [addImageThumbnails, uploadedImagesIds]);
 
-  function getImage(e) {
-    setImage(e.target.files[0]);
-  }
+  // function getImage(e) {
+  //   setImage(e.target.files[0]);
+  // }
 
   function deleteImage(img) {
     var deleteImageKey;

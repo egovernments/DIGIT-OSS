@@ -11,6 +11,7 @@ const useWorkflowDetails = ({ tenantId, id }) => {
   // [];
   useEffect(() => {
     (async () => {
+      //TO do. get tenant id
       const workflow = await Digit.workflowService.getByBusinessId((tenantId = "pb.amritsar"), id);
       if (workflow && workflow.ProcessInstances) {
         // const processInstances = workflow.ProcessInstances.sort((a, b) => a.auditDetails.createdTime - b.auditDetails.createdTime);
@@ -29,9 +30,10 @@ const useWorkflowDetails = ({ tenantId, id }) => {
                 ? state.state.actions.filter((action) => action.roles.includes(role)).map((action) => action.action)
                 : null,
             })),
-            nextActions: processInstances[processInstances.length - 1].state.nextActions
-              ? processInstances[processInstances.length - 1].state.actions.map((action) => action.action)
-              : null,
+            nextActions: {
+              actions: processInstances[0].nextActions ? processInstances[0].nextActions.map((action) => action.action) : null,
+              roles: processInstances[0].nextActions.map((action) => action.roles),
+            },
           };
           setWorkflowDetails(details);
         }

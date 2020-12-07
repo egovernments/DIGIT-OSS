@@ -48,4 +48,11 @@ export const PGRService = {
       params: { tenantId: stateCode, ...params.params },
     });
   },
+  employeeSearch: (cityCode, roles) => {
+    return Request({
+      url: Urls.EmployeeSearch,
+      params: { tenantId: cityCode, roles: roles },
+      auth: true,
+    });
+  },
 };

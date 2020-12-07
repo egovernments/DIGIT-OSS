@@ -7,6 +7,10 @@
     }
 }
 
+.break-line{
+    @apply block h-0 w-full border border-border my-lg
+}
+
 @screen dt{
     .ground-container{
         margin-bottom: 56px;
@@ -14,5 +18,9 @@
     }   
     .heading-m{
         @apply font-bold text-text-primary text-heading-m-dt ml-md pt-sm;
+    }
+    .break-line{
+        margin-top: 40px;
+        margin-bottom: 40px;
     }
 }

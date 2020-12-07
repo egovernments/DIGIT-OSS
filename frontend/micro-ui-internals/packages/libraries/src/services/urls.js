@@ -14,6 +14,8 @@ const Urls = {
 
   FileFetch: "/filestore/v1/files/url",
   PGR_Create: `/pgr-services/v2/request/_create`,
+
+  EmployeeSearch: "/egov-hrms/employees/_search",
 };
 
 export default Urls;

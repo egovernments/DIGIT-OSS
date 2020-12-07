@@ -27,8 +27,9 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
 
   if (userType === "citizen") {
     return <CitizenApp />;
+  } else {
+    return <EmployeeApp />;
   }
-  return <EmployeeApp />;
 };
 
 export const PGRLinks = ({ matchPath }) => (

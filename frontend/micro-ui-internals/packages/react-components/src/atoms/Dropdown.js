@@ -17,11 +17,13 @@ const TextField = (props) => {
 };
 
 const Dropdown = (props) => {
+  const user_type = Digit.SessionStorage.get("user_type");
+
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
 
-  console.log("props in dropdown", props.option, props.optionKey, props.t);
+  // console.log("props in dropdown", props.option, props.optionKey, props.t);
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
@@ -46,7 +48,7 @@ const Dropdown = (props) => {
   }
 
   return (
-    <div className="select-wrap" style={{ ...props.style }}>
+    <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
       <div className={dropdownStatus ? "select-active" : "select"}>
         <TextField
           setFilter={setFilter}
@@ -71,7 +73,7 @@ const Dropdown = (props) => {
               .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
               .map((option, index) => {
                 if (props.t) {
-                  console.log(props.t(option[props.optionKey]));
+                  // console.log(props.t(option[props.optionKey]));
                 }
                 return (
                   <p key={index} onClick={() => onSelect(option)}>

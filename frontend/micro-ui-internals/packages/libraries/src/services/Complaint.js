@@ -43,4 +43,29 @@ export const Complaint = {
 
     return response;
   },
+
+  assign: async (action, employeeData, comments, uploadedDocument) => {
+    console.log("assign complaint srvice acall", action, employeeData, comments, uploadedDocument);
+
+    const complaintDetails = Digit.SessionStorage.get("complaintDetails");
+
+    complaintDetails.workflow.action = action;
+    complaintDetails.workflow.assignes = employeeData ? [employeeData.uuid] : null;
+    complaintDetails.workflow.comments = comments;
+    uploadedDocument
+      ? complaintDetails.workflow.verificationDocuments.push({
+          documentType: "PHOTO",
+          fileStore: uploadedDocument,
+          documentUid: "",
+          additionalDetails: {},
+        })
+      : null;
+
+    console.log("assign complaintg whole call", complaintDetails);
+
+    //TODO: get tenant id
+    const response = await Digit.PGRService.update(complaintDetails, "pb.amritsar");
+    console.log(response);
+    return response;
+  },
 };

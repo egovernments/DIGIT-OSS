@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
+  BreakLine,
   Card,
   CardLabel,
   CardLabelDesc,
@@ -23,10 +24,12 @@ import {
   ActionBar,
   Menu,
   SubmitBar,
+  Dropdown,
 } from "@egovernments/digit-ui-react-components";
 
 import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
+import Modal from "../../components/Modal";
 import useComplaintDetails from "../../hooks/useComplaintDetails";
 import useWorkflowDetails from "../../hooks/useWorkflowDetails";
 
@@ -79,6 +82,8 @@ export const ComplaintDetails = (props) => {
   console.log("workflowDetails", workflowDetails);
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [assignResponse, setAssignResponse] = useState(null);
 
   function popupCall(option) {
     console.log("option", option);
@@ -104,7 +109,6 @@ export const ComplaintDetails = (props) => {
     switch (state) {
       case fullscreen:
         setFullscreen(!fullscreen);
-
         break;
       case popup:
         setPopup(!popup);
@@ -124,6 +128,7 @@ export const ComplaintDetails = (props) => {
   }
 
   function onActionSelect(action) {
+    setSelectedAction(action);
     switch (action) {
       case "ASSIGN":
         setPopup(true);
@@ -134,7 +139,7 @@ export const ComplaintDetails = (props) => {
         setDisplayMenu(false);
         break;
       case "REJECT":
-        alert("COMPLAINT REJECTED");
+        setPopup(true);
         setDisplayMenu(false);
         break;
       default:
@@ -143,10 +148,13 @@ export const ComplaintDetails = (props) => {
     }
   }
 
-  function onAssign() {
+  async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
+    const response = await Digit.Complaint.assign(selectedAction, selectedEmployee, comments, uploadedFile);
+    console.log("aasjdas", response);
+    setAssignResponse(response);
     setToast(true);
-    setTimeout(() => setToast(false), 2000);
+    setTimeout(() => setToast(false), 10000);
   }
 
   function closeToast() {
@@ -174,8 +182,7 @@ export const ComplaintDetails = (props) => {
           )}
         </StatusTable>
         {statusTable.thumbnails && statusTable.thumbnails.length !== 0 ? <DisplayPhotos srcs={statusTable.thumbnails} onClick={zoomImage} /> : null}
-      </Card>
-      <Card>
+        <BreakLine />
         {workflowDetails.timeline && workflowDetails.timeline.length === 1 ? (
           <CheckPoint isCompleted={true} label={workflowDetails.timeline[0].status} />
         ) : (
@@ -208,30 +215,22 @@ export const ComplaintDetails = (props) => {
       ) : null}
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
       {popup ? (
-        <PopUp>
-          <div className="popup-module">
-            <HeaderBar main={<Heading label="Assign Complaint" />} end={<CloseBtn onClick={() => close(popup)} />} />
-            <div className="popup-module-main">
-              <Card>
-                <CardLabel>Employee Name</CardLabel>
-                <TextInput />
-                <CardLabel>Comments</CardLabel>
-                <TextArea />
-                <CardLabel>Supporting Documents</CardLabel>
-                <CardLabelDesc>Only .jpg and .pdf files. 5 MB max file size.</CardLabelDesc>
-                <UploadFile />
-              </Card>
-              <div className="popup-module-action-bar">
-                <ButtonSelector theme="border" label="Cancel" />
-                <ButtonSelector label="Assign" onSubmit={onAssign} />
-              </div>
-            </div>
-          </div>
-        </PopUp>
+        <Modal
+          employeeRoles={workflowDetails.nextActions ? workflowDetails.nextActions.roles : null}
+          headerBarMain={<Heading label={selectedAction === "ASSIGN" || selectedAction === "REASSIGN" ? "Assign Complaint" : "Reject Complaint"} />}
+          headerBarEnd={<CloseBtn onClick={() => close(popup)} />}
+          selectedAction={selectedAction}
+          onAssign={onAssign}
+        />
       ) : null}
-      {toast && <Toast label="Complaint assigned successfully!" onClose={closeToast} />}
+      {toast && (
+        <Toast
+          label={assignResponse ? (assignResponse.Errors ? assignResponse.Errors[0].message : JSON.stringify(assignResponse)) : null}
+          onClose={closeToast}
+        />
+      )}
       <ActionBar>
-        {displayMenu && workflowDetails.nextActions ? <Menu options={workflowDetails.nextActions} onSelect={onActionSelect} /> : null}
+        {displayMenu && workflowDetails.nextActions ? <Menu options={workflowDetails.nextActions.actions} onSelect={onActionSelect} /> : null}
         <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
       </ActionBar>
     </React.Fragment>

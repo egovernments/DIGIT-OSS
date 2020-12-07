@@ -44,6 +44,7 @@ const useComplaintDetails = ({ tenantId, id }) => {
       const ComplaintDetailsResponse = (await Digit.PGRService.search(tenantId, { serviceRequestId: id })).ServiceWrappers[0];
       console.log("COmplaint details response =============>>>>>", ComplaintDetailsResponse);
       if (ComplaintDetailsResponse && serviceDefs) {
+        Digit.SessionStorage.set("complaintDetails", ComplaintDetailsResponse);
         const ids = ComplaintDetailsResponse.workflow.verificationDocuments
           ? ComplaintDetailsResponse.workflow.verificationDocuments.filter((doc) => doc.documentType === "PHOTO").map((photo) => photo.fileStoreId)
           : null;
