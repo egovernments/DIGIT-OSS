@@ -227,21 +227,9 @@ public class BankRemittanceAction extends BaseFormAction {
                 serviceCodeList.add(basm.getBusinessDetails());
             }
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
-            if (fromDate != null && toDate != null) {
-                Long fromDateInLong=fromDate.getTime();
-                Long toDateInLong=toDate.getTime();
-                Long todates = toDateInLong + 1 * 24 * 60 * 60 * 1000;
-                resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("",
-                        StringUtils.join(serviceCodeList, ","), StringUtils.join(fundCodeSet, ","), fromDateInLong, todates,
-                        CollectionConstants.INSTRUMENT_NEW_STATUS);
-            } else if (financialYear != null && financialYear.getStartingDate() != null
-                    && financialYear.getEndingDate() != null) {
-                Long dateInLongFromDate = financialYear.getStartingDate().getTime();
-                Long dateInLongToDate = financialYear.getEndingDate().getTime();
-                resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("",
-                        StringUtils.join(serviceCodeList, ","), StringUtils.join(fundCodeSet, ","), dateInLongFromDate,
-                        dateInLongToDate, CollectionConstants.INSTRUMENT_NEW_STATUS);
-            }
+            resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("", StringUtils.join(serviceCodeList, ","),
+                    StringUtils.join(fundCodeSet, ","), fromDate == null ? financialYear.getStartingDate() : fromDate,
+                    toDate == null ? financialYear.getEndingDate() : toDate, CollectionConstants.INSTRUMENT_NEW_STATUS);
             if (fromDate != null && toDate != null)
                 pageSize = resultList.size();
             else

@@ -71,8 +71,8 @@ public class ReceiptSearchCriteria {
     Set<String>  ids;
     Set<String> status;
     Set<String> businessCodes;
-    Long fromDate;
-    Long toDate;
+    Date fromDate;
+    Date toDate;
     Set<String>receiptNumbers;
     String fund;
     String department;
@@ -82,8 +82,8 @@ public class ReceiptSearchCriteria {
 //        contract.setIds(this.ids);
         contract.setStatus(this.status);
         contract.setBusinessServices(this.businessCodes);
-        contract.setFromDate(this.fromDate != null ? this.fromDate : null);
-        contract.setToDate(this.toDate != null ? this.toDate : null);
+        contract.setFromDate(this.fromDate != null ? this.fromDate.getTime() : null);
+        contract.setToDate(this.toDate != null ? this.toDate.getTime() : null);
 //        contract.setReceiptNumbers(this.receiptNumbers);
         contract.setIds(this.receiptNumbers);
     }

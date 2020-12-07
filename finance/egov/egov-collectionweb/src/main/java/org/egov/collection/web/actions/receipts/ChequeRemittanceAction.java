@@ -206,19 +206,10 @@ public class ChequeRemittanceAction extends BaseFormAction {
             List<String> fundCodeList = fundQuery.list();
             final String fundCode = fundCodeList != null && !fundCodeList.isEmpty() ? fundCodeList.get(0).toString() : null;
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
-            if (fromDate != null && toDate != null) {
-                Long fromDateInLong=fromDate.getTime();
-                Long toDateInLong=toDate.getTime();
-                Long todates = toDateInLong + 1 * 24 * 60 * 60 * 1000;
-                receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
-                        StringUtils.join(serviceCodeList, ","), fundCode, fromDateInLong, todates);
-            } else if (financialYear != null && financialYear.getStartingDate() != null
-                    && financialYear.getEndingDate() != null) {
-                Long dateInLongFromDate = financialYear.getStartingDate().getTime();
-                Long dateInLongToDate = financialYear.getEndingDate().getTime();
-                receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
-                        StringUtils.join(serviceCodeList, ","), fundCode, dateInLongFromDate, dateInLongToDate);
-            }
+            receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
+                    StringUtils.join(serviceCodeList, ","), fundCode,
+                    fromDate == null ? financialYear.getStartingDate() : fromDate,
+                    toDate == null ? financialYear.getEndingDate() : toDate);
             if (fromDate != null && toDate != null)
                 pageSize = receiptBeanList.size();
             else

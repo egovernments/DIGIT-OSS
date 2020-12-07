@@ -143,7 +143,21 @@ public class SearchReceiptAction extends SearchFormAction {
         this.receiptNumber = receiptNumber;
     }
 
-   
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(final Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(final Date toDate) {
+        this.toDate = toDate;
+    }
 
     @Action(value = "/receipts/searchReceipt-reset")
     public String reset() {
@@ -199,18 +213,12 @@ public class SearchReceiptAction extends SearchFormAction {
     public String search() {
         target = "searchresult";
         collectionVersion = ApplicationThreadLocals.getCollectionVersion();
-        Long fromDateInLong = null;
-        Long toDateInLong = null;
-        Long todates = null;
-        if (fromDate != null && toDate != null) {
-            fromDateInLong = getFromDate().getTime();
-            toDateInLong = getToDate().getTime();
-            todates = toDateInLong + 1 * 24 * 60 * 60 * 1000;
-        }
+
         List<ReceiptHeader> receiptList = new ArrayList<>();
-        List<Receipt> receipts = microserviceUtils.searchReciepts("MISCELLANEOUS", fromDateInLong, todates,
-                getServiceTypeId(), (getReceiptNumber() != null && !getReceiptNumber().isEmpty()
-                        && !"".equalsIgnoreCase(getReceiptNumber())) ? getReceiptNumber() : null);
+        List<Receipt> receipts = microserviceUtils.searchReciepts("MISCELLANEOUS", getFromDate(), getToDate(), getServiceTypeId(),
+                (getReceiptNumber() != null && !getReceiptNumber().isEmpty() && !"".equalsIgnoreCase(getReceiptNumber()))
+                        ? getReceiptNumber() : null);
+        
 
         for (Receipt receipt : receipts) {
 
@@ -338,7 +346,6 @@ public class SearchReceiptAction extends SearchFormAction {
         if (getToDate() != null) {
             criteriaString.append(" and receipt.receiptdate < ? ");
             params.add(DateUtils.add(toDate, Calendar.DATE, 1));
-            params.add(toDate);
         }
         if (getServiceTypeId() != null) {
             criteriaString.append(" and receipt.service.id = ? ");
@@ -431,21 +438,5 @@ public class SearchReceiptAction extends SearchFormAction {
     
     public void setCollectionVersion(String collectionVersion) {
         this.collectionVersion = collectionVersion;
-    }
-
-    public Date getFromDate() {
-        return fromDate;
-    }
-
-    public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
-    }
-
-    public Date getToDate() {
-        return toDate;
-    }
-
-    public void setToDate(Date toDate) {
-        this.toDate = toDate;
     }
 }

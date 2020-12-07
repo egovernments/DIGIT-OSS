@@ -1000,7 +1000,7 @@ public class MicroserviceUtils {
         return this.getInstrumentsBySearchCriteria(contract);
     }
 
-    public List<Receipt> getReceipts(String ids, String status, String serviceCodes, Long fromDate, Long toDate) {
+    public List<Receipt> getReceipts(String ids, String status, String serviceCodes, Date fromDate, Date toDate) {
         ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
                 .status(Arrays.stream(status.split(",")).collect(Collectors.toSet())).fromDate(fromDate).toDate(toDate)
                 .receiptNumbers(Arrays.stream(ids.split(",")).collect(Collectors.toSet()))
@@ -1052,10 +1052,10 @@ public class MicroserviceUtils {
             url.append("&businessCodes=").append(StringUtils.join(criteria.getBusinessCodes(), ","));
         }
         if (criteria.getFromDate() != null) {
-            url.append("&fromDate=").append(criteria.getFromDate());
+            url.append("&fromDate=").append(criteria.getFromDate().getTime());
         }
         if (criteria.getToDate() != null) {
-            url.append("&toDate=").append(criteria.getToDate());
+            url.append("&toDate=").append(criteria.getToDate().getTime());
         }
         if (StringUtils.isNotBlank(criteria.getClassification())) {
             url.append("&classification=").append(criteria.getClassification());
@@ -1070,34 +1070,22 @@ public class MicroserviceUtils {
 
     public List<Receipt> getReceipts(String status, String serviceCode, String fund, String department,
             String receiptDate) {
-        Long dateInLong = 0l;
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date date;
-        try {
-            date = formatter.parse(receiptDate);
-            dateInLong = date.getTime();
-
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        Long todates = dateInLong + 1 * 24 * 60 * 60 * 1000;
         ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
                 .status(Arrays.stream(status.split(",")).collect(Collectors.toSet()))
                 .businessCodes(Arrays.stream(serviceCode.split(",")).collect(Collectors.toSet())).fund(fund)
-                .department(department).fromDate(dateInLong)
-                .toDate(todates).build();
+                .department(department).fromDate(DateUtils.toDateUsingDefaultPattern(receiptDate))
+                .toDate(DateUtils.toDateUsingDefaultPattern(receiptDate)).build();
         return this.getReceipt(criteria);
     }
 
-    public List<Receipt> searchReciepts(String classification, Long fromDate, Long toDate, String businessCode,
+    public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
             String receiptNo) {
 
         return this.searchReciepts(classification, fromDate, toDate, businessCode, Arrays.asList(receiptNo));
 
     }
 
-    public List<Receipt> searchReciepts(String classification, Long fromDate, Long toDate, String businessCode,
+    public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
             List<String> receiptNos) {
         ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder().fromDate(fromDate).toDate(toDate)
                 .businessCodes(businessCode != null ? Arrays.stream(businessCode.split(",")).collect(Collectors.toSet())

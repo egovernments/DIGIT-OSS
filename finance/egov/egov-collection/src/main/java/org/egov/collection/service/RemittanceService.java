@@ -69,7 +69,7 @@ public abstract class RemittanceService implements Serializable {
             final Date remittanceDate);
 
     public abstract List<ReceiptBean> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
-            final String serviceCodes, final String fundCodes, Long startDate, Long endDate, String instrumentStatus);
+            final String serviceCodes, final String fundCodes, Date startDate, Date endDate, String instrumentStatus);
 
     public List<CollectionBankRemittanceReport> prepareBankRemittanceReport(final List<ReceiptHeader> receiptHeaders) {
         final List<CollectionBankRemittanceReport> reportList = new ArrayList<CollectionBankRemittanceReport>(0);
@@ -133,7 +133,7 @@ public abstract class RemittanceService implements Serializable {
     }
 
     public abstract List<ReceiptBean> findChequeRemittanceDetailsForServiceAndFund(final String boundaryIdList,
-            final String serviceCodes, final String fundCodes, Long startDate, Long endDate);
+            final String serviceCodes, final String fundCodes, Date startDate, Date endDate);
 
     public abstract List<Receipt> createChequeBankRemittance(List<ReceiptBean> receiptList, String accountNumberId,
             final Date remittanceDate, final String[] instrumentIdArray);

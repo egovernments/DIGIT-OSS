@@ -554,7 +554,7 @@ public class RemittanceServiceImpl extends RemittanceService {
      */
     @Override
     public List<ReceiptBean> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
-            final String serviceCodes, final String fundCodes, final Long startDate, final Long endDate, String instrumentStatus) {
+            final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate, String instrumentStatus) {
      // TODO : need to make this call to mdms
 //        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
         List<Instrument> instruments = microserviceUtils.getInstruments(CollectionConstants.INSTRUMENTTYPE_NAME_CASH, TransactionType.Debit,
@@ -790,7 +790,7 @@ public class RemittanceServiceImpl extends RemittanceService {
      */
     @Override
     public List<ReceiptBean> findChequeRemittanceDetailsForServiceAndFund(final String boundaryIdList,
-            final String serviceCodes, final String fundCodes, final Long startDate, final Long endDate) {
+            final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate) {
         // TODO : need to make this call to mdms
 //        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
         String instrumentTypes = CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE + ","
@@ -817,8 +817,8 @@ public class RemittanceServiceImpl extends RemittanceService {
                     .ids(new HashSet(receiptIds))
                     .status(Collections.singleton(PaymentStatusEnum.NEW.name()))
                     .businessServices(Arrays.asList(serviceCodes.split(",")).stream().collect(Collectors.toSet()))
-                    .fromDate(startDate)
-                    .toDate(endDate)
+                    .fromDate(startDate.getTime())
+                    .toDate(endDate.getTime())
                     .build()
                     );
             payments.stream().filter(payment -> receiptInstrumentMap.containsKey(payment.getId())).forEach(payment -> {
