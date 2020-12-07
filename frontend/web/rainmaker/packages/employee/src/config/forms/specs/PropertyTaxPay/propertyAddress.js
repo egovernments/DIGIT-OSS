@@ -245,6 +245,7 @@ const formConfig = {
       dispatch(setFieldProperty("propertyAddress", "thanaType", "label", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
       dispatch(setFieldProperty("propertyAddress", "roadType", "label", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
       dispatch(setFieldProperty("propertyAddress", "roadType", "required", isRequired));
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "required", isRequired));
 
     const { PT } = citiesByModule || {};
     if (PT) {
