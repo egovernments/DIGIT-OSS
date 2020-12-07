@@ -250,10 +250,18 @@ const formConfig = {
       return { value: item.code, label: item.name };
       });
       console.log("thanaData------->>>",thanaData)
+      let isRequired = true;
+
+      if(window.location.href.includes('dataentry'))
+      {
+        isRequired=false;
+      }
       dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
       dispatch(setFieldProperty("propertyAddress", "thanaType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
       dispatch(setFieldProperty("propertyAddress", "roadType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
-
+      dispatch(setFieldProperty("propertyAddress", "roadType", "required", isRequired));
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "required", isRequired));
+      dispatch(setFieldProperty("propertyAddress","houseNumber" ,"required",isRequired));
       const PT = citiesByModule && citiesByModule.PT;
       if (PT) {
         const tenants = PT.tenants;
