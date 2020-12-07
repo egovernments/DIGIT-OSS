@@ -1,6 +1,7 @@
 import React from "react";
 
 const TextInput = (props) => {
+  //let userType = Digit.SessionStorage.get("userType");
   return (
     <React.Fragment>
       {props.isMandatory ? (
@@ -22,6 +23,7 @@ const TextInput = (props) => {
           onChange={props.onChange}
           ref={props.inputRef}
           value={props.value}
+          style={{ ...props.style }}
         />
       )}
     </React.Fragment>

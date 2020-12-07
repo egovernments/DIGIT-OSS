@@ -6,7 +6,6 @@ import ComplaintsLink from "./inbox/ComplaintLinks";
 const MobileInbox = ({ data }) => {
   return (
     <div style={{ padding: 0 }}>
-      {console.log("data::::<<<<>>>>", data)}
       <div className="inbox-container">
         <div className="filters-container">
           <ComplaintsLink isMobile={true} />

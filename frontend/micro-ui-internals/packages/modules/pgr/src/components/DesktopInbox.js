@@ -62,13 +62,13 @@ const DesktopInbox = (props) => {
     >
       <div className="filters-container">
         <ComplaintsLink />
-        <div className="filter">
-          <Filter onFilterChange={props.onFilterChange} />
+        <div>
+          <Filter onFilterChange={props.onFilterChange} type="desktop" />
         </div>
       </div>
-      <div className="search-container">
+      <div>
         <SearchComplaint onSubmit={props.onSubmit} />
-        <div style={{ marginTop: "24px" }}>
+        <div style={{ marginTop: "24px", marginTop: "24px", width: "874px", marginLeft: "24px" }}>
           <ComplaintTable
             data={props.data}
             columns={columns}

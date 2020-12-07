@@ -1,6 +1,9 @@
 import { LocalizationService } from "./Localization/service";
 
-const ADMIN_CODE = ({ tenantId, hierarchyType }) => tenantId.replace(".", "_").toUpperCase() + "_" + hierarchyType.code;
+const ADMIN_CODE = ({ tenantId, hierarchyType }) => {
+  console.log("object", tenantId);
+  return tenantId.replace(".", "_").toUpperCase() + "_" + hierarchyType.code;
+};
 
 const getI18nKeys = (localitiesWithLocalizationKeys) => {
   return localitiesWithLocalizationKeys.map((locality) => ({
@@ -10,6 +13,7 @@ const getI18nKeys = (localitiesWithLocalizationKeys) => {
 };
 
 const getLocalities = (tenantBoundry) => {
+  console.log("tenantBoundry:", tenantBoundry);
   const adminCode = ADMIN_CODE(tenantBoundry);
   const localitiesWithLocalizationKeys = tenantBoundry.boundary.map((boundaryObj) => ({
     ...boundaryObj,

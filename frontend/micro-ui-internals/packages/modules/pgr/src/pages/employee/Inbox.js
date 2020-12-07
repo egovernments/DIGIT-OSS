@@ -37,8 +37,17 @@ const Inbox = () => {
     getFilteredComplaints();
   }, [getFilteredComplaints]);
 
-  // return complaints.length > 0 ? <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSubmit={onSubmit} /> : "";
-  return complaints ? <MobileInbox data={complaints} onFilterChange={handleFilterChange} /> : "";
+  let isMobile = window.mobileCheck();
+  console.log("window.mobileCheck:", isMobile);
+  if (complaints.length > 0) {
+    if (isMobile) {
+      return <MobileInbox data={complaints} onFilterChange={handleFilterChange} />;
+    } else {
+      return <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSubmit={onSubmit} />;
+    }
+  } else {
+    return <div></div>;
+  }
 };
 
 export default Inbox;

@@ -4,10 +4,12 @@ import { Card, DetailsCard, PopUp, SearchAction } from "@egovernments/digit-ui-r
 import useComplaintTable from "../../hooks/useComplaintTable";
 import { FilterAction } from "@egovernments/digit-ui-react-components";
 import Filter from "./Filter";
+import SearchComplaint from "./search";
 
 export const ComplaintCard = ({ data }) => {
   //let cardData = useComplaintTable(data);
   const [popup, setPopup] = useState(false);
+  const [selectedComponent, setSelectedComponent] = useState(null);
   let cardData = [
     {
       "Complaint No.": "1290889999",
@@ -27,24 +29,27 @@ export const ComplaintCard = ({ data }) => {
     },
   ];
 
-  const handlePopupAction = () => {
+  const handlePopupAction = (type) => {
     console.log("option");
+    if (type === "SEARCH") {
+      setSelectedComponent(<SearchComplaint />);
+    } else if (type === "FILTER") {
+      setSelectedComponent(<Filter />);
+    }
     setPopup(true);
   };
 
   return (
     <React.Fragment>
-      <div class="searchBox">
-        <SearchAction text="SEARCH" handleActionClick={handlePopupAction} />
-        <FilterAction text="FILTER" handleActionClick={handlePopupAction} />
+      <div className="searchBox">
+        <SearchAction text="SEARCH" handleActionClick={() => handlePopupAction("SEARCH")} />
+        <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />
         <FilterAction text="SORT" handleActionClick={handlePopupAction} />
       </div>
       <DetailsCard data={cardData} />
       {popup && (
         <PopUp>
-          <div className="popup-module">
-            <Filter />
-          </div>
+          <div className="popup-module">{selectedComponent}</div>
         </PopUp>
       )}
     </React.Fragment>

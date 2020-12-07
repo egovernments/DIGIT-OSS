@@ -47,6 +47,8 @@ import KeyNote from "./atoms/KeyNote";
 import TelePhone from "./atoms/TelePhone";
 import GreyOutText from "./atoms/GreyOutText";
 import HomeLink from "./atoms/HomeLink";
+import ApplyFilterBar from "./atoms/ApplyFilterBar";
+import RemoveableTag from "./molecules/RemoveableTag";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -128,4 +130,6 @@ export {
   RatingCard,
   SearchAction,
   FilterAction,
+  ApplyFilterBar,
+  RemoveableTag,
 };

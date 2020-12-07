@@ -119,6 +119,18 @@ const FilterSvg = ({ className }) => (
   </svg>
 );
 
+const Close = ({ className }) => (
+  <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" width="24" height="24" fill="#9E9E9E" className={className}>
+    <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path>
+  </svg>
+);
+
+const Feedback = ({ className }) => (
+  <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z" className={className}></path>
+  </svg>
+);
+
 export {
   ArrowLeft,
   ArrowDown,
@@ -134,4 +146,6 @@ export {
   Calender,
   Phone,
   FilterSvg,
+  Close,
+  Feedback,
 };

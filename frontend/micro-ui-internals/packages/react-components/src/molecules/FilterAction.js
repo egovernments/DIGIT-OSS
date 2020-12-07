@@ -2,8 +2,8 @@ import React from "react";
 import { FilterSvg } from "../atoms/svgindex";
 
 const FilterAction = ({ text, handleActionClick }) => (
-  <div class="searchAction" onClick={handleActionClick}>
-    <FilterSvg /> <span class="searchText">{text}</span>
+  <div className="searchAction" onClick={handleActionClick}>
+    <FilterSvg /> <span className="searchText">{text}</span>
   </div>
 );
 
