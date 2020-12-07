@@ -327,7 +327,7 @@ const mapStateToProps = (state, ownProps) => {
             arrears = arrears+ billDetails[i].billAccountDetails[j].amount; 
             }
         }
-        if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TIME_REBATE" )   {     
+   /*      if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TIME_REBATE" )   {     
           if(billDetails[i].fromPeriod!==latestYear)
               {        
                 Rebate = Rebate+ billDetails[i].billAccountDetails[j].amount; 
@@ -339,8 +339,8 @@ const mapStateToProps = (state, ownProps) => {
                   PromotionalRebate = PromotionalRebate+ billDetails[i].billAccountDetails[j].amount; 
                 }
             
-              }
-              finalarrears = arrears+PromotionalRebate+Rebate;
+              } */
+              finalarrears = arrears;
 
       } 
     }
