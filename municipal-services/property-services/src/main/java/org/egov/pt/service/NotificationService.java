@@ -161,7 +161,7 @@ public class NotificationService {
 		if (isUpdateSmsEnabled) {
 
             List<List<String>> tenants = getUpdateSmsEnabledCities();	                
-    	if (tenants.get(0).contains(propertyRequest.getProperty().getTenantId())) {
+    	if (!tenants.get(0).contains(propertyRequest.getProperty().getTenantId())) {
         String citizenMobileNumber = propertyRequest.getRequestInfo().getUserInfo().getMobileNumber();	
 
 		Property property = propertyRequest.getProperty();
