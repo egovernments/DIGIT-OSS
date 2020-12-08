@@ -19,6 +19,14 @@ let externalHost = envVariables.EGOV_EXTERNAL_HOST;
  * @param {*} localisationMap - Map to store localisation key, value pair
  * @param {*} requestInfo - request info from request body
  */
+
+function escapeRegex(string) {
+  if(typeof string == "string")
+  return string.replace(/[\\"]/g, '\\$&'); 
+   else
+    return string;
+  }
+
 export const directMapping = async (
   req,
   dataconfig,
@@ -136,7 +144,12 @@ export const directMapping = async (
                 loc.delimiter
               );
             }
-            ownerObject[scema[k].variable] = fieldValue;
+            let currentValue = fieldValue;
+          if (typeof currentValue == "object" && currentValue.length > 0)
+            currentValue = currentValue[0];
+
+          currentValue= escapeRegex(currentValue);
+          ownerObject[scema[k].variable] = currentValue;
           }
           // set(ownerObject[x], "text", get(val[j], scema[k].key, ""));
           // x += 2;
@@ -275,7 +288,15 @@ export const directMapping = async (
           directArr[i].localisation.isSubTypeRequired,
           directArr[i].localisation.delimiter
         );
-      else variableTovalueMap[directArr[i].jPath] = directArr[i].val;
+      else{
+        let currentValue = directArr[i].val;
+          if (typeof currentValue == "object" && currentValue.length > 0)
+            currentValue = currentValue[0];
+          
+         // currentValue=currentValue.replace(/\\/g,"\\\\").replace(/"/g,'\\"');
+        currentValue= escapeRegex(currentValue);
+        variableTovalueMap[directArr[i].jPath] = currentValue;
+      } 
       if (directArr[i].uCaseNeeded) {
         let currentValue = variableTovalueMap[directArr[i].jPath];
         if (typeof currentValue == "object" && currentValue.length > 0)
