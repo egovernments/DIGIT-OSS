@@ -241,7 +241,7 @@ class Footer extends React.Component {
       if(ptStatus && ptStatus.state === "CORRECTIONPENDING"){
         const editButtonForCitizen = {
           label: "Edit",
-          labelKey: "WF_EDIT_BUTTON",
+          labelKey: "WF_PT_EDIT_BUTTON",
           link: () => {
             let propertyId = get(state.screenConfiguration.preparedFinalObject, "Property.propertyId")
             let tenantId = get(state.screenConfiguration.preparedFinalObject, "Property.tenantId")
