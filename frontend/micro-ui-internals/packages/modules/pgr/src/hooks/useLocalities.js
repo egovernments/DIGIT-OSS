@@ -22,7 +22,7 @@ const useLocalities = ({ city }) => {
     if (localityList) {
       const __localities = localityList;
       __localities.forEach((element) => {
-        locality.push(t(element.code));
+        locality.push({ name: t(element.code), code: element.code });
       });
       setLocalities(locality);
     }

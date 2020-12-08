@@ -13,7 +13,7 @@ const useComplaintStatus = () => {
         .filter((state) => state.applicationStatus)
         .map((state) => ({
           name: t(`CS_COMMON_${state.applicationStatus}`),
-          key: state.applicationStatus,
+          code: state.applicationStatus,
         }));
       setComplaintStatus(applicationStatus);
     })();

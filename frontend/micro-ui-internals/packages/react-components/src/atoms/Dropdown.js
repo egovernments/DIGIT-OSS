@@ -18,7 +18,6 @@ const TextField = (props) => {
 
 const Dropdown = (props) => {
   let userType = Digit.SessionStorage.get("userType");
-  console.log("ut:", userType);
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");

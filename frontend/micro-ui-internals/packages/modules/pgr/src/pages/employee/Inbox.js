@@ -3,35 +3,30 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
+import useInboxData from "../../hooks/useInboxData";
 import { applyInboxFilters } from "../../redux/actions";
 
 const Inbox = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { t } = useTranslation();
-  const [isDesktop, setIsDesktop] = useState(true);
   const getFilteredComplaints = useCallback((params) => dispatch(applyInboxFilters(params)), [dispatch]);
-  const complaints = state.pgr.complaints.response || [];
+  const [searchParams, setSearchParams] = useState({ filters: {}, search: "", sort: {} });
+  //const complaints = state.pgr.complaints.response || [];
 
-  console.log("complaints:::::>", complaints);
-
-  const handleFilterChange = (filters) => {
-    console.log("handleFilterChange hi:", filters);
+  const handleFilterChange = (filterParam) => {
+    setSearchParams({ ...searchParams, filters: filterParam });
   };
 
-  const onSubmit = (params = {}) => {
+  const onSearch = (params = "") => {
     console.log("onSubmit--------", params);
-    getFilteredComplaints({ params });
+    setSearchParams({ ...searchParams, search: params });
+    //getFilteredComplaints({ params });
   };
 
-  // let tableData = complaints.map((obj) => ({
-  //   "Complaint No.": obj.businessId,
-  //   "Complaint Sub Type": "Complaint Sub Type",
-  //   Locality: "Amritsar",
-  //   Status: "assinged",
-  //   "Task Owner": "test",
-  //   "SLA Remaining": obj.businesssServiceSla,
-  // }));
+  let complaints = useInboxData(searchParams) || [];
+
+  console.log("complaints:", complaints);
 
   useEffect(() => {
     getFilteredComplaints();
@@ -39,11 +34,12 @@ const Inbox = () => {
 
   let isMobile = window.mobileCheck();
   console.log("window.mobileCheck:", isMobile);
+  console.log("searchParams:::::>", searchParams);
   if (complaints.length > 0) {
     if (isMobile) {
       return <MobileInbox data={complaints} onFilterChange={handleFilterChange} />;
     } else {
-      return <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSubmit={onSubmit} />;
+      return <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSearch={onSearch} />;
     }
   } else {
     return <div></div>;

@@ -9,101 +9,64 @@ import {
   ActionBar,
   RemoveableTag,
 } from "@egovernments/digit-ui-react-components";
-import { useDispatch, useSelector } from "react-redux";
-import { searchComplaints } from "../../redux/actions";
+import { useSelector } from "react-redux";
 import useLocalities from "../../hooks/useLocalities";
 import useComplaintStatus from "../../hooks/useComplaintStatus";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import useServiceDefs from "../../hooks/useServiceDefs";
 
 const Filter = (props) => {
+  console.log("props in filter--------->:", props);
   // let userType = Digit.SessionStorage.get("userType");
-  const SessionStorage = Digit.SessionStorage;
-  const MDMSService = Digit.MDMSService;
-  const [selectAssigned, setSelectedAssigned] = useState("");
-  const dispatch = useDispatch();
+
   const { t } = useTranslation();
-  //const dispatchFilterChange = useCallback((filters) => dispatch(applyFilters(filters)), [dispatch]);
-  const getComplaints = useCallback((filters) => dispatch(searchComplaints(filters)), [dispatch]);
-  let localities = useLocalities({ city: "Amritsar" });
-  let complaintStatus = useComplaintStatus();
-  console.log("useComplaintStatus:", complaintStatus);
+  const { pgr } = useSelector((state) => state);
 
-  const assignmentOptions = [
-    { lable: "Pending Assignment", type: "pendingforassignment" },
-    { lable: "Pending Reassignment", type: "pendingforreassignment" },
-  ];
-
-  const onRadioChange = (value) => {
-    console.log("onSelect", value);
-    setSelectedAssigned(value);
-    setFilters({ ...filters, assigned: value });
-  };
-
-  const { common, pgr } = useSelector((state) => state);
-
-  console.log("appstate:::>>", common, pgr);
-
-  const [localMenu, setLocalMenu] = useState([]);
+  const [selectAssigned, setSelectedAssigned] = useState("");
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
-  const [currentLocalities, setCurrentLocalities] = useState([]);
   const [pendingComplaintCount, setPendingComplaintCount] = useState([]);
-
   const [filters, setFilters] = useState({
-    assigned: "",
+    assigned: [],
     serviceCodes: [],
     localities: [],
     applicationStatus: [],
   });
 
-  //TODO: Move this to separate hook
-  useEffect(() => {
-    (async () => {
-      const criteria = {
-        type: "serviceDefs",
-        details: {
-          tenantId: common.stateInfo.code,
-          moduleDetails: [
-            {
-              moduleName: "RAINMAKER-PGR",
-              masterDetails: [
-                {
-                  name: "ServiceDefs",
-                },
-              ],
-            },
-          ],
-        },
-      };
+  let localities = useLocalities({ city: "Amritsar" });
+  let complaintStatus = useComplaintStatus();
+  let serviceDefs = useServiceDefs();
 
-      const serviceDefs = await MDMSService.getDataByCriteria(criteria);
-      SessionStorage.set("serviceDefs", serviceDefs);
-      var __localMenu__ = [];
-      await Promise.all(
-        serviceDefs.map((def) => {
-          if (!__localMenu__.find((e) => e.key === def.menuPath)) {
-            def.menuPath === "" ? __localMenu__.push("SERVICEDEFS.OTHERS") : __localMenu__.push("SERVICEDEFS." + def.menuPath.toUpperCase());
-          }
-        })
-      );
-      setLocalMenu(__localMenu__);
-    })();
-  }, [common]);
+  const onRadioChange = (value) => {
+    console.log("vlaue:-------------", value);
+    setSelectedAssigned(value.code);
+    setFilters({ ...filters, assigned: [value] });
+  };
 
   useEffect(() => {
-    let queryString = "";
-    for (const property in filters.pending) {
-      queryString += filters.pending[property] ? `${property},` : "";
+    let queryObj = {};
+    for (const property in filters) {
+      console.log("property:-------->", property);
+      // let values = filters[property].map((prop) => prop.code).join();
+      if (Array.isArray(filters[property])) {
+        let params = filters[property].map((prop) => prop.code).join();
+        console.log("params>>:", params, filters[property]);
+        if (params) {
+          //queryString += `${property}=${params}&`;
+          queryObj[property] = params;
+        }
+      }
     }
-    queryString = queryString.substring(0, queryString.length - 1);
-    getComplaints({ status: queryString });
+    //queryString = queryString.substring(0, queryString.length - 1);
+    console.log("queryObj:", queryObj);
+    handleFilterSubmit(queryObj);
   }, [filters]);
 
   const getCount = (value) => {
-    console.log("pgr.complaint:", pgr.complaints);
+    console.log("pgr.complaints:", pgr);
     return (
-      pgr.complaints &&
+      pgr.complaints.hasOwnProperty("response") &&
       pgr.complaints.response.filter((complaint) => {
         console.log("complaint.serviceCode", complaint.serviceCode, "value:", value);
         return complaint.applicationStatus === value;
@@ -118,20 +81,6 @@ const Filter = (props) => {
     }));
 
     setPendingComplaintCount(statusWithCount);
-
-    // const pendingForAssignment =
-    //   pgr.complaints &&
-    //   pgr.complaints.response.filter((complaint) => {
-    //     console.log("complaint 1:", complaint);
-    //     return complaint.serviceCode === "PENDINGFORASSIGNMENT";
-    //   }).length;
-    // const pendingForReAssignment =
-    //   pgr.complaints &&
-    //   pgr.complaints.response.filter((complaint) => {
-    //     console.log("complaint 2:", complaint);
-    //     return complaint.serviceCode === "PENDINGFORREASSIGNMENT";
-    //   }).length;
-    // setPendingComplaintCount({ pendingForAssignment, pendingForReAssignment });
   };
 
   useEffect(() => {
@@ -142,11 +91,13 @@ const Filter = (props) => {
     setFilters({ ...filters, serviceCodes: [...filters.serviceCodes, type] });
   }
 
-  function onSelectLocality(type) {
-    setFilters({ ...filters, localities: [...filters.localities, type] });
+  function onSelectLocality(value, type) {
+    console.log("hi", type, value);
+    setFilters({ ...filters, localities: [...filters.localities, value] });
   }
 
   useEffect(() => {
+    console.log("filters:", filters.serviceCodes);
     if (filters.serviceCodes.length > 1) {
       setSelectedComplaintType(`${filters.serviceCodes.length} selected`);
     } else {
@@ -162,21 +113,15 @@ const Filter = (props) => {
     }
   }, [filters.localities]);
 
-  const onRemoveComplaintType = (index) => {
-    let afterRemove = filters.serviceCodes.filter((value, i) => {
+  const onRemove = (index, key) => {
+    let afterRemove = filters[key].filter((value, i) => {
       return i !== index;
     });
-    setFilters({ ...filters, serviceCodes: afterRemove });
-  };
-
-  const onRemoveLocality = (index) => {
-    let afterRemove = filters.localities.filter((value, i) => {
-      return i !== index;
-    });
-    setFilters({ ...filters, localities: afterRemove });
+    setFilters({ ...filters, [key]: afterRemove });
   };
 
   const handleAssignmentChange = (e, type) => {
+    console.log("type:", type);
     if (e.target.checked) {
       setFilters({ ...filters, applicationStatus: [...filters.applicationStatus, type] });
     } else {
@@ -188,58 +133,59 @@ const Filter = (props) => {
   };
 
   const handleFilterClear = () => {
-    console.log("hhhh");
+    console.log("clear");
   };
 
-  const handleFilterSubmit = () => {
-    console.log("handleFilterSubmit");
-    console.log("filters:", filters);
+  const handleFilterSubmit = (queryString) => {
+    props.onFilterChange(queryString);
   };
+
+  const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key) => (
+    <div>
+      <div className="filter-label">{lable}</div>
+      <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} style={{ width: "100%" }} />
+      <div className="tag-container">
+        {filters[key].length > 0 &&
+          filters[key].map((value, index) => {
+            return <RemoveableTag text={value.name} onClick={() => onRemove(index, key)} />;
+          })}
+      </div>
+    </div>
+  );
 
   return (
     <React.Fragment>
+      {console.log("filters:", filters)}
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
             <div className="filter-label">FILTER BY:</div>
             <div className="clearAll">Clear all</div>
+            {props.type === "desktop" && <span className="clear-search">Clear all</span>}
           </div>
           <div>
-            <RadioButtons onSelect={onRadioChange} selectedComplaintType={selectAssigned} options={["Assigned To Me", "Assigned To ALL"]} />
-            <div>
-              <div>
-                <div className="filter-label">Complaint Subtype *</div>
-                <Dropdown option={localMenu} selected={selectedComplaintType} select={complaintType} style={{ width: "100%" }} />
-                <div className="tag-container">
-                  {filters.serviceCodes.length > 0 &&
-                    filters.serviceCodes.map((value, index) => {
-                      return <RemoveableTag text={value} onClick={() => onRemoveComplaintType(index)} />;
-                    })}
-                </div>
-              </div>
-              <div>
-                <div className="filter-label">Locality *</div>
-                <Dropdown option={localities} selected={selectedLocality} select={onSelectLocality} style={{ width: "100%" }} />
-                <div className="tag-container">
-                  {filters.localities.length > 0 &&
-                    filters.localities.map((value, index) => {
-                      return <RemoveableTag text={value} onClick={() => onRemoveLocality(index)} />;
-                    })}
-                </div>
-              </div>
-            </div>
+            <RadioButtons
+              onSelect={onRadioChange}
+              selectedComplaintType={selectAssigned}
+              optionskey="name"
+              options={[
+                { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
+                { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
+              ]}
+            />
+            <div>{GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "name", onRemove, "serviceCodes")}</div>
+            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "localities")}</div>
             <div className="status-container">
               <div className="filter-label">Status</div>
               {console.log("pendingComplaintCount:", pendingComplaintCount)}
               {pendingComplaintCount.map((option) => (
-                <CheckBox onChange={(e) => handleAssignmentChange(e, option.type)} label={`${option.name} (${option.count})`} />
+                <CheckBox onChange={(e) => handleAssignmentChange(e, option)} label={`${option.name} (${option.count})`} />
               ))}
             </div>
           </div>
         </div>
       </div>
       <ActionBar>
-        {console.log("props.type :", props.type)}
         {props.type === "desktop" ? (
           <SubmitBar label="Send" />
         ) : (

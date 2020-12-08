@@ -12,12 +12,12 @@ export const WorkflowService = {
       auth: true,
     }),
 
-  getByBusinessId: (stateCode = "pb", businessIds) =>
+  getByBusinessId: (stateCode = "pb", businessIds, params = {}, history = true) =>
     Request({
       url: Urls.WorkFlowProcessSearch,
       useCache: false,
       method: "POST",
-      params: { tenantId: stateCode, businessIds: businessIds, history: true },
+      params: { tenantId: stateCode, businessIds: businessIds, ...params, history },
       auth: true,
     }),
   getNextAction: async (stateCode = "pb", currentState) => {
