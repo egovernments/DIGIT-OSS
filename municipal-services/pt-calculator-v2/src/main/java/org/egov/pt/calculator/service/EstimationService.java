@@ -353,7 +353,7 @@ public class EstimationService {
 						BigDecimal taxRate = getTaxRate(masterMap, unit);
 						BigDecimal multipleFactor = getMultipleFactor(masterMap, unit);
 						BigDecimal landAV = carpetArea.multiply(multipleFactor).multiply(monthMultiplier);
-						unitTaxAmount = landAV.multiply(taxRate);
+						unitTaxAmount = landAV.multiply(taxRate).divide(HUNDRED);
 						totalCarpetArea = totalCarpetArea.add(carpetArea);
 						totalLandAV = totalLandAV.add(landAV);
 						if (unoccupiedLandCount == 0) {
@@ -364,7 +364,7 @@ public class EstimationService {
 							BigDecimal unoccupiedLandArea = propertyDetail.getLandArea().subtract(totalBuiltupArea);
 							BigDecimal unoccupiedLandAV = unoccupiedLandArea.multiply(unitRate).multiply(multipleFactor)
 									.multiply(monthMultiplier);
-							unoccupiedLandTaxAmount = unoccupiedLandAV.multiply(taxRate);
+							unoccupiedLandTaxAmount = unoccupiedLandAV.multiply(taxRate).divide(HUNDRED);
 							unoccupiedLandCount = unoccupiedLandCount + 1;
 						}
 
