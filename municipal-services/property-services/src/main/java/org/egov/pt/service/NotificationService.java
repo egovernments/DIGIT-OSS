@@ -11,6 +11,7 @@ import static org.egov.pt.util.PTConstants.NOTIFICATION_CONSUMERCODE;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_MUTATION_LINK;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_PAY_LINK;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTY_LINK;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_TENANTID;
@@ -168,7 +169,7 @@ public class NotificationService {
 		String createOrUpdate = null;
 		String msg = null;
 		
-		Boolean isCreate =  CREATE_PROCESS_CONSTANT.equalsIgnoreCase(wf.getNotificationAction());
+		Boolean isCreate =  wf != null ? CREATE_PROCESS_CONSTANT.equalsIgnoreCase(wf.getNotificationAction()) : false;
 		String state = wf.getId() != null ? getStateFromWf(wf, configs.getIsWorkflowEnabled()) : WF_NO_WORKFLOW;
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
 		String localisedState = state != WF_NO_WORKFLOW ? getLocalisedState(wf.getState().getState(), completeMsgs) : "";
@@ -214,12 +215,16 @@ public class NotificationService {
 	 */
 	private String getMsgForUpdate(Property property, String msgCode, String completeMsgs, String createUpdateReplaceString) {
 		
-//		String url = notifUtil.getShortenedUrl(
-//					   configs.getUiAppHost().concat(configs.getViewPropertyLink()
-//					  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
-//					  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
+		String url = notifUtil.getShortenedUrl(
+					   configs.getUiAppHost().concat(configs.getViewPropertyLink()
+					  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
+					  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
 		
-		return notifUtil.getMessageTemplate(msgCode, completeMsgs);
+		return notifUtil.getMessageTemplate(msgCode, completeMsgs)
+						.replace(NOTIFICATION_OWNERNAME,property.getOwners().get(0).getName())
+						.replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
+						.replace(NOTIFICATION_PROPERTYID, createUpdateReplaceString)
+						.replace(NOTIFICATION_PROPERTY_LINK, url);
 	}
 	
 	

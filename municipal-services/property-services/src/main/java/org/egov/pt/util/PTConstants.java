@@ -240,6 +240,8 @@ public class PTConstants {
     
     public static final String NOTIFICATION_PAY_LINK =  "{PAYLINK}";
     
+    public static final String NOTIFICATION_PAYMENT_LINK =  "{PAYMENT_LINK}";
+
     public static final String NOTIFICATION_PROPERTY_LINK =  "{PTURL}";
     
     public static final String NOTIFICATION_MUTATION_LINK =  "{MTURL}";

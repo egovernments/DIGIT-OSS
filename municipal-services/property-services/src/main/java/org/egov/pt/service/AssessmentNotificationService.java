@@ -9,6 +9,8 @@ import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENT_UPDATE;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_FINANCIALYEAR;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_TENANTID;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_LINK;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -144,7 +146,10 @@ public class AssessmentNotificationService {
     private String customize(Assessment assessment, Property property, String msgCode, String localizationMessages){
 
         String messageTemplate = util.getMessageTemplate(msgCode, localizationMessages);
-
+        String url = util.getShortenedUrl(
+				   config.getUiAppHost().concat(config.getViewPropertyLink()
+				  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
+				  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
         if(messageTemplate.contains(NOTIFICATION_ASSESSMENTNUMBER))
             messageTemplate = messageTemplate.replace(NOTIFICATION_ASSESSMENTNUMBER, assessment.getAssessmentNumber());
 
@@ -159,6 +164,9 @@ public class AssessmentNotificationService {
 
         if(messageTemplate.contains(NOTIFICATION_FINANCIALYEAR))
             messageTemplate = messageTemplate.replace(NOTIFICATION_FINANCIALYEAR, assessment.getFinancialYear());
+
+        if(messageTemplate.contains(NOTIFICATION_PAYMENT_LINK))
+            messageTemplate = messageTemplate.replace(NOTIFICATION_PAYMENT_LINK, url);
 
         return messageTemplate;
     }
