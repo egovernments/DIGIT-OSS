@@ -234,6 +234,26 @@ class Footer extends React.Component {
     }
   }
 
+  if(moduleName == "PT.CREATE"){ 
+    let ptWFProcessInstances = get(state.screenConfiguration.preparedFinalObject, "workflow.ProcessInstances")
+    if(ptWFProcessInstances && ptWFProcessInstances.length>0){
+      let ptStatus = ptWFProcessInstances[ptWFProcessInstances.length-1].state
+      if(ptStatus && ptStatus.state === "CORRECTIONPENDING"){
+        const editButtonForCitizen = {
+          label: "Edit",
+          labelKey: "WF_EDIT_BUTTON",
+          link: () => {
+            let propertyId = get(state.screenConfiguration.preparedFinalObject, "Property.propertyId")
+            let tenantId = get(state.screenConfiguration.preparedFinalObject, "Property.tenantId")
+            this.props.setRoute(`/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenantId}`)
+          }
+        };
+        downloadMenu.push(editButtonForCitizen)
+      }
+   
+    }
+    
+  }
 
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
