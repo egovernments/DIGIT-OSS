@@ -60,6 +60,8 @@ const commonApplicantInformation = () => {
         jsonPath:
           "Property.ownersTemp[0].gender",
         props: {
+          jsonPath:
+          "Property.ownersTemp[0].gender",
           label: { name: "Gender", key: "PT_MUTATION_TRANSFEREE_GENDER_LABEL" },
           className:"applicant-details-error",
           buttons: [
