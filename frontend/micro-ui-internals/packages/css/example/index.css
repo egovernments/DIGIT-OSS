@@ -521,7 +521,8 @@ img, video {
   margin: 8px;
   padding: 8px 8px 24px;
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16); }
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
+  border-radius: 4px; }
   .employeeCard .card-header {
     font-size: 32px;
     line-height: 40px;
@@ -1597,9 +1598,10 @@ img, video {
   .action-bar-wrap {
     -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.16);
+    left: 64px;
+    width: calc(100% - 64px);
     position: fixed;
     bottom: 0;
-    width: 100%;
     --bg-opacity:1;
     background-color: #fff;
     background-color: rgba(255, 255, 255, var(--bg-opacity));

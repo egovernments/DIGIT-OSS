@@ -10,7 +10,9 @@
 @screen dt {
   .action-bar-wrap {
     box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
-    @apply fixed bottom-0 w-full bg-white py-sm pr-lg text-right;
+    left: 64px;
+    width: calc( 100% - 64px );
+    @apply fixed bottom-0 bg-white py-sm pr-lg text-right;
 
     div{
         width: calc(100% - 16px);

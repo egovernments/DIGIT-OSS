@@ -102,9 +102,14 @@ export const CreateComplaint = ({ stateCode, cityCode }) => {
       body: [
         {
           label: "Mobile Number",
+          isMandatory: true,
           type: "text",
           populators: {
             name: "mobileNumber",
+            validation: {
+              required: true,
+              pattern: /^[6-9]\d{9}$/,
+            },
           },
         },
         {
@@ -112,6 +117,9 @@ export const CreateComplaint = ({ stateCode, cityCode }) => {
           type: "text",
           populators: {
             name: "name",
+            validation: {
+              pattern: /[A-Za-z]/,
+            },
           },
         },
       ],
@@ -121,11 +129,13 @@ export const CreateComplaint = ({ stateCode, cityCode }) => {
       body: [
         {
           label: "Complaint Type",
+          isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={menu} optionKey="name" selected={complaintType} select={selectedType} />,
         },
         {
           label: "Complaint Sub-Type",
+          isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
           populators: <Dropdown option={subTypeMenu} optionKey="name" selected={subType} select={selectedSubType} />,
@@ -140,16 +150,19 @@ export const CreateComplaint = ({ stateCode, cityCode }) => {
           type: "text",
           populators: {
             name: "pincode",
+            validation: { pattern: /^[1-9][0-9]{5}$/ },
           },
         },
         {
           label: "City",
+          isMandatory: true,
           type: "dropdown",
           populators: <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="name" />,
         },
         {
           label: "Moholla",
           type: "dropdown",
+          isMandatory: true,
           dependency: selectedCity && localities ? true : false,
           populators: <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />,
         },
@@ -158,6 +171,9 @@ export const CreateComplaint = ({ stateCode, cityCode }) => {
           type: "textarea",
           populators: {
             name: "landmark",
+            validation: {
+              required: true,
+            },
           },
         },
       ],

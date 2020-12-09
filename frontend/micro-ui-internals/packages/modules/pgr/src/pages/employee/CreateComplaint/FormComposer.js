@@ -23,9 +23,9 @@ const FormComposer = (props) => {
   const fieldSelector = (type, populators) => {
     switch (type) {
       case "text":
-        return <TextInput className="field" {...populators} inputRef={register} />;
+        return <TextInput className="field" {...populators} inputRef={register(populators.validation)} />;
       case "textarea":
-        return <TextArea className="field" {...populators} inputRef={register} />;
+        return <TextArea className="field" {...populators} inputRef={register(populators.validation)} />;
       default:
         return populators.dependency !== false ? populators : null;
     }
@@ -38,7 +38,10 @@ const FormComposer = (props) => {
         {section.body.map((field, index) => {
           return (
             <LabelFieldPair key={index}>
-              <CardLabel>{field.label}</CardLabel>
+              <CardLabel>
+                {field.label}
+                {field.isMandatory ? " * " : null}
+              </CardLabel>
               <div className="field">{fieldSelector(field.type, field.populators)}</div>
             </LabelFieldPair>
           );
