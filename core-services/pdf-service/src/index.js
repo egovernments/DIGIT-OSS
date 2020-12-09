@@ -655,12 +655,14 @@ export const fillValues = (variableTovalueMap, formatconfig) => {
   let output = JSON.parse(
     mustache
       .render(input, variableTovalueMap)
-      .replace(/""/g, '"')
+      .replace(/""/g, '\""')
       //.replace(/\\/g, "")
       .replace(/"\[/g, "[")
       .replace(/\]"/g, "]")
       .replace(/\]\[/g, "],[")
-      .replace(/"\{/g, "{")      
+      .replace(/"\{/g, "{")
+      .replace(/\n/g, "\\n")
+      .replace(/\t/g, "\\t")      
   );
   return output;
 };
