@@ -138,6 +138,10 @@ export const ComplaintDetails = (props) => {
         setPopup(true);
         setDisplayMenu(false);
         break;
+      case "RESOLVE":
+        setPopup(true);
+        setDisplayMenu(false);
+        break;
       case "REJECT":
         setPopup(true);
         setDisplayMenu(false);
@@ -218,14 +222,29 @@ export const ComplaintDetails = (props) => {
       {popup ? (
         <Modal
           employeeRoles={workflowDetails.nextActions ? workflowDetails.nextActions : null}
-          headerBarMain={<Heading label={selectedAction === "ASSIGN" || selectedAction === "REASSIGN" ? "Assign Complaint" : "Reject Complaint"} />}
+          headerBarMain={
+            <Heading
+              label={
+                selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
+                  ? "Assign Complaint"
+                  : selectedAction === "REJECT"
+                  ? "Reject Complaint"
+                  : "Resolve Complaint"
+              }
+            />
+          }
           headerBarEnd={<CloseBtn onClick={() => close(popup)} />}
           selectedAction={selectedAction}
           onAssign={onAssign}
           onCancel={() => close(popup)}
         />
       ) : null}
-      {toast && <Toast label={assignResponse ? "Complaint Assigned Succesfully" : "Complain assigned Failed"} onClose={closeToast} />}
+      {toast && (
+        <Toast
+          label={assignResponse ? "Complaint" + selectedAction.toLowerCase() + "Succesfully" : "Complain assigned Failed"}
+          onClose={closeToast}
+        />
+      )}
       <ActionBar>
         {displayMenu && workflowDetails.nextActions ? (
           <Menu options={workflowDetails.nextActions.map((action) => action.action)} onSelect={onActionSelect} />
