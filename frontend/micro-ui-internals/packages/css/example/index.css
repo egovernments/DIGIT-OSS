@@ -426,7 +426,9 @@ img, video {
   background-color: #22394d;
   background-color: rgba(34, 57, 77, var(--bg-opacity));
   padding: 16px;
-  width: 100%; }
+  width: 100%;
+  position: fixed;
+  z-index: 9999; }
   .navbar img {
     display: inline-block;
     min-width: 78px;
@@ -2028,11 +2030,14 @@ img, video {
       padding-right: 5px; }
 
 .employee .topbar {
-  height: 80px;
+  position: fixed;
+  top: 0;
+  width: 100%;
   padding: 16px 24px;
   background: #fff;
   -webkit-box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.24); }
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.24);
+  z-index: 9999; }
   .employee .topbar img {
     display: inline; }
     .employee .topbar img.city {
@@ -2057,11 +2062,13 @@ img, video {
       font-weight: 700; }
 
 .employee .sidebar {
-  position: absolute;
+  position: fixed;
+  left: 0;
   padding: 20px 0;
   background: #22394d;
   height: 100%;
-  color: #fff; }
+  color: #fff;
+  margin-top: 80px; }
   .employee .sidebar .actions {
     cursor: pointer;
     padding: 0 20px;
@@ -2070,8 +2077,15 @@ img, video {
       border-right: 4px solid #f47738;
       padding-right: 16px; }
 
+.employee .main {
+  padding-top: 88px; }
+
+.citizen .main {
+  padding-top: 72px; }
+
 @media (min-width: 640px) {
   .employee .main {
+    padding-top: 80px;
     margin-left: 88px; } }
 
 .popup-module {

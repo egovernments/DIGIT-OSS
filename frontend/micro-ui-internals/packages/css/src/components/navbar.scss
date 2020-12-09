@@ -1,5 +1,7 @@
 .navbar {
   @apply text-white bg-secondary p-md w-full;
+  position: fixed;
+  z-index: 9999;
 
   img {
     display: inline-block;

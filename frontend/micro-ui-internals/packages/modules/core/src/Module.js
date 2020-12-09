@@ -108,7 +108,9 @@ const DigitUIApp = ({ stateCode, modules, appTenants, logoUrl, cityCode }) => {
       </Route>
       <Route path="/digit-ui/citizen">
         <TopBar img={logoUrl} />
-        <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
+        <div className="main">
+          <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
+        </div>
       </Route>
       <Route>
         <Redirect to="/digit-ui/citizen" />
