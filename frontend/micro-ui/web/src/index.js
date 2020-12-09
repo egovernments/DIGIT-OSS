@@ -18,17 +18,17 @@ const employeeInfo = window.localStorage.getItem("Employee.user-info")
 const employeeTenantId = window.localStorage.getItem("Employee.tenant-id")
 
 const userType = token === citizenToken ? "citizen" : "employee";
-Digit.SessionStorage.set("user_type", userType);
-Digit.SessionStorage.set("userType", userType);
+window.Digit.SessionStorage.set("user_type", userType);
+window.Digit.SessionStorage.set("userType", userType);
 
 const getUserDetails = (token, info) => ({ token, info })
 
 const userDetails = userType === "citizen" ? getUserDetails(citizenToken, citizenInfo) : getUserDetails(employeeToken, employeeInfo)
 
-Digit.SessionStorage.set("User", userDetails);
+window.Digit.SessionStorage.set("User", userDetails);
 
-Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
-Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
+window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
 
 ReactDOM.render(
   <React.StrictMode>
