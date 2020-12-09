@@ -1149,9 +1149,9 @@
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.15.tgz#28ffc8778b85a9f47712adf39e8f25c0b2c39623"
-  integrity sha512-027GJ7H0DutCCxUtvlx/knEWZ4QJPqPNXwEydoPZAAtddCL0c0yD97geAS42ioZKTLI8oi/T7UsQIqmNfFYniQ==
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.17.tgz#5c9469574ac16641a0416eecbed3ba467b3de15c"
+  integrity sha512-h36LGw6K42VokKpPZt+aKZFDgVyisa0MwHLu0F4yv0HgQ6rb3UmlAKFsvROUQwzvp3bsutIbbD947Ig0d2AEWg==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1162,9 +1162,9 @@
     react-i18next "^11.7.3"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.15.tgz#8851a644a9e9b8686f15f81dcc113774bcc00e7a"
-  integrity sha512-e1jg34i5As5XCS7Gw3QR7WkKdM2jmV98YgtS2C+GZ5oCOSq/rZfhMwRN95qE39l8VFJs55wzPuAw79+P73QJgg==
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.17.tgz#c9d14bef71fefbc7f420d64ab26caee57750ff82"
+  integrity sha512-1u1kUr6pQCYOA12d4aWnKQvIdhuWzPtQs45HbfBg1WkErWsbAbViIxe8LjbLXOXUe8IXpGtXdaE2F3CwQjWPpQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1180,9 +1180,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.15.tgz#1af2efa5baec02f6bc31772ec40c2082320ce28a"
-  integrity sha512-Wgf1JtQMtCrLnER32ayebayHDsQ8aWSafc7+dj0yxDeSwFMSXkRhqBc2mYLoaiTfPBoig3ZMos5e+XXb7Bchxw==
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.17.tgz#04625ca296d3a7294f33d337c7e4a016f3bc18a0"
+  integrity sha512-N6S6jICnEGEwR+53UgkWDSEQlvADC7c8jvyLiUFwk9nJsnYlS6A2t9tRJP2dMdmn243WhuKgL2Hr1OqfSg451A==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1198,9 +1198,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.15.tgz#4ee9b3214ac94b9953649c2d3d953df45b7a3727"
-  integrity sha512-inhn+DIj+LB/nKGzQBwTWUTgVRNMBhBHxW8kd9L7y6opkXWouDby0SQehOn8j3kpWsj3YJTeYV0gy75PfY5Igw==
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.17.tgz#81a0e78679ee9ce440c420fb9a9e6a6f8e227a2d"
+  integrity sha512-OjrOpuZcJsPRJTI5JX2Sbq5ju66A0FYrSCPTPZPBUniCcqRlTCr53H3od9OTRgh3O7GPQ1+18YsviG6PMDrGIQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1216,9 +1216,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.15.tgz#6f19e64525ee0d8d823d322b0550f14eb0c6bc23"
-  integrity sha512-BR2gDCWXYo2CHkF1DqAVHuRAb00O1QGaSeOGrnsxj/aJYlGkrBy7N/m81vojRdX+mRzmWS7zhubMcCCvhqv27w==
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.17.tgz#fd9f3cab745220eabc93abc1fdb3621994815c69"
+  integrity sha512-+2y5uCDDfnGYGNx1ka1EdvPESKC5a5oJdJP85bYbUt5fB3vjaxSbK0Cttp0ng0ia5l8hPOK4TFJu/mBW0a6cUQ==
   dependencies:
     react-table "^7.6.1"
 
@@ -9074,14 +9074,14 @@ react-error-overlay@^6.0.8:
   integrity sha512-HvPuUQnLp5H7TouGq3kzBeioJmXms1wHy9EGjz2OURWBp4qZO6AfGEcnxts1D/CbwPLRAgTMPCEgYhA3sEM4vw==
 
 react-hook-form@^6.7.0:
-  version "6.11.5"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.11.5.tgz#d3059f159836d19b73ec6fca0906888c60dab16a"
-  integrity sha512-y5RRz3ty/9I0Ps1VONcRw+L9QcFoq01lMDJt15Se1ax9lg7ThLSLpeNALXSRJhmbOhLPJnTTxC8W21EE+8SJNw==
+  version "6.12.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.12.2.tgz#aa67f47da4730a7bce44768583bdf5b749eed521"
+  integrity sha512-O72E2DXyk7djFqyy6eYi5yESGweKe0CNHHPS0Mx4JazpLbE4Ox+66ldZ23f0J5ZN/krEjDWRD+hUfg5Shvfhtw==
 
 react-i18next@^11.7.3:
-  version "11.7.4"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.7.4.tgz#6c0142e15652d8dd80cd7d857e36efe2e9d4d09a"
-  integrity sha512-Aq0+QVW7NMYuAtk0Stcwp4jWeNTd1p5XefAfBPcjs/4c/2duG3v3G3zdtn8fC8L4EyA/coKLwdULHI+lYTbF8w==
+  version "11.8.2"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.8.2.tgz#7a06b7d42c80f9b21126bf46c2c0d1de4fc7c038"
+  integrity sha512-xWHNkqz6gr1ohk5gdPsJ9Nzzn8d98E+QxuqPlXI9VzsbOytKZ1m2BqmbHukFCcUCE8S152gjvSLyMgBJ2BDu4Q==
   dependencies:
     "@babel/runtime" "^7.3.1"
     html-parse-stringify2 "2.0.1"
@@ -9097,9 +9097,9 @@ react-is@^17.0.1:
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
 react-query@^2.26.3:
-  version "2.26.3"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.26.3.tgz#fb893058523213b17f0033d8184eb5cd6c70d778"
-  integrity sha512-h4bhZioVY3kXfo+GLNg0zDn9XvbZkvK3I5eTzW82zpRwtJvUtxrkhrAyZ5N6A0Z9WPeRyo+384JubT5RkMaxEQ==
+  version "2.26.4"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.26.4.tgz#18239b4c0b61d0b744f0d4a91f566b294fa9f752"
+  integrity sha512-sXGG0gh1ah11AcfptYOCRpGDoYMnssq6riQUpQaLSM2EOodVkexp3zNLk1MFDgfRGuXQst40Tnu17oNwni66aA==
   dependencies:
     "@babel/runtime" "^7.5.5"
 
