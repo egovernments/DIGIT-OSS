@@ -33,7 +33,7 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
 
   console.log("pgr", userType, state, store);
   console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
-  console.log("stateeeeeeeeeeeeeeee", state);
+  console.log("state", state);
 
   if (userType === "citizen") {
     return <CitizenApp />;

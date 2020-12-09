@@ -23,6 +23,7 @@ const TextInput = (props) => {
           onChange={props.onChange}
           ref={props.inputRef}
           value={props.value}
+          style={{ ...props.style }}
         />
       )}
     </React.Fragment>

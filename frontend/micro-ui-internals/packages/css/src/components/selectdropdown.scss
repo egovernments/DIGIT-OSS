@@ -18,17 +18,16 @@
   }
 }
 */
-
 .employee-select-wrap{
 
   @apply mb-lg relative;
 
-  .select{
+  .select {
     @apply block w-full h-10 border-2 border-solid border-input-border;
-    
-    input[type="text"]{
-      width: calc( 100% - 32px );
-      @apply h-full outline-none text-text-primary text-form-field pl-sm
+
+    input[type="text"] {
+      width: calc(100% - 32px);
+      @apply h-full outline-none text-text-primary text-form-field pl-sm;
     }
 
     p{
@@ -36,50 +35,50 @@
       @apply text-form-field text-text-primary float-left ml-sm;
     }
 
-    img{
+    img {
       @apply float-right h-6 w-6 mt-sm mr-sm;
     }
 
-    svg{
+    svg {
       @apply float-right h-6 w-6 mt-sm mr-sm;
     }
   }
 
-  .select-active{
+  .select-active {
     @apply block w-full h-10 border-2 border-solid border-primary-main;
-    
-    input[type="text"]{
-      width: calc( 100% - 32px );
-      @apply h-full outline-none text-text-primary text-form-field pl-sm
+
+    input[type="text"] {
+      width: calc(100% - 32px);
+      @apply h-full outline-none text-text-primary text-form-field pl-sm;
     }
 
-    p{
+    p {
       @apply text-form-field text-text-primary float-left ml-sm;
     }
 
-    p{
+    p {
       padding-top: 9px;
     }
 
-    img{
+    img {
       @apply float-right h-6 w-6 mt-sm mr-sm;
     }
 
-    svg{
+    svg {
       @apply float-right h-6 w-6 mt-sm mr-sm;
     }
   }
 
-  .options-card{
+  .options-card {
     width: 100% !important;
-    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
     @apply absolute z-10 mt-xs bg-white;
     
     p{
       padding-top: 14px;
       @apply w-full h-12 pl-sm text-text-primary text-form-field;
 
-      &:hover{
+      &:hover {
         @apply bg-grey-mid;
       }
     }
@@ -154,8 +153,13 @@
   }
 }
 
-@screen dt{
-  .select-wrap{
+.select-wrap-emp {
+  @extend .select-wrap;
+  @apply mb-xs;
+}
+
+@screen dt {
+  .select-wrap {
     width: 480px;
   }
   .employee-select-wrap{

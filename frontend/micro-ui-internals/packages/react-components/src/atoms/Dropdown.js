@@ -18,7 +18,6 @@ const TextField = (props) => {
 
 const Dropdown = (props) => {
   const user_type = Digit.SessionStorage.get("user_type");
-
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
@@ -49,6 +48,7 @@ const Dropdown = (props) => {
 
   return (
     <div className={user_type === "employee" ? "employee-select-wrap" : "select-wrap"} style={{ ...props.style }}>
+      {/* <div className={userType === "employee" ? "select-wrap-emp" : "select-wrap"} style={{ ...props.style }}> */}
       <div className={dropdownStatus ? "select-active" : "select"}>
         <TextField
           setFilter={setFilter}

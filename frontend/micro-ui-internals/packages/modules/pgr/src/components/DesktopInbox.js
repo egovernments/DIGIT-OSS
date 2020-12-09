@@ -32,7 +32,7 @@ const DesktopInbox = (props) => {
       {
         Header: "Status",
         Cell: (row) => {
-          return GetCell(row.row.original["applicationStatus"]);
+          return GetCell(row.row.original["status"]);
         },
       },
       {
@@ -44,7 +44,7 @@ const DesktopInbox = (props) => {
       {
         Header: "SLA Remaining",
         Cell: (row) => {
-          return GetCell(row.row.original["businesssServiceSla"]);
+          return GetCell(row.row.original["sla"]);
         },
       },
     ],
@@ -52,23 +52,16 @@ const DesktopInbox = (props) => {
   );
 
   return (
-    <div
-      // style={{
-      //   display: "flex",
-      //   justifyContent: "center",
-      //   border: "1px solid black",
-      // }}
-      className="inbox-container"
-    >
+    <div className="inbox-container">
       <div className="filters-container">
         <ComplaintsLink />
-        <div className="filter">
-          <Filter onFilterChange={props.onFilterChange} />
+        <div>
+          <Filter onFilterChange={props.onFilterChange} type="desktop" />
         </div>
       </div>
-      <div className="search-container">
-        <SearchComplaint onSubmit={props.onSubmit} />
-        <div style={{ marginTop: "24px" }}>
+      <div>
+        <SearchComplaint onSearch={props.onSearch} type="desktop" />
+        <div style={{ marginTop: "24px", marginTop: "24px", width: "874px", marginLeft: "24px" }}>
           <ComplaintTable
             data={props.data}
             columns={columns}

@@ -51,6 +51,8 @@ import GreyOutText from "./atoms/GreyOutText";
 import HomeLink from "./atoms/HomeLink";
 import SectionalDropdown from "./atoms/SectionalDropdown";
 import LabelFieldPair from "./atoms/LabelFieldPair";
+import ApplyFilterBar from "./atoms/ApplyFilterBar";
+import RemoveableTag from "./molecules/RemoveableTag";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -60,6 +62,8 @@ import DetailsCard from "./molecules/DetailsCard";
 import InputCard from "./molecules/InputCard";
 import FormStep from "./molecules/FormStep";
 import RatingCard from "./molecules/RatingCard";
+import SearchAction from "./molecules/SearchAction";
+import FilterAction from "./molecules/FilterAction";
 
 import { PrivateRoute } from "./atoms/PrivateRoute";
 
@@ -132,4 +136,8 @@ export {
   InputCard,
   FormStep,
   RatingCard,
+  SearchAction,
+  FilterAction,
+  ApplyFilterBar,
+  RemoveableTag,
 };

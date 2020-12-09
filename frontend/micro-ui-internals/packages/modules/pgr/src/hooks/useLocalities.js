@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchLocalities } from "../redux/actions";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
 const useLocalities = ({ city }) => {
+  const { t } = useTranslation();
+  let locality = [];
   const [localityList, setLocalityList] = useState(null);
   const [localities, setLocalities] = useState(null);
-  console.log("uselocalities", city);
+  const code = useSelector((state) => state.common.stateInfo.code);
   useEffect(async () => {
-    let response = await Digit.LocationService.getLocalities({ tenantId: city });
-    let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
-    console.log("__localityList", __localityList);
+    let tenantId = `${code}.${city}`;
+    let response = await Digit.LocationService.getLocalities({ tenantId: tenantId });
+    let __localityList = [];
+    if (response && response.TenantBoundary.length > 0) {
+      __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+    }
     setLocalityList(__localityList);
   }, [city]);
 
   useEffect(() => {
     if (localityList) {
       const __localities = localityList;
-      console.log("uselocalities++++++++++++", __localities);
-      setLocalities(__localities);
+      __localities.forEach((element) => {
+        locality.push({ name: t(element.code), code: element.code });
+      });
+      setLocalities(locality);
     }
   }, [localityList]);
 

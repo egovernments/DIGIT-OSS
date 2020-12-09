@@ -84,7 +84,7 @@ export const ComplaintDetails = (props) => {
   const [popup, setPopup] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [assignResponse, setAssignResponse] = useState(null);
-
+  const [rerender, setRerender] = useState(1);
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
@@ -154,6 +154,7 @@ export const ComplaintDetails = (props) => {
     console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
+    setRerender(rerender + 1);
     setTimeout(() => setToast(false), 10000);
   }
 
@@ -216,7 +217,7 @@ export const ComplaintDetails = (props) => {
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
       {popup ? (
         <Modal
-          employeeRoles={workflowDetails.nextActions ? workflowDetails.nextActions.roles : null}
+          employeeRoles={workflowDetails.nextActions ? workflowDetails.nextActions : null}
           headerBarMain={<Heading label={selectedAction === "ASSIGN" || selectedAction === "REASSIGN" ? "Assign Complaint" : "Reject Complaint"} />}
           headerBarEnd={<CloseBtn onClick={() => close(popup)} />}
           selectedAction={selectedAction}
@@ -224,14 +225,11 @@ export const ComplaintDetails = (props) => {
           onCancel={() => close(popup)}
         />
       ) : null}
-      {toast && (
-        <Toast
-          label={assignResponse ? (assignResponse.Errors ? assignResponse.Errors[0].message : JSON.stringify(assignResponse)) : null}
-          onClose={closeToast}
-        />
-      )}
+      {toast && <Toast label={assignResponse ? "Complaint Assigned Succesfully" : "Complain assigned Failed"} onClose={closeToast} />}
       <ActionBar>
-        {displayMenu && workflowDetails.nextActions ? <Menu options={workflowDetails.nextActions.actions} onSelect={onActionSelect} /> : null}
+        {displayMenu && workflowDetails.nextActions ? (
+          <Menu options={workflowDetails.nextActions.map((action) => action.action)} onSelect={onActionSelect} />
+        ) : null}
         <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
       </ActionBar>
     </React.Fragment>

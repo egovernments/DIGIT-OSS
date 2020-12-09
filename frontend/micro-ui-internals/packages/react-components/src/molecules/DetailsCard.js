@@ -1,6 +1,7 @@
 import React from "react";
 
 const Details = ({ label, name }) => {
+  console.log("label:", label, "name:");
   return (
     <div className="detail">
       <span className="label">
@@ -13,11 +14,15 @@ const Details = ({ label, name }) => {
 
 const DetailsCard = ({ data }) => {
   return (
-    <div className="details-container">
+    <div>
       {data.map((object) => {
-        return Object.keys(object).map((name, index) => {
-          return <Details label={name} name={object[name]} />;
-        });
+        return (
+          <div className="details-container">
+            {Object.keys(object).map((name, index) => {
+              return <Details label={name} name={object[name]} key={index} />;
+            })}
+          </div>
+        );
       })}
     </div>
   );

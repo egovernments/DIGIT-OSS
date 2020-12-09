@@ -12,7 +12,9 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import useEmployeeFilter from "../hooks/useEmployeeFilter";
 const Modal = (props) => {
-  const useEmployeeData = useEmployeeFilter("pb.amritsar", props.employeeRoles);
+  const roles = props.employeeRoles.filter((role) => role.action === props.selectedAction);
+  console.log("modalllll", roles);
+  const useEmployeeData = useEmployeeFilter("pb.amritsar", roles[0].roles);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [comments, setComments] = useState(null);
   const [file, setFile] = useState(null);

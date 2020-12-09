@@ -56,7 +56,7 @@ const FormComposer = (props) => {
         {props.children}
         {/* <input type="submit" value="submit"/> */}
         <ActionBar>
-          <SubmitBar label="Submit Complaint" onSubmit={onSubmit} />
+          <SubmitBar label="Submit Complaint" submit="submit" />
         </ActionBar>
       </Card>
     </form>

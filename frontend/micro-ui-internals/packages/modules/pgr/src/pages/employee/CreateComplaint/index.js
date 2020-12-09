@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardSubHeader, CardLabel, TextInput, Dropdown } from "@egovernments/digit-ui-react-components";
 import FormComposer from "./FormComposer";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
+
 import useComplaintTypes from "../../../hooks/useComplaintTypes";
 import useTenants from "../../../hooks/useTenants";
+import { createComplaint } from "../../../redux/actions/index";
 
 export const CreateComplaint = () => {
   const SessionStorage = Digit.SessionStorage;
@@ -21,9 +25,14 @@ export const CreateComplaint = () => {
   const [localities, setLocalities] = useState(selected_localities ? selected_localities : null);
   const [selectedLocality, setSelectedLocality] = useState(locality_complaint ? locality_complaint : null);
 
+  const [params, setParams] = useState({});
+
   const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
   const { t } = useTranslation();
   const cities = useTenants();
+  const dispatch = useDispatch();
+  let submitVal = false;
+  const match = useRouteMatch();
 
   //complaint logic
   function selectedType(value) {
@@ -58,6 +67,12 @@ export const CreateComplaint = () => {
     }
   }, [selectedCity]);
 
+  useEffect(async () => {
+    console.log("parmamsssss", params);
+    submitVal ? await dispatch(createComplaint(params)) : null;
+    submitVal ? history.push(match.url + "/response") : null;
+  }, [params]);
+
   function selectLocality(locality) {
     setSelectedLocality(locality);
     Digit.SessionStorage.set("locality_complaint", locality);
@@ -65,7 +80,19 @@ export const CreateComplaint = () => {
 
   //On SUbmit
   function onSubmit(data) {
+    submitVal = true;
     console.log("submit data", data, subType, selectedCity, selectedLocality);
+    const cityCode = selectedCity.code;
+    const city = selectedCity.city.name;
+    const district = selectedCity.city.name;
+    const region = selectedCity.city.name;
+    const state = "Punjab";
+    const localityCode = selectedLocality.code;
+    const localityName = selectedLocality.name;
+    const landmark = data.landmark;
+    const { key, name } = subType;
+    const complaintType = key;
+    setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType });
   }
 
   const config = [

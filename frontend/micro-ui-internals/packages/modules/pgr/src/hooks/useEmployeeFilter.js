@@ -5,8 +5,8 @@ const useEmployeeFilter = (cityCode, roles) => {
   const [employeeDetails, setEmployeeDetails] = useState(null);
 
   useEffect(async () => {
-    const _roles = roles.join(",");
-    const searchResponse = await Digit.PGRService.employeeSearch(cityCode, _roles);
+    // const _roles = roles.join(",");
+    const searchResponse = await Digit.PGRService.employeeSearch(cityCode, roles);
 
     const serviceDefs = Digit.SessionStorage.get("serviceDefs");
     const complaintDetails = Digit.SessionStorage.get("complaintDetails");
@@ -16,7 +16,7 @@ const useEmployeeFilter = (cityCode, roles) => {
       employee.assignments.map((assignment) => assignment.department).includes(department)
     );
 
-    console.log("useEMployeefilter", employees);
+    console.log("useEMployeefilter", employees, searchResponse);
     //emplpoyess data sholld only conatin name uuid dept
     setEmployeeDetails([
       {

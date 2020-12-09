@@ -32,6 +32,8 @@ const requestInfo = () => ({
 
 const userServiceData = () => Storage.get("citizen.userServiceData");
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
+  console.log("params:", params);
+  console.log("url:", url);
   if (method.toUpperCase() === "POST") {
     data.RequestInfo = {
       apiId: "Rainmaker",
@@ -58,7 +60,6 @@ export const Request = async ({ method = "POST", url, data = {}, useCache = fals
   // if (useCache) {
   //   Storage.set(key, res.data);
   // }
-
   return res.data;
 };
 

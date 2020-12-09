@@ -113,6 +113,14 @@
   }
 }
 
+.card-emp {
+  @extend .card;
+  padding-right: 0;
+  padding-top: 0;
+  padding-left: 0;
+  @apply bg-white m-sm;
+}
+
 .submit-bar {
   @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none;
 
@@ -207,6 +215,7 @@
     }
   }
   
+
   .header-wrap {
     @apply flex mb-md;
 
@@ -214,7 +223,8 @@
       margin-right: auto;
     }
 
-    .header-content {}
+    .header-content {
+    }
 
     .header-end {
       margin-left: auto;

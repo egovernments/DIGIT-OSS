@@ -25,14 +25,39 @@
       }
     }
     .filter {
-      @apply mt-md;
       .filter-card {
         @apply p-md bg-white;
         .heading {
           @apply flex justify-between;
+          .clearAll {
+            display: none;
+          }
+        }
+        .filter-label {
+          @apply font-bold text-heading-m;
+          padding-bottom: 6px;
         }
       }
     }
+
+    .search-complaint-container {
+      @apply items-center bg-white p-md;
+      .complaint-input-container {
+        .complaint-input {
+          @apply flex flex-col;
+          .clear-search {
+            display: none;
+          }
+        }
+        .mobile-input {
+          @apply ml-sm;
+        }
+      }
+    }
+  }
+  .status-container {
+    @apply overflow-auto;
+    height: 250px;
   }
 }
 
@@ -71,6 +96,9 @@
           .heading {
             @apply flex justify-between;
           }
+          .label {
+            @apply text-heading-s;
+          }
         }
       }
     }
@@ -85,6 +113,9 @@
           @apply pt-md pl-md pr-md;
           .complaint-input {
             @apply flex flex-col;
+            .clear-search {
+              @apply block;
+            }
           }
           .mobile-input {
             @apply ml-sm;

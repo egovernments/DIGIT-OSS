@@ -23,6 +23,10 @@
     width: 480px;
   }
 
+  .card-input-emp {
+    width: 240px;
+  }
+
   .card-input-error {
     width: 480px;
   }
@@ -41,5 +45,8 @@
 
   .employee-card-textarea {
     @apply w-full
+  }
+  .card-input-emp {
+    width: 240px;
   }
 }
