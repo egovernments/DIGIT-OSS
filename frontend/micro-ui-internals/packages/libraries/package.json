@@ -29,6 +29,7 @@
     "i18next": "^19.8.2",
     "i18next-react-postprocessor": "^3.0.4",
     "react": "^17.0.0",
-    "react-i18next": "^11.7.3"
+    "react-i18next": "^11.7.3",
+    "rooks": "^4.3.0"
   }
 }

@@ -2027,6 +2027,53 @@ img, video {
     .tag-container .tag .text {
       padding-right: 5px; }
 
+.employee .topbar {
+  height: 80px;
+  padding: 16px 24px;
+  background: #fff;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.24); }
+  .employee .topbar img {
+    display: inline; }
+    .employee .topbar img.city {
+      margin-right: 8px;
+      height: 48px;
+      width: 48px; }
+    .employee .topbar img.state {
+      margin-left: 40px;
+      height: 20px;
+      max-height: 20px;
+      width: auto; }
+  .employee .topbar .ulb {
+    font-weight: 700; }
+  .employee .topbar .right {
+    float: right;
+    margin-top: 12px; }
+    .employee .topbar .right .user-img-txt {
+      background: #f47738;
+      padding: 10px 15px;
+      border-radius: 50%;
+      color: #fff;
+      font-weight: 700; }
+
+.employee .sidebar {
+  position: absolute;
+  padding: 20px 0;
+  background: #22394d;
+  height: 100%;
+  color: #fff; }
+  .employee .sidebar .actions {
+    cursor: pointer;
+    padding: 0 20px;
+    margin-bottom: 32px; }
+    .employee .sidebar .actions.active {
+      border-right: 4px solid #f47738;
+      padding-right: 16px; }
+
+@media (min-width: 640px) {
+  .employee .main {
+    margin-left: 88px; } }
+
 .popup-module {
   width: 480px;
   margin: auto;
