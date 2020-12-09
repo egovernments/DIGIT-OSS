@@ -1,13 +1,22 @@
 import { CheckBox } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useRouteMatch } from "react-router-dom";
 import ComplaintsLink from "./inbox/ComplaintLinks";
 import ComplaintTable from "./inbox/ComplaintTable";
 import Filter from "./inbox/Filter";
 import SearchComplaint from "./inbox/search";
+import { useHistory } from "react-router-dom";
 
 const DesktopInbox = (props) => {
+  let { match } = useRouteMatch();
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
+  const history = useHistory();
+
+  function goTo(id) {
+    console.log("id", id);
+    history.push("/employee/pgr/complaint/" + id);
+  }
 
   const columns = React.useMemo(
     () => [
@@ -16,7 +25,7 @@ const DesktopInbox = (props) => {
         Cell: (row) => {
           return (
             <div>
-              <a href="http://google.com">{row.row.original["serviceRequestId"]}</a>
+              <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a>
               <br />
               <span style={{ marginTop: "4px", color: "#505A5F" }}>{row.row.original["complaintSubType"]}</span>
             </div>

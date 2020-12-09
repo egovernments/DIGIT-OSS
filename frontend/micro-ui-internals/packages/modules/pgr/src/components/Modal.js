@@ -56,14 +56,14 @@ const Modal = (props) => {
         <HeaderBar main={props.headerBarMain} end={props.headerBarEnd} />
         <div className="popup-module-main">
           <Card>
-            {props.selectedAction !== "REJECT" ? (
+            {props.selectedAction === "REJECT" || props.selectedAction === "RESOLVE" ? null : (
               <React.Fragment>
                 <CardLabel>Employee Name</CardLabel>
                 {employeeData && (
                   <SectionalDropdown selected={selectedEmployee} menuData={employeeData} displayKey="name" select={onSelectEmployee} />
                 )}
               </React.Fragment>
-            ) : null}
+            )}
             <CardLabel>Comments</CardLabel>
             <TextArea onChange={addComment} />
             <CardLabel>Supporting Documents</CardLabel>
