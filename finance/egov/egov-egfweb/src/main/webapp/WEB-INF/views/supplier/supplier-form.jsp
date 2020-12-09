@@ -147,10 +147,31 @@
 		<form:input path="bankAccount" id="bankAccount" maxlength="22" size="24" cssClass="form-control" />
 		<form:errors path="bankAccount" cssClass="add-margin error-msg" />
 	</div>
+	</div>
+	<div class="form-group">
+	<label class="col-sm-2 control-label"><spring:message
+			code="lbl.firmorindividual" /></label>
+	<div class="col-sm-2 col-xs-12 add-margin">
+		<div class="radio">
+			<label><form:radiobutton path="firmOrIndividual"
+					id="firmOrIndividual" value="FIRM" checked="checked" />
+				<spring:message code="lbl.firm" /></label>
+		</div>
+	</div>
+	<div class="col-sm-2 col-xs-12 add-margin">
+		<div class="radio">
+			<label><form:radiobutton path="firmOrIndividual"
+					id="firmOrIndividual" value="INDIVIDUALS" />
+				<spring:message code="lbl.individuals" /></label>
+		</div>
+	</div>
+	<form:errors path="firmOrIndividual" cssClass="error-msg" />
+</div>
+	<div class="form-group" id="registerationNo" style="display: none">
 	<label class="col-sm-2 control-label text-right" for="registrationNumber"> <spring:message code="supplier.registrationNo" text="Registration No"/>
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:input path="registrationNumber" id="registrationNumber" maxlength="21" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace"/>
+		<form:input path="registrationNumber" id="registrationNumber" maxlength="21" required="required" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace"/>
 		<form:errors path="registrationNumber" cssClass="add-margin error-msg" />
 	</div>
 </div>

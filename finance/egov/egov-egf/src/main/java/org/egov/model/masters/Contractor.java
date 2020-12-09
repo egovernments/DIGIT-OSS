@@ -47,7 +47,10 @@
  */
 package org.egov.model.masters;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -60,6 +63,7 @@ import javax.validation.constraints.NotNull;
 import org.egov.commons.Bank;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.utils.EntityType;
+import org.egov.enums.FirmOrIndividualEnum;
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.egov.infra.persistence.validator.annotation.OptionalPattern;
 import org.egov.infra.persistence.validator.annotation.Required;
@@ -71,7 +75,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Table(name = "EGF_CONTRACTOR")
 @Unique(id = "id", tableName = "EGF_CONTRACTOR", columnName = { "code", "tinNumber" }, fields = { "code",
-"tinNumber" }, enableDfltMsg = true)
+        "tinNumber" }, enableDfltMsg = true)
 @SequenceGenerator(name = Contractor.SEQ_EGF_CONTRACTOR, sequenceName = Contractor.SEQ_EGF_CONTRACTOR, allocationSize = 1)
 public class Contractor extends AbstractAuditable implements EntityType {
 
@@ -151,6 +155,10 @@ public class Contractor extends AbstractAuditable implements EntityType {
     @NotNull
     @Length(max = 250, message = "Maximum of 250 Characters allowed for GST Registered State")
     private String gstRegisteredState;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "firmorindividual")
+    private FirmOrIndividualEnum firmOrIndividual;
 
     @ManyToOne
     @JoinColumn(name = "status")
@@ -318,11 +326,13 @@ public class Contractor extends AbstractAuditable implements EntityType {
         this.mobileNumber = mobileNumber;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    @Override
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -330,7 +340,7 @@ public class Contractor extends AbstractAuditable implements EntityType {
         return registrationNumber;
     }
 
-    public void setRegistrationNumber(String registrationNumber) {
+    public void setRegistrationNumber(final String registrationNumber) {
         this.registrationNumber = registrationNumber;
     }
 
@@ -338,7 +348,7 @@ public class Contractor extends AbstractAuditable implements EntityType {
         return status;
     }
 
-    public void setStatus(EgwStatus status) {
+    public void setStatus(final EgwStatus status) {
         this.status = status;
     }
 
@@ -346,7 +356,7 @@ public class Contractor extends AbstractAuditable implements EntityType {
         return epfNumber;
     }
 
-    public void setEpfNumber(String epfNumber) {
+    public void setEpfNumber(final String epfNumber) {
         this.epfNumber = epfNumber;
     }
 
@@ -354,7 +364,7 @@ public class Contractor extends AbstractAuditable implements EntityType {
         return esiNumber;
     }
 
-    public void setEsiNumber(String esiNumber) {
+    public void setEsiNumber(final String esiNumber) {
         this.esiNumber = esiNumber;
     }
 
@@ -362,8 +372,15 @@ public class Contractor extends AbstractAuditable implements EntityType {
         return gstRegisteredState;
     }
 
-    public void setGstRegisteredState(String gstRegisteredState) {
+    public void setGstRegisteredState(final String gstRegisteredState) {
         this.gstRegisteredState = gstRegisteredState;
     }
 
+    public FirmOrIndividualEnum getFirmOrIndividual() {
+        return firmOrIndividual;
+    }
+
+    public void setFirmOrIndividual(final FirmOrIndividualEnum firmOrIndividual) {
+        this.firmOrIndividual = firmOrIndividual;
+    }
 }

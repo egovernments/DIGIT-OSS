@@ -69,7 +69,9 @@
 				<label class="col-sm-2 control-label text-right"><spring:message code="lbl.billdate" text="Bill Date"/><span class="mandatory"></span>
 				</label>
 				<div class="col-sm-3 add-margin">
-					<form:input id="billdate" path="billdate" class="form-control datepicker" data-date-end-date="0d" required="required" />
+ 					<form:input path="billdate" id="billdate"
+									class="form-control datepicker" data-date-end-date="0d"
+									required="required" autocomplete="off" data-inputmask="'mask': 'd/m/y'"  placeholder="DD/MM/YYYY"/>
 					<form:errors path="billdate" cssClass="add-margin error-msg" />
 				</div>
 			</c:when>
@@ -77,7 +79,9 @@
 				<label class="col-sm-3 control-label text-right"><spring:message code="lbl.billdate" text="Bill Date" /><span class="mandatory"></span>
 				</label>
 				<div class="col-sm-3 add-margin">
-					<form:input id="billdate" path="billdate" class="form-control datepicker" data-date-end-date="0d" required="required" />
+					<form:input path="billdate" id="billdate"
+									class="form-control datepicker" data-date-end-date="0d"
+									required="required" autocomplete="off" data-inputmask="'mask': 'd/m/y'"  placeholder="DD/MM/YYYY"/>
 					<form:errors path="billdate" cssClass="add-margin error-msg" />
 				</div>
 				<label class="col-sm-2 control-label text-right"></label>
@@ -190,7 +194,9 @@
 			<spring:message code="lbl.party.billdate" text="Party Bill Date"/><span class="mandatory"></span>
 		</label>
 		<div class="col-sm-3 add-margin">
-			<form:input id="partyBillDate" path="egBillregistermis.partyBillDate" class="form-control datepicker" data-date-end-date="0d" required="required" />
+ 		<form:input path="egBillregistermis.partyBillDate" id="partyBillDate"
+									class="form-control datepicker" data-date-end-date="0d"
+									required="required" autocomplete="off" data-inputmask="'mask': 'd/m/y'"  placeholder="DD/MM/YYYY"/>
 			<form:errors path="egBillregistermis.partyBillDate" cssClass="add-margin error-msg" />
 		</div>
 	</div>

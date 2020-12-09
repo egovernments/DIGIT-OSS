@@ -79,3 +79,4 @@
 	});
 </script>
 <script src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/app/js/contractorHelper.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>

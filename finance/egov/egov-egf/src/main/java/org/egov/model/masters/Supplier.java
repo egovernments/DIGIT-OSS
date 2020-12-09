@@ -47,7 +47,10 @@
  */
 package org.egov.model.masters;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -59,6 +62,7 @@ import javax.persistence.Table;
 import org.egov.commons.Bank;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.utils.EntityType;
+import org.egov.enums.FirmOrIndividualEnum;
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.egov.infra.persistence.validator.annotation.OptionalPattern;
 import org.egov.infra.persistence.validator.annotation.Required;
@@ -152,6 +156,10 @@ public class Supplier extends AbstractAuditable implements EntityType {
 
     @Length(max = 250, message = "Maximum of 250 Characters allowed for GST Registered State")
     private String gstRegisteredState;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "firmorindividual")
+    private FirmOrIndividualEnum firmOrIndividual;
 
     @Override
     public String getCode() {
@@ -361,6 +369,14 @@ public class Supplier extends AbstractAuditable implements EntityType {
 
     public void setGstRegisteredState(String gstRegisteredState) {
         this.gstRegisteredState = gstRegisteredState;
+    }
+
+    public FirmOrIndividualEnum getFirmOrIndividual() {
+        return firmOrIndividual;
+    }
+
+    public void setFirmOrIndividual(FirmOrIndividualEnum firmOrIndividual) {
+        this.firmOrIndividual = firmOrIndividual;
     }
 
 }

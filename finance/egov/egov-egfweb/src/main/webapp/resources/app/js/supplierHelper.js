@@ -47,10 +47,33 @@
  */
 
 jQuery('#btnsearch').click(function(e) {
-
 	callAjaxSearch();
 });
 
+$(document).ready(function(){	
+
+	refreshViewFromRadionOptionValue($('input[name=firmOrIndividual]:checked').val(), true);
+	
+	$('input[type=radio][name=firmOrIndividual]').change(function() {
+		refreshViewFromRadionOptionValue(this.value, false);
+    });
+	
+});
+
+function refreshViewFromRadionOptionValue(optionValue, isFromPageLoad)
+{
+	if(optionValue === "FIRM")
+    {
+    	$('#registerationNo').show(); 
+    	$("#registerationNo").attr('required','required');
+
+    }
+    else if(optionValue === "INDIVIDUALS")
+    {
+		$('#registerationNo').hide();
+    	$('*[required]').removeAttr('required');	
+    }
+}
 function getFormData($form) {
 	var unindexed_array = $form.serializeArray();
 	var indexed_array = {};
