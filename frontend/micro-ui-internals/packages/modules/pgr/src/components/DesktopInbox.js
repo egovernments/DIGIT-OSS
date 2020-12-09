@@ -9,6 +9,7 @@ import SearchComplaint from "./inbox/search";
 import { useHistory } from "react-router-dom";
 
 const DesktopInbox = (props) => {
+  const { t } = useTranslation();
   let { match } = useRouteMatch();
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
   const GetSlaCell = (value) => {
@@ -24,7 +25,7 @@ const DesktopInbox = (props) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Complaint no",
+        Header: t("CS_COMMON_COMPLAINT_NO"),
         Cell: (row) => {
           return (
             <div>
@@ -36,25 +37,25 @@ const DesktopInbox = (props) => {
         },
       },
       {
-        Header: "Locality",
+        Header: t("WF_INBOX_HEADER_LOCALITY"),
         Cell: (row) => {
-          return GetCell(row.row.original["locality"]);
+          return GetCell(t(`admin.locality.${row.row.original["locality"]}`));
         },
       },
       {
-        Header: "Status",
+        Header: t("CS_COMPLAINT_DETAILS_CURRENT_STATUS"),
         Cell: (row) => {
-          return GetCell(row.row.original["status"]);
+          return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
         },
       },
       {
-        Header: "Task Owner",
+        Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
         Cell: (row) => {
           return GetCell(row.row.original["taskOwner"]);
         },
       },
       {
-        Header: "SLA Remaining",
+        Header: t("WF_INBOX_HEADER_SLA_DAYS_REMAINING"),
         Cell: (row) => {
           return GetSlaCell(row.row.original["sla"]);
         },
