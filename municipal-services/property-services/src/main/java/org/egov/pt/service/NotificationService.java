@@ -223,7 +223,7 @@ public class NotificationService {
 		return notifUtil.getMessageTemplate(msgCode, completeMsgs)
 						.replace(NOTIFICATION_OWNERNAME,property.getOwners().get(0).getName())
 						.replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
-						.replace(NOTIFICATION_PROPERTYID, createUpdateReplaceString)
+						.replace(NOTIFICATION_UPDATED_CREATED_REPLACE, createUpdateReplaceString)
 						.replace(NOTIFICATION_PROPERTY_LINK, url);
 	}
 	
