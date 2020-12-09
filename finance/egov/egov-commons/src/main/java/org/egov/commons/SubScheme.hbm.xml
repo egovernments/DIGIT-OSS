@@ -66,7 +66,7 @@
 			<column name="CODE" length="50" not-null="true" />
 		</property>
 		<property name="name" type="string">
-			<column name="NAME" length="50" not-null="true" />
+			<column name="NAME" length="100" not-null="true" />
 		</property>
 		<property name="validfrom" type="date">
 			<column name="VALIDFROM" length="7" not-null="true" />
