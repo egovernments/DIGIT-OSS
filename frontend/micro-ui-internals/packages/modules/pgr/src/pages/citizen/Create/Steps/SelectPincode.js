@@ -9,13 +9,19 @@ const SelectPincode = ({ config, onSelect }) => {
   tenants.map;
   const goNext = async (data) => {
     console.log("iiiiiiiii", data);
-    var foundValue = tenants.filter((obj) => obj.pincode.find((item) => item == data.pincode));
+    var foundValue = tenants.filter((obj) => obj.pincode.find((item) => item == data.pincode))[0];
     console.log("foundValue", foundValue);
-    Digit.SessionStorage.set("city_complaint", foundValue);
-    let response = await Digit.LocationService.getLocalities({ tenantId: foundValue.code });
-    let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
-    Digit.SessionStorage.set("selected_localities", __localityList);
-    __localityList.filter((obj) => obj.pincode.find((item) => item == data.pincode));
+    if (foundValue) {
+      Digit.SessionStorage.set("city_complaint", foundValue);
+      let response = await Digit.LocationService.getLocalities({ tenantId: foundValue.code });
+      let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+      const filteredLocalities = __localityList.filter((obj) => obj.pincode?.find((item) => item == data.pincode));
+      console.log('filter localities', filteredLocalities, __localityList);
+      Digit.SessionStorage.set("selected_localities", filteredLocalities?.length > 0 ? filteredLocalities : __localityList);
+    } else {
+      Digit.SessionStorage.set("city_complaint", undefined);
+      Digit.SessionStorage.set("selected_localities", undefined);
+    }
     onSelect(data);
   };
 
