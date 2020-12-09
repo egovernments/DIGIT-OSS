@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-fsm",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
