@@ -88,7 +88,7 @@ export const Complaint = {
     return response;
   },
 
-  assign: async (action, employeeData, comments, uploadedDocument) => {
+  assign: async (action, employeeData, comments, uploadedDocument, tenantId) => {
     console.log("assign complaint srvice acall", action, employeeData, comments, uploadedDocument);
 
     const complaintDetails = Digit.SessionStorage.get("complaintDetails");
@@ -108,7 +108,7 @@ export const Complaint = {
     console.log("assign complaintg whole call", complaintDetails);
 
     //TODO: get tenant id
-    const response = await Digit.PGRService.update(complaintDetails, "pb.amritsar");
+    const response = await Digit.PGRService.update(complaintDetails, tenantId);
     console.log(response);
     return response;
   },

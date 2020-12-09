@@ -8,7 +8,7 @@ import Inbox from "./Inbox";
 import { Employee } from "../../constants/Routes";
 import Response from "./Response";
 
-const Complaint = () => {
+const Complaint = ({ stateCode, cityCode }) => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
   const match = useRouteMatch();
@@ -23,10 +23,13 @@ const Complaint = () => {
       <div className="ground-container">
         <BackButton>Back</BackButton>
         <Switch>
-          <Route path={match.url + Employee.CreateComplaint} component={() => <CreateComplaint />} />
-          <Route path={match.url + Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails />} />
-          <Route path={match.url + Employee.Inbox} component={Inbox} />
-          <Route path={match.url + Employee.Response} component={Response} />
+          <Route path={match.url + Employee.CreateComplaint} component={() => <CreateComplaint stateCode={stateCode} cityCode={cityCode} />} />
+          <Route
+            path={match.url + Employee.ComplaintDetails + ":id"}
+            component={() => <ComplaintDetails stateCode={stateCode} cityCode={cityCode} />}
+          />
+          <Route path={match.url + Employee.Inbox} component={() => <Inbox stateCode={stateCode} cityCode={cityCode} />} />
+          <Route path={match.url + Employee.Response} component={() => <Response stateCode={stateCode} cityCode={cityCode} />} />
         </Switch>
       </div>
       {/* <ActionBar>

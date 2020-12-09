@@ -41,10 +41,10 @@ export const updateLocalizationResources = () => async (dispatch, getState) => {
   await Digit.LocalizationService.getLocale({ modules: ["rainmaker-common", "rainmaker-pgr"], locale: lng, tenantId: "pb" });
 };
 
-export const searchComplaints = (filters = {}) => async (dispatch, getState) => {
+export const searchComplaints = (filters = {}, tenantId) => async (dispatch, getState) => {
   console.log("getState:", getState());
   let { cityCode } = getState();
-  cityCode = "pb.amritsar"; //TODO: fetch it from store
+  cityCode = tenantId; //TODO: fetch it from store
 
   let { ServiceWrappers } = (await Digit.PGRService.search(`pb.amritsar`, filters)) || {};
   dispatch({
@@ -62,8 +62,8 @@ export const fetchBusinessServiceByTenant = (cityCode, businessServices) => asyn
   });
 };
 
-export const fetchBusinessServiceById = (businessId) => async (dispatch, getState) => {
-  let cityCode = "pb.amritsar"; //TODO: fetch it from store
+export const fetchBusinessServiceById = (businessId, tenantId) => async (dispatch, getState) => {
+  let cityCode = tenantId; //TODO: fetch it from store
   const businessServiceDetails = await Digit.workflowService.getByBusinessId(cityCode, businessId);
   console.log("businessServiceDetails:", businessServiceDetails);
   dispatch({

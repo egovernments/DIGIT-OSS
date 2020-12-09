@@ -8,17 +8,17 @@ import { LOCALE } from "../../constants/Localization";
 import Complaint from "../../components/Complaint";
 import { useSelector } from "react-redux";
 
-const useComplaintsList = () => {
+const useComplaintsList = (tenantId) => {
   const User = Digit.SessionStorage.get("User");
   // TODO: move city to state
-  const { isLoading, error, data } = useQuery("complaintsList", () => Digit.PGRService.search("pb.amritsar", { userName: User.mobileNumber }));
+  const { isLoading, error, data } = useQuery("complaintsList", () => Digit.PGRService.search(tenantId, { userName: User.mobileNumber }));
   return { isLoading, error, data };
 };
 
 export const ComplaintsList = (props) => {
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
-  let { isLoading, error, data } = useComplaintsList();
+  let { isLoading, error, data } = useComplaintsList(props.cityCode);
 
   if (isLoading) {
     return (

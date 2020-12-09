@@ -17,7 +17,7 @@ import { ComplaintsList } from "./ComplaintsList";
 // import ComplaintsPage from "./Complaints";
 import ComplaintDetailsPage from "./ComplaintDetails";
 
-const App = () => {
+const App = ({ stateCode, cityCode }) => {
   const { path, url } = useRouteMatch();
   console.log("pgr citizen", path, url);
 
@@ -39,11 +39,11 @@ const App = () => {
         <Route exact path={getRoute(match, PgrRoutes.RatingAndFeedBack)} component={() => <RatingAndFeedBack match={match} />} />
         <Route exact path={getRoute(match, PgrRoutes.RatingAndFeedBack)} component={() => <RatingAndFeedBack match={match} />} /> */}
 
-        <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
-        <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
-        <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
-        <PrivateRoute path={`${path}/reopen`} component={ReopenComplaint} />
-        <PrivateRoute path={`${path}/rate/:id`} component={SelectRating} />
+        <PrivateRoute path={`${path}/create-complaint`} component={() => <CreateComplaint stateCode={stateCode} cityCode={cityCode} />} />
+        <PrivateRoute path={`${path}/complaints`} exact component={() => <ComplaintsList stateCode={stateCode} cityCode={cityCode} />} />
+        <PrivateRoute path={`${path}/complaints/:id`} component={() => <ComplaintDetailsPage stateCode={stateCode} cityCode={cityCode} />} />
+        <PrivateRoute path={`${path}/reopen`} component={() => <ReopenComplaint stateCode={stateCode} cityCode={cityCode} />} />
+        <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating stateCode={stateCode} cityCode={cityCode} />} />
       </AppContainer>
     </Switch>
   );

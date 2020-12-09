@@ -36,9 +36,9 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
   console.log("state", state);
 
   if (userType === "citizen") {
-    return <CitizenApp />;
+    return <CitizenApp stateCode={stateCode} cityCode={cityCode} />;
   } else {
-    return <EmployeeApp />;
+    return <EmployeeApp stateCode={stateCode} cityCode={cityCode} />;
   }
 };
 

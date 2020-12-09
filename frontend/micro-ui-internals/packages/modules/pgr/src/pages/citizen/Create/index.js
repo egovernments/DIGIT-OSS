@@ -22,12 +22,12 @@ const Step2 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSe
 const Step3 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSelect} />;
 
 // steps type: radio, map location, input, city-mohalla, textarea, upload photo
-export const CreateComplaint = () => {
+export const CreateComplaint = ({ stateCode, cityCode }) => {
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
   const history = useHistory();
   const dispatch = useDispatch();
-
+  console.log("citycodeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", cityCode);
   const appState = useSelector((state) => state)["common"];
   console.log("appstate form index", appState);
   const __initParams = Digit.SessionStorage.get("PGR_CREATE_COMPLAINT_PARAMS");
@@ -132,28 +132,28 @@ export const CreateComplaint = () => {
   return (
     <Switch>
       <Route path={`${path}/complaint-type`}>
-        <SelectComplaintType config={stepItems[0]} onSelect={selectComplaintType} />
+        <SelectComplaintType stateCode={stateCode} cityCode={cityCode} config={stepItems[0]} onSelect={selectComplaintType} />
       </Route>
       <Route path={`${path}/sub-type`}>
-        <SelectSubType config={stepItems[1]} onSelect={selectSubType} />
+        <SelectSubType stateCode={stateCode} cityCode={cityCode} config={stepItems[1]} onSelect={selectSubType} />
       </Route>
       <Route path={`${path}/pincode`}>
-        <SelectPincode config={stepItems[2]} onSelect={selectPincode} />
+        <SelectPincode stateCode={stateCode} cityCode={cityCode} config={stepItems[2]} onSelect={selectPincode} />
       </Route>
       <Route path={`${path}/address`}>
-        <SelectAddress config={stepItems[3]} onSelect={selectAddress} />
+        <SelectAddress stateCode={stateCode} cityCode={cityCode} config={stepItems[3]} onSelect={selectAddress} />
       </Route>
       <Route path={`${path}/landmark`}>
-        <SelectLandmark config={stepItems[4]} onSelect={saveLandmark} />
+        <SelectLandmark stateCode={stateCode} cityCode={cityCode} config={stepItems[4]} onSelect={saveLandmark} />
       </Route>
       <Route path={`${path}/upload-photos`}>
-        <SelectImages config={stepItems[5]} onSelect={saveImagesUrl} />
+        <SelectImages stateCode={stateCode} cityCode={cityCode} config={stepItems[5]} onSelect={saveImagesUrl} />
       </Route>
       <Route path={`${path}/additional-details`}>
-        <SelectDetails config={stepItems[6]} onSelect={submitComplaint} />
+        <SelectDetails stateCode={stateCode} cityCode={cityCode} config={stepItems[6]} onSelect={submitComplaint} />
       </Route>
       <Route path={`${path}/response`}>
-        <Response config={stepItems[7]} onSelect={backToHome} />
+        <Response stateCode={stateCode} cityCode={cityCode} config={stepItems[7]} onSelect={backToHome} />
       </Route>
       <Route>
         <Redirect to={`${url}/complaint-type`} />

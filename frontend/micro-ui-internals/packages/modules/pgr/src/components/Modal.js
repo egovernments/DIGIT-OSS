@@ -14,7 +14,7 @@ import useEmployeeFilter from "../hooks/useEmployeeFilter";
 const Modal = (props) => {
   const roles = props.employeeRoles.filter((role) => role.action === props.selectedAction);
   console.log("modalllll", roles);
-  const useEmployeeData = useEmployeeFilter("pb.amritsar", roles[0].roles);
+  const useEmployeeData = useEmployeeFilter(props.tenantId, roles[0].roles);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [comments, setComments] = useState(null);
   const [file, setFile] = useState(null);
@@ -33,7 +33,7 @@ const Modal = (props) => {
 
   useEffect(async () => {
     if (file) {
-      const response = await Digit.UploadServices.Filestorage(file);
+      const response = await Digit.UploadServices.Filestorage(file, props.tenantId);
       setUploadedFile(response.data.files[0].fileStoreId);
     }
   }, file);

@@ -1,11 +1,11 @@
 import Axios from "axios";
 import Urls from "./urls";
 export const UploadServices = {
-  Filestorage: async (filedata) => {
+  Filestorage: async (filedata, tenantId) => {
     const formData = new FormData();
 
     formData.append("file", filedata, filedata.name);
-    formData.append("tenantId", "pb.amritsar");
+    formData.append("tenantId", tenantId);
     formData.append("module", "property-upload");
     var config = {
       method: "post",

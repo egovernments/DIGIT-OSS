@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 //import complaintData from "./dummyComplaintData.json"; // using dummy data as api pgr search api is down
 
-const useInboxData = (searchParams) => {
+const useInboxData = (searchParams, tenantId) => {
   console.log("searchParams--------:", searchParams);
   const state = useSelector((state) => state);
   const [complaintList, setcomplaintList] = useState([]);
   //let serviceReqIds = "";
-  const tenantId = "pb.amritsar";
   let serviceIds = [];
   let filters = { start: 1, end: 10, ...searchParams.filters, ...searchParams.search };
   useEffect(() => {
@@ -18,7 +17,10 @@ const useInboxData = (searchParams) => {
       const serviceIdParams = serviceIds.join();
       const workflowInstances = await Digit.workflowService.getByBusinessId(tenantId, serviceIdParams, filters, false);
       //console.log("serviceIdParams:", serviceIdParams, "workflowInstances:", workflowInstances);
-      let combinedRes = combineResponses(complaintDetailsResponse, workflowInstances).map(data => ({ ...data, sla: Math.round(data.sla / (24 * 60 * 60 * 1000)) }));
+      let combinedRes = combineResponses(complaintDetailsResponse, workflowInstances).map((data) => ({
+        ...data,
+        sla: Math.round(data.sla / (24 * 60 * 60 * 1000)),
+      }));
       setcomplaintList(combinedRes);
     };
     getComplaintResponse();

@@ -8,7 +8,7 @@ import MobileInbox from "../../components/MobileInbox";
 import useInboxData from "../../hooks/useInboxData";
 import { applyInboxFilters } from "../../redux/actions";
 
-const Inbox = () => {
+const Inbox = ({ stateCode, cityCode }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ const Inbox = () => {
     //getFilteredComplaints({ params });
   };
 
-  let complaints = useInboxData(searchParams) || [];
+  let complaints = useInboxData(searchParams, cityCode) || [];
 
   console.log("complaints:", complaints);
 

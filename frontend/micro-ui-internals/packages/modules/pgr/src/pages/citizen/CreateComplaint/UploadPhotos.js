@@ -51,7 +51,7 @@ const UploadPhotos = (props) => {
   }
 
   async function uploadImage() {
-    const response = await Digit.UploadServices.Filestorage(image);
+    const response = await Digit.UploadServices.Filestorage(image, "pb.amritsar");
     setUploadedImagesIds(addUploadedImageIds(response));
   }
 
@@ -85,7 +85,12 @@ const UploadPhotos = (props) => {
   return (
     <Card>
       {/* <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} /> */}
-      <ImageUploadHandler header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)} cardText="" onPhotoChange={handleUpload} />
+      <ImageUploadHandler
+        tenantId="pb.amritsar"
+        header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)}
+        cardText=""
+        onPhotoChange={handleUpload}
+      />
       {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_ERROR_MESSAGE`)}</CardLabelError>}
       <SubmitBar label="Next" onSubmit={save} />
       {props.skip ? <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} onClick={skip} /> : null}

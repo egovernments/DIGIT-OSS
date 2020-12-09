@@ -28,12 +28,12 @@ import useComplaintDetails from "../../hooks/useComplaintDetails";
 import TimeLine from "./CreateComplaint/TimeLine";
 import useWorkflowDetails from "../../hooks/useWorkflowDetails";
 
-const ComplaintDetailsPage = (props) => {
+const ComplaintDetailsPage = ({ stateCode, cityCode }) => {
   let { t } = useTranslation();
   let { id } = useParams();
   const dispatch = useDispatch();
-  const getComplaint = useCallback((id) => dispatch(searchComplaints({ serviceRequestId: id })), [dispatch]);
-  const getBusinessServiceById = useCallback((id) => dispatch(fetchBusinessServiceById(id)), [dispatch]);
+  const getComplaint = useCallback((id) => dispatch(searchComplaints({ serviceRequestId: id }, cityCode)), [dispatch]);
+  const getBusinessServiceById = useCallback((id) => dispatch(fetchBusinessServiceById(id, cityCode)), [dispatch]);
 
   useEffect(() => {
     getBusinessServiceById(id);
@@ -41,7 +41,7 @@ const ComplaintDetailsPage = (props) => {
   }, [getComplaint, getBusinessServiceById, id]);
 
   const state = useSelector((state) => state);
-  let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
+  let cityCodeVal = cityCode;
   const statusTableData = useComplaintDetails({ tenantId: cityCodeVal, id });
   const statusTableFlags = [
     "CS_COMPLAINT_DETAILS_COMPLAINT_NO",
