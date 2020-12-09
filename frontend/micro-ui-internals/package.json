@@ -20,14 +20,16 @@
     "dev:css": "cd packages/css && yarn start",
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
-    "dev:common": "cd packages/modules/common && yarn start",
+    "dev:core": "cd packages/modules/core && yarn start",
     "dev:pgr": "cd packages/modules/pgr && yarn start",
+    "dev:fsm": "cd packages/modules/fsm && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-s build:**",
     "build:libraries": "cd packages/libraries && yarn build",
     "build:components": "cd packages/react-components && yarn build",
-    "build:common": "cd packages/modules/common && yarn build",
-    "build:pgr": "cd packages/modules/pgr && yarn build"
+    "build:core": "cd packages/modules/core && yarn build",
+    "build:pgr": "cd packages/modules/pgr && yarn build",
+    "build:fsm": "cd packages/modules/fsm && yarn build"
   },
   "devDependencies": {
     "husky": ">=4",
