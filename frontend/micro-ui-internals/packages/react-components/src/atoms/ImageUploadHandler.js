@@ -7,9 +7,11 @@ import UploadImages from "./UploadImages";
 
 export const ImageUploadHandler = (props) => {
   const { t } = useTranslation();
+  const __initImageIds = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
+  const __initThumbnails = Digit.SessionStorage.get("PGR_CREATE_THUMBNAILS");
   const [image, setImage] = useState(null);
-  const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(null);
-  const [uploadedImagesIds, setUploadedImagesIds] = useState(null);
+  const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(__initThumbnails ? __initThumbnails : null);
+  const [uploadedImagesIds, setUploadedImagesIds] = useState(__initImageIds ? __initImageIds : null);
   const [rerender, setRerender] = useState(1);
 
   useEffect(() => {
@@ -27,6 +29,11 @@ export const ImageUploadHandler = (props) => {
       }
     })();
   }, [uploadedImagesIds]);
+
+  useEffect(() => {
+    console.log("uploaded image thmbs are ehher", uploadedImagesThumbs);
+    Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", uploadedImagesThumbs);
+  }, [uploadedImagesThumbs]);
 
   const addUploadedImageIds = useCallback(
     (imageIdData) => {
@@ -71,32 +78,37 @@ export const ImageUploadHandler = (props) => {
       const res = await Digit.UploadServices.Filefetch([uploadedImagesIds[uploadedImagesIds.length - 1]], "pb.amritsar");
       addImageThumbnails(res);
     }
-  }, [addImageThumbnails, uploadedImagesIds]);
+  }, [uploadedImagesIds]);
 
   // function getImage(e) {
   //   setImage(e.target.files[0]);
   // }
 
   function deleteImage(img) {
-    var deleteImageKey;
-    uploadedImagesThumbs.flatMap((o, index) => {
-      if (o.image === img) {
-        deleteImageKey = [o.key, index];
-      }
-    });
+    console.log("to delte ", img);
+    var deleteImageKey = uploadedImagesThumbs.filter((o, index) => o.image === img);
+    console.log("to delte ", deleteImageKey);
 
-    var index = uploadedImagesIds.findIndex((key) => key === deleteImageKey[0]);
+    var uploadedthumbs = uploadedImagesThumbs;
+    var newThumbsList = uploadedthumbs.filter((thumbs) => thumbs != deleteImageKey[0]);
+    // var thumbs = uploadedImagesThumbs.filter((o, index) => o.image !== img);
 
-    if (index > -1) {
-      var arr = uploadedImagesIds;
-      arr.splice(index, 1);
-      setUploadedImagesIds(arr);
-    }
+    var newUploadedImagesIds = uploadedImagesIds.filter((key) => key != deleteImageKey[0].key);
+    // setUploadedImagesIds(newUploadedImagesIds)
+    setUploadedImagesThumbs(newThumbsList);
+    // if (index > -1) {
+    //   var arr = uploadedImagesIds;
+    //   arr.splice(index, 1);
+    //   setUploadedImagesIds(arr);
+    // }
 
-    var thumbs = uploadedImagesThumbs;
-    thumbs.splice(deleteImageKey[1], 1);
-    setUploadedImagesThumbs(thumbs);
-    setRerender(rerender + 1);
+    // var thumbs = uploadedImagesThumbs;
+
+    // console.log(deleteImageKey);
+    // console.log(thumbs);
+    // thumbs.splice(deleteImageKey[1], 1);
+    // setUploadedImagesThumbs(thumbs);
+    // setRerender(rerender + 1);
   }
 
   return (

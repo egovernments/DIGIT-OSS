@@ -30,7 +30,8 @@ export const CreateComplaint = () => {
 
   const appState = useSelector((state) => state)["common"];
   console.log("appstate form index", appState);
-  const [params, setParams] = useState({});
+  const __initParams = Digit.SessionStorage.get("PGR_CREATE_COMPLAINT_PARAMS");
+  const [params, setParams] = useState(__initParams ? __initParams : {});
   const [submitForm, setSubmitForm] = useState(false);
 
   const stepItems = useMemo(
@@ -58,6 +59,7 @@ export const CreateComplaint = () => {
     const { key, name } = subType;
     const complaintType = key;
     setParams({ ...params, complaintType });
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
     history.push(`${path}/pincode`);
   };
 
@@ -66,6 +68,7 @@ export const CreateComplaint = () => {
       const { pincode } = _pincode;
       setParams({ ...params, pincode });
       console.log("index --->", pincode);
+      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
     }
     history.push(`${path}/address`);
   };
@@ -79,12 +82,14 @@ export const CreateComplaint = () => {
     const localityCode = address.locality.code;
     const localityName = address.locality.name;
     setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName });
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
     history.push(`${path}/landmark`);
   };
 
   const saveLandmark = (_landmark) => {
     const { landmark } = _landmark;
     setParams({ ...params, landmark });
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
     history.push(`${path}/upload-photos`);
   };
 
@@ -98,6 +103,7 @@ export const CreateComplaint = () => {
       };
     });
     setParams({ ...params, uploadedImages });
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
     history.push(`${path}/additional-details`);
   };
 
@@ -105,6 +111,7 @@ export const CreateComplaint = () => {
     if (_details) {
       const { details } = _details;
       details && details !== "" ? setParams({ ...params, details }) : null;
+      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
     }
     console.log("index params", params);
     // submit complaint through actions

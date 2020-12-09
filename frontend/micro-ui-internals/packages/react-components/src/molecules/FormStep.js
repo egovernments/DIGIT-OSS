@@ -6,7 +6,7 @@ import CardLabelError from "../atoms/CardLabelError";
 import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
-const FormStep = ({ children, config, onSelect, onSkip }) => {
+const FormStep = ({ children, config, onSelect, onSkip, value, onChange }) => {
   const { register, watch, errors, handleSubmit } = useForm();
 
   console.log("config", config);
@@ -20,7 +20,14 @@ const FormStep = ({ children, config, onSelect, onSkip }) => {
         <React.Fragment key={index}>
           <CardLabel>{input.label}</CardLabel>
           {errors[input.name] && <CardLabelError>{input.error}</CardLabelError>}
-          <TextInput key={index} name={input.name} inputRef={register(input.validation)} isMandatory={errors[input.name]} />
+          <TextInput
+            key={index}
+            name={input.name}
+            value={value}
+            onChange={onChange}
+            inputRef={register(input.validation)}
+            isMandatory={errors[input.name]}
+          />
         </React.Fragment>
       );
     }
@@ -28,7 +35,7 @@ const FormStep = ({ children, config, onSelect, onSkip }) => {
       return (
         <React.Fragment key={index}>
           <CardLabel>{input.label}</CardLabel>
-          <TextArea key={index} name={input.name} inputRef={register(input.validation)}></TextArea>
+          <TextArea key={index} name={input.name} value={value} onChange={onChange} inputRef={register(input.validation)}></TextArea>
         </React.Fragment>
       );
   });
