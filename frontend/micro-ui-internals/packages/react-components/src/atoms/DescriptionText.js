@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const DescriptionText = (props) => {
   return (
@@ -6,6 +7,17 @@ const DescriptionText = (props) => {
       <p>{props.text}</p>
     </div>
   );
+};
+
+DescriptionText.propTypes = {
+  /**
+   * DescriptionText contents
+   */
+  date: PropTypes.string.isRequired,
+};
+
+DescriptionText.defaultProps = {
+  text: "This is the description",
 };
 
 export default DescriptionText;

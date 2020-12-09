@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
@@ -97,5 +98,12 @@ const Dropdown = (props) => {
     </div>
   );
 };
+
+Dropdown.propTypes = {
+  selected: PropTypes.string,
+  style: PropTypes.object,
+};
+
+Dropdown.defaultProps = {};
 
 export default Dropdown;

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const TextInput = (props) => {
   return (
@@ -26,6 +27,24 @@ const TextInput = (props) => {
       )}
     </React.Fragment>
   );
+};
+
+TextInput.propTypes = {
+  isMandatory: PropTypes.bool,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  ref: PropTypes.func,
+  value: PropTypes.string.isRequired,
+};
+
+TextInput.defaultProps = {
+  isMandatory: false,
+  name: "name",
+  placeholder: "Name",
+  onChange: undefined,
+  ref: undefined,
+  value: "",
 };
 
 export default TextInput;

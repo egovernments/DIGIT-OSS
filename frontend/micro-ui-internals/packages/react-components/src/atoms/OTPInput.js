@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const OTPInput = (props) => {
   if (!props.length) {
@@ -10,6 +11,14 @@ const OTPInput = (props) => {
   }
 
   return <div className="input-otp-wrap">{OTPStack}</div>;
+};
+
+OTPInput.propTypes = {
+  length: PropTypes.number.isRequired,
+};
+
+OTPInput.defaultProps = {
+  length: 4,
 };
 
 export default OTPInput;

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const DisplayPhotos = (props) => {
   return (
@@ -13,4 +14,20 @@ const DisplayPhotos = (props) => {
     </div>
   );
 };
+
+DisplayPhotos.propTypes = {
+  /**
+   * text
+   */
+  srcs: PropTypes.array.isRequired,
+  /**
+   * optional click handler
+   */
+  onClick: PropTypes.func,
+};
+
+DisplayPhotos.defaultProps = {
+  srcs: [],
+};
+
 export default DisplayPhotos;

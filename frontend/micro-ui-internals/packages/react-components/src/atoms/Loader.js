@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export const Loader = ({ page = false }) => (
   <div className={`${page ? "page" : "module"}-loader`}>
@@ -9,3 +10,14 @@ export const Loader = ({ page = false }) => (
     </div>
   </div>
 );
+
+Loader.propTypes = {
+  /**
+   * Is this is page or a module?
+   */
+  page: PropTypes.bool,
+};
+
+Loader.defaultProps = {
+  page: false,
+};
