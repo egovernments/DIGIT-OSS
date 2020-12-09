@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import { Loader } from "@egovernments/digit-ui-react-components";
+
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
 import useInboxData from "../../hooks/useInboxData";
@@ -42,7 +44,7 @@ const Inbox = () => {
       return <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSearch={onSearch} />;
     }
   } else {
-    return <div></div>;
+    return <Loader />;
   }
 };
 
