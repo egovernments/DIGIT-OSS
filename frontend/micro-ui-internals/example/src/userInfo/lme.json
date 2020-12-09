@@ -10,6 +10,11 @@
     "type": "EMPLOYEE",
     "roles": [
       {
+        "name": "PGR Last Mile Employee",
+        "code": "PGR_LME",
+        "tenantId": "pb.amritsar"
+      },
+      {
         "name": "Employee",
         "code": "EMPLOYEE",
         "tenantId": "pb.amritsar"
