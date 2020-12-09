@@ -9,13 +9,29 @@ import { Body, TopBar, Loader, PrivateRoute } from "@egovernments/digit-ui-react
 
 import getStore from "./redux/store";
 
-const AppModules = ({ stateCode, userType }) => {
+const getTenants = (codes, tenants) => {
+  return tenants.filter(tenant => codes.map(item => item.code).includes(tenant.code))
+}
+
+const AppModules = ({ stateCode, userType, modules, appTenants }) => {
   const { path } = useRouteMatch();
+  const moduleList = ["PGR", "FSM"];
+
+  const appRoutes = modules.filter(module => moduleList.includes(module.code)).map(({ code, tenants }, index) => {
+    if (code === "PGR") {
+      return (
+        <Route key={index} path={`${path}/pgr`}>
+          <PGRModule stateCode={stateCode} cityCode="pb.amritsar" moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
+        </Route>
+      )
+    }
+    return;
+  });
+
   return (
     <Switch>
-      <Route path={`${path}/pgr`}>
-        <PGRModule stateCode={stateCode} cityCode="pb.amritsar" moduleCode="PGR" userType={userType} />
-      </Route>
+      {appRoutes}
+      {/* TODO: remove once FSM is enabled via MDMS */}
       <Route path={`${path}/fsm`}>
         <FSMModule stateCode={stateCode} cityCode="pb.amritsar" moduleCode="FSM" userType={userType} />
       </Route>
@@ -40,14 +56,15 @@ const AppHome = ({ userType }) => {
 
 const PrivatePage = () => <h2>Private</h2>;
 
-const DigitUIApp = ({ stateCode }) => {
+const DigitUIApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   return (
     <Switch>
       <Route path="/digit-ui/employee">
-        <AppModules stateCode={stateCode} userType="employee" />
+        <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
       </Route>
       <Route path="/digit-ui/citizen">
-        <AppModules stateCode={stateCode} userType="citizen" />
+        <TopBar img={logoUrl} />
+        <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
       </Route>
       <PrivateRoute exact path="/digit-ui/private" component={PrivatePage} />
       <Route>
@@ -72,8 +89,7 @@ export const DigitUI = ({ stateCode }) => {
       <ReactQueryCacheProvider queryCache={queryCache}>
         <Router>
           <Body>
-            <TopBar state={initData?.stateInfo?.name} img={initData?.stateInfo?.logoUrl} />
-            <DigitUIApp stateCode={stateCode} />
+            <DigitUIApp stateCode={stateCode} modules={initData?.modules} appTenants={initData.tenants} logoUrl={initData?.stateInfo?.logoUrl} />
           </Body>
         </Router>
       </ReactQueryCacheProvider>

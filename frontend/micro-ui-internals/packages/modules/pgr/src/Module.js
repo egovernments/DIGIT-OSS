@@ -13,7 +13,7 @@ import { fetchBusinessServiceByTenant } from "./redux/actions";
 
 export const PGRReducers = getRootReducer;
 
-export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "PGR", userType }) => {
+export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "PGR", userType, tenants }) => {
   const { path } = useRouteMatch();
   const state = useSelector((state) => state["pgr"]);
   const disptach = useDispatch();
@@ -31,7 +31,7 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
     return <Loader />;
   }
 
-  console.log("pgr", userType, state, store);
+  console.log("pgr", userType, tenants, state, store);
   console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
   console.log("state", state);
 
