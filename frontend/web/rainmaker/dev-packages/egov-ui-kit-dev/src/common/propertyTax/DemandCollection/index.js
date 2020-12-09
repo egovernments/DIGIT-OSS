@@ -112,7 +112,7 @@ class DemandCollection extends React.Component {
                                   {
                                       if (Math.sign(e.target.value)===-1) 
                                       {  
-                                      alert( "Negitive numbers are not allowed.");
+                                      alert( "Negative numbers are not allowed.");
                                       return value = "" ;
                                       }
                                   }
