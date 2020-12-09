@@ -30,7 +30,8 @@ const requestInfo = () => ({
   authToken: Storage.get("User").token,
 });
 
-const userServiceData = () => Storage.get("citizen.userServiceData");
+const userServiceData = () => Storage.get("User").info;
+
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
   console.log("params:", params);
   console.log("url:", url);
@@ -115,10 +116,10 @@ export const GetServiceDefWithLocalization = (MdmsRes) => {
   const serviceDef = MdmsRes["RAINMAKER-PGR"].ServiceDefs.map((def) =>
     def.active
       ? {
-          name: def.serviceCode,
-          i18nKey: def.menuPath !== "" ? "SERVICEDEFS." + def.serviceCode.toUpperCase() : "Others",
-          ...def,
-        }
+        name: def.serviceCode,
+        i18nKey: def.menuPath !== "" ? "SERVICEDEFS." + def.serviceCode.toUpperCase() : "Others",
+        ...def,
+      }
       : null
   ).filter((o) => o != null);
   Storage.set("ServiceDefs", serviceDef); //TODO: move this to service, session storage key name is too big currently

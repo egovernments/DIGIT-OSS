@@ -184,8 +184,8 @@ const Filter = (props) => {
             <div className="status-container">
               <div className="filter-label">Status</div>
               {console.log("pendingComplaintCount:", pendingComplaintCount)}
-              {pendingComplaintCount.map((option) => (
-                <CheckBox onChange={(e) => handleAssignmentChange(e, option)} label={`${option.name} (${option.count})`} />
+              {pendingComplaintCount.map((option, index) => (
+                <CheckBox key={index} onChange={(e) => handleAssignmentChange(e, option)} label={`${option.name} (${option.count})`} />
               ))}
             </div>
           </div>
@@ -195,13 +195,13 @@ const Filter = (props) => {
         {props.type === "desktop" ? (
           <SubmitBar label="Send" />
         ) : (
-          <ApplyFilterBar
-            labelLink={t("CS_COMMON_CLEAR_ALL")}
-            buttonLink={t("CS_COMMON_FILTER")}
-            onClear={handleFilterClear}
-            onSubmit={handleFilterSubmit}
-          />
-        )}
+            <ApplyFilterBar
+              labelLink={t("CS_COMMON_CLEAR_ALL")}
+              buttonLink={t("CS_COMMON_FILTER")}
+              onClear={handleFilterClear}
+              onSubmit={handleFilterSubmit}
+            />
+          )}
       </ActionBar>
       {/* <ActionBar>
         <SubmitBar label="Take Action" />
