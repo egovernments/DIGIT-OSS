@@ -11,6 +11,9 @@ import { useHistory } from "react-router-dom";
 const DesktopInbox = (props) => {
   let { match } = useRouteMatch();
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
+  const GetSlaCell = (value) => {
+    return value < 0 ? <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span> : <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
+  }
   const history = useHistory();
 
   function goTo(id) {
@@ -53,7 +56,7 @@ const DesktopInbox = (props) => {
       {
         Header: "SLA Remaining",
         Cell: (row) => {
-          return GetCell(row.row.original["sla"]);
+          return GetSlaCell(row.row.original["sla"]);
         },
       },
     ],

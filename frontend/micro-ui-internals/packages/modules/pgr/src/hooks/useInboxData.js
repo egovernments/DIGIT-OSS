@@ -18,7 +18,7 @@ const useInboxData = (searchParams) => {
       const serviceIdParams = serviceIds.join();
       const workflowInstances = await Digit.workflowService.getByBusinessId(tenantId, serviceIdParams, filters, false);
       //console.log("serviceIdParams:", serviceIdParams, "workflowInstances:", workflowInstances);
-      let combinedRes = combineResponses(complaintDetailsResponse, workflowInstances);
+      let combinedRes = combineResponses(complaintDetailsResponse, workflowInstances).map(data => ({ ...data, sla: Math.round(data.sla / (24 * 60 * 60 * 1000)) }));
       setcomplaintList(combinedRes);
     };
     getComplaintResponse();
