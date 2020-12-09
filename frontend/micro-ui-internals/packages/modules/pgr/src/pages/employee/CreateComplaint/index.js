@@ -24,14 +24,13 @@ export const CreateComplaint = () => {
   const [selectedCity, setSelectedCity] = useState(city_complaint ? city_complaint : null);
   const [localities, setLocalities] = useState(selected_localities ? selected_localities : null);
   const [selectedLocality, setSelectedLocality] = useState(locality_complaint ? locality_complaint : null);
-
+  const [submitValve, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
 
   const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
   const { t } = useTranslation();
   const cities = useTenants();
   const dispatch = useDispatch();
-  let submitVal = false;
   const match = useRouteMatch();
 
   //complaint logic
@@ -69,8 +68,8 @@ export const CreateComplaint = () => {
 
   useEffect(async () => {
     console.log("parmamsssss", params);
-    submitVal ? await dispatch(createComplaint(params)) : null;
-    submitVal ? history.push(match.url + "/response") : null;
+    params.landmark ? await dispatch(createComplaint(params)) : null;
+    params.landmark ? history.push(match.url + "/response") : null;
   }, [params]);
 
   function selectLocality(locality) {
@@ -80,7 +79,7 @@ export const CreateComplaint = () => {
 
   //On SUbmit
   function onSubmit(data) {
-    submitVal = true;
+    setSubmitValve(true);
     console.log("submit data", data, subType, selectedCity, selectedLocality);
     const cityCode = selectedCity.code;
     const city = selectedCity.city.name;
@@ -90,9 +89,11 @@ export const CreateComplaint = () => {
     const localityCode = selectedLocality.code;
     const localityName = selectedLocality.name;
     const landmark = data.landmark;
-    const { key, name } = subType;
+    const { key } = subType;
     const complaintType = key;
-    setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType });
+    const mobileNumber = data.mobileNumber;
+    const name = data.name;
+    setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name });
   }
 
   const config = [
@@ -103,7 +104,7 @@ export const CreateComplaint = () => {
           label: "Mobile Number",
           type: "text",
           populators: {
-            name: "mobile",
+            name: "mobileNumber",
           },
         },
         {

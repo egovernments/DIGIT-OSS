@@ -15,6 +15,7 @@ const SelectPincode = ({ config, onSelect }) => {
     let response = await Digit.LocationService.getLocalities({ tenantId: foundValue.code });
     let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
     Digit.SessionStorage.set("selected_localities", __localityList);
+    __localityList.filter((obj) => obj.pincode.find((item) => item == data.pincode));
     onSelect(data);
   };
 
