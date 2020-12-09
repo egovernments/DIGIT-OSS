@@ -10,24 +10,6 @@ export const ComplaintCard = ({ data }) => {
   //let cardData = useComplaintTable(data);
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
-  let cardData = [
-    {
-      "Complaint No.": "1290889999",
-      "Complaint Sub Type": "Sub Type",
-      Locality: "Amritsar",
-      Status: "formattedAddress",
-      "Task Owner": "test",
-      "SLA Remaining": "120",
-    },
-    {
-      "Complaint No.": "1290889999",
-      "Complaint Sub Type": "Sub Type",
-      Locality: "Amritsar",
-      Status: "formattedAddress",
-      "Task Owner": "test",
-      "SLA Remaining": "120",
-    },
-  ];
 
   const handlePopupAction = (type) => {
     console.log("option");
@@ -46,7 +28,7 @@ export const ComplaintCard = ({ data }) => {
         <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />
         <FilterAction text="SORT" handleActionClick={handlePopupAction} />
       </div>
-      <DetailsCard data={cardData} />
+      <DetailsCard data={data} />
       {popup && (
         <PopUp>
           <div className="popup-module">{selectedComponent}</div>
