@@ -29,6 +29,7 @@ export const newComplaintSteps = [
         name: "pincode",
         validation: {
           minLength: 6,
+          maxLength: 7,
         },
         error: "CORE_COMMON_PINCODE_INVALID",
       },

@@ -159,7 +159,7 @@ const Filter = (props) => {
   return (
     <div className="filter-card">
       {console.log("filters", filters)}
-      <div class="heading">
+      <div className="heading">
         <CardCaption>FILTER BY:</CardCaption>
         <div>Clear all</div>
       </div>

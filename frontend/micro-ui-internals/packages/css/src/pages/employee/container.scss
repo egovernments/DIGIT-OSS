@@ -7,6 +7,10 @@
     }
 }
 
+.heading-m{
+    @apply font-bold text-text-primary text-heading-m ml-md pt-sm;
+}
+
 .break-line{
     @apply block h-0 w-full border border-border my-lg
 }
@@ -17,7 +21,7 @@
         @apply p-md ;
     }   
     .heading-m{
-        @apply font-bold text-text-primary text-heading-m-dt ml-md pt-sm;
+        @apply text-heading-m-dt;
     }
     .break-line{
         margin-top: 40px;

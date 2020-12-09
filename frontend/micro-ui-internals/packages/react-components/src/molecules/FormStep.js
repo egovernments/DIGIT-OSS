@@ -7,7 +7,7 @@ import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
 const FormStep = ({ children, config, onSelect, onSkip }) => {
-  const { register, watch, handleSubmit } = useForm();
+  const { register, watch, errors, handleSubmit } = useForm();
 
   console.log("config", config);
   const goNext = (data) => {
@@ -16,12 +16,11 @@ const FormStep = ({ children, config, onSelect, onSkip }) => {
   };
   const inputs = config.inputs?.map((input, index) => {
     if (input.type === "text") {
-      const watchInput = watch(input.name);
       return (
         <React.Fragment key={index}>
           <CardLabel>{input.label}</CardLabel>
-          {watchInput && <CardLabelError>{input.error}</CardLabelError>}
-          <TextInput key={index} name={input.name} inputRef={register(input.validation)} isMandatory={watchInput} />
+          {errors[input.name] && <CardLabelError>{input.error}</CardLabelError>}
+          <TextInput key={index} name={input.name} inputRef={register(input.validation)} isMandatory={errors[input.name]} />
         </React.Fragment>
       );
     }

@@ -11,8 +11,8 @@ export const CreateComplaint = () => {
   const __initSubType__ = Digit.SessionStorage.get("subType");
 
   const city_complaint = Digit.SessionStorage.get("city_complaint");
-  const locality_complaint = Digit.SessionStorage.get("locality_complaint");
   const selected_localities = Digit.SessionStorage.get("selected_localities");
+  const locality_complaint = Digit.SessionStorage.get("locality_complaint");
 
   const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});
   const [subTypeMenu, setSubTypeMenu] = useState(__initSubType__ ? __initSubType__ : {});
@@ -42,6 +42,7 @@ export const CreateComplaint = () => {
 
   // city locality logic
   function selectCity(city) {
+    Digit.SessionStorage.set("locality_complaint", null);
     setSelectedLocality(null);
     setLocalities(null);
     setSelectedCity(city);
@@ -64,7 +65,7 @@ export const CreateComplaint = () => {
 
   //On SUbmit
   function onSubmit(data) {
-    console.log("submit data", data);
+    console.log("submit data", data, subType, selectedCity, selectedLocality);
   }
 
   const config = [
@@ -98,6 +99,7 @@ export const CreateComplaint = () => {
         {
           label: "Complaint Sub-Type",
           type: "dropdown",
+          menu: { ...subTypeMenu },
           populators: <Dropdown option={subTypeMenu} optionKey="name" selected={subType} select={selectedSubType} />,
         },
       ],

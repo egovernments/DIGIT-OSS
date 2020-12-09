@@ -69,7 +69,7 @@ const Modal = (props) => {
             <UploadFile accept=".jpg , .pdf" onUpload={selectfile} message={uploadedFile ? "1 File Uploaded" : "No File Uploaded"} />
           </Card>
           <div className="popup-module-action-bar">
-            <ButtonSelector theme="border" label="Cancel" />
+            <ButtonSelector theme="border" label="Cancel" onSubmit={() => props.onCancel()} />
             <ButtonSelector
               label="Assign"
               onSubmit={() => {

@@ -5,7 +5,7 @@
     @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;
   }
 
-  .card-sub-header {
+  .card-sub-header{
     @apply text-text-primary text-caption-xl font-bold align-middle text-left;
   }
 
@@ -44,6 +44,7 @@
   .card-link {
     @apply block text-center text-link text-link-normal mt-md;
   }
+  
 }
 
 .employeeCard {
@@ -53,7 +54,7 @@
     @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;
   }
 
-  .card-sub-header {
+  .card-sub-header, .employee-card-sub-header {
     @apply text-text-primary text-caption-xl font-bold align-middle text-left;
   }
 
@@ -98,6 +99,19 @@
   }
 }
 
+.header-wrap {
+  @apply flex mb-md;
+
+  .header-start {
+    margin-right: auto;
+  }
+
+  .header-content {}
+
+  .header-end {
+    margin-left: auto;
+  }
+}
 
 .submit-bar {
   @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none;
@@ -156,6 +170,11 @@
     }
 
     .card-sub-header {
+      @apply text-heading-l-dt;
+    }
+
+    .employee-card-sub-header {
+      margin-bottom: 40px;
       @apply text-heading-l-dt;
     }
     

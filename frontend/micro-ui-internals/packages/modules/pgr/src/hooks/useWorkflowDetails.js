@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const useWorkflowDetails = ({ tenantId, id }) => {
   const [workflowDetails, setWorkflowDetails] = useState({});
   let role = Digit.SessionStorage.get("role") || "CITIZEN"; // ToDo:store in session storage
+  const appState = useSelector((state) => state);
+  console.log("appppppppppppppppppp state ", appState);
   // let actions =
   // (selectedState.actions &&
   //   selectedState.actions.filter((state) => {
@@ -16,7 +19,14 @@ const useWorkflowDetails = ({ tenantId, id }) => {
       if (workflow && workflow.ProcessInstances) {
         // const processInstances = workflow.ProcessInstances.sort((a, b) => a.auditDetails.createdTime - b.auditDetails.createdTime);
         const processInstances = workflow.ProcessInstances;
-        console.log("workflow123", processInstances);
+        const nextStates = processInstances[0].nextActions.map((action) => action.nextState);
+        const nextActions = nextStates.map((id) => {
+          (async () => {
+            console.log("idddddd", id);
+            // await Digit.workflowService.getNextAction((tenantId = "pb.amritsar"), id)
+          })();
+        });
+        console.log("workflow details 123", processInstances, nextStates, nextActions);
         if (processInstances.length > 0) {
           const details = {
             timeline: processInstances.map((state) => ({

@@ -31,7 +31,7 @@ const FormComposer = (props) => {
     }
   };
 
-  const formFields = props.config?.map((section, index) => {
+  const formFields = props.config?.map((section, index, array) => {
     return (
       <React.Fragment key={index}>
         <CardSectionHeader>{section.head}</CardSectionHeader>
@@ -39,11 +39,11 @@ const FormComposer = (props) => {
           return (
             <LabelFieldPair key={index}>
               <CardLabel>{field.label}</CardLabel>
-              {fieldSelector(field.type, field.populators)}
+              <div className="field">{fieldSelector(field.type, field.populators)}</div>
             </LabelFieldPair>
           );
         })}
-        <BreakLine />
+        {array.length - 1 === index ? null : <BreakLine />}
       </React.Fragment>
     );
   });

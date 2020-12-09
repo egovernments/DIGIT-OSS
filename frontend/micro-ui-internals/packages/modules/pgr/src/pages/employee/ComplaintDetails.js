@@ -221,6 +221,7 @@ export const ComplaintDetails = (props) => {
           headerBarEnd={<CloseBtn onClick={() => close(popup)} />}
           selectedAction={selectedAction}
           onAssign={onAssign}
+          onCancel={() => close(popup)}
         />
       ) : null}
       {toast && (

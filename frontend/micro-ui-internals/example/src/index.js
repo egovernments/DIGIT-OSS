@@ -10,27 +10,27 @@ import "@egovernments/digit-ui-css/example/index.css";
 
 initLibraries();
 
-// const userServiceData = {
-//   userInfo: {
-//     id: 23349,
-//     uuid: "530968f3-76b3-4fd1-b09d-9e22eb1f85df",
-//     userName: "9404052047",
-//     name: "Aniket T",
-//     mobileNumber: "9404052047",
-//     emailId: "xc@gmail.com",
-//     locale: null,
-//     type: "CITIZEN",
-//     roles: [
-//       {
-//         name: "Citizen",
-//         code: "CITIZEN",
-//         tenantId: "pb",
-//       },
-//     ],
-//     active: true,
-//     tenantId: "pb",
-//   },
-// };
+const userServiceData = {
+  userInfo: {
+    id: 23349,
+    uuid: "530968f3-76b3-4fd1-b09d-9e22eb1f85df",
+    userName: "9404052047",
+    name: "Aniket T",
+    mobileNumber: "9404052047",
+    emailId: "xc@gmail.com",
+    locale: null,
+    type: "CITIZEN",
+    roles: [
+      {
+        name: "Citizen",
+        code: "CITIZEN",
+        tenantId: "pb",
+      },
+    ],
+    active: true,
+    tenantId: "pb",
+  },
+};
 
 const employeeServiceData = {
   userInfo: {
@@ -159,6 +159,7 @@ Digit.SessionStorage.set("citizen.userServiceData", employeeServiceData);
 // const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
 const citAuth = "f5a8704f-f9c9-4074-b5ae-32e2b2147baf";
 
+// Digit.SessionStorage.set("user_type", "citizen");
 Digit.SessionStorage.set("user_type", "employee");
 
 console.log("citAUth", citAuth);

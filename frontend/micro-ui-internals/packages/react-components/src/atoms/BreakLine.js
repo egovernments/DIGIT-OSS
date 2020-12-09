@@ -1,7 +1,7 @@
 import React from "react";
 
 const BreakLine = () => {
-  return <div class="break-line"></div>;
+  return <div className="break-line"></div>;
 };
 
 export default BreakLine;
