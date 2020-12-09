@@ -1,10 +1,13 @@
 /* TODO: convert using tailwind */
 .employee {
   .topbar {
-    height: 80px;
+    position: fixed;
+    top: 0;
+    width: 100%;
     padding: 16px 24px;
     background: white;
     box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
+    z-index: 9999;
 
     img {
       display: inline;
@@ -43,11 +46,13 @@
   }
 
   .sidebar {
-    position: absolute;
+    position: fixed;
+    left: 0;
     padding: 20px 0;
     background: #22394D;
     height: 100%;
     color: white;
+    margin-top: 80px;
 
     .actions {
       cursor: pointer;
@@ -62,12 +67,21 @@
     }
   }
 
-  // .main {}
+  .main {
+    padding-top: 88px;
+  }
+}
+
+.citizen {
+  .main {
+    padding-top: 72px;
+  }
 }
 
 @media (min-width: 640px) {
   .employee {
     .main {
+      padding-top: 80px;
       margin-left: 88px;
     }
   }

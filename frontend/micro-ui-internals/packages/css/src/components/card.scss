@@ -5,7 +5,7 @@
     @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;
   }
 
-  .card-sub-header{
+  .card-sub-header {
     @apply text-text-primary text-caption-xl font-bold align-middle text-left;
   }
 
@@ -44,24 +44,27 @@
   .card-link {
     @apply block text-center text-link text-link-normal mt-md;
   }
-  
+
 }
 
 .employeeCard {
   @apply bg-white m-sm px-sm pt-sm pb-lg shadow-card;
+  max-width: 420px;
+  border-radius: 4px;
 
   .card-header {
     @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;
   }
 
-  .card-sub-header, .employee-card-sub-header {
+  .card-sub-header,
+  .employee-card-sub-header {
     @apply text-text-primary text-caption-xl font-bold align-middle text-left;
   }
 
   .card-section-header {
     @apply text-text-primary text-heading-m font-bold;
   }
-  
+
   .card-caption {
     @apply text-text-secondary text-caption-xl mb-sm;
   }
@@ -167,11 +170,12 @@
     }
   }
 
-  .employeeCard{
+  .employeeCard {
     margin-left: auto;
     margin-right: auto;
     padding-left: 16px;
     padding-top: 16px;
+    max-width: 270px;
 
     .card-header {
       @apply text-heading-xl-dt;
@@ -185,11 +189,12 @@
       margin-bottom: 40px;
       @apply text-heading-l-dt;
     }
-    
+
     .card-section-header {
       margin-bottom: 40px;
-      @apply text-heading-m-dt ;
+      @apply text-heading-m-dt;
     }
+
     .card-caption {
       @apply text-caption-xl-dt;
     }
@@ -203,18 +208,20 @@
       @apply text-left;
     }
 
-    .label-field-pair{
+    .label-field-pair {
       @apply flex;
-      h2{
+
+      h2 {
         width: 30%;
       }
-      .field{
+
+      .field {
         width: 50%;
         margin-right: 20%;
       }
     }
   }
-  
+
 
   .header-wrap {
     @apply flex mb-md;
@@ -223,8 +230,7 @@
       margin-right: auto;
     }
 
-    .header-content {
-    }
+    .header-content {}
 
     .header-end {
       margin-left: auto;
