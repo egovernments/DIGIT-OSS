@@ -10,7 +10,9 @@ const SelectLandmark = ({ t, config, onSelect }) => {
     Digit.SessionStorage.set("PGR_CREATE_LANDMARK", e.target.value);
   }
 
-  return <FormStep config={config} value={landmark} onChange={onChange} onSelect={onSelect} t={t}></FormStep>;
+  const onSkip = () => onSelect();
+
+  return <FormStep config={config} value={landmark} onChange={onChange} onSelect={onSelect} onSkip={onSkip} t={t}></FormStep>;
 };
 
 export default SelectLandmark;

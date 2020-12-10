@@ -84,23 +84,27 @@ export const CreateComplaint = () => {
   };
 
   const saveLandmark = (_landmark) => {
-    const { landmark } = _landmark;
-    setParams({ ...params, landmark });
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+    if (_landmark) {
+      const { landmark } = _landmark;
+      setParams({ ...params, landmark });
+      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+    }
     history.push(`${path}/upload-photos`);
   };
 
   const saveImagesUrl = (images) => {
-    const uploadedImages = images?.map((url) => {
-      return {
-        documentType: "PHOTO",
-        fileStore: url,
-        documentUid: "",
-        additionalDetails: {},
-      };
-    });
-    setParams({ ...params, uploadedImages });
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+    if (images) {
+      const uploadedImages = images?.map((url) => {
+        return {
+          documentType: "PHOTO",
+          fileStore: url,
+          documentUid: "",
+          additionalDetails: {},
+        };
+      });
+      setParams({ ...params, uploadedImages });
+      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+    }
     history.push(`${path}/additional-details`);
   };
 
@@ -108,9 +112,12 @@ export const CreateComplaint = () => {
     if (_details) {
       const { details } = _details;
       details && details !== "" ? setParams({ ...params, details }) : null;
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
     }
     console.log("index params", params);
+
+    //Empty Session Storage for params
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
+
     // submit complaint through actions
     await dispatch(createComplaint(params));
     history.push(`${path}/response`);
