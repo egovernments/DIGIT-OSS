@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import useComplaintTypes from "../../../../hooks/useComplaintTypes";
 
-const SelectComplaintType = ({ config, onSelect, cityCode }) => {
+const SelectComplaintType = ({ config, onSelect }) => {
   const goNext = () => {
     onSelect(complaintType);
   };
@@ -11,7 +11,7 @@ const SelectComplaintType = ({ config, onSelect, cityCode }) => {
   const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});
   const textParams = config.texts;
   const SessionStorage = Digit.SessionStorage;
-  const menu = useComplaintTypes({ stateCode: cityCode });
+  const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
 
   function selectedValue(value) {
     setComplaintType(value);

@@ -1080,8 +1080,7 @@ img, video {
   line-height: 20px;
   --text-opacity:1;
   color: #0b0c0c;
-  color: rgba(11, 12, 12, var(--text-opacity));
-  padding: 8px; }
+  color: rgba(11, 12, 12, var(--text-opacity)); }
 
 @media (min-width: 780px) {
   .card-input, .card-input-error {

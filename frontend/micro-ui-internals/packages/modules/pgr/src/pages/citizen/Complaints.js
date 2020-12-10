@@ -14,7 +14,7 @@ const ComplaintsPage = (props) => {
   const { t } = useTranslation();
 
   const complaints = state.complaints.list;
-  const getComplaints = useCallback(() => dispatch(searchComplaints({}, props.cityCode)), [dispatch]);
+  const getComplaints = useCallback(() => dispatch(searchComplaints()), [dispatch]);
 
   useEffect(() => {
     getComplaints();

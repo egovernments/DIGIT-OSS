@@ -68,14 +68,14 @@ const TLCaption = ({ data }) => {
   );
 };
 
-export const ComplaintDetails = ({ stateCode, cityCode }) => {
+export const ComplaintDetails = (props) => {
   let { id } = useParams();
   const { t } = useTranslation();
   const [fullscreen, setFullscreen] = useState(false);
   const [imageZoom, setImageZoom] = useState(null);
   // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
-  const tenantId = cityCode;
+  const tenantId = "pb.amritsar";
   const statusTable = useComplaintDetails({ tenantId, id });
   console.log("statusTable", statusTable);
   const workflowDetails = useWorkflowDetails({ tenantId, id });
@@ -154,7 +154,7 @@ export const ComplaintDetails = ({ stateCode, cityCode }) => {
 
   async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
-    const response = await Digit.Complaint.assign(selectedAction, selectedEmployee, comments, uploadedFile, tenantId);
+    const response = await Digit.Complaint.assign(selectedAction, selectedEmployee, comments, uploadedFile);
     console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
@@ -221,7 +221,6 @@ export const ComplaintDetails = ({ stateCode, cityCode }) => {
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
       {popup ? (
         <Modal
-          tenantId={tenantId}
           employeeRoles={workflowDetails.nextActions ? workflowDetails.nextActions : null}
           headerBarMain={
             <Heading

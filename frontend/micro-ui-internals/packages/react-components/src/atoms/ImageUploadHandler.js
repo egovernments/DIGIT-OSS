@@ -48,7 +48,7 @@ export const ImageUploadHandler = (props) => {
   );
 
   const uploadImage = useCallback(async () => {
-    const response = await Digit.UploadServices.Filestorage(image, props.tenantId);
+    const response = await Digit.UploadServices.Filestorage(image);
     setUploadedImagesIds(addUploadedImageIds(response));
   }, [addUploadedImageIds, image]);
 
@@ -75,7 +75,7 @@ export const ImageUploadHandler = (props) => {
 
   const submit = useCallback(async () => {
     if (uploadedImagesIds !== null) {
-      const res = await Digit.UploadServices.Filefetch([uploadedImagesIds[uploadedImagesIds.length - 1]], props.tenantId);
+      const res = await Digit.UploadServices.Filefetch([uploadedImagesIds[uploadedImagesIds.length - 1]], "pb.amritsar");
       addImageThumbnails(res);
     }
   }, [uploadedImagesIds]);

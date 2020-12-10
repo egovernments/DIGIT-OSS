@@ -9,7 +9,7 @@ import useComplaintTypes from "../../../hooks/useComplaintTypes";
 import useTenants from "../../../hooks/useTenants";
 import { createComplaint } from "../../../redux/actions/index";
 
-export const CreateComplaint = ({ stateCode, cityCode }) => {
+export const CreateComplaint = () => {
   const SessionStorage = Digit.SessionStorage;
   const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
   const __initSubType__ = Digit.SessionStorage.get("subType");
@@ -27,7 +27,7 @@ export const CreateComplaint = ({ stateCode, cityCode }) => {
   const [submitValve, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
 
-  const menu = useComplaintTypes({ stateCode: cityCode });
+  const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
   const { t } = useTranslation();
   const cities = useTenants();
   const dispatch = useDispatch();

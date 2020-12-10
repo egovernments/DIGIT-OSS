@@ -2,16 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import {
-  Card,
-  SubmitBar,
-  BackButton,
-  ImageUploadHandler,
-  CardLabelError,
-  LinkButton,
-  CardHeader,
-  CardText,
-} from "@egovernments/digit-ui-react-components";
+import { Card, SubmitBar, BackButton, ImageUploadHandler, CardLabelError, LinkButton } from "@egovernments/digit-ui-react-components";
 
 import { LOCALIZATION_KEY } from "../../../constants/Localization";
 
@@ -20,7 +11,7 @@ const UploadPhoto = (props) => {
   const history = useHistory();
   let { id } = useParams();
   const [verificationDocuments, setVerificationDocuments] = useState(null);
-  // const [valid, setValid] = useState(true);
+  const [valid, setValid] = useState(true);
 
   const handleUpload = (ids) => {
     setDocState(ids);
@@ -38,7 +29,7 @@ const UploadPhoto = (props) => {
 
   function save() {
     if (verificationDocuments === null) {
-      // setValid(false);
+      setValid(false);
     } else {
       history.push(`${props.match.path}/addional-details/${id}`);
     }
@@ -56,19 +47,12 @@ const UploadPhoto = (props) => {
   return (
     <React.Fragment>
       <Card>
-        <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)}</CardHeader>
-        <CardText>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO_TEXT`)}</CardText>
-        <ImageUploadHandler
-          tenantId={props.cityCode}
-          header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)}
-          cardText=""
-          onPhotoChange={handleUpload}
-        />
+        <ImageUploadHandler header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)} cardText="" onPhotoChange={handleUpload} />
         {/* <Link to={`${props.match.path}/addional-details/${id}`}>
           <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
         </Link> */}
 
-        {/* {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_ERROR_MESSAGE`)}</CardLabelError>} */}
+        {valid ? null : <CardLabelError>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_ERROR_MESSAGE`)}</CardLabelError>}
         <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={save} />
         {props.skip ? <LinkButton label={t(`${LOCALIZATION_KEY.CORE_COMMON}_SKIP_CONTINUE`)} onClick={skip} /> : null}
       </Card>
