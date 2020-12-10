@@ -4,7 +4,6 @@ import useTenants from "../../../../hooks/useTenants";
 
 const SelectPincode = ({ t, config, onSelect }) => {
   const tenants = useTenants();
-  tenants.map;
   const __initPincode = Digit.SessionStorage.get("PGR_CREATE_PINCODE");
   const [pincode, setPincode] = useState(__initPincode ? __initPincode : "");
   function onChange(e) {
@@ -12,7 +11,7 @@ const SelectPincode = ({ t, config, onSelect }) => {
     Digit.SessionStorage.set("PGR_CREATE_PINCODE", e.target.value);
   }
   const goNext = async (data) => {
-    var foundValue = tenants.filter((obj) => obj.pincode.find((item) => item == data.pincode))[0];
+    var foundValue = tenants.filter((obj) => obj.pincode?.find((item) => item == data?.pincode))[0];
     if (foundValue) {
       Digit.SessionStorage.set("city_complaint", foundValue);
       let response = await Digit.LocationService.getLocalities({ tenantId: foundValue.code });
