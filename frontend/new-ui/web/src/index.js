@@ -7,21 +7,26 @@ import App from './App';
 
 initLibraries();
 
-const token = window.localStorage.getItem("token")
+const getFromStorage = (key) => {
+  const value = window.localStorage.getItem(key);
+  return value && value !== "undefined" ? JSON.parse(value) : null;
+}
 
-const citizenToken = window.localStorage.getItem("Citizen.token")
-const citizenInfo = window.localStorage.getItem("Citizen.user-info")
-const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id")
+const token = getFromStorage("token")
 
-const employeeToken = window.localStorage.getItem("Employee.token")
-const employeeInfo = window.localStorage.getItem("Employee.user-info")
-const employeeTenantId = window.localStorage.getItem("Employee.tenant-id")
+const citizenToken = getFromStorage("Citizen.token")
+const citizenInfo = getFromStorage("Citizen.user-info")
+const citizenTenantId = getFromStorage("Citizen.tenant-id")
+
+const employeeToken = getFromStorage("Employee.token")
+const employeeInfo = getFromStorage("Employee.user-info")
+const employeeTenantId = getFromStorage("Employee.tenant-id")
 
 const userType = token === citizenToken ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userType);
 window.Digit.SessionStorage.set("userType", userType);
 
-const getUserDetails = (token, info) => ({ token, info })
+const getUserDetails = (token, info) => ({ token, info: { userInfo: info } })
 
 const userDetails = userType === "citizen" ? getUserDetails(citizenToken, citizenInfo) : getUserDetails(employeeToken, employeeInfo)
 
