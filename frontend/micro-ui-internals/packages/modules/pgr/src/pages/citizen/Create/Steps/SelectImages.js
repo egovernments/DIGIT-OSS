@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FormStep, ImageUploadHandler, Loader } from "@egovernments/digit-ui-react-components";
 
-const SelectImages = ({ config, onSelect }) => {
+const SelectImages = ({ t, config, onSelect }) => {
   const __initImages = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
   const [uploadedImages, setUploadedImagesIds] = useState(__initImages ? __initImages : null);
 
@@ -11,7 +11,7 @@ const SelectImages = ({ config, onSelect }) => {
   };
 
   return (
-    <FormStep config={config} onSelect={() => onSelect(uploadedImages)}>
+    <FormStep config={config} onSelect={() => onSelect(uploadedImages)} t={t}>
       <ImageUploadHandler onPhotoChange={handleUpload} />
     </FormStep>
   );

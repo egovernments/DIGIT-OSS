@@ -18,9 +18,6 @@ import SelectImages from "./Steps/SelectImages";
 import SelectDetails from "./Steps/SelectDetails";
 import Response from "./Steps/Response";
 
-const Step2 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSelect} />;
-const Step3 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSelect} />;
-
 // steps type: radio, map location, input, city-mohalla, textarea, upload photo
 export const CreateComplaint = () => {
   const { t } = useTranslation();

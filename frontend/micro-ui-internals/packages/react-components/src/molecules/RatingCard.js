@@ -7,11 +7,11 @@ import CheckBox from "../atoms/CheckBox";
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
 import SubmitBar from "../atoms/SubmitBar";
-import { useTranslation } from "react-i18next";
 
-const RatingCard = ({ config, onSelect }) => {
+const RatingCard = ({ config, onSelect, t }) => {
   const { register, watch, handleSubmit } = useForm();
-  const { t } = useTranslation();
+
+  console.log('rate card', t("ULBGRADE_MUNICIPAL_CORPORATION"));
 
   const onSubmit = (data) => {
     onSelect(...data, { rating: rating });

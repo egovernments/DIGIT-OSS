@@ -9,13 +9,14 @@ import RadioButtons from "../atoms/RadioButtons";
 import SubmitBar from "../atoms/SubmitBar";
 
 const TypeSelectCard = ({ t, headerCaption, header, cardText, submitBarLabel, selectedOption, menu, optionsKey, selected, onSave }) => {
+  console.log("cardText", t("ULBGRADE_MUNICIPAL_CORPORATION"), cardText);
   return (
     <Card>
-      <CardCaption>{t ? t(headerCaption) : headerCaption}</CardCaption>
-      <CardHeader>{t ? t(header) : header}</CardHeader>
-      <CardText>{t ? t(cardText) : cardText}</CardText>
+      <CardCaption>{t(headerCaption)}</CardCaption>
+      <CardHeader>{t(header)}</CardHeader>
+      <CardText>{t(cardText)}</CardText>
       {menu ? <RadioButtons selectedoption={selectedOption} options={menu} optionskey={optionsKey} onSelect={selected} /> : null}
-      <SubmitBar label={t ? t(submitBarLabel) : submitBarLabel} onSubmit={onSave} />
+      <SubmitBar label={t(submitBarLabel)} onSubmit={onSave} />
     </Card>
   );
 };
