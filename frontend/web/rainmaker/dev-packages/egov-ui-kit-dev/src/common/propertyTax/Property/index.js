@@ -209,8 +209,10 @@ class Property extends Component {
     } else {
 
       this.setState({
-        dialogueOpen: true,
+        // dialogueOpen: true,
         urlToAppend: getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.ASSESS, -1, assessmentNo),
+      },function(){
+        this.props.history && this.props.history.push(`${this.state.urlToAppend}&FY=2020-21`)
       });
     }
   };
