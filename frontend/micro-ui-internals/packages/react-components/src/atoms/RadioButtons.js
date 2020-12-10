@@ -1,8 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import isEqual from "lodash/isEqual";
 
 const RadioButtons = (props) => {
-  var selected = props.selectedoption;
+  var selected = props.selectedOption;
   console.log("selected option", selected);
   function selectOption(value) {
     console.log("value,,,,,", value);
@@ -12,9 +13,10 @@ const RadioButtons = (props) => {
   return (
     <div className="radio-wrap">
       {props.options.map((option) => {
-        if (props.optionskey) {
+        console.log("%c 🏎️: RadioButtons -> option ", "font-size:16px;background-color:#c239cc;color:white;", option);
+        if (props.optionsKey) {
           return (
-            <div key={option[props.optionskey]}>
+            <div key={option[props.optionsKey]}>
               <span className="radio-btn-wrap">
                 <input
                   className="radio-btn"
@@ -25,7 +27,7 @@ const RadioButtons = (props) => {
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label>{option[props.optionskey]}</label>
+              <label>{option[props.optionsKey]}</label>
             </div>
           );
         } else {
@@ -48,6 +50,20 @@ const RadioButtons = (props) => {
       })}
     </div>
   );
+};
+
+RadioButtons.propTypes = {
+  selectedOption: PropTypes.string.isRequired,
+  onSelect: PropTypes.func,
+  options: PropTypes.array.isRequired,
+  optionKey: PropTypes.string.isRequired,
+};
+
+RadioButtons.defaultProps = {
+  selectedOption: "first",
+  onSelect: undefined,
+  options: ["first", "second"],
+  optionKey: 0,
 };
 
 export default RadioButtons;

@@ -100,10 +100,21 @@ const Dropdown = (props) => {
 };
 
 Dropdown.propTypes = {
-  selected: PropTypes.string,
+  selected: PropTypes.string.isRequired,
   style: PropTypes.object,
+  option: PropTypes.array.isRequired,
+  optionKey: PropTypes.string.isRequired,
+  select: PropTypes.func,
+  t: PropTypes.func,
 };
 
-Dropdown.defaultProps = {};
+Dropdown.defaultProps = {
+  selected: "first",
+  style: {},
+  option: ["first", "second", "third"],
+  optionKey: 0,
+  select: undefined,
+  t: undefined,
+};
 
 export default Dropdown;
