@@ -5,7 +5,6 @@ import useTenants from "../../../../hooks/useTenants";
 const SelectAddress = ({ t, config, onSelect }) => {
   const cities = useTenants();
   console.log("tenents", cities);
-  const { t } = useTranslation();
 
   const city_complaint = Digit.SessionStorage.get("city_complaint");
   const locality_complaint = Digit.SessionStorage.get("locality_complaint");

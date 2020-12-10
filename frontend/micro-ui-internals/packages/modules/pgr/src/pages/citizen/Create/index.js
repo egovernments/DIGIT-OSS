@@ -150,7 +150,7 @@ export const CreateComplaint = () => {
         <SelectDetails t={t} config={stepItems[6]} onSelect={submitComplaint} />
       </Route>
       <Route path={`${path}/response`}>
-        <Response config={stepItems[7]} onSelect={backToHome} />
+        <Response t={t} config={stepItems[7]} onSelect={backToHome} />
       </Route>
       <Route>
         <Redirect to={`${url}/complaint-type`} />
