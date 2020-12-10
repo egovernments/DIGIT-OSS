@@ -10,8 +10,10 @@ const SelectImages = ({ t, config, onSelect }) => {
     Digit.SessionStorage.set("PGR_CREATE_IMAGES", ids);
   };
 
+  const onSkip = () => onSelect();
+
   return (
-    <FormStep config={config} onSelect={() => onSelect(uploadedImages)} t={t}>
+    <FormStep config={config} onSelect={() => onSelect(uploadedImages)} onSkip={onSkip} t={t}>
       <ImageUploadHandler onPhotoChange={handleUpload} />
     </FormStep>
   );
