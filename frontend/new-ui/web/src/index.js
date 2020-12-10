@@ -7,9 +7,17 @@ import App from './App';
 
 initLibraries();
 
+const parseValue = (value) => {
+  try {
+    return JSON.parse(value)
+  } catch (e) {
+    return value
+  }
+}
+
 const getFromStorage = (key) => {
   const value = window.localStorage.getItem(key);
-  return value && value !== "undefined" ? JSON.parse(value) : null;
+  return value && value !== "undefined" ? parseValue(value) : null;
 }
 
 const token = getFromStorage("token")
