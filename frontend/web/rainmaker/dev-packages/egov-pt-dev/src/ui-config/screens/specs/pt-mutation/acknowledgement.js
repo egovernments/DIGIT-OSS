@@ -168,7 +168,6 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
 
 
   const getHeader = (applicationNumber, moduleName) => {
-    console.log("prasad moduleName", moduleName);
     
     if (moduleName == 'PT.CREATE') {
       return getCommonContainer({
