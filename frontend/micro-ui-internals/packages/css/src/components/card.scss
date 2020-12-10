@@ -48,8 +48,8 @@
 }
 
 .employeeCard {
-  @apply bg-white m-sm px-sm pt-sm pb-lg shadow-card;
-
+  @apply bg-white px-sm pt-sm pb-lg shadow-card;
+  max-width: 420px;
   border-radius: 4px;
 
   .card-header {
@@ -171,11 +171,14 @@
   }
 
   .employeeCard {
-    margin-left: auto;
-    margin-right: auto;
     padding-left: 16px;
     padding-top: 16px;
- 
+    max-width: 270px;
+
+    &.filter {
+      margin-left: auto;
+      margin-right: auto;
+    }
 
     .card-header {
       @apply text-heading-xl-dt;

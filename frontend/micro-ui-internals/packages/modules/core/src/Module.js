@@ -120,7 +120,7 @@ const DigitUIApp = ({ stateCode, modules, appTenants, logoUrl, cityCode }) => {
         </div>
       </Route>
       <Route path="/digit-ui/citizen">
-        <TopBar img={logoUrl} />
+        <TopBar img={"https://egov-micro-qa.egovernments.org/egov-dev-assets/logo-mseva-white.png"} />
         <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>

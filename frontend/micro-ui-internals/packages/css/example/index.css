@@ -518,10 +518,10 @@ img, video {
   --bg-opacity:1;
   background-color: #fff;
   background-color: rgba(255, 255, 255, var(--bg-opacity));
-  margin: 8px;
   padding: 8px 8px 24px;
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
+  max-width: 420px;
   border-radius: 4px; }
   .employeeCard .card-header {
     font-size: 32px;
@@ -673,10 +673,12 @@ img, video {
     .card .card-link, .card-emp .card-link {
       text-align: left; }
   .employeeCard {
-    margin-left: auto;
-    margin-right: auto;
     padding-left: 16px;
-    padding-top: 16px; }
+    padding-top: 16px;
+    max-width: 270px; }
+    .employeeCard.filter {
+      margin-left: auto;
+      margin-right: auto; }
     .employeeCard .card-header {
       font-size: 48px;
       line-height: 56px; }
@@ -1080,7 +1082,8 @@ img, video {
   line-height: 20px;
   --text-opacity:1;
   color: #0b0c0c;
-  color: rgba(11, 12, 12, var(--text-opacity)); }
+  color: rgba(11, 12, 12, var(--text-opacity));
+  padding: 8px; }
 
 @media (min-width: 780px) {
   .card-input, .card-input-error {
@@ -2085,6 +2088,11 @@ img, video {
 .citizen .main {
   padding-top: 72px; }
 
+.link {
+  --text-opacity:1;
+  color: #1d70b8;
+  color: rgba(29, 112, 184, var(--text-opacity)); }
+
 @media (min-width: 640px) {
   .employee .main {
     padding-top: 80px;
@@ -2359,14 +2367,12 @@ img, video {
         align-items: center;
         --bg-opacity:1;
         background-color: #fff;
-        background-color: rgba(255, 255, 255, var(--bg-opacity)); }
+        background-color: rgba(255, 255, 255, var(--bg-opacity));
+        padding: 16px; }
         .inbox-container .search-container .search-complaint-container .complaint-input-container {
           display: -webkit-box !important;
           display: -ms-flexbox !important;
-          display: flex !important;
-          padding-top: 16px;
-          padding-left: 16px;
-          padding-right: 16px; }
+          display: flex !important; }
           .inbox-container .search-container .search-complaint-container .complaint-input-container .complaint-input {
             display: -webkit-box;
             display: -ms-flexbox;

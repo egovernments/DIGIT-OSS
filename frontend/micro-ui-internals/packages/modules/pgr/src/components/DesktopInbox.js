@@ -1,7 +1,7 @@
 import { CheckBox } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import ComplaintsLink from "./inbox/ComplaintLinks";
 import ComplaintTable from "./inbox/ComplaintTable";
 import Filter from "./inbox/Filter";
@@ -19,7 +19,7 @@ const DesktopInbox = (props) => {
 
   function goTo(id) {
     console.log("id", id);
-    history.push("/employee/pgr/complaint/" + id);
+    history.push("/digit-ui/employee/pgr/complaint/details/" + id);
   }
 
   const columns = React.useMemo(
@@ -29,9 +29,12 @@ const DesktopInbox = (props) => {
         Cell: (row) => {
           return (
             <div>
-              <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a>
+              <span className="link">
+                <Link to={"/digit-ui/employee/pgr/complaint/details/" + row.row.original["serviceRequestId"]}>{row.row.original["serviceRequestId"]}</Link>
+              </span>
+              {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
               <br />
-              <span style={{ marginTop: "4px", color: "#505A5F" }}>{row.row.original["complaintSubType"]}</span>
+              <span style={{ marginTop: "4px", color: "#505A5F" }}>{t(`SERVICEDEFS.${row.row.original["complaintSubType"].toUpperCase()}`)}</span>
             </div>
           );
         },
@@ -81,11 +84,12 @@ const DesktopInbox = (props) => {
             getCellProps={(cellInfo) => {
               return {
                 style: {
+                  minWidth: cellInfo.column.Header === t("CS_COMMON_COMPLAINT_NO") ? "240px" : "",
                   padding: "20px 18px",
                   fontSize: "16px",
-                  borderTop: "1px solid grey",
-                  textAlign: "left",
-                  verticalAlign: "middle",
+                  // borderTop: "1px solid grey",
+                  // textAlign: "left",
+                  // verticalAlign: "middle",
                 },
               };
             }}

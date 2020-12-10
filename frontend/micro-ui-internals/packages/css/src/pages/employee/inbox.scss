@@ -135,11 +135,10 @@
       @apply ml-lg;
 
       .search-complaint-container {
-        @apply flex items-center bg-white;
+        @apply flex items-center bg-white p-md;
 
         .complaint-input-container {
           display: flex !important;
-          @apply pt-md pl-md pr-md;
 
           .complaint-input {
             @apply flex flex-col;

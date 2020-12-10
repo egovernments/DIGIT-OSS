@@ -32,7 +32,7 @@ const SearchComplaint = ({ onSearch, type }) => {
                 <Label>Mobile No.</Label>
                 <TextInput name="mobileNo" inputRef={register} style={{ width: "280px" }}></TextInput>
               </span>
-              {type === "desktop" && <SubmitBar label="Search" submit />}
+              {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: 8 }} label="Search" submit />}
             </div>
             {type === "desktop" && <span className="clear-search">{clearAll()}</span>}
           </div>

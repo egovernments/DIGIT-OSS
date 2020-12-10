@@ -36,6 +36,7 @@ const combineResponses = (complaintDetailsResponse, workflowInstances) => {
   let wfMap = mapWfBybusinessId(workflowInstances.ProcessInstances);
   return complaintDetailsResponse.ServiceWrappers.map((complaint) => ({
     serviceRequestId: complaint.service.serviceRequestId,
+    complaintSubType: complaint.service.serviceCode,
     locality: complaint.service.address.locality.code,
     status: complaint.service.applicationStatus,
     taskOwner: wfMap[complaint.service.serviceRequestId].assigner.name,

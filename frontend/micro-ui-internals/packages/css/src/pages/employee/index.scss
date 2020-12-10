@@ -53,6 +53,7 @@
     height: 100%;
     color: white;
     margin-top: 80px;
+    z-index: 9999;
 
     .actions {
       cursor: pointer;
@@ -76,6 +77,10 @@
   .main {
     padding-top: 72px;
   }
+}
+
+.link {
+  @apply text-link-normal;
 }
 
 @media (min-width: 640px) {
