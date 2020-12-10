@@ -18,7 +18,7 @@ OTPInput.propTypes = {
 };
 
 OTPInput.defaultProps = {
-  length: 4,
+  length: 0,
 };
 
 export default OTPInput;

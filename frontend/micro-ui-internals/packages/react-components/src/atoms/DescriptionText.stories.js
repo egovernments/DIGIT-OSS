@@ -10,3 +10,7 @@ export default {
 const Template = (args) => <DescriptionText {...args} />;
 
 export const Default = Template.bind({});
+
+Default.args = {
+  text: "This is the description",
+};

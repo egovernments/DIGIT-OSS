@@ -11,4 +11,9 @@ const Template = (args) => <RadioButtons {...args} />;
 
 export const Default = Template.bind({});
 
-Default.args = {};
+Default.args = {
+  selectedOption: "first",
+  onSelect: undefined,
+  options: ["first", "second"],
+  optionsKey: "",
+};

@@ -10,3 +10,10 @@ export default {
 const Template = (args) => <CheckPoint {...args} />;
 
 export const Default = Template.bind({});
+
+Default.args = {
+  isCompleted: true,
+  key: 234234,
+  label: "First checkpoint",
+  info: "This is the first checkpoint",
+};

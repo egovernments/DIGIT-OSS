@@ -31,7 +31,7 @@ CheckBox.propTypes = {
 };
 
 CheckBox.defaultProps = {
-  label: "Agree to terms and conditions",
+  label: "",
   onChange: () => {},
   ref: () => {},
 };

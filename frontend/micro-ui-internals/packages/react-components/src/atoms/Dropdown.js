@@ -109,10 +109,10 @@ Dropdown.propTypes = {
 };
 
 Dropdown.defaultProps = {
-  selected: "first",
-  style: {},
-  option: ["first", "second", "third"],
+  selected: "",
+  option: [],
   optionKey: 0,
+  style: {},
   select: undefined,
   t: undefined,
 };

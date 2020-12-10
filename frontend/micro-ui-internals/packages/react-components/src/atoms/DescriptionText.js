@@ -17,7 +17,7 @@ DescriptionText.propTypes = {
 };
 
 DescriptionText.defaultProps = {
-  text: "This is the description",
+  text: "",
 };
 
 export default DescriptionText;

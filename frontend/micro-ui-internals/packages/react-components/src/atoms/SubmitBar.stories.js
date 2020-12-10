@@ -9,8 +9,18 @@ export default {
 
 const Template = (args) => <SubmitBar {...args} />;
 
-export const Default = Template.bind({});
-Default.args = {
+export const SubmitButton = Template.bind({});
+
+SubmitButton.args = {
+  submit: true,
+  style: {},
+  label: "Submit",
+  onSubmit: undefined,
+};
+
+export const NormalButton = Template.bind({});
+
+NormalButton.args = {
   submit: false,
   style: {},
   label: "Click me",

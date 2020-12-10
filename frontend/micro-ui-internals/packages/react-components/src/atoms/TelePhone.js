@@ -20,8 +20,8 @@ TelePhone.propTypes = {
 };
 
 TelePhone.defaultProps = {
-  mobile: "9292929929",
-  text: "Joe Doe",
+  mobile: "",
+  text: "",
 };
 
 export default TelePhone;

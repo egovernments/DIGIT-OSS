@@ -11,4 +11,8 @@ const Template = (args) => <Dropdown {...args} />;
 
 export const Default = Template.bind({});
 
-Default.args = {};
+Default.args = {
+  selected: "first",
+  option: ["first", "second", "third"],
+  optionKey: 0,
+};

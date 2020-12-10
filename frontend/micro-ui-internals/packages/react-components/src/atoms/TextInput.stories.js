@@ -10,4 +10,10 @@ export default {
 const Template = (args) => <TextInput {...args} />;
 
 export const Default = Template.bind({});
-Default.args = {};
+
+Default.args = {
+  isMandatory: false,
+  name: "name",
+  placeholder: "Name",
+  value: "",
+};

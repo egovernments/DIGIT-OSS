@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import PropTypes from "prop-types";
+
 import TextArea from "../atoms/TextArea";
 import CardLabel from "../atoms/CardLabel";
 import Rating from "../atoms/Rating";
@@ -60,6 +62,16 @@ const RatingCard = ({ config, onSelect }) => {
       </Card>
     </form>
   );
+};
+
+RatingCard.propTypes = {
+  config: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+
+RatingCard.defaultProps = {
+  config: {},
+  onSubmit: undefined,
 };
 
 export default RatingCard;

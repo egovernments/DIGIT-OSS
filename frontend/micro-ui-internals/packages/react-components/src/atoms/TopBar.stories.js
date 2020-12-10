@@ -10,4 +10,7 @@ export default {
 const Template = (args) => <TopBar {...args} />;
 
 export const Default = Template.bind({});
-Default.args = {};
+
+Default.args = {
+  img: undefined,
+};

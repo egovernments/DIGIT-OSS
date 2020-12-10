@@ -14,5 +14,8 @@ NoImages.args = {};
 
 export const Images = Template.bind({});
 Images.args = {
-  thumbnails: ["http://lorempixel.com/640/480/nightlife", "http://lorempixel.com/640/480/city"],
+  thumbnails: [
+    "https://randomwordgenerator.com/img/picture-generator/5ee6d1454b53b10ff3d8992cc12c30771037dbf85254794e722679d49445_640.jpg",
+    "https://randomwordgenerator.com/img/picture-generator/57e0d1444250a414f1dc8460962e33791c3ad6e04e50744077297bd59445c2_640.jpg",
+  ],
 };

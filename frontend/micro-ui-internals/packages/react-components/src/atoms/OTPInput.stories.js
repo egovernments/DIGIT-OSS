@@ -10,4 +10,7 @@ export default {
 const Template = (args) => <OTPInput {...args} />;
 
 export const Default = Template.bind({});
-Default.args = {};
+
+Default.args = {
+  length: 4,
+};

@@ -42,8 +42,6 @@ TextInput.defaultProps = {
   isMandatory: false,
   name: "name",
   placeholder: "Name",
-  onChange: undefined,
-  ref: undefined,
   value: "",
 };
 

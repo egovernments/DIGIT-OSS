@@ -17,7 +17,7 @@ const DisplayPhotos = (props) => {
 
 DisplayPhotos.propTypes = {
   /**
-   * text
+   * images
    */
   srcs: PropTypes.array.isRequired,
   /**

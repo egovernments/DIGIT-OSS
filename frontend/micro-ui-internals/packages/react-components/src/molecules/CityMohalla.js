@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
 import CardText from "../atoms/CardText";
@@ -20,6 +22,7 @@ const CityMohalla = ({
   selectCity,
   selectLocalities,
   onSave,
+  selectedLocality,
 }) => {
   return (
     <Card>
@@ -32,10 +35,42 @@ const CityMohalla = ({
       <CardLabel>{cardLabelCity}* </CardLabel>
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} />
       <CardLabel>{cardLabelMohalla} *</CardLabel>
-      <Dropdown isMandatory option={localities} select={selectLocalities} />
+      <Dropdown isMandatory selected={selectedLocality} option={localities} select={selectLocalities} />
       <SubmitBar label={nextText} onSubmit={onSave} />
     </Card>
   );
+};
+
+CityMohalla.propTypes = {
+  header: PropTypes.string.isRequired,
+  subHeader: PropTypes.string.isRequired,
+  cardText: PropTypes.string.isRequired,
+  cardLabelCity: PropTypes.string.isRequired,
+  cardLabelMohalla: PropTypes.string.isRequired,
+  nextText: PropTypes.string.isRequired,
+  selectedCity: PropTypes.string.isRequired,
+  cities: PropTypes.array.isRequired,
+  localities: PropTypes.array.isRequired,
+  selectCity: PropTypes.string.isRequired,
+  selectedLocality: PropTypes.string.isRequired,
+  selectLocalities: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+};
+
+CityMohalla.defaultProps = {
+  header: "",
+  subHeader: "",
+  cardText: "",
+  cardLabelCity: "",
+  cardLabelMohalla: "",
+  nextText: "",
+  selectedCity: "",
+  cities: [],
+  localities: [],
+  selectCity: "",
+  selectedLocality: "",
+  selectLocalities: undefined,
+  onSave: undefined,
 };
 
 export default CityMohalla;

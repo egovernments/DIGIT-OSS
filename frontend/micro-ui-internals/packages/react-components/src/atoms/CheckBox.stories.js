@@ -9,4 +9,8 @@ export default {
 
 const Template = (args) => <CheckBox {...args} />;
 
-export const Primary = Template.bind({});
+export const Default = Template.bind({});
+
+Default.args = {
+  label: "Agree to terms and conditions",
+};

@@ -54,8 +54,8 @@ CheckPoint.propTypes = {
 };
 
 CheckPoint.defaultProps = {
-  isCompleted: true,
-  key: 234234,
-  label: "First checkpoint",
-  info: "This is the first checkpoint",
+  isCompleted: false,
+  key: 0,
+  label: "",
+  info: "",
 };

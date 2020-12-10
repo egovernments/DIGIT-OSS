@@ -34,9 +34,9 @@ ButtonSelector.propTypes = {
 };
 
 ButtonSelector.defaultProps = {
-  label: "Submit",
-  theme: "default",
-  onSubmit: () => alert("You clicked me"),
+  label: "",
+  theme: "",
+  onSubmit: undefined,
 };
 
 export default ButtonSelector;

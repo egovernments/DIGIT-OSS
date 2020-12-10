@@ -19,7 +19,7 @@ DateWrap.propTypes = {
 };
 
 DateWrap.defaultProps = {
-  date: 1607498172995,
+  date: 0,
 };
 
 export default DateWrap;

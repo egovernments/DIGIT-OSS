@@ -18,7 +18,7 @@ Toast.propTypes = {
 };
 
 Toast.defaultProps = {
-  label: "Successful",
+  label: "",
   onClose: undefined,
 };
 

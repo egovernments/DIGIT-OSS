@@ -13,3 +13,7 @@ export default {
 const Template = (args) => <DateWrap {...args} />;
 
 export const Default = Template.bind({});
+
+Default.args = {
+  date: 1607498172995,
+};

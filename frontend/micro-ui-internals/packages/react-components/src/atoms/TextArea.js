@@ -13,9 +13,9 @@ TextArea.propTypes = {
 };
 
 TextArea.defaultProps = {
-  name: "Description",
+  name: "",
   ref: undefined,
-  value: "This is a description",
+  value: "",
   onChange: undefined,
 };
 

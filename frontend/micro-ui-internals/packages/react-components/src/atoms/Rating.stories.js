@@ -10,4 +10,9 @@ export default {
 const Template = (args) => <Rating {...args} />;
 
 export const Default = Template.bind({});
-Default.args = {};
+
+Default.args = {
+  maxRating: 5,
+  currentRating: 0,
+  onFeedback: () => {},
+};

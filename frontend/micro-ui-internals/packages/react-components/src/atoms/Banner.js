@@ -48,8 +48,8 @@ Banner.propTypes = {
 
 Banner.defaultProps = {
   successful: true,
-  message: "Your query is resolve.",
-  complaintNumber: 5343,
+  message: "",
+  complaintNumber: 0,
 };
 
 export default Banner;

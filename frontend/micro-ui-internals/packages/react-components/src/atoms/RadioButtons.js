@@ -56,14 +56,14 @@ RadioButtons.propTypes = {
   selectedOption: PropTypes.string.isRequired,
   onSelect: PropTypes.func,
   options: PropTypes.array.isRequired,
-  optionKey: PropTypes.string.isRequired,
+  optionsKey: PropTypes.string.isRequired,
 };
 
 RadioButtons.defaultProps = {
-  selectedOption: "first",
+  selectedOption: "",
   onSelect: undefined,
-  options: ["first", "second"],
-  optionKey: 0,
+  options: [],
+  optionsKey: "",
 };
 
 export default RadioButtons;
