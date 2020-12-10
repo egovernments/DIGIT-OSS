@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useWindowSize } from "rooks"
 import {
@@ -33,7 +33,7 @@ const FormComposer = (props) => {
     }
   };
 
-  const formFields = props.config?.map((section, index, array) => {
+  const formFields = useMemo(() => props.config?.map((section, index, array) => {
     return (
       <React.Fragment key={index}>
         <CardSectionHeader>{section.head}</CardSectionHeader>
@@ -51,7 +51,7 @@ const FormComposer = (props) => {
         {array.length - 1 === index ? null : <BreakLine />}
       </React.Fragment>
     );
-  });
+  }), [props.config]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
