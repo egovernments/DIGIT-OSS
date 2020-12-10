@@ -329,7 +329,7 @@ class ApplicationPreview extends Component {
     var {properties,prepareFormData} = this.props;
     const financialYearFromQuery = getFinancialYearFromQuery();
     const financeYear = { financialYear: financialYearFromQuery };
-    financeYear.financialYear =  "2019-20";
+    financeYear.financialYear =  "2020-21";
 
     if(properties && properties.propertyId){
       const assessmentPayload = createAssessmentPayload(properties, financeYear);
@@ -344,29 +344,41 @@ class ApplicationPreview extends Component {
           Assessment: assessmentPayload
         }
       );
+      let intermediateValues=[];
+
       if(estimateResponse.Calculation){
-        estimateResponse.Calculation[0].taxHeadEstimates.push(
+        intermediateValues.push(
           {taxHeadCode: "PT_CARPET_AREA", 
           estimateAmount:estimateResponse.Calculation[0].carpetArea,  
           category: "TAX"}
         )
-        estimateResponse.Calculation[0].taxHeadEstimates.push(
+        intermediateValues.push(
           {taxHeadCode: "PT_ANNUAL_VALUE", 
           estimateAmount:estimateResponse.Calculation[0].landAV,  
           category: "TAX"}
         )
       }
       this.setState({
-        estimates:estimateResponse.Calculation
+        estimates:estimateResponse.Calculation,
+        intermediateValues: intermediateValues
       })
     }
 }
 
 updateEstimate = ()=>{
 
-  if(this.props.prepareFormData.Properties[0].propertyDetails[0]){
-    this.estimate(this.props.prepareFormData.Properties[0].propertyDetails[0])
+  let additionalDetails = {
+    "adhocPenalty":localStorage.getItem('adhocPenalty'),
+    "adhocPenaltyReason":localStorage.getItem('adhocPenaltyReason') == 'Others' ? localStorage.getItem('adhocOtherPenaltyReason') : localStorage.getItem('adhocPenaltyReason'),
+    "adhocExemption":localStorage.getItem("adhocExemption"),
+    "adhocExemptionReason":localStorage.getItem('adhocExemptionReason') == 'Others' ? localStorage.getItem("adhocOtherExemptionReason") : localStorage.getItem("adhocExemptionReason")
   }
+    // if(this.props.prepareFormData.Properties[0].additionalDetails){
+    //   this.estimate(this.props.prepareFormData.Properties[0].additionalDetails)
+    // }
+    if(additionalDetails){
+      this.estimate(additionalDetails)
+    }
 }
 openCalculationDetails = () => {
   this.setState({ calculationDetails: true });
@@ -510,6 +522,7 @@ closeCalculationDetails = () => {
                     open={this.state.calculationDetails}
                     data={this.props.calculationScreenData}
                     closeDialogue={() => this.closeCalculationDetails()}
+                    intermediateValues ={this.state.intermediateValues}
                   />
                 </div>
               }

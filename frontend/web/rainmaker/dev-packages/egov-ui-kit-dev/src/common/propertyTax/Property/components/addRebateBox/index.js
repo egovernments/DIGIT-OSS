@@ -53,6 +53,7 @@ class AddRebateExemption extends React.Component {
       showExtraPenaltyField: show
     });
     this.props.handleFieldChange("adhocPenaltyReason", value);
+    localStorage.setItem("adhocPenaltyReason",value)
   };
   onChangeExemptField = value => {
     let show = false;
@@ -78,6 +79,7 @@ class AddRebateExemption extends React.Component {
       showExtraExemptField: show
     });
     this.props.handleFieldChange("adhocExemptionReason", value);
+    localStorage.setItem("adhocExemptionReason",value);
   };
   onSubmit = () => {
     const {
@@ -160,6 +162,7 @@ class AddRebateExemption extends React.Component {
             <TextField
               onChange={(e, value) =>{ handleFieldChange("adhocPenalty", value)
               prepareFinalObject("adhocExemptionPenalty.adhocPenalty",value)
+              localStorage.setItem('adhocPenalty',value);
             }}
               {...adhocPenalty}
               // value = {adhocPenalty}
@@ -174,9 +177,10 @@ class AddRebateExemption extends React.Component {
           {showExtraPenaltyField && (
             <div className="col-sm-6 col-xs-12">
               <TextField
-                onChange={(e, value) =>
+                onChange={(e, value) =>{
                   prepareFinalObject("adhocExemptionPenalty.otherPenaltyReason", value)
-                }
+                  localStorage.setItem('adhocPenalty',value)}}
+
                 fullWidth={true}
                 {...otherPenaltyReason}
               />
@@ -192,7 +196,9 @@ class AddRebateExemption extends React.Component {
            <TextField
               onChange={(e, value) =>{
                 handleFieldChange("adhocExemption", value)
-                prepareFinalObject("adhocExemptionPenalty.adhocExemption", value)}
+                prepareFinalObject("adhocExemptionPenalty.adhocExemption", value)
+                localStorage.setItem('adhocExemption',-(Math.abs(value)))
+              }
               }
               {...adhocExemption}
             />
@@ -209,6 +215,7 @@ class AddRebateExemption extends React.Component {
                 onChange={(e, value) =>{
                   handleFieldChange("otherExemptionReason", value)
                   prepareFinalObject("adhocExemptionPenalty.adhocOtherExemptionReason", value)
+                  localStorage.setItem('adhocOtherExemptionReason',value);
                 }
                 }
                 fullWidth={true}

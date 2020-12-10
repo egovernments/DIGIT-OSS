@@ -2,7 +2,7 @@ import React from "react";
 import { Dialog, Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 
-const CalculationDetails = ({ open, closeDialogue, data }) => {
+const CalculationDetails = ({ open, closeDialogue, data, intermediateValues }) => {
 
    return (
     <Dialog
@@ -16,14 +16,14 @@ const CalculationDetails = ({ open, closeDialogue, data }) => {
           </div>
           <div className="clearfix">
             <Label containerStyle={{ marginBottom: 5 }} dark={true} label="PT_CHARGE_SLABS" />
-            { data && data.map((item) => {
+            { intermediateValues && intermediateValues.map((item) => {
               return (
                 <div className="col-xs-10 padding-0" style={{ marginBottom: 5 }}>
                   <div className="col-xs-6 padding-0">
-                    <Label label={item.label} />
+                    <Label label={item.taxHeadCode} />
                   </div>
                   <div className="col-xs-6 padding-0">
-                    <Label label={item.value} dark={true} />
+                    <Label label={item.estimateAmount.toString()}  />
                   </div>
                 </div>
               );

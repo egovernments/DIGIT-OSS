@@ -311,12 +311,17 @@ const assessProperty = async (action, props) => {
 
 
   assessment.additionalDetails = {}
-  if (Object.keys(adhocExemptionPenalty).length > 1) {
+/*   if (Object.keys(adhocExemptionPenalty).length > 1) {
     assessment.additionalDetails.adhocPenalty = Number(adhocExemptionPenalty.adhocPenalty);
     assessment.additionalDetails.adhocPenaltyReason = adhocExemptionPenalty.adhocPenaltyReason == 'Others' ? adhocExemptionPenalty.adhocOtherPenaltyReason : adhocExemptionPenalty.adhocPenaltyReason;
     assessment.additionalDetails.adhocExemption = Number(adhocExemptionPenalty.adhocExemption);
     assessment.additionalDetails.adhocExemptionReason = adhocExemptionPenalty.adhocExemptionReason == 'Others' ? adhocExemptionPenalty.adhocOtherExemptionReason : adhocExemptionPenalty.adhocExemptionReason;
-  }
+  } */
+
+    assessment.additionalDetails.adhocPenalty = localStorage.getItem('adhocPenalty');
+    assessment.additionalDetails.adhocPenaltyReason = localStorage.getItem('adhocPenaltyReason') == 'Others' ? localStorage.getItem('adhocOtherPenaltyReason') : localStorage.getItem('adhocPenaltyReason')
+    assessment.additionalDetails.adhocExemption = localStorage.getItem("adhocExemption")
+    assessment.additionalDetails.adhocExemptionReason = localStorage.getItem('adhocExemptionReason') == 'Others' ? localStorage.getItem("adhocOtherExemptionReason") : localStorage.getItem("adhocExemptionReason")
 
 
 
