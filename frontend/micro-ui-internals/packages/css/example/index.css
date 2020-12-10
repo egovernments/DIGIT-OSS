@@ -622,7 +622,17 @@ img, video {
   background-color: rgba(255, 255, 255, var(--bg-opacity));
   margin: 8px; }
 
-.submit-bar {
+.submit-bar header {
+  font-family: Roboto Condensed,sans-serif;
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 23px;
+  --text-opacity:1;
+  color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
+  line-height: 2.5rem; }
+
+.submit-bar, .submit-bar-disabled {
   height: 2.5rem;
   --bg-opacity:1;
   background-color: #f47738;
@@ -635,11 +645,13 @@ img, video {
   border-color: rgba(11, 12, 12, var(--border-opacity));
   width: 100%;
   outline: 2px solid transparent;
+  outline-offset: 2px;
+  outline: 2px solid transparent;
   outline-offset: 2px; }
-  .submit-bar:focus {
-    outline: 2px solid transparent;
-    outline-offset: 2px; }
-  .submit-bar header {
+
+.submit-bar-disabled {
+  opacity: .5; }
+  .submit-bar-disabled header {
     font-family: Roboto Condensed,sans-serif;
     font-weight: 500;
     font-size: 19px;
@@ -650,7 +662,7 @@ img, video {
     line-height: 2.5rem; }
 
 @media (min-width: 780px) {
-  .submit-bar {
+  .submit-bar, .submit-bar-disabled {
     width: 240px; }
   .card, .card-emp {
     margin-left: auto;

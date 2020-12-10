@@ -136,8 +136,20 @@
   }
 }
 
+.submit-bar-disabled{
+  @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none opacity-50;
+
+  &:focus {
+    @apply outline-none;
+  }
+
+  header {
+    @apply font-rc font-medium text-legend text-white leading-10;
+  }
+}
+
 @screen dt {
-  .submit-bar {
+  .submit-bar, .submit-bar-disabled {
     width: 240px;
   }
 

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 const SelectAddress = ({ config, onSelect }) => {
   const cities = useTenants();
+  console.log("tenents", cities);
   const { t } = useTranslation();
 
   const city_complaint = Digit.SessionStorage.get("city_complaint");
@@ -44,7 +45,7 @@ const SelectAddress = ({ config, onSelect }) => {
   return (
     <FormStep config={config} onSelect={onSubmit}>
       <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="name" />
+      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
       {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
       {selectedCity && localities && (
         <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />

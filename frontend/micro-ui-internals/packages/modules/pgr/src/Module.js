@@ -31,6 +31,8 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
     return <Loader />;
   }
 
+  Digit.SessionStorage.set("PGR_TENANTS", tenants);
+
   console.log("pgr", userType, tenants, state, store);
   console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
   console.log("state", state);
