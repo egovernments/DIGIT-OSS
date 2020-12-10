@@ -441,7 +441,8 @@ img, video {
   margin: 8px;
   padding: 8px 8px 24px;
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16); }
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
+  border-radius: 4px; }
   .card .card-header, .card-emp .card-header {
     font-size: 32px;
     line-height: 40px;
@@ -1529,6 +1530,7 @@ img, video {
     line-height: 28px; } }
 
 .status-highlight {
+  float: right;
   --bg-opacity:12%!important;
   border-radius: 16px;
   height: 2rem;
@@ -1546,6 +1548,14 @@ img, video {
     --text-opacity:1;
     color: #d4351c;
     color: rgba(212, 53, 28, var(--text-opacity)); }
+  .status-highlight.success {
+    --bg-opacity:1;
+    background-color: #00703c;
+    background-color: rgba(0, 112, 60, var(--bg-opacity)); }
+    .status-highlight.success p {
+      --text-opacity:1;
+      color: #00703c;
+      color: rgba(0, 112, 60, var(--text-opacity)); }
 
 .image-viewer-wrap {
   --bg-opacity:1;
