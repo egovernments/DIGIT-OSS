@@ -105,11 +105,18 @@ class ReviewForm extends Component {
                 addRebateBox={addRebateBox}
                 openCalculationDetails={this.openCalculationDetails}
               />}
-              <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
-              <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
-              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
-              <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></DocumentsInfo>
-            </div>
+              {isAssess && <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} ></PropertyAddressInfo> }
+              {isAssess && <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} ></AssessmentInfo> }
+              {isAssess && <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties}  ></OwnerInfo> }
+              {isAssess && <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} ></DocumentsInfo> }
+               
+              { !isAssess && <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>}
+              { !isAssess &&  <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>}
+              { !isAssess && <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo> }
+              { !isAssess &&  <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></DocumentsInfo> }
+             
+            
+              </div>
           }
         />
         {!this.props.isCompletePayment && (
