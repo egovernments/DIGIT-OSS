@@ -191,22 +191,22 @@ export const ComplaintDetails = (props) => {
         {workflowDetails.timeline && workflowDetails.timeline.length === 1 ? (
           <CheckPoint isCompleted={true} label={workflowDetails.timeline[0].status} />
         ) : (
-          <ConnectingCheckPoints>
-            {workflowDetails.timeline &&
-              workflowDetails.timeline.map((checkpoint, index, arr) => {
-                return arr.length - 1 === index ? (
-                  <CheckPoint key={index} isCompleted={false} label={t(checkpoint.status)} />
-                ) : (
-                  <CheckPoint
-                    key={index}
-                    isCompleted={true}
-                    label={t(checkpoint.status)}
-                    customChild={checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null}
-                  />
-                );
-              })}
-          </ConnectingCheckPoints>
-        )}
+            <ConnectingCheckPoints>
+              {workflowDetails.timeline &&
+                workflowDetails.timeline.map((checkpoint, index, arr) => {
+                  return arr.length - 1 === index ? (
+                    <CheckPoint key={index} isCompleted={false} label={t(checkpoint.status)} />
+                  ) : (
+                      <CheckPoint
+                        key={index}
+                        isCompleted={true}
+                        label={t(checkpoint.status)}
+                        customChild={checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null}
+                      />
+                    );
+                })}
+            </ConnectingCheckPoints>
+          )}
       </Card>
       {fullscreen ? (
         <PopUp>
@@ -228,8 +228,8 @@ export const ComplaintDetails = (props) => {
                 selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
                   ? "Assign Complaint"
                   : selectedAction === "REJECT"
-                  ? "Reject Complaint"
-                  : "Resolve Complaint"
+                    ? "Reject Complaint"
+                    : "Resolve Complaint"
               }
             />
           }
@@ -245,12 +245,13 @@ export const ComplaintDetails = (props) => {
           onClose={closeToast}
         />
       )}
-      <ActionBar>
+      {workflowDetails.nextActions?.length > 0 && <ActionBar>
         {displayMenu && workflowDetails.nextActions ? (
           <Menu options={workflowDetails.nextActions.map((action) => action.action)} onSelect={onActionSelect} />
         ) : null}
         <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
-      </ActionBar>
+      </ActionBar>}
+
     </React.Fragment>
   );
 };

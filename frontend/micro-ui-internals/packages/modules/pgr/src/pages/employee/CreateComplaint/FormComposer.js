@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useWindowSize } from "rooks"
 import {
   BreakLine,
   Card,
@@ -14,6 +15,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 
 const FormComposer = (props) => {
+  const { innerWidth } = useWindowSize();
   const { register, watch, handleSubmit } = useForm();
 
   function onSubmit(data) {
@@ -53,7 +55,7 @@ const FormComposer = (props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Card>
+      <Card style={{ paddingRight: innerWidth <= 640 ? 8 : 320 }}>
         <CardSubHeader>{props.heading}</CardSubHeader>
         {formFields}
         {props.children}

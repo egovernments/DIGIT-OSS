@@ -655,7 +655,7 @@ img, video {
   .card, .card-emp {
     margin-left: auto;
     margin-right: auto;
-    padding-right: 320px;
+    padding-right: 16px;
     padding-left: 16px;
     padding-top: 16px; }
     .card .card-header, .card-emp .card-header {
@@ -1602,6 +1602,7 @@ img, video {
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.16);
     left: 64px;
     width: calc(100% - 64px);
+    z-index: 9999;
     position: fixed;
     bottom: 0;
     --bg-opacity:1;
@@ -1623,7 +1624,9 @@ img, video {
       background-color: rgba(255, 255, 255, var(--bg-opacity));
       text-align: left;
       margin-bottom: 4px;
-      z-index: 30; }
+      z-index: 30;
+      width: 240px;
+      right: 24px; }
       .action-bar-wrap .menu-wrap div {
         height: 3rem;
         padding-left: 8px;
@@ -2073,7 +2076,8 @@ img, video {
   background: #22394d;
   height: 100%;
   color: #fff;
-  margin-top: 80px; }
+  margin-top: 80px;
+  z-index: 9999; }
   .employee .sidebar .actions {
     cursor: pointer;
     padding: 0 20px;
