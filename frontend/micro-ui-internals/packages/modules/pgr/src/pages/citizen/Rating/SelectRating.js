@@ -1,7 +1,9 @@
 import React from "react";
 import { RatingCard } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
 const SelectRating = () => {
+  const { t } = useTranslation();
   const config = {
     texts: {
       header: "CS_COMPLAINT_RATE_HELP_TEXT",
@@ -25,6 +27,6 @@ const SelectRating = () => {
       },
     ],
   };
-  return <RatingCard {...{ config: config }} />;
+  return <RatingCard {...{ config: config }} t={t} />;
 };
 export default SelectRating;

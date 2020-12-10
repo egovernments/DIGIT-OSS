@@ -52,7 +52,11 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
         <ConnectingCheckPoints>
           {timeline.map(({ status, caption, auditDetails, timeLineActions }, index) => {
             return (
-              <CheckPoint isCompleted={index === 0 ? true : false} customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })} />
+              <CheckPoint
+                key={index}
+                isCompleted={index === 0 ? true : false}
+                customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })}
+              />
             );
           })}
         </ConnectingCheckPoints>

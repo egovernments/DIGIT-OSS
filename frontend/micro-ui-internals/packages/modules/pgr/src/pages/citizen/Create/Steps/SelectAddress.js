@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CardLabel, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 import useTenants from "../../../../hooks/useTenants";
-import { useTranslation } from "react-i18next";
 
-const SelectAddress = ({ config, onSelect }) => {
+const SelectAddress = ({ t, config, onSelect }) => {
   const cities = useTenants();
   console.log("tenents", cities);
   const { t } = useTranslation();
@@ -43,7 +42,7 @@ const SelectAddress = ({ config, onSelect }) => {
   }
 
   return (
-    <FormStep config={config} onSelect={onSubmit}>
+    <FormStep config={config} onSelect={onSubmit} t={t}>
       <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
       {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}

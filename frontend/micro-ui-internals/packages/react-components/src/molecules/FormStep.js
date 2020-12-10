@@ -42,7 +42,7 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange }) =>
 
   return (
     <form onSubmit={handleSubmit(goNext)}>
-      <InputCard {...config} submit {...{ onSkip: onSkip }}>
+      <InputCard {...config} submit {...{ onSkip: onSkip }} t={t}>
         {inputs}
         {children}
       </InputCard>
