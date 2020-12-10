@@ -56,7 +56,7 @@ export const CreateComplaint = () => {
     let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
     setLocalities(__localityList);
     Digit.SessionStorage.set("selected_localities", __localityList);
-  }
+  };
 
   // useEffect(async () => {
   //   if (selectedCity) {
@@ -96,15 +96,15 @@ export const CreateComplaint = () => {
     const name = data.name;
     const formData = { ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name };
     await dispatch(createComplaint(formData));
-    history.push(match.url + "/response")
-  }
+    history.push(match.url + "/response");
+  };
 
   const config = [
     {
-      head: "Complainant Details",
+      head: t("ES_CREATECOMPLAINT_PROVIDE_COMPLAINANT_DETAILS"),
       body: [
         {
-          label: "Mobile Number",
+          label: t("ES_CREATECOMPLAINT_MOBILE_NUMBER"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -116,7 +116,7 @@ export const CreateComplaint = () => {
           },
         },
         {
-          label: "Name",
+          label: t("ES_CREATECOMPLAINT_COMPLAINT_NAME"),
           type: "text",
           populators: {
             name: "name",
@@ -128,16 +128,16 @@ export const CreateComplaint = () => {
       ],
     },
     {
-      head: "Complaint Details",
+      head: t("CS_COMPLAINT_DETAILS_COMPLAINT_DETAILS"),
       body: [
         {
-          label: "Complaint Type",
+          label: t("CS_COMPLAINT_DETAILS_COMPLAINT_TYPE"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={menu} optionKey="name" id="complaintType" selected={complaintType} select={selectedType} />,
         },
         {
-          label: "Complaint Sub-Type",
+          label: t("CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
@@ -146,10 +146,10 @@ export const CreateComplaint = () => {
       ],
     },
     {
-      head: "Complaint Location",
+      head: t("CS_ADDCOMPLAINT_LOCATION"),
       body: [
         {
-          label: "Pincode",
+          label: t("CORE_COMMON_PINCODE"),
           type: "text",
           populators: {
             name: "pincode",
@@ -157,20 +157,22 @@ export const CreateComplaint = () => {
           },
         },
         {
-          label: "City",
+          label: t("CS_COMPLAINT_DETAILS_CITY"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
         },
         {
-          label: "Moholla",
+          label: t("CS_CREATECOMPLAINT_MOHALLA"),
           type: "dropdown",
           isMandatory: true,
           dependency: selectedCity && localities ? true : false,
-          populators: <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />,
+          populators: (
+            <Dropdown isMandatory selected={selectedLocality} optionKey="code" id="locality" option={localities} select={selectLocality} t={t} />
+          ),
         },
         {
-          label: "Landmark",
+          label: t("CS_COMPLAINT_DETAILS_LANDMARK"),
           type: "textarea",
           populators: {
             name: "landmark",
@@ -182,10 +184,10 @@ export const CreateComplaint = () => {
       ],
     },
     {
-      head: "Additional Details",
+      head: t("CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS"),
       body: [
         {
-          label: "Additional Details",
+          label: t("CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS"),
           type: "textarea",
           populators: {
             name: "details",
@@ -195,5 +197,5 @@ export const CreateComplaint = () => {
     },
   ];
 
-  return <FormComposer heading="New Complaint" config={config} onSubmit={onSubmit}></FormComposer>;
+  return <FormComposer heading="ES_CREATECOMPLAINT_NEW_COMPLAINT" config={config} onSubmit={onSubmit}></FormComposer>;
 };
