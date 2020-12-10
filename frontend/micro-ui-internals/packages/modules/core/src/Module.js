@@ -86,7 +86,7 @@ const DigitUIApp = ({ stateCode, modules, appTenants, logoUrl, cityCode }) => {
           <img className="city" src={cityDetails.logoId} />
           <span className="ulb">{t(cityDetails.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}</span>
           {!mobileView && <div className="right">
-            <TextToImg name={userDetails.info.userInfo.name} />
+            <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />
             <img className="state" src={logoUrl} />
           </div>}
         </div>
