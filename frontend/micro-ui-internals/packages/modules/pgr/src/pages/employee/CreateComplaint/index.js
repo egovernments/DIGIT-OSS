@@ -50,9 +50,9 @@ export const CreateComplaint = () => {
 
   // city locality logic
   function selectCity(city) {
-    Digit.SessionStorage.set("locality_complaint", null);
-    setSelectedLocality(null);
-    setLocalities(null);
+    // Digit.SessionStorage.set("locality_complaint", null);
+    // setSelectedLocality(null);
+    // setLocalities(null);
     setSelectedCity(city);
     Digit.SessionStorage.set("city_complaint", city);
   }

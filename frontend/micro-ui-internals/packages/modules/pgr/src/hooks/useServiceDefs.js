@@ -30,18 +30,19 @@ const useServiceDefs = () => {
 
       const serviceDefs = await Digit.MDMSService.getDataByCriteria(criteria);
       SessionStorage.set("serviceDefs", serviceDefs);
-      var __localMenu__ = [];
-      await Promise.all(
-        serviceDefs.map((def) => {
-          if (!__localMenu__.find((e) => e.key === def.menuPath)) {
-            def.menuPath === ""
-              ? __localMenu__.push({ code: "SERVICEDEFS.OTHERS", name: t("SERVICEDEFS.OTHERS") })
-              : __localMenu__.push({ code: "SERVICEDEFS." + def.menuPath.toUpperCase(), name: t(def.menuPath.toUpperCase()) });
-          }
-        })
-      );
-      console.log("__localMenu__:", __localMenu__);
-      setLocalMenu(__localMenu__);
+      // var __localMenu__ = [];
+      // await Promise.all(
+      //   serviceDefs.map((def) => {
+      //     if (!__localMenu__.find((e) => e.key === def.menuPath)) {
+      //       def.menuPath === ""
+      //         ? __localMenu__.push({ code: "SERVICEDEFS.OTHERS", name: t("SERVICEDEFS.OTHERS") })
+      //         : __localMenu__.push({ code: "SERVICEDEFS." + def.menuPath.toUpperCase(), name: t(def.menuPath.toUpperCase()) });
+      //     }
+      //   })
+      // );
+      const serviceDefsWithKeys = serviceDefs.map((def) => ({ ...def, i18nKey: t("SERVICEDEFS." + def.serviceCode.toUpperCase()) }));
+      console.log("serviceDefs:", serviceDefsWithKeys);
+      setLocalMenu(serviceDefsWithKeys);
     })();
   }, [common]);
 

@@ -6,7 +6,7 @@ import CardLabelError from "../atoms/CardLabelError";
 import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
-const FormStep = ({ children, config, onSelect, onSkip, value, onChange }) => {
+const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, t }) => {
   const { register, watch, errors, handleSubmit } = useForm();
 
   console.log("config", config);
@@ -18,8 +18,8 @@ const FormStep = ({ children, config, onSelect, onSkip, value, onChange }) => {
     if (input.type === "text") {
       return (
         <React.Fragment key={index}>
-          <CardLabel>{input.label}</CardLabel>
-          {errors[input.name] && <CardLabelError>{input.error}</CardLabelError>}
+          <CardLabel>{t(input.label)}</CardLabel>
+          {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
           <TextInput
             key={index}
             name={input.name}

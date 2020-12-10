@@ -8,14 +8,14 @@ import CardText from "../atoms/CardText";
 import RadioButtons from "../atoms/RadioButtons";
 import SubmitBar from "../atoms/SubmitBar";
 
-const TypeSelectCard = ({ headerCaption, header, cardText, submitBarLabel, selectedOption, menu, optionsKey, selected, onSave }) => {
+const TypeSelectCard = ({ t, headerCaption, header, cardText, submitBarLabel, selectedOption, menu, optionsKey, selected, onSave }) => {
   return (
     <Card>
-      <CardCaption>{headerCaption}</CardCaption>
-      <CardHeader>{header}</CardHeader>
-      <CardText>{cardText}</CardText>
+      <CardCaption>{t ? t(headerCaption) : headerCaption}</CardCaption>
+      <CardHeader>{t ? t(header) : header}</CardHeader>
+      <CardText>{t ? t(cardText) : cardText}</CardText>
       {menu ? <RadioButtons selectedoption={selectedOption} options={menu} optionskey={optionsKey} onSelect={selected} /> : null}
-      <SubmitBar label={submitBarLabel} onSubmit={onSave} />
+      <SubmitBar label={t ? t(submitBarLabel) : submitBarLabel} onSubmit={onSave} />
     </Card>
   );
 };

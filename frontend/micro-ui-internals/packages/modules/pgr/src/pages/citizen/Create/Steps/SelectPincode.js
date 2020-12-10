@@ -2,7 +2,7 @@ import { FormStep } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import useTenants from "../../../../hooks/useTenants";
 
-const SelectPincode = ({ config, onSelect }) => {
+const SelectPincode = ({ t, config, onSelect }) => {
   const tenants = useTenants();
   tenants.map;
   const __initPincode = Digit.SessionStorage.get("PGR_CREATE_PINCODE");
@@ -27,7 +27,7 @@ const SelectPincode = ({ config, onSelect }) => {
   };
 
   const onSkip = () => onSelect();
-  return <FormStep config={config} onSelect={goNext} value={pincode} onChange={onChange} onSkip={onSkip}></FormStep>;
+  return <FormStep t={t} config={config} onSelect={goNext} value={pincode} onChange={onChange} onSkip={onSkip}></FormStep>;
 };
 
 export default SelectPincode;

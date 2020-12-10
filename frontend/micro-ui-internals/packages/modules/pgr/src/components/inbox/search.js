@@ -10,12 +10,20 @@ const SearchComplaint = ({ onSearch, type }) => {
     if (data.businessId) {
       onSearch({ businesssId: data.businessId });
     } else {
-      onSearch({ mobileNo: data.mobileNo });
+      onSearch({ mobileNumber: data.mobileNo });
     }
   };
 
+  function clearSearch() {
+    onSearch({});
+  }
+
   const clearAll = () => {
-    return <LinkLabel style={{ color: "#F47738" }}>Clear Search</LinkLabel>;
+    return (
+      <LinkLabel style={{ color: "#F47738" }} onClick={clearSearch}>
+        Clear Search
+      </LinkLabel>
+    );
   };
 
   return (

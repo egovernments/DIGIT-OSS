@@ -33,14 +33,14 @@ const Filter = (props) => {
     localities: [],
     applicationStatus: [],
   });
-
+  //TODO change city fetch from user tenantid
   let localities = useLocalities({ city: "Amritsar" });
   let complaintStatus = useComplaintStatus();
   let serviceDefs = useServiceDefs();
 
   const onRadioChange = (value) => {
     console.log("vlaue:-------------", value);
-    setSelectedAssigned(value.code);
+    setSelectedAssigned(value);
     setFilters({ ...filters, assigned: [value] });
   };
 
@@ -88,6 +88,7 @@ const Filter = (props) => {
   }, [complaintStatus.length]);
 
   function complaintType(type) {
+    console.log("complaint fikler", filters, type);
     setFilters({ ...filters, serviceCodes: [...filters.serviceCodes, type] });
   }
 
@@ -132,6 +133,14 @@ const Filter = (props) => {
     }
   };
 
+  function clearAll() {
+    setFilters({ assigned: [], serviceCodes: [], localities: [], applicationStatus: [] });
+    setSelectedAssigned("");
+    setSelectedComplaintType(null);
+    setSelectedLocality(null);
+    setPendingComplaintCount([]);
+  }
+
   //   return (
   //     <div className="filter-card">
   //       {console.log("filters", filters)}
@@ -149,11 +158,13 @@ const Filter = (props) => {
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key) => (
     <div>
       <div className="filter-label">{lable}</div>
-      <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} style={{ width: "100%" }} />
+
+      {console.log("options heiaisndao", options)}
+      <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />
       <div className="tag-container">
         {filters[key].length > 0 &&
           filters[key].map((value, index) => {
-            return <RemoveableTag text={value.name} onClick={() => onRemove(index, key)} />;
+            return <RemoveableTag text={value[optionKey]} onClick={() => onRemove(index, key)} />;
           })}
       </div>
     </div>
@@ -166,20 +177,28 @@ const Filter = (props) => {
         <div className="filter-card">
           <div className="heading">
             <div className="filter-label">FILTER BY:</div>
-            <div className="clearAll">Clear all</div>
-            {props.type === "desktop" && <span className="clear-search">Clear all</span>}
+            <div className="clearAll" onClick={clearAll}>
+              Clear all
+            </div>
+            {props.type === "desktop" && (
+              <span className="clear-search" onClick={clearAll}>
+                Clear all
+              </span>
+            )}
           </div>
           <div>
             <RadioButtons
               onSelect={onRadioChange}
-              selectedComplaintType={selectAssigned}
+              selectedoption={selectAssigned}
               optionskey="name"
               options={[
                 { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
                 { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
               ]}
             />
-            <div>{GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "name", onRemove, "serviceCodes")}</div>
+            <div>
+              {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCodes")}
+            </div>
             <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "localities")}</div>
             <div className="status-container">
               <div className="filter-label">Status</div>
@@ -195,13 +214,13 @@ const Filter = (props) => {
         {props.type === "desktop" ? (
           <SubmitBar label="Send" />
         ) : (
-            <ApplyFilterBar
-              labelLink={t("CS_COMMON_CLEAR_ALL")}
-              buttonLink={t("CS_COMMON_FILTER")}
-              onClear={handleFilterClear}
-              onSubmit={handleFilterSubmit}
-            />
-          )}
+          <ApplyFilterBar
+            labelLink={t("CS_COMMON_CLEAR_ALL")}
+            buttonLink={t("CS_COMMON_FILTER")}
+            onClear={handleFilterClear}
+            onSubmit={handleFilterSubmit}
+          />
+        )}
       </ActionBar>
       {/* <ActionBar>
         <SubmitBar label="Take Action" />

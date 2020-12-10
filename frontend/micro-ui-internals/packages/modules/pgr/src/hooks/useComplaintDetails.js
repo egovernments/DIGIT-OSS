@@ -54,7 +54,7 @@ const useComplaintDetails = ({ tenantId, id }) => {
         const details = {
           CS_COMPLAINT_DETAILS_COMPLAINT_NO: id,
           CS_COMPLAINT_DETAILS_COMPLAINT_TYPE: serviceDefs.find((def) => def.serviceCode === ComplaintDetailsResponse.service.serviceCode).menuPath,
-          CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t(ComplaintDetailsResponse.service.serviceCode),
+          CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t("SERVICEDEFS." + ComplaintDetailsResponse.service.serviceCode),
           CS_COMPLAINT_DETAILS_APPLICATION_STATUS: ComplaintDetailsResponse.service.applicationStatus,
           CS_COMPLAINT_DETAILS_LOCALITY: t(ComplaintDetailsResponse.service.address.locality.code),
           CS_COMPLAINT_DETAILS_CITY: t(ComplaintDetailsResponse.service.address.city),

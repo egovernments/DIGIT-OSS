@@ -132,25 +132,25 @@ export const CreateComplaint = () => {
   return (
     <Switch>
       <Route path={`${path}/complaint-type`}>
-        <SelectComplaintType config={stepItems[0]} onSelect={selectComplaintType} />
+        <SelectComplaintType t={t} config={stepItems[0]} onSelect={selectComplaintType} />
       </Route>
       <Route path={`${path}/sub-type`}>
-        <SelectSubType config={stepItems[1]} onSelect={selectSubType} />
+        <SelectSubType t={t} config={stepItems[1]} onSelect={selectSubType} />
       </Route>
       <Route path={`${path}/pincode`}>
-        <SelectPincode config={stepItems[2]} onSelect={selectPincode} />
+        <SelectPincode t={t} config={stepItems[2]} onSelect={selectPincode} />
       </Route>
       <Route path={`${path}/address`}>
-        <SelectAddress config={stepItems[3]} onSelect={selectAddress} />
+        <SelectAddress t={t} config={stepItems[3]} onSelect={selectAddress} />
       </Route>
       <Route path={`${path}/landmark`}>
-        <SelectLandmark config={stepItems[4]} onSelect={saveLandmark} />
+        <SelectLandmark t={t} config={stepItems[4]} onSelect={saveLandmark} />
       </Route>
       <Route path={`${path}/upload-photos`}>
-        <SelectImages config={stepItems[5]} onSelect={saveImagesUrl} />
+        <SelectImages t={t} config={stepItems[5]} onSelect={saveImagesUrl} />
       </Route>
       <Route path={`${path}/additional-details`}>
-        <SelectDetails config={stepItems[6]} onSelect={submitComplaint} />
+        <SelectDetails t={t} config={stepItems[6]} onSelect={submitComplaint} />
       </Route>
       <Route path={`${path}/response`}>
         <Response config={stepItems[7]} onSelect={backToHome} />
