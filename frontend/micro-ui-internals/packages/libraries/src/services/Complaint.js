@@ -16,7 +16,7 @@ export const Complaint = {
     name,
   }) => {
     var data =
-      mobileNumber && name
+      Digit.SessionStorage.get("user_type") === "employee"
         ? {
             service: {
               citizen: {

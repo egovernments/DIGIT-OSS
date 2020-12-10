@@ -45,6 +45,12 @@ const AddtionalDetails = (props) => {
     let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
     let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
 
+    console.log("reopen complaint1", reopenDetails, complaintDetails);
+
+    // delete complaintDetails.service.citizen;
+
+    // console.log("reopen complaint2", reopenDetails, complaintDetails)
+
     complaintDetails.workflow = getUpdatedWorkflow(
       reopenDetails,
       // complaintDetails,

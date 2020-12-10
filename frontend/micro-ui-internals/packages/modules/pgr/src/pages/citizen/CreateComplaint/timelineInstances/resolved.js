@@ -9,10 +9,11 @@ import { getRoute } from "../../../../constants/Routes";
 
 const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate }) => {
   const { t } = useTranslation();
+  const __nextActions = [...new Set(nextActions)];
   if (action === "RESOLVE") {
     let actions =
-      nextActions &&
-      nextActions.map((action, index) => (
+      __nextActions &&
+      __nextActions.map((action, index) => (
         <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
           <ActionLinks>{action}</ActionLinks>
         </Link>

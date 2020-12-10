@@ -25,9 +25,9 @@ const useWorkflowDetails = ({ tenantId, id }) => {
           action: id.action,
           state: businessServiceResponse.filter((state) => state.uuid === id.nextState)[0],
         }));
-        const actionRolePair = nextActions.map((action) => ({
+        const actionRolePair = nextActions?.map((action) => ({
           action: action.action,
-          roles: action.state.actions.map((action) => action.roles).join(","),
+          roles: action.state.actions?.map((action) => action.roles).join(","),
         }));
         console.log("ffffffffffffffffffffffffffff", businessServiceResponse, actionRolePair);
 
