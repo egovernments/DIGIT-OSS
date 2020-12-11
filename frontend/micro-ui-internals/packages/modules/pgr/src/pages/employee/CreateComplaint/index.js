@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardSubHeader, CardLabel, TextInput, Dropdown } from "@egovernments/digit-ui-react-components";
 import FormComposer from "./FormComposer";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 
 import useComplaintTypes from "../../../hooks/useComplaintTypes";
 import useTenants from "../../../hooks/useTenants";
@@ -32,6 +32,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   const cities = useTenants();
   const dispatch = useDispatch();
   const match = useRouteMatch();
+  const history = useHistory();
 
   // //complaint logic
   function selectedType(value) {

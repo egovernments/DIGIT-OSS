@@ -10,6 +10,7 @@ import {
   UploadFile,
   ButtonSelector,
 } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 import useEmployeeFilter from "../hooks/useEmployeeFilter";
 const Modal = (props) => {
   const roles = props.employeeRoles.filter((role) => role.action === props.selectedAction);
@@ -19,6 +20,7 @@ const Modal = (props) => {
   const [comments, setComments] = useState(null);
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
+  const { t } = useTranslation();
 
   console.log("modal", useEmployeeData);
   const employeeData = useEmployeeData
@@ -58,22 +60,26 @@ const Modal = (props) => {
           <Card>
             {props.selectedAction === "REJECT" || props.selectedAction === "RESOLVE" ? null : (
               <React.Fragment>
-                <CardLabel>Employee Name</CardLabel>
+                <CardLabel>{t("CS_COMMON_EMPLOYEE_NAME")}</CardLabel>
                 {employeeData && (
                   <SectionalDropdown selected={selectedEmployee} menuData={employeeData} displayKey="name" select={onSelectEmployee} />
                 )}
               </React.Fragment>
             )}
-            <CardLabel>Comments</CardLabel>
+            <CardLabel>{t("CS_COMMON_EMPLOYEE_COMMENTS")}</CardLabel>
             <TextArea onChange={addComment} />
-            <CardLabel>Supporting Documents</CardLabel>
-            <CardLabelDesc>Only .jpg and .pdf files. 5 MB max file size.</CardLabelDesc>
-            <UploadFile accept=".jpg , .pdf" onUpload={selectfile} message={uploadedFile ? "1 File Uploaded" : "No File Uploaded"} />
+            <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
+            <CardLabelDesc>{t(TL_UPLOAD_RESTRICTIONS)}</CardLabelDesc>
+            <UploadFile
+              accept=".jpg"
+              onUpload={selectfile}
+              message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+            />
           </Card>
           <div className="popup-module-action-bar">
-            <ButtonSelector theme="border" label="Cancel" onSubmit={() => props.onCancel()} />
+            <ButtonSelector theme="border" label={t("CS_COMMON_CANCEL")} onSubmit={() => props.onCancel()} />
             <ButtonSelector
-              label="Assign"
+              label={t("CS_COMMON_ASSIGN")}
               onSubmit={() => {
                 console.log(selectedEmployee, comments, uploadedFile);
                 props.onAssign(selectedEmployee, comments, uploadedFile);

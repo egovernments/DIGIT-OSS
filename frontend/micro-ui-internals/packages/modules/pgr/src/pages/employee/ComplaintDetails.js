@@ -174,7 +174,17 @@ export const ComplaintDetails = (props) => {
     return <Loader />;
   }
 
-  const filterSstatusTable = ["CS_COMPLAINT_DETAILS_GEOLOCATION", "thumbnails", "workflow", "CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS", "audit"];
+  const filterSstatusTable = [
+    "CS_COMPLAINT_DETAILS_GEOLOCATION",
+    "thumbnails",
+    "workflow",
+    "CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS",
+    "audit",
+    "CS_COMPLAINT_DETAILS_DOOR",
+    "CS_COMPLAINT_DETAILS_BUILDING_NAME",
+    "CS_COMPLAINT_DETAILS_PLOT_NO",
+    "CS_COMPLAINT_DETAILS_STREET",
+  ];
   const getTimelineCaptions = (checkpoint) => {
     console.log("tl", checkpoint);
     if (checkpoint.status === "COMPLAINT_FILED" && statusTable?.audit) {
@@ -257,7 +267,7 @@ export const ComplaintDetails = (props) => {
           onCancel={() => close(popup)}
         />
       ) : null}
-      {toast && <Toast label={assignResponse ? `CS_ACTION_${selectedAction}_TEXT` : "CS_ACTION_ASSIGN_FAILED"} onClose={closeToast} />}
+      {toast && <Toast label={t(assignResponse ? `CS_ACTION_${selectedAction}_TEXT` : "CS_ACTION_ASSIGN_FAILED")} onClose={closeToast} />}
       {workflowDetails.nextActions?.length > 0 && (
         <ActionBar>
           {displayMenu && workflowDetails.nextActions ? (

@@ -33,7 +33,7 @@ const BannerPicker = ({ response }) => {
 const Response = (props) => {
   const { t } = useTranslation();
   const { match } = useRouteMatch();
-  const appState = useSelector((state) => state)["common"];
+  const appState = useSelector((state) => state)["pgr"];
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}
