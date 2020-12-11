@@ -25,8 +25,8 @@ const Modal = (props) => {
   console.log("modal", useEmployeeData);
   const employeeData = useEmployeeData
     ? useEmployeeData.map((departmentData) => {
-        return { heading: departmentData.department, options: departmentData.employees };
-      })
+      return { heading: departmentData.department, options: departmentData.employees };
+    })
     : null;
 
   // const uploadFile = useCallback( () => {
@@ -69,7 +69,7 @@ const Modal = (props) => {
             <CardLabel>{t("CS_COMMON_EMPLOYEE_COMMENTS")}</CardLabel>
             <TextArea onChange={addComment} />
             <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
-            <CardLabelDesc>{t(TL_UPLOAD_RESTRICTIONS)}</CardLabelDesc>
+            <CardLabelDesc>{t("TL_UPLOAD_RESTRICTIONS")}</CardLabelDesc>
             <UploadFile
               accept=".jpg"
               onUpload={selectfile}
