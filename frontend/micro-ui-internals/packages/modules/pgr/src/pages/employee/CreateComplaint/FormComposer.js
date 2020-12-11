@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { useWindowSize } from "rooks"
+import { useWindowSize } from "rooks";
 import {
   BreakLine,
   Card,
@@ -13,10 +13,12 @@ import {
   SubmitBar,
   LabelFieldPair,
 } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
 const FormComposer = (props) => {
   const { innerWidth } = useWindowSize();
   const { register, watch, handleSubmit } = useForm();
+  const { t } = useTranslation();
 
   function onSubmit(data) {
     props.onSubmit(data);
@@ -33,35 +35,39 @@ const FormComposer = (props) => {
     }
   };
 
-  const formFields = useMemo(() => props.config?.map((section, index, array) => {
-    return (
-      <React.Fragment key={index}>
-        <CardSectionHeader>{section.head}</CardSectionHeader>
-        {section.body.map((field, index) => {
-          return (
-            <LabelFieldPair key={index}>
-              <CardLabel>
-                {field.label}
-                {field.isMandatory ? " * " : null}
-              </CardLabel>
-              <div className="field">{fieldSelector(field.type, field.populators)}</div>
-            </LabelFieldPair>
-          );
-        })}
-        {array.length - 1 === index ? null : <BreakLine />}
-      </React.Fragment>
-    );
-  }), [props.config]);
+  const formFields = useMemo(
+    () =>
+      props.config?.map((section, index, array) => {
+        return (
+          <React.Fragment key={index}>
+            <CardSectionHeader>{section.head}</CardSectionHeader>
+            {section.body.map((field, index) => {
+              return (
+                <LabelFieldPair key={index}>
+                  <CardLabel>
+                    {field.label}
+                    {field.isMandatory ? " * " : null}
+                  </CardLabel>
+                  <div className="field">{fieldSelector(field.type, field.populators)}</div>
+                </LabelFieldPair>
+              );
+            })}
+            {array.length - 1 === index ? null : <BreakLine />}
+          </React.Fragment>
+        );
+      }),
+    [props.config]
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Card style={{ paddingRight: innerWidth <= 640 ? 8 : 320 }}>
+      <Card>
         <CardSubHeader>{props.heading}</CardSubHeader>
         {formFields}
         {props.children}
         {/* <input type="submit" value="submit"/> */}
         <ActionBar>
-          <SubmitBar label="Submit Complaint" submit="submit" />
+          <SubmitBar label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")} submit="submit" />
         </ActionBar>
       </Card>
     </form>
