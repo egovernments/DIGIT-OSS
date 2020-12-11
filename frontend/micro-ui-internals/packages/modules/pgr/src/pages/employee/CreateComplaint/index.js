@@ -9,7 +9,7 @@ import useComplaintTypes from "../../../hooks/useComplaintTypes";
 import useTenants from "../../../hooks/useTenants";
 import { createComplaint } from "../../../redux/actions/index";
 
-export const CreateComplaint = () => {
+export const CreateComplaint = ({ parentUrl }) => {
   const SessionStorage = Digit.SessionStorage;
   const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
   const __initSubType__ = Digit.SessionStorage.get("subType");
@@ -97,7 +97,7 @@ export const CreateComplaint = () => {
     const name = data.name;
     const formData = { ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name };
     dispatch(createComplaint(formData));
-    history.push(match.url + "/response");
+    history.push(parentUrl + "/response");
   };
 
   const config = [
