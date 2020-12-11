@@ -1,5 +1,5 @@
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getTransformedLocale ,getTransformedLocalStorgaeLabels, getTranslatedLabel} from "egov-ui-framework/ui-utils/commons";
 import { fetchDocuments } from "egov-ui-kit/redux/mdms/actions";
 import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import React, { Component } from "react";
@@ -54,7 +54,10 @@ class DocumentsUpload extends Component {
           return item.active;
         });
         dropdown.menu = dropdown.menu.map(item => {
-          let menuItem = { code: item.code, label: getTransformedLocale(item.code) };
+          // let menuItem = { code: item.code, label: getTransformedLocale(item.code) };
+        let localisationlabels = getTransformedLocalStorgaeLabels()
+        let menuItem = { code: item.code, label: getTranslatedLabel(item.code,localisationlabels) };
+
           if (item.parentValue) {
             menuItem['parentValue'] = item.parentValue;
           }
