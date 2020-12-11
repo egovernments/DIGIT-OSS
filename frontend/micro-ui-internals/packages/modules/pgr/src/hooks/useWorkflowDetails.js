@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const useWorkflowDetails = ({ tenantId, id }) => {
   const [workflowDetails, setWorkflowDetails] = useState({});
+  const { t } = useTranslation();
   let role = Digit.SessionStorage.get("role") || "CITIZEN"; // ToDo:store in session storage
   const appState = useSelector((state) => state);
   console.log("appppppppppppppppppp state ", appState);
@@ -35,7 +37,7 @@ const useWorkflowDetails = ({ tenantId, id }) => {
         if (processInstances.length > 0) {
           const details = {
             timeline: processInstances.map((state) => ({
-              status: state.state.applicationStatus,
+              status: t(`CS_COMMON_${state.state.applicationStatus.toUpperCase()}`),
               caption: state.assignes ? state.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
               auditDetails: {
                 created: Digit.DateUtils.ConvertTimestampToDate(state.auditDetails.createdTime),

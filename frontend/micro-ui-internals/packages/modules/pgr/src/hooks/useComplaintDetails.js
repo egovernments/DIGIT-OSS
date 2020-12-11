@@ -53,9 +53,11 @@ const useComplaintDetails = ({ tenantId, id }) => {
 
         const details = {
           CS_COMPLAINT_DETAILS_COMPLAINT_NO: id,
-          CS_COMPLAINT_DETAILS_COMPLAINT_TYPE: serviceDefs.find((def) => def.serviceCode === ComplaintDetailsResponse.service.serviceCode).menuPath,
-          CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t("SERVICEDEFS." + ComplaintDetailsResponse.service.serviceCode),
-          CS_COMPLAINT_DETAILS_APPLICATION_STATUS: ComplaintDetailsResponse.service.applicationStatus,
+          CS_COMPLAINT_DETAILS_COMPLAINT_TYPE: t(
+            "SERVICEDEFS." + serviceDefs.find((def) => def.serviceCode === ComplaintDetailsResponse.service.serviceCode).menuPath.toUpperCase()
+          ),
+          CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t("SERVICEDEFS." + ComplaintDetailsResponse.service.serviceCode.toUpperCase()),
+          CS_COMPLAINT_DETAILS_APPLICATION_STATUS: t(`CS_COMMON_${ComplaintDetailsResponse.service.applicationStatus}`),
           CS_COMPLAINT_DETAILS_LOCALITY: t(
             "PB_" + ComplaintDetailsResponse.service.address.city.toUpperCase() + "_ADMIN_" + ComplaintDetailsResponse.service.address.locality.code
           ),
