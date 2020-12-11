@@ -30,7 +30,7 @@ const requestInfo = () => ({
   authToken: Storage.get("User").token,
 });
 
-const userServiceData = () => Storage.get("User").info;
+const userServiceData = () => ({ userInfo: Storage.get("User").info });
 
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
   console.log("params:", params);
