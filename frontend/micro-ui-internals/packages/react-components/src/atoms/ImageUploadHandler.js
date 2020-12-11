@@ -1,3 +1,4 @@
+import { set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CardHeader from "./CardHeader";
@@ -11,6 +12,7 @@ export const ImageUploadHandler = (props) => {
   const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(null);
   const [uploadedImagesIds, setUploadedImagesIds] = useState(null);
   const [rerender, setRerender] = useState(1);
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
     if (image) {
@@ -27,6 +29,14 @@ export const ImageUploadHandler = (props) => {
       }
     })();
   }, [uploadedImagesIds]);
+
+  useEffect(() => {
+    if (imageFile && imageFile.size > 2097152) {
+      alert("File is too big!");
+    } else {
+      setImage(imageFile);
+    }
+  }, [imageFile]);
 
   const addUploadedImageIds = useCallback(
     (imageIdData) => {
@@ -59,11 +69,7 @@ export const ImageUploadHandler = (props) => {
   }
 
   function getImage(e) {
-    if (e.target.files[0] && e.target.files[0].size > 2097152) {
-      alert("File is too big!");
-    } else {
-      setImage(e.target.files[0]);
-    }
+    setImageFile(e.target.files[0]);
   }
 
   const submit = useCallback(async () => {
@@ -72,10 +78,6 @@ export const ImageUploadHandler = (props) => {
       addImageThumbnails(res);
     }
   }, [addImageThumbnails, uploadedImagesIds]);
-
-  function getImage(e) {
-    setImage(e.target.files[0]);
-  }
 
   function deleteImage(img) {
     var deleteImageKey;
