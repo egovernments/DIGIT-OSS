@@ -6,7 +6,7 @@ const Menu = (props) => {
       {props.options.map((option, index) => {
         return (
           <div key={index} onClick={() => props.onSelect(option)}>
-            <p>{option}</p>
+            <p>{props.t ? props.t(`CS_ACTION_${option}`) : option}</p>
           </div>
         );
       })}

@@ -13,8 +13,12 @@ const DesktopInbox = (props) => {
   let { match } = useRouteMatch();
   const GetCell = (value) => <span style={{ color: "#505A5F" }}>{value}</span>;
   const GetSlaCell = (value) => {
-    return value < 0 ? <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span> : <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
-  }
+    return value < 0 ? (
+      <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
+    ) : (
+      <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
+    );
+  };
   const history = useHistory();
 
   function goTo(id) {
@@ -30,7 +34,9 @@ const DesktopInbox = (props) => {
           return (
             <div>
               <span className="link">
-                <Link to={"/digit-ui/employee/pgr/complaint/details/" + row.row.original["serviceRequestId"]}>{row.row.original["serviceRequestId"]}</Link>
+                <Link to={"/digit-ui/employee/pgr/complaint/details/" + row.row.original["serviceRequestId"]}>
+                  {row.row.original["serviceRequestId"]}
+                </Link>
               </span>
               {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
               <br />
@@ -42,7 +48,7 @@ const DesktopInbox = (props) => {
       {
         Header: t("WF_INBOX_HEADER_LOCALITY"),
         Cell: (row) => {
-          return GetCell(t(`admin.locality.${row.row.original["locality"]}`));
+          return GetCell(t(`PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`));
         },
       },
       {

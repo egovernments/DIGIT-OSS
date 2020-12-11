@@ -244,10 +244,10 @@ export const ComplaintDetails = (props) => {
             <Heading
               label={
                 selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
-                  ? "Assign Complaint"
+                  ? t("CS_ACTION_ASSIGN")
                   : selectedAction === "REJECT"
-                  ? "Reject Complaint"
-                  : "Resolve Complaint"
+                  ? t("CS_ACTION_REJECT")
+                  : t("CS_ACTION_RESOLVE")
               }
             />
           }
@@ -257,18 +257,13 @@ export const ComplaintDetails = (props) => {
           onCancel={() => close(popup)}
         />
       ) : null}
-      {toast && (
-        <Toast
-          label={assignResponse ? "Complaint" + selectedAction.toLowerCase() + "Succesfully" : "Complain assigned Failed"}
-          onClose={closeToast}
-        />
-      )}
+      {toast && <Toast label={assignResponse ? `CS_ACTION_${selectedAction}_TEXT` : "CS_ACTION_ASSIGN_FAILED"} onClose={closeToast} />}
       {workflowDetails.nextActions?.length > 0 && (
         <ActionBar>
           {displayMenu && workflowDetails.nextActions ? (
-            <Menu options={workflowDetails.nextActions.map((action) => action.action)} onSelect={onActionSelect} />
+            <Menu options={workflowDetails.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
           ) : null}
-          <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
+          <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
         </ActionBar>
       )}
     </React.Fragment>
