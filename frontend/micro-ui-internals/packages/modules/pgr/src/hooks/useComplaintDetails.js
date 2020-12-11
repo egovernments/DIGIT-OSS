@@ -53,8 +53,10 @@ const useComplaintDetails = ({ tenantId, id }) => {
 
         const details = {
           CS_COMPLAINT_DETAILS_COMPLAINT_NO: id,
-          CS_COMPLAINT_DETAILS_COMPLAINT_TYPE: serviceDefs.find((def) => def.serviceCode === ComplaintDetailsResponse.service.serviceCode).menuPath,
-          CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t("SERVICEDEFS." + ComplaintDetailsResponse.service.serviceCode),
+          CS_COMPLAINT_DETAILS_COMPLAINT_TYPE: t(
+            "SERVICEDEFS." + serviceDefs.find((def) => def.serviceCode === ComplaintDetailsResponse.service.serviceCode).menuPath.toUpperCase()
+          ),
+          CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t("SERVICEDEFS." + ComplaintDetailsResponse.service.serviceCode.toUpperCase()),
           CS_COMPLAINT_DETAILS_APPLICATION_STATUS: ComplaintDetailsResponse.service.applicationStatus,
           CS_COMPLAINT_DETAILS_LOCALITY: t(
             "PB_" + ComplaintDetailsResponse.service.address.city.toUpperCase() + "_ADMIN_" + ComplaintDetailsResponse.service.address.locality.code
@@ -71,6 +73,11 @@ const useComplaintDetails = ({ tenantId, id }) => {
           CS_COMPLAINT_FILED_DATE: Digit.DateUtils.ConvertTimestampToDate(ComplaintDetailsResponse.service.auditDetails.createdTime),
           thumbnails: thumbnails,
           workflow: ComplaintDetailsResponse.workflow,
+          audit: {
+            citizen: ComplaintDetailsResponse.service.citizen,
+            details: ComplaintDetailsResponse.service.auditDetails,
+            source: ComplaintDetailsResponse.service.source,
+          },
         };
         setComplaintDetails(details);
       } else {

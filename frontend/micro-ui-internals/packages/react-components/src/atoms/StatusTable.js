@@ -11,7 +11,7 @@ export const LastRow = (props) => {
 
 export const Row = (props) => {
   return (
-    <div>
+    <div className={props.last ? "row-last" : ""}>
       <h2>{props.label}</h2>
       <p>{props.text}</p>
     </div>

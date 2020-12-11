@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
-const useWorkflowDetails = ({ tenantId, id }) => {
+const useWorkflowDetails = ({ tenantId, id, role = "CITIZEN" }) => {
   const [workflowDetails, setWorkflowDetails] = useState({});
-  let role = Digit.SessionStorage.get("role") || "CITIZEN"; // ToDo:store in session storage
+  // let role = Digit.SessionStorage.get("role") || "CITIZEN"; // ToDo:store in session storage
   const appState = useSelector((state) => state);
   console.log("appppppppppppppppppp state ", appState);
   // let actions =
@@ -29,24 +29,29 @@ const useWorkflowDetails = ({ tenantId, id }) => {
           action: action.action,
           roles: action.state.actions?.map((action) => action.roles).join(","),
         }));
-        console.log("ffffffffffffffffffffffffffff", businessServiceResponse, actionRolePair);
 
         console.log("workflow details 123", processInstances, nextStates, nextActions);
         if (processInstances.length > 0) {
           const details = {
-            timeline: processInstances.map((state) => ({
-              status: state.state.applicationStatus,
-              caption: state.assignes ? state.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+            timeline: processInstances.map((instance) => ({
+              status: instance.state.applicationStatus,
+              caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
               auditDetails: {
-                created: Digit.DateUtils.ConvertTimestampToDate(state.auditDetails.createdTime),
-                lastModified: Digit.DateUtils.ConvertTimestampToDate(state.auditDetails.lastModifiedTime),
+                created: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.createdTime),
+                lastModified: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.lastModifiedTime),
               },
-              timeLineActions: state.state.actions
-                ? state.state.actions.filter((action) => action.roles.includes(role)).map((action) => action.action)
+              timeLineActions: instance.state.actions
+                ? instance.state.actions.filter((action) => action.roles.includes(role)).map((action) => action.action)
                 : null,
             })),
             nextActions: actionRolePair,
           };
+          if (role !== "CITIZEN") {
+            details.timeline.push({
+              status: "COMPLAINT_FILED",
+            });
+          }
+          console.log("wf details", details, role);
           setWorkflowDetails(details);
         }
       } else {
