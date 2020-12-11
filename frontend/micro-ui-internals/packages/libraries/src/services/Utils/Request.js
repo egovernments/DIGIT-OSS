@@ -2,84 +2,65 @@ import Axios from "axios";
 //import { connectAdvanced } from "react-redux";
 import { Storage } from "./Storage";
 
-Axios.interceptors.request.use((req) => {
-  document.body.classList.add("loader");
-  return req;
+// Axios.interceptors.request.use((req) => {
+//   document.body.classList.add("loader");
+//   return req;
+// });
+
+// Axios.interceptors.response.use(
+//   (res) => {
+//     document.body.classList.remove("loader");
+//     return res;
+//   },
+//   (err) => {
+//     document.body.classList.remove("loader");
+//     return err;
+//   }
+// );
+
+const requestInfo = () => ({
+  apiId: "Rainmaker",
+  // action: "",
+  // did: 1,
+  // key: "",
+  // msgId: "20170310130900|en_IN",
+  // requesterId: "",
+  // ts: 1513579888683,
+  // ver: ".01",
+  authToken: Storage.get("User").token,
 });
 
-Axios.interceptors.response.use(
-  (res) => {
-    document.body.classList.remove("loader");
-    return res;
-  },
-  (err) => {
-    document.body.classList.remove("loader");
-    return err;
-  }
-);
-
-const requestInfo = {
-  apiId: "Rainmaker",
-  action: "",
-  did: 1,
-  key: "",
-  msgId: "20170310130900|en_IN",
-  requesterId: "",
-  ts: 1513579888683,
-  ver: ".01",
-  authToken: Storage.get("citizen.token"),
-};
-
-const userServiceData = {
-  userInfo: {
-    id: 23349,
-    uuid: "530968f3-76b3-4fd1-b09d-9e22eb1f85df",
-    userName: "9404052047",
-    name: "Aniket T",
-    mobileNumber: "9404052047",
-    emailId: "xc@gmail.com",
-    locale: null,
-    type: "CITIZEN",
-    roles: [
-      {
-        name: "Citizen",
-        code: "CITIZEN",
-        tenantId: "pb",
-      },
-    ],
-    active: true,
-    tenantId: "pb",
-  },
-};
+const userServiceData = () => ({ userInfo: Storage.get("User").info });
 
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
-  let key = "";
+  console.log("params:", params);
+  console.log("url:", url);
   if (method.toUpperCase() === "POST") {
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
     if (auth) {
-      data.RequestInfo = { ...data.RequestInfo, ...requestInfo };
+      data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
     if (userService) {
-      data.RequestInfo = { ...data.RequestInfo, ...userServiceData };
+      data.RequestInfo = { ...data.RequestInfo, ...userServiceData() };
     }
   }
 
-  if (useCache) {
-    key = `${method.toUpperCase()}.${url}.${JSON.stringify(params, null, 0)}.${JSON.stringify(data, null, 0)}`;
-    const value = Storage.get(key);
-    if (value) {
-      return value;
-    }
-  } else {
-    params._ = Date.now();
-  }
+  // let key = "";
+  // if (useCache) {
+  //   key = `${method.toUpperCase()}.${url}.${JSON.stringify(params, null, 0)}.${JSON.stringify(data, null, 0)}`;
+  //   const value = Storage.get(key);
+  //   if (value) {
+  //     return value;
+  //   }
+  // } else {
+  //   params._ = Date.now();
+  // }
   const res = await Axios({ method, url, data, params });
-  if (useCache) {
-    Storage.set(key, res.data);
-  }
-
+  // if (useCache) {
+  //   Storage.set(key, res.data);
+  // }
   return res.data;
 };
 
@@ -135,10 +116,10 @@ export const GetServiceDefWithLocalization = (MdmsRes) => {
   const serviceDef = MdmsRes["RAINMAKER-PGR"].ServiceDefs.map((def) =>
     def.active
       ? {
-          name: def.serviceCode,
-          i18nKey: def.menuPath !== "" ? "SERVICEDEFS." + def.serviceCode.toUpperCase() : "Others",
-          ...def,
-        }
+        name: def.serviceCode,
+        i18nKey: def.menuPath !== "" ? "SERVICEDEFS." + def.serviceCode.toUpperCase() : "Others",
+        ...def,
+      }
       : null
   ).filter((o) => o != null);
   Storage.set("ServiceDefs", serviceDef); //TODO: move this to service, session storage key name is too big currently

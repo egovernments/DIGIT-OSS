@@ -1,0 +1,21 @@
+.toast-success{
+    width: 480px;
+    bottom: 64px;
+    left: calc( 50% - 240px );
+    gap: 16px;
+    border-radius: 4px;
+    @apply fixed flex bg-success h-12 z-20 items-center pl-md pr-sm;
+
+    svg{
+        height: 20px;
+        width: 20px;
+    }
+
+    .toast-close-btn{
+        margin-left: auto;
+    }
+
+    h2{
+        @apply text-body-s-dt text-white;
+    }
+}

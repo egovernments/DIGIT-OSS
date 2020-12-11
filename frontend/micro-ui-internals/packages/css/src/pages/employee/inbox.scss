@@ -1,0 +1,158 @@
+.complaint-links-container {
+  @apply bg-white;
+
+  .header {
+    @apply flex items-center border-b border-border;
+
+    .logo {
+      @apply bg-focus;
+      padding: 12px;
+      border-radius: 4px;
+    }
+
+    .text {
+      @apply pl-md font-bold;
+    }
+  }
+
+  .body {
+    padding: 10px;
+    @apply flex items-start flex-col;
+    margin-left: 46px;
+
+    .link {
+      @apply p-sm text-link-normal;
+    }
+  }
+}
+
+.inbox-container {
+  @apply justify-center;
+
+  .filters-container {
+
+
+    .filter {
+      .filter-card {
+        @apply p-md bg-white;
+
+        .heading {
+          @apply flex justify-between;
+
+          .clearAll {
+            display: none;
+          }
+        }
+
+        .filter-label {
+          @apply font-bold text-heading-m;
+          padding-bottom: 6px;
+        }
+      }
+    }
+
+    .search-complaint-container {
+      @apply items-center bg-white p-md;
+
+      .complaint-input-container {
+        .complaint-input {
+          @apply flex flex-col;
+
+          .clear-search {
+            display: none;
+          }
+        }
+
+        .mobile-input {
+          @apply ml-sm;
+        }
+      }
+    }
+  }
+
+  .status-container {
+    @apply overflow-auto;
+    height: 250px;
+  }
+}
+
+@screen dt {
+  .complaint-links-container {
+    @apply bg-white;
+
+    .header {
+      @apply flex items-center border-b border-border;
+
+      .logo {
+        @apply bg-focus;
+        padding: 12px;
+        border-radius: 4px;
+      }
+
+      .text {
+        @apply pl-md font-bold;
+      }
+    }
+
+    .body {
+      padding: 10px;
+      @apply flex items-start flex-col;
+      margin-left: 46px;
+
+      .link {
+        @apply p-sm text-link-normal;
+      }
+    }
+  }
+
+  .inbox-container {
+    @apply flex justify-center;
+
+    .filters-container {
+      width: 270px;
+
+
+
+      .filter {
+        @apply mt-md;
+
+        .filter-card {
+          @apply p-md bg-white;
+
+          .heading {
+            @apply flex justify-between;
+          }
+
+          .label {
+            @apply text-heading-s;
+          }
+        }
+      }
+    }
+
+    .search-container {
+      width: 874px;
+      @apply ml-lg;
+
+      .search-complaint-container {
+        @apply flex items-center bg-white p-md;
+
+        .complaint-input-container {
+          display: flex !important;
+
+          .complaint-input {
+            @apply flex flex-col;
+
+            .clear-search {
+              @apply block;
+            }
+          }
+
+          .mobile-input {
+            @apply ml-sm;
+          }
+        }
+      }
+    }
+  }
+}

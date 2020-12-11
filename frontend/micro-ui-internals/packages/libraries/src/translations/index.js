@@ -3,8 +3,8 @@ import { initReactI18next } from "react-i18next";
 import ReactPostprocessor from "i18next-react-postprocessor";
 
 const i18nextConfig = {
-  lng: "en",
-  fallbackLng: "en",
+  lng: "en_IN",
+  fallbackLng: "en_IN",
   debug: false,
   ns: ["translations"],
   defaultNS: "translations",
@@ -23,8 +23,8 @@ const i18nextConfig = {
     bindI18nStore: "added",
   },
   resources: {
-    en: {
-      translation: {
+    en_IN: {
+      translations: {
         welcome: "Welcome",
       },
     },

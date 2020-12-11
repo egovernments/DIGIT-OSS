@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-pgr",
-  "version": "1.0.5",
+  "version": "1.0.28",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -13,6 +13,10 @@
     "build": "microbundle-crl --no-compress --format modern,cjs",
     "prepublish": "yarn build"
   },
+  "peerDependencies": {
+    "react": "^17.0.0",
+    "react-router-dom": "^5.2.0"
+  },
   "dependencies": {
     "@egovernments/digit-ui-libraries": "^1.0.0",
     "@egovernments/digit-ui-react-components": "^1.0.0",
@@ -20,9 +24,12 @@
     "react-dom": "^17.0.0",
     "react-hook-form": "^6.7.0",
     "react-i18next": "^11.7.3",
+    "react-query": "^2.26.3",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
+    "react-table": "^7.6.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "rooks": "^4.3.0"
   }
 }

@@ -1,0 +1,9 @@
+.searchBox {
+  @apply flex justify-between m-sm;
+  .searchAction {
+    @apply flex flex-row text-focus;
+    .searchText {
+      @apply ml-sm;
+    }
+  }
+}

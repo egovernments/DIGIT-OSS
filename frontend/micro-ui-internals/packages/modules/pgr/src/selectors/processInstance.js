@@ -1,1 +1,1 @@
-export const selectWorkflow = (state) => state.businessService.businessService || {};
+export const selectWorkflow = (state) => (state.businessService && state.businessService.businessService) || {};

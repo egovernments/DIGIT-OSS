@@ -1,66 +1,39 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { Card, CardCaption } from "@egovernments/digit-ui-react-components";
+import { Card, DateWrap, KeyNote } from "@egovernments/digit-ui-react-components";
+import { CardSubHeader } from "@egovernments/digit-ui-react-components";
+import { LOCALIZATION_KEY } from "../constants/Localization";
+
 // import { ConvertTimestampToDate } from "../@egovernments/digit-utils/services/date";
 
-const Complaint = (props) => {
-  let { data } = props;
+const Complaint = ({ data, path }) => {
   let { serviceCode, serviceRequestId, applicationStatus } = data;
-  const CS_COMMON = "CS_COMMON";
 
   const history = useHistory();
   const { t } = useTranslation();
 
   const handleClick = () => {
-    history.push(`/complaint/details/${serviceRequestId}`);
+    history.push(`${path}/${serviceRequestId}`);
   };
 
-  return (
-    <Card>
-      <div onClick={handleClick}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "self-end",
-          }}
-        >
-          <div>
-            <div>
-              <CardCaption>{t(`SERVICEDEFS.${serviceCode.toUpperCase()}`)}</CardCaption>
-            </div>
-            <div>{Digit.DateUtils.ConvertTimestampToDate(data.auditDetails.createdTime)}</div>
-          </div>
-          <div
-            style={{
-              borderRadius: "15px",
-              color: "#D4351C",
-              backgroundColor: "#f8e0dc",
-              padding: "0.1rem 1.2rem",
-              fontSize: "1.2rem",
-              display: "inline-block",
-            }}
-          >
-            Open
-          </div>
-        </div>
+  const closedStatus = ["RESOLVED"];
 
-        <div style={{ marginTop: "1rem" }}>
-          <div>{t(`${CS_COMMON}_COMPLAINT_NO`)}</div>
-          <CardCaption>{serviceRequestId}</CardCaption>
+  return (
+    <React.Fragment>
+      <Card onClick={handleClick}>
+        <div className={`status-highlight ${closedStatus.includes(applicationStatus) ? "success" : ""}`}>
+          <p>{(closedStatus.includes(applicationStatus) ? t("CS_COMMON_CLOSED") : t("CS_COMMON_OPEN")).toUpperCase()}</p>
         </div>
-        <div style={{ marginTop: "1rem" }}>
-          {/* {t("CS_COMMON_" + applicationStatus.toUpperCase())} */}
-          {/* {console.log(
-            serviceRequestId,
-            "applicationStatus.toLowerCase():",
-            applicationStatus.toLowerCase()
-          )} */}
-          {t(`${CS_COMMON}_${applicationStatus}`)}
-        </div>
-      </div>
-    </Card>
+        <CardSubHeader>{t(`SERVICEDEFS.${serviceCode.toUpperCase()}`)}</CardSubHeader>
+
+        <DateWrap date={Digit.DateUtils.ConvertTimestampToDate(data.auditDetails.createdTime)} />
+
+        <KeyNote keyValue={t(`${LOCALIZATION_KEY.CS_COMMON}_COMPLAINT_NO`)} note={serviceRequestId} />
+
+        {t(`${LOCALIZATION_KEY.CS_COMMON}_${applicationStatus}`)}
+      </Card>
+    </React.Fragment>
   );
 };
 

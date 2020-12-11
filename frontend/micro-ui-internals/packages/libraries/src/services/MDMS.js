@@ -54,8 +54,7 @@ export const MdmsService = {
     Request({ url: Urls.MDMS, data: initRequestBody(stateCode), useCache: true, method: "POST", params: { tenantId: stateCode } }),
   call: (details, stateCode = "pb") =>
     Request({ url: Urls.MDMS, data: getCriteria(details), useCache: true, method: "POST", params: { tenantId: stateCode } }),
-  getDataByCriteria: async (mdmsDetails) => {
-    const moduleCode = "PGR";
+  getDataByCriteria: async (mdmsDetails, moduleCode = "PGR") => {
     const { MdmsRes } = await MdmsService.call(mdmsDetails.details);
     return transformResponse(mdmsDetails.type, MdmsRes, moduleCode);
   },

@@ -1,0 +1,19 @@
+.navbar {
+  @apply text-white bg-secondary p-md w-full;
+  position: fixed;
+  z-index: 9999;
+
+  img {
+    display: inline-block;
+    min-width: 78px;
+    height: 24px;
+  }
+}
+
+/* .navbar-header{
+    @apply text-navbarheader float-left px-sm
+}
+
+.navbar-subheader{
+    @apply font-light px-sm border-solid border-l border-white border-opacity-100
+}*/

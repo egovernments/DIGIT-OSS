@@ -1,6 +1,6 @@
 {
   "name": "egovernments",
-  "version": "1.0.0",
+  "version": "1.0.17",
   "main": "index.js",
   "workspaces": [
     "example",
@@ -12,18 +12,23 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=14"
+    "node": ">=10"
   },
   "scripts": {
     "start": "run-s build:** start:dev",
     "start:dev": "run-p dev:**",
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
+    "dev:core": "cd packages/modules/core && yarn start",
     "dev:pgr": "cd packages/modules/pgr && yarn start",
+    "dev:fsm": "cd packages/modules/fsm && yarn start",
     "dev:example": "cd example && yarn start",
+    "build": "run-s build:**",
     "build:libraries": "cd packages/libraries && yarn build",
     "build:components": "cd packages/react-components && yarn build",
-    "build:pgr": "cd packages/modules/pgr && yarn build"
+    "build:core": "cd packages/modules/core && yarn build",
+    "build:pgr": "cd packages/modules/pgr && yarn build",
+    "build:fsm": "cd packages/modules/fsm && yarn build"
   },
   "devDependencies": {
     "husky": ">=4",
@@ -38,5 +43,8 @@
   },
   "lint-staged": {
     "*.{js,css,md}": "prettier --write"
+  },
+  "dependencies": {
+    "lodash": "^4.17.20"
   }
 }
