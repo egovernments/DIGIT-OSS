@@ -58,7 +58,7 @@ const useComplaintDetails = ({ tenantId, id }) => {
           ),
           CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t("SERVICEDEFS." + ComplaintDetailsResponse.service.serviceCode.toUpperCase()),
           CS_COMPLAINT_DETAILS_APPLICATION_STATUS: t(`CS_COMMON_${ComplaintDetailsResponse.service.applicationStatus}`),
-          CS_COMPLAINT_DETAILS_LOCALITY: ComplaintDetailsResponse.service.address.city.includes("_")
+          CS_COMPLAINT_DETAILS_LOCALITY: ComplaintDetailsResponse.service.address.locality.code.includes("_")
             ? t(ComplaintDetailsResponse.service.address.locality.code.toUpperCase())
             : t(
               "PB_" +
