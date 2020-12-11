@@ -12,7 +12,7 @@
     box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
     left: 64px;
     width: calc(100% - 64px);
-    z-index: 9999;
+    z-index: 20;
 
     @apply fixed bottom-0 bg-white py-sm pr-lg text-right;
 

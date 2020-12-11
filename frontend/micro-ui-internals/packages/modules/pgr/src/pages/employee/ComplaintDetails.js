@@ -191,22 +191,22 @@ export const ComplaintDetails = (props) => {
         {workflowDetails.timeline && workflowDetails.timeline.length === 1 ? (
           <CheckPoint isCompleted={true} label={workflowDetails.timeline[0].status} />
         ) : (
-            <ConnectingCheckPoints>
-              {workflowDetails.timeline &&
-                workflowDetails.timeline.map((checkpoint, index, arr) => {
-                  return arr.length - 1 === index ? (
-                    <CheckPoint key={index} isCompleted={false} label={t(checkpoint.status)} />
-                  ) : (
-                      <CheckPoint
-                        key={index}
-                        isCompleted={true}
-                        label={t(checkpoint.status)}
-                        customChild={checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null}
-                      />
-                    );
-                })}
-            </ConnectingCheckPoints>
-          )}
+          <ConnectingCheckPoints>
+            {workflowDetails.timeline &&
+              workflowDetails.timeline.map((checkpoint, index, arr) => {
+                return arr.length - 1 === index ? (
+                  <CheckPoint key={index} isCompleted={false} label={t(checkpoint.status)} />
+                ) : (
+                  <CheckPoint
+                    key={index}
+                    isCompleted={true}
+                    label={t(checkpoint.status)}
+                    customChild={checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null}
+                  />
+                );
+              })}
+          </ConnectingCheckPoints>
+        )}
       </Card>
       {fullscreen ? (
         <PopUp>
@@ -226,10 +226,10 @@ export const ComplaintDetails = (props) => {
             <Heading
               label={
                 selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
-                  ? "Assign Complaint"
+                  ? t("CS_ACTION_ASSIGN")
                   : selectedAction === "REJECT"
-                    ? "Reject Complaint"
-                    : "Resolve Complaint"
+                  ? t("CS_ACTION_REJECT")
+                  : t("CS_ACTION_RESOLVE")
               }
             />
           }
@@ -239,19 +239,15 @@ export const ComplaintDetails = (props) => {
           onCancel={() => close(popup)}
         />
       ) : null}
-      {toast && (
-        <Toast
-          label={assignResponse ? "Complaint" + selectedAction.toLowerCase() + "Succesfully" : "Complain assigned Failed"}
-          onClose={closeToast}
-        />
+      {toast && <Toast label={assignResponse ? `CS_ACTION_${selectedAction}_TEXT` : "CS_ACTION_ASSIGN_FAILED"} onClose={closeToast} />}
+      {workflowDetails.nextActions?.length > 0 && (
+        <ActionBar>
+          {displayMenu && workflowDetails.nextActions ? (
+            <Menu options={workflowDetails.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
+          ) : null}
+          <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+        </ActionBar>
       )}
-      {workflowDetails.nextActions?.length > 0 && <ActionBar>
-        {displayMenu && workflowDetails.nextActions ? (
-          <Menu options={workflowDetails.nextActions.map((action) => action.action)} onSelect={onActionSelect} />
-        ) : null}
-        <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
-      </ActionBar>}
-
     </React.Fragment>
   );
 };
