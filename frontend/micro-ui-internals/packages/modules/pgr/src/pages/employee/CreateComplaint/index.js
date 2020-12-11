@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardSubHeader, CardLabel, TextInput, Dropdown } from "@egovernments/digit-ui-react-components";
 import FormComposer from "./FormComposer";
-import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 
 import useComplaintTypes from "../../../hooks/useComplaintTypes";
 import useTenants from "../../../hooks/useTenants";
@@ -13,7 +13,6 @@ export const CreateComplaint = ({ parentUrl }) => {
   const SessionStorage = Digit.SessionStorage;
   const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
   const __initSubType__ = Digit.SessionStorage.get("subType");
-  const history = useHistory();
 
   const city_complaint = Digit.SessionStorage.get("city_complaint");
   const selected_localities = Digit.SessionStorage.get("selected_localities");
@@ -53,7 +52,7 @@ export const CreateComplaint = ({ parentUrl }) => {
     // setLocalities(null);
     setSelectedCity(city);
     Digit.SessionStorage.set("city_complaint", city);
-    const response = await Digit.LocationService.getLocalities({ tenantId: city.code });
+    let response = await Digit.LocationService.getLocalities({ tenantId: city.code });
     let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
     setLocalities(__localityList);
     Digit.SessionStorage.set("selected_localities", __localityList);
@@ -80,7 +79,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   }
 
   //On SUbmit
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setSubmitValve(true);
     console.log("submit data", data, subType, selectedCity, selectedLocality);
     const cityCode = selectedCity.code;
@@ -96,7 +95,7 @@ export const CreateComplaint = ({ parentUrl }) => {
     const mobileNumber = data.mobileNumber;
     const name = data.name;
     const formData = { ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name };
-    dispatch(createComplaint(formData));
+    await dispatch(createComplaint(formData));
     history.push(parentUrl + "/response");
   };
 
