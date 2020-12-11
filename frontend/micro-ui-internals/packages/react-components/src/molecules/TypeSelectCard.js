@@ -9,14 +9,15 @@ import CardText from "../atoms/CardText";
 import RadioButtons from "../atoms/RadioButtons";
 import SubmitBar from "../atoms/SubmitBar";
 
-const TypeSelectCard = ({ headerCaption, header, cardText, submitBarLabel, selectedOption, menu, optionsKey, selected, onSave }) => {
+const TypeSelectCard = ({ t, headerCaption, header, cardText, submitBarLabel, selectedOption, menu, optionsKey, selected, onSave }) => {
+  console.log("cardText", t("ULBGRADE_MUNICIPAL_CORPORATION"), cardText);
   return (
     <Card>
-      <CardCaption>{headerCaption}</CardCaption>
-      <CardHeader>{header}</CardHeader>
-      <CardText>{cardText}</CardText>
-      {menu ? <RadioButtons selectedOption={selectedOption} options={menu} optionsKey={optionsKey} onSelect={selected} /> : null}
-      <SubmitBar label={submitBarLabel} onSubmit={onSave} />
+      <CardCaption>{t(headerCaption)}</CardCaption>
+      <CardHeader>{t(header)}</CardHeader>
+      <CardText>{t(cardText)}</CardText>
+      {menu ? <RadioButtons selectedoption={selectedOption} options={menu} optionskey={optionsKey} onSelect={selected} /> : null}
+      <SubmitBar label={t(submitBarLabel)} onSubmit={onSave} />
     </Card>
   );
 };
@@ -31,6 +32,7 @@ TypeSelectCard.propTypes = {
   optionsKey: PropTypes.string.isRequired,
   selected: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 TypeSelectCard.defaultProps = {
@@ -43,6 +45,7 @@ TypeSelectCard.defaultProps = {
   optionsKey: "",
   selected: undefined,
   onSave: undefined,
+  t: undefined
 };
 
 export default TypeSelectCard;

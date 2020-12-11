@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import useComplaintTypes from "../../../../hooks/useComplaintTypes";
 
-const SelectComplaintType = ({ config, onSelect }) => {
+const SelectComplaintType = ({ t, config, onSelect }) => {
   const goNext = () => {
     onSelect(complaintType);
   };
@@ -25,6 +25,7 @@ const SelectComplaintType = ({ config, onSelect }) => {
       {...{ selected: selectedValue }}
       {...{ selectedOption: complaintType }}
       {...{ onSave: goNext }}
+      {...{ t }}
     />
   );
 };

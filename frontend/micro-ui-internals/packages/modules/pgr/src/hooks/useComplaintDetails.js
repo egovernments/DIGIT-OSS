@@ -44,6 +44,7 @@ const useComplaintDetails = ({ tenantId, id }) => {
       const ComplaintDetailsResponse = (await Digit.PGRService.search(tenantId, { serviceRequestId: id })).ServiceWrappers[0];
       console.log("COmplaint details response =============>>>>>", ComplaintDetailsResponse);
       if (ComplaintDetailsResponse && serviceDefs) {
+        Digit.SessionStorage.set("complaintDetails", ComplaintDetailsResponse);
         const ids = ComplaintDetailsResponse.workflow.verificationDocuments
           ? ComplaintDetailsResponse.workflow.verificationDocuments.filter((doc) => doc.documentType === "PHOTO").map((photo) => photo.fileStoreId)
           : null;
@@ -52,10 +53,19 @@ const useComplaintDetails = ({ tenantId, id }) => {
 
         const details = {
           CS_COMPLAINT_DETAILS_COMPLAINT_NO: id,
-          CS_COMPLAINT_DETAILS_COMPLAINT_TYPE: serviceDefs.find((def) => def.serviceCode === ComplaintDetailsResponse.service.serviceCode).menuPath,
-          CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t(ComplaintDetailsResponse.service.serviceCode),
-          CS_COMPLAINT_DETAILS_APPLICATION_STATUS: ComplaintDetailsResponse.service.applicationStatus,
-          CS_COMPLAINT_DETAILS_LOCALITY: t(ComplaintDetailsResponse.service.address.locality.code),
+          CS_COMPLAINT_DETAILS_COMPLAINT_TYPE: t(
+            "SERVICEDEFS." + serviceDefs.find((def) => def.serviceCode === ComplaintDetailsResponse.service.serviceCode).menuPath.toUpperCase()
+          ),
+          CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t("SERVICEDEFS." + ComplaintDetailsResponse.service.serviceCode.toUpperCase()),
+          CS_COMPLAINT_DETAILS_APPLICATION_STATUS: t(`CS_COMMON_${ComplaintDetailsResponse.service.applicationStatus}`),
+          CS_COMPLAINT_DETAILS_LOCALITY: ComplaintDetailsResponse.service.address.locality.code.includes("_")
+            ? t(ComplaintDetailsResponse.service.address.locality.code.toUpperCase())
+            : t(
+              "PB_" +
+              ComplaintDetailsResponse.service.address.city.toUpperCase() +
+              "_ADMIN_" +
+              ComplaintDetailsResponse.service.address.locality.code
+            ),
           CS_COMPLAINT_DETAILS_CITY: t(ComplaintDetailsResponse.service.address.city),
           CS_COMPLAINT_DETAILS_LANDMARK: ComplaintDetailsResponse.service.address.landmark,
           CS_COMPLAINT_DETAILS_GEOLOCATION: ComplaintDetailsResponse.service.address.geoLocation,
@@ -68,6 +78,11 @@ const useComplaintDetails = ({ tenantId, id }) => {
           CS_COMPLAINT_FILED_DATE: Digit.DateUtils.ConvertTimestampToDate(ComplaintDetailsResponse.service.auditDetails.createdTime),
           thumbnails: thumbnails,
           workflow: ComplaintDetailsResponse.workflow,
+          audit: {
+            citizen: ComplaintDetailsResponse.service.citizen,
+            details: ComplaintDetailsResponse.service.auditDetails,
+            source: ComplaintDetailsResponse.service.source,
+          },
         };
         setComplaintDetails(details);
       } else {

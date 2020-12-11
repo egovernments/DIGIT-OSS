@@ -29,6 +29,7 @@ export const newComplaintSteps = [
         name: "pincode",
         validation: {
           minLength: 6,
+          maxLength: 7,
         },
         error: "CORE_COMMON_PINCODE_INVALID",
       },
@@ -48,6 +49,7 @@ export const newComplaintSteps = [
       header: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK",
       cardText: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK_TEXT",
       nextText: "PT_COMMONS_NEXT",
+      skipText: "CORE_COMMON_SKIP_CONTINUE",
     },
     inputs: [
       {
@@ -62,6 +64,7 @@ export const newComplaintSteps = [
       header: "CS_ADDCOMPLAINT_UPLOAD_PHOTO",
       cardText: "CS_ADDCOMPLAINT_UPLOAD_PHOTO_TEXT",
       nextText: "PT_COMMONS_NEXT",
+      skipText: "CORE_COMMON_SKIP_CONTINUE",
     },
   },
   {

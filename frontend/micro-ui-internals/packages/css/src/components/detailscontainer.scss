@@ -1,10 +1,10 @@
 .details-container {
-  @apply flex flex-col;
+  @apply flex flex-col m-sm pt-md pb-md pl-sm pr-sm bg-white;
   .detail {
-    @apply flex flex-row content-evenly;
+    @apply flex flex-row items-baseline;
     .label {
       width: 138px;
-      @apply pt-md pb-md;
+      @apply font-bold text-heading-s text-text-primary mb-md;
     }
     .name {
       @apply pt-md;

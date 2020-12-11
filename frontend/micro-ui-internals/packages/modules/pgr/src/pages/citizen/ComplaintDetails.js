@@ -20,6 +20,7 @@ import {
   CheckPoint,
   DisplayPhotos,
   ImageViewer,
+  Loader,
 } from "@egovernments/digit-ui-react-components";
 
 import { selectComplaints } from "../../selectors/complaint";
@@ -48,10 +49,10 @@ const ComplaintDetailsPage = (props) => {
     "CS_COMPLAINT_DETAILS_APPLICATION_STATUS",
     "CS_COMPLAINT_FILED_DATE",
     "CS_COMPLAINT_DETAILS_LANDMARK",
-    "CS_COMPLAINT_DETAILS_DOOR",
-    "CS_COMPLAINT_DETAILS_BUILDING_NAME",
-    "CS_COMPLAINT_DETAILS_PLOT_NO",
-    "CS_COMPLAINT_DETAILS_STREET",
+    // "CS_COMPLAINT_DETAILS_DOOR",
+    // "CS_COMPLAINT_DETAILS_BUILDING_NAME",
+    // "CS_COMPLAINT_DETAILS_PLOT_NO",
+    // "CS_COMPLAINT_DETAILS_STREET",
     "CS_COMPLAINT_DETAILS_LOCALITY",
     "CS_COMPLAINT_DETAILS_CITY",
   ];
@@ -79,7 +80,7 @@ const ComplaintDetailsPage = (props) => {
     <React.Fragment>
       <Header>{t(`${LOCALIZATION_KEY.CS_HEADER}_COMPLAINT_SUMMARY`)}</Header>
 
-      {Object.keys(complaintDetails).length > 0 && (
+      {Object.keys(complaintDetails).length > 0 ? (
         <React.Fragment>
           <Card>
             <CardSubHeader>{t(`SERVICEDEFS.${complaintDetails.service.serviceCode.toUpperCase()}`)}</CardSubHeader>
@@ -111,6 +112,8 @@ const ComplaintDetailsPage = (props) => {
             <SubmitBar label="Send" />
           </Card>
         </React.Fragment>
+      ) : (
+        <Loader />
       )}
     </React.Fragment>
   );

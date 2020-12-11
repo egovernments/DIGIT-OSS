@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Route, BrowserRouter as Router, Switch, Link } from "react-router-dom";
 
 import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
@@ -8,38 +7,33 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
 import "@egovernments/digit-ui-css/example/index.css";
 
+import CITIZEN from "./userInfo/citizen.json"
+import EMPLOYEE from "./userInfo/employee.json"
+import LME from "./userInfo/lme.json"
+
+const userInfo = { CITIZEN, EMPLOYEE, LME }
+
 initLibraries();
 
-const userServiceData = {
-  userInfo: {
-    id: 23349,
-    uuid: "530968f3-76b3-4fd1-b09d-9e22eb1f85df",
-    userName: "9404052047",
-    name: "Aniket T",
-    mobileNumber: "9404052047",
-    emailId: "xc@gmail.com",
-    locale: null,
-    type: "CITIZEN",
-    roles: [
-      {
-        name: "Citizen",
-        code: "CITIZEN",
-        tenantId: "pb",
-      },
-    ],
-    active: true,
-    tenantId: "pb",
-  },
-};
+const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-Digit.SessionStorage.set("citizen.userServiceData", userServiceData);
+const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`]
 
-// const citAuth = process.env.REACT_APP_CITIZEN_AUTH;
-const citAuth = "06774a0c-b881-452e-b4df-a83f1e9a5995";
+const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
+const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
 
-console.log("citAUth", citAuth);
+const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
+const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
 
-Digit.SessionStorage.set("User", { token: citAuth, mobileNumber: "9404052047" });
-// window.sessionStorage.setItem("citizen.token", citAuth);
+const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
+window.Digit.SessionStorage.set("user_type", userTypeInfo);
+window.Digit.SessionStorage.set("userType", userTypeInfo);
+
+const userDetails = { token, info: userType === "CITIZEN" ? citizenInfo : employeeInfo }
+
+window.Digit.SessionStorage.set("User", userDetails);
+
+window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
+window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
 
 ReactDOM.render(<DigitUI stateCode="pb" />, document.getElementById("root"));

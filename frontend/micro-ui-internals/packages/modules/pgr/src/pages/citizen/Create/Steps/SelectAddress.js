@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { CardLabel, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 import useTenants from "../../../../hooks/useTenants";
-import { useTranslation } from "react-i18next";
 
-const SelectAddress = ({ config, onSelect }) => {
+const SelectAddress = ({ t, config, onSelect }) => {
   const cities = useTenants();
-  const { t } = useTranslation();
+  console.log("tenents", cities);
 
   const city_complaint = Digit.SessionStorage.get("city_complaint");
   const locality_complaint = Digit.SessionStorage.get("locality_complaint");
@@ -16,9 +15,10 @@ const SelectAddress = ({ config, onSelect }) => {
   //   const __localities = useLocalities({ city: selectedCity });
 
   useEffect(async () => {
-    if (selectedCity) {
-      let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
+    if (selectedCity !== city_complaint) {
+      let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code || city_complaint.code });
       let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+      console.log("address __localityList", __localityList);
       setLocalities(__localityList);
       Digit.SessionStorage.set("selected_localities", __localityList);
     }
@@ -41,9 +41,9 @@ const SelectAddress = ({ config, onSelect }) => {
   }
 
   return (
-    <FormStep config={config} onSelect={onSubmit}>
+    <FormStep config={config} onSelect={onSubmit} t={t}>
       <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="name" />
+      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
       {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
       {selectedCity && localities && (
         <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />

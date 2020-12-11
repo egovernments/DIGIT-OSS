@@ -2,16 +2,17 @@ import Urls from "./urls";
 import { Request } from "./Utils/Request";
 
 export const PGRService = {
-  search: (stateCode = "pb", filters = {}) =>
-    Request({
+  search: (stateCode = "pb", filters = {}) => {
+    console.log("----------------------------", filters);
+    return Request({
       url: Urls.pgr_search,
       useCache: false,
-      userInfo: true,
       method: "POST",
       auth: true,
       userService: true,
       params: { tenantId: stateCode, ...filters },
-    }),
+    });
+  },
   create: (details, stateCode = "pb") =>
     Request({
       url: Urls.PGR_Create,
@@ -46,6 +47,13 @@ export const PGRService = {
       data: details,
       useCache: true,
       params: { tenantId: stateCode, ...params.params },
+    });
+  },
+  employeeSearch: (cityCode, roles) => {
+    return Request({
+      url: Urls.EmployeeSearch,
+      params: { tenantId: cityCode, roles: roles },
+      auth: true,
     });
   },
 };

@@ -1,4 +1,12 @@
-import { APPLY_FILTER, APPLY_INBOX_FILTER, FETCH_BUSINESS_SERVICE_BY_ID, FETCH_COMPLAINTS, FETCH_LOCALITIES, UPDATE_COMPLAINT } from "./types";
+import {
+  APPLY_FILTER,
+  APPLY_INBOX_FILTER,
+  FETCH_BUSINESS_SERVICE_BY_ID,
+  FETCH_COMPLAINTS,
+  FETCH_LOCALITIES,
+  UPDATE_COMPLAINT,
+  FETCH_ALL_BUSINESSS_SERVICES,
+} from "./types";
 //import { LocalizationService } from "../../@egovernments/digit-utils/services/Localization/service";
 //import { LocationService } from "../../@egovernments/digit-utils/services/Location";
 //import { LocalityService } from "../../@egovernments/digit-utils/services/Localities";
@@ -42,6 +50,15 @@ export const searchComplaints = (filters = {}) => async (dispatch, getState) => 
   dispatch({
     type: FETCH_COMPLAINTS,
     payload: { complaints: ServiceWrappers },
+  });
+};
+
+export const fetchBusinessServiceByTenant = (cityCode, businessServices) => async (dispatch, getState) => {
+  const businessServiceResponse = await Digit.workflowService.init(cityCode, businessServices);
+  const businessService = businessServiceResponse.BusinessServices;
+  dispatch({
+    type: FETCH_ALL_BUSINESSS_SERVICES,
+    payload: { businessService },
   });
 };
 

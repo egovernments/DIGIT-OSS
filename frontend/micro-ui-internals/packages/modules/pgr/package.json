@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-pgr",
-  "version": "1.0.15",
+  "version": "1.0.28",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -29,6 +29,7 @@
     "react-router-dom": "^5.2.0",
     "react-table": "^7.6.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "rooks": "^4.3.0"
   }
 }

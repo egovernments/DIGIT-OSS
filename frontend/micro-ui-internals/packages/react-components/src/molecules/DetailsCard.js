@@ -14,11 +14,15 @@ const Details = ({ label, name }) => {
 
 const DetailsCard = ({ data }) => {
   return (
-    <div className="details-container">
-      {data.map((object) => {
-        return Object.keys(object).map((name, index) => {
-          return <Details label={name} name={object[name]} />;
-        });
+    <div>
+      {data.map((object, itemIndex) => {
+        return (
+          <div key={itemIndex} className="details-container">
+            {Object.keys(object).map((name, index) => {
+              return <Details label={name} name={object[name]} key={index} />;
+            })}
+          </div>
+        );
       })}
     </div>
   );

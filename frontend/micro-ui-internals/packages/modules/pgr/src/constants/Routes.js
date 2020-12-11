@@ -30,6 +30,7 @@ export const Employee = {
   Inbox: "/inbox",
   ComplaintDetails: PGR_EMPLOYEE_COMPLAINT_DETAILS,
   CreateComplaint: PGR_EMPLOYEE_CREATE_COMPLAINT,
+  Response: "/response",
 };
 
 export const getRoute = (match, route) => `${match.path}${route}`;

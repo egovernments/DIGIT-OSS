@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
+  BreakLine,
   Card,
   CardLabel,
   CardLabelDesc,
@@ -23,10 +24,13 @@ import {
   ActionBar,
   Menu,
   SubmitBar,
+  Dropdown,
+  Loader,
 } from "@egovernments/digit-ui-react-components";
 
 import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
+import Modal from "../../components/Modal";
 import useComplaintDetails from "../../hooks/useComplaintDetails";
 import useWorkflowDetails from "../../hooks/useWorkflowDetails";
 
@@ -57,10 +61,13 @@ const CloseBtn = (props) => {
 };
 
 const TLCaption = ({ data }) => {
+  const { t } = useTranslation();
   return (
     <div>
+      {data.date && <p>{data.date}</p>}
       <p>{data.name}</p>
       <p>{data.mobileNumber}</p>
+      {data.source && <p>{t("ES_COMMON_FILED_VIA_" + data.source.toUpperCase())}</p>}
     </div>
   );
 };
@@ -75,11 +82,13 @@ export const ComplaintDetails = (props) => {
   const tenantId = "pb.amritsar";
   const statusTable = useComplaintDetails({ tenantId, id });
   console.log("statusTable", statusTable);
-  const workflowDetails = useWorkflowDetails({ tenantId, id });
+  const workflowDetails = useWorkflowDetails({ tenantId, id, role: "EMPLOYEE" });
   console.log("workflowDetails", workflowDetails);
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
-
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [assignResponse, setAssignResponse] = useState(null);
+  const [rerender, setRerender] = useState(1);
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
@@ -104,7 +113,6 @@ export const ComplaintDetails = (props) => {
     switch (state) {
       case fullscreen:
         setFullscreen(!fullscreen);
-
         break;
       case popup:
         setPopup(!popup);
@@ -124,6 +132,7 @@ export const ComplaintDetails = (props) => {
   }
 
   function onActionSelect(action) {
+    setSelectedAction(action);
     switch (action) {
       case "ASSIGN":
         setPopup(true);
@@ -133,8 +142,12 @@ export const ComplaintDetails = (props) => {
         setPopup(true);
         setDisplayMenu(false);
         break;
+      case "RESOLVE":
+        setPopup(true);
+        setDisplayMenu(false);
+        break;
       case "REJECT":
-        alert("COMPLAINT REJECTED");
+        setPopup(true);
         setDisplayMenu(false);
         break;
       default:
@@ -143,30 +156,60 @@ export const ComplaintDetails = (props) => {
     }
   }
 
-  function onAssign() {
+  async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
+    const response = await Digit.Complaint.assign(selectedAction, selectedEmployee, comments, uploadedFile);
+    console.log("aasjdas", response);
+    setAssignResponse(response);
     setToast(true);
-    setTimeout(() => setToast(false), 2000);
+    setRerender(rerender + 1);
+    setTimeout(() => setToast(false), 10000);
   }
 
   function closeToast() {
     setToast(false);
   }
 
+  if (Object.keys(statusTable).length === 0) {
+    return <Loader />;
+  }
+
+  const filterSstatusTable = [
+    "CS_COMPLAINT_DETAILS_GEOLOCATION",
+    "thumbnails",
+    "workflow",
+    "CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS",
+    "audit",
+    "CS_COMPLAINT_DETAILS_DOOR",
+    "CS_COMPLAINT_DETAILS_BUILDING_NAME",
+    "CS_COMPLAINT_DETAILS_PLOT_NO",
+    "CS_COMPLAINT_DETAILS_STREET",
+  ];
+  const getTimelineCaptions = (checkpoint) => {
+    console.log("tl", checkpoint);
+    if (checkpoint.status === "COMPLAINT_FILED" && statusTable?.audit) {
+      const caption = {
+        date: Digit.DateUtils.ConvertTimestampToDate(statusTable.audit.details.createdTime),
+        name: statusTable.audit.citizen.name,
+        mobileNumber: statusTable.audit.citizen.mobileNumber,
+        source: statusTable.audit.source,
+      };
+      return <TLCaption data={caption} />;
+    }
+    return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
+  };
+
   return (
     <React.Fragment>
       <Card>
-        <CardSubHeader>Complaint Summary</CardSubHeader>
-        <CardLabel>Complaint Details</CardLabel>
+        <CardSubHeader>{t(`CS_HEADER_COMPLAINT_SUMMARY`)}</CardSubHeader>
+        <CardLabel>{t(`CS_COMPLAINT_DETAILS_COMPLAINT_DETAILS`)}</CardLabel>
         <StatusTable>
           {Object.keys(statusTable)
-            .filter(
-              (k) =>
-                k !== "CS_COMPLAINT_DETAILS_GEOLOCATION" && k !== "thumbnails" && k !== "workflow" && k !== "CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS"
-            )
-            .map((k, i, arr) =>
-              arr.length - 1 === i ? <LastRow key={k} label={t(k)} text={statusTable[k]} /> : <Row key={k} label={t(k)} text={statusTable[k]} />
-            )}
+            .filter((k) => !filterSstatusTable.includes(k))
+            .map((k, i, arr) => (
+              <Row key={k} label={t(k)} text={statusTable[k]} last={arr.length - 1 === i} />
+            ))}
           {1 === 1 ? null : (
             <MediaRow label="CS_COMPLAINT_DETAILS_GEOLOCATION">
               <MapView onClick={zoomView} />
@@ -174,22 +217,19 @@ export const ComplaintDetails = (props) => {
           )}
         </StatusTable>
         {statusTable.thumbnails && statusTable.thumbnails.length !== 0 ? <DisplayPhotos srcs={statusTable.thumbnails} onClick={zoomImage} /> : null}
-      </Card>
-      <Card>
+        <BreakLine />
         {workflowDetails.timeline && workflowDetails.timeline.length === 1 ? (
-          <CheckPoint isCompleted={true} label={workflowDetails.timeline[0].status} />
+          <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails.timeline[0].status)} />
         ) : (
           <ConnectingCheckPoints>
             {workflowDetails.timeline &&
               workflowDetails.timeline.map((checkpoint, index, arr) => {
-                return arr.length - 1 === index ? (
-                  <CheckPoint key={index} isCompleted={false} label={t(checkpoint.status)} />
-                ) : (
+                return (
                   <CheckPoint
                     key={index}
-                    isCompleted={true}
-                    label={t(checkpoint.status)}
-                    customChild={checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null}
+                    isCompleted={index === 0}
+                    label={t("CS_COMMON_" + checkpoint.status)}
+                    customChild={getTimelineCaptions(checkpoint)}
                   />
                 );
               })}
@@ -208,32 +248,34 @@ export const ComplaintDetails = (props) => {
       ) : null}
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
       {popup ? (
-        <PopUp>
-          <div className="popup-module">
-            <HeaderBar main={<Heading label="Assign Complaint" />} end={<CloseBtn onClick={() => close(popup)} />} />
-            <div className="popup-module-main">
-              <Card>
-                <CardLabel>Employee Name</CardLabel>
-                <TextInput />
-                <CardLabel>Comments</CardLabel>
-                <TextArea />
-                <CardLabel>Supporting Documents</CardLabel>
-                <CardLabelDesc>Only .jpg and .pdf files. 5 MB max file size.</CardLabelDesc>
-                <UploadFile />
-              </Card>
-              <div className="popup-module-action-bar">
-                <ButtonSelector theme="border" label="Cancel" />
-                <ButtonSelector label="Assign" onSubmit={onAssign} />
-              </div>
-            </div>
-          </div>
-        </PopUp>
+        <Modal
+          employeeRoles={workflowDetails.nextActions ? workflowDetails.nextActions : null}
+          headerBarMain={
+            <Heading
+              label={
+                selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
+                  ? t("CS_ACTION_ASSIGN")
+                  : selectedAction === "REJECT"
+                  ? t("CS_ACTION_REJECT")
+                  : t("CS_ACTION_RESOLVE")
+              }
+            />
+          }
+          headerBarEnd={<CloseBtn onClick={() => close(popup)} />}
+          selectedAction={selectedAction}
+          onAssign={onAssign}
+          onCancel={() => close(popup)}
+        />
       ) : null}
-      {toast && <Toast label="Complaint assigned successfully!" onClose={closeToast} />}
-      <ActionBar>
-        {displayMenu && workflowDetails.nextActions ? <Menu options={workflowDetails.nextActions} onSelect={onActionSelect} /> : null}
-        <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
-      </ActionBar>
+      {toast && <Toast label={t(assignResponse ? `CS_ACTION_${selectedAction}_TEXT` : "CS_ACTION_ASSIGN_FAILED")} onClose={closeToast} />}
+      {workflowDetails.nextActions?.length > 0 && (
+        <ActionBar>
+          {displayMenu && workflowDetails.nextActions ? (
+            <Menu options={workflowDetails.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
+          ) : null}
+          <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+        </ActionBar>
+      )}
     </React.Fragment>
   );
 };
