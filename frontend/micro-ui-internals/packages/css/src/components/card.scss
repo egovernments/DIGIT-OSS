@@ -50,7 +50,6 @@
 
 .employeeCard {
   @apply bg-white px-sm pt-sm pb-lg shadow-card;
-  max-width: 420px;
   border-radius: 4px;
 
   .card-header {
@@ -186,7 +185,6 @@
   .employeeCard {
     padding-left: 16px;
     padding-top: 16px;
-    max-width: 270px;
 
     &.filter {
       margin-left: auto;
