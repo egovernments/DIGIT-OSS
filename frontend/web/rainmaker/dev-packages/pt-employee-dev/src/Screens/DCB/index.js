@@ -2356,6 +2356,7 @@ class FormWizardDataEntry extends Component {
     } 
    //let  propertyMethodAction ="_create";
     try {
+      showSpinner();
       let assessPropertyResponse = await httpRequest(
         `property-services/assessment/${propertyMethodAction}`,
         `${propertyMethodAction}`,
@@ -2364,6 +2365,7 @@ class FormWizardDataEntry extends Component {
           Assessment: assessment
         }
       );
+      hideSpinner();      
 
       const assessmentNumber= get(assessPropertyResponse, "Assessments[0].assessmentNumber",'');
       
