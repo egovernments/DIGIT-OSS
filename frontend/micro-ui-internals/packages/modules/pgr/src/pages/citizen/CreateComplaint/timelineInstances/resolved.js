@@ -13,11 +13,14 @@ const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate })
   if (action === "RESOLVE") {
     let actions =
       __nextActions &&
-      __nextActions.map((action, index) => (
-        <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
-          <ActionLinks>{action}</ActionLinks>
-        </Link>
-      ));
+      __nextActions.map(
+        (action, index) =>
+          action && (
+            <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
+              <ActionLinks>{action}</ActionLinks>
+            </Link>
+          )
+      );
     return (
       <div>
         {t(`CS_COMMON_COMPLAINT_RESOLVED`)} <div>{actions}</div>

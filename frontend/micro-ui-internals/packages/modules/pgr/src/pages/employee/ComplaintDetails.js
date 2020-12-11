@@ -202,8 +202,8 @@ export const ComplaintDetails = (props) => {
   return (
     <React.Fragment>
       <Card>
-        <CardSubHeader>Complaint Summary</CardSubHeader>
-        <CardLabel>Complaint Details</CardLabel>
+        <CardSubHeader>{t(`CS_HEADER_COMPLAINT_SUMMARY`)}</CardSubHeader>
+        <CardLabel>{t(`CS_COMPLAINT_DETAILS_COMPLAINT_DETAILS`)}</CardLabel>
         <StatusTable>
           {Object.keys(statusTable)
             .filter((k) => !filterSstatusTable.includes(k))

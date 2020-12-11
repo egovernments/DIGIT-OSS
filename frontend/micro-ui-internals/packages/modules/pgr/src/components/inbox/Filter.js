@@ -210,7 +210,7 @@ const Filter = (props) => {
           </div>
         </div>
       </div>
-      <ActionBar>
+      {/* <ActionBar>
         {props.type === "desktop" ? (
           <SubmitBar label="Send" />
         ) : (
@@ -221,7 +221,7 @@ const Filter = (props) => {
             onSubmit={handleFilterSubmit}
           />
         )}
-      </ActionBar>
+      </ActionBar> */}
       {/* <ActionBar>
         <SubmitBar label="Take Action" />
       </ActionBar> */}
