@@ -1,5 +1,6 @@
 .card {
   @apply bg-white m-sm px-sm pt-sm pb-lg shadow-card;
+  border-radius: 4px;
 
   .card-header {
     @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;

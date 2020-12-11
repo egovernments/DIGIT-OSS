@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, TelePhone } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, Loader, TelePhone } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../../constants/Localization";
@@ -48,7 +48,7 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
   return (
     <React.Fragment>
       <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
-      {timeline && timeline.length > 0 && (
+      {timeline && timeline.length > 0 ? (
         <ConnectingCheckPoints>
           {timeline.map(({ status, caption, auditDetails, timeLineActions }, index) => {
             return (
@@ -60,6 +60,8 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
             );
           })}
         </ConnectingCheckPoints>
+      ) : (
+        <Loader />
       )}
     </React.Fragment>
   );
