@@ -23,7 +23,7 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
         return <PendingForAssignment complaintFiledDate={auditDetails.created} text={t(`CS_COMMON_COMPLAINT_FILED`)} />;
 
       case "PENDINGATLME":
-        let { name, mobileNumber } = caption[0];
+        let { name, mobileNumber } = caption && caption.length > 0 ? caption[0] : { name: "", mobileNumber: "" };
         const assignedTo = `${t("CS_COMMON_COMPLAINT_ASSIGNED_TO")}`;
         return <PendingAtLME name={name} mobile={mobileNumber} text={assignedTo} />;
 
@@ -61,8 +61,8 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
           })}
         </ConnectingCheckPoints>
       ) : (
-        <Loader />
-      )}
+          <Loader />
+        )}
     </React.Fragment>
   );
 };
