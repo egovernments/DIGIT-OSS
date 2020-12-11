@@ -34,7 +34,7 @@ const userType = token === citizenToken ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userType);
 window.Digit.SessionStorage.set("userType", userType);
 
-const getUserDetails = (token, info) => ({ token, info: { userInfo: info } })
+const getUserDetails = (token, info) => ({ token, info })
 
 const userDetails = userType === "citizen" ? getUserDetails(citizenToken, citizenInfo) : getUserDetails(employeeToken, employeeInfo)
 
