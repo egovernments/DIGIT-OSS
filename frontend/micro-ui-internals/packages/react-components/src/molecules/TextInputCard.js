@@ -1,6 +1,8 @@
 import React from "react";
 // import { Card, CardHeader, CardText, LocationSearch, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
+
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
 import CardText from "../atoms/CardText";
@@ -26,6 +28,32 @@ const TextInputCard = ({ header, subHeader, cardText, cardLabel, nextText, skipA
       {skip ? <LinkButton label={skipAndContinueText} onClick={onSkip} /> : null}
     </Card>
   );
+};
+
+TextInputCard.propTypes = {
+  header: PropTypes.string.isRequired,
+  subHeader: PropTypes.string.isRequired,
+  cardText: PropTypes.string.isRequired,
+  cardLabel: PropTypes.string.isRequired,
+  nextText: PropTypes.string.isRequired,
+  skipAndContinueText: PropTypes.string.isRequired,
+  skip: PropTypes.bool.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onSkip: PropTypes.func.isRequired,
+  textInput: PropTypes.string.isRequired,
+};
+
+TextInputCard.defaultProps = {
+  header: "",
+  subHeader: "",
+  cardText: "",
+  cardLabel: "",
+  nextText: "",
+  skipAndContinueText: "",
+  skip: true,
+  onSave: undefined,
+  onSkip: undefined,
+  textInput: "",
 };
 
 export default TextInputCard;

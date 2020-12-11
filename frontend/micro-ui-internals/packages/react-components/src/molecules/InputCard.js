@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
@@ -20,6 +21,20 @@ const InputCard = ({ t, children, texts = {}, submit = false, inputs = [], input
       {texts.skipText ? <LinkButton label={t(texts.skipText)} onClick={onSkip} /> : null}
     </Card>
   );
+};
+
+InputCard.propTypes = {
+  text: PropTypes.object.isRequired,
+  submit: PropTypes.bool.isRequired,
+  onNext: PropTypes.func.isRewquired,
+  onSkip: PropTypes.func.isRequired,
+};
+
+InputCard.defaultProps = {
+  texts: {},
+  submit: false,
+  onNext: undefined,
+  onSkip: undefined,
 };
 
 export default InputCard;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { CameraSvg } from "./svgindex";
 import { DeleteBtn } from "./svgindex";
 
@@ -43,6 +44,16 @@ const UploadImages = (props) => {
       </div>
     );
   }
+};
+
+UploadImages.propTypes = {
+  thumbnail: PropTypes.array,
+  onUpload: PropTypes.func,
+};
+
+UploadImages.defaultProps = {
+  thumbnail: [],
+  onUpload: undefined,
 };
 
 export default UploadImages;

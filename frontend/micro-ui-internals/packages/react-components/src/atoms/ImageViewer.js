@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const ImageViewer = (props) => {
   return (
@@ -10,6 +11,14 @@ const ImageViewer = (props) => {
       <img src={props.imageSrc} />
     </div>
   );
+};
+
+ImageViewer.propTypes = {
+  imageSrc: PropTypes.string.isRequired,
+};
+
+ImageViewer.defaultProps = {
+  imageSrc: "",
 };
 
 export default ImageViewer;

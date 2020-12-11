@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { StarFilled } from "./svgindex";
 import { StarEmpty } from "./svgindex";
+import PropTypes from "prop-types";
 
 const Rating = (props) => {
   var stars = [];
@@ -23,6 +24,18 @@ const Rating = (props) => {
       {props.text ? props.text : ""} {stars}
     </div>
   );
+};
+
+Rating.propTypes = {
+  maxRating: PropTypes.number.isRequired,
+  currentRating: PropTypes.number.isRequired,
+  onFeedback: PropTypes.func.isRequired,
+};
+
+Rating.defaultProps = {
+  maxRating: 5,
+  currentRating: 0,
+  onFeedback: () => {},
 };
 
 export default Rating;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
@@ -98,6 +99,24 @@ const Dropdown = (props) => {
       ) : null}
     </div>
   );
+};
+
+Dropdown.propTypes = {
+  selected: PropTypes.string.isRequired,
+  style: PropTypes.object,
+  option: PropTypes.array.isRequired,
+  optionKey: PropTypes.string.isRequired,
+  select: PropTypes.func,
+  t: PropTypes.func,
+};
+
+Dropdown.defaultProps = {
+  selected: "",
+  option: [],
+  optionKey: 0,
+  style: {},
+  select: undefined,
+  t: undefined,
 };
 
 export default Dropdown;

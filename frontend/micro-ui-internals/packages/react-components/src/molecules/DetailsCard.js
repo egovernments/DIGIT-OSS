@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const Details = ({ label, name }) => {
   return (
@@ -25,6 +26,14 @@ const DetailsCard = ({ data }) => {
       })}
     </div>
   );
+};
+
+DetailsCard.propTypes = {
+  data: PropTypes.array.isRequired,
+};
+
+DetailsCard.defaultProps = {
+  data: [],
 };
 
 export default DetailsCard;

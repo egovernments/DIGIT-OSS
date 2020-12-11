@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const LinkButton = (props) => {
   return (
@@ -6,6 +7,22 @@ const LinkButton = (props) => {
       {props.label}
     </span>
   );
+};
+
+LinkButton.propTypes = {
+  /**
+   * LinkButton contents
+   */
+  label: PropTypes.string.isRequired,
+  /**
+   * Optional click handler
+   */
+  onClick: PropTypes.func,
+};
+
+LinkButton.defaultProps = {
+  label: "Link",
+  onClick: undefined,
 };
 
 export default LinkButton;

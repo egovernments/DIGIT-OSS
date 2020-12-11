@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import PropTypes from "prop-types";
 import TextArea from "../atoms/TextArea";
 import CardLabel from "../atoms/CardLabel";
 import CardLabelError from "../atoms/CardLabelError";
@@ -48,6 +49,18 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange }) =>
       </InputCard>
     </form>
   );
+};
+
+FormStep.propTypes = {
+  config: PropTypes.shape({}),
+  onSelect: PropTypes.func.isRequired,
+  onSkip: PropTypes.func.isRequired,
+};
+
+FormStep.defaultProps = {
+  config: {},
+  onSelect: undefined,
+  onSkip: undefined,
 };
 
 export default FormStep;
