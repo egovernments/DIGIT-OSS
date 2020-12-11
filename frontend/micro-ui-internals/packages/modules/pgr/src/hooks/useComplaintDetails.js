@@ -59,13 +59,13 @@ const useComplaintDetails = ({ tenantId, id }) => {
           CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE: t("SERVICEDEFS." + ComplaintDetailsResponse.service.serviceCode.toUpperCase()),
           CS_COMPLAINT_DETAILS_APPLICATION_STATUS: t(`CS_COMMON_${ComplaintDetailsResponse.service.applicationStatus}`),
           CS_COMPLAINT_DETAILS_LOCALITY: ComplaintDetailsResponse.service.address.city.includes("_")
-            ? t(ComplaintDetailsResponse.service.address.city.toUpperCase())
+            ? t(ComplaintDetailsResponse.service.address.locality.code.toUpperCase())
             : t(
-                "PB_" +
-                  ComplaintDetailsResponse.service.address.city.toUpperCase() +
-                  "_ADMIN_" +
-                  ComplaintDetailsResponse.service.address.locality.code
-              ),
+              "PB_" +
+              ComplaintDetailsResponse.service.address.city.toUpperCase() +
+              "_ADMIN_" +
+              ComplaintDetailsResponse.service.address.locality.code
+            ),
           CS_COMPLAINT_DETAILS_CITY: t(ComplaintDetailsResponse.service.address.city),
           CS_COMPLAINT_DETAILS_LANDMARK: ComplaintDetailsResponse.service.address.landmark,
           CS_COMPLAINT_DETAILS_GEOLOCATION: ComplaintDetailsResponse.service.address.geoLocation,
