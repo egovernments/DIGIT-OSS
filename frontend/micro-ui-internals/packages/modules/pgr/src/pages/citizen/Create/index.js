@@ -18,9 +18,6 @@ import SelectImages from "./Steps/SelectImages";
 import SelectDetails from "./Steps/SelectDetails";
 import Response from "./Steps/Response";
 
-const Step2 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSelect} />;
-const Step3 = ({ config, onSelect }) => <FormStep config={config} onSelect={onSelect} />;
-
 // steps type: radio, map location, input, city-mohalla, textarea, upload photo
 export const CreateComplaint = () => {
   const { t } = useTranslation();
@@ -30,7 +27,8 @@ export const CreateComplaint = () => {
 
   const appState = useSelector((state) => state)["common"];
   console.log("appstate form index", appState);
-  const [params, setParams] = useState({});
+  const __initParams = Digit.SessionStorage.get("PGR_CREATE_COMPLAINT_PARAMS");
+  const [params, setParams] = useState(__initParams ? __initParams : {});
   const [submitForm, setSubmitForm] = useState(false);
 
   const stepItems = useMemo(
@@ -58,6 +56,7 @@ export const CreateComplaint = () => {
     const { key, name } = subType;
     const complaintType = key;
     setParams({ ...params, complaintType });
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
     history.push(`${path}/pincode`);
   };
 
@@ -66,6 +65,7 @@ export const CreateComplaint = () => {
       const { pincode } = _pincode;
       setParams({ ...params, pincode });
       console.log("index --->", pincode);
+      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
     }
     history.push(`${path}/address`);
   };
@@ -79,25 +79,32 @@ export const CreateComplaint = () => {
     const localityCode = address.locality.code;
     const localityName = address.locality.name;
     setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName });
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
     history.push(`${path}/landmark`);
   };
 
   const saveLandmark = (_landmark) => {
-    const { landmark } = _landmark;
-    setParams({ ...params, landmark });
+    if (_landmark) {
+      const { landmark } = _landmark;
+      setParams({ ...params, landmark });
+      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+    }
     history.push(`${path}/upload-photos`);
   };
 
   const saveImagesUrl = (images) => {
-    const uploadedImages = images?.map((url) => {
-      return {
-        documentType: "PHOTO",
-        fileStore: url,
-        documentUid: "",
-        additionalDetails: {},
-      };
-    });
-    setParams({ ...params, uploadedImages });
+    if (images) {
+      const uploadedImages = images?.map((url) => {
+        return {
+          documentType: "PHOTO",
+          fileStore: url,
+          documentUid: "",
+          additionalDetails: {},
+        };
+      });
+      setParams({ ...params, uploadedImages });
+      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+    }
     history.push(`${path}/additional-details`);
   };
 
@@ -107,6 +114,10 @@ export const CreateComplaint = () => {
       details && details !== "" ? setParams({ ...params, details }) : null;
     }
     console.log("index params", params);
+
+    //Empty Session Storage for params
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
+
     // submit complaint through actions
     await dispatch(createComplaint(params));
     history.push(`${path}/response`);
@@ -125,28 +136,28 @@ export const CreateComplaint = () => {
   return (
     <Switch>
       <Route path={`${path}/complaint-type`}>
-        <SelectComplaintType config={stepItems[0]} onSelect={selectComplaintType} />
+        <SelectComplaintType t={t} config={stepItems[0]} onSelect={selectComplaintType} />
       </Route>
       <Route path={`${path}/sub-type`}>
-        <SelectSubType config={stepItems[1]} onSelect={selectSubType} />
+        <SelectSubType t={t} config={stepItems[1]} onSelect={selectSubType} />
       </Route>
       <Route path={`${path}/pincode`}>
-        <SelectPincode config={stepItems[2]} onSelect={selectPincode} />
+        <SelectPincode t={t} config={stepItems[2]} onSelect={selectPincode} />
       </Route>
       <Route path={`${path}/address`}>
-        <SelectAddress config={stepItems[3]} onSelect={selectAddress} />
+        <SelectAddress t={t} config={stepItems[3]} onSelect={selectAddress} />
       </Route>
       <Route path={`${path}/landmark`}>
-        <SelectLandmark config={stepItems[4]} onSelect={saveLandmark} />
+        <SelectLandmark t={t} config={stepItems[4]} onSelect={saveLandmark} />
       </Route>
       <Route path={`${path}/upload-photos`}>
-        <SelectImages config={stepItems[5]} onSelect={saveImagesUrl} />
+        <SelectImages t={t} config={stepItems[5]} onSelect={saveImagesUrl} />
       </Route>
       <Route path={`${path}/additional-details`}>
-        <SelectDetails config={stepItems[6]} onSelect={submitComplaint} />
+        <SelectDetails t={t} config={stepItems[6]} onSelect={submitComplaint} />
       </Route>
       <Route path={`${path}/response`}>
-        <Response config={stepItems[7]} onSelect={backToHome} />
+        <Response t={t} config={stepItems[7]} onSelect={backToHome} />
       </Route>
       <Route>
         <Redirect to={`${url}/complaint-type`} />

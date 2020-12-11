@@ -17,24 +17,20 @@ const Complaint = ({ data, path }) => {
     history.push(`${path}/${serviceRequestId}`);
   };
 
+  const closedStatus = ["RESOLVED"];
+
   return (
     <React.Fragment>
       <Card onClick={handleClick}>
+        <div className={`status-highlight ${closedStatus.includes(applicationStatus) ? "success" : ""}`}>
+          <p>{(closedStatus.includes(applicationStatus) ? t("CS_COMMON_CLOSED") : t("CS_COMMON_OPEN")).toUpperCase()}</p>
+        </div>
         <CardSubHeader>{t(`SERVICEDEFS.${serviceCode.toUpperCase()}`)}</CardSubHeader>
 
         <DateWrap date={Digit.DateUtils.ConvertTimestampToDate(data.auditDetails.createdTime)} />
 
         <KeyNote keyValue={t(`${LOCALIZATION_KEY.CS_COMMON}_COMPLAINT_NO`)} note={serviceRequestId} />
 
-        <div className="status-highlight">
-          <p>Open</p>
-        </div>
-        {/* {t("CS_COMMON_" + applicationStatus.toUpperCase())} */}
-        {/* {console.log(
-          serviceRequestId,
-          "applicationStatus.toLowerCase():",
-          applicationStatus.toLowerCase()
-        )} */}
         {t(`${LOCALIZATION_KEY.CS_COMMON}_${applicationStatus}`)}
       </Card>
     </React.Fragment>

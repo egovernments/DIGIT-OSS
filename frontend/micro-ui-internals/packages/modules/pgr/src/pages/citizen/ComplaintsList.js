@@ -11,7 +11,8 @@ import { useSelector } from "react-redux";
 const useComplaintsList = () => {
   const User = Digit.SessionStorage.get("User");
   // TODO: move city to state
-  const { isLoading, error, data } = useQuery("complaintsList", () => Digit.PGRService.search("pb.amritsar", { userName: User.mobileNumber }));
+  const mobileNumber = User.mobileNumber || User?.info?.mobileNumber || User?.info?.userInfo?.mobileNumber;
+  const { isLoading, error, data } = useQuery("complaintsList", () => Digit.PGRService.search("pb.amritsar", { mobileNumber }));
   return { isLoading, error, data };
 };
 
@@ -36,13 +37,13 @@ export const ComplaintsList = (props) => {
   if (error) {
     complaintsList = (
       <Card>
-        <p style={{ textAlign: "center" }}>Error loading complaints.</p>
+        {(t(LOCALE.ERROR_LOADING_RESULTS)).split("\\n").map(text => <p style={{ textAlign: "center" }}>{text}</p>)}
       </Card>
     );
   } else if (complaints.length === 0) {
     complaintsList = (
       <Card>
-        <p style={{ textAlign: "center" }}>{t(LOCALE.NO_COMPLAINTS)}</p>
+        {(t(LOCALE.NO_COMPLAINTS)).split("\\n").map(text => <p style={{ textAlign: "center" }}>{text}</p>)}
       </Card>
     );
   } else {
