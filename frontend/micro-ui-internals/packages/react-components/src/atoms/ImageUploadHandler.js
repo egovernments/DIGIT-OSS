@@ -1,3 +1,4 @@
+import { set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CardHeader from "./CardHeader";
@@ -13,6 +14,7 @@ export const ImageUploadHandler = (props) => {
   const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(__initThumbnails ? __initThumbnails : null);
   const [uploadedImagesIds, setUploadedImagesIds] = useState(__initImageIds ? __initImageIds : null);
   const [rerender, setRerender] = useState(1);
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
     if (image) {
@@ -31,9 +33,12 @@ export const ImageUploadHandler = (props) => {
   }, [uploadedImagesIds]);
 
   useEffect(() => {
-    console.log("uploaded image thmbs are ehher", uploadedImagesThumbs);
-    Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", uploadedImagesThumbs);
-  }, [uploadedImagesThumbs]);
+    if (imageFile && imageFile.size > 2097152) {
+      alert("File is too big!");
+    } else {
+      setImage(imageFile);
+    }
+  }, [imageFile]);
 
   const addUploadedImageIds = useCallback(
     (imageIdData) => {
@@ -66,11 +71,7 @@ export const ImageUploadHandler = (props) => {
   }
 
   function getImage(e) {
-    if (e.target.files[0] && e.target.files[0].size > 2097152) {
-      alert("File is too big!");
-    } else {
-      setImage(e.target.files[0]);
-    }
+    setImageFile(e.target.files[0]);
   }
 
   const submit = useCallback(async () => {
@@ -79,10 +80,6 @@ export const ImageUploadHandler = (props) => {
       addImageThumbnails(res);
     }
   }, [uploadedImagesIds]);
-
-  // function getImage(e) {
-  //   setImage(e.target.files[0]);
-  // }
 
   function deleteImage(img) {
     console.log("to delte ", img);
