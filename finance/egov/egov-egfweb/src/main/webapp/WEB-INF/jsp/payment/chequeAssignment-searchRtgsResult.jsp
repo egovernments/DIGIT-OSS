@@ -149,7 +149,7 @@
 									name="%{voucherDate}" format="dd/MM/yyyy" />
 									 <s:hidden
 									name="rtgsList[%{#counter}].tempPaymentDate"
-									value="%{tempPaymentDate}"></s:hidden></td>
+									value="%{tempPaymentDate}" id="tempPaymentDate"></s:hidden></td>
 							<td style="text-align: center" class="blueborderfortdnew"><s:hidden
 									id="paidTo" name="rtgsList[%{#counter}].paidTo"
 									value="%{paidTo}" /> <s:property value="%{paidTo}" /></td>
@@ -235,29 +235,33 @@
 			}
 			function validate()
 			{
-			
 				resetSelectedRowsId();
-				var result=true;
+				var result = true;
+				
 				if(document.getElementById('selectedRows').value=='' || document.getElementById('selectedRows').value==0)
 				{
 					bootbox.alert('<s:text name="msg.please.select.the.payment.voucher"/> ');
 					return false;
 				}
 				if(document.getElementById('rtgsdateMapId').value=='')
-					{
-					
+				{	
 					bootbox.alert('<s:text name="msg.please.select.rtgs.date"/> ');
 					return false;
-					}
+				}
+				
 				<s:if test="%{paymentMode=='rtgs'}">
-					//result= validateForRtgsMode();  
-				</s:if>    
-				//disableAll(); 
-				document.chequeAssignment.action ='/services/EGF/payment/chequeAssignment-update.action';
-	    		//document.chequeAssignment.submit();
-								 
-				return true;                   
+					result = validateForRtgsMode();  
+				</s:if>  
+				
+				if(result)
+				{
+					document.chequeAssignment.action ='/services/EGF/payment/chequeAssignment-update.action';
+					return true; 
+				}
+				else return false;
 			}
+			
+			
 		function validateForRtgsMode(){
 				var noOfSelectedRows=document.getElementById('selectedRows').value;
 				var chkCount=0;     
@@ -271,10 +275,10 @@
 				
 					<s:iterator value="value" status="s">
 					index='<s:property value="%{#listCount}"/>';       
-					chequeDate='<s:property value="%{rtgsdateMap[#accountId]}"/>';     
-					var paymentDate= document.getElementsByName("value["+index+"].tempPaymentDate")[0].value; 
+					//chequeDate='<s:property value="%{rtgsdateMap[#accountId]}"/>';
+					chequeDate=document.getElementById('rtgsdateMapId').value;
+					var paymentDate=document.getElementById('tempPaymentDate').value;
 						if(document.getElementById('isSelected'+index).checked){
-							console.log("chkCount",chkCount);
 							chkCount++;                 
 							if( compareDate(paymentDate,chequeDate) == -1){     
 								bootbox.alert('<s:text name="msg.cheque.date.cant.be.less.than.payment.date"/>');
@@ -290,7 +294,6 @@
 			}
 		
 		function resetSelectedRowsId(){
-			/* var checkboxes = document.querySelectorAll('input:checked'); */
 			var checkboxes = document.querySelectorAll("input[type='checkbox']");
 			 var temp =[];
 			for(var i =0 ; i<checkboxes.length;i++){
@@ -330,7 +333,7 @@
 					document.getElementsByName("rtgsList["+index+"].billId")[0].disabled =true;
 					document.getElementsByName("rtgsList["+index+"].expenditureType")[0].disabled =true;
 					document.getElementsByName("rtgsList["+index+"].tempPaymentDate")[0].disabled =true;
-					document.getElementsByName("__checkbox_rtgsList["+index+"].isSelected")[0].remove();	
+					document.getElementsByName("__checkbox_rtgsList["+index+"].isSelected")[0] && document.getElementsByName("__checkbox_rtgsList["+index+"].isSelected")[0].remove();	
 					document.getElementsByName("rtgsList["+index+"].paidAmount")[0].disabled =true;
 					document.getElementById('selectall').disabled = true;
 					
