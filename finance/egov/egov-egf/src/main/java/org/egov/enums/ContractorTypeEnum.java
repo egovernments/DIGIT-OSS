@@ -1,12 +1,12 @@
 package org.egov.enums;
 
-public enum FirmOrIndividualEnum {
+public enum ContractorTypeEnum {
     
     FIRM("Firm"), INDIVIDUALS("Individuals");
 
     private String value;
 
-    FirmOrIndividualEnum(String value) {
+    ContractorTypeEnum(String value) {
         this.value = value;
     }
 

@@ -52,9 +52,9 @@ jQuery('#btnsearch').click(function(e) {
 
 $(document).ready(function(){	
 
-	refreshViewFromRadionOptionValue($('input[name=firmOrIndividual]:checked').val(), true);
+	refreshViewFromRadionOptionValue($('input[name=supplierType]:checked').val(), true);
 	
-	$('input[type=radio][name=firmOrIndividual]').change(function() {
+	$('input[type=radio][name=supplierType]').change(function() {
 		refreshViewFromRadionOptionValue(this.value, false);
     });
 	

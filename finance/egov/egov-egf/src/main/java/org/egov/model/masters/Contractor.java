@@ -63,7 +63,7 @@ import javax.validation.constraints.NotNull;
 import org.egov.commons.Bank;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.utils.EntityType;
-import org.egov.enums.FirmOrIndividualEnum;
+import org.egov.enums.ContractorTypeEnum;
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.egov.infra.persistence.validator.annotation.OptionalPattern;
 import org.egov.infra.persistence.validator.annotation.Required;
@@ -157,8 +157,8 @@ public class Contractor extends AbstractAuditable implements EntityType {
     private String gstRegisteredState;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "firmorindividual")
-    private FirmOrIndividualEnum firmOrIndividual;
+    @Column(name = "contractortype")
+    private ContractorTypeEnum contractorType;
 
     @ManyToOne
     @JoinColumn(name = "status")
@@ -376,11 +376,11 @@ public class Contractor extends AbstractAuditable implements EntityType {
         this.gstRegisteredState = gstRegisteredState;
     }
 
-    public FirmOrIndividualEnum getFirmOrIndividual() {
-        return firmOrIndividual;
+    public ContractorTypeEnum getContractorType() {
+        return contractorType;
     }
 
-    public void setFirmOrIndividual(final FirmOrIndividualEnum firmOrIndividual) {
-        this.firmOrIndividual = firmOrIndividual;
+    public void setContractorType(ContractorTypeEnum contractorType) {
+        this.contractorType = contractorType;
     }
 }

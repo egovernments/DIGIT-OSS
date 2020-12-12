@@ -132,13 +132,13 @@
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.firmorindividual"
-								text="FirmOrIndividual" />
+							<spring:message code="lbl.type.contrator.supplier"
+								text="Type" />
 						</div>
-						<div class="col-sm-3 add-margin view-content">${contractor.firmOrIndividual}</div>
+						<div class="col-sm-3 add-margin view-content">${contractor.contractorType}</div>
 					</div>
 					<c:choose>
-						<c:when test="${contractor.firmOrIndividual =='FIRM'}">
+						<c:when test="${contractor.contractorType =='FIRM'}">
 							<div class="row add-border">
 								<div class="col-xs-3 add-margin">
 									<spring:message code="contractor.registrationNo"
