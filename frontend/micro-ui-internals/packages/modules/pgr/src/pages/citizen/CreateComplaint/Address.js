@@ -49,7 +49,7 @@ const Address = (props) => {
     console.log("object keys", Object.keys(props.list).length > 0);
     if (Object.keys(props.list).length > 0) {
       cities.push(props.list.city);
-      props.list.localities.map((locality) => localities.push(t(`admin.locality.${locality.code}`)));
+      props.list.localities.map((locality) => localities.push(t(`${locality.code}`)));
     } else {
       appState.cities.map((city) => cities.push(city.name));
       if (appState.localities.localityList) {

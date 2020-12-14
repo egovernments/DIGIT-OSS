@@ -24,13 +24,14 @@ const getDetailsRow = ({ id, service }) => ({
   ],
 });
 
+const isEmptyOrNull = (obj) => obj === undefined || obj === null || Object.keys(obj).length === 0;
+
 const transformDetails = ({ id, service, workflow, thumbnails }) => {
-  console.log("window.Digit.Customizations.PGR.getComplaintDetailsTableRows", window.Digit.Customizations.PGR.getComplaintDetailsTableRows);
+  const { Customizations, SessionStorage } = window.Digit;
+  const role = (SessionStorage.get("user_type") || "CITIZEN").toUpperCase();
+  const customDetails = Customizations.PGR.getComplaintDetailsTableRows ? Customizations.PGR.getComplaintDetailsTableRows({ id, service, role }) : {};
   return {
-    details:
-      window.Digit.SessionStorage.get("user_type") === "employee"
-        ? getDetailsRow({ id, service })
-        : window.Digit.Customizations.PGR.getComplaintDetailsTableRows({ id, service, role: "CITIZEN" }),
+    details: !isEmptyOrNull(customDetails) ? customDetails : getDetailsRow({ id, service }),
     thumbnails: thumbnails,
     workflow: workflow,
     audit: {
