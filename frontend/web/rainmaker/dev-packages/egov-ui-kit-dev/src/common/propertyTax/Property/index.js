@@ -417,6 +417,8 @@ class Property extends Component {
       isMigratedProperty =true;
     }
 
+    let isCitizen = process.env.REACT_APP_NAME === "Citizen";
+
  /*    let button;
     if(process.env.REACT_APP_NAME !='Citizen' && propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD' && Payments.length <= 0){
     button =
@@ -458,7 +460,7 @@ class Property extends Component {
         }        
 
                       
-         
+         {!isCitizen &&
            <Button
               label={
                 <Label buttonLabel={true}
@@ -471,8 +473,8 @@ class Property extends Component {
              // buttonStyle={{ border: "1px solid #fe7a51" }}
              style={{ lineHeight: "auto", minWidth: "inherit" }}
              />   
-              {isMigratedProperty && 
-
+            }
+              {isMigratedProperty && !isCitizen &&
 
               <Button
               onClick={() => this.editDemand()}
