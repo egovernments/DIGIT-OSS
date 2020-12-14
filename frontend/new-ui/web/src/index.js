@@ -14,6 +14,7 @@ const parseValue = (value) => {
     return value
   }
 }
+window.Digit.Customizations = { PGR: {} };
 
 const getFromStorage = (key) => {
   const value = window.localStorage.getItem(key);

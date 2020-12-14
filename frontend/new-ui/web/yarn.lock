@@ -1248,6 +1248,13 @@
   dependencies:
     react-table "^7.6.1"
 
+"@egovernments/digit-ui-react-components@^1.0.31":
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.31.tgz#6b1c3917243e9c448b437f84c34205b52235449c"
+  integrity sha512-dTbYeXWx7bJkBF/ncOjKPS5uQAAGPjCppTk4dPM++N4I6KBBwBZdMwuuCd79KvYDSSODiJZJ++8d+etkG1eQpA==
+  dependencies:
+    react-table "^7.6.1"
+
 "@eslint/eslintrc@^0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.2.1.tgz#f72069c330461a06684d119384435e12a5d76e3c"
@@ -9688,9 +9695,9 @@ rollup@^1.31.1:
     acorn "^7.1.0"
 
 rooks@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/rooks/-/rooks-4.3.0.tgz#67ac2868c76c5fae76165c9700b2f01d8c5396ae"
-  integrity sha512-eOAhCXJGJAfx5r3nS9HjjY2C1mBS5vP7pgYFbqoavJUt1/CYHlDGuAKaHwEzrWnJmOYj8+ImT49h3dWqLH+/yA==
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/rooks/-/rooks-4.4.0.tgz#b095edea7e70425503a4172fcd022f5206a4c389"
+  integrity sha512-rpLfnar1JFLO2c7SFxpfT2Ym0sgISslEQJrZYkInGX5IF5IJw38/r4u6Ng8bdwBE62d42seiVqNAMe9vu3noSA==
 
 rsvp@^4.8.4:
   version "4.8.5"
