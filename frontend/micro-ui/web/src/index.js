@@ -7,6 +7,8 @@ import App from './App';
 
 initLibraries();
 
+window.Digit.Customizations = { PGR: {} };
+
 // const token = window.localStorage.getItem("token");
 const citizenToken = window.localStorage.getItem("Citizen.token");
 // const employeeToken = window.localStorage.getItem("Employee.token");
