@@ -397,6 +397,7 @@ class Property extends Component {
       receiptsByYr,
       totalBillAmountDue,
       documentsUploaded,
+      Payments = []
     } = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
@@ -460,7 +461,7 @@ class Property extends Component {
         }        
 
                       
-         {!isCitizen &&
+         {!isCitizen && Payments.length<=0 &&
            <Button
               label={
                 <Label buttonLabel={true}
@@ -474,7 +475,7 @@ class Property extends Component {
              style={{ lineHeight: "auto", minWidth: "inherit" }}
              />   
             }
-              {isMigratedProperty && !isCitizen &&
+              {isMigratedProperty && !isCitizen && Payments.length<=0 &&
 
               <Button
               onClick={() => this.editDemand()}
@@ -792,7 +793,7 @@ const mapStateToProps = (state, ownProps) => {
   const { urls, localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById } = state.common || {};
-  let { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue = 0, Assessments = [] } = state.properties || {};
+  let { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue = 0, Assessments = [],Payments = [] } = state.properties || {};  
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
@@ -844,7 +845,8 @@ const mapStateToProps = (state, ownProps) => {
     localization,
     totalBillAmountDue,
     documentsUploaded,
-    Assessments
+    Assessments,
+    Payments
   };
 };
 
