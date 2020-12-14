@@ -209,20 +209,21 @@ export const ComplaintDetails = (props) => {
           <Loader />
         ) : (
           <StatusTable>
-            {Object.keys(statusTable.complaintDetails.details)
-              // .filter((k) => !filterSstatusTable.includes(k))
-              .map((k, i, arr) => (
-                <Row
-                  key={k}
-                  label={t(k)}
-                  text={
-                    Array.isArray(statusTable.complaintDetails.details[k])
-                      ? statusTable.complaintDetails.details[k].map((val) => t(val))
-                      : t(statusTable.complaintDetails.details[k])
-                  }
-                  last={arr.length - 1 === i}
-                />
-              ))}
+            {statusTable?.complaintDetails &&
+              Object.keys(statusTable?.complaintDetails?.details)
+                // .filter((k) => !filterSstatusTable.includes(k))
+                .map((k, i, arr) => (
+                  <Row
+                    key={k}
+                    label={t(k)}
+                    text={
+                      Array.isArray(statusTable.complaintDetails.details[k])
+                        ? statusTable.complaintDetails.details[k].map((val) => t(val))
+                        : t(statusTable.complaintDetails.details[k])
+                    }
+                    last={arr.length - 1 === i}
+                  />
+                ))}
 
             {1 === 1 ? null : (
               <MediaRow label="CS_COMPLAINT_DETAILS_GEOLOCATION">

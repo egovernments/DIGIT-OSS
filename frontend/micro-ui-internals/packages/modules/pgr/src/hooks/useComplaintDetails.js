@@ -1,5 +1,4 @@
 import { useQuery } from "react-query";
-import _ from "lodash";
 
 // TODO: move to service
 const getThumbnails = async (ids, tenantId) => {
@@ -26,10 +25,12 @@ const getDetailsRow = ({ id, service }) => ({
 });
 
 const transformDetails = ({ id, service, workflow, thumbnails }) => {
+  console.log("window.Digit.Customizations.PGR.getComplaintDetailsTableRows", window.Digit.Customizations.PGR.getComplaintDetailsTableRows);
   return {
-    details: _.isEmpty(window.Digit.Customizations.PGR.getComplaintDetailsTableRows)
-      ? getDetailsRow({ id, service })
-      : window.Digit.Customizations.PGR.getComplaintDetailsTableRows({ id, service, role: "CITIZEN" }),
+    details:
+      window.Digit.SessionStorage.get("user_type") === "employee"
+        ? getDetailsRow({ id, service })
+        : window.Digit.Customizations.PGR.getComplaintDetailsTableRows({ id, service, role: "CITIZEN" }),
     thumbnails: thumbnails,
     workflow: workflow,
     audit: {
