@@ -1162,10 +1162,25 @@
     react-i18next "^11.7.3"
     rooks "^4.3.0"
 
-"@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.30.tgz#dc9e7f30cfe46e02b73e610a8b71d7826967fb99"
-  integrity sha512-26jBZL1hrVLaKYZAPv8fAswwbXmVtyfYlSMcTknTzjLryq7wTN22BwO+gRZYM+A55WwHcqC3F16ScWtAicMs0Q==
+"@egovernments/digit-ui-libraries@^1.0.31":
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.31.tgz#9f4c8f1f9c6b9c32e296e891329eba39702f5607"
+  integrity sha512-ol+Laa0QTx9gY46ygrb1CuMm3JNfcmIv/wcp8KR+XFevZiu3Ejvs0OBEvUFsTZ0pja7kRYegRCv7MbGj3JVURQ==
+  dependencies:
+    axios "^0.20.0"
+    babel-preset-react "^6.24.1"
+    date-fns "^2.16.1"
+    i18next "^19.8.2"
+    i18next-react-postprocessor "^3.0.4"
+    react "^17.0.0"
+    react-i18next "^11.7.3"
+    react-query "^2.26.3"
+    rooks "^4.3.0"
+
+"@egovernments/digit-ui-module-core@^1.0.31":
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.31.tgz#834087c6fa262831bacaa5e88e6fe2ec0afaae53"
+  integrity sha512-mBu9GKLpmi+aD/Un6BblfNXS1lZ/M+0UKmGE1WTKU1u6eQbP+WgLbUqCO4qTYgFMM1B+jx62G3lm/g5lxOCU9w==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1181,10 +1196,10 @@
     redux-thunk "^2.3.0"
     rooks "^4.3.0"
 
-"@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.30.tgz#ce1c43f4a5ea46df3fb2a772acd2f82e9908b524"
-  integrity sha512-vkjpSgwkwTDMvCilcDLO3kRwIharXgJuysGEOe6BfSWHaKDuYJHUzGmkDMUWRC0n85ZDpvI04D+Zd5e4BLy2jw==
+"@egovernments/digit-ui-module-fsm@^1.0.31":
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.31.tgz#7d9d2da6eb0a3bd7f07e3b17c845093dbb177da1"
+  integrity sha512-hAtvo54n6fiFVcGtHpjgRuZjO4AuMW06r0PubUmFQrIH4fBbnY+nUUqhGwKd4gQ4jiKSO9UKXMaMj0cFIA2Q9g==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1200,10 +1215,10 @@
     redux-thunk "^2.3.0"
     rooks "^4.3.0"
 
-"@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.30.tgz#ac77498c1ccf86c175d7d0e6f1b59cf608317e44"
-  integrity sha512-l0gls0O/+lYqP1XROzEmPsyMZjATXlyNJ+CcrV4+k6NRL9JN0vpWgGh1UPB5E8J6JChfluR+/FOYDWMgHlSr8w==
+"@egovernments/digit-ui-module-pgr@^1.0.31":
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.31.tgz#dadfa3dd76e08af112ea2defda68db3509968d75"
+  integrity sha512-IMsVqrdoYVEbMHDAQ8veTMnzF2LRzwOhzFmBFjweS1XWDNnXByU6ylwjtLh0kWb8LvVZrmfECmTdKpHQRKXUQw==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1223,6 +1238,13 @@
   version "1.0.30"
   resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.30.tgz#97c47f57c60dad5d7a36e83a9a2653fd076f60b2"
   integrity sha512-qNDx4bbdIJN/yFmgIX7aEhciNoSB4bx23YVtB/hrpvwdm9WlbDKp5A/hSPJ/PoMfrufTWEq4KvNxx9wMSCETnw==
+  dependencies:
+    react-table "^7.6.1"
+
+"@egovernments/digit-ui-react-components@^1.0.31":
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.31.tgz#6b1c3917243e9c448b437f84c34205b52235449c"
+  integrity sha512-dTbYeXWx7bJkBF/ncOjKPS5uQAAGPjCppTk4dPM++N4I6KBBwBZdMwuuCd79KvYDSSODiJZJ++8d+etkG1eQpA==
   dependencies:
     react-table "^7.6.1"
 
@@ -9033,7 +9055,7 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
-react-dev-utils@^11.0.0:
+react-dev-utils@^11.0.1:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.1.tgz#30106c2055acfd6b047d2dc478a85c356e66fe45"
   integrity sha512-rlgpCupaW6qQqvu0hvv2FDv40QG427fjghV56XyPcP5aKtOAPzNAhQ7bHqk1YdS2vpW1W7aSV3JobedxuPlBAA==
@@ -9152,10 +9174,10 @@ react-router@5.2.0:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-scripts@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-4.0.0.tgz#36f3d84ffff708ac0618fd61e71eaaea11c26417"
-  integrity sha512-icJ/ctwV5XwITUOupBP9TUVGdWOqqZ0H08tbJ1kVC5VpNWYzEZ3e/x8axhV15ZXRsixLo27snwQE7B6Zd9J2Tg==
+react-scripts@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-4.0.1.tgz#34974c0f4cfdf1655906c95df6a04d80db8b88f0"
+  integrity sha512-NnniMSC/wjwhcJAyPJCWtxx6CWONqgvGgV9+QXj1bwoW/JI++YF1eEf3Upf/mQ9KmP57IBdjzWs1XvnPq7qMTQ==
   dependencies:
     "@babel/core" "7.12.3"
     "@pmmmwh/react-refresh-webpack-plugin" "0.4.2"
@@ -9199,8 +9221,9 @@ react-scripts@4.0.0:
     postcss-normalize "8.0.1"
     postcss-preset-env "6.7.0"
     postcss-safe-parser "5.0.2"
+    prompts "2.4.0"
     react-app-polyfill "^2.0.0"
-    react-dev-utils "^11.0.0"
+    react-dev-utils "^11.0.1"
     react-refresh "^0.8.3"
     resolve "1.18.1"
     resolve-url-loader "^3.1.2"
