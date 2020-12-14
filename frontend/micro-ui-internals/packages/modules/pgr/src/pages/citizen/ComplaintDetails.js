@@ -77,6 +77,7 @@ const ComplaintDetailsPage = (props) => {
           </Card>
           <Card>
             <TimeLine
+              isLoading={workFlowDetails.isLoading}
               data={workFlowDetails.data}
               serviceRequestId={id}
               complaintWorkflow={complaintDetails.workflow}

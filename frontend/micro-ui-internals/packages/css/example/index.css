@@ -1253,25 +1253,25 @@ img, video {
     padding: 0;
     margin: 0; }
 
-.employee-data-table div {
+.employee-data-table .row {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   padding-bottom: 8px;
   margin-bottom: 8px; }
-  .employee-data-table div span {
+  .employee-data-table .row span {
     width: 70%;
     display: contents; }
-  .employee-data-table div h2 {
+  .employee-data-table .row h2 {
     width: 30%;
     font-weight: 700; }
-  .employee-data-table div h2, .employee-data-table div p {
+  .employee-data-table .row .value, .employee-data-table .row h2 {
     font-size: 16px;
     line-height: 24px; }
-  .employee-data-table div p {
+  .employee-data-table .row .value {
     width: 70%; }
 
-.employee-data-table .row-last {
+.employee-data-table .last {
   border: none;
   padding: 0;
   margin: 0; }
