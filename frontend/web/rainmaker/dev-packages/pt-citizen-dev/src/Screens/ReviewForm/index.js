@@ -45,7 +45,7 @@ class ReviewForm extends Component {
   };
 
   componentDidMount() {
-    this.getImportantDates();
+    //this.getImportantDates();
     this.props.getEstimates();
   }
 
@@ -89,7 +89,7 @@ class ReviewForm extends Component {
           Penalty
         } = ImpDatesResponse.MdmsRes.PropertyTax;
         const { financialYr } = this.props;
-        const intrest = findCorrectDateObjPenaltyIntrest(financialYr, Interest);
+        const intrest =Interest &&  findCorrectDateObjPenaltyIntrest(financialYr, Interest);
         const fireCess = findCorrectDateObj(financialYr, FireCess);
         const rebate = findCorrectDateObj(financialYr, Rebate);
         const penalty = findCorrectDateObjPenaltyIntrest(financialYr, Penalty);
