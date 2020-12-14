@@ -34,6 +34,7 @@ import static org.egov.pt.calculator.util.CalculatorConstants.USAGE_SUB_MINOR_MA
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ROUNDOFF;
 import static org.egov.pt.calculator.util.CalculatorConstants.MIXED;
 import static org.egov.pt.calculator.util.CalculatorConstants.GROUND_FLOOR_NUMBER;
+import static org.egov.pt.calculator.util.CalculatorConstants.SWATCHATHA_TAX;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -241,6 +242,10 @@ public class EstimationService {
 		estimates.add(getAdHocPenaltyTaxhead(property));
 		estimates.add(getAdHocRebateTaxhead(property));
 		estimates.add(getUsageExemptionTaxhead(exemption));
+		TaxHeadEstimate swachhataTaxHead = getSwachhataTax(ptTaxHead,property.getTenantId());
+		
+		if (swachhataTaxHead != null)
+		estimates.add(swachhataTaxHead);
 		log.info("estimates", estimates);
 		Map<String, List> estimatesAndBillingSlabs = new HashMap<>();
 		estimatesAndBillingSlabs.put("estimates", estimates);
@@ -278,6 +283,17 @@ public class EstimationService {
 		Map details = (Map) property.getPropertyDetails().get(0).getAdditionalDetails();
 		BigDecimal amount = details.get(ONE_TIME_PENALTY_JSON_STRING)==null ? BigDecimal.ZERO : BigDecimal.valueOf((double) details.get(ONE_TIME_PENALTY_JSON_STRING));
 		return TaxHeadEstimate.builder().taxHeadCode(PT_LATE_ASSESSMENT_PENALTY).estimateAmount(amount).build();
+	}
+	
+	private TaxHeadEstimate getSwachhataTax(TaxHeadEstimate ptTaxHead,String tenantId) {
+
+		BigDecimal ptTax = ptTaxHead.getEstimateAmount() == null ? BigDecimal.ZERO : ptTaxHead.getEstimateAmount();
+		Integer taxRate = mdmsService.getSwachataTaxRate(tenantId);
+		BigDecimal swachhTax = ptTax.multiply(BigDecimal.valueOf(taxRate)).divide(HUNDRED);
+		if (swachhTax.compareTo(BigDecimal.ZERO) > 0)
+			return TaxHeadEstimate.builder().taxHeadCode(SWATCHATHA_TAX).estimateAmount(swachhTax).build();
+		else
+			return null;
 	}
 
 	private Map<String,Object> getPropertyTaxhead(CalculationCriteria criteria, List<BillingSlab> filteredBillingSlabs,

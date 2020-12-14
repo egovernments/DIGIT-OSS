@@ -14,12 +14,20 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.calculator.config.PTCalculatorConfigs;
 import org.egov.pt.calculator.repository.ServiceRequestRepository;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.pt.calculator.util.CalculatorConstants.INVALID_TENANT_ID_MDMS_KEY;
+import static org.egov.pt.calculator.util.CalculatorConstants.INVALID_TENANT_ID_MDMS_MSG;
+import static org.egov.pt.calculator.util.CalculatorConstants.MDMS_MASTER_MUTATIONFEE;
+import static org.egov.pt.calculator.util.CalculatorConstants.MDMS_MASTER_SWACHHATA_TAX;
+import static org.egov.pt.calculator.util.CalculatorConstants.PROPERTY_TAX_MODULE;
+
 
 @Slf4j
 @Service
@@ -44,17 +52,16 @@ public class MDMSService {
 	 * @param tenantId    The tenantId of the tradeLicense
 	 * @return MDMSCriteria Request
 	 */
-	private MdmsCriteriaReq getMDMSRequest(RequestInfo requestInfo, String tenantId) {
+	private MdmsCriteriaReq getMDMSRequest(RequestInfo requestInfo,String masterName,String moduleName, String tenantId) {
 
 		List<MasterDetail> ptMasterDetails = new ArrayList<>();
-
 		MasterDetail masterDetailAppType = new MasterDetail();
-		masterDetailAppType.setName("MutationFee");
+		masterDetailAppType.setName(masterName);
 		ptMasterDetails.add(masterDetailAppType);
 
 		ModuleDetail ptModuleDtls = new ModuleDetail();
 		ptModuleDtls.setMasterDetails(ptMasterDetails);
-		ptModuleDtls.setModuleName("PropertyTax");
+		ptModuleDtls.setModuleName(moduleName);
 
 		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Arrays.asList(ptModuleDtls)).tenantId(tenantId)
 				.build();
@@ -63,7 +70,7 @@ public class MDMSService {
 	}
 
 	public Object mDMSCall(RequestInfo requestInfo, String tenantId) {
-		MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo, tenantId);
+		MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo,MDMS_MASTER_MUTATIONFEE,PROPERTY_TAX_MODULE ,tenantId);
 		StringBuilder url = getMdmsSearchUrl();
 		Object result = serviceRequestRepository.fetchResult(url, mdmsCriteriaReq);
 		return result;
@@ -91,5 +98,27 @@ public class MDMSService {
 		});
 		return mdmsResMap;
 	}
-		
+	
+	
+	public Integer getSwachataTaxRate(String tenantId) {
+		Integer taxRate = 0;
+		StringBuilder mdmsUrl = new StringBuilder(getMdmsSearchUrl());
+		MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(new RequestInfo(),MDMS_MASTER_SWACHHATA_TAX , PROPERTY_TAX_MODULE, tenantId);
+
+		try {
+			Object result = serviceRequestRepository.fetchResult(mdmsUrl, mdmsCriteriaReq);
+			Map<String, List<Object>> taxRateConfig = getAttributeValues(result);
+			List<Object> swachhataTaxRate = taxRateConfig.get("SwachhataTax");
+			if (swachhataTaxRate == null || swachhataTaxRate.isEmpty()) {
+				return taxRate;
+			} else {
+				Map<String, Object> swachhataTaxMap = (Map<String, Object>) swachhataTaxRate.get(0);
+				taxRate = (Integer) swachhataTaxMap.get("rate");
+			}
+			return taxRate;
+		} catch (Exception e) {
+			throw new CustomException(INVALID_TENANT_ID_MDMS_KEY, INVALID_TENANT_ID_MDMS_MSG);
+		}
+	}
+
 }

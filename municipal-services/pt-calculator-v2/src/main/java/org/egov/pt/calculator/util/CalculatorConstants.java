@@ -58,6 +58,8 @@ public class CalculatorConstants {
 	public static final String PT_ADHOC_PENALTY = "PT_ADHOC_PENALTY";
 
 	public static final String PT_ADHOC_REBATE = "PT_ADHOC_REBATE";
+	
+	public static final String SWATCHATHA_TAX = "SWATCHATHA_TAX";
 
 //	public static final String PT_DECIMAL_CEILING_CREDIT = "PT_DECIMAL_CEILING_CREDIT";
 	
@@ -377,5 +379,8 @@ public class CalculatorConstants {
 	public static final String INVALID_TENANT_ID_MDMS_MSG = "No data found for this tenentID";
 	
 	public static final String GROUND_FLOOR_NUMBER = "0";
+	
+	public static final String MDMS_MASTER_MUTATIONFEE = "MutationFee";
+	public static final String MDMS_MASTER_SWACHHATA_TAX = "SwachhataTax";
 
 }

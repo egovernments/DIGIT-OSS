@@ -416,7 +416,7 @@ public class DemandService {
 
 		/**
 		 * Commenting the below as Partial payment is disabled and sending null to
-		 * applyPenaltyRebateAndInterest get the payments done agianst this demand
+		 * applyPenaltyRebateAndInterest get the payments done against this demand
 		 * List<Payment> payments = paymentService.getPaymentsFromDemand(demand,
 		 * requestInfoWrapper);
 		 */
