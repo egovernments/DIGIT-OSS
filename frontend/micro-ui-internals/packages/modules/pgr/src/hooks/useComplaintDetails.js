@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import _ from "lodash";
 
 // TODO: move to service
 const getThumbnails = async (ids, tenantId) => {
@@ -13,6 +14,7 @@ const getThumbnails = async (ids, tenantId) => {
 const getDetailsRow = ({ id, service }) => ({
   CS_COMPLAINT_DETAILS_COMPLAINT_NO: id,
   CS_COMPLAINT_DETAILS_APPLICATION_STATUS: `CS_COMMON_${service.applicationStatus}`,
+  CS_ADDCOMPLAINT_COMPLAINT_TYPE: `SERVICEDEFS.${service.serviceCode.toUpperCase()}`,
   CS_COMPLAINT_FILED_DATE: Digit.DateUtils.ConvertTimestampToDate(service.auditDetails.createdTime),
   ES_CREATECOMPLAINT_ADDRESS: [
     service.address.landmark,
@@ -25,9 +27,9 @@ const getDetailsRow = ({ id, service }) => ({
 
 const transformDetails = ({ id, service, workflow, thumbnails }) => {
   return {
-    details: window.Digit.Customizations.PGR.getComplaintDetailsTableRows
-      ? window.Digit.Customizations.PGR.getComplaintDetailsTableRows({ id, service, role: "CITIZEN" })
-      : getDetailsRow({ id, service }),
+    details: _.isEmpty(window.Digit.Customizations.PGR.getComplaintDetailsTableRows)
+      ? getDetailsRow({ id, service })
+      : window.Digit.Customizations.PGR.getComplaintDetailsTableRows({ id, service, role: "CITIZEN" }),
     thumbnails: thumbnails,
     workflow: workflow,
     audit: {

@@ -184,15 +184,16 @@ export const ComplaintDetails = (props) => {
     "CS_COMPLAINT_DETAILS_BUILDING_NAME",
     "CS_COMPLAINT_DETAILS_PLOT_NO",
     "CS_COMPLAINT_DETAILS_STREET",
+    "ES_CREATECOMPLAINT_ADDRESS",
   ];
   const getTimelineCaptions = (checkpoint) => {
     console.log("tl", checkpoint);
-    if (checkpoint.status === "COMPLAINT_FILED" && statusTable?.audit) {
+    if (checkpoint.status === "COMPLAINT_FILED" && statusTable?.complaintDetails?.audit) {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(statusTable.audit.details.createdTime),
-        name: statusTable.audit.citizen.name,
-        mobileNumber: statusTable.audit.citizen.mobileNumber,
-        source: statusTable.audit.source,
+        date: Digit.DateUtils.ConvertTimestampToDate(statusTable.complaintDetails.audit.details.createdTime),
+        name: statusTable.complaintDetails.audit.citizen.name,
+        mobileNumber: statusTable.complaintDetails.audit.citizen.mobileNumber,
+        source: statusTable.complaintDetails.audit.source,
       };
       return <TLCaption data={caption} />;
     }
@@ -204,19 +205,35 @@ export const ComplaintDetails = (props) => {
       <Card>
         <CardSubHeader>{t(`CS_HEADER_COMPLAINT_SUMMARY`)}</CardSubHeader>
         <CardLabel>{t(`CS_COMPLAINT_DETAILS_COMPLAINT_DETAILS`)}</CardLabel>
-        <StatusTable>
-          {Object.keys(statusTable)
-            .filter((k) => !filterSstatusTable.includes(k))
-            .map((k, i, arr) => (
-              <Row key={k} label={t(k)} text={statusTable[k]} last={arr.length - 1 === i} />
-            ))}
-          {1 === 1 ? null : (
-            <MediaRow label="CS_COMPLAINT_DETAILS_GEOLOCATION">
-              <MapView onClick={zoomView} />
-            </MediaRow>
-          )}
-        </StatusTable>
-        {statusTable.thumbnails && statusTable.thumbnails.length !== 0 ? <DisplayPhotos srcs={statusTable.thumbnails} onClick={zoomImage} /> : null}
+        {statusTable && statusTable.isLoading ? (
+          <Loader />
+        ) : (
+          <StatusTable>
+            {Object.keys(statusTable.complaintDetails.details)
+              // .filter((k) => !filterSstatusTable.includes(k))
+              .map((k, i, arr) => (
+                <Row
+                  key={k}
+                  label={t(k)}
+                  text={
+                    Array.isArray(statusTable.complaintDetails.details[k])
+                      ? statusTable.complaintDetails.details[k].map((val) => t(val))
+                      : t(statusTable.complaintDetails.details[k])
+                  }
+                  last={arr.length - 1 === i}
+                />
+              ))}
+
+            {1 === 1 ? null : (
+              <MediaRow label="CS_COMPLAINT_DETAILS_GEOLOCATION">
+                <MapView onClick={zoomView} />
+              </MediaRow>
+            )}
+          </StatusTable>
+        )}
+        {statusTable?.complaintDetails?.thumbnails && statusTable?.complaintDetails?.thumbnails.length !== 0 ? (
+          <DisplayPhotos srcs={statusTable?.complaintDetails?.thumbnails} onClick={zoomImage} />
+        ) : null}
         <BreakLine />
         {workflowDetails.timeline && workflowDetails.timeline.length === 1 ? (
           <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails.timeline[0].status)} />
