@@ -29,7 +29,9 @@ const isEmptyOrNull = (obj) => obj === undefined || obj === null || Object.keys(
 const transformDetails = ({ id, service, workflow, thumbnails }) => {
   const { Customizations, SessionStorage } = window.Digit;
   const role = (SessionStorage.get("user_type") || "CITIZEN").toUpperCase();
-  const customDetails = Customizations.PGR.getComplaintDetailsTableRows ? Customizations.PGR.getComplaintDetailsTableRows({ id, service, role }) : {};
+  const customDetails = Customizations?.PGR?.getComplaintDetailsTableRows
+    ? Customizations.PGR.getComplaintDetailsTableRows({ id, service, role })
+    : {};
   return {
     details: !isEmptyOrNull(customDetails) ? customDetails : getDetailsRow({ id, service }),
     thumbnails: thumbnails,
