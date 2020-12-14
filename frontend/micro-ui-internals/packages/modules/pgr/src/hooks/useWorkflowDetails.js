@@ -1,21 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
 const useWorkflowDetails = ({ tenantId, id, role = "CITIZEN" }) => {
   const [workflowDetails, setWorkflowDetails] = useState({});
-  // let role = Digit.SessionStorage.get("role") || "CITIZEN"; // ToDo:store in session storage
-  const appState = useSelector((state) => state);
-  console.log("appppppppppppppppppp state ", appState);
-  // let actions =
-  // (selectedState.actions &&
-  //   selectedState.actions.filter((state) => {
-  //     return state.roles.includes(role);
-  //   })) ||
-  // [];
   useEffect(() => {
     (async () => {
       //TO do. get tenant id
-      const workflow = await Digit.workflowService.getByBusinessId((tenantId = "pb.amritsar"), id);
+      const workflow = await Digit.workflowService.getByBusinessId(tenantId, id);
       const businessServiceResponse = (await Digit.workflowService.init("pb.amritsar", "PGR")).BusinessServices[0].states;
       if (workflow && workflow.ProcessInstances) {
         // const processInstances = workflow.ProcessInstances.sort((a, b) => a.auditDetails.createdTime - b.auditDetails.createdTime);
@@ -23,7 +13,7 @@ const useWorkflowDetails = ({ tenantId, id, role = "CITIZEN" }) => {
         const nextStates = processInstances[0].nextActions.map((action) => ({ action: action.action, nextState: action.nextState }));
         const nextActions = nextStates.map((id) => ({
           action: id.action,
-          state: businessServiceResponse.filter((state) => state.uuid === id.nextState)[0],
+          state: businessServiceResponse.find((state) => state.uuid === id.nextState),
         }));
         const actionRolePair = nextActions?.map((action) => ({
           action: action.action,

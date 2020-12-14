@@ -11,7 +11,7 @@ const SelectPincode = ({ t, config, onSelect }) => {
     Digit.SessionStorage.set("PGR_CREATE_PINCODE", e.target.value);
   }
   const goNext = async (data) => {
-    var foundValue = tenants.filter((obj) => obj.pincode?.find((item) => item == data?.pincode))[0];
+    var foundValue = tenants.find((obj) => obj.pincode?.find((item) => item == data?.pincode));
     if (foundValue) {
       Digit.SessionStorage.set("city_complaint", foundValue);
       let response = await Digit.LocationService.getLocalities({ tenantId: foundValue.code });

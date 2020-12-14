@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import mergeConfig from "./config/mergeConfig";
 import { useStore, useInitStore } from "./services/index";
 import { initI18n } from "./translations/index";
@@ -14,6 +15,8 @@ import { UploadServices } from "./services/UploadServices";
 import { GetServiceDefinitions } from "./services/ServiceDefinitions";
 import { Complaint } from "./services/Complaint";
 import { PincodeMap } from "./services/PincodeMap";
+
+import Hooks from "./hooks";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -43,7 +46,6 @@ const setupDevice = () => {
 const initLibraries = () => {
   setupLibraries("Config", { mergeConfig });
   setupLibraries("Services", { useStore, useInitStore });
-  setupLibraries("Translation", { initI18n });
   setupLibraries("Enums", Enums);
   setupLibraries("SessionStorage", Storage);
   setupLibraries("LocationService", LocationService);
@@ -57,10 +59,13 @@ const initLibraries = () => {
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
   setupLibraries("Complaint", Complaint);
   setupLibraries("PincodeMap", PincodeMap);
+  setupLibraries("Customizations", {});
   setupDevice();
   initI18n();
+  window.i18next = i18next;
+  // setupLibraries("Translation", { initI18n: init, i18next });
 };
 
-export { initLibraries, Enums };
+export { initLibraries, Enums, Hooks };
 
 // export default initLibraries;

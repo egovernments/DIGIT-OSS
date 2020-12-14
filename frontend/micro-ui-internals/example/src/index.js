@@ -7,17 +7,21 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 // import { Body, TopBar } from "@egovernments/digit-ui-react-components";
 import "@egovernments/digit-ui-css/example/index.css";
 
-import CITIZEN from "./userInfo/citizen.json"
-import EMPLOYEE from "./userInfo/employee.json"
-import LME from "./userInfo/lme.json"
+import CITIZEN from "./userInfo/citizen.json";
+import EMPLOYEE from "./userInfo/employee.json";
+import LME from "./userInfo/lme.json";
 
-const userInfo = { CITIZEN, EMPLOYEE, LME }
+import pgrCustomizations from "./pgr";
+
+const userInfo = { CITIZEN, EMPLOYEE, LME };
 
 initLibraries();
 
+window.Digit.Customizations = { PGR: pgrCustomizations };
+
 const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`]
+const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
@@ -29,7 +33,7 @@ const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userTypeInfo);
 window.Digit.SessionStorage.set("userType", userTypeInfo);
 
-const userDetails = { token, info: userType === "CITIZEN" ? citizenInfo : employeeInfo }
+const userDetails = { token, info: userType === "CITIZEN" ? citizenInfo : employeeInfo };
 
 window.Digit.SessionStorage.set("User", userDetails);
 
