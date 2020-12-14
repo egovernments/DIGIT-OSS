@@ -6,6 +6,7 @@ import Enums from "./enums/index";
 import { LocationService } from "./services/Location";
 import { LocalityService } from "./services/Localities";
 import { LocalizationService } from "./services/Localization/service";
+import { LoginService } from "./services/Login";
 import { PGRService } from "./services/PGR";
 import * as dateUtils from "./services/Utils/Date";
 import { WorkflowService } from "./services/WorkFlow";
@@ -29,6 +30,7 @@ const initLibraries = () => {
   setupLibraries("SessionStorage", Storage);
   setupLibraries("LocationService", LocationService);
   setupLibraries("LocalityService", LocalityService);
+  setupLibraries("LoginService", LoginService);
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
   setupLibraries("DateUtils", dateUtils);

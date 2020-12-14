@@ -6,7 +6,7 @@ import { getI18n } from "react-i18next";
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr/src/Module";
 import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm/src/Module";
 import { Body, TopBar, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
-
+import CitizenLogin from "./pages/citizen/Login";
 import getStore from "./redux/store";
 
 const AppModules = ({ stateCode, userType }) => {
@@ -18,6 +18,9 @@ const AppModules = ({ stateCode, userType }) => {
       </Route>
       <Route path={`${path}/fsm`}>
         <FSMModule stateCode={stateCode} cityCode="pb.amritsar" moduleCode="FSM" userType={userType} />
+      </Route>
+      <Route path={`${path}/login`}>
+        <AppLogin userType={userType} stateCode={stateCode} cityCode="pb.amritsar" moduleCode="PGR" />
       </Route>
       <Route>
         <AppHome userType={userType} />
@@ -36,6 +39,23 @@ const AppHome = ({ userType }) => {
     );
   }
   return <h1>Employee home</h1>;
+};
+
+const AppLogin = ({ stateCode, cityCode, moduleCode, userType }) => {
+  // const state = useSelector(state => state);
+  // const language = state?.common?.selectedLanguage;
+  // const store = Digit.Services.useStore({}, { stateCode, cityCode, moduleCode, language });
+
+  // console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
+
+  // if (Object.keys(store).length === 0) {
+  //   return <Loader />;
+  // }
+
+  if (userType === "citizen") {
+    return <CitizenLogin stateCode={stateCode} cityCode={cityCode} />;
+  }
+  return <h1>Employee login</h1>;
 };
 
 const PrivatePage = () => <h2>Private</h2>;

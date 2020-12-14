@@ -5,7 +5,14 @@ const createProxy = createProxyMiddleware({
   changeOrigin: true,
 });
 module.exports = function (app) {
-  ["/egov-mdms-service", "/egov-location", "/localization", "/egov-workflow-v2", "/pgr-services", "/filestore"].forEach((location) =>
-    app.use(location, createProxy)
-  );
+  [
+    "/egov-mdms-service",
+    "/egov-location",
+    "/localization",
+    "/egov-workflow-v2",
+    "/pgr-services",
+    "/filestore",
+    "/user-otp",
+    "/user",
+  ].forEach((location) => app.use(location, createProxy));
 };
