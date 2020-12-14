@@ -26,19 +26,34 @@ const getAddress = (item) => {
 const searchApiCall = async (state, dispatch, index) => {
   showHideTable(false, dispatch, 0);
   showHideTable(false, dispatch, 1);
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: getTenantId()
-    }
-    // { key: "limit", value: "10" },
-    // { key: "offset", value: "0" }
-  ];
+
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
     "searchScreen",
     {}
   );
+  if ((!searchScreenObject.tenantId) && index == 0) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to search",
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
+        },
+        "error"
+      )
+    );
+    return;
+
+  }
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: searchScreenObject.tenantId
+    }
+    // { key: "limit", value: "10" },
+    // { key: "offset", value: "0" }
+  ]; 
 
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.captureMutationDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchProperty.children.searchPropertyDetails.children.ulbCityContainer.children",
