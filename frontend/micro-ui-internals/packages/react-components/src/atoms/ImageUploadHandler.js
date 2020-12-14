@@ -1,13 +1,9 @@
-import { set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import CardHeader from "./CardHeader";
-import CardText from "./CardHeader";
+import Toast from "./Toast";
 import UploadImages from "./UploadImages";
-// import { Filestorage, Filefetch } from "../@egovernments/digit-utils/services/Filestorage";
 
 export const ImageUploadHandler = (props) => {
-  const { t } = useTranslation();
   const __initImageIds = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
   const __initThumbnails = Digit.SessionStorage.get("PGR_CREATE_THUMBNAILS");
   const [image, setImage] = useState(null);
@@ -15,6 +11,8 @@ export const ImageUploadHandler = (props) => {
   const [uploadedImagesIds, setUploadedImagesIds] = useState(__initImageIds ? __initImageIds : null);
   const [rerender, setRerender] = useState(1);
   const [imageFile, setImageFile] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (image) {
@@ -23,22 +21,30 @@ export const ImageUploadHandler = (props) => {
   }, [image]);
 
   useEffect(() => {
-    (async () => {
-      if (uploadedImagesIds !== null) {
-        await submit();
-        setRerender(rerender + 1);
-        props.onPhotoChange(uploadedImagesIds);
-      }
-    })();
+    if (!isDeleting) {
+      (async () => {
+        if (uploadedImagesIds !== null) {
+          await submit();
+          setRerender(rerender + 1);
+          props.onPhotoChange(uploadedImagesIds);
+        }
+      })();
+    } else {
+      setIsDeleting(false);
+    }
   }, [uploadedImagesIds]);
 
   useEffect(() => {
     if (imageFile && imageFile.size > 2097152) {
-      alert("File is too big!");
+      setError("File is too large");
     } else {
       setImage(imageFile);
     }
   }, [imageFile]);
+
+  useEffect(() => {
+    Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", uploadedImagesThumbs);
+  }, [uploadedImagesThumbs]);
 
   const addUploadedImageIds = useCallback(
     (imageIdData) => {
@@ -51,6 +57,11 @@ export const ImageUploadHandler = (props) => {
     },
     [uploadedImagesIds]
   );
+
+  function getImage(e) {
+    setError(null);
+    setImageFile(e.target.files[0]);
+  }
 
   const uploadImage = useCallback(async () => {
     const response = await Digit.UploadServices.Filestorage(image);
@@ -65,52 +76,35 @@ export const ImageUploadHandler = (props) => {
     }
     var thumbnails = [];
     if (uploadedImagesThumbs !== null) {
-      thumbnails = uploadedImagesThumbs;
+      thumbnails = uploadedImagesThumbs.length > 0 ? uploadedImagesThumbs.filter((thumb) => thumb.key !== keys[0]) : [];
     }
+
     setUploadedImagesThumbs([...thumbnails, { image: thumbnailsData.data[keys[0]].split(",")[2], key: keys[0] }]);
   }
 
-  function getImage(e) {
-    setImageFile(e.target.files[0]);
-  }
-
   const submit = useCallback(async () => {
-    if (uploadedImagesIds !== null) {
+    if (uploadedImagesIds !== null && uploadedImagesIds.length > 0) {
       const res = await Digit.UploadServices.Filefetch([uploadedImagesIds[uploadedImagesIds.length - 1]], "pb.amritsar");
       addImageThumbnails(res);
     }
   }, [uploadedImagesIds]);
 
   function deleteImage(img) {
-    console.log("to delte ", img);
+    setIsDeleting(true);
     var deleteImageKey = uploadedImagesThumbs.filter((o, index) => o.image === img);
-    console.log("to delte ", deleteImageKey);
 
     var uploadedthumbs = uploadedImagesThumbs;
     var newThumbsList = uploadedthumbs.filter((thumbs) => thumbs != deleteImageKey[0]);
-    // var thumbs = uploadedImagesThumbs.filter((o, index) => o.image !== img);
 
-    var newUploadedImagesIds = uploadedImagesIds.filter((key) => key != deleteImageKey[0].key);
-    // setUploadedImagesIds(newUploadedImagesIds)
+    var newUploadedImagesIds = uploadedImagesIds.filter((key) => key !== deleteImageKey[0].key);
     setUploadedImagesThumbs(newThumbsList);
-    // if (index > -1) {
-    //   var arr = uploadedImagesIds;
-    //   arr.splice(index, 1);
-    //   setUploadedImagesIds(arr);
-    // }
-
-    // var thumbs = uploadedImagesThumbs;
-
-    // console.log(deleteImageKey);
-    // console.log(thumbs);
-    // thumbs.splice(deleteImageKey[1], 1);
-    // setUploadedImagesThumbs(thumbs);
-    // setRerender(rerender + 1);
+    setUploadedImagesIds(newUploadedImagesIds);
+    Digit.SessionStorage.set("PGR_CREATE_IMAGES", newUploadedImagesIds);
   }
 
   return (
-    // <Card>
     <React.Fragment>
+      {error && <Toast error={true} label={error} onClose={() => setError(null)} />}
       <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} />
     </React.Fragment>
   );
