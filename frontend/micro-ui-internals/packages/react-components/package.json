@@ -10,8 +10,8 @@
   },
   "scripts": {
     "example": "cd example && npm run start",
-    "build": "microbundle --no-compress --format modern,cjs",
-    "start": "microbundle watch --no-compress --format modern,cjs",
+    "build": "microbundle-crl --no-compress --format modern,cjs",
+    "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "yarn build",
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build",
@@ -34,7 +34,6 @@
     "gh-pages": "^2.2.0",
     "husky": ">=4",
     "lint-staged": ">=10",
-    "microbundle": "^0.12.4",
     "microbundle-crl": "^0.13.10",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
