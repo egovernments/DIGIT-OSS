@@ -32,5 +32,5 @@ const i18nextConfig = {
 };
 
 export const initI18n = () => {
-  i18next.use(new ReactPostprocessor()).use(initReactI18next).init(i18nextConfig);
+  return i18next.use(new ReactPostprocessor()).use(initReactI18next).init(i18nextConfig);
 };

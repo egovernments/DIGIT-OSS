@@ -10,10 +10,15 @@ export const LastRow = (props) => {
 };
 
 export const Row = (props) => {
+  let value = props.text;
+  if (Array.isArray(props.text)) {
+    value = props.text.map((val, index) => <p key={index}>{val}</p>);
+  }
+
   return (
-    <div className={props.last ? "row-last" : ""}>
+    <div className={props.last ? "row last" : "row"}>
       <h2>{props.label}</h2>
-      <p>{props.text}</p>
+      <div className="value">{value}</div>
     </div>
   );
 };

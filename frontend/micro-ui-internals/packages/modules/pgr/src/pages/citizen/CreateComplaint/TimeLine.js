@@ -9,9 +9,14 @@ import Reopen from "./timelineInstances/reopen";
 import Resolved from "./timelineInstances/resolved";
 import StarRated from "./timelineInstances/StarRated";
 
-const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
+const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating }) => {
   const { t } = useTranslation();
   // let GetComplaintInstance = ({}) => {
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   let { timeline } = data;
 
   const getCheckPoint = ({ status, caption, auditDetails, timeLineActions }) => {
@@ -61,8 +66,8 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
           })}
         </ConnectingCheckPoints>
       ) : (
-          <Loader />
-        )}
+        <Loader />
+      )}
     </React.Fragment>
   );
 };
