@@ -336,7 +336,107 @@ const setSearchResponse = async (
     );
   }
 
-  prepareUoms(state, dispatch);
+
+  let transfereeOwners = get(
+    property,
+    "ownersTemp", []
+  );
+  let transferorOwners = get(
+    property,
+    "ownersInit", []
+  );
+  let transfereeOwnersDid = true;
+  let transferorOwnersDid = true;
+  transfereeOwners.map(owner => {
+    if (owner.ownerType != 'NONE') {
+      transfereeOwnersDid = false;
+    }
+  })
+  transferorOwners.map(owner => {
+    if (owner.ownerType != 'NONE') {
+      transferorOwnersDid = false;
+    }
+
+  })
+  if (transferorOwnersDid) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
+        "props.style.display",
+        'none'
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID",
+        "props.style.display",
+        'none'
+      )
+    );
+
+  }
+  if (transfereeOwnersDid) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId",
+        "props.style.display",
+        'none'
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
+        "props.style.display",
+        'none'
+      )
+    );
+
+  }
+
+  if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
+    const propertiesAudit = get(auditResponse, "Properties", []);
+
+    const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
+
+
+    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
+
+    if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+      property.institutionInit = previousActiveProperty.institution;
+
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.transferorSummary",
+          "visible",
+          false
+        )
+      );
+    } else {
+
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.transferorInstitutionSummary",
+          "visible",
+          false
+        )
+      );
+    }
+  }
+
+
+  // auditResponse
+  dispatch(prepareFinalObject("Property", property));
+  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
+  prepareDocumentsView(state, dispatch);
+
   await loadPdfGenerationData(applicationNumber, tenantId);
   setDownloadMenu(state, dispatch, tenantId, applicationNumber);
 };
