@@ -1,5 +1,5 @@
 import React from "react";
-import { QueryCache, ReactQueryCacheProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
 import { Route, BrowserRouter as Router, Switch, useRouteMatch, Redirect, Link } from "react-router-dom";
 import { getI18n, useTranslation } from "react-i18next";
@@ -182,7 +182,7 @@ export const DigitUI = ({ stateCode }) => {
   const cityCode = "pb.amritsar";
   const userType = Digit.SessionStorage.get("userType") || "citizen";
   const initData = Digit.Services.useInitStore(stateCode);
-  const queryCache = new QueryCache();
+  const queryClient = new QueryClient();
 
   if (Object.keys(initData).length === 0) {
     return <Loader page={true} />;
@@ -195,7 +195,7 @@ export const DigitUI = ({ stateCode }) => {
   return (
     <div className={userType}>
       <Provider store={getStore(initData, { pgr: PGRReducers(initData) })}>
-        <ReactQueryCacheProvider queryCache={queryCache}>
+        <QueryClientProvider client={queryClient}>
           <Router>
             <Body>
               <DigitUIApp
@@ -207,7 +207,7 @@ export const DigitUI = ({ stateCode }) => {
               />
             </Body>
           </Router>
-        </ReactQueryCacheProvider>
+        </QueryClientProvider>
       </Provider>
     </div>
   );
