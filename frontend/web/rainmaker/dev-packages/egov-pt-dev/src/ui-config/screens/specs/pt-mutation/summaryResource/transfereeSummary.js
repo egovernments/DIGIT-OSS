@@ -11,7 +11,6 @@ import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
 import { getLabelIfNotNull } from "../../utils/index";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export const transfereeSummary = getCommonGrayCard({
   header: {
