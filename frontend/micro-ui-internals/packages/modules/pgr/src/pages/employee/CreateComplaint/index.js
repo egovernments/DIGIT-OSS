@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardHeader, CardSubHeader, CardLabel, TextInput, Dropdown } from "@egovernments/digit-ui-react-components";
-import FormComposer from "./FormComposer";
+import { Card, CardHeader, CardSubHeader, CardLabel, TextInput, Dropdown, FormComposer } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 
 import useComplaintTypes from "../../../hooks/useComplaintTypes";
@@ -198,5 +197,12 @@ export const CreateComplaint = ({ parentUrl }) => {
     },
   ];
 
-  return <FormComposer heading="ES_CREATECOMPLAINT_NEW_COMPLAINT" config={config} onSubmit={onSubmit}></FormComposer>;
+  return (
+    <FormComposer
+      heading="ES_CREATECOMPLAINT_NEW_COMPLAINT"
+      label="CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT"
+      config={config}
+      onSubmit={onSubmit}
+    ></FormComposer>
+  );
 };

@@ -6,6 +6,8 @@ import { AppContainer, Header, HomeLink, Loader, PrivateRoute } from "@egovernme
 import { getI18n } from "react-i18next";
 import FileComplaint from "./FileComplaint/index";
 
+import { NewApplication } from "./pages/employee/NewApplication";
+
 export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "FSM", userType }) => {
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
@@ -22,6 +24,7 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
     <Switch>
       <AppContainer>
         <PrivateRoute path={`${path}/file-property`} component={FileComplaint} />
+        <Route path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
       </AppContainer>
     </Switch>
   );

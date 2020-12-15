@@ -65,6 +65,8 @@ import RatingCard from "./molecules/RatingCard";
 import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
 
+import FormComposer from "./hoc/FormComposer";
+
 import { PrivateRoute } from "./atoms/PrivateRoute";
 
 export {
@@ -140,4 +142,6 @@ export {
   FilterAction,
   ApplyFilterBar,
   RemoveableTag,
+  // hoc
+  FormComposer,
 };
