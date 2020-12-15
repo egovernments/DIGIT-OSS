@@ -48,6 +48,7 @@
 
 package org.egov.collection.web.actions.receipts;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -155,6 +156,7 @@ public class ChequeRemittanceAction extends BaseFormAction {
     private static final String REMITTANCE_LIST = "REMITTANCE_LIST";
     private Boolean isBankCollectionRemitter;
     private String remitAccountNumber;
+    private String selectedRowsId;
 
     /**
      * @param collectionsUtil the collectionsUtil to set
@@ -253,6 +255,7 @@ public class ChequeRemittanceAction extends BaseFormAction {
     @ValidationErrorPage(value = "error")
     @Action(value = "/receipts/chequeRemittance-create")
     public String create() {
+        prepareChequeRemittanceList();
         final long startTimeMillis = System.currentTimeMillis();
         if (accountNumberId == null || accountNumberId.isEmpty())
             throw new ValidationException(Arrays.asList(new ValidationError("Please select Account number",
@@ -273,6 +276,40 @@ public class ChequeRemittanceAction extends BaseFormAction {
         totalCashAmount = 0.0;
         totalChequeAmount = getSum(finalBeanList);
         return INDEX;
+    }
+
+    public List<ReceiptBean> prepareChequeRemittanceList() {
+        finalBeanList = new ArrayList<>();
+        String[] selectedRowsIdArray;
+        if (selectedRowsId != null)
+            selectedRowsIdArray = selectedRowsId.split(";,");
+        else
+            selectedRowsIdArray = new String[0];
+        for (int i = 0; i < selectedRowsIdArray.length; i++) {
+            ReceiptBean receipt = new ReceiptBean();
+            String[] items = selectedRowsIdArray[i].split("\\~");
+            receipt.setService(items[0]);
+            receipt.setFund(items[1]);
+            receipt.setDepartment(items[2]);
+            receipt.setInstrumentAmount(BigDecimal.valueOf(Double.valueOf(items[3])));
+            receipt.setInstrumentNumber(items[4]);
+            receipt.setInstrumentDate(items[5]);
+            receipt.setInstrumentType(items[6]);
+            receipt.setInstrumentId(items[7]);
+            receipt.setBank(items[8]);
+            receipt.setBankBranch(items[9]);
+            receipt.setReceiptNumber(items[10]);
+            receipt.setReceiptId(items[11]);
+            if (items[12] != null && !items[12].isEmpty()) {
+                String item = items[12];
+                if (item.contains(";"))
+                    item = items[12].replace(";", "");
+                receipt.setReceiptDate(item);
+            }
+            receipt.setSelected(true);
+            finalBeanList.add(receipt);
+        }
+        return finalBeanList;
     }
 
     private void populateNames(List<Receipt> receiptList) {
@@ -674,6 +711,13 @@ public class ChequeRemittanceAction extends BaseFormAction {
 
     public void setFinalBeanList(List<ReceiptBean> finalBeanList) {
         this.finalBeanList = finalBeanList;
+    }
+    public String getSelectedRowsId() {
+        return selectedRowsId;
+    }
+
+    public void setSelectedRowsId(String selectedRowsId) {
+        this.selectedRowsId = selectedRowsId;
     }
 
 }

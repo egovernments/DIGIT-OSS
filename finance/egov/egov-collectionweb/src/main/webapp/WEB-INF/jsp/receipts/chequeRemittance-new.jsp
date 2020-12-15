@@ -191,6 +191,7 @@
 	}
 	
 	function validate() {
+		resetSelectedRowsId();
 		dom.get("bankselectionerror").style.display = "none";
 		dom.get("accountselectionerror").style.display = "none";
 		dom.get("selectremittanceerror").style.display = "none";
@@ -253,6 +254,48 @@
 		}
 
 	}
+	
+	var selectedRowsId=new Array();
+	function resetSelectedRowsId(){
+		var list = document.getElementsByName('instrumentAmount');
+			console.log(list,"---list")
+				for(var index=0;index<list.length;index++){
+					var obj = document.getElementById('selected_'+index);
+					console.log(obj,"obj")
+					if(obj.checked == true){
+					selectedRowsId.push(document.getElementsByName("finalBeanList["+index+"].service")[0].value +"~"+
+							document.getElementsByName("finalBeanList["+index+"].fund")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].department")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].instrumentAmount")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].instrumentNumber")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].instrumentDate")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].instrumentType")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].instrumentId")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].bank")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].bankBranch")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].receiptNumber")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].receiptId")[0].value+"~"+
+							document.getElementsByName("finalBeanList["+index+"].receiptDate")[0].value +";");
+	
+					}
+					document.getElementsByName("finalBeanList["+index+"].service")[0].disabled = true;
+					document.getElementsByName("finalBeanList["+index+"].fund")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].department")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].instrumentAmount")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].instrumentNumber")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].instrumentDate")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].instrumentType")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].instrumentId")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].bank")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].bankBranch")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].receiptNumber")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].receiptId")[0].disabled =true;
+					document.getElementsByName("finalBeanList["+index+"].receiptDate")[0].disabled =true;
+					document.getElementsByName('finalBeanList["+index+"].selected').disabled = true;
+					
+				}
+				document.getElementById('selectedRowsId').value = selectedRowsId;
+		}
 
 	function processDate(date) {
 		var parts = date.split("/");
@@ -495,7 +538,7 @@
 						</tr>
 					</table>
 				</div>
-
+					<input type="hidden" name="selectedRowsId"  id ="selectedRowsId" value="${selectedRowsId}" />
 				<div align="left" class="mandatorycoll">
 					<s:text name="common.mandatoryfields" />
 				</div>
