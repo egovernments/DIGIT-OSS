@@ -1004,7 +1004,7 @@ public class MicroserviceUtils {
         ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
                 .status(Arrays.stream(status.split(",")).collect(Collectors.toSet())).fromDate(fromDate).toDate(toDate)
                 .receiptNumbers(Arrays.stream(ids.split(",")).collect(Collectors.toSet()))
-                .businessCodes(Arrays.stream(serviceCodes.split(",")).collect(Collectors.toSet())).build();
+                .businessCodes(Arrays.stream(serviceCodes.split(",")).collect(Collectors.toSet())).tenantId(getTenentId()).build();
         return this.getReceipt(criteria);
     }
 

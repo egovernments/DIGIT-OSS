@@ -77,6 +77,7 @@ public class ReceiptSearchCriteria {
     String fund;
     String department;
     String classification;
+    String tenantId;
     
     public void toPayemntSerachCriteriaContract(PaymentSearchCriteria contract){
 //        contract.setIds(this.ids);
@@ -86,5 +87,6 @@ public class ReceiptSearchCriteria {
         contract.setToDate(this.toDate != null ? this.toDate.getTime() : null);
 //        contract.setReceiptNumbers(this.receiptNumbers);
         contract.setIds(this.receiptNumbers);
+        contract.setTenantId(this.tenantId);
     }
 }
