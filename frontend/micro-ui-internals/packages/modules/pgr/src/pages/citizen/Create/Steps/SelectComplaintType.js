@@ -5,7 +5,7 @@ import useComplaintTypes from "../../../../hooks/useComplaintTypes";
 
 const SelectComplaintType = ({ t, config, onSelect }) => {
   const goNext = () => {
-    onSelect(complaintType);
+    onSelect({ complaintType });
   };
   const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
   const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});

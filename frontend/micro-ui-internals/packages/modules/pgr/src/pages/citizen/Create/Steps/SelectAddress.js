@@ -37,7 +37,17 @@ const SelectAddress = ({ t, config, onSelect }) => {
   }
 
   function onSubmit() {
-    onSelect({ locality: selectedLocality, city: selectedCity });
+    const { code: cityCode, name: city } = selectedCity;
+    const { code: localityCode, name: localityName } = selectedLocality;
+    onSelect({
+      cityCode,
+      city,
+      district: city,
+      region: city,
+      localityCode,
+      localityName,
+      state: 'Punjab'
+    });
   }
 
   return (

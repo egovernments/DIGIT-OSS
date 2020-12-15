@@ -12,7 +12,7 @@ const SelectLandmark = ({ t, config, onSelect }) => {
 
   const onSkip = () => onSelect();
 
-  return <FormStep config={config} value={landmark} onChange={onChange} onSelect={onSelect} onSkip={onSkip} t={t}></FormStep>;
+  return <FormStep config={config} value={landmark} onChange={onChange} onSelect={data => onSelect(data)} onSkip={onSkip} t={t}></FormStep>;
 };
 
 export default SelectLandmark;

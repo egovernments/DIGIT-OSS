@@ -7,6 +7,7 @@ import { useWindowSize } from "rooks"
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr/src/Module";
 import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm/src/Module";
 import { Body, TopBar, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { ComponentProvider } from './context'
 
 import getStore from "./redux/store";
 
@@ -138,7 +139,7 @@ const DigitUIApp = ({ stateCode, modules, appTenants, logoUrl, cityCode }) => {
   );
 };
 
-export const DigitUI = ({ stateCode }) => {
+export const DigitUI = ({ stateCode, registry }) => {
   const cityCode = "pb.amritsar";
   const userType = Digit.SessionStorage.get("userType") || "citizen";
   const initData = Digit.Services.useInitStore(stateCode);
@@ -157,9 +158,11 @@ export const DigitUI = ({ stateCode }) => {
       <Provider store={getStore(initData, { pgr: PGRReducers(initData) })}>
         <ReactQueryCacheProvider queryCache={queryCache}>
           <Router>
-            <Body>
-              <DigitUIApp stateCode={stateCode} modules={initData?.modules} appTenants={initData.tenants} logoUrl={initData?.stateInfo?.logoUrl} cityCode={cityCode} />
-            </Body>
+            <ComponentProvider.Provider value={registry}>
+              <Body>
+                <DigitUIApp stateCode={stateCode} modules={initData?.modules} appTenants={initData.tenants} logoUrl={initData?.stateInfo?.logoUrl} cityCode={cityCode} />
+              </Body>
+            </ComponentProvider.Provider>
           </Router>
         </ReactQueryCacheProvider>
       </Provider>

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 const SelectSubType = ({ t, config, onSelect }) => {
   const goNext = () => {
-    onSelect(subType);
+    onSelect({ subType });
   };
   const complaintType = Digit.SessionStorage.get("complaintType");
   const __initSubType__ = Digit.SessionStorage.get("subType");

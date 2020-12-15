@@ -1,13 +1,16 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+import merge from 'lodash.merge'
 import { useDispatch, useSelector } from "react-redux";
 import { createComplaint } from "../../../redux/actions/index";
 
 import { FormStep, SubmitBar, TextInput } from "@egovernments/digit-ui-react-components";
+import { ComponentProvider } from "@egovernments/digit-ui-module-core/src/context";
 
 import { newComplaintSteps } from "./config";
-import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { config as defaultConfig } from './defaultConfig';
+import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 
 import SelectComplaintType from "./Steps/SelectComplaintType";
 import SelectSubType from "./Steps/SelectSubType";
@@ -21,99 +24,111 @@ import Response from "./Steps/Response";
 // steps type: radio, map location, input, city-mohalla, textarea, upload photo
 export const CreateComplaint = () => {
   const { t } = useTranslation();
-  const { path, url } = useRouteMatch();
+  const { pathname } = useLocation()
+  const { path } = useRouteMatch();
   const history = useHistory();
+  const registry = useContext(ComponentProvider);
   const dispatch = useDispatch();
-
-  const appState = useSelector((state) => state)["common"];
-  console.log("appstate form index", appState);
+  const customConfig = Digit.SessionStorage.get("ComplaintConfig");
+  const config = useMemo(() => merge(defaultConfig, customConfig), [customConfig]);
   const __initParams = Digit.SessionStorage.get("PGR_CREATE_COMPLAINT_PARAMS");
   const [params, setParams] = useState(__initParams ? __initParams : {});
-  const [submitForm, setSubmitForm] = useState(false);
+  // const appState = useSelector((state) => state)["common"];
+  // console.log("appstate form index", appState);
+  // console.log(customConfig, 'custom config');
+  // console.log(config, 'my config');
+  // const [submitForm, setSubmitForm] = useState(false);
 
-  const stepItems = useMemo(
-    () =>
-      newComplaintSteps.map((step, index) => {
-        const texts = {};
-        for (const key in step.texts) {
-          texts[key] = t(step.texts[key]);
-        }
-        return { ...step, texts };
-      }),
-    [newComplaintSteps]
-  );
+  // const stepItems = useMemo(
+  //   () =>
+  //     newComplaintSteps.map((step, index) => {
+  //       const texts = {};
+  //       for (const key in step.texts) {
+  //         texts[key] = t(step.texts[key]);
+  //       }
+  //       return { ...step, texts };
+  //     }),
+  //   [newComplaintSteps]
+  // );
 
-  useEffect(() => {
-    console.log("submitForm", params);
-  }, [submitForm]);
+  // useEffect(() => {
+  //   console.log("submitForm", params);
+  // }, [submitForm]);
 
-  const selectComplaintType = (complaintType) => {
-    // updateParams("complaintType", complaintType);
-    history.push(`${path}/sub-type`);
-  };
+  const goNext = () => {
+    const currentPath = pathname.split('/').pop();
+    const { nextStep } = config.routes[currentPath]
+    if (nextStep === null) return submitComplaint();
+    history.push(`${path}/${nextStep}`);
+  }
 
-  const selectSubType = (subType) => {
-    const { key, name } = subType;
-    const complaintType = key;
-    setParams({ ...params, complaintType });
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    history.push(`${path}/pincode`);
-  };
+  // const selectComplaintType = (complaintType) => {
+  //   // updateParams("complaintType", complaintType);
+  //   history.push(`${path}/sub-type`);
+  // };
 
-  const selectPincode = (_pincode) => {
-    if (_pincode) {
-      const { pincode } = _pincode;
-      setParams({ ...params, pincode });
-      console.log("index --->", pincode);
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    }
-    history.push(`${path}/address`);
-  };
+  // const selectSubType = (subType) => {
+  //   const { key, name } = subType;
+  //   const complaintType = key;
+  //   setParams({ ...params, complaintType });
+  //   Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+  //   history.push(`${path}/pincode`);
+  // };
 
-  const selectAddress = (address) => {
-    const cityCode = address.city.code;
-    const city = address.city.name;
-    const district = address.city.name;
-    const region = address.city.name;
-    const state = "Punjab";
-    const localityCode = address.locality.code;
-    const localityName = address.locality.name;
-    setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName });
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    history.push(`${path}/landmark`);
-  };
+  // const selectPincode = (_pincode) => {
+  //   if (_pincode) {
+  //     const { pincode } = _pincode;
+  //     setParams({ ...params, pincode });
+  //     console.log("index --->", pincode);
+  //     Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+  //   }
+  //   history.push(`${path}/address`);
+  // };
 
-  const saveLandmark = (_landmark) => {
-    if (_landmark) {
-      const { landmark } = _landmark;
-      setParams({ ...params, landmark });
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    }
-    history.push(`${path}/upload-photos`);
-  };
+  // const selectAddress = (address) => {
+  //   const cityCode = address.city.code;
+  //   const city = address.city.name;
+  //   const district = address.city.name;
+  //   const region = address.city.name;
+  //   const state = "Punjab";
+  //   const localityCode = address.locality.code;
+  //   const localityName = address.locality.name;
+  //   setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName });
+  //   Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+  //   history.push(`${path}/landmark`);
+  // };
 
-  const saveImagesUrl = (images) => {
-    if (images) {
-      const uploadedImages = images?.map((url) => {
-        return {
-          documentType: "PHOTO",
-          fileStore: url,
-          documentUid: "",
-          additionalDetails: {},
-        };
-      });
-      setParams({ ...params, uploadedImages });
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    }
-    history.push(`${path}/additional-details`);
-  };
+  // const saveLandmark = (_landmark) => {
+  //   if (_landmark) {
+  //     const { landmark } = _landmark;
+  //     setParams({ ...params, landmark });
+  //     Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+  //   }
+  //   history.push(`${path}/upload-photos`);
+  // };
+
+  // const saveImagesUrl = (images) => {
+  //   if (images) {
+  //     const uploadedImages = images?.map((url) => {
+  //       return {
+  //         documentType: "PHOTO",
+  //         fileStore: url,
+  //         documentUid: "",
+  //         additionalDetails: {},
+  //       };
+  //     });
+  //     setParams({ ...params, uploadedImages });
+  //     Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
+  //   }
+  //   history.push(`${path}/additional-details`);
+  // };
 
   const submitComplaint = async (_details) => {
-    if (_details) {
-      const { details } = _details;
-      details && details !== "" ? setParams({ ...params, details }) : null;
-    }
-    console.log("index params", params);
+    // if (_details) {
+    //   const { details } = _details;
+    //   details && details !== "" ? setParams({ ...params, details }) : null;
+    // }
+    // console.log("index params", params);
 
     //Empty Session Storage for params
     Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
@@ -127,6 +142,15 @@ export const CreateComplaint = () => {
     history.push(`/digit-ui`);
   };
 
+  const handleSelect = (data) => {
+    setParams({ ...params, ...data });
+    goNext();
+  }
+
+  const handleSkip = () => {
+    goNext();
+  }
+
   const updateParams = (param, value) => {
     setParams({ ...params, [param]: value });
   };
@@ -135,7 +159,27 @@ export const CreateComplaint = () => {
 
   return (
     <Switch>
-      <Route path={`${path}/complaint-type`}>
+      {Object.keys(config.routes).map(route => {
+        const { component, texts, inputs } = config.routes[route];
+        const Component = typeof component === 'string' ? registry.getComponent(component) : component
+        return (
+          <Route path={`${path}/${route}`}>
+            <Component
+              config={{ texts, inputs }}
+              onSelect={handleSelect}
+              onSkip={handleSkip}
+              t={t}
+            />
+            {/* {React.createElement(component, {
+              config: { texts, inputs },
+              onSelect: handleSelect,
+              onSkip: handleSkip,
+              t: t
+            })} */}
+          </Route>
+        );
+      })}
+      {/* <Route path={`${path}/complaint-type`}>
         <SelectComplaintType t={t} config={stepItems[0]} onSelect={selectComplaintType} />
       </Route>
       <Route path={`${path}/sub-type`}>
@@ -158,9 +202,9 @@ export const CreateComplaint = () => {
       </Route>
       <Route path={`${path}/response`}>
         <Response t={t} config={stepItems[7]} onSelect={backToHome} />
-      </Route>
+      </Route> */}
       <Route>
-        <Redirect to={`${url}/complaint-type`} />
+        <Redirect to={`${path}/${config.indexRoute}`} />
       </Route>
     </Switch>
   );

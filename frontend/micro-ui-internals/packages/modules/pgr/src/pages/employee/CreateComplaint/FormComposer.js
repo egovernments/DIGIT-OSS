@@ -5,6 +5,7 @@ import {
   BreakLine,
   Card,
   CardLabel,
+  CardLabelError,
   CardSubHeader,
   CardSectionHeader,
   TextArea,
@@ -17,7 +18,7 @@ import { useTranslation } from "react-i18next";
 
 const FormComposer = (props) => {
   const { innerWidth } = useWindowSize();
-  const { register, watch, handleSubmit } = useForm();
+  const { errors, register, watch, handleSubmit } = useForm();
   const { t } = useTranslation();
 
   function onSubmit(data) {
@@ -49,6 +50,9 @@ const FormComposer = (props) => {
                     {field.isMandatory ? " * " : null}
                   </CardLabel>
                   <div className="field">{fieldSelector(field.type, field.populators)}</div>
+                  {console.log(errors, 'error')}
+                  <p>{errors[field?.populators?.name]}</p>
+                  {errors[field.populators.name] && <CardLabelError>Error</CardLabelError>}
                 </LabelFieldPair>
               );
             })}
