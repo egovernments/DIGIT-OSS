@@ -7,8 +7,8 @@ const getEmployeeFilter = async (cityCode, roles) => {
   console.log(searchResponse);
   const serviceDefs = Digit.SessionStorage.get("serviceDefs") || [];
   const complaintDetails = Digit.SessionStorage.get("complaintDetails");
-  // const serviceCode = complaintDetails.service.serviceCode;
-  const serviceCode = complaintDetails.audit.serviceCode;
+  const serviceCode = complaintDetails.service.serviceCode;
+  // const serviceCode = complaintDetails.audit.serviceCode;
   // const department = serviceDefs.find((def) => def.serviceCode === serviceCode).map((service) => service.department);
   const department = serviceDefs.find((def) => def.serviceCode === serviceCode).department;
   const employees = searchResponse.Employees.filter((employee) =>

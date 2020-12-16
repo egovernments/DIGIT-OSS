@@ -96,7 +96,7 @@ export const ComplaintDetails = (props) => {
     //   const assignWorkflow = await Digit.workflowService.getByBusinessId(tenantId, id);
     //   console.log("aassign", assignWorkflow);
     // })();
-    Digit.SessionStorage.set("complaintDetails", complaintDetails);
+    // Digit.SessionStorage.set("complaintDetails", complaintDetails);
     console.log("---------------------------------->>>>", complaintDetails);
   }, [complaintDetails]);
   // useEffect(() => {
