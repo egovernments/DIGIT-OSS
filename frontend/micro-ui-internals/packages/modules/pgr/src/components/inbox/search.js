@@ -16,6 +16,7 @@ const SearchComplaint = ({ onSearch, type }) => {
 
   function clearSearch() {
     reset();
+    onSearch({});
   }
 
   const clearAll = () => {
