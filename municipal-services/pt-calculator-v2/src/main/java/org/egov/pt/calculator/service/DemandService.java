@@ -101,9 +101,14 @@ public class DemandService {
 			PropertyDetail detail = property.getPropertyDetails().get(0);
 
 			Calculation calculation = propertyCalculationMap.get(property.getPropertyDetails().get(0).getAssessmentNumber());
-
+			
 			String assessmentNumber = detail.getAssessmentNumber();
-
+			Map<String, Object> finyearMap = (Map<String, Object>) masterMap.get(FINANCIALYEAR_MASTER_KEY);
+			Map<String, Object> finYear = (Map<String, Object>) finyearMap.get(detail.getFinancialYear());
+			Long startingDate = (Long) finYear.get("startingDate");
+			Long endingDate = (Long) finYear.get("endingDate");
+			criteria.setFromDate(startingDate);
+			criteria.setToDate(endingDate);
 			// pt_tax for the new assessment
 			BigDecimal newTax =  BigDecimal.ZERO;
 			Optional<TaxHeadEstimate> advanceCarryforwardEstimate = propertyCalculationMap.get(assessmentNumber).getTaxHeadEstimates()
