@@ -4,10 +4,15 @@ import javax.validation.Valid;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.calculator.service.BillingSlabService;
+import org.egov.pt.calculator.service.MutationBillingSlabService;
 import org.egov.pt.calculator.validator.BillingSlabValidator;
+import org.egov.pt.calculator.validator.MutationBillingSlabValidator;
 import org.egov.pt.calculator.web.models.BillingSlabReq;
 import org.egov.pt.calculator.web.models.BillingSlabRes;
 import org.egov.pt.calculator.web.models.BillingSlabSearchCriteria;
+import org.egov.pt.calculator.web.models.MutationBillingSlabReq;
+import org.egov.pt.calculator.web.models.MutationBillingSlabRes;
+import org.egov.pt.calculator.web.models.MutationBillingSlabSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +34,16 @@ public class BillingSlabController {
 	@Autowired
 	private BillingSlabService service;
 	
+
+	@Autowired
+	private MutationBillingSlabService mutationService;
+	
 	@Autowired
 	private BillingSlabValidator billingSlabValidator;
 	
-
+	@Autowired
+	private MutationBillingSlabValidator mutationbillingSlabValidator;
+	
 	/**
 	 * endpoint to create billing-slabs
 	 * 
@@ -82,6 +93,57 @@ public class BillingSlabController {
 					@ModelAttribute @Valid BillingSlabSearchCriteria billingSlabSearcCriteria) {
 		long startTime = System.currentTimeMillis();
 		BillingSlabRes billingSlabRes = service.searchBillingSlabs(requestInfo, billingSlabSearcCriteria);
+		long endTime = System.currentTimeMillis();
+		log.debug(" the time taken for create in ms: {}", endTime - startTime);
+		return new ResponseEntity<>(billingSlabRes, HttpStatus.OK);
+	}
+	
+	/**
+	 * endpoint to create mutation billing-slabs
+	 *
+	 * @param mutationbillingSlabReq
+	 */
+	@PostMapping("/mutation/_create")
+	@ResponseBody
+	private ResponseEntity<?> mutationCreate(@RequestBody @Valid MutationBillingSlabReq mutationbillingSlabReq) {
+
+		long startTime = System.currentTimeMillis();
+		mutationbillingSlabValidator.validateCreate(mutationbillingSlabReq);
+		MutationBillingSlabRes billingSlabRes = mutationService.createBillingSlab(mutationbillingSlabReq);
+		long endTime = System.currentTimeMillis();
+		log.debug(" the time taken for create in ms: {}", endTime - startTime);
+		return new ResponseEntity<>(billingSlabRes, HttpStatus.CREATED);
+	}
+
+	/**
+	 * enpoint to update mutation billing-slabs
+	 *
+	 * @param billingSlabReq
+	 */
+	@PostMapping("/mutation/_update")
+	@ResponseBody
+	private ResponseEntity<?> update(@RequestBody @Valid MutationBillingSlabReq billingSlabReq) {
+
+		long startTime = System.currentTimeMillis();
+		mutationbillingSlabValidator.validateUpdate(billingSlabReq);
+		MutationBillingSlabRes billingSlabRes = mutationService.updateBillingSlab(billingSlabReq);
+		long endTime = System.currentTimeMillis();
+		log.debug(" the time taken for create in ms: {}", endTime - startTime);
+		return new ResponseEntity<>(billingSlabRes, HttpStatus.CREATED);
+	}
+
+	/**
+	 * enpoint to search mutation billing-slabs
+	 *
+	 * @param requestInfo
+	 * @param billingSlabSearcCriteria
+	 */
+	@PostMapping("/mutation/_search")
+	@ResponseBody
+	private ResponseEntity<?> search(@RequestBody @Valid RequestInfo requestInfo,
+									 @ModelAttribute @Valid MutationBillingSlabSearchCriteria billingSlabSearcCriteria) {
+		long startTime = System.currentTimeMillis();
+		MutationBillingSlabRes billingSlabRes = mutationService.searchBillingSlabs(requestInfo, billingSlabSearcCriteria);
 		long endTime = System.currentTimeMillis();
 		log.debug(" the time taken for create in ms: {}", endTime - startTime);
 		return new ResponseEntity<>(billingSlabRes, HttpStatus.OK);

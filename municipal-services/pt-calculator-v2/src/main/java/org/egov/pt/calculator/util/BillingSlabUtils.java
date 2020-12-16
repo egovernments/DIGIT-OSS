@@ -12,6 +12,8 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.calculator.web.models.BillingSlabReq;
 import org.egov.pt.calculator.web.models.BillingSlabRes;
+import org.egov.pt.calculator.web.models.MutationBillingSlabReq;
+import org.egov.pt.calculator.web.models.MutationBillingSlabRes;
 import org.egov.pt.calculator.web.models.property.AuditDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -78,6 +80,20 @@ public class BillingSlabUtils {
 		moduleDetails.add(moduleDetail);
 		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(tenantId).moduleDetails(moduleDetails).build();
 		return  MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
+	}
+	
+	/**
+	 * Returns MutationBillingSlabRes fetched based on the given MutationBillingSlabReq
+	 *
+	 * @param billingSlabReq
+	 * @return MutationBillingSlabRes
+	 */
+	public MutationBillingSlabRes getMutationBillingSlabResponse(MutationBillingSlabReq billingSlabReq) {
+
+		return MutationBillingSlabRes.builder()
+				.responseInfo(factory.createResponseInfoFromRequestInfo(billingSlabReq.getRequestInfo(), true))
+				.billingSlab(billingSlabReq.getBillingSlab())
+				.build();
 	}
 	
 }
