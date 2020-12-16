@@ -19,7 +19,9 @@ initLibraries();
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
-const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
+// const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
+const userType = window.sessionStorage.getItem("apna_userType") || "EMPLOYEE";
+console.log(userType);
 
 const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 

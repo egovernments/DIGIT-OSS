@@ -9,29 +9,30 @@ import {
   CardLabelDesc,
   UploadFile,
   ButtonSelector,
+  Loader,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import useEmployeeFilter from "../hooks/useEmployeeFilter";
 const Modal = (props) => {
   const roles = props.employeeRoles.filter((role) => role.action === props.selectedAction);
   console.log("modalllll", roles);
-  const useEmployeeData = useEmployeeFilter("pb.amritsar", roles[0].roles);
+  const { isLoading: employeeDataLoading, error, isError, data: useEmployeeData } = useEmployeeFilter("pb.amritsar", roles[0].roles);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [comments, setComments] = useState(null);
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const { t } = useTranslation();
 
-  console.log("modal", useEmployeeData);
-  const employeeData = useEmployeeData
-    ? useEmployeeData.map((departmentData) => {
-        return { heading: departmentData.department, options: departmentData.employees };
-      })
-    : null;
+  useEffect(() => {
+    if (!employeeDataLoading) console.log("-------------------------->>>>>>>>>>>>>>", useEmployeeData, error);
+  });
 
-  // const uploadFile = useCallback( () => {
-
-  //   }, [file]);
+  const employeeData =
+    useEmployeeData && !employeeDataLoading
+      ? useEmployeeData.map((departmentData) => {
+          return { heading: departmentData.department, options: departmentData.employees };
+        })
+      : [];
 
   useEffect(async () => {
     if (file) {
@@ -52,7 +53,13 @@ const Modal = (props) => {
     setFile(e.target.files[0]);
   }
 
-  return (
+  return employeeDataLoading ? (
+    <PopUp>
+      <div className="popup-module">
+        <Loader />
+      </div>
+    </PopUp>
+  ) : (
     <PopUp>
       <div className="popup-module">
         <HeaderBar main={props.headerBarMain} end={props.headerBarEnd} />

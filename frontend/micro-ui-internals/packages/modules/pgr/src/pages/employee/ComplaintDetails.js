@@ -92,10 +92,12 @@ export const ComplaintDetails = (props) => {
     setPopup(true);
   }
   useEffect(() => {
-    (async () => {
-      const assignWorkflow = await Digit.workflowService.getByBusinessId(tenantId, id);
-      console.log("aassign", assignWorkflow);
-    })();
+    // (async () => {
+    //   const assignWorkflow = await Digit.workflowService.getByBusinessId(tenantId, id);
+    //   console.log("aassign", assignWorkflow);
+    // })();
+    Digit.SessionStorage.set("complaintDetails", complaintDetails);
+    console.log("---------------------------------->>>>", complaintDetails);
   }, [complaintDetails]);
   // useEffect(() => {
   //   console.log("action", props.action);
@@ -171,6 +173,8 @@ export const ComplaintDetails = (props) => {
     return <Loader />;
   }
 
+  console.log("from employee============>", JSON.stringify(complaintDetails.details));
+
   const getTimelineCaptions = (checkpoint) => {
     console.log("tl", checkpoint);
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
@@ -186,6 +190,7 @@ export const ComplaintDetails = (props) => {
   };
 
   return (
+    // <React.Fragment></React.Fragment>
     <React.Fragment>
       <Card>
         <CardSubHeader>{t(`CS_HEADER_COMPLAINT_SUMMARY`)}</CardSubHeader>
