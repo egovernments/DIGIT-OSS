@@ -192,6 +192,8 @@ public class MicroserviceUtils {
 
     private static final Logger LOGGER = Logger.getLogger(MicroserviceUtils.class);
     private static final String CLIENT_ID = "client.id";
+    private static final int DEFAULT_PAGE_SIZE = 100;
+
     @Autowired
     private SecurityUtils securityUtils;
 
@@ -926,11 +928,14 @@ public class MicroserviceUtils {
     }
 
     public List<Instrument> getInstruments(String instrumentType, TransactionType transactionType,
-            String instrumentStatus) {
+            String instrumentStatus,final Date startDate, final Date endDate) {
         InstrumentSearchContract contract = new InstrumentSearchContract();
         contract.setInstrumentTypes(instrumentType);
         contract.setTransactionType(transactionType);
         contract.setFinancialStatuses(instrumentStatus);
+        contract.setTransactionFromDate(startDate);
+        contract.setTransactionToDate(endDate);
+        contract.setPageSize(DEFAULT_PAGE_SIZE);
         return this.getInstrumentsBySearchCriteria(contract);
     }
 
