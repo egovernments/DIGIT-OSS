@@ -27,9 +27,9 @@ const Rating = (props) => {
 };
 
 Rating.propTypes = {
-  maxRating: PropTypes.number.isRequired,
-  currentRating: PropTypes.number.isRequired,
-  onFeedback: PropTypes.func.isRequired,
+  maxRating: PropTypes.number,
+  currentRating: PropTypes.number,
+  onFeedback: PropTypes.func,
 };
 
 Rating.defaultProps = {

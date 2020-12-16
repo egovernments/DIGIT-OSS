@@ -19,7 +19,7 @@ DisplayPhotos.propTypes = {
   /**
    * images
    */
-  srcs: PropTypes.array.isRequired,
+  srcs: PropTypes.array,
   /**
    * optional click handler
    */

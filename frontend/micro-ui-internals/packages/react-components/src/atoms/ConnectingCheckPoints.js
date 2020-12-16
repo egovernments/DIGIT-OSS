@@ -44,11 +44,11 @@ CheckPoint.propTypes = {
   /**
    * key value
    */
-  key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /**
    * checkpoint content
    */
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   info: PropTypes.string,
   customChild: PropTypes.string,
 };

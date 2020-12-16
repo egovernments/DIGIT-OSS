@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 import TextArea from "../atoms/TextArea";
@@ -53,14 +53,16 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange }) =>
 
 FormStep.propTypes = {
   config: PropTypes.shape({}),
-  onSelect: PropTypes.func.isRequired,
-  onSkip: PropTypes.func.isRequired,
+  onSelect: PropTypes.func,
+  onSkip: PropTypes.func,
+  t: PropTypes.func,
 };
 
 FormStep.defaultProps = {
   config: {},
   onSelect: undefined,
   onSkip: undefined,
+  t: (value) => value,
 };
 
 export default FormStep;

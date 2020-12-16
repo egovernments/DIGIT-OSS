@@ -24,10 +24,11 @@ const InputCard = ({ t, children, texts = {}, submit = false, inputs = [], input
 };
 
 InputCard.propTypes = {
-  text: PropTypes.object.isRequired,
-  submit: PropTypes.bool.isRequired,
-  onNext: PropTypes.func.isRewquired,
-  onSkip: PropTypes.func.isRequired,
+  text: PropTypes.object,
+  submit: PropTypes.bool,
+  onNext: PropTypes.func,
+  onSkip: PropTypes.func,
+  t: PropTypes.func,
 };
 
 InputCard.defaultProps = {
@@ -35,6 +36,7 @@ InputCard.defaultProps = {
   submit: false,
   onNext: undefined,
   onSkip: undefined,
+  t: (value) => value,
 };
 
 export default InputCard;

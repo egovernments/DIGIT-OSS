@@ -15,8 +15,8 @@ const TelePhone = ({ mobile, text }) => (
 );
 
 TelePhone.propTypes = {
-  mobile: PropTypes.number.isRequired,
-  text: PropTypes.string.isRequired,
+  mobile: PropTypes.number,
+  text: PropTypes.string,
 };
 
 TelePhone.defaultProps = {

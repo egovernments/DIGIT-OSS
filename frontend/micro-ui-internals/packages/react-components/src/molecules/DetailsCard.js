@@ -29,7 +29,7 @@ const DetailsCard = ({ data }) => {
 };
 
 DetailsCard.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.array,
 };
 
 DetailsCard.defaultProps = {

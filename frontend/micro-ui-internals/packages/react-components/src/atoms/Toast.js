@@ -13,7 +13,7 @@ const Toast = (props) => {
 };
 
 Toast.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   onClose: PropTypes.func,
 };
 

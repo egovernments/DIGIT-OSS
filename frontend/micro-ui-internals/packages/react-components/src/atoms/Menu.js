@@ -16,8 +16,8 @@ const Menu = (props) => {
 };
 
 Menu.propTypes = {
-  options: PropTypes.array.isRequired,
-  onSelect: PropTypes.func.isRequired,
+  options: PropTypes.array,
+  onSelect: PropTypes.func,
 };
 
 Menu.defaultProps = {

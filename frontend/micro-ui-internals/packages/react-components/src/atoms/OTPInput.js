@@ -14,7 +14,7 @@ const OTPInput = (props) => {
 };
 
 OTPInput.propTypes = {
-  length: PropTypes.number.isRequired,
+  length: PropTypes.number,
 };
 
 OTPInput.defaultProps = {

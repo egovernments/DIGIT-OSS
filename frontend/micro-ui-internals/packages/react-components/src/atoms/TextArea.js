@@ -16,9 +16,9 @@ const TextArea = (props) => {
 };
 
 TextArea.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   ref: PropTypes.func,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func,
 };
 

@@ -29,12 +29,12 @@ const LocationSearchCard = ({ header, cardText, nextText, skipAndContinueText, s
 };
 
 LocationSearchCard.propTypes = {
-  header: PropTypes.string.isRequired,
-  cardText: PropTypes.string.isRequired,
-  nextText: PropTypes.string.isRequired,
-  skipAndContinueText: PropTypes.string.isRequired,
-  skip: PropTypes.bool.isRequired,
-  onSave: PropTypes.func.isRequired,
+  header: PropTypes.string,
+  cardText: PropTypes.string,
+  nextText: PropTypes.string,
+  skipAndContinueText: PropTypes.string,
+  skip: PropTypes.bool,
+  onSave: PropTypes.func,
 };
 
 LocationSearchCard.defaultProps = {

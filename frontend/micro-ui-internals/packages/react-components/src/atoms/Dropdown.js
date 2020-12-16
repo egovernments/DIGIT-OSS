@@ -102,10 +102,10 @@ const Dropdown = (props) => {
 };
 
 Dropdown.propTypes = {
-  selected: PropTypes.string.isRequired,
+  selected: PropTypes.string,
   style: PropTypes.object,
-  option: PropTypes.array.isRequired,
-  optionKey: PropTypes.string.isRequired,
+  option: PropTypes.array,
+  optionKey: PropTypes.string,
   select: PropTypes.func,
   t: PropTypes.func,
 };

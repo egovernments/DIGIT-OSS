@@ -31,16 +31,16 @@ const TextInputCard = ({ header, subHeader, cardText, cardLabel, nextText, skipA
 };
 
 TextInputCard.propTypes = {
-  header: PropTypes.string.isRequired,
-  subHeader: PropTypes.string.isRequired,
-  cardText: PropTypes.string.isRequired,
-  cardLabel: PropTypes.string.isRequired,
-  nextText: PropTypes.string.isRequired,
-  skipAndContinueText: PropTypes.string.isRequired,
-  skip: PropTypes.bool.isRequired,
-  onSave: PropTypes.func.isRequired,
-  onSkip: PropTypes.func.isRequired,
-  textInput: PropTypes.string.isRequired,
+  header: PropTypes.string,
+  subHeader: PropTypes.string,
+  cardText: PropTypes.string,
+  cardLabel: PropTypes.string,
+  nextText: PropTypes.string,
+  skipAndContinueText: PropTypes.string,
+  skip: PropTypes.bool,
+  onSave: PropTypes.func,
+  onSkip: PropTypes.func,
+  textInput: PropTypes.string,
 };
 
 TextInputCard.defaultProps = {
