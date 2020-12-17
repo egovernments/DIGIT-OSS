@@ -3,20 +3,24 @@ import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
 
 const SearchComplaint = ({ onSearch, type }) => {
-  const { register, handleSubmit, reset } = useForm();
+const [complaintNo, setComplaintNo] = useState("");
+const [mobileNo, setMobileNo] = useState("");
+const { register, handleSubmit, reset } = useForm();
 
   const onSubmitInput = (data) => {
     console.log("data", data);
-    if (data.businessId) {
-      onSearch({ businesssId: data.businessId });
+    if (data.serviceRequestId) {
+      onSearch({ serviceRequestId: data.serviceRequestId });
     } else {
-      onSearch({ mobileNumber: data.mobileNo });
+      onSearch({ mobileNumber: data.mobileNumber });
     }
   };
 
   function clearSearch() {
     reset();
     onSearch({});
+    setComplaintNo("");
+    setMobileNo("");
   }
 
   const clearAll = () => {
@@ -26,6 +30,14 @@ const SearchComplaint = ({ onSearch, type }) => {
       </LinkLabel>
     );
   };
+
+  function setComplaint(e) {
+    setComplaintNo(e.target.value);
+  }
+
+  function setMobile(e) {
+    setMobileNo(e.target.value);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmitInput)}>
@@ -49,11 +61,17 @@ const SearchComplaint = ({ onSearch, type }) => {
             <div className="complaint-input-container">
               <span className="complaint-input">
                 <Label>Complaint No.</Label>
-                <TextInput name="businessId" inputRef={register} style={{ width: "280px", marginBottom: "8px" }}></TextInput>
+                <TextInput
+                  name="serviceRequestId"
+                  value={complaintNo}
+                  onChange={setComplaint}
+                  inputRef={register}
+                  style={{ width: "280px", marginBottom: "8px" }}
+                ></TextInput>
               </span>
               <span className="mobile-input">
                 <Label>Mobile No.</Label>
-                <TextInput name="mobileNo" inputRef={register} style={{ width: "280px" }}></TextInput>
+                <TextInput name="mobileNumber" value={mobileNo} onChange={setMobile} inputRef={register} style={{ width: "280px" }}></TextInput>
               </span>
               {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: 8 }} label="Search" submit />}
             </div>

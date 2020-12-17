@@ -29,8 +29,8 @@ const Filter = (props) => {
   const [pendingComplaintCount, setPendingComplaintCount] = useState([]);
   const [filters, setFilters] = useState({
     assigned: [],
-    serviceCodes: [],
-    localities: [],
+    serviceCode: [],
+    locality: [],
     applicationStatus: [],
   });
   //TODO change city fetch from user tenantid
@@ -79,7 +79,6 @@ const Filter = (props) => {
       ...status,
       count: getCount(status.key),
     }));
-
     setPendingComplaintCount(statusWithCount);
   };
 
@@ -87,32 +86,33 @@ const Filter = (props) => {
     getPendingCount();
   }, [complaintStatus.length]);
 
-  function complaintType(type) {
-    console.log("complaint fikler", filters, type);
-    setFilters({ ...filters, serviceCodes: [...filters.serviceCodes, type] });
+  function complaintType(_type) {
+    console.log("complaint fikler", filters, _type);
+    const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
+    setFilters({ ...filters, serviceCode: [...filters.serviceCode, type] });
   }
 
   function onSelectLocality(value, type) {
     console.log("hi", type, value);
-    setFilters({ ...filters, localities: [...filters.localities, value] });
+    setFilters({ ...filters, locality: [...filters.locality, value] });
   }
 
   useEffect(() => {
-    console.log("filters:", filters.serviceCodes);
-    if (filters.serviceCodes.length > 1) {
-      setSelectedComplaintType(`${filters.serviceCodes.length} selected`);
+    console.log("filters:", filters.serviceCode);
+    if (filters.serviceCode.length > 1) {
+      setSelectedComplaintType(`${filters.serviceCode.length} selected`);
     } else {
-      setSelectedComplaintType(filters.serviceCodes[0]);
+      setSelectedComplaintType(filters.serviceCode[0]);
     }
-  }, [filters.serviceCodes]);
+  }, [filters.serviceCode]);
 
   useEffect(() => {
-    if (filters.localities.length > 1) {
-      setSelectedLocality(`${filters.localities.length} selected`);
+    if (filters.locality.length > 1) {
+      setSelectedLocality(`${filters.locality.length} selected`);
     } else {
-      setSelectedLocality(filters.localities[0]);
+      setSelectedLocality(filters.locality[0]);
     }
-  }, [filters.localities]);
+  }, [filters.locality]);
 
   const onRemove = (index, key) => {
     let afterRemove = filters[key].filter((value, i) => {
@@ -134,11 +134,12 @@ const Filter = (props) => {
   };
 
   function clearAll() {
-    setFilters({ assigned: [], serviceCodes: [], localities: [], applicationStatus: [] });
+    setFilters({ assigned: [], serviceCode: [], locality: [], applicationStatus: [] });
     setSelectedAssigned("");
     setSelectedComplaintType(null);
     setSelectedLocality(null);
-    setPendingComplaintCount([]);
+    // setPendingComplaintCount([]);
+    // getPendingCount()
   }
 
   //   return (
@@ -155,7 +156,7 @@ const Filter = (props) => {
     props.onFilterChange(queryString);
   };
 
-  const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key) => (
+  const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
 
@@ -164,7 +165,7 @@ const Filter = (props) => {
       <div className="tag-container">
         {filters[key].length > 0 &&
           filters[key].map((value, index) => {
-            return <RemoveableTag text={value[optionKey]} onClick={() => onRemove(index, key)} />;
+            return <RemoveableTag key={index} text={value[displayKey]} onClick={() => onRemove(index, key)} />;
           })}
       </div>
     </div>
@@ -198,14 +199,19 @@ const Filter = (props) => {
               ]}
             />
             <div>
-              {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCodes")}
+              {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCode", "key")}
             </div>
-            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "localities")}</div>
+            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
             <div className="status-container">
               <div className="filter-label">Status</div>
               {console.log("pendingComplaintCount:", pendingComplaintCount)}
               {pendingComplaintCount.map((option, index) => (
-                <CheckBox key={index} onChange={(e) => handleAssignmentChange(e, option)} label={`${option.name} (${option.count})`} />
+                <CheckBox
+                  key={index}
+                  onChange={(e) => handleAssignmentChange(e, option)}
+                  checked={filters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
+                  label={`${option.name} (${option.count})`}
+                />
               ))}
             </div>
           </div>
