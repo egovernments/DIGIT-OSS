@@ -16,7 +16,7 @@ export const CreateComplaint = () => {
   const history = useHistory();
   const registry = useContext(ComponentProvider);
   const dispatch = useDispatch();
-  const customConfig = Digit.SessionStorage.get("ComplaintConfig");
+  const customConfig = Digit.Customizations?.PGR?.complaintConfig || {};
   const config = useMemo(() => merge(defaultConfig, customConfig), [customConfig]);
   const __initParams = Digit.SessionStorage.get("PGR_CREATE_COMPLAINT_PARAMS");
   const [params, setParams] = useState(__initParams ? __initParams : {});

@@ -10,17 +10,15 @@ import "@egovernments/digit-ui-css/example/index.css";
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
-import { config as complaintConfig } from "./complaintConfig";
 import Registry from "@egovernments/digit-ui-libraries/src/services/ComponentRegistry";
-import SelectName from "./SelectName";
 
-import pgrCustomizations from "./pgr";
+import { pgrCustomizations, pgrComponents } from "./pgr";
 
 const userInfo = { CITIZEN, EMPLOYEE, LME };
 
 initLibraries();
 const registry = new Registry({
-  SelectName: SelectName,
+  ...pgrComponents,
 });
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
@@ -45,6 +43,5 @@ window.Digit.SessionStorage.set("User", userDetails);
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
-window.Digit.SessionStorage.set("ComplaintConfig", complaintConfig);
 
 ReactDOM.render(<DigitUI stateCode="pb" registry={registry} />, document.getElementById("root"));
