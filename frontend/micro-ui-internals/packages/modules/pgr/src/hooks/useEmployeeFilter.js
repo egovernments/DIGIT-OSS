@@ -11,7 +11,7 @@ const useEmployeeFilter = (cityCode, roles) => {
     const serviceDefs = Digit.SessionStorage.get("serviceDefs");
     const complaintDetails = Digit.SessionStorage.get("complaintDetails");
     const serviceCode = complaintDetails.service.serviceCode;
-    const department = serviceDefs.filter((def) => def.serviceCode === serviceCode).map((service) => service.department)[0];
+    const department = serviceDefs.find((def) => def.serviceCode === serviceCode).map((service) => service.department);
     const employees = searchResponse.Employees.filter((employee) =>
       employee.assignments.map((assignment) => assignment.department).includes(department)
     );

@@ -1,7 +1,7 @@
 .data-table {
-  @apply mb-lg text-text-primary;
+  @apply text-text-primary;
 
-  div{
+  .row {
     @apply flex border-b border-border pb-sm mb-sm;
 
     span{
@@ -14,13 +14,13 @@
       @apply font-bold text-heading-s;
     }
 
-    p{
+    .value{
       width: 70%;
       @apply text-heading-s;
     }
   }
 
-  .row-last{
+  .last{
     border: none;
     padding: 0;
     margin: 0;
@@ -28,7 +28,7 @@
 }
 
 .employee-data-table{
-  div{
+  .row {
     @apply flex pb-sm mb-sm;
 
     span{
@@ -41,13 +41,13 @@
       @apply font-bold text-heading-s;
     }
 
-    p{
+    .value{
       width: 70%;
       @apply text-heading-s;
     }
   }
 
-  .row-last{
+  .last{
     border: none;
     padding: 0;
     margin: 0;

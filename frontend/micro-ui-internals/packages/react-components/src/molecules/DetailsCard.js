@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Details = ({ label, name }) => {
   return (
@@ -11,16 +12,18 @@ const Details = ({ label, name }) => {
   );
 };
 
-const DetailsCard = ({ data }) => {
+const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix }) => {
   return (
     <div>
       {data.map((object, itemIndex) => {
         return (
-          <div key={itemIndex} className="details-container">
-            {Object.keys(object).map((name, index) => {
-              return <Details label={name} name={object[name]} key={index} />;
-            })}
-          </div>
+          <Link key={itemIndex} to={`${linkPrefix}${object[serviceRequestIdKey]}`}>
+            <div className="details-container">
+              {Object.keys(object).map((name, index) => {
+                return <Details label={name} name={object[name]} key={index} />;
+              })}
+            </div>
+          </Link>
         );
       })}
     </div>

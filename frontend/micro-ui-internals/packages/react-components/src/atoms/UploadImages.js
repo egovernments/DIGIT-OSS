@@ -5,7 +5,6 @@ import { DeleteBtn } from "./svgindex";
 const MiniUpload = (props) => {
   return (
     <div className="upload-img-container">
-      {/* <img src={camera} className="upload-camera-img" alt="upload"/> */}
       <CameraSvg className="upload-camera-img" />
       <input type="file" id="miniupload" accept="image/*" onChange={(e) => props.onUpload(e)} />
     </div>
@@ -19,14 +18,7 @@ const UploadImages = (props) => {
         {props.thumbnails.map((thumbnail, index) => {
           return (
             <div key={index}>
-              {/* <img src={deleteBtn} onClick={props.onDelete} className="delete" alt="delete"/> */}
-              <DeleteBtn
-                onClick={() => {
-                  props.onDelete(thumbnail);
-                }}
-                className="delete"
-                fill="#d4351c"
-              />
+              <DeleteBtn onClick={() => props.onDelete(thumbnail)} className="delete" fill="#d4351c" />
               <img src={thumbnail} alt="uploaded thumbnail" />
             </div>
           );
@@ -37,7 +29,6 @@ const UploadImages = (props) => {
   } else {
     return (
       <div className="upload-wrap" onClick={(e) => props.onUpload(e)}>
-        {/* <img src={camera} alt="upload"/>  */}
         <CameraSvg />
         <input type="file" id="upload" accept="image/*" onChange={(e) => props.onUpload(e)} />
       </div>

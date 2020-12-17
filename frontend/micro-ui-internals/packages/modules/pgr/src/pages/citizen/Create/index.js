@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import merge from 'lodash.merge'
+import merge from "lodash.merge";
 import { useDispatch, useSelector } from "react-redux";
 import { createComplaint } from "../../../redux/actions/index";
 
@@ -9,7 +9,7 @@ import { FormStep, SubmitBar, TextInput } from "@egovernments/digit-ui-react-com
 import { ComponentProvider } from "@egovernments/digit-ui-module-core/src/context";
 
 import { newComplaintSteps } from "./config";
-import { config as defaultConfig } from './defaultConfig';
+import { config as defaultConfig } from "./defaultConfig";
 import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 
 import SelectComplaintType from "./Steps/SelectComplaintType";
@@ -24,7 +24,7 @@ import Response from "./Steps/Response";
 // steps type: radio, map location, input, city-mohalla, textarea, upload photo
 export const CreateComplaint = () => {
   const { t } = useTranslation();
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
   const { path } = useRouteMatch();
   const history = useHistory();
   const registry = useContext(ComponentProvider);
@@ -56,11 +56,11 @@ export const CreateComplaint = () => {
   // }, [submitForm]);
 
   const goNext = () => {
-    const currentPath = pathname.split('/').pop();
-    const { nextStep } = config.routes[currentPath]
+    const currentPath = pathname.split("/").pop();
+    const { nextStep } = config.routes[currentPath];
     if (nextStep === null) return submitComplaint();
     history.push(`${path}/${nextStep}`);
-  }
+  };
 
   // const selectComplaintType = (complaintType) => {
   //   // updateParams("complaintType", complaintType);
@@ -130,11 +130,21 @@ export const CreateComplaint = () => {
     // }
     // console.log("index params", params);
 
-    //Empty Session Storage for params
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
-
     // submit complaint through actions
     await dispatch(createComplaint(params));
+
+    //Empty Session Storage
+    Digit.SessionStorage.set("complaintType", null);
+    Digit.SessionStorage.set("subType", null);
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
+    Digit.SessionStorage.set("PGR_CREATE_PINCODE", null);
+    Digit.SessionStorage.set("city_complaint", null);
+    Digit.SessionStorage.set("selected_localities", null);
+    Digit.SessionStorage.set("locality_complaint", null);
+    Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
+    Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
+    Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
+
     history.push(`${path}/response`);
   };
 
@@ -145,11 +155,11 @@ export const CreateComplaint = () => {
   const handleSelect = (data) => {
     setParams({ ...params, ...data });
     goNext();
-  }
+  };
 
   const handleSkip = () => {
     goNext();
-  }
+  };
 
   const updateParams = (param, value) => {
     setParams({ ...params, [param]: value });
@@ -159,17 +169,12 @@ export const CreateComplaint = () => {
 
   return (
     <Switch>
-      {Object.keys(config.routes).map(route => {
+      {Object.keys(config.routes).map((route) => {
         const { component, texts, inputs } = config.routes[route];
-        const Component = typeof component === 'string' ? registry.getComponent(component) : component
+        const Component = typeof component === "string" ? registry.getComponent(component) : component;
         return (
           <Route path={`${path}/${route}`}>
-            <Component
-              config={{ texts, inputs }}
-              onSelect={handleSelect}
-              onSkip={handleSkip}
-              t={t}
-            />
+            <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} t={t} />
             {/* {React.createElement(component, {
               config: { texts, inputs },
               onSelect: handleSelect,
