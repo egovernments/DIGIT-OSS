@@ -213,7 +213,7 @@ const formConfig = {
     let state = store.getState();
     const { citiesByModule,loadMdmsData } = state.common;
 
-    const roadTypeData =
+    /* const roadTypeData =
         get(loadMdmsData, "PropertyTax.RoadType") &&
         Object.values(get(loadMdmsData, "PropertyTax.RoadType")).map((item, index) => {
           return { value: item.code, label: item.name };
@@ -222,6 +222,17 @@ const formConfig = {
       dispatch(setFieldProperty("propertyAddress", "roadType", "dropDownData", roadTypeData));
       const locale = getLocale() || "en_IN";
       const localizationLabelsData = initLocalizationLabels(locale);
+ */
+    const locale = getLocale() || "en_IN";
+    const localizationLabelsData = initLocalizationLabels(locale);
+    const roadTypeData =
+        get(loadMdmsData, "PropertyTax.RoadType") &&
+        Object.values(get(loadMdmsData, "PropertyTax.RoadType")).map((item, index) => {
+          return { value: item.code,
+            label: getTranslatedLabel('PROPERTYTAX_ROADTYPE_' + item.code.toUpperCase(), localizationLabelsData)};
+        });
+
+      dispatch(setFieldProperty("propertyAddress", "roadType", "dropDownData", roadTypeData));
 
      const thanaData =
       get(loadMdmsData, "PropertyTax.Thana") &&
