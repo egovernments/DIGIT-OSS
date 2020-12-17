@@ -12,15 +12,15 @@ const SelectImages = ({ t, config, onSelect, onSkip }) => {
 
   // const onSkip = () => onSelect();
   const handleSubmit = () => {
-    if (uploadedImages.length === 0) return onSkip();
-    const _uploadImages = uploadedImages.map(url => ({
+    if (!uploadedImages || uploadedImages.length === 0) return onSkip();
+    const _uploadImages = uploadedImages.map((url) => ({
       documentType: "PHOTO",
       fileStore: url,
       documentUid: "",
       additionalDetails: {},
     }));
     onSelect({ uploadedImages: _uploadImages });
-  }
+  };
 
   return (
     <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t}>
