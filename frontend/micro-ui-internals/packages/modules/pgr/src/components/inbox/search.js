@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
 
-const SearchComplaint = ({ onClose, onSearch, type }) => {
-  const { register, handleSubmit } = useForm();
+const SearchComplaint = ({ onSearch, type }) => {
+  const { register, handleSubmit, reset } = useForm();
 
   const onSubmitInput = (data) => {
     console.log("data", data);
@@ -15,12 +15,13 @@ const SearchComplaint = ({ onClose, onSearch, type }) => {
   };
 
   function clearSearch() {
+    reset();
     onSearch({});
   }
 
   const clearAll = () => {
     return (
-      <LinkLabel style={{ color: "#F47738" }} onClick={clearSearch}>
+      <LinkLabel style={{ color: "#F47738", cursor: "pointer" }} onClick={clearSearch}>
         Clear Search
       </LinkLabel>
     );
