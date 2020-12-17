@@ -323,7 +323,16 @@ class ActionMenuComp extends Component {
                       id={item.name.toUpperCase().replace(/[\s]/g, "-") + "-" + index}
                       onClick={() => {
                         //  localStorageSet("menuPath", item.path);
-                        updateActiveRoute(item.path, item.name);
+                        if(item.navigationURL==='property-tax/assessment-form-dataentry')
+                        {
+                          let origin = window.location.origin;
+                          origin = origin.concat("/");
+                          window.location.href = origin.concat(item.navigationURL);
+                        }
+                        else
+                        {
+                          updateActiveRoute(item.path, item.name);
+                        }
                         document.title = item.name;
                         toggleDrawer && toggleDrawer();
                         if (window.location.href.indexOf(item.navigationURL) > 0 && item.navigationURL.startsWith("integration")) {
