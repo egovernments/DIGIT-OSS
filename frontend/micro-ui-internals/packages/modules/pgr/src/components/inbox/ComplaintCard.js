@@ -6,7 +6,7 @@ import { FilterAction } from "@egovernments/digit-ui-react-components";
 import Filter from "./Filter";
 import SearchComplaint from "./search";
 
-export const ComplaintCard = ({ data }) => {
+export const ComplaintCard = ({ data, serviceRequestIdKey }) => {
   //let cardData = useComplaintTable(data);
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -28,7 +28,7 @@ export const ComplaintCard = ({ data }) => {
         <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />
         <FilterAction text="SORT" handleActionClick={handlePopupAction} />
       </div>
-      <DetailsCard data={data} />
+      <DetailsCard data={data} serviceRequestIdKey={serviceRequestIdKey} linkPrefix={"/digit-ui/employee/pgr/complaint/details/"} />
       {popup && (
         <PopUp>
           <div className="popup-module">{selectedComponent}</div>

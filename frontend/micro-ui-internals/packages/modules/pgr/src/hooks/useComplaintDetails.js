@@ -13,6 +13,7 @@ const getThumbnails = async (ids, tenantId) => {
 const getDetailsRow = ({ id, service }) => ({
   CS_COMPLAINT_DETAILS_COMPLAINT_NO: id,
   CS_COMPLAINT_DETAILS_APPLICATION_STATUS: `CS_COMMON_${service.applicationStatus}`,
+  CS_ADDCOMPLAINT_COMPLAINT_TYPE: `SERVICEDEFS.${service.serviceCode.toUpperCase()}`,
   CS_COMPLAINT_FILED_DATE: Digit.DateUtils.ConvertTimestampToDate(service.auditDetails.createdTime),
   ES_CREATECOMPLAINT_ADDRESS: [
     service.address.landmark,
@@ -23,11 +24,16 @@ const getDetailsRow = ({ id, service }) => ({
   ],
 });
 
+const isEmptyOrNull = (obj) => obj === undefined || obj === null || Object.keys(obj).length === 0;
+
 const transformDetails = ({ id, service, workflow, thumbnails }) => {
+  const { Customizations, SessionStorage } = window.Digit;
+  const role = (SessionStorage.get("user_type") || "CITIZEN").toUpperCase();
+  const customDetails = Customizations?.PGR?.getComplaintDetailsTableRows
+    ? Customizations.PGR.getComplaintDetailsTableRows({ id, service, role })
+    : {};
   return {
-    details: window.Digit.Customizations.PGR.getComplaintDetailsTableRows
-      ? window.Digit.Customizations.PGR.getComplaintDetailsTableRows({ id, service, role: "CITIZEN" })
-      : getDetailsRow({ id, service }),
+    details: !isEmptyOrNull(customDetails) ? customDetails : getDetailsRow({ id, service }),
     thumbnails: thumbnails,
     workflow: workflow,
     audit: {

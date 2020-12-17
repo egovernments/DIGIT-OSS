@@ -28,7 +28,7 @@
 }
 
 .employee-data-table{
-  div{
+  .row {
     @apply flex pb-sm mb-sm;
 
     span{
@@ -41,13 +41,13 @@
       @apply font-bold text-heading-s;
     }
 
-    p{
+    .value{
       width: 70%;
       @apply text-heading-s;
     }
   }
 
-  .row-last{
+  .last{
     border: none;
     padding: 0;
     margin: 0;

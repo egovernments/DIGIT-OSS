@@ -901,6 +901,8 @@ img, video {
     width: 100% !important;
     -webkit-box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+    max-height: 400px;
+    overflow: scroll;
     position: absolute;
     z-index: 10;
     margin-top: 4px;
@@ -1253,25 +1255,25 @@ img, video {
     padding: 0;
     margin: 0; }
 
-.employee-data-table div {
+.employee-data-table .row {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   padding-bottom: 8px;
   margin-bottom: 8px; }
-  .employee-data-table div span {
+  .employee-data-table .row span {
     width: 70%;
     display: contents; }
-  .employee-data-table div h2 {
+  .employee-data-table .row h2 {
     width: 30%;
     font-weight: 700; }
-  .employee-data-table div h2, .employee-data-table div p {
+  .employee-data-table .row .value, .employee-data-table .row h2 {
     font-size: 16px;
     line-height: 24px; }
-  .employee-data-table div p {
+  .employee-data-table .row .value {
     width: 70%; }
 
-.employee-data-table .row-last {
+.employee-data-table .last {
   border: none;
   padding: 0;
   margin: 0; }

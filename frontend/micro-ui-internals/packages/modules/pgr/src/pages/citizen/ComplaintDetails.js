@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { Hooks } from "@egovernments/digit-ui-libraries";
-
 import { LOCALIZATION_KEY } from "../../constants/Localization";
 
 import {
@@ -28,7 +26,7 @@ const ComplaintDetailsPage = (props) => {
 
   let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
   const { isLoading, error, isError, complaintDetails } = useComplaintDetails({ tenantId: cityCodeVal, id });
-  const workFlowDetails = Hooks.useWorkflowDetails({ tenantId: cityCodeVal, id, moduleCode: "PGR" });
+  const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: cityCodeVal, id, moduleCode: "PGR" });
 
   const [imageZoom, setImageZoom] = useState(null);
 
@@ -77,6 +75,7 @@ const ComplaintDetailsPage = (props) => {
           </Card>
           <Card>
             <TimeLine
+              isLoading={workFlowDetails.isLoading}
               data={workFlowDetails.data}
               serviceRequestId={id}
               complaintWorkflow={complaintDetails.workflow}
