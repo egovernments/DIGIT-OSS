@@ -1598,9 +1598,10 @@ img, video {
 .action-bar-wrap {
   -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.16);
-  width: 480px;
+  max-width: 480px;
   position: fixed;
   bottom: 0;
+  width: 100%;
   --bg-opacity:1;
   background-color: #fff;
   background-color: rgba(255, 255, 255, var(--bg-opacity));
