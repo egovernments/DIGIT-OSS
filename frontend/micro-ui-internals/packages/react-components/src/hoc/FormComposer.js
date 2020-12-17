@@ -24,7 +24,12 @@ const FormComposer = (props) => {
   const fieldSelector = (type, populators) => {
     switch (type) {
       case "text":
-        return <TextInput className="field" {...populators} inputRef={register(populators.validation)} />;
+        return (
+          <div class="field-container">
+            {populators.componentInFront ? populators.componentInFront : null}
+            <TextInput className="field" {...populators} inputRef={register(populators.validation)} />
+          </div>
+        );
       case "textarea":
         return <TextArea className="field" {...populators} inputRef={register(populators.validation)} />;
       default:
