@@ -1,6 +1,6 @@
 .popup-module{
     width: 480px;
-    margin: auto;
+    margin: 0 auto;
     @apply bg-white;
     
     .popup-module-main{
@@ -9,7 +9,7 @@
 
     .popup-module-action-bar{
         gap: 16px;
-        @apply flex flex-row justify-end
+        @apply flex flex-row justify-end;
     }
 }
 
