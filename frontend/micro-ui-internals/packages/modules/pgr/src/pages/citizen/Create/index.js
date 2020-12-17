@@ -115,11 +115,21 @@ export const CreateComplaint = () => {
     }
     console.log("index params", params);
 
-    //Empty Session Storage for params
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
-
     // submit complaint through actions
     await dispatch(createComplaint(params));
+
+    //Empty Session Storage
+    Digit.SessionStorage.set("complaintType", null);
+    Digit.SessionStorage.set("subType", null);
+    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
+    Digit.SessionStorage.set("PGR_CREATE_PINCODE", null);
+    Digit.SessionStorage.set("city_complaint", null);
+    Digit.SessionStorage.set("selected_localities", null);
+    Digit.SessionStorage.set("locality_complaint", null);
+    Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
+    Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
+    Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
+
     history.push(`${path}/response`);
   };
 

@@ -27,6 +27,23 @@ const getCriteria = ({ tenantId, moduleDetails }) => {
   };
 };
 
+const getModuleServiceDefsCriteria = (tenantId, moduleCode) => ({
+  type: "serviceDefs",
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: `RAINMAKER-${moduleCode}`,
+        masterDetails: [
+          {
+            name: "ServiceDefs",
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -57,5 +74,8 @@ export const MdmsService = {
   getDataByCriteria: async (mdmsDetails, moduleCode = "PGR") => {
     const { MdmsRes } = await MdmsService.call(mdmsDetails.details);
     return transformResponse(mdmsDetails.type, MdmsRes, moduleCode);
+  },
+  getServiceDefs: (tenantId, moduleCode = "PGR") => {
+    return MdmsService.getDataByCriteria(getModuleServiceDefsCriteria(tenantId, moduleCode), moduleCode);
   },
 };

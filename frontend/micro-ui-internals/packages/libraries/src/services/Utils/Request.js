@@ -2,36 +2,15 @@ import Axios from "axios";
 //import { connectAdvanced } from "react-redux";
 import { Storage } from "./Storage";
 
-// Axios.interceptors.request.use((req) => {
-//   document.body.classList.add("loader");
-//   return req;
-// });
-
-// Axios.interceptors.response.use(
-//   (res) => {
-//     document.body.classList.remove("loader");
-//     return res;
-//   },
-//   (err) => {
-//     document.body.classList.remove("loader");
-//     return err;
-//   }
-// );
-
 const requestInfo = () => ({
   apiId: "Rainmaker",
-  // action: "",
-  // did: 1,
-  // key: "",
-  // msgId: "20170310130900|en_IN",
-  // requesterId: "",
-  // ts: 1513579888683,
-  // ver: ".01",
   authToken: Storage.get("User").token,
 });
 
 const userServiceData = () => ({ userInfo: Storage.get("User").info });
 
+window.Digit = window.Digit || {};
+window.Digit = { ...window.Digit, RequestCache: window.Digit.RequestCache || {} };
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
   console.log("params:", params);
   console.log("url:", url);
@@ -47,20 +26,20 @@ export const Request = async ({ method = "POST", url, data = {}, useCache = fals
     }
   }
 
-  // let key = "";
-  // if (useCache) {
-  //   key = `${method.toUpperCase()}.${url}.${JSON.stringify(params, null, 0)}.${JSON.stringify(data, null, 0)}`;
-  //   const value = Storage.get(key);
-  //   if (value) {
-  //     return value;
-  //   }
-  // } else {
-  //   params._ = Date.now();
-  // }
+  let key = "";
+  if (useCache) {
+    key = `${method.toUpperCase()}.${url}.${btoa(JSON.stringify(params, null, 0))}.${btoa(JSON.stringify(data, null, 0))}`;
+    const value = window.Digit.RequestCache[key];
+    if (value) {
+      return value;
+    }
+  } else {
+    params._ = Date.now();
+  }
   const res = await Axios({ method, url, data, params });
-  // if (useCache) {
-  //   Storage.set(key, res.data);
-  // }
+  if (useCache) {
+    window.Digit.RequestCache[key] = res.data;
+  }
   return res.data;
 };
 
@@ -84,7 +63,7 @@ export const TransformArrayToObj = (traslationList) => {
 };
 
 export const GetCitiesWithi18nKeys = (MdmsRes, moduleCode) => {
-  const cityList = (MdmsRes.tenant.citymodule && MdmsRes.tenant.citymodule.filter((module) => module.code === moduleCode)[0].tenants) || [];
+  const cityList = (MdmsRes.tenant.citymodule && MdmsRes.tenant.citymodule.find((module) => module.code === moduleCode).tenants) || [];
   const citiesMap = cityList.map((city) => city.code);
   const cities = MdmsRes.tenant.tenants
     .filter((city) => citiesMap.includes(city.code))
@@ -116,10 +95,10 @@ export const GetServiceDefWithLocalization = (MdmsRes) => {
   const serviceDef = MdmsRes["RAINMAKER-PGR"].ServiceDefs.map((def) =>
     def.active
       ? {
-        name: def.serviceCode,
-        i18nKey: def.menuPath !== "" ? "SERVICEDEFS." + def.serviceCode.toUpperCase() : "Others",
-        ...def,
-      }
+          name: def.serviceCode,
+          i18nKey: def.menuPath !== "" ? "SERVICEDEFS." + def.serviceCode.toUpperCase() : "Others",
+          ...def,
+        }
       : null
   ).filter((o) => o != null);
   Storage.set("ServiceDefs", serviceDef); //TODO: move this to service, session storage key name is too big currently

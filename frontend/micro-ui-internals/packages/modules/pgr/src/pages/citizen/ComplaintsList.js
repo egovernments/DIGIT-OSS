@@ -1,25 +1,18 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "react-query";
 import { useRouteMatch } from "react-router-dom";
 
 import { Card, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { LOCALE } from "../../constants/Localization";
 import Complaint from "../../components/Complaint";
-import { useSelector } from "react-redux";
-
-const useComplaintsList = () => {
-  const User = Digit.SessionStorage.get("User");
-  // TODO: move city to state
-  const mobileNumber = User.mobileNumber || User?.info?.mobileNumber || User?.info?.userInfo?.mobileNumber;
-  const { isLoading, error, data } = useQuery("complaintsList", () => Digit.PGRService.search("pb.amritsar", { mobileNumber }));
-  return { isLoading, error, data };
-};
+import { useComplaintsListByMobile } from "../../hooks/useComplaintList";
 
 export const ComplaintsList = (props) => {
+  const User = Digit.SessionStorage.get("User");
+  const mobileNumber = User.mobileNumber || User?.info?.mobileNumber || User?.info?.userInfo?.mobileNumber;
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
-  let { isLoading, error, data } = useComplaintsList();
+  let { isLoading, error, data } = useComplaintsListByMobile(mobileNumber);
 
   if (isLoading) {
     return (
@@ -37,13 +30,21 @@ export const ComplaintsList = (props) => {
   if (error) {
     complaintsList = (
       <Card>
-        {(t(LOCALE.ERROR_LOADING_RESULTS)).split("\\n").map(text => <p style={{ textAlign: "center" }}>{text}</p>)}
+        {t(LOCALE.ERROR_LOADING_RESULTS)
+          .split("\\n")
+          .map((text) => (
+            <p style={{ textAlign: "center" }}>{text}</p>
+          ))}
       </Card>
     );
   } else if (complaints.length === 0) {
     complaintsList = (
       <Card>
-        {(t(LOCALE.NO_COMPLAINTS)).split("\\n").map(text => <p style={{ textAlign: "center" }}>{text}</p>)}
+        {t(LOCALE.NO_COMPLAINTS)
+          .split("\\n")
+          .map((text) => (
+            <p style={{ textAlign: "center" }}>{text}</p>
+          ))}
       </Card>
     );
   } else {
