@@ -1,12 +1,34 @@
-import React from "react";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RatingCard } from "@egovernments/digit-ui-react-components";
+import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import useComplaintDetails from "../../../hooks/useComplaintDetails";
+import { updateComplaints } from "../../../redux/actions/index";
 
 const SelectRating = () => {
   const { t } = useTranslation();
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  let userType = Digit.SessionStorage.get("userType");
+  let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
+  const complaintDetails = useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
+  const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
 
   function log(data) {
-    console.log("rateeeeeeeee**********", data);
+    if (complaintDetails) {
+      console.log("complaintDetails", complaintDetails);
+      complaintDetails.service.rating = data.rating;
+      complaintDetails.service.additionalDetail = data.CS_FEEDBACK_WHAT_WAS_GOOD.join(",");
+      complaintDetails.workflow = {
+        action: "RATE",
+        comments: data.comments,
+        verificationDocuments: [],
+      };
+      console.log("updtaed complaint details", complaintDetails);
+      updateComplaint({ service: complaintDetails.service, workflow: complaintDetails.workflow });
+    }
   }
 
   const config = {

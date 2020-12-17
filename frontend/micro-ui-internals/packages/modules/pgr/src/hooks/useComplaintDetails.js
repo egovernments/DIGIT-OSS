@@ -43,6 +43,7 @@ const transformDetails = ({ id, service, workflow, thumbnails }) => {
       rating: service.rating,
       serviceCode: service.serviceCode,
     },
+    service: service,
   };
 };
 

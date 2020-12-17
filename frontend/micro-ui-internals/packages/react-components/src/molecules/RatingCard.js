@@ -10,13 +10,13 @@ import SubmitBar from "../atoms/SubmitBar";
 
 const RatingCard = ({ config, onSelect, t }) => {
   const { register, watch, handleSubmit } = useForm();
+  const [comments, setComments] = useState("");
+  const [rating, setRating] = useState(0);
 
   const onSubmit = (data) => {
-    console.log("submitsadddddddddddas", data);
-    // onSelect(... data, { rating: rating });
+    data.rating = rating;
+    onSelect(data);
   };
-
-  const [rating, setRating] = useState(0);
 
   const feedback = (e, ref, index) => {
     setRating(index);
@@ -36,7 +36,8 @@ const RatingCard = ({ config, onSelect, t }) => {
       return (
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
-          {input.checkLabels && input.checkLabels.map((label, index) => <CheckBox key={index} name={input.label} label={label} />)}
+          {input.checkLabels &&
+            input.checkLabels.map((label, index) => <CheckBox key={index} name={input.label} label={label} inputRef={register} />)}
         </React.Fragment>
       );
     }
@@ -45,7 +46,7 @@ const RatingCard = ({ config, onSelect, t }) => {
       return (
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
-          <TextArea name={input.name}></TextArea>
+          <TextArea name={input.name} value={comments} onChange={(e) => setComments(e.target.value)} inputRef={register}></TextArea>
         </React.Fragment>
       );
     }
