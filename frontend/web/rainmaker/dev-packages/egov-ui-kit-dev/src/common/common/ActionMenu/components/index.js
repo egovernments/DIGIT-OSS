@@ -327,6 +327,11 @@ class ActionMenuComp extends Component {
                         {
                           let origin = window.location.origin;
                           origin = origin.concat("/");
+                          if(window.location.hostname!=="localhost")
+                          {
+                          origin = origin.concat(process.env.REACT_APP_NAME.toLowerCase());
+                          origin = origin.concat("/");
+                          }
                           window.location.href = origin.concat(item.navigationURL);
                         }
                         else
