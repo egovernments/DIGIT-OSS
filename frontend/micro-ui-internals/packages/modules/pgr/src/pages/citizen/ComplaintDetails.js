@@ -82,11 +82,12 @@ const ComplaintDetailsPage = (props) => {
               rating={complaintDetails.audit.rating}
             />
           </Card>
-          <Card>
+          {/* TO DO if api support */}
+          {/* <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
             <TextArea />
             <SubmitBar label="Send" />
-          </Card>
+          </Card> */}
         </React.Fragment>
       ) : (
         <Loader />

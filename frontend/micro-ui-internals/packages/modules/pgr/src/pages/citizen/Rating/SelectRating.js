@@ -4,6 +4,11 @@ import { useTranslation } from "react-i18next";
 
 const SelectRating = () => {
   const { t } = useTranslation();
+
+  function log(data) {
+    console.log("rateeeeeeeee**********", data);
+  }
+
   const config = {
     texts: {
       header: "CS_COMPLAINT_RATE_HELP_TEXT",
@@ -27,6 +32,6 @@ const SelectRating = () => {
       },
     ],
   };
-  return <RatingCard {...{ config: config }} t={t} />;
+  return <RatingCard {...{ config: config }} t={t} onSelect={log} />;
 };
 export default SelectRating;

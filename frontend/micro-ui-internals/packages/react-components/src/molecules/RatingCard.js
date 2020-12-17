@@ -11,10 +11,9 @@ import SubmitBar from "../atoms/SubmitBar";
 const RatingCard = ({ config, onSelect, t }) => {
   const { register, watch, handleSubmit } = useForm();
 
-  console.log("rate card", t("ULBGRADE_MUNICIPAL_CORPORATION"));
-
   const onSubmit = (data) => {
-    onSelect(...data, { rating: rating });
+    console.log("submitsadddddddddddas", data);
+    // onSelect(... data, { rating: rating });
   };
 
   const [rating, setRating] = useState(0);
@@ -56,7 +55,7 @@ const RatingCard = ({ config, onSelect, t }) => {
       <Card>
         <CardHeader>{t(config.texts.header)}</CardHeader>
         {segments}
-        <SubmitBar label={t(config.texts.submitBarLabel)} onSubmit={onSubmit} />
+        <SubmitBar label={t(config.texts.submitBarLabel)} submit={true} />
       </Card>
     </form>
   );
