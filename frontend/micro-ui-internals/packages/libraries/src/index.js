@@ -59,6 +59,7 @@ const initLibraries = () => {
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
   setupLibraries("Complaint", Complaint);
   setupLibraries("PincodeMap", PincodeMap);
+  setupLibraries("Hooks", Hooks);
   setupLibraries("Customizations", {});
   setupDevice();
   initI18n();

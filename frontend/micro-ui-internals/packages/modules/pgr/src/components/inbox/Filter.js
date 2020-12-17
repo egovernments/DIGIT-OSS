@@ -186,6 +186,7 @@ const Filter = (props) => {
                 Clear all
               </span>
             )}
+            {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
           </div>
           <div>
             <RadioButtons
@@ -216,10 +217,8 @@ const Filter = (props) => {
           </div>
         </div>
       </div>
-      {/* <ActionBar>
-        {props.type === "desktop" ? (
-          <SubmitBar label="Send" />
-        ) : (
+      <ActionBar>
+        {props.type === "mobile" && (
           <ApplyFilterBar
             labelLink={t("CS_COMMON_CLEAR_ALL")}
             buttonLink={t("CS_COMMON_FILTER")}
@@ -227,7 +226,7 @@ const Filter = (props) => {
             onSubmit={handleFilterSubmit}
           />
         )}
-      </ActionBar> */}
+      </ActionBar>
       {/* <ActionBar>
         <SubmitBar label="Take Action" />
       </ActionBar> */}
