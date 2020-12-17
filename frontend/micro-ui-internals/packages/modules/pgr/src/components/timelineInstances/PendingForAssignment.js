@@ -1,4 +1,3 @@
-import { GreyOutText } from "@egovernments/digit-ui-react-components";
 import React from "react";
 
 const PendingForAssignment = ({ text, complaintFiledDate }) => {

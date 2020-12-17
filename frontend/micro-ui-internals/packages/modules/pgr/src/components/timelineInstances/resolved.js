@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import StarRated from "./StarRated";
 import { useTranslation } from "react-i18next";
 import Reopen from "./reopen";
-import { getRoute } from "../../../../constants/Routes";
 //const GetTranslatedAction = (action, t) => t(`CS_COMMON_${action}`);
 
 const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate }) => {

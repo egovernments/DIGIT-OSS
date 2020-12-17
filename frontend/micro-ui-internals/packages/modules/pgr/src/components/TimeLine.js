@@ -1,7 +1,7 @@
 import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, Loader, TelePhone } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { LOCALIZATION_KEY } from "../../../constants/Localization";
+import { LOCALIZATION_KEY } from "../constants/Localization";
 import PendingAtLME from "./timelineInstances/pendingAtLme";
 import PendingForAssignment from "./timelineInstances/PendingForAssignment";
 import PendingForReassignment from "./timelineInstances/PendingForReassignment";
@@ -61,8 +61,8 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
           })}
         </ConnectingCheckPoints>
       ) : (
-          <Loader />
-        )}
+        <Loader />
+      )}
     </React.Fragment>
   );
 };

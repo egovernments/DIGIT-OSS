@@ -20,7 +20,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 
 import useComplaintDetails from "../../hooks/useComplaintDetails";
-import TimeLine from "./CreateComplaint/TimeLine";
+import TimeLine from "../../components/TimeLine";
 
 const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
