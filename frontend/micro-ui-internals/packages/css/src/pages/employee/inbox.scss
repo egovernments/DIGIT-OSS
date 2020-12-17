@@ -71,8 +71,7 @@
   }
 
   .status-container {
-    @apply overflow-auto;
-    height: 250px;
+    margin-bottom: 50px;
   }
 }
 
@@ -136,6 +135,11 @@
 
       .search-complaint-container {
         @apply flex items-center bg-white p-md;
+
+        .complaint-header {
+          display: flex;
+          @apply flex justify-between w-full;
+        }
 
         .complaint-input-container {
           display: flex !important;

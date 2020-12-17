@@ -6,7 +6,7 @@ import { FilterAction } from "@egovernments/digit-ui-react-components";
 import Filter from "./Filter";
 import SearchComplaint from "./search";
 
-export const ComplaintCard = ({ data, serviceRequestIdKey }) => {
+export const ComplaintCard = ({ data, onFilterChange, serviceRequestIdKey }) => {
   //let cardData = useComplaintTable(data);
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -14,11 +14,16 @@ export const ComplaintCard = ({ data, serviceRequestIdKey }) => {
   const handlePopupAction = (type) => {
     console.log("option");
     if (type === "SEARCH") {
-      setSelectedComponent(<SearchComplaint />);
+      setSelectedComponent(<SearchComplaint type="mobile" onClose={handlePopupClose} />);
     } else if (type === "FILTER") {
-      setSelectedComponent(<Filter />);
+      setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
     }
     setPopup(true);
+  };
+
+  const handlePopupClose = () => {
+    setPopup(false);
+    setSelectedComponent(null);
   };
 
   return (

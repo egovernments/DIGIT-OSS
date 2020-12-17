@@ -12,7 +12,7 @@ const GetSlaCell = (value) => {
   );
 };
 
-const MobileInbox = ({ data }) => {
+const MobileInbox = ({ data, onFilterChange }) => {
   const { t } = useTranslation();
   const localizedData = data?.map(({ locality, serviceRequestId, sla, status, taskOwner }) => ({
     [t("CS_COMMON_COMPLAINT_NO")]: serviceRequestId,
@@ -26,7 +26,7 @@ const MobileInbox = ({ data }) => {
       <div className="inbox-container">
         <div className="filters-container">
           <ComplaintsLink isMobile={true} />
-          <ComplaintCard data={localizedData} serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")} />
+          <ComplaintCard data={localizedData} onFilterChange={onFilterChange} serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")} />
         </div>
       </div>
     </div>
