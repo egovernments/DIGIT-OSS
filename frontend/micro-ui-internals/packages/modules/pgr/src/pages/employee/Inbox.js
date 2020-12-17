@@ -28,8 +28,6 @@ const Inbox = () => {
 
   let complaints = useInboxData(searchParams) || [];
 
-  console.log("complaints:", complaints);
-
   useEffect(() => {
     getFilteredComplaints();
   }, [getFilteredComplaints]);
@@ -37,7 +35,7 @@ const Inbox = () => {
   let isMobile = window.mobileCheck();
   console.log("window.mobileCheck:", isMobile);
   console.log("searchParams:::::>", searchParams);
-  if (complaints.length > 0) {
+  if (complaints.length !== null) {
     if (isMobile) {
       return <MobileInbox data={complaints} onFilterChange={handleFilterChange} />;
     } else {
