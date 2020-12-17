@@ -1618,6 +1618,7 @@ img, video {
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.16);
     left: 64px;
     width: calc(100% - 64px);
+    max-width: none;
     z-index: 20;
     position: fixed;
     bottom: 0;
