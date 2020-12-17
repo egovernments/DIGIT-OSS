@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardSubHeader, CardLabel, TextInput, Dropdown } from "@egovernments/digit-ui-react-components";
-import FormComposer from "./FormComposer";
+import { FormComposer } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 
 import useComplaintTypes from "../../../hooks/useComplaintTypes";
@@ -114,6 +114,7 @@ export const CreateComplaint = ({ parentUrl }) => {
               required: true,
               pattern: /^[6-9]\d{9}$/,
             },
+            error: t("CORE_COMMON_MOBILE_ERROR"),
           },
         },
         {
@@ -124,6 +125,7 @@ export const CreateComplaint = ({ parentUrl }) => {
             validation: {
               pattern: /[A-Za-z]/,
             },
+            error: t("CS_ADDCOMPLAINT_NAME_ERROR"),
           },
         },
       ],
@@ -155,6 +157,7 @@ export const CreateComplaint = ({ parentUrl }) => {
           populators: {
             name: "pincode",
             validation: { pattern: /^[1-9][0-9]{5}$/ },
+            error: t("CORE_COMMON_PINCODE_INVALID"),
           },
         },
         {
@@ -198,5 +201,12 @@ export const CreateComplaint = ({ parentUrl }) => {
     },
   ];
 
-  return <FormComposer heading="ES_CREATECOMPLAINT_NEW_COMPLAINT" config={config} onSubmit={onSubmit}></FormComposer>;
+  return (
+    <FormComposer
+      heading="ES_CREATECOMPLAINT_NEW_COMPLAINT"
+      config={config}
+      onSubmit={onSubmit}
+      label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")}
+    />
+  );
 };
