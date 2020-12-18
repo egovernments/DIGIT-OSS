@@ -1,21 +1,16 @@
-import {
-  dispatchMultipleFieldChangeAction,
-  getLabel
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { convertDateToEpoch, dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { disableField, enableField, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import compact from "lodash/compact";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields } from "../../utils";
-import "./index.css";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "../../../../../ui-utils";
-import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
-import {
-  createUpdateNocApplication,
-  prepareDocumentsUploadData
-} from "../../../../../ui-utils/commons";
 import store from "ui-redux/store";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "../../../../../ui-utils";
+import { prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
+import { getCommonApplyFooter, validateFields } from "../../utils";
+import { onChangeTypeOfOwnership } from "../applyResourceMutation/transfereeDetails";
+import "./index.css";
+
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
@@ -66,7 +61,7 @@ const moveToReview = (state, dispatch) => {
         dispatch(
           toggleSnackbar(
             true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+            { labelName: "Please upload mandatory documents!", labelKey: "" },
             "warning"
           )
         );
@@ -94,9 +89,9 @@ const getMdmsData = async (state, dispatch) => {
   );
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: "uk",
       moduleDetails: [
-        { moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] }
       ]
     }
   };
@@ -112,7 +107,7 @@ const getMdmsData = async (state, dispatch) => {
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.PropertyTax.Documents",
-        payload.MdmsRes.PropertyTax.Documents
+        payload.MdmsRes.PropertyTax.MutationDocuments
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -127,17 +122,45 @@ const callBackForApply = async (state, dispatch) => {
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state, "screenConfiguration.preparedFinalObject.Property");
+    consumerCode=consumerCode==null?propertyPayload.propertyId:consumerCode;
+
+  if (process.env.REACT_APP_NAME === "Citizen" && propertyPayload && !propertyPayload.declaration) {
+    const errorMessage = {
+      labelName:
+        "Please fill all mandatory fields for Applicant Details, then proceed!",
+      labelKey: "ERR_CITIZEN_DECLARATION_TOAST"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+
+
+  let documentsUploadRedux = get(
+    state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
+
+  let isDocumentValid = true;
+  Object.keys(documentsUploadRedux).map((key) => {
+    if (documentsUploadRedux[key].documents && documentsUploadRedux[key].documents.length > 0 && !(documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value)) {
+      isDocumentValid = false;
+    }
+  });
+  if (!isDocumentValid) {
+    dispatch(toggleSnackbar(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
+    return;
+  }
+  disableField('apply', "components.div.children.footer.children.payButton", dispatch);
+
+
   propertyPayload.workflow = {
     "businessService": "PT.MUTATION",
     tenantId,
-    "action": "OPEN",
+    "action": getQueryArg(window.location.href, "action") === "edit"?"REOPEN":"OPEN",
     "moduleName": "PT"
   },
     propertyPayload.owners.map(owner => {
       owner.status = "INACTIVE";
 
     })
-  propertyPayload.additionalDetails.documentDate = 1581490792377;
 
   propertyPayload.ownersTemp.map(owner => {
     if (owner.documentUid && owner.documentType) {
@@ -182,19 +205,42 @@ const callBackForApply = async (state, dispatch) => {
     // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     delete propertyPayload.institutionTemp;
-  }
-  else {
-    //
-    propertyPayload.ownersTemp.map(owner => {
-      owner.status = "ACTIVE";
-      owner.ownerType = 'NONE';
-    })
+  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+    propertyPayload.institution = {};
+    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
+    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
+    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
+    propertyPayload.institution.tenantId = tenantId;
+    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
 
-    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
-    delete propertyPayload.ownersTemp;
+    propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    propertyPayload.institutionTemp.ownerType = "NONE";
+    propertyPayload.institutionTemp.status = "ACTIVE";
+    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
+    propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
+    delete propertyPayload.institutionTemp;
   }
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
+  let newDocuments = Object.values(documentsUploadRedux).map(document => {
+    if (document.dropdown && document.dropdown.value && document.documents && document.documents[0] && document.documents[0].fileStoreId) {
+      let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
+      return {
+        documentType: documentValue,
+        fileStoreId: document.documents[0].fileStoreId,
+        documentUid: document.documents[0].fileStoreId,
+        auditDetails: null,
+        status: "ACTIVE"
+      }
+    }
+  });
+  newDocuments = compact(newDocuments);
+  let oldDocuments = [];
+  oldDocuments = propertyPayload.documents && Array.isArray(propertyPayload.documents) && propertyPayload.documents.filter(document => {
+    return (document.documentType.includes('USAGEPROOF') || document.documentType.includes('OCCUPANCYPROOF') || document.documentType.includes('CONSTRUCTIONPROOF'))
+  })
+  oldDocuments = oldDocuments || [];
+  propertyPayload.documents = [...newDocuments, ...oldDocuments];
 
   try {
     let queryObject = [
@@ -207,6 +253,7 @@ const callBackForApply = async (state, dispatch) => {
         value: consumerCode
       }
     ];
+    propertyPayload.owners =propertyPayload.owners.filter(owner=>owner.isDeleted!==false);
     propertyPayload.creationReason = 'MUTATION';
     let payload = null;
     payload = await httpRequest(
@@ -220,14 +267,16 @@ const callBackForApply = async (state, dispatch) => {
     // dispatch(prepareFinalObject("Properties", payload.Properties));
     // dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
     if (payload) {
+      enableField('apply', "components.div.children.footer.children.payButton", dispatch);
       store.dispatch(
         setRoute(
-          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&tenantId=${tenantId}
+          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&moduleName=PT.MUTATION&tenantId=${tenantId}
           `
         )
       );
     }
     else {
+      enableField('apply', "components.div.children.footer.children.payButton", dispatch);
       store.dispatch(
         setRoute(
           `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
@@ -236,6 +285,7 @@ const callBackForApply = async (state, dispatch) => {
       );
     }
   } catch (e) {
+    enableField('apply', "components.div.children.footer.children.payButton", dispatch);
     console.log(e);
     store.dispatch(
       setRoute(
@@ -248,17 +298,32 @@ const callBackForApply = async (state, dispatch) => {
 
 const validateMobileNumber = (state) => {
   let err = false;
-  const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
-  const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
-  const names = owners.map(owner => {
-    return owner.name
-  })
-  const mobileNumbers = owners.map(owner => {
-    return owner.mobileNumber
-  })
-  newOwners.map(owner => {
-    if (names.includes(owner.name)) {
-      err = "OWNER_NAME_SAME";
+  let ownershipCategoryTemp = get(state, 'screenConfiguration.preparedFinalObject.Property.ownershipCategoryTemp');
+
+
+  if (ownershipCategoryTemp.includes('INSTITUTIONAL')) {
+    const newOwners = [get(state, 'screenConfiguration.preparedFinalObject.Property.institutionTemp', {})];
+    const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
+    const names = owners.map(owner => {
+      return owner.name
+    })
+    // const mobileNumbers = owners.map(owner => {
+    //   if (owner.status == "ACTIVE") {
+    //     return owner.mobileNumber;
+    //   }
+    // })
+    // newOwners.map(owner => {
+    //   if (mobileNumbers.includes(owner.mobileNumber)) {
+    //     err = "OWNER_NUMBER_SAME";
+    //   }
+    // })
+  } else {
+
+    let newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+    if (newOwners && newOwners.length && newOwners.length > 1) {
+      newOwners = newOwners.filter(object => {
+        return !(object.isDeleted === false)
+      })
     }
     const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
     // const names = owners.map(owner => {
@@ -277,7 +342,7 @@ const validateMobileNumber = (state) => {
     if (!err && ownershipCategoryTemp.includes('MULTIPLEOWNERS') && newOwners.length == 1) {
       err = "OWNERSHIPTYPE_CANNOT_BE_MULTIPLE";
     }
-  })
+  }
 
   return err;
 }
@@ -288,6 +353,7 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
+  const isMutationDetailsCard = get(state, "screenConfiguration.preparedFinalObject.PropertyConfiguration[0].Mutation.MutationDetails");
   // console.log(activeStep);
   let errorMsg = false;
   let isFormValid = true;
@@ -310,8 +376,14 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
+    let isInstitutionTypeValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children",
+      state,
+      dispatch
+    );
 
-    let isTransfereeDetailsCardValid = isSingleOwnerValid || isMutilpleOwnerValid || isInstitutionValid;
+
+    let isTransfereeDetailsCardValid = isSingleOwnerValid || isMutilpleOwnerValid || (isInstitutionValid && isInstitutionTypeValid);
 
     let isApplicantTypeValid = validateFields(
       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
@@ -319,11 +391,11 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
-    let ismutationCardValid = validateFields(
+    let ismutationCardValid = isMutationDetailsCard ? validateFields(
       "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children",
       state,
       dispatch
-    );
+    ) : true;
     let isregistrationCardValid = validateFields(
       "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children",
       state,
@@ -340,18 +412,86 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-
     if (isFormValid) {
       errorMsg = validateMobileNumber(state);
+
       errorMsg ? isFormValid = false : {};
     }
-
-
-
+    if (getQueryArg(window.location.href, "action") === "edit") {
+      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel",'props.labelKey',"PT_COMMON_BUTTON_RESUBMIT"))
+      onChangeTypeOfOwnership({ value: get(state.screenConfiguration.preparedFinalObject, 'Property.ownershipCategoryTemp', '') }, state, dispatch)
+    }else{
+      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel",'props.labelKey',"PT_COMMON_BUTTON_SUBMIT"))
+    }
   }
 
   if (activeStep === 1) {
     isFormValid = moveToReview(state, dispatch);
+
+
+    const ownershipCategory = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Property.ownershipCategory",
+      ''
+    );
+    const ownershipCategoryTemp = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Property.ownershipCategoryTemp",
+      ''
+    );
+
+    if (ownershipCategory.includes("INSTITUTIONAL")) {
+      let owner = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.owners",
+        []
+      );
+      owner = owner.filter(own => own.status == "ACTIVE");
+
+      dispatch(
+        prepareFinalObject(
+          "Property.ownersInit",
+          owner
+        )
+      );
+    }
+    else {
+      let owner = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.owners",
+        []
+      );
+      owner = owner.filter(own => own.status == "ACTIVE");
+
+      dispatch(
+        prepareFinalObject(
+          "Property.ownersInit",
+          owner
+        )
+      );
+    }
+    if (ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+      const institutionTemp = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.institutionTemp",
+        ''
+      );
+      let temp = {};
+      temp = { ...institutionTemp }
+      temp.name = institutionTemp.institutionName;
+      temp.fatherOrHusbandName = institutionTemp.name;
+      temp.permanentAddress = institutionTemp.correspondenceAddress;
+      const ownerTemp = [temp];
+      dispatch(
+        prepareFinalObject(
+          "Property.ownersTemp",
+          ownerTemp
+        )
+      );
+
+
+    }
+
   }
   if (activeStep === 2) {
 
@@ -566,7 +706,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "NOC_COMMON_BUTTON_PREV_STEP"
+        labelKey: "PT_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
