@@ -67,7 +67,7 @@ const AddtionalDetails = (props) => {
     return (
       <Redirect
         to={{
-          pathname: "/response",
+          pathname: `${props.parentRoute}/response`,
           state: { complaintDetails },
         }}
       />
