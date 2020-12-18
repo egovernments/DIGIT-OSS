@@ -21,7 +21,7 @@ export const getAssmentURL = () => {
     window.location.href,
     "tenantId"
   );
-  const path  = `/property-tax/assessment-form?assessmentId=0&purpose=assess&propertyId=${propertyId}&tenantId=${tenantId}&FY=2019-20`
+  const path  = `/property-tax/assessment-form?assessmentId=0&purpose=assess&propertyId=${propertyId}&tenantId=${tenantId}&FY=2020-21`
   
   return path;
 
