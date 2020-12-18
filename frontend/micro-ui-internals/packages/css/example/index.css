@@ -718,12 +718,12 @@ img, video {
         width: 50%;
         margin-right: 20%; }
     .employeeCard .field-container span {
-      border: "2px solid black";
-      background: "rgb(247 247 247)";
-      width: "40px";
-      height: "40px";
-      margin-top: "-16px";
-      border-right: "none"; }
+      background: #f7f7f7;
+      width: 40px;
+      height: 40px;
+      margin-top: -16px;
+      border: 2px solid #000;
+      border-right: none; }
   .header-wrap {
     display: -webkit-box;
     display: -ms-flexbox;

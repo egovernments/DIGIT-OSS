@@ -237,20 +237,20 @@
     }
 
     .field-container {
-      display: "flex";
-      justify-content: "center";
-      align-items: "center";
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       span {
-        border: "2px solid black";
-        background: "rgb(247 247 247)";
-        width: "40px";
-        height: "40px";
-        display: "flex";
-        justify-content: "center";
-        align-items: "center";
-        margin-top: "-16px";
-        border-right: "none";
+        border: 2px solid black;
+        background: rgb(247, 247, 247);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: -16px;
+        border-right: none;
       }
     }
   }
