@@ -12,6 +12,7 @@
     "@egovernments/digit-ui-libraries": "^1.0.0",
     "@egovernments/digit-ui-module-fsm": "^1.0.0",
     "@egovernments/digit-ui-module-pgr": "^1.0.0",
+    "@egovernments/digit-ui-utils": "^1.0.0",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",

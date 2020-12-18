@@ -1,0 +1,22 @@
+{
+  "name": "@egovernments/digit-ui-utils",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "source": "src/index.js",
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "example": "cd example && npm run start",
+    "build": "rollup --config",
+    "start": "rollup -w --config",
+    "prepare": "yarn build"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "jspdf": "^2.2.0",
+    "rollup": "^2.35.1"
+  }
+}
