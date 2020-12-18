@@ -237,9 +237,7 @@
     }
 
     .field-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @apply flex justify-center items-center;
 
       span {
         border: 2px solid black;
