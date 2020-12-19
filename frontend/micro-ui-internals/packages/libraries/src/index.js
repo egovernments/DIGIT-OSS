@@ -15,6 +15,7 @@ import { UploadServices } from "./services/UploadServices";
 import { GetServiceDefinitions } from "./services/ServiceDefinitions";
 import { Complaint } from "./services/Complaint";
 import { PincodeMap } from "./services/PincodeMap";
+import { CoreService } from "./class/coreService";
 
 import Hooks from "./hooks";
 
@@ -67,6 +68,6 @@ const initLibraries = () => {
   // setupLibraries("Translation", { initI18n: init, i18next });
 };
 
-export { initLibraries, Enums, Hooks };
+export { initLibraries, Enums, Hooks, CoreService };
 
 // export default initLibraries;

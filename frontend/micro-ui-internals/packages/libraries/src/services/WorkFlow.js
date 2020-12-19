@@ -3,23 +3,26 @@ import Urls from "./urls";
 import { Request } from "./Utils/Request";
 
 export const WorkflowService = {
-  init: (stateCode = "pb", businessServices = "PGR") =>
-    Request({
+  init: (stateCode = "pb", businessServices = "PGR") => {
+    console.log("***************************************>>>>>>>>>>>>>>>>>>>>", stateCode);
+    return Request({
       url: Urls.WorkFlow,
       useCache: true,
       method: "POST",
       params: { tenantId: stateCode, businessServices },
       auth: true,
-    }),
+    });
+  },
 
-  getByBusinessId: (stateCode = "pb", businessIds, params = {}, history = true) =>
-    Request({
+  getByBusinessId: (stateCode = "pb", businessIds, params = {}, history = true) => {
+    return Request({
       url: Urls.WorkFlowProcessSearch,
       useCache: false,
       method: "POST",
       params: { tenantId: stateCode, businessIds: businessIds, ...params, history },
       auth: true,
-    }),
+    });
+  },
   getNextAction: async (stateCode = "pb", currentState) => {
     let role = Storage.get("role") || "CITIZEN";
     let res = await WorkflowService.init(stateCode, "PGR");

@@ -1,15 +1,12 @@
 import { useQuery } from "react-query";
 
-const getEmployeeFilter = async (cityCode, roles) => {
+const getEmployeeFilter = async (cityCode, roles, complaintDetails) => {
   // const _roles = roles.join(",");
 
   const searchResponse = await Digit.PGRService.employeeSearch(cityCode, roles);
   console.log(searchResponse);
   const serviceDefs = Digit.SessionStorage.get("serviceDefs") || [];
-  const complaintDetails = Digit.SessionStorage.get("complaintDetails");
-  const serviceCode = complaintDetails.service.serviceCode;
-  // const serviceCode = complaintDetails.audit.serviceCode;
-  // const department = serviceDefs.find((def) => def.serviceCode === serviceCode).map((service) => service.department);
+  const serviceCode = complaintDetails.audit.serviceCode;
   const department = serviceDefs.find((def) => def.serviceCode === serviceCode).department;
   const employees = searchResponse.Employees.filter((employee) =>
     employee.assignments.map((assignment) => assignment.department).includes(department)
@@ -26,8 +23,10 @@ const getEmployeeFilter = async (cityCode, roles) => {
   ];
 };
 
-export const useEmployeeFilter = (cityCode, roles) => {
-  const { isLoading, error, isError, data } = useQuery(["employeeFilter", cityCode, roles], async () => getEmployeeFilter(cityCode, roles));
+export const useEmployeeFilter = (cityCode, roles, complaintDetails) => {
+  const { isLoading, error, isError, data } = useQuery(["employeeFilter", cityCode, roles], async () =>
+    getEmployeeFilter(cityCode, roles, complaintDetails)
+  );
   return { isLoading, error, isError, data };
 };
 

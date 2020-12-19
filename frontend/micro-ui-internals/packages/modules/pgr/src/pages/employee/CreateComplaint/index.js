@@ -48,9 +48,6 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   // city locality logic
   const selectCity = async (city) => {
-    // Digit.SessionStorage.set("locality_complaint", null);
-    // setSelectedLocality(null);
-    // setLocalities(null);
     setSelectedCity(city);
     Digit.SessionStorage.set("city_complaint", city);
     let response = await Digit.LocationService.getLocalities({ tenantId: city.code });
@@ -58,21 +55,6 @@ export const CreateComplaint = ({ parentUrl }) => {
     setLocalities(__localityList);
     Digit.SessionStorage.set("selected_localities", __localityList);
   };
-
-  // useEffect(async () => {
-  //   if (selectedCity) {
-  //     let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
-  //     let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
-  //     setLocalities(__localityList);
-  //     Digit.SessionStorage.set("selected_localities", __localityList);
-  //   }
-  // }, []);
-
-  // useEffect(async () => {
-  //   console.log("parmamsssss", params);
-  //   params.landmark ? await dispatch(createComplaint(params)) : null;
-  //   params.landmark ? history.push(match.url + "/response") : null;
-  // }, [params]);
 
   function selectLocality(locality) {
     setSelectedLocality(locality);

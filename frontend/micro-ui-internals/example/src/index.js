@@ -10,10 +10,11 @@ import "@egovernments/digit-ui-css/example/index.css";
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
+import GRO from "./userInfo/gro.json";
 
 import pgrCustomizations from "./pgr";
 
-const userInfo = { CITIZEN, EMPLOYEE, LME };
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
 
 initLibraries();
 

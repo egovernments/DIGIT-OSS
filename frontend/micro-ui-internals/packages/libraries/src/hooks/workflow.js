@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 const getWorkflowDetails = async ({ tenantId, id, moduleCode, role }) => {
   console.log("getWorkflowDetails", tenantId, id, moduleCode, role);
@@ -46,10 +46,12 @@ const getWorkflowDetails = async ({ tenantId, id, moduleCode, role }) => {
 };
 
 const useWorkflowDetails = ({ tenantId, id, moduleCode, role = "CITIZEN" }) => {
+  const queryClient = useQueryClient();
   const { isLoading, error, isError, data } = useQuery(["workFlowDetails", tenantId, id, moduleCode, role], () =>
     getWorkflowDetails({ tenantId, id, moduleCode, role })
   );
-  return { isLoading, error, isError, data };
+
+  return { isLoading, error, isError, data, revalidate: () => queryClient.invalidateQueries(["workFlowDetails", tenantId, id, moduleCode, role]) };
 };
 
 export default useWorkflowDetails;

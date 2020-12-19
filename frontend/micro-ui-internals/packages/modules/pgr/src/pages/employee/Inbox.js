@@ -35,6 +35,7 @@ const Inbox = () => {
   let isMobile = window.mobileCheck();
   console.log("window.mobileCheck:", isMobile);
   console.log("searchParams:::::>", searchParams);
+  console.log(complaints);
   if (complaints.length !== null) {
     if (isMobile) {
       return <MobileInbox data={complaints} onFilterChange={handleFilterChange} />;

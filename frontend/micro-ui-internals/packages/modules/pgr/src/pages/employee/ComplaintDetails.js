@@ -79,30 +79,23 @@ export const ComplaintDetails = (props) => {
   // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
   const tenantId = "pb.amritsar";
-  const { isLoading, complaintDetails } = useComplaintDetails({ tenantId, id });
+  const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = useComplaintDetails({ tenantId, id });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, role: "EMPLOYEE" });
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [assignResponse, setAssignResponse] = useState(null);
   const [rerender, setRerender] = useState(1);
+  const [showLoader, setLoader] = useState(false);
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
     setPopup(true);
   }
-  useEffect(() => {
-    // (async () => {
-    //   const assignWorkflow = await Digit.workflowService.getByBusinessId(tenantId, id);
-    //   console.log("aassign", assignWorkflow);
-    // })();
-    // Digit.SessionStorage.set("complaintDetails", complaintDetails);
-    console.log("---------------------------------->>>>", complaintDetails);
-  }, [complaintDetails]);
+
   // useEffect(() => {
-  //   console.log("action", props.action);
-  //   setActionCalled(props.action);
-  // }, [props.action]);
+  //   setRerender(rerender + 1);
+  // }, [complaintDetails]);
 
   function zoomView() {
     setFullscreen(!fullscreen);
@@ -158,10 +151,12 @@ export const ComplaintDetails = (props) => {
   async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
     const response = await Digit.Complaint.assign(selectedAction, selectedEmployee, comments, uploadedFile);
-    console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
-    setRerender(rerender + 1);
+    setLoader(true);
+    await revalidateComplaintDetails();
+    await workflowDetails.revalidate();
+    setLoader(false);
     setTimeout(() => setToast(false), 10000);
   }
 
@@ -169,11 +164,13 @@ export const ComplaintDetails = (props) => {
     setToast(false);
   }
 
-  if (isLoading) {
+  useEffect(() => {
+    setLoader(isLoading || workflowDetails.isLoading);
+  }, [isLoading, workflowDetails.isLoading]);
+
+  if (showLoader) {
     return <Loader />;
   }
-
-  console.log("from employee============>", JSON.stringify(complaintDetails.details));
 
   const getTimelineCaptions = (checkpoint) => {
     console.log("tl", checkpoint);
@@ -258,6 +255,7 @@ export const ComplaintDetails = (props) => {
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
       {popup ? (
         <Modal
+          complaintDetails={complaintDetails}
           employeeRoles={workflowDetails.data?.nextActions ? workflowDetails.data?.nextActions : null}
           headerBarMain={
             <Heading
