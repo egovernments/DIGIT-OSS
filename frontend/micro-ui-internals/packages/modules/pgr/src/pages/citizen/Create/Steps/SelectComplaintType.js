@@ -7,6 +7,7 @@ const SelectComplaintType = ({ t, config, onSelect }) => {
   const goNext = () => {
     onSelect(complaintType);
   };
+
   const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
   const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});
   const textParams = config.texts;

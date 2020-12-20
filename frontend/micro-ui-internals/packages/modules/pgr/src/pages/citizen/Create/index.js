@@ -116,19 +116,21 @@ export const CreateComplaint = () => {
     console.log("index params", params);
 
     // submit complaint through actions
-    await dispatch(createComplaint(params));
+    // await dispatch(createComplaint(params));
+
+    //submit complaint thru react query
 
     //Empty Session Storage
-    Digit.SessionStorage.set("complaintType", null);
-    Digit.SessionStorage.set("subType", null);
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
-    Digit.SessionStorage.set("PGR_CREATE_PINCODE", null);
-    Digit.SessionStorage.set("city_complaint", null);
-    Digit.SessionStorage.set("selected_localities", null);
-    Digit.SessionStorage.set("locality_complaint", null);
-    Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
-    Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
-    Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
+    // Digit.SessionStorage.set("complaintType", null);
+    // Digit.SessionStorage.set("subType", null);
+    // Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
+    // Digit.SessionStorage.set("PGR_CREATE_PINCODE", null);
+    // Digit.SessionStorage.set("city_complaint", null);
+    // Digit.SessionStorage.set("selected_localities", null);
+    // Digit.SessionStorage.set("locality_complaint", null);
+    // Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
+    // Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
+    // Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
 
     history.push(`${path}/response`);
   };
@@ -167,7 +169,7 @@ export const CreateComplaint = () => {
         <SelectDetails t={t} config={stepItems[6]} onSelect={submitComplaint} />
       </Route>
       <Route path={`${path}/response`}>
-        <Response t={t} config={stepItems[7]} onSelect={backToHome} />
+        <Response t={t} config={stepItems[7]} onSelect={backToHome} params={params} />
       </Route>
       <Route>
         <Redirect to={`${url}/complaint-type`} />

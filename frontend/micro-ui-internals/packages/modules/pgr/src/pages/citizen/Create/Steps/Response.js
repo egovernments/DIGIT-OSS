@@ -2,6 +2,8 @@ import React from "react";
 import { FormStep, Banner } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import SubmitComplaint from "../../../../ServiceWrapper/CreateComplaint";
+import { QueryCache } from "react-query";
 
 const GetActionMessage = ({ action }) => {
   const { t } = useTranslation();
@@ -27,12 +29,24 @@ const BannerPicker = ({ complaints }) => {
   }
 };
 
-const Response = ({ t, config, onSelect }) => {
+const Response = ({ t, config, onSelect, params }) => {
+  //object init of class
+  let __submitComplaint = new SubmitComplaint("PGR", "pb.amritsar");
+
+  const queryCache = new QueryCache();
+
+  const queryResponse = queryCache.find("createQueryResponse");
+
   const complaints = useSelector((state) => state["pgr"].complaints);
+  // submit call
+  __submitComplaint.submit(params);
   return (
-    <FormStep config={config} onSelect={onSelect} t={t}>
-      {complaints.response ? <BannerPicker complaints={complaints} /> : null}
-    </FormStep>
+    <React.Fragment>
+      <h2 onClick={() => console.log("create query response", queryResponse)}>TEST CACHE</h2>
+      <FormStep config={config} onSelect={onSelect} t={t}>
+        {complaints.response ? <BannerPicker complaints={complaints} /> : null}
+      </FormStep>
+    </React.Fragment>
   );
 };
 
