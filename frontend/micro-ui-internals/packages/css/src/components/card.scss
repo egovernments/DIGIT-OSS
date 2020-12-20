@@ -45,7 +45,6 @@
   .card-link {
     @apply block text-center text-link text-link-normal mt-md;
   }
-
 }
 
 .employeeCard {
@@ -109,7 +108,8 @@
     margin-right: auto;
   }
 
-  .header-content {}
+  .header-content {
+  }
 
   .header-end {
     margin-left: auto;
@@ -136,7 +136,7 @@
   }
 }
 
-.submit-bar-disabled{
+.submit-bar-disabled {
   @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none opacity-50;
 
   &:focus {
@@ -149,7 +149,8 @@
 }
 
 @screen dt {
-  .submit-bar, .submit-bar-disabled {
+  .submit-bar,
+  .submit-bar-disabled {
     width: 240px;
   }
 
@@ -236,7 +237,6 @@
     }
   }
 
-
   .header-wrap {
     @apply flex mb-md;
 
@@ -244,7 +244,8 @@
       margin-right: auto;
     }
 
-    .header-content {}
+    .header-content {
+    }
 
     .header-end {
       margin-left: auto;
