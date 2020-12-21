@@ -141,7 +141,7 @@ public class NotificationService {
 		// Ignoring paid status, since it's wired from payment consumer directly
 		if (!StringUtils.isEmpty(msg)) {
 			msg = replaceCommonValues(property, msg, localisedState);
-			prepareMsgAndSend(propertyRequest, msg);
+			prepareMsgAndSend(propertyRequest, msg, state);
 		}
 	}
 
@@ -198,7 +198,7 @@ public class NotificationService {
 
 		
 		msg = replaceCommonValues(property, msg, localisedState);
-		prepareMsgAndSend(propertyRequest, msg);
+		prepareMsgAndSend(propertyRequest, msg, state);
     }
 	}
 	}
@@ -349,7 +349,7 @@ public class NotificationService {
 	 * @param property
 	 * @param msg
 	 */
-	private void prepareMsgAndSend(PropertyRequest request, String msg) {
+	private void prepareMsgAndSend(PropertyRequest request, String msg, String state) {
 
 		Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
@@ -363,8 +363,12 @@ public class NotificationService {
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 		notifUtil.sendSMS(smsRequests);
 
-		List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId());
-		notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
+		Boolean isActionReq = false;
+		if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
+			isActionReq = true;
+
+		List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
+				notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 	}
 	
 	private List<List<String>> getUpdateSmsEnabledCities() {

@@ -3,19 +3,20 @@ package org.egov.pt.util;
 import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
 import static org.egov.pt.util.PTConstants.BILL_AMOUNT_PATH;
 import static org.egov.pt.util.PTConstants.BILL_NODEMAND_ERROR_CODE;
-import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
@@ -55,7 +56,7 @@ public class PropertyUtil extends CommonUtils {
 	 * @param properties         List of property whose owner's are to be populated
 	 *                           from userDetailResponse
 	 */
-	public void enrichOwner(UserDetailResponse userDetailResponse, List<Property> properties) {
+	public void enrichOwner(UserDetailResponse userDetailResponse, List<Property> properties, Boolean isSearchOpen) {
 
 		List<OwnerInfo> users = userDetailResponse.getUser();
 		Map<String, OwnerInfo> userIdToOwnerMap = new HashMap<>();
@@ -66,14 +67,39 @@ public class PropertyUtil extends CommonUtils {
 			property.getOwners().forEach(owner -> {
 
 				if (userIdToOwnerMap.get(owner.getUuid()) == null)
-					log.info("OWNER SEARCH ERROR", "The owner with UUID : \"" + owner.getUuid() +
-							"\" for the property with Id \"" + property.getPropertyId() + "\" is not present in user search response");
-				else
-					owner.addUserDetail(userIdToOwnerMap.get(owner.getUuid()));
+					log.info("OWNER SEARCH ERROR",
+							"The owner with UUID : \"" + owner.getUuid() + "\" for the property with Id \""
+									+ property.getPropertyId() + "\" is not present in user search response");
+				else {
+
+					OwnerInfo info = userIdToOwnerMap.get(owner.getUuid());
+					if (isSearchOpen) {
+						owner.addUserDetail(getMaskedOwnerInfo(info));
+					} else {
+						owner.addUserDetail(info);
+					}
+				}
 			});
 		});
 	}
 	
+	/**
+	 * nullifying the PII's for open search
+	 * @param info
+	 * @return
+	 */
+	private org.egov.pt.models.user.User getMaskedOwnerInfo(OwnerInfo info) {
+
+		info.setMobileNumber(null);
+		info.setUuid(null);
+		info.setUserName(null);
+		info.setGender(null);
+		info.setAltContactNumber(null);
+		info.setPwdExpiryDate(null);
+		
+		return info;
+	}
+
 
 	public ProcessInstanceRequest getProcessInstanceForMutationPayment(PropertyRequest propertyRequest) {
 
@@ -94,28 +120,35 @@ public class PropertyUtil extends CommonUtils {
 					.build();
 	}
 	
-	public ProcessInstanceRequest getWfForPropertyRegistry(PropertyRequest request, String process) {
+	public ProcessInstanceRequest getWfForPropertyRegistry(PropertyRequest request, CreationReason creationReasonForWorkflow) {
 		
 		Property property = request.getProperty();
 		ProcessInstance wf = null != property.getWorkflow() ? property.getWorkflow() : new ProcessInstance();
-		
+	
 		wf.setBusinessId(property.getAcknowldgementNumber());
 		wf.setTenantId(property.getTenantId());
 	
+		switch (creationReasonForWorkflow) {
 		
-		switch (process) {
-		
-		case CREATE_PROCESS_CONSTANT :
+		case CREATE :
 
 			wf.setBusinessService(configs.getCreatePTWfName());
 			wf.setModuleName(configs.getPropertyModuleName());
 			wf.setAction("OPEN");
 			break;
+			
+		case LEGACY_ENTRY :
+			
+			wf.setBusinessService(configs.getLegacyPTWfName());
+			wf.setModuleName(configs.getPropertyModuleName());
+			wf.setAction("OPEN");
+			break;
+			
 
-		case MUTATION_PROCESS_CONSTANT:
+		case UPDATE :
 			break;
 
-		case UPDATE_PROCESS_CONSTANT:
+		case MUTATION :
 			break;
 			
 		default:
@@ -200,16 +233,15 @@ public class PropertyUtil extends CommonUtils {
 	}
 
 
-public void setdataForNotification(PropertyRequest request, String notificationAction) {
+	/**
+	 * Public method to infer whether the search is for open or authenticated user
+	 * 
+	 * @param userInfo
+	 * @return
+	 */
+	public Boolean isPropertySearchOpen(User userInfo) {
 
-		ProcessInstance workflow = request.getProperty().getWorkflow();
-
-		if (workflow != null) {
-
-			workflow.setNotificationAction(notificationAction);
-		} else {
-			workflow = ProcessInstance.builder().notificationAction(notificationAction).build();
-		}
-		request.getProperty().setWorkflow(workflow);
+		return userInfo.getType().equalsIgnoreCase("SYSTEM")
+				&& userInfo.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()).contains("ANONYMOUS");
 	}
 }

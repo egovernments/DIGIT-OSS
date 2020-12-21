@@ -116,6 +116,8 @@ public class PTConstants {
 
     public static final List<String> FIELDS_FOR_PROPERTY_MUTATION = Collections.unmodifiableList(Arrays.asList("propertyType","usageCategory","ownershipCategory","noOfFloors","landArea"));
 
+    public static final String CITIZEN_SENDBACK_ACTION = "SENDBACKTOCITIZEN";
+    
     public static final String WORKFLOW_START_ACTION = "INITIATE";
 
     public static final String ASMT_WORKFLOW_CODE = "ASMT";
@@ -189,8 +191,8 @@ public class PTConstants {
 	public static final String UPDATE_NO_WORKFLOW = "PT_NOTIF_WF_UPDATE_NONE";
 	
 	public static final String CREATE_NOTIF_CODE = "PT_NOTIF_CREATE";
-	
-	public static final String WF_ACTION_APPROVE = "APPROVE";
+    
+    public static final String WF_ACTION_APPROVE = "APPROVE";
 	
 	/* ASSESSMENT CONSTANTS */
 	
@@ -240,8 +242,6 @@ public class PTConstants {
     
     public static final String NOTIFICATION_PAY_LINK =  "{PAYLINK}";
     
-    public static final String NOTIFICATION_PAYMENT_LINK =  "{PAYMENT_LINK}";
-
     public static final String NOTIFICATION_PROPERTY_LINK =  "{PTURL}";
     
     public static final String NOTIFICATION_MUTATION_LINK =  "{MTURL}";
@@ -262,6 +262,7 @@ public class PTConstants {
 
     public static final String NOTIFICATION_ASMT_PREFIX = "ASMT_MSG_";
 
+    public static final String NOTIFICATION_PAYMENT_LINK = "{PAYMENT_LINK}";
 
 
     public static final String ONLINE_PAYMENT_MODE = "ONLINE";
@@ -304,6 +305,10 @@ public class PTConstants {
 
     public static final String KEY_PDF_DOCUMENTTYPE = "documentType";
 
+    public static final String PT_CORRECTION_PENDING = "CORRECTIONPENDING";
 
+    public static final String ASMT_USER_EVENT_PAY = "pay";
+
+    public static final String VIEW_APPLICATION_CODE = "View Application";
 }
 

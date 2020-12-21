@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -164,9 +166,12 @@ public class PGRRequestValidator {
 	 * @param errorMap
 	 */
 	private void validateIfArraysEqual(ServiceRequest serviceRequest, Map<String, String> errorMap) {
-		if (null != serviceRequest.getActionInfo()
-				&& serviceRequest.getServices().size() != serviceRequest.getActionInfo().size())
-			errorMap.put(ErrorConstants.UNEQUAL_REQUEST_SIZE_KEY, ErrorConstants.UNEQUAL_REQUEST_SIZE_MSG);
+		if(!CollectionUtils.isEmpty(serviceRequest.getActionInfo())) {
+			if(serviceRequest.getServices().size() != serviceRequest.getActionInfo().size()) {
+				errorMap.put(ErrorConstants.UNEQUAL_REQUEST_SIZE_KEY, ErrorConstants.UNEQUAL_REQUEST_SIZE_MSG);
+			}
+			
+		}
 	}
 
 	/**
@@ -245,7 +250,7 @@ public class PGRRequestValidator {
 	 */
 	public void validateSearch(ServiceReqSearchCriteria criteria, RequestInfo requestInfo) {
 		Map<String, String> errorMap = new HashMap<>();
-		validateUserRBACProxy(errorMap, requestInfo);
+		//validateUserRBACProxy(errorMap, requestInfo);
 		if ((criteria.getStartDate() != null && criteria.getStartDate() > new Date().getTime())
 				|| (criteria.getEndDate() != null && criteria.getEndDate() > new Date().getTime())) {
 			errorMap.put(ErrorConstants.INVALID_START_END_DATE_CODE, ErrorConstants.INVALID_START_END_DATE_MSG);
@@ -258,6 +263,16 @@ public class PGRRequestValidator {
 				criteria.getServiceRequestId().size() == 1) {
 			if(criteria.getServiceRequestId().get(0).length() < 6) {
 				errorMap.put(ErrorConstants.INVALID_PARTIAL_SERVICEREQUESTID_CODE, ErrorConstants.INVALID_PARTIAL_SERVICEREQUESTID_MSG);
+			}
+		}
+		
+		if(!CollectionUtils.isEmpty(criteria.getServiceRequestId())) {
+			Pattern pattern = Pattern.compile(PGRConstants.SERVICE_REQID_REGEX);
+			for(String id: criteria.getServiceRequestId()) {
+				Matcher matcher = pattern.matcher(id);
+				if(!matcher.find() || id.length() >= 20) {
+					errorMap.put(ErrorConstants.INVALID_EG_PGR_SERVICE_REQ_ID_CODE, ErrorConstants.INVALID_EG_PGR_SERVICE_REQ_ID_MSG + id);
+				}
 			}
 		}
 

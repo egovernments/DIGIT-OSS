@@ -21,6 +21,7 @@ public class PropertyCriteria {
 
 	private String tenantId;
 
+	@JsonProperty("ids")
 	private Set<String> ids;
 
 	private Set<String> oldpropertyids;
@@ -57,6 +58,25 @@ public class PropertyCriteria {
     @JsonProperty("limit")
     private Long limit;
 
+	@JsonProperty("asOnDate")
+	private Long asOnDate;
+
+	@JsonProperty("financialYear")
+	private String financialYear;
+
+	private String propertyId;
+
+
+
+	public Boolean isNull(){
+		return  this.getAccountId()==null && this.getName()==null
+				&& this.getLocality()==null && this.getDoorNo()==null
+				&& this.getMobileNumber()==null && this.getUserName()==null
+				&& CollectionUtils.isEmpty(this.getIds()) && CollectionUtils.isEmpty(this.getOldpropertyids())
+				&& CollectionUtils.isEmpty(this.getAddressids()) && CollectionUtils.isEmpty(this.getUnitids())
+				&& CollectionUtils.isEmpty(this.getOwnerids()) && CollectionUtils.isEmpty(this.getPropertyDetailids())
+				&& CollectionUtils.isEmpty(this.getDocumentids());
+	}
 
 
 

@@ -68,19 +68,28 @@ public class TLConfiguration {
     private String idGenPath;
 
     @Value("${egov.idgen.tl.applicationNum.name}")
-    private String applicationNumberIdgenName;
+    private String applicationNumberIdgenNameTL;
 
     @Value("${egov.idgen.tl.applicationNum.format}")
-    private String applicationNumberIdgenFormat;
+    private String applicationNumberIdgenFormatTL;
 
     @Value("${egov.idgen.tl.licensenumber.name}")
-    private String licenseNumberIdgenName;
+    private String licenseNumberIdgenNameTL;
 
     @Value("${egov.idgen.tl.licensenumber.format}")
-    private String licenseNumberIdgenFormat;
+    private String licenseNumberIdgenFormatTL;
 
+    @Value("${egov.idgen.bpa.applicationNum.name}")
+    private String applicationNumberIdgenNameBPA;
 
+    @Value("${egov.idgen.bpa.applicationNum.format}")
+    private String applicationNumberIdgenFormatBPA;
 
+    @Value("${egov.idgen.bpa.licensenumber.name}")
+    private String licenseNumberIdgenNameBPA;
+
+    @Value("${egov.idgen.bpa.licensenumber.format}")
+    private String licenseNumberIdgenFormatBPA;
 
     //Persister Config
     @Value("${persister.save.tradelicense.topic}")
@@ -125,21 +134,31 @@ public class TLConfiguration {
     private String calculatorHost;
 
     @Value("${egov.tl.calculator.calculate.endpoint}")
-    private String calculateEndpoint;
+    private String calculateEndpointTL;
+
+    @Value("${egov.bpa.calculator.calculate.endpoint}")
+    private String calculateEndpointBPA;
 
     @Value("${egov.tl.calculator.getBill.endpoint}")
     private String getBillEndpoint;
 
+    @Value("${egov.billingservice.host}")
+    private String billingHost;
 
+    @Value("${egov.bill.gen.endpoint}")
+    private String fetchBillEndpoint;
 
     //Institutional key word
     @Value("${egov.ownershipcategory.institutional}")
     private String institutional;
 
 
-    @Value("${egov.receipt.businessservice}")
-    private String businessService;
+    @Value("${egov.receipt.businessserviceTL}")
+    private String businessServiceTL;
 
+
+    @Value("${egov.receipt.businessserviceBPA}")
+    private String businessServiceBPA;
 
     //Property Service
     @Value("${egov.property.service.host}")
@@ -156,10 +175,14 @@ public class TLConfiguration {
     @Value("${kafka.topics.notification.sms}")
     private String smsNotifTopic;
 
-    @Value("${notification.sms.enabled}")
-    private Boolean isSMSEnabled;
+    @Value("${notification.sms.enabled.forTL}")
+    private Boolean isTLSMSEnabled;
 
+    @Value("${notification.sms.enabled.forBPA}")
+    private Boolean isBPASMSEnabled;
 
+    @Value("${notification.sms.enabled.forTLRENEWAL}")
+    private Boolean isTLRENEWALSMSEnabled;
 
     //Localization
     @Value("${egov.localization.host}")
@@ -202,7 +225,7 @@ public class TLConfiguration {
 
     // Workflow
     @Value("${create.tl.workflow.name}")
-    private String businessServiceValue;
+    private String tlBusinessServiceValue;
 
     @Value("${workflow.context.path}")
     private String wfHost;
@@ -226,15 +249,61 @@ public class TLConfiguration {
 		
 	@Value("${egov.usr.events.pay.link}")
 	private String payLink;
+
+    @Value("${egov.msg.pay.link}")
+    private String payLinkSMS;
 	
 	@Value("${egov.usr.events.pay.code}")
 	private String payCode;
 	
-	@Value("${egov.user.event.notification.enabled}")
-	private Boolean isUserEventsNotificationEnabled;
+	@Value("${egov.user.event.notification.enabledForTL}")
+	private Boolean isUserEventsNotificationEnabledForTL;
+
+    @Value("${egov.user.event.notification.enabledForTLRenewal}")
+    private Boolean isUserEventsNotificationEnabledForTLRenewal;
+
+    @Value("${egov.user.event.notification.enabledForBPA}")
+    private Boolean isUserEventsNotificationEnabledForBPA;
 
 	@Value("${egov.usr.events.pay.triggers}")
 	private String payTriggers;
+
+
+
+	//Reminder
+    @Value("${egov.tl.reminder.period}")
+    private Long reminderPeriod;
+
+    @Value("${egov.tl.pagination.size}")
+    private Integer paginationSize;
+
+    @Value("${egov.tl.reminder.enable}")
+    private Boolean isReminderEnabled;
+
+    @Value("${egov.tl.batch.reminder.error.topic}")
+    private String reminderErrorTopic;
+
+    @Value("${egov.tl.batch.expire.error.topic}")
+    private String expiryErrorTopic;
+
+
+
+    // url shortner
+
+    @Value("${egov.url.shortner.host}")
+    private String urlShortnerHost;
+
+    @Value("${tl.url.shortner.endpoint}")
+    private String urlShortnerEndpoint;
+
+    @Value("${egov.usr.events.view.application.triggers}")
+    private String viewApplicationTriggers;
+
+    @Value("${egov.usr.events.view.application.link}")
+    private String viewApplicationLink;
+
+    @Value("${egov.usr.events.view.application.code}")
+    private String viewApplicationCode;
 
 
 }

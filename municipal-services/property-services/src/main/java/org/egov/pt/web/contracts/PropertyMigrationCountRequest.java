@@ -5,9 +5,7 @@ import lombok.*;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.oldProperty.MigrationCount;
 
-
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * Contract class to receive request. Array of Property items  are used in case of create . Where as single Property item is used for update

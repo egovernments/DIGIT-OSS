@@ -6,15 +6,20 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.ServiceRequestRepository;
+import org.egov.tl.repository.TLRepository;
+import org.egov.tl.util.TradeUtil;
+import org.egov.tl.validator.TLValidator;
 import org.egov.tl.web.models.*;
 import org.egov.tl.web.models.user.CreateUserRequest;
 import org.egov.tl.web.models.user.UserDetailResponse;
 import org.egov.tl.web.models.user.UserSearchRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import static org.egov.tl.util.TLConstants.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,11 +37,17 @@ public class UserService{
     private TLConfiguration config;
 
 
+    private TradeUtil tradeUtil;
+
+    private TLRepository repository;
+
     @Autowired
-    public UserService(ObjectMapper mapper, ServiceRequestRepository serviceRequestRepository, TLConfiguration config) {
+    public UserService(ObjectMapper mapper, ServiceRequestRepository serviceRequestRepository, TLConfiguration config,TradeUtil tradeUtil,TLRepository repository) {
         this.mapper = mapper;
         this.serviceRequestRepository = serviceRequestRepository;
         this.config = config;
+        this.tradeUtil=tradeUtil;
+        this.repository=repository;
     }
 
 
@@ -46,10 +57,10 @@ public class UserService{
      * @param request TradeLciense create or update request
      */
 
-    public void createUser(TradeLicenseRequest request){
+    public void createUser(TradeLicenseRequest request,boolean isBPARoleAddRequired){
         List<TradeLicense> licenses = request.getLicenses();
         RequestInfo requestInfo = request.getRequestInfo();
-        Role role = getCitizenRole();
+        Role role = getCitizenRole(licenses.get(0).getTenantId());
         licenses.forEach(tradeLicense -> {
 
            /* Set<String> listOfMobileNumbers = getMobileNumbers(tradeLicense.getTradeLicenseDetail().getOwners()
@@ -57,22 +68,34 @@ public class UserService{
 
             tradeLicense.getTradeLicenseDetail().getOwners().forEach(owner ->
             {
-                if(owner.getUuid()==null)
-                    {
-                        addUserDefaultFields(tradeLicense.getTenantId(),role,owner);
-                      //  UserDetailResponse userDetailResponse = userExists(owner,requestInfo);
-                         StringBuilder uri = new StringBuilder(config.getUserHost())
-                                    .append(config.getUserContextPath())
-                                    .append(config.getUserCreateEndpoint());
-                            setUserName(owner);
+                OwnerInfo ownerInfoBackup=owner;
+                String businessService = tradeLicense.getBusinessService();
+                if (businessService == null)
+                    businessService = businessService_TL;
+                switch (businessService) {
+                    case businessService_BPA:
+                        UserDetailResponse userDetailResponse = searchByUserName(owner.getMobileNumber(), getStateLevelTenant(tradeLicense.getTenantId()));
+                        if (!userDetailResponse.getUser().isEmpty()) {
+                            User user = userDetailResponse.getUser().get(0);
+                            owner = addNotNullFieldsFromOwner(user, owner);
+                        }
+                        break;
+                }
+                if (owner.getUuid() == null) {
+                    addUserDefaultFields(tradeLicense.getTenantId(), role, owner, businessService);
+                    //  UserDetailResponse userDetailResponse = userExists(owner,requestInfo);
+                    StringBuilder uri = new StringBuilder(config.getUserHost())
+                            .append(config.getUserContextPath())
+                            .append(config.getUserCreateEndpoint());
+                    setUserName(owner,businessService);
 
-                           UserDetailResponse userDetailResponse = userCall(new CreateUserRequest(requestInfo,owner),uri);
-                            if(userDetailResponse.getUser().get(0).getUuid()==null){
-                                throw new CustomException("INVALID USER RESPONSE","The user created has uuid as null");
-                            }
-                            log.info("owner created --> "+userDetailResponse.getUser().get(0).getUuid());
-                        setOwnerFields(owner,userDetailResponse,requestInfo);
+                    UserDetailResponse userDetailResponse = userCall(new CreateUserRequest(requestInfo, owner), uri);
+                    if (userDetailResponse.getUser().get(0).getUuid() == null) {
+                        throw new CustomException("INVALID USER RESPONSE", "The user created has uuid as null");
                     }
+                    log.info("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
+                    setOwnerFields(owner, userDetailResponse, requestInfo);
+                }
                  else {
                     UserDetailResponse userDetailResponse = userExists(owner,requestInfo);
                     if(userDetailResponse.getUser().isEmpty())
@@ -82,14 +105,69 @@ public class UserService{
                     OwnerInfo user = new OwnerInfo();
                     user.addUserWithoutAuditDetail(owner);
                     addNonUpdatableFields(user,userDetailResponse.getUser().get(0));
+                   if (isBPARoleAddRequired) {
+                        List<String> licenseeTyperRole = tradeUtil.getusernewRoleFromMDMS(tradeLicense, requestInfo);
+                        for (String rolename : licenseeTyperRole) {
+                            user.addRolesItem(Role.builder().code(rolename).name(rolename).tenantId(tradeLicense.getTenantId()).build());
+                        }
+                   }
                     userDetailResponse = userCall( new CreateUserRequest(requestInfo,user),uri);
+                    switch (businessService)
+                    {
+                        case businessService_BPA:
+                            owner=ownerInfoBackup;
+                            break;
+                    }
                     setOwnerFields(owner,userDetailResponse,requestInfo);
                 }
             });
         });
     }
 
+    private OwnerInfo addNotNullFieldsFromOwner(User user,OwnerInfo owner)
+    {
+        OwnerInfo newowner = new OwnerInfo();
+        newowner.setUuid(getFromOwnerIfNotNull(user.getUuid(),owner.getUuid()));
+        newowner.setId((owner.getId()==null)?user.getId():owner.getId());
+        newowner.setUserName(getFromOwnerIfNotNull(user.getUserName(),owner.getUserName()));
+        newowner.setPassword(getFromOwnerIfNotNull(user.getPassword(),owner.getPassword()));
+        newowner.setSalutation(getFromOwnerIfNotNull(user.getSalutation(),owner.getSalutation()));
+        newowner.setName(getFromOwnerIfNotNull(user.getName(),owner.getName()));
+        newowner.setGender(getFromOwnerIfNotNull(user.getGender(),owner.getGender()));
+        newowner.setMobileNumber(getFromOwnerIfNotNull(user.getMobileNumber(),owner.getMobileNumber()));
+        newowner.setEmailId(getFromOwnerIfNotNull(user.getEmailId(),owner.getEmailId()));
+        newowner.setAltContactNumber(getFromOwnerIfNotNull(user.getAltContactNumber(),owner.getAltContactNumber()));
+        newowner.setPan(getFromOwnerIfNotNull(user.getPan(),owner.getPan()));
+        newowner.setAadhaarNumber(getFromOwnerIfNotNull(user.getAadhaarNumber(),owner.getAadhaarNumber()));
+        newowner.setPermanentAddress(getFromOwnerIfNotNull(user.getPermanentAddress(),owner.getPermanentAddress()));
+        newowner.setPermanentCity(getFromOwnerIfNotNull(user.getPermanentCity(),owner.getPermanentCity()));
+        newowner.setPermanentPincode(getFromOwnerIfNotNull(user.getPermanentPincode(),owner.getPermanentPincode()));
+        newowner.setCorrespondenceAddress(getFromOwnerIfNotNull(user.getCorrespondenceAddress(),owner.getCorrespondenceAddress()));
+        newowner.setCorrespondenceCity(getFromOwnerIfNotNull(user.getCorrespondenceCity(),owner.getCorrespondenceCity()));
+        newowner.setCorrespondencePincode(getFromOwnerIfNotNull(user.getCorrespondencePincode(),owner.getCorrespondencePincode()));
+        newowner.setActive((owner.getActive()==null)?user.getActive():owner.getActive());
+        newowner.setDob((owner.getDob()!=null)?owner.getDob():user.getDob());
+        newowner.setPwdExpiryDate((owner.getPwdExpiryDate()==null)?user.getPwdExpiryDate():owner.getPwdExpiryDate());
+        newowner.setLocale(getFromOwnerIfNotNull(user.getLocale(),owner.getLocale()));
+        newowner.setType(getFromOwnerIfNotNull(user.getType(),owner.getType()));
+        newowner.setRoles(user.getRoles());
+        newowner.setAccountLocked((owner.getAccountLocked()==null)?user.getAccountLocked():owner.getAccountLocked());
+        newowner.setFatherOrHusbandName(getFromOwnerIfNotNull(user.getFatherOrHusbandName(),owner.getFatherOrHusbandName()));
+        newowner.setBloodGroup(getFromOwnerIfNotNull(user.getBloodGroup(),owner.getBloodGroup()));
+        newowner.setIdentificationMark(getFromOwnerIfNotNull(user.getIdentificationMark(),owner.getIdentificationMark()));
+        newowner.setPhoto(getFromOwnerIfNotNull(user.getPhoto(),owner.getPhoto()));
+        newowner.setTenantId(getFromOwnerIfNotNull(user.getTenantId(),owner.getTenantId()));
+        return  newowner;
+    }
 
+    private String getFromOwnerIfNotNull(String fromuser,String fromowner)
+    {
+        if(fromowner!=null)
+        {
+            return fromowner;
+        }
+        return fromuser;
+    }
     /**
      * Sets the immutable fields from search to update request
      * @param user The user to be updated
@@ -128,9 +206,14 @@ public class UserService{
      * Sets the username as uuid
      * @param owner The owner to whom the username is to assigned
      */
-    private void setUserName(OwnerInfo owner){
-            String username = UUID.randomUUID().toString();
-            owner.setUserName(username);
+    private void setUserName(OwnerInfo owner,String businessService){
+        String username = UUID.randomUUID().toString();
+        switch (businessService) {
+            case businessService_BPA:
+                username = owner.getMobileNumber();
+                break;
+        }
+        owner.setUserName(username);
     }
 
 
@@ -166,8 +249,8 @@ public class UserService{
         owner.setId(userDetailResponse.getUser().get(0).getId());
         owner.setUserName((userDetailResponse.getUser().get(0).getUserName()));
         owner.setCreatedBy(requestInfo.getUserInfo().getUuid());
-        owner.setCreatedDate(System.currentTimeMillis());
         owner.setLastModifiedBy(requestInfo.getUserInfo().getUuid());
+        owner.setCreatedDate(System.currentTimeMillis());
         owner.setLastModifiedDate(System.currentTimeMillis());
         owner.setActive(userDetailResponse.getUser().get(0).getActive());
     }
@@ -179,11 +262,18 @@ public class UserService{
      * @param role The role of the user set in this case to CITIZEN
      * @param owner The user whose fields are to be set
      */
-    private void addUserDefaultFields(String tenantId, Role role, OwnerInfo owner){
+    private void addUserDefaultFields(String tenantId, Role role, OwnerInfo owner, String businessService){
         owner.setActive(true);
-        owner.setTenantId(tenantId);
+        owner.setTenantId(tenantId.split("\\.")[0]);
         owner.setRoles(Collections.singletonList(role));
         owner.setType("CITIZEN");
+        switch (businessService)
+        {
+            // for mseva notifications
+            case businessService_BPA:
+                owner.setPermanentCity(tenantId.split("\\.")[0]);
+                break;
+        }
     }
 
 
@@ -191,13 +281,17 @@ public class UserService{
      * Creates citizen role
      * @return Role object for citizen
      */
-    private Role getCitizenRole(){
+    private Role getCitizenRole(String tenantId){
         Role role = new Role();
         role.setCode("CITIZEN");
         role.setName("Citizen");
+        role.setTenantId(getStateLevelTenant(tenantId));
         return role;
     }
 
+    private String getStateLevelTenant(String tenantId){
+        return tenantId.split("\\.")[0];
+    }
 
 
     /**
@@ -316,6 +410,7 @@ public class UserService{
      */
     public void updateUser(TradeLicenseRequest request){
         List<TradeLicense> licenses = request.getLicenses();
+
         RequestInfo requestInfo = request.getRequestInfo();
         licenses.forEach(license -> {
                 license.getTradeLicenseDetail().getOwners().forEach(owner -> {
@@ -350,9 +445,4 @@ public class UserService{
         StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
         return userCall(userSearchRequest,uri);
     }
-
-
-
-
-
 }

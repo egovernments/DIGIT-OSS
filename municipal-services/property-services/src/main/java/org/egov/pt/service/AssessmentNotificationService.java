@@ -1,22 +1,12 @@
 package org.egov.pt.service;
 
 
-import static org.egov.pt.util.PTConstants.LOCALIZATION_ASMT_PREFIX;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_ASMT_PREFIX;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENTNUMBER;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENT_CREATE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENT_UPDATE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_FINANCIALYEAR;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_TENANTID;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_LINK;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
@@ -33,6 +23,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.pt.util.PTConstants.*;
 
 @Slf4j
 @Component
@@ -73,7 +65,11 @@ public class AssessmentNotificationService {
         List<SMSRequest> smsRequests = enrichSMSRequest(topicName, assessmentRequest, property);
         util.sendSMS(smsRequests);
 
-        List<Event> events = util.enrichEvent(smsRequests, requestInfo, tenantId);
+        Boolean isActionReq = false;
+        if(topicName.equalsIgnoreCase(config.getCreateAssessmentTopic()) && assessment.getWorkflow() == null)
+            isActionReq=true;
+
+        List<Event> events = util.enrichEvent(smsRequests, requestInfo, tenantId, property, isActionReq);
         util.sendEventNotification(new EventRequest(requestInfo, events));
     }
 
@@ -146,10 +142,7 @@ public class AssessmentNotificationService {
     private String customize(Assessment assessment, Property property, String msgCode, String localizationMessages){
 
         String messageTemplate = util.getMessageTemplate(msgCode, localizationMessages);
-        String url = util.getShortenedUrl(
-				   config.getUiAppHost().concat(config.getViewPropertyLink()
-				  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
-				  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
+
         if(messageTemplate.contains(NOTIFICATION_ASSESSMENTNUMBER))
             messageTemplate = messageTemplate.replace(NOTIFICATION_ASSESSMENTNUMBER, assessment.getAssessmentNumber());
 
@@ -165,8 +158,18 @@ public class AssessmentNotificationService {
         if(messageTemplate.contains(NOTIFICATION_FINANCIALYEAR))
             messageTemplate = messageTemplate.replace(NOTIFICATION_FINANCIALYEAR, assessment.getFinancialYear());
 
-        if(messageTemplate.contains(NOTIFICATION_PAYMENT_LINK))
-            messageTemplate = messageTemplate.replace(NOTIFICATION_PAYMENT_LINK, url);
+        if(messageTemplate.contains(NOTIFICATION_PAYMENT_LINK)){
+
+            String UIHost = config.getUiAppHost();
+            String paymentPath = config.getPayLinkSMS();
+            paymentPath = paymentPath.replace("$consumerCode",property.getPropertyId());
+            paymentPath = paymentPath.replace("$tenantId",property.getTenantId());
+            paymentPath = paymentPath.replace("$businessService",PT_BUSINESSSERVICE);
+
+            String finalPath = UIHost + paymentPath;
+
+            messageTemplate = messageTemplate.replace(NOTIFICATION_PAYMENT_LINK,util.getShortenedUrl(finalPath));
+        }
 
         return messageTemplate;
     }

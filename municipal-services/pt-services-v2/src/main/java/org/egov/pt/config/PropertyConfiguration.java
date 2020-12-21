@@ -93,8 +93,11 @@ public class PropertyConfiguration {
     @Value("${kafka.topics.notification.sms}")
     private String smsNotifTopic;
 
-    @Value("${kafka.topics.notification.fullpayment}")
-    private String receiptTopic;
+   /* @Value("${kafka.topics.notification.fullpayment}")
+    private String receiptTopic;*/
+
+    @Value("${kafka.topics.notification.payment}")
+    private String paymentTopic;
 
     @Value("${kafka.topics.notification.pg.save.txns}")
     private String pgTopic;
@@ -150,6 +153,60 @@ public class PropertyConfiguration {
 	
 	@Value("${egov.user.event.notification.enabled}")
 	private Boolean isUserEventsNotificationEnabled;
+
+
+
+
+    // Demand based System
+    @Value("${egov.pt.demand.based.searcher.host}")
+    private String demandBasedSearcherHost;
+
+    @Value("${egov.pt.demand.based.searcher.endpoint}")
+    private String demandBasedSearcherEndpoint;
+
+    @Value("${pt.demand.based.batch.size}")
+    private Integer batchSize;
+
+    @Value("${persister.demand.based.topic}")
+    private String demandBasedPTTopic;
+
+    @Value("${persister.demand.based.dead.letter.topic.batch}")
+    private String deadLetterTopicBatch;
+
+    @Value("${persister.demand.based.dead.letter.topic.single}")
+    private String deadLetterTopicSingle;
+
+    @Value("${egov.billing.host}")
+    private String billingHost;
+
+    @Value("${egov.billing.context.path}")
+    private String billingContext;
+
+    @Value("${egov.billing.fetch.endpoint}")
+    private String fetchBillEndPoint;
+
+
+    //Calculation
+    @Value("${egov.calculation.host}")
+    private String calculationHost;
+
+    @Value("${egov.calculation.context.path}")
+    private String calculationContextPath;
+
+    @Value("${egov.calculation.endpoint}")
+    private String calculationEndpoint;
+    
+    
+    //URL Shortener
+    @Value("${egov.url.shortener.host}")
+    private String shortenerHost;
+
+    @Value("${egov.url.shortener.endpoint}")
+    private String shortenerEndpoint;
+
+
+
+
 
 
 }

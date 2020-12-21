@@ -11,14 +11,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.AuditDetails;
+import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.user.User;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.IdGenerationRequest;
 import org.egov.pt.web.contracts.IdGenerationResponse;
@@ -74,12 +75,8 @@ public class CommonUtils {
 	public List<User> getUserForWorkflow(Property property) {
 
 		List<User> users = new LinkedList<>();
-
-		property.getOwners().forEach(ownerInfo -> {
-			users.add(User.builder().uuid(ownerInfo.getUuid()).build());
-		});
-
-		users.add(User.builder().uuid(property.getAccountId()).build());
+		users.addAll(property.getOwners());
+		users.add(OwnerInfo.builder().uuid(property.getAccountId()).build());
 		return users;
 	}
 	

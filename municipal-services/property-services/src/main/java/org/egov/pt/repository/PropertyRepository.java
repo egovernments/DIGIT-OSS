@@ -15,11 +15,11 @@ import org.egov.pt.models.user.User;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.repository.builder.PropertyQueryBuilder;
+import org.egov.pt.repository.rowmapper.OpenPropertyRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyAuditRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyRowMapper;
 import org.egov.pt.service.UserService;
 import org.egov.pt.util.PropertyUtil;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -42,6 +42,9 @@ public class PropertyRepository {
 	private PropertyRowMapper rowMapper;
 	
 	@Autowired
+	private OpenPropertyRowMapper openRowMapper;
+	
+	@Autowired
 	private PropertyAuditRowMapper auditRowMapper;
 	
 	@Autowired
@@ -57,33 +60,35 @@ public class PropertyRepository {
 		return jdbcTemplate.queryForList(query, preparedStmtList.toArray(), String.class);
 	}
 
-	public List<Property> getProperties(PropertyCriteria criteria) {
+	public List<Property> getProperties(PropertyCriteria criteria, Boolean isApiOpen) {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList);
-		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+		if (isApiOpen)
+			return jdbcTemplate.query(query, preparedStmtList.toArray(), openRowMapper);
+		else
+			return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 	}
 
-	public List<String> fetchAuditUUIDs(PropertyCriteria criteria) {
-		List<Object> preparedStmtList = new ArrayList<>();
-		preparedStmtList.add(criteria.getOffset());
-		preparedStmtList.add(criteria.getLimit());
-		return jdbcTemplate.query("select audituuid from eg_pt_property_audit order by auditcreatedtime,audituuid offset " +
-						" ? " +
-						"limit ? ",
-				preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
-	}
-
-	public List<Property> getPropertiesBulkSearch(PropertyCriteria criteria) {
-		if (criteria.getUuids() == null || criteria.getUuids().isEmpty())
-			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
-		return getPropertyAuditBulk(criteria);
-	}
-	
 	public List<Property> getPropertiesForBulkSearch(PropertyCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertyQueryForBulkSearch(criteria, preparedStmtList);
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+	}
+
+	public List<String> fetchIds(PropertyCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String basequery = "select id from eg_pt_property";
+		StringBuilder builder = new StringBuilder(basequery);
+		if (!ObjectUtils.isEmpty(criteria.getTenantId())) {
+			builder.append(" where tenantid=?");
+			preparedStmtList.add(criteria.getTenantId());
+		}
+		String orderbyClause = " order by lastmodifiedtime,id offset ? limit ?";
+		builder.append(orderbyClause);
+		preparedStmtList.add(criteria.getOffset());
+		preparedStmtList.add(criteria.getLimit());
+		return jdbcTemplate.query(builder.toString(), preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
 	}
 	/**
 	 * Returns list of properties based on the given propertyCriteria with owner
@@ -93,15 +98,17 @@ public class PropertyRepository {
 	 * @param requestInfo RequestInfo object of the request
 	 * @return properties with owner information added from user service
 	 */
-	public List<Property> getPropertiesWithOwnerInfo(PropertyCriteria criteria, RequestInfo requestInfo) {
+	public List<Property> getPropertiesWithOwnerInfo(PropertyCriteria criteria, RequestInfo requestInfo, Boolean isInternal) {
 
 		List<Property> properties;
+		
+		Boolean isOpenSearch = isInternal ? false : util.isPropertySearchOpen(requestInfo.getUserInfo());
 
-		if (criteria.isAudit()) {
+		if (criteria.isAudit() && !isOpenSearch) {
 			properties = getPropertyAudit(criteria);
 		} else {
 
-			properties = getProperties(criteria);
+			properties = getProperties(criteria, isOpenSearch);
 		}
 		if (CollectionUtils.isEmpty(properties))
 			return Collections.emptyList();
@@ -113,7 +120,7 @@ public class PropertyRepository {
 		userSearchRequest.setUuid(ownerIds);
 
 		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
-		util.enrichOwner(userDetailResponse, properties);
+		util.enrichOwner(userDetailResponse, properties, isOpenSearch);
 		return properties;
 	}
 	
@@ -123,10 +130,6 @@ public class PropertyRepository {
 		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), auditRowMapper);
 	}
 
-	private List<Property> getPropertyAuditBulk(PropertyCriteria criteria) {
-		String query = queryBuilder.getPropertyAuditBulkSearchQuery(criteria.getUuids());
-		return jdbcTemplate.query(query, criteria.getUuids().toArray(), auditRowMapper);
-	}
 
 	/**
 	 * 
@@ -191,21 +194,6 @@ public class PropertyRepository {
 		}
 
 		return false;
-	}
-	
-	public List<String> fetchIds(PropertyCriteria criteria) {
-		List<Object> preparedStmtList = new ArrayList<>();
-		String basequery = "select id from eg_pt_property";
-		StringBuilder builder = new StringBuilder(basequery);
-		if (!ObjectUtils.isEmpty(criteria.getTenantId())) {
-			builder.append(" where tenantid=?");
-			preparedStmtList.add(criteria.getTenantId());
-		}
-		String orderbyClause = " order by lastmodifiedtime,id offset ? limit ?";
-		builder.append(orderbyClause);
-		preparedStmtList.add(criteria.getOffset());
-		preparedStmtList.add(criteria.getLimit());
-		return jdbcTemplate.query(builder.toString(), preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
 	}
 
 }

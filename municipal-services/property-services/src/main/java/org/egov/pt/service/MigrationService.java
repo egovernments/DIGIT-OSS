@@ -139,11 +139,11 @@ public class MigrationService {
 
 
 
-   public long getTenantCount(String tenantid){
-       String query = COUNT_QUERY.replace("{}",tenantid);
-       long count = jdbcTemplate.queryForObject(query, Integer.class);
-       return count;
-   }
+    public long getTenantCount(String tenantid){
+        String query = COUNT_QUERY.replace("{}",tenantid);
+        long count = jdbcTemplate.queryForObject(query, Integer.class);
+        return count;
+    }
     public List<String> getTenantList(){
         List<String> tenantList =jdbcTemplate.queryForList(TENANT_QUERY,String.class);
         return tenantList;
@@ -163,7 +163,7 @@ public class MigrationService {
             propertyCriteria.setLimit(Long.valueOf(batchSize));
 
         if(StringUtils.isEmpty(propertyCriteria.getOffset()))
-            propertyCriteria.setLimit(Long.valueOf(batchOffset));
+            propertyCriteria.setLimit(Long.valueOf(batchSize));
 
         for(int i= 0;i<tenantList.size();i++){
             MigrationCount migrationCount = getMigrationCountForTenant(tenantList.get(i));
@@ -205,37 +205,37 @@ public class MigrationService {
         log.info("Count: "+count);
         log.info("startbatch: "+startBatch);
 
-            while(startBatch<count) {
-                long startTime = System.nanoTime();
-                List<OldProperty> oldProperties = searchOldPropertyFromURL(requestInfoWrapper,propertyCriteria) ;
-                try {
-                    properties= migrateProperty(requestInfo,oldProperties,masters,errorMap);
-                } catch (Exception e) {
+        while(startBatch<count) {
+            long startTime = System.nanoTime();
+            List<OldProperty> oldProperties = searchOldPropertyFromURL(requestInfoWrapper,propertyCriteria) ;
+            try {
+                properties= migrateProperty(requestInfo,oldProperties,masters,errorMap);
+            } catch (Exception e) {
 
-                    log.error("Migration failed at batch count of : " + startBatch);
-                    responseMap.put( "Migration failed at batch count : " + startBatch, e.getMessage());
-                    return responseMap;
-                }
-                addResponseToMap(properties,responseMap,"SUCCESS");
-                log.info(" count completed for batch : " + startBatch);
-                long endtime = System.nanoTime();
-                long elapsetime = endtime - startTime;
-                log.info("\n\nBatch elapsed time: "+elapsetime+"\n\n");
-
-                MigrationCount migrationCount = new MigrationCount();
-                migrationCount.setId(UUID.randomUUID().toString());
-                migrationCount.setOffset(Long.valueOf(startBatch));
-                migrationCount.setLimit(Long.valueOf(batchSizeInput));
-                migrationCount.setCreatedTime(System.currentTimeMillis());
-                migrationCount.setTenantid(propertyCriteria.getTenantId());
-                migrationCount.setRecordCount(Long.valueOf(startBatch+batchSizeInput));
-                PropertyMigrationCountRequest request = PropertyMigrationCountRequest.builder().requestInfo(requestInfo).migrationCount(migrationCount).build();
-                producer.push(config.getMigartionBatchCountTopic(), request);
-
-                startBatch = startBatch+batchSizeInput;
-                propertyCriteria.setOffset(Long.valueOf(startBatch));
-                System.out.println("Property Count which pushed into kafka topic:"+count2);
+                log.error("Migration failed at batch count of : " + startBatch);
+                responseMap.put( "Migration failed at batch count : " + startBatch, e.getMessage());
+                return responseMap;
             }
+            addResponseToMap(properties,responseMap,"SUCCESS");
+            log.info(" count completed for batch : " + startBatch);
+            long endtime = System.nanoTime();
+            long elapsetime = endtime - startTime;
+            log.info("\n\nBatch elapsed time: "+elapsetime+"\n\n");
+
+            MigrationCount migrationCount = new MigrationCount();
+            migrationCount.setId(UUID.randomUUID().toString());
+            migrationCount.setOffset(Long.valueOf(startBatch));
+            migrationCount.setLimit(Long.valueOf(batchSizeInput));
+            migrationCount.setCreatedTime(System.currentTimeMillis());
+            migrationCount.setTenantid(propertyCriteria.getTenantId());
+            migrationCount.setRecordCount(Long.valueOf(startBatch+batchSizeInput));
+            PropertyMigrationCountRequest request = PropertyMigrationCountRequest.builder().requestInfo(requestInfo).migrationCount(migrationCount).build();
+            producer.push(config.getMigartionBatchCountTopic(), request);
+
+            startBatch = startBatch+batchSizeInput;
+            propertyCriteria.setOffset(Long.valueOf(startBatch));
+            System.out.println("Property Count which pushed into kafka topic:"+count2);
+        }
         propertyCriteria.setOffset(Long.valueOf(batchOffset));
         return responseMap;
 
@@ -568,7 +568,7 @@ public class MigrationService {
 
                 producer.push(config.getSavePropertyTopic(), request);
                 properties.add(property);
-                
+
 
                 if(oldProperty.getPropertyDetails().get(i)!=null)
                     migrateAssesment(oldProperty.getPropertyDetails().get(i),property,requestInfo,errorMap,masters,units);
@@ -862,7 +862,7 @@ public class MigrationService {
             assessment.setDocuments(null);
         else{
             List<Document> documentList = migrateDocument(propertyDetail.getDocuments());
-            Set<Document> documentSet = new HashSet<>();
+            Set<Document> documentSet = null;
             for(Document document : documentList)
                 documentSet.add(document);
             assessment.setDocuments(documentSet);

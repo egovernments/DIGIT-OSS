@@ -76,6 +76,7 @@ public class EnrichmentService {
 
                     }
                     propertyDetail.getOwners().forEach(owner -> {
+                        owner.setPersisterRefId(UUID.randomUUID().toString());
                         if(!CollectionUtils.isEmpty(owner.getDocuments()))
                             owner.getDocuments().forEach(document -> {
                                 document.setId(UUID.randomUUID().toString());
@@ -263,14 +264,14 @@ public class EnrichmentService {
      */
     public void enrichPropertyCriteriaWithOwnerids(PropertyCriteria criteria, List<Property> properties){
         Set<String> ownerids = new HashSet<>();
-        properties.forEach(property -> {
-            property.getPropertyDetails().forEach(propertyDetail -> propertyDetail.getOwners().forEach(owner -> ownerids.add(owner.getUuid())));
-        });
-        properties.forEach(property -> {
-            property.getPropertyDetails().forEach(propertyDetail -> {
-                ownerids.add(propertyDetail.getCitizenInfo().getUuid());
-            });
-        });
+        for(Property property : properties){
+            for(PropertyDetail detail : property.getPropertyDetails()){
+                ownerids.add(detail.getCitizenInfo().getUuid());
+                for(OwnerInfo ownerInfo : detail.getOwners()){
+                    ownerids.add(ownerInfo.getUuid());
+                }
+            }
+        }
         criteria.setOwnerids(ownerids);
     }
 
@@ -284,7 +285,7 @@ public class EnrichmentService {
         Set<String> propertyids = new HashSet<>();
         properties.forEach(property -> propertyids.add(property.getPropertyId()));
         criteria.setIds(propertyids);
-        criteria.setTenantId(properties.get(0).getTenantId());
+    //    criteria.setTenantId(properties.get(0).getTenantId());
         return criteria;
     }
 
@@ -327,6 +328,21 @@ public class EnrichmentService {
        });
        return requests;
     }
+
+
+
+    /**
+     *
+     * @param criteria The PropertyCriteria to be enriched
+     */
+    public void enrichPropertyCriteriaForDefaultSearch(RequestInfo requestInfo, PropertyCriteria criteria){
+
+        criteria.setMobileNumber(requestInfo.getUserInfo().getUserName());
+        criteria.setAccountId(requestInfo.getUserInfo().getUuid());
+        criteria.setTenantId(requestInfo.getUserInfo().getTenantId());
+    }
+
+
 
     /**
      *

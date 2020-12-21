@@ -2,14 +2,17 @@ package org.egov.pt.service;
 
 import static org.egov.pt.util.PTConstants.ASSESSMENT_BUSINESSSERVICE;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.*;
+import org.egov.pt.models.Assessment;
+import org.egov.pt.models.AssessmentSearchCriteria;
+import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
@@ -18,16 +21,10 @@ import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.validator.AssessmentValidator;
-import org.egov.pt.validator.DemandValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
-import org.egov.pt.web.contracts.DemandRequest;
-import org.egov.pt.web.contracts.PropertyRequest;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AssessmentService {
@@ -75,6 +72,7 @@ public class AssessmentService {
 	@Autowired
 	private DemandValidator demandValidator;
 
+
 	/**
 	 * Method to create an assessment asynchronously.
 	 *
@@ -86,7 +84,7 @@ public class AssessmentService {
 		validator.validateAssessmentCreate(request, property);
 		assessmentEnrichmentService.enrichAssessmentCreate(request);
 
-		if (config.getIsAssessmentWorkflowEnabled()) {
+		if(config.getIsAssessmentWorkflowEnabled()){
 			assessmentEnrichmentService.enrichWorkflowForInitiation(request);
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(request.getRequestInfo(),
 					Collections.singletonList(request.getAssessment().getWorkflow()));
@@ -148,7 +146,8 @@ public class AssessmentService {
 		LocalDate ld = Instant.ofEpochMilli(fromDate).atZone(ZoneId.systemDefault()).toLocalDate();
 		return String.valueOf(ld.getYear()).concat("-").concat(String.valueOf(ld.getYear() + 1).substring(2, 4));
 	}
-	
+
+
 	/**
 	 * Method to update an assessment asynchronously.
 	 *
@@ -217,7 +216,7 @@ public class AssessmentService {
 		}
 		return request.getAssessment();
 	}
-	
+
 	public Assessment updateLegacyAssessments(AssessmentRequest request) {
 		List<AssessmentRequest> newAssessments = new ArrayList<>();
 		List<AssessmentRequest> oldAssessments = new ArrayList<>();
@@ -266,11 +265,26 @@ public class AssessmentService {
 	public List<Assessment> getAssessmenPlainSearch(AssessmentSearchCriteria criteria) {
 		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
 			criteria.setLimit(config.getMaxSearchLimit());
-		List<String> assessmentNumbers = repository.fetchAssessmentNumbers(criteria);
-		if (assessmentNumbers.isEmpty())
-			return Collections.emptyList();
-		AssessmentSearchCriteria assessmentSearchCriteria = AssessmentSearchCriteria.builder().limit(criteria.getLimit())
-				.assessmentNumbers(new HashSet<>(assessmentNumbers)).build();
+		if(criteria.getLimit()==null)
+			criteria.setLimit(config.getDefaultLimit());
+		if(criteria.getOffset()==null)
+			criteria.setOffset(config.getDefaultOffset());
+		AssessmentSearchCriteria assessmentSearchCriteria = new AssessmentSearchCriteria();
+		if (criteria.getIds() != null || criteria.getPropertyIds() != null || criteria.getAssessmentNumbers() != null) {
+			if (criteria.getIds() != null)
+				assessmentSearchCriteria.setIds(criteria.getIds());
+			if (criteria.getPropertyIds() != null)
+				assessmentSearchCriteria.setPropertyIds(criteria.getPropertyIds());
+			if (criteria.getAssessmentNumbers() != null)
+				assessmentSearchCriteria.setAssessmentNumbers(criteria.getAssessmentNumbers());
+
+		} else {
+			List<String> assessmentNumbers = repository.fetchAssessmentNumbers(criteria);
+			if (assessmentNumbers.isEmpty())
+				return Collections.emptyList();
+			assessmentSearchCriteria.setAssessmentNumbers(new HashSet<>(assessmentNumbers));
+		}
+		assessmentSearchCriteria.setLimit(criteria.getLimit());
 		return repository.getAssessmentPlainSearch(assessmentSearchCriteria);
 	}
 
@@ -281,13 +295,13 @@ public class AssessmentService {
 	private Boolean isWorkflowTriggered(Assessment assessment, Assessment assessmentFromSearch){
 
 		Boolean isWorkflowTriggeredByFieldChange = false;
-		List<String> fieldsUpdated = diffService.getUpdatedFields(assessment, assessmentFromSearch);
+		List<String> fieldsUpdated = diffService.getUpdatedFields(assessment, assessmentFromSearch, "");
 
 		if(!CollectionUtils.isEmpty(fieldsUpdated))
 			isWorkflowTriggeredByFieldChange = intersection(new LinkedList<>(Arrays.asList(config.getAssessmentWorkflowTriggerParams().split(","))), fieldsUpdated);
 
-
-		List<String> objectsAdded = diffService.getObjectsAdded(assessment, assessmentFromSearch);
+		// third variable is needed only for mutation
+		List<String> objectsAdded = diffService.getObjectsAdded(assessment, assessmentFromSearch, "");
 
 		Boolean isWorkflowTriggeredByObjectAddition = false;
 		if(!CollectionUtils.isEmpty(objectsAdded))
@@ -307,5 +321,7 @@ public class AssessmentService {
 		return !CollectionUtils.isEmpty(list1);
 
 	}
+
+
 
 }

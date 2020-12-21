@@ -72,15 +72,11 @@ public class MasterDataService {
 	/**
 	 * Fetches Financial Year from Mdms Api
 	 *
-	 * @param req
+	 * @param requestInfo
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<String,Map<String, Object>> getFinancialYear(CalculationReq req) {
-		String tenantId = req.getCalculationCriteria().get(0).getTenantId();
-		RequestInfo requestInfo = req.getRequestInfo();
-		Set<String> assessmentYears = req.getCalculationCriteria().stream().map(cal -> cal.getProperty().getPropertyDetails().get(0).getFinancialYear())
-				.collect(Collectors.toSet());
+	public Map<String,Map<String, Object>> getFinancialYear(String tenantId,RequestInfo requestInfo,Set<String> assessmentYears) {
 		MdmsCriteriaReq mdmsCriteriaReq = calculatorUtils.getFinancialYearRequest(requestInfo, assessmentYears, tenantId);
 		StringBuilder url = calculatorUtils.getMdmsSearchUrl();
 		Object res = repository.fetchResult(url, mdmsCriteriaReq);
@@ -323,10 +319,12 @@ public class MasterDataService {
 	public Map<String,Object> getMasterMap(CalculationReq request){
 		RequestInfo requestInfo = request.getRequestInfo();
 		String tenantId = request.getCalculationCriteria().get(0).getTenantId();
+		Set<String> assessmentYears = request.getCalculationCriteria().stream().map(cal -> cal.getProperty().getPropertyDetails().get(0).getFinancialYear())
+				.collect(Collectors.toSet());
 		Map<String,Object> masterMap = new HashMap<>();
 		List<TaxPeriod> taxPeriods = getTaxPeriodList(requestInfo,tenantId);
 		List<TaxHeadMaster> taxHeadMasters = getTaxHeadMasterMap(requestInfo,tenantId);
-		Map<String,Map<String, Object>> financialYearMaster = getFinancialYear(request);
+		Map<String,Map<String, Object>> financialYearMaster = getFinancialYear(tenantId,requestInfo,assessmentYears);
 
 		masterMap.put(TAXPERIOD_MASTER_KEY,taxPeriods);
 		masterMap.put(TAXHEADMASTER_MASTER_KEY,taxHeadMasters);

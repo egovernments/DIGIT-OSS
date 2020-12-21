@@ -1,7 +1,5 @@
 package org.egov.pt.models.enums;
 
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -17,11 +15,15 @@ public enum CreationReason {
   
   MUTATION ("MUTATION"),
   
+  LEGACY_ENTRY ("LEGACY_ENTRY"),
+  
   BIFURCATION ("BIFURCATION"),
   
   AMALGAMATION ("AMALGAMATION"),
   
-  SUBDIVISION("SUBDIVISION");
+  SUBDIVISION("SUBDIVISION"), 
+  
+  DATA_UPLOAD ("DATA_UPLOAD");
 
   private String value;
 

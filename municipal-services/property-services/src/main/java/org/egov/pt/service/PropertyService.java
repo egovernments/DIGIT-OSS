@@ -1,10 +1,10 @@
 package org.egov.pt.service;
 
-import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -65,6 +65,8 @@ public class PropertyService {
     @Autowired
 	private CalculationService calculatorService;
 
+
+    
 	/**
 	 * Enriches the Request and pushes to the Queue
 	 *
@@ -76,9 +78,16 @@ public class PropertyService {
 		propertyValidator.validateCreateRequest(request);
 		enrichmentService.enrichCreateRequest(request);
 		userService.createUser(request);
-		if (config.getIsWorkflowEnabled() && ! "LEGACY_RECORD".equals(request.getProperty().getSource().toString()))
-			wfService.updateWorkflow(request, CREATE_PROCESS_CONSTANT);
-		util.setdataForNotification(request, CREATE_PROCESS_CONSTANT);
+		if (config.getIsWorkflowEnabled()
+				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_UPLOAD)
+				&& !"LEGACY_RECORD".equals(request.getProperty().getSource().toString())) {
+			wfService.updateWorkflow(request, request.getProperty().getCreationReason());
+
+		} else {
+
+			request.getProperty().setStatus(Status.ACTIVE);
+		}
+
 		producer.push(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
 		return request.getProperty();
@@ -120,10 +129,14 @@ public class PropertyService {
 	private void processPropertyUpdate(PropertyRequest request, Property propertyFromSearch) {
 		
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
-		request.getProperty().setOwners(propertyFromSearch.getOwners());
+		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {	
+			userService.createUser(request);	
+		} else {	
+			request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));	
+		}
+		enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		
-		util.setdataForNotification(request, UPDATE_PROCESS_CONSTANT);
 		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
@@ -133,7 +146,7 @@ public class PropertyService {
 		
 		if(config.getIsWorkflowEnabled() && ! "LEGACY_RECORD".equals(request.getProperty().getSource().toString())) {
 			
-			State state = wfService.updateWorkflow(request, UPDATE_PROCESS_CONSTANT);
+			State state = wfService.updateWorkflow(request, CreationReason.UPDATE);
 
 			if (state.getIsStartState() == true
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
@@ -173,12 +186,11 @@ public class PropertyService {
 	private void processOwnerMutation(PropertyRequest request, Property propertyFromSearch) {
 		
 		propertyValidator.validateMutation(request, propertyFromSearch);
-		userService.createUser(request);
+		userService.createUserForMutation(request, !propertyFromSearch.getStatus().equals(Status.INWORKFLOW));		enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichMutationRequest(request, propertyFromSearch);
 		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
 		
 		// TODO FIX ME block property changes FIXME
-		util.setdataForNotification(request, MUTATION_PROCESS_CONSTANT);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
@@ -187,7 +199,8 @@ public class PropertyService {
 		
 		if (config.getIsMutationWorkflowEnabled()) {
 
-			State state = wfService.updateWorkflow(request, MUTATION_PROCESS_CONSTANT);
+			State state = wfService.updateWorkflow(request, CreationReason.MUTATION);
+      
 			/*
 			 * updating property from search to INACTIVE status
 			 * 
@@ -242,6 +255,7 @@ public class PropertyService {
 		PropertyCriteria criteria = PropertyCriteria.builder().uuids(Sets.newHashSet(propertyUuId))
 				.tenantId(propertyFromSearch.getTenantId()).build();
 		Property previousPropertyToBeReInstated = searchProperty(criteria, request.getRequestInfo()).get(0);
+		previousPropertyToBeReInstated.setAuditDetails(util.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid().toString(), true));
 		previousPropertyToBeReInstated.setStatus(Status.ACTIVE);
 		request.setProperty(previousPropertyToBeReInstated);
 		
@@ -257,7 +271,6 @@ public class PropertyService {
 	public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
 
 		List<Property> properties;
-		propertyValidator.validatePropertyCriteria(criteria, requestInfo);
 
 		/*
 		 * throw error if audit request is with no proeprty id or multiple propertyids
@@ -276,9 +289,9 @@ public class PropertyService {
 			if (shouldReturnEmptyList)
 				return Collections.emptyList();
 
-			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo);
+			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
 		} else {
-			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo);
+			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
 		}
 
 		properties.forEach(property -> {
@@ -288,26 +301,20 @@ public class PropertyService {
 		return properties;
 	}
 
-	public List<Property> searchPropertyPlainAuditSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
-		List<Property> properties = getPropertiesPlainAuditSearch(criteria, requestInfo);
-		for(Property property:properties)
-			enrichmentService.enrichBoundary(property,requestInfo);
-		return properties;
-	}
-	
 	public List<Property> searchPropertyPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
 		List<Property> properties = getPropertiesPlainSearch(criteria, requestInfo);
 		for(Property property:properties)
 			enrichmentService.enrichBoundary(property,requestInfo);
 		return properties;
 	}
-	
+
+
 	List<Property> getPropertiesPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
 		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
 			criteria.setLimit(config.getMaxSearchLimit());
-		if (criteria.getLimit() == null)
+		if(criteria.getLimit()==null)
 			criteria.setLimit(config.getDefaultLimit());
-		if (criteria.getOffset() == null)
+		if(criteria.getOffset()==null)
 			criteria.setOffset(config.getDefaultOffset());
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
 		if (criteria.getUuids() != null || criteria.getPropertyIds() != null) {
@@ -324,31 +331,6 @@ public class PropertyService {
 		}
 		propertyCriteria.setLimit(criteria.getLimit());
 		List<Property> properties = repository.getPropertiesForBulkSearch(propertyCriteria);
-		if (properties.isEmpty())
-			return Collections.emptyList();
-		Set<String> ownerIds = properties.stream().map(Property::getOwners).flatMap(List::stream)
-				.map(OwnerInfo::getUuid).collect(Collectors.toSet());
-
-		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
-		userSearchRequest.setUuid(ownerIds);
-		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
-		util.enrichOwner(userDetailResponse, properties);
-		return properties;
-	}
-
-
-	List<Property> getPropertiesPlainAuditSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
-
-		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
-			criteria.setLimit(config.getMaxSearchLimit());
-
-		List<String> audituuids = repository.fetchAuditUUIDs(criteria);
-		if(audituuids.isEmpty())
-			return Collections.emptyList();
-
-		PropertyCriteria propertyCriteria = PropertyCriteria.builder().uuids(new HashSet<>(audituuids)).build();
-
-		List<Property> properties = repository.getPropertiesBulkSearch(propertyCriteria);
 		if(properties.isEmpty())
 			return Collections.emptyList();
 		Set<String> ownerIds = properties.stream().map(Property::getOwners).flatMap(List::stream)
@@ -357,7 +339,7 @@ public class PropertyService {
 		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
 		userSearchRequest.setUuid(ownerIds);
 		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
-		util.enrichOwner(userDetailResponse, properties);
+		util.enrichOwner(userDetailResponse, properties, false);
 		return properties;
 	}
 }

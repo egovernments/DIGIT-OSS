@@ -1,9 +1,13 @@
 package org.egov.pt.calculator.util;
 
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import lombok.Getter;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Configuration
 @Getter
@@ -15,6 +19,15 @@ public class Configurations {
 	
 	@Value("${kafka.topics.billing-slab.update.service}")
 	public String billingSlabUpdatePersisterTopic;
+
+	@Value("${kafka.topics.mutation-billing-slab.save.service}")
+	public String mutationbillingSlabSavePersisterTopic;
+
+	@Value("${kafka.topics.mutation-billing-slab.update.service}")
+	public String mutationbillingSlabUpdatePersisterTopic;
+
+	@Value("${pt.mutation.deadline.month}")
+	public Integer mutationDeadlineMonth;
 	
 	//MDMS
 	@Value("${egov.mdms.host}")
@@ -27,6 +40,12 @@ public class Configurations {
 	/*
 	 * Calculator Configs
 	 */
+	//assessment service
+	@Value("${egov.assessmentservice.host}")
+	private String assessmentServiceHost;
+
+	@Value("${egov.assessmentservice.search.endpoint}")
+	private String	assessmentSearchEndpoint;
 	
 	// billing service
 	@Value("${egov.billingservice.host}")
@@ -57,6 +76,9 @@ public class Configurations {
 	
 	@Value("${egov.receipt.search.endpoint}")
 	private String	ReceiptSearchEndpoint;
+
+	@Value("${egov.payment.search.endpoint}")
+	private String	PaymentSearchEndpoint;
 	
 	// billing slab configs
 		
@@ -83,4 +105,38 @@ public class Configurations {
 
 	@Value("${pt.financialyear.start.month}")
 	private String financialYearStartMonth;
+
+	// PT Service
+
+	@Value("${egov.pt.host}")
+	private String ptHost;
+
+	@Value("${egov.pt.search.endpoint}")
+	private String ptSearchEndpoint;
+
+	@Value("#{'${egov.pt.source.demand.gen.ignore}'.split(',')}")
+	private List<String> sourcesToBeIgnored;
+	
+	
+	//Mutation
+	@Value("${pt.mutation.fees.business.code}")
+	private String ptMutationBusinessCode;
+	
+	@Value("${pt.mutation.fee.taxhead}")
+	private String ptMutationFeeTaxHead;
+	
+	@Value("${pt.mutation.penalty.taxhead}")
+	private String ptMutationPenaltyTaxHead;
+	
+	@Value("${pt.mutation.rebate.taxhead}")
+	private String ptMutationRebateTaxHead;
+	
+	@Value("${pt.mutation.exemption.taxhead}")
+	private String ptMutationExemptionTaxHead;
+	
+	@Value("${pt.mutation.minpayable.amount}")
+	private BigDecimal ptMutationMinPayable;
+	
+
+
 }

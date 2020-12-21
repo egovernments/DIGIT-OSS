@@ -131,6 +131,9 @@ public class PropertyDetail   {
         @JsonProperty("usageCategoryMajor")
         private String usageCategoryMajor;
 
+         @JsonProperty("usageCategoryMinor")
+         private String usageCategoryMinor;
+
         @NotEmpty
         @JsonProperty("ownershipCategory")
         private String ownershipCategory;
@@ -149,7 +152,6 @@ public class PropertyDetail   {
         @NotNull
         @Size(min=1)
         private Set<OwnerInfo> owners;
-
 
         @JsonProperty("auditDetails")
         private AuditDetails auditDetails;

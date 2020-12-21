@@ -48,7 +48,7 @@ public class User   {
 
         @NotNull
         @Size(max=100)
-        @Pattern(regexp = "^[a-zA-Z0-9 \\-'`\\.]*$", message = "Invalid name. Only alphabets and special characters -, ',`, .")
+        @Pattern(regexp = "^[^\\$\"'<>?\\\\~`!@#$%^()+={}\\[\\]*,:;“”‘’]*$", message = "Invalid name. Only alphabets and special characters -, ',`, .")
         @JsonProperty("name")
         private String name;
 
@@ -70,7 +70,7 @@ public class User   {
         @JsonProperty("pan")
         private String pan;
 
-        @Pattern(regexp = "^[0-9]{12}$", message = "AdharNumber should be 12 digit number")
+        @Pattern(regexp = "^[0-9]{12}$", message = "Aadhaar number should be 12 digit number")
         @JsonProperty("aadhaarNumber")
         private String aadhaarNumber;
 

@@ -1,62 +1,68 @@
 package org.egov.pt.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import net.minidev.json.JSONObject;
+import static org.egov.pt.util.PTConstants.MUTATION_BUSINESSSERVICE;
+import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_OLDPROPERTYID_ABSENT;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_FAIL;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_OFFLINE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_ONLINE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_OFFLINE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_ONLINE;
+import static org.egov.pt.util.PTConstants.ONLINE_PAYMENT_MODE;
+import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.contract.request.Role;
-import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.collection.PaymentDetail;
 import org.egov.pt.models.collection.PaymentRequest;
-import org.egov.pt.models.event.*;
+import org.egov.pt.models.event.Action;
+import org.egov.pt.models.event.ActionItem;
+import org.egov.pt.models.event.Event;
+import org.egov.pt.models.event.EventRequest;
+import org.egov.pt.models.event.Recepient;
+import org.egov.pt.models.event.Source;
 import org.egov.pt.models.transaction.Transaction;
 import org.egov.pt.models.transaction.TransactionRequest;
-import org.egov.pt.producer.Producer;
-import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.util.PTConstants;
-import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.SMSRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 
-import static org.egov.pt.util.PTConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class PaymentNotificationService {
 
     @Autowired
-    private Producer producer;
-
-    @Autowired
-    private ServiceRequestRepository serviceRequestRepository;
-
-    @Autowired
     private PropertyConfiguration propertyConfiguration;
 
     @Autowired
-    private PropertyService propertyService;
+    private PropertyRepository PropertyRepository;
 
     @Autowired
     private NotificationUtil util;
-
-    @Autowired
-    private NotificationService notificationService;
 
     @Autowired
     private ObjectMapper mapper;
@@ -112,7 +118,7 @@ public class PaymentNotificationService {
                     .propertyIds(Collections.singleton(consumerCode))
                     .build();
 
-            List<Property> properties = propertyService.searchProperty(criteria, requestInfo);
+            List<Property> properties = PropertyRepository.getPropertiesWithOwnerInfo(criteria, requestInfo, true);
 
             if(CollectionUtils.isEmpty(properties)){
                 log.error("PROPERTY_NOT_FOUND","Unable to send payment notification to propertyId: "+consumerCode);
@@ -188,7 +194,7 @@ public class PaymentNotificationService {
                                         .propertyIds(Collections.singleton(consumerCode))
                                         .build();
 
-            List<Property> properties = propertyService.searchProperty(criteria, requestInfo);
+            List<Property> properties = PropertyRepository.getPropertiesWithOwnerInfo(criteria, requestInfo, true);
 
             if(CollectionUtils.isEmpty(properties)){
                 log.error("PROPERTY_NOT_FOUND","Unable to send payment notification to propertyId: "+consumerCode);
@@ -282,6 +288,8 @@ public class PaymentNotificationService {
             valMap.put("mobileNumber",paymentDetail.getBill().getMobileNumber());
 
             valMap.put("module",paymentDetail.getBusinessService());
+
+            valMap.put("receiptNumber",paymentDetail.getReceiptNumber());
         }
         catch (Exception e)
         {
@@ -384,6 +392,19 @@ public class PaymentNotificationService {
         return customMessage;
     }
 
+    private String getReceiptLink(Map<String,String> valMap,String mobileNumber){
+        StringBuilder builder = new StringBuilder(propertyConfiguration.getUiAppHost());
+        builder.append(propertyConfiguration.getReceiptDownloadLink());
+        String link = builder.toString();
+        link = link.replace("$consumerCode", valMap.get("propertyId"));
+        link = link.replace("$tenantId", valMap.get("tenantId"));
+        link = link.replace("$receiptNumber", valMap.get("receiptNumber"));
+        link = link.replace("$businessService",PT_BUSINESSSERVICE);
+        link = link.replace("$mobile", mobileNumber);
+        link = util.getShortenedUrl(link);
+        return  link;
+    }
+
     /**
      * @param message The message template from localization
      * @param valMap The map of the required values
@@ -453,6 +474,10 @@ public class PaymentNotificationService {
                 if(customizedMessage.contains("<payLink>")){
                     finalMessage = finalMessage.replace("<payLink>", getPaymentLink(valMap));
                 }
+                if(customizedMessage.contains("<receipt download link>")){
+                    String receiptDownloadLink = getReceiptLink(valMap, mobileNumber);
+                    finalMessage = finalMessage.replace("<receipt download link>", receiptDownloadLink);
+                }                
                 SMSRequest smsRequest = new SMSRequest(mobileNumber,finalMessage);
                 smsRequests.add(smsRequest);
             }
@@ -526,6 +551,8 @@ public class PaymentNotificationService {
         String url = builder.toString();
         url = url.replace("$consumerCode", valMap.get("propertyId"));
         url = url.replace("$tenantId", valMap.get("tenantId"));
+        url = url.replace("$businessService",PT_BUSINESSSERVICE);
+
         url = util.getShortenedUrl(url);
         return url;
     }

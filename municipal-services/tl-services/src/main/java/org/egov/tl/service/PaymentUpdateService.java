@@ -14,15 +14,19 @@ import org.egov.tl.util.TradeUtil;
 import org.egov.tl.web.models.TradeLicense;
 import org.egov.tl.web.models.TradeLicenseRequest;
 import org.egov.tl.web.models.TradeLicenseSearchCriteria;
+import org.egov.tl.web.models.collection.PaymentDetail;
+import org.egov.tl.web.models.collection.PaymentRequest;
 import org.egov.tl.web.models.workflow.BusinessService;
 import org.egov.tl.workflow.WorkflowIntegrator;
 import org.egov.tl.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +53,9 @@ public class PaymentUpdateService {
 	private WorkflowService workflowService;
 
 	private TradeUtil util;
+
+	@Value("${workflow.bpa.businessServiceCode.fallback_enabled}")
+	private Boolean pickWFServiceNameFromTradeTypeOnly;
 
 	@Autowired
 	public PaymentUpdateService(TradeLicenseService tradeLicenseService, TLConfiguration config, TLRepository repository,
@@ -81,56 +88,75 @@ public class PaymentUpdateService {
 	public void process(HashMap<String, Object> record) {
 
 		try {
-			String jsonString = new JSONObject(record).toString();
-			DocumentContext documentContext = JsonPath.parse(jsonString);
-			Map<String, String> valMap = enrichValMap(documentContext);
+			PaymentRequest paymentRequest = mapper.convertValue(record,PaymentRequest.class);
+			RequestInfo requestInfo = paymentRequest.getRequestInfo();
+			List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
+			String tenantId = paymentRequest.getPayment().getTenantId();
+			for(PaymentDetail paymentDetail : paymentDetails){
+				if (paymentDetail.getBusinessService().equalsIgnoreCase(businessService_TL) || paymentDetail.getBusinessService().equalsIgnoreCase(businessService_BPA)) {
+					TradeLicenseSearchCriteria searchCriteria = new TradeLicenseSearchCriteria();
+					searchCriteria.setTenantId(tenantId);
+					searchCriteria.setApplicationNumber(paymentDetail.getBill().getConsumerCode());
+					searchCriteria.setBusinessService(paymentDetail.getBusinessService());
+					List<TradeLicense> licenses = tradeLicenseService.getLicensesWithOwnerInfo(searchCriteria, requestInfo);
+					String wfbusinessServiceName = null;
+					switch (paymentDetail.getBusinessService()) {
+						case businessService_TL:
+							wfbusinessServiceName = config.getTlBusinessServiceValue();
+							break;
 
-			Map<String, Object> info = documentContext.read("$.RequestInfo");
-			RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
-
-			if (valMap.get(businessService).equalsIgnoreCase(config.getBusinessService())) {
-				TradeLicenseSearchCriteria searchCriteria = new TradeLicenseSearchCriteria();
-				searchCriteria.setTenantId(valMap.get(tenantId));
-				searchCriteria.setApplicationNumber(valMap.get(consumerCode));
-				List<TradeLicense> licenses = tradeLicenseService.getLicensesWithOwnerInfo(searchCriteria, requestInfo);
-
-				BusinessService businessService = workflowService.getBusinessService(licenses.get(0).getTenantId(), requestInfo);
+						case businessService_BPA:
+							String tradeType = licenses.get(0).getTradeLicenseDetail().getTradeUnits().get(0).getTradeType();
+							if (pickWFServiceNameFromTradeTypeOnly)
+								tradeType = tradeType.split("\\.")[0];
+							wfbusinessServiceName = tradeType;
+							break;
+					}
+				BusinessService businessService = workflowService.getBusinessService(licenses.get(0).getTenantId(), requestInfo,wfbusinessServiceName);
 
 
-				if (CollectionUtils.isEmpty(licenses))
-					throw new CustomException("INVALID RECEIPT",
-							"No tradeLicense found for the comsumerCode " + searchCriteria.getApplicationNumber());
+					if (CollectionUtils.isEmpty(licenses))
+						throw new CustomException("INVALID RECEIPT",
+								"No tradeLicense found for the comsumerCode " + searchCriteria.getApplicationNumber());
 
-				licenses.forEach(license -> license.setAction(ACTION_PAY));
+					licenses.forEach(license -> license.setAction(ACTION_PAY));
 
-				// FIXME check if the update call to repository can be avoided
-				// FIXME check why aniket is not using request info from consumer
-				// REMOVE SYSTEM HARDCODING AFTER ALTERING THE CONFIG IN WF FOR TL
+					// FIXME check if the update call to repository can be avoided
+					// FIXME check why aniket is not using request info from consumer
+					// REMOVE SYSTEM HARDCODING AFTER ALTERING THE CONFIG IN WF FOR TL
 
-				Role role = Role.builder().code("SYSTEM_PAYMENT").tenantId(licenses.get(0).getTenantId()).build();
-				requestInfo.getUserInfo().getRoles().add(role);
-				TradeLicenseRequest updateRequest = TradeLicenseRequest.builder().requestInfo(requestInfo)
-						.licenses(licenses).build();
+					Role role = Role.builder().code("SYSTEM_PAYMENT").tenantId(licenses.get(0).getTenantId()).build();
+					requestInfo.getUserInfo().getRoles().add(role);
+					TradeLicenseRequest updateRequest = TradeLicenseRequest.builder().requestInfo(requestInfo)
+							.licenses(licenses).build();
 
-				/*
-				 * calling workflow to update status
-				 */
-				wfIntegrator.callWorkFlow(updateRequest);
+					/*
+					 * calling workflow to update status
+					 */
+					wfIntegrator.callWorkFlow(updateRequest);
 
-				updateRequest.getLicenses()
-						.forEach(obj -> log.info(" the status of the application is : " + obj.getStatus()));
+					updateRequest.getLicenses()
+							.forEach(obj -> log.info(" the status of the application is : " + obj.getStatus()));
 
-				enrichmentService.postStatusEnrichment(updateRequest);
+					List<String> endStates = Collections.nCopies(updateRequest.getLicenses().size(), STATUS_APPROVED);
+					switch (paymentDetail.getBusinessService()) {
+						case businessService_BPA:
+							endStates = util.getBPAEndState(updateRequest);
+							break;
+					}
+					enrichmentService.postStatusEnrichment(updateRequest,endStates,null);
 
-				/*
-				 * calling repository to update the object in TL tables
-				 */
-				Map<String,Boolean> idToIsStateUpdatableMap = util.getIdToIsStateUpdatableMap(businessService,licenses);
-				repository.update(updateRequest,idToIsStateUpdatableMap);
+					/*
+					 * calling repository to update the object in TL tables
+					 */
+					Map<String,Boolean> idToIsStateUpdatableMap = util.getIdToIsStateUpdatableMap(businessService,licenses);
+					repository.update(updateRequest,idToIsStateUpdatableMap);
 			}
+		 }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	/**
@@ -142,12 +168,12 @@ public class PaymentUpdateService {
 	private Map<String, String> enrichValMap(DocumentContext context) {
 		Map<String, String> valMap = new HashMap<>();
 		try {
-			valMap.put(businessService, context.read("$.Receipt[0].Bill[0].billDetails[0].businessService"));
-			valMap.put(consumerCode, context.read("$.Receipt[0].Bill[0].billDetails[0].consumerCode"));
-			valMap.put(tenantId, context.read("$.Receipt[0].tenantId"));
+			valMap.put(businessService, context.read("$.Payments.*.paymentDetails[?(@.businessService=='TL')].businessService"));
+			valMap.put(consumerCode, context.read("$.Payments.*.paymentDetails[?(@.businessService=='TL')].bill.consumerCode"));
+			valMap.put(tenantId, context.read("$.Payments[0].tenantId"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new CustomException("RECEIPT ERROR", "Unable to fetch values from receipt");
+			throw new CustomException("PAYMENT ERROR", "Unable to fetch values from payment");
 		}
 		return valMap;
 	}

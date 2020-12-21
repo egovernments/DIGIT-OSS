@@ -4,10 +4,7 @@ package org.egov.pt.repository.rowmapper;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.egov.pt.web.models.Address;
 import org.egov.pt.web.models.AuditDetails;
@@ -49,7 +46,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 
 		while (rs.next()) {
 
-			String currentId = rs.getString("propertyid");
+			String currentId = rs.getString("ptid");
 			Property currentProperty = propertyMap.get(currentId);
 			String tenanId = rs.getString("tenantId");
 
@@ -67,6 +64,8 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				Double longitude = rs.getDouble("longitude");
 				if(rs.wasNull()){longitude = null;}
 
+				//PGobject addObj = (PGobject) rs.getObject("add_additionalDetails");
+
 				Address address = Address.builder().addressId(rs.getString("addressId"))
 						.addressLine1(rs.getString("addressLine1")).addressLine2(rs.getString("addressLine2"))
 						.addressNumber(rs.getString("addressNumber")).buildingName(rs.getString("buildingName"))
@@ -74,37 +73,36 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 						.landmark(rs.getString("landmark")).latitude(latitude).locality(locality)
 						.longitude(longitude).pincode(rs.getString("pincode"))
 						.doorNo(rs.getString("doorno"))
-						.street(rs.getString("street")).tenantId(tenanId).type(rs.getString("type")).build();
+						.street(rs.getString("street"))
+						.tenantId(tenanId)
+						.type(rs.getString("type"))
+						//.additionalDetails(getJsonValue(addObj))
+						.build();
 
-				Long lastModifiedTime = rs.getLong("lastModifiedTime");
+				Long lastModifiedTime = rs.getLong("propertylastModifiedTime");
 				if(rs.wasNull()){lastModifiedTime = null;}
-				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("createdBy"))
-						.createdTime(rs.getLong("createdTime")).lastModifiedBy(rs.getString("lastModifiedBy"))
+				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("propertyCreatedby"))
+						.createdTime(rs.getLong("propertyCreatedTime")).lastModifiedBy(rs.getString("propertyModifiedBy"))
 						.lastModifiedTime(lastModifiedTime)
 						.build();
 
-				try {
-					Long occupancyDate = rs.getLong("occupancyDate");
-					if(rs.wasNull()){occupancyDate = null;}
-					currentProperty = Property.builder().address(address)
-							.acknowldgementNumber(rs.getString("acknowldgementNumber"))
-							.creationReason(CreationReasonEnum.fromValue(rs.getString("creationReason")))
-							.occupancyDate(occupancyDate).propertyId(currentId)
-							.oldPropertyId(rs.getString("oldPropertyId"))
-							.status(PropertyInfo.StatusEnum.fromValue(rs.getString("status")))
-							.tenantId(tenanId).auditDetails(auditdetails)
-							.build();
-					PGobject obj = (PGobject) rs.getObject("pt_additionalDetails");
-					if(obj!=null){
-						JsonNode propertyAdditionalDetails = mapper.readTree(obj.getValue());
-                        currentProperty.setAdditionalDetails(propertyAdditionalDetails);
-					}
+				Long occupancyDate = rs.getLong("occupancyDate");
+				PGobject obj = (PGobject) rs.getObject("pt_additionalDetails");
+
+				if(rs.wasNull()){occupancyDate = null;}
+				currentProperty = Property.builder().address(address)
+						.acknowldgementNumber(rs.getString("acknowldgementNumber"))
+						.creationReason(CreationReasonEnum.fromValue(rs.getString("creationReason")))
+						.occupancyDate(occupancyDate).propertyId(currentId)
+						.oldPropertyId(rs.getString("oldPropertyId"))
+						.status(PropertyInfo.StatusEnum.fromValue(rs.getString("status")))
+						.tenantId(tenanId).auditDetails(auditdetails)
+						.additionalDetails(getJsonValue(obj))
+						.build();
 
 
-					propertyMap.put(currentId, currentProperty);
-				} catch (IOException e) {
-					throw new CustomException("PARSING ERROR","The propertyAdditionalDetail json cannot be parsed");
-				}
+				propertyMap.put(currentId, currentProperty);
+
 			}
 
 			addChildrenToProperty(rs, currentProperty);
@@ -137,6 +135,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 					.build();
 
 			Institution institution = null;
+			//PGobject insti_additionalDetails = (PGobject) rs.getObject("insti_additionalDetails");
 			if(rs.getString("instiid")!=null)
 			{ institution = Institution.builder()
 					.id(rs.getString("instiid"))
@@ -144,6 +143,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 					.name(rs.getString("institutionName"))
 					.type(rs.getString("institutionType"))
 					.designation(rs.getString("designation"))
+					//.additionalDetails(getJsonValue(insti_additionalDetails))
 					.build();
 			}
 
@@ -156,41 +156,34 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 			Long noOfFloors = rs.getLong("noOfFloors");
 			if(rs.wasNull()){noOfFloors = null;}
 
-			try{
-				detail = PropertyDetail.builder()
-						.buildUpArea(buildUpArea)
-						.landArea(landArea)
-						.channel(ChannelEnum.fromValue(rs.getString("channel")))
-						.noOfFloors(noOfFloors).source(SourceEnum.fromValue(rs.getString("source")))
-						.usage(rs.getString("usage")).assessmentDate(rs.getLong("assessmentDate"))
-						.assessmentNumber(rs.getString("assessmentNumber")).financialYear(rs.getString("financialYear"))
-						.propertyType(rs.getString("propertyType")).propertySubType(rs.getString("propertySubType"))
-						.ownershipCategory(rs.getString("ownershipCategory"))
-						.subOwnershipCategory(rs.getString("subOwnershipCategory"))
-						.usageCategoryMajor(rs.getString("usageCategoryMajor"))
-						.usageCategoryMinor(rs.getString("usageCategoryMinor"))
-						.adhocExemption(rs.getBigDecimal("adhocExemption"))
-						.status(StatusEnum.fromValue(rs.getString("propertydetailstatus")))
-						.adhocExemptionReason(rs.getString("adhocExemptionReason"))
-						.adhocPenalty(rs.getBigDecimal("adhocPenalty"))
-						.adhocPenaltyReason(rs.getString("adhocPenaltyReason"))
-						.tenantId(rs.getString("tenantid"))
-						.institution(institution)
-						.citizenInfo(citizenInfo)
-						.auditDetails(assessAuditdetails)
-						.build();
 
-				PGobject obj = (PGobject) rs.getObject("ptdl_additionalDetails");
-				if(obj!=null){
-					JsonNode additionalDetails = mapper.readTree( obj.getValue());
-					detail.setAdditionalDetails(additionalDetails);
-				}
+			detail = PropertyDetail.builder()
+					.buildUpArea(buildUpArea)
+					.landArea(landArea)
+					.channel(ChannelEnum.fromValue(rs.getString("channel")))
+					.noOfFloors(noOfFloors).source(SourceEnum.fromValue(rs.getString("source")))
+					.usage(rs.getString("usage")).assessmentDate(rs.getLong("assessmentDate"))
+					.assessmentNumber(rs.getString("assessmentNumber")).financialYear(rs.getString("financialYear"))
+					.propertyType(rs.getString("propertyType")).propertySubType(rs.getString("propertySubType"))
+					.ownershipCategory(rs.getString("ownershipCategory"))
+					.subOwnershipCategory(rs.getString("subOwnershipCategory"))
+					.usageCategoryMajor(rs.getString("usageCategoryMajor"))
+					.usageCategoryMinor(rs.getString("usageCategoryMinor"))
+					.adhocExemption(rs.getBigDecimal("adhocExemption"))
+					.status(StatusEnum.fromValue(rs.getString("propertydetailstatus")))
+					.adhocExemptionReason(rs.getString("adhocExemptionReason"))
+					.adhocPenalty(rs.getBigDecimal("adhocPenalty"))
+					.adhocPenaltyReason(rs.getString("adhocPenaltyReason"))
+					.tenantId(rs.getString("tenantid"))
+					.institution(institution)
+					.citizenInfo(citizenInfo)
+					.auditDetails(assessAuditdetails)
+					.build();
 
-				property.addpropertyDetailsItem(detail);
-			   }
-			catch (Exception e){
-				throw new CustomException("PARSING ERROR","The additionalDetail json cannot be parsed");
-			}
+			PGobject obj = (PGobject) rs.getObject("ptdl_additionalDetails");
+			detail.setAdditionalDetails(getJsonValue(obj));
+			property.addpropertyDetailsItem(detail);
+
 		}
 
 		String tenantId = property.getTenantId();
@@ -212,6 +205,8 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 			Long unitoccupancyDate = rs.getLong("unitoccupancyDate");
 			if(rs.wasNull()){unitoccupancyDate = null;}
 
+			//PGobject unit_additionalDetails = (PGobject) rs.getObject("unit_additionalDetails");
+
 			Unit unit = Unit.builder().id(rs.getString("unitid"))
 				.floorNo(rs.getString("floorNo"))
 				.tenantId(tenantId)
@@ -226,6 +221,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				.constructionType(rs.getString("constructionType"))
 				.constructionSubType(rs.getString("constructionSubType"))
 				.arv(rs.getBigDecimal("arv"))
+				//.additionalDetails(getJsonValue(unit_additionalDetails))
 				.build();
 			detail.addUnitsItem(unit);
 		}
@@ -242,12 +238,16 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		if(rs.wasNull()){ ownerShipPercentage = null;}
 		Boolean isPrimaryOwner = rs.getBoolean("isPrimaryOwner");
 		if(rs.wasNull()){ isPrimaryOwner = null;}
+
+		//PGobject ownerInfo_additionalDetails = (PGobject) rs.getObject("ownerInfo_additionalDetails");
+
 		OwnerInfo owner = OwnerInfo.builder().uuid(rs.getString("userid"))
 				.isPrimaryOwner(isPrimaryOwner)
 				.ownerType(rs.getString("ownerType"))
 				.ownerShipPercentage(ownerShipPercentage)
 				.institutionId(rs.getString("institutionid"))
 				.relationship(OwnerInfo.RelationshipEnum.fromValue(rs.getString("relationship")))
+			//	.additionalDetails(getJsonValue(ownerInfo_additionalDetails))
 				.build();
 
 		/*
@@ -265,4 +265,22 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 			});
 		}
 	}
+
+
+
+
+	private JsonNode getJsonValue(PGobject pGobject){
+		try {
+			if(Objects.isNull(pGobject) || Objects.isNull(pGobject.getValue()))
+				return null;
+			else
+				return mapper.readTree( pGobject.getValue());
+		} catch (IOException e) {
+			throw new CustomException("SERVER_ERROR","Exception occurred while parsing the additionalDetail json : "+ e
+					.getMessage());
+		}
+	}
+
+
+
 }

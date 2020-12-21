@@ -12,10 +12,11 @@ import org.egov.pt.calculator.web.models.Calculation;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.CalculationRes;
 import org.egov.pt.calculator.web.models.GetBillCriteria;
+import org.egov.pt.calculator.web.models.MutationCalculatorReq;
 import org.egov.pt.calculator.web.models.demand.BillResponse;
 import org.egov.pt.calculator.web.models.demand.DemandResponse;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
-import org.egov.pt.calculator.web.models.registry.CalculationRequestV2;
+import org.egov.pt.calculator.web.models.propertyV2.PropertyRequestV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class CalculatorController {
 
 	@PostMapping("/_calculate")
 	public ResponseEntity<Map<String, Calculation>> generateDemands(@RequestBody @Valid CalculationReq calculationReq) {
-		return new ResponseEntity<>(demandService.generateDemands(calculationReq), HttpStatus.OK);
+		return new ResponseEntity<>(calculatorService.calculateAndCreateDemand(calculationReq), HttpStatus.OK);
 	}
 	
 	@PostMapping("/_getbill")
@@ -63,16 +64,9 @@ public class CalculatorController {
 		return new ResponseEntity<>(demandService.updateDemands(getBillCriteria, requestInfoWrapper), HttpStatus.OK);
 	}
 	
-	@PostMapping("/v2/_calculate")
-	public ResponseEntity<Map<String, Calculation>> caculateV2(@RequestBody @Valid CalculationRequestV2 calculationRequestV2) {
-		CalculationReq calculationReq = registryService.calculationWrapper(calculationRequestV2);
-		return new ResponseEntity<>(demandService.generateDemands(calculationReq), HttpStatus.OK);
-	}
-	
-	@PostMapping("/v2/_estimate")
-	public ResponseEntity<CalculationRes> estimateV2(@RequestBody @Valid CalculationRequestV2 calculationRequestV2) {
-		CalculationReq calculationReq = registryService.calculationWrapper(calculationRequestV2);
-		return new ResponseEntity<>(calculatorService.getTaxCalculation(calculationReq), HttpStatus.OK);
+	@PostMapping("/mutation/_calculate")
+	public ResponseEntity<Map<String, Calculation>> mutationCalculator(@RequestBody @Valid PropertyRequestV2 request) {
+		return new ResponseEntity<>(calculatorService.mutationCalculator(request.getProperty(), request.getRequestInfo()), HttpStatus.OK);
 	}
 
 }

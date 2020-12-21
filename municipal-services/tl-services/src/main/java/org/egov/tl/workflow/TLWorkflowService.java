@@ -50,7 +50,7 @@ public class TLWorkflowService {
              if(license.getAction().equalsIgnoreCase(ACTION_APPROVE)){
                  Long time = System.currentTimeMillis();
                  license.setIssuedDate(time);
-                 license.setValidFrom(time);
+                // license.setValidFrom(time);
              }
        });
     }

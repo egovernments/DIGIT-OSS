@@ -1,6 +1,7 @@
 package org.egov.pt.service;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -9,10 +10,12 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.Institution;
+import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.user.User;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -103,8 +106,9 @@ public class EnrichmentService {
     	
     	Property property = request.getProperty();
         RequestInfo requestInfo = request.getRequestInfo();
-        AuditDetails auditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), true);
-        
+		AuditDetails auditDetailsForUpdate = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), false);
+		propertyFromDb.setAuditDetails(auditDetailsForUpdate); 
+		       
 		Boolean isWfEnabled = config.getIsWorkflowEnabled();
 		Boolean iswfStarting = propertyFromDb.getStatus().equals(Status.ACTIVE);
 
@@ -127,13 +131,23 @@ public class EnrichmentService {
 				}
 			});
 				
+	    	if (!CollectionUtils.isEmpty(property.getUnits()))
+			property.getUnits().forEach(unit -> {
+
+				if (unit.getId() == null) {
+					unit.setId(UUID.randomUUID().toString());
+					unit.setActive(true);
+				}
+			});
+				
 		Institution institute = property.getInstitution();
 		if (!ObjectUtils.isEmpty(institute) && null == institute.getId())
 			property.getInstitution().setId(UUID.randomUUID().toString());
-
-            property.setAuditDetails(auditDetails);
-            property.setAccountId(propertyFromDb.getAccountId());
-       
+		
+		AuditDetails auditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), true);
+		property.setAuditDetails(auditDetails);
+		property.setAccountId(propertyFromDb.getAccountId());
+			   
 		property.setAdditionalDetails(
 				propertyutil.jsonMerge(propertyFromDb.getAdditionalDetails(), property.getAdditionalDetails()));
     }
@@ -199,6 +213,8 @@ public class EnrichmentService {
 		Property property = request.getProperty();
 		Boolean isWfEnabled = config.getIsMutationWorkflowEnabled();
 		Boolean iswfStarting = propertyFromSearch.getStatus().equals(Status.ACTIVE);
+		AuditDetails auditDetailsForUpdate = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), false);
+		propertyFromSearch.setAuditDetails(auditDetailsForUpdate);
 
 		if (!isWfEnabled) {
 
@@ -225,6 +241,8 @@ public class EnrichmentService {
 					}
 				});
 		});
+		 AuditDetails auditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), true);
+		 property.setAuditDetails(auditDetails);
 	}
 
 	/**
@@ -288,5 +306,29 @@ public class EnrichmentService {
 				owner.setStatus(Status.ACTIVE);
 		});
 	}
+	
+    /**
+     * In case of SENDBACKTOCITIZEN enrich the assignee with the owners and creator of property
+     * @param property to be enriched
+     */
+    public void enrichAssignes(Property property){
+
+            if(property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.CITIZEN_SENDBACK_ACTION)){
+
+                    List<User> assignes = new LinkedList<>();
+
+                    // Adding owners to assignes list
+                    property.getOwners().forEach(ownerInfo -> {
+                       assignes.add(ownerInfo);
+                    });
+
+                    // Adding creator of license
+                    if(property.getAccountId()!=null)
+                        assignes.add(OwnerInfo.builder().uuid(property.getAccountId()).build());
+
+                    property.getWorkflow().setAssignes(assignes);
+            }
+    }
+
 
 }

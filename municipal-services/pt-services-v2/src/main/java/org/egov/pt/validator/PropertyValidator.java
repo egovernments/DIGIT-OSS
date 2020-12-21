@@ -543,7 +543,7 @@ public class PropertyValidator {
         else
             allowedParams = Arrays.asList(propertyConfiguration.getEmployeeSearchParams().split(","));
 
-        if(propertyCriteria.getTenantId()==null)
+        if(propertyCriteria.getAccountId()==null && propertyCriteria.getTenantId()==null)
             throw new CustomException("INVALID SEARCH","TenantId cannot be null in search");
 
         if(propertyCriteria.getName()!=null && !allowedParams.contains("name"))

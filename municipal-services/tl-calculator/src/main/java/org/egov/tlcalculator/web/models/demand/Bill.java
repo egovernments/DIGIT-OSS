@@ -1,64 +1,112 @@
 package org.egov.tlcalculator.web.models.demand;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
-import lombok.Builder.Default;
 import org.egov.tlcalculator.web.models.AuditDetails;
-
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Bill
  */
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Bill {
-	// TODO some of the fields are mandatory in yml, lets discuss billdetail and billaccountdetail also for more clarity
 
 	@JsonProperty("id")
-	private String id = null;
+	private String id;
 
 	@JsonProperty("mobileNumber")
-	private String mobileNumber = null;
-
-	@JsonProperty("paidBy")
-	private String paidBy = null;
+	private String mobileNumber;
 
 	@JsonProperty("payerName")
-	private String payerName = null;
+	private String payerName;
 
 	@JsonProperty("payerAddress")
-	private String payerAddress = null;
+	private String payerAddress;
 
 	@JsonProperty("payerEmail")
-	private String payerEmail = null;
+	private String payerEmail;
 
-	@JsonProperty("isActive")
-	private Boolean isActive = null;
+	@JsonProperty("status")
+	private StatusEnum status;
 
-	@JsonProperty("isCancelled")
-	private Boolean isCancelled = null;
+	@JsonProperty("totalAmount")
+	private BigDecimal totalAmount;
+
+	@JsonProperty("businessService")
+	private String businessService;
+
+	@JsonProperty("billNumber")
+	private String billNumber;
+
+	@JsonProperty("billDate")
+	private Long billDate;
+
+	@JsonProperty("consumerCode")
+	private String consumerCode;
 
 	@JsonProperty("additionalDetails")
-	private Object additionalDetails = null;
-
-	@JsonProperty("taxAndPayments")
-	@Valid
-	private List<TaxAndPayment> taxAndPayments = null;
+	private Object additionalDetails;
 
 	@JsonProperty("billDetails")
 	@Valid
-	private List<BillDetail> billDetails = null;
+	private List<BillDetail> billDetails;
 
 	@JsonProperty("tenantId")
-	private String tenantId = null;
+	private String tenantId;
 
 	@JsonProperty("auditDetails")
-	private AuditDetails auditDetails = null;
+	private AuditDetails auditDetails;
+
+	/**
+	 * status of the bill .
+	 */
+	public enum StatusEnum {
+
+		ACTIVE("ACTIVE"),
+
+		CANCELLED("CANCELLED"),
+
+		PAID("PAID"),
+
+		EXPIRED("EXPIRED");
+
+		private String value;
+
+		StatusEnum(String value) {
+			this.value = value;
+		}
+
+		@Override
+		@JsonValue
+		public String toString() {
+			return String.valueOf(value);
+		}
+
+		@JsonCreator
+		public static StatusEnum fromValue(String text) {
+			for (StatusEnum b : StatusEnum.values()) {
+				if (String.valueOf(b.value).equals(text)) {
+					return b;
+				}
+			}
+			return null;
+		}
+	}
+
+	public Bill addBillDetailsItem(BillDetail billDetailsItem) {
+		if (this.billDetails == null) {
+			this.billDetails = new ArrayList<>();
+		}
+		this.billDetails.add(billDetailsItem);
+		return this;
+	}
 
 }

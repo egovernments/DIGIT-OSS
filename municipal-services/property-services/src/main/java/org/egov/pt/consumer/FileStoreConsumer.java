@@ -1,7 +1,20 @@
 package org.egov.pt.consumer;
 
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
+import static org.egov.pt.util.PTConstants.KEY_PDF_DOCUMENTTYPE;
+import static org.egov.pt.util.PTConstants.KEY_PDF_ENTITY_ID;
+import static org.egov.pt.util.PTConstants.KEY_PDF_FILESTOREID;
+import static org.egov.pt.util.PTConstants.KEY_PDF_JOBS;
+import static org.egov.pt.util.PTConstants.KEY_PDF_MODULE_NAME;
+import static org.egov.pt.util.PTConstants.KEY_PDF_TENANT_ID;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
@@ -21,8 +34,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
-import static org.egov.pt.util.PTConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -85,7 +97,7 @@ public class FileStoreConsumer {
 
         PropertyCriteria criteria = PropertyCriteria.builder().tenantId(tenantId).uuids(Collections.singleton(id)).build();
 
-        List<Property> properties = propertyRepository.getProperties(criteria);
+        List<Property> properties = propertyRepository.getProperties(criteria, false);
 
         if(CollectionUtils.isEmpty(properties))
             throw new CustomException("INVALID_ENTITYID","The entity id: "+id+" is not found for tenantId: "+tenantId);

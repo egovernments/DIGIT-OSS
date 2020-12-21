@@ -29,7 +29,7 @@ public class PropertyRequest   {
         @JsonProperty("RequestInfo")
         private RequestInfo requestInfo;
 
-        @JsonProperty("properties")
+        @JsonProperty("Properties")
         @Valid
         private List<Property> properties;
 

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.log4j.Category;
+import org.egov.pt.models.enums.Category;
 
 import java.math.BigDecimal;
 

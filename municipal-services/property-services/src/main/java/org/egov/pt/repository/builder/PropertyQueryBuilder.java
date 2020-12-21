@@ -24,8 +24,6 @@ public class PropertyQueryBuilder {
 	
 	private static String PROEPRTY_AUDIT_QUERY = "select property from eg_pt_property_audit where propertyid=?";
 
-    private static String PROEPRTY_AUDIT_QUERY_BULK = "select property from eg_pt_property_audit where audituuid IN {replace}";
-
 	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace})";
 	
 	private static String REPLACE_STRING = "{replace}";
@@ -147,6 +145,15 @@ public class PropertyQueryBuilder {
 			preparedStmtList.add(criteria.getStatus());
 			appendAndQuery= true;
 		}
+		
+		if (null != criteria.getLocality()) {
+
+			if(appendAndQuery)
+				builder.append(AND_QUERY);
+			builder.append("address.locality = ?");
+			preparedStmtList.add(criteria.getLocality());
+			appendAndQuery= true;
+		}
 
 		Set<String> propertyIds = criteria.getPropertyIds();
 		if (!CollectionUtils.isEmpty(propertyIds)) {
@@ -154,7 +161,7 @@ public class PropertyQueryBuilder {
 			if(appendAndQuery)
 				builder.append(AND_QUERY);
 			builder.append("property.propertyid IN (").append(createQuery(propertyIds)).append(")");
-			addToPreparedStatement(preparedStmtList, propertyIds);
+			addToPreparedStatementWithUpperCase(preparedStmtList, propertyIds);
 			appendAndQuery= true;
 		}
 		
@@ -164,7 +171,7 @@ public class PropertyQueryBuilder {
 			if(appendAndQuery)
 				builder.append(AND_QUERY);
 			builder.append("property.acknowldgementnumber IN (").append(createQuery(acknowledgementIds)).append(")");
-			addToPreparedStatement(preparedStmtList, acknowledgementIds);
+			addToPreparedStatementWithUpperCase(preparedStmtList, acknowledgementIds);
 			appendAndQuery= true;
 		}
 		
@@ -191,7 +198,8 @@ public class PropertyQueryBuilder {
 		String withClauseQuery = WITH_CLAUSE_QUERY.replace(REPLACE_STRING, builder);
 		return addPaginationWrapper(withClauseQuery, preparedStmtList, criteria);
 	}
-	
+
+
 	public String getPropertyQueryForBulkSearch(PropertyCriteria criteria, List<Object> preparedStmtList) {
 
 		Boolean isEmpty = CollectionUtils.isEmpty(criteria.getPropertyIds())
@@ -230,7 +238,6 @@ public class PropertyQueryBuilder {
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 	}
 
-
 	public String getPropertyIdsQuery(Set<String> ownerIds, List<Object> preparedStmtList) {
 
 		StringBuilder query = new StringBuilder("(");
@@ -239,14 +246,6 @@ public class PropertyQueryBuilder {
 		query.append(")");
 		
 		return PROEPRTY_ID_QUERY.replace(REPLACE_STRING, query).toString();
-	}
-
-
-	public String getPropertyAuditBulkSearchQuery(Set<String> audituuids) {
-		StringBuilder query = new StringBuilder("(");
-		query.append(createQuery(audituuids));
-		query.append(")");
-		return PROEPRTY_AUDIT_QUERY_BULK.replace(REPLACE_STRING, query).toString();
 	}
 
 	private String createQuery(Set<String> ids) {

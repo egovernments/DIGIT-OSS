@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -21,8 +22,12 @@ import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.Unit;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstance;
+import org.egov.pt.models.workflow.State;
+import org.egov.pt.service.DiffService;
 import org.egov.pt.service.PropertyService;
+import org.egov.pt.service.WorkflowService;
 import  org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -56,6 +61,13 @@ public class PropertyValidator {
     @Autowired
     private ObjectMapper mapper;
     
+    
+    @Autowired
+    private DiffService diffService;
+    
+    @Autowired
+    private WorkflowService workflowService;
+	
 
     /**
      * Validate the masterData and ctizenInfo of the given propertyRequest
@@ -83,6 +95,15 @@ public class PropertyValidator {
 		validateFields(request, errorMap);
 		if (!CollectionUtils.isEmpty(units))
 			validateUnits(request, errorMap);
+		
+		
+		Set<String> uniqueOwnerSet = owners.stream()
+				.map(owner -> owner.getName() + owner.getMobileNumber()).collect(Collectors.toSet());
+		
+		if (uniqueOwnerSet.size() != owners.size())
+			throw new CustomException("EG_PT_OWNER INFO ERROR", "Duplicate Owners in the request");
+			
+		
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
@@ -115,19 +136,52 @@ public class PropertyValidator {
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
             validateAssessees(request,propertyFromSearch, errorMap);
 
-		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null && ! "LEGACY_RECORD".equals(request.getProperty().getSource().toString()))
+		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null && !"LEGACY_RECORD".equals(request.getProperty().getSource().toString()))
 			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
 
+		// third variable is needed only for mutation
+		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, "");
+		
+		
+		Boolean isstateUpdatable =  false;
+		/*
+		 *  update and mutation open state are same currently
+		 *  
+		 *  creation reason will change for begining of a workflow 
+		 */
+		if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
+				&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
+			fieldsUpdated.remove("creationReason");
+			isstateUpdatable = true;
+
+		} else {
+
+			State currentState = workflowService.getCurrentState(request.getRequestInfo(), property.getTenantId(),
+					property.getAcknowldgementNumber());
+			BusinessService businessService = workflowService.getBusinessService(property.getTenantId(),
+					property.getWorkflow().getBusinessService(), request.getRequestInfo());
+			isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
+		}
+
+		// third variable is needed only for mutation
+		List<String> objectsAdded = diffService.getObjectsAdded(property, propertyFromSearch, "");
+		objectsAdded.removeAll(Arrays.asList("TextNode", "Role", "NullNode", "LongNode", "JsonNodeFactory", "IntNode",
+				"ProcessInstance"));
+
+		if (!isstateUpdatable && (!CollectionUtils.isEmpty(objectsAdded) || !CollectionUtils.isEmpty(fieldsUpdated)))
+			throw new CustomException("EG_PT_WF_UPDATE_ERROR",
+					"The current state of workflow does not allow chnages to property");
+		
+	    
         /*
          * Blocking owner changes in update flow
          */
 		List<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toList());
 		List<String> uuidsNotFound = new ArrayList<>();
+//
+//		if(!property.getWorkflow().getBusinessService().equalsIgnoreCase(configs.getUpdatePTWfName()))
+//			errorMap.put("EG_PT_UPDATE_PROPERTY_WF_ERROR", "Invalid Workflow name for update, please provide the proper workflow information");
 
-		if(! "LEGACY_RECORD".equals(request.getProperty().getSource().toString())){
-		if(!property.getWorkflow().getBusinessService().equalsIgnoreCase(configs.getUpdatePTWfName()))
-			errorMap.put("EG_PT_UPDATE_PROPERTY_WF_ERROR", "Invalid Workflow name for update, please provide the proper workflow information");
-		}
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_UUID_ERROR", "Invalid owners found in request : " + uuidsNotFound);
 
@@ -438,7 +492,7 @@ public class PropertyValidator {
 		String uuid = request.getRequestInfo().getUserInfo().getUuid();
 		Property property = request.getProperty();
 
-		Set<String> ownerIds = property.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
+		Set<String> ownerIds = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
 
 		if (!(ownerIds.contains(uuid) || uuid.equalsIgnoreCase(propertyFromSearch.getAccountId()))) {
 			errorMap.put("EG_PT_UPDATE AUTHORIZATION FAILURE",
@@ -489,8 +543,15 @@ public class PropertyValidator {
 		List<String> allowedParams = null;
 		
 		User user = requestInfo.getUserInfo();
-		String userType = requestInfo.getUserInfo().getType();
+		String userType = user.getType();
 		Boolean isUserCitizen = "CITIZEN".equalsIgnoreCase(userType);
+		
+		if(propertyUtil.isPropertySearchOpen(user)) {
+			
+			if(StringUtils.isEmpty(criteria.getLocality()))
+					throw new CustomException("EG_PT_INVALID_SEARCH"," locality is mandatory for open search");
+		}
+		
 		
 		Boolean isCriteriaEmpty = CollectionUtils.isEmpty(criteria.getOldpropertyids())
 				&& CollectionUtils.isEmpty(criteria.getAcknowledgementIds())
@@ -580,7 +641,23 @@ public class PropertyValidator {
 		if (configs.getIsMutationWorkflowEnabled() && request.getProperty().getWorkflow() == null)
 			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for mutation process");
 		
+		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, PTConstants.MUTATION_PROCESS_CONSTANT);
+		// only editable field in mutation other than owners, additinal details.
+		fieldsUpdated.remove("ownershipCategory");
 		
+		if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
+				&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
+			fieldsUpdated.remove("creationReason");
+		}
+		
+//		Boolean isstateUpdatable = workflowService
+//				.getCurrentState(request.getRequestInfo(), property.getTenantId(), property.getAcknowldgementNumber())
+//				.getIsStateUpdatable();
+
+		if (!CollectionUtils.isEmpty(fieldsUpdated))
+			throw new CustomException("EG_PT_MUTATION_ERROR",
+					"The property mutation doesnt allow change of these fields " + fieldsUpdated);
+
 		@SuppressWarnings("unchecked")
 		Map<String, Object> additionalDetails = mapper.convertValue(property.getAdditionalDetails(), Map.class);
 		try {
@@ -595,7 +672,7 @@ public class PropertyValidator {
 			throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "Mandatory fields Missing for mutation, please provide the following information in additionalDetails : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
 		} catch (Exception e) {
-			throw new CustomException("EG_PT_ADDITIONALDETAILS_PARSING_ERROR", e.getMessage());
+			throw new CustomException("EG_PT_ADDITIONALDETAILS_PARSING_ERROR", e.toString());
 		}
 
 		Boolean isNullStatusFound = false;
@@ -604,11 +681,21 @@ public class PropertyValidator {
 		Set<Status> statusSet = new HashSet<>();
 		Set<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
 		List<String> uuidsNotFound = new ArrayList<String>();
-		Set<String> mobileNumberPlusNameSet = new HashSet<>();
+		Map<String, Integer> activeMobileNumberPlusNameOwnerMap = new HashMap<>();
 		
 		for (OwnerInfo owner : property.getOwners()) {
 
-			mobileNumberPlusNameSet.add(owner.getMobileNumber()+owner.getName());
+			if (owner.getStatus() == Status.ACTIVE) {
+
+				String key = owner.getMobileNumber() + owner.getName();
+				if (activeMobileNumberPlusNameOwnerMap.get(key) == null) {
+					activeMobileNumberPlusNameOwnerMap.put(key, 1);
+				} else {
+					Integer val = activeMobileNumberPlusNameOwnerMap.get(key);
+					activeMobileNumberPlusNameOwnerMap.put(key, val++);
+				}
+			}
+			
 			if (StringUtils.isEmpty(owner.getStatus())) {
 				isNullStatusFound = true;
 			}
@@ -623,8 +710,8 @@ public class PropertyValidator {
 				uuidsNotFound.add(owner.getUuid());
 		}
 		
-		if(property.getOwners().size() != mobileNumberPlusNameSet.size())
-			errorMap.put("EG_PT_MUTATION_DUPLICATE_OWNER_ERROR", "Same Owner object is repated in the update Request");
+		if(activeMobileNumberPlusNameOwnerMap.values().stream().anyMatch(valueCount -> valueCount > 1))
+			errorMap.put("EG_PT_MUTATION_DUPLICATE_OWNER_ERROR", "Active Owner object with combination of name and mobilenumber is repated in the update Request");
 
 		if (isNullStatusFound)
 			errorMap.put("EG_PT_MUTATION_ALL_OWNER_STATUS_NULL_ERROR", "Status of the owner objects cannot be null, please make the status either ACTIVE or INACTIVE");
@@ -634,11 +721,13 @@ public class PropertyValidator {
 
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Invalid owners found in request : " + uuidsNotFound);
-		
-		if (!propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
-			if (!isNewOWnerAdded && !isOwnerCancelled)
-				errorMap.put("EG_PT_MUTATION_OWNER_ERROR", "Mutation request should either add a new owner object or make an existing object INACTIVE in the request");
+		if (!propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
+			
+
+			if (!isNewOWnerAdded && !isOwnerCancelled) {
+					errorMap.put("EG_PT_MUTATION_OWNER_ERROR", "Mutation request should either add a new owner object or update an existing object to INACTIVE");
+			}
 
 			if (isOwnerCancelled && property.getOwners().size() == 1)
 				errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR", "Single owner of a property cannot be deactivated or removed in a mutation request");
@@ -689,6 +778,33 @@ public class PropertyValidator {
 
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
+	}
+
+	/**
+	 * Verfies if atleast one owner in mutation request is modified
+	 * 
+	 * @param propertyFromSearch
+	 * @param errorMap
+	 * @param property
+	 * @return
+	 */
+	private Boolean isAtleastOneOwnerModified(Property propertyFromSearch, Map<String, String> errorMap, Property property) {
+		
+		Map<String, OwnerInfo> ownerIdMapFromSearch = propertyFromSearch.getOwners().stream().collect(Collectors.toMap(OwnerInfo::getOwnerInfoUuid, Function.identity()));
+
+		for (OwnerInfo ownerFromRequest : property.getOwners()) {
+
+			OwnerInfo OwnerFromSearch = ownerIdMapFromSearch.get(ownerFromRequest.getOwnerInfoUuid());
+
+			if (OwnerFromSearch == null) {
+
+				errorMap.put("EG_PT_MUTATION_OWNER_ERROR", "Owner with invalid id found in the property request object : " + ownerFromRequest.getOwnerInfoUuid());
+			}
+			if (!ownerFromRequest.mutationEquals(OwnerFromSearch))
+				return true;
+		}
+
+		return false;
 	}
 
 }

@@ -63,6 +63,10 @@ public class PropertyService {
      */
     public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
         List<Property> properties;
+
+        if(criteria.isNull())
+            enrichmentService.enrichPropertyCriteriaForDefaultSearch(requestInfo,criteria);
+
         propertyValidator.validatePropertyCriteria(criteria, requestInfo);
         if (criteria.getMobileNumber() != null || criteria.getName() != null) {
             UserDetailResponse userDetailResponse = userService.getUser(criteria, requestInfo);
@@ -90,7 +94,7 @@ public class PropertyService {
 
     public List<Property> searchPropertyPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
         List<Property> properties = getPropertiesPlainSearch(criteria, requestInfo);
-        enrichmentService.enrichBoundary(new PropertyRequest(requestInfo, properties));
+        //enrichmentService.enrichBoundary(new PropertyRequest(requestInfo, properties));
         return properties;
     }
 
@@ -101,7 +105,7 @@ public class PropertyService {
      * @param requestInfo RequestInfo object of the request
      * @return properties with owner information added from user service
      */
-    List<Property> getPropertiesWithOwnerInfo(PropertyCriteria criteria, RequestInfo requestInfo) {
+    public List<Property> getPropertiesWithOwnerInfo(PropertyCriteria criteria, RequestInfo requestInfo) {
         List<Property> properties = repository.getProperties(criteria);
         if (CollectionUtils.isEmpty(properties))
             return Collections.emptyList();
@@ -111,11 +115,27 @@ public class PropertyService {
         return properties;
     }
 
-    List<Property> getPropertiesPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
-        List<Property> properties = repository.getPropertiesPlainSearch(criteria);
-        enrichmentService.enrichPropertyCriteriaWithOwnerids(criteria, properties);
-        UserDetailResponse userDetailResponse = userService.getUser(criteria, requestInfo);
-        enrichmentService.enrichOwner(userDetailResponse, properties);
+    private List<Property> getPropertiesPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
+
+        if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+            criteria.setLimit(config.getMaxSearchLimit());
+
+        Set<String> ids = null;
+
+        if(criteria.getIds() != null && !criteria.getIds().isEmpty())
+            ids = criteria.getIds();
+        else
+            ids = repository.fetchPropertyIds(criteria);
+
+        if(ids.isEmpty())
+            return Collections.emptyList();
+
+        PropertyCriteria propertyCriteria = PropertyCriteria.builder().ids(new HashSet<>(ids)).build();
+
+        List<Property> properties = repository.getPropertiesPlainSearch(propertyCriteria);
+        // enrichmentService.enrichPropertyCriteriaWithOwnerids(criteria, properties);
+        // UserDetailResponse userDetailResponse = userService.getUser(criteria, requestInfo);
+        // enrichmentService.enrichOwner(userDetailResponse, properties);
         return properties;
     }
 

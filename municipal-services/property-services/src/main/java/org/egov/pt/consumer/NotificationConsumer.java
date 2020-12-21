@@ -4,7 +4,7 @@ package org.egov.pt.consumer;
 import java.util.HashMap;
 
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.workflow.ProcessInstance;
+import org.egov.pt.models.Property;
 import org.egov.pt.service.AssessmentNotificationService;
 import org.egov.pt.service.NotificationService;
 import org.egov.pt.util.PTConstants;
@@ -51,17 +51,13 @@ public class NotificationConsumer {
 			} else if (topic.equalsIgnoreCase(configs.getSavePropertyTopic()) || topic.equalsIgnoreCase(configs.getUpdatePropertyTopic())) {
 
 				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);
-				ProcessInstance wf = request.getProperty().getWorkflow();
-				String notifAction = null != wf ? wf.getNotificationAction() : null;
-				if (null == notifAction) 
-					return;
 				
-				if (PTConstants.MUTATION_PROCESS_CONSTANT.equalsIgnoreCase(notifAction)) {
+				if (PTConstants.MUTATION_PROCESS_CONSTANT.equalsIgnoreCase(request.getProperty().getCreationReason().toString())) {
 
 					notifService.sendNotificationForMutation(request);
 				} else {
 
-					notifService.sendNotificationForUpdate(request);
+					notifService.sendNotificationForUpdate(request);					
 				}
 			}
 

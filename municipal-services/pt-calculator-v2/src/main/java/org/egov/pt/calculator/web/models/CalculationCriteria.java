@@ -33,11 +33,8 @@ public class CalculationCriteria   {
         @JsonProperty("property")
         private Property property;
 
-        @JsonProperty("assesmentNumber")
-        private String assesmentNumber;
-
-        @JsonProperty("assessmentYear")
-        private String assessmentYear;
+        @JsonProperty("assessmentNumber")
+        private String assessmentNumber;
 
         @JsonProperty("oldAssessmentNumber")
         private String oldAssessmentNumber;
@@ -46,6 +43,10 @@ public class CalculationCriteria   {
         @JsonProperty("tenantId")
         private String tenantId;
 
+        @JsonProperty("fromDate")
+        private Long fromDate;
 
+        @JsonProperty("toDate")
+        private Long toDate;
 }
 

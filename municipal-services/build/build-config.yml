@@ -40,6 +40,14 @@ config:
       - work-dir: "rainmaker-pgr/src/main/resources/db"
         image-name: "rainmaker-pgr-db"
 
+  - name: "builds/municipal-services/pgr-services"
+    build:
+      - work-dir: "pgr-services"
+        image-name: "pgr-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "pgr-services/src/main/resources/db"
+        image-name: "pgr-services-db"
+
   - name: "builds/municipal-services/tl-calculator"
     build:
       - work-dir: "tl-calculator"
@@ -74,6 +82,7 @@ config:
     build:
       - work-dir: "ws-services"
         image-name: "ws-services"
+        dockerfile: "build/maven/Dockerfile"
       - work-dir: "ws-services/src/main/resources/db"
         image-name: "ws-services-db"
         
@@ -121,4 +130,20 @@ config:
     build:
       - work-dir: "bpa-calculator"
         image-name: "bpa-calculator"
-        dockerfile: "build/maven/Dockerfile" 
+        dockerfile: "build/maven/Dockerfile"     
+
+  - name: "builds/municipal-services/land-services"
+    build:
+      - work-dir: "land-services"
+        image-name: "land-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "land-services/src/main/resources/db"
+        image-name: "land-services-db"
+
+  - name: "builds/municipal-services/noc-services"
+    build:
+      - work-dir: "noc-services"
+        image-name: "noc-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "noc-services/src/main/resources/db"
+        image-name: "noc-services-db"

@@ -10,7 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 @Component
 public class OldPropertyQueryBuilder {
-	
+
 	@Autowired
 	private PropertyConfiguration config;
 
@@ -70,7 +70,7 @@ public class OldPropertyQueryBuilder {
 
 
 	public String getPropertyLikeQuery(OldPropertyCriteria criteria, List<Object> preparedStmtList,long initialPoint) {
-		StringBuilder builder = new StringBuilder(LIKE_QUERY);	
+		StringBuilder builder = new StringBuilder(LIKE_QUERY);
 		String tenatId = config.getStateLevelTenantId();
 		if(!StringUtils.isEmpty(criteria.getTenantId())) {
 			if(criteria.getTenantId().equals(tenatId)) {
@@ -87,8 +87,8 @@ public class OldPropertyQueryBuilder {
 		/*String id = criteria.getIds().stream().findFirst().get();
 		builder.append("AND pt.propertyid LIKE ?");
 		preparedStmtList.add(id);*/
-		
-        return addPaginationWrapper(builder.toString(), preparedStmtList, criteria,initialPoint);
+
+		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria,initialPoint);
 
 	}
 

@@ -106,6 +106,9 @@ public class PGRConstants {
 	public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 	public static final String  USREVENTS_EVENT_NAME = "Public Grievance Redressal";
 	public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-PGR";
+	
+	
+	public static final String  SERVICE_REQID_REGEX = "(^[0-9/]*$)";
 
 
 	

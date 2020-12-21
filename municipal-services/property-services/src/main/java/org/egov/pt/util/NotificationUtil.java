@@ -1,12 +1,16 @@
 package org.egov.pt.util;
 
 
+import static org.egov.pt.util.PTConstants.ASMT_USER_EVENT_PAY;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_MODULENAME;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
+import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
+import static org.egov.pt.util.PTConstants.PT_CORRECTION_PENDING;
 import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_NAME;
 import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_POSTEDBY;
 import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_TYPE;
+import static org.egov.pt.util.PTConstants.VIEW_APPLICATION_CODE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +24,10 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.Property;
+import org.egov.pt.models.enums.CreationReason;
+import org.egov.pt.models.event.Action;
+import org.egov.pt.models.event.ActionItem;
 import org.egov.pt.models.event.Event;
 import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.models.event.Recepient;
@@ -76,7 +84,7 @@ public class NotificationUtil {
      */
     public String getMessageTemplate(String notificationCode, String localizationMessage) {
 
-        String path = "$.messages[?(@.code==\"{}\")].message";
+        String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);
         String message = "";
         try {
@@ -256,7 +264,7 @@ public class NotificationUtil {
     * @param smsRequests
     * @param events
     */
-   public List<Event> enrichEvent(List<SMSRequest> smsRequests, RequestInfo requestInfo, String tenantId){
+   public List<Event> enrichEvent(List<SMSRequest> smsRequests, RequestInfo requestInfo, String tenantId, Property property, Boolean isActionReq){
 
 		List<Event> events = new ArrayList<>();
        Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
@@ -271,10 +279,49 @@ public class NotificationUtil {
            List<String> toUsers = new ArrayList<>();
            toUsers.add(mapOfPhnoAndUUIDs.get(mobileNumber));
            Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
+
+           Action action = null;
+           if(isActionReq){
+               List<ActionItem> items = new ArrayList<>();
+               String msg = smsRequests.get(0).getMessage();
+               String actionLink = "";
+               if(msg.contains(PT_CORRECTION_PENDING)){
+            	   
+					String url = config.getUserEventViewPropertyLink();
+					if (property.getCreationReason().equals(CreationReason.MUTATION)) {
+						url = config.getUserEventViewMutationLink();
+					}
+					
+                   actionLink = url.replace("$mobileNo", mobileNumber)
+                           .replace("$tenantId", tenantId)
+                           .replace("$propertyId" , property.getPropertyId())
+                           .replace("$applicationNumber" , property.getAcknowldgementNumber());
+
+                   actionLink = config.getUiAppHost() + actionLink;
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_APPLICATION_CODE).build();
+                   items.add(item);
+               }
+
+               if(msg.contains(ASMT_USER_EVENT_PAY)){
+                   actionLink = config.getPayLink().replace("$mobile", mobileNumber)
+                           .replace("$consumerCode", property.getPropertyId())
+                           .replace("$tenantId", property.getTenantId())
+                           .replace("$businessService" , PT_BUSINESSSERVICE);
+
+                   actionLink = config.getUiAppHost() + actionLink;
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
+                   items.add(item);
+               }
+
+
+               action = Action.builder().actionUrls(items).build();
+
+           }
            events.add(Event.builder().tenantId(tenantId).description(mobileNumberToMsg.get(mobileNumber))
                    .eventType(USREVENTS_EVENT_TYPE).name(USREVENTS_EVENT_NAME)
                    .postedBy(USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
-                   .eventDetails(null).build());
+                   .eventDetails(null).actions(action).build());
+
 		});
 		return events;
 	}

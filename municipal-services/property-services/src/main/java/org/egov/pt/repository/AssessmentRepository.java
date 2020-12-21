@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 @Repository
 @Slf4j
@@ -43,16 +44,26 @@ public class AssessmentRepository {
 
 	public List<String> fetchAssessmentNumbers(AssessmentSearchCriteria criteria) {
 		Map<String, Object> preparedStatementValues = new HashMap<>();
+		String basequery = "SELECT assessmentnumber from eg_pt_asmt_assessment";
+		StringBuilder builder = new StringBuilder(basequery);
+		if (!ObjectUtils.isEmpty(criteria.getTenantId())) {
+			builder.append(" where tenantid = :tenantid");
+			preparedStatementValues.put("tenantid", criteria.getTenantId());
+		}
+		String orderbyClause = " ORDER BY createdtime,id offset :offset limit :limit";
 		preparedStatementValues.put("offset", criteria.getOffset());
 		preparedStatementValues.put("limit", criteria.getLimit());
-		return namedParameterJdbcTemplate.query("SELECT assessmentnumber from eg_pt_asmt_assessment ORDER BY createdtime,id offset :offset limit :limit",
+		builder.append(orderbyClause);
+		return namedParameterJdbcTemplate.query(builder.toString(),
 				preparedStatementValues,
 				new SingleColumnRowMapper<>(String.class));
 	}
 
 	public List<Assessment> getAssessmentPlainSearch(AssessmentSearchCriteria criteria) {
-		if (criteria.getAssessmentNumbers() == null || criteria.getAssessmentNumbers().isEmpty())
-			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by assessent Numbers!");
+		if ((criteria.getAssessmentNumbers() == null || criteria.getAssessmentNumbers().isEmpty())
+				&& (criteria.getIds() == null || criteria.getIds().isEmpty())
+				&& (criteria.getPropertyIds() == null || criteria.getPropertyIds().isEmpty()))
+			throw new CustomException("PLAIN_SEARCH_ERROR", "Empty search not allowed!");
 		return getAssessments(criteria);
 	}
 	/**
@@ -74,7 +85,7 @@ public class AssessmentRepository {
 
 		return assessments.get(0);
 	}
-
+	
 	public List<Assessment> getAssessmentsFromDBByPropertyId(Assessment assessment) {
 
 		AssessmentSearchCriteria criteria = AssessmentSearchCriteria.builder()
