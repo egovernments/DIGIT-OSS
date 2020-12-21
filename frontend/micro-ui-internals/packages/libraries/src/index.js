@@ -18,8 +18,6 @@ import { PincodeMap } from "./services/PincodeMap";
 import { UserService } from "./services/User";
 import { ULBService } from "./services/Ulb";
 
-import { CoreBase } from "./services/core";
-
 import Hooks from "./hooks";
 
 const setupLibraries = (Library, props) => {
@@ -49,7 +47,6 @@ const setupDevice = () => {
 
 const initLibraries = () => {
   setupLibraries("SessionStorage", Storage);
-  setupLibraries("Core", { CoreBase });
   setupLibraries("UserService", UserService);
   setupLibraries("ULBService", ULBService);
 
