@@ -4,6 +4,7 @@ import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
 import static org.egov.pt.util.PTConstants.BILL_AMOUNT_PATH;
 import static org.egov.pt.util.PTConstants.BILL_NODEMAND_ERROR_CODE;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,8 @@ import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.egov.tracer.model.ServiceCallException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -243,5 +246,15 @@ public class PropertyUtil extends CommonUtils {
 
 		return userInfo.getType().equalsIgnoreCase("SYSTEM")
 				&& userInfo.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()).contains("ANONYMOUS");
+	}
+	
+	public List<OwnerInfo> getCopyOfOwners(List<OwnerInfo> owners) {
+
+		List<OwnerInfo> copyOwners = new ArrayList<>();
+		owners.forEach(owner -> {
+
+			copyOwners.add(new OwnerInfo(owner));
+		});
+		return copyOwners;
 	}
 }

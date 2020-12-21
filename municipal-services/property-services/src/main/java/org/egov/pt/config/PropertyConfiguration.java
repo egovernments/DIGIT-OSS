@@ -129,6 +129,12 @@ public class PropertyConfiguration {
     @Value("${egov.notif.view.mutation}")
     private String viewMutationLink;
     
+    @Value("${egov.usr.events.view.history.link}")
+    private String userEventViewPropertyLink;
+    
+    @Value("${egov.usr.events.view.mutation.history.link}")
+    private String userEventViewMutationLink;  
+    
     //Property Search Params
     @Value("${citizen.allowed.search.params}")
     private String citizenSearchParams;
@@ -159,21 +165,24 @@ public class PropertyConfiguration {
     private String localizationSearchEndpoint;
 
     //USER EVENTS
-	@Value("${egov.ui.app.host}")
-	private String uiAppHost;
-    
-	@Value("${egov.usr.events.create.topic}")
-	private String saveUserEventsTopic;
-		
-	@Value("${egov.usr.events.pay.link}")
-	private String payLink;
-	
-	@Value("${egov.usr.events.pay.code}")
-	private String payCode;
-	
-	@Value("${egov.user.event.notification.enabled}")
-	private Boolean isUserEventsNotificationEnabled;
-	
+    //USER EVENTS
+   	@Value("${egov.ui.app.host}")
+   	private String uiAppHost;
+       
+   	@Value("${egov.usr.events.create.topic}")
+   	private String saveUserEventsTopic;
+   		
+   	@Value("${egov.usr.events.pay.link}")
+   	private String payLink;
+   	
+   	@Value("${egov.usr.events.pay.code}")
+   	private String payCode;
+   	
+   	@Value("${egov.user.event.notification.enabled}")
+   	private Boolean isUserEventsNotificationEnabled;
+
+    @Value("${egov.msg.download.receipt.link}")
+    private String receiptDownloadLink;
 	//Assessments V2
 	@Value("${egov.pt.assessment.create.topic}")
 	private String createAssessmentTopic;
@@ -181,6 +190,8 @@ public class PropertyConfiguration {
 	@Value("${egov.pt.assessment.update.topic}")
 	private String updateAssessmentTopic;
 	
+	@Value("${egov.msg.pay.link}")
+    private String payLinkSMS;
 
     // Workflow
 	
@@ -204,6 +215,9 @@ public class PropertyConfiguration {
     
     @Value("${property.workflow.name}")
     private String createPTWfName;
+    
+    @Value("${property.legacy.entry.workflow.name}")
+    private String LegacyPTWfName;
     
     @Value("${property.update.workflow.name}")
     private String updatePTWfName;

@@ -9,9 +9,9 @@ import static org.egov.pt.util.PTConstants.NOTIFICATION_AMOUNT;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_APPID;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_CONSUMERCODE;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_MUTATION_LINK;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_PAY_LINK;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTY_LINK;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_TENANTID;
@@ -39,6 +39,7 @@ import static org.egov.pt.util.PTConstants.WF_STATUS_REJECTED_LOCALE;
 import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_APPROVED_CODE;
 import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_CHANGE_CODE;
 import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_OPEN_CODE;
+import static org.egov.pt.util.PTConstants.PT_CORRECTION_PENDING;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -69,7 +70,6 @@ import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.SMSRequest;
 import org.egov.tracer.model.CustomException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -153,7 +153,7 @@ public class NotificationService {
 			String msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAID_CODE, NOTIFICATION_MUTATION_LINK)
 						.replace(NOTIFICATION_AMOUNT, Amount.toPlainString());
 			msg = replaceCommonValues(property, msg, "");		
-			prepareMsgAndSend(propertyRequest, msg);
+			prepareMsgAndSend(propertyRequest, msg, "");
 	}
 	
 	public void sendNotificationForUpdate(PropertyRequest propertyRequest) {

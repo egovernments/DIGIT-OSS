@@ -2,6 +2,10 @@ package org.egov.pt.service;
 
 import static org.egov.pt.util.PTConstants.ASSESSMENT_BUSINESSSERVICE;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,6 +16,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AssessmentSearchCriteria;
+import org.egov.pt.models.Demand;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
@@ -21,10 +26,15 @@ import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.validator.AssessmentValidator;
+import org.egov.pt.validator.DemandValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
+import org.egov.pt.web.contracts.DemandRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AssessmentService {
