@@ -1,0 +1,91 @@
+/* TODO: convert using tailwind */
+.employee {
+  .topbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 16px 24px;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
+    z-index: 20;
+
+    img {
+      display: inline;
+
+      &.city {
+        margin-right: 8px;
+        height: 48px;
+        width: 48px;
+      }
+
+      &.state {
+        margin-left: 40px;
+        height: 20px;
+        max-height: 20px;
+        width: auto;
+      }
+    }
+
+    .ulb {
+      font-weight: bold;
+    }
+
+    .right {
+      float: right;
+      margin-top: 12px;
+
+      .user-img-txt {
+        background: #f47738;
+        padding: 10px 15px;
+        border-radius: 50%;
+        color: white;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    padding: 20px 0;
+    background: #22394d;
+    height: 100%;
+    color: white;
+    margin-top: 80px;
+    z-index: 9999;
+
+    .actions {
+      cursor: pointer;
+      padding: 0 20px;
+      margin-bottom: 32px;
+
+      &.active {
+        border-right: 4px solid #f47738;
+        padding-right: 16px;
+      }
+    }
+  }
+
+  .main {
+    padding-top: 88px;
+  }
+}
+
+.citizen {
+  .main {
+    padding-top: 72px;
+  }
+}
+
+.link {
+  @apply text-link-normal;
+}
+
+@media (min-width: 640px) {
+  .employee {
+    .main {
+      padding-top: 80px;
+      margin-left: 88px;
+    }
+  }
+}

@@ -1,4 +1,12 @@
-import { APPLY_FILTER, APPLY_INBOX_FILTER, FETCH_BUSINESS_SERVICE_BY_ID, FETCH_COMPLAINTS, FETCH_LOCALITIES, UPDATE_COMPLAINT } from "./types";
+import {
+  APPLY_FILTER,
+  APPLY_INBOX_FILTER,
+  FETCH_BUSINESS_SERVICE_BY_ID,
+  FETCH_COMPLAINTS,
+  FETCH_LOCALITIES,
+  UPDATE_COMPLAINT,
+  FETCH_ALL_BUSINESSS_SERVICES,
+} from "./types";
 //import { LocalizationService } from "../../@egovernments/digit-utils/services/Localization/service";
 //import { LocationService } from "../../@egovernments/digit-utils/services/Location";
 //import { LocalityService } from "../../@egovernments/digit-utils/services/Localities";
@@ -45,9 +53,18 @@ export const searchComplaints = (filters = {}) => async (dispatch, getState) => 
   });
 };
 
+export const fetchBusinessServiceByTenant = (cityCode, businessServices) => async (dispatch, getState) => {
+  const businessServiceResponse = await Digit.WorkflowService.init(cityCode, businessServices);
+  const businessService = businessServiceResponse.BusinessServices;
+  dispatch({
+    type: FETCH_ALL_BUSINESSS_SERVICES,
+    payload: { businessService },
+  });
+};
+
 export const fetchBusinessServiceById = (businessId) => async (dispatch, getState) => {
   let cityCode = "pb.amritsar"; //TODO: fetch it from store
-  const businessServiceDetails = await Digit.workflowService.getByBusinessId(cityCode, businessId);
+  const businessServiceDetails = await Digit.WorkflowService.getByBusinessId(cityCode, businessId);
   console.log("businessServiceDetails:", businessServiceDetails);
   dispatch({
     type: FETCH_BUSINESS_SERVICE_BY_ID,

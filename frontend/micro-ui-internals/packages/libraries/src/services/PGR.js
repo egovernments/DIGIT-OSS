@@ -2,50 +2,58 @@ import Urls from "./urls";
 import { Request } from "./Utils/Request";
 
 export const PGRService = {
-  search: (stateCode = "pb", filters = {}) =>
-    Request({
+  search: (tenantId, filters = {}) => {
+    console.log("----------------------------", filters);
+    return Request({
       url: Urls.pgr_search,
       useCache: false,
-      userInfo: true,
       method: "POST",
       auth: true,
       userService: true,
-      params: { tenantId: stateCode, ...filters },
-    }),
-  create: (details, stateCode = "pb") =>
+      params: { tenantId: tenantId, ...filters },
+    });
+  },
+  create: (details, tenantId) =>
     Request({
       url: Urls.PGR_Create,
       data: details,
       useCache: true,
       userInfo: true,
       method: "POST",
-      params: { tenantId: stateCode },
+      params: { tenantId },
       auth: true,
     }),
-  update: (details, stateCode = "pb") =>
+  update: (details, tenantId) =>
     Request({
       url: Urls.pgr_update,
       data: details,
       useCache: true,
       auth: true,
       method: "POST",
-      params: { tenantId: stateCode },
+      params: { tenantId },
     }),
-  count: (details, stateCode = "pb") =>
+  count: (details, tenantId) =>
     Request({
       url: Urls.MDMS,
       data: details,
       useCache: true,
       method: "POST",
-      params: { tenantId: stateCode },
+      params: { tenantId },
     }),
-  inboxFilter: (params = {}, details = {}, stateCode = "pb") => {
+  inboxFilter: (params = {}, details = {}, tenantId) => {
     return Request({
       // url: "https://run.mocky.io/v3/597a50a0-90e5-4a45-b82e-8a2186b760bd",
       url: "https://run.mocky.io/v3/4334951e-c395-4ffa-91c1-203be5b0e0ff",
       data: details,
       useCache: true,
-      params: { tenantId: stateCode, ...params.params },
+      params: { tenantId: tenantId, ...params.params },
+    });
+  },
+  employeeSearch: (tenantId, roles) => {
+    return Request({
+      url: Urls.EmployeeSearch,
+      params: { tenantId, roles },
+      auth: true,
     });
   },
 };

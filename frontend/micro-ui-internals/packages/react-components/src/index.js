@@ -6,9 +6,11 @@ import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
 import Header from "./atoms/Header";
 import LinkLabel from "./atoms/LinkLabel";
 import BackButton from "./atoms/BackButton";
+import BreakLine from "./atoms/BreakLine";
 import Card from "./atoms/Card";
 import CardCaption from "./atoms/CardCaption";
 import CardHeader from "./atoms/CardHeader";
+import CardSectionHeader from "./atoms/CardSectionHeader";
 import CardText from "./atoms/CardText";
 import CardLabel from "./atoms/CardLabel";
 import CardLabelDesc from "./atoms/CardLabelDesc";
@@ -47,6 +49,10 @@ import KeyNote from "./atoms/KeyNote";
 import TelePhone from "./atoms/TelePhone";
 import GreyOutText from "./atoms/GreyOutText";
 import HomeLink from "./atoms/HomeLink";
+import SectionalDropdown from "./atoms/SectionalDropdown";
+import LabelFieldPair from "./atoms/LabelFieldPair";
+import ApplyFilterBar from "./atoms/ApplyFilterBar";
+import RemoveableTag from "./molecules/RemoveableTag";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -56,7 +62,9 @@ import DetailsCard from "./molecules/DetailsCard";
 import InputCard from "./molecules/InputCard";
 import FormStep from "./molecules/FormStep";
 import RatingCard from "./molecules/RatingCard";
-
+import SearchAction from "./molecules/SearchAction";
+import FilterAction from "./molecules/FilterAction";
+import FormComposer from "./hoc/FormComposer";
 import { PrivateRoute } from "./atoms/PrivateRoute";
 
 export {
@@ -72,6 +80,7 @@ export {
   Menu,
   LinkLabel,
   BackButton,
+  BreakLine,
   Card,
   CardCaption,
   CardHeader,
@@ -86,6 +95,7 @@ export {
   TextArea,
   Banner,
   CardSubHeader,
+  CardSectionHeader,
   SubmitBar,
   ButtonSelector,
   LinkButton,
@@ -120,8 +130,16 @@ export {
   GreyOutText,
   ActionLinks,
   PrivateRoute,
+  SectionalDropdown,
+  LabelFieldPair,
   // Molecule
   InputCard,
   FormStep,
   RatingCard,
+  SearchAction,
+  FilterAction,
+  ApplyFilterBar,
+  RemoveableTag,
+  // hoc
+  FormComposer,
 };

@@ -9,14 +9,18 @@ import { getRoute } from "../../../../constants/Routes";
 
 const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate }) => {
   const { t } = useTranslation();
+  const __nextActions = [...new Set(nextActions)];
   if (action === "RESOLVE") {
     let actions =
-      nextActions &&
-      nextActions.map((action, index) => (
-        <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
-          <ActionLinks>{action}</ActionLinks>
-        </Link>
-      ));
+      __nextActions &&
+      __nextActions.map(
+        (action, index) =>
+          action && (
+            <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
+              <ActionLinks>{action}</ActionLinks>
+            </Link>
+          )
+      );
     return (
       <div>
         {t(`CS_COMMON_COMPLAINT_RESOLVED`)} <div>{actions}</div>

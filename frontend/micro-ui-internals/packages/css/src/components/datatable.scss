@@ -1,26 +1,53 @@
 .data-table {
-  @apply mb-lg text-text-primary;
+  @apply text-text-primary;
 
-  div{
+  .row {
     @apply flex border-b border-border pb-sm mb-sm;
 
-    span{
+    span {
       width: 70%;
       display: contents;
     }
 
-    h2{
+    h2 {
       width: 30%;
       @apply font-bold text-heading-s;
     }
 
-    p{
+    .value {
       width: 70%;
       @apply text-heading-s;
     }
   }
 
-  .row-last{
+  .last {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.employee-data-table {
+  .row {
+    @apply flex pb-sm mb-sm;
+
+    span {
+      width: 70%;
+      display: contents;
+    }
+
+    h2 {
+      width: 30%;
+      @apply font-bold text-heading-s;
+    }
+
+    .value {
+      width: 70%;
+      @apply text-heading-s;
+    }
+  }
+
+  .last {
     border: none;
     padding: 0;
     margin: 0;

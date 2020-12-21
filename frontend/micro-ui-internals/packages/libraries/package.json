@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-libraries",
-  "version": "1.0.14",
+  "version": "1.0.33",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
@@ -20,15 +20,17 @@
     "gh-pages": "^2.2.0",
     "microbundle-crl": "^0.13.10",
     "react-dom": "^17.0.0",
-    "react-scripts": "^4.0.0"
+    "react-scripts": "^4.0.1"
   },
   "dependencies": {
     "axios": "^0.20.0",
     "babel-preset-react": "^6.24.1",
     "date-fns": "^2.16.1",
-    "i18next": "^19.8.2",
-    "i18next-react-postprocessor": "^3.0.4",
+    "i18next": "^19.8.4",
+    "i18next-react-postprocessor": "^3.0.5",
     "react": "^17.0.0",
-    "react-i18next": "^11.7.3"
+    "react-i18next": "^11.7.3",
+    "react-query": "^3.2.0",
+    "rooks": "^4.4.0"
   }
 }

@@ -12,6 +12,7 @@ module.exports = function (app) {
     "/egov-workflow-v2",
     "/pgr-services",
     "/filestore",
+    "/egov-hrms",
     "/user-otp",
     "/user",
   ].forEach((location) => app.use(location, createProxy));

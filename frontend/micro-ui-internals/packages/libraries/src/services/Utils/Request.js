@@ -1,37 +1,17 @@
 import Axios from "axios";
-//import { connectAdvanced } from "react-redux";
-import { Storage } from "./Storage";
-
-// Axios.interceptors.request.use((req) => {
-//   document.body.classList.add("loader");
-//   return req;
-// });
-
-// Axios.interceptors.response.use(
-//   (res) => {
-//     document.body.classList.remove("loader");
-//     return res;
-//   },
-//   (err) => {
-//     document.body.classList.remove("loader");
-//     return err;
-//   }
-// );
+import { UserService } from "../User";
 
 const requestInfo = () => ({
-  apiId: "Rainmaker",
-  // action: "",
-  // did: 1,
-  // key: "",
-  // msgId: "20170310130900|en_IN",
-  // requesterId: "",
-  // ts: 1513579888683,
-  // ver: ".01",
-  authToken: Storage.get("User").token,
+  authToken: UserService.getUser().token,
 });
 
-const userServiceData = () => Storage.get("citizen.userServiceData");
+const userServiceData = () => ({ userInfo: UserService.getUser().info });
+
+window.Digit = window.Digit || {};
+window.Digit = { ...window.Digit, RequestCache: window.Digit.RequestCache || {} };
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
+  console.log("params:", params);
+  console.log("url:", url);
   if (method.toUpperCase() === "POST") {
     data.RequestInfo = {
       apiId: "Rainmaker",
@@ -44,82 +24,49 @@ export const Request = async ({ method = "POST", url, data = {}, useCache = fals
     }
   }
 
-  // let key = "";
-  // if (useCache) {
-  //   key = `${method.toUpperCase()}.${url}.${JSON.stringify(params, null, 0)}.${JSON.stringify(data, null, 0)}`;
-  //   const value = Storage.get(key);
-  //   if (value) {
-  //     return value;
-  //   }
-  // } else {
-  //   params._ = Date.now();
-  // }
+  let key = "";
+  if (useCache) {
+    key = `${method.toUpperCase()}.${url}.${btoa(JSON.stringify(params, null, 0))}.${btoa(JSON.stringify(data, null, 0))}`;
+    const value = window.Digit.RequestCache[key];
+    if (value) {
+      return value;
+    }
+  } else {
+    params._ = Date.now();
+  }
   const res = await Axios({ method, url, data, params });
-  // if (useCache) {
-  //   Storage.set(key, res.data);
-  // }
-
+  if (useCache) {
+    window.Digit.RequestCache[key] = res.data;
+  }
   return res.data;
 };
 
-export const SortByName = (na, nb) => {
-  if (na < nb) {
-    return -1;
+/**
+ *
+ * @param {*} serviceName
+ *
+ * preHook:
+ * ({params, data}) => ({params, data})
+ *
+ * postHook:
+ * ({resData}) => ({resData})
+ *
+ */
+
+export const ServiceRequest = async ({ serviceName, method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
+  const preHookName = `${serviceName}Pre`;
+  const postHookName = `${serviceName}Post`;
+
+  let reqParams = params;
+  let reqData = data;
+  if (window[preHookName] && typeof window[preHookName] === "function") {
+    let preHookRes = await window[preHookName]({ params, data });
+    reqParams = preHookRes.params;
+    reqData = preHookRes.data;
   }
-  if (na > nb) {
-    return 1;
+  const resData = await Request({ method, url, data: reqData, useCache, params: reqParams, auth, userService });
+  if (window[postHookName] && typeof window[postHookName] === "function") {
+    return await window[postHookName](resData);
   }
-  return 0;
-};
-
-export const TransformArrayToObj = (traslationList) => {
-  return traslationList.reduce(
-    // eslint-disable-next-line
-    (obj, item) => ((obj[item.code] = item.message), obj),
-    {}
-  );
-  // return trasformedTraslation;
-};
-
-export const GetCitiesWithi18nKeys = (MdmsRes, moduleCode) => {
-  const cityList = (MdmsRes.tenant.citymodule && MdmsRes.tenant.citymodule.filter((module) => module.code === moduleCode)[0].tenants) || [];
-  const citiesMap = cityList.map((city) => city.code);
-  const cities = MdmsRes.tenant.tenants
-    .filter((city) => citiesMap.includes(city.code))
-    .map(({ code, name, logoId, emailId, address, contactNumber }) => ({
-      code,
-      name,
-      logoId,
-      emailId,
-      address,
-      contactNumber,
-      i18nKey: "TENANT_TENANTS_" + code.replace(".", "_").toUpperCase(),
-    }))
-    .sort((cityA, cityB) => {
-      const na = cityA.name.toLowerCase(),
-        nb = cityB.name.toLowerCase();
-      return SortByName(na, nb);
-    });
-  return cities;
-};
-
-export const GetEgovLocations = (MdmsRes) => {
-  return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
-    name: obj.localname,
-    i18nKey: obj.localname,
-  }));
-};
-
-export const GetServiceDefWithLocalization = (MdmsRes) => {
-  const serviceDef = MdmsRes["RAINMAKER-PGR"].ServiceDefs.map((def) =>
-    def.active
-      ? {
-          name: def.serviceCode,
-          i18nKey: def.menuPath !== "" ? "SERVICEDEFS." + def.serviceCode.toUpperCase() : "Others",
-          ...def,
-        }
-      : null
-  ).filter((o) => o != null);
-  Storage.set("ServiceDefs", serviceDef); //TODO: move this to service, session storage key name is too big currently
-  return serviceDef;
+  return resData;
 };

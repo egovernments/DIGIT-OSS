@@ -8,16 +8,16 @@ import LinkButton from "../atoms/LinkButton";
 import CardCaption from "../atoms/CardCaption";
 import TextInput from "../atoms/TextInput";
 
-const InputCard = ({ children, texts = {}, submit = false, inputs = [], inputRef, onNext, onSkip }) => {
+const InputCard = ({ t, children, texts = {}, submit = false, inputs = [], inputRef, onNext, onSkip }) => {
   // TODO: inputs handle
   return (
     <Card>
-      {texts.headerCaption && <CardCaption>{texts.headerCaption}</CardCaption>}
-      <CardHeader>{texts.header}</CardHeader>
-      <CardText>{texts.cardText}</CardText>
+      {texts.headerCaption && <CardCaption>{t(texts.headerCaption)}</CardCaption>}
+      <CardHeader>{t(texts.header)}</CardHeader>
+      <CardText>{t(texts.cardText)}</CardText>
       {children}
-      <SubmitBar submit={submit} label={texts.nextText} onSubmit={onNext} />
-      {texts.skipText ? <LinkButton label={texts.skipText} onClick={onSkip} /> : null}
+      <SubmitBar submit={submit} label={t(texts.nextText)} onSubmit={onNext} />
+      {texts.skipText ? <LinkButton label={t(texts.skipText)} onClick={onSkip} /> : null}
     </Card>
   );
 };

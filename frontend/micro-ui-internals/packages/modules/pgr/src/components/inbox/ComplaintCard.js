@@ -1,22 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Card, DetailsCard } from "@egovernments/digit-ui-react-components";
+import { Card, DetailsCard, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
+import useComplaintTable from "../../hooks/useComplaintTable";
+import { FilterAction } from "@egovernments/digit-ui-react-components";
+import Filter from "./Filter";
+import SearchComplaint from "./search";
 
-export const ComplaintCard = ({ data }) => {
-  // let data = [
-  //   {
-  //     "Complaint No.": "1290889999",
-  //     "Complaint Sub Type": "Sub Type",
-  //     Locality: "Amritsar",
-  //     Status: "formattedAddress",
-  //     "Task Owner": "test",
-  //     "SLA Remaining": "120",
-  //   },
-  // ];
+export const ComplaintCard = ({ data, onFilterChange, serviceRequestIdKey }) => {
+  //let cardData = useComplaintTable(data);
+  const [popup, setPopup] = useState(false);
+  const [selectedComponent, setSelectedComponent] = useState(null);
+
+  const handlePopupAction = (type) => {
+    console.log("option");
+    if (type === "SEARCH") {
+      setSelectedComponent(<SearchComplaint type="mobile" onClose={handlePopupClose} />);
+    } else if (type === "FILTER") {
+      setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
+    }
+    setPopup(true);
+  };
+
+  const handlePopupClose = () => {
+    setPopup(false);
+    setSelectedComponent(null);
+  };
 
   return (
-    <Card>
-      <DetailsCard data={tableData} />
-    </Card>
+    <React.Fragment>
+      <div className="searchBox">
+        <SearchAction text="SEARCH" handleActionClick={() => handlePopupAction("SEARCH")} />
+        <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />
+        <FilterAction text="SORT" handleActionClick={handlePopupAction} />
+      </div>
+      <DetailsCard data={data} serviceRequestIdKey={serviceRequestIdKey} linkPrefix={"/digit-ui/employee/pgr/complaint/details/"} />
+      {popup && (
+        <PopUp>
+          <div className="popup-module">{selectedComponent}</div>
+        </PopUp>
+      )}
+    </React.Fragment>
   );
 };

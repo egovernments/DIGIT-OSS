@@ -19,6 +19,7 @@ const Urls = {
   Authenticate: "/user/oauth/token",
   RegisterUser: "/user/citizen/_create",
   UserProfileUpdate: "/user/profile/_update",
+  EmployeeSearch: "/egov-hrms/employees/_search",
 };
 
 export default Urls;

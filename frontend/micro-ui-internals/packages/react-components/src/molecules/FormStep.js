@@ -6,8 +6,8 @@ import CardLabelError from "../atoms/CardLabelError";
 import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
-const FormStep = ({ children, config, onSelect, onSkip }) => {
-  const { register, watch, handleSubmit } = useForm();
+const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange }) => {
+  const { register, watch, errors, handleSubmit } = useForm();
 
   console.log("config", config);
   const goNext = (data) => {
@@ -16,27 +16,33 @@ const FormStep = ({ children, config, onSelect, onSkip }) => {
   };
   const inputs = config.inputs?.map((input, index) => {
     if (input.type === "text") {
-      const watchInput = watch(input.name);
       return (
         <React.Fragment key={index}>
-          <CardLabel>{input.label}</CardLabel>
-          {watchInput && <CardLabelError>{input.error}</CardLabelError>}
-          <TextInput key={index} name={input.name} inputRef={register(input.validation)} isMandatory={watchInput} />
+          <CardLabel>{t(input.label)}</CardLabel>
+          {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
+          <TextInput
+            key={index}
+            name={input.name}
+            value={value}
+            onChange={onChange}
+            inputRef={register(input.validation)}
+            isMandatory={errors[input.name]}
+          />
         </React.Fragment>
       );
     }
     if (input.type === "textarea")
       return (
         <React.Fragment key={index}>
-          <CardLabel>{input.label}</CardLabel>
-          <TextArea key={index} name={input.name} inputRef={register(input.validation)}></TextArea>
+          <CardLabel>{t(input.label)}</CardLabel>
+          <TextArea key={index} name={input.name} value={value} onChange={onChange} inputRef={register(input.validation)}></TextArea>
         </React.Fragment>
       );
   });
 
   return (
     <form onSubmit={handleSubmit(goNext)}>
-      <InputCard {...config} submit {...{ onSkip: onSkip }}>
+      <InputCard {...config} submit {...{ onSkip: onSkip }} t={t}>
         {inputs}
         {children}
       </InputCard>

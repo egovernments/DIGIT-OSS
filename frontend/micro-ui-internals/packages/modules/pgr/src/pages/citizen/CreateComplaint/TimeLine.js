@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, TelePhone } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, CheckPoint, ConnectingCheckPoints, GreyOutText, Loader, TelePhone } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { LOCALIZATION_KEY } from "../../../constants/Localization";
@@ -9,9 +9,14 @@ import Reopen from "./timelineInstances/reopen";
 import Resolved from "./timelineInstances/resolved";
 import StarRated from "./timelineInstances/StarRated";
 
-const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
+const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating }) => {
   const { t } = useTranslation();
   // let GetComplaintInstance = ({}) => {
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   let { timeline } = data;
 
   const getCheckPoint = ({ status, caption, auditDetails, timeLineActions }) => {
@@ -23,7 +28,7 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
         return <PendingForAssignment complaintFiledDate={auditDetails.created} text={t(`CS_COMMON_COMPLAINT_FILED`)} />;
 
       case "PENDINGATLME":
-        let { name, mobileNumber } = caption[0];
+        let { name, mobileNumber } = caption && caption.length > 0 ? caption[0] : { name: "", mobileNumber: "" };
         const assignedTo = `${t("CS_COMMON_COMPLAINT_ASSIGNED_TO")}`;
         return <PendingAtLME name={name} mobile={mobileNumber} text={assignedTo} />;
 
@@ -48,14 +53,20 @@ const TimeLine = ({ data, serviceRequestId, complaintWorkflow, rating }) => {
   return (
     <React.Fragment>
       <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
-      {timeline && timeline.length > 0 && (
+      {timeline && timeline.length > 0 ? (
         <ConnectingCheckPoints>
           {timeline.map(({ status, caption, auditDetails, timeLineActions }, index) => {
             return (
-              <CheckPoint isCompleted={index === 0 ? true : false} customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })} />
+              <CheckPoint
+                key={index}
+                isCompleted={index === 0 ? true : false}
+                customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })}
+              />
             );
           })}
         </ConnectingCheckPoints>
+      ) : (
+        <Loader />
       )}
     </React.Fragment>
   );
