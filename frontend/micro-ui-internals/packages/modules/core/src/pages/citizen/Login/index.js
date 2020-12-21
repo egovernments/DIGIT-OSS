@@ -36,7 +36,7 @@ const Login = ({ stateCode, cityCode }) => {
     if (!tokens) return;
     const { access_token } = tokens;
     const { mobileNumber } = params;
-    Digit.SessionStorage.set("User", { token: access_token, mobileNumber });
+    Digit.UserService.setUser({ token: access_token, mobileNumber });
   }, [tokens]);
 
   const stepItems = useMemo(() =>
@@ -52,6 +52,8 @@ const Login = ({ stateCode, cityCode }) => {
     )
   );
 
+  const getUserType = () => Digit.UserService.getType();
+
   const handleOtpChange = (otp) => {
     setParmas({ ...params, otp });
   };
@@ -61,7 +63,7 @@ const Login = ({ stateCode, cityCode }) => {
     const data = {
       ...mobileNumber,
       tenantId: stateCode,
-      userType: "CITIZEN",
+      userType: getUserType(),
     };
     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
     if (!err) {
@@ -82,7 +84,7 @@ const Login = ({ stateCode, cityCode }) => {
       ...user,
       ...name,
     };
-    const { user: updatedUser } = await Digit.LoginService.updateUser(data, stateCode);
+    const { user: updatedUser } = await Digit.UserService.updateUser(data, stateCode);
     setUser(updatedUser[0]);
   };
 
@@ -94,12 +96,12 @@ const Login = ({ stateCode, cityCode }) => {
           username: mobileNumber,
           password: otp,
           tenantId: stateCode,
-          userType: "CITIZEN",
+          userType: getUserType(),
         };
 
         const {
           data: { ResponseInfo, UserRequest, ...tokens },
-        } = await Digit.LoginService.authenticate(data);
+        } = await Digit.UserService.authenticate(data);
         setTokens(tokens);
         setUser(UserRequest);
       } else if (!isUserRegistered) {
@@ -113,7 +115,7 @@ const Login = ({ stateCode, cityCode }) => {
 
         const {
           data: { ResponseInfo, UserRequest, ...tokens },
-        } = await Digit.LoginService.registerUser(data, stateCode);
+        } = await Digit.UserService.registerUser(data, stateCode);
         setTokens(tokens);
         setUser(UserRequest);
       }
@@ -127,7 +129,7 @@ const Login = ({ stateCode, cityCode }) => {
     const data = {
       mobileNumber,
       tenantId: stateCode,
-      userType: "CITIZEN",
+      userType: getUserType(),
     };
     if (!isUserRegistered) {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
@@ -138,7 +140,7 @@ const Login = ({ stateCode, cityCode }) => {
 
   const sendOtp = async (data) => {
     try {
-      const res = await Digit.LoginService.sendOtp(data, stateCode);
+      const res = await Digit.UserService.sendOtp(data, stateCode);
       return [res, null];
     } catch (err) {
       return [null, err];
@@ -150,13 +152,13 @@ const Login = ({ stateCode, cityCode }) => {
       <AppContainer>
         <BackButton />
         <Route path={`${path}`} exact>
-          <SelectMobileNumber onSelect={selectMobileNumber} config={stepItems[0]} />
+          <SelectMobileNumber onSelect={selectMobileNumber} config={stepItems[0]} t={t} />
         </Route>
         <Route path={`${path}/otp`}>
-          <SelectOtp config={stepItems[1]} onOtpChange={handleOtpChange} onResend={resendOtp} onSelect={selectOtp} otp={params.otp} />
+          <SelectOtp config={stepItems[1]} onOtpChange={handleOtpChange} onResend={resendOtp} onSelect={selectOtp} otp={params.otp} t={t} />
         </Route>
         <Route path={`${path}/name`}>
-          <SelectName config={stepItems[2]} onSelect={selectName} />
+          <SelectName config={stepItems[2]} onSelect={selectName} t={t} />
         </Route>
       </AppContainer>
     </Switch>

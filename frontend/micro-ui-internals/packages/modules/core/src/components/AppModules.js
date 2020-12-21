@@ -4,6 +4,7 @@ import { PGRModule } from "@egovernments/digit-ui-module-pgr/src/Module";
 import { FSMModule } from "@egovernments/digit-ui-module-fsm/src/Module";
 
 import { AppHome } from "./Home";
+import Login from "../pages/citizen/Login";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -33,6 +34,11 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
       <Route path={`${path}/fsm`}>
         <FSMModule stateCode={stateCode} cityCode="pb.amritsar" moduleCode="FSM" userType={userType} />
       </Route>
+      {userType === "citizen" && (
+        <Route path={`${path}/login`}>
+          <Login stateCode={stateCode} cityCode="pb.amritsar" />
+        </Route>
+      )}
       <Route>
         <AppHome userType={userType} />
       </Route>
