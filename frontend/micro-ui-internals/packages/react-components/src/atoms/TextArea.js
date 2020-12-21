@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const TextArea = (props) => {
-  const user_type = Digit.SessionStorage.get("user_type") === "employee" ? true : false;
+  const user_type = props.userType;
 
   return (
     <textarea
@@ -16,6 +16,7 @@ const TextArea = (props) => {
 };
 
 TextArea.propTypes = {
+  userType: PropTypes.string,
   name: PropTypes.string.isRequired,
   ref: PropTypes.func,
   value: PropTypes.string.isRequired,
@@ -23,6 +24,7 @@ TextArea.propTypes = {
 };
 
 TextArea.defaultProps = {
+  userType: "citizen",
   name: "",
   ref: undefined,
   value: "",

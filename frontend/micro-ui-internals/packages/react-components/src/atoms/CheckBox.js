@@ -3,7 +3,7 @@ import { CheckSvg } from "./svgindex";
 import PropTypes from "prop-types";
 
 const CheckBox = ({ onChange, label, ref, ...props }) => {
-  const userType = Digit.SessionStorage.get("userType");
+  const userType = props.userType;
   return (
     <div className="checkbox-wrap">
       <input type="checkbox" className={userType === "employee" ? "input-emp" : ""} onChange={onChange} value={label} {...props} ref={ref} />
@@ -29,12 +29,14 @@ CheckBox.propTypes = {
    * input ref
    */
   ref: PropTypes.func,
+  userType: PropTypes.string,
 };
 
 CheckBox.defaultProps = {
   label: "",
   onChange: () => {},
   ref: () => {},
+  userType: "citizen",
 };
 
 export default CheckBox;
