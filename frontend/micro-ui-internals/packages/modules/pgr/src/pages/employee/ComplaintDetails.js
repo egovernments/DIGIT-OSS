@@ -173,7 +173,6 @@ export const ComplaintDetails = (props) => {
   }
 
   const getTimelineCaptions = (checkpoint) => {
-    console.log("tl", checkpoint);
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),

@@ -1,5 +1,5 @@
 import { Request, GetCitiesWithi18nKeys } from "../services/Utils/Request";
-
+import Urls from "../services/urls";
 const initRequestBody = (tenantId) => ({
   MdmsCriteria: {
     tenantId,
@@ -67,9 +67,9 @@ const transformResponse = (type, MdmsRes, moduleCode = "PGR") => {
 class MdmsService {
   constructor() {
     this.init = (stateCode = "pb") =>
-      this.Request({ url: Urls.MDMS, data: initRequestBody(stateCode), useCache: true, method: "POST", params: { tenantId: stateCode } });
+      Request({ url: Urls.MDMS, data: initRequestBody(stateCode), useCache: true, method: "POST", params: { tenantId: stateCode } });
     this.call = (details, stateCode = "pb") =>
-      this.Request({ url: Urls.MDMS, data: getCriteria(details), useCache: true, method: "POST", params: { tenantId: stateCode } });
+      Request({ url: Urls.MDMS, data: getCriteria(details), useCache: true, method: "POST", params: { tenantId: stateCode } });
     this.getDataByCriteria = async (mdmsDetails, moduleCode = "PGR") => {
       const { MdmsRes } = await this.call(mdmsDetails.details);
       return transformResponse(mdmsDetails.type, MdmsRes, moduleCode);

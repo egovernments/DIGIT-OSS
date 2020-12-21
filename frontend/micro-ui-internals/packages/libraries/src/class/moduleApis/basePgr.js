@@ -1,3 +1,6 @@
+import Urls from "../../services/urls";
+import { Request } from "../../services/Utils/Request";
+
 class PGRBaseService {
   constructor() {}
   search = (stateCode = "pb", filters = {}) => {
