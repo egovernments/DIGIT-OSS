@@ -48,4 +48,18 @@ window.Digit.SessionStorage.set("User", userDetails);
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
 
+window.mdmsInitPre = ({ params, data }) => {
+  console.log("mdms init pre", params, data);
+  return { params, data };
+};
+
+window.mdmsInitPost = (data) => {
+  console.log("mdms init post", data);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(data);
+    }, 2000);
+  });
+};
+
 ReactDOM.render(<DigitUI stateCode="pb" />, document.getElementById("root"));

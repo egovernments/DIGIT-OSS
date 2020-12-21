@@ -54,7 +54,7 @@ export const searchComplaints = (filters = {}) => async (dispatch, getState) => 
 };
 
 export const fetchBusinessServiceByTenant = (cityCode, businessServices) => async (dispatch, getState) => {
-  const businessServiceResponse = await Digit.workflowService.init(cityCode, businessServices);
+  const businessServiceResponse = await Digit.WorkflowService.init(cityCode, businessServices);
   const businessService = businessServiceResponse.BusinessServices;
   dispatch({
     type: FETCH_ALL_BUSINESSS_SERVICES,
@@ -64,7 +64,7 @@ export const fetchBusinessServiceByTenant = (cityCode, businessServices) => asyn
 
 export const fetchBusinessServiceById = (businessId) => async (dispatch, getState) => {
   let cityCode = "pb.amritsar"; //TODO: fetch it from store
-  const businessServiceDetails = await Digit.workflowService.getByBusinessId(cityCode, businessId);
+  const businessServiceDetails = await Digit.WorkflowService.getByBusinessId(cityCode, businessId);
   console.log("businessServiceDetails:", businessServiceDetails);
   dispatch({
     type: FETCH_BUSINESS_SERVICE_BY_ID,

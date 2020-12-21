@@ -36,6 +36,7 @@ const transformDetails = ({ id, service, workflow, thumbnails }) => {
     details: !isEmptyOrNull(customDetails) ? customDetails : getDetailsRow({ id, service }),
     thumbnails: thumbnails,
     workflow: workflow,
+    service,
     audit: {
       citizen: service.citizen,
       details: service.auditDetails,

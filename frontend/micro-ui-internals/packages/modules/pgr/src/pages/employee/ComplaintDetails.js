@@ -93,7 +93,7 @@ export const ComplaintDetails = (props) => {
   }
   useEffect(() => {
     (async () => {
-      const assignWorkflow = await Digit.workflowService.getByBusinessId(tenantId, id);
+      const assignWorkflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
       console.log("aassign", assignWorkflow);
     })();
   }, [complaintDetails]);
@@ -155,7 +155,7 @@ export const ComplaintDetails = (props) => {
 
   async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
-    const response = await Digit.Complaint.assign(selectedAction, selectedEmployee, comments, uploadedFile);
+    const response = await Digit.Complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile);
     console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
@@ -253,6 +253,7 @@ export const ComplaintDetails = (props) => {
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
       {popup ? (
         <Modal
+          complaintDetails={complaintDetails}
           employeeRoles={workflowDetails.data?.nextActions ? workflowDetails.data?.nextActions : null}
           headerBarMain={
             <Heading

@@ -6,10 +6,10 @@ const useComplaintStatus = () => {
   const [complaintStatus, setComplaintStatus] = useState([]);
 
   useEffect(() => {
-    let workflowService = null;
+    let WorkflowService = null;
     (async () => {
-      workflowService = await Digit.workflowService.init();
-      let applicationStatus = workflowService.BusinessServices[0].states
+      WorkflowService = await Digit.WorkflowService.init();
+      let applicationStatus = WorkflowService.BusinessServices[0].states
         .filter((state) => state.applicationStatus)
         .map((state) => ({
           name: t(`CS_COMMON_${state.applicationStatus}`),
