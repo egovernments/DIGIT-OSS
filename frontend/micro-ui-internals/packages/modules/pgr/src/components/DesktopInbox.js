@@ -16,8 +16,8 @@ const DesktopInbox = (props) => {
     return value < 0 ? (
       <span style={{ color: "#D4351C", backgroundColor: "rgba(212, 53, 28, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
     ) : (
-        <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
-      );
+      <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value}</span>
+    );
   };
   const history = useHistory();
 
@@ -48,7 +48,9 @@ const DesktopInbox = (props) => {
       {
         Header: t("WF_INBOX_HEADER_LOCALITY"),
         Cell: (row) => {
-          return GetCell(t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`));
+          return GetCell(
+            t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
+          );
         },
       },
       {
