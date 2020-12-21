@@ -19,9 +19,17 @@ initLibraries();
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
-const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
+// const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+// const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+
+//HOTFIX TOKEN
+
+const userType = "EMPLOYEE";
+
+const token = "2e1d6975-1884-4323-acc4-7a9a262c76a2";
+
+// COMMENT ABOVE BEFORE COMMIT OR PUSH OR DEPLOY
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";

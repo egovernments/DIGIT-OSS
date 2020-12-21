@@ -6,6 +6,7 @@
 packages/css/example/index.css
 package-lock.json
 locales/
+example/src/index.js
 
 ### Node ###
 # Logs
