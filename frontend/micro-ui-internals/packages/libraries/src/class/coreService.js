@@ -17,12 +17,14 @@ const createModule = (moduleCode) => {
 
 export class CoreService {
   constructor(moduleCode) {
-    this.MdmsService = mdmsServiceObj;
-    this.WorkFlowService = workFlowServiceObj;
-    this.fileStorageService = fileStorageService;
-    this.module = createModule(moduleCode);
+    this._MdmsService = mdmsServiceObj;
+    this._WorkFlowService = workFlowServiceObj;
+    this._fileStorageService = fileStorageService;
+    this._module = createModule(moduleCode);
     this.Request = Request;
   }
+
+  isEmptyOrNull = (obj) => obj === undefined || obj === null || Object.keys(obj).length === 0;
 
   employeeSearch = (cityCode, roles) => {
     return Request({

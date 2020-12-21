@@ -15,6 +15,7 @@ import useComplaintStatus from "../../hooks/useComplaintStatus";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import useServiceDefs from "../../hooks/useServiceDefs";
+import { usePGRService } from "../../Services";
 
 const Filter = (props) => {
   console.log("props in filter--------->:", props);
@@ -22,7 +23,7 @@ const Filter = (props) => {
 
   const { t } = useTranslation();
   const { pgr } = useSelector((state) => state);
-
+  const pgrServ = usePGRService();
   const [selectAssigned, setSelectedAssigned] = useState("");
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
@@ -35,7 +36,8 @@ const Filter = (props) => {
   });
   //TODO change city fetch from user tenantid
   let localities = useLocalities({ city: "Amritsar" });
-  let complaintStatus = useComplaintStatus();
+  // let complaintStatus = useComplaintStatus();
+  let { data: complaintStatus } = pgrServ.useQuery(pgrServ.getComplaintStatus, [t], { cacheKey: "complaintStatus" });
   let serviceDefs = useServiceDefs();
 
   const onRadioChange = (value) => {
@@ -83,8 +85,8 @@ const Filter = (props) => {
   };
 
   useEffect(() => {
-    getPendingCount();
-  }, [complaintStatus.length]);
+    if (complaintStatus?.length) getPendingCount();
+  }, [complaintStatus]);
 
   function complaintType(_type) {
     console.log("complaint fikler", filters, _type);

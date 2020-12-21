@@ -13,7 +13,7 @@ import { fetchBusinessServiceByTenant } from "./redux/actions";
 import { usePGRService } from "./Services";
 export const PGRReducers = getRootReducer;
 export const pgrService = usePGRService();
-export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "PGR", userType, tenants }) => {
+export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode, userType, tenants }) => {
   const { path } = useRouteMatch();
   const state = useSelector((state) => state["pgr"]);
   const disptach = useDispatch();

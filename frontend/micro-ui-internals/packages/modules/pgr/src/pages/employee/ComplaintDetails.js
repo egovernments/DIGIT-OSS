@@ -32,6 +32,7 @@ import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import useComplaintDetails from "../../hooks/useComplaintDetails";
+import { usePGRService } from "../../Services";
 
 const MapView = (props) => {
   return (
@@ -73,14 +74,15 @@ const TLCaption = ({ data }) => {
 
 export const ComplaintDetails = (props) => {
   let { id } = useParams();
+  const pgr = usePGRService();
   const { t } = useTranslation();
   const [fullscreen, setFullscreen] = useState(false);
   const [imageZoom, setImageZoom] = useState(null);
   // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
   const tenantId = "pb.amritsar";
-  const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = useComplaintDetails({ tenantId, id });
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, role: "EMPLOYEE" });
+  const { isLoading, data: complaintDetails, revalidate: revalidateComplaintDetails } = pgr.useQuery(pgr.fetchComplaintDetails, [id]);
+  const workflowDetails = pgr.getWorkFlowDetailsById(id, "EMPLOYEE");
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
@@ -92,10 +94,6 @@ export const ComplaintDetails = (props) => {
     setDisplayMenu(false);
     setPopup(true);
   }
-
-  // useEffect(() => {
-  //   setRerender(rerender + 1);
-  // }, [complaintDetails]);
 
   function zoomView() {
     setFullscreen(!fullscreen);
@@ -150,7 +148,8 @@ export const ComplaintDetails = (props) => {
 
   async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
-    const response = await Digit.Complaint.assign(selectedAction, selectedEmployee, comments, uploadedFile);
+    const response = await Digit.Complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile);
+    console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
     setLoader(true);

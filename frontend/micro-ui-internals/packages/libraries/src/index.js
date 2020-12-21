@@ -16,6 +16,8 @@ import { GetServiceDefinitions } from "./services/ServiceDefinitions";
 import { Complaint } from "./services/Complaint";
 import { PincodeMap } from "./services/PincodeMap";
 import { CoreService } from "./class/coreService";
+import { UserService } from "./services/User";
+import { ULBService } from "./services/Ulb";
 
 import Hooks from "./hooks";
 
@@ -45,23 +47,28 @@ const setupDevice = () => {
 };
 
 const initLibraries = () => {
-  setupLibraries("Config", { mergeConfig });
-  setupLibraries("Services", { useStore, useInitStore });
-  setupLibraries("Enums", Enums);
   setupLibraries("SessionStorage", Storage);
+  setupLibraries("UserService", UserService);
+  setupLibraries("ULBService", ULBService);
+
+  setupLibraries("Config", { mergeConfig });
+  setupLibraries("Services", { useStore });
+  setupLibraries("Enums", Enums);
   setupLibraries("LocationService", LocationService);
   setupLibraries("LocalityService", LocalityService);
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
   setupLibraries("DateUtils", dateUtils);
-  setupLibraries("workflowService", WorkflowService);
+  setupLibraries("WorkflowService", WorkflowService);
   setupLibraries("MDMSService", MdmsService);
   setupLibraries("UploadServices", UploadServices);
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
   setupLibraries("Complaint", Complaint);
   setupLibraries("PincodeMap", PincodeMap);
+
   setupLibraries("Hooks", Hooks);
   setupLibraries("Customizations", {});
+
   setupDevice();
   initI18n();
   window.i18next = i18next;

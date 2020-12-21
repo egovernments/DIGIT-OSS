@@ -28,6 +28,15 @@ class FileStorage {
     const res = await Axios(config);
     return res;
   };
+
+  getThumbnails = async (ids, tenantId) => {
+    const res = await this.Filefetch(ids, tenantId);
+    if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
+      return res.data.fileStoreIds.map((o) => o.url.split(",")[3]);
+    } else {
+      return null;
+    }
+  };
 }
 
 export const fileStorageService = new FileStorage();

@@ -1,9 +1,11 @@
 import { LocalizationService } from "../Localization/service";
 import { MdmsService } from "../MDMS";
-import { GetCitiesWithi18nKeys } from "../Utils/Request";
-import { WorkflowService } from "../WorkFlow";
+import { Storage } from "../Utils/Storage";
 
 export const StoreService = {
+  getInitData: () => {
+    return Storage.get("initData");
+  },
   digitInitData: async (stateCode) => {
     const { MdmsRes } = await MdmsService.init(stateCode);
     const stateInfo = MdmsRes["common-masters"].StateInfo[0];
@@ -19,10 +21,16 @@ export const StoreService = {
     };
     initData.selectedLanguage = initData.languages[0].value;
     await LocalizationService.getLocale({
-      modules: [`rainmaker-${stateCode.toLowerCase()}`, ...initData.localizationModules.map((module) => module.value)],
+      modules: [
+        `rainmaker-${stateCode.toLowerCase()}`,
+        ...initData.localizationModules.map((module) => module.value),
+        ...initData.tenants.map((tenant) => `rainmaker-${tenant.code.toLowerCase()}`),
+      ],
       locale: initData.selectedLanguage,
       tenantId: stateCode,
     });
+
+    Storage.set("initData", initData);
 
     return initData;
   },

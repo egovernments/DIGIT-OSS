@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
 
-const getEmployeeFilter = async (cityCode, roles, complaintDetails) => {
-  // const _roles = roles.join(",");
+const useEmployeeFilter = (cityCode, roles, complaintDetails) => {
+  const [employeeDetails, setEmployeeDetails] = useState(null);
 
-  const searchResponse = await Digit.PGRService.employeeSearch(cityCode, roles);
+  const searchResponse = (async () => await Digit.PGRService.employeeSearch(cityCode, roles))();
   console.log(searchResponse);
   const serviceDefs = Digit.SessionStorage.get("serviceDefs") || [];
   const serviceCode = complaintDetails.audit.serviceCode;

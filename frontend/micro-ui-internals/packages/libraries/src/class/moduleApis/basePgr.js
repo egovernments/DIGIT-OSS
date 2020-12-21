@@ -3,7 +3,7 @@ import { Request } from "../../services/Utils/Request";
 
 class PGRBaseService {
   constructor() {}
-  search = (stateCode = "pb", filters = {}) => {
+  search = (stateCode, filters = {}) => {
     console.log("----------------------------", filters);
     return Request({
       url: Urls.pgr_search,
@@ -15,7 +15,7 @@ class PGRBaseService {
     });
   };
 
-  create = (details, stateCode = "pb") =>
+  create = (details, stateCode) =>
     Request({
       url: Urls.PGR_Create,
       data: details,
@@ -26,7 +26,7 @@ class PGRBaseService {
       auth: true,
     });
 
-  update = (details, stateCode = "pb") =>
+  update = (details, stateCode) =>
     Request({
       url: Urls.pgr_update,
       data: details,
@@ -36,7 +36,7 @@ class PGRBaseService {
       params: { tenantId: stateCode },
     });
 
-  count = (details, stateCode = "pb") =>
+  count = (details, stateCode) =>
     Request({
       url: Urls.MDMS,
       data: details,
@@ -45,7 +45,7 @@ class PGRBaseService {
       params: { tenantId: stateCode },
     });
 
-  inboxFilter = (params = {}, details = {}, stateCode = "pb") => {
+  inboxFilter = (params = {}, details = {}, stateCode) => {
     return Request({
       // url: "https://run.mocky.io/v3/597a50a0-90e5-4a45-b82e-8a2186b760bd",
       url: "https://run.mocky.io/v3/4334951e-c395-4ffa-91c1-203be5b0e0ff",

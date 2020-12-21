@@ -16,6 +16,7 @@ import {
   ImageViewer,
   Loader,
 } from "@egovernments/digit-ui-react-components";
+import { usePGRService } from "../../Services";
 
 import useComplaintDetails from "../../hooks/useComplaintDetails";
 import TimeLine from "./CreateComplaint/TimeLine";
@@ -24,10 +25,11 @@ const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
 
-  let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
-  const { isLoading, error, isError, complaintDetails } = useComplaintDetails({ tenantId: cityCodeVal, id });
-  const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: cityCodeVal, id, moduleCode: "PGR" });
-
+  const pgr = usePGRService();
+  // let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
+  // const { isLoading, error, isError, complaintDetails } = useComplaintDetails({ tenantId: cityCodeVal, id });
+  const { isLoading, error, isError, data: complaintDetails } = pgr.useQuery(pgr.fetchComplaintDetails, [id]);
+  const workFlowDetails = pgr.getWorkFlowDetailsById(id);
   const [imageZoom, setImageZoom] = useState(null);
 
   function zoomImage(imageSource) {
@@ -76,7 +78,7 @@ const ComplaintDetailsPage = (props) => {
           <Card>
             <TimeLine
               isLoading={workFlowDetails.isLoading}
-              data={workFlowDetails.data}
+              data={workFlowDetails.data || []}
               serviceRequestId={id}
               complaintWorkflow={complaintDetails.workflow}
               rating={complaintDetails.audit.rating}
