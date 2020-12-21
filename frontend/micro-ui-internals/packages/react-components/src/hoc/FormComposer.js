@@ -25,7 +25,14 @@ const FormComposer = (props) => {
     switch (type) {
       case "text":
         return (
-          <div class="field-container">
+          <div
+            className="field-container"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             {populators.componentInFront ? populators.componentInFront : null}
             <TextInput className="field" {...populators} inputRef={register(populators.validation)} />
           </div>
