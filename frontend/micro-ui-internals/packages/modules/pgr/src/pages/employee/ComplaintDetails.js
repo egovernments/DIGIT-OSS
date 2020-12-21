@@ -93,7 +93,7 @@ export const ComplaintDetails = (props) => {
   }
   useEffect(() => {
     (async () => {
-      const assignWorkflow = await Digit.workflowService.getByBusinessId(tenantId, id);
+      const assignWorkflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
       console.log("aassign", assignWorkflow);
     })();
   }, [complaintDetails]);
