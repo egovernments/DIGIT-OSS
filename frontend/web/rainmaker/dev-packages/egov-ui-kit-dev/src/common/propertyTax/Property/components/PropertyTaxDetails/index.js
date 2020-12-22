@@ -125,9 +125,10 @@ class PropertyTaxDetails extends React.Component {
                               <Label label={item.taxHeadCode} />
                             </div>
                             <div 
-                            //className="col-sm-3 col-xs-3" 
-                            
-                            style={{padding:0,whiteSpace:"no-wrap"}}>
+                            className="col-sm-9 col-xs-9" 
+                            style={{padding:0,
+                              marginTop: "-25px",
+                              whiteSpace:"no-wrap"}}>
                               <Label
                                 containerStyle={{ textAlign: "right" }}
                                 className="pt-rf-price"
@@ -145,23 +146,17 @@ class PropertyTaxDetails extends React.Component {
                           </div>
                         )
                       );
-                    })}                    
-                        
-                       
-                   
-
+                    })} 
                   <Divider
                     className="reciept-divider"
                     inset={true}
                     lineStyle={{ marginLeft: 0, marginRight: 0, height: 2 }}
                   />
                   <div className="clearfix" style={{ marginTop: 8 }}>
-                    <div className="col-sm-9 col-xs-9" style={{ padding: 0 }}>
+                  <div className="col-sm-9 col-xs-9" style={{ padding: 0 }}>
                       <Label label="PT_FORM4_TOTAL" />
                     </div>
-                    <div 
-                    //className="col-sm-3 col-xs-3"
-                     style={{padding:0}}>
+                    <div className="col-sm-9 col-xs-9" style={{padding:0}}>
                       <Label
                         containerStyle={{ textAlign: "right" }}
                         labelStyle={{
