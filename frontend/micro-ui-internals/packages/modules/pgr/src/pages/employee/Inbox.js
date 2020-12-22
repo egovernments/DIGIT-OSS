@@ -17,6 +17,7 @@ const Inbox = () => {
   //const complaints = state.pgr.complaints.response || [];
 
   const handleFilterChange = (filterParam) => {
+    console.log("handleFilterChange", { ...searchParams, filters: filterParam });
     setSearchParams({ ...searchParams, filters: filterParam });
   };
 

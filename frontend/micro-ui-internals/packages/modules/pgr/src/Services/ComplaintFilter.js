@@ -3,15 +3,15 @@ import { CoreService } from "@egovernments/digit-ui-libraries";
 class ComplaintFilter extends CoreService {
   constructor() {
     super("PGR");
-    this.serviceIds = [];
   }
 
   getComplaintResponse = async (filters) => {
+    const serviceIds = [];
     const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
     let complaintDetailsResponse = await this._module.search(tenantId, filters);
     console.log("complaintDetailsResponse", complaintDetailsResponse, filters);
-    complaintDetailsResponse.ServiceWrappers.forEach((service) => this.serviceIds.push(service.service.serviceRequestId));
-    const serviceIdParams = this.serviceIds.join();
+    complaintDetailsResponse.ServiceWrappers.forEach((service) => serviceIds.push(service.service.serviceRequestId));
+    const serviceIdParams = serviceIds.join();
     const workflowInstances = await this._WorkFlowService.getByBusinessId(tenantId, serviceIdParams, filters, false);
     //console.log("serviceIdParams:", serviceIdParams, "workflowInstances:", workflowInstances);
     return this.combineResponses(complaintDetailsResponse, workflowInstances).map((data) => ({
