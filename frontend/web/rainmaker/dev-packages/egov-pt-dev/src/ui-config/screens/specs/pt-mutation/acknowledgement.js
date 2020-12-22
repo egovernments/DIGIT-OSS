@@ -475,7 +475,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
-      header:getHeader(applicationNumber),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
