@@ -1,6 +1,22 @@
 import Axios from "axios";
 import { UserService } from "../User";
 
+Axios.interceptors.response.use(
+  (res) => res,
+  (er) => {
+    console.log("-==-==-=-=-=-=-=-=-=-=-=2222222222222222222", er.response.status);
+    if (er.response.status == 403) window.location.href = "/";
+    if (er.response && er.response.data.Errors && er.response.data.Errors.length) {
+      for (const error of er.response.data.Errors) {
+        if (error.message.indexOf(`"code":"InvalidAccessTokenException"`) != -1) {
+          window.location.href = "/";
+          break;
+        }
+      }
+    }
+  }
+);
+
 const requestInfo = () => ({
   authToken: UserService.getUser().token,
 });
@@ -34,6 +50,7 @@ export const Request = async ({ method = "POST", url, data = {}, useCache = fals
   } else {
     params._ = Date.now();
   }
+
   const res = await Axios({ method, url, data, params });
   if (useCache) {
     window.Digit.RequestCache[key] = res.data;

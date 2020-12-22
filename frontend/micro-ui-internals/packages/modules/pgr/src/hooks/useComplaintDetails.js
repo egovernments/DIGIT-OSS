@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 // TODO: move to service
 const getThumbnails = async (ids, tenantId) => {
@@ -51,6 +51,7 @@ const transformDetails = ({ id, service, workflow, thumbnails }) => {
 const fetchComplaintDetails = async (tenantId, id) => {
   var serviceDefs = await Digit.MDMSService.getServiceDefs(tenantId, "PGR");
   const { service, workflow } = (await Digit.PGRService.search(tenantId, { serviceRequestId: id })).ServiceWrappers[0] || {};
+  Digit.SessionStorage.set("complaintDetails", { service, workflow });
   if (service && workflow && serviceDefs) {
     const ids = workflow.verificationDocuments
       ? workflow.verificationDocuments.filter((doc) => doc.documentType === "PHOTO").map((photo) => photo.fileStoreId || photo.id)
@@ -65,8 +66,9 @@ const fetchComplaintDetails = async (tenantId, id) => {
 };
 
 const useComplaintDetails = ({ tenantId, id }) => {
+  const queryClient = useQueryClient();
   const { isLoading, error, data } = useQuery(["complaintDetails", tenantId, id], () => fetchComplaintDetails(tenantId, id));
-  return { isLoading, error, complaintDetails: data };
+  return { isLoading, error, complaintDetails: data, revalidate: () => queryClient.invalidateQueries(["complaintDetails", tenantId, id]) };
 };
 
 export default useComplaintDetails;

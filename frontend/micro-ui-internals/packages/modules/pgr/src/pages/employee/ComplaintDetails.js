@@ -32,6 +32,7 @@ import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import useComplaintDetails from "../../hooks/useComplaintDetails";
+import { usePGRService } from "../../Services";
 
 const MapView = (props) => {
   return (
@@ -73,34 +74,26 @@ const TLCaption = ({ data }) => {
 
 export const ComplaintDetails = (props) => {
   let { id } = useParams();
+  const pgr = usePGRService();
   const { t } = useTranslation();
   const [fullscreen, setFullscreen] = useState(false);
   const [imageZoom, setImageZoom] = useState(null);
   // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
   const tenantId = "pb.amritsar";
-  const { isLoading, complaintDetails } = useComplaintDetails({ tenantId, id });
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, role: "EMPLOYEE" });
+  const { isLoading, data: complaintDetails, revalidate: revalidateComplaintDetails } = pgr.useQuery(pgr.fetchComplaintDetails, [id]);
+  const workflowDetails = pgr.getWorkFlowDetailsById(id, "EMPLOYEE");
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [assignResponse, setAssignResponse] = useState(null);
   const [rerender, setRerender] = useState(1);
+  const [showLoader, setLoader] = useState(false);
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
     setPopup(true);
   }
-  useEffect(() => {
-    (async () => {
-      const assignWorkflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
-      console.log("aassign", assignWorkflow);
-    })();
-  }, [complaintDetails]);
-  // useEffect(() => {
-  //   console.log("action", props.action);
-  //   setActionCalled(props.action);
-  // }, [props.action]);
 
   function zoomView() {
     setFullscreen(!fullscreen);
@@ -159,7 +152,10 @@ export const ComplaintDetails = (props) => {
     console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
-    setRerender(rerender + 1);
+    setLoader(true);
+    await revalidateComplaintDetails();
+    await workflowDetails.revalidate();
+    setLoader(false);
     setTimeout(() => setToast(false), 10000);
   }
 
@@ -167,12 +163,15 @@ export const ComplaintDetails = (props) => {
     setToast(false);
   }
 
-  if (isLoading) {
+  useEffect(() => {
+    setLoader(isLoading || workflowDetails.isLoading);
+  }, [isLoading, workflowDetails.isLoading]);
+
+  if (showLoader) {
     return <Loader />;
   }
 
   const getTimelineCaptions = (checkpoint) => {
-    console.log("tl", checkpoint);
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
@@ -186,6 +185,7 @@ export const ComplaintDetails = (props) => {
   };
 
   return (
+    // <React.Fragment></React.Fragment>
     <React.Fragment>
       <Card>
         <CardSubHeader>{t(`CS_HEADER_COMPLAINT_SUMMARY`)}</CardSubHeader>

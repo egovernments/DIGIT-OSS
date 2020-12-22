@@ -1,5 +1,5 @@
-import Urls from "./urls";
-import { Request, ServiceRequest } from "./Utils/Request";
+import { Request } from "../services/Utils/Request";
+import Urls from "../services/urls";
 
 const SortByName = (na, nb) => {
   if (na < nb) {
@@ -97,28 +97,20 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
   }
 };
 
-export const MdmsService = {
-  init: (stateCode) =>
-    ServiceRequest({
-      serviceName: "mdmsInit",
-      url: Urls.MDMS,
-      data: initRequestBody(stateCode),
-      useCache: true,
-      params: { tenantId: stateCode },
-    }),
-  call: (details, tenantId) =>
-    ServiceRequest({
-      serviceName: "mdmsCall",
-      url: Urls.MDMS,
-      data: getCriteria(details),
-      useCache: true,
-      params: { tenantId },
-    }),
-  getDataByCriteria: async (mdmsDetails, moduleCode) => {
-    const { MdmsRes } = await MdmsService.call(mdmsDetails.details);
-    return transformResponse(mdmsDetails.type, MdmsRes, moduleCode);
-  },
-  getServiceDefs: (tenantId, moduleCode) => {
-    return MdmsService.getDataByCriteria(getModuleServiceDefsCriteria(tenantId, moduleCode), moduleCode);
-  },
-};
+class MdmsService {
+  constructor() {
+    this.init = (stateCode) =>
+      Request({ url: Urls.MDMS, data: initRequestBody(stateCode), useCache: true, method: "POST", params: { tenantId: stateCode } });
+    this.call = (details, stateCode) =>
+      Request({ url: Urls.MDMS, data: getCriteria(details), useCache: true, method: "POST", params: { tenantId: stateCode } });
+    this.getDataByCriteria = async (mdmsDetails, moduleCode) => {
+      const { MdmsRes } = await this.call(mdmsDetails.details);
+      return transformResponse(mdmsDetails.type, MdmsRes, moduleCode);
+    };
+    this.getServiceDefs = (tenantId, moduleCode) => {
+      return this.getDataByCriteria(getModuleServiceDefsCriteria(tenantId, moduleCode), moduleCode);
+    };
+  }
+}
+
+export const mdmsServiceObj = new MdmsService();

@@ -10,12 +10,15 @@ import "@egovernments/digit-ui-css/example/index.css";
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
+import GRO from "./userInfo/gro.json";
+import { pgrService } from "@egovernments/digit-ui-module-pgr";
 
 import pgrCustomizations from "./pgr";
 
-const userInfo = { CITIZEN, EMPLOYEE, LME };
-
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
 initLibraries();
+
+pgrService.customizations = pgrCustomizations;
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 

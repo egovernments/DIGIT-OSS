@@ -13,8 +13,11 @@ export const StoreService = {
       languages: stateInfo.hasLocalisation ? stateInfo.languages : [{ label: "ENGLISH", value: "en_IN" }],
       stateInfo: { code: stateInfo.code, name: stateInfo.name, logoUrl: stateInfo.logoUrl },
       localizationModules: stateInfo.localizationModules,
-      modules: MdmsRes?.tenant?.citymodule,
-      tenants: MdmsRes?.tenant?.tenants.map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant })),
+      modules: MdmsRes && MdmsRes.tenant && MdmsRes.tenant.citymodule,
+      tenants:
+        MdmsRes &&
+        MdmsRes.tenant &&
+        MdmsRes.tenant.tenants.map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant })),
     };
     initData.selectedLanguage = initData.languages[0].value;
     await LocalizationService.getLocale({

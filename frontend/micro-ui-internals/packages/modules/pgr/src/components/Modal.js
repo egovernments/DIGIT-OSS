@@ -9,37 +9,33 @@ import {
   CardLabelDesc,
   UploadFile,
   ButtonSelector,
+  Loader,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import useEmployeeFilter from "../hooks/useEmployeeFilter";
+import { usePGRService } from "../Services";
+
 const Modal = (props) => {
   const roles = props.employeeRoles.filter((role) => role.action === props.selectedAction);
   const { complaintDetails } = props;
-  console.log("modalllll", roles);
-  const useEmployeeData = useEmployeeFilter("pb.amritsar", roles[0].roles, complaintDetails);
+  const pgr = usePGRService();
+  const { isLoading: employeeDataLoading, error, data: useEmployeeData, revalidate: employeeRevalidate } = pgr.useQuery(
+    pgr.getEmployeeForAssignment,
+    ["pb.amritsar", roles[0].roles, complaintDetails]
+  );
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [comments, setComments] = useState(null);
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const { t } = useTranslation();
 
-  console.log("modal", useEmployeeData);
-  const employeeData = useEmployeeData
-    ? useEmployeeData.map((departmentData) => {
-        return { heading: departmentData.department, options: departmentData.employees };
-      })
-    : null;
+  const fileData = pgr.useFileUpload(file);
 
-  // const uploadFile = useCallback( () => {
-
-  //   }, [file]);
-
-  useEffect(async () => {
-    if (file) {
-      const response = await Digit.UploadServices.Filestorage(file);
-      setUploadedFile(response.data.files[0].fileStoreId);
-    }
-  }, file);
+  const employeeData =
+    useEmployeeData && !employeeDataLoading
+      ? useEmployeeData.map((departmentData) => {
+          return { heading: departmentData.department, options: departmentData.employees };
+        })
+      : [];
 
   function onSelectEmployee(employee) {
     setSelectedEmployee(employee);
@@ -53,6 +49,21 @@ const Modal = (props) => {
     setFile(e.target.files[0]);
   }
 
+  useEffect(() => {
+    if (fileData.data) {
+      setUploadedFile(fileData.data?.data.files[0].fileStoreId);
+    }
+  }, [fileData.isSuccess]);
+
+  if (employeeDataLoading) {
+    return (
+      <PopUp>
+        <div className="popup-module">
+          <Loader />
+        </div>
+      </PopUp>
+    );
+  }
   return (
     <PopUp>
       <div className="popup-module">

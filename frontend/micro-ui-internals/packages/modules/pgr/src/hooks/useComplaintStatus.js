@@ -8,7 +8,7 @@ const useComplaintStatus = () => {
   useEffect(() => {
     let WorkflowService = null;
     (async () => {
-      WorkflowService = await Digit.WorkflowService.init();
+      WorkflowService = await Digit.WorkflowService.init("pb.amritsar");
       let applicationStatus = WorkflowService.BusinessServices[0].states
         .filter((state) => state.applicationStatus)
         .map((state) => ({
