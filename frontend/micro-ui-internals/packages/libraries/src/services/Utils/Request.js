@@ -5,7 +5,7 @@ Axios.interceptors.response.use(
   (res) => res,
   (er) => {
     console.log("-==-==-=-=-=-=-=-=-=-=-=2222222222222222222", er.response.status);
-    if (er.response.status == 403) window.location.href = "/";
+    if (er.response.status == 403 || er.response.status == 401) window.location.href = "/";
     if (er.response && er.response.data.Errors && er.response.data.Errors.length) {
       for (const error of er.response.data.Errors) {
         if (error.message.indexOf(`"code":"InvalidAccessTokenException"`) != -1) {

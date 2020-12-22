@@ -28,9 +28,11 @@ window.Digit.Customizations = { PGR: pgrCustomizations };
 
 //HOTFIX TOKEN
 
-const userType = "EMPLOYEE";
+const userType = sessionStorage.getItem("custom_user") || "EMPLOYEE";
 
-const token = "2e1d6975-1884-4323-acc4-7a9a262c76a2";
+const token = process.env[`REACT_APP_${userType}_TOKEN`];
+
+console.log(token);
 
 // COMMENT ABOVE BEFORE COMMIT OR PUSH OR DEPLOY
 

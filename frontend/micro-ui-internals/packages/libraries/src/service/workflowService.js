@@ -37,7 +37,7 @@ class WorkFlowService {
       return actions;
     };
 
-    this.getDetailsById = async ({ tenantId, id, moduleCode, role }) => {
+    this.getDetailsById = async (tenantId, id, moduleCode, role) => {
       console.log("getWorkflowDetails=====================>>>>>>>>", tenantId, id, moduleCode, role);
       const workflow = await this.getByBusinessId(tenantId, id);
       const businessServiceResponse = (await this.init(tenantId, moduleCode)).BusinessServices[0].states;
