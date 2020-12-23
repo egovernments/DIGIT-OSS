@@ -93,14 +93,20 @@ class PGRBaseService extends CoreService {
           ...useQuery([...args, config.cacheKey], () => func(...args), config),
           revalidate: () => client.invalidateQueries([...args, config.cacheKey]),
         };
-      return { ...useQuery(args, () => func(...args), config), revalidate: () => client.invalidateQueries(args) };
+      return {
+        ...useQuery(args, () => func(...args), config),
+        revalidate: () => {
+          console.log("**********8888888888888888888888888888*9", args);
+          client.invalidateQueries(args);
+        },
+      };
     } else return { ...useQuery(config.cacheKey, () => func(), config), revalidate: () => client.invalidateQueries(config.cacheKey) };
   };
 
   getWorkFlowDetailsById = (id, role = "CITIZEN") => {
     let tenantId = this.getTenantId();
     let moduleCode = this.moduleCode;
-    return this.useQuery(this._WorkFlowService.getDetailsById, [{ tenantId, id, moduleCode, role }]);
+    return this.useQuery(this._WorkFlowService.getDetailsById, [tenantId, id, moduleCode, role]);
   };
 
   useFileUpload = (file) => {

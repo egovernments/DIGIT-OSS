@@ -28,7 +28,7 @@ window.Digit.Customizations = { PGR: pgrCustomizations };
 
 //HOTFIX TOKEN
 
-const userType = "EMPLOYEE";
+const userType = sessionStorage.getItem("custom_user") || "EMPLOYEE";
 
 const token = "f444fd6a-c4fe-4760-af05-e7609f6e8ae9";
 
