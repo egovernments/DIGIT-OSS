@@ -51,6 +51,10 @@ const PropertyInformationForm = Loadable({
   loader: () => import("../Screens/PropertyEditForm"),
   loading: Loading
 });
+const ptAcknowledgment = Loadable({
+  loader: () => import("egov-ui-kit/common/propertyTax/PTAcknowledgementNew"),
+  loading: Loading
+});
 
 const ptAcknowledgment = Loadable({
   loader: () => import("egov-ui-kit/common/propertyTax/PTAcknowledgement"),

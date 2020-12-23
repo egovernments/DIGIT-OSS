@@ -68,7 +68,8 @@ import {
   //getImportantDates,
   renderPlotAndFloorDetails,
   removeAdhocIfDifferentFY,
-  getBusinessServiceNextAction
+  getBusinessServiceNextAction,
+  routeToAcknowledgement
 } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 import sortBy from "lodash/sortBy";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -1728,6 +1729,27 @@ class FormWizardDataEntry extends Component {
           )
         );
 
+        resetForm();
+      };
+      switch (propertyMethodAction) {
+        case "_update":
+          this.setState({
+            selected: index
+          });
+          routeToAcknowledgement("update","success",createPropertyResponse.Properties[0].propertyId,getTenantId(),createPropertyResponse.Properties[0].acknowldgementNumber)
+          break;
+        case "_create":
+          this.setState({
+            selected: index
+          });
+          // callToggleBarSnackbar(
+          //   "PT_PROPERTY_CREATED_SUCCESSFULLY",
+          //   "PropertyTax Created Successfully",
+          //   "success"
+          // );
+         routeToAcknowledgement("create","success",createPropertyResponse.Properties[0].propertyId,getTenantId(),createPropertyResponse.Properties[0].acknowldgementNumber)
+          break;
+        default:
       }
     }
   }
