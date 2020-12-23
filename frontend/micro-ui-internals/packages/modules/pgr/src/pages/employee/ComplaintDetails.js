@@ -104,13 +104,6 @@ export const ComplaintDetails = (props) => {
   //   setActionCalled(props.action);
   // }, [props.action]);
 
-  useEffect(() => {
-    console.log("state in current", fullscreen, imageZoom, toast, popup, displayMenu, selectedAction, assignResponse, loader, rerender);
-    return () => {
-      console.log("state in prev", fullscreen, imageZoom, toast, popup, displayMenu, selectedAction, assignResponse, loader, rerender);
-    };
-  });
-
   function zoomView() {
     setFullscreen(!fullscreen);
   }
@@ -153,6 +146,10 @@ export const ComplaintDetails = (props) => {
         setDisplayMenu(false);
         break;
       case "REJECT":
+        setPopup(true);
+        setDisplayMenu(false);
+        break;
+      case "REOPEN":
         setPopup(true);
         setDisplayMenu(false);
         break;
@@ -199,6 +196,11 @@ export const ComplaintDetails = (props) => {
     }
     return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
   };
+
+  console.log(
+    "actiosns=======================>",
+    workflowDetails.data.nextActions.map((action) => action.action)
+  );
 
   return (
     <React.Fragment>
