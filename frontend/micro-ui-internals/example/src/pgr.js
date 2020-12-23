@@ -1,4 +1,8 @@
+import SelectName from "./SelectName";
+import { config as complaintConfig } from "./complaintConfig";
+
 const pgrCustomizations = {
+  complaintConfig,
   getComplaintDetailsTableRows: ({ id, service, role }) => {
     if (role === "CITIZEN") {
       return {
@@ -18,4 +22,7 @@ const pgrCustomizations = {
   },
 };
 
-export default pgrCustomizations;
+const pgrComponents = {
+  SelectName: SelectName,
+};
+export { pgrCustomizations, pgrComponents };

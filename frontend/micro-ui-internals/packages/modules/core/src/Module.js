@@ -9,7 +9,6 @@ import { Body, Loader } from "@egovernments/digit-ui-react-components";
 import { DigitApp } from "./components/App";
 
 import getStore from "./redux/store";
-import { ComponentProvider } from "./context";
 
 const DigitUIWrapper = ({ stateCode }) => {
   const { isLoading, data: initData } = Digit.Hooks.useInitStore(stateCode);
@@ -32,16 +31,14 @@ const DigitUIWrapper = ({ stateCode }) => {
   );
 };
 
-export const DigitUI = ({ stateCode, registry }) => {
+export const DigitUI = ({ stateCode }) => {
   const userType = Digit.UserService.getType();
   const queryClient = new QueryClient();
 
   return (
     <div className={userType}>
       <QueryClientProvider client={queryClient}>
-        <ComponentProvider.Provider value={registry}>
-          <DigitUIWrapper stateCode={stateCode} />
-        </ComponentProvider.Provider>
+        <DigitUIWrapper stateCode={stateCode} />
       </QueryClientProvider>
     </div>
   );

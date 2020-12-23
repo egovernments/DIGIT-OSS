@@ -19,7 +19,7 @@ export const CreateComplaint = () => {
   const dispatch = useDispatch();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
   const [customConfig, setConfig] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_COMPLAINT_CONFIG, {});
-  const config = useMemo(() => merge(defaultConfig, customConfig), [customConfig]);
+  const config = useMemo(() => merge(defaultConfig, Digit.Customizations.PGR.complaintConfig), [Digit.Customizations.PGR.complaintConfig]);
 
   const goNext = () => {
     const currentPath = pathname.split("/").pop();

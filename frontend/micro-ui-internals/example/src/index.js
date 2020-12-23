@@ -14,13 +14,13 @@ import { config as complaintConfig } from "./complaintConfig";
 import Registry from "@egovernments/digit-ui-libraries/src/services/ComponentRegistry";
 import SelectName from "./SelectName";
 
-import pgrCustomizations from "./pgr";
+import { pgrCustomizations, pgrComponents } from "./pgr";
 
 const userInfo = { CITIZEN, EMPLOYEE, LME };
 
 initLibraries();
 const registry = new Registry({
-  SelectName: SelectName,
+  ...pgrComponents,
 });
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
@@ -45,7 +45,6 @@ window.Digit.SessionStorage.set("User", userDetails);
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
-window.Digit.SessionStorage.set("ComplaintConfig", complaintConfig);
 
 window.mdmsInitPre = ({ params, data }) => {
   console.log("mdms init pre", params, data);
