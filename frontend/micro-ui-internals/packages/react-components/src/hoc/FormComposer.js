@@ -13,7 +13,7 @@ import LabelFieldPair from "../atoms/LabelFieldPair";
 
 import { useTranslation } from "react-i18next";
 
-const FormComposer = (props) => {
+export const FormComposer = (props) => {
   const { register, handleSubmit } = useForm();
   const { t } = useTranslation();
 
@@ -81,5 +81,3 @@ const FormComposer = (props) => {
     </form>
   );
 };
-
-export default FormComposer;
