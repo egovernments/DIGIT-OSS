@@ -19,6 +19,8 @@ export const useStore = (defaultConfig, { deltaConfig, stateCode, cityCode, modu
 };
 
 export const useInitStore = (stateCode) => {
-  const { isLoading, error, isError, data } = useQuery(["initStore", stateCode], () => StoreService.digitInitData(stateCode));
+  const { isLoading, error, isError, data } = useQuery(["initStore", stateCode], () => StoreService.digitInitData(stateCode), {
+    staleTime: Infinity,
+  });
   return { isLoading, error, isError, data };
 };
