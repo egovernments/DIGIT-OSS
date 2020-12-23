@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Dropdown, RadioButtons } from "@egovernments/digit-ui-react-components";
+import { Dropdown } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
+import { FormComposer } from "../../../components/FormComposer";
 import useTenants from "../../../hooks/useTenants";
 
 // TODO: fetch data instead of hard coded

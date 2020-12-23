@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-react-components",
-  "version": "1.0.34",
+  "version": "1.0.38",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -27,7 +27,6 @@
     "microbundle-crl": "^0.13.10",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-i18next": "^11.7.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1"
   },
@@ -35,6 +34,8 @@
     "dist"
   ],
   "dependencies": {
+    "react-hook-form": "^6.7.0",
+    "react-i18next": "^11.7.3",
     "react-table": "^7.6.1"
   }
 }
