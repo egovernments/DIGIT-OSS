@@ -179,9 +179,6 @@ export const CreateComplaint = ({ parentUrl }) => {
           type: "textarea",
           populators: {
             name: "landmark",
-            validation: {
-              required: true,
-            },
           },
         },
       ],
