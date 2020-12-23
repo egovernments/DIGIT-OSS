@@ -14,8 +14,9 @@ import { useTranslation } from "react-i18next";
 import useEmployeeFilter from "../hooks/useEmployeeFilter";
 const Modal = (props) => {
   const roles = props.employeeRoles.filter((role) => role.action === props.selectedAction);
+  const { complaintDetails } = props;
   console.log("modalllll", roles);
-  const useEmployeeData = useEmployeeFilter("pb.amritsar", roles[0].roles);
+  const useEmployeeData = useEmployeeFilter("pb.amritsar", roles[0].roles, complaintDetails);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [comments, setComments] = useState(null);
   const [file, setFile] = useState(null);

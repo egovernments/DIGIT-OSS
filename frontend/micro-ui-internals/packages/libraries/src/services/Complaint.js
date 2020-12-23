@@ -88,11 +88,8 @@ export const Complaint = {
     return response;
   },
 
-  assign: async (action, employeeData, comments, uploadedDocument) => {
+  assign: async (complaintDetails, action, employeeData, comments, uploadedDocument) => {
     console.log("assign complaint srvice acall", action, employeeData, comments, uploadedDocument);
-
-    const complaintDetails = Digit.SessionStorage.get("complaintDetails");
-
     complaintDetails.workflow.action = action;
     complaintDetails.workflow.assignes = employeeData ? [employeeData.uuid] : null;
     complaintDetails.workflow.comments = comments;
