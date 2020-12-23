@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import merge from "lodash.merge";
 import { useDispatch } from "react-redux";
 import { createComplaint } from "../../../redux/actions/index";
+import { PGR_CITIZEN_COMPLAINT_CONFIG, PGR_CITIZEN_CREATE_COMPLAINT } from "../../../constants/Citizen";
 
 import { ComponentProvider } from "@egovernments/digit-ui-module-core/src/context";
 
@@ -16,10 +17,9 @@ export const CreateComplaint = () => {
   const history = useHistory();
   const registry = useContext(ComponentProvider);
   const dispatch = useDispatch();
-  const customConfig = Digit.Customizations?.PGR?.complaintConfig || {};
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
+  const [customConfig, setConfig] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_COMPLAINT_CONFIG, {});
   const config = useMemo(() => merge(defaultConfig, customConfig), [customConfig]);
-  const __initParams = Digit.SessionStorage.get("PGR_CREATE_COMPLAINT_PARAMS");
-  const [params, setParams] = useState(__initParams ? __initParams : {});
 
   const goNext = () => {
     const currentPath = pathname.split("/").pop();
@@ -29,30 +29,36 @@ export const CreateComplaint = () => {
   };
 
   const submitComplaint = async () => {
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
-
     // submit complaint through actions
-    await dispatch(createComplaint(params));
+    const { city_complaint, locality_complaint, uploadedImages, ...values } = params;
+    const { code: cityCode, name: city } = city_complaint;
+    const { code: localityCode, name: localityName } = locality_complaint;
+    const _uploadImages = uploadedImages.map((url) => ({
+      documentType: "PHOTO",
+      fileStore: url,
+      documentUid: "",
+      additionalDetails: {},
+    }));
 
-    //Empty Session Storage
-    Digit.SessionStorage.set("complaintType", null);
-    Digit.SessionStorage.set("subType", null);
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
-    Digit.SessionStorage.set("PGR_CREATE_PINCODE", null);
-    Digit.SessionStorage.set("city_complaint", null);
-    Digit.SessionStorage.set("selected_localities", null);
-    Digit.SessionStorage.set("locality_complaint", null);
-    Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
-    Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
-    Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
+    const data = {
+      ...values,
+      cityCode,
+      city,
+      district: city,
+      region: city,
+      localityCode,
+      localityName,
+      state: "Punjab",
+      uploadedImages: _uploadImages,
+    };
 
+    await dispatch(createComplaint(data));
+    clearParams();
     history.push(`${path}/response`);
   };
 
   const handleSelect = (data) => {
     setParams({ ...params, ...data });
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    console.log("form params", params);
     goNext();
   };
 
@@ -67,7 +73,7 @@ export const CreateComplaint = () => {
         const Component = typeof component === "string" ? registry.getComponent(component) : component;
         return (
           <Route path={`${path}/${route}`} key={index}>
-            <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} t={t} />
+            <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} />
           </Route>
         );
       })}

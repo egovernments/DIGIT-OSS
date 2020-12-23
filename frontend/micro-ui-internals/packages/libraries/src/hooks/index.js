@@ -1,5 +1,6 @@
 import useWorkflowDetails from "./workflow";
+import useSessionStorage from "./useSessionStorage";
 
-const Hooks = { useWorkflowDetails };
+const Hooks = { useSessionStorage, useWorkflowDetails };
 
 export default Hooks;

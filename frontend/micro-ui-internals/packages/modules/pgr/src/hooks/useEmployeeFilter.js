@@ -1,7 +1,7 @@
 import { set } from "lodash";
 import React, { useState, useEffect } from "react";
 
-const useEmployeeFilter = (cityCode, roles) => {
+const useEmployeeFilter = (cityCode, roles, complaintDetails) => {
   const [employeeDetails, setEmployeeDetails] = useState(null);
 
   useEffect(async () => {
@@ -9,9 +9,9 @@ const useEmployeeFilter = (cityCode, roles) => {
     const searchResponse = await Digit.PGRService.employeeSearch(cityCode, roles);
 
     const serviceDefs = Digit.SessionStorage.get("serviceDefs");
-    const complaintDetails = Digit.SessionStorage.get("complaintDetails");
     const serviceCode = complaintDetails.service.serviceCode;
-    const department = serviceDefs.find((def) => def.serviceCode === serviceCode).map((service) => service.department);
+    const service = serviceDefs.find((def) => def.serviceCode === serviceCode);
+    const department = service?.department;
     const employees = searchResponse.Employees.filter((employee) =>
       employee.assignments.map((assignment) => assignment.department).includes(department)
     );
