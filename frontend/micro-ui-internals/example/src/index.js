@@ -23,7 +23,7 @@ const registry = new Registry({
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
-const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
+const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
 const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 
