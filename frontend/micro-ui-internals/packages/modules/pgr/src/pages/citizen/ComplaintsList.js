@@ -8,7 +8,7 @@ import Complaint from "../../components/Complaint";
 import { useComplaintsListByMobile } from "../../hooks/useComplaintList";
 
 export const ComplaintsList = (props) => {
-  const User = Digit.SessionStorage.get("User");
+  const User = Digit.UserService.getUser();
   const mobileNumber = User.mobileNumber || User?.info?.mobileNumber || User?.info?.userInfo?.mobileNumber;
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();

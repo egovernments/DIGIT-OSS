@@ -1,30 +1,30 @@
-.icon-bg-secondary{
-    @apply flex bg-secondary w-12 h-12;
+.icon-bg-secondary {
+  @apply flex bg-secondary w-12 h-12;
 
-    svg{
-        margin: auto;
-        @apply w-6 h-6;
-    }
+  svg {
+    margin: auto;
+    @apply w-6 h-6;
+  }
 }
 
-.heading-m{
-    @apply font-bold text-text-primary text-heading-m ml-md pt-sm;
+.heading-m {
+  @apply font-bold text-text-primary text-heading-m ml-md pt-sm;
 }
 
-.break-line{
-    @apply block h-0 w-full border border-border my-lg
+.break-line {
+  @apply block h-0 w-full border border-border my-lg;
 }
 
-@screen dt{
-    .ground-container{
-        margin-bottom: 56px;
-        @apply p-md ;
-    }   
-    .heading-m{
-        @apply text-heading-m-dt;
-    }
-    .break-line{
-        margin-top: 40px;
-        margin-bottom: 40px;
-    }
+@screen dt {
+  .ground-container {
+    margin-bottom: 56px;
+    @apply p-md;
+  }
+  .heading-m {
+    @apply text-heading-m-dt;
+  }
+  .break-line {
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
 }

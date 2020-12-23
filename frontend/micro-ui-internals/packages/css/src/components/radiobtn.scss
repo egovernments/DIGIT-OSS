@@ -1,8 +1,8 @@
 .radio-wrap {
   @apply my-sm block leading-10 mb-lg;
 
-  div{
-    @apply block mb-md
+  div {
+    @apply block mb-md;
   }
 
   .radio-btn-wrap {
@@ -17,7 +17,7 @@
     @apply h-10 w-10 border-2 border-input-border border-solid rounded-full block;
   }
 
-  label{
+  label {
     @apply text-text-primary text-form-field ml-md;
   }
 
@@ -44,5 +44,4 @@
   .radio-btn-wrap input:checked ~ .radio-btn-checkmark:after {
     @apply block bg-primary-main h-5 w-5 rounded-full absolute top-10 left-10;
   }
-
 }
