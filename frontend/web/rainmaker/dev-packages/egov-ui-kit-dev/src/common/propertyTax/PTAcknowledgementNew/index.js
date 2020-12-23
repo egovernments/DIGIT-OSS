@@ -1,22 +1,16 @@
 import { Button, Card } from "components";
-import DownloadPrintButton from "egov-ui-framework/ui-molecules/DownloadPrintButton";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
-import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
-import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
-import { formWizardConstants, getPurpose, PROPERTY_FORM_PURPOSE, routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getPurpose, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import React from "react";
 import { connect } from "react-redux";
 import store from "ui-redux/store";
 import PTHeader from "../../common/PTHeader";
-import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
-import PTInformation from "../AssessmentList/components/PTInformation";
 import "./index.css";
 
 class PTAcknowledgement extends React.Component {
@@ -28,64 +22,20 @@ class PTAcknowledgement extends React.Component {
   };
 
   componentDidMount = () => {
-    const { fetchProperties, location } = this.props;
-    const { search } = location;
-    const propertyId = getQueryValue(search, "propertyId");
-    const tenantId = getQueryValue(search, "tenantId");
-    fetchProperties([
-      { key: "propertyIds", value: propertyId },
-      { key: "tenantId", value: tenantId },
-    ]);
-    this.setState({ propertyId: propertyId });
-    loadUlbLogo(tenantId);
-  };
-  onDCBClick = () => {
     const { location } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
-    store.dispatch(setRoute(`/property-tax/demand-and-collection?propertyId=${propertyId}`));
+    const tenantId = getQueryValue(search, "tenantId");
+
+    this.setState({ propertyId: propertyId });
+    loadUlbLogo(tenantId);
   };
+  
   onGoHomeClick = () => {
     process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/pt-mutation/propertySearch")) : store.dispatch(setRoute("/property-tax"));
   };
-  download() {
-    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
-    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
-  }
-  print() {
-    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
-    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, 'print');
-  }
-  onAssessPayClick = () => {
-    const propertyId = getQueryArg(window.location.href, "propertyId");
-    const tenant = getQueryArg(window.location.href, "tenantId");
-    routeToCommonPay(propertyId, tenant);
-    // store.dispatch(
-    //   setRoute(
-    //     `/egov-common/pay?consumerCode=${propertyId}&tenantId=${tenant}&businessService=PT`
-    //   )
-    // );
-  };
 
-  downloadAcknowledgementForm = () => {
-    const { common, app = {}, propertiesById } = this.props;
-    const { propertyId } = this.state;
-    const convertedResponse = [propertiesById[propertyId]];
-    const { address, propertyDetails } = convertedResponse[0];
-    const { owners } = propertyDetails[0];
-    const { localizationLabels } = app;
-    const { cities, generalMDMSDataById } = common;
-    const header = getHeaderDetails(convertedResponse[0], cities, localizationLabels, true);
-    let receiptDetails = {};
-    receiptDetails = {
-      propertyDetails,
-      address,
-      owners,
-      header,
-      propertyId,
-    };
-    AcknowledgementReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, null);
-  };
+  
   getFetchBillResponse = async (propertyId, tenantId) => {
     let showPay = false;
     let fetchBill = true;
@@ -108,11 +58,6 @@ class PTAcknowledgement extends React.Component {
   render() {
     const {
       acknowledgeType = "success",
-      messageHeader = "",
-      message = "",
-      receiptHeader = "PT_APPLICATION_NO_LABEL",
-      receiptNo = "",
-      generalMDMSDataById,
       propertiesById,
     } = this.props;
     const purpose = getPurpose();
@@ -122,8 +67,6 @@ class PTAcknowledgement extends React.Component {
     const propertyId = getQueryArg(window.location.href, "propertyId") || "";
     const secondNumber = getQueryArg(window.location.href, "secondNumber") || "";
     const properties = propertiesById[propertyId];
-    let downloadMenu = [];
-    let printMenu = [];
     if (
       (purpose == PROPERTY_FORM_PURPOSE.ASSESS || purpose == PROPERTY_FORM_PURPOSE.REASSESS) &&
       !this.state.fetchBill &&
@@ -132,29 +75,7 @@ class PTAcknowledgement extends React.Component {
     ) {
       this.getFetchBillResponse(propertyId, tenantId);
     }
-    let applicationDownloadObject = {
-      label: { labelName: "Application", labelKey: "PT_APPLICATION" },
-      link: () => {
-        // generatePdfFromDiv("download", propertyId, "#property-review-form");
-        this.download();
-        //this.downloadAcknowledgementForm();
-        console.log("Download");
-      },
-      leftIcon: "assignment",
-    };
 
-    let tlCertificatePrintObject = {
-      label: { labelName: "Application", labelKey: "PT_APPLICATION" },
-      link: () => {
-        this.print();
-        // generatePdfFromDiv("print", propertyId, "#property-review-form");
-        //console.log("Print");
-      },
-      leftIcon: "book",
-    };
-
-    downloadMenu.push(applicationDownloadObject);
-    printMenu.push(tlCertificatePrintObject);
     let icon;
     let iconColor;
     if (acknowledgeType == "success") {
@@ -173,13 +94,10 @@ class PTAcknowledgement extends React.Component {
     let Button1 = { name: "", onClick: "", visibility: false };
     let Button2 = { name: "", onClick: "", visibility: false };
     let Button3 = { name: "", onClick: "", visibility: false };
-    let downloadButton = { menu: downloadMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
-    let printButton = { menu: printMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
     let statusIcon = {};
     let ptIDLabel = {};
     if (purpose === PROPERTY_FORM_PURPOSE.CREATE && status === "success") {
       ptHeader = {
-        // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "New Property",
         labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
@@ -205,14 +123,9 @@ class PTAcknowledgement extends React.Component {
         visibility: true,
       };
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
-      Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
-      Button3 = { name: "PT_ADD_DEMAND", buttonClick: this.onDCBClick, visibility:   process.env.REACT_APP_NAME === "Citizen" ?false:true };
-
-      // downloadButton={menu:downloadMenu,visibility:true} ;
-      // printButton={menu:printMenu,visibility:true} ;
+     
     } else if (purpose === PROPERTY_FORM_PURPOSE.UPDATE && status === "success") {
       ptHeader = {
-        // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "New Property",
         labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
@@ -238,12 +151,9 @@ class PTAcknowledgement extends React.Component {
         visibility: true,
       };
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
-      Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
-      // downloadButton={menu:downloadMenu,visibility:true} ;
-      // printButton={menu:printMenu,visibility:true} ;
+      
     } else if (purpose === PROPERTY_FORM_PURPOSE.CREATE && status === "failure") {
       ptHeader = {
-        // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "New Property",
         labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
@@ -267,12 +177,8 @@ class PTAcknowledgement extends React.Component {
       };
 
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
-      Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
-      // downloadButton={menu:downloadMenu,visibility:false} ;
-      // printButton={menu:printMenu,visibility:false} ;
     } else if (purpose === PROPERTY_FORM_PURPOSE.UPDATE && status === "failure") {
       ptHeader = {
-        // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "New Property",
         labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
@@ -296,12 +202,8 @@ class PTAcknowledgement extends React.Component {
       };
 
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
-      Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
-      // downloadButton={menu:downloadMenu,visibility:false} ;
-      // printButton={menu:printMenu,visibility:false} ;
     } else if (purpose === PROPERTY_FORM_PURPOSE.ASSESS && status === "success") {
       ptHeader = {
-        // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "Property Assessment",
         labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
@@ -323,13 +225,9 @@ class PTAcknowledgement extends React.Component {
         labelName: "A notification regarding property assessment has been sent to property owner at registered Mobile No.",
         labelKey: "PT_PROPERTY_ASSESSMENT_SUCCESS_SUB_MSG",
       };
-      Button1 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: this.state.showPay };
-      Button2 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
-      // downloadButton={menu:downloadMenu,visibility:true} ;
-      // printButton={menu:printMenu,visibility:true} ;
+      Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
     } else if (purpose === PROPERTY_FORM_PURPOSE.ASSESS && status === "failure") {
       ptHeader = {
-        // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "Property Assessment",
         labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
@@ -352,12 +250,8 @@ class PTAcknowledgement extends React.Component {
         labelKey: "PT_PROPERTY_ASSESSMENT_FAILURE_SUB_MSG",
       };
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
-      Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
-      // downloadButton={menu:downloadMenu,visibility:false} ;
-      // printButton={menu:printMenu,visibility:false} ;
     } else if (purpose === PROPERTY_FORM_PURPOSE.REASSESS && status === "success") {
       ptHeader = {
-        // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "Re-Assess Property",
         labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
@@ -379,13 +273,9 @@ class PTAcknowledgement extends React.Component {
         labelName: "A notification regarding property assessment has been sent to property owner at registered Mobile No.",
         labelKey: "PT_PROPERTY_RE_ASSESSMENT_SUCCESS_SUB_MSG",
       };
-      Button1 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: this.state.showPay };
-      Button2 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
-      // downloadButton={menu:downloadMenu,visibility:false} ;
-      // printButton={menu:printMenu,visibility:false} ;
+      Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
     } else if (purpose === PROPERTY_FORM_PURPOSE.REASSESS && status === "failure") {
       ptHeader = {
-        // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "Re-Assess Property",
         labelKey: formWizardConstants[purpose].header,
         dynamicArray: [financialYear],
@@ -408,25 +298,11 @@ class PTAcknowledgement extends React.Component {
         labelKey: "PT_PROPERTY_RE_ASSESSMENT_FAILURE_SUB_MSG",
       };
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
-      Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
-      // downloadButton={menu:downloadMenu,visibility:false} ;
-      // printButton={menu:printMenu,visibility:false} ;
     }
     return (
       <div>
         <div className="mainContainer flex-container">
           <PTHeader header={ptHeader && ptHeader.labelKey} subHeaderTitle="PT_PROPERTY_ID" subHeaderValue={propertyId} />
-          {/* <Label
-          label={ptHeader&&ptHeader.labelKey}
-          color="rgba(0, 0, 0, 0.87)"
-          fontSize="22px"
-          fontWeight="400"
-          fontFamily="Roboto"
-          dynamicArray={ptHeader.dynamicArray}
-          lineHeight="1.35417em"
-          className="ptHeader"
-          
-        /> */}
         </div>
         <div className="ptCards">
           <Card
@@ -445,8 +321,6 @@ class PTAcknowledgement extends React.Component {
                       </i>
                     </FloatingActionButton>
                   </div>
-                  {/* <div>Property Assessed Successfully</div>
-              <div>A notification regarding property assessment has been sent to property owner at registered mobile No.</div> */}
                   <div className="ack-body" id="custom-atoms-body">
                     <h1 className="MuiTypography-root-8 MuiTypography-headline-13" id="material-ui-header">
                       <span id="custom-containers-key">
@@ -470,7 +344,6 @@ class PTAcknowledgement extends React.Component {
                     </div>
                   </div>
                   <div className="ack-text" id="custom-atoms-tail">
-                    {/* {receiptNo&&<h1  className="MuiTypography-root-8 MuiTypography-headline-13" id="material-ui-text" style={{fontSize: '16px' ,fontWeight:"400" ,color: 'rgba(0, 0, 0, 0.6)'}}  > */}
                     <h1
                       className="MuiTypography-root-8 MuiTypography-headline-13"
                       id="material-ui-text"
@@ -534,14 +407,6 @@ class PTAcknowledgement extends React.Component {
           />
         </div>
         <div className="print-application-conainer" style={{ position: "fixed", opacity: 0, zIndex: -9999, height: "100%" }}>
- {/*          {properties && (
-            <PTInformation
-              properties={properties}
-              generalMDMSDataById={generalMDMSDataById}
-              documentsUploaded={this.props.documentsUploaded}
-              totalBillAmountDue={this.props.totalBillAmountDue}
-            />
-          )} */}
         </div>
       </div>
     );
@@ -554,29 +419,20 @@ const mapStateToProps = (state, ownProps) => {
   const propertyId = getQueryValue(search, "propertyId");
   const { screenConfiguration, common, app, properties } = state || {};
   let { propertiesById, totalBillAmountDue = 0, Assessments = [] } = properties;
-  if (Assessments.length == 0) {
-    totalBillAmountDue = 0;
-  }
-  const selPropertyDetails = propertiesById[propertyId] || {};
-  const { documentsUploaded } = selPropertyDetails || [];
   const { generalMDMSDataById } = common;
   const purpose = getQueryArg(window.location.href, "purpose");
   const { preparedFinalObject } = screenConfiguration;
-  const { UlbLogoForPdf = '' } = preparedFinalObject;
   return {
-    propertiesById,
-    selPropertyDetails,
+    propertiesById,    
     common,
     app,
-    generalMDMSDataById,
-    documentsUploaded,
-    totalBillAmountDue
+    generalMDMSDataById,     
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
+    //fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
   };
 };
 
