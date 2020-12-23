@@ -7,6 +7,7 @@ import { PGRReducers } from "@egovernments/digit-ui-module-pgr/src/Module";
 import { Body, Loader } from "@egovernments/digit-ui-react-components";
 
 import { DigitApp } from "./components/App";
+import { ComponentProvider } from "./context";
 
 import getStore from "./redux/store";
 
@@ -31,14 +32,16 @@ const DigitUIWrapper = ({ stateCode }) => {
   );
 };
 
-export const DigitUI = ({ stateCode }) => {
+export const DigitUI = ({ stateCode, registry }) => {
   const userType = Digit.UserService.getType();
   const queryClient = new QueryClient();
 
   return (
     <div className={userType}>
       <QueryClientProvider client={queryClient}>
-        <DigitUIWrapper stateCode={stateCode} />
+        <ComponentProvider.Provider value={registry}>
+          <DigitUIWrapper stateCode={stateCode} />
+        </ComponentProvider.Provider>
       </QueryClientProvider>
     </div>
   );
