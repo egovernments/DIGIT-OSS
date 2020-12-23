@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-react-components",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -32,7 +32,8 @@
     "react-scripts": "^4.0.1"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/**/*.js"
   ],
   "dependencies": {
     "react-table": "^7.6.1"
