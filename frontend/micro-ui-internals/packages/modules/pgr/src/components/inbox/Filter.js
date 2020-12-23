@@ -18,7 +18,7 @@ import useServiceDefs from "../../hooks/useServiceDefs";
 
 const Filter = (props) => {
   // let userType = Digit.SessionStorage.get("userType");
-  const { uuid } = Digit.UserService.getUser().info;
+  let { uuid } = Digit.UserService.getUser().info;
   console.log("user in filter uuid--------->:", uuid);
 
   const { t } = useTranslation();
@@ -46,10 +46,10 @@ const Filter = (props) => {
   let serviceDefs = useServiceDefs();
 
   const onRadioChange = (value) => {
+    console.log("here---------------------------");
     setSelectedAssigned(value);
-    if (value.code === "ASSIGNED_TO_ME") {
-      setWfFilters({ ...wfFilters, uuid: [{ code: uuid }] });
-    }
+    uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
+    setWfFilters({ ...wfFilters, uuid: [{ code: uuid }] });
   };
 
   useEffect(() => {
@@ -96,17 +96,24 @@ const Filter = (props) => {
     getPendingCount();
   }, [complaintStatus.length]);
 
+  const ifExists = (list, key) => {
+    return list.filter((object) => object.code === key.code).length;
+  };
+
   function complaintType(_type) {
     const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
-    setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
+    if (!ifExists(pgrfilters.serviceCode, type)) {
+      setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
+    }
   }
 
   function onSelectLocality(value, type) {
-    setPgrFilters({ ...pgrfilters, locality: [...pgrfilters.locality, value] });
+    if (!ifExists(pgrfilters.locality, value)) {
+      setPgrFilters({ ...pgrfilters, locality: [...pgrfilters.locality, value] });
+    }
   }
 
   useEffect(() => {
-    console.log("pgrfilters:", pgrfilters.serviceCode);
     if (pgrfilters.serviceCode.length > 1) {
       setSelectedComplaintType(`${pgrfilters.serviceCode.length} selected`);
     } else {
@@ -154,7 +161,6 @@ const Filter = (props) => {
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
-
       {console.log("options heiaisndao", options)}
       <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />
       <div className="tag-container">

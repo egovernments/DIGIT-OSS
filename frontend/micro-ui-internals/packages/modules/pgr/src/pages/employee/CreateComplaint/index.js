@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardHeader, CardSubHeader, CardLabel, TextInput, Dropdown } from "@egovernments/digit-ui-react-components";
-import { FormComposer } from "@egovernments/digit-ui-react-components";
-import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
+import { Dropdown } from "@egovernments/digit-ui-react-components";
+import { useRouteMatch, useHistory } from "react-router-dom";
 
+import { FormComposer } from "../../../components/FormComposer";
 import useComplaintTypes from "../../../hooks/useComplaintTypes";
 import useTenants from "../../../hooks/useTenants";
 import { createComplaint } from "../../../redux/actions/index";
@@ -180,9 +180,6 @@ export const CreateComplaint = ({ parentUrl }) => {
           type: "textarea",
           populators: {
             name: "landmark",
-            validation: {
-              required: true,
-            },
           },
         },
       ],

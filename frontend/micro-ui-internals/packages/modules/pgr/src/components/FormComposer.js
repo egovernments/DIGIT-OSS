@@ -1,15 +1,17 @@
 import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import BreakLine from "../atoms/BreakLine";
-import Card from "../atoms/Card";
-import CardLabel from "../atoms/CardLabel";
-import CardSubHeader from "../atoms/CardSubHeader";
-import CardSectionHeader from "../atoms/CardSectionHeader";
-import TextArea from "../atoms/TextArea";
-import TextInput from "../atoms/TextInput";
-import ActionBar from "../atoms/ActionBar";
-import SubmitBar from "../atoms/SubmitBar";
-import LabelFieldPair from "../atoms/LabelFieldPair";
+import {
+  BreakLine,
+  Card,
+  CardLabel,
+  CardSubHeader,
+  CardSectionHeader,
+  TextArea,
+  TextInput,
+  ActionBar,
+  SubmitBar,
+  LabelFieldPair,
+} from "@egovernments/digit-ui-react-components";
 
 import { useTranslation } from "react-i18next";
 
