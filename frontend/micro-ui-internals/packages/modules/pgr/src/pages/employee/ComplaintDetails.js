@@ -32,6 +32,7 @@ import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import useComplaintDetails from "../../hooks/useComplaintDetails";
+import { isError } from "react-query";
 
 const MapView = (props) => {
   return (
@@ -79,28 +80,36 @@ export const ComplaintDetails = (props) => {
   // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
   const tenantId = "pb.amritsar";
-  const { isLoading, complaintDetails } = useComplaintDetails({ tenantId, id });
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, role: "EMPLOYEE" });
+  const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = useComplaintDetails({ tenantId, id });
+  const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, moduleCode: "PGR", role: "EMPLOYEE" });
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [assignResponse, setAssignResponse] = useState(null);
+  const [loader, setLoader] = useState(false);
   const [rerender, setRerender] = useState(1);
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
     setPopup(true);
   }
-  useEffect(() => {
-    (async () => {
-      const assignWorkflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
-      console.log("aassign", assignWorkflow);
-    })();
-  }, [complaintDetails]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const assignWorkflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
+  //     console.log("aassign", assignWorkflow);
+  //   })();
+  // }, [complaintDetails]);
   // useEffect(() => {
   //   console.log("action", props.action);
   //   setActionCalled(props.action);
   // }, [props.action]);
+
+  useEffect(() => {
+    console.log("state in current", fullscreen, imageZoom, toast, popup, displayMenu, selectedAction, assignResponse, loader, rerender);
+    return () => {
+      console.log("state in prev", fullscreen, imageZoom, toast, popup, displayMenu, selectedAction, assignResponse, loader, rerender);
+    };
+  });
 
   function zoomView() {
     setFullscreen(!fullscreen);
@@ -159,6 +168,10 @@ export const ComplaintDetails = (props) => {
     console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
+    setLoader(true);
+    await workflowDetails.revalidate();
+    await revalidateComplaintDetails;
+    setLoader(false);
     setRerender(rerender + 1);
     setTimeout(() => setToast(false), 10000);
   }
@@ -167,9 +180,11 @@ export const ComplaintDetails = (props) => {
     setToast(false);
   }
 
-  if (isLoading) {
+  if (isLoading || workflowDetails.isLoading || loader) {
     return <Loader />;
   }
+
+  if (workflowDetails.isError) return <React.Fragment>{workflowDetails.error}</React.Fragment>;
 
   const getTimelineCaptions = (checkpoint) => {
     console.log("tl", checkpoint);

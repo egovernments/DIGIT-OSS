@@ -35,11 +35,12 @@ const Modal = (props) => {
   //   }, [file]);
 
   useEffect(async () => {
+    debugger;
     if (file) {
       const response = await Digit.UploadServices.Filestorage(file);
       setUploadedFile(response.data.files[0].fileStoreId);
     }
-  }, file);
+  }, [file]);
 
   function onSelectEmployee(employee) {
     setSelectedEmployee(employee);
@@ -50,6 +51,7 @@ const Modal = (props) => {
   }
 
   function selectfile(e) {
+    debugger;
     setFile(e.target.files[0]);
   }
 
