@@ -32,7 +32,7 @@ class PTAcknowledgement extends React.Component {
   };
   
   onGoHomeClick = () => {
-    process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/pt-mutation/propertySearch")) : store.dispatch(setRoute("/property-tax"));
+    process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/property-tax/search-property")) : store.dispatch(setRoute("/property-tax"));
   };
 
   
