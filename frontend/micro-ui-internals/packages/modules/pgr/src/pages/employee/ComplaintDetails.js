@@ -220,6 +220,7 @@ export const ComplaintDetails = (props) => {
         {workflowDetails.isLoading && <Loader />}
         {!workflowDetails.isLoading && (
           <React.Fragment>
+            {console.log("===============|", workflowDetails)}
             {workflowDetails.data.timeline && workflowDetails.data.timeline.length === 1 ? (
               <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails.data.timeline[0].status)} />
             ) : (
