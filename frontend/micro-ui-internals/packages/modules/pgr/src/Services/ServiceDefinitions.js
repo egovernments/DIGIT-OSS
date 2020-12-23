@@ -29,7 +29,7 @@ class ServiceDefinitions extends CoreService {
 
   getMenu = async (stateCode, t) => {
     var Menu = [];
-    const response = await get(stateCode);
+    const response = await this.get(stateCode);
     await Promise.all(
       response.map((def) => {
         if (!Menu.find((e) => e.key === def.menuPath)) {
@@ -49,7 +49,7 @@ class ServiceDefinitions extends CoreService {
   };
 
   getSubMenu = async (stateCode, selectedType, t) => {
-    const response = await get(stateCode);
+    const response = await this.get(stateCode);
     return response
       .filter((def) => def.menuPath === selectedType.key)
       .map((id) => ({

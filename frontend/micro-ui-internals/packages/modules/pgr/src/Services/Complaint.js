@@ -1,4 +1,4 @@
-import { CoreService } from "@egovernments/digit-ui-libraries/src/service/coreService";
+import { CoreService } from "@egovernments/digit-ui-libraries";
 
 class Complaint extends CoreService {
   constructor() {
@@ -23,7 +23,7 @@ class Complaint extends CoreService {
     mobileNumber,
     name,
   }) => {
-    var data = this._userType
+    var data = this._userType()
       ? {
           service: {
             citizen: {
@@ -35,7 +35,7 @@ class Complaint extends CoreService {
                   id: null,
                   name: "Citizen",
                   code: "CITIZEN",
-                  tenantId: this.employeeTenantId,
+                  tenantId: this.employeeTenantId(),
                 },
               ],
               tenantId: this.employeeTenantId,
@@ -97,6 +97,7 @@ class Complaint extends CoreService {
 
   assign = async (complaintDetails, action, employeeData, comments, uploadedDocument) => {
     console.log("assign complaint srvice acall", action, employeeData, comments, uploadedDocument);
+    debugger;
     complaintDetails.workflow.action = action;
     complaintDetails.workflow.assignes = employeeData ? [employeeData.uuid] : null;
     complaintDetails.workflow.comments = comments;
@@ -110,9 +111,13 @@ class Complaint extends CoreService {
       : null;
 
     console.log("assign complaintg whole call", complaintDetails);
-
-    const response = await this._module.update(complaintDetails, this.employeeTenantId);
+    debugger;
+    const response = await this._module.update(complaintDetails, this.employeeTenantId());
     console.log(response);
     return response;
   };
 }
+
+const ComplaintObject = new Complaint();
+
+export const getComplaint = () => ComplaintObject;

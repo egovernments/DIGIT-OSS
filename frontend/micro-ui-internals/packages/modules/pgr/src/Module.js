@@ -10,9 +10,18 @@ import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
 import { getI18n } from "react-i18next";
 import { fetchBusinessServiceByTenant } from "./redux/actions";
-import { usePGRService } from "./Services";
+import { usePGRService } from "./Services/index";
+
 export const PGRReducers = getRootReducer;
 export const pgrService = usePGRService();
+
+// const PGRLibraries = {
+//   pgrService: usePGRService(),
+//   getComplaint: getComplaint()
+// }
+// initialize local libraries
+// window.Digit["PGRLibraries"] = { ...window.Digit["PGRLibraries"], ...PGRLibraries };
+
 export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode, userType, tenants }) => {
   const { path } = useRouteMatch();
   const state = useSelector((state) => state["pgr"]);

@@ -6,9 +6,10 @@ const useComplaintTypes = ({ stateCode }) => {
   const [complaintTypes, setComplaintTypes] = useState(null);
   const { t } = useTranslation();
 
+  const serviceDefinitions = getServiceDefinitions();
   useEffect(() => {
     (async () => {
-      const res = await getServiceDefinitions.getMenu(stateCode, t);
+      const res = await serviceDefinitions.getMenu(stateCode, t);
       let menu = res.filter((o) => o.key !== "");
       menu.push({ key: "Others", name: "Others" });
       setComplaintTypes(menu);

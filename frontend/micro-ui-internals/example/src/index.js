@@ -30,7 +30,7 @@ window.Digit.Customizations = { PGR: pgrCustomizations };
 
 const userType = "EMPLOYEE";
 
-const token = "2e1d6975-1884-4323-acc4-7a9a262c76a2";
+const token = "f444fd6a-c4fe-4760-af05-e7609f6e8ae9";
 
 // COMMENT ABOVE BEFORE COMMIT OR PUSH OR DEPLOY
 

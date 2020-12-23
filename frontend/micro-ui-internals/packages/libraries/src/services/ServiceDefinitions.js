@@ -46,7 +46,7 @@ export const GetServiceDefinitions = {
   },
 
   getSubMenu: (selectedType, t) => {
-    return Storage.get("serviceDefinitions")
+    return Digit.SessionStorage.get("serviceDefinitions")
       .filter((def) => def.menuPath === selectedType.key)
       .map((id) => ({
         key: id.serviceCode,

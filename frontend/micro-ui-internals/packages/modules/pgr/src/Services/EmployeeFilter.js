@@ -1,4 +1,4 @@
-import CoreService from "@egovernments/digit-ui-libraries";
+import { CoreService } from "@egovernments/digit-ui-libraries";
 import { getServiceDefinitions } from "./ServiceDefinitions";
 
 class EmployeeFilter extends CoreService {

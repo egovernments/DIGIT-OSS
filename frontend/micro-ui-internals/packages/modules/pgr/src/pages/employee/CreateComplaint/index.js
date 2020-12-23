@@ -8,6 +8,7 @@ import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import useComplaintTypes from "../../../hooks/useComplaintTypes";
 import useTenants from "../../../hooks/useTenants";
 import { createComplaint } from "../../../redux/actions/index";
+import { getServiceDefinitions } from "../../../Services/ServiceDefinitions";
 
 export const CreateComplaint = ({ parentUrl }) => {
   const SessionStorage = Digit.SessionStorage;
@@ -26,18 +27,23 @@ export const CreateComplaint = ({ parentUrl }) => {
   const [selectedLocality, setSelectedLocality] = useState(locality_complaint ? locality_complaint : null);
   const [submitValve, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
-
-  const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
+  const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
+  const menu = useComplaintTypes({ stateCode: tenantId });
   const { t } = useTranslation();
   const cities = useTenants();
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const history = useHistory();
+  const serviceDefinitions = getServiceDefinitions();
+
+  //TO USE this way
+  // let getObject = window.Digit.CoreService;
+  // console.log(getObject.service("PGR").Name)
 
   // //complaint logic
   function selectedType(value) {
     setComplaintType(value);
-    setSubTypeMenu(Digit.GetServiceDefinitions.getSubMenu(value, t));
+    setSubTypeMenu(serviceDefinitions.getSubMenu(tenantId, value, t));
     SessionStorage.set("complaintType", value);
   }
 

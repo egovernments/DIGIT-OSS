@@ -46,6 +46,10 @@ const setupDevice = () => {
   };
 };
 
+const getCoreService = {
+  service: (moduleCode) => new CoreService(moduleCode),
+};
+
 const initLibraries = () => {
   setupLibraries("SessionStorage", Storage);
   setupLibraries("UserService", UserService);
@@ -68,6 +72,8 @@ const initLibraries = () => {
 
   setupLibraries("Hooks", Hooks);
   setupLibraries("Customizations", {});
+
+  setupLibraries("CoreService", getCoreService);
 
   setupDevice();
   initI18n();

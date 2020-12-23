@@ -1,4 +1,4 @@
-import { CoreService } from "@egovernments/digit-ui-libraries/src/service/coreService";
+import { CoreService } from "@egovernments/digit-ui-libraries";
 import { useQuery } from "react-query";
 
 class SearchComplaints extends CoreService {
@@ -6,11 +6,11 @@ class SearchComplaints extends CoreService {
     super("PGR");
     this.userType = () => window.Digit?.SessionStorage.get("userType");
     this.tenantId = () =>
-      this.userType ? window.Digit?.SessionStorage.get("Citizen.tenantId") : window.Digit?.SessionStorage.get("Employee.tenantId");
+      this.userType() ? window.Digit?.SessionStorage.get("Citizen.tenantId") : window.Digit?.SessionStorage.get("Employee.tenantId");
   }
 
   useComplaintsList = (filters = {}) => {
-    const { isLoading, error, data } = useQuery(["complaintsList", filters], () => this._module.search(this.tenantId, filters));
+    const { isLoading, error, data } = useQuery(["complaintsList", filters], () => this._module.search(this.tenantId(), filters));
     return { isLoading, error, data };
   };
 

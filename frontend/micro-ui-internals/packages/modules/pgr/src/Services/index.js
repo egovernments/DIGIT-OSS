@@ -9,6 +9,7 @@ class PGRBaseService extends CoreService {
     console.log("instances--------------------->>>>>>>>", ++instances);
     this.customizations = {};
     this.moduleCode = "PGR";
+    console.log("instances=====================$$$$$$$$$$$$$$$$$$$$$$$$$", this._locationService);
     this.getUserType = () => window.Digit?.SessionStorage.get("userType");
     this.getTenantId = () =>
       this.getUserType() == "CITIZEN" ? window.Digit.SessionStorage?.get("Citizen.tenantId") : window.Digit.SessionStorage?.get("Employee.tenantId");

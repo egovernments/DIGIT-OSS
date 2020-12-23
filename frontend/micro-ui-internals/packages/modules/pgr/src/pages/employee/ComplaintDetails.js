@@ -33,6 +33,7 @@ import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import useComplaintDetails from "../../hooks/useComplaintDetails";
 import { usePGRService } from "../../Services";
+import { getComplaint } from "../../Services/Complaint";
 
 const MapView = (props) => {
   return (
@@ -80,7 +81,7 @@ export const ComplaintDetails = (props) => {
   const [imageZoom, setImageZoom] = useState(null);
   // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
-  const tenantId = "pb.amritsar";
+  const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
   const { isLoading, data: complaintDetails, revalidate: revalidateComplaintDetails } = pgr.useQuery(pgr.fetchComplaintDetails, [id]);
   const workflowDetails = pgr.getWorkFlowDetailsById(id, "EMPLOYEE");
   const [displayMenu, setDisplayMenu] = useState(false);
@@ -89,6 +90,8 @@ export const ComplaintDetails = (props) => {
   const [assignResponse, setAssignResponse] = useState(null);
   const [rerender, setRerender] = useState(1);
   const [showLoader, setLoader] = useState(false);
+
+  const complaint = getComplaint();
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
@@ -148,7 +151,8 @@ export const ComplaintDetails = (props) => {
 
   async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
-    const response = await Digit.Complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile);
+    debugger;
+    const response = await complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile);
     console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
