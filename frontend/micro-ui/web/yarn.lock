@@ -1162,10 +1162,10 @@
     react-i18next "^11.7.3"
     rooks "^4.3.0"
 
-"@egovernments/digit-ui-libraries@^1.0.33":
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.33.tgz#f57bcc4d6111b9a8f75d0489e308feca3b1013c3"
-  integrity sha512-dDUNMkR+XaWGJawdIZxRQXY3oaAIGWnZG+jL5MG2caqDDcRgWPrG4vlXTf80rjCU6hd4pI48gEMo5xw0+hFPXQ==
+"@egovernments/digit-ui-libraries@^1.0.34":
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.34.tgz#df3600a8c157d92a682d4305d66610699c1387df"
+  integrity sha512-A5VnMDbCrsdsjw4P5EZfVm30t1PjMIfY2NH9oOcCg6rwA4s3KHy3FXYZdWlJiz6Mgjp6JWWaSX7kUfpTETMK8w==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1177,10 +1177,10 @@
     react-query "^3.2.0"
     rooks "^4.4.0"
 
-"@egovernments/digit-ui-module-core@^1.0.33":
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.33.tgz#03ac61095dd9ed7921eb982911a96720abd024f6"
-  integrity sha512-RF2qvpWKwbWDZ7P2J+OLggHkcCA5V2j0qbqkIgP6K+PiN7GQ9y6zjf+MrihLzxGsUB+dkGr2/ZpcmI7lQkZnzA==
+"@egovernments/digit-ui-module-core@^1.0.34":
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.34.tgz#df4b5d1f1fcdc0bce8c76012c1f8ccea77c111f3"
+  integrity sha512-8+YH3JciuBqoa/QHr2W0x3RM3xtVvlNQijzZ25ng/+Q+KdFsJx0WNa+tv4TPVAeHRdikkZ2v/9+8QziLHJgL/Q==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1196,10 +1196,10 @@
     redux-thunk "^2.3.0"
     rooks "^4.4.0"
 
-"@egovernments/digit-ui-module-fsm@^1.0.33":
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.33.tgz#17b76167a811b284fcabe4b63eb877c7ee2a00f4"
-  integrity sha512-+INswiSOB17rG43fZD2rG4HhS5YWXoBmk0I3eiwMAlf6OgkQCV0WkZOf4vxWH+ByelbNykEp40QkqQAQEUKJ3w==
+"@egovernments/digit-ui-module-fsm@^1.0.34":
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.34.tgz#5813314b198c7978cf8756a5ce0369b1fcb5036a"
+  integrity sha512-8yN97yQjjmba2ED/kbhIcBno+3lsYcfl3TmzwAEZm44Ifu8T65R6YrAmqSXxy5dD6u3Gu/9avTJA+ugGdd9BzA==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1215,10 +1215,10 @@
     redux-thunk "^2.3.0"
     rooks "^4.4.0"
 
-"@egovernments/digit-ui-module-pgr@^1.0.33":
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.33.tgz#cff3c83398adbf21080d641af42a95bd5f7c8f5f"
-  integrity sha512-svwW3sqL9xtF/pmGW6sorW10L+z0XgSaapU0OixR5QYTv3Wkd4AmxGUKUzyzWtNwhy6NnAPy5PuusJ1doaUNDQ==
+"@egovernments/digit-ui-module-pgr@^1.0.34":
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.34.tgz#480e92333fab7760755fdd3bb4098be5fe96caff"
+  integrity sha512-8HhPiBwoCIq/plTybKrU/E02+T1BglYc2K/5hOCc0Z7TYDYhCyQCPFfPTllne30Y9tmHxYQFN0Md0klK3ZNpNw==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1241,10 +1241,10 @@
   dependencies:
     react-table "^7.6.1"
 
-"@egovernments/digit-ui-react-components@^1.0.33":
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.33.tgz#164f4eac13629821e7787bec5e85c9175753a7e4"
-  integrity sha512-kS1XY1iZOf290yKwuHdbb8L5VyQ7JbjX4BLyYfryhvw8xTnDgDy996W55H8cAbZEcment1Kl1MPawXgHvcJNug==
+"@egovernments/digit-ui-react-components@^1.0.34":
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.34.tgz#3ed11e5e8309394ed7b61c0b652d8c8ed104a053"
+  integrity sha512-uYqV6NQ7DfKaPn7SJFWWJxLSq6f33+JKMB7eeVvxo3A8W07W3GUHyUZJBcEJWH37sVFrE6ibO/j96opa7sJEZA==
   dependencies:
     react-table "^7.6.1"
 

@@ -7,6 +7,10 @@ import App from './App';
 
 initLibraries();
 
+window.Digit.Customizations = { PGR: {} };
+
+// login detection
+
 const parseValue = (value) => {
   try {
     return JSON.parse(value)
@@ -14,7 +18,6 @@ const parseValue = (value) => {
     return value
   }
 }
-window.Digit.Customizations = { PGR: {} };
 
 const getFromStorage = (key) => {
   const value = window.localStorage.getItem(key);
@@ -43,6 +46,8 @@ window.Digit.SessionStorage.set("User", userDetails);
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+
+// end
 
 ReactDOM.render(
   <React.StrictMode>
