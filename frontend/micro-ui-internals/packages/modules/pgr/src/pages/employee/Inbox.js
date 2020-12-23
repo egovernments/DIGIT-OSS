@@ -21,7 +21,7 @@ const Inbox = () => {
   };
 
   const onSearch = (params = "") => {
-    console.log("onSubmit--------", params);
+    console.log("::::>", params);
     setSearchParams({ ...searchParams, search: params });
     //getFilteredComplaints({ params });
   };

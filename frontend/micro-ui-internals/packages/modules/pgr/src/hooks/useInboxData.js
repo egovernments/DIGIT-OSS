@@ -1,24 +1,25 @@
+import { UserService } from "@egovernments/digit-ui-libraries/src/services/User";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 //import complaintData from "./dummyComplaintData.json"; // using dummy data as api pgr search api is down
 
 const useInboxData = (searchParams) => {
-  console.log("searchParams--------:", searchParams);
   const state = useSelector((state) => state);
   const [complaintList, setcomplaintList] = useState([]);
-  //let serviceReqIds = "";
-  const tenantId = "pb.amritsar";
+  const user = Digit.UserService.getUser();
+  const tenantId = user?.info?.tenantId;
+  console.log("searchParams received", searchParams);
   let serviceIds = [];
-  let filters = { start: 1, end: 10, ...searchParams.filters, ...searchParams.search };
+  let commonFilters = { start: 1, end: 10 };
+  let appFilters = { ...commonFilters, ...searchParams.filters.pgrQuery, ...searchParams.search };
+  let wfFilters = { ...commonFilters, ...searchParams.filters.wfQuery };
   useEffect(() => {
     let complaintDetailsResponse = null;
     let getComplaintResponse = async () => {
-      complaintDetailsResponse = await Digit.PGRService.search(tenantId, filters);
-      console.log("complaintDetailsResponse", complaintDetailsResponse, filters);
+      complaintDetailsResponse = await Digit.PGRService.search(tenantId, appFilters);
       complaintDetailsResponse.ServiceWrappers.forEach((service) => serviceIds.push(service.service.serviceRequestId));
       const serviceIdParams = serviceIds.join();
-      const workflowInstances = await Digit.WorkflowService.getByBusinessId(tenantId, serviceIdParams, filters, false);
-      //console.log("serviceIdParams:", serviceIdParams, "workflowInstances:", workflowInstances);
+      const workflowInstances = await Digit.WorkflowService.getByBusinessId(tenantId, serviceIdParams, wfFilters, false);
       let combinedRes = combineResponses(complaintDetailsResponse, workflowInstances).map((data) => ({
         ...data,
         sla: Math.round(data.sla / (24 * 60 * 60 * 1000)),
