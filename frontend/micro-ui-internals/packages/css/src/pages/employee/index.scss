@@ -24,7 +24,6 @@
         max-height: 20px;
         width: auto;
       }
-
     }
 
     .ulb {
@@ -49,7 +48,7 @@
     position: fixed;
     left: 0;
     padding: 20px 0;
-    background: #22394D;
+    background: #22394d;
     height: 100%;
     color: white;
     margin-top: 80px;
@@ -61,10 +60,9 @@
       margin-bottom: 32px;
 
       &.active {
-        border-right: 4px solid #F47738;
+        border-right: 4px solid #f47738;
         padding-right: 16px;
       }
-
     }
   }
 

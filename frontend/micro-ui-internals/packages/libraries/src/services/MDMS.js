@@ -1,6 +1,37 @@
 import Urls from "./urls";
-// import { GetCitiesWithi18nKeys } from "./utils";
-import { Request, GetCitiesWithi18nKeys } from "./Utils/Request";
+import { Request, ServiceRequest } from "./Utils/Request";
+
+const SortByName = (na, nb) => {
+  if (na < nb) {
+    return -1;
+  }
+  if (na > nb) {
+    return 1;
+  }
+  return 0;
+};
+
+const GetCitiesWithi18nKeys = (MdmsRes, moduleCode) => {
+  const cityList = (MdmsRes.tenant.citymodule && MdmsRes.tenant.citymodule.find((module) => module.code === moduleCode).tenants) || [];
+  const citiesMap = cityList.map((city) => city.code);
+  const cities = MdmsRes.tenant.tenants
+    .filter((city) => citiesMap.includes(city.code))
+    .map(({ code, name, logoId, emailId, address, contactNumber }) => ({
+      code,
+      name,
+      logoId,
+      emailId,
+      address,
+      contactNumber,
+      i18nKey: "TENANT_TENANTS_" + code.replace(".", "_").toUpperCase(),
+    }))
+    .sort((cityA, cityB) => {
+      const na = cityA.name.toLowerCase(),
+        nb = cityB.name.toLowerCase();
+      return SortByName(na, nb);
+    });
+  return cities;
+};
 
 const initRequestBody = (tenantId) => ({
   MdmsCriteria: {
@@ -67,15 +98,27 @@ const transformResponse = (type, MdmsRes, moduleCode = "PGR") => {
 };
 
 export const MdmsService = {
-  init: (stateCode = "pb") =>
-    Request({ url: Urls.MDMS, data: initRequestBody(stateCode), useCache: true, method: "POST", params: { tenantId: stateCode } }),
-  call: (details, stateCode = "pb") =>
-    Request({ url: Urls.MDMS, data: getCriteria(details), useCache: true, method: "POST", params: { tenantId: stateCode } }),
-  getDataByCriteria: async (mdmsDetails, moduleCode = "PGR") => {
+  init: (stateCode) =>
+    ServiceRequest({
+      serviceName: "mdmsInit",
+      url: Urls.MDMS,
+      data: initRequestBody(stateCode),
+      useCache: true,
+      params: { tenantId: stateCode },
+    }),
+  call: (details, tenantId) =>
+    ServiceRequest({
+      serviceName: "mdmsCall",
+      url: Urls.MDMS,
+      data: getCriteria(details),
+      useCache: true,
+      params: { tenantId },
+    }),
+  getDataByCriteria: async (mdmsDetails, moduleCode) => {
     const { MdmsRes } = await MdmsService.call(mdmsDetails.details);
     return transformResponse(mdmsDetails.type, MdmsRes, moduleCode);
   },
-  getServiceDefs: (tenantId, moduleCode = "PGR") => {
+  getServiceDefs: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(getModuleServiceDefsCriteria(tenantId, moduleCode), moduleCode);
   },
 };

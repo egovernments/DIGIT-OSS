@@ -93,8 +93,8 @@ export const ComplaintDetails = (props) => {
   }
   useEffect(() => {
     (async () => {
-      const assignWorkflow = await Digit.workflowService.getByBusinessId(tenantId, id);
-      console.log("aassign", assignWorkflow);
+      const assignWorkflow = await Digit?.WorkflowService?.getByBusinessId(tenantId, id);
+      console.log("assign", assignWorkflow);
     })();
   }, [complaintDetails]);
   // useEffect(() => {
@@ -200,7 +200,7 @@ export const ComplaintDetails = (props) => {
                   key={k}
                   label={t(k)}
                   text={
-                    Array.isArray(complaintDetails.details[k]) ? complaintDetails.details[k].map((val) => t(val)) : t(complaintDetails.details[k])
+                    Array.isArray(complaintDetails?.details[k]) ? complaintDetails?.details[k].map((val) => t(val)) : t(complaintDetails?.details[k])
                   }
                   last={arr.length - 1 === i}
                 />
@@ -213,19 +213,19 @@ export const ComplaintDetails = (props) => {
             )}
           </StatusTable>
         )}
-        {complaintDetails?.thumbnails && complaintDetails?.thumbnails.length !== 0 ? (
+        {complaintDetails?.thumbnails && complaintDetails?.thumbnails?.length !== 0 ? (
           <DisplayPhotos srcs={complaintDetails?.thumbnails} onClick={zoomImage} />
         ) : null}
         <BreakLine />
-        {workflowDetails.isLoading && <Loader />}
-        {!workflowDetails.isLoading && (
+        {workflowDetails?.isLoading && <Loader />}
+        {!workflowDetails?.isLoading && (
           <React.Fragment>
-            {workflowDetails.data.timeline && workflowDetails.data.timeline.length === 1 ? (
-              <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails.data.timeline[0].status)} />
+            {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
+              <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />
             ) : (
               <ConnectingCheckPoints>
-                {workflowDetails.data.timeline &&
-                  workflowDetails.data.timeline.map((checkpoint, index, arr) => {
+                {workflowDetails?.data?.timeline &&
+                  workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
                     return (
                       <CheckPoint
                         key={index}
@@ -254,7 +254,7 @@ export const ComplaintDetails = (props) => {
       {popup ? (
         <Modal
           complaintDetails={complaintDetails}
-          employeeRoles={workflowDetails.data?.nextActions ? workflowDetails.data?.nextActions : null}
+          employeeRoles={workflowDetails?.data?.nextActions ? workflowDetails?.data?.nextActions : null}
           headerBarMain={
             <Heading
               label={
@@ -273,10 +273,10 @@ export const ComplaintDetails = (props) => {
         />
       ) : null}
       {toast && <Toast label={t(assignResponse ? `CS_ACTION_${selectedAction}_TEXT` : "CS_ACTION_ASSIGN_FAILED")} onClose={closeToast} />}
-      {!workflowDetails.isLoading && workflowDetails.data?.nextActions?.length > 0 && (
+      {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
         <ActionBar>
-          {displayMenu && workflowDetails.data.nextActions ? (
-            <Menu options={workflowDetails.data.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
+          {displayMenu && workflowDetails?.data?.nextActions ? (
+            <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
           ) : null}
           <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
         </ActionBar>

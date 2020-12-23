@@ -6,7 +6,7 @@ export const PrivateRoute = ({ component: Component, roles, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        const user = Digit.SessionStorage.get("User");
+        const user = Digit.UserService.getUser();
         console.log(user);
         if (!user || !user.token) {
           // not logged in so redirect to login page with the return url

@@ -16,7 +16,8 @@ const Modal = (props) => {
   const roles = props.employeeRoles.filter((role) => role.action === props.selectedAction);
   const { complaintDetails } = props;
   console.log("modalllll", roles);
-  const useEmployeeData = useEmployeeFilter("pb.amritsar", roles[0].roles, complaintDetails);
+  const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
+  const useEmployeeData = useEmployeeFilter(tenantId, roles[0].roles, complaintDetails);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [comments, setComments] = useState(null);
   const [file, setFile] = useState(null);
@@ -39,7 +40,7 @@ const Modal = (props) => {
       const response = await Digit.UploadServices.Filestorage(file);
       setUploadedFile(response.data.files[0].fileStoreId);
     }
-  }, file);
+  }, [file]);
 
   function onSelectEmployee(employee) {
     setSelectedEmployee(employee);
