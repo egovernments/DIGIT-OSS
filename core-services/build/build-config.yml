@@ -243,3 +243,10 @@ config:
       - work-dir: "nlp-engine"
         image-name: "nlp-engine"
         dockerfile: "nlp-engine/Dockerfile"
+
+  - name: "builds/core-services/xstate-chatbot"
+    build:
+      - work-dir: "xstate-chatbot/nodejs"
+        image-name: "xstate-chatbot"
+      - work-dir: "xstate-chatbot/nodejs/db"
+        image-name: "xstate-chatbot-db"
