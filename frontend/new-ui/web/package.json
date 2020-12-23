@@ -5,16 +5,16 @@
   "workspaces": [],
   "homepage": "/digit-ui",
   "dependencies": {
-    "@egovernments/digit-ui-libraries": "^1.0.34",
-    "@egovernments/digit-ui-module-core": "^1.0.34",
-    "@egovernments/digit-ui-module-fsm": "^1.0.34",
-    "@egovernments/digit-ui-module-pgr": "^1.0.34",
-    "@egovernments/digit-ui-react-components": "^1.0.34",
+    "@egovernments/digit-ui-libraries": "^1.0.38",
+    "@egovernments/digit-ui-module-core": "^1.0.38",
+    "@egovernments/digit-ui-module-fsm": "^1.0.38",
+    "@egovernments/digit-ui-module-pgr": "^1.0.38",
+    "@egovernments/digit-ui-react-components": "^1.0.38",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
