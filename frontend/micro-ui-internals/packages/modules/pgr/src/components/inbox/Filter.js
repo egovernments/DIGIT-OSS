@@ -87,9 +87,7 @@ const Filter = (props) => {
   }, [complaintStatus.length]);
 
   const ifExists = (list, key) => {
-    return list.filter((object) => {
-      return object.code === key.code;
-    }).length;
+    return list.filter((object) => object.code === key.code).length;
   };
 
   function complaintType(_type) {
