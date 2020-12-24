@@ -33,7 +33,13 @@ const DigitUIWrapper = ({ stateCode }) => {
 
 export const DigitUI = ({ stateCode }) => {
   const userType = Digit.UserService.getType();
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity,
+      },
+    },
+  });
 
   return (
     <div className={userType}>
