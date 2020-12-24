@@ -2,7 +2,6 @@ import { Button, Card } from "components";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { formWizardConstants, getPurpose, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
@@ -28,7 +27,6 @@ class PTAcknowledgement extends React.Component {
     const tenantId = getQueryValue(search, "tenantId");
 
     this.setState({ propertyId: propertyId });
-    loadUlbLogo(tenantId);
   };
   
   onGoHomeClick = () => {
