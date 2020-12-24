@@ -4,8 +4,7 @@ import { useTranslation } from "react-i18next";
 const useComplaintStatus = () => {
   const { t } = useTranslation();
   const [complaintStatus, setComplaintStatus] = useState([]);
-  const user = Digit.UserService.getUser();
-  const tenantId = user?.info?.tenantId;
+  const tenantId = Digit.ULBService.getCurrentTenantId();
 
   useEffect(() => {
     let WorkflowService = null;
