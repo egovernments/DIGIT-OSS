@@ -3,9 +3,9 @@ import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
 
 const SearchComplaint = ({ onSearch, type }) => {
-const [complaintNo, setComplaintNo] = useState("");
-const [mobileNo, setMobileNo] = useState("");
-const { register, handleSubmit, reset } = useForm();
+  const [complaintNo, setComplaintNo] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const { register, handleSubmit, reset } = useForm();
 
   const onSubmitInput = (data) => {
     console.log("data", data);
