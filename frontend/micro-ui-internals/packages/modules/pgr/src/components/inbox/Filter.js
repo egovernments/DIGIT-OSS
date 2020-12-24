@@ -18,8 +18,7 @@ import useServiceDefs from "../../hooks/useServiceDefs";
 
 const Filter = (props) => {
   // let userType = Digit.SessionStorage.get("userType");
-  const { uuid } = Digit.UserService.getUser().info;
-  console.log("user in filter uuid--------->:", uuid);
+  let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();
   const { pgr } = useSelector((state) => state);
@@ -47,19 +46,18 @@ const Filter = (props) => {
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
-    if (value.code === "ASSIGNED_TO_ME") {
-      setWfFilters({ ...wfFilters, uuid: [{ code: uuid }] });
-    }
+    uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
+    setWfFilters({ ...wfFilters, uuid: [{ code: uuid }] });
   };
 
   useEffect(() => {
-    let pgrQueryObj = {};
-    let wfQueryObj = {};
+    let pgrQuery = {};
+    let wfQuery = {};
     for (const property in pgrfilters) {
       if (Array.isArray(pgrfilters[property])) {
         let params = pgrfilters[property].map((prop) => prop.code).join();
         if (params) {
-          pgrQueryObj[property] = params;
+          pgrQuery[property] = params;
         }
       }
     }
@@ -67,12 +65,12 @@ const Filter = (props) => {
       if (Array.isArray(wfFilters[property])) {
         let params = wfFilters[property].map((prop) => prop.code).join();
         if (params) {
-          wfQueryObj[property] = params;
+          wfQuery[property] = params;
         }
       }
     }
     //queryString = queryString.substring(0, queryString.length - 1);
-    handleFilterSubmit({ pgrQuery: pgrQueryObj, wfQuery: wfQueryObj });
+    handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
   }, [pgrfilters, wfFilters]);
 
   const getCount = (value) => {
@@ -96,17 +94,24 @@ const Filter = (props) => {
     getPendingCount();
   }, [complaintStatus.length]);
 
+  const ifExists = (list, key) => {
+    return list.filter((object) => object.code === key.code).length;
+  };
+
   function complaintType(_type) {
     const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
-    setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
+    if (!ifExists(pgrfilters.serviceCode, type)) {
+      setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
+    }
   }
 
   function onSelectLocality(value, type) {
-    setPgrFilters({ ...pgrfilters, locality: [...pgrfilters.locality, value] });
+    if (!ifExists(pgrfilters.locality, value)) {
+      setPgrFilters({ ...pgrfilters, locality: [...pgrfilters.locality, value] });
+    }
   }
 
   useEffect(() => {
-    console.log("pgrfilters:", pgrfilters.serviceCode);
     if (pgrfilters.serviceCode.length > 1) {
       setSelectedComplaintType(`${pgrfilters.serviceCode.length} selected`);
     } else {
@@ -154,7 +159,6 @@ const Filter = (props) => {
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
-
       {console.log("options heiaisndao", options)}
       <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />
       <div className="tag-container">

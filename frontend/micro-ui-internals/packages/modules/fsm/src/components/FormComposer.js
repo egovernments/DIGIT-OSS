@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { useWindowSize } from "rooks";
 import {
   BreakLine,
   Card,
@@ -13,11 +12,11 @@ import {
   SubmitBar,
   LabelFieldPair,
 } from "@egovernments/digit-ui-react-components";
+
 import { useTranslation } from "react-i18next";
 
-const FormComposer = (props) => {
-  const { innerWidth } = useWindowSize();
-  const { register, watch, handleSubmit } = useForm();
+export const FormComposer = (props) => {
+  const { register, handleSubmit } = useForm();
   const { t } = useTranslation();
 
   function onSubmit(data) {
@@ -27,7 +26,19 @@ const FormComposer = (props) => {
   const fieldSelector = (type, populators) => {
     switch (type) {
       case "text":
-        return <TextInput className="field" {...populators} inputRef={register(populators.validation)} />;
+        return (
+          <div
+            className="field-container"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {populators.componentInFront ? populators.componentInFront : null}
+            <TextInput className="field" {...populators} inputRef={register(populators.validation)} />
+          </div>
+        );
       case "textarea":
         return <TextArea className="field" {...populators} inputRef={register(populators.validation)} />;
       default:
@@ -65,13 +76,10 @@ const FormComposer = (props) => {
         <CardSubHeader>{props.heading}</CardSubHeader>
         {formFields}
         {props.children}
-        {/* <input type="submit" value="submit"/> */}
         <ActionBar>
-          <SubmitBar label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")} submit="submit" />
+          <SubmitBar label={t(props.label)} submit="submit" />
         </ActionBar>
       </Card>
     </form>
   );
 };
-
-export default FormComposer;
