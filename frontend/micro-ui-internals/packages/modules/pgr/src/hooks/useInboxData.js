@@ -8,7 +8,6 @@ const useInboxData = (searchParams) => {
   const [complaintList, setcomplaintList] = useState([]);
   const user = Digit.UserService.getUser();
   const tenantId = user?.info?.tenantId;
-  console.log("searchParams received", searchParams);
   let serviceIds = [];
   let commonFilters = { start: 1, end: 10 };
   let appFilters = { ...commonFilters, ...searchParams.filters.pgrQuery, ...searchParams.search };

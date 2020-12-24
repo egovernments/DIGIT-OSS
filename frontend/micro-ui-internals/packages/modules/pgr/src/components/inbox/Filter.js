@@ -19,7 +19,6 @@ import useServiceDefs from "../../hooks/useServiceDefs";
 const Filter = (props) => {
   // let userType = Digit.SessionStorage.get("userType");
   let { uuid } = Digit.UserService.getUser().info;
-  console.log("user in filter uuid--------->:", uuid);
 
   const { t } = useTranslation();
   const { pgr } = useSelector((state) => state);
@@ -52,13 +51,13 @@ const Filter = (props) => {
   };
 
   useEffect(() => {
-    let pgrQueryObj = {};
-    let wfQueryObj = {};
+    let pgrQuery = {};
+    let wfQuery = {};
     for (const property in pgrfilters) {
       if (Array.isArray(pgrfilters[property])) {
         let params = pgrfilters[property].map((prop) => prop.code).join();
         if (params) {
-          pgrQueryObj[property] = params;
+          pgrQuery[property] = params;
         }
       }
     }
@@ -66,12 +65,12 @@ const Filter = (props) => {
       if (Array.isArray(wfFilters[property])) {
         let params = wfFilters[property].map((prop) => prop.code).join();
         if (params) {
-          wfQueryObj[property] = params;
+          wfQuery[property] = params;
         }
       }
     }
     //queryString = queryString.substring(0, queryString.length - 1);
-    handleFilterSubmit({ pgrQuery: pgrQueryObj, wfQuery: wfQueryObj });
+    handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
   }, [pgrfilters, wfFilters]);
 
   const getCount = (value) => {

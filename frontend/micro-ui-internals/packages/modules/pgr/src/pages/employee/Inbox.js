@@ -21,9 +21,7 @@ const Inbox = () => {
   };
 
   const onSearch = (params = "") => {
-    console.log("::::>", params);
     setSearchParams({ ...searchParams, search: params });
-    //getFilteredComplaints({ params });
   };
 
   let complaints = useInboxData(searchParams) || [];
@@ -33,7 +31,6 @@ const Inbox = () => {
   }, [getFilteredComplaints]);
 
   let isMobile = window.mobileCheck();
-  console.log("window.mobileCheck:", isMobile);
   console.log("searchParams:::::>", searchParams);
   if (complaints.length !== null) {
     if (isMobile) {
