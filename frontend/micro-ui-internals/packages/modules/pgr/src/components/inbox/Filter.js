@@ -46,7 +46,6 @@ const Filter = (props) => {
   let serviceDefs = useServiceDefs();
 
   const onRadioChange = (value) => {
-    console.log("here---------------------------");
     setSelectedAssigned(value);
     uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
     setWfFilters({ ...wfFilters, uuid: [{ code: uuid }] });
