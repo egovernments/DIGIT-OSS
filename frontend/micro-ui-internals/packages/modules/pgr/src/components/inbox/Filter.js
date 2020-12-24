@@ -15,6 +15,7 @@ import useComplaintStatus from "../../hooks/useComplaintStatus";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import useServiceDefs from "../../hooks/useServiceDefs";
+import Status from "./Status";
 
 const Filter = (props) => {
   // let userType = Digit.SessionStorage.get("userType");
@@ -29,19 +30,19 @@ const Filter = (props) => {
   const [pendingComplaintCount, setPendingComplaintCount] = useState([]);
 
   const [pgrfilters, setPgrFilters] = useState({
-    // uuid: [],
     serviceCode: [],
     locality: [],
     applicationStatus: [],
   });
 
   const [wfFilters, setWfFilters] = useState({
-    uuid: [],
+    assignee: [],
   });
 
   //TODO change city fetch from user tenantid
   let localities = useLocalities({ city: "Amritsar" });
-  let complaintStatus = useComplaintStatus();
+  // let complaintStatus = useComplaintStatus();
+  // console.log("complaintStatus-------------------------------:", complaintStatus);
   let serviceDefs = useServiceDefs();
 
   const onRadioChange = (value) => {
@@ -72,27 +73,6 @@ const Filter = (props) => {
     //queryString = queryString.substring(0, queryString.length - 1);
     handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
   }, [pgrfilters, wfFilters]);
-
-  const getCount = (value) => {
-    return (
-      pgr.complaints.hasOwnProperty("response") &&
-      pgr.complaints.response.filter((complaint) => {
-        return complaint.applicationStatus === value;
-      }).length
-    );
-  };
-
-  const getPendingCount = () => {
-    let statusWithCount = complaintStatus.map((status) => ({
-      ...status,
-      count: getCount(status.code),
-    }));
-    setPendingComplaintCount(statusWithCount);
-  };
-
-  useEffect(() => {
-    getPendingCount();
-  }, [complaintStatus.length]);
 
   const ifExists = (list, key) => {
     return list.filter((object) => object.code === key.code).length;
@@ -136,12 +116,12 @@ const Filter = (props) => {
 
   const handleAssignmentChange = (e, type) => {
     if (e.target.checked) {
-      setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, type] });
+      setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, { code: type.code }] });
     } else {
       const filteredStatus = pgrfilters.applicationStatus.filter((value) => {
-        return value !== type;
-      });
-      setPgrFilters({ ...pgrfilters, applicationStatus: filteredStatus });
+        return value.code !== type.code;
+      })[0];
+      setPgrFilters({ ...pgrfilters, applicationStatus: [{ code: filteredStatus }] });
     }
   };
 
@@ -200,17 +180,8 @@ const Filter = (props) => {
               {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCode", "key")}
             </div>
             <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
-            <div className="status-container">
-              <div className="filter-label">Status</div>
-              {pendingComplaintCount.map((option, index) => (
-                <CheckBox
-                  key={index}
-                  onChange={(e) => handleAssignmentChange(e, option)}
-                  checked={pgrfilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
-                  label={`${option.name} (${option.count})`}
-                />
-              ))}
-            </div>
+            {console.log("pgrFilters>>>>:", pgrfilters)}
+            <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
           </div>
         </div>
       </div>
