@@ -1,6 +1,6 @@
 import i18next from "i18next";
 import mergeConfig from "./config/mergeConfig";
-import { useStore, useInitStore } from "./services/index";
+import { useStore } from "./services/index";
 import { initI18n } from "./translations/index";
 import { Storage } from "./services/atoms/Utils/Storage";
 import Enums from "./enums/index";

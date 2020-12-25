@@ -32,6 +32,7 @@ import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import useComplaintDetails from "../../hooks/useComplaintDetails";
+import { isError } from "react-query";
 
 const MapView = (props) => {
   return (
@@ -73,23 +74,20 @@ const TLCaption = ({ data }) => {
 
 export const ComplaintDetails = (props) => {
   let { id } = useParams();
-  const pgr = usePGRService();
   const { t } = useTranslation();
   const [fullscreen, setFullscreen] = useState(false);
   const [imageZoom, setImageZoom] = useState(null);
   // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
-  const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
-  const { isLoading, data: complaintDetails, revalidate: revalidateComplaintDetails } = useComplaintDetails({ tenantId, id });
-  const workflowDetails = pgr.getWorkFlowDetailsById(id, "EMPLOYEE");
+  const tenantId = "pb.amritsar";
+  const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = useComplaintDetails({ tenantId, id });
+  const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, moduleCode: "PGR", role: "EMPLOYEE" });
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [assignResponse, setAssignResponse] = useState(null);
+  const [loader, setLoader] = useState(false);
   const [rerender, setRerender] = useState(1);
-  const [showLoader, setLoader] = useState(false);
-
-  const complaint = getComplaint();
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
@@ -102,6 +100,11 @@ export const ComplaintDetails = (props) => {
       console.log("assign", assignWorkflow);
     })();
   }, [complaintDetails]);
+
+  // useEffect(() => {
+  //   console.log("action", props.action);
+  //   setActionCalled(props.action);
+  // }, [props.action]);
 
   function zoomView() {
     setFullscreen(!fullscreen);
@@ -148,6 +151,10 @@ export const ComplaintDetails = (props) => {
         setPopup(true);
         setDisplayMenu(false);
         break;
+      case "REOPEN":
+        setPopup(true);
+        setDisplayMenu(false);
+        break;
       default:
         console.log("action not known");
         setDisplayMenu(false);
@@ -156,15 +163,15 @@ export const ComplaintDetails = (props) => {
 
   async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
-    debugger;
-    const response = await complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile);
+    const response = await Digit.Complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile);
     console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
     setLoader(true);
-    await revalidateComplaintDetails();
     await workflowDetails.revalidate();
+    await revalidateComplaintDetails;
     setLoader(false);
+    setRerender(rerender + 1);
     setTimeout(() => setToast(false), 10000);
   }
 
@@ -172,15 +179,14 @@ export const ComplaintDetails = (props) => {
     setToast(false);
   }
 
-  useEffect(() => {
-    setLoader(isLoading || workflowDetails.isLoading);
-  }, [isLoading, workflowDetails.isLoading]);
-
-  if (showLoader) {
+  if (isLoading || workflowDetails.isLoading || loader) {
     return <Loader />;
   }
 
+  if (workflowDetails.isError) return <React.Fragment>{workflowDetails.error}</React.Fragment>;
+
   const getTimelineCaptions = (checkpoint) => {
+    // console.log("tl", checkpoint);
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
@@ -194,7 +200,6 @@ export const ComplaintDetails = (props) => {
   };
 
   return (
-    // <React.Fragment></React.Fragment>
     <React.Fragment>
       <Card>
         <CardSubHeader>{t(`CS_HEADER_COMPLAINT_SUMMARY`)}</CardSubHeader>
