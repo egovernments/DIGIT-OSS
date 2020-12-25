@@ -2,22 +2,20 @@ import i18next from "i18next";
 import mergeConfig from "./config/mergeConfig";
 import { useStore, useInitStore } from "./services/index";
 import { initI18n } from "./translations/index";
-import { Storage } from "./services/Utils/Storage";
+import { Storage } from "./services/atoms/Utils/Storage";
 import Enums from "./enums/index";
-import { LocationService } from "./services/Location";
-import { LocalityService } from "./services/Localities";
-import { LocalizationService } from "./services/Localization/service";
-import { PGRService } from "./services/PGR";
-import * as dateUtils from "./services/Utils/Date";
-import { WorkflowService } from "./services/WorkFlow";
-import { MdmsService } from "./services/MDMS";
-import { UploadServices } from "./services/UploadServices";
-import { GetServiceDefinitions } from "./services/ServiceDefinitions";
-import { Complaint } from "./services/Complaint";
-import { PincodeMap } from "./services/PincodeMap";
-import { CoreService } from "./service/coreService";
-import { UserService } from "./services/User";
-import { ULBService } from "./services/Ulb";
+import { LocationService } from "./services/molecules/Location";
+import { LocalityService } from "./services/elements/Localities";
+import { LocalizationService } from "./services/molecules/Localization/service";
+import { PGRService } from "./services/molecules/PGR";
+import * as dateUtils from "./services/atoms/Utils/Date";
+import { WorkflowService } from "./services/molecules/WorkFlow";
+import { MdmsService } from "./services/molecules/MDMS";
+import { UploadServices } from "./services/atoms/UploadServices";
+import { GetServiceDefinitions } from "./services/elements/ServiceDefinitions";
+import { Complaint } from "./services/elements/Complaint";
+import { UserService } from "./services/molecules/User";
+import { ULBService } from "./services/molecules/Ulb";
 
 import Hooks from "./hooks";
 
@@ -46,10 +44,6 @@ const setupDevice = () => {
   };
 };
 
-const getCoreService = {
-  service: (moduleCode) => new CoreService(moduleCode),
-};
-
 const initLibraries = () => {
   setupLibraries("SessionStorage", Storage);
   setupLibraries("UserService", UserService);
@@ -68,12 +62,9 @@ const initLibraries = () => {
   setupLibraries("UploadServices", UploadServices);
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
   setupLibraries("Complaint", Complaint);
-  setupLibraries("PincodeMap", PincodeMap);
 
   setupLibraries("Hooks", Hooks);
   setupLibraries("Customizations", {});
-
-  setupLibraries("CoreService", getCoreService);
 
   setupDevice();
   initI18n();
@@ -81,6 +72,6 @@ const initLibraries = () => {
   // setupLibraries("Translation", { initI18n: init, i18next });
 };
 
-export { initLibraries, Enums, Hooks, CoreService };
+export { initLibraries, Enums, Hooks };
 
 // export default initLibraries;

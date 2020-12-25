@@ -12,15 +12,15 @@ import {
   Loader,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { usePGRService } from "../Services";
 
 const Modal = (props) => {
   const roles = props.employeeRoles.filter((role) => role.action === props.selectedAction);
   const { complaintDetails } = props;
-  const pgr = usePGRService();
-  const { isLoading: employeeDataLoading, error, data: useEmployeeData, revalidate: employeeRevalidate } = pgr.useQuery(
-    pgr.getEmployeeForAssignment,
-    ["pb.amritsar", roles[0].roles, complaintDetails]
+  const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
+  const { isLoading: employeeDataLoading, error, data: useEmployeeData, revalidate: employeeRevalidate } = useEmployeeFilter(
+    tenantId,
+    roles[0].roles,
+    complaintDetails
   );
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [comments, setComments] = useState(null);
@@ -28,7 +28,7 @@ const Modal = (props) => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const { t } = useTranslation();
 
-  const fileData = pgr.useFileUpload(file);
+  const fileData = Digit.UploadServices.Filestorage(file);
 
   const employeeData =
     useEmployeeData && !employeeDataLoading

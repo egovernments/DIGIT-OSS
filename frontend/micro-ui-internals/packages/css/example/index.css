@@ -717,6 +717,13 @@ img, video {
       .employeeCard .label-field-pair .field {
         width: 50%;
         margin-right: 20%; }
+    .employeeCard .field-container span {
+      background: #f7f7f7;
+      width: 40px;
+      height: 40px;
+      margin-top: -16px;
+      border: 2px solid #000;
+      border-right: none; }
   .header-wrap {
     display: -webkit-box;
     display: -ms-flexbox;

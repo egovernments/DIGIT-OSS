@@ -16,7 +16,6 @@ import {
   ImageViewer,
   Loader,
 } from "@egovernments/digit-ui-react-components";
-import { usePGRService } from "../../Services";
 
 import useComplaintDetails from "../../hooks/useComplaintDetails";
 import TimeLine from "../../components/TimeLine";
@@ -25,10 +24,9 @@ const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
 
-  const pgr = usePGRService();
-  // let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
-  // const { isLoading, error, isError, complaintDetails } = useComplaintDetails({ tenantId: cityCodeVal, id });
-  const { isLoading, error, isError, data: complaintDetails } = pgr.useQuery(pgr.fetchComplaintDetails, [id]);
+  //To Do check tenantid
+  const tenantId = Digit.ULBService.getCurrentUlb().code;
+  const { isLoading, error, isError, complaintDetails } = useComplaintDetails({ tenantId: tenantId, id });
   const workFlowDetails = pgr.getWorkFlowDetailsById(id);
   const [imageZoom, setImageZoom] = useState(null);
 

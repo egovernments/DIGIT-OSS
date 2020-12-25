@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardHeader, CardSubHeader, CardLabel, TextInput, Dropdown } from "@egovernments/digit-ui-react-components";
-import { FormComposer } from "@egovernments/digit-ui-react-components";
-import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
+import { Dropdown } from "@egovernments/digit-ui-react-components";
+import { useRouteMatch, useHistory } from "react-router-dom";
 
+import { FormComposer } from "../../../components/FormComposer";
 import useComplaintTypes from "../../../hooks/useComplaintTypes";
 import useTenants from "../../../hooks/useTenants";
 import { createComplaint } from "../../../redux/actions/index";
-import { getServiceDefinitions } from "../../../Services/ServiceDefinitions";
 
 export const CreateComplaint = ({ parentUrl }) => {
   const SessionStorage = Digit.SessionStorage;
@@ -34,7 +33,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const history = useHistory();
-  const serviceDefinitions = getServiceDefinitions();
+  const serviceDefinitions = Digit.GetServiceDefinitions;
 
   //TO USE this way
   // let getObject = window.Digit.CoreService;
@@ -168,9 +167,6 @@ export const CreateComplaint = ({ parentUrl }) => {
           type: "textarea",
           populators: {
             name: "landmark",
-            validation: {
-              required: true,
-            },
           },
         },
       ],

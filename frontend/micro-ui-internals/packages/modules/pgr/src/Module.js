@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { Route, BrowserRouter as Router, Switch, useRouteMatch } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -10,19 +10,10 @@ import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
 import { getI18n } from "react-i18next";
 import { fetchBusinessServiceByTenant } from "./redux/actions";
-import { usePGRService } from "./Services/index";
 
 export const PGRReducers = getRootReducer;
-export const pgrService = usePGRService();
 
-// const PGRLibraries = {
-//   pgrService: usePGRService(),
-//   getComplaint: getComplaint()
-// }
-// initialize local libraries
-// window.Digit["PGRLibraries"] = { ...window.Digit["PGRLibraries"], ...PGRLibraries };
-
-export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode, userType, tenants }) => {
+export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "PGR", userType, tenants }) => {
   const { path } = useRouteMatch();
   const state = useSelector((state) => state["pgr"]);
   const disptach = useDispatch();
@@ -33,7 +24,7 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode, u
     if (state && !state.businessService) {
       disptach(fetchBusinessServiceByTenant("pb.amritsar", "PGR"));
     }
-    console.log("state", state);
+    // console.log("state", state);
   });
 
   if (Object.keys(store).length === 0) {
@@ -41,6 +32,10 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode, u
   }
 
   Digit.SessionStorage.set("PGR_TENANTS", tenants);
+
+  // console.log("pgr", userType, tenants, state, store);
+  // console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
+  // console.log("state", state);
 
   if (userType === "citizen") {
     return <CitizenApp />;

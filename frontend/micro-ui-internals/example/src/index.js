@@ -11,28 +11,17 @@ import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
 import GRO from "./userInfo/gro.json";
-import { pgrService } from "@egovernments/digit-ui-module-pgr";
 
 import pgrCustomizations from "./pgr";
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
 initLibraries();
 
-pgrService.customizations = pgrCustomizations;
-
 window.Digit.Customizations = { PGR: pgrCustomizations };
-
-// const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
-
-// const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
-
-//HOTFIX TOKEN
 
 const userType = sessionStorage.getItem("custom_user") || "EMPLOYEE";
 
-const token = "f444fd6a-c4fe-4760-af05-e7609f6e8ae9";
-
-// COMMENT ABOVE BEFORE COMMIT OR PUSH OR DEPLOY
+const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";

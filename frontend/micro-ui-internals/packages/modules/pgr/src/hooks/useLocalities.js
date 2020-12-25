@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { usePGRService } from "../Services/index";
+import { useSelector } from "react-redux";
 
 const useLocalities = ({ city }) => {
   const { t } = useTranslation();
   let locality = [];
   const [localityList, setLocalityList] = useState(null);
   const [localities, setLocalities] = useState(null);
-  let tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
-  const locationServices = usePGRService();
-
+  const code = useSelector((state) => state.common.stateInfo.code);
   useEffect(async () => {
-    let response = await locationServices._locationService.getLocalities({ tenantId: tenantId });
+    let tenantId = `${code}.${city}`;
+    let response = await Digit.LocationService.getLocalities({ tenantId: tenantId });
     let __localityList = [];
     if (response && response.TenantBoundary.length > 0) {
-      __localityList = locationServices._localityService.get(response.TenantBoundary[0]);
+      __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
     }
     setLocalityList(__localityList);
   }, [city]);
