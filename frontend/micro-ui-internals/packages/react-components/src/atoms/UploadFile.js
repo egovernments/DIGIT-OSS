@@ -28,7 +28,7 @@ const UploadFile = (props) => {
           <div className="tag-container">
             <div className="tag" style={{ height: "2rem", marginTop: "1rem" }}>
               <span className="text">{inpRef.current.files[0]?.name}</span>
-              <span onClick={handleDelete}>
+              <span onClick={() => handleDelete()}>
                 <Close className="close" />
               </span>
             </div>
