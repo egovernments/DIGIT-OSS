@@ -36,7 +36,6 @@ const Modal = (props) => {
   //   }, [file]);
 
   useEffect(async () => {
-    debugger;
     if (file) {
       const response = await Digit.UploadServices.Filestorage(file);
       setUploadedFile(response.data.files[0].fileStoreId);
@@ -52,7 +51,6 @@ const Modal = (props) => {
   }
 
   function selectfile(e) {
-    debugger;
     setFile(e.target.files[0]);
   }
 
@@ -77,6 +75,9 @@ const Modal = (props) => {
             <UploadFile
               accept=".jpg"
               onUpload={selectfile}
+              onDelete={() => {
+                setUploadedFile(null);
+              }}
               message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
             />
           </Card>

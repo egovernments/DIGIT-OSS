@@ -10,8 +10,8 @@ const userServiceData = () => ({ userInfo: UserService.getUser().info });
 window.Digit = window.Digit || {};
 window.Digit = { ...window.Digit, RequestCache: window.Digit.RequestCache || {} };
 export const Request = async ({ method = "POST", url, data = {}, useCache = false, params = {}, auth, userService }) => {
-  console.log("params:", params);
-  console.log("url:", url);
+  // console.log("params:", params);
+  // console.log("url:", url);
   if (method.toUpperCase() === "POST") {
     data.RequestInfo = {
       apiId: "Rainmaker",

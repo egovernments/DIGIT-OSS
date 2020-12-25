@@ -18,8 +18,7 @@ const DigitUIWrapper = ({ stateCode }) => {
   }
 
   const i18n = getI18n();
-  console.log("common i18n keys", Object.keys(i18n.getDataByLanguage("en_IN").translations).length);
-
+  console.log("core module rendered");
   return (
     <Provider store={getStore(initData, { pgr: PGRReducers(initData) })}>
       <Router>

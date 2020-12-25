@@ -101,7 +101,7 @@ export const ComplaintDetails = (props) => {
     })();
   }, [complaintDetails]);
 
-      // useEffect(() => {
+  // useEffect(() => {
   //   console.log("action", props.action);
   //   setActionCalled(props.action);
   // }, [props.action]);
@@ -186,7 +186,7 @@ export const ComplaintDetails = (props) => {
   if (workflowDetails.isError) return <React.Fragment>{workflowDetails.error}</React.Fragment>;
 
   const getTimelineCaptions = (checkpoint) => {
-    console.log("tl", checkpoint);
+    // console.log("tl", checkpoint);
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
@@ -198,11 +198,6 @@ export const ComplaintDetails = (props) => {
     }
     return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
   };
-
-  console.log(
-    "actiosns=======================>",
-    workflowDetails.data.nextActions.map((action) => action.action)
-  );
 
   return (
     <React.Fragment>
