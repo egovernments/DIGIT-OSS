@@ -23,16 +23,16 @@ const TypeSelectCard = ({ t, headerCaption, header, cardText, submitBarLabel, se
 };
 
 TypeSelectCard.propTypes = {
-  headerCaption: PropTypes.string.isRequired,
-  header: PropTypes.string.isRequired,
-  cardText: PropTypes.string.isRequired,
-  submitBarLabel: PropTypes.string.isRequired,
-  selectedOption: PropTypes.string.isRequired,
-  menu: PropTypes.array.isRequired,
-  optionsKey: PropTypes.string.isRequired,
-  selected: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
+  headerCaption: PropTypes.string,
+  header: PropTypes.string,
+  cardText: PropTypes.string,
+  submitBarLabel: PropTypes.string,
+  selectedOption: PropTypes.string,
+  menu: PropTypes.array,
+  optionsKey: PropTypes.string,
+  selected: PropTypes.func,
+  onSave: PropTypes.func,
+  t: PropTypes.func,
 };
 
 TypeSelectCard.defaultProps = {
@@ -45,7 +45,7 @@ TypeSelectCard.defaultProps = {
   optionsKey: "",
   selected: undefined,
   onSave: undefined,
-  t: undefined
+  t: (value) => value,
 };
 
 export default TypeSelectCard;

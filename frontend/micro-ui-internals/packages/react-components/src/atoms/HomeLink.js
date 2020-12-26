@@ -9,8 +9,8 @@ const HomeLink = ({ to, children }) => (
 );
 
 HomeLink.propTypes = {
-  to: PropTypes.string.isRequired,
-  children: PropTypes.string.isRequired,
+  to: PropTypes.string,
+  children: PropTypes.string,
 };
 
 HomeLink.defaultProps = {

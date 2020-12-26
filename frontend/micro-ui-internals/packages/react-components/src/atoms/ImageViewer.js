@@ -14,7 +14,7 @@ const ImageViewer = (props) => {
 };
 
 ImageViewer.propTypes = {
-  imageSrc: PropTypes.string.isRequired,
+  imageSrc: PropTypes.string,
 };
 
 ImageViewer.defaultProps = {

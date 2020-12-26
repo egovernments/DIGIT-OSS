@@ -20,5 +20,4 @@ export const Error = Template.bind({});
 Error.args = {
   successful: false,
   message: "Your query is not resolve.",
-  complaintNumber: 5343,
 };

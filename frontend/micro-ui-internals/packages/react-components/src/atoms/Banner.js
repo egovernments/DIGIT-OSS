@@ -43,13 +43,12 @@ Banner.propTypes = {
   /**
    * If banner is successful, then show the complaint number
    */
-  complaintNumber: 2324,
+  complaintNumber: PropTypes.number,
 };
 
 Banner.defaultProps = {
   successful: true,
   message: "",
-  complaintNumber: 0,
 };
 
 export default Banner;

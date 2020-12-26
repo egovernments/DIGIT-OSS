@@ -26,7 +26,7 @@ SubmitBar.propTypes = {
   /**
    * SubmitButton contents
    */
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   /**
    * Optional click handler
    */

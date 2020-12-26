@@ -13,7 +13,7 @@ DescriptionText.propTypes = {
   /**
    * DescriptionText contents
    */
-  date: PropTypes.string.isRequired,
+  date: PropTypes.string,
 };
 
 DescriptionText.defaultProps = {

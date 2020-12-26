@@ -32,7 +32,7 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix }) => {
 };
 
 DetailsCard.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.array,
 };
 
 DetailsCard.defaultProps = {

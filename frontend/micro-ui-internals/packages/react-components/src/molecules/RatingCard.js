@@ -65,13 +65,15 @@ const RatingCard = ({ config, onSelect, t }) => {
 };
 
 RatingCard.propTypes = {
-  config: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  config: PropTypes.object,
+  onSubmit: PropTypes.func,
+  t: PropTypes.func,
 };
 
 RatingCard.defaultProps = {
   config: {},
   onSubmit: undefined,
+  t: (value) => value,
 };
 
 export default RatingCard;

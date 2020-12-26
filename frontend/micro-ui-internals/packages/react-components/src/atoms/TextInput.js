@@ -34,11 +34,11 @@ const TextInput = (props) => {
 TextInput.propTypes = {
   userType: PropTypes.string,
   isMandatory: PropTypes.bool,
-  name: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  name: PropTypes.string,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
   ref: PropTypes.func,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
 };
 
 TextInput.defaultProps = {

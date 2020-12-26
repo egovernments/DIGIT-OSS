@@ -42,19 +42,19 @@ const CityMohalla = ({
 };
 
 CityMohalla.propTypes = {
-  header: PropTypes.string.isRequired,
-  subHeader: PropTypes.string.isRequired,
-  cardText: PropTypes.string.isRequired,
-  cardLabelCity: PropTypes.string.isRequired,
-  cardLabelMohalla: PropTypes.string.isRequired,
-  nextText: PropTypes.string.isRequired,
-  selectedCity: PropTypes.string.isRequired,
-  cities: PropTypes.array.isRequired,
-  localities: PropTypes.array.isRequired,
-  selectCity: PropTypes.string.isRequired,
-  selectedLocality: PropTypes.string.isRequired,
-  selectLocalities: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
+  header: PropTypes.string,
+  subHeader: PropTypes.string,
+  cardText: PropTypes.string,
+  cardLabelCity: PropTypes.string,
+  cardLabelMohalla: PropTypes.string,
+  nextText: PropTypes.string,
+  selectedCity: PropTypes.string,
+  cities: PropTypes.array,
+  localities: PropTypes.array,
+  selectCity: PropTypes.string,
+  selectedLocality: PropTypes.string,
+  selectLocalities: PropTypes.func,
+  onSave: PropTypes.func,
 };
 
 CityMohalla.defaultProps = {

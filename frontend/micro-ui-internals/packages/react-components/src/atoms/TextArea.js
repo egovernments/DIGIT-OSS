@@ -19,7 +19,7 @@ TextArea.propTypes = {
   userType: PropTypes.string,
   name: PropTypes.string.isRequired,
   ref: PropTypes.func,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func,
 };
 

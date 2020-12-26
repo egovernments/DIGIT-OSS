@@ -53,10 +53,10 @@ const RadioButtons = (props) => {
 };
 
 RadioButtons.propTypes = {
-  selectedOption: PropTypes.string.isRequired,
+  selectedOption: PropTypes.string,
   onSelect: PropTypes.func,
-  options: PropTypes.array.isRequired,
-  optionsKey: PropTypes.string.isRequired,
+  options: PropTypes.array,
+  optionsKey: PropTypes.string,
 };
 
 RadioButtons.defaultProps = {

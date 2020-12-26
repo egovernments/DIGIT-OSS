@@ -11,8 +11,8 @@ const KeyNote = ({ keyValue, note }) => {
 };
 
 KeyNote.propTypes = {
-  keyValue: PropTypes.string.isRequired,
-  note: PropTypes.string.isRequired,
+  keyValue: PropTypes.string,
+  note: PropTypes.string,
 };
 
 KeyNote.defaultProps = {
