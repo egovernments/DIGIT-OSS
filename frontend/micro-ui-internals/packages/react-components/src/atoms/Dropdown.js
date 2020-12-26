@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
@@ -17,7 +18,7 @@ const TextField = (props) => {
 };
 
 const Dropdown = (props) => {
-  const user_type = Digit.SessionStorage.get("user_type");
+  const user_type = props.userType;
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
@@ -99,6 +100,24 @@ const Dropdown = (props) => {
       ) : null}
     </div>
   );
+};
+
+Dropdown.propTypes = {
+  selected: PropTypes.string,
+  style: PropTypes.object,
+  option: PropTypes.array,
+  optionKey: PropTypes.string,
+  select: PropTypes.func,
+  t: PropTypes.func,
+};
+
+Dropdown.defaultProps = {
+  selected: "",
+  option: [],
+  optionKey: 0,
+  style: {},
+  select: undefined,
+  t: undefined,
 };
 
 export default Dropdown;

@@ -75,6 +75,9 @@ const Modal = (props) => {
             <UploadFile
               accept=".jpg"
               onUpload={selectfile}
+              onDelete={() => {
+                setUploadedFile(null);
+              }}
               message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
             />
           </Card>

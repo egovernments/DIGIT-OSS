@@ -1,7 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const TextInput = (props) => {
-  const user_type = Digit.SessionStorage.get("user_type") === "employee" ? true : false;
+  const user_type = props.userType;
   return (
     <React.Fragment>
       {props.isMandatory ? (
@@ -28,6 +29,24 @@ const TextInput = (props) => {
       )}
     </React.Fragment>
   );
+};
+
+TextInput.propTypes = {
+  userType: PropTypes.string,
+  isMandatory: PropTypes.bool,
+  name: PropTypes.string,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
+  ref: PropTypes.func,
+  value: PropTypes.string,
+};
+
+TextInput.defaultProps = {
+  userType: "citizen",
+  isMandatory: false,
+  name: "name",
+  placeholder: "Name",
+  value: "",
 };
 
 export default TextInput;
