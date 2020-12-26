@@ -19,6 +19,7 @@ import { UserService } from "./services/User";
 import { ULBService } from "./services/Ulb";
 
 import Hooks from "./hooks";
+import Utils from "./utils";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -67,6 +68,7 @@ const initLibraries = () => {
 
   setupLibraries("Hooks", Hooks);
   setupLibraries("Customizations", {});
+  setupLibraries("Utils", Utils);
 
   setupDevice();
   initI18n();
