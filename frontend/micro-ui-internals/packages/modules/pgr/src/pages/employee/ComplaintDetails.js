@@ -32,6 +32,7 @@ import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
 import useComplaintDetails from "../../hooks/useComplaintDetails";
+import { isError } from "react-query";
 
 const MapView = (props) => {
   return (
@@ -79,24 +80,27 @@ export const ComplaintDetails = (props) => {
   // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
   const tenantId = "pb.amritsar";
-  const { isLoading, complaintDetails } = useComplaintDetails({ tenantId, id });
-  const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, role: "EMPLOYEE" });
+  const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = useComplaintDetails({ tenantId, id });
+  const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, moduleCode: "PGR", role: "EMPLOYEE" });
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [assignResponse, setAssignResponse] = useState(null);
+  const [loader, setLoader] = useState(false);
   const [rerender, setRerender] = useState(1);
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
     setPopup(true);
   }
+
   useEffect(() => {
     (async () => {
-      const assignWorkflow = await Digit.workflowService.getByBusinessId(tenantId, id);
-      console.log("aassign", assignWorkflow);
+      const assignWorkflow = await Digit?.WorkflowService?.getByBusinessId(tenantId, id);
+      console.log("assign", assignWorkflow);
     })();
   }, [complaintDetails]);
+
   // useEffect(() => {
   //   console.log("action", props.action);
   //   setActionCalled(props.action);
@@ -147,6 +151,10 @@ export const ComplaintDetails = (props) => {
         setPopup(true);
         setDisplayMenu(false);
         break;
+      case "REOPEN":
+        setPopup(true);
+        setDisplayMenu(false);
+        break;
       default:
         console.log("action not known");
         setDisplayMenu(false);
@@ -155,10 +163,14 @@ export const ComplaintDetails = (props) => {
 
   async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
-    const response = await Digit.Complaint.assign(selectedAction, selectedEmployee, comments, uploadedFile);
+    const response = await Digit.Complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile);
     console.log("aasjdas", response);
     setAssignResponse(response);
     setToast(true);
+    setLoader(true);
+    await workflowDetails.revalidate();
+    await revalidateComplaintDetails;
+    setLoader(false);
     setRerender(rerender + 1);
     setTimeout(() => setToast(false), 10000);
   }
@@ -167,12 +179,14 @@ export const ComplaintDetails = (props) => {
     setToast(false);
   }
 
-  if (isLoading) {
+  if (isLoading || workflowDetails.isLoading || loader) {
     return <Loader />;
   }
 
+  if (workflowDetails.isError) return <React.Fragment>{workflowDetails.error}</React.Fragment>;
+
   const getTimelineCaptions = (checkpoint) => {
-    console.log("tl", checkpoint);
+    // console.log("tl", checkpoint);
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
@@ -200,7 +214,7 @@ export const ComplaintDetails = (props) => {
                   key={k}
                   label={t(k)}
                   text={
-                    Array.isArray(complaintDetails.details[k]) ? complaintDetails.details[k].map((val) => t(val)) : t(complaintDetails.details[k])
+                    Array.isArray(complaintDetails?.details[k]) ? complaintDetails?.details[k].map((val) => t(val)) : t(complaintDetails?.details[k])
                   }
                   last={arr.length - 1 === i}
                 />
@@ -213,19 +227,19 @@ export const ComplaintDetails = (props) => {
             )}
           </StatusTable>
         )}
-        {complaintDetails?.thumbnails && complaintDetails?.thumbnails.length !== 0 ? (
+        {complaintDetails?.thumbnails && complaintDetails?.thumbnails?.length !== 0 ? (
           <DisplayPhotos srcs={complaintDetails?.thumbnails} onClick={zoomImage} />
         ) : null}
         <BreakLine />
-        {workflowDetails.isLoading && <Loader />}
-        {!workflowDetails.isLoading && (
+        {workflowDetails?.isLoading && <Loader />}
+        {!workflowDetails?.isLoading && (
           <React.Fragment>
-            {workflowDetails.data.timeline && workflowDetails.data.timeline.length === 1 ? (
-              <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails.data.timeline[0].status)} />
+            {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
+              <CheckPoint isCompleted={true} label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)} />
             ) : (
               <ConnectingCheckPoints>
-                {workflowDetails.data.timeline &&
-                  workflowDetails.data.timeline.map((checkpoint, index, arr) => {
+                {workflowDetails?.data?.timeline &&
+                  workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
                     return (
                       <CheckPoint
                         key={index}
@@ -253,7 +267,8 @@ export const ComplaintDetails = (props) => {
       {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
       {popup ? (
         <Modal
-          employeeRoles={workflowDetails.data?.nextActions ? workflowDetails.data?.nextActions : null}
+          complaintDetails={complaintDetails}
+          employeeRoles={workflowDetails?.data?.nextActions ? workflowDetails?.data?.nextActions : null}
           headerBarMain={
             <Heading
               label={
@@ -272,10 +287,10 @@ export const ComplaintDetails = (props) => {
         />
       ) : null}
       {toast && <Toast label={t(assignResponse ? `CS_ACTION_${selectedAction}_TEXT` : "CS_ACTION_ASSIGN_FAILED")} onClose={closeToast} />}
-      {!workflowDetails.isLoading && workflowDetails.data?.nextActions?.length > 0 && (
+      {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
         <ActionBar>
-          {displayMenu && workflowDetails.data.nextActions ? (
-            <Menu options={workflowDetails.data.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
+          {displayMenu && workflowDetails?.data?.nextActions ? (
+            <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
           ) : null}
           <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
         </ActionBar>

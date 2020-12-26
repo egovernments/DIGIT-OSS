@@ -1,7 +1,7 @@
 .action-bar-wrap {
   box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
-  @apply fixed w-full bottom-0 bg-white py-sm px-sm text-right;
-
+  max-width: 480px;
+  @apply fixed bottom-0 w-full bg-white py-sm px-sm text-right;
   div {
     @apply w-full;
   }
@@ -12,6 +12,7 @@
     box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
     left: 64px;
     width: calc(100% - 64px);
+    max-width: none;
     z-index: 20;
 
     @apply fixed bottom-0 bg-white py-sm pr-lg text-right;
@@ -31,7 +32,7 @@
         @apply h-12 pl-sm py-md text-body-l text-text-primary;
 
         &:hover {
-          @apply bg-grey-mid
+          @apply bg-grey-mid;
         }
       }
     }

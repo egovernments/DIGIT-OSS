@@ -2,9 +2,11 @@ import React, { useMemo } from "react";
 import { Route, BrowserRouter as Router, Switch, useRouteMatch } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { AppContainer, Header, HomeLink, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { BackButton, Header, HomeLink, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import { getI18n } from "react-i18next";
 import FileComplaint from "./FileComplaint/index";
+
+import { NewApplication } from "./pages/employee/NewApplication";
 
 export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "FSM", userType }) => {
   const { path, url } = useRouteMatch();
@@ -20,9 +22,11 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
 
   return (
     <Switch>
-      <AppContainer>
+      <div className="ground-container">
+        <BackButton>Back</BackButton>
         <PrivateRoute path={`${path}/file-property`} component={FileComplaint} />
-      </AppContainer>
+        <Route path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
+      </div>
     </Switch>
   );
 };

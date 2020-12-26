@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 // TODO: move to service
 const getThumbnails = async (ids, tenantId) => {
@@ -36,6 +36,7 @@ const transformDetails = ({ id, service, workflow, thumbnails }) => {
     details: !isEmptyOrNull(customDetails) ? customDetails : getDetailsRow({ id, service }),
     thumbnails: thumbnails,
     workflow: workflow,
+    service,
     audit: {
       citizen: service.citizen,
       details: service.auditDetails,
@@ -63,8 +64,10 @@ const fetchComplaintDetails = async (tenantId, id) => {
 };
 
 const useComplaintDetails = ({ tenantId, id }) => {
+  const client = useQueryClient();
   const { isLoading, error, data } = useQuery(["complaintDetails", tenantId, id], () => fetchComplaintDetails(tenantId, id));
-  return { isLoading, error, complaintDetails: data };
+  return { isLoading, error, complaintDetails: data, revalidate: () => client.invalidateQueries(["complaintDetails", tenantId, id]) };
+  // return { isLoading, error, complaintDetails: data };
 };
 
 export default useComplaintDetails;

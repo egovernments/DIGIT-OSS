@@ -88,21 +88,27 @@ export const Complaint = {
     return response;
   },
 
-  assign: async (action, employeeData, comments, uploadedDocument) => {
-    console.log("assign complaint srvice acall", action, employeeData, comments, uploadedDocument);
-
-    const complaintDetails = Digit.SessionStorage.get("complaintDetails");
-
+  assign: async (complaintDetails, action, employeeData, comments, uploadedDocument) => {
+    console.log("assign complaint srvice acall", action, employeeData, comments, uploadedDocument, complaintDetails);
     complaintDetails.workflow.action = action;
     complaintDetails.workflow.assignes = employeeData ? [employeeData.uuid] : null;
     complaintDetails.workflow.comments = comments;
     uploadedDocument
-      ? complaintDetails.workflow.verificationDocuments.push({
-          documentType: "PHOTO",
-          fileStore: uploadedDocument,
-          documentUid: "",
-          additionalDetails: {},
-        })
+      ? complaintDetails.workflow.verificationDocuments
+        ? complaintDetails.workflow.verificationDocuments.push({
+            documentType: "PHOTO",
+            fileStore: uploadedDocument,
+            documentUid: "",
+            additionalDetails: {},
+          })
+        : (complaintDetails.workflow.verificationDocuments = [
+            {
+              documentType: "PHOTO",
+              fileStore: uploadedDocument,
+              documentUid: "",
+              additionalDetails: {},
+            },
+          ])
       : null;
 
     console.log("assign complaintg whole call", complaintDetails);

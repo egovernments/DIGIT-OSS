@@ -6,10 +6,14 @@ const useComplaintStatus = () => {
   const [complaintStatus, setComplaintStatus] = useState([]);
 
   useEffect(() => {
-    let workflowService = null;
+    let WorkflowService = null;
     (async () => {
-      workflowService = await Digit.workflowService.init();
-      let applicationStatus = workflowService.BusinessServices[0].states
+      let stateCode =
+        Digit.SessionStorage.get("userType") == "employee"
+          ? Digit.SessionStorage.get("Employee.tenantId")
+          : Digit.SessionStorage.get("Citizen.tenantId");
+      WorkflowService = await Digit.WorkflowService.init(stateCode);
+      let applicationStatus = WorkflowService.BusinessServices[0].states
         .filter((state) => state.applicationStatus)
         .map((state) => ({
           name: t(`CS_COMMON_${state.applicationStatus}`),

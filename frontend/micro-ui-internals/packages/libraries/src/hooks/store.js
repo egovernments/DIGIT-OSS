@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 // import mergeConfig from "../../config/mergeConfig";
-import { StoreService } from "./service";
+import { StoreService } from "../services/Store/service";
 
 export const useStore = (defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode, language }) => {
   const [defaultStore, setDefaultStore] = useState({});
@@ -18,12 +19,8 @@ export const useStore = (defaultConfig, { deltaConfig, stateCode, cityCode, modu
 };
 
 export const useInitStore = (stateCode) => {
-  const [defaultStore, setDefaultStore] = useState({});
-  useEffect(() => {
-    StoreService.digitInitData(stateCode).then((initData) => {
-      console.log("init data", initData);
-      setDefaultStore({ config: {}, ...initData });
-    });
-  }, [stateCode]);
-  return defaultStore;
+  const { isLoading, error, isError, data } = useQuery(["initStore", stateCode], () => StoreService.digitInitData(stateCode), {
+    staleTime: Infinity,
+  });
+  return { isLoading, error, isError, data };
 };

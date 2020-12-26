@@ -70,18 +70,19 @@ const Dropdown = (props) => {
       {dropdownStatus ? (
         props.optionKey ? (
           <div className="options-card">
-            {props.option
-              .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
-              .map((option, index) => {
-                if (props.t) {
-                  // console.log(props.t(option[props.optionKey]));
-                }
-                return (
-                  <p key={index} onClick={() => onSelect(option)}>
-                    {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}
-                  </p>
-                );
-              })}
+            {props.option &&
+              props.option
+                .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
+                .map((option, index) => {
+                  if (props.t) {
+                    // console.log(props.t(option[props.optionKey]));
+                  }
+                  return (
+                    <p key={index} onClick={() => onSelect(option)}>
+                      {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}
+                    </p>
+                  );
+                })}
           </div>
         ) : (
           <div className="options-card">

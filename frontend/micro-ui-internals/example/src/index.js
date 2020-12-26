@@ -10,18 +10,22 @@ import "@egovernments/digit-ui-css/example/index.css";
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
+import GRO from "./userInfo/gro.json";
 
 import pgrCustomizations from "./pgr";
 
-const userInfo = { CITIZEN, EMPLOYEE, LME };
-
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
 initLibraries();
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
-const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
+const userType = sessionStorage.getItem("custom_user") || "EMPLOYEE";
 
-const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+const token = process.env[`REACT_APP_${userType}_TOKEN`];
+
+console.log(token);
+
+// COMMENT ABOVE BEFORE COMMIT OR PUSH OR DEPLOY
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
@@ -39,5 +43,19 @@ window.Digit.SessionStorage.set("User", userDetails);
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+
+window.mdmsInitPre = ({ params, data }) => {
+  console.log("mdms init pre", params, data);
+  return { params, data };
+};
+
+window.mdmsInitPost = (data) => {
+  console.log("mdms init post", data);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(data);
+    }, 2000);
+  });
+};
 
 ReactDOM.render(<DigitUI stateCode="pb" />, document.getElementById("root"));

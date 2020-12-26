@@ -1,6 +1,6 @@
 import i18next from "i18next";
 import mergeConfig from "./config/mergeConfig";
-import { useStore, useInitStore } from "./services/index";
+import { useStore } from "./services/index";
 import { initI18n } from "./translations/index";
 import { Storage } from "./services/Utils/Storage";
 import Enums from "./enums/index";
@@ -15,8 +15,11 @@ import { UploadServices } from "./services/UploadServices";
 import { GetServiceDefinitions } from "./services/ServiceDefinitions";
 import { Complaint } from "./services/Complaint";
 import { PincodeMap } from "./services/PincodeMap";
+import { UserService } from "./services/User";
+import { ULBService } from "./services/Ulb";
 
 import Hooks from "./hooks";
+import Utils from "./utils";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -44,23 +47,29 @@ const setupDevice = () => {
 };
 
 const initLibraries = () => {
-  setupLibraries("Config", { mergeConfig });
-  setupLibraries("Services", { useStore, useInitStore });
-  setupLibraries("Enums", Enums);
   setupLibraries("SessionStorage", Storage);
+  setupLibraries("UserService", UserService);
+  setupLibraries("ULBService", ULBService);
+
+  setupLibraries("Config", { mergeConfig });
+  setupLibraries("Services", { useStore });
+  setupLibraries("Enums", Enums);
   setupLibraries("LocationService", LocationService);
   setupLibraries("LocalityService", LocalityService);
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
   setupLibraries("DateUtils", dateUtils);
-  setupLibraries("workflowService", WorkflowService);
+  setupLibraries("WorkflowService", WorkflowService);
   setupLibraries("MDMSService", MdmsService);
   setupLibraries("UploadServices", UploadServices);
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
   setupLibraries("Complaint", Complaint);
   setupLibraries("PincodeMap", PincodeMap);
+
   setupLibraries("Hooks", Hooks);
   setupLibraries("Customizations", {});
+  setupLibraries("Utils", Utils);
+
   setupDevice();
   initI18n();
   window.i18next = i18next;
