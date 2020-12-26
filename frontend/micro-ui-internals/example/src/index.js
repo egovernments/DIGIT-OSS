@@ -12,14 +12,19 @@ import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
 import GRO from "./userInfo/gro.json";
 
-import pgrCustomizations from "./pgr";
+import Registry from "@egovernments/digit-ui-libraries/src/services/ComponentRegistry";
+
+import { pgrCustomizations, pgrComponents } from "./pgr";
 
 const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
 initLibraries();
+const registry = new Registry({
+  ...pgrComponents,
+});
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
-const userType = sessionStorage.getItem("custom_user") || "EMPLOYEE";
+const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
@@ -54,4 +59,4 @@ window.mdmsInitPost = (data) => {
   });
 };
 
-ReactDOM.render(<DigitUI stateCode="pb" />, document.getElementById("root"));
+ReactDOM.render(<DigitUI stateCode="pb" registry={registry} />, document.getElementById("root"));

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Phone } from "./svgindex";
 
 const TelePhone = ({ mobile, text }) => (
@@ -12,5 +13,15 @@ const TelePhone = ({ mobile, text }) => (
     </div>
   </React.Fragment>
 );
+
+TelePhone.propTypes = {
+  mobile: PropTypes.number,
+  text: PropTypes.string,
+};
+
+TelePhone.defaultProps = {
+  mobile: "",
+  text: "",
+};
 
 export default TelePhone;

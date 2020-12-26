@@ -1,5 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
+
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
 import CardText from "../atoms/CardText";
@@ -25,6 +27,32 @@ const TextInputCard = ({ header, subHeader, cardText, cardLabel, nextText, skipA
       {skip ? <LinkButton label={skipAndContinueText} onClick={onSkip} /> : null}
     </Card>
   );
+};
+
+TextInputCard.propTypes = {
+  header: PropTypes.string,
+  subHeader: PropTypes.string,
+  cardText: PropTypes.string,
+  cardLabel: PropTypes.string,
+  nextText: PropTypes.string,
+  skipAndContinueText: PropTypes.string,
+  skip: PropTypes.bool,
+  onSave: PropTypes.func,
+  onSkip: PropTypes.func,
+  textInput: PropTypes.string,
+};
+
+TextInputCard.defaultProps = {
+  header: "",
+  subHeader: "",
+  cardText: "",
+  cardLabel: "",
+  nextText: "",
+  skipAndContinueText: "",
+  skip: true,
+  onSave: undefined,
+  onSkip: undefined,
+  textInput: "",
 };
 
 export default TextInputCard;

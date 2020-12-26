@@ -1,6 +1,7 @@
 import React from "react";
 import { SuccessSvg } from "./svgindex";
 import { ErrorSvg } from "./svgindex";
+import PropTypes from "prop-types";
 
 const Successful = (props) => {
   return (
@@ -28,6 +29,26 @@ const Error = (props) => {
 
 const Banner = (props) => {
   return props.successful ? <Successful props={props} /> : <Error props={props} />;
+};
+
+Banner.propTypes = {
+  /**
+   * Is banner is successful or error?
+   */
+  successful: PropTypes.bool.isRequired,
+  /**
+   * Banner message
+   */
+  message: PropTypes.string.isRequired,
+  /**
+   * If banner is successful, then show the complaint number
+   */
+  complaintNumber: PropTypes.number,
+};
+
+Banner.defaultProps = {
+  successful: true,
+  message: "",
 };
 
 export default Banner;
