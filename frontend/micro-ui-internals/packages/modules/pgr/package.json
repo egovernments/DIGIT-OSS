@@ -20,6 +20,7 @@
   "dependencies": {
     "@egovernments/digit-ui-libraries": "^1.0.0",
     "@egovernments/digit-ui-react-components": "^1.0.0",
+    "lodash.merge": "^4.6.2",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-hook-form": "^6.7.0",
