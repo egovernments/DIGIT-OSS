@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
 import Card from "../atoms/Card";
 import CardCaption from "../atoms/CardCaption";
@@ -19,6 +20,32 @@ const TypeSelectCard = ({ t, headerCaption, header, cardText, submitBarLabel, se
       <SubmitBar label={t(submitBarLabel)} onSubmit={onSave} />
     </Card>
   );
+};
+
+TypeSelectCard.propTypes = {
+  headerCaption: PropTypes.string,
+  header: PropTypes.string,
+  cardText: PropTypes.string,
+  submitBarLabel: PropTypes.string,
+  selectedOption: PropTypes.string,
+  menu: PropTypes.array,
+  optionsKey: PropTypes.string,
+  selected: PropTypes.func,
+  onSave: PropTypes.func,
+  t: PropTypes.func,
+};
+
+TypeSelectCard.defaultProps = {
+  headerCaption: "",
+  header: "",
+  cardText: "",
+  submitBarLabel: "",
+  selectedOption: "",
+  menu: [],
+  optionsKey: "",
+  selected: undefined,
+  onSave: undefined,
+  t: (value) => value,
 };
 
 export default TypeSelectCard;

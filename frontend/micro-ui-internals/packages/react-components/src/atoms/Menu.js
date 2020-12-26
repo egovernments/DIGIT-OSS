@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const Menu = (props) => {
   return (
@@ -12,6 +13,16 @@ const Menu = (props) => {
       })}
     </div>
   );
+};
+
+Menu.propTypes = {
+  options: PropTypes.array,
+  onSelect: PropTypes.func,
+};
+
+Menu.defaultProps = {
+  options: [],
+  onSelect: () => {},
 };
 
 export default Menu;
