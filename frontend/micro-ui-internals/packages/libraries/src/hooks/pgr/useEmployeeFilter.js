@@ -1,4 +1,3 @@
-import { set } from "lodash";
 import React, { useState, useEffect } from "react";
 
 const useEmployeeFilter = (cityCode, roles, complaintDetails) => {

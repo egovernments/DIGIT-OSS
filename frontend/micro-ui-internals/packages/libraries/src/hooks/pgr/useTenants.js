@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 const useTenants = () => {
   const tenantInfo = Digit.SessionStorage.get("PGR_TENANTS");

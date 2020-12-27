@@ -7,7 +7,6 @@ import { BackButton, Card, CardHeader, CardText, TextArea, SubmitBar } from "@eg
 
 import { updateComplaints } from "../../../redux/actions/index";
 import { LOCALIZATION_KEY } from "../../../constants/Localization";
-import useComplaintDetails from "../../../hooks/useComplaintDetails";
 
 const AddtionalDetails = (props) => {
   // const [details, setDetails] = useState(null);
@@ -19,7 +18,7 @@ const AddtionalDetails = (props) => {
   let userType = Digit.SessionStorage.get("userType");
   let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
 
-  const complaintDetails = useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
+  const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
   console.log("88888888888888888", tenantId, complaintDetails);
   useEffect(() => {
     if (appState.complaints) {

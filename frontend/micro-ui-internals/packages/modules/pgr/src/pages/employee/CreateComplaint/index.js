@@ -5,8 +5,6 @@ import { Dropdown } from "@egovernments/digit-ui-react-components";
 import { useRouteMatch, useHistory } from "react-router-dom";
 
 import { FormComposer } from "../../../components/FormComposer";
-import useComplaintTypes from "../../../hooks/useComplaintTypes";
-import useTenants from "../../../hooks/useTenants";
 import { createComplaint } from "../../../redux/actions/index";
 
 export const CreateComplaint = ({ parentUrl }) => {
@@ -27,9 +25,9 @@ export const CreateComplaint = ({ parentUrl }) => {
   const [submitValve, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
-  const menu = useComplaintTypes({ stateCode: tenantId });
+  const menu = Digit.Hooks.pgr.useComplaintTypes({ stateCode: tenantId });
   const { t } = useTranslation();
-  const cities = useTenants();
+  const cities = Digit.Hooks.pgr.useTenants();
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const history = useHistory();
@@ -40,9 +38,9 @@ export const CreateComplaint = ({ parentUrl }) => {
   // console.log(getObject.service("PGR").Name)
 
   // //complaint logic
-  function selectedType(value) {
+  async function selectedType(value) {
     setComplaintType(value);
-    setSubTypeMenu(serviceDefinitions.getSubMenu(tenantId, value, t));
+    setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
     SessionStorage.set("complaintType", value);
   }
 

@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-//import complaintData from "./dummyComplaintData.json"; // using dummy data as api pgr search api is down
 
 const useInboxData = (searchParams) => {
   console.log("searchParams--------:", searchParams);
-  const state = useSelector((state) => state);
   const [complaintList, setcomplaintList] = useState([]);
   //let serviceReqIds = "";
   const tenantId = "pb.amritsar";

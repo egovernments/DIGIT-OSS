@@ -4,7 +4,6 @@ import { Loader } from "@egovernments/digit-ui-react-components";
 
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
-import useInboxData from "../../hooks/useInboxData";
 
 const Inbox = () => {
   const { t } = useTranslation();
@@ -20,7 +19,7 @@ const Inbox = () => {
     setSearchParams({ ...searchParams, search: params });
   };
 
-  let complaints = useInboxData(searchParams) || [];
+  let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
 
   let isMobile = window.mobileCheck();
 

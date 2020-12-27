@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
 
 const useLocalities = ({ city }) => {
   const { t } = useTranslation();
   let locality = [];
   const [localityList, setLocalityList] = useState(null);
   const [localities, setLocalities] = useState(null);
-  const code = useSelector((state) => state.common.stateInfo.code);
   useEffect(async () => {
-    let tenantId = `${code}.${city}`;
+    let tenantId = `pb.amritsar`;
     let response = await Digit.LocationService.getLocalities({ tenantId: tenantId });
     let __localityList = [];
     if (response && response.TenantBoundary.length > 0) {

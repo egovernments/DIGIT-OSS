@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CardLabel, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
-import useTenants from "../../../../hooks/useTenants";
 
 const SelectAddress = ({ t, config, onSelect }) => {
-  const cities = useTenants();
+  const cities = Digit.Hooks.pgr.useTenants();
   console.log("tenents", cities);
 
   const city_complaint = Digit.SessionStorage.get("city_complaint");
@@ -12,7 +11,6 @@ const SelectAddress = ({ t, config, onSelect }) => {
   const [selectedCity, setSelectedCity] = useState(city_complaint ? city_complaint : null);
   const [localities, setLocalities] = useState(selected_localities ? selected_localities : null);
   const [selectedLocality, setSelectedLocality] = useState(locality_complaint ? locality_complaint : null);
-  //   const __localities = useLocalities({ city: selectedCity });
 
   useEffect(async () => {
     if (selectedCity !== city_complaint) {

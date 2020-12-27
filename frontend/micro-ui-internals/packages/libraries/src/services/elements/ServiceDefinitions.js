@@ -45,8 +45,9 @@ export const GetServiceDefinitions = {
     return Menu;
   },
 
-  getSubMenu: (selectedType, t) => {
-    return Digit.SessionStorage.get("serviceDefinitions")
+  getSubMenu: async (tenantId, selectedType, t) => {
+    const fetchServiceDefs = await GetServiceDefinitions.get(tenantId);
+    return fetchServiceDefs
       .filter((def) => def.menuPath === selectedType.key)
       .map((id) => ({
         key: id.serviceCode,

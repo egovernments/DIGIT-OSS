@@ -17,17 +17,16 @@ import {
   Loader,
 } from "@egovernments/digit-ui-react-components";
 
-import useComplaintDetails from "../../hooks/useComplaintDetails";
 import TimeLine from "../../components/TimeLine";
 
 const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
 
-  //To Do check tenantid
-  const tenantId = Digit.ULBService.getCurrentUlb().code;
-  const { isLoading, error, isError, complaintDetails } = useComplaintDetails({ tenantId: tenantId, id });
-  const workFlowDetails = pgr.getWorkFlowDetailsById(id);
+  let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
+  const { isLoading, error, isError, complaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId: cityCodeVal, id });
+  const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: cityCodeVal, id, moduleCode: "PGR" });
+
   const [imageZoom, setImageZoom] = useState(null);
 
   function zoomImage(imageSource) {
@@ -76,18 +75,17 @@ const ComplaintDetailsPage = (props) => {
           <Card>
             <TimeLine
               isLoading={workFlowDetails.isLoading}
-              data={workFlowDetails.data || []}
+              data={workFlowDetails.data}
               serviceRequestId={id}
               complaintWorkflow={complaintDetails.workflow}
               rating={complaintDetails.audit.rating}
             />
           </Card>
-          {/* TO DO if api support */}
-          {/* <Card>
+          <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
             <TextArea />
             <SubmitBar label="Send" />
-          </Card> */}
+          </Card>
         </React.Fragment>
       ) : (
         <Loader />
