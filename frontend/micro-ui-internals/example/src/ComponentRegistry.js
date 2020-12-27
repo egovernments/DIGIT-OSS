@@ -6,6 +6,6 @@ class Registry {
   getComponent(id) {
     return this._registry[id];
   }
-};
+}
 
 export default Registry;

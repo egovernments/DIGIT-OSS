@@ -5,12 +5,11 @@ import { useDispatch } from "react-redux";
 import { createComplaint } from "../../../redux/actions/index";
 import { PGR_CITIZEN_COMPLAINT_CONFIG, PGR_CITIZEN_CREATE_COMPLAINT } from "../../../constants/Citizen";
 
-import { ComponentProvider } from "@egovernments/digit-ui-module-core/src/context";
-
 import { config as defaultConfig } from "./defaultConfig";
 import { Redirect, Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 
 export const CreateComplaint = () => {
+  const ComponentProvider = Digit.Contexts.ComponentProvider;
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const { path } = useRouteMatch();

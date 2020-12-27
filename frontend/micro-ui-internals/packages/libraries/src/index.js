@@ -18,6 +18,7 @@ import { PincodeMap } from "./services/PincodeMap";
 import { UserService } from "./services/User";
 import { ULBService } from "./services/Ulb";
 
+import Contexts from "./contexts";
 import Hooks from "./hooks";
 import Utils from "./utils";
 
@@ -66,6 +67,7 @@ const initLibraries = () => {
   setupLibraries("Complaint", Complaint);
   setupLibraries("PincodeMap", PincodeMap);
 
+  setupLibraries("Contexts", Contexts);
   setupLibraries("Hooks", Hooks);
   setupLibraries("Customizations", {});
   setupLibraries("Utils", Utils);
