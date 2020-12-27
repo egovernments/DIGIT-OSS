@@ -1,5 +1,6 @@
 import React from "react";
 import { CheckSvg } from "./svgindex";
+import PropTypes from "prop-types";
 
 const CheckBox = ({ onChange, label, ref, checked, inputRef, ...props }) => {
   const userType = Digit.SessionStorage.get("userType");
@@ -21,6 +22,29 @@ const CheckBox = ({ onChange, label, ref, checked, inputRef, ...props }) => {
       <p className="label">{label}</p>
     </div>
   );
+};
+
+CheckBox.propTypes = {
+  /**
+   * CheckBox content
+   */
+  label: PropTypes.string.isRequired,
+  /**
+   * onChange func
+   */
+  onChange: PropTypes.func,
+  /**
+   * input ref
+   */
+  ref: PropTypes.func,
+  userType: PropTypes.string,
+};
+
+CheckBox.defaultProps = {
+  label: "",
+  onChange: () => {},
+  ref: () => {},
+  userType: "citizen",
 };
 
 export default CheckBox;

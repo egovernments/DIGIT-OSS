@@ -1,5 +1,7 @@
 import { useInitStore } from "./store";
 import useWorkflowDetails from "./workflow";
+import useSessionStorage from "./useSessionStorage";
+
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
 import useComplaintStatus from "./pgr/useComplaintStatus";
@@ -31,6 +33,6 @@ const fsm = {
   useTenantsFSM,
 };
 
-const Hooks = { useWorkflowDetails, useInitStore, pgr, fsm };
+const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, pgr, fsm };
 
 export default Hooks;

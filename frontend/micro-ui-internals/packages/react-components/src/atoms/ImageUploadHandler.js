@@ -4,11 +4,12 @@ import Toast from "./Toast";
 import UploadImages from "./UploadImages";
 
 export const ImageUploadHandler = (props) => {
-  const __initImageIds = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
-  const __initThumbnails = Digit.SessionStorage.get("PGR_CREATE_THUMBNAILS");
+  // const __initImageIds = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
+  // const __initThumbnails = Digit.SessionStorage.get("PGR_CREATE_THUMBNAILS");
   const [image, setImage] = useState(null);
-  const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(__initThumbnails ? __initThumbnails : null);
-  const [uploadedImagesIds, setUploadedImagesIds] = useState(__initImageIds ? __initImageIds : null);
+  const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(null);
+  const [uploadedImagesIds, setUploadedImagesIds] = useState(props.uploadedImages);
+
   const [rerender, setRerender] = useState(1);
   const [imageFile, setImageFile] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -42,9 +43,9 @@ export const ImageUploadHandler = (props) => {
     }
   }, [imageFile]);
 
-  useEffect(() => {
-    Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", uploadedImagesThumbs);
-  }, [uploadedImagesThumbs]);
+  // useEffect(() => {
+  //   Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", uploadedImagesThumbs);
+  // }, [uploadedImagesThumbs]);
 
   const addUploadedImageIds = useCallback(
     (imageIdData) => {
