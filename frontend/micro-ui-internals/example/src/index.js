@@ -40,10 +40,6 @@ const userType = window.sessionStorage.getItem("userType") || process.env.REACT_
 
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
-console.log(token);
-
-// COMMENT ABOVE BEFORE COMMIT OR PUSH OR DEPLOY
-
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
 

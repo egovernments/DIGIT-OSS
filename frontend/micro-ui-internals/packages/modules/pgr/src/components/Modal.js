@@ -11,13 +11,12 @@ import {
   ButtonSelector,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import useEmployeeFilter from "../hooks/useEmployeeFilter";
 const Modal = (props) => {
   const roles = props.employeeRoles.filter((role) => role.action === props.selectedAction);
   const { complaintDetails } = props;
   console.log("modalllll", roles);
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
-  const useEmployeeData = useEmployeeFilter(tenantId, roles[0].roles, complaintDetails);
+  const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(tenantId, roles[0].roles, complaintDetails);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [comments, setComments] = useState(null);
   const [file, setFile] = useState(null);

@@ -10,11 +10,8 @@ import {
   RemoveableTag,
 } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
-import useLocalities from "../../hooks/useLocalities";
-import useComplaintStatus from "../../hooks/useComplaintStatus";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import useServiceDefs from "../../hooks/useServiceDefs";
 
 const Filter = (props) => {
   console.log("props in filter--------->:", props);
@@ -34,9 +31,9 @@ const Filter = (props) => {
     applicationStatus: [],
   });
   //TODO change city fetch from user tenantid
-  let localities = useLocalities({ city: "Amritsar" });
-  let complaintStatus = useComplaintStatus();
-  let serviceDefs = useServiceDefs();
+  let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
+  let complaintStatus = Digit.Hooks.pgr.useComplaintStatus();
+  let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
   const onRadioChange = (value) => {
     console.log("vlaue:-------------", value);

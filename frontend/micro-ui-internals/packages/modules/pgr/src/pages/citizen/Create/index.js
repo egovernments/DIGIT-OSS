@@ -29,6 +29,22 @@ export const CreateComplaint = () => {
 
   const submitComplaint = async () => {
     // submit complaint through actions
+    // await dispatch(createComplaint(params));
+
+    //submit complaint thru react query
+
+    //Empty Session Storage
+    // Digit.SessionStorage.set("complaintType", null);
+    // Digit.SessionStorage.set("subType", null);
+    // Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
+    // Digit.SessionStorage.set("PGR_CREATE_PINCODE", null);
+    // Digit.SessionStorage.set("city_complaint", null);
+    // Digit.SessionStorage.set("selected_localities", null);
+    // Digit.SessionStorage.set("locality_complaint", null);
+    // Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
+    // Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
+    // Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
+
     const { city_complaint, locality_complaint, uploadedImages, ...values } = params;
     const { code: cityCode, name: city } = city_complaint;
     const { code: localityCode, name: localityName } = locality_complaint;

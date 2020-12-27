@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 // import mergeConfig from "../../config/mergeConfig";
-import { StoreService } from "../services/Store/service";
+import { StoreService } from "../services/molecules/Store/service";
 
 export const useStore = (defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode, language }) => {
   const [defaultStore, setDefaultStore] = useState({});

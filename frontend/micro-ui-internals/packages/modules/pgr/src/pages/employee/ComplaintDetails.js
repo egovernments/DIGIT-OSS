@@ -31,7 +31,6 @@ import {
 import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
-import useComplaintDetails from "../../hooks/useComplaintDetails";
 import { isError } from "react-query";
 
 const MapView = (props) => {
@@ -80,7 +79,7 @@ export const ComplaintDetails = (props) => {
   // const [actionCalled, setActionCalled] = useState(false);
   const [toast, setToast] = useState(false);
   const tenantId = "pb.amritsar";
-  const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = useComplaintDetails({ tenantId, id });
+  const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, moduleCode: "PGR", role: "EMPLOYEE" });
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
