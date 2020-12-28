@@ -18,7 +18,7 @@ const Modal = (props) => {
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
   const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(tenantId, roles[0].roles, complaintDetails);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [comments, setComments] = useState(null);
+  const [comments, setComments] = useState("");
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const { t } = useTranslation();
