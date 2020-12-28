@@ -59,17 +59,12 @@ const RadioButtons = (props) => {
 };
 
 RadioButtons.propTypes = {
-  selectedOption: PropTypes.string,
+  selectedOption: PropTypes.any,
   onSelect: PropTypes.func,
-  options: PropTypes.array,
+  options: PropTypes.any,
   optionsKey: PropTypes.string,
 };
 
-RadioButtons.defaultProps = {
-  selectedOption: "",
-  onSelect: undefined,
-  options: [],
-  optionsKey: "",
-};
+RadioButtons.defaultProps = {};
 
 export default RadioButtons;

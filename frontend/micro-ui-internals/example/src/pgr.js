@@ -3,7 +3,7 @@ import SelectName from "./components/SelectName";
 import { config as complaintConfig } from "./complaintConfig";
 
 const pgrCustomizations = {
-  complaintConfig,
+  // complaintConfig,
   getComplaintDetailsTableRows: ({ id, service, role, t }) => {
     if (role === "CITIZEN") {
       return {

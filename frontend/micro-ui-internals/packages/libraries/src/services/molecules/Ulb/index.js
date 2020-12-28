@@ -5,7 +5,8 @@ export const ULBService = {
   getCurrentTenantId: () => {
     // TODO: change when setter is done.
     const user = UserService.getUser();
-    const tenantId = user?.info?.tenantId;
+    //TODO: fix tenant id from userinfo
+    const tenantId = user?.info.type === "CITIZEN" ? "pb.amritsar" : user?.info?.tenantId;
     return tenantId;
   },
   getCurrentUlb: () => {
