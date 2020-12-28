@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 
 import Card from "../atoms/Card";
@@ -16,7 +15,7 @@ const TypeSelectCard = ({ t, headerCaption, header, cardText, submitBarLabel, se
       <CardCaption>{t(headerCaption)}</CardCaption>
       <CardHeader>{t(header)}</CardHeader>
       <CardText>{t(cardText)}</CardText>
-      {menu ? <RadioButtons selectedoption={selectedOption} options={menu} optionskey={optionsKey} onSelect={selected} /> : null}
+      {menu ? <RadioButtons selectedOption={selectedOption} options={menu} optionsKey={optionsKey} onSelect={selected} /> : null}
       <SubmitBar label={t(submitBarLabel)} onSubmit={onSave} />
     </Card>
   );
@@ -27,7 +26,7 @@ TypeSelectCard.propTypes = {
   header: PropTypes.string,
   cardText: PropTypes.string,
   submitBarLabel: PropTypes.string,
-  selectedOption: PropTypes.string,
+  selectedOption: PropTypes.any,
   menu: PropTypes.array,
   optionsKey: PropTypes.string,
   selected: PropTypes.func,
@@ -35,17 +34,6 @@ TypeSelectCard.propTypes = {
   t: PropTypes.func,
 };
 
-TypeSelectCard.defaultProps = {
-  headerCaption: "",
-  header: "",
-  cardText: "",
-  submitBarLabel: "",
-  selectedOption: "",
-  menu: [],
-  optionsKey: "",
-  selected: undefined,
-  onSave: undefined,
-  t: (value) => value,
-};
+TypeSelectCard.defaultProps = {};
 
 export default TypeSelectCard;
