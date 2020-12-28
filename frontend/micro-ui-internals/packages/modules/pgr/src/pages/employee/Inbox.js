@@ -15,14 +15,12 @@ const Inbox = () => {
   };
 
   const onSearch = (params = "") => {
-    console.log("onSubmit--------", params);
     setSearchParams({ ...searchParams, search: params });
   };
 
   let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
 
   let isMobile = window.mobileCheck();
-
   if (complaints.length !== null) {
     if (isMobile) {
       return <MobileInbox data={complaints} onFilterChange={handleFilterChange} />;
