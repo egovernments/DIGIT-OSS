@@ -46,11 +46,17 @@
     border: 1px dashed #d6d5d4;
     margin: 0 !important;
 
-    img {
-      margin-left: auto;
-      margin-right: auto;
-      padding-top: calc(33% - 21px);
-    }
+        img {
+            margin-left: auto;
+            margin-right: auto;
+            padding-top: calc(33% - 21px);
+        }
+
+        svg {
+            @apply flex;
+            margin: auto;
+            margin-top: calc(33% - 21px);
+        }
 
     svg {
       margin-left: auto;

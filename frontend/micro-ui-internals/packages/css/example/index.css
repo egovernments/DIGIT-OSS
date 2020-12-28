@@ -717,6 +717,13 @@ img, video {
       .employeeCard .label-field-pair .field {
         width: 50%;
         margin-right: 20%; }
+    .employeeCard .field-container span {
+      background: #f7f7f7;
+      width: 40px;
+      height: 40px;
+      margin-top: -16px;
+      border: 2px solid #000;
+      border-right: none; }
   .header-wrap {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -726,6 +733,14 @@ img, video {
       margin-right: auto; }
     .header-wrap .header-end {
       margin-left: auto; } }
+
+.custom-card-class {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  --text-opacity:1;
+  color: #d4351c;
+  color: rgba(212, 53, 28, var(--text-opacity)); }
 
 .selector-button-primary {
   height: 2rem;
@@ -1752,13 +1767,14 @@ img, video {
     border: 1px dashed #d6d5d4;
     margin: 0 !important; }
     .multi-upload-wrap .upload-img-container img {
-      padding-top: calc(33% - 21px); }
-    .multi-upload-wrap .upload-img-container img, .multi-upload-wrap .upload-img-container svg {
       margin-left: auto;
-      margin-right: auto; }
+      margin-right: auto;
+      padding-top: calc(33% - 21px); }
     .multi-upload-wrap .upload-img-container svg {
-      top: calc(50% - 21px);
-      position: relative; }
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      margin: calc(33% - 21px) auto auto; }
     .multi-upload-wrap .upload-img-container input, .multi-upload-wrap .upload-img-container .checkbox-wrap .input-emp, .checkbox-wrap .multi-upload-wrap .upload-img-container .input-emp {
       position: absolute;
       width: 100%;

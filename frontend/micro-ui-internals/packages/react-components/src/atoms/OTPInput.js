@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 
 const SingleInput = ({ isFocus, onChange, onFocus, value }) => {
   const inputRef = useRef();
@@ -47,6 +48,14 @@ const OTPInput = (props) => {
   }
 
   return <div className="input-otp-wrap">{OTPStack}</div>;
+};
+
+OTPInput.propTypes = {
+  length: PropTypes.number,
+};
+
+OTPInput.defaultProps = {
+  length: 0,
 };
 
 export default OTPInput;

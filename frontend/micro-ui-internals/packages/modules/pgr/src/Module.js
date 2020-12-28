@@ -24,7 +24,7 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
     if (state && !state.businessService) {
       disptach(fetchBusinessServiceByTenant("pb.amritsar", "PGR"));
     }
-    console.log("state", state);
+    // console.log("state", state);
   });
 
   if (Object.keys(store).length === 0) {
@@ -33,9 +33,9 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
 
   Digit.SessionStorage.set("PGR_TENANTS", tenants);
 
-  console.log("pgr", userType, tenants, state, store);
-  console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
-  console.log("state", state);
+  // console.log("pgr", userType, tenants, state, store);
+  // console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
+  // console.log("state", state);
 
   if (userType === "citizen") {
     return <CitizenApp />;

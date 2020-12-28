@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 const Details = ({ label, name }) => {
@@ -28,6 +29,14 @@ const DetailsCard = ({ data, serviceRequestIdKey, linkPrefix }) => {
       })}
     </div>
   );
+};
+
+DetailsCard.propTypes = {
+  data: PropTypes.array,
+};
+
+DetailsCard.defaultProps = {
+  data: [],
 };
 
 export default DetailsCard;

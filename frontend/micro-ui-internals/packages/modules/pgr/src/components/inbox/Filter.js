@@ -10,11 +10,8 @@ import {
   RemoveableTag,
 } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
-import useLocalities from "../../hooks/useLocalities";
-import useComplaintStatus from "../../hooks/useComplaintStatus";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import useServiceDefs from "../../hooks/useServiceDefs";
 
 const Filter = (props) => {
   console.log("props in filter--------->:", props);
@@ -34,9 +31,9 @@ const Filter = (props) => {
     applicationStatus: [],
   });
   //TODO change city fetch from user tenantid
-  let localities = useLocalities({ city: "Amritsar" });
-  let complaintStatus = useComplaintStatus();
-  let serviceDefs = useServiceDefs();
+  let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
+  let complaintStatus = Digit.Hooks.pgr.useComplaintStatus();
+  let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
   const onRadioChange = (value) => {
     console.log("vlaue:-------------", value);
@@ -86,19 +83,24 @@ const Filter = (props) => {
     getPendingCount();
   }, [complaintStatus.length]);
 
+  const ifExists = (list, key) => {
+    return list.filter((object) => object.code === key.code).length;
+  };
+
   function complaintType(_type) {
-    console.log("complaint fikler", filters, _type);
     const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
-    setFilters({ ...filters, serviceCode: [...filters.serviceCode, type] });
+    if (!ifExists(filters.serviceCode, type)) {
+      setFilters({ ...filters, serviceCode: [...filters.serviceCode, type] });
+    }
   }
 
   function onSelectLocality(value, type) {
-    console.log("hi", type, value);
-    setFilters({ ...filters, locality: [...filters.locality, value] });
+    if (!ifExists(filters.locality, value)) {
+      setFilters({ ...filters, locality: [...filters.locality, value] });
+    }
   }
 
   useEffect(() => {
-    console.log("filters:", filters.serviceCode);
     if (filters.serviceCode.length > 1) {
       setSelectedComplaintType(`${filters.serviceCode.length} selected`);
     } else {
@@ -159,7 +161,6 @@ const Filter = (props) => {
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
-
       {console.log("options heiaisndao", options)}
       <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />
       <div className="tag-container">
@@ -173,7 +174,7 @@ const Filter = (props) => {
 
   return (
     <React.Fragment>
-      {console.log("filters:", filters)}
+      {console.log("filters:>>>>>>>>>>>>>>>", filters)}
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
@@ -191,8 +192,8 @@ const Filter = (props) => {
           <div>
             <RadioButtons
               onSelect={onRadioChange}
-              selectedoption={selectAssigned}
-              optionskey="name"
+              selectedOption={selectAssigned}
+              optionsKey="name"
               options={[
                 { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
                 { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },

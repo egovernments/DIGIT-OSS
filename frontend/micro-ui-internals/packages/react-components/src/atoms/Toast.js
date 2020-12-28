@@ -1,5 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { RoundedCheck, DeleteBtn } from "./svgindex";
+
 const Toast = (props) => {
   if (props.error) {
     return (
@@ -18,6 +20,16 @@ const Toast = (props) => {
       <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} />
     </div>
   );
+};
+
+Toast.propTypes = {
+  label: PropTypes.string,
+  onClose: PropTypes.func,
+};
+
+Toast.defaultProps = {
+  label: "",
+  onClose: undefined,
 };
 
 export default Toast;
