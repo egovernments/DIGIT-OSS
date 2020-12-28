@@ -1,5 +1,4 @@
 import Axios from "axios";
-import { UserService } from "../../molecules/User";
 
 Axios.interceptors.response.use(
   (res) => res,

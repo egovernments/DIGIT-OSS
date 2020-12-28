@@ -38,7 +38,7 @@ export const UserService = {
   registerUser: (details, stateCode = "pb") =>
     ServiceRequest({
       serviceName: "registerUser",
-      url: Urls.Register_User,
+      url: Urls.RegisterUser,
       data: {
         User: details,
       },
