@@ -192,8 +192,8 @@ const Filter = (props) => {
           <div>
             <RadioButtons
               onSelect={onRadioChange}
-              selectedoption={selectAssigned}
-              optionskey="name"
+              selectedOption={selectAssigned}
+              optionsKey="name"
               options={[
                 { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
                 { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
