@@ -68,7 +68,7 @@ const Modal = (props) => {
               </React.Fragment>
             )}
             <CardLabel>{t("CS_COMMON_EMPLOYEE_COMMENTS")}</CardLabel>
-            <TextArea onChange={addComment} />
+            <TextArea onChange={addComment} value={comments} />
             <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
             <CardLabelDesc>{t(`TL_UPLOAD_RESTRICTIONS`)}</CardLabelDesc>
             <UploadFile
