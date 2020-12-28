@@ -4,6 +4,7 @@ import merge from "lodash.merge";
 import { useDispatch } from "react-redux";
 import { createComplaint } from "../../../redux/actions/index";
 import { PGR_CITIZEN_COMPLAINT_CONFIG, PGR_CITIZEN_CREATE_COMPLAINT } from "../../../constants/Citizen";
+import Response from "./Response";
 
 import { config as defaultConfig } from "./defaultConfig";
 import { Redirect, Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
@@ -12,7 +13,7 @@ export const CreateComplaint = () => {
   const ComponentProvider = Digit.Contexts.ComponentProvider;
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const { path } = useRouteMatch();
+  const match = useRouteMatch();
   const history = useHistory();
   const registry = useContext(ComponentProvider);
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ export const CreateComplaint = () => {
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.routes[currentPath];
     if (nextStep === null) return submitComplaint();
-    history.push(`${path}/${nextStep}`);
+    history.push(`${match.path}/${nextStep}`);
   };
 
   const submitComplaint = async () => {
@@ -72,7 +73,7 @@ export const CreateComplaint = () => {
     console.log("this is the request data", data);
     await dispatch(createComplaint(data));
     clearParams();
-    history.push(`${path}/response`);
+    history.push(`${match.path}/response`);
   };
 
   const handleSelect = (data) => {
@@ -91,13 +92,16 @@ export const CreateComplaint = () => {
         const { component, texts, inputs } = config.routes[route];
         const Component = typeof component === "string" ? registry.getComponent(component) : component;
         return (
-          <Route path={`${path}/${route}`} key={index}>
+          <Route path={`${match.path}/${route}`} key={index}>
             <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} />
           </Route>
         );
       })}
+      <Route path={`${match.path}/response`}>
+        <Response match={match} />
+      </Route>
       <Route>
-        <Redirect to={`${path}/${config.indexRoute}`} />
+        <Redirect to={`${match.path}/${config.indexRoute}`} />
       </Route>
     </Switch>
   );
