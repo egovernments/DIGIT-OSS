@@ -10,11 +10,8 @@ import {
   RemoveableTag,
 } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
-import useLocalities from "../../hooks/useLocalities";
-import useComplaintStatus from "../../hooks/useComplaintStatus";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import useServiceDefs from "../../hooks/useServiceDefs";
 import Status from "./Status";
 
 const Filter = (props) => {
@@ -40,10 +37,9 @@ const Filter = (props) => {
   });
 
   //TODO change city fetch from user tenantid
-  let localities = useLocalities({ city: "Amritsar" });
-  // let complaintStatus = useComplaintStatus();
-  // console.log("complaintStatus-------------------------------:", complaintStatus);
-  let serviceDefs = useServiceDefs();
+  let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
+  let complaintStatus = Digit.Hooks.pgr.useComplaintStatus();
+  let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
@@ -169,8 +165,8 @@ const Filter = (props) => {
           <div>
             <RadioButtons
               onSelect={onRadioChange}
-              selectedoption={selectAssigned}
-              optionskey="name"
+              selectedOption={selectAssigned}
+              optionsKey="name"
               options={[
                 { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
                 { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
@@ -180,7 +176,6 @@ const Filter = (props) => {
               {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCode", "key")}
             </div>
             <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
-            {console.log("pgrFilters>>>>:", pgrfilters)}
             <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
           </div>
         </div>

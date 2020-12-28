@@ -5,8 +5,6 @@ import { Dropdown } from "@egovernments/digit-ui-react-components";
 import { useRouteMatch, useHistory } from "react-router-dom";
 
 import { FormComposer } from "../../../components/FormComposer";
-import useComplaintTypes from "../../../hooks/useComplaintTypes";
-import useTenants from "../../../hooks/useTenants";
 import { createComplaint } from "../../../redux/actions/index";
 
 export const CreateComplaint = ({ parentUrl }) => {
@@ -26,18 +24,23 @@ export const CreateComplaint = ({ parentUrl }) => {
   const [selectedLocality, setSelectedLocality] = useState(locality_complaint ? locality_complaint : null);
   const [submitValve, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
-
-  const menu = useComplaintTypes({ stateCode: "pb.amritsar" });
+  const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
+  const menu = Digit.Hooks.pgr.useComplaintTypes({ stateCode: tenantId });
   const { t } = useTranslation();
-  const cities = useTenants();
+  const cities = Digit.Hooks.pgr.useTenants();
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const history = useHistory();
+  const serviceDefinitions = Digit.GetServiceDefinitions;
+
+  //TO USE this way
+  // let getObject = window.Digit.CoreService;
+  // console.log(getObject.service("PGR").Name)
 
   // //complaint logic
-  function selectedType(value) {
+  async function selectedType(value) {
     setComplaintType(value);
-    setSubTypeMenu(Digit.GetServiceDefinitions.getSubMenu(value, t));
+    setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
     SessionStorage.set("complaintType", value);
   }
 
@@ -48,9 +51,6 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   // city locality logic
   const selectCity = async (city) => {
-    // Digit.SessionStorage.set("locality_complaint", null);
-    // setSelectedLocality(null);
-    // setLocalities(null);
     setSelectedCity(city);
     Digit.SessionStorage.set("city_complaint", city);
     let response = await Digit.LocationService.getLocalities({ tenantId: city.code });
@@ -58,21 +58,6 @@ export const CreateComplaint = ({ parentUrl }) => {
     setLocalities(__localityList);
     Digit.SessionStorage.set("selected_localities", __localityList);
   };
-
-  // useEffect(async () => {
-  //   if (selectedCity) {
-  //     let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
-  //     let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
-  //     setLocalities(__localityList);
-  //     Digit.SessionStorage.set("selected_localities", __localityList);
-  //   }
-  // }, []);
-
-  // useEffect(async () => {
-  //   console.log("parmamsssss", params);
-  //   params.landmark ? await dispatch(createComplaint(params)) : null;
-  //   params.landmark ? history.push(match.url + "/response") : null;
-  // }, [params]);
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
@@ -123,7 +108,7 @@ export const CreateComplaint = ({ parentUrl }) => {
           populators: {
             name: "name",
             validation: {
-              pattern: /[A-Za-z]/,
+              pattern: /^[A-Za-z]/,
             },
             error: t("CS_ADDCOMPLAINT_NAME_ERROR"),
           },

@@ -1,176 +1,99 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import merge from "lodash.merge";
+import { useDispatch } from "react-redux";
 import { createComplaint } from "../../../redux/actions/index";
+import { PGR_CITIZEN_COMPLAINT_CONFIG, PGR_CITIZEN_CREATE_COMPLAINT } from "../../../constants/Citizen";
 
-import { FormStep, SubmitBar, TextInput } from "@egovernments/digit-ui-react-components";
+import { config as defaultConfig } from "./defaultConfig";
+import { Redirect, Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 
-import { newComplaintSteps } from "./config";
-import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch } from "react-router-dom";
-
-import SelectComplaintType from "./Steps/SelectComplaintType";
-import SelectSubType from "./Steps/SelectSubType";
-import SelectPincode from "./Steps/SelectPincode";
-import SelectAddress from "./Steps/SelectAddress";
-import SelectLandmark from "./Steps/SelectLandmark";
-import SelectImages from "./Steps/SelectImages";
-import SelectDetails from "./Steps/SelectDetails";
-import Response from "./Steps/Response";
-
-// steps type: radio, map location, input, city-mohalla, textarea, upload photo
 export const CreateComplaint = () => {
+  const ComponentProvider = Digit.Contexts.ComponentProvider;
   const { t } = useTranslation();
-  const { path, url } = useRouteMatch();
+  const { pathname } = useLocation();
+  const { path } = useRouteMatch();
   const history = useHistory();
+  const registry = useContext(ComponentProvider);
   const dispatch = useDispatch();
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
+  const [customConfig, setConfig] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_COMPLAINT_CONFIG, {});
+  const config = useMemo(() => merge(defaultConfig, Digit.Customizations.PGR.complaintConfig), [Digit.Customizations.PGR.complaintConfig]);
 
-  const appState = useSelector((state) => state)["common"];
-  console.log("appstate form index", appState);
-  const __initParams = Digit.SessionStorage.get("PGR_CREATE_COMPLAINT_PARAMS");
-  const [params, setParams] = useState(__initParams ? __initParams : {});
-  const [submitForm, setSubmitForm] = useState(false);
-
-  const stepItems = useMemo(
-    () =>
-      newComplaintSteps.map((step, index) => {
-        const texts = {};
-        for (const key in step.texts) {
-          texts[key] = t(step.texts[key]);
-        }
-        return { ...step, texts };
-      }),
-    [newComplaintSteps]
-  );
-
-  useEffect(() => {
-    console.log("submitForm", params);
-  }, [submitForm]);
-
-  const selectComplaintType = (complaintType) => {
-    // updateParams("complaintType", complaintType);
-    history.push(`${path}/sub-type`);
+  const goNext = () => {
+    const currentPath = pathname.split("/").pop();
+    const { nextStep } = config.routes[currentPath];
+    if (nextStep === null) return submitComplaint();
+    history.push(`${path}/${nextStep}`);
   };
 
-  const selectSubType = (subType) => {
-    const { key, name } = subType;
-    const complaintType = key;
-    setParams({ ...params, complaintType });
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    history.push(`${path}/pincode`);
-  };
-
-  const selectPincode = (_pincode) => {
-    if (_pincode) {
-      const { pincode } = _pincode;
-      setParams({ ...params, pincode });
-      console.log("index --->", pincode);
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    }
-    history.push(`${path}/address`);
-  };
-
-  const selectAddress = (address) => {
-    const cityCode = address.city.code;
-    const city = address.city.name;
-    const district = address.city.name;
-    const region = address.city.name;
-    const state = "Punjab";
-    const localityCode = address.locality.code;
-    const localityName = address.locality.name;
-    setParams({ ...params, cityCode, city, district, region, state, localityCode, localityName });
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    history.push(`${path}/landmark`);
-  };
-
-  const saveLandmark = (_landmark) => {
-    if (_landmark) {
-      const { landmark } = _landmark;
-      setParams({ ...params, landmark });
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    }
-    history.push(`${path}/upload-photos`);
-  };
-
-  const saveImagesUrl = (images) => {
-    if (images) {
-      const uploadedImages = images?.map((url) => {
-        return {
-          documentType: "PHOTO",
-          fileStore: url,
-          documentUid: "",
-          additionalDetails: {},
-        };
-      });
-      setParams({ ...params, uploadedImages });
-      Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", params);
-    }
-    history.push(`${path}/additional-details`);
-  };
-
-  const submitComplaint = async (_details) => {
-    if (_details) {
-      const { details } = _details;
-      details && details !== "" ? setParams({ ...params, details }) : null;
-    }
-    console.log("index params", params);
-
+  const submitComplaint = async () => {
     // submit complaint through actions
-    await dispatch(createComplaint(params));
+    // await dispatch(createComplaint(params));
+
+    //submit complaint thru react query
 
     //Empty Session Storage
-    Digit.SessionStorage.set("complaintType", null);
-    Digit.SessionStorage.set("subType", null);
-    Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
-    Digit.SessionStorage.set("PGR_CREATE_PINCODE", null);
-    Digit.SessionStorage.set("city_complaint", null);
-    Digit.SessionStorage.set("selected_localities", null);
-    Digit.SessionStorage.set("locality_complaint", null);
-    Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
-    Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
-    Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
+    // Digit.SessionStorage.set("complaintType", null);
+    // Digit.SessionStorage.set("subType", null);
+    // Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
+    // Digit.SessionStorage.set("PGR_CREATE_PINCODE", null);
+    // Digit.SessionStorage.set("city_complaint", null);
+    // Digit.SessionStorage.set("selected_localities", null);
+    // Digit.SessionStorage.set("locality_complaint", null);
+    // Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
+    // Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
+    // Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
 
+    const { city_complaint, locality_complaint, uploadedImages, ...values } = params;
+    const { code: cityCode, name: city } = city_complaint;
+    const { code: localityCode, name: localityName } = locality_complaint;
+    const _uploadImages = uploadedImages.map((url) => ({
+      documentType: "PHOTO",
+      fileStore: url,
+      documentUid: "",
+      additionalDetails: {},
+    }));
+
+    const data = {
+      ...values,
+      cityCode,
+      city,
+      district: city,
+      region: city,
+      localityCode,
+      localityName,
+      state: "Punjab",
+      uploadedImages: _uploadImages,
+    };
+
+    await dispatch(createComplaint(data));
+    clearParams();
     history.push(`${path}/response`);
   };
 
-  const backToHome = () => {
-    history.push(`/digit-ui`);
+  const handleSelect = (data) => {
+    setParams({ ...params, ...data });
+    goNext();
   };
 
-  const updateParams = (param, value) => {
-    setParams({ ...params, [param]: value });
+  const handleSkip = () => {
+    goNext();
   };
-
-  // setSubmitForm(true); USE TO SUBMIT FORM
 
   return (
     <Switch>
-      <Route path={`${path}/complaint-type`}>
-        <SelectComplaintType t={t} config={stepItems[0]} onSelect={selectComplaintType} />
-      </Route>
-      <Route path={`${path}/sub-type`}>
-        <SelectSubType t={t} config={stepItems[1]} onSelect={selectSubType} />
-      </Route>
-      <Route path={`${path}/pincode`}>
-        <SelectPincode t={t} config={stepItems[2]} onSelect={selectPincode} />
-      </Route>
-      <Route path={`${path}/address`}>
-        <SelectAddress t={t} config={stepItems[3]} onSelect={selectAddress} />
-      </Route>
-      <Route path={`${path}/landmark`}>
-        <SelectLandmark t={t} config={stepItems[4]} onSelect={saveLandmark} />
-      </Route>
-      <Route path={`${path}/upload-photos`}>
-        <SelectImages t={t} config={stepItems[5]} onSelect={saveImagesUrl} />
-      </Route>
-      <Route path={`${path}/additional-details`}>
-        <SelectDetails t={t} config={stepItems[6]} onSelect={submitComplaint} />
-      </Route>
-      <Route path={`${path}/response`}>
-        <Response t={t} config={stepItems[7]} onSelect={backToHome} />
-      </Route>
+      {Object.keys(config.routes).map((route, index) => {
+        const { component, texts, inputs } = config.routes[route];
+        const Component = typeof component === "string" ? registry.getComponent(component) : component;
+        return (
+          <Route path={`${path}/${route}`} key={index}>
+            <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} />
+          </Route>
+        );
+      })}
       <Route>
-        <Redirect to={`${url}/complaint-type`} />
+        <Redirect to={`${path}/${config.indexRoute}`} />
       </Route>
     </Switch>
   );

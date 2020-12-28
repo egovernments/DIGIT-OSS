@@ -28,6 +28,7 @@
     "date-fns": "^2.16.1",
     "i18next": "^19.8.4",
     "i18next-react-postprocessor": "^3.0.5",
+    "jspdf": "^2.2.0",
     "react": "^17.0.0",
     "react-i18next": "^11.7.3",
     "react-query": "^3.2.0",

@@ -1,7 +1,6 @@
 import React from "react";
 import { CheckBox } from "@egovernments/digit-ui-react-components";
-
-import useComplaintStatusCount from "../../hooks/useComplaintStatusWithCount";
+import useComplaintStatusCount from "../../../../../libraries/src/hooks/pgr/useComplaintStatusWithCount";
 
 const Status = ({ complaints, onAssignmentChange, pgrfilters }) => {
   const complaintsWithCount = useComplaintStatusCount(complaints);

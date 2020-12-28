@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormStep } from "@egovernments/digit-ui-react-components";
 
-const SelectDetails = ({ t, config, onSelect }) => {
-  const __initDetails = Digit.SessionStorage.get("PGR_CREATE_DETAIL");
-  const [details, setDetails] = React.useState(__initDetails ? __initDetails : "");
+const SelectDetails = ({ t, config, onSelect, value }) => {
+  const [details, setDetails] = useState(() => {
+    const { details } = value;
+    return details ? details : "";
+  });
 
-  const handleChange = (event) => {
+  const onChange = (event) => {
     const { value } = event.target;
     setDetails(value);
-    Digit.SessionStorage.set("PGR_CREATE_DETAIL", value);
   };
 
-  return <FormStep config={config} onChange={handleChange} onSelect={onSelect} t={t} value={details} />;
+  return <FormStep config={config} onChange={onChange} onSelect={() => onSelect({ details })} value={details} t={t} />;
 };
 
 export default SelectDetails;

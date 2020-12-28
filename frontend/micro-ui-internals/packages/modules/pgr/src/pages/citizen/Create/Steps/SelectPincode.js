@@ -1,15 +1,19 @@
 import { FormStep } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
-import useTenants from "../../../../hooks/useTenants";
 
-const SelectPincode = ({ t, config, onSelect }) => {
-  const tenants = useTenants();
-  const __initPincode = Digit.SessionStorage.get("PGR_CREATE_PINCODE");
-  const [pincode, setPincode] = useState(__initPincode ? __initPincode : "");
+const SelectPincode = ({ t, config, onSelect, value }) => {
+  const tenants = Digit.Hooks.pgr.useTenants();
+  // const __initPincode = Digit.SessionStorage.get("PGR_CREATE_PINCODE");
+  const [pincode, setPincode] = useState(() => {
+    const { pincode } = value;
+    return pincode;
+  });
+
   function onChange(e) {
     setPincode(e.target.value);
-    Digit.SessionStorage.set("PGR_CREATE_PINCODE", e.target.value);
+    // Digit.SessionStorage.set("PGR_CREATE_PINCODE", e.target.value);
   }
+
   const goNext = async (data) => {
     var foundValue = tenants.find((obj) => obj.pincode?.find((item) => item == data?.pincode));
     if (foundValue) {
