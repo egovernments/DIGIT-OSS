@@ -42,10 +42,7 @@ TextInput.propTypes = {
 };
 
 TextInput.defaultProps = {
-  userType: "citizen",
   isMandatory: false,
-  name: "name",
-  placeholder: "Name",
   value: "",
 };
 
