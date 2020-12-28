@@ -44,12 +44,11 @@ const Filter = (props) => {
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
     uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
-    setWfFilters({ ...wfFilters, uuid: [{ code: uuid }] });
+    setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
   };
-
+  let pgrQuery = {};
+  let wfQuery = {};
   useEffect(() => {
-    let pgrQuery = {};
-    let wfQuery = {};
     for (const property in pgrfilters) {
       if (Array.isArray(pgrfilters[property])) {
         let params = pgrfilters[property].map((prop) => prop.code).join();
@@ -122,20 +121,21 @@ const Filter = (props) => {
   };
 
   function clearAll() {
-    setPgrFilters({ assigned: [], serviceCode: [], locality: [], applicationStatus: [] });
+    setPgrFilters({ serviceCode: [], locality: [], applicationStatus: [] });
+    setWfFilters({ assigned: [{ code: [] }] });
     setSelectedAssigned("");
     setSelectedComplaintType(null);
     setSelectedLocality(null);
   }
 
-  const handleFilterSubmit = (queryString) => {
-    props.onFilterChange(queryString);
+  const handleFilterSubmit = () => {
+    props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
+    //props.onClose();
   };
 
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
-      {console.log("options heiaisndao", options)}
       <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />
       <div className="tag-container">
         {pgrfilters[key].length > 0 &&
@@ -182,7 +182,7 @@ const Filter = (props) => {
       </div>
       <ActionBar>
         {props.type === "mobile" && (
-          <ApplyFilterBar labelLink={t("CS_COMMON_CLEAR_ALL")} buttonLink={t("CS_COMMON_FILTER")} onClear={clearAll} onSubmit={handleFilterSubmit} />
+          <ApplyFilterBar labelLink={t("CS_COMMON_CLEAR_ALL")} buttonLink={t("CS_COMMON_FILTER")} onClear={clearAll} onSubmit={props.onClose} />
         )}
       </ActionBar>
       {/* <ActionBar>
