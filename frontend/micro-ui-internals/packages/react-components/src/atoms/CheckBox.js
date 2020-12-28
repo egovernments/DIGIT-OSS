@@ -3,19 +3,19 @@ import { CheckSvg } from "./svgindex";
 import PropTypes from "prop-types";
 
 const CheckBox = ({ onChange, label, ref, checked, inputRef, ...props }) => {
-  const usertype = Digit.SessionStorage.get("usertype");
+  const userType = Digit.SessionStorage.get("userType");
   return (
     <div className="checkbox-wrap">
       <input
         type="checkbox"
-        className={usertype === "employee" ? "input-emp" : ""}
+        className={userType === "employee" ? "input-emp" : ""}
         onChange={onChange}
         value={label}
         {...props}
         ref={inputRef}
         {...(checked ? (checked = { checked }) : null)}
       />
-      <p className="" className={usertype === "employee" ? "custom-checkbox-emp" : "custom-checkbox"}>
+      <p className="" className={userType === "employee" ? "custom-checkbox-emp" : "custom-checkbox"}>
         {/* <img src={check} alt="" /> */}
         <CheckSvg />
       </p>
@@ -37,14 +37,9 @@ CheckBox.propTypes = {
    * input ref
    */
   ref: PropTypes.func,
-  usertype: PropTypes.string,
+  userType: PropTypes.string,
 };
 
-CheckBox.defaultProps = {
-  label: "",
-  onChange: () => {},
-  ref: () => {},
-  usertype: "citizen",
-};
+CheckBox.defaultProps = {};
 
 export default CheckBox;

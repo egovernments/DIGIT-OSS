@@ -18,7 +18,7 @@ SubmitBar.propTypes = {
   /**
    * Is it a normal button or submit button?
    */
-  submit: PropTypes.bool,
+  submit: PropTypes.string,
   /**
    * style for the button
    */
