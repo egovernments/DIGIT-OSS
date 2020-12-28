@@ -45,7 +45,7 @@ export const CreateComplaint = () => {
     // Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
     // Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
 
-    const { city_complaint, locality_complaint, uploadedImages, ...values } = params;
+    const { city_complaint, locality_complaint, uploadedImages, complaintType, serviceCode, details, ...values } = params;
     const { code: cityCode, name: city } = city_complaint;
     const { code: localityCode, name: localityName } = locality_complaint;
     const _uploadImages = uploadedImages?.map((url) => ({
@@ -57,8 +57,10 @@ export const CreateComplaint = () => {
 
     const data = {
       ...values,
+      complaintType: serviceCode,
       cityCode,
       city,
+      description: details,
       district: city,
       region: city,
       localityCode,
@@ -66,6 +68,7 @@ export const CreateComplaint = () => {
       state: "Punjab",
       uploadedImages: _uploadImages,
     };
+
     console.log("this is the request data", data);
     await dispatch(createComplaint(data));
     clearParams();
