@@ -27,7 +27,7 @@ TypeSelectCard.propTypes = {
   cardText: PropTypes.string,
   submitBarLabel: PropTypes.string,
   selectedOption: PropTypes.any,
-  menu: PropTypes.array,
+  menu: PropTypes.any,
   optionsKey: PropTypes.string,
   selected: PropTypes.func,
   onSave: PropTypes.func,
