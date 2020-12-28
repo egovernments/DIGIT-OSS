@@ -12,9 +12,9 @@ const SelectSubType = ({ t, config, onSelect, value }) => {
   console.log("select subtype ", value, complaintType, subType, menu);
 
   const goNext = () => {
-    const subTypeKey = subType.key;
-    console.log("subtypekey", subTypeKey);
-    onSelect({ subTypeKey });
+    const serviceCode = subType.key;
+    // console.log("subtypekey", subTypeKey);
+    onSelect({ serviceCode });
   };
   // const complaintType = Digit.SessionStorage.get("complaintType");
   // const __initSubType__ = Digit.SessionStorage.get("subType");
