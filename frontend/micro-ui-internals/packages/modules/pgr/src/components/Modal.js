@@ -18,7 +18,7 @@ const Modal = (props) => {
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
   const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(tenantId, roles[0].roles, complaintDetails);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [comments, setComments] = useState(null);
+  const [comments, setComments] = useState("");
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const { t } = useTranslation();
@@ -68,7 +68,7 @@ const Modal = (props) => {
               </React.Fragment>
             )}
             <CardLabel>{t("CS_COMMON_EMPLOYEE_COMMENTS")}</CardLabel>
-            <TextArea onChange={addComment} />
+            <TextArea onChange={addComment} value={comments} />
             <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
             <CardLabelDesc>{t(`TL_UPLOAD_RESTRICTIONS`)}</CardLabelDesc>
             <UploadFile

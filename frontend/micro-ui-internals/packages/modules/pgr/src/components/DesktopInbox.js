@@ -80,7 +80,7 @@ const DesktopInbox = (props) => {
       <div className="filters-container">
         <ComplaintsLink />
         <div>
-          <Filter onFilterChange={props.onFilterChange} type="desktop" />
+          <Filter complaints={props.data} onFilterChange={props.onFilterChange} type="desktop" />
         </div>
       </div>
       <div>

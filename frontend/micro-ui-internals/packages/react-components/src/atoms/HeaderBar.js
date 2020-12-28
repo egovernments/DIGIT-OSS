@@ -12,9 +12,9 @@ const HeaderBar = (props) => {
 };
 
 HeaderBar.propTypes = {
-  start: PropTypes.string,
-  main: PropTypes.string,
-  end: PropTypes.string,
+  start: PropTypes.any,
+  main: PropTypes.any,
+  end: PropTypes.any,
 };
 
 HeaderBar.defaultProps = {
