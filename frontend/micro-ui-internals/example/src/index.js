@@ -10,18 +10,27 @@ import "@egovernments/digit-ui-css/example/index.css";
 import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
+import GRO from "./userInfo/gro.json";
 
-import pgrCustomizations from "./pgr";
+import Registry from "@egovernments/digit-ui-libraries/src/services/ComponentRegistry";
 
-const userInfo = { CITIZEN, EMPLOYEE, LME };
+import { pgrCustomizations, pgrComponents } from "./pgr";
 
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
 initLibraries();
+const registry = new Registry({
+  ...pgrComponents,
+});
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
-const userType = process.env.REACT_APP_USER_TYPE || "CITIZEN";
+const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+const token = process.env[`REACT_APP_${userType}_TOKEN`];
+
+console.log(token);
+
+// COMMENT ABOVE BEFORE COMMIT OR PUSH OR DEPLOY
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
@@ -54,4 +63,4 @@ window.mdmsInitPost = (data) => {
   });
 };
 
-ReactDOM.render(<DigitUI stateCode="pb" />, document.getElementById("root"));
+ReactDOM.render(<DigitUI stateCode="pb" registry={registry} />, document.getElementById("root"));

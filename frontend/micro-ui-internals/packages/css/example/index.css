@@ -1759,13 +1759,14 @@ img, video {
     border: 1px dashed #d6d5d4;
     margin: 0 !important; }
     .multi-upload-wrap .upload-img-container img {
-      padding-top: calc(33% - 21px); }
-    .multi-upload-wrap .upload-img-container img, .multi-upload-wrap .upload-img-container svg {
       margin-left: auto;
-      margin-right: auto; }
+      margin-right: auto;
+      padding-top: calc(33% - 21px); }
     .multi-upload-wrap .upload-img-container svg {
-      top: calc(50% - 21px);
-      position: relative; }
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      margin: calc(33% - 21px) auto auto; }
     .multi-upload-wrap .upload-img-container input, .multi-upload-wrap .upload-img-container .checkbox-wrap .input-emp, .checkbox-wrap .multi-upload-wrap .upload-img-container .input-emp {
       position: absolute;
       width: 100%;

@@ -123,7 +123,7 @@ export const CreateComplaint = ({ parentUrl }) => {
           populators: {
             name: "name",
             validation: {
-              pattern: /[A-Za-z]/,
+              pattern: /^[A-Za-z]/,
             },
             error: t("CS_ADDCOMPLAINT_NAME_ERROR"),
           },
