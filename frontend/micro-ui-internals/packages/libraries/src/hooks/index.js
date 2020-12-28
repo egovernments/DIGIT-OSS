@@ -12,6 +12,7 @@ import useInboxData from "./pgr/useInboxData";
 import useLocalities from "./pgr/useLocalities";
 import useServiceDefs from "./pgr/useServiceDefs";
 import useTenants from "./pgr/useTenants";
+import useComplaintSubType from "./pgr/useComplaintSubType";
 
 import useTenantsFSM from "./fsm/useTenants";
 
@@ -27,6 +28,7 @@ const pgr = {
   useLocalities,
   useServiceDefs,
   useTenants,
+  useComplaintSubType,
 };
 
 const fsm = {

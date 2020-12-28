@@ -48,7 +48,7 @@ export const CreateComplaint = () => {
     const { city_complaint, locality_complaint, uploadedImages, ...values } = params;
     const { code: cityCode, name: city } = city_complaint;
     const { code: localityCode, name: localityName } = locality_complaint;
-    const _uploadImages = uploadedImages.map((url) => ({
+    const _uploadImages = uploadedImages?.map((url) => ({
       documentType: "PHOTO",
       fileStore: url,
       documentUid: "",
@@ -66,13 +66,14 @@ export const CreateComplaint = () => {
       state: "Punjab",
       uploadedImages: _uploadImages,
     };
-
+    console.log("this is the request data", data);
     await dispatch(createComplaint(data));
     clearParams();
     history.push(`${path}/response`);
   };
 
   const handleSelect = (data) => {
+    console.log("DATA selected", data);
     setParams({ ...params, ...data });
     goNext();
   };
