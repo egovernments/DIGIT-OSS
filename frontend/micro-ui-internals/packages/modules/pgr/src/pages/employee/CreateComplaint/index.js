@@ -8,20 +8,20 @@ import { FormComposer } from "../../../components/FormComposer";
 import { createComplaint } from "../../../redux/actions/index";
 
 export const CreateComplaint = ({ parentUrl }) => {
-  const SessionStorage = Digit.SessionStorage;
-  const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
-  const __initSubType__ = Digit.SessionStorage.get("subType");
+  // const SessionStorage = Digit.SessionStorage;
+  // const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
+  // const __initSubType__ = Digit.SessionStorage.get("subType");
 
-  const city_complaint = Digit.SessionStorage.get("city_complaint");
-  const selected_localities = Digit.SessionStorage.get("selected_localities");
-  const locality_complaint = Digit.SessionStorage.get("locality_complaint");
+  // const city_complaint = Digit.SessionStorage.get("city_complaint");
+  // const selected_localities = Digit.SessionStorage.get("selected_localities");
+  // const locality_complaint = Digit.SessionStorage.get("locality_complaint");
 
-  const [complaintType, setComplaintType] = useState(__initComplaintType__ ? __initComplaintType__ : {});
-  const [subTypeMenu, setSubTypeMenu] = useState(__initSubType__ ? __initSubType__ : []);
+  const [complaintType, setComplaintType] = useState({});
+  const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [subType, setSubType] = useState({});
-  const [selectedCity, setSelectedCity] = useState(city_complaint ? city_complaint : null);
-  const [localities, setLocalities] = useState(selected_localities ? selected_localities : null);
-  const [selectedLocality, setSelectedLocality] = useState(locality_complaint ? locality_complaint : null);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [localities, setLocalities] = useState(null);
+  const [selectedLocality, setSelectedLocality] = useState(null);
   const [submitValve, setSubmitValve] = useState(false);
   const [params, setParams] = useState({});
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
@@ -41,27 +41,27 @@ export const CreateComplaint = ({ parentUrl }) => {
   async function selectedType(value) {
     setComplaintType(value);
     setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
-    SessionStorage.set("complaintType", value);
+    // SessionStorage.set("complaintType", value);
   }
 
   function selectedSubType(value) {
     setSubType(value);
-    Digit.SessionStorage.set("subType", [value]);
+    // Digit.SessionStorage.set("subType", [value]);
   }
 
   // city locality logic
   const selectCity = async (city) => {
     setSelectedCity(city);
-    Digit.SessionStorage.set("city_complaint", city);
+    // Digit.SessionStorage.set("city_complaint", city);
     let response = await Digit.LocationService.getLocalities({ tenantId: city.code });
     let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
     setLocalities(__localityList);
-    Digit.SessionStorage.set("selected_localities", __localityList);
+    // Digit.SessionStorage.set("selected_localities", __localityList);
   };
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
-    Digit.SessionStorage.set("locality_complaint", locality);
+    // Digit.SessionStorage.set("locality_complaint", locality);
   }
 
   //On SUbmit

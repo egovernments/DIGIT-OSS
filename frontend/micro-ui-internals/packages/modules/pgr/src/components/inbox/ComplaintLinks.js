@@ -1,4 +1,5 @@
 import { Card } from "@egovernments/digit-ui-react-components";
+import { forEach } from "lodash";
 import React, { useEffect, useState } from "react";
 
 const ComplaintsLink = ({ isMobile, data }) => {
@@ -8,7 +9,13 @@ const ComplaintsLink = ({ isMobile, data }) => {
     { text: "Dashboard", link: "/employee" },
   ];
 
-  const [links, setLinks] = useState(allLinks);
+  const [links, setLinks] = useState([]);
+
+  const { roles } = Digit.UserService.getUser().info;
+
+  const hasAccess = (accessTo) => {
+    return roles.filter((role) => role.code === accessTo).length;
+  };
 
   const { roles } = Digit.UserService.getUser().info;
 
