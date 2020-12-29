@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
-import data from "../propertyType.json";
+import data from "../../../propertyType.json";
 
 const SelectPropertySubtype = ({ config, onSelect, t }) => {
   const [subtype, setSubtype] = useState(null);

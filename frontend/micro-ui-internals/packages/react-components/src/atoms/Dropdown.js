@@ -103,7 +103,7 @@ const Dropdown = (props) => {
 };
 
 Dropdown.propTypes = {
-  selected: PropTypes.object,
+  selected: PropTypes.any,
   style: PropTypes.object,
   option: PropTypes.array,
   optionKey: PropTypes.string,

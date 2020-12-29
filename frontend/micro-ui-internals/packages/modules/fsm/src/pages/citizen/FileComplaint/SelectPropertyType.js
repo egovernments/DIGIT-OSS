@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import data from "../propertyType.json";
+import data from "../../../propertyType.json";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
 const SelectPropertyType = ({ config, onSelect, t }) => {
   const [propertyType, setPropertyType] = useState(null);

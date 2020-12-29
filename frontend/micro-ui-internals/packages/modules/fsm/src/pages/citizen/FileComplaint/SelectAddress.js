@@ -2,7 +2,7 @@ import React, { useEffect, useState, Fragment } from "react";
 import { FormStep, CardLabel, Dropdown } from "@egovernments/digit-ui-react-components";
 
 const SelectAddress = ({ t, config, onSelect, value }) => {
-  const cities = Digit.Hooks.fsm.useTenantsFSM();
+  const cities = Digit.Hooks.fsm.useTenants();
   // const city_complaint = Digit.SessionStorage.get("city_complaint");
   // const locality_complaint = Digit.SessionStorage.get("locality_complaint");
   // const selected_localities = Digit.SessionStorage.get("selected_localities");
