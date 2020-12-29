@@ -1114,7 +1114,12 @@ img, video {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: distribute;
-  justify-content: space-around; }
+  justify-content: space-around;
+  max-width: 500px; }
+  .inputWrapper div {
+    max-width: 80px; }
+  .inputWrapper span {
+    margin-top: 16px; }
 
 @media (min-width: 780px) {
   .card-input, .card-input-error {
