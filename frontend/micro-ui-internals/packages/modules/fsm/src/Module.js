@@ -1,12 +1,15 @@
 import React, { useMemo } from "react";
 import { Route, BrowserRouter as Router, Switch, useRouteMatch } from "react-router-dom";
 import { useSelector } from "react-redux";
+import SelectRating from "./pages/citizen/Rating/SelectRating";
 
 import { BackButton, Header, HomeLink, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import { getI18n } from "react-i18next";
 import FileComplaint from "./FileComplaint/index";
 
 import { NewApplication } from "./pages/employee/NewApplication";
+import { MyApplications } from "./pages/citizen/MyApplications";
+import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 
 export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "FSM", userType }) => {
   const { path, url } = useRouteMatch();
@@ -26,6 +29,9 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
         <BackButton>Back</BackButton>
         <PrivateRoute path={`${path}/file-property`} component={FileComplaint} />
         <Route path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
+        <Route path={`${path}/my-applications`} component={MyApplications} />
+        <Route path={`${path}/application-details`} component={ApplicationDetails} />
+        <Route path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
       </div>
     </Switch>
   );
@@ -35,5 +41,6 @@ export const FSMLinks = ({ matchPath }) => (
   <React.Fragment>
     <Header>Other Services</Header>
     <HomeLink to={`${matchPath}/create-request`}>Apply for Desludging</HomeLink>
+    <HomeLink to={`${matchPath}/my-applications`}>My Applications</HomeLink>
   </React.Fragment>
 );
