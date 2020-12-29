@@ -1070,7 +1070,7 @@
     "@babel/helper-plugin-utils" "^7.10.4"
     "@babel/plugin-transform-typescript" "^7.12.1"
 
-"@babel/runtime-corejs3@^7.10.2":
+"@babel/runtime-corejs3@^7.10.2", "@babel/runtime-corejs3@^7.9.6":
   version "7.12.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.12.5.tgz#ffee91da0eb4c6dae080774e94ba606368e414f4"
   integrity sha512-roGr54CsTmNPPzZoCP1AmDXuBoNao7tnSA83TXTwt+UK5QVyh1DIJnrgYRPWKCF2flqZQXwa7Yr8v7VmLzF0YQ==
@@ -1162,25 +1162,26 @@
     react-i18next "^11.7.3"
     rooks "^4.3.0"
 
-"@egovernments/digit-ui-libraries@^1.0.38":
-  version "1.0.38"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.38.tgz#f156371c6bfae6becc33137a825d3f7246d7f398"
-  integrity sha512-U7svlHCvHfWcNE/LQVBUJJCuvjSnUu8ixB1Yh+cOgG+UbhJeYGtWvw1QaQKF6KJ12A9JqCXljtctFS8W1QzN7g==
+"@egovernments/digit-ui-libraries@^1.0.39":
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.39.tgz#db9e1d78016c7a436c9a6ec104959cc293c8e9be"
+  integrity sha512-+QwyObitZ+pSA1Jw6Gm+7VzsyrgB8UUqqpvWwAwr5mmtOUFiUnjeDqcp/qPQuvFSy3K3Or5E4wJkqBI+RGUsiQ==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
     date-fns "^2.16.1"
     i18next "^19.8.4"
     i18next-react-postprocessor "^3.0.5"
+    jspdf "^2.2.0"
     react "^17.0.0"
     react-i18next "^11.7.3"
     react-query "^3.2.0"
     rooks "^4.4.0"
 
-"@egovernments/digit-ui-module-core@^1.0.38":
-  version "1.0.38"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.38.tgz#ec5d4ff548d09f2744becf6880b47ea4c986e02b"
-  integrity sha512-UqvnWuSSNZRExiLSS3qJpJS6ETB7LgoyS8VHWPDqz8JvYV2XkfL9Jy/a0210QHP5GpzZGjuWR2h+FqsxdwXONA==
+"@egovernments/digit-ui-module-core@^1.0.39":
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.39.tgz#8fe10478b82efc79f4d916ad3c8b64c34f43ee5e"
+  integrity sha512-ncVkck0XPGBbzHs/h2gVS0gv4McM93FHlh+40UqtBMKegjgEe5lIlyxXpfrRkgrbpxFFB1xSvF0DF734QH8nyA==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1196,10 +1197,10 @@
     redux-thunk "^2.3.0"
     rooks "^4.4.0"
 
-"@egovernments/digit-ui-module-fsm@^1.0.38":
-  version "1.0.38"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.38.tgz#4a996b78e00f18276b924736d7bb9aabd7abae9e"
-  integrity sha512-Fh4i8Gl50iB8jeU7i14YfIbRoc9tdsgm7xCa/gjFUS3wYhg+K2GK8cu6TnDQvs5sRaBXuTi+/bz3I+td+OZ9Sw==
+"@egovernments/digit-ui-module-fsm@^1.0.39":
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.39.tgz#b5e45ba52b0d9158f4365512b47df5675094be91"
+  integrity sha512-UDw3dlyDQjPHD7318iGtEWfQNWty9HTY6JTWSXkS5uUquX6/CX+1D3xxw51Ih6ndXX8SvCnRGEvXuDr7hcBfIQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1213,15 +1214,15 @@
     react-table "^7.6.1"
     redux "^4.0.5"
     redux-thunk "^2.3.0"
-    rooks "^4.4.0"
 
-"@egovernments/digit-ui-module-pgr@^1.0.38":
-  version "1.0.38"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.38.tgz#a6a25e1e87abd49053330960ef228889dc620274"
-  integrity sha512-ktfmNoVagBT5sBUYgzMh/Exx/m0NzU9GiPxHxZkcZ6sNV1wi8kUvesVMY+dQFlyW47T/GKTUJ3mgg6fagvbdNg==
+"@egovernments/digit-ui-module-pgr@^1.0.39":
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.39.tgz#d12212f61a6daa216dbd0b59caa83362f633023e"
+  integrity sha512-3kHsunG39RF2fypDCUyCjzb/z65lXjyNMXCrE3+7boAM5j0bhwZHiHK29xUuhEmd4z7m3bBlQQOtnidKF5pKyw==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
+    lodash.merge "^4.6.2"
     react "^17.0.0"
     react-dom "^17.0.0"
     react-hook-form "^6.7.0"
@@ -1241,10 +1242,10 @@
   dependencies:
     react-table "^7.6.1"
 
-"@egovernments/digit-ui-react-components@^1.0.38":
-  version "1.0.38"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.38.tgz#df133901e160efb1b9a8337c59f46633a6db9f12"
-  integrity sha512-Pua6d1x5+bIXVVABmeY6Shn1oDmdNDjJs3QRit7AnBQ1XQmIMGV6cEVTmn3fZBCoWgp1uP08iDYPpyQNOx2kqA==
+"@egovernments/digit-ui-react-components@^1.0.39":
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.39.tgz#b6d1c5b0dccb723312988cb5bd119d9f3465acf4"
+  integrity sha512-suhLoAs78Qwz+tMEQqtWSVlPBICPxqbPy1rbtsShSEPy+S/x33vs3c4XGXl9k630XmOOY/h5Xft7R+g+WBmHHA==
   dependencies:
     react-hook-form "^6.7.0"
     react-i18next "^11.7.3"
@@ -1812,6 +1813,11 @@
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
   integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
+
+"@types/raf@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@types/raf/-/raf-3.4.0.tgz#2b72cbd55405e071f1c4d29992638e022b20acc2"
+  integrity sha512-taW5/WYqo36N7V39oYyHP9Ipfd5pNFvGTIQsNGj86xV88YQ7GnI30/yMfKDF7Zgin0m3e+ikX88FvImnK4RjGw==
 
 "@types/resolve@0.0.8":
   version "0.0.8"
@@ -2777,6 +2783,11 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
+base64-arraybuffer@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-0.2.0.tgz#4b944fac0191aa5907afe2d8c999ccc57ce80f45"
+  integrity sha512-7emyCsu1/xiBXgQZrscw/8KPRT44I4Yq9Pe6EGs3aPRTsWuggML1/1DTuZUuIaJPIm1FTDUVXl4x/yW8s0kQDQ==
+
 base64-js@^1.0.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
@@ -3017,6 +3028,11 @@ bser@2.1.1:
   dependencies:
     node-int64 "^0.4.0"
 
+btoa@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/btoa/-/btoa-1.2.1.tgz#01a9909f8b2c93f6bf680ba26131eb30f7fa3d73"
+  integrity sha512-SB4/MIGlsiVkMcHmT+pSmIPoNDoHg+7cMzmt3Uxt628MTz2487DKSqK/fuhFBrkuqrYv5UCEnACpF4dTFNKc/g==
+
 buffer-from@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz#32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
@@ -3184,6 +3200,18 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001109, can
   version "1.0.30001161"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001161.tgz#64f7ffe79ee780b8c92843ff34feb36cea4651e0"
   integrity sha512-JharrCDxOqPLBULF9/SPa6yMcBRTjZARJ6sc3cuKrPfyIk64JN6kuMINWqA99Xc8uElMFcROliwtz0n9pYej+g==
+
+canvg@^3.0.6:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/canvg/-/canvg-3.0.7.tgz#e45b87a64116af906917f7cad57d370ea372d682"
+  integrity sha512-4sq6iL5Q4VOXS3PL1BapiXIZItpxYyANVzsAKpTPS5oq4u3SKbGfUcbZh2gdLCQ3jWpG/y5wRkMlBBAJhXeiZA==
+  dependencies:
+    "@babel/runtime-corejs3" "^7.9.6"
+    "@types/raf" "^3.4.0"
+    raf "^3.4.1"
+    rgbcolor "^1.0.1"
+    stackblur-canvas "^2.0.0"
+    svg-pathdata "^5.0.5"
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -3587,6 +3615,11 @@ core-js@^2.4.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
 
+core-js@^3.6.0:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.8.1.tgz#f51523668ac8a294d1285c3b9db44025fda66d47"
+  integrity sha512-9Id2xHY1W7m8hCl8NkhQn5CufmF/WuR30BTRewvCXc1aZd3kMECwNZ69ndLbekKfakw9Rf2Xyc+QR6E7Gg+obg==
+
 core-js@^3.6.5:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.7.0.tgz#b0a761a02488577afbf97179e4681bf49568520f"
@@ -3729,6 +3762,13 @@ css-has-pseudo@^0.10.0:
   dependencies:
     postcss "^7.0.6"
     postcss-selector-parser "^5.0.0-rc.4"
+
+css-line-break@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/css-line-break/-/css-line-break-1.1.1.tgz#d5e9bdd297840099eb0503c7310fd34927a026ef"
+  integrity sha512-1feNVaM4Fyzdj4mKPIQNL2n70MmuYzAXZ1aytlROFX1JsOo070OsugwGjj7nl6jnDJWHDM8zRZswkmeYVWZJQA==
+  dependencies:
+    base64-arraybuffer "^0.2.0"
 
 css-loader@4.3.0:
   version "4.3.0"
@@ -4222,6 +4262,11 @@ domhandler@^2.3.0:
   integrity sha512-JiK04h0Ht5u/80fdLMCEmV4zkNh2BcoMFBmZ/91WtYZ8qVXSKjiw7fXMgFPnHcSZgOo3XdinHvmnDUeMf5R4wA==
   dependencies:
     domelementtype "1"
+
+dompurify@^2.2.0:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.2.6.tgz#54945dc5c0b45ce5ae228705777e8e59d7b2edc4"
+  integrity sha512-7b7ZArhhH0SP6W2R9cqK6RjaU82FZ2UPM7RO8qN1b1wyvC/NY1FNWcX1Pu00fFOAnzEORtwXe4bPaClg6pUybQ==
 
 domutils@1.5.1:
   version "1.5.1"
@@ -5620,6 +5665,13 @@ html-webpack-plugin@4.5.0:
     tapable "^1.1.3"
     util.promisify "1.0.0"
 
+html2canvas@^1.0.0-rc.5:
+  version "1.0.0-rc.7"
+  resolved "https://registry.yarnpkg.com/html2canvas/-/html2canvas-1.0.0-rc.7.tgz#70c159ce0e63954a91169531894d08ad5627ac98"
+  integrity sha512-yvPNZGejB2KOyKleZspjK/NruXVQuowu8NnV2HYG7gW7ytzl+umffbtUI62v2dCHQLDdsK6HIDtyJZ0W3neerA==
+  dependencies:
+    css-line-break "1.1.1"
+
 htmlparser2@^3.3.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.10.1.tgz#bd679dc3f59897b6a34bb10749c855bb53a9392f"
@@ -6861,6 +6913,20 @@ jsonfile@^6.0.1:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
+jspdf@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/jspdf/-/jspdf-2.2.0.tgz#e186cd08d7ddfcdbe8ea462640323ee2d75671b6"
+  integrity sha512-kz6blXdM+wQ0vWMDJsa7GW9Ya79DHQBWQL14urVsbr6mk9nsJCSqZuIgE1CPZ78i5Yih2uW4tqOTiLf5xSpT9Q==
+  dependencies:
+    atob "^2.1.2"
+    btoa "^1.2.1"
+    pako "^1.0.11"
+  optionalDependencies:
+    canvg "^3.0.6"
+    core-js "^3.6.0"
+    dompurify "^2.2.0"
+    html2canvas "^1.0.0-rc.5"
+
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -7033,6 +7099,11 @@ lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
+
+lodash.merge@^4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
 lodash.sortby@^4.7.0:
   version "4.7.0"
@@ -7905,7 +7976,7 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-pako@~1.0.5:
+pako@^1.0.11, pako@~1.0.5:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
   integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
@@ -9646,6 +9717,11 @@ rgba-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/rgba-regex/-/rgba-regex-1.0.0.tgz#43374e2e2ca0968b0ef1523460b7d730ff22eeb3"
   integrity sha1-QzdOLiyglosO8VI0YLfXMP8i7rM=
 
+rgbcolor@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/rgbcolor/-/rgbcolor-1.0.1.tgz#d6505ecdb304a6595da26fa4b43307306775945d"
+  integrity sha1-1lBezbMEplldom+ktDMHMGd1lF0=
+
 rimraf@2.6.3:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.3.tgz#b2d104fe0d8fb27cf9e0a1cda8262dd3833c6cab"
@@ -10247,6 +10323,11 @@ stack-utils@^2.0.2:
   dependencies:
     escape-string-regexp "^2.0.0"
 
+stackblur-canvas@^2.0.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/stackblur-canvas/-/stackblur-canvas-2.4.0.tgz#2b2eba910cb46f6feae918e1c402f863d602c01b"
+  integrity sha512-Z+HixfgYV0ss3C342DxPwc+UvN1SYWqoz7Wsi3xEDWEnaBkSCL3Ey21gF4io+WlLm8/RIrSnCrDBIEcH4O+q5Q==
+
 stackframe@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/stackframe/-/stackframe-1.2.0.tgz#52429492d63c62eb989804c11552e3d22e779303"
@@ -10494,6 +10575,11 @@ svg-parser@^2.0.2:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/svg-parser/-/svg-parser-2.0.4.tgz#fdc2e29e13951736140b76cb122c8ee6630eb6b5"
   integrity sha512-e4hG1hRwoOdRb37cIMSgzNsxyzKfayW6VOflrwvR+/bzrkyxY/31WkbgnQpgtrNp1SdpJvpUAGTa/ZoiPNDuRQ==
+
+svg-pathdata@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/svg-pathdata/-/svg-pathdata-5.0.5.tgz#65e8d765642ba15fe15434444087d082bc526b29"
+  integrity sha512-TAAvLNSE3fEhyl/Da19JWfMAdhSXTYeviXsLSoDT1UM76ADj5ndwAPX1FKQEgB/gFMPavOy6tOqfalXKUiXrow==
 
 svgo@^1.0.0, svgo@^1.2.2:
   version "1.3.2"
