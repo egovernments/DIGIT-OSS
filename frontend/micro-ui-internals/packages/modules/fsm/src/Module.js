@@ -10,6 +10,7 @@ import FileComplaint from "./pages/citizen/FileComplaint/index";
 import { NewApplication } from "./pages/employee/NewApplication";
 import { MyApplications } from "./pages/citizen/MyApplications";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
+import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
 import Response from "./pages/Response";
 
 export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "FSM", userType }) => {
@@ -34,6 +35,7 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
         <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/employee/new-application`} component={() => <NewApplication parentUrl={url} />} />
+        <Route path={`${path}/employee/application-details`} component={EmployeeApplicationDetails} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
       </div>
     </Switch>
