@@ -1,6 +1,32 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
+  "propertyType": [
+    {
+      "name": "Residential",
+      "code": "Residential",
+      "active": true
+    },
+    {
+      "name": "Commercial",
+      "code": "Commercial",
+      "active": true
+    }
+  ],
+  "propertySubtype": [
+    {
+      "name": "Independent House",
+      "code": "Independent House"
+    },
+    {
+      "name": "Appartment",
+      "code": "Appartment"
+    },
+    {
+      "name": "Row House",
+      "code": "Row House"
+    }
+  ],
   "PropertyType": [
     {
       "name": "Vacant Land",

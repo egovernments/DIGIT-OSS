@@ -1,37 +1,54 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
-import { config } from "./config";
+import { config } from "./defaultConfig";
 import SelectPropertyType from "./SelectPropertyType";
+import SelectPropertySubtype from "./SelectPropertySubtype";
 
 const FileComplaint = () => {
-  const { path, url } = useRouteMatch();
+  const match = useRouteMatch();
   const { t } = useTranslation();
-  const stepItems = useMemo(
-    () =>
-      config.map((step, index) => {
-        const texts = {};
-        for (const key in step.texts) {
-          texts[key] = t(step.texts[key]);
-        }
-        return { ...step, texts };
-      }),
-    [config]
-  );
+  const { pathname } = useLocation();
+  const history = useHistory();
+  const [params, setParams] = useState({});
+
+  const goNext = () => {
+    const currentPath = pathname.split("/").pop();
+    const { nextStep } = config.routes[currentPath];
+    if (nextStep === null) return submitComplaint();
+    history.push(`${match.path}/${nextStep}`);
+  };
+
+  const submitComplaint = () => {};
 
   function log(data) {
     console.log("data", data);
+    goNext();
   }
+
+  const handleSkip = () => {};
 
   return (
     <Switch>
-      <Route exact path={`${path}/`}>
-        <SelectPropertyType config={stepItems[0]} onSelect={log} />
+      {Object.keys(config.routes).map((route, index) => {
+        const { component, texts, inputs } = config.routes[route];
+        const Component = typeof component === "string" ? registry.getComponent(component) : component;
+        return (
+          <Route path={`${match.path}/${route}`} key={index}>
+            <Component config={{ texts, inputs }} onSelect={log} onSkip={handleSkip} value={params} t={t} />
+          </Route>
+        );
+      })}
+      <Route>
+        <Redirect to={`${match.path}/${config.indexRoute}`} />
+      </Route>
+      {/* <Route exact path={`${path}/`}>
+        <SelectPropertyType config={stepItems[0]} onSelect={log} t={t} />
       </Route>
       <Route path={`${path}/property-sub-type`}>
-        <h1>property sub type</h1>
-      </Route>
+        <SelectPropertySubtype config={stepItems[1]} onSelect={log} t={t} />
+      </Route> */}
     </Switch>
   );
 };
