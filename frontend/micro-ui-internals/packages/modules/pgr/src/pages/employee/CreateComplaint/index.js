@@ -182,7 +182,6 @@ export const CreateComplaint = ({ parentUrl }) => {
       ],
     },
   ];
-  console.log(":::complaintType:::", complaintType);
 
   return (
     <FormComposer
