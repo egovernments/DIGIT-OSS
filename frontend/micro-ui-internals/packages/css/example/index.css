@@ -1109,6 +1109,13 @@ img, video {
   color: rgba(11, 12, 12, var(--text-opacity));
   padding: 8px; }
 
+.inputWrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+  justify-content: space-around; }
+
 @media (min-width: 780px) {
   .card-input, .card-input-error {
     width: 480px; }

@@ -3,6 +3,7 @@ import SelectPropertyType from "./SelectPropertyType";
 import SelectAddress from "./SelectAddress";
 import SelectLandmark from "./SelectLandmark";
 import SelectPincode from "./SelectPincode";
+import SelectTankSize from "./SelectTankSize";
 
 export const config = {
   routes: {
@@ -32,7 +33,8 @@ export const config = {
         headerCaption: "",
         header: "CS_ADDCOMPLAINT_PINCODE",
         cardText: "CS_FILE_PROPERTY_PINCODE_TEXT",
-        submitBarLabel: "PT_COMMONS_NEXT",
+        nextText: "PT_COMMONS_NEXT",
+        skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
         {
@@ -74,6 +76,16 @@ export const config = {
           name: "landmark",
         },
       ],
+      nextStep: "tank-size",
+    },
+    "tank-size": {
+      component: SelectTankSize,
+      texts: {
+        headerCaption: "",
+        header: "CS_FILE_PROPERTY_SUBTYPE_PLACEHOLDER",
+        cardText: "CS_FILE_PROPERTY_SUBTYPE_TEXT",
+        nextText: "PT_COMMONS_NEXT",
+      },
     },
   },
   indexRoute: "property-type",
