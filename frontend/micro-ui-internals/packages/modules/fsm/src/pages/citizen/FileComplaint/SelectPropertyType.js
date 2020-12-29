@@ -3,10 +3,9 @@ import data from "../../../propertyType.json";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const SelectPropertyType = ({ config, onSelect }) => {
+const SelectPropertyType = ({ config, onSelect, t }) => {
   const [propertyType, setPropertyType] = useState(null);
-  const menu = data.PropertyType;
-  const { t } = useTranslation();
+  const menu = data.propertyType;
 
   const goNext = () => {
     onSelect(propertyType);
@@ -24,7 +23,7 @@ const SelectPropertyType = ({ config, onSelect }) => {
       {...{ selected: selectedValue }}
       {...{ selectedOption: propertyType }}
       {...{ onSave: goNext }}
-      {...{ t: t }}
+      t={t}
     />
   );
 };
