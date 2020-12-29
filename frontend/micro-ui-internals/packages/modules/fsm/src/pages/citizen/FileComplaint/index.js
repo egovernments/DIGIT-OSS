@@ -6,7 +6,7 @@ import { config } from "./defaultConfig";
 import SelectPropertyType from "./SelectPropertyType";
 import SelectPropertySubtype from "./SelectPropertySubtype";
 
-const FileComplaint = () => {
+const FileComplaint = ({ parentRoute }) => {
   const match = useRouteMatch();
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -20,7 +20,9 @@ const FileComplaint = () => {
     history.push(`${match.path}/${nextStep}`);
   };
 
-  const submitComplaint = () => {};
+  const submitComplaint = () => {
+    history.push(`${parentRoute}/response`);
+  };
 
   function log(data) {
     console.log("data", data);

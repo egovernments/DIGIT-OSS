@@ -86,6 +86,7 @@ export const config = {
         cardText: "CS_FILE_PROPERTY_SUBTYPE_TEXT",
         nextText: "PT_COMMONS_NEXT",
       },
+      nextStep: null,
     },
   },
   indexRoute: "property-type",
