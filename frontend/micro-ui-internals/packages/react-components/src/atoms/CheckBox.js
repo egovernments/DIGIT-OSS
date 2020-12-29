@@ -40,11 +40,6 @@ CheckBox.propTypes = {
   userType: PropTypes.string,
 };
 
-CheckBox.defaultProps = {
-  label: "",
-  onChange: () => {},
-  ref: () => {},
-  userType: "citizen",
-};
+CheckBox.defaultProps = {};
 
 export default CheckBox;

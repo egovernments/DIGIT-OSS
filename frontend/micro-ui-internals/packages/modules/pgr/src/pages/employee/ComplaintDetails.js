@@ -240,12 +240,14 @@ export const ComplaintDetails = (props) => {
                 {workflowDetails?.data?.timeline &&
                   workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
                     return (
-                      <CheckPoint
-                        key={index}
-                        isCompleted={index === 0}
-                        label={t("CS_COMMON_" + checkpoint.status)}
-                        customChild={getTimelineCaptions(checkpoint)}
-                      />
+                      <React.Fragment key={index}>
+                        <CheckPoint
+                          keyValue={index}
+                          isCompleted={index === 0}
+                          label={t("CS_COMMON_" + checkpoint.status)}
+                          customChild={getTimelineCaptions(checkpoint)}
+                        />
+                      </React.Fragment>
                     );
                   })}
               </ConnectingCheckPoints>

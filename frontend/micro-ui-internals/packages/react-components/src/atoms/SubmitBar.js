@@ -18,7 +18,7 @@ SubmitBar.propTypes = {
   /**
    * Is it a normal button or submit button?
    */
-  submit: PropTypes.bool,
+  submit: PropTypes.any,
   /**
    * style for the button
    */
@@ -33,11 +33,6 @@ SubmitBar.propTypes = {
   onSubmit: PropTypes.func,
 };
 
-SubmitBar.defaultProps = {
-  submit: false,
-  style: {},
-  label: "Click me",
-  onSubmit: undefined,
-};
+SubmitBar.defaultProps = {};
 
 export default SubmitBar;

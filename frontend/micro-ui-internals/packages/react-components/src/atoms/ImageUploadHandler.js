@@ -80,12 +80,16 @@ export const ImageUploadHandler = (props) => {
       thumbnails = uploadedImagesThumbs.length > 0 ? uploadedImagesThumbs.filter((thumb) => thumb.key !== keys[0]) : [];
     }
 
-    setUploadedImagesThumbs([...thumbnails, { image: thumbnailsData.data[keys[0]].split(",")[2], key: keys[0] }]);
+    const newThumbnails = keys.map((key) => {
+      return { image: thumbnailsData.data[key].split(",")[2], key };
+    });
+
+    setUploadedImagesThumbs([...thumbnails, ...newThumbnails]);
   }
 
   const submit = useCallback(async () => {
     if (uploadedImagesIds !== null && uploadedImagesIds.length > 0) {
-      const res = await Digit.UploadServices.Filefetch([uploadedImagesIds[uploadedImagesIds.length - 1]], "pb.amritsar");
+      const res = await Digit.UploadServices.Filefetch(uploadedImagesIds, "pb.amritsar");
       addImageThumbnails(res);
     }
   }, [uploadedImagesIds]);

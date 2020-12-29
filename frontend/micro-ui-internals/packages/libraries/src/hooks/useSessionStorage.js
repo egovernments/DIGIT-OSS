@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-const useSessionStorage = (key, initalValue) => {
+const useSessionStorage = (key, initialValue) => {
   const [storedValue, setStoredValue] = useState(() => {
     try {
       const data = Digit.SessionStorage.get(key);
-      return data ? data : initalValue;
+      return data ? data : initialValue;
     } catch (err) {
-      return initalValue;
+      return initialValue;
     }
   });
 
@@ -21,8 +21,8 @@ const useSessionStorage = (key, initalValue) => {
   };
 
   const clearValue = () => {
-    setStoredValue(initalValue);
-    Digit.SessionStorage.set(key, null);
+    setStoredValue(initialValue);
+    Digit.SessionStorage.set(key, initialValue);
   };
 
   return [storedValue, setValue, clearValue];

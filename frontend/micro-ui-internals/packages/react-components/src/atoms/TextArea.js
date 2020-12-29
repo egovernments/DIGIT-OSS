@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const TextArea = (props) => {
-  const user_type = props.userType;
+  const user_type = Digit.SessionStorage.get("userType");
 
   return (
     <textarea
@@ -24,10 +24,7 @@ TextArea.propTypes = {
 };
 
 TextArea.defaultProps = {
-  userType: "citizen",
-  name: "",
   ref: undefined,
-  value: "",
   onChange: undefined,
 };
 

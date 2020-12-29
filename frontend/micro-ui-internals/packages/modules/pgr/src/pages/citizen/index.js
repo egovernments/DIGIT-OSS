@@ -12,8 +12,7 @@ import Response from "./Response";
 
 const App = () => {
   const { path, url, match } = useRouteMatch();
-  console.log("pgr citizen", path, url);
-
+  console.log("pgr citizen", path, url, match);
   return (
     <Switch>
       <AppContainer>

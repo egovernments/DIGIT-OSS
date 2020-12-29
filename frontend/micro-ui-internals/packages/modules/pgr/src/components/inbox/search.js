@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
 
-const SearchComplaint = ({ onSearch, type }) => {
+const SearchComplaint = ({ onSearch, type, onClose }) => {
   const [complaintNo, setComplaintNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const { register, handleSubmit, reset } = useForm();
@@ -13,6 +13,9 @@ const SearchComplaint = ({ onSearch, type }) => {
       onSearch({ serviceRequestId: data.serviceRequestId });
     } else {
       onSearch({ mobileNumber: data.mobileNumber });
+    }
+    if (type === "mobile") {
+      onClose();
     }
   };
 
