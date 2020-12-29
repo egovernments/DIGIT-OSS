@@ -32,7 +32,7 @@ const pgr = {
 };
 
 const fsm = {
-  useTenantsFSM,
+  useTenants: useTenantsFSM,
 };
 
 const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, pgr, fsm };
