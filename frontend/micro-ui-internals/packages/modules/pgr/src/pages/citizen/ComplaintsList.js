@@ -5,14 +5,13 @@ import { useRouteMatch } from "react-router-dom";
 import { Card, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { LOCALE } from "../../constants/Localization";
 import Complaint from "../../components/Complaint";
-import { useComplaintsListByMobile } from "../../hooks/useComplaintList";
 
 export const ComplaintsList = (props) => {
   const User = Digit.UserService.getUser();
   const mobileNumber = User.mobileNumber || User?.info?.mobileNumber || User?.info?.userInfo?.mobileNumber;
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
-  let { isLoading, error, data } = useComplaintsListByMobile(mobileNumber);
+  let { isLoading, error, data } = Digit.Hooks.pgr.useComplaintsListByMobile(mobileNumber);
 
   if (isLoading) {
     return (

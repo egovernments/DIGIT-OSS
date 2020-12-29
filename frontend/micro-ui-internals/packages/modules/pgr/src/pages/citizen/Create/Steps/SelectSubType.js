@@ -7,9 +7,13 @@ const SelectSubType = ({ t, config, onSelect, value }) => {
     return subType ? subType : {};
   });
   const { complaintType } = value;
-  const menu = Digit.GetServiceDefinitions.getSubMenu(complaintType, t);
+  const menu = Digit.Hooks.pgr.useComplaintSubType(complaintType, t);
+
+  console.log("select subtype ", value, complaintType, subType, menu);
 
   const goNext = () => {
+    // const serviceCode = subType.key;
+    // console.log("subtypekey", subTypeKey);
     onSelect({ subType });
   };
   // const complaintType = Digit.SessionStorage.get("complaintType");

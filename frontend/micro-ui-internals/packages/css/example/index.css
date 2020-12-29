@@ -734,6 +734,14 @@ img, video {
     .header-wrap .header-end {
       margin-left: auto; } }
 
+.custom-card-class {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  --text-opacity:1;
+  color: #d4351c;
+  color: rgba(212, 53, 28, var(--text-opacity)); }
+
 .selector-button-primary {
   height: 2rem;
   --bg-opacity:1;
