@@ -43,7 +43,7 @@ const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details }) =>
     ],
   };
 
-  pdfMake.createPdf(dd).download();
+  pdfMake.createPdf(dd).open();
 };
 
 export default { generate: jsPdfGenerator };
@@ -150,7 +150,7 @@ function createContent(details) {
         createContentForDetailsWithLengthOfOneAndThree(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
       } else {
         value.forEach((value, index) => {
-          let margin = [-25, 0];
+          let margin = [-25, 0, 0, 5];
           if (index === 1) margin = [15, 0];
           if (index === 2) margin = [30, 0];
           if (index === 3) margin = [20, 0];
@@ -160,9 +160,9 @@ function createContent(details) {
             bold: true,
             margin,
           });
-          if (index === 1) margin = [15, 0];
-          if (index === 2) margin = [30, 0];
-          if (index === 3) margin = [20, 0];
+          if (index === 1) margin = [15, 0, 0, 5];
+          if (index === 2) margin = [30, 0, 0, 5];
+          if (index === 3) margin = [20, 0, 0, 5];
           column2.push({
             text: value.value,
             fontSize: 9,
@@ -181,19 +181,19 @@ function createContent(details) {
   return data;
 }
 
-function createContentForDetailsWithLengthOfTwo (values, data, column1, column2, num = 0) {
+function createContentForDetailsWithLengthOfTwo(values, data, column1, column2, num = 0) {
   values.forEach((value, index) => {
     if (index === 0) {
       column1.push({
         text: value.title,
         fontSize: 12,
         bold: true,
-        margin: [-25, num - 5],
+        margin: [-25, num - 10],
       });
       column2.push({
         text: value.value,
         fontSize: 9,
-        margin: [-25, 5],
+        margin: [-25, 5, 0, 0],
         color: "#1a1a1a",
       });
     } else {
@@ -201,34 +201,62 @@ function createContentForDetailsWithLengthOfTwo (values, data, column1, column2,
         text: value.title,
         fontSize: 12,
         bold: true,
-        margin: [-115, num - 5],
+        margin: [-115, num - 10],
       });
       column2.push({
         text: value.value,
         fontSize: 9,
-        margin: [-115, 5],
+        margin: [-115, 5, 0, 0],
         color: "#1a1a1a",
       });
     }
   });
   data.push({ columns: column1 });
   data.push({ columns: column2 });
-};
+}
 
 function createContentForDetailsWithLengthOfOneAndThree(values, data, column1, column2, num = 0) {
-  values.forEach((value) => {
-    column1.push({
-      text: value.title,
-      fontSize: 12,
-      bold: true,
-      margin: values.length > 1 ? [-25, -10] : [-25, 20],
-    });
-    column2.push({
-      text: value.value,
-      fontSize: 9,
-      margin: values.length > 1 ? [-25, 5] : [-25, -20],
-      color: "#1a1a1a",
-    });
+  values.forEach((value, index) => {
+    if (index === 0) {
+      column1.push({
+        text: value.title,
+        fontSize: 12,
+        bold: true,
+        margin: values.length > 1 ? [-25, -5, 0, 0] : [-25, 0, 0, 0],
+      });
+      column2.push({
+        text: value.value,
+        fontSize: 9,
+        color: "#1a1a1a",
+        margin: values.length > 1 ? [-25, 5, 0, 0] : [-25, 5, 0, 0],
+      });
+    } else if (index === 2) {
+      column1.push({
+        text: value.title,
+        fontSize: 12,
+        bold: true,
+        margin: [-60, -5, 0, 0],
+      });
+      column2.push({
+        text: value.value,
+        fontSize: 9,
+        margin: [-60, 5, 0, 0],
+        color: "#1a1a1a",
+      });
+    } else {
+      column1.push({
+        text: value.title,
+        fontSize: 12,
+        bold: true,
+        margin: [-28, -5, 0, 0],
+      });
+      column2.push({
+        text: value.value,
+        fontSize: 9,
+        margin: [-28, 5, 0, 0],
+        color: "#1a1a1a",
+      });
+    }
   });
   data.push({ columns: column1 });
   data.push({ columns: column2 });
