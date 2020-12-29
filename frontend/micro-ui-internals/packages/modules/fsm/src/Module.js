@@ -12,6 +12,7 @@ import { MyApplications } from "./pages/citizen/MyApplications";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
 import CollectPayment from "./pages/employee/CollectPayment";
+import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 
 export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "FSM", userType }) => {
@@ -38,6 +39,7 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
         <PrivateRoute path={`${path}/employee/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/employee/application-details`} component={EmployeeApplicationDetails} />
         <PrivateRoute path={`${path}/employee/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
+        <PrivateRoute path={`${path}/employee/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
       </div>
     </Switch>
