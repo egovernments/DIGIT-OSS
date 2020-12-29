@@ -11,6 +11,8 @@ import { NewApplication } from "./pages/employee/NewApplication";
 import { MyApplications } from "./pages/citizen/MyApplications";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
+import CollectPayment from "./pages/employee/CollectPayment";
+import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
 
 const EmployeeApp = ({ path, url, userType }) => {
@@ -22,6 +24,8 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/application-details`} component={EmployeeApplicationDetails} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
+        <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
+        <PrivateRoute path={`${path}/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />
       </div>
     </Switch>
   );
@@ -98,6 +102,9 @@ export const FSMLinks = ({ matchPath, userType }) => {
                 </span>
                 <span className="link">
                   <Link to={`${matchPath}/new-application/`}>New Desludging Application</Link>
+                </span>
+                <span className="link">
+                  <Link to={`${matchPath}/application-audit/`}>Application Audit</Link>
                 </span>
               </div>
             </div>
