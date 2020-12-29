@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 const ComplaintsLink = ({ isMobile, data }) => {
   const allLinks = [
-    { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: "CSR" },
+    { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
     { text: "Reports", link: "/employee" },
     { text: "Dashboard", link: "/employee" },
   ];
@@ -14,13 +14,7 @@ const ComplaintsLink = ({ isMobile, data }) => {
   const { roles } = Digit.UserService.getUser().info;
 
   const hasAccess = (accessTo) => {
-    return roles.filter((role) => role.code === accessTo).length;
-  };
-
-  const { roles } = Digit.UserService.getUser().info;
-
-  const hasAccess = (accessTo) => {
-    return roles.filter((role) => role.code === accessTo).length;
+    return roles.filter((role) => accessTo.includes(role.code)).length;
   };
 
   useEffect(() => {
