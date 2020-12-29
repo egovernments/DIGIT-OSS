@@ -15,6 +15,10 @@ const Urls = {
   FileFetch: "/filestore/v1/files/url",
   PGR_Create: `/pgr-services/v2/request/_create`,
 
+  OTP_Send: "/user-otp/v1/_send",
+  Authenticate: "/user/oauth/token",
+  RegisterUser: "/user/citizen/_create",
+  UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
 };
 
