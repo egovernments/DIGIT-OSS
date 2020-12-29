@@ -15,7 +15,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "run-s build:** start:dev",
+    "start": "SKIP_PREFLIGHT_CHECK=true run-s build:** start:dev",
     "start:dev": "run-p dev:**",
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",

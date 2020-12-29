@@ -6,9 +6,16 @@ const ComplaintsLink = ({ isMobile, data }) => {
   const allLinks = [
     { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: "CSR" },
     { text: "Reports", link: "/employee" },
+    { text: "Dashboard", link: "/employee" },
   ];
 
   const [links, setLinks] = useState([]);
+
+  const { roles } = Digit.UserService.getUser().info;
+
+  const hasAccess = (accessTo) => {
+    return roles.filter((role) => role.code === accessTo).length;
+  };
 
   const { roles } = Digit.UserService.getUser().info;
 
@@ -29,6 +36,15 @@ const ComplaintsLink = ({ isMobile, data }) => {
     });
     setLinks(linksToShow);
   }, []);
+
+  // useEffect(() => {
+  //   if (isMobile) {
+  //     const mobileLinks = links.filter((link) => {
+  //       return link.text !== "Dashboard";
+  //     });
+  //     setLinks(mobileLinks);
+  //   }
+  // }, []);
 
   const GetLogo = () => (
     <div className="header">

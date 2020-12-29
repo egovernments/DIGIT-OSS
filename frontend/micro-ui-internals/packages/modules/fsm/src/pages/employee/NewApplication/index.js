@@ -5,7 +5,6 @@ import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { FormComposer } from "../../../components/FormComposer";
-import useTenants from "../../../hooks/useTenants";
 
 // TODO: fetch data instead of hard coded
 import data from "../../../propertyType.json";
@@ -37,7 +36,7 @@ export const NewApplication = ({ parentUrl }) => {
   const [selectedLocality, setSelectedLocality] = useState(localityProperty ? localityProperty : null);
 
   const { t } = useTranslation();
-  const cities = useTenants();
+  const cities = Digit.Hooks.fsm.useTenants();
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const history = useHistory();

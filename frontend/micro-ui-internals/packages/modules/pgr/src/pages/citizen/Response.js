@@ -7,10 +7,13 @@ import { useTranslation } from "react-i18next";
 
 const GetActionMessage = ({ action }) => {
   const { t } = useTranslation();
-  if (action === "REOPEN") {
-    return t(`CS_COMMON_COMPLAINT_REOPENED`);
-  } else {
-    return t(`CS_COMMON_COMPLAINT_SUBMITTED`);
+  switch (action) {
+    case "REOPEN":
+      return t(`CS_COMMON_COMPLAINT_REOPENED`);
+    case "RATE":
+      return t("CS_COMMON_THANK_YOU");
+    default:
+      return t(`CS_COMMON_COMPLAINT_SUBMITTED`);
   }
 };
 

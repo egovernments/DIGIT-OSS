@@ -10,15 +10,13 @@ import {
   RemoveableTag,
 } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
-import useLocalities from "../../hooks/useLocalities";
-import useComplaintStatus from "../../hooks/useComplaintStatus";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import useServiceDefs from "../../hooks/useServiceDefs";
+import Status from "./Status";
 
 const Filter = (props) => {
-  console.log("props in filter--------->:", props);
   // let userType = Digit.SessionStorage.get("userType");
+  let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();
   const { pgr } = useSelector((state) => state);
@@ -27,64 +25,49 @@ const Filter = (props) => {
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [pendingComplaintCount, setPendingComplaintCount] = useState([]);
-  const [filters, setFilters] = useState({
-    assigned: [],
+
+  const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],
     locality: [],
     applicationStatus: [],
   });
+
+  const [wfFilters, setWfFilters] = useState({
+    assignee: [],
+  });
+
   //TODO change city fetch from user tenantid
-  let localities = useLocalities({ city: "Amritsar" });
-  let complaintStatus = useComplaintStatus();
-  let serviceDefs = useServiceDefs();
+  let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
+  let complaintStatus = Digit.Hooks.pgr.useComplaintStatus();
+  let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
   const onRadioChange = (value) => {
-    console.log("vlaue:-------------", value);
     setSelectedAssigned(value);
-    setFilters({ ...filters, assigned: [value] });
+    uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
+    setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
   };
-
+  let pgrQuery = {};
+  let wfQuery = {};
   useEffect(() => {
-    let queryObj = {};
-    for (const property in filters) {
-      console.log("property:-------->", property);
-      // let values = filters[property].map((prop) => prop.code).join();
-      if (Array.isArray(filters[property])) {
-        let params = filters[property].map((prop) => prop.code).join();
-        console.log("params>>:", params, filters[property]);
+    for (const property in pgrfilters) {
+      if (Array.isArray(pgrfilters[property])) {
+        let params = pgrfilters[property].map((prop) => prop.code).join();
         if (params) {
-          //queryString += `${property}=${params}&`;
-          queryObj[property] = params;
+          pgrQuery[property] = params;
+        }
+      }
+    }
+    for (const property in wfFilters) {
+      if (Array.isArray(wfFilters[property])) {
+        let params = wfFilters[property].map((prop) => prop.code).join();
+        if (params) {
+          wfQuery[property] = params;
         }
       }
     }
     //queryString = queryString.substring(0, queryString.length - 1);
-    console.log("queryObj:", queryObj);
-    handleFilterSubmit(queryObj);
-  }, [filters]);
-
-  const getCount = (value) => {
-    console.log("pgr.complaints:", pgr);
-    return (
-      pgr.complaints.hasOwnProperty("response") &&
-      pgr.complaints.response.filter((complaint) => {
-        console.log("complaint.serviceCode", complaint.serviceCode, "value:", value);
-        return complaint.applicationStatus === value;
-      }).length
-    );
-  };
-
-  const getPendingCount = () => {
-    let statusWithCount = complaintStatus.map((status) => ({
-      ...status,
-      count: getCount(status.key),
-    }));
-    setPendingComplaintCount(statusWithCount);
-  };
-
-  useEffect(() => {
-    getPendingCount();
-  }, [complaintStatus.length]);
+    handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
+  }, [pgrfilters, wfFilters]);
 
   const ifExists = (list, key) => {
     return list.filter((object) => object.code === key.code).length;
@@ -92,83 +75,71 @@ const Filter = (props) => {
 
   function complaintType(_type) {
     const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
-    if (!ifExists(filters.serviceCode, type)) {
-      setFilters({ ...filters, serviceCode: [...filters.serviceCode, type] });
+    if (!ifExists(pgrfilters.serviceCode, type)) {
+      setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
     }
   }
 
   function onSelectLocality(value, type) {
-    if (!ifExists(filters.locality, value)) {
-      setFilters({ ...filters, locality: [...filters.locality, value] });
+    if (!ifExists(pgrfilters.locality, value)) {
+      setPgrFilters({ ...pgrfilters, locality: [...pgrfilters.locality, value] });
     }
   }
 
   useEffect(() => {
-    if (filters.serviceCode.length > 1) {
-      setSelectedComplaintType(`${filters.serviceCode.length} selected`);
+    if (pgrfilters.serviceCode.length > 1) {
+      setSelectedComplaintType(`${pgrfilters.serviceCode.length} selected`);
     } else {
-      setSelectedComplaintType(filters.serviceCode[0]);
+      setSelectedComplaintType(pgrfilters.serviceCode[0]);
     }
-  }, [filters.serviceCode]);
+  }, [pgrfilters.serviceCode]);
 
   useEffect(() => {
-    if (filters.locality.length > 1) {
-      setSelectedLocality(`${filters.locality.length} selected`);
+    if (pgrfilters.locality.length > 1) {
+      setSelectedLocality(`${pgrfilters.locality.length} selected`);
     } else {
-      setSelectedLocality(filters.locality[0]);
+      setSelectedLocality(pgrfilters.locality[0]);
     }
-  }, [filters.locality]);
+  }, [pgrfilters.locality]);
 
   const onRemove = (index, key) => {
-    let afterRemove = filters[key].filter((value, i) => {
+    let afterRemove = pgrfilters[key].filter((value, i) => {
       return i !== index;
     });
-    setFilters({ ...filters, [key]: afterRemove });
+    setPgrFilters({ ...pgrfilters, [key]: afterRemove });
   };
 
   const handleAssignmentChange = (e, type) => {
-    console.log("type:", type);
     if (e.target.checked) {
-      setFilters({ ...filters, applicationStatus: [...filters.applicationStatus, type] });
+      setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, { code: type.code }] });
     } else {
-      const filteredStatus = filters.applicationStatus.filter((value) => {
-        return value !== type;
-      });
-      setFilters({ ...filters, applicationStatus: filteredStatus });
+      const filteredStatus = pgrfilters.applicationStatus.filter((value) => {
+        return value.code !== type.code;
+      })[0];
+      setPgrFilters({ ...pgrfilters, applicationStatus: [{ code: filteredStatus }] });
     }
   };
 
   function clearAll() {
-    setFilters({ assigned: [], serviceCode: [], locality: [], applicationStatus: [] });
+    setPgrFilters({ serviceCode: [], locality: [], applicationStatus: [] });
+    setWfFilters({ assigned: [{ code: [] }] });
     setSelectedAssigned("");
     setSelectedComplaintType(null);
     setSelectedLocality(null);
-    // setPendingComplaintCount([]);
-    // getPendingCount()
   }
 
-  //   return (
-  //     <div className="filter-card">
-  //       {console.log("filters", filters)}
-  //       <div className="heading">
-  //         <CardCaption>FILTER BY:</CardCaption>
-  //         <div>Clear all</div>
-  const handleFilterClear = () => {
-    console.log("clear");
-  };
-
-  const handleFilterSubmit = (queryString) => {
-    props.onFilterChange(queryString);
+  const handleFilterSubmit = () => {
+    props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
+    //props.onClose();
   };
 
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
-      {console.log("options heiaisndao", options)}
       <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />
       <div className="tag-container">
-        {filters[key].length > 0 &&
-          filters[key].map((value, index) => {
+        {pgrfilters[key].length > 0 &&
+          pgrfilters[key].map((value, index) => {
             return <RemoveableTag key={index} text={value[displayKey]} onClick={() => onRemove(index, key)} />;
           })}
       </div>
@@ -177,7 +148,6 @@ const Filter = (props) => {
 
   return (
     <React.Fragment>
-      {console.log("filters:>>>>>>>>>>>>>>>", filters)}
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
@@ -195,8 +165,8 @@ const Filter = (props) => {
           <div>
             <RadioButtons
               onSelect={onRadioChange}
-              selectedoption={selectAssigned}
-              optionskey="name"
+              selectedOption={selectAssigned}
+              optionsKey="name"
               options={[
                 { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
                 { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
@@ -206,29 +176,13 @@ const Filter = (props) => {
               {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCode", "key")}
             </div>
             <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
-            <div className="status-container">
-              <div className="filter-label">Status</div>
-              {console.log("pendingComplaintCount:", pendingComplaintCount)}
-              {pendingComplaintCount.map((option, index) => (
-                <CheckBox
-                  key={index}
-                  onChange={(e) => handleAssignmentChange(e, option)}
-                  checked={filters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
-                  label={`${option.name} (${option.count})`}
-                />
-              ))}
-            </div>
+            <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
           </div>
         </div>
       </div>
       <ActionBar>
         {props.type === "mobile" && (
-          <ApplyFilterBar
-            labelLink={t("CS_COMMON_CLEAR_ALL")}
-            buttonLink={t("CS_COMMON_FILTER")}
-            onClear={handleFilterClear}
-            onSubmit={handleFilterSubmit}
-          />
+          <ApplyFilterBar labelLink={t("CS_COMMON_CLEAR_ALL")} buttonLink={t("CS_COMMON_FILTER")} onClear={clearAll} onSubmit={props.onClose} />
         )}
       </ActionBar>
       {/* <ActionBar>
