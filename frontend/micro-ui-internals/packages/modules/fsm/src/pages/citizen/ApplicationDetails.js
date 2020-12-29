@@ -83,7 +83,15 @@ const ApplicationDetails = () => {
               </span>
               <span style={{ color: "#f47738", marginLeft: "8px" }}>DOWNLOAD</span>
             </div>
-          }
+          }Card style={{ position: "relative" }}>
+          <LinkButton
+            label={
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span>
+                  <GetApp />
+                </span>
+                <span style={{ color: "#f47738", marginLeft: "8px" }}>DOWNLOAD</span>
+              </
           style={{ position: "absolute", top: 0, right: 20 }}
           onClick={() => Digit.Utils.pdf.generate(data)}
         />
