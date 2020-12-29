@@ -41,7 +41,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   async function selectedType(value) {
     setComplaintType(value);
     setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
-    SessionStorage.set("complaintType", value);
+    // SessionStorage.set("complaintType", value);
   }
 
   function selectedSubType(value) {
