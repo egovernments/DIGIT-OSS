@@ -10,6 +10,7 @@ import FileComplaint from "./FileComplaint/index";
 import { NewApplication } from "./pages/employee/NewApplication";
 import { MyApplications } from "./pages/citizen/MyApplications";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
+import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
 
 export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "FSM", userType }) => {
   const { path, url } = useRouteMatch();
@@ -31,6 +32,7 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
         <Route path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <Route path={`${path}/my-applications`} component={MyApplications} />
         <Route path={`${path}/application-details`} component={ApplicationDetails} />
+        <Route path={`${path}/employee/application-details`} component={EmployeeApplicationDetails} />
         <Route path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
       </div>
     </Switch>
