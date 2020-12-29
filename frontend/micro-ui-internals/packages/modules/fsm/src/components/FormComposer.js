@@ -55,10 +55,12 @@ export const FormComposer = (props) => {
             {section.body.map((field, index) => {
               return (
                 <LabelFieldPair key={index}>
-                  <CardLabel>
-                    {field.label}
-                    {field.isMandatory ? " * " : null}
-                  </CardLabel>
+                  {field.label && (
+                    <CardLabel>
+                      {field.label}
+                      {field.isMandatory ? " * " : null}
+                    </CardLabel>
+                  )}
                   <div className="field">{fieldSelector(field.type, field.populators)}</div>
                 </LabelFieldPair>
               );
