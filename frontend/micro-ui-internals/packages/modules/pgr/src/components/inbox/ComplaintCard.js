@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 
 import { Card, DetailsCard, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
-import useComplaintTable from "../../hooks/useComplaintTable";
 import { FilterAction } from "@egovernments/digit-ui-react-components";
 import Filter from "./Filter";
 import SearchComplaint from "./search";
 
 export const ComplaintCard = ({ data, onFilterChange, serviceRequestIdKey }) => {
-  //let cardData = useComplaintTable(data);
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
 

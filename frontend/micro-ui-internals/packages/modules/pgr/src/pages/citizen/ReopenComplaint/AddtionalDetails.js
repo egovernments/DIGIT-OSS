@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Redirect } from "react-router-dom";
 
 import { BackButton, Card, CardHeader, CardText, TextArea, SubmitBar } from "@egovernments/digit-ui-react-components";
 
@@ -15,7 +15,11 @@ const AddtionalDetails = (props) => {
   const dispatch = useDispatch();
   const appState = useSelector((state) => state)["common"];
   let { t } = useTranslation();
+  let userType = Digit.SessionStorage.get("userType");
+  let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
 
+  const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
+  console.log("88888888888888888", tenantId, complaintDetails);
   useEffect(() => {
     if (appState.complaints) {
       const { response } = appState.complaints;
@@ -43,32 +47,30 @@ const AddtionalDetails = (props) => {
 
   function reopenComplaint() {
     let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
-    let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
-
+    // let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
     console.log("reopen complaint1", reopenDetails, complaintDetails);
-
-    // delete complaintDetails.service.citizen;
 
     // console.log("reopen complaint2", reopenDetails, complaintDetails)
 
-    complaintDetails.workflow = getUpdatedWorkflow(
-      reopenDetails,
-      // complaintDetails,
-      "REOPEN"
+    if (complaintDetails) {
+      complaintDetails.workflow = getUpdatedWorkflow(
+        reopenDetails,
+        // complaintDetails,
+        "REOPEN"
+      );
+      complaintDetails.service.additionalDetail = {
+        REOPEN_REASON: reopenDetails.reason,
+      };
+      updateComplaint({ service: complaintDetails.service, workflow: complaintDetails.workflow });
+    }
+    return (
+      <Redirect
+        to={{
+          pathname: `${props.parentRoute}/response`,
+          state: { complaintDetails },
+        }}
+      />
     );
-    complaintDetails.service.additionalDetail = {
-      REOPEN_REASON: reopenDetails.reason,
-    };
-    updateComplaint(complaintDetails);
-
-    // return (
-    //   <Redirect
-    //     to={{
-    //       pathname: "/response",
-    //       state: { complaintDetails },
-    //     }}
-    //   />
-    // );
   }
 
   function textInput(e) {

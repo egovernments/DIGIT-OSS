@@ -4,25 +4,23 @@ import { Loader } from "@egovernments/digit-ui-react-components";
 
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
-import useInboxData from "../../hooks/useInboxData";
 
 const Inbox = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useState({ filters: {}, search: "", sort: {} });
 
   const handleFilterChange = (filterParam) => {
+    console.log("handleFilterChange", { ...searchParams, filters: filterParam });
     setSearchParams({ ...searchParams, filters: filterParam });
   };
 
   const onSearch = (params = "") => {
-    console.log("onSubmit--------", params);
     setSearchParams({ ...searchParams, search: params });
   };
 
-  let complaints = useInboxData(searchParams) || [];
+  let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
 
   let isMobile = window.mobileCheck();
-
   if (complaints.length !== null) {
     if (isMobile) {
       return <MobileInbox data={complaints} onFilterChange={handleFilterChange} />;

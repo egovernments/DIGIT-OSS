@@ -8,7 +8,7 @@ import SelectSubType from "./Steps/SelectSubType";
 
 export const config = {
   routes: {
-    'complaint-type': {
+    "complaint-type": {
       component: SelectComplaintType,
       texts: {
         headerCaption: "",
@@ -16,18 +16,18 @@ export const config = {
         cardText: "CS_COMPLAINT_TYPE_TEXT",
         submitBarLabel: "PT_COMMONS_NEXT",
       },
-      nextStep: 'sub-type',
+      nextStep: "sub-type",
     },
-    'sub-type': {
+    "sub-type": {
       component: SelectSubType,
       texts: {
         header: "CS_ADDCOMPLAINT_COMPLAINT_SUBTYPE_PLACEHOLDER",
         cardText: "CS_COMPLAINT_SUBTYPE_TEXT",
         submitBarLabel: "PT_COMMONS_NEXT",
       },
-      nextStep: 'pincode',
+      nextStep: "pincode",
     },
-    'pincode': {
+    pincode: {
       component: SelectPincode,
       texts: {
         headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
@@ -48,9 +48,9 @@ export const config = {
           error: "CORE_COMMON_PINCODE_INVALID",
         },
       ],
-      nextStep: 'address',
+      nextStep: "address",
     },
-    'address': {
+    address: {
       component: SelectAddress,
       texts: {
         headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
@@ -58,9 +58,9 @@ export const config = {
         cardText: "CS_ADDCOMPLAINT_CITY_MOHALLA_TEXT",
         nextText: "PT_COMMONS_NEXT",
       },
-      nextStep: 'landmark',
+      nextStep: "landmark",
     },
-    'landmark': {
+    landmark: {
       component: SelectLandmark,
       texts: {
         headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
@@ -76,9 +76,9 @@ export const config = {
           name: "landmark",
         },
       ],
-      nextStep: 'upload-photos',
+      nextStep: "upload-photos",
     },
-    'upload-photos': {
+    "upload-photos": {
       component: SelectImages,
       texts: {
         header: "CS_ADDCOMPLAINT_UPLOAD_PHOTO",
@@ -86,9 +86,9 @@ export const config = {
         nextText: "PT_COMMONS_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
-      nextStep: 'additional-details',
+      nextStep: "additional-details",
     },
-    'additional-details': {
+    "additional-details": {
       component: SelectDetails,
       texts: {
         header: "CS_ADDCOMPLAINT_PROVIDE_ADDITIONAL_DETAILS",
@@ -103,7 +103,7 @@ export const config = {
         },
       ],
       nextStep: null,
-    }
+    },
   },
-  indexRoute: 'complaint-type'
+  indexRoute: "complaint-type",
 };
