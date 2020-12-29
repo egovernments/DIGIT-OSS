@@ -33,6 +33,8 @@ export const CreateComplaint = ({ parentUrl }) => {
   const history = useHistory();
   const serviceDefinitions = Digit.GetServiceDefinitions;
 
+  const localitiesObj = useSelector((state) => state.common.localities);
+
   //TO USE this way
   // let getObject = window.Digit.CoreService;
   // console.log(getObject.service("PGR").Name)
@@ -41,7 +43,6 @@ export const CreateComplaint = ({ parentUrl }) => {
   async function selectedType(value) {
     setComplaintType(value);
     setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
-    // SessionStorage.set("complaintType", value);
   }
 
   function selectedSubType(value) {
@@ -53,8 +54,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   const selectCity = async (city) => {
     setSelectedCity(city);
     // Digit.SessionStorage.set("city_complaint", city);
-    let response = await Digit.LocationService.getLocalities({ tenantId: city.code });
-    let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+    let __localityList = localitiesObj[city.code];
     setLocalities(__localityList);
     // Digit.SessionStorage.set("selected_localities", __localityList);
   };
@@ -182,6 +182,7 @@ export const CreateComplaint = ({ parentUrl }) => {
       ],
     },
   ];
+  console.log(":::complaintType:::", complaintType);
 
   return (
     <FormComposer

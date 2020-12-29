@@ -6,9 +6,18 @@ export const StoreService = {
   getInitData: () => {
     return Storage.get("initData");
   },
+
+  getBoundries: async (tenants) => {
+    let allBoundries = [];
+    allBoundries = tenants.map((tenant) => {
+      return Digit.LocationService.getLocalities({ tenantId: tenant.code });
+    });
+    return await Promise.all(allBoundries);
+  },
   digitInitData: async (stateCode, enabledModules) => {
     const { MdmsRes } = await MdmsService.init(stateCode);
     const stateInfo = MdmsRes["common-masters"].StateInfo[0];
+    const localities = {};
     const initData = {
       languages: stateInfo.hasLocalisation ? stateInfo.languages : [{ label: "ENGLISH", value: "en_IN" }],
       stateInfo: { code: stateInfo.code, name: stateInfo.name, logoUrl: stateInfo.logoUrl },
@@ -41,9 +50,12 @@ export const StoreService = {
       locale: initData.selectedLanguage,
       tenantId: stateCode,
     });
-
     Storage.set("initData", initData);
-
+    let tenantBoundriesList = await StoreService.getBoundries(initData.tenants);
+    tenantBoundriesList.forEach((boundry) => {
+      localities[boundry.TenantBoundary[0].tenantId] = Digit.LocalityService.get(boundry.TenantBoundary[0]);
+    });
+    initData.localities = localities;
     return initData;
   },
   defaultData: async (stateCode, cityCode, moduleCode, language) => {
