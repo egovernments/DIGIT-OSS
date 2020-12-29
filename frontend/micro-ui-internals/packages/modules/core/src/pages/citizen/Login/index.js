@@ -92,7 +92,7 @@ const Login = ({ stateCode, cityCode }) => {
     try {
       const { mobileNumber, otp } = params;
       if (isUserRegistered) {
-        const data = {
+        const requestData = {
           username: mobileNumber,
           password: otp,
           tenantId: stateCode,
@@ -101,11 +101,12 @@ const Login = ({ stateCode, cityCode }) => {
 
         const {
           data: { ResponseInfo, UserRequest, ...tokens },
-        } = await Digit.UserService.authenticate(data);
+        } = await Digit.UserService.authenticate(requestData);
+
         setTokens(tokens);
         setUser(UserRequest);
       } else if (!isUserRegistered) {
-        const data = {
+        const requestData = {
           name: DEFAULT_USER,
           username: mobileNumber,
           otpReference: otp,
@@ -115,7 +116,7 @@ const Login = ({ stateCode, cityCode }) => {
 
         const {
           data: { ResponseInfo, UserRequest, ...tokens },
-        } = await Digit.UserService.registerUser(data, stateCode);
+        } = await Digit.UserService.registerUser(requestData, stateCode);
         setTokens(tokens);
         setUser(UserRequest);
       }

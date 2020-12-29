@@ -4,14 +4,14 @@ import { Storage } from "../../atoms/Utils/Storage";
 
 export const UserService = {
   authenticate: (details) => {
-    const params = new URLSearchParams();
-    Object.entries(details).forEach(([key, value]) => params.append(key, value));
-    params.append("scope", "read");
-    params.append("grant_type", "password");
+    const data = new URLSearchParams();
+    Object.entries(details).forEach(([key, value]) => data.append(key, value));
+    data.append("scope", "read");
+    data.append("grant_type", "password");
     return ServiceRequest({
       serviceName: "authenticate",
       url: Urls.Authenticate,
-      params,
+      data,
       headers: {
         authorization: "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0",
         "Content-Type": "application/x-www-form-urlencoded",

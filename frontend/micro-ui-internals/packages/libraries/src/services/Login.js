@@ -1,6 +1,6 @@
 import Axios from "axios";
-import Urls from "./urls";
-import { Request } from "./Utils/Request";
+import Urls from "./atoms/urls";
+import { Request } from "./atoms/Utils/Request";
 
 export const LoginService = {
   sendOtp: (details, stateCode = "pb") =>
