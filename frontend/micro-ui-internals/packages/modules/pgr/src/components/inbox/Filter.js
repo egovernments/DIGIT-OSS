@@ -21,7 +21,7 @@ const Filter = (props) => {
   const { t } = useTranslation();
   const { pgr } = useSelector((state) => state);
 
-  const [selectAssigned, setSelectedAssigned] = useState("");
+  const [selectAssigned, setSelectedAssigned] = useState(null);
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [pendingComplaintCount, setPendingComplaintCount] = useState([]);
