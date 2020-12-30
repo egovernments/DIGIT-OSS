@@ -43,7 +43,7 @@ Banner.propTypes = {
   /**
    * If banner is successful, then show the complaint number
    */
-  complaintNumber: PropTypes.number,
+  complaintNumber: PropTypes.string,
 };
 
 Banner.defaultProps = {

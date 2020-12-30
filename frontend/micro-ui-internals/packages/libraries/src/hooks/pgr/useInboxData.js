@@ -12,15 +12,19 @@ const useInboxData = (searchParams) => {
   let wfFilters = { ...commonFilters, ...searchParams.filters.wfQuery };
   useEffect(() => {
     let complaintDetailsResponse = null;
+    let combinedRes = [];
     let getComplaintResponse = async () => {
       complaintDetailsResponse = await Digit.PGRService.search(tenantId, appFilters);
       complaintDetailsResponse.ServiceWrappers.forEach((service) => serviceIds.push(service.service.serviceRequestId));
       const serviceIdParams = serviceIds.join();
       const workflowInstances = await Digit.WorkflowService.getByBusinessId(tenantId, serviceIdParams, wfFilters, false);
-      let combinedRes = combineResponses(complaintDetailsResponse, workflowInstances).map((data) => ({
-        ...data,
-        sla: Math.round(data.sla / (24 * 60 * 60 * 1000)),
-      }));
+      console.log("workflowInstances:::>", workflowInstances);
+      if (workflowInstances.ProcessInstances.length) {
+        combinedRes = combineResponses(complaintDetailsResponse, workflowInstances).map((data) => ({
+          ...data,
+          sla: Math.round(data.sla / (24 * 60 * 60 * 1000)),
+        }));
+      }
       setcomplaintList(combinedRes);
     };
     getComplaintResponse();
