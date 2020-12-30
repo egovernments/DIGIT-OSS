@@ -521,8 +521,7 @@ img, video {
   padding: 8px 8px 24px;
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
-  border-radius: 4px;
-  margin-bottom: 16px; }
+  border-radius: 4px; }
   .employeeCard .card-header {
     font-size: 32px;
     line-height: 40px;
@@ -685,11 +684,8 @@ img, video {
     .card .card-link, .card-emp .card-link {
       text-align: left; }
   .employeeCard {
-    font-size: 16px;
-    padding: 0 0 16px;
-    width: 270px;
-    display: inline-block;
-    margin-right: 16px; }
+    padding-left: 16px;
+    padding-top: 16px; }
     .employeeCard.filter {
       margin-left: auto;
       margin-right: auto; }
@@ -2082,6 +2078,14 @@ img, video {
     .tag-container .tag .text {
       padding-right: 5px; }
 
+.employee .card-home {
+  font-size: 16px;
+  padding: 0 0 16px;
+  width: 270px;
+  display: inline-block;
+  margin-right: 16px;
+  margin-bottom: 16px; }
+
 .employee .topbar {
   position: fixed;
   top: 0;
@@ -2270,7 +2274,7 @@ img, video {
       padding-left: 16px;
       font-weight: 700; }
   .complaint-links-container .body {
-    padding: 10px 0 0 8px;
+    padding: 10px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -2360,7 +2364,7 @@ img, video {
         padding-left: 16px;
         font-weight: 700; }
     .complaint-links-container .body {
-      padding: 10px 0 0 8px;
+      padding: 10px;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
