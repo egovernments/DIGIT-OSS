@@ -8,7 +8,6 @@ import CitizenApp from "./pages/citizen";
 
 import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
-import { getI18n } from "react-i18next";
 import { fetchBusinessServiceByTenant } from "./redux/actions";
 
 export const PGRReducers = getRootReducer;

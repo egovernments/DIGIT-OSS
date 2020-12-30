@@ -38,6 +38,8 @@ const Filter = (props) => {
   let complaintStatus = useComplaintStatus();
   let serviceDefs = useServiceDefs();
 
+  console.log("%c 🏎️: RadioButtons -> selected value ", "font-size:16px;background-color:#c239cc;color:white;", selectAssigned);
+
   const onRadioChange = (value) => {
     console.log("vlaue:-------------", value);
     setSelectedAssigned(value);
@@ -196,7 +198,7 @@ const Filter = (props) => {
             <RadioButtons
               onSelect={onRadioChange}
               selectedoption={selectAssigned}
-              optionskey="name"
+              optionsKey="name"
               options={[
                 { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
                 { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },

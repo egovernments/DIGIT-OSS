@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 const CheckBox = ({ onChange, label, ref, checked, ...props }) => {
   const userType = Digit.SessionStorage.get("userType");
+  // console.log("%c 🏎️: checkbox ", "font-size:16px;background-color:#c239cc;color:white;", props);
   return (
     <div className="checkbox-wrap">
       <input
@@ -11,7 +12,7 @@ const CheckBox = ({ onChange, label, ref, checked, ...props }) => {
         className={userType === "employee" ? "input-emp" : ""}
         onChange={onChange}
         value={label}
-        {...props}
+        // {...props}
         ref={ref}
         {...(checked ? (checked = { checked }) : null)}
       />
