@@ -7,4 +7,12 @@ export const config = [
       submitBarLabel: "PT_COMMONS_NEXT",
     },
   },
+  {
+    texts: {
+      headerCaption: "",
+      header: "CS_ADDCOMPLAINT_PINCODE",
+      cardText: "CS_FILE_PROPERTY_SUBTYPE_TEXT",
+      submitBarLabel: "PT_COMMONS_NEXT",
+    },
+  },
 ];

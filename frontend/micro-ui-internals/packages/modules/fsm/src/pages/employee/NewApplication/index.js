@@ -11,7 +11,7 @@ import data from "../../../propertyType.json";
 const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
 const propertySubTypeRes = data.PropertyType.map((item) => ({ key: item.propertyType, name: item.code }));
 
-export const NewApplication = ({ parentUrl }) => {
+export const NewApplication = ({ parentUrl, heading = "New Desuldging Application" }) => {
   const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   const __initSubType__ = window.Digit.SessionStorage.get("subType");
 
@@ -23,6 +23,8 @@ export const NewApplication = ({ parentUrl }) => {
     { key: "Tracker (500 ltrs)", name: "Tracker (500 ltrs)" },
     { key: "Tracker (1000 ltrs)", name: "Tracker (1000 ltrs)" },
   ]);
+  const [channel, setChannel] = useState("Counter");
+  const [channelMenu, setChannelMenu] = useState([{ key: "Counter", name: "Counter" }]);
   const [vehicle, setVehicle] = useState("Tracker (500 ltrs)");
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
@@ -54,6 +56,10 @@ export const NewApplication = ({ parentUrl }) => {
 
   function selectSlum(value) {
     setSlum(value);
+  }
+
+  function selectChannel(value) {
+    setChannel(value);
   }
 
   function selectVehicle(value) {
@@ -174,6 +180,8 @@ export const NewApplication = ({ parentUrl }) => {
     Digit.SessionStorage.set("city_property", null);
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
+
+    history.push("digit-ui/employee/fsm/response");
   };
 
   const config = [
@@ -182,13 +190,8 @@ export const NewApplication = ({ parentUrl }) => {
       body: [
         {
           label: t("Application Channel"),
-          type: "text",
-          populators: {
-            name: "applicationChannel",
-            validation: {
-              pattern: /[A-Za-z]/,
-            },
-          },
+          type: "dropdown",
+          populators: <Dropdown option={channelMenu} optionKey="name" id="channel" selected={channel} select={selectChannel} />,
         },
         {
           label: t("Applicant Name"),
@@ -320,5 +323,5 @@ export const NewApplication = ({ parentUrl }) => {
     },
   ];
 
-  return <FormComposer heading="New Desuldging Application" label="Application Submit" config={config} onSubmit={onSubmit}></FormComposer>;
+  return <FormComposer heading={heading} label="Application Submit" config={config} onSubmit={onSubmit}></FormComposer>;
 };
