@@ -1,5 +1,13 @@
 /* TODO: convert using tailwind */
 .employee {
+  .card-home {
+    font-size: 16px;
+    padding: 0 0 16px 0;
+    width: 270px;
+    display: inline-block;
+    margin-right: 16px;
+    margin-bottom: 16px;
+  }
   .topbar {
     position: fixed;
     top: 0;

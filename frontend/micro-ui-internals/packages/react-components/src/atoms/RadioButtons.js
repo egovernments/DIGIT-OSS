@@ -13,13 +13,6 @@ const RadioButtons = (props) => {
   return (
     <div className="radio-wrap">
       {props.options.map((option, ind) => {
-        console.log(
-          "%c 🏎️: RadioButtonsss -> option ",
-          "font-size:16px;background-color:#c239cc;color:white;",
-          option,
-          "props.optionsKey",
-          props.optionsKey
-        );
         if (props.optionsKey) {
           console.log("selected option =======>>", props, isEqual(selected, option));
           return (

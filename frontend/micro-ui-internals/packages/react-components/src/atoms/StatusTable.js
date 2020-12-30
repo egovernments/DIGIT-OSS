@@ -19,6 +19,7 @@ export const Row = (props) => {
     <div className={props.last ? "row last" : "row"}>
       <h2>{props.label}</h2>
       <div className="value">{value}</div>
+      {props.actionButton ? <div className="action-button">{props.actionButton}</div> : null}
     </div>
   );
 };

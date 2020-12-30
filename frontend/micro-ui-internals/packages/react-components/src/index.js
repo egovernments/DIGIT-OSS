@@ -66,25 +66,7 @@ import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
 import { FormComposer } from "./hoc/FormComposer";
 import { PrivateRoute } from "./atoms/PrivateRoute";
-import {
-  ArrowLeft,
-  ArrowDown,
-  CameraSvg,
-  DeleteBtn,
-  SuccessSvg,
-  ErrorSvg,
-  StarFilled,
-  StarEmpty,
-  SearchIconSvg,
-  CheckSvg,
-  RoundedCheck,
-  Calender,
-  Phone,
-  FilterSvg,
-  Close,
-  Feedback,
-  GetApp,
-} from "./atoms/svgindex";
+import { GetApp } from "./atoms/svgindex";
 
 export {
   // Atoms
@@ -151,22 +133,6 @@ export {
   PrivateRoute,
   SectionalDropdown,
   LabelFieldPair,
-  ArrowLeft,
-  ArrowDown,
-  CameraSvg,
-  DeleteBtn,
-  SuccessSvg,
-  ErrorSvg,
-  StarFilled,
-  StarEmpty,
-  SearchIconSvg,
-  CheckSvg,
-  RoundedCheck,
-  Calender,
-  Phone,
-  FilterSvg,
-  Close,
-  Feedback,
   GetApp,
   // Molecule
   InputCard,
