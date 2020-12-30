@@ -21,7 +21,8 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
   useEffect(async () => {
     if (selectedCity) {
       let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
-      let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+      let __localityList = response.TenantBoundary[0].boundary;
+      // let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
       // console.log("address __localityList", __localityList);
       setLocalities(__localityList);
       // Digit.SessionStorage.set("selected_localities", __localityList);
