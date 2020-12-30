@@ -181,7 +181,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
 
-    history.push("digit-ui/employee/fsm/response");
+    history.push("/digit-ui/employee/fsm/response");
   };
 
   const config = [
