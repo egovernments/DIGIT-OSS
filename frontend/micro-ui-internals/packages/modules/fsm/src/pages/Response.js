@@ -21,11 +21,16 @@ const BannerPicker = () => {
 
 const Response = (props) => {
   const { t } = useTranslation();
+  const jumpTo = props.parentRoute;
+  const split = jumpTo.split("/");
+  const homePage = split.slice(0, split.length - 2).join("/") + "/";
+
   return (
     <Card>
       <BannerPicker />
       <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
-      <Link to={`${props.parentRoute}/`}>
+
+      <Link to={`${homePage}/`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>

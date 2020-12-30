@@ -23,6 +23,8 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     { key: "Tracker (500 ltrs)", name: "Tracker (500 ltrs)" },
     { key: "Tracker (1000 ltrs)", name: "Tracker (1000 ltrs)" },
   ]);
+  const [channel, setChannel] = useState("Counter");
+  const [channelMenu, setChannelMenu] = useState([{ key: "Counter", name: "Counter" }]);
   const [vehicle, setVehicle] = useState("Tracker (500 ltrs)");
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
@@ -54,6 +56,10 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
 
   function selectSlum(value) {
     setSlum(value);
+  }
+
+  function selectChannel(value) {
+    setChannel(value);
   }
 
   function selectVehicle(value) {
@@ -174,6 +180,8 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     Digit.SessionStorage.set("city_property", null);
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
+
+    history.push("digit-ui/employee/");
   };
 
   const config = [
@@ -182,13 +190,8 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
       body: [
         {
           label: t("Application Channel"),
-          type: "text",
-          populators: {
-            name: "applicationChannel",
-            validation: {
-              pattern: /[A-Za-z]/,
-            },
-          },
+          type: "dropdown",
+          populators: <Dropdown option={channelMenu} optionKey="name" id="channel" selected={channel} select={selectChannel} />,
         },
         {
           label: t("Applicant Name"),
