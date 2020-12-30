@@ -36,7 +36,7 @@ const CitizenApp = ({ path }) => {
     <Switch>
       <div className="ground-container">
         <BackButton>Back</BackButton>
-        <PrivateRoute path={`${path}/file-property`} component={() => <FileComplaint parentRoute={path} />} />
+        <PrivateRoute path={`${path}/new-application`} component={() => <FileComplaint parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
         <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
@@ -69,13 +69,10 @@ export const FSMLinks = ({ matchPath, userType }) => {
   if (userType === "citizen") {
     return (
       <React.Fragment>
-        <Header>Properties</Header>
-        <HomeLink to={`${matchPath}/file-property`}>File a Property</HomeLink>
-        <HomeLink to={`${matchPath}/`}>My Properties</HomeLink>
         <Header>Applications</Header>
         <HomeLink to={`${matchPath}/my-applications`}>My Applications</HomeLink>
         <Header>Other Services</Header>
-        <HomeLink to={`${matchPath}/`}>Apply for Desludging</HomeLink>
+        <HomeLink to={`${matchPath}/new-application`}>Apply for Desludging</HomeLink>
       </React.Fragment>
     );
   } else {
