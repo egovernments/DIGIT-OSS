@@ -21,6 +21,7 @@ const EmployeeApp = ({ path, url, userType }) => {
       <div className="ground-container">
         <BackButton>Back</BackButton>
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
+
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/application-details`} component={EmployeeApplicationDetails} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
