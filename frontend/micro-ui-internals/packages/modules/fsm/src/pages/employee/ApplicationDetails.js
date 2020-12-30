@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -19,6 +19,8 @@ import {
   Menu,
   LinkButton,
 } from "@egovernments/digit-ui-react-components";
+
+import Modal from "../../components/Modal";
 
 const applicationDetails = {
   details: [
@@ -82,6 +84,7 @@ const ApplicationDetails = (props) => {
   const { t } = useTranslation();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   function onActionSelect(action) {
     setSelectedAction(action);
@@ -99,6 +102,19 @@ const ApplicationDetails = (props) => {
     );
   };
 
+  useEffect(() => {
+    console.log("action selected", selectedAction);
+    switch (selectedAction) {
+      case "GENERATE_DEMAND":
+        return setShowModal(true);
+      case "MODIFY_APPLICATION":
+        return console.log("reroute to modify page");
+      default:
+        console.log("default case");
+        break;
+    }
+  }, [selectedAction]);
+
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.status === "COMPLAINT_FILED" && complaintDetails?.audit) {
       const caption = {
@@ -112,6 +128,10 @@ const ApplicationDetails = (props) => {
     return checkpoint.caption && checkpoint.caption.length !== 0 ? <TLCaption data={checkpoint.caption[0]} /> : null;
   };
 
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <React.Fragment>
       {Object.keys(applicationDetails).length > 0 ? (
@@ -123,7 +143,7 @@ const ApplicationDetails = (props) => {
               onClick={() => {}}
             />
             {applicationDetails.details.map((detail, index) => (
-              <React.Fragment>
+              <React.Fragment key={index}>
                 {index === 0 ? (
                   <CardSubHeader style={{ marginBottom: "16px" }}>{detail.title}</CardSubHeader>
                 ) : (
@@ -142,7 +162,14 @@ const ApplicationDetails = (props) => {
               <ConnectingCheckPoints>
                 {timeline.map((value, index) => {
                   return (
-                    <CheckPoint key={index} isCompleted={index === 0 ? true : false} label={value.label} customChild={getTimelineCaptions(value)} />
+                    <React.Fragment key={index}>
+                      <CheckPoint
+                        keyValue={index}
+                        isCompleted={index === 0 ? true : false}
+                        label={value.label}
+                        customChild={getTimelineCaptions(value)}
+                      />
+                    </React.Fragment>
                   );
                 })}
               </ConnectingCheckPoints>
@@ -150,6 +177,7 @@ const ApplicationDetails = (props) => {
               <Loader />
             )}
           </Card>
+          {showModal ? <Modal onClose={closeModal} /> : null}
           <ActionBar>
             {displayMenu && workflowDetails?.data?.nextActions ? (
               <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
