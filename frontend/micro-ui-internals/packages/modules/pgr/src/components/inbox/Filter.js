@@ -41,6 +41,8 @@ const Filter = (props) => {
   let complaintStatus = Digit.Hooks.pgr.useComplaintStatus();
   let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
+  console.log("%c 🏎️: RadioButtons -> selected value ", "font-size:16px;background-color:#c239cc;color:white;", selectAssigned);
+
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
     uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
