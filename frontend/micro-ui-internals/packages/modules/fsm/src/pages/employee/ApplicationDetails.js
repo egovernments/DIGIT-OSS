@@ -120,7 +120,7 @@ const ApplicationDetails = (props) => {
             <LinkButton
               label={<span style={{ color: "#f47738", marginLeft: "8px" }}>VIEW AUDIT TRAIL</span>}
               style={{ position: "absolute", top: 0, right: 20 }}
-              onClick={() => Digit.Utils.pdf.generate(data)}
+              onClick={() => {}}
             />
             {applicationDetails.details.map((detail, index) => (
               <React.Fragment>
