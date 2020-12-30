@@ -50,6 +50,7 @@
 .employeeCard {
   @apply bg-white px-sm pt-sm pb-lg shadow-card;
   border-radius: 4px;
+  margin-bottom: 16px;
 
   .card-header {
     @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;
@@ -184,8 +185,11 @@
   }
 
   .employeeCard {
-    padding-left: 16px;
-    padding-top: 16px;
+    font-size: 16px;
+    padding: 0 0 16px 0;
+    width: 270px;
+    display: inline-block;
+    margin-right: 16px;
 
     &.filter {
       margin-left: auto;
