@@ -36,7 +36,7 @@ const showHideMapPopup = (state, dispatch) => {
 const getMapLocator = textSchema => {
   return {
     uiFramework: "custom-molecules-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-firenoc",
     componentPath: "MapLocator",
     props: {}
   };
@@ -348,6 +348,7 @@ export const propertyLocationDetails = getCommonCard(
           suggestions: [],
           fullwidth: true,
           required: true,
+          isClearable: true,
           inputLabelProps: {
             shrink: true
           }

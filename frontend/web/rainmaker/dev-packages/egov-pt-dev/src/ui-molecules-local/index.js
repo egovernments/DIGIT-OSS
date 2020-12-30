@@ -47,6 +47,11 @@ const FeesEstimateCard = Loadable({
   loading: () => <Loading />
 });
 
+const Table = Loadable({
+  loader: () => import("./Table"),
+  loading: () => <Loading />
+});
+
 const HowItWorks = Loadable({
   loader: () => import("./HowItWorks"),
   loading: () => <Loading />
@@ -62,5 +67,6 @@ export {
   MapLocator,
   FeesEstimateCard,
   DividerWithLabel,
+  Table,
   HowItWorks
 };

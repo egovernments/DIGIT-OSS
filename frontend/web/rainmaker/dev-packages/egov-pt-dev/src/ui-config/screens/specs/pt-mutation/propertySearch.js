@@ -1,19 +1,13 @@
-import {
-  getCommonHeader,
-  getLabel,
-  getBreak
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import propertySearchTabs from "./property-search-tabs";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-// import { progressStatus } from "./searchResource/progressStatus";
-import { searchPropertyTable, searchApplicationTable } from "./searchResource/searchResults";
-import { httpRequest } from "../../../../ui-utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
-import { adhocPopup } from "./adhocPopup";
-import { showHideAdhocPopup } from "../utils";
+import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg, getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 import { resetFields } from "./mutation-methods";
+import propertySearchTabs from "./property-search-tabs";
+import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
+import { showHideAdhocPopup } from "../utils";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -21,40 +15,77 @@ const tenant = getTenantId();
 
 //console.log(captureMutationDetails);
 
-const getMDMSData = async (dispatch) => {
-  const mdmsBody = {
-    MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
-      moduleDetails: [
+const getMDMSData = async (action, dispatch) => {
+   const moduleDetails= [
+        {
+           moduleName: "PropertyTax", 
+           masterDetails: [
+             { name: "Documents" }
+            ] 
+          },
         {
           moduleName: "tenant",
           masterDetails: [
             {
               name: "tenants"
-            }
+            }, { name: "citymodule" }
           ]
-        }
+        } 
       ]
-    }
-  }
+   
   try {
-    const payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
+    getRequiredDocData(action, dispatch, moduleDetails).then((payload)=>{
+      if (process.env.REACT_APP_NAME != "Citizen") {
+        dispatch(
+          prepareFinalObject(
+            "searchScreen.tenantId",
+            tenant
+          )
+        );
+      }
+    })
+    // const payload = await httpRequest(
+    //   "post",
+    //   "/egov-mdms-service/v1/_search",
+    //   "_search",
+    //   [],
+    //   mdmsBody
+    // );
+    // payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+
+
+    // let documents = get(
+    //   payload.MdmsRes,
+    //   "PropertyTax.Documents",
+    //   []
+    // );
+
+    // let documentUi = getRequiredDocuments(documents);
+    // set(documentUi, 'children.header.children.header.children.key.props.labelKey', 'PT_REQ_DOCS_HEADER')
+    // set(documentUi, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey', 'PT_COMMON_BUTTON_APPLY')
+    // set(documentUi, 'children.footer.children.footer.children.applyButton.onClickDefination', {
+    //   action: "condition",
+    //   callBack: startApplyFlow
+    // })
+    // set(
+    //   action,
+    //   "screenConfig.components.adhocDialog.children.popup",
+    //   documentUi
+    // );
+
+
+
     // console.log("payload--", payload)
-    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    if (process.env.REACT_APP_NAME != "Citizen") {
-      dispatch(
-        prepareFinalObject(
-          "searchScreen.tenantId",
-          tenant
-        )
-      );
-    }
+    // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  //   if (process.env.REACT_APP_NAME != "Citizen") {
+  //     dispatch(
+  //       prepareFinalObject(
+  //         "searchScreen.tenantId",
+  //         tenant
+  //       )
+  //     );
+  //   }
+  // }
   } catch (e) {
     console.log(e);
   }
@@ -70,7 +101,8 @@ const screenConfig = {
 
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
-    getMDMSData(dispatch);
+    
+    getMDMSData(action, dispatch);
     return action;
   },
 
@@ -134,7 +166,7 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  showHideAdhocPopup(state, dispatch, "search");
+                  showHideAdhocPopup(state, dispatch, "propertySearch");
 
                 }
               },
@@ -154,16 +186,15 @@ const screenConfig = {
       }
     },
     adhocDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-pt",
+      uiFramework: "custom-containers",
       componentPath: "DialogContainer",
       props: {
         open: false,
-        maxWidth: "sm",
-        screenKey: "search"
+        maxWidth: false,
+        screenKey: "propertySearch"
       },
       children: {
-        popup: adhocPopup
+        popup: {}
       }
     }
   }

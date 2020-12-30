@@ -25,7 +25,7 @@ export const documentDetails = getCommonCard({
   break: getBreak(),
   documentList: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-firenoc",
     componentPath: "DocumentListContainer",
     props: {
       documents: [
@@ -80,7 +80,7 @@ export const documentDetails = getCommonCard({
       inputProps: {
         accept: "image/*, .pdf, .png, .jpeg"
       },
-      maxFileSize: 6000
+      maxFileSize: 5000
     },
     type: "array"
   }

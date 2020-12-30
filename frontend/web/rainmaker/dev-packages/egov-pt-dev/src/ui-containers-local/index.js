@@ -1,6 +1,6 @@
+import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 import React from "react";
 import Loadable from "react-loadable";
-import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 
 const Loading = () => <LinearProgress />;
 
@@ -12,6 +12,7 @@ const LabelContainer = Loadable({
   loader: () => import("./LabelContainer"),
   loading: () => <Loading />
 });
+
 
 const CheckboxContainer = Loadable({
   loader: () => import("./CheckboxContainer"),
@@ -48,15 +49,21 @@ const ViewBreakupContainer = Loadable({
   loading: () => <Loading />
 });
 
-export {
-  CustomTabContainer,
-  LabelContainer,
-  CheckboxContainer,
-  DownloadFileContainer,
-  EstimateCardContainer,
-  AutosuggestContainer,
-  DocumentListContainer,
-  PaymentRedirectPage,
-  ViewBreakupContainer,
-  DialogContainer
-};
+const HeaderContainer = Loadable({
+  loader: () => import("./HeaderContainer"),
+  loading: () => <Loading />
+});
+
+const CheckboxContainerPTCommon = Loadable({
+  loader: () => import("./CheckboxContainerPTCommon"),
+  loading: () => <Loading />
+});
+
+const SuccessPTPopupContainer = Loadable({
+  loader: () => import("./SuccessPTPopupContainer"),
+  loading: () => <Loading />
+});
+
+
+export { CustomTabContainer, LabelContainer, CheckboxContainer, DownloadFileContainer, EstimateCardContainer, AutosuggestContainer, DocumentListContainer, PaymentRedirectPage, ViewBreakupContainer, DialogContainer, HeaderContainer, CheckboxContainerPTCommon, SuccessPTPopupContainer };
+

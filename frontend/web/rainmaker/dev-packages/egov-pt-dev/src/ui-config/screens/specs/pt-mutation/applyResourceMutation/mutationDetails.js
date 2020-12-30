@@ -10,7 +10,7 @@ import {
     getPattern,
     getSelectField,
     getTextField,
-    getDateField
+    getDateField    
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {
@@ -34,7 +34,7 @@ import {
               }
             }
           ),
-          mutationDetailsContainer: getCommonContainer({
+          mutationDetailsContainer: getCommonContainer({ 
             getMutationPendingRadioButton : {
               uiFramework: "custom-containers",
               componentPath: "RadioGroupContainer",
@@ -65,9 +65,34 @@ import {
                 required: true
               },
               required: true,
-              type: "array"
+              type: "array",
+              beforeFieldChange:(action, state, dispatch) => {
+                const courtCaseJsonPath = "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.courtCaseDetails";
+                if(action.value === "NO"){
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", true));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.value", ""));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.helperText", ""));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.error", false));
+                }else{
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", false));
+                }
+              }
             },
-
+            courtCaseDetails: getTextField({
+              label: {
+                labelName: "Details of Court Case",
+                labelKey: "PT_MUTATION_COURT_CASE_DETAILS"
+              },
+              props:{
+                className:"applicant-details-error",
+              },
+              placeholder: {
+                labelName: "Enter Details of Court Case",
+                labelKey: "PT_MUTATION_COURT_CASE_DETAILS_PLACEHOLDER"
+              },
+              pattern: getPattern("Address"),
+              jsonPath: "Property.additionalDetails.caseDetails"
+            }),
             getMutationStateAcquisitionRadioButton : {
               uiFramework: "custom-containers",
               componentPath: "RadioGroupContainer",
@@ -98,24 +123,19 @@ import {
                 required: true
               },
               required: true,
-              type: "array"
+              type: "array",
+              beforeFieldChange:(action, state, dispatch) => {
+                const courtCaseJsonPath = "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.govtAcquisitionDetails";
+                if(action.value === "NO"){
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", true));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.value", ""));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.helperText", ""));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.error", false));
+                }else{
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", false));
+                }
+              }
             },
-
-            courtCaseDetails: getTextField({
-              label: {
-                labelName: "Details of Court Case",
-                labelKey: "PT_MUTATION_COURT_CASE_DETAILS"
-              },
-              props:{
-                className:"applicant-details-error"
-              },
-              placeholder: {
-                labelName: "Enter Details of Court Case",
-                labelKey: "PT_MUTATION_COURT_CASE_DETAILS_PLACEHOLDER"
-              },
-              pattern: getPattern("Address"),
-              jsonPath: "Property.additionalDetails.caseDetails"
-            }),
             govtAcquisitionDetails: getTextField({
               label: {
                 labelName: "Details of Government Acquisition",
@@ -134,3 +154,11 @@ import {
 
           })
         });
+
+        
+
+              
+              
+
+
+             

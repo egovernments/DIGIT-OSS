@@ -22,7 +22,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
 const getHeader = label => {
   return {
     uiFramework: "custom-molecules-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-firenoc",
     componentPath: "DividerWithLabel",
     props: {
       className: "hr-generic-divider-label",

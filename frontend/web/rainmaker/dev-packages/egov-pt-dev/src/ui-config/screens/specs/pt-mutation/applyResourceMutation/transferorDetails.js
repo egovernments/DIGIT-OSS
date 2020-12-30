@@ -10,7 +10,7 @@ import {
       getPattern,
       getSelectField,
       getTextField,
-      getDateField
+      getDateField    
     } from "egov-ui-framework/ui-config/screens/specs/utils";
     import { checkValueForNA } from "../../utils";
     import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -21,7 +21,7 @@ import {
     import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
     import get from "lodash/get";
 
-
+   
 
 export const transferorDetails = getCommonCard(
     {
@@ -86,7 +86,7 @@ export const transferorDetails = getCommonCard(
         //    jsonPath: "Property.propertyDetails[0].owners[0].dob",
         //     callBack: checkValueForNA
         //     }
-
+          
         // ),
         transferorOwnerType: getLabelWithValue(
           {
@@ -153,3 +153,9 @@ export const transferorDetails = getCommonCard(
         )
       })
     });
+
+    
+
+
+
+

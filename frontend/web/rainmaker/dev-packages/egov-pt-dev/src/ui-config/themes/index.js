@@ -49,8 +49,18 @@ const themeObject = {
         fontSize: "14px"
       }
     },
-
-    MuiTypography: {
+    MuiTab:{
+      labelContainer:{
+        fontSize: "14px!important"
+      },
+      labelWrapped:{
+        fontSize: "14px!important"
+      },
+      label:{
+        fontSize: "14px!important"
+      }
+    },
+     MuiTypography: {
       title: {
         color: "rgba(0, 0, 0, 0.87)",
         fontFamily: "Roboto",

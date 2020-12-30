@@ -14,8 +14,11 @@ const declarationDetails = getCommonContainer({
     moduleName: "egov-pt",
     componentPath: "Checkbox",
     props: {
-      content:'PT_MUTATION_DECLARATION'
+      content:'PT_MUTATION_DECLARATION',
+      jsonPath:
+          "Property.declaration"
     },
+    
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
   });

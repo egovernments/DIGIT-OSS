@@ -1,22 +1,15 @@
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
-  toggleSnackbar,
-  toggleSpinner
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import html2canvas from "html2canvas";
 import jp from "jsonpath";
+import jsPDF from "jspdf";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
-import DATA from "./documents";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -53,20 +46,35 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   }
 };
 
-export const getSearchResults = async (queryObject, dispatch) => {
+export const getSearchResults = async (queryObject, requestBody) => {
   try {
-
-
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "/property-services/property/_search",
       "",
-      queryObject
+      queryObject,
+      requestBody
     );
+    response && response.Properties && response.Properties.map(property => {
+      if (property.status == "INWORKFLOW") {
+        let newOwnerList = [];
+        let oldOwnerList = [];
+        property.owners.map(owner => {
+          if (owner.status == 'ACTIVE') {
+            newOwnerList.push(owner);
+          } else {
+            oldOwnerList.push(owner);
+          }
+        })
+        oldOwnerList.push(...newOwnerList);
+        property.owners = oldOwnerList;
+      }
+    })
     store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
+    store.dispatch(toggleSpinner());
     store.dispatch(
       toggleSnackbar(
         true,
@@ -302,7 +310,7 @@ export const createUpdatePTApplication = async (state, dispatch, status) => {
 export const prepareDocumentsUploadData = (state, dispatch) => {
   let documents = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.Documents",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.MutationDocuments",
     []
   );
   documents = documents.filter(item => {
@@ -321,23 +329,37 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   documents.forEach(doc => {
     // Handle the case for multiple muildings
 
-      let card = {};
-      card["name"] = doc.code;
-      card["code"] = doc.code;
-      card["required"] = doc.required ? true : false;
-      if (doc.hasDropdown && doc.dropdownData) {
-        let dropdown = {};
-        dropdown.label = "PT_MUTATION_SELECT_DOC_LABEL";
-        dropdown.required = true;
-        dropdown.menu = doc.dropdownData.filter(item => {
-          return item.active;
-        });
-        dropdown.menu = dropdown.menu.map(item => {
-          return { code: item.code, label: getTransformedLocale(item.code) };
-        });
-        card["dropdown"] = dropdown;
-      }
-      tempDoc[doc.documentType].cards.push(card);
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.additionalDetails && doc.additionalDetails.filterCondition) {
+      card["filterCondition"] = doc.additionalDetails.filterCondition;
+    }
+    if (doc.additionalDetails && doc.additionalDetails.dropdownFilter) {
+      card["dropdownFilter"] = doc.additionalDetails.dropdownFilter;
+    }
+
+    // if(doc.code=='OWNER_REGISTRATIONPROOF'){
+    //   card["filterCondition"]={"filterValue":["NONE"],"jsonPath":"Property.ownersTemp","onArray":true,"arrayAttribute":"ownerType"};
+    // }
+    if (doc.hasDropdown && doc.dropdownData) {
+      let dropdown = {};
+      dropdown.label = "PT_MUTATION_SELECT_DOC_LABEL";
+      dropdown.required = true;
+      dropdown.menu = doc.dropdownData.filter(item => {
+        return item.active;
+      });
+      dropdown.menu = dropdown.menu.map(item => {
+        let menuItem = { code: item.code, label: getTransformedLocale(item.code) };
+        if (item.parentValue) {
+          menuItem['parentValue'] = item.parentValue;
+        }
+        return { ...menuItem };
+      });
+      card["dropdown"] = dropdown;
+    }
+    tempDoc[doc.documentType].cards.push(card);
 
   });
 
@@ -470,12 +492,13 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
     );
   }
 };
-export const generatePdfFromDiv = (action, applicationNumber) => {
-  let target = document.querySelector("#material-ui-cardContent");
+export const generatePdfFromDiv = (action, applicationNumber, divID) => {
+  const divName = divID ? divID : "#material-ui-cardContent";
+  let target = document.querySelector(divName);
   html2canvas(target, {
-    imageTimeout:1500000000,
+    // imageTimeout: 1500000000,
     onclone: function (clonedDoc) {
-      if(clonedDoc.getElementById("pdf-header")){
+      if (clonedDoc.getElementById("pdf-header")) {
         clonedDoc.getElementById("pdf-header").style.display = "block";
       }
 
@@ -491,14 +514,22 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
 
     }
   }).then(canvas => {
-    var data = canvas.toDataURL();
+    var data = canvas.toDataURL("image/jpeg", 1);
     var imgWidth = 200;
-    var pageHeight = 295;
-    var imgHeight =  pageHeight-80;
+    var pageHeight = 290;
+    var imgHeight = (canvas.height * imgWidth) / canvas.width;
+    var heightLeft = imgHeight;
     var doc = new jsPDF("p", "mm");
     var position = 0;
 
-    doc.addImage(data, "PNG", 5, 10+position, imgWidth, imgHeight);
+    doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      doc.addPage();
+      doc.addImage(data, 'PNG', 5, 10 + position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
 
     if (action === "download") {
       doc.save(`preview-${applicationNumber}.pdf`);
@@ -507,4 +538,110 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
       window.open(doc.output("bloburl"), "_blank");
     }
   });
+};
+
+export const getBoundaryData = async (
+  action,
+  state,
+  dispatch,
+  queryObject,
+  code,
+  componentPath
+) => {
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "_search",
+      queryObject,
+      {}
+    );
+    const tenantId =
+      process.env.REACT_APP_NAME === "Employee"
+        ? get(
+          state.screenConfiguration.preparedFinalObject,
+          "Property.address.city"
+        )
+        : getQueryArg(window.location.href, "tenantId");
+
+    const mohallaData =
+      payload &&
+      payload.TenantBoundary[0] &&
+      payload.TenantBoundary[0].boundary &&
+      payload.TenantBoundary[0].boundary.reduce((result, item) => {
+        result.push({
+          ...item,
+          name: `${tenantId
+            .toUpperCase()
+            .replace(/[.]/g, "_")}_REVENUE_${item.code
+              .toUpperCase()
+              .replace(/[._:-\s\/]/g, "_")}`
+        });
+        return result;
+      }, []);
+
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.tenant.localities",
+        // payload.TenantBoundary && payload.TenantBoundary[0].boundary,
+        mohallaData
+      )
+    );
+
+    dispatch(
+      handleField(
+        "register-property",
+        "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
+        "props.suggestions",
+        mohallaData
+      )
+    );
+    if (code) {
+
+      let data = payload.TenantBoundary[0].boundary;
+      let messageObject =
+        data &&
+        data.find(item => {
+          return item.code == code;
+        });
+      if (messageObject)
+        dispatch(
+          prepareFinalObject(
+            "Property.address.locality.name",
+            messageObject.name
+          )
+        );
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getSearchBillResult = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "fetxh");
+  }
+};
+
+export const getDomainLink = () =>{
+    let link = "";
+    if(process.env.NODE_ENV !== "development"){
+       link += "/"+process.env.REACT_APP_NAME.toLowerCase()
+    }
+    return link
 };

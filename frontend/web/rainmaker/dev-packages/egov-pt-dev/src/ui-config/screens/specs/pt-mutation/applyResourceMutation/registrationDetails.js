@@ -10,7 +10,7 @@ import {
       getPattern,
       getSelectField,
       getTextField,
-      getDateField
+      getDateField    
     } from "egov-ui-framework/ui-config/screens/specs/utils";
     import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
     import {
@@ -19,6 +19,12 @@ import {
     } from "../../utils";
     import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
     import get from "lodash/get";
+
+
+
+
+
+    
 export const registrationDetails = getCommonCard(
     {
       header: getCommonTitle(
@@ -33,45 +39,41 @@ export const registrationDetails = getCommonCard(
         }
       ),
       registrationDetailsContainer: getCommonContainer({
-        transferReason: getSelectField({
-          label: {
-            labelName: "Reason for Transfer",
-            labelKey: "PT_MUTATION_TRANSFER_REASON"
+          transferReason: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-pt",
+            componentPath: "AutosuggestContainer",
+            props: {
+              className: "autocomplete-dropdown",
+              label: {
+                labelName: "Reason for Transfer",
+                labelKey: "PT_MUTATION_TRANSFER_REASON"
+              },
+              placeholder: {
+                labelName: "Select Reason for Transfer",
+                labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
+              },
+              required:true,
+              isClearable: true,
+              labelsFromLocalisation: true,
+              localePrefix: {
+                moduleName: "PropertyTax",
+                masterName: "ReasonForTransfer"
+              },
+              sourceJsonPath: "ReasonForTransfer.PropertyTax.ReasonForTransfer",
+              inputLabelProps: {
+                shrink: true
+              }
+            },
+            required:true,
+            jsonPath:
+            "Property.additionalDetails.reasonForTransfer",
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            }
           },
-          placeholder: {
-            labelName: "Select Reason for Transfer",
-            labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
-          },
-          required:true,
-          jsonPath:
-          "Property.additionalDetails.reasonForTransfer",
-          localePrefix: {
-            moduleName: "PropertyTax",
-            masterName: "ReasonForTransfer"
-          },
-          sourceJsonPath: "ReasonForTransfer.PropertyTax.ReasonForTransfer",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          }
-        }),
-        // transferReason: getTextField({
-        //   label: {
-        //     labelName: "Reason for Transfer",
-        //     labelKey: "PT_MUTATION_TRANSFER_REASON"
-        //   },
-        //   props:{
-        //     className:"applicant-details-error"
-        //   },
-        //   placeholder: {
-        //     labelName: "Select Reason for Transfer",
-        //     labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
-        //   },
-        //   required:true,
-        //   pattern: getPattern("Address"),
-        //   jsonPath: "Property.additionalDetails.reasonForTransfer"
-        // }),
 
         marketValue: getTextField({
           label: {
@@ -105,21 +107,26 @@ export const registrationDetails = getCommonCard(
           pattern: getPattern("DocumentNo"),
           jsonPath: "Property.additionalDetails.documentNumber"
         }),
-          documentIssueDateField :getDateField({
-          label: { labelName: "Document Issue Date", labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE" },
-          placeholder: {
-            labelName: "Enter Document No.",
-            labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE_PLACEHOLDER"
-          },
-          required: true,
-          pattern: getPattern("Date"),
-          jsonPath: "Property.additionalDetails.documentDate",
-          // props: {
-          //   inputProps: {
-          //     max: getTodaysDateInYMD()
-          //   }
-          // }
-        }),
+        documentIssueDateField: {
+          ...getDateField({
+            label: { labelName: "Document Issue Date", labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE" },
+            placeholder: {
+              labelName: "Enter Document No.",
+              labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE_PLACEHOLDER"
+            },
+            required: true,
+            pattern: getPattern("Date"),
+            isDOB: true,
+            errorMessage: "PT_DOCUMENT_DATE_ERROR_MESSAGE",
+            jsonPath: "Property.additionalDetails.documentDate",
+            props: {
+              inputProps: {
+                max: getTodaysDateInYMD()
+              }
+            }
+          })
+        },
+          
         documentValue: getTextField({
           label: {
             labelName: "Document Value",
@@ -152,4 +159,4 @@ export const registrationDetails = getCommonCard(
           jsonPath: "Property.additionalDetails.remarks",
         }),
       })
-    }) ;
+    }) ; 
