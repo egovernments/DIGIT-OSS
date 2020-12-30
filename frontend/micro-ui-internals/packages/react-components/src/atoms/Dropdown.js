@@ -23,7 +23,8 @@ const Dropdown = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
 
-  // console.log("props in dropdown", props.option, props.optionKey, props.t);
+  console.log("%c 🏎️: props in dropdown ", "font-size:16px;background-color:#c239cc;color:white;", props.selected);
+
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);

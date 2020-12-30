@@ -21,7 +21,7 @@ const Filter = (props) => {
   const { t } = useTranslation();
   const { pgr } = useSelector((state) => state);
 
-  const [selectAssigned, setSelectedAssigned] = useState("");
+  const [selectAssigned, setSelectedAssigned] = useState(null);
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [pendingComplaintCount, setPendingComplaintCount] = useState([]);
@@ -40,6 +40,8 @@ const Filter = (props) => {
   let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
   let complaintStatus = Digit.Hooks.pgr.useComplaintStatus();
   let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
+
+  console.log("%c 🏎️: RadioButtons -> selected value ", "font-size:16px;background-color:#c239cc;color:white;", selectAssigned);
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
