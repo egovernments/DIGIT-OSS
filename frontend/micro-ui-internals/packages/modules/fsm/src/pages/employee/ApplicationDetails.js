@@ -21,6 +21,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 
 import Modal from "../../components/Modal";
+import { useHistory } from "react-router-dom";
 
 const applicationDetails = {
   details: [
@@ -82,6 +83,7 @@ const workflowDetails = {
 
 const ApplicationDetails = (props) => {
   const { t } = useTranslation();
+  const history = useHistory();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -108,7 +110,7 @@ const ApplicationDetails = (props) => {
       case "GENERATE_DEMAND":
         return setShowModal(true);
       case "MODIFY_APPLICATION":
-        return console.log("reroute to modify page");
+        return history.push("/digit-ui/employee/fsm/modify-application");
       default:
         console.log("default case");
         break;

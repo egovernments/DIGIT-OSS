@@ -106,18 +106,11 @@ Dropdown.propTypes = {
   selected: PropTypes.any,
   style: PropTypes.object,
   option: PropTypes.array,
-  optionKey: PropTypes.string,
+  optionKey: PropTypes.any,
   select: PropTypes.func,
   t: PropTypes.func,
 };
 
-Dropdown.defaultProps = {
-  selected: "",
-  option: [],
-  optionKey: 0,
-  style: {},
-  select: undefined,
-  t: undefined,
-};
+Dropdown.defaultProps = {};
 
 export default Dropdown;
