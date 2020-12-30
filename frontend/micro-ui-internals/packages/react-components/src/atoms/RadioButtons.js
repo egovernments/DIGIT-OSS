@@ -4,18 +4,19 @@ import isEqual from "lodash/isEqual";
 
 const RadioButtons = (props) => {
   var selected = props.selectedOption;
-  console.log("selected option", selected);
   function selectOption(value) {
     console.log("value,,,,,", value);
     selected = value;
     props.onSelect(value);
   }
+
   return (
     <div className="radio-wrap">
-      {props.options.map((option) => {
+      {props.options.map((option, ind) => {
         if (props.optionsKey) {
+          console.log("selected option =======>>", props, isEqual(selected, option));
           return (
-            <div key={option[props.optionsKey]}>
+            <div key={ind}>
               <span className="radio-btn-wrap">
                 <input
                   className="radio-btn"
@@ -31,7 +32,7 @@ const RadioButtons = (props) => {
           );
         } else {
           return (
-            <div key={option}>
+            <div key={ind}>
               <span className="radio-btn-wrap">
                 <input
                   className="radio-btn"
