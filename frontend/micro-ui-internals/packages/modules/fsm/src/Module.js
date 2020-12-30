@@ -14,6 +14,7 @@ import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
 import CollectPayment from "./pages/employee/CollectPayment";
 import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import Response from "./pages/Response";
+import EditApplication from "./pages/employee/EditApplication";
 
 const EmployeeApp = ({ path, url, userType }) => {
   return (
@@ -23,6 +24,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
 
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
+        <PrivateRoute path={`${path}/modify-application`} component={() => <EditApplication />} />
         <PrivateRoute path={`${path}/application-details`} component={EmployeeApplicationDetails} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
