@@ -52,7 +52,7 @@ paths:
       parameters:
         - name: Amendment
           in: body
-          description: Request header for the demand.
+          description: Request header for the Amendment.
           required: true
           schema:
             $ref: '#/definitions/AmendmentRequest'
@@ -69,7 +69,14 @@ paths:
             $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
   /amendment/_update:
     post:
-      description: 'Updates the workflow status of Amendment.'' parameters: - name: AmendmentUpdate in: body description: Request header for the Amendment. required: true schema: $ref: '
+      description: Updates the workflow status of Amendment.
+      parameters:
+        - name: AmendmentUpdate
+          in: body
+          description: Request header for the Amendment.
+          required: true
+          schema:
+            $ref: '#/definitions/AmendmentUpdateRequest'
       tags:
         - Amendment
       responses:
