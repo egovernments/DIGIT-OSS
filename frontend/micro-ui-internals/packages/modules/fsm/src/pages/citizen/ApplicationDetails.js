@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Header, Card, KeyNote, SubmitBar, LinkButton, GetApp } from "@egovernments/digit-ui-react-components";
+import { Header, Card, KeyNote, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
 const data = {
@@ -79,7 +79,9 @@ const ApplicationDetails = () => {
           label={
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
               <span>
-                <GetApp />
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f47738">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
               </span>
               <span style={{ color: "#f47738", marginLeft: "8px" }}>DOWNLOAD</span>
             </div>
