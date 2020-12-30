@@ -94,7 +94,9 @@ class MultiItem extends React.Component {
     if (sourceJsonPath) {
       let multiItemContent = get(scheama, prefixSourceJsonPath, {});
       for (var variable in multiItemContent) {
-        if (
+        if(multiItemContent.hasOwnProperty(variable) && multiItemContent[variable].componentPath == "DynamicMdmsContainer" ){
+          multiItemContent[variable].index = itemsLength;
+        } else if (
           multiItemContent.hasOwnProperty(variable) &&
           multiItemContent[variable].props &&
           multiItemContent[variable].props.jsonPath
@@ -261,7 +263,7 @@ class MultiItem extends React.Component {
         {hasAddItem !== false && (
           <Container style={{ marginTop: "8px" }}>
             <Item xs={12} align="right">
-              <Button onClick={e => addItem()} color="primary">
+              <Button onClick={e => addItem()} color="primary" className="sss">
                 <Icon iconName="add" />
                 <LabelConatiner labelName={labelName} labelKey={labelKey} />
               </Button>

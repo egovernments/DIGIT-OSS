@@ -235,31 +235,16 @@ const getReceiptData = (transformedData, ulbLogo) => {
             ],
             [
               {
-                text: "Occupancy Type",
+                text: "Accessories",
                 border: borderKey,
                 style: "receipt-table-key"
               },
               {
-                text: transformedData.occupancyType,
+                text: `${transformedData.accessoriesList}`,
                 border: borderValue
               }
             ]
           ]
-
-          //   [
-          //     {
-          //       text: "Accessories",
-          //       border: borderKey,
-          //       style: "receipt-table-key"
-          //     },
-          //     {
-          //       text: `(${transformedData.accessories}) ${
-          //         transformedData.accessoriesList
-          //       }`,
-          //       border: borderValue
-          //     }
-          //   ]
-          // ]
         },
         layout: tableborder
       },
@@ -485,13 +470,13 @@ const getReceiptData = (transformedData, ulbLogo) => {
           body: [
             [
               {
-                text: "MSC5/MSC2 No:",
+                text: "G8 Receipt No:",
                 border: borderKey,
                 style: "receipt-table-key"
               },
               { text: transformedData.g8ReceiptNo, border: borderValue },
               {
-                text: "MSC5/MSC2 Issue Date:",
+                text: "G8 Receipt Issue Date:",
                 border: borderKey,
                 style: "receipt-table-key"
               },
@@ -756,19 +741,6 @@ const getCertificateData = (transformedData, ulbLogo) => {
         columns: [
           {
             width: 160,
-            text: "Occupancy Type"
-          },
-          {
-            width: "*",
-            text: transformedData.occupancyType
-          }
-        ]
-      },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
             text: "Trade Address"
           },
           {
@@ -790,21 +762,19 @@ const getCertificateData = (transformedData, ulbLogo) => {
           }
         ]
       },
-      // {
-      //   style: "tl-certificate-data-2",
-      //   columns: [
-      //     {
-      //       width: 160,
-      //       text: "Accessories"
-      //     },
-      //     {
-      //       width: "*",
-      //       text: `(${transformedData.accessories}) ${
-      //         transformedData.accessoriesList
-      //       }`
-      //     }
-      //   ]
-      // },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: "Accessories"
+          },
+          {
+            width: "*",
+            text: `${transformedData.accessoriesList}`
+          }
+        ]
+      },
       {
         style: "tl-certificate-data-2",
         columns: [
@@ -855,9 +825,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                 text: "Approved by: "
               },
               {
-                text: `${transformedData.auditorName}\n${
-                  transformedData.designation
-                }`
+                text: transformedData.auditorName
               }
             ],
             alignment: "left"
@@ -872,15 +840,11 @@ const getCertificateData = (transformedData, ulbLogo) => {
             alignment: "right"
           }
         ]
-      },
-      {
-        style: "tl-certificate-footer1",
-        text: transformedData.signature
       }
     ],
     footer: [
       {
-        text: transformedData.Disclaimer,
+        text:transformedData.Disclaimer,
         style: "receipt-footer"
       }
     ],
@@ -956,7 +920,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       "receipt-footer": {
         color: "#484848",
         fontSize: 8,
-        margin: [10, -35, 5, 5]
+        margin: [10, -25, 5, 5]
       },
       "receipt-no": {
         color: "#484848",
@@ -965,11 +929,6 @@ const getCertificateData = (transformedData, ulbLogo) => {
       "tl-certificate-footer": {
         fontSize: 14,
         margin: [0, 50, 0, 0], //left top right bottom
-        color: "#1E1E1E"
-      },
-      "tl-certificate-footer1": {
-        fontSize: 14,
-        margin: [0, 15, 0, 0], //left top right bottom
         color: "#1E1E1E"
       }
     }

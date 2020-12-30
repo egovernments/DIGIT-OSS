@@ -12,6 +12,7 @@ const getSuggestions = suggestions => {
   return (
     suggestions &&
     suggestions.length > 0 &&
+    Array.isArray(suggestions) &&
     suggestions.map(suggestion => ({
       value: suggestion.code,
       label: suggestion.name

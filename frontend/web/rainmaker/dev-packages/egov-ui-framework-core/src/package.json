@@ -8,7 +8,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "murali",
-  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/muralim4242/egov-ui-framework-boilerplate.git"

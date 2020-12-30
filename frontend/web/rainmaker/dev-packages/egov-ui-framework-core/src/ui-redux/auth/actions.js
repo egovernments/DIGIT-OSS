@@ -1,5 +1,5 @@
 import * as authType from "./actionTypes";
-import { localStorageGet } from "../../ui-utils/localStorageUtils";
+import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
 export const authenticating = () => {
   return { type: authType.AUTHENTICATING };

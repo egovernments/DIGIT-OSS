@@ -43,6 +43,26 @@ const AutosuggestContainer = Loadable({
   loading: () => <Loading />
 });
 
+const DialogContainer = Loadable({
+  loader: () => import("./DialogContainer"),
+  loading: () => <Loading />
+});
+
+const DynamicMdmsContainer = Loadable({
+  loader: () => import("./DynamicMdmsContainer"),
+  loading: () => <Loading />
+});
+
+const AcknowledgementContainer = Loadable({
+  loader: () => import("./AcknowledgementContainer"),
+  loading: () => <Loading />
+});
+
+const ModifyLabelConatiner = Loadable({
+  loader: () => import("./ModifyLabelConatiner"),
+  loading: () => <Loading />
+});
+
 export {
   TextFieldContainer,
   RadioGroupContainer,
@@ -51,5 +71,9 @@ export {
   SnackbarContainer,
   CustomTabContainer,
   DownloadFileContainer,
-  AutosuggestContainer
+  AutosuggestContainer,
+  DialogContainer,
+  DynamicMdmsContainer,
+  AcknowledgementContainer,
+  ModifyLabelConatiner
 };

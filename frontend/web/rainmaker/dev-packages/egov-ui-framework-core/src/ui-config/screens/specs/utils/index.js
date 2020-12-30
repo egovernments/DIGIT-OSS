@@ -16,36 +16,6 @@ const appCardHeaderStyle = (colorOne = "#ec407a", colorTwo = "#d81b60") => {
   };
 };
 
-export const loadUlbLogo = logoURL => {
-  var img = new Image();
-  img.crossOrigin = "Anonymous";
-  img.onload = function() {
-    var canvas = document.createElement("CANVAS");
-    var ctx = canvas.getContext("2d");
-    canvas.height = this.height;
-    canvas.width = this.width;
-    ctx.drawImage(this, 0, 0);
-    store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
-    canvas = null;
-  };
-  img.src = logoURL;
-};
-
-export const getULBURL=(state)=>{
-  const cities = get(
-    state.common,
-    "cities",
-    []
-  );
-  let ulbLogo;
-  cities.forEach((city)=>{
-    if (city.key==tenant) {
-      ulbLogo=logoId;
-    }
-  })
-  return ulbLogo;
-}
-
 export const getStepperObject = (
   stpperProps,
   stepsData,
@@ -121,15 +91,37 @@ export const getCommonValue = (value, props = {}) => {
   return getCommonHeader(value, { variant: "body2", ...props });
 };
 
-export const getCommonCard = (children, cardProps = {}) => {
+
+export const getCommonLabelWithValue = (paragraph, value, props = {}) => {
+  return getCommonLabelValue(paragraph, value, { variant: "caption", ...props });
+}
+
+export const getCommonLabelValue = (header, value, props) => {
+  return {
+    componentPath: "Typography",
+    props: {
+      variant: "headline",
+      ...props
+    },
+    children: {
+      // [header]: getLabel(header)
+      key: getLabelForModify(header, value),
+    }
+  };
+};
+
+export const getCommonCard = (children, cardProps = {}, cardContentProps = {}) => {
   return {
     componentPath: "Card",
     props: {
-      ...cardProps
+      ...cardProps  
     },
     children: {
       cardContent: {
         componentPath: "CardContent",
+        props: {
+          ...cardContentProps
+        },
         children
       }
     }
@@ -180,6 +172,15 @@ export const getCommonGrayCard = children => {
     }
   });
 };
+export const getCommonCardWithNoShadow = children => {
+  return getCommonCard(children, {
+    style: {
+      boxShadow: "none",
+      borderRadius: 0,
+      overflow: "visible"
+    }
+  });
+};
 
 export const getBreak = (props = {}) => {
   return {
@@ -195,6 +196,18 @@ export const getLabel = (label, labelKey, props = {}) => {
     componentPath: "LabelContainer",
     props: {
       ...label,
+      ...props
+    }
+  };
+};
+
+export const getLabelForModify = (label, jsonPath, props = {}) => {
+  return {
+    uiFramework: "custom-containers",
+    componentPath: "ModifyLabelConatiner",
+    props: {
+      ...label,
+      ...jsonPath,
       ...props
     }
   };
@@ -449,26 +462,44 @@ export const getLabelWithValue = (label, value, props = {}) => {
   };
 };
 
-export const convertEpochToDate = dateEpoch => {
-  const dateFromApi = new Date(dateEpoch);
-  let month = dateFromApi.getMonth() + 1;
-  let day = dateFromApi.getDate();
-  let year = dateFromApi.getFullYear();
-  month = (month > 9 ? "" : "0") + month;
-  day = (day > 9 ? "" : "0") + day;
-  return `${day}/${month}/${year}`;
+export const getLabelWithValueForModifiedLabel = (label, value, label2, value2,  props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 3
+    },
+    props: {
+      style: {
+        marginBottom: "16px",
+        wordBreak: "break-word"
+      },
+      ...props
+    },
+    children: {
+      label1: getCommonCaption(label),
+      value1: getCommonValue(value),
+      label2: getCommonLabelWithValue(label2, value2)
+    }
+  };
 };
 
-export const convertEpochToDateForEndDate = dateEpoch => {
-  const dateFromApi = new Date(dateEpoch);
-  dateFromApi.setDate(dateFromApi.getDate()-1);
-  let month = dateFromApi.getMonth() + 1;
-  let day = dateFromApi.getDate();
-  let year = dateFromApi.getFullYear();
-  month = (month > 9 ? "" : "0") + month;
-  day = (day > 9 ? "" : "0") + day;
-  return `${day}/${month}/${year}`;
+export const convertEpochToDate = dateEpoch => {
+  // Returning null in else case because new Date(null) returns initial date from calender
+  if(dateEpoch){
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${day}/${month}/${year}`;
+  } else {
+    return null;
+  }
 };
+
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
   try {
@@ -512,7 +543,7 @@ export const getTab = (label, props = {}) => {
 export const getPattern = type => {
   switch (type) {
     case "Name":
-      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,50}$/i;
+      return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":
@@ -524,7 +555,7 @@ export const getPattern = type => {
     case "PAN":
       return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
     case "TradeName":
-      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,:;“”‘’]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,100}$/i;
     case "Date":
       return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
     case "UOMValue":
@@ -536,11 +567,13 @@ export const getPattern = type => {
     case "GSTNo":
       return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
     case "DoorHouseNo":
-      return /^[^\$\"'<>?\\\\~`!@$%^+={}\[\]*.:;“”‘’]{1,50}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
     case "BuildingStreet":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
     case "Pincode":
       return /^[1-9][0-9]{5}$/i;
+    case "Landline":
+        return /^[0-9]{11}$/i;
     case "PropertyID":
       return /^[a-zA-z0-9\s\\/\-]$/i;
     case "ElectricityConnNo":
@@ -560,16 +593,4 @@ export const getPattern = type => {
 
 export const checkValueForNA = value => {
   return value && value !== "null" ? value : "NA";
-};
-
-export const convertDateTimeToEpoch = dateTimeString => {
-  //example input format : "26-07-2018 17:43:21"
-  try {
-    const parts = dateTimeString.match(
-      /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/
-    );
-    return Date.UTC(+parts[3], parts[2] - 1, +parts[1], +parts[4], +parts[5]);
-  } catch (e) {
-    return dateTimeString;
-  }
 };

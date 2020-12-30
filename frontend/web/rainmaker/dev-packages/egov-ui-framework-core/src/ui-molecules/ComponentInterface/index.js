@@ -7,7 +7,7 @@ import remoteComponents from "ui-config/commonConfig/remote-component-paths";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
-import { localStorageGet } from "../../ui-utils/localStorageUtils";
+import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { getModuleName } from "./moduleConfig";
 
 class ComponentInterface extends React.Component {
@@ -228,7 +228,7 @@ const mapStateToProps = state => {
     jsonPath = "FireNOCs[0].fireNOCDetails.status";
   } else if (moduleName === "NewTL") {
     jsonPath = "Licenses[0].status";
-  } else if (moduleName === "BPA") {
+  } else if ((moduleName === "BPA") || (moduleName === "BPA_LOW") || (moduleName === "BPA_OC")) {
     jsonPath = "BPA.status";
   } else {
     jsonPath = "Licenses[0].status";

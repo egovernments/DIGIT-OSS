@@ -7,10 +7,10 @@ import {
   transformById,
   getLocaleLabels,
   appendModulePrefix
-} from "../../ui-utils/commons";
+} from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
-import { getLocalization } from "../../ui-utils/localStorageUtils";
+import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 
 // const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 // const transfomedKeys = transformById(localizationLabels, "code");
@@ -18,7 +18,7 @@ class AutoSuggestor extends Component {
   onSelect = value => {
     const { onChange } = this.props;
     //Storing multiSelect values not handled yet
-    onChange({ target: { value: value.value } });
+    onChange({ target: { value: value ? value.value : null } });
   };
 
   render() {
@@ -30,6 +30,9 @@ class AutoSuggestor extends Component {
       suggestions,
       className,
       localizationLabels,
+      required,
+      errorText,
+      disabled,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -52,6 +55,11 @@ class AutoSuggestor extends Component {
           className={className}
           label={translatedLabel}
           placeholder={translatedPlaceholder}
+          helperText={required && errorText}
+          error={errorText == "Required" && required}
+          isClearable={true}
+          required={required}
+          disabled={disabled}
           {...rest}
         />
       </div>
@@ -63,6 +71,7 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
   return (
     suggestions &&
     suggestions.length > 0 &&
+    Array.isArray(suggestions) &&
     suggestions.map((option, key) => {
       option.name = getLocaleLabels(
         option.code,
@@ -76,6 +85,18 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
   );
 };
 
+const getErrorText = (obj, id) => {
+  const keys = Object.keys(obj);
+  let errorText = "";
+  for(let i = 0; i < keys.length; i++){
+    if(obj[keys[i]].id == id) {
+      errorText = obj[keys[i]].errorText;
+      break;
+    }
+  }
+  return errorText;
+}
+
 const mapStateToProps = (state, ownprops) => {
   const { localizationLabels } = state.app;
   let {
@@ -84,15 +105,24 @@ const mapStateToProps = (state, ownprops) => {
     sourceJsonPath,
     labelsFromLocalisation,
     data,
-    localePrefix
+    localePrefix,
+    canFetchValueFromJsonpath=true,
+    helperText,
+    id,
+    formName
   } = ownprops;
+  let errorText = helperText ? helperText : (formName && state.form[formName] && state.form[formName].fields ? getErrorText(state.form[formName].fields, id) : "");
   let suggestions =
     data && data.length > 0
       ? data
       : get(state.screenConfiguration.preparedFinalObject, sourceJsonPath, []);
-  value = value
-    ? value
-    : get(state.screenConfiguration.preparedFinalObject, jsonPath);
+   if(canFetchValueFromJsonpath){
+    value = value
+      ? value
+      : (get(state.screenConfiguration.preparedFinalObject, jsonPath) ? get(state.screenConfiguration.preparedFinalObject, jsonPath) : get(state.common.prepareFormData, jsonPath));
+  
+   }   
+
   //To fetch corresponding labels from localisation for the suggestions, if needed.
   if (labelsFromLocalisation) {
     suggestions = getLocalisedSuggestions(
@@ -112,7 +142,7 @@ const mapStateToProps = (state, ownprops) => {
     value = { label: selectedItem.name, value: selectedItem.code };
   }
   // console.log(value, suggestions);
-  return { value, jsonPath, suggestions, localizationLabels };
+  return { value, jsonPath, suggestions, localizationLabels, errorText };
 };
 
 const mapDispatchToProps = dispatch => {

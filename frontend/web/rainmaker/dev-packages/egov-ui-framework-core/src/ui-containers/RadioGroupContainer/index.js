@@ -21,10 +21,15 @@ const styles = theme => ({
   },
   group: {
     display: "inline-block",
-    margin: 0
+    margin: 0,
+    height: '3em'
   },
   radioRoot: {
     marginBottom: 12
+  },
+  radioHelperText: {
+    color: '#f44336',
+    fontSize: '1.4rem'
   },
   formLabel: {
     fontSize: 12,
@@ -34,8 +39,8 @@ const styles = theme => ({
 });
 
 const disableRadioButton = {
-  pointerEvents : "none",
-  opacity : 0.5
+  pointerEvents: "none",
+  opacity: 0.5
 }
 
 class RadioButtonsGroup extends React.Component {
@@ -48,7 +53,7 @@ class RadioButtonsGroup extends React.Component {
       onFieldChange,
       onChange
     } = this.props;
-    onChange?onChange(event):onFieldChange(
+    onChange ? onChange(event) : onFieldChange(
       screenKey,
       componentJsonpath,
       "props.value",
@@ -57,21 +62,29 @@ class RadioButtonsGroup extends React.Component {
   };
 
   render() {
-  //  const { classes, buttons, fieldValue } = this.props;
-  const {
-    label,
-    classes,
-    buttons,
-    defaultValue,
-    value,
-    fieldValue,
-    required
-  } = this.props;
+    //  const { classes, buttons, fieldValue } = this.props;
+    //   error: true
+    // helperText: "Required Field"
+    const {
+      label,
+      classes,
+      buttons,
+      defaultValue,
+      value,
+      fieldValue,
+      required,
+      error,
+      helperText, id
+    } = this.props;
 
     return (
       <div className={classes.root}>
         {/* <FormControl component="fieldset" className={classes.formControl}> */}
         <FormControl
+        required={required}
+        error={error}
+        helperText={helperText}
+          id={id}
           component="fieldset"
           className={classes.formControl}
           required={required}
@@ -82,16 +95,19 @@ class RadioButtonsGroup extends React.Component {
                 className={classes.formLabel}
                 labelName={label.name}
                 labelKey={label.key}
+                
               />
             )}
           </FormLabel>
           <RadioGroup
+
             aria-label="Gender"
             name="gender1"
             className={classes.group}
-           // value={this.state.value || fieldValue}
-           value={value || fieldValue || defaultValue}
+            // value={this.state.value || fieldValue}
+            value={value || fieldValue || defaultValue}
             onChange={this.handleChange}
+
           >
             {buttons &&
               buttons.map((button, index) => {
@@ -108,7 +124,7 @@ class RadioButtonsGroup extends React.Component {
                       //   }}
                       //   color="primary"
                       // />
-                     <Radio className={classes.radioRoot} color="primary" />
+                      <Radio className={classes.radioRoot} color="primary" />
                     }
                     // label={button.label}
                     label={
@@ -121,6 +137,9 @@ class RadioButtonsGroup extends React.Component {
                 );
               })}
           </RadioGroup>
+          {error && helperText && <p id={`${id}-helper-text`} className={classes.radioHelperText}>
+            {helperText}
+          </p >}
         </FormControl>
       </div>
     );
