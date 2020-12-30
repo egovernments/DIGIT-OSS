@@ -13,7 +13,13 @@ const RadioButtons = (props) => {
   return (
     <div className="radio-wrap">
       {props.options.map((option) => {
-        console.log("%c 🏎️: RadioButtons -> option ", "font-size:16px;background-color:#c239cc;color:white;", option);
+        console.log(
+          "%c 🏎️: RadioButtonsss -> option ",
+          "font-size:16px;background-color:#c239cc;color:white;",
+          option,
+          "props.optionsKey",
+          props.optionsKey
+        );
         if (props.optionsKey) {
           return (
             <div key={option[props.optionsKey]}>
@@ -53,17 +59,12 @@ const RadioButtons = (props) => {
 };
 
 RadioButtons.propTypes = {
-  selectedOption: PropTypes.string,
+  selectedOption: PropTypes.any,
   onSelect: PropTypes.func,
-  options: PropTypes.array,
+  options: PropTypes.any,
   optionsKey: PropTypes.string,
 };
 
-RadioButtons.defaultProps = {
-  selectedOption: "",
-  onSelect: undefined,
-  options: [],
-  optionsKey: "",
-};
+RadioButtons.defaultProps = {};
 
 export default RadioButtons;

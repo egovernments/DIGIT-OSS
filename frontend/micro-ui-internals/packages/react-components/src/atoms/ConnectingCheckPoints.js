@@ -50,7 +50,6 @@ CheckPoint.propTypes = {
    */
   label: PropTypes.string,
   info: PropTypes.string,
-  customChild: PropTypes.string,
 };
 
 CheckPoint.defaultProps = {

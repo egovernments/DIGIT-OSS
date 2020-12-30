@@ -9,6 +9,7 @@ import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
 import { fetchBusinessServiceByTenant } from "./redux/actions";
+import { PGR_CITIZEN_CREATE_COMPLAINT } from "./constants/Citizen";
 
 export const PGRReducers = getRootReducer;
 
@@ -43,10 +44,18 @@ export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
   }
 };
 
-export const PGRLinks = ({ matchPath }) => (
-  <React.Fragment>
-    <Header>Complaints</Header>
-    <HomeLink to={`${matchPath}/create-complaint`}>File a Complaint</HomeLink>
-    <HomeLink to={`${matchPath}/complaints`}>My Complaints</HomeLink>
-  </React.Fragment>
-);
+export const PGRLinks = ({ matchPath }) => {
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
+
+  useEffect(() => {
+    clearParams();
+  }, []);
+
+  return (
+    <React.Fragment>
+      <Header>Complaints</Header>
+      <HomeLink to={`${matchPath}/create-complaint`}>File a Complaint</HomeLink>
+      <HomeLink to={`${matchPath}/complaints`}>My Complaints</HomeLink>
+    </React.Fragment>
+  );
+};

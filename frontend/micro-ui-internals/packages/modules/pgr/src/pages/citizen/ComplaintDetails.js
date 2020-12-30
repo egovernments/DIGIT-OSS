@@ -17,15 +17,14 @@ import {
   Loader,
 } from "@egovernments/digit-ui-react-components";
 
-import useComplaintDetails from "../../hooks/useComplaintDetails";
-import TimeLine from "./CreateComplaint/TimeLine";
+import TimeLine from "../../components/TimeLine";
 
 const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
 
   let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
-  const { isLoading, error, isError, complaintDetails } = useComplaintDetails({ tenantId: cityCodeVal, id });
+  const { isLoading, error, isError, complaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId: cityCodeVal, id });
   const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: cityCodeVal, id, moduleCode: "PGR" });
 
   const [imageZoom, setImageZoom] = useState(null);

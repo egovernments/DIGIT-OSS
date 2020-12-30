@@ -511,7 +511,8 @@ img, video {
     line-height: 19px;
     color: #1d70b8;
     color: rgba(29, 112, 184, var(--text-opacity));
-    margin-top: 16px; }
+    margin-top: 16px;
+    cursor: pointer; }
 
 .employeeCard {
   --bg-opacity:1;
@@ -721,6 +722,15 @@ img, video {
       background: #f7f7f7;
       width: 40px;
       height: 40px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
       margin-top: -16px;
       border: 2px solid #000;
       border-right: none; }
@@ -1766,7 +1776,11 @@ img, video {
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
-      margin: calc(33% - 21px) auto auto; }
+      margin: calc(33% - 21px) auto auto;
+      margin-left: auto;
+      margin-right: auto;
+      top: calc(50% - 21px);
+      position: relative; }
     .multi-upload-wrap .upload-img-container input, .multi-upload-wrap .upload-img-container .checkbox-wrap .input-emp, .checkbox-wrap .multi-upload-wrap .upload-img-container .input-emp {
       position: absolute;
       width: 100%;
