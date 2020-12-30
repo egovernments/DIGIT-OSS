@@ -11,7 +11,7 @@ import data from "../../../propertyType.json";
 const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
 const propertySubTypeRes = data.PropertyType.map((item) => ({ key: item.propertyType, name: item.code }));
 
-export const NewApplication = ({ parentUrl }) => {
+export const NewApplication = ({ parentUrl, heading = "New Desuldging Application" }) => {
   const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   const __initSubType__ = window.Digit.SessionStorage.get("subType");
 
@@ -323,5 +323,5 @@ export const NewApplication = ({ parentUrl }) => {
     },
   ];
 
-  return <FormComposer heading="New Desuldging Application" label="Application Submit" config={config} onSubmit={onSubmit}></FormComposer>;
+  return <FormComposer heading={heading} label="Application Submit" config={config} onSubmit={onSubmit}></FormComposer>;
 };
