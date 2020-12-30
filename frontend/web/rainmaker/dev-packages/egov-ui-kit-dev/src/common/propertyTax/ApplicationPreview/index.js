@@ -329,7 +329,9 @@ class ApplicationPreview extends Component {
     var {properties,prepareFormData} = this.props;
     const financialYearFromQuery = getFinancialYearFromQuery();
     const financeYear = { financialYear: financialYearFromQuery };
-    financeYear.financialYear =  "2020-21";
+    let fY = localStorage.getItem('finalData')
+    fY = fY && JSON.parse(fY);
+    financeYear.financialYear =  fY && fY[0].financialYear;
 
     if(properties && properties.propertyId){
       const assessmentPayload = createAssessmentPayload(properties, financeYear);

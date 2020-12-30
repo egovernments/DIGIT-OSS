@@ -200,6 +200,9 @@ class Property extends Component {
   onAssessPayClick = () => {
     const { latestPropertyDetails, propertyId, tenantId, selPropertyDetails } = this.props;
     const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    let fY = localStorage.getItem('finalData')
+    fY = fY && JSON.parse(fY);
+    fY = fY && fY[0].financialYear
     if (selPropertyDetails.status != "ACTIVE") {
       this.props.toggleSnackbarAndSetText(
         true,
@@ -212,7 +215,7 @@ class Property extends Component {
         // dialogueOpen: true,
         urlToAppend: getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.ASSESS, -1, assessmentNo),
       },function(){
-        this.props.history && this.props.history.push(`${this.state.urlToAppend}&FY=2020-21`)
+        this.props.history && this.props.history.push(`${this.state.urlToAppend}&FY=${fY}`)
       });
     }
   };

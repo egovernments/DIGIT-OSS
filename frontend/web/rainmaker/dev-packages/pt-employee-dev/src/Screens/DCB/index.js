@@ -2342,11 +2342,12 @@ class FormWizardDataEntry extends Component {
     // }
 
     //showSpinner();     
-    
+    let fY = localStorage.getItem('finalData')
+    fY = fY && JSON.parse(fY);
    let assessment = {
       tenantId: getTenantId(),
       propertyId: propertyId,
-      financialYear: "2020-21",
+      financialYear:fY && fY[0].financialYear,
       assessmentDate: new Date().getTime() - 60000,
       source: "LEGACY_RECORD",
       channel: "CFC_COUNTER",
