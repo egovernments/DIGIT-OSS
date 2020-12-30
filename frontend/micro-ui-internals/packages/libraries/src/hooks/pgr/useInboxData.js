@@ -18,7 +18,6 @@ const useInboxData = (searchParams) => {
       complaintDetailsResponse.ServiceWrappers.forEach((service) => serviceIds.push(service.service.serviceRequestId));
       const serviceIdParams = serviceIds.join();
       const workflowInstances = await Digit.WorkflowService.getByBusinessId(tenantId, serviceIdParams, wfFilters, false);
-      console.log("workflowInstances:::>", workflowInstances);
       if (workflowInstances.ProcessInstances.length) {
         combinedRes = combineResponses(complaintDetailsResponse, workflowInstances).map((data) => ({
           ...data,

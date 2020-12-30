@@ -1,14 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  Dropdown,
-  CardLabel,
-  RadioButtons,
-  CardCaption,
-  CheckBox,
-  SubmitBar,
-  ActionBar,
-  RemoveableTag,
-} from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
+import { Dropdown, RadioButtons, ActionBar, RemoveableTag } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
@@ -24,7 +15,6 @@ const Filter = (props) => {
   const [selectAssigned, setSelectedAssigned] = useState("");
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
-  const [pendingComplaintCount, setPendingComplaintCount] = useState([]);
 
   const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],
@@ -38,7 +28,6 @@ const Filter = (props) => {
 
   //TODO change city fetch from user tenantid
   let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
-  let complaintStatus = Digit.Hooks.pgr.useComplaintStatus();
   let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
   const onRadioChange = (value) => {
