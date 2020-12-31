@@ -165,7 +165,7 @@ public class TranslationService {
                 
                 Map<String, Object> unitAdditionalMap = new HashMap<>();
                 
-                unitAdditionalMap.put("innerDimensionsKnown", unit.getConstructionDetail().getDimensions() instanceof NullNode ? false:true);
+                unitAdditionalMap.put("innerDimensionsKnown", unit.getConstructionDetail().getDimensions() == null ? false:true);
 
                 unitMap.put("additionalDetails", unitAdditionalMap);
                 units.add(unitMap);
