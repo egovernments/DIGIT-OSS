@@ -25,7 +25,7 @@
     "http-proxy-middleware": "^1.0.5",
     "rewire": "^5.0.0",
     "unminified-webpack-plugin": "^2.0.0",
-    "webpack": "4.44.2",
+    "webpack": "^5.11.1",
     "webpack-cli": "^4.3.0"
   },
   "scripts": {
