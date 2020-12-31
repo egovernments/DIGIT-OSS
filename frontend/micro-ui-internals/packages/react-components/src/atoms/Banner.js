@@ -39,16 +39,15 @@ Banner.propTypes = {
   /**
    * Banner message
    */
-  message: PropTypes.string.isRequired,
+  message: PropTypes.any.isRequired,
   /**
    * If banner is successful, then show the complaint number
    */
-  complaintNumber: PropTypes.string,
+  complaintNumber: PropTypes.any,
 };
 
 Banner.defaultProps = {
   successful: true,
-  message: "",
 };
 
 export default Banner;

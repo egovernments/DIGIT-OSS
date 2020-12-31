@@ -23,7 +23,8 @@ const Dropdown = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
 
-  // console.log("props in dropdown", props.option, props.optionKey, props.t);
+  console.log("%c 🏎️: props in dropdown ", "font-size:16px;background-color:#c239cc;color:white;", props.selected);
+
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
@@ -103,21 +104,14 @@ const Dropdown = (props) => {
 };
 
 Dropdown.propTypes = {
-  selected: PropTypes.object,
+  selected: PropTypes.any,
   style: PropTypes.object,
   option: PropTypes.array,
-  optionKey: PropTypes.string,
+  optionKey: PropTypes.any,
   select: PropTypes.func,
   t: PropTypes.func,
 };
 
-Dropdown.defaultProps = {
-  selected: "",
-  option: [],
-  optionKey: 0,
-  style: {},
-  select: undefined,
-  t: undefined,
-};
+Dropdown.defaultProps = {};
 
 export default Dropdown;

@@ -13,16 +13,13 @@ LinkButton.propTypes = {
   /**
    * LinkButton contents
    */
-  label: PropTypes.string,
+  label: PropTypes.any,
   /**
    * Optional click handler
    */
   onClick: PropTypes.func,
 };
 
-LinkButton.defaultProps = {
-  label: "Link",
-  onClick: undefined,
-};
+LinkButton.defaultProps = {};
 
 export default LinkButton;
