@@ -5,7 +5,7 @@ import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import { generatePTMAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generatePTMAcknowledgement";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults,generatePdfFromDiv } from "../../../../ui-utils/commons";
 import { downloadCertificateForm, prepareDocumentsView } from "../utils/index";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { applicationSuccessFooter, gotoHomeFooter,gotoAssessment } from "./acknowledgementResource/footers";
@@ -57,10 +57,10 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
   const applicationDownloadObject = {
     label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePTMAcknowledgement(get(
-        state,
-        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
-      // generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
+      // generatePTMAcknowledgement(get(
+      //   state,
+      //   "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
+      generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
 
     },
     leftIcon: "assignment"
@@ -75,7 +75,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
       generatePTMAcknowledgement(get(
         state,
         "screenConfiguration.preparedFinalObject", {}), 'print');
-      // generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
+      generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
 
     },
     leftIcon: "assignment"
