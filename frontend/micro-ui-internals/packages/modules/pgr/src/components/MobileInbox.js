@@ -27,7 +27,6 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
       <div className="inbox-container">
         <div className="filters-container">
           <ComplaintsLink isMobile={true} />
-          {console.log("localizedData::::::::::>", localizedData)}
           <ComplaintCard data={localizedData} onFilterChange={onFilterChange} serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")} onSearch={onSearch} />
         </div>
       </div>
