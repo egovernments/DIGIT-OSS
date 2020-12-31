@@ -1,14 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Dropdown,
-  CardLabel,
-  RadioButtons,
-  CardCaption,
-  CheckBox,
-  SubmitBar,
-  ActionBar,
-  RemoveableTag,
-} from "@egovernments/digit-ui-react-components";
+import { Dropdown, RadioButtons, ActionBar, RemoveableTag } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
@@ -19,12 +10,10 @@ const Filter = (props) => {
   let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();
-  const { pgr } = useSelector((state) => state);
 
   const [selectAssigned, setSelectedAssigned] = useState(null);
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
-  const [pendingComplaintCount, setPendingComplaintCount] = useState([]);
 
   const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],
@@ -178,7 +167,8 @@ const Filter = (props) => {
               {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCode", "key")}
             </div>
             <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
-            <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
+            {console.log("props.complaints:", props.complaints)}
+            {props.complaints && <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />}
           </div>
         </div>
       </div>
