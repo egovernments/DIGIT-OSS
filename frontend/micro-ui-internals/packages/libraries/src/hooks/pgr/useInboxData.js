@@ -26,7 +26,7 @@ const useInboxData = (searchParams) => {
     return combinedRes;
   };
 
-  const result = useQuery(["fetchInboxData", searchParams], fetchInboxData);
+  const result = useQuery(["fetchInboxData", searchParams], fetchInboxData, { staleTime: Infinity });
   return result;
 };
 
