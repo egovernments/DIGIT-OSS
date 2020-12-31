@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
 import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
