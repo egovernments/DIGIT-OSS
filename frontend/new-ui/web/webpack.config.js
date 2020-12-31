@@ -5,7 +5,7 @@ var UnminifiedWebpackPlugin = require("unminified-webpack-plugin");
 
 module.exports = {
   entry: "./src/index.js",
-  devtool: "eval-source-map",
+  devtool: "source-map",
   module: {
     rules: [
       {

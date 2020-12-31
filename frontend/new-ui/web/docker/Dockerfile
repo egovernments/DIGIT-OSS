@@ -5,7 +5,7 @@ ENV NODE_OPTIONS "--max-old-space-size=1792"
 
 COPY ${WORK_DIR} .
 RUN yarn install
-RUN yarn build
+RUN yarn build:dev
 
 FROM nginx:mainline-alpine
 ENV WORK_DIR=/var/web/digit-ui
