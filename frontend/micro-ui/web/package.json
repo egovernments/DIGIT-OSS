@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "node build && gulp"
   },
   "eslintConfig": {
     "extends": [
