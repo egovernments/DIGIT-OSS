@@ -17,11 +17,20 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
-    "http-proxy-middleware": "^1.0.5"
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "babel-loader": "^8.2.2",
+    "html-webpack-plugin": "^4.5.0",
+    "http-proxy-middleware": "^1.0.5",
+    "rewire": "^5.0.0",
+    "unminified-webpack-plugin": "^2.0.0",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "node build && gulp"
+    "build": "webpack --config webpack.config.js"
   },
   "eslintConfig": {
     "extends": [
