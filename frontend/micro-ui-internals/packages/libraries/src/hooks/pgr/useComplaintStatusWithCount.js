@@ -20,7 +20,7 @@ const useComplaintStatusCount = (complaints) => {
       count: getCount(status.code),
     }));
     setcomplaintStatusWithCount(statusWithCount);
-  }, [complaints]);
+  }, [complaints, complaintStatus]);
   return complaintStatusWithCount;
 };
 

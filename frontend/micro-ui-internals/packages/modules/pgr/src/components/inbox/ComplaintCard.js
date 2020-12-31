@@ -14,7 +14,7 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
     if (type === "SEARCH") {
       setSelectedComponent(<SearchComplaint type="mobile" onClose={handlePopupClose} onSearch={onSearch} />);
     } else if (type === "FILTER") {
-      setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
+      setSelectedComponent(<Filter complaints={data} onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
     }
     setPopup(true);
   };

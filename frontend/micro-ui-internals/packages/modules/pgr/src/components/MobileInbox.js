@@ -1,4 +1,4 @@
-import { Card } from "@egovernments/digit-ui-react-components";
+import { Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ComplaintCard } from "./inbox/ComplaintCard";
@@ -12,7 +12,7 @@ const GetSlaCell = (value) => {
   );
 };
 
-const MobileInbox = ({ data, onFilterChange, onSearch }) => {
+const MobileInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
   const { t } = useTranslation();
   const localizedData = data?.map(({ locality, serviceRequestId, sla, status, taskOwner }) => ({
     [t("CS_COMMON_COMPLAINT_NO")]: serviceRequestId,
@@ -20,13 +20,21 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
     [t("CS_COMPLAINT_DETAILS_CURRENT_STATUS")]: t(`CS_COMMON_${status}`),
     [t("WF_INBOX_HEADER_CURRENT_OWNER")]: taskOwner,
     [t("WF_INBOX_HEADER_SLA_DAYS_REMAINING")]: GetSlaCell(sla),
+    status,
   }));
   return (
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
           <ComplaintsLink isMobile={true} />
-          <ComplaintCard data={localizedData} onFilterChange={onFilterChange} serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")} onSearch={onSearch} />
+          {
+            <ComplaintCard
+              data={localizedData}
+              onFilterChange={onFilterChange}
+              serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")}
+              onSearch={onSearch}
+            />
+          }
         </div>
       </div>
     </div>
