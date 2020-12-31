@@ -113,7 +113,7 @@ const Filter = (props) => {
     setPgrFilters({ serviceCode: [], locality: [], applicationStatus: [] });
     setWfFilters({ assigned: [{ code: [] }] });
     setSelectedAssigned("");
-    setSelectedComplaintType(null);
+    setSelectedComplaintType("");
     setSelectedLocality(null);
   }
 
@@ -125,7 +125,8 @@ const Filter = (props) => {
   const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
-      <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />
+      {<Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />}
+
       <div className="tag-container">
         {pgrfilters[key].length > 0 &&
           pgrfilters[key].map((value, index) => {
