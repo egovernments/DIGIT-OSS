@@ -15,7 +15,7 @@ const TelePhone = ({ mobile, text }) => (
 );
 
 TelePhone.propTypes = {
-  mobile: PropTypes.number,
+  mobile: PropTypes.any,
   text: PropTypes.string,
 };
 

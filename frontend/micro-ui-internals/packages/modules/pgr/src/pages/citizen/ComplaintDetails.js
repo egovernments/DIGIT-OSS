@@ -83,7 +83,7 @@ const ComplaintDetailsPage = (props) => {
           </Card>
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
-            <TextArea />
+            <TextArea name={""} />
             <SubmitBar label="Send" />
           </Card>
         </React.Fragment>

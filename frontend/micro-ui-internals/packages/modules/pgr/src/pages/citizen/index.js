@@ -11,7 +11,7 @@ import ComplaintDetailsPage from "./ComplaintDetails";
 import Response from "./Response";
 
 const App = () => {
-  const { path, url, match } = useRouteMatch();
+  const { path, url, ...match } = useRouteMatch();
   console.log("pgr citizen", path, url, match);
   return (
     <Switch>
@@ -20,9 +20,9 @@ const App = () => {
         <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
         <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
         <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
-        <PrivateRoute path={`${path}/reopen`} component={() => <ReopenComplaint parentRoute={path} />} />
+        <PrivateRoute path={`${path}/reopen`} component={() => <ReopenComplaint match={{ ...match, url, path }} parentRoute={path} />} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
-        <PrivateRoute path={`${path}/response`} component={() => <Response match={match} />} />
+        <PrivateRoute path={`${path}/response`} component={() => <Response match={{ ...match, url, path }} />} />
       </AppContainer>
     </Switch>
   );
