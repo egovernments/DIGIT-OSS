@@ -1,4 +1,4 @@
-import { Card } from "@egovernments/digit-ui-react-components";
+import { Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ComplaintCard } from "./inbox/ComplaintCard";
@@ -26,7 +26,16 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
       <div className="inbox-container">
         <div className="filters-container">
           <ComplaintsLink isMobile={true} />
-          <ComplaintCard data={localizedData} onFilterChange={onFilterChange} serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")} onSearch={onSearch} />
+          {localizedData.length > 0 ? (
+            <ComplaintCard
+              data={localizedData}
+              onFilterChange={onFilterChange}
+              serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")}
+              onSearch={onSearch}
+            />
+          ) : (
+            <Loader />
+          )}
         </div>
       </div>
     </div>
