@@ -30,7 +30,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "webpack --config webpack.config.js"
+    "build:dev": "webpack --config webpack.config.js",
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
