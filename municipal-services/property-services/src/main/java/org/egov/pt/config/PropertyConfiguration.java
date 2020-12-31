@@ -213,7 +213,7 @@ public class PropertyConfiguration {
     @Value("${is.workflow.enabled}")
     private Boolean isWorkflowEnabled;
     
-    @Value("${property.workflow.name}")
+    @Value("${property.create.workflow.name}")
     private String createPTWfName;
     
     @Value("${property.legacy.entry.workflow.name}")
