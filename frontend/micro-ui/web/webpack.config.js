@@ -22,6 +22,6 @@ module.exports = {
   plugins: [
     // new UnminifiedWebpackPlugin(),
     // new webpack.SourceMapDevToolPlugin({}),
-    new HtmlWebpackPlugin(),
+    // new HtmlWebpackPlugin(),
   ],
 };
