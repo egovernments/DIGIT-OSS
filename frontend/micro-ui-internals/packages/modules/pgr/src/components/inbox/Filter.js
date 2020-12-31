@@ -126,7 +126,6 @@ const Filter = (props) => {
   const GetSelectOptions = (lable, options, selected = null, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
-      {console.log("selected::::::::::::::::::::>", typeof selected)}
       {<Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />}
 
       <div className="tag-container">
@@ -168,7 +167,6 @@ const Filter = (props) => {
               {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCode", "key")}
             </div>
             <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
-            {console.log("props.complaints:>>>>>>>>>>>>>>>>>>>>>>>", props.complaints)}
             <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
           </div>
         </div>
