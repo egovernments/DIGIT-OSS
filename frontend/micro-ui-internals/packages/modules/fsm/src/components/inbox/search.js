@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
 
-const SearchComplaint = ({ onSearch, type, onClose }) => {
+const SearchApplication = ({ onSearch, type, onClose }) => {
   const [applicationNo, setApplicationNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const { register, handleSubmit, reset } = useForm();
@@ -90,4 +90,4 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
   );
 };
 
-export default SearchComplaint;
+export default SearchApplication;
