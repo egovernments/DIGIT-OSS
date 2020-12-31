@@ -1,9 +1,9 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
-  mode: 'development',
+  mode: "production",
   entry: "./src/index.js",
   devtool: "source-map",
   module: {
@@ -18,7 +18,7 @@ module.exports = {
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "build"),
-    publicPath: "/digit-ui/"
+    publicPath: "/digit-ui/",
   },
   plugins: [
     new CleanWebpackPlugin(),
