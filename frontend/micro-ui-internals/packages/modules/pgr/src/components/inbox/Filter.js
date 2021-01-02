@@ -10,27 +10,28 @@ const Filter = (props) => {
   let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();
-  const { pgr } = useSelector((state) => state);
 
   const [selectAssigned, setSelectedAssigned] = useState(null);
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
 
-  const [pgrfilters, setPgrFilters] = useState({
-    serviceCode: [],
-    locality: [],
-    applicationStatus: [],
-  });
+  const [pgrfilters, setPgrFilters] = useState(
+    Digit.SessionStorage.get("pgr_filters") || {
+      serviceCode: [],
+      locality: [],
+      applicationStatus: [],
+    }
+  );
 
-  const [wfFilters, setWfFilters] = useState({
-    assignee: [],
-  });
+  const [wfFilters, setWfFilters] = useState(
+    Digit.SessionStorage.get("pgr_wfFilters") || {
+      assignee: [],
+    }
+  );
 
   //TODO change city fetch from user tenantid
   let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
   let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
-
-  console.log("%c 🏎️: RadioButtons -> selected value ", "font-size:16px;background-color:#c239cc;color:white;", selectAssigned);
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
@@ -57,6 +58,8 @@ const Filter = (props) => {
         }
       }
     }
+    Digit.SessionStorage.set("pgr_filters", pgrfilters);
+    Digit.SessionStorage.set("pgr_wfFilters", wfFilters);
     //queryString = queryString.substring(0, queryString.length - 1);
     handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
   }, [pgrfilters, wfFilters]);
@@ -169,7 +172,8 @@ const Filter = (props) => {
               {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCode", "key")}
             </div>
             <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
-            <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
+            {console.log("props.complaints:", props.complaints)}
+            {props.complaints && <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />}
           </div>
         </div>
       </div>
