@@ -17,6 +17,7 @@ import { GetServiceDefinitions } from "./services/elements/ServiceDefinitions";
 import { Complaint } from "./services/elements/Complaint";
 import { UserService } from "./services/molecules/User";
 import { ULBService } from "./services/molecules/Ulb";
+import { isWebView } from "./services/atoms/Utils/WebView";
 
 import Contexts from "./contexts";
 import Hooks from "./hooks";
@@ -45,6 +46,9 @@ const setupDevice = () => {
     console.log("check", check);
     return check;
   };
+  window.webview = (function () {
+    return isWebView(navigator.userAgent);
+  })();
 };
 
 const initLibraries = () => {

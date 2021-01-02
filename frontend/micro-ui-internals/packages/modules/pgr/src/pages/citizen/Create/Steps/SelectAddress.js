@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { CardLabel, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
+import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value }) => {
   const cities = Digit.Hooks.pgr.useTenants();
+  const localitiesObj = useSelector((state) => state.common.localities);
   // const city_complaint = Digit.SessionStorage.get("city_complaint");
   // const locality_complaint = Digit.SessionStorage.get("locality_complaint");
   // const selected_localities = Digit.SessionStorage.get("selected_localities");
@@ -20,8 +22,9 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
 
   useEffect(async () => {
     if (selectedCity) {
-      let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
-      let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+      //let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
+      //let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+      let __localityList = localitiesObj[selectedCity.code];
       // console.log("address __localityList", __localityList);
       setLocalities(__localityList);
       // Digit.SessionStorage.set("selected_localities", __localityList);

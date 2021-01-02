@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown, RadioButtons, ActionBar, RemoveableTag } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
@@ -27,7 +27,6 @@ const Filter = (props) => {
 
   //TODO change city fetch from user tenantid
   let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
-  let complaintStatus = Digit.Hooks.pgr.useComplaintStatus();
   let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
   console.log("%c 🏎️: RadioButtons -> selected value ", "font-size:16px;background-color:#c239cc;color:white;", selectAssigned);
@@ -39,6 +38,7 @@ const Filter = (props) => {
   };
   let pgrQuery = {};
   let wfQuery = {};
+
   useEffect(() => {
     for (const property in pgrfilters) {
       if (Array.isArray(pgrfilters[property])) {
@@ -124,10 +124,11 @@ const Filter = (props) => {
     //props.onClose();
   };
 
-  const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
+  const GetSelectOptions = (lable, options, selected = null, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
-      <Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />
+      {<Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />}
+
       <div className="tag-container">
         {pgrfilters[key].length > 0 &&
           pgrfilters[key].map((value, index) => {
