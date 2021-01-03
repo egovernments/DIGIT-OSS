@@ -11,7 +11,7 @@ const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
 
-const Login = ({ stateCode, cityCode }) => {
+const Login = ({ stateCode, cityCode, from = "/" }) => {
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
   const history = useHistory();
@@ -24,20 +24,16 @@ const Login = ({ stateCode, cityCode }) => {
     if (!user) {
       return;
     }
-    const { name } = user;
+    Digit.UserService.setUser(user);
+    const {
+      info: { name },
+    } = user;
     if (!name || name === DEFAULT_USER) {
       history.push(`${path}/name`);
     } else {
-      history.push("/");
+      history.push(from);
     }
   }, [user]);
-
-  useEffect(() => {
-    if (!tokens) return;
-    const { access_token } = tokens;
-    const { mobileNumber } = params;
-    Digit.UserService.setUser({ token: access_token, mobileNumber });
-  }, [tokens]);
 
   const stepItems = useMemo(() =>
     loginSteps.map(
@@ -80,12 +76,13 @@ const Login = ({ stateCode, cityCode }) => {
   };
 
   const selectName = async (name) => {
+    const { info } = user;
     const data = {
-      ...user,
+      ...info,
       ...name,
     };
     const { user: updatedUser } = await Digit.UserService.updateUser(data, stateCode);
-    setUser(updatedUser[0]);
+    setUser({ ...user, info: { ...updatedUser[0] } });
   };
 
   const selectOtp = async () => {
@@ -99,12 +96,8 @@ const Login = ({ stateCode, cityCode }) => {
           userType: getUserType(),
         };
 
-        const {
-          data: { ResponseInfo, UserRequest, ...tokens },
-        } = await Digit.UserService.authenticate(requestData);
-
-        setTokens(tokens);
-        setUser(UserRequest);
+        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
+        setUser({ info, ...tokens });
       } else if (!isUserRegistered) {
         const requestData = {
           name: DEFAULT_USER,
@@ -114,11 +107,8 @@ const Login = ({ stateCode, cityCode }) => {
           permanentCity: cityCode,
         };
 
-        const {
-          data: { ResponseInfo, UserRequest, ...tokens },
-        } = await Digit.UserService.registerUser(requestData, stateCode);
-        setTokens(tokens);
-        setUser(UserRequest);
+        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser(requestData, stateCode);
+        setUser({ info, ...tokens });
       }
     } catch (err) {
       console.log(err);

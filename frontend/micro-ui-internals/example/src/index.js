@@ -50,9 +50,9 @@ const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userTypeInfo);
 window.Digit.SessionStorage.set("userType", userTypeInfo);
 
-const userDetails = { token, info: userType === "CITIZEN" ? citizenInfo : employeeInfo };
+// const userDetails = { token, info: userType === "CITIZEN" ? citizenInfo : employeeInfo };
 
-window.Digit.SessionStorage.set("User", userDetails);
+// window.Digit.SessionStorage.set("User", userDetails);
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
