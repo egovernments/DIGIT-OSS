@@ -7,6 +7,7 @@ import Enums from "./enums/index";
 import { LocationService } from "./services/molecules/Location";
 import { LocalityService } from "./services/elements/Localities";
 import { LocalizationService } from "./services/molecules/Localization/service";
+import { LoginService } from "./services/Login";
 import { PGRService } from "./services/molecules/PGR";
 import * as dateUtils from "./services/atoms/Utils/Date";
 import { WorkflowService } from "./services/molecules/WorkFlow";
@@ -56,6 +57,7 @@ const initLibraries = () => {
   setupLibraries("Enums", Enums);
   setupLibraries("LocationService", LocationService);
   setupLibraries("LocalityService", LocalityService);
+  setupLibraries("LoginService", LoginService);
   setupLibraries("LocalizationService", LocalizationService);
   setupLibraries("PGRService", PGRService);
   setupLibraries("DateUtils", dateUtils);

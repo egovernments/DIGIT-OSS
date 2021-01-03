@@ -16,7 +16,6 @@ const SelectRating = ({ parentRoute }) => {
   // const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
 
   function log(data) {
-    console.log("acbdlkasldkal");
     // if (complaintDetails) {
     // console.log("complaintDetails", complaintDetails);
     // complaintDetails.service.rating = data.rating;

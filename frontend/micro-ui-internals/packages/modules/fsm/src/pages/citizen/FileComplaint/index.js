@@ -5,8 +5,9 @@ import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { config } from "./defaultConfig";
 import SelectPropertyType from "./SelectPropertyType";
 import SelectPropertySubtype from "./SelectPropertySubtype";
+import CheckPage from "./CheckPage";
 
-const FileComplaint = () => {
+const FileComplaint = ({ parentRoute }) => {
   const match = useRouteMatch();
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -20,7 +21,9 @@ const FileComplaint = () => {
     history.push(`${match.path}/${nextStep}`);
   };
 
-  const submitComplaint = () => {};
+  const submitComplaint = () => {
+    history.push(`${parentRoute}/new-application/check`);
+  };
 
   function log(data) {
     console.log("data", data);
@@ -40,6 +43,9 @@ const FileComplaint = () => {
           </Route>
         );
       })}
+      <Route path={`${match.path}/check`}>
+        <CheckPage />
+      </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />
       </Route>
