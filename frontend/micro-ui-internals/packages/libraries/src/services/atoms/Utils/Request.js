@@ -17,7 +17,7 @@ Axios.interceptors.response.use(
 );
 
 const requestInfo = () => ({
-  authToken: Digit.UserService.getUser().token,
+  authToken: Digit.UserService.getUser().access_token,
 });
 
 const userServiceData = () => ({ userInfo: Digit.UserService.getUser().info });

@@ -82,8 +82,8 @@ export const config = {
       component: SelectTankSize,
       texts: {
         headerCaption: "",
-        header: "CS_FILE_PROPERTY_SUBTYPE_PLACEHOLDER",
-        cardText: "CS_FILE_PROPERTY_SUBTYPE_TEXT",
+        header: "CS_FILE_PROPERTY_TANKSIZE_PLACEHOLDER",
+        cardText: "CS_FILE_PROPERTY_TANKSIZE_TEXT",
         nextText: "PT_COMMONS_NEXT",
       },
       nextStep: null,
