@@ -4,6 +4,7 @@ import { Loader } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
 import DesktopInbox from "../../components/DesktopInbox";
+import MobileInbox from "../../components/MobileInbox";
 
 const Inbox = () => {
   const { t } = useTranslation();
@@ -18,8 +19,8 @@ const Inbox = () => {
     // setSearchParams({ ...searchParams, search: params });
   };
 
-  // let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
-  const complaints = React.useMemo(
+  // let applications = Digit.Hooks.pgr.useInboxData(searchParams) || [];
+  const applications = React.useMemo(
     () => [
       {
         applicationNo: (
@@ -52,35 +53,21 @@ const Inbox = () => {
         locality: "Alakapuri",
         status: "Pending for Payment",
         slaDaysRemaining: "12",
-      },
-    ],
-    []
-  );
-
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "When",
-        accessor: "when",
-      },
-      {
-        Header: "Who",
-        accessor: "who",
-      },
-      {
-        Header: "What",
-        accessor: "what",
       },
     ],
     []
   );
 
   let isMobile = window.mobileCheck();
-  // if (complaints.length !== null) {
-  return <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSearch={onSearch} />;
-  // } else {
-  //   return <Loader />;
-  // }
+  if (applications.length !== null) {
+    if (isMobile) {
+      return <MobileInbox data={applications} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+    } else {
+      return <DesktopInbox data={applications} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+    }
+  } else {
+    return <Loader />;
+  }
 };
 
 export default Inbox;

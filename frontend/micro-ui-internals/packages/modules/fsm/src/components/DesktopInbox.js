@@ -3,9 +3,9 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useRouteMatch } from "react-router-dom";
 import FSMLink from "./inbox/FSMLink";
-import ComplaintTable from "./inbox/ComplaintTable";
+import ApplicationTable from "./inbox/ApplicationTable";
 import Filter from "./inbox/Filter";
-import SearchComplaint from "./inbox/search";
+import SearchApplication from "./inbox/search";
 import { useHistory } from "react-router-dom";
 
 const DesktopInbox = (props) => {
@@ -85,13 +85,13 @@ const DesktopInbox = (props) => {
       <div className="filters-container">
         <FSMLink />
         <div>
-          <Filter complaints={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+          <Filter applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
         </div>
       </div>
       <div>
-        <SearchComplaint onSearch={props.onSearch} type="desktop" />
+        <SearchApplication onSearch={props.onSearch} type="desktop" />
         <div style={{ marginTop: "24px", marginTop: "24px", width: "874px", marginLeft: "24px" }}>
-          <ComplaintTable
+          <ApplicationTable
             data={props.data}
             columns={columns}
             getCellProps={(cellInfo) => {
