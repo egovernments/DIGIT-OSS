@@ -3,14 +3,10 @@ import { useTranslation } from "react-i18next";
 
 import {
   Card,
-  Header,
   CardSubHeader,
   StatusTable,
   Row,
-  TextArea,
   SubmitBar,
-  DisplayPhotos,
-  ImageViewer,
   Loader,
   CardSectionHeader,
   ConnectingCheckPoints,
@@ -18,10 +14,11 @@ import {
   ActionBar,
   Menu,
   LinkButton,
+  Dropdown,
 } from "@egovernments/digit-ui-react-components";
 
-import Modal from "../../components/Modal";
 import { useHistory } from "react-router-dom";
+import Modal from "../../components/Modal";
 
 const applicationDetails = {
   details: [
@@ -88,8 +85,31 @@ const ApplicationDetails = (props) => {
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  const [vehicle, setVehicle] = useState(null);
+  const [vehicleMenu, setVehicleMenu] = useState([
+    { key: "Type A", name: "Type A" },
+    { key: "Type B", name: "Type B" },
+  ]);
+
+  function selectVehicle(value) {
+    setVehicle(value);
+  }
+
+  const config = [
+    {
+      body: [
+        {
+          label: t("Vehicle Type"),
+          type: "dropdown",
+          populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
+        },
+      ],
+    },
+  ];
+
   function onActionSelect(action) {
     setSelectedAction(action);
+    setDisplayMenu(false);
   }
 
   const TLCaption = ({ data }) => {
@@ -132,6 +152,16 @@ const ApplicationDetails = (props) => {
 
   const closeModal = () => {
     setShowModal(false);
+    setSelectedAction(null);
+  };
+
+  const handleGenerateDemand = (data) => {
+    closeModal();
+    console.log("%c 🍓: handleGenerateDemand -> data ", "font-size:16px;background-color:#582dc7;color:white;", {
+      ...data,
+      vehicle,
+    });
+    setVehicle(null);
   };
 
   return (
@@ -179,7 +209,7 @@ const ApplicationDetails = (props) => {
               <Loader />
             )}
           </Card>
-          {showModal ? <Modal onClose={closeModal} /> : null}
+          {showModal ? <Modal closeModal={closeModal} onSubmit={handleGenerateDemand} config={config} /> : null}
           <ActionBar>
             {displayMenu && workflowDetails?.data?.nextActions ? (
               <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />

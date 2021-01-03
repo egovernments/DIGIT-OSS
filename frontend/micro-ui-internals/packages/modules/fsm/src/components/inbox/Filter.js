@@ -22,9 +22,9 @@ const Filter = (props) => {
   const { pgr } = useSelector((state) => state);
 
   const [selectAssigned, setSelectedAssigned] = useState("");
-  const [selectedComplaintType, setSelectedComplaintType] = useState(null);
+  const [selectedApplicationType, setSelectedApplicationType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
-  const [pendingComplaintCount, setPendingComplaintCount] = useState([]);
+  const [pendingApplicationCount, setPendingApplicationCount] = useState([]);
 
   const [pgrfilters, setPgrFilters] = useState({
     serviceCode: [],
@@ -39,7 +39,7 @@ const Filter = (props) => {
   //TODO change city fetch from user tenantid
   // let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
   let localities = ["Alakapuri", "Railway medical Colony"];
-  // let complaintStatus = Digit.Hooks.pgr.useComplaintStatus();
+  // let applicationStatus = Digit.Hooks.pgr.useApplicationStatus();
   // let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
   const onRadioChange = (value) => {
@@ -76,7 +76,7 @@ const Filter = (props) => {
     return list.filter((object) => object.code === key.code).length;
   };
 
-  function complaintType(_type) {
+  function applicationType(_type) {
     const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
     if (!ifExists(pgrfilters.serviceCode, type)) {
       setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
@@ -94,9 +94,9 @@ const Filter = (props) => {
 
   useEffect(() => {
     if (pgrfilters.serviceCode.length > 1) {
-      setSelectedComplaintType(`${pgrfilters.serviceCode.length} selected`);
+      setSelectedApplicationType(`${pgrfilters.serviceCode.length} selected`);
     } else {
-      setSelectedComplaintType(pgrfilters.serviceCode[0]);
+      setSelectedApplicationType(pgrfilters.serviceCode[0]);
     }
   }, [pgrfilters.serviceCode]);
 
@@ -130,7 +130,7 @@ const Filter = (props) => {
     setPgrFilters({ serviceCode: [], locality: [], applicationStatus: [] });
     setWfFilters({ assigned: [{ code: [] }] });
     setSelectedAssigned("");
-    setSelectedComplaintType(null);
+    setSelectedApplicationType(null);
     setSelectedLocality(null);
   }
 
@@ -189,7 +189,7 @@ const Filter = (props) => {
               ]}
             />
             <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
-            <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
+            <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
           </div>
         </div>
       </div>
