@@ -22,7 +22,15 @@
 .inputWrapper {
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  max-width: 500px;
+
+  div {
+    max-width: 80px;
+  }
+
+  span {
+    margin-top: 16px;
+  }
 }
 
 @screen dt {
