@@ -57,11 +57,12 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
         <ConnectingCheckPoints>
           {timeline.map(({ status, caption, auditDetails, timeLineActions }, index) => {
             return (
-              <CheckPoint
-                key={index}
-                isCompleted={index === 0 ? true : false}
-                customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })}
-              />
+              <React.Fragment key={index}>
+                <CheckPoint
+                  isCompleted={index === 0 ? true : false}
+                  customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })}
+                />
+              </React.Fragment>
             );
           })}
         </ConnectingCheckPoints>
