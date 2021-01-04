@@ -13,7 +13,7 @@ const Status = ({ complaints, onAssignmentChange, pgrfilters }) => {
           key={index}
           onChange={(e) => onAssignmentChange(e, option)}
           checked={pgrfilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
-          label={`${option.name} (${option.count})`}
+          label={`${option.name} (${option.count || 0})`}
         />
       ))}
     </div>
