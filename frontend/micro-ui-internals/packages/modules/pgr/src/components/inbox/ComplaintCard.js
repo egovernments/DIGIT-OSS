@@ -8,13 +8,13 @@ import SearchComplaint from "./search";
 export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey }) => {
   const [popup, setPopup] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null);
+  const [filterCount, setFilterCount] = useState(Digit.SessionStorage.get("pgr_filter_count") || 0);
 
   const handlePopupAction = (type) => {
-    console.log("option");
     if (type === "SEARCH") {
       setSelectedComponent(<SearchComplaint type="mobile" onClose={handlePopupClose} onSearch={onSearch} />);
     } else if (type === "FILTER") {
-      setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
+      setSelectedComponent(<Filter complaints={data} onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
     }
     setPopup(true);
   };

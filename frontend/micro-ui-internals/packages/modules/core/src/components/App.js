@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
-import { useWindowSize } from "rooks";
 import { TopBar } from "@egovernments/digit-ui-react-components";
 
 import { AppModules } from "./AppModules";
@@ -12,12 +11,10 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { t } = useTranslation();
-  const { innerWidth } = useWindowSize();
+  const innerWidth = window.innerWidth;
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
-
   const mobileView = innerWidth <= 640;
-
   return (
     <Switch>
       <Route path="/digit-ui/employee">
