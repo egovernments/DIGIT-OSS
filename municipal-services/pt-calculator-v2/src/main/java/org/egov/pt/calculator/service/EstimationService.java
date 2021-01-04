@@ -385,6 +385,7 @@ public class EstimationService {
 
 						BigDecimal unitRate = BigDecimal.valueOf(billingSlab.get().getUnitRate());
 						BigDecimal taxRate = getTaxRate(masterMap, unit);
+						log.info("Calculation unit rate ,tax rate: " + unitRate + " "+ taxRate);
 						BigDecimal exemptionRate = getExemptionRate(masterMap, unit);
 						// 26-12 TODO: add todate and fromdat instead of
 						// assessment year.
@@ -400,6 +401,7 @@ public class EstimationService {
 						
 						landAV = landAV.add(appreDepreAmount);
 						unitTaxAmount = landAV.multiply(taxRate).divide(HUNDRED);
+						log.info("Calculation details: unitrate: " + unitRate + " ,Tax rate: "+ taxRate+" ,Land AV: "+landAV);
 						//exemption = exemption.add(unitTaxAmount.multiply(exemptionRate).divide(HUNDRED));
 						totalCarpetArea = totalCarpetArea.add(carpetArea);
 						totalLandAV = totalLandAV.add(landAV);
@@ -412,7 +414,7 @@ public class EstimationService {
 
 				taxAmount = taxAmount.add(unitTaxAmount).add(unoccupiedLandTaxAmount).setScale(2, 2);
 			}
-			
+			log.info("Total PT TAX: " +taxAmount);
 			TaxHeadEstimate taxheadEstimate = TaxHeadEstimate.builder().taxHeadCode(PT_TAX).estimateAmount(taxAmount).build();
 			taxDetailsMap.put("LANDAREA",totalCarpetArea);
 			taxDetailsMap.put("LANDAV", totalLandAV);
