@@ -299,6 +299,8 @@ public class EstimationService {
 	private Map<String,Object> getPropertyTaxhead(CalculationCriteria criteria, List<BillingSlab> filteredBillingSlabs,
 			Map<String, JSONArray> masterMap, BigDecimal exemption) {
 
+		log.info("Calculation criteria: " + criteria);
+
 		Map<String,Object> taxDetailsMap = new HashMap<>();
 		Property property = criteria.getProperty();
 		List<BillingSlab> usedSlabs = new ArrayList<BillingSlab>();
