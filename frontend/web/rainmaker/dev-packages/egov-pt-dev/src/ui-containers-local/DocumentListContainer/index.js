@@ -89,7 +89,7 @@ const mapStateToProps = state => {
       }
       document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
       document.dropdown.menu.map((item, key) => {
-        document.dropdown.menu[key].name = item.label;
+        document.dropdown.menu[key].name = item.label.split("_").join(".");
       });
     });
     documentList.cards = documentList.cards.filter(document => filterFunction(document, preparedFinalObject, document.filterCondition));
