@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
@@ -12,7 +12,7 @@ const FileComplaint = ({ parentRoute }) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const history = useHistory();
-  const [params, setParams] = useState({});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
 
   const goNext = () => {
     const currentPath = pathname.split("/").pop();
@@ -21,12 +21,17 @@ const FileComplaint = ({ parentRoute }) => {
     history.push(`${match.path}/${nextStep}`);
   };
 
-  const submitComplaint = () => {
+  const submitComplaint = async () => {
+    await Digit.FileDesludging.create("pb.amritsar");
     history.push(`${parentRoute}/new-application/check`);
   };
 
-  function log(data) {
-    console.log("data", data);
+  useEffect(() => {
+    console.log("params----->", params);
+  }, [params]);
+
+  function saveParams(data) {
+    setParams({ ...params, ...data });
     goNext();
   }
 
@@ -39,7 +44,7 @@ const FileComplaint = ({ parentRoute }) => {
         const Component = typeof component === "string" ? registry.getComponent(component) : component;
         return (
           <Route path={`${match.path}/${route}`} key={index}>
-            <Component config={{ texts, inputs }} onSelect={log} onSkip={handleSkip} value={params} t={t} />
+            <Component config={{ texts, inputs }} onSelect={saveParams} onSkip={handleSkip} value={params} t={t} />
           </Route>
         );
       })}
