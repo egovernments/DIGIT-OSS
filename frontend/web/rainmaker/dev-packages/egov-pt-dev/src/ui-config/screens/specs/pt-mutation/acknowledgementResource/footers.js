@@ -127,30 +127,84 @@ export const applicationSuccessFooter = (
   });
 };
 
-
-export const gotoAssessment = getCommonApplyFooter({
-  gotoHome: {
-    componentPath: "Button",
-    props: {
-      variant: "outlined",
-      color: "primary",
-      style: {
-        // minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
+export const gotoAssessment =(moduleName)=>{ //69
+  
+  return getCommonApplyFooter({
+    gotoHome: moduleName !=null ? {
+      componentPath: "Button",
+      props: {
+        variant: "outlined",
+        color: "primary",
+        style: {
+         // minWidth: "200px",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        //downloadReceiptButtonLabel: getLabel
+        goToHomeButtonLabel: getLabel({
+          labelName: "GO TO HOME",
+          labelKey: "PT_ASSESSMENT"
+        })
+      },
+      // Check this onClickDefinition later again
+      onClickDefination: {
+        action: "page_change",
+        path: `${getAssmentURL()}`
+  
+      } 
+    }:{},
+    gotoHomeone: {
+      componentPath: "Button",
+      props: {
+        variant: "outlined",
+        color: "primary",
+        style: {
+         // minWidth: "200px",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        //downloadReceiptButtonLabel: getLabel
+        goToHomeButtonLabel: getLabel({
+          labelName: "GO TO HOME",
+          labelKey: "PT_MUTATION_HOME"
+        })
+      },
+      // Check this onClickDefinition later again
+      onClickDefination: {
+        action: "page_change",
+        path: `${getRedirectionURL()}`
       }
-    },
-    children: {
-      //downloadReceiptButtonLabel: getLabel
-      goToHomeButtonLabel:  getLabel({
-        labelName: "GO TO HOME",
-        labelKey: "PT_ASSESSMENT"
-      })
-    },
-    // Check this onClickDefinition later again
-    onClickDefination: {
-      action: "page_change",
-      path: `${getAssmentURL()}`
     }
+  
+  });
   }
-});
+// export const gotoAssessment = getCommonApplyFooter({
+//   gotoHome: {
+//     componentPath: "Button",
+//     props: {
+//       variant: "outlined",
+//       color: "primary",
+//       style: {
+//         // minWidth: "200px",
+//         height: "48px",
+//         marginRight: "46px"
+//       }
+//     },
+//     children: {
+//       //downloadReceiptButtonLabel: getLabel
+//       goToHomeButtonLabel:  getLabel({
+//         labelName: "GO TO HOME",
+//         labelKey: "PT_ASSESSMENT"
+//       })
+//     },
+//     // Check this onClickDefinition later again
+//     onClickDefination: {
+//       action: "page_change",
+//       path: `${getAssmentURL()}`
+//     }
+//   }
+// });

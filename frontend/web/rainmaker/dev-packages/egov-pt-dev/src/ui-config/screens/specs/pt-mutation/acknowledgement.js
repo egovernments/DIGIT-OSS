@@ -360,7 +360,7 @@ const getAcknowledgementCard = (
         }
       },
       // gotoHomeFooter,
-      gotoAssessment,
+      gotoAssessment:gotoAssessment(moduleName)
     };
   }
   else if (purpose === "verified" && status === "failure") {
