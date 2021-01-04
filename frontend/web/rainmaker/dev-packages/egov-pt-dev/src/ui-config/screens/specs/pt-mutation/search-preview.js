@@ -7,7 +7,7 @@ import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/form
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults,generatePdfFromDiv } from "../../../../ui-utils/commons";
 import { downloadCertificateForm, downloadReceitForm, getpayments, prepareDocumentsView, searchBill, showHideMutationDetailsCard } from "../utils/index";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
@@ -78,20 +78,20 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePTMAcknowledgement(get(
-        state,
-        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
-      // generatePdfFromDiv("download", applicationNumber, "#material-ui-cardContent")
+      // generatePTMAcknowledgement(get(
+      //   state,
+      //   "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
+      generatePdfFromDiv("download", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePTMAcknowledgement(get(
-        state,
-        "screenConfiguration.preparedFinalObject", {}), 'print');
-      // generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
+      // generatePTMAcknowledgement(get(
+      //   state,
+      //   "screenConfiguration.preparedFinalObject", {}), 'print');
+      generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
