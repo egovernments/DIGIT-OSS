@@ -60,6 +60,7 @@ const Filter = (props) => {
     Digit.SessionStorage.set("pgr_filters", pgrfilters);
     Digit.SessionStorage.set("pgr_wfFilters", wfFilters);
     //queryString = queryString.substring(0, queryString.length - 1);
+
     handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
     // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
     if (Digit.SessionStorage.get("pgr_assigned")) {
@@ -108,6 +109,7 @@ const Filter = (props) => {
   };
 
   const handleAssignmentChange = (e, type) => {
+    debugger;
     if (e.target.checked) {
       setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, { code: type.code }] });
     } else {
@@ -133,13 +135,13 @@ const Filter = (props) => {
   }
 
   const handleFilterSubmit = () => {
+    debugger;
     props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
   };
 
   const GetSelectOptions = (lable, options, selected = null, select, optionKey, onRemove, key, displayKey) => (
     <div>
       <div className="filter-label">{lable}</div>
-      {console.log("optionKey-----------------:", optionKey)}
       {<Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />}
 
       <div className="tag-container">
