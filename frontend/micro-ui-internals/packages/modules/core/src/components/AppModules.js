@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 
 import { AppHome } from "./Home";
@@ -12,6 +12,19 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
   const ComponentProvider = Digit.Contexts.ComponentProvider;
   const { path } = useRouteMatch();
   const registry = useContext(ComponentProvider);
+
+  useEffect(() => {
+    if (userType !== "citizen") {
+      const user = Digit.SessionStorage.get("Employee.user-details");
+      Digit.UserService.setUser(user);
+    }
+
+    return () => {
+      if (userType !== "citizen") {
+        Digit.UserService.setUser({});
+      }
+    };
+  }, []);
 
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = registry.getComponent(`${code}Module`);

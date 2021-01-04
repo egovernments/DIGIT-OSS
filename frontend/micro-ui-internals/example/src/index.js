@@ -56,6 +56,7 @@ window.Digit.SessionStorage.set("userType", userTypeInfo);
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+window.Digit.SessionStorage.set("Employee.user-details", { access_token: token, info: { ...employeeInfo } });
 
 window.mdmsInitPre = ({ params, data }) => {
   console.log("mdms init pre", params, data);
