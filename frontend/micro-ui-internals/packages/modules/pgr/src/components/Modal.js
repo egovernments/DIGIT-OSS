@@ -45,7 +45,9 @@ const Modal = (props) => {
       } else {
         try {
           const response = await Digit.UploadServices.Filestorage(file, cityDetails.code);
-          setUploadedFile(response?.data?.files[0]?.fileStoreId);
+          if (response) {
+            setUploadedFile(response?.data?.files[0]?.fileStoreId);
+          }
         } catch (err) {
           console.log("%c ↖️: Modal -> err ", "font-size:16px;background-color:#abe582;color:black;", err);
           setError(err.message);
