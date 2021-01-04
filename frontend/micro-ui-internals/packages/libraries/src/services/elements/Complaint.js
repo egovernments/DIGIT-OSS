@@ -58,7 +58,6 @@ export const Complaint = {
         ],
         tenantId: tenantId,
       };
-      // defaultData.service.source = ""; ToDo: confirm this logic for employee with egov team
     }
     const response = await Digit.PGRService.create(defaultData, cityCode);
     return response;
