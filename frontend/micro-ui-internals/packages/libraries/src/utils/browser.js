@@ -32,12 +32,5 @@ const mobileCheck = () => {
   console.log("check", check);
   return check;
 };
-//   window.webview = (function () {
-//     return isWebView(navigator.userAgent);
-//   })();
-
-// const isWebview = () => {
-//   checkWebview(navigator.userAgent);
-// };
 
 export default { isWebview: checkWebview(), isMobile: mobileCheck() };
