@@ -1,6 +1,7 @@
 package org.egov.pt.service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,8 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.NullNode;
 
 import static org.egov.pt.util.PTConstants.*;
 
@@ -101,6 +102,9 @@ public class TranslationService {
         propertyDetail.put("source", assessment.getSource().toString());
         propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
+        JsonNode additionalDetails = property.getAdditionalDetails();
+		String constructionYear = additionalDetails ==null ? null : additionalDetails.get("constructionYear").toString();
+		long constructionDate = constructionYear == null ? 0 : Instant.parse(constructionYear).toEpochMilli();
         if(assessment.getAdditionalDetails()!=null){
 
             try{
@@ -167,6 +171,7 @@ public class TranslationService {
                 
                 unitAdditionalMap.put("innerDimensionsKnown", unit.getConstructionDetail().getDimensions() == null ? false:true);
 
+                unitAdditionalMap.put("constructionDate",constructionDate);
                 unitMap.put("additionalDetails", unitAdditionalMap);
                 units.add(unitMap);
 
