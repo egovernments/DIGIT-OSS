@@ -213,7 +213,7 @@ public class EnrichmentService {
 		Property property = request.getProperty();
 		Boolean isWfEnabled = config.getIsMutationWorkflowEnabled();
 		Boolean iswfStarting = propertyFromSearch.getStatus().equals(Status.ACTIVE);
-		AuditDetails auditDetailsForUpdate = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), false);
+		AuditDetails auditDetailsForUpdate = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), true);
 		propertyFromSearch.setAuditDetails(auditDetailsForUpdate);
 
 		if (!isWfEnabled) {
