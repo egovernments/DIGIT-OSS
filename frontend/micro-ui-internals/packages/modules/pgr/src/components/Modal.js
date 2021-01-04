@@ -24,6 +24,7 @@ const Modal = (props) => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const { t } = useTranslation();
   const [error, setError] = useState(null);
+  const cityDetails = Digit.ULBService.getCurrentUlb();
 
   console.log("modal", useEmployeeData);
   const employeeData = useEmployeeData
@@ -41,10 +42,9 @@ const Modal = (props) => {
     if (file) {
       if (file.size > 5242880) {
         setError("Maximum upload size exceeded");
-      } else {
-        const response = await Digit.UploadServices.Filestorage(file);
-        setUploadedFile(response?.data?.files[0]?.fileStoreId);
       }
+      const response = await Digit.UploadServices.Filestorage(file, cityDetails.code);
+      setUploadedFile(response?.data?.files[0]?.fileStoreId);
     }
   }, [file]);
 
