@@ -9,6 +9,7 @@ import {
   CardLabelDesc,
   UploadFile,
   ButtonSelector,
+  Toast,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 const Modal = (props) => {
@@ -22,6 +23,7 @@ const Modal = (props) => {
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const { t } = useTranslation();
+  const [error, setError] = useState(null);
 
   console.log("modal", useEmployeeData);
   const employeeData = useEmployeeData
@@ -35,9 +37,14 @@ const Modal = (props) => {
   //   }, [file]);
 
   useEffect(async () => {
+    setError(null);
     if (file) {
-      const response = await Digit.UploadServices.Filestorage(file);
-      setUploadedFile(response.data.files[0].fileStoreId);
+      if (file.size > 5242880) {
+        setError("Maximum upload size exceeded");
+      } else {
+        const response = await Digit.UploadServices.Filestorage(file);
+        setUploadedFile(response?.data?.files[0]?.fileStoreId);
+      }
     }
   }, [file]);
 
@@ -92,6 +99,7 @@ const Modal = (props) => {
           </div>
         </div>
       </div>
+      {error && <Toast label={error} onClose={() => setError(null)} error />}
     </PopUp>
   );
 };
