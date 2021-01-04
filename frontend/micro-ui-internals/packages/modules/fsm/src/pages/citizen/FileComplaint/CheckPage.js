@@ -27,7 +27,7 @@ const CheckPage = () => {
   const history = useHistory();
 
   function submit() {
-    history.push("/digit-ui/citizen/fsm/response");
+    history.push("/digit-ui/citizen/fsm/new-application/response");
   }
   return (
     <Card>

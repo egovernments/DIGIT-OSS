@@ -74,5 +74,6 @@ export const FileDesludging = {
             workflow: null,
           };
     const response = await FSMService.create(data, tenantId);
+    return response;
   },
 };

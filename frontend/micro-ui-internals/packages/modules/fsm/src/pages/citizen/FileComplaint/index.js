@@ -6,6 +6,7 @@ import { config } from "./defaultConfig";
 import SelectPropertyType from "./SelectPropertyType";
 import SelectPropertySubtype from "./SelectPropertySubtype";
 import CheckPage from "./CheckPage";
+import Response from "./Response";
 
 const FileComplaint = ({ parentRoute }) => {
   const match = useRouteMatch();
@@ -50,6 +51,9 @@ const FileComplaint = ({ parentRoute }) => {
       })}
       <Route path={`${match.path}/check`}>
         <CheckPage />
+      </Route>
+      <Route path={`${match.path}/response`}>
+        <Response />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />
