@@ -397,6 +397,7 @@ public class EstimationService {
 							appreDepreAmount = carpetArea.multiply(unitRate).multiply(appreciationDepreciation)
 									.multiply(monthMultiplier).divide(HUNDRED);
 						}
+						log.info("Calculation details: appreDepreAmount:"+appreDepreAmount);
 						BigDecimal landAV = carpetArea.multiply(unitRate).multiply(monthMultiplier);
 						
 						landAV = landAV.add(appreDepreAmount);
@@ -434,6 +435,7 @@ public class EstimationService {
 		LocalDate constructionYear = Instant.ofEpochMilli(unit.getAdditionalDetails().getConstructionDate())
 				.atZone(ZoneId.systemDefault()).toLocalDate();
 		int age = assessmentYear - constructionYear.getYear();
+		log.info("Calculation details: appreDepreCalc:" + assessmentYear + " Construction year: " + constructionYear);
 
 		for (Object val : depreciationAppreciation) {
 			LinkedHashMap deprAppr = (LinkedHashMap)val;
