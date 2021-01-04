@@ -347,7 +347,7 @@ public class EstimationService {
 					usedSlabs.add(billingSlab.get());
 					if (unit.getUsageCategoryMajor().equals(NONRESIDENTIAL)) {
 						BigDecimal carpetArea = unit.getUnitArea();
-						BigDecimal unitRate = BigDecimal.valueOf(filteredBillingSlabs.get(0).getUnitRate());
+						BigDecimal unitRate = BigDecimal.valueOf(billingSlab.get().getUnitRate());
 						BigDecimal taxRate = getTaxRate(masterMap, unit);
 						BigDecimal multipleFactor = getMultipleFactor(masterMap, unit);
 						BigDecimal landAV = carpetArea.multiply(multipleFactor).multiply(monthMultiplier);
@@ -381,7 +381,7 @@ public class EstimationService {
 							carpetArea = unit.getUnitArea().multiply(COVERED_AREA_MULTIPLIER);
 						}
 
-						BigDecimal unitRate = BigDecimal.valueOf(filteredBillingSlabs.get(0).getUnitRate());
+						BigDecimal unitRate = BigDecimal.valueOf(billingSlab.get().getUnitRate());
 						BigDecimal taxRate = getTaxRate(masterMap, unit);
 						BigDecimal exemptionRate = getExemptionRate(masterMap, unit);
 						// 26-12 TODO: add todate and fromdat instead of
