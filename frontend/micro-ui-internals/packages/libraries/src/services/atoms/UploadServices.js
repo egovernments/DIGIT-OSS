@@ -13,7 +13,7 @@ export const UploadServices = {
       data: formData,
     };
 
-    return await Axios(config);
+    return Axios(config);
   },
 
   Filefetch: async (filesArray, tenantId) => {

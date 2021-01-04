@@ -40,11 +40,17 @@ const Modal = (props) => {
   useEffect(async () => {
     setError(null);
     if (file) {
-      if (file.size > 5242880) {
-        setError("Maximum upload size exceeded");
+      if (file.size >= 5242880) {
+        setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+      } else {
+        try {
+          const response = await Digit.UploadServices.Filestorage(file, cityDetails.code);
+          setUploadedFile(response?.data?.files[0]?.fileStoreId);
+        } catch (err) {
+          console.log("%c ↖️: Modal -> err ", "font-size:16px;background-color:#abe582;color:black;", err);
+          setError(err.message);
+        }
       }
-      const response = await Digit.UploadServices.Filestorage(file, cityDetails.code);
-      setUploadedFile(response?.data?.files[0]?.fileStoreId);
     }
   }, [file]);
 
