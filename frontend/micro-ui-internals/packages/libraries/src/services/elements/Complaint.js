@@ -37,7 +37,7 @@ export const Complaint = {
               serviceCode: complaintType,
               description: description,
               additionalDetail: {},
-              source: window.webview ? "mobileapp" : "web",
+              source: Digit.Utils.browser.isWebview ? "mobileapp" : "web",
               address: {
                 landmark: landmark,
                 city: city,
@@ -63,7 +63,7 @@ export const Complaint = {
               serviceCode: complaintType,
               description: description,
               additionalDetail: {},
-              source: window.webview ? "mobileapp" : "web",
+              source: Digit.Utils.browser.isWebview ? "mobileapp" : "web",
               address: {
                 landmark: landmark,
                 city: city,

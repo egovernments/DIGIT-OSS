@@ -21,7 +21,7 @@ const Inbox = () => {
   // let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
   let { data: complaints, isLoading } = Digit.Hooks.pgr.useInboxData(searchParams) || [];
 
-  let isMobile = window.mobileCheck();
+  let isMobile = Digit.Utils.browser.isMobile;
 
   if (complaints?.length !== null) {
     if (isMobile) {

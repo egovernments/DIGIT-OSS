@@ -75,7 +75,7 @@ const Inbox = () => {
     []
   );
 
-  let isMobile = window.mobileCheck();
+  let isMobile = Digit.Utils.browser.isMobile;
   // if (complaints.length !== null) {
   return <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSearch={onSearch} />;
   // } else {
