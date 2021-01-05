@@ -1155,10 +1155,10 @@
     react-query "^3.2.0"
     rooks "^4.4.0"
 
-"@egovernments/digit-ui-libraries@^1.0.47":
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.47.tgz#424e35f8dd1a9424c5aaa6f574cb1545314d7415"
-  integrity sha512-9iRKLw0CD/BB6BQWhVu6YzDbZ6Jv9hmNpKNEAMzaviMpAeAWEW4aD6u+Qxv+BLXxqZSwyFuoVs0/4ka1W8eUIw==
+"@egovernments/digit-ui-libraries@^1.0.48":
+  version "1.0.48"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.48.tgz#151b9dbac152779cfdba93f229ed1146408f0dc9"
+  integrity sha512-0c5vhJoaZP6bVyRuugaBThDkI+JO75JQzHgl++AaIlE6Y4eK6bK7xDnCfhglqmkbPEkbY6nnK+f28iz/rFGFOA==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1171,10 +1171,10 @@
     react-query "^3.2.0"
     rooks "^4.4.0"
 
-"@egovernments/digit-ui-module-core@^1.0.47":
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.47.tgz#16062fa01602255eee900075e604db9bdf5b6120"
-  integrity sha512-GtGuq3BaHygxAKQ2yGQNR/EY/JMfsveXw19t7wFms9zgPr5n5g/gwIs2YB2wjxKt4wf6buWmwhM3qOBiRJliDw==
+"@egovernments/digit-ui-module-core@^1.0.48":
+  version "1.0.48"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.48.tgz#7402b79ed9d4d8746701588bf4b2bf65780e448b"
+  integrity sha512-BGmy3xeEoEdZdmSeQ8UbwkqpQjoAutYt7fZQi+3UyOBD2CtKCkgblKDgYOtsWufPszE52CvB5odFZR3CZ4Q6NQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1189,10 +1189,10 @@
     redux "^4.0.5"
     redux-thunk "^2.3.0"
 
-"@egovernments/digit-ui-module-fsm@^1.0.47":
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.47.tgz#72ed5fa24e93f1bfb4daab61a0bda2cb8bf874b8"
-  integrity sha512-kxUTMthFig5h20uoINdWV4CIcKNO3+UdCxeoPF6u0xgagACCDQQPOQ6AtZ6/PpMenG3gOEJ43K6BVsDVO3C3bw==
+"@egovernments/digit-ui-module-fsm@^1.0.48":
+  version "1.0.48"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.48.tgz#cb1b632d6c0f4d55a1f7aae43c93b12f3829437b"
+  integrity sha512-OB2pqwzTa6GadWAtOSdc5F5HZGQuXCOW/F8pCeo/69oBN7ueWwB9z5KsD+VCyR/KMiuNcjbR/OFMDEJcVluV3g==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1207,10 +1207,10 @@
     redux "^4.0.5"
     redux-thunk "^2.3.0"
 
-"@egovernments/digit-ui-module-pgr@^1.0.47":
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.47.tgz#b09a20407bcadd2d1d8ae1d91bb951b4c9e45736"
-  integrity sha512-zfvGiBcTZcBDf3LoWVBtHNIazQmX6xiQlEIf1MiKfW1f3/MNU9A7+i4DYgCTBz5XgcHOz5v5273U2vEplZyLUA==
+"@egovernments/digit-ui-module-pgr@^1.0.48":
+  version "1.0.48"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.48.tgz#f67093d2fe0c966ac53496c7f9a7e8cc8245c203"
+  integrity sha512-9IdRHTufV2KYC8JmmT6kcloCrzcQTK++2qgIU94E7BiZJ9yaCa96p0R5tj9wBZphXjvGolKw9Gq5bT9DAs2xRg==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1236,10 +1236,10 @@
     react-i18next "^11.7.3"
     react-table "^7.6.1"
 
-"@egovernments/digit-ui-react-components@^1.0.47":
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.47.tgz#ac6bca8516d21753d07c8b0fa642aa530a39bc89"
-  integrity sha512-/dlvCn74gVZljCVfYir6iXOGRT3wawBZKWjDZe+oow9Q/rdzVbGiMKYvHkve7fQrZ0FV8v3ZOCRcp2Cl5g/DXQ==
+"@egovernments/digit-ui-react-components@^1.0.48":
+  version "1.0.48"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.48.tgz#da5466cc71da86da825e3424788ba7ac596b5cd0"
+  integrity sha512-ewZ3xCqxP3lPYSgkcdpOVbCrOiG+iT/wmuw3dt+G85F5M4QCFFweL9olpUVzPycI992YSvTAnFt2hJZfQ+EBqA==
   dependencies:
     react-hook-form "^6.7.0"
     react-i18next "^11.7.3"
