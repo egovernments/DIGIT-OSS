@@ -60,7 +60,6 @@ const Filter = (props) => {
     Digit.SessionStorage.set("pgr_filters", pgrfilters);
     Digit.SessionStorage.set("pgr_wfFilters", wfFilters);
     //queryString = queryString.substring(0, queryString.length - 1);
-
     handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
     // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
     if (Digit.SessionStorage.get("pgr_assigned")) {
@@ -114,8 +113,8 @@ const Filter = (props) => {
     } else {
       const filteredStatus = pgrfilters.applicationStatus.filter((value) => {
         return value.code !== type.code;
-      })[0];
-      setPgrFilters({ ...pgrfilters, applicationStatus: [{ code: filteredStatus }] });
+      });
+      setPgrFilters({ ...pgrfilters, applicationStatus: filteredStatus });
     }
   };
 
