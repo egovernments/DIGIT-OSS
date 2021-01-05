@@ -18,3 +18,16 @@
     }
   }
 }
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  background-color: rgba(255, 255, 255, var(--bg-opacity));
+  border-top: 1px solid rgb(214, 213, 212);
+  padding: 20px 40px 20px 0px;
+  color: rgb(80, 90, 95);
+}
+
+.pagination button:nth-child(1)::after {
+  content: "\f105";
+}

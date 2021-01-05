@@ -1,5 +1,5 @@
 import React from "react";
-import { useTable, useRowSelect } from "react-table";
+import { useTable, useRowSelect, usePagination } from "react-table";
 
 // const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
 //   const defaultRef = React.useRef();
@@ -17,11 +17,29 @@ import { useTable, useRowSelect } from "react-table";
 // });
 
 const Table = ({ data, columns, getCellProps }) => {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
     {
       columns,
       data,
+      initialState: { pageIndex: 0 },
     },
+    usePagination,
     useRowSelect
     // (hooks) => {
     //   hooks.visibleColumns.push((columns) => [
@@ -46,49 +64,92 @@ const Table = ({ data, columns, getCellProps }) => {
   );
 
   return (
-    <table className="table" {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.slice(0, 10).map((row, i) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return (
-                  <td
-                    // style={{ padding: "20px 18px", fontSize: "16px", borderTop: "1px solid grey", textAlign: "left", verticalAlign: "middle" }}
-                    {...cell.getCellProps([
-                      // {
-                      //   className: cell.column.className,
-                      //   style: cell.column.style,
-                      // },
-                      // getColumnProps(cell.column),
-                      getCellProps(cell),
-                    ])}
-                  >
-                    {cell.column.link ? (
-                      <a style={{ color: "#1D70B8" }} href={cell.column.to}>
-                        {cell.render("Cell")}
-                      </a>
-                    ) : (
-                      <React.Fragment> {cell.render("Cell")} </React.Fragment>
-                    )}
-                  </td>
-                );
-              })}
+    <React.Fragment>
+      <table className="table" {...getTableProps()}>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              ))}
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row, i) => {
+            // rows.slice(0, 10).map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <td
+                      // style={{ padding: "20px 18px", fontSize: "16px", borderTop: "1px solid grey", textAlign: "left", verticalAlign: "middle" }}
+                      {...cell.getCellProps([
+                        // {
+                        //   className: cell.column.className,
+                        //   style: cell.column.style,
+                        // },
+                        // getColumnProps(cell.column),
+                        getCellProps(cell),
+                      ])}
+                    >
+                      {cell.column.link ? (
+                        <a style={{ color: "#1D70B8" }} href={cell.column.to}>
+                          {cell.render("Cell")}
+                        </a>
+                      ) : (
+                        <React.Fragment> {cell.render("Cell")} </React.Fragment>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div
+        className="pagination"
+        // style={{
+        //   display: "flex",
+        //   justifyContent: "flex-end",
+        //   backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
+        //   borderTop: "1px solid #d6d5d4",
+        //   padding: "20px 0",
+        //   paddingRight: "40px",
+        //   color: "rgb(80, 90, 95)",
+        // }}
+      >
+        Rows Per Page{":"}
+        <select
+          value={pageSize}
+          style={{ marginRight: "15px" }}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              {pageSize}
+            </option>
+          ))}
+        </select>
+        <span>
+          <span>
+            {pageIndex * 10 + 1}
+            {"-"}
+            {(pageIndex + 1) * 10} of {rows.length}
+          </span>{" "}
+        </span>
+        <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {"<"}
+        </button>{" "}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {">"}
+        </button>{" "}
+      </div>
+    </React.Fragment>
   );
 };
 
