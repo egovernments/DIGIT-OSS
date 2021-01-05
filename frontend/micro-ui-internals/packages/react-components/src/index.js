@@ -52,8 +52,10 @@ import HomeLink from "./atoms/HomeLink";
 import SectionalDropdown from "./atoms/SectionalDropdown";
 import LabelFieldPair from "./atoms/LabelFieldPair";
 import ApplyFilterBar from "./atoms/ApplyFilterBar";
-import RemoveableTag from "./molecules/RemoveableTag";
+import NavBar from "./atoms/NavBar";
+import Hamburger from "./atoms/Hamburger";
 
+import RemoveableTag from "./molecules/RemoveableTag";
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
 import TextInputCard from "./molecules/TextInputCard";
@@ -134,6 +136,8 @@ export {
   SectionalDropdown,
   LabelFieldPair,
   GetApp,
+  NavBar,
+  Hamburger,
   // Molecule
   InputCard,
   FormStep,

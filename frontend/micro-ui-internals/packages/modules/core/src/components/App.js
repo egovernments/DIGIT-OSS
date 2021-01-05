@@ -4,6 +4,8 @@ import { Link, Redirect, Route, Switch } from "react-router-dom";
 import { TopBar } from "@egovernments/digit-ui-react-components";
 
 import { AppModules } from "./AppModules";
+import { NavBar } from "@egovernments/digit-ui-react-components";
+import Sidebar from "../../../pgr/src/components/Sidebar";
 
 const TextToImg = ({ name }) => <span className="user-img-txt">{name[0].toUpperCase()}</span>;
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
@@ -79,7 +81,8 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         </div>
       </Route>
       <Route path="/digit-ui/citizen">
-        <TopBar img={"https://egov-micro-qa.egovernments.org/egov-dev-assets/logo-mseva-white.png"} />
+        {/* <TopBar img={"https://egov-micro-qa.egovernments.org/egov-dev-assets/logo-mseva-white.png"} /> */}
+        <Sidebar />
         <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>
