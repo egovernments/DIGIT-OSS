@@ -73,7 +73,7 @@ const Filter = (props) => {
   };
 
   function complaintType(_type) {
-    const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
+    const type = { i18nKey: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
     if (!ifExists(pgrfilters.serviceCode, type)) {
       setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
     }
@@ -109,7 +109,6 @@ const Filter = (props) => {
   };
 
   const handleAssignmentChange = (e, type) => {
-    debugger;
     if (e.target.checked) {
       setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, { code: type.code }] });
     } else {
@@ -135,36 +134,38 @@ const Filter = (props) => {
   }
 
   const handleFilterSubmit = () => {
-    debugger;
     props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
   };
 
-  const GetSelectOptions = (lable, options, selected = null, select, optionKey, onRemove, key, displayKey) => (
-    <div>
-      <div className="filter-label">{lable}</div>
-      {<Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />}
+  const GetSelectOptions = (lable, options, selected = null, select, optionKey, onRemove, key) => {
+    selected = selected || { [optionKey]: " ", code: "" };
+    return (
+      <div>
+        <div className="filter-label">{lable}</div>
+        {<Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />}
 
-      <div className="tag-container">
-        {pgrfilters[key].length > 0 &&
-          pgrfilters[key].map((value, index) => {
-            return <RemoveableTag key={index} text={value[displayKey]} onClick={() => onRemove(index, key)} />;
-          })}
+        <div className="tag-container">
+          {pgrfilters[key].length > 0 &&
+            pgrfilters[key].map((value, index) => {
+              return <RemoveableTag key={index} text={value[optionKey]} onClick={() => onRemove(index, key)} />;
+            })}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <React.Fragment>
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
-            <div className="filter-label">FILTER BY:</div>
+            <div className="filter-label">{t("FILTER_BY")}:</div>
             <div className="clearAll" onClick={clearAll}>
-              Clear all
+              {t("CS_COMMON_CLEAR_ALL")}
             </div>
             {props.type === "desktop" && (
               <span className="clear-search" onClick={clearAll}>
-                Clear all
+                {t("CS_COMMON_CLEAR_ALL")}
               </span>
             )}
             {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
@@ -180,9 +181,17 @@ const Filter = (props) => {
               ]}
             />
             <div>
-              {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCode", "key")}
+              {GetSelectOptions(
+                t("CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE"),
+                serviceDefs,
+                selectedComplaintType,
+                complaintType,
+                "i18nKey",
+                onRemove,
+                "serviceCode"
+              )}
             </div>
-            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
+            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality")}</div>
             {<Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />}
           </div>
         </div>
