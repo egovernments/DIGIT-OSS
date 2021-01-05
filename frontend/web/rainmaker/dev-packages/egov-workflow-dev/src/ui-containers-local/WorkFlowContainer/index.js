@@ -487,6 +487,9 @@ class WorkFlowContainer extends React.Component {
       else if(moduleName==='PT.CREATE'){
         showFooter=true;
       }
+      else if(moduleName==='PT.MUTATION'){
+        showFooter=true;
+      }
       else{
          showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
       }
