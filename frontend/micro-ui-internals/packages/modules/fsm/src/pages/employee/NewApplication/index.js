@@ -43,6 +43,9 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
   const match = useRouteMatch();
   const history = useHistory();
 
+  const test = Digit.Hooks.fsm.useMDMS("pb.amritsar", "FSM", "ApplicationChannel");
+  console.log("test------>", test["data"]);
+
   useEffect(() => {
     setMenu(propertyTypeRes.filter((o) => o !== undefined).map((item) => ({ key: item, name: item })));
     setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
