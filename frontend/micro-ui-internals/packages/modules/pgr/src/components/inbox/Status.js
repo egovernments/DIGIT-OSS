@@ -4,18 +4,21 @@ import useComplaintStatusCount from "../../../../../libraries/src/hooks/pgr/useC
 
 const Status = ({ complaints, onAssignmentChange, pgrfilters }) => {
   const complaintsWithCount = useComplaintStatusCount(complaints);
+  let hasFilters = pgrfilters?.applicationStatus?.length;
   return (
     <div className="status-container">
       <div className="filter-label">Status</div>
       {complaintsWithCount.length === 0 && <Loader />}
-      {complaintsWithCount.map((option, index) => (
-        <CheckBox
-          key={index}
-          onChange={(e) => onAssignmentChange(e, option)}
-          checked={pgrfilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
-          label={`${option.name} (${option.count || 0})`}
-        />
-      ))}
+      {complaintsWithCount.map((option, index) => {
+        return (
+          <CheckBox
+            key={index}
+            onChange={(e) => onAssignmentChange(e, option)}
+            checked={hasFilters ? (pgrfilters.applicationStatus.filter((e) => e.code === option.code).length !== 0 ? true : false) : false}
+            label={`${option.name} (${option.count || 0})`}
+          />
+        );
+      })}
     </div>
   );
 };
