@@ -8,24 +8,24 @@ import { FormComposer } from "../../../components/FormComposer";
 
 // TODO: fetch data instead of hard coded
 import data from "../../../propertyType.json";
-const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
+// const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
 const propertySubTypeRes = data.PropertyType.map((item) => ({ key: item.propertyType, name: item.code }));
 
 export const NewApplication = ({ parentUrl, heading = "New Desuldging Application" }) => {
-  const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
-  const __initSubType__ = window.Digit.SessionStorage.get("subType");
+  // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
+  // const __initSubType__ = window.Digit.SessionStorage.get("subType");
 
   const [menu, setMenu] = useState([]);
-  const [subTypeMenu, setSubTypeMenu] = useState(__initSubType__ ? __initSubType__ : []);
-  const [propertyType, setPropertyType] = useState(__initPropertyType__ ? __initPropertyType__ : {});
+  const [subTypeMenu, setSubTypeMenu] = useState([]);
+  const [propertyType, setPropertyType] = useState({});
   const [subType, setSubType] = useState({});
   const [vehicleMenu, setVehicleMenu] = useState([
     { key: "Tracker (500 ltrs)", name: "Tracker (500 ltrs)" },
     { key: "Tracker (1000 ltrs)", name: "Tracker (1000 ltrs)" },
   ]);
-  const [channel, setChannel] = useState("Counter");
+  const [channel, setChannel] = useState(null);
   const [channelMenu, setChannelMenu] = useState([{ key: "Counter", name: "Counter" }]);
-  const [vehicle, setVehicle] = useState("Tracker (500 ltrs)");
+  const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
 
@@ -42,9 +42,13 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const history = useHistory();
+  const mutation = Digit.Hooks.fsm.useDesludging("pb.amritsar");
 
   useEffect(() => {
-    setMenu(propertyTypeRes.filter((o) => o !== undefined).map((item) => ({ key: item, name: item })));
+    setMenu(() => {
+      const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
+      return uniqMenu.map((item) => ({ key: item, name: item }));
+    });
     setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
   }, []);
 
@@ -52,9 +56,9 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     setPropertyType(value);
     setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
     window.Digit.SessionStorage.set("propertyType", value);
-    (async () => {
-      await Digit.FileDesludging.create("pb.amritsar");
-    })();
+    // (async () => {
+    //   await Digit.FileDesludging.create("pb.amritsar");
+    // })();
   }
 
   function selectSlum(value) {
@@ -71,7 +75,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
 
   function selectedSubType(value) {
     setSubType(value);
-    window.Digit.SessionStorage.set("subType", [value]);
+    // window.Digit.SessionStorage.set("subType", [value]);
   }
 
   // city locality logic
@@ -90,7 +94,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
   }
 
   const onSubmit = (data) => {
-    const applicationChannel = data.applicationChannel;
+    const applicationChannel = channel.key;
     const applicantName = data.applicantName;
     const mobileNumber = data.mobileNumber;
     const pincode = data.pincode;
@@ -107,74 +111,100 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     const { key } = subType;
     const propertyType = key;
     const formData = {
-      applicationChannel,
-      applicantName,
-      mobileNumber,
-      pincode,
-      landmark,
-      noOfTrips,
-      amount,
-      cityCode,
-      city,
-      district,
-      region,
-      localityCode,
-      localityName,
-      state,
-      propertyType,
-      subType,
-      vehicle,
+      fsm: {
+        citizen: {
+          name: applicantName,
+          mobileNumber,
+        },
+        tenantId: "pb.amritsar",
+        sanitationtype: "CONVENTIONAL_DUAL_PIT",
+        source: applicationChannel,
+        address: {
+          tenantId: "pb.amritsar",
+          landmark,
+          city,
+          state,
+          pincode,
+          locality: {
+            code: localityCode.split("-").pop(),
+            name: localityName,
+          },
+          geoLocation: {
+            latitude: selectedLocality.latitude,
+            longitude: selectedLocality.longitude,
+          },
+        },
+        noOfTrips,
+      },
+      workflow: null,
+      // applicationChannel,
+      // applicantName,
+      // mobileNumber,
+      // pincode,
+      // landmark,
+      // noOfTrips,
+      // amount,
+      // cityCode,
+      // city,
+      // district,
+      // region,
+      // localityCode,
+      // localityName,
+      // state,
+      // propertyType,
+      // subType,
+      // vehicle,
     };
 
-    const requestData = {
-      tenantId: null,
-      description: null,
-      accountId: null,
-      additionalDetail: {},
-      source: null,
-      sanitationtype: null,
-      propertyUsage: null,
-      noOfTrips,
-      status: null,
-      vehicleId: vehicle,
-      pitDetail: {
-        hight: 0,
-        length: 0,
-        width: 0,
-        distanceFromRoad: 0,
-      },
-      address: {
-        tenantId: null,
-        doorNo: null,
-        plotNo: null,
-        landmark,
-        city,
-        district,
-        region,
-        state,
-        country: null,
-        pincode,
-        additionDetails: null,
-        buildingName: null,
-        street: null,
-        locality: {
-          code: null,
-          name: null,
-          label: null,
-          latitude: null,
-          longitude: null,
-          children: [null],
-        },
-        geoLocation: {
-          latitude: 0,
-          longitude: 0,
-          additionalDetails: {},
-        },
-      },
-    };
+    // const requestData = {
+    //   tenantId: null,
+    //   description: null,
+    //   accountId: null,
+    //   additionalDetail: {},
+    //   source: null,
+    //   sanitationtype: null,
+    //   propertyUsage: null,
+    //   noOfTrips,
+    //   status: null,
+    //   vehicleId: vehicle,
+    //   pitDetail: {
+    //     hight: 0,
+    //     length: 0,
+    //     width: 0,
+    //     distanceFromRoad: 0,
+    //   },
+    //   address: {
+    //     tenantId: null,
+    //     doorNo: null,
+    //     plotNo: null,
+    //     landmark,
+    //     city,
+    //     district,
+    //     region,
+    //     state,
+    //     country: null,
+    //     pincode,
+    //     additionDetails: null,
+    //     buildingName: null,
+    //     street: null,
+    //     locality: {
+    //       code: null,
+    //       name: null,
+    //       label: null,
+    //       latitude: null,
+    //       longitude: null,
+    //       children: [null],
+    //     },
+    //     geoLocation: {
+    //       latitude: 0,
+    //       longitude: 0,
+    //       additionalDetails: {},
+    //     },
+    //   },
+    // };
     console.log("%c 🇸🇦: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData);
-    console.log("%c 🍦: onSubmit -> requestData ", "font-size:16px;background-color:#50ab67;color:white;", requestData);
-
+    // console.log("%c 🍦: onSubmit -> requestData ", "font-size:16px;background-color:#50ab67;color:white;", requestData);
+    // mutation.mutate(formData)
     // await dispatch(createApplication(formData));
     // history.push(parentUrl + "/response");
 
@@ -184,7 +214,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
 
-    history.push("/digit-ui/employee/fsm/response");
+    history.push("/digit-ui/employee/fsm/response", formData);
   };
 
   const config = [
