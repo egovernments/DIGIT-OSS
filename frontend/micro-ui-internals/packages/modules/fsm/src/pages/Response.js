@@ -11,12 +11,13 @@ const GetActionMessage = ({ action }) => {
     case "RATE":
       return t("CS_COMMON_THANK_YOU");
     default:
-      return t(`CS_COMMON_COMPLAINT_SUBMITTED`);
+      return t(`ES_PAYMENT_COLLECTED`);
   }
 };
 
 const BannerPicker = () => {
-  return <Banner message={GetActionMessage("SUCCESS")} complaintNumber="FSM-11122020-00789" successful={true} />;
+  const { t } = useTranslation();
+  return <Banner message={GetActionMessage("SUCCESS")} applicationNumber="FSM-11122020-00789" info={t("ES_RECEIPT_NO")} successful={true} />;
 };
 
 const Response = (props) => {

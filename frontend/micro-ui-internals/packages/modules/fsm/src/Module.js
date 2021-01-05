@@ -17,6 +17,8 @@ import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
 import Inbox from "./pages/employee/Inbox";
 
+import { useTranslation } from "react-i18next";
+
 const EmployeeApp = ({ path, url, userType }) => {
   return (
     <Switch>
@@ -71,6 +73,8 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
 };
 
 export const FSMLinks = ({ matchPath, userType }) => {
+  const { t } = useTranslation();
+
   if (userType === "citizen") {
     return (
       <React.Fragment>
@@ -100,13 +104,13 @@ export const FSMLinks = ({ matchPath, userType }) => {
               </div>
               <div className="body">
                 <span className="link">
-                  <Link to={`${matchPath}/inbox`}>Inbox</Link>
+                  <Link to={`${matchPath}/inbox`}>{t("ES_INBOX")}</Link>
                 </span>
                 <span className="link">
-                  <Link to={`${matchPath}/new-application/`}>New Desludging Application</Link>
+                  <Link to={`${matchPath}/new-application/`}>{t("ES_NEW_DESULDGING_APPLICATION")}</Link>
                 </span>
                 <span className="link">
-                  <Link to={`${matchPath}/application-audit/`}>Application Audit</Link>
+                  <Link to={`${matchPath}/application-audit/`}>{t("ES_APPLICATION_AUDIT")}</Link>
                 </span>
               </div>
             </div>

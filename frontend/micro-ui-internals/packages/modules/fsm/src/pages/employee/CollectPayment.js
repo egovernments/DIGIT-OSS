@@ -19,25 +19,25 @@ const CollectPayment = ({ parentRoute }) => {
 
   const config = [
     {
-      head: t("Payment Details"),
+      head: t("ES_PAYMENT_DETAILS"),
       body: [
         {
-          label: t("Total Amount"),
+          label: t("ES_TOTAL_AMOUNT"),
           populators: <CardSectionHeader>₹ 500.00</CardSectionHeader>,
         },
       ],
     },
     {
-      head: t("Payment Details"),
+      head: t("ES_PAYMENT_DETAILS"),
       body: [
         {
-          label: t("Property Type"),
+          label: t("ES_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={menu} optionKey="name" id="owner" selected={ownerType} select={selectedType} />,
         },
         {
-          label: t("No. of Trips"),
+          label: t("ES_PAYMENT_NO_OF_TRIPS"),
           type: "text",
           populators: {
             name: "noOfTrips",
@@ -45,7 +45,7 @@ const CollectPayment = ({ parentRoute }) => {
           },
         },
         {
-          label: t("Amount"),
+          label: t("ES_PAYMENT_AMOUNT"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -67,7 +67,7 @@ const CollectPayment = ({ parentRoute }) => {
       ],
     },
     {
-      head: t("Payment Mode"),
+      head: t("ES_PAYMENT_MODE"),
       body: [
         {
           populators: (
@@ -85,7 +85,7 @@ const CollectPayment = ({ parentRoute }) => {
 
   return (
     <React.Fragment>
-      <FormComposer heading="Collect Payment" label="Application Submit" config={config} onSubmit={onSubmit}></FormComposer>
+      <FormComposer heading={t("ES_COLLECT_PAYMENT")} label={t("ES_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit}></FormComposer>
     </React.Fragment>
   );
 };

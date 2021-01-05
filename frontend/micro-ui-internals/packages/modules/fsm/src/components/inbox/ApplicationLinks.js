@@ -1,16 +1,19 @@
 import { Card } from "@egovernments/digit-ui-react-components";
 import { forEach } from "lodash";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ApplicationLinks = ({ isMobile, data }) => {
+  const { t } = useTranslation();
+
   const allLinks = [
     {
-      text: "New Desuldging Application",
+      text: t("ES_NEW_DESULDGING_APPLICATION"),
       link: "/digit-ui/employee/fsm/new-application",
       // accessTo: ["CSR"]
     },
-    { text: "Reports", link: "/employee" },
-    { text: "Dashboard", link: "/employee" },
+    { text: t("ES_REPORTS"), link: "/employee" },
+    { text: t("ES_DASHBOARD"), link: "/employee" },
   ];
 
   const [links, setLinks] = useState([]);
@@ -38,7 +41,7 @@ const ApplicationLinks = ({ isMobile, data }) => {
   // useEffect(() => {
   //   if (isMobile) {
   //     const mobileLinks = links.filter((link) => {
-  //       return link.text !== "Dashboard";
+  //       return link.text !== t("ES_DASHBOARD");
   //     });
   //     setLinks(mobileLinks);
   //   }
