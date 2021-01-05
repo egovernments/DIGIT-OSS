@@ -7,36 +7,8 @@ info:
     name: Egovernments Foundation
     email: contact@egovernments.org
 servers:
-  - url: https://egov-dcr-galaxy.egovernments.org/edcr
+  - url: https://egov-micro-dev.egovernments.org/edcr
     description: Development server
-    
-paths:
-  /rest/dcr/scrutinizeplan:
-    post:
-      summary: This API will scrutinize the building plan drawing(dxf) file send along and gives the plan scrutiny result as response along with a unique eDCR number on successful processing.
-      requestBody:
-        content:
-          multipart/mixed:
-            schema:
-              $ref: '#/components/schemas/ScrutinizePlanReq'
-            encoding:
-              dxfFile:
-                contentType: application/dxf
-      responses:
-        '200':
-          description: Plan scrutanized successfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ScrutinizePlanResponse'
-        '400':
-          description: Invalid Input
-          content:
-            application/json:
-              schema:
-                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
-      tags:
-        - Scrutinize Plan
 
 paths:
   /rest/dcr/scrutinize:
@@ -1570,4 +1542,3 @@ components:
       required:
         - name
           
-   
