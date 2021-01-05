@@ -23,8 +23,9 @@ const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
 
-  let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
+  let cityCodeVal = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
   const { isLoading, error, isError, complaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId: cityCodeVal, id });
+
   const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: cityCodeVal, id, moduleCode: "PGR" });
 
   const [imageZoom, setImageZoom] = useState(null);
@@ -83,7 +84,7 @@ const ComplaintDetailsPage = (props) => {
           </Card>
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
-            <TextArea />
+            <TextArea name={""} />
             <SubmitBar label="Send" />
           </Card>
         </React.Fragment>

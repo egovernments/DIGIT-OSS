@@ -18,14 +18,16 @@ const Inbox = () => {
     setSearchParams({ ...searchParams, search: params });
   };
 
-  let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
+  // let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
+  let { data: complaints, isLoading } = Digit.Hooks.pgr.useInboxData(searchParams) || [];
 
   let isMobile = window.mobileCheck();
-  if (complaints.length !== null) {
+
+  if (complaints?.length !== null) {
     if (isMobile) {
-      return <MobileInbox data={complaints} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+      return <MobileInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />;
     } else {
-      return <DesktopInbox data={complaints} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+      return <DesktopInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />;
     }
   } else {
     return <Loader />;

@@ -52,6 +52,9 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     setPropertyType(value);
     setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
     window.Digit.SessionStorage.set("propertyType", value);
+    (async () => {
+      await Digit.FileDesludging.create("pb.amritsar");
+    })();
   }
 
   function selectSlum(value) {
