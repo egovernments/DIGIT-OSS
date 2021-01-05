@@ -5,10 +5,14 @@ import { useTranslation } from "react-i18next";
 
 const SelectPropertyType = ({ config, onSelect, t }) => {
   const [propertyType, setPropertyType] = useState(null);
-  const menu = data.propertyType;
+  const [menu, setMenu] = useState(() => {
+    const _menu = data.PropertyType.filter((item) => item.propertyType !== undefined).map((item) => item.propertyType);
+    const uniqMenu = [...new Set(_menu)];
+    return uniqMenu.map((item) => ({ key: item, name: item }));
+  });
 
   const goNext = () => {
-    onSelect(propertyType);
+    onSelect({ propertyType: propertyType.key });
   };
 
   function selectedValue(value) {

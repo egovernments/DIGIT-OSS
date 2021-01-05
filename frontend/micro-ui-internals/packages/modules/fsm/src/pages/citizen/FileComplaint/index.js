@@ -12,7 +12,7 @@ const FileComplaint = ({ parentRoute }) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const history = useHistory();
-  const [params, setParams] = useState({});
+  const [params, setParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
 
   const goNext = () => {
     const currentPath = pathname.split("/").pop();
@@ -27,6 +27,7 @@ const FileComplaint = ({ parentRoute }) => {
 
   function log(data) {
     console.log("data", data);
+    setParams({ ...params, ...data });
     goNext();
   }
 
@@ -49,12 +50,6 @@ const FileComplaint = ({ parentRoute }) => {
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />
       </Route>
-      {/* <Route exact path={`${path}/`}>
-        <SelectPropertyType config={stepItems[0]} onSelect={log} t={t} />
-      </Route>
-      <Route path={`${path}/property-sub-type`}>
-        <SelectPropertySubtype config={stepItems[1]} onSelect={log} t={t} />
-      </Route> */}
     </Switch>
   );
 };
