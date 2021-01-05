@@ -78,10 +78,10 @@ export const FSMLinks = ({ matchPath, userType }) => {
   if (userType === "citizen") {
     return (
       <React.Fragment>
-        <Header>Applications</Header>
-        <HomeLink to={`${matchPath}/my-applications`}>My Applications</HomeLink>
-        <Header>Other Services</Header>
-        <HomeLink to={`${matchPath}/new-application`}>Apply for Desludging</HomeLink>
+        <Header>{t("CS_APPLICATIONS")}</Header>
+        <HomeLink to={`${matchPath}/my-applications`}>{t("CS_MY_APPLICATIONS")}</HomeLink>
+        <Header>{t("CS_OTHER_SERVICES")}</Header>
+        <HomeLink to={`${matchPath}/new-application`}>{t("CS_APPLY_FOR_DESLUDGING")}</HomeLink>
       </React.Fragment>
     );
   } else {
@@ -100,7 +100,7 @@ export const FSMLinks = ({ matchPath, userType }) => {
                     ></path>
                   </svg>
                 </span>
-                <span className="text">FSM</span>
+                <span className="text">{t("ES_FSM")}</span>
               </div>
               <div className="body">
                 <span className="link">
