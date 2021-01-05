@@ -18,17 +18,17 @@ const FileComplaint = ({ parentRoute }) => {
   const goNext = () => {
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.routes[currentPath];
-    if (nextStep === null) return submitComplaint();
+    if (nextStep === null) {
+      return history.push(`${parentRoute}/new-application/check`);
+    }
     history.push(`${match.path}/${nextStep}`);
   };
 
   const submitComplaint = async () => {
-    await Digit.FileDesludging.create("pb.amritsar");
-    history.push(`${parentRoute}/new-application/check`);
+    history.push(`${parentRoute}/new-application/response`);
   };
 
   function handleSelect(data) {
-    console.log("data", data);
     setParams({ ...params, ...data });
     goNext();
   }
@@ -47,10 +47,10 @@ const FileComplaint = ({ parentRoute }) => {
         );
       })}
       <Route path={`${match.path}/check`}>
-        <CheckPage />
+        <CheckPage onSubmit={submitComplaint} />
       </Route>
       <Route path={`${match.path}/response`}>
-        <Response />
+        <Response data={params} onSuccess={clearParams} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />

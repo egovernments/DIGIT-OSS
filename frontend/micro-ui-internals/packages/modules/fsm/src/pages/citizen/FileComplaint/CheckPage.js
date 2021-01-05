@@ -23,12 +23,9 @@ const ActionButton = ({ jumpTo }) => {
   return <LinkButton label="CHANGE" style={{ color: "#F47738" }} onClick={routeTo} />;
 };
 
-const CheckPage = () => {
+const CheckPage = ({ onSubmit }) => {
   const history = useHistory();
 
-  function submit() {
-    history.push("/digit-ui/citizen/fsm/new-application/response");
-  }
   return (
     <Card>
       <CardHeader>Check Your Answers</CardHeader>
@@ -50,7 +47,7 @@ const CheckPage = () => {
       <StatusTable>
         <Row label="Size" text="1m x 1m x 1m" actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />} />
       </StatusTable>
-      <SubmitBar label="Submit" onSubmit={submit} />
+      <SubmitBar label="Submit" onSubmit={onSubmit} />
     </Card>
   );
 };

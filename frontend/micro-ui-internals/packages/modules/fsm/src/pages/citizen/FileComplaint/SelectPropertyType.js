@@ -3,8 +3,12 @@ import data from "../../../propertyType.json";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
-const SelectPropertyType = ({ config, onSelect, t }) => {
-  const [propertyType, setPropertyType] = useState(null);
+const SelectPropertyType = ({ config, onSelect, t, value }) => {
+  const [propertyType, setPropertyType] = useState(() => {
+    const { propertyType } = value;
+    return propertyType !== undefined ? { key: propertyType, name: propertyType } : null;
+  });
+
   const [menu, setMenu] = useState(() => {
     const _menu = data.PropertyType.filter((item) => item.propertyType !== undefined).map((item) => item.propertyType);
     const uniqMenu = [...new Set(_menu)];
