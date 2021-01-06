@@ -28,6 +28,9 @@ const mapStateToProps = (state, ownProps) => {
     uploadedDocData &&
     uploadedDocData.map(item => {
       if (item.title && item.fileStoreId && item.name && item.link && item.linkText) {
+        if( item.title.includes("OWNER") ){
+          item.title = item.title.split("_").join(".");
+        }
         return {
           ...item
         }
