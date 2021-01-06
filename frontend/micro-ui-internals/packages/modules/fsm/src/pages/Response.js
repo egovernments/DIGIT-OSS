@@ -11,12 +11,20 @@ const GetActionMessage = ({ action }) => {
     case "RATE":
       return t("CS_COMMON_THANK_YOU");
     default:
-      return t(`CS_COMMON_COMPLAINT_SUBMITTED`);
+      return t(`ES_PAYMENT_COLLECTED`);
   }
 };
 
 const BannerPicker = (props) => {
-  return <Banner message={GetActionMessage("SUCCESS")} complaintNumber={props.data?.fsm[0].applicationNo} successful={props.isSuccess} />;
+  const { t } = useTranslation();
+  return (
+    <Banner
+      message={GetActionMessage("SUCCESS")}
+      complaintNumber={props.data?.fsm[0].applicationNo}
+      info={t("ES_RECEIPT_NO")}
+      successful={props.isSuccess}
+    />
+  );
 };
 
 const Response = (props) => {

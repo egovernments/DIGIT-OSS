@@ -17,6 +17,8 @@ import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
 import Inbox from "./pages/employee/Inbox";
 
+import { useTranslation } from "react-i18next";
+
 const EmployeeApp = ({ path, url, userType }) => {
   return (
     <Switch>
@@ -71,13 +73,15 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
 };
 
 export const FSMLinks = ({ matchPath, userType }) => {
+  const { t } = useTranslation();
+
   if (userType === "citizen") {
     return (
       <React.Fragment>
-        <Header>Applications</Header>
-        <HomeLink to={`${matchPath}/my-applications`}>My Applications</HomeLink>
-        <Header>Other Services</Header>
-        <HomeLink to={`${matchPath}/new-application`}>Apply for Desludging</HomeLink>
+        <Header>{t("CS_APPLICATIONS")}</Header>
+        <HomeLink to={`${matchPath}/my-applications`}>{t("CS_MY_APPLICATIONS")}</HomeLink>
+        <Header>{t("CS_OTHER_SERVICES")}</Header>
+        <HomeLink to={`${matchPath}/new-application`}>{t("CS_APPLY_FOR_DESLUDGING")}</HomeLink>
       </React.Fragment>
     );
   } else {
@@ -96,17 +100,17 @@ export const FSMLinks = ({ matchPath, userType }) => {
                     ></path>
                   </svg>
                 </span>
-                <span className="text">FSM</span>
+                <span className="text">{t("ES_FSM")}</span>
               </div>
               <div className="body">
                 <span className="link">
-                  <Link to={`${matchPath}/inbox`}>Inbox</Link>
+                  <Link to={`${matchPath}/inbox`}>{t("ES_INBOX")}</Link>
                 </span>
                 <span className="link">
-                  <Link to={`${matchPath}/new-application/`}>New Desludging Application</Link>
+                  <Link to={`${matchPath}/new-application/`}>{t("ES_NEW_DESULDGING_APPLICATION")}</Link>
                 </span>
                 <span className="link">
-                  <Link to={`${matchPath}/application-audit/`}>Application Audit</Link>
+                  <Link to={`${matchPath}/application-audit/`}>{t("ES_APPLICATION_AUDIT")}</Link>
                 </span>
               </div>
             </div>

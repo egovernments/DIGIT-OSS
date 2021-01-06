@@ -1,8 +1,11 @@
 import React from "react";
 import { Header } from "@egovernments/digit-ui-react-components";
 import MyApplication from "./MyApplication";
+import { useTranslation } from "react-i18next";
 
 export const MyApplications = () => {
+  const { t } = useTranslation();
+
   const applications = [
     {
       complaintNo: "FSM-56-353535",
@@ -20,7 +23,7 @@ export const MyApplications = () => {
 
   return (
     <React.Fragment>
-      <Header>My Applications</Header>
+      <Header>{t("CS_MY_APPLICATIONS")}</Header>
       {applications?.length > 0 &&
         applications.map((application, index) => (
           <div key={index}>

@@ -20,58 +20,6 @@ import {
 import { useHistory } from "react-router-dom";
 import Modal from "../../components/Modal";
 
-const applicationDetails = {
-  details: [
-    {
-      title: "Application Details",
-      values: [{ title: "Application No.", value: "FSM-277373" }],
-    },
-    {
-      title: "Applicant Details",
-      values: [
-        { title: "Applicant Name", value: "Nawal Kishore" },
-        { title: "Applicant Mobile No.", value: "+91 9645234533" },
-        { title: "Slum Name", value: "Jagbandhu huda" },
-      ],
-    },
-    {
-      title: "Property Details",
-      values: [
-        { title: "Property Type", value: "Commercial" },
-        { title: "Property Sub-Type", value: "Shopping Mail" },
-      ],
-    },
-    {
-      title: "Property Location Details",
-      values: [
-        { title: "Locality", value: "Alakapuri" },
-        { title: "City", value: "Berhampur" },
-        { title: "Pincode", value: "345123" },
-        { title: "Landmark", value: "SBI Bank" },
-        { title: "Geolocation", value: "" },
-      ],
-    },
-  ],
-};
-
-const timeline = [
-  {
-    label: "Pending for Demand Generation",
-    caption: [""],
-  },
-  {
-    label: "Application Submitted",
-    caption: [
-      {
-        date: "12/08/2020",
-        name: "Nawal Kishore",
-        mobileNumber: "+91 4534234512",
-        source: "Filed Via Mobile App",
-      },
-    ],
-  },
-];
-
 const workflowDetails = {
   data: {
     nextActions: [{ action: "GENERATE_DEMAND" }, { action: "MODIFY_APPLICATION" }, { action: "REJECT_APPLICATION" }],
@@ -99,7 +47,7 @@ const ApplicationDetails = (props) => {
     {
       body: [
         {
-          label: t("Vehicle Type"),
+          label: t("ES_VEHICLE_TYPE"),
           type: "dropdown",
           populators: <Dropdown option={vehicleMenu} optionKey="name" id="channel" selected={vehicle} select={selectVehicle} />,
         },
@@ -164,13 +112,65 @@ const ApplicationDetails = (props) => {
     setVehicle(null);
   };
 
+  const applicationDetails = {
+    details: [
+      {
+        title: t("ES_APPLICATION_DETAILS"),
+        values: [{ title: t("ES_APPLICATION_NO"), value: "FSM-277373" }],
+      },
+      {
+        title: t("ES_APPLICATION_DETAILS"),
+        values: [
+          { title: t("ES_APPLICANT_NAME"), value: "Nawal Kishore" },
+          { title: t("ES_APPLICANT_MOBILE_NO"), value: "+91 9645234533" },
+          { title: t("ES_SLUM_NAME"), value: "Jagbandhu huda" },
+        ],
+      },
+      {
+        title: t("ES_PROPERTY_DETAILS"),
+        values: [
+          { title: t("ES_PROPERTY_TYPE"), value: "Commercial" },
+          { title: t("ES_PROPERTY_SUB-TYPE"), value: "Shopping Mail" },
+        ],
+      },
+      {
+        title: t("ES_LOCATION_DETAILS"),
+        values: [
+          { title: t("ES_LOCATION_LOCALITY"), value: "Alakapuri" },
+          { title: t("ES_LOCATION_CITY"), value: "Berhampur" },
+          { title: t("ES_LOCATION_PINCODE"), value: "345123" },
+          { title: t("ES_LOCATION_LANDMARK"), value: "SBI Bank" },
+          { title: t("ES_LOCATION_GEOLOCATION"), value: "" },
+        ],
+      },
+    ],
+  };
+
+  const timeline = [
+    {
+      label: t("ES_TIMELINE_PENDING_FOR_DEMAND_GENERATION"),
+      caption: [""],
+    },
+    {
+      label: t("ES_TIMELINE_APPLICATION_SUBMITTED"),
+      caption: [
+        {
+          date: "12/08/2020",
+          name: "Nawal Kishore",
+          mobileNumber: "+91 4534234512",
+          source: "Filed Via Mobile App",
+        },
+      ],
+    },
+  ];
+
   return (
     <React.Fragment>
       {Object.keys(applicationDetails).length > 0 ? (
         <React.Fragment>
           <Card style={{ position: "relative" }}>
             <LinkButton
-              label={<span style={{ color: "#f47738", marginLeft: "8px" }}>VIEW AUDIT TRAIL</span>}
+              label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_VIEW_AUDIT_TRAIL")}</span>}
               style={{ position: "absolute", top: 0, right: 20 }}
               onClick={() => {}}
             />
@@ -189,7 +189,7 @@ const ApplicationDetails = (props) => {
               </React.Fragment>
             ))}
 
-            <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>Application Timeline</CardSectionHeader>
+            <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t("ES_APPLICATION_TIMELINE")}</CardSectionHeader>
             {timeline && timeline.length > 0 ? (
               <ConnectingCheckPoints>
                 {timeline.map((value, index) => {
@@ -214,7 +214,7 @@ const ApplicationDetails = (props) => {
             {displayMenu && workflowDetails?.data?.nextActions ? (
               <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
             ) : null}
-            <SubmitBar label="Take Action" onSubmit={() => setDisplayMenu(!displayMenu)} />
+            <SubmitBar label={t("ES_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
           </ActionBar>
         </React.Fragment>
       ) : (
