@@ -166,13 +166,13 @@ const Filter = (props) => {
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
-            <div className="filter-label">FILTER BY:</div>
+            <div className="filter-label">{t("ES_INBOX_FILTER_BY")}:</div>
             <div className="clearAll" onClick={clearAll}>
-              Clear all
+              {t("ES_CLEAR_ALL")}
             </div>
             {props.type === "desktop" && (
               <span className="clear-search" onClick={clearAll}>
-                Clear all
+                {t("ES_CLEAR_ALL")}
               </span>
             )}
             {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
@@ -183,11 +183,13 @@ const Filter = (props) => {
               selectedOption={selectAssigned}
               optionsKey="name"
               options={[
-                { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
-                { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
+                { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
+                { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
               ]}
             />
-            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
+            <div>
+              {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}
+            </div>
             <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
           </div>
         </div>

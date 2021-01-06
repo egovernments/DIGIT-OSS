@@ -11,7 +11,7 @@ import data from "../../../propertyType.json";
 // const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
 const propertySubTypeRes = data.PropertyType.map((item) => ({ key: item.propertyType, name: item.code }));
 
-export const NewApplication = ({ parentUrl, heading = "New Desuldging Application" }) => {
+export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
 
@@ -244,20 +244,15 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
 
   const config = [
     {
-      head: t("Application Details"),
+      head: t("ES_APPLICATION_DETAILS"),
       body: [
         {
-          label: t("Application Channel"),
+          label: t("ES_APPLICATION_CHANNEL"),
           type: "dropdown",
           populators: <Dropdown option={channelMenu} optionKey="name" id="channel" selected={channel} select={selectChannel} />,
         },
         {
-          label: t("Sanitation Type"),
-          type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="name" id="channel" selected={sanitation} select={selectSanitation} />,
-        },
-        {
-          label: t("Applicant Name"),
+          label: t("ES_APPLICANT_NAME"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -269,7 +264,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           },
         },
         {
-          label: t("Applicant Mobile No."),
+          label: t("ES_APPLICANT_MOBILE_NO"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -281,7 +276,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           },
         },
         {
-          label: t("Slum Name"),
+          label: t("ES_SLUM_NAME"),
           type: "radio",
           isMandatory: true,
           populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
@@ -289,16 +284,16 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
       ],
     },
     {
-      head: t("Property Details"),
+      head: t("ES_PROPERTY_DETAILS"),
       body: [
         {
-          label: t("Property Type"),
+          label: t("ES_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={menu} optionKey="name" id="propertyType" selected={propertyType} select={selectedType} />,
         },
         {
-          label: t("Property Sub-Type"),
+          label: t("ES_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
@@ -307,10 +302,10 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
       ],
     },
     {
-      head: t("Location Details"),
+      head: t("ES_LOCATION_DETAILS"),
       body: [
         {
-          label: t("Pincode"),
+          label: t("ES_LOCATION_PINCODE"),
           type: "text",
           populators: {
             name: "pincode",
@@ -318,13 +313,13 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           },
         },
         {
-          label: t("City"),
+          label: t("ES_LOCATION_CITY"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
         },
         {
-          label: t("Mohalla"),
+          label: t("ES_LOCATION_MOHALLA"),
           isMandatory: true,
           type: "dropdown",
           populators: (
@@ -332,7 +327,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           ),
         },
         {
-          label: t("Landmark"),
+          label: t("ES_LOCATION_LANDMARK"),
           type: "textarea",
           populators: {
             name: "landmark",
@@ -341,10 +336,10 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
       ],
     },
     {
-      head: t("Payment Details"),
+      head: t("ES_PAYMENT_DETAILS"),
       body: [
         {
-          label: t("No. of Trips"),
+          label: t("ES_PAYMENT_NO_OF_TRIPS"),
           type: "text",
           populators: {
             name: "noOfTrips",
@@ -352,7 +347,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           },
         },
         {
-          label: t("Amount"),
+          label: t("ES_PAYMENT_AMOUNT"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -377,7 +372,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
       head: t(),
       body: [
         {
-          label: t("Vehicle Requested"),
+          label: t("ES_LOCATION_VEHICLE_REQUESTED"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={vehicleMenu} optionKey="name" id="vehicle" selected={vehicle} select={selectVehicle} />,
@@ -386,5 +381,5 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     },
   ];
 
-  return <FormComposer heading={heading} label="Application Submit" config={config} onSubmit={onSubmit}></FormComposer>;
+  return <FormComposer heading={heading} label={t("ES_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit}></FormComposer>;
 };

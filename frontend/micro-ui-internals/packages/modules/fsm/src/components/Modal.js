@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { FormComposer, PopUp, HeaderBar, ButtonSelector } from "@egovernments/digit-ui-react-components";
 
@@ -22,15 +23,17 @@ const CloseBtn = (props) => {
 };
 
 const Modal = ({ closeModal, onSubmit, config }) => {
+  const { t } = useTranslation();
+
   return (
     <PopUp>
       <div className="popup-module">
-        <HeaderBar main={<Heading label="Generate Demand" />} end={<CloseBtn onClick={closeModal} />} />
+        <HeaderBar main={<Heading label={t("ES_GENERATE_DEMAND")} />} end={<CloseBtn onClick={closeModal} />} />
         <div className="popup-module-main">
           <FormComposer config={config} noBoxShadow inline onSubmit={onSubmit}>
             <div className="popup-module-action-bar">
-              <ButtonSelector theme="border" label="Cancel" onSubmit={closeModal} />
-              <ButtonSelector label="Save" />
+              <ButtonSelector theme="border" label={t("ES_CANCEL")} onSubmit={closeModal} />
+              <ButtonSelector label={t("ES_SAVE")} />
             </div>
           </FormComposer>
         </div>

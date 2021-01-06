@@ -10,8 +10,8 @@ const Successful = (props) => {
       <div>
         {/* <img src={success} alt="successfull submition"/> */}
         <SuccessSvg />
-        <h2>Complaint No.</h2>
-        <p>{props.props.complaintNumber}</p>
+        <h2>{props?.props?.complaintNumber ? "Complaint No." : props.props.info}</h2>
+        <p>{props?.props?.complaintNumber ? props?.props?.complaintNumber : props?.props?.applicationNumber}</p>
       </div>
     </div>
   );

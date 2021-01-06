@@ -1,8 +1,11 @@
 import { Header, LinkButton, Table } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const ApplicationAudit = () => {
+  const { t } = useTranslation();
+
   const data = React.useMemo(
     () => [
       {
@@ -12,7 +15,7 @@ const ApplicationAudit = () => {
           <p>
             New Request{" "}
             <Link to={`/digit-ui/employee/fsm/collect-payment`}>
-              <LinkButton label="View Application" style={{ color: "#1671ba", marginLeft: "8px" }} />
+              <LinkButton label={t("ES_VIEW_APPLICATION")} style={{ color: "#1671ba", marginLeft: "8px" }} />
             </Link>
           </p>
         ),
@@ -34,15 +37,15 @@ const ApplicationAudit = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "When",
+        Header: t("ES_AUDIT_WHEN"),
         accessor: "when",
       },
       {
-        Header: "Who",
+        Header: t("ES_AUDIT_WHO"),
         accessor: "who",
       },
       {
-        Header: "What",
+        Header: t("ES_AUDIT_WHAT"),
         accessor: "what",
       },
     ],
@@ -51,7 +54,7 @@ const ApplicationAudit = () => {
 
   return (
     <div>
-      <Header>Application Audit</Header>
+      <Header>{t("ES_APPLICATION_AUDIT")}</Header>
       <Table
         data={data}
         columns={columns}
