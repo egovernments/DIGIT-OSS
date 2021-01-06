@@ -26,8 +26,13 @@
   border-top: 1px solid rgb(214, 213, 212);
   padding: 20px 40px 20px 0px;
   color: rgb(80, 90, 95);
+
+  svg{
+    fill: #505A5F;
+    @apply ml-md;
+  }
 }
 
-.pagination button:nth-child(1)::after {
+.pagination button:nth-child(1) span::after  {
   content: "\f105";
 }
