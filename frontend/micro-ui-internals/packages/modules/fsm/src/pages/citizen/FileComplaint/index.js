@@ -18,20 +18,17 @@ const FileComplaint = ({ parentRoute }) => {
   const goNext = () => {
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.routes[currentPath];
-    if (nextStep === null) return submitComplaint();
+    if (nextStep === null) {
+      return history.push(`${parentRoute}/new-application/check`);
+    }
     history.push(`${match.path}/${nextStep}`);
   };
 
   const submitComplaint = async () => {
-    await Digit.FileDesludging.create("pb.amritsar");
-    history.push(`${parentRoute}/new-application/check`);
+    history.push(`${parentRoute}/new-application/response`);
   };
 
-  useEffect(() => {
-    console.log("params----->", params);
-  }, [params]);
-
-  function saveParams(data) {
+  function handleSelect(data) {
     setParams({ ...params, ...data });
     goNext();
   }
@@ -45,25 +42,19 @@ const FileComplaint = ({ parentRoute }) => {
         const Component = typeof component === "string" ? registry.getComponent(component) : component;
         return (
           <Route path={`${match.path}/${route}`} key={index}>
-            <Component config={{ texts, inputs }} onSelect={saveParams} onSkip={handleSkip} value={params} t={t} />
+            <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} />
           </Route>
         );
       })}
       <Route path={`${match.path}/check`}>
-        <CheckPage />
+        <CheckPage onSubmit={submitComplaint} />
       </Route>
       <Route path={`${match.path}/response`}>
-        <Response />
+        <Response data={params} onSuccess={clearParams} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />
       </Route>
-      {/* <Route exact path={`${path}/`}>
-        <SelectPropertyType config={stepItems[0]} onSelect={log} t={t} />
-      </Route>
-      <Route path={`${path}/property-sub-type`}>
-        <SelectPropertySubtype config={stepItems[1]} onSelect={log} t={t} />
-      </Route> */}
     </Switch>
   );
 };

@@ -1,5 +1,5 @@
-import React from "react";
-import { Card, Banner, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
+import React, { useEffect } from "react";
+import { Card, Banner, CardText, SubmitBar, Loader } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -15,22 +15,25 @@ const GetActionMessage = ({ action }) => {
   }
 };
 
-const BannerPicker = () => {
-  return <Banner message={GetActionMessage("SUCCESS")} complaintNumber="FSM-11122020-00789" successful={true} />;
+const BannerPicker = (props) => {
+  return <Banner message={GetActionMessage("SUCCESS")} complaintNumber={props.data?.fsm[0].applicationNo} successful={props.isSuccess} />;
 };
 
 const Response = (props) => {
   const { t } = useTranslation();
-  const jumpTo = props.parentRoute;
-  const split = jumpTo.split("/");
-  const homePage = split.slice(0, split.length - 2).join("/") + "/";
+  const mutation = Digit.Hooks.fsm.useDesludging("pb.amritsar");
+  useEffect(() => {
+    const { state } = props.location;
+    mutation.mutate(state);
+  }, []);
 
-  return (
+  return mutation.isLoading || mutation.isIdle ? (
+    <Loader />
+  ) : (
     <Card>
-      <BannerPicker />
+      <BannerPicker data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
       <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
-
-      <Link to={`${homePage}/`}>
+      <Link to={`/digit-ui/employee`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>

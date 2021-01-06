@@ -1,8 +1,8 @@
 import { FileDesludging } from "../../services/molecules/FSM/FileDesludging";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 
-const useDesludging = (data, tenantId, config = {}) => {
-  return useQuery("FSM_NEW_DESLUDGING", () => FileDesludging.create(tenantId), config);
+const useDesludging = (tenantId, config = {}) => {
+  return useMutation((data) => FileDesludging.create(tenantId, data));
 };
 
 export default useDesludging;

@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { FormStep, CardText, TextInput } from "@egovernments/digit-ui-react-components";
 
-const SelectTankSize = ({ config, onSelect, t }) => {
-  const [size, setSize] = useState({});
+const SelectTankSize = ({ config, onSelect, t, value }) => {
+  const [size, setSize] = useState(() => {
+    const { pitDetail } = value;
+    return pitDetail || {};
+  });
 
   const handleChange = (event) => {
-    const { name, value } = event;
-    setSize({ ...size, [name]: value });
+    const { name, value } = event.target;
+    setSize({ ...size, [name]: parseInt(value, 10) });
   };
 
   const handleSubmit = () => {
-    onSelect({ size });
+    onSelect({ pitDetail: size });
   };
 
   return (

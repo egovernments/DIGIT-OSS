@@ -28,7 +28,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/modify-application`} component={() => <EditApplication />} />
         <PrivateRoute path={`${path}/application-details`} component={EmployeeApplicationDetails} />
-        <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
+        <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />
       </div>
