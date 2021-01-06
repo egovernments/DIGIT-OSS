@@ -97,6 +97,7 @@ export const subUsageType = {
     dropDownData: [],
     required: true,
     numcols: 4,
+    menuHeight:"190px",
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       let subUsageMinor = get(state, `common.generalMDMSDataById.UsageCategoryDetail[${field.value}]`);
       if (!isEmpty(subUsageMinor)) {
