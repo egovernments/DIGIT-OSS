@@ -15,7 +15,7 @@ const useComplaintStatus = () => {
       //   Digit.SessionStorage.get("userType") == "employee"
       //     ? Digit.SessionStorage.get("Employee.tenantId")
       //     : Digit.SessionStorage.get("Citizen.tenantId");
-      WorkflowService = await Digit.WorkflowService.init(tenantId);
+      WorkflowService = await Digit.WorkflowService.init(tenantId, "PGR");
       let applicationStatus = WorkflowService.BusinessServices[0].states
         .filter((state) => state.applicationStatus)
         .map((state) => ({

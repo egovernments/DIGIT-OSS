@@ -15,7 +15,7 @@ DateWrap.propTypes = {
   /**
    * date
    */
-  date: PropTypes.number,
+  date: PropTypes.any,
 };
 
 DateWrap.defaultProps = {

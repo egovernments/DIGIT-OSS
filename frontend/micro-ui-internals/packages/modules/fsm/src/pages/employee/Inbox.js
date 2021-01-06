@@ -58,7 +58,7 @@ const Inbox = () => {
     []
   );
 
-  let isMobile = window.mobileCheck();
+  let isMobile = window.Digit.Utils.browser.isMobile;
   if (applications.length !== null) {
     if (isMobile) {
       return <MobileInbox data={applications} onFilterChange={handleFilterChange} onSearch={onSearch} />;

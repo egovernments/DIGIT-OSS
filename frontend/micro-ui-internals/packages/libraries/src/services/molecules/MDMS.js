@@ -75,6 +75,42 @@ const getModuleServiceDefsCriteria = (tenantId, moduleCode) => ({
   },
 });
 
+const getSanitationTypeCriteria = (tenantId, moduleCode) => ({
+  type: "SanitationType",
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "SanitationType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getApplicationChannelCriteria = (tenantId, moduleCode) => ({
+  type: "ApplicationChannel",
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "ApplicationChannel",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -84,6 +120,10 @@ const GetEgovLocations = (MdmsRes) => {
 
 const GetServiceDefs = (MdmsRes) => MdmsRes["RAINMAKER-PGR"].ServiceDefs.filter((def) => def.active);
 
+const GetSanitationType = (MdmsRes) => MdmsRes["FSM"].SanitationType.filter((type) => type.active);
+
+const GetApplicationChannel = (MdmsRes) => MdmsRes["FSM"].ApplicationChannel.filter((type) => type.active);
+
 const transformResponse = (type, MdmsRes, moduleCode) => {
   switch (type) {
     case "citymodule":
@@ -92,6 +132,10 @@ const transformResponse = (type, MdmsRes, moduleCode) => {
       return GetEgovLocations(MdmsRes);
     case "serviceDefs":
       return GetServiceDefs(MdmsRes);
+    case "ApplicationChannel":
+      return GetApplicationChannel(MdmsRes);
+    case "SanitationType":
+      return GetSanitationType(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -115,10 +159,17 @@ export const MdmsService = {
       params: { tenantId },
     }),
   getDataByCriteria: async (mdmsDetails, moduleCode) => {
+    console.log("mdms request details ---->", mdmsDetails);
     const { MdmsRes } = await MdmsService.call(mdmsDetails.details);
     return transformResponse(mdmsDetails.type, MdmsRes, moduleCode);
   },
   getServiceDefs: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(getModuleServiceDefsCriteria(tenantId, moduleCode), moduleCode);
+  },
+  getSanitationType: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(getSanitationTypeCriteria(tenantId, moduleCode), moduleCode);
+  },
+  getApplicationChannel: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(getApplicationChannelCriteria(tenantId, moduleCode), moduleCode);
   },
 };

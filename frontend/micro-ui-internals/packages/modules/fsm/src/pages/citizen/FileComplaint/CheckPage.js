@@ -25,13 +25,10 @@ const ActionButton = ({ jumpTo }) => {
   return <LinkButton label={t("CS_CHANGE")} style={{ color: "#F47738" }} onClick={routeTo} />;
 };
 
-const CheckPage = () => {
+const CheckPage = ({ onSubmit }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  function submit() {
-    history.push("/digit-ui/citizen/fsm/response");
-  }
   return (
     <Card>
       <CardHeader>{t("CS_CHECK_YOUR_ANSWERS")}</CardHeader>
@@ -57,7 +54,7 @@ const CheckPage = () => {
       <StatusTable>
         <Row label={t("CS_SIZE")} text="1m x 1m x 1m" actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />} />
       </StatusTable>
-      <SubmitBar label={t("CS_SUBMIT")} onSubmit={submit} />
+      <SubmitBar label="Submit" onSubmit={onSubmit} />
     </Card>
   );
 };

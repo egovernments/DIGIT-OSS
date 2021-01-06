@@ -4,7 +4,6 @@ import useComplaintStatus from "./useComplaintStatus";
 const useComplaintStatusCount = (complaints) => {
   const [complaintStatusWithCount, setcomplaintStatusWithCount] = useState([]);
   let complaintStatus = useComplaintStatus();
-
   const getCount = (value) => {
     return (
       complaints &&
@@ -20,7 +19,7 @@ const useComplaintStatusCount = (complaints) => {
       count: getCount(status.code),
     }));
     setcomplaintStatusWithCount(statusWithCount);
-  }, [complaints]);
+  }, [complaints, complaintStatus]);
   return complaintStatusWithCount;
 };
 
