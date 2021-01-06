@@ -10,9 +10,8 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
   });
 
   const [menu, setMenu] = useState(() => {
-    const _menu = data.PropertyType.filter((item) => item.propertyType !== undefined).map((item) => item.propertyType);
-    const uniqMenu = [...new Set(_menu)];
-    return uniqMenu.map((item) => ({ key: item, name: item }));
+    const uniqMenu = [...new Set(data.PropertyType.filter((item) => item.propertyType !== undefined).map((item) => item.propertyType))];
+    return uniqMenu.map((type) => ({ i18nKey: `CS_PROPERTY_TYPE_${type}` }));
   });
 
   const goNext = () => {
@@ -27,7 +26,7 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
     <TypeSelectCard
       {...config.texts}
       {...{ menu: menu }}
-      {...{ optionsKey: "name" }}
+      {...{ optionsKey: "i18nKey" }}
       {...{ selected: selectedValue }}
       {...{ selectedOption: propertyType }}
       {...{ onSave: goNext }}

@@ -19,33 +19,34 @@ const CollectPayment = ({ parentRoute }) => {
 
   const config = [
     {
-      head: t("ES_PAYMENT_DETAILS"),
+      head: t("ES_COLLECT_PAYMENT_PAYMENT_DETAILS"),
       body: [
         {
-          label: t("ES_TOTAL_AMOUNT"),
+          label: t("ES_COLLECT_PAYMENT_TOTAL_AMOUNT"),
           populators: <CardSectionHeader>₹ 500.00</CardSectionHeader>,
         },
       ],
     },
     {
-      head: t("ES_PAYMENT_DETAILS"),
+      head: t("ES_COLLECT_PAYMENT_PAYER_DETAILS"),
       body: [
         {
-          label: t("ES_PROPERTY_TYPE"),
+          label: t("ES_COLLECT_PAYMENT_PAID_BY"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={menu} optionKey="name" id="owner" selected={ownerType} select={selectedType} />,
         },
         {
-          label: t("ES_PAYMENT_NO_OF_TRIPS"),
+          label: t("ES_COLLECT_PAYMENT_PAYER_NAME"),
           type: "text",
+
           populators: {
-            name: "noOfTrips",
-            validation: { pattern: /[0-9]+/ },
+            name: "payerName",
+            validation: { required: true, pattern: /[A-Za-z]/ },
           },
         },
         {
-          label: t("ES_PAYMENT_AMOUNT"),
+          label: t("ES_COLLECT_PAYMENT_PAYER_MOBILE_NO"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -59,7 +60,7 @@ const CollectPayment = ({ parentRoute }) => {
                   alignItems: "center",
                 }}
               >
-                ₹
+                +91
               </span>
             ),
           },
@@ -67,7 +68,7 @@ const CollectPayment = ({ parentRoute }) => {
       ],
     },
     {
-      head: t("ES_PAYMENT_MODE"),
+      head: t("ES_COLLECT_PAYMENT_PAYMENT_MODE"),
       body: [
         {
           populators: (
@@ -85,7 +86,12 @@ const CollectPayment = ({ parentRoute }) => {
 
   return (
     <React.Fragment>
-      <FormComposer heading={t("ES_COLLECT_PAYMENT")} label={t("ES_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit}></FormComposer>
+      <FormComposer
+        heading={t("ES_TITLE_COLLECT_PAYMENT")}
+        label={t("ES_COMMON_APPLICATION_SUBMITTED")}
+        config={config}
+        onSubmit={onSubmit}
+      ></FormComposer>
     </React.Fragment>
   );
 };

@@ -55,28 +55,35 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
-      setChannelMenu(applicationChannelData.data);
+      const data = applicationChannelData.data?.map((channel) => ({ i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}` }));
+
+      setChannelMenu(data);
     }
   }, [applicationChannelData]);
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      setSanitationMenu(sanitationTypeData.data);
+      const data = sanitationTypeData.data?.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+
+      setSanitationMenu(data);
     }
   }, [sanitationTypeData]);
 
   useEffect(() => {
     setMenu(() => {
       const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
-      return uniqMenu.map((item) => ({ key: item, name: item }));
+      return uniqMenu.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_PROPERTY_TYPE_${type}` }));
     });
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
+    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
   }, []);
 
   function selectedType(value) {
     setPropertyType(value);
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
-    window.Digit.SessionStorage.set("propertyType", value);
+    // TODO: bottom two lines are hard coded data, whenever we get propertyType apis, it should be update
+    const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
+    setSubTypeMenu(uniqMenu.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_PROPERTY_SUB_TYPE_${type}` })));
+    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
+    // window.Digit.SessionStorage.set("propertyType", value);
     // (async () => {
     //   await Digit.FileDesludging.create("pb.amritsar");
     // })();
@@ -249,12 +256,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_APPLICATION_CHANNEL"),
           type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="name" id="channel" selected={channel} select={selectChannel} />,
+          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} />,
         },
         {
           label: t("ES_SANITATION_TYPE"),
           type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="name" id="sanitation" selected={sanitation} select={selectSanitation} />,
+          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
         },
         {
           label: t("ES_APPLICANT_NAME"),
@@ -295,14 +302,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
           label: t("ES_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={menu} optionKey="name" id="propertyType" selected={propertyType} select={selectedType} />,
+          populators: <Dropdown option={menu} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} />,
         },
         {
           label: t("ES_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="name" id="propertySubType" selected={subType} select={selectedSubType} />,
+          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} />,
         },
       ],
     },
