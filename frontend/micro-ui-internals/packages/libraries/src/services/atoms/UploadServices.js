@@ -1,19 +1,19 @@
 import Axios from "axios";
 import Urls from "./urls";
 export const UploadServices = {
-  Filestorage: async (filedata) => {
+  Filestorage: async (module, filedata, tenantId) => {
     const formData = new FormData();
 
     formData.append("file", filedata, filedata.name);
-    formData.append("tenantId", "pb.amritsar");
-    formData.append("module", "property-upload");
+    formData.append("tenantId", tenantId);
+    formData.append("module", module);
     var config = {
       method: "post",
       url: Urls.FileStore,
       data: formData,
     };
 
-    return await Axios(config);
+    return Axios(config);
   },
 
   Filefetch: async (filesArray, tenantId) => {

@@ -9,6 +9,7 @@ import {
   CardLabelDesc,
   UploadFile,
   ButtonSelector,
+  Toast,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 const Modal = (props) => {
@@ -22,6 +23,8 @@ const Modal = (props) => {
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const { t } = useTranslation();
+  const [error, setError] = useState(null);
+  const cityDetails = Digit.ULBService.getCurrentUlb();
 
   console.log("modal", useEmployeeData);
   const employeeData = useEmployeeData
@@ -35,9 +38,24 @@ const Modal = (props) => {
   //   }, [file]);
 
   useEffect(async () => {
+    setError(null);
     if (file) {
-      const response = await Digit.UploadServices.Filestorage(file);
-      setUploadedFile(response.data.files[0].fileStoreId);
+      if (file.size >= 5242880) {
+        setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+      } else {
+        try {
+          // TODO: change module in file storage
+          const response = await Digit.UploadServices.Filestorage("property-upload", file, cityDetails.code);
+          if (response?.data?.files?.length > 0) {
+            setUploadedFile(response?.data?.files[0]?.fileStoreId);
+          } else {
+            setError(t("CS_FILE_UPLOAD_ERROR"));
+          }
+        } catch (err) {
+          console.error("Modal -> err ", err);
+          setError(t("CS_FILE_UPLOAD_ERROR"));
+        }
+      }
     }
   }, [file]);
 
@@ -68,7 +86,7 @@ const Modal = (props) => {
               </React.Fragment>
             )}
             <CardLabel>{t("CS_COMMON_EMPLOYEE_COMMENTS")}</CardLabel>
-            <TextArea onChange={addComment} value={comments} />
+            <TextArea name="comment" onChange={addComment} value={comments} />
             <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
             <CardLabelDesc>{t(`TL_UPLOAD_RESTRICTIONS`)}</CardLabelDesc>
             <UploadFile
@@ -92,6 +110,7 @@ const Modal = (props) => {
           </div>
         </div>
       </div>
+      {error && <Toast label={error} onClose={() => setError(null)} error />}
     </PopUp>
   );
 };
