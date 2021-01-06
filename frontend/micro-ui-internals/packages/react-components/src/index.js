@@ -54,6 +54,8 @@ import LabelFieldPair from "./atoms/LabelFieldPair";
 import ApplyFilterBar from "./atoms/ApplyFilterBar";
 import NavBar from "./atoms/NavBar";
 import Hamburger from "./atoms/Hamburger";
+import { PrivateRoute } from "./atoms/PrivateRoute";
+import { GetApp } from "./atoms/svgindex";
 
 import RemoveableTag from "./molecules/RemoveableTag";
 import TypeSelectCard from "./molecules/TypeSelectCard";
@@ -66,9 +68,8 @@ import FormStep from "./molecules/FormStep";
 import RatingCard from "./molecules/RatingCard";
 import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
+
 import { FormComposer } from "./hoc/FormComposer";
-import { PrivateRoute } from "./atoms/PrivateRoute";
-import { GetApp } from "./atoms/svgindex";
 
 export {
   // Atoms

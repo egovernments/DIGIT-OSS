@@ -2078,6 +2078,11 @@ img, video {
     .tag-container .tag .text {
       padding-right: 5px; }
 
+.language-selector {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+
 .employee .card-home {
   font-size: 16px;
   padding: 0 0 16px;

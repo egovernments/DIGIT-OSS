@@ -42,38 +42,22 @@ const NavBar = ({ img, open, menuItems }) => {
             transform: `${open ? "translateX(0)" : "translateX(-310px)"}`,
           }}
         >
-          {menuItems.map((item, index) => (
-            <div
-              key={index}
-              style={{ marginLeft: "0px", height: "48px", padding: "0px", display: "flex", alignItems: "center", justifyContent: "flexStart" }}
-            >
-              <span
-                style={{
-                  marginLeft: "15px",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  flex: "1 1",
-                  width: "100%",
-                  color: "rgba(0,0,0,.87)",
-                }}
+          {menuItems.map((item, index) => {
+            console.log("item::::::::::::", item);
+            console.log("index::::::::::::", index);
+            return (
+              <div
+                key={index}
+                style={{ marginLeft: "0px", height: "48px", padding: "0px", display: "flex", alignItems: "center", justifyContent: "flexStart" }}
               >
-                {item.text}
-              </span>
-            </div>
-          ))}
+                {item?.type && item.type === "component" ? <div>{item.action}</div> : <div>{item.text}</div>}
+              </div>
+            );
+          })}
         </div>
       </div>
     </React.Fragment>
   );
-};
-
-NavBar.propTypes = {
-  img: PropTypes.string,
-};
-
-NavBar.defaultProps = {
-  img: undefined,
 };
 
 export default NavBar;

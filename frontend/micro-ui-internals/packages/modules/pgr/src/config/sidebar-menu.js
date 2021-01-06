@@ -1,3 +1,8 @@
+import React from "react";
+import ChangeLanguage from "../../../core/src/components/ChangeLanguage";
+
+const languages = ["English", "हिंदी", "ਪੰਜਾਬੀ"];
+
 const SideBarMenu = [
   {
     text: "Home",
@@ -14,6 +19,10 @@ const SideBarMenu = [
   {
     text: "Trade licence",
     link: "/trade-licence/",
+  },
+  {
+    type: "component",
+    action: <ChangeLanguage languages={languages} />,
   },
 ];
 
