@@ -11,17 +11,11 @@ const ComplaintsLink = ({ isMobile, data }) => {
 
   const [links, setLinks] = useState([]);
 
-  const { roles } = Digit.UserService.getUser().info;
-
-  const hasAccess = (accessTo) => {
-    return roles.filter((role) => accessTo.includes(role.code)).length;
-  };
-
   useEffect(() => {
     let linksToShow = [];
     allLinks.forEach((link) => {
       if (link.accessTo) {
-        if (hasAccess(link.accessTo)) {
+        if (Digit.Utils.access.hasAccess(link.accessTo)) {
           linksToShow.push(link);
         }
       } else {
