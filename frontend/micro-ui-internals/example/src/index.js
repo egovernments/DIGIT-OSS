@@ -40,7 +40,6 @@ const userType = window.sessionStorage.getItem("userType") || process.env.REACT_
 
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
-const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
 
 const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
@@ -50,13 +49,12 @@ const userTypeInfo = userType === "CITIZEN" ? "citizen" : "employee";
 window.Digit.SessionStorage.set("user_type", userTypeInfo);
 window.Digit.SessionStorage.set("userType", userTypeInfo);
 
-// const userDetails = { token, info: userType === "CITIZEN" ? citizenInfo : employeeInfo };
-
-// window.Digit.SessionStorage.set("User", userDetails);
+if (userType !== "CITIZEN") {
+  window.Digit.SessionStorage.set("User", { access_token: token, info: employeeInfo });
+}
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
-window.Digit.SessionStorage.set("Employee.user-details", { access_token: token, info: { ...employeeInfo } });
 
 window.mdmsInitPre = ({ params, data }) => {
   console.log("mdms init pre", params, data);
