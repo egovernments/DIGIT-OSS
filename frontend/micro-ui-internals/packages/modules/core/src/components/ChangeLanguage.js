@@ -11,14 +11,16 @@ const ChangeLanguage = (props) => {
     setselected(language);
   };
   return (
-    <div className="language-selector">
-      {languages.map((language, index) => (
-        <div className="language-button-container" key={index}>
-          {/* <Button size="small" key={index} label={language} onSubmit={() => handleChangeLanguage(language)} /> */}
-          <CustomButton selected={language === selected} text={language} onClick={() => handleChangeLanguage(language)}></CustomButton>
-        </div>
-      ))}
-    </div>
+    <React.Fragment>
+      <div className="language-selector">
+        {languages.map((language, index) => (
+          <div className="language-button-container" key={index}>
+            {/* <Button size="small" key={index} label={language} onSubmit={() => handleChangeLanguage(language)} /> */}
+            <CustomButton selected={language === selected} text={language} onClick={() => handleChangeLanguage(language)}></CustomButton>
+          </div>
+        ))}
+      </div>
+    </React.Fragment>
   );
 };
 
