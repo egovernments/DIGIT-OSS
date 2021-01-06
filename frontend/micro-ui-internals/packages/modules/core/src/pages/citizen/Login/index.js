@@ -21,6 +21,13 @@ const Login = ({ stateCode, cityCode }) => {
   const [tokens, setTokens] = useState(null);
   const [params, setParmas] = useState({});
 
+  // TODO: fix redirect and remove this temporary fix
+  useEffect(() => {
+    if (location.state?.from?.pathname) {
+      Digit.SessionStorage.set("LOGIN_REDIRECT_PATH", location.state?.from?.pathname);
+    }
+  }, []);
+
   useEffect(() => {
     if (!user) {
       return;
@@ -32,7 +39,8 @@ const Login = ({ stateCode, cityCode }) => {
     if (!name || name === DEFAULT_USER) {
       history.push(`${path}/name`);
     } else {
-      const redirectPath = location.state?.from?.pathname || "/";
+      const redirectPath = location.state?.from?.pathname || Digit.SessionStorage.get("LOGIN_REDIRECT_PATH") || "/";
+      Digit.SessionStorage.del("LOGIN_REDIRECT_PATH");
       history.push(redirectPath);
     }
   }, [user]);
