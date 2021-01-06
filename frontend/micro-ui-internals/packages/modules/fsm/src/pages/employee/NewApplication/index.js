@@ -252,6 +252,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
           populators: <Dropdown option={channelMenu} optionKey="name" id="channel" selected={channel} select={selectChannel} />,
         },
         {
+          label: t("ES_SANITATION_TYPE"),
+          type: "dropdown",
+          populators: <Dropdown option={sanitationMenu} optionKey="name" id="sanitation" selected={sanitation} select={selectSanitation} />,
+        },
+        {
           label: t("ES_APPLICANT_NAME"),
           type: "text",
           isMandatory: true,
