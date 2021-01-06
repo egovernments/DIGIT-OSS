@@ -29,7 +29,8 @@ const BannerPicker = (props) => {
 
 const Response = (props) => {
   const { t } = useTranslation();
-  const mutation = Digit.Hooks.fsm.useDesludging("pb.amritsar");
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const mutation = Digit.Hooks.fsm.useDesludging(tenantId);
   useEffect(() => {
     const { state } = props.location;
     mutation.mutate(state);

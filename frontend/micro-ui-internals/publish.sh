@@ -9,17 +9,32 @@ msg() {
 msg "Building and publishing css"
 cd "$BASEDIR/packages/css" && yarn publish --access public
 
+sleep 15
+cd "$BASEDIR" && yarn
+
 msg "Building and publishing libraries"
 cd "$BASEDIR/packages/libraries" && yarn publish --access public
+
+sleep 15
+cd "$BASEDIR" && yarn
 
 msg "Building and publishing react-components"
 cd "$BASEDIR/packages/react-components" && yarn publish --access public
 
+sleep 15
+cd "$BASEDIR" && yarn
+
 msg "Building and publishing PGR module"
 cd "$BASEDIR/packages/modules/pgr" && yarn publish --access public
 
+sleep 15
+cd "$BASEDIR" && yarn
+
 msg "Building and publishing FSM module"
 cd "$BASEDIR/packages/modules/fsm" && yarn publish --access public
+
+sleep 15
+cd "$BASEDIR" && yarn
 
 msg "Building and publishing Core module"
 cd "$BASEDIR/packages/modules/core" && yarn publish --access public
