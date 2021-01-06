@@ -8,7 +8,7 @@ const SelectPropertyType = ({ config, onSelect, t }) => {
   const menu = data.propertyType;
 
   const goNext = () => {
-    onSelect(propertyType);
+    onSelect({ propertyType: propertyType });
   };
 
   function selectedValue(value) {

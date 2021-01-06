@@ -2,30 +2,28 @@ import React from "react";
 import { Card, Banner, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Loader } from "@egovernments/digit-ui-react-components";
 
-const GetActionMessage = ({ action }) => {
+const GetActionMessage = () => {
   const { t } = useTranslation();
-  switch (action) {
-    case "REOPEN":
-      return t(`CS_COMMON_COMPLAINT_REOPENED`);
-    case "RATE":
-      return t("CS_COMMON_THANK_YOU");
-    default:
-      return t(`CS_COMMON_COMPLAINT_SUBMITTED`);
-  }
+  return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
 };
 
-const BannerPicker = () => {
-  return <Banner message={GetActionMessage("SUCCESS")} complaintNumber="FSM-11122020-00789" successful={true} />;
+const BannerPicker = (props) => {
+  return <Banner message={GetActionMessage()} complaintNumber={props.data?.fsm[0].applicationNo} successful={props.isSuccess} />;
 };
 
-const Response = (props) => {
+const Response = () => {
   const { t } = useTranslation();
-  return (
+  const { data, error, isLoading, isSuccess, status } = Digit.Hooks.fsm.useDesludging("data", "pb.amritsar");
+  // console.log("data ------------------>", data, error, isLoading, isSuccess, status);
+  return isLoading ? (
+    <Loader />
+  ) : (
     <Card>
-      <BannerPicker />
+      <BannerPicker data={data} isSuccess={isSuccess} isLoading={isLoading} />
       <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
-      <Link to={`${props.parentRoute}/`}>
+      <Link to={`/digit-ui/citizen`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>

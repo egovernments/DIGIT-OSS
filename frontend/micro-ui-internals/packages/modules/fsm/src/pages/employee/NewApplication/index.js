@@ -43,6 +43,9 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
   const match = useRouteMatch();
   const history = useHistory();
 
+  const test = Digit.Hooks.fsm.useMDMS("pb.amritsar", "FSM", "ApplicationChannel");
+  console.log("test------>", test["data"]);
+
   useEffect(() => {
     setMenu(propertyTypeRes.filter((o) => o !== undefined).map((item) => ({ key: item, name: item })));
     setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
@@ -52,6 +55,9 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     setPropertyType(value);
     setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
     window.Digit.SessionStorage.set("propertyType", value);
+    (async () => {
+      await Digit.FileDesludging.create("pb.amritsar");
+    })();
   }
 
   function selectSlum(value) {
