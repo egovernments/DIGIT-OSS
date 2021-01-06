@@ -44,6 +44,9 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
   const history = useHistory();
   const mutation = Digit.Hooks.fsm.useDesludging("pb.amritsar");
 
+  const test = Digit.Hooks.fsm.useMDMS("pb.amritsar", "FSM", "ApplicationChannel");
+  console.log("test------>", test["data"]);
+
   useEffect(() => {
     setMenu(() => {
       const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
