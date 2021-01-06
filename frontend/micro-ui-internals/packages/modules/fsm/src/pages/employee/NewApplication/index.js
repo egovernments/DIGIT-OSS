@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { FormComposer } from "../../../components/FormComposer";
 
@@ -24,10 +24,14 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     { key: "Tracker (1000 ltrs)", name: "Tracker (1000 ltrs)" },
   ]);
   const [channel, setChannel] = useState(null);
-  const [channelMenu, setChannelMenu] = useState([{ key: "Counter", name: "Counter" }]);
+  const [channelMenu, setChannelMenu] = useState([]);
+  const [sanitation, setSanitation] = useState([]);
+  const [sanitationMenu, setSanitationMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
+
+  const localitiesObj = useSelector((state) => state.common.localities);
 
   const cityProperty = Digit.SessionStorage.get("city_property");
   const selectedLocalities = Digit.SessionStorage.get("selected_localities");
@@ -44,8 +48,22 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
   const history = useHistory();
   const mutation = Digit.Hooks.fsm.useDesludging("pb.amritsar");
 
-  const test = Digit.Hooks.fsm.useMDMS("pb.amritsar", "FSM", "ApplicationChannel");
-  console.log("test------>", test["data"]);
+  const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
+
+  const applicationChannelData = Digit.Hooks.fsm.useMDMS("pb.amritsar", "FSM", "ApplicationChannel");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS("pb.amritsar", "FSM", "SanitationType");
+
+  useEffect(() => {
+    if (!applicationChannelData.isLoading) {
+      setChannelMenu(applicationChannelData.data);
+    }
+  }, [applicationChannelData]);
+
+  useEffect(() => {
+    if (!sanitationTypeData.isLoading) {
+      setSanitationMenu(sanitationTypeData.data);
+    }
+  }, [sanitationTypeData]);
 
   useEffect(() => {
     setMenu(() => {
@@ -72,6 +90,10 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     setChannel(value);
   }
 
+  function selectSanitation(value) {
+    setSanitation(value);
+  }
+
   function selectVehicle(value) {
     setVehicle(value);
   }
@@ -84,20 +106,17 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
   // city locality logic
   const selectCity = async (city) => {
     setSelectedCity(city);
-    Digit.SessionStorage.set("city_property", city);
-    let response = await Digit.LocationService.getLocalities({ tenantId: city.code });
-    let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+    let __localityList = localitiesObj[city.code];
     setLocalities(__localityList);
-    Digit.SessionStorage.set("selected_localities", __localityList);
   };
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
-    Digit.SessionStorage.set("localityProperty", locality);
   }
 
   const onSubmit = (data) => {
-    const applicationChannel = channel.key;
+    const applicationChannel = channel.code;
+    const sanitationtype = sanitation.code;
     const applicantName = data.applicantName;
     const mobileNumber = data.mobileNumber;
     const pincode = data.pincode;
@@ -119,11 +138,11 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           name: applicantName,
           mobileNumber,
         },
-        tenantId: "pb.amritsar",
-        sanitationtype: "CONVENTIONAL_DUAL_PIT",
+        tenantId: tenantId,
+        sanitationtype: sanitationtype,
         source: applicationChannel,
         address: {
-          tenantId: "pb.amritsar",
+          tenantId: cityCode,
           landmark,
           city,
           state,
@@ -131,6 +150,9 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           locality: {
             code: localityCode.split("-").pop(),
             name: localityName,
+          },
+          additionalDetails: {
+            tripAmount: amount,
           },
           geoLocation: {
             latitude: selectedLocality.latitude,
@@ -228,6 +250,11 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           label: t("Application Channel"),
           type: "dropdown",
           populators: <Dropdown option={channelMenu} optionKey="name" id="channel" selected={channel} select={selectChannel} />,
+        },
+        {
+          label: t("Sanitation Type"),
+          type: "dropdown",
+          populators: <Dropdown option={sanitationMenu} optionKey="name" id="channel" selected={sanitation} select={selectSanitation} />,
         },
         {
           label: t("Applicant Name"),

@@ -26,9 +26,6 @@ const Response = (props) => {
     const { state } = props.location;
     mutation.mutate(state);
   }, []);
-  const jumpTo = props.parentRoute;
-  const split = jumpTo.split("/");
-  const homePage = split.slice(0, split.length - 2).join("/") + "/";
 
   return mutation.isLoading || mutation.isIdle ? (
     <Loader />
@@ -36,7 +33,7 @@ const Response = (props) => {
     <Card>
       <BannerPicker data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
       <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
-      <Link to={`${homePage}/`}>
+      <Link to={`/digit-ui/employee`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>
