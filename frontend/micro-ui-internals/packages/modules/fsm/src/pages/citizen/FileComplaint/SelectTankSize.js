@@ -25,7 +25,7 @@ const SelectTankSize = ({ config, onSelect, t, value }) => {
         </div>
         <span>x</span>
         <div>
-          <TextInput name="breadth" value={size["breadth"]} onChange={handleChange} />
+          <TextInput name="width" value={size["width"]} onChange={handleChange} />
           <CardText style={{ textAlign: "center" }}>Breadth (m)</CardText>
         </div>
         <span>x</span>
