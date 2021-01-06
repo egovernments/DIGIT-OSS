@@ -56,6 +56,7 @@ import NavBar from "./atoms/NavBar";
 import Hamburger from "./atoms/Hamburger";
 import { PrivateRoute } from "./atoms/PrivateRoute";
 import { GetApp } from "./atoms/svgindex";
+import CustomButton from "./atoms/CustomButton";
 
 import RemoveableTag from "./molecules/RemoveableTag";
 import TypeSelectCard from "./molecules/TypeSelectCard";
@@ -139,6 +140,7 @@ export {
   GetApp,
   NavBar,
   Hamburger,
+  CustomButton,
   // Molecule
   InputCard,
   FormStep,
