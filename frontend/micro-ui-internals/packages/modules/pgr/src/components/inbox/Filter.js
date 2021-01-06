@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown, RadioButtons, ActionBar, RemoveableTag } from "@egovernments/digit-ui-react-components";
-import { useSelector } from "react-redux";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
 const Filter = (props) => {
-  // let userType = Digit.SessionStorage.get("userType");
   let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();
@@ -29,12 +27,13 @@ const Filter = (props) => {
     }
   );
 
-  //TODO change city fetch from user tenantid
-  let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  let localities = Digit.Hooks.pgr.useLocalities({ city: tenantId });
   let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
+    Digit.SessionStorage.set("pgr_assigned", value.code === "ASSIGNED_TO_ME" ? value : "");
     uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
     setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
   };
@@ -62,6 +61,10 @@ const Filter = (props) => {
     Digit.SessionStorage.set("pgr_wfFilters", wfFilters);
     //queryString = queryString.substring(0, queryString.length - 1);
     handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
+    // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
+    if (Digit.SessionStorage.get("pgr_assigned")) {
+      setSelectedAssigned(Digit.SessionStorage.get("pgr_assigned"));
+    }
   }, [pgrfilters, wfFilters]);
 
   const ifExists = (list, key) => {
@@ -69,7 +72,7 @@ const Filter = (props) => {
   };
 
   function complaintType(_type) {
-    const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
+    const type = { i18nKey: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
     if (!ifExists(pgrfilters.serviceCode, type)) {
       setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
     }
@@ -83,7 +86,7 @@ const Filter = (props) => {
 
   useEffect(() => {
     if (pgrfilters.serviceCode.length > 1) {
-      setSelectedComplaintType(`${pgrfilters.serviceCode.length} selected`);
+      setSelectedComplaintType({ i18nKey: `${pgrfilters.serviceCode.length} selected` });
     } else {
       setSelectedComplaintType(pgrfilters.serviceCode[0]);
     }
@@ -91,7 +94,7 @@ const Filter = (props) => {
 
   useEffect(() => {
     if (pgrfilters.locality.length > 1) {
-      setSelectedLocality(`${pgrfilters.locality.length} selected`);
+      setSelectedLocality({ name: `${pgrfilters.locality.length} selected` });
     } else {
       setSelectedLocality(pgrfilters.locality[0]);
     }
@@ -110,50 +113,58 @@ const Filter = (props) => {
     } else {
       const filteredStatus = pgrfilters.applicationStatus.filter((value) => {
         return value.code !== type.code;
-      })[0];
-      setPgrFilters({ ...pgrfilters, applicationStatus: [{ code: filteredStatus }] });
+      });
+      setPgrFilters({ ...pgrfilters, applicationStatus: filteredStatus });
     }
   };
 
   function clearAll() {
-    setPgrFilters({ serviceCode: [], locality: [], applicationStatus: [] });
-    setWfFilters({ assigned: [{ code: [] }] });
+    let pgrReset = { serviceCode: [], locality: [], applicationStatus: [] };
+    let wfRest = { assigned: [{ code: [] }] };
+    setPgrFilters(pgrReset);
+    setWfFilters(wfRest);
     setSelectedAssigned("");
     setSelectedComplaintType(null);
     setSelectedLocality(null);
+
+    Digit.SessionStorage.set("pgr_filters", null);
+    Digit.SessionStorage.set("pgr_wfFilters", null);
+    Digit.SessionStorage.set("pgr_assigned", null);
   }
 
   const handleFilterSubmit = () => {
     props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-    //props.onClose();
   };
 
-  const GetSelectOptions = (lable, options, selected = null, select, optionKey, onRemove, key, displayKey) => (
-    <div>
-      <div className="filter-label">{lable}</div>
-      {<Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />}
+  const GetSelectOptions = (lable, options, selected = null, select, optionKey, onRemove, key) => {
+    selected = selected || { [optionKey]: " ", code: "" };
+    return (
+      <div>
+        <div className="filter-label">{lable}</div>
+        {<Dropdown option={options} selected={selected} select={(value) => select(value, key)} optionKey={optionKey} />}
 
-      <div className="tag-container">
-        {pgrfilters[key].length > 0 &&
-          pgrfilters[key].map((value, index) => {
-            return <RemoveableTag key={index} text={value[displayKey]} onClick={() => onRemove(index, key)} />;
-          })}
+        <div className="tag-container">
+          {pgrfilters[key].length > 0 &&
+            pgrfilters[key].map((value, index) => {
+              return <RemoveableTag key={index} text={value[optionKey]} onClick={() => onRemove(index, key)} />;
+            })}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <React.Fragment>
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
-            <div className="filter-label">FILTER BY:</div>
+            <div className="filter-label">{t("FILTER_BY")}:</div>
             <div className="clearAll" onClick={clearAll}>
-              Clear all
+              {t("CS_COMMON_CLEAR_ALL")}
             </div>
             {props.type === "desktop" && (
               <span className="clear-search" onClick={clearAll}>
-                Clear all
+                {t("CS_COMMON_CLEAR_ALL")}
               </span>
             )}
             {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
@@ -169,11 +180,18 @@ const Filter = (props) => {
               ]}
             />
             <div>
-              {GetSelectOptions(t("Complaint Subtype"), serviceDefs, selectedComplaintType, complaintType, "i18nKey", onRemove, "serviceCode", "key")}
+              {GetSelectOptions(
+                t("CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE"),
+                serviceDefs,
+                selectedComplaintType,
+                complaintType,
+                "i18nKey",
+                onRemove,
+                "serviceCode"
+              )}
             </div>
-            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}</div>
-            {console.log("props.complaints:", props.complaints)}
-            {props.complaints && <Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />}
+            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality")}</div>
+            {<Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />}
           </div>
         </div>
       </div>
@@ -182,9 +200,6 @@ const Filter = (props) => {
           <ApplyFilterBar labelLink={t("CS_COMMON_CLEAR_ALL")} buttonLink={t("CS_COMMON_FILTER")} onClear={clearAll} onSubmit={props.onClose} />
         )}
       </ActionBar>
-      {/* <ActionBar>
-        <SubmitBar label="Take Action" />
-      </ActionBar> */}
     </React.Fragment>
   );
 };
