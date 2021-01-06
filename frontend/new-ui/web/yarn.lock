@@ -1139,7 +1139,7 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
-"@egovernments/digit-ui-libraries@^1.0.0", "@egovernments/digit-ui-libraries@^1.0.51":
+"@egovernments/digit-ui-libraries@^1.0.0":
   version "1.0.51"
   resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.51.tgz#b2d2fa3e61f0c6895b23ede0313cd2651bba2316"
   integrity sha512-vzSQuwZNZ8Q3eq930zQ9E8GLJuQt+a8Bvvu+KbNmVQ6tQN6BsBtfEjGtkWWNCWgh0vHt8QbAdqeGlFIxBQB8Vg==
@@ -1155,7 +1155,7 @@
     react-query "^3.2.0"
     rooks "^4.4.0"
 
-"@egovernments/digit-ui-module-core@^1.0.51":
+"@egovernments/digit-ui-module-core@^1.0.0":
   version "1.0.51"
   resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.51.tgz#842e766b5b1f8ef356d903dff5583af26202129c"
   integrity sha512-qOwi+mkFXrJwi4FBrkHOs46U5MK12gbtlNCZB0lPmqNMdSlZGegjGuwEsI93JiMH7QxRQQDNU/7okR+VPLIJsg==
@@ -1173,7 +1173,7 @@
     redux "^4.0.5"
     redux-thunk "^2.3.0"
 
-"@egovernments/digit-ui-module-fsm@^1.0.51":
+"@egovernments/digit-ui-module-fsm@^1.0.0":
   version "1.0.51"
   resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.51.tgz#8982fda036f36b8e369967ad0535687bc36bc974"
   integrity sha512-2zkC8+6SAmKdxR9V7kIC+4M4f4Xci7PlrB4OGCBivVlUnIbTsdXvCLXysK5eT03WVkp6lqWBwFp9+3VVsOi5/w==
@@ -1191,7 +1191,7 @@
     redux "^4.0.5"
     redux-thunk "^2.3.0"
 
-"@egovernments/digit-ui-module-pgr@^1.0.51":
+"@egovernments/digit-ui-module-pgr@^1.0.0":
   version "1.0.51"
   resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.51.tgz#8780b18144cf0f7cf071895324807c9d7e9b39a5"
   integrity sha512-K6bYjH16l6jv0LTazGsLR2K79lXjNzv6F8Gl4423rxLxDSwhHTV1AofIosNcQFf+1zF1odU+Kd29CcTjdMo8tQ==
@@ -1211,7 +1211,7 @@
     redux-thunk "^2.3.0"
     rooks "^4.4.0"
 
-"@egovernments/digit-ui-react-components@^1.0.0", "@egovernments/digit-ui-react-components@^1.0.51":
+"@egovernments/digit-ui-react-components@^1.0.0":
   version "1.0.51"
   resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.51.tgz#e431bca5d7f90193fd07d4c3fcf426d9cbb34475"
   integrity sha512-G3/4iZfud13ZUTZ91qE0lXq2GwcyCvodLqotRS31FC14GdBf5k7sFZcFjmddM7Obbf9ezNVUbpPCYXpoabX63g==
