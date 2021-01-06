@@ -197,7 +197,7 @@ class AddRebateExemption extends React.Component {
               onChange={(e, value) =>{
                 handleFieldChange("adhocExemption", value)
                 prepareFinalObject("adhocExemptionPenalty.adhocExemption", value)
-                localStorage.setItem('adhocExemption',-(Math.abs(value)))
+                localStorage.setItem('adhocExemption',value)              
               }
               }
               {...adhocExemption}

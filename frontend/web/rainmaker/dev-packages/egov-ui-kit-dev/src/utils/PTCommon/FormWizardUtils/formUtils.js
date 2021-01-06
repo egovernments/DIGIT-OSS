@@ -344,6 +344,11 @@ const assessProperty = async (action, props) => {
     );
 
     const assessmentNumber = get(assessPropertyResponse, "Assessments[0].assessmentNumber", '');
+    
+      localStorage.setItem('adhocPenalty',null);
+      localStorage.setItem("adhocPenaltyReason",null);
+      localStorage.setItem('adhocExemption',null)
+      localStorage.setItem("adhocExemptionReason",null);
 
     routeToAcknowledgement(purpose, 'success', assessment.propertyId, assessment.tenantId, assessmentNumber, assessment.financialYear);
 
