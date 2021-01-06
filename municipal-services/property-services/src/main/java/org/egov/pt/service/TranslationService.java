@@ -103,8 +103,13 @@ public class TranslationService {
         propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
         JsonNode additionalDetails = property.getAdditionalDetails();
-		String constructionYear = additionalDetails ==null ? null : additionalDetails.get("constructionYear").asText();
+        String constructionYear = null;
+		if (additionalDetails != null) {
+			constructionYear = additionalDetails.get("constructionYear") == null ? null
+					: additionalDetails.get("constructionYear").asText();
+		}
 		long constructionDate = constructionYear == null ? 0 : Instant.parse(constructionYear).toEpochMilli();
+		
         if(assessment.getAdditionalDetails()!=null){
 
             try{
