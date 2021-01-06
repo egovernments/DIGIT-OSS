@@ -15,17 +15,20 @@ const BannerPicker = (props) => {
 
 const Response = ({ data, onSuccess }) => {
   const { t } = useTranslation();
-  const mutation = Digit.Hooks.fsm.useDesludging("pb.amritsar");
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  console.log("data---------->", data);
+  const mutation = Digit.Hooks.fsm.useDesludging(data.city_complaint ? data.city_complaint.code : tenantId);
   useEffect(() => {
     try {
       const { propertyType, landmark, pincode, pitDetail, city_complaint, locality_complaint } = data;
+
       const formdata = {
         fsm: {
-          tenantId: "pb.amritsar",
+          tenantId: city_complaint.code,
           additionalDetails: {},
           propertyUsage: propertyType,
           address: {
-            tenantId: "pb.amritsar",
+            tenantId: city_complaint.code,
             additionalDetails: null,
             landmark,
             city: city_complaint.name,
