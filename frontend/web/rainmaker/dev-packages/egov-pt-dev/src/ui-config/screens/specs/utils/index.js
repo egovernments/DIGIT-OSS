@@ -552,7 +552,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/receipts/_search",
+      "/collection-services/collection/_search",
       "",
       queryObject
     );
