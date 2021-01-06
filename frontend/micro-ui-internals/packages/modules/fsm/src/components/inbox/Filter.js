@@ -15,7 +15,6 @@ import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
 const Filter = (props) => {
-  let userType = Digit.SessionStorage.get("userType");
   let { uuid } = Digit.UserService.getUser().info;
 
   const { t } = useTranslation();

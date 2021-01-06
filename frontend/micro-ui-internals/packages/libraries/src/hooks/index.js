@@ -15,6 +15,8 @@ import useTenants from "./pgr/useTenants";
 import useComplaintSubType from "./pgr/useComplaintSubType";
 
 import useTenantsFSM from "./fsm/useTenants";
+import useDesludging from "./fsm/useDesludging";
+import useMDMS from "./fsm/useMDMS";
 
 const pgr = {
   useComplaintDetails,
@@ -33,6 +35,8 @@ const pgr = {
 
 const fsm = {
   useTenants: useTenantsFSM,
+  useDesludging: useDesludging,
+  useMDMS: useMDMS,
 };
 
 const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, pgr, fsm };

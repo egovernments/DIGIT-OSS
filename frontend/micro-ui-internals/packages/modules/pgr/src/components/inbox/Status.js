@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckBox } from "@egovernments/digit-ui-react-components";
+import { CheckBox, Loader } from "@egovernments/digit-ui-react-components";
 import useComplaintStatusCount from "../../../../../libraries/src/hooks/pgr/useComplaintStatusWithCount";
 
 const Status = ({ complaints, onAssignmentChange, pgrfilters }) => {
@@ -7,6 +7,7 @@ const Status = ({ complaints, onAssignmentChange, pgrfilters }) => {
   return (
     <div className="status-container">
       <div className="filter-label">Status</div>
+      {complaintsWithCount.length === 0 && <Loader />}
       {complaintsWithCount.map((option, index) => (
         <CheckBox
           key={index}

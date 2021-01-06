@@ -11,7 +11,7 @@ const SelectPropertySubtype = ({ config, onSelect, t }) => {
   };
 
   const goNext = () => {
-    onSelect(subtype);
+    onSelect({ subtype: subtype });
   };
   return (
     <TypeSelectCard

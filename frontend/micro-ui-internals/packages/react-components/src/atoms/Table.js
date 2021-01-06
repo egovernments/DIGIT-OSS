@@ -1,20 +1,20 @@
 import React from "react";
 import { useTable, useRowSelect } from "react-table";
 
-const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
-  const defaultRef = React.useRef();
-  const resolvedRef = ref || defaultRef;
-  React.useEffect(() => {
-    resolvedRef.current.indeterminate = indeterminate;
-  }, [resolvedRef, indeterminate]);
+// const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
+//   const defaultRef = React.useRef();
+//   const resolvedRef = ref || defaultRef;
+//   React.useEffect(() => {
+//     resolvedRef.current.indeterminate = indeterminate;
+//   }, [resolvedRef, indeterminate]);
 
-  return (
-    <React.Fragment>
-      <input type="checkbox" ref={resolvedRef} {...rest} />
-      {/* <CheckBox ref={resolvedRef} {...rest} /> */}
-    </React.Fragment>
-  );
-});
+//   return (
+//     <React.Fragment>
+//       <input type="checkbox" ref={resolvedRef} {...rest} />
+//       {/* <CheckBox ref={resolvedRef} {...rest} /> */}
+//     </React.Fragment>
+//   );
+// });
 
 const Table = ({ data, columns, getCellProps }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
