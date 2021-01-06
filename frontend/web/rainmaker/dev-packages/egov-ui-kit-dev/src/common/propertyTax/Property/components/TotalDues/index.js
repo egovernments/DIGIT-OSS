@@ -33,8 +33,11 @@ class TotalDues extends React.Component {
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
       <div className="">
-        <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
+       <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "35px" }}>
           <Label buttonLabel={false} label="PT_TOTAL_DUES" color="rgba(0, 0, 0, 0.74)" labelStyle={labelStyle} fontSize="14px" />
+          </div>
+          <div className="col-xs-6 col-sm-3 flex-child" style={{ position: "absolute",
+          left: "134px", width: "30px", display: "inline-flex" }}>
           <Label
             label="Rs "
             secondaryText={totalBillAmountDue ? totalBillAmountDue : 0}
@@ -45,14 +48,13 @@ class TotalDues extends React.Component {
             height="35px"
           ></Label>
         </div>
-        <Tooltip
+          <Tooltip
           className="totaldues-tooltip-icon"
           val={data}
           icon={"info_circle"}
-          //style={{ position: "absolute", left: "160px",  top: "13px" }}
+          style={{ position: "absolute", left: "117px", width: "30px", display: "inline-flex" }}
         />
-        <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
-        </div>
+      
         {totalBillAmountDue > 0 && (
           <div className="col-xs-6 col-sm-3 flex-child-button">
             {/* <TotalDuesButton
