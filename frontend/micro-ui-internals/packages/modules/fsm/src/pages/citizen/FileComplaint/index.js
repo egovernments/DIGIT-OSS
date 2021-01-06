@@ -47,7 +47,7 @@ const FileComplaint = ({ parentRoute }) => {
         );
       })}
       <Route path={`${match.path}/check`}>
-        <CheckPage onSubmit={submitComplaint} />
+        <CheckPage onSubmit={submitComplaint} value={params} />
       </Route>
       <Route path={`${match.path}/response`}>
         <Response data={params} onSuccess={clearParams} />

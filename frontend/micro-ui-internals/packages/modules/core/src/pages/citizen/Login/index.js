@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AppContainer, BackButton } from "@egovernments/digit-ui-react-components";
-import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { loginSteps } from "./config";
 import SelectMobileNumber from "./SelectMobileNumber";
 import SelectOtp from "./SelectOtp";
@@ -11,8 +11,9 @@ const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
 
-const Login = ({ stateCode, cityCode, from = "/" }) => {
+const Login = ({ stateCode, cityCode }) => {
   const { t } = useTranslation();
+  const location = useLocation();
   const { path, url } = useRouteMatch();
   const history = useHistory();
   const [isUserRegistered, setIsUserRegistered] = useState(null);
@@ -31,7 +32,8 @@ const Login = ({ stateCode, cityCode, from = "/" }) => {
     if (!name || name === DEFAULT_USER) {
       history.push(`${path}/name`);
     } else {
-      history.push(from);
+      const redirectPath = location.state?.from?.pathname || "/";
+      history.push(redirectPath);
     }
   }, [user]);
 

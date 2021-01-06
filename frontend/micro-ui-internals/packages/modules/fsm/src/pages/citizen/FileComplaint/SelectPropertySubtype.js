@@ -3,7 +3,10 @@ import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import data from "../../../propertyType.json";
 
 const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
-  const [subtype, setSubtype] = useState(null);
+  const [subtype, setSubtype] = useState(() => {
+    const { subtype } = value;
+    return subtype !== undefined ? subtype : null;
+  });
   const { propertyType } = value;
   const [subTypeMenu, setSubTypeMenu] = useState([]);
 
