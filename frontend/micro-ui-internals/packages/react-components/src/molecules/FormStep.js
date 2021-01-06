@@ -7,7 +7,7 @@ import CardLabelError from "../atoms/CardLabelError";
 import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
-const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange }) => {
+const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDisabled }) => {
   const { register, watch, errors, handleSubmit } = useForm();
 
   console.log("config", config);
@@ -15,6 +15,9 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange }) =>
     console.log("data", data);
     onSelect(data);
   };
+
+  var isDisable = isDisabled ? true : config.canDisable && Object.keys(errors).filter((i) => errors[i]).length;
+
   const inputs = config.inputs?.map((input, index) => {
     if (input.type === "text") {
       return (
@@ -43,7 +46,7 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange }) =>
 
   return (
     <form onSubmit={handleSubmit(goNext)}>
-      <InputCard {...config} submit {...{ onSkip: onSkip }} t={t}>
+      <InputCard {...{ isDisable: isDisable }} {...config} submit {...{ onSkip: onSkip }} t={t}>
         {inputs}
         {children}
       </InputCard>
