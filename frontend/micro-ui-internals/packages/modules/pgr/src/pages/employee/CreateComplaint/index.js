@@ -58,7 +58,7 @@ export const CreateComplaint = ({ parentUrl }) => {
     if (selectedCity?.code != city.code) {
       setSelectedCity(city);
       setSelectedLocality(null);
-      let __localityList = localitiesObj[city["code"]];
+      let __localityList = localitiesObj[city.code];
       setLocalities(__localityList);
     }
   };
