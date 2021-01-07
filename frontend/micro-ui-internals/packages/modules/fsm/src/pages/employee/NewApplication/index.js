@@ -68,7 +68,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       return Object.values(
         data.PropertyType.reduce((acc, item) => {
           if (item.propertyType !== undefined) return acc;
-          return Object.assign(acc, { [item.code]: { key: item.code, name: item.code } });
+          return Object.assign(acc, { [item.code]: { key: item.code, name: item.name } });
         }, {})
       );
     });
@@ -77,7 +77,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   function selectedType(value) {
     setPropertyType(value);
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === value.key).map((item) => ({ key: item.code, name: item.code })));
+    setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === value.key).map((item) => ({ key: item.code, name: item.name })));
   }
 
   function selectSlum(value) {
@@ -138,6 +138,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         tenantId: tenantId,
         sanitationtype: sanitationtype,
         source: applicationChannel,
+        propertyUsage: propertyType,
         address: {
           tenantId: cityCode,
           landmark,
@@ -224,14 +225,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={menu} optionKey="key" id="propertyType" selected={propertyType} select={selectedType} />,
+          populators: <Dropdown option={menu} optionKey="name" id="propertyType" selected={propertyType} select={selectedType} />,
         },
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="key" id="propertySubType" selected={subType} select={selectedSubType} />,
+          populators: <Dropdown option={subTypeMenu} optionKey="name" id="propertySubType" selected={subType} select={selectedSubType} />,
         },
       ],
     },

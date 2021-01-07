@@ -13,7 +13,7 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
     return Object.values(
       data.PropertyType.reduce((acc, item) => {
         if (item.propertyType !== undefined) return acc;
-        return Object.assign(acc, { [item.code]: { key: item.code, name: item.code } });
+        return Object.assign(acc, { [item.code]: { key: item.code, name: item.name } });
       }, {})
     );
   });
@@ -30,7 +30,7 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
     <TypeSelectCard
       {...config.texts}
       {...{ menu: menu }}
-      {...{ optionsKey: "key" }}
+      {...{ optionsKey: "name" }}
       {...{ selected: selectedValue }}
       {...{ selectedOption: propertyType }}
       {...{ onSave: goNext }}
