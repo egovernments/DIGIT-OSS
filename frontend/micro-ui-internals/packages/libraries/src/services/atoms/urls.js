@@ -14,6 +14,7 @@ const Urls = {
 
   FileFetch: "/filestore/v1/files/url",
   PGR_Create: `/pgr-services/v2/request/_create`,
+  pgr_count: `/pgr-services/v2/request/_count`,
 
   OTP_Send: "/user-otp/v1/_send",
   Authenticate: "/user/oauth/token",

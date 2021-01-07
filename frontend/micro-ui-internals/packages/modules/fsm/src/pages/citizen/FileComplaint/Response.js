@@ -20,13 +20,13 @@ const Response = ({ data, onSuccess }) => {
   const mutation = Digit.Hooks.fsm.useDesludging(data.city_complaint ? data.city_complaint.code : tenantId);
   useEffect(() => {
     try {
-      const { propertyType, landmark, pincode, pitDetail, city_complaint, locality_complaint } = data;
+      const { subtype, landmark, pincode, pitDetail, city_complaint, locality_complaint } = data;
 
       const formdata = {
         fsm: {
           tenantId: city_complaint.code,
           additionalDetails: {},
-          propertyUsage: propertyType,
+          propertyUsage: subtype.code,
           address: {
             tenantId: city_complaint.code,
             additionalDetails: null,
@@ -84,7 +84,7 @@ const Response = ({ data, onSuccess }) => {
         {
           title: "Property Details",
           values: [
-            { title: "Property Type", value: applicationDetails.propertyUsage },
+            { title: "Property Type", value: applicationDetails.propertyUsage.split(".")[0] },
             { title: "Property Sub Type", value: applicationDetails.propertyUsage },
           ],
         },

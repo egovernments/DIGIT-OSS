@@ -21,13 +21,6 @@ const Login = ({ stateCode, cityCode }) => {
   const [tokens, setTokens] = useState(null);
   const [params, setParmas] = useState({});
 
-  // TODO: fix redirect and remove this temporary fix
-  useEffect(() => {
-    if (location.state?.from?.pathname) {
-      Digit.SessionStorage.set("LOGIN_REDIRECT_PATH", location.state?.from?.pathname);
-    }
-  }, []);
-
   useEffect(() => {
     if (!user) {
       return;
@@ -39,8 +32,7 @@ const Login = ({ stateCode, cityCode }) => {
     if (!name || name === DEFAULT_USER) {
       history.push(`${path}/name`);
     } else {
-      const redirectPath = location.state?.from?.pathname || Digit.SessionStorage.get("LOGIN_REDIRECT_PATH") || "/";
-      Digit.SessionStorage.del("LOGIN_REDIRECT_PATH");
+      const redirectPath = location.state?.from || "/";
       history.push(redirectPath);
     }
   }, [user]);
@@ -74,13 +66,13 @@ const Login = ({ stateCode, cityCode }) => {
     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
     if (!err) {
       setIsUserRegistered(true);
-      history.push(`${path}/otp`);
+      history.push(`${path}/otp`, { from: location.state.from });
       return;
     }
     const [res2, err2] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
     if (!err2) {
       setIsUserRegistered(false);
-      history.push(`${path}/otp`);
+      history.push(`${path}/otp`, { from: location.state.from });
       return;
     }
   };

@@ -79,9 +79,10 @@ export const FormComposer = (props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card style={props.noBoxShadow && { boxShadow: "none" }}>
-        {props.children}
+        {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader>{props.heading}</CardSubHeader>}
         {formFields}
+        {props.childrenAtTheBottom && props.children}
         {props.label && (
           <ActionBar>
             <SubmitBar label={t(props.label)} submit="submit" />

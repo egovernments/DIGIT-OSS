@@ -16,6 +16,11 @@ const CitizenHome = ({ modules }) => {
   );
 };
 
+const allLinks = [
+  { text: "Inbox", link: "/digit-ui/employee/pgr/inbox" },
+  { text: "New Complaint", link: "/digit-ui/employee/pgr/complaint/create", accessTo: ["CSR"] },
+];
+
 const EmployeeHome = () => {
   const { t } = useTranslation();
 
@@ -37,12 +42,15 @@ const EmployeeHome = () => {
               <span className="text">Complaints</span>
             </div>
             <div className="body">
-              <span className="link">
-                <Link to="/digit-ui/employee/pgr/inbox">Inbox</Link>
-              </span>
-              <span className="link">
-                <Link to="/digit-ui/employee/pgr/complaint/create">New Complain</Link>
-              </span>
+              {allLinks.map((link, index) => {
+                if (!link.accessTo || Digit.UserService.hasAccess(link.accessTo)) {
+                  return (
+                    <span className="link" key={index}>
+                      <Link to={link.link}>{link.text}</Link>
+                    </span>
+                  );
+                }
+              })}
             </div>
           </div>
         </div>

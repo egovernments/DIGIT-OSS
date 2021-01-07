@@ -30,7 +30,7 @@ const Modal = ({ closeModal, onSubmit, config }) => {
       <div className="popup-module">
         <HeaderBar main={<Heading label={t("ES_GENERATE_DEMAND")} />} end={<CloseBtn onClick={closeModal} />} />
         <div className="popup-module-main">
-          <FormComposer config={config} noBoxShadow inline onSubmit={onSubmit}>
+          <FormComposer config={config} noBoxShadow inline childrenAtTheBottom onSubmit={onSubmit}>
             <div className="popup-module-action-bar">
               <ButtonSelector theme="border" label={t("ES_CANCEL")} onSubmit={closeModal} />
               <ButtonSelector label={t("ES_SAVE")} />

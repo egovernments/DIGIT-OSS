@@ -1,25 +1,20 @@
 import React from "react";
-import { Header } from "@egovernments/digit-ui-react-components";
+import { Header, Loader } from "@egovernments/digit-ui-react-components";
 import MyApplication from "./MyApplication";
 import { useTranslation } from "react-i18next";
 
 export const MyApplications = () => {
   const { t } = useTranslation();
 
-  const applications = [
-    {
-      complaintNo: "FSM-56-353535",
-      serviceCategory: "FSM",
-      applicationType: "Desludging Request",
-      status: "Pending for Payment",
-    },
-    {
-      complaintNo: "FSM-56-353534",
-      serviceCategory: "FSM",
-      applicationType: "Desludging Request",
-      status: "Pending for Payment",
-    },
-  ];
+  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch("pb.amritsar");
+
+  if (isLoading) {
+    return <Loader />;
+  }
+  console.log("test------------>>", data);
+
+  const { fsm: applicationsList } = data;
+  console.log("applicationsList", applicationsList);
 
   return (
     <React.Fragment>

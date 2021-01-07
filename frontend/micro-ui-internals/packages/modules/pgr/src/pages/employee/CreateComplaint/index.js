@@ -19,6 +19,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   const [complaintType, setComplaintType] = useState({});
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [subType, setSubType] = useState({});
+  const [pincode, setPincode] = useState("");
   const [selectedCity, setSelectedCity] = useState(null);
   const [localities, setLocalities] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
@@ -31,9 +32,20 @@ export const CreateComplaint = ({ parentUrl }) => {
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const history = useHistory();
+  const localitiesObj = useSelector((state) => state.common.localities);
   const serviceDefinitions = Digit.GetServiceDefinitions;
 
-  const localitiesObj = useSelector((state) => state.common.localities);
+  useEffect(() => {
+    const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
+    if (city) setSelectedCity(city);
+  }, [pincode]);
+
+  useEffect(() => {
+    if (selectedCity) {
+      let __localityList = localitiesObj[selectedCity.code];
+      setLocalities(__localityList);
+    }
+  }, [selectedCity]);
 
   //TO USE this way
   // let getObject = window.Digit.CoreService;
@@ -41,8 +53,11 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   // //complaint logic
   async function selectedType(value) {
-    setComplaintType(value);
-    setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
+    if (value.key !== complaintType.key) {
+      setSubType({ name: "" });
+      setComplaintType(value);
+      setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
+    }
   }
 
   function selectedSubType(value) {
@@ -52,11 +67,12 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   // city locality logic
   const selectCity = async (city) => {
-    setSelectedCity(city);
-    // Digit.SessionStorage.set("city_complaint", city);
-    let __localityList = localitiesObj[city.code];
-    setLocalities(__localityList);
-    // Digit.SessionStorage.set("selected_localities", __localityList);
+    if (selectedCity?.code !== city.code) {
+      setSelectedCity(city);
+      setSelectedLocality(null);
+      let __localityList = localitiesObj[city.code];
+      setLocalities(__localityList);
+    }
   };
 
   function selectLocality(locality) {
@@ -83,6 +99,11 @@ export const CreateComplaint = ({ parentUrl }) => {
     const formData = { ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name };
     await dispatch(createComplaint(formData));
     history.push(parentUrl + "/response");
+  };
+
+  const handlePincode = (event) => {
+    const { value } = event.target;
+    setPincode(value);
   };
 
   const config = [
@@ -143,6 +164,7 @@ export const CreateComplaint = ({ parentUrl }) => {
             name: "pincode",
             validation: { pattern: /^[1-9][0-9]{5}$/ },
             error: t("CORE_COMMON_PINCODE_INVALID"),
+            onChange: handlePincode,
           },
         },
         {
