@@ -6,6 +6,9 @@ import { useTranslation } from "react-i18next";
 export const MyApplications = () => {
   const { t } = useTranslation();
 
+  const test = Digit.Hooks.fsm.useSearch("pb.amritsar");
+  console.log("test------------>>", test);
+
   const applications = [
     {
       complaintNo: "FSM-56-353535",
