@@ -8,7 +8,6 @@ import { FormComposer } from "../../../components/FormComposer";
 import { createComplaint } from "../../../redux/actions/index";
 
 export const CreateComplaint = ({ parentUrl }) => {
-  console.log("create complaint rendered");
   // const SessionStorage = Digit.SessionStorage;
   // const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
   // const __initSubType__ = Digit.SessionStorage.get("subType");
@@ -54,8 +53,11 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   // //complaint logic
   async function selectedType(value) {
-    setComplaintType(value);
-    setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
+    if (value.key !== complaintType.key) {
+      setSubType({ name: "" });
+      setComplaintType(value);
+      setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
+    }
   }
 
   function selectedSubType(value) {
@@ -65,11 +67,12 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   // city locality logic
   const selectCity = async (city) => {
-    setSelectedCity(city);
-    // Digit.SessionStorage.set("city_complaint", city);
-    let __localityList = localitiesObj[city.code];
-    setLocalities(__localityList);
-    // Digit.SessionStorage.set("selected_localities", __localityList);
+    if (selectedCity?.code !== city.code) {
+      setSelectedCity(city);
+      setSelectedLocality(null);
+      let __localityList = localitiesObj[city.code];
+      setLocalities(__localityList);
+    }
   };
 
   function selectLocality(locality) {
