@@ -11,7 +11,6 @@ export const MyApplications = () => {
   if (isLoading) {
     return <Loader />;
   }
-  console.log("test------------>>", data);
 
   const { fsm: applicationsList } = data;
   console.log("applicationsList", applicationsList);
@@ -19,8 +18,8 @@ export const MyApplications = () => {
   return (
     <React.Fragment>
       <Header>{t("CS_TITLE_MY_APPLICATIONS")}</Header>
-      {applications?.length > 0 &&
-        applications.map((application, index) => (
+      {applicationsList?.length > 0 &&
+        applicationsList.map((application, index) => (
           <div key={index}>
             <MyApplication application={application} />
           </div>

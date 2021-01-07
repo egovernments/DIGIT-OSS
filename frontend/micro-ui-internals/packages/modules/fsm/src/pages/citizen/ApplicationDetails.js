@@ -99,23 +99,21 @@ const ApplicationDetails = () => {
           style={{ position: "absolute", top: 0, right: 20 }}
           onClick={() => Digit.Utils.pdf.generate(getPDFData(application, tenantInfo, t))}
         />
-        <KeyNote keyValue={t("CS_SERVICE_CATEGORY")} note={application.serviceCategory || "FSM"} />
-        <KeyNote keyValue={t("CS_APPLICATION_TYPE")} note={application.applicationType || "Desludging Request"} />
-        <KeyNote keyValue={t("CS_STATUS")} note={application.applicationStatus} />
-        <KeyNote keyValue={t("CS_APPLICATION_DATE")} note={Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime)} />
-        <KeyNote keyValue={t("CS_PROPERTY_TYPE")} note={application.propertyUsage} />
+        <KeyNote keyValue={t("CS_APPLICATION_NO")} note={application.applicationNumber} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory || "FSM"} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_TYPE")} note={application.applicationType || "Desludging Request"} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_STATUS")} note={application.applicationStatus} />
         <KeyNote
-          keyValue={t("CS_PIT_SIZE")}
+          keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_DATE")}
+          note={Digit.DateUtils.ConvertTimestampToDate(application.auditDetails.createdTime)}
+        />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_PROPERTY_TYPE")} note={`SERVICEDEFS.${application.propertyUsage}`} />
+        <KeyNote
+          keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
           note={`${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m`}
         />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_TYPE")} note={application.applicationType} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_STATUS")} note={application.status} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_DATE")} note={application.applicationDate} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_PROPERTY_TYPE")} note={application.propertyType} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")} note={application.pitSize} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} />
         <Link to={`/digit-ui/citizen/fsm/rate/${application.complaintNo}`}>
           <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE_US")} />
         </Link>
