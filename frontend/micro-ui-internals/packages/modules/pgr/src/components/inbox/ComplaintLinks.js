@@ -15,7 +15,7 @@ const ComplaintsLink = ({ isMobile, data }) => {
     let linksToShow = [];
     allLinks.forEach((link) => {
       if (link.accessTo) {
-        if (Digit.Utils.access.hasAccess(link.accessTo)) {
+        if (Digit.AccessServices.hasAccess(link.accessTo)) {
           linksToShow.push(link);
         }
       } else {
