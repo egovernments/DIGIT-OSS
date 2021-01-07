@@ -65,7 +65,7 @@ export const ImageUploadHandler = (props) => {
   }
 
   const uploadImage = useCallback(async () => {
-    const response = await Digit.UploadServices.Filestorage("property-upload", image);
+    const response = await Digit.UploadServices.Filestorage("property-upload", image, props.tenantId);
     setUploadedImagesIds(addUploadedImageIds(response));
   }, [addUploadedImageIds, image]);
 
