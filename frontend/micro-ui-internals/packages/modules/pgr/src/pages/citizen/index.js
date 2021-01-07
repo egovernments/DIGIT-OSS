@@ -2,7 +2,7 @@ import React from "react";
 import { ReopenComplaint } from "./ReopenComplaint/index";
 import SelectRating from "./Rating/SelectRating";
 import { PgrRoutes, getRoute } from "../../constants/Routes";
-import { useRouteMatch, Switch } from "react-router-dom";
+import { useRouteMatch, Switch, useLocation } from "react-router-dom";
 import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 
 import { CreateComplaint } from "./Create";
@@ -13,10 +13,11 @@ import Response from "./Response";
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
   console.log("pgr citizen", path, url, match);
+  const location = useLocation();
   return (
     <Switch>
       <AppContainer>
-        <BackButton>Back</BackButton>
+        {!location.pathname.includes("create-complaint/response") && <BackButton>Back</BackButton>}
         <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
         <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
         <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
