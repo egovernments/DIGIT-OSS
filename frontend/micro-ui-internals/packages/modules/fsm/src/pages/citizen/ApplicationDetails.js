@@ -51,7 +51,7 @@ const getPDFData = (application, tenantInfo, t) => ({
       title: "Pit/Septic Tank Details",
       values: [
         { title: "Dimension", value: `${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m` },
-        { title: "Distance from Road", value: "NA" },
+        { title: "Distance from Road", value: application.pitDetail.distanceFromRoad },
         { title: "No. of Trips", value: application.noOfTrips },
         { title: "Amount per Trip", value: "₹ NA" },
         { title: "Total Amount Due", value: "₹ NA" },
