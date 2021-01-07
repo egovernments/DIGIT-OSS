@@ -115,32 +115,32 @@ const ApplicationDetails = (props) => {
   const applicationDetails = {
     details: [
       {
-        title: t("ES_APPLICATION_DETAILS"),
+        title: t("ES_TITLE_APPLICATION_DETAILS"),
         values: [{ title: t("ES_APPLICATION_NO"), value: "FSM-277373" }],
       },
       {
-        title: t("ES_APPLICATION_DETAILS"),
+        title: t("ES_TITLE_APPLICATION_DETAILS"),
         values: [
-          { title: t("ES_APPLICANT_NAME"), value: "Nawal Kishore" },
-          { title: t("ES_APPLICANT_MOBILE_NO"), value: "+91 9645234533" },
-          { title: t("ES_SLUM_NAME"), value: "Jagbandhu huda" },
+          { title: t("ES_APPLICATION_DETAILS_APPLICANT_NAME"), value: "Nawal Kishore" },
+          { title: t("ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO"), value: "+91 9645234533" },
+          { title: t("ES_APPLICATION_DETAILS_SLUM_NAME"), value: "Jagbandhu huda" },
         ],
       },
       {
-        title: t("ES_PROPERTY_DETAILS"),
+        title: t("ES_APPLICATION_DETAILS_PROPERTY_DETAILS"),
         values: [
-          { title: t("ES_PROPERTY_TYPE"), value: "Commercial" },
-          { title: t("ES_PROPERTY_SUB-TYPE"), value: "Shopping Mail" },
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"), value: "Commercial" },
+          { title: t("ES_APPLICATION_DETAILS_PROPERTY_SUB-TYPE"), value: "Shopping Mail" },
         ],
       },
       {
-        title: t("ES_LOCATION_DETAILS"),
+        title: t("ES_APPLICATION_DETAILS_LOCATION_DETAILS"),
         values: [
-          { title: t("ES_LOCATION_LOCALITY"), value: "Alakapuri" },
-          { title: t("ES_LOCATION_CITY"), value: "Berhampur" },
-          { title: t("ES_LOCATION_PINCODE"), value: "345123" },
-          { title: t("ES_LOCATION_LANDMARK"), value: "SBI Bank" },
-          { title: t("ES_LOCATION_GEOLOCATION"), value: "" },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_LOCALITY"), value: "Alakapuri" },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_CITY"), value: "Berhampur" },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_PINCODE"), value: "345123" },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_LANDMARK"), value: "SBI Bank" },
+          { title: t("ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION"), value: "" },
         ],
       },
     ],
@@ -152,7 +152,7 @@ const ApplicationDetails = (props) => {
       caption: [""],
     },
     {
-      label: t("ES_TIMELINE_APPLICATION_SUBMITTED"),
+      label: t("ES_COMMON_APPLICATION_SUBMITTED"),
       caption: [
         {
           date: "12/08/2020",
@@ -170,7 +170,7 @@ const ApplicationDetails = (props) => {
         <React.Fragment>
           <Card style={{ position: "relative" }}>
             <LinkButton
-              label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_VIEW_AUDIT_TRAIL")}</span>}
+              label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_APPLICATION_DETAILS_VIEW_AUDIT_TRAIL")}</span>}
               style={{ position: "absolute", top: 0, right: 20 }}
               onClick={() => {}}
             />
@@ -189,7 +189,9 @@ const ApplicationDetails = (props) => {
               </React.Fragment>
             ))}
 
-            <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t("ES_APPLICATION_TIMELINE")}</CardSectionHeader>
+            <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
+              {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+            </CardSectionHeader>
             {timeline && timeline.length > 0 ? (
               <ConnectingCheckPoints>
                 {timeline.map((value, index) => {
@@ -214,7 +216,7 @@ const ApplicationDetails = (props) => {
             {displayMenu && workflowDetails?.data?.nextActions ? (
               <Menu options={workflowDetails?.data?.nextActions.map((action) => action.action)} t={t} onSelect={onActionSelect} />
             ) : null}
-            <SubmitBar label={t("ES_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+            <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
           </ActionBar>
         </React.Fragment>
       ) : (

@@ -73,7 +73,7 @@ const ApplicationDetails = () => {
 
   return (
     <React.Fragment>
-      <Header>{t("CS_APPLICATION_DETAILS")}</Header>
+      <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
       <Card style={{ position: "relative" }}>
         <LinkButton
           label={
@@ -83,22 +83,22 @@ const ApplicationDetails = () => {
                   <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
                 </svg>
               </span>
-              <span style={{ color: "#f47738", marginLeft: "8px" }}>{t("CS_DOWNLOAD")}</span>
+              <span style={{ color: "#f47738", marginLeft: "8px" }}>{t("CS_COMMON_DOWNLOAD")}</span>
             </div>
           }
           style={{ position: "absolute", top: 0, right: 20 }}
           onClick={() => Digit.Utils.pdf.generate(data)}
         />
-        <KeyNote keyValue={t("CS_SERVICE_CATEGORY")} note={application.serviceCategory} />
-        <KeyNote keyValue={t("CS_APPLICATION_TYPE")} note={application.applicationType} />
-        <KeyNote keyValue={t("CS_STATUS")} note={application.status} />
-        <KeyNote keyValue={t("CS_APPLICATION_DATE")} note={application.applicationDate} />
-        <KeyNote keyValue={t("CS_PROPERTY_TYPE")} note={application.propertyType} />
-        <KeyNote keyValue={t("CS_PIT_SIZE")} note={application.pitSize} />
-        <KeyNote keyValue={t("CS_NO_OF_TRIPS")} note={application.noOfTrips} />
-        <KeyNote keyValue={t("CS_DESLUDGING_CHARGES")} note={application.desuldgingCharges} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_TYPE")} note={application.applicationType} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_STATUS")} note={application.status} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_DATE")} note={application.applicationDate} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_PROPERTY_TYPE")} note={application.propertyType} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")} note={application.pitSize} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges} />
         <Link to={`/digit-ui/citizen/fsm/rate/${application.complaintNo}`}>
-          <SubmitBar label={t("CS_RATE_US")} />
+          <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE_US")} />
         </Link>
       </Card>
     </React.Fragment>

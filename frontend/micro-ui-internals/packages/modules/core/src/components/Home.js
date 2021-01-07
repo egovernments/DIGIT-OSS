@@ -58,17 +58,17 @@ const EmployeeHome = () => {
                   ></path>
                 </svg>
               </span>
-              <span className="text">{t("ES_FAECAL_SLUDGE_MGMT")}</span>
+              <span className="text">{t("ES_TITLE_FAECAL_SLUDGE_MGMT")}</span>
             </div>
             <div className="body">
               <span className="link">
-                <Link to={`/digit-ui/employee/fsm/inbox`}>{t("ES_INBOX")}</Link>
+                <Link to={`/digit-ui/employee/fsm/inbox`}>{t("ES_TITLE_INBOX")}</Link>
               </span>
               <span className="link">
-                <Link to={`/digit-ui/employee/fsm/new-application`}>{t("ES_NEW_DESULDGING_APPLICATION")}</Link>
+                <Link to={`/digit-ui/employee/fsm/new-application`}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Link>
               </span>
               <span className="link">
-                <Link to={`/digit-ui/employee/fsm/application-audit`}>{t("ES_APPLICATION_AUDIT")}</Link>
+                <Link to={`/digit-ui/employee/fsm/application-audit`}>{t("ES_TITLE_APPLICATION_AUDIT")}</Link>
               </span>
             </div>
           </div>

@@ -23,7 +23,7 @@ export const MyApplications = () => {
 
   return (
     <React.Fragment>
-      <Header>{t("CS_MY_APPLICATIONS")}</Header>
+      <Header>{t("CS_TITLE_MY_APPLICATIONS")}</Header>
       {applications?.length > 0 &&
         applications.map((application, index) => (
           <div key={index}>
