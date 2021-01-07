@@ -9,7 +9,7 @@ import { FormComposer } from "../../../components/FormComposer";
 // TODO: fetch data instead of hard coded
 import data from "../../../propertyType.json";
 // const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
-const propertySubTypeRes = data.PropertyType.map((item) => ({ key: item.propertyType, name: item.code }));
+const propertySubTypeRes = data.PropertyType.filter((item) => item.propertyType !== undefined);
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
@@ -49,13 +49,17 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
-      setChannelMenu(applicationChannelData.data);
+      const data = applicationChannelData.data?.map((channel) => ({ i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}` }));
+
+      setChannelMenu(data);
     }
   }, [applicationChannelData]);
 
   useEffect(() => {
     if (!sanitationTypeData.isLoading) {
-      setSanitationMenu(sanitationTypeData.data);
+      const data = sanitationTypeData.data?.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+
+      setSanitationMenu(data);
     }
   }, [sanitationTypeData]);
 
@@ -63,18 +67,17 @@ export const NewApplication = ({ parentUrl, heading }) => {
     setMenu(() => {
       return Object.values(
         data.PropertyType.reduce((acc, item) => {
-          if (item.propertyType === undefined) return acc;
-          return Object.assign(acc, { [item.propertyType]: { key: item.propertyType, name: item.propertyType } });
+          if (item.propertyType !== undefined) return acc;
+          return Object.assign(acc, { [item.code]: { key: item.code, name: item.name } });
         }, {})
       );
     });
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
+    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === propertyType));
   }, []);
 
   function selectedType(value) {
     setPropertyType(value);
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
-    window.Digit.SessionStorage.set("propertyType", value);
+    setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === value.key).map((item) => ({ key: item.code, name: item.name })));
   }
 
   function selectSlum(value) {
@@ -176,12 +179,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
         {
           label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
           type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="name" id="channel" selected={channel} select={selectChannel} />,
+          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} />,
         },
         {
           label: t("ES_NEW_APPLICATION_SANITATION_TYPE"),
           type: "dropdown",
-          populators: <Dropdown option={sanitationMenu} optionKey="name" id="sanitation" selected={sanitation} select={selectSanitation} />,
+          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
         },
         {
           label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
