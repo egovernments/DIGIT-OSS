@@ -127,8 +127,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const state = "Punjab";
     const localityCode = selectedLocality.code;
     const localityName = selectedLocality.name;
-    const { key } = subType;
-    const propertyType = key;
+    const { code } = subType;
+    const propertyType = code;
     const formData = {
       fsm: {
         citizen: {

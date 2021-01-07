@@ -5,6 +5,7 @@ const SelectImages = ({ t, config, onSelect, onSkip, value }) => {
   // const __initImages = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
   const [uploadedImages, setUploadedImagesIds] = useState(() => {
     // __initImages ? __initImages : null
+    console.log("%c 🏎️: props in selectImages ", "font-size:16px;background-color:#c239cc;color:white;", value);
     const { uploadedImages } = value;
     return uploadedImages ? uploadedImages : null;
   });
@@ -28,7 +29,7 @@ const SelectImages = ({ t, config, onSelect, onSkip, value }) => {
 
   return (
     <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t}>
-      <ImageUploadHandler uploadedImages={uploadedImages} onPhotoChange={handleUpload} />
+      <ImageUploadHandler tenantId={value.city_complaint?.code} uploadedImages={uploadedImages} onPhotoChange={handleUpload} />
     </FormStep>
   );
 };
