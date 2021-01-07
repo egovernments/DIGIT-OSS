@@ -53,7 +53,7 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   // //complaint logic
   async function selectedType(value) {
-    if (value.key != complaintType.key) {
+    if (value.key !== complaintType.key) {
       setSubType({ name: "" });
       setComplaintType(value);
       setSubTypeMenu(await serviceDefinitions.getSubMenu(tenantId, value, t));
@@ -67,7 +67,7 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   // city locality logic
   const selectCity = async (city) => {
-    if (selectedCity?.code != city.code) {
+    if (selectedCity?.code !== city.code) {
       setSelectedCity(city);
       setSelectedLocality(null);
       let __localityList = localitiesObj[city.code];
