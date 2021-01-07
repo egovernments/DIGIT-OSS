@@ -54,7 +54,7 @@ const ApplicationAudit = () => {
 
   return (
     <div>
-      <Header>{t("ES_APPLICATION_AUDIT")}</Header>
+      <Header>{t("ES_TITLE_APPLICATION_AUDIT")}</Header>
       <Table
         data={data}
         columns={columns}

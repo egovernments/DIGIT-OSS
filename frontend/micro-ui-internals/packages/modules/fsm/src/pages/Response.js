@@ -41,7 +41,7 @@ const Response = (props) => {
   ) : (
     <Card>
       <BannerPicker data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-      <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
+      <CardText>{t("CS_COMMON_TRACK_APPLICATION_TEXT")}</CardText>
       <Link to={`/digit-ui/employee`}>
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

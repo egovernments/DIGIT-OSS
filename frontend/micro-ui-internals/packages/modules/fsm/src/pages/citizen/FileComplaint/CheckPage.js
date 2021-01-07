@@ -22,7 +22,7 @@ const ActionButton = ({ jumpTo }) => {
     history.push(jumpTo);
   }
 
-  return <LinkButton label={t("CS_CHANGE")} style={{ color: "#F47738" }} onClick={routeTo} />;
+  return <LinkButton label={t("CS_COMMON_CHANGE")} style={{ color: "#F47738" }} onClick={routeTo} />;
 };
 
 const CheckPage = ({ onSubmit, value }) => {
@@ -33,29 +33,29 @@ const CheckPage = ({ onSubmit, value }) => {
 
   return (
     <Card>
-      <CardHeader>{t("CS_CHECK_YOUR_ANSWERS")}</CardHeader>
-      <CardSubHeader>{t("CS_PROPERTY_DETAILS")}</CardSubHeader>
+      <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
+      <CardSubHeader>{t("CS_CHECK_PROPERTY_DETAILS")}</CardSubHeader>
       <StatusTable>
         <Row
-          label={t("CS_PROPERTY_TYPE")}
+          label={t("CS_CHECK_PROPERTY_TYPE")}
           text={propertyType}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/property-type" />}
         />
         <Row
-          label={t("CS_PROPERTY_SUB_TYPE")}
+          label={t("CS_CHECK_PROPERTY_SUB_TYPE")}
           text={subtype.name}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/property-subtype" />}
         />
         <Row
-          label={t("CS_ADDRESS")}
+          label={t("CS_CHECK_ADDRESS")}
           text={city_complaint.address}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pincode" />}
         />
       </StatusTable>
-      <CardSubHeader>{t("CS_PIT_SEPTIC_TANK_DETAILS")}</CardSubHeader>
+      <CardSubHeader>{t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS")}</CardSubHeader>
       <StatusTable>
         <Row
-          label={t("CS_SIZE")}
+          label={t("CS_CHECK_SIZE")}
           text={Object.values(pitDetail).join(" x ")}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />

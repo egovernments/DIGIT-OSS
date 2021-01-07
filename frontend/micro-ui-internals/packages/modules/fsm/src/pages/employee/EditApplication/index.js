@@ -193,10 +193,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
 
   const config = [
     {
-      head: t("ES_APPLICATION_DETAILS"),
+      head: t("ES_TITLE_APPLICATION_DETAILS"),
       body: [
         {
-          label: t("ES_APPLICANT_NAME"),
+          label: t("ES_MODIFY_APPLICATION_APPLICANT_NAME"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -208,7 +208,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           },
         },
         {
-          label: t("ES_APPLICANT_MOBILE_NO"),
+          label: t("ES_MODIFY_APPLICATION_APPLICANT_MOBILE_NO"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -220,7 +220,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           },
         },
         {
-          label: t("ES_SLUM_NAME"),
+          label: t("ES_MODIFY_APPLICATION_SLUM_NAME"),
           type: "radio",
           isMandatory: true,
           populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
@@ -228,16 +228,16 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       ],
     },
     {
-      head: t("ES_PROPERTY_DETAILS"),
+      head: t("ES_MODIFY_APPLICATION_PROPERTY_DETAILS"),
       body: [
         {
-          label: t("ES_PROPERTY_TYPE"),
+          label: t("ES_MODIFY_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={menu} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} />,
         },
         {
-          label: t("ES_PROPERTY_SUB-TYPE"),
+          label: t("ES_MODIFY_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
@@ -246,10 +246,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       ],
     },
     {
-      head: t("ES_LOCATION_DETAILS"),
+      head: t("ES_MODIFY_APPLICATION_LOCATION_DETAILS"),
       body: [
         {
-          label: t("ES_LOCATION_PINCODE"),
+          label: t("ES_MODIFY_APPLICATION_LOCATION_PINCODE"),
           type: "text",
           populators: {
             name: "pincode",
@@ -257,13 +257,13 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           },
         },
         {
-          label: t("ES_LOCATION_CITY"),
+          label: t("ES_MODIFY_APPLICATION_LOCATION_CITY"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
         },
         {
-          label: t("ES_LOCATION_MOHALLA"),
+          label: t("ES_MODIFY_APPLICATION_LOCATION_MOHALLA"),
           isMandatory: true,
           type: "dropdown",
           populators: (
@@ -271,14 +271,14 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           ),
         },
         {
-          label: t("ES_LOCATION_LANDMARK"),
+          label: t("ES_MODIFY_APPLICATION_LOCATION_LANDMARK"),
           type: "textarea",
           populators: {
             name: "landmark",
           },
         },
         {
-          label: t("ES_LOCATION_VEHICLE_REQUESTED"),
+          label: t("ES_MODIFY_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={vehicleMenu} optionKey="name" id="vehicle" selected={vehicle} select={selectVehicle} />,
@@ -286,10 +286,10 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       ],
     },
     {
-      head: t("ES_PAYMENT_DETAILS"),
+      head: t("ES_MODIFY_APPLICATION_PAYMENT_DETAILS"),
       body: [
         {
-          label: t("ES_PAYMENT_NO_OF_TRIPS"),
+          label: t("ES_MODIFY_APPLICATION_PAYMENT_NO_OF_TRIPS"),
           type: "text",
           populators: {
             name: "noOfTrips",
@@ -297,7 +297,7 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           },
         },
         {
-          label: t("ES_PAYMENT_AMOUNT"),
+          label: t("ES_MODIFY_APPLICATION_PAYMENT_AMOUNT"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -319,15 +319,14 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
       ],
     },
   ];
-
-  const applicationDetail = {
-    title: t("ES_APPLICATION_NO"),
+  searchnDetail = {
+    title: t("ES_APPLICATION_DETAILS_APPLICATION_NO"),
     value: "FSM-277373",
   };
 
   return (
     <React.Fragment>
-      <FormComposer label={t("ES_UPDATE")} config={config} onSubmit={onSubmit} beforeSubHeader>
+      <FormComposer label={t("ES_COMMON_UPDATE")} config={config} onSubmit={onSubmit} beforeSubHeader>
         <CardSubHeader style={{ marginBottom: "16px" }}>Modify Application</CardSubHeader>
         <StatusTable>
           <Row key={applicationDetail.title} label={applicationDetail.title} text={applicationDetail.value} />

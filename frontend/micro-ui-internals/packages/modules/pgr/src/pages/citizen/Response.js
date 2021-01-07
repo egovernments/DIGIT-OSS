@@ -40,7 +40,7 @@ const Response = (props) => {
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}
       <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
-      <Link to={getRoute(props.match, PgrRoutes.CreateComplaintStart)}>
+      <Link to="/digit-ui/citizen">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>

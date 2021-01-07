@@ -8,12 +8,12 @@ const ApplicationLinks = ({ isMobile, data }) => {
 
   const allLinks = [
     {
-      text: t("ES_NEW_DESULDGING_APPLICATION"),
+      text: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
       link: "/digit-ui/employee/fsm/new-application",
       // accessTo: ["CSR"]
     },
-    { text: t("ES_REPORTS"), link: "/employee" },
-    { text: t("ES_DASHBOARD"), link: "/employee" },
+    { text: t("ES_TITLE_REPORTS"), link: "/employee" },
+    { text: t("ES_TITLE_DASHBOARD"), link: "/employee" },
   ];
 
   const [links, setLinks] = useState([]);
@@ -41,7 +41,7 @@ const ApplicationLinks = ({ isMobile, data }) => {
   // useEffect(() => {
   //   if (isMobile) {
   //     const mobileLinks = links.filter((link) => {
-  //       return link.text !== t("ES_DASHBOARD");
+  //       return link.text !== t("ES_TITLE_DASHBOARD");
   //     });
   //     setLinks(mobileLinks);
   //   }

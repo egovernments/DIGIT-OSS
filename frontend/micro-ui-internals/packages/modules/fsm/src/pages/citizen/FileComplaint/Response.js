@@ -20,13 +20,13 @@ const Response = ({ data, onSuccess }) => {
   const mutation = Digit.Hooks.fsm.useDesludging(data.city_complaint ? data.city_complaint.code : tenantId);
   useEffect(() => {
     try {
-      const { propertyType, landmark, pincode, pitDetail, city_complaint, locality_complaint } = data;
+      const { subtype, landmark, pincode, pitDetail, city_complaint, locality_complaint } = data;
 
       const formdata = {
         fsm: {
           tenantId: city_complaint.code,
           additionalDetails: {},
-          propertyUsage: propertyType,
+          propertyUsage: subtype.code,
           address: {
             tenantId: city_complaint.code,
             additionalDetails: null,
@@ -84,7 +84,7 @@ const Response = ({ data, onSuccess }) => {
         {
           title: "Property Details",
           values: [
-            { title: "Property Type", value: applicationDetails.propertyUsage },
+            { title: "Property Type", value: applicationDetails.propertyUsage.split(".")[0] },
             { title: "Property Sub Type", value: applicationDetails.propertyUsage },
           ],
         },
@@ -133,7 +133,7 @@ const Response = ({ data, onSuccess }) => {
                   <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
                 </svg>
               </span>
-              <span style={{ color: "#f47738", marginLeft: "8px" }}>{t("CS_DOWNLOAD")}</span>
+              <span style={{ color: "#f47738", marginLeft: "8px" }}>{t("CS_COMMON_DOWNLOAD")}</span>
             </div>
           }
           onClick={handleDownloadPdf}

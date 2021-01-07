@@ -13,6 +13,7 @@ import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
 import GRO from "./userInfo/gro.json";
+import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
 
 import Registry from "./ComponentRegistry";
 
@@ -20,7 +21,7 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
 
-const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, FSM_EMPLOYEE };
 
 const enabledModules = ["PGR", "FSM"];
 const registry = new Registry({

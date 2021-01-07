@@ -53,9 +53,9 @@ export const config = {
     address: {
       component: SelectAddress,
       texts: {
-        headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
-        header: "CS_ADDCOMPLAINT_PROVIDE_COMPLAINT_ADDRESS",
-        cardText: "CS_ADDCOMPLAINT_CITY_MOHALLA_TEXT",
+        headerCaption: "CS_ADDCOMPLAINT_PROPERTY_LOCATION",
+        header: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_ADDRESS",
+        cardText: "CS_ADDCOMPLAINT_PROPERTY_CITY_MOHALLA_TEXT",
         nextText: "PT_COMMONS_NEXT",
       },
       nextStep: "landmark",
@@ -63,15 +63,15 @@ export const config = {
     landmark: {
       component: SelectLandmark,
       texts: {
-        headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
+        headerCaption: "CS_ADDCOMPLAINT_PROPERTY_LOCATION",
         header: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK",
-        cardText: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK_TEXT",
+        cardText: "CS_ADDCOMPLAINT_PROVIDE_PROPERTY_LANDMARK_TEXT",
         nextText: "PT_COMMONS_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
         {
-          label: "CS_ADDCOMPLAINT_LANDMARK",
+          label: "CS_ADDCOMPLAINT_PROPERTY_LANDMARK",
           type: "textarea",
           name: "landmark",
         },

@@ -9,12 +9,12 @@ const FSMLink = ({ isMobile, data }) => {
 
   const allLinks = [
     {
-      text: t("ES_NEW_DESULDGING_APPLICATION"),
+      text: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
       link: "/digit-ui/employee/fsm/new-application",
       // accessTo: ["CSR"]
     },
-    { text: t("ES_REPORTS"), link: "/employee" },
-    { text: t("ES_DASHBOARD"), link: "/employee" },
+    { text: t("ES_TITLE_REPORTS"), link: "/employee" },
+    { text: t("ES_TITLE_DASHBOARD"), link: "/employee" },
   ];
 
   const [links, setLinks] = useState([]);
@@ -56,7 +56,7 @@ const FSMLink = ({ isMobile, data }) => {
           <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z" fill="white" />
         </svg>
       </span>{" "}
-      <span className="text">{t("ES_FAECAL_SLUDGE_MGMT")}</span>
+      <span className="text">{t("ES_TITLE_FAECAL_SLUDGE_MGMT")}</span>
     </div>
   );
 

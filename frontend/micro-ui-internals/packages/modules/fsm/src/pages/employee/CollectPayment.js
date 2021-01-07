@@ -19,25 +19,25 @@ const CollectPayment = ({ parentRoute }) => {
 
   const config = [
     {
-      head: t("ES_COLLECT_PAYMENT_PAYMENT_DETAILS"),
+      head: t("ES_TITLE_PAYMENT_DETAILS"),
       body: [
         {
-          label: t("ES_COLLECT_PAYMENT_TOTAL_AMOUNT"),
+          label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
           populators: <CardSectionHeader>₹ 500.00</CardSectionHeader>,
         },
       ],
     },
     {
-      head: t("ES_COLLECT_PAYMENT_PAYER_DETAILS"),
+      head: t("ES_TITLE_PAYMENT_DETAILS"),
       body: [
         {
-          label: t("ES_COLLECT_PAYMENT_PAID_BY"),
+          label: t("ES_PAYMENT_DETAILS_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={menu} optionKey="name" id="owner" selected={ownerType} select={selectedType} />,
         },
         {
-          label: t("ES_COLLECT_PAYMENT_PAYER_NAME"),
+          label: t("ES_PAYMENT_DETAILS_PAYMENT_NO_OF_TRIPS"),
           type: "text",
 
           populators: {
@@ -46,7 +46,7 @@ const CollectPayment = ({ parentRoute }) => {
           },
         },
         {
-          label: t("ES_COLLECT_PAYMENT_PAYER_MOBILE_NO"),
+          label: t("ES_PAYMENT_DETAILS_PAYMENT_AMOUNT"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -68,7 +68,7 @@ const CollectPayment = ({ parentRoute }) => {
       ],
     },
     {
-      head: t("ES_COLLECT_PAYMENT_PAYMENT_MODE"),
+      head: t("ES_PAYMENT_DETAILS_PAYMENT_MODE"),
       body: [
         {
           populators: (
@@ -87,7 +87,7 @@ const CollectPayment = ({ parentRoute }) => {
   return (
     <React.Fragment>
       <FormComposer
-        heading={t("ES_TITLE_COLLECT_PAYMENT")}
+        heading={t("ES_PAYMENT_DETAILS_COLLECT_PAYMENT")}
         label={t("ES_COMMON_APPLICATION_SUBMITTED")}
         config={config}
         onSubmit={onSubmit}
