@@ -26,7 +26,7 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
       Digit.SessionStorage.set("city_complaint", undefined);
       Digit.SessionStorage.set("selected_localities", undefined);
     }
-    onSelect(data);
+    onSelect({ ...data, city_complaint: foundValue });
   };
 
   const onSkip = () => onSelect();

@@ -32,13 +32,13 @@ export const PGRService = {
       method: "POST",
       params: { tenantId },
     }),
-  count: (details, tenantId) =>
+  count: (tenantId, params) =>
     Request({
-      url: Urls.MDMS,
-      data: details,
+      url: Urls.pgr_count,
       useCache: true,
+      auth: true,
       method: "POST",
-      params: { tenantId },
+      params: { tenantId, ...params },
     }),
 
   employeeSearch: (tenantId, roles) => {
