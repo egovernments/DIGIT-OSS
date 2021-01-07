@@ -72,10 +72,17 @@ const formConfig = {
               filteredSubUsageMinor,
               "usageCategorySubMinor"
             );
-            setDependentFields(["subUsageType"], dispatch, formKey, false);
-            const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
-            const subUsageData = sortDropdown(mergedMaster, "label", true);
-            setDependentFields(["subUsageType"], dispatch, formKey, subUsageData, "dropDownData");
+            if(field.value === "NONRESIDENTIAL")
+                {
+                  setDependentFields(["subUsageType"], dispatch, formKey, false);
+                }
+            else 
+                {
+                  setDependentFields(["subUsageType"], dispatch, formKey, true);
+                }
+               const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
+               const subUsageData = sortDropdown(mergedMaster, "label", true);
+               setDependentFields(["subUsageType"], dispatch, formKey, subUsageData, "dropDownData");
           }
         } else {
           setDependentFields(["subUsageType"], dispatch, formKey, true);

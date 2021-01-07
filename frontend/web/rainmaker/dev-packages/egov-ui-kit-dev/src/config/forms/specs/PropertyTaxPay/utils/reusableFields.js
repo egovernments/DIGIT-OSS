@@ -163,7 +163,7 @@ export const innerDimensions = {
 };
 
 const innnerDimentionUtilFucntion=(value,dispatch,formKey)=>{
-  const dependentFields1 = ["roomArea", "subUsageType", "balconyArea", "garageArea", "bathroomArea"];
+  const dependentFields1 = ["roomArea", "balconyArea", "garageArea", "bathroomArea"];
   const dependentFields2 = ["builtArea"];
   // switch (value) {
   //   case "no":
