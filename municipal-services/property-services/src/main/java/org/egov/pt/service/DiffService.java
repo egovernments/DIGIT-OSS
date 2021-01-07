@@ -22,6 +22,9 @@ import org.javers.core.diff.custom.BigDecimalComparatorWithFixedEquals;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class DiffService {
 	
@@ -49,6 +52,8 @@ public class DiffService {
             return updatedFields;
 
         changes.forEach(change -> {
+			log.info("Field  " + change.getPropertyName() + " changed from " + change.getLeft() + " to "
+					+ change.getRight());
             if (!FIELDS_TO_IGNORE.contains(change.getPropertyName())) {
                 updatedFields.add(change.getPropertyName());
             }
