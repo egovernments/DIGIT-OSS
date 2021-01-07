@@ -31,7 +31,7 @@ const MobileInbox = ({ data, onFilterChange, onSearch }) => {
           <ApplicationCard
             data={localizedData}
             onFilterChange={onFilterChange}
-            serviceRequestIdKey={t("CS_COMMON_COMPLAINT_NO")}
+            serviceRequestIdKey={t("ES_INBOX_APPLICATION_NO")}
             onSearch={onSearch}
           />
         </div>

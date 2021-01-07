@@ -133,7 +133,7 @@ const Response = ({ data, onSuccess }) => {
                   <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
                 </svg>
               </span>
-              <span style={{ color: "#f47738", marginLeft: "8px" }}>{t("CS_DOWNLOAD")}</span>
+              <span style={{ color: "#f47738", marginLeft: "8px" }}>{t("CS_COMMON_DOWNLOAD")}</span>
             </div>
           }
           onClick={handleDownloadPdf}

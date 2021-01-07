@@ -29,7 +29,7 @@ const DesktopInbox = (props) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: t("ES_APPLICATION_NO"),
+        Header: t("ES_INBOX_APPLICATION_NO"),
         accessor: "applicationNo",
         // Cell: (row) => {
         //   return (
@@ -47,7 +47,7 @@ const DesktopInbox = (props) => {
         // },
       },
       {
-        Header: t("ES_APPLICATION_DATE"),
+        Header: t("ES_INBOX_APPLICATION_DATE"),
         accessor: "applicationDate",
         // Cell: (row) => {
         //   return GetCell(
@@ -56,14 +56,14 @@ const DesktopInbox = (props) => {
         // },
       },
       {
-        Header: t("ES_LOCALITY"),
+        Header: t("ES_INBOX_LOCALITY"),
         accessor: "locality",
         // Cell: (row) => {
         //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
         // },
       },
       {
-        Header: t("ES_STATUS"),
+        Header: t("ES_INBOX_STATUS"),
         accessor: "status",
         // Cell: (row) => {
         //   return GetCell(row.row.original["taskOwner"]);
@@ -97,7 +97,7 @@ const DesktopInbox = (props) => {
             getCellProps={(cellInfo) => {
               return {
                 style: {
-                  minWidth: cellInfo.column.Header === t("ES_APPLICATION_NO") ? "240px" : "",
+                  minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
                   padding: "20px 18px",
                   fontSize: "16px",
                   // borderTop: "1px solid grey",
