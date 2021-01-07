@@ -8,11 +8,11 @@ import Reopen from "./reopen";
 
 const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate }) => {
   const { t } = useTranslation();
-  const __nextActions = [...new Set(nextActions)];
+
   if (action === "RESOLVE") {
     let actions =
-      __nextActions &&
-      __nextActions.map(
+      nextActions &&
+      nextActions.map(
         (action, index) =>
           action && (
             <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
