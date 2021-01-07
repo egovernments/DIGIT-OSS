@@ -1,5 +1,6 @@
 import React from "react";
 import { useTable, useRowSelect, usePagination } from "react-table";
+import { ArrowBack, ArrowForward } from "./svgindex";
 
 // const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
 //   const defaultRef = React.useRef();
@@ -109,18 +110,7 @@ const Table = ({ data, columns, getCellProps }) => {
           })}
         </tbody>
       </table>
-      <div
-        className="pagination"
-        // style={{
-        //   display: "flex",
-        //   justifyContent: "flex-end",
-        //   backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
-        //   borderTop: "1px solid #d6d5d4",
-        //   padding: "20px 0",
-        //   paddingRight: "40px",
-        //   color: "rgb(80, 90, 95)",
-        // }}
-      >
+      <div className="pagination">
         Rows Per Page{":"}
         <select
           value={pageSize}
@@ -142,12 +132,13 @@ const Table = ({ data, columns, getCellProps }) => {
             {(pageIndex + 1) * 10} of {rows.length}
           </span>{" "}
         </span>
-        <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {"<"}
-        </button>{" "}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {">"}
-        </button>{" "}
+        {/* <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
+          <span>
+
+          </span>
+        </button> */}
+        {canPreviousPage && <ArrowBack onClick={() => previousPage()} />}
+        {canNextPage && <ArrowForward onClick={() => nextPage()} />}
       </div>
     </React.Fragment>
   );
