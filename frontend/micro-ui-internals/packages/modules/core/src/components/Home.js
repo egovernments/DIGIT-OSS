@@ -36,7 +36,7 @@ const EmployeeHome = () => (
           </div>
           <div className="body">
             {allLinks.map((link, index) => {
-              if (!link.accessTo || Digit.AccessServices.hasAccess(link.accessTo)) {
+              if (!link.accessTo || Digit.UserService.hasAccess(link.accessTo)) {
                 return (
                   <span className="link" key={index}>
                     <Link to={link.link}>{link.text}</Link>
