@@ -61,8 +61,12 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     setMenu(() => {
-      const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
-      return uniqMenu.map((item) => ({ key: item, name: item }));
+      return Object.values(
+        data.PropertyType.reduce((acc, item) => {
+          if (item.propertyType === undefined) return acc;
+          return Object.assign(acc, { [item.propertyType]: { key: item.propertyType, name: item.propertyType } });
+        }, {})
+      );
     });
     setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
   }, []);

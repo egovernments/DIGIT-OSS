@@ -10,9 +10,12 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
   });
 
   const [menu, setMenu] = useState(() => {
-    const _menu = data.PropertyType.filter((item) => item.propertyType !== undefined).map((item) => item.propertyType);
-    const uniqMenu = [...new Set(_menu)];
-    return uniqMenu.map((item) => ({ key: item, name: item }));
+    return Object.values(
+      data.PropertyType.reduce((acc, item) => {
+        if (item.propertyType === undefined) return acc;
+        return Object.assign(acc, { [item.propertyType]: { key: item.propertyType, name: item.propertyType } });
+      }, {})
+    );
   });
 
   const goNext = () => {
