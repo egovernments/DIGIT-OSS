@@ -12,9 +12,12 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
 
   React.useEffect(() => {
     // TODO: bottom two lines are hard coded data, whenever we get propertyType apis, it should be update
-    const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
-    setSubTypeMenu(uniqMenu.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_PROPERTY_SUB_TYPE_${type}` })));
-  });
+    const uniqMenu = data.PropertyType.filter((o) => o.propertyType !== undefined && o.propertyType === propertyType).map((item) => ({
+      key: item.code,
+      name: item.code,
+    }));
+    setSubTypeMenu(uniqMenu);
+  }, []);
 
   const selectedValue = (value) => {
     setSubtype(value);
@@ -27,7 +30,7 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
     <TypeSelectCard
       {...config.texts}
       {...{ menu: subTypeMenu }}
-      {...{ optionsKey: "i18nKey" }}
+      {...{ optionsKey: "key" }}
       {...{ selected: selectedValue }}
       {...{ selectedOption: subtype }}
       {...{ onSave: goNext }}

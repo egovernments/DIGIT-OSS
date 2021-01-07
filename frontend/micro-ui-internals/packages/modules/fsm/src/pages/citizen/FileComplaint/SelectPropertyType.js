@@ -10,8 +10,12 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
   });
 
   const [menu, setMenu] = useState(() => {
-    const uniqMenu = [...new Set(data.PropertyType.filter((item) => item.propertyType !== undefined).map((item) => item.propertyType))];
-    return uniqMenu.map((type) => ({ i18nKey: `CS_PROPERTY_TYPE_${type}` }));
+    return Object.values(
+      data.PropertyType.reduce((acc, item) => {
+        if (item.propertyType !== undefined) return acc;
+        return Object.assign(acc, { [item.code]: { key: item.code, name: item.code } });
+      }, {})
+    );
   });
 
   const goNext = () => {
@@ -26,7 +30,7 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
     <TypeSelectCard
       {...config.texts}
       {...{ menu: menu }}
-      {...{ optionsKey: "i18nKey" }}
+      {...{ optionsKey: "key" }}
       {...{ selected: selectedValue }}
       {...{ selectedOption: propertyType }}
       {...{ onSave: goNext }}

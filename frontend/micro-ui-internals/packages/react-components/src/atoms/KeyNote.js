@@ -12,7 +12,7 @@ const KeyNote = ({ keyValue, note }) => {
 
 KeyNote.propTypes = {
   keyValue: PropTypes.string,
-  note: PropTypes.string,
+  note: PropTypes.string || PropTypes.number,
 };
 
 KeyNote.defaultProps = {

@@ -30,31 +30,31 @@
   "PropertyType": [
     {
       "name": "Vacant Land",
-      "code": "VACANT",
+      "code": "CS_PROPERTY_TYPE_VACANT",
       "active": true
     },
     {
       "name": "Built Up",
-      "code": "BUILTUP",
+      "code": "CS_PROPERTY_TYPE_BUILTUP",
       "active": true
     },
     {
       "name": "Flat/Part of the building",
-      "code": "BUILTUP.SHAREDPROPERTY",
+      "code": "ES_APPLICATION_DETAILS_PROPERTY_SUB_TYPE_BUILTUP.SHAREDPROPERTY",
       "active": true,
-      "propertyType": "BUILTUP"
+      "propertyType": "CS_PROPERTY_TYPE_BUILTUP"
     },
     {
       "name": "Independent Building",
-      "code": "BUILTUP.INDEPENDENTPROPERTY",
+      "code": "ES_APPLICATION_DETAILS_PROPERTY_SUB_TYPE_BUILTUP.INDEPENDENTPROPERTY",
       "active": true,
-      "propertyType": "BUILTUP"
+      "propertyType": "CS_PROPERTY_TYPE_BUILTUP"
     },
     {
       "name": "Vacant Independent Building",
-      "code": "VACANT.INDEPENDENTPROPERTY",
+      "code": "ES_APPLICATION_DETAILS_PROPERTY_SUB_TYPE_VACANT.INDEPENDENTPROPERTY",
       "active": true,
-      "propertyType": "VACANT"
+      "propertyType": "CS_PROPERTY_TYPE_VACANT"
     }
   ]
 }

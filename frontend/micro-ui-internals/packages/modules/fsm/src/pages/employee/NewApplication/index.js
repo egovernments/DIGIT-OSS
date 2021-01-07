@@ -9,12 +9,12 @@ import { FormComposer } from "../../../components/FormComposer";
 // TODO: fetch data instead of hard coded
 import data from "../../../propertyType.json";
 // const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
-const propertySubTypeRes = data.PropertyType.map((item) => ({ key: item.propertyType, name: item.code }));
+const propertySubTypeRes = data.PropertyType.filter((item) => item.propertyType !== undefined);
 
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
-
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const [menu, setMenu] = useState([]);
   const [subTypeMenu, setSubTypeMenu] = useState([]);
   const [propertyType, setPropertyType] = useState({});
@@ -43,15 +43,9 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   const { t } = useTranslation();
   const cities = Digit.Hooks.fsm.useTenants();
-  const dispatch = useDispatch();
-  const match = useRouteMatch();
   const history = useHistory();
-  const mutation = Digit.Hooks.fsm.useDesludging("pb.amritsar");
-
-  const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
-
-  const applicationChannelData = Digit.Hooks.fsm.useMDMS("pb.amritsar", "FSM", "ApplicationChannel");
-  const sanitationTypeData = Digit.Hooks.fsm.useMDMS("pb.amritsar", "FSM", "SanitationType");
+  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
@@ -71,22 +65,19 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     setMenu(() => {
-      const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
-      return uniqMenu.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_PROPERTY_TYPE_${type}` }));
+      return Object.values(
+        data.PropertyType.reduce((acc, item) => {
+          if (item.propertyType !== undefined) return acc;
+          return Object.assign(acc, { [item.code]: { key: item.code, name: item.code } });
+        }, {})
+      );
     });
-    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
+    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === propertyType));
   }, []);
 
   function selectedType(value) {
     setPropertyType(value);
-    // TODO: bottom two lines are hard coded data, whenever we get propertyType apis, it should be update
-    const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
-    setSubTypeMenu(uniqMenu.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_PROPERTY_SUB_TYPE_${type}` })));
-    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
-    // window.Digit.SessionStorage.set("propertyType", value);
-    // (async () => {
-    //   await Digit.FileDesludging.create("pb.amritsar");
-    // })();
+    setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === value.key).map((item) => ({ key: item.code, name: item.code })));
   }
 
   function selectSlum(value) {
@@ -107,7 +98,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
 
   function selectedSubType(value) {
     setSubType(value);
-    // window.Digit.SessionStorage.set("subType", [value]);
   }
 
   // city locality logic
@@ -169,76 +159,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
         noOfTrips,
       },
       workflow: null,
-      // applicationChannel,
-      // applicantName,
-      // mobileNumber,
-      // pincode,
-      // landmark,
-      // noOfTrips,
-      // amount,
-      // cityCode,
-      // city,
-      // district,
-      // region,
-      // localityCode,
-      // localityName,
-      // state,
-      // propertyType,
-      // subType,
-      // vehicle,
     };
-
-    // const requestData = {
-    //   tenantId: null,
-    //   description: null,
-    //   accountId: null,
-    //   additionalDetail: {},
-    //   source: null,
-    //   sanitationtype: null,
-    //   propertyUsage: null,
-    //   noOfTrips,
-    //   status: null,
-    //   vehicleId: vehicle,
-    //   pitDetail: {
-    //     hight: 0,
-    //     length: 0,
-    //     width: 0,
-    //     distanceFromRoad: 0,
-    //   },
-    //   address: {
-    //     tenantId: null,
-    //     doorNo: null,
-    //     plotNo: null,
-    //     landmark,
-    //     city,
-    //     district,
-    //     region,
-    //     state,
-    //     country: null,
-    //     pincode,
-    //     additionDetails: null,
-    //     buildingName: null,
-    //     street: null,
-    //     locality: {
-    //       code: null,
-    //       name: null,
-    //       label: null,
-    //       latitude: null,
-    //       longitude: null,
-    //       children: [null],
-    //     },
-    //     geoLocation: {
-    //       latitude: 0,
-    //       longitude: 0,
-    //       additionalDetails: {},
-    //     },
-    //   },
-    // };
     console.log("%c 🇸🇦: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData);
-    // console.log("%c 🍦: onSubmit -> requestData ", "font-size:16px;background-color:#50ab67;color:white;", requestData);
-    // mutation.mutate(formData)
-    // await dispatch(createApplication(formData));
-    // history.push(parentUrl + "/response");
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -302,14 +224,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
           label: t("ES_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={menu} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} />,
+          populators: <Dropdown option={menu} optionKey="key" id="propertyType" selected={propertyType} select={selectedType} />,
         },
         {
           label: t("ES_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} />,
+          populators: <Dropdown option={subTypeMenu} optionKey="key" id="propertySubType" selected={subType} select={selectedSubType} />,
         },
       ],
     },
