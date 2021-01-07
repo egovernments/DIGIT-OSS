@@ -1,6 +1,7 @@
 import { sortDropdown } from "egov-ui-kit/utils/PTCommon";
 import { setDependentFields } from "../utils/enableDependentFields";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
+import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import {
   subUsageType,
   occupancy,
@@ -12,7 +13,13 @@ import {
   getAbsentMasterObj,
   floorName,
   annualRent,
-  constructionType
+  innerDimensions,
+  constructionType,
+  roomArea,
+  balconyArea,
+  garageArea,
+  bathroomArea,
+  innnerDimentionUtilFucntion
 } from "../utils/reusableFields";
 import filter from "lodash/filter";
 import get from "lodash/get";
@@ -37,6 +44,20 @@ const formConfig = {
         if(window.location.href.includes('dataentry') && field.value !="RESIDENTIAL" || !window.location.href.includes('dataentry')){
          minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
        }
+       let propertyType = state.common.prepareFormData.Properties[0].propertyDetails[0].propertyType
+       if( propertyType == "BUILTUP.SHAREDPROPERTY"){
+          if(field.value === "RESIDENTIAL"){
+            setDependentFields(["innerDimensions"],dispatch, formKey, false)
+          }else  if(field.value === "NONRESIDENTIAL"){
+          dispatch(setFieldProperty(formKey, "innerDimensions", "value", "false"));
+          setDependentFields(["innerDimensions"],dispatch, formKey, true)
+          setDependentFields(["builtArea"],dispatch,formKey,false)
+          setDependentFields(["roomArea"],dispatch,formKey,true)
+          setDependentFields(["garageArea"],dispatch,formKey,true)
+          setDependentFields(["bathroomArea"],dispatch,formKey,true)
+          setDependentFields(["balconyArea"],dispatch,formKey,true)
+          }
+        }
         if (!isEmpty(minorObject)) {
           dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, minorObject.usageCategoryMajor));
           var filteredSubUsageMinor = filter(
@@ -66,7 +87,12 @@ const formConfig = {
     ...subUsageType,
     ...occupancy,
     ...constructionType,
+    ...innerDimensions,
     ...builtArea,
+    ...roomArea,
+    ...balconyArea,
+    ...garageArea,
+    ...bathroomArea,
     ...floorName,
     ...annualRent
   },

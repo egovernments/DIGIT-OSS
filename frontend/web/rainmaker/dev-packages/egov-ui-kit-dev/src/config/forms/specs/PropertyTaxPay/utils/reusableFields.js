@@ -397,12 +397,24 @@ export const beforeInitForm = {
     const { form } = action;
     const { name: formKey, fields } = form;
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
+    const propertyUsage = get(state,"form.basicInformation.fields.typeOfUsage.value")
     
    const { Floor } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "BUILTUP.SHAREDPROPERTY") {
         set(action, "form.fields.floorName.hideField", false);
         set(action, "form.fields.floorName.dropDownData", prepareDropDownData(Floor));
+        if(propertyUsage === "MIXED"){
+          set(action, "form.fields.innerDimensions.hideField", true);
+          setDependentFields(["innerDimensions"],dispatch,formKey,true)
+          set(action, "form.fields.builtArea.hideField", false);
+          set(action, "form.fields.roomArea.hideField", true);
+          set(action, "form.fields.balconyArea.hideField", true);
+          set(action, "form.fields.garageArea.hideField", true);
+          set(action, "form.fields.bathroomArea.hideField", true);
+        }else{
+          set(action, "form.fields.innerDimensions.hideField", false);
+        }
       } else {
         set(action, "form.fields.floorName.hideField", true);
       }
@@ -556,6 +568,7 @@ export const beforeInitFormForPlot = {
     let state = store.getState();
     let { dispatch } = store;
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
+    // const propertyUsage = get(state, "form.basicInformation.fields.typeOfUsage.value")
     const { Floor } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "BUILTUP.SHAREDPROPERTY") {
@@ -644,6 +657,7 @@ export const beforeInitFormForPlot = {
     }
     if (get(state, `common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`)==="RESIDENTIAL") {
       if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
+        set(action, "form.fields.innerDimensions.hideField", false);
         set(action, "form.fields.innerDimensions.value", "false");
         set(action, "form.fields.builtArea.hideField", false);
         set(action, "form.fields.roomArea.hideField", true);
