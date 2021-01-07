@@ -36,11 +36,12 @@ const BannerPicker = ({ response }) => {
 const Response = (props) => {
   const { t } = useTranslation();
   const appState = useSelector((state) => state)["pgr"];
+
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}
       <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
-      <Link to={getRoute(props.match, PgrRoutes.CreateComplaintStart)}>
+      <Link to="/">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>
