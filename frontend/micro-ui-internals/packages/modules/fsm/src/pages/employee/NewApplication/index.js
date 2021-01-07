@@ -124,17 +124,20 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const state = "Punjab";
     const localityCode = selectedLocality.code;
     const localityName = selectedLocality.name;
-    const { code } = subType;
-    const propertyType = code;
+    const { name } = subType;
+    const propertyType = name;
     const formData = {
       fsm: {
         citizen: {
           name: applicantName,
           mobileNumber,
         },
-        tenantId: tenantId,
+        tenantId: cityCode,
         sanitationtype: sanitationtype,
         source: applicationChannel,
+        additionalDetails: {
+          tripAmount: amount,
+        },
         propertyUsage: propertyType,
         address: {
           tenantId: cityCode,
@@ -143,11 +146,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
           state,
           pincode,
           locality: {
-            code: localityCode.split("-").pop(),
+            code: localityCode.split("_").pop(),
             name: localityName,
-          },
-          additionalDetails: {
-            tripAmount: amount,
           },
           geoLocation: {
             latitude: selectedLocality.latitude,
@@ -158,7 +158,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       },
       workflow: null,
     };
-    console.log("%c 🇸🇦: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData);
+    console.log("%c 🇸🇦: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData, subType);
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
