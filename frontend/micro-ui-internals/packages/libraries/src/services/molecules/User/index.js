@@ -54,4 +54,8 @@ export const UserService = {
       },
       params: { tenantId: stateCode },
     }),
+  hasAccess: (accessTo) => {
+    const { roles } = Digit.UserService.getUser().info;
+    return roles.filter((role) => accessTo.includes(role.code)).length;
+  },
 };
