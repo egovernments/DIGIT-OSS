@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 export const MyApplications = () => {
   const { t } = useTranslation();
 
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch("pb.amritsar");
+  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch("pb");
 
   if (isLoading) {
     return <Loader />;
