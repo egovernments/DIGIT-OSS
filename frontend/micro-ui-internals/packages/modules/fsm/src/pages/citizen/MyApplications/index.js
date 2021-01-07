@@ -5,8 +5,9 @@ import { useTranslation } from "react-i18next";
 
 export const MyApplications = () => {
   const { t } = useTranslation();
+  const { info: userInfo } = Digit.UserService.getUser();
 
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch("pb");
+  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch({ tenantId: "pb", uuid: userInfo.uuid });
 
   if (isLoading) {
     return <Loader />;

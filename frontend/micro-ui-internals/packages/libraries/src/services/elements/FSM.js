@@ -9,7 +9,7 @@ export const FSMService = {
       method: "POST",
       auth: true,
       userService: true,
-      params: { tenantId: tenantId, ...filters },
+      params: { tenantId, ...filters },
     }),
   create: (details, tenantId) =>
     Request({

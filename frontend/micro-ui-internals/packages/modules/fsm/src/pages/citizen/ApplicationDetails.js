@@ -64,7 +64,7 @@ const ApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const history = useHistory();
-  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch("pb.amritsar", id);
+  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch({ tenantId: "pb", applicationNumber: id });
   const coreData = Digit.Hooks.useCoreData();
 
   if (isLoading) {
