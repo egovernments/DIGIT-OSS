@@ -8,6 +8,7 @@ import { FormComposer } from "../../../components/FormComposer";
 import { createComplaint } from "../../../redux/actions/index";
 
 export const CreateComplaint = ({ parentUrl }) => {
+  console.log("create complaint rendered");
   // const SessionStorage = Digit.SessionStorage;
   // const __initComplaintType__ = Digit.SessionStorage.get("complaintType");
   // const __initSubType__ = Digit.SessionStorage.get("subType");
