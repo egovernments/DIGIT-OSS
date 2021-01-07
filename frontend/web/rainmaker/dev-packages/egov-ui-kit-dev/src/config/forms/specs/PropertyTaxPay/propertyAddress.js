@@ -218,6 +218,7 @@ const formConfig = {
       fullWidth: true,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       numcols: 6,
+      menuHeight:"65px"
     },
     thanaType: {
       id: "Thana",
