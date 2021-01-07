@@ -142,6 +142,7 @@ public class PropertyValidator {
 		// third variable is needed only for mutation
 		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, "");
 		
+		log.info("Fields updated:"+fieldsUpdated.toString());
 		
 		Boolean isstateUpdatable =  false;
 		/*
@@ -168,6 +169,8 @@ public class PropertyValidator {
 		objectsAdded.removeAll(Arrays.asList("TextNode", "Role", "NullNode", "LongNode", "JsonNodeFactory", "IntNode",
 				"ProcessInstance"));
 
+		log.info("Objects added:"+objectsAdded.toString());
+		
 		if (!isstateUpdatable && (!CollectionUtils.isEmpty(objectsAdded) || !CollectionUtils.isEmpty(fieldsUpdated)))
 			throw new CustomException("EG_PT_WF_UPDATE_ERROR",
 					"The current state of workflow does not allow chnages to property");
