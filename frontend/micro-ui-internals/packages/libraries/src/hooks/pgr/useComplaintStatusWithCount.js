@@ -4,21 +4,22 @@ import useComplaintStatus from "./useComplaintStatus";
 const useComplaintStatusCount = (complaints) => {
   const [complaintStatusWithCount, setcomplaintStatusWithCount] = useState([]);
   let complaintStatus = useComplaintStatus();
-  const getCount = (value) => {
-    return (
-      complaints &&
-      complaints.filter((complaint) => {
-        return complaint.status === value;
-      }).length
-    );
+  let tenantId = Digit.ULBService.getCurrentTenantId();
+
+  const getCount = async (value) => {
+    let response = await Digit.PGRService.count(tenantId, { applicationStatus: value });
+    return response?.count || "";
   };
 
   useEffect(() => {
-    let statusWithCount = complaintStatus.map((status) => ({
-      ...status,
-      count: getCount(status.code),
-    }));
-    setcomplaintStatusWithCount(statusWithCount);
+    let getStatusWithCount = async () => {
+      let statusWithCount = complaintStatus.map(async (status) => ({
+        ...status,
+        count: await getCount(status.code),
+      }));
+      setcomplaintStatusWithCount(await Promise.all(statusWithCount));
+    };
+    getStatusWithCount();
   }, [complaints, complaintStatus]);
   return complaintStatusWithCount;
 };
