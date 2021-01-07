@@ -78,10 +78,10 @@ export const FSMLinks = ({ matchPath, userType }) => {
   if (userType === "citizen") {
     return (
       <React.Fragment>
-        <Header>{t("CS_APPLICATIONS")}</Header>
-        <HomeLink to={`${matchPath}/my-applications`}>{t("CS_MY_APPLICATIONS")}</HomeLink>
-        <Header>{t("CS_OTHER_SERVICES")}</Header>
-        <HomeLink to={`${matchPath}/new-application`}>{t("CS_APPLY_FOR_DESLUDGING")}</HomeLink>
+        <Header>{t("CS_HOME_PROPERTIES")}</Header>
+        <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
+        <Header>{t("CS_HOME_OTHER_SERVICES")}</Header>
+        <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
       </React.Fragment>
     );
   } else {
@@ -100,17 +100,17 @@ export const FSMLinks = ({ matchPath, userType }) => {
                     ></path>
                   </svg>
                 </span>
-                <span className="text">{t("ES_FSM")}</span>
+                <span className="text">{t("ES_TITLE_FSM")}</span>
               </div>
               <div className="body">
                 <span className="link">
-                  <Link to={`${matchPath}/inbox`}>{t("ES_INBOX")}</Link>
+                  <Link to={`${matchPath}/inbox`}>{t("ES_TITLE_INBOX")}</Link>
                 </span>
                 <span className="link">
-                  <Link to={`${matchPath}/new-application/`}>{t("ES_NEW_DESULDGING_APPLICATION")}</Link>
+                  <Link to={`${matchPath}/new-application/`}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Link>
                 </span>
                 <span className="link">
-                  <Link to={`${matchPath}/application-audit/`}>{t("ES_APPLICATION_AUDIT")}</Link>
+                  <Link to={`${matchPath}/application-audit/`}>{t("ES_TITLE_APPLICATION_AUDIT")}</Link>
                 </span>
               </div>
             </div>

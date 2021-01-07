@@ -30,7 +30,7 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
   const clearAll = () => {
     return (
       <LinkLabel style={{ color: "#F47738", cursor: "pointer" }} onClick={clearSearch}>
-        {t("ES_CLEAR_SEARCH")}
+        {t("ES_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
   };
@@ -64,7 +64,7 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
             )}
             <div className="complaint-input-container">
               <span className="complaint-input">
-                <Label>{t("ES_APPLICATION_NO")}</Label>
+                <Label>{t("ES_SEARCH_APPLICATION_APPLICATION_NO")}</Label>
                 <TextInput
                   name="serviceRequestId"
                   value={applicationNo}
@@ -74,17 +74,17 @@ const SearchApplication = ({ onSearch, type, onClose }) => {
                 ></TextInput>
               </span>
               <span className="mobile-input">
-                <Label>{t("ES_MOBILE_NO")}</Label>
+                <Label>{t("ES_SEARCH_APPLICATION_MOBILE_NO")}</Label>
                 <TextInput name="mobileNumber" value={mobileNo} onChange={setMobile} inputRef={register} style={{ width: "280px" }}></TextInput>
               </span>
-              {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: 8 }} label={t("ES_INBOX_SEARCH")} submit />}
+              {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: 8 }} label={t("ES_COMMON_SEARCH")} submit />}
             </div>
             {type === "desktop" && <span className="clear-search">{clearAll()}</span>}
           </div>
         </div>
         {type === "mobile" && (
           <ActionBar>
-            <SubmitBar label={t("ES_SEARCH")} submit />
+            <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
           </ActionBar>
         )}
       </React.Fragment>
