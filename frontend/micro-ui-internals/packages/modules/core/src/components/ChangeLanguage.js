@@ -12,6 +12,7 @@ const ChangeLanguage = (props) => {
   };
   return (
     <React.Fragment>
+      <div style="margin-bottom:5px">Language</div>
       <div className="language-selector">
         {languages.map((language, index) => (
           <div className="language-button-container" key={index}>
