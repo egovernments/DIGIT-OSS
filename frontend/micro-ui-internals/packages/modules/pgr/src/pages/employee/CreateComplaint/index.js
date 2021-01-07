@@ -35,10 +35,6 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   const localitiesObj = useSelector((state) => state.common.localities);
 
-  useEffect(() => {
-    console.log("%c 🏎️: subtype changed ", "font-size:24px;background-color:#c239cc;color:white;", subType);
-  }, [complaintType]);
-
   //TO USE this way
   // let getObject = window.Digit.CoreService;
   // console.log(getObject.service("PGR").Name)
@@ -59,7 +55,7 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   // city locality logic
   const selectCity = async (city) => {
-    if (selectedCity?.i18nKey != city.i18nKey) {
+    if (selectedCity?.code != city.code) {
       setSelectedCity(city);
       setSelectedLocality(null);
       let __localityList = localitiesObj[city["code"]];
