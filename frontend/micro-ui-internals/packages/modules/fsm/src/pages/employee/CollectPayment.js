@@ -39,9 +39,10 @@ const CollectPayment = ({ parentRoute }) => {
         {
           label: t("ES_PAYMENT_DETAILS_PAYMENT_NO_OF_TRIPS"),
           type: "text",
+
           populators: {
-            name: "noOfTrips",
-            validation: { pattern: /[0-9]+/ },
+            name: "payerName",
+            validation: { required: true, pattern: /[A-Za-z]/ },
           },
         },
         {
@@ -59,7 +60,7 @@ const CollectPayment = ({ parentRoute }) => {
                   alignItems: "center",
                 }}
               >
-                ₹
+                +91
               </span>
             ),
           },
