@@ -30,11 +30,19 @@ const styles = {
 const documentTitle = {
   color: "rgba(0, 0, 0, 0.87)",
   fontFamily: "Roboto",
-  fontSize: "16px",
+  fontSize: "14px",
   fontWeight: 400,
   letterSpacing: "0.67px",
   lineHeight: "19px"
 };
+const documentMainTitle = {
+  color: "rgba(0, 0, 0, 0.87)",
+  fontFamily: "Roboto",
+  fontSize: "16px",
+  fontWeight: 400,
+  letterSpacing: "0.67px",
+  lineHeight: "19px"
+}
 
 function MultiCardDownloadGrid(props) {
   const { classes, data, ...rest } = props;
@@ -53,12 +61,19 @@ function MultiCardDownloadGrid(props) {
                 : classes.whiteCard
             }
           >
+           {item.mainTitle && <Grid xs={12}>
+              <LabelContainer
+                  labelName={item.mainTitle}
+                  labelKey={item.mainTitle}
+                  style={documentMainTitle}
+                />
+            </Grid>}
             <Grid xs={12}>
               <LabelContainer
-                labelName={item.title}
-                labelKey={item.title}
-                style={documentTitle}
-              />
+                  labelName={item.title}
+                  labelKey={item.title}
+                  style={documentTitle}
+                />
             </Grid>
             <Grid container>
               <Grid xs={6} className={classes.subtext}>

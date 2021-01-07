@@ -138,6 +138,7 @@ export const convertToArray = (documentsUploadRedux) => {
         }
         return documentsData.push({
           title: docTitleArray[docTitleArray.length - 1],
+          mainTitle: documentsUploadRedux[key].documentCode,
           link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
           linkText: "View",
           name: documentsUploadRedux[key].documents[0].fileName,
