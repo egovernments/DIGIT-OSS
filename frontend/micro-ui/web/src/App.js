@@ -1,22 +1,25 @@
-import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
-import { Body, TopBar } from "@egovernments/digit-ui-react-components";
+import React from 'react';
+
+import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
+import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
+import { DigitUI } from "@egovernments/digit-ui-module-core";
+
+import Registry from "./ComponentRegistry";
+
+const enabledModules = ["PGR", "FSM"];
+const registry = new Registry({
+  PGRLinks,
+  PGRModule,
+  FSMModule,
+  FSMLinks,
+});
+const moduleReducers = (initData) => ({
+  pgr: PGRReducers(initData),
+});
 
 function App() {
   return (
-    <Router>
-      <Body>
-        <TopBar />
-        <Switch>
-          <Route path="/digit-ui/pgr">
-            <PGRModule stateCode="pb" cityCode="pb.amritsar" moduleCode="PGR" />
-          </Route>
-          <Route>
-            <PGRLinks />
-          </Route>
-        </Switch>
-      </Body>
-    </Router>
+    <DigitUI stateCode="pb" registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />
   );
 }
 

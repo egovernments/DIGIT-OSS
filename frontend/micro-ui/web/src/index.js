@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import initLibraries from "@egovernments/digit-ui-libraries";
+import { initLibraries } from "@egovernments/digit-ui-libraries";
 
 import "./index.css";
 import App from './App';
@@ -9,15 +9,45 @@ initLibraries();
 
 window.Digit.Customizations = { PGR: {} };
 
-// const token = window.localStorage.getItem("token");
-const citizenToken = window.localStorage.getItem("Citizen.token");
-// const employeeToken = window.localStorage.getItem("Employee.token");
+// login detection
 
-// const isLoggedIn = token || citizenToken || employeeToken;
-// const isCitizenLogin = token === citizenToken;
+const parseValue = (value) => {
+  try {
+    return JSON.parse(value)
+  } catch (e) {
+    return value
+  }
+}
 
+const getFromStorage = (key) => {
+  const value = window.localStorage.getItem(key);
+  return value && value !== "undefined" ? parseValue(value) : null;
+}
 
-window.Digit.SessionStorage.set("citizen.token", citizenToken);
+const token = getFromStorage("token")
+
+const citizenToken = getFromStorage("Citizen.token")
+const citizenInfo = getFromStorage("Citizen.user-info")
+const citizenTenantId = getFromStorage("Citizen.tenant-id")
+
+const employeeToken = getFromStorage("Employee.token")
+const employeeInfo = getFromStorage("Employee.user-info")
+const employeeTenantId = getFromStorage("Employee.tenant-id")
+
+const userType = token === citizenToken ? "citizen" : "employee";
+window.Digit.SessionStorage.set("user_type", userType);
+window.Digit.SessionStorage.set("userType", userType);
+
+const getUserDetails = (access_token, info) => ({ access_token, info })
+
+const userDetails = userType === "citizen" ? getUserDetails(citizenToken, citizenInfo) : getUserDetails(employeeToken, employeeInfo)
+
+window.Digit.SessionStorage.set("User", userDetails);
+
+window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
+window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+
+// end
 
 ReactDOM.render(
   <React.StrictMode>
