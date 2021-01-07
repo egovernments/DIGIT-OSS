@@ -16,7 +16,7 @@ export const FSMService = {
       url: Urls.fsm.create,
       data: details,
       useCache: true,
-      userInfo: true,
+      userService: true,
       method: "POST",
       params: { tenantId },
       auth: true,

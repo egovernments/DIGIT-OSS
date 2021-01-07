@@ -33,6 +33,7 @@ const Response = (props) => {
   const mutation = Digit.Hooks.fsm.useDesludging(tenantId);
   useEffect(() => {
     const { state } = props.location;
+    console.log("state -------->", state);
     mutation.mutate(state);
   }, []);
 

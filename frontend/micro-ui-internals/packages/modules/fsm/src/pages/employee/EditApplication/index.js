@@ -42,14 +42,23 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
   const history = useHistory();
 
   useEffect(() => {
-    setMenu(propertyTypeRes.filter((o) => o !== undefined).map((item) => ({ key: item, name: item })));
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
+    setMenu(() => {
+      const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
+      return uniqMenu.map((type) => ({ i18nKey: `ES_MODIFY_APPLICATION_PROPERTY_TYPE_${type}` }));
+    });
+    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
   }, []);
 
   function selectedType(value) {
     setPropertyType(value);
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
-    window.Digit.SessionStorage.set("propertyType", value);
+    // TODO: bottom two lines are hard coded data, whenever we get propertyType apis, it should be update
+    const uniqMenu = [...new Set(data.PropertyType.filter((o) => o.propertyType !== undefined).map((item) => item.propertyType))];
+    setSubTypeMenu(uniqMenu.map((type) => ({ i18nKey: `ES_MODIFY_APPLICATION_PROPERTY_SUB_TYPE_${type}` })));
+    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
+    // window.Digit.SessionStorage.set("propertyType", value);
+    // (async () => {
+    //   await Digit.FileDesludging.create("pb.amritsar");
+    // })();
   }
 
   function selectSlum(value) {
@@ -225,14 +234,14 @@ const ModifyApplication = ({ parentUrl, heading = "Modify Application" }) => {
           label: t("ES_MODIFY_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={menu} optionKey="name" id="propertyType" selected={propertyType} select={selectedType} />,
+          populators: <Dropdown option={menu} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} />,
         },
         {
           label: t("ES_MODIFY_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="name" id="propertySubType" selected={subType} select={selectedSubType} />,
+          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} />,
         },
       ],
     },

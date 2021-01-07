@@ -12,8 +12,8 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
   const [menu, setMenu] = useState(() => {
     return Object.values(
       data.PropertyType.reduce((acc, item) => {
-        if (item.propertyType === undefined) return acc;
-        return Object.assign(acc, { [item.propertyType]: { key: item.propertyType, name: item.propertyType } });
+        if (item.propertyType !== undefined) return acc;
+        return Object.assign(acc, { [item.code]: { key: item.code, name: item.name } });
       }, {})
     );
   });

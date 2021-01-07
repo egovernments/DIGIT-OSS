@@ -26,7 +26,7 @@ const Response = ({ data, onSuccess }) => {
         fsm: {
           tenantId: city_complaint.code,
           additionalDetails: {},
-          propertyUsage: subtype.code,
+          propertyUsage: subtype.key,
           address: {
             tenantId: city_complaint.code,
             additionalDetails: null,
