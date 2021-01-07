@@ -99,7 +99,7 @@ const ApplicationDetails = () => {
           style={{ position: "absolute", top: 0, right: 20 }}
           onClick={() => Digit.Utils.pdf.generate(getPDFData(application, tenantInfo, t))}
         />
-        <KeyNote keyValue={t("CS_APPLICATION_NO")} note={application.applicationNumber} />
+        <KeyNote keyValue={t("CS_MY_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory || "FSM"} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_TYPE")} note={application.applicationType || "Desludging Request"} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_STATUS")} note={application.applicationStatus} />
@@ -112,7 +112,7 @@ const ApplicationDetails = () => {
           keyValue={t("CS_APPLICATION_DETAILS_PIT_SIZE")}
           note={`${application.pitDetail.length}m * ${application.pitDetail.width}m * ${application.pitDetail.height}m`}
         />
-        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={application.noOfTrips} />
+        <KeyNote keyValue={t("CS_APPLICATION_DETAILS_NO_OF_TRIPS")} note={`application.noOfTrips`} />
         <KeyNote keyValue={t("CS_APPLICATION_DETAILS_DESLUDGING_CHARGES")} note={application.desuldgingCharges || "NA"} />
         <Link to={`/digit-ui/citizen/fsm/rate/${application.complaintNo}`}>
           <SubmitBar label={t("CS_APPLICATION_DETAILS_RATE_US")} />
