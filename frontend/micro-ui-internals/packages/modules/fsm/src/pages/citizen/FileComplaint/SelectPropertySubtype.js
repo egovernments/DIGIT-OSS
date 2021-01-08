@@ -23,7 +23,7 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
     return <Loader />;
   }
 
-  const menu = propertySubtypesData.data.filter((item) => item.propertyType === propertyType.code);
+  const menu = propertySubtypesData.data.filter((item) => item.propertyType === propertyType?.code);
 
   return (
     <TypeSelectCard
