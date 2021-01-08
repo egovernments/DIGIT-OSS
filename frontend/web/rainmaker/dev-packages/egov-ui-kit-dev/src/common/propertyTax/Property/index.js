@@ -23,7 +23,8 @@ import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/Tra
 import isEqual from "lodash/isEqual";
 import orderby from "lodash/orderBy";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
-import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
 import { Button, Card } from "components";
 import "./index.css";
@@ -81,6 +82,7 @@ class Property extends Component {
       fetchProperties,
       fetchReceipt,
       fetchAssessments,
+      fetchLocalizationLabel
     } = this.props;
     const requestBody = {
       MdmsCriteria: {
@@ -182,7 +184,10 @@ class Property extends Component {
     ]);
 
     loadUlbLogo(this.props.match.params.tenantId);
+    fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId());
+
   };
+
 
   onListItemClick = (item, index) => {
     const { getSingleAssesmentandStatus } = this.props;
@@ -862,6 +867,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchTotalBillAmount: (fetchBillQueryObject) => dispatch(fetchTotalBillAmount(fetchBillQueryObject)),
     fetchReceipt: (fetchReceiptQueryObject) => dispatch(fetchReceipt(fetchReceiptQueryObject)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
+    fetchLocalizationLabel: (locale, tenantId, tenatId) =>dispatch(fetchLocalizationLabel(locale, tenantId,tenatId)),
     fetchAssessments: (fetchAssessmentsQueryObject) => dispatch(fetchAssessments(fetchAssessmentsQueryObject)),
   };
 };

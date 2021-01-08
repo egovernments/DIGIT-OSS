@@ -17,6 +17,8 @@ import { transferorInstitutionSummary, transferorSummary } from "./searchPreview
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const titlebar = getCommonContainer({
@@ -388,6 +390,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     dispatch(unMountScreen("propertySearch"));
     dispatch(unMountScreen("apply"));
     const applicationNumber = getQueryArg(
