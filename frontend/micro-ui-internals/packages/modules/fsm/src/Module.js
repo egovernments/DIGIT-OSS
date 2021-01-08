@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Route, BrowserRouter as Router, Switch, useRouteMatch, matchPath, Link } from "react-router-dom";
+import React, { useMemo, useEffect } from "react";
+import { Route, BrowserRouter as Router, Switch, useRouteMatch, useLocation, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import SelectRating from "./pages/citizen/Rating/SelectRating";
 
@@ -39,10 +39,11 @@ const EmployeeApp = ({ path, url, userType }) => {
 };
 
 const CitizenApp = ({ path }) => {
+  const location = useLocation();
   return (
     <Switch>
       <div className="ground-container">
-        <BackButton>Back</BackButton>
+        {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
         <PrivateRoute path={`${path}/new-application`} component={() => <FileComplaint parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
         <PrivateRoute path={`${path}/application-details/:id`} component={ApplicationDetails} />
@@ -74,6 +75,11 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
 
 export const FSMLinks = ({ matchPath, userType }) => {
   const { t } = useTranslation();
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
+
+  useEffect(() => {
+    clearParams();
+  }, []);
 
   if (userType === "citizen") {
     return (

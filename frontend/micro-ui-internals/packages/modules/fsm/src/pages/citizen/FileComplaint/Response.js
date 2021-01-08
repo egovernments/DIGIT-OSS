@@ -10,7 +10,14 @@ const GetActionMessage = () => {
 };
 
 const BannerPicker = (props) => {
-  return <Banner message={GetActionMessage()} complaintNumber={props.data?.fsm[0].applicationNo} successful={props.isSuccess} />;
+  return (
+    <Banner
+      message={GetActionMessage()}
+      applicationNumber={props.data?.fsm[0].applicationNo}
+      info={props.t("CS_FILE_DESLUDGING_APPLICATION_NO")}
+      successful={props.isSuccess}
+    />
+  );
 };
 
 const Response = ({ data, onSuccess }) => {
@@ -26,7 +33,7 @@ const Response = ({ data, onSuccess }) => {
         fsm: {
           tenantId: city_complaint.code,
           additionalDetails: {},
-          propertyUsage: subtype.key,
+          propertyUsage: subtype.code,
           address: {
             tenantId: city_complaint.code,
             additionalDetails: null,
@@ -122,8 +129,8 @@ const Response = ({ data, onSuccess }) => {
     <Loader />
   ) : (
     <Card>
-      <BannerPicker data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-      <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
+      <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
+      <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
       {mutation.isSuccess && (
         <LinkButton
           label={

@@ -38,7 +38,7 @@ const CheckPage = ({ onSubmit, value }) => {
       <StatusTable>
         <Row
           label={t("CS_CHECK_PROPERTY_TYPE")}
-          text={propertyType}
+          text={propertyType.name}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/property-type" />}
         />
         <Row
