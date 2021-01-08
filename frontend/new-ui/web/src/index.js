@@ -42,7 +42,9 @@ const getUserDetails = (access_token, info) => ({ access_token, info })
 
 const userDetails = userType === "citizen" ? getUserDetails(citizenToken, citizenInfo) : getUserDetails(employeeToken, employeeInfo)
 
-window.Digit.SessionStorage.set("User", userDetails);
+if (userType !== "citizen") {
+  window.Digit.SessionStorage.set("User", userDetails);
+}
 
 window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
