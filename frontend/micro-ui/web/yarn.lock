@@ -1140,9 +1140,9 @@
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.56"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.56.tgz#652efc15ca8a48c7fb611d90fafce9f66289c862"
-  integrity sha512-GhznfOIFxY9x+UfQ66L3i2ZYzSTujHdsYxsXhwnWiprN68IlgQuwfUsmT7wYe9x0JFZ5xwALahaiSXRTxyM4bw==
+  version "1.0.57"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.57.tgz#b6334542672621a606079b864f1fd6242447d12a"
+  integrity sha512-San3gojCuZk3CrQ9ihDJAzqSw81XgtOmLB2htg/TsCwY3ejvWqdPV20NlCixUfZLvoIG2wR3py1AjWnvvXyUAQ==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1153,13 +1153,12 @@
     react "^17.0.0"
     react-i18next "^11.7.3"
     react-query "^3.2.0"
-    react-redux "^7.2.1"
-    redux "^4.0.5"
+    rooks "^4.4.0"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.56"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.56.tgz#e6cbe038d45c1f0f6d94328a5dd5590d8014072f"
-  integrity sha512-BdWQQj3Fg7DHkX2nltK8Y74XFIgIqk3nRlGjw+g4trINkUrDNsmAkb+i3jRYguq8yGQXHiY5CyS08W/qK34RcQ==
+  version "1.0.57"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.57.tgz#e4cf95b78c03403d4719b960742e643728257fee"
+  integrity sha512-rVNm2mxxUiQQMsAiSqef0giNnqSLu+dCz8/X3X05szVRmE7m0gCuldG4Iit0mSNg7nZuI8oizPC8PboYLPazJQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1175,9 +1174,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.56"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.56.tgz#f69a1955764542c6c7e23ee70adc47eb8a192a46"
-  integrity sha512-XQ1/oPiNbpzg5wAHWkpp+Jwdm07A6hVz3mpQ3KqR29M8PonOdC82H/Gy8gruJFquhAveViqFNbqm+ip31rJ/lg==
+  version "1.0.57"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.57.tgz#b38d9b582d1e99dc56102bb9815fb39f836b996d"
+  integrity sha512-MD+05NaXuEMd9ZfUokvTMfmVM6TcOwVbsZRM8W0lPopWwZyLPj2PCmW9qKE4wNrCwMb4Nm7yoSK/sbWnp7fvxg==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1193,9 +1192,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.56"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.56.tgz#2a7090078c2ad0ed3642f5c4b73ebfad27575682"
-  integrity sha512-anLd/JjOBz5G0ejQTwlZlC3DKtZoBF8NtSJba185ldDyY9mb55Z1K+TprMZ7COTcAddRWYC19ODwyJ3+Qbmzvw==
+  version "1.0.57"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.57.tgz#73e83ce50ed3931aab2bf58f42908f55d36e19cd"
+  integrity sha512-ZQ+qdAAxpjc3bGWKySk2Eivpmo4RQgEbwOod+ciLtvktEoDrawzibQViak65zDQZjRG7zsEG57EoMP4Slg3UHg==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1210,11 +1209,12 @@
     react-table "^7.6.1"
     redux "^4.0.5"
     redux-thunk "^2.3.0"
+    rooks "^4.4.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.56"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.56.tgz#f275801ed588e87eb9676e344a2932eee180f10a"
-  integrity sha512-Vs6CETh4AnQLCRoRHschjyMiKpEJIdyC29NfOPffmOGtZV3cnpbJZtqwJGtYLEcLr6W0VFH6JLDy7Ca5bUmPjg==
+  version "1.0.57"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.57.tgz#dc5b60582686409771ee7871aa2d422c26ad04dc"
+  integrity sha512-SJOR8V04i6612eMPIE19pjt+nnnQCmQUgQriVki4ecSbveA588H/KFVyHrjmiDbI2bjbrWllbP83k8+pBP7jBA==
   dependencies:
     react-hook-form "^6.7.0"
     react-i18next "^11.7.3"
@@ -7436,9 +7436,9 @@ loader-runner@^2.4.0:
   integrity sha512-Jsmr89RcXGIwivFY21FcRrisYZfvLMTWx5kOLc+JTxtpBOG6xML0vzbc6SEQG2FO9/4Fc3wW4LVcB5DmGflaRw==
 
 loader-runner@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-4.1.0.tgz#f70bc0c29edbabdf2043e7ee73ccc3fe1c96b42d"
-  integrity sha512-oR4lB4WvwFoC70ocraKhn5nkKSs23t57h9udUgw8o0iH8hMXeEoRuUgfcvgUwAJ1ZpRqBvcou4N2SMvM1DwMrA==
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-4.2.0.tgz#d7022380d66d14c5fb1d496b89864ebcfd478384"
+  integrity sha512-92+huvxMvYlMzMt0iIOukcwYBFpkYJdpl2xsZ7LrlayO7E8SOv+JJUEK17B/dJIHAOLMfh2dZZ/Y18WgmGtYNw==
 
 loader-utils@1.2.3:
   version "1.2.3"
@@ -9363,9 +9363,9 @@ postcss@^7, postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.17, po
     supports-color "^6.1.0"
 
 postcss@^8.1.0:
-  version "8.2.2"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.2.2.tgz#60613b62297005084fd21024a68637798864fe26"
-  integrity sha512-HM1NDNWLgglJPQQMNwvLxgH2KcrKZklKLi/xXYIOaqQB57p/pDWEJNS83PVICYsn1Dg/9C26TiejNr422/ePaQ==
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.2.3.tgz#14ed1294850c99661761d9cb68863718eb75690d"
+  integrity sha512-tdmNCCmxJEsLZNj810qlj8QbvnUNKFL9A5doV+uHrGGK/YNKWEslrytnHDWr9M/GgGjfUFwXCRbxd/b6IoRBXQ==
   dependencies:
     colorette "^1.2.1"
     nanoid "^3.1.20"
@@ -10274,6 +10274,11 @@ rollup@^1.31.1:
     "@types/node" "*"
     acorn "^7.1.0"
 
+rooks@^4.4.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/rooks/-/rooks-4.5.0.tgz#2d5886c583392be90aab2d5816e52ace8111ceb5"
+  integrity sha512-+3hJ5iqZJcPYeFvjzrrbylf62WJV3ALADM7KbT+L6wnmiYToF4alPRdwxDA7dUxVFOn9QZQbZAVhIcsVQ4mxiA==
+
 rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
@@ -11171,9 +11176,9 @@ tapable@^2.1.1, tapable@^2.2.0:
   integrity sha512-FBk4IesMV1rBxX2tfiK8RAmogtWn53puLOQlvO8XuwlgxcYbP4mVPS9Ph4aeamSyyVjOl24aYWAuc8U5kCVwMw==
 
 tar@^6.0.2:
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-6.0.5.tgz#bde815086e10b39f1dcd298e89d596e1535e200f"
-  integrity sha512-0b4HOimQHj9nXNEAA7zWwMM91Zhhba3pspja6sQbgTpynOJf+bkjBnfybNYzbpLbnwXnbyB4LOREvlyXLkCHSg==
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.0.tgz#d1724e9bcc04b977b18d5c573b333a2207229a83"
+  integrity sha512-DUCttfhsnLCjwoDoFcI+B2iJgYa93vBnDUATYEeRx6sntCTdN01VnqsIuTlALXla/LWooNg0yEGeB+Y8WdFxGA==
   dependencies:
     chownr "^2.0.0"
     fs-minipass "^2.0.0"
