@@ -7,7 +7,15 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
   };
 
   const useApplicationChannel = () => {
-    return useQuery("FSM_APPLICATION_CHANNEL", () => MdmsService.getApplicationChannel(tenantId, moduleCode), config);
+    return useQuery("FSM_APPLICATION_CHANNEL", () => MdmsService.getApplicationChannel(tenantId, moduleCode, type), config);
+  };
+
+  const usePropertyType = () => {
+    return useQuery("FSM_PROPERTY_TYPE", () => MdmsService.getPropertyType(tenantId, moduleCode, type), config);
+  };
+
+  const usePropertySubType = () => {
+    return useQuery("FSM_PROPERTY_SUBTYPE", () => MdmsService.getPropertyType(tenantId, moduleCode, type), config);
   };
 
   switch (type) {
@@ -16,6 +24,12 @@ const useMDMS = (tenantId, moduleCode, type, config = {}) => {
 
     case "ApplicationChannel":
       return useApplicationChannel();
+
+    case "PropertyType":
+      return usePropertyType();
+
+    case "PropertySubtype":
+      return usePropertySubType();
   }
 };
 

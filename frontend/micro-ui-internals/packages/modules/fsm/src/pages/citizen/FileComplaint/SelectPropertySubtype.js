@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
-import data from "../../../propertyType.json";
+import { Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
   const [subtype, setSubtype] = useState(() => {
@@ -8,16 +7,9 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
     return subtype !== undefined ? subtype : null;
   });
   const { propertyType } = value;
-  const [subTypeMenu, setSubTypeMenu] = useState([]);
 
-  React.useEffect(() => {
-    // TODO: bottom two lines are hard coded data, whenever we get propertyType apis, it should be update
-    const uniqMenu = data.PropertyType.filter((o) => o.propertyType !== undefined && o.propertyType === propertyType).map((item) => ({
-      key: item.code,
-      name: item.name,
-    }));
-    setSubTypeMenu(uniqMenu);
-  }, []);
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype");
 
   const selectedValue = (value) => {
     setSubtype(value);
@@ -26,10 +18,17 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
   const goNext = () => {
     onSelect({ subtype: subtype });
   };
+
+  if (propertySubtypesData.isLoading) {
+    return <Loader />;
+  }
+
+  const menu = propertySubtypesData.data.filter((item) => item.propertyType === propertyType.code);
+
   return (
     <TypeSelectCard
       {...config.texts}
-      {...{ menu: subTypeMenu }}
+      {...{ menu: menu }}
       {...{ optionsKey: "name" }}
       {...{ selected: selectedValue }}
       {...{ selectedOption: subtype }}
