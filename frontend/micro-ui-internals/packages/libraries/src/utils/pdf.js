@@ -2,7 +2,7 @@ var pdfMake = require("pdfmake/build/pdfmake.js");
 var pdfFonts = require("pdfmake/build/vfs_fonts.js");
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details }) => {
+const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
   const dd = {
     header: {
       columns: [
@@ -40,10 +40,16 @@ const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details }) =>
         margin: [-25, 32],
       },
       ...createContent(details),
+      {
+        text: t("PDF_SYSTEM_GENERATED_ACKNOWLEDGEMENT"),
+        fontSize: 11,
+        color: "#6f777c",
+        margin: [-25, 32],
+      },
     ],
   };
 
-  pdfMake.createPdf(dd).download();
+  pdfMake.createPdf(dd).open();
 };
 
 export default { generate: jsPdfGenerator };
