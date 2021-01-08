@@ -10,6 +10,7 @@ import {
   ActionLinks,
   LinkButton,
   SubmitBar,
+  CitizenInfoLabel,
 } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -60,6 +61,7 @@ const CheckPage = ({ onSubmit, value }) => {
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />
       </StatusTable>
+      <CitizenInfoLabel info={t("CS_CHECK_INFO_TITLE")} text={t("CS_CHECK_INFO_TEXT")} />
       <SubmitBar label="Submit" onSubmit={onSubmit} />
     </Card>
   );
