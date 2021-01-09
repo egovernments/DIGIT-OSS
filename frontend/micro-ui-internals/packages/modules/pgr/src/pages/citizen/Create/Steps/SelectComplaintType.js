@@ -14,7 +14,7 @@ const SelectComplaintType = ({ t, config, onSelect, value }) => {
 
   const textParams = config.texts;
 
-  const menu = Digit.Hooks.pgr.useComplaintTypes({ stateCode: "pb.amritsar" });
+  const menu = Digit.Hooks.pgr.useComplaintTypes({ stateCode: Digit.ULBService.getCurrentTenantId() });
 
   function selectedValue(value) {
     setComplaintType(value);
