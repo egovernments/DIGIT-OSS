@@ -29,7 +29,13 @@ const AddtionalDetails = (props) => {
     }
   }, [appState.complaints, props.history]);
 
-  const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
+  const updateComplaint = useCallback(
+    async (complaintDetails) => {
+      await dispatch(updateComplaints(complaintDetails));
+      history.push(`${props.match.path}/response/${id}`);
+    },
+    [dispatch]
+  );
 
   const getUpdatedWorkflow = (reopenDetails, type) => {
     switch (type) {
@@ -87,7 +93,7 @@ const AddtionalDetails = (props) => {
       <Card>
         <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_ADDITIONAL_DETAILS`)}</CardHeader>
         <CardText>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_TEXT`)}</CardText>
-        <TextArea onChange={textInput}></TextArea>
+        <TextArea name={"AdditionalDetails"} onChange={textInput}></TextArea>
         <div onClick={reopenComplaint}>
           <SubmitBar label={t(`${LOCALIZATION_KEY.CS_HEADER}_REOPEN_COMPLAINT`)} />
         </div>
