@@ -13,6 +13,7 @@ import useLocalities from "./pgr/useLocalities";
 import useServiceDefs from "./pgr/useServiceDefs";
 import useTenants from "./pgr/useTenants";
 import useComplaintSubType from "./pgr/useComplaintSubType";
+import useOutsideClickListener from "./pgr/useOutsideClickListener";
 
 import useTenantsFSM from "./fsm/useTenants";
 
@@ -29,6 +30,7 @@ const pgr = {
   useServiceDefs,
   useTenants,
   useComplaintSubType,
+  useOutsideClickListener,
 };
 
 const fsm = {

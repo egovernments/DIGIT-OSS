@@ -29,6 +29,12 @@ const Dropdown = (props) => {
     setSelectedOption(props.selected);
   }, [props.selected]);
 
+  useEffect(() => {
+    if (props.forceClose) {
+      setDropdownStatus(false);
+    }
+  }, [props.forceClose]);
+
   function dropdownSwitch() {
     var current = dropdownStatus;
     setDropdownStatus(!current);
@@ -68,6 +74,7 @@ const Dropdown = (props) => {
         />
         <ArrowDown onClick={dropdownSwitch} />
       </div>
+      {console.log("dropdownStatus::::::::::::::>", dropdownStatus)}
       {dropdownStatus ? (
         props.optionKey ? (
           <div className="options-card">
