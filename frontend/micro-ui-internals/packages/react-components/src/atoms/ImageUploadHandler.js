@@ -88,8 +88,8 @@ export const ImageUploadHandler = (props) => {
   }
 
   const submit = useCallback(async () => {
-    if (uploadedImagesIds && uploadedImagesIds.length > 0) {
-      const res = await Digit.UploadServices.Filefetch(uploadedImagesIds, "pb.amritsar");
+    if (uploadedImagesIds !== null && uploadedImagesIds.length > 0) {
+      const res = await Digit.UploadServices.Filefetch(uploadedImagesIds, props.tenantId);
       addImageThumbnails(res);
     }
   }, [uploadedImagesIds]);

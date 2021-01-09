@@ -3,7 +3,7 @@ import { Request } from "../atoms/Utils/Request";
 
 export const PGRService = {
   search: (tenantId, filters = {}) => {
-    // console.log("----------------------------", filters);
+    // console.log("----------------------------", tenantId,filters);
     return Request({
       url: Urls.pgr_search,
       useCache: false,

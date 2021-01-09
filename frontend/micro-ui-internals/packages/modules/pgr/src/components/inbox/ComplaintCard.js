@@ -29,7 +29,7 @@ export const ComplaintCard = ({ data, onFilterChange, onSearch, serviceRequestId
       <div className="searchBox">
         <SearchAction text="SEARCH" handleActionClick={() => handlePopupAction("SEARCH")} />
         <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />
-        <FilterAction text="SORT" handleActionClick={handlePopupAction} />
+        {/* <FilterAction text="SORT" handleActionClick={handlePopupAction} /> */}
       </div>
       <DetailsCard data={data} serviceRequestIdKey={serviceRequestIdKey} linkPrefix={"/digit-ui/employee/pgr/complaint/details/"} />
       {popup && (
