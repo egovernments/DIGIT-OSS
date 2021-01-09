@@ -20,12 +20,25 @@ export const CreateComplaint = () => {
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
   // const [customConfig, setConfig] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_COMPLAINT_CONFIG, {});
   const config = useMemo(() => merge(defaultConfig, Digit.Customizations.PGR.complaintConfig), [Digit.Customizations.PGR.complaintConfig]);
+  const [paramState, setParamState] = useState(params);
+  const [nextStep, setNextStep] = useState("");
+
+  useEffect(() => {
+    setParamState(params);
+    if (nextStep === null) {
+      submitComplaint();
+    } else {
+      history.push(`${match.path}/${nextStep}`);
+    }
+  }, [params, nextStep]);
 
   const goNext = () => {
+    //console.log("ParamState go next::::::::::", paramState);
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.routes[currentPath];
-    if (nextStep === null) return submitComplaint();
-    history.push(`${match.path}/${nextStep}`);
+    setNextStep(nextStep);
+    // if (nextStep === null) return submitComplaint();
+    // history.push(`${match.path}/${nextStep}`);
   };
 
   const submitComplaint = async () => {
@@ -45,35 +58,37 @@ export const CreateComplaint = () => {
     // Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
     // Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
     // Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
+    if (paramState?.complaintType) {
+      const { city_complaint, locality_complaint, uploadedImages, complaintType, subType, details, ...values } = paramState;
+      const { code: cityCode, name: city } = city_complaint;
 
-    const { city_complaint, locality_complaint, uploadedImages, complaintType, subType, details, ...values } = params;
-    const { code: cityCode, name: city } = city_complaint;
-    const { code: localityCode, name: localityName } = locality_complaint;
-    const _uploadImages = uploadedImages?.map((url) => ({
-      documentType: "PHOTO",
-      fileStore: url,
-      documentUid: "",
-      additionalDetails: {},
-    }));
+      const { code: localityCode, name: localityName } = locality_complaint;
+      const _uploadImages = uploadedImages?.map((url) => ({
+        documentType: "PHOTO",
+        fileStore: url,
+        documentUid: "",
+        additionalDetails: {},
+      }));
 
-    const data = {
-      ...values,
-      complaintType: subType.key,
-      cityCode,
-      city,
-      description: details,
-      district: city,
-      region: city,
-      localityCode,
-      localityName,
-      state: "Punjab",
-      uploadedImages: _uploadImages,
-    };
+      const data = {
+        ...values,
+        complaintType: subType.key,
+        cityCode,
+        city,
+        description: details,
+        district: city,
+        region: city,
+        localityCode,
+        localityName,
+        state: "Punjab",
+        uploadedImages: _uploadImages,
+      };
 
-    console.log("this is the request data", data);
-    await dispatch(createComplaint(data));
-    clearParams();
-    history.push(`${match.path}/response`);
+      console.log("this is the request data", data);
+      await dispatch(createComplaint(data));
+      clearParams();
+      history.push(`${match.path}/response`);
+    }
   };
 
   const handleSelect = (data) => {
