@@ -1217,7 +1217,8 @@ img, video {
 .photos-wrap {
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  padding-top: 16px; }
   .photos-wrap img, .photos-wrap svg {
     margin-right: 14px; }
   .photos-wrap .last, .photos-wrap img, .photos-wrap svg {
