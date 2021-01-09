@@ -67,7 +67,7 @@
 }
 
 .photos-wrap {
-  @apply flex;
+  @apply flex pt-md;
 
   img {
     width: calc(33% - 9.333px);
