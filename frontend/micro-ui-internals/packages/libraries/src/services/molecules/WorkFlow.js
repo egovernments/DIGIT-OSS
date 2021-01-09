@@ -44,7 +44,7 @@ export const WorkflowService = {
     const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCode)).BusinessServices[0].states;
     if (workflow && workflow.ProcessInstances) {
       const processInstances = workflow.ProcessInstances;
-      const nextStates = processInstances[0].nextActions.map((action) => ({ action: action.action, nextState: action.nextState }));
+      const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action.action, nextState: action.nextState }));
       const nextActions = nextStates.map((id) => ({
         action: id.action,
         state: businessServiceResponse.find((state) => state.uuid === id.nextState),

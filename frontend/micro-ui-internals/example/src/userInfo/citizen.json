@@ -8,11 +8,11 @@
   "locale": null,
   "type": "CITIZEN",
   "roles": [
-    {
-      "name": "Citizen",
-      "code": "CITIZEN",
-      "tenantId": "pb"
-    }
+      {
+          "name": "Citizen",
+          "code": "CITIZEN",
+          "tenantId": "pb"
+      }
   ],
   "active": true,
   "tenantId": "pb"
