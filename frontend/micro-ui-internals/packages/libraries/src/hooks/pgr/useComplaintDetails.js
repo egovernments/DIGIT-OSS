@@ -14,6 +14,7 @@ const getDetailsRow = ({ id, service }) => ({
   CS_COMPLAINT_DETAILS_COMPLAINT_NO: id,
   CS_COMPLAINT_DETAILS_APPLICATION_STATUS: `CS_COMMON_${service.applicationStatus}`,
   CS_ADDCOMPLAINT_COMPLAINT_TYPE: `SERVICEDEFS.${service.serviceCode.toUpperCase()}`,
+  CS_COMPLAINT_COMPLAINT_ADDTIONAL_DETAILS: service.description,
   CS_COMPLAINT_FILED_DATE: Digit.DateUtils.ConvertTimestampToDate(service.auditDetails.createdTime),
   ES_CREATECOMPLAINT_ADDRESS: [
     service.address.landmark,
@@ -54,7 +55,7 @@ const fetchComplaintDetails = async (tenantId, id) => {
   Digit.SessionStorage.set("complaintDetails", { service, workflow });
   if (service && workflow && serviceDefs) {
     const ids = workflow.verificationDocuments
-      ? workflow.verificationDocuments.filter((doc) => doc.documentType === "PHOTO").map((photo) => photo.fileStoreId || photo.id)
+      ? workflow.verificationDocuments.filter((doc) => doc.documentType === "PHOTO").map((photo) => photo.fileStore || photo.id)
       : null;
     const thumbnails = ids ? await getThumbnails(ids, tenantId) : null;
     const details = transformDetails({ id, service, workflow, thumbnails });

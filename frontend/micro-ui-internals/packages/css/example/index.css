@@ -2048,9 +2048,6 @@ img, video {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
   margin: 8px; }
   .searchBox .searchAction {
     display: -webkit-box;
@@ -2065,6 +2062,9 @@ img, video {
     color: rgba(244, 119, 56, var(--text-opacity)); }
     .searchBox .searchAction .searchText {
       margin-left: 8px; }
+
+.searchBox div:not(:first-child) {
+  margin-left: 65px; }
 
 .tag-container {
   display: -webkit-box;

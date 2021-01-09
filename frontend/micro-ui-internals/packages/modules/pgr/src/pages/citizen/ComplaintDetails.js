@@ -19,14 +19,27 @@ import {
 
 import TimeLine from "../../components/TimeLine";
 
+const WorkflowComponent = ({ complaintDetails, id }) => {
+  const tenantId = complaintDetails.service.tenantId;
+  const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: tenantId, id, moduleCode: "PGR" });
+
+  return (
+    <TimeLine
+      isLoading={workFlowDetails.isLoading}
+      data={workFlowDetails.data}
+      serviceRequestId={id}
+      complaintWorkflow={complaintDetails.workflow}
+      rating={complaintDetails.audit.rating}
+    />
+  );
+};
+
 const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
 
   let cityCodeVal = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
   const { isLoading, error, isError, complaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId: cityCodeVal, id });
-
-  const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: cityCodeVal, id, moduleCode: "PGR" });
 
   const [imageZoom, setImageZoom] = useState(null);
 
@@ -73,15 +86,7 @@ const ComplaintDetailsPage = (props) => {
             ) : null}
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>
-          <Card>
-            <TimeLine
-              isLoading={workFlowDetails.isLoading}
-              data={workFlowDetails.data}
-              serviceRequestId={id}
-              complaintWorkflow={complaintDetails.workflow}
-              rating={complaintDetails.audit.rating}
-            />
-          </Card>
+          <Card>{complaintDetails?.service && <WorkflowComponent complaintDetails={complaintDetails} id={id} />}</Card>
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
             <TextArea name={""} />
