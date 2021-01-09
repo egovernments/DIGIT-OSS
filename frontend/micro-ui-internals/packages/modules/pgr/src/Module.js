@@ -54,7 +54,7 @@ export const PGRLinks = ({ matchPath }) => {
   return (
     <React.Fragment>
       <Header>Complaints</Header>
-      <HomeLink to={`${matchPath}/create-complaint`}>File a Complaint</HomeLink>
+      <HomeLink to={`${matchPath}/create-complaint/complaint-type`}>File a Complaint</HomeLink>
       <HomeLink to={`${matchPath}/complaints`}>My Complaints</HomeLink>
     </React.Fragment>
   );
