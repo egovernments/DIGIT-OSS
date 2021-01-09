@@ -10,10 +10,11 @@ const getThumbnails = async (ids, tenantId) => {
   }
 };
 
-const getDetailsRow = ({ id, service }) => ({
+const getDetailsRow = ({ id, service, complaintType }) => ({
   CS_COMPLAINT_DETAILS_COMPLAINT_NO: id,
   CS_COMPLAINT_DETAILS_APPLICATION_STATUS: `CS_COMMON_${service.applicationStatus}`,
-  CS_ADDCOMPLAINT_COMPLAINT_TYPE: `SERVICEDEFS.${service.serviceCode.toUpperCase()}`,
+  CS_ADDCOMPLAINT_COMPLAINT_TYPE: `SERVICEDEFS.${complaintType}`,
+  CS_ADDCOMPLAINT_COMPLAINT_SUB_TYPE: `SERVICEDEFS.${service.serviceCode.toUpperCase()}`,
   CS_COMPLAINT_COMPLAINT_ADDTIONAL_DETAILS: service.description,
   CS_COMPLAINT_FILED_DATE: Digit.DateUtils.ConvertTimestampToDate(service.auditDetails.createdTime),
   ES_CREATECOMPLAINT_ADDRESS: [
@@ -27,14 +28,14 @@ const getDetailsRow = ({ id, service }) => ({
 
 const isEmptyOrNull = (obj) => obj === undefined || obj === null || Object.keys(obj).length === 0;
 
-const transformDetails = ({ id, service, workflow, thumbnails }) => {
+const transformDetails = ({ id, service, workflow, thumbnails, complaintType }) => {
   const { Customizations, SessionStorage } = window.Digit;
   const role = (SessionStorage.get("user_type") || "CITIZEN").toUpperCase();
   const customDetails = Customizations?.PGR?.getComplaintDetailsTableRows
     ? Customizations.PGR.getComplaintDetailsTableRows({ id, service, role })
     : {};
   return {
-    details: !isEmptyOrNull(customDetails) ? customDetails : getDetailsRow({ id, service }),
+    details: !isEmptyOrNull(customDetails) ? customDetails : getDetailsRow({ id, service, complaintType }),
     thumbnails: thumbnails,
     workflow: workflow,
     service,
@@ -54,11 +55,12 @@ const fetchComplaintDetails = async (tenantId, id) => {
   const { service, workflow } = (await Digit.PGRService.search(tenantId, { serviceRequestId: id })).ServiceWrappers[0] || {};
   Digit.SessionStorage.set("complaintDetails", { service, workflow });
   if (service && workflow && serviceDefs) {
+    const complaintType = serviceDefs.filter((def) => def.serviceCode === service.serviceCode)[0].menuPath.toUpperCase();
     const ids = workflow.verificationDocuments
       ? workflow.verificationDocuments.filter((doc) => doc.documentType === "PHOTO").map((photo) => photo.fileStore || photo.id)
       : null;
     const thumbnails = ids ? await getThumbnails(ids, tenantId) : null;
-    const details = transformDetails({ id, service, workflow, thumbnails });
+    const details = transformDetails({ id, service, workflow, thumbnails, complaintType });
     return details;
   } else {
     console.log("error fetching complaint details or service defs");
