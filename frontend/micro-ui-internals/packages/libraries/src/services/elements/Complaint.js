@@ -22,7 +22,7 @@ export const Complaint = {
         serviceCode: complaintType,
         description: description,
         additionalDetail: {},
-        source: Digit.Utils.browser.isWebview ? "mobileapp" : "web",
+        source: Digit.Utils.browser.isWebview ? "mobile" : "web",
         address: {
           landmark: landmark,
           city: city,
@@ -63,7 +63,7 @@ export const Complaint = {
     return response;
   },
 
-  assign: async (complaintDetails, action, employeeData, comments, uploadedDocument, tenantId) => {
+  assign: async (complaintDetails, action, employeeData, comments, uploadedDocument) => {
     console.log("assign complaint srvice acall", action, employeeData, comments, uploadedDocument, complaintDetails);
     complaintDetails.workflow.action = action;
     complaintDetails.workflow.assignes = employeeData ? [employeeData.uuid] : null;
@@ -89,7 +89,7 @@ export const Complaint = {
     console.log("assign complaintg whole call", complaintDetails);
 
     //TODO: get tenant id
-    const response = await Digit.PGRService.update(complaintDetails, tenantId);
+    const response = await Digit.PGRService.update(complaintDetails, "pb.amritsar");
     console.log(response);
     return response;
   },
