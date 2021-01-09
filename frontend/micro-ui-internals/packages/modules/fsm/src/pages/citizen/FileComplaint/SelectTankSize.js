@@ -9,7 +9,7 @@ const SelectTankSize = ({ config, onSelect, t, value }) => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setSize({ ...size, [name]: parseInt(value, 10) });
+    setSize({ ...size, [name]: value });
   };
 
   const handleSubmit = () => {
