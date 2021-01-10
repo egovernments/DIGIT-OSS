@@ -207,7 +207,7 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   return (
     <FormComposer
-      heading="ES_CREATECOMPLAINT_NEW_COMPLAINT"
+      heading={t("ES_CREATECOMPLAINT_NEW_COMPLAINT")}
       config={config}
       onSubmit={onSubmit}
       label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")}
