@@ -22,7 +22,7 @@ export const Complaint = {
         serviceCode: complaintType,
         description: description,
         additionalDetail: {},
-        source: Digit.Utils.browser.isWebview ? "mobileapp" : "web",
+        source: Digit.Utils.browser.isWebview ? "mobile" : "web",
         address: {
           landmark: landmark,
           city: city,
