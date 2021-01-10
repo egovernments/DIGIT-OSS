@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -15,13 +15,18 @@ import {
   DisplayPhotos,
   ImageViewer,
   Loader,
+  Toast,
 } from "@egovernments/digit-ui-react-components";
 
 import TimeLine from "../../components/TimeLine";
 
-const WorkflowComponent = ({ complaintDetails, id }) => {
+const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
   const tenantId = complaintDetails.service.tenantId;
   const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: tenantId, id, moduleCode: "PGR" });
+
+  useEffect(() => {
+    getWorkFlow(workFlowDetails.data);
+  }, [workFlowDetails.data]);
 
   return (
     <TimeLine
@@ -43,6 +48,14 @@ const ComplaintDetailsPage = (props) => {
 
   const [imageZoom, setImageZoom] = useState(null);
 
+  const [comment, setComment] = useState("");
+
+  const [toast, setToast] = useState(false);
+
+  const [commentError, setCommentError] = useState(null);
+
+  const [disableComment, setDisableComment] = useState(true);
+
   function zoomImage(imageSource) {
     setImageZoom(imageSource);
   }
@@ -50,6 +63,36 @@ const ComplaintDetailsPage = (props) => {
   function onCloseImageZoom() {
     setImageZoom(null);
   }
+
+  const onWorkFlowChange = (data) => {
+    let timeline = data?.timeline;
+    let status = timeline?.length ? timeline[0].status : null;
+    status && (status === "REJECTED" || status === "RESOLVED") ? setDisableComment(false) : setDisableComment(true);
+  };
+
+  const submitComment = async () => {
+    let detailsToSend = { ...complaintDetails };
+    delete detailsToSend.audit;
+    delete detailsToSend.details;
+    console.log("before", detailsToSend);
+
+    detailsToSend.workflow = { action: "COMMENT", comments: comment };
+    console.log(detailsToSend);
+    let tenantId = Digit.ULBService.getCurrentTenantId();
+
+    try {
+      setCommentError(null);
+      const res = await Digit.PGRService.update(detailsToSend, tenantId);
+      if (res.ServiceWrappers.length) setComment("");
+      else throw true;
+    } catch (er) {
+      setCommentError(true);
+    }
+    setToast(true);
+    setTimeout(() => {
+      setToast(false);
+    }, 30000);
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -86,12 +129,19 @@ const ComplaintDetailsPage = (props) => {
             ) : null}
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>
-          <Card>{complaintDetails?.service && <WorkflowComponent complaintDetails={complaintDetails} id={id} />}</Card>
+          <Card>{complaintDetails?.service && <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} />}</Card>
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
-            <TextArea name={""} />
-            <SubmitBar label="Send" />
+            <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name={""} />
+            <SubmitBar disabled={disableComment} onSubmit={submitComment} label="Send" />
           </Card>
+          {toast && (
+            <Toast
+              error={commentError}
+              label={!commentError ? t(`CS_COMPLAINT_COMMENT_SUCCESS`) : t(`CS_COMPLAINT_COMMENT_ERROR`)}
+              onClose={() => setToast(false)}
+            />
+          )}{" "}
         </React.Fragment>
       ) : (
         <Loader />

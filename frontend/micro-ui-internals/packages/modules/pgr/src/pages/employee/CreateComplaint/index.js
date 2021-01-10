@@ -106,6 +106,8 @@ export const CreateComplaint = ({ parentUrl }) => {
     setPincode(value);
   };
 
+  const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
+
   const config = [
     {
       head: t("ES_CREATECOMPLAINT_PROVIDE_COMPLAINANT_DETAILS"),
@@ -171,7 +173,7 @@ export const CreateComplaint = ({ parentUrl }) => {
           label: t("CS_COMPLAINT_DETAILS_CITY"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
+          populators: <Dropdown isMandatory selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="name" />,
         },
         {
           label: t("CS_CREATECOMPLAINT_MOHALLA"),

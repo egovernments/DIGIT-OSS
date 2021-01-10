@@ -84,7 +84,7 @@ export const CreateComplaint = () => {
         uploadedImages: _uploadImages,
       };
 
-      console.log("this is the request data", data);
+      // console.log("this is the request data", data);
       await dispatch(createComplaint(data));
       clearParams();
       history.push(`${match.path}/response`);
