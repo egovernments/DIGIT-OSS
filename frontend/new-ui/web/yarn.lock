@@ -1140,9 +1140,9 @@
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.58"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.58.tgz#fd4be9531b0abc4c5a6c02d900ce416f5a2393a2"
-  integrity sha512-XyIj45DBw0ug/tXXj9dqoaI7QeXWY8YoxDfvZ3595cXAN+34GTVhLa8PF5bJq7e1ilnjYpAwizUuktWxakYH/w==
+  version "1.0.59"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.59.tgz#9088536a813c5fc39de9d16305e9da3db44fefaa"
+  integrity sha512-jt+LxbSgNXhMsNBvS2DxHJbxTR7HvrBg0Zg3GS2/+ujsES0MKLZvUl3tJqKVhbFWnvgP9aKEsVUJmMP2AQRHwQ==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1157,9 +1157,9 @@
     redux "^4.0.5"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.58"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.58.tgz#811403f9a6c2389806e8e4dedf128cd1ed0714f1"
-  integrity sha512-INT1QWkQVhTHaaj3D/aHRB5WzVPcaxcLmFLA8YyAUQko7HEG7jIR+YEy0j00/zB1gy3pUEhCjsd4/vZQ+Irx8Q==
+  version "1.0.59"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.59.tgz#35fac06feab2cbda4cc6ed371f678e317aced8b4"
+  integrity sha512-ro7N7aV81DkoXKV1u9aPqguqoAG9QzaZ67p7cqrSSzPcSZn21eRyjx7I5hW68Wwgt2b5k083TEmpJ5d8wZJzmg==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1175,9 +1175,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.58"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.58.tgz#9bc4f923eebfab29a01a1b4277c023af133b8f59"
-  integrity sha512-BCi04RJqk+KTyMG79CF5vnvQHHJgMwIAZfdCJzcqZ6XoDWuuRihGb9Gb3K9GK2pqbt1rzoqCLZh07FiCrlUf7g==
+  version "1.0.59"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.59.tgz#7f5c3c4d310614b582ea7954c1f5e32721d3e762"
+  integrity sha512-2kWi1KjX33YwjUUjJoYA/kM0xFPiIQhlJMtU8YwqgwKCZ61m0TiZ/rG6rG4DsHmhw+MkM6P213jkDHAY+atUlA==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1193,9 +1193,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.58"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.58.tgz#3ba6969c84d4f25ab02ffd7e62b06ae5ebdb5ac5"
-  integrity sha512-8dhSV3yZvl5uEmks3Q1ah3aEzGjBkZylotO5PuNCCzyOdxlTZn60uDx8Ylt4RC0+xV99eCyPytXJI95tBQtGsA==
+  version "1.0.59"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.59.tgz#e670e2b1bfdc19c3302c77a54a7dd7ff3ec36632"
+  integrity sha512-cX38nwJbEQj1sOipYwaBps+WH93bMH+Oi4DtHM5uyo5O80asrV1faQs0PSAs8ptexc7jPYi/95iWTVIqCcPBAA==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1212,9 +1212,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.58"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.58.tgz#7dc784d89211311f620540833c4e5720ea331df8"
-  integrity sha512-sY7p78Zq2UnDzab42AxizXHEOe6g5Dwm8cJH2etDP3HHfN6MKcTbeA4x+oFtuYCkaPOXeHw/pGzWtpVbCWwfzg==
+  version "1.0.59"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.59.tgz#fec299ed2474d67479306a6b0e0f16c7b6220241"
+  integrity sha512-oA9LZfD97J5FdGkoRndsZplqHf8Xd3+f+jg7+Ds/WhkvwYsES1vbTpbQDrxVb+9XlvGqI+i42PNuPI/XKITCJw==
   dependencies:
     react-hook-form "^6.7.0"
     react-i18next "^11.7.3"
@@ -11235,9 +11235,9 @@ terser-webpack-plugin@^1.4.3:
     worker-farm "^1.7.0"
 
 terser-webpack-plugin@^5.0.3:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-5.1.0.tgz#e52e838ae7a0c8b6783afd80313db52f5e07154b"
-  integrity sha512-7Hw5b45IslUGsR3rh1WhKlt2EHHIemwrus2Y++8f+36SGBVXruvwuDU1/bgkM44i/x6F24yJk1d+3r+JGtHaOg==
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-5.1.1.tgz#7effadee06f7ecfa093dbbd3e9ab23f5f3ed8673"
+  integrity sha512-5XNNXZiR8YO6X6KhSGXfY0QrGrCRlSwAEjIIrlRQR4W8nP69TaJUlh3bkuac6zzgspiGPfKEHcY295MMVExl5Q==
   dependencies:
     jest-worker "^26.6.2"
     p-limit "^3.1.0"
@@ -11667,9 +11667,9 @@ upath@^1.1.1, upath@^1.1.2, upath@^1.2.0:
   integrity sha512-aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==
 
 uri-js@^4.2.2:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.4.0.tgz#aa714261de793e8a82347a7bcc9ce74e86f28602"
-  integrity sha512-B0yRTzYdUCCn9n+F4+Gh4yIDtMQcaJsmYBDsTSG8g/OejKBodLQ2IHfN3bM7jUsRXndopT7OIXWdYqc1fjmV6g==
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.4.1.tgz#9b1a52595225859e55f669d928f88c6c57f2a77e"
+  integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
 
