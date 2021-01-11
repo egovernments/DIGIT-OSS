@@ -15,6 +15,7 @@ import useTenants from "./pgr/useTenants";
 import useComplaintSubType from "./pgr/useComplaintSubType";
 
 import useTenantsFSM from "./fsm/useTenants";
+import { useRevalidateQuery } from "./revalidateQuery";
 
 const pgr = {
   useComplaintDetails,
@@ -35,6 +36,6 @@ const fsm = {
   useTenants: useTenantsFSM,
 };
 
-const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, pgr, fsm };
+const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, pgr, fsm, useRevalidateQuery };
 
 export default Hooks;

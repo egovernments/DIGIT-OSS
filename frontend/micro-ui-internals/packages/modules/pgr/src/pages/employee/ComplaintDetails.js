@@ -31,7 +31,7 @@ import {
 import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import Modal from "../../components/Modal";
-import { isError } from "react-query";
+import { isError, useQueryClient } from "react-query";
 
 const MapView = (props) => {
   return (
@@ -87,6 +87,7 @@ export const ComplaintDetails = (props) => {
   const [assignResponse, setAssignResponse] = useState(null);
   const [loader, setLoader] = useState(false);
   const [rerender, setRerender] = useState(1);
+  const client = useQueryClient();
   function popupCall(option) {
     console.log("option", option);
     setDisplayMenu(false);
@@ -99,6 +100,20 @@ export const ComplaintDetails = (props) => {
       console.log("assign", assignWorkflow);
     })();
   }, [complaintDetails]);
+
+  const refreshData = async () => {
+    await client.refetchQueries(["fetchInboxData"]);
+    await workflowDetails.revalidate();
+    await revalidateComplaintDetails();
+  };
+
+  useEffect(async () => {
+    if (complaintDetails) {
+      setLoader(true);
+      await refreshData();
+      setLoader(false);
+    }
+  }, []);
 
   // useEffect(() => {
   //   console.log("action", props.action);
@@ -167,8 +182,7 @@ export const ComplaintDetails = (props) => {
     setAssignResponse(response);
     setToast(true);
     setLoader(true);
-    await workflowDetails.revalidate();
-    await revalidateComplaintDetails;
+    await refreshData();
     setLoader(false);
     setRerender(rerender + 1);
     setTimeout(() => setToast(false), 10000);

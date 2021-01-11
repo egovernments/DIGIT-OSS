@@ -17,7 +17,7 @@ const App = () => {
   return (
     <Switch>
       <AppContainer>
-        {!location.pathname.includes("create-complaint/response") && <BackButton>Back</BackButton>}
+        {!location.pathname.includes("create-complaint/response") && !location.pathname.includes("reopen/response") && <BackButton>Back</BackButton>}
         <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
         <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
         <PrivateRoute path={`${path}/complaints/:id`} component={ComplaintDetailsPage} />
