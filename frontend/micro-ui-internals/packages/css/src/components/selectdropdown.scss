@@ -22,11 +22,13 @@
   @apply mb-lg relative;
 
   .select {
-    @apply block w-full h-10 border-2 border-solid border-input-border;
+    @apply relative block w-full h-10 border-2 border-solid border-input-border;
 
     input[type="text"] {
       width: calc(100% - 32px);
-      @apply h-full outline-none text-text-primary text-form-field pl-sm;
+      background-color: transparent;
+
+      @apply absolute z-10 w-full h-full outline-none text-text-primary text-form-field pl-sm;
     }
 
     p {
@@ -39,16 +41,18 @@
     }
 
     svg {
-      @apply float-right h-6 w-6 mt-sm mr-sm;
+      @apply absolute right-0 float-right h-6 w-6 mt-sm mr-sm;
     }
   }
 
   .select-active {
-    @apply block w-full h-10 border-2 border-solid border-primary-main;
+    @apply relative block w-full h-10 border-2 border-solid border-primary-main;
 
     input[type="text"] {
       width: calc(100% - 32px);
-      @apply h-full outline-none text-text-primary text-form-field pl-sm;
+      background-color: transparent;
+
+      @apply absolute z-10 w-full h-full outline-none text-text-primary text-form-field pl-sm;
     }
 
     p {
@@ -64,7 +68,7 @@
     }
 
     svg {
-      @apply float-right h-6 w-6 mt-sm mr-sm;
+      @apply absolute right-0 float-right h-6 w-6 mt-sm mr-sm;
     }
   }
 
@@ -73,7 +77,7 @@
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
     max-height: 400px;
     overflow: scroll;
-    @apply absolute z-10 mt-xs bg-white;
+    @apply absolute z-20 mt-xs bg-white;
 
     p {
       padding-top: 14px;
@@ -90,11 +94,13 @@
   @apply mb-lg relative;
 
   .select {
-    @apply block w-full h-10 border-2 border-solid border-input-border;
+    @apply relative block w-full h-10 border-2 border-solid border-input-border;
 
     input[type="text"] {
       width: calc(100% - 32px);
-      @apply h-full outline-none text-text-primary text-form-field pl-sm;
+      background-color: transparent;
+
+      @apply absolute z-10 w-full h-full outline-none text-text-primary text-form-field pl-sm;
     }
 
     p {
@@ -107,16 +113,18 @@
     }
 
     svg {
-      @apply float-right h-6 w-6 mt-sm mr-sm;
+      @apply absolute right-0 float-right h-6 w-6 mt-sm mr-sm;
     }
   }
 
   .select-active {
-    @apply block w-full h-10 border-2 border-solid border-primary-main;
+    @apply relative block w-full h-10 border-2 border-solid border-primary-main;
 
     input[type="text"] {
       width: calc(100% - 32px);
-      @apply h-full outline-none text-text-primary text-form-field pl-sm;
+      background-color: transparent;
+
+      @apply absolute z-10 w-full h-full outline-none text-text-primary text-form-field pl-sm;
     }
 
     p {
@@ -132,14 +140,14 @@
     }
 
     svg {
-      @apply float-right h-6 w-6 mt-sm mr-sm;
+      @apply absolute right-0 float-right h-6 w-6 mt-sm mr-sm;
     }
   }
 
   .options-card {
     width: 100% !important;
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
-    @apply absolute z-10 mt-xs bg-white;
+    @apply absolute z-20 mt-xs bg-white;
 
     p {
       padding-top: 14px;

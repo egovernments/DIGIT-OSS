@@ -19,7 +19,7 @@ const Inbox = () => {
   };
 
   // let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
-  let { data: complaints, isLoading } = Digit.Hooks.pgr.useInboxData(searchParams) || [];
+  let { data: complaints, isLoading, revalidate } = Digit.Hooks.pgr.useInboxData(searchParams) || [];
 
   let isMobile = Digit.Utils.browser.isMobile;
 

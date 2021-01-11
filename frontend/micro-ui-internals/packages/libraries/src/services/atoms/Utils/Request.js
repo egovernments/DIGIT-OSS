@@ -41,7 +41,9 @@ export const Request = async ({ method = "POST", url, data = {}, headers = {}, u
 
   let key = "";
   if (useCache) {
-    key = `${method.toUpperCase()}.${url}.${btoa(JSON.stringify(params, null, 0))}.${btoa(JSON.stringify(data, null, 0))}`;
+    console.log(JSON.stringify(params, null, 0));
+    console.log(JSON.stringify(data, null, 0));
+    key = `${method.toUpperCase()}.${url}.${btoa(escape(JSON.stringify(params, null, 0)))}.${btoa(escape(JSON.stringify(data, null, 0)))}`;
     const value = window.Digit.RequestCache[key];
     if (value) {
       return value;

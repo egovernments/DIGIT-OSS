@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RatingCard } from "@egovernments/digit-ui-react-components";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, Redirect, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { updateComplaints } from "../../../redux/actions/index";
 
@@ -10,6 +10,7 @@ const SelectRating = ({ parentRoute }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   console.log("parent route", parentRoute);
+  const history = useHistory();
 
   let userType = Digit.SessionStorage.get("userType");
   let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
@@ -28,15 +29,7 @@ const SelectRating = ({ parentRoute }) => {
       };
       console.log("updtaed complaint details", complaintDetails);
       updateComplaint({ service: complaintDetails.service, workflow: complaintDetails.workflow });
-
-      return (
-        <Redirect
-          to={{
-            pathname: `${parentRoute}/response`,
-            state: { complaintDetails },
-          }}
-        />
-      );
+      history.push(`${parentRoute}/response`);
     }
   }
 
