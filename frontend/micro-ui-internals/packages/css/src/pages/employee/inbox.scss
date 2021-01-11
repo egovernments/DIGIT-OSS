@@ -32,7 +32,8 @@
   .filters-container {
     .filter {
       .filter-card {
-        @apply p-md bg-white;
+        @apply bg-white;
+        padding: 10px;
 
         .heading {
           @apply flex justify-between;
