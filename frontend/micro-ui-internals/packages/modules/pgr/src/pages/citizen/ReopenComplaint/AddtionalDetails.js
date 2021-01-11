@@ -19,7 +19,6 @@ const AddtionalDetails = (props) => {
   let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
 
   const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
-  console.log("88888888888888888", tenantId, complaintDetails);
   useEffect(() => {
     if (appState.complaints) {
       const { response } = appState.complaints;

@@ -40,16 +40,16 @@ const SelectRating = ({ parentRoute }) => {
       {
         type: "rate",
         maxRating: 5,
-        label: "CS_COMPLAINT_RATE_TEXT",
+        label: t("CS_COMPLAINT_RATE_TEXT"),
       },
       {
         type: "checkbox",
-        label: "CS_FEEDBACK_WHAT_WAS_GOOD",
-        checkLabels: ["CS_FEEDBACK_SERVICES", "CS_FEEDBACK_RESOLUTION_TIME", "CS_FEEDBACK_QUALITY_OF_WORK", "CS_FEEDBACK_OTHERS"],
+        label: t("CS_FEEDBACK_WHAT_WAS_GOOD"),
+        checkLabels: [t("CS_FEEDBACK_SERVICES"), t("CS_FEEDBACK_RESOLUTION_TIME"), t("CS_FEEDBACK_QUALITY_OF_WORK"), t("CS_FEEDBACK_OTHERS")],
       },
       {
         type: "textarea",
-        label: "CS_COMMON_COMMENTS",
+        label: t("CS_COMMON_COMMENTS"),
         name: "comments",
       },
     ],

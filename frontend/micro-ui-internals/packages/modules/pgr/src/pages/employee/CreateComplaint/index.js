@@ -34,6 +34,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   const history = useHistory();
   const localitiesObj = useSelector((state) => state.common.localities);
   const serviceDefinitions = Digit.GetServiceDefinitions;
+  const client = useQueryClient();
 
   useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
@@ -98,6 +99,7 @@ export const CreateComplaint = ({ parentUrl }) => {
     const name = data.name;
     const formData = { ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name };
     await dispatch(createComplaint(formData));
+    await client.refetchQueries(["fetchInboxData"]);
     history.push(parentUrl + "/response");
   };
 
@@ -105,6 +107,8 @@ export const CreateComplaint = ({ parentUrl }) => {
     const { value } = event.target;
     setPincode(value);
   };
+
+  const getCities = () => cities?.filter((e) => e.code === Digit.ULBService.getCurrentTenantId()) || [];
 
   const config = [
     {
@@ -171,7 +175,7 @@ export const CreateComplaint = ({ parentUrl }) => {
           label: t("CS_COMPLAINT_DETAILS_CITY"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
+          populators: <Dropdown isMandatory selected={selectedCity} option={getCities()} id="city" select={selectCity} optionKey="name" />,
         },
         {
           label: t("CS_CREATECOMPLAINT_MOHALLA"),
@@ -207,7 +211,7 @@ export const CreateComplaint = ({ parentUrl }) => {
 
   return (
     <FormComposer
-      heading="ES_CREATECOMPLAINT_NEW_COMPLAINT"
+      heading={t("ES_CREATECOMPLAINT_NEW_COMPLAINT")}
       config={config}
       onSubmit={onSubmit}
       label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")}

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { CardLabel, Dropdown, FormStep } from "@egovernments/digit-ui-react-components";
 import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value }) => {
   const cities = Digit.Hooks.pgr.useTenants();
   const localitiesObj = useSelector((state) => state.common.localities);
+
   // const city_complaint = Digit.SessionStorage.get("city_complaint");
   // const locality_complaint = Digit.SessionStorage.get("locality_complaint");
   // const selected_localities = Digit.SessionStorage.get("selected_localities");
@@ -13,10 +14,12 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
     return city_complaint ? city_complaint : null;
   });
   const [localities, setLocalities] = useState(null);
+
   const [selectedLocality, setSelectedLocality] = useState(() => {
     const { locality_complaint } = value;
     return locality_complaint ? locality_complaint : null;
   });
+
   // const [selectedLocality, setSelectedLocality] = useState(locality_complaint ? locality_complaint : null);
   //   const __localities = useLocalities({ city: selectedCity });
 
@@ -43,6 +46,9 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
     // Digit.SessionStorage.set("locality_complaint", locality);
   }
 
+  const wrapperRef = useRef(null);
+  const clicked = Digit.Hooks.pgr.useOutsideClickListener(wrapperRef);
+
   function onSubmit() {
     // const { code: cityCode, name: city } = selectedCity;
     // const { code: localityCode, name: localityName } = selectedLocality;
@@ -59,12 +65,14 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
   }
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
-      <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-      <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
-      {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
-      {selectedCity && localities && (
-        <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />
-      )}
+      <div ref={wrapperRef}>
+        <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
+        <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} forceClose={clicked} />
+        {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
+        {selectedCity && localities && (
+          <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} forceClose={clicked} />
+        )}
+      </div>
     </FormStep>
   );
 };
