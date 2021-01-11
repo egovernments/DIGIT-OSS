@@ -5,11 +5,11 @@
   "workspaces": [],
   "homepage": "/digit-ui",
   "dependencies": {
-    "@egovernments/digit-ui-libraries": "^1.0.44",
-    "@egovernments/digit-ui-module-core": "^1.0.44",
-    "@egovernments/digit-ui-module-fsm": "^1.0.44",
-    "@egovernments/digit-ui-module-pgr": "^1.0.44",
-    "@egovernments/digit-ui-react-components": "^1.0.44",
+    "@egovernments/digit-ui-libraries": "^1.0.0",
+    "@egovernments/digit-ui-module-core": "^1.0.0",
+    "@egovernments/digit-ui-module-fsm": "^1.0.0",
+    "@egovernments/digit-ui-module-pgr": "^1.0.0",
+    "@egovernments/digit-ui-react-components": "^1.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
@@ -17,11 +17,20 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
-    "http-proxy-middleware": "^1.0.5"
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^4.5.1",
+    "http-proxy-middleware": "^1.0.5",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build"
+    "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
+    "build:dev": "webpack --config webpack.config.js",
+    "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build"
   },
   "eslintConfig": {
     "extends": [
