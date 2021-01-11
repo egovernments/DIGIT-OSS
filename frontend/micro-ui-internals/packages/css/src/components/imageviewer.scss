@@ -2,6 +2,7 @@
   @apply bg-text-primary p-md top-0 left-0 z-20 fixed w-full h-full;
 
   svg {
+    top: 90px;
     right: 16px;
     @apply absolute h-6 w-6;
   }
@@ -17,6 +18,7 @@
     @apply flex fixed top-0 left-0 w-full h-full z-20 bg-text-primary p-md;
 
     svg {
+      top: 90px;
       right: 16px;
       @apply absolute h-6 w-6;
     }

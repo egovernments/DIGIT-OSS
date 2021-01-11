@@ -1618,6 +1618,7 @@ img, video {
   width: 100%;
   height: 100%; }
   .image-viewer-wrap svg {
+    top: 90px;
     right: 16px;
     position: absolute;
     height: 1.5rem;
@@ -1643,6 +1644,7 @@ img, video {
     background-color: rgba(11, 12, 12, var(--bg-opacity));
     padding: 16px; }
     .image-viewer-wrap svg {
+      top: 90px;
       right: 16px;
       position: absolute;
       height: 1.5rem;
@@ -2146,7 +2148,7 @@ img, video {
   background: #fff;
   -webkit-box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.24);
-  z-index: 20; }
+  z-index: 9999; }
   .employee .topbar img {
     display: inline; }
     .employee .topbar img.city {

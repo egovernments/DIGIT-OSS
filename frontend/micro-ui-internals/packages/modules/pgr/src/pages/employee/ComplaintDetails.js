@@ -138,8 +138,8 @@ export const ComplaintDetails = (props) => {
     }
   }
 
-  function zoomImage(imageSource) {
-    setImageZoom(imageSource);
+  function zoomImage(imageSource, index) {
+    setImageZoom(complaintDetails.images[index - 1]);
   }
 
   function onCloseImageZoom() {
@@ -241,7 +241,7 @@ export const ComplaintDetails = (props) => {
           </StatusTable>
         )}
         {complaintDetails?.thumbnails && complaintDetails?.thumbnails?.length !== 0 ? (
-          <DisplayPhotos srcs={complaintDetails?.thumbnails} onClick={zoomImage} />
+          <DisplayPhotos srcs={complaintDetails?.thumbnails} onClick={(source, index) => zoomImage(source, index)} />
         ) : null}
         <BreakLine />
         {workflowDetails?.isLoading && <Loader />}
