@@ -251,6 +251,7 @@ const commonBuildingData = buildingType => {
             isRequired: false,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            requiredValue : true,
             callBack: buildingUsageTypeChange
           },
           {
@@ -258,6 +259,7 @@ const commonBuildingData = buildingType => {
             isRequired: false,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            requiredValue : true,
             callBack: buildingSubUsageTypeChange
           }
         ],

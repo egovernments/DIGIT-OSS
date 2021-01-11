@@ -73,10 +73,11 @@ const commonApplicantInformation = () => {
             {
               labelName: "Transgender",
               labelKey: "PT_MUTATION_TRANSFEREE_GENDER_TRANSGENDER_RADIOBUTTON",
-              value: "TRANSGENDER"
+              value: "OTHERS"
             }
           ],
-
+          jsonPath:
+          "Property.ownersTemp[0].gender",
           required: true,
           errorMessage: "Required",
         },
@@ -316,40 +317,29 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error"
         }
       }),
-      specialCategoryDocumentType: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-pt",
-        componentPath: "AutosuggestContainer",
-        props: {
-          label: {
-            labelName: "Document Type",
-            labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Document Type.",
-            labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
-          },
-          localePrefix: {
-            moduleName: "PropertyTax",
-            masterName: "ReasonForTransfer"
-          },
-          className: "applicant-details-error autocomplete-dropdown",
-          required: true,
-          isClearable: true,
-          labelsFromLocalisation: true,
-          jsonPath: "Property.ownersTemp[0].documentType",
-          sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
+      specialCategoryDocumentType: getSelectField({
+        label: {
+          labelName: "Document Type",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
         },
-        required: true,
-        visible: false,
+        placeholder: {
+          labelName: "Enter Document Type.",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "PropertyTax",
+          masterName: "ReasonForTransfer"
+        },
         jsonPath: "Property.ownersTemp[0].documentType",
         sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
+        required: true,
+        visible: false,
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         }
-      },
+      }),
       specialCategoryDocument: getTextField({
         label: {
           labelName: "Document Id No.",
@@ -506,7 +496,7 @@ const institutionInformation = () => {
             labelKey: "PT_MUTATION_AUTHORISED_MOBILE_PLACEHOLDER"
           },
           required: true,
-          pattern: getPattern("Number"),
+          pattern: getPattern("MobileNo"),
           jsonPath: "Property.institutionTemp.mobileNumber"
         }),
         authorisedLandline: getTextField({
@@ -560,7 +550,7 @@ const institutionInformation = () => {
     })
 };
 
-export const onChangeTypeOfOwnership = (action, state, dispatch) => {
+export const onChangeTypeOfOwnership = (action, state, dispatch,addItemMultiOwner=true) => {
   let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";
 
 
@@ -623,8 +613,10 @@ export const onChangeTypeOfOwnership = (action, state, dispatch) => {
     //   dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[1]", "item1", owner1.item0))
 
     // }
-
-    addItemInMultiselect(state, dispatch);
+    if(addItemMultiOwner){
+      addItemInMultiselect(state, dispatch);
+    }
+    
 
   }
 }

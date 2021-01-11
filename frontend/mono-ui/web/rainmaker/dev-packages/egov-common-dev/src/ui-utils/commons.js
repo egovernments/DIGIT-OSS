@@ -3,7 +3,7 @@ import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/ut
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { downloadPdf, openPdf, printPdf } from "egov-ui-kit/utils/commons";
+import { downloadPdf, getPaymentSearchAPI, openPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -487,12 +487,24 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
+export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showConfirmation=false) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
+    if (fileRes && !fileRes[fileStoreId]) {
+      console.error('ERROR IN DOWNLOADING RECEIPT');
+      return;
+    }
     if (mode === 'download') {
       downloadPdf(fileRes[fileStoreId]);
+      if(showConfirmation){
+        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+      , "success"));
+      }
     } else if (mode === 'open') {
       openPdf(fileRes[fileStoreId], '_self')
+      if(showConfirmation){
+        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+      , "success"));
+      }
     }
     else {
       printPdf(fileRes[fileStoreId]);
@@ -501,25 +513,27 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
 }
 
 
-export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
+export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state,showConfirmation=false) => {
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
   }
-  const FETCHRECEIPT = {
-    GET: {
-      URL: "/collection-services/payments/_search",
-      ACTION: "_get",
-    },
-  };
+
   const DOWNLOADRECEIPT = {
     GET: {
       URL: "/pdf-service/v1/_create",
       ACTION: "_get",
     },
   };
+  let businessService = '';
+  receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+    if (query.key == "businessService") {
+      businessService = query.value;
+    }
+  })
+  receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
   try {
-    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+    httpRequest("post", getPaymentSearchAPI(businessService), "_search", receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
         { key: "key", value: configKey },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
@@ -547,7 +561,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
 
       const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
       if (oldFileStoreId) {
-        downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+        downloadReceiptFromFilestoreID(oldFileStoreId, mode,undefined,showConfirmation)
       }
       else {
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
@@ -555,7 +569,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
             res.filestoreIds[0]
             if (res && res.filestoreIds && res.filestoreIds.length > 0) {
               res.filestoreIds.map(fileStoreId => {
-                downloadReceiptFromFilestoreID(fileStoreId, mode)
+                downloadReceiptFromFilestoreID(fileStoreId, mode,undefined,showConfirmation)
               })
             } else {
               console.log('Some Error Occured while downloading Receipt!');
@@ -606,7 +620,6 @@ export const downloadBill = async (consumerCode, tenantId, configKey = "consolid
     }
   } catch (error) {
     console.log(error);
-
   }
 
 }

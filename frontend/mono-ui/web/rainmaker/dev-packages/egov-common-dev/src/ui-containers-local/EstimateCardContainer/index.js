@@ -6,7 +6,7 @@ import orderBy from "lodash/orderBy";
 
 class EstimateCardContainer extends Component {
   render() {
-    return <FeesEstimateCard estimate={this.props.estimate} />;
+    return <FeesEstimateCard estimate={this.props.estimate} isArrears={this.props.isArrears} />;
   }
 }
 
@@ -49,6 +49,7 @@ const mapStateToProps = (state, ownProps) => {
   const fees = formatTaxHeaders(sortBillDetails(get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []))[0]);
   // const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.estimateCardData", []);
   const billDetails = get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []);
+  const isArrears = get(screenConfiguration, "preparedFinalObject.isArrears");
   let totalAmount = 0;
   let arrears=0;
   for (let billDetail of billDetails) {
@@ -65,7 +66,7 @@ if(totalAmount>0){
     totalAmount,
     arrears
   };
-  return { estimate };
+  return { estimate, isArrears };
 };
 
 export default connect(

@@ -275,6 +275,9 @@ export const getTextField = textScheama => {
     maxValue,
     infoIcon,
     title = {},
+    multiline=false,
+    rows="1",
+    disabled=false,
     errorMessage = "",
     requiredMessage = "",
     ...rest
@@ -300,6 +303,9 @@ export const getTextField = textScheama => {
       iconObj,
       title,
       infoIcon,
+      disabled,
+      multiline,
+      rows,
       errorMessage,
       ...props
     },
@@ -547,7 +553,7 @@ export const getPattern = type => {
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":
-      return /^[0-9]{0,9}$/i;
+      return /^\d+(\.\d{1,2})?$/;
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":

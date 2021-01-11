@@ -10,7 +10,7 @@ import jsPDF from "jspdf";
 import get from "lodash/get";
 import set from "lodash/set";
 import some from "lodash/some";
-import { applyTradeLicense, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
+import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
 import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields} from "../../utils";
 import "./index.css";
 
@@ -297,6 +297,12 @@ export const callBackForNext = async (state, dispatch) => {
           "applicationNumber"
         );
         const tenantId = getQueryArg(window.location.href, "tenantId");
+        let oldOwners = JSON.parse(
+          JSON.stringify(
+            get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
+          )
+        );
+        dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.owners", checkValidOwners(get(state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.owners",[]),oldOwners)));
         dispatch(
           setRoute(
             `/tradelicence/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
@@ -864,7 +870,8 @@ export const footerReviewTop = (
 
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "businessService", value:'TL' }    
       ]
       download(receiptQueryString, "download", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_download");
@@ -876,7 +883,8 @@ export const footerReviewTop = (
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "businessService", value:'TL' }   
       ]
       download(receiptQueryString, "print", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_print");
@@ -1030,7 +1038,8 @@ export const downloadPrintContainer = (
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "businessService", value:'TL' }   
       ]
       download(receiptQueryString, "download", receiptKey);
     },
@@ -1041,7 +1050,8 @@ export const downloadPrintContainer = (
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "businessService", value:'TL' }   
       ]
       download(receiptQueryString, "print", receiptKey);
     },

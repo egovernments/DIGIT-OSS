@@ -62,7 +62,7 @@ class PieChart extends React.Component {
 		};
 		var tempdataSet = {
 			label: "",
-			backgroundColor: CONFIG.CHART_COLOR_CODE,
+			backgroundColor: JSON.parse(sessionStorage.getItem('CHART_COLOR_CODE')) ,
 			data: [],
 			dataSymbol: []
 		};

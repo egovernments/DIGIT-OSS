@@ -6,6 +6,7 @@ import DownArrow from "material-ui/svg-icons/navigation/arrow-drop-down";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 import { getTranslatedLabel } from "../../../utils/commons";
+import { sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
 
 class CityPickerDialog extends Component {
   state = { results: [], searchTerm: "", open: false };
@@ -26,12 +27,21 @@ class CityPickerDialog extends Component {
   };
 
   prepareResultsForDisplay = (results = []) => {
-    return results.map((result, index) => {
+    results= results.map((result, index) => {
       const mappedResult = {};
       mappedResult.key = result.key;
       mappedResult.primaryText = this.getLocalizedLabel(`TENANT_TENANTS_${result.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`);
       mappedResult.id = result.key;
       return mappedResult;
+    })
+    return results.sort((e1, e2) => {
+      if (e1 && e1.primaryText && typeof e1.primaryText == 'string') {
+        return e1 && e1.primaryText && e1.primaryText.localeCompare && e1.primaryText.localeCompare(e2 && e2.primaryText && e2.primaryText || '');
+      } else if (e1 && e1.key && typeof e1.key == 'string') {
+        return e1 && e1.key && e1.key.localeCompare && e1.key.localeCompare(e2 && e2.key && e2.key || '');
+      } else {
+        return 1;
+      }
     });
   };
 

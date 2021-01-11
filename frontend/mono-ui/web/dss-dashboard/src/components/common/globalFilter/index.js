@@ -86,7 +86,19 @@ class GlobalFilter extends Component {
             },
             "MdmsCriteria": {
                 "tenantId": tenent && tenent !== 'null' ? tenent : '',
-                "moduleDetails": [
+                "moduleDetails": [   {
+                    "moduleName": "dss-dashboard",
+                    "masterDetails": [
+                        {
+                            "name": "MODULE_LEVEL"
+                        },
+                        {
+                            "name": "SERVICES"
+                        }, {
+                            "name": "CHART_COLOR_CODE"
+                        } 
+                    ]
+                },
                     {
                         "moduleName": "tenant",
                         "masterDetails": [
@@ -239,7 +251,7 @@ class GlobalFilter extends Component {
                         "MdmsCriteria": {
                             "tenantId": ulbs[ulbs.length - 1],
 
-                            "moduleDetails": [
+                            "moduleDetails": [ 
                                 {
                                     "moduleName": "egov-location",
                                     "masterDetails": [
@@ -424,7 +436,7 @@ class GlobalFilter extends Component {
                     case "DDRs":
                         return this.renderAutoComplete(object.label, this.handleChanges, this.state.ddrs, object.values, '')
                     case "Services":
-                        return this.renderSimpleSelect(object.label, CONFIG.SERVICES, this.handleChanges)
+                        return this.renderSimpleSelect(object.label,JSON.parse(sessionStorage.getItem('SERVICES')) , this.handleChanges)
                     case "Date Range":
                         return this.renderDateRange(object.label, object.values);
                 }

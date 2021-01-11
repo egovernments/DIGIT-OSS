@@ -15,6 +15,12 @@ const options = [
   { value: true, label: getLocaleLabels("Yes", "PT_COMMON_YES") },
   { value: false, label: getLocaleLabels("No", "PT_COMMON_NO") },
 ];
+
+const propertyOptions = [
+  { value: "CREATE", label: getLocaleLabels("New Property (Default)", "PT_NEW_PROPERTY_DEFAULT") },
+  { value: "LEGACY_ENTRY", label: getLocaleLabels("Legacy Data Entry", "PT_LEGACY_DATA_ENTRY") },
+];
+
 const formConfig = {
   name: "basicInformation",
   fields: {
@@ -96,6 +102,23 @@ const formConfig = {
       },
       dropDownData: [],
     },
+    propertyEntryType: {
+      id: "propertyEntryType",
+      jsonPath: "Properties[0].creationReason",
+      type: "radioButton",
+      localePrefix: "PROPERTYTAX_BILLING_SLAB",
+      floatingLabelText: "PT_PROPERTY_ADDRESS_ENTRY_TYPE",
+      hintText: "PT_PROPERTY_ADDRESS_ENTRY_TYPE",
+      required: false,
+      fullWidth: true,
+      showFloatingLabelText:true,
+      labelsFromLocalisation:false,
+      gridDefination: {
+        xs: 0,
+        sm: 0
+      },
+      dropDownData: [],
+    }
   },
   action: "",
   redirectionRoute: "",
@@ -115,7 +138,9 @@ const formConfig = {
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));
       set(action, "form.fields.rainwaterHarvesting.options",options);
       set(action, "form.fields.rainwaterHarvesting.value", get(state.common.prepareFormData,'Properties[0].additionalDetails.isRainwaterHarvesting',false));
-      
+      set(action, "form.fields.propertyEntryType.options",propertyOptions);
+      set(action, "form.fields.propertyEntryType.value", get(state.common.prepareFormData,'Properties[0].creationReason',"CREATE"));
+      process.env.REACT_APP_NAME == "Citizen" ? set(action, "form.fields.propertyEntryType.visible", false) : set(action, "form.fields.propertyEntryType.visible", true)
       return action;
     } catch (e) {
       console.log(e);

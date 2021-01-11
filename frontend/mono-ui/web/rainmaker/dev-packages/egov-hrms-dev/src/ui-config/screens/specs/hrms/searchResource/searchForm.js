@@ -5,7 +5,7 @@ import {
   getCommonTitle,
   getLabel,
   getPattern,
-  getSelectField,
+
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -49,6 +49,14 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
+      "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.mobileNumber",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
       "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb",
       "props.value",
       tenantId
@@ -70,7 +78,7 @@ export const searchForm = getCommonCard({
       uiFramework: "custom-containers-local",
       moduleName: "egov-hrms",
       componentPath: "AutosuggestContainer",
-      jsonPath: "searchScreen.ulb",
+      jsonPath: "hrmsSearchScreen.ulb",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -78,9 +86,9 @@ export const searchForm = getCommonCard({
       props: {
         optionLabel: "name",
         optionValue: "code",
-        label: { 
-          labelName: "ULB", 
-          labelKey: "HR_ULB_LABEL" 
+        label: {
+          labelName: "ULB",
+          labelKey: "HR_ULB_LABEL"
         },
         placeholder: {
           labelName: "Select ULB",
@@ -95,16 +103,91 @@ export const searchForm = getCommonCard({
           roles: []
         },
         value: tenantId,
-        className:"autocomplete-dropdown",
-        jsonPath: "searchScreen.ulb",
+        className: "autocomplete-dropdown",
+        jsonPath: "hrmsSearchScreen.ulb",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
-        isClearable: true,
+        disabled: true,
+        isDisabled:true,
       },
       required: true,
+      disabled: true,
+      isDisabled:true,
     },
 
+    employeeID: getTextField({
+      label: {
+        labelName: "Employee ID",
+        labelKey: "HR_EMP_ID_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Employee ID",
+        labelKey: "HR_EMP_ID_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      pattern: /^[a-zA-Z0-9-!@#\$%\^\&*\)\(+=._]*$/i,
+      errorMessage: "HR_EMP_ID_ERR_MSG",
+      jsonPath: "hrmsSearchScreen.codes"
+    }),
+    mobileNumber: getTextField({
+      label: {
+        labelName: "Mobile No.",
+        labelKey: "HR_EMP_MOBILE_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Mobile No.",
+        labelKey: "HR_EMP_MOBILE_PLACEHOLDER"
+      },
+      required: false,
+      props: {
+        className: "applicant-details-error"
+      },
+      pattern: /^[6789][0-9]{9}$/i,
+      errorMessage: "HR_EMP_MOBILE_ERR_MSG",
+      jsonPath: "hrmsSearchScreen.phone",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+    }),
+    department: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "AutosuggestContainer",
+      props: {
+        optionLabel: "name",
+        optionValue: "code",
+        label: {
+          labelName: "Department",
+          labelKey: "HR_ROLE_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Department",
+          labelKey: "HR_ROLE_PLACEHOLDER"
+        },
+        required: false,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        className: "autocomplete-dropdown",
+        jsonPath: "hrmsSearchScreen.roles",
+        sourceJsonPath: "searchScreenMdmsData.ACCESSCONTROL-ROLES.roles",
+        localePrefix: {
+          moduleName: "ACCESSCONTROL_ROLES",
+          masterName: "ROLES"
+        }
+      },
+      required: false,
+      jsonPath: "hrmsSearchScreen.roles",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+    },
     employeeName: getTextField({
       label: {
         labelName: "Employee Name",
@@ -121,61 +204,8 @@ export const searchForm = getCommonCard({
       required: false,
       pattern: getPattern("Name") || null,
       errorMessage: "HR_EMP_NAME_ERR_MSG",
-      jsonPath: "searchScreen.names"
+      jsonPath: "hrmsSearchScreen.names"
     }),
-
-    employeeID: getTextField({
-      label: {
-        labelName: "Employee ID",
-        labelKey: "HR_EMP_ID_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Employee ID",
-        labelKey: "HR_EMP_ID_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      required: false,
-      pattern: /^[a-zA-Z0-9-_]*$/i,
-      errorMessage: "HR_EMP_ID_ERR_MSG",
-      jsonPath: "searchScreen.codes"
-    }),
-
-    department: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-hrms",
-      componentPath: "AutosuggestContainer",
-      props: {
-        optionLabel: "name",
-        optionValue: "code",
-        label: { 
-          labelName: "Department", 
-          labelKey: "HR_DEPT_LABEL" 
-        },
-        placeholder: {
-          labelName: "Select Department",
-          labelKey: "HR_DEPT_PLACEHOLDER"
-        },
-        required: false,
-        isClearable:true,
-        labelsFromLocalisation: true,
-        className:"autocomplete-dropdown",
-        jsonPath: "searchScreen.departments",
-        sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "Department"
-        }
-      },
-      required: false,
-      jsonPath: "searchScreen.departments",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-    },
     designation: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-hrms",
@@ -189,10 +219,10 @@ export const searchForm = getCommonCard({
           labelKey: "HR_DESIGNATION_PLACEHOLDER"
         },
         required: false,
-        isClearable:true,
+        isClearable: true,
         labelsFromLocalisation: true,
-        className:"autocomplete-dropdown",
-        jsonPath: "searchScreen.designations",
+        className: "autocomplete-dropdown",
+        jsonPath: "hrmsSearchScreen.designations",
         sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
         localePrefix: {
           moduleName: "common-masters",
@@ -200,17 +230,18 @@ export const searchForm = getCommonCard({
         }
       },
       required: false,
-      jsonPath: "searchScreen.designations",
+      jsonPath: "hrmsSearchScreen.designations",
       gridDefination: {
         xs: 12,
         sm: 4
       },
     },
+
   }),
 
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
-      resetButton: {
+      hrmsResetButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
@@ -223,9 +254,9 @@ export const searchForm = getCommonCard({
             color: "#FE7A51",
             borderColor: "#FE7A51",
             //   borderRadius: "2px",
-            width: "220px",
+            // width: "220px",
             height: "48px",
-            margin: "8px",
+            // margin: "8px",
             float: "right"
           }
         },
@@ -240,7 +271,7 @@ export const searchForm = getCommonCard({
           callBack: resetFields
         }
       },
-      searchButton: {
+      hrmsSearchButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
@@ -251,10 +282,10 @@ export const searchForm = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            // margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            // width: "220px",
             height: "48px"
           }
         },
@@ -271,8 +302,8 @@ export const searchForm = getCommonCard({
       }
     })
   })
-},{
-  style:{
+}, {
+  style: {
     overflow: "visible"
   }
 });

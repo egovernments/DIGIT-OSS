@@ -1,12 +1,20 @@
 import Hidden from "@material-ui/core/Hidden";
+import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import TableFooter from '@material-ui/core/TableFooter';
 import TableHead from "@material-ui/core/TableHead";
+import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from "@material-ui/core/TableRow";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import FirstPageIcon from '@material-ui/icons/FirstPage';
 import ImportExportIcon from "@material-ui/icons/ImportExport";
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
 import { Card } from "components";
 import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -17,17 +25,118 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import { TaskDialog } from "egov-workflow/ui-molecules-local";
 import get from "lodash/get";
+import PropTypes from 'prop-types';
 import React from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import { getWFConfig } from "./workflowRedirectionConfig";
+const actionsStyles = theme => ({
+  root: {
+    flexShrink: 0,
+    color: theme.palette.text.secondary,
+    marginLeft: theme.spacing.unit * 2.5,
+  },
+});
+
+class TablePaginationActions extends React.Component {
+  handleFirstPageButtonClick = event => {
+    this.props.onChangePage(event, 0);
+  };
+
+  handleBackButtonClick = event => {
+    this.props.onChangePage(event, this.props.page - 1);
+  };
+
+  handleNextButtonClick = event => {
+    this.props.onChangePage(event, this.props.page + 1);
+  };
+
+  handleLastPageButtonClick = event => {
+    this.props.onChangePage(
+      event,
+      Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1),
+    );
+  };
+
+  render() {
+    const { classes, count, page, rowsPerPage, theme } = this.props;
+
+    return (
+      <div className={classes.root}>
+        <Hidden only={["xs"]}>
+        <IconButton
+          onClick={this.handleFirstPageButtonClick}
+          disabled={page === 0}
+          aria-label="First Page"
+        >
+          {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        </IconButton>
+        </Hidden>
+        <IconButton
+          onClick={this.handleBackButtonClick}
+          disabled={page === 0}
+          aria-label="Previous Page"
+        >
+          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        </IconButton>
+        <IconButton
+          onClick={this.handleNextButtonClick}
+          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          aria-label="Next Page"
+        >
+          {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        </IconButton>
+        <Hidden only={["xs"]}>
+        <IconButton
+          onClick={this.handleLastPageButtonClick}
+          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          aria-label="Last Page"
+        >
+          {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        </IconButton>
+        </Hidden>
+      </div>
+    );
+  }
+}
+
+TablePaginationActions.propTypes = {
+  classes: PropTypes.object.isRequired,
+  count: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  theme: PropTypes.object.isRequired,
+};
+
+const TablePaginationActionsWrapped = withStyles(actionsStyles, { withTheme: true })(
+  TablePaginationActions,
+);
+const styles = theme => ({
+  root: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+  },
+  table: {
+    minWidth: 500,
+  },
+  tableWrapper: {
+    overflowX: 'auto',
+  },
+  tableRow: {
+    display: 'flex'
+  }
+});
 class InboxData extends React.Component {
   state = {
     dialogOpen: false,
     workflowHistory: [],
     sortOrder: "asc",
     isSorting: false,
-    wfSlaConfig: []
+    wfSlaConfig: [],
+    page: 0,
+    rowsPerPage: 0,
+    rowsPerPageOptions: []
   };
 
   componentDidMount = async () => {
@@ -40,6 +149,9 @@ class InboxData extends React.Component {
             masterDetails: [
               {
                 name: "wfSlaConfig"
+              },
+              {
+                name: "TablePaginationOptions"
               }
             ]
           }
@@ -55,7 +167,9 @@ class InboxData extends React.Component {
       );
       if (payload) {
         this.setState({
-          wfSlaConfig: get(payload.MdmsRes, "common-masters.wfSlaConfig")
+          wfSlaConfig: get(payload.MdmsRes, "common-masters.wfSlaConfig"),
+          rowsPerPage: get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].defaultValue",100),
+          rowsPerPageOptions: get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].rowsPerPageOptions",[25,50,100])
         })
       }
     } catch (e) {
@@ -120,7 +234,7 @@ class InboxData extends React.Component {
     else if (row[0].subtext === "NewSW1") {
       queryParams += '&history=true&service=SEWERAGE';
     }
-    else if(row[0].subtext === "ModifyWSConnection"){
+    else if (row[0].subtext === "ModifyWSConnection") {
       queryParams += '&history=true&service=WATER&mode=MODIFY';
     }
     this.props.setRoute(`${contextPath}?${queryParams}`);
@@ -148,15 +262,26 @@ class InboxData extends React.Component {
         sortOrder: order,
         isSorting: true,
       });
+      this.props.data.rows=this.props.data.rows.reverse();
     }
+  };
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
   };
 
   render() {
-    const { data, ProcessInstances } = this.props;
+    const { data={rows:[],headers:[]}, ProcessInstances, classes } = this.props;
     const { onHistoryClick, onDialogClose, getModuleLink } = this;
     const { isSorting, sortOrder } = this.state;
+    const { rows, rowsPerPage, page, rowsPerPageOptions } = this.state;
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data&&data.rows&&data.rows.length - page * rowsPerPage);
+
     if (isSorting) {
-      data.rows.reverse();
+      // data.rows.reverse();
     }
     return (
       <div>
@@ -164,7 +289,7 @@ class InboxData extends React.Component {
           <Table>
             <TableHead style={{ backgroundColor: "white", borderBottom: "1px solid rgb(211, 211, 211)" }}>
               <TableRow>
-                {data.headers.map((item, index) => {
+                {data&&data.headers&&data.headers.map((item, index) => {
                   let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
                   return (
                     <TableCell className={classNames}>
@@ -172,14 +297,14 @@ class InboxData extends React.Component {
                         <div className="rainmaker-displayInline">
                           {sortOrder === "desc" && (
                             <div className="arrow-icon-style" onClick={() => this.sortingTable("asc")}>
-                              <Label label={item} labelStyle={{ fontWeight: "500", marginTop:"-5px",minWidth:"150px"}} color="#000000"/>
-                              <ArrowDropUpIcon style={{marginTop:"-3px"  }}/>
+                              <Label label={item} labelStyle={{ fontWeight: "500", marginTop: "-5px", minWidth: "150px" }} color="#000000" />
+                              <ArrowDropUpIcon style={{ marginTop: "-3px" }} />
                             </div>
                           )}
                           {sortOrder === "asc" && (
                             <div className="arrow-icon-style" onClick={() => this.sortingTable("desc")}>
-                              <Label label={item} labelStyle={{ fontWeight: "500" , marginTop:"-5px",minWidth:"150px"}} color="#000000" />
-                              <ArrowDropDownIcon style={{marginTop:"-3px"  }}/>
+                              <Label label={item} labelStyle={{ fontWeight: "500", marginTop: "-5px", minWidth: "150px" }} color="#000000" />
+                              <ArrowDropDownIcon style={{ marginTop: "-3px" }} />
                             </div>
                           )}
                         </div>
@@ -198,7 +323,7 @@ class InboxData extends React.Component {
               </TableBody>
             ) : (
                 <TableBody>
-                  {data.rows.map((row, i) => {
+                  {data.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => {
                     return (
                       <TableRow key={i} className="inbox-data-table-bodyrow">
                         {row.map((item, index) => {
@@ -241,7 +366,25 @@ class InboxData extends React.Component {
                   })}
                   <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
                 </TableBody>
+
               )}
+            {/* {emptyRows > 0 && (
+                <TableRow style={{ height: 48 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )} */}
+            <TableFooter>
+              <TablePagination
+                rowsPerPageOptions={rowsPerPageOptions}
+                count={data.rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                labelRowsPerPage={<Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActionsWrapped}
+              />
+            </TableFooter>
           </Table>
         </Hidden>
         <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
@@ -263,7 +406,7 @@ class InboxData extends React.Component {
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
               <div>
-                {data.rows.map((row, index) => {
+                {data.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                   return (
                     <Card
                       key={index}
@@ -307,6 +450,21 @@ class InboxData extends React.Component {
                   );
                 })}
                 <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
+                <TableFooter>
+                  <div className={'inbox-table-pagination-sm'}>
+                    <TablePagination
+                      colSpan={6}
+                      rowsPerPageOptions={rowsPerPageOptions}
+                      count={data.rows.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      labelRowsPerPage={<Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}
+                      onChangePage={this.handleChangePage}
+                      onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                      ActionsComponent={TablePaginationActionsWrapped}
+                    />
+                  </div>
+                </TableFooter>
               </div>
             )}
         </Hidden>
@@ -331,9 +489,8 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(InboxData);
 
-export const Taskboard = ({ data }) => {
+export const Taskboard = ({ data=[] }) => {
   return (
     <div>
       {data.map((item, i) => (
@@ -354,3 +511,8 @@ export const Taskboard = ({ data }) => {
   );
 };
 
+InboxData.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(InboxData));

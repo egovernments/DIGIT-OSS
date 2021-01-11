@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import styles from './styles';
+import { getLocaleLabels } from '../../../utils/commons';
 
 class SwitchButton extends Component {
 
@@ -21,7 +22,7 @@ class SwitchButton extends Component {
     };
 
     render() {
-        let { classes, chartParent } = this.props;
+        let { classes, chartParent,strings={} } = this.props;
         //let switchLabel = ["Boundary", "Usage"];
         return (
             <ToggleButtonGroup
@@ -32,7 +33,7 @@ class SwitchButton extends Component {
                 aria-label="text alignment"
             >
                 {chartParent.map((d, i) =>
-                    <ToggleButton key={i} checked={this.state.value === d.id} className={classes.toggleButton} value={d.id} aria-label="left aligned" >{d.tabName}</ToggleButton>
+                    <ToggleButton key={i} checked={this.state.value === d.id} className={classes.toggleButton} value={d.id} aria-label="left aligned" >{getLocaleLabels(`DSS_TAB_${d.tabName}`,strings)}</ToggleButton>
                 )}
             </ToggleButtonGroup>
         );

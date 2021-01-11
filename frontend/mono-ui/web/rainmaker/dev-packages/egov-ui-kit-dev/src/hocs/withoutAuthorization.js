@@ -2,12 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 // import AppBar from "@material-ui/core/AppBar";
 import "./index.css";
-import { getLocale, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId, getUserInfo, setStoredModulesList, setModule } from "egov-ui-kit/utils/localStorageUtils";
 import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
 import Label from "egov-ui-kit/utils/translationNode";
 import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { fetchLocalizationLabel, setLocalizationLabels } from "egov-ui-kit/redux/app/actions";
 import { DropDown, AppBar } from "components";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
@@ -87,6 +87,12 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
         tenantId = userInfo && userInfo.permanentCity;
         tenantId = tenantInfo ? tenantInfo : tenantId;
       }
+      var resetList=[];
+      var newList =JSON.stringify(resetList);
+      setStoredModulesList(newList);
+      let locale= getLocale();
+      let resultArray=[];
+      setLocalizationLabels(locale, resultArray);
       this.props.fetchLocalizationLabel(value, tenantId, tenantId);
     };
 

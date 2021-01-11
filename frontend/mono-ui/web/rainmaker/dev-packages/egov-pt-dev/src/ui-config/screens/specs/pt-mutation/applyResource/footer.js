@@ -176,7 +176,7 @@ const callBackForApply = async (state, dispatch) => {
   if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
-      owner.ownerType = 'NONE';
+      // owner.ownerType = 'NONE';
     })
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
@@ -253,6 +253,7 @@ const callBackForApply = async (state, dispatch) => {
         value: consumerCode
       }
     ];
+    propertyPayload.owners =propertyPayload.owners.filter(owner=>owner.isDeleted!==false);
     propertyPayload.creationReason = 'MUTATION';
     let payload = null;
     payload = await httpRequest(
@@ -306,16 +307,16 @@ const validateMobileNumber = (state) => {
     const names = owners.map(owner => {
       return owner.name
     })
-    const mobileNumbers = owners.map(owner => {
-      if (owner.status == "ACTIVE") {
-        return owner.mobileNumber;
-      }
-    })
-    newOwners.map(owner => {
-      if (mobileNumbers.includes(owner.mobileNumber)) {
-        err = "OWNER_NUMBER_SAME";
-      }
-    })
+    // const mobileNumbers = owners.map(owner => {
+    //   if (owner.status == "ACTIVE") {
+    //     return owner.mobileNumber;
+    //   }
+    // })
+    // newOwners.map(owner => {
+    //   if (mobileNumbers.includes(owner.mobileNumber)) {
+    //     err = "OWNER_NUMBER_SAME";
+    //   }
+    // })
   } else {
 
     let newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
@@ -325,19 +326,19 @@ const validateMobileNumber = (state) => {
       })
     }
     const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
-    const names = owners.map(owner => {
-      return owner.name
-    })
-    const mobileNumbers = owners.map(owner => {
-      if (owner.status == "ACTIVE") {
-        return owner.mobileNumber;
-      }
-    })
-    newOwners.map(owner => {
-      if (mobileNumbers.includes(owner.mobileNumber)) {
-        err = "OWNER_NUMBER_SAME";
-      }
-    })
+    // const names = owners.map(owner => {
+    //   return owner.name
+    // })
+    // const mobileNumbers = owners.map(owner => {
+    //   if (owner.status == "ACTIVE") {
+    //     return owner.mobileNumber;
+    //   }
+    // })
+    // newOwners.map(owner => {
+    //   if (mobileNumbers.includes(owner.mobileNumber)) {
+    //     err = "OWNER_NUMBER_SAME";
+    //   }
+    // })
     if (!err && ownershipCategoryTemp.includes('MULTIPLEOWNERS') && newOwners.length == 1) {
       err = "OWNERSHIPTYPE_CANNOT_BE_MULTIPLE";
     }

@@ -11,6 +11,7 @@ import {
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
 
 // const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 // const transfomedKeys = transformById(localizationLabels, "code");
@@ -72,7 +73,7 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
         transfomedKeys
       );
       return option;
-    })
+    }).sort(sortDropdownNames)
   );
 };
 

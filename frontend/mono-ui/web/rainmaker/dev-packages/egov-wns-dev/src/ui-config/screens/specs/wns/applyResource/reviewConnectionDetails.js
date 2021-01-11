@@ -503,15 +503,101 @@ const propertyOwnerDetails = () => {
       scheama: getCommonGrayCard({
         div3: ownerDetailsInfo,
         viewFive: getCommonContainer({
-          mobileNumber,
-          name,
-          gender,
-          dateOfBirth,
-          email,
-          fatherName,
-          relationship,
-          correspondenceAddress,
-          specialApplicantCategory
+          // mobileNumber,
+          // name,
+          // gender,
+          // dateOfBirth,
+          // email,
+          // fatherName,
+          // relationship,
+          // correspondenceAddress,
+          // specialApplicantCategory,
+          mobileNumber: getLabelWithValue(
+            {
+              labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
+            },
+            { 
+              jsonPath: "applyScreen.property.owners[0].mobileNumber", 
+              callBack: handleNA 
+            }
+          ),
+          name: getLabelWithValue(
+            {
+              labelName: "Name",
+              labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
+            },
+            { 
+              jsonPath: "applyScreen.property.owners[0].name", 
+              callBack: handleNA 
+            }
+          ),
+          gender: getLabelWithValue(
+            {
+              labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.property.owners[0].gender",
+              callBack: handleNA,
+              localePrefix: {
+                moduleName: "COMMON",
+                masterName: "GENDER"
+              }
+            }
+          ),
+          dateOfBirth: getLabelWithValue(
+            {
+              labelKey: "WS_OWN_DETAIL_DOB_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.property.owners[0].dob",
+              callBack: convertEpochToDateAndHandleNA
+            }
+          ),
+          email: getLabelWithValue(
+            {
+              labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.property.owners[0].emailId",
+              callBack: handleNA
+            }
+          ),
+          fatherName: getLabelWithValue(
+            {
+              labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
+            },
+            { 
+              jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName", 
+              callBack: handleNA 
+            }
+          ),
+          relationship: getLabelWithValue(
+            {
+              labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
+            },
+            { 
+              jsonPath: "applyScreen.property.owners[0].relationship", 
+              callBack: handleNA 
+            }
+          ),
+          correspondenceAddress: getLabelWithValue(
+            {
+              labelKey: "WS_OWN_DETAIL_CROSADD"
+            },
+            {
+              jsonPath: "applyScreen.property.owners[0].correspondenceAddress",
+              callBack: handleNA
+            }
+          ),
+          specialApplicantCategory: getLabelWithValue(
+            {
+              labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.property.owners[0].ownerType",
+              callBack: handleNA
+            }
+          )
         }),
       }),
       items: [],

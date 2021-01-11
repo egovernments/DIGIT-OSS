@@ -217,7 +217,7 @@ const UploadCard = (props) => {
         {docItem.required && requiredIcon}
         <Typography variant="caption">
           <LabelContainer
-            labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
+            labelKey={getTransformedLocale("BPA_UPLOAD_FILE_RESTRICTIONS")}
           />
         </Typography>
       </Grid>

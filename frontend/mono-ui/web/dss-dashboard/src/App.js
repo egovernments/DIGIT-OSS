@@ -10,6 +10,7 @@ import './App.css';
 import variables from './styles/variables';
 import { fetchLocalisationRequest } from './utils/commons';
 import Layout from './utils/Layout';
+import { loadUlbLogo } from './utils/block';
 
 const theme = createMuiTheme({
   overrides: {
@@ -163,6 +164,7 @@ class App extends React.Component {
   componentDidMount() {
     document.title = "DSS Dashboard";
     this.loadLocalisation();
+    loadUlbLogo(localStorage.getItem('tenant-id'));
   }
 
   changeTheName = (e) => {

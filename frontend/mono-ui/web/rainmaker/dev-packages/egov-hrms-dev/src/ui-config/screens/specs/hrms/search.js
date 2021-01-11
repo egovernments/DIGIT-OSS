@@ -68,7 +68,8 @@ const getMDMSData = async (action, state, dispatch) => {
         {
           moduleName: "tenant",
           masterDetails: [{ name: "tenants" }]
-        }
+        },
+        {"moduleName":"ACCESSCONTROL-ROLES","masterDetails":[{"name":"roles","filter":"$.[?(@.code!='CITIZEN')]"}]}
       ]
     }
   };
@@ -120,6 +121,7 @@ const employeeSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("hrmsSearchScreen", {}));
     getData(action, state, dispatch);
     setUlbSelect(action, state, dispatch);
     return action;

@@ -146,7 +146,12 @@ body.employee-user-profile {
 .menu-search-container >div >svg{
   color: rgba(0, 0, 0, 0.87) !important; 
 }
-
+@media only screen and (max-width: 768px) {
+  .screenHeaderLabelStyle .label-text {
+    line-height: 20px !important;
+    font-size: 18px !important;
+  }
+}
 @media only screen and (min-width: 768px) {
   .screenHeaderLabelStyle .label-text {
     color: #484848 !important;

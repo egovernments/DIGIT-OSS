@@ -6,7 +6,7 @@ import {
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getTransformedLocale, enableField, disableField } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -246,6 +246,8 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "fireNOCDetails.additionalDetail.documents",
       otherDocuments
     );
+    disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+    // disableField('summary',"components.div.children.footer.children.submitButton",dispatch);
 
     // Set Channel and Financial Year
     process.env.REACT_APP_NAME === "Citizen"
@@ -273,6 +275,8 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         { FireNOCs: payload }
       );
       response = furnishNocResponse(response);
+      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+      // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
@@ -284,11 +288,15 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         { FireNOCs: payload }
       );
       response = furnishNocResponse(response);
+      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+      // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
     }
 
     return { status: "success", message: response };
   } catch (error) {
+    enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+    enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
 
     // Revert the changed pfo in case of request failure

@@ -4,6 +4,7 @@ import { getQueryArg, getStatusKey } from "egov-ui-framework/ui-utils/commons";
 import React from "react";
 import store from "ui-redux/store";
 import { getEpochForDate, sortByEpoch } from "../../utils";
+import get from "lodash/get";
 
 export const getQueryRedirectUrl = () => {
   let url = getQueryArg(window.location.href, "redirectUrl");
@@ -112,17 +113,35 @@ export const searchPropertyTable = {
 };
 
 const getSelect = data => {
-  if (data.rowData[3] !== 'SELECT') {
-    return false;
-  }
-  const isMode = getQueryArg(window.location.href, "mode");
-  if (isMode === "MODIFY") {
-    store.dispatch(
-      setRoute(`${getQueryRedirectUrl()}&propertyId=${data.rowData[0]}`)
-    )
+  let storeData = store.getState();
+  let isCheckFromWNS = get(storeData, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.isCheckFromWNS", false);
+  if (isCheckFromWNS) {
+    if (data.rowData[3] !== 'SELECT') {
+      return false;
+    }
+    const isMode = getQueryArg(window.location.href, "mode");
+    if (isMode === "MODIFY") {
+      store.dispatch(
+        setRoute(`${getQueryRedirectUrl()}&propertyId=${data.rowData[0]}`)
+      )
+    } else {
+      store.dispatch(
+        setRoute(`${getQueryRedirectUrl()}&propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`)
+      )
+    }
   } else {
-    store.dispatch(
-      setRoute(`${getQueryRedirectUrl()}&propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`)
-    )
+    if ((data.rowData[3] !== 'SELECT') || (data.rowData[3] !== 'INWORKFLOW') ) {
+      return false;
+    }
+    const isMode = getQueryArg(window.location.href, "mode");
+    if (isMode === "MODIFY") {
+      store.dispatch(
+        setRoute(`${getQueryRedirectUrl()}&propertyId=${data.rowData[0]}`)
+      )
+    } else {
+      store.dispatch(
+        setRoute(`${getQueryRedirectUrl()}&propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`)
+      )
+    }
   }
 }

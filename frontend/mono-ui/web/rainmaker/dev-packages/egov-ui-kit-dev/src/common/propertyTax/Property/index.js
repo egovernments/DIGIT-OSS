@@ -95,6 +95,7 @@ class Property extends Component {
     fetchReceipt([
       { key: "consumerCodes", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId },
+      { key: "businessService", value: 'PT' }
     ]);
 
     loadUlbLogo(this.props.match.params.tenantId);

@@ -475,7 +475,7 @@ class TableChart extends Component {
         <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column', marginTop: "10px" }}>
           <div className="tableHeading">
             <div className={"table-filters"}>
-              <SwitchButton clickFromTab={this.clickFromTab} chartParent={chartParent} />
+              <SwitchButton clickFromTab={this.clickFromTab} chartParent={chartParent} strings={strings} />
 
             </div>
           </div>

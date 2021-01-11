@@ -147,7 +147,8 @@ export const getMdmsData = async dispatch => {
             { name: "connectionType" },
             { name: "PropertySearch" }
           ]
-        }
+        },
+        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" }]}
       ]
     }
   };
@@ -286,17 +287,19 @@ export const getData = async (action, state, dispatch) => {
       }
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
       if (waterConnections.length > 0) {
-        waterConnections[0].additionalDetails.locality = waterConnections[0].property.address.locality.code;
+        waterConnections[0].additionalDetails.locality = get(waterConnections[0], "property.address.locality.code");
       }
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];
       if (sewerageConnections.length > 0) {
-        sewerageConnections[0].additionalDetails.locality = sewerageConnections[0].property.address.locality.code;
+        sewerageConnections[0].additionalDetails.locality = get(sewerageConnections[0], "property.address.locality.code");
       }
       let combinedArray = waterConnections.concat(sewerageConnections);
 
-      if (!isActiveProperty(combinedArray[0].property)) {
-        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));
-        showHideFieldsFirstStep(dispatch, "", false);
+      if (!window.location.href.includes("propertyId")) {
+        if (!isActiveProperty(combinedArray[0].property)) {
+          dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));
+          showHideFieldsFirstStep(dispatch, "", false);
+        }
       }
       // For Modify connection details
       if (isModifyMode() && !isModifyModeAction()) {

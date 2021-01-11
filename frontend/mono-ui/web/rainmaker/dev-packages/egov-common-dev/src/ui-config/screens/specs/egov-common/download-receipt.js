@@ -1,3 +1,4 @@
+import { getCommonCard, getCommonTitle,getCommonSubHeader,getCommonLabelValue, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { set } from "lodash";
@@ -5,6 +6,31 @@ import get from "lodash/get";
 import { download } from "../../../../ui-utils/commons";
 import { getBusinessServiceMdmsData } from "../utils";
 import { getHeader } from "./pay";
+
+
+const getReceiptData = (receiptNo) => {
+ 
+    return getCommonContainer({
+        h1:getCommonContainer({
+        header: getCommonTitle({
+            labelName: `Payment `, //later use getFinancialYearDates
+            labelKey: "DOWNLOAD_RECEIPT_HEADER"
+        }),
+    }),
+        h2:getCommonContainer({
+        consumerCode: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-common",
+            componentPath: "OthersContainer",
+            props: {
+                number: receiptNo,
+                label: {
+                    labelKey: "RECEIPT_NO_HEADER",
+                },
+            }
+        }})
+    });
+}
 
 const loadMdms = async (action, state, dispatch, consumerCode, tenantId, businessService, receiptNumber) => {
     await getBusinessServiceMdmsData(dispatch, tenantId);
@@ -25,9 +51,10 @@ const loadMdms = async (action, state, dispatch, consumerCode, tenantId, busines
     await getBusinessServiceMdmsData(dispatch, tenantId);
     const receiptQueryString = [
         { key: "receiptNumbers", value: receiptNumber },
-        { key: "tenantId", value: tenantId }
+        { key: "tenantId", value: tenantId },
+        { key: "businessService", value:businessService }        
     ]
-    download(receiptQueryString, "open", receiptKey, state)
+    download(receiptQueryString, "open", receiptKey, state,true)
 }
 const screenConfig = {
     uiFramework: "material-ui",
@@ -39,9 +66,11 @@ const screenConfig = {
             props: {
                 className: "common-div-css"
             },
-            children: {}
-        }
+            children: {
+         },
     },
+
+},
     beforeInitScreen: (action, state, dispatch) => {
         const status = getQueryArg(window.location.href, "status");
         const consumerCode = getQueryArg(window.location.href, "consumerCode");
@@ -50,7 +79,9 @@ const screenConfig = {
         const businessService = getQueryArg(window.location.href, "businessService");
         loadMdms(action, state, dispatch, consumerCode, tenantId, businessService, receiptNumber);
         const data = getHeader(state);
-        set(action, "screenConfig.components.div.children", { data });
+        set(action, "screenConfig.components.div.children", { data,paymentDetails: getCommonCard({
+           head:getReceiptData(receiptNumber)
+        }) });
         return action;
     }
 };

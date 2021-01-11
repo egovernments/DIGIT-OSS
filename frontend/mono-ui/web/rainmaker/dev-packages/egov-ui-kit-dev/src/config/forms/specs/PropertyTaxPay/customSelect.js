@@ -14,6 +14,7 @@ const formConfig = {
       floatingLabelText: "PT_FORM2_SELECT_FLOOR",
       hintText: "PT_FORM2_SELECT_FLOOR",
       numcols: 12,
+      defaultSort:false,
       errorMessage: "",
       required: true,
       className: "pt-floor-name",

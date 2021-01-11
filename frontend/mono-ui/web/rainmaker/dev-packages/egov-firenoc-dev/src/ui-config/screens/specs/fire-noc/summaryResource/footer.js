@@ -4,8 +4,10 @@ import get from "lodash/get";
 import { createUpdateNocApplication } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.scss";
+import { enableField, disableField } from "egov-ui-framework/ui-utils/commons";
 
 const updateNocApplication = async (state, dispatch) => {
+  disableField('summary',"components.div.children.footer.children.submitButton",dispatch);
   let response = await createUpdateNocApplication(state, dispatch, "APPLY");
   let applicationNumber = get(
     state,
@@ -16,6 +18,7 @@ const updateNocApplication = async (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.FireNOCs[0].tenantId"
   );
   if (get(response, "status", "") === "success") {
+    enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
     const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
         ? `/egov-ui-framework/fire-noc/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`

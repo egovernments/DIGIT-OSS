@@ -2,7 +2,7 @@ import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { transformById } from "egov-ui-kit/utils/commons";
+import { transformById ,getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { BOUNDARY, DOWNLOADRECEIPT, DRAFT, FETCHASSESSMENTS, FETCHBILL, FETCHRECEIPT, PGService, PROPERTY, RECEIPT } from "egov-ui-kit/utils/endPoints";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
@@ -624,7 +624,7 @@ export const fetchTotalBillAmount = (fetchBillQueryObject) => {
         dispatch(toggleSnackbarAndSetText(
           true,
           { labelName: error.message, labelKey: error.message },
-          "error"
+          error.message&& error.message.includes&& error.message.includes("No Demands Found") ? "warning" : "error"
         ))
         dispatch(fetchBillError(error.message));
       }
@@ -636,7 +636,15 @@ export const fetchReceipt = (fetchReceiptQueryObject) => {
     if (fetchReceiptQueryObject) {
       dispatch(fetchReceiptPending());
       try {
-        const payloadProperty = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, fetchReceiptQueryObject);
+        let businessService = '';
+        fetchReceiptQueryObject && Array.isArray(fetchReceiptQueryObject) && fetchReceiptQueryObject.map(query => {
+          if (query.key == "businessService") {
+            businessService = query.value;
+          }
+        })
+        fetchReceiptQueryObject = fetchReceiptQueryObject && Array.isArray(fetchReceiptQueryObject) && fetchReceiptQueryObject.filter(query => query.key != "businessService")
+       
+        const payloadProperty = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, fetchReceiptQueryObject);
         dispatch(fetchReceiptComplete(payloadProperty));
       } catch (error) {
         dispatch(fetchReceiptError(error.message));
@@ -681,17 +689,47 @@ export const downloadReceipt = (receiptQueryString) => {
     if (receiptQueryString) {
       // dispatch(downloadReceiptPending());
       try {
-        const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
-        const queryStr = [
-          { key: "key", value: "consolidatedreceipt" },
-          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-        ]
+        let businessService = '';
+        receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+          if (query.key == "businessService") {
+            businessService = query.value;
+          }
+        })
+        receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
+       
+        const payloadReceiptDetails = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
+  
         const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
-        if (oldFileStoreId) {
+        const paymentStatus = get(payloadReceiptDetails.Payments[0], "paymentStatus")
+        if (oldFileStoreId && paymentStatus!="CANCELLED") {
           downloadReceiptFromFilestoreID(oldFileStoreId, "download")
         }
+        else if(oldFileStoreId && paymentStatus=="CANCELLED"){
+          getFileUrlFromAPI(oldFileStoreId).then((fileRes) => {
+            if(fileRes&&fileRes[oldFileStoreId]){
+            var win = window.open(fileRes[oldFileStoreId], '_blank');
+            win.focus();}
+            else{
+              download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
+            }
+          });
+        }
         else {
-          httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+          download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
+        }
+      } catch (error) {
+        dispatch(downloadReceiptError(error.message));
+      }
+    }
+  }
+}
+
+const download =(Payments,tenant)=>{
+  const queryStr = [
+    { key: "key", value: "consolidatedreceipt" },
+    { key: "tenantId", value:tenant }
+  ]
+  httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
               getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
                 var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
@@ -699,10 +737,4 @@ export const downloadReceipt = (receiptQueryString) => {
               });
 
             });
-        }
-      } catch (error) {
-        dispatch(downloadReceiptError(error.message));
-      }
-    }
-  }
 }

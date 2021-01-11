@@ -2,13 +2,13 @@ import {
   getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,
-
+  getLabelWithValue,
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { checkValueForNA } from "../../utils";
 import { getLabelIfNotNull } from "../../utils/index";
-
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const showComponent = (dispatch, componentJsonPath, display) => {
   let displayProps = display ? {} : { display: "none" };
@@ -57,7 +57,7 @@ export const transfereeSummary = getCommonGrayCard({
       className: "owner-summary",
       scheama: getCommonGrayCard({
         ownerContainer: getCommonContainer({
-          ownerName: getLabelWithValueForModifiedLabel(
+          ownerName: getLabelWithValue(
             {
               labelName: "Name",
               labelKey: "PT_OWNERSHIP_INFO_NAME"
@@ -70,7 +70,7 @@ export const transfereeSummary = getCommonGrayCard({
             labelKey: "PTM_OLD_LABEL_NAME"
           },
             { jsonPath: "PropertyOld.ownersTemp[0].name", callBack: checkValueForNA },
-          ), ownerFatherHusbandName: getLabelWithValueForModifiedLabel(
+          ), ownerFatherHusbandName: getLabelWithValue(
             {
               labelName: "Guardian's Name",
               labelKey: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
@@ -83,7 +83,7 @@ export const transfereeSummary = getCommonGrayCard({
             labelKey: "PTM_OLD_LABEL_NAME"
           },
             { jsonPath: "PropertyOld.ownersTemp[0].fatherOrHusbandName", callBack: checkValueForNA },
-          ), ownerGender: getLabelWithValueForModifiedLabel(
+          ), ownerGender: getLabelWithValue(
             {
               labelName: "Gender",
               labelKey: "PT_OWNERSHIP_INFO_GENDER"
@@ -96,7 +96,7 @@ export const transfereeSummary = getCommonGrayCard({
             labelKey: "PTM_OLD_LABEL_NAME"
           },
             { jsonPath: "PropertyOld.ownersTemp[0].gender", callBack: checkValueForNA },
-          ), ownerType: getLabelWithValueForModifiedLabel(
+          ), ownerType: getLabelWithValue(
             {
               labelName: "Type of Ownership",
               labelKey: "PT_FORM3_OWNERSHIP_TYPE"
@@ -110,7 +110,7 @@ export const transfereeSummary = getCommonGrayCard({
           },
             { jsonPath: "PropertyOld.ownershipCategoryTemp", callBack: checkValueForNA },
           ),
-          mobileNo: getLabelWithValueForModifiedLabel(
+          mobileNo: getLabelWithValue(
             {
               labelName: "Mobile No.",
               labelKey: "PT_OWNERSHIP_INFO_MOBILE_NO"
@@ -123,7 +123,7 @@ export const transfereeSummary = getCommonGrayCard({
             labelKey: "PTM_OLD_LABEL_NAME"
           },
             { jsonPath: "PropertyOld.ownersTemp[0].mobileNumber", callBack: checkValueForNA },
-          ), ownerEmail: getLabelWithValueForModifiedLabel(
+          ), ownerEmail: getLabelWithValue(
             {
               labelName: "Email",
               labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
@@ -137,7 +137,7 @@ export const transfereeSummary = getCommonGrayCard({
           },
             { jsonPath: "PropertyOld.ownersTemp[0].emailId", callBack: checkValueForNA },
           ),
-          ownerDob: getLabelWithValueForModifiedLabel(
+          ownerDob: getLabelWithValue(
             {
               labelName: "Special Category",
               labelKey: "PT_OWNERSHIP_INFO_USER_CATEGORY"
@@ -154,7 +154,7 @@ export const transfereeSummary = getCommonGrayCard({
           },
             { jsonPath: "PropertyOld.ownersTemp[0].ownerType", callBack: checkValueForNA },
           ),
-          ownerAddress: getLabelWithValueForModifiedLabel(
+          ownerAddress: getLabelWithValue(
             {
               labelName: "Correspondence Address",
               labelKey: "PT_OWNERSHIP_INFO_CORR_ADDR"
@@ -312,11 +312,14 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
         labelKey: "PT_OWNERSHIP_INSTI_TYPE"
       },
       {
-        jsonPath: "Property.institutionTemp.institutionName",
-        callBack: checkValueForNA
-        // callBack: value => {
-        //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-        // }
+        jsonPath: "Property.institutionTemp.institutionType",
+        // callBack: checkValueForNA
+        callBack: value => {
+          if(!value){
+            return 'NA';
+          }
+          return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+        }
       }, {
       labelKey: "PTM_OLD_LABEL_NAME"
     },

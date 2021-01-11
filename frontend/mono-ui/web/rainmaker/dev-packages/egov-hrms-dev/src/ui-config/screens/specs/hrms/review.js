@@ -39,26 +39,26 @@ const screenConfig = {
         className: "common-div-css"
       },
       children: {
-        headerDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
-          children: {
-            header: {
-              gridDefination: {
-                xs: 12,
-                sm: 10
-              },
-              ...header
-            },
-            subHeader: {
-              gridDefination: {
-                xs: 12,
-                sm: 10
-              },
-              ...subHeader
-            }
-          }
-        },
+        // headerDiv: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Container",
+        //   children: {
+        //     header: {
+        //       gridDefination: {
+        //         xs: 12,
+        //         sm: 10
+        //       },
+        //       ...header
+        //     },
+        //     subHeader: {
+        //       gridDefination: {
+        //         xs: 12,
+        //         sm: 10
+        //       },
+        //       ...subHeader
+        //     }
+        //   }
+        // },
         tradeReview
       }
     }

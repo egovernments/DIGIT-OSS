@@ -1,20 +1,14 @@
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import {
-  getCommonCaption, getCommonCard,
-
-
-
-  getLabelWithValue, getPattern
+  getCommonCaption, getCommonCard, getLabelWithValue, getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import {
-  getFileUrl, getFileUrlFromAPI, getLocaleLabels, getQueryArg,
-
-
-  getTransformedLocale, getTransformedLocalStorgaeLabels
+  getFileUrl, getFileUrlFromAPI, getLocaleLabels, getQueryArg, getTransformedLocale, getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -896,10 +890,18 @@ export const fetchBill = async queryObject => {
   }
 };
 export const getpayments = async queryObject => {
+
+  let businessService = '';
+    queryObject && Array.isArray(queryObject) && queryObject.map(query => {
+      if (query.key == "businessService") {
+        businessService = query.value;
+      }
+    })
+
   try {
     const response = await httpRequest(
       "post",
-      "/collection-services/payments/_search",
+      getPaymentSearchAPI(businessService),
       "",
       queryObject
     );
@@ -972,7 +974,12 @@ export const downloadReceitForm = async (Payments, pdfcode, tenantId, applicatio
     {
       key: "consumerCodes",
       value: applicationNumber
-    }
+    },
+    {
+      key: "businessService",
+      value: 'PT.MUTATION'
+    },
+    
   ];
 
   const responsePayments = await getpayments(queryObj)
