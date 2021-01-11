@@ -184,3 +184,9 @@ body {
     }
   }
   
+  @media only screen and (max-width: 600px) {
+    .public-domain-search-position {
+      top: 50px !important;
+      position: relative !important;
+    }
+  }

@@ -162,3 +162,10 @@
 }
 #material-ui-searchPropertyContainer div div div div div p {
   font-size: 1.4rem  }
+
+  @media only screen and (max-width: 600px) {
+    .public-domain-search-position {
+      top: 50px !important;
+      position: relative !important;
+    }
+  }
