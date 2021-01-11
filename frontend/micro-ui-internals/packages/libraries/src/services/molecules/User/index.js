@@ -32,8 +32,8 @@ export const UserService = {
       auth: false,
       params: { tenantId: stateCode },
     }),
-  setUser: () => {
-    return Digit.SessionStorage.set("User");
+  setUser: (data) => {
+    return Digit.SessionStorage.set("User", data);
   },
   registerUser: (details, stateCode = "pb") =>
     ServiceRequest({

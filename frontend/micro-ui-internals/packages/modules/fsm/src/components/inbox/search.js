@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
+import { useTranslation } from "react-i18next";
 
-const SearchComplaint = ({ onSearch, type, onClose }) => {
+const SearchApplication = ({ onSearch, type, onClose }) => {
+  const { t } = useTranslation();
   const [applicationNo, setApplicationNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const { register, handleSubmit, reset } = useForm();
@@ -28,7 +30,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
   const clearAll = () => {
     return (
       <LinkLabel style={{ color: "#F47738", cursor: "pointer" }} onClick={clearSearch}>
-        Clear Search
+        {t("ES_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
   };
@@ -62,7 +64,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
             )}
             <div className="complaint-input-container">
               <span className="complaint-input">
-                <Label>Application No.</Label>
+                <Label>{t("ES_SEARCH_APPLICATION_APPLICATION_NO")}</Label>
                 <TextInput
                   name="serviceRequestId"
                   value={applicationNo}
@@ -72,17 +74,17 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
                 ></TextInput>
               </span>
               <span className="mobile-input">
-                <Label>Mobile No.</Label>
+                <Label>{t("ES_SEARCH_APPLICATION_MOBILE_NO")}</Label>
                 <TextInput name="mobileNumber" value={mobileNo} onChange={setMobile} inputRef={register} style={{ width: "280px" }}></TextInput>
               </span>
-              {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: 8 }} label="Search" submit />}
+              {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: 8 }} label={t("ES_COMMON_SEARCH")} submit />}
             </div>
             {type === "desktop" && <span className="clear-search">{clearAll()}</span>}
           </div>
         </div>
         {type === "mobile" && (
           <ActionBar>
-            <SubmitBar label="Search" submit />
+            <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
           </ActionBar>
         )}
       </React.Fragment>
@@ -90,4 +92,4 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
   );
 };
 
-export default SearchComplaint;
+export default SearchApplication;

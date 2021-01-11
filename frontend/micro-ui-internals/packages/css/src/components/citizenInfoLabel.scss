@@ -1,0 +1,7 @@
+.citizen-info-label {
+  @apply p-sm border-4 border-solid border-link-normal text-heading-m mb-xs;
+
+  p {
+    @apply text-link-normal font-bold mt-xs text-heading-s;
+  }
+}

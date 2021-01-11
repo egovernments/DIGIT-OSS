@@ -1,8 +1,10 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { FormStep, CardLabel, Dropdown } from "@egovernments/digit-ui-react-components";
+import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value }) => {
   const cities = Digit.Hooks.fsm.useTenants();
+  const localitiesObj = useSelector((state) => state.common.localities);
   // const city_complaint = Digit.SessionStorage.get("city_complaint");
   // const locality_complaint = Digit.SessionStorage.get("locality_complaint");
   // const selected_localities = Digit.SessionStorage.get("selected_localities");
@@ -20,8 +22,7 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
 
   useEffect(async () => {
     if (selectedCity) {
-      let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
-      let __localityList = response.TenantBoundary[0].boundary;
+      let __localityList = localitiesObj[selectedCity.code];
       // let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
       // console.log("address __localityList", __localityList);
       setLocalities(__localityList);
@@ -57,7 +58,7 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
   }
 
   return (
-    <FormStep config={config} onSelect={onSubmit} t={t}>
+    <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
       {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}

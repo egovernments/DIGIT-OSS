@@ -1,28 +1,26 @@
 import React from "react";
-import { Header } from "@egovernments/digit-ui-react-components";
+import { Header, Loader } from "@egovernments/digit-ui-react-components";
 import MyApplication from "./MyApplication";
+import { useTranslation } from "react-i18next";
 
 export const MyApplications = () => {
-  const applications = [
-    {
-      complaintNo: "FSM-56-353535",
-      serviceCategory: "FSM",
-      applicationType: "Desludging Request",
-      status: "Pending for Payment",
-    },
-    {
-      complaintNo: "FSM-56-353534",
-      serviceCategory: "FSM",
-      applicationType: "Desludging Request",
-      status: "Pending for Payment",
-    },
-  ];
+  const { t } = useTranslation();
+  const { info: userInfo } = Digit.UserService.getUser();
+
+  const { isLoading, isError, error, data } = Digit.Hooks.fsm.useSearch({ tenantId: "pb", uuid: userInfo.uuid });
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  const { fsm: applicationsList } = data;
+  console.log("applicationsList", applicationsList);
 
   return (
     <React.Fragment>
-      <Header>My Applications</Header>
-      {applications?.length > 0 &&
-        applications.map((application, index) => (
+      <Header>{t("CS_TITLE_MY_APPLICATIONS")}</Header>
+      {applicationsList?.length > 0 &&
+        applicationsList.map((application, index) => (
           <div key={index}>
             <MyApplication application={application} />
           </div>

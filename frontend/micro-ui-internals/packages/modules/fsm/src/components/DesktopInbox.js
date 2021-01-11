@@ -3,9 +3,9 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useRouteMatch } from "react-router-dom";
 import FSMLink from "./inbox/FSMLink";
-import ComplaintTable from "./inbox/ComplaintTable";
+import ApplicationTable from "./inbox/ApplicationTable";
 import Filter from "./inbox/Filter";
-import SearchComplaint from "./inbox/search";
+import SearchApplication from "./inbox/search";
 import { useHistory } from "react-router-dom";
 
 const DesktopInbox = (props) => {
@@ -29,7 +29,7 @@ const DesktopInbox = (props) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: t("Application No."),
+        Header: t("ES_INBOX_APPLICATION_NO"),
         accessor: "applicationNo",
         // Cell: (row) => {
         //   return (
@@ -47,7 +47,7 @@ const DesktopInbox = (props) => {
         // },
       },
       {
-        Header: t("Application Date"),
+        Header: t("ES_INBOX_APPLICATION_DATE"),
         accessor: "applicationDate",
         // Cell: (row) => {
         //   return GetCell(
@@ -56,21 +56,21 @@ const DesktopInbox = (props) => {
         // },
       },
       {
-        Header: t("Locality"),
+        Header: t("ES_INBOX_LOCALITY"),
         accessor: "locality",
         // Cell: (row) => {
         //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
         // },
       },
       {
-        Header: t("Status"),
+        Header: t("ES_INBOX_STATUS"),
         accessor: "status",
         // Cell: (row) => {
         //   return GetCell(row.row.original["taskOwner"]);
         // },
       },
       {
-        Header: t("SLA Days Remaining"),
+        Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
         accessor: "slaDaysRemaining",
         // Cell: (row) => {
         //   return GetSlaCell(row.row.original["sla"]);
@@ -85,19 +85,19 @@ const DesktopInbox = (props) => {
       <div className="filters-container">
         <FSMLink />
         <div>
-          <Filter complaints={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+          <Filter applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
         </div>
       </div>
       <div>
-        <SearchComplaint onSearch={props.onSearch} type="desktop" />
+        <SearchApplication onSearch={props.onSearch} type="desktop" />
         <div style={{ marginTop: "24px", marginTop: "24px", width: "874px", marginLeft: "24px" }}>
-          <ComplaintTable
+          <ApplicationTable
             data={props.data}
             columns={columns}
             getCellProps={(cellInfo) => {
               return {
                 style: {
-                  minWidth: cellInfo.column.Header === t("CS_COMMON_COMPLAINT_NO") ? "240px" : "",
+                  minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
                   padding: "20px 18px",
                   fontSize: "16px",
                   // borderTop: "1px solid grey",

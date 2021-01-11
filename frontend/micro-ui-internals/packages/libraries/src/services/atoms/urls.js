@@ -21,6 +21,11 @@ const Urls = {
   RegisterUser: "/user/citizen/_create",
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
+
+  fsm: {
+    search: "/fsm/v1/_search",
+    create: "/fsm/v1/_create",
+  },
 };
 
 export default Urls;
