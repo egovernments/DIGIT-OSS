@@ -185,7 +185,6 @@ class DocumentList extends Component {
     const { classes, documents, documentTypePrefix } = this.props;
     
     const { uploadedIndex } = this.state;
-    console.log("prpsssss",uploadedIndex);
     return (
       <div style={{ paddingTop: 10 }}>
         {documents &&

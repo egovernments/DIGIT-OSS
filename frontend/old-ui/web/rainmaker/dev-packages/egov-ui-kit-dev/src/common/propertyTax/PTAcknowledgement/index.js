@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import store from "ui-redux/store";
 import PTHeader from "../../common/PTHeader";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import PTInformation from "../AssessmentList/components/PTInformation";
 import "./index.css";
 
@@ -95,7 +96,8 @@ class PTAcknowledgement extends React.Component {
         showPay = true;
       }
       this.setState({ showPay, fetchBill });
-    } catch (e) {
+    } catch (error) {
+      this.props.toggleSnackbarAndSetText(true,  { labelName: error.message, labelKey: error.message },           error.message&& error.message.includes&& error.message.includes("No Demands Found") ? "warning" : "error");
       console.log(e);
     }
   };
@@ -588,6 +590,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
   };
 };

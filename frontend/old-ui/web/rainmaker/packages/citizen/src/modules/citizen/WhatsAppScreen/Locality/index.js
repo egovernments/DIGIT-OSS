@@ -9,7 +9,9 @@ import Input from '@material-ui/core/Input';
 import get from "lodash/get";
 import queryString from 'query-string';
 import { connect } from "react-redux";
+import commonConfig from "config/common";
 // import "./index.css";
+
 
 const styles = (theme) => ({
   root: {
@@ -182,7 +184,7 @@ class WhatsAppLocality extends React.Component {
             items={this.getListItems(this.state.data)}
             primaryTogglesNestedList={true}
             onItemClick={(item, index) => {
-              const number = this.state.phone || 918744960111;
+              const number = this.state.phone || commonConfig.whatsappNumber;
               const name=item.primaryText.props.label;
               const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name;
               window.location.href = weblink

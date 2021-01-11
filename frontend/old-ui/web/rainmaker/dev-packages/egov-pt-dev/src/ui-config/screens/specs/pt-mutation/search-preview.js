@@ -293,11 +293,13 @@ const setSearchResponse = async (
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
 
-
-    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+    const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
 
 
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
+
     if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
       property.institutionInit = previousActiveProperty.institution;
 
@@ -349,6 +351,10 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
     {
       key: "consumerCodes",
       value: applicationNumber
+    },
+    {
+      key: "businessService",
+      value: 'PT.MUTATION'
     }
   ];
   const responsePayments = await getpayments(queryObj)
@@ -388,15 +394,14 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(unMountScreen("propertySearch"));
-    dispatch(unMountScreen("apply"));
+    // dispatch(unMountScreen("propertySearch"));
+    // dispatch(unMountScreen("apply"));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
 
-    searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
     loadUlbLogo(tenantId);
     const queryObject = [

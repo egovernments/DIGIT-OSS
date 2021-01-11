@@ -321,42 +321,49 @@ export const getEmployeeName = async queryObject => {
 };
 
 export const setServiceCategory = (businessServiceData, dispatch) => {
-  let nestedServiceData = {};
-  businessServiceData.forEach(item => {
-    if (item.code && item.code.indexOf(".") > 0) {
-      if (nestedServiceData[item.code.split(".")[0]]) {
-        let child = get(
-          nestedServiceData,
-          `${item.code.split(".")[0]}.child`,
-          []
-        );
-        child.push(item);
-        set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
-      } else {
-        set(
-          nestedServiceData,
-          `${item.code.split(".")[0]}.code`,
-          item.code.split(".")[0]
-        );
-        set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
-      }
-    } else {
-      set(nestedServiceData, `${item.code}`, item);
-    }
-  });
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.nestedServiceData",
-      nestedServiceData
-    )
-  );
-  let serviceCategories = Object.values(nestedServiceData).filter(
-    item => item.code
-  );
+  // let nestedServiceData = {};
+  // businessServiceData.forEach(item => {
+  //   if (item.code && item.code.indexOf(".") > 0) {
+  //     if (nestedServiceData[item.code.split(".")[0]]) {
+  //       let child = get(
+  //         nestedServiceData,
+  //         `${item.code.split(".")[0]}.child`,
+  //         []
+  //       );
+  //       child.push(item);
+  //       set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
+  //     } else {
+  //       set(
+  //         nestedServiceData,
+  //         `${item.code.split(".")[0]}.code`,
+  //         item.code.split(".")[0]
+  //       );
+  //       set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
+  //     }
+  //   } else {
+  //     set(nestedServiceData, `${item.code}`, item);
+  //   }
+  // });
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.nestedServiceData",
+  //     nestedServiceData
+  //   )
+  // );
+  // let serviceCategories = Object.values(nestedServiceData).filter(
+  //   item => item.code
+  // );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.serviceCategories",
+  //     serviceCategories
+  //   )
+  // );
+
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.serviceCategories",
-      serviceCategories
+      businessServiceData
     )
   );
 };

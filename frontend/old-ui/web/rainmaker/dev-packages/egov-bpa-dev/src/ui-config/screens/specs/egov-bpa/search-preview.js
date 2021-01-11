@@ -49,6 +49,7 @@ import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "./noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
+import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -247,6 +248,11 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     state,
     "screenConfiguration.preparedFinalObject.BPA.riskType"
   );
+
+  const service = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.businessService"
+  );
   let downloadMenu = [];
   let printMenu = [];
   let appFeeDownloadObject = {
@@ -320,10 +326,39 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     leftIcon: "assignment"
   };
 
-  let paymentPayload = await httpRequest(
-    "post",
-    `collection-services/payments/_search?tenantId=${tenantId}&consumerCodes=${applicationNumber}`
-  );
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "consumerCodes",
+      value: applicationNumber
+    }
+  ];
+  
+  let paymentPayload = {}; 
+  paymentPayload.Payments = [];
+  if(riskType === "LOW") {
+    let lowAppPaymentPayload = await httpRequest(
+      "post",
+      getPaymentSearchAPI("BPA.LOW_RISK_PERMIT_FEE"),
+      "",
+      queryObject
+    );
+    if(lowAppPaymentPayload && lowAppPaymentPayload.Payments && lowAppPaymentPayload.Payments.length > 0) paymentPayload.Payments.push(lowAppPaymentPayload.Payments[0]);
+  } else {
+    let businessServicesList = ["BPA.NC_APP_FEE", "BPA.NC_SAN_FEE" ];
+    for(let fee = 0; fee < businessServicesList.length; fee++ ) {
+      let lowAppPaymentPayload = await httpRequest(
+        "post",
+        getPaymentSearchAPI(businessServicesList[fee]),
+        "",
+        queryObject
+      );
+      if(lowAppPaymentPayload && lowAppPaymentPayload.Payments) paymentPayload.Payments.push(lowAppPaymentPayload.Payments[0]);
+    }
+  }
 
   if (riskType === "LOW") {
     if (paymentPayload && paymentPayload.Payments.length == 1) {

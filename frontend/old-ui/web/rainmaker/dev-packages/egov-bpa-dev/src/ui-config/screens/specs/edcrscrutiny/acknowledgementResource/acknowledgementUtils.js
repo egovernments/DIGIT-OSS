@@ -43,6 +43,9 @@ const style = {
 
 export const downloadReport=async(url,mode)=>{
     if (mode === 'download') {
+      if(!url.includes("https")) {
+        url.replace(/http/g, "https")
+      }
       var win = window.open(url, '_blank');
       if(win){
         win.focus();

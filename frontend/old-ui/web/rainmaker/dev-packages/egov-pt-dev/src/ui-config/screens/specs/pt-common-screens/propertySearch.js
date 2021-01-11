@@ -13,6 +13,7 @@ import "./index.css";
 // import { showHideAdhocPopup } from "../utils";
 import { resetFields, searchPropertyDetails } from "./mutation-methods";
 import { getQueryRedirectUrl, searchPropertyTable } from "./searchResource/searchResults";
+import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -33,6 +34,12 @@ const getMDMSData = async (dispatch) => {
               name: "tenants"
             }, { name: "citymodule" }
           ]
+        },
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [
+            { name: "PTWorkflow" }
+          ]
         }
       ]
     }
@@ -46,6 +53,8 @@ const getMDMSData = async (dispatch) => {
       mdmsBody
     );
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+    dispatch(prepareFinalObject("applyScreenMdmsData.tenant", payload.MdmsRes.tenant));
     if (process.env.REACT_APP_NAME != "Citizen") {
       dispatch(
         prepareFinalObject(
@@ -54,6 +63,16 @@ const getMDMSData = async (dispatch) => {
         )
       );
     }
+
+    let ptWorkflowDetails = get(payload, "MdmsRes.PropertyTax.PTWorkflow", []);
+    ptWorkflowDetails.forEach(data => {
+      if(data.enable) {
+        dispatch(prepareFinalObject("applyScreenMdmsData.isCheckFromWNS", false));
+        if((data.businessService).includes("WNS")){
+          dispatch(prepareFinalObject("applyScreenMdmsData.isCheckFromWNS", true));
+        }
+      }
+    })
   } catch (e) {
     console.log(e);
   }

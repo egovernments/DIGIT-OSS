@@ -14,7 +14,12 @@ const getCommonApplyFooter = children => {
 
 export const paymentFailureFooter = (consumerCode, tenant, businessService) => {
     const redirectionURL = isPublicSearch() ? "/withoutAuth/egov-common/pay" : "/egov-common/pay";
-    const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=${businessService}`
+    let path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=${businessService}`
+    const redirectNumber=localStorage.getItem('pay-redirectNumber');
+    const channel=localStorage.getItem('pay-channel');
+    if(channel&&redirectNumber){
+        path=`${path}&channel=${channel}&redirectNumber=${redirectNumber}`
+    }
     return getCommonApplyFooter({
         gotoHome: {
             componentPath: "Button",

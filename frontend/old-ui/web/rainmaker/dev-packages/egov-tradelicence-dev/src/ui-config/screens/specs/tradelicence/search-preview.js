@@ -18,8 +18,9 @@ import {
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import get from "lodash/get";
 import set from "lodash/set";
+import store from "ui-redux/store";
 import { httpRequest } from "../../../../ui-utils";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { checkValidOwners, getSearchResults } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
 
@@ -95,6 +96,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+  payload && dispatch(prepareFinalObject("LicensesTemp[0].oldOwners", [...payload.Licenses[0].tradeLicenseDetail.owners]));
 
   //set business service data
 
@@ -182,15 +184,21 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     const obj = setStatusBasedValue(status);
     let appDocuments=get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
     if (appDocuments) {
-      appDocuments=appDocuments.filter(document=>document);
+      let applicationDocs = [];
+      appDocuments.forEach(doc => {
+        if(doc.length !== 0) {
+          applicationDocs.push(doc);
+        }
+      })
+      applicationDocs=applicationDocs.filter(document=>document);
       
       let removedDocs=get(data, "LicensesTemp[0].removedDocs",[]);
       if(removedDocs.length>0){
           removedDocs.map(removedDoc=>{
-            appDocuments=appDocuments.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
+            applicationDocs=applicationDocs.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
           })             
       }
-      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",appDocuments));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",applicationDocs));
       await setDocuments(
         get(state, "screenConfiguration.preparedFinalObject"),
         "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -489,6 +497,16 @@ export const tradeReviewDetails = getCommonCard({
   reviewDocumentDetails
 });
 
+export const beforeSubmitHook =  (Licenses=[{}]) => {
+  let state = store.getState();
+  let oldOwners =  JSON.parse(
+    JSON.stringify(get(state, "screenConfiguration.preparedFinalObject.LicensesTemp[0].oldOwners", {}))
+  );
+  Licenses&&Array.isArray(Licenses)&&Licenses.length>0&& set(Licenses[0] ,"tradeLicenseDetail.owners", checkValidOwners(get(Licenses[0], "tradeLicenseDetail.owners",[]),oldOwners));
+  
+return Licenses;
+
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -550,7 +568,8 @@ const screenConfig = {
           props: {
             dataPath: "Licenses",
             moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update"
+            updateUrl: "/tl-services/v1/_update",
+            beforeSubmitHook:beforeSubmitHook
           }
         },
         // actionDialog: {

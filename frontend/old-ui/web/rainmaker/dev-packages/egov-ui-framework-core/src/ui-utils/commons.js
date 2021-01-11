@@ -875,3 +875,24 @@ export const disableFieldAndShowSpinner = (screenKey, jsonPath = 'components', d
   dispatch(showSpinner());
   disableField(screenKey, jsonPath, dispatch);
 }
+
+
+export const sortDropdownNames = (e1, e2) => {
+  if (e1 && e1.name && typeof e1.name == 'string') {
+    return e1 && e1.name && e1.name.localeCompare && e1.name.localeCompare(e2 && e2.name && e2.name || '');
+  } else if (e1 && e1.name && typeof e1.name == 'number') {
+    return e1.name - e2.name;
+  } else {
+    return 1;
+  }
+}
+
+export const sortDropdownLabels = (e1, e2) => {
+  if (e1 && e1.label && typeof e1.label == 'string') {
+    return e1 && e1.label && e1.label.localeCompare && e1.label.localeCompare(e2 && e2.label && e2.label || '');
+  } else if (e1 && e1.label && typeof e1.label == 'number') {
+    return e1.label - e2.label;
+  } else {
+    return 1;
+  }
+}

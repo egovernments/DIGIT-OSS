@@ -4,6 +4,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg, getRequiredDocData,showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+import get from "lodash/get";
 import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
@@ -37,11 +38,13 @@ const getMDMSData = async (action, dispatch) => {
       if (process.env.REACT_APP_NAME != "Citizen") {
         dispatch(
           prepareFinalObject(
-            "searchScreen.tenantId",
+            "ptSearchScreen.tenantId",
             tenant
           )
         );
       }
+      const tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
+      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
     })
     // const payload = await httpRequest(
     //   "post",
@@ -79,7 +82,7 @@ const getMDMSData = async (action, dispatch) => {
   //   if (process.env.REACT_APP_NAME != "Citizen") {
   //     dispatch(
   //       prepareFinalObject(
-  //         "searchScreen.tenantId",
+  //         "ptSearchScreen.tenantId",
   //         tenant
   //       )
   //     );

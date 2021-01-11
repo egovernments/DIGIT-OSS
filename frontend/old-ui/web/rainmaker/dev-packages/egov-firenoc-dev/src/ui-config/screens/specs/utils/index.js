@@ -1,15 +1,16 @@
+import commonConfig from "config/common.js";
 import { getCommonCaption, getCommonCard, getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
+import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import set from "lodash/set";
 import isEmpty from "lodash/isEmpty";
 import isUndefined from "lodash/isUndefined";
+import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils/api";
-import commonConfig from "config/common.js";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -82,16 +83,16 @@ export const validateFields = (
         )
       ) {
         isFormValid = false;
-      } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props){
-        let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+      } else if (fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props) {
+        let { masterName, moduleName, rootBlockSub, dropdownFields } = fields[variable].props;
         let isIndex = fields[variable].index || 0;
         dropdownFields.forEach((item, i) => {
           let isValid = get(
-            state.screenConfiguration.preparedFinalObject ,
+            state.screenConfiguration.preparedFinalObject,
             `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
             ''
           );
-          if(isValid == '' || isValid == 'none') {
+          if (isValid == '' || isValid == 'none') {
             isFormValid = false;
             dispatch(
               handleField(
@@ -103,7 +104,7 @@ export const validateFields = (
             );
           }
         });
-        
+
       }
     }
   }
@@ -468,7 +469,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
   }
 };
 
-export const validateOwners = (state, dispatch)=>{
+export const validateOwners = (state, dispatch) => {
   let ownersJsonPath = "";
   let owners = [];
   let ownership = get(
@@ -476,7 +477,7 @@ export const validateOwners = (state, dispatch)=>{
     "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
     "INDIVIDUAL.SINGLEOWNER"
   );
-  if(ownership==="INDIVIDUAL.SINGLEOWNER"){
+  if (ownership === "INDIVIDUAL.SINGLEOWNER") {
     ownersJsonPath = "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children";
     owners = get(
       state.screenConfiguration.screenConfig.apply,
@@ -484,7 +485,7 @@ export const validateOwners = (state, dispatch)=>{
       []
     );
     applyRequiredValidation(owners, state, dispatch);
-  } else if(ownership==="INDIVIDUAL.MULTIPLEOWNERS"){
+  } else if (ownership === "INDIVIDUAL.MULTIPLEOWNERS") {
     ownersJsonPath = "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items";
 
     owners = get(
@@ -492,8 +493,8 @@ export const validateOwners = (state, dispatch)=>{
       ownersJsonPath,
       []
     );
-    for(let i =0;i<owners.length;i++){
-      let obj = owners[i]["item"+i].children.cardContent.children.applicantCard.children;
+    for (let i = 0; i < owners.length; i++) {
+      let obj = owners[i]["item" + i].children.cardContent.children.applicantCard.children;
       applyRequiredValidation(obj, state, dispatch);
     }
   } else {
@@ -508,12 +509,12 @@ export const validateOwners = (state, dispatch)=>{
 }
 
 export const applyRequiredValidation = (obj, state, dispatch) => {
-  Object.keys(obj).map((item)=>{
+  Object.keys(obj).map((item) => {
     let jsonPath = obj[item].jsonPath;
     let componentJsonpath = obj[item].componentJsonpath;
     let isFieldValid = obj[item].isFieldValid;
     let value = get(state.screenConfiguration.preparedFinalObject, jsonPath, null);
-    if(value && !isFieldValid){
+    if (value && !isFieldValid) {
       dispatch(
         handleField(
           "apply",
@@ -546,7 +547,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/payments/_search",
+      getPaymentSearchAPI('FIRENOC'),
       "",
       queryObject
     );
@@ -621,7 +622,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/payments/_search",
+      getPaymentSearchAPI("FIRENOC"),
       "",
       queryObject
     );

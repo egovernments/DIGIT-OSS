@@ -60,7 +60,13 @@ class SingleApplication extends React.Component {
       this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
       switch (item.status) {
         case "INITIATED":
-          setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+          
+          if(item.applicationType=="RENEWAL"){
+            setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&licenseNumber=${item.licenseNumber}&action=EDITRENEWAL&tenantId=${item.tenantId}`);
+          }else{
+            setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+          }
+          break;
         default:
           setRoute(`/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
       }

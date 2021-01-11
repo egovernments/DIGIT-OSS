@@ -38,3 +38,8 @@
 .hrmsCityPicker > div {
   width: 100% !important;
 }
+
+
+#custom-containers-local-role div div div div{ 
+flex-flow: wrap !important;
+}

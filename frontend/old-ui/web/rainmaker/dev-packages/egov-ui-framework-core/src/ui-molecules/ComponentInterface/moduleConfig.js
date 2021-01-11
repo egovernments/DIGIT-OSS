@@ -4,7 +4,7 @@ export const getModuleName = (pathName, BPAtradeType) => {
   } else if (pathName && pathName.includes("egov-bpa")) {
     let moduleServiceName = "BPA";
     let url = window.location.href;
-    if(url && url.includes("type=LOW")) {
+    if (url && url.includes("type=LOW")) {
       moduleServiceName = "BPA_LOW"
     }
     return moduleServiceName;

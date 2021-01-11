@@ -1,17 +1,16 @@
 import {
-  getCommonHeader,
-  getCommonContainer
+  getCommonContainer, getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
+import { showHideAdhocPopup } from "../utils";
+import { deactivateEmployee } from "./viewResource/deactivate-employee";
 import { employeeReviewDetails } from "./viewResource/employee-review";
 import { hrViewFooter } from "./viewResource/footer";
 import { getEmployeeData } from "./viewResource/functions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { deactivateEmployee } from "./viewResource/deactivate-employee";
-import { showHideAdhocPopup } from "../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -105,7 +104,8 @@ const screenConfig = {
       props: {
         open: false,
         maxWidth: "sm",
-        screenKey: "view"
+        screenKey: "view",
+
       },
       children: {
         popup: deactivateEmployee

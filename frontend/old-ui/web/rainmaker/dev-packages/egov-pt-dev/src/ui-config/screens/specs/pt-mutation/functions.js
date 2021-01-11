@@ -1,13 +1,11 @@
-import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { disableField, enableField } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
+import React from "react";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
+import { validateFields } from "../utils/index";
 
-import {
-  enableField,disableField
- } from "egov-ui-framework/ui-utils/commons";
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch, 0)
 }
@@ -17,7 +15,7 @@ export const applicationSearch = async (state, dispatch) => {
 }
 
 const removeValidation = (state, dispatch, index) => {
- 
+
   dispatch(
     handleField(
       "propertySearch",
@@ -134,7 +132,7 @@ const searchApiCall = async (state, dispatch, index) => {
 
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "ptSearchScreen",
     {}
   );
   if ((!searchScreenObject.tenantId) && index == 0) {
@@ -151,16 +149,11 @@ const searchApiCall = async (state, dispatch, index) => {
     return;
 
   }
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: searchScreenObject.tenantId
-    }
-  ];
-  if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
-    queryObject = [];
-  }
 
+  let query = { "tenantId": searchScreenObject.tenantId };
+  if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
+    query = {}
+  }
 
   let formValid = false;
   if (index == 0) {
@@ -303,70 +296,36 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
   }
-  //   else if (
-  //     (searchScreenObject["fromDate"] === undefined ||
-  //       searchScreenObject["fromDate"].length === 0) &&
-  //     searchScreenObject["toDate"] !== undefined &&
-  //     searchScreenObject["toDate"].length !== 0
-  //   ) {
-  //     dispatch(
-  //       toggleSnackbar(
-  //         true,
-  //         { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
-  //         "warning"
-  //       )
-  //     );
-  //   } 
+
   else {
 
     removeValidation(state, dispatch, index);
-
-    //  showHideProgress(true, dispatch);
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {
-        if (key === "fromDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "daystart")
-          });
-        } else if (key === "tenantId") {
-          // queryObject.push({
-          //   key: key,
-          //   value: convertDateToEpoch(searchScreenObject[key], "dayend")
-          // });
+        if (key === "tenantId") {
 
         }
         else if (key === "ids") {
-          queryObject.push({
-            key: "propertyIds",
-            value: searchScreenObject[key].trim()
-          });
+          query["propertyIds"] = searchScreenObject[key].trim();
         }
-
-        else if (key === "toDate") {
-          queryObject.push({
-            key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "dayend")
-          });
-        }
-        // else if (key === "status") {
-        //   queryObject.push({
-        //     key: "action",
-        //     value: searchScreenObject[key].trim()
-        //   });
-        // }
         else {
-          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+          query[key] = searchScreenObject[key].trim();
         }
       }
     }
+    let queryObject = [];
+    Object.keys(query).map(key => {
+      queryObject.push({
+        key: key, value: query[key]
+      })
+    })
     try {
-      disableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-      disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-     const response = await getSearchResults(queryObject);
+      disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+      disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+      const response = await getSearchResults(queryObject);
 
       // const response = searchSampleResponse();
 
@@ -398,8 +357,8 @@ const searchApiCall = async (state, dispatch, index) => {
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
         temporary: item
       }));
-      enableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       dispatch(
         handleField(
           "propertySearch",
@@ -436,8 +395,8 @@ const searchApiCall = async (state, dispatch, index) => {
       showHideTable(true, dispatch, index);
     } catch (error) {
       //showHideProgress(false, dispatch);
-      enableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       dispatch(
         toggleSnackbar(
           true,
@@ -581,7 +540,7 @@ export const downloadPrintContainer = (
               label: { labelName: "DOWNLOAD", labelKey: "MT_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "pt-download-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "pt-download-button" },
               menu: downloadMenu
             }
           }

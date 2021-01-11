@@ -52,7 +52,9 @@ class ActionMenu extends Component {
 const mapStateToProps = ({ app }) => {
   const actionListArr = app.menu || [];
   const activeRoutePath = app.activeRoutePath;
-
+  actionListArr.map(item=>{if(item.id==2024){
+    item.path= "bill-amend"
+  }})
   return { actionListArr, activeRoutePath };
 };
 

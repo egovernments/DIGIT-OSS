@@ -1,28 +1,28 @@
-import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
-import Icon from "egov-ui-kit/components/Icon";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Label from "egov-ui-kit/utils/translationNode";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
+import { withStyles } from "@material-ui/core/styles";
+import Icon from "egov-ui-kit/components/Icon";
+import Label from "egov-ui-kit/utils/translationNode";
+import React from "react";
+import { connect } from "react-redux";
 import "./index.css";
 
 const styles = (theme) => ({
   webRoot: {
     flexGrow: 1,
     width: "10%",
-    padding:"1%"
+    padding: "1%"
   },
   mobileRoot: {
     flexGrow: 1,
-    padding:'1%',
+    padding: '1%',
     width: "25%",
   },
   mobileRoot1: {
     flexGrow: 1,
-    padding:'1%',
+    padding: '1%',
     width: "33%",
   },
   paper: {
@@ -59,10 +59,10 @@ class ServiceList extends React.Component {
   };
   componentWillReceiveProps(nextProps) {
     const { menu } = nextProps;
-    let list ;
-    if(process.env.REACT_APP_NAME === "Citizen"){
+    let list;
+    if (process.env.REACT_APP_NAME === "Citizen") {
       list = menu && menu.filter((item) => item.url === "card" && item.name.startsWith("rainmaker-citizen"));
-    }else{
+    } else {
       list = menu && menu.filter((item) => item.url === "card");
     }
     this.setState({
@@ -79,11 +79,17 @@ class ServiceList extends React.Component {
             const translatedLabel = service.displayName.toUpperCase().replace(/[.:\-\s]/g, "_");
 
             return (
-              <Grid className={(actionList.length===6 ||actionList.length===5 || actionList.length===9 )? classes.mobileRoot1:classes.mobileRoot } item align="center">
+              <Grid className={(actionList.length === 6 || actionList.length === 5 || actionList.length === 9) ? classes.mobileRoot1 : classes.mobileRoot} item align="center">
                 <Card
                   className={classes.paper}
                   onClick={(e) => {
-                    history.push(service.navigationURL);
+                    if (service.navigationURL && service.navigationURL.includes('digit-ui')) {
+                      window.location.href = service.navigationURL;
+                      return;
+                    } else {
+                      history.push(service.navigationURL);
+                    }
+
                   }}
                 >
                   <CardContent classes={{ root: "card-content-style" }}>
@@ -105,7 +111,12 @@ class ServiceList extends React.Component {
                 <Card
                   className={`${classes.paper} service-module-style`}
                   onClick={(e) => {
-                    history.push(service.navigationURL);
+                    if (service.navigationURL && service.navigationURL.includes('digit-ui')) {
+                      window.location.href = service.navigationURL;
+                      return;
+                    } else {
+                      history.push(service.navigationURL);
+                    }
                   }}
                 >
                   <CardContent classes={{ root: "card-content-style" }}>

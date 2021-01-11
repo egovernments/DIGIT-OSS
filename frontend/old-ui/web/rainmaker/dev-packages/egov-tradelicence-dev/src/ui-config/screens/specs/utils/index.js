@@ -13,6 +13,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import "./index.css";
 import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -518,7 +519,7 @@ export const getReceipt = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/collection-services/payments/_search",
+      getPaymentSearchAPI('TL'),
       "",
       queryObject
     );
@@ -573,7 +574,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/payments/_search",
+      getPaymentSearchAPI('TL'),
       "",
       queryObject
     );

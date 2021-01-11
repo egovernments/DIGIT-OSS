@@ -9,6 +9,7 @@ import {
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 
@@ -30,13 +31,14 @@ const assignmentDetailsCard = {
                 labelKey: "HR_ASMT_FROM_DATE_PLACEHOLDER"
               },
               required: true,
+              
               pattern: getPattern("Date"),
               jsonPath: "Employee[0].assignments[0].fromDate",
               props: {
-                // inputProps: {
-                //   min: getTodaysDateInYMD(),
-                //   max: getFinancialYearDates("yyyy-mm-dd").endDate
-                // }
+                inputProps: {
+                  max: getTodaysDateInYMD(),
+
+                }
               }
             })
           },
@@ -50,14 +52,17 @@ const assignmentDetailsCard = {
                 labelName: "Assigned To Date",
                 labelKey: "HR_ASMT_TO_DATE_PLACEHOLDER"
               },
-              // required: true,
               pattern: getPattern("Date"),
               jsonPath: "Employee[0].assignments[0].toDate",
+             
               props: {
-                // inputProps: {
-                //   min: getTodaysDateInYMD(),
-                //   max: getFinancialYearDates("yyyy-mm-dd").endDate
-                // }
+                checkFieldDisable: true,
+                dependantField:'isCurrentAssignment',
+                jsonPathRemoveKey:"toDate",
+                
+                inputProps: {
+                  min: getTodaysDateInYMD(),
+                }
               }
             })
           },
@@ -129,7 +134,7 @@ const assignmentDetailsCard = {
                       false
                     )
                   );
-                }
+                 }
               }
             }
           },
@@ -208,7 +213,7 @@ const assignmentDetailsCard = {
                 labelName: "Reporting To",
                 labelKey: "HR_REP_TO_LABEL"
               },
-              pattern: getPattern("TradeName") || null,
+              pattern: getPattern("Name") || null,
               jsonPath: "Employee[0].assignments[0].reportingTo"
             })
           },
@@ -259,7 +264,7 @@ const assignmentDetailsCard = {
           if (isCurrentAssignment && key === "currentAssignment") {
             set(muliItemContent[key], "props.disabled", false);
           } else {
-            set(muliItemContent[key], "props.disabled", true);
+            // set(muliItemContent[key], "props.disabled", true);
           }
         });
       } else {

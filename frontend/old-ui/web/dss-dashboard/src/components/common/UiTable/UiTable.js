@@ -449,6 +449,7 @@ class EnhancedTable extends React.Component {
                 tableType={tableType}
                 needCheckBox={needCheckBox}
                 needHash={needHash}
+                strings={strings}
               />
               {tableData && tableData.length > 0 ? (
                 <TableBody className={classes.fontStyle}>

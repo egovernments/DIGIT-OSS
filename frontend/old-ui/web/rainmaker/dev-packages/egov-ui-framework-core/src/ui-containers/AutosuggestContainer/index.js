@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { AutoSuggest } from "../../ui-atoms";
-import { findItemInArrayOfObject } from "../../ui-utils/commons";
+import { findItemInArrayOfObject, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   transformById,
@@ -33,6 +33,7 @@ class AutoSuggestor extends Component {
       required,
       errorText,
       disabled,
+      defaultSort=true,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -58,6 +59,7 @@ class AutoSuggestor extends Component {
           helperText={required && errorText}
           error={errorText == "Required" && required}
           isClearable={true}
+          defaultSort={defaultSort}
           required={required}
           disabled={disabled}
           {...rest}
@@ -67,12 +69,9 @@ class AutoSuggestor extends Component {
   }
 }
 
-const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
-  return (
-    suggestions &&
-    suggestions.length > 0 &&
-    Array.isArray(suggestions) &&
-    suggestions.map((option, key) => {
+const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys,defaultSort) => {
+    
+   let result= suggestions && suggestions.length > 0 && Array.isArray(suggestions) &&    suggestions.map((option, key) => {
       option.name = getLocaleLabels(
         option.code,
         localePrefix && !isEmpty(localePrefix)
@@ -81,8 +80,13 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
         transfomedKeys
       );
       return option;
-    })
-  );
+    }) || [];
+   
+    return defaultSort?result&& Array.isArray(result)&&result.sort(sortDropdownNames): result;
+
+    
+    
+  
 };
 
 const getErrorText = (obj, id) => {
@@ -109,7 +113,8 @@ const mapStateToProps = (state, ownprops) => {
     canFetchValueFromJsonpath=true,
     helperText,
     id,
-    formName
+    formName,
+    defaultSort=true
   } = ownprops;
   let errorText = helperText ? helperText : (formName && state.form[formName] && state.form[formName].fields ? getErrorText(state.form[formName].fields, id) : "");
   let suggestions =
@@ -128,7 +133,8 @@ const mapStateToProps = (state, ownprops) => {
     suggestions = getLocalisedSuggestions(
       JSON.parse(JSON.stringify(suggestions)),
       localePrefix,
-      localizationLabels
+      localizationLabels,
+      defaultSort
     );
   }
   //To find correct option object as per the value (for showing the selected value).

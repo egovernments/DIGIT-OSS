@@ -132,9 +132,13 @@ class AddRebateExemption extends React.Component {
 
 
     let { taxHeadEstimates, totalAmount } = estimateResponse[0] || {};
+    let ownerExemption=0;
     taxHeadEstimates.map(taxHead => {
       if (taxHead.taxHeadCode == "PT_TAX") {
         totalAmount = taxHead.estimateAmount;
+      }
+      if (taxHead.taxHeadCode == "PT_OWNER_EXEMPTION") {
+        ownerExemption = taxHead.estimateAmount||0;
       }
     });
 
@@ -155,6 +159,12 @@ class AddRebateExemption extends React.Component {
           // exemptValue !== null &&
           // this.props.handleFieldChange("adhocExemption", exemptValue);
           // updateEstimate();
+          if(ownerExemption+totalAmount==0){
+            alert(
+              "Adhoc Exemption cannot be applied for the given property as it has owner exemption"
+            );
+            return;
+          }
           this.updateValueToEstimate();
           handleClose();
         } else {

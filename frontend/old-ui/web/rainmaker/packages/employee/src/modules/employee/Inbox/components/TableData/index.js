@@ -7,14 +7,14 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getLocaleLabels, transformById } from "egov-ui-framework/ui-utils/commons";
 import TextFieldIcon from "egov-ui-kit/components/TextFieldIcon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { httpRequest } from "egov-ui-kit/utils/api";
+import { httpRequest, multiHttpRequest } from "egov-ui-kit/utils/api";
 import { getLocale, getLocalization, getTenantId, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import cloneDeep from "lodash/cloneDeep";
-import filter from "lodash/filter";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
+import set from "lodash/set";
 import uniq from "lodash/uniq";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -27,6 +27,7 @@ const getWFstatus = (status) => {
   switch (status) {
     case "INITIATED":
       return "Initiated";
+    case "CORRECTIONPENDING":
     case "PENDING_FOR_CITIZEN_ACTION":
       return "Pending for Citizen Action";
     case "OPEN":
@@ -48,6 +49,8 @@ const getWFstatus = (status) => {
     case "PAID":
     case "VERIFIED":
     case "FIELDVERIFIED":
+    case "APPROVALPENDING":
+    case "PENDING_FOR_APPROVAL":
     case "PENDINGAPPROVAL":
       return "Pending for Approval";
     case "PENDING_FOR_CONNECTION_ACTIVATION":
@@ -112,6 +115,7 @@ class TableData extends Component {
     },
     showFilter: false,
     value: 0,
+    totalRowCount: 0,
     tabData: [{ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [0] }
       , { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [0] }],
     taskboardData: [{ head: 0, body: "WF_TOTAL_TASK", color: "rgb(171,211,237)", baseColor: "rgb(53,152,219)" },
@@ -122,8 +126,11 @@ class TableData extends Component {
     initialInboxData: [{ headers: [], rows: [] }],
     moduleName: "",
     loaded: false,
+    showLocality: !Boolean(localStorage.getItem('disableLocality')),
     color: "rgb(53,152,219)",
-    timeoutForTyping: false
+    timeoutForTyping: false,
+    loadLocalityForInitialData: false,
+    showLoadingTaskboard:false
   };
 
   getUniqueList = (list = []) => {
@@ -200,7 +207,7 @@ class TableData extends Component {
   applyFilter = (inboxData) => {
     this.showLoading();
     let initialInboxData = inboxData ? cloneDeep(inboxData) : cloneDeep(this.state.initialInboxData);
-    const { filter, searchFilter, taskboardLabel } = this.state;
+    const { filter, searchFilter, taskboardLabel, totalRowCount } = this.state;
     let ESCALATED_SLA = [];
     let NEARING_SLA = [];
     let totalRows = []
@@ -240,12 +247,16 @@ class TableData extends Component {
 
 
 
-    let { taskboardData, tabData } = this.state;
-    taskboardData[0].head = totalRows.length;
-    taskboardData[1].head = NEARING_SLA.length;
-    taskboardData[2].head = ESCALATED_SLA.length;
+    let { taskboardData, tabData , showLoadingTaskboard } = this.state;
+if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
+  
+  this.setState({showLoadingTaskboard:true})
+}
+    taskboardData[0].head = showLoadingTaskboard?totalRows.length: totalRowCount;
+    taskboardData[1].head = totalRows.length == totalRowCount || showLoadingTaskboard ? NEARING_SLA.length : 'LOADING';
+    taskboardData[2].head = totalRows.length == totalRowCount || showLoadingTaskboard ? ESCALATED_SLA.length : 'LOADING';
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
-    tabData[1].dynamicArray = [initialInboxData[1].rows.length];
+    tabData[1].dynamicArray = [showLoadingTaskboard?totalRows.length: totalRowCount];
     this.hideLoading();
     return {
       inboxData: initialInboxData,
@@ -290,73 +301,131 @@ class TableData extends Component {
       initialInboxData: tempObject
     });
   }
-  prepareInboxDataRows = async (data, all) => {
+  prepareInboxDataRows = async (data, all, loadLocality = false) => {
     const { toggleSnackbarAndSetText } = this.props;
-    if (isEmpty(data)) return [];
-    const businessIds = data.map((item) => {
-      return item.businessId;
-    });
-    const businessServiceData = this.getBussinessServiceData();
-    const modules =
-      businessServiceData &&
-      businessServiceData.map((item, index) => {
-        return item.business;
+    const uuid = get(this.props, "userInfo.uuid");
+    if (isEmpty(data)) return{ allData: [], assignedToMe: [] };
+    let businessServices = [];
+    let businessIds = [];
+    let ptApplicationNo = []
+    if (this.state.showLocality && loadLocality) {
+      businessIds = data.map((item) => {
+        businessServices.push(item.moduleName);
+        if (item.moduleName == 'PT') {
+          ptApplicationNo.push(item.businessId);
+        }
+        return item.businessId;
       });
-    const uniqueModules = uniq(modules)
-
+    }
+    // const businessServiceData = this.getBussinessServiceData();
+    // const modules =this.state.showLocality&&
+    //   businessServiceData &&
+    //   businessServiceData.map((item, index) => {
+    //     return item.business;
+    //   })||[];
+    // const uniqueModules = uniq(modules)
+    const uniqueModules = uniq(businessServices)
     let localitymap = [];
-    try {
-      for (var i = 0; i < uniqueModules.length; i++) {
-        try {
-          if (uniqueModules[i] != 'PT') {
-            const requestBody = {
-              searchCriteria: {
-                "referenceNumber": businessIds
-              }
-            }
-            const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${uniqueModules[i]}/_get`, "search", [], requestBody);
-            localitymap = [...localitymap, ...moduleWiseLocality.Localities];
-          } else {
-            const acknowledgementIds = [...businessIds];
-            for (let i = 0; i <= businessIds.length + 200; i += 200) {
-              let acknowledgementId = acknowledgementIds.splice(0, 200);
+    if (this.state.showLocality && loadLocality) {
+      try {
+        let requestBodies = []
+        let endpoints = []
+        let queries = []
+        uniqueModules.map((uniqueModule, ind) => {
+          if (uniqueModule == "PT") {
+            const acknowledgementIds = [...ptApplicationNo];
+            for (let i = 0; i <= ptApplicationNo.length + 50; i += 50) {
+              let acknowledgementId = acknowledgementIds.splice(0, 50);
               if (acknowledgementId && acknowledgementId.length > 0) {
                 const query = [{ key: "tenantId", value: getTenantId() },
                 { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
-                const propertyResponse = await httpRequest("property-services/property/_search", "_search", query);
-
-                const localities = propertyResponse.Properties && propertyResponse.Properties.map(property => {
-                  return {
-                    "referencenumber": property.acknowldgementNumber,
-                    "locality": property.address.locality.code
-                  }
-                })
-                localitymap = [...localitymap, ...localities];
+                requestBodies.push(undefined)
+                queries.push(query)
+                endpoints.push("property-services/property/_search")
               }
             }
+          } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services") {
+
+          } else {
+            requestBodies.push({
+              searchCriteria: {
+                "referenceNumber": businessIds
+              }
+            })
+            queries.push([])
+            endpoints.push(`egov-searcher/locality/${uniqueModule}/_get`)
           }
 
-        } catch (e) {
-          console.log("error");
-        }
+        })
+        const resp = await multiHttpRequest(endpoints, "search", queries, requestBodies)
+        resp && resp.map(res => {
+          if (res && res.Localities) {
+            let locality = res.Localities;
+            localitymap = [...localitymap, ...locality];
+          } else if (res && res.Properties) {
+            const localities = res.Properties.map(property => {
+              return {
+                "referencenumber": property.acknowldgementNumber,
+                "locality": property.address.locality.code
+              }
+            })
+            localitymap = [...localitymap, ...localities];
+          }
+        });
+        /* for (var i = 0; i < uniqueModules.length; i++) {
+          try {
+            if (uniqueModules[i] != 'PT') {
+              const requestBody = {
+                searchCriteria: {
+                  "referenceNumber": businessIds
+                }
+              }
+              const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${uniqueModules[i]}/_get`, "search", [], requestBody);
+              localitymap = [...localitymap, ...moduleWiseLocality.Localities];
+          
+            
+            } else {
+            const acknowledgementIds = [...businessIds];
+              for (let i = 0; i <= businessIds.length + 200; i += 200) {
+                let acknowledgementId = acknowledgementIds.splice(0, 200);
+                if (acknowledgementId && acknowledgementId.length > 0) {
+                  const query = [{ key: "tenantId", value: getTenantId() },
+                  { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
+                  const propertyResponse = await httpRequest("property-services/property/_search", "_search", query);
+  
+                  const localities = propertyResponse.Properties && propertyResponse.Properties.map(property => {
+                    return {
+                      "referencenumber": property.acknowldgementNumber,
+                      "locality": property.address.locality.code
+                    }
+                  })
+                  localitymap = [...localitymap, ...localities];
+                }
+              } 
+            }
+  
+          } catch (e) {
+            console.log("error");
+          }
+        } */
+      } catch (e) {
+        toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "Locality Empty!",
+            labelKey: "Locality Empty!",
+          },
+          "error"
+        );
       }
-    } catch (e) {
-      toggleSnackbarAndSetText(
-        true,
-        {
-          labelName: "Locality Empty!",
-          labelKey: "Locality Empty!",
-        },
-        "error"
-      );
     }
     let localityDropdownList = [];
     let moduleDropdownList = [];
     let statusDropdownList = [];
 
-
+    let assignedToMe = [];
     const initialData = data.map((item) => {
-      const locality = localitymap.find(locality => {
+      const locality = this.state.showLocality && localitymap.find(locality => {
         return locality.referencenumber === item.businessId;
       })
       var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
@@ -366,7 +435,7 @@ class TableData extends Component {
         text: item.state ? (
           <Label
             label={`WF_${item.businessService.toUpperCase()}_${item.state.state}`}
-            defaultLabel={getWFstatus(item.state.state)}
+            defaultLabel={`WF_${item.businessService.toUpperCase()}_${item.state.state}`}
             color="#000000"
           />
         ) : (
@@ -374,7 +443,7 @@ class TableData extends Component {
           ),
       };
 
-      let row3 = { text: <Label label={get(item,'assignes[0].name','NA')} color="#000000" /> };
+      let row3 = { text: <Label label={get(item, 'assignes[0].name', 'NA')} color="#000000" /> };
       let row4 = { text: Math.round(sla), badge: true };
       let row5 = { historyButton: true };
 
@@ -400,6 +469,10 @@ class TableData extends Component {
           row3.text.props.label.toLowerCase()]
         }
       ];
+      let assignes = get(item, 'assignes');
+      if (get(assignes ? assignes[0] : {}, "uuid") === uuid) {
+        assignedToMe.push([...dataRows])
+      }
       return dataRows;
     });
 
@@ -437,7 +510,7 @@ class TableData extends Component {
       });
 
     }
-    return initialData;
+    return { allData: initialData, assignedToMe: assignedToMe };
   };
 
   handleChange = (event, value) => {
@@ -452,7 +525,7 @@ class TableData extends Component {
   getMaxSLA() {
     const businessServiceData = this.getBussinessServiceData();
     let businessServiceSla = {}
-    businessServiceData.map(eachRow => {
+    businessServiceData && Array.isArray(businessServiceData) && businessServiceData.map(eachRow => {
       businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
     })
     this.setState({ businessServiceSla });
@@ -465,6 +538,9 @@ class TableData extends Component {
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
+     if(e&&e.message&&e.message.includes('setItem')){
+
+     }else{
       toggleSnackbarAndSetText(
         true,
         {
@@ -473,37 +549,87 @@ class TableData extends Component {
         },
         "error"
       );
+     }
+   
     }
   };
 
   componentDidMount = async () => {
+    this.loadInitialData();
+    this.getMaxSLA();
+  };
+  loadInitialData = async () => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
-    const uuid = get(this.props, "userInfo.uuid");
     const tenantId = getTenantId();
     let { taskboardData, tabData } = this.state;
-
     const inboxData = [{ headers: [], rows: [] }];
     try {
       this.showLoading();
-      this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
-      const requestBody = [{ key: "tenantId", value: tenantId }];
+      const requestBody1 = [{ key: "tenantId", value: tenantId }];
+      let maxCount = await httpRequest("egov-workflow-v2/egov-wf/process/_count", "_search", requestBody1);
+      maxCount = maxCount ;
+      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? Math.round(maxCount / 3) : maxCount }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
-      const assignedData = orderBy(
-        filter(responseData.ProcessInstances, (item) => {
-          let assignes = get(item, 'assignes');
-          return get(assignes ? assignes[0] : {}, "uuid") === uuid
-        }),
-        ["businesssServiceSla"]
-      );
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
+      if (maxCount > 500) {
+        this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: Math.round(maxCount / 3) }, { key: "limit", value: Math.round(maxCount / 3) * 2 + 2 }], responseData)
+      } else {
+        this.loadLocalityForAllData(allData);
+      }
+      const convertedData = await this.prepareInboxDataRows(allData, true, false)
+      const allDataRows = convertedData.allData;
+      const assignedDataRows = convertedData.assignedToMe;
 
+      let headersList = [
+        "WF_INBOX_HEADER_APPLICATION_NO",
+        "WF_INBOX_HEADER_LOCALITY",
+        "WF_INBOX_HEADER_STATUS",
+        "WF_INBOX_HEADER_CURRENT_OWNER",
+        "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
+      ];
+      inboxData[0].headers = headersList;
+      inboxData[0].rows = assignedDataRows;
 
-      // const assignedDataRows = []
-      // const allDataRows = []
+      tabData[0].dynamicArray = [assignedDataRows.length];
+      tabData[1].dynamicArray = [allDataRows.length];
+      inboxData.push({
+        headers: headersList,
+        rows: allDataRows,
+      });
+      let NEARING_SLA = [];
+      let ESCALATED_SLA = [];
+      const taskCount = allDataRows.length;
+      taskboardData[0].head = taskCount;
+      taskboardData[1].head = NEARING_SLA.length;
+      taskboardData[2].head = ESCALATED_SLA.length;
 
-      const assignedDataRows = await this.prepareInboxDataRows(assignedData);
-      const allDataRows = await this.prepareInboxDataRows(allData, true);
+      this.setState({
+        loaded: true,
+        totalRowCount: maxCount,
+        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
+      });
+      this.hideLoading()
+    } catch (e) {
+      this.hideLoading();
+      toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
+    }
+    prepareFinalObject("InboxData", [...inboxData]);
+    this.getMaxSLA();
+  }
+  loadRemainingData = async (requestBody = [], response) => {
+    const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
+    let { taskboardData, tabData } = this.state;
+    const inboxData = [{ headers: [], rows: [] }];
+    try {
+      const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+      set(responseData, "ProcessInstances", [...responseData.ProcessInstances, ...response.ProcessInstances]);
 
+      const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
+      this.loadLocalityForAllData(allData);
+
+      const convertedData = await this.prepareInboxDataRows(allData, true, false)
+      const allDataRows = convertedData.allData;
+      const assignedDataRows = convertedData.assignedToMe;
 
       let headersList = [
         "WF_INBOX_HEADER_APPLICATION_NO",
@@ -532,13 +658,56 @@ class TableData extends Component {
         loaded: true,
         inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
       });
-      this.hideLoading()
     } catch (e) {
+      this.hideLoading();
       toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
     prepareFinalObject("InboxData", [...inboxData]);
     this.getMaxSLA();
-  };
+  }
+  loadLocalityForAllData = async (allData) => {
+    const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
+    let { taskboardData, tabData } = this.state;
+    const inboxData = [{ headers: [], rows: [] }];
+    try {
+      const convertedData = await this.prepareInboxDataRows(allData, true, true)
+      const allDataRows = convertedData.allData;
+      const assignedDataRows = convertedData.assignedToMe;
+
+      let headersList = [
+        "WF_INBOX_HEADER_APPLICATION_NO",
+        "WF_INBOX_HEADER_LOCALITY",
+        "WF_INBOX_HEADER_STATUS",
+        "WF_INBOX_HEADER_CURRENT_OWNER",
+        "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
+      ];
+      inboxData[0].headers = headersList;
+      inboxData[0].rows = assignedDataRows;
+
+      tabData[0].dynamicArray = [assignedDataRows.length];
+      tabData[1].dynamicArray = [allDataRows.length];
+      inboxData.push({
+        headers: headersList,
+        rows: allDataRows,
+      });
+      let NEARING_SLA = [];
+      let ESCALATED_SLA = [];
+      const taskCount = allDataRows.length;
+      taskboardData[0].head = taskCount;
+      taskboardData[1].head = NEARING_SLA.length;
+      taskboardData[2].head = ESCALATED_SLA.length;
+
+      this.setState({
+        loaded: true,
+        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
+      });
+    } catch (e) {
+      this.hideLoading();
+      toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
+    }
+    prepareFinalObject("InboxData", [...inboxData]);
+    this.getMaxSLA();
+  }
 
   onModuleFilter = (event) => {
     this.setState({ moduleName: event.target.value }, () => {

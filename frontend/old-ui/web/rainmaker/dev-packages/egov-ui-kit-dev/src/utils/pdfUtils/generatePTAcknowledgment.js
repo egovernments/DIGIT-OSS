@@ -12,11 +12,11 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     let unitInfoCard = []
     if (unitCard.length >= 1) {
         let unitItems = [];
-        unitCard.map((unit, index) => {
+        Object.values(unitCard).map((unit, index) => {
             if (unit.length > 1) {
                 let unitItem = { items: unit[0] }
                 if (getFromObject(property, 'propertyDetails[0].propertySubType', '') !== "SHAREDPROPERTY") {
-                    unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`, `PROPERTYTAX_FLOOR_${index}`);
+                    unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${Object.keys(unitCard)[index]}`, `PROPERTYTAX_FLOOR_${Object.keys(unitCard)[index]}`);
                 }
                 let subItems = [];
                 unit.map((subUnit, ind) => {
@@ -38,7 +38,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
             } else {
                 let unitItem = { items: unit[0] }
                 if (getFromObject(property, 'propertyDetails[0].propertySubType', '') !== "SHAREDPROPERTY") {
-                    unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${index}`, `PROPERTYTAX_FLOOR_${index}`);
+                    unitItem.header = getLocaleLabels(`PROPERTYTAX_FLOOR_${Object.keys(unitCard)[index]}`, `PROPERTYTAX_FLOOR_${Object.keys(unitCard)[index]}`);
                 }
                 unitItems.push(unitItem)
             }

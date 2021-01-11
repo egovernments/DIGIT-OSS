@@ -4,17 +4,28 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import { Complaints, SortDialog, Screen } from "modules/common";
 import { fetchComplaints } from "egov-ui-kit/redux/complaints/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleFieldChange,setFieldProperty } from "egov-ui-kit/redux/form/actions";
+
+
 import Label from "egov-ui-kit/utils/translationNode";
 import { transformComplaintForComponent } from "egov-ui-kit/utils/commons";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { connect } from "react-redux";
 import orderby from "lodash/orderBy";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import {
+  toggleSnackbarAndSetText,
+  fetchUiCommonConfig,
+  fetchUiCommonConstants
+} from "egov-ui-kit/redux/app/actions";
 import isEmpty from "lodash/isEmpty";
 import isEqual from "lodash/isEqual";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import CountDetails from "./components/CountDetails";
+import { fetchComplaintCategories } from "egov-ui-kit/redux/complaints/actions";
+import { fetchpgrConstants, prepareFormData } from "egov-ui-kit/redux/common/actions";
 import "./index.css";
+
+
 
 class AllComplaints extends Component {
   state = {
@@ -24,13 +35,13 @@ class AllComplaints extends Component {
     search: false,
     value: 0,
     sortPopOpen: false,
-    errorText: ""
+    errorText: "",
   };
   style = {
     iconStyle: {
       height: "30px",
-      width: "30px"
-    }
+      width: "30px",
+    },
   };
 
   componentDidMount = async () => {
@@ -40,8 +51,15 @@ class AllComplaints extends Component {
       numCSRComplaint,
       numEmpComplaint,
       renderCustomTitle,
-      prepareFinalObject
+      prepareFinalObject,
+      form
     } = this.props;
+    this.props.fetchpgrConstants();
+    this.props.fetchUiCommonConfig();
+    this.props.fetchComplaintCategories();
+    this.props.resetCityFieldValue();
+    this.props.resetMohallaFieldValue();
+    this.props.resetFormData();
     let rawRole =
       userInfo && userInfo.roles && userInfo.roles[0].code.toUpperCase();
     //const numberOfComplaints = role === "employee" ? numEmpComplaint : role === "csr" ? numCSRComplaint : 0;
@@ -57,8 +75,8 @@ class AllComplaints extends Component {
           value:
             role === "csr"
               ? "assigned,open,reassignrequested"
-              : "assigned,reassignrequested"
-        }
+              : "assigned,reassignrequested",
+        },
       ];
       let payloadCount = await httpRequest(
         "rainmaker-pgr/v1/requests/_count",
@@ -77,8 +95,8 @@ class AllComplaints extends Component {
         { key: "tenantId", value: getTenantId() },
         {
           key: "status",
-          value: "assigned"
-        }
+          value: "assigned",
+        },
       ];
       let assignedTotalComplaints = await httpRequest(
         "rainmaker-pgr/v1/requests/_count",
@@ -89,8 +107,8 @@ class AllComplaints extends Component {
         { key: "tenantId", value: getTenantId() },
         {
           key: "status",
-          value: "open,reassignrequested"
-        }
+          value: "open,reassignrequested",
+        },
       ];
       let unassignedTotalComplaints = await httpRequest(
         "rainmaker-pgr/v1/requests/_count",
@@ -100,7 +118,7 @@ class AllComplaints extends Component {
       prepareFinalObject("pgrComplaintCount", {
         assignedTotalComplaints: assignedTotalComplaints.count,
         unassignedTotalComplaints: unassignedTotalComplaints.count,
-        employeeTotalComplaints: payloadCount.count
+        employeeTotalComplaints: payloadCount.count,
       });
 
       if (role === "ao") {
@@ -108,8 +126,8 @@ class AllComplaints extends Component {
           [
             {
               key: "status",
-              value: "assigned"
-            }
+              value: "assigned",
+            },
           ],
           true,
           false
@@ -118,8 +136,8 @@ class AllComplaints extends Component {
           [
             {
               key: "status",
-              value: "open,reassignrequested"
-            }
+              value: "open,reassignrequested",
+            },
           ],
           true,
           false
@@ -132,8 +150,8 @@ class AllComplaints extends Component {
               value:
                 rawRole === "EMPLOYEE"
                   ? "assigned,reassignrequested"
-                  : "assigned,open,reassignrequested"
-            }
+                  : "assigned,open,reassignrequested",
+            },
           ],
           true,
           true
@@ -143,14 +161,14 @@ class AllComplaints extends Component {
     let inputType = document.getElementsByTagName("input");
     for (let input in inputType) {
       if (inputType[input].type === "number") {
-        inputType[input].addEventListener("mousewheel", function() {
+        inputType[input].addEventListener("mousewheel", function () {
           this.blur();
         });
       }
     }
   };
 
-  componentWillReceiveProps = nextProps => {
+  componentWillReceiveProps = (nextProps) => {
     const { role, renderCustomTitle } = this.props;
     if (
       !isEqual(
@@ -170,33 +188,33 @@ class AllComplaints extends Component {
 
   closeSortDialog = () => {
     this.setState({
-      sortPopOpen: false
+      sortPopOpen: false,
     });
   };
 
   onSortClick = () => {
     this.setState({
-      sortPopOpen: true
+      sortPopOpen: true,
     });
   };
 
-  onComplaintClick = complaintNo => {
+  onComplaintClick = (complaintNo) => {
     this.props.history.push(`/complaint-details/${complaintNo}`);
   };
 
-  onComplaintChange = e => {
+  onComplaintChange = (e) => {
     const complaintNo = e.target.value;
     this.setState({ complaintNo });
     if (complaintNo.length < 6) {
       this.setState({
-        errorText: "ERR_COMPLAINT_NUMBER_SEARCH"
+        errorText: "ERR_COMPLAINT_NUMBER_SEARCH",
       });
     } else {
       this.setState({ errorText: "" });
     }
   };
 
-  onMobileChange = e => {
+  onMobileChange = (e) => {
     const inputValue = e.target.value;
     this.setState({ mobileNo: inputValue });
   };
@@ -224,7 +242,7 @@ class AllComplaints extends Component {
           true,
           {
             labelName: "Entered value is less than 6 characters in length.",
-            labelKey: `ERR_VALUE_LESS_THAN_SIX_CHARACTERS`
+            labelKey: `ERR_VALUE_LESS_THAN_SIX_CHARACTERS`,
           },
           "error"
         );
@@ -238,26 +256,27 @@ class AllComplaints extends Component {
   clearSearch = () => {
     const { fetchComplaints } = this.props;
     fetchComplaints([
-      { key: "status", value: "assigned,open,reassignrequested" }
+      { key: "status", value: "assigned,open,reassignrequested" },
     ]);
     this.setState({ mobileNo: "", complaintNo: "", search: false });
   };
 
-  onChange = value => {
+  onChange = (value) => {
     this.setState({ value });
   };
 
   render() {
-    const { loading, history } = this.props;
+    const { loading,history } = this.props;
     const {
       mobileNo,
       complaintNo,
       search,
       sortPopOpen,
-      errorText
+      errorText,
     } = this.state;
+  
     const tabStyle = {
-      letterSpacing: "0.6px"
+      letterSpacing: "0.6px",
     };
 
     const { onComplaintClick, onSortClick, closeSortDialog, style } = this;
@@ -270,15 +289,16 @@ class AllComplaints extends Component {
       searchFilterEmployeeComplaints,
       assignedTotalComplaints,
       unassignedTotalComplaints,
-      employeeTotalComplaints
+      employeeTotalComplaints,
     } = this.props;
     const hintTextStyle = {
       letterSpacing: "0.7px",
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
       width: "90%",
-      overflow: "hidden"
+      overflow: "hidden",
     };
+   
     return role === "ao" ? (
       <div>
         <div
@@ -378,7 +398,7 @@ class AllComplaints extends Component {
                     />
                   </div>
                 </Screen>
-              )
+              ),
             },
             {
               label: (
@@ -428,15 +448,14 @@ class AllComplaints extends Component {
                     />
                   </div>
                 </Screen>
-              )
-            }
+              ),
+            },
           ]}
         />
       </div>
     ) : role === "csr" ? (
       <Screen loading={loading}>
         <div className="form-without-button-cont-generic">
-
           <Card
             id="complaint-search-card"
             className="complaint-search-main-card"
@@ -506,11 +525,11 @@ class AllComplaints extends Component {
                     onChange={(e, value) => this.onComplaintChange(e)}
                     underlineStyle={{
                       bottom: 7,
-                      borderBottom: "1px solid #e0e0e0"
+                      borderBottom: "1px solid #e0e0e0",
                     }}
                     underlineFocusStyle={{
                       bottom: 7,
-                      borderBottom: "1px solid #e0e0e0"
+                      borderBottom: "1px solid #e0e0e0",
                     }}
                     hintStyle={{ width: "100%" }}
                   />
@@ -531,7 +550,7 @@ class AllComplaints extends Component {
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
-                      color: "#fff"
+                      color: "#fff",
                     }}
                     buttonStyle={{ border: 0 }}
                     onClick={() => this.onSearch()}
@@ -547,7 +566,7 @@ class AllComplaints extends Component {
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
-                      color: "#fe7a51"
+                      color: "#fe7a51",
                     }}
                     buttonStyle={{ border: "1px solid #fe7a51" }}
                     style={{ width: "36%" }}
@@ -574,7 +593,7 @@ class AllComplaints extends Component {
         <div className="floating-button-cont csr-add-button">
           <FloatingActionButton
             id="mycomplaints-add"
-            onClick={e => {
+            onClick={(e) => {
               history.push("/create-complaint");
             }}
             className="floating-button"
@@ -656,11 +675,11 @@ class AllComplaints extends Component {
                     onChange={(e, value) => this.onComplaintChange(e)}
                     underlineStyle={{
                       bottom: 7,
-                      borderBottom: "1px solid #e0e0e0"
+                      borderBottom: "1px solid #e0e0e0",
                     }}
                     underlineFocusStyle={{
                       bottom: 7,
-                      borderBottom: "1px solid #e0e0e0"
+                      borderBottom: "1px solid #e0e0e0",
                     }}
                     hintStyle={{ width: "100%" }}
                   />
@@ -681,7 +700,7 @@ class AllComplaints extends Component {
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
-                      color: "#fff"
+                      color: "#fff",
                     }}
                     buttonStyle={{ border: 0 }}
                     onClick={() => this.onSearch()}
@@ -697,7 +716,7 @@ class AllComplaints extends Component {
                     labelStyle={{
                       letterSpacing: 0.7,
                       padding: 0,
-                      color: "#fe7a51"
+                      color: "#fe7a51",
                     }}
                     buttonStyle={{ border: "1px solid #fe7a51" }}
                     style={{ width: "36%" }}
@@ -734,7 +753,7 @@ class AllComplaints extends Component {
 }
 
 const roleFromUserInfo = (roles = [], role) => {
-  const roleCodes = roles.map(role => {
+  const roleCodes = roles.map((role) => {
     return role.code;
   });
   return roleCodes && roleCodes.length && roleCodes.indexOf(role) > -1
@@ -755,7 +774,7 @@ const displayStatus = (status = "") => {
   return statusObj;
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { complaints, common, screenConfiguration = {} } = state || {};
   const { categoriesById, byId, order } = complaints;
   const { fetchSuccess } = complaints;
@@ -764,7 +783,7 @@ const mapStateToProps = state => {
   const {
     assignedTotalComplaints = 0,
     unassignedTotalComplaints = 0,
-    employeeTotalComplaints = 0
+    employeeTotalComplaints = 0,
   } = pgrComplaintCount;
   const loading = !isEmpty(categoriesById)
     ? fetchSuccess
@@ -793,23 +812,23 @@ const mapStateToProps = state => {
     employeeComplaints = [],
     csrComplaints = [];
   let filteredEmployeeComplaints = transformedComplaints.filter(
-    complaint =>
+    (complaint) =>
       complaint.complaintStatus === "ASSIGNED" ||
       complaint.rawStatus === "reassignrequested"
   );
 
   let searchFilterEmployeeComplaints = transformedComplaints.filter(
-    complaint =>
+    (complaint) =>
       complaint.complaintStatus === "ASSIGNED" ||
       complaint.rawStatus === "reassignrequested" ||
       complaint.complaintStatus === "CLOSED"
   );
 
   let filteredAssignedComplaints = transformedComplaints.filter(
-    complaint => complaint.complaintStatus === "ASSIGNED"
+    (complaint) => complaint.complaintStatus === "ASSIGNED"
   );
   let filteredUnassignedComplaints = transformedComplaints.filter(
-    complaint => complaint.complaintStatus === "UNASSIGNED"
+    (complaint) => complaint.complaintStatus === "UNASSIGNED"
   );
 
   if (role === "ao") {
@@ -904,22 +923,26 @@ const mapStateToProps = state => {
     searchFilterEmployeeComplaints,
     assignedTotalComplaints,
     unassignedTotalComplaints,
-    employeeTotalComplaints
+    employeeTotalComplaints,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     fetchComplaints: (criteria, hasUsers, overWrite) =>
       dispatch(fetchComplaints(criteria, hasUsers, overWrite)),
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     prepareFinalObject: (jsonPath, value) =>
-      dispatch(prepareFinalObject(jsonPath, value))
+      dispatch(prepareFinalObject(jsonPath, value)),
+    resetCityFieldValue:()=>dispatch(setFieldProperty("complaint","city","value","")), 
+    resetMohallaFieldValue:()=>dispatch(setFieldProperty("complaint","mohalla","value","")), 
+    resetFormData:()=>dispatch(prepareFormData("services",[{}])), 
+    fetchComplaintCategories: () => dispatch(fetchComplaintCategories()),
+    fetchpgrConstants: () => dispatch(fetchpgrConstants()),
+    fetchUiCommonConfig: () => dispatch(fetchUiCommonConfig()),
+    fetchUiCommonConstants: () => dispatch(fetchUiCommonConstants()),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AllComplaints);
+export default connect(mapStateToProps, mapDispatchToProps)(AllComplaints);

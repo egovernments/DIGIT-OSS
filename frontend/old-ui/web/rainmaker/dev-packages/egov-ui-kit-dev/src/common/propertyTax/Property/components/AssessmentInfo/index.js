@@ -58,6 +58,10 @@ export const getRainWaterHarvestingInfo = (properties) => {
   return get(properties, 'additionalDetails.isRainwaterHarvesting', false) ? getTranslatedLabel("PT_COMMON_YES", localizationLabelsData) : getTranslatedLabel("PT_COMMON_NO", localizationLabelsData)
 }
 
+export const getaddressPropertyEntryTypeInfo = (properties) => {
+  return getTranslatedLabel(get(properties, "creationReason", "CREATE"), localizationLabelsData);
+}
+
 export const getUnitUsageTypeInfo = (unit, propertyDetails) => {
   return unit && unit.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit && unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails && propertyDetails.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails && propertyDetails.usageCategoryMinor, localizationLabelsData) :
     (unit && unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit && unit.usageCategoryMajor, localizationLabelsData) : "NA"));
@@ -103,6 +107,11 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properti
         value: getRainWaterHarvestingInfo(properties),
         oldValue: OldProperty && getRainWaterHarvestingInfo(OldProperty),
       },
+      process.env.REACT_APP_NAME !== "Citizen" ? {
+        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ENTRY_TYPE", localizationLabelsData),
+        value: getaddressPropertyEntryTypeInfo(properties),
+        oldValue: OldProperty && getaddressPropertyEntryTypeInfo(OldProperty),
+      } : "",
     ]
   );
 };

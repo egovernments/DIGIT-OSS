@@ -1,13 +1,12 @@
-import get from "lodash/get";
-import find from "lodash/find";
 import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../..//ui-utils/commons";
-import { getTextToLocalMapping } from "./searchResults";
-import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import find from "lodash/find";
+import get from "lodash/get";
+import { getSearchResults } from "../../../../..//ui-utils/commons";
+import { validateFields } from "../../utils";
 
 export const getDeptName = (state, codes) => {
   let deptMdmsData = get(
@@ -37,7 +36,7 @@ export const searchApiCall = async (state, dispatch) => {
   let { localisationLabels } = state.app || {};
   showHideTable(false, dispatch);
   const tenantId =
-    get(state.screenConfiguration.preparedFinalObject, "searchScreen.ulb") ||
+    get(state.screenConfiguration.preparedFinalObject, "hrmsSearchScreen.ulb") ||
     getTenantId();
   let queryObject = [
     {
@@ -47,7 +46,7 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "hrmsSearchScreen",
     {}
   );
   const isSearchFormValid = validateFields(
@@ -92,7 +91,7 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getSearchResults(queryObject, dispatch);
+    let response = await getSearchResults(queryObject.filter(query=>query.key!='ulb'), dispatch);
     try {
       let data = response.Employees.map(item => {
         // GET ALL CURRENT DESIGNATIONS OF EMPLOYEE
@@ -112,20 +111,20 @@ export const searchApiCall = async (state, dispatch) => {
           .map(assignment => {
             return assignment.department;
           });
-
+let role=get(item, "user.roles", []).map(role => {
+  return ` ${role.name}`;
+}).join();
         return {
           ["HR_COMMON_TABLE_COL_EMP_ID"]: get(item, "code", "-") || "-",
           ["HR_COMMON_TABLE_COL_NAME"]: get(item, "user.name", "-") || "-",
           ["HR_COMMON_TABLE_COL_ROLE"]:
-            get(item, "user.roles", [])
-              .map(role => {
-                return ` ${role.name}`;
-              })
-              .join() || "-",
+            get(item, "user.roles", false)?role&&role.length<50?role:`${role.slice(0,50)}...`: "-",
           ["HR_COMMON_TABLE_COL_DESG"]:
             getDesigName(state, currentDesignations) || "-",
           ["HR_COMMON_TABLE_COL_DEPT"]:
             getDeptName(state, currentDepartments) || "-",
+          ["HR_COMMON_TABLE_COL_STATUS"]:
+            get(item, "isActive", false) ? "ACTIVE" : "INACTIVE" || "-",
           ["HR_COMMON_TABLE_COL_TENANT_ID"]: get(item, "tenantId", "-")
         };
       });

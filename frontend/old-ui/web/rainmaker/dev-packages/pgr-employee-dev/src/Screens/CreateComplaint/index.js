@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import formHoc from "egov-ui-kit/hocs/form";
 import AddComplaintForm from "./components/AddComplaintForm";
 import { Screen } from "modules/common";
-import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import { handleFieldChange,setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import isEqual from "lodash/isEqual";
 import "./index.css";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 const ComplaintFormHOC = formHoc({
   formKey: "complaint",
@@ -27,6 +29,10 @@ class AddComplaints extends Component {
   //handleFieldChange("complaint", "city", tenantId);
   //}
   //};
+  componentDidMount(){
+    this.props.resetForm()
+    this.props.resetFieldValue()
+  }
   componentWillReceiveProps = nextprops => {
     if (!isEqual(nextprops, this.props)) {
       let inputType = document.getElementsByTagName("input");
@@ -56,15 +62,19 @@ class AddComplaints extends Component {
 
 const mapStateToProps = state => {
   const { localizationLabels } = state.app;
-  const form = state.form["complaint"];
+  // const  form = state.form["complaint"];
   const categories = state.complaints.categoriesById;
-  return { categories, localizationLabels, form };
+  return { categories, localizationLabels };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     handleFieldChange: (formKey, fieldKey, value) =>
-      dispatch(handleFieldChange(formKey, fieldKey, value))
+      dispatch(handleFieldChange(formKey, fieldKey, value)),
+    resetForm:()=>dispatch(prepareFinalObject("services",[{}])),
+    resetFieldValue:()=>dispatch(setFieldProperty("complaint","city","value","")),  
+
+    
   };
 };
 

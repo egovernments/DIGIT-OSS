@@ -28,7 +28,7 @@ class DynamicMdmsContainer extends Component {
       dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, true));
       await getMdmsJson(state, dispatch, reqObj);
       this.triggerCallback(null, null, null);
-      if (getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL") {
+      if (getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL" || getQueryArg(window.location.href, "applicationNumber") != null) {
         callBackEdit(state, dispatch);
       } else {
         dropdownFields && dropdownFields.forEach((entry, i) => {
@@ -233,8 +233,19 @@ class DynamicMdmsContainer extends Component {
 const mapStateToProps = (state, ownprops) => {
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
-  const { DynamicMdms } = preparedFinalObject;
-  return { state, DynamicMdms };
+  const { DynamicMdms ={}} = preparedFinalObject;
+
+  let { dropdownFields, moduleName,  rootBlockSub, index = 0 } = ownprops;
+  const newFields=dropdownFields && dropdownFields.map((entry, i) => {
+    let { key } = entry;
+   const moduleName1 = DynamicMdms[moduleName]||{};
+   const rootBlockSub1 = moduleName1[rootBlockSub]||{};
+   const key1 = rootBlockSub1[`${key}Transformed`]||{};
+ 
+   const allDropdown1 = key1['allDropdown']||[];
+   return {moduleName1,rootBlockSub1,key1,allDropdown1}
+ })
+  return { state, DynamicMdms ,newFields};
 };
 
 export default connect(
