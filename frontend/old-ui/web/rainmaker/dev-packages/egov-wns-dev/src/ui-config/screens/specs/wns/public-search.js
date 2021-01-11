@@ -65,7 +65,7 @@ const screenConfig = {
             uiFramework: "custom-atoms",
             componentPath: "Form",
             props: {
-                className: "public-domain-search",
+                className: "public-domain-search, public-domain-search-position",
                 id: "search",
             },
             children: {
