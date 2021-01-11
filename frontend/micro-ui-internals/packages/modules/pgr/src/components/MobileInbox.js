@@ -14,13 +14,14 @@ const GetSlaCell = (value) => {
 
 const MobileInbox = ({ data, onFilterChange, onSearch, isLoading }) => {
   const { t } = useTranslation();
-  const localizedData = data?.map(({ locality, serviceRequestId, sla, status, taskOwner }) => ({
+  const localizedData = data?.map(({ locality, serviceRequestId, complaintSubType, sla, status, taskOwner }) => ({
     [t("CS_COMMON_COMPLAINT_NO")]: serviceRequestId,
+    [t("CS_ADDCOMPLAINT_COMPLAINT_SUB_TYPE")]: t(`SERVICEDEFS.${complaintSubType.toUpperCase()}`),
     [t("WF_INBOX_HEADER_LOCALITY")]: t(locality),
     [t("CS_COMPLAINT_DETAILS_CURRENT_STATUS")]: t(`CS_COMMON_${status}`),
     [t("WF_INBOX_HEADER_CURRENT_OWNER")]: taskOwner,
     [t("WF_INBOX_HEADER_SLA_DAYS_REMAINING")]: GetSlaCell(sla),
-    status,
+    // status,
   }));
   return (
     <div style={{ padding: 0 }}>

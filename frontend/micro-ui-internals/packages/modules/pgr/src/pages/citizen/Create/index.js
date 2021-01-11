@@ -68,7 +68,7 @@ export const CreateComplaint = () => {
       const { code: localityCode, name: localityName } = locality_complaint;
       const _uploadImages = uploadedImages?.map((url) => ({
         documentType: "PHOTO",
-        fileStore: url,
+        fileStoreId: url,
         documentUid: "",
         additionalDetails: {},
       }));
