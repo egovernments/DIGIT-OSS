@@ -44,7 +44,7 @@ const ComplaintDetailsPage = (props) => {
   let { id } = useParams();
 
   let cityCodeVal = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
-  const { isLoading, error, isError, complaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId: cityCodeVal, id });
+  const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId: cityCodeVal, id });
 
   const [imageZoom, setImageZoom] = useState(null);
 
@@ -55,6 +55,16 @@ const ComplaintDetailsPage = (props) => {
   const [commentError, setCommentError] = useState(null);
 
   const [disableComment, setDisableComment] = useState(true);
+
+  const [loader, setLoader] = useState(false);
+
+  useEffect(async () => {
+    if (complaintDetails) {
+      setLoader(true);
+      await revalidate();
+      setLoader(false);
+    }
+  }, []);
 
   function zoomImage(imageSource) {
     setImageZoom(imageSource);
@@ -74,12 +84,8 @@ const ComplaintDetailsPage = (props) => {
     let detailsToSend = { ...complaintDetails };
     delete detailsToSend.audit;
     delete detailsToSend.details;
-    console.log("before", detailsToSend);
-
     detailsToSend.workflow = { action: "COMMENT", comments: comment };
-    console.log(detailsToSend);
     let tenantId = Digit.ULBService.getCurrentTenantId();
-
     try {
       setCommentError(null);
       const res = await Digit.PGRService.update(detailsToSend, tenantId);
@@ -94,7 +100,7 @@ const ComplaintDetailsPage = (props) => {
     }, 30000);
   };
 
-  if (isLoading) {
+  if (isLoading || loader) {
     return <Loader />;
   }
 

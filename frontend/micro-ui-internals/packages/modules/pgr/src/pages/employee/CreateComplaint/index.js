@@ -34,6 +34,7 @@ export const CreateComplaint = ({ parentUrl }) => {
   const history = useHistory();
   const localitiesObj = useSelector((state) => state.common.localities);
   const serviceDefinitions = Digit.GetServiceDefinitions;
+  const client = useQueryClient();
 
   useEffect(() => {
     const city = cities.find((obj) => obj.pincode?.find((item) => item == pincode));
@@ -98,6 +99,7 @@ export const CreateComplaint = ({ parentUrl }) => {
     const name = data.name;
     const formData = { ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name };
     await dispatch(createComplaint(formData));
+    await client.refetchQueries(["fetchInboxData"]);
     history.push(parentUrl + "/response");
   };
 
