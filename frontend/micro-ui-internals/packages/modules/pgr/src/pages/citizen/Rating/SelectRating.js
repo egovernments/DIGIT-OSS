@@ -9,7 +9,7 @@ const SelectRating = ({ parentRoute }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
-  console.log("jjjjjjjjjjjjjjjjj", parentRoute);
+  console.log("parent route", parentRoute);
 
   let userType = Digit.SessionStorage.get("userType");
   let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
