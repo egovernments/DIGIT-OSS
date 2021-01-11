@@ -1140,9 +1140,9 @@
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.59"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.59.tgz#9088536a813c5fc39de9d16305e9da3db44fefaa"
-  integrity sha512-jt+LxbSgNXhMsNBvS2DxHJbxTR7HvrBg0Zg3GS2/+ujsES0MKLZvUl3tJqKVhbFWnvgP9aKEsVUJmMP2AQRHwQ==
+  version "1.0.60"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.60.tgz#7324fe4f27f8c1f38d41aa4d6cbcc1ca7ed3240c"
+  integrity sha512-DCskq6EXqwP+eqxuzGOBaVWlbG3tHjkBP9tWpIzJp6wQoYqTL9tx3V+ghWNgdkJYn/v8cvIgNioULxouOzMVcA==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1157,9 +1157,9 @@
     redux "^4.0.5"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.59"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.59.tgz#35fac06feab2cbda4cc6ed371f678e317aced8b4"
-  integrity sha512-ro7N7aV81DkoXKV1u9aPqguqoAG9QzaZ67p7cqrSSzPcSZn21eRyjx7I5hW68Wwgt2b5k083TEmpJ5d8wZJzmg==
+  version "1.0.60"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.60.tgz#7deaf58eea0967661b1dc0a3e681d8f10abcd4e1"
+  integrity sha512-dLrKit2uZEH0A/7m8SmJ51EMKInMFXLtGOPfg3lkmOEWG/gHl1Iz7hODe0Lly4gKC2m+kgF4k0eyk+2E7SOiWg==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1175,9 +1175,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.59"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.59.tgz#7f5c3c4d310614b582ea7954c1f5e32721d3e762"
-  integrity sha512-2kWi1KjX33YwjUUjJoYA/kM0xFPiIQhlJMtU8YwqgwKCZ61m0TiZ/rG6rG4DsHmhw+MkM6P213jkDHAY+atUlA==
+  version "1.0.60"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.60.tgz#96ac873797ca55bd983e0b19e823eaeb942adcde"
+  integrity sha512-qDn50KshkspwE2LQ19txwjZueLgPPgTzsFngHEhlXw3ZSBXmu3ljQZW/SLh4OoW03eaTaVtx/+US63QmCQd/AQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1193,9 +1193,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.59"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.59.tgz#e670e2b1bfdc19c3302c77a54a7dd7ff3ec36632"
-  integrity sha512-cX38nwJbEQj1sOipYwaBps+WH93bMH+Oi4DtHM5uyo5O80asrV1faQs0PSAs8ptexc7jPYi/95iWTVIqCcPBAA==
+  version "1.0.60"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.60.tgz#232f4f229cf62cb5c58d6bdba97762c35be81bd3"
+  integrity sha512-Ci61aADr6s5sQ2xLRox1zhx6dVJJKp7mEpXZFgVmDGceYJHFkvcMiB+KrNKPY8j2MyffwM1/+GI39cP50Bp9wg==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1212,9 +1212,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.59"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.59.tgz#fec299ed2474d67479306a6b0e0f16c7b6220241"
-  integrity sha512-oA9LZfD97J5FdGkoRndsZplqHf8Xd3+f+jg7+Ds/WhkvwYsES1vbTpbQDrxVb+9XlvGqI+i42PNuPI/XKITCJw==
+  version "1.0.60"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.60.tgz#43c85268b5bae4390458f2dbebf5d932dafa8eb8"
+  integrity sha512-kwG7BCOWHPgiVrAU51sZKIKcF3z/UXaqXbiyQdC1Bk1c/EYkb+DdCTyirDEiUI8v8g35TxjBfzWgSd6eXAVhFQ==
   dependencies:
     react-hook-form "^6.7.0"
     react-i18next "^11.7.3"
@@ -4594,18 +4594,18 @@ end-of-stream@^1.0.0, end-of-stream@^1.1.0:
     once "^1.4.0"
 
 enhanced-resolve@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-4.3.0.tgz#3b806f3bfafc1ec7de69551ef93cca46c1704126"
-  integrity sha512-3e87LvavsdxyoCfGusJnrZ5G8SLPOFeHSNpZI/ATL9a5leXo2k0w6MKnbqhdBad9qTobSfB20Ld7UmgoNbAZkQ==
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-4.5.0.tgz#2f3cfd84dbe3b487f18f2db2ef1e064a571ca5ec"
+  integrity sha512-Nv9m36S/vxpsI+Hc4/ZGRs0n9mXqSWGGq49zxb/cJfPAQMbUtttJAlNPS4AQzaBdw/pKskw5bMbekT/Y7W/Wlg==
   dependencies:
     graceful-fs "^4.1.2"
     memory-fs "^0.5.0"
     tapable "^1.0.0"
 
 enhanced-resolve@^5.3.1:
-  version "5.4.1"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.4.1.tgz#c89b0c34f17f931902ef2913a125d4b825b49b6f"
-  integrity sha512-4GbyIMzYktTFoRSmkbgZ1LU+RXwf4AQ8Z+rSuuh1dC8plp0PPeaWvx6+G4hh4KnUJ48VoxKbNyA1QQQIUpXjYA==
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.5.0.tgz#5f2ca7d511076541e2a30dc364a40c4f6c027bcd"
+  integrity sha512-b4a6BasBCoLzri4MdaeOlDMpls2oioI28CF17csMiav9dq46yvQaKPFNUrCHB6VqQokBDG2VIEEL81jMiQ6Wtw==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
