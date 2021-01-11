@@ -37,12 +37,6 @@ const Dropdown = (props) => {
     setSelectedOption(props.selected);
   }, [props.selected]);
 
-  useEffect(() => {
-    if (props.forceClose) {
-      setDropdownStatus(false);
-    }
-  }, [props.forceClose]);
-
   function dropdownSwitch() {
     var current = dropdownStatus;
     setDropdownStatus(!current);
@@ -59,7 +53,7 @@ const Dropdown = (props) => {
   }
 
   function onSelect(val) {
-    // console.log(val,"curent", selectedOption,"old");
+    //console.log(val, "curent", selectedOption, "old");
     if (val !== selectedOption) {
       // console.log(val,"is selected");
       props.select(val);
