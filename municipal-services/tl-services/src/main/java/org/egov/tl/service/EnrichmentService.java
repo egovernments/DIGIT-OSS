@@ -573,7 +573,7 @@ public class EnrichmentService {
 
             if(license.getAction().equalsIgnoreCase(CITIZEN_SENDBACK_ACTION)){
 
-                    List<String> assignes = new LinkedList<>();
+                    Set<String> assignes = new HashSet<>();
 
                     // Adding owners to assignes list
                     license.getTradeLicenseDetail().getOwners().forEach(ownerInfo -> {
@@ -584,7 +584,13 @@ public class EnrichmentService {
                     if(license.getAccountId()!=null)
                         assignes.add(license.getAccountId());
 
-                    license.setAssignee(assignes);
+                    Set<String> registeredUUIDS = userService.getUUidFromUserName(license);
+
+                    if(!CollectionUtils.isEmpty(registeredUUIDS))
+                        assignes.addAll(registeredUUIDS);
+
+
+                    license.setAssignee(new LinkedList<>(assignes));
             }
     }
 

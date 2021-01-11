@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.egov.pt.calculator.repository.Repository;
 import org.egov.pt.calculator.util.CalculatorConstants;
 import org.egov.pt.calculator.util.Configurations;
@@ -102,7 +103,7 @@ public class PaymentService {
                 .append(configurations.getPaymentSearchEndpoint()).append(URL_PARAMS_SEPARATER)
                 .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(criteria.getTenantId())
                 .append(SEPARATER).append(CONSUMER_CODE_SEARCH_FIELD_NAME_PAYMENT)
-                .append(criteria.getConsumerCodes())
+                .append(StringUtils.join(criteria.getConsumerCodes(),","))
                 .append(CalculatorConstants.SEPARATER).append(STATUS_FIELD_FOR_SEARCH_URL)
                 .append(ALLOWED_RECEIPT_STATUS);
     }

@@ -1,3 +1,4 @@
+
 package org.egov.pt.repository;
 
 import java.util.ArrayList;
@@ -6,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
@@ -25,7 +25,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-
 import com.google.common.collect.Sets;
 import org.springframework.util.ObjectUtils;
 
@@ -63,7 +62,8 @@ public class PropertyRepository {
 	public List<Property> getProperties(PropertyCriteria criteria, Boolean isApiOpen) {
 
 		List<Object> preparedStmtList = new ArrayList<>();
-		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList);
+		Boolean isPlainSearch = true;
+		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, isPlainSearch);
 		if (isApiOpen)
 			return jdbcTemplate.query(query, preparedStmtList.toArray(), openRowMapper);
 		else
@@ -72,17 +72,43 @@ public class PropertyRepository {
 
 	public List<Property> getPropertiesForBulkSearch(PropertyCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
-		String query = queryBuilder.getPropertyQueryForBulkSearch(criteria, preparedStmtList);
+		Boolean isPlainSearch = true;
+		String query = queryBuilder.getPropertyQueryForBulkSearch(criteria, preparedStmtList, isPlainSearch);
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+	}
+
+	private String createQuery(Set<String> ids) {
+		StringBuilder builder = new StringBuilder();
+		int length = ids.size();
+		for (int i = 0; i < length; i++) {
+			builder.append(" ?");
+			if (i != length - 1)
+				builder.append(",");
+		}
+		return builder.toString();
 	}
 
 	public List<String> fetchIds(PropertyCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
+		Boolean isPlainSearch = false;
 		String basequery = "select id from eg_pt_property";
 		StringBuilder builder = new StringBuilder(basequery);
-		if (!ObjectUtils.isEmpty(criteria.getTenantId())) {
-			builder.append(" where tenantid=?");
-			preparedStmtList.add(criteria.getTenantId());
+		if(isPlainSearch)
+		{
+			Set<String> tenantIds = criteria.getTenantIds();
+			if(!ObjectUtils.isEmpty(tenantIds))
+			{
+				builder.append(" where tenantid IN (").append(createQuery(tenantIds)).append(")");
+				preparedStmtList.add(tenantIds);
+			}
+		}
+		else
+		{
+			if(!ObjectUtils.isEmpty(criteria.getTenantId()))
+			{
+				builder.append(" where tenantid=?");
+				preparedStmtList.add(criteria.getTenantId());
+			}
 		}
 		String orderbyClause = " order by lastmodifiedtime,id offset ? limit ?";
 		builder.append(orderbyClause);

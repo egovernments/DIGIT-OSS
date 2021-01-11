@@ -1,3 +1,4 @@
+
 package org.egov.pt.web.controllers;
 
 import java.util.Arrays;
@@ -32,84 +33,84 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/property")
 public class PropertyController {
 
-	@Autowired
-	private PropertyService propertyService;
+    @Autowired
+    private PropertyService propertyService;
 
-	@Autowired
-	private ResponseInfoFactory responseInfoFactory;
+    @Autowired
+    private ResponseInfoFactory responseInfoFactory;
 
-	@Autowired
-	private MigrationService migrationService;
-	
-	@Autowired
+    @Autowired
+    private MigrationService migrationService;
+
+    @Autowired
     private PropertyValidator propertyValidator;
 
-	@PostMapping("/_create")
-	public ResponseEntity<PropertyResponse> create(@Valid @RequestBody PropertyRequest propertyRequest) {
+    @PostMapping("/_create")
+    public ResponseEntity<PropertyResponse> create(@Valid @RequestBody PropertyRequest propertyRequest) {
 
-		Property property = propertyService.createProperty(propertyRequest);
-		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
-		PropertyResponse response = PropertyResponse.builder()
-				.properties(Arrays.asList(property))
-				.responseInfo(resInfo)
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
-	}
+        Property property = propertyService.createProperty(propertyRequest);
+        ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
+        PropertyResponse response = PropertyResponse.builder()
+                .properties(Arrays.asList(property))
+                .responseInfo(resInfo)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
-	
-	@PostMapping("/_update")
-	public ResponseEntity<PropertyResponse> update(@Valid @RequestBody PropertyRequest propertyRequest) {
-		
-		Property property = propertyService.updateProperty(propertyRequest);
-		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
-		PropertyResponse response = PropertyResponse.builder()
-				.properties(Arrays.asList(property))
-				.responseInfo(resInfo)
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
 
-	@PostMapping("/_search")
-	public ResponseEntity<PropertyResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-			@Valid @ModelAttribute PropertyCriteria propertyCriteria) {
-		
-		propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
-		List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
-		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+    @PostMapping("/_update")
+    public ResponseEntity<PropertyResponse> update(@Valid @RequestBody PropertyRequest propertyRequest) {
 
-	@PostMapping("/_migration")
-	public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-											   @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
-		long startTime = System.nanoTime();
-		Map<String, String> resultMap = null;
-		Map<String, String> errorMap = new HashMap<>();
+        Property property = propertyService.updateProperty(propertyRequest);
+        ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
+        PropertyResponse response = PropertyResponse.builder()
+                .properties(Arrays.asList(property))
+                .responseInfo(resInfo)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
-		resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap);
+    @PostMapping("/_search")
+    public ResponseEntity<PropertyResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                   @Valid @ModelAttribute PropertyCriteria propertyCriteria) {
 
-		long endtime = System.nanoTime();
-		long elapsetime = endtime - startTime;
-		System.out.println("Elapsed time--->"+elapsetime);
+        propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
+        List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
-		return new ResponseEntity<>(resultMap, HttpStatus.OK);
-	}
+    @PostMapping("/_migration")
+    public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                               @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
+        long startTime = System.nanoTime();
+        Map<String, String> resultMap = null;
+        Map<String, String> errorMap = new HashMap<>();
 
-	@RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
-	public ResponseEntity<PropertyResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-														@Valid @ModelAttribute PropertyCriteria propertyCriteria) {
-		List<Property> properties = propertyService.searchPropertyPlainSearch(propertyCriteria, requestInfoWrapper.getRequestInfo());
-		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+        resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap);
+
+        long endtime = System.nanoTime();
+        long elapsetime = endtime - startTime;
+        System.out.println("Elapsed time--->"+elapsetime);
+
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+    public ResponseEntity<PropertyResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                        @Valid @ModelAttribute PropertyCriteria propertyCriteria) {
+        List<Property> properties = propertyService.searchPropertyPlainSearch(propertyCriteria, requestInfoWrapper.getRequestInfo());
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 //	@RequestMapping(value = "/_cancel", method = RequestMethod.POST)
 //	public ResponseEntity<PropertyResponse> cancel(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 //												   @Valid @ModelAttribute PropertyCancelCriteria propertyCancelCriteria) {
-//		
+//
 //		List<Property> properties = propertyService.cancelProperty(propertyCancelCriteria,requestInfoWrapper.getRequestInfo());
 //		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
 //				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))

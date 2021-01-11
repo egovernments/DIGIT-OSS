@@ -97,7 +97,7 @@ public class SewerageServiceImpl implements SewerageService {
 		}
 		sewerageConnectionValidator.validateSewerageConnection(sewerageConnectionRequest, reqType);
 		Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
-		validateProperty.validatePropertyFields(property);
+		validateProperty.validatePropertyFields(property,sewerageConnectionRequest.getRequestInfo());
 		mDMSValidator.validateMasterForCreateRequest(sewerageConnectionRequest);
 		enrichmentService.enrichSewerageConnection(sewerageConnectionRequest, reqType);
 		userService.createUser(sewerageConnectionRequest);
@@ -155,7 +155,7 @@ public class SewerageServiceImpl implements SewerageService {
 		sewerageConnectionValidator.validateSewerageConnection(sewerageConnectionRequest, SWConstants.UPDATE_APPLICATION);
 		mDMSValidator.validateMasterData(sewerageConnectionRequest, SWConstants.UPDATE_APPLICATION);
 		Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
-		validateProperty.validatePropertyFields(property);
+		validateProperty.validatePropertyFields(property,sewerageConnectionRequest.getRequestInfo());
 		String previousApplicationStatus = workflowService.getApplicationStatus(
 				sewerageConnectionRequest.getRequestInfo(),
 				sewerageConnectionRequest.getSewerageConnection().getApplicationNo(),
@@ -221,7 +221,7 @@ public class SewerageServiceImpl implements SewerageService {
 		sewerageConnectionValidator.validateSewerageConnection(sewerageConnectionRequest, SWConstants.MODIFY_CONNECTION);
 		mDMSValidator.validateMasterData(sewerageConnectionRequest, SWConstants.MODIFY_CONNECTION);
 		Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
-		validateProperty.validatePropertyFields(property);
+		validateProperty.validatePropertyFields(property,sewerageConnectionRequest.getRequestInfo());
 		String previousApplicationStatus = workflowService.getApplicationStatus(
 				sewerageConnectionRequest.getRequestInfo(),
 				sewerageConnectionRequest.getSewerageConnection().getApplicationNo(),

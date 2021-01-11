@@ -272,8 +272,8 @@ const OwnerInfo = {
       type: "string",
       description:
         "Type of owner, based on this option Exemptions will be applied. This is master data defined in mdms.",
-      maxLength: 256,
-      minLength: 4
+      //maxLength: 256,
+      //minLength: 4
     },
     relationship: {
       type: "string",

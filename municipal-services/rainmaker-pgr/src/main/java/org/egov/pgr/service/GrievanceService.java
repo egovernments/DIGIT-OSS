@@ -85,6 +85,9 @@ public class GrievanceService {
 	@Value("${egov.user.create.endpoint}")
 	private String userCreateEndPoint;
 
+	@Value("${url.enrichment.enabled}")
+	private Boolean isUrlEnrichmentEnabled;
+
 	@Autowired
 	private ResponseInfoFactory factory;
 
@@ -637,7 +640,8 @@ public class GrievanceService {
 				services.add(obj.getServices());
 			}
 		});
-		replaceIdsWithUrls(actionHistory);
+		if(isUrlEnrichmentEnabled)
+			replaceIdsWithUrls(actionHistory);
 
 		return ServiceResponse.builder().responseInfo(factory.createResponseInfoFromRequestInfo(requestInfo, true))
 				.services(services).actionHistory(actionHistory).build();

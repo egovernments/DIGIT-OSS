@@ -223,10 +223,19 @@ public class WorkflowNotificationService {
 			}
 			if (code.equalsIgnoreCase("DOWNLOAD RECEIPT")) {
 				String receiptNumber = getReceiptNumber(sewerageConnectionRequest);
+				String consumerCode,service;
+				if(StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo())){
+					consumerCode = sewerageConnectionRequest.getSewerageConnection().getApplicationNo();
+					service = businessService;
+				}
+				else{
+					consumerCode = sewerageConnectionRequest.getSewerageConnection().getConnectionNo();
+					service = "SW";
+				}
 				actionLink = config.getNotificationUrl() + config.getUserEventReceiptDownloadLink();
-				actionLink = actionLink.replace("$consumerCode", sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
+				actionLink = actionLink.replace("$consumerCode", consumerCode);
 				actionLink = actionLink.replace("$tenantId", property.getTenantId());
-				actionLink = actionLink.replace("$businessService", businessService);
+				actionLink = actionLink.replace("$businessService", service);
 				actionLink = actionLink.replace("$receiptNumber", receiptNumber);
 				actionLink = actionLink.replace("$mobile", mobileNumber);
 			}
@@ -586,10 +595,19 @@ public class WorkflowNotificationService {
 			String receiptNumber = getReceiptNumber(sewerageConnectionRequest);
 			for (Entry<String, String> mobileAndMsg : mobileNumberAndMesssage.entrySet()) {
 				String messageToReplace = mobileAndMsg.getValue();
+				String consumerCode,service;
+				if(StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo())){
+					consumerCode = sewerageConnectionRequest.getSewerageConnection().getApplicationNo();
+					service = businessService;
+				}
+				else{
+					consumerCode = sewerageConnectionRequest.getSewerageConnection().getConnectionNo();
+					service = "SW";
+				}
 				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
-				link = link.replace("$consumerCode", sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
+				link = link.replace("$consumerCode", consumerCode);
 				link = link.replace("$tenantId", property.getTenantId());
-				link = link.replace("$businessService", businessService);
+				link = link.replace("$businessService", service);
 				link = link.replace("$receiptNumber", receiptNumber);
 				link = link.replace("$mobile", mobileAndMsg.getKey());
 				link = sewerageServicesUtil.getShortenedURL(link);
@@ -603,8 +621,17 @@ public class WorkflowNotificationService {
 	}
 
 	public String getReceiptNumber(SewerageConnectionRequest sewerageConnectionRequest){
+		String consumerCode,service;
+		if(StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo())){
+			consumerCode = sewerageConnectionRequest.getSewerageConnection().getApplicationNo();
+			service = businessService;
+		}
+		else{
+			consumerCode = sewerageConnectionRequest.getSewerageConnection().getConnectionNo();
+			service = "SW";
+		}
 		StringBuilder URL = sewerageServicesUtil.getcollectionURL();
-		URL.append("?").append("consumerCodes=").append(sewerageConnectionRequest.getSewerageConnection().getApplicationNo())
+		URL.append(service).append("/_search").append("?").append("consumerCodes=").append(consumerCode)
 				.append("&").append("tenantId=").append(sewerageConnectionRequest.getSewerageConnection().getTenantId());
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(sewerageConnectionRequest.getRequestInfo()).build();
 		Object response = serviceRequestRepository.fetchResult(URL,requestInfoWrapper);

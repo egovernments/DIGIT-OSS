@@ -445,4 +445,36 @@ public class UserService{
         StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
         return userCall(userSearchRequest,uri);
     }
+
+
+    /**
+     * Searches registered user for mobileNumbers in the given TradeLicense
+     * @param license
+     * @return uuids of the users
+     */
+    public Set<String> getUUidFromUserName(TradeLicense license){
+
+        String tenantId = license.getTenantId();
+        List<OwnerInfo> ownerInfos = license.getTradeLicenseDetail().getOwners();
+
+        Set<String> mobileNumbers = new HashSet<>();
+
+        // Get all unique mobileNumbers in the license
+        ownerInfos.forEach(owner -> {
+            mobileNumbers.add(owner.getMobileNumber());
+        });
+
+        Set<String> uuids = new HashSet<>();
+
+        // For every unique mobilenumber search the use with mobilenumber as username and get uuid
+        mobileNumbers.forEach(mobileNumber -> {
+            UserDetailResponse userDetailResponse = searchByUserName(mobileNumber, getStateLevelTenant(tenantId));
+            if(!CollectionUtils.isEmpty(userDetailResponse.getUser())){
+                uuids.add(userDetailResponse.getUser().get(0).getUuid());
+            }
+        });
+
+        return uuids;
+    }
+
 }

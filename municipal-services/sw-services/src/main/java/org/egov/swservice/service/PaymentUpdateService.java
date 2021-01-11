@@ -206,7 +206,8 @@ public class PaymentUpdateService {
 								"No sewerageConnection found for the consumerCode " + paymentDetail.getBill().getConsumerCode());
 					}
 					Collections.sort(sewerageConnections, Comparator.comparing(wc -> wc.getAuditDetails().getLastModifiedTime()));
-					Optional<SewerageConnection> connections = sewerageConnections.stream().findFirst();
+					long count = sewerageConnections.stream().count();
+					Optional<SewerageConnection> connections = Optional.of(sewerageConnections.stream().skip(count - 1).findFirst().get());
 					SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
 							.sewerageConnection(connections.get()).requestInfo(paymentRequest.getRequestInfo())
 							.build();

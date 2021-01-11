@@ -151,6 +151,9 @@ public class WaterServicesUtil {
 			propertyIds.add(waterConnectionSearchCriteria.getPropertyId());
 			propertyCriteria.setPropertyIds(propertyIds);
 		}
+		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getLocality())) {
+			propertyCriteria.setLocality(waterConnectionSearchCriteria.getLocality());
+		}
 		return getPropertyDetails(serviceRequestRepository.fetchResult(getPropertyURL(propertyCriteria),
 				RequestInfoWrapper.builder().requestInfo(requestInfo).build()));
 	}

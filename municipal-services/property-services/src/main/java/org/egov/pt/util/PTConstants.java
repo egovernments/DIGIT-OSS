@@ -201,7 +201,9 @@ public class PTConstants {
 
 	public static final String BILL_AMOUNT_PATH = "/Bill/0/totalAmount";
 
-	public static final String BILL_NODEMAND_ERROR_CODE = "EG_BS_BILL_NO_DEMANDS_FOUND";
+	public static final String BILL_NO_DEMAND_ERROR_CODE = "EG_BS_BILL_NO_DEMANDS_FOUND";
+	
+	public static final String BILL_NO_PAYABLE_DEMAND_ERROR_CODE = "EG_BS_BILL_ZERO_TAX";
 
 
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -260,6 +261,8 @@ public class PropertyConfiguration {
     @Value("${property.unit.landarea}")
 	private String landAreaUnit;
     
+    @Value("${property.min.unit.builtuparea}")
+	private BigDecimal minUnitArea;
     
     @Value("${property.module.name}")
 	private String propertyModuleName;    

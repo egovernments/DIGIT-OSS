@@ -55,11 +55,8 @@ import org.egov.pt.calculator.web.models.DemandSearchCriteria;
 import org.egov.pt.calculator.web.models.GetBillCriteria;
 import org.egov.pt.calculator.web.models.ReceiptSearchCriteria;
 import org.egov.pt.calculator.web.models.collections.Payment;
-import org.egov.pt.calculator.web.models.demand.BillAccountDetail;
-import org.egov.pt.calculator.web.models.demand.Demand;
-import org.egov.pt.calculator.web.models.demand.DemandDetail;
-import org.egov.pt.calculator.web.models.demand.DemandResponse;
-import org.egov.pt.calculator.web.models.demand.TaxPeriod;
+import org.egov.pt.calculator.web.models.collections.PaymentDetail;
+import org.egov.pt.calculator.web.models.demand.*;
 import org.egov.pt.calculator.web.models.property.AuditDetails;
 import org.egov.pt.calculator.web.models.property.OwnerInfo;
 import org.egov.pt.calculator.web.models.property.Property;
@@ -575,30 +572,33 @@ public class CalculatorUtils {
      * @param payment
      * @return
      */
-    public BigDecimal getTaxAmtFromPaymentForApplicablesGeneration(Payment payment,TaxPeriod taxPeriod) {
+    public BigDecimal getTaxAmtFromPaymentForApplicablesGeneration(Payment payment, TaxPeriod taxPeriod) {
         BigDecimal taxAmt = BigDecimal.ZERO;
         BigDecimal amtPaid = BigDecimal.ZERO;
 
         List<BillAccountDetail> billAccountDetails = new LinkedList<>();
+        if(payment!=null) {
+            payment.getPaymentDetails().forEach(paymentDetail -> {
+                if (paymentDetail.getBusinessService().equalsIgnoreCase(SERVICE_FIELD_VALUE_PT)) {
+                    paymentDetail.getBill().getBillDetails().forEach(billDetail -> {
+                        if (billDetail.getFromPeriod().equals(taxPeriod.getFromDate())
+                                && billDetail.getToPeriod().equals(taxPeriod.getToDate())) {
+                            billAccountDetails.addAll(billDetail.getBillAccountDetails());
+                        }
+                    });
+                }
+            });
 
-        payment.getPaymentDetails().forEach(paymentDetail -> {
-            if(paymentDetail.getBusinessService().equalsIgnoreCase(SERVICE_FIELD_VALUE_PT)) {
-                paymentDetail.getBill().getBillDetails().forEach(billDetail -> {
-                    if (billDetail.getFromPeriod() == taxPeriod.getFromDate() && billDetail.getToPeriod() == taxPeriod.getToDate()) {
-                        billAccountDetails.addAll(billDetail.getBillAccountDetails());
-                    }
-                });
+            for (BillAccountDetail detail : billAccountDetails) {
+                if (TAXES_TO_BE_CONSIDERD.contains(detail.getTaxHeadCode())) {
+                    taxAmt = taxAmt.add(detail.getAmount());
+                    amtPaid = amtPaid.add(detail.getAdjustedAmount());
+                }
             }
-        });
-
-
-        for (BillAccountDetail detail : billAccountDetails) {
-            if (TAXES_TO_BE_CONSIDERD.contains(detail.getTaxHeadCode())) {
-                taxAmt = taxAmt.add(detail.getAmount());
-                amtPaid = amtPaid.add(detail.getAdjustedAmount());
-            }
+            return taxAmt.subtract(amtPaid);
+        }else {
+            return BigDecimal.ZERO;
         }
-        return taxAmt.subtract(amtPaid);
     }
 
 
@@ -780,5 +780,21 @@ public class CalculatorUtils {
         return addroles;
     }
 
+    public Boolean isTaxPeriodAvaialble(Payment payment, TaxPeriod taxPeriod) {
+        Boolean isTaxPeriodPresent = false;
+        if (payment == null)
+            return false;
+        for (PaymentDetail paymentDetail : payment.getPaymentDetails()) {
+            if (paymentDetail.getBusinessService().equalsIgnoreCase(SERVICE_FIELD_VALUE_PT)) {
+                for (BillDetail billDetail : paymentDetail.getBill().getBillDetails()) {
+                    if (billDetail.getFromPeriod().equals(taxPeriod.getFromDate())
+                            && billDetail.getToPeriod().equals(taxPeriod.getToDate())) {
+                        isTaxPeriodPresent = true;
+                    }
+                }
+            }
+        }
+        return isTaxPeriodPresent;
+    }
 
 }

@@ -108,39 +108,64 @@ public class WorkflowService {
     }
 
 
-    public void enrichWorkflow(RequestInfo requestInfo, List<ServiceWrapper> serviceWrappers) {
+    public List<ServiceWrapper> enrichWorkflow(RequestInfo requestInfo, List<ServiceWrapper> serviceWrappers) {
 
         // FIX ME FOR BULK SEARCH
-        String tenantId = serviceWrappers.get(0).getService().getTenantId();
+        Map<String, List<ServiceWrapper>> tenantIdToServiceWrapperMap = getTenantIdToServiceWrapperMap(serviceWrappers);
 
-        List<String> serviceRequestIds = new ArrayList<>();
+        List<ServiceWrapper> enrichedServiceWrappers = new ArrayList<>();
 
-        serviceWrappers.forEach(pgrEntity -> {
-            serviceRequestIds.add(pgrEntity.getService().getServiceRequestId());
-        });
+        for(String tenantId : tenantIdToServiceWrapperMap.keySet()) {
 
-        RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+            List<String> serviceRequestIds = new ArrayList<>();
 
-        StringBuilder searchUrl = getprocessInstanceSearchURL(tenantId, StringUtils.join(serviceRequestIds,','));
-        Object result = repository.fetchResult(searchUrl, requestInfoWrapper);
+            List<ServiceWrapper> tenantSpecificWrappers = tenantIdToServiceWrapperMap.get(tenantId);
+
+            tenantSpecificWrappers.forEach(pgrEntity -> {
+                serviceRequestIds.add(pgrEntity.getService().getServiceRequestId());
+            });
+
+            RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+
+            StringBuilder searchUrl = getprocessInstanceSearchURL(tenantId, StringUtils.join(serviceRequestIds, ','));
+            Object result = repository.fetchResult(searchUrl, requestInfoWrapper);
 
 
-        ProcessInstanceResponse processInstanceResponse = null;
-        try {
-            processInstanceResponse = mapper.convertValue(result, ProcessInstanceResponse.class);
-        } catch (IllegalArgumentException e) {
-            throw new CustomException("PARSING ERROR", "Failed to parse response of workflow processInstance search");
+            ProcessInstanceResponse processInstanceResponse = null;
+            try {
+                processInstanceResponse = mapper.convertValue(result, ProcessInstanceResponse.class);
+            } catch (IllegalArgumentException e) {
+                throw new CustomException("PARSING ERROR", "Failed to parse response of workflow processInstance search");
+            }
+
+            if (CollectionUtils.isEmpty(processInstanceResponse.getProcessInstances()) || processInstanceResponse.getProcessInstances().size() != serviceRequestIds.size())
+                throw new CustomException("WORKFLOW_NOT_FOUND", "The workflow object is not found");
+
+            Map<String, Workflow> businessIdToWorkflow = getWorkflow(processInstanceResponse.getProcessInstances());
+
+            tenantSpecificWrappers.forEach(pgrEntity -> {
+                pgrEntity.setWorkflow(businessIdToWorkflow.get(pgrEntity.getService().getServiceRequestId()));
+            });
+
+            enrichedServiceWrappers.addAll(tenantSpecificWrappers);
         }
 
-        if (CollectionUtils.isEmpty(processInstanceResponse.getProcessInstances()) || processInstanceResponse.getProcessInstances().size()!=serviceRequestIds.size())
-            throw new CustomException("WORKFLOW_NOT_FOUND", "The workflow object is not found");
+        return enrichedServiceWrappers;
 
-        Map<String, Workflow> businessIdToWorkflow = getWorkflow(processInstanceResponse.getProcessInstances());
+    }
 
-        serviceWrappers.forEach(pgrEntity -> {
-            pgrEntity.setWorkflow(businessIdToWorkflow.get(pgrEntity.getService().getServiceRequestId()));
-        });
-
+    private Map<String, List<ServiceWrapper>> getTenantIdToServiceWrapperMap(List<ServiceWrapper> serviceWrappers) {
+        Map<String, List<ServiceWrapper>> resultMap = new HashMap<>();
+        for(ServiceWrapper serviceWrapper : serviceWrappers){
+            if(resultMap.containsKey(serviceWrapper.getService().getTenantId())){
+                resultMap.get(serviceWrapper.getService().getTenantId()).add(serviceWrapper);
+            }else{
+                List<ServiceWrapper> serviceWrapperList = new ArrayList<>();
+                serviceWrapperList.add(serviceWrapper);
+                resultMap.put(serviceWrapper.getService().getTenantId(), serviceWrapperList);
+            }
+        }
+        return resultMap;
     }
 
     /**

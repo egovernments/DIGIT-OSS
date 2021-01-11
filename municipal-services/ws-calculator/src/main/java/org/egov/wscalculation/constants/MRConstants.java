@@ -17,6 +17,10 @@ public class MRConstants {
 	public static final String INVALID_BILLING_PERIOD = "Invalid Billing Period";
 
 	public static final String INVALID_BILLING_PERIOD_MSG = "No data found for this Billing Period";
+ 
+	public static final String PROPERTY_JSONPATH_ROOT = "$.MdmsRes.PropertyTax";
+
+	public static final String PROPERTY_MASTER_MODULE = "PropertyTax";
 	
 
 }

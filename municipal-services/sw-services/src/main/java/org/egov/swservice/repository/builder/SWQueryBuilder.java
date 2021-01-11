@@ -107,6 +107,11 @@ public class SWQueryBuilder {
 		if (!StringUtils.isEmpty(criteria.getPropertyId()) && StringUtils.isEmpty(criteria.getMobileNumber())) {
 			if(propertyIdsPresent)
 				query.append(")");
+			else{
+				addClauseIfRequired(preparedStatement, query);
+				query.append(" conn.property_id = ? ");
+				preparedStatement.add(criteria.getPropertyId());
+			}
 		}
 		if (!CollectionUtils.isEmpty(criteria.getIds())) {
 			addClauseIfRequired(preparedStatement, query);
@@ -160,6 +165,11 @@ public class SWQueryBuilder {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.isoldapplication = ? ");
 			preparedStatement.add(Boolean.FALSE);
+		}
+		if (!StringUtils.isEmpty(criteria.getLocality())) {
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" conn.locality = ? ");
+			preparedStatement.add(criteria.getLocality());
 		}
 		
 		//Add OrderBy clause

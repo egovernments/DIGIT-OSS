@@ -69,6 +69,9 @@ public class SearchCriteria {
 	@JsonProperty("applicationType")
 	private String applicationType;
 
+	@JsonProperty("locality")
+	private String locality;
+
 	@JsonProperty("searchType")
 	private String searchType = "APPLICATION";
 

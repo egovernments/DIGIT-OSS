@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.IdGenRepository;
 import org.egov.swservice.repository.SewerageDaoImpl;
@@ -13,6 +14,7 @@ import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.*;
 import org.egov.swservice.web.models.Connection.StatusEnum;
 import org.egov.swservice.web.models.Idgen.IdResponse;
+import org.egov.swservice.web.models.users.User;
 import org.egov.swservice.web.models.users.UserDetailResponse;
 import org.egov.swservice.web.models.users.UserSearchRequest;
 import org.egov.tracer.model.CustomException;
@@ -257,7 +259,7 @@ public class EnrichmentService {
 		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
 		userSearchRequest.setUuid(connectionHolderIds);
 		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
-		enrichConnectionHolderInfo(userDetailResponse, sewerageConnectionList);
+		enrichConnectionHolderInfo(userDetailResponse, sewerageConnectionList,requestInfo);
 	}
 
 	/**
@@ -270,7 +272,7 @@ public class EnrichmentService {
 	 *            userDetailsResponse
 	 */
 	public void enrichConnectionHolderInfo(UserDetailResponse userDetailResponse,
-			List<SewerageConnection> sewerageConnectionList) {
+			List<SewerageConnection> sewerageConnectionList,RequestInfo requestInfo) {
 		List<OwnerInfo> connectionHolderInfos = userDetailResponse.getUser();
 		Map<String, OwnerInfo> userIdToConnectionHolderMap = new HashMap<>();
 		connectionHolderInfos.forEach(user -> userIdToConnectionHolderMap.put(user.getUuid(), user));
@@ -280,11 +282,35 @@ public class EnrichmentService {
 					if (userIdToConnectionHolderMap.get(holderInfo.getUuid()) == null)
 						throw new CustomException("OWNER_SEARCH_ERROR", "The owner of the sewerage application"
 								+ sewerageConnection.getApplicationNo() + " is not coming in user search");
-					else
-						holderInfo.addUserDetail(userIdToConnectionHolderMap.get(holderInfo.getUuid()));
+					else{
+						Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
+						if(isOpenSearch)
+							holderInfo.addUserDetail(getMaskedOwnerInfo(userIdToConnectionHolderMap.get(holderInfo.getUuid())));
+						else
+							holderInfo.addUserDetail(userIdToConnectionHolderMap.get(holderInfo.getUuid()));
+					}
+
 				});
 			}
 		});
+	}
+
+	public Boolean isSearchOpen(org.egov.common.contract.request.User userInfo) {
+
+		return userInfo.getType().equalsIgnoreCase("SYSTEM")
+				&& userInfo.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()).contains("ANONYMOUS");
+	}
+
+	private User getMaskedOwnerInfo(OwnerInfo info) {
+
+		info.setMobileNumber(null);
+		info.setUuid(null);
+		info.setUserName(null);
+		info.setGender(null);
+		info.setAltContactNumber(null);
+		info.setPwdExpiryDate(null);
+
+		return info;
 	}
 
 	/**

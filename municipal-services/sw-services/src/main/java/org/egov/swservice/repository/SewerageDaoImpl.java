@@ -3,9 +3,13 @@ package org.egov.swservice.repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.repository.rowmapper.OpenSewerageRowMapper;
 import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
@@ -37,6 +41,9 @@ public class SewerageDaoImpl implements SewerageDao {
 	private SewerageRowMapper sewarageRowMapper;
 
 	@Autowired
+	private OpenSewerageRowMapper openSewerageRowMapper;
+
+	@Autowired
 	private SWConfiguration swConfiguration;
 
 	@Value("${egov.sewarageservice.createconnection.topic}")
@@ -56,12 +63,25 @@ public class SewerageDaoImpl implements SewerageDao {
 		String query = swQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
 		if (query == null)
 			return Collections.emptyList();
-		List<SewerageConnection> sewerageConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
-				sewarageRowMapper);
+		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
+		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
+		if(isOpenSearch)
+			sewerageConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
+					openSewerageRowMapper);
+		else
+			sewerageConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
+					sewarageRowMapper);
+
 		if (sewerageConnectionList == null) {
 			return Collections.emptyList();
 		}
 		return sewerageConnectionList;
+	}
+
+	public Boolean isSearchOpen(User userInfo) {
+
+		return userInfo.getType().equalsIgnoreCase("SYSTEM")
+				&& userInfo.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()).contains("ANONYMOUS");
 	}
 
 	public void updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest,

@@ -146,6 +146,9 @@ public class SewerageServicesUtil {
 			propertyIds.add(sewerageConnectionSearchCriteria.getPropertyId());
 			propertyCriteria.setPropertyIds(propertyIds);
 		}
+		if (!StringUtils.isEmpty(sewerageConnectionSearchCriteria.getLocality())) {
+			propertyCriteria.setLocality(sewerageConnectionSearchCriteria.getLocality());
+		}
 
 		Object result = serviceRequestRepository.fetchResult(
 				getPropertyURL(propertyCriteria),

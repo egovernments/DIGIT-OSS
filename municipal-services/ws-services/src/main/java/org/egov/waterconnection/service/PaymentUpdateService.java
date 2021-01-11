@@ -213,7 +213,8 @@ public class PaymentUpdateService {
 								"No waterConnection found for the consumerCode " + paymentDetail.getBill().getConsumerCode());
 					}
 					Collections.sort(waterConnections, Comparator.comparing(wc -> wc.getAuditDetails().getLastModifiedTime()));
-					Optional<WaterConnection> connections = waterConnections.stream().findFirst();
+					long count = waterConnections.stream().count();
+					Optional<WaterConnection> connections = Optional.of(waterConnections.stream().skip(count - 1).findFirst().get());
 					WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
 							.waterConnection(connections.get()).requestInfo(paymentRequest.getRequestInfo())
 							.build();

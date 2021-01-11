@@ -51,7 +51,7 @@ public class MDMSUtils {
      * @param tenantId
      * @return
      */
-    private MdmsCriteriaReq getMDMSRequest(RequestInfo requestInfo,String tenantId){
+    public MdmsCriteriaReq getMDMSRequest(RequestInfo requestInfo,String tenantId){
         List<ModuleDetail> pgrModuleRequest = getPGRModuleRequest();
 
         List<ModuleDetail> moduleDetails = new LinkedList<>();
@@ -94,7 +94,7 @@ public class MDMSUtils {
      *
      * @return url for mdms search endpoint
      */
-    private StringBuilder getMdmsSearchUrl() {
+    public StringBuilder getMdmsSearchUrl() {
         return new StringBuilder().append(config.getMdmsHost()).append(config.getMdmsEndPoint());
     }
 

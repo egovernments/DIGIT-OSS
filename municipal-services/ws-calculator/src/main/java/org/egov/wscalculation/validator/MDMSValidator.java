@@ -66,7 +66,7 @@ public class MDMSValidator {
 	
 
 
-	private Map<String, List<String>> getAttributeValues(String tenantId, String moduleName, List<String> names,
+	public Map<String, List<String>> getAttributeValues(String tenantId, String moduleName, List<String> names,
 			String filter, String jsonPath, RequestInfo requestInfo) {
 		StringBuilder uri = new StringBuilder(mdmsHost).append(mdmsEndpoint);
 		MdmsCriteriaReq criteriaReq = meterReadingUtil.prepareMdMsRequest(tenantId, moduleName, names, filter,

@@ -35,38 +35,38 @@ import com.google.common.collect.Sets;
 @Service
 public class PropertyService {
 
-    @Autowired
-    private Producer producer;
+	@Autowired
+	private Producer producer;
 
-    @Autowired
-    private PropertyConfiguration config;
+	@Autowired
+	private PropertyConfiguration config;
 
-    @Autowired
-    private PropertyRepository repository;
+	@Autowired
+	private PropertyRepository repository;
 
-    @Autowired
-    private EnrichmentService enrichmentService;
+	@Autowired
+	private EnrichmentService enrichmentService;
 
-    @Autowired
-    private PropertyValidator propertyValidator;
+	@Autowired
+	private PropertyValidator propertyValidator;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Autowired
+	@Autowired
 	private WorkflowService wfService;
-    
-    @Autowired
-    private PropertyUtil util;
-    
-    @Autowired
-    private ObjectMapper mapper;
-    
-    @Autowired
+
+	@Autowired
+	private PropertyUtil util;
+
+	@Autowired
+	private ObjectMapper mapper;
+
+	@Autowired
 	private CalculationService calculatorService;
 
 
-    
+
 	/**
 	 * Enriches the Request and pushes to the Queue
 	 *
@@ -91,14 +91,14 @@ public class PropertyService {
 		request.getProperty().setWorkflow(null);
 		return request.getProperty();
 	}
-	
+
 	/**
 	 * Updates the property
-	 * 
+	 *
 	 * handles multiple processes 
-	 * 
+	 *
 	 * Update
-	 * 
+	 *
 	 * Mutation
 	 *
 	 * @param request PropertyRequest containing list of properties to be update
@@ -107,9 +107,9 @@ public class PropertyService {
 	public Property updateProperty(PropertyRequest request) {
 
 		Property propertyFromSearch = propertyValidator.validateCommonUpdateInformation(request);
-		
+
 		boolean isRequestForOwnerMutation = CreationReason.MUTATION.equals(request.getProperty().getCreationReason());
-		
+
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
 		else
@@ -121,29 +121,32 @@ public class PropertyService {
 
 	/**
 	 * Method to process Property update 
-	 * 
+	 *
 	 * @param request
 	 * @param propertyFromSearch
 	 */
 	private void processPropertyUpdate(PropertyRequest request, Property propertyFromSearch) {
-		
+
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
 			userService.createUser(request);
+		} else {
+			request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));
 		}
-		request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));
+
+
 		enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
-		
+
 		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
 				.build();
-		
+
 		util.mergeAdditionalDetails(request, propertyFromSearch);
-		
+
 		if(config.getIsWorkflowEnabled()) {
-			
+
 			State state = wfService.updateWorkflow(request, CreationReason.UPDATE);
 
 			if (state.getIsStartState() == true
@@ -177,38 +180,38 @@ public class PropertyService {
 
 	/**
 	 * method to process owner mutation
-	 * 
+	 *
 	 * @param request
 	 * @param propertyFromSearch
 	 */
 	private void processOwnerMutation(PropertyRequest request, Property propertyFromSearch) {
-		
+
 		propertyValidator.validateMutation(request, propertyFromSearch);
-		userService.createUser(request);
+		userService.createUserForMutation(request, !propertyFromSearch.getStatus().equals(Status.INWORKFLOW));
 		enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichMutationRequest(request, propertyFromSearch);
 		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
-		
+
 		// TODO FIX ME block property changes FIXME
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
 				.build();
-		
+
 		if (config.getIsMutationWorkflowEnabled()) {
 
 			State state = wfService.updateWorkflow(request, CreationReason.MUTATION);
-      
+
 			/*
 			 * updating property from search to INACTIVE status
-			 * 
+			 *
 			 * to create new entry for new Mutation
 			 */
 			if (state.getIsStartState() == true
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
-				
+
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
 
@@ -237,36 +240,36 @@ public class PropertyService {
 	}
 
 	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {
-		
+
 		/* current record being rejected */
 		producer.push(config.getUpdatePropertyTopic(), request);
-		
+
 		/* Previous record set to ACTIVE */
 		@SuppressWarnings("unchecked")
 		Map<String, Object> additionalDetails = mapper.convertValue(propertyFromSearch.getAdditionalDetails(), Map.class);
-		if(null == additionalDetails) 
+		if(null == additionalDetails)
 			return;
-		
+
 		String propertyUuId = (String) additionalDetails.get(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID);
-		if(StringUtils.isEmpty(propertyUuId)) 
+		if(StringUtils.isEmpty(propertyUuId))
 			return;
-		
+
 		PropertyCriteria criteria = PropertyCriteria.builder().uuids(Sets.newHashSet(propertyUuId))
 				.tenantId(propertyFromSearch.getTenantId()).build();
 		Property previousPropertyToBeReInstated = searchProperty(criteria, request.getRequestInfo()).get(0);
 		previousPropertyToBeReInstated.setAuditDetails(util.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid().toString(), true));
 		previousPropertyToBeReInstated.setStatus(Status.ACTIVE);
 		request.setProperty(previousPropertyToBeReInstated);
-		
+
 		producer.push(config.getUpdatePropertyTopic(), request);
 	}
 
-    /**
-     * Search property with given PropertyCriteria
-     *
-     * @param criteria PropertyCriteria containing fields on which search is based
-     * @return list of properties satisfying the containing fields in criteria
-     */
+	/**
+	 * Search property with given PropertyCriteria
+	 *
+	 * @param criteria PropertyCriteria containing fields on which search is based
+	 * @return list of properties satisfying the containing fields in criteria
+	 */
 	public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
 
 		List<Property> properties;
@@ -296,7 +299,7 @@ public class PropertyService {
 		properties.forEach(property -> {
 			enrichmentService.enrichBoundary(property, requestInfo);
 		});
-		
+
 		return properties;
 	}
 

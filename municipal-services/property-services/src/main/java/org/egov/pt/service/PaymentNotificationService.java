@@ -133,7 +133,12 @@ public class PaymentNotificationService {
                 mobileNumbers.add(owner.getMobileNumber());
             });
 
-            List<SMSRequest> smsRequests = getSMSRequests(mobileNumbers,customMessage, valMap);
+			List<SMSRequest> smsRequests = getSMSRequests(mobileNumbers, customMessage, valMap);
+			String payerMobileNo = transaction.getUser().getMobileNumber();
+			if (!mobileNumbers.contains(payerMobileNo)) {
+				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
+			}
+            
 
             util.sendSMS(smsRequests);
 
@@ -223,6 +228,10 @@ public class PaymentNotificationService {
             });
 
             smsRequests.addAll(getSMSRequests(mobileNumbers,customMessage, valMap));
+			String payerMobileNo = paymentRequest.getPayment().getMobileNumber();
+			if (!mobileNumbers.contains(payerMobileNo)) {
+				smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
+			}
 
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
                 if(paymentDetail.getTotalDue().compareTo(paymentDetail.getTotalAmountPaid())==0)
@@ -484,7 +493,24 @@ public class PaymentNotificationService {
         }
         return smsRequests;
     }
+    
+    /**
+     * Creates SMSRequest for the given mobileNumber with the given message removing receipt link
+     * @param mobileNumber The set of mobileNumber for which SMSRequest has to be created
+     * @param customizedMessage The message to sent
+     * @return SMSRequest
+     */
+	private SMSRequest getSMSRequestsWithoutReceipt(String mobileNumber, String customizedMessage, Map<String, String> valMap) {
 
+		String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
+		if (customizedMessage.contains("<receipt download link>")) {
+			finalMessage = finalMessage.replace("Click on the link to download payment receipt <receipt download link>", "");
+		}
+		if (customizedMessage.contains("<payLink>")) {
+			finalMessage = finalMessage.replace("<payLink>", getPaymentLink(valMap));
+		}
+		return new SMSRequest(mobileNumber, finalMessage);
+	}
 
     /**
      *

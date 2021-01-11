@@ -284,4 +284,8 @@ public class SWCalculationConstant {
 
 	public static final String SW_TIME_ADHOC_REBATE = "SW_TIME_ADHOC_REBATE";
 
+	public static final String PROPERTY_JSONPATH_ROOT = "$.MdmsRes.PropertyTax";
+
+	public static final String PROPERTY_MASTER_MODULE = "PropertyTax";
+
 }

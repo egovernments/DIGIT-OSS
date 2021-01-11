@@ -72,6 +72,9 @@ public class SearchCriteria {
 	@JsonProperty("searchType")
 	private String searchType = "APPLICATION";
 
+	@JsonProperty("locality")
+	private String locality;
+
 
 	@JsonIgnore
 	private List<String> ownerIds;

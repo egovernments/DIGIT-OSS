@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -94,6 +95,15 @@ public class PropertyValidator {
 		validateFields(request, errorMap);
 		if (!CollectionUtils.isEmpty(units))
 			validateUnits(request, errorMap);
+		
+		
+		Set<String> uniqueOwnerSet = owners.stream()
+				.map(owner -> owner.getName() + owner.getMobileNumber()).collect(Collectors.toSet());
+		
+		if (uniqueOwnerSet.size() != owners.size())
+			throw new CustomException("EG_PT_OWNER INFO ERROR", "Duplicate Owners in the request");
+			
+		
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
@@ -108,9 +118,30 @@ public class PropertyValidator {
 			
 			ConstructionDetail consDtl = unit.getConstructionDetail();
 			
-			if (consDtl.getCarpetArea() != null && !property.getPropertyType().contains(PTConstants.PT_TYPE_VACANT)
-					&& consDtl.getCarpetArea().compareTo(consDtl.getBuiltUpArea()) >= 0)
-				errorMap.put("UNIT INFO ERROR ", "Carpet area cannot be greater or equal than builtUp area");
+			Boolean isBuiltUpAreaNull = consDtl.getBuiltUpArea() == null;
+			
+			if (isBuiltUpAreaNull) {
+
+				if (consDtl.getPlinthArea() == null || consDtl.getSuperBuiltUpArea() == null)
+					errorMap.put("EG_PT_UNIT_AREA_ERROR",
+							"Any one of the following either builtUpArea or (plinthArea + superBuiltUpArea) should be provided");
+
+				if (consDtl.getPlinthArea() != null && consDtl.getSuperBuiltUpArea() != null) {
+					consDtl.setBuiltUpArea(consDtl.getSuperBuiltUpArea().subtract(consDtl.getPlinthArea()));
+					isBuiltUpAreaNull = false;
+					
+				}
+
+			} else if(!isBuiltUpAreaNull) {
+
+				if (consDtl.getBuiltUpArea().compareTo(configs.getMinUnitArea()) <= 0)
+					errorMap.put("EG_PT_UNIT_BUILTUPAREA_ERROR", "BuiltUpArea cannot be lesser than minimum value of : "
+							+ configs.getMinUnitArea() + " " + configs.getLandAreaUnit());
+
+				if (consDtl.getCarpetArea() != null && !property.getPropertyType().contains(PTConstants.PT_TYPE_VACANT)
+						&& consDtl.getCarpetArea().compareTo(consDtl.getBuiltUpArea()) >= 0)
+					errorMap.put("UNIT INFO ERROR ", "Carpet area cannot be greater or equal than builtUp area");
+			}
 		}
 	}
 
@@ -662,7 +693,7 @@ public class PropertyValidator {
 			throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "Mandatory fields Missing for mutation, please provide the following information in additionalDetails : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
 		} catch (Exception e) {
-			throw new CustomException("EG_PT_ADDITIONALDETAILS_PARSING_ERROR", e.getMessage());
+			throw new CustomException("EG_PT_ADDITIONALDETAILS_PARSING_ERROR", e.toString());
 		}
 
 		Boolean isNullStatusFound = false;
@@ -671,11 +702,21 @@ public class PropertyValidator {
 		Set<Status> statusSet = new HashSet<>();
 		Set<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
 		List<String> uuidsNotFound = new ArrayList<String>();
-		Set<String> mobileNumberPlusNameSet = new HashSet<>();
+		Map<String, Integer> activeMobileNumberPlusNameOwnerMap = new HashMap<>();
 		
 		for (OwnerInfo owner : property.getOwners()) {
 
-			mobileNumberPlusNameSet.add(owner.getMobileNumber()+owner.getName());
+			if (owner.getStatus() == Status.ACTIVE) {
+
+				String key = owner.getMobileNumber() + owner.getName();
+				if (activeMobileNumberPlusNameOwnerMap.get(key) == null) {
+					activeMobileNumberPlusNameOwnerMap.put(key, 1);
+				} else {
+					Integer val = activeMobileNumberPlusNameOwnerMap.get(key);
+					activeMobileNumberPlusNameOwnerMap.put(key, val++);
+				}
+			}
+			
 			if (StringUtils.isEmpty(owner.getStatus())) {
 				isNullStatusFound = true;
 			}
@@ -690,8 +731,8 @@ public class PropertyValidator {
 				uuidsNotFound.add(owner.getUuid());
 		}
 		
-		if(property.getOwners().size() != mobileNumberPlusNameSet.size())
-			errorMap.put("EG_PT_MUTATION_DUPLICATE_OWNER_ERROR", "Same Owner object is repated in the update Request");
+		if(activeMobileNumberPlusNameOwnerMap.values().stream().anyMatch(valueCount -> valueCount > 1))
+			errorMap.put("EG_PT_MUTATION_DUPLICATE_OWNER_ERROR", "Active Owner object with combination of name and mobilenumber is repated in the update Request");
 
 		if (isNullStatusFound)
 			errorMap.put("EG_PT_MUTATION_ALL_OWNER_STATUS_NULL_ERROR", "Status of the owner objects cannot be null, please make the status either ACTIVE or INACTIVE");
@@ -701,11 +742,13 @@ public class PropertyValidator {
 
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Invalid owners found in request : " + uuidsNotFound);
-		
-		if (!propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
-			if (!isNewOWnerAdded && !isOwnerCancelled)
-				errorMap.put("EG_PT_MUTATION_OWNER_ERROR", "Mutation request should either add a new owner object or make an existing object INACTIVE in the request");
+		if (!propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
+			
+
+			if (!isNewOWnerAdded && !isOwnerCancelled) {
+					errorMap.put("EG_PT_MUTATION_OWNER_ERROR", "Mutation request should either add a new owner object or update an existing object to INACTIVE");
+			}
 
 			if (isOwnerCancelled && property.getOwners().size() == 1)
 				errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR", "Single owner of a property cannot be deactivated or removed in a mutation request");
@@ -756,6 +799,33 @@ public class PropertyValidator {
 
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
+	}
+
+	/**
+	 * Verfies if atleast one owner in mutation request is modified
+	 * 
+	 * @param propertyFromSearch
+	 * @param errorMap
+	 * @param property
+	 * @return
+	 */
+	private Boolean isAtleastOneOwnerModified(Property propertyFromSearch, Map<String, String> errorMap, Property property) {
+		
+		Map<String, OwnerInfo> ownerIdMapFromSearch = propertyFromSearch.getOwners().stream().collect(Collectors.toMap(OwnerInfo::getOwnerInfoUuid, Function.identity()));
+
+		for (OwnerInfo ownerFromRequest : property.getOwners()) {
+
+			OwnerInfo OwnerFromSearch = ownerIdMapFromSearch.get(ownerFromRequest.getOwnerInfoUuid());
+
+			if (OwnerFromSearch == null) {
+
+				errorMap.put("EG_PT_MUTATION_OWNER_ERROR", "Owner with invalid id found in the property request object : " + ownerFromRequest.getOwnerInfoUuid());
+			}
+			if (!ownerFromRequest.mutationEquals(OwnerFromSearch))
+				return true;
+		}
+
+		return false;
 	}
 
 }

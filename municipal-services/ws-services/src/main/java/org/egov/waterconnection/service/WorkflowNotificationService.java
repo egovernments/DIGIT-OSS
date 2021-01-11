@@ -220,10 +220,19 @@ public class WorkflowNotificationService {
 			}
 			if (code.equalsIgnoreCase("DOWNLOAD RECEIPT")) {
 				String receiptNumber = getReceiptNumber(connectionRequest);
+				String consumerCode,service;
+				if(StringUtils.isEmpty(connectionRequest.getWaterConnection().getConnectionNo())){
+					consumerCode = connectionRequest.getWaterConnection().getApplicationNo();
+					service = businessService;
+				}
+				else{
+					consumerCode = connectionRequest.getWaterConnection().getConnectionNo();
+					service = "WS";
+				}
 				actionLink = config.getNotificationUrl() + config.getUserEventReceiptDownloadLink();
-				actionLink = actionLink.replace("$consumerCode", connectionRequest.getWaterConnection().getApplicationNo());
+				actionLink = actionLink.replace("$consumerCode", consumerCode);
 				actionLink = actionLink.replace("$tenantId", property.getTenantId());
-				actionLink = actionLink.replace("$businessService", businessService);
+				actionLink = actionLink.replace("$businessService", service);
 				actionLink = actionLink.replace("$receiptNumber", receiptNumber);
 				actionLink = actionLink.replace("$mobile", mobileNumber);
 			}
@@ -571,10 +580,20 @@ public class WorkflowNotificationService {
 			String receiptNumber = getReceiptNumber(waterConnectionRequest);
 			for (Entry<String, String> mobileAndMsg : mobileNumberAndMessage.entrySet()) {
 				String messageToReplace = mobileAndMsg.getValue();
+				String consumerCode,service;
+				if(StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo())){
+					consumerCode = waterConnectionRequest.getWaterConnection().getApplicationNo();
+					service = businessService;
+				}
+				else{
+					consumerCode = waterConnectionRequest.getWaterConnection().getConnectionNo();
+					service = "WS";
+				}
+
 				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
-				link = link.replace("$consumerCode", waterConnectionRequest.getWaterConnection().getApplicationNo());
+				link = link.replace("$consumerCode", consumerCode);
 				link = link.replace("$tenantId", property.getTenantId());
-				link = link.replace("$businessService", businessService);
+				link = link.replace("$businessService", service);
 				link = link.replace("$receiptNumber", receiptNumber);
 				link = link.replace("$mobile", mobileAndMsg.getKey());
 				link = waterServiceUtil.getShortnerURL(link);
@@ -588,8 +607,17 @@ public class WorkflowNotificationService {
     }
 
     public String getReceiptNumber(WaterConnectionRequest waterConnectionRequest){
+		String consumerCode,service;
+		if(StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo())){
+			consumerCode = waterConnectionRequest.getWaterConnection().getApplicationNo();
+			service = businessService;
+		}
+		else{
+			consumerCode = waterConnectionRequest.getWaterConnection().getConnectionNo();
+			service = "WS";
+		}
 	    StringBuilder URL = waterServiceUtil.getcollectionURL();
-	    URL.append("?").append("consumerCodes=").append(waterConnectionRequest.getWaterConnection().getApplicationNo())
+	    URL.append(service).append("/_search").append("?").append("consumerCodes=").append(consumerCode)
                 .append("&").append("tenantId=").append(waterConnectionRequest.getWaterConnection().getTenantId());
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(waterConnectionRequest.getRequestInfo()).build();
         Object response = serviceRequestRepository.fetchResult(URL,requestInfoWrapper);
