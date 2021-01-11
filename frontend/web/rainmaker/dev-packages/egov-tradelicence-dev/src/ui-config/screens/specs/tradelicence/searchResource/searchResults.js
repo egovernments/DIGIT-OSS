@@ -118,9 +118,15 @@ export const searchResults = {
 const onRowClick = rowData => {
   switch (rowData[7]) {
     case "INITIATED":
-      routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[8]
-        }`);
+      if(rowData[6]=="TL_TYPE_RENEWAL"){
+        routeTo(`apply?applicationNumber=${rowData[0]}&licenseNumber=${rowData[1]}&action=EDITRENEWAL&tenantId=${
+          rowData[8]
+          }`);
+      }else{
+        routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
+          rowData[8]
+          }`);
+      }
       break;
     default:
       routeTo(`search-preview?applicationNumber=${

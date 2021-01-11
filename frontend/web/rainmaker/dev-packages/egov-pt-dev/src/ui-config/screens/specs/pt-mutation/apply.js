@@ -14,14 +14,14 @@ import { mutationDetails } from "./applyResourceMutation/mutationDetails";
 import { documentDetails } from "./applyResourceMutation/mutationDocuments";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 import { registrationDetails } from "./applyResourceMutation/registrationDetails";
-import { transfereeDetails } from './applyResourceMutation/transfereeDetails';
+import { onChangeTypeOfOwnership, transfereeDetails } from './applyResourceMutation/transfereeDetails';
+import "./index.css";
 import { declarationSummary } from "./summaryResource/declarationSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { registrationSummary } from "./summaryResource/registrationSummary";
 import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResource/transfereeSummary";
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
 import { transferorInstitutionSummary as ti1, transferorSummary as ts1 } from "./summaryResource/transferorSummary1";
-import "./index.css";
 
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
@@ -119,8 +119,8 @@ export const formwizardThirdStep = {
     summary: getCommonCard({
       transferorSummary: { ...transferorSummary },
       transferorInstitutionSummary: { ...transferorInstitutionSummary },
-      transfereeSummary: transfereeSummary,
-      transfereeInstitutionSummary: transfereeInstitutionSummary,
+      transfereeSummary: { ...transfereeSummary },
+      transfereeInstitutionSummary: { ...transfereeInstitutionSummary },
       mutationSummary: mutationSummary,
       registrationSummary: registrationSummary,
       documentsSummary: documentsSummary,
@@ -179,7 +179,7 @@ const getPropertyData = async (action, state, dispatch) => {
     setCardVisibility(state, action, dispatch);
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
-    dispatch(prepareFinalObject("PropertyOld",{}));
+    dispatch(prepareFinalObject("PropertyOld", {}));
   } catch (e) {
     console.log(e);
   }
@@ -240,7 +240,9 @@ const getApplicationData = async (action, state, dispatch) => {
       payload.Properties[0].institutionTemp = payload.Properties[0].institution;
       payload.Properties[0].institutionInit = null;
       payload.Properties[0].institution = null;
-
+      if (!payload.Properties[0].ownershipCategoryTemp.includes("SINGLEOWNER")) {
+        onChangeTypeOfOwnership({ value: payload.Properties[0].ownershipCategoryTemp }, state, dispatch, false);
+      }
       if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
         const propertiesAudit = get(auditResponse, "Properties", []);
 
@@ -272,33 +274,33 @@ const getApplicationData = async (action, state, dispatch) => {
     set(payload, 'Properties[0].documents', documents)
     dispatch(prepareFinalObject("DocumentsPrefill", documents && Array.isArray(documents) && documents.length > 0 ? true : false));
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
-    dispatch(prepareFinalObject("PropertyOld",cloneDeep(payload.Properties[0])));
+    dispatch(prepareFinalObject("PropertyOld", cloneDeep(payload.Properties[0])));
     setCardVisibility(state, action, dispatch);
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     // Prefilling radio buttons
     set(
       action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup.props.value",
-        payload.Properties[0].ownersTemp[0].gender
-      )
-    
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationPendingRadioButton.props.value",
-        payload.Properties[0].additionalDetails.isMutationInCourt
-      )
-    
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationStateAcquisitionRadioButton.props.value",
-        payload.Properties[0].additionalDetails.isPropertyUnderGovtPossession
-      )
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.transferReason.props.value",
-        payload.Properties[0].additionalDetails.reasonForTransfer
-      )
-    
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup.props.value",
+      payload.Properties[0].ownersTemp[0].gender
+    )
+
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationPendingRadioButton.props.value",
+      payload.Properties[0].additionalDetails.isMutationInCourt
+    )
+
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationStateAcquisitionRadioButton.props.value",
+      payload.Properties[0].additionalDetails.isPropertyUnderGovtPossession
+    )
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.transferReason.props.value",
+      payload.Properties[0].additionalDetails.reasonForTransfer
+    )
+
 
   } catch (error) {
     console.log("mutation edit flow error ", error);
@@ -520,8 +522,8 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(unMountScreen("propertySearch"));
-    dispatch(unMountScreen("search-preview"));
+    // dispatch(unMountScreen("propertySearch"));
+    // dispatch(unMountScreen("search-preview"));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"

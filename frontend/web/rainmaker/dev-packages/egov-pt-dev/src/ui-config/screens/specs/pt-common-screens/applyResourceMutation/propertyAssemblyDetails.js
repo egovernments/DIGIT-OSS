@@ -20,35 +20,48 @@ const rendersubUsageType = (usageType, propType, dispatch, state) => {
     state.screenConfiguration.preparedFinalObject,
     "Property.propertyType"
   );  
+const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.subUsageType"; 
+
   let subUsage;
-  if (propertyType === "BUILTUP.SHAREDPROPERTY") {
-    dispatch(
-      handleField(
-        "register-property",
-        "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.subUsageType",
-        "required",
-        true
-      )
-     )
-    if (usageType === "MIXED") {
-      subUsage = subTypeValues;
-    } else {
-      subUsage = subTypeValues.filter(cur => {
-        return (cur.code.startsWith(usageType))
-      })
-    }
-  } else {
-    subUsage = [];
-     set(state.screenConfiguration.preparedFinalObject,"Property.subUsageCategory", "");
-     dispatch(
-      handleField(
-        "register-property",
-        "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.subUsageType",
-        "required",
-        false
-      )
-     )
-  }
+    if (propertyType === "BUILTUP.SHAREDPROPERTY" || propertyType === "BUILTUP.INDEPENDENTPROPERTY") {
+        if (usageType === "NONRESIDENTIAL.COMMERCIAL" || usageType === "NONRESIDENTIAL.INDUSTRIAL" || usageType === "NONRESIDENTIAL.INSTITUTIONAL") {
+            dispatch(handleField('register-property', additionalDetailsJson, "visible", true));
+            dispatch(handleField('register-property', additionalDetailsJson, "props.visible", true));
+            if (usageType === "MIXED") {
+                subUsage = subTypeValues;
+            } else {
+                subUsage = subTypeValues.filter(cur => {
+                    return (cur.code.startsWith(usageType))
+                })
+            }
+        } else {
+            set(state.screenConfiguration.preparedFinalObject,"Property.subUsageCategory", "");
+            dispatch(handleField('register-property', additionalDetailsJson, "visible", false));
+            dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
+        }
+    } else {
+        set(state.screenConfiguration.preparedFinalObject,"Property.subUsageCategory", "");
+        dispatch(handleField('register-property', additionalDetailsJson, "visible", false));
+        dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
+    }
+
+//   if (propertyType === "BUILTUP.SHAREDPROPERTY") {
+//     dispatch(handleField('register-property', additionalDetailsJson, "required", true));
+//     dispatch(handleField('register-property', additionalDetailsJson, "props.required", true))
+
+//     if (usageType === "MIXED") {
+//       subUsage = subTypeValues;
+//     } else {
+//       subUsage = subTypeValues.filter(cur => {
+//         return (cur.code.startsWith(usageType))
+//       })
+//     }
+//   } else {
+//     subUsage = [];
+//     set(state.screenConfiguration.preparedFinalObject,"Property.subUsageCategory", "");
+//     dispatch(handleField('register-property', additionalDetailsJson, "required", false));
+//     dispatch(handleField('register-property', additionalDetailsJson, "props.required", false));
+//   }
   dispatch(
     prepareFinalObject(
       "propsubusagetypeForSelectedusageCategory",
@@ -132,7 +145,7 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "Property.totalConstructedArea"
+      jsonPath: "Property.superBuiltUpArea"
     }),
     usageType: getSelectField({
       label: {
@@ -172,7 +185,8 @@ export const propertyAssemblyDetails = getCommonCard({
         labelName: "Select Sub Usage Type",
         labelKey: "PT_COMMON_SUB_USAGE_TYPE_PLACEHOLDER"
       },
-      required: false,
+      required: true,
+      visible: false,
       jsonPath: "Property.subUsageCategory",
       sourceJsonPath: "propsubusagetypeForSelectedusageCategory",
       gridDefination: {

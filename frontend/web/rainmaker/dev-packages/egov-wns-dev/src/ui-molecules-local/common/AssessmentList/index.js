@@ -9,17 +9,19 @@ import { Link } from "react-router-dom"
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { download } from "egov-common/ui-utils/commons"
 
-const downloadReceipt = (tenantId, consumerCode) => {
+const downloadReceipt = (tenantId, consumerCode,businessService) => {
   const val = [
     {
       key: 'consumerCodes',
       value: consumerCode
     },
-    { key: 'tenantId', value: tenantId }]
+    { key: 'tenantId', value: tenantId }
+    ,
+    { key: 'businessService', value: businessService }]
   download(val)
 }
 
-export const getItemStatus = (due, paid, tenantId, consumerCode, history = "") => {
+export const getItemStatus = (due, paid, tenantId, consumerCode, history = "",businessService) => {
   let status;
   if (due === paid) {
     status = "Paid"
@@ -41,7 +43,7 @@ export const getItemStatus = (due, paid, tenantId, consumerCode, history = "") =
             <Label label={status} labelStyle={{ marginLeft: 10 }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
           </div>
-          <div className="assessment-displayInline" style={{ color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode)}>
+          <div className="assessment-displayInline" style={{ color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode,businessService)}>
             <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
           </div>
         </div>
@@ -54,7 +56,7 @@ export const getItemStatus = (due, paid, tenantId, consumerCode, history = "") =
             <Label label={status} labelStyle={{ marginLeft: "8px" }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
           </div>
-          <div className="assessment-displayInline" style={{ color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode)}>
+          <div className="assessment-displayInline" style={{ color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode,businessService)}>
             <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
           </div>
         </div>

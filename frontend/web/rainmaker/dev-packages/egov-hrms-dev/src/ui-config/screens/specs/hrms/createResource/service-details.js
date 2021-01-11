@@ -92,7 +92,10 @@ const serviceDetailsCard = {
                 sm: 4
               },
               props: {
-                jsonPath: "Employee[0].serviceHistory[0].serviceTo"
+                jsonPath: "Employee[0].serviceHistory[0].serviceTo",
+                checkFieldDisable: true,
+                dependantField:'isCurrentPosition',
+                jsonPathRemoveKey:"serviceTo"
                 // inputProps: {
                 //   min: getTodaysDateInYMD(),
                 //   max: getFinancialYearDates("yyyy-mm-dd").endDate

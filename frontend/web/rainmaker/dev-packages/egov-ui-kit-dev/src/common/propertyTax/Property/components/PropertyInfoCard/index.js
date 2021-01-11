@@ -60,7 +60,7 @@ class PropertyInfoCard extends Component {
                 </div>
                 {subSection && (
                   <div>
-                    {subSection.map((units, unitIndex) => {
+                    {subSection&&Array.isArray(subSection)&&subSection.length>0&&Object.values(subSection).map((units, unitIndex) => {
                       return (
                         <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                           {!hideSubsectionLabel && (
@@ -72,7 +72,7 @@ class PropertyInfoCard extends Component {
                                 fontWeight: "400",
                                 lineHeight: "19px",
                               }}
-                              label={"PROPERTYTAX_FLOOR_" + unitIndex}
+                              label={"PROPERTYTAX_FLOOR_" + Object.keys(subSection)[unitIndex]}
                               fontSize="18px"
                             />
                           )}

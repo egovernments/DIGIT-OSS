@@ -82,6 +82,7 @@ const formConfig = {
       localePrefix: { moduleName: "PropertyTax", masterName: "OwnerType" },
       jsonPath: "Properties[0].propertyDetails[0].owners[0].ownerType",
       type: "AutocompleteDropdown",
+      defaultSort:false,
       floatingLabelText: "PT_FORM3_SPECIAL_CATEGORY",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       dropDownData: [],

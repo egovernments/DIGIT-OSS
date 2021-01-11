@@ -14,7 +14,7 @@ class UiTableHead extends Component {
 
   render() {
     // const { classes, onSelectAllClick, Globfilter, order, orderBy, numSelected, rowCount, columnData, needHash, needCheckBox } = this.props;
-    const { classes, Globfilter, order, orderBy, columnData, needHash } = this.props;
+    const { classes, Globfilter, order, orderBy, columnData, needHash,strings={} } = this.props;
     return (
       <TableHead className={classes.root}>
         <TableRow>
@@ -59,10 +59,10 @@ class UiTableHead extends Component {
                     onClick={this.createSortHandler(column.id)}
                   >
 
-                    {convertLabelValue(column.label)+ (column.colType === 'amount' ? ' (In ' + Globfilter['Denomination'] + ')' : ' ')}
+                    {convertLabelValue(column.label,strings)+ (column.colType === 'amount' ? ' (In ' + Globfilter['Denomination'] + ')' : ' ')}
                   </TableSortLabel>
                     :
-                    <span>{convertLabelValue(column.label) }</span>
+                    <span>{convertLabelValue(column.label,strings) }</span>
                 }
               </TableCell>
             );

@@ -49,6 +49,7 @@ export const floorCount = {
     floatingLabelText: "PT_FORM2_NUMBER_OF_FLOORS",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     toolTip: true,
+    defaultSort:false,
     fullWidth: true,
     toolTipMessage: "PT_NUMBER_OF_FLOORS_TOOLTIP_MESSAGE",
     required: true,
@@ -228,6 +229,7 @@ export const floorName = {
       xs: 12,
       sm: 4
     },
+    defaultSort:false,
     errorMessage: "",
     required: true,
     jsonPath: "Properties[0].propertyDetails[0].units[0].floorNo",

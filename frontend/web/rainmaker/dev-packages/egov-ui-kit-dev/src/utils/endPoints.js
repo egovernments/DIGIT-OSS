@@ -176,8 +176,7 @@ export const FETCHBILL = {
 };
 export const FETCHRECEIPT = {
   GET: {
-    URL: "/collection-services/payments/_search",
-    ACTION: "_get",
+    ACTION: "_search",
   },
 };
 export const DOWNLOADRECEIPT = {
@@ -189,6 +188,12 @@ export const DOWNLOADRECEIPT = {
 export const FETCHASSESSMENTS = {
   GET: {
     URL: "/property-services/assessment/_search",
+    ACTION: "_search",
+  },
+};
+export const PAYMENTSEARCH = {
+  GET: {
+    URL: "/collection-services/payments/",
     ACTION: "_search",
   },
 };

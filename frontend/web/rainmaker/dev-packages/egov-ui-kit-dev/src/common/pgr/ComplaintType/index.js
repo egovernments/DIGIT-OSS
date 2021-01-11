@@ -63,6 +63,7 @@ class ComplaintType extends Component {
   };
 
   prepareResultsForDisplay = (results = []) => {
+    results=results&&results.sort&&results.sort((x,y)=>x.displayKey.localeCompare&&x.displayKey.localeCompare(y.displayKey));
     return results.map((result) => {
       const listItem = this.prepareListItem(result);
       if (result.nestedItems && result.nestedItems.length) {

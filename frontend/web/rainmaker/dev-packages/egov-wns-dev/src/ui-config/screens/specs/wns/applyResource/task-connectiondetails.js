@@ -8,7 +8,12 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
 
 const service = getQueryArg(window.location.href, "service")
-const applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
+// let pageUrl = window.location.href;
+// let arrayOfUrl = pageUrl && pageUrl.split("applicationNumber=");
+// let applicationNumberUrl = arrayOfUrl && arrayOfUrl[1].split("&");
+// let applicationNumber = applicationNumberUrl && applicationNumberUrl.length > 0 && applicationNumberUrl[0];
 
 const getHeader = label => {
     return {
@@ -38,7 +43,10 @@ export const getConnectionDetails = () => {
             className: "common-div-css search-preview",
             scheama: getCommonGrayCard({
                 div4: connectionDetailsHeader,
-                serviceCardContainer: renderService()
+                // serviceCardContainer: renderService()
+                serviceCardContainerForWater: renderServiceForWater(),
+                serviceCardContainerForSW: renderServiceForSW(),
+
             }),
             items: [],
             hasAddItem: false,
@@ -129,4 +137,12 @@ export const connDetailsWater=connectionDetailsWater;
 export const connDetailsSewerage=connectionDetailsSewerage;
 export const renderService = () => {
     return getCommonContainer(connectionDetails)
+}
+
+export const renderServiceForWater = () => {
+    return getCommonContainer(connectionDetailsWater)
+}
+
+export const renderServiceForSW = () => {
+    return getCommonContainer(connectionDetailsSewerage)
 }

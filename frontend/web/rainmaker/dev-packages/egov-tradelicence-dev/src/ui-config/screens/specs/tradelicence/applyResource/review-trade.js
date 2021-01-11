@@ -163,13 +163,6 @@ export const tradeReviewDetails = {
       },
     }
   ),
-  reviewOldLicenseNo: getLabelWithValue(
-    {
-      labelName: "Old License Number",
-      labelKey: "TL_OLD_LICENSE_NO"
-    },
-    { jsonPath: "Licenses[0].oldLicenseNumber", callBack: checkValueForNA }
-  ),
   reviewLicenceType: getLabelWithValue(
     {
       labelName: "Licence Type",

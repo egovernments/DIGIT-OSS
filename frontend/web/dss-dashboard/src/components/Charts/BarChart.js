@@ -52,7 +52,7 @@ class BarChart extends React.Component {
       labels: [],
       datasets: []
     };
-    let color = CONFIG.CHART_COLOR_CODE;
+    let color =JSON.parse(sessionStorage.getItem('CHART_COLOR_CODE')) ;
     chartData.map((d, i) => {
       let tempObj = {
         label: "",

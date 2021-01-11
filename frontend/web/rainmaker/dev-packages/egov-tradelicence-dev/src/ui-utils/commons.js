@@ -175,7 +175,21 @@ export const updatePFOforSearchResults = async (
   //   (await setDocsForEditFlow(state, dispatch));
 
   if (payload && payload.Licenses) {
+    
+    let ownersInitial=get(payload.Licenses[0],'tradeLicenseDetail.owners',[]);
+    set(payload.Licenses[0],'tradeLicenseDetail.owners',ownersInitial.filter(owner=>owner.userActive));
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+    dispatch(prepareFinalObject("LicensesTemp[0].oldOwners",  [...payload.Licenses[0].tradeLicenseDetail.owners]));
+    const structureTypes=get(payload,'Licenses[0].tradeLicenseDetail.structureType','').split('.')||[];
+    const structureType=structureTypes&&Array.isArray(structureTypes)&&structureTypes.length>0&&structureTypes[0]||'none';
+    const selectedValues=[{
+      structureType:structureType,
+      structureSubType:get(payload,'Licenses[0].tradeLicenseDetail.structureType','')||'none'
+    }]
+    dispatch(
+      prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
+      dispatch(
+        prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType.${structureType}`,[])));
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
@@ -190,6 +204,8 @@ export const updatePFOforSearchResults = async (
   setApplicationNumberBox(state, dispatch);
 
   createOwnersBackup(dispatch, payload);
+
+    
 };
 
 export const getBoundaryData = async (
@@ -438,6 +454,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       let updateResponse = [];
       if (!isEditFlow) {
+        let oldOwners = JSON.parse(
+          JSON.stringify(
+            get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
+          )
+        );
+        set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
@@ -681,3 +703,23 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     console.log(e.message)
   }
 }
+
+ export const checkValidOwners=(currentOwners=[],oldOwners=[])=>{
+
+  for (var i = 0, len = currentOwners.length; i < len; i++) { 
+    for (var j = 0, len2 = oldOwners.length; j < len2; j++) { 
+        if (currentOwners[i].name === oldOwners[j].name) {
+          oldOwners.splice(j, 1);
+            len2=oldOwners.length;
+        }
+    }   
+}
+oldOwners=oldOwners&&Array.isArray(oldOwners)&&oldOwners.map(owner=>{
+  return {...owner, userActive :false}
+})
+currentOwners=currentOwners&&Array.isArray(currentOwners)&&currentOwners.map(owner=>{
+  return {...owner, userActive :true}
+})
+
+return [...currentOwners, ...oldOwners];
+ }

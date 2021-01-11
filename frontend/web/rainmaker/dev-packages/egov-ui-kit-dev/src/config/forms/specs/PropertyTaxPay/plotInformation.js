@@ -25,6 +25,7 @@ const formConfig = {
       jsonPath: "",
       type: "textfield",
       floatingLabelText: "PT_FORM2_NUMBER_OF_FLOORS",
+      defaultSort:false,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       numcols: 4,
     },

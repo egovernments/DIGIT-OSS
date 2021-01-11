@@ -1,20 +1,20 @@
+import { Container, Item } from "egov-ui-framework/ui-atoms";
+import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
+import set from "lodash/set";
 import React from "react";
 import { connect } from "react-redux";
 import { ActionDialog } from "../";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { Container, Item } from "egov-ui-framework/ui-atoms";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import {
-  getNextFinancialYearForRenewal,
-  getSearchResults
+  getNextFinancialYearForRenewal
 } from "../../ui-utils/commons";
 import { getDownloadItems } from "./downloadItems";
-import get from "lodash/get";
-import set from "lodash/set";
-import isEmpty from "lodash/isEmpty";
 import "./index.css";
 
 class Footer extends React.Component {
@@ -62,8 +62,8 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
-    if(item.buttonLabel === "ACTIVATE_CONNECTION"){
-      if(item.moduleName === "NewWS1" || item.moduleName === "NewSW1"){
+    if (item.buttonLabel === "ACTIVATE_CONNECTION") {
+      if (item.moduleName === "NewWS1" || item.moduleName === "NewSW1") {
         item.showEmployeeList = false;
       }
     }
@@ -81,13 +81,13 @@ class Footer extends React.Component {
           ? item.buttonUrl
           : item.buttonUrl;
 
-          /* Quick fix for edit mutation application */
-      if(url.includes('pt-mutation/apply')){   
-        url=url+'&mode=MODIFY' ; 
-        window.location.href=url.replace("/pt-mutation/",'');
+      /* Quick fix for edit mutation application */
+      if (url.includes('pt-mutation/apply')) {
+        url = url + '&mode=MODIFY';
+        window.location.href = url.replace("/pt-mutation/", '');
         return;
       }
-      
+
       setRoute(url);
       return;
     }
@@ -130,12 +130,12 @@ class Footer extends React.Component {
   };
 
   renewTradelicence = async (financialYear, tenantId) => {
-    const { setRoute, state } = this.props;
+    const { setRoute, state, toggleSnackbar } = this.props;
     const licences = get(
       state.screenConfiguration.preparedFinalObject,
       `Licenses`
     );
-
+    this.props.showSpinner();
     const nextFinancialYear = await getNextFinancialYearForRenewal(
       financialYear
     );
@@ -146,20 +146,36 @@ class Footer extends React.Component {
     set(licences[0], "applicationType", "RENEWAL");
     set(licences[0], "financialYear", nextFinancialYear);
 
-    const response = await httpRequest(
-      "post",
-      "/tl-services/v1/_update",
-      "",
-      [],
-      {
-        Licenses: licences
-      }
-    );
-    const renewedapplicationNo = get(response, `Licenses[0].applicationNumber`);
-    const licenseNumber = get(response, `Licenses[0].licenseNumber`);
-    setRoute(
-      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
-    );
+    try {
+      const response = await httpRequest(
+        "post",
+        "/tl-services/v1/_update",
+        "",
+        [],
+        {
+          Licenses: licences
+        }
+      );
+      const renewedapplicationNo = get(response, `Licenses[0].applicationNumber`);
+      const licenseNumber = get(response, `Licenses[0].licenseNumber`);
+      this.props.hideSpinner();
+      setRoute(
+        `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
+      );
+    } catch (exception) {
+      this.props.hideSpinner();
+      console.log(exception);
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill all the mandatory fields!",
+          labelKey: exception && exception.message || exception
+        },
+        "error"
+      );
+
+    }
+
   };
   render() {
     const {
@@ -182,8 +198,8 @@ class Footer extends React.Component {
           labelName: { buttonLabel },
           labelKey: `WF_${appName.toUpperCase()}_${moduleName.toUpperCase()}_${buttonLabel}`,
           link: () => {
-            (moduleName === "NewTL" || moduleName === "EDITRENEWAL" ) && buttonLabel==="APPLY" ? onDialogButtonClick(buttonLabel, isDocRequired) : 
-            this.openActionDialog(item);
+            (moduleName === "NewTL" || moduleName === "EDITRENEWAL") && buttonLabel === "APPLY" ? onDialogButtonClick(buttonLabel, isDocRequired) :
+              this.openActionDialog(item);
           }
         };
       });
@@ -233,14 +249,14 @@ class Footer extends React.Component {
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].validTo`
       );
-      const currentDate=Date.now();
-      const duration=validTo-currentDate;
+      const currentDate = Date.now();
+      const duration = validTo - currentDate;
       const renewalPeriod = get(
         state.screenConfiguration.preparedFinalObject,
         `renewalPeriod`
       );
-      if(rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
-      duration<=renewalPeriod ){
+      if (rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
+        duration <= renewalPeriod) {
         const editButton = {
           label: "Edit",
           labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
@@ -254,32 +270,32 @@ class Footer extends React.Component {
             );
           }
         };
-        
+
         const submitButton = {
           label: "Submit",
           labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
           link: () => {
             this.renewTradelicence(financialYear, tenantId);
           }
-        };    
-        if(responseLength > 1 ){
-          if(applicationType !== "NEW"){
+        };
+        if (responseLength > 1) {
+          if (applicationType !== "NEW") {
             downloadMenu && downloadMenu.push(editButton);
             downloadMenu && downloadMenu.push(submitButton);
           }
 
         }
-        else if(responseLength === 1){
-         
-            downloadMenu && downloadMenu.push(editButton);
-            downloadMenu && downloadMenu.push(submitButton);
-          }
+        else if (responseLength === 1) {
+
+          downloadMenu && downloadMenu.push(editButton);
+          downloadMenu && downloadMenu.push(submitButton);
+        }
 
 
-        
-      
+
+
+      }
     }
-  }
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",
@@ -325,7 +341,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setRoute: url => dispatch(setRoute(url))
+    setRoute: url => dispatch(setRoute(url)),
+    toggleSnackbar: (open, message, variant) =>
+      dispatch(toggleSnackbar(open, message, variant)),
+    showSpinner: () =>
+      dispatch(showSpinner()),
+    hideSpinner: () =>
+      dispatch(hideSpinner())
   };
 };
 

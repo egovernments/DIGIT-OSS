@@ -1,7 +1,7 @@
 import { DropDown, Icon, Image, List } from "components";
 import { getTransformedLocale, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import emptyFace from "egov-ui-kit/assets/images/download.png";
-import { getLocale, getTenantId, setTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId, setTenantId, getUserInfo, setStoredModulesList, setModule } from "egov-ui-kit/utils/localStorageUtils";
 import React, { Component } from "react";
 import LogoutDialog from "../LogoutDialog";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
@@ -9,7 +9,7 @@ import { CommonMenuItems } from "../NavigationDrawer/commonMenuItems";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { connect } from "react-redux";
 import get from "lodash/get";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
+import { setRoute, setLocalizationLabels } from "egov-ui-kit/redux/app/actions";
 
 import "./index.css";
 
@@ -94,6 +94,12 @@ class UserSettings extends Component {
       tenantId = userInfo && userInfo.permanentCity;
       tenantId = tenantInfo?tenantInfo:tenantId;
     }
+    var resetList=[];
+    var newList =JSON.stringify(resetList);
+    setStoredModulesList(newList);
+    let locale= getLocale();
+    let resultArray=[];
+    setLocalizationLabels(locale, resultArray);
     this.props.fetchLocalizationLabel(value, tenantId, tenantId);
   };
 

@@ -97,6 +97,7 @@ export const otherDetails = getCommonCard({
                 },
                 labelsFromLocalisation: true,
                 isClearable:true,
+                jsonPath: "Employee[0].education[0].yearOfPassing"
               }
             },
             university: {
@@ -142,6 +143,7 @@ export const otherDetails = getCommonCard({
                 },
                 labelsFromLocalisation: true,
                 isClearable:true,
+                jsonPath: "Employee[0].education[0].stream"
               },
             },
             remarks: {
@@ -225,6 +227,7 @@ export const otherDetails = getCommonCard({
                   moduleName: "egov-hrms",
                   masterName: "EmploymentTest"
                 },
+                jsonPath: "Employee[0].tests[0].test",
                 sourceJsonPath: "createScreenMdmsData.egov-hrms.EmploymentTest",
                 labelsFromLocalisation: true,
                 isClearable:true,
@@ -252,6 +255,7 @@ export const otherDetails = getCommonCard({
                   labelName: "Select Year",
                   labelKey: "HR_YEAR_PLACEHOLDER"
                 },
+                jsonPath: "Employee[0].tests[0].yearOfPassing",
                 sourceJsonPath: "yearsList",
                 labelsFromLocalisation: true,
                 isClearable:true,

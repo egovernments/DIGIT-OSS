@@ -427,6 +427,4 @@ export const loadPdfGenerationData = (applicationNumber, tenant) => {
   /** Logo loaded and stored in local storage in base64 */
   loadUlbLogo(tenant);
   loadApplicationData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
-  loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
-  loadMdmsData(tenant);
 };

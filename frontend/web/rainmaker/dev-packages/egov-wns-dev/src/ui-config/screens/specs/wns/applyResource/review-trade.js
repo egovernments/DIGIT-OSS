@@ -350,7 +350,7 @@ const getPropertyDetails = {
 };
 
 export const propertyOwnerDetail={
-  mobileNumber: getLabelWithValueForModifiedLabel(
+  mobileNumber: getLabelWithValue(
    {
      labelName: "Mobile Number",
        labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
@@ -361,7 +361,7 @@ export const propertyOwnerDetail={
   },
   { jsonPath: "WaterConnectionOld[0].property.owners[0].mobileNumber", callBack: handleNA },
 ),
- name: getLabelWithValueForModifiedLabel(
+ name: getLabelWithValue(
    {
      labelName: "Name",
      labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
@@ -374,7 +374,7 @@ export const propertyOwnerDetail={
   },
   { jsonPath: "WaterConnectionOld[0].property.owners[0].name", callBack: handleNA },
  ),
- email: getLabelWithValueForModifiedLabel(
+ email: getLabelWithValue(
    {
      labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
    },
@@ -386,7 +386,7 @@ export const propertyOwnerDetail={
   },
   { jsonPath: "WaterConnectionOld[0].property.owners[0].emailId", callBack: handleNA },
  ),
- gender: getLabelWithValueForModifiedLabel(
+ gender: getLabelWithValue(
    {
      labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
    },
@@ -402,7 +402,7 @@ export const propertyOwnerDetail={
   },
   { jsonPath: "WaterConnectionOld[0].property.owners[0].gender", callBack: handleNA },
  ),
- dateOfBirth: getLabelWithValueForModifiedLabel(
+ dateOfBirth: getLabelWithValue(
    {
      labelName: "Date Of Birth",
      labelKey: "WS_OWN_DETAIL_DOB_LABEL"
@@ -415,7 +415,7 @@ export const propertyOwnerDetail={
   },
   { jsonPath: "WaterConnectionOld[0].property.owners[0].dob", callBack: handleNA },
  ),
- fatherName: getLabelWithValueForModifiedLabel(
+ fatherName: getLabelWithValue(
    {
      labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
    },
@@ -425,7 +425,7 @@ export const propertyOwnerDetail={
   },
   { jsonPath: "WaterConnectionOld[0].property.owners[0].fatherOrHusbandName", callBack: handleNA },
  ),
- relationship: getLabelWithValueForModifiedLabel(
+ relationship: getLabelWithValue(
    {
      labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
    },
@@ -435,7 +435,7 @@ export const propertyOwnerDetail={
   },
   { jsonPath: "WaterConnectionOld[0].property.owners[0].relationship", callBack: handleNA },
  ),
- correspondenceAddress: getLabelWithValueForModifiedLabel(
+ correspondenceAddress: getLabelWithValue(
    {
      labelKey: "WS_OWN_DETAIL_CROSADD"
    },
@@ -444,7 +444,7 @@ export const propertyOwnerDetail={
     labelKey: "WS_OLD_LABEL_NAME"
   },
   { jsonPath: "WaterConnectionOld[0].property.owners[0].correspondenceAddress", callBack: handleNA },
- ), specialApplicantCategory: getLabelWithValueForModifiedLabel(
+ ), specialApplicantCategory: getLabelWithValue(
    {
      labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
    },
@@ -483,7 +483,7 @@ const holderHeader = getHeader({
 })
 
 export const connectionHolderDetails={
-  mobileNumber : getLabelWithValueForModifiedLabel(
+  mobileNumber : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"
      },
@@ -492,7 +492,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].mobileNumber", callBack: handleNA },
    ),
-    name : getLabelWithValueForModifiedLabel(
+    name : getLabelWithValue(
      {
        labelName: "Name",
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_OWN_NAME_LABEL"
@@ -502,7 +502,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].name", callBack: handleNA },
    ),
-    gender : getLabelWithValueForModifiedLabel(
+    gender : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL"
      },
@@ -514,7 +514,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].gender", callBack: handleNA },
    ),
-    fatherName : getLabelWithValueForModifiedLabel(
+    fatherName : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"
      },
@@ -523,7 +523,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].fatherOrHusbandName", callBack: handleNA },
    ),
-    relationship : getLabelWithValueForModifiedLabel(
+    relationship : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"
      },
@@ -532,7 +532,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].relationship", callBack: handleNA },
    ),
-    correspondenceAddress :getLabelWithValueForModifiedLabel(
+    correspondenceAddress :getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_CROSADD"
      },
@@ -544,7 +544,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].correspondenceAddress", callBack: handleNA },
    ),
-    specialApplicantCategory : getLabelWithValueForModifiedLabel(
+    specialApplicantCategory : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
      },

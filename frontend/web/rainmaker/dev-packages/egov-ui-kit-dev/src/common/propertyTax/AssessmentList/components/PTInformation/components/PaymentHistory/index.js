@@ -48,6 +48,7 @@ class PaymentHistory extends Component {
                 <div>
                     {getFullRow("PT_HISTORY_RECEIPT_NO", payment.paymentDetails[0].receiptNumber ? '' + payment.paymentDetails[0].receiptNumber : "NA", 12)}
                     {getFullRow("PT_HISTORY_AMOUNT_PAID", amount ? 'Rs ' + amount : "NA", 12)}
+                    {getFullRow("PT_HISTORY_PAYMENT_STATUS", payment.paymentStatus ? payment.paymentStatus  : "NA", 12)}
                     {getFullRow("PT_HISTORY_PAYMENT_DATE", payment.transactionDate ? getFormattedDate(payment.transactionDate) : "NA", 12)}
                     {getFullRow("PT_HISTORY_BILL_NO", payment.paymentDetails[0].bill.billNumber ? '' + payment.paymentDetails[0].bill.billNumber : "NA", 12)}
                     {getFullRow("PT_HISTORY_BILL_PERIOD", this.getBillPeriod(payment.paymentDetails[0].bill.billDetails), 6)}
@@ -59,7 +60,8 @@ class PaymentHistory extends Component {
                                 onClick={() => {
                                     const receiptQueryString= [
                                             { key: "receiptNumbers", value: payment.paymentDetails[0].receiptNumber },
-                                            { key: "tenantId", value: payment.paymentDetails[0].tenantId }
+                                            { key: "tenantId", value: payment.paymentDetails[0].tenantId },
+                                            { key: "businessService", value: 'PT' }
                                           ]
                                     downloadReceipt(receiptQueryString)
                                     // lastElement.onClick();

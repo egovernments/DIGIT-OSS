@@ -2,7 +2,7 @@ import _ from 'lodash';
 import CONFIG from '../config/configs';
 export default function getFilterObj(GFilterData, mdmsData, page) {
     let newGFilterData = _.cloneDeep(GFilterData);
-
+    let MODULE_LEVEL=JSON.parse(sessionStorage.getItem('MODULE_LEVEL'))
     /* Filter Customization */
     let tempValue = [],
         filters = {};
@@ -45,13 +45,13 @@ export default function getFilterObj(GFilterData, mdmsData, page) {
     }
     if(page){
         let dashKey ='';
-        for(var i=0; i<CONFIG.MODULE_LEVEL.length;i++){
-            dashKey = Object.keys(CONFIG.MODULE_LEVEL[i])[0];
+        for(var i=0; i<MODULE_LEVEL.length;i++){
+            dashKey = Object.keys(MODULE_LEVEL[i])[0];
             if(dashKey.toLowerCase() == page.toLowerCase() || 'ulb-'+dashKey == page.toLowerCase()){
-                filters['modulelevel'] = CONFIG.MODULE_LEVEL[i][dashKey]['filterKey'];
+                filters['modulelevel'] = MODULE_LEVEL[i][dashKey]['filterKey'];
                 break;
-            }else if(newGFilterData && newGFilterData['Services'] && newGFilterData['Services'].length > 0 && CONFIG.MODULE_LEVEL[i][dashKey] && CONFIG.MODULE_LEVEL[i][dashKey]['services_name'] == newGFilterData['Services'] ){
-                filters['modulelevel'] = CONFIG.MODULE_LEVEL[i][dashKey]['filterKey'];
+            }else if(newGFilterData && newGFilterData['Services'] && newGFilterData['Services'].length > 0 && MODULE_LEVEL[i][dashKey] && MODULE_LEVEL[i][dashKey]['services_name'] == newGFilterData['Services'] ){
+                filters['modulelevel'] = MODULE_LEVEL[i][dashKey]['filterKey'];
                 break;
             }
         }

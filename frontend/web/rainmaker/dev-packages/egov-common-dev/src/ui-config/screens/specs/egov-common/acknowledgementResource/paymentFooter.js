@@ -3,9 +3,15 @@ import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { ifUserRoleExists } from "../../utils";
 import './acknowledgementUtils.css';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const getHomeButtonPath = (item) => {
-    return isPublicSearch() ? "/withoutAuth/pt-mutation/public-search" : (ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox"));
+    const consumerCode = getQueryArg(window.location.href, "consumerCode");
+    let url = "/withoutAuth/pt-mutation/public-search";
+    if(consumerCode.includes("WS") || consumerCode.includes("SW")) {
+        url = "/withoutAuth/wns/public-search";
+    }
+    return isPublicSearch() ? url : (ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox"));
 }
 
 const getCommonApplyFooter = children => {

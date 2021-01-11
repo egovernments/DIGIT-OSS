@@ -57,7 +57,7 @@ export const TransferOwnership = ({ ownershipTransfer, openDialog }) => {
         }
         buttonStyle={buttonStyle}
         onClick={() => {
-          openDialog("pendingAmountDue");
+          openDialog("docRequired");
         }}
       ></Button>
     )

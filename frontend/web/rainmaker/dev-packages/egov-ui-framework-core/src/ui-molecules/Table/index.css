@@ -16,6 +16,10 @@ table tbody  tr  td {
 }
 
 @media only screen and (max-width: 960px) {
+  table {
+    table-layout: fixed !important;
+  }
+
   table tbody tr td {
     width: 45% !important;
     padding:4px 8px 4px 10px !important;
@@ -24,6 +28,7 @@ table tbody  tr  td {
     text-overflow: ellipsis!important;
     white-space: nowrap!important;
     overflow: hidden!important;
+    word-break: break-all !important;
   }
   table tbody tr td p{
    

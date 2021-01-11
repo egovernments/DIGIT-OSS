@@ -1,0 +1,25 @@
+.ack-tail{
+    text-align: right;
+    justify-content: center;
+    flex: 1
+}
+
+@media only screen and (max-width: 768px) {
+    .home-footer {
+     min-width: 360px !important;
+    }
+
+    .ack-body, .ack-tail {
+      display: contents;
+      text-align: center;
+    }
+  
+   
+  }
+  @media only screen and (min-width: 768px) {
+    .home-footer {
+     min-width: 200px !important;
+    }
+  
+   
+  }

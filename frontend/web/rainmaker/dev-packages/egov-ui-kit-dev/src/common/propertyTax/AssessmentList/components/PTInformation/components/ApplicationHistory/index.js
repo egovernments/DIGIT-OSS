@@ -30,13 +30,25 @@ class ApplicationHistory extends Component {
     }
 
     getUniqueList = (list = []) => {
-        let newList = [];
-        list.map(element => {
-          if (!JSON.stringify(newList).includes(JSON.stringify(element.acknowldgementNumber))) {
-            newList.push(element);
+        // let newList = [];
+        // list.map(element => {
+        //   if (!JSON.stringify(newList).includes(JSON.stringify(element.acknowldgementNumber))) {
+        //     newList.push(element);
+        //   }
+        // })
+        // return newList;
+        let propertyObject = {}
+        list.map(property => {
+            if(!propertyObject[property.acknowldgementNumber] ){
+                propertyObject[property.acknowldgementNumber] = { ...property }
+            }
+         else if ( propertyObject[property.acknowldgementNumber].status == 'INACTIVE'  ) {
+            propertyObject[property.acknowldgementNumber] = { ...propertyObject[property.acknowldgementNumber] }
+          } else if (propertyObject[property.acknowldgementNumber].status == 'INWORKFLOW' || property.status=='INACTIVE') {
+            propertyObject[property.acknowldgementNumber] = { ...property}
           }
         })
-        return newList;
+        return Object.values(propertyObject);
       }
 
     getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
@@ -54,7 +66,7 @@ class ApplicationHistory extends Component {
           );
           prepareFinalObject("propertiesAudit", payload.Properties);
           if (payload && payload.Properties.length > 0) {
-            payload.Properties=this.getUniqueList(payload.Properties);
+            payload.Properties=this.getUniqueList(payload.Properties.sort((y,x)=>x.auditDetails.lastModifiedTime-y.auditDetails.lastModifiedTime));
             return payload.Properties;
           }
         } catch (e) {

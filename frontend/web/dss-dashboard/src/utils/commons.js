@@ -11,7 +11,7 @@ export const removeSignFromInsightData = (value = '') => {
 }
 
 export const getLocaleLabels = (key = "", strings = {}) => {
-    return strings[removeSpaceInLocalisationKey(key)] || key;
+    return strings[removeSpaceInLocalisationKey(key)] || removeSpaceInLocalisationKey(key);
 }
 
 const removeSpaceInLocalisationKey = (key = "") => {
@@ -20,7 +20,7 @@ const removeSpaceInLocalisationKey = (key = "") => {
     while (tempKey.includes(' ')) {
         tempKey = tempKey.replace(' ', '_');
     }
-    return tempKey;
+    return tempKey.toUpperCase();
 }
 
 export const getTenantId = () => {
@@ -36,11 +36,11 @@ export const fetchLocalisationRequest = (language) => {
     const reqBody = {}
     return { reqHeaders, reqBody, reqUrl };
 }
-export const convertLabelValue=(label='')=>{
+export const convertLabelValue=(label='',strings={})=>{
     switch(label){
         case "Boundary":
-            return 'City';
+            return 'DSS_TB_City';
         default:
-            return label;
+            return getLocaleLabels(`DSS_TB_${label}`,strings);
     }
 }

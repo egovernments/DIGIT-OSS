@@ -1,34 +1,23 @@
-import { httpRequest } from "./api";
-import store from "../ui-redux/store";
 import {
-  convertDateToEpoch,
-  getCurrentFinancialYear,
-  getCheckBoxJsonpath,
-  getSafetyNormsJson,
-  getHygeneLevelJson,
-  getLocalityHarmedJson,
-  setFilteredTradeTypes,
-  getTradeTypeDropdownData
-} from "../ui-config/screens/specs/utils";
-import {
-  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
   toggleSnackbar,
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getTranslatedLabel,
-  //updateDropDowns,
-  ifUserRoleExists
-} from "../ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  getFileUrlFromAPI, getQueryArg, setBusinessServiceDataToLocalStorage
+} from "egov-ui-framework/ui-utils/commons";
+import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import {
-  getQueryArg,
-  getFileUrlFromAPI
-} from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+  convertDateToEpoch,
+  getCurrentFinancialYear, getTranslatedLabel,
+  //updateDropDowns,
+  ifUserRoleExists
+} from "../ui-config/screens/specs/utils";
+import store from "../ui-redux/store";
+import { httpRequest } from "./api";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -83,7 +72,36 @@ export const getSearchResults = async (dispatch, queryObject) => {
   }
 };
 
-export const getGroupBillSearch = async (dispatch,searchScreenObject) => {
+export const getPaymentSearchResults = async (queryObject, dispatch) => {
+  try {
+    let businessService = '';
+    queryObject && Array.isArray(queryObject) && queryObject.map(query => {
+      if (query.key == "businessService") {
+        businessService = query.value;
+      }
+    })
+    queryObject = queryObject && Array.isArray(queryObject) && queryObject.filter(query => query.key != "businessService")
+    const response = await httpRequest(
+      "post",
+      getPaymentSearchAPI(businessService),
+      "",
+      queryObject
+    );
+
+    return response;
+  } catch (error) {
+    // enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+export const getGroupBillSearch = async (dispatch, searchScreenObject) => {
   try {
     dispatch(toggleSpinner());
     const response = await httpRequest(
@@ -181,8 +199,8 @@ export const getBoundaryData = async (
           name: `${tenantId
             .toUpperCase()
             .replace(/[.]/g, "_")}_REVENUE_${item.code
-            .toUpperCase()
-            .replace(/[._:-\s\/]/g, "_")}`
+              .toUpperCase()
+              .replace(/[._:-\s\/]/g, "_")}`
         });
         return result;
       }, []);

@@ -168,7 +168,7 @@ const generateDocument = ( item, modulePrifx ) => {
       style: styles.description
     }
   )
-
+  console.log("docs in core",docs)
   return getCommonGrayCard({
     subHeader: subHeader,
     break: getBreak(),

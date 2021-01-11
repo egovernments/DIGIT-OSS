@@ -50,6 +50,9 @@ class downloadFile extends React.Component {
       linkDetail.labelKey,
       localizationLabels
     );
+    if(value && !value.includes("https")) {
+      value.replace(/http/g, "https")
+    }
 
     return (
       <div>
