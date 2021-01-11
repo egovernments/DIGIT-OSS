@@ -666,7 +666,7 @@ img, video {
   .card, .card-emp {
     margin-left: auto;
     margin-right: auto;
-    padding-right: 16px;
+    padding-right: 300px;
     padding-left: 16px;
     padding-top: 16px; }
     .card .card-header, .card-emp .card-header {
@@ -854,6 +854,7 @@ img, video {
   margin-bottom: 24px;
   position: relative; }
   .employee-select-wrap .select {
+    position: relative;
     display: block;
     width: 100%;
     height: 2.5rem;
@@ -862,6 +863,10 @@ img, video {
     border-color: rgba(11, 12, 12, var(--border-opacity)); }
     .employee-select-wrap .select input[type=text], .employee-select-wrap .select .checkbox-wrap .input-emp[type=text], .checkbox-wrap .employee-select-wrap .select .input-emp[type=text] {
       width: calc(100% - 32px);
+      background-color: transparent;
+      position: absolute;
+      z-index: 10;
+      width: 100%;
       height: 100%;
       outline: 2px solid transparent;
       outline-offset: 2px;
@@ -882,7 +887,11 @@ img, video {
       width: 1.5rem;
       margin-top: 8px;
       margin-right: 8px; }
+    .employee-select-wrap .select svg {
+      position: absolute;
+      right: 0; }
   .employee-select-wrap .select-active {
+    position: relative;
     display: block;
     width: 100%;
     height: 2.5rem;
@@ -891,6 +900,10 @@ img, video {
     border-color: rgba(244, 119, 56, var(--border-opacity)); }
     .employee-select-wrap .select-active input[type=text], .employee-select-wrap .select-active .checkbox-wrap .input-emp[type=text], .checkbox-wrap .employee-select-wrap .select-active .input-emp[type=text] {
       width: calc(100% - 32px);
+      background-color: transparent;
+      position: absolute;
+      z-index: 10;
+      width: 100%;
       height: 100%;
       outline: 2px solid transparent;
       outline-offset: 2px;
@@ -911,6 +924,9 @@ img, video {
       width: 1.5rem;
       margin-top: 8px;
       margin-right: 8px; }
+    .employee-select-wrap .select-active svg {
+      position: absolute;
+      right: 0; }
   .employee-select-wrap .options-card {
     width: 100% !important;
     -webkit-box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
@@ -918,7 +934,7 @@ img, video {
     max-height: 400px;
     overflow: scroll;
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     margin-top: 4px;
     --bg-opacity:1;
     background-color: #fff;
@@ -942,6 +958,7 @@ img, video {
   margin-bottom: 24px;
   position: relative; }
   .select-wrap .select, .select-wrap-emp .select {
+    position: relative;
     display: block;
     width: 100%;
     height: 2.5rem;
@@ -950,6 +967,10 @@ img, video {
     border-color: rgba(11, 12, 12, var(--border-opacity)); }
     .select-wrap .select input[type=text], .select-wrap-emp .select input[type=text], .select-wrap .select .checkbox-wrap .input-emp[type=text], .checkbox-wrap .select-wrap .select .input-emp[type=text], .select-wrap-emp .select .checkbox-wrap .input-emp[type=text], .checkbox-wrap .select-wrap-emp .select .input-emp[type=text] {
       width: calc(100% - 32px);
+      background-color: transparent;
+      position: absolute;
+      z-index: 10;
+      width: 100%;
       height: 100%;
       outline: 2px solid transparent;
       outline-offset: 2px;
@@ -970,7 +991,11 @@ img, video {
       width: 1.5rem;
       margin-top: 8px;
       margin-right: 8px; }
+    .select-wrap .select svg, .select-wrap-emp .select svg {
+      position: absolute;
+      right: 0; }
   .select-wrap .select-active, .select-wrap-emp .select-active {
+    position: relative;
     display: block;
     width: 100%;
     height: 2.5rem;
@@ -979,6 +1004,10 @@ img, video {
     border-color: rgba(244, 119, 56, var(--border-opacity)); }
     .select-wrap .select-active input[type=text], .select-wrap-emp .select-active input[type=text], .select-wrap .select-active .checkbox-wrap .input-emp[type=text], .checkbox-wrap .select-wrap .select-active .input-emp[type=text], .select-wrap-emp .select-active .checkbox-wrap .input-emp[type=text], .checkbox-wrap .select-wrap-emp .select-active .input-emp[type=text] {
       width: calc(100% - 32px);
+      background-color: transparent;
+      position: absolute;
+      z-index: 10;
+      width: 100%;
       height: 100%;
       outline: 2px solid transparent;
       outline-offset: 2px;
@@ -999,12 +1028,15 @@ img, video {
       width: 1.5rem;
       margin-top: 8px;
       margin-right: 8px; }
+    .select-wrap .select-active svg, .select-wrap-emp .select-active svg {
+      position: absolute;
+      right: 0; }
   .select-wrap .options-card, .select-wrap-emp .options-card {
     width: 100% !important;
     -webkit-box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     margin-top: 4px;
     --bg-opacity:1;
     background-color: #fff;
@@ -1548,7 +1580,6 @@ img, video {
     line-height: 28px; } }
 
 .status-highlight {
-  float: right;
   --bg-opacity:12%!important;
   border-radius: 16px;
   height: 2rem;

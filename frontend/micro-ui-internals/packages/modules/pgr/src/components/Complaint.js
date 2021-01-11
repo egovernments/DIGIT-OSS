@@ -22,14 +22,15 @@ const Complaint = ({ data, path }) => {
   return (
     <React.Fragment>
       <Card onClick={handleClick}>
-        <div className={`status-highlight ${closedStatus.includes(applicationStatus) ? "success" : ""}`}>
-          <p>{(closedStatus.includes(applicationStatus) ? t("CS_COMMON_CLOSED") : t("CS_COMMON_OPEN")).toUpperCase()}</p>
-        </div>
         <CardSubHeader>{t(`SERVICEDEFS.${serviceCode.toUpperCase()}`)}</CardSubHeader>
 
         <DateWrap date={Digit.DateUtils.ConvertTimestampToDate(data.auditDetails.createdTime)} />
 
         <KeyNote keyValue={t(`${LOCALIZATION_KEY.CS_COMMON}_COMPLAINT_NO`)} note={serviceRequestId} />
+
+        <div className={`status-highlight ${closedStatus.includes(applicationStatus) ? "success" : ""}`}>
+          <p>{(closedStatus.includes(applicationStatus) ? t("CS_COMMON_CLOSED") : t("CS_COMMON_OPEN")).toUpperCase()}</p>
+        </div>
 
         {t(`${LOCALIZATION_KEY.CS_COMMON}_${applicationStatus}`)}
       </Card>
