@@ -47,7 +47,7 @@ public class Main {
     @Bean
     @Profile("!test")
     public CacheManager cacheManager(){
-        return new SpringCache2kCacheManager().addCaches(b->b.name("workflow").expireAfterWrite(workflowExpiry, TimeUnit.MINUTES).entryCapacity(10));
+        return new SpringCache2kCacheManager().addCaches(b->b.name("businessService").expireAfterWrite(workflowExpiry, TimeUnit.MINUTES).entryCapacity(10));
     }
 
 }
