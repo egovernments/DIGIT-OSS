@@ -229,12 +229,14 @@ router.post(
         properties.Properties.length > 0
       ) {
         var propertyid = properties.Properties[0].propertyId;
+        var bussinessService = "PT";
         var paymentresponse;
         try {
           paymentresponse = await search_payment(
             propertyid,
             tenantId,
-            requestinfo
+            requestinfo,
+            bussinessService
           );
         } catch (ex) {
           console.log(ex.stack);

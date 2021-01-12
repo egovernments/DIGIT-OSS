@@ -18,6 +18,7 @@ router.post(
   asyncMiddleware(async function (req, res, next) {
     var tenantId = req.query.tenantId;
     var consumerCode = req.query.consumerCode;
+    var bussinessService = req.query.bussinessService;
     var requestinfo = req.body;
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
@@ -31,7 +32,7 @@ router.post(
     }
     try {
       try {
-        resProperty = await search_payment(consumerCode, tenantId, requestinfo);
+        resProperty = await search_payment(consumerCode, tenantId, requestinfo, bussinessService);
       } catch (ex) {
         console.log(ex.stack);
         if (ex.response && ex.response.data) console.log(ex.response.data);

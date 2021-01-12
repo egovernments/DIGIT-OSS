@@ -71,11 +71,13 @@ async function search_workflow(applicationNumber, tenantId, requestinfo) {
   });
 }
 
-async function search_payment(consumerCodes, tenantId, requestinfo) {
+async function search_payment(consumerCodes, tenantId, requestinfo, bussinessService) {
   var params = {
     tenantId: tenantId,
     consumerCodes: consumerCodes,
   };
+  var searchEndpoint = config.paths.payment_search;
+  searchEndpoint = searchEndpoint.replace(/\$module/g,bussinessService);
   if (checkIfCitizen(requestinfo)) {
     var mobileNumber = requestinfo.RequestInfo.userInfo.mobileNumber;
     var userName = requestinfo.RequestInfo.userInfo.userName;
@@ -83,7 +85,7 @@ async function search_payment(consumerCodes, tenantId, requestinfo) {
   }
   return await axios({
     method: "post",
-    url: url.resolve(config.host.payments, config.paths.payment_search),
+    url: url.resolve(config.host.payments, searchEndpoint),
     data: requestinfo,
     params,
   });
