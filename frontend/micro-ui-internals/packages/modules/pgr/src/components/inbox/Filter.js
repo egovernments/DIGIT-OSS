@@ -33,7 +33,7 @@ const Filter = (props) => {
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
-    Digit.SessionStorage.set("pgr_assigned", value.code === "ASSIGNED_TO_ME" ? value : "");
+    Digit.SessionStorage.set("pgr_assigned", value);
     uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
     setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
   };
