@@ -1,7 +1,10 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
-## 1.1.0
+## 1.2.0 - 2021-01-12
+- Added support for public domain search
+
+## 1.1.0 - 2020-10-1
 - Added  validtion in non meter reading for modify sewerages connection feature.
 
 ## 1.0.0
