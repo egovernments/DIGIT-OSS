@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.egov.Utils.Utils;
 import org.egov.contract.User;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -29,17 +30,22 @@ public class EventLogRequest {
 
     Object responseBody;
 
+    String method;
+    String referer;
     String url;
     String responseContentType;
     String queryParams;
+    Integer uid;
+    String username;
 
     int statusCode;
 
     String timestamp;
+    String userType;
     Long requestDuration;
 
     String correlationId;
-
+    String userTenantId;
     String userId;
 
     String tenantId;
@@ -53,21 +59,39 @@ public class EventLogRequest {
         });
     }
 
-    public static EventLogRequest fromRequestContext(RequestContext ctx) {
+    public static EventLogRequest fromRequestContext(RequestContext ctx, RequestCaptureCriteria criteria) {
         Object body = null;
-        body = ctx.get(CURRENT_REQUEST_SANITIZED_BODY);
-        Long startTime = (Long)ctx.get(CURRENT_REQUEST_START_TIME);
+        if (criteria.isCaptureInputBody()) {
+            body = ctx.get(CURRENT_REQUEST_SANITIZED_BODY_STR);
+
+            if (body == null) {
+                try {
+                    body = IOUtils.toString(ctx.getRequest().getInputStream());
+                } catch (IOException e) {
+
+                }
+            }
+        }
+
+        String referer = ctx.getRequest().getHeader("referer");
+        String method = ctx.getRequest().getMethod();
+        Long startTime = (Long) ctx.get(CURRENT_REQUEST_START_TIME);
         Long endTime = System.currentTimeMillis();
         ctx.set(CURRENT_REQUEST_END_TIME, endTime);
 
-        Object responseBody = null ;
-
-        if (isJsonResponse(ctx)) {
+        Object responseBody = null;
+        boolean isErrorStatusCode = !(ctx.getResponseStatusCode() >= 200 && ctx.getResponseStatusCode() < 300);
+        if (
+            criteria.isCaptureOutputBody() ||
+                (criteria.isCaptureOutputBodyOnlyForError() && isErrorStatusCode)
+        ) {
             try {
                 responseBody = Utils.getResponseBody(ctx);
-                responseBody = objectMapper.readValue((String)responseBody,
-                    new TypeReference<HashMap<String, Object>>() {
-                    });
+                if (isJsonResponse(ctx)) {
+                    responseBody = objectMapper.readValue((String) responseBody,
+                        new TypeReference<HashMap<String, Object>>() {
+                        });
+                }
             } catch (Exception e) {
                 log.error("Exception while reading body", e);
             }
@@ -75,10 +99,19 @@ public class EventLogRequest {
 
 
         User user = (User) ctx.get(USER_INFO_KEY);
-        String uuid = "";
 
+        String uuid = "";
+        String userType = "";
+        String userTenantId = "";
+        String userName = "";
+        Integer userId = 0;
+        
         if (user != null) {
             uuid = user.getUuid();
+            userType = user.getType();
+            userTenantId = user.getTenantId();
+            userName = user.getUserName();
+            userId = user.getId();
         }
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
@@ -87,14 +120,20 @@ public class EventLogRequest {
 
         EventLogRequest req = EventLogRequest.builder()
             .requestBody(body)
+            .method(method)
+            .referer(referer)
+            .username(userName)
+            .uid(userId)
+            .userType(userType)
             .responseBody(responseBody)
             .queryParams(ctx.getRequest().getQueryString())
-            .correlationId((String)ctx.get(CORRELATION_ID_KEY))
+            .correlationId((String) ctx.get(CORRELATION_ID_KEY))
             .statusCode(ctx.getResponseStatusCode())
             .timestamp(formatter.format(date))
             .requestDuration(endTime - startTime)
             .userId(uuid)
-            .tenantId((String)ctx.get(CURRENT_REQUEST_TENANTID))
+            .userTenantId(userTenantId)
+            .tenantId((String) ctx.get(CURRENT_REQUEST_TENANTID))
             .url(ctx.getRequest().getRequestURI()).build();
 
         return req;

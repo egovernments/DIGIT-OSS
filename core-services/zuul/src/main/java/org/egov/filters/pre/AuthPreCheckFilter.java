@@ -145,6 +145,7 @@ public class AuthPreCheckFilter extends ZuulFilter {
         try {
             String requestSanitizedBody = objectMapper.writeValueAsString(requestBodyInspector.getRequestBody());
             ctx.set(CURRENT_REQUEST_SANITIZED_BODY, requestBodyInspector.getRequestBody());
+            ctx.set(CURRENT_REQUEST_SANITIZED_BODY_STR, requestSanitizedBody);
             requestWrapper.setPayload(requestSanitizedBody);
         } catch (JsonProcessingException e) {
             logger.error(FAILED_TO_SERIALIZE_REQUEST_BODY_MESSAGE, e);
