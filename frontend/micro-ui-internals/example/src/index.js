@@ -13,14 +13,15 @@ import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
 import GRO from "./userInfo/gro.json";
-
+import QACSR from "./userInfo/qa-csr.json";
+import QACT from "./userInfo/qa-citizen.json";
 import Registry from "./ComponentRegistry";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
 
-const userInfo = { CITIZEN, EMPLOYEE, LME, GRO };
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT };
 
 const enabledModules = ["PGR", "FSM"];
 const registry = new Registry({
@@ -39,6 +40,8 @@ window.Digit.Customizations = { PGR: pgrCustomizations };
 const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
+
+console.log(token);
 
 const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
 const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
