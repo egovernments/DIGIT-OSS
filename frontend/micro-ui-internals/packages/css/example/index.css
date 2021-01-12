@@ -1162,7 +1162,7 @@ img, video {
   .card-input-emp {
     width: 240px; } }
 
-.success-wrap {
+.emp-success-wrap, .success-wrap {
   display: block;
   --bg-opacity:1;
   background-color: #00703c;
@@ -1175,14 +1175,14 @@ img, video {
   padding-top: 16px;
   padding-bottom: 8px;
   margin-bottom: 16px; }
-  .success-wrap header {
+  .emp-success-wrap header, .success-wrap header {
     display: block;
     margin-bottom: 8px;
     font-family: Roboto Condensed,sans-serif;
     font-weight: 700;
     font-size: 32px;
     line-height: 40px; }
-  .success-wrap div img, .success-wrap div svg {
+  .emp-success-wrap div img, .emp-success-wrap div svg, .success-wrap div img, .success-wrap div svg {
     padding: 13.67px;
     margin-left: auto;
     margin-right: auto;
@@ -1196,17 +1196,17 @@ img, video {
     background-color: #fff;
     background-color: rgba(255, 255, 255, var(--bg-opacity));
     margin-bottom: 16px; }
-  .success-wrap div h2 {
+  .emp-success-wrap div h2, .success-wrap div h2 {
     font-size: 16px;
     line-height: 19px;
     margin-bottom: 8px; }
-  .success-wrap div h2, .success-wrap div p {
+  .emp-success-wrap div h2, .emp-success-wrap div p, .success-wrap div h2, .success-wrap div p {
     font-weight: 700; }
-  .success-wrap div p {
+  .emp-success-wrap div p, .success-wrap div p {
     font-size: 18px;
     line-height: 21px; }
 
-.error-wrap {
+.emp-error-wrap, .error-wrap {
   display: block;
   --bg-opacity:1;
   background-color: #d4351c;
@@ -1219,14 +1219,14 @@ img, video {
   padding-top: 16px;
   padding-bottom: 8px;
   margin-bottom: 16px; }
-  .error-wrap header {
+  .emp-error-wrap header, .error-wrap header {
     display: block;
     margin-bottom: 8px;
     font-family: Roboto Condensed,sans-serif;
     font-weight: 700;
     font-size: 32px;
     line-height: 40px; }
-  .error-wrap img, .error-wrap svg {
+  .emp-error-wrap img, .emp-error-wrap svg, .error-wrap img, .error-wrap svg {
     margin-left: auto;
     margin-right: auto;
     padding: 13.67px;
@@ -1247,9 +1247,19 @@ img, video {
     .success-wrap header {
       font-size: 48px;
       line-height: 56px; }
+  .emp-success-wrap {
+    width: 100%; }
+    .emp-success-wrap header {
+      font-size: 48px;
+      line-height: 56px; }
   .error-wrap {
     width: calc(100% + 284px); }
     .error-wrap header {
+      font-size: 48px;
+      line-height: 56px; }
+  .emp-error-wrap {
+    width: 100%; }
+    .emp-error-wrap header {
       font-size: 48px;
       line-height: 56px; } }
 
