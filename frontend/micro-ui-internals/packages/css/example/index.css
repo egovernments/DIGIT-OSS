@@ -1242,12 +1242,16 @@ img, video {
     margin-bottom: 16px; }
 
 @media (min-width: 780px) {
-  .success-wrap header {
-    font-size: 48px;
-    line-height: 56px; }
-  .error-wrap header {
-    font-size: 48px;
-    line-height: 56px; } }
+  .success-wrap {
+    width: calc(100% + 284px); }
+    .success-wrap header {
+      font-size: 48px;
+      line-height: 56px; }
+  .error-wrap {
+    width: calc(100% + 284px); }
+    .error-wrap header {
+      font-size: 48px;
+      line-height: 56px; } }
 
 .photos-wrap {
   max-width: 640px;
