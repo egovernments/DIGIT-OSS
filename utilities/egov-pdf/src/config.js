@@ -50,7 +50,7 @@ module.exports = {
     user_search: "/user/_search",
     mdms_search: "/egov-mdms-service/v1/_search",
     download_url: "/download/epass",
-    payment_search: "/collection-services/payments/_search",
+    payment_search: "/collection-services/payments/$module/_search",
     bill_search: "/egov-searcher/bill-genie/billswithaddranduser/_get",
     workflow_search: "/egov-workflow-v2/egov-wf/process/_search"
   },

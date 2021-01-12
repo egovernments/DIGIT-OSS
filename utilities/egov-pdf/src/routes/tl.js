@@ -53,12 +53,14 @@ router.post(
         tradelicenses.Licenses.length > 0
       ) {
         var applicationNumber = tradelicenses.Licenses[0].applicationNumber;
+        var bussinessService = "TL";
         var paymentresponse;
         try {
           paymentresponse = await search_payment(
             applicationNumber,
             tenantId,
-            requestinfo
+            requestinfo,
+            bussinessService
           );
         } catch (ex) {
           console.log(ex.stack);
