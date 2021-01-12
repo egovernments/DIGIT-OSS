@@ -53,7 +53,6 @@ import org.egov.demand.web.contract.DemandRequest;
 import org.egov.demand.web.contract.DemandResponse;
 import org.egov.demand.web.contract.RequestInfoWrapper;
 import org.egov.demand.web.contract.factory.ResponseFactory;
-import org.egov.demand.web.validator.DemandValidatorV1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -104,7 +103,7 @@ public class DemandController {
 	@PostMapping("_update")
 	public ResponseEntity<?> update(@RequestHeader HttpHeaders headers, @RequestBody @Valid DemandRequest demandRequest) {
 
-		return new ResponseEntity<>(demandService.updateAsync(demandRequest), HttpStatus.CREATED);
+		return new ResponseEntity<>(demandService.updateAsync(demandRequest, null), HttpStatus.CREATED);
 	}
 
 	@PostMapping("_search")

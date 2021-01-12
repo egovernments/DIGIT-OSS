@@ -4,15 +4,19 @@ import static org.egov.demand.util.Constants.ADVANCE_BUSINESSSERVICE_JSONPATH_CO
 import static org.egov.demand.util.Constants.INVALID_TENANT_ID_MDMS_KEY;
 import static org.egov.demand.util.Constants.INVALID_TENANT_ID_MDMS_MSG;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.AuditDetails;
+import org.egov.demand.model.Demand;
+import org.egov.demand.model.DemandDetail;
 import org.egov.demand.repository.ServiceRequestRepository;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
@@ -22,15 +26,16 @@ import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.CollectionUtils;
 
 @Component
 @Slf4j
@@ -177,6 +182,70 @@ public class Util {
 			throw new CustomException("BUSINESSSERVICE_ERROR","Failed to fetch isAdvanceAllowed for businessService: "+businessService);
 
 		return isAdvanceAllowed.get(0);
+	}
+	
+	public String getValueFromAdditionalDetailsForKey (Object additionalDetails, String key) {
+		
+		@SuppressWarnings("unchecked")
+		Map<String, Object> additionalDetailMap = mapper.convertValue(additionalDetails, Map.class);
+		if(null == additionalDetails) 
+			return "";
+		
+		return (String) additionalDetailMap.get(key);
+	}
+	
+	/**
+	 * Setting the receiptnumber from payment to bill
+	 * @param request
+	 * @param uuid
+	 * @return
+	 */
+	public ObjectNode setValuesAndGetAdditionalDetails(JsonNode additionalDetails, String key, String value) {
+
+		ObjectNode objectNodeDetail;
+
+		if (null == additionalDetails || (null != additionalDetails && additionalDetails.isNull())) {
+			objectNodeDetail = mapper.createObjectNode();
+
+		} else {
+
+			objectNodeDetail = (ObjectNode) additionalDetails;
+		}
+		objectNodeDetail.put(key, value);
+		
+		return objectNodeDetail;
+	}
+
+	/**
+	 * to Check and update whether a demand has been completely paid or not
+	 * 
+	 * demand payment will be complete when tax and collection are equal and the method is called with payment true
+	 * 
+	 * if the call happens with payment false and the demand is already tallied even then the demands won't be set to paid-completely to allow zero payment
+	 */
+	public void updateDemandPaymentStatus(Demand demand, Boolean isUpdateFromPayment) {
+		BigDecimal totoalTax = demand.getDemandDetails().stream().map(DemandDetail::getTaxAmount)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		BigDecimal totalCollection = demand.getDemandDetails().stream().map(DemandDetail::getCollectionAmount)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		if (totoalTax.compareTo(totalCollection) == 0 && isUpdateFromPayment)
+			demand.setIsPaymentCompleted(true);
+		else if (totoalTax.compareTo(totalCollection) != 0)
+			demand.setIsPaymentCompleted(false);
+	}
+	
+	/**
+	 * validates state level tenant-id for citizens and employees
+	 * 
+	 */
+	public void validateTenantIdForUserType(String tenantId, RequestInfo requestInfo) {
+
+		String userType = requestInfo.getUserInfo().getType();
+		if(Constants.EMPLOYEE_TYPE_CODE.equalsIgnoreCase(userType) && tenantId.split("\\.").length == 1) {
+			throw new CustomException("EG_BS_INVALID_TENANTID","Employees cannot search based on state level tenantid");
+		}
 	}
 	
 }

@@ -39,6 +39,8 @@
  */
 package org.egov.collection.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -74,6 +76,9 @@ public class ApplicationProperties {
 
     @Value("${egov.services.hostname}")
     private String egovServiceHost;
+
+    @Value("${egov.pdf.service.create}")
+    private String egovPdfCreate;
 
     @Value("${egov.egfcommonmasters.hostname}")
     private String egfcommonmastersHost;
@@ -122,6 +127,9 @@ public class ApplicationProperties {
 
     @Value("${kafka.topics.bankaccountservicemapping.create.name}")
     private String createBankAccountServiceMappingTopicName;
+
+    @Value("${kafka.topics.filestore}")
+    private String fileStore;
     
     @Value("${receiptnumber.idname}")
     private String receiptNumberIdName;
@@ -137,6 +145,9 @@ public class ApplicationProperties {
 
     @Value("${collection.receipts.search.default.size}")
     private Integer receiptsSearchDefaultLimit;
+
+    @Value("${collection.receipts.search.max.size}")
+    private Integer receiptsSearchMaxLimit;
     
     @Value("${egov.apportion.service.host}")
     private String apportionHost;
@@ -162,6 +173,14 @@ public class ApplicationProperties {
     @Value("${kafka.topics.payment.receiptlink.key}")
     private String paymentReceiptLinkTopicKey;
 
+    @Value("${coll.notification.ui.host}")
+    private String uiHost;
+
+    @Value("${coll.notification.ui.redirect.url}")
+    private String uiRedirectUrl;
+
+    @Value("${coll.notification.fallback.locale}")
+    private String fallBackLocale;
 
 
     // Payment properties
@@ -177,11 +196,16 @@ public class ApplicationProperties {
 
     @Value("${kafka.topics.payment.cancel.name}")
     private String cancelPaymentTopicName;
-
+    
+    @Value("#{'${search.ignore.status}'.split(',')}")
+    private List<String> searchIgnoreStatus;
+    
+    @Value("${is.payment.search.uri.modulename.mandatory}")
+    private Boolean isModuleNameMandatoryInSearchUriForEmployee;
+    
 
     @Value("${kafka.topics.payment.cancel.key}")
     private String cancelPaymentTopicKey;
-
 
     @Value("${kafka.topics.payment.update.name}")
     private String updatePaymentTopicName;
@@ -189,22 +213,44 @@ public class ApplicationProperties {
     @Value("${kafka.topics.payment.update.key}")
     private String updatePaymentTopicKey;
 
+    @Value("${kafka.topics.notification.sms}")
+    private String smsTopic;
+
+    @Value("${kafka.topics.notification.sms.key}")
+    private String smsTopickey;
+
+
 
     //MDMS
+
     @Value("${egov.mdms.host}")
     private String mdmsHost;
 
     @Value("${egov.mdms.search.endpoint}")
     private String mdmsSearchEndpoint;
 
+    @Value("${egov.mdms.search.endpoint}")
+    private String mdmsUrl;
 
     @Value("${kafka.topics.collection.migrate.name}")
     private String collectionMigrationTopicName;
 
     @Value("${kafka.topics.collection.migrate.key}")
     private String collectionMigrationTopicKey;
-    
-    @Value("${kafka.topic.migration.batch.count}")
-    private String migrationCountTopic;
+
+    //Localization
+
+    @Value("${egov.localization.host}")
+    private String localizationHost;
+
+    @Value("${egov.localization.search.endpoint}")
+    private String localizationEndpoint;
+
+    @Value("${collection.search.max.limit}")
+    private Integer defaultLimit;
+
+    @Value("${collection.search.default.limit}")
+    private Integer maxSearchLimit;
+
 
 }

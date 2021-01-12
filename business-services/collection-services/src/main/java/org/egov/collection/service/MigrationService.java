@@ -18,9 +18,6 @@ import java.util.stream.Collectors;
 
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.AuditDetails;
-import org.egov.collection.model.MigrationCount;
-import org.egov.collection.model.MigrationCountRequest;
-import org.egov.collection.model.MigrationCountRowMapper;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentResponse;
@@ -49,7 +46,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -62,7 +58,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MigrationService {
 
 
-    private ApplicationProperties appProperties;
+    private ApplicationProperties properties;
 
     private ServiceRequestRepository serviceRequestRepository;
 
@@ -76,112 +72,56 @@ public class MigrationService {
     
     @Autowired
     private ObjectMapper mapper;
-    
-    @Autowired
-    private MigrationCountRowMapper migrationCountRowMapper;
 
     @Autowired
-    public MigrationService(ApplicationProperties appProperties, ServiceRequestRepository serviceRequestRepository,CollectionProducer producer) {
-        this.appProperties = appProperties;
+    public MigrationService(ApplicationProperties properties, ServiceRequestRepository serviceRequestRepository,CollectionProducer producer) {
+        this.properties = properties;
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
     }
-    
-    public static final String COUNT_QUERY = "select count(*) from egcl_receiptheader_v1 where tenantid=?;";
 
     public static final String TENANT_QUERY = "select distinct tenantid from egcl_receiptheader_v1 order by tenantid;";
-    
-    public static final String BATCH_INSERT_QUERY = "INSERT INTO egcl_payment_migration (id,batch,batchsize,createdtime,tenantid,recordCount) VALUES (?,?,?,?,?,?);";
-    
-    public static final String MIGARTION_POINT_QUERY ="select id,batch,batchsize,createdtime,tenantid,recordCount from egcl_payment_migration as migration where tenantid = ? and createdtime = (select max(createdtime) from egcl_payment_migration where tenantid = ?);";
 
-    
-    
-    public void migrate(RequestInfo requestInfo, Integer offset,  Integer batchSize, List<String> tenantIdList) throws JsonProcessingException {
+    public void migrate(RequestInfo requestInfo, Integer offsetFromApi,  Integer batchSize, String tenantId) throws JsonProcessingException {
     	
-		if (CollectionUtils.isEmpty(tenantIdList))
-			tenantIdList = jdbcTemplate.queryForList(TENANT_QUERY, String.class);
-		
-
-		 ReceiptSearchCriteria_v1 receipt_criteria_v1 = ReceiptSearchCriteria_v1.builder()
-					.offset(0)
-					.limit(batchSize)
-					.build();
-		 
-		for (int i = 0; i < tenantIdList.size(); i++) {
-			
-			receipt_criteria_v1.setOffset(0);
-
-			String tenantIdEntry = tenantIdList.get(i);
-
-			org.egov.collection.model.MigrationCount migrationCount = getMigrationCountForTenant(tenantIdList.get(i));
-
-			if (ObjectUtils.isEmpty(migrationCount) || migrationCount.getId() == null) {
-
-				receipt_criteria_v1.setTenantId(tenantIdEntry);
+        List<String> tenantIdList =jdbcTemplate.queryForList(TENANT_QUERY,String.class);
+        for(String tenantIdEntry : tenantIdList){
+        
+        	Integer offset = offsetFromApi;
+        	
+			if (tenantId != null && !tenantIdEntry.equalsIgnoreCase(tenantId)) {
+				continue;
 			} else {
-
-				long count = getTenantCount(tenantIdEntry);
-				if (migrationCount.getRecordCount() >= count)
-					continue;
-				else {
-
-					receipt_criteria_v1.setTenantId(tenantIdEntry);
-					receipt_criteria_v1.setOffset(migrationCount.getOffset() + migrationCount.getLimit());
-				}
-
+				tenantId = null;
+				offsetFromApi = 0;
 			}
-			
-			migrateSingleTenant(requestInfo, receipt_criteria_v1);
-		}
-		
+        	
+                while(true){
+                    long startTime = System.currentTimeMillis();
+                    ReceiptSearchCriteria_v1 criteria_v1 = ReceiptSearchCriteria_v1.builder()
+                            .offset(offset).limit(batchSize).tenantId(tenantIdEntry).build();
+                    List<Receipt_v1> receipts = collectionService.fetchReceipts(criteria_v1);
+                    if(CollectionUtils.isEmpty(receipts))
+                        break;
+                    migrateReceipt(requestInfo, receipts);
+                    
+                    log.info("Total receipts migrated: " + offset + "for tenantId : " + tenantIdEntry);
+                    offset += batchSize;
+                    
+                    long endtime = System.currentTimeMillis();
+                    long elapsetime = endtime - startTime;
+                    System.out.println("\n\nBatch Elapsed Time--->"+elapsetime+"\n\n");
+                }
+        }
+
     }
 
-	private void migrateSingleTenant(RequestInfo requestInfo,ReceiptSearchCriteria_v1 receipt_criteria_v1) {
-		
-		// fetching records till empty results
-		while(true){
-			
-		    long startTime = System.currentTimeMillis();
-		    List<Receipt_v1> receipts = collectionService.fetchReceipts(receipt_criteria_v1);
-		    if(CollectionUtils.isEmpty(receipts))
-		        break;
-		    migrateReceipt(requestInfo, receipts);
-
-            MigrationCount migrationCount = new MigrationCount();
-            migrationCount.setId(UUID.randomUUID().toString());
-            migrationCount.setOffset(receipt_criteria_v1.getOffset());
-            migrationCount.setLimit(receipt_criteria_v1.getLimit());
-            migrationCount.setTenantid(receipt_criteria_v1.getTenantId());
-            migrationCount.setRecordCount(receipt_criteria_v1.getOffset() + receipt_criteria_v1.getLimit());
-            
-            MigrationCountRequest request = MigrationCountRequest.builder()
-            		.requestInfo(requestInfo)
-            		.migrationCount(migrationCount)
-            		.build();
-            
-            producer.producer(appProperties.getMigrationCountTopic(),"", request);
-
-		    
-			log.info("Total receipts migrated between : " + receipt_criteria_v1.getOffset() + " AND "
-					+ receipt_criteria_v1.getLimit() + "for tenantId : " + receipt_criteria_v1.getTenantId()
-					+ " in time " + System.currentTimeMillis());
-		    // update offset
-		    receipt_criteria_v1.setOffset(receipt_criteria_v1.getOffset() + receipt_criteria_v1.getLimit());
-
-			long endtime = System.currentTimeMillis();
-			long elapsetime = endtime - startTime;
-			log.info("\n\n Batch Elapsed Time---> " + elapsetime + "\n\n");
-		}
-	}
-
     public void migrateReceipt(RequestInfo requestInfo, List<Receipt_v1> receipts){
-    	
     	
         List<Payment> paymentList = new ArrayList<Payment>();
         
 		for (Receipt_v1 receipt : receipts) {
-			
+
 			Bill newBill = convertBillToNew(receipt.getBill().get(0), receipt.getAuditDetails());
 
 			Payment payment = transformToPayment(requestInfo, receipt, newBill);
@@ -189,9 +129,7 @@ public class MigrationService {
 		}
         
         PaymentResponse paymentResponse = new PaymentResponse(new ResponseInfo(), paymentList);
-        
-        String key = UUID.randomUUID().toString();
-        producer.producer(appProperties.getCollectionMigrationTopicName(), key, paymentResponse);
+        producer.producer(properties.getCollectionMigrationTopicName(), paymentResponse);
     }
 
 	private Bill convertBillToNew(Bill_v1 bill_v1, AuditDetails_v1 oldAuditDetails) {
@@ -258,7 +196,6 @@ public class MigrationService {
 			BillDetail detail = BillDetail.builder()
 				.manualReceiptNumber(oldDetail.getManualReceiptNumber())
 				.cancellationRemarks(oldDetail.getCancellationRemarks())
-				.additionalDetails(oldDetail.getAdditionalDetails())
 				.manualReceiptDate(oldDetail.getManualReceiptDate())
 				.billDescription(oldDetail.getBillDescription())
 				.collectionType(oldDetail.getCollectionType())
@@ -340,7 +277,7 @@ public class MigrationService {
         
         payment.setId(UUID.randomUUID().toString());
         payment.setTenantId(receipt.getTenantId());
-        payment.setTotalDue(totalAmount);
+        payment.setTotalDue(totalAmount.subtract(totalAmountPaid));
         payment.setTotalAmountPaid(totalAmountPaid);
         payment.setTransactionNumber(receipt.getInstrument().getTransactionNumber());
         payment.setTransactionDate(receipt.getReceiptDate());
@@ -392,7 +329,7 @@ public class MigrationService {
         paymentDetail.setBill(newBill);
         paymentDetail.setPaymentId(payment.getId());
     	paymentDetail.setBillId(newBill.getId());
-        paymentDetail.setTotalDue(totalAmount);
+        paymentDetail.setTotalDue(totalAmount.subtract(totalAmountPaid));
         paymentDetail.setTotalAmountPaid(totalAmountPaid);
         payment.setPaymentDetails(Arrays.asList(paymentDetail));
 	    
@@ -504,8 +441,8 @@ public class MigrationService {
 
 	private StringBuilder getBillSearchURI(String tenantId, Set<String> billIds, String service) {
 		
-		StringBuilder builder = new StringBuilder(appProperties.getBillingServiceHostName());
-		builder.append(appProperties.getSearchBill()).append("?");
+		StringBuilder builder = new StringBuilder(properties.getBillingServiceHostName());
+		builder.append(properties.getSearchBill()).append("?");
 		builder.append("tenantId=").append(tenantId);
 		builder.append("&service=").append(service);
 		builder.append("&billId=").append(billIds.toString().replace("[","").replace("]",""));
@@ -513,17 +450,5 @@ public class MigrationService {
 		return builder;
 
 	}
-	
-	
-	   public long getTenantCount(String tenantid){
-	       long count = jdbcTemplate.queryForObject(COUNT_QUERY, new Object[]{tenantid} ,Integer.class);
-	       return count;
-	   }
-
-	    public MigrationCount getMigrationCountForTenant(String tenantId){
-	    	
-	    	MigrationCount migrationCount = jdbcTemplate.query(MIGARTION_POINT_QUERY, new Object[] { tenantId, tenantId }, migrationCountRowMapper);
-	        return migrationCount;
-	    }
 
 }

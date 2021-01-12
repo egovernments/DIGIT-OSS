@@ -63,6 +63,7 @@ import org.egov.demand.model.Demand;
 import org.egov.demand.model.DemandApportionRequest;
 import org.egov.demand.model.DemandCriteria;
 import org.egov.demand.model.DemandDetail;
+import org.egov.demand.model.PaymentBackUpdateAudit;
 import org.egov.demand.repository.BillRepositoryV2;
 import org.egov.demand.repository.DemandRepository;
 import org.egov.demand.repository.ServiceRequestRepository;
@@ -81,6 +82,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -157,7 +159,7 @@ public class DemandService {
 		save(new DemandRequest(requestInfo,demandsToBeCreated));
 
 		if(!CollectionUtils.isEmpty(demandToBeUpdated))
-			update(new DemandRequest(requestInfo,demandToBeUpdated));
+			update(new DemandRequest(requestInfo,demandToBeUpdated), null);
 		
 		billRepoV2.updateBillStatus(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toList()), BillStatus.EXPIRED);
 		
@@ -202,10 +204,9 @@ public class DemandService {
 	 * @param demandRequest demand request object to be updated
 	 * @return
 	 */
-	public DemandResponse updateAsync(DemandRequest demandRequest) {
+	public DemandResponse updateAsync(DemandRequest demandRequest, PaymentBackUpdateAudit paymentBackUpdateAudit) {
 
 		log.debug("the demand service : " + demandRequest);
-
 		DocumentContext mdmsData = getMDMSData(demandRequest);
 
 		demandValidatorV1.validateForUpdate(demandRequest, mdmsData);
@@ -242,13 +243,18 @@ public class DemandService {
 					detail.setTenantId(demand.getTenantId());
 				}
 			}
+			util.updateDemandPaymentStatus(demand, null != paymentBackUpdateAudit);
 		}
 
 		generateAndSetIdsForNewDemands(newDemands, auditDetail);
 
-		update(demandRequest);
-		billRepoV2.updateBillStatus(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toList()),
-				BillStatus.EXPIRED);
+		update(demandRequest, paymentBackUpdateAudit);
+		if (ObjectUtils.isEmpty(paymentBackUpdateAudit))
+			billRepoV2.updateBillStatus(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toList()),
+					BillStatus.EXPIRED);
+		else
+			billRepoV2.updateBillStatus(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toList()),
+					BillStatus.PAID);
 		// producer.push(applicationProperties.getDemandIndexTopic(), demandRequest);
 		return new DemandResponse(responseInfoFactory.getResponseInfo(requestInfo, HttpStatus.CREATED), demands);
 	}
@@ -263,7 +269,7 @@ public class DemandService {
 	 */
 	public List<Demand> getDemands(DemandCriteria demandCriteria, RequestInfo requestInfo) {
 
-		demandValidatorV1.validateDemandCriteria(demandCriteria);
+		demandValidatorV1.validateDemandCriteria(demandCriteria, requestInfo);
 
 		UserSearchRequest userSearchRequest = null;
 		List<User> payers = null;
@@ -326,8 +332,8 @@ public class DemandService {
 		demandRepository.save(demandRequest);
 	}
 
-	public void update(DemandRequest demandRequest) {
-		demandRepository.update(demandRequest);
+	public void update(DemandRequest demandRequest, PaymentBackUpdateAudit paymentBackUpdateAudit) {
+		demandRepository.update(demandRequest, paymentBackUpdateAudit);
 	}
 
 
@@ -426,7 +432,7 @@ public class DemandService {
 
 		return new ArrayList<>(demandsWithAdvance);
 	}
-
+	
 	/**
 	 * Fetches the required master data from MDMS service
 	 * @param demandRequest The request for which master data has to be fetched

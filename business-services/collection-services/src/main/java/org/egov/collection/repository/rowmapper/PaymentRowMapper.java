@@ -173,52 +173,35 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .manualReceiptNumber(manualReceiptNo)
                     .receiptType(receiptType)
                     .additionalDetails(getJsonValue(obj))
-                    
+
                     .auditDetails(auditDetails)
                     .build();
 
-            Long billDate = rs.getLong("billdate");
+            /*Long billDate = rs.getLong("billdate");
             if(rs.wasNull()){billDate = null;}
 
             AuditDetails billAuditDetails = AuditDetails.builder().createdBy(rs.getString("bill_createdby"))
                     .createdTime(rs.getLong("bill_createdTime"))
                     .lastModifiedBy("bill_lastmodifiedby")
                     .lastModifiedTime(rs.getLong("bill_lastModifiedTime"))
-                    .build();
-            
-            List<String> collectionModesAllowedList = new LinkedList<>();
+                    .build();*/
+
+            /*List<String> collectionModesAllowedList = new LinkedList<>();
             if(null != rs.getString("collectionmodesnotallowed")) {
                 String[] collectionModesAllowed = rs.getString("collectionmodesnotallowed").split(",");
                 if(collectionModesAllowed.length!=0)
                     collectionModesAllowedList = Arrays.asList(collectionModesAllowed);
-            }
+            }*/
 
-            PGobject billAdditionalObj = (PGobject) rs.getObject("bill_additionalDetails");
+            // PGobject billAdditionalObj = (PGobject) rs.getObject("bill_additionalDetails");
 
 
-            Bill bill = Bill.builder().id(rs.getString("bill_id"))
-            .status(Bill.StatusEnum.fromValue(rs.getString("bill_status")))
-            .isCancelled(rs.getBoolean("iscancelled"))
-            .tenantId(rs.getString("bill_tenantid"))
-            .collectionModesNotAllowed(collectionModesAllowedList)
-            .partPaymentAllowed(rs.getBoolean("partpaymentallowed"))
-            .isAdvanceAllowed(rs.getBoolean("isadvanceallowed"))
-            .minimumAmountToBePaid(rs.getBigDecimal("minimumamounttobepaid"))
-            .reasonForCancellation(rs.getString("reasonforcancellation"))
-            .businessService(rs.getString("businessservice"))
-            .totalAmount(rs.getBigDecimal("bill_totalamount"))
-            .consumerCode(rs.getString("consumercode"))
-            .billNumber(rs.getString("billnumber"))
-            .billDate(billDate)
-            .auditDetails(billAuditDetails)
-            .additionalDetails(getJsonValue(billAdditionalObj))
-            .build();
 
-            paymentDetail.setBill(bill);
+
             payment.addpaymentDetailsItem(paymentDetail);
         }
 
-        PGobject billAccountDetailAdditionalObj = (PGobject) rs.getObject("bacdt_additionalDetails");
+        /*PGobject billAccountDetailAdditionalObj = (PGobject) rs.getObject("bacdt_additionalDetails");
 
         Integer order = rs.getInt("order");
         if(rs.wasNull()){order = null;}
@@ -264,11 +247,11 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
         // Adding to Bill
         billDetail.addBillAccountDetail(billAccountDetail);
-        paymentDetail.getBill().addBillDetail(billDetail);
+        paymentDetail.getBill().addBillDetail(billDetail);*/
 
 
     }
-    
+
 
     private JsonNode getJsonValue(PGobject pGobject){
         try {
@@ -288,4 +271,4 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
 
 
-    }
+}

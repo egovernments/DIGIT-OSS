@@ -152,11 +152,11 @@ public class BillServicev2 {
 	 * @return
 	 */
 	public BillResponseV2 fetchBill(GenerateBillCriteria billCriteria, RequestInfoWrapper requestInfoWrapper) {
-		
-		billValidator.validateBillGenRequest(billCriteria);
+
+		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
+		billValidator.validateBillGenRequest(billCriteria, requestInfo);
 		if (CollectionUtils.isEmpty(billCriteria.getConsumerCode()))
 			billCriteria.setConsumerCode(new HashSet<>());
-		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
 		BillResponseV2 res = searchBill(billCriteria.toBillSearchCriteria(), requestInfo);
 		List<BillV2> bills = res.getBill();
 
@@ -167,6 +167,7 @@ public class BillServicev2 {
 			return generateBill(billCriteria, requestInfo);
 		
 		Map<String, BillV2> consumerCodeAndBillMap = bills.stream().collect(Collectors.toMap(BillV2::getConsumerCode, Function.identity()));
+		billCriteria.getConsumerCode().addAll(consumerCodeAndBillMap.keySet());
 		/*
 		 * Collecting the businessService code and the list of consumer codes for those service codes 
 		 * whose demands needs to be updated.
@@ -282,6 +283,7 @@ public class BillServicev2 {
 				.tenantId(billCriteria.getTenantId())
 				.email(billCriteria.getEmail())
 				.consumerCode(consumerCodes)
+				.isPaymentCompleted(false)
 				.receiptRequired(false)
 				.demandId(demandIds)
 				.build();

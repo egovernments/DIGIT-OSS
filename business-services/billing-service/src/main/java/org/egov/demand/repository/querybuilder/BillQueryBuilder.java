@@ -60,13 +60,20 @@ public class BillQueryBuilder {
 			+ " b.additionaldetails as b_additionaldetails,  bd.additionaldetails as bd_additionaldetails "
 			+ " FROM egbs_bill_v1 b"
 			+ " LEFT OUTER JOIN egbs_billdetail_v1 bd ON b.id = bd.billid AND b.tenantid = bd.tenantid"
-			+ " LEFT OUTER JOIN egbs_billaccountdetail_v1 ad ON bd.id = ad.billdetail AND bd.tenantid = ad.tenantid"
-			+ " WHERE b.tenantid = ?"; 
+			+ " LEFT OUTER JOIN egbs_billaccountdetail_v1 ad ON bd.id = ad.billdetail AND bd.tenantid = ad.tenantid";
 	
 	public String getBillQuery(BillSearchCriteria billSearchCriteria, List<Object> preparedStatementValues){
 		
 		StringBuilder billQuery = new StringBuilder(BILL_BASE_QUERY);
-		preparedStatementValues.add(billSearchCriteria.getTenantId());
+		String tenantId = billSearchCriteria.getTenantId();
+		String[] tenantIdChunks = tenantId.split("\\.");
+		if(tenantIdChunks.length == 1){
+			billQuery.append(" WHERE b.tenantid LIKE ? ");
+			preparedStatementValues.add(billSearchCriteria.getTenantId() + '%');
+		}else{
+			billQuery.append(" WHERE b.tenantid = ? ");
+			preparedStatementValues.add(billSearchCriteria.getTenantId());
+		}
 		addWhereClause(billQuery, preparedStatementValues, billSearchCriteria);
 		StringBuilder maxQuery = addPagingClause(billQuery, preparedStatementValues, billSearchCriteria);
 		

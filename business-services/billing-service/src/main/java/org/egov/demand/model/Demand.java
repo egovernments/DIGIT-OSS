@@ -80,6 +80,9 @@ public class Demand   {
         @Default
         @JsonProperty("minimumAmountPayable")
         private BigDecimal minimumAmountPayable = BigDecimal.ZERO;
+        
+        @Default
+        private Boolean isPaymentCompleted = false;
 
               /**
    * Gets or Sets status

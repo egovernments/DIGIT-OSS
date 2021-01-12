@@ -2,7 +2,14 @@ package org.egov.collection.util;
 
 
 import static java.util.Objects.isNull;
-import static org.egov.collection.config.CollectionServiceConstants.*;
+import static org.egov.collection.config.CollectionServiceConstants.CHEQUE_DD_DATE_WITH_FUTURE_DATE_MESSAGE;
+import static org.egov.collection.config.CollectionServiceConstants.CHEQUE_DD_DATE_WITH_MANUAL_RECEIPT_DATE_MESSAGE;
+import static org.egov.collection.config.CollectionServiceConstants.CHEQUE_DD_DATE_WITH_RECEIPT_DATE_MESSAGE;
+import static org.egov.collection.config.CollectionServiceConstants.INSTRUMENT_DATE_DAYS;
+import static org.egov.collection.config.CollectionServiceConstants.RECEIPT_CHEQUE_OR_DD_DATE;
+import static org.egov.collection.config.CollectionServiceConstants.RECEIPT_CHEQUE_OR_DD_DATE_MESSAGE;
+import static org.egov.collection.config.CollectionServiceConstants.RECEIPT_NEFT_OR_RTGS_DATE;
+import static org.egov.collection.config.CollectionServiceConstants.RECEIPT_NEFT_OR_RTGS_DATE_MESSAGE;
 import static org.egov.collection.model.enums.InstrumentStatusEnum.APPROVAL_PENDING;
 import static org.egov.collection.model.enums.InstrumentStatusEnum.APPROVED;
 import static org.egov.collection.model.enums.InstrumentStatusEnum.REMITTED;
@@ -13,14 +20,17 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
+import org.egov.collection.config.CollectionServiceConstants;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
@@ -410,10 +420,57 @@ public class PaymentValidator {
 
     }
 
+    /**
+     * method to validate and update search request information based on APP configs
+     * checks for requestInfo
+     * verifies if requester is citizen and validates the module-name path for employee
+     * adds default status and module-name to criteria if applicable
+     * 
+     * @param paymentSearchCriteria
+     * @param requestInfo
+     * @param moduleName
+     */
+    public void validateAndUpdateSearchRequestFromConfig(PaymentSearchCriteria paymentSearchCriteria, RequestInfo requestInfo, String moduleName) {
+    	
+    	Map<String, String> errorMap = new HashMap<>();
+    	validateUserInfo(requestInfo, errorMap);
+        if (!errorMap.isEmpty())
+            throw new CustomException(errorMap);
+    	
+		Boolean isRequesterEmployee = requestInfo.getUserInfo().getType()
+				.equalsIgnoreCase(CollectionServiceConstants.EMPLOYEE_TYPE);
+		if (isRequesterEmployee && applicationProperties.getIsModuleNameMandatoryInSearchUriForEmployee()
+				&& null == moduleName)
+			throw new CustomException("EGCL_URI_EXCEPTION", "Path variable module name is mandatory for employees");
 
+		/*
+		 * Only Applicable if there is no receipt number search
+		 * Only Applicable when search ignore status has been defined in application properties
+		 * Only Applicable when status has not been already provided for the search
+		 */
+		if ((CollectionUtils.isEmpty(paymentSearchCriteria.getReceiptNumbers()))
+				&& !applicationProperties.getSearchIgnoreStatus().isEmpty()
+				&& (CollectionUtils.isEmpty(paymentSearchCriteria.getStatus()))) {
 
+			// Do not return ignored status for receipts by default
+			Set<String> defaultStatus = new HashSet<>();
+			for (PaymentStatusEnum paymentStatus : PaymentStatusEnum.values()) {
 
+				if (!applicationProperties.getSearchIgnoreStatus().contains(paymentStatus.toString())) {
+					defaultStatus.add(paymentStatus.toString());
+				}
+			}
+			paymentSearchCriteria.setStatus(defaultStatus);
+		}
+        
+		if (null != moduleName) {
 
-
+			if (CollectionUtils.isEmpty(paymentSearchCriteria.getBusinessServices())) {
+				paymentSearchCriteria.setBusinessServices(Stream.of(moduleName).collect(Collectors.toSet()));
+			} else {
+				paymentSearchCriteria.getBusinessServices().add(moduleName);
+			}
+		}
+    }
 
 }

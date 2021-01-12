@@ -16,7 +16,7 @@ public class CollectionProducer {
 
 	@Autowired
     private CustomKafkaTemplate<String, Object> kafkaTemplate;
-
+/*
     public void producer(String topicName, String key, Object value) {
         try {
             kafkaTemplate.send(topicName, key, value);
@@ -26,5 +26,16 @@ public class CollectionProducer {
                     .KAFKA_PUSH_EXCEPTION_DESC);
         }
     	
+    }
+ */
+    public void producer(String topicName, Object value) {
+        try {
+            kafkaTemplate.send(topicName, value);
+        } catch (Exception e) {
+            logger.error("Pushing to Queue FAILED! ", e.getMessage());
+            throw new CustomException("COLLECTIONS_KAFKA_PUSH_FAILED", CollectionServiceConstants
+                    .KAFKA_PUSH_EXCEPTION_DESC);
+        }
+
     }
 }

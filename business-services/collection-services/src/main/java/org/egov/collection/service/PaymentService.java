@@ -2,12 +2,7 @@ package org.egov.collection.service;
 
 import static java.util.Objects.isNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
@@ -66,13 +61,9 @@ public class PaymentService {
      * @param paymentSearchCriteria Criteria against which search has to be performed
      * @return List of matching receipts
      */
-    public List<Payment> getPayments(RequestInfo requestInfo, PaymentSearchCriteria paymentSearchCriteria) {
+    public List<Payment> getPayments(RequestInfo requestInfo, PaymentSearchCriteria paymentSearchCriteria, String moduleName) {
     	
-        Map<String, String> errorMap = new HashMap<>();
-        paymentValidator.validateUserInfo(requestInfo, errorMap);
-        if (!errorMap.isEmpty())
-            throw new CustomException(errorMap);
-
+        paymentValidator.validateAndUpdateSearchRequestFromConfig(paymentSearchCriteria, requestInfo, moduleName);
         if (applicationProperties.isPaymentsSearchPaginationEnabled()) {
             paymentSearchCriteria.setOffset(isNull(paymentSearchCriteria.getOffset()) ? 0 : paymentSearchCriteria.getOffset());
             paymentSearchCriteria.setLimit(isNull(paymentSearchCriteria.getLimit()) ? applicationProperties.getReceiptsSearchDefaultLimit() :
@@ -90,6 +81,8 @@ public class PaymentService {
 
         return payments;
     }
+
+
     
     
     /**
@@ -117,8 +110,7 @@ public class PaymentService {
             payment.setPayerId(payerId);
         paymentRepository.savePayment(payment);
 
-        producer.producer(applicationProperties.getCreatePaymentTopicName(), applicationProperties
-                .getCreatePaymentTopicKey(), paymentRequest);
+        producer.producer(applicationProperties.getCreatePaymentTopicName(), paymentRequest);
 
 
         return payment;
@@ -173,8 +165,7 @@ public class PaymentService {
                 paymentRequest.getRequestInfo());
 
         paymentRepository.updatePayment(validatedPayments);
-        producer.producer(applicationProperties.getUpdatePaymentTopicName(), applicationProperties
-                .getUpdatePaymentTopicKey(), new PaymentRequest(paymentRequest.getRequestInfo(), paymentRequest.getPayment()));
+        producer.producer(applicationProperties.getUpdatePaymentTopicName(), new PaymentRequest(paymentRequest.getRequestInfo(), paymentRequest.getPayment()));
 
         return validatedPayments;
     }
@@ -195,6 +186,24 @@ public class PaymentService {
         return paymentRequest.getPayment();
     }
 
+    public List<Payment> plainSearch(PaymentSearchCriteria paymentSearchCriteria) {
+        PaymentSearchCriteria searchCriteria = new PaymentSearchCriteria();
+
+        if (applicationProperties.isPaymentsSearchPaginationEnabled()) {
+            searchCriteria.setOffset(isNull(paymentSearchCriteria.getOffset()) ? 0 : paymentSearchCriteria.getOffset());
+            searchCriteria.setLimit(isNull(paymentSearchCriteria.getLimit()) ? applicationProperties.getReceiptsSearchDefaultLimit() : paymentSearchCriteria.getLimit());
+        } else {
+            searchCriteria.setOffset(0);
+            searchCriteria.setLimit(applicationProperties.getReceiptsSearchDefaultLimit());
+        }
+
+        List<String> ids = paymentRepository.fetchPaymentIds(searchCriteria);
+        if (ids.isEmpty())
+            return Collections.emptyList();
+
+        PaymentSearchCriteria criteria = PaymentSearchCriteria.builder().ids(new HashSet<String>(ids)).build();
+        return paymentRepository.fetchPaymentsForPlainSearch(criteria);
+    }
 
 
 }

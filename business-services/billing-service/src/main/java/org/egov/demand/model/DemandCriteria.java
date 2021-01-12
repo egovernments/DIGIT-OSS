@@ -85,6 +85,8 @@ public class DemandCriteria {
 	
 	private String status;
 	
+	private Boolean isPaymentCompleted;
+	
 	@Default
 	private Boolean receiptRequired=false;
 }

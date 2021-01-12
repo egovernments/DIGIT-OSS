@@ -41,18 +41,14 @@
 package org.egov.collection.web.controller;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.Valid;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.PaymentResponse;
 import org.egov.collection.model.PaymentSearchCriteria;
-import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.service.MigrationService;
 import org.egov.collection.service.PaymentService;
 import org.egov.collection.service.PaymentWorkflowService;
@@ -62,11 +58,19 @@ import org.egov.collection.web.contract.factory.ResponseInfoFactory;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 @RequestMapping("/payments")
@@ -81,35 +85,14 @@ public class PaymentController {
     @Autowired
     private MigrationService migrationService;
 
-    @Value("#{'${search.ignore.status}'.split(',')}")
-    private List<String> searchIgnoreStatus;
-
-    @RequestMapping(value = "/_search", method = RequestMethod.POST)
+    @RequestMapping(path = {"/_search","/{moduleName}/_search"}, method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<PaymentResponse> search(@ModelAttribute PaymentSearchCriteria paymentSearchCriteria,
-                                             @RequestBody @Valid final RequestInfoWrapper requestInfoWrapper) {
+                                             @RequestBody @Valid final RequestInfoWrapper requestInfoWrapper,
+                                             @PathVariable @Nullable String moduleName) {
 
         final RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
-
-		/*
-		 * Only Applicable if there is no receipt number search
-		 * Only Apllicable when search ignore status has been defined in application properties
-		 * Only Applicable when status has not been already provided for the search
-		 */
-        if ((CollectionUtils.isEmpty(paymentSearchCriteria.getReceiptNumbers()))
-                && !searchIgnoreStatus.isEmpty()
-                && (CollectionUtils.isEmpty(paymentSearchCriteria.getStatus()))) {
-            // Do not return ignored status for receipts by default
-            Set<String> defaultStatus = new HashSet<>();
-            for (PaymentStatusEnum paymentStatus : PaymentStatusEnum.values()) {
-                if (!searchIgnoreStatus.contains(paymentStatus.toString())) {
-                    defaultStatus.add(paymentStatus.toString());
-                }
-            }
-            paymentSearchCriteria.setStatus(defaultStatus);
-        }
-        List<Payment> payments = paymentService.getPayments(requestInfo, paymentSearchCriteria);
-
+        List<Payment> payments = paymentService.getPayments(requestInfo, paymentSearchCriteria, moduleName);
         return getSuccessResponse(payments, requestInfo);
     }
 
@@ -122,20 +105,21 @@ public class PaymentController {
 
     }
 
-    @RequestMapping(value = "/_workflow", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<?> workflow(@RequestBody @Valid PaymentWorkflowRequest receiptWorkflowRequest) {
+
+   @RequestMapping(value = "/{moduleName}/_workflow", method = RequestMethod.POST)
+   @ResponseBody
+   public ResponseEntity<?> workflow(@RequestBody @Valid PaymentWorkflowRequest receiptWorkflowRequest, @PathVariable String moduleName) {
 
         List<Payment> payments = workflowService.performWorkflow(receiptWorkflowRequest);
         return getSuccessResponse(payments, receiptWorkflowRequest.getRequestInfo());
     }
 
-    @RequestMapping(value = "/_update", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<?> update(@RequestBody @Valid PaymentRequest paymentRequest) {
-        List<Payment> payments = paymentService.updatePayment(paymentRequest);
-        return getSuccessResponse(payments, paymentRequest.getRequestInfo());
-    }
+//    @RequestMapping(value = "/_update", method = RequestMethod.POST)
+//    @ResponseBody
+//    public ResponseEntity<?> update(@RequestBody @Valid PaymentRequest paymentRequest) {
+//        List<Payment> payments = paymentService.updatePayment(paymentRequest);
+//        return getSuccessResponse(payments, paymentRequest.getRequestInfo());
+//    }
 
     @RequestMapping(value = "/_validate", method = RequestMethod.POST)
     @ResponseBody
@@ -158,13 +142,26 @@ public class PaymentController {
     @RequestMapping(value = "/_migrate", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> workflow(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper,@RequestParam(required = false) Integer offset,
-                                      @RequestParam(required = false) List<String> tenantIdList, @RequestParam(required = true) Integer batchSize) throws JsonProcessingException {
+                                      @RequestParam(required = false) String tenantId, @RequestParam(required = true) Integer batchSize) throws JsonProcessingException {
 
         if(null == offset)
             offset = 0;
 
-        migrationService.migrate(requestInfoWrapper.getRequestInfo(), offset, batchSize, tenantIdList);
+        migrationService.migrate(requestInfoWrapper.getRequestInfo(), offset, batchSize, tenantId);
         return new ResponseEntity<>(HttpStatus.OK );
 
     }
+
+    @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<PaymentResponse> plainSearch(@ModelAttribute PaymentSearchCriteria paymentSearchCriteria,
+                                                       @RequestBody @Valid final RequestInfoWrapper requestInfoWrapper) {
+
+        final RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
+
+        List<Payment> payments = paymentService.plainSearch(paymentSearchCriteria);
+
+        return getSuccessResponse(payments, requestInfo);
+    }
+
 }

@@ -107,7 +107,7 @@ public class NotificationConsumer {
 	 * @param record
 	 * @param topic
 	 */
-	@KafkaListener(topics = { "${kafka.topics.payment.receiptlink.name}" })
+	//@KafkaListener(topics = { "${kafka.topics.payment.receiptlink.name}" })
 	public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			PaymentRequest req = objectMapper.convertValue(record, PaymentRequest.class);
@@ -137,7 +137,7 @@ public class NotificationConsumer {
 						request.put("mobileNumber", phNo);
 						request.put("message", message);
 
-						producer.producer(smsTopic, smsTopickey, request);
+						producer.producer(smsTopic, request);
 					} else {
 						log.error("No message configured! Notification will not be sent.");
 					}

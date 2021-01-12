@@ -85,7 +85,7 @@ public class ReceiptService {
 			
 		}
 		
-		demandService.updateAsync(DemandRequest.builder().demands(demandsToBeUpdated).requestInfo(billRequest.getRequestInfo()).build());
+		demandService.updateAsync(DemandRequest.builder().demands(demandsToBeUpdated).requestInfo(billRequest.getRequestInfo()).build(), null);
 	}
 
 	/**

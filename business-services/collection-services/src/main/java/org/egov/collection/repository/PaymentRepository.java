@@ -5,13 +5,7 @@ import static org.egov.collection.config.CollectionServiceConstants.KEY_FILESTOR
 import static org.egov.collection.config.CollectionServiceConstants.KEY_ID;
 import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.egov.collection.model.Payment;
@@ -23,6 +17,7 @@ import org.egov.collection.repository.rowmapper.PaymentRowMapper;
 import org.egov.collection.web.contract.Bill;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -89,28 +84,59 @@ public class PaymentRepository {
     }
 
 
-    public List<Payment> fetchPayments(PaymentSearchCriteria paymentSearchCriteria){
+    public List<Payment> fetchPayments(PaymentSearchCriteria paymentSearchCriteria) {
         Map<String, Object> preparedStatementValues = new HashMap<>();
-        String query = paymentQueryBuilder.getPaymentSearchQuery(paymentSearchCriteria, preparedStatementValues);
-        log.info("Query: "+query);
-        log.info("preparedStatementValues: "+preparedStatementValues);
-        List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues,paymentRowMapper);
-        if(!CollectionUtils.isEmpty(payments)) {
+
+        List<String> ids = fetchPaymentIdsByCriteria(paymentSearchCriteria);
+
+        if(CollectionUtils.isEmpty(ids))
+            return new LinkedList<>();
+
+        String query = paymentQueryBuilder.getPaymentSearchQuery(ids, preparedStatementValues);
+        log.info("Query: " + query);
+        log.info("preparedStatementValues: " + preparedStatementValues);
+        List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues, paymentRowMapper);
+        if (!CollectionUtils.isEmpty(payments)) {
             Set<String> billIds = new HashSet<>();
-            for(Payment payment : payments) {
-            	billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
+            for (Payment payment : payments) {
+                billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
             }
             Map<String, Bill> billMap = getBills(billIds);
-            for(Payment payment : payments) {
-            	payment.getPaymentDetails().forEach(detail -> {
-            		detail.setBill(billMap.get(detail.getBillId()));
-            	});
+            for (Payment payment : payments) {
+                payment.getPaymentDetails().forEach(detail -> {
+                    detail.setBill(billMap.get(detail.getBillId()));
+                });
             }
-           payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
+            payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
         }
 
         return payments;
     }
+
+    public List<Payment> fetchPaymentsForPlainSearch(PaymentSearchCriteria paymentSearchCriteria) {
+        Map<String, Object> preparedStatementValues = new HashMap<>();
+        String query = paymentQueryBuilder.getPaymentSearchQueryForPlainSearch(paymentSearchCriteria, preparedStatementValues);
+        log.info("Query: " + query);
+        log.info("preparedStatementValues: " + preparedStatementValues);
+        List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues, paymentRowMapper);
+        if (!CollectionUtils.isEmpty(payments)) {
+            Set<String> billIds = new HashSet<>();
+            for (Payment payment : payments) {
+                billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
+            }
+            Map<String, Bill> billMap = getBills(billIds);
+            for (Payment payment : payments) {
+                payment.getPaymentDetails().forEach(detail -> {
+                    detail.setBill(billMap.get(detail.getBillId()));
+                });
+            }
+            payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
+        }
+
+        return payments;
+    }
+
+
     
     private Map<String, Bill> getBills(Set<String> ids){
     	Map<String, Bill> mapOfIdAndBills = new HashMap<>();
@@ -206,5 +232,20 @@ public class PaymentRepository {
 
     }
 
+    public List<String> fetchPaymentIds(PaymentSearchCriteria paymentSearchCriteria) {
 
+        Map<String, Object> preparedStatementValues = new HashMap<>();
+        preparedStatementValues.put("offset", paymentSearchCriteria.getOffset());
+        preparedStatementValues.put("limit", paymentSearchCriteria.getLimit());
+
+        return namedParameterJdbcTemplate.query("SELECT id from egcl_payment ORDER BY createdtime offset " + ":offset " + "limit :limit", preparedStatementValues, new SingleColumnRowMapper<>(String.class));
+
+    }
+
+    public List<String> fetchPaymentIdsByCriteria(PaymentSearchCriteria paymentSearchCriteria) {
+        Map<String, Object> preparedStatementValues = new HashMap<>();
+        String query = paymentQueryBuilder.getIdQuery(paymentSearchCriteria, preparedStatementValues);
+        log.info("query: "+query);
+        return namedParameterJdbcTemplate.query(query, preparedStatementValues, new SingleColumnRowMapper<>(String.class));
+    }
 }

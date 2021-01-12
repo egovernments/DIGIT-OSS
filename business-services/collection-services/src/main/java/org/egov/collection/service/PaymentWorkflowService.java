@@ -3,16 +3,15 @@ package org.egov.collection.service;
 
 import static java.util.Collections.reverseOrder;
 import static java.util.Collections.singleton;
+import static org.egov.collection.config.CollectionServiceConstants.*;
+import static org.egov.collection.config.CollectionServiceConstants.KEY_FILESTOREID;
 import static org.egov.collection.util.Utils.jsonMerge;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentRequest;
@@ -33,8 +32,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.web.client.RestTemplate;
 
 @Service
+@Slf4j
 public class PaymentWorkflowService {
 
 
@@ -43,6 +44,9 @@ public class PaymentWorkflowService {
     private PaymentWorkflowValidator paymentWorkflowValidator;
     private CollectionProducer collectionProducer;
     private ApplicationProperties applicationProperties;
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @Autowired
     public PaymentWorkflowService(PaymentRepository paymentRepository, PaymentWorkflowValidator
@@ -151,11 +155,13 @@ public class PaymentWorkflowService {
             updateAuditDetails(payment, requestInfo);
         }
 
+        List<Map<String, String>> idTofileStoreIdMaps;
+        idTofileStoreIdMaps = generateNewReceiptUponStatusChange(validatedPayments, requestInfo);
+        paymentRepository.updateFileStoreId(idTofileStoreIdMaps);
         paymentRepository.updateStatus(validatedPayments);
 
         validatedPayments.forEach(payment -> {
-            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), applicationProperties
-                    .getCancelPaymentTopicKey(), new PaymentRequest(requestInfo, payment));
+            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
         });
 
 
@@ -203,11 +209,13 @@ public class PaymentWorkflowService {
             updateAuditDetails(payment, requestInfo);
         }
 
+        List<Map<String, String>> idTofileStoreIdMaps;
+        idTofileStoreIdMaps = generateNewReceiptUponStatusChange(validatedPayments, requestInfo);
+        paymentRepository.updateFileStoreId(idTofileStoreIdMaps);
         paymentRepository.updateStatus(validatedPayments);
 
         validatedPayments.forEach(payment -> {
-            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), applicationProperties
-                    .getCancelPaymentTopicKey(), new PaymentRequest(requestInfo, payment));
+            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
         });
 
         return validatedPayments;
@@ -250,15 +258,47 @@ public class PaymentWorkflowService {
             updateAuditDetails(payment, requestInfo);
         }
 
+        List<Map<String, String>> idTofileStoreIdMaps;
+        idTofileStoreIdMaps = generateNewReceiptUponStatusChange(validatedPayments, requestInfo);
+        paymentRepository.updateFileStoreId(idTofileStoreIdMaps);
         paymentRepository.updateStatus(validatedPayments);
 
         validatedPayments.forEach(payment -> {
-            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), applicationProperties
-                    .getCancelPaymentTopicKey(), new PaymentRequest(requestInfo, payment));
+            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), new PaymentRequest(requestInfo, payment));
         });
         return validatedPayments;
     }
 
+    // This method generates a new receipt when payment status is changed and updates fileStoreId of payment receipt
+    List<Map<String, String>> generateNewReceiptUponStatusChange(List<Payment> validatedPayments, RequestInfo request){
+        List<String> fileStoreIds;
+        StringBuilder uri = new StringBuilder();
+        uri.append(applicationProperties.getEgovServiceHost())
+                .append(applicationProperties.getEgovPdfCreate()).append("?key=")
+                .append("consolidatedreceipt")
+                .append("&tenantId=")
+                .append(validatedPayments.get(0).getTenantId().split("\\.")[0]);
+
+        log.info("GENERATED LINK TO PDF-SERVICE " + uri);
+        Object result = null;
+        Map<String, Object> pdfRequest = new HashMap<>();
+        pdfRequest.put("RequestInfo", request);
+        pdfRequest.put("Payments", validatedPayments);
+        List<Map<String, String>> idTofileStoreIdMaps = new LinkedList<>();
+        try{
+            Map<String, String> idToFileStore = new HashMap<>();
+            result = restTemplate.postForObject(uri.toString(), pdfRequest, Map.class);
+            String id = validatedPayments.get(0).getId();
+            fileStoreIds = JsonPath.read(result, "$.filestoreIds");
+            idToFileStore.put(KEY_ID, id);
+            idToFileStore.put(KEY_FILESTOREID, StringUtils.join(fileStoreIds,','));
+            idTofileStoreIdMaps.add(idToFileStore);
+
+        }catch(Exception e){
+            log.error("Error while fetching filestoreid corresponding to new receipt" + e);
+        }
+        return idTofileStoreIdMaps;
+    }
 
 
     /**

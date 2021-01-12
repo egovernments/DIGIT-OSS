@@ -48,6 +48,16 @@ public class OrderByPriority implements ApportionV2 {
         BigDecimal amount;
         Boolean isAmountPositive;
 
+        /*
+        * If zero amount payment is done and the total amount of bill or demands is zero. We will
+        * set the collection amount to the taxamount for all taxHeads
+        * */
+        if(apportionRequestV2.getAmountPaid().compareTo(BigDecimal.ZERO) == 0
+                && getTotalAmount(taxDetails).compareTo(BigDecimal.ZERO) == 0){
+            apportionZeroPaymentAndZeroAmountToBePaid(taxDetails);
+            return taxDetails;
+        }
+
         if(apportionRequestV2.getIsAdvanceAllowed()){
             BigDecimal requiredAdvanceAmount = apportionAndGetRequiredAdvance(apportionRequestV2);
             remainingAmount = remainingAmount.add(requiredAdvanceAmount);
@@ -274,6 +284,40 @@ public class OrderByPriority implements ApportionV2 {
         }
         return advance.negate();
     }
+
+
+    private BigDecimal getTotalAmount(List<TaxDetail> taxDetails){
+
+        BigDecimal totalAmount = BigDecimal.ZERO;
+
+        for(TaxDetail taxDetail : taxDetails){
+
+            totalAmount = totalAmount.add(taxDetail.getAmountToBePaid());
+
+        }
+        return totalAmount;
+    }
+
+    /**
+     * In case of zero payment and total amount to be paid equal to zero
+     * we set adjusted amount equal to tax amount for all buckets
+     * @param taxDetails
+     */
+    private void apportionZeroPaymentAndZeroAmountToBePaid(List<TaxDetail> taxDetails){
+
+        for(TaxDetail taxDetail : taxDetails){
+
+            List<Bucket> buckets = taxDetail.getBuckets();
+
+            buckets.forEach(bucket -> {
+                bucket.setAdjustedAmount(bucket.getAmount());
+            });
+
+        }
+
+    }
+
+
 
 
 
