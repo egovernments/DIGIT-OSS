@@ -17,7 +17,7 @@ const Complaint = ({ data, path }) => {
     history.push(`${path}/${serviceRequestId}`);
   };
 
-  const closedStatus = ["RESOLVED", "REJECTED"];
+  const closedStatus = ["RESOLVED", "REJECTED", "CLOSEDAFTERREJECTION", "CLOSEDAFTERRESOLUTION"];
 
   return (
     <React.Fragment>
