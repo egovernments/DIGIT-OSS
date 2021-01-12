@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import data from "../../../propertyType.json";
 import { Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
-import { useTranslation } from "react-i18next";
 
 const SelectPropertyType = ({ config, onSelect, t, value }) => {
   const [propertyType, setPropertyType] = useState(() => {
@@ -27,11 +25,12 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
   return (
     <TypeSelectCard
       {...config.texts}
-      {...{ menu: propertyTypesData.data }}
-      {...{ optionsKey: "name" }}
-      {...{ selected: selectedValue }}
-      {...{ selectedOption: propertyType }}
-      {...{ onSave: goNext }}
+      disabled={propertyType ? false : true}
+      menu={propertyTypesData.data}
+      optionsKey="i18nKey"
+      selected={selectedValue}
+      selectedOption={propertyType}
+      onSave={goNext}
       t={t}
     />
   );

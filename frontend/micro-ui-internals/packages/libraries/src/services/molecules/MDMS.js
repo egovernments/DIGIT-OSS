@@ -145,14 +145,14 @@ const GetApplicationChannel = (MdmsRes) => MdmsRes["FSM"].ApplicationChannel.fil
 const GetPropertyType = (MdmsRes) =>
   MdmsRes["PropertyTax"].PropertyType.filter((property) => property.active && !property.propertyType).map((item) => ({
     ...item,
-    name: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
+    i18nKey: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
     code: item.code,
   }));
 
 const GetPropertySubtype = (MdmsRes) =>
   MdmsRes["PropertyTax"].PropertyType.filter((property) => property.active && property.propertyType).map((item) => ({
     ...item,
-    name: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
+    i18nKey: `PROPERTYTAX_BILLING_SLAB_${item.code}`,
     code: item.code,
   }));
 
