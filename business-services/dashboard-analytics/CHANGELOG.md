@@ -2,6 +2,10 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.2 - 2020-11-18
+- Removed default DDR hard coding 
+
+
 ## 1.1.1 - 2020-09-01
 
 - Added LOCALSETUP.md and README.md
