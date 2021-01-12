@@ -19,7 +19,6 @@ const SelectRating = ({ parentRoute }) => {
 
   function log(data) {
     if (complaintDetails) {
-      console.log("complaintDetails", complaintDetails);
       complaintDetails.service.rating = data.rating;
       complaintDetails.service.additionalDetail = data.CS_FEEDBACK_WHAT_WAS_GOOD.join(",");
       complaintDetails.workflow = {
@@ -46,7 +45,7 @@ const SelectRating = ({ parentRoute }) => {
       },
       {
         type: "checkbox",
-        label: t("CS_FEEDBACK_WHAT_WAS_GOOD"),
+        label: "CS_FEEDBACK_WHAT_WAS_GOOD",
         checkLabels: [t("CS_FEEDBACK_SERVICES"), t("CS_FEEDBACK_RESOLUTION_TIME"), t("CS_FEEDBACK_QUALITY_OF_WORK"), t("CS_FEEDBACK_OTHERS")],
       },
       {
