@@ -3,6 +3,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.2 - 2021-01-12
+- Query Optimized
+
 ## 1.1.1 - 2020-08-04
 - Migration fix for status mapping issues
 
