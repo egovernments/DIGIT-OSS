@@ -1,0 +1,1 @@
+CREATE INDEX reactivation_employeeid_idx ON eg_hrms_reactivationdetails ("employeeid");

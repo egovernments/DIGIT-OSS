@@ -113,7 +113,11 @@ public class Employee {
     @Valid
     private List<DeactivationDetails> deactivationDetails = new ArrayList<>();
 
+    private List<ReactivationDetails> reactivationDetails = new ArrayList<>();
+
     private AuditDetails auditDetails;
+
+    private Boolean reActivateEmployee;
     
     @Valid
     @NotNull

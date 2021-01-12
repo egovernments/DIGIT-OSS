@@ -68,8 +68,10 @@ public class EmployeeQueryBuilder {
 			builder.append(" and employee.employeetype IN (").append(createQuery(criteria.getEmployeetypes())).append(")");
 			addToPreparedStatement(preparedStmtList, criteria.getEmployeetypes());
 		}
-
-		builder.append(" and employee.active = "+criteria.getIsActive());
+		if(criteria.getIsActive() != null){
+			builder.append(" and employee.active = ?");
+			preparedStmtList.add(criteria.getIsActive());
+		}
 	}
 	
 	public String paginationClause(EmployeeSearchCriteria criteria, StringBuilder builder) {

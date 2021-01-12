@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
@@ -30,8 +31,11 @@ public class NotificationService {
 	
 	@Autowired
 	private RestCallRepository repository;
-	
-    @Value("${kafka.topics.notification.sms}")
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Value("${kafka.topics.notification.sms}")
     private String smsTopic;
     
     @Value("${egov.hrms.employee.app.link}")
@@ -43,6 +47,17 @@ public class NotificationService {
 	@Value("${egov.localization.search.endpoint}")
 	private String localizationSearchEndpoint;
 
+	@Value("${egov.otp.host}")
+	private String otpHost;
+
+	@Value("${egov.otp.create.endpoint}")
+	private String otpCreateEndpoint;
+
+	@Value("${egov.environment.domain}")
+	private String envHost;
+
+
+
 	/**
 	 * Sends notification by putting the sms content onto the core-sms topic
 	 * 
@@ -50,7 +65,7 @@ public class NotificationService {
 	 * @param pwdMap
 	 */
 	public void sendNotification(EmployeeRequest request, Map<String, String> pwdMap) {
-		String message = getMessage(request);
+		String message = getMessage(request,HRMSConstants.HRMS_EMP_CREATE_LOCLZN_CODE);
 		if(StringUtils.isEmpty(message)) {
 			log.info("SMS content has not been configured for this case");
 			return;
@@ -61,6 +76,56 @@ public class NotificationService {
 			producer.push(smsTopic, smsRequest);
 		}
 	}
+
+	public void sendReactivationNotification(EmployeeRequest request){
+		String message = getMessage(request,HRMSConstants.HRMS_EMP_REACTIVATE_LOCLZN_CODE);
+		if(StringUtils.isEmpty(message)) {
+			log.info("SMS content has not been configured for this case");
+			return;
+		}
+		RequestInfo requestInfo = request.getRequestInfo();
+		for(Employee employee: request.getEmployees()) {
+			if(employee.getReactivationDetails()!=null && employee.getReActivateEmployee()){
+				String OTP = getOTP(employee,requestInfo);
+				String link = envHost + "employee/user/otp";
+
+				message = message.replace("<Employee Name>",employee.getUser().getName()).replace("<Username>",employee.getCode());
+				message = message.replace("<date>",(employee.getReactivationDetails().get(0).getEffectiveFrom()).toString());
+				message = message.replace("<password>",OTP).replace("<link>",link);
+
+				SMSRequest smsRequest = SMSRequest.builder().mobileNumber(employee.getUser().getMobileNumber()).message(message).build();
+				log.info(message );
+				producer.push(smsTopic, smsRequest);
+			}
+
+		}
+
+	}
+
+	public String getOTP(Employee employee,RequestInfo requestInfo){
+		Map<String, Object> OTPRequest= new HashMap<>();
+		Map<String, Object> otp= new HashMap<>();
+		otp.put("mobileNumber",employee.getUser().getMobileNumber());
+		otp.put("type","passwordreset");
+		otp.put("tenantId",employee.getTenantId());
+		otp.put("userType","EMPLOYEE");
+		otp.put("identity",employee.getUser().getMobileNumber());
+
+		OTPRequest.put("RequestInfo",requestInfo);
+		OTPRequest.put("otp",otp);
+
+		Object response = null;
+		StringBuilder url = new StringBuilder();
+		url.append(otpHost).append(otpCreateEndpoint);
+		try {
+			response = restTemplate.postForObject(url.toString(), OTPRequest, Map.class);
+		}catch(Exception e) {
+			log.error("Exception while creating user: ", e);
+			return null;
+		}
+		String result = JsonPath.read(response, "$.otp.otp");
+		return result;
+	}
 	
 	/**
 	 * Gets the message from localization
@@ -68,11 +133,11 @@ public class NotificationService {
 	 * @param request
 	 * @return
 	 */
-	public String getMessage(EmployeeRequest request) {
+	public String getMessage(EmployeeRequest request,String msgCode) {
 		String tenantId = request.getEmployees().get(0).getTenantId().split("\\.")[0];
 		Map<String, Map<String, String>> localizedMessageMap = getLocalisedMessages(request.getRequestInfo(), tenantId, 
 				HRMSConstants.HRMS_LOCALIZATION_ENG_LOCALE_CODE, HRMSConstants.HRMS_LOCALIZATION_MODULE_CODE);
-		return localizedMessageMap.get(HRMSConstants.HRMS_LOCALIZATION_ENG_LOCALE_CODE +"|"+tenantId).get(HRMSConstants.HRMS_EMP_CREATE_LOCLZN_CODE);
+		return localizedMessageMap.get(HRMSConstants.HRMS_LOCALIZATION_ENG_LOCALE_CODE +"|"+tenantId).get(msgCode);
 	}
 	
 	/**

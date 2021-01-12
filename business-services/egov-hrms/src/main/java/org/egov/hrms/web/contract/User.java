@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.egov.hrms.model.Role;
+import org.egov.hrms.model.enums.GuardianRelation;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -134,6 +135,9 @@ public class User {
     @Size(max=100)
     @JsonProperty("fatherOrHusbandName")
     private String fatherOrHusbandName;
+
+    @JsonProperty("relationship")
+    private GuardianRelation relationship;
 
     @Size(max=32)
     @JsonProperty("bloodGroup")
