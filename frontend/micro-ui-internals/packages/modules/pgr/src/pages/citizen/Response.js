@@ -19,7 +19,7 @@ const GetActionMessage = ({ action }) => {
 
 const BannerPicker = ({ response }) => {
   const { complaints } = response;
-
+  const { t } = useTranslation();
   if (complaints && complaints.response && complaints.response.responseInfo) {
     return (
       <Banner
@@ -36,7 +36,7 @@ const BannerPicker = ({ response }) => {
 const Response = (props) => {
   const { t } = useTranslation();
   const appState = useSelector((state) => state)["pgr"];
-  console.log("inside response");
+  console.log("inside response", appState);
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}

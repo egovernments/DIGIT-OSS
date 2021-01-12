@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
 
@@ -12,7 +12,7 @@ export const ComplaintsList = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
-  let { isLoading, error, data } = Digit.Hooks.pgr.useComplaintsListByMobile(tenantId, mobileNumber);
+  let { isLoading, error, data, revalidate } = Digit.Hooks.pgr.useComplaintsListByMobile(tenantId, mobileNumber);
 
   if (isLoading) {
     return (

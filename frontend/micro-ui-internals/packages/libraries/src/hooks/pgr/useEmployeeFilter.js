@@ -7,9 +7,9 @@ const useEmployeeFilter = (cityCode, roles, complaintDetails) => {
     // const _roles = roles.join(",");
     const searchResponse = await Digit.PGRService.employeeSearch(cityCode, roles);
 
-    const serviceDefs = Digit.SessionStorage.get("serviceDefs");
+    const serviceDefs = await Digit.MDMSService.getServiceDefs(cityCode, "PGR");
     const serviceCode = complaintDetails.service.serviceCode;
-    const service = serviceDefs.find((def) => def.serviceCode === serviceCode);
+    const service = serviceDefs?.find((def) => def.serviceCode === serviceCode);
     const department = service?.department;
     const employees = searchResponse.Employees.filter((employee) =>
       employee.assignments.map((assignment) => assignment.department).includes(department)

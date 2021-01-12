@@ -18,10 +18,10 @@ export const PGRService = {
       url: Urls.PGR_Create,
       data: details,
       useCache: true,
-      userInfo: true,
       method: "POST",
       params: { tenantId },
       auth: true,
+      userService: true,
     }),
   update: (details, tenantId) =>
     Request({
@@ -31,6 +31,7 @@ export const PGRService = {
       auth: true,
       method: "POST",
       params: { tenantId },
+      userService: true,
     }),
   count: (tenantId, params) =>
     Request({

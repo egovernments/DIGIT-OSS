@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "react-query";
 const getThumbnails = async (ids, tenantId) => {
   const res = await Digit.UploadServices.Filefetch(ids, tenantId);
   if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
-    return res.data.fileStoreIds.map((o) => o.url.split(",")[3]);
+    return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3]), images: res.data.fileStoreIds.map((o) => o.url.split(",")[1]) };
   } else {
     return null;
   }
@@ -36,7 +36,8 @@ const transformDetails = ({ id, service, workflow, thumbnails, complaintType }) 
     : {};
   return {
     details: !isEmptyOrNull(customDetails) ? customDetails : getDetailsRow({ id, service, complaintType }),
-    thumbnails: thumbnails,
+    thumbnails: thumbnails?.thumbs,
+    images: thumbnails?.images,
     workflow: workflow,
     service,
     audit: {
