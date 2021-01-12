@@ -7,6 +7,7 @@ import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
 
 const constructionyears =[{value:"2019",label:"2019-20"},{value:"2018",label:"2018-19"}];
 const formConfig = {
@@ -143,14 +144,32 @@ const mergeMaster = (masterOne, masterTwo, parentName = "") => {
   let parentList = [];
   for (var variable in masterTwo) {
     if (masterTwo.hasOwnProperty(variable)) {
-      dropDownData.push({ label: masterTwo[variable].name, value: masterTwo[variable].code });
+      dropDownData.push({ label:getLocaleLabels(
+        "",
+        `COMMON_PROPUSGTYPE_${masterTwo[variable].code.split(".").join("_")}`,
+        localisationLabels
+      ), value: masterTwo[variable].code });
     }
   }
   let masterOneData = getAbsentMasterObj(prepareDropDownData(masterOne, true), prepareDropDownData(masterTwo, true), parentName);
+  const localisationLabels = getTransformedLocalStorgaeLabels();
+
   // console.log(masterOneData);
   for (var i = 0; i < masterOneData.length; i++) {
     // masterOneData[i][parentName]=masterOneData[i].code;
-    dropDownData.push({ label: masterOneData[i].name, value: masterOneData[i].code });
+    if(masterOneData[i].code === "MIXED"){
+      dropDownData.push({ label: getLocaleLabels(
+        "",
+        `COMMON_PROPUSGTYPE_${masterOneData[i].code.split(".").join("_")}`,
+        localisationLabels
+      ), value: masterOneData[i].code });
+    }else{
+      dropDownData.push({ label: getLocaleLabels(
+        "",
+        `COMMON_PROPTYPE_${masterOneData[i].code.split(".").join("_")}`,
+        localisationLabels
+      ), value: masterOneData[i].code });
+    }
   }
   return dropDownData;
 };

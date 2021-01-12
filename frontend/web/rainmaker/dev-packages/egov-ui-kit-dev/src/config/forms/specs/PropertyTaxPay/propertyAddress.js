@@ -235,12 +235,13 @@ const formConfig = {
   afterInitForm: (action, store, dispatch) => {
     try {
       let state = store.getState();
+      let tenentId = state.form.propertyAddress.fields.city.value;
       const { localizationLabels } = state.app;
       const { cities, citiesByModule, loadMdmsData } = state.common;
       const roadTypeData =
         get(loadMdmsData, "PropertyTax.RoadType") &&
         Object.values(get(loadMdmsData, "PropertyTax.RoadType")).map((item, index) => {
-          return { value: item.code, label: item.name };
+          return { value: item.code, label: getTranslatedLabel(`PROPERTYTAX_ROADTYPE_${item.code}`,localizationLabels)};
         });
 
       dispatch(setFieldProperty("propertyAddress", "roadType", "dropDownData", roadTypeData));
@@ -248,7 +249,7 @@ const formConfig = {
      const thanaData =
       get(loadMdmsData, "PropertyTax.Thana") &&
       Object.values(get(loadMdmsData, "PropertyTax.Thana")).map((item, index) => {
-      return { value: item.code, label: item.name };
+      return { value: item.code, label: getTranslatedLabel('PROPERTYTAX_THANA_' + tenentId.replace(".","_").toUpperCase() + "_" + item.code.toUpperCase(),localizationLabels) };
       });
       console.log("thanaData------->>>",thanaData)
       let isRequired = true;

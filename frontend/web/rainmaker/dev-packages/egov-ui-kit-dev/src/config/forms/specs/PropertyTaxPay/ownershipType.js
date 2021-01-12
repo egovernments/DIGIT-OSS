@@ -4,6 +4,7 @@ import get from "lodash/get";
 import { updateInstituteType } from "./utils/formConfigModifier";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
+import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 
 const formConfig = {
   name: "ownershipType",
@@ -37,7 +38,11 @@ const formConfig = {
     let state = store.getState();
     const { dispatch } = store;
     const ownerDetails = getOwnerDetails(state);
-    if(ownerDetails && ownerDetails.length){
+    const { localizationLabels } = state.app;
+    ownerDetails.map((item)=>{
+      item.label= getTranslatedLabel(`TL_${item.value}`,localizationLabels)
+    })
+     if(ownerDetails && ownerDetails.length){
       const selectedOwnerShip=get(state, "common.prepareFormData.Properties[0].propertyDetails[0].ownershipCategory");
       const ownerShipValue=selectedOwnerShip?selectedOwnerShip:ownerDetails[0].value;
       const currentOwnershipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", ownerShipValue);

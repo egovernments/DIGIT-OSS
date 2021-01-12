@@ -10,6 +10,7 @@ import isEmpty from "lodash/isEmpty";
 import filter from "lodash/filter";
 import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import store from "redux/store";
 
 let floorDropDownData = [];
 let innerDimensionsData = [{ value: "true", label: "YES" }, { value: "false", label: "NO" }];
@@ -122,8 +123,9 @@ export const occupancy = {
     numcols: 4,
     dropDownData: [],
     updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
+      const { localizationLabels } = state.app;
       let consturctType = Object.values(get(state, `common.loadMdmsData.PropertyTax.ConstructionType`,[])).map((item, index) => {
-        return { value: item.code, label: item.name };
+        return { value: item.code, label: getTranslatedLabel(`PROPERTYTAX_CONSTRUCTIONTYPE_${item.code}`,localizationLabels) };
       });
       dispatch(setFieldProperty(formKey, "constructionType", "dropDownData", consturctType));
       // const { value } = sourceField;
@@ -932,13 +934,23 @@ export const roadType = {
 };
 
 export const prepareDropDownData = (master, withOriginal = false) => {
+  let state = store.getState();
+
+  const { localizationLabels } = state.app;
   let dropDownData = [];
   for (var variable in master) {
     if (master.hasOwnProperty(variable)) {
       if (withOriginal) {
         dropDownData.push(master[variable]);
-      } else {
-        dropDownData.push({ label: master[variable].name, value: master[variable].code });
+      } 
+      else if(master[variable].code==="RENTED"||master[variable].code ==="SELFOCCUPIED"||master[variable].code==="UNOCCUPIED") {
+        dropDownData.push({ label: getTranslatedLabel(`PROPERTYTAX_OCCUPANCYTYPE_${master[variable].code}`,localizationLabels), value: master[variable].code });
+      }
+      else if(master[variable].code==="PUCCA"||master[variable].code ==="SEMIPUCCA"||master[variable].code==="KUCCHA") {
+        dropDownData.push({ label: getTranslatedLabel(`PROPERTYTAX_CONSTRUCTIONTYPE_${master[variable].code}`,localizationLabels), value: master[variable].code });
+      }
+      else {
+        dropDownData.push({ label: `${master[variable].code}`, value: master[variable].code });
       }
     }
   }

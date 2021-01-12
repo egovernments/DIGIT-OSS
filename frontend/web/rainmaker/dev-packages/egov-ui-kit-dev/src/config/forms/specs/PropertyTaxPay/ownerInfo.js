@@ -5,6 +5,7 @@ import set from "lodash/set";
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import {getFinalData} from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFormData as setData } from "egov-ui-kit/redux/common/actions";
+import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 
 const formConfig = {
   name: "ownerInfo",
@@ -232,11 +233,16 @@ const formConfig = {
 
     try {
       let state = store.getState();
+      const { localizationLabels } = state.app;
       const {common={}}=state;
       const {prepareFormData={}}=common;
       const OwnerTypes = get(state, `common.generalMDMSDataById.OwnerType`);
+      for (let key in OwnerTypes) {
+        OwnerTypes[key].name = getTranslatedLabel(`PROPERTYTAX_OWNERTYPE_${OwnerTypes[key].code}`,localizationLabels)
+      };
       //const finalData=getFinalData();
       
+
       const TaxPeriod = get(common, `loadMdmsData.BillingService.TaxPeriod`);
     
       let yeardata = [];
