@@ -3,6 +3,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.1 - 2021-01-12
+- Added pincode field
+
 ## 1.1.0 - 2020-06-22
 - Added typescript definition generation plugin
 - Upgraded to `tracer:2.0.0-SNAPSHOT`
