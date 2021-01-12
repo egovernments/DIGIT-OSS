@@ -15,5 +15,6 @@ module.exports = function (app) {
     "/egov-hrms",
     "/user-otp",
     "/user",
+    "/fsm",
   ].forEach((location) => app.use(location, createProxy));
 };

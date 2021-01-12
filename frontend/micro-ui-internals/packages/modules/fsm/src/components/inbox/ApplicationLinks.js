@@ -1,10 +1,9 @@
 import { Card } from "@egovernments/digit-ui-react-components";
 import { forEach } from "lodash";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const FSMLink = ({ isMobile, data }) => {
+const ApplicationLinks = ({ isMobile, data }) => {
   const { t } = useTranslation();
 
   const allLinks = [
@@ -19,22 +18,22 @@ const FSMLink = ({ isMobile, data }) => {
 
   const [links, setLinks] = useState([]);
 
-  // const { roles } = Digit.UserService.getUser().info;
+  const { roles } = Digit.UserService.getUser().info;
 
   const hasAccess = (accessTo) => {
-    // return roles.filter((role) => accessTo.includes(role.code)).length;
+    return roles.filter((role) => accessTo.includes(role.code)).length;
   };
 
   useEffect(() => {
     let linksToShow = [];
     allLinks.forEach((link) => {
-      // if (link.accessTo) {
-      //   if (hasAccess(link.accessTo)) {
-      //     linksToShow.push(link);
-      //   }
-      // } else {
-      linksToShow.push(link);
-      // }
+      if (link.accessTo) {
+        if (hasAccess(link.accessTo)) {
+          linksToShow.push(link);
+        }
+      } else {
+        linksToShow.push(link);
+      }
     });
     setLinks(linksToShow);
   }, []);
@@ -42,7 +41,7 @@ const FSMLink = ({ isMobile, data }) => {
   // useEffect(() => {
   //   if (isMobile) {
   //     const mobileLinks = links.filter((link) => {
-  //       return link.text !== t("ES_DASHBOARD");
+  //       return link.text !== t("ES_TITLE_DASHBOARD");
   //     });
   //     setLinks(mobileLinks);
   //   }
@@ -56,7 +55,7 @@ const FSMLink = ({ isMobile, data }) => {
           <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z" fill="white" />
         </svg>
       </span>{" "}
-      <span className="text">{t("ES_TITLE_FAECAL_SLUDGE_MGMT")}</span>
+      <span className="text">Applications</span>
     </div>
   );
 
@@ -67,7 +66,7 @@ const FSMLink = ({ isMobile, data }) => {
         <div className="body">
           {links.map(({ link, text }, index) => (
             <span className="link" key={index}>
-              <Link to={link}>{text}</Link>
+              <a href={link}>{text}</a>
             </span>
           ))}
         </div>
@@ -76,4 +75,4 @@ const FSMLink = ({ isMobile, data }) => {
   );
 };
 
-export default FSMLink;
+export default ApplicationLinks;

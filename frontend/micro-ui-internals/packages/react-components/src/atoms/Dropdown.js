@@ -31,17 +31,9 @@ const Dropdown = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
 
-  console.log("%c 🏎️: props in dropdown ", "font-size:16px;background-color:#c239cc;color:white;", props.selected);
-
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
-
-  useEffect(() => {
-    if (props.forceClose) {
-      setDropdownStatus(false);
-    }
-  }, [props.forceClose]);
 
   function dropdownSwitch() {
     var current = dropdownStatus;
@@ -59,7 +51,7 @@ const Dropdown = (props) => {
   }
 
   function onSelect(val) {
-    // console.log(val,"curent", selectedOption,"old");
+    //console.log(val, "curent", selectedOption, "old");
     if (val !== selectedOption) {
       // console.log(val,"is selected");
       props.select(val);

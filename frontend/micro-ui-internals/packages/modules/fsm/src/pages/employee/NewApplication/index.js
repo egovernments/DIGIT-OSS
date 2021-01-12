@@ -2,32 +2,36 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 import { Switch, Route, useRouteMatch, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { FormComposer } from "../../../components/FormComposer";
 
 // TODO: fetch data instead of hard coded
 import data from "../../../propertyType.json";
-const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
-const propertySubTypeRes = data.PropertyType.map((item) => ({ key: item.propertyType, name: item.code }));
+// const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
+const propertySubTypeRes = data.PropertyType.filter((item) => item.propertyType !== undefined);
 
-export const NewApplication = ({ parentUrl, heading = "New Desuldging Application" }) => {
-  const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
-  const __initSubType__ = window.Digit.SessionStorage.get("subType");
-
+export const NewApplication = ({ parentUrl, heading }) => {
+  // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
+  // const __initSubType__ = window.Digit.SessionStorage.get("subType");
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const [menu, setMenu] = useState([]);
-  const [subTypeMenu, setSubTypeMenu] = useState(__initSubType__ ? __initSubType__ : []);
-  const [propertyType, setPropertyType] = useState(__initPropertyType__ ? __initPropertyType__ : {});
+  const [subTypeMenu, setSubTypeMenu] = useState([]);
+  const [propertyType, setPropertyType] = useState({});
   const [subType, setSubType] = useState({});
   const [vehicleMenu, setVehicleMenu] = useState([
     { key: "Tracker (500 ltrs)", name: "Tracker (500 ltrs)" },
     { key: "Tracker (1000 ltrs)", name: "Tracker (1000 ltrs)" },
   ]);
-  const [channel, setChannel] = useState("Counter");
-  const [channelMenu, setChannelMenu] = useState([{ key: "Counter", name: "Counter" }]);
-  const [vehicle, setVehicle] = useState("Tracker (500 ltrs)");
+  const [channel, setChannel] = useState(null);
+  const [channelMenu, setChannelMenu] = useState([]);
+  const [sanitation, setSanitation] = useState([]);
+  const [sanitationMenu, setSanitationMenu] = useState([]);
+  const [vehicle, setVehicle] = useState(null);
   const [slumMenu, setSlumMenu] = useState([{ key: "NJagbandhu", name: "NJagbandhu" }]);
   const [slum, setSlum] = useState("NJagbandhu");
+
+  const localitiesObj = useSelector((state) => state.common.localities);
 
   const cityProperty = Digit.SessionStorage.get("city_property");
   const selectedLocalities = Digit.SessionStorage.get("selected_localities");
@@ -39,19 +43,41 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
 
   const { t } = useTranslation();
   const cities = Digit.Hooks.fsm.useTenants();
-  const dispatch = useDispatch();
-  const match = useRouteMatch();
   const history = useHistory();
+  const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
+  const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
 
   useEffect(() => {
-    setMenu(propertyTypeRes.filter((o) => o !== undefined).map((item) => ({ key: item, name: item })));
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === propertyType));
+    if (!applicationChannelData.isLoading) {
+      const data = applicationChannelData.data?.map((channel) => ({ i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}` }));
+
+      setChannelMenu(data);
+    }
+  }, [applicationChannelData]);
+
+  useEffect(() => {
+    if (!sanitationTypeData.isLoading) {
+      const data = sanitationTypeData.data?.map((type) => ({ i18nKey: `ES_APPLICATION_DETAILS_SANITATION_TYPE_${type.code}` }));
+
+      setSanitationMenu(data);
+    }
+  }, [sanitationTypeData]);
+
+  useEffect(() => {
+    setMenu(() => {
+      return Object.values(
+        data.PropertyType.reduce((acc, item) => {
+          if (item.propertyType !== undefined) return acc;
+          return Object.assign(acc, { [item.code]: { key: item.code, name: item.name } });
+        }, {})
+      );
+    });
+    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === propertyType));
   }, []);
 
   function selectedType(value) {
     setPropertyType(value);
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.key === value.key));
-    window.Digit.SessionStorage.set("propertyType", value);
+    setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === value.key).map((item) => ({ key: item.code, name: item.name })));
   }
 
   function selectSlum(value) {
@@ -62,32 +88,32 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     setChannel(value);
   }
 
+  function selectSanitation(value) {
+    setSanitation(value);
+  }
+
   function selectVehicle(value) {
     setVehicle(value);
   }
 
   function selectedSubType(value) {
     setSubType(value);
-    window.Digit.SessionStorage.set("subType", [value]);
   }
 
   // city locality logic
   const selectCity = async (city) => {
     setSelectedCity(city);
-    Digit.SessionStorage.set("city_property", city);
-    let response = await Digit.LocationService.getLocalities({ tenantId: city.code });
-    let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+    let __localityList = localitiesObj[city.code];
     setLocalities(__localityList);
-    Digit.SessionStorage.set("selected_localities", __localityList);
   };
 
   function selectLocality(locality) {
     setSelectedLocality(locality);
-    Digit.SessionStorage.set("localityProperty", locality);
   }
 
   const onSubmit = (data) => {
-    const applicationChannel = data.applicationChannel;
+    const applicationChannel = channel.code;
+    const sanitationtype = sanitation.code;
     const applicantName = data.applicantName;
     const mobileNumber = data.mobileNumber;
     const pincode = data.pincode;
@@ -101,79 +127,41 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     const state = "Punjab";
     const localityCode = selectedLocality.code;
     const localityName = selectedLocality.name;
-    const { key } = subType;
-    const propertyType = key;
+    const { name } = subType;
+    const propertyType = name;
     const formData = {
-      applicationChannel,
-      applicantName,
-      mobileNumber,
-      pincode,
-      landmark,
-      noOfTrips,
-      amount,
-      cityCode,
-      city,
-      district,
-      region,
-      localityCode,
-      localityName,
-      state,
-      propertyType,
-      subType,
-      vehicle,
-    };
-
-    const requestData = {
-      tenantId: null,
-      description: null,
-      accountId: null,
-      additionalDetail: {},
-      source: null,
-      sanitationtype: null,
-      propertyUsage: null,
-      noOfTrips,
-      status: null,
-      vehicleId: vehicle,
-      pitDetail: {
-        hight: 0,
-        length: 0,
-        width: 0,
-        distanceFromRoad: 0,
-      },
-      address: {
-        tenantId: null,
-        doorNo: null,
-        plotNo: null,
-        landmark,
-        city,
-        district,
-        region,
-        state,
-        country: null,
-        pincode,
-        additionDetails: null,
-        buildingName: null,
-        street: null,
-        locality: {
-          code: null,
-          name: null,
-          label: null,
-          latitude: null,
-          longitude: null,
-          children: [null],
+      fsm: {
+        citizen: {
+          name: applicantName,
+          mobileNumber,
         },
-        geoLocation: {
-          latitude: 0,
-          longitude: 0,
-          additionalDetails: {},
+        tenantId: cityCode,
+        sanitationtype: sanitationtype,
+        source: applicationChannel,
+        additionalDetails: {
+          tripAmount: amount,
         },
+        propertyUsage: propertyType,
+        address: {
+          tenantId: cityCode,
+          landmark,
+          city,
+          state,
+          pincode,
+          locality: {
+            code: localityCode.split("_").pop(),
+            name: localityName,
+          },
+          geoLocation: {
+            latitude: selectedLocality.latitude,
+            longitude: selectedLocality.longitude,
+          },
+        },
+        noOfTrips,
       },
+      workflow: null,
     };
-    console.log("%c 🇸🇦: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData);
-    console.log("%c 🍦: onSubmit -> requestData ", "font-size:16px;background-color:#50ab67;color:white;", requestData);
-
-    // await dispatch(createApplication(formData));
-    // history.push(parentUrl + "/response");
+    console.log("%c 🇸🇦: onSubmit -> formData ", "font-size:16px;background-color:#3dd445;color:white;", formData, subType);
 
     window.Digit.SessionStorage.set("propertyType", null);
     window.Digit.SessionStorage.set("subType", null);
@@ -181,20 +169,25 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
 
-    history.push("digit-ui/employee/fsm/response");
+    history.push("/digit-ui/employee/fsm/response", formData);
   };
 
   const config = [
     {
-      head: t("Application Details"),
+      head: t("ES_TITLE_APPLICATION_DETAILS"),
       body: [
         {
-          label: t("Application Channel"),
+          label: t("ES_NEW_APPLICATION_APPLICATION_CHANNEL"),
           type: "dropdown",
-          populators: <Dropdown option={channelMenu} optionKey="name" id="channel" selected={channel} select={selectChannel} />,
+          populators: <Dropdown option={channelMenu} optionKey="i18nKey" id="channel" selected={channel} select={selectChannel} />,
         },
         {
-          label: t("Applicant Name"),
+          label: t("ES_NEW_APPLICATION_SANITATION_TYPE"),
+          type: "dropdown",
+          populators: <Dropdown option={sanitationMenu} optionKey="i18nKey" id="sanitation" selected={sanitation} select={selectSanitation} />,
+        },
+        {
+          label: t("ES_NEW_APPLICATION_APPLICANT_NAME"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -206,7 +199,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           },
         },
         {
-          label: t("Applicant Mobile No."),
+          label: t("ES_NEW_APPLICATION_APPLICANT_MOBILE_NO"),
           type: "text",
           isMandatory: true,
           populators: {
@@ -218,7 +211,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           },
         },
         {
-          label: t("Slum Name"),
+          label: t("ES_NEW_APPLICATION_SLUM_NAME"),
           type: "radio",
           isMandatory: true,
           populators: <Dropdown option={slumMenu} optionKey="name" id="slum" selected={slum} select={selectSlum} />,
@@ -226,16 +219,16 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
       ],
     },
     {
-      head: t("Property Details"),
+      head: t("ES_NEW_APPLICATION_PROPERTY_DETAILS"),
       body: [
         {
-          label: t("Property Type"),
+          label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={menu} optionKey="name" id="propertyType" selected={propertyType} select={selectedType} />,
         },
         {
-          label: t("Property Sub-Type"),
+          label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
@@ -244,10 +237,10 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
       ],
     },
     {
-      head: t("Location Details"),
+      head: t("ES_NEW_APPLICATION_LOCATION_DETAILS"),
       body: [
         {
-          label: t("Pincode"),
+          label: t("ES_NEW_APPLICATION_LOCATION_PINCODE"),
           type: "text",
           populators: {
             name: "pincode",
@@ -255,13 +248,13 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           },
         },
         {
-          label: t("City"),
+          label: t("ES_NEW_APPLICATION_LOCATION_CITY"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown isMandatory selected={selectedCity} option={cities} id="city" select={selectCity} optionKey="name" />,
         },
         {
-          label: t("Mohalla"),
+          label: t("ES_NEW_APPLICATION_LOCATION_MOHALLA"),
           isMandatory: true,
           type: "dropdown",
           populators: (
@@ -269,7 +262,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           ),
         },
         {
-          label: t("Landmark"),
+          label: t("ES_NEW_APPLICATION_LOCATION_LANDMARK"),
           type: "textarea",
           populators: {
             name: "landmark",
@@ -278,10 +271,10 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
       ],
     },
     {
-      head: t("Payment Details"),
+      head: t("ES_NEW_APPLICATION_PAYMENT_DETAILS"),
       body: [
         {
-          label: t("No. of Trips"),
+          label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
           type: "text",
           populators: {
             name: "noOfTrips",
@@ -289,7 +282,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
           },
         },
         {
-          label: t("Amount"),
+          label: t("ES_NEW_APPLICATION_PAYMENT_AMOUNT"),
           isMandatory: true,
           type: "text",
           populators: {
@@ -314,7 +307,7 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
       head: t(),
       body: [
         {
-          label: t("Vehicle Requested"),
+          label: t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED"),
           isMandatory: true,
           type: "dropdown",
           populators: <Dropdown option={vehicleMenu} optionKey="name" id="vehicle" selected={vehicle} select={selectVehicle} />,
@@ -323,5 +316,5 @@ export const NewApplication = ({ parentUrl, heading = "New Desuldging Applicatio
     },
   ];
 
-  return <FormComposer heading={heading} label="Application Submit" config={config} onSubmit={onSubmit}></FormComposer>;
+  return <FormComposer heading={heading} label={t("ES_COMMON_APPLICATION_SUBMITTED")} config={config} onSubmit={onSubmit}></FormComposer>;
 };

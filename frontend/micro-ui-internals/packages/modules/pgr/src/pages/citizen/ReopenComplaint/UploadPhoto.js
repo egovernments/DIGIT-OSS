@@ -21,7 +21,7 @@ const UploadPhoto = (props) => {
     if (ids?.length) {
       const documents = ids.map((id) => ({
         documentType: "PHOTO",
-        fileStore: id,
+        fileStoreId: id,
         documentUid: "",
         additionalDetails: {},
       }));

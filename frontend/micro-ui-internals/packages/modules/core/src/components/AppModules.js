@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 
 import { AppHome } from "./Home";

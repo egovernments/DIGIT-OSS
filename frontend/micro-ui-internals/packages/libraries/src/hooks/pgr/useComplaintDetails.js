@@ -58,7 +58,7 @@ const fetchComplaintDetails = async (tenantId, id) => {
   if (service && workflow && serviceDefs) {
     const complaintType = serviceDefs.filter((def) => def.serviceCode === service.serviceCode)[0].menuPath.toUpperCase();
     const ids = workflow.verificationDocuments
-      ? workflow.verificationDocuments.filter((doc) => doc.documentType === "PHOTO").map((photo) => photo.fileStore || photo.id)
+      ? workflow.verificationDocuments.filter((doc) => doc.documentType === "PHOTO").map((photo) => photo.fileStoreId || photo.id)
       : null;
     const thumbnails = ids ? await getThumbnails(ids, service.tenantId) : null;
     const details = transformDetails({ id, service, workflow, thumbnails, complaintType });

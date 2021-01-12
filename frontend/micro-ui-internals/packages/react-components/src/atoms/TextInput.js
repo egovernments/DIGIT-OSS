@@ -38,7 +38,7 @@ TextInput.propTypes = {
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
   ref: PropTypes.func,
-  value: PropTypes.string,
+  value: PropTypes.any,
 };
 
 TextInput.defaultProps = {

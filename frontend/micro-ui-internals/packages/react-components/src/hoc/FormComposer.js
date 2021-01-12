@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import BreakLine from "../atoms/BreakLine";
 import Card from "../atoms/Card";
@@ -49,15 +49,23 @@ export const FormComposer = (props) => {
       props.config?.map((section, index, array) => {
         return (
           <React.Fragment key={index}>
-            <CardSectionHeader>{section.head}</CardSectionHeader>
+            {section.head && <CardSectionHeader>{section.head}</CardSectionHeader>}
             {section.body.map((field, index) => {
-              return (
-                <LabelFieldPair key={index}>
-                  <CardLabel>
+              const FieldPair = () => (
+                <React.Fragment>
+                  <CardLabel style={props.inline && { marginBottom: "8px" }}>
                     {field.label}
                     {field.isMandatory ? " * " : null}
                   </CardLabel>
                   <div className="field">{fieldSelector(field.type, field.populators)}</div>
+                </React.Fragment>
+              );
+
+              if (props.inline) return <FieldPair key={index} />;
+
+              return (
+                <LabelFieldPair key={index}>
+                  <FieldPair />
                 </LabelFieldPair>
               );
             })}
@@ -70,13 +78,16 @@ export const FormComposer = (props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Card>
-        <CardSubHeader>{props.heading}</CardSubHeader>
+      <Card style={props.noBoxShadow && { boxShadow: "none" }}>
+        {!props.childrenAtTheBottom && props.children}
+        {props.heading && <CardSubHeader>{props.heading}</CardSubHeader>}
         {formFields}
-        {props.children}
-        <ActionBar>
-          <SubmitBar label={t(props.label)} submit="submit" />
-        </ActionBar>
+        {props.childrenAtTheBottom && props.children}
+        {props.label && (
+          <ActionBar>
+            <SubmitBar label={t(props.label)} submit="submit" />
+          </ActionBar>
+        )}
       </Card>
     </form>
   );
