@@ -67,6 +67,7 @@
 }
 
 .photos-wrap {
+  max-width: 640px;
   @apply flex pt-md;
 
   img {
