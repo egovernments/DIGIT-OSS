@@ -35,10 +35,19 @@ export const CreateComplaint = () => {
     }
   }, [params, nextStep]);
 
+  useEffect(() => {
+    console.clear();
+    console.log(params.complaintType);
+  }, [params]);
+
   const goNext = () => {
     //console.log("ParamState go next::::::::::", paramState);
     const currentPath = pathname.split("/").pop();
-    const { nextStep } = config.routes[currentPath];
+
+    let { nextStep } = config.routes[currentPath];
+    if (nextStep === "sub-type" && params.complaintType.key === "Others") {
+      nextStep = config.routes[nextStep].nextStep;
+    }
     setNextStep(nextStep);
     // if (nextStep === null) return submitComplaint();
     // history.push(`${match.path}/${nextStep}`);

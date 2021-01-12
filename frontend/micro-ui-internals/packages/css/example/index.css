@@ -2152,6 +2152,19 @@ img, video {
     font-size: 16px;
     line-height: 24px; }
 
+.roundedLabel {
+  width: 24px;
+  height: 24px;
+  border-radius: 15px;
+  margin-left: 8px;
+  --bg-opacity:1;
+  background-color: #000;
+  background-color: rgba(0, 0, 0, var(--bg-opacity));
+  text-align: center;
+  --text-opacity:1;
+  color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity)); }
+
 .employee .card-home {
   font-size: 16px;
   padding: 0 0 16px;
