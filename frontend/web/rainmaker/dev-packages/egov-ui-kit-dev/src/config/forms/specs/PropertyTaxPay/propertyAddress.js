@@ -8,6 +8,7 @@ import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import sortBy from "lodash/sortBy";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 
 var constructiontype =[{value : "road1" , label :"rd1" }]
 
@@ -277,6 +278,15 @@ const formConfig = {
         }, []);
         dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
       }
+       const locale = getLocale() || "en_IN";
+       const localizationLabelsData = initLocalizationLabels(locale);
+       const mohalla = state.form.propertyAddress.fields.mohalla &&
+              state.form.propertyAddress.fields.mohalla.dropDownData && 
+                  state.form.propertyAddress.fields.mohalla.dropDownData.map((item, index) => {
+              return { value: item.label,
+                    label: getTranslatedLabel(item.label, localizationLabelsData)};
+                    });
+                 dispatch(setFieldProperty("propertyAddress", "mohalla", "dropDownData", mohalla));
       return action;
     } catch (e) {
       console.log(e);
