@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tarento.analytics.ConfigurationLoader;
 import com.tarento.analytics.constant.Constants;
 import com.tarento.analytics.service.impl.RestService;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,8 +133,7 @@ public class MdmsApiMappings {
 
             }
         } catch (Exception e){
-            getDefaultMapping();
-            logger.error("Loading Mdms service error: "+e.getMessage()+" :: loaded default DDRs");
+            throw new CustomException("MDMS_ERROR","Failed to fetch DDR's from mdms");
         }
         ddrValueMap.entrySet().removeIf(map -> map.getValue().size()==0);
         logger.info("ddrValueMap = "+ddrValueMap);
@@ -192,34 +192,6 @@ public class MdmsApiMappings {
         return isTranslate ? ddrValueMap : ddrTenantMapping1;
     }
 
-    private void getDefaultMapping(){
-
-        ddrTenantMapping.put("1", "Amritsar-DDR");
-        ddrTenantMapping.put("2", "Patiala-DDR");
-        ddrTenantMapping.put("3", "Bathinda-DDR");
-        ddrTenantMapping.put("4", "Ferozepur-DDR");
-        ddrTenantMapping.put("5", "Ludhiana-DDR");
-        ddrTenantMapping.put("6", "Ferozepur-DDR");
-        ddrTenantMapping.put("7", "Ferozepur-DDR");
-        ddrTenantMapping.put("8", "Amritsar-DDR");
-        ddrTenantMapping.put("9", "Jalandhar-DDR");
-        ddrTenantMapping.put("10", "Jalandhar-DDR");
-
-        ddrTenantMapping.put("11", "Jalandhar-DDR");
-        ddrTenantMapping.put("12", "Ludhiana-DDR");
-        ddrTenantMapping.put("13", "Bathinda-DDR");
-        ddrTenantMapping.put("14", "Ferozepur-DDR");
-        ddrTenantMapping.put("15", "Patiala-DDR");
-        ddrTenantMapping.put("16", "Bathinda-DDR");
-        ddrTenantMapping.put("17", "Jalandhar-DDR");
-        ddrTenantMapping.put("18", "Pathankot-MC");
-        ddrTenantMapping.put("19", "Patiala-DDR");
-        ddrTenantMapping.put("20", "Ludhiana-DDR");
-        ddrTenantMapping.put("21", "Patiala-DDR");
-        ddrTenantMapping.put("22", "Bathinda-DDR");
-        ddrTenantMapping.put("140001", "Ludhiana-DDR");
-
-    }
 
 
 }
