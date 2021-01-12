@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown, RadioButtons, ActionBar, RemoveableTag } from "@egovernments/digit-ui-react-components";
+import { Dropdown, RadioButtons, ActionBar, RemoveableTag, RoundedLabel } from "@egovernments/digit-ui-react-components";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";

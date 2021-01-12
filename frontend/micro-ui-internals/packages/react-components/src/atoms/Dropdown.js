@@ -41,8 +41,7 @@ const Dropdown = (props) => {
   }
 
   function dropdownOn(val) {
-    const waitForOptions = () => setTimeout(() => setDropdownStatus(val), 200);
-
+    const waitForOptions = () => setTimeout(() => setDropdownStatus(val), 500);
     const timerId = waitForOptions();
 
     return () => {

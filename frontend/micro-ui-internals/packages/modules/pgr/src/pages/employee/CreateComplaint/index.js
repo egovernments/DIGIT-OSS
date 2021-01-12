@@ -7,7 +7,6 @@ import { useQueryClient } from "react-query";
 
 import { FormComposer } from "../../../components/FormComposer";
 import { createComplaint } from "../../../redux/actions/index";
-import { useQueryClient } from "react-query";
 
 export const CreateComplaint = ({ parentUrl }) => {
   // const SessionStorage = Digit.SessionStorage;
