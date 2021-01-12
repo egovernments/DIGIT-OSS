@@ -37,11 +37,13 @@ const moduleReducers = (initData) => ({
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
+const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
+
 const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
-const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
+const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
 
 const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
 const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
@@ -72,6 +74,6 @@ window.mdmsInitPost = (data) => {
 };
 
 ReactDOM.render(
-  <DigitUI stateCode="pb" registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />,
+  <DigitUI stateCode={stateCode} registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />,
   document.getElementById("root")
 );
