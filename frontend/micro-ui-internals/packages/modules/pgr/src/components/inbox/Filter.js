@@ -53,13 +53,13 @@ const Filter = (props) => {
     }
     for (const property in wfFilters) {
       if (Array.isArray(wfFilters[property])) {
-        count += wfFilters[property].length;
         let params = wfFilters[property].map((prop) => prop.code).join();
         if (params) {
           wfQuery[property] = params;
         }
       }
     }
+    count += wfFilters?.assignee?.length || 0;
     Digit.SessionStorage.set("pgr_filters", pgrfilters);
     Digit.SessionStorage.set("pgr_wfFilters", wfFilters);
 
