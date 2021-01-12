@@ -54,12 +54,14 @@
 
 @screen dt {
   .success-wrap {
+    width: calc( 100% + 284px);
     header {
       @apply text-heading-xl-dt;
     }
   }
 
   .error-wrap {
+    width: calc( 100% + 284px);
     header {
       @apply text-heading-xl-dt;
     }
@@ -67,6 +69,7 @@
 }
 
 .photos-wrap {
+  max-width: 640px;
   @apply flex pt-md;
 
   img {
