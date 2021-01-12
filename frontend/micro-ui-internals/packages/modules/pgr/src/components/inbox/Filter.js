@@ -41,8 +41,10 @@ const Filter = (props) => {
   let wfQuery = {};
 
   useEffect(() => {
+    let count = 0;
     for (const property in pgrfilters) {
       if (Array.isArray(pgrfilters[property])) {
+        count += pgrfilters[property].length;
         let params = pgrfilters[property].map((prop) => prop.code).join();
         if (params) {
           pgrQuery[property] = params;
@@ -51,6 +53,7 @@ const Filter = (props) => {
     }
     for (const property in wfFilters) {
       if (Array.isArray(wfFilters[property])) {
+        count += wfFilters[property].length;
         let params = wfFilters[property].map((prop) => prop.code).join();
         if (params) {
           wfQuery[property] = params;
@@ -59,6 +62,8 @@ const Filter = (props) => {
     }
     Digit.SessionStorage.set("pgr_filters", pgrfilters);
     Digit.SessionStorage.set("pgr_wfFilters", wfFilters);
+
+    Digit.SessionStorage.set("pgr_filter_count", count);
     //queryString = queryString.substring(0, queryString.length - 1);
     handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
     // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);

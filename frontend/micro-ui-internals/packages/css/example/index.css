@@ -2088,6 +2088,7 @@ img, video {
   display: flex;
   margin: 8px; }
   .searchBox .searchAction {
+    position: relative;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -2156,10 +2157,14 @@ img, video {
   width: 24px;
   height: 24px;
   border-radius: 15px;
+  position: absolute;
+  z-index: 100;
+  bottom: 10px;
+  right: 70px;
   margin-left: 8px;
   --bg-opacity:1;
-  background-color: #000;
-  background-color: rgba(0, 0, 0, var(--bg-opacity));
+  background-color: #d4351c;
+  background-color: rgba(212, 53, 28, var(--bg-opacity));
   text-align: center;
   --text-opacity:1;
   color: #fff;
