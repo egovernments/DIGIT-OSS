@@ -1250,6 +1250,7 @@ img, video {
     line-height: 56px; } }
 
 .photos-wrap {
+  max-width: 640px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
