@@ -32,6 +32,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import static org.egov.chat.util.ChatBotConstants.*;
+
 @Slf4j
 @Component
 public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormatter {
@@ -115,13 +117,13 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
     @Override
     public List<JsonNode> createChatNodes(JsonNode event) throws Exception {
         List<JsonNode> chatNodes = new ArrayList<>();
-            String source = event.at("/PGREntity/service/source").asText();
-            if ((source != null) && source.equals("whatsapp")) {
-                String status = event.at("/PGREntity/service/applicationStatus").asText();
-                String action = event.at("/PGREntity/workflow/action").asText();
-                String comments = event.at("/PGREntity/workflow/comments").asText();
-                String citizenName = event.at("/PGREntity/service/citizen/name").asText();
-                String mobileNumber = event.at("/PGREntity/service/citizen/mobileNumber").asText();
+            String source = event.at(SERVICESOURCE_PATH).asText();
+            if ((source != null) && source.equals(SOURCE_WHATSAPP)) {
+                String status = event.at(SERVICE_APPLICATIONSTATUS_PATH).asText();
+                String action = event.at(WORKFLOW_ACTION_PATH).asText();
+                String comments = event.at(WORKFLOW_COMMENTS_PATH).asText();
+                String citizenName = event.at(SERVICE_CITIZENNAME_PATH).asText();
+                String mobileNumber = event.at(SERVICE_CITIZEN_MOBILENO_PATH).asText();
                 if (StringUtils.isEmpty(citizenName) || StringUtils.equalsIgnoreCase(citizenName,"null"))
                     citizenName = localizationService.getMessageForCode(citizenKeywordLocalization);
                 ObjectNode userChatNodeForStatusUpdate = createChatNodeForUser(event);
@@ -132,19 +134,19 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
                 }
                 JsonNode extraInfo = null;
                 if (status != null) {
-                    if (status.equalsIgnoreCase("rejected")) {
+                    if (status.equalsIgnoreCase(STATUS_REJECTED)) {
                         extraInfo = responseForRejectedStatus(event, comments, citizenName);
-                    } else if ((action + "-" + status).equalsIgnoreCase("reassign-assigned")) {
+                    } else if ((action + "-" + status).equalsIgnoreCase(REASSIGN_ASSIGNED)) {
                         extraInfo = responseForReassignedtatus(event, citizenName, mobileNumber);
-                    } else if (status.equalsIgnoreCase("PENDINGATLME")) {
-                        if(action.equalsIgnoreCase("REASSIGN")){
+                    } else if (status.equalsIgnoreCase(STATUS_PENDINGATLME)) {
+                        if(action.equalsIgnoreCase(STATUS_REASSIGN)){
                             extraInfo = responseForReassignedtatus(event, citizenName, mobileNumber);
                         }
                         else{
                             extraInfo = responseForAssignedStatus(event, citizenName, mobileNumber);
                         }
 
-                    } else if (status.equalsIgnoreCase("RESOLVED")) {
+                    } else if (status.equalsIgnoreCase(STATUS_RESOLVED)) {
                         extraInfo = responseForResolvedStatus(event, citizenName, mobileNumber);
                     }
                 }
@@ -158,8 +160,8 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
     }
 
     private ObjectNode createChatNodeForUser(JsonNode event) throws Exception {
-        String mobileNumber = event.at("/PGREntity/service/citizen/mobileNumber").asText();
-        String uuid = event.at("/PGREntity/service/citizen/uuid").asText();
+        String mobileNumber = event.at(SERVICE_CITIZEN_MOBILENO_PATH).asText();
+        String uuid = event.at(SERVICE_CITIZEN_UUID_PATH).asText();
         ObjectNode chatNode = objectMapper.createObjectNode();
         chatNode.put("tenantId", stateLevelTenantId);
         ObjectNode user = objectMapper.createObjectNode();
@@ -237,10 +239,10 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
 
 
     private JsonNode createResponseForComment(JsonNode event, String comment, String citizenName) throws IOException {
-        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
-        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
+        String serviceRequestId = event.at(SERVICEREQUESTID_PATH).asText();
+        String serviceCode = event.at(SERVICECODE_PATH).asText();
         JsonNode assignee = getCommentor(event);
-        String commentorName = assignee.at("/name").asText();
+        String commentorName = assignee.at(NAME_PATH).asText();
 
         ObjectNode extraInfo = objectMapper.createObjectNode();
         ArrayNode params = objectMapper.createArrayNode();
@@ -257,10 +259,10 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
     }
 
     private JsonNode responseForAssignedStatus(JsonNode event, String citizenName, String mobileNumber) throws IOException {
-        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
-        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
+        String serviceRequestId = event.at(SERVICEREQUESTID_PATH).asText();
+        String serviceCode = event.at(SERVICECODE_PATH).asText();
         JsonNode assignee = getAssignee(event);
-        String assigneeName = assignee.at("/name").asText();
+        String assigneeName = assignee.at(NAME_PATH).asText();
         ObjectNode extraInfo = objectMapper.createObjectNode();
         ArrayNode params = objectMapper.createArrayNode();
         String complaintURL = makeCitizenURLForComplaint(serviceRequestId, mobileNumber);
@@ -277,7 +279,7 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
     }
 
     private JsonNode getAssignee(JsonNode event) throws IOException {
-        String assigneeId = event.at("/PGREntity/workflow/assignes/0").asText();
+        String assigneeId = event.at(WORKFLOW_ASSIGNEE_PATH).asText();
         return searchUser(event, assigneeId);
     }
 
@@ -287,7 +289,7 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
 
     private JsonNode searchUser(JsonNode event, String userId) throws IOException {
         DocumentContext request = JsonPath.parse(userServiceSearchRequest);
-        String tenantId = event.at("/PGREntity/service/tenantId").asText();
+        String tenantId = event.at(SERVICE_TENANTID_PATH).asText();
         request.set("$.tenantId", tenantId);
         request.set("$.uuid.[0]", userId);
 
@@ -302,8 +304,8 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
 
     private JsonNode responseForRejectedStatus(JsonNode event, String comments, String citizenName) {
         String rejectReason = comments.split(";")[0];
-        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
-        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
+        String serviceRequestId = event.at(SERVICEREQUESTID_PATH).asText();
+        String serviceCode = event.at(SERVICECODE_PATH).asText();
         ObjectNode extraInfo = objectMapper.createObjectNode();
         ArrayNode params = objectMapper.createArrayNode();
         String complaintCategory = localizationService.getMessageForCode(complaintCategoryLocalizationPrefix + serviceCode);
@@ -318,8 +320,8 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
     }
 
     private JsonNode responseForResolvedStatus(JsonNode event, String citizenName, String mobileNumber) throws UnsupportedEncodingException {
-        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
-        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
+        String serviceRequestId = event.at(SERVICEREQUESTID_PATH).asText();
+        String serviceCode = event.at(SERVICECODE_PATH).asText();
         ObjectNode extraInfo = objectMapper.createObjectNode();
         ArrayNode params = objectMapper.createArrayNode();
         String complaintCategory = localizationService.getMessageForCode(complaintCategoryLocalizationPrefix + serviceCode);
@@ -335,10 +337,10 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
     }
 
     private JsonNode responseForReassignedtatus(JsonNode event, String citizenName, String mobileNumber) throws IOException {
-        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
-        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
+        String serviceRequestId = event.at(SERVICEREQUESTID_PATH).asText();
+        String serviceCode = event.at(SERVICECODE_PATH).asText();
         JsonNode assignee = getAssignee(event);
-        String assigneeName = assignee.at("/name").asText();
+        String assigneeName = assignee.at(NAME_PATH).asText();
         ObjectNode extraInfo = objectMapper.createObjectNode();
         ArrayNode params = objectMapper.createArrayNode();
         String complaintCategory = localizationService.getMessageForCode(complaintCategoryLocalizationPrefix + serviceCode);

@@ -8,8 +8,10 @@ import org.egov.wf.web.models.ProcessInstance;
 import org.egov.wf.web.models.ProcessInstanceSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -41,25 +43,18 @@ public class WorKflowRepository {
      */
     public List<ProcessInstance> getProcessInstances(ProcessInstanceSearchCriteria criteria){
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getProcessInstanceSearchQueryWithState(criteria, preparedStmtList);
+
+        List<String> ids = getProcessInstanceIds(criteria);
+
+        if(CollectionUtils.isEmpty(ids))
+            return new LinkedList<>();
+
+        String query = queryBuilder.getProcessInstanceSearchQueryById(ids, preparedStmtList);
+        log.debug("query for status search: "+query+" params: "+preparedStmtList);
+
         return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
     }
 
-
-    /**
-     * Returns processInstances for the particular assignee
-     * @param criteria The search params object
-     * @return List of processInstanceFromRequest assigned to the user
-     */
-    public List<ProcessInstance> getProcessInstancesForAssignee(ProcessInstanceSearchCriteria criteria){
-        List<Object> preparedStmtList = new ArrayList<>();
-        if(CollectionUtils.isEmpty(criteria.getStatus())){
-            return new LinkedList<>();
-        }else{
-            String query = queryBuilder.getAssigneeSearchQuery(criteria, preparedStmtList);
-            return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-        }
-    }
 
 
     /**
@@ -67,10 +62,54 @@ public class WorKflowRepository {
      * @param criteria
      * @return
      */
-    public List<ProcessInstance> getProcessInstancesForStatus(ProcessInstanceSearchCriteria criteria){
+    public List<ProcessInstance> getProcessInstancesForUserInbox(ProcessInstanceSearchCriteria criteria){
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getStatusBasedProcessInstance(criteria, preparedStmtList);
+
+        if(CollectionUtils.isEmpty(criteria.getStatus()))
+            return new LinkedList<>();
+
+        List<String> ids = getInboxSearchIds(criteria);
+
+        if(CollectionUtils.isEmpty(ids))
+            return new LinkedList<>();
+
+        String query = queryBuilder.getProcessInstanceSearchQueryById(ids, preparedStmtList);
+        log.debug("query for status search: "+query+" params: "+preparedStmtList);
         return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
     }
+
+
+    /**
+     * Returns the count based on the search criteria
+     * @param criteria
+     * @return
+     */
+    public Integer getInboxCount(ProcessInstanceSearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getInboxCount(criteria, preparedStmtList);
+        Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+        return count;
+    }
+
+    public Integer getProcessInstancesCount(ProcessInstanceSearchCriteria criteria){
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getProcessInstanceCount(criteria, preparedStmtList);
+        return jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+    }
+
+
+
+    private List<String> getInboxSearchIds(ProcessInstanceSearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getInboxIdQuery(criteria,preparedStmtList);
+        return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+    }
+
+    private List<String> getProcessInstanceIds(ProcessInstanceSearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getProcessInstanceIds(criteria,preparedStmtList);
+        return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+    }
+
 
 }

@@ -27,7 +27,7 @@ public class StorageValidator {
 
 	public void validate(Artifact artifact) {
 			
-		String extension = FilenameUtils.getExtension(artifact.getMultipartFile().getOriginalFilename());
+		String extension = (FilenameUtils.getExtension(artifact.getMultipartFile().getOriginalFilename())).toLowerCase();
 		validateFileExtention(extension);
 		validateContentType(artifact.getFileContentInString(), extension);
 	}

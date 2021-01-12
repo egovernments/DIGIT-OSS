@@ -3,6 +3,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.2 - 2021-01-11
+- Updated PGR v2.0 API calls,request object and response object.
+
 ## 1.1.0 - 2020-10-01
 - Integrate PGR v2.0
 

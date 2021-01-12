@@ -161,7 +161,7 @@ public class UserRequestTest {
                 .accountLocked(false)
                 .roles(getListOfRoles())
                 .guardian("name of relative")
-                .guardianRelation(GuardianRelation.Father)
+                .guardianRelation(GuardianRelation.FATHER)
                 .signature("7a9d7f12-bdcb-4487-9d43-709838a0ad39")
                 .bloodGroup(BloodGroup.A_POSITIVE)
                 .photo("3b26fb49-e43d-401b-899a-f8f0a1572de0")

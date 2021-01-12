@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.2 - 2020-01-12
+- Added field relationShip with guardian and refactoration of code.
+
 ## 1.2.1 - 2020-07-14
 
 - Upgraded to kafka 1.3.11.RELEASE

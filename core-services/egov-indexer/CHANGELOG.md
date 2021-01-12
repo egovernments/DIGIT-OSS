@@ -3,6 +3,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.2
+
+- Added version handling and baselining.
+
 ## 1.1.1
 
 - Changes in custom PT indexing to support property-registry

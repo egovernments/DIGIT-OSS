@@ -34,6 +34,7 @@ import javax.validation.constraints.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BusinessService   {
 
+        @NotNull
         @Size(max=256)
         @JsonProperty("tenantId")
         private String tenantId = null;
@@ -42,10 +43,12 @@ public class BusinessService   {
         @JsonProperty("uuid")
         private String uuid = null;
 
+        @NotNull
         @Size(max=256)
         @JsonProperty("businessService")
         private String businessService = null;
 
+        @NotNull
         @Size(max=256)
         @JsonProperty("business")
         private String business = null;

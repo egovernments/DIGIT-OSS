@@ -5,22 +5,31 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.cache2k.extra.spring.SpringCache2kCacheManager;
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
+@EnableCaching
 @Import({ TracerConfiguration.class })
 public class Main {
 
     @Value("${app.timezone}")
     private String timeZone;
+
+    @Value("${cache.expiry.workflow.minutes}")
+    private int workflowExpiry;
 
     @Bean
     public ObjectMapper objectMapper(){
@@ -33,6 +42,12 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);
+    }
+
+    @Bean
+    @Profile("!test")
+    public CacheManager cacheManager(){
+        return new SpringCache2kCacheManager().addCaches(b->b.name("workflow").expireAfterWrite(workflowExpiry, TimeUnit.MINUTES).entryCapacity(10));
     }
 
 }

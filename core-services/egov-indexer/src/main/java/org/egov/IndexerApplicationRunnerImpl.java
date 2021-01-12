@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.jayway.jsonpath.Configuration;
 import org.egov.infra.indexer.web.contract.Mapping;
 import org.egov.infra.indexer.web.contract.Services;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 
 @Slf4j
 @Component
@@ -39,6 +41,8 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 	public static final Logger logger = LoggerFactory.getLogger(IndexerApplicationRunnerImpl.class);
 
 	public static ConcurrentHashMap<String, Mapping> mappingMaps = new ConcurrentHashMap<>();
+
+	public static ConcurrentHashMap<String, List<Mapping>> versionMap = new ConcurrentHashMap<>();
 
 	public static ConcurrentHashMap<String, List<String>> topicMap = new ConcurrentHashMap<>();
 
@@ -101,6 +105,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 
 	public void readFiles() {
 		ConcurrentHashMap<String, Mapping> mappingsMap = new ConcurrentHashMap<>();
+		ConcurrentHashMap<String, List<Mapping>> versionsMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, List<String>> topicsMap = new ConcurrentHashMap<>();
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 		Services service = null;
@@ -125,8 +130,16 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 
 				try {
 						service = mapper.readValue(resource.getInputStream(), Services.class);
+						String version = service.getServiceMaps().getVersion();
 						for (Mapping mapping : (service.getServiceMaps().getMappings())) {
 							 mappingsMap.put(mapping.getTopic(), mapping);
+							 if(!CollectionUtils.isEmpty(versionsMap.get(version))){
+							 	versionsMap.get(version).add(mapping);
+							 }else{
+							 	List<Mapping> mappings = new ArrayList<>();
+							 	mappings.add(mapping);
+							 	versionsMap.put(version, mappings);
+							 }
 							if (!CollectionUtils.isEmpty(topicsMap.get(mapping.getConfigKey().toString()))) {
 								List<String> topics = topicsMap.get(mapping.getConfigKey().toString());
 								topics.add(mapping.getTopic());
@@ -148,6 +161,7 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 		}
 
 		mappingMaps = mappingsMap;
+		versionMap = versionsMap;
 		topicMap = topicsMap;
 
 		if (failed) {
@@ -159,6 +173,10 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 
 	public ConcurrentHashMap<String, Mapping> getMappingMaps() {
 		return mappingMaps;
+	}
+
+	public ConcurrentHashMap<String, List<Mapping> > getVersionMap(){
+		return versionMap;
 	}
 
 	public ConcurrentHashMap<String, List<String>> getTopicMaps() {

@@ -60,7 +60,7 @@ public class FileStore {
     }
 
     public String convertFromBase64AndStore(String imageInBase64String) throws IOException {
-        String tmpFileName = "pgr-whatsapp-" + System.currentTimeMillis() + ".png";
+        String tmpFileName = "pgr-whatsapp-" + System.currentTimeMillis() + ".jpeg";
         File tempFile = new File(tmpFileName);
         imageInBase64String = imageInBase64String.replaceAll(" ", "+");
         byte[] bytes = Base64.getDecoder().decode(imageInBase64String);

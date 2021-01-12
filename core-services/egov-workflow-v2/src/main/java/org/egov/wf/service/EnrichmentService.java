@@ -3,6 +3,7 @@ package org.egov.wf.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
@@ -24,6 +25,7 @@ import static org.egov.wf.util.WorkflowConstants.UUID_REGEX;
 
 
 @Service
+@Slf4j
 public class EnrichmentService {
 
 
@@ -179,7 +181,7 @@ public class EnrichmentService {
             try{
              processStateAndActions.addAll(transitionService.getProcessStateAndActions(entry.getValue(),false));}
             catch (Exception e){
-                e.printStackTrace();
+                log.error("Error while creating processStateAndActions",e);
             }
         }
 

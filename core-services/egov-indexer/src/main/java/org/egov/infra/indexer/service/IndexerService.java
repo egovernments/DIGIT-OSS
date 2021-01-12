@@ -1,16 +1,24 @@
 package org.egov.infra.indexer.service;
 
+import com.github.zafarkhaja.semver.Version;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.IndexerApplicationRunnerImpl;
 import org.egov.infra.indexer.bulkindexer.BulkIndexer;
+import org.egov.infra.indexer.util.IndexerUtils;
 import org.egov.infra.indexer.web.contract.Index;
 import org.egov.infra.indexer.web.contract.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,6 +33,9 @@ public class IndexerService {
 
 	@Autowired
 	private DataTransformationService dataTransformationService;
+
+	@Autowired
+	private IndexerUtils utils;
 
 	@Value("${egov.core.reindex.topic.name}")
 	private String reindexTopic;
@@ -58,9 +69,10 @@ public class IndexerService {
 	 * @throws Exception
 	 */
 	public void esIndexer(String topic, String kafkaJson) throws Exception {
-		Map<String, Mapping> mappingsMap = runner.getMappingMaps();
-		if (null != mappingsMap.get(topic)) {
-			Mapping mapping = mappingsMap.get(topic);
+		Map<String, List<Mapping>> versionMap = runner.getVersionMap();
+		Mapping applicableMapping = getApplicableMapping(topic, versionMap, kafkaJson);
+		if (!ObjectUtils.isEmpty(applicableMapping)) {
+			Mapping mapping = applicableMapping;
 			try {
 				for (Index index : mapping.getIndexes()) {
 					indexProccessor(index, mapping.getConfigKey(),kafkaJson, index.getIsBulk() != null && index.getIsBulk());
@@ -71,6 +83,27 @@ public class IndexerService {
 		} else {
 			log.error("No mappings found for the service to which the following topic belongs: " + topic);
 		}
+	}
+
+	private Mapping getApplicableMapping(String requiredTopic, Map<String, List<Mapping>> versionMap, String kafkaJson) {
+
+		Object document = Configuration.defaultConfiguration().jsonProvider().parse(kafkaJson);
+
+		String version = "";
+
+		try {
+			version = JsonPath.read(document, "$.RequestInfo.ver");
+		}catch (PathNotFoundException ignore){
+		}
+
+		Version semVer = utils.getSemVer(version);
+		List<Mapping> mappings = versionMap.get(semVer.getNormalVersion());
+		for(Mapping mapping : mappings){
+			if(mapping.getTopic().equals(requiredTopic)){
+				return mapping;
+			}
+		}
+		return null;
 	}
 
 

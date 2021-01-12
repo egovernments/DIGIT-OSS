@@ -3,6 +3,8 @@ package org.egov.infra.indexer.util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
+import com.github.zafarkhaja.semver.UnexpectedCharacterException;
+import com.github.zafarkhaja.semver.Version;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -41,6 +44,12 @@ public class IndexerUtils {
 
 	@Autowired
 	private ReindexConsumerConfig kafkaConsumerConfig;
+
+	private Version defaultSemVer;
+
+	@Value("${default.service.map.version}")
+	private String defaultVersion;
+
 
 	@Value("${egov.infra.indexer.host}")
 	private String esHostUrl;
@@ -676,6 +685,26 @@ public class IndexerUtils {
 			} catch (IOException e) {
 				log.error("Failed pushing data to the ES topic: " + topicName);
 			}
+		}
+	}
+
+	@PostConstruct
+	private void init(){
+		defaultSemVer = Version.valueOf(defaultVersion);
+	}
+
+	public Version getSemVer(String version) {
+		try {
+			if(version == null || version.equals("")) {
+				log.info("No version present in the API request, falling back to default version: " + defaultSemVer.toString());
+				return defaultSemVer;
+			}
+			else {
+				log.info("Version found in API request: " + version);
+				return Version.valueOf(version);
+			}
+		}catch (UnexpectedCharacterException e){
+			return defaultSemVer;
 		}
 	}
 }

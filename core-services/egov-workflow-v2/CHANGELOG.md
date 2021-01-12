@@ -3,6 +3,14 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.2 2021-01-11
+- Query Optimization
+- Caching
+
+## 1.1.1 2020-11-13
+- Added _count API
+- Added pagination in default wf search
+
 ## 1.1.0 - 2020-09-01
 - Added index on assignee 
 

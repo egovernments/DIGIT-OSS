@@ -30,30 +30,6 @@ public class MDMSService {
         this.serviceRequestRepository = serviceRequestRepository;
     }
 
-    /**
-     *  Calls the MDMS search api to fetch data
-     * @param request The incoming ProcessInstanceRequest
-     * @return The data recevied from MDMS search
-     */
-    public Object mdmsCall(ProcessInstanceRequest request){
-        RequestInfo requestInfo = request.getRequestInfo();
-        String tenantId = request.getProcessInstances().get(0).getTenantId();
-        MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo,tenantId);
-        Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
-        return result;
-    }
-
-    /**
-     * Overloaded method for Calls the MDMS search api to fetch data
-     * @param requestInfo The requestInfo of the search request
-     * @param tenantId TenantId of the request
-     * @return The data recevied from MDMS search
-     */
-    public Object mdmsCall(RequestInfo requestInfo,String tenantId){
-        MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo,tenantId);
-        Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
-        return result;
-    }
 
 
     /**
@@ -93,17 +69,6 @@ public class MDMSService {
     }
 
 
-    /**
-     * Creates MDMS ModuleDetail object for business Service
-     * @return ModuleDetail for BS config
-     */
-    private ModuleDetail getBusinessServiceConfigDetail() {
-        List<MasterDetail> bsMasterDetails = new ArrayList<>();
-        bsMasterDetails.add(MasterDetail.builder().name(MDMS_BUSINESSSERVICE).build());
-        ModuleDetail bsConfigDtls = ModuleDetail.builder().masterDetails(bsMasterDetails)
-                .moduleName(MDMS_WORKFLOW).build();
-        return bsConfigDtls;
-    }
 
 
 
