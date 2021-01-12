@@ -1,11 +1,14 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.0.0
+## 1.1.1
 
-- Base version
-
+- Updated the collection search end-point
 
 ## 1.1.0
 
 - NOC Services Integration
+
+## 1.0.0
+
+- Base version
