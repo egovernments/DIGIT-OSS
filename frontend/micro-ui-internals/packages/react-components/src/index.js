@@ -54,6 +54,7 @@ import LabelFieldPair from "./atoms/LabelFieldPair";
 import ApplyFilterBar from "./atoms/ApplyFilterBar";
 import RemoveableTag from "./molecules/RemoveableTag";
 import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
+import RoundedLabel from "./atoms/RoundedLabel";
 
 import TypeSelectCard from "./molecules/TypeSelectCard";
 import LocationSearchCard from "./molecules/LocationSearchCard";
@@ -146,4 +147,5 @@ export {
   RemoveableTag,
   // hoc
   FormComposer,
+  RoundedLabel,
 };

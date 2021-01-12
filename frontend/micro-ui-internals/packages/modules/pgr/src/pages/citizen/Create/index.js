@@ -24,6 +24,7 @@ export const CreateComplaint = () => {
   const config = useMemo(() => merge(defaultConfig, Digit.Customizations.PGR.complaintConfig), [Digit.Customizations.PGR.complaintConfig]);
   const [paramState, setParamState] = useState(params);
   const [nextStep, setNextStep] = useState("");
+  const [rerender, setRerender] = useState(0);
   const client = useQueryClient();
 
   useEffect(() => {
@@ -36,12 +37,14 @@ export const CreateComplaint = () => {
   }, [params, nextStep]);
 
   const goNext = () => {
-    //console.log("ParamState go next::::::::::", paramState);
     const currentPath = pathname.split("/").pop();
-    const { nextStep } = config.routes[currentPath];
+
+    let { nextStep } = config.routes[currentPath];
+    let compType = Digit.SessionStorage.get(PGR_CITIZEN_CREATE_COMPLAINT);
+    if (nextStep === "sub-type" && compType.complaintType.key === "Others") {
+      nextStep = config.routes[nextStep].nextStep;
+    }
     setNextStep(nextStep);
-    // if (nextStep === null) return submitComplaint();
-    // history.push(`${match.path}/${nextStep}`);
   };
 
   const submitComplaint = async () => {
@@ -95,6 +98,7 @@ export const CreateComplaint = () => {
   };
 
   const handleSelect = (data) => {
+    console.clear();
     console.log("DATA selected", data);
     setParams({ ...params, ...data });
     goNext();

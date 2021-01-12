@@ -19,7 +19,6 @@ import useTenantsFSM from "./fsm/useTenants";
 import useDesludging from "./fsm/useDesludging";
 import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
-import { useRevalidateQuery } from "./revalidateQuery";
 
 const pgr = {
   useComplaintDetails,
@@ -43,6 +42,6 @@ const fsm = {
   useSearch: useSearch,
 };
 
-const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useCoreData, pgr, fsm, useRevalidateQuery };
+const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useCoreData, pgr, fsm };
 
 export default Hooks;
