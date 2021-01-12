@@ -4,6 +4,7 @@ All notable changes to this module will be documented in this file.
 ## 1.2.1 - 2021-01-08
 
 - state level search/fetch enable for bills for citizen only
+- zero demands bill genereation restricted to only once
 
 ## 1.2.1
 
