@@ -30,10 +30,10 @@ const Login = ({ stateCode, cityCode }) => {
       info: { name },
     } = user;
     if (!name || name === DEFAULT_USER) {
-      history.push(`${path}/name`);
+      history.replace(`${path}/name`);
     } else {
       const redirectPath = location.state?.from || "/";
-      history.push(redirectPath);
+      history.replace(redirectPath);
     }
   }, [user]);
 
@@ -66,13 +66,13 @@ const Login = ({ stateCode, cityCode }) => {
     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
     if (!err) {
       setIsUserRegistered(true);
-      history.push(`${path}/otp`, { from: location.state.from });
+      history.push(`${path}/otp`, { from: location.state?.from || "/" });
       return;
     }
     const [res2, err2] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
     if (!err2) {
       setIsUserRegistered(false);
-      history.push(`${path}/otp`, { from: location.state.from });
+      history.push(`${path}/otp`, { from: location.state?.from || "/" });
       return;
     }
   };
