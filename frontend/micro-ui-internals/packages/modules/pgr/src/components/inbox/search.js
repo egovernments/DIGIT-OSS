@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
 
 const SearchComplaint = ({ onSearch, type, onClose }) => {
   const [complaintNo, setComplaintNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const { register, handleSubmit, reset } = useForm();
+  const { t } = useTranslation();
 
   const onSubmitInput = (data) => {
-    console.log("data", data);
     if (data.serviceRequestId) {
       onSearch({ serviceRequestId: data.serviceRequestId });
     } else {
@@ -29,7 +30,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
   const clearAll = () => {
     return (
       <LinkLabel style={{ color: "#F47738", cursor: "pointer" }} onClick={clearSearch}>
-        Clear Search
+        {t("CS_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
   };
@@ -57,13 +58,13 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
                   marginBottom: "20px",
                 }}
               >
-                <h2>SEARCH BY:</h2>
+                <h2> {t("CS_COMMON_SEARCH_BY")}:</h2>
                 <span onClick={onClose}>x</span>
               </div>
             )}
             <div className="complaint-input-container">
               <span className="complaint-input">
-                <Label>Complaint No.</Label>
+                <Label>{t("CS_COMMON_COMPLAINT_NO")}.</Label>
                 <TextInput
                   name="serviceRequestId"
                   value={complaintNo}
@@ -73,7 +74,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
                 ></TextInput>
               </span>
               <span className="mobile-input">
-                <Label>Mobile No.</Label>
+                <Label>{t("CS_COMMON_MOBILE_NO")}.</Label>
                 <TextInput name="mobileNumber" value={mobileNo} onChange={setMobile} inputRef={register} style={{ width: "280px" }}></TextInput>
               </span>
               {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: 8 }} label="Search" submit />}
