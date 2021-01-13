@@ -18,8 +18,12 @@ const moduleReducers = (initData) => ({
 });
 
 function App() {
+  const stateCode = globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || process.env.STATE_LEVEL_TENANT_ID;
+  if (!stateCode) {
+    return <h1>stateCode is not defined</h1>
+  }
   return (
-    <DigitUI stateCode="pb" registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />
+    <DigitUI stateCode={stateCode} registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />
   );
 }
 
