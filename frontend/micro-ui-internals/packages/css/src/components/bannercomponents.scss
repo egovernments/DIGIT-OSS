@@ -1,4 +1,4 @@
-.success-wrap {
+.success-wrap, .emp-success-wrap{
   @apply block bg-success w-full text-center text-white pt-md pb-sm mb-md;
 
   header {
@@ -30,7 +30,7 @@
   }
 }
 
-.error-wrap {
+.error-wrap, .emp-error-wrap{
   @apply block bg-error w-full text-center text-white pt-md pb-sm mb-md;
 
   header {
@@ -54,12 +54,27 @@
 
 @screen dt {
   .success-wrap {
+    width: calc( 100% + 284px);
+    header {
+      @apply text-heading-xl-dt;
+    }
+  }
+  .emp-success-wrap{
+    width: calc( 100%);
     header {
       @apply text-heading-xl-dt;
     }
   }
 
   .error-wrap {
+    width: calc( 100% + 284px);
+    header {
+      @apply text-heading-xl-dt;
+    }
+  }
+
+  .emp-error-wrap{
+    width: calc( 100%);
     header {
       @apply text-heading-xl-dt;
     }
@@ -67,7 +82,8 @@
 }
 
 .photos-wrap {
-  @apply flex;
+  max-width: 640px;
+  @apply flex pt-md;
 
   img {
     width: calc(33% - 9.333px);

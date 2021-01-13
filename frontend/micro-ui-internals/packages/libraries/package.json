@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-libraries",
-  "version": "1.0.49",
+  "version": "1.0.63",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
@@ -32,6 +32,7 @@
     "react": "^17.0.0",
     "react-i18next": "^11.7.3",
     "react-query": "^3.2.0",
-    "rooks": "^4.4.0"
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5"
   }
 }

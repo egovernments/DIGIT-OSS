@@ -48,7 +48,7 @@
 }
 
 .employeeCard {
-  @apply bg-white shadow-card;
+  @apply bg-white shadow-card p-md;
   border-radius: 4px;
 
   .card-header {
@@ -157,7 +157,7 @@
   .card {
     margin-left: auto;
     margin-right: auto;
-    padding-right: 16px;
+    padding-right: 300px;
     padding-left: 16px;
     padding-top: 16px;
 

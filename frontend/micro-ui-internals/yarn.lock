@@ -14713,11 +14713,6 @@ rollup@^1.31.1, rollup@^1.32.1:
     "@types/node" "*"
     acorn "^7.1.0"
 
-rooks@^4.4.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/rooks/-/rooks-4.5.0.tgz#2d5886c583392be90aab2d5816e52ace8111ceb5"
-  integrity sha512-+3hJ5iqZJcPYeFvjzrrbylf62WJV3ALADM7KbT+L6wnmiYToF4alPRdwxDA7dUxVFOn9QZQbZAVhIcsVQ4mxiA==
-
 rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"

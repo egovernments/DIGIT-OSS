@@ -27,7 +27,7 @@ export const UserService = {
   logout: () => {
     return Digit.SessionStorage.set("User", {});
   },
-  sendOtp: (details, stateCode = "pb") =>
+  sendOtp: (details, stateCode) =>
     ServiceRequest({
       serviceName: "sendOtp",
       url: Urls.OTP_Send,
@@ -35,10 +35,10 @@ export const UserService = {
       auth: false,
       params: { tenantId: stateCode },
     }),
-  setUser: () => {
-    return Digit.SessionStorage.set("User");
+  setUser: (data) => {
+    return Digit.SessionStorage.set("User", data);
   },
-  registerUser: (details, stateCode = "pb") =>
+  registerUser: (details, stateCode) =>
     ServiceRequest({
       serviceName: "registerUser",
       url: Urls.RegisterUser,
@@ -47,7 +47,7 @@ export const UserService = {
       },
       params: { tenantId: stateCode },
     }),
-  updateUser: async (details, stateCode = "pb") =>
+  updateUser: async (details, stateCode) =>
     ServiceRequest({
       serviceName: "updateUser",
       url: Urls.UserProfileUpdate,
@@ -57,4 +57,8 @@ export const UserService = {
       },
       params: { tenantId: stateCode },
     }),
+  hasAccess: (accessTo) => {
+    const { roles } = Digit.UserService.getUser().info;
+    return roles.filter((role) => accessTo.includes(role.code)).length;
+  },
 };

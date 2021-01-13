@@ -1,16 +1,7 @@
-import React, { useEffect, useState, useCallback } from "react";
-import {
-  PopUp,
-  HeaderBar,
-  Card,
-  CardLabel,
-  Dropdown,
-  TextArea,
-  CardLabelDesc,
-  UploadFile,
-  ButtonSelector,
-} from "@egovernments/digit-ui-react-components";
+import React from "react";
 import { useTranslation } from "react-i18next";
+
+import { FormComposer, PopUp, HeaderBar, ButtonSelector } from "@egovernments/digit-ui-react-components";
 
 const Close = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
@@ -30,31 +21,21 @@ const CloseBtn = (props) => {
     </div>
   );
 };
-const Modal = (props) => {
-  const vehicleData = ["Truck", "Van", "Bike"];
-  const [selectedVehicle, setSelectedVehicle] = useState(null);
 
-  function onSelectVehicle(option) {
-    setSelectedVehicle(option);
-  }
-
-  function close() {
-    props.onClose();
-  }
+const Modal = ({ closeModal, onSubmit, config }) => {
+  const { t } = useTranslation();
 
   return (
     <PopUp>
       <div className="popup-module">
-        <HeaderBar main={<Heading label="Generate Demand" />} end={<CloseBtn onClick={close} />} />
+        <HeaderBar main={<Heading label={t("ES_GENERATE_DEMAND")} />} end={<CloseBtn onClick={closeModal} />} />
         <div className="popup-module-main">
-          <Card>
-            <CardLabel>Vehicle Type</CardLabel>
-            <Dropdown selected={selectedVehicle} option={vehicleData} select={onSelectVehicle} />
-          </Card>
-          <div className="popup-module-action-bar">
-            <ButtonSelector theme="border" label="Cancel" onSubmit={close} />
-            <ButtonSelector label="Save" onSubmit={close} />
-          </div>
+          <FormComposer config={config} noBoxShadow inline childrenAtTheBottom onSubmit={onSubmit}>
+            <div className="popup-module-action-bar">
+              <ButtonSelector theme="border" label={t("ES_CANCEL")} onSubmit={closeModal} />
+              <ButtonSelector label={t("ES_SAVE")} />
+            </div>
+          </FormComposer>
         </div>
       </div>
     </PopUp>

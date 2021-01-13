@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Route, BrowserRouter as Router, Switch, useRouteMatch, matchPath, Link } from "react-router-dom";
+import React, { useMemo, useEffect } from "react";
+import { Route, BrowserRouter as Router, Switch, useRouteMatch, useLocation, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import SelectRating from "./pages/citizen/Rating/SelectRating";
 
@@ -17,6 +17,8 @@ import Response from "./pages/Response";
 import EditApplication from "./pages/employee/EditApplication";
 import Inbox from "./pages/employee/Inbox";
 
+import { useTranslation } from "react-i18next";
+
 const EmployeeApp = ({ path, url, userType }) => {
   return (
     <Switch>
@@ -28,7 +30,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
         <PrivateRoute path={`${path}/modify-application`} component={() => <EditApplication />} />
         <PrivateRoute path={`${path}/application-details`} component={EmployeeApplicationDetails} />
-        <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
+        <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/collect-payment`} component={() => <CollectPayment parentRoute={path} />} />
         <PrivateRoute path={`${path}/application-audit`} component={() => <ApplicationAudit parentRoute={path} />} />
       </div>
@@ -37,13 +39,14 @@ const EmployeeApp = ({ path, url, userType }) => {
 };
 
 const CitizenApp = ({ path }) => {
+  const location = useLocation();
   return (
     <Switch>
       <div className="ground-container">
-        <BackButton>Back</BackButton>
+        {!location.pathname.includes("/new-application/response") && <BackButton>Back</BackButton>}
         <PrivateRoute path={`${path}/new-application`} component={() => <FileComplaint parentRoute={path} />} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
-        <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
+        <PrivateRoute path={`${path}/application-details/:id`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response parentRoute={path} />} />
       </div>
@@ -51,11 +54,12 @@ const CitizenApp = ({ path }) => {
   );
 };
 
-export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "FSM", userType }) => {
+export const FSMModule = ({ stateCode, userType }) => {
+  const moduleCode = "FSM";
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;
-  const store = { data: {} }; //Digit.Services.useStore({}, { deltaConfig, stateCode, cityCode, moduleCode, language });
+  const store = Digit.Services.useStore({ stateCode, moduleCode, language });
 
   if (Object.keys(store).length === 0) {
     return <Loader />;
@@ -71,13 +75,20 @@ export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = 
 };
 
 export const FSMLinks = ({ matchPath, userType }) => {
+  const { t } = useTranslation();
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
+
+  useEffect(() => {
+    clearParams();
+  }, []);
+
   if (userType === "citizen") {
     return (
       <React.Fragment>
-        <Header>Applications</Header>
-        <HomeLink to={`${matchPath}/my-applications`}>My Applications</HomeLink>
-        <Header>Other Services</Header>
-        <HomeLink to={`${matchPath}/new-application`}>Apply for Desludging</HomeLink>
+        <Header>{t("CS_HOME_PROPERTIES")}</Header>
+        <HomeLink to={`${matchPath}/my-applications`}>{t("CS_HOME_MY_APPLICATIONS")}</HomeLink>
+        <Header>{t("CS_HOME_OTHER_SERVICES")}</Header>
+        <HomeLink to={`${matchPath}/new-application`}>{t("CS_HOME_APPLY_FOR_DESLUDGING")}</HomeLink>
       </React.Fragment>
     );
   } else {
@@ -96,17 +107,17 @@ export const FSMLinks = ({ matchPath, userType }) => {
                     ></path>
                   </svg>
                 </span>
-                <span className="text">FSM</span>
+                <span className="text">{t("ES_TITLE_FSM")}</span>
               </div>
               <div className="body">
                 <span className="link">
-                  <Link to={`${matchPath}/inbox`}>Inbox</Link>
+                  <Link to={`${matchPath}/inbox`}>{t("ES_TITLE_INBOX")}</Link>
                 </span>
                 <span className="link">
-                  <Link to={`${matchPath}/new-application/`}>New Desludging Application</Link>
+                  <Link to={`${matchPath}/new-application/`}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Link>
                 </span>
                 <span className="link">
-                  <Link to={`${matchPath}/application-audit/`}>Application Audit</Link>
+                  <Link to={`${matchPath}/application-audit/`}>{t("ES_TITLE_APPLICATION_AUDIT")}</Link>
                 </span>
               </div>
             </div>

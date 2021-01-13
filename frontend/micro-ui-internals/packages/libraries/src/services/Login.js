@@ -3,7 +3,7 @@ import Urls from "./atoms/urls";
 import { Request } from "./atoms/Utils/Request";
 
 export const LoginService = {
-  sendOtp: (details, stateCode = "pb") =>
+  sendOtp: (details, stateCode) =>
     Request({
       url: Urls.OTP_Send,
       data: details,
@@ -11,7 +11,7 @@ export const LoginService = {
       method: "POST",
       params: { tenantId: stateCode },
     }),
-  authenticate: async (details, stateCode = "pb") => {
+  authenticate: async (details, stateCode) => {
     const params = new URLSearchParams();
     Object.entries(details).forEach(([key, value]) => params.append(key, value));
     params.append("scope", "read");
@@ -28,7 +28,7 @@ export const LoginService = {
 
     return Axios(config);
   },
-  registerUser: async (details, stateCode = "pb") =>
+  registerUser: async (details, stateCode) =>
     Request({
       url: Urls.Register_User,
       data: {
@@ -37,7 +37,7 @@ export const LoginService = {
       method: "POST",
       params: { tenantId: stateCode },
     }),
-  updateUser: async (details, stateCode = "pb") =>
+  updateUser: async (details, stateCode) =>
     Request({
       url: Urls.UserProfileUpdate,
       auth: true,

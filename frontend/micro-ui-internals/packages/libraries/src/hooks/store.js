@@ -3,17 +3,15 @@ import { useQuery } from "react-query";
 // import mergeConfig from "../../config/mergeConfig";
 import { StoreService } from "../services/molecules/Store/service";
 
-export const useStore = (defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode, language }) => {
+export const useStore = ({ stateCode, moduleCode, language }) => {
   const [defaultStore, setDefaultStore] = useState({});
   useEffect(() => {
-    const config = window.Digit.Config.mergeConfig(defaultConfig, deltaConfig);
-    StoreService.defaultData(stateCode, cityCode, moduleCode, language)
+    StoreService.defaultData(stateCode, moduleCode, language)
       .then((defaultData) => {
-        const store = { config, ...defaultData };
-        setDefaultStore(store);
+        setDefaultStore({ loading: false, ...defaultData });
       })
       .catch((err) => console.log("err:", err));
-  }, [defaultConfig, stateCode, cityCode, moduleCode]);
+  }, [stateCode, moduleCode, language]);
 
   return defaultStore;
 };

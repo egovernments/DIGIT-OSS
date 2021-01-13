@@ -23,20 +23,7 @@ export const WorkflowService = {
       auth: true,
     });
   },
-  getNextAction: async (stateCode, currentState) => {
-    let role = Storage.get("role") || "CITIZEN";
-    let res = await WorkflowService.init(stateCode, "PGR");
-    let selectedState = res.BusinessServices[0].states.filter((state) => {
-      return state.state === currentState;
-    })[0];
-    let actions =
-      (selectedState.actions &&
-        selectedState.actions.filter((state) => {
-          return state.roles.includes(role);
-        })) ||
-      [];
-    return actions;
-  },
+
   getDetailsById: async ({ tenantId, id, moduleCode, role }) => {
     // console.log("getWorkflowDetails", tenantId, id, moduleCode, role);
     // console.log(Digit);
@@ -44,7 +31,7 @@ export const WorkflowService = {
     const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCode)).BusinessServices[0].states;
     if (workflow && workflow.ProcessInstances) {
       const processInstances = workflow.ProcessInstances;
-      const nextStates = processInstances[0].nextActions.map((action) => ({ action: action.action, nextState: action.nextState }));
+      const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action.action, nextState: action.nextState }));
       const nextActions = nextStates.map((id) => ({
         action: id.action,
         state: businessServiceResponse.find((state) => state.uuid === id.nextState),
@@ -63,8 +50,8 @@ export const WorkflowService = {
               created: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.createdTime),
               lastModified: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.lastModifiedTime),
             },
-            timeLineActions: instance.state.actions
-              ? instance.state.actions.filter((action) => action.roles.includes(role)).map((action) => action.action)
+            timeLineActions: instance.nextActions
+              ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action.action)
               : null,
           })),
           nextActions: actionRolePair,

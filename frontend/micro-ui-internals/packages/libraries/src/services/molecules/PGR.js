@@ -3,7 +3,7 @@ import { Request } from "../atoms/Utils/Request";
 
 export const PGRService = {
   search: (tenantId, filters = {}) => {
-    // console.log("----------------------------", filters);
+    // console.log("----------------------------", tenantId,filters);
     return Request({
       url: Urls.pgr_search,
       useCache: false,
@@ -18,27 +18,28 @@ export const PGRService = {
       url: Urls.PGR_Create,
       data: details,
       useCache: true,
-      userInfo: true,
       method: "POST",
       params: { tenantId },
       auth: true,
+      userService: true,
     }),
-  update: (details, tenantId) =>
+  update: (details) =>
     Request({
       url: Urls.pgr_update,
       data: details,
       useCache: true,
       auth: true,
       method: "POST",
-      params: { tenantId },
+      params: { tenantId: details.tenantId },
+      userService: true,
     }),
-  count: (details, tenantId) =>
+  count: (tenantId, params) =>
     Request({
-      url: Urls.MDMS,
-      data: details,
+      url: Urls.pgr_count,
       useCache: true,
+      auth: true,
       method: "POST",
-      params: { tenantId },
+      params: { tenantId, ...params },
     }),
 
   employeeSearch: (tenantId, roles) => {

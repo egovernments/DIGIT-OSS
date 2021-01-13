@@ -1,6 +1,7 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 const useInboxData = (searchParams) => {
+  const client = useQueryClient();
   // const [complaintList, setcomplaintList] = useState([]);
   // const user = Digit.UserService.getUser();
   // const tenantId = user?.info?.tenantId;
@@ -27,7 +28,7 @@ const useInboxData = (searchParams) => {
   };
 
   const result = useQuery(["fetchInboxData", searchParams], fetchInboxData, { staleTime: Infinity });
-  return result;
+  return { ...result, revalidate: () => client.refetchQueries(["fetchInboxData"]) };
 };
 
 const mapWfBybusinessId = (wfs) => {
@@ -45,6 +46,7 @@ const combineResponses = (complaintDetailsResponse, workflowInstances) => {
     status: complaint.service.applicationStatus,
     taskOwner: wfMap[complaint.service.serviceRequestId]?.assigner?.name,
     sla: wfMap[complaint.service.serviceRequestId]?.businesssServiceSla,
+    tenantId: complaint.service.tenantId,
   }));
 };
 

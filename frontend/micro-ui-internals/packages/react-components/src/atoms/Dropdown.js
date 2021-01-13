@@ -6,7 +6,7 @@ const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
 
   useEffect(() => {
-    props.selectedVal ? setValue(props.selectedVal) : null;
+    props.selectedVal ? setValue(props.selectedVal) : setValue("");
   }, [props.selectedVal]);
 
   function inputChange(e) {
@@ -14,7 +14,15 @@ const TextField = (props) => {
     props.setFilter(e.target.value);
   }
 
-  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} />;
+  function broadcastToOpen() {
+    props.dropdownDisplay(true);
+  }
+
+  function broadcastToClose() {
+    props.dropdownDisplay(false);
+  }
+
+  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} onFocus={broadcastToOpen} onBlur={broadcastToClose} />;
 };
 
 const Dropdown = (props) => {
@@ -22,8 +30,6 @@ const Dropdown = (props) => {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
-
-  console.log("%c 🏎️: props in dropdown ", "font-size:16px;background-color:#c239cc;color:white;", props.selected);
 
   useEffect(() => {
     setSelectedOption(props.selected);
@@ -34,14 +40,23 @@ const Dropdown = (props) => {
     setDropdownStatus(!current);
   }
 
-  function dropdownOn() {
-    setDropdownStatus(true);
+  function dropdownOn(val) {
+    const waitForOptions = () => setTimeout(() => setDropdownStatus(val), 500);
+    const timerId = waitForOptions();
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }
 
-  function onSelect(selectedOption) {
-    props.select(selectedOption);
-    setSelectedOption(selectedOption);
-    setDropdownStatus(false);
+  function onSelect(val) {
+    //console.log(val, "curent", selectedOption, "old");
+    if (val !== selectedOption) {
+      // console.log(val,"is selected");
+      props.select(val);
+      setSelectedOption(val);
+      setDropdownStatus(false);
+    }
   }
 
   function setFilter(val) {
@@ -64,10 +79,12 @@ const Dropdown = (props) => {
               : null
           }
           filterVal={filterVal}
-          onClick={dropdownOn}
+          // onClick={dropdownOn}
+          dropdownDisplay={dropdownOn}
         />
         <ArrowDown onClick={dropdownSwitch} />
       </div>
+      {console.log("dropdownStatus::::::::::::::>", dropdownStatus)}
       {dropdownStatus ? (
         props.optionKey ? (
           <div className="options-card">

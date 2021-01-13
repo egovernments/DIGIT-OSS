@@ -1,9 +1,11 @@
 import React from "react";
 import { CheckBox } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
-const Status = ({ complaints, onAssignmentChange, pgrfilters }) => {
-  // const complaintsWithCount = useComplaintStatusCount(complaints);
-  const complaintsWithCount = [
+const Status = ({ applications, onAssignmentChange, pgrfilters }) => {
+  const { t } = useTranslation();
+  // const applicationsWithCount = useComplaintStatusCount(applications);
+  const applicationsWithCount = [
     {
       name: "Pending for Payment",
       count: 4,
@@ -20,8 +22,8 @@ const Status = ({ complaints, onAssignmentChange, pgrfilters }) => {
 
   return (
     <div className="status-container">
-      <div className="filter-label">Status</div>
-      {complaintsWithCount.map((option, index) => (
+      <div className="filter-label">{t("ES_INBOX_STATUS")}</div>
+      {applicationsWithCount.map((option, index) => (
         <CheckBox
           key={index}
           onChange={(e) => onAssignmentChange(e, option)}

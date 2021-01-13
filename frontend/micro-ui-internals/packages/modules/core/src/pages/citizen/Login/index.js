@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AppContainer, BackButton } from "@egovernments/digit-ui-react-components";
-import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { loginSteps } from "./config";
 import SelectMobileNumber from "./SelectMobileNumber";
 import SelectOtp from "./SelectOtp";
@@ -11,8 +11,9 @@ const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
 
-const Login = ({ stateCode, cityCode }) => {
+const Login = ({ stateCode }) => {
   const { t } = useTranslation();
+  const location = useLocation();
   const { path, url } = useRouteMatch();
   const history = useHistory();
   const [isUserRegistered, setIsUserRegistered] = useState(null);
@@ -24,20 +25,17 @@ const Login = ({ stateCode, cityCode }) => {
     if (!user) {
       return;
     }
-    const { name } = user;
+    Digit.UserService.setUser(user);
+    const {
+      info: { name },
+    } = user;
     if (!name || name === DEFAULT_USER) {
       history.push(`${path}/name`);
     } else {
-      history.push("/");
+      const redirectPath = location.state?.from || "/";
+      history.push(redirectPath);
     }
   }, [user]);
-
-  useEffect(() => {
-    if (!tokens) return;
-    const { access_token } = tokens;
-    const { mobileNumber } = params;
-    Digit.UserService.setUser({ token: access_token, mobileNumber });
-  }, [tokens]);
 
   const stepItems = useMemo(() =>
     loginSteps.map(
@@ -68,24 +66,25 @@ const Login = ({ stateCode, cityCode }) => {
     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
     if (!err) {
       setIsUserRegistered(true);
-      history.push(`${path}/otp`);
+      history.push(`${path}/otp`, { from: location.state.from });
       return;
     }
     const [res2, err2] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
     if (!err2) {
       setIsUserRegistered(false);
-      history.push(`${path}/otp`);
+      history.push(`${path}/otp`, { from: location.state.from });
       return;
     }
   };
 
   const selectName = async (name) => {
+    const { info } = user;
     const data = {
-      ...user,
+      ...info,
       ...name,
     };
     const { user: updatedUser } = await Digit.UserService.updateUser(data, stateCode);
-    setUser(updatedUser[0]);
+    setUser({ ...user, info: { ...updatedUser[0] } });
   };
 
   const selectOtp = async () => {
@@ -99,26 +98,18 @@ const Login = ({ stateCode, cityCode }) => {
           userType: getUserType(),
         };
 
-        const {
-          data: { ResponseInfo, UserRequest, ...tokens },
-        } = await Digit.UserService.authenticate(requestData);
-
-        setTokens(tokens);
-        setUser(UserRequest);
+        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
+        setUser({ info, ...tokens });
       } else if (!isUserRegistered) {
         const requestData = {
           name: DEFAULT_USER,
           username: mobileNumber,
           otpReference: otp,
           tenantId: stateCode,
-          permanentCity: cityCode,
         };
 
-        const {
-          data: { ResponseInfo, UserRequest, ...tokens },
-        } = await Digit.UserService.registerUser(requestData, stateCode);
-        setTokens(tokens);
-        setUser(UserRequest);
+        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser(requestData, stateCode);
+        setUser({ info, ...tokens });
       }
     } catch (err) {
       console.log(err);

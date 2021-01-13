@@ -39,7 +39,7 @@ const ReasonPage = (props) => {
       <RadioButtons
         // handleChange={onRadioChange}
         onSelect={onRadioChange}
-        selectedoption={selected}
+        selectedOption={selected}
         // selected={(value) => setSelected(value)}
         options={[
           t(`${LOCALIZATION_KEY.CS_REOPEN}_OPTION_ONE`),

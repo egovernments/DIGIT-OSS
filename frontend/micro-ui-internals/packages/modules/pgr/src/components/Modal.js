@@ -101,7 +101,7 @@ const Modal = (props) => {
           <div className="popup-module-action-bar">
             <ButtonSelector theme="border" label={t("CS_COMMON_CANCEL")} onSubmit={() => props.onCancel()} />
             <ButtonSelector
-              label={t("CS_COMMON_ASSIGN")}
+              label={props.actionLabel}
               onSubmit={() => {
                 console.log(selectedEmployee, comments, uploadedFile);
                 props.onAssign(selectedEmployee, comments, uploadedFile);

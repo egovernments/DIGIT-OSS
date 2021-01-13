@@ -43,10 +43,6 @@ export const ImageUploadHandler = (props) => {
     }
   }, [imageFile]);
 
-  // useEffect(() => {
-  //   Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", uploadedImagesThumbs);
-  // }, [uploadedImagesThumbs]);
-
   const addUploadedImageIds = useCallback(
     (imageIdData) => {
       if (uploadedImagesIds === null) {
@@ -65,7 +61,8 @@ export const ImageUploadHandler = (props) => {
   }
 
   const uploadImage = useCallback(async () => {
-    const response = await Digit.UploadServices.Filestorage("property-upload", image);
+    const response = await Digit.UploadServices.Filestorage("property-upload", image, props.tenantId);
+    console.log("%c 🏎️: props in Upload ka parent ", "font-size:36px;", response);
     setUploadedImagesIds(addUploadedImageIds(response));
   }, [addUploadedImageIds, image]);
 
@@ -76,9 +73,9 @@ export const ImageUploadHandler = (props) => {
       keys.splice(index, 1);
     }
     var thumbnails = [];
-    if (uploadedImagesThumbs !== null) {
-      thumbnails = uploadedImagesThumbs.length > 0 ? uploadedImagesThumbs.filter((thumb) => thumb.key !== keys[0]) : [];
-    }
+    // if (uploadedImagesThumbs !== null) {
+    //   thumbnails = uploadedImagesThumbs.length > 0 ? uploadedImagesThumbs.filter((thumb) => thumb.key !== keys[0]) : [];
+    // }
 
     const newThumbnails = keys.map((key) => {
       return { image: thumbnailsData.data[key].split(",")[2], key };
@@ -89,7 +86,7 @@ export const ImageUploadHandler = (props) => {
 
   const submit = useCallback(async () => {
     if (uploadedImagesIds !== null && uploadedImagesIds.length > 0) {
-      const res = await Digit.UploadServices.Filefetch(uploadedImagesIds, "pb.amritsar");
+      const res = await Digit.UploadServices.Filefetch(uploadedImagesIds, props.tenantId);
       addImageThumbnails(res);
     }
   }, [uploadedImagesIds]);

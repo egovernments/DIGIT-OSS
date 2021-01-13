@@ -18,13 +18,15 @@ const UploadPhoto = (props) => {
   };
 
   const setDocState = (ids) => {
-    const documents = ids.map((id) => ({
-      documentType: "PHOTO",
-      fileStore: id,
-      documentUid: "",
-      additionalDetails: {},
-    }));
-    setVerificationDocuments(documents);
+    if (ids?.length) {
+      const documents = ids.map((id) => ({
+        documentType: "PHOTO",
+        fileStoreId: id,
+        documentUid: "",
+        additionalDetails: {},
+      }));
+      setVerificationDocuments(documents);
+    }
   };
 
   function save() {
@@ -47,7 +49,13 @@ const UploadPhoto = (props) => {
   return (
     <React.Fragment>
       <Card>
-        <ImageUploadHandler header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)} cardText="" onPhotoChange={handleUpload} />
+        <ImageUploadHandler
+          header={t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_UPLOAD_PHOTO`)}
+          tenantId={Digit.ULBService.getCurrentTenantId()}
+          cardText=""
+          onPhotoChange={handleUpload}
+          uploadedImages={null}
+        />
         {/* <Link to={`${props.match.path}/addional-details/${id}`}>
           <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} />
         </Link> */}

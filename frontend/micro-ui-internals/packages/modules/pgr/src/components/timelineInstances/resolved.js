@@ -8,18 +8,19 @@ import Reopen from "./reopen";
 
 const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate }) => {
   const { t } = useTranslation();
-  const __nextActions = [...new Set(nextActions)];
+
   if (action === "RESOLVE") {
     let actions =
-      __nextActions &&
-      __nextActions.map(
-        (action, index) =>
-          action && (
+      nextActions &&
+      nextActions.map((action, index) => {
+        if (action && action !== "COMMENT") {
+          return (
             <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
               <ActionLinks>{action}</ActionLinks>
             </Link>
-          )
-      );
+          );
+        }
+      });
     return (
       <div>
         {t(`CS_COMMON_COMPLAINT_RESOLVED`)} <div>{actions}</div>

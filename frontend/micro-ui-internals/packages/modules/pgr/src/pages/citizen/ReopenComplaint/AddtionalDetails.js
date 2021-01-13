@@ -15,11 +15,9 @@ const AddtionalDetails = (props) => {
   const dispatch = useDispatch();
   const appState = useSelector((state) => state)["common"];
   let { t } = useTranslation();
-  let userType = Digit.SessionStorage.get("userType");
-  let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
+  let tenantId = Digit.ULBService.getCurrentTenantId();
 
   const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
-  console.log("88888888888888888", tenantId, complaintDetails);
   useEffect(() => {
     if (appState.complaints) {
       const { response } = appState.complaints;
@@ -29,7 +27,13 @@ const AddtionalDetails = (props) => {
     }
   }, [appState.complaints, props.history]);
 
-  const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
+  const updateComplaint = useCallback(
+    async (complaintDetails) => {
+      await dispatch(updateComplaints(complaintDetails));
+      history.push(`${props.match.path}/response/${id}`);
+    },
+    [dispatch]
+  );
 
   const getUpdatedWorkflow = (reopenDetails, type) => {
     switch (type) {
@@ -87,7 +91,7 @@ const AddtionalDetails = (props) => {
       <Card>
         <CardHeader>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_PROVIDE_ADDITIONAL_DETAILS`)}</CardHeader>
         <CardText>{t(`${LOCALIZATION_KEY.CS_ADDCOMPLAINT}_ADDITIONAL_DETAILS_TEXT`)}</CardText>
-        <TextArea onChange={textInput}></TextArea>
+        <TextArea name={"AdditionalDetails"} onChange={textInput}></TextArea>
         <div onClick={reopenComplaint}>
           <SubmitBar label={t(`${LOCALIZATION_KEY.CS_HEADER}_REOPEN_COMPLAINT`)} />
         </div>

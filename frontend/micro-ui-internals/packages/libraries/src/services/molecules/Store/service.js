@@ -26,13 +26,6 @@ export const StoreService = {
     };
     initData.selectedLanguage = initData.languages[0].value;
 
-    // TODO: remove the FSM temp data once added in mdms master
-    initData.modules.push({
-      module: "FSM",
-      code: "FSM",
-      tenants: [{ code: "pb.amritsar" }],
-    });
-
     const moduleTenants = initData.modules
       .map((module) => module.tenants)
       .flat()
@@ -58,9 +51,9 @@ export const StoreService = {
     initData.localities = localities;
     return initData;
   },
-  defaultData: async (stateCode, cityCode, moduleCode, language) => {
+  defaultData: async (stateCode, moduleCode, language) => {
     const LocalePromise = LocalizationService.getLocale({
-      modules: [`rainmaker-${moduleCode.toLowerCase()}`, `rainmaker-${cityCode.toLowerCase()}`],
+      modules: [`rainmaker-${moduleCode.toLowerCase()}`],
       locale: language,
       tenantId: stateCode,
     });

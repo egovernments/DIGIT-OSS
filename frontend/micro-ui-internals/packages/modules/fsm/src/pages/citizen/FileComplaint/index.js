@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Redirect, Route, BrowserRouter as Router, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
@@ -6,27 +6,30 @@ import { config } from "./defaultConfig";
 import SelectPropertyType from "./SelectPropertyType";
 import SelectPropertySubtype from "./SelectPropertySubtype";
 import CheckPage from "./CheckPage";
+import Response from "./Response";
 
 const FileComplaint = ({ parentRoute }) => {
   const match = useRouteMatch();
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const history = useHistory();
-  const [params, setParams] = useState({});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
 
   const goNext = () => {
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.routes[currentPath];
-    if (nextStep === null) return submitComplaint();
+    if (nextStep === null) {
+      return history.push(`${parentRoute}/new-application/check`);
+    }
     history.push(`${match.path}/${nextStep}`);
   };
 
-  const submitComplaint = () => {
-    history.push(`${parentRoute}/new-application/check`);
+  const submitComplaint = async () => {
+    history.push(`${parentRoute}/new-application/response`);
   };
 
-  function log(data) {
-    console.log("data", data);
+  function handleSelect(data) {
+    setParams({ ...params, ...data });
     goNext();
   }
 
@@ -39,22 +42,19 @@ const FileComplaint = ({ parentRoute }) => {
         const Component = typeof component === "string" ? registry.getComponent(component) : component;
         return (
           <Route path={`${match.path}/${route}`} key={index}>
-            <Component config={{ texts, inputs }} onSelect={log} onSkip={handleSkip} value={params} t={t} />
+            <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} />
           </Route>
         );
       })}
       <Route path={`${match.path}/check`}>
-        <CheckPage />
+        <CheckPage onSubmit={submitComplaint} value={params} />
+      </Route>
+      <Route path={`${match.path}/response`}>
+        <Response data={params} onSuccess={clearParams} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />
       </Route>
-      {/* <Route exact path={`${path}/`}>
-        <SelectPropertyType config={stepItems[0]} onSelect={log} t={t} />
-      </Route>
-      <Route path={`${path}/property-sub-type`}>
-        <SelectPropertySubtype config={stepItems[1]} onSelect={log} t={t} />
-      </Route> */}
     </Switch>
   );
 };
