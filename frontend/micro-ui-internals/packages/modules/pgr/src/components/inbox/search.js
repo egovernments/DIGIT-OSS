@@ -11,9 +11,9 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
 
   const onSubmitInput = (data) => {
     if (!Object.keys(errors).filter((i) => errors[i]).length) {
-      if (data.serviceRequestId) {
+      if (data.serviceRequestId !== "") {
         onSearch({ serviceRequestId: data.serviceRequestId });
-      } else {
+      } else if (data.mobileNumber !== "") {
         onSearch({ mobileNumber: data.mobileNumber });
       }
       if (type === "mobile") {
