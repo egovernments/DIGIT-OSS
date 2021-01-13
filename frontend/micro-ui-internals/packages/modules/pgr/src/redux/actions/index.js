@@ -23,9 +23,8 @@ export const fetchLocalities = (city) => async (dispatch, getState) => {
   });
 };
 
-export const updateComplaints = (data) => async (dispatch, getState) => {
-  const { cityCode } = getState();
-  let ServiceWrappers = await Digit.PGRService.update(data, cityCode);
+export const updateComplaints = (data) => async (dispatch) => {
+  let ServiceWrappers = await Digit.PGRService.update(data);
 
   dispatch({
     type: UPDATE_COMPLAINT,
@@ -33,8 +32,8 @@ export const updateComplaints = (data) => async (dispatch, getState) => {
   });
 };
 
-export const fetchBusinessServiceByTenant = (cityCode, businessServices) => async (dispatch, getState) => {
-  const businessServiceResponse = await Digit.WorkflowService.init(cityCode, businessServices);
+export const fetchBusinessServiceByTenant = (tenantId, businessServices) => async (dispatch) => {
+  const businessServiceResponse = await Digit.WorkflowService.init(tenantId, businessServices);
   const businessService = businessServiceResponse.BusinessServices;
   dispatch({
     type: FETCH_ALL_BUSINESSS_SERVICES,

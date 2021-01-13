@@ -12,8 +12,7 @@ const SelectRating = ({ parentRoute }) => {
   console.log("parent route", parentRoute);
   const history = useHistory();
 
-  let userType = Digit.SessionStorage.get("userType");
-  let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
+  let tenantId = Digit.ULBService.getCurrentTenantId();
   const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
   const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
 

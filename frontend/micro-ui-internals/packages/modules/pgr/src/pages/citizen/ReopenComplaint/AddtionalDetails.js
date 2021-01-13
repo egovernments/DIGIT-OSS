@@ -15,8 +15,7 @@ const AddtionalDetails = (props) => {
   const dispatch = useDispatch();
   const appState = useSelector((state) => state)["common"];
   let { t } = useTranslation();
-  let userType = Digit.SessionStorage.get("userType");
-  let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
+  let tenantId = Digit.ULBService.getCurrentTenantId();
 
   const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
   useEffect(() => {
