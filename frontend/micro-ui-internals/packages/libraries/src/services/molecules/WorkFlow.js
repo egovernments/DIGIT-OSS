@@ -46,6 +46,7 @@ export const WorkflowService = {
           timeline: processInstances
             .filter((e) => e.action !== "COMMENT")
             .map((instance) => ({
+              performedAction: instance.action,
               status: instance.state.applicationStatus,
               caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
               auditDetails: {

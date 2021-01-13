@@ -19,14 +19,25 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   }
 
   let { timeline } = data;
+  console.log(
+    "find timeline",
+    timeline.map(({ performedAction }) => performedAction)
+  );
 
-  const getCheckPoint = ({ status, caption, auditDetails, timeLineActions }) => {
+  const getCheckPoint = ({ status, caption, auditDetails, timeLineActions, index, performedAction }) => {
+    console.log("find performedAction", performedAction);
+
     switch (status) {
       case "PENDINGFORREASSIGNMENT":
         return <PendingForReassignment text={t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)} />;
 
       case "PENDINGFORASSIGNMENT":
-        return <PendingForAssignment complaintFiledDate={auditDetails.created} text={t(`CS_COMMON_COMPLAINT_FILED`)} />;
+        return (
+          <PendingForAssignment
+            complaintFiledDate={auditDetails.created}
+            text={performedAction === "REOPEN" ? t(`CS_COMMON_COMPLAINT_REOPENED`) : t(`CS_COMMON_COMPLAINT_FILED`)}
+          />
+        );
 
       case "PENDINGFORASSIGNMENT_AFTERREOPEN":
         return <PendingForAssignment text={t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)} />;
@@ -40,8 +51,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
         return (
           <Resolved
             action={complaintWorkflow.action}
-            nextActions={timeLineActions}
-            rating={rating}
+            nextActions={index <= 1 && timeLineActions}
+            rating={index <= 1 && rating}
             serviceRequestId={serviceRequestId}
             reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
           />
@@ -70,13 +81,21 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMPLAINT_DETAILS}_COMPLAINT_TIMELINE`)}</CardSubHeader>
       {timeline && timeline.length > 0 ? (
         <ConnectingCheckPoints>
-          {timeline.map(({ status, caption, auditDetails, timeLineActions }, index) => {
+          {timeline.map(({ status, caption, auditDetails, timeLineActions, performedAction }, index) => {
+            console.log(performedAction);
             if (status === "PENDINGFORASSIGNMENT" && index === 0) {
               return (
                 <React.Fragment key={index}>
                   <CheckPoint
                     isCompleted={index === 0 ? true : false}
-                    customChild={getCheckPoint({ status: "PENDINGFORASSIGNMENT_AFTERREOPEN", caption, auditDetails, timeLineActions })}
+                    customChild={getCheckPoint({
+                      status: "PENDINGFORASSIGNMENT_AFTERREOPEN",
+                      caption,
+                      auditDetails,
+                      timeLineActions,
+                      index,
+                      performedAction,
+                    })}
                   />
                 </React.Fragment>
               );
@@ -85,7 +104,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
                 <React.Fragment key={index}>
                   <CheckPoint
                     isCompleted={index === 0 ? true : false}
-                    customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })}
+                    customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions, index, performedAction })}
                   />
                 </React.Fragment>
               );
