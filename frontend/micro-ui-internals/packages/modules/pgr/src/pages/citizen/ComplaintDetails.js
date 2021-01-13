@@ -76,9 +76,9 @@ const ComplaintDetailsPage = (props) => {
   }
 
   const onWorkFlowChange = (data) => {
+    console.log("ssdsodososooo ==== ", data);
     let timeline = data?.timeline;
-    let status = timeline?.length ? timeline[0].status : null;
-    status && (status === "REJECTED" || status === "RESOLVED") ? setDisableComment(false) : setDisableComment(true);
+    timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
   };
 
   const submitComment = async () => {

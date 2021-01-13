@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
+import { useTranslation } from "react-i18next";
 
 const SearchComplaint = ({ onSearch, type, onClose }) => {
   const [complaintNo, setComplaintNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const { register, errors, handleSubmit, reset } = useForm();
+  const { t } = useTranslation();
 
   const onSubmitInput = (data) => {
     if (!Object.keys(errors).filter((i) => errors[i]).length) {
@@ -46,7 +48,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
   return (
     <form onSubmit={handleSubmit(onSubmitInput)}>
       <React.Fragment>
-        <div className="search-container">
+        <div className="search-container" style={{ width: "auto" }}>
           <div className="search-complaint-container" style={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
             {type === "mobile" && (
               <div
@@ -62,7 +64,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
                 <span onClick={onClose}>x</span>
               </div>
             )}
-            <div className="complaint-input-container">
+            <div className="complaint-input-container" style={{ width: "100%" }}>
               <span className="complaint-input">
                 <Label>Complaint No.</Label>
                 <TextInput
@@ -89,8 +91,8 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
               </span>
               {type === "desktop" && (
                 <SubmitBar
-                  style={{ marginTop: 32, marginLeft: 8 }}
-                  label="Search"
+                  style={{ marginTop: 32, marginLeft: "auto" }}
+                  label={t("ES_COMMON_SEARCH")}
                   submit={true}
                   disabled={Object.keys(errors).filter((i) => errors[i]).length}
                 />
