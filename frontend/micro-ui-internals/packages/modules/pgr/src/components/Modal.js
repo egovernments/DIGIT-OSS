@@ -93,7 +93,7 @@ const Modal = (props) => {
             )}
             {props.selectedAction === "REOPEN" ? (
               <React.Fragment>
-                <CardLabel>{t("CS_ADDCOMPLAINT_ERROR_REOPEN_REASON")}</CardLabel>
+                <CardLabel>{t("CS_REOPEN_COMPLAINT")}</CardLabel>
                 <Dropdown selected={selectedReopenReason} option={reopenReasonMenu} select={onSelectReopenReason} />
               </React.Fragment>
             ) : null}
