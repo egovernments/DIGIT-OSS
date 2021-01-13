@@ -227,7 +227,9 @@ export const ComplaintDetails = (props) => {
                   key={k}
                   label={t(k)}
                   text={
-                    Array.isArray(complaintDetails?.details[k]) ? complaintDetails?.details[k].map((val) => t(val)) : t(complaintDetails?.details[k])
+                    Array.isArray(complaintDetails?.details[k])
+                      ? complaintDetails?.details[k].map((val) => (typeof val === "object" ? t(val.code) : t(val)))
+                      : t(complaintDetails?.details[k])
                   }
                   last={arr.length - 1 === i}
                 />
