@@ -33,6 +33,7 @@ const NavBar = ({ img, open, menuItems, onClose }) => {
           style={{
             display: "flex",
             flexDirection: "column",
+            marginTop: "60px",
             padding: "5px",
             height: "100vh",
             padding: "2rem",

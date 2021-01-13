@@ -3,15 +3,19 @@ import { NavBar, Hamburger } from "@egovernments/digit-ui-react-components";
 import SideBarMenu from "../../src/config/sidebar-menu";
 
 const Sidebar = ({ isOpen, toggleSidebar, onLogout }) => {
-  const menuItems = [
-    ...SideBarMenu,
-    {
-      text: "Logout",
-      populators: {
-        onClick: onLogout,
+  const user = Digit.UserService.getUser();
+  let menuItems = SideBarMenu;
+  if (user && user.access_token) {
+    menuItems = [
+      ...SideBarMenu,
+      {
+        text: "Logout",
+        populators: {
+          onClick: onLogout,
+        },
       },
-    },
-  ];
+    ];
+  }
 
   return (
     <div>
