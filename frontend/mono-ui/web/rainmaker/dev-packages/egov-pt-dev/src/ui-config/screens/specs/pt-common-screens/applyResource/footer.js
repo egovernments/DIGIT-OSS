@@ -264,7 +264,7 @@ const callBackForApply = async (state, dispatch) => {
         unit.occupancyType = "SELFOCCUPIED";
         unit.constructionDetail = {};
         propertyPayload.units = [];
-        propertyPayload.units.push(unit);
+        // propertyPayload.units.push(unit);
       }
       propertyPayload.creationReason = 'CREATE';
       let payload = null;
