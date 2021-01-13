@@ -5,17 +5,18 @@ const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernm
 const SearchComplaint = ({ onSearch, type, onClose }) => {
   const [complaintNo, setComplaintNo] = useState("");
   const [mobileNo, setMobileNo] = useState("");
-  const { register, handleSubmit, reset } = useForm();
+  const { register, errors, handleSubmit, reset } = useForm();
 
   const onSubmitInput = (data) => {
-    console.log("data", data);
-    if (data.serviceRequestId) {
-      onSearch({ serviceRequestId: data.serviceRequestId });
-    } else {
-      onSearch({ mobileNumber: data.mobileNumber });
-    }
-    if (type === "mobile") {
-      onClose();
+    if (!Object.keys(errors).filter((i) => errors[i]).length) {
+      if (data.serviceRequestId) {
+        onSearch({ serviceRequestId: data.serviceRequestId });
+      } else {
+        onSearch({ mobileNumber: data.mobileNumber });
+      }
+      if (type === "mobile") {
+        onClose();
+      }
     }
   };
 
@@ -68,22 +69,39 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
                   name="serviceRequestId"
                   value={complaintNo}
                   onChange={setComplaint}
-                  inputRef={register}
+                  inputRef={register({
+                    pattern: /(?!^$)([^\s])/,
+                  })}
                   style={{ width: "280px", marginBottom: "8px" }}
                 ></TextInput>
               </span>
               <span className="mobile-input">
                 <Label>Mobile No.</Label>
-                <TextInput name="mobileNumber" value={mobileNo} onChange={setMobile} inputRef={register} style={{ width: "280px" }}></TextInput>
+                <TextInput
+                  name="mobileNumber"
+                  value={mobileNo}
+                  onChange={setMobile}
+                  inputRef={register({
+                    pattern: /^[6-9]\d{9}$/,
+                  })}
+                  style={{ width: "280px" }}
+                ></TextInput>
               </span>
-              {type === "desktop" && <SubmitBar style={{ marginTop: 32, marginLeft: 8 }} label="Search" submit />}
+              {type === "desktop" && (
+                <SubmitBar
+                  style={{ marginTop: 32, marginLeft: 8 }}
+                  label="Search"
+                  submit={true}
+                  disabled={Object.keys(errors).filter((i) => errors[i]).length}
+                />
+              )}
             </div>
             {type === "desktop" && <span className="clear-search">{clearAll()}</span>}
           </div>
         </div>
         {type === "mobile" && (
           <ActionBar>
-            <SubmitBar label="Search" submit />
+            <SubmitBar label="Search" submit={true} />
           </ActionBar>
         )}
       </React.Fragment>
