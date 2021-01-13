@@ -17,7 +17,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
     const Module = registry.getComponent(`${code}Module`);
     return (
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
-        <Module stateCode={stateCode} cityCode="pb.amritsar" moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
+        <Module stateCode={stateCode} moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
       </Route>
     );
   });

@@ -25,7 +25,7 @@ const useEmployeeFilter = (tenantId, roles, complaintDetails) => {
         }),
       },
     ]);
-  }, [cityCode, roles]);
+  }, [tenantId, roles]);
 
   return employeeDetails;
 };

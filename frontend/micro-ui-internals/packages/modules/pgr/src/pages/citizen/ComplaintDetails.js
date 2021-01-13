@@ -43,8 +43,8 @@ const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
 
-  let cityCodeVal = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
-  const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId: cityCodeVal, id });
+  let tenantId = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
+  const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
 
   const [imageZoom, setImageZoom] = useState(null);
 
