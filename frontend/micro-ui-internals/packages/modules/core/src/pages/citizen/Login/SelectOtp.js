@@ -3,7 +3,7 @@ import { ButtonSelector, CardText, FormStep, LinkButton, OTPInput } from "@egove
 import useInterval from "../../../hooks/useInterval";
 
 const SelectOtp = ({ config, otp, onOtpChange, onResend, onSelect, t }) => {
-  const [timeLeft, setTimeLeft] = useState(2);
+  const [timeLeft, setTimeLeft] = useState(30);
 
   useInterval(
     () => {

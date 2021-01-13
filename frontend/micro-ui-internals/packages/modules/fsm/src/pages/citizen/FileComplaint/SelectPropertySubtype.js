@@ -28,11 +28,12 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
   return (
     <TypeSelectCard
       {...config.texts}
-      {...{ menu: menu }}
-      {...{ optionsKey: "name" }}
-      {...{ selected: selectedValue }}
-      {...{ selectedOption: subtype }}
-      {...{ onSave: goNext }}
+      disabled={subtype ? false : true}
+      menu={menu}
+      optionsKey="i18nKey"
+      selected={selectedValue}
+      selectedOption={subtype}
+      onSave={goNext}
       t={t}
     />
   );
