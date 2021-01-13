@@ -13,6 +13,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   const { t } = useTranslation();
   // let GetComplaintInstance = ({}) => {
 
+  // console.log("find complaintWorkflow here", complaintWorkflow)
   if (isLoading) {
     return <Loader />;
   }
@@ -26,6 +27,9 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
 
       case "PENDINGFORASSIGNMENT":
         return <PendingForAssignment complaintFiledDate={auditDetails.created} text={t(`CS_COMMON_COMPLAINT_FILED`)} />;
+
+      case "PENDINGFORASSIGNMENT_AFTERREOPEN":
+        return <PendingForAssignment text={t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)} />;
 
       case "PENDINGATLME":
         let { name, mobileNumber } = caption && caption.length > 0 ? caption[0] : { name: "", mobileNumber: "" };
@@ -45,6 +49,17 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       case "CLOSEDAFTERRESOLUTION":
         return <React.Fragment>{t("CS_COMMON_CLOSEDAFTERRESOLUTION")}</React.Fragment>;
 
+      // case "RESOLVE":
+      // return (
+      //   <Resolved
+      //     action={complaintWorkflow.action}
+      //     nextActions={timeLineActions}
+      //     rating={rating}
+      //     serviceRequestId={serviceRequestId}
+      //     reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
+      //   />
+      // );
+
       default:
         return <React.Fragment>{status}</React.Fragment>;
     }
@@ -56,14 +71,25 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       {timeline && timeline.length > 0 ? (
         <ConnectingCheckPoints>
           {timeline.map(({ status, caption, auditDetails, timeLineActions }, index) => {
-            return (
-              <React.Fragment key={index}>
-                <CheckPoint
-                  isCompleted={index === 0 ? true : false}
-                  customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })}
-                />
-              </React.Fragment>
-            );
+            if (status === "PENDINGFORASSIGNMENT" && index === 0) {
+              return (
+                <React.Fragment key={index}>
+                  <CheckPoint
+                    isCompleted={index === 0 ? true : false}
+                    customChild={getCheckPoint({ status: "PENDINGFORASSIGNMENT_AFTERREOPEN", caption, auditDetails, timeLineActions })}
+                  />
+                </React.Fragment>
+              );
+            } else {
+              return (
+                <React.Fragment key={index}>
+                  <CheckPoint
+                    isCompleted={index === 0 ? true : false}
+                    customChild={getCheckPoint({ status, caption, auditDetails, timeLineActions })}
+                  />
+                </React.Fragment>
+              );
+            }
           })}
         </ConnectingCheckPoints>
       ) : (
