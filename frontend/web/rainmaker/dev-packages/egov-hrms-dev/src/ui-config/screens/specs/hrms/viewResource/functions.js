@@ -670,12 +670,20 @@ const showActivateDetails = (dispatch, activate = true) => {
     )
   );
 
-
+  
   dispatch(
     handleField(
       "view",
       "components.adhocDialog.children.popup.children.nonMandatoryBody.children.upload",
       "jsonPath",
+      activate ? "ActivationDocuments" : "deactivationDocuments"
+    )
+  );
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.upload.children.uploadButton",
+      "props.jsonPath",
       activate ? "ActivationDocuments" : "deactivationDocuments"
     )
   );

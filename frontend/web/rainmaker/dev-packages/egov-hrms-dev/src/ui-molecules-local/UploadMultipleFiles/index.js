@@ -49,7 +49,7 @@ class UploadMultipleFiles extends Component {
     const { documents } = this.state;
     return (
       <div>
-        {documents &&
+        {documents && Array.isArray(documents)&&
           documents.map((document, index) => {
             return (
               <div style={{ marginTop: 10 }} key={index}>

@@ -110,7 +110,8 @@ export const searchApiCall = async (state, dispatch) => {
         ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
         ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
         ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
-        ["TENANT_ID"]: item.tenantId || "-"
+        ["TENANT_ID"]: item.tenantId || "-",
+        ["SERVICE_TYPE"]: item.businessService
       }));
       enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
       dispatch(
