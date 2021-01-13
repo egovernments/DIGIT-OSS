@@ -86,8 +86,8 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
       </Route>
       <Route path="/digit-ui/citizen">
         <TopBar
-          img={cityDetails.logoId}
-          ulb={`${t(cityDetails.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
+          img={cityDetails?.logoId}
+          ulb={`${t(cityDetails?.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
           toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
           logoUrl={logoUrl}
           onLogout={handleLogout}

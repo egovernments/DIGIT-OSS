@@ -2213,6 +2213,7 @@ img, video {
       border-radius: 50%;
       color: #fff;
       font-weight: 700; }
+
 .language-selector {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2250,6 +2251,7 @@ img, video {
   color: #fff;
   color: rgba(255, 255, 255, var(--text-opacity));
   font-weight: 500; }
+
 .citizen-info-label {
   padding: 8px;
   --border-opacity:1;
@@ -2345,7 +2347,7 @@ img, video {
   padding-top: 88px; }
 
 .citizen .main {
-  padding-top: 72px; }
+  padding-top: 82px; }
 
 .link {
   --text-opacity:1;
