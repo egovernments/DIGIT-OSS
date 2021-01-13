@@ -3,6 +3,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.0 - 2020-10-20
+- Added support to make payment by other than the owner/citizen.
+
 ## 1.1.0 - 2020-06-19
 - Added typescript definition generation plugin
 - Upgraded to `tracer:2.0.0-SNAPSHOT`

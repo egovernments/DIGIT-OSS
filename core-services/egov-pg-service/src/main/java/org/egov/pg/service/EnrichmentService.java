@@ -29,12 +29,14 @@ public class EnrichmentService {
     private IdGenService idGenService;
     private BankAccountRepository bankAccountRepository;
     private ObjectMapper objectMapper;
+    private UserService userService;
 
     @Autowired
-    EnrichmentService(IdGenService idGenService, BankAccountRepository bankAccountRepository, ObjectMapper objectMapper) {
+    EnrichmentService(IdGenService idGenService, BankAccountRepository bankAccountRepository, ObjectMapper objectMapper, UserService userService) {
         this.idGenService = idGenService;
         this.bankAccountRepository = bankAccountRepository;
         this.objectMapper = objectMapper;
+        this.userService = userService;
     }
 
     void enrichCreateTransaction(TransactionRequest transactionRequest) {
@@ -47,7 +49,7 @@ public class EnrichmentService {
         // Generate ID from ID Gen service and assign to txn object
         String txnId = idGenService.generateTxnId(transactionRequest);
         transaction.setTxnId(txnId);
-        transaction.setUser(new User(requestInfo.getUserInfo()));
+        transaction.setUser(userService.createOrSearchUser(transactionRequest));
         transaction.setTxnStatus(Transaction.TxnStatusEnum.PENDING);
         transaction.setTxnStatusMsg(PgConstants.TXN_INITIATED);
 
