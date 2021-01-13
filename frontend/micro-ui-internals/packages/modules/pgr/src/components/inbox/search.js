@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
 import { useTranslation } from "react-i18next";
 
@@ -32,7 +33,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
   const clearAll = () => {
     return (
       <LinkLabel style={{ color: "#F47738", cursor: "pointer" }} onClick={clearSearch}>
-        Clear Search
+        {t("CS_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
   };
@@ -60,13 +61,13 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
                   marginBottom: "20px",
                 }}
               >
-                <h2>SEARCH BY:</h2>
+                <h2> {t("CS_COMMON_SEARCH_BY")}:</h2>
                 <span onClick={onClose}>x</span>
               </div>
             )}
             <div className="complaint-input-container" style={{ width: "100%" }}>
               <span className="complaint-input">
-                <Label>Complaint No.</Label>
+                <Label>{t("CS_COMMON_COMPLAINT_NO")}.</Label>
                 <TextInput
                   name="serviceRequestId"
                   value={complaintNo}
@@ -78,7 +79,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
                 ></TextInput>
               </span>
               <span className="mobile-input">
-                <Label>Mobile No.</Label>
+                <Label>{t("CS_COMMON_MOBILE_NO")}.</Label>
                 <TextInput
                   name="mobileNumber"
                   value={mobileNo}
