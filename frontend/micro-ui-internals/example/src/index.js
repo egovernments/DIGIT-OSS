@@ -41,6 +41,9 @@ window.Digit.Customizations = { PGR: pgrCustomizations };
 
 const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
 
+console.clear();
+console.log(stateCode);
+
 const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
