@@ -237,7 +237,6 @@ config:
       - work-dir: "libraries/enc-client"
         image-name: "enc-client"
 
-
   - name: "builds/core-services/nlp-engine"
     build:
       - work-dir: "nlp-engine"
