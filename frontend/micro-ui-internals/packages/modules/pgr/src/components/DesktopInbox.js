@@ -18,56 +18,46 @@ const DesktopInbox = (props) => {
       <span style={{ color: "#00703C", backgroundColor: "rgba(0, 112, 60, 0.12)", padding: "0 24px", borderRadius: "11px" }}>{value || ""}</span>
     );
   };
-  const history = useHistory();
-
-  function goTo(id) {
-    console.log("id", id);
-    history.push("/digit-ui/employee/pgr/complaint/details/" + id);
-  }
 
   const columns = React.useMemo(
     () => [
       {
         Header: t("CS_COMMON_COMPLAINT_NO"),
-        Cell: (row) => {
+        Cell: ({ row }) => {
           return (
             <div>
               <span className="link">
-                <Link to={"/digit-ui/employee/pgr/complaint/details/" + row.row.original["serviceRequestId"]}>
-                  {row.row.original["serviceRequestId"]}
-                </Link>
+                <Link to={"/digit-ui/employee/pgr/complaint/details/" + row.original["serviceRequestId"]}>{row.original["serviceRequestId"]}</Link>
               </span>
               {/* <a onClick={() => goTo(row.row.original["serviceRequestId"])}>{row.row.original["serviceRequestId"]}</a> */}
               <br />
-              <span style={{ marginTop: "4px", color: "#505A5F" }}>{t(`SERVICEDEFS.${row.row.original["complaintSubType"].toUpperCase()}`)}</span>
+              <span style={{ marginTop: "4px", color: "#505A5F" }}>{t(`SERVICEDEFS.${row.original["complaintSubType"].toUpperCase()}`)}</span>
             </div>
           );
         },
       },
       {
         Header: t("WF_INBOX_HEADER_LOCALITY"),
-        Cell: (row) => {
-          return GetCell(
-            t(row.row.original["locality"].includes("_") ? row.row.original["locality"] : `PB_AMRITSAR_ADMIN_${row.row.original["locality"]}`)
-          );
+        Cell: ({ row }) => {
+          return GetCell(t(Digit.Utils.locale.getLocalityCode(row.original["locality"], row.original["tenantId"])));
         },
       },
       {
         Header: t("CS_COMPLAINT_DETAILS_CURRENT_STATUS"),
-        Cell: (row) => {
-          return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
+        Cell: ({ row }) => {
+          return GetCell(t(`CS_COMMON_${row.original["status"]}`));
         },
       },
       {
         Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
-        Cell: (row) => {
-          return GetCell(row.row.original["taskOwner"]);
+        Cell: ({ row }) => {
+          return GetCell(row.original["taskOwner"]);
         },
       },
       {
         Header: t("WF_INBOX_HEADER_SLA_DAYS_REMAINING"),
-        Cell: (row) => {
-          return GetSlaCell(row.row.original["sla"]);
+        Cell: ({ row }) => {
+          return GetSlaCell(row.original["sla"]);
         },
       },
     ],

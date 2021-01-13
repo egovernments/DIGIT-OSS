@@ -2,11 +2,11 @@ import { MdmsService } from "../molecules/MDMS";
 import { Storage } from "../atoms/Utils/Storage";
 
 export const GetServiceDefinitions = {
-  get: async (stateCode) => {
+  get: async (tenantId) => {
     const criteria = {
       type: "serviceDefs",
       details: {
-        tenantId: stateCode,
+        tenantId: tenantId,
         moduleDetails: [
           {
             moduleName: "RAINMAKER-PGR",
@@ -20,7 +20,7 @@ export const GetServiceDefinitions = {
       },
     };
 
-    const serviceDefs = await MdmsService.getDataByCriteria(criteria);
+    const serviceDefs = await MdmsService.getDataByCriteria(tenantId, criteria);
     Storage.set("serviceDefinitions", serviceDefs);
     return serviceDefs;
   },

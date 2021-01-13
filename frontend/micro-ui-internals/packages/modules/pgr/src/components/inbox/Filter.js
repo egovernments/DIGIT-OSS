@@ -29,7 +29,7 @@ const Filter = (props) => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   let localities = Digit.Hooks.pgr.useLocalities({ city: tenantId });
-  let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
+  let serviceDefs = Digit.Hooks.pgr.useServiceDefs(tenantId, "PGR");
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);

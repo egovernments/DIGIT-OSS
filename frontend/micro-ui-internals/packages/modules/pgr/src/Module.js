@@ -1,41 +1,26 @@
 import React, { useEffect } from "react";
-import { Route, BrowserRouter as Router, Switch, useRouteMatch } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import getRootReducer from "./redux/reducers";
-import defaultConfig from "./config";
 import CitizenApp from "./pages/citizen";
 
 import EmployeeApp from "./EmployeeApp";
 import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
-import { fetchBusinessServiceByTenant } from "./redux/actions";
 import { PGR_CITIZEN_CREATE_COMPLAINT } from "./constants/Citizen";
 
 export const PGRReducers = getRootReducer;
 
-export const PGRModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "PGR", userType, tenants }) => {
-  const { path } = useRouteMatch();
+export const PGRModule = ({ stateCode, userType, tenants }) => {
+  const moduleCode = "PGR";
   const state = useSelector((state) => state["pgr"]);
-  const disptach = useDispatch();
   const language = state?.common?.selectedLanguage;
-  const store = Digit.Services.useStore(defaultConfig, { deltaConfig, stateCode, cityCode, moduleCode, language });
-
-  useEffect(() => {
-    if (state && !state.businessService) {
-      disptach(fetchBusinessServiceByTenant("pb.amritsar", "PGR"));
-    }
-    // console.log("state", state);
-  });
+  const store = Digit.Services.useStore({ stateCode, moduleCode, language });
 
   if (Object.keys(store).length === 0) {
     return <Loader />;
   }
 
   Digit.SessionStorage.set("PGR_TENANTS", tenants);
-
-  // console.log("pgr", userType, tenants, state, store);
-  // console.log("pgr i18n keys", Object.keys(getI18n().getDataByLanguage("en_IN").translations).length);
-  // console.log("state", state);
 
   if (userType === "citizen") {
     return <CitizenApp />;

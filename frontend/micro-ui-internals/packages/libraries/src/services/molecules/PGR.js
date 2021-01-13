@@ -23,14 +23,14 @@ export const PGRService = {
       auth: true,
       userService: true,
     }),
-  update: (details, tenantId) =>
+  update: (details) =>
     Request({
       url: Urls.pgr_update,
       data: details,
       useCache: true,
       auth: true,
       method: "POST",
-      params: { tenantId },
+      params: { tenantId: details.tenantId },
       userService: true,
     }),
   count: (tenantId, params) =>

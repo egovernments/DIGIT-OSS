@@ -12,16 +12,16 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { t } = useTranslation();
   const innerWidth = window.innerWidth;
-  const cityDetails = Digit.ULBService.getCurrentUlb() || "pb.amritsar";
+  const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
   const mobileView = innerWidth <= 640;
   return (
     <Switch>
       <Route path="/digit-ui/employee">
         <div className="topbar">
-          <img className="city" src={cityDetails.logoId} />
+          <img className="city" src={cityDetails?.logoId} />
           <span className="ulb">
-            {t(cityDetails.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
+            {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
           </span>
           {!mobileView && (
             <div className="right">
