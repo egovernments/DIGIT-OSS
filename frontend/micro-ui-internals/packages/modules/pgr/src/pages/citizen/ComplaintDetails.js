@@ -23,7 +23,7 @@ import TimeLine from "../../components/TimeLine";
 const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
   const tenantId = complaintDetails.service.tenantId;
   const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: tenantId, id, moduleCode: "PGR" });
-
+  // console.log("get workFLowdetails here", workFlowDetails)
   useEffect(() => {
     getWorkFlow(workFlowDetails.data);
   }, [workFlowDetails.data]);
@@ -43,8 +43,8 @@ const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
 
-  let cityCodeVal = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
-  const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId: cityCodeVal, id });
+  let tenantId = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
+  const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
 
   const [imageZoom, setImageZoom] = useState(null);
 
@@ -76,9 +76,9 @@ const ComplaintDetailsPage = (props) => {
   }
 
   const onWorkFlowChange = (data) => {
+    console.log("ssdsodososooo ==== ", data);
     let timeline = data?.timeline;
-    let status = timeline?.length ? timeline[0].status : null;
-    status && (status === "REJECTED" || status === "RESOLVED") ? setDisableComment(false) : setDisableComment(true);
+    timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
   };
 
   const submitComment = async () => {

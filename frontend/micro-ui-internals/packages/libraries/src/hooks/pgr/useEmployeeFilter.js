@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-const useEmployeeFilter = (cityCode, roles, complaintDetails) => {
+const useEmployeeFilter = (tenantId, roles, complaintDetails) => {
   const [employeeDetails, setEmployeeDetails] = useState(null);
 
   useEffect(async () => {
     // const _roles = roles.join(",");
-    const searchResponse = await Digit.PGRService.employeeSearch(cityCode, roles);
+    const searchResponse = await Digit.PGRService.employeeSearch(tenantId, roles);
 
-    const serviceDefs = await Digit.MDMSService.getServiceDefs(cityCode, "PGR");
+    const serviceDefs = await Digit.MDMSService.getServiceDefs(tenantId, "PGR");
     const serviceCode = complaintDetails.service.serviceCode;
     const service = serviceDefs?.find((def) => def.serviceCode === serviceCode);
     const department = service?.department;
@@ -25,7 +25,7 @@ const useEmployeeFilter = (cityCode, roles, complaintDetails) => {
         }),
       },
     ]);
-  }, [cityCode, roles]);
+  }, [tenantId, roles]);
 
   return employeeDetails;
 };

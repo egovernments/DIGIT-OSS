@@ -72,14 +72,14 @@ export const Complaint = {
       ? complaintDetails.workflow.verificationDocuments
         ? complaintDetails.workflow.verificationDocuments.push({
             documentType: "PHOTO",
-            fileStore: uploadedDocument,
+            fileStoreId: uploadedDocument,
             documentUid: "",
             additionalDetails: {},
           })
         : (complaintDetails.workflow.verificationDocuments = [
             {
               documentType: "PHOTO",
-              fileStore: uploadedDocument,
+              fileStoreId: uploadedDocument,
               documentUid: "",
               additionalDetails: {},
             },

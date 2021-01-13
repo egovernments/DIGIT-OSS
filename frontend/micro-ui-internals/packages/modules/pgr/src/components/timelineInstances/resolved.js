@@ -36,7 +36,22 @@ const Resolved = ({ action, nextActions, rating, serviceRequestId, reopenDate })
   } else if (action === "REOPEN") {
     return <Reopen text={t(`CS_COMMON_COMPLAINT_REOPENED`)} reopenDate={reopenDate} />;
   } else {
-    return <React.Fragment></React.Fragment>;
+    let actions =
+      nextActions &&
+      nextActions.map((action, index) => {
+        if (action && action !== "COMMENT") {
+          return (
+            <Link key={index} to={`/digit-ui/citizen/pgr/${action.toLowerCase()}/${serviceRequestId}`}>
+              <ActionLinks>{action}</ActionLinks>
+            </Link>
+          );
+        }
+      });
+    return (
+      <div>
+        {t(`CS_COMMON_COMPLAINT_RESOLVED`)} <div>{actions}</div>
+      </div>
+    );
   }
 };
 

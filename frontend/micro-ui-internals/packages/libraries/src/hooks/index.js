@@ -14,13 +14,11 @@ import useLocalities from "./pgr/useLocalities";
 import useServiceDefs from "./pgr/useServiceDefs";
 import useTenants from "./pgr/useTenants";
 import useComplaintSubType from "./pgr/useComplaintSubType";
-import useOutsideClickListener from "./pgr/useOutsideClickListener";
 
 import useTenantsFSM from "./fsm/useTenants";
 import useDesludging from "./fsm/useDesludging";
 import useMDMS from "./fsm/useMDMS";
 import useSearch from "./fsm/useSearch";
-import { useRevalidateQuery } from "./revalidateQuery";
 
 const pgr = {
   useComplaintDetails,
@@ -35,7 +33,6 @@ const pgr = {
   useServiceDefs,
   useTenants,
   useComplaintSubType,
-  useOutsideClickListener,
 };
 
 const fsm = {
@@ -45,6 +42,6 @@ const fsm = {
   useSearch: useSearch,
 };
 
-const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useCoreData, pgr, fsm, useRevalidateQuery };
+const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useCoreData, pgr, fsm };
 
 export default Hooks;

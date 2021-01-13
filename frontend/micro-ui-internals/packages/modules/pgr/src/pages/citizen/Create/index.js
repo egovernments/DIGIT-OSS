@@ -24,6 +24,7 @@ export const CreateComplaint = () => {
   const config = useMemo(() => merge(defaultConfig, Digit.Customizations.PGR.complaintConfig), [Digit.Customizations.PGR.complaintConfig]);
   const [paramState, setParamState] = useState(params);
   const [nextStep, setNextStep] = useState("");
+  const [rerender, setRerender] = useState(0);
   const client = useQueryClient();
 
   useEffect(() => {
@@ -36,31 +37,17 @@ export const CreateComplaint = () => {
   }, [params, nextStep]);
 
   const goNext = () => {
-    //console.log("ParamState go next::::::::::", paramState);
     const currentPath = pathname.split("/").pop();
-    const { nextStep } = config.routes[currentPath];
+
+    let { nextStep } = config.routes[currentPath];
+    let compType = Digit.SessionStorage.get(PGR_CITIZEN_CREATE_COMPLAINT);
+    if (nextStep === "sub-type" && compType.complaintType.key === "Others") {
+      nextStep = config.routes[nextStep].nextStep;
+    }
     setNextStep(nextStep);
-    // if (nextStep === null) return submitComplaint();
-    // history.push(`${match.path}/${nextStep}`);
   };
 
   const submitComplaint = async () => {
-    // submit complaint through actions
-    // await dispatch(createComplaint(params));
-
-    //submit complaint thru react query
-
-    //Empty Session Storage
-    // Digit.SessionStorage.set("complaintType", null);
-    // Digit.SessionStorage.set("subType", null);
-    // Digit.SessionStorage.set("PGR_CREATE_COMPLAINT_PARAMS", null);
-    // Digit.SessionStorage.set("PGR_CREATE_PINCODE", null);
-    // Digit.SessionStorage.set("city_complaint", null);
-    // Digit.SessionStorage.set("selected_localities", null);
-    // Digit.SessionStorage.set("locality_complaint", null);
-    // Digit.SessionStorage.set("PGR_CREATE_LANDMARK", null);
-    // Digit.SessionStorage.set("PGR_CREATE_THUMBNAILS", null);
-    // Digit.SessionStorage.set("PGR_CREATE_IMAGES", null);
     if (paramState?.complaintType) {
       const { city_complaint, locality_complaint, uploadedImages, complaintType, subType, details, ...values } = paramState;
       const { code: cityCode, name: city } = city_complaint;
@@ -68,7 +55,7 @@ export const CreateComplaint = () => {
       const { code: localityCode, name: localityName } = locality_complaint;
       const _uploadImages = uploadedImages?.map((url) => ({
         documentType: "PHOTO",
-        fileStore: url,
+        fileStoreId: url,
         documentUid: "",
         additionalDetails: {},
       }));
@@ -95,6 +82,7 @@ export const CreateComplaint = () => {
   };
 
   const handleSelect = (data) => {
+    console.clear();
     console.log("DATA selected", data);
     setParams({ ...params, ...data });
     goNext();

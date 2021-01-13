@@ -46,9 +46,6 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
     // Digit.SessionStorage.set("locality_complaint", locality);
   }
 
-  const wrapperRef = useRef(null);
-  const clicked = Digit.Hooks.pgr.useOutsideClickListener(wrapperRef);
-
   function onSubmit() {
     // const { code: cityCode, name: city } = selectedCity;
     // const { code: localityCode, name: localityName } = selectedLocality;
@@ -65,12 +62,12 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
   }
   return (
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
-      <div ref={wrapperRef}>
+      <div>
         <CardLabel>{t("MYCITY_CODE_LABEL")}</CardLabel>
-        <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} forceClose={clicked} />
+        <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} optionKey="code" t={t} />
         {selectedCity && localities && <CardLabel>{t("CS_CREATECOMPLAINT_MOHALLA")}</CardLabel>}
         {selectedCity && localities && (
-          <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} forceClose={clicked} />
+          <Dropdown isMandatory selected={selectedLocality} optionKey="code" option={localities} select={selectLocality} t={t} />
         )}
       </div>
     </FormStep>

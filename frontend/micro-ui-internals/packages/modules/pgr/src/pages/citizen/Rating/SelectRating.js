@@ -12,14 +12,12 @@ const SelectRating = ({ parentRoute }) => {
   console.log("parent route", parentRoute);
   const history = useHistory();
 
-  let userType = Digit.SessionStorage.get("userType");
-  let tenantId = userType == "CITIZEN" ? Digit.SessionStorage.get("Citizen.tenantId") : Digit.SessionStorage.get("Employee.tenantId");
+  let tenantId = Digit.ULBService.getCurrentTenantId();
   const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
   const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
 
   function log(data) {
     if (complaintDetails) {
-      console.log("complaintDetails", complaintDetails);
       complaintDetails.service.rating = data.rating;
       complaintDetails.service.additionalDetail = data.CS_FEEDBACK_WHAT_WAS_GOOD.join(",");
       complaintDetails.workflow = {
@@ -46,7 +44,7 @@ const SelectRating = ({ parentRoute }) => {
       },
       {
         type: "checkbox",
-        label: t("CS_FEEDBACK_WHAT_WAS_GOOD"),
+        label: "CS_FEEDBACK_WHAT_WAS_GOOD",
         checkLabels: [t("CS_FEEDBACK_SERVICES"), t("CS_FEEDBACK_RESOLUTION_TIME"), t("CS_FEEDBACK_QUALITY_OF_WORK"), t("CS_FEEDBACK_OTHERS")],
       },
       {

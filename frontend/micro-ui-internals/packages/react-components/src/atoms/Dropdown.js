@@ -35,20 +35,13 @@ const Dropdown = (props) => {
     setSelectedOption(props.selected);
   }, [props.selected]);
 
-  useEffect(() => {
-    if (props.forceClose) {
-      setDropdownStatus(false);
-    }
-  }, [props.forceClose]);
-
   function dropdownSwitch() {
     var current = dropdownStatus;
     setDropdownStatus(!current);
   }
 
   function dropdownOn(val) {
-    const waitForOptions = () => setTimeout(() => setDropdownStatus(val), 200);
-
+    const waitForOptions = () => setTimeout(() => setDropdownStatus(val), 500);
     const timerId = waitForOptions();
 
     return () => {
@@ -57,7 +50,7 @@ const Dropdown = (props) => {
   }
 
   function onSelect(val) {
-    // console.log(val,"curent", selectedOption,"old");
+    //console.log(val, "curent", selectedOption, "old");
     if (val !== selectedOption) {
       // console.log(val,"is selected");
       props.select(val);
@@ -81,8 +74,8 @@ const Dropdown = (props) => {
               ? props.t
                 ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
                 : props.optionKey
-                ? selectedOption[props.optionKey]
-                : selectedOption
+                ? `${selectedOption[props.optionKey].slice(0, 22)} ...`
+                : selectedOption.slice(0, 22)
               : null
           }
           filterVal={filterVal}

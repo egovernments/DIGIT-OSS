@@ -13,6 +13,8 @@ import CITIZEN from "./userInfo/citizen.json";
 import EMPLOYEE from "./userInfo/employee.json";
 import LME from "./userInfo/lme.json";
 import GRO from "./userInfo/gro.json";
+import QACSR from "./userInfo/qa-csr.json";
+import QACT from "./userInfo/qa-citizen.json";
 import FSM_EMPLOYEE from "./userInfo/fsm-employee.json";
 
 import Registry from "./ComponentRegistry";
@@ -21,7 +23,7 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 
 initLibraries();
 
-const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, FSM_EMPLOYEE };
+const userInfo = { CITIZEN, EMPLOYEE, LME, GRO, QACSR, QACT, FSM_EMPLOYEE };
 
 const enabledModules = ["PGR", "FSM"];
 const registry = new Registry({
@@ -37,11 +39,20 @@ const moduleReducers = (initData) => ({
 
 window.Digit.Customizations = { PGR: pgrCustomizations };
 
+const stateCode = globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
+
+console.clear();
+console.log(stateCode);
+
 const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
 const token = process.env[`REACT_APP_${userType}_TOKEN`];
 
-const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || "pb";
+console.log(token);
+
+const citizenInfo = window.localStorage.getItem("Citizen.user-info") || userInfo[userType];
+
+const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
 
 const employeeInfo = window.localStorage.getItem("Employee.user-info") || userInfo[userType];
 const employeeTenantId = window.localStorage.getItem("Employee.tenant-id") || "pb.amritsar";
@@ -72,6 +83,6 @@ window.mdmsInitPost = (data) => {
 };
 
 ReactDOM.render(
-  <DigitUI stateCode="pb" registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />,
+  <DigitUI stateCode={stateCode} registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />,
   document.getElementById("root")
 );

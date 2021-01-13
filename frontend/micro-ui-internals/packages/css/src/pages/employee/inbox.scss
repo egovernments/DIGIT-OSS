@@ -27,12 +27,11 @@
 }
 
 .inbox-container {
-  @apply justify-center;
-
   .filters-container {
     .filter {
       .filter-card {
-        @apply p-md bg-white;
+        @apply bg-white;
+        padding: 10px;
 
         .heading {
           @apply flex justify-between;
@@ -103,7 +102,7 @@
   }
 
   .inbox-container {
-    @apply flex justify-center;
+    @apply flex;
 
     .filters-container {
       width: 270px;
@@ -154,5 +153,12 @@
         }
       }
     }
+  }
+}
+
+.clear-search {
+  &:hover {
+    color: #003078;
+    cursor: pointer;
   }
 }

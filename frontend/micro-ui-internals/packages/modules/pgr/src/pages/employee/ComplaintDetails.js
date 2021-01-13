@@ -299,6 +299,13 @@ export const ComplaintDetails = (props) => {
           selectedAction={selectedAction}
           onAssign={onAssign}
           onCancel={() => close(popup)}
+          actionLabel={
+            selectedAction === "ASSIGN" || selectedAction === "REASSIGN"
+              ? t("CS_COMMON_ASSIGN")
+              : selectedAction === "REJECT"
+              ? t("CS_COMMON_REJECT")
+              : t("CS_COMMON_RESOLVE")
+          }
         />
       ) : null}
       {toast && <Toast label={t(assignResponse ? `CS_ACTION_${selectedAction}_TEXT` : "CS_ACTION_ASSIGN_FAILED")} onClose={closeToast} />}

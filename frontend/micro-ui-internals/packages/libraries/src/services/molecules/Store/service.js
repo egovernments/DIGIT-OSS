@@ -51,9 +51,9 @@ export const StoreService = {
     initData.localities = localities;
     return initData;
   },
-  defaultData: async (stateCode, cityCode, moduleCode, language) => {
+  defaultData: async (stateCode, moduleCode, language) => {
     const LocalePromise = LocalizationService.getLocale({
-      modules: [`rainmaker-${moduleCode.toLowerCase()}`, `rainmaker-${cityCode.toLowerCase()}`],
+      modules: [`rainmaker-${moduleCode.toLowerCase()}`],
       locale: language,
       tenantId: stateCode,
     });

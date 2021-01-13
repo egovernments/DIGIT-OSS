@@ -21,20 +21,8 @@
     @apply text-text-primary text-form-field ml-md;
   }
 
-  .radio-btn-wrap:hover input ~ .radio-btn-checkmark {
-    @apply shadow-radiobtn rounded-full;
-  }
-
-  .radio-btn:hover ~ .radio-btn-checkmark {
-    @apply border-primary-main;
-  }
-
   .radio-btn-checkmark:after {
     content: "";
-  }
-
-  .radio-btn:hover ~ .radio-btn-checkmark {
-    @apply border-primary-main;
   }
 
   .radio-btn-wrap input:checked ~ .radio-btn-checkmark {

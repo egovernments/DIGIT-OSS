@@ -24,7 +24,7 @@ export const UserService = {
   getUser: () => {
     return Digit.SessionStorage.get("User");
   },
-  sendOtp: (details, stateCode = "pb") =>
+  sendOtp: (details, stateCode) =>
     ServiceRequest({
       serviceName: "sendOtp",
       url: Urls.OTP_Send,
@@ -35,7 +35,7 @@ export const UserService = {
   setUser: (data) => {
     return Digit.SessionStorage.set("User", data);
   },
-  registerUser: (details, stateCode = "pb") =>
+  registerUser: (details, stateCode) =>
     ServiceRequest({
       serviceName: "registerUser",
       url: Urls.RegisterUser,
@@ -44,7 +44,7 @@ export const UserService = {
       },
       params: { tenantId: stateCode },
     }),
-  updateUser: async (details, stateCode = "pb") =>
+  updateUser: async (details, stateCode) =>
     ServiceRequest({
       serviceName: "updateUser",
       url: Urls.UserProfileUpdate,

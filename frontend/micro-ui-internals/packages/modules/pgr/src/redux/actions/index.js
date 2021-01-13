@@ -23,9 +23,8 @@ export const fetchLocalities = (city) => async (dispatch, getState) => {
   });
 };
 
-export const updateComplaints = (data) => async (dispatch, getState) => {
-  const { cityCode } = getState();
-  let ServiceWrappers = await Digit.PGRService.update(data, cityCode);
+export const updateComplaints = (data) => async (dispatch) => {
+  let ServiceWrappers = await Digit.PGRService.update(data);
 
   dispatch({
     type: UPDATE_COMPLAINT,
@@ -33,42 +32,12 @@ export const updateComplaints = (data) => async (dispatch, getState) => {
   });
 };
 
-//on language change update localization resource with language selected(i18n store)
-export const updateLocalizationResources = () => async (dispatch, getState) => {
-  let city = "amritsar"; // TODO: fetch it from store
-  const lng = getState().currentLanguage.language || "en";
-  await Digit.LocalizationService.getLocale({ modules: [`rainmaker-pb.${city}`], locale: lng, tenantId: `pb.${city}` });
-  await Digit.LocalizationService.getLocale({ modules: ["rainmaker-common", "rainmaker-pgr"], locale: lng, tenantId: "pb" });
-};
-
-export const searchComplaints = (filters = {}) => async (dispatch, getState) => {
-  console.log("getState:", getState());
-  let { cityCode } = getState();
-  cityCode = "pb.amritsar"; //TODO: fetch it from store
-
-  let { ServiceWrappers } = (await Digit.PGRService.search(`pb.amritsar`, filters)) || {};
-  dispatch({
-    type: FETCH_COMPLAINTS,
-    payload: { complaints: ServiceWrappers },
-  });
-};
-
-export const fetchBusinessServiceByTenant = (cityCode, businessServices) => async (dispatch, getState) => {
-  const businessServiceResponse = await Digit.WorkflowService.init(cityCode, businessServices);
+export const fetchBusinessServiceByTenant = (tenantId, businessServices) => async (dispatch) => {
+  const businessServiceResponse = await Digit.WorkflowService.init(tenantId, businessServices);
   const businessService = businessServiceResponse.BusinessServices;
   dispatch({
     type: FETCH_ALL_BUSINESSS_SERVICES,
     payload: { businessService },
-  });
-};
-
-export const fetchBusinessServiceById = (businessId) => async (dispatch, getState) => {
-  let cityCode = "pb.amritsar"; //TODO: fetch it from store
-  const businessServiceDetails = await Digit.WorkflowService.getByBusinessId(cityCode, businessId);
-  console.log("businessServiceDetails:", businessServiceDetails);
-  dispatch({
-    type: FETCH_BUSINESS_SERVICE_BY_ID,
-    payload: { businessServiceDetails },
   });
 };
 
