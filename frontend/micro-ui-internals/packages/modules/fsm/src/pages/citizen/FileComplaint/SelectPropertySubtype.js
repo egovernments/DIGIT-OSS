@@ -7,9 +7,9 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
     return subtype !== undefined ? subtype : null;
   });
   const { propertyType } = value;
-
+  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype");
+  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype", { select });
 
   const selectedValue = (value) => {
     setSubtype(value);

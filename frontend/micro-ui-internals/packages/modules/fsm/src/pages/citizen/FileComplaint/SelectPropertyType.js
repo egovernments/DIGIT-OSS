@@ -6,14 +6,14 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
     const { propertyType } = value;
     return propertyType !== undefined ? propertyType : null;
   });
+  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertyType");
+  const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertyType", { select });
 
   const goNext = () => {
     onSelect({ propertyType: propertyType });
   };
-
   function selectedValue(value) {
     setPropertyType(value);
   }
