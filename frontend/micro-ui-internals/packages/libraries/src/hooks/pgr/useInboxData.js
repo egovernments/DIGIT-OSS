@@ -46,6 +46,7 @@ const combineResponses = (complaintDetailsResponse, workflowInstances) => {
     status: complaint.service.applicationStatus,
     taskOwner: wfMap[complaint.service.serviceRequestId]?.assigner?.name,
     sla: wfMap[complaint.service.serviceRequestId]?.businesssServiceSla,
+    tenantId: complaint.service.tenantId,
   }));
 };
 

@@ -12,7 +12,7 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { t } = useTranslation();
   const innerWidth = window.innerWidth;
-  const cityDetails = Digit.ULBService.getCurrentUlb() || "pb.amritsar";
+  const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
   const mobileView = innerWidth <= 640;
   return (

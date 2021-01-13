@@ -54,11 +54,12 @@ const CitizenApp = ({ path }) => {
   );
 };
 
-export const FSMModule = ({ deltaConfig = {}, stateCode, cityCode, moduleCode = "FSM", userType }) => {
+export const FSMModule = ({ stateCode, userType }) => {
+  const moduleCode = "FSM";
   const { path, url } = useRouteMatch();
   const state = useSelector((state) => state);
   const language = state?.common?.selectedLanguage;
-  const store = { data: {} }; //Digit.Services.useStore({}, { deltaConfig, stateCode, cityCode, moduleCode, language });
+  const store = Digit.Services.useStore({ stateCode, moduleCode, language });
 
   if (Object.keys(store).length === 0) {
     return <Loader />;

@@ -11,7 +11,7 @@ const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
 
-const Login = ({ stateCode, cityCode }) => {
+const Login = ({ stateCode }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const { path, url } = useRouteMatch();
@@ -106,7 +106,6 @@ const Login = ({ stateCode, cityCode }) => {
           username: mobileNumber,
           otpReference: otp,
           tenantId: stateCode,
-          permanentCity: cityCode,
         };
 
         const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.registerUser(requestData, stateCode);
