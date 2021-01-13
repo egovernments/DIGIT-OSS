@@ -7,7 +7,7 @@ const useLocalities = ({ city }) => {
   const [localityList, setLocalityList] = useState(null);
   const [localities, setLocalities] = useState(null);
   useEffect(async () => {
-    let tenantId = `pb.amritsar`;
+    let tenantId = Digit.ULBService.getCurrentTenantId();
     let response = await Digit.LocationService.getLocalities({ tenantId: tenantId });
     let __localityList = [];
     if (response && response.TenantBoundary.length > 0) {

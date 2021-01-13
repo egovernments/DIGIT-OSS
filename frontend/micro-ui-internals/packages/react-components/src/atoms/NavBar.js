@@ -63,7 +63,7 @@ const NavBar = ({ img, open, menuItems, onClose }) => {
                 }}
                 {...item.populators}
               >
-                {item.text}
+                {item?.type && item.type === "component" ? <div>{item.action}</div> : <div>{item.text}</div>}
               </span>
             </div>
           ))}
@@ -71,14 +71,6 @@ const NavBar = ({ img, open, menuItems, onClose }) => {
       </div>
     </React.Fragment>
   );
-};
-
-NavBar.propTypes = {
-  img: PropTypes.string,
-};
-
-NavBar.defaultProps = {
-  img: undefined,
 };
 
 export default NavBar;

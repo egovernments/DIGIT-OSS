@@ -14,7 +14,8 @@ const CheckBox = ({ onChange, label, ref, checked, inputRef, ...props }) => {
         value={label}
         {...props}
         ref={inputRef}
-        {...(checked ? (checked = { checked }) : null)}
+        // {(checked ? (checked = { checked }) : null)}
+        checked={checked}
       />
       <p className="" className={userType === "employee" ? "custom-checkbox-emp" : "custom-checkbox"}>
         {/* <img src={check} alt="" /> */}
