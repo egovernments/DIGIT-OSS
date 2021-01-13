@@ -82,9 +82,9 @@ const DesktopInbox = (props) => {
           <Filter complaints={props.data} onFilterChange={props.onFilterChange} type="desktop" />
         </div>
       </div>
-      <div>
+      <div style={{ flex: 1 }}>
         <SearchComplaint onSearch={props.onSearch} type="desktop" />
-        <div style={{ marginTop: "24px", marginTop: "24px", width: "874px", marginLeft: "24px" }}>
+        <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>
           {props.isLoading ? (
             <Loader />
           ) : (

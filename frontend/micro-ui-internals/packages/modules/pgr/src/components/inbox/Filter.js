@@ -151,7 +151,7 @@ const Filter = (props) => {
         <div className="tag-container">
           {pgrfilters[key].length > 0 &&
             pgrfilters[key].map((value, index) => {
-              return <RemoveableTag key={index} text={value[optionKey]} onClick={() => onRemove(index, key)} />;
+              return <RemoveableTag key={index} text={`${value[optionKey].slice(0, 22)} ...`} onClick={() => onRemove(index, key)} />;
             })}
         </div>
       </div>

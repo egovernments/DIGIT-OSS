@@ -1,6 +1,6 @@
 .checkbox-wrap {
   height: 38px;
-  @apply flex mb-md relative items-center;
+  @apply flex mb-md relative items-baseline;
 
   input {
     width: 38px;
@@ -47,7 +47,7 @@
   }
 
   .label {
-    margin-left: 56px;
+    margin-left: 40px;
     @apply text-form-field text-text-primary;
   }
 }
