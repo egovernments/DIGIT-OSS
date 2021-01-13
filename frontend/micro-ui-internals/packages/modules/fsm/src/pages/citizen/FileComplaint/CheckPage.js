@@ -39,12 +39,12 @@ const CheckPage = ({ onSubmit, value }) => {
       <StatusTable>
         <Row
           label={t("CS_CHECK_PROPERTY_TYPE")}
-          text={propertyType.name}
+          text={t(propertyType.i18nKey)}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/property-type" />}
         />
         <Row
           label={t("CS_CHECK_PROPERTY_SUB_TYPE")}
-          text={subtype.name}
+          text={t(subtype.i18nKey)}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/property-subtype" />}
         />
         <Row
