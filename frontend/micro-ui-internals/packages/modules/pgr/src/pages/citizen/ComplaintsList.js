@@ -14,6 +14,10 @@ export const ComplaintsList = (props) => {
   const { path, url } = useRouteMatch();
   let { isLoading, error, data, revalidate } = Digit.Hooks.pgr.useComplaintsListByMobile(tenantId, mobileNumber);
 
+  useEffect(() => {
+    revalidate();
+  }, []);
+
   if (isLoading) {
     return (
       <React.Fragment>
