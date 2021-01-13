@@ -56,6 +56,7 @@
           @apply flex flex-col;
 
           .clear-search {
+            @apply text-focus;
             display: none;
           }
         }
@@ -143,6 +144,7 @@
             @apply flex flex-col;
 
             .clear-search {
+              @apply text-focus;
               @apply block;
             }
           }
@@ -157,6 +159,7 @@
 }
 
 .clear-search {
+  @apply text-focus;
   &:hover {
     color: #003078;
     cursor: pointer;
