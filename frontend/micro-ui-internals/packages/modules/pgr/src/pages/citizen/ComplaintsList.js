@@ -29,7 +29,7 @@ export const ComplaintsList = (props) => {
   let complaintsList;
   if (error) {
     complaintsList = (
-      <Card>
+      <Card key={0}>
         {t(LOCALE.ERROR_LOADING_RESULTS)
           .split("\\n")
           .map((text) => (
@@ -39,7 +39,7 @@ export const ComplaintsList = (props) => {
     );
   } else if (complaints.length === 0) {
     complaintsList = (
-      <Card>
+      <Card key={0}>
         {t(LOCALE.NO_COMPLAINTS)
           .split("\\n")
           .map((text) => (

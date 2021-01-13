@@ -19,9 +19,9 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
     <Switch>
       <Route path="/digit-ui/employee">
         <div className="topbar">
-          <img className="city" src={cityDetails.logoId} />
+          <img className="city" src={cityDetails?.logoId} />
           <span className="ulb">
-            {t(cityDetails.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
+            {t(cityDetails?.i18nKey)} {ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}
           </span>
           {!mobileView && (
             <div className="right">
