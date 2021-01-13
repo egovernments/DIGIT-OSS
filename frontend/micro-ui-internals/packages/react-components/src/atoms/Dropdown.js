@@ -74,8 +74,8 @@ const Dropdown = (props) => {
               ? props.t
                 ? props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
                 : props.optionKey
-                ? `${selectedOption[props.optionKey].slice(0, 22)} ...`
-                : selectedOption.slice(0, 22)
+                ? selectedOption[props.optionKey]
+                : selectedOption
               : null
           }
           filterVal={filterVal}

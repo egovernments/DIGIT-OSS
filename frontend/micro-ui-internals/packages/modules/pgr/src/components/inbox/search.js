@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-const { TextInput, Label, SubmitBar, LinkLabel, ActionBar } = require("@egovernments/digit-ui-react-components");
-import { useTranslation } from "react-i18next";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar } from "@egovernments/digit-ui-react-components";
 
 const SearchComplaint = ({ onSearch, type, onClose }) => {
   const [complaintNo, setComplaintNo] = useState("");
