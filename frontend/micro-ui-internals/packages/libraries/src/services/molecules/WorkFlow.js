@@ -43,17 +43,19 @@ export const WorkflowService = {
 
       if (processInstances.length > 0) {
         const details = {
-          timeline: processInstances.map((instance) => ({
-            status: instance.state.applicationStatus,
-            caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
-            auditDetails: {
-              created: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.createdTime),
-              lastModified: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.lastModifiedTime),
-            },
-            timeLineActions: instance.nextActions
-              ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action.action)
-              : null,
-          })),
+          timeline: processInstances
+            .filter((e) => e.action !== "COMMENT")
+            .map((instance) => ({
+              status: instance.state.applicationStatus,
+              caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+              auditDetails: {
+                created: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.createdTime),
+                lastModified: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.lastModifiedTime),
+              },
+              timeLineActions: instance.nextActions
+                ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action.action)
+                : null,
+            })),
           nextActions: actionRolePair,
         };
         if (role !== "CITIZEN") {

@@ -53,7 +53,7 @@ const getCriteria = (tenantId, moduleDetails) => {
   return {
     MdmsCriteria: {
       tenantId,
-      moduleDetails,
+      ...moduleDetails,
     },
   };
 };
