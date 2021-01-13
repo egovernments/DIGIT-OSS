@@ -2010,12 +2010,12 @@ img, video {
   color: rgba(80, 90, 95, var(--text-opacity)); }
 
 .action-link {
-  --text-opacity:1;
-  color: #f47738;
-  color: rgba(244, 119, 56, var(--text-opacity));
-  font-size: 16px;
-  line-height: 24px;
-  margin-right: 24px; }
+  --text-opacity:1!important;
+  color: #f47738 !important;
+  color: rgba(244, 119, 56, var(--text-opacity)) !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  margin-right: 24px !important; }
 
 .sect-dropdown-wrap {
   margin-bottom: 24px;
