@@ -85,8 +85,8 @@ export const employeeDetails = getCommonCard({
             name: "COMMON_RELATION_FATHER"
           },
           {
-            code: "HUSHBAND",
-            name: "COMMON_RELATION_HUSHBAND"
+            code: "HUSBAND",
+            name: "COMMON_RELATION_HUSBAND"
           },
         ],
         optionValue: "value",

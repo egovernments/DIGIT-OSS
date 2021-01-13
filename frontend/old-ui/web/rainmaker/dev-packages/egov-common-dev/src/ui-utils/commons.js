@@ -494,12 +494,24 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showC
       return;
     }
     if (mode === 'download') {
+      if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
+        setTimeout(()=>{
+          const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
+          window.location.href = weblink
+        },1500)
+      }
       downloadPdf(fileRes[fileStoreId]);
       if(showConfirmation){
         store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
       , "success"));
       }
     } else if (mode === 'open') {
+      if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
+        setTimeout(()=>{
+          const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
+          window.location.href = weblink
+        },1500)
+      }
       openPdf(fileRes[fileStoreId], '_self')
       if(showConfirmation){
         store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
