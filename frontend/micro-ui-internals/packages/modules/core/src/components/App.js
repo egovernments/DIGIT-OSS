@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
 import { TopBar } from "@egovernments/digit-ui-react-components";
@@ -13,9 +13,13 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const { t } = useTranslation();
+  const [isSidebarOpen, toggleSidebar] = useState(false);
   const innerWidth = window.innerWidth;
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
+  const handleLogout = () => {
+    Digit.UserService.logout();
+  };
   const mobileView = innerWidth <= 640;
   return (
     <Switch>
@@ -81,8 +85,15 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         </div>
       </Route>
       <Route path="/digit-ui/citizen">
-        {/* <TopBar img={"https://egov-micro-qa.egovernments.org/egov-dev-assets/logo-mseva-white.png"} /> */}
-        <Sidebar />
+        <TopBar
+          img={cityDetails.logoId}
+          ulb={`${t(cityDetails.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
+          toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
+          logoUrl={logoUrl}
+          onLogout={handleLogout}
+          userDetails={userDetails}
+        />
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
         <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>

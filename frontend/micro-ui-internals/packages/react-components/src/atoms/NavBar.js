@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import Hamburger from "./Hamburger";
 
-const NavBar = ({ img, open, menuItems }) => {
+const NavBar = ({ img, open, menuItems, onClose }) => {
+  const node = useRef();
+  Digit.Hooks.useClickOutside(node, onClose);
+
   return (
     // <div className="navbar">
     //   <img src={img || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"} alt="mSeva" />
@@ -26,6 +29,7 @@ const NavBar = ({ img, open, menuItems }) => {
           }}
         ></div>
         <div
+          ref={node}
           style={{
             display: "flex",
             flexDirection: "column",
@@ -57,6 +61,7 @@ const NavBar = ({ img, open, menuItems }) => {
                   width: "100%",
                   color: "rgba(0,0,0,.87)",
                 }}
+                {...item.populators}
               >
                 {item.text}
               </span>

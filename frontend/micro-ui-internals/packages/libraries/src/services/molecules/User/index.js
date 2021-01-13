@@ -24,6 +24,9 @@ export const UserService = {
   getUser: () => {
     return Digit.SessionStorage.get("User");
   },
+  logout: () => {
+    return Digit.SessionStorage.set("User", {});
+  },
   sendOtp: (details, stateCode = "pb") =>
     ServiceRequest({
       serviceName: "sendOtp",
