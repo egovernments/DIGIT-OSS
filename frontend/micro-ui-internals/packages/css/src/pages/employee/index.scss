@@ -87,6 +87,10 @@
 
 .link {
   @apply text-link-normal;
+
+  :hover {
+    color: #003078;
+  }
 }
 
 @media (min-width: 640px) {

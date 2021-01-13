@@ -7,20 +7,23 @@ const CheckBox = ({ onChange, label, ref, checked, inputRef, ...props }) => {
   // console.log("%c 🏎️: checkbox ", "font-size:16px;background-color:#c239cc;color:white;", props);
   return (
     <div className="checkbox-wrap">
-      <input
-        type="checkbox"
-        className={userType === "employee" ? "input-emp" : ""}
-        onChange={onChange}
-        value={label}
-        {...props}
-        ref={inputRef}
-        // {(checked ? (checked = { checked }) : null)}
-        checked={checked}
-      />
-      <p className="" className={userType === "employee" ? "custom-checkbox-emp" : "custom-checkbox"}>
-        {/* <img src={check} alt="" /> */}
-        <CheckSvg />
-      </p>
+      <div>
+        <input
+          type="checkbox"
+          className={userType === "employee" ? "input-emp" : ""}
+          onChange={onChange}
+          style={{ cursor: "pointer" }}
+          value={label}
+          {...props}
+          ref={inputRef}
+          // {(checked ? (checked = { checked }) : null)}
+          checked={checked}
+        />
+        <p className={userType === "employee" ? "custom-checkbox-emp" : "custom-checkbox"}>
+          {/* <img src={check} alt="" /> */}
+          <CheckSvg />
+        </p>
+      </div>
       <p className="label">{label}</p>
     </div>
   );

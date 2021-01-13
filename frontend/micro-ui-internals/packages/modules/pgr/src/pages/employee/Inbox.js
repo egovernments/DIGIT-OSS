@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Loader } from "@egovernments/digit-ui-react-components";
+import { Loader, Header } from "@egovernments/digit-ui-react-components";
 
 import DesktopInbox from "../../components/DesktopInbox";
 import MobileInbox from "../../components/MobileInbox";
@@ -27,7 +27,12 @@ const Inbox = () => {
     if (isMobile) {
       return <MobileInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />;
     } else {
-      return <DesktopInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+      return (
+        <div>
+          <Header>{t("ES_COMMON_INBOX")}</Header>
+          <DesktopInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />;
+        </div>
+      );
     }
   } else {
     return <Loader />;
