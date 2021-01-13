@@ -10,6 +10,7 @@ import {
   UploadFile,
   ButtonSelector,
   Toast,
+  Dropdown,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 const Modal = (props) => {
@@ -25,6 +26,7 @@ const Modal = (props) => {
   const { t } = useTranslation();
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
+  const [selectedReopenReason, setSelectedReopenReason] = useState(null);
 
   console.log("modal", useEmployeeData);
   const employeeData = useEmployeeData
@@ -32,7 +34,7 @@ const Modal = (props) => {
         return { heading: departmentData.department, options: departmentData.employees };
       })
     : null;
-
+  const reopenReasonMenu = [t(`CS_REOPEN_OPTION_ONE`), t(`CS_REOPEN_OPTION_TWO`), t(`CS_REOPEN_OPTION_THREE`), t(`CS_REOPEN_OPTION_FOUR`)];
   // const uploadFile = useCallback( () => {
 
   //   }, [file]);
@@ -71,13 +73,17 @@ const Modal = (props) => {
     setFile(e.target.files[0]);
   }
 
+  function onSelectReopenReason(reason) {
+    setSelectedReopenReason(reason);
+  }
+
   return (
     <PopUp>
       <div className="popup-module">
         <HeaderBar main={props.headerBarMain} end={props.headerBarEnd} />
         <div className="popup-module-main">
           <Card>
-            {props.selectedAction === "REJECT" || props.selectedAction === "RESOLVE" ? null : (
+            {props.selectedAction === "REJECT" || props.selectedAction === "RESOLVE" || props.selectedAction === "REOPEN" ? null : (
               <React.Fragment>
                 <CardLabel>{t("CS_COMMON_EMPLOYEE_NAME")}</CardLabel>
                 {employeeData && (
@@ -85,6 +91,12 @@ const Modal = (props) => {
                 )}
               </React.Fragment>
             )}
+            {props.selectedAction === "REOPEN" ? (
+              <React.Fragment>
+                <CardLabel>{t("CS_ADDCOMPLAINT_ERROR_REOPEN_REASON")}</CardLabel>
+                <Dropdown selected={selectedReopenReason} option={reopenReasonMenu} select={onSelectReopenReason} />
+              </React.Fragment>
+            ) : null}
             <CardLabel>{t("CS_COMMON_EMPLOYEE_COMMENTS")}</CardLabel>
             <TextArea name="comment" onChange={addComment} value={comments} />
             <CardLabel>{t("CS_ACTION_SUPPORTING_DOCUMENTS")}</CardLabel>
