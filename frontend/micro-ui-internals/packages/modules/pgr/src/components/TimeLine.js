@@ -19,14 +19,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   }
 
   let { timeline } = data;
-  console.log(
-    "find timeline",
-    timeline.map(({ performedAction }) => performedAction)
-  );
 
   const getCheckPoint = ({ status, caption, auditDetails, timeLineActions, index, performedAction }) => {
-    console.log("find performedAction", performedAction);
-
     switch (status) {
       case "PENDINGFORREASSIGNMENT":
         return <PendingForReassignment text={t(`CS_COMMON_COMPLAINT_PENDINGFORASSINMENT`)} />;
@@ -82,7 +76,6 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       {timeline && timeline.length > 0 ? (
         <ConnectingCheckPoints>
           {timeline.map(({ status, caption, auditDetails, timeLineActions, performedAction }, index) => {
-            console.log(performedAction);
             if (status === "PENDINGFORASSIGNMENT" && index === 0) {
               return (
                 <React.Fragment key={index}>
