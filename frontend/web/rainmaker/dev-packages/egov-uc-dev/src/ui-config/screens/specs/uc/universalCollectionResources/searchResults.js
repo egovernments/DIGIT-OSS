@@ -22,7 +22,7 @@ export const searchResults = {
                 const receiptQueryString = [
                   { key: "receiptNumbers", value:  tableMeta.rowData[0]},
                   { key: "tenantId", value: tableMeta.rowData[7] },
-                  { key: "businessService", value: tableMeta.rowData[9] }
+                  { key: "businessService", value: tableMeta.rowData[8] }
                 ]
                 download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
               }}>
