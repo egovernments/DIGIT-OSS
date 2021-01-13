@@ -102,8 +102,8 @@ public class PaymentUpdateService {
 			throw new CustomException("INVALID RECEIPT",
 					"No Properties found for the comsumerCode " + criteria.getPropertyIds());
 
-		Role role = Role.builder().code("SYSTEM_PAYMENT").build();
-		requestInfo.getUserInfo().getRoles().add(role);
+//		Role role = Role.builder().code("SYSTEM_PAYMENT").build();
+//		requestInfo.getUserInfo().getRoles().add(role);
 		
 		properties.forEach( property -> {
 			
