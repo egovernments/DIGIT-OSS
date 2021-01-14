@@ -1140,9 +1140,9 @@
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.66"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.66.tgz#da08ff90b0e7cd803e50e01d1d3165b838ff6f21"
-  integrity sha512-BLAHA/iYO3UHRyRGMqY7DwwqjtppQ0rmWm0+CbA9wdGUb9q4/L9Qy1/TBZ2vhDnNlgZURzcLpUoUSg+jumj5ng==
+  version "1.0.67"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.67.tgz#f7fa2e795d53cc82b737084cfb1e58162610b74f"
+  integrity sha512-9fm5341om0dQN1ipgFEA+ZR/CbW1JBwv5gej+wvXy9ifRMuMtxGCTqQ3Xf32DTrNnuKvikUBfoyOl/1w0u8FkA==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1157,9 +1157,9 @@
     redux "^4.0.5"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.66"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.66.tgz#96c8fd31abc8c58d5134631325e97b35f7d43b04"
-  integrity sha512-T225pXsCq7SiFEHmMKeChhP0jj6+B82DnTeaL2sjGkgo41AHvrbJSKcvpV3C52jEEEYbcDK0hEQ6Ckz6PENy1Q==
+  version "1.0.67"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.67.tgz#dd00417133b8f1f5b022dfe83248910083e082df"
+  integrity sha512-Psb5D0OjnMK8J+4HC/eeY1Vju2dPU85/6TT46FNCmiIW6GQqSLQUvMf3KsuZ4G2qB6SuulEL10XD7quI0cOx1g==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1175,9 +1175,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.66"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.66.tgz#33aa262c08d37fc930e635cc179eb46e38a70310"
-  integrity sha512-Kid15N4D1/najt4pUyk4iM5+ICgofIGdDfrrANMGppw+DM9Cy9v0DFehEI3/rP5NYXmNAdzFacf7fptmSwCPhg==
+  version "1.0.67"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.67.tgz#8b8941f1d6b32d928626186d61039f4679ce8f62"
+  integrity sha512-B0DiGGfGBM8TtFZN5x5Uz8DaGasrAf9mz9VlVGvEFqeO3z2jceIFsVw9HwtuD9MXAeS6S4NQI9UMcHBmr6vHJA==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1193,9 +1193,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.66"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.66.tgz#31ef8754041181166441b6bb5b432b22bc701284"
-  integrity sha512-y+dz/GguoXOEcQnaiZeC9CGTvDb1dMMLRcoZwR/+fmKimrFD3qAlRTTBgGSS+wWz+Y9SC/2/Z08MorumDHGI5Q==
+  version "1.0.67"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.67.tgz#fa555f344539d1189a393a08f9ef1dbf86880cc6"
+  integrity sha512-6P72xDWqXaZA6mj6YZiWgm9IPM/FXFdr134eWKSGQBfGnkFDpDjKuObkG3CZ9ZRkj3jqV+PJg/QO6jl/Gsylow==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1212,9 +1212,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.66"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.66.tgz#4c5ce679b748f7277305a47b9bdacfb1d93bc06b"
-  integrity sha512-6fEmawQUedVJ1L121uWLOZMeqwAuYIpFEg829obXLk3l0012/0t7bZUr8qWBOfCZtso4B3duXiNbwFwHpyKY/g==
+  version "1.0.67"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.67.tgz#7b4a48e1d2c3fab94d3ead416f139d0347c2e99d"
+  integrity sha512-kYTXwCoOKkxt5naFGALt2u93O7pqEXeE0o7Mc4gb/M638IKCXSxQL81IbgNCKRC00KKUlWTFmpAmWd8cZb9gFw==
   dependencies:
     react-hook-form "^6.7.0"
     react-i18next "^11.7.3"
@@ -3406,9 +3406,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001125, caniuse-lite@^1.0.30001173:
-  version "1.0.30001176"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001176.tgz#e44bac506d4656bae4944a1417f41597bd307335"
-  integrity sha512-VWdkYmqdkDLRe0lvfJlZQ43rnjKqIGKHWhWWRbkqMsJIUaYDNf/K/sdZZcVO6YKQklubokdkJY+ujArsuJ5cag==
+  version "1.0.30001177"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001177.tgz#2c3b384933aafda03e29ccca7bb3d8c3389e1ece"
+  integrity sha512-6Ld7t3ifCL02jTj3MxPMM5wAYjbo4h/TAQGFTgv1inihP1tWnWp8mxxT4ut4JBEHLbpFXEXJJQ119JCJTBkYDw==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -4540,9 +4540,9 @@ ejs@^2.6.1:
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
 electron-to-chromium@^1.3.564, electron-to-chromium@^1.3.634:
-  version "1.3.637"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.637.tgz#be46f77acc217cdecf633bbd25292f6a36cc689b"
-  integrity sha512-924WXYMYquYybc+7pNApGlhY2RWg3MY3he4BrZ5BUmM2n1MGBsrS+PZxrlo6UAsWuNl4NE66fqFdwsWkBUGgkA==
+  version "1.3.639"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.639.tgz#0a27e3018ae3acf438a14a1dd4e41db4b8ab764e"
+  integrity sha512-bwl6/U6xb3d3CNufQU9QeO1L32ueouFwW4bWANSwdXR7LVqyLzWjNbynoKNfuC38QFB5Qn7O0l2KLqBkcXnC3Q==
 
 elliptic@^6.5.3:
   version "6.5.3"
@@ -4608,10 +4608,10 @@ enhanced-resolve@^4.3.0:
     memory-fs "^0.5.0"
     tapable "^1.0.0"
 
-enhanced-resolve@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.6.0.tgz#ad19a1665f230a6e384724a30acf3f7332b2b3f0"
-  integrity sha512-C3GGDfFZmqUa21o10YRKbZN60DPl0HyXKXxoEnQMWso9u7KMU23L7CBHfr/rVxORddY/8YQZaU2MZ1ewTS8Pcw==
+enhanced-resolve@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.7.0.tgz#525c5d856680fbd5052de453ac83e32049958b5c"
+  integrity sha512-6njwt/NsZFUKhM6j9U8hzVyD4E4r0x7NQzhTCbcWOJ0IQjNSAoalWmb0AE51Wn+fwan5qVESWi7t2ToBxs9vrw==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -4693,6 +4693,11 @@ es-abstract@^1.18.0-next.1:
     object.assign "^4.1.1"
     string.prototype.trimend "^1.0.1"
     string.prototype.trimstart "^1.0.1"
+
+es-module-lexer@^0.3.26:
+  version "0.3.26"
+  resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-0.3.26.tgz#7b507044e97d5b03b01d4392c74ffeb9c177a83b"
+  integrity sha512-Va0Q/xqtrss45hWzP8CZJwzGSZJjDM5/MJRE3IXXnUCcVLElR9BRaE9F62BopysASyc4nM3uwhSW7FFB9nlWAA==
 
 es-to-primitive@^1.2.1:
   version "1.2.1"
@@ -11858,9 +11863,9 @@ wbuf@^1.1.0, wbuf@^1.7.3:
     minimalistic-assert "^1.0.0"
 
 web-vitals@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-1.0.1.tgz#025a7ffd9d8f5e4a030e3aee6061dcb38a4b6654"
-  integrity sha512-io/H/D18edTL1D2lcaUTLNLFEVZIPhNd4IdXDB9bEb+uDv2m/6NfyHiXKLFjbmI1ubeYpoQpR1gl9nlcWdI0vA==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-1.1.0.tgz#7f410d9a1f7a1cd5d952806b45776204b47dc274"
+  integrity sha512-1cx54eRxY/+M0KNKdNpNnuXAXG+vJEvwScV4DiV9rOYDguHoeDIzm09ghBohOPtkqPO5OtPC14FWkNva3SDisg==
 
 webidl-conversions@^5.0.0:
   version "5.0.0"
@@ -12012,9 +12017,9 @@ webpack@4.44.2:
     webpack-sources "^1.4.1"
 
 webpack@^5.11.1:
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.13.0.tgz#275351b043bd212562f4390e903619d07d5a2fcf"
-  integrity sha512-NPhMEtfhSVegp1FNPkCM1MPygDm0GHwpreG10dh//0Gr0epfB0br9nlgEfxSghxJqrQ7j9XzgO91CGGLWZiHeA==
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.14.0.tgz#cdfe9286d14ddc2bb348afabc1d910d166f3c47f"
+  integrity sha512-PFtfqXIKT6EG+k4L7d9whUPacN2XvxlUMc8NAQvN+sF9G8xPQqrCDGDiXbAdyGNz+/OP6ioxnUKybBBZ1kp/2A==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.45"
@@ -12024,7 +12029,8 @@ webpack@^5.11.1:
     acorn "^8.0.4"
     browserslist "^4.14.5"
     chrome-trace-event "^1.0.2"
-    enhanced-resolve "^5.6.0"
+    enhanced-resolve "^5.7.0"
+    es-module-lexer "^0.3.26"
     eslint-scope "^5.1.1"
     events "^3.2.0"
     glob-to-regexp "^0.4.1"
