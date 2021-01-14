@@ -23,10 +23,13 @@ import TimeLine from "../../components/TimeLine";
 const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
   const tenantId = complaintDetails.service.tenantId;
   const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: tenantId, id, moduleCode: "PGR" });
-  // console.log("get workFLowdetails here", workFlowDetails)
   useEffect(() => {
     getWorkFlow(workFlowDetails.data);
   }, [workFlowDetails.data]);
+
+  useEffect(() => {
+    workFlowDetails.revalidate();
+  }, []);
 
   return (
     <TimeLine
