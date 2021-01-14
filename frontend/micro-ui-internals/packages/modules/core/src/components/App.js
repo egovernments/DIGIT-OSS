@@ -18,6 +18,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
   const handleLogout = () => {
+    toggleSidebar(false);
     Digit.UserService.logout();
   };
   const mobileView = innerWidth <= 640;

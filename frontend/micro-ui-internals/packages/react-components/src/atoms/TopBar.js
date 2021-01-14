@@ -14,9 +14,6 @@ const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDeta
 
   const options = ["Logout"];
 
-  const onSelect = () => {
-    onLogout();
-  };
   return (
     <div className="navbar">
       {isMobile && <Hamburger handleClick={toggleSidebar} />}
