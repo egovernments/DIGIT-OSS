@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
+import React, { Fragment, useState } from "react";
+import { CitizenInfoLabel, Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
 
 const SelectPropertyType = ({ config, onSelect, t, value }) => {
   const [propertyType, setPropertyType] = useState(() => {
@@ -23,16 +23,19 @@ const SelectPropertyType = ({ config, onSelect, t, value }) => {
   }
 
   return (
-    <TypeSelectCard
-      {...config.texts}
-      disabled={propertyType ? false : true}
-      menu={propertyTypesData.data}
-      optionsKey="i18nKey"
-      selected={selectedValue}
-      selectedOption={propertyType}
-      onSave={goNext}
-      t={t}
-    />
+    <Fragment>
+      <TypeSelectCard
+        {...config.texts}
+        disabled={propertyType ? false : true}
+        menu={propertyTypesData.data}
+        optionsKey="i18nKey"
+        selected={selectedValue}
+        selectedOption={propertyType}
+        onSave={goNext}
+        t={t}
+      />
+      <CitizenInfoLabel info={t("CS_CHECK_INFO_TITLE")} text={t("CS_CHECK_INFO_APPLICATION")} />
+    </Fragment>
   );
 };
 
