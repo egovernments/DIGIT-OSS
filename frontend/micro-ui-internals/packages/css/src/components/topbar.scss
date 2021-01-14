@@ -1,0 +1,48 @@
+.topbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 16px 24px;
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
+  z-index: 20;
+
+  img {
+    display: inline;
+
+    &.city {
+      margin-right: 8px;
+      height: 48px;
+      width: 48px;
+    }
+
+    &.state {
+      margin-left: 40px;
+      height: 20px;
+      max-height: 20px;
+      width: auto;
+    }
+  }
+
+  .ulb {
+    font-weight: bold;
+  }
+
+  .right {
+    float: right;
+    margin-top: 12px;
+    position: relative;
+
+    svg {
+      display: inline;
+    }
+
+    .user-img-txt {
+      background: #f47738;
+      padding: 10px 15px;
+      border-radius: 50%;
+      color: white;
+      font-weight: 700;
+    }
+  }
+}
