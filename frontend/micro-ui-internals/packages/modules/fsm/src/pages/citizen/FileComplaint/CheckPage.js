@@ -11,6 +11,7 @@ import {
   LinkButton,
   SubmitBar,
   CitizenInfoLabel,
+  CardText,
 } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -43,6 +44,7 @@ const CheckPage = ({ onSubmit, value }) => {
   return (
     <Card>
       <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
+      <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
       <CardSubHeader>{t("CS_CHECK_PROPERTY_DETAILS")}</CardSubHeader>
       <StatusTable>
         <Row
