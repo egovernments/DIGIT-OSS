@@ -30,7 +30,15 @@ const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const { city_complaint, propertyType, subtype, pitDetail } = value;
+  const { city_complaint, locality_complaint, landmark, propertyType, subtype, pitDetail } = value;
+
+  const pitMeasurement = Object.values(pitDetail).reduce((previous, current, index, array) => {
+    if (index === array.length - 1) {
+      return previous + current + "m";
+    } else {
+      return previous + current + "m X ";
+    }
+  }, "");
 
   return (
     <Card>
@@ -49,15 +57,22 @@ const CheckPage = ({ onSubmit, value }) => {
         />
         <Row
           label={t("CS_CHECK_ADDRESS")}
-          text={city_complaint.address}
+          text={`${t(locality_complaint.code)} ${t(city_complaint.code)}`}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pincode" />}
         />
+        {landmark && (
+          <Row
+            label={t("CS_CHECK_LANDMARK")}
+            text={landmark}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/landmark" />}
+          />
+        )}
       </StatusTable>
       <CardSubHeader>{t("CS_CHECK_PIT_SEPTIC_TANK_DETAILS")}</CardSubHeader>
       <StatusTable>
         <Row
           label={t("CS_CHECK_SIZE")}
-          text={Object.values(pitDetail).join(" x ")}
+          text={pitMeasurement}
           actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
         />
       </StatusTable>
