@@ -24,6 +24,14 @@ export const UserService = {
   getUser: () => {
     return Digit.SessionStorage.get("User");
   },
+  logout: () => {
+    window.localStorage.setItem("Citizen.user-info", {});
+    window.localStorage.setItem("Citizen.token", "");
+    window.localStorage.setItem("Citizen.refresh-token", "");
+    window.localStorage.setItem("token", "");
+    window.localStorage.setItem(".refresh-token", "");
+    return Digit.SessionStorage.set("User", {});
+  },
   sendOtp: (details, stateCode) =>
     ServiceRequest({
       serviceName: "sendOtp",

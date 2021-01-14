@@ -1,6 +1,7 @@
 import { useInitStore } from "./store";
 import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
+import useClickOutside from "./useClickOutside";
 import useCoreData from "./useCoreData";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
@@ -42,6 +43,6 @@ const fsm = {
   useSearch: useSearch,
 };
 
-const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useCoreData, pgr, fsm };
+const Hooks = { useSessionStorage, useWorkflowDetails, useInitStore, useClickOutside, useCoreData, pgr, fsm };
 
 export default Hooks;

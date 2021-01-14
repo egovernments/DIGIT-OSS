@@ -6,8 +6,17 @@ const ArrowLeft = ({ className }) => (
   </svg>
 );
 
-const ArrowDown = ({ className, onClick }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" className={className} onClick={onClick} width="18px" height="18px">
+const ArrowDown = ({ className, onClick, styles }) => (
+  <svg
+    style={{ ...styles }}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="black"
+    className={className}
+    onClick={onClick}
+    width="18px"
+    height="18px"
+  >
     <path d="M0 0h24v24H0V0z" fill="none" />
     <path d="M7 10l5 5 5-5H7z" />
   </svg>
@@ -152,6 +161,12 @@ const GetApp = ({ className }) => (
   </svg>
 );
 
+const HamburgerIco = ({ className, styles }) => (
+  <svg style={{ ...styles }} width="24" height="24" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+  </svg>
+);
+
 export {
   ArrowLeft,
   ArrowDown,
@@ -170,6 +185,7 @@ export {
   Close,
   Feedback,
   GetApp,
+  HamburgerIco,
   ArrowBack,
   ArrowForward,
 };
