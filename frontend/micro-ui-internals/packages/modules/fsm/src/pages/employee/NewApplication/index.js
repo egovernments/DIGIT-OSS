@@ -6,11 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { FormComposer } from "../../../components/FormComposer";
 
-// TODO: fetch data instead of hard coded
-import data from "../../../propertyType.json";
-// const propertyTypeRes = data.PropertyType.map((item) => item.propertyType);
-const propertySubTypeRes = data.PropertyType.filter((item) => item.propertyType !== undefined);
-
 export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
@@ -46,6 +41,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const history = useHistory();
   const applicationChannelData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "ApplicationChannel");
   const sanitationTypeData = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "SanitationType");
+  const propertyTypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertyType");
+  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype");
 
   useEffect(() => {
     if (!applicationChannelData.isLoading) {
@@ -63,21 +60,9 @@ export const NewApplication = ({ parentUrl, heading }) => {
     }
   }, [sanitationTypeData]);
 
-  useEffect(() => {
-    setMenu(() => {
-      return Object.values(
-        data.PropertyType.reduce((acc, item) => {
-          if (item.propertyType !== undefined) return acc;
-          return Object.assign(acc, { [item.code]: { key: item.code, name: item.name } });
-        }, {})
-      );
-    });
-    // setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === propertyType));
-  }, []);
-
   function selectedType(value) {
     setPropertyType(value);
-    setSubTypeMenu(propertySubTypeRes.filter((item) => item.propertyType === value.key).map((item) => ({ key: item.code, name: item.name })));
+    setSubTypeMenu(propertySubtypesData.data.filter((item) => item.propertyType === value?.code));
   }
 
   function selectSlum(value) {
@@ -141,7 +126,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         additionalDetails: {
           tripAmount: amount,
         },
-        propertyUsage: propertyType,
+        propertyUsage: subType.code,
         address: {
           tenantId: cityCode,
           landmark,
@@ -225,14 +210,16 @@ export const NewApplication = ({ parentUrl, heading }) => {
           label: t("ES_NEW_APPLICATION_PROPERTY_TYPE"),
           isMandatory: true,
           type: "dropdown",
-          populators: <Dropdown option={menu} optionKey="name" id="propertyType" selected={propertyType} select={selectedType} />,
+          populators: (
+            <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} />
+          ),
         },
         {
           label: t("ES_NEW_APPLICATION_PROPERTY_SUB-TYPE"),
           isMandatory: true,
           type: "dropdown",
           menu: { ...subTypeMenu },
-          populators: <Dropdown option={subTypeMenu} optionKey="name" id="propertySubType" selected={subType} select={selectedSubType} />,
+          populators: <Dropdown option={subTypeMenu} optionKey="i18nKey" id="propertySubType" selected={subType} select={selectedSubType} />,
         },
       ],
     },

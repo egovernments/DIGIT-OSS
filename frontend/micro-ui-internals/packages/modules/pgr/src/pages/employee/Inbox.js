@@ -23,6 +23,10 @@ const Inbox = () => {
 
   let isMobile = Digit.Utils.browser.isMobile;
 
+  useEffect(() => {
+    revalidate();
+  }, []);
+
   if (complaints?.length !== null) {
     if (isMobile) {
       return <MobileInbox data={complaints} isLoading={isLoading} onFilterChange={handleFilterChange} onSearch={onSearch} />;

@@ -7,9 +7,9 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
     return subtype !== undefined ? subtype : null;
   });
   const { propertyType } = value;
-
+  const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype");
+  const propertySubtypesData = Digit.Hooks.fsm.useMDMS(tenantId, "PropertyTax", "PropertySubtype", { select });
 
   const selectedValue = (value) => {
     setSubtype(value);
@@ -28,11 +28,12 @@ const SelectPropertySubtype = ({ config, onSelect, t, value }) => {
   return (
     <TypeSelectCard
       {...config.texts}
-      {...{ menu: menu }}
-      {...{ optionsKey: "name" }}
-      {...{ selected: selectedValue }}
-      {...{ selectedOption: subtype }}
-      {...{ onSave: goNext }}
+      disabled={subtype ? false : true}
+      menu={menu}
+      optionsKey="i18nKey"
+      selected={selectedValue}
+      selectedOption={subtype}
+      onSave={goNext}
       t={t}
     />
   );

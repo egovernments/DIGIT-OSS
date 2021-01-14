@@ -8,7 +8,19 @@ import CardText from "../atoms/CardText";
 import RadioButtons from "../atoms/RadioButtons";
 import SubmitBar from "../atoms/SubmitBar";
 
-const TypeSelectCard = ({ t, headerCaption, header, cardText, submitBarLabel, selectedOption, menu, optionsKey, selected, onSave }) => {
+const TypeSelectCard = ({
+  t,
+  headerCaption,
+  header,
+  cardText,
+  disabled = false,
+  submitBarLabel,
+  selectedOption,
+  menu,
+  optionsKey,
+  selected,
+  onSave,
+}) => {
   console.log("cardText", t("ULBGRADE_MUNICIPAL_CORPORATION"), cardText);
   return (
     <Card>
@@ -16,7 +28,7 @@ const TypeSelectCard = ({ t, headerCaption, header, cardText, submitBarLabel, se
       <CardHeader>{t(header)}</CardHeader>
       <CardText>{t(cardText)}</CardText>
       {menu ? <RadioButtons selectedOption={selectedOption} options={menu} optionsKey={optionsKey} onSelect={selected} /> : null}
-      <SubmitBar label={t(submitBarLabel)} onSubmit={onSave} />
+      <SubmitBar disabled={disabled} label={t(submitBarLabel)} onSubmit={onSave} />
     </Card>
   );
 };

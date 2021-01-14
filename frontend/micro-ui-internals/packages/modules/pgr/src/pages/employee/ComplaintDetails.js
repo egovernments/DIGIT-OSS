@@ -178,7 +178,7 @@ export const ComplaintDetails = (props) => {
   async function onAssign(selectedEmployee, comments, uploadedFile) {
     setPopup(false);
     const response = await Digit.Complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile, tenantId);
-    console.log("aasjdas", response);
+    console.log("find response complaint assign here", response);
     setAssignResponse(response);
     setToast(true);
     setLoader(true);
@@ -227,7 +227,9 @@ export const ComplaintDetails = (props) => {
                   key={k}
                   label={t(k)}
                   text={
-                    Array.isArray(complaintDetails?.details[k]) ? complaintDetails?.details[k].map((val) => t(val)) : t(complaintDetails?.details[k])
+                    Array.isArray(complaintDetails?.details[k])
+                      ? complaintDetails?.details[k].map((val) => (typeof val === "object" ? t(val.code) : t(val)))
+                      : t(complaintDetails?.details[k])
                   }
                   last={arr.length - 1 === i}
                 />
@@ -291,7 +293,9 @@ export const ComplaintDetails = (props) => {
                   ? t("CS_ACTION_ASSIGN")
                   : selectedAction === "REJECT"
                   ? t("CS_ACTION_REJECT")
-                  : t("CS_ACTION_RESOLVE")
+                  : selectedAction === "REOPEN"
+                  ? t("CS_COMMON_REOPEN")
+                  : t("CS_COMMON_RESOLVE")
               }
             />
           }
@@ -304,6 +308,8 @@ export const ComplaintDetails = (props) => {
               ? t("CS_COMMON_ASSIGN")
               : selectedAction === "REJECT"
               ? t("CS_COMMON_REJECT")
+              : selectedAction === "REOPEN"
+              ? t("CS_COMMON_REOPEN")
               : t("CS_COMMON_RESOLVE")
           }
         />
