@@ -88,7 +88,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         <TopBar
           img={cityDetails?.logoId}
           ulb={`${t(cityDetails?.i18nKey)} ${ulbCamel(t("ULBGRADE_MUNICIPAL_CORPORATION"))}`}
-          isMobile={mobileView}
+          isMobile={true}
           toggleSidebar={() => toggleSidebar(!isSidebarOpen)}
           logoUrl={logoUrl}
           onLogout={handleLogout}

@@ -11,10 +11,11 @@ const useOnClickOutside = (ref, handler) => {
       handler(event);
     };
     console.log("adding event fired:::::>", event);
-    document.addEventListener("mousedown", listener);
+    document.addEventListener("mouseup", listener);
+    // debugger
     return () => {
       console.log("removeEventListener event fired:::::>", event);
-      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("mouseup", listener);
     };
   }, [ref, handler]);
 };
