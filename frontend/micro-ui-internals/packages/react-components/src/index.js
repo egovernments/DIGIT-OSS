@@ -55,7 +55,7 @@ import ApplyFilterBar from "./atoms/ApplyFilterBar";
 import NavBar from "./atoms/NavBar";
 import Hamburger from "./atoms/Hamburger";
 import { PrivateRoute } from "./atoms/PrivateRoute";
-import { GetApp } from "./atoms/svgindex";
+import { GetApp, ArrowLeft } from "./atoms/svgindex";
 import CustomButton from "./atoms/CustomButton";
 import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
 import RoundedLabel from "./atoms/RoundedLabel";
@@ -140,6 +140,7 @@ export {
   SectionalDropdown,
   LabelFieldPair,
   GetApp,
+  ArrowLeft,
   NavBar,
   Hamburger,
   CustomButton,

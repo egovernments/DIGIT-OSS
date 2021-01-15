@@ -4,7 +4,7 @@ import { Link, Redirect, Route, Switch } from "react-router-dom";
 import { TopBar } from "@egovernments/digit-ui-react-components";
 
 import { AppModules } from "./AppModules";
-import { NavBar } from "@egovernments/digit-ui-react-components";
+import { NavBar, ArrowLeft } from "@egovernments/digit-ui-react-components";
 import Sidebar from "../../../pgr/src/components/Sidebar";
 
 const TextToImg = ({ name }) => <span className="user-img-txt">{name[0].toUpperCase()}</span>;
@@ -97,6 +97,10 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         />
         <Sidebar isOpen={isSidebarOpen} isMobile={mobileView} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
         <div className="main">
+          <a className="back-btn2" href="https://egov-micro-qa.egovernments.org/citizen/language-selection">
+            <ArrowLeft />
+            <p>Back</p>
+          </a>
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>
       </Route>
