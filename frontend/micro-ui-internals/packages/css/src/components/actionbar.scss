@@ -3,10 +3,29 @@
   max-width: 480px;
   z-index: 100;
   @apply sticky bottom-0 w-full bg-white py-sm px-sm text-right;
+
   div {
     @apply w-full;
   }
+
+  .menu-wrap {
+    @apply absolute bg-white text-left mb-xs z-30;
+    top: -90px;
+    box-shadow: rgba(0, 0, 0, 0.14) 0 8px 10px 1px, rgba(0, 0, 0, 0.12) 0 3px 14px 2px, rgba(0, 0, 0, 0.2) 0 5px 5px -3px;
+    width: calc(100% - 16px);
+    right: 8px;
+
+    div {
+      @apply h-12 pl-sm py-md text-body-l text-text-primary;
+
+      &:hover {
+        @apply bg-grey-mid;
+      }
+    }
+  }
+
 }
+
 
 @screen dt {
   .action-bar-wrap {
@@ -23,7 +42,7 @@
     }
 
     .menu-wrap {
-      bottom: 48px;
+      top: -90px;
       box-shadow: rgba(0, 0, 0, 0.14) 0 8px 10px 1px, rgba(0, 0, 0, 0.12) 0 3px 14px 2px, rgba(0, 0, 0, 0.2) 0 5px 5px -3px;
       @apply absolute bg-white text-left mb-xs z-30;
       width: 240px;

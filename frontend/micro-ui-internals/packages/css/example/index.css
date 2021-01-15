@@ -1711,6 +1711,33 @@ img, video {
   text-align: right; }
   .action-bar-wrap div {
     width: 100%; }
+  .action-bar-wrap .menu-wrap {
+    position: absolute;
+    --bg-opacity:1;
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, var(--bg-opacity));
+    text-align: left;
+    margin-bottom: 4px;
+    z-index: 30;
+    top: -90px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.14) 0 8px 10px 1px, rgba(0, 0, 0, 0.12) 0 3px 14px 2px, rgba(0, 0, 0, 0.2) 0 5px 5px -3px;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+    width: calc(100% - 16px);
+    right: 8px; }
+    .action-bar-wrap .menu-wrap div {
+      height: 3rem;
+      padding-left: 8px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      font-size: 16px;
+      line-height: 24px;
+      --text-opacity:1;
+      color: #0b0c0c;
+      color: rgba(11, 12, 12, var(--text-opacity)); }
+      .action-bar-wrap .menu-wrap div:hover {
+        --bg-opacity:1;
+        background-color: #eee;
+        background-color: rgba(238, 238, 238, var(--bg-opacity)); }
 
 @media (min-width: 780px) {
   .action-bar-wrap {
@@ -1732,7 +1759,7 @@ img, video {
     .action-bar-wrap div {
       width: calc(100% - 16px); }
     .action-bar-wrap .menu-wrap {
-      bottom: 48px;
+      top: -90px;
       -webkit-box-shadow: rgba(0, 0, 0, 0.14) 0 8px 10px 1px, rgba(0, 0, 0, 0.12) 0 3px 14px 2px, rgba(0, 0, 0, 0.2) 0 5px 5px -3px;
       box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
       position: absolute;
