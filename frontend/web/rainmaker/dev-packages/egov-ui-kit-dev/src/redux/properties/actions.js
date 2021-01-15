@@ -13,6 +13,7 @@ import {  getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/f
 import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import commonConfig from "config/common.js";
+import axios from "axios";
 
 const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
