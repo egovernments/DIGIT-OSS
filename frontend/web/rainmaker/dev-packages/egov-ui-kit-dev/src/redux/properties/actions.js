@@ -866,7 +866,7 @@ const getBankname = async(payment) =>{
   const ifscCode = payment[0].ifscCode;
   let payload;
   if (ifscCode) {
-    payload = await axios.get(`https://ifsc.razorpay.com/${ifscCode}`);
+    payload = await axios.get(`https://ifsc.razorpay.com/${ifscCode}`,{ crossdomain: true });
     console.log("===================>",payload);
     if (payload.data === "Not Found") {
       set(payment, `[0].bankName`, "");
