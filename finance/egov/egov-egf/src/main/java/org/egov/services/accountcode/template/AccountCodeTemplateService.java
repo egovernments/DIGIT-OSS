@@ -47,8 +47,13 @@ public class AccountCodeTemplateService {
             }
             if(module.equalsIgnoreCase("ExpenseBill")&&billSubType!=null) {
                 prepareAccountCodeDetails(accountCodeTemplate, detailTypeId);
-            } else 
+            } else if(module.equalsIgnoreCase("ContractorBill")) {
                 prepareAccountCodeDetailsWithContractor(accountCodeTemplate);
+            }else if(module.equalsIgnoreCase("SupplierBill")) {
+                prepareAccountCodeDetailsWithSupplier(accountCodeTemplate);
+
+                
+            }
                 
         } catch (Exception e) {
             LOGGER.error(e);
@@ -108,6 +113,43 @@ public class AccountCodeTemplateService {
             
             List<CChartOfAccounts> coaList = chartOfAccountsService.getSubledgerAccountCodesForAccountDetailTypeAndNonSubledgersWithContractors(allGlCodeSet);
             List<CChartOfAccounts> netPayableCodesByAccountDetailType = chartOfAccountsService.getContractorNetPayableAccountCodes();
+            Map<String, CChartOfAccounts> glcodeMap = coaList.stream()
+                    .collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
+            Map<String, CChartOfAccounts> netPayableAccCodeMap = netPayableCodesByAccountDetailType.stream().collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
+            for (AccountCodeTemplate temp : accountCodeTemplate) {
+                if (temp.getNetPayable() != null && temp.getNetPayable().getGlcode() != null) {
+                    CChartOfAccounts cChartOfAccounts = netPayableAccCodeMap.get(temp.getNetPayable().getGlcode());
+                    if(cChartOfAccounts != null){
+                        temp.getNetPayable().setId(cChartOfAccounts.getId());
+                        temp.getNetPayable().setIsSubLedger(!cChartOfAccounts.getChartOfAccountDetails().isEmpty());
+                        temp.getNetPayable().setName(cChartOfAccounts.getName());                            
+                    }else{
+                        temp.setNetPayable(null);
+                    }
+                }
+                if (temp.getDebitCodeDetails() != null && !temp.getDebitCodeDetails().isEmpty()) {
+                    populateCoaDetails(glcodeMap, temp.getDebitCodeDetails());
+                }
+                if (temp.getCreditCodeDetails() != null && !temp.getCreditCodeDetails().isEmpty()) {
+                    populateCoaDetails(glcodeMap, temp.getCreditCodeDetails());
+                }
+            }
+        }
+}
+    
+    private void prepareAccountCodeDetailsWithSupplier(List<AccountCodeTemplate> accountCodeTemplate) {
+        Set<String> debitGlcodeSet = accountCodeTemplate.stream().map(AccountCodeTemplate::getDebitCodeDetails)
+                .flatMap(Collection::stream).map(ChartOfAccounts::getGlcode).collect(Collectors.toSet());
+        Set<String> creditGlcodeSet = accountCodeTemplate.stream().map(AccountCodeTemplate::getCreditCodeDetails)
+                .flatMap(Collection::stream).map(ChartOfAccounts::getGlcode).collect(Collectors.toSet());
+        Set<String> netPayableGlcode = accountCodeTemplate.stream().map(AccountCodeTemplate::getNetPayable)
+                .map(ChartOfAccounts::getGlcode).collect(Collectors.toSet());
+        HashSet<String> allGlCodeSet = new HashSet<>(debitGlcodeSet);
+        allGlCodeSet.addAll(creditGlcodeSet);
+        if (allGlCodeSet != null && !allGlCodeSet.isEmpty()) {
+            
+            List<CChartOfAccounts> coaList = chartOfAccountsService.getSubledgerAccountCodesForAccountDetailTypeAndNonSubledgersWithSupplier(allGlCodeSet);
+            List<CChartOfAccounts> netPayableCodesByAccountDetailType = chartOfAccountsService.getSupplierNetPayableAccountCodes();
             Map<String, CChartOfAccounts> glcodeMap = coaList.stream()
                     .collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
             Map<String, CChartOfAccounts> netPayableAccCodeMap = netPayableCodesByAccountDetailType.stream().collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));

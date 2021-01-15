@@ -77,6 +77,7 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
     private static final String CONTINGENCY_BILL_PURPOSE_IDS = "contingencyBillPurposeIds";
     private static final String GLCODE = "glcode";
     private static final String CONTRACTOR = "Contractor";
+    private static final String SUPPLIER = "Supplier";
 
     @Autowired
     protected AppConfigValueService appConfigValuesService;
@@ -438,14 +439,11 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
                 if (!cad.getDetailTypeId().getName().equalsIgnoreCase(CONTRACTOR)) {
                     check = true;
                 }
-
-            }
+              }
             if (check && !contractorExist) {
                 nonContarctorList.add(coa);
-
+                }
             }
-
-        }
         glcodesList.removeAll(nonContarctorList);
         Map<String, CChartOfAccounts> glcodeSet = glcodesList.stream()
                 .collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
@@ -453,6 +451,45 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
         final Query entitysQuery = getSession().createQuery(
                 "  from CChartOfAccounts  a LEFT OUTER JOIN  fetch a.chartOfAccountDetails  b where (size(a.chartOfAccountDetails) = 0 or b.detailTypeId.id=:accountDetailTypeId) and a.isActiveForPosting=true and a.classification=4 and a.glcode in (:glcodes) and (purposeId is null or purposeId not in (:ids)) order by a.id");
         entitysQuery.setInteger("accountDetailTypeId", contractorAccountDetailTypeId);
+        entitysQuery.setParameterList("glcodes", glcodeSet.keySet());
+        entitysQuery.setParameterList("ids", contingencyBillPurposeIds);
+        return entitysQuery.list();
+    }
+    
+    public List<CChartOfAccounts> getSubledgerAccountCodesForAccountDetailTypeAndNonSubledgersWithSupplier(
+            final Set<String> glcodes) {
+        final List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService
+                .getConfigValuesByModuleAndKey("EGF", CONTINGENCY_BILL_PURPOSE_IDS);
+        final List<Long> contingencyBillPurposeIds = new ArrayList<>();
+        for (final AppConfigValues av : configValuesByModuleAndKey)
+            contingencyBillPurposeIds.add(Long.valueOf(av.getValue()));
+        final List<CChartOfAccounts> glcodesList = getGlCodes(glcodes);
+        final List<CChartOfAccounts> nonSupplierList = new ArrayList<CChartOfAccounts>();
+        Integer supplierAccountDetailTypeId = null;
+        Accountdetailtype supplierAccountdetailtype = accountdetailtypeService.findByName(SUPPLIER);
+        supplierAccountDetailTypeId = supplierAccountdetailtype.getId();
+        for (CChartOfAccounts coa : glcodesList) {
+            Boolean supplierExist = false;
+            Boolean check = false;
+            for (CChartOfAccountDetail cad : coa.getChartOfAccountDetails()) {
+                if (cad.getDetailTypeId() != null && cad.getDetailTypeId().getName().equalsIgnoreCase(SUPPLIER)) {
+                    supplierExist = true;
+                }
+                if (!cad.getDetailTypeId().getName().equalsIgnoreCase(SUPPLIER)) {
+                    check = true;
+                }
+              }
+            if (check && !supplierExist) {
+                nonSupplierList.add(coa);
+                }
+            }
+        glcodesList.removeAll(nonSupplierList);
+        Map<String, CChartOfAccounts> glcodeSet = glcodesList.stream()
+                .collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
+
+        final Query entitysQuery = getSession().createQuery(
+                "  from CChartOfAccounts  a LEFT OUTER JOIN  fetch a.chartOfAccountDetails  b where (size(a.chartOfAccountDetails) = 0 or b.detailTypeId.id=:accountDetailTypeId) and a.isActiveForPosting=true and a.classification=4 and a.glcode in (:glcodes) and (purposeId is null or purposeId not in (:ids)) order by a.id");
+        entitysQuery.setInteger("accountDetailTypeId", supplierAccountDetailTypeId);
         entitysQuery.setParameterList("glcodes", glcodeSet.keySet());
         entitysQuery.setParameterList("ids", contingencyBillPurposeIds);
         return entitysQuery.list();

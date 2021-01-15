@@ -38,6 +38,12 @@ public class AccountCodeTemplateController {
         List<AccountCodeTemplate> list = accCodeTempSer.getAccountTemplate(module, null, null, 0);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+    
+    @GetMapping(value = "/supplierlist")
+    public ResponseEntity<List<AccountCodeTemplate>> getSupplierTemplateList(@RequestParam("module") String module) {
+        List<AccountCodeTemplate> list = accCodeTempSer.getAccountTemplate(module, null, null, 0);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 
     @ExceptionHandler(value = { ApplicationRuntimeException.class })
     public final ResponseEntity<Object> accountCodeTemplateException(ApplicationRuntimeException ex,

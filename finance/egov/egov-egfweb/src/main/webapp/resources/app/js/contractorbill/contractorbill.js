@@ -685,15 +685,3 @@ function populateAccountCodeTemplateDetails(selectedTemp){
   }
 	
 }
-
-/*$("#accountCodeTemplateId").focus(function() {
-	if( $("#accountCodeTemplateId > option").length <= 1 ) {
-		$("#accountCodeTempEmptyMessage").css("display", "block");
-	}
-});
-
-$("#accountCodeTemplateId").blur(function() {
-	if( $("#accountCodeTemplateId > option").length <= 1 ) {
-		$("#accountCodeTempEmptyMessage").css("display", "none");
-	}
-});*/
