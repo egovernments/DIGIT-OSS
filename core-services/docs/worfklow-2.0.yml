@@ -79,8 +79,7 @@ paths:
         - name: businessIds
           type: array
           items:
-            type: integer
-            format: int64
+            type: string
           in: query
           maxItems: 50
           description: The list of businessIds
@@ -94,6 +93,14 @@ paths:
           in: query
           description: Boolean flag to return history of the workflow
           type: boolean
+        - name: limit
+          in: query
+          description: Number of records to be returned
+          type: integer
+        - name: offset
+          in: query
+          description: Starting offset for returning search response
+          type: integer
       responses:
         '200':
           description: Application(s) Retrived Successfully
