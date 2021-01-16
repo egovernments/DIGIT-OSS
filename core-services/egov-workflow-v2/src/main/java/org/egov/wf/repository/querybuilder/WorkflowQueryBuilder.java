@@ -1,5 +1,6 @@
 package org.egov.wf.repository.querybuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.web.models.ProcessInstanceSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +121,22 @@ public class WorkflowQueryBuilder {
             addToPreparedStatement(preparedStmtList, status);
         }
 
+        if(criteria.getAssignee()!=null){
+            with_query_builder.append(" and id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
+            preparedStmtList.add(criteria.getAssignee());
+            preparedStmtList.add(criteria.getTenantId());
+        }
+
+        if(!StringUtils.isEmpty(criteria.getBusinessService())){
+            with_query_builder.append(" AND pi_outer.businessservice =? ");
+            preparedStmtList.add(criteria.getBusinessService());
+        }
+
+        if(!StringUtils.isEmpty(criteria.getModuleName())){
+            with_query_builder.append(" AND pi_outer.modulename =? ");
+            preparedStmtList.add(criteria.getModuleName());
+        }
+
         with_query_builder.append(" ORDER BY pi_outer.lastModifiedTime DESC ");
 
         addPagination(with_query_builder,preparedStmtList,criteria);
@@ -221,6 +238,11 @@ public class WorkflowQueryBuilder {
             with_query_builder.append(" id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
             preparedStmtList.add(criteria.getAssignee());
             preparedStmtList.add(criteria.getTenantId());
+        }
+
+        if(!StringUtils.isEmpty(criteria.getBusinessService())){
+            with_query_builder.append(" AND pi_outer.businessservice =? ");
+            preparedStmtList.add(criteria.getBusinessService());
         }
 
         with_query_builder.append(" ORDER BY pi_outer.lastModifiedTime DESC ");
