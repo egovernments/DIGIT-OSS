@@ -98,7 +98,7 @@ export const CreateComplaint = ({ parentUrl }) => {
     const complaintType = key;
     const mobileNumber = data.mobileNumber;
     const name = data.name;
-    const formData = { ...params, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name };
+    const formData = { ...data, cityCode, city, district, region, state, localityCode, localityName, landmark, complaintType, mobileNumber, name };
     await dispatch(createComplaint(formData));
     await client.refetchQueries(["fetchInboxData"]);
     history.push(parentUrl + "/response");
@@ -203,7 +203,7 @@ export const CreateComplaint = ({ parentUrl }) => {
           label: t("CS_COMPLAINT_DETAILS_ADDITIONAL_DETAILS"),
           type: "textarea",
           populators: {
-            name: "details",
+            name: "description",
           },
         },
       ],

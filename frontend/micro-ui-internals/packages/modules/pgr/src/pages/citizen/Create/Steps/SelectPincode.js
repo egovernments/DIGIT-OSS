@@ -9,9 +9,12 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
     return pincode;
   });
 
+  const [pincodeServicability, setPincodeServicability] = useState(null);
+
   function onChange(e) {
     setPincode(e.target.value);
     // Digit.SessionStorage.set("PGR_CREATE_PINCODE", e.target.value);
+    setPincodeServicability(null);
   }
 
   const goNext = async (data) => {
@@ -21,16 +24,28 @@ const SelectPincode = ({ t, config, onSelect, value }) => {
       let response = await Digit.LocationService.getLocalities({ tenantId: foundValue.code });
       let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
       const filteredLocalities = __localityList.filter((obj) => obj.pincode?.find((item) => item == data.pincode));
-      Digit.SessionStorage.set("selected_localities", filteredLocalities?.length > 0 ? filteredLocalities : __localityList);
+      // console.log("find pincode filtered localities here", filteredLocalities);
+      // Digit.SessionStorage.set("selected_localities", filteredLocalities?.length > 0 ? filteredLocalities : __localityList);
+      onSelect({ ...data, city_complaint: foundValue });
     } else {
       Digit.SessionStorage.set("city_complaint", undefined);
       Digit.SessionStorage.set("selected_localities", undefined);
+      setPincodeServicability("CS_COMMON_PINCODE_NOT_SERVICABLE");
     }
-    onSelect({ ...data, city_complaint: foundValue });
   };
 
   const onSkip = () => onSelect();
-  return <FormStep t={t} config={config} onSelect={goNext} value={pincode} onChange={onChange} onSkip={onSkip}></FormStep>;
+  return (
+    <FormStep
+      t={t}
+      config={config}
+      onSelect={goNext}
+      value={pincode}
+      onChange={onChange}
+      onSkip={onSkip}
+      forcedError={pincodeServicability}
+    ></FormStep>
+  );
 };
 
 export default SelectPincode;

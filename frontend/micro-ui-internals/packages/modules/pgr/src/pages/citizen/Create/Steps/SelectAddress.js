@@ -3,7 +3,9 @@ import { CardLabel, Dropdown, FormStep } from "@egovernments/digit-ui-react-comp
 import { useSelector } from "react-redux";
 
 const SelectAddress = ({ t, config, onSelect, value }) => {
-  const cities = Digit.Hooks.pgr.useTenants();
+  const allCities = Digit.Hooks.pgr.useTenants();
+  const cities = value?.pincode ? allCities.filter((city) => city.pincode.some((pin) => pin == value["pincode"])) : allCities;
+  // console.log("find cities here", cities.filter(city => city.pincode.some( pin => pin == value["pincode"])),value["pincode"], cities );
   const localitiesObj = useSelector((state) => state.common.localities);
 
   // const city_complaint = Digit.SessionStorage.get("city_complaint");
@@ -27,7 +29,11 @@ const SelectAddress = ({ t, config, onSelect, value }) => {
     if (selectedCity) {
       //let response = await Digit.LocationService.getLocalities({ tenantId: selectedCity.code });
       //let __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
-      let __localityList = localitiesObj[selectedCity.code];
+      // console.log("find pincode here", pincode, "find localities", localitiesObj[city_complaint.code].filter( city => city["pincode"] == pincode ))
+      const { city_complaint, pincode } = value;
+      let __localityList = pincode
+        ? localitiesObj[city_complaint.code].filter((city) => city["pincode"] == pincode)
+        : localitiesObj[selectedCity.code];
       // console.log("address __localityList", __localityList);
       setLocalities(__localityList);
       // Digit.SessionStorage.set("selected_localities", __localityList);
