@@ -5,7 +5,7 @@ import { TopBar } from "@egovernments/digit-ui-react-components";
 
 import { AppModules } from "./AppModules";
 import { NavBar, ArrowLeft } from "@egovernments/digit-ui-react-components";
-import Sidebar from "./Sidebar";
+import { CitizenSidebar } from "./Sidebar";
 
 const TextToImg = ({ name }) => <span className="user-img-txt">{name[0].toUpperCase()}</span>;
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
@@ -95,7 +95,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
           onLogout={handleLogout}
           userDetails={userDetails}
         />
-        <Sidebar isOpen={isSidebarOpen} isMobile={mobileView} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
+        <CitizenSidebar isOpen={isSidebarOpen} isMobile={mobileView} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
         <div className="main">
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>

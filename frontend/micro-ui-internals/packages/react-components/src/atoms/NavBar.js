@@ -1,13 +1,10 @@
 import React, { useRef } from "react";
 
-const NavBar = ({ img, open, menuItems, onClose }) => {
+const NavBar = ({ open, profileItem, menuItems, onClose }) => {
   const node = useRef();
   Digit.Hooks.useClickOutside(node, onClose);
 
   return (
-    // <div className="navbar">
-    //   <img src={img || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"} alt="mSeva" />
-    // </div>
     <React.Fragment>
       <div>
         <div
@@ -32,9 +29,7 @@ const NavBar = ({ img, open, menuItems, onClose }) => {
             display: "flex",
             flexDirection: "column",
             marginTop: "56px",
-            padding: "5px",
             height: "100vh",
-            padding: "2rem",
             position: "absolute",
             top: 0,
             left: 0,
@@ -45,27 +40,27 @@ const NavBar = ({ img, open, menuItems, onClose }) => {
             transform: `${open ? "translateX(0)" : "translateX(-310px)"}`,
           }}
         >
-          {menuItems.map((item, index) => (
-            <div
-              key={index}
-              style={{ marginLeft: "0px", height: "48px", padding: "0px", display: "flex", alignItems: "center", justifyContent: "flexStart" }}
-            >
-              <span
-                style={{
-                  marginLeft: "15px",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  flex: "1 1",
-                  width: "100%",
-                  color: "rgba(0,0,0,.87)",
-                }}
-                {...item.populators}
+          {profileItem}
+          <div className="drawer-list">
+            {menuItems.map((item, index) => (
+              <div
+                key={index}
+                // style={{
+                //   marginLeft: 0,
+                //   padding: 0,
+                //   position: "relative",
+                //   display: "flex",
+                //   alignItems: "center",
+                //   justifyContent: "flex-start"
+                // }}
               >
-                {item?.type && item.type === "component" ? <div>{item.action}</div> : <div>{item.text}</div>}
-              </span>
-            </div>
-          ))}
+                <span className="menu-item" {...item.populators}>
+                  {item?.icon && item.icon}
+                  <div className="menu-label">{item?.type && item.type === "component" ? item.action : item.text}</div>
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </React.Fragment>

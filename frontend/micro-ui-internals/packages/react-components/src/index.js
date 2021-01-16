@@ -55,7 +55,7 @@ import ApplyFilterBar from "./atoms/ApplyFilterBar";
 import NavBar from "./atoms/NavBar";
 import Hamburger from "./atoms/Hamburger";
 import { PrivateRoute } from "./atoms/PrivateRoute";
-import { GetApp, ArrowLeft } from "./atoms/svgindex";
+import { GetApp, ArrowLeft, HomeIcon, LanguageIcon, LogoutIcon } from "./atoms/svgindex";
 import CustomButton from "./atoms/CustomButton";
 import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
 import RoundedLabel from "./atoms/RoundedLabel";
@@ -139,8 +139,12 @@ export {
   PrivateRoute,
   SectionalDropdown,
   LabelFieldPair,
+  // Icons
   GetApp,
   ArrowLeft,
+  HomeIcon,
+  LanguageIcon,
+  LogoutIcon,
   NavBar,
   Hamburger,
   CustomButton,
