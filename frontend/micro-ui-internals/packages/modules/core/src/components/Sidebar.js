@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { NavBar, Hamburger } from "@egovernments/digit-ui-react-components";
-import SideBarMenu from "../../src/config/sidebar-menu";
+import SideBarMenu from "../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
 
 const Sidebar = ({ isOpen, isMobile, toggleSidebar, onLogout }) => {
@@ -18,7 +18,7 @@ const Sidebar = ({ isOpen, isMobile, toggleSidebar, onLogout }) => {
       },
     ];
   }
-
+  console.log("sidebar user", user);
   return (
     <div>
       <NavBar open={isOpen} menuItems={menuItems} onClose={() => toggleSidebar(false)} />
