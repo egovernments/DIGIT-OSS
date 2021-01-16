@@ -83,7 +83,7 @@ export const CreateComplaint = () => {
   };
 
   const handleSelect = (data) => {
-    console.clear();
+    // console.clear();
     console.log("DATA selected", data);
     setParams({ ...params, ...data });
     goNext();
