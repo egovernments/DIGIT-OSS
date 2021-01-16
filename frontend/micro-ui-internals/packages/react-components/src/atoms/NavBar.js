@@ -1,6 +1,4 @@
 import React, { useRef } from "react";
-import PropTypes from "prop-types";
-import Hamburger from "./Hamburger";
 
 const NavBar = ({ img, open, menuItems, onClose }) => {
   const node = useRef();
@@ -33,7 +31,7 @@ const NavBar = ({ img, open, menuItems, onClose }) => {
           style={{
             display: "flex",
             flexDirection: "column",
-            marginTop: "60px",
+            marginTop: "56px",
             padding: "5px",
             height: "100vh",
             padding: "2rem",

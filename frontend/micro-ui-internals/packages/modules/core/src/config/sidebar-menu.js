@@ -1,5 +1,5 @@
 import React from "react";
-import ChangeLanguage from "../../../core/src/components/ChangeLanguage";
+import ChangeLanguage from "../components/ChangeLanguage";
 
 const SideBarMenu = [
   // {

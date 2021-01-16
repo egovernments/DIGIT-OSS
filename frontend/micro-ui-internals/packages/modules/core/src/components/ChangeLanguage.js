@@ -1,15 +1,17 @@
 import { Button } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { CustomButton } from "@egovernments/digit-ui-react-components";
+import { useSelector } from "react-redux";
 
-const ChangeLanguage = (props) => {
-  //TODO add language from city active language
-  const languages = ["English", "हिंदी"];
-  const [selected, setselected] = useState("English");
+const ChangeLanguage = () => {
+  const commonState = useSelector((state) => state.common);
+  const { languages, selectedLanguage, stateInfo } = commonState;
+  const [selected, setselected] = useState(selectedLanguage);
 
   const handleChangeLanguage = (language) => {
-    console.log("handleChangeLanguage::::>", language);
-    setselected(language);
+    console.log("changing language", language);
+    setselected(language.value);
+    Digit.LocalizationService.changeLanguage(language.value, stateInfo.code);
   };
   return (
     <React.Fragment>
@@ -17,8 +19,7 @@ const ChangeLanguage = (props) => {
       <div className="language-selector">
         {languages.map((language, index) => (
           <div className="language-button-container" key={index}>
-            {/* <Button size="small" key={index} label={language} onSubmit={() => handleChangeLanguage(language)} /> */}
-            <CustomButton selected={language === selected} text={language} onClick={() => handleChangeLanguage(language)}></CustomButton>
+            <CustomButton selected={language.value === selected} text={language.label} onClick={() => handleChangeLanguage(language)}></CustomButton>
           </div>
         ))}
       </div>

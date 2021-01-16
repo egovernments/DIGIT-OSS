@@ -5,7 +5,7 @@ import { TopBar } from "@egovernments/digit-ui-react-components";
 
 import { AppModules } from "./AppModules";
 import { NavBar, ArrowLeft } from "@egovernments/digit-ui-react-components";
-import Sidebar from "../../../pgr/src/components/Sidebar";
+import Sidebar from "./Sidebar";
 
 const TextToImg = ({ name }) => <span className="user-img-txt">{name[0].toUpperCase()}</span>;
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
