@@ -11,7 +11,7 @@ Workflows are a series of steps that moves a process from one state to another s
 
 ### Swagger API Contract
 
-Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/core-services/master/docs/worfklow-2.0#!/) for egov-workflow-v2 service to understand the structure of APIs and to have visualization of all internal APIs.
+Please refer to the [Swagger API contract](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/core-services/master/docs/worfklow-2.0.yml#!/) for egov-workflow-v2 service to understand the structure of APIs and to have visualization of all internal APIs.
 
 
 ## Service Details
