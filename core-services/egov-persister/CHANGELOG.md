@@ -1,6 +1,10 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.2 - 2021-01-15
+
+-  Add readme for persister versioning 
+
 ## 1.1.1 - 2020-10-09
 
 - Persister: Adding Deserialization Error Handler in Persister
