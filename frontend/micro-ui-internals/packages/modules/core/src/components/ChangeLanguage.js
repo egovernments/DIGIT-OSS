@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { CustomButton } from "@egovernments/digit-ui-react-components";
 
 const ChangeLanguage = (props) => {
-  const languages = ["English", "हिंदी", "ਪੰਜਾਬੀ"];
+  //TODO add language from city active language
+  const languages = ["English", "हिंदी"];
   const [selected, setselected] = useState("English");
 
   const handleChangeLanguage = (language) => {

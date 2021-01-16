@@ -97,10 +97,6 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
         />
         <Sidebar isOpen={isSidebarOpen} isMobile={mobileView} toggleSidebar={toggleSidebar} onLogout={handleLogout} />
         <div className="main">
-          <a className="back-btn2" href="https://egov-micro-qa.egovernments.org/citizen/language-selection">
-            <ArrowLeft />
-            <p>Back</p>
-          </a>
           <AppModules stateCode={stateCode} userType="citizen" modules={modules} appTenants={appTenants} />
         </div>
       </Route>
