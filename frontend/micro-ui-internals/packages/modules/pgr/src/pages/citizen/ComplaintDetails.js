@@ -48,6 +48,7 @@ const ComplaintDetailsPage = (props) => {
 
   let tenantId = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
   const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
+  // console.log("find complaint details here", complaintDetails);
 
   const [imageZoom, setImageZoom] = useState(null);
 
@@ -127,7 +128,7 @@ const ComplaintDetailsPage = (props) => {
                   label={t(flag)}
                   text={
                     Array.isArray(complaintDetails.details[flag])
-                      ? complaintDetails.details[flag].map((val) => t(val))
+                      ? complaintDetails.details[flag].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
                       : t(complaintDetails.details[flag])
                   }
                   last={index === arr.length - 1}

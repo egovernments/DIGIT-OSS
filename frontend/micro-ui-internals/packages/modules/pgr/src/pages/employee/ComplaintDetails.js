@@ -80,6 +80,7 @@ export const ComplaintDetails = (props) => {
   const [toast, setToast] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
+  // console.log("find complaint details here", complaintDetails);
   const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, moduleCode: "PGR", role: "EMPLOYEE" });
   const [displayMenu, setDisplayMenu] = useState(false);
   const [popup, setPopup] = useState(false);
@@ -228,7 +229,7 @@ export const ComplaintDetails = (props) => {
                   label={t(k)}
                   text={
                     Array.isArray(complaintDetails?.details[k])
-                      ? complaintDetails?.details[k].map((val) => (typeof val === "object" ? t(val.code) : t(val)))
+                      ? complaintDetails?.details[k].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
                       : t(complaintDetails?.details[k])
                   }
                   last={arr.length - 1 === i}
