@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 1.2.1 - 2021-01-15
+
+- Allowed file with capital extension to upload in filestore
+
+
 ## 1.2.0 - 2020-07-14
 
 - Added support for `minio` `S3` compatible client
