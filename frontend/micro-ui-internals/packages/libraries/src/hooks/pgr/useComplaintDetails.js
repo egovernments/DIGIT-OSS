@@ -21,6 +21,7 @@ const getDetailsRow = ({ id, service, complaintType }) => ({
     service.address.landmark,
     Digit.Utils.locale.getLocalityCode(service.address.locality, service.tenantId),
     service.address.city,
+    service.address.pincode,
   ],
 });
 
@@ -28,6 +29,7 @@ const isEmptyOrNull = (obj) => obj === undefined || obj === null || Object.keys(
 
 const transformDetails = ({ id, service, workflow, thumbnails, complaintType }) => {
   const { Customizations, SessionStorage } = window.Digit;
+  // console.log("find customizations here", Customizations, SessionStorage);
   const role = (SessionStorage.get("user_type") || "CITIZEN").toUpperCase();
   const customDetails = Customizations?.PGR?.getComplaintDetailsTableRows
     ? Customizations.PGR.getComplaintDetailsTableRows({ id, service, role })
