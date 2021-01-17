@@ -1,10 +1,12 @@
 package org.egov.pgr.repository.rowmapper;
 
 import org.egov.pgr.web.models.RequestSearchCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -33,22 +35,31 @@ public class PGRQueryBuilder {
 
         StringBuilder builder = new StringBuilder(QUERY);
 
-        if(criteria.getTenantId() != null) {
-            String tenantId = criteria.getTenantId();
-
-            String[] tenantIdChunks = tenantId.split("\\.");
-
-            if (tenantIdChunks.length == 1) {
+        if(criteria.getIsPlainSearch() != null && criteria.getIsPlainSearch()){
+            Set<String> tenantIds = criteria.getTenantIds();
+            if(!CollectionUtils.isEmpty(tenantIds)){
                 addClauseIfRequired(preparedStmtList, builder);
-                builder.append(" ser.tenantid LIKE ? ");
-                preparedStmtList.add(criteria.getTenantId() + '%');
-            } else {
-                addClauseIfRequired(preparedStmtList, builder);
-                builder.append(" ser.tenantid=? ");
-                preparedStmtList.add(criteria.getTenantId());
+                builder.append(" ser.tenantId IN (").append(createQuery(tenantIds)).append(")");
+                addToPreparedStatement(preparedStmtList, tenantIds);
             }
         }
+        else {
+            if (criteria.getTenantId() != null) {
+                String tenantId = criteria.getTenantId();
 
+                String[] tenantIdChunks = tenantId.split("\\.");
+
+                if (tenantIdChunks.length == 1) {
+                    addClauseIfRequired(preparedStmtList, builder);
+                    builder.append(" ser.tenantid LIKE ? ");
+                    preparedStmtList.add(criteria.getTenantId() + '%');
+                } else {
+                    addClauseIfRequired(preparedStmtList, builder);
+                    builder.append(" ser.tenantid=? ");
+                    preparedStmtList.add(criteria.getTenantId());
+                }
+            }
+        }
         Set<String> serviceCodes = criteria.getServiceCode();
         if (!CollectionUtils.isEmpty(serviceCodes)) {
             addClauseIfRequired(preparedStmtList, builder);
@@ -90,6 +101,26 @@ public class PGRQueryBuilder {
             builder.append(" ads.locality IN (").append(createQuery(localities)).append(")");
             addToPreparedStatement(preparedStmtList, localities);
         }
+
+        if (criteria.getFromDate() != null) {
+            addClauseIfRequired(preparedStmtList, builder);
+
+            //If user does not specify toDate, take today's date as toDate by default.
+            if (criteria.getToDate() == null) {
+                criteria.setToDate(Instant.now().toEpochMilli());
+            }
+
+            builder.append(" ser.createdtime BETWEEN ? AND ?");
+            preparedStmtList.add(criteria.getFromDate());
+            preparedStmtList.add(criteria.getToDate());
+
+        } else {
+            //if only toDate is provided as parameter without fromDate parameter, throw an exception.
+            if (criteria.getToDate() != null) {
+                throw new CustomException("INVALID_SEARCH", "Cannot specify to-Date without a from-Date");
+            }
+        }
+
 
         addOrderByClause(builder, criteria);
 

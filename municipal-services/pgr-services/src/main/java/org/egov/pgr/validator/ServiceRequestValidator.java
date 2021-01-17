@@ -63,6 +63,7 @@ public class ServiceRequestValidator {
         validateDepartment(request, mdmsData);
         validateReOpen(request);
         RequestSearchCriteria criteria = RequestSearchCriteria.builder().ids(Collections.singleton(id)).build();
+        criteria.setIsPlainSearch(false);
         List<ServiceWrapper> serviceWrappers = repository.getServiceWrappers(criteria);
 
         if(CollectionUtils.isEmpty(serviceWrappers))
@@ -276,5 +277,9 @@ public class ServiceRequestValidator {
     }
 
 
-
+    public void validatePlainSearch(RequestSearchCriteria criteria) {
+        if(CollectionUtils.isEmpty(criteria.getTenantIds())){
+            throw new CustomException("TENANT_ID_LIST_EMPTY", "Tenant ids not provided for searching.");
+        }
+    }
 }

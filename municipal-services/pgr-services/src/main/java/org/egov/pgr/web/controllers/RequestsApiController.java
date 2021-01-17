@@ -61,6 +61,15 @@ public class RequestsApiController{
 
     }
 
+    @RequestMapping(value = "request/_plainsearch", method = RequestMethod.POST)
+    public ResponseEntity<ServiceResponse> requestsPlainSearchPost(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper, @Valid @ModelAttribute RequestSearchCriteria requestSearchCriteria) {
+        List<ServiceWrapper> serviceWrappers = pgrService.plainSearch(requestInfoWrapper.getRequestInfo(), requestSearchCriteria);
+        ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
+        ServiceResponse response = ServiceResponse.builder().responseInfo(responseInfo).serviceWrappers(serviceWrappers).build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
     @RequestMapping(value="/request/_update", method = RequestMethod.POST)
     public ResponseEntity<ServiceResponse> requestsUpdatePost(@Valid @RequestBody ServiceRequest request) throws IOException {
         ServiceRequest enrichedReq = pgrService.update(request);
