@@ -1140,9 +1140,9 @@
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.70"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.70.tgz#5336fb3dcaef5b1b65256e84027fcb33c0e3a89f"
-  integrity sha512-U/vCBq6VGpfjZ+bQf3wQItEQQO3LBF/Mc7fSloW1LVPMDAZrSdwHhxu3jSdD3qFWezpgtnsJm07gL6FiczVGyg==
+  version "1.0.71"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.71.tgz#7c37cc6dea5118a42187c2d2e96bed0f3acdadb0"
+  integrity sha512-W4niYfJffuKFuq+vvNLEunMwP5ebPAsUFpicmHgF/12f5WNlgBD7yyrJG9MfK+j/7HsLh7nqMCa7l6fcMOEyFA==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1157,9 +1157,9 @@
     redux "^4.0.5"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.70"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.70.tgz#da4a605aa7204d280f625ebb1e06a205341dd0b8"
-  integrity sha512-WtQ01E57kfTt6lIGJ/U4VBm3UB7uOG+20/9JVQ1Aull9CP5swaX8jojM3v4kasBf+ncgMQxAgGGzavd5IpVUcA==
+  version "1.0.71"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.71.tgz#73c80e5ad1381b809ec86f1da9b297d4f3beb97e"
+  integrity sha512-ugm90UmIGXYL43CAg4eGYmt6mtQoZHTNCFsIJyMVhSbDzJUNfNDkrdOMU2AJPKgxBInTpehqPAoQFJx36CQDiQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1175,9 +1175,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.70"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.70.tgz#5886a7184f4c813ddd537dbfe648247fa822cea7"
-  integrity sha512-sH6O3ZS40EVk08BDP+j2kMo5bSM4GjJlTdcDSTYscQvprJRyU+gxgcHQzAR1ucDZchEyWtSoXuH2IHiE1IFPIA==
+  version "1.0.71"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.71.tgz#8576e3660d0cd1d642504974317f808c1533dc0d"
+  integrity sha512-2AxFlW5MtO9KYet5C5ixFQKnRNtvJM6m/isaXJBT6Gv6PZBCTVRKUcNMOOgLksw9G2Rp2mazPm2OcLcd9sRUtA==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1193,9 +1193,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.70"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.70.tgz#a3d47b8f98ca545d05fa451bd6ad01ee02c287f1"
-  integrity sha512-hxkWx/Gk/KHdgBjVeGfZEQgwwCCD+qDjj0i+ukcPv6/MK/v+E/A7mz9JuXu+kOeHmOr8/DDWe+lM891OCdzbpw==
+  version "1.0.71"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.71.tgz#046fdec7094afca1f637bb4782fe0728db4dc594"
+  integrity sha512-HsOP9T07SRE+ZLST7S87WkmF6GhQZL8FWIWm8JTRZEFvNqWLP+gd6GGipbOe+14lWA88SV1IBtQCVLfbGYTBjA==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1212,9 +1212,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.70"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.70.tgz#e3dd9116526f4de67d34ebcbdaedd2136f070ad7"
-  integrity sha512-P1OBLxmv8mTy08bB4kGGe9bn0Ty2qC3tcQ7tfgWU/v2LiToEPVD842BtCqEA0cbQto8ZlhPfxcImRJldkTSZdA==
+  version "1.0.71"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.71.tgz#704e3c975af8f9e13d78bd106dfdb66632f70543"
+  integrity sha512-kuzBf4XQolvLSIQIg35kCKMuSzl9ruzrsPHai4cSURwktAdLBQ866aLrrWJ93qDxGbP5YhgrbTVwIouHTnRa6A==
   dependencies:
     react-hook-form "^6.7.0"
     react-i18next "^11.7.3"
@@ -3407,9 +3407,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001125, caniuse-lite@^1.0.30001173:
-  version "1.0.30001177"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001177.tgz#2c3b384933aafda03e29ccca7bb3d8c3389e1ece"
-  integrity sha512-6Ld7t3ifCL02jTj3MxPMM5wAYjbo4h/TAQGFTgv1inihP1tWnWp8mxxT4ut4JBEHLbpFXEXJJQ119JCJTBkYDw==
+  version "1.0.30001178"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001178.tgz#3ad813b2b2c7d585b0be0a2440e1e233c6eabdbc"
+  integrity sha512-VtdZLC0vsXykKni8Uztx45xynytOi71Ufx9T8kHptSw9AL4dpqailUJJHavttuzUe1KYuBYtChiWv+BAb7mPmQ==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -5281,9 +5281,9 @@ fast-deep-equal@^3.1.1:
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
 
 fast-glob@^3.1.1:
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.4.tgz#d20aefbf99579383e7f3cc66529158c9b98554d3"
-  integrity sha512-kr/Oo6PX51265qeuCYsyGypiO5uJFgBS0jksyG7FUeCyQzNwYnzrNIMR1NXfkZXsMYXYLRAHgISHBz8gQcxKHQ==
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.5.tgz#7939af2a656de79a4f1901903ee8adcaa7cb9661"
+  integrity sha512-2DtFcgT68wiTTiwZ2hNdJfcHNke9XOfnwmBRWXhmeKM8rF0TGwmC/Qto3S7RoZKp5cilZbxzO5iTNTQsJ+EeDg==
   dependencies:
     "@nodelib/fs.stat" "^2.0.2"
     "@nodelib/fs.walk" "^1.2.3"
@@ -9675,9 +9675,9 @@ react-is@^17.0.1:
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
 react-query@^3.2.0:
-  version "3.5.14"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.5.14.tgz#6114df6719ef1672a112ad19bcdf8229edca4870"
-  integrity sha512-OqfIifsJln1n7WR594mXkmS9ABFSD2DD8HJcf0DbFdLAjDtimAsbgEizudJ6nTr9c7HMeyjPYt8GzikOxyxSfA==
+  version "3.5.15"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.5.15.tgz#2391e06ce42ad3854eda12c9983e8783efa57b27"
+  integrity sha512-npGgphvqJ2KQ3brsA0ddKjFslLwxDmDlQcABKJv/B3fWdPQuLADVTmiFflF3UHk7yIQRhggNLRgBzgwQt/UYZg==
   dependencies:
     "@babel/runtime" "^7.5.5"
     match-sorter "^6.0.2"
