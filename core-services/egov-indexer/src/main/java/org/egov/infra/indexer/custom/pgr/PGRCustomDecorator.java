@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.infra.indexer.util.IndexerConstants;
 import org.egov.infra.indexer.util.IndexerUtils;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
@@ -121,4 +122,27 @@ public class PGRCustomDecorator {
 		return MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
 	}
 
+	public String enrichDepartmentPlaceholderInPgrRequest(String value) {
+		StringBuilder builder = new StringBuilder(value);
+		builder.deleteCharAt(builder.length()-1);
+		builder.append(",").append(IndexerConstants.DEPARTMENT_PLACEHOLDER).append(":").append(IndexerConstants.DEPT_CODE_PLACEHOLDER).append("}");
+		return builder.toString();
+	}
+
+	public String getDepartmentCodeForPgrRequest(String kafkaJson) {
+		StringBuilder uri = new StringBuilder();
+		String serviceCode = JsonPath.read(kafkaJson, "$.service.serviceCode");
+		MdmsCriteriaReq request = prepareMdMsRequestForDept(uri, stateLevelTenantId, serviceCode, new RequestInfo());
+		try {
+			Object response = restTemplate.postForObject(uri.toString(), request, Map.class);
+			List<String> depts = JsonPath.read(response, "$.MdmsRes.RAINMAKER-PGR.ServiceDefs");
+			if(!CollectionUtils.isEmpty(depts)) {
+				return depts.get(0);
+			}else
+				return null;
+		}catch(Exception e) {
+			log.error("Exception while fetching dept: ",e);
+			return null;
+		}
+	}
 }

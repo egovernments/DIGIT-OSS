@@ -49,7 +49,13 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
 	
 	@Value("${egov.indexer.pgr.create.topic.name}")
 	private String pgrCreateTopic;
-	
+
+	@Value("${pgr.create.topic.name}")
+	private String pgrServicesCreateTopic;
+
+	@Value("${pgr.update.topic.name}")
+	private String pgrServicesUpdateTopic;
+
 	@Value("${egov.indexer.pgr.update.topic.name}")
 	private String pgrUpdateTopic;
 		
@@ -82,7 +88,7 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
     }
     
     public String setTopics(){
-    	String[] excludeArray = {pgrCreateTopic, pgrUpdateTopic, ptCreateTopic, ptUpdateTopic};
+    	String[] excludeArray = {pgrCreateTopic, pgrUpdateTopic, ptCreateTopic, ptUpdateTopic, pgrServicesCreateTopic, pgrServicesUpdateTopic};
     	int noOfExculdedTopics = 0;
     	List<String> topicsList = runner.getTopicMaps().get(ConfigKeyEnum.INDEX.toString());
     	for(String excludeTopic: excludeArray) {

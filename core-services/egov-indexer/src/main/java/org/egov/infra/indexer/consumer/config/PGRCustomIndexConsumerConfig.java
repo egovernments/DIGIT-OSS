@@ -50,8 +50,17 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
 	
 	@Value("${egov.indexer.pgr.legacyindex.topic.name}")
 	private String pgrLegacyTopic;
-        
-    @Autowired
+
+	@Value("${pgr.create.topic.name}")
+	private String pgrServicesCreateTopic;
+
+	@Value("${pgr.update.topic.name}")
+	private String pgrServicesUpdateTopic;
+
+	@Value("${pgr.legacy.topic.name}")
+	private String pgrServicesLegacyTopic;
+
+	@Autowired
     private StoppingErrorHandler stoppingErrorHandler;
     
     @Autowired
@@ -71,10 +80,13 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
     }
     
     public String setTopics(){
-    	String[] topics = new String[3];
+    	String[] topics = new String[6];
     	topics[0] = pgrCreateTopic;
     	topics[1] = pgrUpdateTopic;
     	topics[2] = pgrLegacyTopic;
+		topics[3] = pgrServicesCreateTopic;
+		topics[4] = pgrServicesUpdateTopic;
+		topics[5] = pgrServicesLegacyTopic;
 
     	this.topics = topics;  
     	

@@ -4,7 +4,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.egov.infra.indexer.custom.pgr.PGRCustomDecorator;
 import org.egov.infra.indexer.custom.pgr.PGRIndexObject;
 import org.egov.infra.indexer.custom.pgr.ServiceResponse;
+import org.egov.infra.indexer.service.DataTransformationService;
 import org.egov.infra.indexer.service.IndexerService;
+import org.egov.infra.indexer.util.IndexerConstants;
 import org.egov.infra.indexer.util.IndexerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.listener.MessageListener;
@@ -22,6 +24,9 @@ public class PGRCustomIndexMessageListener implements MessageListener<String, St
 	private IndexerService indexerService;
 
 	@Autowired
+	private DataTransformationService transformationService;
+
+	@Autowired
 	private IndexerUtils indexerUtils;
 
 	@Autowired
@@ -36,13 +41,25 @@ public class PGRCustomIndexMessageListener implements MessageListener<String, St
 	 */
 	public void onMessage(ConsumerRecord<String, String> data) {
 		log.info("Topic: " + data.topic());
-		ObjectMapper mapper = indexerUtils.getObjectMapper();
-		try {
-			ServiceResponse serviceResponse = mapper.readValue(data.value(), ServiceResponse.class);
-			PGRIndexObject indexObject = pgrCustomDecorator.dataTransformationForPGR(serviceResponse);
-			indexerService.esIndexer(data.topic(), mapper.writeValueAsString(indexObject));
-		} catch (Exception e) {
-			log.error("Couldn't parse pgrindex request: ", e);
+
+		if(data.topic().equals(IndexerConstants.SAVE_PGR_TOPIC)){
+			String kafkaJson = pgrCustomDecorator.enrichDepartmentPlaceholderInPgrRequest(data.value());
+			String deptCode = pgrCustomDecorator.getDepartmentCodeForPgrRequest(kafkaJson);
+			kafkaJson = kafkaJson.replace(IndexerConstants.DEPT_CODE, deptCode);
+			try {
+				indexerService.esIndexer(data.topic(), kafkaJson);
+			}catch(Exception e){
+				log.error("Error while indexing pgr-request: " + e);
+			}
+		}else {
+			ObjectMapper mapper = indexerUtils.getObjectMapper();
+			try {
+				ServiceResponse serviceResponse = mapper.readValue(data.value(), ServiceResponse.class);
+				PGRIndexObject indexObject = pgrCustomDecorator.dataTransformationForPGR(serviceResponse);
+				indexerService.esIndexer(data.topic(), mapper.writeValueAsString(indexObject));
+			} catch (Exception e) {
+				log.error("Couldn't parse pgrindex request: ", e);
+			}
 		}
 	}
 
