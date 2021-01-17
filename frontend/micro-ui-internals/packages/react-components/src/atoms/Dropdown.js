@@ -1,28 +1,37 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
 
   useEffect(() => {
-    props.selectedVal ? setValue(props.selectedVal) : null;
-  }, [props.selectedVal]);
+    props.selectedVal ? setValue(props.selectedVal) : setValue("");
+  }, [props.selectedVal, props.forceSet]);
 
   function inputChange(e) {
     setValue(e.target.value);
     props.setFilter(e.target.value);
   }
 
-  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} />;
+  function broadcastToOpen() {
+    props.dropdownDisplay(true);
+  }
+
+  function broadcastToClose() {
+    props.dropdownDisplay(false);
+  }
+
+  return <input type="text" value={value} onChange={inputChange} onClick={props.onClick} onFocus={broadcastToOpen} onBlur={broadcastToClose} />;
 };
 
 const Dropdown = (props) => {
-  const user_type = Digit.SessionStorage.get("user_type");
+  const user_type = Digit.SessionStorage.get("userType");
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.selected ? props.selected : null);
   const [filterVal, setFilterVal] = useState("");
+  const [forceSet, setforceSet] = useState(0);
 
-  // console.log("props in dropdown", props.option, props.optionKey, props.t);
   useEffect(() => {
     setSelectedOption(props.selected);
   }, [props.selected]);
@@ -32,14 +41,26 @@ const Dropdown = (props) => {
     setDropdownStatus(!current);
   }
 
-  function dropdownOn() {
-    setDropdownStatus(true);
+  function dropdownOn(val) {
+    const waitForOptions = () => setTimeout(() => setDropdownStatus(val), 500);
+    const timerId = waitForOptions();
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }
 
-  function onSelect(selectedOption) {
-    props.select(selectedOption);
-    setSelectedOption(selectedOption);
-    setDropdownStatus(false);
+  function onSelect(val) {
+    //console.log(val, "curent", selectedOption, "old");
+    if (val !== selectedOption) {
+      // console.log(val,"is selected");
+      props.select(val);
+      setSelectedOption(val);
+      setDropdownStatus(false);
+    } else {
+      setSelectedOption(val);
+      setforceSet(forceSet + 1);
+    }
   }
 
   function setFilter(val) {
@@ -52,6 +73,7 @@ const Dropdown = (props) => {
       <div className={dropdownStatus ? "select-active" : "select"}>
         <TextField
           setFilter={setFilter}
+          forceSet={forceSet}
           selectedVal={
             selectedOption
               ? props.t
@@ -62,25 +84,28 @@ const Dropdown = (props) => {
               : null
           }
           filterVal={filterVal}
-          onClick={dropdownOn}
+          // onClick={dropdownOn}
+          dropdownDisplay={dropdownOn}
         />
         <ArrowDown onClick={dropdownSwitch} />
       </div>
+      {console.log("dropdownStatus::::::::::::::>", dropdownStatus)}
       {dropdownStatus ? (
         props.optionKey ? (
           <div className="options-card">
-            {props.option
-              .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
-              .map((option, index) => {
-                if (props.t) {
-                  // console.log(props.t(option[props.optionKey]));
-                }
-                return (
-                  <p key={index} onClick={() => onSelect(option)}>
-                    {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}
-                  </p>
-                );
-              })}
+            {props.option &&
+              props.option
+                .filter((option) => option[props.optionKey].toUpperCase().includes(filterVal.toUpperCase()))
+                .map((option, index) => {
+                  if (props.t) {
+                    // console.log(props.t(option[props.optionKey]));
+                  }
+                  return (
+                    <p key={index} onClick={() => onSelect(option)}>
+                      {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}
+                    </p>
+                  );
+                })}
           </div>
         ) : (
           <div className="options-card">
@@ -99,5 +124,16 @@ const Dropdown = (props) => {
     </div>
   );
 };
+
+Dropdown.propTypes = {
+  selected: PropTypes.any,
+  style: PropTypes.object,
+  option: PropTypes.array,
+  optionKey: PropTypes.any,
+  select: PropTypes.func,
+  t: PropTypes.func,
+};
+
+Dropdown.defaultProps = {};
 
 export default Dropdown;

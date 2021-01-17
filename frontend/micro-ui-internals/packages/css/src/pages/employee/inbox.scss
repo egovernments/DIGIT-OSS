@@ -27,14 +27,11 @@
 }
 
 .inbox-container {
-  @apply justify-center;
-
   .filters-container {
-
-
     .filter {
       .filter-card {
-        @apply p-md bg-white;
+        @apply bg-white;
+        padding: 10px;
 
         .heading {
           @apply flex justify-between;
@@ -59,6 +56,7 @@
           @apply flex flex-col;
 
           .clear-search {
+            @apply text-focus;
             display: none;
           }
         }
@@ -105,12 +103,10 @@
   }
 
   .inbox-container {
-    @apply flex justify-center;
+    @apply flex;
 
     .filters-container {
       width: 270px;
-
-
 
       .filter {
         @apply mt-md;
@@ -148,6 +144,7 @@
             @apply flex flex-col;
 
             .clear-search {
+              @apply text-focus;
               @apply block;
             }
           }
@@ -158,5 +155,13 @@
         }
       }
     }
+  }
+}
+
+.clear-search {
+  @apply text-focus;
+  &:hover {
+    color: #003078;
+    cursor: pointer;
   }
 }

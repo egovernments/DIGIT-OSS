@@ -1,12 +1,12 @@
-.popup-wrap{
+.popup-wrap {
+  background: rgba(0, 0, 0, 0.7);
+  @apply flex  fixed w-full h-full overflow-auto top-0 left-0 min-h-screen;
+  z-index: 10000;
+}
+
+@screen dt {
+  .popup-wrap {
     background: rgba(0, 0, 0, 0.7);
-    @apply flex z-30 fixed w-full h-full overflow-auto top-0 left-0 min-h-screen;
+    @apply min-h-screen;
+  }
 }
-
-@screen dt{
-    .popup-wrap{
-        background: rgba(0, 0, 0, 0.7);
-        @apply min-h-screen;
-    }
-}
-

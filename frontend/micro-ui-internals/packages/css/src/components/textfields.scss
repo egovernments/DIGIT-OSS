@@ -19,6 +19,20 @@
   @apply block outline-none mt-md mb-lg border-2 w-full border-input-border border-solid bg-white h-24 text-form-field text-text-primary p-sm;
 }
 
+.inputWrapper {
+  display: flex;
+  justify-content: space-around;
+  max-width: 500px;
+
+  div {
+    max-width: 80px;
+  }
+
+  span {
+    margin-top: 16px;
+  }
+}
+
 @screen dt {
   .card-input {
     width: 480px;
@@ -33,11 +47,11 @@
   }
 
   .employee-card-input {
-    @apply w-full
+    @apply w-full;
   }
 
   .employee-card-input-error {
-    @apply w-full
+    @apply w-full;
   }
 
   .card-textarea {
@@ -45,7 +59,7 @@
   }
 
   .employee-card-textarea {
-    @apply w-full
+    @apply w-full;
   }
 
   .card-input-emp {

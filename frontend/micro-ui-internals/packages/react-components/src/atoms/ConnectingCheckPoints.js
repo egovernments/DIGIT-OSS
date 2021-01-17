@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export const CheckPoint = (props) => {
   return (
@@ -33,4 +34,27 @@ export const ConnectingCheckPoints = (props) => {
     console.warn("ConnectingCheckPoints Components need atleast 2 CheckPoint Components as children");
     return null;
   }
+};
+
+CheckPoint.propTypes = {
+  /**
+   * Is checkpoint completed or not?
+   */
+  isCompleted: PropTypes.bool,
+  /**
+   * key value
+   */
+  key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  /**
+   * checkpoint content
+   */
+  label: PropTypes.string,
+  info: PropTypes.string,
+};
+
+CheckPoint.defaultProps = {
+  isCompleted: false,
+  key: 0,
+  label: "",
+  info: "",
 };

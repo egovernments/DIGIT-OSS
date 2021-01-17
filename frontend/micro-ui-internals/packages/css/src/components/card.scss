@@ -43,13 +43,12 @@
   }
 
   .card-link {
-    @apply block text-center text-link text-link-normal mt-md;
+    @apply block text-center text-link text-link-normal mt-md cursor-pointer;
   }
-
 }
 
 .employeeCard {
-  @apply bg-white px-sm pt-sm pb-lg shadow-card;
+  @apply bg-white shadow-card p-md;
   border-radius: 4px;
 
   .card-header {
@@ -109,7 +108,8 @@
     margin-right: auto;
   }
 
-  .header-content {}
+  .header-content {
+  }
 
   .header-end {
     margin-left: auto;
@@ -136,7 +136,7 @@
   }
 }
 
-.submit-bar-disabled{
+.submit-bar-disabled {
   @apply h-10 bg-primary-main text-center border-b-2 border-input-border border-solid w-full outline-none opacity-50;
 
   &:focus {
@@ -149,14 +149,15 @@
 }
 
 @screen dt {
-  .submit-bar, .submit-bar-disabled {
+  .submit-bar,
+  .submit-bar-disabled {
     width: 240px;
   }
 
   .card {
     margin-left: auto;
     margin-right: auto;
-    padding-right: 16px;
+    padding-right: 300px;
     padding-left: 16px;
     padding-top: 16px;
 
@@ -183,9 +184,6 @@
   }
 
   .employeeCard {
-    padding-left: 16px;
-    padding-top: 16px;
-
     &.filter {
       margin-left: auto;
       margin-right: auto;
@@ -234,8 +232,21 @@
         margin-right: 20%;
       }
     }
-  }
 
+    .field-container {
+      span {
+        border: 2px solid black;
+        background: rgb(247, 247, 247);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: -16px;
+        border-right: none;
+      }
+    }
+  }
 
   .header-wrap {
     @apply flex mb-md;
@@ -244,7 +255,8 @@
       margin-right: auto;
     }
 
-    .header-content {}
+    .header-content {
+    }
 
     .header-end {
       margin-left: auto;

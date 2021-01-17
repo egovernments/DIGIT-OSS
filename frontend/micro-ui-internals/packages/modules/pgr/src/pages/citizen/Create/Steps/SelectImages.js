@@ -1,20 +1,35 @@
 import React, { useState } from "react";
 import { FormStep, ImageUploadHandler, Loader } from "@egovernments/digit-ui-react-components";
 
-const SelectImages = ({ t, config, onSelect }) => {
-  const __initImages = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
-  const [uploadedImages, setUploadedImagesIds] = useState(__initImages ? __initImages : null);
+const SelectImages = ({ t, config, onSelect, onSkip, value }) => {
+  // const __initImages = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
+  const [uploadedImages, setUploadedImagesIds] = useState(() => {
+    // __initImages ? __initImages : null
+    console.log("%c 🏎️: props in selectImages ", "font-size:16px;background-color:#c239cc;color:white;", value);
+    const { uploadedImages } = value;
+    return uploadedImages ? uploadedImages : null;
+  });
 
   const handleUpload = (ids) => {
     setUploadedImagesIds(ids);
-    Digit.SessionStorage.set("PGR_CREATE_IMAGES", ids);
+    // Digit.SessionStorage.set("PGR_CREATE_IMAGES", ids);
   };
 
-  const onSkip = () => onSelect();
+  // const onSkip = () => onSelect();
+  const handleSubmit = () => {
+    if (!uploadedImages || uploadedImages.length === 0) return onSkip();
+    // const _uploadImages = uploadedImages.map((url) => ({
+    //   documentType: "PHOTO",
+    //   fileStore: url,
+    //   documentUid: "",
+    //   additionalDetails: {},
+    // }));
+    onSelect({ uploadedImages });
+  };
 
   return (
-    <FormStep config={config} onSelect={() => onSelect(uploadedImages)} onSkip={onSkip} t={t}>
-      <ImageUploadHandler onPhotoChange={handleUpload} />
+    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t}>
+      <ImageUploadHandler tenantId={value.city_complaint?.code} uploadedImages={uploadedImages} onPhotoChange={handleUpload} />
     </FormStep>
   );
 };

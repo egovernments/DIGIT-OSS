@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { CameraSvg } from "./svgindex";
 import { DeleteBtn } from "./svgindex";
 
@@ -13,6 +14,7 @@ const MiniUpload = (props) => {
 
 const UploadImages = (props) => {
   if (props.thumbnails && props.thumbnails.length > 0) {
+    console.log("%c 🏎️: props in Upload ", "font-size:36px;", props.thumbnails);
     return (
       <div className="multi-upload-wrap">
         {props.thumbnails.map((thumbnail, index) => {
@@ -34,6 +36,16 @@ const UploadImages = (props) => {
       </div>
     );
   }
+};
+
+UploadImages.propTypes = {
+  thumbnail: PropTypes.array,
+  onUpload: PropTypes.func,
+};
+
+UploadImages.defaultProps = {
+  thumbnail: [],
+  onUpload: undefined,
 };
 
 export default UploadImages;

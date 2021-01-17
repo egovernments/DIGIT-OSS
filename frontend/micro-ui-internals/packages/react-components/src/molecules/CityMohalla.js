@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
 import CardText from "../atoms/CardText";
@@ -20,6 +22,7 @@ const CityMohalla = ({
   selectCity,
   selectLocalities,
   onSave,
+  selectedLocality,
 }) => {
   return (
     <Card>
@@ -32,10 +35,42 @@ const CityMohalla = ({
       <CardLabel>{cardLabelCity}* </CardLabel>
       <Dropdown isMandatory selected={selectedCity} option={cities} select={selectCity} />
       <CardLabel>{cardLabelMohalla} *</CardLabel>
-      <Dropdown isMandatory option={localities} select={selectLocalities} />
+      <Dropdown isMandatory selected={selectedLocality} option={localities} select={selectLocalities} />
       <SubmitBar label={nextText} onSubmit={onSave} />
     </Card>
   );
+};
+
+CityMohalla.propTypes = {
+  header: PropTypes.string,
+  subHeader: PropTypes.string,
+  cardText: PropTypes.string,
+  cardLabelCity: PropTypes.string,
+  cardLabelMohalla: PropTypes.string,
+  nextText: PropTypes.string,
+  selectedCity: PropTypes.string,
+  cities: PropTypes.array,
+  localities: PropTypes.array,
+  selectCity: PropTypes.string,
+  selectedLocality: PropTypes.string,
+  selectLocalities: PropTypes.func,
+  onSave: PropTypes.func,
+};
+
+CityMohalla.defaultProps = {
+  header: "",
+  subHeader: "",
+  cardText: "",
+  cardLabelCity: "",
+  cardLabelMohalla: "",
+  nextText: "",
+  selectedCity: "",
+  cities: [],
+  localities: [],
+  selectCity: "",
+  selectedLocality: "",
+  selectLocalities: undefined,
+  onSave: undefined,
 };
 
 export default CityMohalla;

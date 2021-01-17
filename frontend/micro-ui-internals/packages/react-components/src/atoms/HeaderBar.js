@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const HeaderBar = (props) => {
   return (
@@ -8,6 +9,18 @@ const HeaderBar = (props) => {
       {props.end ? <div className="header-end">{props.end}</div> : null}
     </div>
   );
+};
+
+HeaderBar.propTypes = {
+  start: PropTypes.any,
+  main: PropTypes.any,
+  end: PropTypes.any,
+};
+
+HeaderBar.defaultProps = {
+  start: "",
+  main: "",
+  end: "",
 };
 
 export default HeaderBar;

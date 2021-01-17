@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -15,30 +15,97 @@ import {
   DisplayPhotos,
   ImageViewer,
   Loader,
+  Toast,
 } from "@egovernments/digit-ui-react-components";
 
-import useComplaintDetails from "../../hooks/useComplaintDetails";
-import TimeLine from "./CreateComplaint/TimeLine";
+import TimeLine from "../../components/TimeLine";
+
+const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
+  const tenantId = complaintDetails.service.tenantId;
+  const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: tenantId, id, moduleCode: "PGR" });
+  useEffect(() => {
+    getWorkFlow(workFlowDetails.data);
+  }, [workFlowDetails.data]);
+
+  useEffect(() => {
+    workFlowDetails.revalidate();
+  }, []);
+
+  return (
+    <TimeLine
+      isLoading={workFlowDetails.isLoading}
+      data={workFlowDetails.data}
+      serviceRequestId={id}
+      complaintWorkflow={complaintDetails.workflow}
+      rating={complaintDetails.audit.rating}
+    />
+  );
+};
 
 const ComplaintDetailsPage = (props) => {
   let { t } = useTranslation();
   let { id } = useParams();
 
-  let cityCodeVal = "pb.amritsar"; // ToDo: fetch from state
-  const { isLoading, error, isError, complaintDetails } = useComplaintDetails({ tenantId: cityCodeVal, id });
-  const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: cityCodeVal, id, moduleCode: "PGR" });
+  let tenantId = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
+  const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
+  // console.log("find complaint details here", complaintDetails);
 
   const [imageZoom, setImageZoom] = useState(null);
 
-  function zoomImage(imageSource) {
-    setImageZoom(imageSource);
+  const [comment, setComment] = useState("");
+
+  const [toast, setToast] = useState(false);
+
+  const [commentError, setCommentError] = useState(null);
+
+  const [disableComment, setDisableComment] = useState(true);
+
+  const [loader, setLoader] = useState(false);
+
+  useEffect(async () => {
+    if (complaintDetails) {
+      setLoader(true);
+      await revalidate();
+      setLoader(false);
+    }
+  }, []);
+
+  function zoomImage(imageSource, index) {
+    // console.log("index", index, imageSource,complaintDetails.images[index-1],"|||", complaintDetails.images )
+    setImageZoom(complaintDetails.images[index - 1]);
   }
 
   function onCloseImageZoom() {
     setImageZoom(null);
   }
 
-  if (isLoading) {
+  const onWorkFlowChange = (data) => {
+    console.log("ssdsodososooo ==== ", data);
+    let timeline = data?.timeline;
+    timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
+  };
+
+  const submitComment = async () => {
+    let detailsToSend = { ...complaintDetails };
+    delete detailsToSend.audit;
+    delete detailsToSend.details;
+    detailsToSend.workflow = { action: "COMMENT", comments: comment };
+    let tenantId = Digit.ULBService.getCurrentTenantId();
+    try {
+      setCommentError(null);
+      const res = await Digit.PGRService.update(detailsToSend, tenantId);
+      if (res.ServiceWrappers.length) setComment("");
+      else throw true;
+    } catch (er) {
+      setCommentError(true);
+    }
+    setToast(true);
+    setTimeout(() => {
+      setToast(false);
+    }, 30000);
+  };
+
+  if (isLoading || loader) {
     return <Loader />;
   }
 
@@ -61,7 +128,7 @@ const ComplaintDetailsPage = (props) => {
                   label={t(flag)}
                   text={
                     Array.isArray(complaintDetails.details[flag])
-                      ? complaintDetails.details[flag].map((val) => t(val))
+                      ? complaintDetails.details[flag].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
                       : t(complaintDetails.details[flag])
                   }
                   last={index === arr.length - 1}
@@ -69,24 +136,23 @@ const ComplaintDetailsPage = (props) => {
               ))}
             </StatusTable>
             {complaintDetails.thumbnails && complaintDetails.thumbnails.length !== 0 ? (
-              <DisplayPhotos srcs={complaintDetails.thumbnails} onClick={zoomImage} />
+              <DisplayPhotos srcs={complaintDetails.thumbnails} onClick={(source, index) => zoomImage(source, index)} />
             ) : null}
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
           </Card>
-          <Card>
-            <TimeLine
-              isLoading={workFlowDetails.isLoading}
-              data={workFlowDetails.data}
-              serviceRequestId={id}
-              complaintWorkflow={complaintDetails.workflow}
-              rating={complaintDetails.audit.rating}
-            />
-          </Card>
+          <Card>{complaintDetails?.service && <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} />}</Card>
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
-            <TextArea />
-            <SubmitBar label="Send" />
+            <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name={""} />
+            <SubmitBar disabled={disableComment} onSubmit={submitComment} label="Send" />
           </Card>
+          {toast && (
+            <Toast
+              error={commentError}
+              label={!commentError ? t(`CS_COMPLAINT_COMMENT_SUCCESS`) : t(`CS_COMPLAINT_COMMENT_ERROR`)}
+              onClose={() => setToast(false)}
+            />
+          )}{" "}
         </React.Fragment>
       ) : (
         <Loader />

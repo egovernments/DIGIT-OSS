@@ -1,9 +1,14 @@
 .searchBox {
-  @apply flex justify-between m-sm;
+  @apply flex m-sm;
   .searchAction {
+    position: relative;
     @apply flex flex-row text-focus;
     .searchText {
       @apply ml-sm;
     }
   }
+}
+
+.searchBox div:not(:first-child) {
+  margin-left: 65px;
 }

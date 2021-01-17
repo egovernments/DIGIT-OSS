@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-css",
-  "version": "1.0.32",
+  "version": "1.0.69",
   "license": "MIT",
   "main": "dist/index.css",
   "engines": {
@@ -12,7 +12,6 @@
   "scripts": {
     "start": "gulp build",
     "build:prod": "NODE_ENV=production gulp build",
-    "prepare": "yarn build:prod",
     "prepublish": "yarn build:prod",
     "deploy": "gulp && cp -R svg example && cp -R img example && gh-pages -d example"
   },

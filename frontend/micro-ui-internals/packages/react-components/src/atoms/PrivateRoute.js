@@ -6,11 +6,11 @@ export const PrivateRoute = ({ component: Component, roles, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        const user = Digit.SessionStorage.get("User");
+        const user = Digit.UserService.getUser();
         console.log(user);
-        if (!user || !user.token) {
+        if (!user || !user.access_token) {
           // not logged in so redirect to login page with the return url
-          return <Redirect to={{ pathname: "/digit-ui/", state: { from: props.location } }} />;
+          return <Redirect to={{ pathname: "/digit-ui/citizen/login", state: { from: props.location.pathname } }} />;
         }
 
         // logged in so return component

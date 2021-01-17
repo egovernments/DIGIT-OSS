@@ -1,5 +1,13 @@
 /* TODO: convert using tailwind */
 .employee {
+  .card-home {
+    font-size: 16px;
+    padding: 0 0 16px 0;
+    width: 270px;
+    display: inline-block;
+    margin-right: 16px;
+    margin-bottom: 16px;
+  }
   .topbar {
     position: fixed;
     top: 0;
@@ -7,7 +15,7 @@
     padding: 16px 24px;
     background: white;
     box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
-    z-index: 20;
+    z-index: 9999;
 
     img {
       display: inline;
@@ -24,7 +32,6 @@
         max-height: 20px;
         width: auto;
       }
-
     }
 
     .ulb {
@@ -49,7 +56,7 @@
     position: fixed;
     left: 0;
     padding: 20px 0;
-    background: #22394D;
+    background: #22394d;
     height: 100%;
     color: white;
     margin-top: 80px;
@@ -61,10 +68,9 @@
       margin-bottom: 32px;
 
       &.active {
-        border-right: 4px solid #F47738;
+        border-right: 4px solid #f47738;
         padding-right: 16px;
       }
-
     }
   }
 
@@ -75,12 +81,16 @@
 
 .citizen {
   .main {
-    padding-top: 72px;
+    padding-top: 82px;
   }
 }
 
 .link {
   @apply text-link-normal;
+
+  :hover {
+    color: #003078;
+  }
 }
 
 @media (min-width: 640px) {

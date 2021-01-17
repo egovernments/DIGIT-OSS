@@ -7,16 +7,19 @@ import { useTranslation } from "react-i18next";
 
 const GetActionMessage = ({ action }) => {
   const { t } = useTranslation();
-  if (action === "REOPEN") {
-    return t(`CS_COMMON_COMPLAINT_REOPENED`);
-  } else {
-    return t(`CS_COMMON_COMPLAINT_SUBMITTED`);
+  switch (action) {
+    case "REOPEN":
+      return t(`CS_COMMON_COMPLAINT_REOPENED`);
+    case "RATE":
+      return t("CS_COMMON_THANK_YOU");
+    default:
+      return t(`CS_COMMON_COMPLAINT_SUBMITTED`);
   }
 };
 
 const BannerPicker = ({ response }) => {
   const { complaints } = response;
-
+  const { t } = useTranslation();
   if (complaints && complaints.response && complaints.response.responseInfo) {
     return (
       <Banner
@@ -32,12 +35,13 @@ const BannerPicker = ({ response }) => {
 
 const Response = (props) => {
   const { t } = useTranslation();
-  const appState = useSelector((state) => state)["common"];
+  const appState = useSelector((state) => state)["pgr"];
+  console.log("inside response", appState);
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}
       <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
-      <Link to={getRoute(props.match, PgrRoutes.CreateComplaintStart)}>
+      <Link to="/digit-ui/citizen">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { Switch, Route, useRouteMatch, useLocation } from "react-router-dom";
 
 import { BackButton, ActionBar, Menu, SubmitBar } from "@egovernments/digit-ui-react-components";
 import { ComplaintDetails } from "./ComplaintDetails";
@@ -18,10 +18,13 @@ const Complaint = () => {
     setDisplayMenu(false);
     setPopup(true);
   }
+
+  let location = useLocation().pathname;
+
   return (
     <React.Fragment>
       <div className="ground-container">
-        <BackButton>Back</BackButton>
+        {!location.includes(Employee.Response) && <BackButton>Back</BackButton>}
         <Switch>
           <Route path={match.url + Employee.CreateComplaint} component={() => <CreateComplaint parentUrl={match.url} />} />
           <Route path={match.url + Employee.ComplaintDetails + ":id"} component={() => <ComplaintDetails />} />

@@ -1,34 +1,60 @@
 {
-    "tenantId": "pb",
-    "moduleName": "PropertyTax",
-    "PropertyType": [
-      {
-        "name": "Vacant Land",
-        "code": "VACANT",
-        "active": true
-      },
-      {
-        "name": "Built Up",
-        "code": "BUILTUP",
-        "active": true
-      },
-      {
-        "name": "Flat/Part of the building",
-        "code": "BUILTUP.SHAREDPROPERTY",
-        "active": true,
-        "propertyType": "BUILTUP"
-      },
-      {
-        "name": "Independent Building",
-        "code": "BUILTUP.INDEPENDENTPROPERTY",
-        "active": true,
-        "propertyType": "BUILTUP"
-      },
-      {
-        "name": "Vacant Independent Building",
-        "code": "VACANT.INDEPENDENTPROPERTY",
-        "active": true,
-        "propertyType": "VACANT"
-      }
-    ]
-  }
+  "tenantId": "pb",
+  "moduleName": "PropertyTax",
+  "propertyType": [
+    {
+      "name": "Residential",
+      "code": "Residential",
+      "active": true
+    },
+    {
+      "name": "Commercial",
+      "code": "Commercial",
+      "active": true
+    }
+  ],
+  "propertySubtype": [
+    {
+      "name": "Independent House",
+      "code": "Independent House"
+    },
+    {
+      "name": "Appartment",
+      "code": "Appartment"
+    },
+    {
+      "name": "Row House",
+      "code": "Row House"
+    }
+  ],
+  "PropertyType": [
+    {
+      "name": "CS_PROPERTY_TYPE_VACANT",
+      "code": "VACANT",
+      "active": true
+    },
+    {
+      "name": "CS_PROPERTY_TYPE_BUILTUP",
+      "code": "BUILTUP",
+      "active": true
+    },
+    {
+      "name": "ES_APPLICATION_DETAILS_PROPERTY_SUB_TYPE_BUILTUP.SHAREDPROPERTY",
+      "code": "BUILTUP.SHAREDPROPERTY",
+      "active": true,
+      "propertyType": "BUILTUP"
+    },
+    {
+      "name": "ES_APPLICATION_DETAILS_PROPERTY_SUB_TYPE_BUILTUP.INDEPENDENTPROPERTY",
+      "code": "BUILTUP.INDEPENDENTPROPERTY",
+      "active": true,
+      "propertyType": "BUILTUP"
+    },
+    {
+      "name": "ES_APPLICATION_DETAILS_PROPERTY_SUB_TYPE_VACANT.INDEPENDENTPROPERTY",
+      "code": "VACANT.INDEPENDENTPROPERTY",
+      "active": true,
+      "propertyType": "VACANT"
+    }
+  ]
+}
