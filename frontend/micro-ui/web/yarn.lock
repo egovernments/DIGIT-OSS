@@ -1140,9 +1140,9 @@
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.74.tgz#3b9b39023c67c2a0ede6c2c3219a68eebdc4956d"
-  integrity sha512-sOARbgqAYGGiLxSynXRLvqoxFxfbgudn3mISDy1+AaqZjmwirYCbANV8LWyiYYVjCjIcwjxNHhqGBf9thGdAHw==
+  version "1.0.76"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.76.tgz#68b82a2379257ac4238cb5a9b7b391d3163d52a7"
+  integrity sha512-bUyBpggyewSXxkopFzkYce2kNETx3nFb805BTWSfW0iQEAdxR6OetEhDp1qzQnNB/Zpmm1Qqlakr2TmOJi/obw==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1157,9 +1157,9 @@
     redux "^4.0.5"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.74.tgz#7836ab980f47873505314bb6efad60d8ea238743"
-  integrity sha512-JqQwc3aCJw+fU9c3E+4mssCLQsGf1f4MzQpG5uiUA1pUnVMJu73JRHqh2VvOKTnfFTAaDuBUKYA8JoRUByUMJg==
+  version "1.0.76"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.76.tgz#a453961bc98ad9d12b7c2e087cfe6969e1c68df0"
+  integrity sha512-lJ7TwbQo+mZzFtZhp1pYGQX4LLWJXXNaO16wWICBN4ySIz+BH7X+xj25zCyGmvqVO95NmWY5LvCONO0AW5zsvQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1175,9 +1175,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.74.tgz#3965d06859f97edbba8f9c4a0f2e3a15f3e742eb"
-  integrity sha512-oqzxce02hv3LUcYTzOjIZvWB6e53IQ8QsX/4GSqXQYfbtkmR2IlfDGZKnA56OeneOcalXqh6ZwNX+S7IFwSA4Q==
+  version "1.0.76"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.76.tgz#a7f45a1dd3b095fa0c918b9fb8a38c6c479ac03a"
+  integrity sha512-f4to07Vs8dWp/KdhjskVdSKj7U94I6yt4g2JXuwVi7FAbefSCQoaHUEjPqnFT0DvxVYlk7Dv8E+n0a7sgTWD+g==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1193,9 +1193,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.74.tgz#a02ebb60d8bde0e193ad687060edbd1e8092ac74"
-  integrity sha512-xvdaOf7t4DbZkZcUdQR7C14jfMgVJJwKB2yUgsKNv44o8yRhTahtkwJn/+N7IJrIS0GAtHjeZthyGXJDTah6gQ==
+  version "1.0.76"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.76.tgz#9ef2d0dcdf2ec5cd18d75ad23eba6c16a21629b3"
+  integrity sha512-b2RhYZ2p6v6FVkAQB5CyJsP5kQqA+RpFzJdbq6eVZcOw1wOFV9kk3rmI5tAhJnIVUK+wMps0QSzfJ+R9VhibIQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1212,9 +1212,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.74.tgz#61954cb33ca2b36dbc6b7724d0b233010170069d"
-  integrity sha512-iPQvOeq1/SW7gQ6zrcDFmkfeO0GvkEFC6DNeMs1tKEYwcNMVXqBCKjCzEi0qoUZU0dAYk+4msmSvBB7bi2QeLQ==
+  version "1.0.76"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.76.tgz#298bf024d1bdcbb45bcc11a8da4c798ecc87a091"
+  integrity sha512-VeVolqF6fJT5vriLpqEnOHipauw+NR+S4tSlnBgSTVAJnmj4/xNO2KDQfAK8wh4cZ36QJrG5/QXWFT7UjbUDNA==
   dependencies:
     react-hook-form "^6.7.0"
     react-i18next "^11.7.3"
@@ -8457,9 +8457,9 @@ parse-json@^4.0.0:
     json-parse-better-errors "^1.0.1"
 
 parse-json@^5.0.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/parse-json/-/parse-json-5.1.0.tgz#f96088cdf24a8faa9aea9a009f2d9d942c999646"
-  integrity sha512-+mi/lmVVNKFNVyLXV31ERiy2CY5E1/F6QtJFEzoChPRwwngMNXRDQ9GJ5WdE2Z2P4AujsOi0/+2qHID68KwfIQ==
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/parse-json/-/parse-json-5.2.0.tgz#c76fc66dee54231c962b22bcc8a72cf2f99753cd"
+  integrity sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     error-ex "^1.3.1"
