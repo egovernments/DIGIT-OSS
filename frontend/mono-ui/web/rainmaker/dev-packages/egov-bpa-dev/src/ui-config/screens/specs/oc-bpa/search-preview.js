@@ -238,11 +238,12 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     comparisonReportPrintObject = {
       label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
       link: () => {
-        let comparisonReports = comparisonReport;
-        if(!comparisonReport.includes("https")) {
+        let comparisonReports;
+        if(!comparisonReport.includes("https") && window.location.href.includes("https")) {
           comparisonReports = comparisonReport.replace(/http/g, "https");
         }
-        printPdf(comparisonReports);
+        let downloadLink = comparisonReports ? comparisonReports : comparisonReport;
+        printPdf(downloadLink);
       },
       leftIcon: "assignment"
     }
