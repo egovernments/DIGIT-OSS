@@ -60,6 +60,9 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
 	@Value("${pgr.legacy.topic.name}")
 	private String pgrServicesLegacyTopic;
 
+	@Value("${pgr.batch.create.topic.name}")
+	private String pgrServicesBatchCreateTopic;
+
 	@Autowired
     private StoppingErrorHandler stoppingErrorHandler;
     
@@ -80,12 +83,13 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
     }
     
     public String setTopics(){
-    	String[] topics = new String[5];
+    	String[] topics = new String[6];
     	topics[0] = pgrCreateTopic;
     	topics[1] = pgrUpdateTopic;
     	topics[2] = pgrLegacyTopic;
 		topics[3] = pgrServicesCreateTopic;
 		topics[4] = pgrServicesLegacyTopic;
+		topics[5] = pgrServicesBatchCreateTopic;
 
     	this.topics = topics;  
     	

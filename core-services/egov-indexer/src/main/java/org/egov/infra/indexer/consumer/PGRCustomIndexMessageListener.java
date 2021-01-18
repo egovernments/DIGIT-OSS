@@ -42,7 +42,7 @@ public class PGRCustomIndexMessageListener implements MessageListener<String, St
 	public void onMessage(ConsumerRecord<String, String> data) {
 		log.info("Topic: " + data.topic());
 
-		if(data.topic().equals(IndexerConstants.SAVE_PGR_TOPIC)){
+		if(data.topic().equals(IndexerConstants.SAVE_PGR_TOPIC) || data.topic().equals(IndexerConstants.SAVE_PGR_REQUEST_BATCH_TOPIC)){
 			String kafkaJson = pgrCustomDecorator.enrichDepartmentPlaceholderInPgrRequest(data.value());
 			String deptCode = pgrCustomDecorator.getDepartmentCodeForPgrRequest(kafkaJson);
 			kafkaJson = kafkaJson.replace(IndexerConstants.DEPT_CODE, deptCode);
