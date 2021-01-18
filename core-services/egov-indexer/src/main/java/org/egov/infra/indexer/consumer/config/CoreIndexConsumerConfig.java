@@ -88,7 +88,7 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
     }
     
     public String setTopics(){
-    	String[] excludeArray = {pgrCreateTopic, pgrUpdateTopic, ptCreateTopic, ptUpdateTopic, pgrServicesCreateTopic, pgrServicesUpdateTopic};
+    	String[] excludeArray = {pgrCreateTopic, pgrUpdateTopic, ptCreateTopic, ptUpdateTopic, pgrServicesCreateTopic};
     	int noOfExculdedTopics = 0;
     	List<String> topicsList = runner.getTopicMaps().get(ConfigKeyEnum.INDEX.toString());
     	for(String excludeTopic: excludeArray) {

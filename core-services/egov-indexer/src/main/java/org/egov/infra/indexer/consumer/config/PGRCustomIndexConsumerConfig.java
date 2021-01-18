@@ -80,13 +80,12 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
     }
     
     public String setTopics(){
-    	String[] topics = new String[6];
+    	String[] topics = new String[5];
     	topics[0] = pgrCreateTopic;
     	topics[1] = pgrUpdateTopic;
     	topics[2] = pgrLegacyTopic;
 		topics[3] = pgrServicesCreateTopic;
-		topics[4] = pgrServicesUpdateTopic;
-		topics[5] = pgrServicesLegacyTopic;
+		topics[4] = pgrServicesLegacyTopic;
 
     	this.topics = topics;  
     	
