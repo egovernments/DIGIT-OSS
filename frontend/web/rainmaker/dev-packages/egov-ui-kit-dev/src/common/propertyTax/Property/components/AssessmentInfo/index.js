@@ -148,18 +148,22 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
 
   const { units = [], noOfFloors,additionalDetails={} } = propertyDetails || {};
   var construction_date =(additionalDetails && additionalDetails.constructionYear)? moment(additionalDetails.constructionYear).format('DD-MM-YYYY'):null;
+  let usageType = generalMDMSDataById["PropertyType"][propertyDetails.propertyType].code;
+    usageType = usageType.split(".");
+    usageType = usageType[1];
 
   return (
     propertyDetails && [
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-        value: propertyDetails.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor : "NA", //noOfFloors
+        value: propertyDetails.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor.toUpperCase() : "NA", //noOfFloors
       },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
         value: generalMDMSDataById
                 ? generalMDMSDataById["PropertyType"]
-                  ? generalMDMSDataById["PropertyType"][propertyDetails.propertyType].name
+                ? `PROPERTYTAX_BILLING_SLAB_${usageType}`
+                  // ? getTranslatedLabel(generalMDMSDataById["PropertyType"][propertyDetails.propertyType].code,localizationLabelsData.PropertyType)
                   : "NA"
               : "NA",
       },

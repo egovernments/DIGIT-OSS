@@ -156,6 +156,7 @@ export const innerDimensions = {
     dropDownData: innerDimensionsData,
     required:true,
     localePrefix: "COMMON_MASTER",
+    value:"false",
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
       innnerDimentionUtilFucntion(value,dispatch,formKey);
@@ -571,6 +572,14 @@ export const beforeInitFormForPlot = {
     let { dispatch } = store;
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
     // const propertyUsage = get(state, "form.basicInformation.fields.typeOfUsage.value")
+    innerDimensionsData = innerDimensionsData.map(item =>{
+      return {
+        value:item.value,
+        label: item.label === "YES"? getTranslatedLabel("COMMON_MASTER_TRUE",state.app.localizationLabels)
+                :getTranslatedLabel("COMMON_MASTER_FALSE",state.app.localizationLabels)
+      }
+    })
+    set(action,"form.fields.innerDimensions.dropDownData",innerDimensionsData)
     const { Floor } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "BUILTUP.SHAREDPROPERTY") {
