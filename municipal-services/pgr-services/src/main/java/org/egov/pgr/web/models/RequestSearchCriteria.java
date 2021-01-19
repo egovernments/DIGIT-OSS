@@ -52,6 +52,12 @@ public class RequestSearchCriteria {
     @JsonProperty("toDate")
     private Long toDate;
 
+    @JsonProperty("slaDeltaMaxLimit")
+    private Long slaDeltaMaxLimit;
+
+    @JsonProperty("slaDeltaMinLimit")
+    private Long slaDeltaMinLimit;
+
     @JsonProperty("limit")
     private Integer limit;
 

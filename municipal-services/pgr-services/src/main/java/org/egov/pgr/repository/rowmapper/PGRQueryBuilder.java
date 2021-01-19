@@ -87,6 +87,22 @@ public class PGRQueryBuilder {
             addToPreparedStatement(preparedStmtList, ids);
         }
 
+        //When UI tries to fetch "escalated" complaints count.
+        if(criteria.getSlaDeltaMaxLimit() != null && criteria.getSlaDeltaMinLimit() == null){
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" ((extract(epoch FROM NOW())*1000) - ser.createdtime) > ? ");
+            preparedStmtList.add(criteria.getSlaDeltaMaxLimit());
+        }
+        //When UI tries to fetch "other" complaints count.
+        if(criteria.getSlaDeltaMaxLimit() != null && criteria.getSlaDeltaMinLimit() != null){
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" ((extract(epoch FROM NOW())*1000) - ser.createdtime) > ? ");
+            preparedStmtList.add(criteria.getSlaDeltaMinLimit());
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" ((extract(epoch FROM NOW())*1000) - ser.createdtime) < ? ");
+            preparedStmtList.add(criteria.getSlaDeltaMaxLimit());
+        }
+
         Set<String> userIds = criteria.getUserIds();
         if (!CollectionUtils.isEmpty(userIds)) {
             addClauseIfRequired(preparedStmtList, builder);
