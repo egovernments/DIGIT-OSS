@@ -146,12 +146,14 @@ public class PropertyQueryBuilder {
 			appendAndQuery= true;
 		}
 		
-		if (null != criteria.getLocality()) {
+		if (null != criteria.getLocality() && null != criteria.getDoorNo()) {
 
 			if(appendAndQuery)
 				builder.append(AND_QUERY);
 			builder.append("address.locality = ?");
+			builder.append("address.doorno = ?");
 			preparedStmtList.add(criteria.getLocality());
+			preparedStmtList.add(criteria.getDoorNo());
 			appendAndQuery= true;
 		}
 
