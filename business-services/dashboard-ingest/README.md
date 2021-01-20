@@ -12,7 +12,7 @@ Dashboard-Ingest module runs as a pipeline and manages to validate, transform an
 
 ### Swagger API Contract
 
-- Please refer to the [Swagger API contarct](https://github.com/egovernments/business-services/blob/dss-dashboards/Docs/dss-dashboard/DSS%20Ingest%20YAML%20Spec%201.0.0.yaml) for egov-pg service to understand the structure of APIs and to have visualization of all internal APIs.
+- Please refer to the [Swagger API contarct](https://raw.githubusercontent.com/egovernments/business-services/master/Docs/dss-dashboard/DSS%20Ingest%20YAML%20Spec%201.0.0.yaml) for dashboard-ingest to understand the structure of APIs and to have visualization of all internal APIs.
 
 
 ## Service Details
