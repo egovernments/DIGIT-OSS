@@ -14,4 +14,13 @@
     z-index: 2000;
     max-height: 150px;
     overflow: auto; }
+    .autocomplete-mohalla {
+      min-width: 30% ;
+      max-width: 80%;
   
+  }
+  .autocomplete-mohalla div{
+    min-width: 30%;
+    max-width: 100%;
+    overflow-x: hidden;
+}

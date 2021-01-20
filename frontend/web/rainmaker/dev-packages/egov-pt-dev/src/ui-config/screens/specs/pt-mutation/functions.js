@@ -164,7 +164,7 @@ const searchApiCall = async (state, dispatch, index) => {
 
   let formValid = false;
   if (index == 0) {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '') {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '' || (searchScreenObject.locality && searchScreenObject.doorNo) ) {
       formValid = true;
     }
   } else {
@@ -350,6 +350,14 @@ const searchApiCall = async (state, dispatch, index) => {
           queryObject.push({
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "dayend")
+          });
+        }
+        else if(key === "locality"){
+          let locl = searchScreenObject[key].substr(searchScreenObject[key].indexOf("M"))
+
+          queryObject.push({
+            key: key,
+            value: locl
           });
         }
         // else if (key === "status") {

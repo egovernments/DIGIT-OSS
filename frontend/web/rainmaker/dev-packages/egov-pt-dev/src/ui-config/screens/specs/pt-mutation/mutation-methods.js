@@ -79,6 +79,23 @@ export const resetFields = (state, dispatch) => {
       ""
     )
   );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.houseNumber",
+      "props.value",
+      ""
+    )
+  );
+  
   dispatch(prepareFinalObject(
     "searchScreen.acknowledgementIds",
     ''
@@ -93,6 +110,14 @@ export const resetFields = (state, dispatch) => {
   ))
   dispatch(prepareFinalObject(
     "searchScreen.oldpropertyids",
+    ''
+  ))
+  dispatch(prepareFinalObject(
+    "searchScreen.locality",
+    ''
+  ))
+  dispatch(prepareFinalObject(
+    "searchScreen.doorNo",
     ''
   ))
 
@@ -189,6 +214,58 @@ export const searchPropertyDetails = getCommonCard({
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
       jsonPath: "searchScreen.ids"
+    }),
+    mohalla: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "AutosuggestContainer",
+      props: {
+        className: "autocomplete-dropdown autocomplete-mohalla",
+        suggestions: [],
+        label: {
+          labelName: "Mohalla",
+          labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+        },
+        placeholder: {
+          labelName: "Select mohala",
+          labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
+        },
+        jsonPath: "searchScreen.locality",
+        sourceJsonPath: "searchScreenMdmsData.tenant.localities",
+        labelsFromLocalisation: true,
+        required: true,
+        isClearable: true,
+        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+        inputLabelProps: {
+          shrink: true
+        }
+      },
+      // required: true,
+      jsonPath: "searchScreen.locality",
+      sourceJsonPath: "searchScreenMdmsData.tenant.localities",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    },
+    houseNumber: getTextField({
+      label: {
+        labelName: "House/Shop No.",
+        labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
+      },
+      placeholder: {
+        labelName: "Enter House no.",
+        labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        
+      },
+      required: false,
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_INVALID_PROPERTY_ID",
+      jsonPath: "searchScreen.doorNo"
     }),
     existingPropertyId: getTextField({
       label: {

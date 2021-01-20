@@ -8,6 +8,7 @@ import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
 import { showHideAdhocPopup } from "../utils";
+import { httpRequest } from "../../../../ui-utils";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -44,6 +45,33 @@ const getMDMSData = async (action, dispatch) => {
         );
       }
     })
+      let mohallaPayload = await httpRequest(
+        "post",
+        "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+        "_search",
+        [{ key: "tenantId", value: tenant }],
+        {}
+      );
+      if(mohallaPayload &&
+        mohallaPayload.TenantBoundary[0] &&
+        mohallaPayload.TenantBoundary[0].boundary){
+  
+          const mohallaData =
+          mohallaPayload.TenantBoundary[0].boundary.reduce((result, item) => {
+            result.push({
+              ...item,
+              code: `${tenant
+                .toUpperCase()
+                .replace(/[.]/g, "_")}_REVENUE_${item.code
+                .toUpperCase()
+                .replace(/[._:-\s\/]/g, "_")}`
+            });
+            return result;
+          }, []);
+          dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
+  
+        }
+    
     // const payload = await httpRequest(
     //   "post",
     //   "/egov-mdms-service/v1/_search",
