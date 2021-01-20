@@ -566,6 +566,7 @@ let getModifiedPayment = (payments) =>{
             break;
         }
       })
+      tax = tax-Math.abs(rebate);
     }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
       billdetail.billAccountDetails.forEach(billAccountDetail =>{
         switch (billAccountDetail.taxHeadCode) {
