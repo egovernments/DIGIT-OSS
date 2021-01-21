@@ -148,9 +148,13 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
 
   const { units = [], noOfFloors,additionalDetails={} } = propertyDetails || {};
   var construction_date =(additionalDetails && additionalDetails.constructionYear)? moment(additionalDetails.constructionYear).format('DD-MM-YYYY'):null;
-  let usageType = generalMDMSDataById["PropertyType"][propertyDetails.propertyType].code;
+   let usageType = generalMDMSDataById["PropertyType"] && 
+          generalMDMSDataById["PropertyType"][propertyDetails.propertyType] && 
+          generalMDMSDataById["PropertyType"][propertyDetails.propertyType].code;
+  if(usageType != "VACANT"){
     usageType = usageType.split(".");
     usageType = usageType[1];
+  }
 
   return (
     propertyDetails && [
