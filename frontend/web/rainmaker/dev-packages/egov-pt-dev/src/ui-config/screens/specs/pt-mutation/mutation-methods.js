@@ -11,6 +11,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { propertySearch, applicationSearch } from "./functions";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
 // import "./index.css";
 
 
@@ -229,6 +231,10 @@ export const searchPropertyDetails = getCommonCard({
         placeholder: {
           labelName: "Select mohala",
           labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName:getTenantId(),
+          masterName: "REVENUE"
         },
         jsonPath: "searchScreen.locality",
         sourceJsonPath: "searchScreenMdmsData.tenant.localities",

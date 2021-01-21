@@ -2,13 +2,14 @@ import commonConfig from "config/common.js";
 import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
 import { showHideAdhocPopup } from "../utils";
 import { httpRequest } from "../../../../ui-utils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -60,16 +61,16 @@ const getMDMSData = async (action, dispatch) => {
           mohallaPayload.TenantBoundary[0].boundary.reduce((result, item) => {
             result.push({
               ...item,
-              code: `${tenant
-                .toUpperCase()
-                .replace(/[.]/g, "_")}_REVENUE_${item.code
-                .toUpperCase()
-                .replace(/[._:-\s\/]/g, "_")}`
+              code: item.code
             });
             return result;
+            // code: `${tenant
+            //   .toUpperCase()
+            //   .replace(/[.]/g, "_")}_REVENUE_${item.code
+            //   .toUpperCase()
+            //   .replace(/[._:-\s\/]/g, "_")}`
           }, []);
           dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
-  
         }
     
     // const payload = await httpRequest(
@@ -129,7 +130,7 @@ const screenConfig = {
 
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
-    
+    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
     return action;
   },

@@ -352,14 +352,6 @@ const searchApiCall = async (state, dispatch, index) => {
             value: convertDateToEpoch(searchScreenObject[key], "dayend")
           });
         }
-        else if(key === "locality"){
-          let locl = searchScreenObject[key].substr(searchScreenObject[key].indexOf("M"))
-
-          queryObject.push({
-            key: key,
-            value: locl
-          });
-        }
         // else if (key === "status") {
         //   queryObject.push({
         //     key: "action",
