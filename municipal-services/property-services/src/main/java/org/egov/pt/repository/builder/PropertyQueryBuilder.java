@@ -123,7 +123,9 @@ public class PropertyQueryBuilder {
 					&& CollectionUtils.isEmpty(criteria.getOldpropertyids())
 					&& CollectionUtils.isEmpty(criteria.getUuids())
 					&& null == criteria.getMobileNumber()
-					&& null == criteria.getName();
+					&& null == criteria.getName()
+					&& null == criteria.getLocality()
+					&& null == criteria.getDoorNo();
 		
 		if(isEmpty)
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No criteria given for the property search");
@@ -151,6 +153,7 @@ public class PropertyQueryBuilder {
 			if(appendAndQuery)
 				builder.append(AND_QUERY);
 			builder.append("address.locality = ?");
+			builder.append(AND_QUERY);
 			builder.append("address.doorno = ?");
 			preparedStmtList.add(criteria.getLocality());
 			preparedStmtList.add(criteria.getDoorNo());
