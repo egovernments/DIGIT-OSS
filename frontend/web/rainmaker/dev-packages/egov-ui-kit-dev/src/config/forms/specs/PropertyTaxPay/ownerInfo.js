@@ -83,6 +83,7 @@ const formConfig = {
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       dropDownData: [],
       fullWidth: true,
+      menuHeight :"200px",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
         const { value } = sourceField;

@@ -237,7 +237,7 @@ class ReactSelectDropdown extends React.Component {
     // inputValue = {result}
      isDisabled={disabled}
      isSearchable = "true"
-     maxMenuHeight = {menuHeight}
+     maxMenuHeight={menuHeight}
      //defaultValue ={label}
      /*  floatingLabelShrinkStyle={floatingLabelBaseShrinkStyle}
      floatingLabelFixed={true}      
