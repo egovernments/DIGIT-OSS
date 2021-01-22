@@ -510,12 +510,13 @@ public class PropertyValidator {
      */
 	private void validateAssessees(PropertyRequest request,Property propertyFromSearch, Map<String, String> errorMap) {
 
+		String mobileNumberFromRequestInfo = request.getRequestInfo().getUserInfo().getMobileNumber();
 		String uuid = request.getRequestInfo().getUserInfo().getUuid();
 		Property property = request.getProperty();
 
-		Set<String> ownerIds = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
+		Set<String> ownerMobileNumbers = propertyFromSearch.getOwners().stream().map(OwnerInfo::getMobileNumber).collect(Collectors.toSet());
 
-		if (!(ownerIds.contains(uuid) || uuid.equalsIgnoreCase(propertyFromSearch.getAccountId()))) {
+		if (!(ownerMobileNumbers.contains(mobileNumberFromRequestInfo) || uuid.equalsIgnoreCase(propertyFromSearch.getAccountId()))) {
 			errorMap.put("EG_PT_UPDATE AUTHORIZATION FAILURE",
 					"Not Authorized to update property with propertyId " + property.getPropertyId());
 		}

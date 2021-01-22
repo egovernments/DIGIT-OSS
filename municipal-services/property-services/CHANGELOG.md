@@ -1,9 +1,15 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.3 - 2021-01-22
+
+- MobileNuber based user validation for update
+
+## 1.1.3
+
 ## 1.1.2 - 2021-01-12
 
-- Mutation & create duplicat eowner issue fixed
+- Mutation & create duplicate owner issue fixed
 - builtup/unit area validation added
 
 ## 1.1.2 
