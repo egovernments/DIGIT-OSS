@@ -18,6 +18,9 @@ import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
 import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
 import "./pay.css";
+import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+
 
 const header = getCommonContainer({
     header: getCommonHeader({
@@ -197,6 +200,72 @@ const getPaymentCard = () => {
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.tenantId", tenantId));
 };
 
+const fetchBillingServiceData = async(state,tenantId) =>{
+    let mdmsBody = {
+        MdmsCriteria: {
+          tenantId: tenantId,
+          moduleDetails: [
+            {
+              moduleName: "BillingService",
+              masterDetails: [
+                {
+                  name: "TaxHeadMaster"
+                },
+                {
+                  name: "TaxPeriod"
+                }
+              ]
+            }
+          ]
+        }
+      };
+      try {
+          console.log("mounika",mdmsBody)
+        const payload1 = await httpRequest(
+          "post",
+          "/egov-mdms-service/v1/_search",
+          "_search",
+          [],
+          mdmsBody
+        )
+        console.log("mounika",payload1)
+          
+        const MdmsData = payload1.MdmsRes;
+        const yeardataInfo =
+        (MdmsData && MdmsData.BillingService.TaxPeriod) || {};
+
+        const taxDataInfo =
+        (MdmsData && MdmsData.BillingService.TaxHeadMaster) || {};
+        let yeardata = [];
+        let taxData = [];
+        const data = Object.keys(yeardataInfo).map((key, index) => {
+        yeardata.push(yeardataInfo[key]);
+        });
+        const data2 = Object.keys(taxDataInfo).map((key, index) => {
+        taxData.push(taxDataInfo[key]);
+        });
+        let yeardata1 = yeardata.filter(yearKey => yearKey.service === "PT");
+        let taxdata1 =
+        taxData.filter(tax => tax.service === "PT" && tax.legacy == true) || [];
+        taxdata1.length > 0 &&
+        taxdata1.sort(function(a, b) {
+            return a.order - b.order;
+        });
+        const finalData = Object.keys(yeardata1).map((data, key) => {
+        yeardata1[data]["taxHead"] = [...taxdata1];
+        return yeardata[data];
+        });
+        console.log("finalData",finalData)
+        {
+        finalData && finalData.length
+            ? localStorage.setItem("finalData", JSON.stringify(finalData))
+            : "error";
+        }
+
+      } catch (e) {
+        console.log(e);
+      }
+}
 
 const screenConfig = {
     uiFramework: "material-ui",
@@ -205,6 +274,7 @@ const screenConfig = {
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
+        fetchBillingServiceData(state,tenantId)
         fetchBill(state, dispatch, consumerCode, tenantId, businessService);
         const data = getPaymentCard();
         set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
