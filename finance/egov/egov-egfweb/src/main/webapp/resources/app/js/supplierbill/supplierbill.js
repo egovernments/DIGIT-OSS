@@ -276,7 +276,7 @@ function addDebitDetailsRow() {
 	$('.debitGlcode').typeahead('destroy');
 	$('.debitGlcode').unbind();
 	var rowcount = $("#tbldebitdetails tbody tr").length;
-	if (rowcount < 30) {
+	if (rowcount < 40) {
 		if (document.getElementById('debitdetailsrow') != null) {
 			addRow('tbldebitdetails','debitdetailsrow');
 			$('#tbldebitdetails tbody tr:eq('+rowcount+')').find('.debitDetailGlcode').val('');
@@ -311,7 +311,7 @@ function addCreditDetailsRow() {
 	$('.creditGlcode').typeahead('destroy');
 	$('.creditGlcode').unbind();
 	var rowcount = $("#tblcreditdetails tbody tr").length;
-	if (rowcount < 30) {
+	if (rowcount < 40) {
 		if (document.getElementById('creditdetailsrow') != null) {
 			addRow('tblcreditdetails','creditdetailsrow');
 			$('#tblcreditdetails tbody tr:eq('+rowcount+')').find('.creditDetailGlcode').val('');
