@@ -1194,9 +1194,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.101"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.101.tgz#22000cbd575ddabba24c2a60fa8ebb2d15809420"
-  integrity sha512-n/WrtJeLm1ssRAi4GSXQzOMOJbTRvauZ8QeiGkHuC1Vfa1W490kz5s1uxH4r1ajTeqLLLvPlY4StczkQak7G/w==
+  version "1.0.102"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.102.tgz#097faebda395bc8cc8aafb1b684f5bb2929e518f"
+  integrity sha512-D1Krf2M87PIOwMHVaTWAR0DHaGOoSsmXPDdnDnfimIwnXAXGNoEUgyucrGJm6UnwuRZLQGbeTVgixU/RSfwy4w==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
