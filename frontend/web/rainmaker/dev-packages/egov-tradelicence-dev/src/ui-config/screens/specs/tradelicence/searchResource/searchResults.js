@@ -1,76 +1,101 @@
+import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getLocaleLabels, getStatusKey } from "egov-ui-framework/ui-utils/commons";
+// import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import React from "react";
-import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
+import { getEpochForDate, sortByEpoch } from "../../utils";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("License No"),
-      getTextToLocalMapping("Trade Name"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
-      getTextToLocalMapping("Financial Year"),
       {
-        name: getTextToLocalMapping("Application Type"),
+        labelName: "Application No",
+        labelKey: "TL_COMMON_TABLE_COL_APP_NO",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => (
+            <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
+          )
+        }
+      },
+      {
+        labelName: "License No",
+        labelKey: "TL_COMMON_TABLE_COL_LIC_NO"
+      },
+      {
+        labelName: "Trade Name",
+        labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
+      },
+      {
+        labelName: "Owner Name",
+        labelKey: "TL_COMMON_TABLE_COL_OWN_NAME"
+      },
+      {
+        labelName: "Application Date",
+        labelKey: "TL_COMMON_TABLE_COL_APP_DATE"
+      },
+      {
+        labelName: "Financial Year",
+        labelKey: "TL_COMMON_TABLE_COL_FIN_YEAR"
+      },
+      {
+        labelName: "Application Type",
+        labelKey: "TL_COMMON_TABLE_COL_APP_TYPE",
         options: {
           filter: false,
           customBodyRender: value => (
             <span>
-              {getTextToLocalMapping(value)}
+              {getLocaleLabels(value, value)}
             </span>
           )
         }
       },
       {
-        name: getTextToLocalMapping("Status"),
+        labelName: "Status",
+        labelKey: "TL_COMMON_TABLE_COL_STATUS",
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
+            <LabelContainer
               style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
+                value.includes("APPROVED") ? { color: "green" } : { color: "red" }
               }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
         }
       },
       {
-        name: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       },
       {
-        name:"status1",
+        labelName: "Status",
+        labelKey: "TL_COMMON_TABLE_COL_STATUS",
         options: {
           display: false
         }
       },
 
     ],
-    title: getTextToLocalMapping(
-      "Search Results for Trade License Applications"
-    ),
+    title: {
+      labelName: "Search Results for Trade License Applications",
+      labelKey: "TL_HOME_SEARCH_RESULTS_TABLE_HEADING"
+    },
+    rows: "",
     options: {
       filter: false,
       download: false,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onRowClick(row);
-      }
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Application Date",
