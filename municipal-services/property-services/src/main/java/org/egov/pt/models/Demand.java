@@ -47,6 +47,10 @@ public class Demand   {
         @JsonProperty("businessService")
         private String businessService;
 
+        @Valid
+        @JsonProperty("payer")
+        private User payer;
+
         @NotNull
         @JsonProperty("taxPeriodFrom")
         private Long taxPeriodFrom;
