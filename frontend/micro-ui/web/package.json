@@ -6,6 +6,7 @@
   "homepage": "/digit-ui",
   "dependencies": {
     "@egovernments/digit-ui-libraries": "^1.0.0",
+    "@egovernments/digit-ui-module-common": "^1.0.0",
     "@egovernments/digit-ui-module-core": "^1.0.0",
     "@egovernments/digit-ui-module-fsm": "^1.0.0",
     "@egovernments/digit-ui-module-pgr": "^1.0.0",

@@ -1156,6 +1156,25 @@
     react-redux "^7.2.1"
     redux "^4.0.5"
 
+"@egovernments/digit-ui-module-common@^1.0.0":
+  version "1.0.87"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-common/-/digit-ui-module-common-1.0.87.tgz#3dc635874c6cddaa2e1593a3ddcf84785359326a"
+  integrity sha512-Dc1ocOrzpyGG5GPPRqdUIMrDIWnmASXDS/jcZh++fqHQpenUI6rZ3e3P9QRbou0ENZwSPlyCfsCVydGfYHy/zA==
+  dependencies:
+    "@egovernments/digit-ui-libraries" "^1.0.0"
+    "@egovernments/digit-ui-react-components" "^1.0.0"
+    react "^17.0.0"
+    react-dom "^17.0.0"
+    react-hook-form "^6.7.0"
+    react-i18next "^11.7.3"
+    react-query "^3.2.0"
+    react-redux "^7.2.1"
+    react-router-dom "^5.2.0"
+    react-table "^7.6.1"
+    redux "^4.0.5"
+    redux-thunk "^2.3.0"
+    rooks "^4.4.0"
+
 "@egovernments/digit-ui-module-core@^1.0.0":
   version "1.0.87"
   resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.87.tgz#6c04c3354ef39730856d1d852707829a8047a1c6"
@@ -4541,9 +4560,9 @@ ejs@^2.6.1:
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
 electron-to-chromium@^1.3.564, electron-to-chromium@^1.3.634:
-  version "1.3.645"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.645.tgz#c0b269ae2ecece5aedc02dd4586397d8096affb1"
-  integrity sha512-T7mYop3aDpRHIQaUYcmzmh6j9MAe560n6ukqjJMbVC6bVTau7dSpvB18bcsBPPtOSe10cKxhJFtlbEzLa0LL1g==
+  version "1.3.647"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.647.tgz#8f1750ab7a5137f1a9a27f8f4ebdf550e08ae10b"
+  integrity sha512-Or2Nu8TjkmSywY9hk85K/Y6il28hchlonITz30fkC87qvSNupQl29O12BzDDDTnUFlo6kEIFL2QGSpkZDMxH8g==
 
 elliptic@^6.5.3:
   version "6.5.3"
@@ -10264,6 +10283,11 @@ rollup@^1.31.1:
     "@types/node" "*"
     acorn "^7.1.0"
 
+rooks@^4.4.0:
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/rooks/-/rooks-4.7.1.tgz#fbcfd3b0635bf06ae6c9a4d95b497b7b6faf66dd"
+  integrity sha512-t60ISx+IOHdW4cyGeuXfnOIVCPk8vPoM9Ef9UjZzDZwJqXrdJ7866Rb+tlG+mB8qaXCd9IW9fa9skRW4u4v78w==
+
 rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
@@ -10811,9 +10835,9 @@ ssri@^6.0.1:
     figgy-pudding "^3.5.1"
 
 ssri@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/ssri/-/ssri-8.0.0.tgz#79ca74e21f8ceaeddfcb4b90143c458b8d988808"
-  integrity sha512-aq/pz989nxVYwn16Tsbj1TqFpD5LLrQxHf5zaHuieFV+R0Bbr4y8qUsOA45hXT/N4/9UNXTarBjnjVmjSOVaAA==
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/ssri/-/ssri-8.0.1.tgz#638e4e439e2ffbd2cd289776d5ca457c4f51a2af"
+  integrity sha512-97qShzy1AiyxvPNIkLWoGua7xoQzzPjQ0HAH4B0rWKo7SZ6USuPcrUiAFrws0UH8RrbWmgq3LMTObhPIHbbBeQ==
   dependencies:
     minipass "^3.1.1"
 
