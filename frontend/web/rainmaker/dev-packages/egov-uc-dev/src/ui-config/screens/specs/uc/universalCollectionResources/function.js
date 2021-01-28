@@ -73,15 +73,6 @@ export const searchApiCall = async (state, dispatch) => {
       )
     );
   } 
-  //else if (
-  //   (searchScreenObject["fromDate"] === undefined ||
-  //     searchScreenObject["fromDate"].length === 0) &&
-  //   searchScreenObject["toDate"] !== undefined &&
-  //   searchScreenObject["toDate"].length !== 0
-  // ) {
-  //   dispatch(toggleSnackbar(true, "Please fill From Date", "warning"));
-  // } 
-  
   else {
     for (var key in searchScreenObject) {
       if (searchScreenObject.hasOwnProperty(key) && key === "businessServices") {
@@ -130,13 +121,13 @@ export const searchApiCall = async (state, dispatch) => {
 
       try {
         let data = response.map(item => ({
-          [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
-          [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
-          [getTextToLocalMapping("Service Type")]: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
-          [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
-          [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
-          [getTextToLocalMapping("Status")]: item.status || "-",
-          ["tenantId"]: item.tenantId || "-"
+          ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+          ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
+          ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+          ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
+          ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
+          ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
+          ["TENANT_ID"]: item.tenantId || "-"
         }));
         dispatch(
           handleField(
