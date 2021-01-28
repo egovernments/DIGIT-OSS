@@ -54,7 +54,7 @@ $(document).ready(function(){
 function addRow(tableName,rowName) { 
 	
 	var rowcount = $("#"+tableName+" tbody tr").length;
-	if (rowcount < 40) {
+	if (rowcount < 80) {
 		if (document.getElementById(rowName) != null) {
 			// get Next Row Index to Generate
 			var nextIdx = 0;
