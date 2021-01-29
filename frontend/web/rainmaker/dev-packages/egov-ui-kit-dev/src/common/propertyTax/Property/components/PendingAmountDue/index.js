@@ -44,7 +44,7 @@ class PendingAmountDialog extends Component {
             </p>
             
             <div className="text-right" style={{ marginTop: 10 }}>
-              <Label className="footer-amount" labelClassName="footer-amount" label="PT_MUTATION_RS" fontSize="24px" /><span className="footer-amount-no" > {amount}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <span className="footer-amount-no" > {`${getLocaleLabels("PT_MUTATION_RS", "PT_MUTATION_RS")} ${amount}`}</span>&nbsp;&nbsp;&nbsp;&nbsp;
               <Button
                 label={<Label buttonLabel={true} label="PT_PROCEED_TO_PAY" fontSize="16px" labelClassName="footer-button-label" />}
                 primary={true}
