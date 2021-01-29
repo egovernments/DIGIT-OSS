@@ -34,6 +34,7 @@ import filter from "lodash/filter";
 import { convertEpochToDate,getAllDataFromBillingSlab } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {httpRequest} from "../../../../../ui-utils"
+import { getUserInfo } from "egov-ui-framework/ui-utils/localStorageUtils";
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
@@ -874,7 +875,7 @@ export const tradeDetails = getCommonCard({
             masterName: "ApplicationType"
           },
           props:{
-            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit"  ? true:false,
           },
           jsonPath:
             "Licenses[0].applicationType",
