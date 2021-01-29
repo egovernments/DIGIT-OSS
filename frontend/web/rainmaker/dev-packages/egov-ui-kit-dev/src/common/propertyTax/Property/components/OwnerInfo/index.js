@@ -319,6 +319,10 @@ class OwnerInfo extends Component {
                 key: getTranslatedLabel("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", localizationLabelsData),
                 value: owner.fatherOrHusbandName || "NA",
               },
+              {
+                key: getTranslatedLabel("PT_FORM3_RELATIONSHIP", localizationLabelsData),
+                value: owner.relationship || "NA",
+              },
             isInstitution
               ? {
                 key: getTranslatedLabel("PT_OWNERSHIP_INFO_TYPE_INSTI", localizationLabelsData),
