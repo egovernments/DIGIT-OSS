@@ -75,7 +75,9 @@ const commonApplicantInformation = () => {
               labelKey: "PT_MUTATION_TRANSFEREE_GENDER_TRANSGENDER_RADIOBUTTON",
               value: "TRANSGENDER"
             }
-          ],
+         ],
+         jsonPath:
+              "Property.ownersTemp[0].gender",          
 
           required: true,
           errorMessage: "Required",
