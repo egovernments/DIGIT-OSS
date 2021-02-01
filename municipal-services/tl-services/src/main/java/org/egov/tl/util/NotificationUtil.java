@@ -93,10 +93,12 @@ public class NotificationUtil {
 			message = getRejectedMsg(license, messageTemplate);
 			break;
 
-		case ACTION_STATUS_FIELDINSPECTION:
-			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_FIELD_INSPECTION, localizationMessage);
-			message = getFieldInspectionMsg(license, messageTemplate);
-			break;
+		/*
+		 * case ACTION_STATUS_FIELDINSPECTION: messageTemplate =
+		 * getMessageTemplate(TLConstants.NOTIFICATION_FIELD_INSPECTION,
+		 * localizationMessage); message = getFieldInspectionMsg(license,
+		 * messageTemplate); break;
+		 */
 
 		case ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION:
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_CITIZEN, localizationMessage);
@@ -118,10 +120,11 @@ public class NotificationUtil {
 			message = getSendBackToInspcetionMsg(license, messageTemplate);
 			break;
 			
-		  case ACTION_STATUS_PENDINGAPPROVAL:
-	          messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
-	          message = getPendingApprovalMsg(license, messageTemplate);
-	          break;
+		/*
+		 * case ACTION_STATUS_PENDINGAPPROVAL: messageTemplate =
+		 * getMessageTemplate(NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
+		 * message = getPendingApprovalMsg(license, messageTemplate); break;
+		 */
 	          
 		  case ACTION_STATUS_FORWARD_APPLIED:
               messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_STATUS_FORWARD_APPLIED, localizationMessage);

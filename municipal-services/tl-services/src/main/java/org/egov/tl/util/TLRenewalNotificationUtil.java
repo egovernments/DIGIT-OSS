@@ -75,15 +75,19 @@ public class TLRenewalNotificationUtil {
                 message = getAppliedMsg(license, messageTemplate);
                 break;
 
-            case ACTION_STATUS_FIELDINSPECTION:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_FIELD_INSPECTION, localizationMessage);
-                message = getFieldInspectionMsg(license, messageTemplate);
-                break;
+		/*
+		 * case ACTION_STATUS_FIELDINSPECTION: messageTemplate =
+		 * getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_FIELD_INSPECTION,
+		 * localizationMessage); message = getFieldInspectionMsg(license,
+		 * messageTemplate); break;
+		 */
 
-            case ACTION_STATUS_PENDINGAPPROVAL:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
-                message = getPendingApprovalMsg(license, messageTemplate);
-                break;
+		/*
+		 * case ACTION_STATUS_PENDINGAPPROVAL: messageTemplate =
+		 * getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_PENDINGAPPROVAL,
+		 * localizationMessage); message = getPendingApprovalMsg(license,
+		 * messageTemplate); break;
+		 */
 
             case ACTION_STATUS_REJECTED:
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_REJECTED, localizationMessage);
