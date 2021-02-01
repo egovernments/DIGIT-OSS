@@ -62,53 +62,40 @@ public class UserService {
      * @param request PropertyRequest received for creating properties
      */
     public void createUser(PropertyRequest request){
-    	
+  	
         Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
 		Role role = getCitizenRole();
 		List<OwnerInfo> owners = property.getOwners();
-		Set<String> listOfMobileNumbers = getMobileNumbers(property, requestInfo, property.getTenantId());
 
-		owners.forEach(owner -> {
+		for (OwnerInfo ownerFromRequest : owners) {
 
-			addUserDefaultFields(property.getTenantId(), role, owner);
-			UserDetailResponse userDetailResponse = userExists(owner, requestInfo);
+			addUserDefaultFields(property.getTenantId(), role, ownerFromRequest);
+			UserDetailResponse userDetailResponse = userExists(ownerFromRequest, requestInfo);
+			List<OwnerInfo> existingUsersFromService = userDetailResponse.getUser();
+			Map<String, OwnerInfo> ownerMapFromSearch = existingUsersFromService.stream().collect(Collectors.toMap(OwnerInfo::getUuid, Function.identity()));
 
-			if (CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+			if (CollectionUtils.isEmpty(existingUsersFromService)) {
+
+				ownerFromRequest.setUserName(UUID.randomUUID().toString());
+				userDetailResponse = createUser(requestInfo, ownerFromRequest);
 				
-				/*
-				 * Sets userName equal to mobileNumber
-				 * 
-				 *  If mobileNumber already assigned as user-name for another user
-				 *  
-				 *  then random uuid is assigned as user-name
-				 */
-				StringBuilder uri = new StringBuilder(userHost).append(userContextPath).append(userCreateEndpoint);
-				setUserName(owner, listOfMobileNumbers);
-
-				CreateUserRequest userRequest = CreateUserRequest.builder()
-						.requestInfo(requestInfo)
-						.user(owner)
-						.build();
-
-				userDetailResponse = userCall(userRequest, uri);
-				
-				if (ObjectUtils.isEmpty(userDetailResponse)) {
-
-					throw new CustomException("INVALID USER RESPONSE",
-							"The user create has failed for the mobileNumber : " + owner.getUserName());
-				}
-
 			} else {
 
-				userDetailResponse = updateExistingUser(property, requestInfo, role, owner, userDetailResponse.getUser().get(0));
+				String uuid = ownerFromRequest.getUuid();
+				if (uuid != null && ownerMapFromSearch.containsKey(uuid)) {
+					userDetailResponse = updateExistingUser(property, requestInfo, role, ownerFromRequest, ownerMapFromSearch.get(uuid));
+				} else {
+
+					ownerFromRequest.setUserName(UUID.randomUUID().toString());
+					userDetailResponse = createUser(requestInfo, ownerFromRequest);
+				}
 			}
 			// Assigns value of fields from user got from userDetailResponse to owner object
-			setOwnerFields(owner, userDetailResponse, requestInfo);
-		});
+			setOwnerFields(ownerFromRequest, userDetailResponse, requestInfo);
+		}
 	}
-
-
+    
     /**
      * update existing user
      * 
