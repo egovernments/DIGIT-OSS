@@ -2,7 +2,7 @@ import {
   getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,
-
+  getLabelWithValue,
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -57,7 +57,7 @@ export const transfereeSummary = getCommonGrayCard({
       className: "owner-summary",
       scheama: getCommonGrayCard({
         ownerContainer: getCommonContainer({
-          ownerName: getLabelWithValueForModifiedLabel(
+          ownerName: getLabelWithValue(
             {
               labelName: "Name",
               labelKey: "PT_OWNERSHIP_INFO_NAME"
@@ -66,11 +66,8 @@ export const transfereeSummary = getCommonGrayCard({
               jsonPath:
                 "Property.ownersTemp[0].name",
               callBack: checkValueForNA
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownersTemp[0].name", callBack: checkValueForNA },
-          ), ownerFatherHusbandName: getLabelWithValueForModifiedLabel(
+            }
+        ), ownerFatherHusbandName: getLabelWithValue(
             {
               labelName: "Guardian's Name",
               labelKey: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
@@ -79,11 +76,8 @@ export const transfereeSummary = getCommonGrayCard({
               jsonPath:
                 "Property.ownersTemp[0].fatherOrHusbandName",
               callBack: checkValueForNA
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownersTemp[0].fatherOrHusbandName", callBack: checkValueForNA },
-          ), ownerGender: getLabelWithValueForModifiedLabel(
+            }
+          ),  ownerGender: getLabelWithValue(
             {
               labelName: "Gender",
               labelKey: "PT_OWNERSHIP_INFO_GENDER"
@@ -92,11 +86,8 @@ export const transfereeSummary = getCommonGrayCard({
               jsonPath:
                 "Property.ownersTemp[0].gender",
               callBack: checkValueForNA
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownersTemp[0].gender", callBack: checkValueForNA },
-          ), ownerType: getLabelWithValueForModifiedLabel(
+            }
+          ), ownerType: getLabelWithValue(
             {
               labelName: "Type of Ownership",
               labelKey: "PT_FORM3_OWNERSHIP_TYPE"
@@ -105,12 +96,9 @@ export const transfereeSummary = getCommonGrayCard({
               jsonPath:
                 "Property.ownershipCategoryTemp",
               callBack: checkValueForNA
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownershipCategoryTemp", callBack: checkValueForNA },
+            }
           ),
-          mobileNo: getLabelWithValueForModifiedLabel(
+          mobileNo: getLabelWithValue(
             {
               labelName: "Mobile No.",
               labelKey: "PT_OWNERSHIP_INFO_MOBILE_NO"
@@ -119,11 +107,8 @@ export const transfereeSummary = getCommonGrayCard({
               jsonPath:
                 "Property.ownersTemp[0].mobileNumber",
               callBack: checkValueForNA
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownersTemp[0].mobileNumber", callBack: checkValueForNA },
-          ), ownerEmail: getLabelWithValueForModifiedLabel(
+            }
+            ),  ownerEmail: getLabelWithValue(
             {
               labelName: "Email",
               labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
@@ -132,12 +117,9 @@ export const transfereeSummary = getCommonGrayCard({
               jsonPath:
                 "Property.ownersTemp[0].emailId",
               callBack: checkValueForNA
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownersTemp[0].emailId", callBack: checkValueForNA },
+            }
           ),
-          ownerDob: getLabelWithValueForModifiedLabel(
+          ownerDob: getLabelWithValue(
             {
               labelName: "Special Category",
               labelKey: "PT_OWNERSHIP_INFO_USER_CATEGORY"
@@ -149,12 +131,9 @@ export const transfereeSummary = getCommonGrayCard({
               // callBack: value => {
               //   return convertEpochToDate(value);
               // }
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownersTemp[0].ownerType", callBack: checkValueForNA },
+            }
           ),
-          ownerAddress: getLabelWithValueForModifiedLabel(
+          ownerAddress: getLabelWithValue(
             {
               labelName: "Correspondence Address",
               labelKey: "PT_OWNERSHIP_INFO_CORR_ADDR"
@@ -162,11 +141,8 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath:
                 "Property.ownersTemp[0].permanentAddress",
-              callBack: checkValueForNA
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownersTemp[0].permanentAddress", callBack: checkValueForNA },
+                callBack: checkValueForNA
+            }
           ),
           ownerSpecialDocumentType: getLabelIfNotNull(
             {
@@ -176,10 +152,7 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath: "Property.ownersTemp[0].documentType",
               callBack: checkValueForNA
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownersTemp[0].documentType", callBack: checkValueForNA },
+            }
           ),
           ownerDocumentId: getLabelIfNotNull(
             {
@@ -189,10 +162,7 @@ export const transfereeSummary = getCommonGrayCard({
             {
               jsonPath: "Property.ownersTemp[0].documentUid",
               callBack: checkValueForNA
-            }, {
-            labelKey: "PTM_OLD_LABEL_NAME"
-          },
-            { jsonPath: "PropertyOld.ownersTemp[0].documentUid", callBack: checkValueForNA },
+            }
           ),
 
         }),

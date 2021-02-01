@@ -1,66 +1,58 @@
+
 import {
+  getBreak,
   getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,
-  getLabelWithValueForModifiedLabel
+  getLabel,
+  getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { gotoApplyWithStep } from "../../utils/index";
 import { checkValueForNA } from "../../utils";
 
-export const mutationSummaryDetails = {
-  transferReason: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Reason for Transfer",
-      labelKey: "PT_MUTATION_COURT_PENDING_OR_NOT"
-    },
-    {
-      jsonPath:
-        "Property.additionalDetails.isMutationInCourt",
-      callBack: checkValueForNA
-    }, {
-    labelKey: "PTM_OLD_LABEL_NAME"
-  },
-    { jsonPath: "PropertyOld.additionalDetails.isMutationInCourt", callBack: checkValueForNA },
-  ), documentNo: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Document No.",
-      labelKey: "PT_MUTATION_COURT_CASE_DETAILS"
-    },
-    {
-      jsonPath:
-        "Property.additionalDetails.caseDetails",
-      callBack: checkValueForNA
-    }, {
-    labelKey: "PTM_OLD_LABEL_NAME"
-  },
-    { jsonPath: "PropertyOld.additionalDetails.caseDetails", callBack: checkValueForNA },
-  ), documentDate: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Document Issue Date",
-      labelKey: "PT_MUTATION_STATE_ACQUISITION"
-    },
-    {
-      jsonPath:
-        "Property.additionalDetails.isPropertyUnderGovtPossession",
-      callBack: checkValueForNA
-    }, {
-    labelKey: "PTM_OLD_LABEL_NAME"
-  },
-    { jsonPath: "PropertyOld.additionalDetails.isPropertyUnderGovtPossession", callBack: checkValueForNA },
-  ), documentValue: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Document Value",
-      labelKey: "PT_MUTATION_GOVT_ACQUISITION_DETAILS"
-    },
-    {
-      jsonPath:
-        "Property.additionalDetails.govtAcquisitionDetails",
-      callBack: checkValueForNA
-    }, {
-    labelKey: "PTM_OLD_LABEL_NAME"
-  },
-    { jsonPath: "PropertyOld.additionalDetails.govtAcquisitionDetails", callBack: checkValueForNA },
-  )
-}
+export const mutationSummaryDetails =  {
+    transferReason: getLabelWithValue(
+      {
+        labelName: "Reason for Transfer",
+        labelKey: "PT_MUTATION_COURT_PENDING_OR_NOT"
+      },
+      {
+        jsonPath:
+          "Property.additionalDetails.isMutationInCourt",
+          callBack: checkValueForNA
+      }
+    ), documentNo: getLabelWithValue(
+      {
+        labelName: "Document No.",
+        labelKey: "PT_MUTATION_COURT_CASE_DETAILS"
+      },
+      {
+        jsonPath:
+          "Property.additionalDetails.caseDetails",
+          callBack: checkValueForNA
+      }
+    ), documentDate: getLabelWithValue(
+      {
+        labelName: "Document Issue Date",
+        labelKey: "PT_MUTATION_STATE_ACQUISITION"
+      },
+      {
+        jsonPath:
+          "Property.additionalDetails.isPropertyUnderGovtPossession",
+          callBack: checkValueForNA
+      }
+    ), documentValue: getLabelWithValue(
+      {
+        labelName: "Document Value",
+        labelKey: "PT_MUTATION_GOVT_ACQUISITION_DETAILS"
+      },
+      {
+        jsonPath:
+          "Property.additionalDetails.govtAcquisitionDetails",
+          callBack: checkValueForNA
+      }
+    )
+};
 
 const mutationDetails = getCommonGrayCard({
   mutationDetailsContainer: getCommonContainer(mutationSummaryDetails)

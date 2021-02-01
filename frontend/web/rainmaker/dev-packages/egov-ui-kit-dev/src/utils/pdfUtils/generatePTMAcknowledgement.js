@@ -62,8 +62,8 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     } else if (get(property, "ownershipCategoryTemp", "").includes("SINGLEOWNER")) {
         transfereeDetails = generateKeyValue(preparedFinalObject, transfereeSummaryDetails)
     } else {
-        transfereeDetailsInfo = getMultiItems(preparedFinalObject, transfereeSummaryDetails, 'Property.ownersInit[0]')
-        transfereeDetails = getMultipleItemCard(transferorDetailsInfo, 'PT_OWNER')
+        transfereeDetailsInfo = getMultiItems(preparedFinalObject, transfereeSummaryDetails, 'Property.ownersInit')
+        transfereeDetails = getMultipleItemCard(transfereeDetailsInfo, 'PT_OWNER')
     }
 
     const addressCard = getAddressItems(get(preparedFinalObject, 'Property', {}));

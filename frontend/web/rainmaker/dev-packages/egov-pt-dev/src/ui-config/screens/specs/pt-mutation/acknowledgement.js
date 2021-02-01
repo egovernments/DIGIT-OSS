@@ -57,10 +57,10 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
   const applicationDownloadObject = {
     label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      // generatePTMAcknowledgement(get(
-      //   state,
-      //   "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
-      generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
+      // generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
 
     },
     leftIcon: "assignment"
@@ -75,7 +75,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
       generatePTMAcknowledgement(get(
         state,
         "screenConfiguration.preparedFinalObject", {}), 'print');
-      generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
+      // generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
 
     },
     leftIcon: "assignment"
