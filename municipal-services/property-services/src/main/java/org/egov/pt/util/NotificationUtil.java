@@ -115,7 +115,7 @@ public class NotificationUtil {
         LinkedHashMap responseMap = null;
 
         if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("\\|").length >= 2) {
-            locale = requestInfo.getMsgId().split("\\|")[1];
+            locale = NOTIFICATION_LOCALE;
 			isRetryNeeded = true;
 		}
 
