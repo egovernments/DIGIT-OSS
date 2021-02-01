@@ -46,7 +46,7 @@ public class UserService {
      * Creates user of the owners of property if it is not created already
      * @param request PropertyRequest received for creating properties
      */
-    public void createUser(PropertyRequest request){
+   public void createUser(PropertyRequest request){
         List<Property> properties = request.getProperties();
         RequestInfo requestInfo = request.getRequestInfo();
         Role role = getCitizenRole();
@@ -89,6 +89,7 @@ public class UserService {
             });
         });
     }
+
 
 
     /**
