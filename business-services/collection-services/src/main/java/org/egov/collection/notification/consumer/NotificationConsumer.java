@@ -79,6 +79,9 @@ public class NotificationConsumer {
 	@Value("${kafka.topics.notification.sms.key}")
 	private String smsTopickey;
 
+	@Value("${sms.enabled}")
+	private Boolean smsEnabled;
+	
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -115,7 +118,9 @@ public class NotificationConsumer {
 	public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			PaymentRequest req = objectMapper.convertValue(record, PaymentRequest.class);
-			sendNotification(req);
+			if (smsEnabled) {
+				sendNotification(req);
+			}
 		}catch(Exception e) {
 			log.error("Exception while reading from the queue: ", e);
 		}
@@ -209,7 +214,7 @@ public class NotificationConsumer {
 			locale = fallBackLocale;
 		StringBuilder uri = new StringBuilder();
 		uri.append(localizationHost).append(localizationEndpoint);
-		uri.append("?tenantId=").append(tenantId.split("\\.")[0]).append("&locale=").append(locale).append("&module=").append(module);
+		uri.append("?tenantId=").append(tenantId.split("\\.")[0]).append("&locale=").append("en_IN").append("&module=").append(module);
 		Map<String, Object> request = new HashMap<>();
 		request.put("RequestInfo", requestInfo);
 		try {
