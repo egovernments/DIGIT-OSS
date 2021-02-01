@@ -47,48 +47,40 @@ public class UserService {
      * @param request PropertyRequest received for creating properties
      */
     public void createUser(PropertyRequest request){
-        List<Property> properties = request.getProperties();
-        RequestInfo requestInfo = request.getRequestInfo();
-        Role role = getCitizenRole();
-        properties.forEach(property -> {
-            property.getPropertyDetails().forEach(propertyDetail -> {
-                // Fetches the unique mobileNumbers from all the owners
-                Set<String> listOfMobileNumbers = getMobileNumbers(propertyDetail,requestInfo,property.getTenantId());
-                propertyDetail.getOwners().forEach(owner -> {
-                        addUserDefaultFields(property.getTenantId(),role,owner);
-                        // Checks if the user is already present based on name of the owner and mobileNumber
-                        UserDetailResponse userDetailResponse = userExists(owner,requestInfo);
-                        // If user not present new user is created
-                        if(CollectionUtils.isEmpty(userDetailResponse.getUser()))
-                        {   /* Sets userName equal to mobileNumber if mobileNumber already assigned as username
-                          random number is assigned as username */
-                            StringBuilder uri = new StringBuilder(userHost).append(userContextPath).append(userCreateEndpoint);
-                            setUserName(owner,listOfMobileNumbers);
+    	
+        Property property = request.getProperty();
+		RequestInfo requestInfo = request.getRequestInfo();
+		Role role = getCitizenRole();
+		List<OwnerInfo> owners = property.getOwners();
 
-                            userDetailResponse = userCall(new CreateUserRequest(requestInfo,owner),uri);
-                            if(userDetailResponse.getUser().get(0).getUuid()==null){
-                                throw new CustomException("INVALID USER RESPONSE","The user created has uuid as null");
-                            }
-                        }
-                        else
-                        {
-                          owner.setId(userDetailResponse.getUser().get(0).getId());
-                          owner.setUuid(userDetailResponse.getUser().get(0).getUuid());
-                          addUserDefaultFields(property.getTenantId(),role,owner);
+		for (OwnerInfo ownerFromRequest : owners) {
 
-                          StringBuilder uri = new StringBuilder(userHost).append(userContextPath)
-                                              .append(userUpdateEndpoint);
-                          userDetailResponse = userCall( new CreateUserRequest(requestInfo,owner),uri);
-                            if(userDetailResponse.getUser().get(0).getUuid()==null){
-                                throw new CustomException("INVALID USER RESPONSE","The user updated has uuid as null");
-                            }
-                        }
-                        // Assigns value of fields from user got from userDetailResponse to owner object
-                        setOwnerFields(owner,userDetailResponse,requestInfo);
-                });
-            });
-        });
-    }
+			addUserDefaultFields(property.getTenantId(), role, ownerFromRequest);
+			UserDetailResponse userDetailResponse = userExists(ownerFromRequest, requestInfo);
+			List<OwnerInfo> existingUsersFromService = userDetailResponse.getUser();
+			Map<String, OwnerInfo> ownerMapFromSearch = existingUsersFromService.stream().collect(Collectors.toMap(OwnerInfo::getUuid, Function.identity()));
+
+			if (CollectionUtils.isEmpty(existingUsersFromService)) {
+
+				ownerFromRequest.setUserName(UUID.randomUUID().toString());
+				userDetailResponse = createUser(requestInfo, ownerFromRequest);
+				
+			} else {
+
+				String uuid = ownerFromRequest.getUuid();
+				if (uuid != null && ownerMapFromSearch.containsKey(uuid)) {
+					userDetailResponse = updateExistingUser(property, requestInfo, role, ownerFromRequest, ownerMapFromSearch.get(uuid));
+				} else {
+
+					ownerFromRequest.setUserName(UUID.randomUUID().toString());
+					userDetailResponse = createUser(requestInfo, ownerFromRequest);
+				}
+			}
+			// Assigns value of fields from user got from userDetailResponse to owner object
+			setOwnerFields(ownerFromRequest, userDetailResponse, requestInfo);
+		}
+	}
+
 
 
     /**
