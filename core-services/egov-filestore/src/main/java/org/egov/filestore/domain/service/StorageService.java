@@ -136,7 +136,7 @@ public class StorageService {
 	}
 
 	private String getFolderName(String module, String tenantId, Calendar calendar) {
-		return tenantId + "/" + module + "/" + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)
+		return tenantId + "/" + calendar.get(Calendar.YEAR) + "/" + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)
 				+ "/" + calendar.get(Calendar.DATE) + "/";
 	}
 
