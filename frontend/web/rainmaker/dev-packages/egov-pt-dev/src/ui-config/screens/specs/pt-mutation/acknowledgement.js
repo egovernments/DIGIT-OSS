@@ -16,6 +16,8 @@ import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
 import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResource/transfereeSummary";
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -923,6 +925,7 @@ const screenConfig = {
     loadUlbLogo(tenant);
     setData(state, dispatch, applicationNumber, tenant);
     setApplicationData(state, dispatch, applicationNumber, tenant);
+    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     const data = getAcknowledgementCard(
       state,
       dispatch,
