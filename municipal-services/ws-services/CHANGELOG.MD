@@ -1,6 +1,9 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
+## 1.2.1 - 2021-02-03
+- Added additionalDetails column
+
 ## 1.2.0 - 2021-01-12
 - Added support for public domain search
 

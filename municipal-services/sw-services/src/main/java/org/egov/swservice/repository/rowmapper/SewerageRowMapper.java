@@ -4,12 +4,19 @@ import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.web.models.*;
 import org.egov.swservice.web.models.Connection.StatusEnum;
 import org.egov.swservice.web.models.workflow.ProcessInstance;
+import org.egov.tracer.model.CustomException;
+import org.postgresql.util.PGobject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,6 +26,10 @@ import java.util.Map;
 
 @Component
 public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnection>> {
+	
+	
+	@Autowired
+	private ObjectMapper mapper;
 	
 	@Override
     public List<SewerageConnection> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -46,7 +57,20 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
                 sewarageConnection.setRoadType(rs.getString("roadtype"));
                 sewarageConnection.setOldApplication(rs.getBoolean("isoldapplication"));
                 // get property id and get property object
-                HashMap<String, Object> addtionalDetails = new HashMap<>();
+                PGobject pgObj = (PGobject) rs.getObject("additionaldetails");
+				ObjectNode addtionalDetails = null;
+				if (pgObj != null) {
+
+					try {
+						addtionalDetails = mapper.readValue(pgObj.getValue(), ObjectNode.class);
+					} catch (IOException ex) {
+						// TODO Auto-generated catch block
+						throw new CustomException("PARSING ERROR", "The additionalDetail json cannot be parsed");
+					}
+				} else {
+					addtionalDetails = mapper.createObjectNode();
+				}
+               // HashMap<String, Object> addtionalDetails = new HashMap<>();
                 addtionalDetails.put(SWConstants.ADHOC_PENALTY, rs.getBigDecimal("adhocpenalty"));
                 addtionalDetails.put(SWConstants.ADHOC_REBATE, rs.getBigDecimal("adhocrebate"));
                 addtionalDetails.put(SWConstants.ADHOC_PENALTY_REASON, rs.getString("adhocpenaltyreason"));
