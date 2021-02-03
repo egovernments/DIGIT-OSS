@@ -445,11 +445,11 @@ public class EstimationService {
 				ageOfBuilding = (LinkedHashMap) deprAppr.get("ageOfBuilding");
 
 				if(ageOfBuilding.get("yearTo") == null){
-					return BigDecimal.valueOf(Long.valueOf((int) deprAppr.get("depreciationAppreciation")));
+					return BigDecimal.valueOf((double) deprAppr.get("depreciationAppreciation"));
 				}
 
 				if (((int) ageOfBuilding.get("yearFrom")) <= age && ((int) ageOfBuilding.get("yearTo")) >= age) {
-					return BigDecimal.valueOf(Long.valueOf((int) deprAppr.get("depreciationAppreciation")));
+					return BigDecimal.valueOf((double) deprAppr.get("depreciationAppreciation"));
 				}
 				}
 			} catch (Exception e) {

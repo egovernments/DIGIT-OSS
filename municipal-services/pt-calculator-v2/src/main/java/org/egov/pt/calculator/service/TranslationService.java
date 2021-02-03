@@ -1,25 +1,37 @@
 package org.egov.pt.calculator.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.time.Instant;
+// import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.calculator.repository.Repository;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
-import org.egov.pt.calculator.web.models.propertyV2.*;
+import org.egov.pt.calculator.web.models.propertyV2.AssessmentRequestV2;
+import org.egov.pt.calculator.web.models.propertyV2.AssessmentV2;
+import org.egov.pt.calculator.web.models.propertyV2.PropertyResponseV2;
+import org.egov.pt.calculator.web.models.propertyV2.PropertyV2;
+import org.egov.pt.calculator.web.models.propertyV2.UnitUsage;
+import org.egov.pt.calculator.web.models.propertyV2.UnitV2;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.time.Instant;
-// import java.math.BigDecimal;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 // import static org.egov.pt.calculator.util.CalculatorConstants.*;
 
@@ -107,8 +119,10 @@ public class TranslationService {
         propertyDetail.put("source", assessment.getSource().toString());
         propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
+        if(assessment.getAdditionalDetails()!=null) {
         propertyDetail.put("adhocExemption", assessment.getAdditionalDetails().get("adhocExemption"));
         propertyDetail.put("adhocPenalty",assessment.getAdditionalDetails().get("adhocPenalty"));
+        }
         LinkedHashMap additionalDetails = (LinkedHashMap) property.getAdditionalDetails();
 		String constructionYear = additionalDetails ==null ? null : (String) additionalDetails.get("constructionYear");
 		long constructionDate = constructionYear == null ? 0 : Instant.parse(constructionYear).toEpochMilli();
@@ -147,13 +161,35 @@ public class TranslationService {
 
             
                     Map<String, Object> unitAdditionalMap = new HashMap<>();
-                    unitAdditionalMap.put("innerDimensionsKnown", unit.getConstructionDetail().getDimensions()==null? false:true);
-                    //if unit.getConstructionDetail().getDimensions() not null convert it to innerdimensions
-                    // unitAdditionalMap.put("roomsArea",unit.getConstructionDetail().get);
-                    // unitAdditionalMap.put("commonArea",);
-                    // unitAdditionalMap.put("garageArea",);
-                    // unitAdditionalMap.put("bathroomArea",);
-                    unitAdditionalMap.put("constructionDate",constructionDate);
+                    
+                    Object unitAdditionalDetails = unit.getAdditionalDetails();
+				if (unitAdditionalDetails != null) {
+					LinkedHashMap unitAdditionalDetailsMap = (LinkedHashMap) unitAdditionalDetails;
+
+					boolean innerDimensionKnown = Boolean
+							.parseBoolean(unitAdditionalDetailsMap.get("innerDimensionsKnown").toString());
+					unitAdditionalMap.put("innerDimensionsKnown", innerDimensionKnown);
+					if (innerDimensionKnown) {
+						if (unitAdditionalDetailsMap.get("bathroomArea") != null) {
+							unitAdditionalMap.put("bathroomArea",
+									new BigDecimal(unitAdditionalDetailsMap.get("bathroomArea").toString()));
+						}
+						if (unitAdditionalDetailsMap.get("garageArea") != null) {
+							unitAdditionalMap.put("garageArea",
+									new BigDecimal(unitAdditionalDetailsMap.get("garageArea").toString()));
+						}
+						if (unitAdditionalDetailsMap.get("commonArea") != null) {
+							unitAdditionalMap.put("commonArea",
+									new BigDecimal(unitAdditionalDetailsMap.get("commonArea").toString()));
+						}
+						if (unitAdditionalDetailsMap.get("roomsArea") != null) {
+							unitAdditionalMap.put("roomsArea",
+									new BigDecimal(unitAdditionalDetailsMap.get("roomsArea").toString()));
+						}
+					}
+				}
+                
+				unitAdditionalMap.put("constructionDate",constructionDate);
 
 
                 unitMap.put("additionalDetails", unitAdditionalMap);
