@@ -94,6 +94,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -433,7 +434,7 @@ public class BillServicev2 {
 		}
 
 		
-		Long billExpiryDate = getExpiryDateForDemand(demand.getBillExpiryTime());
+		Long billExpiryDate = getExpiryDateForDemand(demand);
 		
 		return BillDetailV2.builder()
 				.billAccountDetails(new ArrayList<>(taxCodeAccountdetailMap.values()))
@@ -452,11 +453,17 @@ public class BillServicev2 {
 	 * 
 	 * @return expiryDate
 	 */
-	private Long getExpiryDateForDemand(Long billExpiryPeriod) {
+	private Long getExpiryDateForDemand(Demand demand) {
 
+		Long billExpiryPeriod = demand.getBillExpiryTime();
+		Long fixedBillExpiryDate = demand.getFixedBillExpiryDate();
 		Calendar cal = Calendar.getInstance();
-		if (null != billExpiryPeriod && 0 < billExpiryPeriod)
+		
+		if (!ObjectUtils.isEmpty(fixedBillExpiryDate) && fixedBillExpiryDate > cal.getTimeInMillis()) {
+			cal.setTimeInMillis(fixedBillExpiryDate);
+		} else if (!ObjectUtils.isEmpty(billExpiryPeriod) && 0 < billExpiryPeriod) {
 			cal.setTimeInMillis(cal.getTimeInMillis() + billExpiryPeriod);
+		}
 
 		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), 23, 59, 59);
 		return cal.getTimeInMillis();

@@ -12,7 +12,7 @@
 	</parent>
 	<groupId>com.egov.demand</groupId>
 	<artifactId>billing-service</artifactId>
-	<version>1.2.1-SNAPSHOT</version>
+	<version>1.2.2-SNAPSHOT</version>
 	<name>billing-service</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
