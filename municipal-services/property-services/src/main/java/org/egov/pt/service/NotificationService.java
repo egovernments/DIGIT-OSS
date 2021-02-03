@@ -102,7 +102,7 @@ public class NotificationService {
     private ServiceRequestRepository serviceRequestRepository;
 
 	public void sendNotificationForMutation(PropertyRequest propertyRequest) {
-
+		if(isUpdateSmsEnabled) {
 		String msg = null;
 		String state = null;
 		Property property = propertyRequest.getProperty();
@@ -142,6 +142,7 @@ public class NotificationService {
 		if (!StringUtils.isEmpty(msg)) {
 			msg = replaceCommonValues(property, msg, localisedState);
 			prepareMsgAndSend(propertyRequest, msg, state);
+		}
 		}
 	}
 
