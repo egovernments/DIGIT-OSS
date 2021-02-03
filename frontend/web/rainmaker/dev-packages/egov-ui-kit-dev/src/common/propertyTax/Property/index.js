@@ -72,7 +72,7 @@ class Property extends Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     const {
       location,
       addBreadCrumbs,
@@ -184,6 +184,67 @@ class Property extends Component {
     ]);
 
     loadUlbLogo(this.props.match.params.tenantId);
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: "uk",
+        moduleDetails: [
+         {
+            moduleName: "BillingService",
+            masterDetails: [
+              {
+                name: "TaxPeriod",
+              },
+              {
+                name: "TaxHeadMaster",
+              }
+            ]
+          },       
+        ]
+      }
+    };
+    try {
+      const payload =  await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+  
+      const MdmsData = payload.MdmsRes;
+      const yeardataInfo =
+      (MdmsData && MdmsData.BillingService.TaxPeriod) || {};
+
+      const taxDataInfo =
+      (MdmsData && MdmsData.BillingService.TaxHeadMaster) || {};
+      let yeardata = [];
+      let taxData = [];
+      const data = Object.keys(yeardataInfo).map((key, index) => {
+      yeardata.push(yeardataInfo[key]);
+      });
+      const data2 = Object.keys(taxDataInfo).map((key, index) => {
+      taxData.push(taxDataInfo[key]);
+      });
+      let yeardata1 = yeardata.filter(yearKey => yearKey.service === "PT");
+      let taxdata1 =
+      taxData.filter(tax => tax.service === "PT" && tax.legacy == true) || [];
+      taxdata1.length > 0 &&
+      taxdata1.sort(function(a, b) {
+          return a.order - b.order;
+      });
+      const finalData = Object.keys(yeardata1).map((data, key) => {
+      yeardata1[data]["taxHead"] = [...taxdata1];
+      return yeardata[data];
+      });
+      {
+      finalData && finalData.length
+          ? localStorage.setItem("finalData", JSON.stringify(finalData))
+          : "error";
+      }
+
+    } catch (e) {
+      console.log(e);
+    }
     fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId());
 
   };
