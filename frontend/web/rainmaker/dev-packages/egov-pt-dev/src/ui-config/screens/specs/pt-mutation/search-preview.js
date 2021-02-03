@@ -197,6 +197,9 @@ const setSearchResponse = async (
     });
 
     property.ownersInit = owners;
+    ownersTemp = ownersTemp.sort(function(a,b){
+        return ownersTemp.indexOf(b)-ownersTemp.indexOf(a)
+      })
     property.ownersTemp = ownersTemp;
   }
   property.ownershipCategoryTemp = property.ownershipCategory;

@@ -913,6 +913,7 @@ const screenConfig = {
     }
   },
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
     const applicationNumber = getQueryArg(
@@ -925,7 +926,6 @@ const screenConfig = {
     loadUlbLogo(tenant);
     setData(state, dispatch, applicationNumber, tenant);
     setApplicationData(state, dispatch, applicationNumber, tenant);
-    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     const data = getAcknowledgementCard(
       state,
       dispatch,

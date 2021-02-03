@@ -52,7 +52,7 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     } else if (get(property, "ownershipCategoryInit", "").includes("SINGLEOWNER")) {
         transferorDetails = generateKeyValue(preparedFinalObject, transferorSummaryDetails)
     } else {
-        transferorDetailsInfo = getMultiItems(preparedFinalObject, transferorSummaryDetails, 'Property.ownersTemp[0]')
+        transferorDetailsInfo = getMultiItems(preparedFinalObject, transferorSummaryDetails, 'Property.ownersInit')
         transferorDetails = getMultipleItemCard(transferorDetailsInfo, 'PT_OWNER')
     }
     let transfereeDetails = []
@@ -63,6 +63,11 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
         transfereeDetails = generateKeyValue(preparedFinalObject, transfereeSummaryDetails)
     } else {
         transfereeDetailsInfo = getMultiItems(preparedFinalObject, transfereeSummaryDetails, 'Property.ownersTemp')
+        if(!window.location.href.includes("search-preview")){
+            transfereeDetailsInfo = transfereeDetailsInfo.sort(function(a,b){
+                  return transfereeDetailsInfo.indexOf(b)-transfereeDetailsInfo.indexOf(a)
+                })
+        }
         transfereeDetails = getMultipleItemCard(transfereeDetailsInfo, 'PT_OWNER')
     }
 
