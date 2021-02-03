@@ -32,9 +32,12 @@ const checkDocuments = (owner) => {
 export const getOwnerInformation = (latestPropertyDetails, generalMDMSDataById) => {
   const isInstitution =
     latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
-  const { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
+  let { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
   let owner = [];
   if (ownerDetails && ownerDetails.length > 0) {
+    ownerDetails = ownerDetails.sort(function(item1,item2){
+      return ownerDetails.indexOf(item2)-ownerDetails.indexOf(item1)
+    })
     owner = ownerDetails[0];
   }
   return (
@@ -291,9 +294,12 @@ class OwnerInfo extends Component {
   getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
     const isInstitution =
       latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
-    const { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
+    let { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
     let owner = [];
     if (ownerDetails && ownerDetails.length > 0) {
+      ownerDetails = ownerDetails.sort(function(item1,item2){
+        return ownerDetails.indexOf(item2)-ownerDetails.indexOf(item1)
+      })
       owner = ownerDetails[0];
     }
     return (
