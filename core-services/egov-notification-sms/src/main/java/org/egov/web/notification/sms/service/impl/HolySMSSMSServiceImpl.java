@@ -46,12 +46,12 @@ public class HolySMSSMSServiceImpl implements SMSService {
 	private void submitToExternalSmsService(Sms sms) {
 		try {
 			String baseURL = smsProperties.getUrl();
-			log.info("sms configmap = " + smsProperties.getConfigMap());
 			MultiValueMap<String, String> params = getRequest(sms).getBody();
 			URI uri = UriComponentsBuilder
 			           .fromUriString(baseURL)
 			           .queryParams(params)
 			           .build().encode().toUri();
+			log.info("uri = " + uri);
 			String response = restTemplate.getForObject(uri, String.class);
 			log.info("response: "+response);
 		} catch (RestClientException e) {
