@@ -450,7 +450,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     nodeLength = ind;
                 }
             })
-            if (currentNode.startPosition.verticalRatio > 0.80 && currentNode.style == 'pdf-card-title') {
+            if (currentNode.startPosition.verticalRatio > 0.9 && currentNode.style == 'pdf-card-title') {
                 return true;
             }
             if (currentNode.startPosition.verticalRatio > 0.75 && currentNode.style == 'pdf-card-title' && nodeLength > 19) {
@@ -513,9 +513,9 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 bold: true,
                 "margin": [
                     -18,
-                    16,
+                    5,
                     8,
-                    8
+                    2
                 ],
                 "color": "#484848",
                 "fontWeight": 500
