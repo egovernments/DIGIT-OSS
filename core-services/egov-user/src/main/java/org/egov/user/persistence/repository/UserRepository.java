@@ -278,7 +278,7 @@ public class UserRepository {
             }
         }
         else {
-            updateuserInputs.put("Type", "");
+            updateuserInputs.put("Type", oldUser.getType().toString());
         }
 
         updateuserInputs.put("LastModifiedDate", new Date());
