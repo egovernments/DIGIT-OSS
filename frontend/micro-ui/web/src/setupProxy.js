@@ -1,7 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
-  // target: "https://egov-micro-qa.egovernments.org",
-  target: "https://egov-micro-dev.egovernments.org",
+  target: process.env.REACT_APP_PROXY_URL,
   changeOrigin: true,
 });
 module.exports = function (app) {
