@@ -61,41 +61,53 @@ public class UserService {
      * Creates user of the owners of property if it is not created already
      * @param request PropertyRequest received for creating properties
      */
-    public void createUser(PropertyRequest request){
-  	
+   public void createUser(PropertyRequest request){
+    	
         Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
 		Role role = getCitizenRole();
 		List<OwnerInfo> owners = property.getOwners();
+		Set<String> listOfMobileNumbers = getMobileNumbers(property, requestInfo, property.getTenantId());
 
-		for (OwnerInfo ownerFromRequest : owners) {
+		owners.forEach(owner -> {
 
-			addUserDefaultFields(property.getTenantId(), role, ownerFromRequest);
-			UserDetailResponse userDetailResponse = userExists(ownerFromRequest, requestInfo);
-			List<OwnerInfo> existingUsersFromService = userDetailResponse.getUser();
-			Map<String, OwnerInfo> ownerMapFromSearch = existingUsersFromService.stream().collect(Collectors.toMap(OwnerInfo::getUuid, Function.identity()));
+			addUserDefaultFields(property.getTenantId(), role, owner);
+			UserDetailResponse userDetailResponse = userExists(owner, requestInfo);
 
-			if (CollectionUtils.isEmpty(existingUsersFromService)) {
-
-				ownerFromRequest.setUserName(UUID.randomUUID().toString());
-				userDetailResponse = createUser(requestInfo, ownerFromRequest);
+			if (CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 				
+				/*
+				 * Sets userName equal to mobileNumber
+				 * 
+				 *  If mobileNumber already assigned as user-name for another user
+				 *  
+				 *  then random uuid is assigned as user-name
+				 */
+				StringBuilder uri = new StringBuilder(userHost).append(userContextPath).append(userCreateEndpoint);
+				setUserName(owner, listOfMobileNumbers);
+
+				CreateUserRequest userRequest = CreateUserRequest.builder()
+						.requestInfo(requestInfo)
+						.user(owner)
+						.build();
+
+				userDetailResponse = userCall(userRequest, uri);
+				
+				if (ObjectUtils.isEmpty(userDetailResponse)) {
+
+					throw new CustomException("INVALID USER RESPONSE",
+							"The user create has failed for the mobileNumber : " + owner.getUserName());
+				}
+
 			} else {
 
-				String uuid = ownerFromRequest.getUuid();
-				if (uuid != null && ownerMapFromSearch.containsKey(uuid)) {
-					userDetailResponse = updateExistingUser(property, requestInfo, role, ownerFromRequest, ownerMapFromSearch.get(uuid));
-				} else {
-
-					ownerFromRequest.setUserName(UUID.randomUUID().toString());
-					userDetailResponse = createUser(requestInfo, ownerFromRequest);
-				}
+				userDetailResponse = updateExistingUser(property, requestInfo, role, owner, userDetailResponse.getUser().get(0));
 			}
 			// Assigns value of fields from user got from userDetailResponse to owner object
-			setOwnerFields(ownerFromRequest, userDetailResponse, requestInfo);
-		}
+			setOwnerFields(owner, userDetailResponse, requestInfo);
+		});
 	}
-    
+	
     /**
      * update existing user
      * 
