@@ -5,6 +5,7 @@
   "workspaces": [],
   "homepage": "/digit-ui",
   "dependencies": {
+    "@egovernments/digit-ui-css": "^1.0.0",
     "@egovernments/digit-ui-libraries": "^1.0.0",
     "@egovernments/digit-ui-module-common": "^1.0.0",
     "@egovernments/digit-ui-module-core": "^1.0.0",
