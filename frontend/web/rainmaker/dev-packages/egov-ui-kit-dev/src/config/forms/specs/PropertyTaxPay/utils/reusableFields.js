@@ -572,14 +572,14 @@ export const beforeInitFormForPlot = {
     let { dispatch } = store;
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
     // const propertyUsage = get(state, "form.basicInformation.fields.typeOfUsage.value")
-    innerDimensionsData = innerDimensionsData.map(item =>{
+    let innerDimensionsTranslatedData = innerDimensionsData.map(item =>{
       return {
         value:item.value,
         label: item.label === "YES"? getTranslatedLabel("COMMON_MASTER_TRUE",state.app.localizationLabels)
                 :getTranslatedLabel("COMMON_MASTER_FALSE",state.app.localizationLabels)
       }
     })
-    set(action,"form.fields.innerDimensions.dropDownData",innerDimensionsData)
+    set(action,"form.fields.innerDimensions.dropDownData",innerDimensionsTranslatedData)
     const { Floor } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "BUILTUP.SHAREDPROPERTY") {
