@@ -313,6 +313,7 @@ public class EnrichmentService {
      */
     public void enrichAssignes(Property property){
 
+    	if(null != property.getWorkflow()){
             if(property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.CITIZEN_SENDBACK_ACTION)){
 
                     List<User> assignes = new LinkedList<>();
@@ -328,6 +329,7 @@ public class EnrichmentService {
 
                     property.getWorkflow().setAssignes(assignes);
             }
+    	}
     }
 
 
