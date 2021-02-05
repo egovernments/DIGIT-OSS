@@ -174,8 +174,40 @@ public class TranslationService {
                 
                 Map<String, Object> unitAdditionalMap = new HashMap<>();
                 
-                unitAdditionalMap.put("innerDimensionsKnown", unit.getConstructionDetail().getDimensions() == null ? false:true);
+				JsonNode unitAdditionalDetails = unit.getAdditionalDetails();
+				if (unitAdditionalDetails != null) {
+					if (unitAdditionalDetails.get("innerDimensionsKnown") != null) {
+						boolean innerDimensionKnownValue = unitAdditionalDetails.get("innerDimensionsKnown")
+								.asBoolean();
+						unitAdditionalMap.put("innerDimensionsKnown", innerDimensionKnownValue);
 
+						if (innerDimensionKnownValue) {
+
+							if (unitAdditionalDetails.get("bathroomArea") != null) {
+								unitAdditionalMap.put("bathroomArea",
+										new BigDecimal(unitAdditionalDetails.get("bathroomArea").asText()));
+							}
+
+							if (unitAdditionalDetails.get("garageArea") != null) {
+								unitAdditionalMap.put("garageArea",
+										new BigDecimal(unitAdditionalDetails.get("garageArea").asText()));
+							}
+
+							if (unitAdditionalDetails.get("commonArea") != null) {
+								unitAdditionalMap.put("commonArea",
+										new BigDecimal(unitAdditionalDetails.get("commonArea").asText()));
+							}
+
+							if (unitAdditionalDetails.get("roomsArea") != null) {
+								unitAdditionalMap.put("roomsArea",
+										new BigDecimal(unitAdditionalDetails.get("roomsArea").asText()));
+							}
+
+						}
+					}
+
+				}
+				
                 unitAdditionalMap.put("constructionDate",constructionDate);
                 unitMap.put("additionalDetails", unitAdditionalMap);
                 units.add(unitMap);
