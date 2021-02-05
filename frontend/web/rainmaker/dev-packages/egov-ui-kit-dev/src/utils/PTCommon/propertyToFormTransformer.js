@@ -127,14 +127,13 @@ export const convertRawDataToFormConfig = (propertyResponse) => {
   let assessmentForms = getAssesmentDetails(propertyResponse);
 
 
-  //const ownershipType = get(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", "");
-  const ownershipType = "INDIVIDUAL.SINGLEOWNER";
+  const ownershipType = get(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", "");
 
   const typeOfOwnershipPath = get(ownerShipForm, "ownershipType.fields.ownershipCategory.jsonPath", "");
   const ownershipCategoryFromApi = get(properties[0], "propertyDetails[0].ownershipCategory", "");
 
-  if (ownershipType === "INDIVIDUAL.MULTIPLEOWNERS" || ownershipType === "INDIVIDUAL.SINGLEOWNER") {
-    ownerForms = getAllOwnerDetails(properties[0], ownershipType === "INDIVIDUAL.SINGLEOWNER");
+  if (ownershipType === "MULTIPLEOWNERS" || ownershipType === "SINGLEOWNER") {
+    ownerForms = getAllOwnerDetails(properties[0],ownershipType && ownershipType.includes("SINGLEOWNER"));
   } else if (ownershipType.toLowerCase().indexOf("insti") !== -1 || 
   ownershipCategoryFromApi.toLowerCase().indexOf("insti") !== -1) {
     institutionAuthority = getInstituteAuthority(propertyResponse);
@@ -149,7 +148,7 @@ export const convertRawDataToFormConfig = (propertyResponse) => {
   set(assessmentForms, "plotDetails.fields.plotSize.value", landArea);
 
   
-  set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", "INDIVIDUAL.SINGLEOWNER");
+  set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", ownershipType === "SINGLEOWNER"? "INDIVIDUAL.SINGLEOWNER" :"INDIVIDUAL.MULTIPLEOWNERS");
 
   
   return {
