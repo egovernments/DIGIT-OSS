@@ -695,6 +695,8 @@ public class DishonorChequeService implements FinancialIntegrationService {
             ins.setDishonor(dishonorReasonContract);
         });
         microserviceUtils.updateInstruments(instruments, null, finStatus );
+        LOGGER.debug("checking dishonor bean  : model" + model);
+        LOGGER.debug("checking dishonor bean  : ReceiptNumber" + model.getReceiptNumber());
 
         // calling cancel receipt api
         if(model.getReceiptNumber()!=null && !model.getReceiptNumber().isEmpty()) {
