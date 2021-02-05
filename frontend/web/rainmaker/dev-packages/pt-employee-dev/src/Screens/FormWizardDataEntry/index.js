@@ -430,6 +430,10 @@ class FormWizardDataEntry extends Component {
     const { selected } = this.state;
     const {propertiesEdited}= this.props;
     const isReviewPage = selected === 3;
+    let ownerAr = this.state.ownerInfoArr;
+    ownerAr = ownerAr && ownerAr.length>1 && ownerAr.sort(function(item1,item2){
+      return ownerAr.indexOf(item2)-ownerAr.indexOf(item1);
+    })
     switch (ownerType) {
       case "INDIVIDUAL.SINGLEOWNER":
         return <OwnerInfoHOC  />;
@@ -440,7 +444,7 @@ class FormWizardDataEntry extends Component {
               addOwner(false, OwnerInformation, this);
             }}
             handleRemoveOwner={this.handleRemoveOwner}
-            ownerDetails={this.state.ownerInfoArr}
+            ownerDetails={ownerAr}
           />
         );
       case "INSTITUTIONALPRIVATE":
