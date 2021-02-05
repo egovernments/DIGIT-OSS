@@ -697,12 +697,14 @@ public class DishonorChequeService implements FinancialIntegrationService {
         microserviceUtils.updateInstruments(instruments, null, finStatus );
 
         // calling cancel receipt api
-        receiptList = microserviceUtils.getReceipts(model.getReceiptNumber().toString());
+        if(model.getReceiptNumber()!=null && !model.getReceiptNumber().isEmpty()) {
+        receiptList = microserviceUtils.getReceipts(model.getReceiptNumber());
+        LOGGER.debug("calling cancel receipt for : receiptList" + receiptList);
         for (Receipt receipts : receiptList) {
             paymentIdSet.add(receipts.getPaymentId());
             break;
         }
-
+        LOGGER.debug("calling cancel receipt for : paymentIdSet" + paymentIdSet);
         switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
         case "V2":
         case "VERSION2":
@@ -720,6 +722,7 @@ public class DishonorChequeService implements FinancialIntegrationService {
             }
             ReceiptResponse response = microserviceUtils.updateReceipts(new ArrayList<>(receiptList));
             break;
+        }
         }
     }
     
