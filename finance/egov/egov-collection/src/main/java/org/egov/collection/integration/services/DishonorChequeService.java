@@ -63,6 +63,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
+import org.egov.collection.bean.ReceiptBean;
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.AccountPayeeDetail;
 import org.egov.collection.entity.CollectionDishonorCheque;
@@ -89,7 +90,9 @@ import org.egov.infra.microservice.models.FinancialStatus;
 import org.egov.infra.microservice.models.Instrument;
 import org.egov.infra.microservice.models.InstrumentSearchContract;
 import org.egov.infra.microservice.models.InstrumentVoucher;
+import org.egov.infra.microservice.models.PaymentWorkflow;
 import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.microservice.models.ReceiptResponse;
 import org.egov.infra.microservice.models.ReceiptSearchCriteria;
 import org.egov.infra.microservice.models.TransactionType;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
@@ -675,6 +678,8 @@ public class DishonorChequeService implements FinancialIntegrationService {
     }
 
     public void processDishonor(DishonoredChequeBean model) {
+        List<Receipt> receiptList = new ArrayList<>();
+        Set<String> paymentIdSet = new HashSet();
         List<Instrument> instruments = microserviceUtils.getInstruments(model.getInstHeaderIds());
         FinancialStatus finStatus = new FinancialStatus();
         finStatus.setCode("Dishonored");
@@ -690,6 +695,32 @@ public class DishonorChequeService implements FinancialIntegrationService {
             ins.setDishonor(dishonorReasonContract);
         });
         microserviceUtils.updateInstruments(instruments, null, finStatus );
+
+        // calling cancel receipt api
+        receiptList = microserviceUtils.getReceipts(model.getReceiptNumber().toString());
+        for (Receipt receipts : receiptList) {
+            paymentIdSet.add(receipts.getPaymentId());
+            break;
+        }
+
+        switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+        case "V2":
+        case "VERSION2":
+            if (!paymentIdSet.isEmpty()) {
+                microserviceUtils.performWorkflow(paymentIdSet, PaymentWorkflow.PaymentAction.CANCEL,
+                        "Payment got cancelled from finance");
+            }
+            break;
+
+        default:
+            for (final Receipt receiptHeader : receiptList) {
+                receiptHeader.getBill().get(0).getBillDetails().get(0).setStatus("Cancelled");
+                receiptHeader.getInstrument().setTenantId(receiptHeader.getTenantId());
+                receiptHeader.getBill().get(0).setPayerName(receiptHeader.getBill().get(0).getPaidBy());
+            }
+            ReceiptResponse response = microserviceUtils.updateReceipts(new ArrayList<>(receiptList));
+            break;
+        }
     }
     
     private void prepareDishonouredSearchCriteria(DishonoredChequeBean model, InstrumentSearchContract criteria) {
