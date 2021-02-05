@@ -11,7 +11,9 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { propertySearch, applicationSearch } from "./functions";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
 // import "./index.css";
 
@@ -172,7 +174,43 @@ export const searchPropertyDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4
-      }
+      },
+    afterFieldChange: async (action, state, dispatch) => {
+      let tenant = action.value;
+      dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
+      let mohallaPayload = await httpRequest(
+        "post",
+        "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+        "_search",
+        [{ key: "tenantId", value: tenant }],
+        {}
+      );
+      if(mohallaPayload &&
+        mohallaPayload.TenantBoundary[0] &&
+        mohallaPayload.TenantBoundary[0].boundary){
+          const mohallaData =
+          mohallaPayload.TenantBoundary[0].boundary.reduce((result, item) => {
+            result.push({
+              ...item,
+              code: item.code
+            });
+            return result;
+          }, []);
+          const mohallaLocalePrefix = {
+            moduleName: action.value,
+            masterName: "REVENUE"
+          };
+          dispatch(
+            handleField(
+              "propertySearch",
+              "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
+              "props.localePrefix",
+              mohallaLocalePrefix
+            )
+          );
+            dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
+        }
+    }
     },
     ownerMobNo: getTextField({
       label: {

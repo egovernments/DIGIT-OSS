@@ -46,6 +46,7 @@ const getMDMSData = async (action, dispatch) => {
         );
       }
     })
+    if (process.env.REACT_APP_NAME != "Citizen") {
       let mohallaPayload = await httpRequest(
         "post",
         "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
@@ -72,7 +73,7 @@ const getMDMSData = async (action, dispatch) => {
           }, []);
           dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
         }
-    
+      }
     // const payload = await httpRequest(
     //   "post",
     //   "/egov-mdms-service/v1/_search",
