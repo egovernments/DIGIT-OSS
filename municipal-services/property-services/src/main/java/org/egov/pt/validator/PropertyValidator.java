@@ -164,7 +164,7 @@ public class PropertyValidator {
 					property.getWorkflow().getBusinessService(), request.getRequestInfo());
 			isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
 		}
-		}
+		
 		// third variable is needed only for mutation
 		List<String> objectsAdded = diffService.getObjectsAdded(property, propertyFromSearch, "");
 		objectsAdded.removeAll(Arrays.asList("TextNode", "Role", "NullNode", "LongNode", "JsonNodeFactory", "IntNode",
@@ -176,7 +176,7 @@ public class PropertyValidator {
 			throw new CustomException("EG_PT_WF_UPDATE_ERROR",
 					"The current state of workflow does not allow chnages to property");
 		
-	    
+		}
         /*
          * Blocking owner changes in update flow
          */
