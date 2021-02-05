@@ -150,6 +150,7 @@ public class PropertyValidator {
 		 *  
 		 *  creation reason will change for begining of a workflow 
 		 */
+		if(null != property.getWorkflow()){
 		if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
 				&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
 			fieldsUpdated.remove("creationReason");
@@ -163,7 +164,7 @@ public class PropertyValidator {
 					property.getWorkflow().getBusinessService(), request.getRequestInfo());
 			isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
 		}
-
+		}
 		// third variable is needed only for mutation
 		List<String> objectsAdded = diffService.getObjectsAdded(property, propertyFromSearch, "");
 		objectsAdded.removeAll(Arrays.asList("TextNode", "Role", "NullNode", "LongNode", "JsonNodeFactory", "IntNode",
