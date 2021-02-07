@@ -1199,9 +1199,9 @@
     rooks "^4.4.0"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.105"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.105.tgz#629271f605b529a0c7019837f8ff03f83bd7ad07"
-  integrity sha512-NcS5iLqowakFkVnfFl8S22jQSot9HeaWbvW8WdBhXw6gtq2Js2V7EpLrCUk9Aqy9XNMTd+LV1n2BwA7XqAHcbw==
+  version "1.0.106"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.106.tgz#a3f7298779e67865f582470d34177e6b85af0ddb"
+  integrity sha512-EWYKOXeS4KRkDtSPgA5Fr60NyY2PaCOEm6J3SQ4O7yNUQKKdlVtkhxtDXJO65mPbsaED2boOCxl0AD4sagudnA==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
