@@ -684,6 +684,14 @@ export const beforeInitFormForPlot = {
         set(action, "form.fields.garageArea.hideField", true);
         set(action, "form.fields.bathroomArea.hideField", true);
       }
+      if ((get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)==="true")){
+        set(action, "form.fields.innerDimensions.value", "true");
+        set(action, "form.fields.builtArea.hideField", true);
+        set(action, "form.fields.roomArea.hideField", false);
+        set(action, "form.fields.balconyArea.hideField", false);
+        set(action, "form.fields.garageArea.hideField", false);
+        set(action, "form.fields.bathroomArea.hideField", false);
+      }
    /*    else {
         set(action, "form.fields.innerDimensions.value", "false");
         set(action, "form.fields.builtArea.hideField", true);
