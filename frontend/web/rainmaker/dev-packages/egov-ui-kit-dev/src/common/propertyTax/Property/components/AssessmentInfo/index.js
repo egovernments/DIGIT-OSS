@@ -199,7 +199,7 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   
 };
 
-export const getUnitInfo = (units = []) => {
+export const getUnitInfo = (units = [],usageCategoryMajor="") => {
   units = units || [];
   let floors = [];
   units.map((unit, index) => {
@@ -207,7 +207,7 @@ export const getUnitInfo = (units = []) => {
       let floor = [{
         key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
         value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
-          unit.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor : "NA",
+        (unit.usageCategoryMajor||usageCategoryMajor) ? 'PROPERTYTAX_BILLING_SLAB_' + (unit.usageCategoryMajor||usageCategoryMajor) : "NA",
       }, {
   
         key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
@@ -273,7 +273,7 @@ let hideSubsectionLabel=false;
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      subUnitItems = getUnitInfo(propertyDetails[0]['units']);
+      subUnitItems = getUnitInfo(propertyDetails[0]['units'],propertyDetails[0]['usageCategoryMajor']?propertyDetails[0]['usageCategoryMajor']:"");
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if(propertyDetails[0].propertySubType === "BUILTUP.SHAREDPROPERTY"){
         hideSubsectionLabel=true;
