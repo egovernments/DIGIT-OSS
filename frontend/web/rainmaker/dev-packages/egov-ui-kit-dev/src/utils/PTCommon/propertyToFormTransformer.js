@@ -53,7 +53,10 @@ export const getOwnerShipDetails = (property) => {
 // }
 
 export const getAllOwnerDetails = (property, isSingleOwner = false) => {
-  const ownerDataFromApi = get(property, "propertyDetails[0].owners", []);
+  let ownerDataFromApi = get(property, "propertyDetails[0].owners", []);
+  ownerDataFromApi = ownerDataFromApi.sort(function(item1,item2){
+    return ownerDataFromApi.indexOf(item2)-ownerDataFromApi.indexOf(item1)
+  })
   let ownerForms = {};
   ownerDataFromApi.forEach((ownerDetails, index) => {
     let singleownerDetails = addData(cloneDeep(ownerInfo), ownerDetails);
