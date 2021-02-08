@@ -680,6 +680,7 @@ public class DishonorChequeService implements FinancialIntegrationService {
     public void processDishonor(DishonoredChequeBean model) {
         List<Receipt> receiptList = new ArrayList<>();
         Set<String> paymentIdSet = new HashSet();
+        Set<String> receiptNumbers = new HashSet();     
         List<Instrument> instruments = microserviceUtils.getInstruments(model.getInstHeaderIds());
         FinancialStatus finStatus = new FinancialStatus();
         finStatus.setCode("Dishonored");
@@ -693,20 +694,23 @@ public class DishonorChequeService implements FinancialIntegrationService {
                     .instrument(ins.getId())
                     .build();
             ins.setDishonor(dishonorReasonContract);
+            ins.getInstrumentVouchers().stream().forEach(insVou -> {
+                receiptNumbers.add(insVou.getReceiptHeaderId());
+               });
+            
         });
         microserviceUtils.updateInstruments(instruments, null, finStatus );
-        LOGGER.debug("checking dishonor bean  : model" + model);
-        LOGGER.debug("checking dishonor bean  : ReceiptNumber" + model.getReceiptNumber());
-
         // calling cancel receipt api
-        if(model.getReceiptNumber()!=null && !model.getReceiptNumber().isEmpty()) {
-        receiptList = microserviceUtils.getReceipts(model.getReceiptNumber());
-        LOGGER.debug("calling cancel receipt for : receiptList" + receiptList);
+        LOGGER.info("calling cancel receipt for : receiptNumbers" +receiptNumbers);
+
+        if(!receiptNumbers.isEmpty()) {
+        receiptList = microserviceUtils.getReceipts(StringUtils.join(receiptNumbers, ","));
+        LOGGER.info("calling cancel receipt for : receiptList" + receiptList);
         for (Receipt receipts : receiptList) {
             paymentIdSet.add(receipts.getPaymentId());
             break;
         }
-        LOGGER.debug("calling cancel receipt for : paymentIdSet" + paymentIdSet);
+        LOGGER.info("calling cancel receipt for : paymentIdSet" + paymentIdSet);
         switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
         case "V2":
         case "VERSION2":
