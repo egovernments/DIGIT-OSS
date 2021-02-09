@@ -407,6 +407,15 @@ export const getFinancialYearFromEPOCH = (epochTime) => {
   financialYear = date.getFullYear()-1 + "-" + String(date.getFullYear()).slice(2);
   return financialYear;
 };
+const getFinancialYearFromEPOCH = (epochTime) => {
+  let financialYear = "";
+  let date = new Date(epochTime);
+  if(date.getMonth()>=3)
+  financialYear = date.getFullYear() + "-" + String(date.getFullYear() + 1).slice(2);
+  else
+  financialYear = date.getFullYear()-1 + "-" + String(date.getFullYear()).slice(2);
+  return financialYear;
+};
 const getYearlyAssessments = (propertiesArray = []) => {
   let yearlyAssessments = [];
   propertiesArray && propertiesArray.map((property) => {
