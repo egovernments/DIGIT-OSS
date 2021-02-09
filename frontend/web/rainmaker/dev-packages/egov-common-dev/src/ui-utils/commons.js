@@ -15,6 +15,7 @@ import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import printJS from 'print-js';
 import axios from 'axios';
+import getFinancialYearFromEPOCH from "egov-ui-kit/redux/properties/actions";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -667,6 +668,8 @@ else if(payments[0].paymentDetails[0].businessService === 'TL'){
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocPenalty`, adhocPenalty);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
 }
+
+set(payments, `[0].paymentDetails[0].bill.additionalDetails.financialYear`, getFinancialYearFromEPOCH(payments[0].transactionDate));
   return payments;
 }
 

@@ -396,7 +396,16 @@ const getFinancialYear = (fromDate, toDate) => {
   let financialYear = '';
   financialYear = (new Date(fromDate).getFullYear()) + '-' + String(new Date(toDate).getFullYear()).slice(2);
   return financialYear;
-}
+};
+const getFinancialYearFromEPOCH = (epochTime) => {
+  let financialYear = "";
+  let date = new Date(epochTime);
+  if(date.getMonth()>=3)
+  financialYear = date.getFullYear() + "-" + String(date.getFullYear() + 1).slice(2);
+  else
+  financialYear = date.getFullYear()-1 + "-" + String(date.getFullYear()).slice(2);
+  return financialYear;
+};
 const getYearlyAssessments = (propertiesArray = []) => {
   let yearlyAssessments = [];
   propertiesArray && propertiesArray.map((property) => {
@@ -848,7 +857,8 @@ else if(payments[0].paymentDetails[0].businessService === 'TL'){
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
 }
 
-  return payments;
+set(payments, `[0].paymentDetails[0].bill.additionalDetails.financialYear`, getFinancialYearFromEPOCH(payments[0].transactionDate));
+return payments;
 }
 
 const getBankname = async(payment) =>{
