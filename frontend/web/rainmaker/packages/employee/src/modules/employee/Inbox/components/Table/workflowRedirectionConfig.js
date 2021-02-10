@@ -47,7 +47,12 @@ export const getWFConfig = (module, businessService) => {
           INITIATED: "/property-tax/application-preview",
           DEFAULT: "/property-tax/application-preview",
         };
-      } else {
+      }else if (businessService === "PT.LEGACY") {
+        return {
+          INITIATED: "/property-tax/application-preview",
+          DEFAULT: "/property-tax/application-preview",
+        };
+      }  else {
         return {
           INITIATED: "/pt-mutation/search-preview",
           DEFAULT: "/pt-mutation/search-preview",

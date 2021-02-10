@@ -281,6 +281,26 @@ class ApplicationPreview extends Component {
         }
       ]
       applicationObject.endpoint = PROPERTY;
+    }else if (applicationType == "legacy") {
+      applicationObject.responsePath = "Properties";
+      applicationObject.dataPath = "Property";
+      applicationObject.moduleName = "PT.LEGACY";
+      applicationObject.updateUrl = "/property-services/property/_update";
+      applicationObject.queryParams = [
+        {
+          key: "acknowledgementIds", value: getQueryArg(
+            window.location.href,
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId", value: getQueryArg(
+            window.location.href,
+            "tenantId"
+          )
+        }
+      ]
+      applicationObject.endpoint = PROPERTY;
     }
     return applicationObject;
   }

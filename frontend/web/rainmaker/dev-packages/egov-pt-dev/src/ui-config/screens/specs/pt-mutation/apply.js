@@ -533,6 +533,12 @@ const screenConfig = {
     const isEdit = getQueryArg(window.location.href, "action") === "edit";
     dispatch(
       prepareFinalObject(
+        "Property",
+        {}
+      )
+    );
+    dispatch(
+      prepareFinalObject(
         "Property.additionalDetails",
         {}
       )

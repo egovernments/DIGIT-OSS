@@ -401,7 +401,12 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-
+    dispatch(
+      prepareFinalObject(
+        "Property",
+        {}
+      )
+    );
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
     loadUlbLogo(tenantId);
     const queryObject = [
