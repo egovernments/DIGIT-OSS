@@ -905,6 +905,8 @@ export const navigateToApplication = (businessService, propsHistory, application
     setRoute(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
   } else if (businessService == 'PT.CREATE') {
     setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
+  } else if (businessService == 'PT.LEGACY') {
+    setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=legacy`);
   } else {
     setRoute(getPropertyInfoScreenUrl(propertyId, tenantId));
   }
@@ -922,6 +924,8 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
         return 'PT.MUTATION';
       } else if (creationReason == 'CREATE') {
         return 'PT.CREATE';
+      } else if (creationReason == 'LEGACY_ENTRY') {
+        return 'PT.LEGACY';
       } else if (creationReason == 'UPDATE') {
         return 'PT.CREATE';
       }
