@@ -218,7 +218,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
 
    let currentDate = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDay();
        
-   let limitEpochDate = convertDateTimeToEpoch("01-01-2021 00:00:00");
+   let limitEpochDate = convertDateTimeToEpoch("01-01-"+date.getFullYear()+" 00:00:00");
 
    let currentDatetoEpoch = convertDateToEpoch(currentDate);
 
@@ -242,7 +242,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
   // set(action, "screenConfig.components.footer", footer)
 
    //if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
-    if(payloadStatus ==="APPROVED" && payloadType ==="NEW" && ((currentDatetoEpoch<LicenseExpiryDate && currentDatetoEpoch>=limitEpochDate )||(currentDatetoEpoch>LicenseExpiryDate)))
+    if(payloadStatus ==="APPROVED" && (payloadType ==="NEW" || payloadType === "RENEWAL") && ((currentDatetoEpoch<LicenseExpiryDate && currentDatetoEpoch>=limitEpochDate )||(currentDatetoEpoch>LicenseExpiryDate)))
 
     {
       dispatch(handleField(
@@ -262,35 +262,35 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       ));
 
     }
-    else if(payloadType ==="RENEWAL")
-    {
-      dispatch(handleField(
-        "search-preview",
-        "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
-        "visible",
-        false
-      ))
-      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
-      // dispatch(
-      //   handleField(
-      //     "search-preview",
-      //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
-      //     "props.visible",
-      //     false
-      //   )
-      // );
-      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
+    // else if(payloadType ==="RENEWAL")
+    // {
+    //   dispatch(handleField(
+    //     "search-preview",
+    //     "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
+    //     "visible",
+    //     true
+    //   ))
+    //   set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton.props.visible", true)
+    //   // dispatch(
+    //   //   handleField(
+    //   //     "search-preview",
+    //   //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+    //   //     "props.visible",
+    //   //     false
+    //   //   )
+    //   // );
+    //   set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton.props.visible", true)
 
-      // dispatch(
-      //   handleField(
-      //     "search-preview",
-      //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
-      //     "props.visible",
-      //     false
-      //   )
-      // );
+    //   // dispatch(
+    //   //   handleField(
+    //   //     "search-preview",
+    //   //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+    //   //     "props.visible",
+    //   //     false
+    //   //   )
+    //   // );
 
-    }
+    // }
     else    {
       dispatch(handleField(
         "search-preview",

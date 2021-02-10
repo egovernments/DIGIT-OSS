@@ -13,6 +13,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import isEmpty from "lodash/isEmpty";
 import "./index.css";
+import {convertDateTimeToEpoch,convertDateToEpoch} from "egov-tradelicence/ui-config/screens/specs/utils/index"
 
 class Footer extends React.Component {
   state = {
@@ -186,6 +187,22 @@ class Footer extends React.Component {
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].licenseNumber`
     );
+    const LicensevalidToDate = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].validTo"
+    );
+
+   let LicenseExpiryDate = LicensevalidToDate-1000;
+
+
+   let date = new Date();
+
+   let currentDate = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDay();
+       
+   let limitEpochDate = convertDateTimeToEpoch("01-01-"+date.getFullYear()+" 00:00:00");
+
+   let currentDatetoEpoch = convertDateToEpoch(currentDate);
+
 
     const downloadMenu =
       contractData &&
@@ -210,7 +227,7 @@ class Footer extends React.Component {
           return true;
         })
        const rolecheck= rolearray.length>0? true: false;
-    if ((status === "APPROVED"||status === "EXPIRED") && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
+    if ((status === "APPROVED"||status === "EXPIRED") && ((currentDatetoEpoch<LicenseExpiryDate && currentDatetoEpoch>=limitEpochDate )||(currentDatetoEpoch>LicenseExpiryDate)) && rolecheck===true) {
       const editButton = {
         label: "Edit",
         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
