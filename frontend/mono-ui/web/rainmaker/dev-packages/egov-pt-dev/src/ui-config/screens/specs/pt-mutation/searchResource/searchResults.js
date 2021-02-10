@@ -304,6 +304,8 @@ const applicationNumberClick = async (item) => {
     navigate(`/pt-mutation/search-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}`);
   } else if (businessService == 'PT.CREATE') {
     navigate(`/property-tax/application-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}&type=property`);
+  } else if (businessService == 'PT.LEGACY') {
+    navigate(`/property-tax/application-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}&type=legacy`);
   } else {
     navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
   }

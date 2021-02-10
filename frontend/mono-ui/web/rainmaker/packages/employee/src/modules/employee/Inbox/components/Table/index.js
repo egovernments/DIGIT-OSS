@@ -222,8 +222,11 @@ class InboxData extends React.Component {
     // }
     let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText, row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText, row[0].subtext).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
-    if (row[0].subtext === "PT.CREATE") {
+    if (row[0].subtext === "PT.CREATE" ) {
       queryParams += '&type=property';
+    } 
+    else if (row[0].subtext === "PT.LEGACY") {
+      queryParams += '&type=legacy';
     }
     else if (row[0].subtext === "ASMT") {
       queryParams += '&type=assessment';
