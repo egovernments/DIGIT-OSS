@@ -40,7 +40,6 @@ public class Unit   {
         @JsonProperty("unitType")
         private String unitType;
 
-        @NotNull
         @JsonProperty("unitArea")
         private BigDecimal unitArea;
 
