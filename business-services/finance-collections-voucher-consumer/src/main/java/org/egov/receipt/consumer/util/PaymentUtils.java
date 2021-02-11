@@ -63,6 +63,7 @@ import org.egov.receipt.consumer.v2.model.BillDetailV2;
 import org.egov.receipt.consumer.v2.model.BillV2;
 import org.egov.receipt.consumer.v2.model.Payment;
 import org.egov.receipt.consumer.v2.model.PaymentDetail;
+import org.egov.receipt.consumer.v2.model.PaymentModeEnum;
 import org.egov.receipt.custom.exception.VoucherCustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -257,31 +258,20 @@ public class PaymentUtils {
         if(payment.getIfscCode() != null && !payment.getIfscCode().isEmpty()){
         	populateBankDetails(instrument,payment.getIfscCode());
         }
-//        instrument.setBank(bank);
-//        instrument.setBankAccount(bankAccount);
-//        instrument.setBranchName(branchName);
-//        instrument.setDrawer(drawer);
-//        instrument.setFinancialStatus(financialStatus);
-//        instrument.setId(payment.getId());
         instrument.setPaymentId(payment.getId());
         instrument.setInstrumentDate(payment.getInstrumentDate());
         instrument.setInstrumentNumber(payment.getInstrumentNumber());
         instrument.setInstrumentStatus(payment.getInstrumentStatus());
         InstrumentType instrumentType = new InstrumentType();
-        instrumentType.setName(this.toCamelCase(payment.getPaymentMode().name()));
+		if (payment.getPaymentMode().name().equalsIgnoreCase("DD"))
+			instrumentType.setName(payment.getPaymentMode().name().toUpperCase());
+		else
+			instrumentType.setName(this.toCamelCase(payment.getPaymentMode().name()));
         instrument.setInstrumentType(instrumentType);
-//        instrument.setInstrumentVouchers(instrumentVouchers);
-//        instrument.setPayee(payee);
-//        instrument.setPayinSlipId(payinSlipId);
-//        instrument.setReconciledAmount(reconciledAmount);
-//        instrument.setReconciledOn(reconciledOn);
-//        instrument.setSerialNo(serialNo);
         instrument.setTenantId(payment.getTenantId());
         instrument.setTransactionDate(new Date(payment.getTransactionDate()));
-//        instrument.setTransactionDateInput(transactionDateInput);
         instrument.setTransactionNumber(payment.getTransactionNumber());
         instrument.setTransactionType(TransactionType.Debit);
-        
     }
     
     /**
