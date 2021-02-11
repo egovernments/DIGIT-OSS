@@ -595,6 +595,17 @@ export const checkValueForNA = value => {
   return value && value !== "null" ? value : "NA";
 };
 
+export const convertDateTimeToEpoch = dateTimeString => {
+  //example input format : "26-07-2018 17:43:21"
+  try {
+    const parts = dateTimeString.match(
+      /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/
+    );
+    return Date.UTC(+parts[3], parts[2] - 1, +parts[1], +parts[4], +parts[5]);
+  } catch (e) {
+    return dateTimeString;
+  }
+}
 export const tradeValueNote = (label, value, props = {}) => {
   return {
     uiFramework: "custom-atoms",
@@ -603,106 +614,16 @@ export const tradeValueNote = (label, value, props = {}) => {
       style: {
         marginBottom: "16px",
         wordBreak : "break-word",
+        width:"40%",
         display:"flex",
+        justifyContent:"space-between",
         flexWrap:"wrap"
       },
       ...props
     },
     children: {
-      label: getCommonCaption(label,{style:{fontSize:"15px"}}),
-      value: getCommonValue(value,{style:{fontSize:"15px",lineHeight:"unset",marginLeft:"5px"}})
+      label: getCommonCaption(label),
+      value: getCommonValue(value)
     }
-  };
-};
-
-export const getCommonContainerNew = (children, props = {}) => {
-  return {
-    componentPath: "Grid",
-    gridDefination: {
-      xs: 12,
-      sm: 6
-    },
-    props: {
-      container: true,
-      style:{
-        display:"flex",
-        flexDirection:"column",
-      },
-      ...props
-    },
-    children
-  };
-};
-export const ptFeeLabelWithValue = (label, value, props = {}) => {
-  return {
-    uiFramework: "custom-atoms",
-    componentPath: "Div",
-    props: {
-      style: {
-        marginBottom: "16px",
-        wordBreak : "break-word",
-        display:"flex",
-        flexWrap:"wrap",
-        justifyContent:"space-between"
-      },
-      ...props
-    },
-    children: {
-      label: getCommonCaption(label,{style:{fontSize:"15px"}}),
-      value: getCommonValue(value,{style:{fontSize:"15px",lineHeight:"unset",marginLeft:"5px"}})
-    }
-  };
-};
-export const ptButtons = () => {
-  return {
-    buttonContainer: getCommonContainer({
-      goToHomeButton: {
-        componentPath: "Button",
-        props: {
-          variant: "outlined",
-          color: "primary",
-          style: {
-            minWidth: "200px",
-            height: "48px",
-            marginRight: "16px"
-          }
-        },
-        children: {
-          downloadReceiptButtonLabel: getLabel({
-            labelName: "Go To Home",
-            labelKey: "ABG_GO_TO_HOME_BUTTON"
-          })
-        },
-        onClickDefination: {
-          action: "page_change",
-          // path: `${getRedirectionURL()}`
-        }
-      },
-    
-      viewReceiptButton: {
-        componentPath: "Button",
-        props: {
-          variant: "contained",
-          color: "primary",
-          style: {
-            minWidth: "200px",
-            height: "48px",
-            marginRight: "16px"
-          }
-        },
-        children: {
-          downloadReceiptButtonLabel: getLabel({
-            labelName: "VIEW RECEIPT",
-            labelKey: "ABG_VIEW_RECEIPT_BUTTON"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            // viewReceipt(state, dispatch);
-          }
-        }
-      }
-    })
   };
 };
