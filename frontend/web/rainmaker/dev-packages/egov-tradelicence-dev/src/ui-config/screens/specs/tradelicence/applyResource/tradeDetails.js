@@ -7,7 +7,10 @@ import {
   getDateField,
   getSelectField,
   getCommonContainer,
-  getPattern
+  getLabelWithValue,
+  getLabelWithValueForModifiedLabel,
+  getPattern,
+  tradeValueNote
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getIconStyle,
@@ -30,6 +33,7 @@ import get from "lodash/get";
 import filter from "lodash/filter";
 import { convertEpochToDate,getAllDataFromBillingSlab } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {httpRequest} from "../../../../../ui-utils"
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
@@ -435,6 +439,63 @@ const tradeUnitCard = {
               } catch (e) {
                 console.log(e);
               }
+            },afterFieldChange: async (action, state, dispatch)=>{
+              let cardIndex = action.componentJsonpath
+                  .split("items[")[1]
+                  .split("]")[0];
+                let tradeLicenceData = get(
+                  state.screenConfiguration.preparedFinalObject,
+                  `Licenses`,
+                  ""
+                );
+                if(tradeLicenceData && tradeLicenceData[0]){
+
+                  let apType = tradeLicenceData[0].applicationType.split(".")[1];
+                  const queryObj = [
+                    {
+                      key: "applicationType",
+                      value: apType
+                    },
+                    {
+                      key: "structureType",
+                      value: tradeLicenceData[0].tradeLicenseDetail.structureType
+                    },
+                    {
+                      key: "tradeType",
+                      value: tradeLicenceData[0].tradeLicenseDetail.tradeUnits[cardIndex].tradeType
+                    }
+                  ];
+                let payload = await httpRequest(
+                  "post",
+                  `/tl-calculator/billingslab/_search?tenantId=${getTenantId()}`,
+                  "_search",
+                  queryObj,
+                  {}
+                );
+                let rate = payload && payload.billingSlab && payload.billingSlab.length>0 && payload.billingSlab[0].rate;
+                dispatch(
+                  pFO(
+                    `Licenses[0].tradeLicenseDetail.tradeUnits[${cardIndex}].rate`,
+                    rate
+                  )
+                );
+                  dispatch(	
+                    handleField(	
+                      "apply",	
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeValue.props",	
+                       "visible",	
+                       true
+                    )	
+                  );
+                  dispatch(	
+                    handleField(	
+                      "apply",	
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeValue",	
+                       "visible",	
+                       true
+                    )	
+                  );
+                }
             }
           },
           tradeUOM: getTextField({
@@ -1245,7 +1306,16 @@ export const tradeDetails = getCommonCard({
           : {} */
     }
   ),
-  tradeUnitCard
+  tradeUnitCard,
+  tradeValue: tradeValueNote(
+            {
+              labelKey: "TL_NEW_TRADE_DETAILS_TRADE_UNIT_AMOUNT",
+              labelName: "Trade unit amount",
+            },
+            {
+              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].rate",
+            }
+          ),
   // accessoriesCard
 });
 

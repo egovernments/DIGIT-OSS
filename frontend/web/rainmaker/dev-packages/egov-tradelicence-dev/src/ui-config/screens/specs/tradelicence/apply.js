@@ -405,6 +405,22 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
       );
+      dispatch(	
+        handleField(	
+          "apply",	
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeValue.props",	
+           "visible",	
+           false
+        )	
+      );
+      dispatch(	
+        handleField(	
+          "apply",	
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeValue",	
+           "visible",	
+           false
+        )	
+      );
     });
 
     return action;

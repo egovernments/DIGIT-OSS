@@ -594,3 +594,25 @@ export const getPattern = type => {
 export const checkValueForNA = value => {
   return value && value !== "null" ? value : "NA";
 };
+
+export const tradeValueNote = (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: {
+        marginBottom: "16px",
+        wordBreak : "break-word",
+        width:"40%",
+        display:"flex",
+        justifyContent:"space-between",
+        flexWrap:"wrap"
+      },
+      ...props
+    },
+    children: {
+      label: getCommonCaption(label),
+      value: getCommonValue(value)
+    }
+  };
+};
