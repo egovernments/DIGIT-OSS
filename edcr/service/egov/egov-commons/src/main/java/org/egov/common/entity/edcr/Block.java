@@ -91,6 +91,8 @@ public class Block extends Measurement {
     private List<TerraceUtility> terraceUtilities;
     private FireTenderMovement fireTenderMovement;
     private List<Measurement> parapetWithColor = new ArrayList<>();
+    private Parapet parapetV2;
+    private Chimney chimneyV2;
     
     @Override
     public String toString() {
@@ -393,5 +395,21 @@ public class Block extends Measurement {
     public void setParapetWithColor(List<Measurement> parapetWithColor) {
         this.parapetWithColor = parapetWithColor;
     }
-    
+
+	public Parapet getParapetV2() {
+		return parapetV2;
+	}
+
+	public void setParapetV2(Parapet parapetV2) {
+		this.parapetV2 = parapetV2;
+	}
+
+	public Chimney getChimneyV2() {
+		return chimneyV2;
+	}
+
+	public void setChimneyV2(Chimney chimneyV2) {
+		this.chimneyV2 = chimneyV2;
+	}
+ 
 }
