@@ -603,7 +603,7 @@ export const tradeValueNote = (label, value, props = {}) => {
       style: {
         marginBottom: "16px",
         wordBreak : "break-word",
-        width:"40%",
+        width:"24%",
         display:"flex",
         justifyContent:"space-between",
         flexWrap:"wrap"
