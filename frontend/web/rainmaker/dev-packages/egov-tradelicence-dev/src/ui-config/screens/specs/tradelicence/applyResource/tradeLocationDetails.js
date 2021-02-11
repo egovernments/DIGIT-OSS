@@ -208,7 +208,7 @@ export const tradeLocationDetails = getCommonCard(
             labelName: "Select Mohalla",
             labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
           },
-          className:"mohalla-details",
+         // className:"mohalla-details",
           disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
           jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
           sourceJsonPath: "applyScreenMdmsData.tenant.localities",

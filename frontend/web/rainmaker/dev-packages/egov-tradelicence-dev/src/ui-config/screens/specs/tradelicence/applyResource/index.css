@@ -55,17 +55,3 @@
     height: 166px !important;
     width: 498px !important; } }
 
-.mohalla-details {
-  box-sizing: border-box;
-  background-color: #ffffff;
-  
-  display: block;
-  position: absolute !important;
-  display: block;
-
-  z-index: 1;
-  }
-
-#material-ui-tradeLocationDetails {
-  padding-bottom: 200px !important;
-  overflow-x: scroll; }
