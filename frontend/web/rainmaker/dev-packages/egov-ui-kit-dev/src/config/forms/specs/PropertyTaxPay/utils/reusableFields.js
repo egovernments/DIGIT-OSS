@@ -966,8 +966,8 @@ export const prepareDropDownData = (master, withOriginal = false) => {
       else if(master[variable].code==="PUCCA"||master[variable].code ==="SEMIPUCCA"||master[variable].code==="KUCCHA") {
         dropDownData.push({ label: getTranslatedLabel(`PROPERTYTAX_CONSTRUCTIONTYPE_${master[variable].code}`,localizationLabels), value: master[variable].code });
       }
-      else {
-        dropDownData.push({ label: `${master[variable].code}`, value: master[variable].code });
+     else {
+        dropDownData.push({ label: getTranslatedLabel(`PROPERTYTAX_FLOOR_${master[variable].code}`,localizationLabels), value: master[variable].code });
       }
     }
   }
