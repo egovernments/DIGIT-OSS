@@ -93,7 +93,8 @@ $(document).ready(function(){
 					return moment(value).format('DD/MM/YYYY');
 				}
 			},
-			{"data" : "instrumentAmount","sClass" : "text-left"}
+			{"data" : "instrumentAmount","sClass" : "text-left"},
+			{"data" : "dishonorReason","sClass" : "text-left"}
 			];
 		$.fn.dataTable.ext.errMode = 'none';
 		var heading = prepareHeading();

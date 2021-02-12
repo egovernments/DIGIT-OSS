@@ -701,21 +701,18 @@ public class DishonorChequeService implements FinancialIntegrationService {
         });
         microserviceUtils.updateInstruments(instruments, null, finStatus );
         // calling cancel receipt api
-        LOGGER.info("calling cancel receipt for : receiptNumbers" + receiptNumbers);
         if (!receiptNumbers.isEmpty()) {
             receiptList = microserviceUtils.getReceipts(StringUtils.join(receiptNumbers, ","));
-            LOGGER.info("calling cancel receipt for : receiptList" + receiptList);
             for (Receipt receipts : receiptList) {
                 paymentIdSet.add(receipts.getPaymentId());
                 break;
             }
-            LOGGER.info("calling cancel receipt for : paymentIdSet" + paymentIdSet);
             switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
             case "V2":
             case "VERSION2":
                 if (!paymentIdSet.isEmpty()) {
                     microserviceUtils.performWorkflow(paymentIdSet, PaymentWorkflow.PaymentAction.DISHONOUR,
-                            "Payment got cancelled/dishonoured from finance");
+                            model.getDishonorReason());
                 }
                 break;
 
@@ -788,6 +785,7 @@ public class DishonorChequeService implements FinancialIntegrationService {
                 Long dateVal=ins.getDishonor().getDishonorDate();
                 Date date=new Date(dateVal); 
                 chequeBean.setDishonorDate(date);
+                chequeBean.setDishonorReason(ins.getDishonor().getReason());
                 dishonoredChequeList.add(chequeBean);
             });
             return dishonoredChequeList;
