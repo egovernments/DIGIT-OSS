@@ -701,34 +701,33 @@ public class DishonorChequeService implements FinancialIntegrationService {
         });
         microserviceUtils.updateInstruments(instruments, null, finStatus );
         // calling cancel receipt api
-        LOGGER.info("calling cancel receipt for : receiptNumbers" +receiptNumbers);
-
-        if(!receiptNumbers.isEmpty()) {
-        receiptList = microserviceUtils.getReceipts(StringUtils.join(receiptNumbers, ","));
-        LOGGER.info("calling cancel receipt for : receiptList" + receiptList);
-        for (Receipt receipts : receiptList) {
-            paymentIdSet.add(receipts.getPaymentId());
-            break;
-        }
-        LOGGER.info("calling cancel receipt for : paymentIdSet" + paymentIdSet);
-        switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
-        case "V2":
-        case "VERSION2":
-            if (!paymentIdSet.isEmpty()) {
-                microserviceUtils.performWorkflow(paymentIdSet, PaymentWorkflow.PaymentAction.CANCEL,
-                        "Payment got cancelled from finance");
+        LOGGER.info("calling cancel receipt for : receiptNumbers" + receiptNumbers);
+        if (!receiptNumbers.isEmpty()) {
+            receiptList = microserviceUtils.getReceipts(StringUtils.join(receiptNumbers, ","));
+            LOGGER.info("calling cancel receipt for : receiptList" + receiptList);
+            for (Receipt receipts : receiptList) {
+                paymentIdSet.add(receipts.getPaymentId());
+                break;
             }
-            break;
+            LOGGER.info("calling cancel receipt for : paymentIdSet" + paymentIdSet);
+            switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+            case "V2":
+            case "VERSION2":
+                if (!paymentIdSet.isEmpty()) {
+                    microserviceUtils.performWorkflow(paymentIdSet, PaymentWorkflow.PaymentAction.DISHONOUR,
+                            "Payment got cancelled/dishonoured from finance");
+                }
+                break;
 
-        default:
-            for (final Receipt receiptHeader : receiptList) {
-                receiptHeader.getBill().get(0).getBillDetails().get(0).setStatus("Cancelled");
-                receiptHeader.getInstrument().setTenantId(receiptHeader.getTenantId());
-                receiptHeader.getBill().get(0).setPayerName(receiptHeader.getBill().get(0).getPaidBy());
+            default:
+                for (final Receipt receiptHeader : receiptList) {
+                    receiptHeader.getBill().get(0).getBillDetails().get(0).setStatus("Cancelled");
+                    receiptHeader.getInstrument().setTenantId(receiptHeader.getTenantId());
+                    receiptHeader.getBill().get(0).setPayerName(receiptHeader.getBill().get(0).getPaidBy());
+                }
+                ReceiptResponse response = microserviceUtils.updateReceipts(new ArrayList<>(receiptList));
+                break;
             }
-            ReceiptResponse response = microserviceUtils.updateReceipts(new ArrayList<>(receiptList));
-            break;
-        }
         }
     }
     
