@@ -25,4 +25,5 @@ public class VoucherSearchCriteria {
     private String voucherName;
     private String fundId;
     private String deptCode;
+    private String tenantId;
 }

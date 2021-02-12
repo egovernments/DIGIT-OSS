@@ -228,8 +228,11 @@ public class EgfKafkaListener {
         			}else{
         				throw new VoucherCustomException(ProcessStatus.FAILED, String.format("Vouchers is not exist for Payment id: %1$s", paymentId));
         			}
-        	}
-        		}
+                } else if (topic.equals(manager.getCancelPaymentTopicName())
+                        && payRequest.getPayment().getPaymentStatus().equals(PaymentStatusEnum.DISHONOURED)) {
+                    LOGGER.info("Payment dishonoured successfully.");
+                }
+            }
         }catch(VoucherCustomException e){
         	this.getBackupToDB(recRequest,e.getStatus(),e.getMessage(),voucherNumber);
         	LOGGER.error(e.getMessage());

@@ -516,6 +516,7 @@ public class VoucherServiceImpl implements VoucherService {
 		VoucherSearchRequest request = new VoucherSearchRequest();
 		request.setRequestInfo(requestInfo);
 		request.setTenantId(tenantId);
+		criteria.setTenantId(tenantId);
 		StringBuilder url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)).append(propertiesManager.getVoucherSearchUrl()).append("?");
 		prepareQueryString(url, criteria);
 		try {
@@ -553,15 +554,18 @@ public class VoucherServiceImpl implements VoucherService {
 		return reversalVoucherResponse;
 	}
 
-	private void prepareQueryString(StringBuilder url, VoucherSearchCriteria criteria) {
-		if(criteria.getIds() != null && !criteria.getIds().isEmpty()){
-			String collect = criteria.getIds().stream().map(id -> id.toString()).collect(Collectors.joining(", "));
-			url.append("&ids=").append(collect);
-		}
-		if(criteria.getVoucherNumbers() != null && !criteria.getVoucherNumbers().isEmpty()){
-			url.append("&voucherNumbers=").append(String.join(", ", criteria.getVoucherNumbers()));
-		}
-	}
+    private void prepareQueryString(StringBuilder url, VoucherSearchCriteria criteria) {
+        if (criteria.getTenantId() != null && !criteria.getTenantId().isEmpty()) {
+            url.append("tenantId=").append(criteria.getTenantId());
+        }
+        if (criteria.getIds() != null && !criteria.getIds().isEmpty()) {
+            String collect = criteria.getIds().stream().map(id -> id.toString()).collect(Collectors.joining(", "));
+            url.append("&ids=").append(collect);
+        }
+        if (criteria.getVoucherNumbers() != null && !criteria.getVoucherNumbers().isEmpty()) {
+            url.append("&voucherNumbers=").append(String.join(", ", criteria.getVoucherNumbers()));
+        }
+    }
 	
 	private List<AccountDetail> prepareLedgerForReversalVoucher(Map<String, AccountDetail> rvGlcodeMap,
 			Map<String, AccountDetail> pisGlCodeMap) {
