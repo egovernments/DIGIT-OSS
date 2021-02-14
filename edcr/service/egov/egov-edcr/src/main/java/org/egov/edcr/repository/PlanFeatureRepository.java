@@ -99,7 +99,7 @@ import org.egov.edcr.feature.PlanInfoFeature;
 import org.egov.edcr.feature.Plantation;
 import org.egov.edcr.feature.PlantationGreenStrip;
 import org.egov.edcr.feature.PlotArea;
-import org.egov.edcr.feature.Portico;
+import org.egov.edcr.feature.PorticoService;
 import org.egov.edcr.feature.RainWaterHarvesting;
 import org.egov.edcr.feature.RampService;
 import org.egov.edcr.feature.RecreationalSpace;
@@ -368,7 +368,7 @@ public class PlanFeatureRepository {
         pf = new PlanFeature(GlassFacadeOpening.class);
         features.add(pf);
 
-        pf = new PlanFeature(Portico.class);
+        pf = new PlanFeature(PorticoService.class);
         features.add(pf);
         
         
