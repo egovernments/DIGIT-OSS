@@ -93,7 +93,8 @@ public class Block extends Measurement {
     private List<Measurement> parapetWithColor = new ArrayList<>();
     private Parapet parapetV2;
     private Chimney chimneyV2;
-    
+    private List<Portico> porticos = new ArrayList<>();
+
     @Override
     public String toString() {
         return "Block [building=" + building + ", name=" + name + ", number=" + number + ", setBacks=" + setBacks
@@ -411,5 +412,17 @@ public class Block extends Measurement {
 	public void setChimneyV2(Chimney chimneyV2) {
 		this.chimneyV2 = chimneyV2;
 	}
- 
+
+	public List<Portico> getPorticos() {
+		return porticos;
+	}
+
+	public void setPorticos(List<Portico> porticos) {
+		this.porticos = porticos;
+	}
+
+	public void addPorticos(Portico portico) {
+		this.porticos.add(portico);
+	}
+
 }
