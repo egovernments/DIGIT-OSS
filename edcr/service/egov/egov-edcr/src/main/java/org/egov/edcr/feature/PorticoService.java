@@ -67,7 +67,8 @@ public class PorticoService extends FeatureProcess {
 	
 	private static final String SUBRULE_PORTICO = "PORTICO";
 	private static final String SUBRULE_PORTICO_MAX_LENGTHDESCRIPTION = "Maximum Portico length for portico %s ";
-	
+    public static final String PORTICO_DISTANCETO_EXTERIORWALL = "Block %s Portico %s Portico distance to exteriorwall";
+
     @Override
     public Plan validate(Plan plan) {
         HashMap<String, String> errors = new HashMap<>();
@@ -77,9 +78,9 @@ public class PorticoService extends FeatureProcess {
     		 { 
     			 if(portico.getDistanceToExteriorWall().isEmpty())
     			 {
-    				 errors.put(String.format(DcrConstants.PORTICO_DISTANCETO_EXTERIORWALL, block.getNumber(),portico.getName()),
+    				 errors.put(String.format(PORTICO_DISTANCETO_EXTERIORWALL, block.getNumber(),portico.getName()),
                              edcrMessageSource.getMessage(DcrConstants.OBJECTNOTDEFINED,
-                                     new String[] { String.format(DcrConstants.PORTICO_DISTANCETO_EXTERIORWALL, block.getNumber(),portico.getName()) },
+                                     new String[] { String.format(PORTICO_DISTANCETO_EXTERIORWALL, block.getNumber(),portico.getName()) },
                                      LocaleContextHolder.getLocale()));
                      plan.addErrors(errors);
     			 }
