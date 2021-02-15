@@ -212,10 +212,16 @@ export const newCollectionDetailsCard = getCommonCard(
                 serviceData[action.value].child &&
                 serviceData[action.value].child.length > 0
               ) {
+                var arr1=[]
+                for(let i=0;i<serviceData[action.value].child.length;i++)
+                      {
+                        if(serviceData[action.value].child[i].isActive)
+                        arr1.push(serviceData[action.value].child[i])
+                      }
                 dispatch(
                   prepareFinalObject(
                     "applyScreenMdmsData.serviceTypes",
-                    serviceData[action.value].child
+                    arr1
                   )
                 );
                 dispatch(
