@@ -1,5 +1,6 @@
 /*
- * eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+ * eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency
+,
  * accountability and the service delivery of the government  organizations.
  *
  *  Copyright (C) <2019>  eGovernments Foundation
@@ -47,87 +48,41 @@
 
 package org.egov.common.entity.edcr;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class Room {
+/**
+ * @author vinoth
+ *
+ */
+public class SupplyLine implements Serializable {
 
-    private String number;
+    private static final long serialVersionUID = 90L;
 
-    private List<RoomHeight> heightOfRooms = new ArrayList<>();
-    
-    private Boolean closed = false;
+    // List of all supply lines
+    private List<Measurement> supplyLines = new ArrayList<>();
 
-    private List<Measurement> rooms = new ArrayList<>();
+    // Key: Color code, Value: List of dimensions like distances, length
+    private Map<Integer, List<BigDecimal>> distances = Collections.emptyMap();
 
-    private MeasurementWithHeight lightAndVentilation = new MeasurementWithHeight();
-
-    private List<Occupancy> mezzanineAreas = new ArrayList<>();
-
-    public List<RoomHeight> getHeights() {
-        return heightOfRooms;
+    public List<Measurement> getSupplyLines() {
+        return supplyLines;
     }
 
-    public void setHeights(List<RoomHeight> heights) {
-        this.heightOfRooms = heights;
+    public void setSupplyLines(List<Measurement> supplyLines) {
+        this.supplyLines = supplyLines;
     }
 
-    /**
-     * @return the closed
-     */
-    public Boolean getClosed() {
-        return closed;
+    public Map<Integer, List<BigDecimal>> getDistances() {
+        return distances;
     }
 
-    /**
-     * @param closed the closed to set
-     */
-    public void setClosed(Boolean closed) {
-        this.closed = closed;
-    }
-
-    /**
-     * @return the number
-     */
-    public String getNumber() {
-        return number;
-    }
-
-    /**
-     * @param number the number to set
-     */
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    /**
-     * @return the lightAndVentilation
-     */
-    public MeasurementWithHeight getLightAndVentilation() {
-        return lightAndVentilation;
-    }
-
-    /**
-     * @param lightAndVentilation the lightAndVentilation to set
-     */
-    public void setLightAndVentilation(MeasurementWithHeight lightAndVentilation) {
-        this.lightAndVentilation = lightAndVentilation;
-    }
-
-    public List<Measurement> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(List<Measurement> rooms) {
-        this.rooms = rooms;
-    }
-
-    public List<Occupancy> getMezzanineAreas() {
-        return mezzanineAreas;
-    }
-
-    public void setMezzanineAreas(List<Occupancy> mezzanineAreas) {
-        this.mezzanineAreas = mezzanineAreas;
+    public void setDistances(Map<Integer, List<BigDecimal>> distances) {
+        this.distances = distances;
     }
 
 }

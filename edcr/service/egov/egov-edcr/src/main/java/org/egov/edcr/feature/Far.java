@@ -566,13 +566,13 @@ public class Far extends FeatureProcess {
                         : null;
                         
                 if (!(pl.getVirtualBuilding().getResidentialOrCommercialBuilding()
-                        || (mostRestrictiveOccupancy.getType() != null
+                        || (mostRestrictiveOccupancy != null && mostRestrictiveOccupancy.getType() != null
                                 && DxfFileConstants.G.equalsIgnoreCase(mostRestrictiveOccupancy.getType().getCode())))) {
                     pl.getErrors().put(DxfFileConstants.OCCUPANCY_ALLOWED_KEY, DxfFileConstants.OCCUPANCY_ALLOWED);
                     return pl;
                 }
                 
-                Set<String> occupancyCodes = new HashSet<String>();
+                Set<String> occupancyCodes = new HashSet<>();
                 for (OccupancyTypeHelper oth : pl.getVirtualBuilding().getOccupancyTypes()) {
                     if (oth.getSubtype() != null) {
                         occupancyCodes.add(oth.getSubtype().getCode());

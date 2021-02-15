@@ -47,87 +47,51 @@
 
 package org.egov.common.entity.edcr;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
-public class Room {
+public class GlassFacadeOpening {
 
-    private String number;
+    private static final long serialVersionUID = 102L;
 
-    private List<RoomHeight> heightOfRooms = new ArrayList<>();
-    
-    private Boolean closed = false;
+    private Integer number;
 
-    private List<Measurement> rooms = new ArrayList<>();
+    private List<BigDecimal> widths;
 
-    private MeasurementWithHeight lightAndVentilation = new MeasurementWithHeight();
+    private List<BigDecimal> heights;
 
-    private List<Occupancy> mezzanineAreas = new ArrayList<>();
+    private List<BigDecimal> floorToGlassOpeningHeights;
 
-    public List<RoomHeight> getHeights() {
-        return heightOfRooms;
-    }
-
-    public void setHeights(List<RoomHeight> heights) {
-        this.heightOfRooms = heights;
-    }
-
-    /**
-     * @return the closed
-     */
-    public Boolean getClosed() {
-        return closed;
-    }
-
-    /**
-     * @param closed the closed to set
-     */
-    public void setClosed(Boolean closed) {
-        this.closed = closed;
-    }
-
-    /**
-     * @return the number
-     */
-    public String getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    /**
-     * @param number the number to set
-     */
-    public void setNumber(String number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 
-    /**
-     * @return the lightAndVentilation
-     */
-    public MeasurementWithHeight getLightAndVentilation() {
-        return lightAndVentilation;
+    public List<BigDecimal> getWidths() {
+        return widths;
     }
 
-    /**
-     * @param lightAndVentilation the lightAndVentilation to set
-     */
-    public void setLightAndVentilation(MeasurementWithHeight lightAndVentilation) {
-        this.lightAndVentilation = lightAndVentilation;
+    public void setWidths(List<BigDecimal> widths) {
+        this.widths = widths;
     }
 
-    public List<Measurement> getRooms() {
-        return rooms;
+    public List<BigDecimal> getHeights() {
+        return heights;
     }
 
-    public void setRooms(List<Measurement> rooms) {
-        this.rooms = rooms;
+    public void setHeights(List<BigDecimal> heights) {
+        this.heights = heights;
     }
 
-    public List<Occupancy> getMezzanineAreas() {
-        return mezzanineAreas;
+    public List<BigDecimal> getFloorToGlassOpeningHeights() {
+        return floorToGlassOpeningHeights;
     }
 
-    public void setMezzanineAreas(List<Occupancy> mezzanineAreas) {
-        this.mezzanineAreas = mezzanineAreas;
+    public void setFloorToGlassOpeningHeights(List<BigDecimal> floorToGlassOpeningHeights) {
+        this.floorToGlassOpeningHeights = floorToGlassOpeningHeights;
     }
 
 }

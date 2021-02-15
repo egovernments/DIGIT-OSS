@@ -167,6 +167,9 @@ public class Plan implements Serializable {
     // Plot all sides compound wall and their railing heights
     private CompoundWall compoundWall;
 
+    // Roads reserved by government for road widening purpose
+    private transient List<Road> roadReserves = new ArrayList<>();
+
     @Transient
     @JsonIgnore
     public StringBuffer additionsToDxf = new StringBuffer();
@@ -195,7 +198,7 @@ public class Plan implements Serializable {
     private HashMap<String, String> featureAmendments = new LinkedHashMap<>();
     private transient Map<String, List<Object>> mdmsMasterData;
     private transient Boolean mainDcrPassed = false;
-    
+
     public List<BigDecimal> getCanopyDistanceFromPlotBoundary() {
         return canopyDistanceFromPlotBoundary;
     }
@@ -229,7 +232,7 @@ public class Plan implements Serializable {
     public void setAccessoryBlocks(List<AccessoryBlock> accessoryBlocks) {
         this.accessoryBlocks = accessoryBlocks;
     }
-    
+
     public List<BigDecimal> getAccessoryBlockDistances() {
         return accessoryBlockDistances;
     }
@@ -560,6 +563,14 @@ public class Plan implements Serializable {
 
     public CompoundWall getCompoundWall() {
         return compoundWall;
+    }
+
+    public List<Road> getRoadReserves() {
+        return roadReserves;
+    }
+
+    public void setRoadReserves(List<Road> roadReserves) {
+        this.roadReserves = roadReserves;
     }
 
     public Map<String, String> getPlanInfoProperties() {

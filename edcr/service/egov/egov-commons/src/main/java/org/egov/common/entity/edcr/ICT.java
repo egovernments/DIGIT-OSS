@@ -50,84 +50,16 @@ package org.egov.common.entity.edcr;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Room {
+public class ICT extends Room {
 
-    private String number;
+    List<Measurement> doors = new ArrayList<>();
 
-    private List<RoomHeight> heightOfRooms = new ArrayList<>();
-    
-    private Boolean closed = false;
-
-    private List<Measurement> rooms = new ArrayList<>();
-
-    private MeasurementWithHeight lightAndVentilation = new MeasurementWithHeight();
-
-    private List<Occupancy> mezzanineAreas = new ArrayList<>();
-
-    public List<RoomHeight> getHeights() {
-        return heightOfRooms;
+    public List<Measurement> getDoors() {
+        return doors;
     }
 
-    public void setHeights(List<RoomHeight> heights) {
-        this.heightOfRooms = heights;
-    }
-
-    /**
-     * @return the closed
-     */
-    public Boolean getClosed() {
-        return closed;
-    }
-
-    /**
-     * @param closed the closed to set
-     */
-    public void setClosed(Boolean closed) {
-        this.closed = closed;
-    }
-
-    /**
-     * @return the number
-     */
-    public String getNumber() {
-        return number;
-    }
-
-    /**
-     * @param number the number to set
-     */
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    /**
-     * @return the lightAndVentilation
-     */
-    public MeasurementWithHeight getLightAndVentilation() {
-        return lightAndVentilation;
-    }
-
-    /**
-     * @param lightAndVentilation the lightAndVentilation to set
-     */
-    public void setLightAndVentilation(MeasurementWithHeight lightAndVentilation) {
-        this.lightAndVentilation = lightAndVentilation;
-    }
-
-    public List<Measurement> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(List<Measurement> rooms) {
-        this.rooms = rooms;
-    }
-
-    public List<Occupancy> getMezzanineAreas() {
-        return mezzanineAreas;
-    }
-
-    public void setMezzanineAreas(List<Occupancy> mezzanineAreas) {
-        this.mezzanineAreas = mezzanineAreas;
+    public void setDoors(List<Measurement> doors) {
+        this.doors = doors;
     }
 
 }

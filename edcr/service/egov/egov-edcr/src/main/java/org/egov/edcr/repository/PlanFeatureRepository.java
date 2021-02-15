@@ -67,16 +67,20 @@ import org.egov.edcr.feature.ConstructedArea;
 import org.egov.edcr.feature.Coverage;
 import org.egov.edcr.feature.DepthCuttingService;
 import org.egov.edcr.feature.DistanceToRoad;
+import org.egov.edcr.feature.DrinageService;
 import org.egov.edcr.feature.ExitWidth;
 import org.egov.edcr.feature.Far;
 import org.egov.edcr.feature.FireStair;
 import org.egov.edcr.feature.FireTenderMovement;
+import org.egov.edcr.feature.FootpathService;
 import org.egov.edcr.feature.GateService;
 import org.egov.edcr.feature.GeneralStair;
+import org.egov.edcr.feature.GlassFacadeOpening;
 import org.egov.edcr.feature.GovtBuildingDistance;
 import org.egov.edcr.feature.GuardRoom;
 import org.egov.edcr.feature.HeadRoom;
 import org.egov.edcr.feature.HeightOfRoom;
+import org.egov.edcr.feature.ICTService;
 import org.egov.edcr.feature.InteriorOpenSpaceService;
 import org.egov.edcr.feature.Kitchen;
 import org.egov.edcr.feature.LandUse;
@@ -96,11 +100,13 @@ import org.egov.edcr.feature.PlanInfoFeature;
 import org.egov.edcr.feature.Plantation;
 import org.egov.edcr.feature.PlantationGreenStrip;
 import org.egov.edcr.feature.PlotArea;
+import org.egov.edcr.feature.PorticoService;
 import org.egov.edcr.feature.RainWaterHarvesting;
 import org.egov.edcr.feature.RampService;
 import org.egov.edcr.feature.RecreationalSpace;
 import org.egov.edcr.feature.RecycleWasteWater;
 import org.egov.edcr.feature.RiverDistance;
+import org.egov.edcr.feature.RoadReserve;
 import org.egov.edcr.feature.RoadWidth;
 import org.egov.edcr.feature.RoofTank;
 import org.egov.edcr.feature.Sanitation;
@@ -113,6 +119,7 @@ import org.egov.edcr.feature.SolarWaterHeating;
 import org.egov.edcr.feature.SolidLiquidWasteTreatment;
 import org.egov.edcr.feature.SpiralStair;
 import org.egov.edcr.feature.StairCover;
+import org.egov.edcr.feature.SupplyLineUtility;
 import org.egov.edcr.feature.SurrenderRoad;
 import org.egov.edcr.feature.TerraceUtilityService;
 import org.egov.edcr.feature.TravelDistanceToExit;
@@ -140,6 +147,9 @@ public class PlanFeatureRepository {
         pf = new PlanFeature(Coverage.class);
         features.add(pf);
 
+        pf = new PlanFeature(RoadReserve.class);
+        features.add(pf);
+        
         pf = new PlanFeature(SetBackService.class);
         features.add(pf);
 
@@ -346,6 +356,25 @@ public class PlanFeatureRepository {
 
         pf = new PlanFeature(ConstructedArea.class);
         features.add(pf);
+        
+        pf = new PlanFeature(FootpathService.class);
+        features.add(pf);
+        
+        pf = new PlanFeature(DrinageService.class);
+        features.add(pf);
+        
+        pf = new PlanFeature(SupplyLineUtility.class);
+        features.add(pf);
+        
+        pf = new PlanFeature(GlassFacadeOpening.class);
+        features.add(pf);
+
+        pf = new PlanFeature(PorticoService.class);
+        features.add(pf);
+        
+        pf = new PlanFeature(ICTService.class);
+        features.add(pf);
+        
         
         return features;
     }

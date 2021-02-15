@@ -47,87 +47,45 @@
 
 package org.egov.common.entity.edcr;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class Room {
+/**
+ * @author vinoth
+ *
+ */
+public class Footpath implements Serializable {
 
-    private String number;
+    private static final long serialVersionUID = 100L;
 
-    private List<RoomHeight> heightOfRooms = new ArrayList<>();
-    
-    private Boolean closed = false;
+    // List of foot paths
+    private List<Measurement> footpaths = new ArrayList<>();
 
-    private List<Measurement> rooms = new ArrayList<>();
-
-    private MeasurementWithHeight lightAndVentilation = new MeasurementWithHeight();
-
-    private List<Occupancy> mezzanineAreas = new ArrayList<>();
-
-    public List<RoomHeight> getHeights() {
-        return heightOfRooms;
-    }
-
-    public void setHeights(List<RoomHeight> heights) {
-        this.heightOfRooms = heights;
-    }
-
-    /**
-     * @return the closed
+    /*
+     * Key: Color code, Value: List of distances from building to footpath. When key having value 0 means no color
+     * code used.
      */
-    public Boolean getClosed() {
-        return closed;
+    private Map<Integer, List<BigDecimal>> distancesFromBuilding = Collections.emptyMap();
+
+
+    public List<Measurement> getFootpaths() {
+        return footpaths;
     }
 
-    /**
-     * @param closed the closed to set
-     */
-    public void setClosed(Boolean closed) {
-        this.closed = closed;
+    public void setFootpaths(List<Measurement> footpaths) {
+        this.footpaths = footpaths;
     }
 
-    /**
-     * @return the number
-     */
-    public String getNumber() {
-        return number;
+    public Map<Integer, List<BigDecimal>> getDistancesFromBuilding() {
+        return distancesFromBuilding;
     }
 
-    /**
-     * @param number the number to set
-     */
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    /**
-     * @return the lightAndVentilation
-     */
-    public MeasurementWithHeight getLightAndVentilation() {
-        return lightAndVentilation;
-    }
-
-    /**
-     * @param lightAndVentilation the lightAndVentilation to set
-     */
-    public void setLightAndVentilation(MeasurementWithHeight lightAndVentilation) {
-        this.lightAndVentilation = lightAndVentilation;
-    }
-
-    public List<Measurement> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(List<Measurement> rooms) {
-        this.rooms = rooms;
-    }
-
-    public List<Occupancy> getMezzanineAreas() {
-        return mezzanineAreas;
-    }
-
-    public void setMezzanineAreas(List<Occupancy> mezzanineAreas) {
-        this.mezzanineAreas = mezzanineAreas;
+    public void setDistancesFromBuilding(Map<Integer, List<BigDecimal>> distancesFromBuilding) {
+        this.distancesFromBuilding = distancesFromBuilding;
     }
 
 }

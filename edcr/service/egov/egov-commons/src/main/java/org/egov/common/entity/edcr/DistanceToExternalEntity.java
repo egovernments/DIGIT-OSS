@@ -57,41 +57,60 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * 
  * @author pradeep
  *
- *         PoJo used to keep distance from the external entities like monuments,
- *         government building, river etc
+ * PoJo used to keep distance from the external entities like monuments, government building, river etc
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DistanceToExternalEntity implements Serializable {
 
-	private static final long serialVersionUID = -4379805246519538610L;
-	private List<BigDecimal> monuments = new ArrayList<>();
-	private List<BigDecimal> govtBuildings = new ArrayList<>();
-	private List<River> rivers = new ArrayList<River>();
+    private static final long serialVersionUID = -4379805246519538610L;
+    private List<BigDecimal> monuments = new ArrayList<>();
+    private List<BigDecimal> govtBuildings = new ArrayList<>();
+    private List<River> rivers = new ArrayList<River>();
+    private Drinage drinage;
+    private Footpath footpath;
 
-	public List<BigDecimal> getMonuments() {
-		return monuments;
-	}
+    public List<BigDecimal> getMonuments() {
+        return monuments;
+    }
 
-	public void setMonuments(List<BigDecimal> monuments) {
-		this.monuments = monuments;
-	}
+    public void setMonuments(List<BigDecimal> monuments) {
+        this.monuments = monuments;
+    }
 
-	public List<BigDecimal> getGovtBuildings() {
-		return govtBuildings;
-	}
+    public List<BigDecimal> getGovtBuildings() {
+        return govtBuildings;
+    }
 
-	public void setGovtBuildings(List<BigDecimal> govtBuildings) {
-		this.govtBuildings = govtBuildings;
-	}
+    public void setGovtBuildings(List<BigDecimal> govtBuildings) {
+        this.govtBuildings = govtBuildings;
+    }
 
-	public List<River> getRivers() {
-		return rivers;
-	}
-	public void addRivers(River river) {
-		this.getRivers().add(river) ;
-	}
-	public void setRivers(List<River> rivers) {
-		this.rivers = rivers;
-	}
+    public List<River> getRivers() {
+        return rivers;
+    }
+
+    public void addRivers(River river) {
+        this.getRivers().add(river);
+    }
+
+    public void setRivers(List<River> rivers) {
+        this.rivers = rivers;
+    }
+
+    public Drinage getDrinage() {
+        return drinage;
+    }
+
+    public void setDrinage(Drinage drinage) {
+        this.drinage = drinage;
+    }
+
+    public Footpath getFootpath() {
+        return footpath;
+    }
+
+    public void setFootpath(Footpath footpath) {
+        this.footpath = footpath;
+    }
 
 }

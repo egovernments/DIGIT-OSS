@@ -45,89 +45,30 @@
  *  In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
 
-package org.egov.common.entity.edcr;
+package org.egov.edcr.feature;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class Room {
+import org.egov.common.entity.edcr.Plan;
+import org.springframework.stereotype.Service;
 
-    private String number;
-
-    private List<RoomHeight> heightOfRooms = new ArrayList<>();
-    
-    private Boolean closed = false;
-
-    private List<Measurement> rooms = new ArrayList<>();
-
-    private MeasurementWithHeight lightAndVentilation = new MeasurementWithHeight();
-
-    private List<Occupancy> mezzanineAreas = new ArrayList<>();
-
-    public List<RoomHeight> getHeights() {
-        return heightOfRooms;
+@Service
+public class ICTService extends FeatureProcess {
+    @Override
+    public Plan validate(Plan plan) {
+        return plan;
     }
 
-    public void setHeights(List<RoomHeight> heights) {
-        this.heightOfRooms = heights;
+    @Override
+    public Plan process(Plan plan) {
+        return plan;
     }
 
-    /**
-     * @return the closed
-     */
-    public Boolean getClosed() {
-        return closed;
-    }
-
-    /**
-     * @param closed the closed to set
-     */
-    public void setClosed(Boolean closed) {
-        this.closed = closed;
-    }
-
-    /**
-     * @return the number
-     */
-    public String getNumber() {
-        return number;
-    }
-
-    /**
-     * @param number the number to set
-     */
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    /**
-     * @return the lightAndVentilation
-     */
-    public MeasurementWithHeight getLightAndVentilation() {
-        return lightAndVentilation;
-    }
-
-    /**
-     * @param lightAndVentilation the lightAndVentilation to set
-     */
-    public void setLightAndVentilation(MeasurementWithHeight lightAndVentilation) {
-        this.lightAndVentilation = lightAndVentilation;
-    }
-
-    public List<Measurement> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(List<Measurement> rooms) {
-        this.rooms = rooms;
-    }
-
-    public List<Occupancy> getMezzanineAreas() {
-        return mezzanineAreas;
-    }
-
-    public void setMezzanineAreas(List<Occupancy> mezzanineAreas) {
-        this.mezzanineAreas = mezzanineAreas;
+    @Override
+    public Map<String, Date> getAmendments() {
+        return new LinkedHashMap<>();
     }
 
 }

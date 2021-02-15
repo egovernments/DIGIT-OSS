@@ -103,7 +103,7 @@ public class Balcony extends FeatureProcess {
                         for (org.egov.common.entity.edcr.Balcony balcony : balconies) {
                             boolean isAccepted = false;
                             List<BigDecimal> widths = balcony.getWidths();
-                            BigDecimal minWidth = widths.stream().reduce(BigDecimal::min).get();
+                            BigDecimal minWidth = widths.isEmpty() ? BigDecimal.ZERO : widths.stream().reduce(BigDecimal::min).get();
                             minWidth = minWidth.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
                                     DcrConstants.ROUNDMODE_MEASUREMENTS);
                             if (minWidth.compareTo(ONE_POINTTWO.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,

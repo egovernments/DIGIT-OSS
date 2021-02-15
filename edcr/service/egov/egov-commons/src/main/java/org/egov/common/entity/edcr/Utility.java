@@ -52,161 +52,170 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Utility extends Measurement {
-	private static final long serialVersionUID = 16L;
-	private List<WasteDisposal> wasteDisposalUnits = new ArrayList<>();
-	private List<WasteWaterRecyclePlant> wasteWaterRecyclePlant = new ArrayList<>();
-	private List<LiquidWasteTreatementPlant> liquidWasteTreatementPlant = new ArrayList<>();
-	private List<WellUtility> wells = new ArrayList<>();
-	private List<RoadOutput> wellDistance = new ArrayList<>();
-	private List<RainWaterHarvesting> rainWaterHarvest = new ArrayList<>();
-	private List<Solar> solar = new ArrayList<>();
-	private BigDecimal rainWaterHarvestingTankCapacity;
-	private List<BiometricWasteTreatment> biometricWasteTreatment = new ArrayList<>();
-	private List<SolidLiqdWasteTrtmnt> solidLiqdWasteTrtmnt = new ArrayList<>();
-	private List<Measurement> solarWaterHeatingSystems = new ArrayList<>();
-	private List<Measurement> segregationOfWaste = new ArrayList<>();
-	private BigDecimal waterTankCapacity;
+    private static final long serialVersionUID = 16L;
+    private List<WasteDisposal> wasteDisposalUnits = new ArrayList<>();
+    private List<WasteWaterRecyclePlant> wasteWaterRecyclePlant = new ArrayList<>();
+    private List<LiquidWasteTreatementPlant> liquidWasteTreatementPlant = new ArrayList<>();
+    private List<WellUtility> wells = new ArrayList<>();
+    private List<RoadOutput> wellDistance = new ArrayList<>();
+    private List<RainWaterHarvesting> rainWaterHarvest = new ArrayList<>();
+    private List<Solar> solar = new ArrayList<>();
+    private BigDecimal rainWaterHarvestingTankCapacity;
+    private List<BiometricWasteTreatment> biometricWasteTreatment = new ArrayList<>();
+    private List<SolidLiqdWasteTrtmnt> solidLiqdWasteTrtmnt = new ArrayList<>();
+    private List<Measurement> solarWaterHeatingSystems = new ArrayList<>();
+    private List<Measurement> segregationOfWaste = new ArrayList<>();
+    private BigDecimal waterTankCapacity;
+    private SupplyLine supplyLine;
 
-	public void setBiometricWasteTreatment(List<BiometricWasteTreatment> biometricWasteTreatment) {
-		this.biometricWasteTreatment = biometricWasteTreatment;
-	}
+    public void setBiometricWasteTreatment(List<BiometricWasteTreatment> biometricWasteTreatment) {
+        this.biometricWasteTreatment = biometricWasteTreatment;
+    }
 
-	public List<BiometricWasteTreatment> getBiometricWasteTreatment() {
+    public List<BiometricWasteTreatment> getBiometricWasteTreatment() {
 
-		return biometricWasteTreatment;
-	}
+        return biometricWasteTreatment;
+    }
 
-	public void addBiometricWasteTreatment(BiometricWasteTreatment biometricWasteTrtmnt) {
-		biometricWasteTreatment.add(biometricWasteTrtmnt);
-	}
+    public void addBiometricWasteTreatment(BiometricWasteTreatment biometricWasteTrtmnt) {
+        biometricWasteTreatment.add(biometricWasteTrtmnt);
+    }
 
-	public BigDecimal getRainWaterHarvestingTankCapacity() {
-		return rainWaterHarvestingTankCapacity;
-	}
+    public BigDecimal getRainWaterHarvestingTankCapacity() {
+        return rainWaterHarvestingTankCapacity;
+    }
 
-	public void setRainWaterHarvestingTankCapacity(BigDecimal rainWaterHarvestingTankCapacity) {
-		this.rainWaterHarvestingTankCapacity = rainWaterHarvestingTankCapacity;
-	}
+    public void setRainWaterHarvestingTankCapacity(BigDecimal rainWaterHarvestingTankCapacity) {
+        this.rainWaterHarvestingTankCapacity = rainWaterHarvestingTankCapacity;
+    }
 
-	public List<WasteDisposal> getWasteDisposalUnits() {
-		return wasteDisposalUnits;
-	}
+    public List<WasteDisposal> getWasteDisposalUnits() {
+        return wasteDisposalUnits;
+    }
 
-	public List<LiquidWasteTreatementPlant> getLiquidWasteTreatementPlant() {
-		return liquidWasteTreatementPlant;
-	}
+    public List<LiquidWasteTreatementPlant> getLiquidWasteTreatementPlant() {
+        return liquidWasteTreatementPlant;
+    }
 
-	public void addLiquidWasteTreatementPlant(LiquidWasteTreatementPlant lqWastTrtPlant) {
-		liquidWasteTreatementPlant.add(lqWastTrtPlant);
+    public void addLiquidWasteTreatementPlant(LiquidWasteTreatementPlant lqWastTrtPlant) {
+        liquidWasteTreatementPlant.add(lqWastTrtPlant);
 
-	}
+    }
 
-	public void addWasteDisposal(WasteDisposal wasteDisposal) {
-		wasteDisposalUnits.add(wasteDisposal);
-	}
+    public void addWasteDisposal(WasteDisposal wasteDisposal) {
+        wasteDisposalUnits.add(wasteDisposal);
+    }
 
-	public void addWasteWaterRecyclePlant(WasteWaterRecyclePlant waterRecyclePlant) {
-		wasteWaterRecyclePlant.add(waterRecyclePlant);
+    public void addWasteWaterRecyclePlant(WasteWaterRecyclePlant waterRecyclePlant) {
+        wasteWaterRecyclePlant.add(waterRecyclePlant);
 
-	}
+    }
 
-	public List<WasteWaterRecyclePlant> getWasteWaterRecyclePlant() {
-		return wasteWaterRecyclePlant;
-	}
+    public List<WasteWaterRecyclePlant> getWasteWaterRecyclePlant() {
+        return wasteWaterRecyclePlant;
+    }
 
-	public void addWells(WellUtility wellUtility) {
-		wells.add(wellUtility);
+    public void addWells(WellUtility wellUtility) {
+        wells.add(wellUtility);
 
-	}
+    }
 
-	public List<WellUtility> getWells() {
-		return wells;
-	}
+    public List<WellUtility> getWells() {
+        return wells;
+    }
 
-	public List<RoadOutput> getWellDistance() {
-		return wellDistance;
-	}
+    public List<RoadOutput> getWellDistance() {
+        return wellDistance;
+    }
 
-	public void setWellDistance(List<RoadOutput> wellDistance) {
-		this.wellDistance = wellDistance;
-	}
+    public void setWellDistance(List<RoadOutput> wellDistance) {
+        this.wellDistance = wellDistance;
+    }
 
-	public void addSolar(Solar solarsystem) {
-		solar.add(solarsystem);
+    public void addSolar(Solar solarsystem) {
+        solar.add(solarsystem);
 
-	}
+    }
 
-	public List<Solar> getSolar() {
-		return solar;
-	}
+    public List<Solar> getSolar() {
+        return solar;
+    }
 
-	public List<RainWaterHarvesting> getRainWaterHarvest() {
-		return rainWaterHarvest;
-	}
+    public List<RainWaterHarvesting> getRainWaterHarvest() {
+        return rainWaterHarvest;
+    }
 
-	public void addRainWaterHarvest(RainWaterHarvesting rwh) {
-		rainWaterHarvest.add(rwh);
+    public void addRainWaterHarvest(RainWaterHarvesting rwh) {
+        rainWaterHarvest.add(rwh);
 
-	}
+    }
 
-	public List<SolidLiqdWasteTrtmnt> getSolidLiqdWasteTrtmnt() {
-		return solidLiqdWasteTrtmnt;
-	}
+    public List<SolidLiqdWasteTrtmnt> getSolidLiqdWasteTrtmnt() {
+        return solidLiqdWasteTrtmnt;
+    }
 
-	public void addSolidLiqdWasteTrtmnt(SolidLiqdWasteTrtmnt solidLiqdWasteTrtmnt) {
-		this.solidLiqdWasteTrtmnt.add(solidLiqdWasteTrtmnt);
-	}
+    public void addSolidLiqdWasteTrtmnt(SolidLiqdWasteTrtmnt solidLiqdWasteTrtmnt) {
+        this.solidLiqdWasteTrtmnt.add(solidLiqdWasteTrtmnt);
+    }
 
-	public List<Measurement> getSolarWaterHeatingSystems() {
-		return solarWaterHeatingSystems;
-	}
+    public List<Measurement> getSolarWaterHeatingSystems() {
+        return solarWaterHeatingSystems;
+    }
 
-	public void setSolarWaterHeatingSystems(List<Measurement> solarWaterHeatingSystems) {
-		this.solarWaterHeatingSystems = solarWaterHeatingSystems;
-	}
+    public void setSolarWaterHeatingSystems(List<Measurement> solarWaterHeatingSystems) {
+        this.solarWaterHeatingSystems = solarWaterHeatingSystems;
+    }
 
-	public void setWasteDisposalUnits(List<WasteDisposal> wasteDisposalUnits) {
-		this.wasteDisposalUnits = wasteDisposalUnits;
-	}
+    public void setWasteDisposalUnits(List<WasteDisposal> wasteDisposalUnits) {
+        this.wasteDisposalUnits = wasteDisposalUnits;
+    }
 
-	public void setWasteWaterRecyclePlant(List<WasteWaterRecyclePlant> wasteWaterRecyclePlant) {
-		this.wasteWaterRecyclePlant = wasteWaterRecyclePlant;
-	}
+    public void setWasteWaterRecyclePlant(List<WasteWaterRecyclePlant> wasteWaterRecyclePlant) {
+        this.wasteWaterRecyclePlant = wasteWaterRecyclePlant;
+    }
 
-	public void setLiquidWasteTreatementPlant(List<LiquidWasteTreatementPlant> liquidWasteTreatementPlant) {
-		this.liquidWasteTreatementPlant = liquidWasteTreatementPlant;
-	}
+    public void setLiquidWasteTreatementPlant(List<LiquidWasteTreatementPlant> liquidWasteTreatementPlant) {
+        this.liquidWasteTreatementPlant = liquidWasteTreatementPlant;
+    }
 
-	public void setWells(List<WellUtility> wells) {
-		this.wells = wells;
-	}
+    public void setWells(List<WellUtility> wells) {
+        this.wells = wells;
+    }
 
-	public void setRainWaterHarvest(List<RainWaterHarvesting> rainWaterHarvest) {
-		this.rainWaterHarvest = rainWaterHarvest;
-	}
+    public void setRainWaterHarvest(List<RainWaterHarvesting> rainWaterHarvest) {
+        this.rainWaterHarvest = rainWaterHarvest;
+    }
 
-	public void setSolar(List<Solar> solar) {
-		this.solar = solar;
-	}
+    public void setSolar(List<Solar> solar) {
+        this.solar = solar;
+    }
 
-	public void setSolidLiqdWasteTrtmnt(List<SolidLiqdWasteTrtmnt> solidLiqdWasteTrtmnt) {
-		this.solidLiqdWasteTrtmnt = solidLiqdWasteTrtmnt;
-	}
+    public void setSolidLiqdWasteTrtmnt(List<SolidLiqdWasteTrtmnt> solidLiqdWasteTrtmnt) {
+        this.solidLiqdWasteTrtmnt = solidLiqdWasteTrtmnt;
+    }
 
-	public List<Measurement> getSegregationOfWaste() {
-		return segregationOfWaste;
-	}
+    public List<Measurement> getSegregationOfWaste() {
+        return segregationOfWaste;
+    }
 
-	public void setSegregationOfWaste(List<Measurement> segregationOfWaste) {
-		this.segregationOfWaste = segregationOfWaste;
-	}
-    
-        public BigDecimal getWaterTankCapacity() {
-            return waterTankCapacity;
-        }
-    
-        public void setWaterTankCapacity(BigDecimal waterTankCapacity) {
-            this.waterTankCapacity = waterTankCapacity;
-        }
+    public void setSegregationOfWaste(List<Measurement> segregationOfWaste) {
+        this.segregationOfWaste = segregationOfWaste;
+    }
+
+    public BigDecimal getWaterTankCapacity() {
+        return waterTankCapacity;
+    }
+
+    public void setWaterTankCapacity(BigDecimal waterTankCapacity) {
+        this.waterTankCapacity = waterTankCapacity;
+    }
+
+    public SupplyLine getSupplyLine() {
+        return supplyLine;
+    }
+
+    public void setSupplyLine(SupplyLine supplyLine) {
+        this.supplyLine = supplyLine;
+    }
 
 }

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.egov</groupId>
-    <artifactId>egov-erp-edcr</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <groupId>org.egov.edcr</groupId>
+    <artifactId>egov-erp</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -19,20 +18,25 @@
         <name>eGovernments Foundation</name>
         <url>http://www.egovernments.org</url>
     </organization>
+<scm>
+		<connection>scm:git:git://github.com/egovernments/eGov.git</connection>
+		<developerConnection>scm:git:git@github.com:egovernments/eGov.git</developerConnection>
+		<url>https://github.com/egovernments/eGov</url>
+		<tag>HEAD</tag>
+	</scm>
 
-
-    <distributionManagement>
-         <repository>
-            <id>repo.egovernments.org</id>
-            <name>eGov ERP Releases Repository</name>
-            <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>repo.egovernments.org</id>
-            <name>eGov ERP Snapshots Repository</name>
-            <url>https://nexus-repo.egovernments.org/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+   <distributionManagement>
+		<repository>
+			<id>repo.egovernments.org</id>
+			<name>eGov ERP Releases Repository</name>
+			<url>http://repo.egovernments.org/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>repo.egovernments.org</id>
+			<name>eGov ERP Snapshots Repository</name>
+			<url>http://repo.egovernments.org/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
     <repositories>
         <repository>
@@ -72,13 +76,13 @@
     </pluginRepositories>
 
     <modules>
-    	<module>egov-config</module>
-    	<module>egov-egi</module>
+    	 <module>egov-config</module>
+       <module>egov-egi</module>
         <module>egov-commons</module>
         <module>egov-edcr</module>
         <module>egov-egiweb</module>
         <module>egov-edcrweb</module>
-        <module>egov-ear</module>
+        <module>egov-ear</module>  
     </modules>
 
     <properties>
@@ -89,7 +93,7 @@
         <app.version>${project.version}</app.version>
 
         <!-- Application core dependency versions -->
-        <erp-version>1.0.0-SNAPSHOT</erp-version>
+        
 
         <!-- Application server provided dependency versions -->
         <hibernate-version>5.1.10.Final</hibernate-version>
@@ -164,7 +168,7 @@
         <log4j-version>1.2.17</log4j-version>
         <axis-version>1.4</axis-version>
         <saaj-impl-version>1.3.16</saaj-impl-version>
-        <ap-fonts-version>1.0.2</ap-fonts-version>
+        <ap-fonts-version>1.0.1</ap-fonts-version>
         <wsdl4j-version>1.6.3</wsdl4j-version>
         <google-guava-version>23.2-jre</google-guava-version>
         <google.zxing.version>3.3.0</google.zxing.version>
@@ -196,42 +200,42 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>org.egov</groupId>
+           <dependency>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-egi</artifactId>
-                <version>${erp-version}</version>
+                <version>1.1.0-SNAPSHOT</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>commons-logging</artifactId>
                         <groupId>commons-logging</groupId>
                     </exclusion>
                 </exclusions>
-            </dependency>
+            </dependency>  
             <dependency>
-                <groupId>org.egov</groupId>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-config</artifactId>
-                <version>${erp-version}</version>
+  					<version>1.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.egov</groupId>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-commons</artifactId>
-                <version>${erp-version}</version>
+                 <version>1.1.0-SNAPSHOT</version>
             </dependency>
-            <dependency>
-                <groupId>org.egov</groupId>
+            <!--dependency>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-eis</artifactId>
-                <version>${erp-version}</version>
+                  <version>1.0.5-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.egov</groupId>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-portal</artifactId>
-                <version>${erp-version}</version>
-            </dependency>
+                 <version>1.0.5-SNAPSHOT</version>
+            </dependency-->
 	    	<dependency>
-                <groupId>org.egov</groupId>
+                <groupId>org.egov.edcr</groupId>
                 <artifactId>egov-edcr</artifactId>
-                <version>${erp-version}</version>
-            </dependency>
+                 <version>1.1.0-SNAPSHOT</version>
+            </dependency> 
             <!-- HIBERNATE DEPENDENCIES START -->
             <dependency>
                 <groupId>org.hibernate</groupId>
