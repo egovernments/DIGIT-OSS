@@ -26,7 +26,7 @@ public class InstrumentAccountCodeEntity extends AuditableEntity {
     public InstrumentAccountCode toDomain() {
         InstrumentAccountCode instrumentAccountCode = new InstrumentAccountCode();
         super.toDomain(instrumentAccountCode);
-        instrumentAccountCode.setId(id);
+        //instrumentAccountCode.setId(id);
         instrumentAccountCode.setInstrumentType(InstrumentType.builder().name(instrumentTypeId).build());
         instrumentAccountCode.setAccountCode(ChartOfAccountContract.builder().glcode(accountCodeId).build());
         return instrumentAccountCode;
