@@ -397,7 +397,7 @@ const getFinancialYear = (fromDate, toDate) => {
   financialYear = (new Date(fromDate).getFullYear()) + '-' + String(new Date(toDate).getFullYear()).slice(2);
   return financialYear;
 };
-const getFinancialYearFromEPOCH = (epochTime) => {
+export const getFinancialYearFromEPOCH = (epochTime) => {
   let financialYear = "";
   let date = new Date(epochTime);
   if(date.getMonth()>=3)

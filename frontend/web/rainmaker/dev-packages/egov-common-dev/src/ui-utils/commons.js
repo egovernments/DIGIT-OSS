@@ -15,7 +15,7 @@ import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import printJS from 'print-js';
 import axios from 'axios';
-import getFinancialYearFromEPOCH from "egov-ui-kit/redux/properties/actions";
+import { getFinancialYearFromEPOCH } from "egov-ui-kit/redux/properties/actions";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
