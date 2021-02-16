@@ -5,12 +5,14 @@ import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { TENANT } from "egov-ui-kit/utils/endPoints";
-import { getAccessToken, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getAccessToken, getTenantId, getUserInfo, localStorageGet, localStorageSet, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
 import React from "react";
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { showSpinner, hideSpinner } from "egov-ui-kit/redux/common/actions";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -532,6 +534,7 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
     if (url) {
       let localizationLabels = {};
       if (state && state.app) localizationLabels = (state.app && state.app.localizationLabels) || {};
+      dispatch(showSpinner())
       const payloadSpec = await httpRequest(url, action, queryParams || [], requestBody);
       const dropdownData = boundary
         ? // ? jp.query(payloadSpec, dataFetchConfig.dataPath)
@@ -549,8 +552,15 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
             const mohallaCode = `${queryParams[0].value.toUpperCase().replace(/[.]/g, "_")}_${hierarchyType}_${item.code
               .toUpperCase()
               .replace(/[._:-\s\/]/g, "_")}`;
+              let updatedLabel;
+              if(localizationLabels.hasOwnProperty(mohallaCode)){
+                 updatedLabel = getTranslatedLabel(mohallaCode, localizationLabels);
+              }else{
+                let abc = initLocalizationLabels((getLocale() || "en_IN"))
+                 updatedLabel = getTranslatedLabel(mohallaCode, abc)
+              }              
             option = {
-              label: getTranslatedLabel(mohallaCode, localizationLabels),
+              label: updatedLabel,
               value: item.code,
             };
           } else {
@@ -573,6 +583,8 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
           return ddData;
         }, []);
       dispatch(setFieldProperty(formKey, fieldKey, "dropDownData", ddData));
+      dispatch(hideSpinner())
+
     }
   } catch (error) {
     const { message } = error;
