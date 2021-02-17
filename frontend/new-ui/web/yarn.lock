@@ -1155,9 +1155,9 @@
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
 "@egovernments/digit-ui-css@^1.0.0":
-  version "1.0.113"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-css/-/digit-ui-css-1.0.113.tgz#18802e0ac2a1ffab8822ba06968e156f25ddd0ae"
-  integrity sha512-Jsjmc7EhGTdGtQ30mz1HF1+3Jk7mMomsbYEWNVD7LXOzDsIL0L9UfMrpSjqYNB4lMb3xNl5mO3yT0N+cUsSgbQ==
+  version "1.0.114"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-css/-/digit-ui-css-1.0.114.tgz#7921dff00eead5da5b0b5776df5a1b174bf3c122"
+  integrity sha512-huXLIyJRBZRSZ8b6a+VuwwKMu8/0C8Rjbu8FTxXHXkunlIR3yuQhiUKmAyA0XzX4roW2D05ilM2h7sLe8nOaew==
   dependencies:
     node-sass "^4.14.1"
     normalize.css "^8.0.1"
@@ -1165,9 +1165,9 @@
     tailwindcss "^1.8.10"
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.113"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.113.tgz#7906ffe5d074c0da49676488289681bb0b159c67"
-  integrity sha512-hjMOprYZ2Ql0jo9rxduK56rKkNE6P1cQUF9J7Z6W4RR1qKvy2GY6vnaFebqLpVcDa/zSkTGeOhg2eyOanAIsgA==
+  version "1.0.114"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.114.tgz#8d88b123357a7bc9322b832c37f7c34c9442d258"
+  integrity sha512-ElM+0G6XVc5kpZxUhf67sj/vWh3fP9PIQMjzVLkmkrge2PMBvAHVkhUROzk/sRB3VDObXS7ecKBDsknN97qagQ==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1182,9 +1182,9 @@
     redux "^4.0.5"
 
 "@egovernments/digit-ui-module-common@^1.0.0":
-  version "1.0.113"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-common/-/digit-ui-module-common-1.0.113.tgz#f5c1f6b09002fb3b62a940df7eed1130c4d7f998"
-  integrity sha512-or0Dwon0STgO8iuS5TP7keBGzN4k95oYQJGU3wbDuFvJqIN99dmR5rN6oMLa3yYx6REfr2pO+GgN13Dqs/Lmzw==
+  version "1.0.114"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-common/-/digit-ui-module-common-1.0.114.tgz#7d70ef831f7d50d1056df34e83719b26fedd4609"
+  integrity sha512-ug0dSlsa2otgFRPMMqWkee88yBk+eP+hzv9yKl1b7nMVz42dPGzmTcaiFNlzKY7aqayZlGn2mA4L2pOrDB9n/A==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1201,9 +1201,9 @@
     rooks "^4.4.0"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.113"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.113.tgz#8017fdb4442c66b8526eac7e4642221cee05fbf9"
-  integrity sha512-a9e2Wg4o5+KlfxeynAwHl6lUoWXBXz9fQz8ilSGEQxa/jmKMeRAH2qAEUrSFsWMQUG5lbblOYveE/0PT/54Heg==
+  version "1.0.114"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.114.tgz#9258d0aa5d6f05a7faccb7b0f4a7684c409fc7fc"
+  integrity sha512-eioq05zox+X5iWqQNptWkWgfAk5biX6oXhQ65Hue7uIQuzUGOnOZIa13/sm5Ot1T7UQqD0+Lmws2smuIKzWOeQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1219,9 +1219,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.113"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.113.tgz#eb7c3043e37328e37e25cd82ae06863989dbd7ff"
-  integrity sha512-QscBtXAk74q8XSzXR9pmm9fLn+MZHpYBA5DOtRmcjRP84k/y09Fqbdpd80h2Rj6/J983DLJqDdjx5m38OI8Z+w==
+  version "1.0.114"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.114.tgz#ca8c8714210b7b6d9484d6035a75f2944e94a476"
+  integrity sha512-+Nb531zHBHaMpqRQsA8/uQyPdMG14ecWbcsxkpH02QMPAAIXQRN+X3VeMi4RulLYxItr3xgyw/tGtNQTizLiYw==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1237,9 +1237,28 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.113"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.113.tgz#04e4ebb94658aa4c56133a6bbfa7b27616eb8c47"
-  integrity sha512-j88CV0159OLvi5fFSuRi8nsUfm+dMlS1fCsdJcnyH7EJ1wXlBiFWaoUF2AIKTnVoVEOQnai0vRLhRq1DfAsXxQ==
+  version "1.0.114"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.114.tgz#0b9eb54786b6ffe0c3a363230ff22d547c85d7ee"
+  integrity sha512-Racvh6Bm776voixw0SIYBkNWbpuDuW2PxLwVoz8DEARQsYV3ErLBviJNsujbiGd3CFAHZHLqAsg6pXlnkJ43UQ==
+  dependencies:
+    "@egovernments/digit-ui-libraries" "^1.0.0"
+    "@egovernments/digit-ui-react-components" "^1.0.0"
+    lodash.merge "^4.6.2"
+    react "^17.0.0"
+    react-dom "^17.0.0"
+    react-hook-form "^6.7.0"
+    react-i18next "^11.7.3"
+    react-query "^3.2.0"
+    react-redux "^7.2.1"
+    react-router-dom "^5.2.0"
+    react-table "^7.6.1"
+    redux "^4.0.5"
+    redux-thunk "^2.3.0"
+
+"@egovernments/digit-ui-module-pt@^1.0.0":
+  version "1.0.114"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pt/-/digit-ui-module-pt-1.0.114.tgz#5f3841bcc440fa7c58e4798bcf53f20da0e00225"
+  integrity sha512-gGmr19z/N60oA0jgajBudnhsVnvk/6TcM8jGwODYBZ4fBx+4hqm3fGoTteOe1P43KP0a9P10vvZD+ZvNHTOqaw==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1256,9 +1275,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.113"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.113.tgz#3dabf2021e0f9389fdf6737d6cc89e08d39267d7"
-  integrity sha512-iVQdpFRyMAPKX+0MnRq2AuaN4UPCnwH2phyXfh0g8rwgt1UPcma7MzjzCkygj2kDT4DNN55vs+6mZcHxDGr7vw==
+  version "1.0.114"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.114.tgz#0d7f5237460e825e7b937aa55a5a5de6399f1e8b"
+  integrity sha512-CFGDkbEcAUWXWZGMP5Ohv+o6HkvuSPqT0EY/yBMsh/stbbKQZGNKfAwaaKzky4hciV5ivQf+58Tt+1pxe43TBw==
   dependencies:
     "@googlemaps/js-api-loader" "^1.11.1"
     react-hook-form "^6.7.0"
