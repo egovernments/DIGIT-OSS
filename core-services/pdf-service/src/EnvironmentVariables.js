@@ -17,7 +17,7 @@ const envVariables = {
   DB_HOST: process.env.DB_HOST || "localhost",
   DB_NAME: process.env.DB_NAME || "PdfGen",
   DB_PORT: process.env.DB_PORT || 5432,
-  EGOV_EXTERNAL_HOST: process.env.EGOV_EXTERNAL_HOST || "https://egov-micro-dev.egovernments.org/" ,
+  EGOV_EXTERNAL_HOST: process.env.EGOV_EXTERNAL_HOST || "https://dev.digit.org/" ,
   DEFAULT_LOCALISATION_LOCALE:
     process.env.DEFAULT_LOCALISATION_LOCALE || "en_IN",
     DEFAULT_LOCALISATION_TENANT:
