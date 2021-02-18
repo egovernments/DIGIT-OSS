@@ -60,7 +60,13 @@ public class PropertyConfiguration {
     @Value("${persister.migration.batch.count.topic}")
     private String migartionBatchCountTopic;
 
+    @Value("${persister.migration.property.topic}")
+    private String migratePropertyTopic;
 
+	/*
+	 * @Value("${kafka.partition.count}") private Integer partitionCount;
+	 */
+    
     //USER
     @Value("${egov.user.host}")
     private String userHost;

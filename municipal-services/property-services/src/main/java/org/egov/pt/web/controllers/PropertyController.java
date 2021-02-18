@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/property")
@@ -83,17 +84,17 @@ public class PropertyController {
 
 	@PostMapping("/_migration")
 	public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-											   @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
+															  @Valid @ModelAttribute OldPropertyCriteria propertyCriteria, @RequestParam List<String> tenantIdList) {
 		long startTime = System.nanoTime();
 		Map<String, String> resultMap = null;
 		Map<String, String> errorMap = new HashMap<>();
 
-		resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap);
+		resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap, tenantIdList);
 
 		long endtime = System.nanoTime();
 		long elapsetime = endtime - startTime;
 		System.out.println("Elapsed time--->"+elapsetime);
-
+		
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 

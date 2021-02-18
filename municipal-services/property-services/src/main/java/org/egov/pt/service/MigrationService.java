@@ -60,25 +60,22 @@ import org.egov.pt.models.oldProperty.OldUserDetailResponse;
 import org.egov.pt.models.oldProperty.PropertyDetail;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.producer.Producer;
-import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.repository.builder.OldPropertyQueryBuilder;
 import org.egov.pt.repository.rowmapper.MigrationCountRowMapper;
 import org.egov.pt.repository.rowmapper.OldPropertyRowMapper;
-import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.util.ErrorConstants;
 import org.egov.pt.util.PTConstants;
-import org.egov.pt.validator.AssessmentValidator;
 import org.egov.pt.validator.PropertyMigrationValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.PropertyMigrationCountRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
+import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -101,9 +98,9 @@ public class MigrationService {
 
     @Autowired
     private Producer producer;
-
+    
     @Autowired
-    private AssessmentValidator validator;
+    private CustomKafkaTemplate<String, Object> kafkaTemplate;
 
     @Autowired
     private PropertyConfiguration config;
@@ -113,12 +110,6 @@ public class MigrationService {
 
     @Autowired
     private ObjectMapper mapper;
-
-    @Autowired
-    private AssessmentUtils AssmtUtils;
-
-    @Autowired
-    private AssessmentRepository assessmentRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -176,11 +167,11 @@ public class MigrationService {
 
 
 
-    public long getTenantCount(String tenantid){
-        String query = COUNT_QUERY.replace("{}",tenantid);
-        long count = jdbcTemplate.queryForObject(query, Integer.class);
-        return count;
-    }
+   public long getTenantCount(String tenantid){
+       String query = COUNT_QUERY.replace("{}",tenantid);
+       long count = jdbcTemplate.queryForObject(query, Integer.class);
+       return count;
+   }
     public List<String> getTenantList(){
         List<String> tenantList =jdbcTemplate.queryForList(TENANT_QUERY,String.class);
         return tenantList;
@@ -190,17 +181,23 @@ public class MigrationService {
         return migrationCount;
     }
 
-    public Map<String, String> initiateProcess(RequestInfoWrapper requestInfoWrapper,OldPropertyCriteria propertyCriteria,Map<String, String> errorMap){
+    public Map<String, String> initiateProcess(RequestInfoWrapper requestInfoWrapper,OldPropertyCriteria propertyCriteria,Map<String, String> errorMap, List<String> tenantIdList){
 
         Map<String, String> resultMap = null;
         Map<String, List<String>> masters = getMDMSData(requestInfoWrapper.getRequestInfo(),config.getStateLevelTenantId());
-        List<String> tenantList = getTenantList();
+        
+		List<String> tenantList;
+
+		if (!CollectionUtils.isEmpty(tenantIdList)) {
+			tenantList = tenantIdList;
+		} else
+			tenantList = getTenantList();
 
         if(StringUtils.isEmpty(propertyCriteria.getLimit()))
             propertyCriteria.setLimit(Long.valueOf(batchSize));
 
         if(StringUtils.isEmpty(propertyCriteria.getOffset()))
-            propertyCriteria.setLimit(Long.valueOf(batchSize));
+            propertyCriteria.setOffset(Long.valueOf(batchOffset));
 
         for(int i= 0;i<tenantList.size();i++){
             MigrationCount migrationCount = getMigrationCountForTenant(tenantList.get(i));
@@ -242,37 +239,37 @@ public class MigrationService {
         log.info("Count: "+count);
         log.info("startbatch: "+startBatch);
 
-        while(startBatch<count) {
-            long startTime = System.nanoTime();
-            List<OldProperty> oldProperties = searchOldPropertyFromURL(requestInfoWrapper,propertyCriteria) ;
-            try {
-                properties= migrateProperty(requestInfo,oldProperties,masters,errorMap);
-            } catch (Exception e) {
+            while(startBatch<count) {
+                long startTime = System.nanoTime();
+                List<OldProperty> oldProperties = searchOldPropertyFromURL(requestInfoWrapper,propertyCriteria) ;
+                try {
+                    properties= migrateProperty(requestInfo,oldProperties,masters,errorMap);
+                } catch (Exception e) {
 
-                log.error("Migration failed at batch count of : " + startBatch);
-                responseMap.put( "Migration failed at batch count : " + startBatch, e.getMessage());
-                return responseMap;
+                    log.error("Migration failed at batch count of : " + startBatch);
+                    responseMap.put( "Migration failed at batch count : " + startBatch, e.getMessage());
+                    return responseMap;
+                }
+                addResponseToMap(properties,responseMap,"SUCCESS");
+                log.info(" count completed for batch : " + startBatch);
+                long endtime = System.nanoTime();
+                long elapsetime = endtime - startTime;
+                log.info("\n\nBatch elapsed time: "+elapsetime+"\n\n");
+
+                MigrationCount migrationCount = new MigrationCount();
+                migrationCount.setId(UUID.randomUUID().toString());
+                migrationCount.setOffset(Long.valueOf(startBatch));
+                migrationCount.setLimit(Long.valueOf(batchSizeInput));
+                migrationCount.setCreatedTime(System.currentTimeMillis());
+                migrationCount.setTenantid(propertyCriteria.getTenantId());
+                migrationCount.setRecordCount(Long.valueOf(startBatch+batchSizeInput));
+                PropertyMigrationCountRequest request = PropertyMigrationCountRequest.builder().requestInfo(requestInfo).migrationCount(migrationCount).build();
+                producer.push(config.getMigartionBatchCountTopic(), request);
+
+                startBatch = startBatch+batchSizeInput;
+                propertyCriteria.setOffset(Long.valueOf(startBatch));
+                System.out.println("Property Count which pushed into kafka topic:"+count2);
             }
-            addResponseToMap(properties,responseMap,"SUCCESS");
-            log.info(" count completed for batch : " + startBatch);
-            long endtime = System.nanoTime();
-            long elapsetime = endtime - startTime;
-            log.info("\n\nBatch elapsed time: "+elapsetime+"\n\n");
-
-            MigrationCount migrationCount = new MigrationCount();
-            migrationCount.setId(UUID.randomUUID().toString());
-            migrationCount.setOffset(Long.valueOf(startBatch));
-            migrationCount.setLimit(Long.valueOf(batchSizeInput));
-            migrationCount.setCreatedTime(System.currentTimeMillis());
-            migrationCount.setTenantid(propertyCriteria.getTenantId());
-            migrationCount.setRecordCount(Long.valueOf(startBatch+batchSizeInput));
-            PropertyMigrationCountRequest request = PropertyMigrationCountRequest.builder().requestInfo(requestInfo).migrationCount(migrationCount).build();
-            producer.push(config.getMigartionBatchCountTopic(), request);
-
-            startBatch = startBatch+batchSizeInput;
-            propertyCriteria.setOffset(Long.valueOf(startBatch));
-            System.out.println("Property Count which pushed into kafka topic:"+count2);
-        }
         propertyCriteria.setOffset(Long.valueOf(batchOffset));
         return responseMap;
 
@@ -501,11 +498,28 @@ public class MigrationService {
             Collections.sort(oldProperty.getPropertyDetails(), new Comparator<PropertyDetail>() {
                 @Override
                 public int compare(PropertyDetail pd1, PropertyDetail pd2) {
-                    return pd1.getAuditDetails().getCreatedTime().compareTo(pd2.getAuditDetails().getCreatedTime());
-                }
+
+					int financialYeardiff = pd1.getFinancialYear().compareTo(pd2.getFinancialYear());
+
+					if (financialYeardiff == 0)
+						return pd1.getAuditDetails().getCreatedTime().compareTo(pd2.getAuditDetails().getCreatedTime());
+					else
+						return financialYeardiff;
+				}
             });
 
+			/*
+			 * // to map key for partition String kafkaKeyValue =
+			 * String.valueOf(getKafkaKeyValue(propertyId));
+			 */
+            
+            int detailCount = oldProperty.getPropertyDetails().size();
+            boolean isDetailActive = false;
+            
             for(int i=0;i< oldProperty.getPropertyDetails().size();i++){
+            	
+				if (detailCount == i+1)
+					isDetailActive = true;
                 Property property = new Property();
                 property.setId(Id);
                 property.setPropertyId(propertyId);
@@ -539,6 +553,8 @@ public class MigrationService {
 
                 if(!StringUtils.isEmpty(oldProperty.getCreationReason()))
                     property.setCreationReason(CreationReason.fromValue(String.valueOf(oldProperty.getCreationReason())));
+                else 
+                	property.setCreationReason(CreationReason.CREATE);
 
 
                 property.setNoOfFloors(oldProperty.getPropertyDetails().get(i).getNoOfFloors());
@@ -568,7 +584,7 @@ public class MigrationService {
                 if(oldProperty.getPropertyDetails().get(i).getUnits() == null)
                     property.setUnits(null);
                 else{
-                    units=migrateUnit(oldProperty.getPropertyDetails().get(i).getUnits());
+                    units=migrateUnit(oldProperty.getPropertyDetails().get(i).getUnits(), isDetailActive);
                     property.setUnits(units);
 
                 }
@@ -589,7 +605,7 @@ public class MigrationService {
 
 
                 if(oldProperty.getPropertyDetails().get(i).getOwners()!=null){
-                    List<OwnerInfo> ownerInfos = migrateOwnerInfo(oldProperty.getPropertyDetails().get(i).getOwners());
+                    List<OwnerInfo> ownerInfos = migrateOwnerInfo(oldProperty.getPropertyDetails().get(i).getOwners(), isDetailActive);
                     property.setOwners(ownerInfos);
                 }
                 else
@@ -603,9 +619,8 @@ public class MigrationService {
                    throw new CustomException(errorMap);*/
                 }
 
-                producer.push(config.getSavePropertyTopic(), request);
+                kafkaTemplate.send(config.getMigratePropertyTopic(), propertyId, request);
                 properties.add(property);
-
 
                 if(oldProperty.getPropertyDetails().get(i)!=null)
                     migrateAssesment(oldProperty.getPropertyDetails().get(i),property,requestInfo,errorMap,masters,units);
@@ -617,7 +632,19 @@ public class MigrationService {
         return properties;
     }
 
-    public Address migrateAddress(org.egov.pt.models.oldProperty.Address oldAddress){
+    /**
+     * modulo value of property-id based on number of partiiton
+     * 
+     * @param propertyId
+     * @return
+     */
+	/*
+	 * private int getKafkaKeyValue(String propertyId) {
+	 * 
+	 * return propertyId.hashCode()% config.getPartitionCount(); }
+	 */
+
+	public Address migrateAddress(org.egov.pt.models.oldProperty.Address oldAddress){
         Address address = new Address();
         address.setTenantId(oldAddress.getTenantId());
         address.setDoorNo(oldAddress.getDoorNo());
@@ -678,7 +705,7 @@ public class MigrationService {
         return  geoLocation;
     }
 
-    public List<OwnerInfo> migrateOwnerInfo(Set<OldOwnerInfo> oldOwnerInfosSet){
+    public List<OwnerInfo> migrateOwnerInfo(Set<OldOwnerInfo> oldOwnerInfosSet, Boolean isOwnerActive){
         List<OwnerInfo> ownerInfolist = new ArrayList<>();
         for(OldOwnerInfo oldOwnerInfo : oldOwnerInfosSet){
             OwnerInfo ownerInfo = new OwnerInfo();
@@ -722,9 +749,17 @@ public class MigrationService {
             ownerInfo.setCorrespondenceAddress(oldOwnerInfo.getCorrespondenceAddress());
             ownerInfo.setIsPrimaryOwner(oldOwnerInfo.getIsPrimaryOwner());
             ownerInfo.setOwnerShipPercentage(oldOwnerInfo.getOwnerShipPercentage());
-            ownerInfo.setOwnerType(oldOwnerInfo.getOwnerType());
+			if (null == oldOwnerInfo.getOwnerType())
+				ownerInfo.setOwnerType("NONE");
+			else
+				ownerInfo.setOwnerType(oldOwnerInfo.getOwnerType());
             ownerInfo.setInstitutionId(oldOwnerInfo.getInstitutionId());
-            ownerInfo.setStatus(Status.ACTIVE);
+            
+			if (isOwnerActive)
+				ownerInfo.setStatus(Status.ACTIVE);
+			else
+				ownerInfo.setStatus(Status.INACTIVE);
+
             if(oldOwnerInfo.getOldDocuments() == null)
                 ownerInfo.setDocuments(null);
             else
@@ -793,7 +828,7 @@ public class MigrationService {
     }
 
 
-    public List<Unit> migrateUnit(List<OldUnit> oldUnits){
+    public List<Unit> migrateUnit(List<OldUnit> oldUnits,Boolean isUnitActive ){
         List<Unit> units = new ArrayList<>();
         for(OldUnit oldUnit : oldUnits){
             Unit unit = new Unit();
@@ -804,10 +839,7 @@ public class MigrationService {
             unit.setUsageCategory(migrateUnitUsageCategory(oldUnit));
             unit.setOccupancyType(oldUnit.getOccupancyType());
             unit.setOccupancyDate(oldUnit.getOccupancyDate());
-            if(oldUnit.getActive() == null)
-                unit.setActive(Boolean.TRUE);
-            else
-                unit.setActive(oldUnit.getActive());
+            unit.setActive(isUnitActive);
             unit.setConstructionDetail(migrateConstructionDetail(oldUnit));
             //unit.setAdditionalDetails(oldUnit.getAdditionalDetails());
             //unit.setAuditDetails();
@@ -822,6 +854,8 @@ public class MigrationService {
         StringBuilder usageCategory = new StringBuilder();
         if(StringUtils.isEmpty(oldUnit.getUsageCategoryMajor()))
             return null;
+        else if(!StringUtils.isEmpty(oldUnit.getUsageCategoryMajor()) && StringUtils.isEmpty(oldUnit.getUsageCategoryMinor()))
+        	return oldUnit.getUsageCategoryMajor();
         else
             usageCategory.append(oldUnit.getUsageCategoryMajor());
         if(!StringUtils.isEmpty(oldUnit.getUsageCategoryMinor()))
@@ -899,7 +933,7 @@ public class MigrationService {
             assessment.setDocuments(null);
         else{
             List<Document> documentList = migrateDocument(propertyDetail.getDocuments());
-            Set<Document> documentSet = null;
+            Set<Document> documentSet = new HashSet<>();
             for(Document document : documentList)
                 documentSet.add(document);
             assessment.setDocuments(documentSet);
