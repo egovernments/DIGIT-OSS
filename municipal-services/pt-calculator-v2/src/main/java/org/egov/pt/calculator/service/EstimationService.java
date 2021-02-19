@@ -732,10 +732,10 @@ public class EstimationService {
 		calculation.setRebate(rebate.setScale(2, 2).negate());
 		calculation.setPenalty(penalty.setScale(2, 2));
 		calculation.setExemption(BigDecimal.ZERO);
-		calculation.setApplicationFee(additionalDetails.get("applicationFee") != null ? (BigDecimal)additionalDetails.get("applicationFee") : BigDecimal.ZERO );
-		calculation.setProcessingFee(additionalDetails.get("processingFee") != null ? (BigDecimal) additionalDetails.get("processingFee") : BigDecimal.ZERO);
-		calculation.setPublicationFee(additionalDetails.get("publicationFee") != null ? (BigDecimal)additionalDetails.get("publicationFee") : BigDecimal.ZERO);
-		calculation.setLateFee(additionalDetails.get("lateFee") != null ? (BigDecimal)additionalDetails.get("lateFee") : BigDecimal.ZERO);
+		calculation.setApplicationFee(additionalDetails.get("applicationFee") != null ? BigDecimal.valueOf((Integer)additionalDetails.get("applicationFee")) : BigDecimal.ZERO );
+		calculation.setProcessingFee(additionalDetails.get("processingFee") != null ? BigDecimal.valueOf((Integer)additionalDetails.get("processingFee")) : BigDecimal.ZERO);
+		calculation.setPublicationFee(additionalDetails.get("publicationFee") != null ? BigDecimal.valueOf((Integer)additionalDetails.get("publicationFee")) : BigDecimal.ZERO);
+		calculation.setLateFee(additionalDetails.get("lateFee") != null ? BigDecimal.valueOf((Integer)additionalDetails.get("lateFee")) : BigDecimal.ZERO);
 
 		BigDecimal totalAmount = calculation.getTaxAmount().add(calculation.getRebate().add(calculation.getExemption()))
 				.add(calculation.getPenalty()).add(calculation.getApplicationFee()).add(calculation.getProcessingFee()).add(calculation.getPublicationFee()).add(calculation.getLateFee());
