@@ -698,7 +698,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: moduleDetails[0].moduleName === "ws-services-masters" ? commonConfig.tenantId : tenantId,
+      tenantId:"uk",
       moduleDetails: moduleDetails
     }
   };

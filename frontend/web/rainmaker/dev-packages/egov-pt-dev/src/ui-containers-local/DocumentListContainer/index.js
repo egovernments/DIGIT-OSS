@@ -76,19 +76,33 @@ const filterFunction = (rowObject, preparedFinalObject, filterConditon) => {
 const mapStateToProps = state => {
   let preparedFinalObject = get(state, 'screenConfiguration.preparedFinalObject', {})
   const reasonForTransfer = get(preparedFinalObject, 'Property.additionalDetails.reasonForTransfer', '');
+  let mutationDocuments = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.MutationDocuments', {})
   let documentsList = get(
     state,
     "screenConfiguration.preparedFinalObject.documentsContract",
     []
   );
+  mutationDocuments && documentsList.map(documentList => {
+    let updatedDocs = [];
+    documentList.cards.map((document,index) => {
+      
+      mutationDocuments && mutationDocuments.map((item) => {
+        (document.code.includes(item.code) && item.mutationReason) && item.mutationReason.map((key) => {
+          (key === reasonForTransfer) &&
+          updatedDocs.push(documentList.cards[index])
+        })
+      })
+    })
+    documentList.cards = updatedDocs;
+  })
   documentsList.map(documentList => {
-    documentList.cards.map(document => {
-      if (document.code.includes("TRANSFERREASONDOCUMENT")) {
+    documentList.cards.map((document,index) => {
+      if (document.code && document.code.includes("TRANSFERREASONDOCUMENT")) {
         document.dropdown.value = reasonForTransfer;
         document.dropdown.disabled = true;
       }
-      document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
-      document.dropdown.menu.map((item, key) => {
+      document.dropdown.menu = document && document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
+      document && document.dropdown.menu.map((item, key) => {
         document.dropdown.menu[key].name = item.label.split("_").join(".");
       });
     });

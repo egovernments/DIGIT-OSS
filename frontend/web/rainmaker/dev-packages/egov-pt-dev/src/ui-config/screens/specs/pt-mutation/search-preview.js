@@ -18,8 +18,10 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getLocale,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { FeeSummary } from "./summaryResource/feeSummary";
 import "./index.css";
+import { any } from "prop-types";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -388,6 +390,60 @@ const getPropertyConfigurationMDMSData = async (action, state, dispatch) => {
     console.log(e);
   }
 };
+const getMutationAdditionalData = async (action, state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: "uk",
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [{ name: "MutationAdditionalFees" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    let mutationAdditionalFeeData = get(payload, "MdmsRes.PropertyTax.MutationAdditionalFees")
+    let userInfo = getUserInfo();
+    userInfo = JSON.parse(userInfo);
+    let approver = userInfo.roles.map(item =>{
+      if(item.code == "PTAPPROVER"){
+        return item;
+      }
+    })
+    if(approver){
+      set(
+        action,
+        `screenConfig.components.div.children.body.children.cardContent.children.FeeSummary.visible`,
+        true
+      )
+    }
+    let mutaDetails = get(action,"screenConfig.components.div.children.body.children.cardContent.children.FeeSummary.children.cardContent.children.cardOne.children.cardContent.children.feedetailsContainer.children");
+    dispatch(prepareFinalObject("MutationAdditionalFees", mutationAdditionalFeeData));
+      for(var mutKey in mutaDetails){
+        
+        var visible =mutationAdditionalFeeData[0][mutKey] ? 
+            (mutationAdditionalFeeData[0][mutKey].enabledCities && 
+                mutationAdditionalFeeData[0][mutKey].enabledCities.includes(getTenantId()))
+                :false
+        set(
+          action,
+          `screenConfig.components.div.children.body.children.cardContent.children.FeeSummary.children.cardContent.children.cardOne.children.cardContent.children.feedetailsContainer.children.${mutKey}.visible`,
+          visible
+        )
+      }
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -466,7 +522,8 @@ const screenConfig = {
       "screenConfig.components.div.children.headerDiv.children.helpSection.children",
       printCont
     );
-    getPropertyConfigurationMDMSData(action, state, dispatch);
+    getPropertyConfigurationMDMSData(action, state, dispatch); 
+    getMutationAdditionalData(action,state,dispatch);
     return action;
   },
   components: {
@@ -519,6 +576,7 @@ const screenConfig = {
             moduleName: "egov-pt",
             componentPath: "pdfHeader"
           },
+          FeeSummary:FeeSummary,
           propertySummary: propertySummary,
           transferorSummary: transferorSummary,
           transferorInstitutionSummary: transferorInstitutionSummary,

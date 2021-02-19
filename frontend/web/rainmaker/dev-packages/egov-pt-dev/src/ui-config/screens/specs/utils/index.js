@@ -1,3 +1,4 @@
+
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import {
   getCommonCaption, getCommonCard,
@@ -229,22 +230,22 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
 
 
-  let link = `/property-tax/assessment-form`;
-  let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
-  window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
+  // let link = `/property-tax/assessment-form`;
+  // let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+  // window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
 
 
-  dispatch(setRoute(`/property-tax/assessment-form`));
+  // dispatch(setRoute(`/property-tax/assessment-form`));
 
 
-  // let toggle = get(
-  //   state.screenConfiguration.screenConfig[screenKey],
-  //   "components.adhocDialog.props.open",
-  //   false
-  // );
-  // dispatch(
-  //   handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
-  // );
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.adhocDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  );
 };
 
 export const getCommonGrayCard = children => {
