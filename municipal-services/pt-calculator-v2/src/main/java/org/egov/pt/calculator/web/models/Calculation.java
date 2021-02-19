@@ -50,6 +50,18 @@ public class Calculation   {
         @JsonProperty("rebate")
         private BigDecimal rebate;
 
+        @JsonProperty("applicationFee")
+        private BigDecimal applicationFee;
+
+        @JsonProperty("processingFee")
+        private BigDecimal processingFee;
+
+        @JsonProperty("publicationFee")
+        private BigDecimal publicationFee;
+
+        @JsonProperty("lateFee")
+        private BigDecimal lateFee;
+        
         List<TaxHeadEstimate> taxHeadEstimates;
 
         @JsonProperty("billingSlabIds")
