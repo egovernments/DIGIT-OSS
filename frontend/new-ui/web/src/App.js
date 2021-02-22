@@ -33,7 +33,7 @@ function App() {
     return <h1>stateCode is not defined</h1>
   }
   return (
-    <DigitUI stateCode={stateCode} registry={registry} enabledModules={enabledModules} moduleReducers={moduleReducers} />
+    <DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />
   );
 }
 
