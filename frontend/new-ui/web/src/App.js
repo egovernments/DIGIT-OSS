@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
 import { FSMModule, FSMLinks } from "@egovernments/digit-ui-module-fsm";
 import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
@@ -8,8 +9,10 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 
 import Registry from "./ComponentRegistry";
 
+initLibraries();
+
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
-const registry = new Registry({
+window.Digit.ComponentRegistryService.setupRegistry({
   PGRLinks,
   PGRModule,
   FSMModule,
@@ -19,6 +22,7 @@ const registry = new Registry({
   PaymentModule,
   PaymentLinks,
 });
+
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
 });
