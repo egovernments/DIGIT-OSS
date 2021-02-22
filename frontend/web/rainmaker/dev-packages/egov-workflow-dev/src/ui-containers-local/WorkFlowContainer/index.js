@@ -192,6 +192,13 @@ class WorkFlowContainer extends React.Component {
       if(beforeSubmitHook){
         data=beforeSubmitHook(data);
       }
+      if(data.additionalDetails){
+        data.additionalDetails.applicationFee = data.additionalDetails.applicationFee ? parseInt(data.additionalDetails.applicationFee) : 0;
+        data.additionalDetails.lateFee = data.additionalDetails.lateFee ? parseInt(data.additionalDetails.lateFee) : 0;
+        data.additionalDetails.processingFee = data.additionalDetails.processingFee ? parseInt(data.additionalDetails.processingFee) : 0;
+        data.additionalDetails.publicationFee = data.additionalDetails.publicationFee ? parseInt(data.additionalDetails.publicationFee) : 0;
+        data.additionalDetails.mutationFee = data.additionalDetails.mutationFee ? parseInt(data.additionalDetails.mutationFee) : 0;
+      }
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
