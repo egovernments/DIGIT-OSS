@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+BRANCH="$(git branch --show-current)"
 
 if [$BRANCH == "dev"] || [$BRANCH == "master"]; then
 
