@@ -1,13 +1,19 @@
 #!/bin/sh
 
-echo "vars ${scmVars}"
+BRANCH="$(git branch --show-current)"
 
-# if [$BRANCH != "dev"]; then
+echo $BRANCH
 
-#   INTERNALS="digit-ui-internals"
-#   rm -rf $INTERNALS
-#   git clone -b development https://github.com/egovernments/digit-ui-internals.git $INTERNALS
+if [ "$BRANCH" != "dev" ] || [ "$BRANCH" != "master" ]; then
 
-#   rm yarn.lock
+  INTERNALS="digit-ui-internals"
+  rm -rf $INTERNALS
+  git clone -b development https://github.com/egovernments/digit-ui-internals.git $INTERNALS
+  cd $INTERNALS && yarn && yarn build
+  cd ..
 
-# fi
+  rm -rf node_modules yarn.lock
+
+fi
+
+echo $BRANCH
