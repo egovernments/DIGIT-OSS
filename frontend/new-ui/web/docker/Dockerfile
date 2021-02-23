@@ -10,9 +10,9 @@ RUN ls -lah
 
 WORKDIR /app/web
 RUN node envs.js
+RUN git branch --show-current
 RUN ./install-deps.sh
 RUN yarn install
-RUN pwd
 RUN ls -lah
 RUN yarn build
 
