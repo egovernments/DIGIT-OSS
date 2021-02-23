@@ -59,7 +59,7 @@ public class TLNotificationService {
 					if(config.getIsTLSMSEnabled()) {
 						enrichSMSRequest(request,smsRequestsTL);
 						if(!CollectionUtils.isEmpty(smsRequestsTL))
-							util.sendSMS(smsRequestsTL,true);
+							util.sendSMS(smsRequestsTL,false);
 					}
 				}
 				if(null != config.getIsUserEventsNotificationEnabledForTL()) {
