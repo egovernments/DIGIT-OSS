@@ -7,8 +7,6 @@ import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
 import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 
-import Registry from "./ComponentRegistry";
-
 initLibraries();
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
