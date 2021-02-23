@@ -5,7 +5,7 @@ ENV NODE_OPTIONS "--max-old-space-size=1792"
 
 COPY ${WORK_DIR} .
 RUN ls -lah
-RUN yarn build:prepare
+RUN ./install-deps.sh
 RUN yarn install
 RUN yarn build
 
