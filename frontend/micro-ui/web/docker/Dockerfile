@@ -8,9 +8,9 @@ ENV NODE_OPTIONS "--max-old-space-size=1792"
 COPY ${WORK_DIR} .
 RUN node envs.js
 RUN ./install-deps.sh
-RUN yarn install
-RUN pwd
-RUN ls -lah
+# RUN yarn install
+# RUN pwd
+# RUN ls -lah
 # RUN yarn build
 
 # FROM nginx:mainline-alpine
