@@ -13,7 +13,7 @@ if [ "$BRANCH" != "dev" ] || [ "$BRANCH" != "master" ]; then
   cd ..
 
   rm -rf node_modules
-  # rm yarn.lock
+  rm yarn.lock
 
 fi
 
