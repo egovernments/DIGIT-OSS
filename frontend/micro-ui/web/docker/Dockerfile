@@ -1,4 +1,6 @@
 FROM egovio/alpine-node-builder-14:yarn AS build
+RUN apk update && apk upgrade
+RUN apk add --no-cache git>2.30.0
 ARG WORK_DIR
 WORKDIR /app
 ENV NODE_OPTIONS "--max-old-space-size=1792"
