@@ -4,6 +4,8 @@ WORKDIR /app
 ENV NODE_OPTIONS "--max-old-space-size=1792"
 
 COPY ${WORK_DIR} .
+RUN ls -lah
+RUN ./build
 RUN yarn install
 RUN yarn build
 
