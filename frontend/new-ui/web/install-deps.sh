@@ -1,15 +1,16 @@
 #!/bin/sh
 
-BRANCH="$(scmVars.BRANCH)"
+BRANCH=${scmVars.BRANCH}
 
-if [$BRANCH != "dev"]; then
+echo ${BRANCH}
 
-  INTERNALS="digit-ui-internals"
-  rm -rf $INTERNALS
-  git clone -b development https://github.com/egovernments/digit-ui-internals.git $INTERNALS
+# if [$BRANCH != "dev"]; then
 
-  rm yarn.lock
+#   INTERNALS="digit-ui-internals"
+#   rm -rf $INTERNALS
+#   git clone -b development https://github.com/egovernments/digit-ui-internals.git $INTERNALS
 
-fi
+#   rm yarn.lock
 
-echo $BRANCH
+# fi
+
