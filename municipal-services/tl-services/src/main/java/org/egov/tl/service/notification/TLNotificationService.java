@@ -55,20 +55,20 @@ public class TLNotificationService {
 		{
 			case businessService_TL:
 				List<SMSRequest> smsRequestsTL = new LinkedList<>();
-				if(null != config.getIsTLSMSEnabled()) {
-					if(config.getIsTLSMSEnabled()) {
-						enrichSMSRequest(request,smsRequestsTL);
-						if(!CollectionUtils.isEmpty(smsRequestsTL))
-							util.sendSMS(smsRequestsTL,false);
-					}
-				}
-				if(null != config.getIsUserEventsNotificationEnabledForTL()) {
-					if(config.getIsUserEventsNotificationEnabledForTL()) {
-						EventRequest eventRequest = getEventsForTL(request);
-						if(null != eventRequest)
-							util.sendEventNotification(eventRequest);
-					}
-				}
+// 				if(null != config.getIsTLSMSEnabled()) {
+// 					if(config.getIsTLSMSEnabled()) {
+// 						enrichSMSRequest(request,smsRequestsTL);
+// 						if(!CollectionUtils.isEmpty(smsRequestsTL))
+// 							util.sendSMS(smsRequestsTL,false);
+// 					}
+// 				}
+// 				if(null != config.getIsUserEventsNotificationEnabledForTL()) {
+// 					if(config.getIsUserEventsNotificationEnabledForTL()) {
+// 						EventRequest eventRequest = getEventsForTL(request);
+// 						if(null != eventRequest)
+// 							util.sendEventNotification(eventRequest);
+// 					}
+// 				}
 				break;
 
 			case businessService_BPA:
