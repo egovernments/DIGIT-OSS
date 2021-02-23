@@ -1,8 +1,6 @@
 #!/bin/sh
 
-BRANCH=${scmVars.BRANCH}
-
-echo ${BRANCH}
+echo "vars ${scmVars}"
 
 # if [$BRANCH != "dev"]; then
 
@@ -13,4 +11,3 @@ echo ${BRANCH}
 #   rm yarn.lock
 
 # fi
-
