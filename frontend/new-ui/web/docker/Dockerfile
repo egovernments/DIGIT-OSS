@@ -8,13 +8,12 @@ ENV NODE_OPTIONS "--max-old-space-size=1792"
 COPY ${WORK_DIR} .
 RUN ls -lah
 
-WORKDIR /app/web
-RUN node envs.js
-RUN git branch --show-current
-RUN ./install-deps.sh
-RUN yarn install
-RUN ls -lah
-RUN yarn build
+RUN node web/envs.js
+RUN cd web && git branch --show-current
+RUN cd web && ./install-deps.sh
+RUN cd web && yarn install
+RUN cd web && ls -lah
+RUN cd web && yarn build
 
 FROM nginx:mainline-alpine
 ENV WORK_DIR=/var/web/digit-ui
