@@ -6,11 +6,12 @@ WORKDIR /app
 ENV NODE_OPTIONS "--max-old-space-size=1792"
 
 COPY ${WORK_DIR} .
-RUN cd web
 RUN ls -lah
+
+RUN cd web
 RUN node envs.js
 RUN ./install-deps.sh
-# RUN yarn install
+RUN yarn install
 # RUN yarn build
 
 # FROM nginx:mainline-alpine
