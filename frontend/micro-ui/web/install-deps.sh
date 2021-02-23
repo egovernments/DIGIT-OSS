@@ -2,7 +2,7 @@
 
 BRANCH="$(git branch --show-current)"
 
-echo $BRANCH
+echo "Main Branch: $BRANCH"
 
 if [ "$BRANCH" != "dev" ] || [ "$BRANCH" != "master" ]; then
 
