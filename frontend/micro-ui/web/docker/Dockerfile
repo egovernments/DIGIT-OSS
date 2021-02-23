@@ -8,7 +8,7 @@ ENV NODE_OPTIONS "--max-old-space-size=1792"
 COPY ${WORK_DIR} .
 RUN ls -lah
 
-WORKDIR /app/web
+RUN cd digit-ui/web
 RUN node envs.js
 RUN ./install-deps.sh
 RUN yarn install
