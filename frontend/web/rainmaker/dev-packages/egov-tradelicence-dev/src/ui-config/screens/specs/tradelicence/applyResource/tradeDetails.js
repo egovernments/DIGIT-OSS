@@ -35,7 +35,6 @@ import { convertEpochToDate,getAllDataFromBillingSlab } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {httpRequest} from "../../../../../ui-utils"
 import { getUserInfo } from "egov-ui-framework/ui-utils/localStorageUtils";
-import {httpRequest} from "../../../../../ui-utils"
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
