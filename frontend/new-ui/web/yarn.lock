@@ -1173,9 +1173,9 @@
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
 "@egovernments/digit-ui-css@^1.0.0":
-  version "1.0.123"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-css/-/digit-ui-css-1.0.123.tgz#0458a6658c98a877a3f6dacbc2148bcb1e0b0869"
-  integrity sha512-jTia0OZJYNbwGFaRuqSUVDYH65XbiRi0BM6oZxSD1sim+Q9WhR2XL82DFiDkByknFgIS/mkT5iI3ibTmveMO+w==
+  version "1.0.124"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-css/-/digit-ui-css-1.0.124.tgz#739749eb50de296d3e5e4031e3edf2cd40e24ff6"
+  integrity sha512-oF6mFeLysUe1VvMSqi56QahKpAuHT67BcElfXLtFcAZvn0ydT+jsapjaLoGpiAbz4c9ju4YQW+OTBV76nEaT8A==
   dependencies:
     node-sass "^4.14.1"
     normalize.css "^8.0.1"
@@ -1183,9 +1183,9 @@
     tailwindcss "^1.8.10"
 
 "@egovernments/digit-ui-libraries@^1.0.0":
-  version "1.0.123"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.123.tgz#8c510505fd8f251bf11a1e845d58b91f31a88a4a"
-  integrity sha512-iMEUutySEJsCkmp5fMb/rFMf+134DF5PO6CzpM1M5CnWWzhyxmQYm36zzeUixl3v81lBBSTs5UndKzKm1VK5uQ==
+  version "1.0.124"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.0.124.tgz#f99bbd72273d2252576b8c2d77f7f63675381de6"
+  integrity sha512-3/AMttQ/XkWGVRVI0pX6Eol2ClIX2rdBomiyndBYOpUHnnOlmENnIm3SuMwGdn/pd5DN2vBnRpmAQCdzA/hqRw==
   dependencies:
     axios "^0.20.0"
     babel-preset-react "^6.24.1"
@@ -1200,9 +1200,9 @@
     redux "^4.0.5"
 
 "@egovernments/digit-ui-module-common@^1.0.0":
-  version "1.0.123"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-common/-/digit-ui-module-common-1.0.123.tgz#6dce15d185ddc9aecf4ce9ceff024bd185f94879"
-  integrity sha512-+VmKY5uq856YQJE0stAAE1cmhn7nhE7jaV6uvaDPH6vSKApXXT+sVxyPeOEYp2ZT+6F8ZUpkwPzFS56IaF2MhA==
+  version "1.0.124"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-common/-/digit-ui-module-common-1.0.124.tgz#c66ffd7354bfb313ee360360a814a1485096ece4"
+  integrity sha512-23U7Memq/76vkpTD8E43v/g5KuvSGrwFY+cK/EPoM5HIv8pfemvIq3UbCSfAREKul2ylqRKmFytbbNMIfibQkw==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1219,9 +1219,9 @@
     rooks "^4.4.0"
 
 "@egovernments/digit-ui-module-core@^1.0.0":
-  version "1.0.123"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.123.tgz#88cc8eaec4b0316d2be7116ebad816ab35060e4e"
-  integrity sha512-MrThwmZbm7apt4CJp+8jLizRuW0a1DCYGYjEBj5ch7xPoZZc6sDeXuQidNRAbggjldVy58dNO2Cy+wzaDKT6Uw==
+  version "1.0.124"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.0.124.tgz#85ad71a4afd5002ade51c7f874cc3b51fd703a0d"
+  integrity sha512-cm69cEteN8Ab2JNWkoFDUcDHSaNPZmLkmMdo4GiRuOhrbRYbHYc11bVPSsDQOrz2lC4ZeMNbm9Tf4XrJO4IWlg==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1237,9 +1237,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-fsm@^1.0.0":
-  version "1.0.123"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.123.tgz#188e72fcdefe1d40d04f75beb8abe2cc5b580e30"
-  integrity sha512-geloG77XYkNWizk+IJmV8CvcPgLErjWtG0lyz5lsM2y+OiDkUfXdmHInLYd5gl1P9HKUiy1TQ6tHLktkK23eVA==
+  version "1.0.124"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-fsm/-/digit-ui-module-fsm-1.0.124.tgz#c5f8431bc1d2ca49ed3cb162820415f00d4c68b8"
+  integrity sha512-TdFdZQBG8peXmo1rq/N8u/3ataqQVtXYxEYZBO6wctmFkDi4S5xH4rYtoiiU4yEG6k1aJNfEnkRlKiuicIDYoA==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1256,9 +1256,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pgr@^1.0.0":
-  version "1.0.123"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.123.tgz#ddca6c76db82a395bd215cc351e32c96d6acc044"
-  integrity sha512-eSQrqL2Iz+1bOSvfX3K6tT91wQ/UBoSwhYKi+bLt52uH9N/tVwCf3hCAWJJKC0loyRULAcuCk+Xz2F/90xWmPg==
+  version "1.0.124"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pgr/-/digit-ui-module-pgr-1.0.124.tgz#deb6a1a640de28d5b565a9732da01b8d66cb6ee3"
+  integrity sha512-VsRiBvAix86B3b2DO0JSzYodf0cwv0DR9Rmpjh1adKrwz4c2DqGoSbyUjaKkvBpxhp0+FSJa6tQKSf3jFU6pyQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1275,9 +1275,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-module-pt@^1.0.0":
-  version "1.0.123"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pt/-/digit-ui-module-pt-1.0.123.tgz#436a4b8a6fe825fdbaecac17c5ea3056c8fd3259"
-  integrity sha512-8fI/TkKE8Lij0S/nahEIy8RhIBpl7NejiksHCGVgw+FCNbu7QL28vyP0SQuFi8QgrSLvC7QA4HHX1+bBk/ATjw==
+  version "1.0.124"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-pt/-/digit-ui-module-pt-1.0.124.tgz#aa8be5432549dc77096ad0bff723216e6596033e"
+  integrity sha512-mhEMjGXgQ4NQ/7jH3S1VotR2x40JEnmIio763yJxPaRy9NfJUvKAMSbabvgC/DM2EnoQBVsiuUeJtcGg4/4VJQ==
   dependencies:
     "@egovernments/digit-ui-libraries" "^1.0.0"
     "@egovernments/digit-ui-react-components" "^1.0.0"
@@ -1294,9 +1294,9 @@
     redux-thunk "^2.3.0"
 
 "@egovernments/digit-ui-react-components@^1.0.0":
-  version "1.0.123"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.123.tgz#49bf0dd24f4e7fd99ab5bf482efd6ce08020f10a"
-  integrity sha512-gk3FsqsTuTQi1/6d/vkxjbyCBilHyqsx+JO8RwxCp5/PyDy4yKqTcVi7RsEsisX7jZUSCW5L8bTzZmIdHU3lrA==
+  version "1.0.124"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-react-components/-/digit-ui-react-components-1.0.124.tgz#bd7bc081e9f110e9eeddd3dceb4eef4cfb460f89"
+  integrity sha512-KjyP9DooJyHLHLqV5ad/0Q1m7jVck/EH6G1GsWSo9hP/qT9kp+osfNhoL0Keo5niRO+CA99myjFJ6M8+R+tgOg==
   dependencies:
     "@googlemaps/js-api-loader" "^1.11.1"
     react-hook-form "^6.7.0"
