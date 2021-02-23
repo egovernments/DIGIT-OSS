@@ -1,8 +1,8 @@
 #!/bin/sh
 
-BRANCH="$(git branch --show-current)"
+BRANCH="$(scmVars.BRANCH)"
 
-if [$BRANCH == "dev"] || [$BRANCH == "master"]; then
+if [$BRANCH != "dev"]; then
 
   INTERNALS="digit-ui-internals"
   rm -rf $INTERNALS
