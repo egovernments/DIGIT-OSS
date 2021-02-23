@@ -2,7 +2,10 @@
   "name": "digit-ui",
   "version": "0.1.0",
   "private": true,
-  "workspaces": [],
+  "workspaces": [
+    "digit-ui-internals/packages/*",
+    "digit-ui-internals/packages/modules/*"
+  ],
   "homepage": "/digit-ui",
   "dependencies": {
     "@egovernments/digit-ui-css": "^1.0.0",
@@ -22,7 +25,8 @@
   "devDependencies": {},
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "build:prepare": "./build.sh"
   },
   "eslintConfig": {
     "extends": [
