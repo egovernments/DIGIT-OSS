@@ -10,6 +10,8 @@ import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import { getOwnerPhoto } from "egov-tradelicence/ui-config/screens/specs/utils/receiptTransformer";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+
 
 export const hasTokenExpired = (status, data) => {
   if (status === 401) {
