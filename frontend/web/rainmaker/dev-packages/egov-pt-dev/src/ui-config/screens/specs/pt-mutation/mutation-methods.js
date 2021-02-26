@@ -175,7 +175,7 @@ export const searchPropertyDetails = getCommonCard({
         xs: 12,
         sm: 4
       },
-    afterFieldChange: async (action, state, dispatch) => {
+    beforeFieldChange: async (action, state, dispatch) => {
       let tenant = action.value;
       dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
       let mohallaPayload = await httpRequest(

@@ -407,7 +407,7 @@ export const getFinancialYearFromEPOCH = (epochTime) => {
   financialYear = date.getFullYear()-1 + "-" + String(date.getFullYear()).slice(2);
   return financialYear;
 };
-export const getFinancialYearFromEPOCH = (epochTime) => {
+const getFinancialYearFromEPOCH = (epochTime) => {
   let financialYear = "";
   let date = new Date(epochTime);
   if(date.getMonth()>=3)

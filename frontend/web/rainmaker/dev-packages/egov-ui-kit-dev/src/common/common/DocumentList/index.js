@@ -317,7 +317,7 @@ class DocumentList extends Component {
               required={true}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
-              className= "autocomplete-dropdown"
+             // className= "autocomplete-dropdown"
               labelsFromLocalisation= {true}
             />
           )}
