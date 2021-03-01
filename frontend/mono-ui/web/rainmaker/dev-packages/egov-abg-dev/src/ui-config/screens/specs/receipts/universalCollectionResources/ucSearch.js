@@ -69,10 +69,10 @@ export const UCSearchCard = getCommonCard({
         isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.businessServices",
-        jsonPath: "searchScreen.businessService",
+        jsonPath: "receiptCancelSearch.businessService",
       },
       required: true,
-      jsonPath: "searchScreen.businessService",
+      jsonPath: "receiptCancelSearch.businessService",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -91,7 +91,7 @@ export const UCSearchCard = getCommonCard({
       //     selectedCategory.child.length > 0) ?
       //     selectedCategory.child.map(item => item.code) : selectedCategory.code);
       //   dispatch(
-      //     prepareFinalObject("searchScreen.businessServices", serviceTypes)
+      //     prepareFinalObject("receiptCancelSearch.businessServices", serviceTypes)
       //   );
       //   return action;
       // }
@@ -107,7 +107,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.consumerCodes",
+      jsonPath: "receiptCancelSearch.consumerCodes",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -124,7 +124,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.receiptNumbers",
+      jsonPath: "receiptCancelSearch.receiptNumbers",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -151,7 +151,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNumber"
+      jsonPath: "receiptCancelSearch.mobileNumber"
     })
   }),
 

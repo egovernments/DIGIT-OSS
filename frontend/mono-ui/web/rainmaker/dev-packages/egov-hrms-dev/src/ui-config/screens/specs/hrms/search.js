@@ -3,7 +3,7 @@ import {
   getCommonHeader,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
@@ -90,11 +90,11 @@ const getMDMSData = async (action, state, dispatch) => {
 const setUlbSelect = (action, state, dispatch) => {
   let adminRoles = getAdminRole(state);
   if (adminRoles.hasAdminRole) {
-    set(
-      action.screenConfig,
-      "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb.roleDefination.roles",
-      adminRoles.configAdminRoles
-    );
+    // set(
+    //   action.screenConfig,
+    //   "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb.roleDefination.roles",
+    //   adminRoles.configAdminRoles
+    // );
   } else {
     set(
       action.screenConfig,
@@ -111,8 +111,13 @@ const getData = async (action, state, dispatch) => {
 const adminCityPickerCheck = (state, dispatch) => {
   let adminRoles = getAdminRole(state);
   if (adminRoles.hasAdminRole) {
+    dispatch(prepareFinalObject("hrmsPickerFlag", true));
+    dispatch(handleField("search", "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.value", ""));
+    dispatch(handleField("search", "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.required", true));
+    dispatch(handleField("search", "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "required", true));
     showCityPicker(state, dispatch);
   } else {
+    dispatch(prepareFinalObject("hrmsPickerFlag", false));
     createEmployee(state, dispatch);
   }
 };

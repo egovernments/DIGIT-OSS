@@ -223,11 +223,11 @@ const screenConfig = {
       window.location.href,
       "businessService"
     );
-    if(status=='success'&&localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
-      setTimeout(()=>{
-        const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + `Payment is Successful for consumer ${consumerCode} and Payment Receipt Number ${receiptNumber}`;
+    if (status == 'success' && localStorage.getItem('pay-channel') && localStorage.getItem('pay-redirectNumber')) {
+      setTimeout(() => {
+        const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
         window.location.href = weblink
-      },1500)
+      }, 1500)
     }
     // Calling the Bill so that payer information can be set in the PDF for Citizen application
     if (process.env.REACT_APP_NAME === "Citizen") {

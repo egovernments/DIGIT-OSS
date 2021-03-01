@@ -134,7 +134,7 @@ export const logout = () => {
     try {
       const authToken = getAccessToken();
       if (authToken) {
-        const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [{ key: "access_token", value: authToken }]);
+        const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [], { "access_token" : authToken });
       } else {
         clearUserDetails();
         process.env.REACT_APP_NAME === "Citizen"

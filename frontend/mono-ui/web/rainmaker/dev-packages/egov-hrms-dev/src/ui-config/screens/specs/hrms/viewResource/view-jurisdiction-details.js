@@ -67,12 +67,12 @@ const jurisdictionCard = {
             }, callBack: checkValueForNA
           }
         ),
-        // reviewRole: getLabelWithValue(
-        //   { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
-        //   {
-        //     jsonPath: "hrms.reviewScreen.furnishedRolesList",
-        //   }
-        // ),
+        reviewRole: getLabelWithValue(
+          { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
+          {
+            jsonPath: "Employee[0].jurisdictions[0].furnishedRolesList",
+          }
+        ),
 
       })
     }),

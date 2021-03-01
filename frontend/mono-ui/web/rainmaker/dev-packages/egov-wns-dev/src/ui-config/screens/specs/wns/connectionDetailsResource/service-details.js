@@ -9,12 +9,13 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
 import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
-const tenantId = getTenantIdCommon()
+
+
+export const renderService = () => {
+  const tenantId = getTenantIdCommon()
 const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
 const connectionType = getQueryArg(window.location.href, "connectionType")
-
-export const renderService = () => {
   if (service === serviceConst.WATER) {
     if (connectionType === "Metered") {
       return getCommonContainer({

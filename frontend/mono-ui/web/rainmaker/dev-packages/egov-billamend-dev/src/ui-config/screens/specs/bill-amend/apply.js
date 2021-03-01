@@ -1,7 +1,9 @@
 import {
   getCommonContainer,
   getCommonHeader,
-  getStepperObject
+  getStepperObject,
+  getCommonSubHeader,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getQueryArg,
@@ -20,7 +22,6 @@ import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import set from "lodash/set";
 import get from "lodash/get";
 import jp from "jsonpath";
-// import { changeStep } from "./applyResource/footer";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { documentDetails } from "./applyResource/documentDetails";
 import { footer } from "./applyResource/footer";
@@ -28,6 +29,9 @@ import  summary from "./applyResource/summary"
 import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
 import { docdata } from "./applyResource/docData";
+import { getFetchBill, procedToNextStep, cancelPopUp } from "../utils";
+import "./index.scss";
+
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
   { labelName: "Documents", labelKey: "BILL_STEPPER_DOCUMENTS_HEADER" },
@@ -41,17 +45,18 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Apply for Bill`,
+    labelName: `Generate Note`,
     labelKey: "BILL_APPLY_FOR_BILL"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-bpa",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: "NA"
-    },
-    visible: false
+        moduleName: "egov-billamend",
+        componentPath: "ConsumerNo",
+        props: {
+            number: "NA",
+            label: { labelValue: "Consumer No.", labelKey: "BILL_CONSUMER_NO" }
+        },
+    // visible: false
   }
 });
 
@@ -91,11 +96,61 @@ export const formwizardThirdStep = {
   visible: false
 };
 
+export const setSearchResponse = async (state, dispatch, action) => {
+  const connectionNumber = getQueryArg( window.location.href, "connectionNumber");
+  const businessService = getQueryArg( window.location.href, "businessService");
+  const tenantId = getTenantId() || getQueryArg( window.location.href, "businessService");
+
+  let fetBill = await getFetchBill(state, dispatch, action, [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "consumerCode",
+      value: connectionNumber
+    },
+    {
+      key: "businessService",
+      value: businessService
+    }
+  ]);
+  
+  if(fetBill && fetBill.Bill && fetBill && fetBill.Bill.length > 0) {
+    let billDetails = get(fetBill, "Bill[0].billDetails[0].billAccountDetails",[]);
+    billDetails.map(bill => {
+      bill.reducedAmountValue = 0;
+      bill.additionalAmountValue = 0;
+    });
+    dispatch(prepareFinalObject("fetchBillDetails", billDetails));
+    dispatch(prepareFinalObject("Amendment.consumerCode", connectionNumber));
+    dispatch(prepareFinalObject("Amendment.tenantId", tenantId));
+    dispatch(prepareFinalObject("Amendment.businessService", businessService));
+    dispatch(prepareFinalObject("BILL.AMOUNTTYPE", "reducedAmount"));
+    // dispatch(prepareFinalObject("Amendment.status", "ACTIVE"));
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "props.number",
+        connectionNumber
+      )
+    );
+
+  }
+}
+
 export const getData = async (action, state, dispatch) => {
   await getMdmsData(action, state, dispatch);
+  // await setSearchResponse(state, dispatch, action);
 }
 
 export const getMdmsData = async (action, state, dispatch) => {
+  const connectionNumber = getQueryArg( window.location.href, "connectionNumber");
+  const businessService = getQueryArg( window.location.href, "businessService");
+  const tenantId = getTenantId() || getQueryArg( window.location.href, "tenantId");
+
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -112,6 +167,11 @@ export const getMdmsData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "DocumentType" }
           ]
+        },
+        {
+          moduleName: "BillingService",
+          masterDetails: [
+            { name: "TaxHeadMaster" } ]
         }
       ]
     }
@@ -125,10 +185,34 @@ export const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    // if(!payload.MdmsRes.BillAmendment){
-    //   payload.MdmsRes.BillAmendment=docdata.BillAmendment;
-    // }
+    let taxHeadMasterMdmsDetails = get(payload, "MdmsRes.BillingService.TaxHeadMaster", []), taxHeadMasterDetails;
+    if (taxHeadMasterMdmsDetails && taxHeadMasterMdmsDetails.length > 0) {
+      taxHeadMasterDetails = taxHeadMasterMdmsDetails.filter(service => (service.service == businessService));
+      let billTaxHeadMasterDetails = taxHeadMasterDetails.filter(data => (data.IsBillamend== true));
+      if(billTaxHeadMasterDetails && billTaxHeadMasterDetails.length > 0) {
+       billTaxHeadMasterDetails.map(bill => {
+          bill.reducedAmountValue = 0;
+          bill.additionalAmountValue = 0;
+          bill.taxHeadCode = bill.code;
+        });
+      }
+      dispatch(prepareFinalObject("fetchBillDetails", billTaxHeadMasterDetails, []));
+    } else {
+      dispatch(prepareFinalObject("fetchBillDetails", []));
+    }
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    dispatch(prepareFinalObject("Amendment.consumerCode", connectionNumber));
+    dispatch(prepareFinalObject("Amendment.tenantId", tenantId));
+    dispatch(prepareFinalObject("Amendment.businessService", businessService));
+    dispatch(prepareFinalObject("BILL.AMOUNTTYPE", "reducedAmount"));
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "props.number",
+        connectionNumber
+      )
+    );
   } catch (e) {
     console.log(e);
   }
@@ -139,15 +223,11 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
     dispatch(prepareFinalObject("BILL", {}));
-    dispatch(prepareFinalObject("bill-amend-review-document-data",
-    [
-    { "title": "Court Order", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "CourtOrder.jpeg" },
-    { "title": "Past Bills", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "PastBills.jpeg" },
-    { "title": "Identity Proof", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "IdentityProof.jpeg" },
-    { "title": "Address Proof", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "AddressProof.jpeg" },
-    { "title": "Self Declaration", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "SelfDeclaration.jpeg" },
-    ]
-))
+    dispatch(prepareFinalObject("Amendment", {}));
+    dispatch(prepareFinalObject("AmendmentTemp", {}));
+    dispatch(prepareFinalObject("documentsUploadRedux", {}));
+    dispatch(prepareFinalObject("documentsContract", []));
+    dispatch(prepareFinalObject("AmendmentTemp.isPreviousDemandRevBasisValue", true));
     getData(action, state, dispatch).then(responseAction => {
 
     });
@@ -221,7 +301,101 @@ const screenConfig = {
         formwizardThirdStep,
         footer
       }
-    }
+    },
+    billAmdAlertDialog :{
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "sm"
+      },
+      children: {
+        dialogTitle:{
+          componentPath: "DialogTitle",
+          children: {
+            popup: getCommonContainer({
+              billamdHeader: getCommonHeader({
+                labelName: "Confirm change",
+                labelKey: "BILL_CONFIRM_CHANGE_HEADER"
+              }),
+            }) 
+          }
+        },
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
+          },
+          children: {
+            popup: getCommonContainer({
+              billamdSubheader: getCommonSubHeader ({
+                labelName: "Changing the Demand Revision basis will erase the previosly selected values.",
+                labelKey: "BILL_CONFIRM_CHANGE_SUB_HEADER"
+              }),
+              billamdSubheader1: getCommonSubHeader ({
+                labelName: "Are you sure want to proceed?",
+                labelKey: "BILL_CONFIRM_CHANGE_SUB_HEADER_1"
+              }),
+              billAmdDialogPicker: getCommonContainer({
+                div: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Div",
+                  children: {
+                    selectButton: {
+                      componentPath: "Button",
+                      props: {
+                        variant: "outlined",
+                        color: "primary",
+                        style: {
+                          width: "110px",
+                          height: "30px",
+                          marginRight: "4px",
+                          marginTop: "16px"
+                        }
+                      },
+                      children: {
+                        previousButtonLabel: getLabel({
+                          labelName: "CANCEL",
+                          labelKey: "BILL_CANCEL_BUTTON"
+                        })
+                      },
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: cancelPopUp
+                      }
+                    },
+                    cancelButton: {
+                      componentPath: "Button",
+                      props: {
+                        variant: "contained",
+                        color: "primary",
+                        style: {
+                          width: "100px",
+                          height: "30px",
+                          marginRight: "4px",
+                          marginTop: "16px"
+                        }
+                      },
+                      children: {
+                        previousButtonLabel: getLabel({
+                          labelName: "OK",
+                          labelKey: "BILL_OK_BUTTON"
+                        })
+                      },
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: procedToNextStep
+                      }
+                    }
+                  }
+                }
+              })
+            })
+          }
+        }
+      }
+    },
   }
 };
 

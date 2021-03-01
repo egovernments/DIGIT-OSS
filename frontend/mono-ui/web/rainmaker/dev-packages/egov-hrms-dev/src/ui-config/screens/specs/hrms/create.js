@@ -174,6 +174,10 @@ const getMdmsData = async (state, dispatch, tenantId) => {
               filter: "[?(@.active == true)]"
             }
           ]
+        },
+        {
+          moduleName: "tenant",
+          masterDetails: [{ name: "tenants" }]
         }
       ]
     }

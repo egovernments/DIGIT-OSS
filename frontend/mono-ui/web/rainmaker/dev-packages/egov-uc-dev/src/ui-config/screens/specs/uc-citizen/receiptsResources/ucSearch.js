@@ -111,12 +111,13 @@ export const UCSearchCard = getCommonCard({
           moduleName: "BillingService"
         },
         className: "autocomplete-dropdown",
-        required: false,
+        required: true,
         isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.serviceCategories",
         jsonPath: "searchScreenMdmsData.businessServiceSelected",
       },
+      required: true,
       jsonPath: "searchScreenMdmsData.businessServiceSelected",
       gridDefination: {
         xs: 12,

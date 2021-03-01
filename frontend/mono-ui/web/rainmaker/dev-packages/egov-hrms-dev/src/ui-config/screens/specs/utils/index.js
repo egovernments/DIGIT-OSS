@@ -2,7 +2,7 @@ import commonConfig from "config/common.js";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import "./index.css";
@@ -596,22 +596,40 @@ export const showCityPicker = (state, dispatch) => {
 };
 
 export const createEmployee = (state, dispatch) => {
-  const tenantId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "citiesByModule.tenantId.value"
-  );
-  get(state.screenConfiguration.preparedFinalObject, "Employee") &&
-    dispatch(prepareFinalObject("Employee", []));
-  get(
-    state.screenConfiguration.preparedFinalObject,
-    "hrms.reviewScreen.furnishedRolesList"
-  ) && dispatch(prepareFinalObject("hrms.reviewScreen.furnishedRolesList", ""));
-  const tenantIdQueryString = tenantId ? `?tenantId=${tenantId}` : "";
-  const createUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/hrms/create${tenantIdQueryString}`
-      : `/hrms/create${tenantIdQueryString}`;
-  dispatch(setRoute(createUrl));
+  const hrmsPickerFlag = get( state.screenConfiguration.preparedFinalObject, "hrmsPickerFlag", false);
+  let isCityPickerValid = true;
+  if(hrmsPickerFlag) {
+    isCityPickerValid = validateFields(
+      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "search"
+    );
+    if(!isCityPickerValid) isCityPickerValid = false; 
+  }
+
+  if(isCityPickerValid) {
+    let tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "citiesByModule.tenantId"
+    ) || get(
+      state.screenConfiguration.preparedFinalObject,
+      "citiesByModule.tenantId.value"
+    );
+    tenantId=tenantId?tenantId:getTenantId();
+    get(state.screenConfiguration.preparedFinalObject, "Employee") &&
+      dispatch(prepareFinalObject("Employee", []));
+    get(
+      state.screenConfiguration.preparedFinalObject,
+      "hrms.reviewScreen.furnishedRolesList"
+    ) && dispatch(prepareFinalObject("hrms.reviewScreen.furnishedRolesList", ""));
+    const tenantIdQueryString = tenantId ? `?tenantId=${tenantId}` : "";
+    const createUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/hrms/create${tenantIdQueryString}`
+        : `/hrms/create${tenantIdQueryString}`;
+    dispatch(setRoute(createUrl));
+  }
 };
 
 // HRMS

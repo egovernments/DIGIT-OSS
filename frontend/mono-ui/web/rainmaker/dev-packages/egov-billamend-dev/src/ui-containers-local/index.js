@@ -28,12 +28,16 @@ const DialogContainer = Loadable({
   loader: () => import("./DialogContainer"),
   loading: () => <Loading />
 });
-
+const AutosuggestContainer = Loadable({
+  loader: () => import("./AutosuggestContainer"),
+  loading: () => <Loading />
+});
 
 export {
   EstimateCardContainer,
   DocumentListContainer,
   AdjustmentAmountContainer,
   CheckBoxContainer,
-  DialogContainer
+  DialogContainer,
+  AutosuggestContainer
 };

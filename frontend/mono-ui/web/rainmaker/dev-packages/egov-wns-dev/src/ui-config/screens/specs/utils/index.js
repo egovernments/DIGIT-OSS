@@ -1657,3 +1657,22 @@ export const triggerModificationsDisplay = (action, isModeEnable) => {
     setVisible('roadCuttingChargeContainer', !isModeEnable, action);
 }
 
+export const getDemand = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/demand/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+        "warning"
+        )
+      );
+  }
+};

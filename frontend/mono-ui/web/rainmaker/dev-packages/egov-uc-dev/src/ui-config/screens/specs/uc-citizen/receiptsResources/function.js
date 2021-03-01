@@ -105,9 +105,29 @@ export const searchApiCall = async (state, dispatch) => {
     }
 
     const responseFromAPI = await getSearchResults(queryObject);
+    const businessServices = get(searchScreenObject, 'businessServices', null);
+    const businessServiceDataList = get(
+      state.screenConfiguration.preparedFinalObject,
+      "applyScreenMdmsData.businessServiceDataList",
+      []
+    );
+    let responseFromFilter = [];
+    if(!businessServices) {
+      get(responseFromAPI, 'Payments', []).map(payment => {
+        if(businessServiceDataList.includes(get(payment, "paymentDetails[0].businessService", ""))) {
+          responseFromFilter.push(payment);
+        }
+      })
+    } else {
+      responseFromFilter = get(responseFromAPI, 'Payments', []).filter(payment => {
+        return get(payment, "paymentDetails[0].businessService", "") == businessServices
+      })
+    }
+    
     dispatch(prepareFinalObject("PaymentsSearchResponse", responseFromAPI));
 
-    const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
+    // const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
+    const Payments = responseFromFilter || [];
     const response = [];
     for (let i = 0; i < Payments.length; i++) {
       const serviceTypeLabel = getTransformedLocale(

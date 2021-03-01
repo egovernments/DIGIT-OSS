@@ -10,256 +10,8 @@ import {
     getTextField,
     getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { onDemandRevisionBasis } from "../../utils";
 import get from "lodash/get";
-
-let demandArray = [];
-export const onDemandRevisionBasis = async (action, state, dispatch) => {
-    let demandRevisionBasis = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Bill.demandRevisionBasis", ""
-    );
-    let demandArray = [];
-    switch (demandRevisionBasis) {
-        case "COURTCASESETTLEMENT":
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
-                    "visible",
-                    true
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
-                    "visible",
-                    true
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
-                    "visible",
-                    false
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
-                    "visible",
-                    false
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
-                    "visible",
-                    false
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
-                    "visible",
-                    false
-                )
-            );
-
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
-                    "props.value",
-                    ""
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
-                    "props.value",
-                    ""
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
-                    "props.value",
-                    ""
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
-                    "props.value",
-                    ""
-                )
-            );
-            break;
-        case "ARREARSWRITEOFF":
-        case "ONETIMESETTLEMENT":
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
-                    "visible",
-                    false
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
-                    "visible",
-                    false
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
-                    "visible",
-                    true
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
-                    "visible",
-                    false
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
-                    "visible",
-                    true
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
-                    "visible",
-                    true
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
-                    "props.value",
-                    ""
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
-                    "props.value",
-                    ""
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
-                    "props.value",
-                    ""
-                )
-            );
-            break;
-        case "DCBCORRECTION":
-        case "REMISSIONFORPT":
-        case "OTHERS":
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
-                    "visible",
-                    false
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
-                    "visible",
-                    false
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
-                    "visible",
-                    false
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
-                    "visible",
-                    true
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
-                    "visible",
-                    true
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
-                    "visible",
-                    true
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
-                    "props.value",
-                    ""
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
-                    "props.value",
-                    ""
-                )
-            );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
-                    "props.value",
-                    ""
-                )
-            );
-            break;
-        default:
-            demandArray = [false, false, false, false, false, false];
-            break;
-    }
-}
 
 export const AddAdjustmentAmount = getCommonCard({
     header: getCommonTitle(
@@ -331,7 +83,7 @@ export const AddDemandRevisionBasis = getCommonCard({
                 labelName: "Select Demand Revison Basis",
                 labelKey: "BILL_DEMAND_REVISON_BASIS_PLACEHOLDER"
             },
-            jsonPath: "Bill.demandRevisionBasis",
+            jsonPath: "Amendment.amendmentReason",
             sourceJsonPath: "applyScreenMdmsData.BillAmendment.DemandRevisionBasis",
             required: true,
             gridDefination: {
@@ -340,7 +92,9 @@ export const AddDemandRevisionBasis = getCommonCard({
                 md: 6
             },
             afterFieldChange: (action, state, dispatch) => {
-                onDemandRevisionBasis(action, state, dispatch)
+                // const isPreviousDemandRevBasisValueChange = get (state.screenConfiguration.preparedFinalObject, "AmendmentTemp.isPreviousDemandRevBasisValue", false);
+                const isPreviousDemandRevBasisValueChange = get (state.screenConfiguration.preparedFinalObject, "AmendmentTemp.amendmentReason", true);
+                onDemandRevisionBasis(state, dispatch, true, isPreviousDemandRevBasisValueChange);
             }
         }),
         courtOrderNo: getTextField({
@@ -354,7 +108,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.courtOderNo",
+            jsonPath: "Amendment.reasonDocumentNumber",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -372,7 +126,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.dateEffectiveFrom",
+            jsonPath: "Amendment.effectiveFrom",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -392,7 +146,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.govtNotificationNumber",
+            jsonPath: "Amendment.reasonDocumentNumber",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -410,7 +164,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.documentNo",
+            jsonPath: "Amendment.reasonDocumentNumber",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -428,7 +182,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.fromDate",
+            jsonPath: "Amendment.effectiveFrom",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -448,7 +202,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.toDate",
+            jsonPath: "Amendment.effectiveTill",
             gridDefination: {
                 xs: 12,
                 sm: 12,

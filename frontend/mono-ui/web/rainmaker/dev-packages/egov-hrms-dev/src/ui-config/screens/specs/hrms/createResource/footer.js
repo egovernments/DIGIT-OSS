@@ -3,9 +3,9 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSnackbar ,showSpinner ,hideSpinner} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, showSpinner, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import {
@@ -55,51 +55,53 @@ export const callBackForNext = async (state, dispatch) => {
       labelKey: "ERR_MOBILE_NUMBER_EXISTS_FIELDS"
     };
     let existingPhoneNumbers = get(state.screenConfiguration.preparedFinalObject, "existingPhoneNumbers", []);
-    if(get(state.screenConfiguration.preparedFinalObject, "empPhoneNumber")!=get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")){
-
-    
-    if (existingPhoneNumbers.includes(get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber"))) {
-      dispatch(toggleSnackbar(true, errorMessage, "error"));
-      return;
-    } else {
-      dispatch(showSpinner());
-try {
-  
-
-      let queryObject = [
-        {
-          key: "phone",
-          value: get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")
-        },
-        {
-          key: "tenantId",
-          value: tenantId
-        }
-      ];
-      const response = await httpRequest(
-        "post",
-        "/egov-hrms/employees/_search",
-        "",
-        queryObject
-      );
-      dispatch(hideSpinner());
-
-      if (response && response.Employees && response.Employees.length == 0) {
+    if (get(state.screenConfiguration.preparedFinalObject, "empPhoneNumber") != get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")) {
 
 
-      } else {
-        dispatch(prepareFinalObject("existingPhoneNumbers", [...existingPhoneNumbers, get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")]));
-
+      if (existingPhoneNumbers.includes(get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber"))) {
         dispatch(toggleSnackbar(true, errorMessage, "error"));
-        return
+        return;
+      } else {
+        dispatch(showSpinner());
+        try {
+
+
+          let queryObject = [
+            {
+              key: "phone",
+              value: get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")
+            },
+            {
+              key: "tenantId",
+              value: tenantId
+            }
+          ];
+          const response = await httpRequest(
+            "post",
+            "/egov-hrms/employees/_search",
+            "",
+            queryObject
+          );
+          dispatch(hideSpinner());
+
+          if (response && response.Employees && response.Employees.length == 0) {
+
+
+          } else {
+            dispatch(prepareFinalObject("existingPhoneNumbers", [...existingPhoneNumbers, get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")]));
+
+            dispatch(toggleSnackbar(true, errorMessage, "error"));
+            return
+          }
+        } catch (error) {
+          dispatch(hideSpinner());
+          dispatch(toggleSnackbar(true, { ...errorMessage, labelKey: 'HRMS_SEARCH_ERROR' }, "error"));
+          return
+        }
       }
-    } catch (error) {
-      dispatch(hideSpinner());
-      dispatch(toggleSnackbar(true,{...errorMessage,labelKey:'HRMS_SEARCH_ERROR'}, "error"));
-      return
     }
-    }
-  }
+
+    dispatch(handleField("create", "components.div.children.formwizardSecondStep.children.jurisdictionDetails.children.cardContent.children.jurisdictionDetailsCard", "props.items", []));
   }
   if (activeStep === 1) {
     let jurisdictionDetailsPath =
@@ -165,17 +167,17 @@ try {
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
       return;
     }
-    let assignmentInvalid=false;
-    assignmentsData.map(assignment=>{
-      if(assignment.isCurrentAssignment){
+    let assignmentInvalid = false;
+    assignmentsData.map(assignment => {
+      if (assignment.isCurrentAssignment) {
 
-      }else if(!assignment.isCurrentAssignment&&!assignment.toDate){
-        assignmentInvalid=true;
-      }else if(new Date(assignment.toDate)-new Date(assignment.fromDate)<0){
-        assignmentInvalid=true;
+      } else if (!assignment.isCurrentAssignment && !assignment.toDate) {
+        assignmentInvalid = true;
+      } else if (new Date(assignment.toDate) - new Date(assignment.fromDate) < 0) {
+        assignmentInvalid = true;
       }
     })
-    if(assignmentInvalid){
+    if (assignmentInvalid) {
       isFormValid = false;
       const errorMessage1 = {
         labelName: "Please select at least one current assignment",
@@ -187,6 +189,60 @@ try {
     if (!isAssignmentDetailsValid) {
       isFormValid = false;
     }
+
+    let jurisdictions = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Employee[0].jurisdictions`,
+      []
+    );
+    let deletedJurisdictions = get(
+      state.screenConfiguration.preparedFinalObject,
+      `deletedJurisdiction`,
+      []
+    );
+    let deletedJurisdiction = [];
+    deletedJurisdiction = jurisdictions.filter(jurisdiction => jurisdiction.isDeleted === false && jurisdiction.isActive)
+    deletedJurisdiction = [...deletedJurisdictions, ...deletedJurisdiction]
+    jurisdictions = jurisdictions.filter(jurisdiction => jurisdiction.isDeleted !== false);
+    let rolesList = [];
+    let baseTenant = false;
+    let repeatedTenant = false;
+    let tenants = []
+    jurisdictions.map(judis => {
+      judis && judis.roles && Array.isArray(judis.roles) && judis.roles.map(role => {
+        rolesList.push({ ...role, tenantId: judis.boundary, code: role.value, name: role.label })
+      })
+      if (judis && judis.boundary && judis.boundary == getQueryArg(window.location.href, 'tenantId')) {
+        baseTenant = true;
+      }
+      if (judis && judis.boundary && tenants.includes(judis.boundary)) {
+        repeatedTenant = true;
+      }
+      tenants.push(judis.boundary);
+    })
+    if (!baseTenant) {
+      const errorMessage2 = {
+        labelName: "Please select at least one Role in Base Tenant",
+        labelKey: "ERR_BASE_TENANT_MANDATORY"
+      };
+      dispatch(toggleSnackbar(true, errorMessage2, "warning"));
+      return;
+    }
+    if (repeatedTenant) {
+      const errorMessage3 = {
+        labelName: "Please select at least one Role in Base Tenant",
+        labelKey: "ERR_INVALID_JURISDICTION"
+      };
+      dispatch(toggleSnackbar(true, errorMessage3, "warning"));
+      return;
+    }
+
+    dispatch(prepareFinalObject("deletedJurisdiction", [...deletedJurisdiction]));
+
+    dispatch(prepareFinalObject("Employee[0].jurisdictions", [...jurisdictions]));
+    dispatch(prepareFinalObject("Employee[0].user.roles", rolesList))
+    dispatch(handleField("create", "components.div.children.formwizardThirdStep.children.reviewDetails.children.cardContent.children.viewJurisdictionDetails.children.cardContent.children.viewOne", "props.items", []));
+    dispatch(handleField("create", "components.div.children.formwizardSecondStep.children.jurisdictionDetails.children.cardContent.children.jurisdictionDetailsCard", "props.items", []));
     setRolesList(state, dispatch);
   }
   if (activeStep === 2) {

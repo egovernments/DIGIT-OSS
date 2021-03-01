@@ -22,7 +22,8 @@ import {
   getAppSearchResults,
   getNocSearchResults,
   prepareNOCUploadData,
-  nocapplicationUpdate
+  nocapplicationUpdate,
+  getStakeHolderRoles
 } from "../../../../ui-utils/commons";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
@@ -331,6 +332,8 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
   /** END */
 };
 
+const stakeholerRoles = getStakeHolderRoles();
+
 const getRequiredMdmsDetails = async (state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -450,7 +453,7 @@ const setSearchResponse = async (
     let userInfo = JSON.parse(getUserInfo()), roles = get(userInfo, "roles"), isArchitect = false;
     if (roles && roles.length > 0) {
       roles.forEach(role => {
-        if (role.code === "BPA_ARCHITECT") {
+        if (stakeholerRoles.includes(role.code)) {
           isArchitect = true;
         }
       })
@@ -479,11 +482,10 @@ const setSearchResponse = async (
     let userInfo = JSON.parse(getUserInfo()),
       roles = get(userInfo, "roles"),
       owners = get(response.BPA["0"].landInfo, "owners"),
-      archtect = "BPA_ARCHITECT",
       isTrue = false, isOwner = true;
     if (roles && roles.length > 0) {
       roles.forEach(role => {
-        if (role.code === archtect) {
+        if (stakeholerRoles.includes(role.code)) {
           isTrue = true;
         }
       })
@@ -494,7 +496,7 @@ const setSearchResponse = async (
         if (owner.mobileNumber === userInfo.mobileNumber) {
           if (owner.roles && owner.roles.length > 0) {
             owner.roles.forEach(owrRole => {
-              if (owrRole.code === archtect) {
+              if (stakeholerRoles.includes(owrRole.code)) {
                 isOwner = false;
               }
             })

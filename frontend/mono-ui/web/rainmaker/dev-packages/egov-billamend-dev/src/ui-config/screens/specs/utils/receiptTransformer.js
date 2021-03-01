@@ -1,23 +1,19 @@
-import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  getTransformedLocale, getTranslatedLabel, getUlbGradeLabel,
+
+
+
+  getUserDataFromUuid, transformById
+} from "egov-ui-framework/ui-utils/commons";
+import {
+  getLocale, getLocalization
+} from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import store from "../../../../ui-redux/store";
 import {
-  getMdmsData,
-  getReceiptData,
-  getSearchResults,
-  getFinancialYearDates
+  getFinancialYearDates, getMdmsData
 } from "../utils";
-import {
-  getLocalization,
-  getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
-import {
-  getUlbGradeLabel,
-  getTranslatedLabel,
-  transformById,
-  getTransformedLocale,
-  getUserDataFromUuid
-} from "egov-ui-framework/ui-utils/commons";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -57,7 +53,7 @@ export const getMessageFromLocalization = code => {
 export const loadUlbLogo = tenantid => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("CANVAS");
     var ctx = canvas.getContext("2d");
     canvas.height = this.height;
@@ -75,7 +71,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     { key: "tenantId", value: tenant },
     { key: "applicationNumber", value: applicationNumber }
   ];
-  let response = await getSearchResults(queryObject);
+  let response = {};
 
   if (response && response.Licenses && response.Licenses.length > 0) {
     data.applicationNumber = nullToNa(
@@ -169,23 +165,23 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         }
         /** End */
 
-        res.tradeCategory.push(getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory));
+        res.tradeCategory.push(getMessageFromLocalization("TRADELICENSE_TRADETYPE_" + tradeCategory));
 
         res.tradeTypeReceipt.push(
-          getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
-            " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
+          getMessageFromLocalization("TRADELICENSE_TRADETYPE_" + tradeType) +
+          " / " +
+          getMessageFromLocalization("TRADELICENSE_TRADETYPE_" + getTransformedLocale(tradeSubType))
         );
         res.tradeTypeCertificate.push(
           getMessageFromLocalization(
             "TRADELICENSE_TRADETYPE_" + tradeCategory
           ) +
-            " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_" + tradeType) +
-            " / " +
-            getMessageFromLocalization(
-              "TRADELICENSE_TRADETYPE_" + getTransformedLocale(tradeSubType)
-            )
+          " / " +
+          getMessageFromLocalization("TRADELICENSE_TRADETYPE_" + tradeType) +
+          " / " +
+          getMessageFromLocalization(
+            "TRADELICENSE_TRADETYPE_" + getTransformedLocale(tradeSubType)
+          )
         );
         return res;
       },
@@ -248,7 +244,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
       value: consumerCode
     }
   ];
-  let response = await getReceiptData(queryObject);
+  let response = {};
 
   if (response && response.Payments && response.Payments.length > 0) {
     data.receiptNumber = nullToNa(
@@ -371,7 +367,7 @@ export const loadMdmsData = async tenantid => {
       .toUpperCase()
       .replace(/[.]/g, "_")}`;
 
-    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(cityKey,localizationLabels).toUpperCase()}`;
+    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(cityKey, localizationLabels).toUpperCase()}`;
 
     /** END */
     data.corporationAddress = get(ulbData, "address", "NA");

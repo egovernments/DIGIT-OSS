@@ -2,17 +2,19 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getUserInfo,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {set,get} from "lodash";
-
 import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { 
+  handleScreenConfigurationFieldChange as handleField,prepareFinalObject, 
+  toggleSnackbar 
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getCommonCard,
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
 import { httpRequest } from "../../../../ui-utils";
 import commonConfig from "config/common.js";
 import {getRequiredDocuments} from "../../../../ui-containers-local/RequiredDocuments/reqDocs";
+
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -277,13 +279,15 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
   }
 };
 const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
-  const tenant = getTenantId();
+  const connectionNumber = getQueryArg( window.location.href, "connectionNumber");
+  const tenantId = getQueryArg( window.location.href, "tenantId");
+  const businessService = connectionNumber.includes("WS") ? "WS" : "SW";
+
   switch (moduleName) {
    
     case "BillAmendment":
       return (state, dispatch) => {
-        // dispatch(prepareFinalObject("documentsUploadRedux", {}));
-        const applyUrl = `/bill-amend/apply`;
+        const applyUrl = `/bill-amend/apply?connectionNumber=${connectionNumber}&tenantId=${tenantId}&businessService=${businessService}`;
         dispatch(setRoute(applyUrl));
       };
     }
@@ -490,3 +494,663 @@ export const getTextToLocalMapping = label => {
           ); 
   }
 };
+
+export const getFetchBill = async(state, dispatch, action, queryObject) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "fetxh");
+  }
+}
+
+export const showApplyCityPicker = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
+  );
+};
+
+export const onDemandRevisionBasis = async (state, dispatch, isFromOk = true, check = false) => {
+  let demandRevisionBasis = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Amendment.amendmentReason", ""
+  );
+  let previousDemandRevBasisValue = get(
+    state.screenConfiguration.preparedFinalObject,
+    "AmendmentTemp.amendmentReason", ""
+  );
+
+  if (previousDemandRevBasisValue !== demandRevisionBasis && previousDemandRevBasisValue != "" && isFromOk && check) {
+    dispatch(handleField("apply", "components.billAmdAlertDialog", "props.open", true));
+  } else if (previousDemandRevBasisValue == demandRevisionBasis && isFromOk) {
+
+  } else {
+    let demandArray = [];
+    switch (demandRevisionBasis) {
+      case "COURT_CASE_SETTLEMENT":
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "visible",
+            false
+          )
+        );
+
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "props.required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "required",
+            true
+          )
+        );
+
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "props.required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "required",
+            true
+          )
+        );
+
+        break;
+      case "ARREAR_WRITE_OFF":
+      case "ONE_TIME_SETTLEMENT":
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "props.value",
+            ""
+          )
+        );
+
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "props.required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "props.required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "props.required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "required",
+            true
+          )
+        );
+
+        break;
+      case "DCB_CORRECTION":
+      case "REMISSION_FOR_PROPERTY_TAX":
+      case "OTHERS":
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "props.required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.fromDate",
+            "required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "props.required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
+            "required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "props.required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "required",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "props.required",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.documentNo",
+            "required",
+            true
+          )
+        );
+        break;
+      default:
+        demandArray = [false, false, false, false, false, false];
+        break;
+    }
+  }
+}
+
+export const procedToNextStep = async (state, dispatch) => {
+  const demandRevBasisValue = get( state.screenConfiguration.preparedFinalObject, "Amendment.amendmentReason", "");
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
+  dispatch(prepareFinalObject("documentsContract", []));
+  dispatch(prepareFinalObject("AmendmentTemp.amendmentReason", demandRevBasisValue));
+  dispatch(prepareFinalObject("AmendmentTemp.isPreviousDemandRevBasisValue", true));
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.demandRevisionBasis",
+      "props.value",
+      demandRevBasisValue
+    )
+  );
+  onDemandRevisionBasis(state, dispatch, false);
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.billAmdAlertDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.billAmdAlertDialog", "props.open", !toggle)
+  );
+}
+
+export const cancelPopUp = async (state, dispatch) => {
+  const previousDemandRevBasisValue = get( state.screenConfiguration.preparedFinalObject, "AmendmentTemp.amendmentReason", "");
+  dispatch(prepareFinalObject("AmendmentTemp.isPreviousDemandRevBasisValue", false));
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.demandRevisionBasis",
+      "props.value",
+      previousDemandRevBasisValue
+    )
+  );
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.billAmdAlertDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.billAmdAlertDialog", "props.open", !toggle)
+  );
+}
