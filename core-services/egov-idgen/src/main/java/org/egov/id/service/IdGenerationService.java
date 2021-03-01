@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import sun.util.resources.cldr.chr.CalendarData_chr_US;
@@ -311,7 +312,8 @@ public class IdGenerationService {
 
         } catch (Exception e) {
 
-            throw new InvalidIDFormatException(propertiesManager.getInvalidIdFormat(), requestInfo);
+            throw new CustomException("INVALID_FORMAT", "Error while generating financial year in provided format. Given format invalid.");
+            //throw new InvalidIDFormatException(propertiesManager.getInvalidIdFormat(), requestInfo);
 
         }
     }
@@ -336,7 +338,8 @@ public class IdGenerationService {
 
         } catch (Exception e) {
 
-            throw new InvalidIDFormatException(propertiesManager.getInvalidIdFormat(), requestInfo);
+            throw new CustomException("INVALID_FORMAT", "Error while generating current year in provided format. Given format invalid.");
+            //throw new InvalidIDFormatException(propertiesManager.getInvalidIdFormat(), requestInfo);
 
         }
     }
@@ -355,7 +358,8 @@ public class IdGenerationService {
         try {
             Pattern.compile(regex);
         } catch (Exception e) {
-            throw new InvalidIDFormatException(propertiesManager.getInvalidIdFormat(), requestInfo);
+            throw new CustomException("INVALID_REGEX", "Random text could not be generated. Invalid regex provided.");
+            //throw new InvalidIDFormatException(propertiesManager.getInvalidIdFormat(), requestInfo);
         }
         Matcher matcher = Pattern.compile("\\{(.*?)\\}").matcher(regex);
         while (matcher.find()) {

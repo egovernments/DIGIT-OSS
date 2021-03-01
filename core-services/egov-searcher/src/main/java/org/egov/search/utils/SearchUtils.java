@@ -156,10 +156,12 @@ public class SearchUtils {
 
 						preparedStatementValues.put(param.getName(), "%" + paramValue + "%");
 					} else if (operator.equals("TOUPPERCASE")) {
-
+						
+						operator =  "=";
 						paramValue = ((String) paramValue).toUpperCase();
 					} else if (operator.equals("TOLOWERCASE")) {
 
+						operator =  "=";
 						paramValue = ((String) paramValue).toLowerCase();
 					}
 					

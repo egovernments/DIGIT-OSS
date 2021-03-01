@@ -11,11 +11,12 @@ import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.egov.wf.util.WorkflowConstants.CITIZEN_TYPE;
-import static org.egov.wf.util.WorkflowConstants.SENDBACKTOCITIZEN;
+import static org.egov.wf.util.WorkflowConstants.*;
 
 
 @Component
@@ -46,6 +47,7 @@ public class WorkflowValidator {
         BusinessService businessService = businessUtil.getBusinessService(tenantId,businessServiceCode);
         validateAction(requestInfo,processStateAndActions,businessService);
         validateDocuments(processStateAndActions);
+        validateAssignes(requestInfo, processStateAndActions);
     }
 
 
@@ -119,6 +121,15 @@ public class WorkflowValidator {
                 throw new CustomException("INVALID ACTION","Action not found for businessIds: "+
                         processStateAndAction.getCurrentState().getBusinessServiceId());
 
+            Integer rating = null;
+
+            if(!ObjectUtils.isEmpty(processStateAndAction.getProcessInstanceFromRequest()))
+                rating = processStateAndAction.getProcessInstanceFromRequest().getRating();
+
+            if(rating != null && !action.equals(RATE_ACTION)){
+                throw new CustomException("INVALID_ACTION", "Rating can be given only upon taking RATE action.");
+            }
+
             Boolean isRoleAvailable = util.isRoleAvailable(roles,action.getRoles());
             Boolean isStateChanging = (action.getCurrentState().equalsIgnoreCase( action.getNextState())) ? false : true;
             List<String> transitionRoles = getRolesFromState(processStateAndAction.getCurrentState());
@@ -188,6 +199,41 @@ public class WorkflowValidator {
             });
         }
         return transitionRoles;
+    }
+
+
+    /**
+     * Validates if the citizen is in list of assignes
+     * @param requestInfo
+     * @param processStateAndActions
+     */
+    private void validateAssignes(RequestInfo requestInfo, List<ProcessStateAndAction> processStateAndActions){
+
+        if(requestInfo.getUserInfo().getType().equalsIgnoreCase(CITIZEN_TYPE)){
+
+            String userUUID = requestInfo.getUserInfo().getUuid();
+            Map<String, String> errorMap = new HashMap<>();
+
+            for(ProcessStateAndAction processStateAndAction : processStateAndActions){
+
+                ProcessInstance processInstanceFromDb = processStateAndAction.getProcessInstanceFromDb();
+
+                if(processInstanceFromDb!=null){
+                    if(!CollectionUtils.isEmpty(processInstanceFromDb.getAssignes())){
+                        List<String> assignes = processInstanceFromDb.getAssignes().stream().map(User::getUuid).collect(Collectors.toList());
+
+                        if(!assignes.contains(userUUID))
+                            errorMap.put("INVALID_USER","Citizen not authorized to perform action on application: "+processInstanceFromDb.getBusinessId());
+                    }
+                }
+
+            }
+
+            if(!errorMap.isEmpty())
+                throw new CustomException(errorMap);
+
+        }
+
     }
 
 

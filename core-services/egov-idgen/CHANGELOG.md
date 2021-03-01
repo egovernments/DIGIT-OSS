@@ -1,5 +1,10 @@
 All notable changes to this module will be documented in this file.
 
+## 1.2.1 - 2021-02-26
+
+- Updated domain name in application.properties
+- Added size validations
+
 ## 1.2.0 - 2020-06-17
 
 - Added typescript definition generation plugin

@@ -1,5 +1,9 @@
 All notable changes to this module will be documented in this file.
 
+## 1.1.1 - 2021-02-26
+
+- Updated domain name in application.properties
+
 ## 1.1.0 - 2020-06-22
 
 - Upgraded to tracer:2.0.0-SNAPSHOT

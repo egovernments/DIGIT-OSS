@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.filestore.config.FileStoreConfig;
 import org.egov.filestore.domain.model.Artifact;
@@ -24,6 +25,7 @@ import org.egov.filestore.repository.impl.minio.MinioConfig;
 import org.egov.filestore.validator.StorageValidator;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,6 +54,17 @@ public class StorageService {
 	private StorageValidator storageValidator;
 	
 	private MinioConfig minioConfig;
+
+	@Value("${filename.length}")
+	private Integer filenameLength;
+
+	@Value("${filename.useletters}")
+	private Boolean useLetters;
+
+	@Value("${filename.usenumbers}")
+	private Boolean useNumbers;
+
+
 	
 	
 
@@ -80,8 +93,10 @@ public class StorageService {
 		List<Artifact> artifacts = new ArrayList<>();
 		Artifact artifact = null;
 		for (MultipartFile file : files) {
-			String fileName = folderName + System.currentTimeMillis() + file.getOriginalFilename();
-			// String fileName = file.getOriginalFilename();
+			String randomString = RandomStringUtils.random(filenameLength, useLetters, useNumbers);
+			String orignalFileName = file.getOriginalFilename();
+			String imagetype = FilenameUtils.getExtension(orignalFileName);
+			String fileName = folderName + System.currentTimeMillis() + randomString + "." +imagetype;
 			String id = this.idGeneratorService.getId();
 			FileLocation fileLocation = new FileLocation(id, module, tag, tenantId, fileName, null);
 			try {

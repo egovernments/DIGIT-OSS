@@ -1,5 +1,8 @@
 # Changelog
 
+##1.2.2 - 2021-02-26
+
+- File now saved with application generated name
 
 ## 1.2.1 - 2021-01-15
 

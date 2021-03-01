@@ -28,6 +28,6 @@ public class WorkflowConstants {
 
     public static final String SENDBACKTOCITIZEN = "SENDBACKTOCITIZEN";
 
-
+    public static final String RATE_ACTION = "RATE";
 
 }

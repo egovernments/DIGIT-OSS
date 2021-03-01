@@ -1,4 +1,6 @@
+## 1.1.1 - 26-02-2021
 
+- Updated hashing algorithm
 
 ## 1.1.0 - 26-06-2020
 

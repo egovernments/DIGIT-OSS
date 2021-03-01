@@ -18,6 +18,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 import static java.util.Collections.singletonMap;
@@ -53,12 +54,17 @@ public class EnrichmentService {
         transaction.setTxnStatus(Transaction.TxnStatusEnum.PENDING);
         transaction.setTxnStatusMsg(PgConstants.TXN_INITIATED);
 
-        if(Objects.isNull(transaction.getAdditionalDetails()))
+        if(Objects.isNull(transaction.getAdditionalDetails())){
             transaction.setAdditionalDetails(objectMapper.createObjectNode());
-
-        ((ObjectNode) transaction.getAdditionalDetails()).set("taxAndPayments",
-                objectMapper.valueToTree(transaction.getTaxAndPayments()));
-
+            ((ObjectNode) transaction.getAdditionalDetails()).set("taxAndPayments",
+                    objectMapper.valueToTree(transaction.getTaxAndPayments()));
+        }
+        else{
+            Map<String, Object> additionDetailsMap = objectMapper.convertValue(transaction.getAdditionalDetails(), Map.class);
+            additionDetailsMap.put("taxAndPayments",(Object) transaction.getTaxAndPayments());
+            transaction.setAdditionalDetails(objectMapper.convertValue(additionDetailsMap,Object.class));
+        }
+        
         String uri = UriComponentsBuilder
                 .fromHttpUrl(transaction.getCallbackUrl())
                 .queryParams(new LinkedMultiValueMap<>(singletonMap(PgConstants.PG_TXN_IN_LABEL,

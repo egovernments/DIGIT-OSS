@@ -43,7 +43,7 @@ public class MSDGSMSServiceImpl extends BaseSMSService {
         MessageDigest md;
         byte[] md5 = new byte[64];
         try {
-            md = MessageDigest.getInstance("SHA-1");
+            md = MessageDigest.getInstance("SHA-256");
             md.update(text.getBytes("iso-8859-1"), 0, text.length());
             md5 = md.digest();
         } catch (Exception e) {

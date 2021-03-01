@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egov-enc-service</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <name>egov-enc-service</name>
   <properties>
     <java.version>1.8</java.version>
