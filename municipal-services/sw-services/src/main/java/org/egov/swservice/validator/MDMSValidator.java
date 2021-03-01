@@ -14,6 +14,7 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.swservice.repository.ServiceRequestRepository;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
+import org.egov.swservice.web.models.RoadCuttingInfo;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
 import org.egov.tracer.model.CustomException;
@@ -90,12 +91,22 @@ public class MDMSValidator {
 			messageBuilder.append("Connection type value is invalid, please enter proper value! ");
 			errorMap.put("INVALID SEWERAGE CONNECTION TYPE", messageBuilder.toString());
 		}
-		if (sewerageConnection.getRoadType() != null
-				&& !codes.get(SWConstants.SC_ROADTYPE_MASTER).contains(sewerageConnection.getRoadType())) {
-			messageBuilder = new StringBuilder();
-			messageBuilder.append("Road type value is invalid, please enter proper value! ");
-			errorMap.put("INVALID_WATER_ROAD_TYPE", messageBuilder.toString());
+		
+		if(sewerageConnection.getRoadCuttingInfo() == null){
+			errorMap.put("INVALID_ROAD_INFO", "Road Cutting Information should not be empty");
 		}
+
+		if(sewerageConnection.getRoadCuttingInfo() != null){
+			for(RoadCuttingInfo roadCuttingInfo : sewerageConnection.getRoadCuttingInfo()){
+				if (!StringUtils.isEmpty(roadCuttingInfo.getRoadType())
+						&& !codes.get(SWConstants.SC_ROADTYPE_MASTER).contains(roadCuttingInfo.getRoadType())) {
+					messageBuilder = new StringBuilder();
+					messageBuilder.append("Road type value is invalid, please enter proper value! ");
+					errorMap.put("INVALID_WATER_ROAD_TYPE", messageBuilder.toString());
+				}
+			}
+		}
+		
 		return errorMap;
 	}
 	

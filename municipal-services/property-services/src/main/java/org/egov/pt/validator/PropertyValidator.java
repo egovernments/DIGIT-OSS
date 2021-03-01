@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -191,7 +190,7 @@ public class PropertyValidator {
 
 		if (!isstateUpdatable && (!CollectionUtils.isEmpty(objectsAdded) || !CollectionUtils.isEmpty(fieldsUpdated)))
 			throw new CustomException("EG_PT_WF_UPDATE_ERROR",
-					"The current state of workflow does not allow chnages to property");
+					"The current state of workflow does not allow changes to property");
 		
 	    
         /*
@@ -800,33 +799,6 @@ public class PropertyValidator {
 
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
-	}
-
-	/**
-	 * Verfies if atleast one owner in mutation request is modified
-	 * 
-	 * @param propertyFromSearch
-	 * @param errorMap
-	 * @param property
-	 * @return
-	 */
-	private Boolean isAtleastOneOwnerModified(Property propertyFromSearch, Map<String, String> errorMap, Property property) {
-		
-		Map<String, OwnerInfo> ownerIdMapFromSearch = propertyFromSearch.getOwners().stream().collect(Collectors.toMap(OwnerInfo::getOwnerInfoUuid, Function.identity()));
-
-		for (OwnerInfo ownerFromRequest : property.getOwners()) {
-
-			OwnerInfo OwnerFromSearch = ownerIdMapFromSearch.get(ownerFromRequest.getOwnerInfoUuid());
-
-			if (OwnerFromSearch == null) {
-
-				errorMap.put("EG_PT_MUTATION_OWNER_ERROR", "Owner with invalid id found in the property request object : " + ownerFromRequest.getOwnerInfoUuid());
-			}
-			if (!ownerFromRequest.mutationEquals(OwnerFromSearch))
-				return true;
-		}
-
-		return false;
 	}
 
 }

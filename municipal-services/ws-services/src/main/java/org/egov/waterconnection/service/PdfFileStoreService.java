@@ -167,7 +167,6 @@ public class PdfFileStoreService {
 			}
 			return fileStoreIds.get(0).toString();
 		} catch (Exception ex) {
-			log.error("PDF file store id response error!!", ex);
 			throw new CustomException("WATER_FILESTORE_PDF_EXCEPTION", "PDF response can not parsed!!!");
 		}
 	}

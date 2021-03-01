@@ -120,7 +120,6 @@ public class ServiceRequestValidator {
             res = JsonPath.read(mdmsData,jsonPath);
         }
         catch (Exception e){
-            e.printStackTrace();
             throw new CustomException("JSONPATH_ERROR","Failed to parse mdms response");
         }
 
@@ -156,7 +155,6 @@ public class ServiceRequestValidator {
             res = JsonPath.read(mdmsData,jsonPath);
         }
         catch (Exception e){
-            e.printStackTrace();
             throw new CustomException("JSONPATH_ERROR","Failed to parse mdms response for department");
         }
 

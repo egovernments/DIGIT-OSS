@@ -112,6 +112,7 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 		addDocumentToWaterConnection(rs, waterConnection);
 		addPlumberInfoToWaterConnection(rs, waterConnection);
 		addHoldersDeatilsToWaterConnection(rs, waterConnection);
+		addRoadCuttingInfotToWaterConnection(rs, waterConnection);
 	}
 
 	private void addDocumentToWaterConnection(ResultSet rs, WaterConnection waterConnection) throws SQLException {
@@ -129,6 +130,23 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 			applicationDocument.setDocumentUid(rs.getString("doc_Id"));
 			applicationDocument.setStatus(Status.fromValue(isActive));
 			waterConnection.addDocumentsItem(applicationDocument);
+		}
+	}
+
+	private void addRoadCuttingInfotToWaterConnection(ResultSet rs, WaterConnection waterConnection) throws SQLException {
+		String roadcutting_id = rs.getString("roadcutting_id");
+		String isActive = rs.getString("roadcutting_active");
+		boolean roadCuttingInfoActive = false;
+		if (!StringUtils.isEmpty(isActive)) {
+			roadCuttingInfoActive = Status.ACTIVE.name().equalsIgnoreCase(isActive);
+		}
+		if (!StringUtils.isEmpty(roadcutting_id) && roadCuttingInfoActive) {
+			RoadCuttingInfo roadCuttingInfo = new RoadCuttingInfo();
+			roadCuttingInfo.setId(roadcutting_id);
+			roadCuttingInfo.setRoadType(rs.getString("roadcutting_roadtype"));
+			roadCuttingInfo.setRoadCuttingArea(rs.getFloat("roadcutting_roadcuttingarea"));
+			roadCuttingInfo.setStatus(Status.fromValue(isActive));
+			waterConnection.addRoadCuttingInfoList(roadCuttingInfo);
 		}
 	}
 

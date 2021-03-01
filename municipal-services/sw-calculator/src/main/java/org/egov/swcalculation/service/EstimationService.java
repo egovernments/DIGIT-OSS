@@ -14,15 +14,7 @@ import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.swcalculation.constants.SWCalculationConstant;
-import org.egov.swcalculation.web.models.BillingSlab;
-import org.egov.swcalculation.web.models.CalculationCriteria;
-import org.egov.swcalculation.web.models.Property;
-import org.egov.swcalculation.web.models.RequestInfoWrapper;
-import org.egov.swcalculation.web.models.SearchCriteria;
-import org.egov.swcalculation.web.models.SewerageConnection;
-import org.egov.swcalculation.web.models.SewerageConnectionRequest;
-import org.egov.swcalculation.web.models.Slab;
-import org.egov.swcalculation.web.models.TaxHeadEstimate;
+import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.util.CalculatorUtils;
 import org.egov.swcalculation.util.SWCalculationUtil;
 import org.egov.swcalculation.util.SewerageCessUtil;
@@ -346,19 +338,30 @@ public class EstimationService {
 			meterCost = new BigDecimal(feeObj.getAsNumber(SWCalculationConstant.METER_COST_CONST).toString());
 		}
 		BigDecimal roadCuttingCharge = BigDecimal.ZERO;
-		if (criteria.getSewerageConnection().getRoadType() != null) {
-			roadCuttingCharge = getChargeForRoadCutting(masterData, criteria.getSewerageConnection().getRoadType(),
-					criteria.getSewerageConnection().getRoadCuttingArea());
+		BigDecimal usageTypeCharge = BigDecimal.ZERO;
+
+		if(criteria.getSewerageConnection().getRoadCuttingInfo() != null){
+			for(RoadCuttingInfo roadCuttingInfo : criteria.getSewerageConnection().getRoadCuttingInfo()){
+				BigDecimal singleRoadCuttingCharge = BigDecimal.ZERO;
+				if (roadCuttingInfo.getRoadType() != null)
+					singleRoadCuttingCharge = getChargeForRoadCutting(masterData, roadCuttingInfo.getRoadType(),
+							roadCuttingInfo.getRoadCuttingArea());
+
+				BigDecimal singleUsageTypeCharge = BigDecimal.ZERO;
+				if (roadCuttingInfo.getRoadCuttingArea() != null)
+					singleUsageTypeCharge = getUsageTypeFee(masterData,
+							property.getUsageCategory(),
+							roadCuttingInfo.getRoadCuttingArea());
+
+				roadCuttingCharge = roadCuttingCharge.add(singleRoadCuttingCharge);
+				usageTypeCharge = usageTypeCharge.add(singleUsageTypeCharge);
+			}
 		}
+
+
 		BigDecimal roadPlotCharge = BigDecimal.ZERO;
 		if (property.getLandArea() != null) {
 			roadPlotCharge = getPlotSizeFee(masterData, property.getLandArea());
-		}
-		BigDecimal usageTypeCharge = BigDecimal.ZERO;
-		if (criteria.getSewerageConnection().getRoadCuttingArea() != null) {
-			usageTypeCharge = getUsageTypeFee(masterData,
-					property.getUsageCategory(),
-					criteria.getSewerageConnection().getRoadCuttingArea());
 		}
 
 		BigDecimal totalCharge = formFee.add(scrutinyFee).add(otherCharges).add(meterCost).add(roadCuttingCharge)

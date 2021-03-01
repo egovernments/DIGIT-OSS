@@ -137,6 +137,10 @@ public class BPAConstants {
 	public static final String ACTION_SKIP_PAY = "SKIP_PAYMENT";
 
 	public static final String ACTION_ADHOC = "ADHOC";
+	
+	public static final String ACTION_SEND_TO_ARCHITECT = "SEND_TO_ARCHITECT";
+	
+	public static final String ACTION_SEND_TO_CITIZEN = "SEND_TO_CITIZEN";
 
 	// BPA Status
 
@@ -210,6 +214,8 @@ public class BPAConstants {
 	
 	public static final String FI_STATUS = "FIELDINSPECTION_INPROGRESS";
 	public static final String FI_ADDITIONALDETAILS = "fieldinspection_pending";
+	
+	public static final String  STATUS_CITIZEN_APPROVAL_INPROCESS = "CITIZEN_APPROVAL_INPROCESS";
 
 	// OCCUPANCY TYPE
 

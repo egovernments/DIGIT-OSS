@@ -44,8 +44,8 @@ public class WsQueryBuilder {
 			+ " conn.adhocpenaltycomment, conn.adhocrebatereason, conn.adhocrebatecomment, conn.createdBy as ws_createdBy, conn.lastModifiedBy as ws_lastModifiedBy,"
 			+ " conn.createdTime as ws_createdTime, conn.lastModifiedTime as ws_lastModifiedTime,conn.additionaldetails, "
 			+ " conn.locality, conn.isoldapplication, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id,"
-			+ " plumber.name as plumber_name, plumber.licenseno,"
-			+ " plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress,"
+			+ " plumber.name as plumber_name, plumber.licenseno, roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea,"
+			+ " roadcuttingInfo.active as roadcutting_active, plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress,"
 			+ " plumber.relationship, " + holderSelectValues
 			+ " FROM eg_ws_connection conn "
 			+  INNER_JOIN_STRING 
@@ -55,7 +55,9 @@ public class WsQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
 		    +  LEFT_OUTER_JOIN_STRING
-		    + "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id";
+		    + "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" ;
 
 	private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
@@ -80,13 +82,14 @@ public class WsQueryBuilder {
 				return null;
 		StringBuilder query = new StringBuilder(WATER_SEARCH_QUERY);
 		boolean propertyIdsPresent = false;
-		
+
+		Set<String> propertyIds = new HashSet<>();
 		String propertyIdQuery = " (conn.property_id in (";
 
 		if (!StringUtils.isEmpty(criteria.getMobileNumber()) || !StringUtils.isEmpty(criteria.getPropertyId())) {
-			Set<String> propertyIds = new HashSet<>();
 			List<Property> propertyList = waterServicesUtil.propertySearchOnCriteria(criteria, requestInfo);
 			propertyList.forEach(property -> propertyIds.add(property.getId()));
+			criteria.setPropertyIds(propertyIds);
 			if (!propertyIds.isEmpty()) {
 				addClauseIfRequired(preparedStatement, query);
 				query.append(propertyIdQuery).append(createQuery(propertyIds)).append(" )");
@@ -94,9 +97,12 @@ public class WsQueryBuilder {
 				propertyIdsPresent = true;
 			}
 		}
+		
+		Set<String> uuids = null;
 		if(!StringUtils.isEmpty(criteria.getMobileNumber())) {
-			Set<String> uuids = userService.getUUIDForUsers(criteria.getMobileNumber(), criteria.getTenantId(), requestInfo);
+			uuids = userService.getUUIDForUsers(criteria.getMobileNumber(), criteria.getTenantId(), requestInfo);
 			boolean userIdsPresent = false;
+			criteria.setUserIds(uuids);
 			if (!CollectionUtils.isEmpty(uuids)) {
 				addORClauseIfRequired(preparedStatement, query);
 				if(!propertyIdsPresent)
@@ -109,6 +115,17 @@ public class WsQueryBuilder {
 				query.append(")");
 			}
 		}
+
+		/*
+		 * to return empty result for mobilenumber empty result
+		 */
+		if (!StringUtils.isEmpty(criteria.getMobileNumber()) 
+				&& CollectionUtils.isEmpty(criteria.getPropertyIds()) && CollectionUtils.isEmpty(criteria.getUserIds())
+				&& StringUtils.isEmpty(criteria.getApplicationNumber()) && StringUtils.isEmpty(criteria.getPropertyId())
+				&& StringUtils.isEmpty(criteria.getConnectionNumber()) && CollectionUtils.isEmpty(criteria.getIds())) {
+			return null;
+		}
+		
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.tenantid = ? ");

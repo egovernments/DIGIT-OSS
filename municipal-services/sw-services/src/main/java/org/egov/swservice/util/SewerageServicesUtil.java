@@ -114,7 +114,7 @@ public class SewerageServicesUtil {
 	 *            Response object from property service call
 	 * @return List of property
 	 */
-	private List<Property> getPropertyDetails(Object result) {
+	public List<Property> getPropertyDetails(Object result) {
 		try {
 			return mapper.convertValue(result, PropertyResponse.class).getProperties();
 		} catch (Exception ex) {
@@ -241,7 +241,7 @@ public class SewerageServicesUtil {
 	 * @param criteria - Property Search Criteria
 	 * @return property URL
 	 */
-	private StringBuilder getPropertyURL(PropertyCriteria criteria) {
+	public StringBuilder getPropertyURL(PropertyCriteria criteria) {
 		StringBuilder url = new StringBuilder(getPropertyURL());
 		boolean isanyparametermatch = false;
 		url.append("?");

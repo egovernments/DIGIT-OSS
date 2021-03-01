@@ -56,7 +56,6 @@ public class LandMDMSValidator {
 			try {
 				mdmsResMap.putAll(JsonPath.read(mdmsData, modulepath));
 			} catch (Exception e) {
-				log.error("Error while fetvhing MDMS data", e);
 				throw new CustomException(LandConstants.INVALID_TENANT_ID_MDMS_KEY,
 						LandConstants.INVALID_TENANT_ID_MDMS_MSG);
 			}

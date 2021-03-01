@@ -3,6 +3,7 @@ package org.egov.pt.service;
 import java.util.HashMap;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.pt.config.PropertyConfiguration;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
 @Service
+@Slf4j
 public class PaymentUpdateService {
 
 	@Autowired
@@ -75,7 +77,7 @@ public class PaymentUpdateService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("KAFKA_PROCESS_ERROR:", e);
 		}
 
 	}

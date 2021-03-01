@@ -814,7 +814,9 @@ public class GrievanceService {
 					Long id = null;
 					try {
 						id = Long.parseLong(service.getAccountId());
-					}catch(Exception e) {}
+					}catch(Exception e) {
+						log.error("Parse Error", e);
+					}
 					service.setCitizen(userResponseMap.get(id));
 				}
 			}

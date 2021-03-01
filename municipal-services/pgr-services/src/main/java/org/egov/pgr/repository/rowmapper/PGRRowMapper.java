@@ -136,7 +136,6 @@ public class PGRRowMapper implements ResultSetExtractor<List<Service>> {
             }
         }
         catch (IOException | SQLException e){
-            e.printStackTrace();
             throw new CustomException("PARSING_ERROR","Failed to parse additionalDetail object");
         }
         return additionalDetail;

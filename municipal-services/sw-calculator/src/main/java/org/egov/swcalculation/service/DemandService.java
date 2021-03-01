@@ -596,6 +596,10 @@ public class DemandService {
 
 		BigDecimal penalty = interestPenaltyEstimates.get(SWCalculationConstant.SW_TIME_PENALTY);
 		BigDecimal interest = interestPenaltyEstimates.get(SWCalculationConstant.SW_TIME_INTEREST);
+		if(penalty == null)
+			penalty = BigDecimal.ZERO;
+		if(interest == null)
+			interest = BigDecimal.ZERO;
 
 		DemandDetailAndCollection latestPenaltyDemandDetail, latestInterestDemandDetail;
 

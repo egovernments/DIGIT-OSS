@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.service.BPAService;
@@ -30,6 +31,7 @@ import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONArray;
 
 @Service
+@Slf4j
 public class PaymentNotificationService {
 
 	private BPAConfiguration config;
@@ -119,7 +121,7 @@ public class PaymentNotificationService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("KAFKA_PROCESS_ERROR:", e);
 		}
 	}
 
@@ -156,7 +158,6 @@ public class PaymentNotificationService {
 									.get(0));
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new CustomException(BPAErrorConstants.RECEIPT_ERROR, "Unable to fetch values from receipt");
 		}
 		return valMap;

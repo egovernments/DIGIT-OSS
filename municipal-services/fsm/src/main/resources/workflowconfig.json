@@ -1,0 +1,367 @@
+{
+    "tenantId": "pb.amritsar",
+    "uuid": "047a541b-ed5e-46aa-9fee-24c9674be9c3",
+    "businessService": "FSM",
+    "business": "fsm",
+    "businessServiceSla": 5184000000,
+    "states": [
+        {
+            "tenantId": "pb.amritsar",
+            
+            "sla": null,
+            "state": null,
+            "applicationStatus": null,
+            "docUploadRequired": false,
+            "isStartState": true,
+            "isTerminateState": false,
+            "isStateUpdatable": true,
+            "actions": [
+                {
+                   
+                    "tenantId": "pb.amritsar",
+                    "action": "CREATE",
+                    "nextState": "CREATED",
+                    "roles": [
+                        "CITIZEN"
+                    ]
+                },
+                {
+                  
+                    "tenantId": "pb.amritsar",
+                    "action": "APPLY",
+                    "nextState": "PENDING_APPL_FEE_PAYMENT",
+                    "roles": [
+                        "FSM_CREATOR_EMP"
+                    ]
+                }
+            ]
+        },
+        {
+           
+            "tenantId": "pb.amritsar",
+            "sla": null,
+            "state": "CREATED",
+            "applicationStatus": "CREATED",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": false,
+            "isStateUpdatable": true,
+            "actions": [
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "SUBMIT",
+                    "nextState": "PENDING_APPL_FEE_PAYMENT",
+                    "roles": [
+                        "FSM_EDITOR_EMP"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "REJECT",
+                    "nextState": "REJECTED",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                }
+            ]
+        },
+        {
+            
+            "tenantId": "pb.amritsar",
+            "sla": null,
+            "state": "PENDING_APPL_FEE_PAYMENT",
+            "applicationStatus": "PENDING_APPL_FEE_PAYMENT",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": false,
+            "isStateUpdatable": true,
+            "actions": [
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "CANCEL",
+                    "nextState": "CANCELED",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "PAY",
+                    "nextState": "ASSIGN_DS0",
+                    "roles": [
+                        "CITIZEN",
+                        "FSM_COLLECTOR"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "SENDBACK",
+                    "nextState": "CREATED",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                }
+            ]
+        },
+        {
+            "tenantId": "pb.amritsar",
+            "sla": null,
+            "state": "ASSING_DSO",
+            "applicationStatus": "ASSING_DSO",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": false,
+            "isStateUpdatable": true,
+            "actions": [
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "CANCEL",
+                    "nextState": "CANCELED",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "ASSIGN",
+                    "nextState": "PENDING_DSO_APPROVAL",
+                    "roles": [
+                        "FSM_EDITOR_EMP"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "SENDBACK",
+                    "nextState": "PENDING_APPL_FEE_PAYMENT",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                }
+            ]
+        },
+        {
+            "tenantId": "pb.amritsar",
+            "sla": null,
+            "state": "DSO_REJECTED",
+            "applicationStatus": "DSO_REJECTED",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": false,
+            "isStateUpdatable": true,
+            "actions": [
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "ASSIGN",
+                    "nextState": "PENDING_DSO_APPROVAL",
+                    "roles": [
+                        "FSM_EDITOR_EMP"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "CANCEL",
+                    "nextState": "CANCELED",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "SENDBACK",
+                    "nextState": "PENDING_DSO_APPROVAL",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                }
+            ]
+        },
+        {
+            "tenantId": "pb.amritsar",
+            "sla": null,
+            "state": "DSO_INPROGRESS",
+            "applicationStatus": "DSO_INPROGRESS",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": false,
+            "isStateUpdatable": true,
+            "actions": [
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "COMPLETED",
+                    "nextState": "CITIZEN_FEEDBACK_PENDING",
+                    "roles": [
+                        "FSM_DSO",
+                        "FSM_EDITOR_EMP"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "DECLINE",
+                    "nextState": "ASSIGN_DS0",
+                    "roles": [
+                        "FSM_DSO"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "ADDITIONAL_PAY_REQUEST",
+                    "nextState": "PENDING_ADDITIONAL_PAYMENT",
+                    "roles": [
+                        "FSM_DSO"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "CANCEL",
+                    "nextState": "CANCELED",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "SENDBACK",
+                    "nextState": "PENDING_DSO_APPROVAL",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                }
+            ]
+        },
+        {
+            "tenantId": "pb.amritsar",
+            "sla": null,
+            "state": "PENDING_DSO_APPROVAL",
+            "applicationStatus": "PENDING_DSO_APPROVAL",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": false,
+            "isStateUpdatable": true,
+            "actions": [
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "DSO_ACCEPT",
+                    "nextState": "DSO_INPROGRESS",
+                    "roles": [
+                        "FSM_DSO"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "CANCEL",
+                    "nextState": "CANCELED",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "SENDBACK",
+                    "nextState": "ASSIGN_DS0",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "DSO_REJECT",
+                    "nextState": "DSO_REJECTED",
+                    "roles": [
+                        "FSM_DSO"
+                    ]
+                }
+            ]
+        },
+        {
+            "tenantId": "pb.amritsar",
+            "sla": null,
+            "state": "PENDING_ADDITIONAL_PAYMENT",
+            "applicationStatus": "PENDING_ADDITIONAL_PAYMENT",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": false,
+            "isStateUpdatable": true,
+            "actions": [
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "PAY",
+                    "nextState": "DSO_INPROGRESS",
+                    "roles": [
+                        "CITIZEN"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "CANCEL",
+                    "nextState": "CANCELED",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                },
+                {
+                    "tenantId": "pb.amritsar",
+                    "action": "SENDBACK",
+                    "nextState": "DSO_INPROGRESS",
+                    "roles": [
+                        "FSM_ADMIN"
+                    ]
+                }
+            ]
+        },
+        {
+           
+            "tenantId": "pb.amritsar",
+            "sla": null,
+            "state": "COMPLETED",
+            "applicationStatus": "COMPLETED",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": true,
+            "isStateUpdatable": false,
+            "actions": null
+        },
+        {
+            "tenantId": "pb.amritsar",
+            "sla": null,
+            "state": "REJECTED",
+            "applicationStatus": "REJECTED",
+            "docUploadRequired": false,
+            "isStartState": false,
+            "isTerminateState": true,
+            "isStateUpdatable": false,
+            "actions": null
+        },
+            {
+                "tenantId": "pb.amritsar",
+                "sla": null,
+                "state": "CANCELED",
+                "applicationStatus": "CANCELED",
+                "docUploadRequired": false,
+                "isStartState": false,
+                "isTerminateState": true,
+                "isStateUpdatable": false,
+                "actions": null
+            },
+            {
+                
+                "tenantId": "pb.amritsar",
+                "sla": null,
+                "state": "CITIZEN_FEEDBACK_PENDING",
+                "applicationStatus": "COMPLETED",
+                "docUploadRequired": false,
+                "isStartState": false,
+                "isTerminateState": false,
+                "isStateUpdatable": false,
+                "actions": [
+                    {
+                        "tenantId": "pb.amritsar",
+                        "action": "SUBMIT_FEEDBACK",
+                        "nextState": "COMPLETED",
+                        "roles": [
+                            "CITIZEN"
+                        ]
+                    }
+                ]
+            }
+    ]
+}

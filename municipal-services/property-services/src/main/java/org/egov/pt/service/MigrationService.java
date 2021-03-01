@@ -562,8 +562,7 @@ public class MigrationService {
                 try{
                     propertyMigrationValidator.validatePropertyCreateRequest(request,masters,errorMap);
                 } catch (Exception e) {
-                   /*errorMap.put(property.getPropertyId(), String.valueOf(e));
-                   throw new CustomException(errorMap);*/
+                    log.error("Error while migrating prperty data of " + property.getPropertyId(), e);
                 }
 
                 producer.push(config.getSavePropertyTopic(), request);
@@ -887,7 +886,6 @@ public class MigrationService {
                     assessment.setAdditionalDetails(null);
 
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
                 throw new CustomException("PARSING_ERROR","Failed to parse additional details in translation");
             }
         }
@@ -904,7 +902,6 @@ public class MigrationService {
                     assessment.setAdditionalDetails(null);
 
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
                 throw new CustomException("PARSING_ERROR","Failed to parse additional details in translation");
             }
 
@@ -920,8 +917,8 @@ public class MigrationService {
         try{
             propertyMigrationValidator.ValidateAssessmentMigrationData(request,property,masters,errorMap);
         } catch (Exception e) {
+            log.error("Error while migrating assessment data of " + assessment.getAssessmentNumber(), e);
             errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
-            //throw new CustomException(errorMap);
         }
         //assessmentRequestList.add(request);
         producer.push(config.getCreateAssessmentTopic(), request);

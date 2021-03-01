@@ -3,6 +3,7 @@ package org.egov.swservice.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.egov.swservice.web.models.RoadCuttingInfo;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
 import org.egov.swservice.web.models.ValidatorResult;
 import org.egov.swservice.util.SWConstants;
@@ -42,12 +43,21 @@ public class SewerageFieldValidator implements SewerageActionValidator {
 		}
 		if (SWConstants.APPROVE_CONNECTION_CONST.equalsIgnoreCase(
 				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
-			if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getRoadType())) {
-				errorMap.put("INVALID_ROAD_TYPE", "Road type should not be empty");
+			if(sewerageConnectionRequest.getSewerageConnection().getRoadCuttingInfo() == null){
+				errorMap.put("INVALID_ROAD_INFO", "Road Cutting Information should not be empty");
 			}
-			if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getRoadCuttingArea())) {
-				errorMap.put("INVALID_ROAD_CUTTING_AREA", "Road cutting area should not be empty");
+
+			if(sewerageConnectionRequest.getSewerageConnection().getRoadCuttingInfo() != null){
+				for(RoadCuttingInfo roadCuttingInfo : sewerageConnectionRequest.getSewerageConnection().getRoadCuttingInfo()){
+					if(StringUtils.isEmpty(roadCuttingInfo.getRoadType())){
+						errorMap.put("INVALID_ROAD_TYPE", "Road type should not be empty");
+					}
+					if(roadCuttingInfo.getRoadCuttingArea() == null){
+						errorMap.put("INVALID_ROAD_CUTTING_AREA", "Road cutting area should not be empty");
+					}
+				}
 			}
+
 		}
 	}
 

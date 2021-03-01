@@ -103,6 +103,7 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
 			addDocumentToSewerageConnection(rs, sewarageConnection);
 			addPlumberInfoToSewerageConnection(rs, sewarageConnection);
 			addHoldersDeatilsToSewerageConnection(rs, sewarageConnection);
+            addRoadCuttingInfotToSewerageConnection(rs, sewarageConnection);
         }
         return new ArrayList<>(connectionListMap.values());
     }
@@ -122,6 +123,23 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
             applicationDocument.setDocumentUid(rs.getString("doc_Id"));
             applicationDocument.setStatus(Status.fromValue(isActive));
             sewerageConnection.addDocumentsItem(applicationDocument);
+        }
+    }
+
+    private void addRoadCuttingInfotToSewerageConnection(ResultSet rs, SewerageConnection sewerageConnection) throws SQLException {
+        String roadcutting_id = rs.getString("roadcutting_id");
+        String isActive = rs.getString("roadcutting_active");
+        boolean roadCuttingInfoActive = false;
+        if (!org.apache.commons.lang3.StringUtils.isEmpty(isActive)) {
+            roadCuttingInfoActive = Status.ACTIVE.name().equalsIgnoreCase(isActive);
+        }
+        if (!org.apache.commons.lang3.StringUtils.isEmpty(roadcutting_id) && roadCuttingInfoActive) {
+            RoadCuttingInfo roadCuttingInfo = new RoadCuttingInfo();
+            roadCuttingInfo.setId(roadcutting_id);
+            roadCuttingInfo.setRoadType(rs.getString("roadcutting_roadtype"));
+            roadCuttingInfo.setRoadCuttingArea(rs.getFloat("roadcutting_roadcuttingarea"));
+            roadCuttingInfo.setStatus(Status.fromValue(isActive));
+            sewerageConnection.addRoadCuttingInfoList(roadCuttingInfo);
         }
     }
 

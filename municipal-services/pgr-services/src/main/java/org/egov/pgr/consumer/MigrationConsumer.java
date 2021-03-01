@@ -33,7 +33,7 @@ public class MigrationConsumer {
             migrationService.migrate(serviceResponse);
         }
         catch (Exception e){
-            e.printStackTrace();
+            log.error("Error occured while processing the record from topic : " + topic, e);
         }
 
     }

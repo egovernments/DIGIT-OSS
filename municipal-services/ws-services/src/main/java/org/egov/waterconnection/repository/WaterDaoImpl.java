@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,12 +62,15 @@ public class WaterDaoImpl implements WaterDao {
 	@Override
 	public List<WaterConnection> getWaterConnectionList(SearchCriteria criteria,
 			RequestInfo requestInfo) {
+		
+		List<WaterConnection> waterConnectionList = new ArrayList<>();
 		List<Object> preparedStatement = new ArrayList<>();
 		String query = wsQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
+		
 		if (query == null)
 			return Collections.emptyList();
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
-		List<WaterConnection> waterConnectionList = new ArrayList<>();
+		
 		if(isOpenSearch)
 			waterConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
 					openWaterRowMapper);

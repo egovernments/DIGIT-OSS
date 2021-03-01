@@ -13,6 +13,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.constants.WCConstants;
+import org.egov.waterconnection.web.models.RoadCuttingInfo;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
@@ -95,7 +96,6 @@ public class MDMSValidator {
 			Object result = serviceRequestRepository.fetchResult(uri, criteriaReq);
 			return JsonPath.read(result, jsonPath);
 		} catch (Exception e) {
-			log.error("Error while fetching MDMS data", e);
 			throw new CustomException(WCConstants.INVALID_CONNECTION_TYPE, WCConstants.INVALID_CONNECTION_TYPE);
 		}
 	}
@@ -138,11 +138,26 @@ public class MDMSValidator {
 			messageBuilder.append("Water Source / Water Sub Source value is invalid, please enter proper value! ");
 			errorMap.put("INVALID_WATER_CONNECTION_SOURCE", messageBuilder.toString());
 		}
-		if (!StringUtils.isEmpty(waterConnection.getRoadType())
+		/*if (!StringUtils.isEmpty(waterConnection.getRoadType())
 				&& !codes.get(WCConstants.WC_ROADTYPE_MASTER).contains(waterConnection.getRoadType())) {
 			messageBuilder = new StringBuilder();
 			messageBuilder.append("Road type value is invalid, please enter proper value! ");
 			errorMap.put("INVALID_WATER_ROAD_TYPE", messageBuilder.toString());
+		}*/
+
+		if(waterConnection.getRoadCuttingInfo() == null){
+			errorMap.put("INVALID_ROAD_INFO", "Road Cutting Information should not be empty");
+		}
+
+		if(waterConnection.getRoadCuttingInfo() != null){
+			for(RoadCuttingInfo roadCuttingInfo : waterConnection.getRoadCuttingInfo()){
+				if (!StringUtils.isEmpty(roadCuttingInfo.getRoadType())
+						&& !codes.get(WCConstants.WC_ROADTYPE_MASTER).contains(roadCuttingInfo.getRoadType())) {
+					messageBuilder = new StringBuilder();
+					messageBuilder.append("Road type value is invalid, please enter proper value! ");
+					errorMap.put("INVALID_WATER_ROAD_TYPE", messageBuilder.toString());
+				}
+			}
 		}
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);

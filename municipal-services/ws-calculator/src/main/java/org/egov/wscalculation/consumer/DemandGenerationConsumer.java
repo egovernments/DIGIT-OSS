@@ -61,14 +61,13 @@ public class DemandGenerationConsumer {
 			try {
 				CalculationReq calcReq = mapper.convertValue(record.getPayload(), CalculationReq.class);
 				calculationCriteria.addAll(calcReq.getCalculationCriteria());
-				log.info("Consuming record: " + mapper.writeValueAsString(record));
 			} catch (final Exception e) {
 				StringBuilder builder = new StringBuilder();
 				try {
 					builder.append("Error while listening to value: ").append(mapper.writeValueAsString(record))
 							.append(" on topic: ").append(e);
 				} catch (JsonProcessingException e1) {
-					e1.printStackTrace();
+					log.error("KAFKA_PROCESS_ERROR", e1);
 				}
 				log.error(builder.toString());
 			}
@@ -94,7 +93,6 @@ public class DemandGenerationConsumer {
 				calculationReq.getCalculationCriteria().get(0).getTenantId());
 		records.forEach(record -> {
 			try {
-				log.info("Consuming record on dead letter topic : " + mapper.writeValueAsString(record));
 				CalculationReq calcReq = mapper.convertValue(record.getPayload(), CalculationReq.class);
 
 				calcReq.getCalculationCriteria().forEach(calcCriteria -> {
@@ -110,7 +108,7 @@ public class DemandGenerationConsumer {
 							builder.append("Error while generating Demand for Criteria: ")
 									.append(mapper.writeValueAsString(calcCriteria));
 						} catch (JsonProcessingException e1) {
-							e1.printStackTrace();
+							log.error("KAFKA_PROCESS_ERROR", e1);
 						}
 						log.error(builder.toString(), e);
 					}
@@ -144,7 +142,6 @@ public class DemandGenerationConsumer {
 					.map(criteria -> criteria.getConnectionNo()).collect(Collectors.toSet()).toString();
 			StringBuilder str = new StringBuilder("Demand generated Successfully. For records : ")
 					.append(connectionNoStrings);
-			log.info(str.toString());
 		} catch (Exception ex) {
 			log.error("Demand generation error: ", ex);
 			producer.push(errorTopic, request);

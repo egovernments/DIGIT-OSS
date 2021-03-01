@@ -36,12 +36,10 @@ public class TradeLicenseConsumer {
         ObjectMapper mapper = new ObjectMapper();
         TradeLicenseRequest tradeLicenseRequest = new TradeLicenseRequest();
         try {
-            log.info("Consuming record: " + record);
             tradeLicenseRequest = mapper.convertValue(record, TradeLicenseRequest.class);
         } catch (final Exception e) {
             log.error("Error while listening to value: " + record + " on topic: " + topic + ": " + e);
         }
-        log.info("TradeLicense Received: "+tradeLicenseRequest.getLicenses().get(0).getApplicationNumber());
         if (!tradeLicenseRequest.getLicenses().isEmpty()) {
             String businessService = tradeLicenseRequest.getLicenses().get(0).getBusinessService();
             if (businessService == null)

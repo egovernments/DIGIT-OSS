@@ -116,7 +116,7 @@ public class PaymentUpdateService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("KAFKA_PROCESS_ERROR:", e);
 		}
 	}
 }

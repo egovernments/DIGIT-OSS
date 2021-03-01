@@ -51,7 +51,6 @@ public class CalculationService {
 			try {
 				Object response = serviceRequestRepository.fetchResult(waterServiceUtil.getCalculatorURL(), calRequest);
 				CalculationRes calResponse = mapper.convertValue(response, CalculationRes.class);
-				log.info(mapper.writeValueAsString(calResponse));
 			} catch (Exception ex) {
 				log.error("Calculation response error!!", ex);
 				throw new CustomException("WATER_CALCULATION_EXCEPTION", "Calculation response can not parsed!!!");
