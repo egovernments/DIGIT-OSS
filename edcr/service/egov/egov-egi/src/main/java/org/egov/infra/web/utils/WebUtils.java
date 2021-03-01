@@ -48,19 +48,17 @@
 
 package org.egov.infra.web.utils;
 
-import org.egov.infra.admin.master.entity.User;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.support.RequestContextUtils;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.egov.infra.utils.ApplicationConstant.COLON;
+import static org.egov.infra.utils.ApplicationConstant.SLASH;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.egov.infra.utils.ApplicationConstant.COLON;
-import static org.egov.infra.utils.ApplicationConstant.SLASH;
-
-import java.util.Enumeration;
+import org.egov.infra.admin.master.entity.User;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 public final class WebUtils {
 
@@ -69,7 +67,7 @@ public final class WebUtils {
     private static final String SCHEME_DOMAIN_SEPARATOR = "://";
 
     private WebUtils() {
-        //Since utils are with static methods
+        // Since utils are with static methods
     }
 
     /**
@@ -101,17 +99,6 @@ public final class WebUtils {
      * http://www.domain.com/cxt/xyz withContext value as false will return http://www.domain.com
      **/
     public static String extractRequestDomainURL(HttpServletRequest httpRequest, boolean withContext) {
-        Enumeration headerNames = httpRequest.getHeaderNames();
-        System.out.println("********Request Header Start**********");
-        System.out.println("********Request Scheme**********"+httpRequest.getScheme());
-        while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
-            String value = httpRequest.getHeader(key);
-            System.out.println("Request--#######Key: "+key+", #####Value: "+value);
-        }
-        System.out.println("Request URL-->"+httpRequest.getRequestURL());
-        System.out.println("Request URI-->"+httpRequest.getRequestURI());
-        System.out.println("********Request Header End**********");
         StringBuilder url = new StringBuilder(httpRequest.getRequestURL());
         String uri = httpRequest.getRequestURI();
         return withContext ? url.substring(0, url.length() - uri.length() + httpRequest.getContextPath().length()) + FORWARD_SLASH
