@@ -1,9 +1,9 @@
 {
   "name": "e-governance",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "homepage": "/dashboard/",
-  "proxy": "https://egov-micro-qa.egovernments.org",
+  "proxy": "https://qa.digit.org",
   "dependencies": {
     "@date-io/date-fns": "^1.3.11",
     "@material-ui/core": "^4.5.1",
