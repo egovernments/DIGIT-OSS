@@ -22,6 +22,22 @@ allprojects {
 
 android {
 	compileSdkVersion 26
+
+	signingConfigs {
+		Citizen {
+			keyAlias 'your_key_alias'
+			keyPassword '123456'
+			storeFile file('your_key_name.keystore')
+			storePassword '123456'
+		}
+		Employee {
+			keyAlias 'your_key_alias'
+			keyPassword '123456'
+			storeFile file('your_key_name.keystore')
+			storePassword '123456'
+		}
+	}
+
 	buildTypes {
 		release {
 			minifyEnabled true
@@ -29,8 +45,12 @@ android {
 			applicationVariants.all { variant ->
 				variant.outputs.all {
 					def date = new Date()
-					def formattedDate = date.format('ddMMMyyyy_HH:mm:ss')
+					def formattedDate = date.format('ddMMMyyyy')
+
 					outputFileName = "${variant.name}_${variant.versionName}_${formattedDate}.apk"
+					if(variant.name.contains('Release')){
+						outputFileName = "${variant.name}_${variant.versionName}.apk"
+					}
 				}
 			}
 		}
@@ -41,21 +61,6 @@ android {
 		abortOnError false
 	}
 
-	signingConfigs {
-		Citizen {
-			keyAlias 'mseva.punjab.citizen'
-			keyPassword 'egov123'
-			storeFile file('keystore/citizen/keystore')
-			storePassword 'egov123'
-		}
-		Employee {
-			keyAlias 'mseva.punjab.employee'
-			keyPassword 'egov123'
-			storeFile file('keystore/employee/keystore')
-			storePassword 'egov123'
-		}
-	}
-
 	flavorDimensions "default"
 	productFlavors {
 		CitizenProd {
@@ -63,8 +68,8 @@ android {
 			applicationId 'org.egovernment.mseva.citizen'
 			targetSdkVersion 26
 			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-			versionCode 13
-			versionName '1.0.14'
+			versionCode 14
+			versionName '2.3.0'
 			resValue "string", "app_name", "mSeva-Punjab"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
 			signingConfig signingConfigs.Citizen
@@ -77,8 +82,8 @@ android {
 			applicationId 'org.egovernment.mseva.employee'
 			targetSdkVersion 26
 			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-			versionCode 13
-			versionName '1.0.14'
+			versionCode 14
+			versionName '2.3.0'
 			resValue "string", "app_name", "mSeva-Punjab Employee"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
 			signingConfig signingConfigs.Employee
@@ -86,45 +91,109 @@ android {
 			// Production
 			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/employee/user/login"'
 		}
-		CitizenUAT {
+		CitizenDEV {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.citizen'
 			targetSdkVersion 26
 			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-			versionCode 13
-			versionName '1.0.14'
-			resValue "string", "app_name", "UAT mSeva-Punjab"
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Citizen-DEV"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
 			signingConfig signingConfigs.Citizen
 
-			// QA
-//			buildConfigField 'String', 'url', '"https://egov-micro-qa.egovernments.org/citizen/user/register"'
+			buildConfigField 'String', 'url', '"https://dev.digit.org/citizen/user/register"'
+		}
+		EmployeeDEV {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Employee-DEV"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
 
-			// DEV
-//			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/citizen/user/register"'
+			buildConfigField 'String', 'url', '"https://dev.digit.org/employee/user/login"'
+		}
+		CitizenQA{
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Citizen-QA"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
 
-			//UAT
-			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/citizen/user/register"'
+			buildConfigField 'String', 'url', '"https://qa.digit.org/citizen/user/register"'
+		}
+		EmployeeQA {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Employee-QA"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
+
+			buildConfigField 'String', 'url', '"https://qa.digit.org/employee/user/login"'
+		}
+		CitizenUAT{
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Citizen-UAT"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
+
+			buildConfigField 'String', 'url', '"https://uat.digit.org/citizen/user/register"'
 		}
 		EmployeeUAT {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.employee'
 			targetSdkVersion 26
 			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-			versionCode 13
-			versionName '1.0.14'
-			resValue "string", "app_name", "UAT mSeva-Punjab Employee"
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Employee-UAT"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
 			signingConfig signingConfigs.Employee
 
-			//QA
-//			buildConfigField 'String', 'url', '"https://egov-micro-qa.egovernments.org/employee/user/login"'
+			buildConfigField 'String', 'url', '"https://uat.digit.org/employee/user/login"'
+		}
+		CitizenSTAGING{
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Citizen-STAGING"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
 
-			//DEV
-//			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/employee/user/login"'
+			buildConfigField 'String', 'url', '"https://staging.digit.org/citizen/user/register"'
+		}
+		EmployeeSTAGING {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Employee-STAGING"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
 
-			//UAT
-			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/employee/user/login"'
+			buildConfigField 'String', 'url', '"https://staging.digit.org//employee/user/login"'
 		}
 	}
 }

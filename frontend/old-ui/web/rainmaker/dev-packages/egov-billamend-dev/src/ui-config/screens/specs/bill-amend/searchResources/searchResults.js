@@ -1,12 +1,19 @@
+import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getStatusKey } from "egov-ui-framework/ui-utils/commons";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import React from "react";
 import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
+  getEpochForDate, sortByEpoch
 } from "../../utils";
-import { download, downloadBill } from "egov-common/ui-utils/commons";
-import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
-import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
+
+const getConnectionDetails = data => {
+  if (data.rowData[0] == "WS" || data.rowData[0] == "SW") {
+    routeTo(`/wns/redirect?connectionNumber=${data.rowData[2]}&tenantId=${data.rowData[6]}&businessService=${data.rowData[0]}`)
+  } else {
+    // routeTo(`/wns/connection-details?connectionNumber=${data.rowData[2]}&tenantId=${data.rowData[6]}&service=${data.rowData[8]}&connectionType=${data.rowData[9]}`)
+  }
+
+}
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -17,25 +24,32 @@ export const searchResults = {
       {
         labelName: "Bill No.",
         labelKey: "BILL_COMMON_SERVICE_TYPE",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <span style={{ "color": "rgba(0, 0, 0, 0.87)", "cursor": "text" }} >
+              {value}
+            </span>
+          )
+        }
       },
       {
-        labelName: "Consumer Code",
+        labelName: "Application No",
         labelKey: "BILL_COMMON_APPLICATION_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
-            <a href="javascript:void(0)"
-              onClick={() => {
-                console.log('CLICKED');
-                let link = `/bill-amend/search-preview`;
-                let link1 = `/bill-amend/apply`;
-                link=value=='NA'?link1:link;
-                routeTo(link);
-                // downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
-              }}
-            >
-              {value}
-            </a>
+            value == 'NA' ?
+              <span style={{ "color": "rgba(0, 0, 0, 0.87)", "cursor": "text" }} >
+                {value}
+              </span> :
+              <a href="javascript:void(0)"
+                onClick={() => {
+                  let link = `/bill-amend/search-preview?tenantId=${tableMeta.rowData[6]}&applicationNumber=${tableMeta.rowData[1]}&businessService=${tableMeta.rowData[0]}`;
+                  routeTo(link);
+                }}
+              >{value}
+              </a>
           )
         }
       },
@@ -47,15 +61,9 @@ export const searchResults = {
           customBodyRender: (value, tableMeta, updateValue) => (
             <a href="javascript:void(0)"
               onClick={() => {
-                console.log('CLICKED');
-                let link2=`/wns/connection-details?connectionNumber=WS/107/2020-21/066733&tenantId=pb.amritsar&service=WATER&connectionType=Metered&due=NA`;
-                let link = `/wns/connection-details?connectionNumber=WS/107/2020-21/000041&tenantId=pb.amritsar&service=WATER&connectionType=Non%20Metered`;
-                link=value=='WS/107/2020-21/000037'?link2:link;
-                routeTo(link);
-                // downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
+                getConnectionDetails(tableMeta)
               }}
-            >
-              {value}
+            >{value}
             </a>
           )
         }
@@ -68,54 +76,20 @@ export const searchResults = {
         labelName: "Consumer Name",
         labelKey: "BILL_COMMON_TABLE_CONSUMER_ADDRESS"
       },
-      // {
-      //   labelName: "Bill Date",
-      //   labelKey: "BILL_COMMON_TABLE_CONSUMER_ADDRESS"
-      // },
-      // {
-      //   labelName: "Bill Amount(Rs)",
-      //   labelKey: "BILL_COMMON_TABLE_COL_STATUS"
-      // },
       {
         labelName: "Status",
         labelKey: "BILL_COMMON_TABLE_COL_STATUS",
-        options:{
+        options: {
           filter: false,
           customBodyRender: value => (
-            <span>
-               {getLocaleLabels(value.toUpperCase(),value.toUpperCase())}
-            </span>
+            <LabelContainer
+              style={
+                value === "ACTIVE" ||value === "CONSUMED" ? { color: "green" } : { color: "red" }
+              }
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
-
-        }
-      },
-      // {
-      //   labelName: "Action",
-      //   labelKey: "BILL_COMMON_TABLE_COL_ACTION",
-      //   options: {
-      //     filter: false,
-      //     customBodyRender: (value, tableMeta) => value === "PAY" ? (tableMeta.rowData[4] > 0 ? getActionButton(value, tableMeta):(tableMeta.rowData[4] <= 0 && tableMeta.rowData[13] ? getActionButton(value, tableMeta) : "")) : getActionButton(value, tableMeta)
-      //   }
-      // },
-      {
-        labelKey: "BUSINESS_SERVICE",
-        labelName: "Business Service",
-        options: {
-          display: false
-        }
-      },
-      {
-        labelKey: "RECEIPT_KEY",
-        labelName: "Receipt Key",
-        options: {
-          display: false
-        }
-      },
-      {
-        labelName: "Bill Key",
-        labelKey: "BILL_KEY",
-        options: {
-          display: false
         }
       },
       {
@@ -126,32 +100,32 @@ export const searchResults = {
         }
       },
       {
-        labelName: "Bill Id",
-        labelKey: "BILL_ID",
+        labelKey: "BUSINESS_SERVICE",
+        labelName: "Business Service",
         options: {
           display: false
         }
       },
       {
-        labelName: "Bill Search Url",
-        labelKey: "BILL_SEARCH_URL",
+        labelKey: "SERVICE_CONST",
+        labelName: "Service Constant",
         options: {
           display: false
         }
       },
       {
-        labelName: "Advance Payment",
-        labelKey: "ADVANCE_PAYMENT",
+        labelKey: "CONNECTION_TYPE",
+        labelName: "Connection Type",
         options: {
           display: false
         }
-      }
+      },
     ],
     title: {
       labelName: "Search Results for Bill",
       labelKey: "BILL_SEARCH_TABLE_HEADER"
     },
-    rows : "",
+    rows: "",
     options: {
       filter: false,
       download: false,
@@ -177,43 +151,3 @@ export const searchResults = {
     }
   }
 };
-
-const getActionButton = (value, tableMeta) => {
-  return (
-    <a href="javascript:void(0)"
-      style={{
-        color: "#FE7A51",
-        cursor: "pointer"
-      }}
-      onClick={value => {
-        const appName =
-          process.env.REACT_APP_NAME === "Citizen"
-            ? "citizen"
-            : "employee";
-        if (tableMeta.rowData[5] === "PAID") {
-          const receiptQueryString = [
-            { key: "billIds", value: tableMeta.rowData[11] },
-            { key: "tenantId", value: tableMeta.rowData[10] }
-          ];
-          download(receiptQueryString , "download" ,tableMeta.rowData[8]);
-        } else {
-          const url =
-            process.env.NODE_ENV === "development"
-              ? `/egov-common/pay?consumerCode=${
-                  tableMeta.rowData[1]
-                }&tenantId=${tableMeta.rowData[10]}&businessService=${
-                  tableMeta.rowData[7]
-                }`
-              : `/${appName}/egov-common/pay?consumerCode=${
-                  tableMeta.rowData[1]
-                }&tenantId=${tableMeta.rowData[10]}&businessService=${
-                  tableMeta.rowData[7]
-                }`;
-          document.location.href = `${document.location.origin}${url}`;
-        }
-      }}
-    >
-      {getLocaleLabels(value,value)}
-    </a>
-  )
-}

@@ -1,12 +1,12 @@
-import { getBreak, getCommonHeader, getLabel, getCommonSubHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonHeader, getCommonSubHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
+import { getRequiredDocData } from "../utils";
+import "./index.css";
 import { searchCard } from "./searchResources/searchCard";
 import { searchResults } from "./searchResources/searchResults";
-import { getRequiredDocData, showHideAdhocPopup } from "../utils"
-import "./index.css";
 
 const header = getCommonHeader({
   labelName: "Universal Bill",
@@ -25,7 +25,7 @@ const getMDMSData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: 'pb',
       moduleDetails: [
         {
           moduleName: "BillingService",
@@ -74,7 +74,7 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.billGineiURL);
+    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.isBillAmendmentEnabled);
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -90,11 +90,11 @@ const screenConfig = {
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
-    const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+    const tenantId = getTenantId();
     if (tenantId) {
-      dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId }));
+      dispatch(prepareFinalObject("searchScreenBillAmend", { tenantId: tenantId, businessService: "", mobileNumber: "", amendmentId: "", consumerCode: "" }));
       const ulbComponentJsonPath = "components.div.children.searchCard.children.cardContent.children.searchContainer.children.ulb";
-      const disableUlb = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+
       dispatch(
         handleField(
           "search",
@@ -103,14 +103,7 @@ const screenConfig = {
           tenantId
         )
       );
-      dispatch(
-        handleField(
-          "search",
-          ulbComponentJsonPath,
-          "props.disabled",
-          disableUlb
-        )
-      );
+
     }
 
     return action;
@@ -135,39 +128,6 @@ const screenConfig = {
                 sm: 6
               },
               ...header
-            },
-            groupBillButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-              children: {
-                ButtonLabel: getLabel({
-                  labelName: "Group Bills",
-                  labelKey: "BILL_COMMON_HEADER"
-                })
-              },
-              onClickDefination: {
-                action: "page_change",
-                path:
-                  process.env.REACT_APP_SELF_RUNNING === "true"
-                    ? `/egov-ui-framework/abg/groupBills`
-                    : `/abg/groupBills`
-              },
-              visible: false
             }
           }
         },

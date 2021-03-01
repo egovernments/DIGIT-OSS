@@ -41,7 +41,7 @@ const formConfig = {
     id: "employee-change-password-submit-action",
   },
   saveUrl: "/user/password/_update",
-  redirectionRoute: "/inbox",
+  redirectionRoute: "/hrms/acknowledgement?purpose=updatepassword&status=success",
   action: "_update",
 };
 

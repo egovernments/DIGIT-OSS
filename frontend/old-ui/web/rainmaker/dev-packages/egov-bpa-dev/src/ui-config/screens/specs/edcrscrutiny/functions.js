@@ -68,6 +68,11 @@ export const fetchDataForStakeHolder = async (
 
       let searchConvertedArray = [];
       response.edcrDetail.forEach(element => {
+        let planReportUrl = element.planReport;
+        let dxfFileurl = element.dxfFile;
+        let planReportUrlValue, dxfFileurlValue;
+        planReportUrlValue = (!planReportUrl.includes("https") && window.location.href.includes("https")) ? planReportUrl.replace(/http/g, "https") : planReportUrl;
+        dxfFileurlValue = (!dxfFileurl.includes("https") && window.location.href.includes("https")) ? dxfFileurl.replace(/http/g, "https") : dxfFileurl;
         searchConvertedArray.push({
           ["EDCR_COMMON_TABLE_APPL_NO"]: element.applicationNumber || "-",
           ["EDCR_COMMON_TABLE_SCRUTINY_NO"]: (element.edcrNumber === "null" ? "NA" : element.edcrNumber) || "NA",
@@ -76,8 +81,8 @@ export const fetchDataForStakeHolder = async (
           ["EDCR_COMMON_TABLE_COL_STATUS"]: element.status || "-",
           ["EDCR_DOWNLOAD_REPORT"]: getLocaleLabels("DOWNLOAD SCRUTINY REPORT", "EDCR_DOWNLOAD_REPORT"),
           ["EDCR_DOWNLOAD_BUILDING_PLAN"]: getLocaleLabels("DOWNLOAD BUILDING PLAN(DXF)", "EDCR_DOWNLOAD_BUILDING_PLAN"),
-          ["EDCR_DOWNLOAD_REPORT1"]: element.planReport,
-          ["EDCR_DOWNLOAD_BUILDING_PLAN1"]: element.dxfFile,
+          ["EDCR_DOWNLOAD_REPORT1"]: planReportUrlValue, //element.planReport,
+          ["EDCR_DOWNLOAD_BUILDING_PLAN1"]: dxfFileurlValue //element.dxfFile,
         })
       });
 

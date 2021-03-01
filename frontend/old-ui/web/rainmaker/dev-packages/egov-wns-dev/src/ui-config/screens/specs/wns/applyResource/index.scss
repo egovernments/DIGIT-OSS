@@ -30,3 +30,13 @@
 
 #custom-containers-local-tradeLocMohalla div p {
   font-size: 14px; }
+#custom-atoms-roadCuttingChargeInfoCard {
+    width: 100% !important;
+  }
+#custom-atoms-roadCuttingChargeInfoCard div div div div button[aria-label="Remove"] {
+  display: block !important;
+  margin-top: 20px !important;
+  }
+#custom-atoms-roadCuttingChargeInfoCard div[id^="material-ui-item"] div[id^="material-ui-cardContent"] {
+    padding: 16px 24px !important;
+  }

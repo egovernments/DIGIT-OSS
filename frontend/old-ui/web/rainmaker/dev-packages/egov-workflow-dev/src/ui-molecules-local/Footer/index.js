@@ -69,9 +69,19 @@ class Footer extends React.Component {
     }
     if (dataPath === "BPA") {
       handleFieldChange(`${dataPath}.comment`, "");
+      handleFieldChange(`${dataPath}.wfDocuments`, []);
       handleFieldChange(`${dataPath}.assignees`, "");
+    } else  if (dataPath === "FireNOCs") {
+      handleFieldChange(`${dataPath}[0].fireNOCDetails.additionalDetail.comment`, "");
+      handleFieldChange(`${dataPath}[0].fireNOCDetails.additionalDetail.assignee`, []);
+      handleFieldChange(`${dataPath}[0].fireNOCDetails.additionalDetail.wfDocuments`, []);
+    } else  if (dataPath === "Property") {
+      handleFieldChange(`${dataPath}.workflow.comment`, "");
+      handleFieldChange(`${dataPath}.workflow.assignes`, []);
+      handleFieldChange(`${dataPath}.workflow.wfDocuments`, []);
     } else {
       handleFieldChange(`${dataPath}[0].comment`, "");
+      handleFieldChange(`${dataPath}[0].wfDocuments`, []);
       handleFieldChange(`${dataPath}[0].assignee`, []);
     }
 
@@ -101,7 +111,11 @@ class Footer extends React.Component {
         {
           key: "tenantId",
           value: tenantId
+        },{
+          key: "isActive",
+          value: true
         }
+
       ];
       const payload = await httpRequest(
         "post",

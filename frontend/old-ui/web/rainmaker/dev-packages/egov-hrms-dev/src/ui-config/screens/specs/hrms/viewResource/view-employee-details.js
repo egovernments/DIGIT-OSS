@@ -187,12 +187,12 @@ export const getEmployeeDetailsView = (isReview = true) => {
           },
         }
       ),
-      reviewRole: getLabelWithValue(
-        { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
-        {
-          jsonPath: "hrms.reviewScreen.furnishedRolesList", callBack: checkValueForNA
-        }
-      ),
+      // reviewRole: getLabelWithValue(
+      //   { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
+      //   {
+      //     jsonPath: "hrms.reviewScreen.furnishedRolesList", callBack: checkValueForNA
+      //   }
+      // ),
     }),
   });
 };

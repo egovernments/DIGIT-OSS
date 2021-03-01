@@ -6,6 +6,7 @@ import { ifUserRoleMatches } from "../utils";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import BPAStakeholderRegIcon from "../../../../ui-atoms-local/Icons/BPAStakeholderRegIcon";
 import BPANewPermitIcon from "../../../../ui-atoms-local/Icons/BPANewPermitIcon";
+import { getStakeHolderRoles } from "../../../../ui-utils/commons";
 import "../utils/index.css";
 const header = getCommonHeader(
   {
@@ -19,15 +20,10 @@ const header = getCommonHeader(
   }
 );
 
+const stakeHolderRoles = getStakeHolderRoles();
+
 const hideBPACard = () => {
-  return ifUserRoleMatches([
-    "BPA_ARCHITECT",
-    "BPA_ENGINEER",
-    "BPA_BUILDER",
-    "BPA_STRUCTURALENGINEER",
-    "BPA_SUPERVISOR",
-    "BPA_TOWNPLANNER"
-  ]);
+  return ifUserRoleMatches(stakeHolderRoles);
 };
 
 const displayView = () => {
