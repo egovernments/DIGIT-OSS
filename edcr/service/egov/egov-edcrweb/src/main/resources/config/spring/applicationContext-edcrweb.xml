@@ -72,7 +72,5 @@
     </bean>
 
     <bean name="edcrBpaRestService" class="org.egov.edcr.service.EdcrBpaRestService"></bean>
-    <!-- <bean name="genericBillGeneratorService" class="org.egov.bpa.transaction.service.collection.GenericBillGeneratorService"></bean> -->
-
 
 </beans>
