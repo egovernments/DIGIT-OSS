@@ -119,7 +119,8 @@ export const callPGService = async (state, dispatch) => {
         gateway: "AXIS",
         taxAndPayments,
         user,
-        callbackUrl
+        callbackUrl,
+        additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false }
       }
     };
     const goToPaymentGateway = await httpRequest(

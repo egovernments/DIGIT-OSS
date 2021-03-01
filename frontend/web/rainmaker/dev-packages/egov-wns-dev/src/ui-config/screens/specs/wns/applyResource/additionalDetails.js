@@ -9,7 +9,8 @@ import {
   getDateField,
   getLabel,
   getCommonHeader,
-  getCommonGrayCard
+  getCommonGrayCard,
+  getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 //   import { searchApiCall } from "./functions";
 import commonConfig from "config/common.js";
@@ -83,6 +84,53 @@ const waterSubSourceChange = (reqObj) => {
   } catch (e) {
     console.log(e);
   }
+}
+export const commonRoadCuttingChargeInformation = () => {
+  return getCommonGrayCard({
+    roadDetails: getCommonContainer({
+      roadType: getSelectField({
+        label: {
+          labelName: "Road Type",
+          labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "WS",
+          masterName: "ROADTYPE"
+        },
+        required: false,
+        sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        errorMessage: "ERR_INVALID_BILLING_PERIOD",
+        jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
+        props: {
+          jsonPath: "applyScreen.roadCuttingInfo[0].roadType"
+        }
+      }),
+      enterArea: getTextField({
+        label: {
+          labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_AREA_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: getPattern("Amount"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "applyScreen.roadCuttingInfo[0].roadCuttingArea"
+      })
+    })
+  })
 }
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
@@ -227,57 +275,47 @@ export const additionDetails = getCommonCard({
       }),
     })
   }),
-  roadCuttingChargeContainer: getCommonGrayCard({
-    subHeader: getCommonTitle({
-      labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
-    }),
-    roadDetails: getCommonContainer({
-      roadType: getSelectField({
-        label: {
-          labelName: "Road Type",
-          labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+  roadCuttingChargeContainer: getCommonCard({
+    header: getCommonSubHeader(
+      {
+        labelName: "Road Cutting Charge",
+        labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+      },
+      {
+        style: {
+          marginBottom: 18
+        }
+      }
+    ),
+    applicantTypeContainer: getCommonContainer({
+      roadCuttingChargeInfoCard : {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          style: {
+            // display: "none"
+            // width: 
+          }
         },
-      //   props: {
-      //     label: {
-      //       labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
-      //     },
-      //     placeholder: {
-      //       labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
-      //     }
-      // },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName: "WS",
-          masterName: "ROADTYPE"
-        },
-        required: false,
-        sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        errorMessage: "ERR_INVALID_BILLING_PERIOD",
-        jsonPath: "applyScreen.roadType"
-      }),
-      enterArea: getTextField({
-        label: {
-          labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_AREA_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        pattern: getPattern("Amount"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.roadCuttingArea"
-      })
+        children: {
+          multipleApplicantInfo: {
+            uiFramework: "custom-containers",
+            componentPath: "MultiItem",
+            props: {
+              scheama: commonRoadCuttingChargeInformation(),
+              items: [],
+              addItemLabel: {
+                labelName: "Add Road Type",
+                labelKey: "WS_ADD_ROAD_TYPE_LABEL"
+              },
+              isReviewPage: false,
+              sourceJsonPath: "applyScreen.roadCuttingInfo",
+              prefixSourceJsonPath: "children.cardContent.children.roadDetails.children"
+            },
+            type: "array"
+          }
+        }
+      },
     }),
   }),
   activationDetailsContainer: getCommonGrayCard({

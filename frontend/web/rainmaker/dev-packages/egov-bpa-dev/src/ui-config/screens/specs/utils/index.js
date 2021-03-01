@@ -5200,33 +5200,36 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
   );
 
   let payments = [];
-  payments.push(get (paymentPayload, "Payments[0]", []));
 
-  // if (window.location.href.includes("oc-bpa")) {
-  //   if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
-  //     if (serviceCode === "BPA.NC_OC_APP_FEE") {
-  //       payments.push(paymentPayload.Payments[1]);
-  //     }
+//  if(process.env.REACT_APP_NAME == "Citizen") {
+  if (window.location.href.includes("oc-bpa")) {
+    if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
+      if (serviceCode === "BPA.NC_OC_APP_FEE") {
+        payments.push(paymentPayload.Payments[1]);
+      }
 
-  //     if (serviceCode === "BPA.NC_OC_SAN_FEE") {
-  //       payments.push(paymentPayload.Payments[0]);
-  //     }
-  //   } else {
-  //     payments.push(paymentPayload.Payments[0]);
-  //   }
-  // } else {
-  //   if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
-  //     if (serviceCode === "BPA.NC_APP_FEE") {
-  //       payments.push(paymentPayload.Payments[1]);
-  //     }
+      if (serviceCode === "BPA.NC_OC_SAN_FEE") {
+        payments.push(paymentPayload.Payments[0]);
+      }
+    } else {
+      payments.push(paymentPayload.Payments[0]);
+    }
+  } else {
+    if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
+      if (serviceCode === "BPA.NC_APP_FEE") {
+        payments.push(paymentPayload.Payments[1]);
+      }
 
-  //     if (serviceCode === "BPA.NC_SAN_FEE") {
-  //       payments.push(paymentPayload.Payments[0]);
-  //     }
-  //   } else {
-  //     payments.push(paymentPayload.Payments[0]);
-  //   }
-  // }
+      if (serviceCode === "BPA.NC_SAN_FEE") {
+        payments.push(paymentPayload.Payments[0]);
+      }
+    } else {
+      payments.push(paymentPayload.Payments[0]);
+    }
+  }
+//  } else {
+//   payments.push(get (paymentPayload, "Payments[0]", []));
+//  }
 
 
   let res = await httpRequest(

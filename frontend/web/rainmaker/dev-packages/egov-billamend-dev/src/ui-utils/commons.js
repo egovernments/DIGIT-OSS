@@ -1,6 +1,11 @@
 import commonConfig from "config/common.js";
-import { acceptedFiles } from "egov-ui-framework/ui-utils/commons";
+import {
+  toggleSnackbar
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
+import { acceptedFiles } from "egov-ui-framework/ui-utils/commons";
+import { getSewerageDetails, getWaterDetails } from "../ui-config/screens/specs/bill-amend/utils";
+import { httpRequest } from "./api";
 
 export const handleFileUpload = (event, handleDocument, props) => {
   const S3_BUCKET = {
@@ -77,4 +82,141 @@ export const getImageUrlByFile = file => {
       resolve(fileurl);
     };
   });
+};
+
+
+
+export const getBillAmendSearchResult = async (queryObject, dispatch) => {
+  try {
+    let qo = {
+      // "amendmentId": '3edf1f2d-761e-4e8b-a990-505b648cf5eb'
+    }
+    queryObject.map(query =>
+      qo[query.key] = query.value
+    )
+    let newQuery = [];
+    Object.keys(qo).map(key => {
+      newQuery.push({
+        key: key,
+        value: qo[key]
+      })
+    })
+
+    const response = await httpRequest(
+      "post",
+      "/billing-service/amendment/_search",
+      "_search",
+      newQuery
+    );
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+
+
+export const searchBill = async (queryObject, dispatch) => {
+  try {
+    let newQuery = {};
+    queryObject.map(query => {
+      newQuery[query.key] = query.value
+    })
+    let newQueryObj = [
+      {
+        "key": 'tenantId',
+        "value": newQuery['tenantId']
+      }, {
+        "key": 'businessService',
+        "value": newQuery['businessService']
+      }
+    ];
+    if (newQuery['mobileNumber'] != '' && !newQuery['consumerCode']) {
+      newQueryObj.push({
+        "key": 'mobileNumber',
+        "value": newQuery['mobileNumber']
+      })
+    } else {
+      newQueryObj.push({
+        "key": 'connectionNumber',
+        "value": newQuery['consumerCode']
+      })
+    }
+let returnObject={'Bill':[]};
+    if(newQuery['businessService']=='WS'){
+      newQueryObj.push({
+        "key": 'searchType',
+        "value":'CONNECTION'
+      })
+      newQueryObj.push({
+        "key": 'isPropertyDetailsRequired',
+        "value":true
+      })
+       
+      const response = await getWaterDetails(newQueryObj);
+      if(response !== null &&
+        response !== undefined &&
+        response.WaterConnection &&
+        response.WaterConnection.length > 0){
+          returnObject.Bill.push(...response.WaterConnection);
+      }
+      return returnObject;
+    } else  if(newQuery['businessService']=='SW'){
+      newQueryObj.push({
+        "key": 'searchType',
+        "value":'CONNECTION'
+      })
+      newQueryObj.push({
+        "key": 'isPropertyDetailsRequired',
+        "value":true
+      })
+      const response = await getSewerageDetails(newQueryObj);
+      if(response !== null &&
+        response !== undefined &&
+        response.SewerageConnections &&
+        response.SewerageConnections.length > 0){
+          returnObject.Bill.push(...response.SewerageConnections);
+      }
+      return returnObject;
+    }
+
+  } catch (error) {
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "warning"
+      )
+    );
+  }
+};
+
+export const getBillAmdSearchResult = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/amendment/_search",
+      "_search",
+      queryObject
+    );
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
 };

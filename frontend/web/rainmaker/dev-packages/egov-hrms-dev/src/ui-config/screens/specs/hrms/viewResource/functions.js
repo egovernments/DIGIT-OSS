@@ -82,20 +82,43 @@ const returnEmptyArrayIfNull = value => {
 };
 
 export const setRolesList = (state, dispatch) => {
-  let rolesList = get(
+
+
+
+  let jurisdictions = get(
     state.screenConfiguration.preparedFinalObject,
-    `Employee[0].user.roles`,
+    `Employee[0].jurisdictions`,
     []
   );
-  let furnishedRolesList = rolesList.map(item => {
-    return " " + item.label;
-  });
-  dispatch(
-    prepareFinalObject(
-      "hrms.reviewScreen.furnishedRolesList",
-      furnishedRolesList.join()
-    )
-  );
+
+
+  jurisdictions.map((judis, ind) => {
+    let furnishedRolesList = judis && judis.roles && Array.isArray(judis.roles) && judis.roles.map(role => {
+      return " " + role.label;
+    }) || [];
+    dispatch(
+      prepareFinalObject(
+        `Employee[0].jurisdictions[${ind}].furnishedRolesList`,
+        furnishedRolesList.join()
+      )
+    );
+  })
+
+
+  // let rolesList = get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   `Employee[0].user.roles`,
+  //   []
+  // );
+  // let furnishedRolesList = rolesList.map(item => {
+  //   return " " + item.label;
+  // });
+  // dispatch(
+  //   prepareFinalObject(
+  //     "Employee[0].jurisdictions[0].furnishedRolesList",
+  //     furnishedRolesList.join()
+  //   )
+  // );
 };
 
 const setDeactivationDocuments = (state, dispatch) => {
@@ -225,6 +248,17 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
   handleDeletedCards(employeeObject[0], "serviceHistory", "id");
   handleDeletedCards(employeeObject[0], "education", "id");
   handleDeletedCards(employeeObject[0], "tests", "id");
+  let deletedJurisdiction = get(
+    state.screenConfiguration.preparedFinalObject,
+    "deletedJurisdiction",
+    []
+  );
+  let employeeJurisdictions = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Employee[0].jurisdictions",
+    []
+  );
+  deletedJurisdiction.map(jurisdiction => jurisdiction.isActive = false);
 
   // DEACTIVATE EMPLOYEE VALIDATIONS
   if (action === "DEACTIVATE") {
@@ -389,7 +423,8 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
   let processedRoles = roles.map(item => {
     return {
       code: item.value,
-      name: item.label
+      name: item.label,
+      tenantId: item.tenantId
     };
   });
   set(employeeObject[0], "user.roles", processedRoles);
@@ -419,10 +454,12 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
       if (get(employeeObject[0], 'user.photo', null)) {
         set(employeeObject[0], 'user.photo', get(employeeObject[0], 'user.identificationMark', null));
       }
-
+      let employee = {};
+      employee = { ...employeeObject[0] }
+      set(employee, 'jurisdictions', [...employeeJurisdictions, ...deletedJurisdiction])
       let response = await updateEmployee(
         queryObject,
-        employeeObject,
+        [employee],
         dispatch
       );
       let employeeId = response && get(response, "Employees[0].code");
@@ -517,7 +554,7 @@ export const getEmployeeData = async (
   ];
   let response = await getSearchResults(queryObject, dispatch);
   dispatch(prepareFinalObject("Employee", get(response, "Employees")));
-  dispatch(prepareFinalObject("empPhoneNumber", get(response, "Employees[0].user.mobileNumber",'')));
+  dispatch(prepareFinalObject("empPhoneNumber", get(response, "Employees[0].user.mobileNumber", '')));
   dispatch(
     handleField(
       "create",
@@ -537,7 +574,18 @@ export const getEmployeeData = async (
       true
     )
   );
-  
+
+  const judis = get(response, 'Employees[0].jurisdictions', []);
+  const roles = get(response, 'Employees[0].user.roles', [])
+  judis.map(judis => {
+    if (judis.boundary) {
+      judis.roles = roles.filter(role => role.tenantId == judis.boundary).map(role => {
+        return { ...role, value: role.code, label: role.name }
+      });
+    }
+  })
+  dispatch(prepareFinalObject("Employee", get(response, "Employees")));
+
   if (get(response, "Employees[0].isActive", false)) {
     dispatch(
       handleField(

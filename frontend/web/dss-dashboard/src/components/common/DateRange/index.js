@@ -140,7 +140,7 @@ class DateRange extends React.Component {
   svgWrapper = ({ dangerouslySetInnerHTML, className }) => {
     return (
       <span
-        dangerouslySetInnerHTML={dangerouslySetInnerHTML}
+        // dangerouslySetInnerHTML={dangerouslySetInnerHTML}
         className={className}
       />
     );

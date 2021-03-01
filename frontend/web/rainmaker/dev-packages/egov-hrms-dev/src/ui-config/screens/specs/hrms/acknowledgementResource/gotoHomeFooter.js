@@ -46,3 +46,33 @@ export const gotoHomeFooter = () => {
     }
   });
 };
+
+
+export const gotoInboxFooter = () => {
+  return getCommonApplyFooter({
+    gotoHome: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "200px",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        downloadReceiptButtonLabel: getLabel({
+          labelName: "GO TO HOME",
+          labelKey: "TL_COMMON_BUTTON_HOME"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          dispatch(setRoute('/inbox'));
+        }
+      }
+    }
+  });
+};

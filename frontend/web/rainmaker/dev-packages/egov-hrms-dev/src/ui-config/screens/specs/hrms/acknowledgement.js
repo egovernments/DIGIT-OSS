@@ -2,12 +2,15 @@ import {
   getCommonHeader,
   getCommonContainer,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
+import { gotoHomeFooter, gotoInboxFooter } from "./acknowledgementResource/gotoHomeFooter";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
 
 const goToHome = gotoHomeFooter();
+
+const goToInbox = gotoInboxFooter();
+
 const getAcknowledgementCard = (
   state,
   dispatch,
@@ -94,6 +97,35 @@ const getAcknowledgementCard = (
         },
       },
       goToHome,
+    };
+  }  else if (purpose === "updatepassword" && status === "success") {
+    return {
+      header: getCommonContainer({
+        header: getCommonHeader({
+          labelName: `Update Employee`,
+          labelKey: "HR_COMMON_UPDATE_EMPLOYEE_HEADER",
+        }),
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          disabled: {
+            uiFramework: "custom-atoms-local",
+            componentPath: "DisableBackComponent",
+            moduleName: "egov-hrms",
+          },
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Employee Updated Successfully",
+              labelKey: "HR_UPDATE_PASSWORD_SUCCESS_MESSAGE",
+            },
+          }),
+        },
+      },
+      goToInbox,
     };
   } else if (purpose === "deactivate" && status === "success") {
     return {

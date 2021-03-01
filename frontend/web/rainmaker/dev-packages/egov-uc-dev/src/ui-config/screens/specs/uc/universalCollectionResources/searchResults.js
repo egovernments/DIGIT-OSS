@@ -22,11 +22,12 @@ export const searchResults = {
                 const receiptQueryString = [
                   { key: "receiptNumbers", value:  tableMeta.rowData[0]},
                   { key: "tenantId", value: tableMeta.rowData[7] },
-                  { key: "businessService", value: tableMeta.rowData[8] }
+                  { key: "businessService", value:tableMeta.rowData[8] } 
                 ]
                 download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
               }}>
-              {value}
+       
+              <a href="javascript:void(0)" >{value}</a>
             </div>
           )
         }
@@ -65,12 +66,13 @@ export const searchResults = {
           display: false
         }
       }, {
-        labelName: "SERVICE TYPE",
-        labelKey: "SERVICE_TYPE",
+        labelName: "Service Type",
+        labelKey: "SERVICE",
         options: {
           display: false
         }
       }
+      
     ],
     title: {
       labelKey: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",

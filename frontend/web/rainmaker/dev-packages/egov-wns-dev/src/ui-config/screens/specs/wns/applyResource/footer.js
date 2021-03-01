@@ -29,6 +29,11 @@ import commonConfig from "config/common.js";
 const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
+  let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+  if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+    let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
+    dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
+  }
   let tenantId = getTenantIdCommon();
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
@@ -403,6 +408,21 @@ const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
     } else {
+      let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+      if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+        for (let i = 0; i < roadCuttingInfo.length; i++) {
+          if (roadCuttingInfo[i] == undefined) {
+            roadCuttingInfo[i] = {};
+            roadCuttingInfo[i].isEmpty = true;
+          }
+        }
+        let filteredInfo = [];
+        roadCuttingInfo.map(info => {
+          if(info.isDeleted !=false) filteredInfo.push(info);
+        });
+        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
+      }
+
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
       }
@@ -420,6 +440,11 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 3) {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
+    let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+    if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+      let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
+      dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
+    }
     if (waterId && sewerId) {
       isFormValid = await acknoledgementForBothWaterAndSewerage(state, activeStep, isFormValid, dispatch);
     } else if (waterId) {

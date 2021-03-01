@@ -10,9 +10,9 @@ const getSmsRedirectionLink = (url) => {
   const redirectionTo = getQueryArg(url, "redirectTo");
   const params = getQueryArg(url, "params");
   const mobileNo = getQueryArg(url, "mobileNo");
-  if(url.includes('digit-ui')){
-    return `/${url.split("redirectTo=")[1]}`;
-  }
+  // if(url.includes('digit-ui')){
+  //   return `/${url.split("redirectTo=")[1]}`;
+  // }
   switch (redirectionTo) {
     case "uc-citizen/smsViewReceipt":
       return `/${redirectionTo}?smsLink=true&mobileNo=${mobileNo}&tenantId=${params.split(",")[0]}&receiptNo=${params.split(",")[1]}`;

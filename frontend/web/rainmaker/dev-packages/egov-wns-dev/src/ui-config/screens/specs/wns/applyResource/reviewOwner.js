@@ -7,7 +7,7 @@ import {
   getDivider,
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA, handleRoadType } from '../../utils';
 import { changeStep } from "./footer";
 
 const getHeader = label => {
@@ -420,10 +420,43 @@ const connectionChargeDetails = getCommonContainer({
   reviewPlumberMobileNo
 });
 
-const roadCuttingCharges = getCommonContainer({
-  reviewRoadType,
-  reviewArea
-});
+const roadCuttingCharges = {
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    className: "applicant-summary",
+    scheama: getCommonContainer({
+        reviewRoadType : getLabelWithValue(
+          {
+            labelName: "Road Type",
+            labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+          },
+          {
+            jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
+            callBack: handleRoadType
+          }
+        ),
+        reviewArea : getLabelWithValue(
+          {
+            labelName: "Area (in sq ft)",
+            labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
+          },
+          {
+            jsonPath: "applyScreen.roadCuttingInfo[0].roadCuttingArea",
+            callBack: handleNA
+          }
+        )
+        
+    }),
+    items: [],
+    hasAddItem: false,
+    isReviewPage: true,
+    sourceJsonPath: "applyScreen.roadCuttingInfo",
+    prefixSourceJsonPath: "children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  type: "array"
+}
 
 const activationDetails = getCommonContainer({
   reviewConnectionExecutionDate,

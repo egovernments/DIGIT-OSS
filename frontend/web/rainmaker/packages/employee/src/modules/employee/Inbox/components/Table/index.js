@@ -248,9 +248,9 @@ class InboxData extends React.Component {
     const { wfSlaConfig } = this.state;
     const MAX_SLA = businessServiceSla[businessService];
     if (wfSlaConfig) {
-      if ((MAX_SLA - (MAX_SLA * eval(wfSlaConfig[0].slotPercentage)) <= sla) && sla <= MAX_SLA) {
+      if ((MAX_SLA - (MAX_SLA * wfSlaConfig[0].slotPercentage / 100) <= sla) && sla <= MAX_SLA) {
         return wfSlaConfig[0].positiveSlabColor;
-      } else if (0 < sla && sla < MAX_SLA - (MAX_SLA * eval(wfSlaConfig[0].slotPercentage))) {
+      } else if (0 < sla && sla < MAX_SLA - (MAX_SLA * wfSlaConfig[0].slotPercentage / 100)) {
         return wfSlaConfig[0].middleSlabColor;
       } else {
         return wfSlaConfig[0].negativeSlabColor;

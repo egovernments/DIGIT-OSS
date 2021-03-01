@@ -1,115 +1,132 @@
+import { getAddress } from 'egov-billamend/ui-config/screens/specs/bill-amend/searchResources/function.js';
 import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
+import { generateBillAmendAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateBillAmendAcknowledgement";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
-import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
 import get from "lodash/get";
 import set from "lodash/set";
-// import { getSearchResults } from "../../../../ui-utils/commons";
-import { createEstimateData, getTransformedStatus } from "../utils";
-import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import commonConfig from "../../../../config/common";
+import { getBillAmendSearchResult, searchBill } from "../../../../ui-utils/commons";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
-import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
-// import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
-// import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import "./index.css";
+import { generateBillAmendPdf } from "./utils";
+
+const searchResults = async (dispatch, applicationNo, tenantId, businessService) => {
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "amendmentId", value: applicationNo },
+    { key: "businessService", value: businessService },
+  ];
+  let payload = await getBillAmendSearchResult(queryObject);
+
+  await setDocuments(
+    payload,
+    "Amendments[0].documents",
+    "bill-amend-review-document-data",
+    dispatch, 'BILLAMEND'
+  );
 
 
 
-// const getTradeTypeSubtypeDetails = payload => {
-//   const tradeUnitsFromApi = get(
-//     payload,
-//     "Licenses[0].tradeLicenseDetail.tradeUnits",
-//     []
-//   );
-//   const tradeUnitDetails = [];
-//   tradeUnitsFromApi.forEach(tradeUnit => {
-//     const { tradeType } = tradeUnit;
-//     const tradeDetails = tradeType.split(".");
-//     tradeUnitDetails.push({
-//       trade: get(tradeDetails, "[0]", ""),
-//       tradeType: get(tradeDetails, "[1]", ""),
-//       tradeSubType: get(tradeDetails, "[2]", "")
-//     });
-//   });
-//   return tradeUnitDetails;
-// };
+  let newQuery = [{
+    key: "tenantId",
+    value: tenantId
+  },
+  {
+    key: "consumerCode",
+    value: get(
+      payload,
+      "Amendments[0].consumerCode",
+      ''
+    )
+  },
+  {
+    key: "businessService",
+    value: businessService
+  }]
+  let resp = await searchBill(newQuery, dispatch);
+  let connectionDetail = get(resp, 'Bill[0]', {});
 
-// const searchResults = async (dispatch, applicationNo, tenantId) => {
-//   let queryObject = [
-//     { key: "tenantId", value: tenantId },
-//     { key: "applicationNumber", value: applicationNo }
-//   ];
-//   let payload = await getSearchResults(queryObject);
-
-//   set(payload, "Licenses[0].assignee", []);
-
-//   await setDocuments(
-//     payload,
-//     "Licenses[0].tradeLicenseDetail.applicationDocuments",
-//     "LicensesTemp[0].reviewDocData",
-//     dispatch, 'TL'
-//   );
-//   //set Trade Types
-
-//   payload && dispatch(
-//     prepareFinalObject(
-//       "Licenses", get(
-//         payload,
-//         "Licenses",
-//         []
-//       )))
-//   payload &&
-//     dispatch(
-//       prepareFinalObject(
-//         "LicensesTemp[0].tradeDetailsResponse",
-//         getTradeTypeSubtypeDetails(payload)
-//       )
-//     );
-//   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
-//   const LicenseData = payload.Licenses[0];
-//   const fetchFromReceipt = sts !== "pending_payment";
+  let consumerName = get(connectionDetail, "additionalDetails.ownerName", "NA");
+  let consumerAddress = getAddress(get(connectionDetail, "tenantId"), get(connectionDetail, "additionalDetails.locality"));
+  set(payload, 'Amendments[0].additionalDetails.ownerName', consumerName);
+  set(payload, 'Amendments[0].additionalDetails.ownerAddress', consumerAddress);
 
 
-//   // generate estimate data
-//   createEstimateData(
-//     LicenseData,
-//     "LicensesTemp[0].estimateCardData",
-//     dispatch,
-//     {},
-//     fetchFromReceipt
-//   );
-// };
 
-const downloadprintMenu = (state, dispatch) => {
+  payload && dispatch(
+    prepareFinalObject(
+      "Amendment", get(
+        payload,
+        "Amendments[0]",
+        {}
+      )))
+
+};
+
+const downloadprintMenu = (state, dispatch, status) => {
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "BILL_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents = LicensesTemp && LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      // downloadAcknowledgementForm(Licenses);
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Licenses[0].applicationNumber}`);
+
+      const { Amendment } = state.screenConfiguration.preparedFinalObject;
+      generateBillAmendAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `billamend-acknowledgement-${Amendment.amendmentId}.pdf`)
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "BILL_APPLICATION" },
     link: () => {
-      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents = LicensesTemp && LicensesTemp[0].reviewDocData;
-      set(Licenses[0], "additionalDetails.documents", documents)
-      // downloadAcknowledgementForm(Licenses,'print');
-      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
+      const { Amendments } = state.screenConfiguration.preparedFinalObject;
+      generateBillAmendAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), 'print')
     },
     leftIcon: "assignment"
   };
+
+  let certificateDownloadObject = {
+    label: { labelName: "Application", labelKey: "BILL_COUPON" },
+    link: () => {
+
+      const { Amendment } = state.screenConfiguration.preparedFinalObject;
+      generateBillAmendPdf([Amendment], commonConfig.tenantId, 'download');
+    },
+    leftIcon: "assignment"
+  };
+  let certificatePrintObject = {
+    label: { labelName: "Application", labelKey: "BILL_COUPON" },
+    link: () => {
+
+      const { Amendment } = state.screenConfiguration.preparedFinalObject;
+      generateBillAmendPdf([Amendment], commonConfig.tenantId, 'print');
+    },
+    leftIcon: "assignment"
+  };
+
+
   let downloadMenu = [];
   let printMenu = [];
-  downloadMenu = [applicationDownloadObject];
-  printMenu = [applicationPrintObject];
+  switch (status) {
+    case 'apply':
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case 'approve':
+      downloadMenu = [certificateDownloadObject];
+      printMenu = [certificatePrintObject];
+      break;
+    default:
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+  }
+
 
 
   return {
@@ -158,39 +175,30 @@ const getAcknowledgementCard = (
   status,
   applicationNumber,
   secondNumber,
-  financialYear,
-  tenant
+  tenant,
+  businessService
 ) => {
-  const financialYearText = financialYear ? financialYear : "";
   if (purpose === "apply" && status === "success") {
-    // searchResults(dispatch, applicationNumber, tenant);
+    searchResults(dispatch, applicationNumber, tenant, businessService);
     return {
       headerDiv: getCommonContainer({
         header: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
-          children:{
-            headerTitle:getCommonHeader({
+          children: {
+            headerTitle: getCommonHeader({
               labelName: `Acknowledgement for Bill Amendment`,
               labelKey: "BILL_COMMON_APPLICATION_NEW_AMENDMENT",
-              dynamicArray: [financialYearText],
-              style:{alignSelf:"center"}
+              dynamicArray: [],
+              style: { alignSelf: "center" }
             })
           }
         },
-        headerdownloadprint: downloadprintMenu(state, dispatch),
-      },{style:{justifyContent:"space-between"}}),
-
-
+        headerdownloadprint: downloadprintMenu(state, dispatch, 'apply'),
+      }, { style: { justifyContent: "space-between" } }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
-        props: {
-          // style: {
-          //   position: "absolute",
-          //   width: "95%"
-          // }
-        },
         children: {
           card: acknowledgementCard({
             icon: "done",
@@ -224,23 +232,23 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "approve" && status === "success") {
-    // loadReceiptGenerationData(applicationNumber, tenant);
+    searchResults(dispatch, applicationNumber, tenant, businessService);
     return {
-      header: getCommonContainer({
-        header: getCommonHeader({
-          labelName: `BILL AMENDMENT Application ${financialYearText}`,
-          labelKey: "BILL_AMENDMENT_APPLICATION",
-          dynamicArray: [financialYearText]
-        }),
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
+      headerDiv: getCommonContainer({
+        header: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          children: {
+            headerTitle: getCommonHeader({
+              labelName: `Acknowledgement for Bill Amendment`,
+              labelKey: "BILL_COMMON_APPLICATION_NEW_AMENDMENT",
+              dynamicArray: [],
+              style: { alignSelf: "center" }
+            })
           }
-        }
-      }),
+        },
+        headerdownloadprint: downloadprintMenu(state, dispatch, 'approve'),
+      }, { style: { justifyContent: "space-between" } }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -250,55 +258,62 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application is Approved Successfully",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+              labelKey: "BILL_APPROVED_MESSAGE_HEAD"
             },
             body: {
-              labelName:
-                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_SUB"
+              labelName: "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+              labelKey: "BILL_APPROVED_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelName: "Application No.",
+              labelKey: "BILL_APPLICATION_NUMBER"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },
       approvalSuccessFooter
     };
-  } else if (purpose === "forward" && status === "success") {
+  } else if (purpose === "application" && status === "rejected") {
     return {
-      header: getCommonHeader({
-        labelName: `Application for Trade License ${financialYearText}`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE",
-        dynamicArray: [financialYearText]
+      headerDiv: getCommonContainer({
+        header: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          children: {
+            headerTitle: getCommonHeader({
+              labelName: `Acknowledgement for Bill Amendment`,
+              labelKey: "BILL_COMMON_APPLICATION_NEW_AMENDMENT",
+              dynamicArray: [],
+              style: { alignSelf: "center" }
+            })
+          }
+        },
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         children: {
           card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
+            icon: "close",
+            backgroundColor: "#E54D42",
             header: {
-              labelName: "Application Forwarded Successfully",
-              labelKey: "TL_FORWARD_SUCCESS_MESSAGE_MAIN"
+              labelName: "Application is Rejected Successfully",
+              labelKey: "BILL_REJECTED_MESSAGE_HEAD"
             },
             body: {
-              labelName:
-                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPLICATION_FORWARD_SUCCESS"
+              labelName: "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+              labelKey: "BILL_REJECTED_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BILL_APPLICATION_NUMBER"
             },
             number: applicationNumber
           })
         }
       },
-      gotoHomeFooter
+      approvalSuccessFooter
     };
   }
 };
@@ -318,12 +333,16 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
-    const financialYear = getQueryArg(window.location.href, "FY");
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
-    const secondNumber = getQueryArg(window.location.href, "secondNumber");
+    const businessService = getQueryArg(
+      window.location.href,
+      "businessService"
+    );
+
+    const secondNumber = getQueryArg(window.location.href, "consumerCode");
     const tenant = getQueryArg(window.location.href, "tenantId");
     loadUlbLogo(tenant);
     const data = getAcknowledgementCard(
@@ -333,8 +352,8 @@ const screenConfig = {
       status,
       applicationNumber,
       secondNumber,
-      financialYear,
-      tenant
+      tenant,
+      businessService
     );
     set(action, "screenConfig.components.div.children", data);
     return action;

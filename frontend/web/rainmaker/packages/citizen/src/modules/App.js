@@ -84,7 +84,7 @@ class App extends Component {
       if (mobileNumber === citizenMobileNo) {
         let redirectionURL = redirectionLink(href);
         if (redirectionURL && redirectionURL.includes && redirectionURL.includes('digit-ui')) {
-          window.location.href = redirectionURL.startsWith('/digit') ? redirectionURL : `/${redirectionURL}`;
+          window.location.href = redirectionURL.startsWith('/digit') ? redirectionURL.split('&')[0] : `/${redirectionURL.split('&')[0]}`;
           return;
         } else {
           setRoute(redirectionURL);

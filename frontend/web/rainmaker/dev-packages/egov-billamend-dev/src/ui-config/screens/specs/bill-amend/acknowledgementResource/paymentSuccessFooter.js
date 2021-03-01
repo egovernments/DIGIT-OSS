@@ -1,7 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generateReceipt from "../../utils/receiptPdf";
 import { ifUserRoleExists } from "../../utils";
-import { generatePdfFromDiv } from "../applyResource/footer";
+// import { generatePdfFromDiv } from "../applyResource/footer";
 
 const getCommonApplyFooter = children => {
   return {
@@ -31,7 +31,7 @@ export const paymentSuccessFooter = (
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      generateReceipt(state, dispatch, "certificate_download");
+      // generateReceipt(state, dispatch, "certificate_download");
     },
     leftIcon: "book"
   };
@@ -59,14 +59,14 @@ export const paymentSuccessFooter = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber);
+      // generatePdfFromDiv("download", applicationNumber);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print", applicationNumber);
+      // generatePdfFromDiv("print", applicationNumber);
     },
     leftIcon: "assignment"
   };

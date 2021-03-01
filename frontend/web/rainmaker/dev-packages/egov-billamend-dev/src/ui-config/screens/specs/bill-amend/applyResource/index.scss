@@ -83,3 +83,15 @@
   max-height: 150px;
   overflow-y: auto;
 }
+
+#material-ui-billAmdDialogPicker div{
+  width: 100% !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+#material-ui-billamdHeader,
+#material-ui-billamdSubheader,
+#material-ui-billamdSubheader1{
+  width: 100% !important;
+}

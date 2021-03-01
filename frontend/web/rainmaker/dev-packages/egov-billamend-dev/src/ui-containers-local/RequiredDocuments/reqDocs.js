@@ -35,8 +35,7 @@ const styles = {
     fontFamily: "Roboto",
     fontSize: "14px",
     fontWeight: 400,
-    lineHeight: "17px",
-    paddingBottom: "24px",
+    lineHeight: "15px",
   },
   description: {
     fontFamily: "Roboto",
@@ -45,7 +44,7 @@ const styles = {
     fontWeight: 400,
     letterSpacing: "0.6px",
     lineHeight: "14px",
-    marginBottom: "1rem",
+    marginBottom: "2rem",
   },
 };
 
@@ -71,6 +70,7 @@ const getCommonGrayCard = (children) => {
         componentPath: "Div",
         children: {
           ch1: getCommonCard(children, {
+            className:"billamend-reqdoc",
             style: {
               backgroundColor: "rgb(242, 242, 242)",
               boxShadow: "none",

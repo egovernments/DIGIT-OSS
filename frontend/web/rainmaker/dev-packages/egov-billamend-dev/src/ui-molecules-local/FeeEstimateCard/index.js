@@ -10,6 +10,8 @@ import { Tooltip } from "egov-ui-framework/ui-molecules";
 import ErrorIcon from "@material-ui/icons/Error";
 import { getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
 
 
 const styles = {
@@ -49,20 +51,37 @@ const styles = {
     },
     leftIcon: {
         color: "grey",
-        marginRight: 4
+        marginRight: 4,
+        position:'absolute'
+    },
+    taxHeadMasterCodes: {
+        fontSize: "12px",
+        marginTop: "5px"
     }
 };
 
 function totalAmount(arr) {
-    return arr
-        .map(item => (item.value ? item.value : 0))
+    if(Array.isArray(arr)) {
+        return arr
+        .map(item => (item.taxAmount ? item.taxAmount : 0))
         .reduce((prev, next) => prev + next, 0);
+    } else {
+        return 0;
+    }
 }
 
+// function getAmountType (fees) {
+//     for(let i = 0; i < fees.length; i++) {
+//         // if (fees[i].taxAmount < 0) return "reducedAmount";
+//         // if (fees[i].taxAmount > 0) return "additionalAmount";
+//         return fees[i].amountType
+//     }
+// }
+
 function FeesEstimateCard(props) {
-    console.log(props, "fees props")
     const { classes, estimate } = props;
     const total = totalAmount(estimate.fees);
+    // const amountType = getAmountType(estimate.fees);
     return (
 
         <Grid container>
@@ -74,26 +93,35 @@ function FeesEstimateCard(props) {
                                 <LabelContainer labelName="Tax Heads" labelKey="BILL_TAX_HEADS" style={{fontWeight:"bold"}}/>
                             </Grid>
                             <Grid xs={6} align="right">
-                            <LabelContainer labelName="Reduced Amount(Rs)" labelKey="BILL_REDUCED_AMOUNT" style={{fontWeight:"bold"}}/>
+                            <LabelContainer 
+                            labelName="Reduced Amount(Rs)" 
+                            labelKey= {get(estimate, "fees[0].amountType", "") === "reducedAmount" ? "BILL_REDUCED_AMOUNT_RS" : "BILL_ADDITIONAL_AMOUNT_RS"}
+                            style={{fontWeight:"bold"}}/>
                             </Grid>
                         </Grid>
-                        {estimate.fees.map((fee, key) => {
+                        {estimate.fees && estimate.fees.length > 0 && estimate.fees.map((fee, key) => {
                             let tooltip = fee.info ? (
-                                <Tooltip val={fee.info.labelName} icon={"info_circle"} />
+                                <Tooltip val="" icon={"info_circle"} className={'bill-estimate-infoicon'} style={{    position: 'absolute'}} /> //{fee.info.labelName}
                             ) : (
                                     ""
                                 );
-                            let textLeft = fee.name ? (
+                            let textLeft = fee.taxHeadMasterCode ? (
                                 <Grid container xs={8}>
-                                    <Typography>{fee.name.labelName}</Typography>
+                                    <LabelContainer 
+                                        labelKey = {getTransformedLocale(`BILL_${fee.taxHeadMasterCode}`)}
+                                        className={classes.taxHeadMasterCodes}
+                                    />
+                                    {/* <Typography>{`BILL_${fee.taxHeadMasterCode}`}</Typography> */}
                                     {tooltip}
                                 </Grid>
                             ) : (
                                     <Grid xs={8} />
                                 );
-                            let textRight = fee.value ? (
+                            let textRight = fee ? (
                                 <Grid xs={4} align="right">
-                                    <Typography variant="body2">{fee.value}</Typography>
+                                    <Typography variant="body2" className={classes.taxHeadMasterCodes}>
+                                        {fee.taxAmount}
+                                    </Typography>
                                 </Grid>
                             ) : (
                                     <Grid xs={4} />
@@ -134,7 +162,7 @@ function FeesEstimateCard(props) {
                                 let colRight = item.textLeft ? 6 : 10;
                                 if (item.textLeft) {
                                     textLeft = (
-                                        <Grid xs={colLeft}>
+                                        <Grid xs={colLeft} className={'bill-estimate-infotext'}>
                                             <Typography>{item.textLeft}</Typography>
                                         </Grid>
                                     );

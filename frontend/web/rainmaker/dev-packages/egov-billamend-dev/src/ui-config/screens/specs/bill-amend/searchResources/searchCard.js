@@ -63,7 +63,7 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId ,businesService:""}));
+  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId, businessService: "", mobileNumber: "", amendmentId: "", consumerCode: "" }));
 };
 
 export const searchCard = getCommonCard({
@@ -78,7 +78,7 @@ export const searchCard = getCommonCard({
   searchContainer: getCommonContainer({
     ulb: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-abg",
+      moduleName: "egov-billamend",
       componentPath: "AutosuggestContainer",
       props: {
         label: {
@@ -99,11 +99,12 @@ export const searchCard = getCommonCard({
         // isClearable: true,
         className: "autocomplete-dropdown",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-        jsonPath: "searchScreen.tenantId",
-        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+        jsonPath: "searchScreenBillAmend.tenantId",
+        disabled: true,
+        isDisabled: true,
       },
       required: true,
-      jsonPath: "searchScreen.tenantId",
+      jsonPath: "searchScreenBillAmend.tenantId",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -111,7 +112,7 @@ export const searchCard = getCommonCard({
     },
     serviceCategory: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-abg",
+      moduleName: "egov-billamend",
       componentPath: "AutosuggestContainer",
       props: {
         label: {
@@ -126,7 +127,7 @@ export const searchCard = getCommonCard({
         labelsFromLocalisation: true,
         className: "autocomplete-dropdown",
         // isClearable: true,
-        jsonPath: "searchScreen.businesService",
+        jsonPath: "searchScreenBillAmend.businessService",
         localePrefix: {
           moduleName: "BillingService",
           masterName: "BusinessService"
@@ -134,7 +135,7 @@ export const searchCard = getCommonCard({
         sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
       },
       required: true,
-      jsonPath: "searchScreen.businesService",
+      jsonPath: "searchScreenBillAmend.businessService",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -185,9 +186,10 @@ export const searchCard = getCommonCard({
         position: "start"
       },
       required: false,
+      // disabled: true,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNumber"
+      jsonPath: "searchScreenBillAmend.mobileNumber"
     }),
     billNumber: getTextField({
       label: {
@@ -200,7 +202,7 @@ export const searchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.billNo",
+      jsonPath: "searchScreenBillAmend.amendmentId",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -217,7 +219,8 @@ export const searchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.consumerCode",
+      pattern: /^[a-zA-Z0-9-/]*$/i,
+      jsonPath: "searchScreenBillAmend.consumerCode",
       gridDefination: {
         xs: 12,
         sm: 4

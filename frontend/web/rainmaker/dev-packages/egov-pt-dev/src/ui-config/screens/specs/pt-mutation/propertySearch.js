@@ -1,6 +1,6 @@
 import commonConfig from "config/common.js";
 import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject ,unMountScreen} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, getRequiredDocData,showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
@@ -103,7 +103,7 @@ const screenConfig = {
 
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
-    
+    dispatch(unMountScreen("search-preview"));
     getMDMSData(action, dispatch);
     return action;
   },

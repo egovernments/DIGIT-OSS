@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -196,6 +197,7 @@ class DocumentList extends Component {
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, documentsUploadRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
+    const tenantId = getTenantId();
 
     prepareFinalObject("documentsUploadRedux", {
       ...documentsUploadRedux,
@@ -205,7 +207,8 @@ class DocumentList extends Component {
           {
             fileName: file.name,
             fileStoreId,
-            fileUrl: getFileUrl(Object.values(fileUrl)[0])
+            fileUrl: getFileUrl(Object.values(fileUrl)[0]),
+            tenantId: tenantId
           }
         ]
       }

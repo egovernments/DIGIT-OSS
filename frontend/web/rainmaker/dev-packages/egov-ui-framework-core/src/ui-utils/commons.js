@@ -695,7 +695,7 @@ export const getStatusKey = (status) => {
 
 export const getRequiredDocData = async (action, dispatch, moduleDetails, closePopUp) => {
   let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity|| commonConfig.tenantId  : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: moduleDetails[0].moduleName === "ws-services-masters" ? commonConfig.tenantId : tenantId,
