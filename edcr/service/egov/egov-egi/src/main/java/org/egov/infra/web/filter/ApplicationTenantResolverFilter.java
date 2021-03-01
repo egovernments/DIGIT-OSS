@@ -223,7 +223,8 @@ public class ApplicationTenantResolverFilter implements Filter {
                     while (m.find()) {
                         CharSequence charSequence = m.group().subSequence(1, m.group().length() - 1);
                         String[] reqBodyParams = String.valueOf(charSequence).split(",");
-                        LOG.info("***********Request Body Params**************" + String.valueOf(charSequence));
+                        if(LOG.isDebugEnabled())
+                            LOG.debug("***********Request Body Params**************" + String.valueOf(charSequence));
                         for (String param : reqBodyParams) {
                             LOG.info("*************************" + param);
                             if (param.contains("userInfo") && StringUtils.isNotBlank(tenantAtBody))
@@ -235,7 +236,8 @@ public class ApplicationTenantResolverFilter implements Filter {
                                     tenantAtBody = tenant[1].substring(1, tenant[1].length() - 1);
                                 else
                                     tenantAtBody = tenant[1];
-                                LOG.info("############Tenant From Body######" + tenantAtBody);
+                                if(LOG.isDebugEnabled())
+                                    LOG.debug("############Tenant From Body######" + tenantAtBody);
                             } /*
                                * else if (param.contains("authToken")) { String[] authTokenVal = param.split(":"); // Next to
                                * 'bearer' word space is required to differentiate token type and access token String tokenType =
