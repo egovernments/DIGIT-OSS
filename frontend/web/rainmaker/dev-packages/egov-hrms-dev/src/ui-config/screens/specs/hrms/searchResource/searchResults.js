@@ -57,19 +57,34 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Employee ID"),
-      getTextToLocalMapping("Name"),
-      getTextToLocalMapping("Role"),
-      getTextToLocalMapping("Designation"),
-      getTextToLocalMapping("Department"),
       {
-        name: "tenantId",
-        options: {
-          display: false
-        }
-      }
+        labelName: "Employee ID",
+        labelKey: getTextToLocalMapping("Employee ID"),
+      },{
+        labelName: "Name",
+        labelKey:getTextToLocalMapping("Name"),
+      },{
+        labelName: "Role",
+        labelKey: getTextToLocalMapping("Role"),
+      },{
+        labelName: "Designation",
+        labelKey: getTextToLocalMapping("Designation"),
+      },{
+        labelName: "Department",
+        labelKey: getTextToLocalMapping("Department"),
+      },
+        {
+          labelName: "Tenant ID",
+          labelKey: getTextToLocalMapping("Tenant ID"),
+          options: {
+            display: false
+          }
+        },
     ],
-    title: getTextToLocalMapping("Search Results for Employee"),
+    title:{
+      labelName:"Search Results for Employee",
+      labelKey:getTextToLocalMapping("Search Results for Employee")
+    },
     options: {
       filter: false,
       download: false,

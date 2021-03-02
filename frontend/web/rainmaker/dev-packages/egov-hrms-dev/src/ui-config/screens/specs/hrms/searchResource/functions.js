@@ -126,7 +126,8 @@ export const searchApiCall = async (state, dispatch) => {
             getDesigName(state, currentDesignations) || "-",
           [getTextToLocalMapping("Department")]:
             getDeptName(state, currentDepartments) || "-",
-          ["tenantId"]: get(item, "tenantId", "-")
+          [getTextToLocalMapping("Tenant ID")]: get(item, "tenantId", "-")
+
         };
       });
 
@@ -142,10 +143,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping("Search Results for Employee")} (${
-            response.Employees.length
-          })`
+          "props.rows",
+          response.Employees.length
         )
       );
       showHideTable(true, dispatch);
