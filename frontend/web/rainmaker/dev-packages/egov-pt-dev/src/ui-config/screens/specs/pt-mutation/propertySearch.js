@@ -158,7 +158,7 @@ const screenConfig = {
         [],
         tenantRequestBody
     ).then(res => {
-      debugger
+     // debugger
         citywiseconfig:res.MdmsRes.tenant.citywiseconfig
         let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
         enableButton && dispatch(
