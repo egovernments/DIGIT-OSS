@@ -44,7 +44,6 @@ public class MDMSService {
 	 */
 	public Map<String, List<String>> getMDMSData(RequestInfo requestInfo, String tenantId){
 		MdmsResponse response = fetchMDMSData(requestInfo, tenantId);
-		MdmsResponse responseLoc = fetchMDMSDataLoc(requestInfo, tenantId);
 		Map<String, List<String>> masterData = new HashMap<>();
 		Map<String, List<String>> eachMasterMap = new HashMap<>();
 		if(null != response) {
@@ -69,15 +68,7 @@ public class MDMSService {
 				}
 			}
 		}
-		if(null != responseLoc){
-			if(!CollectionUtils.isEmpty(responseLoc.getMdmsRes().keySet())) {
-				if(null != responseLoc.getMdmsRes().get(HRMSConstants.HRMS_MDMS_EGOV_LOCATION_MASTERS_CODE)) {
-					eachMasterMap = (Map) responseLoc.getMdmsRes().get(HRMSConstants.HRMS_MDMS_EGOV_LOCATION_MASTERS_CODE);
-					masterData.put(HRMSConstants.HRMS_MDMS_TENANT_BOUNDARY_CODE,eachMasterMap.get(HRMSConstants.HRMS_MDMS_TENANT_BOUNDARY_CODE));
-				}
 
-			}
-		}
 		return masterData;
 		
 	}

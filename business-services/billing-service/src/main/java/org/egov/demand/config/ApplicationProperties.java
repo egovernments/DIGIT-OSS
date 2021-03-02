@@ -165,4 +165,32 @@ public class ApplicationProperties {
 	@Value("${egov.apportion.endpoint}")
 	private String apportionEndpoint;
 
+	// Amendment
+	@Value("${is.amendment.workflow.enabled}")
+	private Boolean isAmendmentworkflowEnabed;
+	
+    @Value("${workflow.host}")
+    private String wfHost;
+
+    @Value("${workflow.transition.path}")
+    private String wfTransitionPath;
+
+    @Value("${workflow.businessservice.search.path}")
+    private String wfBusinessServiceSearchPath;
+
+    @Value("${workflow.processinstance.search.path}")
+    private String wfProcessInstanceSearchPath;
+    
+    @Value("${workflow.open.action}")
+    private String amendmentWfOpenAction;
+    
+    @Value("${workflow.modulename}")
+    private String amendmentWfModuleName;
+    
+    @Value("${amendment.workflow.name}")
+    private String amendmentWfName;
+    
+    @Value("${amendment.id.format.name}")
+    private String amendmentIdFormatName;
+    
 }

@@ -177,47 +177,7 @@ public abstract class JdbcRepository {
                 .toString();
         return uQuery;
     }
-
-    /**
-     * this api is not used
-     *
-     * @param tableName
-     * @param obj
-     * @return
-     */
-    public static String getBasicSearchQuery(String tableName, Object obj) {
-        String uQuery = "select * from  :tableName where  :searchFields ";
-        StringBuilder fieldNameAndParams = new StringBuilder();
-        // StringBuilder uniqueFieldNameAndParams = new StringBuilder();
-        int i = 0;
-
-        for (String s : allInsertFields.get("FundEntity")) {
-            if (i > 0) {
-                fieldNameAndParams.append(" and ");
-
-            }
-            try {
-                Field declaredField = getField(obj, s);
-                if (getValue(declaredField, obj) != null)
-
-                {
-                    fieldNameAndParams.append(s).append("=").append(":").append(s);
-                    i++;
-                }
-            } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-
-            } catch (SecurityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        uQuery = uQuery.replace(":searchFields", fieldNameAndParams.toString()).replace(":tableName", tableName)
-                .toString();
-        return uQuery;
-    }
+    
 
     public static Object getValue(Field declaredField, Object obj) {
 

@@ -31,9 +31,9 @@ public class HRMSConstants {
 	public static final String HRMS_EMP_REACTIVATE_LOCLZN_CODE = "hrms.employee.reactivation.notification";
 	public static final String HRMS_LOCALIZATION_MODULE_CODE = "egov-hrms";
 	public static final String HRMS_LOCALIZATION_ENG_LOCALE_CODE = "en_IN";
-	public static final String HRMS_TENANTBOUNDARY_HIERARCHY_JSONPATH = "$.TenantBoundary[*].hierarchyType.code";
-	public static final String HRMS_TENANTBOUNDARY_BOUNDARY_TYPE_JSONPATH  ="$.TenantBoundary[?(@.hierarchyType.name==\"%s\")]..label";
-	public static final String HRMS_TENANTBOUNDARY_BOUNDARY_VALUE_JSONPATH ="$.TenantBoundary[?(@.hierarchyType.name==\"%s\")]..code";
+	public static final String HRMS_TENANTBOUNDARY_HIERARCHY_JSONPATH = "$.TenantBoundary[?(@.boundary.code ==\"%s\")].hierarchyType.code";
+	public static final String HRMS_TENANTBOUNDARY_BOUNDARY_TYPE_JSONPATH  ="$.TenantBoundary[?(@.hierarchyType.name==\"%1$s\" && @.boundary.code ==\"%2$s\")]..label";
+	public static final String HRMS_TENANTBOUNDARY_BOUNDARY_VALUE_JSONPATH ="$.TenantBoundary[?(@.hierarchyType.name==\"%1$s\" && @.boundary.code ==\"%2$s\")]..code";
 
 	public static final String HRMS_MDMS_AC_ROLES_FILTER = "[?(@.code != \"CITIZEN\")].code";
 	public static final String HRMS_MDMS_CODE_FLITER = "[?(@.active == true)].code";

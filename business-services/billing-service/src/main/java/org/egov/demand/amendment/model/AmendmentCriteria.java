@@ -37,12 +37,14 @@
  *
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
-package org.egov.demand.model;
+package org.egov.demand.amendment.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
+
+import org.egov.demand.amendment.model.enums.AmendmentStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,35 +53,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class BusinessServiceDetail {
+public class AmendmentCriteria {
 
-    private String id;
+	private String mobileNumber;
+	
+	@NotNull
+	private String tenantId;
+	
+	private String amendmentId;
 
-    @NotNull
-    private String tenantId;
+	@Default
+	private Set<String> consumerCode = new HashSet<>();
 
-    @NotNull
-    private String businessService;
-    
-    private String code;
+	@NotNull
+	private String businessService;
 
-    private List<String> collectionModesNotAllowed = new ArrayList<>();
-
-    private Boolean partPaymentAllowed;
-    
-    @Default
-    private Boolean isBillAmendmentEnabled = false;
-    
-    private Boolean isAdvanceAllowed;
-    
-    private Long demandUpdateTime;
-
-    private Boolean callBackForApportioning;
-
-    private String callBackApportionURL;
-
-    private AuditDetail auditDetails;
+	private AmendmentStatus status;
 }

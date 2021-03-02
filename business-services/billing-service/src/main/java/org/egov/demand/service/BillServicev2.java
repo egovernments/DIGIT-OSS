@@ -363,8 +363,9 @@ public class BillServicev2 {
 				billAmount = billAmount.add(billDetail.getAmount());
 			}
 			
-			
-			BillV2 bill = BillV2.builder()
+			if (billAmount.compareTo(BigDecimal.ZERO) >= 0) {
+
+				BillV2 bill = BillV2.builder()
 					.auditDetails(util.getAuditDetail(requestInfo))
 					.payerAddress(payer.getPermanentAddress())
 					.mobileNumber(payer.getMobileNumber())
@@ -382,9 +383,10 @@ public class BillServicev2 {
 			
 			bills.add(bill);
 		}
-		return bills;
 	}
-	
+	return bills;
+}
+
 	private List<String> getBillNumbers(RequestInfo requestInfo, String tenantId, String module, int count) {
 
 		String billNumberFormat = appProps.getBillNumberFormat();
@@ -579,7 +581,9 @@ public class BillServicev2 {
 	}
 	
 	public BillResponseV2 create(BillRequestV2 billRequest) {
-		billRepository.saveBill(billRequest);
+
+		if (!CollectionUtils.isEmpty(billRequest.getBills()))
+			billRepository.saveBill(billRequest);
 		return getBillResponse(billRequest.getBills());
 	}
 	

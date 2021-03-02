@@ -45,8 +45,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.egov.demand.model.DemandCriteria;
-import org.egov.demand.model.DemandDetailCriteria;
-import org.egov.demand.model.DemandUpdateMisRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -221,50 +219,6 @@ public class DemandQueryBuilder {
 		return demandQuery.toString();
 	}
 	
-	public static String getDemandDetailQuery(DemandDetailCriteria demandDetailCriteria,
-			List<Object> preparedStatementValues) {
-
-		StringBuilder demandDetailQuery = new StringBuilder(BASE_DEMAND_DETAIL_QUERY);
-
-		demandDetailQuery.append("demanddetail.tenantid=?");
-		preparedStatementValues.add(demandDetailCriteria.getTenantId());
-
-		if (demandDetailCriteria.getDemandId() != null) {
-			addAndClause(demandDetailQuery);
-			demandDetailQuery.append("demanddetail.demandid=?");
-			preparedStatementValues.add(demandDetailCriteria.getDemandId());
-		}
-		if (demandDetailCriteria.getTaxHeadCode() != null) {
-			addAndClause(demandDetailQuery);
-			demandDetailQuery.append("demanddetail.taxheadcode=?");
-			preparedStatementValues.add(demandDetailCriteria.getTaxHeadCode());
-		}
-		if (demandDetailCriteria.getPeriodFrom() != null) {
-			addAndClause(demandDetailQuery);
-			demandDetailQuery.append("demand.taxPeriodFrom=?");
-			preparedStatementValues.add(demandDetailCriteria.getPeriodFrom());
-		}
-		if(demandDetailCriteria.getPeriodTo() != null){
-			addAndClause(demandDetailQuery);
-			demandDetailQuery.append("demand.taxPeriodTo=?");
-			preparedStatementValues.add(demandDetailCriteria.getPeriodTo());
-		}
-		if(demandDetailCriteria.getDetailsId() !=null && 
-				!demandDetailCriteria.getDetailsId().isEmpty()){
-			addAndClause(demandDetailQuery);
-			demandDetailQuery.append("demanddetail.id IN (" +getIdQueryForStrings(demandDetailCriteria.getDetailsId()));
-		}
-		addOrderByClause(demandDetailQuery, BASE_DEMAND_DETAIL_QUERY_ORDER_BY_CLAUSE);
-		addPagingClause(demandDetailQuery, preparedStatementValues);
-		log.info("the query String for demand detail: " + demandDetailQuery.toString());
-		return demandDetailQuery.toString();
-	}
-	//query builder for update mis(updating consumer code)
-	public String getDemandUpdateMisQuery(DemandUpdateMisRequest demandRequest){
-
-		return DEMAND_UPDATE_CONSUMERCODE_QUERY+getIdQueryForStrings(demandRequest.getId());
-	}
-
 	private static void addOrderByClause(StringBuilder demandQueryBuilder,String columnName) {
 		demandQueryBuilder.append(" ORDER BY " + columnName);
 	}

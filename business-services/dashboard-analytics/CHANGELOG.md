@@ -2,6 +2,9 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.3 - 2021-02-26
+- Updated egov mdms host name in application.properties
+
 ## 1.1.2 - 2020-11-18
 - Removed default DDR hard coding 
 

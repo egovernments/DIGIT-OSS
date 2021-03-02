@@ -1,18 +1,28 @@
 package org.egov.demand.util;
 
+import static java.util.Objects.isNull;
 import static org.egov.demand.util.Constants.ADVANCE_BUSINESSSERVICE_JSONPATH_CODE;
 import static org.egov.demand.util.Constants.INVALID_TENANT_ID_MDMS_KEY;
 import static org.egov.demand.util.Constants.INVALID_TENANT_ID_MDMS_MSG;
+import static org.egov.demand.util.Constants.MDMS_CODE_FILTER;
+import static org.egov.demand.util.Constants.MDMS_MASTER_NAMES;
+import static org.egov.demand.util.Constants.MODULE_NAME;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.demand.amendment.model.ProcessInstance;
+import org.egov.demand.amendment.model.ProcessInstanceRequest;
+import org.egov.demand.amendment.model.ProcessInstanceResponse;
+import org.egov.demand.amendment.model.State;
 import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.Demand;
@@ -246,6 +256,113 @@ public class Util {
 		if(Constants.EMPLOYEE_TYPE_CODE.equalsIgnoreCase(userType) && tenantId.split("\\.").length == 1) {
 			throw new CustomException("EG_BS_INVALID_TENANTID","Employees cannot search based on state level tenantid");
 		}
+	}
+	
+	/**
+	 * Fetches the required master data from MDMS service
+	 * @param demandRequest The request for which master data has to be fetched
+	 * @return
+	 */
+	public DocumentContext getMDMSData(RequestInfo requestInfo, String tenantId){
+		
+		/*
+		 * Preparing the mdms request with billing service master and calling the mdms search API
+		 */
+		MdmsCriteriaReq mdmsReq = prepareMdMsRequest(tenantId, MODULE_NAME, MDMS_MASTER_NAMES, MDMS_CODE_FILTER,
+				requestInfo);
+		DocumentContext mdmsData = getAttributeValues(mdmsReq);
+
+		return mdmsData;
+	}
+	
+
+	/**
+	 * Method to integrate with workflow
+	 *
+	 * takes the trade-license request as parameter constructs the work-flow request
+	 *
+	 * and sets the resultant status from wf-response back to trade-license object
+	 *
+	 */
+	public State callWorkFlow(ProcessInstance workflow, RequestInfo requestInfo) {
+
+		ProcessInstanceRequest workflowReq = ProcessInstanceRequest.builder()
+				.processInstances(Arrays.asList(workflow))
+				.requestInfo(requestInfo)
+				.build();
+				
+		ProcessInstanceResponse response = null;
+		StringBuilder url = new StringBuilder(appProps.getWfHost().concat(appProps.getWfTransitionPath()));
+		Object objectResponse = serviceRequestRepository.fetchResult(url.toString(), workflowReq);
+		response = mapper.convertValue(objectResponse, ProcessInstanceResponse.class);
+		return response.getProcessInstances().get(0).getState();
+	}
+	
+	/*
+	 * 
+	 * Json merge utils
+	 */
+	
+	/**
+	 * Method to merge additional details during update 
+	 * 
+	 * @param mainNode
+	 * @param updateNode
+	 * @return
+	 */
+	public JsonNode jsonMerge(JsonNode mainNode, JsonNode updateNode) {
+
+		if (isNull(mainNode) || mainNode.isNull())
+			return updateNode;
+		if (isNull(updateNode) || updateNode.isNull())
+			return mainNode;
+
+		Iterator<String> fieldNames = updateNode.fieldNames();
+		while (fieldNames.hasNext()) {
+
+			String fieldName = fieldNames.next();
+			JsonNode jsonNode = mainNode.get(fieldName);
+			// if field exists and is an embedded object
+			if (jsonNode != null && jsonNode.isObject()) {
+				jsonMerge(jsonNode, updateNode.get(fieldName));
+			} else {
+				if (mainNode instanceof ObjectNode) {
+					// Overwrite field
+					JsonNode value = updateNode.get(fieldName);
+					((ObjectNode) mainNode).set(fieldName, value);
+				}
+			}
+
+		}
+		return mainNode;
+	}
+	
+	public String getIdsQueryForList(Set<String> ownerIds, List<Object> preparedStmtList) {
+
+		StringBuilder query = new StringBuilder("(");
+		query.append(createPlaceHolderForList(ownerIds));
+		addToPreparedStatement(preparedStmtList, ownerIds);
+		query.append(")");
+		
+		return query.toString();
+	}
+
+	private String createPlaceHolderForList(Set<String> ids) {
+		
+		StringBuilder builder = new StringBuilder();
+		int length = ids.size();
+		for (int i = 0; i < length; i++) {
+			builder.append(" ?");
+			if (i != length - 1)
+				builder.append(",");
+		}
+		return builder.toString();
+	}
+
+	private void addToPreparedStatement(List<Object> preparedStmtList, Set<String> ids) {
+		ids.forEach(id -> {
+			preparedStmtList.add(id);
+		});
 	}
 	
 }
