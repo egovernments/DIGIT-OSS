@@ -2,6 +2,7 @@ import { getBreak, getCommonHeader, getCommonSubHeader } from "egov-ui-framework
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from "config/common.js";
 import { httpRequest } from "../../../../ui-utils";
 import { getRequiredDocData } from "../utils";
 import "./index.css";
@@ -25,7 +26,7 @@ const getMDMSData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "BillingService",
