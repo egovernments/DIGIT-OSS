@@ -12,8 +12,11 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Tooltip from "@material-ui/core/Tooltip";
 import Label from "egov-ui-kit/utils/translationNode";
-import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageSet, localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+import commonConfig from "config/common.js";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const styles = {
   inputStyle: {
@@ -67,6 +70,7 @@ class ActionMenuComp extends Component {
       path: "",
       menuItems: [],
       selectedMenuIndex: 0,
+      citywiseconfig:null
     };
     this.setWrapperRef = this.setWrapperRef.bind(this);
   }
@@ -164,7 +168,7 @@ class ActionMenuComp extends Component {
       path,
     });
   };
-  menuChange = (pathParam) => {
+  menuChange = async(pathParam,state) => {
     let path = pathParam.path;
     let { role, actionListArr } = this.props;
     let actionList = actionListArr;
@@ -172,6 +176,50 @@ class ActionMenuComp extends Component {
     for (var i = 0; i < (actionList && actionList.length); i++) {
       if (actionList[i].path !== "") {
         if (path && !path.parentMenu && actionList[i].path.startsWith(path + ".")) {
+          if(actionList[i].name === "Data Entry"){
+            let citywiseConfig = localStorage.getItem("citywiseConfig");
+            citywiseConfig = citywiseConfig && JSON.parse(citywiseConfig);
+           let citywiseConfigb;
+            if(!citywiseConfig || citywiseConfig && citywiseConfig.length === 0){
+              const tenantRequestBody = {
+                MdmsCriteria: {
+                  tenantId: commonConfig.tenantId,
+                  moduleDetails: [
+                    {
+                      moduleName: "tenant",
+                      masterDetails: [
+                        {
+                          name: "citywiseconfig",
+                          filter: "[?(@.config=='assessmentEnabledCities')]"
+                        }
+                      ]
+                    }
+                  ]
+                },
+              };
+              let citywiseconfigs = await httpRequest(
+                  "post",
+                  "/egov-mdms-service/v1/_search",
+                  "_search",
+                  [],
+                  tenantRequestBody);
+                localStorage.setItem("citywiseconfig",JSON.stringify(citywiseconfigs.MdmsRes.tenant.citywiseconfig))
+                citywiseConfigb = citywiseconfigs.MdmsRes.tenant.citywiseconfig
+            }
+             citywiseConfig = citywiseConfig || citywiseConfigb;
+            // if(citywiseConfiga ||)
+            if(citywiseConfig && citywiseConfig[0] && citywiseConfig[0].enabledCities ){
+              let dataentryShow = citywiseConfig[0].enabledCities.find( item =>{
+                return item === getTenantId()
+              })
+              if(dataentryShow){
+                continue;
+              }
+            }
+          }
+
+          
+          
           let splitArray = actionList[i].path.split(path + ".")[1].split(".");
           let leftIconArray = actionList[i].leftIcon.split(".");
           let leftIcon =
@@ -296,7 +344,7 @@ class ActionMenuComp extends Component {
                       parentPath: false,
                     };
                     toggleDrawer && toggleDrawer();
-                    menuChange(pathParam);
+                    menuChange(pathParam,this.state);
                   }}
                 />
                 {/* </Tooltip> */}
@@ -550,6 +598,7 @@ class ActionMenuComp extends Component {
 const mapDispatchToProps = (dispatch) => ({
   handleToggle: (showMenu) => dispatch({ type: "MENU_TOGGLE", showMenu }),
   setRoute: (route) => dispatch({ type: "SET_ROUTE", route }),
+  setCityWiseConfig: (cityWiseData) => dispatch(prepareFinalObject("cityWiseConfigActionMenu",cityWiseData))
 });
 export default connect(
   null,

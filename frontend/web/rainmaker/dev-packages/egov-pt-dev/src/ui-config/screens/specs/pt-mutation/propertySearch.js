@@ -10,6 +10,8 @@ import { searchApplicationTable, searchPropertyTable } from "./searchResource/se
 import { showHideAdhocPopup } from "../utils";
 import { httpRequest } from "../../../../ui-utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -133,6 +135,41 @@ const screenConfig = {
     resetFields(state, dispatch);
     dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
+    const tenantRequestBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "tenant",
+            masterDetails: [
+              {
+                name: "citywiseconfig",
+                filter: "[?(@.config=='assessmentEnabledCities')]"
+              }
+            ]
+          }
+        ]
+      },
+    };
+    let citywiseconfig = httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        tenantRequestBody
+    ).then(res => {
+      debugger
+        citywiseconfig:res.MdmsRes.tenant.citywiseconfig
+        let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
+        enableButton && dispatch(
+          handleField(
+              "propertySearch",
+              "components.div.children.headerDiv.children.newApplicationButton",
+              "visible",
+              enabledCities ? enabledCities.includes(tenant) : false
+          )
+        );
+      });
     return action;
   },
 
