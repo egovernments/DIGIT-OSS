@@ -59,6 +59,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -217,7 +218,7 @@ public final class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     public static Date getDate(String date, String pattern) {
         try {
             return isNotBlank(date) && isNotBlank(pattern) ? getDateFormatter(pattern).parse(date) : null;
-        } catch (Exception e) {
+        } catch (NullPointerException | ParseException e) {
             throw new ApplicationRuntimeException("Date or Pattern value is not valid", e);
         }
     }

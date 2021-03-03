@@ -191,7 +191,7 @@ public abstract class AbstractReportService<T> implements ReportService {
         T report = null;
         try {
             report = getTemplate(templateName);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             LOGGER.error(templateName + " is not a valid template name.", e);
         }
 

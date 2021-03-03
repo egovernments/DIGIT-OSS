@@ -528,7 +528,7 @@ public class PlanReportService {
             sub.setDatasource(new DJDataSource(dataSourceName, DJConstants.DATA_SOURCE_ORIGIN_PARAMETER, 0));
             sub.setLayoutManager(new ClassicLayoutManager());
             return sub;
-        } catch (Exception e) {
+        } catch (ColumnBuilderException e) {
             LOG.error(e.getMessage(), e);
         }
         return null;
@@ -550,7 +550,7 @@ public class PlanReportService {
             sub.setDatasource(new DJDataSource(dataSourceName, DJConstants.DATA_SOURCE_ORIGIN_PARAMETER, 0));
             sub.setLayoutManager(new ClassicLayoutManager());
             return sub;
-        } catch (Exception e) {
+        } catch (ColumnBuilderException e) {
             LOG.error(e.getMessage(), e);
         }
         return null;

@@ -196,7 +196,7 @@ public class JasperReportService extends AbstractReportService<JasperReport> {
             Exporter exporter = getExporter(reportInput, jasperPrint, reportOutputStream);
             exporter.exportReport();
             return reportOutputStream.toByteArray();
-        } catch (Exception e) {
+        } catch (JRException | IOException e) {
             LOGGER.error(EXCEPTION_IN_REPORT_CREATION, e);
             throw new ApplicationRuntimeException(EXCEPTION_IN_REPORT_CREATION, e);
         }

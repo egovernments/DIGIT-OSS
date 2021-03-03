@@ -33,7 +33,6 @@ import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.common.entity.edcr.ScrutinyDetail.ColumnHeadingDetail;
-import org.egov.edcr.constants.DxfFileConstants;
 import org.egov.edcr.entity.ApplicationType;
 import org.egov.edcr.entity.EdcrApplication;
 import org.egov.edcr.entity.EdcrApplicationDetail;
@@ -497,7 +496,7 @@ public class OcComparisonReportService {
             sub.setDatasource(new DJDataSource(dataSourceName, DJConstants.DATA_SOURCE_ORIGIN_PARAMETER, 0));
             sub.setLayoutManager(new ClassicLayoutManager());
             return sub;
-        } catch (Exception e) {
+        } catch (ColumnBuilderException e) {
             LOG.error(e.getMessage(), e);
         }
         return null;
@@ -519,7 +518,7 @@ public class OcComparisonReportService {
             sub.setDatasource(new DJDataSource(dataSourceName, DJConstants.DATA_SOURCE_ORIGIN_PARAMETER, 0));
             sub.setLayoutManager(new ClassicLayoutManager());
             return sub;
-        } catch (Exception e) {
+        } catch (ColumnBuilderException e) {
             LOG.error(e.getMessage(), e);
         }
         return null;
@@ -581,9 +580,7 @@ public class OcComparisonReportService {
             sub.setDatasource(new DJDataSource(dataSourceName, DJConstants.DATA_SOURCE_ORIGIN_PARAMETER, 0));
             sub.setLayoutManager(new ClassicLayoutManager());
             return sub;
-        } catch (ColumnBuilderException |
-
-                ClassNotFoundException e) {
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
             LOG.error(e.getMessage(), e);
         }
         return null;
@@ -701,19 +698,20 @@ public class OcComparisonReportService {
 
     private BigDecimal getDeviation(BigDecimal ocValue, BigDecimal permitValue) {
         BigDecimal numerator = ocValue.subtract(permitValue).multiply(BigDecimal.valueOf(100));
-        BigDecimal finalValue = permitValue.compareTo(BigDecimal.ZERO) > 0 ? numerator.divide(permitValue, DECIMALDIGITS_MEASUREMENTS,
-                ROUNDMODE_MEASUREMENTS) : numerator;
+        BigDecimal finalValue = permitValue.compareTo(BigDecimal.ZERO) > 0
+                ? numerator.divide(permitValue, DECIMALDIGITS_MEASUREMENTS,
+                        ROUNDMODE_MEASUREMENTS)
+                : numerator;
         return finalValue;
     }
 
     private List<ScrutinyDetail> buildReportObject(List<OcComparisonBlockDetail> ocComparison) {
-        
 
         List<ScrutinyDetail> scrutinyDetails = new ArrayList<>();
         for (OcComparisonBlockDetail blockDetail : ocComparison) {
             Map<String, String> floorNos = new HashMap<>();
             Map<String, String> bldngHgts = new HashMap<>();
-            
+
             ScrutinyDetail bltUpAreaSd = new ScrutinyDetail();
             bltUpAreaSd.setKey("Block_" + blockDetail.getNumber() + "_" + "BuiltUp Area");
             bltUpAreaSd.addColumnHeading(1, "Floor");
@@ -771,7 +769,7 @@ public class OcComparisonReportService {
                     Map<String, String> bltUpAreaDetails = new HashMap<>();
                     Map<String, String> flrAreaDetails = new HashMap<>();
                     Map<String, String> crptAreaDetails = new HashMap<>();
-                    
+
                     bltUpAreaDetails.put("Floor", floor.getNumber().toString());
                     bltUpAreaDetails.put("Oc built up area", floor.getOcBltUpArea().toString() + "m²");
                     bltUpAreaDetails.put("Permit built up area", floor.getPermitBltUpArea().toString() + "m²");
@@ -834,7 +832,7 @@ public class OcComparisonReportService {
             qrCodeValue = qrCodeValue.append("Applicant Name : ")
                     .append(dcrApplication.getApplicantName()).append("\n");
         }
-        //Map<String, String> serviceTypeList = DxfFileConstants.getServiceTypeList();
+        // Map<String, String> serviceTypeList = DxfFileConstants.getServiceTypeList();
         Map<String, String> serviceTypeList = new ConcurrentHashMap<>();
         serviceTypeList.put("NEW_CONSTRUCTION", "New Construction");
         if (StringUtils.isNotBlank(dcrApplication.getServiceType())) {

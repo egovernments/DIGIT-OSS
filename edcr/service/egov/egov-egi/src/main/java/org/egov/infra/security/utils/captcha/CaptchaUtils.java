@@ -62,6 +62,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,7 +100,7 @@ public class CaptchaUtils {
                 String response = request.getParameter("j_captcha_response");
                 return captchaService.validateResponseForID(captchaId, response);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOG.error("Recaptcha verification failed", e);
             return false;
         }

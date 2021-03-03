@@ -53,6 +53,7 @@ import org.owasp.validator.html.AntiSamy;
 import org.owasp.validator.html.CleanResults;
 import org.owasp.validator.html.Policy;
 import org.owasp.validator.html.PolicyException;
+import org.owasp.validator.html.ScanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,7 +92,7 @@ public final class VirtualSanitizer {
 				throw new ApplicationRuntimeException("Found security threat in user input : " + cr.getErrorMessages());
 			}
 			return input;
-		} catch (final Exception e) {
+		} catch (final ScanException | PolicyException | ApplicationRuntimeException e) {
 			LOG.error(e.getMessage());
 			throw new ApplicationRuntimeException("Error occurred while validating inputs", e);
 		}

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -22,10 +23,8 @@ public class RestCallService {
             LOG.info("Request: " + mapper.writeValueAsString(request));
             RestTemplate restTemplate = new RestTemplate();
             response = restTemplate.postForObject(uri.toString(), request, Map.class);
-        } catch (HttpClientErrorException e) {
-            LOG.error(e.getResponseBodyAsString());
-        } catch (Exception e) {
-            LOG.error(e.getStackTrace());
+        } catch (HttpClientErrorException | JsonProcessingException e) {
+            LOG.error("Error occurred while calling API", e);
         }
 
         return response;

@@ -97,7 +97,7 @@ public class ReportViewer implements HttpRequestHandler {
             }
 
             renderReport(response, reportData, reportFormat);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             LOGGER.error("Invalid report id [{}]", reportId, e);
             renderHtml(response, "Report can not be rendered");
         } finally {
@@ -115,7 +115,7 @@ public class ReportViewer implements HttpRequestHandler {
             resp.setContentType(ReportViewerUtil.getContentType(reportFormat));
             resp.setContentLength(reportData.length);
             outputStream.write(reportData);
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOGGER.error("Exception in rendering report with format [{}]!", e);
             throw new ApplicationRuntimeException("Error occurred in report viewer", e);
         }

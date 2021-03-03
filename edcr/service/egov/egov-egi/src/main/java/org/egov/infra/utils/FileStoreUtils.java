@@ -48,6 +48,26 @@
 
 package org.egov.infra.utils;
 
+import static java.lang.String.format;
+import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION;
+import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION_ATTACH;
+import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION_INLINE;
+import static org.egov.infra.utils.ImageUtils.compressImage;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -65,26 +85,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static java.lang.String.format;
-import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION;
-import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION_ATTACH;
-import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION_INLINE;
-import static org.egov.infra.utils.ImageUtils.compressImage;
-import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
 @Service
 public class FileStoreUtils {
@@ -122,7 +122,7 @@ public class FileStoreUtils {
             }
             return ResponseEntity.notFound().build();
         } catch (IOException e) {
-            LOGGER.error("Error occurred while creating response entity from file mapper", e);
+            LOGGER.error("Error occurred while creating response entity from file mapper", e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
@@ -158,7 +158,7 @@ public class FileStoreUtils {
                             else
                                 return this.fileStoreService.store(file.getInputStream(), file.getOriginalFilename(),
                                         file.getContentType(), moduleName);
-                        } catch (Exception e) {
+                        } catch (IOException e) {
                             throw new ApplicationRuntimeException("err.input.stream", e);
                         }
                     }).collect(Collectors.toSet());
@@ -189,19 +189,4 @@ public class FileStoreUtils {
         }
     }
 
-    public ResponseEntity<InputStreamResource> fileAsPDFResponse(String fileStoreId, String fileName, String moduleName) {
-        try {
-            File signedFile = fileStoreService.fetch(fileStoreId, moduleName);
-            byte[] signFileBytes = FileUtils.readFileToByteArray(signedFile);
-            return ResponseEntity.
-                    ok().
-                    contentType(MediaType.parseMediaType(APPLICATION_PDF_VALUE)).
-                    cacheControl(CacheControl.noCache()).
-                    contentLength(signFileBytes.length).
-                    header("content-disposition", "inline;filename=" + fileName + ".pdf").
-                    body(new InputStreamResource(new ByteArrayInputStream(signFileBytes)));
-        } catch (IOException e) {
-            throw new ApplicationRuntimeException("Error while reading file", e);
-        }
-    }
 }
