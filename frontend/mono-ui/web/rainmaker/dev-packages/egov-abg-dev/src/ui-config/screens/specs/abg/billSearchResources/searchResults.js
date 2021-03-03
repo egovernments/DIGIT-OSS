@@ -165,7 +165,8 @@ const getActionButton = (value, tableMeta) => {
         if (tableMeta.rowData[5] === "PAID") {
           const receiptQueryString = [
             { key: "billIds", value: tableMeta.rowData[11] },
-            { key: "tenantId", value: tableMeta.rowData[10] }
+            { key: "tenantId", value: tableMeta.rowData[10] },
+            { key: "businessService", value:tableMeta.rowData[7] } 
           ];
           download(receiptQueryString , "download" ,tableMeta.rowData[8]);
         } else {
