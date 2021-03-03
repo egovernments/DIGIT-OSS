@@ -73,6 +73,7 @@ const ucSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("ucSearchScreen", {}));
     getData(action, state, dispatch);
     return action;
   },
