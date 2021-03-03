@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "fc525ef6-6ca8-4296-a1c2-6a8cd88349b7",
+		"name": "XState-Chatbot-Console",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Receive Text Message",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"message\": {\n        \"type\": \"text\",\n        \"input\": \"1\"\n    },\n    \"user\": {\n        \"mobileNumber\": \"9123123123\"\n    },\n    \"extraInfo\": {\n        \"whatsAppBusinessNumber\": \"917834811114\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/xstate-chatbot/message",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"xstate-chatbot",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Receive Geocode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"message\": {\n        \"type\": \"location\",\n        \"input\": \"(32.133,123.12)\"\n    },\n    \"user\": {\n        \"mobileNumber\": \"9123123123\"\n    },\n    \"extraInfo\": {\n        \"whatsAppBusinessNumber\": \"917834811114\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/xstate-chatbot/message",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"xstate-chatbot",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Receive Image",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"message\": {\n        \"type\": \"image\",\n        \"input\": \"fileStoreId\"\n    },\n    \"user\": {\n        \"mobileNumber\": \"9123123123\"\n    },\n    \"extraInfo\": {\n        \"whatsAppBusinessNumber\": \"917834811114\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/xstate-chatbot/message",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"xstate-chatbot",
+						"message"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
