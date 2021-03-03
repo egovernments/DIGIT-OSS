@@ -87,17 +87,12 @@ public class FileDownloadController {
         IOUtils.write(cityService.getCityLogoAsBytes(), response.getOutputStream());
     }
 
-    @GetMapping("/gis")
-    public void getKML(HttpServletResponse response) throws IOException {
-        try (final InputStream in = Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("gis/" + ApplicationThreadLocals.getTenantID() + "/wards.kml");
-             final OutputStream out = response.getOutputStream()) {
-            if (in != null) {
-                response.setHeader("Content-Disposition", "inline;filename=wards.kml");
-                response.setContentType("application/vnd.google-earth.kml+xml");
-                IOUtils.write(IOUtils.toByteArray(in), out);
-            }
-        }
-    }
+    /*
+     * @GetMapping("/gis") public void getKML(HttpServletResponse response) throws IOException { try (final InputStream in =
+     * Thread.currentThread().getContextClassLoader() .getResourceAsStream("gis/" + ApplicationThreadLocals.getTenantID() +
+     * "/wards.kml"); final OutputStream out = response.getOutputStream()) { if (in != null) {
+     * response.setHeader("Content-Disposition", "inline;filename=wards.kml");
+     * response.setContentType("application/vnd.google-earth.kml+xml"); IOUtils.write(IOUtils.toByteArray(in), out); } } }
+     */
 
 }
