@@ -56,7 +56,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.egov.common.entity.dcr.helper.ErrorDetail;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.commons.mdms.BpaMdmsUtil;
@@ -103,13 +102,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @RequestMapping(value = "/rest/dcr")
 public class RestEdcrApplicationController {
 
+    private static final String INVALID_JSON_FORMAT = "Invalid JSON Data";
     private static final String INCORRECT_REQUEST = "INCORRECT_REQUEST";
-	private static final Logger LOGGER = Logger.getLogger(RestEdcrApplicationController.class);
     private static final String DIGIT_DCR = "Digit DCR";
 
     @Autowired
     private EdcrRestService edcrRestService;
-    
+
     @Autowired
     private PlanService planService;
 
@@ -121,7 +120,7 @@ public class RestEdcrApplicationController {
 
     @Autowired
     private MDMSValidator mDMSValidator;
-    
+
     @Autowired
     private BpaMdmsUtil bpaMdmsUtil;
 
@@ -134,13 +133,19 @@ public class RestEdcrApplicationController {
             @RequestParam String edcrRequest) {
         EdcrDetail edcrDetail = new EdcrDetail();
         EdcrRequest edcr = new EdcrRequest();
+        boolean isValid = isValidJson(edcrRequest);
+        if (!isValid) {
+            ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, INVALID_JSON_FORMAT,
+                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail errorResponses = (edcrRestService.validateEdcrRequest(edcr, planFile));
             if (errorResponses != null)
                 return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
             else {
-                edcrDetail = edcrRestService.createEdcr(edcr, planFile, new HashMap());
+                edcrDetail = edcrRestService.createEdcr(edcr, planFile, new HashMap<>());
             }
 
         } catch (IOException e) {
@@ -150,23 +155,29 @@ public class RestEdcrApplicationController {
         }
         return getSuccessResponse(Arrays.asList(edcrDetail), edcr.getRequestInfo());
     }
-    
+
     @PostMapping(value = "/scrutinizeocplan", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> scrutinizeOccupancyPlan(@RequestBody MultipartFile planFile,
             @RequestParam String edcrRequest) {
         EdcrDetail edcrDetail = new EdcrDetail();
         EdcrRequest edcr = new EdcrRequest();
+        boolean isValid = isValidJson(edcrRequest);
+        if (!isValid) {
+            ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, INVALID_JSON_FORMAT,
+                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail errorResponses = (edcrRestService.validateEdcrOcRequest(edcr, planFile));
-            
+
             if (errorResponses != null)
                 return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
             else {
-            	edcr.setAppliactionType(ApplicationType.OCCUPANCY_CERTIFICATE.toString());
-            	
-                edcrDetail = edcrRestService.createEdcr(edcr, planFile, new HashMap());
+                edcr.setAppliactionType(ApplicationType.OCCUPANCY_CERTIFICATE.toString());
+
+                edcrDetail = edcrRestService.createEdcr(edcr, planFile, new HashMap<>());
             }
 
         } catch (IOException e) {
@@ -176,13 +187,19 @@ public class RestEdcrApplicationController {
         }
         return getSuccessResponse(Arrays.asList(edcrDetail), edcr.getRequestInfo());
     }
-    
+
     @PostMapping(value = "/scrutinize", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> scrutinize(@RequestBody MultipartFile planFile,
             @RequestParam String edcrRequest) {
         EdcrDetail edcrDetail = new EdcrDetail();
         EdcrRequest edcr = new EdcrRequest();
+        boolean isValid = isValidJson(edcrRequest);
+        if (!isValid) {
+            ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, INVALID_JSON_FORMAT,
+                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
         try {
             List<ErrorDetail> errorResponses = new ArrayList<ErrorDetail>();
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
@@ -196,7 +213,7 @@ public class RestEdcrApplicationController {
             Boolean mdmsEnabled = mdmsConfiguration.getMdmsEnabled();
             if (mdmsEnabled != null && mdmsEnabled) {
                 Object mdmsData = bpaMdmsUtil.mDMSCall(new RequestInfo(), edcr.getTenantId());
-                HashMap<String, String> data = new HashMap();
+                HashMap<String, String> data = new HashMap<>();
                 data.put("applicationType", applicationType);
                 data.put("serviceType", serviceType);
                 masterData = mDMSValidator.getAttributeValues(mdmsData);
@@ -209,9 +226,9 @@ public class RestEdcrApplicationController {
                     errorResponses = edcrRestService.validateScrutinizeOcRequest(edcr, planFile);
                 } else if ("BUILDING_PLAN_SCRUTINY".equalsIgnoreCase(applicationType)) {
                     ErrorDetail validateEdcrRequest = edcrRestService.validateEdcrRequest(edcr, planFile);
-                    if(validateEdcrRequest!=null)
-                    errorResponses = Arrays.asList(validateEdcrRequest);
-                    
+                    if (validateEdcrRequest != null)
+                        errorResponses = Arrays.asList(validateEdcrRequest);
+
                     edcr.setAppliactionType(ApplicationType.PERMIT.toString());
                 }
 
@@ -221,9 +238,9 @@ public class RestEdcrApplicationController {
                     errorResponses = (edcrRestService.validateScrutinizeOcRequest(edcr, planFile));
                 } else if ("BUILDING_PLAN_SCRUTINY".equalsIgnoreCase(applicationType)) {
                     ErrorDetail validateEdcrRequest = edcrRestService.validateEdcrRequest(edcr, planFile);
-                    if(validateEdcrRequest!=null)
-                    errorResponses = Arrays.asList(validateEdcrRequest);
-                    
+                    if (validateEdcrRequest != null)
+                        errorResponses = Arrays.asList(validateEdcrRequest);
+
                     edcr.setAppliactionType(ApplicationType.PERMIT.toString());
                 }
             }
@@ -246,29 +263,35 @@ public class RestEdcrApplicationController {
     @ResponseBody
     public ResponseEntity<?> scrutinyDetails(@ModelAttribute EdcrRequest edcrRequest,
             @RequestBody @Valid RequestInfoWrapper requestInfoWrapper) {
-        List<EdcrDetail> edcrDetail = edcrRestService.fetchEdcr(edcrRequest,requestInfoWrapper);
+        List<EdcrDetail> edcrDetail = edcrRestService.fetchEdcr(edcrRequest, requestInfoWrapper);
 
         if (!edcrDetail.isEmpty() && edcrDetail.get(0).getErrors() != null)
             return new ResponseEntity<>(edcrDetail.get(0).getErrors(), HttpStatus.NOT_FOUND);
         else {
             return getSuccessResponse(edcrDetail, requestInfoWrapper.getRequestInfo());
         }
-    }    
-	
-    @PostMapping(value = "/extractplan", produces =  MediaType.APPLICATION_JSON_VALUE)	
-	@ResponseBody 
-	public ResponseEntity<?> planDetails(@RequestBody MultipartFile planFile,
-            @RequestParam String edcrRequest) {          
-    	Plan plan = new Plan();
+    }
+
+    @PostMapping(value = "/extractplan", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> planDetails(@RequestBody MultipartFile planFile,
+            @RequestParam String edcrRequest) {
+        Plan plan = new Plan();
         EdcrRequest edcr = new EdcrRequest();
+        boolean isValid = isValidJson(edcrRequest);
+        if (!isValid) {
+            ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, INVALID_JSON_FORMAT,
+                    HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail errorResponses = edcrRestService.validatePlanFile(planFile);
             if (errorResponses != null)
                 return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
             else {
-                plan = planService.extractPlan(edcr, planFile);   
-          }
+                plan = planService.extractPlan(edcr, planFile);
+            }
         } catch (IOException e) {
             ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, e.getLocalizedMessage(),
                     HttpStatus.BAD_REQUEST);
@@ -278,12 +301,12 @@ public class RestEdcrApplicationController {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         String jsonRes = "";
         try {
-        	jsonRes = mapper.writeValueAsString(plan);
-		} catch (JsonProcessingException e) {
+            jsonRes = mapper.writeValueAsString(plan);
+        } catch (JsonProcessingException e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
-		}
-        return getPlanSuccessResponse(jsonRes, edcr.getRequestInfo());	 	  
-	}	 
+        }
+        return getPlanSuccessResponse(jsonRes, edcr.getRequestInfo());
+    }
 
     @GetMapping("/downloadfile/{fileStoreId}")
     public ResponseEntity<InputStreamResource> download(@PathVariable final String fileStoreId) {
@@ -298,13 +321,13 @@ public class RestEdcrApplicationController {
         return new ResponseEntity<>(edcrRes, HttpStatus.OK);
 
     }
-    
+
     private ResponseEntity<?> getPlanSuccessResponse(String jsonRes, RequestInfo requestInfo) {
         PlanResponse planRes = new PlanResponse();
         Plan plan;
-		try {
-			plan = new ObjectMapper().readValue(jsonRes, Plan.class);
-		} catch (IOException e) {
+        try {
+            plan = new ObjectMapper().readValue(jsonRes, Plan.class);
+        } catch (IOException e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
         planRes.setPlan(plan);
@@ -350,6 +373,16 @@ public class RestEdcrApplicationController {
         comparisonResponse.setResponseInfo(responseInfo);
         return new ResponseEntity<>(comparisonResponse, HttpStatus.OK);
 
+    }
+
+    private static boolean isValidJson(String json) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.readTree(json);
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
 
 }
