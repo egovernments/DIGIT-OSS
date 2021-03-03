@@ -21,7 +21,7 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "ucSearchScreen",
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
