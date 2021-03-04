@@ -205,8 +205,8 @@ export const createForm = getCommonCard({
         pattern: getPattern("Date"),
         jsonPath: "events[0].eventDetails.fromDate",
         props: {
-          iconObj: { position: "end", iconName: "calendar_today", style: { width: 24, height: 24 } },
-          style: { marginBottom: 10 },
+          // iconObj: { position: "end", iconName: "calendar_today", style: { width: 24, height: 24 } },
+          // style: { marginBottom: 10 },
         },
       }),
     },
@@ -232,8 +232,8 @@ export const createForm = getCommonCard({
         pattern: getPattern("Date"),
         jsonPath: "events[0].eventDetails.toDate",
         props: {
-          iconObj: { position: "end", iconName: "calendar_today" },
-          style: { marginBottom: 10 },
+          // iconObj: { position: "end", iconName: "calendar_today" },
+          // style: { marginBottom: 10 },
         },
       }),
     },
