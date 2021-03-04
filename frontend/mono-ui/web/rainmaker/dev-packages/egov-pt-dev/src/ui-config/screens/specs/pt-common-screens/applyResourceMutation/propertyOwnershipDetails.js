@@ -311,8 +311,8 @@ const commonApplicantInformation = () => {
         jsonPath: "Property.owners[0].fatherOrHusbandName",
         gridDefination: {
           xs: 12,
-          sm: 4,
-          md: 4
+          sm: 12,
+          md: 6
         },
         props: {
           className: "applicant-details-error"
@@ -337,30 +337,8 @@ const commonApplicantInformation = () => {
         //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
         gridDefination: {
           xs: 12,
-          sm: 2,
-          md: 2
-        }
-      }),
-      applicantAddress: getTextField({
-        label: {
-          labelName: "Correspondence Address",
-          labelKey: "PT_COMMON_CORRESPONDENCE_ADDRESS_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Correspondence Address",
-          labelKey: "PT_COMMON_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
-        },
-        pattern: getPattern("Address"),
-        required: true,
-        errorMessage: "Invalid Address",
-        jsonPath: "Property.owners[0].correspondenceAddress",
-        gridDefination: {
-          xs: 12,
           sm: 12,
           md: 6
-        },
-        props: {
-          className: "applicant-details-error"
         }
       }),
       specialApplicantCategory: getSelectField({
@@ -383,6 +361,28 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        }
+      }),
+      applicantAddress: getTextField({
+        label: {
+          labelName: "Correspondence Address",
+          labelKey: "PT_COMMON_CORRESPONDENCE_ADDRESS_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Correspondence Address",
+          labelKey: "PT_COMMON_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        required: true,
+        errorMessage: "Invalid Address",
+        jsonPath: "Property.owners[0].correspondenceAddress",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props: {
+          className: "applicant-details-error"
         }
       }),
       sameAsPropertyAddress: {
