@@ -505,6 +505,7 @@ export const beforeInitForm = {
     if (usageCategoryMinor && usageCategoryMajor !== "MIXED") {
       unitFormUpdate("common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
     } else {
+      let  usageTypeVal = get(form, "fields.usageType.value")
       if (usageCategoryMajor === "MIXED") {
         var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
         var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
@@ -515,7 +516,16 @@ export const beforeInitForm = {
         set(action, "form.fields.usageType.dropDownData", usageTypeData);
         unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`, false);
       } else {
+        if(usageCategoryMajor === "NONRESIDENTIAL" && propertyType === "BUILTUP.INDEPENDENTPROPERTY" && 
+        usageTypeVal === "Commercial"){
+        set(action, "form.fields.subUsageType.hideField", false);
+        unitFormUpdate(`common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`, false);
+        let subUsageTypeVal = get(state,`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`);
+        set(action, "form.fields.subUsageType.value", getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels));
+        dispatch(setFieldProperty(formKey, "subUsageType", "value", getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels)));
+        }else{
         set(action, "form.fields.subUsageType.hideField", true);
+        }
       }
     }
     set(action, "form.fields.occupancy.dropDownData", prepareDropDownData(occupancy));
