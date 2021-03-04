@@ -516,7 +516,7 @@ export const beforeInitForm = {
         set(action, "form.fields.usageType.dropDownData", usageTypeData);
         unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`, false);
       } else {
-        if(usageCategoryMajor === "NONRESIDENTIAL" && propertyType === "BUILTUP.INDEPENDENTPROPERTY" && 
+        if(usageCategoryMajor === "NONRESIDENTIAL" && (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || propertyType === "BUILTUP.SHAREDPROPERTY") && 
         usageTypeVal === "Commercial"){
         set(action, "form.fields.subUsageType.hideField", false);
         unitFormUpdate(`common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`, false);
