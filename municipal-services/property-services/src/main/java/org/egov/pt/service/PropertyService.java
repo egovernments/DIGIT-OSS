@@ -132,8 +132,7 @@ public class PropertyService {
 		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {	
 			userService.createUser(request);	
 		} else {	
-			userService.createUser(request);
-			request.getProperty().setOwners(util.getCopyOfOwners(request.getProperty().getOwners()));	
+			request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));	
 		}
 		enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
