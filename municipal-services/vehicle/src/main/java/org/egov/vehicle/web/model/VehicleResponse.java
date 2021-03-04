@@ -25,4 +25,7 @@ public class VehicleResponse {
     @JsonProperty("vehicle")
     @Valid
     private List<Vehicle> vehicle = null;
+    
+    @JsonProperty("totalCount")
+	private Integer totalCount = null;
 }

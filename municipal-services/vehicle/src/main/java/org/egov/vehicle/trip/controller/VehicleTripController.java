@@ -65,12 +65,10 @@ public class VehicleTripController {
 	public ResponseEntity<VehicleTripResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute VehicleTripSearchCriteria criteria) {
 		
-		List<VehicleTrip> vehicleLogList = vehicleTripService.search(criteria, requestInfoWrapper.getRequestInfo());
+		VehicleTripResponse response = vehicleTripService.search(criteria, requestInfoWrapper.getRequestInfo());
 		
-		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLogList).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-				.build();
-		
+		response.setResponseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

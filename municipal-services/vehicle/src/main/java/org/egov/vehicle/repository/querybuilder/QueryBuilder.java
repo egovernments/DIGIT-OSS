@@ -24,7 +24,7 @@ public class QueryBuilder {
 	
 	
 	private final String paginationWrapper = "{} {orderby} {pagination}";
-	private static final String Query = " SELECT * FROM eg_vehicle ";
+	private static final String Query = " SELECT count(*) OVER() AS full_count, * FROM eg_vehicle ";
 	private static final String VEH_EXISTS_QUERY=" SELECT COUNT(*) FROM eg_vehicle WHERE tenantid=? AND registrationNumber=?";
 	
 	/**

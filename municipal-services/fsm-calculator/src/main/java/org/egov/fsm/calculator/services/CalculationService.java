@@ -226,7 +226,7 @@ public class CalculationService {
 		}
 		
 		if(amount == null) {
-			throw new CustomException(CalculatorConstants.INVALID_PRICE, "Price not found in Billing Slab for the given vehicleType and slumName");
+			throw new CustomException(CalculatorConstants.INVALID_PRICE, "Price not found in Billing Slab for the given propertyType and slumName");
 		}
 		
 		

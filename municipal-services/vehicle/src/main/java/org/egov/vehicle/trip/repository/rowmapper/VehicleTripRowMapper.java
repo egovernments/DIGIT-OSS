@@ -26,12 +26,23 @@ public class VehicleTripRowMapper implements ResultSetExtractor<List<VehicleTrip
 
 	@Autowired
 	private ObjectMapper mapper;
+	
+	public int fullCount=0;
+
+	public int getFullCount() {
+		return fullCount;
+	}
+
+	public void setFullCount(int fullCount) {
+		this.fullCount = fullCount;
+	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<VehicleTrip> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
 		Map<String, VehicleTrip> vehicleLogMap = new LinkedHashMap<String, VehicleTrip>();
+		this.setFullCount(0);
 
 		while (rs.next()) {
 			VehicleTrip vehicleLog = new VehicleTrip();
@@ -50,6 +61,7 @@ public class VehicleTripRowMapper implements ResultSetExtractor<List<VehicleTrip
 			Long tripendtime = rs.getLong("tripendtime");
 			Double volumeCarried = rs.getDouble("volumecarried");
 			String businesSservice = rs.getString("businessservice");
+			this.setFullCount(rs.getInt("full_count"));
 			if (vehicleLog == null) {
 				Long lastModifiedTime = rs.getLong("lastmodifiedtime");
 

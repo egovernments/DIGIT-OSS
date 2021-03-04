@@ -30,11 +30,12 @@ public class VehicleTripResponse {
 
 	@JsonProperty("responseInfo")
 	private ResponseInfo responseInfo = null;
-	
-	 @JsonProperty("vehicleTrip")
-	 @Valid
-	 private List<VehicleTrip> vehicleTrip = null;
-	 
-	 
+
+	@JsonProperty("vehicleTrip")
+	@Valid
+	private List<VehicleTrip> vehicleTrip = null;
+
+	@JsonProperty("totalCount")
+	private Integer totalCount = null;
 
 }

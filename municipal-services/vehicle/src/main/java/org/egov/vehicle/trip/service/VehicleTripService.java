@@ -12,6 +12,7 @@ import org.egov.vehicle.trip.util.VehicleTripConstants;
 import org.egov.vehicle.trip.validator.VehicleTripValidator;
 import org.egov.vehicle.trip.web.model.VehicleTrip;
 import org.egov.vehicle.trip.web.model.VehicleTripRequest;
+import org.egov.vehicle.trip.web.model.VehicleTripResponse;
 import org.egov.vehicle.trip.web.model.VehicleTripSearchCriteria;
 import org.egov.vehicle.trip.web.model.workflow.BusinessService;
 import org.egov.vehicle.trip.workflow.ActionValidator;
@@ -80,15 +81,14 @@ public class VehicleTripService {
 		return request.getVehicleTrip();
 	}
 	
-	public List<VehicleTrip> search(VehicleTripSearchCriteria criteria, RequestInfo requestInfo) {
+	public VehicleTripResponse search(VehicleTripSearchCriteria criteria, RequestInfo requestInfo) {
 		validator.validateSearch(requestInfo, criteria);
-		List<VehicleTrip> vehicleLogList = new LinkedList<>();
 		
 		if(criteria.getRefernceNos() != null && !CollectionUtils.isEmpty(criteria.getRefernceNos())) {
 			
 			List<String> tripIds = vehicleLogRepository.getTripFromRefrences(criteria.getRefernceNos());
 			if(CollectionUtils.isEmpty(tripIds)) {
-				return new ArrayList<VehicleTrip>();
+				return VehicleTripResponse.builder().build();
 			}else {
 				if(CollectionUtils.isEmpty(criteria.getIds())) {
 					criteria.setIds(tripIds);
@@ -98,11 +98,11 @@ public class VehicleTripService {
 			}
 		}
 		
-		vehicleLogList = vehicleLogRepository.getVehicleLogData(criteria);
-		vehicleLogList.forEach(trip->{
+		VehicleTripResponse response = vehicleLogRepository.getVehicleLogData(criteria);
+		response.getVehicleTrip().forEach(trip->{
 			trip.setTripDetails(vehicleLogRepository.getTrpiDetails(trip.getId()));
 		});
-		vehicleLogEnrichmentService.enrichSearch(vehicleLogList, requestInfo);
-		return vehicleLogList;
+		vehicleLogEnrichmentService.enrichSearch(response.getVehicleTrip(), requestInfo);
+		return response;
 	}
 }

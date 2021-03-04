@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 public class VehicleTripQueryBuilder {
 
 	private static final String QUERY_VEHICLE_LOG_EXIST = "SELECT count(*) FROM eg_vehicle_trip where id =? AND status='ACTIVE'";
-	private static final String Query_SEARCH_VEHICLE_LOG = "select * from eg_vehicle_trip WHERE tenantid=?";
+	private static final String Query_SEARCH_VEHICLE_LOG = "select count(*) OVER() AS full_count, * from eg_vehicle_trip WHERE tenantid=?";
 	private final String paginationWrapper = "{} {orderby}  OFFSET ? LIMIT ?";
 	private static final String QUERY_TRIP_FROM_REF= "SELECT trip_id from eg_vehicle_trip_detail WHERE referenceno in ( %s )";
 	private static final String QUERY_TRIP_DTL= "SELECT * FROM eg_vehicle_trip_detail WHERE trip_id = ? ";

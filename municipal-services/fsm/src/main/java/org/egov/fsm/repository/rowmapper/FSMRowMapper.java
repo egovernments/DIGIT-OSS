@@ -30,14 +30,22 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 	@Autowired
 	private ObjectMapper mapper;
 	
-	public String full_count=null;
+	private int full_count=0;
+
+	public int getFull_count() {
+		return full_count;
+	}
+
+	public void setFull_count(int full_count) {
+		this.full_count = full_count;
+	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<FSM> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
 		Map<String, FSM> fmsMap = new LinkedHashMap<String, FSM>();
-		this.full_count="0";
+		this.setFull_count(0);
 		while (rs.next()) {
 			FSM currentfsm = new FSM();
 			// TODO fill the FSM object with data in the result set record
@@ -58,7 +66,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			String vehicleType = rs.getString("vehicletype");
 			String dsoid = rs.getString("dso_id");
 			Long possiblesrvdate = rs.getLong("possible_srv_date");
-			this.full_count = rs.getString("full_count");
+			this.setFull_count(rs.getInt("full_count"));
 			if (currentfsm == null) {
 				Long lastModifiedTime = rs.getLong("lastmodifiedtime");
 

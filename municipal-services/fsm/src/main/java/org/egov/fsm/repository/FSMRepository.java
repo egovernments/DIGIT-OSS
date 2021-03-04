@@ -73,7 +73,7 @@ public class FSMRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = fsmQueryBuilder.getFSMSearchQuery(fsmSearchCriteria, dsoId, preparedStmtList);
 		List<FSM> fsms = jdbcTemplate.query(query, preparedStmtList.toArray(), FSMrowMapper);
-		FSMResponse fsmResponse = FSMResponse.builder().fsm(fsms).totalCount(FSMrowMapper.full_count).build();
+		FSMResponse fsmResponse = FSMResponse.builder().fsm(fsms).totalCount(FSMrowMapper.getFull_count()).build();
 		return fsmResponse;
 	}
 

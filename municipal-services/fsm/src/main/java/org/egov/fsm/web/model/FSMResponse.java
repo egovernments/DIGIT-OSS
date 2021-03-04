@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class FSMResponse   {
 	
   @JsonProperty("totalCount")
-  private String totalCount =null;
+  private Integer totalCount =null;
   
   @JsonProperty("responseInfo")
   private ResponseInfo responseInfo = null;
@@ -141,11 +141,11 @@ public class FSMResponse   {
     return o.toString().replace("\n", "\n    ");
   }
 
-public String getTotalCount() {
+public Integer getTotalCount() {
 	return totalCount;
 }
 
-public void setTotalCount(String totalCount) {
+public void setTotalCount(Integer totalCount) {
 	this.totalCount = totalCount;
 }
 }

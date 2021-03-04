@@ -13,6 +13,7 @@ import org.egov.vehicle.trip.repository.rowmapper.VehicleTripRowMapper;
 import org.egov.vehicle.trip.web.model.VehicleTrip;
 import org.egov.vehicle.trip.web.model.VehicleTripDetail;
 import org.egov.vehicle.trip.web.model.VehicleTripRequest;
+import org.egov.vehicle.trip.web.model.VehicleTripResponse;
 import org.egov.vehicle.trip.web.model.VehicleTripSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -73,16 +74,13 @@ public class VehicleTripRepository {
 		return count;
 	}
 	
-	public List<VehicleTrip> getVehicleLogData(VehicleTripSearchCriteria criteria) {
+	public VehicleTripResponse getVehicleLogData(VehicleTripSearchCriteria criteria) {
 		List<VehicleTrip> vehicleTrips = null;
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getVehicleLogSearchQuery(criteria, preparedStmtList);
-		try {
-			vehicleTrips = jdbcTemplate.query(query,preparedStmtList.toArray(), mapper);
-		} catch (Exception e) {
-			throw new CustomException("INVALID_VEHICLELOG_DATA", "INVALID_VEHICLELOG_DATA");
-		}
-		return vehicleTrips;
+		vehicleTrips = jdbcTemplate.query(query,preparedStmtList.toArray(), mapper);
+		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleTrips).totalCount(Integer.valueOf(mapper.getFullCount())).build();
+		return response;
 	}
 	
 	public List<VehicleTripDetail> getTrpiDetails(String tripId){

@@ -23,6 +23,7 @@ To run the fsm locally, you need to port forward below services locally
 ```bash
 billing-service
 mdms-service
+fsm
 ```
 
 To run the fsm-calculator locally, update below listed properties in `application.properties` before running the project:

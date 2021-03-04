@@ -10,6 +10,7 @@ import org.egov.vehicle.repository.querybuilder.QueryBuilder;
 import org.egov.vehicle.repository.rowmapper.RowMapper;
 import org.egov.vehicle.web.model.Vehicle;
 import org.egov.vehicle.web.model.VehicleRequest;
+import org.egov.vehicle.web.model.VehicleResponse;
 import org.egov.vehicle.web.model.VehicleSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,13 +38,13 @@ public class VehicleRepository {
             vehicleProducer.push(config.getSaveTopic(), vehicleRequest);
         }
 
-		public List<Vehicle> getVehicleData(@Valid VehicleSearchCriteria criteria) {
+		public VehicleResponse getVehicleData(@Valid VehicleSearchCriteria criteria) {
 			
 			List<Object> preparedStmtList = new ArrayList<>();
 			String query = queryBuilder.getSearchQuery(criteria, preparedStmtList);
 			List<Vehicle> vehicles = jdbcTemplate.query(query, preparedStmtList.toArray(),rowMapper );
-			
-			return vehicles;
+			VehicleResponse response = VehicleResponse.builder().vehicle(vehicles).totalCount(Integer.valueOf(rowMapper.getFullCount())).build();
+			return response;
 		}
 
 		public Integer getVehicleCount(VehicleRequest vehicleRequest) {

@@ -151,7 +151,7 @@
             "actions": [
                 {
                     "tenantId": "pb.amritsar",
-                    "action": "ASSIGN",
+                    "action": "REASSING",
                     "nextState": "PENDING_DSO_APPROVAL",
                     "roles": [
                         "FSM_EDITOR_EMP"
@@ -161,14 +161,6 @@
                     "tenantId": "pb.amritsar",
                     "action": "CANCEL",
                     "nextState": "CANCELED",
-                    "roles": [
-                        "FSM_ADMIN"
-                    ]
-                },
-                {
-                    "tenantId": "pb.amritsar",
-                    "action": "SENDBACK",
-                    "nextState": "PENDING_DSO_APPROVAL",
                     "roles": [
                         "FSM_ADMIN"
                     ]
@@ -199,15 +191,8 @@
                     "action": "DECLINE",
                     "nextState": "ASSIGN_DS0",
                     "roles": [
-                        "FSM_DSO"
-                    ]
-                },
-                {
-                    "tenantId": "pb.amritsar",
-                    "action": "ADDITIONAL_PAY_REQUEST",
-                    "nextState": "PENDING_ADDITIONAL_PAYMENT",
-                    "roles": [
-                        "FSM_DSO"
+                        "FSM_DSO",
+                        "FSM_EDITOR_EMP"
                     ]
                 },
                 {
@@ -268,42 +253,6 @@
                     "nextState": "DSO_REJECTED",
                     "roles": [
                         "FSM_DSO"
-                    ]
-                }
-            ]
-        },
-        {
-            "tenantId": "pb.amritsar",
-            "sla": null,
-            "state": "PENDING_ADDITIONAL_PAYMENT",
-            "applicationStatus": "PENDING_ADDITIONAL_PAYMENT",
-            "docUploadRequired": false,
-            "isStartState": false,
-            "isTerminateState": false,
-            "isStateUpdatable": true,
-            "actions": [
-                {
-                    "tenantId": "pb.amritsar",
-                    "action": "PAY",
-                    "nextState": "DSO_INPROGRESS",
-                    "roles": [
-                        "CITIZEN"
-                    ]
-                },
-                {
-                    "tenantId": "pb.amritsar",
-                    "action": "CANCEL",
-                    "nextState": "CANCELED",
-                    "roles": [
-                        "FSM_ADMIN"
-                    ]
-                },
-                {
-                    "tenantId": "pb.amritsar",
-                    "action": "SENDBACK",
-                    "nextState": "DSO_INPROGRESS",
-                    "roles": [
-                        "FSM_ADMIN"
                     ]
                 }
             ]

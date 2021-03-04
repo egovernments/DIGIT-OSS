@@ -53,12 +53,10 @@ public class VehicleController {
 	public ResponseEntity<VehicleResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute VehicleSearchCriteria criteria) {
 		
-		List<Vehicle> vehicleList = vehicleService.search(criteria, requestInfoWrapper.getRequestInfo());
+		VehicleResponse response = vehicleService.search(criteria, requestInfoWrapper.getRequestInfo());
 		
-		VehicleResponse response = VehicleResponse.builder().vehicle(vehicleList).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-				.build();
-		
+		response.setResponseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

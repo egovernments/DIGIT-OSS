@@ -131,8 +131,8 @@ public class NotificationUtil {
 				
 				if (message.contains("<RECEIPT_LINK>") ) {
 					StringBuilder builder = new StringBuilder(config.getPdfHost());
-					builder.append(config.getPdfContextPath()).append(config.getPdfCreateNoSaveEndpoint());
-					builder.append("?tenantId=").append(fsm.getTenantId()).append("&key=").append(FSMConstants.RECEIPT_KEY);
+					builder.append(config.getUiAppHost()).append(config.getFsmAppLink());
+					builder.append(fsm.getApplicationNo());
 					message = message.replace("<RECEIPT_LINK>", getShortenedUrl(builder.toString()));
 				}
 				
@@ -311,7 +311,7 @@ public class NotificationUtil {
 		StringBuilder uri = new StringBuilder();
 		uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
 				.append(config.getLocalizationSearchEndpoint()).append("?").append("locale=").append(locale)
-				.append("&tenantId=").append(tenantId).append("&module=").append(FSMConstants.SEARCH_MODULE);
+				.append("&tenantId=").append(tenantId).append("&module=").append(FSMConstants.SEARCH_MODULE).append(",").append(FSMConstants.FSM_LOC_SEARCH_MODULE);
 		return uri;
 	}
 
@@ -392,13 +392,18 @@ public class NotificationUtil {
 	 * @param url
 	 */
 	public String getShortenedUrl(String url){
-
+		String res = null;
 		HashMap<String,String> body = new HashMap<>();
 		body.put("url",url);
 		StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
 		builder.append(config.getUrlShortnerEndpoint());
-		String res = restTemplate.postForObject(builder.toString(), body, String.class);
+		try {
+			res = restTemplate.postForObject(builder.toString(), body, String.class);
 
+		}catch(Exception e) {
+			 log.error("Error while shortening the url: " + url,e);
+			
+		}
 		if(StringUtils.isEmpty(res)){
 			log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
 			return url;

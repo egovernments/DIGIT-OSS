@@ -30,4 +30,5 @@ public class VehicleTripConstants {
 	public static final String INVALID_VOLUME = "INVALID_VOLUME";
 	public static final String INVALID_TRIP_ENDTIME = "INVALID_TRIP_ENDTIME";
 	public static final String ACTION_SCHEDULE = "SCHEDULE";
+	public static final String VOLUME_GRT_CAPACITY ="VOLUME_GRT_CAPACITY";
 }

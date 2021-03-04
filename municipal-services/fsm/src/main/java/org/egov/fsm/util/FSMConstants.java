@@ -82,6 +82,7 @@ public class FSMConstants {
 	public static final String USREVENTS_EVENT_NAME = "FSM";
 	public static final String USREVENTS_EVENT_POSTEDBY = "SYSTEM-FSM";
 	public static final String SEARCH_MODULE = "rainmaker-common";
+	public static final String FSM_LOC_SEARCH_MODULE = "rainmaker-fsm";
 	
 	
 	
@@ -98,6 +99,8 @@ public class FSMConstants {
 	public static final String WF_ACTION_CREATE ="CREATE";
 	public static final String WF_ACTION_SUBMIT="SUBMIT";
 	public static final String WF_ACTION_ASSIGN_DSO="ASSIGN";
+	public static final String WF_ACTION_REASSIGN_DSO="REASSING";	
+	
 	public static final String WF_ACTION_DSO_ACCEPT="DSO_ACCEPT";
 	
 	public static final String APPLICATION_FEE ="APPLICATION_FEE";

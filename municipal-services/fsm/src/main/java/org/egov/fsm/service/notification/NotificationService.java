@@ -202,7 +202,7 @@ public class NotificationService {
 		
 		if(fsm.getApplicationStatus().equalsIgnoreCase(FSMConstants.WF_STATUS_PENDING_APPL_FEE_PAYMENT) && 
 				fsm.getSource() != null && fsm.getSource().equalsIgnoreCase(FSMConstants.APPLICATION_CHANNEL_TELEPONE)) {
-			messageCode=FSMConstants.SMS_NOTIFICATION_PREFIX +fsm.getApplicationStatus()+"_"+FSMConstants.WF_ACTION_CREATE;
+			messageCode=FSMConstants.SMS_NOTIFICATION_PREFIX +FSMConstants.WF_STATUS_CREATED+"_"+FSMConstants.WF_ACTION_CREATE;
 			String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
 			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
 			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
@@ -234,7 +234,7 @@ public class NotificationService {
 		
 
 		
-		mobileNumberToOwner.put(userDetailResponse.getUser().get(0).getUserName(),
+		mobileNumberToOwner.put(userDetailResponse.getUser().get(0).getMobileNumber(),
 				userDetailResponse.getUser().get(0).getName());
 		
 

@@ -14,6 +14,7 @@ import org.egov.vehicle.util.VehicleUtil;
 import org.egov.vehicle.validator.Validator;
 import org.egov.vehicle.web.model.Vehicle;
 import org.egov.vehicle.web.model.VehicleRequest;
+import org.egov.vehicle.web.model.VehicleResponse;
 import org.egov.vehicle.web.model.VehicleSearchCriteria;
 import org.egov.vehicle.web.model.user.User;
 import org.egov.vehicle.web.model.user.UserDetailResponse;
@@ -57,11 +58,10 @@ public class VehicleService {
         return vehicleRequest.getVehicle();
     }
 
-	public List<Vehicle> search(@Valid VehicleSearchCriteria criteria, RequestInfo requestInfo) {
+	public VehicleResponse search(@Valid VehicleSearchCriteria criteria, RequestInfo requestInfo) {
 		validator.validateSearch(requestInfo, criteria);
 		UserDetailResponse usersRespnse;
 		List<String> uuids = new ArrayList<String>();
-		List<Vehicle> vehicleList = new ArrayList<Vehicle>();
 		
 		if(criteria.tenantIdOnly() ) {
 			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, " Atlest one parameter is mandatory!");
@@ -79,12 +79,12 @@ public class VehicleService {
 			}
 		}
 		
-		vehicleList = repository.getVehicleData(criteria);
+		VehicleResponse response = repository.getVehicleData(criteria);
 		
-		if(!vehicleList.isEmpty()) {
-			enrichmentService.enrichSearchData(vehicleList,requestInfo);
+		if(!response.getVehicle().isEmpty()) {
+			enrichmentService.enrichSearchData(response.getVehicle(),requestInfo);
 		}
-		return vehicleList;
+		return response;
 	}
 
 }
