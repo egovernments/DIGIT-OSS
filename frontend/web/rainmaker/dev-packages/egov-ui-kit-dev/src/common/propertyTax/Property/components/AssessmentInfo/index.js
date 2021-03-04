@@ -208,7 +208,11 @@ export const getUnitInfo = (units = [],usageCategoryMajor="") => {
         key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
         value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
         (unit.usageCategoryMajor||usageCategoryMajor) ? 'PROPERTYTAX_BILLING_SLAB_' + (unit.usageCategoryMajor||usageCategoryMajor) : "NA",
-      }, {
+      },{
+        
+        key: getTranslatedLabel("PT_ASSESMENT_INFO_SUB_USAGE_TYPE", localizationLabelsData),
+        value: unit.usageCategorySubMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategorySubMinor : "NA",
+      },{
   
         key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
         value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
