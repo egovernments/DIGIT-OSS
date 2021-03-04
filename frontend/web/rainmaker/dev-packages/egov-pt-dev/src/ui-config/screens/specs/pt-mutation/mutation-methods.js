@@ -1,4 +1,3 @@
-
 import {
   getTextField,
   getSelectField,
@@ -177,6 +176,45 @@ export const searchPropertyDetails = getCommonCard({
       },
     beforeFieldChange: async (action, state, dispatch) => {
       let tenant = action.value;
+      if(process.env.REACT_APP_NAME === "Citizen" && action.value){
+        debugger
+        const tenantRequestBody = {
+          MdmsCriteria: {
+            tenantId: getTenantId(),
+            moduleDetails: [
+              {
+                moduleName: "tenant",
+                masterDetails: [
+                  {
+                    name: "citywiseconfig",
+                    filter: "[?(@.config=='assessmentEnabledCities')]"
+                  }
+                ]
+              }
+            ]
+          },
+        };
+        let citywiseconfig = httpRequest(
+            "post",
+            "/egov-mdms-service/v1/_search",
+            "_search",
+            [],
+            tenantRequestBody
+        ).then(res => {
+         debugger
+            citywiseconfig:res.MdmsRes.tenant.citywiseconfig
+            let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
+            let enableButton = enabledCities && enabledCities.includes(action.value);
+          dispatch(
+              handleField(
+                  "propertySearch",
+                  "components.div.children.headerDiv.children.newApplicationButton",
+                  "visible",
+                  enableButton
+              )
+            );
+          });
+      }
       dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
       let mohallaPayload = await httpRequest(
         "post",
