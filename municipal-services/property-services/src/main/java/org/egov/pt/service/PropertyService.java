@@ -1,5 +1,6 @@
 package org.egov.pt.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.Owner;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
@@ -131,8 +133,22 @@ public class PropertyService {
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {	
 			userService.createUser(request);	
-		} else {	
-			request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));	
+		} else {
+			if ("LEGACY_RECORD".equals(request.getProperty().getSource().toString())) {
+				userService.createUser(request);
+
+				for (OwnerInfo info : propertyFromSearch.getOwners()) {
+					info.setStatus(Status.INACTIVE);
+				}
+
+				List<OwnerInfo> collectedOwners = new ArrayList<OwnerInfo>();
+				collectedOwners.addAll(propertyFromSearch.getOwners());
+				collectedOwners.addAll(request.getProperty().getOwners());
+
+				request.getProperty().setOwners(util.getCopyOfOwners(collectedOwners));
+			} else
+				request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));
+
 		}
 		enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);

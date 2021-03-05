@@ -380,6 +380,7 @@ public class UserService {
         owner.setLastModifiedBy(requestInfo.getUserInfo().getUuid());
         owner.setLastModifiedDate(System.currentTimeMillis());
         owner.setActive(userDetailResponse.getUser().get(0).getActive());
+        owner.setOwnerInfoUuid(UUID.randomUUID().toString());
     }
 
 
