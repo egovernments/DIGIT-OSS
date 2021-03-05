@@ -397,7 +397,7 @@ public class FSMService {
 		List<FSMAudit> auditList = null;
 		List<FSMAuditUtil> sourceObjects = repository.getFSMActualData(criteria);
 		if (!CollectionUtils.isEmpty(sourceObjects)) {
-			FSMAuditUtil sourceObject = repository.getFSMActualData(criteria).get(NumberUtils.INTEGER_ZERO);
+			FSMAuditUtil sourceObject = sourceObjects.get(NumberUtils.INTEGER_ZERO);
 			List<FSMAuditUtil> targetObjects = repository.getFSMAuditData(criteria);
 			auditList = enrichmentService.enrichFSMAudit(sourceObject, targetObjects);
 		}
