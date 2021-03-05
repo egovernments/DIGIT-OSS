@@ -48,17 +48,17 @@
 
 package org.egov.infra.config.persistence.multitenancy;
 
-import org.hibernate.HibernateException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
 import org.hibernate.engine.jdbc.connections.spi.AbstractMultiTenantConnectionProvider;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.hibernate.service.UnknownUnwrapTypeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class MultiTenantSchemaConnectionProvider implements MultiTenantConnectionProvider {
     private static final long serialVersionUID = -6022082859572861041L;
@@ -84,9 +84,12 @@ public class MultiTenantSchemaConnectionProvider implements MultiTenantConnectio
             connection.setSchema(tenantId);
             return connection;
         } catch (SQLException e) {
-            LOG.error("Error occurred while switching tenant schema upon getting connection", e);
-            throw new HibernateException("Could not alter JDBC connection to specified schema [" + tenantId + "]", e);
+            LOG.error(
+                    "Error occurred while switching tenant schema upon getting connection. Could not alter JDBC connection to specified schema ["
+                            + tenantId + "]",
+                    e);
         }
+        return null;
     }
 
     @Override

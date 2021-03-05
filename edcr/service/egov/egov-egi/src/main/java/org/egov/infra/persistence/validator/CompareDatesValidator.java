@@ -48,15 +48,19 @@
 
 package org.egov.infra.persistence.validator;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.egov.infra.exception.ApplicationRuntimeException;
-import org.egov.infra.persistence.validator.annotation.CompareDates;
+import java.util.Date;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Date;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.egov.infra.persistence.validator.annotation.CompareDates;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CompareDatesValidator implements ConstraintValidator<CompareDates, Object> {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompareDatesValidator.class);
 
     private CompareDates compareDates;
 
@@ -76,7 +80,8 @@ public class CompareDatesValidator implements ConstraintValidator<CompareDates, 
                         addPropertyNode(compareDates.toDate()).addConstraintViolation();
             return isValid;
         } catch (IllegalAccessException e) {
-            throw new ApplicationRuntimeException("Could not compare dates", e);
+            LOGGER.error("Could not compare dates", e);
         }
+        return false;
     }
 }

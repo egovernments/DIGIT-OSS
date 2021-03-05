@@ -147,8 +147,8 @@ public final class ReportUtil {
             return reportProps;
         } catch (IOException e) {
             LOGGER.warn("Exception while loading report configuration file [{}]", REPORT_CONFIG_FILE, e);
-            return null;
         }
+        return null;
     }
 
     public static Object fetchFromDBSql(Connection connection, String sqlQuery) throws SQLException {
@@ -158,8 +158,8 @@ public final class ReportUtil {
         } catch (SQLException e) {
             String errMsg = "Exception while executing query [" + sqlQuery + "]";
             LOGGER.error(errMsg, e);
-            throw new ApplicationRuntimeException(errMsg, e);
         }
+        return null;
     }
 
     public static Date getDate(int year, int month, int date) {

@@ -48,20 +48,23 @@
 
 package org.egov.infra.persistence.validator;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.egov.infra.exception.ApplicationRuntimeException;
-import org.egov.infra.persistence.validator.annotation.Unique;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.egov.infra.persistence.validator.annotation.Unique;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class UniqueCheckValidator implements ConstraintValidator<Unique, Object> {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(UniqueCheckValidator.class);
 
     private Unique unique;
 
@@ -89,8 +92,9 @@ public class UniqueCheckValidator implements ConstraintValidator<Unique, Object>
                 }
             return isValid;
         } catch (final IllegalAccessException e) {
-            throw new ApplicationRuntimeException("Error while validating unique key", e);
+            LOGGER.error("Error while validating unique key", e);
         }
+        return false;
 
     }
 

@@ -48,8 +48,17 @@
 
 package org.egov.infra.persistence.validator;
 
+import static org.egov.infra.utils.DateUtils.endOfDay;
+import static org.egov.infra.utils.DateUtils.startOfDay;
+
+import java.util.Date;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.persistence.validator.annotation.UniqueDateOverlap;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -57,17 +66,11 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import java.util.Date;
-
-import static org.egov.infra.utils.DateUtils.endOfDay;
-import static org.egov.infra.utils.DateUtils.startOfDay;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UniqueDateOverlapValidator implements ConstraintValidator<UniqueDateOverlap, Object> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UniqueDateOverlapValidator.class);
 
     private UniqueDateOverlap uniqueDateOverlap;
 
@@ -88,8 +91,9 @@ public class UniqueDateOverlapValidator implements ConstraintValidator<UniqueDat
                         addPropertyNode(uniqueDateOverlap.fromField()).addConstraintViolation();
             return isValid;
         } catch (final IllegalAccessException e) {
-            throw new ApplicationRuntimeException("Error while validating unique key with date overlapping", e);
+            LOGGER.error("Error while validating unique key with date overlapping", e);
         }
+        return false;
 
     }
 

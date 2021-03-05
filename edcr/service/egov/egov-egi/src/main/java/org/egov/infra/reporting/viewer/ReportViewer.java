@@ -117,7 +117,6 @@ public class ReportViewer implements HttpRequestHandler {
             outputStream.write(reportData);
         } catch (IOException e) {
             LOGGER.error("Exception in rendering report with format [{}]!", e);
-            throw new ApplicationRuntimeException("Error occurred in report viewer", e);
         }
     }
 }

@@ -55,7 +55,6 @@ import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.egov.edcr.security.oauth2.entity.SecuredClient;
-import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.rest.support.CustomTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -118,7 +117,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                         .accessTokenValiditySeconds(client.getAccessTokenValidity() * 60)
                         .refreshTokenValiditySeconds(client.getRefreshTokenValidity() * 60);
             } catch (Exception e) {
-                throw new ApplicationRuntimeException("Exception occured while configuring: ", e);
+                LOGGER.error("Exception occured while configuring: ", e);
             }
         });
     }

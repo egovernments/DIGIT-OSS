@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +26,6 @@ import org.egov.edcr.repository.EdcrApplicationDetailRepository;
 import org.egov.edcr.repository.EdcrApplicationRepository;
 import org.egov.edcr.service.es.EdcrIndexService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
-import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.security.utils.SecurityUtils;
@@ -149,12 +147,12 @@ public class EdcrApplicationService {
     }
 
     private FileStoreMapper addToFileStore(final MultipartFile file) {
-        FileStoreMapper fileStoreMapper;
+        FileStoreMapper fileStoreMapper = null;
         try {
             fileStoreMapper = fileStoreService.store(file.getInputStream(), file.getOriginalFilename(),
                     file.getContentType(), FILESTORE_MODULECODE);
         } catch (final IOException e) {
-            throw new ApplicationRuntimeException("Error occurred, while getting input stream!!!!!", e);
+            LOG.error("Error occurred, while getting input stream!!!!!", e);
         }
         return fileStoreMapper;
     }

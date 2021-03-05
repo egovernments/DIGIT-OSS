@@ -12,7 +12,6 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -41,8 +40,6 @@ import org.egov.edcr.utility.DcrConstants;
 import org.egov.infra.custom.CustomImplProvider;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.filestore.service.FileStoreService;
-import org.egov.infra.validation.exception.ValidationError;
-import org.egov.infra.validation.exception.ValidationException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -417,7 +414,7 @@ public class PlanService {
             doc.save(new File(path.toString()));
             doc.close();
         } catch (IOException e) {
-            throw new ValidationException(Arrays.asList(new ValidationError("error", e.getMessage())));
+            LOG.error("error", e);
         }
     }
 }

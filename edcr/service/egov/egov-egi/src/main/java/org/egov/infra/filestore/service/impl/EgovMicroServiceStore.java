@@ -66,7 +66,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.microservice.contract.StorageResponse;
@@ -90,166 +89,163 @@ import org.springframework.web.client.RestTemplate;
 @Component("egovMicroServiceStore")
 public class EgovMicroServiceStore implements FileStoreService {
 
-	private static final String FILESTORE_V1_FILES = "/filestore/v1/files";
+    private static final String FILESTORE_V1_FILES = "/filestore/v1/files";
 
-	private static final Logger LOG = getLogger(LocalDiskFileStoreService.class);
+    private static final Logger LOG = getLogger(LocalDiskFileStoreService.class);
 
-	private String url;
+    private String url;
 
-	private RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
-	@Autowired
-	public EgovMicroServiceStore(@Value("${ms.url}") String url) {
-		this.restTemplate = new RestTemplate();
-		this.url = url + FILESTORE_V1_FILES;
-	}
+    @Autowired
+    public EgovMicroServiceStore(@Value("${ms.url}") String url) {
+        this.restTemplate = new RestTemplate();
+        this.url = url + FILESTORE_V1_FILES;
+    }
 
-	@Override
-	public FileStoreMapper store(File sourceFile, String fileName, String mimeType, String moduleName) {
-		return store(sourceFile, fileName, mimeType, moduleName, true);
-	}
+    @Override
+    public FileStoreMapper store(File sourceFile, String fileName, String mimeType, String moduleName) {
+        return store(sourceFile, fileName, mimeType, moduleName, true);
+    }
 
-	@Override
-	public FileStoreMapper store(InputStream sourceFileStream, String fileName, String mimeType, String moduleName) {
-		return store(sourceFileStream, fileName, mimeType, moduleName, true);
-	}
+    @Override
+    public FileStoreMapper store(InputStream sourceFileStream, String fileName, String mimeType, String moduleName) {
+        return store(sourceFileStream, fileName, mimeType, moduleName, true);
+    }
 
-	@Override
-	public FileStoreMapper store(File file, String fileName, String mimeType, String moduleName, boolean deleteFile) {
-		try {
-			HttpHeaders headers = new HttpHeaders();
-			if(LOG.isDebugEnabled())
-			LOG.debug(String.format("Uploaded file   %s   with size  %s " ,file.getName() , file.length()));
-			
-			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("file", new FileSystemResource(file.getName()));
-			map.add("tenantId", ApplicationThreadLocals.getTenantID());
-			map.add("module", moduleName);
-			HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(map,
-					headers);
-			ResponseEntity<StorageResponse> result = restTemplate.postForEntity(url, request, StorageResponse.class);
-			FileStoreMapper fileMapper = new FileStoreMapper(result.getBody().getFiles().get(0).getFileStoreId(),
-					fileName);
-			if(LOG.isDebugEnabled())
-			LOG.debug(String.format("Uploaded file   %s   with filestoreid  %s " ,file.getName() , fileMapper.getFileStoreId()));
-		
-			fileMapper.setContentType(mimeType);
-			
-			Files.deleteIfExists(Paths.get(fileName));
+    @Override
+    public FileStoreMapper store(File file, String fileName, String mimeType, String moduleName, boolean deleteFile) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            if (LOG.isDebugEnabled())
+                LOG.debug(String.format("Uploaded file   %s   with size  %s ", file.getName(), file.length()));
 
-			return fileMapper;
-		} catch (RestClientException e) {
-			LOG.error("Error while Saving to FileStore", e);
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+            map.add("file", new FileSystemResource(file.getName()));
+            map.add("tenantId", ApplicationThreadLocals.getTenantID());
+            map.add("module", moduleName);
+            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(map,
+                    headers);
+            ResponseEntity<StorageResponse> result = restTemplate.postForEntity(url, request, StorageResponse.class);
+            FileStoreMapper fileMapper = new FileStoreMapper(result.getBody().getFiles().get(0).getFileStoreId(),
+                    fileName);
+            if (LOG.isDebugEnabled())
+                LOG.debug(
+                        String.format("Uploaded file   %s   with filestoreid  %s ", file.getName(), fileMapper.getFileStoreId()));
 
-		} catch (IOException e) {
-			LOG.error("Error while Deleting temp file", e);
-		}
-		return null;
-	}
+            fileMapper.setContentType(mimeType);
 
-	@Override
-	public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
-			boolean closeStream) {
+            Files.deleteIfExists(Paths.get(fileName));
 
-		try {
-			HttpHeaders headers = new HttpHeaders();
-			File f = new File(fileName);
-			FileUtils.copyToFile(fileStream, f);
-			if (closeStream) {
-				fileStream.close();
-			}
-			if(LOG.isDebugEnabled())
-			LOG.debug(String.format("Uploading .....  %s    with size %s   " ,f.getName() , f.length()));  
-			
-			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("file", new FileSystemResource(f.getName()));
-			map.add("tenantId", ApplicationThreadLocals.getTenantID());
-			map.add("module", moduleName);
-			HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(map,
-					headers);
-			ResponseEntity<StorageResponse> result = restTemplate.postForEntity(url, request, StorageResponse.class);
-			FileStoreMapper fileMapper = new FileStoreMapper(result.getBody().getFiles().get(0).getFileStoreId(),
-					fileName);
-			if(LOG.isDebugEnabled())
-			LOG.debug(String.format("Upload completed for  %s   with filestoreid   " ,f.getName() , fileMapper.getFileStoreId()));
-			
-			fileMapper.setContentType(mimeType);
-			if (closeStream)
-				Files.deleteIfExists(Paths.get(fileName));
+            return fileMapper;
+        } catch (RestClientException e) {
+            LOG.error("Error while Saving to FileStore", e);
 
-			return fileMapper;
-		} catch (RestClientException | IOException e) {
-			LOG.error("Error while Saving to FileStore", e);   
+        } catch (IOException e) {
+            LOG.error("Error while Deleting temp file", e);
+        }
+        return null;
+    }
 
-		}
-		return null;
+    @Override
+    public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
+            boolean closeStream) {
 
-	}
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            File f = new File(fileName);
+            FileUtils.copyToFile(fileStream, f);
+            if (closeStream) {
+                fileStream.close();
+            }
+            if (LOG.isDebugEnabled())
+                LOG.debug(String.format("Uploading .....  %s    with size %s   ", f.getName(), f.length()));
 
-	@Override
-	public File fetch(FileStoreMapper fileMapper, String moduleName) {
-		return this.fetch(fileMapper.getFileStoreId(), moduleName);
-	}
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+            map.add("file", new FileSystemResource(f.getName()));
+            map.add("tenantId", ApplicationThreadLocals.getTenantID());
+            map.add("module", moduleName);
+            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(map,
+                    headers);
+            ResponseEntity<StorageResponse> result = restTemplate.postForEntity(url, request, StorageResponse.class);
+            FileStoreMapper fileMapper = new FileStoreMapper(result.getBody().getFiles().get(0).getFileStoreId(),
+                    fileName);
+            if (LOG.isDebugEnabled())
+                LOG.debug(String.format("Upload completed for  %s   with filestoreid   ", f.getName(),
+                        fileMapper.getFileStoreId()));
 
-	@Override
-	public Set<File> fetchAll(Set<FileStoreMapper> fileMappers, String moduleName) {
-		return fileMappers.stream().map(fileMapper -> this.fetch(fileMapper.getFileStoreId(), moduleName))
-				.collect(Collectors.toSet());
-	}
+            fileMapper.setContentType(mimeType);
+            if (closeStream)
+                Files.deleteIfExists(Paths.get(fileName));
 
-	@Override
-	public File fetch(String fileStoreId, String moduleName) {
+            return fileMapper;
+        } catch (RestClientException | IOException e) {
+            LOG.error("Error while Saving to FileStore", e);
 
-		
-		String urls = url + "/id?tenantId=" + ApplicationThreadLocals.getTenantID() + "&fileStoreId=" + fileStoreId;
-		if(LOG.isDebugEnabled())
-			LOG.debug(String.format("fetch file fron url   %s   " ,urls) );
+        }
+        return null;
 
-		RequestCallback requestCallback = request -> request.getHeaders()
-				.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM, MediaType.ALL));
-		Path path = Paths.get("/tmp/" + RandomUtils.nextLong());
-		ResponseExtractor<Void> responseExtractor = response -> {
-			Files.copy(response.getBody(), path);
-			return null;
-		};
-		restTemplate.execute(URI.create(urls), HttpMethod.GET, requestCallback, responseExtractor);
-		
-		LOG.debug("fetch completed....   ");
-		return path.toFile();
+    }
 
-	}  
+    @Override
+    public File fetch(FileStoreMapper fileMapper, String moduleName) {
+        return this.fetch(fileMapper.getFileStoreId(), moduleName);
+    }
 
-	 
+    @Override
+    public Set<File> fetchAll(Set<FileStoreMapper> fileMappers, String moduleName) {
+        return fileMappers.stream().map(fileMapper -> this.fetch(fileMapper.getFileStoreId(), moduleName))
+                .collect(Collectors.toSet());
+    }
 
-	@Override
-	public Path fetchAsPath(String fileStoreId, String moduleName) {
-		return Paths.get(fetch(fileStoreId, moduleName).getPath());
-		 
-	}
+    @Override
+    public File fetch(String fileStoreId, String moduleName) {
 
-	@Override
-	public void delete(String fileStoreId, String moduleName) {
-		Path fileDirPath = this.getFileDirectoryPath(moduleName);
-		if (!fileDirPath.toFile().exists()) {
-			Path filePath = this.getFilePath(fileDirPath, fileStoreId);
-			try {
-				Files.deleteIfExists(filePath);
-			} catch (IOException e) {
-				throw new ApplicationRuntimeException(
-						String.format("Could not remove document %s", filePath.getFileName()), e);
-			}
-		}
-	}
+        String urls = url + "/id?tenantId=" + ApplicationThreadLocals.getTenantID() + "&fileStoreId=" + fileStoreId;
+        if (LOG.isDebugEnabled())
+            LOG.debug(String.format("fetch file fron url   %s   ", urls));
 
-	 
-	private Path getFileDirectoryPath(String moduleName) {
-		return Paths.get(new StringBuilder().append(this.url).append(separator).append(getCityCode()).append(separator)
-				.append(moduleName).toString());
-	}
+        RequestCallback requestCallback = request -> request.getHeaders()
+                .setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM, MediaType.ALL));
+        Path path = Paths.get("/tmp/" + RandomUtils.nextLong());
+        ResponseExtractor<Void> responseExtractor = response -> {
+            Files.copy(response.getBody(), path);
+            return null;
+        };
+        restTemplate.execute(URI.create(urls), HttpMethod.GET, requestCallback, responseExtractor);
 
-	private Path getFilePath(Path fileDirPath, String fileStoreId) {
-		return Paths.get(fileDirPath + separator + fileStoreId);
-	}
+        LOG.debug("fetch completed....   ");
+        return path.toFile();
+
+    }
+
+    @Override
+    public Path fetchAsPath(String fileStoreId, String moduleName) {
+        return Paths.get(fetch(fileStoreId, moduleName).getPath());
+
+    }
+
+    @Override
+    public void delete(String fileStoreId, String moduleName) {
+        Path fileDirPath = this.getFileDirectoryPath(moduleName);
+        if (!fileDirPath.toFile().exists()) {
+            Path filePath = this.getFilePath(fileDirPath, fileStoreId);
+            try {
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                LOG.error(String.format("Could not remove document %s", filePath.getFileName()), e);
+            }
+        }
+    }
+
+    private Path getFileDirectoryPath(String moduleName) {
+        return Paths.get(new StringBuilder().append(this.url).append(separator).append(getCityCode()).append(separator)
+                .append(moduleName).toString());
+    }
+
+    private Path getFilePath(Path fileDirPath, String fileStoreId) {
+        return Paths.get(fileDirPath + separator + fileStoreId);
+    }
 }

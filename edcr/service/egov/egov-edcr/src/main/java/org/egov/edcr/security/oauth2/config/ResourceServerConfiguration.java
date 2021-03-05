@@ -56,7 +56,6 @@ import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.egov.edcr.security.oauth2.entity.SecuredResource;
-import org.egov.infra.exception.ApplicationRuntimeException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -105,7 +104,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 else
                     authorizedUrl.authenticated();
             } catch (Exception e) {
-                throw new ApplicationRuntimeException("Exception occured while configuring: ", e);
+                LOGGER.error("Exception occured while configuring: ", e);
             }
         });
 

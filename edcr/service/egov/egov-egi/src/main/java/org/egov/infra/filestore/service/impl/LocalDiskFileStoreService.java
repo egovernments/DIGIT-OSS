@@ -109,13 +109,15 @@ public class LocalDiskFileStoreService implements FileStoreService {
                 LOG.info("File store source file deleted");
             return fileMapper;
         } catch (IOException e) {
-            throw new ApplicationRuntimeException(String.format("Error occurred while storing files at %s/%s/%s",
-                    this.fileStoreBaseDir, getCityCode(), moduleName), e);
+            LOG.error(String.format("Error occurred while storing files at %s/%s/%s", this.fileStoreBaseDir, getCityCode(),
+                    moduleName), e);
         }
+        return null;
     }
 
     @Override
-    public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName, boolean closeStream) {
+    public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
+            boolean closeStream) {
         try {
             FileStoreMapper fileMapper = new FileStoreMapper(randomUUID().toString(), fileName);
             Path newFilePath = this.createNewFilePath(fileMapper, moduleName);
@@ -125,9 +127,9 @@ public class LocalDiskFileStoreService implements FileStoreService {
                 fileStream.close();
             return fileMapper;
         } catch (IOException e) {
-            throw new ApplicationRuntimeException(String.format("Error occurred while storing files at %s/%s/%s",
-                    this.fileStoreBaseDir, getCityCode(), moduleName), e);
+            LOG.error(String.format("Error occurred while storing files at %s/%s/%s", this.fileStoreBaseDir, getCityCode(), moduleName), e);
         }
+        return null;
     }
 
     @Override
@@ -180,8 +182,8 @@ public class LocalDiskFileStoreService implements FileStoreService {
     }
 
     private Path getFileDirectoryPath(String moduleName) {
-        return Paths.get(new StringBuilder().append(this.fileStoreBaseDir).append(separator).
-                append(getCityCode()).append(separator).append(moduleName).toString());
+        return Paths.get(new StringBuilder().append(this.fileStoreBaseDir).append(separator).append(getCityCode())
+                .append(separator).append(moduleName).toString());
     }
 
     private Path getFilePath(Path fileDirPath, String fileStoreId) {
