@@ -9,8 +9,6 @@ const enabledModules = ["PGR", "FSM", "Payment"];
 window.Digit.ComponentRegistryService.setupRegistry({
   PGRLinks,
   PGRModule,
-  PTModule,
-  PTLinks,
   PaymentModule,
   PaymentLinks,
 });
