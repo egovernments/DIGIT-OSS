@@ -70,6 +70,7 @@ import org.egov.edcr.contract.EdcrResponse;
 import org.egov.edcr.contract.PlanResponse;
 import org.egov.edcr.entity.ApplicationType;
 import org.egov.edcr.service.EdcrRestService;
+import org.egov.edcr.service.EdcrValidator;
 import org.egov.edcr.service.OcComparisonService;
 import org.egov.edcr.service.PlanService;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
@@ -126,6 +127,9 @@ public class RestEdcrApplicationController {
 
     @Autowired
     private OcComparisonService ocComparisonService;
+    
+    @Autowired
+    private EdcrValidator edcrValidator;
 
     @PostMapping(value = "/scrutinizeplan", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -145,6 +149,9 @@ public class RestEdcrApplicationController {
             if (errorResponses != null)
                 return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
             else {
+                ErrorDetail edcRes = edcrValidator.validate(edcr);
+                if (edcRes != null)
+                    return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
                 edcrDetail = edcrRestService.createEdcr(edcr, planFile, new HashMap<>());
             }
 
