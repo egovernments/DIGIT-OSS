@@ -1,5 +1,5 @@
 {
-  "name": "digit-ui-fsm",
+  "name": "digit-ui",
   "version": "1.1.0",
   "private": true,
   "workspaces": [
