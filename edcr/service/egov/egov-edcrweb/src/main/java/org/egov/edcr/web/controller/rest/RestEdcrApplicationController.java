@@ -145,13 +145,13 @@ public class RestEdcrApplicationController {
         }
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
+            ErrorDetail edcRes = edcrValidator.validate(edcr);
+            if (edcRes != null)
+                return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             ErrorDetail errorResponses = (edcrRestService.validateEdcrRequest(edcr, planFile));
             if (errorResponses != null)
                 return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
             else {
-                ErrorDetail edcRes = edcrValidator.validate(edcr);
-                if (edcRes != null)
-                    return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
                 edcrDetail = edcrRestService.createEdcr(edcr, planFile, new HashMap<>());
             }
 
@@ -177,6 +177,9 @@ public class RestEdcrApplicationController {
         }
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
+            ErrorDetail edcRes = edcrValidator.validate(edcr);
+            if (edcRes != null)
+                return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             ErrorDetail errorResponses = (edcrRestService.validateEdcrOcRequest(edcr, planFile));
 
             if (errorResponses != null)
@@ -210,6 +213,9 @@ public class RestEdcrApplicationController {
         try {
             List<ErrorDetail> errorResponses = new ArrayList<ErrorDetail>();
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
+            ErrorDetail edcRes = edcrValidator.validate(edcr);
+            if (edcRes != null)
+                return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             List<ErrorDetail> errors = edcrRestService.validateEdcrMandatoryFields(edcr);
             if (!errors.isEmpty())
                 return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
@@ -293,6 +299,9 @@ public class RestEdcrApplicationController {
         }
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
+            ErrorDetail edcRes = edcrValidator.validate(edcr);
+            if (edcRes != null)
+                return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             ErrorDetail errorResponses = edcrRestService.validatePlanFile(planFile);
             if (errorResponses != null)
                 return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
