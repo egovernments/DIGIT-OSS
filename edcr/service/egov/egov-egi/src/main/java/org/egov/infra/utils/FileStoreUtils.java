@@ -132,8 +132,8 @@ public class FileStoreUtils {
             FileStoreMapper fileStoreMapper = this.fileStoreMapperRepository.findByFileStoreId(fileStoreId);
             if (fileStoreMapper != null) {
                 File file = this.fileStoreService.fetch(fileStoreMapper, moduleName);
-                response.setHeader(CONTENT_DISPOSITION, format(CONTENT_DISPOSITION_INLINE, fileStoreMapper.getFileName()));
-                response.setContentType(fileStoreMapper.getContentType());
+                response.setHeader(CONTENT_DISPOSITION, StringUtils.sanitize(format(CONTENT_DISPOSITION_INLINE, fileStoreMapper.getFileName())));
+                response.setContentType(StringUtils.sanitize(fileStoreMapper.getContentType()));
                 OutputStream out = response.getOutputStream();
                 IOUtils.write(FileUtils.readFileToByteArray(file), out);
             }

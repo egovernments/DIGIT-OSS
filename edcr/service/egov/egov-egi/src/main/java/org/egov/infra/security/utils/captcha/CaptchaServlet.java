@@ -48,6 +48,7 @@
 
 package org.egov.infra.security.utils.captcha;
 
+import org.egov.infra.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
@@ -76,7 +77,7 @@ public class CaptchaServlet implements HttpRequestHandler {
             response.setHeader("Cache-Control", "no-store");
             response.setHeader("Pragma", "no-cache");
             response.setDateHeader("Expires", 0);
-            response.setContentType("image/jpeg");
+            response.setContentType(StringUtils.sanitize("image/jpeg"));
             ServletOutputStream responseStream = response.getOutputStream();
             responseStream.write(jpegOutputStream.toByteArray());
             responseStream.flush();

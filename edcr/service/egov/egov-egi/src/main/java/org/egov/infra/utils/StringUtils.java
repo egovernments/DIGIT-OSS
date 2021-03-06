@@ -124,4 +124,8 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
     public static String uniqueString(int codePoint) {
         return UNIQUE_STRING_GENERATOR.generate(codePoint);
     }
+    
+    public static String sanitize(final String str) {
+        return StringUtils.replaceEach(str, new String[] {"\n", "\r"}, new String[] {"", ""});
+    }
 }

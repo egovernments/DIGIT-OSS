@@ -48,23 +48,24 @@
 
 package org.egov.infra.reporting.viewer;
 
-import org.egov.infra.exception.ApplicationRuntimeException;
+import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION;
+
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.egov.infra.reporting.engine.ReportConstants;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportOutput;
+import org.egov.infra.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-
-import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION;
 
 @Component("reportViewer")
 public class ReportViewer implements HttpRequestHandler {
@@ -111,8 +112,8 @@ public class ReportViewer implements HttpRequestHandler {
 
     private void renderReport(HttpServletResponse resp, byte[] reportData, ReportFormat reportFormat) {
         try (BufferedOutputStream outputStream = new BufferedOutputStream(resp.getOutputStream())) {
-            resp.setHeader(CONTENT_DISPOSITION, ReportViewerUtil.getContentDisposition(reportFormat));
-            resp.setContentType(ReportViewerUtil.getContentType(reportFormat));
+            resp.setHeader(CONTENT_DISPOSITION, StringUtils.sanitize(ReportViewerUtil.getContentDisposition(reportFormat)));
+            resp.setContentType(StringUtils.sanitize(ReportViewerUtil.getContentType(reportFormat)));
             resp.setContentLength(reportData.length);
             outputStream.write(reportData);
         } catch (IOException e) {

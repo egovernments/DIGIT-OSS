@@ -77,6 +77,7 @@ import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.microservice.contract.ResponseInfo;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.utils.FileStoreUtils;
+import org.egov.infra.utils.StringUtils;
 import org.egov.infra.web.rest.error.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -146,7 +147,7 @@ public class RestEdcrApplicationController {
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail edcRes = edcrValidator.validate(edcr);
-            if (edcRes != null)
+            if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
                 return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             ErrorDetail errorResponses = (edcrRestService.validateEdcrRequest(edcr, planFile));
             if (errorResponses != null)
@@ -178,7 +179,7 @@ public class RestEdcrApplicationController {
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail edcRes = edcrValidator.validate(edcr);
-            if (edcRes != null)
+            if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
                 return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             ErrorDetail errorResponses = (edcrRestService.validateEdcrOcRequest(edcr, planFile));
 
@@ -214,7 +215,7 @@ public class RestEdcrApplicationController {
             List<ErrorDetail> errorResponses = new ArrayList<ErrorDetail>();
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail edcRes = edcrValidator.validate(edcr);
-            if (edcRes != null)
+            if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
                 return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             List<ErrorDetail> errors = edcrRestService.validateEdcrMandatoryFields(edcr);
             if (!errors.isEmpty())
@@ -300,7 +301,7 @@ public class RestEdcrApplicationController {
         try {
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             ErrorDetail edcRes = edcrValidator.validate(edcr);
-            if (edcRes != null)
+            if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
                 return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
             ErrorDetail errorResponses = edcrRestService.validatePlanFile(planFile);
             if (errorResponses != null)
