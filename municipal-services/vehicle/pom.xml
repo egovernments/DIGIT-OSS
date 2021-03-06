@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>vehicle</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>vehicle</name>
 	<description>Demo project for Spring Boot</description>
 
