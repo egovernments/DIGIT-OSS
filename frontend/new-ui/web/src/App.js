@@ -4,13 +4,16 @@ import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-
 import { initFSMComponents } from "@egovernments/digit-ui-module-fsm";
 import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
+import { initLibraries } from "@egovernments/digit-ui-libraries";
+
 
 const enabledModules = ["PGR", "FSM", "Payment"];
+
+initLibraries();
+
 window.Digit.ComponentRegistryService.setupRegistry({
   PGRLinks,
   PGRModule,
-  PTModule,
-  PTLinks,
   PaymentModule,
   PaymentLinks,
 });
