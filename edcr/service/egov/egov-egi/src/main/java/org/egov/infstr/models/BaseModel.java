@@ -111,7 +111,7 @@ public class BaseModel implements Serializable {
         return id;
     }
 
-    public void setId(final Long id) {
+    protected void setId(final Long id) {
         this.id = id;
     }
 

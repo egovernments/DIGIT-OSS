@@ -80,7 +80,7 @@ public class MessageTemplate extends AbstractPersistable<Long> {
         return id;
     }
 
-    public void setId(final Long id) {
+    protected void setId(final Long id) {
         this.id = id;
     }
 

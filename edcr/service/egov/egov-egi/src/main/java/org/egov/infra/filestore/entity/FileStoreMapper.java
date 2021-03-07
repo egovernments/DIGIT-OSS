@@ -110,7 +110,7 @@ public class FileStoreMapper extends AbstractPersistable<Long> {
     }
 
     @Override
-    public void setId(Long id) {
+    protected void setId(Long id) {
         this.id = id;
     }
 

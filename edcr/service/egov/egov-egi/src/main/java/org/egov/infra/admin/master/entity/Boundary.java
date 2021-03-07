@@ -149,7 +149,7 @@ public class Boundary extends AbstractAuditable {
     }
 
     @Override
-    public void setId(final Long id) {
+    protected void setId(final Long id) {
         this.id = id;
     }
 

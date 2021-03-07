@@ -15,7 +15,6 @@ import javax.persistence.Table;
 public class OccupancyMapping {
 
 	public static final String SEQ_OCCUPANCY = "SEQ_EGBPA_OCCUPANCY_MAPPING";
-	private static final long serialVersionUID = -1928622582218032380L;
 
 	@Id
 	@GeneratedValue(generator = SEQ_OCCUPANCY, strategy = GenerationType.SEQUENCE)
@@ -37,7 +36,7 @@ public class OccupancyMapping {
 		return id;
 	}
 
-	public void setId(Long id) {
+	protected void setId(Long id) {
 		this.id = id;
 	}
 

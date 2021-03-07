@@ -76,7 +76,7 @@ public class SubFeatureColorCode {
         return id;
     }
 
-    public void setId(Long id) {
+    protected void setId(Long id) {
         this.id = id;
     }
 

@@ -123,7 +123,7 @@ public class SubOccupancy extends AbstractAuditable {
     }
 
     @Override
-    public void setId(Long id) {
+    protected void setId(Long id) {
         this.id = id;
     }
 
