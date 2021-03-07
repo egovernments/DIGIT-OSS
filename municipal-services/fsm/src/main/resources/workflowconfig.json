@@ -270,36 +270,7 @@
                     "docUploadRequired": false,
                     "isStartState": false,
                     "isTerminateState": true,
-                    "isStateUpdatable": false,
-                    "actions": [
-                        {
-                            "tenantId": "pb",
-                            "currentState": "COMPLETED",
-                            "action": "SUBMIT_FEEDBACK",
-                            "nextState": "COMPLETED",
-                            "roles": [
-                                "CITIZEN"
-                            ]
-                        },
-                        {
-                            "tenantId": "pb",
-                            "currentState": "COMPLETED",
-                            "action": "SUBMIT_FEEDBACK",
-                            "nextState": "COMPLETED",
-                            "roles": [
-                                "CITIZEN"
-                            ]
-                        },
-                        {
-                            "tenantId": "pb",
-                            "currentState": "COMPLETED",
-                            "action": "SUBMIT_FEEDBACK",
-                            "nextState": "COMPLETED",
-                            "roles": [
-                                "CITIZEN"
-                            ]
-                        }
-                    ]
+                    "isStateUpdatable": false
                 },
                 {
                     "sla": null,
