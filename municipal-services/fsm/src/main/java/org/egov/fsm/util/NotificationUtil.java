@@ -90,10 +90,10 @@ public class NotificationUtil {
 				}
 				if (message.contains("<DSO_MOBILE_NUMBER>") && vendor != null) {
 					
-					message = message.replace("<AMOUNT_TO_BE_PAID>", vendor.getOwner().getMobileNumber());
+					message = message.replace("<DSO_MOBILE_NUMBER>", vendor.getOwner().getMobileNumber());
 				}
 				
-				if (message.contains("<VEHICLE_REG_NO>") && vendor != null && CollectionUtils.isEmpty(vendor.getVehicles())) {
+				if (message.contains("<VEHICLE_REG_NO>") && vendor != null && !CollectionUtils.isEmpty(vendor.getVehicles())) {
 					Map<String, Vehicle> vehilceIdMap = vendor.getVehicles().stream().collect(Collectors.toMap(Vehicle::getId,Function.identity()));
 					Vehicle vehicle = vehilceIdMap.get(fsm.getVehicleId());
 					if(vehicle != null) {
@@ -112,11 +112,14 @@ public class NotificationUtil {
 				
 				if (message.contains("<FSM_DSO_REJECT_REASON>") ) {
 					
-					message = message.replace("<FSM_DSO_REJECT_REASON>", fsmRequest.getWorkflow().getComments());
+					String reasonComment = fsmRequest.getWorkflow().getComments();
+					String localizedCmt = getMessageTemplate(reasonComment, localizationMessage);
+					message = message.replace("<FSM_DSO_REJECT_REASON>", org.springframework.util.StringUtils.isEmpty(localizedCmt)? reasonComment : localizedCmt);
 				}
 				if (message.contains("<FSM_CANCEL_REASON>") ) {
-					
-					message = message.replace("<FSM_CANCEL_REASON>", fsmRequest.getWorkflow().getComments());
+					String reasonComment = fsmRequest.getWorkflow().getComments();
+					String localizedCmt = getMessageTemplate(reasonComment, localizationMessage);
+					message = message.replace("<FSM_CANCEL_REASON>", org.springframework.util.StringUtils.isEmpty(localizedCmt)? reasonComment : localizedCmt);
 				}
 				
 				if (message.contains("<PAY_LINK>") ) {
@@ -155,7 +158,7 @@ public class NotificationUtil {
 	private String getPaymentData(String properyName,FSMRequest fsmRequest) {
 			StringBuilder builder = new StringBuilder(config.getCollectionServiceHost());
 			builder.append(config.getCollectionServiceSearchEndPoint()).append(FSMConstants.FSM_PAY_BUSINESS_SERVICE);
-			builder.append("?tenantId=").append(fsmRequest.getFsm().getTenantId()).append("&consumerCodes=").append(fsmRequest.getFsm().getApplicationNo());
+			builder.append("/_search?tenantId=").append(fsmRequest.getFsm().getTenantId()).append("&consumerCodes=").append(fsmRequest.getFsm().getApplicationNo());
 			LinkedHashMap responseMap =  (LinkedHashMap) serviceRequestRepository.fetchResult(builder, new RequestInfoWrapper(fsmRequest.getRequestInfo()));
 			JSONObject jsonObject = new JSONObject(responseMap);
 			String proeprtyValue ="";
@@ -305,7 +308,7 @@ public class NotificationUtil {
 			tenantId = tenantId.split("\\.")[0];
 
 		String locale = "en_IN";
-		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
+		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("\\|").length >= 2)
 			locale = requestInfo.getMsgId().split("\\|")[1];
 
 		StringBuilder uri = new StringBuilder();
