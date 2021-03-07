@@ -71,7 +71,7 @@ public class LabelValueBean implements Serializable {
 	 * Sets the id.
 	 * @param id The id to set.
 	 */
-	public void setId(final int id) {
+	protected void setId(final int id) {
 		this.id = id;
 	}
 
