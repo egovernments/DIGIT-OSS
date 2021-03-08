@@ -468,7 +468,7 @@ public class EstimationService {
 		for (Object val : taxRates) {
 			LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) val;
 			if (((String) map.get("code")).equals(unit.getUsageCategorySubMinor())) {
-				return BigDecimal.valueOf(Long.valueOf((int) map.get("ARVFactor")));
+				return BigDecimal.valueOf(Double.valueOf((double) map.get("ARVFactor")));
 			}
 
 		}
