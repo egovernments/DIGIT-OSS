@@ -414,16 +414,15 @@ const getMutationAdditionalData = async (action, state, dispatch) => {
     let mutationAdditionalFeeData = get(payload, "MdmsRes.PropertyTax.MutationAdditionalFees")
     let userInfo = getUserInfo();
     userInfo = JSON.parse(userInfo);
-    let approver = userInfo.roles.map(item =>{
-      if(item.code == "PTAPPROVER"){
-        return item;
-      }
-    })
-    if(approver){
+    let isRoleValid = !!userInfo.roles.find(item => {
+     return item.code === 'PTAPPROVER' || item.code === "PTFEMP"
+    }); 
+
+    if(isRoleValid){
       set(
         action,
         `screenConfig.components.div.children.body.children.cardContent.children.FeeSummary.visible`,
-        true
+        isRoleValid
       )
     }
     let mutaDetails = get(action,"screenConfig.components.div.children.body.children.cardContent.children.FeeSummary.children.cardContent.children.cardOne.children.cardContent.children.feedetailsContainer.children");
