@@ -76,6 +76,7 @@ class ServiceList extends React.Component {
       <Grid container>
         <Hidden smUp>
           {actionList.map((service) => {
+           service.leftIcon= service.name== "digit-ui FSM"? "custom:localShipping":service.leftIcon;
             const translatedLabel = service.displayName.toUpperCase().replace(/[.:\-\s]/g, "_");
 
             return (
