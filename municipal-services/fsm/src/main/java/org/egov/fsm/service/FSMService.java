@@ -286,6 +286,33 @@ public class FSMService {
 			throw new CustomException(FSMErrorConstants.INVALID_WASTER_COLLECTED," Wastecollected is invalid to complete the application !.");
 		}
 		
+		if(fsm.getCompletedOn() != null) {
+			Calendar cmpOn = Calendar.getInstance();
+			cmpOn.setTimeInMillis(fsm.getCompletedOn());
+			Calendar strtDt = Calendar.getInstance();
+			strtDt.setTimeInMillis(fsm.getAuditDetails().getCreatedTime());
+			Calendar today = Calendar.getInstance();
+			strtDt.set(Calendar.HOUR_OF_DAY,0);
+			strtDt.set(Calendar.MINUTE,0);
+			strtDt.set(Calendar.SECOND,0);
+			strtDt.set(Calendar.MILLISECOND,0);
+			today.set(Calendar.HOUR_OF_DAY,0);
+			today.set(Calendar.MINUTE,0);
+			today.set(Calendar.SECOND,0);
+			today.set(Calendar.MILLISECOND,0);
+			cmpOn.set(Calendar.HOUR_OF_DAY,0);
+			cmpOn.set(Calendar.MINUTE,0);
+			cmpOn.set(Calendar.SECOND,0);
+			cmpOn.set(Calendar.MILLISECOND,0);
+			cmpOn.add(Calendar.DAY_OF_YEAR, 1);
+			today.add(Calendar.DAY_OF_YEAR, 2);
+			if( !(cmpOn.after(strtDt) && cmpOn.before(today) )) {
+				throw new CustomException(FSMErrorConstants.INVALID_COMPLETED_DATE," Completed  Date  is invalid");
+			}
+		}else {
+			throw new CustomException(FSMErrorConstants.COMPLETED_DATE_NOT_NULL," Completed On Cannot be empty !");
+		}
+		
 		ArrayList assignes = new ArrayList<String>();
 		assignes.add(fsm.getAccountId());
 		fsmRequest.getWorkflow().setAssignes(assignes);

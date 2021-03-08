@@ -68,6 +68,8 @@ public class FSMErrorConstants {
 	public static final String INVALID_ACTION = "INVALID_ACTION";
 	public static final String INVALID_DSO = "INVALID_DSO";
 	public static final String INVALID_POSSIBLE_DATE = "INVALID_POSSIBLE_DATE";
+	public static final String INVALID_COMPLETED_DATE = "INVALID_COMPLETED_DATE";
+	public static final String COMPLETED_DATE_NOT_NULL = "COMPLETED_DATE_NOT_NULL";
 	public static final String VEHICLE_NOT_FOUND = "VEHICLE_NOT_FOUND";
 	public static final String INVALID_DSO_VEHICLE = "INVALID_DSO_VEHICLE";
 	public static final String INVALID_CHECKLIST = "INVALID_CHECKLIST";

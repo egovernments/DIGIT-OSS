@@ -133,5 +133,9 @@ public class FSM   {
   
   @JsonProperty("wasteCollected")
   private Double wasteCollected = null;
+  
+
+  @JsonProperty("completedOn")
+  private Long completedOn = null;
 
 }
