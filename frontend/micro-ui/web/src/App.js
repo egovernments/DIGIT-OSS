@@ -2,10 +2,9 @@ import React from 'react';
 
 import { PGRModule, PGRLinks, PGRReducers } from "@egovernments/digit-ui-module-pgr";
 import { initFSMComponents } from "@egovernments/digit-ui-module-fsm";
-import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pgr";
+import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
 import { PaymentModule, PaymentLinks } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
-import { initLibraries } from "@egovernments/digit-ui-libraries";
 
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT"];
