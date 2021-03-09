@@ -5,7 +5,7 @@
 	<artifactId>ws-services</artifactId>
 	<packaging>jar</packaging>
 	<name>water-services</name>
-	<version>1.2.1-SNAPSHOT</version>
+	<version>1.3.0-SNAPSHOT</version>
 	<properties>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>

@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>rainmaker-pgr</artifactId>
-  <version>1.1.2-SNAPSHOT</version>
+  <version>1.1.3-SNAPSHOT</version>
   <name>pgr</name>
   <description>Public Grievance Redressal</description>
   <url>http://maven.apache.org</url>

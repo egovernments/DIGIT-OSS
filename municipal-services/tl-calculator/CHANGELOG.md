@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.2 - 2021-02-26
+
+- Updated domain name in application.properties
+
 ## 1.1.1 - 2020-10-1
 
 - Added Index to achieve performance benefits.
