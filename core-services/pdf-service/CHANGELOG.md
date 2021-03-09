@@ -2,10 +2,10 @@
 All notable changes to this module will be documented in this file.
 
 ## 1.1.2 - 2021-02-26
-- Updated domain name in application.properties
+- Updated domain name in EnvironmentVaraible.js file.
 
 ## 1.1.1 -2021-01-12
-- Handled special character as input in PDF
+- Handled special character as input in PDF.
 
 ## 1.1.0 - 2020-19-06
 - Added PDF service to generate PDFs at server based on configs     
