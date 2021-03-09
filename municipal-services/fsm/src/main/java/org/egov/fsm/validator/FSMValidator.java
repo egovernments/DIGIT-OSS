@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -174,38 +175,54 @@ public class FSMValidator {
 
 		if (criteria.getLimit() != null && !allowedParams.contains("limit"))
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on limit is not allowed");
-		
+
 		if (criteria.getApplicationNos() != null && !allowedParams.contains("applicationNos")) {
-			System.out.println("app..... "+criteria.getApplicationNos());
+			System.out.println("app..... " + criteria.getApplicationNos());
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationNo is not allowed");
-			}
-		if (criteria.getFromDate() != null && !allowedParams.contains("fromDate") && 
-				criteria.getToDate() != null && !allowedParams.contains("toDate") ) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on fromDate and toDate is not allowed");
-		}else if( (criteria.getFromDate() != null && criteria.getToDate() == null ) ||
-				criteria.getFromDate() == null && criteria.getToDate() != null) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search only "+((criteria.getFromDate() == null) ? "fromDate" :"toDate" )+" is not allowed");
-		}if(criteria.getFromDate() != null && criteria.getFromDate() > Calendar.getInstance().getTimeInMillis() ||
-				criteria.getToDate() != null && criteria.getFromDate() > Calendar.getInstance().getTimeInMillis()	) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search in futer dates is not allowed");
-			
 		}
-		
-		
-		if (CollectionUtils.isEmpty(criteria.getApplicationStatus())&& !allowedParams.contains("applicationStatus")) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
+		if (criteria.getFromDate() != null && !allowedParams.contains("fromDate") && criteria.getToDate() != null
+				&& !allowedParams.contains("toDate")) {
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on fromDate and toDate is not allowed");
+		} else if( criteria.getFromDate() != null && criteria.getToDate() != null ){
+
+			if ((criteria.getFromDate() != null && criteria.getToDate() == null)
+					|| criteria.getFromDate() == null && criteria.getToDate() != null) {
+				throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search only "
+						+ ((criteria.getFromDate() == null) ? "fromDate" : "toDate") + " is not allowed");
 			}
-		
+
+			Calendar fromDate = Calendar.getInstance(TimeZone.getDefault());
+			fromDate.setTimeInMillis(criteria.getFromDate());
+			fromDate.set(Calendar.HOUR_OF_DAY, 0);
+			fromDate.set(Calendar.MINUTE, 0);
+			fromDate.set(Calendar.SECOND, 0);
+
+			Calendar toDate =  Calendar.getInstance(TimeZone.getDefault());
+			toDate.setTimeInMillis(criteria.getToDate());
+			toDate.set(Calendar.HOUR_OF_DAY, 23);
+			toDate.set(Calendar.MINUTE, 59);
+			toDate.set(Calendar.SECOND, 59);
+			toDate.set(Calendar.MILLISECOND, 0);
+
+
+			if (fromDate.getTimeInMillis() > toDate.getTimeInMillis() ) {
+				throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "fromdate cannot be greater than todate.");
+
+			}
+		}
+
+		if (CollectionUtils.isEmpty(criteria.getApplicationStatus()) && !allowedParams.contains("applicationStatus")) {
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
+		}
+
 		if (CollectionUtils.isEmpty(criteria.getLocality()) && !allowedParams.contains("locality")) {
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
-			}
-		
+		}
+
 		if (CollectionUtils.isEmpty(criteria.getOwnerIds()) && !allowedParams.contains("ownerIds")) {
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
-			}
-		
-		
-			
+		}
+
 	}
 
 	public void validateUpdate(FSMRequest fsmRequest, List<FSM> searchResult, Object mdmsData) {

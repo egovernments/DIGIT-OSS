@@ -1,10 +1,12 @@
 # fsm-calculator
 
-TBD
+FSM Calculator is a system that enables FSM Admin to create billing slab for the FSM application(s) with different combination of propertyType , slum , tank capacity and etc..
+
+Generates the Demand after calculating the charges for the given application using the billing slab already configured. This document contains the details about how to setup the fsm-calculator service and description the functionalities it provides.   
 
 ### DB UML Diagram
 
-- TBD
+![plot](./fsm-calculator.png)
 
 ### Service Dependencies
 

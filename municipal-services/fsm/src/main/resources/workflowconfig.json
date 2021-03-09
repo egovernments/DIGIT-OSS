@@ -110,14 +110,6 @@
                     "actions": [
                         {
                             "tenantId": "pb",
-                            "action": "SENDBACK",
-                            "nextState": "PENDING_APPL_FEE_PAYMENT",
-                            "roles": [
-                                "FSM_ADMIN"
-                            ]
-                        },
-                        {
-                            "tenantId": "pb",
                             "action": "CANCEL",
                             "nextState": "CANCELED",
                             "roles": [

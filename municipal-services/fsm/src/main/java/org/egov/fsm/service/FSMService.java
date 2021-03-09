@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TimeZone;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -97,8 +98,8 @@ public class FSMService {
 	private FSMRepository repository;
 	public FSM create(FSMRequest fsmRequest) {
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
-		String tenantId = fsmRequest.getFsm().getTenantId().split("\\.")[0];
-		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
+//		String tenantId = fsmRequest.getFsm().getTenantId().split("\\.")[0];
+		Object mdmsData = util.mDMSCall(requestInfo, fsmRequest.getFsm().getTenantId());
 		if (fsmRequest.getFsm().getTenantId().split("\\.").length == 1) {
 			throw new CustomException(FSMErrorConstants.INVALID_TENANT, " Application cannot be create at StateLevel");
 		}
@@ -126,8 +127,8 @@ public class FSMService {
 	public FSM update(FSMRequest fsmRequest) {
 		
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
-		String tenantId = fsmRequest.getFsm().getTenantId().split("\\.")[0];
-		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
+//		String tenantId = fsmRequest.getFsm().getTenantId().split("\\.")[0];
+		Object mdmsData = util.mDMSCall(requestInfo, fsmRequest.getFsm().getTenantId());
 		FSM fsm = fsmRequest.getFsm();
 		
 		
@@ -214,9 +215,9 @@ public class FSMService {
 		}
 		
 		if(fsm.getPossibleServiceDate() != null) {
-			Calendar psd = Calendar.getInstance();
+			Calendar psd = Calendar.getInstance(TimeZone.getDefault());
 			psd.setTimeInMillis(fsm.getPossibleServiceDate());
-			Calendar today = Calendar.getInstance();
+			Calendar today = Calendar.getInstance(TimeZone.getDefault());
 			today.set(Calendar.HOUR_OF_DAY,0);
 			today.set(Calendar.MINUTE,0);
 			today.set(Calendar.SECOND,0);
@@ -287,11 +288,11 @@ public class FSMService {
 		}
 		
 		if(fsm.getCompletedOn() != null) {
-			Calendar cmpOn = Calendar.getInstance();
+			Calendar cmpOn = Calendar.getInstance(TimeZone.getDefault());
 			cmpOn.setTimeInMillis(fsm.getCompletedOn());
-			Calendar strtDt = Calendar.getInstance();
+			Calendar strtDt = Calendar.getInstance(TimeZone.getDefault());
 			strtDt.setTimeInMillis(fsm.getAuditDetails().getCreatedTime());
-			Calendar today = Calendar.getInstance();
+			Calendar today = Calendar.getInstance(TimeZone.getDefault());
 			strtDt.set(Calendar.HOUR_OF_DAY,0);
 			strtDt.set(Calendar.MINUTE,0);
 			strtDt.set(Calendar.SECOND,0);
@@ -395,6 +396,8 @@ public class FSMService {
 					criteria.getOwnerIds().addAll(uuids);
 				}
 				
+			}else {
+				return FSMResponse.builder().fsm(fsmList).build();
 			}
 		}
 		

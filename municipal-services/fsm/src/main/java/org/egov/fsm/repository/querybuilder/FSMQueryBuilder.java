@@ -1,6 +1,8 @@
 package org.egov.fsm.repository.querybuilder;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.egov.fsm.config.FSMConfiguration;
 import org.egov.fsm.web.model.FSMSearchCriteria;
@@ -75,13 +77,27 @@ public class FSMQueryBuilder {
 		}
 
 		if (criteria.getFromDate() != null && criteria.getToDate() != null) {
+			
+			Calendar fromDate = Calendar.getInstance(TimeZone.getDefault());
+			fromDate.setTimeInMillis(criteria.getFromDate());
+			fromDate.set(Calendar.HOUR_OF_DAY,0);
+			fromDate.set(Calendar.MINUTE,0);
+			fromDate.set(Calendar.SECOND,0);
+
+			Calendar toDate = Calendar.getInstance(TimeZone.getDefault());
+			toDate.setTimeInMillis(criteria.getToDate());
+			toDate.set(Calendar.HOUR_OF_DAY, 23);
+			toDate.set(Calendar.MINUTE, 59);
+			toDate.set(Calendar.SECOND, 59);
+			toDate.set(Calendar.MILLISECOND, 0);
+
+			
+			
 			addClauseIfRequired(preparedStmtList, builder);
-			builder.append(" fsm.createdtime BETWEEN ").append(criteria.getFromDate()).append(" AND ")
-					.append(criteria.getToDate());
-		} else if (criteria.getFromDate() != null && criteria.getToDate() == null) {
-			addClauseIfRequired(preparedStmtList, builder);
-			builder.append(" fsm.createdtime >= ").append(criteria.getFromDate());
+			builder.append(" fsm.createdtime BETWEEN ").append(fromDate.getTimeInMillis()).append(" AND ")
+					.append(toDate.getTimeInMillis());
 		}
+		
 		List<String> ownerIds = criteria.getOwnerIds();
 		if (!CollectionUtils.isEmpty(ownerIds)) {
 			addClauseIfRequired(preparedStmtList, builder);
