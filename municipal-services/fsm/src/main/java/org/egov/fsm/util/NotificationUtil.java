@@ -25,6 +25,8 @@ import org.egov.fsm.web.model.dso.Vendor;
 import org.egov.fsm.web.model.notification.EventRequest;
 import org.egov.fsm.web.model.notification.SMSRequest;
 import org.egov.fsm.web.model.vehicle.Vehicle;
+import org.egov.fsm.web.model.workflow.ProcessInstance;
+import org.egov.fsm.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,15 +52,18 @@ public class NotificationUtil {
 	private DSOService dsoSerevice;
 	
 	private RestTemplate restTemplate;
+	
+	private WorkflowService workflowService;
 
 	@Autowired
 	public NotificationUtil(FSMConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			Producer producer,DSOService dsoService, RestTemplate restTemplate) {
+			Producer producer,DSOService dsoService, RestTemplate restTemplate, WorkflowService workflowService) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
 		this.dsoSerevice=dsoService;
 		this.restTemplate = restTemplate;
+		this.workflowService = workflowService;
 	}
 
 	final String receiptNumberKey = "receiptNumber";
@@ -81,9 +86,22 @@ public class NotificationUtil {
 			FSM fsm = fsmRequest.getFsm();
 			Vendor vendor = this.dsoSerevice.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null, fsmRequest.getRequestInfo());
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
+			
 			if (!StringUtils.isEmpty(messageTemplate)) {
 				message = getInitiatedMsg(fsm, messageTemplate);
 
+				if (message.contains("<SLA_HOURS>")) {
+					ProcessInstance processInstance = workflowService.getProcessInstance(fsm, fsmRequest.getRequestInfo());
+					Long slatime =null;
+					slatime = ( ( processInstance.getStateSla() != null ) ? processInstance.getStateSla() : processInstance.getBusinesssServiceSla() );
+					int slaValue = 0;
+					if(slatime != null) {
+						slaValue= (int) Math.ceil(slatime/(1000*60*60));
+						
+					}
+					message = message.replace("<SLA_HOURS>", String.valueOf(slaValue));
+				}
+				
 				if (message.contains("<AMOUNT_TO_BE_PAID>")) {
 					BigDecimal amount = getAmountToBePaid(fsmRequest.getRequestInfo(), fsmRequest.getFsm());
 					message = message.replace("<AMOUNT_TO_BE_PAID>", amount.toString());

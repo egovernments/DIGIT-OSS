@@ -1,16 +1,16 @@
 # Vendor
 
-TBD
+Vehicle Registry is a system that enables ULB Employees to create and search Vendor i.e Desluding Operator (DSO) and driver entities with appropriate vehicle Entities  for FSM Application. This document contains the details about how to setup the Vendor and describe the functionalities provided.
 
 ### DB UML Diagram
 
-- TBD
+![plot](./vendor.png)
 
 ### Service Dependencies
 
 
-- mdms-service
-- user-service
+- egov-mdms-service
+- egov-user-service
 - boundary-service
 - vehicle
 
@@ -47,7 +47,7 @@ TBD
 
 
 ### Kafka Consumers
-
+NA
 
 ### Kafka Producers
 

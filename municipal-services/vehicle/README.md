@@ -1,18 +1,19 @@
 # Vehicle
 
-TBD
+Vehicle Registry is a system that enables ULB Employees to create and search Vehicle Entities and schedule Vehicle Trip for FSM Application and track the VehicleTrip. This document contains the details about how to setup the Vehicle and describe the functionalities provided.
 
 ### DB UML Diagram
 
-- TBD
+
+![plot](./vehicle.png)
 
 ### Service Dependencies
 
 
-- mdms-service
-- workflow-v2
+- egov-mdms-service
+- egov-workflow-v2
 - user-service
-- idgen
+- egov-idgen
 
 
 ### Swagger API Contract

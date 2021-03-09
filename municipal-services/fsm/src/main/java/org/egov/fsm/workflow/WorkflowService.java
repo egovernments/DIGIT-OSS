@@ -8,6 +8,8 @@ import org.egov.fsm.web.model.FSM;
 import org.egov.fsm.web.model.RequestInfoWrapper;
 import org.egov.fsm.web.model.workflow.BusinessService;
 import org.egov.fsm.web.model.workflow.BusinessServiceResponse;
+import org.egov.fsm.web.model.workflow.ProcessInstance;
+import org.egov.fsm.web.model.workflow.ProcessInstanceResponse;
 import org.egov.fsm.web.model.workflow.State;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +37,14 @@ public class WorkflowService {
 	/**
 	 * Get the workflow config for the given tenant
 	 * 
-	 * @param tenantId
-	 *            The tenantId for which businessService is requested
+	 * @param fsm
+	 *            The FSM Object
 	 * @param requestInfo
 	 *            The RequestInfo object of the request
 	 * @return BusinessService for the the given tenantId
 	 */
 	public BusinessService getBusinessService(FSM fsm, RequestInfo requestInfo, String businessServceName, String applicationNo) {
-		StringBuilder url = getSearchURLWithParams(fsm, businessServceName, applicationNo);
+		StringBuilder url = getSearchURLWithParams(fsm.getTenantId(), businessServceName, applicationNo);
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
 		BusinessServiceResponse response = null;
@@ -55,13 +57,34 @@ public class WorkflowService {
 	}
 
 	/**
+	 * Get the ProcessInstance for the given Application
+	 * 
+	 * @param FSM
+	 *            The FSM Object
+	 * @param requestInfo
+	 *            The RequestInfo object of the request
+	 * 
+	 */
+	public ProcessInstance getProcessInstance(FSM fsm, RequestInfo requestInfo) {
+		StringBuilder url = getSearchURLWithParams(fsm.getTenantId(), null, fsm.getApplicationNo());
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+		ProcessInstanceResponse response = null;
+		try {
+			response = mapper.convertValue(result, ProcessInstanceResponse.class);
+		} catch (IllegalArgumentException e) {
+			throw new CustomException(FSMErrorConstants.PARSING_ERROR, "Failed to parse response of Workflow");
+		}
+		return response.getProcessInstances().get(0);
+	}
+	/**
 	 * Creates url for search based on given tenantId
 	 *
 	 * @param tenantId
 	 *            The tenantId for which url is generated
 	 * @return The search url
 	 */
-	private StringBuilder getSearchURLWithParams(FSM fsm, String businessService, String applicationNo) {
+	private StringBuilder getSearchURLWithParams(String tenantId, String businessService, String applicationNo) {
 		StringBuilder url = new StringBuilder(config.getWfHost());
 		
 		
@@ -77,7 +100,7 @@ public class WorkflowService {
 		}
 		
 		url.append("&tenantId=");
-		url.append(fsm.getTenantId());
+		url.append(tenantId);
 		
 		return url;
 	}
