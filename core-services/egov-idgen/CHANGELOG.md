@@ -4,6 +4,7 @@ All notable changes to this module will be documented in this file.
 
 - Updated domain name in application.properties
 - Added size validations
+- Change the time zone to IST for date generation
 
 ## 1.2.0 - 2020-06-17
 
