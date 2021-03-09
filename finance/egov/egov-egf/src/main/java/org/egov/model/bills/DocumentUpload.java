@@ -92,6 +92,8 @@ public class DocumentUpload implements Serializable {
 
     @Column(name = "uploadeddate")
     private Date uploadedDate;
+     
+    private Boolean isMigrated;
 
     private transient ByteArrayInputStream inputStream;
 
@@ -165,6 +167,14 @@ public class DocumentUpload implements Serializable {
     
     public Date getCreatedDate(){
         return fileStore.getCreatedDate();
+    }
+    
+    public Boolean getIsMigrated() {
+        return isMigrated;
+    }
+
+    public void setIsMigrated(Boolean isMigrated) {
+        this.isMigrated = isMigrated;
     }
     
 }

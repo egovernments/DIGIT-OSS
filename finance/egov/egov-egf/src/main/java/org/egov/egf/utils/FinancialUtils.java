@@ -47,6 +47,8 @@
  */
 package org.egov.egf.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -61,8 +63,10 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.log4j.Logger;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.dao.EgwStatusHibernateDAO;
+import org.egov.egf.expensebill.repository.DocumentUploadRepository;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
 import org.egov.eis.service.EisCommonService;
@@ -72,9 +76,12 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigService;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.filestore.entity.FileStoreMapper;
+import org.egov.infra.filestore.repository.FileStoreMapperRepository;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.EmployeeInfo;
+import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.workflow.entity.State;
@@ -97,6 +104,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class FinancialUtils {
 
+    private static final Logger LOGGER = Logger.getLogger(FinancialUtils.class);
     public static final Map<String, String> VOUCHER_SUBTYPES = new HashMap<String, String>() {
         private static final long serialVersionUID = -2168753508482839041L;
 
@@ -125,6 +133,12 @@ public class FinancialUtils {
 
     @Autowired
     private FileStoreService fileStoreService;
+    
+    @Autowired
+    private FileStoreMapperRepository fileStoreMapperRepository;
+
+    @Autowired
+    private DocumentUploadRepository documentUploadRepository;
 
     @Autowired
     MicroserviceUtils microServiceUtil;
@@ -365,6 +379,42 @@ public class FinancialUtils {
 
         }
         return documentDetailsList;
+    }
+    
+    @Transactional
+    public void migrateUploadedFiles(RequestInfo requestInfo, List<DocumentUpload> docsUpload) {
+        FileStoreMapper fileStoreS3 = null;
+        FileStoreMapper fileStoreMapperNFS = null;
+        for (DocumentUpload docs : docsUpload) {
+            try {
+                String fileStoreId = docs.getFileStore().getFileStoreId();
+                fileStoreMapperNFS = fileStoreMapperRepository.findByFileStoreId(fileStoreId);
+                // Here passing with the filestoreId and fetch file from the NFS
+                final File file = fileStoreService.fetchNFS(fileStoreMapperNFS.getFileStoreId(),
+                        FinancialConstants.FILESTORE_MODULECODE);
+                // Here taking the NFS file and pushing to S3 bucket
+                if (file.exists()) {
+                    fileStoreS3 = fileStoreService.store(file, fileStoreMapperNFS.getFileName(),
+                            fileStoreMapperNFS.getContentType(), FinancialConstants.FILESTORE_MODULECODE);
+                    LOGGER.info(("NFSFile-------------------" + fileStoreMapperNFS.getFileStoreId()));
+
+                    LOGGER.info("S3File-------------------" + fileStoreS3.getFileStoreId());
+                    docs.getFileStore().setFileStoreId(fileStoreS3.getFileStoreId());
+                    if (fileStoreS3 != null) {
+                        docs.setIsMigrated(true);
+                    }
+
+                    documentUploadRepository.save(docs);
+                }
+            } catch (ApplicationRuntimeException e) {
+                LOGGER.info("Exception while after pushing to S3 bucket filstoreId's : ", e);
+                LOGGER.info(("NFSFile-------------------" + fileStoreMapperNFS.getFileStoreId()));
+
+                LOGGER.info("S3File-------------------" + fileStoreS3.getFileStoreId());
+                
+            }
+        }
+
     }
 
 }

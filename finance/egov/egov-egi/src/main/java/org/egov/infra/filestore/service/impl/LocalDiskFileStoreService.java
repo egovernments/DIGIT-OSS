@@ -201,4 +201,16 @@ public class LocalDiskFileStoreService implements FileStoreService {
     private Path getFilePath(Path fileDirPath, String fileStoreId) {
         return Paths.get(fileDirPath + separator + fileStoreId);
     }
+
+    @Override
+    public Path fetchAsPathNFS(String fileStoreId, String moduleName) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public File fetchNFS(String fileStoreId, String moduleName) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

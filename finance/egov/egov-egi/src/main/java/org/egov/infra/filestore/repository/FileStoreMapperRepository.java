@@ -50,8 +50,11 @@ package org.egov.infra.filestore.repository;
 
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 import javax.persistence.QueryHint;
 
@@ -59,4 +62,7 @@ import javax.persistence.QueryHint;
 public interface FileStoreMapperRepository extends JpaRepository<FileStoreMapper,Long>{
     @QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value = "true") })
     FileStoreMapper findByFileStoreId(String fileStoreId);
+    
+    @Query("from FileStoreMapper where fileStoreId = :fileStoreId")
+    List<FileStoreMapper> getFileStoreIds(String fileStoreId);
 }

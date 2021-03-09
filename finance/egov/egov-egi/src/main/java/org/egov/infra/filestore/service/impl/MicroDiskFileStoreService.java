@@ -3,7 +3,6 @@ package org.egov.infra.filestore.service.impl;
 import static java.io.File.separator;
 import static java.util.UUID.randomUUID;
 import static org.apache.commons.io.FileUtils.getUserDirectoryPath;
-import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.egov.infra.config.core.ApplicationThreadLocals.getCityCode;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -112,7 +111,7 @@ public class MicroDiskFileStoreService implements FileStoreService {
             int length = (int) file.length();
             File parentFile = file.getParentFile();
     
-            DiskFileItem fileItem = new DiskFileItem("budgetInXls",probeContentType, false, name, length, parentFile);
+            DiskFileItem fileItem = new DiskFileItem("files",probeContentType, false, name, length, parentFile);
             InputStream inputs =  new FileInputStream(file);
             OutputStream os = fileItem.getOutputStream();
             int ret = inputs.read();
@@ -196,6 +195,11 @@ public class MicroDiskFileStoreService implements FileStoreService {
     public File fetchFromDigitFileStoreApi(String fileStoreId) throws IOException {
         return fetchDigitFilestore(fileStoreId);
     }
+    
+    @Override
+    public File fetchNFS(String fileStoreId, String moduleName) {
+        return fetchAsPathNFS(fileStoreId, moduleName).toFile();
+    }
 
     @Override
     public Path fetchAsPath(String fileStoreId, String moduleName) {
@@ -225,6 +229,15 @@ public class MicroDiskFileStoreService implements FileStoreService {
         Path path = Files.write(Paths.get(fileDirPath + separator + fileStoreId), responseEntity.getBody());
 
         return path.toFile();
+    }
+
+    @Override
+    public Path fetchAsPathNFS(String fileStoreId, String moduleName) {
+       Path fileDirPath = this.getFileDirectoryPath(moduleName);
+        if (!fileDirPath.toFile().exists())
+            throw new ApplicationRuntimeException(String.format("File Store does not exist at Path : %s/%s/%s",
+                   this.fileStoreBaseDir, getCityCode(), moduleName));
+        return this.getFilePath(fileDirPath, fileStoreId);
     }
 
     @Override

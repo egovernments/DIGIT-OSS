@@ -49,14 +49,11 @@
 package org.egov.infra.filestore.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Set;
 
 import org.egov.infra.filestore.entity.FileStoreMapper;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface FileStoreService {
 
@@ -84,12 +81,16 @@ public interface FileStoreService {
     File fetch(String fileStoreId, String moduleName);
 
     Path fetchAsPath(String fileStoreId, String moduleName);
+    
+    Path fetchAsPathNFS(String fileStoreId, String moduleName);
 
 //    Path fetchAsDigitPath(String fileStoreId,String moduleName) throws IOException;
 
     Set<File> fetchAll(Set<FileStoreMapper> fileMappers, String moduleName);
 
     void delete(String fileStoreId, String moduleName);
+    
+    File fetchNFS(String fileStoreId, String moduleName);
 
 //    FileStoreMapper storeFiles(List<MultipartFile> files, InputStream fileStream, String fileName, String mimeType,
 //            String moduleName, boolean closeStream);
