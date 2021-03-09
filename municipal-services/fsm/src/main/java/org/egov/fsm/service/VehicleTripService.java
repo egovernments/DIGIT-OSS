@@ -61,7 +61,7 @@ public class VehicleTripService {
 		List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL",false);
 		VehicleTrip scheduledTrip = null;
 		if(existingVehicleTrips != null ) {
-			throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION, "VehicleTrip Waiting for Disposal of Application No "+existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()+", Cannot complete this FSM Application : "+ fsmRequest.getFsm().getApplicationNo());
+			throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION, "VehicleTrip Waiting for Disposal of Application No "+existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()+", Cannot complete this FSM Application No "+ fsmRequest.getFsm().getApplicationNo());
 		}else {
 			List<VehicleTrip> scheduledTrips = getVehicleTrips(fsmRequest,"SCHEDULED",true);
 			if(scheduledTrips == null) {
