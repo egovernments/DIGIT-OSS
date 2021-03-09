@@ -774,8 +774,8 @@ public class PropertyValidator {
 
 		if (isDocsEmpty || !isTransferDocPresent) {
 
-			errorMap.put("EG_PT_MT_DOCS_ERROR",
-					"Mandatory documents mising for the muation reason : " + reasonForTransfer);
+			//errorMap.put("EG_PT_MT_DOCS_ERROR",
+			//		"Mandatory documents mising for the muation reason : " + reasonForTransfer);
 		}
 
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW)
