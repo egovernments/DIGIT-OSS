@@ -340,8 +340,10 @@ public class PropertyValidator {
 			errorMap.put("Invalid PROPERTYTYPE", "The PropertyType '" + property.getPropertyType() + "' does not exists");
 		}
 
-		if (property.getOwnershipCategory() != null && !codes.get(PTConstants.MDMS_PT_OWNERSHIPCATEGORY).contains(property.getOwnershipCategory())) {
-			errorMap.put("Invalid OWNERSHIPCATEGORY", "The OwnershipCategory '" + property.getOwnershipCategory() + "' does not exists");
+		String ownershipCategory = property.getOwnershipCategory();
+		String[] ownerSplit = ownershipCategory.split("\\.", 2);
+		if (ownershipCategory != null && !codes.get(PTConstants.MDMS_PT_OWNERSHIPCATEGORY).contains(ownerSplit[1])) {
+			errorMap.put("Invalid OWNERSHIPCATEGORY", "The OwnershipCategory '" + ownershipCategory + "' does not exists");
 		}
 
 		if (property.getUsageCategory() != null && !codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(property.getUsageCategory())) {
