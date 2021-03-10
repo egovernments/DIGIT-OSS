@@ -407,6 +407,12 @@ export const transformPropertyDataToAssessInfo = (data) => {
         jsonPath =  jsonPath && jsonPath.replace(/units\[[0-9]\]/g, "units[" + unitIndex + "]");
         configFloor["fields"][item].jsonPath = jsonPath;
         let valueInJSON = get(data, jsonPath);
+        var addDetail = jsonPath.split("additionalDetails") && jsonPath.split("additionalDetails")[0]
+        if(addDetail && get(data, `${addDetail}additionalDetails.innerDimensionsKnown`) === "false" && (jsonPath.includes("roomsArea")
+        || jsonPath.includes("commonArea") || 
+        jsonPath.includes("bathroomArea") || jsonPath.includes("garageArea"))){
+          configFloor["fields"][item].hideField = true
+        }
         if (valueInJSON === null) {
           let categoryValue = jsonPath.split(".").pop();
           if (categoryValue === "usageCategoryMinor") {
