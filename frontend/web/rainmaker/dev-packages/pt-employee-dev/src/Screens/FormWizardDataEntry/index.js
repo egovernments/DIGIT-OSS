@@ -1437,6 +1437,11 @@ class FormWizardDataEntry extends Component {
       );
       set(
         prepareFormData,
+        "Properties[0].owners",
+        getSingleOwnerInfo(this)
+      );
+      set(
+        prepareFormData,
         "Properties[0].propertyDetails[0].ownershipCategory",
         get(
           common,
@@ -1455,6 +1460,11 @@ class FormWizardDataEntry extends Component {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
+        getMultipleOwnerInfo(this)
+      );
+      set(
+        prepareFormData,
+        "Properties[0].owners",
         getMultipleOwnerInfo(this)
       );
       set(
