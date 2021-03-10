@@ -441,7 +441,7 @@ class FormWizard extends Component {
             }}
             handleRemoveOwner={this.handleRemoveOwner}
             ownerDetails={this.state.ownerInfoArr}
-            disabled={propertiesEdited}
+            //disabled={propertiesEdited}
           />
         );
       case "INSTITUTIONALPRIVATE":

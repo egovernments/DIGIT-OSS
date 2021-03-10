@@ -379,7 +379,7 @@ const createProperty = async (Properties, action, props) => {
 
 
 
-  if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
+  /* if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
   {
     set(propertyPayload, "ownershipCategory",'INDIVIDUAL.SINGLEOWNER');
   }
@@ -387,7 +387,7 @@ const createProperty = async (Properties, action, props) => {
   if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.MULTIPLEOWNERS")
   {
     set(propertyPayload, "ownershipCategory",'INDIVIDUAL.MULTIPLEOWNERS');
-  }
+  } */
 
   if(usageCategory==="RESIDENTIAL.RESIDENTIAL")
   {
