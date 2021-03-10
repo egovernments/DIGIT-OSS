@@ -59,7 +59,7 @@ public class EdcrPdfDetail implements Serializable {
 
     private String layer;
 
-    private File convertedPdf;
+    private transient File convertedPdf;
 
     private String failureReasons;
 
