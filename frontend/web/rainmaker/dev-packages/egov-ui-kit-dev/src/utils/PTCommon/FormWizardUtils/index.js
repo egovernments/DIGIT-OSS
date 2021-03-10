@@ -226,7 +226,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.usageCategoryMajor = extractFromString(newProperty.usageCategory, 0);
   propertyDetails.usageCategoryMinor = extractFromString(newProperty.usageCategory, 1);
   propertyDetails.ownershipCategory = extractFromString(newProperty.ownershipCategory, 0);
-  propertyDetails.subOwnershipCategory = extractFromString(newProperty.ownershipCategory, 1);
+  propertyDetails.subOwnershipCategory = extractFromString(newProperty.ownershipCategory, 2);
   propertyDetails.adhocExemption = null;
   propertyDetails.adhocPenalty = null;
   propertyDetails.adhocExemptionReason = null;
