@@ -48,13 +48,6 @@
 
 package org.egov.infra.utils;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.text.RandomStringGenerator;
-
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.apache.commons.lang3.StringUtils.toEncodedString;
 import static org.egov.infra.utils.ApplicationConstant.NA;
 import static org.egov.infra.utils.ApplicationConstant.NO;
@@ -63,6 +56,17 @@ import static org.egov.infra.utils.ApplicationConstant.WHITESPACE;
 import static org.egov.infra.utils.ApplicationConstant.YES;
 import static org.egov.infra.utils.DateUtils.currentDateToFileNameFormat;
 import static org.egov.infra.validation.regex.Constants.UNSIGNED_NUMERIC;
+
+import java.nio.charset.Charset;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.RandomStringGenerator;
 
 public class StringUtils extends org.apache.commons.lang.StringUtils {
 
@@ -124,8 +128,19 @@ public class StringUtils extends org.apache.commons.lang.StringUtils {
     public static String uniqueString(int codePoint) {
         return UNIQUE_STRING_GENERATOR.generate(codePoint);
     }
-    
+
     public static String sanitize(final String str) {
-        return StringUtils.replaceEach(str, new String[] {"\n", "\r"}, new String[] {"", ""});
+        return StringUtils.replaceEach(str, new String[] { "\n", "\r" }, new String[] { "", "" });
+    }
+
+    public static String normalizeString(String fileName) {
+        fileName = Normalizer.normalize(fileName, Form.NFKC);
+        Pattern pattern = Pattern.compile("[<>]");
+        Matcher matcher = pattern.matcher(fileName);
+        if (matcher.find()) {
+            // Found blacklisted tag
+            throw new IllegalStateException();
+        }
+        return fileName;
     }
 }

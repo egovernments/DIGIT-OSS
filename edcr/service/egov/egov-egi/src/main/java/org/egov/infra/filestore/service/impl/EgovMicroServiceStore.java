@@ -50,6 +50,7 @@ package org.egov.infra.filestore.service.impl;
 
 import static java.io.File.separator;
 import static org.egov.infra.config.core.ApplicationThreadLocals.getCityCode;
+import static org.egov.infra.utils.StringUtils.normalizeString;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.File;
@@ -116,6 +117,9 @@ public class EgovMicroServiceStore implements FileStoreService {
     @Override
     public FileStoreMapper store(File file, String fileName, String mimeType, String moduleName, boolean deleteFile) {
         try {
+            fileName = normalizeString(fileName);
+            mimeType = normalizeString(mimeType);
+            moduleName = normalizeString(moduleName);
             HttpHeaders headers = new HttpHeaders();
             if (LOG.isDebugEnabled())
                 LOG.debug(String.format("Uploaded file   %s   with size  %s ", file.getName(), file.length()));
@@ -154,6 +158,9 @@ public class EgovMicroServiceStore implements FileStoreService {
 
         try {
             HttpHeaders headers = new HttpHeaders();
+            fileName = normalizeString(fileName);
+            mimeType = normalizeString(mimeType);
+            moduleName = normalizeString(moduleName);
             File f = new File(fileName);
             FileUtils.copyToFile(fileStream, f);
             if (closeStream) {
@@ -203,6 +210,8 @@ public class EgovMicroServiceStore implements FileStoreService {
     @Override
     public File fetch(String fileStoreId, String moduleName) {
 
+        fileStoreId = normalizeString(fileStoreId);
+        moduleName = normalizeString(moduleName);
         String urls = url + "/id?tenantId=" + ApplicationThreadLocals.getTenantID() + "&fileStoreId=" + fileStoreId;
         if (LOG.isDebugEnabled())
             LOG.debug(String.format("fetch file fron url   %s   ", urls));

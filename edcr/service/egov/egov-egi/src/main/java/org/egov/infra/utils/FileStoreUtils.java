@@ -53,6 +53,7 @@ import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION;
 import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION_ATTACH;
 import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION_INLINE;
 import static org.egov.infra.utils.ImageUtils.compressImage;
+import static org.egov.infra.utils.StringUtils.normalizeString;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -107,6 +108,8 @@ public class FileStoreUtils {
 
     public ResponseEntity<InputStreamResource> fileAsResponseEntity(String fileStoreId, String moduleName, boolean toSave) {
         try {
+            fileStoreId = normalizeString(fileStoreId);
+            moduleName = normalizeString(moduleName);
             Optional<FileStoreMapper> fileStoreMapper = getFileStoreMapper(fileStoreId);
             if (fileStoreMapper.isPresent()) {
                 Path file = getFileAsPath(fileStoreId, moduleName);
@@ -129,6 +132,8 @@ public class FileStoreUtils {
 
     public void writeToHttpResponseStream(String fileStoreId, String moduleName, HttpServletResponse response) {
         try {
+            fileStoreId = normalizeString(fileStoreId);
+            moduleName = normalizeString(moduleName);
             FileStoreMapper fileStoreMapper = this.fileStoreMapperRepository.findByFileStoreId(fileStoreId);
             if (fileStoreMapper != null) {
                 File file = this.fileStoreService.fetch(fileStoreMapper, moduleName);
@@ -167,6 +172,8 @@ public class FileStoreUtils {
     }
 
     public void copyFileToPath(Path newFilePath, String fileStoreId, String moduleName) throws IOException {
+        fileStoreId = normalizeString(fileStoreId);
+        moduleName = normalizeString(moduleName);
         Optional<FileStoreMapper> fileStoreMapper = getFileStoreMapper(fileStoreId);
         if (fileStoreMapper.isPresent()) {
             File file = fileStoreService.fetch(fileStoreMapper.get(), moduleName);
@@ -175,6 +182,8 @@ public class FileStoreUtils {
     }
 
     public byte[] fileAsByteArray(String fileStoreId, String moduleName) {
+        fileStoreId = normalizeString(fileStoreId);
+        moduleName = normalizeString(moduleName);
         try {
             Optional<FileStoreMapper> fileStoreMapper = getFileStoreMapper(fileStoreId);
             if (fileStoreMapper.isPresent()) {
