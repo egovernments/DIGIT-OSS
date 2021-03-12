@@ -50,7 +50,10 @@ package org.egov.infra.config.security.authentication.filter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.security.utils.SecurityConstants;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -87,6 +90,9 @@ public class ApplicationAuthenticationFilter extends UsernamePasswordAuthenticat
                                             FilterChain filterChain, Authentication authResult) throws IOException, ServletException {
         String location = request.getParameter(SecurityConstants.LOCATION_FIELD);
         HttpSession session = request.getSession();
+        boolean isValid = Jsoup.isValid(location, Whitelist.basic());
+        if(!isValid)
+            throw new ApplicationRuntimeException("Invalid location");
         if (StringUtils.isNotBlank(location))
             session.setAttribute(SecurityConstants.LOCATION_FIELD, location);
 
@@ -106,6 +112,9 @@ public class ApplicationAuthenticationFilter extends UsernamePasswordAuthenticat
             credentials.put(credential, field);
         }
         String username = request.getParameter(SecurityConstants.USERNAME_FIELD);
+        boolean isValid = Jsoup.isValid(username, Whitelist.basic());
+        if(!isValid)
+            throw new ApplicationRuntimeException("Invalid username");
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, credentials);
         request.getSession().setAttribute(SecurityConstants.USERNAME_FIELD, username);
         setDetails(request, authToken);
