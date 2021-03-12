@@ -11,6 +11,7 @@ var paymentRouter = require("./routes/payments");
 // var billRouter = require("./routes/bills");
 
 var app = express();
+app.disable('x-powered-by');
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
