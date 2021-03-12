@@ -19,9 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.springframework.security.web.savedrequest.Enumerator;
 
 public class MultiReadRequestWrapper extends HttpServletRequestWrapper {
+    
+    private static final Logger LOG = Logger.getLogger(MultiReadRequestWrapper.class);
+    
     private ByteArrayOutputStream cachedBytes;
     private final Map<String, String> customHeaders;
 
@@ -31,7 +35,7 @@ public class MultiReadRequestWrapper extends HttpServletRequestWrapper {
     }
 
     @Override
-    public ServletInputStream getInputStream() throws IOException {
+    public ServletInputStream getInputStream() {
         if (cachedBytes == null)
             cacheInputStream();
 
@@ -39,13 +43,17 @@ public class MultiReadRequestWrapper extends HttpServletRequestWrapper {
     }
 
     @Override
-    public BufferedReader getReader() throws IOException {
+    public BufferedReader getReader() {
         return new BufferedReader(new InputStreamReader(getInputStream()));
     }
 
-    private void cacheInputStream() throws IOException {
+    private void cacheInputStream() {
         cachedBytes = new ByteArrayOutputStream();
-        IOUtils.copy(super.getInputStream(), cachedBytes);
+        try {
+            IOUtils.copy(super.getInputStream(), cachedBytes);
+        } catch (IOException e) {
+            LOG.error("Error occurred when caching", e);
+        }
     }
 
     public class CachedServletInputStream extends ServletInputStream {
@@ -56,7 +64,8 @@ public class MultiReadRequestWrapper extends HttpServletRequestWrapper {
         }
 
         @Override
-        public int read() throws IOException {
+        public int read() {
+            
             return input.read();
         }
 
@@ -111,7 +120,7 @@ public class MultiReadRequestWrapper extends HttpServletRequestWrapper {
     
     @Override
     public Enumeration<String> getHeaders(String name) {
-     // check the custom headers first
+        // check the custom headers first
         String headerValue = customHeaders.get(name);
 
         if (headerValue != null) {

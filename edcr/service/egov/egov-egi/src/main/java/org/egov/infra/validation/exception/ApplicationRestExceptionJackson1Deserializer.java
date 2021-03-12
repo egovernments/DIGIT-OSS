@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.DeserializationContext;
@@ -60,55 +61,63 @@ import org.codehaus.jackson.map.JsonDeserializer;
 
 public class ApplicationRestExceptionJackson1Deserializer extends JsonDeserializer<ApplicationRestException> {
 
+    private static final Logger LOG = Logger.getLogger(ApplicationRestExceptionJackson1Deserializer.class);
+
     private static final String ERROR_DESCRIPTION = "error_description";
 
     @Override
-    public ApplicationRestException deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+    public ApplicationRestException deserialize(JsonParser jp, DeserializationContext ctxt) {
 
-        JsonToken t = jp.getCurrentToken();
-        if (t == JsonToken.START_OBJECT) {
-            t = jp.nextToken();
-        }
-        Map<String, Object> errorParams = new HashMap<>();
-        for (; t == JsonToken.FIELD_NAME; t = jp.nextToken()) {
-            // Must point to field name
-            String fieldName = jp.getCurrentName();
-            // And then the value...
-            t = jp.nextToken();
-            // Note: must handle null explicitly here; value deserializers won't
-            Object value;
-            if (t == JsonToken.VALUE_NULL) {
-                value = null;
+        try {
+            JsonToken t = jp.getCurrentToken();
+            if (t == JsonToken.START_OBJECT) {
+                t = jp.nextToken();
             }
-            // Some servers might send back complex content
-            else if (t == JsonToken.START_ARRAY) {
-                value = jp.readValueAs(List.class);
-            } else if (t == JsonToken.START_OBJECT) {
-                value = jp.readValueAs(Map.class);
-            } else {
-                value = jp.getText();
+            Map<String, Object> errorParams = new HashMap<>();
+            for (; t == JsonToken.FIELD_NAME; t = jp.nextToken()) {
+                // Must point to field name
+                String fieldName = jp.getCurrentName();
+                // And then the value...
+                t = jp.nextToken();
+                // Note: must handle null explicitly here; value deserializers won't
+                Object value;
+                if (t == JsonToken.VALUE_NULL) {
+                    value = null;
+                }
+                // Some servers might send back complex content
+                else if (t == JsonToken.START_ARRAY) {
+                    value = jp.readValueAs(List.class);
+                } else if (t == JsonToken.START_OBJECT) {
+                    value = jp.readValueAs(Map.class);
+                } else {
+                    value = jp.getText();
+                }
+                errorParams.put(fieldName, value);
             }
-            errorParams.put(fieldName, value);
-        }
 
-        Object errorCode = errorParams.get("error");
-        String errorMessage = errorParams.containsKey(ERROR_DESCRIPTION) ? errorParams.get(ERROR_DESCRIPTION)
-                .toString() : null;
-        if (errorMessage == null) {
-            errorMessage = errorCode == null ? "Rest Error" : errorCode.toString();
-        }
-
-        ApplicationRestException ex = new ApplicationRestException(errorMessage);
-
-        Set<Map.Entry<String, Object>> entries = errorParams.entrySet();
-        for (Map.Entry<String, Object> entry : entries) {
-            String key = entry.getKey();
-            if (!"error".equals(key) && !ERROR_DESCRIPTION.equals(key)) {
-                Object value = entry.getValue();
-                ex.addAdditionalInformation(key, value == null ? null : value.toString());
+            Object errorCode = errorParams.get("error");
+            String errorMessage = errorParams.containsKey(ERROR_DESCRIPTION) ? errorParams.get(ERROR_DESCRIPTION)
+                    .toString() : null;
+            if (errorMessage == null) {
+                errorMessage = errorCode == null ? "Rest Error" : errorCode.toString();
             }
-        }
 
-        return ex;
+            ApplicationRestException ex = new ApplicationRestException(errorMessage);
+
+            Set<Map.Entry<String, Object>> entries = errorParams.entrySet();
+            for (Map.Entry<String, Object> entry : entries) {
+                String key = entry.getKey();
+                if (!"error".equals(key) && !ERROR_DESCRIPTION.equals(key)) {
+                    Object value = entry.getValue();
+                    ex.addAdditionalInformation(key, value == null ? null : value.toString());
+                }
+            }
+
+            return ex;
+        } catch (IOException e) {
+            LOG.error("Error occurred when dezerialize data", e);
+        }
+        return null;
+
     }
 }

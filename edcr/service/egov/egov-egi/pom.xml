@@ -170,6 +170,10 @@
 			<groupId>displaytag</groupId>
 			<artifactId>displaytag-export-poi</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
 		<!-- DISPLAYTAG END -->
 
 		<!-- REPORTS START -->

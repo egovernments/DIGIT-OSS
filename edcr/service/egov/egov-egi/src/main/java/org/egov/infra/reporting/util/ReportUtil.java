@@ -112,7 +112,7 @@ public final class ReportUtil {
     }
 
     public static String getImageURL(String imagePathWithContextRoot) {
-        return getDomainURL()+imagePathWithContextRoot;
+        return getDomainURL() + imagePathWithContextRoot;
     }
 
     public static String getCityName() {
@@ -151,7 +151,7 @@ public final class ReportUtil {
         return null;
     }
 
-    public static Object fetchFromDBSql(Connection connection, String sqlQuery) throws SQLException {
+    public static Object fetchFromDBSql(Connection connection, String sqlQuery) {
         try (PreparedStatement statement = connection.prepareStatement(sqlQuery);
                 ResultSet resultSet = statement.executeQuery()) {
             return resultSet.next() ? resultSet.getString(1) : null;

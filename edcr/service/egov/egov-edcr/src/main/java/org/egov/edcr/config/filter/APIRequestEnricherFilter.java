@@ -56,22 +56,28 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.log4j.Logger;
 import org.egov.infra.rest.support.APIRequestEnricher;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class APIRequestEnricherFilter implements Filter {
 
+    private static final Logger LOG = Logger.getLogger(APIRequestEnricherFilter.class);
+
     @Autowired
     private APIRequestEnricher apiRequestEnricher;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
-            throws IOException, ServletException {
-        filterChain.doFilter(apiRequestEnricher.enrich(request), response);
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) {
+        try {
+            filterChain.doFilter(apiRequestEnricher.enrich(request), response);
+        } catch (IOException | ServletException e) {
+            LOG.error("Error while enrich API Request", e);
+        }
     }
 
     @Override
-    public void init(final FilterConfig arg0) throws ServletException {
+    public void init(final FilterConfig arg0) {
         // Do nothing
     }
 

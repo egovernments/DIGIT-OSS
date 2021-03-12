@@ -128,11 +128,16 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .setClientDetailsService(clientDetailsService);
     }
 
-    private SecuredClient getSecuredClientFromResource() throws IOException {
+    private SecuredClient getSecuredClientFromResource() {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
         mapper.configure(SerializationConfig.Feature.AUTO_DETECT_FIELDS, true);
-        return mapper.readValue(getClientsConfig().getInputStream(), SecuredClient.class);
+        try {
+            return mapper.readValue(getClientsConfig().getInputStream(), SecuredClient.class);
+        } catch (IOException e) {
+            LOGGER.error("Exception occured while reading data: ", e);
+        }
+        return null;
     }
 
     private Resource getClientsConfig() {

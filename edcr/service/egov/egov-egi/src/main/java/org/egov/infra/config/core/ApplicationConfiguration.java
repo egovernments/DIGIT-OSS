@@ -48,6 +48,27 @@
 
 package org.egov.infra.config.core;
 
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_COUNTRY_CODE_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_CODE_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_NAME_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_NAME_SHORT_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_SYMBOL_HEX_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_SYMBOL_UTF8_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_DATE_PATTERN_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_DATE_TIME_PATTERN_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_ENCODING_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_LOCALE_KEY;
+import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_TIME_ZONE_KEY;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.reporting.engine.ReportService;
 import org.egov.infra.reporting.engine.jasper.JasperReportService;
@@ -64,28 +85,11 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_COUNTRY_CODE_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_CODE_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_NAME_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_NAME_SHORT_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_SYMBOL_HEX_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_CURRENCY_SYMBOL_UTF8_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_DATE_PATTERN_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_DATE_TIME_PATTERN_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_ENCODING_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_LOCALE_KEY;
-import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_TIME_ZONE_KEY;
-
 @Configuration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ApplicationConfiguration {
+
+    private static final Logger LOG = Logger.getLogger(ApplicationConfiguration.class);
 
     @Resource(name = "tenants")
     private List<String> tenants;
@@ -129,24 +133,31 @@ public class ApplicationConfiguration {
     }
 
     @PostConstruct
-    public void enhanceSystemProperties() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException {
-        MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
-        methodInvokingFactoryBean.setTargetObject(System.getProperties());
-        methodInvokingFactoryBean.setTargetMethod("putAll");
-        Properties properties = new Properties();
-        properties.setProperty(DEFAULT_TIME_ZONE_KEY, environmentSettings.getProperty(DEFAULT_TIME_ZONE_KEY));
-        properties.setProperty(DEFAULT_COUNTRY_CODE_KEY, environmentSettings.getProperty(DEFAULT_COUNTRY_CODE_KEY));
-        properties.setProperty(DEFAULT_CURRENCY_CODE_KEY, environmentSettings.getProperty(DEFAULT_CURRENCY_CODE_KEY));
-        properties.setProperty(DEFAULT_CURRENCY_NAME_KEY, environmentSettings.getProperty(DEFAULT_CURRENCY_NAME_KEY));
-        properties.setProperty(DEFAULT_CURRENCY_NAME_SHORT_KEY, environmentSettings.getProperty(DEFAULT_CURRENCY_NAME_SHORT_KEY));
-        properties.setProperty(DEFAULT_CURRENCY_SYMBOL_UTF8_KEY, environmentSettings.getProperty(DEFAULT_CURRENCY_SYMBOL_UTF8_KEY));
-        properties.setProperty(DEFAULT_CURRENCY_SYMBOL_HEX_KEY, environmentSettings.getProperty(DEFAULT_CURRENCY_SYMBOL_HEX_KEY));
-        properties.setProperty(DEFAULT_LOCALE_KEY, environmentSettings.getProperty(DEFAULT_LOCALE_KEY));
-        properties.setProperty(DEFAULT_ENCODING_KEY, environmentSettings.getProperty(DEFAULT_ENCODING_KEY));
-        properties.setProperty(DEFAULT_DATE_PATTERN_KEY, environmentSettings.getProperty(DEFAULT_DATE_PATTERN_KEY));
-        properties.setProperty(DEFAULT_DATE_TIME_PATTERN_KEY, environmentSettings.getProperty(DEFAULT_DATE_TIME_PATTERN_KEY));
-        methodInvokingFactoryBean.setArguments(new Object[]{properties});
-        methodInvokingFactoryBean.prepare();
-        methodInvokingFactoryBean.invoke();
+    public void enhanceSystemProperties() {
+        try {
+            MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
+            methodInvokingFactoryBean.setTargetObject(System.getProperties());
+            methodInvokingFactoryBean.setTargetMethod("putAll");
+            Properties properties = new Properties();
+            properties.setProperty(DEFAULT_TIME_ZONE_KEY, environmentSettings.getProperty(DEFAULT_TIME_ZONE_KEY));
+            properties.setProperty(DEFAULT_COUNTRY_CODE_KEY, environmentSettings.getProperty(DEFAULT_COUNTRY_CODE_KEY));
+            properties.setProperty(DEFAULT_CURRENCY_CODE_KEY, environmentSettings.getProperty(DEFAULT_CURRENCY_CODE_KEY));
+            properties.setProperty(DEFAULT_CURRENCY_NAME_KEY, environmentSettings.getProperty(DEFAULT_CURRENCY_NAME_KEY));
+            properties.setProperty(DEFAULT_CURRENCY_NAME_SHORT_KEY,
+                    environmentSettings.getProperty(DEFAULT_CURRENCY_NAME_SHORT_KEY));
+            properties.setProperty(DEFAULT_CURRENCY_SYMBOL_UTF8_KEY,
+                    environmentSettings.getProperty(DEFAULT_CURRENCY_SYMBOL_UTF8_KEY));
+            properties.setProperty(DEFAULT_CURRENCY_SYMBOL_HEX_KEY,
+                    environmentSettings.getProperty(DEFAULT_CURRENCY_SYMBOL_HEX_KEY));
+            properties.setProperty(DEFAULT_LOCALE_KEY, environmentSettings.getProperty(DEFAULT_LOCALE_KEY));
+            properties.setProperty(DEFAULT_ENCODING_KEY, environmentSettings.getProperty(DEFAULT_ENCODING_KEY));
+            properties.setProperty(DEFAULT_DATE_PATTERN_KEY, environmentSettings.getProperty(DEFAULT_DATE_PATTERN_KEY));
+            properties.setProperty(DEFAULT_DATE_TIME_PATTERN_KEY, environmentSettings.getProperty(DEFAULT_DATE_TIME_PATTERN_KEY));
+            methodInvokingFactoryBean.setArguments(new Object[] { properties });
+            methodInvokingFactoryBean.prepare();
+            methodInvokingFactoryBean.invoke();
+        } catch (InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException e) {
+            LOG.error("Error occurred while loading properties", e);
+        }
     }
 }

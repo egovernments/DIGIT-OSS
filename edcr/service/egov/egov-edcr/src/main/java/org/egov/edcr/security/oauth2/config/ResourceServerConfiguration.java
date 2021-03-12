@@ -87,14 +87,19 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     }
 
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    public void configure(HttpSecurity http) {
         http.requestMatchers().and();
         configurePatterns(http);
-        http.exceptionHandling()
-                .accessDeniedHandler(new OAuth2AccessDeniedHandler());
+        try {
+            http.exceptionHandling()
+                    .accessDeniedHandler(new OAuth2AccessDeniedHandler());
+        } catch (Exception e) {
+            LOGGER.error("Exception occured while authenticating: ", e);
+        }
     }
 
-    private void configurePatterns(HttpSecurity http) throws Exception {
+    private void configurePatterns(HttpSecurity http) {
+
         getSecuredResourceFromResource().getResources().forEach(record -> {
             try {
                 ExpressionUrlAuthorizationConfigurer<HttpSecurity>.AuthorizedUrl authorizedUrl = http.authorizeRequests()
@@ -107,15 +112,19 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 LOGGER.error("Exception occured while configuring: ", e);
             }
         });
-
     }
 
-    private SecuredResource getSecuredResourceFromResource() throws IOException {
+    private SecuredResource getSecuredResourceFromResource() {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
         mapper.configure(SerializationConfig.Feature.AUTO_DETECT_FIELDS, true);
-        return mapper.readValue(getResourcesConfig().getInputStream(),
-                SecuredResource.class);
+        try {
+            return mapper.readValue(getResourcesConfig().getInputStream(),
+                    SecuredResource.class);
+        } catch (IOException e) {
+            LOGGER.error("Exception occured while reading data: ", e);
+        }
+        return null;
     }
 
     private Resource getResourcesConfig() {

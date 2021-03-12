@@ -154,7 +154,6 @@ public class EgovMasterDataCaching {
 
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching", e);
         }
         return dataList;
     }
@@ -209,7 +208,6 @@ public class EgovMasterDataCaching {
                 throw new ApplicationRuntimeException("This type (" + type + ") is not supported for " + sqlTagName);
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching getMap", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching getMap", e);
         }
         return dataMap;
     }
@@ -233,7 +231,6 @@ public class EgovMasterDataCaching {
             CACHE_MANAGER.getCache().remove(applName + PATH_DELIM + domainName + PATH_DELIM + sqlTagName);
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching removeFromCache", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching removeFromCache", e);
         }
     }
 
@@ -255,7 +252,6 @@ public class EgovMasterDataCaching {
 
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadQLMasterData", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadQLMasterData", e);
         }
         return list;
     }
@@ -281,7 +277,6 @@ public class EgovMasterDataCaching {
             list = (List) method.invoke(cls.newInstance(), loadMethodArguments(parametertype, parametervalue));
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadJavaAPIMasterDataList", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadJavaAPIMasterDataList", e);
         }
         return list;
     }
@@ -307,7 +302,6 @@ public class EgovMasterDataCaching {
             dataMap = (HashMap) method.invoke(cls.newInstance(), loadMethodArguments(parametertype, parametervalue));
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadJavaAPIMasterDataMap", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadJavaAPIMasterDataMap", e);
         }
         return dataMap;
     }
@@ -330,7 +324,6 @@ public class EgovMasterDataCaching {
             }
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadMethodParameter", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadMethodParameter", e);
         }
         return class_name;
     }
@@ -361,7 +354,6 @@ public class EgovMasterDataCaching {
             }
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadMethodArguments", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadMethodArguments", e);
         }
         return obj_name;
     }
@@ -381,7 +373,6 @@ public class EgovMasterDataCaching {
             list = qry.list();
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching queryByHibernate", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching queryByHibernate", e);
         }
         return list;
     }
@@ -406,7 +397,6 @@ public class EgovMasterDataCaching {
                 returnList = resultSetToArrayList(resultlist);
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching queryByJdbc", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching queryByJdbc", e);
         }
         return returnList;
     }
@@ -433,7 +423,6 @@ public class EgovMasterDataCaching {
             }
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching resultSetToArrayList", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching resultSetToArrayList", e);
         }
         return list;
     }

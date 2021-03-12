@@ -48,10 +48,20 @@
 
 package org.egov.infra.utils;
 
-import javaxt.io.Image;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.multipart.MultipartFile;
+import static javax.imageio.ImageIO.createImageOutputStream;
+import static javax.imageio.ImageIO.getImageWritersByFormatName;
+import static javax.imageio.ImageIO.read;
+import static javax.imageio.ImageWriteParam.MODE_EXPLICIT;
+import static org.apache.commons.io.FilenameUtils.getExtension;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.defaultString;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
+import java.util.Iterator;
+import java.util.Optional;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -60,20 +70,12 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Paths;
-import java.util.Iterator;
-import java.util.Optional;
 
-import static javax.imageio.ImageIO.createImageOutputStream;
-import static javax.imageio.ImageIO.getImageWritersByFormatName;
-import static javax.imageio.ImageIO.read;
-import static javax.imageio.ImageWriteParam.MODE_EXPLICIT;
-import static org.apache.commons.io.FilenameUtils.getExtension;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.defaultString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
+
+import javaxt.io.Image;
 
 public final class ImageUtils {
     public static final String JPG_EXTN = ".jpg";
@@ -85,14 +87,19 @@ public final class ImageUtils {
     private static final Logger LOG = LoggerFactory.getLogger(ImageUtils.class);
 
     private ImageUtils() {
-        //Not to be initialized
+        // Not to be initialized
     }
 
-    public static File compressImage(MultipartFile imageFile) throws IOException {
-        return compressImage(imageFile.getInputStream(), imageFile.getOriginalFilename(), true);
+    public static File compressImage(MultipartFile imageFile) {
+        try {
+            return compressImage(imageFile.getInputStream(), imageFile.getOriginalFilename(), true);
+        } catch (IOException e) {
+            LOG.error("Error occurred when reading image file", e);
+        }
+        return null;
     }
 
-    public static File compressImage(final InputStream imageStream, String imageFileName, boolean closeStream) throws IOException {
+    public static File compressImage(final InputStream imageStream, String imageFileName, boolean closeStream) {
         File compressedImage = Paths.get(imageFileName).toFile();
         try (final ImageOutputStream imageOutput = createImageOutputStream(compressedImage)) {
             ImageWriter writer = getImageWritersByFormatName(defaultString(getExtension(imageFileName), JPG_FORMAT_NAME)).next();
@@ -107,6 +114,8 @@ public final class ImageUtils {
             writer.dispose();
             if (closeStream)
                 imageStream.close();
+        } catch (IOException e) {
+            LOG.error("Error occurred when reading image file", e);
         }
         return compressedImage;
     }
@@ -117,7 +126,7 @@ public final class ImageUtils {
             Image image = new Image(jpegImage);
             coordinates = Optional.ofNullable(image.getGPSCoordinate());
         }
-        return coordinates.orElse(new double[]{0D, 0D});
+        return coordinates.orElse(new double[] { 0D, 0D });
     }
 
     public static String imageFormat(File image) {

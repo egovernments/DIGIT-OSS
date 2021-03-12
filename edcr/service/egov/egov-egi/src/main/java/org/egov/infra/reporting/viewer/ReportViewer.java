@@ -53,7 +53,6 @@ import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -76,7 +75,7 @@ public class ReportViewer implements HttpRequestHandler {
     private ReportViewerUtil reportViewerUtil;
 
     @Override
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response) {
         String reportId = request.getParameter(ReportConstants.REQ_PARAM_REPORT_ID);
         try {
             ReportOutput reportOutput = reportViewerUtil.getReportOutputFormCache(reportId);

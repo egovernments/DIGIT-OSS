@@ -48,21 +48,6 @@
 
 package org.egov.infra.config.security.authentication.handler;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.regex.Pattern;
-
 import static org.egov.infra.security.utils.SecurityConstants.IPADDR_FIELD;
 import static org.egov.infra.security.utils.SecurityConstants.LOGIN_IP;
 import static org.egov.infra.security.utils.SecurityConstants.LOGIN_TIME;
@@ -70,7 +55,26 @@ import static org.egov.infra.security.utils.SecurityConstants.LOGIN_USER_AGENT;
 import static org.egov.infra.security.utils.SecurityConstants.USERAGENT_FIELD;
 import static org.springframework.util.StringUtils.hasText;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.regex.Pattern;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
+
 public class ApplicationAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
+    private static final Logger LOG = Logger.getLogger(ApplicationAuthenticationSuccessHandler.class);
 
     private RequestCache requestCache = new HttpSessionRequestCache();
 
@@ -86,31 +90,36 @@ public class ApplicationAuthenticationSuccessHandler extends SimpleUrlAuthentica
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws ServletException, IOException {
+            Authentication authentication) {
         auditLoginDetails(request, authentication);
         redirectToSuccessPage(request, response, authentication);
     }
 
     private void redirectToSuccessPage(HttpServletRequest request, HttpServletResponse response,
-                                       Authentication authentication) throws IOException, ServletException {
-        SavedRequest savedRequest = requestCache.getRequest(request, response);
-        if (savedRequest == null) {
-            super.onAuthenticationSuccess(request, response, authentication);
-            return;
-        }
-        String targetUrlParameter = getTargetUrlParameter();
-        if (isAlwaysUseDefaultTargetUrl()
-                || (targetUrlParameter != null && hasText(request.getParameter(targetUrlParameter)))) {
-            requestCache.removeRequest(request, response);
-            super.onAuthenticationSuccess(request, response, authentication);
-            return;
-        }
+            Authentication authentication) {
 
-        clearAuthenticationAttributes(request);
-        String targetUrl = savedRequest.getRedirectUrl();
-        if (excludedUrls.matcher(targetUrl).find())
-            targetUrl = getDefaultTargetUrl();
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        try {
+            SavedRequest savedRequest = requestCache.getRequest(request, response);
+            if (savedRequest == null) {
+                super.onAuthenticationSuccess(request, response, authentication);
+                return;
+            }
+            String targetUrlParameter = getTargetUrlParameter();
+            if (isAlwaysUseDefaultTargetUrl()
+                    || (targetUrlParameter != null && hasText(request.getParameter(targetUrlParameter)))) {
+                requestCache.removeRequest(request, response);
+                super.onAuthenticationSuccess(request, response, authentication);
+                return;
+            }
+
+            clearAuthenticationAttributes(request);
+            String targetUrl = savedRequest.getRedirectUrl();
+            if (excludedUrls.matcher(targetUrl).find())
+                targetUrl = getDefaultTargetUrl();
+            getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        } catch (IOException | ServletException e) {
+            LOG.error("Error occurred on redirect to success page", e);
+        }
     }
 
     private void auditLoginDetails(HttpServletRequest request, Authentication authentication) {

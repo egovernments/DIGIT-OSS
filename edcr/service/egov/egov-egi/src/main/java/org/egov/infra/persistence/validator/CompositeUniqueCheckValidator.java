@@ -48,8 +48,13 @@
 
 package org.egov.infra.persistence.validator;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.egov.infra.exception.ApplicationRuntimeException;
+import org.apache.log4j.Logger;
 import org.egov.infra.persistence.validator.annotation.CompositeUnique;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -57,12 +62,9 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 public class CompositeUniqueCheckValidator implements ConstraintValidator<CompositeUnique, Object> {
+
+    private static final Logger LOG = Logger.getLogger(CompositeUniqueCheckValidator.class);
 
     private CompositeUnique unique;
 
@@ -85,8 +87,9 @@ public class CompositeUniqueCheckValidator implements ConstraintValidator<Compos
                             .addConstraintViolation();
             return isValid;
         } catch (final IllegalAccessException e) {
-            throw new ApplicationRuntimeException("Error while validating composite unique key", e);
+            LOG.error("Error while validating composite unique key", e);
         }
+        return false;
 
     }
 

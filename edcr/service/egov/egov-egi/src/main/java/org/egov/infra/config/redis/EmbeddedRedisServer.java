@@ -48,28 +48,43 @@
 
 package org.egov.infra.config.redis;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+
 import redis.clients.jedis.Protocol;
 import redis.embedded.RedisServer;
 
 public class EmbeddedRedisServer implements InitializingBean, DisposableBean, BeanDefinitionRegistryPostProcessor {
+    
+    private static final Logger LOG = Logger.getLogger(EmbeddedRedisServer.class);
 
     private RedisServer redisServer;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        redisServer = new RedisServer(Protocol.DEFAULT_PORT);
-        redisServer.start();
+    public void afterPropertiesSet() {
+        try {
+            redisServer = new RedisServer(Protocol.DEFAULT_PORT);
+            redisServer.start();
+        } catch (IOException | URISyntaxException e) {
+            LOG.error("Error occurred when starting redis server", e);
+        }
     }
 
     @Override
-    public void destroy() throws Exception {
-        if (redisServer != null)
-            redisServer.stop();
+    public void destroy() {
+            try {
+                if (redisServer != null)
+                    redisServer.stop();
+            } catch (InterruptedException e) {
+                LOG.error("Error occurred when stoping redis server", e);
+            }
     }
 
     @Override

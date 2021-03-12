@@ -48,7 +48,23 @@
 
 package org.egov.infra.config.security.authentication.filter;
 
+import static org.egov.infra.utils.ApplicationConstant.USERID_KEY;
+import static org.egov.infra.utils.ApplicationConstant.USERNAME_KEY;
+import static org.egov.infra.utils.StringUtils.emptyIfNull;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.security.utils.SecurityConstants;
@@ -58,21 +74,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import static org.egov.infra.utils.ApplicationConstant.USERID_KEY;
-import static org.egov.infra.utils.ApplicationConstant.USERNAME_KEY;
-import static org.egov.infra.utils.StringUtils.emptyIfNull;
-
 public class ApplicationAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    private static final Logger LOG = Logger.getLogger(ApplicationAuthenticationFilter.class);
 
     private List<String> credentialFields = new ArrayList<>();
 
@@ -87,21 +91,25 @@ public class ApplicationAuthenticationFilter extends UsernamePasswordAuthenticat
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                            FilterChain filterChain, Authentication authResult) throws IOException, ServletException {
-        String location = request.getParameter(SecurityConstants.LOCATION_FIELD);
-        HttpSession session = request.getSession();
-        boolean isValid = Jsoup.isValid(location, Whitelist.basic());
-        if(!isValid)
-            throw new ApplicationRuntimeException("Invalid location");
-        if (StringUtils.isNotBlank(location))
-            session.setAttribute(SecurityConstants.LOCATION_FIELD, location);
+            FilterChain filterChain, Authentication authResult) {
+        try {
+            String location = request.getParameter(SecurityConstants.LOCATION_FIELD);
+            HttpSession session = request.getSession();
+            boolean isValid = Jsoup.isValid(location, Whitelist.basic());
+            if (!isValid)
+                throw new ApplicationRuntimeException("Invalid location");
+            if (StringUtils.isNotBlank(location))
+                session.setAttribute(SecurityConstants.LOCATION_FIELD, location);
 
-        if (authResult != null) {
-            CurrentUser principal = (CurrentUser) authResult.getPrincipal();
-            session.setAttribute(USERID_KEY, principal.getUserId());
-            session.setAttribute(USERNAME_KEY, principal.getUsername());
+            if (authResult != null) {
+                CurrentUser principal = (CurrentUser) authResult.getPrincipal();
+                session.setAttribute(USERID_KEY, principal.getUserId());
+                session.setAttribute(USERNAME_KEY, principal.getUsername());
+            }
+            super.successfulAuthentication(request, response, filterChain, authResult);
+        } catch (IOException | ServletException | RuntimeException e) {
+            LOG.error("Eror occurred while on login authentication", e);
         }
-        super.successfulAuthentication(request, response, filterChain, authResult);
     }
 
     @Override
@@ -113,7 +121,7 @@ public class ApplicationAuthenticationFilter extends UsernamePasswordAuthenticat
         }
         String username = request.getParameter(SecurityConstants.USERNAME_FIELD);
         boolean isValid = Jsoup.isValid(username, Whitelist.basic());
-        if(!isValid)
+        if (!isValid)
             throw new ApplicationRuntimeException("Invalid username");
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, credentials);
         request.getSession().setAttribute(SecurityConstants.USERNAME_FIELD, username);
