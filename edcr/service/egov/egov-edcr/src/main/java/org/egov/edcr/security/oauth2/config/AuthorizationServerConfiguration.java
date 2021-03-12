@@ -48,6 +48,7 @@
 package org.egov.edcr.security.oauth2.config;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
@@ -132,8 +133,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         final ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
         mapper.configure(SerializationConfig.Feature.AUTO_DETECT_FIELDS, true);
-        try {
-            return mapper.readValue(getClientsConfig().getInputStream(), SecuredClient.class);
+        try(InputStream is = getClientsConfig().getInputStream()) {
+            return mapper.readValue(is, SecuredClient.class);
         } catch (IOException e) {
             LOGGER.error("Exception occured while reading data: ", e);
         }

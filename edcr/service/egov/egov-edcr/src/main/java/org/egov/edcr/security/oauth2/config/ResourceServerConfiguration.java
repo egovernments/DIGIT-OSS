@@ -48,6 +48,7 @@
 package org.egov.edcr.security.oauth2.config;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -118,8 +119,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         final ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
         mapper.configure(SerializationConfig.Feature.AUTO_DETECT_FIELDS, true);
-        try {
-            return mapper.readValue(getResourcesConfig().getInputStream(),
+        try (InputStream is = getResourcesConfig().getInputStream()) {
+            return mapper.readValue(is,
                     SecuredResource.class);
         } catch (IOException e) {
             LOGGER.error("Exception occured while reading data: ", e);
