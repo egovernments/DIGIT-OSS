@@ -248,28 +248,28 @@ const formConfig = {
     
       let yeardata = [];
       let taxData = [];
-      const data = Object.keys(TaxPeriod).map((key, index) => {
+      const data = TaxPeriod && Object.keys(TaxPeriod).map((key, index) => {
         yeardata.push(TaxPeriod[key]);
       });
       
-      let yeardata1 = yeardata.filter(yearKey => yearKey.service === "PT");
+      let yeardata1 = yeardata && yeardata.filter(yearKey => yearKey.service === "PT");
       let taxdata1 =
-        taxData.filter(tax => tax.service === "PT" && tax.legacy == true) || [];
+      taxData && taxData.filter(tax => tax.service === "PT" && tax.legacy == true) || [];
       taxdata1.length > 0 &&
         taxdata1.sort(function(a, b) {
           return a.order - b.order;
         });
-      const finalData = Object.keys(yeardata1).map((data, key) => {
+      const finalData = yeardata1 && Object.keys(yeardata1).map((data, key) => {
         yeardata1[data]["taxHead"] = [...taxdata1];
         return yeardata[data];
       });      
-      const finalYear=finalData[0].financialYear;
+      const finalYear= finalData.length && finalData[0].financialYear && finalData[0].financialYear;
 
 
       // let financialYearFromQuery = window.location.search.split("FY=")[1];
       // financialYearFromQuery = financialYearFromQuery.split("&")[0];
       
-      const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes),finalYear);
+      const dropdownData = finalYear && getOwnerCategoryByYear(Object.values(OwnerTypes),finalYear);
 
 
       
