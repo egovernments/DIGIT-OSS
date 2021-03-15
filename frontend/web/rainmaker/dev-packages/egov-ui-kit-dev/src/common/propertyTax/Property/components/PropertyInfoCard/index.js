@@ -56,6 +56,8 @@ class PropertyInfoCard extends Component {
                 {subSection && (
                   <div>
                     {subSection.map((units, unitIndex) => {
+                      let floorNo = units.floorNo || unitIndex
+                      units = units.floorDetails || units
                       return (
                         <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                           {!hideSubsectionLabel && (
@@ -67,11 +69,11 @@ class PropertyInfoCard extends Component {
                                 fontWeight: "400",
                                 lineHeight: "19px",
                               }}
-                              label={"PROPERTYTAX_FLOOR_" + units.floorNo}
+                              label={"PROPERTYTAX_FLOOR_" + (floorNo)}
                               fontSize="18px"
                             />
                           )}
-                          {units.floorDetails && units.floorDetails.map((unit, index) => {
+                          {units && units.map((unit, index) => {
                             const subUnitHeader = hideSubsectionLabel ? undefined : "Unit - " + (index + 1);
                             return <PropertyInfoCard backgroundColor="white" items={unit} header={subUnitHeader}></PropertyInfoCard>;
                           })}

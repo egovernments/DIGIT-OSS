@@ -289,14 +289,16 @@ let hideSubsectionLabel=false;
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      var units = propertyDetails[0].units.filter((unit,unInde) =>{
+      var units = propertyDetails[0].units && propertyDetails[0].units.filter((unit,unInde) =>{
         if(unit.floorNo <0){
           return unit;
         }
       })
       subUnitItems = getUnitInfo(propertyDetails[0]['units'],propertyDetails[0]['usageCategoryMajor']?propertyDetails[0]['usageCategoryMajor']:"");
-      let ssub = getUnitInfo(units,propertyDetails[0]['usageCategoryMajor']?propertyDetails[0]['usageCategoryMajor']:"",propertyDetails[0]['buildUpArea'],true);
-      subUnitItems = ssub.concat(subUnitItems)
+      if(units && units.length>0){
+        let ssub = getUnitInfo(units,propertyDetails[0]['usageCategoryMajor']?propertyDetails[0]['usageCategoryMajor']:"",propertyDetails[0]['buildUpArea'],true);
+        subUnitItems = ssub.concat(subUnitItems)
+      }
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if(propertyDetails[0].propertySubType === "BUILTUP.SHAREDPROPERTY"){
         hideSubsectionLabel=true;
