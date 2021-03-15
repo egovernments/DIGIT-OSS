@@ -173,14 +173,14 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.additionalDetails.documentDate = convertDateToEpoch(
     propertyPayload.additionalDetails.documentDate);
 
-  if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
+  if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
       owner.ownerType = 'NONE';
     })
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
-  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
+  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
       owner.ownerType = 'NONE';
@@ -188,7 +188,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institution = null;
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
-  } else if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+  } else if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryInit.includes("INSTITUTIONAL")) {
     propertyPayload.owners.map(owner => {
       owner.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     })
@@ -202,10 +202,10 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
     propertyPayload.institutionTemp.status = "ACTIVE";
-    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
+    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryInit;
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     delete propertyPayload.institutionTemp;
-  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryInit.includes("INSTITUTIONAL")) {
     propertyPayload.institution = {};
     propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
@@ -216,12 +216,12 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
     propertyPayload.institutionTemp.status = "ACTIVE";
-    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
+    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryInit;
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     delete propertyPayload.institutionTemp;
   }
-  propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
-  delete propertyPayload.ownershipCategoryTemp;
+  propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryInit;
+  delete propertyPayload.ownershipCategoryInit;
   let newDocuments = Object.values(documentsUploadRedux).map(document => {
     if (document.dropdown && document.dropdown.value && document.documents && document.documents[0] && document.documents[0].fileStoreId) {
       let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
