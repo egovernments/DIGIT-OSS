@@ -67,11 +67,11 @@ class PropertyInfoCard extends Component {
                                 fontWeight: "400",
                                 lineHeight: "19px",
                               }}
-                              label={"PROPERTYTAX_FLOOR_" + unitIndex}
+                              label={"PROPERTYTAX_FLOOR_" + units.floorNo}
                               fontSize="18px"
                             />
                           )}
-                          {units.map((unit, index) => {
+                          {units.floorDetails && units.floorDetails.map((unit, index) => {
                             const subUnitHeader = hideSubsectionLabel ? undefined : "Unit - " + (index + 1);
                             return <PropertyInfoCard backgroundColor="white" items={unit} header={subUnitHeader}></PropertyInfoCard>;
                           })}
