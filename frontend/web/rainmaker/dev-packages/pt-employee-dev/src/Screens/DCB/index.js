@@ -2741,7 +2741,7 @@ class FormWizardDataEntry extends Component {
       assessedPropertyDetails = {}
     } = this.state;
     const fromReviewPage = selected === 3;
-    const { history, location, finalData = [], getYearList} = this.props;
+    const { history, location, finalData = [], getYearList,DemandPropertiesResponse} = this.props;
 
    
     const { search } = location;
@@ -2786,6 +2786,7 @@ class FormWizardDataEntry extends Component {
           nextButtonEnabled={nextButtonEnabled}
           tenantId = {getTenantId()}
           propertyId = {wPropertyId}
+          demands = {DemandPropertiesResponse && DemandPropertiesResponse.Demands}
         />
       </div>
     );

@@ -28,12 +28,21 @@ const WizardComponent = ({
   history,
   nextButtonEnabled,
   propertyId,
-  tenantId
+  tenantId,
+  demands
 }) => {
   ((selected == 1 || selected == 2)
     ? ((selected == 1) ? (backLabel = 'PT_APPLICATION_BUTTON_DOWN_CONF') : (backLabel = 'PT_ASSESS_PAY_FOR_NEW_YEAR'))
     : (backLabel))
-
+    let paybtnShow = true;
+    if(demands && demands.length>0){
+      for(let i = 0;i<demands.length;i++){
+        if(demands[i].minimumAmountPayable<=0){
+           paybtnShow =false;
+          break;
+        }
+      }
+    }
 
   return (
     <div className={`wizard-cont active-step-${selected}`}>
@@ -72,7 +81,7 @@ const WizardComponent = ({
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{ marginRight: 45, width: "30%" }}
           />} 
-           {selected ==2 &&<Button
+           {selected ==2 && paybtnShow &&<Button
             label={<Label buttonLabel={true} label={'PT_DEMAND_PAY'} color="#fe7a51" />}
             onClick={() => {              
               history.push(`../../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}&businessService=PT`) 
