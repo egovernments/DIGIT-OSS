@@ -92,6 +92,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -128,7 +129,7 @@ public class RestEdcrApplicationController {
 
     @Autowired
     private OcComparisonService ocComparisonService;
-    
+
     @Autowired
     private EdcrValidator edcrValidator;
 
@@ -199,10 +200,11 @@ public class RestEdcrApplicationController {
         return getSuccessResponse(Arrays.asList(edcrDetail), edcr.getRequestInfo());
     }
 
-    @PostMapping(value = "/scrutinize", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/scrutinize", consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE }, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> scrutinize(@RequestBody MultipartFile planFile,
-            @RequestParam String edcrRequest) {
+    public ResponseEntity<?> scrutinize(@RequestPart("planFile") MultipartFile planFile,
+            @RequestParam("edcrRequest") String edcrRequest) {
         EdcrDetail edcrDetail = new EdcrDetail();
         EdcrRequest edcr = new EdcrRequest();
         boolean isValid = isValidJson(edcrRequest);
