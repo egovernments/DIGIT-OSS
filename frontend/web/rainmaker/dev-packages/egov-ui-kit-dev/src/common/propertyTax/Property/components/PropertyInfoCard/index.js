@@ -5,7 +5,7 @@ import "./index.css";
 
 class PropertyInfoCard extends Component {
   render() {
-    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
+    let { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
 
     return (
       <div>
@@ -33,7 +33,7 @@ class PropertyInfoCard extends Component {
                         <div>
                           <div className={item.key==="Property Type"? "col-sm-3 col-xs-12 assessment-property-type":"col-sm-3 col-xs-12"} 
                           style={{ marginBottom: 10, marginTop: 5 }}> 
-                            <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                          <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
                                 label={item.key ? item.key : "NA"}
@@ -55,9 +55,7 @@ class PropertyInfoCard extends Component {
                 </div>
                 {subSection && (
                   <div>
-                    {subSection.map((units, unitIndex) => {
-                      let floorNo = units.floorNo || unitIndex
-                      units = units.floorDetails || units
+                    {subSection&&Array.isArray(subSection)&&subSection.length>0&&Object.values(subSection).map((units, unitIndex) => {
                       return (
                         <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                           {!hideSubsectionLabel && (
@@ -69,7 +67,7 @@ class PropertyInfoCard extends Component {
                                 fontWeight: "400",
                                 lineHeight: "19px",
                               }}
-                              label={"PROPERTYTAX_FLOOR_" + (floorNo)}
+                              label={"PROPERTYTAX_FLOOR_" + Object.keys(subSection)[unitIndex]}
                               fontSize="18px"
                             />
                           )}

@@ -199,7 +199,7 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   
 };
 
-export const getUnitInfo = (units = [],usageCategoryMajor="",basements) => {
+export const getUnitInfo = (units = [],usageCategoryMajor="") => {
   units = units || [];
   let floors = [];
   units.map((unit, index) => {
@@ -252,24 +252,10 @@ export const getUnitInfo = (units = [],usageCategoryMajor="",basements) => {
           value: unit.arv ? unit.arv + '' : "NA",
         })
       }
-      if( basements){
-        floors.push({
-          floorNo:unit.floorNo,
-          floorDetails:[floor]
-        })
-      }
-      else{
-        if (!floors[unit['floorNo']]) {
-          floors[unit['floorNo']] = {
-            floorNo:unit.floorNo,
-            floorDetails:[floor]
-          };
-        } else {
-          floors[unit['floorNo']].push({
-            floorNo:unit.floorNo,
-            floorDetails:[floor]
-          });
-        }
+      if (!floors[unit['floorNo']]) {
+        floors[unit['floorNo']] = [floor];
+      } else {
+        floors[unit['floorNo']].push(floor);
       }
     }
   }
@@ -289,16 +275,7 @@ let hideSubsectionLabel=false;
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      var units = propertyDetails[0].units && propertyDetails[0].units.filter((unit,unInde) =>{
-        if(unit.floorNo <0){
-          return unit;
-        }
-      })
       subUnitItems = getUnitInfo(propertyDetails[0]['units'],propertyDetails[0]['usageCategoryMajor']?propertyDetails[0]['usageCategoryMajor']:"");
-      if(units && units.length>0){
-        let ssub = getUnitInfo(units,propertyDetails[0]['usageCategoryMajor']?propertyDetails[0]['usageCategoryMajor']:"",propertyDetails[0]['buildUpArea'],true);
-        subUnitItems = ssub.concat(subUnitItems)
-      }
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if(propertyDetails[0].propertySubType === "BUILTUP.SHAREDPROPERTY"){
         hideSubsectionLabel=true;
