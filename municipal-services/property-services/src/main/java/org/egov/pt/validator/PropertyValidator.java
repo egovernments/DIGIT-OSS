@@ -673,9 +673,12 @@ public class PropertyValidator {
 			reasonForTransfer = (String) additionalDetails.get("reasonForTransfer");
 			docNo = (String) additionalDetails.get("documentNumber");
 			docDate = Long.valueOf(String.valueOf(additionalDetails.get("documentDate")));
-			docVal = Double.valueOf(String.valueOf(additionalDetails.get("documentValue")));
-			marketVal = Double.valueOf(String.valueOf(additionalDetails.get("marketValue")));
-
+			if (additionalDetails.get("documentValue") != null) {
+				docVal = Double.valueOf(String.valueOf(additionalDetails.get("documentValue")));
+			}
+			if (additionalDetails.get("marketValue") != null) {
+				marketVal = Double.valueOf(String.valueOf(additionalDetails.get("marketValue")));
+			}
 		} catch (PathNotFoundException e) {
 			throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "Mandatory fields Missing for mutation, please provide the following information in additionalDetails : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
@@ -741,7 +744,7 @@ public class PropertyValidator {
 				errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR", "Single owner of a property cannot be deactivated or removed in a mutation request");
 		}
 		
-		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate) || ObjectUtils.isEmpty(docVal) || ObjectUtils.isEmpty(marketVal)) {
+		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate)) {
 				throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
 		}
