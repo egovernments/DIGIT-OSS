@@ -189,9 +189,12 @@ public class PropertyValidator {
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_UUID_ERROR", "Invalid owners found in request : " + uuidsNotFound);
 
-		if(searchOwnerUuids.size() != request.getProperty().getOwners().size())
-			errorMap.put("EG_PT_UPDATE_OWNER_SIZE_ERROR", "Update request cannot change owner Information please use mutation process");
-		
+		if (!"LEGACY_RECORD".equalsIgnoreCase(request.getProperty().getSource().toString())) {
+			if (searchOwnerUuids.size() != request.getProperty().getOwners().size())
+				errorMap.put("EG_PT_UPDATE_OWNER_SIZE_ERROR",
+						"Update request cannot change owner Information please use mutation process");
+		}
+
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
     }
