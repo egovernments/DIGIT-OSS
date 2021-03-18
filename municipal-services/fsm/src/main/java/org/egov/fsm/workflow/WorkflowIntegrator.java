@@ -37,6 +37,8 @@ public class WorkflowIntegrator {
 
 	private static final String COMMENTKEY = "comment";
 
+	private static final String RATING = "rating";
+
 	private static final String MODULENAMEKEY = "moduleName";
 
 	private static final String BUSINESSIDKEY = "businessId";
@@ -89,6 +91,7 @@ public class WorkflowIntegrator {
 		obj.put(MODULENAMEKEY, MODULENAMEVALUE);
 		obj.put(ACTIONKEY, fsmRequest.getWorkflow().getAction());
 		obj.put(COMMENTKEY, fsmRequest.getWorkflow().getComments());
+		obj.put(RATING, fsmRequest.getWorkflow().getRating());
 		
 		if (!CollectionUtils.isEmpty(fsmRequest.getWorkflow().getAssignes())) {
 			List<Map<String, String>> uuidmaps = new LinkedList<>();

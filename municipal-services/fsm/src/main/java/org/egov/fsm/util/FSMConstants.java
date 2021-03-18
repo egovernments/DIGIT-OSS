@@ -112,7 +112,7 @@ public class FSMConstants {
 
 	public static final String WF_ACTION_COMPLETE = "COMPLETED";
 
-	public static final String WF_ACTION_SUBMIT_FEEDBACK = "SUBMIT_FEEDBACK";
+	public static final String WF_ACTION_SUBMIT_FEEDBACK = "RATE";
 
 	public static final String WF_ACTION_ADDITIONAL_PAY_REQUEST = "ADDITIONAL_PAY_REQUEST";
 

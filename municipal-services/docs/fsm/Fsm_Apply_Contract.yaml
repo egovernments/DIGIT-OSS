@@ -537,10 +537,7 @@ components:
         auditDetails:
           $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
       required:
-        - height
         - width
-        - length
-        - distanceFromRoad
     
     FSMRequest:
       type: object

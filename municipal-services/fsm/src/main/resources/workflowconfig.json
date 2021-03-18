@@ -212,6 +212,15 @@
                             "roles": [
                                 "FSM_ADMIN"
                             ]
+                        },
+                        {
+                            "tenantId": "pb",
+                            "currentState": "DSO_INPROGRESS",
+                            "action": "REASSING",
+                            "nextState": "PENDING_DSO_APPROVAL",
+                            "roles": [
+                                "FSM_EDITOR_EMP"
+                            ]
                         }
                     ]
                 },
@@ -250,6 +259,15 @@
                             "nextState": "CANCELED",
                             "roles": [
                                 "FSM_ADMIN"
+                            ]
+                        },
+                        {
+                            "tenantId": "pb",
+                            "currentState": "PENDING_DSO_APPROVAL",
+                            "action": "REASSING",
+                            "nextState": "PENDING_DSO_APPROVAL",
+                            "roles": [
+                                "FSM_EDITOR_EMP"
                             ]
                         }
                     ]
@@ -298,7 +316,7 @@
                         {
                             "tenantId": "pb",
                             "currentState": "CITIZEN_FEEDBACK_PENDING",
-                            "action": "SUBMIT_FEEDBACK",
+                            "action": "RATE",
                             "nextState": "COMPLETED",
                             "roles": [
                                 "CITIZEN"

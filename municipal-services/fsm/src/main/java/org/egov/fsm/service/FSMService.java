@@ -1,5 +1,6 @@
 package org.egov.fsm.service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -316,7 +317,16 @@ public class FSMService {
 		
 		ArrayList assignes = new ArrayList<String>();
 		assignes.add(fsm.getAccountId());
-		fsmRequest.getWorkflow().setAssignes(assignes);
+		FSMSearchCriteria fsmsearch = new FSMSearchCriteria();
+		ArrayList accountIds = new ArrayList<String>();
+		accountIds.add(fsm.getAccountId());
+		fsmsearch.setTenantId(fsm.getTenantId());
+		fsmsearch.setOwnerIds(accountIds);
+		UserDetailResponse userDetailResponse = userService.getUser(fsmsearch, fsmRequest.getRequestInfo());
+		fsmsearch.setMobileNumber(userDetailResponse.getUser().get(0).getMobileNumber());
+		fsmsearch.setOwnerIds(null);
+		userDetailResponse = userService.getUser(fsmsearch, null);
+		fsmRequest.getWorkflow().setAssignes(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toList()));
 		vehicleTripService.vehicleTripReadyForDisposal(fsmRequest);
 
 	}

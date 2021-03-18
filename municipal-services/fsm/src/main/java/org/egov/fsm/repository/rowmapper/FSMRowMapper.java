@@ -67,6 +67,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			String dsoid = rs.getString("dso_id");
 			Long possiblesrvdate = rs.getLong("possible_srv_date");
 			this.setFull_count(rs.getInt("full_count"));
+			Long compeletedOn = rs.getLong("completed_on");
 			if (currentfsm == null) {
 				Long lastModifiedTime = rs.getLong("lastmodifiedtime");
 
@@ -76,7 +77,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 				currentfsm = FSM.builder().id(id).applicationNo(applicationNo).tenantId(tenantId)
 						.description(description).accountId(accountId).additionalDetails(getAdditionalDetail("additionalDetails",rs))
 						.source(source).sanitationtype(sanitationtype).propertyUsage(propertyUsage).noOfTrips(noOfTrips)
-						.vehicleId(vehicleId).applicationStatus(applicationStatus).dsoId(dsoid).possibleServiceDate(possiblesrvdate).vehicleType(vehicleType)
+						.vehicleId(vehicleId).applicationStatus(applicationStatus).dsoId(dsoid).possibleServiceDate(possiblesrvdate).vehicleType(vehicleType).completedOn(compeletedOn)
 						.build();
 
 				fmsMap.put(id, currentfsm);
