@@ -287,7 +287,7 @@ public class RestEdcrApplicationController {
         List<EdcrDetail> edcrDetail = edcrRestService.fetchEdcr(edcrRequest, requestInfoWrapper);
         if (!edcrDetail.isEmpty() && edcrDetail.get(0).getErrors() != null) {
             LOGGER.info("***********EDCR Application details are not found************"+edcrDetail.get(0).getErrors());
-            return new ResponseEntity<>(edcrDetail.get(0).getErrors(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(edcrDetail.get(0).getErrors(), HttpStatus.OK);
         } else {
             return getSuccessResponse(edcrDetail, requestInfoWrapper.getRequestInfo());
         }
