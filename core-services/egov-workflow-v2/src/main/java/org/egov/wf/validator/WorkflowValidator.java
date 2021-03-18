@@ -126,7 +126,7 @@ public class WorkflowValidator {
             if(!ObjectUtils.isEmpty(processStateAndAction.getProcessInstanceFromRequest()))
                 rating = processStateAndAction.getProcessInstanceFromRequest().getRating();
 
-            if(rating != null && !action.equals(RATE_ACTION)){
+            if(rating != null && !action.getAction().equalsIgnoreCase(RATE_ACTION)){
                 throw new CustomException("INVALID_ACTION", "Rating can be given only upon taking RATE action.");
             }
 
