@@ -22,6 +22,8 @@ class Inbox extends Component {
     const {fetchLocalizationLabel} = this.props
     const tenantId = getTenantId();
     fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+
+    
   }
 
  
@@ -56,13 +58,47 @@ class Inbox extends Component {
     const { name, history, setRoute, menu,Loading } = this.props;
     const { actionList, hasWorkflow } = this.state;
     const a = menu ? menu.filter(item => item.url === "quickAction") : [];
+  
+    let citywiseConfig = localStorage.getItem("citywiseconfig");
+
+    let dataentryShow;
+    citywiseConfig = citywiseConfig && JSON.parse(citywiseConfig);
+    if(citywiseConfig && citywiseConfig[0] && citywiseConfig[0].enabledCities ){
+       dataentryShow = citywiseConfig[0].enabledCities.find( item =>{
+        return item === getTenantId()
+      })
+    } 
+    
+    let show = dataentryShow === getTenantId() ?false:true; 
+
     const downloadMenu = a.map((obj, index) => {
-      return {
-        labelName: obj.displayName,
-        labelKey: `ACTION_TEST_${obj.displayName.toUpperCase().replace(/[._:-\s\/]/g, "_")}`,
-        link: () => setRoute(obj.navigationURL)
-      }
-    })
+        if(obj.displayName ==='Data Entry')   
+        { 
+            if(show)
+            {
+            return {
+                  labelName: obj.displayName,
+                  labelKey: `ACTION_TEST_${obj.displayName.toUpperCase().replace(/[._:-\s\/]/g, "_")}`,
+                  link: () => setRoute(obj.navigationURL)
+                 }
+            }
+            else
+            {
+              return {     }
+            }
+         }     
+        else
+          {
+            return {
+              labelName: obj.displayName,
+              labelKey: `ACTION_TEST_${obj.displayName.toUpperCase().replace(/[._:-\s\/]/g, "_")}`,
+              link: () => setRoute(obj.navigationURL)
+               }
+          }
+    
+     });
+
+
     const {isLoading}=Loading;
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "INBOX_QUICK_ACTION" },

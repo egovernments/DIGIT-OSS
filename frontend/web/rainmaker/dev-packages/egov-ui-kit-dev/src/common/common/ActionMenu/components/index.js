@@ -79,9 +79,50 @@ class ActionMenuComp extends Component {
     this.wrapperRef = node;
   }
 
-  componentDidMount() {
-    // for better reusability moving out
+  componentDidMount = async () => {    // for better reusability moving out
     this.initialMenuUpdate();
+
+    let citywiseConfig = localStorage.getItem("citywiseConfig");
+    citywiseConfig = citywiseConfig && JSON.parse(citywiseConfig);
+   let citywiseConfigb;
+    if(!citywiseConfig || citywiseConfig && citywiseConfig.length === 0){
+      const tenantRequestBody = {
+        MdmsCriteria: {
+          tenantId: commonConfig.tenantId,
+          moduleDetails: [
+            {
+              moduleName: "tenant",
+              masterDetails: [
+                {
+                  name: "citywiseconfig",
+                  filter: "[?(@.config=='assessmentEnabledCities')]"
+                }
+              ]
+            }
+          ]
+        },
+      };
+      let citywiseconfigs = await httpRequest(
+          "post",
+          "/egov-mdms-service/v1/_search",
+          "_search",
+          [],
+          tenantRequestBody);
+        localStorage.setItem("citywiseconfig",JSON.stringify(citywiseconfigs.MdmsRes.tenant.citywiseconfig))
+        citywiseConfigb = citywiseconfigs.MdmsRes.tenant.citywiseconfig
+    }
+     citywiseConfig = citywiseConfig || citywiseConfigb;
+    // if(citywiseConfiga ||)
+    if(citywiseConfig && citywiseConfig[0] && citywiseConfig[0].enabledCities ){
+      let dataentryShow = citywiseConfig[0].enabledCities.find( item =>{
+        return item === getTenantId()
+      })
+      /* if(dataentryShow){
+        continue;
+      } */
+    }
+  
+
   }
   initialMenuUpdate() {
     let pathParam = {};
