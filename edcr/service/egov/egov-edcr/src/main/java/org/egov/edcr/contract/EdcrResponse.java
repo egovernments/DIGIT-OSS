@@ -72,5 +72,11 @@ public class EdcrResponse {
 
 	public void setEdcrDetail(List<EdcrDetail> edcrDetail) {
 		this.edcrDetail = edcrDetail;
-	}	
+	}
+
+    @Override
+    public String toString() {
+        return "EdcrResponse [responseInfo=" + responseInfo + ", edcrDetail=" + edcrDetail + "]";
+    }
+	
 }

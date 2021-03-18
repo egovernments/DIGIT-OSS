@@ -52,7 +52,6 @@ import java.io.File;
 import java.util.Date;
 
 import org.egov.infra.microservice.models.RequestInfo;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

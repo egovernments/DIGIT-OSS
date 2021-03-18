@@ -79,6 +79,8 @@ import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.utils.FileStoreUtils;
 import org.egov.infra.utils.StringUtils;
 import org.egov.infra.web.rest.error.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -108,6 +110,8 @@ public class RestEdcrApplicationController {
     private static final String INVALID_JSON_FORMAT = "Invalid JSON Data";
     private static final String INCORRECT_REQUEST = "INCORRECT_REQUEST";
     private static final String DIGIT_DCR = "Digit DCR";
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestEdcrApplicationController.class);
 
     @Autowired
     private EdcrRestService edcrRestService;
@@ -279,11 +283,12 @@ public class RestEdcrApplicationController {
     @ResponseBody
     public ResponseEntity<?> scrutinyDetails(@ModelAttribute EdcrRequest edcrRequest,
             @RequestBody @Valid RequestInfoWrapper requestInfoWrapper) {
+        LOGGER.info("***********Fetch scruitny details API Called - START************");
         List<EdcrDetail> edcrDetail = edcrRestService.fetchEdcr(edcrRequest, requestInfoWrapper);
-
-        if (!edcrDetail.isEmpty() && edcrDetail.get(0).getErrors() != null)
+        if (!edcrDetail.isEmpty() && edcrDetail.get(0).getErrors() != null) {
+            LOGGER.info("***********EDCR Application details are not found************"+edcrDetail.get(0).getErrors());
             return new ResponseEntity<>(edcrDetail.get(0).getErrors(), HttpStatus.NOT_FOUND);
-        else {
+        } else {
             return getSuccessResponse(edcrDetail, requestInfoWrapper.getRequestInfo());
         }
     }
@@ -337,6 +342,7 @@ public class RestEdcrApplicationController {
         edcrRes.setEdcrDetail(edcrDetails);
         ResponseInfo responseInfo = edcrRestService.createResponseInfoFromRequestInfo(requestInfo, true);
         edcrRes.setResponseInfo(responseInfo);
+        LOGGER.info("######EDCR Scruitny Search Response Info###########"+edcrRes.toString());
         return new ResponseEntity<>(edcrRes, HttpStatus.OK);
 
     }

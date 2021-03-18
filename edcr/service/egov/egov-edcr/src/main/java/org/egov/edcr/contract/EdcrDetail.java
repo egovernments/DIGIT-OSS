@@ -225,4 +225,13 @@ public class EdcrDetail {
         this.comparisonEdcrNumber = comparisonEdcrNumber;
     }
 
+    @Override
+    public String toString() {
+        return "EdcrDetail [transactionNumber=" + transactionNumber + ", applicationDate=" + applicationDate
+                + ", applicationNumber=" + applicationNumber + ", status=" + status + ", edcrNumber=" + edcrNumber + ", tenantId="
+                + tenantId + ", errors=" + errors + ", planPdfs=" + planPdfs + ", planDetail=" + planDetail + ", permitNumber="
+                + permitNumber + ", permitDate=" + permitDate + ", appliactionType=" + appliactionType + ", applicationSubType="
+                + applicationSubType + ", comparisonEdcrNumber=" + comparisonEdcrNumber + "]";
+    }
+
 }
