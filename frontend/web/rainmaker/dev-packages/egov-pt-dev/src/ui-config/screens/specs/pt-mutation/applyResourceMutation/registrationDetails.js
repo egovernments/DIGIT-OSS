@@ -74,7 +74,16 @@ export const registrationDetails = getCommonCard(
             md: 6
           },
           afterFieldChange: async (action, state, dispatch) => {
-            let fields = ["marketValue","powerOfAttorneyRegNo","documentNumber","documentIssueDateField","documentValue","remarks"];
+            let fields = ["marketValue","powerOfAttorneyRegNo","PowerOfAttorneyRegDate","documentNumber","documentIssueDateField",
+            "documentValue","remarks","NameAndAddressOfWitnesses","DateOfWritingWill","NameOfAuctionAuthority","AuctionDate",
+            "AuctionRegistrationnumber",
+            "AuctionRegistrationDate","SerialNumber",
+            "IssuingAuthority",
+            "IssuingDate", "CourtName",
+            "DecreeNo",
+            "DecreeDate",
+            "IsThereAnyStayOrderOnCourtDecreeByUpperCourt",
+            "DetailsOfUpperCourtStayOrder"];
             fields && fields.map((item)=>{
               dispatch(
                 handleField(
@@ -112,9 +121,26 @@ export const registrationDetails = getCommonCard(
           labelKey: "PT_MUTATION_MARKET_VALUE_PLACEHOLDER"
         },
         required:true,
-        pattern: getPattern("DocumentNo"),
+        pattern: getPattern("Amount"),
       jsonPath: "Property.additionalDetails.marketValue",
       visible: false,
+      }),
+      AuctionRegistrationnumber: getTextField({
+        label: {
+          labelName: "Auction Registration No.",
+          labelKey: "PT_MUTATION_AUCTION_REGISTRATION_NO"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Auction Registration No.",
+          labelKey: "PT_MUTATION_AUCTION_REGISTRATION_NO_PLACEHOLDER"
+        },
+        required:true,
+        pattern: getPattern("DocumentNo"),
+        jsonPath: "Property.additionalDetails.AuctionRegistrationnumber",
+        visible: false,
       }),
       documentNumber: getTextField({
         label: {
@@ -133,28 +159,102 @@ export const registrationDetails = getCommonCard(
         jsonPath: "Property.additionalDetails.documentNumber",
         visible: false,
       }),
-      powerOfAttorneyRegNo: getTextField({
+      SerialNumber: getTextField({
         label: {
-          labelName: "powerOfAttorneyRegNo",
-          labelKey: "PT_MUTATION_DOCUMENT_NO"
+          labelName: "Serial No.",
+          labelKey: "PT_MUTATION_SERIAL_NO"
         },
         props:{
           className:"applicant-details-error"
         },
         placeholder: {
-          labelName: "Enter Document No.",
-          labelKey: "PT_MUTATION_DOCUMENT_NO_PLACEHOLDER"
+          labelName: "Enter Serial No.",
+          labelKey: "PT_MUTATION_SERIAL_NO_PLACEHOLDER"
         },
         required:true,
         pattern: getPattern("DocumentNo"),
-        jsonPath: "Property.additionalDetails.documentNumber",
+        jsonPath: "Property.additionalDetails.SerialNumber",
         visible: false,
       }),
+      powerOfAttorneyRegNo: getTextField({
+        label: {
+          labelName: "powerOfAttorneyRegNo",
+          labelKey: "PT_MUTATION_ATTORNEY_REG_NO"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Attorney Registration Number",
+          labelKey: "PT_MUTATION_ATTORNEY_REG_NO_PLACEHOLDER"
+        },
+        required:true,
+        pattern: getPattern("DocumentNo"),
+        jsonPath: "Property.additionalDetails.powerOfAttorneyRegNo",
+        visible: false,
+      }),
+      DecreeNo: getTextField({
+        label: {
+          labelName: "DecreeNo",
+          labelKey: "PT_MUTATION_DECREE_NO"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Decree No",
+          labelKey: "PT_MUTATION_DECREE_NO_PLACEHOLDER"
+        },
+        required:true,
+        pattern: getPattern("DocumentNo"),
+        jsonPath: "Property.additionalDetails.DecreeNo",
+        visible: false,
+      }),
+      AuctionRegistrationDate: {
+        ...getDateField({
+          label: { labelName: "Auction Registration Date", labelKey: "PT_MUTATION_AUCTION_REGISTRATION_DATE" },
+          placeholder: {
+            labelName: "Enter Auction Registration Date",
+            labelKey: "PT_MUTATION_AUCTION_REGISTRATION_DATE_PLACEHOLDER"
+          },
+          required: true,
+          pattern: getPattern("Date"),
+          isDOB: true,
+          errorMessage: "PT_DOCUMENT_DATE_ERROR_MESSAGE",
+          jsonPath: "Property.additionalDetails.AuctionRegistrationDate",
+          visible: false,
+          props: {
+            inputProps: {
+              max: getTodaysDateInYMD()
+            }
+          }
+        })
+      },
+      DecreeDate: {
+        ...getDateField({
+          label: { labelName: "Decree Date", labelKey: "PT_MUTATION_DECREE_DATE" },
+          placeholder: {
+            labelName: "Enter Decree Date",
+            labelKey: "PT_MUTATION_DECREE_DATE_PLACEHOLDER"
+          },
+          required: true,
+          pattern: getPattern("Date"),
+          isDOB: true,
+          errorMessage: "PT_DOCUMENT_DATE_ERROR_MESSAGE",
+          jsonPath: "Property.additionalDetails.DecreeDate",
+          visible: false,
+          props: {
+            inputProps: {
+              max: getTodaysDateInYMD()
+            }
+          }
+        })
+      },
             documentIssueDateField: {
         ...getDateField({
           label: { labelName: "Document Issue Date", labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE" },
           placeholder: {
-            labelName: "Enter Document No.",
+            labelName: "Enter Document Issue Date",
             labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE_PLACEHOLDER"
           },
           required: true,
@@ -170,6 +270,127 @@ export const registrationDetails = getCommonCard(
           }
         })
       },
+      DateOfWritingWill:{
+      ...getDateField({
+        label: { labelName: "Date of writing will", labelKey: "PT_MUTATION_DATE_OF_WRITING_WILL" },
+        placeholder: {
+          labelName: "Enter Date",
+          labelKey: "PT_MUTATION_DATE_OF_WRITING_WILL_PLACEHOLDER"
+        },
+        required: true,
+        pattern: getPattern("Date"),
+        isDOB: true,
+        errorMessage: "PT_DOCUMENT_DATE_ERROR_MESSAGE",
+        jsonPath: "Property.additionalDetails.DateOfWritingWill",
+        visible: false,
+        props: {
+          inputProps: {
+            max: getTodaysDateInYMD()
+          }
+        }
+      })
+    },
+    AuctionDate:{
+      ...getDateField({
+        label: { labelName: "Auction Date", labelKey: "PT_MUTATION_AUCTION_DATE" },
+        placeholder: {
+          labelName: "Enter Date",
+          labelKey: "PT_MUTATION_AUCTION_DATE_PLACEHOLDER"
+        },
+        required: true,
+        pattern: getPattern("Date"),
+        isDOB: true,
+        errorMessage: "PT_DOCUMENT_DATE_ERROR_MESSAGE",
+        jsonPath: "Property.additionalDetails.AuctionDate",
+        visible: false,
+        props: {
+          inputProps: {
+            max: getTodaysDateInYMD()
+          }
+        }
+      })
+    },
+    IssuingDate:{
+      ...getDateField({
+        label: { labelName: "Issuing Date", labelKey: "PT_MUTATION_DATE_OF_ISSUING" },
+        placeholder: {
+          labelName: "Enter Date of Issuing",
+          labelKey: "PT_MUTATION_DATE_OF_ISSUING_PLACEHOLDER"
+        },
+        required: true,
+        pattern: getPattern("Date"),
+        isDOB: true,
+        errorMessage: "PT_DOCUMENT_DATE_ERROR_MESSAGE",
+        jsonPath: "Property.additionalDetails.IssuingDate",
+        visible: false,
+        props: {
+          inputProps: {
+            max: getTodaysDateInYMD()
+          }
+        }
+      })
+    },
+    IsThereAnyStayOrderOnCourtDecreeByUpperCourt : {
+      uiFramework: "custom-containers",
+      componentPath: "RadioGroupContainer",
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      jsonPath:"Property.additionalDetails.IsThereAnyStayOrderOnCourtDecreeByUpperCourt",
+      visible: false,
+      props: {
+        label: {
+          name: "Is Property or Part of Property under State/Central Government Acquisition? ",
+          key: "PT_MUTATION_DETAILS_OF_UPPER_COURT_STAY_ORDER"
+        },
+        buttons: [
+          {
+            labelName: "Yes",
+            labelKey: "PT_MUTATION_STATE_ACQUISITION_YES",
+            value: "YES"
+          },
+          {
+            label: "No",
+            labelKey: "PT_MUTATION_STATE_ACQUISITION_NO",
+            value: "NO"
+          }
+        ],
+        // jsonPath:"Property.additionalDetails.isPropertyUnderGovtPossession",
+        required: true
+      },
+      required: true,
+      type: "array",
+      beforeFieldChange:(action, state, dispatch) => {
+      /*   const courtCaseJsonPath = "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.govtAcquisitionDetails";
+        if(action.value === "NO"){
+          dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", true));
+          dispatch(handleField("apply", courtCaseJsonPath, "props.value", ""));
+          dispatch(handleField("apply", courtCaseJsonPath, "props.helperText", ""));
+          dispatch(handleField("apply", courtCaseJsonPath, "props.error", false));
+        }else{
+          dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", false));
+        } */
+      }
+    },
+
+    DetailsOfUpperCourtStayOrder: getTextField({
+      label: {
+        labelName: "DetailsOfUpperCourtStayOrder",
+        labelKey: "PT_MUTATION_DETAILS_OF_UPPER_STAY_ORDER"
+      },
+      props:{
+        className:"applicant-details-error"
+      },
+      placeholder: {
+        labelName: "Enter Remarks if any",
+        labelKey: "PT_MUTATION_DETAILS_OF_UPPER_STAY_ORDER"
+      },
+      //pattern: getPattern("Address"),
+      jsonPath: "Property.additionalDetails.DetailsOfUpperCourtStayOrder",
+      visible: false,
+    }),
         
       documentValue: getTextField({
         label: {
@@ -188,6 +409,74 @@ export const registrationDetails = getCommonCard(
       jsonPath: "Property.additionalDetails.documentValue",
       visible: false,
       }),
+      CourtName:getTextField({
+        label: {
+          labelName: "Court Name",
+          labelKey: "PT_MUTATION_COURT_NAME"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Court Name",
+          labelKey: "PT_MUTATION_COURT_NAME_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "Property.additionalDetails.CourtName",
+        visible: false,
+      }),
+   
+      NameAndAddressOfWitnesses: getTextField({
+        label: {
+          labelName: "Name And Address Of Witnesses",
+          labelKey: "PT_MUTATION_NAME_AND_ADDRESS_OF_WITNESS"
+        },
+        props:{
+          className:"applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Name And Address Of Witnesses",
+          labelKey: "PT_MUTATION_NAME_AND_ADDRESS_OF_WITNESS_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        jsonPath: "Property.additionalDetails.NameAndAddressOfWitnesses",
+        visible: false,
+      }),
+    
+    IssuingAuthority: getTextField({
+      label: {
+        labelName: "Name Of Issuing Authority",
+        labelKey: "PT_MUTATION_NAME_OF_ISSUING_AUTHORITY"
+      },
+      props:{
+        className:"applicant-details-error"
+      },
+      placeholder: {
+        labelName: "Enter Name Of Issuing Authority",
+        labelKey: "PT_MUTATION_NAME_OF_ISSUING_AUTHORITY_PLACEHOLDER"
+      },
+    pattern: getPattern("Address"),
+      jsonPath: "Property.additionalDetails.IssuingAuthority",
+      visible: false,
+    }),
+  
+    NameOfAuctionAuthority: getTextField({
+      label: {
+        labelName: "Name Of Auction Authority",
+        labelKey: "PT_MUTATION_NAME_OF_AUCTION_AUTHORITY"
+      },
+      props:{
+        className:"applicant-details-error"
+      },
+      placeholder: {
+        labelName: "Enter Name Of Auction Authority",
+        labelKey: "PT_MUTATION_NAME_OF_AUCTION_AUTHORITY_PLACEHOLDER"
+      },
+      pattern: getPattern("NameOfAuctionAuthority"),
+      jsonPath: "Property.additionalDetails.NameOfAuctionAuthority",
+      visible: false,
+    }),
+   
       remarks: getTextField({
         label: {
           labelName: "Remarks",

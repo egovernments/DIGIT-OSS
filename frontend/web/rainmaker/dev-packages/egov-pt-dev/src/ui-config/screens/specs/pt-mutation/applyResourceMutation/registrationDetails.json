@@ -1,5 +1,5 @@
 { 
-    "Spelling Mistake Correction": [
+    "NAMECORRECTION": [
         "No information to be captured"
     ],
     "SALEDEED": [
@@ -9,22 +9,22 @@
     "SALEPOWEROFATTORNEY": [
         "documentNumber",
         "documentIssueDateField",
-        "powerOfAttorneyRegNo",
-        "Powerofattorneyregdate"
+        "powerOfAttorneyRegNo"
+        
     ],
     "REGISTEREDWILLDEED": [
         "documentNumber",
         "documentIssueDateField"
     ],
     "UNREGISTEREDWILLDEED": [
-        "Name and address of witnesses (Multiple)",
-        "Date of writing will"
+        "NameAndAddressOfWitnesses", 
+        "DateOfWritingWill"
     ],
     "PROPERTYAUCTION": [
-        "Name of auction authority",
-        "Auction Date",
-        "Auction Registration number",
-        "Auction Registration Date"
+        "NameOfAuctionAuthority",
+        "AuctionDate",
+        "AuctionRegistrationnumber",
+        "AuctionRegistrationDate"
     ],
     "PARTITIONDEED": [
         "documentNumber",
@@ -35,20 +35,20 @@
         "documentIssueDateField"
     ],
     "SUCCESSIONORDEATHCERTIFICATE": [
-        "Serial Number",
-        "Issuing Authority",
-        "Issuing Date"
+        "SerialNumber",
+        "IssuingAuthority",  
+        "IssuingDate"
     ],
     "PATTACERTIFICATE": [
         "documentNumber",
         "documentIssueDateField"
     ],
     "COURTDECREE": [
-        "Court Name",
-        "Decree No.",
-        "Decree Date",
-        "Is there any stay order on court decree by upper court? Yes / No (Checkbox)",
-        "Details of upper court stay order:"
+        "CourtName",
+        "DecreeNo",
+        "DecreeDate",
+        "IsThereAnyStayOrderOnCourtDecreeByUpperCourt",
+        "DetailsOfUpperCourtStayOrder"
     ]
 
 }
