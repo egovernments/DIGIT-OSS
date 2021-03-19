@@ -140,7 +140,11 @@ public class PropertyService {
 				for (OwnerInfo info : propertyFromSearch.getOwners()) {
 					info.setStatus(Status.INACTIVE);
 				}
-
+				
+				for (OwnerInfo info : request.getProperty().getOwners()) {
+					info.setStatus(Status.ACTIVE);
+				}
+				
 				List<OwnerInfo> collectedOwners = new ArrayList<OwnerInfo>();
 				collectedOwners.addAll(propertyFromSearch.getOwners());
 				collectedOwners.addAll(request.getProperty().getOwners());
