@@ -433,6 +433,13 @@ class OwnerInfo extends Component {
         if (ownerInfo.length > 1) {
           multipleOwner = true;
         }
+        let owner = [];
+        if (ownerInfo && ownerInfo.length > 0) {
+          ownerInfo = ownerInfo.sort(function(item1,item2){
+            return ownerInfo.indexOf(item2)-ownerInfo.indexOf(item1)
+          })
+          owner = ownerInfo[0];
+        }
       }
     }
     return (
