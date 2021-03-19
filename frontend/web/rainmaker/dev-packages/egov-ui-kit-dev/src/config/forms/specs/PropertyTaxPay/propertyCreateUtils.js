@@ -35,9 +35,9 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
       obj.ownerType = obj.ownerType || "NONE";
     });
   }
-  if (newProperties && newProperties.length > 0) {
+ /*  if (newProperties && newProperties.length > 0) {
     properties[0].owners = newProperties[0].owners;
-  }
+  } */
   properties[0].units && properties[0].units.map((unit) => {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
