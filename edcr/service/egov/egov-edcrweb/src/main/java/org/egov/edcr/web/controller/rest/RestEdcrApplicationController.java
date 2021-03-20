@@ -54,6 +54,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.egov.common.entity.dcr.helper.ErrorDetail;
@@ -76,6 +77,7 @@ import org.egov.edcr.service.PlanService;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.microservice.contract.ResponseInfo;
 import org.egov.infra.microservice.models.RequestInfo;
+import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.utils.FileStoreUtils;
 import org.egov.infra.utils.StringUtils;
 import org.egov.infra.web.rest.error.ErrorResponse;
@@ -110,6 +112,7 @@ public class RestEdcrApplicationController {
     private static final String INVALID_JSON_FORMAT = "Invalid JSON Data";
     private static final String INCORRECT_REQUEST = "INCORRECT_REQUEST";
     private static final String DIGIT_DCR = "Digit DCR";
+    private static final String USER_INFO_HEADER_NAME = "x-user-info";
     
     private static final Logger LOGGER = LoggerFactory.getLogger(RestEdcrApplicationController.class);
 
@@ -208,11 +211,12 @@ public class RestEdcrApplicationController {
             MediaType.MULTIPART_FORM_DATA_VALUE }, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> scrutinize(@RequestPart("planFile") MultipartFile planFile,
-            @RequestParam("edcrRequest") String edcrRequest) {
+            @RequestParam("edcrRequest") String edcrRequest, final HttpServletRequest request) {
+        String userInfo = request.getHeader(USER_INFO_HEADER_NAME);
+        LOGGER.info("###User Info####"+userInfo);
         EdcrDetail edcrDetail = new EdcrDetail();
         EdcrRequest edcr = new EdcrRequest();
-        boolean isValid = isValidJson(edcrRequest);
-        if (!isValid) {
+        if (!isValidJson(edcrRequest) || !isValidJson(userInfo)) {
             ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, INVALID_JSON_FORMAT,
                     HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -220,6 +224,10 @@ public class RestEdcrApplicationController {
         try {
             List<ErrorDetail> errorResponses = new ArrayList<ErrorDetail>();
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
+            if(userInfo != null) {
+                UserInfo userInfo2 = new ObjectMapper().readValue(userInfo, UserInfo.class);
+                edcr.getRequestInfo().setUserInfo(userInfo2);
+            }
             ErrorDetail edcRes = edcrValidator.validate(edcr);
             if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
                 return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
