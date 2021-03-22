@@ -216,7 +216,7 @@ public class RestEdcrApplicationController {
         LOGGER.info("###User Info####"+userInfo);
         EdcrDetail edcrDetail = new EdcrDetail();
         EdcrRequest edcr = new EdcrRequest();
-        if (!isValidJson(edcrRequest) || !isValidJson(userInfo)) {
+        if (!isValidJson(edcrRequest) || (userInfo != null && !isValidJson(userInfo))) {
             ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, INVALID_JSON_FORMAT,
                     HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
