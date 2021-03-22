@@ -75,12 +75,12 @@ class PTHome extends Component {
         icon: <Icon style={iconStyle} action="custom" name="home-account" />,
         dynamicArray: [numProperties],
         route: "/property-tax/my-properties"
-      },{
+      },/* {
         label: "PT_MUTATION_MY_APPLICATIONS",
         icon: <Icon style={iconStyle} action="custom" name="home-account" />,
         dynamicArray: [myApplicationsCount],
         route: "/pt-mutation/my-applications"
-      }
+      } */
     ];
   };
 
