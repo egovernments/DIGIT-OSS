@@ -60,6 +60,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.config.core.EnvironmentSettings;
+import org.egov.infra.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -86,9 +87,9 @@ public final class WebUtils {
         String requestURL = httpRequest.getRequestURL().toString();
         String domainName = getDomainName(requestURL);
         if(domainName.contains(EDCR_POD_URL)) {
-            Enumeration<String> protocol = httpRequest.getHeaders("x-forwarded-proto");
-            Enumeration<String> host = httpRequest.getHeaders("x-forwarded-host");
-            if(protocol.hasMoreElements() && host.hasMoreElements()) {
+            String protocol = httpRequest.getHeader("x-forwarded-proto");
+            String host = httpRequest.getHeader("x-forwarded-host");
+            if(StringUtils.isNotBlank(protocol) && StringUtils.isNotBlank(host)) {
                 String proto = protocol.toString().split(",")[0];
                 String hostName = host.toString().split(",")[0];
                 System.out.println("List of domain name*******"+hostName.toString());
