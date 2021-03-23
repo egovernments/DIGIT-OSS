@@ -59,6 +59,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.egov.infra.admin.master.entity.User;
+import org.egov.infra.config.core.EnvironmentSettings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -67,6 +69,10 @@ public final class WebUtils {
     private static final char QUESTION_MARK = '?';
     private static final char FORWARD_SLASH = '/';
     private static final String SCHEME_DOMAIN_SEPARATOR = "://";
+    private static final String EDCR_POD_URL = "egov-edcr.egov";
+    
+    @Autowired
+    private static EnvironmentSettings environmentSettings;
 
     private WebUtils() {
         // Since utils are with static methods
@@ -78,7 +84,23 @@ public final class WebUtils {
      **/
     public static String extractRequestedDomainName(HttpServletRequest httpRequest) {
         String requestURL = httpRequest.getRequestURL().toString();
-        return extractRequestedDomainName(requestURL);
+        String domainName = getDomainName(requestURL);
+        if(domainName.contains(EDCR_POD_URL)) {
+            environmentSettings.getProperty("common.domain.name");
+            Enumeration<String> protocol = httpRequest.getHeaders("x-forwarded-proto");
+            Enumeration<String> host = httpRequest.getHeaders("x-forwarded-host");
+            if(protocol.hasMoreElements() && host.hasMoreElements()) {
+                String proto = protocol.toString().split(",")[0];
+                String hostName = host.toString().split(",")[0];
+                System.out.println("List of domain name*******"+hostName.toString());
+                System.out.println("List of protocols*******"+proto.toString());
+                System.out.println("Domain name*******"+hostName);
+                System.out.println("Proto name*******"+proto);
+                String URL = new StringBuilder().append(proto).append(SCHEME_DOMAIN_SEPARATOR).append(hostName).toString();
+                System.out.println("Domain URL*******"+URL);
+            }
+        }
+        return domainName;
     }
 
     /**
@@ -86,6 +108,11 @@ public final class WebUtils {
      * eg: http://www.domain.com/cxt/xyz will return www.domain.com http://somehost:8090/cxt/xyz will return somehost
      **/
     public static String extractRequestedDomainName(String requestURL) {
+        String domainName = getDomainName(requestURL);
+        return domainName;
+    }
+
+    private static String getDomainName(String requestURL) {
         int domainNameStartIndex = requestURL.indexOf(SCHEME_DOMAIN_SEPARATOR) + 3;
         int domainNameEndIndex = requestURL.indexOf(FORWARD_SLASH, domainNameStartIndex);
         String domainName = requestURL.substring(domainNameStartIndex,
@@ -107,7 +134,7 @@ public final class WebUtils {
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
             String value = httpRequest.getHeader(key);
-            System.out.println("Request--#######Key: "+key+", #####Value: "+value);
+            System.out.println("Request--#######Key: "+ key+", #####Value: "+value);
         }
         System.out.println("Request URL-->"+httpRequest.getRequestURL());
         System.out.println("Request URI-->"+httpRequest.getRequestURI());

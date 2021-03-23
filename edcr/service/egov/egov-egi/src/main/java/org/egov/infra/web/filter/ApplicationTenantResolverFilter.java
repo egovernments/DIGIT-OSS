@@ -111,7 +111,7 @@ public class ApplicationTenantResolverFilter implements Filter {
         HttpSession session = req.getSession();
 
         String domainURL = extractRequestDomainURL((HttpServletRequest) request, false);
-        String domainName = extractRequestedDomainName(domainURL);
+        String domainName = extractRequestedDomainName((HttpServletRequest) request);
         ApplicationThreadLocals.setTenantID(environmentSettings.schemaName(domainName));
         ApplicationThreadLocals.setDomainName(domainName);
         ApplicationThreadLocals.setDomainURL(domainURL);
