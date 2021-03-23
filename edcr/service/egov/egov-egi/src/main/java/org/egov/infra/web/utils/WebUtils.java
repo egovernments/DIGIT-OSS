@@ -86,7 +86,6 @@ public final class WebUtils {
         String requestURL = httpRequest.getRequestURL().toString();
         String domainName = getDomainName(requestURL);
         if(domainName.contains(EDCR_POD_URL)) {
-            environmentSettings.getProperty("common.domain.name");
             Enumeration<String> protocol = httpRequest.getHeaders("x-forwarded-proto");
             Enumeration<String> host = httpRequest.getHeaders("x-forwarded-host");
             if(protocol.hasMoreElements() && host.hasMoreElements()) {
