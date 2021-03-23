@@ -4,11 +4,14 @@ import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
 import static org.egov.pt.util.PTConstants.BILL_AMOUNT_PATH;
 import static org.egov.pt.util.PTConstants.BILL_NODEMAND_ERROR_CODE;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -24,6 +27,7 @@ import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
+import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -257,4 +261,46 @@ public class PropertyUtil extends CommonUtils {
 		});
 		return copyOwners;
 	}
+	
+	public BigDecimal getDemandAmount(PropertyRequest propertyRequest) {
+		Property property = propertyRequest.getProperty();
+		RequestInfo requestInfo = propertyRequest.getRequestInfo();
+		Optional<Object> fetchResult = restRepo.fetchResult(getBillUri(property), new RequestInfoWrapper(requestInfo));
+		LinkedHashMap responseMap = (LinkedHashMap) fetchResult.get();
+		JSONObject jsonObject = new JSONObject(responseMap);
+		double amount = 0.0;
+		try {
+			JSONArray demandArray = (JSONArray) jsonObject.get("Demands");
+			if (demandArray != null && demandArray.length() > 0) {
+				JSONObject firstElement = (JSONObject) demandArray.get(0);
+				if (firstElement != null) {
+					JSONArray demandDetails = (JSONArray) firstElement.get("demandDetails");
+					if (demandDetails != null) {
+						for (int i = 0; i < demandDetails.length(); i++) {
+							JSONObject object = (JSONObject) demandDetails.get(i);
+							Double taxAmt = Double.valueOf((object.get("taxAmount").toString()));
+							amount = amount + taxAmt;
+						}
+					}
+				}
+			}
+			return BigDecimal.valueOf(amount);
+		} catch (Exception e) {
+			throw new CustomException("PARSING ERROR",
+					"Failed to parse the response using jsonPath: " + PTConstants.BILL_AMOUNT);
+		}
+	}
+
+	public StringBuilder getBillUri(Property property) {
+		StringBuilder builder = new StringBuilder(configs.getEgbsHost());
+		builder.append(configs.getEgbsSearchDemand());
+		builder.append("?tenantId=");
+		builder.append(property.getTenantId());
+		builder.append("&consumerCode=");
+		builder.append(property.getPropertyId());
+		builder.append("&businessService=");
+		builder.append("PT");
+		return builder;
+	}
+
 }

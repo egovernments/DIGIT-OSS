@@ -1,5 +1,6 @@
 package org.egov.pt.validator;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import org.egov.pt.models.workflow.State;
 import org.egov.pt.service.DiffService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.service.WorkflowService;
+import org.egov.pt.util.ErrorConstants;
 import  org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -790,6 +792,8 @@ public class PropertyValidator {
 				&& property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState()))
 			errorMap.put("EG_PT_MUTATION_WF_ACTION_ERROR", "Invalid action, OPEN action cannot be applied on an active workflow ");
 
+		validateSkipPaymentAction(request);
+
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
 	}
@@ -821,4 +825,16 @@ public class PropertyValidator {
 		return false;
 	}
 
+	private void validateSkipPaymentAction(PropertyRequest propertyRequest) {
+		Property property = propertyRequest.getProperty();
+		if (property.getWorkflow().getAction() != null
+				&& (property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.ACTION_SKIP_PAY))) {
+			BigDecimal demandAmount = propertyUtil.getDemandAmount(propertyRequest);
+			if ((demandAmount.compareTo(BigDecimal.ZERO) > 0)) {
+				throw new CustomException(ErrorConstants.INVALID_ACTION,
+						"Payment can't be skipped once demand is generated.");
+			}
+		}
+	}
+	
 }

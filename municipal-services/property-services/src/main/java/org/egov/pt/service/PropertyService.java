@@ -1,6 +1,8 @@
 package org.egov.pt.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +20,8 @@ import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
+import org.egov.pt.models.workflow.ProcessInstance;
+import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.PropertyRepository;
@@ -230,6 +234,11 @@ public class PropertyService {
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 				
+				if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
+						.contains(state.getApplicationStatus())) {
+					skipPayment(request);
+				}
+
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
 
@@ -362,4 +371,17 @@ public class PropertyService {
 		util.enrichOwner(userDetailResponse, properties, false);
 		return properties;
 	}
+	
+    public void skipPayment(PropertyRequest propertyRequest ){
+    	Property property = propertyRequest.getProperty();
+		BigDecimal demandAmount = util.getDemandAmount(propertyRequest);
+		if (!(demandAmount.compareTo(BigDecimal.ZERO) > 0)) {
+			ProcessInstance workflow = ProcessInstance.builder().action(PTConstants.ACTION_SKIP_PAY).build();
+			property.setWorkflow(workflow);
+			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(propertyRequest.getRequestInfo(),
+					Collections.singletonList(workflow));
+			 wfService.callWorkFlow(workflowRequest);
+		}
+	}
+    
 }

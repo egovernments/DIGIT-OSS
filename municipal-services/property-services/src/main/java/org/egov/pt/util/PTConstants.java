@@ -310,5 +310,11 @@ public class PTConstants {
     public static final String ASMT_USER_EVENT_PAY = "pay";
 
     public static final String VIEW_APPLICATION_CODE = "View Application";
+
+    public static final String ACTION_SKIP_PAY = "SKIP_PAYMENT";
+    
+	public static final String BILL_AMOUNT = "$.Demands[0].demandDetails[0].taxAmount";
+
+
 }
 

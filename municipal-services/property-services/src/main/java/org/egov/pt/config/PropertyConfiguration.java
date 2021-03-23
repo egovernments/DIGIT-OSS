@@ -327,4 +327,8 @@ public class PropertyConfiguration {
 	
 	@Value("${egbs.demand.search.endpoint}")
 	private String egbsSearchDemand;
+	
+	@Value("${egov.property.skippayment.status}")
+	private String skipPaymentStatuses;
+	
 }
