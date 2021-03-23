@@ -463,9 +463,9 @@ class OwnerInfo extends Component {
                   {/* Transfer ownership button and View History button */}
                   {(viewHistory || ownershipTransfer) && (
                     <div id="pt-header-button-container" className="header-button-container">
-                      {/* <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
+                       <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
                        <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
- */}                    </div>
+                           </div>
                   )}
                   {/* ------------------------- */}
                 </div>
