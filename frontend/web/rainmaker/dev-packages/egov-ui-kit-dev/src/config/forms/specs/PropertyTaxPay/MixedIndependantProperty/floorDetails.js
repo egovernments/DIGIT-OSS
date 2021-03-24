@@ -58,6 +58,21 @@ const formConfig = {
           setDependentFields(["balconyArea"],dispatch,formKey,true)
           }
         }
+        if(propertyType == "BUILTUP.INDEPENDENTPROPERTY")
+        {
+          if(field.value === "RESIDENTIAL"){
+            setDependentFields(["innerDimensions"],dispatch, formKey, false)
+          }else  if(field.value === "NONRESIDENTIAL"){
+          dispatch(setFieldProperty(formKey, "innerDimensions", "value", "false"));
+          setDependentFields(["innerDimensions"],dispatch, formKey, true)
+          setDependentFields(["builtArea"],dispatch,formKey,false)
+          setDependentFields(["roomArea"],dispatch,formKey,true)
+          setDependentFields(["garageArea"],dispatch,formKey,true)
+          setDependentFields(["bathroomArea"],dispatch,formKey,true)
+          setDependentFields(["balconyArea"],dispatch,formKey,true)
+          }
+
+        }
         if (!isEmpty(minorObject)) {
           dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, minorObject.usageCategoryMajor));
           var filteredSubUsageMinor = filter(

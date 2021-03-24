@@ -515,9 +515,19 @@ export const beforeInitForm = {
         const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
         set(action, "form.fields.usageType.dropDownData", usageTypeData);
         unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`, false);
+        if (usageCategoryMajor === "MIXED" && propertyType === "BUILTUP.INDEPENDENTPROPERTY")
+        {
+          set(action, "form.fields.innerDimensions.value", "false");
+          set(action, "form.fields.innerDimensions.hideField", "true");
+          set(action, "form.fields.builtArea.hideField", false);
+          set(action, "form.fields.roomArea.hideField", true);
+          set(action, "form.fields.balconyArea.hideField", true);
+          set(action, "form.fields.garageArea.hideField", true);
+          set(action, "form.fields.bathroomArea.hideField", true); 
+         }
       } else {
-        if(usageCategoryMajor === "NONRESIDENTIAL" && (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || propertyType === "BUILTUP.SHAREDPROPERTY") && 
-        usageTypeVal === "Commercial"){
+        if(usageCategoryMajor === "NONRESIDENTIAL" && (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || 
+        propertyType === "BUILTUP.SHAREDPROPERTY") && usageTypeVal === "Commercial"){
         set(action, "form.fields.subUsageType.hideField", false);
         unitFormUpdate(`common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`, false);
         let subUsageTypeVal = get(state,`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`);
