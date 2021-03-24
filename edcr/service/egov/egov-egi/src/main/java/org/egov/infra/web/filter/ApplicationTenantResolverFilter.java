@@ -112,11 +112,12 @@ public class ApplicationTenantResolverFilter implements Filter {
         HttpSession session = customRequest.getSession();
         LOG.info("Request URL-->" + customRequest.getRequestURL());
         LOG.info("Request URI-->" + customRequest.getRequestURI());
-        String domainURL = extractRequestDomainURL((HttpServletRequest) customRequest, false);
-        String domainName = extractRequestedDomainName((HttpServletRequest) customRequest);
+        String domainURL = extractRequestDomainURL(customRequest, false);
+        String domainName = extractRequestedDomainName(customRequest);
         ApplicationThreadLocals.setTenantID(environmentSettings.schemaName(domainName));
         ApplicationThreadLocals.setDomainName(domainName);
         ApplicationThreadLocals.setDomainURL(domainURL);
+        LOG.info("***Tenant ID-->" + ApplicationThreadLocals.getTenantID());
         customRequest = prepareRestService(req, session);
         if (customRequest == null)
             chain.doFilter(request, response);
@@ -152,7 +153,9 @@ public class ApplicationTenantResolverFilter implements Filter {
             String tenantFromBody = StringUtils.EMPTY;
             customRequest = new MultiReadRequestWrapper(req);
             tenantFromBody = setCustomHeader(req, tenantFromBody, customRequest);
+            LOG.info("Tenant from Body***" + tenantFromBody);
             String fullTenant = req.getParameter("tenantId");
+            LOG.info("fullTenant***" + fullTenant);
             if (StringUtils.isBlank(fullTenant)) {
                 fullTenant = tenantFromBody;
             }
@@ -160,6 +163,7 @@ public class ApplicationTenantResolverFilter implements Filter {
                 throw new ApplicationRestException("incorrect_request", "RestUrl does not contain tenantId: " + fullTenant);
             }
             String tenant = fullTenant.substring(fullTenant.lastIndexOf('.') + 1, fullTenant.length());
+            LOG.info("tenant***" + tenant);
             LOG.info("tenant from rest request =" + tenant);
             LOG.info("City Code from session " + (String) session.getAttribute(CITY_CODE_KEY));
             boolean found = false;

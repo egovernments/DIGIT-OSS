@@ -85,10 +85,10 @@ public final class WebUtils {
         String domainName = getDomainName(requestURL);
         if (domainName.contains(EDCR_SERVICE_INTERNAL_URL)) {
             String host = httpRequest.getHeader("x-forwarded-host");
-            LOG.info("*****host Name*****", host);
+            LOG.info("*****host Name*****" + host);
             if (StringUtils.isNotBlank(host)) {
                 domainName = host.toString().split(",")[0];
-                LOG.info("*****Domain Name*****", domainName);
+                LOG.info("*****Domain Name*****" + domainName);
             }
         }
         return domainName;
