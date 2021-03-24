@@ -90,7 +90,7 @@ import org.springframework.web.client.RestTemplate;
 @Component("egovMicroServiceStore")
 public class EgovMicroServiceStore implements FileStoreService {
 
-    private static final String FILESTORE_V1_FILES = "/filestore/v1/files";
+    private static final String FILESTORE_V1_FILES = "filestore/v1/files";
 
     private static final Logger LOG = getLogger(LocalDiskFileStoreService.class);
 
