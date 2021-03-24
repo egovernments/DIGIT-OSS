@@ -129,6 +129,10 @@ public class EgovMicroServiceStore implements FileStoreService {
             map.add("file", new FileSystemResource(file.getName()));
             map.add("tenantId", ApplicationThreadLocals.getTenantID());
             map.add("module", moduleName);
+            LOG.info("****file****", new FileSystemResource(file.getName()));
+            LOG.info("****tenantId***", ApplicationThreadLocals.getTenantID());
+            LOG.info("***module***", moduleName);
+            LOG.info("****filestore URL*****", url);
             HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(map,
                     headers);
             ResponseEntity<StorageResponse> result = restTemplate.postForEntity(url, request, StorageResponse.class);

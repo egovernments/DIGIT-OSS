@@ -52,8 +52,6 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.egov.infra.utils.ApplicationConstant.COLON;
 import static org.egov.infra.utils.ApplicationConstant.SLASH;
 
-import java.util.Enumeration;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -87,6 +85,7 @@ public final class WebUtils {
         String domainName = getDomainName(requestURL);
         if (domainName.contains(EDCR_SERVICE_INTERNAL_URL)) {
             String host = httpRequest.getHeader("x-forwarded-host");
+            LOG.info("*****host Name*****", host);
             if (StringUtils.isNotBlank(host)) {
                 domainName = host.toString().split(",")[0];
                 LOG.info("*****Domain Name*****", domainName);
@@ -120,23 +119,11 @@ public final class WebUtils {
      * http://www.domain.com/cxt/xyz withContext value as false will return http://www.domain.com
      **/
     public static String extractRequestDomainURL(HttpServletRequest httpRequest, boolean withContext) {
-        Enumeration headerNames = httpRequest.getHeaderNames();
-        LOG.info("********Request Header Start**********");
-        LOG.info("********Request Scheme**********" + httpRequest.getScheme());
-        while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
-            String value = httpRequest.getHeader(key);
-            LOG.info("Request--#######Key: " + key + ", #####Value: " + value);
-        }
-        LOG.info("Request URL-->" + httpRequest.getRequestURL());
-        LOG.info("Request URI-->" + httpRequest.getRequestURI());
-        LOG.info("********Request Header End**********");
-
         StringBuilder url = new StringBuilder(httpRequest.getRequestURL());
         String domainURL = "";
+        String protocol = httpRequest.getHeader("x-forwarded-proto");
+        String host = httpRequest.getHeader("x-forwarded-host");
         if (getDomainName(url.toString()).contains(EDCR_SERVICE_INTERNAL_URL)) {
-            String protocol = httpRequest.getHeader("x-forwarded-proto");
-            String host = httpRequest.getHeader("x-forwarded-host");
             if (StringUtils.isNotBlank(protocol) && StringUtils.isNotBlank(host)) {
                 String proto = protocol.toString().split(",")[0];
                 String hostName = host.toString().split(",")[0];

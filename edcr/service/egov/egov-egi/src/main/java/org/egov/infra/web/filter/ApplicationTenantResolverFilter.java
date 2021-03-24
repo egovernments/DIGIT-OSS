@@ -108,14 +108,16 @@ public class ApplicationTenantResolverFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        HttpSession session = req.getSession();
-
-        String domainURL = extractRequestDomainURL((HttpServletRequest) request, false);
-        String domainName = extractRequestedDomainName((HttpServletRequest) request);
+        MultiReadRequestWrapper customRequest = new MultiReadRequestWrapper(req);
+        HttpSession session = customRequest.getSession();
+        LOG.info("Request URL-->" + customRequest.getRequestURL());
+        LOG.info("Request URI-->" + customRequest.getRequestURI());
+        String domainURL = extractRequestDomainURL((HttpServletRequest) customRequest, false);
+        String domainName = extractRequestedDomainName((HttpServletRequest) customRequest);
         ApplicationThreadLocals.setTenantID(environmentSettings.schemaName(domainName));
         ApplicationThreadLocals.setDomainName(domainName);
         ApplicationThreadLocals.setDomainURL(domainURL);
-        MultiReadRequestWrapper customRequest = prepareRestService(req, session);
+        customRequest = prepareRestService(req, session);
         if (customRequest == null)
             chain.doFilter(request, response);
         else

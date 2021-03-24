@@ -225,8 +225,13 @@ public class RestEdcrApplicationController {
             List<ErrorDetail> errorResponses = new ArrayList<ErrorDetail>();
             edcr = new ObjectMapper().readValue(edcrRequest, EdcrRequest.class);
             if(userInfo != null) {
-                UserInfo userInfo2 = new ObjectMapper().readValue(userInfo, UserInfo.class);
-                edcr.getRequestInfo().setUserInfo(userInfo2);
+                UserInfo userInfoReq = new ObjectMapper().readValue(userInfo, UserInfo.class);
+                UserInfo enrichUser = new UserInfo();
+                enrichUser.setId(userInfoReq.getUuid());
+                enrichUser.setUuid(userInfoReq.getUuid());
+                enrichUser.setMobile(userInfoReq.getMobile());
+                enrichUser.setTenantId(userInfoReq.getTenantId());
+                edcr.getRequestInfo().setUserInfo(enrichUser);
             }
             ErrorDetail edcRes = edcrValidator.validate(edcr);
             if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
