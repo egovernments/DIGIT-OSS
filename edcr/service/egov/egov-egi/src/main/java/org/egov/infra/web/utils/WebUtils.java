@@ -59,9 +59,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.egov.infra.admin.master.entity.User;
-import org.egov.infra.config.core.EnvironmentSettings;
 import org.egov.infra.utils.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -70,10 +70,9 @@ public final class WebUtils {
     private static final char QUESTION_MARK = '?';
     private static final char FORWARD_SLASH = '/';
     private static final String SCHEME_DOMAIN_SEPARATOR = "://";
-    private static final String EDCR_POD_URL = "egov-edcr.egov";
-    
-    @Autowired
-    private static EnvironmentSettings environmentSettings;
+    private static final String EDCR_SERVICE_INTERNAL_URL = "egov-edcr.egov";
+
+    private static final Logger LOG = LoggerFactory.getLogger(WebUtils.class);
 
     private WebUtils() {
         // Since utils are with static methods
@@ -86,18 +85,11 @@ public final class WebUtils {
     public static String extractRequestedDomainName(HttpServletRequest httpRequest) {
         String requestURL = httpRequest.getRequestURL().toString();
         String domainName = getDomainName(requestURL);
-        if(domainName.contains(EDCR_POD_URL)) {
-            String protocol = httpRequest.getHeader("x-forwarded-proto");
+        if (domainName.contains(EDCR_SERVICE_INTERNAL_URL)) {
             String host = httpRequest.getHeader("x-forwarded-host");
-            if(StringUtils.isNotBlank(protocol) && StringUtils.isNotBlank(host)) {
-                String proto = protocol.toString().split(",")[0];
-                String hostName = host.toString().split(",")[0];
-                System.out.println("List of domain name*******"+hostName.toString());
-                System.out.println("List of protocols*******"+proto.toString());
-                System.out.println("Domain name*******"+hostName);
-                System.out.println("Proto name*******"+proto);
-                String URL = new StringBuilder().append(proto).append(SCHEME_DOMAIN_SEPARATOR).append(hostName).toString();
-                System.out.println("Domain URL*******"+URL);
+            if (StringUtils.isNotBlank(host)) {
+                domainName = host.toString().split(",")[0];
+                LOG.info("*****Domain Name*****", domainName);
             }
         }
         return domainName;
@@ -129,20 +121,35 @@ public final class WebUtils {
      **/
     public static String extractRequestDomainURL(HttpServletRequest httpRequest, boolean withContext) {
         Enumeration headerNames = httpRequest.getHeaderNames();
-        System.out.println("********Request Header Start**********");
-        System.out.println("********Request Scheme**********"+httpRequest.getScheme());
+        LOG.info("********Request Header Start**********");
+        LOG.info("********Request Scheme**********" + httpRequest.getScheme());
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
             String value = httpRequest.getHeader(key);
-            System.out.println("Request--#######Key: "+ key+", #####Value: "+value);
+            LOG.info("Request--#######Key: " + key + ", #####Value: " + value);
         }
-        System.out.println("Request URL-->"+httpRequest.getRequestURL());
-        System.out.println("Request URI-->"+httpRequest.getRequestURI());
-        System.out.println("********Request Header End**********");
+        LOG.info("Request URL-->" + httpRequest.getRequestURL());
+        LOG.info("Request URI-->" + httpRequest.getRequestURI());
+        LOG.info("********Request Header End**********");
+
         StringBuilder url = new StringBuilder(httpRequest.getRequestURL());
-        String uri = httpRequest.getRequestURI();
-        return withContext ? url.substring(0, url.length() - uri.length() + httpRequest.getContextPath().length()) + FORWARD_SLASH
-                : url.substring(0, url.length() - uri.length());
+        String domainURL = "";
+        if (getDomainName(url.toString()).contains(EDCR_SERVICE_INTERNAL_URL)) {
+            String protocol = httpRequest.getHeader("x-forwarded-proto");
+            String host = httpRequest.getHeader("x-forwarded-host");
+            if (StringUtils.isNotBlank(protocol) && StringUtils.isNotBlank(host)) {
+                String proto = protocol.toString().split(",")[0];
+                String hostName = host.toString().split(",")[0];
+                domainURL = new StringBuilder().append(proto).append(SCHEME_DOMAIN_SEPARATOR).append(hostName).toString();
+                LOG.info("Domain URL*******" + domainURL);
+            }
+        } else {
+            String uri = httpRequest.getRequestURI();
+            domainURL = withContext
+                    ? url.substring(0, url.length() - uri.length() + httpRequest.getContextPath().length()) + FORWARD_SLASH
+                    : url.substring(0, url.length() - uri.length());
+        }
+        return domainURL;
     }
 
     public static String extractQueryParamsFromUrl(String url) {
