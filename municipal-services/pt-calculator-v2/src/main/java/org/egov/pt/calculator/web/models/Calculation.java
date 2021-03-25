@@ -62,6 +62,9 @@ public class Calculation   {
         @JsonProperty("lateFee")
         private BigDecimal lateFee;
         
+        @JsonProperty("mutationFee")
+        private BigDecimal mutationFee;
+        
         List<TaxHeadEstimate> taxHeadEstimates;
 
         @JsonProperty("billingSlabIds")

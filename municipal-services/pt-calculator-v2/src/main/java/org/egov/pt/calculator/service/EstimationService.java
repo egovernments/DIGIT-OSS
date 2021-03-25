@@ -12,7 +12,9 @@ import static org.egov.pt.calculator.util.CalculatorConstants.FINANCIALYEAR_MAST
 import static org.egov.pt.calculator.util.CalculatorConstants.FINANCIAL_YEAR_ENDING_DATE;
 import static org.egov.pt.calculator.util.CalculatorConstants.FINANCIAL_YEAR_STARTING_DATE;
 import static org.egov.pt.calculator.util.CalculatorConstants.GARAGE_AREA_MULTIPLIER;
+import static org.egov.pt.calculator.util.CalculatorConstants.GROUND_FLOOR_NUMBER;
 import static org.egov.pt.calculator.util.CalculatorConstants.HUNDRED;
+import static org.egov.pt.calculator.util.CalculatorConstants.MIXED;
 import static org.egov.pt.calculator.util.CalculatorConstants.NONRESIDENTIAL;
 import static org.egov.pt.calculator.util.CalculatorConstants.ONE_TIME_PENALTY_JSON_STRING;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ADHOC_PENALTY;
@@ -20,21 +22,18 @@ import static org.egov.pt.calculator.util.CalculatorConstants.PT_ADHOC_REBATE;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ESTIMATE_BILLINGSLABS_UNMATCH_VACANCT;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ESTIMATE_BILLINGSLABS_UNMATCH_VACANT_MSG;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_LATE_ASSESSMENT_PENALTY;
+import static org.egov.pt.calculator.util.CalculatorConstants.PT_ROUNDOFF;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_TAX;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_TYPE_VACANT_LAND;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_USAGE_EXEMPTION;
 import static org.egov.pt.calculator.util.CalculatorConstants.REBATE_MASTER;
-import static org.egov.pt.calculator.util.CalculatorConstants.RENTED;
 import static org.egov.pt.calculator.util.CalculatorConstants.RESIDENTIAL;
 import static org.egov.pt.calculator.util.CalculatorConstants.ROAD_TYPE_JSON_STRING;
 import static org.egov.pt.calculator.util.CalculatorConstants.ROOMS_AREA_MULTIPLIER;
+import static org.egov.pt.calculator.util.CalculatorConstants.SWATCHATHA_TAX;
 import static org.egov.pt.calculator.util.CalculatorConstants.TAXHEADMASTER_MASTER_KEY;
 import static org.egov.pt.calculator.util.CalculatorConstants.TAX_RATE;
 import static org.egov.pt.calculator.util.CalculatorConstants.USAGE_SUB_MINOR_MASTER;
-import static org.egov.pt.calculator.util.CalculatorConstants.PT_ROUNDOFF;
-import static org.egov.pt.calculator.util.CalculatorConstants.MIXED;
-import static org.egov.pt.calculator.util.CalculatorConstants.GROUND_FLOOR_NUMBER;
-import static org.egov.pt.calculator.util.CalculatorConstants.SWATCHATHA_TAX;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -655,7 +654,6 @@ public class EstimationService {
 		Map<String, Object> additionalDetails = mapper.convertValue(property.getAdditionalDetails(), Map.class);
 		calcValidator.validatePropertyForMutationCalculation(additionalDetails);
 		Calculation calculation = new Calculation();
-		BigDecimal fee = BigDecimal.ZERO;
 		Object mdmsData = mdmsService.mDMSCall(requestInfo, property.getTenantId());
 		Map<String, List<Object>> attributeValues = mdmsService.getAttributeValues(mdmsData);
 		List<Object> mutationFee = attributeValues.get("MutationFee");
@@ -668,13 +666,37 @@ public class EstimationService {
 			usage = usageCategory;
 		}
 
-		Map<String, Object> applicableMasterData = getApplicableMasterData(mutationFee);
-		LinkedHashMap<String, Object> feeMap = (LinkedHashMap<String, Object>) applicableMasterData;
-		fee = BigDecimal.valueOf((Integer) feeMap.get(usage));
+		Map<String, Object> additionalDetail = mapper.convertValue(property.getAdditionalDetails(), Map.class);
+
+		String reasonForTransfer = (String) additionalDetail.get("reasonForTransfer");
+		if (reasonForTransfer != null) {
+			Map<String, Object> applicableMasterData = getApplicableMasterData(mutationFee, usage, reasonForTransfer);
+			BigDecimal applicationFee = BigDecimal.ZERO;
+			BigDecimal processingFee = BigDecimal.ZERO;
+			BigDecimal publicationFee = BigDecimal.ZERO;
+
+			Object applicationFeeValue = applicableMasterData.get("applicationFee");
+			if (applicationFeeValue != null) {
+				applicationFee = BigDecimal.valueOf((Integer) applicationFeeValue);
+				calculation.setApplicationFee(applicationFee);
+			}
+
+			Object processingFeeValue = applicableMasterData.get("processingFee");
+			if (applicationFeeValue != null) {
+				processingFee = BigDecimal.valueOf((Integer) processingFeeValue);
+				calculation.setProcessingFee(processingFee);
+			}
+
+			Object publicationFeeValue = applicableMasterData.get("publicationFee");
+			if (publicationFeeValue != null) {
+				publicationFee = BigDecimal.valueOf((Integer) publicationFeeValue);
+				calculation.setPublicationFee(publicationFee);
+			}
+		}
 		calculation.setTenantId(property.getTenantId());
 
 		setTaxperiodForCalculation(requestInfo, property.getTenantId(), calculation);
-		calculation.setTaxAmount(fee);
+		calculation.setTaxAmount(BigDecimal.ZERO);
 		postProcessTheFee(requestInfo, property, calculation, additionalDetails);
 		feeStructure.put(property.getAcknowldgementNumber(), calculation);
 		searchDemand(requestInfo, property, calculation, feeStructure);
@@ -732,13 +754,32 @@ public class EstimationService {
 		calculation.setRebate(rebate.setScale(2, 2).negate());
 		calculation.setPenalty(penalty.setScale(2, 2));
 		calculation.setExemption(BigDecimal.ZERO);
-		calculation.setApplicationFee(additionalDetails.get("applicationFee") != null ? BigDecimal.valueOf((Integer)additionalDetails.get("applicationFee")) : BigDecimal.ZERO );
-		calculation.setProcessingFee(additionalDetails.get("processingFee") != null ? BigDecimal.valueOf((Integer)additionalDetails.get("processingFee")) : BigDecimal.ZERO);
-		calculation.setPublicationFee(additionalDetails.get("publicationFee") != null ? BigDecimal.valueOf((Integer)additionalDetails.get("publicationFee")) : BigDecimal.ZERO);
-		calculation.setLateFee(additionalDetails.get("lateFee") != null ? BigDecimal.valueOf((Integer)additionalDetails.get("lateFee")) : BigDecimal.ZERO);
+		/*
+		 * calculation.setApplicationFee(additionalDetails.get("applicationFee") != null
+		 * ? BigDecimal.valueOf((Integer)additionalDetails.get("applicationFee")) :
+		 * BigDecimal.ZERO );
+		 * calculation.setProcessingFee(additionalDetails.get("processingFee") != null ?
+		 * BigDecimal.valueOf((Integer)additionalDetails.get("processingFee")) :
+		 * BigDecimal.ZERO);
+		 * calculation.setPublicationFee(additionalDetails.get("publicationFee") != null
+		 * ? BigDecimal.valueOf((Integer)additionalDetails.get("publicationFee")) :
+		 * BigDecimal.ZERO);
+		 */		
+		calculation.setLateFee(additionalDetails.get("lateFee") != null
+				? BigDecimal.valueOf((Integer) additionalDetails.get("lateFee"))
+				: BigDecimal.ZERO);
+		
+		calculation.setMutationFee(additionalDetails.get("mutationFee") != null
+				? BigDecimal.valueOf((Integer) additionalDetails.get("mutationFee"))
+				: BigDecimal.ZERO);
 
 		BigDecimal totalAmount = calculation.getTaxAmount().add(calculation.getRebate().add(calculation.getExemption()))
-				.add(calculation.getPenalty()).add(calculation.getApplicationFee()).add(calculation.getProcessingFee()).add(calculation.getPublicationFee()).add(calculation.getLateFee());
+				.add(calculation.getPenalty())
+				.add(calculation.getApplicationFee() != null ? calculation.getApplicationFee() : BigDecimal.ZERO)
+				.add(calculation.getProcessingFee() != null ? calculation.getProcessingFee() : BigDecimal.ZERO)
+				.add(calculation.getPublicationFee() != null ? calculation.getPublicationFee() : BigDecimal.ZERO)
+				.add(calculation.getMutationFee() != null ? calculation.getMutationFee() : BigDecimal.ZERO)
+				.add(calculation.getLateFee() != null ? calculation.getLateFee() : BigDecimal.ZERO);
 		calculation.setTotalAmount(totalAmount);
 	}
 
@@ -1011,6 +1052,14 @@ public class EstimationService {
 						.build();
 				details.add(demandDetail);
 			}
+			if (null != feeStructure.get(key).getMutationFee()
+					&& BigDecimal.ZERO != feeStructure.get(key).getMutationFee()) {
+				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(BigDecimal.ZERO).demandId(null)
+						.id(null).taxAmount(calculation.getMutationFee()).auditDetails(null)
+						.taxHeadMasterCode("PT_MUTATION_FEE").tenantId(calculation.getTenantId())
+						.build();
+				details.add(demandDetail);
+			}
 			OwnerInfo owner = getActiveOwner(property.getOwners());
 			User payer = utils.getCommonContractUser(owner);
 
@@ -1117,20 +1166,34 @@ public class EstimationService {
 
 	}
 
-	public Map<String, Object> getApplicableMasterData(List<Object> masterList) {
+	public Map<String, Object> getApplicableMasterData(List<Object> masterList, String usage,
+			String reasonForTransfer) {
 
 		Map<String, Object> objToBeReturned = null;
+		Map<String, Object> convertedMasterList = null;
 
 		for (Object object : masterList) {
 
 			Map<String, Object> objMap = (Map<String, Object>) object;
-			Long startDate = ((Long) objMap.get(CalculatorConstants.STARTING_DATE_APPLICABLES));
-			Long endDate = ((Long) objMap.get(CalculatorConstants.ENDING_DATE_APPLICABLES));
+
+			convertedMasterList = objMap;
+		}
+
+		Map<String, Object> usageMap = (Map<String, Object>) convertedMasterList.get(usage);
+		List<Object> reasonForTransferList = (List<Object>) usageMap.get(reasonForTransfer);
+
+		for (Object o : reasonForTransferList) {
+			Map<String, Object> oMap = (Map<String, Object>) o;
+
+			Long startDate = ((Long) oMap.get(CalculatorConstants.STARTING_DATE_APPLICABLES));
+			Long endDate = ((Long) oMap.get(CalculatorConstants.ENDING_DATE_APPLICABLES));
 
 			if (System.currentTimeMillis() >= startDate && System.currentTimeMillis() <= endDate)
-				objToBeReturned = objMap;
+				objToBeReturned = oMap;
+
 		}
 
 		return objToBeReturned;
+
 	}
 }
