@@ -118,11 +118,9 @@ public class ApplicationTenantResolverFilter implements Filter {
         ApplicationThreadLocals.setDomainName(domainName);
         ApplicationThreadLocals.setDomainURL(domainURL);
         LOG.info("***Tenant ID-->" + ApplicationThreadLocals.getTenantID());
-        customRequest = prepareRestService(req, session);
-        if (customRequest == null)
-            chain.doFilter(request, response);
-        else
-            chain.doFilter(customRequest, response);
+        prepareRestService(customRequest, session);
+        LOG.info("***Tenant ID from BODY-->" + ApplicationThreadLocals.getTenantID());
+        chain.doFilter(customRequest, response);
     }
 
     @Override
@@ -135,26 +133,26 @@ public class ApplicationTenantResolverFilter implements Filter {
         // Nothing to be cleaned up
     }
 
-    private MultiReadRequestWrapper prepareRestService(HttpServletRequest req, HttpSession session) {
-        MultiReadRequestWrapper customRequest = null;
+    private void prepareRestService(MultiReadRequestWrapper customRequest, HttpSession session) {
         if (tenants == null || tenants.isEmpty()) {
             tenants = tenantUtils.tenantsMap();
         }
 
         // restricted only the state URL to access the rest API
         // LOG.info("***********Enter to set tenant id and custom header**************" + req.getRequestURL().toString());
-        if (req.getRequestURL().toString().contains(tenants.get("state"))
-                && (req.getRequestURL().toString().contains("/edcr/") && (req.getRequestURL().toString().contains("/rest/")
-                        || req.getRequestURL().toString().contains("/oauth/")))) {
+        String requestURL = new StringBuilder().append(ApplicationThreadLocals.getDomainURL())
+                .append(customRequest.getRequestURI()).toString();
+        if (requestURL.contains(tenants.get("state"))
+                && (requestURL.contains("/edcr/") && (requestURL.contains("/rest/")
+                        || requestURL.contains("/oauth/")))) {
 
             LOG.debug("All tenants from config" + tenants);
             LOG.info("tenants.get(state))" + tenants.get("state"));
             LOG.info("Inside method to set tenant id and custom header");
             String tenantFromBody = StringUtils.EMPTY;
-            customRequest = new MultiReadRequestWrapper(req);
-            tenantFromBody = setCustomHeader(req, tenantFromBody, customRequest);
+            tenantFromBody = setCustomHeader(requestURL, tenantFromBody, customRequest);
             LOG.info("Tenant from Body***" + tenantFromBody);
-            String fullTenant = req.getParameter("tenantId");
+            String fullTenant = customRequest.getParameter("tenantId");
             LOG.info("fullTenant***" + fullTenant);
             if (StringUtils.isBlank(fullTenant)) {
                 fullTenant = tenantFromBody;
@@ -192,7 +190,6 @@ public class ApplicationTenantResolverFilter implements Filter {
             }
 
         }
-        return customRequest;
     }
 
     /*
@@ -214,10 +211,10 @@ public class ApplicationTenantResolverFilter implements Filter {
      * }
      */
 
-    private String setCustomHeader(HttpServletRequest request, String tenantAtBody,
+    private String setCustomHeader(String requestURL, String tenantAtBody,
             MultiReadRequestWrapper multiReadRequestWrapper) {
 
-        if (request.getRequestURL().toString().contains("/rest/")) {
+        if (requestURL.contains("/rest/")) {
             LOG.info("***********Inside method to fetch auth token and tenant from reqbody**************");
             try {
                 StringWriter writer = new StringWriter();
@@ -229,7 +226,7 @@ public class ApplicationTenantResolverFilter implements Filter {
                     while (m.find()) {
                         CharSequence charSequence = m.group().subSequence(1, m.group().length() - 1);
                         String[] reqBodyParams = String.valueOf(charSequence).split(",");
-                        if(LOG.isDebugEnabled())
+                        if (LOG.isDebugEnabled())
                             LOG.debug("***********Request Body Params**************" + String.valueOf(charSequence));
                         for (String param : reqBodyParams) {
                             LOG.info("*************************" + param);
@@ -242,7 +239,7 @@ public class ApplicationTenantResolverFilter implements Filter {
                                     tenantAtBody = tenant[1].substring(1, tenant[1].length() - 1);
                                 else
                                     tenantAtBody = tenant[1];
-                                if(LOG.isDebugEnabled())
+                                if (LOG.isDebugEnabled())
                                     LOG.debug("############Tenant From Body######" + tenantAtBody);
                             } /*
                                * else if (param.contains("authToken")) { String[] authTokenVal = param.split(":"); // Next to
