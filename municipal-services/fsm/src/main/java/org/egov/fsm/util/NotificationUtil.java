@@ -151,7 +151,7 @@ public class NotificationUtil {
 				}
 				
 				if (message.contains("<RECEIPT_LINK>") ) {
-					StringBuilder builder = new StringBuilder(config.getPdfHost());
+					StringBuilder builder = new StringBuilder();
 					builder.append(config.getUiAppHost()).append(config.getFsmAppLink());
 					builder.append(fsm.getApplicationNo());
 					message = message.replace("<RECEIPT_LINK>", getShortenedUrl(builder.toString()));
