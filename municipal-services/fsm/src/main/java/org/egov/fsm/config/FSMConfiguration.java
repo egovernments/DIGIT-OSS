@@ -224,6 +224,10 @@ public class FSMConfiguration {
 		@Value("${egov.ui.fsm.new.link}")
 		private String newFsmLink;
 		
+		@Value("egov.msg.download.receipt.link")
+		private String downloadLink;
+		
+		
 		// DSO Config
 		@Value("${egov.vendor.host}")
 		private String vendorHost;
