@@ -101,7 +101,7 @@ public class EgovMicroServiceStore implements FileStoreService {
     @Autowired
     public EgovMicroServiceStore(@Value("${ms.url}") String url) {
         this.restTemplate = new RestTemplate();
-        this.url = url + FILESTORE_V1_FILES;
+        this.url = "https://egov-filestore.egov:8080/" + FILESTORE_V1_FILES;
     }
 
     @Override
