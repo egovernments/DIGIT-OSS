@@ -1,4 +1,3 @@
-
 import { getCommonCard, getCommonContainer, getCommonHeader, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -306,7 +305,7 @@ const getApplicationData = async (action, state, dispatch) => {
 
 }
 
-const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
+export const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
   let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
@@ -593,11 +592,11 @@ const screenConfig = {
 
       // Set Documents Data (TEMP)
       prepareDocumentsUploadData(state, dispatch);
+      getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
     });
 
     getMdmsTransferReasonData(action, state, dispatch);
 
-    getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
     // Search in cprepareDocumentsUploadDataase of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
