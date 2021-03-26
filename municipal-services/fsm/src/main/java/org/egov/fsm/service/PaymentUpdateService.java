@@ -83,6 +83,7 @@ public class PaymentUpdateService {
 					searchCriteria.setApplicationNos(applNos);
 					FSMResponse fsmResponse = repository.getFSMData(searchCriteria, null);
 					List<FSM> fsms = fsmResponse.getFsm();
+					enrichmentService.enrichFSMSearch(fsms, requestInfo, tenantId);
 					if (CollectionUtils.isEmpty(fsms)) {
 						throw new CustomException(FSMErrorConstants.INVALID_RECEIPT,
 								"No Building Plan Application found for the comsumerCode "

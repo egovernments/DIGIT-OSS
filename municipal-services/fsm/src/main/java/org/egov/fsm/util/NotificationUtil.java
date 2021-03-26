@@ -156,7 +156,7 @@ public class NotificationUtil {
     						.replace("$tenantId", fsm.getTenantId())
     						.replace("$receiptNumber", getPaymentData("receiptNumber",fsmRequest))
     						.replace("$businessService",FSMConstants.FSM_PAY_BUSINESS_SERVICE);
-					message = message.replace("<RECEIPT_LINK>", getShortenedUrl(actionLink));
+					message = message.replace("<RECEIPT_LINK>", getShortenedUrl(config.getUiAppHost()+actionLink));
 				}
 				
 				if (message.contains("<RECEIPT_NO>") ) {
