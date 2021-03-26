@@ -120,7 +120,7 @@ public class EdcrRestService {
 
     private static Logger LOG = Logger.getLogger(EdcrApplicationService.class);
 
-    public static final String FILE_DOWNLOAD_URL = "%s/edcr/rest/dcr/downloadfile/";
+    public static final String FILE_DOWNLOAD_URL = "%s/edcr/rest/dcr/downloadfile";
 
     @Autowired
     protected SecurityUtils securityUtils;
