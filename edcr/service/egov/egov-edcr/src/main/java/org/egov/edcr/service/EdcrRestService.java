@@ -681,8 +681,8 @@ public class EdcrRestService {
     }
 
     public String getFileDownloadUrl(final String fileStoreId, final String tenantId) {
-        return String.format(FILE_DOWNLOAD_URL, ApplicationThreadLocals.getDomainURL()) + fileStoreId + "?tenantId="
-                + tenantId;
+        return String.format(FILE_DOWNLOAD_URL, ApplicationThreadLocals.getDomainURL()) + "?tenantId="
+                + tenantId +"&fileStoreId=" + fileStoreId;
     }
 
 }

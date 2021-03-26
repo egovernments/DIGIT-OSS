@@ -91,7 +91,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -345,8 +344,8 @@ public class RestEdcrApplicationController {
         return getPlanSuccessResponse(jsonRes, edcr.getRequestInfo());
     }
 
-    @GetMapping("/downloadfile/{fileStoreId}")
-    public ResponseEntity<InputStreamResource> download(@PathVariable final String fileStoreId) {
+    @GetMapping("/downloadfile")
+    public ResponseEntity<InputStreamResource> download(@RequestParam final String fileStoreId) {
         return fileStoreUtils.fileAsResponseEntity(fileStoreId, DIGIT_DCR, true);
     }
 
