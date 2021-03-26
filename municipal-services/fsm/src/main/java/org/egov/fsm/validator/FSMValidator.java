@@ -77,8 +77,6 @@ public class FSMValidator {
 			}
 			if(!StringUtils.isEmpty(fsm.getSanitationtype())) {
 				mdmsValidator.validateOnSiteSanitationType(fsm.getSanitationtype());
-			}else {
-				fsm.setSanitationtype(FSMConstants.SANITATION_TYPE_SINGLE_PIT);
 			}
 			
 		}else if( fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)) {
@@ -91,7 +89,9 @@ public class FSMValidator {
 			
 			mdmsValidator.validateVehicleType(fsm.getVehicleType());
 			mdmsValidator.validateApplicationChannel(fsm.getSource());
-			mdmsValidator.validateOnSiteSanitationType(fsm.getSanitationtype());
+			if(!StringUtils.isEmpty(fsm.getSanitationtype())) {
+				mdmsValidator.validateOnSiteSanitationType(fsm.getSanitationtype());
+			}
 			validateTripAmount(fsmRequest, mdmsData);
 		}else {
 			// incase of anonymous user, citizen is mandatory
