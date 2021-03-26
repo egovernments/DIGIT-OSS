@@ -186,7 +186,7 @@ public class PayService {
 				Map<String, Object> rebateMap = (Map<String, Object>) rebate;
 				if ( (long)rebateMap.get("startingDay") < currentTime
 						&& currentTime < (long)rebateMap.get("endingDay")) {
-					rebateAmt = taxAmt.multiply(BigDecimal.valueOf((int) rebateMap.get("rate"))).divide(HUNDRED);
+					rebateAmt = taxAmt.multiply(BigDecimal.valueOf((double) rebateMap.get("rate"))).divide(HUNDRED);
 				}
 			}
 		}
