@@ -148,12 +148,19 @@ public class FSMService {
 		FSMSearchCriteria criteria = FSMSearchCriteria.builder().ids(ids).tenantId(fsm.getTenantId()).build();
 		FSMResponse fsmResponse = repository.getFSMData(criteria, null);
 		List<FSM> fsms = fsmResponse.getFsm();
-		fsmValidator.validateUpdate(fsmRequest, fsms, mdmsData); 
+		
 		
 		BusinessService businessService = workflowService.getBusinessService(fsm, fsmRequest.getRequestInfo(),
 				FSMConstants.FSM_BusinessService,null);
 		actionValidator.validateUpdateRequest(fsmRequest, businessService);
 		FSM oldFSM = fsms.get(0);
+		
+		if( fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_REJECT) || 
+				fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_CANCEL)) {
+			handleRejectCancel(fsmRequest,oldFSM);
+		}else {
+			fsmValidator.validateUpdate(fsmRequest, fsms, mdmsData); 
+		}
 		
 		if( fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SUBMIT) ) {
 			handleApplicationSubmit(fsmRequest,oldFSM);
@@ -184,10 +191,7 @@ public class FSMService {
 			handleAdditionalPayRequest(fsmRequest,oldFSM);
 		}
 		
-		if( fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_REJECT) || 
-				fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_CANCEL)) {
-			handleRejectCancel(fsmRequest,oldFSM);
-		}
+		
 		
 		if( fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SEND_BACK) ) {
 			handleSendBack(fsmRequest,oldFSM);
