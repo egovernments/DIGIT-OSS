@@ -184,9 +184,10 @@ public class PayService {
 
 			for (Object rebate : rebateMasterList) {
 				Map<String, Object> rebateMap = (Map<String, Object>) rebate;
-				if ( (long)rebateMap.get("startingDay") < currentTime
-						&& currentTime < (long)rebateMap.get("endingDay")) {
-					rebateAmt = taxAmt.multiply(BigDecimal.valueOf((double) rebateMap.get("rate"))).divide(HUNDRED);
+				if ((long) rebateMap.get("startingDay") < currentTime && currentTime < (long) rebateMap.get("endingDay")
+						&& rebateMap.get("rate") != null) {
+					rebateAmt = taxAmt.multiply(BigDecimal.valueOf(Double.valueOf(rebateMap.get("rate").toString())))
+							.divide(HUNDRED);
 				}
 			}
 		}
