@@ -44,7 +44,7 @@ class EGFFinance extends Component {
     return (
       <div>
         <iframe name="erp_iframe" id="erp_iframe" height={winheight} width="100%" />
-        <form action={erp_url} id="erp_form" method="post" target="erp_iframe">
+        <form action={erp_url} id="erp_form" method="get" target="erp_iframe">
           <input readOnly hidden="true" name="auth_token" value={auth_token} />
           <input readOnly hidden="true" name="tenantId" value={tenantId} />
           <input readOnly hidden="true" name="locale" value={locale} />
