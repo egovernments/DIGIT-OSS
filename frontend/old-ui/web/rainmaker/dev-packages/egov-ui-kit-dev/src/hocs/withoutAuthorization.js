@@ -12,6 +12,7 @@ import { DropDown, AppBar } from "components";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
 import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
+import { getModuleName } from "../utils/commons";
 
 const getUlbGradeLabel = (ulbGrade) => {
   if (ulbGrade) {
@@ -76,6 +77,9 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
           this.props.history.push(redirectionUrl);
         }
       }
+      if(isPublicSearch()){
+        this.onLanguageChange(getQueryArg(window.location.href, "locale")||'en_IN');
+      }
     }
 
     onLanguageChange = (event, index, value) => {
@@ -97,6 +101,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
       setLocalizationLabels(locale, resultArray);
       this.props.fetchLocalizationLabel(value, tenantId, tenantId);
     };
+
 
     checkForPublicSeach = () => {
       return isPublicSearch();

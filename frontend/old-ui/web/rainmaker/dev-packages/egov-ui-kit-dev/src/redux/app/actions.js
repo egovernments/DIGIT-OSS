@@ -40,7 +40,7 @@ export const toggleSnackbarAndSetText = (open, message = {}, variant) => {
   };
 };
 
-export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) => {
+export const fetchLocalizationLabel = (locale='en_IN', module, tenantId, isFromModule) => {
   return async (dispatch) => {
     let storedModuleList=[];
     if(getStoredModulesList()!==null){
@@ -55,7 +55,7 @@ export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) =
         localeModule=moduleName;
     }
     else{
-      localeModule=`rainmaker-common,${moduleName}`;
+      localeModule=moduleName?`rainmaker-common,${moduleName}`:`rainmaker-common`;
     }
     try {
       let resultArray = [], tenantModule = "", isCommonScreen;
@@ -63,7 +63,7 @@ export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) =
        tenantModule=`rainmaker-${module}`;
       }
       
-      if((window.location.href.includes("/language-selection") || window.location.href.includes("/user/login"))) {
+      if((window.location.href.includes("/language-selection") || window.location.href.includes("/user/login")|| window.location.href.includes("/withoutAuth"))) {
          if((moduleName && storedModuleList.includes(moduleName) === false) || moduleName == null) isCommonScreen = true;
       }
 
