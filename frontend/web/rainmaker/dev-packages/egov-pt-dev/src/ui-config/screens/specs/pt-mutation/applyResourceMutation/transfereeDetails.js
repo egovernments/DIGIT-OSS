@@ -1,11 +1,11 @@
 import { getBreak, getCommonCard, getCommonContainer, getCommonGrayCard, getCommonTitle, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import "./index.css";
-
+import { getSpecialCategoryDocumentTypeMDMSData } from "../apply.js";
 const showComponent = (dispatch, componentJsonPath, display, oldStyle = {}) => {
   let displayProps = display ? { ...oldStyle, display: 'block' } : { ...oldStyle, display: "none" };
   dispatch(
@@ -273,17 +273,21 @@ const commonApplicantInformation = () => {
 
 
           } else {
-            let documentType = get(
-              state,
-              "screenConfiguration.preparedFinalObject.applyScreenMdmsData.OwnerTypeDocument",
-              []
-            );
-            documentType = documentType.filter(document => {
-              return action.value === document.ownerTypeCode
-            })
-            if (documentType.length == 1) {
-              dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", documentType[0].code));
-            }
+            getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch).then(()=>{            
+              let documentType = get(
+                state,
+                "screenConfiguration.preparedFinalObject.applyScreenMdmsData.OwnerTypeDocument",
+                []
+              );
+              documentType = documentType.filter(document => {
+                return action.value === document.ownerTypeCode
+              })
+              if (documentType.length == 1) {
+                dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", documentType[0].code));
+                dispatch(prepareFinalObject("applyScreenMdmsData.OwnerTypeDocument", documentType));
+              }
+             }
+            )
             showComponent(dispatch, categoryDocumentJsonPath, true);
             showDocumentType(dispatch, specialCategoryDocumentTypeJsonPath, true);
 
