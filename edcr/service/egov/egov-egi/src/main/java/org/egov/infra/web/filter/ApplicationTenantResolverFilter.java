@@ -119,7 +119,6 @@ public class ApplicationTenantResolverFilter implements Filter {
         ApplicationThreadLocals.setDomainURL(domainURL);
         LOG.info("***Tenant ID-->" + ApplicationThreadLocals.getTenantID());
         prepareRestService(customRequest, session);
-        LOG.info("***Tenant ID from BODY-->" + ApplicationThreadLocals.getTenantID());
         chain.doFilter(customRequest, response);
     }
 
