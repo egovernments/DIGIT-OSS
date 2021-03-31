@@ -524,7 +524,7 @@ public class EdcrRestService {
     public ErrorDetail validateEdcrRequest(final EdcrRequest edcrRequest, final MultipartFile planFile) {
         if (edcrRequest.getRequestInfo() == null)
             return new ErrorDetail(BPA_07, REQ_BODY_REQUIRED);
-        else if (edcrRequest.getRequestInfo().getUserInfo() == null || (edcrRequest.getRequestInfo().getUserInfo() != null && isBlank(edcrRequest.getRequestInfo().getUserInfo().getId())))
+        else if (edcrRequest.getRequestInfo().getUserInfo() == null || (edcrRequest.getRequestInfo().getUserInfo() != null && isBlank(edcrRequest.getRequestInfo().getUserInfo().getUuid())))
             return new ErrorDetail(BPA_07, USER_ID_IS_MANDATORY);
         
         if (isBlank(edcrRequest.getTransactionNumber()))
@@ -540,7 +540,7 @@ public class EdcrRestService {
     public ErrorDetail validateEdcrOcRequest(final EdcrRequest edcrRequest, final MultipartFile planFile) {
         if (edcrRequest.getRequestInfo() == null)
             return new ErrorDetail(BPA_07, REQ_BODY_REQUIRED);
-        else if (edcrRequest.getRequestInfo().getUserInfo() == null || (edcrRequest.getRequestInfo().getUserInfo() != null && isBlank(edcrRequest.getRequestInfo().getUserInfo().getId())))
+        else if (edcrRequest.getRequestInfo().getUserInfo() == null || (edcrRequest.getRequestInfo().getUserInfo() != null && isBlank(edcrRequest.getRequestInfo().getUserInfo().getUuid())))
             return new ErrorDetail(BPA_07, USER_ID_IS_MANDATORY);
         
         if (isBlank(edcrRequest.getTransactionNumber()))
@@ -563,7 +563,7 @@ public class EdcrRestService {
         if (edcrRequest.getRequestInfo() == null)
             errorDetails.add(new ErrorDetail(BPA_07, REQ_BODY_REQUIRED));
         else if (edcrRequest.getRequestInfo().getUserInfo() == null || (edcrRequest.getRequestInfo().getUserInfo() != null
-                && isBlank(edcrRequest.getRequestInfo().getUserInfo().getId())))
+                && isBlank(edcrRequest.getRequestInfo().getUserInfo().getUuid())))
             errorDetails.add(new ErrorDetail("BPA-08", USER_ID_IS_MANDATORY));
 
         if (isBlank(edcrRequest.getTransactionNumber()))

@@ -228,7 +228,8 @@ public class ApplicationTenantResolverFilter implements Filter {
                         if (LOG.isDebugEnabled())
                             LOG.debug("***********Request Body Params**************" + String.valueOf(charSequence));
                         for (String param : reqBodyParams) {
-                            LOG.info("*************************" + param);
+                            if (LOG.isDebugEnabled())
+                                LOG.debug("*************************" + param);
                             if (param.contains("userInfo") && StringUtils.isNotBlank(tenantAtBody))
                                 break;
 
