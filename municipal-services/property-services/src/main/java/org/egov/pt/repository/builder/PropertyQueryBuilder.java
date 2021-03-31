@@ -80,7 +80,7 @@ public class PropertyQueryBuilder {
 			
 			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid "
 			
-			+ " WHERE ";
+			+ " WHERE unit.active = 't' and  ";
 	
 
 
