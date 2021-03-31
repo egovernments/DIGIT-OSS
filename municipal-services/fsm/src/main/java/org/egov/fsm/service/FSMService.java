@@ -386,15 +386,14 @@ public class FSMService {
 		
 		fsmValidator.validateSearch(requestInfo, criteria);
 		
-		if(criteria.tenantIdOnly() && 
-				requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN) ) {
+		if(requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN) ) {
 			List<Role> roles = requestInfo.getUserInfo().getRoles();
 			if( roles.stream().anyMatch(role -> Objects.equals(role.getCode(), FSMConstants.ROLE_FSM_DSO))) {
 			  	Vendor dso = dsoService.getVendor(null, criteria.getTenantId(), null, requestInfo.getUserInfo().getMobileNumber(), requestInfo);
 			  	if(dso!=null && org.apache.commons.lang3.StringUtils.isNotEmpty(dso.getId())) {
 			  		dsoId = dso.getId();
 			  	}
-			}else {
+			}else if(criteria.tenantIdOnly() ){
 				criteria.setMobileNumber(requestInfo.getUserInfo().getMobileNumber());
 			}
 			
