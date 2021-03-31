@@ -20,34 +20,47 @@ const tenant = getTenantId();
 //console.log(captureMutationDetails);
 
 const getMDMSData = async (action, dispatch) => {
-   const moduleDetails= [
+  const moduleDetails= [
+ 
+    {
+      moduleName: "tenant",
+      masterDetails: [
         {
-           moduleName: "PropertyTax", 
-           masterDetails: [
-             { name: "Documents" }
-            ] 
-          },
-        {
-          moduleName: "tenant",
-          masterDetails: [
-            {
-              name: "tenants"
-            }, { name: "citymodule" }
-          ]
-        } 
+          name: "tenants"
+        }, { name: "citymodule" }
       ]
-   
+    } 
+  ]
+  let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId : getTenantId();
+
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId:"uk",
+      moduleDetails: moduleDetails
+    }
+  };
   try {
-    getRequiredDocData(action, dispatch, moduleDetails).then((payload)=>{
-      if (process.env.REACT_APP_NAME != "Citizen") {
-        dispatch(
-          prepareFinalObject(
-            "searchScreen.tenantId",
-            tenant
-          )
-        );
-      }
-    })
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );     
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+    if(process.env.REACT_APP_NAME != "Citizen"){
+      dispatch(
+        prepareFinalObject(
+          "searchScreen.tenantId",
+          tenant
+        )
+      );
+    }
     if (process.env.REACT_APP_NAME != "Citizen") {
       let mohallaPayload = await httpRequest(
         "post",
@@ -118,9 +131,7 @@ const getMDMSData = async (action, dispatch) => {
   //     );
   //   }
   // }
-  } catch (e) {
-    console.log(e);
-  }
+  
 };
 
 const header = getCommonHeader({
