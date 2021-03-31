@@ -226,7 +226,6 @@ public class RestEdcrApplicationController {
             if(userInfo != null) {
                 UserInfo userInfoReq = new ObjectMapper().readValue(userInfo, UserInfo.class);
                 UserInfo enrichUser = new UserInfo();
-                enrichUser.setId(userInfoReq.getUuid());
                 enrichUser.setUuid(userInfoReq.getUuid());
                 enrichUser.setMobile(userInfoReq.getMobile());
                 enrichUser.setTenantId(userInfoReq.getTenantId());

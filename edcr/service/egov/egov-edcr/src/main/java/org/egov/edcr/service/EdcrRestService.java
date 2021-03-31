@@ -146,9 +146,6 @@ public class EdcrRestService {
     @Autowired
     private MdmsConfiguration mdmsConfiguration;
     
-    @Autowired 
-    private OcComparisonService ocComparisonService;
-    
     @Autowired
     private EdcrApplicationDetailService applicationDetailService;
     
@@ -192,9 +189,9 @@ public class EdcrRestService {
         edcrApplication.setDxfFile(file);
 
         if (edcrRequest.getRequestInfo() != null && edcrRequest.getRequestInfo().getUserInfo() != null) {
-            edcrApplication.setThirdPartyUserCode(isNotBlank(edcrRequest.getRequestInfo().getUserInfo().getId())
-                    ? edcrRequest.getRequestInfo().getUserInfo().getId()
-                    : StringUtils.EMPTY);
+            edcrApplication.setThirdPartyUserCode(isNotBlank(edcrRequest.getRequestInfo().getUserInfo().getUuid())
+                    ? edcrRequest.getRequestInfo().getUserInfo().getUuid()
+                    : edcrRequest.getRequestInfo().getUserInfo().getId());
             edcrApplication
                     .setThirdPartyUserTenant(StringUtils.isNotBlank(edcrRequest.getTenantId())
                             ? edcrRequest.getTenantId()
@@ -348,9 +345,15 @@ public class EdcrRestService {
         return edcrDetail;
     }
 
+    @SuppressWarnings("unchecked")
     public List<EdcrDetail> fetchEdcr(final EdcrRequest edcrRequest, final RequestInfoWrapper reqInfoWrapper) {
         List<EdcrApplicationDetail> edcrApplications = new ArrayList<>();
         UserInfo userInfo = reqInfoWrapper.getRequestInfo() == null ? null : reqInfoWrapper.getRequestInfo().getUserInfo();
+        String userId = "";
+        if(userInfo != null && StringUtils.isNoneBlank(userInfo.getUuid()))
+            userId = userInfo.getUuid();
+        else if(userInfo != null && StringUtils.isNoneBlank(userInfo.getId()))
+            userId = userInfo.getId();
         boolean onlyTenantId = edcrRequest != null && isBlank(edcrRequest.getEdcrNumber())
                 && isBlank(edcrRequest.getTransactionNumber())
                 && isBlank(edcrRequest.getAppliactionType())
@@ -392,9 +395,9 @@ public class EdcrRestService {
                     params.put("transactionNumber", edcrRequest.getTransactionNumber());
                 }
 
-                if (onlyTenantId && userInfo != null && isNotBlank(userInfo.getId())) {
+                if (onlyTenantId && userInfo != null && isNotBlank(userId)) {
                     queryStr.append("and appln.thirdPartyUserCode=:thirdPartyUserCode ");
-                    params.put("thirdPartyUserCode", userInfo.getId());
+                    params.put("thirdPartyUserCode", userId);
                 }
                 
                 String appliactionType = edcrRequest.getAppliactionType();
@@ -470,8 +473,8 @@ public class EdcrRestService {
                 criteria.add(Restrictions.eq("application.serviceType", edcrRequest.getApplicationSubType()));
             }
             
-                if (onlyTenantId && userInfo != null && isNotBlank(userInfo.getId())) {
-                    criteria.add(Restrictions.eq("application.thirdPartyUserCode", userInfo.getId()));
+                if (onlyTenantId && userInfo != null && isNotBlank(userId)) {
+                    criteria.add(Restrictions.eq("application.thirdPartyUserCode", userId));
                 }
             
             criteria.addOrder(Order.asc("edcrApplicationDetail.createdDate"));
@@ -637,6 +640,7 @@ public class EdcrRestService {
      * MimeUtil.unregisterMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector"); return String.valueOf(mimeType); }
      */
 
+    @SuppressWarnings("unused")
     public ErrorDetail validateParam(List<String> allowedExtenstions, List<String> mimeTypes,
             MultipartFile file, final String maxAllowSizeInMB) {
         String extension;
