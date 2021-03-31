@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.0
+- Added portico feature
+- Added glass facade openings feature
+- Added Information and Communication Technology landing point feature
+- Added capturing mezzanine area at room level
+- Enhanced accessory block feature to accommodate units with color code, and multiple distances with color code support
+- Enhanced chimney feature to accommodate multiple area and height
+- Enhanced parapet feature to accommodate multiple area and height
+
 ## 1.0.2
 
 - Extract dimesion values for road reserve

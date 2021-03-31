@@ -80,7 +80,7 @@ import org.egov.edcr.feature.GovtBuildingDistance;
 import org.egov.edcr.feature.GuardRoom;
 import org.egov.edcr.feature.HeadRoom;
 import org.egov.edcr.feature.HeightOfRoom;
-import org.egov.edcr.feature.ICTService;
+import org.egov.edcr.feature.InfoCommsTechService;
 import org.egov.edcr.feature.InteriorOpenSpaceService;
 import org.egov.edcr.feature.Kitchen;
 import org.egov.edcr.feature.LandUse;
@@ -372,7 +372,7 @@ public class PlanFeatureRepository {
         pf = new PlanFeature(PorticoService.class);
         features.add(pf);
         
-        pf = new PlanFeature(ICTService.class);
+        pf = new PlanFeature(InfoCommsTechService.class);
         features.add(pf);
         
         

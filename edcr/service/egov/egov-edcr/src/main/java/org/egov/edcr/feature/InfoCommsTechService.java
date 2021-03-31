@@ -55,7 +55,7 @@ import org.egov.common.entity.edcr.Plan;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ICTService extends FeatureProcess {
+public class InfoCommsTechService extends FeatureProcess {
     @Override
     public Plan validate(Plan plan) {
         return plan;

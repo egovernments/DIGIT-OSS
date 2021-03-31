@@ -198,6 +198,7 @@ public class Plan implements Serializable {
     private HashMap<String, String> featureAmendments = new LinkedHashMap<>();
     private transient Map<String, List<Object>> mdmsMasterData;
     private transient Boolean mainDcrPassed = false;
+    private List<ICT> icts = new ArrayList<>();
 
     public List<BigDecimal> getCanopyDistanceFromPlotBoundary() {
         return canopyDistanceFromPlotBoundary;
@@ -627,6 +628,14 @@ public class Plan implements Serializable {
 
     public void setMainDcrPassed(Boolean mainDcrPassed) {
         this.mainDcrPassed = mainDcrPassed;
+    }
+
+    public List<ICT> getIcts() {
+        return icts;
+    }
+
+    public void setIcts(List<ICT> icts) {
+        this.icts = icts;
     }
 
 }
