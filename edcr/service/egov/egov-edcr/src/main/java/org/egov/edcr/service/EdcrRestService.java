@@ -59,6 +59,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -85,6 +86,7 @@ import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.microservice.contract.ResponseInfo;
 import org.egov.infra.microservice.models.RequestInfo;
+import org.egov.infra.microservice.models.Role;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.utils.TenantUtils;
@@ -145,16 +147,16 @@ public class EdcrRestService {
 
     @Autowired
     private MdmsConfiguration mdmsConfiguration;
-    
+
     @Autowired
     private EdcrApplicationDetailService applicationDetailService;
-    
+
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
     }
 
     @Transactional
-    public EdcrDetail createEdcr(final EdcrRequest edcrRequest, final MultipartFile file, Map<String, List<Object>> masterData ) {
+    public EdcrDetail createEdcr(final EdcrRequest edcrRequest, final MultipartFile file, Map<String, List<Object>> masterData) {
         EdcrApplication edcrApplication = new EdcrApplication();
         edcrApplication.setMdmsMasterData(masterData);
         EdcrApplicationDetail edcrApplicationDetail = new EdcrApplicationDetail();
@@ -171,20 +173,18 @@ public class EdcrRestService {
             edcrApplication.setApplicantName(DxfFileConstants.ANONYMOUS_APPLICANT);
         edcrApplication.setArchitectInformation(DxfFileConstants.ANONYMOUS_APPLICANT);
         edcrApplication.setServiceType(edcrRequest.getApplicationSubType());
-        if(edcrRequest.getAppliactionType()==null)
-        edcrApplication.setApplicationType(ApplicationType.PERMIT);
+        if (edcrRequest.getAppliactionType() == null)
+            edcrApplication.setApplicationType(ApplicationType.PERMIT);
         else
-         edcrApplication.setApplicationType(ApplicationType.valueOf(edcrRequest.getAppliactionType()));
-        if(edcrRequest.getPermitNumber()!=null)
+            edcrApplication.setApplicationType(ApplicationType.valueOf(edcrRequest.getAppliactionType()));
+        if (edcrRequest.getPermitNumber() != null)
             edcrApplication.setPlanPermitNumber(edcrRequest.getPermitNumber());
-        
-        
-        if(edcrRequest.getPermitDate()!=null)
-        {
+
+        if (edcrRequest.getPermitDate() != null) {
             edcrApplication.setApplicationDate(edcrRequest.getPermitDate());
             edcrApplication.setPermitApplicationDate(edcrRequest.getPermitDate());
         }
-       
+
         edcrApplication.setEdcrApplicationDetails(edcrApplicationDetails);
         edcrApplication.setDxfFile(file);
 
@@ -244,7 +244,7 @@ public class EdcrRestService {
         }
         if (edcrApplnDtl.getApplication().getServiceType() != null)
             edcrDetail.setApplicationSubType(edcrApplnDtl.getApplication().getServiceType());
-        
+
         if (edcrApplnDtl.getDxfFileId() != null)
             edcrDetail.setDxfFile(
                     format(getFileDownloadUrl(
@@ -301,10 +301,10 @@ public class EdcrRestService {
 
         edcrDetail.setPlanPdfs(planPdfs);
         edcrDetail.setTenantId(edcrRequest.getTenantId());
-        
-        if(StringUtils.isNotBlank(edcrRequest.getComparisonEdcrNumber()))
-        edcrDetail.setComparisonEdcrNumber(edcrRequest.getComparisonEdcrNumber());
-        
+
+        if (StringUtils.isNotBlank(edcrRequest.getComparisonEdcrNumber()))
+            edcrDetail.setComparisonEdcrNumber(edcrRequest.getComparisonEdcrNumber());
+
         if (!edcrApplnDtl.getStatus().equalsIgnoreCase("Accepted"))
             edcrDetail.setStatus(edcrApplnDtl.getStatus());
 
@@ -319,7 +319,6 @@ public class EdcrRestService {
         edcrDetail.setApplicationDate(new LocalDate(String.valueOf(applnDtls[9])).toDate());
         edcrDetail.setApplicationNumber(String.valueOf(applnDtls[10]));
 
-       
         if (String.valueOf(applnDtls[5]) != null)
             edcrDetail.setDxfFile(
                     format(getFileDownloadUrl(String.valueOf(applnDtls[5]), String.valueOf(applnDtls[0]))));
@@ -350,16 +349,23 @@ public class EdcrRestService {
         List<EdcrApplicationDetail> edcrApplications = new ArrayList<>();
         UserInfo userInfo = reqInfoWrapper.getRequestInfo() == null ? null : reqInfoWrapper.getRequestInfo().getUserInfo();
         String userId = "";
-        if(userInfo != null && StringUtils.isNoneBlank(userInfo.getUuid()))
+        if (userInfo != null && StringUtils.isNoneBlank(userInfo.getUuid()))
             userId = userInfo.getUuid();
-        else if(userInfo != null && StringUtils.isNoneBlank(userInfo.getId()))
+        else if (userInfo != null && StringUtils.isNoneBlank(userInfo.getId()))
             userId = userInfo.getId();
+        // When the user is ANONYMOUS, then search application by edcrno or transaction number
+        if (StringUtils.isNoneBlank(userId) && !userInfo.getPrimaryrole().isEmpty()) {
+            List<String> roles = userInfo.getPrimaryrole().stream().map(Role::getCode).collect(Collectors.toList());
+            LOG.info("****Roles***" + roles);
+            if (roles.contains("ANONYMOUS"))
+                userId = "";
+        }
         boolean onlyTenantId = edcrRequest != null && isBlank(edcrRequest.getEdcrNumber())
                 && isBlank(edcrRequest.getTransactionNumber())
                 && isBlank(edcrRequest.getAppliactionType())
                 && isBlank(edcrRequest.getApplicationSubType())
                 && isNotBlank(edcrRequest.getTenantId());
-        
+
         City stateCity = cityService.fetchStateCityDetails();
         if (edcrRequest != null && edcrRequest.getTenantId().equalsIgnoreCase(stateCity.getCode())) {
             final Map<String, String> params = new ConcurrentHashMap<>();
@@ -399,7 +405,7 @@ public class EdcrRestService {
                     queryStr.append("and appln.thirdPartyUserCode=:thirdPartyUserCode ");
                     params.put("thirdPartyUserCode", userId);
                 }
-                
+
                 String appliactionType = edcrRequest.getAppliactionType();
                 if (isNotBlank(appliactionType)) {
                     ApplicationType applicationType = null;
@@ -420,7 +426,7 @@ public class EdcrRestService {
                     queryStr.append("and appln.serviceType=:servicetype ");
                     params.put("servicetype", edcrRequest.getApplicationSubType());
                 }
-                
+
                 queryStr.append(" order by appln.createddate desc)");
                 if (tenantItr.hasNext()) {
                     queryStr.append(" union ");
@@ -450,10 +456,9 @@ public class EdcrRestService {
             if (edcrRequest != null && isNotBlank(edcrRequest.getTransactionNumber())) {
                 criteria.add(Restrictions.eq("application.transactionNumber", edcrRequest.getTransactionNumber()));
             }
-            
-            
+
             String appliactionType = edcrRequest.getAppliactionType();
-            
+
             if (edcrRequest != null && isNotBlank(appliactionType)) {
                 ApplicationType applicationType = null;
                 if ("BUILDING_PLAN_SCRUTINY".equalsIgnoreCase(appliactionType)) {
@@ -472,16 +477,16 @@ public class EdcrRestService {
             if (edcrRequest != null && isNotBlank(edcrRequest.getApplicationSubType())) {
                 criteria.add(Restrictions.eq("application.serviceType", edcrRequest.getApplicationSubType()));
             }
-            
-                if (onlyTenantId && userInfo != null && isNotBlank(userId)) {
-                    criteria.add(Restrictions.eq("application.thirdPartyUserCode", userId));
-                }
-            
+
+            if (onlyTenantId && userInfo != null && isNotBlank(userId)) {
+                criteria.add(Restrictions.eq("application.thirdPartyUserCode", userId));
+            }
+
             criteria.addOrder(Order.asc("edcrApplicationDetail.createdDate"));
             criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
             edcrApplications = criteria.list();
         }
-        
+
         LOG.info("The number of records = " + edcrApplications.size());
         if (edcrApplications.isEmpty()) {
             EdcrDetail edcrDetail = new EdcrDetail();
@@ -496,14 +501,13 @@ public class EdcrRestService {
         List<String> dcrAllowedExtenstions = new ArrayList<>(
                 Arrays.asList(edcrApplicationSettings.getValue("dcr.dxf.allowed.extenstions").split(",")));
 
-        
         String fileSize = edcrApplicationSettings.getValue("dcr.dxf.max.size");
         final String maxAllowSizeInMB = fileSize;
         String extension;
         if (file != null && !file.isEmpty()) {
             extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.') + 1);
             if (extension != null && !extension.isEmpty()) {
-               
+
                 if (!dcrAllowedExtenstions.contains(extension.toLowerCase())) {
                     return new ErrorDetail("BPA-02", "Please upload " + dcrAllowedExtenstions + " format file only");
                 } else if (file.getSize() > (Long.valueOf(maxAllowSizeInMB) * 1024 * 1024)) {
@@ -517,46 +521,48 @@ public class EdcrRestService {
         } else {
             return new ErrorDetail(BPA_05, "Please upload plan file, It is mandatory");
         }
-        
+
         return null;
     }
 
     public ErrorDetail validateEdcrRequest(final EdcrRequest edcrRequest, final MultipartFile planFile) {
         if (edcrRequest.getRequestInfo() == null)
             return new ErrorDetail(BPA_07, REQ_BODY_REQUIRED);
-        else if (edcrRequest.getRequestInfo().getUserInfo() == null || (edcrRequest.getRequestInfo().getUserInfo() != null && isBlank(edcrRequest.getRequestInfo().getUserInfo().getUuid())))
+        else if (edcrRequest.getRequestInfo().getUserInfo() == null || (edcrRequest.getRequestInfo().getUserInfo() != null
+                && isBlank(edcrRequest.getRequestInfo().getUserInfo().getUuid())))
             return new ErrorDetail(BPA_07, USER_ID_IS_MANDATORY);
-        
+
         if (isBlank(edcrRequest.getTransactionNumber()))
             return new ErrorDetail(BPA_07, "Please enter transaction number");
         if (isNotBlank(edcrRequest.getTransactionNumber())
                 && edcrApplicationService.findByTransactionNumber(edcrRequest.getTransactionNumber()) != null) {
             return new ErrorDetail(BPA_01, MSG_UNQ_TRANSACTION_NUMBER);
         }
-        
+
         return validatePlanFile(planFile);
     }
-    
+
     public ErrorDetail validateEdcrOcRequest(final EdcrRequest edcrRequest, final MultipartFile planFile) {
         if (edcrRequest.getRequestInfo() == null)
             return new ErrorDetail(BPA_07, REQ_BODY_REQUIRED);
-        else if (edcrRequest.getRequestInfo().getUserInfo() == null || (edcrRequest.getRequestInfo().getUserInfo() != null && isBlank(edcrRequest.getRequestInfo().getUserInfo().getUuid())))
+        else if (edcrRequest.getRequestInfo().getUserInfo() == null || (edcrRequest.getRequestInfo().getUserInfo() != null
+                && isBlank(edcrRequest.getRequestInfo().getUserInfo().getUuid())))
             return new ErrorDetail(BPA_07, USER_ID_IS_MANDATORY);
-        
+
         if (isBlank(edcrRequest.getTransactionNumber()))
             return new ErrorDetail(BPA_07, "Transaction number is mandatory");
-        
-        if (null==edcrRequest.getPermitDate())
+
+        if (null == edcrRequest.getPermitDate())
             return new ErrorDetail("BPA-08", "Permit Date is mandatory");
         if (isNotBlank(edcrRequest.getTransactionNumber())
                 && edcrApplicationService.findByTransactionNumber(edcrRequest.getTransactionNumber()) != null) {
             return new ErrorDetail(BPA_01, MSG_UNQ_TRANSACTION_NUMBER);
-            
+
         }
-        
+
         return validatePlanFile(planFile);
     }
-    
+
     public List<ErrorDetail> validateScrutinizeOcRequest(final EdcrRequest edcrRequest, final MultipartFile planFile) {
         List<ErrorDetail> errorDetails = new ArrayList<>();
 
@@ -611,7 +617,7 @@ public class EdcrRestService {
 
         return errorDetails;
     }
-        
+
     public List<ErrorDetail> validateEdcrMandatoryFields(final EdcrRequest edcrRequest) {
         List<ErrorDetail> errors = new ArrayList<>();
         if (StringUtils.isBlank(edcrRequest.getAppliactionType())) {
@@ -621,7 +627,7 @@ public class EdcrRestService {
         if (StringUtils.isBlank(edcrRequest.getApplicationSubType())) {
             errors.add(new ErrorDetail("BPA-11", "Service type is missing"));
         }
-         
+
         return errors;
     }
 
@@ -686,7 +692,7 @@ public class EdcrRestService {
 
     public String getFileDownloadUrl(final String fileStoreId, final String tenantId) {
         return String.format(FILE_DOWNLOAD_URL, ApplicationThreadLocals.getDomainURL()) + "?tenantId="
-                + tenantId +"&fileStoreId=" + fileStoreId;
+                + tenantId + "&fileStoreId=" + fileStoreId;
     }
 
 }
