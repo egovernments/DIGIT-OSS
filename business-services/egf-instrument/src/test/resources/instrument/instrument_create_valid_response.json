@@ -1,0 +1,16 @@
+"instruments": [
+   	{
+   			"id": null,
+            "transactionNumber": "transactionNumber",
+            "amount": 1,
+            "transactionType":"Credit",
+            "instrumentType": 
+            	{
+            		"name":"instrumenttype"
+            	}
+            ,
+            "serialNo":"serialNo",
+            "tenantId": "default"
+   	}
+   	
+   	]

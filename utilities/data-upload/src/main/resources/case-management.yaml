@@ -1,0 +1,81 @@
+service: case-management
+mappings:
+  - id: create-case
+    version: 1.0
+    description: Persists case details into case table
+    headers: ["Name", "Mobile Number", "Age", "Start Date", "End Date", "Reason", "Medical History"]
+    steps:
+      - id: create-case
+        url: http://localhost:8080/case-management/case/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "case": {
+              "tenantId": "{{tenantId}}",
+              "name": "{{Name}}",
+              "mobileNumber": "{{Mobile Number}}",
+              "age": {{Age}},
+              "startDate": "{{#toEpoch}}{{Start Date}}{{/toEpoch}}",
+              "endDate": "{{#toEpoch}}{{End Date}}{{/toEpoch}}",
+              "reason": "{{Reason}}",
+              "medicalHistory": "{{Medical History}}"
+            }
+          }
+
+  - id: health-details-collect
+    version: 1.0
+    description: Collects health details related to case management
+    headers: ["Name", "Mobile Number", "Age", "Last Reported On", "Current body temperature (in °F)", "Dry Cough? (Yes or No)", "Fever? (Yes or No)", "Difficulty in breathing ? (Yes or No)"]
+    steps:
+      - id: health-details-collect
+        url: http://localhost:8080/case-management/healthdetail/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "tenantId": "{{tenantId}}",
+            "mobileNumber": "{{Mobile Number}}",
+            "healthDetails": [
+              {
+                "temperature": "{{Current body temperature (in �F)}}",
+                "fever": "{{#toBool}}{{Fever? (Yes or No)}}{{/toBool}}",
+                "breathingIssues": "{{#toBool}}{{Difficulty in breathing ? (Yes or No)}}{{/toBool}}",
+                "dryCough": "{{#toBool}}{{Dry Cough? (Yes or No)}}{{/toBool}}"
+              }
+            ]
+          }
+
+  - id: create-case-manager
+    version: 1.0
+    description: Add case manager admins
+    headers: ["Email ID", "Name", "Tenant"]
+    steps:
+      - id: create-case-manager
+        url: http://localhost:8080/case-management/employee/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "employee": {
+                "emailId": "{{Email ID}}",
+                "name": "{{Name}}",
+                "tenantId": "{{Tenant}}",
+                "roles": [ "ISOLATION_CASE_ADMIN" ]
+              }
+          }
+
+  - id: create-health-details-collector
+    version: 1.0
+    description: Add case manager health details collectors
+    headers: ["Email ID", "Name"]
+    steps:
+      - id: create-health-details-collector
+        url: http://localhost:8080/case-management/employee/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "employee": {
+                "emailId": "{{Email ID}}",
+                "name": "{{Name}}",
+                "tenantId": "{{tenantId}}",
+                "roles": [ "ISOLATION_HEALTH_DETAILS_COLLECTOR" ]
+              }
+          }

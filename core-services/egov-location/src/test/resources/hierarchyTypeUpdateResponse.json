@@ -1,0 +1,25 @@
+{
+    "ResponseInfo": {
+        "apiId": null,
+        "ver": null,
+        "ts": null,
+        "resMsgId": null,
+        "msgId": null,
+        "status": "200 OK"
+    },
+    "HierarchyType": [
+        {
+            "id": 31,
+            "name": "TESTTEST12",
+            "code": "Revenue",
+            "localName": null,
+            "tenantId": "default",
+            "createdBy": null,
+            "createdDate": null,
+            "lastModifiedBy": null,
+            "lastModifiedDate": null,
+            "version": 0,
+            "new": false
+        }
+    ]
+}

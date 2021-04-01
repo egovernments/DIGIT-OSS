@@ -1,0 +1,1090 @@
+---
+ReportDefinitions:
+  #  Stock Opening Balance Report
+- reportName: openingBalanceReport
+  summary: Stock Opening Balance Report
+  version: 1.0.0
+  moduleName: inventory
+  externalService:
+  - entity: $.MdmsRes.inventory.Material
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid
+    keyOrder: code,name,tenantId
+    tableName: tbl_material
+  - entity: $.MdmsRes.common-masters.Uom
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Uom&tenantId=$tenantid
+    keyOrder: code,conversionFactor,tenantId
+    tableName: tbl_uom
+  sourceColumns:
+
+  - name: financialYear
+    label: inventory.financialYear
+    type: string
+    source: materialReceipt
+
+  - name: storeName
+    label: inventory.store.name
+    type: string
+    source: materialReceipt
+
+  - name: materialCode
+    label: inventory.material.code
+    type: string
+    source: materialReceipt
+
+  - name: materialName
+    label: inventory.materialName
+    type: string
+    source: material
+
+  - name: materialTypeName
+    label: inventory.material.materialtype
+    type: string
+    source: materialReceiptDetails
+
+  - name: uom
+    label: reports.inventory.openbal.Uom
+    type: string
+    source: materialReceiptDetails
+
+  - name: qty
+    label: reports.inventory.openbal.Qty.
+    type: string
+    source: materialReceiptDetails
+
+  - name: rate
+    label: inventory.Rate
+    type: string
+    source: materialReceiptDetails
+
+  - name: totalAmount
+    label: reports.inventory.openbal.TotalAmount
+    type: string
+    source: materialReceiptDetails
+
+  - name: remarks
+    label: reports.inventory.openbal.Remarks
+    type: string
+    source: materialReceiptDetails
+
+  searchParams:
+  - name: financialYear
+    label: inventory.financialYear
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$..finYearRange|$..finYearRange
+    source: materialReceipt
+    isMandatory: true
+
+  - name: storeName
+    label: inventory.store.name
+    type: singlevaluelist
+    pattern: http://inventory-services:8080/inventory-services/stores/_search?active=true&tenantId=$tenantid|$..code|$..name
+    source: store
+    isMandatory: true
+    wrapper: true
+
+  - name: materialTypeName
+    label: inventory.material.materialtype
+    type: singlevaluelist
+    pattern: 'list://OPENING BALANCE:OPENING BALANCE'
+    source: materialReceipt
+    isMandatory: false
+    searchClause: AND matrcpt.receiptType = $materialTypeName
+
+  - name: materialName
+    label: inventory.materialName
+    type: string
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid|$.MdmsRes.inventory.Material.*.code|$.MdmsRes.inventory.Material.*.name
+    source: materialReceipt
+    isMandatory: false
+    searchClause: AND mat.name = $materialName
+  query: SELECT matrcpt.financialyear AS financialyear,
+          store.name AS storeName,
+          matrcptdtl.material AS materialcode,
+          mat.name AS materialname,
+          matrcpt.receiptType AS materialtypename,
+          matrcptdtl.uomno AS uom,
+          (matrcptdtl.receivedqty / (SELECT CAST(conversionFactor AS bigint) FROM (values tbl_uom )AS tb (code,conversionFactor,tenantid) 
+           WHERE tb.code = matrcptdtl.uomno AND tb.tenantid= $tenantid AND matrcptdtl.tenantid = $tenantid)) ::numeric(13,2) AS qty,
+          matrcptdtl.unitrate AS rate,
+          (matrcptdtl.unitrate * (matrcptdtl.receivedqty / (SELECT CAST(conversionFactor AS bigint) FROM (values tbl_uom )AS tb (code,conversionFactor,tenantid)
+           WHERE tb.code = matrcptdtl.uomno AND tb.tenantid= $tenantid AND matrcptdtl.tenantid = $tenantid))) ::numeric(13,2)  AS totalamount,
+          matrcptdtl.remarks AS remarks 
+          FROM materialreceipt matrcpt,
+          (VALUES tbl_material) AS mat (code, name, tenantid),
+          (VALUES tbl_uom) AS uomtbl (code,conversionFactor,tenantid),
+          materialreceiptdetail matrcptdtl , store store 
+          WHERE matrcpt.financialyear = $financialYear
+          AND matrcpt.receivingstore =  store.code
+          AND matrcpt.receivingstore =  $storeName
+          AND store.tenantid = matrcpt.tenantid
+          AND mat.tenantid= matrcpt.tenantid
+          AND uomtbl.code=matrcptdtl.uomno
+          AND uomtbl.tenantid= store.tenantid
+          AND matrcpt.tenantid = matrcptdtl.tenantid
+          AND mat.tenantid = matrcpt.tenantid 
+          AND matrcpt.tenantid = $tenantid 
+          AND matrcpt.mrnnumber = matrcptdtl.mrnnumber 
+          AND mat.code = matrcptdtl.material
+
+#  Supplier Report
+- reportName: supplierreport
+  summary: Supplier List
+  version: 1.0.0
+  moduleName: inventory
+  sourceColumns:
+  - name: supplierCode
+    label: inventory.supplier.code
+    type: string
+    source: supplier
+
+  - name: supplierType
+    label: inventory.supplier.type
+    type: string
+    source: supplier
+
+  - name: supplierName
+    label: inventory.supplier.name
+    type: string
+    source: supplier
+
+  - name: status
+    label: inventory.common.status
+    type: string
+    source: supplier
+
+  - name: address
+    label: inventory.supplier.address
+    type: string
+    source: supplier
+
+  - name: contactNo
+    label: inventory.common.contactNo
+    type: string
+    source: supplier
+
+  - name: email
+    label: inventory.report.email
+    type: string
+    source: supplier
+
+  - name: cstNo
+    label: inventory.common.cstno
+    type: string
+    source: supplier
+
+  - name: bankName
+    label: inventory.common.bankname
+    type: string
+    source: supplier
+
+  - name: bankBranch
+    label: inventory.common.bankbranchname
+    type: string
+    source: supplier
+
+  - name: bankAcctNo
+    label: inventory.common.bankacctno
+    type: string
+    source: supplier
+
+  - name: ifsc
+    label: inventory.common.ifsc
+    type: string
+    source: supplier
+
+  - name: contactPerson
+    label: inventory.common.contactperson
+    type: string
+    source: supplier
+
+  - name: contactPersonNo
+    label: inventory.common.contactpersonno
+    type: string
+    source: supplier
+
+  query:  SELECT supplier.code AS supplierCode, supplier.type AS supplierType, supplier.name AS supplierName,
+          supplier.status AS status, supplier.address AS address , supplier.contactno AS contactNo,
+          supplier.email AS email, supplier.cstno AS cstNo,
+          bank.name AS bankName, supplier.bankbranch AS bankBranch, supplier.bankacctno AS bankAcctNo,
+          supplier.bankifsc AS ifsc, supplier.contactperson AS contactPerson,
+          supplier.contactpersonno AS contactPersonNo
+          FROM supplier AS supplier, egf_bank bank
+          WHERE
+          bank.code = supplier.bankcode
+          AND bank.tenantid = supplier.tenantid
+          AND supplier.tenantid = $tenantid
+          ORDER BY supplier.name asc;
+
+# Material Returned Report
+# Need to change  drop down Link based on report and Query
+- reportName: materialReturnedReport
+  summary: Material Returned Report
+  version: 1.0.0
+  moduleName: inventory
+  sourceColumns:
+
+  - name: materialReturnNo
+    label: inventory.materialReturnNo
+    type: string
+    source: inventory
+
+  - name: returnDate
+    label: inventory.returnDate
+    type: string
+    source: inventory
+
+  - name: supplierName
+    label: inventory.supplierName
+    type: epoch
+    source: inventory
+
+  - name: materialCode
+    label: inventory.materialCode
+    type: string
+    source: inventory
+
+  - name: materialName
+    label: inventory.materialName
+    type: string
+    source: inventory
+
+  - name: returnedQty
+    label: inventory.returnedQty
+    type: string
+    source: inventory
+
+  - name: uom
+    label: inventory.uom
+    type: string
+    source: inventory
+
+  - name: unitRate
+    label: inventory.unitRate
+    type: string
+    source: inventory
+
+  - name: totalReturnedAmount
+    label: inventory.totalReturnedAmount
+    type: string
+    source: inventory
+
+  - name: returnRemarks
+    label: inventory.returnRemarks
+    type: string
+    source: inventory
+
+  - name: returnBy
+    label: inventory.returnBy
+    type: string
+    source: inventory
+
+  searchParams:
+  
+  - name: storeName
+    label: inventory.store.name
+    type: singlevaluelist
+    pattern: http://inventory-services:8080/inventory-services/stores/_search?active=true&tenantId=$tenantid|$..code|$..name
+    source: store
+    isMandatory: true
+
+  - name: fromDate
+    label: inventory.fromDate
+    type: epoch
+    source: inventory
+    isMandatory: false
+
+  - name: toDate
+    label: inventory.toDate
+    type: epoch
+    source: inventory
+    isMandatory: false
+
+  - name: supplierName
+    label: inventory.supplierName
+    pattern: http://inventory-services:8080/inventory-services/suppliers/_search?tenantId=$tenantid|$..code|$..name
+    type: singlevaluelist
+    source: inventory
+    isMandatory: false
+  
+  - name: materialReturnNo
+    label: inventory.materialReturnNo
+    type: singlevaluelist
+    source: inventory
+    isMandatory: false
+
+  - name: materialName
+    label: inventory.materialName
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid|$.MdmsRes.inventory.Material.*.code|$.MdmsRes.inventory.Material.*.name
+    type: singlevaluelist
+    source: inventory
+    isMandatory: false
+
+  query: SELECT * FROM material;
+
+# Disposal of Scrap Report
+# Need to Change drop down Link based on report and Query
+- reportName: disposalOfScrapReport
+  summary: Disposal of Scrap Report
+  version: 1.0.0
+  moduleName: inventory
+  sourceColumns:
+
+  - name: storeName
+    label: inventory.storeName
+    type: string
+    source: inventory
+
+  - name: materialCode
+    label: inventory.materialCode
+    type: string
+    source: inventory
+
+  - name: materialName
+    label: inventory.materialName
+    type: string
+    source: inventory
+
+  - name: materialTypeName
+    label: inventory.materialTypeName
+    type: epoch
+    source: inventory
+
+  - name: disposalNo
+    label: inventory.disposalNo
+    type: string
+    source: inventory
+
+  - name: disposalDate
+    label: inventory.disposalDate
+    type: string
+    source: inventory
+
+  - name: disposalQty
+    label: inventory.disposalQty
+    type: string
+    source: inventory
+
+  - name: uom
+    label: inventory.uom
+    type: string
+    source: inventory
+
+  - name: disposalValue
+    label: inventory.disposalValue
+    type: string
+    source: inventory
+
+  - name: lotNo
+    label: inventory.lotNo
+    type: string
+    source: inventory
+
+  - name: disposalBy
+    label: inventory.disposalBy
+    type: string
+    source: inventory
+
+  - name: remarks
+    label: inventory.remarks
+    type: string
+    source: inventory
+
+  searchParams:
+  
+  - name: storeName
+    label: inventory.store.name
+    type: singlevaluelist
+    pattern: http://inventory-services:8080/inventory-services/stores/_search?active=true&tenantId=$tenantid|$..code|$..name
+    source: store
+    isMandatory: true
+
+  - name: disposalFromDate
+    label: inventory.disposalFromDate
+    type: epoch
+    source: inventory
+    isMandatory: false
+
+  - name: toDate
+    label: inventory.toDate
+    type: epoch
+    source: inventory
+    isMandatory: false
+
+  - name: materialtypename
+    label: inventory.materialtypename
+    type: singlevaluelist
+    source: inventory
+    isMandatory: false
+  
+  - name: disposalNo
+    label: inventory.disposalNo
+    type: singlevaluelist
+    source: inventory
+    isMandatory: false
+
+  - name: materialName
+    label: inventory.materialName
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid|$.MdmsRes.inventory.Material.*.code|$.MdmsRes.inventory.Material.*.name
+    type: singlevaluelist
+    source: inventory
+    isMandatory: false
+
+  query: SELECT * FROM material;
+
+# Rates comparison with history data Report
+- reportName: ratesComparisonWithHistory
+  summary: Rates comparison with history data
+  version: 1.0.0
+  moduleName: inventory
+  externalService:
+  - entity: $.MdmsRes.inventory.Material
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid
+    keyOrder: code,name,tenantId
+    tableName: tbl_material
+  sourceColumns:
+
+  - name: materialCode
+    label: inventory.material.code
+    type: string
+    source: inventory
+
+  - name: materialName
+    label: inventory.material.name
+    type: string
+    source: inventory
+
+  - name: supplierName
+    label: inventory.supplierName
+    type: string
+    source: inventory
+
+  - name: rateType
+    label: inventory.rateType
+    type: string
+    source: inventory
+
+  - name: currentRate
+    label: inventory.currentRate
+    type: string
+    source: inventory
+
+  - name: currentYear
+    label: inventory.currentYear
+    type: string
+    source: inventory
+
+  - name: previousYear
+    label: inventory.previousYear
+    type: string
+    source: inventory
+
+  searchParams:
+  - name: supplierName
+    label: inventory.supplierName
+    pattern: http://inventory-services:8080/inventory-services/suppliers/_search?tenantId=$tenantid|$..code|$..name
+    type: singlevaluelist
+    source: inventory
+    searchClause: AND pl.supplier = $supplierName
+    wrapper: true
+    isMandatory: false
+
+  - name: materialName
+    label: inventory.materialName
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid|$.MdmsRes.inventory.Material.*.code|$.MdmsRes.inventory.Material.*.name
+    type: singlevaluelist
+    source: inventory
+    searchClause: AND pld.material = $materialName
+    isMandatory: false
+    wrapper: true
+
+  query: SELECT pld.material AS materialCode, 
+          sup.name AS supplierName, 
+          mat.name AS materialName, 
+          pl.ratetype AS ratetype,
+          pld.ratePerUnit AS currentRate, 
+          (SELECT count(*) FROM pricelistdetails WHERE material=pld.material AND pld.tenantid = $tenantid
+          AND fromdate::bigint >= (SELECT EXTRACT(EPOCH FROM timestamptz (CONCAT ((SELECT to_char(now(),'YYYY')),'-','01','-','01')))) 
+          AND todate::bigint <= (SELECT EXTRACT(EPOCH FROM timestamptz (CONCAT ((SELECT to_char(now(),'YYYY')),'-','03','-','01'))))) AS currentYear, 
+          (SELECT count(*) FROM pricelistdetails WHERE material=pld.material AND pricelistdetails.tenantid = $tenantid
+          AND fromdate::bigint >= (SELECT EXTRACT(EPOCH FROM timestamptz (CONCAT ((SELECT to_char(now()- interval '1 year','YYYY')),'-','01','-','01')))) 
+          AND todate::bigint <= (SELECT EXTRACT(EPOCH FROM timestamptz (CONCAT ((SELECT to_char(now()- interval '1 year','YYYY')),'-','12','-','31'))))) AS previousYear 
+          FROM pricelist pl,pricelistdetails pld,supplier sup,(VALUES tbl_material) AS mat (code, name, tenantid)
+          WHERE
+          pld.tenantid = sup.tenantid
+          AND sup.tenantid =  pl.tenantid
+          AND pl.tenantid = $tenantid
+          AND mat.tenantid = pld.tenantid
+          AND pl.supplier = sup.code 
+          AND pl.id = pld.pricelist
+          AND pld.deleted = false
+          AND mat.code = pld.material
+
+# Comparison between different rates Report
+- reportName: comparisonBetweenDifferentRates
+  summary: Comparison between different rates
+  version: 1.0.0
+  moduleName: inventory
+  externalService:
+  - entity: $.MdmsRes.inventory.Material
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid
+    keyOrder: code,name,tenantId
+    tableName: tbl_material
+  sourceColumns:
+
+  - name: materialCode
+    label: inventory.material.code
+    type: string
+    source: inventory
+
+  - name: materialName
+    label: inventory.materialName
+    type: string
+    source: inventory
+
+  - name: supplierName
+    label: inventory.supplierName
+    type: string
+    source: inventory
+
+  - name: dtt
+    label: inventory.DTT
+    type: string
+    source: inventory
+
+  - name: quotation
+    label: inventory.quotation
+    type: string
+    source: inventory
+
+  - name: dgsnd
+    label: inventory.DGSND
+    type: string
+    source: inventory
+
+  - name: tender
+    label: inventory.tender
+    type: string
+    source: inventory
+
+  searchParams:
+  - name: supplierName
+    label: inventory.supplierName
+    pattern: http://inventory-services:8080/inventory-services/suppliers/_search?tenantId=$tenantid|$..code|$..name
+    type: singlevaluelist
+    source: inventory
+    searchClause: AND pl.supplier = $supplierName
+    wrapper: true
+    isMandatory: false
+
+  - name: materialName
+    label: inventory.materialName
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid|$.MdmsRes.inventory.Material.*.code|$.MdmsRes.inventory.Material.*.name
+    type: singlevaluelist
+    source: inventory
+    searchClause: AND pld.material = $materialName
+    isMandatory: false
+    wrapper: true
+
+
+  query: SELECT pld.material AS materialCode,
+         mat.name AS materialName,
+         sup.name AS supplierName,
+         ((SELECT  ratePerUnit FROM pricelistdetails WHERE material=pld.material AND pl.rateType = 'Quotation' AND pld.tenantid = $tenantid
+         AND FROMdate::bigint <= (SELECT extract(epoch FROM now())*1000) AND todate::bigint >= (SELECT extract(epoch FROM now()))*1000)
+         ORDER BY createdtime desc limit 1) AS quotation,
+         ((SELECT  ratePerUnit FROM pricelistdetails WHERE material=pld.material AND pl.rateType ='DGSC Rate Contract' AND pld.tenantid = $tenantid
+         AND FROMdate::bigint <= (SELECT extract(epoch FROM now())*1000) AND todate::bigint >= (SELECT extract(epoch FROM now()))*1000)
+         ORDER BY createdtime desc limit 1) AS dgsnd,
+         ((SELECT  ratePerUnit FROM pricelistdetails WHERE material=pld.material AND pl.rateType = 'ULB Rate Contract' AND pld.tenantid =  $tenantid
+         AND FROMdate::bigint <= (SELECT extract(epoch FROM now())*1000) AND todate::bigint >= (SELECT extract(epoch FROM now()))*1000) 
+         ORDER BY createdtime desc limit 1) AS dtt,
+         ((SELECT  ratePerUnit FROM pricelistdetails WHERE material=pld.material AND pl.rateType = 'One Time Tender'  AND pld.tenantid =  $tenantid
+         AND FROMdate::bigint <= (SELECT extract(epoch FROM now())*1000) AND todate::bigint >= (SELECT extract(epoch FROM now()))*1000)
+         ORDER BY createdtime desc limit 1) AS tender
+         FROM pricelistdetails pld, pricelist pl,  (VALUES tbl_material) AS mat (code, name, tenantid) , supplier sup
+         WHERE  pld.tenantid =  $tenantid
+         AND pl.tenantid = pld.tenantid
+         AND sup.tenantid=pl.tenantId
+         AND mat.tenantid = pl.tenantid
+         AND mat.code = pld.material 
+         AND sup.code = pl.supplier
+         AND pld.deleted = false
+         AND pld.pricelist = pl.id 
+
+# Procurement Expenditure Report
+# Need to Change drop down Link based on report and Query
+- reportName: procurementExpenditureReport
+  summary: Procurement Expenditure Report
+  version: 1.0.0
+  moduleName: inventory
+  sourceColumns:
+
+  - name: budgetHeadCode
+    label: inventory.budgetHeadCode
+    type: string
+    source: inventory
+
+  - name: nameOfBudgetHead
+    label: inventory.nameOfBudgetHead
+    type: string
+    source: inventory
+
+  - name: estimateBudget
+    label: inventory.estimateBudget
+    type: string
+    source: inventory
+
+  - name: actualExpenses
+    label: inventory.actualExpenses
+    type: string
+    source: inventory
+
+  - name: remainingBudget
+    label: inventory.remainingBudget
+    type: string
+    source: inventory
+    
+  searchParams:
+
+  - name: storeName
+    label: inventory.store.name
+    type: singlevaluelist
+    pattern: http://inventory-services:8080/inventory-services/stores/_search?active=true&tenantId=$tenantid|$..code|$..name
+    source: inventory
+    isMandatory: true
+    wrapper: true
+
+  - name: financialYear
+    label: inventory.financialYear
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=egf-master&masterName=FinancialYear|$..finYearRange|$..finYearRange
+    source: inventory
+    isMandatory: true
+
+  - name: budgetHead
+    label: inventory.budgetHead
+    type: singlevaluelist
+    source: inventory
+    isMandatory: true
+
+  query: SELECT * FROM material;
+
+# Supplier wise Purchase Order History Report
+- reportName: SupplierwisesPurchaseOrderHistoryReport
+  summary: Supplier wise Purchase Order History
+  version: 1.0.0
+  moduleName: inventory
+  sourceColumns:
+
+  - name: supplierName
+    label: inventory.supplierName
+    type: string
+    source: inventory
+
+  - name: supplierCompanyName
+    label: inventory.supplierCompanyName
+    type: string
+    source: inventory
+
+  - name: poNo
+    label: inventory.poNo
+    type: string
+    source: inventory
+
+  - name: poDate
+    label: inventory.poDate
+    type: epoch
+    source: inventory
+
+  - name: poStatus
+    label: inventory.poStatus
+    type: string
+    source: inventory
+
+  - name: expectedDeliveryDate
+    label: inventory.expecteddeliverydate
+    type: epoch
+    source: inventory
+
+  - name: paymentDueDate
+    label: inventory.paymentDueDate
+    type: epoch
+    source: inventory
+
+  - name: qtyOrdered
+    label: inventory.qtyOrdered
+    type: string
+    source: inventory
+
+  - name: poTotal
+    label: inventory.poTotal
+    type: string
+    source: inventory
+
+  - name: amountPaid
+    label: inventory.amountPaid
+    type: string
+    source: inventory
+
+  - name: balanceDue
+    label: inventory.balanceDue
+    type: string
+    source: inventory
+
+  searchParams:
+
+  - name: supplierName
+    label: inventory.supplierName
+    pattern: http://inventory-services:8080/inventory-services/suppliers/_search?tenantId=$tenantid|$..code|$..name
+    type: singlevaluelist
+    source: inventory
+    searchClause: AND po.supplier = $supplierName
+    wrapper: true
+    isMandatory: false
+
+  - name: supplierCompanyName
+    label: inventory.supplierCompanyName
+    pattern: http://inventory-services:8080/inventory-services/suppliers/_search?tenantId=$tenantid&type=COMPANY|$..code|$..name
+    type: singlevaluelist
+    source: inventory
+    searchClause: AND sup.name = $supplierCompanyName
+    isMandatory: false
+
+  - name: storeName
+    label: inventory.store.name
+    pattern: http://inventory-services:8080/inventory-services/stores/_search?active=true&tenantId=$tenantid|$..code|$..name
+    type: singlevaluelist
+    searchClause: AND po.store = $storeName
+    source: inventory
+    isMandatory: false
+    wrapper: true
+
+  - name: poNo
+    label: inventory.poNo
+    type: string
+    source: inventory
+    searchClause: AND po.purchaseordernumber = $poNo
+    isMandatory: false
+
+  - name: poDate
+    label: inventory.poDate
+    type: epoch
+    source: inventory
+    searchClause: AND po.purchaseorderdate = $poDate
+    isMandatory: false
+
+  query: SELECT sup.name AS suppliername,
+        (SELECT name  FROM supplier WHERE type = 'COMPANY' AND tenantid =$tenantid) AS supplierCompanyName,
+        po.purchaseorderNumber AS PoNo,
+        po.purchaseorderdate AS PoDate,
+        po.status AS postatus,
+        po.expecteddeliverydate AS expecteddeliverydate,
+        pod.orderquantity AS qtyOrdered
+        FROM supplier sup,purchaseorder po,purchaseorderdetail pod
+        WHERE po.tenantid = $tenantid
+        AND pod.tenantid = po.tenantid
+        AND pod.tenantid = sup.tenantid
+        AND po.purchaseordernumber = pod.purchaseorder
+        AND po.supplier = sup.code
+
+# Material wise Purchase Order History Report
+- reportName: MaterialwisePurchaseOrderHistoryReport
+  summary: Material wise Purchase Order History
+  version: 1.0.0
+  moduleName: inventory
+  externalService:
+  - entity: $.MdmsRes.inventory.Material
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid
+    keyOrder: code,name,tenantId,description
+    tableName: tbl_material
+  sourceColumns:
+
+  - name: materialName
+    label: inventory.materialName
+    type: string
+    source: inventory
+
+  - name: materialdescription
+    label: inventory.material.description
+    type: string
+    source: inventory
+
+  - name: poNo
+    label: inventory.poNo
+    type: string
+    source: inventory
+
+  - name: poDate
+    label: inventory.poDate
+    type: epoch
+    source: inventory
+
+  - name: poStatus
+    label: inventory.poStatus
+    type: string
+    source: inventory
+
+  - name: expectedDeliveryDate
+    label: inventory.expecteddeliverydate
+    type: epoch
+    source: inventory
+
+  - name: paymentDueDate
+    label: inventory.paymentDueDate
+    type: epoch
+    source: inventory
+
+  - name: qtyOrdered
+    label: inventory.qtyOrdered
+    type: string
+    source: inventory
+
+  - name: poTotal
+    label: inventory.poTotal
+    type: string
+    source: inventory
+
+  searchParams:
+
+  - name: materialName
+    label: inventory.materialName
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid
+    type: singlevaluelist
+    source: inventory
+    searchClause: AND pld.material = $materialName
+    wrapper: true
+    isMandatory: false
+
+  - name: storeName
+    label: inventory.store.name
+    pattern: http://inventory-services:8080/inventory-services/stores/_search?active=true&tenantId=$tenantid|$..code|$..name
+    type: singlevaluelist
+    source: inventory
+    searchClause: AND po.store = $storeName
+    isMandatory: false
+    wrapper: true
+
+  - name: poNo
+    label: inventory.poNo
+    type: string
+    source: inventory
+    searchClause: AND po.purchaseordernumber = $poNo
+    isMandatory: false
+
+  - name: poDate
+    label: inventory.poDate
+    type: epoch
+    source: inventory
+    searchClause: AND po.purchaseorderdate = $poDate
+    isMandatory: false
+
+  query: SELECT mat.name AS materialName,
+        mat .description AS materialdescription,
+        po.purchaseorderNumber AS PoNo,
+        po.purchaseorderdate AS PoDate,
+        po.status AS postatus,
+        po.expecteddeliverydate AS expecteddeliverydate,
+        pod.orderquantity AS qtyOrdered
+        FROM (VALUES tbl_material) AS mat (code, name, tenantid,description),purchaseorder po,purchaseorderdetail pod
+        WHERE po.tenantid = $tenantid
+        AND pod.tenantid = po.tenantid
+        AND pod.tenantid = mat.tenantid
+        AND po.purchaseordernumber = pod.purchaseorder
+        AND pod.material = mat.code
+
+# Inventory Register Report
+- reportName: inventoryRegisterReport
+  summary: Inventory Register
+  version: 1.0.0
+  moduleName: inventory
+  sourceColumns:
+  - name: storeName
+    label: inventory.store.name
+    type: string
+    source: inventory
+
+  - name: deptName
+    label: inventory.deptName
+    type: string
+    source: inventory
+
+  - name: materialName
+    label: inventory.materialName
+    type: string
+    source: material
+
+  - name: supplierName
+    label: inventory.suppliername
+    type: string
+    source: inventory
+
+  - name: qty
+    label: inventory.qty
+    type: string
+    source: inventory
+
+  - name: uom
+    label: inventory.uom
+    type: string
+    source: inventory
+
+  - name: unitRate
+    label: inventory.unitrate
+    type: string
+    source: inventory
+
+  - name: totalAmount
+    label: inventory.totalAmount
+    type: string
+    source: inventory
+
+  - name: receiptDate
+    label: inventory.date
+    type: string
+    source: inventory
+
+  - name: transactionNumber
+    label: inventory.transactionnumber
+    type: string
+    source: inventory
+
+  - name: receiptType
+    label: inventory.receiptType
+    type: string
+    source: inventory
+
+  searchParams:
+  - name: storeName
+    label: inventory.store.name
+    type: singlevaluelist
+    pattern: http://inventory-services:8080/inventory-services/stores/_search?active=true&tenantId=$tenantid|$..code|$..name
+    source: store
+    searchClause: AND store.code = $storeName
+    isMandatory: true
+    wrapper: true
+
+  - name: materialName
+    label: inventory.materialName
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid|$.MdmsRes.inventory.Material.*.code|$.MdmsRes.inventory.Material.*.name
+    source: materialReceipt
+    isMandatory: false
+  query: select store.name as storeName,store.department as deptName,
+       sup.name as supplierName,
+       detail.receivedqty as qty,detail.uomno as uom,detail.unitrate as unitRate,
+       (detail.receivedqty * detail.unitrate) as totalAmount,
+       (select to_date(to_char(to_timestamp(Trunc(CAST(mat.receiptdate as bigint)/1000 )), 'YYYY/MM/DD'), 'YYYY-MM-DD')) as receiptDate,
+       detail.mrnnumber as transactionNumber,mat.receipttype as receipttype
+        from materialreceiptdetail  detail,materialreceipt mat,store store,supplier sup
+        where detail.tenantid=$tenantid
+        AND mat.tenantid=detail.tenantid
+        AND store.tenantid=mat.tenantid
+        AND sup.tenantid= store.tenantid
+        AND mat.suppliercode =sup.code
+        AND mat.receivingstore=store.code
+        AND mat.mrnnumber=detail.mrnnumber
+        
+# Need to add query 
+# Stock Aging Report
+- reportName: stockAgingReport
+  summary: Stock Aging Report
+  version: 1.0.0
+  moduleName: inventory
+  sourceColumns:
+  - name: materialCode
+    label: inventory.materialcode
+    type: string
+    source: inventory
+
+  - name: materialName
+    label: inventory.materialName
+    type: string
+    source: inventory
+
+  - name: materialTypeName
+    label: inventory.materialTypeName
+    type: string
+    source: material
+
+  - name: lotNo
+    label: inventory.lotNo
+    type: string
+    source: inventory
+
+  - name: qtyFrom0to90Days
+    label: inventory.qtyFrom0to90Days
+    type: string
+    source: inventory
+
+  - name: stockValueFrom0to90Days
+    label: inventory.stockValueFrom0to90Days
+    type: string
+    source: inventory
+
+  - name: qtyFrom91to180Days
+    label: inventory.qtyFrom91to180Days
+    type: string
+    source: inventory
+
+  - name: stockValueFrom91to180Days
+    label: inventory.stockValueFrom91to180Days
+    type: string
+    source: inventory
+
+  - name: qtyFrom181DaysAndAbove
+    label: inventory.qtyFrom181DaysAndAbove
+    type: string
+    source: inventory
+
+  - name: stockValueFrom181DaysAndAbove
+    label: inventory.stockValueFrom181DaysAndAbove
+    type: string
+    source: inventory
+
+  - name: totalQty
+    label: inventory.totalQty
+    type: string
+    source: inventory
+
+  - name: totalStockValue
+    label: inventory.totalStockValue
+    type: string
+    source: inventory
+
+  searchParams:
+  - name: storeName
+    label: inventory.store.name
+    type: singlevaluelist
+    pattern: http://inventory-services:8080/inventory-services/stores/_search?active=true&tenantId=$tenantid|$..code|$..name
+    source: store
+    searchClause: AND store.code = $storeName
+    isMandatory: true
+    wrapper: true
+
+  - name: materialTypeName
+    label: inventory.materialTypeName
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=MaterialType&tenantId=$tenantid|$.MdmsRes.inventory.Material.*.code|$.MdmsRes.inventory.Material.*.name
+    source: materialReceipt
+    isMandatory: false
+
+  - name: materialName
+    label: inventory.materialName
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=inventory&masterName=Material&tenantId=$tenantid|$.MdmsRes.inventory.Material.*.code|$.MdmsRes.inventory.Material.*.name
+    source: materialReceipt
+    isMandatory: false
+
+  - name: asOnDate
+    label: inventory.asOnDate
+    type: epoch
+    source: inventory
+    isMandatory: true
+  query: 
+
+
+
+
+
+
+

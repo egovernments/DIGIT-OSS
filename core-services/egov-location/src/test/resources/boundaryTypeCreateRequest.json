@@ -1,0 +1,30 @@
+{
+    "RequestInfo": {
+       "apiId" : "emp",
+       "ver" : "1.0",
+       "ts" : "10-03-2017 00:00:00",
+       "action" : "create",
+       "did" : "1",
+       "key" : "abcdkey",
+       "msgId" : "20170310130900",
+       "requesterId" : "rajesh",
+       "authToken" : "05992e58-60d2-4c7d-84a8-cd55973b53e4",
+       "userInfo" : {
+       	
+       	"id" : 1
+       }
+    },
+    "BoundaryType": 
+        
+        {
+            "name" : "Test1234",
+             "code" :"BNDRYTYPE",
+             "tenantId" : "default",
+             "hierarchyType" : {
+             	"code" : "ADMIN",
+             	"tenantId" : "default"
+             
+             },
+            "hierarchy" : 12
+        }
+ }

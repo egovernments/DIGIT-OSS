@@ -1,0 +1,45 @@
+{
+    "moduleName": "MDMS",
+    "Definitions": [
+        {
+            "name": "mdms",
+            "templateFileName": "MSMS_Template.xls",
+            "requests": [
+                {
+                    "url": "/egov-mdms-service/v1/_search",
+                    "apiRequest": {
+                        "RequestInfo": {
+                            "apiId": "org.egov.pgr"
+                        },
+                        "MdmsCriteria": {
+                            "tenantId": "pb.amritsar",
+                            "moduleDetails": [
+                                {
+                                    "moduleName": "common-masters",
+                                    "masterDetails": [
+                                        {
+                                            "name": "Department",
+                                            "filter": "[?(@.code == 'ADM')]"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    "excelHeadersToRequestMap": {
+                        "Department Code": [
+                            "$.MdmsCriteria.moduleDetails.*.masterDetails.*.filter"
+                        ]
+                    },
+                    "additionalResFields": {
+                        "$.MdmsRes.common-masters.Department.*.name": "Department Name"
+                    },
+                    "prevResponseToRequestMap": {},
+                    "tenantIdPaths": [
+                        "$.MdmsCriteria.tenantId"
+                    ]
+                }
+            ]
+        }
+    ]
+}

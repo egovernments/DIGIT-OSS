@@ -1,0 +1,806 @@
+{
+  "key": "ws-consolidatedsewerageconnection",
+  "config": {
+    "defaultStyle": {
+      "font": "Cambay"
+    },
+    "content": [
+      {
+        "style": "ws-head",
+        "table": {
+          "widths": [
+            60,
+            "*",
+            120
+          ],
+          "body": [
+            [
+              {
+                "image": "{{logoImage}}",
+                "width": 50,
+                "height": 61.25,
+                "margin": [
+                  12,
+                  10,
+                  12,
+                  10
+                ]
+              },
+              {
+                "stack": [
+                  {
+                    "text": "{{logo_header}} {{Municipal_Corporation}}",
+                    "style": "receipt-logo-header"
+                  },
+                  {
+                    "text": "{{logo_sub_header}}"
+                  }
+                ],
+                "alignment": "left",
+                "margin": [
+                  10,
+                  30,
+                  0,
+                  0
+                ]
+              },
+              {
+                "stack": [
+                  {
+                    "table": {
+                      "widths": [
+                        "*",
+                        "*"
+                      ],
+                      "body": [
+                        [
+                          {
+                            "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABkAAAAZAAQMAAAAbwhzkAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAGUExURQAAAP7+/soH9D0AAAYwSURBVHja7dyxcYNAEAVQPA4UugRKoTRcGqW4BIcKNMKBcABzXu8JhIXn/UwSJ/Zt/Oea8Z+kAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAXkiyGdTn77iaHt79nLHa1oQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEJA9IC+ZVvolhHS3b88hpE+130FAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQP4AMmQK7vNpruVme80OppxAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQECOCeluH1PdeBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQkGND4pvaQUBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBADgYJE0OG+TTh0TggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB7QqqSgpS78TUBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQF5LGRF4h2MjwoICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMhGkPI0izvTP6Ju/IosLnk/b1/yBwEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB+RVyz1+mdjDlEu6gW4wKAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKyB6Scc1hp76MdjCGk3I0f5jsAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQHZBRJ348PhYkhNrb6rWTIICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMi2kB8yPfTRJFKepnz07fbjdX40tT4QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEJCtICuSqtWndjDllHotCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjIRpDPpj797B+umSOv08PvGcj0sQUBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAdkD8pJppV/mkMXRYT5VuRtf3kFXU8kHAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQF5DGQoltbbImQxzYpMkMVN7SAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAeDnMZEype8p46CgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA8AeSem9pr0oKAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOwJSU0zh3ynW7yvOM17ceRurAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMi2kKr00dFTZgdTrjU7AAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB2RhyvICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICArMkXJlylJdANIpEAAAAASUVORK5CYII=",
+                            "width": 70,
+                            "height": 70,
+                            "alignment": "right",
+                            "border": [
+                              false,
+                              false,
+                              false,
+                              false
+                            ],
+                            "style": "qr-image"
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        "layout": "noBorders"
+      },
+      {
+        "columns": [
+          {
+            "width": "20%",
+            "text": "{{consumer_no}}"
+          },
+          {
+            "width": "50%",
+            "text": "{{consumerNo}}"
+          },
+          {
+            "width": "14%",
+            "text": " "
+          },
+          {
+            "width": "10%",
+            "text": "{{status_label}}",
+            "alignment": "right"
+          },
+          {
+            "width": "10%",
+            "text": "{{status}}",
+            "alignment": "right"
+          }
+        ],
+        "margin": [
+          -26,
+          10,
+          0,
+          0
+        ]
+      },
+      {
+        "text": "{{service_details_header}}",
+        "style": "header"
+      },
+      {
+        "style": "ws-table",
+        "table": {
+          "widths": [
+            "103%"
+          ],
+          "body": [
+            [
+              {
+                "table": {
+                  "widths": [
+                    "25%",
+                    "25%",
+                    "25%",
+                    "25%"
+                  ],
+                  "body": [
+                    [
+                      {
+                        "text": "{{service}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{connection_execution_date}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{unit_of_measurement}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": " ",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{sewarage_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{connectionExecutionDate}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{uom}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": " ",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      }
+                    ]
+                  ]
+                },
+                "border": [
+                  true,
+                  true,
+                  true,
+                  true
+                ]
+              }
+            ]
+          ]
+        },
+        "layout": {}
+      },
+      {
+        "text": "{{property_details_header}}",
+        "style": "header"
+      },
+      {
+        "style": "ws-table",
+        "table": {
+          "widths": [
+            "103%"
+          ],
+          "body": [
+            [
+              {
+                "table": {
+                  "widths": [
+                    "25%",
+                    "25%",
+                    "25%",
+                    "25%"
+                  ],
+                  "body": [
+                    [
+                      {
+                        "text": "{{property_type}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{property_usage_type}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{plot_size}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": " ",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{propertyType}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{propertyUsageType}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{plotSize}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": " ",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{property_ID}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{city_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{plot_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{building_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{propertyID}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{city}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{plot}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{building}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{street_name}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{locality_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{pincode_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{location_on_map}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{streetName}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{locality}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{pincode}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{lat}} {{long}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      }
+                    ]
+                  ]
+                },
+                "border": [
+                  true,
+                  true,
+                  true,
+                  true
+                ]
+              }
+            ]
+          ]
+        },
+        "layout": {}
+      },
+      {
+        "text": "{{owner_details_header}}",
+        "style": "header"
+      },
+      {
+        "style": "ws-table",
+        "table": {
+          "widths": [
+            "103%"
+          ],
+          "body": [
+            [
+              {
+                "table": {
+                  "widths": [
+                    "25%",
+                    "25%",
+                    "25%",
+                    "25%"
+                  ],
+                  "body": [
+                    [
+                      {
+                        "text": "{{owner_mobile_number}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{owner_name}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{gender_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{guardian_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{ownerMobileNumber}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{ownerName}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{gender}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{guardian}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{guardian_name}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{owner_category}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{email_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      },
+                      {
+                        "text": "{{correspondence_address}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{guardianName}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{ownerCategory}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{email}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      },
+                      {
+                        "text": "{{correspondenceAddress}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "ws-sub-table-value"
+                      }
+                    ]
+                  ]
+                },
+                "border": [
+                  true,
+                  true,
+                  true,
+                  true
+                ]
+              }
+            ]
+          ]
+        },
+        "layout": {}
+      }
+    ],
+    "styles": {
+      "ws-head": {
+        "fillColor": "#F2F2F2",
+        "margin": [
+          -39,
+          -38,
+          -38,
+          0
+        ]
+      },
+      "receipt-logo-header": {
+        "color": "#000000",
+        "fontFamily": "Cambay",
+        "fontSize": 14,
+        "bold": true,
+        "letterSpacing": 0.74,
+        "margin": [
+          0,
+          -10,
+          0,
+          5
+        ]
+      },
+      "ws-table": {
+        "fontSize": 12,
+        "color": "#484848",
+        "margin": [
+          -25,
+          18,
+          -8,
+          10
+        ]
+      },
+      "header": {
+        "color": "#000000",
+        "textTransform": "uppercase",
+        "bold": true,
+        "fontSize": 12,
+        "fontWeight": 500,
+        "margin": [
+          -25,
+          15,
+          0,
+          -10
+        ]
+      },
+      "ws-sub-table-value": {
+        "color": "#000000",
+        "bold": true,
+        "fontSize": 12,
+        "fontWeight": 500,
+        "margin": [
+          3,
+          0,
+          0,
+          10
+        ]
+      },
+      "ws-sub-table": {
+        "color": "#484848",
+        "bold": true,
+        "fontSize": 12,
+        "fontWeight": 400,
+        "margin": [
+          3,
+          8,
+          0,
+          0
+        ]
+      },
+      "qr-image": {
+        "margin": [
+          -40,
+          -1,
+          -3,
+          0
+        ],
+        "color": "#484848",
+        "alignment": "right",
+        "backgroundColor": "#dddddd"
+      }
+    }
+  }
+}

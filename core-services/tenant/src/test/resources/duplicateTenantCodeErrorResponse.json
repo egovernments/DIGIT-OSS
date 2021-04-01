@@ -1,0 +1,15 @@
+{
+    "responseInfo": null,
+    "error": {
+        "code": 400,
+        "message": "Tenant code already exists",
+        "description": null,
+        "fields": [
+            {
+                "code": "TENANT.TENANT_CODE_ALREADY_EXISTS",
+                "message": "Tenant code already exists",
+                "field": "code"
+            }
+        ]
+    }
+}

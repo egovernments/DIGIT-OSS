@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Telemetry",
+  "description": "Telemetry Message from Kafka",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "ver": {
+      "type": "string"
+    },
+    "ets": {
+      "type": "number"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "minItems": 1
+    },
+    "mid": {
+      "type": "string"
+    },
+    "syncts": {
+      "type": "number"
+    }
+
+  },
+  "required": ["id", "ver", "ets", "events", "mid", "syncts"]
+}

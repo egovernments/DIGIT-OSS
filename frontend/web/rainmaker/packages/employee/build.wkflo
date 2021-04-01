@@ -1,0 +1,9 @@
+def build(path, ci_image) {
+    stage("Build") {
+        docker.image("egovio/ci-react:v8.4.0").inside {
+            sh "cd ${path} && rm -rf node_modules && npm set registry http://egov-micro-dev.egovernments.org/verdaccio &&  npm install && npm run build";
+        }
+    }
+}
+
+return this;

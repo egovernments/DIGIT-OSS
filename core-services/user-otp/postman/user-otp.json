@@ -1,0 +1,31 @@
+{
+	"variables": [],
+	"info": {
+		"name": "user-otp",
+		"_postman_id": "04e46a8d-da7c-dffb-c5c4-a31e326cf6a4",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://egov-micro-dev.egovernments.org/user-otp/v1/_send",
+			"request": {
+				"url": "http://localhost:8090/user-otp/v1/_send",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"api_id\": \"1\",\n    \"ver\": \"1\",\n    \"ts\": null,\n    \"action\": \"create\",\n    \"did\": \"\",\n    \"key\": \"\",\n    \"msg_id\": \"\",\n    \"requester_id\": \"\",\n    \"auth_token\": null\n  },\n  \"otp\": {\n  \t\"tenantId\": \"ap.public\",\n  \t\"mobileNumber\": \"12312312\"\n  }\n}"
+				},
+				"description": "OTP send"
+			},
+			"response": []
+		}
+	]
+}

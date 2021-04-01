@@ -1,0 +1,77 @@
+serviceMaps:
+  serviceName: cms
+  mappings:
+    - version: 1.0
+      description: Persists case details into case table
+      fromTopic: save-cms-case
+      isTransaction: true
+      queryMaps:
+
+        - query: INSERT INTO eg_cms_case( tenantid, age, startdate, enddate, reason, medicalhistory, status, caseid, uuid, useruuid, signature, createdby, lastmodifiedby, createdtime, lastmodifiedtime, additionaldetails ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+          basePath: $
+          jsonMaps:
+            - jsonPath: $.case.tenantId
+
+            - jsonPath: $.case.age
+
+            - jsonPath: $.case.startDate
+
+            - jsonPath: $.case.endDate
+
+            - jsonPath: $.case.reason
+
+            - jsonPath: $.case.medicalHistory
+
+            - jsonPath: $.case.status
+
+            - jsonPath: $.case.caseId
+
+            - jsonPath: $.case.uuid
+
+            - jsonPath: $.case.userUuid
+
+            - jsonPath: $.case.signature
+
+            - jsonPath: $.case.auditDetails.createdBy
+
+            - jsonPath: $.case.auditDetails.lastModifiedBy
+
+            - jsonPath: $.case.auditDetails.createdTime
+
+            - jsonPath: $.case.auditDetails.lastModifiedTime
+
+            - jsonPath: $.case.additionalDetails
+              type: JSON
+              dbType: JSONB
+
+
+    - version: 1.0
+      description: Update case details
+      fromTopic: update-cms-case
+      isTransaction: true
+      queryMaps:
+
+        - query: UPDATE eg_cms_case SET status = ?,startdate = ?,enddate = ?, reason = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ?, healthdetails = ? WHERE uuid=?;
+          basePath: $
+          jsonMaps:
+            - jsonPath: $.case.status
+
+            - jsonPath: $.case.startDate
+
+            - jsonPath: $.case.endDate
+
+            - jsonPath: $.case.reason
+
+            - jsonPath: $.case.additionalDetails
+              type: JSON
+              dbType: JSONB
+
+            - jsonPath: $.case.auditDetails.lastModifiedBy
+
+            - jsonPath: $.case.auditDetails.lastModifiedTime
+
+            - jsonPath: $.case.healthDetails
+              type: JSON
+              dbType: JSONB
+
+            - jsonPath: $.case.uuid

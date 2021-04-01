@@ -1,0 +1,17 @@
+{
+  "responseInfo": {
+    "resMsgId": "placeholder",
+    "status": "placeholder",
+    "apiId": null,
+    "ver": null,
+    "key": null,
+    "tenantId": null
+  },
+  "instrumentTypes":
+  [
+	  {
+	    "id": "1",
+	    "tenantId": "default"
+	  }
+  ]
+}

@@ -1,0 +1,565 @@
+---
+ReportDefinitions:
+- reportName: WorkOrderRegister
+  summary: Work Order Register
+  version: 1.0.0
+  moduleName: works
+  viewPath: workOrderRegister
+  externalService:
+  - entity: $.MdmsRes.egf-master.FinancialYear
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=egf-master&masterName=FinancialYear&tenantId=$tenantid&filter=%5B%3F%28%40.active%3D%3Dtrue%29%5D
+    keyOrder: finYearRange,startingDate,endingDate,tenantId
+    tableName: tbl_financialyear
+    stateData: true
+  sourceColumns:
+  - name: workorderdate
+    label: reports.works.workorderdate
+    type: epoch
+    source: works
+  - name: nameofwork
+    label: reports.works.nameofwork
+    type: string
+    source: works
+  - name: workordernumber
+    label: reports.works.workordernumber
+    type: number
+    source: works
+  - name: referencenoofwip
+    label: reports.works.referencenoofwip
+    type: string
+    source: works
+  - name: estimateamount
+    label: reports.works.estimateamount
+    type: number
+    source: works
+  - name: tenderamount
+    label: reports.works.tenderamount
+    type: number
+    source: works
+  - name: contractorname
+    label: reports.works.contractorname
+    type: string
+    source: works
+  - name: approvedattherateof
+    label: reports.works.approvedattherateof
+    type: number
+    source: works
+  - name: totalvalueofthework
+    label: reports.works.totalvalueofthework
+    type: number
+    source: works
+  - name: emdamount
+    label: reports.works.emdamount
+    type: number
+    source: works
+  - name: sanctionedfinyear
+    label: reports.works.sanctionedfinyear
+    type: string
+    source: works
+  - name: securitydepositamount
+    label: reports.works.securitydepositamount
+    type: number
+    source: works
+  - name: expectedcompletiondate
+    label: reports.works.expectedcompletiondate
+    type: epoch
+    source: works
+  searchParams:
+  - name: fromDate
+    label: reports.works.wofromDate
+    type: date
+    source: works
+    searchClause : AND wo.workorderdate>=$fromDate
+    isMandatory: false
+  - name: toDate
+    label: reports.works.wotoDate
+    type: date
+    source: works
+    searchClause : AND wo.workorderdate<=$toDate
+    isMandatory: false
+  - name: contractorName
+    label: reports.works.contractorname
+    type: string
+    source: works
+    searchClause : AND contractor.name=$contractorName
+    isMandatory: false
+  - name: amountFrom
+    label: reports.works.woamountfrom
+    type: number
+    source: works
+    searchClause : AND loae.estimateloaamount>=$amountFrom
+    isMandatory: false
+  - name: amountUpto
+    label: reports.works.woamountupto
+    type: number
+    source: works
+    searchClause : AND loae.estimateloaamount<=$amountUpto
+    isMandatory: false
+
+  query: select wo.workorderdate, de.nameofwork, wo.workordernumber, de.projectcode as referencenoofwip, de.estimatevalue as estimateamount, de.workvalue as tenderamount, contractor.name as contractorname, loa.tenderfinalizedpercentage as approvedattherateof, loa.loaamount as totalvalueofthework, loa.emdamountdeposited as emdamount, (select sum(amount) from egw_securitydeposit where letterofacceptance=loa.id) as securitydepositamount, (select finyear.finYearRange from (values tbl_financialyear) as finyear (finYearRange,startingDate,endingDate,tenantId) where wo.createdtime between startingDate::bigint and endingDate::bigint) as sanctionedfinyear, ((select coalesce(statusdate, innerwo.workorderdate) from egw_workorder innerwo left join egw_offlinestatus fs on fs.objecttype='WorkOrderOffline' and fs.status='WORK_COMMENCED' and fs.objectnumber=innerwo.workordernumber where innerwo.workordernumber=wo.workordernumber) + loa.contractperiod*24*12*60*1000) as expectedcompletiondate from egw_workorder wo, egw_letterofacceptance loa, egw_letterofacceptanceestimate loae, egw_detailedestimate de, egw_contractor contractor where wo.letterofacceptance=loa.id and wo.letterofacceptance=loae.letterofacceptance and loae.letterofacceptance=loa.id and loae.detailedestimate=de.estimatenumber and contractor.code=loa.contractor
+
+- reportName: WorkStatusReport
+  summary: Work Status Report
+  version: 1.0.0
+  moduleName: works
+  viewPath: WorkStatusReport
+  sourceColumns:
+  - name: nameofwork
+    label: reports.works.nameofwork
+    type: epoch
+    source: works
+  - name: fund
+    label: reports.works.fund
+    type: string
+    source: works
+  - name: typeofwork
+    label: reports.works.typeofwork
+    type: string
+    source: works
+  - name: subtypeofwork
+    label: reports.works.subtypeofwork
+    type: string
+    source: works
+  - name: estimatevalue
+    label: reports.works.estimatevalue
+    type: number
+    source: works
+  - name: agencyfirmname
+    label: reports.works.agencyfirmname
+    type: string
+    source: works
+  - name: workorderamount
+    label: reports.works.workorderamount
+    type: number
+    source: works
+  - name: billsubmittedtilldate
+    label: reports.works.billsubmittedtilldate
+    type: number
+    source: works
+  - name: worksstatuspercentage
+    label: reports.works.worksstatuspercentage
+    type: number
+    source: works
+  - name: amountpaidtilldate
+    label: reports.works.amountpaidtilldate
+    type: number
+    source: works
+  searchParams:
+  - name: fund
+    label: reports.works.fund
+    isMandatory: false
+    type: multivaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=egf-master&masterName=Fund&tenantId=$tenantid&filter=%5B%3F%28%40.active%3D%3Dtrue%29%5D
+    source: works
+    stateData: true
+    wrapper: true
+    searchClause : AND de.fund in ($fund)
+  - name: typeofwork
+    label: reports.works.typeofwork
+    isMandatory: false
+    type: multivaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter=%5B%3F%28%40.active%3D%3Dtrue%29%5D
+    source: works
+    stateData: true
+    wrapper: true
+    searchClause : AND de.workstype in ($typeofwork)
+  - name: subtypeofwork
+    label: reports.works.subtypeofwork
+    isMandatory: false
+    type: multivaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter%3D%5B%3F%28%20%40.parent%3D%3D%7Btypeofwork%7D%29%5D%7C%24.MdmsRes.works.TypeOfWork.%2A.code%7C%24.MdmsRes..works.TypeOfWork.%2A.name
+    source: works
+    stateData: true
+    wrapper: true
+    searchClause : AND de.workssubtype in ($subtypeofwork)
+  - name: department
+    label: reports.works.department
+    isMandatory: false
+    type: multivaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantid&filter=%5B%3F%28%40.active%3D%3Dtrue%29%5D
+    source: works
+    stateData: true
+    wrapper: true
+    searchClause : AND de.department in ($department)
+  - name: scheme
+    label: reports.works.scheme
+    isMandatory: false
+    type: multivaluelist
+    pattern:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=Works&masterName=Scheme&tenantId=$tenantid&filter=%5B%3F%28%40.active%3D%3Dtrue%29%5D
+    source: works
+    stateData: true
+    wrapper: true
+    searchClause : AND de.scheme in ($scheme)
+  - name: status
+    label: reports.works.status
+    isMandatory: false
+    type: multivaluelist
+    pattern: 'list://Documentation stage:Documentation stage,Tendering Stage:Tendering Stage,Work In Progress Stage:Work In Progress Stage,Completed:Completed'
+    source: works
+    stateData: true
+    wrapper: true
+    searchClause : AND de.status in ('Approved')
+
+  query: select de.nameofwork AS nameofwork, de.fund as fund, de.workstype AS typeofwork, de.workssubtype AS subtypeofwork, de.estimatevalue As estimatevalue, contractor.name as firmname, loa.loaamount AS workorderamount, cb.contractorbillamount as billsubmittedtilldate, tm.totalpercentage AS workstatuspercentage, (select COALESCE(sum(br.billamount),0) from egf_billregister br where br.billnumber=cb.billnumber) as amountpaidtilldate from egw_detailedestimate de, egw_letterofacceptanceestimate loae,egw_contractor contractor, egw_milestone m, egw_trackmilestone tm, egw_letterofacceptance loa, egw_contractorbill cb where loa.id=loae.letterofacceptance and loae.detailedestimate=de.id and contractor.code = loa.contractor and m.letterofacceptanceestimate = loae.id and m.id=tm.milestone and loae.id=cb.letterofacceptanceestimate;
+
+- reportName: WorkInProgressRegister
+  summary: Work In Progress Register
+  version: 1.0.0
+  moduleName: works
+  externalService:
+  - entity: $.MdmsRes.works.TypeOfWork
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter=%5B%3F%28%40.parent%3D%3Dnull%20%26%26%20%40.active%3D%3D%27true%27%29%5D
+    keyOrder: name,code,description,tenantId
+    tableName: tbl_typeofwork
+    stateData: true
+  - entity: $.MdmsRes.works.TypeOfWork
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter=%5B%3F%28%40.parent%21%3Dnull%20%26%26%20%40.active%3D%3D%27true%27%29%5D
+    keyOrder: name,code,description,tenantId
+    tableName: tbl_subtypeofwork
+    stateData: true
+  - entity: $.MdmsRes.works.WorksStatus
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=WorksStatus&tenantId=$tenantid&filter=%5B%3F%28%40.moduleType%3D%3D%27DetailedEstimate%27%29%5D
+    keyOrder: code,description,tenantId
+    tableName: tbl_workstatus
+    stateData: true
+  sourceColumns:
+  - name: wincode
+    label: reports.works.wincode
+    type: string
+    source: works
+    linkedReport:
+      reportName: WorkInProgressDetails
+      linkedColumn: _parent?reportName={reportName}&wcode={wincode}
+  - name: nameofwork
+    label: reports.works.nameofwork
+    type: string
+    source: works
+  - name: subtypeofwork
+    label: reports.works.subtypeofwork
+    type: string
+    source: works
+  - name: status
+    label: reports.works.status
+    type: string
+    source: works
+  searchParams:
+  - name: typeOfWork
+    label: reports.works.typeofwork
+    type: singlevaluelist
+    source: works
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter=%5B%3F%28%40.parent%3D%3Dnull%20%26%26%20%40.active%3D%3D%27true%27%29%5D|$.MdmsRes.works.TypeOfWork.*.code|$.MdmsRes.works.TypeOfWork.*.name
+    wrapper: true
+    stateData: true
+    searchClause : AND de.workstype=$typeOfWork
+    isMandatory: false
+  - name: subTypeOfWork
+    label: reports.works.subtypeofwork
+    type: singlevaluelist
+    source: works
+    pattern: /egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter=%5B%3F(%40.parent%3D%3D%27{typeOfWork}%27%20%26%26%20%40.active%3D%3D%27true%27)%5D|$.MdmsRes.works.TypeOfWork.*.code|$.MdmsRes.works.TypeOfWork.*.name
+    wrapper: true
+    stateData: true
+    searchClause : AND de.workssubtype=$subTypeOfWork
+    isMandatory: false
+  - name: nameOfWork
+    label: reports.works.nameofwork
+    type: string
+    source: works
+    searchClause : AND de.nameofwork=$nameOfWork
+    isMandatory: false
+  - name: wincode
+    label: reports.works.wincode
+    type: string
+    source: works
+    searchClause : AND de.projectcode=$wincode
+    isMandatory: false
+  - name: status
+    label: reports.works.status
+    type: singlevaluelist
+    source: works
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=WorksStatus&tenantId=$tenantid&filter=%5B%3F%28%40.moduleType%3D%3D%27DetailedEstimate%27%29%5D|$..code|$..description
+    wrapper: true
+    stateData: true
+    searchClause : AND de.status=$status
+    isMandatory: false
+  - name: statusason
+    label: reports.works.statusason
+    type: string
+    source: works
+    searchClause : AND de.status=$statusason
+    isMandatory: false
+
+  query: select de.projectcode as wincode, de.nameofwork, tw.name||'/'||stw.name as subtypeofwork, workstatus.description as status from egw_detailedestimate de, (values tbl_workstatus) as workstatus (code,description,tenantId), (values tbl_typeofwork) as tw (name,code,description,tenantId), (values tbl_subtypeofwork) as stw (name,code,description,tenantId) where de.status='CREATED' and workstatus.code=de.status and tw.code=de.workstype and stw.code=de.workssubtype
+
+- reportName: WorkInProgressDetails
+  summary: Work In Progress Details
+  version: 1.0.0
+  moduleName: works
+  externalService:
+  - entity: $.MdmsRes.egf-master.FinancialYear
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=egf-master&masterName=FinancialYear&tenantId=$tenantid&filter=%5B%3F%28%40.active%3D%3Dtrue%29%5D
+    keyOrder: finYearRange,startingDate,endingDate,tenantId
+    tableName: tbl_financialyear
+    stateData: true
+  - entity: $.MdmsRes.works.Scheme
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=Scheme&tenantId=$tenantid&filter=%5B%3F%28%40.parent%21%3Dnull%29%5D
+    keyOrder: name,code
+    tableName: tbl_scheme
+    stateData: true
+  sourceColumns:
+  - name: nameofwork
+    label: reports.works.nameofwork
+    type: string
+    source: works
+  - name: distributedforfinyear
+    label: reports.works.distributedforfinyear
+    type: string
+    source: works
+  - name: accountcode
+    label: reports.works.accountcode
+    type: string
+    source: works
+  - name: estimatevalue
+    label: reports.works.estimatevalue
+    type: number
+    source: works
+  - name: location
+    label: reports.works.location
+    type: string
+    source: works
+  - name: expectedcompletiondate
+    label: reports.works.expectedcompletiondate
+    type: epoch
+    source: works
+  - name: schemename
+    label: reports.works.schemename
+    type: string
+    source: works
+  - name: actualcompletiondate
+    label: reports.works.actualcompletiondate
+    type: epoch
+    source: works
+  - name: resolutionnumberanddate
+    label: reports.works.resolutionnumberanddate
+    type: string
+    source: works
+  - name: capitalisationdate
+    label: reports.works.capitalisationdate
+    type: epoch
+    source: works
+  - name:  workordernumber
+    label: reports.works.workordernumber
+    type: number
+    source: works
+  - name: wincode
+    label: reports.works.wincode
+    type: number
+    source: works
+  - name:  approvedbudget
+    label: reports.works.approvedbudget
+    type: string
+    source: works
+  - name:  assetidentificationnumber
+    label: reports.works.assetidentificationnumber
+    type: string
+    source: works
+  - name: securitydepositamount
+    label: reports.works.securitydepositamount
+    type: string
+    source: works
+  - name: totalexpensesincurredsofar
+    label: reports.works.totalexpensesincurredsofar
+    type: string
+    source: works
+  - name: paymentdate
+    label: reports.works.paymentdate
+    type: epoch
+    source: works
+  - name: amount
+    label: reports.works.amount
+    type: number
+    source: works
+  - name: deductionamount
+    label: reports.works.deductionamount
+    type: number
+    source: works
+  - name: netpayable
+    label: reports.works.netpayable
+    type: number
+    source: works
+  - name: vouchernumber
+    label: reports.works.vouchernumber
+    type: string
+    source: works
+  - name: securitydepositrefunddate
+    label: reports.works.securitydepositrefunddate
+    type: epoch
+    source: works
+  - name: securitydepositrefundamount
+    label: reports.works.securitydepositrefundamount
+    type: number
+    source: works
+  - name: outstandingsecuritydepositamount
+    label: reports.works.outstandingsecuritydepositamount
+    type: number
+    source: works
+  - name: remarks
+    label: reports.works.remarks
+    type: string
+    source: works
+  - name: headofdepartment
+    label: reports.works.headofdepartment
+    type: string
+    source: works
+  searchParams:
+  - name: wcode
+    label: reports.works.wincode
+    type: string
+    source: works
+    searchClause : AND de.projectcode=$wcode
+    isMandatory: false
+
+  query: select de.nameofwork, (select finyear.finYearRange from (values tbl_financialyear) as finyear (finYearRange,startingDate,endingDate,tenantId) where de.estimatedate between startingDate::bigint and endingDate::bigint) as distributedforfinyear, de.budgetgroup as accountcode, de.estimatevalue, de.location, ((select coalesce(statusdate, innerwo.workorderdate) from egw_workorder innerwo left join egw_offlinestatus fs on fs.objecttype='WorkOrderOffline' and fs.status='WORK_COMMENCED' and fs.objectnumber=innerwo.workordernumber where innerwo.workordernumber=wo.workordernumber) + loa.contractperiod*24*12*60*1000) as expectedcompletiondate, (select scheme.name from (values tbl_scheme) as scheme (name, code) where scheme.code=de.scheme) as schemename, (select cb.workcompletiondate from egw_contractorbill cb, egf_billregister bg where bg.billnumber=cb.billnumber and bg.billtype='contractorbill' and bg.billsubtype='Final' and cb.letterofacceptanceestimate=loae.id) as actualcompletiondate, de.councilresolutionnumber||'/'||de.councilresolutiondate as resolutionnumberanddate, (select bg.billdate from egw_contractorbill cb, egf_billregister bg where bg.billnumber=cb.billnumber and bg.billtype='contractorbill' and bg.billsubtype='Final' and cb.letterofacceptanceestimate=loae.id) as capitalisationdate, wo.workordernumber, de.projectcode as wincode, de.estimatevalue as approvedbudget, '' as assetidentificationnumber, (select sum(amount) from egw_securitydeposit where letterofacceptance=loa.id) as securitydepositamount, (select sum(bg.billamount) from egw_contractorbill cb, egf_billregister bg where bg.billnumber=cb.billnumber and bg.billtype='contractorbill' and cb.deleted=false and cb.letterofacceptanceestimate=loae.id) as totalexpensesincurredsofar, br.billdate as paymentdate, br.billamount as amount, br.billnumber as vouchernumber from egw_detailedestimate de left join egw_letterofacceptanceestimate loae on loae.detailedestimate=de.estimatenumber left join egw_letterofacceptance loa on loae.letterofacceptance=loa.id left join egw_workorder wo on wo.letterofacceptance=loa.id left join egw_contractorbill cb on cb.letterofacceptanceestimate=loae.id left join egf_billregister br on cb.billnumber=br.billnumber and br.billtype='contractorbill'where wo.letterofacceptance=loa.id and loae.letterofacceptance= wo.letterofacceptance and loae.letterofacceptance=loa.id and loae.detailedestimate=de.estimatenumber
+
+- reportName: ProjectStatusReport
+  summary: Project Status Report
+  version: 1.0.0
+  moduleName: works
+  externalService:
+  - entity: $.MdmsRes.tenant.tenants[*].city
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_search
+    keyOrder: name,districtName, regionName
+    tableName: tbl_tenant
+    postObject: $RequestInfo,"MdmsCriteria":{"tenantId":"default","moduleDetails":[{"moduleName":"tenant","masterDetails":[{"name":"tenants","filter":"[?(@.code=='$tenantid')]"}]}]}
+    stateData: true
+  - entity: $.MdmsRes.works.Scheme
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=Scheme&tenantId=$tenantid&filter=%5B%3F%28%40.parent%21%3Dnull%29%5D
+    keyOrder: name,code
+    tableName: tbl_scheme
+    stateData: true
+  - entity: $.MdmsRes.works.TypeOfWork
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter=%5B%3F%28%40.parent%3D%3Dnull%20%26%26%20%40.active%3D%3D%27true%27%29%5D
+    keyOrder: name,code,description,tenantId
+    tableName: tbl_typeofwork
+    stateData: true
+  - entity: $.MdmsRes.works.TypeOfWork
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter=%5B%3F%28%40.parent%21%3Dnull%20%26%26%20%40.active%3D%3D%27true%27%29%5D
+    keyOrder: name,code,description,tenantId
+    tableName: tbl_subtypeofwork
+    stateData: true
+  sourceColumns:
+  - name: divisionname
+    label: reports.works.division
+    type: string
+    source: works
+  - name: districtname
+    label: reports.works.district
+    type: string
+    source: works
+  - name: ulbname
+    label: reports.works.ulbname
+    type: string
+    source: works
+  - name: typeofwork
+    label: reports.works.typeofwork
+    type: string
+    source: works
+  - name: subtypeofwork
+    label: reports.works.subtypeofwork
+    type: string
+    source: works
+  - name: schemename
+    label: reports.works.schemename
+    type: string
+    source: works
+  - name: estimatenumber
+    label: reports.works.estimatenumber
+    type: string
+    source: works
+  - name: nameofwork
+    label: reports.works.nameofwork
+    type: string
+    source: works
+  - name: estimateamount
+    label: reports.works.estimateamount
+    type: number
+    source: works
+  - name: sanctionedamount
+    label: reports.works.sanctionedamount
+    type: number
+    source: works
+  - name: workstatus
+    label: reports.works.status
+    type: string
+    source: works
+  - name: billsreceivedtill
+    label: reports.works.billsreceivedtill
+    type: string
+    source: works
+  - name: paymentdonetill
+    label: reports.works.paymentdonetill
+    type: number
+    source: works
+  searchParams:
+  - name: division
+    label: reports.works.division
+    type: singlevaluelist
+    source: works
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=tenant&masterName=tenants&tenantId=$tenantid|$.MdmsRes.tenant.tenants.*.city.regionName|$.MdmsRes.tenant.tenants.*.city.regionName
+    wrapper: true
+    stateData: true
+    searchClause : AND de.workstype=$typeOfWork
+    isMandatory: false
+  - name: district
+    label: reports.works.district
+    type: singlevaluelist
+    isMandatory: false
+    type: string
+    source: works
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=tenant&masterName=tenants&tenantId=$tenantid|$.MdmsRes.tenant.tenants.*.city.districtName|$.MdmsRes.tenant.tenants.*.city.districtName
+    wrapper: true
+    stateData: true
+    searchClause : AND de.workstype in ($typeofwork)
+  - name: ulb
+    label: reports.works.ulbname
+    isMandatory: false
+    type: multivaluelist
+    source: works
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=tenant&masterName=tenants&tenantId=$tenantid|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    wrapper: true
+    stateData: true
+    searchClause : AND de.workssubtype in ($subtypeofwork)
+  - name: status
+    label: reports.works.status
+    type: singlevaluelist
+    source: works
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=WorksStatus&tenantId=$tenantid&filter=%5B%3F%28%40.moduleType%3D%3D%27DetailedEstimate%27%29%5D|$..code|$..description
+    wrapper: true
+    stateData: true
+    searchClause : AND de.status=$status
+    isMandatory: false
+  - name: statusason
+    label: reports.works.statusason
+    type: string
+    source: works
+    searchClause : AND de.status=$statusason
+    isMandatory: false
+  - name: typeOfWork
+    label: reports.works.typeofwork
+    type: singlevaluelist
+    source: works
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter=%5B%3F%28%40.parent%3D%3Dnull%20%26%26%20%40.active%3D%3D%27true%27%29%5D|$..code|$..name
+    wrapper: true
+    stateData: true
+    searchClause : AND de.workstype=$typeOfWork
+    isMandatory: false
+  - name: subTypeOfWork
+    label: reports.works.subtypeofwork
+    type: singlevaluelist
+    source: works
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=works&masterName=TypeOfWork&tenantId=$tenantid&filter=%5B%3F%28%40.parent%3D%3D%7BtypeOfWork%7D%20%26%26%20%40.active%3D%3D%27true%27%29%5D|$..code|$..name
+    wrapper: true
+    stateData: true
+    searchClause : AND de.workssubtype=$subTypeOfWork
+    isMandatory: false
+  query: select (select city.name from (values tbl_tenant) as city (name, districtName, regionName)) as divisionname, (select city.districtName from (values tbl_tenant) as city (name, districtName, regionName)) as districtname, (select name from (values tbl_tenant) as city (name, districtName, regionName)) as ulbname, (select tw.name from (values tbl_typeofwork) as tw (name,code,description,tenantId) where tw.code=de.workstype) as typeofwork, (select stw.name from (values tbl_subtypeofwork) as stw (name,code,description,tenantId) where stw.code=de.workssubtype) as subtypeofwork, (select scheme.name from (values tbl_scheme) as scheme (name, code) where scheme.code=de.scheme) as schemename, de.estimatenumber, de.nameofwork, de.estimatevalue as estimateamount, loa.loaamount as sanctionedamount, (select sum(bg.billamount) from egw_contractorbill cb, egf_billregister bg where bg.billnumber=cb.billnumber and bg.billtype='contractorbill' and cb.deleted=false and cb.letterofacceptanceestimate=loae.id) as billsreceivedtill from egw_letterofacceptance loa, egw_detailedestimate de, egw_letterofacceptanceestimate loae left join egw_contractorbill cb on cb.letterofacceptanceestimate=loae.id left join egf_billregister br on cb.billnumber=br.billnumber and br.billtype='contractorbill' where loae.letterofacceptance=loa.id and loae.detailedestimate=de.estimatenumber

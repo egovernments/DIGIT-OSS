@@ -1,0 +1,9 @@
+"instrumentTypes": [
+   	{
+		"name":"name",
+		"description":"description",
+		"active":true,
+   		"tenantId":"default"
+   	}
+   	
+   	]

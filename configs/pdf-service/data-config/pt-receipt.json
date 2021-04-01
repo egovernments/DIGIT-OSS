@@ -1,0 +1,273 @@
+{
+
+   "key":"pt-receipt",
+   "DataConfigs": {
+      "serviceName": "rainmaker-pt",
+      "version": "1.0.0",
+      "baseKeyPath": "$.Properties.*",
+      "entityIdPath":"$.propertyId",
+      "isCommonTableBorderRequired":true,
+      "mappings": [
+         {
+            "topic": "pt-pdf-generation",
+            "staticConfigPath": "https://raw.githubusercontent.com/egovernments/egov-services/vishal-feature-filestore/core/egov-indexer/src/main/resources/rainmaker-pgr-indexer.yml",
+            "mappings": [
+               {
+                  "direct": [
+                     {
+                        "variable": "variable1",
+                        "value": {
+                             "path":"$.propertyDetails[0].financialYear"                              
+                        }
+                     },  
+                     {
+                        "variable": "variable38",                        
+                        "url":"https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                        "type":"image"
+                     },       
+                     {
+                        "variable": "variable35",
+                        "value": {
+                             "path":"$.tenantId"                              
+                        },
+                        "localisation":{
+                           "required":true,
+                           "prefix":"TENANT_TENANTS",   
+                           "module":"rainmaker-common"
+                        },
+                        "isUpperCaseRequired":true 
+                     },  
+                     {
+                        "variable": "variable36", 
+                        "type":"citizen-employee-title"
+                     },            
+                     {
+                        "variable":"variable2",
+                        "value":{
+                           "path":"$.oldPropertyId"                            
+                        }  
+                     },
+                     {
+                        "variable": "variable3",
+                        "value":{
+                             "path":"$.propertyId"                           
+                         } 
+                     },
+                     {
+                       "variable": "variable4",
+                       "value":{
+                            "path":"$.propertyDetails[0].assessmentNumber"                           
+                        } 
+                     },
+                     {
+                       "variable": "variable5",
+                       "value":{
+                            "path":"$.address.doorNo"                           
+                        } 
+                     },
+                     {
+                       "variable": "variable6",
+                       "value":{
+                            "path":"$.address.buildingName"                           
+                        } 
+                     },
+                     {
+                       "variable": "variable7",
+                       "value":{
+                            "path":"$.address.street"                           
+                        } 
+                     },
+                     {
+                       "variable": "variable8",
+                       "value":{
+                            "path":"$.address.locality.name"                           
+                        } 
+                     },
+                     {
+                       "variable": "variable9",
+                       "value":{
+                            "path":"$.propertyDetails[0].landArea"                           
+                        } 
+                     },
+                     {
+                       "variable": "variable10",
+                       "value":{
+                            "path":"$.propertyDetails[0].propertySubType"                           
+                        },
+                        "localisation":{
+                           "required":true,
+                           "prefix":"PROPERTYTAX_BILLING_SLAB",   
+                           "module":"rainmaker-pt"
+                        } 
+                     },
+                     {
+                       "variable": "variable11",                        
+                       "value":{
+                            "path":"$.propertyDetails[0].owners.*"                          
+                        },
+                        "type":"array",
+                        "format":{                            
+                           "type":"string",
+                           "scema":[
+                              {
+                                 "key":"name"
+                              },
+                              {
+                                 "key":"fatherOrHusbandName"
+                              }]
+                       } 
+                    },
+                    {
+                       "variable": "variable12",                        
+                       "value":{
+                            "path":"$.propertyDetails[0].units.*"                          
+                        },
+                        "type":"array-column",
+                        "format":{                            
+                           "type":"string",
+                           "scema":[
+                              {
+                                 "key":"floorNo",
+                                 "localisation":{
+                                    "required":true,
+                                    "prefix":"PROPERTYTAX_FLOOR",   
+                                    "module":"rainmaker-pt"
+                                 }
+                                 
+                              },
+                              {
+                                 "key":"usageCategoryMinor",
+                                 "localisation":{
+                                    "required":true,
+                                    "prefix":"PROPERTYTAX_BILLING_SLAB",   
+                                    "module":"rainmaker-pt"
+                                 }
+                                 
+                              },
+                              {
+                                 "key":"usageCategoryDetail",
+                                 "localisation":{
+                                    "required":true,
+                                    "prefix":"PROPERTYTAX_BILLING_SLAB",   
+                                    "module":"rainmaker-pt"
+                                 }
+                              },
+                              {   
+                                 "key":"occupancyType",
+                                 "localisation":{
+                                    "required":true,
+                                    "prefix":"PROPERTYTAX_OCCUPANCYTYPE",   
+                                    "module":"rainmaker-pt"
+                                 }
+                              },
+                              {
+                                 "key":"unitArea"
+                              }]
+                       } 
+                    } 
+                  ]
+               },
+               {
+                  "derived": [
+                     {
+                        "variable": "variable37",
+                        "formula": "{{variable34}}-{{variable27}}"
+                     }
+                  ]
+               },
+               {
+                  "externalAPI": [     
+                    {                         
+                       "path": "http://collection-services:8080/collection-services/receipts/_search",
+                       "queryParam": "consumerCode=$.propertyId:$.propertyDetails[0].assessmentNumber",
+                       "apiRequest": null,
+                       "responseMapping":[
+                         {             
+                            "variable":"variable15",
+                            "value":"$.Receipt[0].receiptNumber"
+                         },
+                         {
+                            "variable":"variable16",
+                            "value":"$.Receipt[0].receiptDate"
+                         },
+                         {
+                            "variable":"variable17",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"
+                         },
+                         {
+                            "variable":"variable18",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_FIRE_CESS')].amount"
+                         },
+                         {
+                            "variable":"variable19",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_CANCER_CESS')].amount"
+                         },
+                         {
+                            "variable":"variable20",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"
+                         },
+                         {
+                            "variable":"variable21",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+                         },
+                         {
+                            "variable":"variable22",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_INTEREST')].amount"
+                         },
+                         {
+                            "variable":"variable23",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_UNIT_USAGE_EXEMPTION')].amount"
+                         },
+                         {
+                            "variable":"variable24",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_OWNER_EXEMPTION')].amount"
+                         },
+                         {
+                            "variable":"variable25",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_ROUNDOFF')].amount"
+                         },
+                         {
+                            "variable":"variable26",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].totalAmount"
+                         },
+                         {
+                            "variable":"variable27",
+                            "value":"$.Receipt[0].Bill[0].billDetails[0].amountPaid"
+                         },
+                         {
+                            "variable":"variable28",
+                            "value":"$.Receipt[0].instrument.instrumentType.name"
+                         },
+                         {
+                            "variable":"variable29",
+                            "value":"$.Receipt[0].instrument.bank.name"
+                         },
+                         {
+                            "variable":"variable30",
+                            "value":"$.Receipt[0].transactionId"
+                         },
+                         {
+                            "variable":"variable31",
+                            "value":"$.Receipt[0].instrument.transactionDateInput"
+                         },
+                         {
+                           "variable":"variable32",
+                           "value":"$.Receipt[0].Bill[0].billDetails[0].manualReceiptNumber"
+                        },
+                        {
+                           "variable":"variable33",
+                           "value":"$.Receipt[0].Bill[0].billDetails[0].manualReceiptDate"
+                        },
+                        {
+                           "variable":"variable34",
+                           "value":"$.Receipt[0].Bill[0].billDetails[0].totalAmount"
+                        }
+                      ]  
+                     }
+                  ]
+               }
+            ]
+         }
+      ]
+   }
+}

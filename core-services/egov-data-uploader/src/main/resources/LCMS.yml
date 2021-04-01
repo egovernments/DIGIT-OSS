@@ -1,0 +1,22 @@
+UploadDefinitions: 
+ moduleName: lcms
+ summary: legal case management system module
+ version: 1.0.0
+ definitions:
+ - defName: create legacy case
+   apiRequest: {"RequestInfo": {},"cases": [{"receiptDate": 1511807400000,"resolution": "Test resolution","resolutionDate": 1511807400000,"pleaderEngagementDetails": "Test",
+"vakalatnamaGenerationDate": 1511807400000,"departmentPerson": "Test departmentPerson","remarks": "Test remarks","tenantId": "default","advocateInfo": "test advocate Info","caseRegistrationDate": 1511807400000,"hearingDetails": [{"judgeMentDate": 1511807400000,"caseJudgeMent": "test","advocateOpinion": "Test","furtherProcessDetails": "test","darkhasthDueDate": 1511807400000}],"caseVoucher": {"details": "test","officerSignature": "test","voucherDate": 1511807400000,"verificationRemarks": "test"},"advocateDetails": [{"advocate": {"code": "defaultadvocate000197"},"fee": 1500,"assignedDate": 1512498600000}],"summon": {"isSummon": true,"sectionApplied": "test","summonDate": 1513130216138,"amountReceived": 2000,"year": "2017","plantiffName": "test",
+"caseNo": "3232","caseDetails": "test","defendant": "test","tenantId": "default","hearingTime": 1513130216138,"hearingDate": 1512498600000,"ward": "test ward","side":{
+"code": "Test side"},"register": {"code": "test"},"bench": {"code":"test"},"caseType": {"code": "APL"},"plantiffAddress": {"addressLine1": "test"},"departmentName": {"code": "ACC"},"courtName": {"code": "CLCIC"}}}]}
+   
+   headerJsonPathMap: {"Case No":["$.cases.*.summon.caseNo"],"ULB Name":["$.cases.*.summon.tenantId"],"Name of Plaintiff":["$.cases.*.summon.plantiffName"],"Name of Defendant":["$.cases.*.summon.defendant"],"Section of the act applied":["$.cases.*.summon.sectionApplied"],"Date of receipt of responsible officer":["$.cases.*.receiptDate"],"Date of service of Summon on the municipal body":["$.cases.*.summon.summonDate"],"Resolution of municipal body with date":["$.cases.*.resolutionDate"],"Particulars of Pleaders engaged and fees fixed":["$.cases.*.advocateDetails.*.fee"],"Due of Information given to the Pleaders":["$.cases.*.advocateInfo"],"Date of Instruction of the suit or production of Vakalatnama in the court":["$.cases.*.vakalatnamaGenerationDate"],"Name of court where suit is been filed":["$.cases.*.summon.courtName.code"],"Name of Responsible officer attending the case on behalf of the municipal body":["$.cases.*.departmentPerson"],"Date of Judgment":["$.cases.*.hearingDetails.*.judgeMentDate"],"Particulars of judgment containing  details":["$.cases.*.hearingDetails.*.caseJudgeMent"],"Opinion of Pleader or Officer on the result of case":["$.cases.*.hearingDetails.*.advocateOpinion"],"Particulars of further process of recovery":["$.cases.*.hearingDetails.*.furtherProcessDetails"],"Due date of darkhast":["$.cases.*.hearingDetails.*.darkhasthDueDate"],"Particulars of actual amount received":["$.cases.*.summon.amountReceived"],"Date of credit on Municipal account":["$.cases.*.caseVoucher.voucherDate"],"Date of Debit in Municipal Account/Voucher no.":["$.cases.*.caseVoucher.voucherDate"],"Remarks regarding verification with the reference to court records, Adjustment of Advances":["$.cases.*.caseVoucher.verificationRemarks"],"Signature of Authorized Officers":["$.cases.*.caseVoucher.officerSignature"],"Remark":["$.cases.*.remarks"],"Year":["$.cases.*.summon.year"],"Case Type":["$.cases.*.summon.caseType.code"],"Plaintiff Address":["$.cases.*.summon.plantiffAddress.addressLine1"],"Side":["$.cases.*.summon.side.code"],"Case details":["$.cases.*.summon.caseDetails"],"Department Name":["$.cases.*.summon.departmentName.code"],"Hearing Time":["$.cases.*.summon.hearingTime"],"Hearing Date":["$.cases.*.summon.hearingDate"],"Ward":["$.cases.*.summon.ward"],"Register/Stamp":["$.cases.*.summon.register.code"],"Bench":["$.cases.*.summon.bench.code"],"Case Registration Date":["$.cases.*.caseRegistrationDate"],"Advocate Name":["$.cases.*.advocateDetails.*.advocate.code"]}
+
+   isBulkApi: true
+   arrayPath: $.cases.*
+   isParentChild: true
+   uniqueParentKeys: ["Case No"]
+   tenantIdPaths: ["$.cases.*.tenantId", "$.cases.*.summon.tenantId", "$.cases.*.register.tenantId"]
+   uniqueKeysForInnerObject: []
+   uri: /lcms-services/legalcase/case/_dataentry
+   additionalResFields:
+   templateFileName: lcms_case.xls

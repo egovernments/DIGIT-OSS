@@ -1,0 +1,62 @@
+{
+  "tenantId": "default",
+  "moduleName": "common-masters",
+  "Department": [
+    {
+      "id": "1",
+      "name": "ADMINISTRATION",
+      "code": "ADM",
+      "active": "true",
+      "tenantId": "default"
+    },
+    {
+      "id": "2",
+      "name": "ACCOUNTS",
+      "code": "ACC",
+      "active": "true",
+      "tenantId": "default"
+    },
+    {
+      "id": "5",
+      "name": "ENGINEERING",
+      "code": "ENG",
+      "active": "true",
+      "tenantId": "default"
+    },
+    {
+      "id": "7",
+      "name": "TOWN PLANNING",
+      "code": "TP",
+      "active": "true",
+      "tenantId": "default"
+    },
+    {
+      "id": "8",
+      "name": "REVENUE",
+      "code": "REV",
+      "active": "true",
+      "tenantId": "default"
+    },
+    {
+      "id": "9",
+      "name": "PUBLIC HEALTH AND SANITATION",
+      "code": "PHS",
+      "active": "true",
+      "tenantId": "default"
+    },
+    {
+      "id": "10",
+      "name": "URBAN POVERTY ALLEVIATION",
+      "code": "UPA",
+      "active": "true",
+      "tenantId": "default"
+    },
+    {
+      "id": "11",
+      "name": "EDUCATION",
+      "code": "EDU",
+      "active": "true",
+      "tenantId": "default"
+    }
+  ]
+}

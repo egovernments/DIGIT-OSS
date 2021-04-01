@@ -1,0 +1,3 @@
+ALTER TABLE eg_sw_connection ADD COLUMN IF NOT EXISTS isoldapplication BOOLEAN DEFAULT FALSE;
+
+ALTER TABLE eg_sw_connection_audit ADD COLUMN IF NOT EXISTS isoldapplication BOOLEAN DEFAULT FALSE;

@@ -1,0 +1,71 @@
+{
+	"variables": [],
+	"info": {
+		"name": "SurrenderReasonNegative",
+		"_postman_id": "771f2fbe-d3cf-6bb5-120f-c1215cf7419e",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8480/egf-instrument/surrenderreasons/_create",
+			"request": {
+				"url": "localhost:8480/egf-instrument/surrenderreasons/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"requestInfo\":{\n      \"resMsgId\":\"placeholder\",\n      \"status\":\"200\",\n      \"apiId\":null,\n      \"ver\":null,\n      \"ts\":\"01-01-2017 01:01:01\",\n      \"key\":null,\n      \"authToken\":\"\",\n      \"userInfo\":{\n         \"id\":1\n      }\n   },\n   \"surrenderReasons\":[\n   \t\t{\n\t\t\t\"name\":\"Reason4\",\n\t\t\t\"description\": \"Reason4 Description\"\n   \t\t}\n   \t]\n}"
+				},
+				"description": "Surrender Reason create failed because no tenantId specifieds"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8480/egf-instrument/surrenderreasons/_update",
+			"request": {
+				"url": "localhost:8480/egf-instrument/surrenderreasons/_update",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"requestInfo\":{\n      \"resMsgId\":\"placeholder\",\n      \"status\":\"200\",\n      \"apiId\":null,\n      \"ver\":null,\n      \"ts\":\"01-01-2017 01:01:01\",\n      \"key\":null,\n      \"authToken\":\"\",\n      \"userInfo\":{\n         \"id\":1\n      }\n   },\n   \"surrenderReasons\":[\n   \t\t{\n   \t\t\t\"id\":\"b7263b99e85b41449be5b675f286c043\",\n\t\t\t\"name\":\"Reason3\",\n\t\t\t\"description\": \"Reason3 Description Update\"\n   \t\t}\n   \t]\n}"
+				},
+				"description": "SurrenderReason Update filed because no tenantId specified"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8480/egf-instrument/surrenderreasons/_delete",
+			"request": {
+				"url": "localhost:8480/egf-instrument/surrenderreasons/_delete",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"requestInfo\":{\n      \"resMsgId\":\"placeholder\",\n      \"status\":\"200\",\n      \"apiId\":null,\n      \"ver\":null,\n      \"ts\":\"01-01-2017 01:01:01\",\n      \"key\":null,\n      \"authToken\":\"\",\n      \"userInfo\":{\n         \"id\":1\n      }\n   },\n   \"surrenderReasons\":[\n   \t{\n   \t\t\n   \t}\n   \t]\n}"
+				},
+				"description": "SurrenderReason delete fails because no ID is specified"
+			},
+			"response": []
+		}
+	]
+}

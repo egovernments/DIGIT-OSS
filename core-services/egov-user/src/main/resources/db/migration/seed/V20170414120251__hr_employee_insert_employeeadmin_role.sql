@@ -1,0 +1,2 @@
+insert into eg_role (id,name,code,description,createddate,createdby,lastmodifiedby,lastmodifieddate,version,tenantid)values
+(nextval('SEQ_EG_ROLE'),'Employee Admin','EMPLOYEE ADMIN','Employee Administrator',now(),1,1,now(),0,'ap.public');

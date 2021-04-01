@@ -1,0 +1,686 @@
+{
+    "key": "ws-estimationnotice",
+    "config": {
+        "defaultStyle": {
+            "font": "Cambay"
+        },
+        "content": [
+            {
+                "style": "ws-head",
+                "table": {
+                    "widths": [
+                        60,
+                        "*",
+                        120
+                    ],
+                    "body": [
+                        [
+                            {
+                                "image": "{{logoImage}}",
+                                "width": 50,
+                                "height": 61.25,
+                                "margin": [
+                                    12,
+                                    10,
+                                    12,
+                                    10
+                                ]
+                            },
+                            {
+                                "stack": [
+                                    {
+                                        "text": "{{tenantName}} - {{UAT}}",
+                                        "style": "receipt-logo-header",
+                                        "margin": [
+                                            0,
+                                            0,
+                                            0,
+                                            20
+                                        ]
+                                    },
+                                    {
+                                        "text": "{{estimation_notice_header}} {{service}} {{connection_header}}",
+                                        "style": "receipt-logo-header"
+                                    }
+                                ],
+                                "alignment": "center",
+                                "margin": [
+                                    10,
+                                    30,
+                                    0,
+                                    0
+                                ]
+                            }
+                        ]
+                    ]
+                },
+                "layout": "noBorders"
+            },
+            {
+                "style": "ws-table-property",
+                "table": {
+                    "widths": [
+                        "103%"
+                    ],
+                    "body": [
+                        [
+                            {
+                                "table": {
+                                    "widths": [
+                                        "16%",
+                                        "34%",
+                                        "18%",
+                                        "32%"
+                                    ],
+                                    "body": [
+                                        [
+                                            {
+                                                "text": "{{app_no}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": ": {{appNo}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": "{{app_date}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": ": {{appDate}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "{{user_name}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": ": {{name}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": "{{guardian_name}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": ": {{guardianName}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "{{usage_type}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": ": {{usageType}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": "{{mobile_no}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": ": {{mobileNumber}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "{{house_no}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": ": {{houseNo}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": " ",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": " ",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "{{user_address}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": ": {{address}}, PIN:{{pincode}}",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": " ",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            },
+                                            {
+                                                "text": " ",
+                                                "border": [
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false
+                                                ],
+                                                "style": "ws-sub-table"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                "border": [
+                                    false,
+                                    false,
+                                    false,
+                                    false
+                                ]
+                            }
+                        ]
+                    ]
+                },
+                "layout": {}
+            },
+            {
+                "text": "{{estimation_header}} {{service}} {{connection_header}}",
+                "style": "receipt-logo-header",
+                "alignment": "center"
+            },
+            {
+                "style": "ws-table-property",
+                "table": {
+                    "widths": [
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            {
+                                "table": {
+                                    "widths": [
+                                        "auto",
+                                        "*",
+                                        "*"
+                                    ],
+                                    "body": [
+                                        [
+                                            {
+                                                "text": "{{sl_no}}",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{fee_estimate}}",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{amount}}",
+                                                "alignment": "center"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "1.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{form_fee}}"
+                                            },
+                                            {
+                                                "text": "{{formFee}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "2.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{scrutiny_fee}}"
+                                            },
+                                            {
+                                                "text": "{{ScrutinyFee}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "3.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{one_time_fee}}"
+                                            },
+                                            {
+                                                "text": "{{oneTimeFee}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "4.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{other_charge}}"
+                                            },
+                                            {
+                                                "text": "{{otherCharge}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "5.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{road_charge}}"
+                                            },
+                                            {
+                                                "text": "{{roadCharge}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "6.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{security_charge}}"
+                                            },
+                                            {
+                                                "text": "{{securityCharge}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "7.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{tax_cess}}"
+                                            },
+                                            {
+                                                "text": "{{taxCess}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "8.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{penalty}}"
+                                            },
+                                            {
+                                                "text": "{{penaltyAmount}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "9.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{rebate}}"
+                                            },
+                                            {
+                                                "text": "{{rebateAmount}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "10.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{roundOff}}"
+                                            },
+                                            {
+                                                "text": "{{roundOffAmount}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "(+)",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{comments}}"
+                                            },
+                                            {
+                                                "text": "{{penaltyComments}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": " "
+                                            },
+                                            {
+                                                "text": "{{grand_total}}"
+                                            },
+                                            {
+                                                "text": "{{totalAmount}}",
+                                                "alignment": "right"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                "border": [
+                                    false,
+                                    false,
+                                    false,
+                                    false
+                                ]
+                            }
+                        ]
+                    ]
+                },
+                "layout": {}
+            },
+            {
+                "text": "{{approved_by}}",
+                "alignment": "center",
+                "margin": [
+                    -39,
+                    -30,
+                    -38,
+                    0
+                ]
+            }
+        ],
+        "styles": {
+            "ws-head": {
+                "margin": [
+                    -39,
+                    -38,
+                    -38,
+                    0
+                ]
+            },
+            "receipt-logo-header": {
+                "color": "#000000",
+                "fontFamily": "Cambay",
+                "fontSize": 14,
+                "bold": true,
+                "letterSpacing": 0.74,
+                "margin": [
+                    0,
+                    -10,
+                    0,
+                    5
+                ]
+            },
+            "ws-table": {
+                "fontSize": 12,
+                "color": "#484848",
+                "margin": [
+                    -25,
+                    18,
+                    -8,
+                    10
+                ]
+            },
+            "ws-table-property": {
+                "fontSize": 12,
+                "color": "#484848",
+                "margin": [
+                    -25,
+                    18,
+                    -8,
+                    50
+                ]
+            },
+            "header": {
+                "color": "#000000",
+                "textTransform": "uppercase",
+                "bold": true,
+                "fontSize": 12,
+                "fontWeight": 500,
+                "margin": [
+                    -25,
+                    15,
+                    0,
+                    -10
+                ]
+            },
+            "ws-sub-table-value": {
+                "color": "#000000",
+                "fontSize": 12,
+                "fontWeight": 500
+            },
+            "ws-sub-table": {
+                "color": "#000000",
+                "bold": true,
+                "fontSize": 12,
+                "fontWeight": 400,
+                "margin": [
+                    3,
+                    8,
+                    0,
+                    0
+                ]
+            },
+            "qr-image": {
+                "margin": [
+                    -40,
+                    -1,
+                    -3,
+                    0
+                ],
+                "color": "#484848",
+                "alignment": "right",
+                "backgroundColor": "#dddddd"
+            },
+            "receipt-table-value": {
+                "color": "#000000",
+                "bold": true,
+                "fontSize": 12,
+                "fontWeight": 500,
+                "margin": [
+                    5,
+                    5,
+                    0,
+                    0
+                ]
+            },
+            "receipt-table-value-total": {
+                "color": "#000000",
+                "bold": true,
+                "fontSize": 12,
+                "fontWeight": 500,
+                "alignment": "right",
+                "margin": [
+                    0,
+                    5,
+                    30,
+                    0
+                ]
+            },
+            "receipt-table-value-down": {
+                "color": "#000000",
+                "bold": false,
+                "fontSize": 12,
+                "fontWeight": 400,
+                "alignment": "left",
+                "margin": [
+                    3,
+                    5,
+                    0,
+                    5
+                ]
+            },
+            "receipt-table-value2": {
+                "color": "#000000",
+                "bold": false,
+                "fontSize": 12,
+                "fontWeight": 500,
+                "margin": [
+                    3,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "receipt-table-value-cont": {
+                "color": "#000000",
+                "bold": false,
+                "fontSize": 11,
+                "fontWeight": 400,
+                "margin": [
+                    3,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "receipt-table": {
+                "color": "#484848",
+                "bold": true,
+                "fontSize": 12,
+                "fontWeight": 400,
+                "margin": [
+                    -30,
+                    5,
+                    0,
+                    0
+                ]
+            },
+            "receipt-table2": {
+                "color": "#000000",
+                "bold": true,
+                "fontSize": 12,
+                "fontWeight": 500,
+                "margin": [
+                    3,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,83 @@
+ServiceMaps:
+ serviceName: lcms
+ version: 1.0.0
+ mappings:
+  - topic: lcms-opinion-create
+    indexes:
+    - name: opinion
+      type: opinion_type
+      id: $.code
+      isBulk: true
+      jsonPath: $.opinions.*
+
+  - topic: lcms-opinion-update
+    indexes:
+    - name: opinion
+      type: opinion
+      id: $.code
+      isBulk: true
+      jsonPath: $.opinions.*
+      
+  - topic: lcms-parawisecomment-create
+    indexes:
+    - name: case
+      type: case_type
+      id: $.code
+      isBulk: true
+      jsonPath: $.cases.*.parawisecomments.*
+
+  - topic: lcms-parawisecomment-update
+    indexes:
+    - name: case
+      type: case_type
+      id: $.code
+      isBulk: true
+      jsonPath: $.cases.*.parawisecomments.*
+
+  - topic: advocate-payment-create
+    indexes:
+    - name: advocatepayment
+      type: advocatepayment_type
+      id: $.code
+      isBulk: true
+      jsonPath: $.advocatePayments.*
+
+  - topic: advocate-payment-update
+    indexes:
+    - name: advocatepayment
+      type: advocatepayment_type
+      id: $.code
+      isBulk: true
+      jsonPath: $.advocatePayments.*
+
+  - topic: lcms-create-summon-validated
+    indexes:
+    - name: case
+      type: case_type
+      id: $.code
+      isBulk: false
+      jsonPath: $.cases.*
+
+  - topic: lcms-update-summon
+    indexes:
+    - name: case
+      type: case_type
+      id: $.code
+      isBulk: false
+      jsonPath: $.cases.*
+
+  - topic: lcms-assign-advocate
+    indexes:
+    - name: case
+      type: case_type
+      id: $.code
+      isBulk: false
+      jsonPath: $.cases.*
+
+  - topic: lcms-create-vakalatnama
+    indexes:
+    - name: case
+      type: case_type
+      id: $.code
+      isBulk: false
+      jsonPath: $.cases.*

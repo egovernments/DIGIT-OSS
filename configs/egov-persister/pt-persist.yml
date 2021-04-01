@@ -1,0 +1,582 @@
+serviceMaps:
+ serviceName: Property Tax Service
+ mappings:
+ - version: 1.0
+   name: property tax create
+   description: create property tax in egpt_property
+   fromTopic: property-create-validated
+   queryMaps: 
+    - query: INSERT INTO egpt_property (id,tenantId, upicNumber, oldUpicNumber, vltUpicNumber,creationReason, assessmentDate,occupancyDate, gisRefNo,isAuthorised, isUnderWorkflow, channel, createdBy,lastModifiedBy, createdTime,lastModifiedTime,sequenceNo,demands,oldestUpicNumber)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      basePath: $.properties.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.id
+         
+       - jsonPath: $.properties.*.tenantId
+         
+       - jsonPath: $.properties.*.upicNumber
+         
+       - jsonPath: $.properties.*.oldUpicNumber
+         
+       - jsonPath: $.properties.*.vltUpicNumber
+
+       - jsonPath: $.properties.*.creationReason
+         
+       - jsonPath: $.properties.*.assessmentDate
+         type: DATE
+         dbType: DATE
+       
+       - jsonPath: $.properties.*.occupancyDate
+         type: DATE
+         dbType: DATE
+
+       - jsonPath: $.properties.*.gisRefNo
+         
+       - jsonPath: $.properties.*.isAuthorised
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.isUnderWorkflow
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.channel
+         
+       - jsonPath: $.properties.*.auditDetails.createdBy
+
+       - jsonPath: $.properties.*.auditDetails.lastModifiedBy
+         
+       - jsonPath: $.properties.*.auditDetails.createdTime
+         type: LONG
+
+       - jsonPath: $.properties.*.auditDetails.lastModifiedTime
+         type: LONG 
+         
+       - jsonPath: $.properties.*.sequenceNo
+         type: INT
+       
+       - jsonPath: $.properties.*.demandsJsonObject
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.properties.*.oldestUpicNumber
+
+    - query: INSERT INTO egpt_propertydetails (id, source, regdDocNo, regdDocDate,reason, status, isVerified,verificationDate, isExempted, exemptionReason, propertyType, category, usage,department, apartment, siteLength, siteBreadth, sitalArea,totalBuiltupArea, undividedShare, noOfFloors, isSuperStructure, landOwner, floorType,woodType, roofType, wallType, stateId, applicationNo, createdBy, lastModifiedBy,createdTime, lastModifiedTime, property, taxCalculations,factors,assessmentDates,builderDetails,bpaNo,bpaDate,subUsage)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      basePath: $.properties.*.propertyDetail
+      jsonMaps:
+       - jsonPath: $.properties.*.propertyDetail.id
+       
+       - jsonPath: $.properties.*.propertyDetail.source
+         
+       - jsonPath: $.properties.*.propertyDetail.regdDocNo
+
+       - jsonPath: $.properties.*.propertyDetail.regdDocDate
+         type: DATE
+         dbType: DATE
+         
+       - jsonPath: $.properties.*.propertyDetail.reason
+         
+       - jsonPath: $.properties.*.propertyDetail.status
+
+       - jsonPath: $.properties.*.propertyDetail.isVerified
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.propertyDetail.verificationDate
+         type: DATE
+         dbType: DATE
+       
+       - jsonPath: $.properties.*.propertyDetail.isExempted
+         type: BOOLEAN
+
+       - jsonPath: $.properties.*.propertyDetail.exemptionReason
+         
+       - jsonPath: $.properties.*.propertyDetail.propertyType
+         
+       - jsonPath: $.properties.*.propertyDetail.category
+         
+       - jsonPath: $.properties.*.propertyDetail.usage
+         
+       - jsonPath: $.properties.*.propertyDetail.department
+         
+       - jsonPath: $.properties.*.propertyDetail.apartment
+
+       - jsonPath: $.properties.*.propertyDetail.siteLength
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.siteBreadth
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.sitalArea
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.totalBuiltupArea
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.undividedShare
+         type: DOUBLE
+       
+       - jsonPath: $.properties.*.propertyDetail.noOfFloors
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail.isSuperStructure
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.propertyDetail.landOwner
+         
+       - jsonPath: $.properties.*.propertyDetail.floorType
+         
+       - jsonPath: $.properties.*.propertyDetail.woodType
+         
+       - jsonPath: $.properties.*.propertyDetail.roofType
+         
+       - jsonPath: $.properties.*.propertyDetail.wallType
+         
+       - jsonPath: $.properties.*.propertyDetail.stateId
+
+       - jsonPath: $.properties.*.propertyDetail.applicationNo
+         
+       - jsonPath: $.properties.*.propertyDetail.auditDetails.createdBy
+         
+       - jsonPath: $.properties.*.propertyDetail.auditDetails.lastModifiedBy
+
+       - jsonPath: $.properties.*.propertyDetail.auditDetails.createdTime
+         type: LONG
+         
+       - jsonPath: $.properties.*.propertyDetail.auditDetails.lastModifiedTime
+         type: LONG
+
+       - jsonPath: $.properties.*.id
+         
+       - jsonPath: $.properties.*.propertyDetail.taxCalculations
+         type: JSON
+         dbType: JSONB
+         
+       - jsonPath: $.properties.*.propertyDetail.factors
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.properties.*.propertyDetail.assessmentDates
+         type: JSON
+         dbType: JSONB  
+         
+       - jsonPath: $.properties.*.propertyDetail.builderDetails
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.properties.*.propertyDetail.bpaNo
+         
+       - jsonPath: $.properties.*.propertyDetail.bpaDate
+
+       - jsonPath: $.properties.*.propertyDetail.subUsage
+
+
+    - query: INSERT INTO egpt_Address (id, tenantId, latitude, longitude, addressNumber, addressLine1, addressLine2, landmark, city, pincode, detail,createdBy, lastModifiedBy, createdTime, lastModifiedTime, property, surveyNo, plotNo )VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      basePath: $.properties.*.address
+      jsonMaps:
+
+       - jsonPath: $.properties.*.address.id
+      
+       - jsonPath: $.properties.*.address.tenantId
+
+       - jsonPath: $.properties.*.address.latitude
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.address.longitude
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.address.addressNumber
+      
+       - jsonPath: $.properties.*.address.addressLine1
+
+       - jsonPath: $.properties.*.address.addressLine2
+
+       - jsonPath: $.properties.*.address.landmark
+        
+       - jsonPath: $.properties.*.address.city
+  
+       - jsonPath: $.properties.*.address.pincode
+      
+       - jsonPath: $.properties.*.address.detail
+
+       - jsonPath: $.properties.*.address.auditDetails.createdBy
+         
+       - jsonPath: $.properties.*.address.auditDetails.lastModifiedBy
+
+       - jsonPath: $.properties.*.address.auditDetails.createdTime
+         type: LONG
+
+       - jsonPath: $.properties.*.address.auditDetails.lastModifiedTime
+         type: LONG
+
+       - jsonPath: $.properties.*.id
+         type: LONG
+
+       - jsonPath: $.properties.*.address.surveyNo
+         
+       - jsonPath: $.properties.*.address.plotNo
+
+
+    - query: INSERT INTO egpt_floors (id,floorNo,createdBy, lastModifiedBy, createdTime, lastModifiedTime, propertydetails)VALUES(?,?,?,?,?,?,?);
+      basePath: $.properties.*.propertyDetail.floors.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.propertyDetail.floors.*.id
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.floorNo
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.auditDetails.createdBy
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.auditDetails.lastModifiedBy
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.auditDetails.createdTime
+         type: LONG
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.auditDetails.lastModifiedTime
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail[?( {id} in @.floors[*].id)].id
+         
+    - query: INSERT INTO egpt_unit (id, unitNo, unitType, length,width,builtupArea,assessableArea,bpaBuiltupArea,bpaNo,bpaDate,usage,occupancytype,occupierName,firmName,rentCollected, structure, age,exemptionReason, isStructured, occupancyDate, constCompletionDate, manualArv, arv,electricMeterNo, waterMeterNo, createdBy, lastModifiedBy, createdTime, lastModifiedTime,floor,isAuthorised,constructionStartDate,landCost,buildingCost,subusage,carpetArea,exemptionArea,rv) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      basePath: $.properties.*.propertyDetail.floors.*.units.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.id
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.unitNo
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.unitType
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.length
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.width
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.builtupArea
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.assessableArea
+         type: DOUBLE    
+        
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.bpaBuiltupArea
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.bpaNo
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.bpaDate
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.usage
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.occupancyType
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.occupierName
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.firmName
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.rentCollected
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.structure
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.age
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.exemptionReason
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.isStructured
+         type: BOOLEAN 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.occupancyDate
+         type: DATE
+         dbType: DATE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.constCompletionDate
+         type: DATE
+         dbType: DATE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.manualArv
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.arv
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.electricMeterNo
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.waterMeterNo
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.auditDetails.createdBy
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.auditDetails.lastModifiedBy
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.auditDetails.createdTime
+         type: LONG 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.auditDetails.lastModifiedTime
+         type: LONG
+         
+       - jsonPath: $.properties.*.propertyDetail.floors[?( {id} in @.units[*].id)].id
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.isAuthorised
+         type: BOOLEAN 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.constructionStartDate
+         type: DATE
+         dbType: DATE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.landCost
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.buildingCost
+         type: DOUBLE  
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.subUsage
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.carpetArea
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.exemptionArea
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.rv
+         type: DOUBLE
+
+    - query: INSERT INTO egpt_unit (id, unitNo, unitType, length,width,builtupArea,assessableArea,bpaBuiltupArea,bpaNo,bpaDate,usage,occupancytype,occupierName,firmName,rentCollected, structure, age,exemptionReason, isStructured, occupancyDate, constCompletionDate, manualArv, arv,electricMeterNo, waterMeterNo, createdBy, lastModifiedBy, createdTime, lastModifiedTime,floor,parentid,isAuthorised,constructionStartDate,landCost,buildingCost,subusage,carpetArea,exemptionArea,rv) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      basePath: $.properties.*.propertyDetail.floors.*.units.*.units.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.id
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.unitNo
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.unitType
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.length
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.width
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.builtupArea
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.assessableArea
+         type: DOUBLE    
+        
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.bpaBuiltupArea
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.bpaNo
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.bpaDate
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.usage
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.occupancyType
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.occupierName
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.firmName
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.rentCollected
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.structure
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.age
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.exemptionReason
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.isStructured
+         type: BOOLEAN 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.occupancyDate
+         type: DATE
+         dbType: DATE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.constCompletionDate
+         type: DATE
+         dbType: DATE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.manualArv
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.arv
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.electricMeterNo
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.waterMeterNo
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.auditDetails.createdBy
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.auditDetails.lastModifiedBy
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.auditDetails.createdTime
+         type: LONG 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.auditDetails.lastModifiedTime
+         type: LONG
+         
+       - jsonPath: $.properties.*.propertyDetail.floors[?( {id} in @.units[*].id)].id
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units[?( {id} in @.units[*].id)].id
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.isAuthorised
+         type: BOOLEAN 
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.constructionStartDate
+         type: DATE
+         dbType: DATE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.landCost
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.buildingCost
+         type: DOUBLE  
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.subUsage
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.carpetArea
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.exemptionArea
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.propertyDetail.floors.*.units.*.units.*.rv
+         type: DOUBLE
+         
+    - query: INSERT INTO egpt_document (id, fileStore, createdBy, lastModifiedBy, createdTime, lastModifiedTime,propertydetails,documenttype) VALUES(?,?,?,?,?,?,?,?);
+      basePath: $.properties.*.propertyDetail.documents.*
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.propertyDetail.documents.*.id
+
+       - jsonPath: $.properties.*.propertyDetail.documents.*.fileStore
+         
+       - jsonPath: $.properties.*.propertyDetail.documents.*.auditDetails.createdBy
+         
+       - jsonPath: $.properties.*.propertyDetail.documents.*.auditDetails.lastModifiedBy
+
+       - jsonPath: $.properties.*.propertyDetail.documents.*.auditDetails.createdTime
+         type: LONG                    
+         
+       - jsonPath: $.properties.*.propertyDetail.documents.*.auditDetails.lastModifiedTime
+         type: LONG
+
+       - jsonPath: $.properties.*.propertyDetail[?({id} in @.documents[*].id)].id
+         
+       - jsonPath: $.properties.*.propertyDetail.documents.*.documentType
+
+
+    - query: INSERT INTO egpt_vacantland (id,surveyNumber,pattaNumber, marketValue,capitalValue,layoutApprovedAuth,layoutPermissionNo,layoutPermissionDate, resdPlotArea,nonResdPlotArea,createdBy, lastModifiedBy, createdTime,lastModifiedTime, property) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      basePath: $.properties.*.vacantLand
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.vacantLand.id
+         
+       - jsonPath: $.properties.*.vacantLand.surveyNumber
+         
+       - jsonPath: $.properties.*.vacantLand.pattaNumber
+
+       - jsonPath: $.properties.*.vacantLand.marketValue
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.vacantLand.capitalValue
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.vacantLand.layoutApprovedAuth
+
+       - jsonPath: $.properties.*.vacantLand.layoutPermissionNo
+         
+       - jsonPath: $.properties.*.vacantLand.layoutPermissionDate
+
+       - jsonPath: $.properties.*.vacantLand.resdPlotArea
+         type: DOUBLE
+         
+       - jsonPath: $.properties.*.vacantLand.nonResdPlotArea
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.vacantLand.auditDetails.createdBy
+         
+       - jsonPath: $.properties.*.vacantLand.auditDetails.lastModifiedBy
+
+       - jsonPath: $.properties.*.vacantLand.auditDetails.createdTime
+         type: LONG                    
+         
+       - jsonPath: $.properties.*.vacantLand.auditDetails.lastModifiedTime
+         type: LONG   
+         
+       - jsonPath: $.properties.*.id
+         type: LONG
+         
+
+    - query: INSERT INTO egpt_propertylocation (id,revenueBoundary, locationBoundary, adminBoundary, northBoundedBy,eastBoundedBy, westBoundedBy, southBoundedBy,createdBy, lastModifiedBy, createdTime,lastModifiedTime,property,guidanceValueBoundary) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+      basePath: $.properties.*.boundary
+      jsonMaps:
+       
+       - jsonPath: $.properties.*.boundary.id
+         
+       - jsonPath: $.properties.*.boundary.revenueBoundary.id
+         type: LONG
+         
+       - jsonPath: $.properties.*.boundary.locationBoundary.id
+         type: LONG
+
+       - jsonPath: $.properties.*.boundary.adminBoundary.id
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.boundary.northBoundedBy
+         
+       - jsonPath: $.properties.*.boundary.eastBoundedBy
+
+       - jsonPath: $.properties.*.boundary.westBoundedBy
+         
+       - jsonPath: $.properties.*.boundary.southBoundedBy
+         
+       - jsonPath: $.properties.*.boundary.auditDetails.createdBy
+         
+       - jsonPath: $.properties.*.boundary.auditDetails.lastModifiedBy
+
+       - jsonPath: $.properties.*.boundary.auditDetails.createdTime
+         type: LONG                    
+         
+       - jsonPath: $.properties.*.boundary.auditDetails.lastModifiedTime
+         type: LONG   
+         
+       - jsonPath: $.properties.*.id
+         type: LONG
+         
+       - jsonPath: $.properties.*.boundary.guidanceValueBoundary
+         type: LONG      
+         
+    - query: INSERT INTO egpt_property_owner (id, owner,property,isPrimaryOwner, isSecondaryOwner,ownerShipPercentage, ownerType,createdBy, lastModifiedBy, createdTime, lastModifiedTime ) VALUES(?,?,?,?,?,?,?,?,?,?,?);
+      basePath: $.properties.*.owners.*
+      jsonMaps:
+       
+
+       - jsonPath: $.properties.*.owners.*.id
+
+       - jsonPath: $.properties.*.owners.*.owner
+         type: LONG
+         
+       - jsonPath: $.properties[?({id} in @.owners[*].id)].id
+
+       - jsonPath: $.properties.*.owners.*.isPrimaryOwner
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.owners.*.isSecondaryOwner
+         type: BOOLEAN
+         
+       - jsonPath: $.properties.*.owners.*.ownerShipPercentage
+         type: DOUBLE
+
+       - jsonPath: $.properties.*.owners.*.ownerType
+        
+       - jsonPath: $.properties.*.owners.*.auditDetails.createdBy
+         
+       - jsonPath: $.properties.*.owners.*.auditDetails.lastModifiedBy
+
+       - jsonPath: $.properties.*.owners.*.auditDetails.createdTime
+         type: LONG                    
+         
+       - jsonPath: $.properties.*.owners.*.auditDetails.lastModifiedTime
+         type: LONG

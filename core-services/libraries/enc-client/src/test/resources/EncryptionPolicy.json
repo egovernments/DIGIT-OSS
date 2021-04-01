@@ -1,0 +1,80 @@
+[
+  {
+    "key" : "User",
+    "attributeList" : [
+      {
+        "jsonPath" : "name",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "mobileNumber",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "emailId",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "username",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "altContactNumber",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "pan",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "aadhaarNumber",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "guardian",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "permanentAddress/address",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "correspondenceAddress/address",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "addresses/*/address",
+        "type" : "Normal"
+      }
+    ]
+  },
+  {
+    "key" : "UserSearchCriteria",
+    "attributeList" : [
+      {
+        "jsonPath" : "userName",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "name",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "mobileNumber",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "aadhaarNumber",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "pan",
+        "type" : "Normal"
+      },
+      {
+        "jsonPath" : "emailId",
+        "type" : "Normal"
+      }
+    ]
+  }
+]

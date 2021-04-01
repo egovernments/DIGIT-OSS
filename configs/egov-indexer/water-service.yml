@@ -1,0 +1,235 @@
+ServiceMaps:
+ serviceName: Water Service - rainmaker
+ version: 1.0.0
+ mappings:
+  - topic: save-ws-connection
+    configKey: INDEX
+    indexes:
+      - name: water-services
+        type: general
+        id: $.id,$.tenantId
+        jsonPath: $.WaterConnection
+        timeStampField: $.auditDetails.createdTime
+        customJsonMapping:
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
+          fieldMapping:
+          - inJsonPath: $.applicationStatus.state
+            outJsonPath: $.Data.workflow.state
+          - inJsonPath: $.processInstance.action
+            outJsonPath: $.Data.workflow.action
+          - inJsonPath: $.processInstance.assignes.*.uuid
+            outJsonPath: $.Data.workflow.assignes
+          - inJsonPath: $.applicationNo
+            outJsonPath: $.Data.applicationNo
+          - inJsonPath: $.applicationStatus
+            outJsonPath: $.Data.applicationStatus
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.connectionNo
+            outJsonPath: $.Data.connectionNo
+          - inJsonPath: $.oldConnectionNo
+            outJsonPath: $.Data.oldConnectionNo
+          - inJsonPath: $.plumberInfo
+            outJsonPath: $.Data.plumberInfo
+          - inJsonPath: $.connectionHolders
+            outJsonPath: $.Data.connectionHolders
+          - inJsonPath: $.roadType
+            outJsonPath: $.Data.roadType
+          - inJsonPath: $.roadCuttingArea
+            outJsonPath: $.Data.roadCuttingArea
+          - inJsonPath: $.connectionExecutionDate
+            outJsonPath: $.Data.connectionExecutionDate
+          - inJsonPath: $.connectionCategory
+            outJsonPath: $.Data.connectionCategory
+          - inJsonPath: $.connectionType
+            outJsonPath: $.Data.connectionType
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.rainWaterHarvesting
+            outJsonPath: $.Data.rainWaterHarvesting
+          - inJsonPath: $.waterSource
+            outJsonPath: $.Data.waterSource
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.meterId
+            outJsonPath: $.Data.meterId
+          - inJsonPath: $.meterInstallationDate
+            outJsonPath: $.Data.meterInstallationDate
+          - inJsonPath: $.proposedPipeSize
+            outJsonPath: $.Data.proposedPipeSize
+          - inJsonPath: $.proposedTaps
+            outJsonPath: $.Data.proposedTaps
+          - inJsonPath: $.pipeSize
+            outJsonPath: $.Data.pipeSize
+          - inJsonPath: $.noOfTaps
+            outJsonPath: $.Data.noOfTaps
+          - inJsonPath: $.applicationType
+            outJsonPath: $.Data.applicationType
+          - inJsonPath: $.dateEffectiveFrom
+            outJsonPath: $.Data.dateEffectiveFrom
+          externalUriMapping:
+          - path: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search
+            queryParam: businessIds=$.applicationNo,history=true,tenantId=$.tenantId
+            apiRequest: {"RequestInfo":{"apiId":"org.egov.pt","ver":"1.0","ts":1502890899493,"action":"asd","did":"4354648646","key":"xyz","msgId":"654654","requesterId":"61","authToken":"d9994555-7656-4a67-ab3a-a952a0d4dfc8","userInfo":{"id":1,"uuid":"1fec8102-0e02-4d0a-b283-cd80d5dab067","type":"EMPLOYEE","tenantId":"pb.amritsar","roles":[{"name":"Employee","code":"EMPLOYEE","tenantId":"pb.amritsar"}]}}}
+            uriResponseMapping:
+            - inJsonPath: $.ProcessInstances
+              outJsonPath: $.Data.history
+     
+
+  - topic: update-ws-connection
+    configKey: INDEX
+    indexes:
+      - name: water-services
+        type: general
+        id: $.id,$.tenantId
+        jsonPath: $.WaterConnection
+        timeStampField: $.auditDetails.lastModifiedTime
+        customJsonMapping:
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
+          fieldMapping:
+          - inJsonPath: $.applicationStatus.state
+            outJsonPath: $.Data.workflow.state
+          - inJsonPath: $.processInstance.action
+            outJsonPath: $.Data.workflow.action
+          - inJsonPath: $.processInstance.assignes.*.uuid
+            outJsonPath: $.Data.workflow.assignes
+          - inJsonPath: $.applicationNo
+            outJsonPath: $.Data.applicationNo
+          - inJsonPath: $.applicationStatus
+            outJsonPath: $.Data.applicationStatus
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.connectionNo
+            outJsonPath: $.Data.connectionNo
+          - inJsonPath: $.oldConnectionNo
+            outJsonPath: $.Data.oldConnectionNo
+          - inJsonPath: $.plumberInfo
+            outJsonPath: $.Data.plumberInfo
+          - inJsonPath: $.connectionHolders
+            outJsonPath: $.Data.connectionHolders
+          - inJsonPath: $.roadType
+            outJsonPath: $.Data.roadType
+          - inJsonPath: $.roadCuttingArea
+            outJsonPath: $.Data.roadCuttingArea
+          - inJsonPath: $.connectionExecutionDate
+            outJsonPath: $.Data.connectionExecutionDate
+          - inJsonPath: $.connectionCategory
+            outJsonPath: $.Data.connectionCategory
+          - inJsonPath: $.connectionType
+            outJsonPath: $.Data.connectionType
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.rainWaterHarvesting
+            outJsonPath: $.Data.rainWaterHarvesting
+          - inJsonPath: $.waterSource
+            outJsonPath: $.Data.waterSource
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.meterId
+            outJsonPath: $.Data.meterId
+          - inJsonPath: $.meterInstallationDate
+            outJsonPath: $.Data.meterInstallationDate
+          - inJsonPath: $.proposedPipeSize
+            outJsonPath: $.Data.proposedPipeSize
+          - inJsonPath: $.proposedTaps
+            outJsonPath: $.Data.proposedTaps
+          - inJsonPath: $.pipeSize
+            outJsonPath: $.Data.pipeSize
+          - inJsonPath: $.noOfTaps
+            outJsonPath: $.Data.noOfTaps
+          - inJsonPath: $.applicationType
+            outJsonPath: $.Data.applicationType
+          - inJsonPath: $.dateEffectiveFrom
+            outJsonPath: $.Data.dateEffectiveFrom
+          externalUriMapping:
+          - path: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search
+            queryParam: businessIds=$.applicationNo,history=true,tenantId=$.tenantId
+            apiRequest: {"RequestInfo":{"apiId":"org.egov.pt","ver":"1.0","ts":1502890899493,"action":"asd","did":"4354648646","key":"xyz","msgId":"654654","requesterId":"61","authToken":"d9994555-7656-4a67-ab3a-a952a0d4dfc8","userInfo":{"id":1,"uuid":"1fec8102-0e02-4d0a-b283-cd80d5dab067","type":"EMPLOYEE","tenantId":"pb.amritsar","roles":[{"name":"Employee","code":"EMPLOYEE","tenantId":"pb.amritsar"}]}}}
+            uriResponseMapping:
+            - inJsonPath: $.ProcessInstances
+              outJsonPath: $.Data.history
+              
+  - topic: update-ws-workflow
+    configKey: INDEX
+    indexes:
+      - name: water-services
+        type: general
+        id: $.id,$.tenantId
+        jsonPath: $.WaterConnection
+        timeStampField: $.auditDetails.lastModifiedTime
+        customJsonMapping:
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
+          fieldMapping:
+          - inJsonPath: $.applicationStatus.state
+            outJsonPath: $.Data.workflow.state
+          - inJsonPath: $.processInstance.action
+            outJsonPath: $.Data.workflow.action
+          - inJsonPath: $.processInstance.assignes.*.uuid
+            outJsonPath: $.Data.workflow.assignes
+          - inJsonPath: $.applicationNo
+            outJsonPath: $.Data.applicationNo
+          - inJsonPath: $.applicationStatus
+            outJsonPath: $.Data.applicationStatus
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.connectionNo
+            outJsonPath: $.Data.connectionNo
+          - inJsonPath: $.oldConnectionNo
+            outJsonPath: $.Data.oldConnectionNo
+          - inJsonPath: $.plumberInfo
+            outJsonPath: $.Data.plumberInfo
+          - inJsonPath: $.connectionHolders
+            outJsonPath: $.Data.connectionHolders
+          - inJsonPath: $.roadType
+            outJsonPath: $.Data.roadType
+          - inJsonPath: $.roadCuttingArea
+            outJsonPath: $.Data.roadCuttingArea
+          - inJsonPath: $.connectionExecutionDate
+            outJsonPath: $.Data.connectionExecutionDate
+          - inJsonPath: $.connectionCategory
+            outJsonPath: $.Data.connectionCategory
+          - inJsonPath: $.connectionType
+            outJsonPath: $.Data.connectionType
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.rainWaterHarvesting
+            outJsonPath: $.Data.rainWaterHarvesting
+          - inJsonPath: $.waterSource
+            outJsonPath: $.Data.waterSource
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.meterId
+            outJsonPath: $.Data.meterId
+          - inJsonPath: $.meterInstallationDate
+            outJsonPath: $.Data.meterInstallationDate
+          - inJsonPath: $.proposedPipeSize
+            outJsonPath: $.Data.proposedPipeSize
+          - inJsonPath: $.proposedTaps
+            outJsonPath: $.Data.proposedTaps
+          - inJsonPath: $.pipeSize
+            outJsonPath: $.Data.pipeSize
+          - inJsonPath: $.noOfTaps
+            outJsonPath: $.Data.noOfTaps
+          - inJsonPath: $.applicationType
+            outJsonPath: $.Data.applicationType
+          - inJsonPath: $.dateEffectiveFrom
+            outJsonPath: $.Data.dateEffectiveFrom
+          externalUriMapping:
+          - path: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search
+            queryParam: businessIds=$.applicationNo,history=true,tenantId=$.tenantId
+            apiRequest: {"RequestInfo":{"apiId":"org.egov.pt","ver":"1.0","ts":1502890899493,"action":"asd","did":"4354648646","key":"xyz","msgId":"654654","requesterId":"61","authToken":"d9994555-7656-4a67-ab3a-a952a0d4dfc8","userInfo":{"id":1,"uuid":"1fec8102-0e02-4d0a-b283-cd80d5dab067","type":"EMPLOYEE","tenantId":"pb.amritsar","roles":[{"name":"Employee","code":"EMPLOYEE","tenantId":"pb.amritsar"}]}}}
+            uriResponseMapping:
+            - inJsonPath: $.ProcessInstances
+              outJsonPath: $.Data.history

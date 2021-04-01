@@ -1,0 +1,241 @@
+serviceMaps:
+  serviceName: Payment Service
+  mappings:
+    - version: 1.0
+      name: collection migration
+      description: Inserting payment details into egcl_payment
+      fromTopic: egov-collection-migration-batch
+      queryMaps:
+
+        - query: INSERT into egcl_payment (id, tenantid, totaldue, totalamountpaid, transactionnumber, transactiondate, paymentmode, instrumentdate, instrumentnumber, instrumentstatus, ifsccode, additionaldetails, paidby, mobilenumber, payername, payeraddress, payeremail, payerid, paymentstatus, createdby, createdtime, lastmodifiedby, lastmodifiedtime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          basePath: $.Payments.*
+          jsonMaps:
+            - jsonPath: $.Payments.*.id
+
+            - jsonPath: $.Payments.*.tenantId
+
+            - jsonPath: $.Payments.*.totalDue
+              type: DOUBLE
+
+            - jsonPath: $.Payments.*.totalAmountPaid
+              type: Double
+
+            - jsonPath: $.Payments.*.transactionNumber
+
+            - jsonPath: $.Payments.*.transactionDate
+              type: LONG
+
+            - jsonPath: $.Payments.*.paymentMode
+
+            - jsonPath: $.Payments.*.instrumentDate
+              type: LONG
+
+            - jsonPath: $.Payments.*.instrumentNumber
+
+            - jsonPath: $.Payments.*.instrumentStatus
+
+            - jsonPath: $.Payments.*.ifscCode
+
+            - jsonPath: $.Payments.*.additionalDetails
+              type: JSON
+              dbType: JSONB
+
+            - jsonPath: $.Payments.*.paidBy
+
+            - jsonPath: $.Payments.*.mobileNumber
+
+            - jsonPath: $.Payments.*.payerName
+
+            - jsonPath: $.Payments.*.payerAddress
+
+            - jsonPath: $.Payments.*.payerEmail
+
+            - jsonPath: $.Payments.*.payerId
+
+            - jsonPath: $.Payments.*.paymentStatus
+
+            - jsonPath: $.Payments.*.auditDetails.createdBy
+
+            - jsonPath: $.Payments.*.auditDetails.createdTime
+              type: LONG
+
+            - jsonPath: $.Payments.*.auditDetails.lastModifiedBy
+
+            - jsonPath: $.Payments.*.auditDetails.lastModifiedTime
+              type: LONG
+
+
+
+
+        - query: INSERT into egcl_paymentdetail (id, tenantid, paymentid, due, amountpaid, receiptnumber, receiptdate, receipttype, businessservice, billid, additionaldetails, createdby, createdtime, lastmodifiedby, lastmodifiedtime, manualreceiptnumber, manualreceiptdate) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          basePath: $.Payments.*.paymentDetails.*
+          jsonMaps:
+            - jsonPath: $.Payments.*.paymentDetails.*.id
+
+            - jsonPath: $.Payments.*.paymentDetails.*.tenantId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.paymentId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.totalDue
+              type: DOUBLE
+
+            - jsonPath: $.Payments.*.paymentDetails.*.totalAmountPaid
+              type: DOUBLE
+
+            - jsonPath: $.Payments.*.paymentDetails.*.receiptNumber
+
+            - jsonPath: $.Payments.*.paymentDetails.*.receiptDate
+              type: LONG
+
+            - jsonPath: $.Payments.*.paymentDetails.*.receiptType
+
+            - jsonPath: $.Payments.*.paymentDetails.*.businessService
+
+            - jsonPath: $.Payments.*.paymentDetails.*.billId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.additionalDetails
+              type: JSON
+              dbType: JSONB
+
+            - jsonPath: $.Payments.*.paymentDetails.*.auditDetails.createdBy
+
+            - jsonPath: $.Payments.*.paymentDetails.*.auditDetails.createdTime
+              type: LONG
+
+            - jsonPath: $.Payments.*.paymentDetails.*.auditDetails.lastModifiedBy
+
+            - jsonPath: $.Payments.*.paymentDetails.*.auditDetails.lastModifiedTime
+              type: LONG
+
+            - jsonPath: $.Payments.*.paymentDetails.*.manualReceiptNumber
+
+            - jsonPath: $.Payments.*.paymentDetails.*.manualReceiptDate
+              type: LONG
+
+
+        - query: INSERT into egcl_bill (id, status, iscancelled, additionaldetails, tenantid, collectionmodesnotallowed, partpaymentallowed, isadvanceallowed, minimumamounttobepaid, businessservice, totalamount, consumercode, billnumber, billdate, reasonforcancellation, createdby, createdtime, lastmodifiedby, lastmodifiedtime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          basePath: $.Payments.*.paymentDetails.*.bill
+          jsonMaps:
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.id
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.status
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.isCancelled
+              type: BOOLEAN
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.additionalDetails
+              type: JSON
+              dbType: JSONB
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.tenantId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.collectionModesNotAllowed[0]
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.partPaymentAllowed
+              type: BOOLEAN
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.isAdvanceAllowed
+              type: BOOLEAN
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.minimumAmountToBePaid
+              type: DOUBLE
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.businessService
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.totalAmount
+              type: DOUBLE
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.consumerCode
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billNumber
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDate
+              type: LONG
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.reasonForCancellation
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.auditDetails.createdBy
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.auditDetails.createdTime
+              type: LONG
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.auditDetails.lastModifiedBy
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.auditDetails.lastModifiedTime
+              type: LONG
+
+
+        - query: INSERT into egcl_billdetial (id, tenantid, demandid, billid, amount, amountpaid, fromperiod, toperiod, additionaldetails, channel, voucherheader, boundary, collectiontype, billdescription, expirydate, displaymessage, callbackforapportioning, cancellationremarks) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          basePath: $.Payments.*.paymentDetails.*.bill.billDetails.*
+          jsonMaps:
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.id
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.tenantId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.demandId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.amount
+              type: DOUBLE
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.amountPaid
+              type: DOUBLE
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.fromPeriod
+              type: LONG
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.toPeriod
+              type: LONG
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.additionalDetails
+              type: JSON
+              dbType: JSONB
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.channel
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.voucherHeader
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.boundary
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.collectionType
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billDescription
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.expiryDate
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.displayMessage
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.callBackForApportioning
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.cancellationRemarks
+
+
+        - query: INSERT into egcl_billaccountdetail (id, tenantid, billdetailid, demanddetailid, "order", amount, adjustedamount, isactualdemand, taxheadcode, additionaldetails) values(?,?,?,?,?,?,?,?,?,?)
+          basePath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*
+          jsonMaps:
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.id
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.tenantId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.billDetailId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.demandDetailId
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.order
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.amount
+              type: DOUBLE
+              
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.adjustedAmount
+              type: DOUBLE              
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.isActualDemand
+              type: BOOLEAN
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.taxHeadCode
+
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.additionalDetails
+              type: JSON
+              dbType: JSONB
+

@@ -1,0 +1,17 @@
+{
+  "ResponseInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": "200 OK"
+  },
+  "BoundaryType": [
+    {
+      "id": "1",
+      "name": "City",
+      "tenantId": "tenantId"
+    }
+   ]
+}

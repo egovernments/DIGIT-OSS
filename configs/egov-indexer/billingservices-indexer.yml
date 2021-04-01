@@ -1,0 +1,24 @@
+ServiceMaps:
+ serviceName: Billing Service
+ version: 1.0.0
+ mappings:
+  - topic: create-demand-index
+    configKey: INDEX
+    indexes:
+    - name: demandindex-v1
+      type: demand
+      id: $.id, $.tenantId
+      isBulk: true
+      jsonPath: $.Demands
+      timeStampField: $.auditDetail.createdTime
+      
+  - topic: demand-reindex
+    configKey: REINDEX
+    indexes:
+    - name: demandindex-v1
+      type: demand
+      id: $.id, $.tenantId
+      isBulk: true
+      jsonPath: $.hits
+      timeStampField: $.auditDetail.createdTime
+

@@ -1,0 +1,16 @@
+pgr=file:///work-dir/configs/reports/config/pgr-reports.yml
+citizen=file:///work-dir/configs/reports/config/citizen-reports.yml
+asset=file:///work-dir/configs/reports/config/asset-reports.yml
+lcms=file:///work-dir/configs/reports/config/lcms-reports.yml
+inventory=file:///work-dir/configs/reports/config/inventoryReport.yml
+common=file:///work-dir/configs/reports/config/common-reports.yml
+swm=file:///work-dir/configs/reports/config/swm-reports.yml
+works=file:///work-dir/configs/reports/config/works-reports.yml
+rainmaker-pgr=file:///work-dir/configs/reports/config/rainmaker-pgr-reports.yml
+rainmaker-pt=file:///work-dir/configs/reports/config/rainmaker-pt-reports.yml
+finance=file:///work-dir/configs/reports/config/finance-reports.yml
+rainmaker-tl=file:///work-dir/configs/reports/config/rainmaker-tl-reports.yml
+rainmaker-noc=file:///work-dir/configs/reports/config/rainmaker-noc-reports.yml
+rainmaker-common=file:///work-dir/configs/reports/config/rainmaker-common-reports.yml
+epass=file:///work-dir/configs/reports/config/e-pass-reports.yml
+rainmaker-nocsrv=file:///work-dir/configs/reports/config/noc-services-reports.yml

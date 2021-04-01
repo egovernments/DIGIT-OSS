@@ -1,0 +1,13 @@
+{
+    "ResponseInfo": {
+        "apiId": null,
+        "ver": null,
+        "ts": null,
+        "resMsgId": null,
+        "msgId": null,
+        "status": "200 OK"
+    },
+    "ShapeFile": {
+        "fileExist": true
+    }
+}

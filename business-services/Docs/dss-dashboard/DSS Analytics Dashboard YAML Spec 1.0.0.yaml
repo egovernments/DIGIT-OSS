@@ -1,0 +1,369 @@
+
+swagger: '2.0'
+info:
+  title: DSS Analytics APIs
+  description: |
+    APIs for DSS Analytics Dashboard will mainly consist of 2 APIs. 
+    The one which is used to get Configuration based on which the Dashboard has to be painted. 
+    The other one will be the API which gets the data which is needed for the Visualization to paint different Graphs. 
+  version: "1.0.0"
+# the domain of the service, only for example
+host: 'egov-micro-dev.egovernments.org'
+# array of all schemes that the API supports, preferred https
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: '/dashboard/[APIEndPoint]'
+produces:
+  - application/json
+  
+paths:
+  /getDashboardConfig/{dashboardId}:
+    get:
+      summary: API to get the Dashboard Configuration which gives the Visualizations and Layout to paint
+      description: 
+        This endpoint will pass the Dashboard ID from the URL to this API and will get the Dashboard Configuration from
+        the backend which will have the details of the Visualization Layouts which are to be designed in this Dashboard. 
+      tags:
+        - Dashboard
+      parameters:
+        - name: dashboardId
+          in: path
+          description: ID of the Dashboard
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Response for Success State of the API
+          schema:
+            $ref: '#/definitions/DashboardConfigResponse'
+        '400':
+          description: Invalid input. 
+          schema:
+            $ref: '#/definitions/ErrorRes'
+            
+  /getChartV2: 
+    post:
+      summary: Get Chart API will be responding with the Data for each visualization based on the Chart ID which has been sent
+      description:
+        Based on the Chart ID and the Visualization Type and the Request Dates and Filters, the API will aggregate the data and give the data which needs to be painted on Visualization Charts 
+      tags:
+        - Order
+      parameters:
+        - in: body
+          name: order
+          required: true
+          description: This request object contains the Visualization for which the data has to be served. 
+          schema:
+            $ref: '#/definitions/DashboardRequest'
+      responses:
+        '200':
+          description: Response for Success State of the API
+          schema:
+            $ref: '#/definitions/DashboardResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/ErrorRes'
+    
+ 
+definitions:
+  Chart: 
+    type: object
+    properties:
+      id: 
+        type: integer
+        format: int64
+        description: This field holds the Unique Identifier of the Charts
+      name: 
+        type: string
+        description: Name of the Chart
+      code: 
+        type: string
+        description: Unique Code to recognize the Chart
+      chartType: 
+        type: string
+        description: Type of the Chart or Graph which will be painted on the UI for this partifular Chart Data is represented here.
+        format: enum
+          - PIE
+          - BAR
+          - METRIC
+          - LINE
+          - TABLE
+      filter: 
+        type: object
+        description: A map of String and and String to hold the Filters which are applied on this chart
+        additionalProperties: 
+          type: string
+        
+  Dimension: 
+    type: object
+    properties: 
+      height: 
+        type: integer
+        description: Describes the Height of the Visualization 
+      width: 
+        type: integer
+        description: Describes the Width of the Visualization
+        
+  Plot: 
+    type: object
+    properties: 
+      label: 
+        type: string
+        description: Label which has to be printed in the Visualization Charts
+      name: 
+        type: string
+        description: Name of the legends which are to be used in the Charts
+      value: 
+        type: integer
+        format: int64
+        description: Holds the value of plot response
+      symbol: 
+        type: string
+        description: Symbol that has to be used with the Value. Amount or Value or Percentage etc.,
+        
+  Data: 
+    type: object
+    properties: 
+      headerName: 
+        type: string
+        description: Name of the header when the grouping of all the plots are done
+      headerValue: 
+        type: integer
+        format: int64
+        description: Total Value of all the plots are put as Header Value
+      headerSymbol: 
+        type: string
+        description: Symbol which has to be used to represent 
+      plots: 
+        type: array
+        description: Symbol that has to be used with the Value. Amount or Value or Percentage etc.,
+        items: 
+          $ref: "#/definitions/Plot"
+        
+  Visualization: 
+    type: object
+    properties: 
+      id: 
+        type: integer
+        description: Unique Identifier for a Visualization
+      name: 
+        type: string
+        description: Name of the Visualization
+      dimensions:
+        $ref: "#/definitions/Dimension"
+      vizType: 
+        type: string
+        description: Type of Visualization which groups the type of different charts in specific
+      charts:
+        type: array
+        items: 
+          $ref: "#/definitions/Chart"
+          
+  Tab: 
+    type: object
+    properties: 
+      row: 
+        type: integer
+        description: This defines the row number in which this Visualization will have to appear on UI
+      name:
+        type: string
+        description: Name of the tab on which the visualization has to appear is defined here 
+      vizArray:
+        type: array
+        items: 
+          $ref: "#/definitions/Visualization"
+          
+  Dashboard: 
+    type: object
+    properties: 
+      name: 
+        type: string
+        description: Name of the Dashboard
+      id: 
+        type: string
+        description: Unique ID of the Dashboard
+      isActive: 
+        type: boolean
+        description: Active / Inactive Status of the Dashboard
+      style: 
+        type: string
+        description: Type of the Style which will be represented
+        format: enum
+          - LINEAR
+          - TABBED
+      visualizations:
+        type: array
+        items: 
+          $ref: "#/definitions/Tab"
+          
+  RequestDate: 
+    type: object
+    properties:
+      startDate: 
+        type: string
+        description: Request Date Starting Date field 
+      endDate: 
+        type: string
+        description: Request Date Ending Date Field 
+
+  AggregationRequest:
+    type: object
+    properties:
+      visualizationType: 
+        type: string
+        description: Request mentions the type of Visualization which it needs the data for
+        format: enum
+          - PIE
+          - BAR
+          - METRIC
+          - LINE
+          - TABLE
+      visualizationCode: 
+        type: string
+        description: Code of the Visualization for which the data has to be obtained. 
+      queryType: 
+        type: string
+        description: Type of Query which has to be used to get the data for this visualization
+      filter: 
+        type: object
+        description: A map of String and and String to hold the Filters which are applied on this chart
+        additionalProperties: 
+          type: string
+      moduleLevel: 
+        type: string
+        description: Which Module is being represented is to be added here. 
+        format: enum
+          - PT
+          - TL
+          - PGR
+          - HOME_REVENUE
+          - HOME_SERVICES
+      requestDate: 
+        type: object
+        $ref: "#/definitions/RequestDate"
+  
+  DashboardRequest:
+    type: object
+    properties:
+      header: 
+        type: object
+        description: A map of String and and String to hold the Header Filters which are applied on this dashboard
+        additionalProperties: 
+          type: string
+      aggregationRequest:
+        $ref: "#/definitions/AggregationRequest"
+        
+  DashboardConfigResponse:
+    type: object
+    properties:
+      statusInfo: 
+        type: object
+        description: Status Info
+        $ref: "#/definitions/StatusInfo"
+      responseData:
+        type: array
+        items: 
+          $ref: "#/definitions/Dashboard"
+          
+  DashboardResponse:
+    type: object
+    properties:
+      statusInfo: 
+        type: object
+        description: Status Info
+        $ref: "#/definitions/StatusInfo"
+      responseData:
+        type: array
+        items: 
+          $ref: "#/definitions/ChartApiResponse"
+          
+  ChartApiResponse:
+    type: object
+    properties:
+      chartType:
+        type: string
+        description: Type of Chart which are to be used to represent the data on Dashboard
+        maxLength: 128
+      chartFormat:
+        type: string
+        description: Format specifies as which library to be used to paint the visualizations
+        maxLength: 32
+      drillDownChartId:
+        type: string
+        description: Chart ID which is to be used for Drill Downs 
+      filter: 
+        type: object
+        description: A map of String and and String to hold the Filters which are applied on this chart
+        additionalProperties: 
+          type: string
+      data:
+        type: array
+        items: 
+          $ref: "#/definitions/Data"
+        
+  SuccessResponse:
+    type: object
+    properties:
+      status:
+        $ref: "#/definitions/StatusInfo"
+  
+  StatusInfo:
+    type: object
+    readOnly: true
+    description: Status Information object will hold the run time status and the live response obtained from the server for the respective API Call.
+    properties:
+      statusCode:
+        type: string
+        description: unique API ID
+        maxLength: 128
+      statusMessage:
+        type: string
+        description: API version
+        maxLength: 32
+      errorCode:
+        type: integer
+        format: int64
+        description: response time in epoch
+      errorMessage:
+        type: string
+        description: unique response message id (UUID) - will usually be the correlation id from the server
+        maxLength: 256
+        
+  Error:
+    type: object
+    description: Error object will be returned as a part of reponse body in conjunction with ResponseInfo as part of ErrorResponse whenever the request processing status in the ResponseInfo is FAILED. HTTP return in this scenario will usually be HTTP 400. 
+    properties:
+      code:
+        type: string
+        description: Error Code will be module specific error label/code to identiffy the error. All modules should also publish the Error codes with their specific localized values in localization service to ensure clients can print locale specific error messages. Example for error code would be User.NotFound to indicate User Not Found by User/Authentication service. All services must declare their possible Error Codes with brief description in the error response section of their API path.
+      message:
+        type: string
+        description: English locale message of the error code. Clients should make a separate call to get the other locale description if configured with the service. 
+      description:
+        type: string
+        description: Optional long description of the error to help clients take remedial action. This will not be available as part of localization service.
+      params:
+        type: array
+        description: Some error messages may carry replaceable fields (say $1, $2) to provide more context to the message. E.g. Format related errors may want to indicate the actual field for which the format is invalid. Client's should use the values in the param array to replace those fields. 
+        items: 
+          type: string
+    required:
+      - code
+      - message
+      
+  ErrorRes:
+    type: object
+    description: All APIs will return ErrorRes in case of failure which will carry ResponseInfo as metadata and Error object as actual representation of error. In case of bulk apis, some apis may chose to return the array of Error objects to indicate individual failure.
+    properties:
+      statusInfo:
+        $ref: '#/definitions/StatusInfo'
+      errors:
+        description: Error response array corresponding to Request Object array. In case of single object submission or _search related paths this may be an array of one error element
+        type: array
+        minLength: 1
+        items:
+          $ref: '#/definitions/Error'
+    required:
+      - statusInfo

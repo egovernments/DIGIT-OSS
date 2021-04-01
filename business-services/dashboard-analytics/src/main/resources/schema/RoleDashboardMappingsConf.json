@@ -1,0 +1,68 @@
+{
+  "_comment": "Holds mapping for each role with and its associated dashboards",
+  "roles" : [
+    {
+      "_comment":"This role is super role which can access all the available dashboards: [other/new roles are suppose to be added]",
+      "roleId": "roleId#1",
+      "roleName" : "Admin",
+      "isSuper" : "",
+      "orgId": "",
+      "dashboards": [
+        {
+          "name": "My Dashboard",
+          "id": "home"
+        },
+        {
+          "name": "My Dashboard v2",
+          "id": "homev2"
+        },
+        {
+          "name": "Property Tax",
+          "id": "propertyTax"
+        },
+        {
+          "name": "Trade License",
+          "id": "tradeLicense"
+        },
+        {
+          "name": "PGR",
+          "id": "pgr"
+        },
+        {
+          "id": "overview"
+        },
+        {
+          "id": "ws"
+        }
+      ]
+    },
+    {
+      "_comment":"This role is super role which can access all the available dashboards: [other/new roles are suppose to be added]",
+      "roleId": "roleId#2",
+      "roleName" : "Commissioner",
+      "isSuper" : "",
+      "orgId": "",
+      "dashboards": [
+        {
+          "id": "ulb-pgr"
+        },
+        {
+          "id": "ulb-propertyTax"
+        },
+        {
+          "id": "ulb-tradeLicense"
+        },
+        {
+          "id": "ulb-overview"
+        },
+        {
+          "id": "ulb-home"
+        },
+        {
+          "id": "ulb-ws"
+        }
+      ]
+    }
+
+  ]
+}

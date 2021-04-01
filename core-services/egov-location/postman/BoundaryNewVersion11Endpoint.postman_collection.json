@@ -1,0 +1,73 @@
+{
+	"id": "5bb88e02-fa74-56cc-265e-13f54afaf7c4",
+	"name": "BoundaryNewVersion11Endpoint",
+	"description": "",
+	"order": [
+		"ef746b24-9391-b6f5-f32b-d53dacc8aa22"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1511959629473,
+	"owner": "2070265",
+	"public": false,
+	"requests": [
+		{
+			"id": "ef746b24-9391-b6f5-f32b-d53dacc8aa22",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:8082/egov-location/location/v11/boundarys/_search?tenantId=default&hierarchyTypeCode=revenue&boundaryType=Ward&codes=8,9",
+			"queryParams": [
+				{
+					"key": "tenantId",
+					"value": "default",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "hierarchyTypeCode",
+					"value": "revenue",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "boundaryType",
+					"value": "Ward",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "codes",
+					"value": "8,9",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1511959711705,
+			"name": "http://localhost:8082/egov-location/location/v11/boundarys/_search?tenantId=default&hierarchyTypeCode=revenue&boundaryType=Ward&codes=8,9",
+			"description": "",
+			"collectionId": "5bb88e02-fa74-56cc-265e-13f54afaf7c4",
+			"responses": [],
+			"rawModeData": "{\n \n    \"apiId\": \"asset-services\",\n    \"ver\": null,\n    \"ts\": null,\n    \"action\": null,\n    \"did\": null,\n    \"key\": null,\n    \"msgId\": \"search with from and to values\",\n    \"authToken\": \"21b6bae2-07f0-4387-a619-2a017db3769e\",\n    \"correlationId\": null,\n    \"userInfo\": {\n      \"id\": \"1\",\n      \"userName\": null,\n      \"name\": null,\n      \"type\": null,\n      \"mobileNumber\": null,\n      \"emailId\": null,\n      \"roles\": null\n    }\n  \n}"
+		}
+	]
+}

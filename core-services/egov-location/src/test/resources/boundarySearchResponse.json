@@ -1,0 +1,89 @@
+{
+  "ResponseInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": "200 OK"
+  },
+  "Boundary": [
+    {
+      "id": "1",
+      "name": "Srikakulam  Municipality",
+      "longitude": null,
+      "latitude": null,
+      "boundaryNum": 1,
+      "parent": null,
+      "tenantId": "default",
+      "boundaryType": {
+        "id": "1",
+        "name": "City",
+        "code": null,
+        "hierarchyType": null,
+        "parent": null,
+        "hierarchy": 1,
+        "localName": null,
+        "parentName": null,
+        "childBoundaryTypes": null,
+        "tenantId": "default",
+        "createdBy": null,
+        "createdDate": null,
+        "lastModifiedBy": null,
+        "lastModifiedDate": null
+      },
+      "code": null
+    },
+    {
+      "id": "2",
+      "name": "Zone-1",
+      "longitude": null,
+      "latitude": null,
+      "boundaryNum": 1,
+      "parent": {
+        "id": "1",
+        "name": "Srikakulam  Municipality",
+        "longitude": null,
+        "latitude": null,
+        "boundaryNum": 1,
+        "parent": null,
+        "tenantId": "default",
+        "boundaryType": {
+          "id": "1",
+          "name": "City",
+          "code": null,
+          "hierarchyType": null,
+          "parent": null,
+          "hierarchy": 1,
+          "localName": null,
+          "parentName": null,
+          "childBoundaryTypes": null,
+          "tenantId": "default",
+          "createdBy": null,
+          "createdDate": null,
+          "lastModifiedBy": null,
+          "lastModifiedDate": null
+        },
+        "code": null
+      },
+      "tenantId": "default",
+      "boundaryType": {
+        "id": "3",
+        "name": "Zone",
+        "code": null,
+        "hierarchyType": null,
+        "parent": null,
+        "hierarchy": 3,
+        "localName": null,
+        "parentName": null,
+        "childBoundaryTypes": null,
+        "tenantId": "default",
+        "createdBy": null,
+        "createdDate": null,
+        "lastModifiedBy": null,
+        "lastModifiedDate": null
+      },
+      "code": null
+    }
+  ]
+}

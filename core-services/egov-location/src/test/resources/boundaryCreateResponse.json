@@ -1,0 +1,15 @@
+{
+  "ResponseInfo": {
+    "apiId" : null,
+    "ver" : null,
+    "msgId" : null
+  },
+  "Boundary": [
+    {
+      "id": "1",
+      "name": "TestBoundaryOne",
+      "tenantId": "default"
+    }
+   
+  ]
+}

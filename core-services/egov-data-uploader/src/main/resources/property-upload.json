@@ -1,0 +1,20 @@
+{
+  "moduleName": "property-upload",
+  "Definitions": [
+    {
+      "name": "property-residential-create",
+      "templateFileName": "property-residential.xlsx",
+      "uniqueParentKeys": [],
+      "isParentChild": false,
+      "requests": [
+        {
+          "url": "",
+          "apiRequest": {},
+          "excelHeadersToRequestMap": {},
+          "additionalResFields": {},
+          "tenantIdPaths": []
+        }
+      ]
+    }
+  ]
+}

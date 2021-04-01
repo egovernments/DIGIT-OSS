@@ -1,0 +1,92 @@
+.actionMenuSearchBox {
+  background-color: #34495E !important;
+  border: 1px solid #fe7a511f;
+  color: white;
+  height: 40px !important;
+  margin-top: 22px;
+}
+
+.whiteColor {
+  color: white !important;
+}
+
+.pointerCursor {
+  cursor: pointer;
+}
+
+.actionMenuFibreIcon {
+  width: 8px;
+  height: 8px;
+}
+.actionMenuMenu {
+  display: inline-block !important;
+  padding: 0px !important;
+  min-width: 100%;
+}
+
+.custom-style-for-send {
+  transform: rotate(-20deg);
+}
+
+
+@media only screen and (min-width: 768px) {
+  .sideMenuItem:hover,
+  .sideMenuItem.selected {
+    background-color: #486480;
+
+    div:nth-of-type(1) > span {
+      background: none !important;
+      div > div > div > span {
+        color: #fe7a51 !important;
+      }
+    }
+    .iconClassHover {
+      fill: #fe7a51 !important;
+    }
+ .label-container > .label-text{
+      color : #fe7a51 !important
+    } 
+  }
+  .selected {
+    border-left: 3px solid #fe7a51;
+  }
+  .drawer-collapse-menu-item {
+    position: absolute;
+    bottom: 0;
+    height: 42px;
+    width: 100%;
+    .iconClassHover {
+      border: 1px solid #fe7a511f;
+      border-radius: 50%;
+      background: #fe7a511f;
+      height: 28px !important;
+      width: 28px !important;
+    }
+  }
+  .menuStyle > .label-text{
+    color:#fff !important
+  }
+}
+
+.menuStyle  > .label-text{
+  color:rgba(0,0,0, 0.87)
+}
+
+.menu-item-title {
+  font-size: 16px;
+  color: black;
+  padding: 15px 0 0 5px;
+}
+
+.menuStyle {
+  margin-left: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  flex: 1;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.8700000047683716);
+}
+.menuStyle.with-childs {
+  margin-right: 15px;
+}

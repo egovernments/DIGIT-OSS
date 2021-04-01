@@ -1,0 +1,319 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: eGov Encryption Service
+  description: API for encryption / decryption
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+
+paths:
+
+  /crypto/v1/_encrypt:
+    post:
+      summary: Encrypts the given input value/s OR values of the object.
+      requestBody:
+        description: The request body can contain an array of Encryption Requests to support bulk encryption. The key for encryption will be decided based on the tenantId. Each tenant will have its own seperate key. The value to be encrypted can be simple string OR an array of string OR can be a JSON Object. In case the value is a JSON Object, all the values will get encrypted and keys will be left untouched. 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptionRequest'
+            example:
+              {
+                "encryptionRequests": [
+                  {
+                    "tenantId": "pb",
+                    "type": "Important",
+                    "value": "My email"
+                  },
+                  {
+                    "tenantId": "pb.jalandhar",
+                    "type": "Normal",
+                    "value": [
+                      "Personal",
+                      "Private"
+                    ]
+                  },
+                  {
+                    "tenantId": "pb.mohali",
+                    "type": "Normal",
+                    "value": {
+                      "userObject1": {
+                        "name": "John Doe",
+                        "mobileNumber": "98989121234"
+                      }
+                    }
+                  }
+                ]
+              }
+
+      responses:
+        '200':
+          description: The returned encrypted value will have the same structure as the input value.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+              example:
+                  [
+                    "437506|A5ag4DfbhHAHiqXRKFcAedFKtNOelHX+8+jB0ckNG/tihwimx7xu6akEoa+kaQPcIhSnYeveloIhdPBCOgrXWvkWGZfShx1i2bE2vAcWB+r0YIDdwZLKJbQGBHDqcEOn8mfO+LnmpJ5P4zPETtE+2EHhta+vKcE5OQj8ZQawHS4=",
+                    [
+                        "896077|I/8Xwqr5MwB6UucEP8/Q5wiCHpbaNqGE",
+                        "896077|I+gMx6TjN0BcLxudEiYQKIDKtSlmpJY="
+                    ],
+                    {
+                        "userObject1": {
+                            "mobileNumber": "395551|eSfiPrQ1UK07d0SupYQYqbr2QFNOWSuYJYcU",
+                            "name": "395551|CnCzaK1ADfnx+4FINXIQ9zjnUs1ieAtz"
+                        }
+                    }
+                  ]
+
+
+      tags:
+        - Crypto
+
+  /crypto/v1/_decrypt:
+    post:
+      summary: Decrypts the given input value/s OR values of the object.
+      requestBody:
+        description: Input to a decryption request may be an simple string OR an array OR a JSON Object. Every Object/Array will be navigated through to find simple strings, and those strings will be decrypted.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+            example:
+               [
+                [
+                    "896077|I/8Xwqr5MwB6UucEP8/Q5wiCHpbaNqGE",
+                    "896077|I+gMx6TjN0BcLxudEiYQKIDKtSlmpJY="
+                ],
+                {
+                    "userObject1": {
+                        "mobileNumber": "395551|eSfiPrQ1UK07d0SupYQYqbr2QFNOWSuYJYcU",
+                        "name": "395551|CnCzaK1ADfnx+4FINXIQ9zjnUs1ieAtz"
+                    }
+                }
+              ]
+
+      responses:
+        '200':
+          description: The response to a decryption request will have the same structure as the input.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+              example:
+                [
+                  [
+                      "Personal",
+                      "Private"
+                  ],
+                  {
+                      "userObject1": {
+                          "mobileNumber": "98989121234",
+                          "name": "John Doe"
+                      }
+                  }
+                ]
+
+
+      tags:
+        - Crypto
+        
+        
+  /crypto/v1/_sign:
+    post:
+      tags:
+        - Crypto
+      summary: Provide signature for a given value.
+      requestBody:
+        description: Request contains tenant id and the value that needs to be signed.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignRequest'
+      responses:
+        '200':
+          description: Response contains the value that has been signed and the value of signature.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignResponse'
+                
+  /crypto/v1/_verify:
+    post:
+      tags:
+        - Crypto
+      summary: Check if the signature is correct for the provided value.
+      requestBody:
+        description: Request contains the value and its signature.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyRequest'
+      responses:
+        '200':
+          description: Response returns if the provided signature is correct for the given value.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyResponse'
+
+  /crypto/v1/_rotatekey:
+    post:
+      tags:
+        - Crypto
+      summary: Deactivate the keys for the given tenant and generate new keys. It will deactivate both symmetric and asymmetric keys for the provided tenant.
+      requestBody:
+        description: Request has the name of the tenant for which the key needs to be rotated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RotateKeyRequest'
+      responses:
+        '200':
+          description: Acknowldgement if the operation was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RotateKeyResponse'
+
+
+components:
+  schemas:
+
+    EncReqObject:
+      type: object
+      description: EncrReqObject contains data to be encrypted and meta-data required to perform the encryption.
+      properties:
+        tenantId:
+          type: string
+          description: Encryption Key will be decided based on tenant id.
+        type:
+          type: string
+          description: Method to be used for encryption ( AES / RSA )
+          enum:
+          - Important
+          - Normal
+        value:
+          type: array
+          description: Value/s to be encrypted. Can be a string or object or array
+          items: {}
+          example: ["Personal", "Private"]
+
+      example:
+          tenantId: "pb.jalandhar"
+          type: "Important"
+          value: {
+            "key": "secret"
+          }
+
+
+
+    EncryptionRequest:
+      type: object
+      description: An encryption request can contain multiple EncReqObject. This will help to encrypt bulk requests which may have different tenant-id and/or method ( AES / RSA ).
+      properties:
+        encryptionRequests:
+          type: array
+          items: 
+            $ref: '#/components/schemas/EncReqObject'
+      example:
+        {
+          "encryptionRequests": [
+              {
+                "tenantId": "pb.amritsar",
+                "type": "Important",
+                "value": {
+                  "key": "secret"
+                }
+              }
+            ]
+        }
+    
+    SignRequest:
+      type: object
+      description: A Sign request containing tenant id and the string value to be signed.
+      properties:
+        tenantId:
+          type: string
+          description: The key used for signing will be determined based on tenant id.
+        value:
+          type: string
+          description: The value to be signed.
+      example: 
+        {
+          "tenantId": "pb.amritsar",
+          "value": "claim"
+        }
+    
+    SignResponse:
+      type: object
+      description: Response to sign api containing the actual value and its corresponding signature.
+      properties:
+        value:
+          type: string
+          description: The value that came with request.
+        signature:
+          type: string
+          description: The signature generated for the above value.
+      example: 
+        {
+          "value": "claim",
+          "signature": "436958|JLXQk7KP0y1nU3YHKLe0aq7EJp1iPEfNcIrbsgBh2u2U9aLCYfr8tVWGPud7JNQ5uiKJ1gTMFgzGU4XfTwUZDENHQ6mpFOhxH+LVVggj9QmDZk629ce2X7ju4aHuX6WDBx9/bxHstE8r5F47sP7f6ryY52HDQ5D5/8b7SX3WkkE="
+        }
+    
+    VerifyRequest:
+      type: object
+      description: A Verify request containing the value and its corresponding signature.
+      properties:
+        value:
+          type: string
+          description: The claim to be verified
+        signature:
+          type: string
+          description: The signature for the claim
+      example: 
+        {
+          "value": "claim",
+          "signature": "436958|JLXQk7KP0y1nU3YHKLe0aq7EJp1iPEfNcIrbsgBh2u2U9aLCYfr8tVWGPud7JNQ5uiKJ1gTMFgzGU4XfTwUZDENHQ6mpFOhxH+LVVggj9QmDZk629ce2X7ju4aHuX6WDBx9/bxHstE8r5F47sP7f6ryY52HDQ5D5/8b7SX3WkkE="
+        }
+    
+    VerifyResponse:
+      type: object
+      description: Response to the verify api containing if the signature was correct for the input claim
+      properties:
+        verified:
+          type: boolean
+          description: This will be true if the signature is correct according to the claim, otherwise false.
+      example: 
+        {
+          "verified": true
+        }
+    
+    RotateKeyRequest:
+      type: object
+      description: A request to rotate key for a given tenant
+      properties:
+        tenantId:
+          type: string
+          description: The tenantId for which the key needs to be changed.
+      example: 
+        {
+          "tenantId": "pb.amritsar"
+        }
+    
+    RotateKeyResponse:
+      type: object
+      description: An acknowledgement if the key rotation request was successful.
+      properties:
+        acknowledged:
+          type: boolean
+          description: Acknowledgement if the operation was successful.

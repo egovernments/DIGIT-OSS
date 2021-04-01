@@ -1,0 +1,79 @@
+{
+    "ResponseInfo": {
+        "apiId": "org.egov.collection",
+        "ver": "1.0",
+        "resMsgId": "uief87324",
+        "msgId": "654654",
+        "status": "200"
+    },
+    "BusinessDetailsInfo": [
+        {
+            "id": 1,
+            "code": "TLM",
+            "name": "Trade Licence Mutation",
+            "active": true,
+            "businessCategory": 1,
+            "businessType": "C",
+            "businessUrl": "/receipts/receipt-create.action",
+            "department": "56",
+            "fundSource": "234",
+            "functionary": "456",
+            "voucherCreation": true,
+            "isVoucherApproved": true,
+            "ordernumber": 2,
+            "fund": "12",
+            "function": "123",
+            "tenantId": "default",
+            "accountDetails": [
+                {
+                    "id": 1,
+                    "businessDetails":1,
+                    "chartOfAccounts": 56,
+                    "amount": 5000.00
+                },
+                {
+                    "id": 5,
+                    "businessDetails":1,
+                    "chartOfAccounts": 58,
+                    "amount": 3000.00
+                },
+                {
+                    "id": 6,
+                    "businessDetails":1,
+                    "chartOfAccounts": 59,
+                    "amount": 4000.00
+                }
+            ],
+            "subledgerDetails": [
+                {
+                    "id": 1,
+                    "detailType": 34,
+                    "detailKey": 23,
+                    "amount": 50000.00,
+                    "businessAccountDetails":1
+                },
+                {
+                    "id": 5,
+                    "detailType": 34,
+                    "detailKey": 23,
+                    "amount": 50000.00,
+                    "businessAccountDetails":1
+                },
+                {
+                    "id": 3,
+                    "detailType": 34,
+                    "detailKey": 23,
+                    "amount": 30000.00,
+                    "businessAccountDetails":5
+                },
+                {
+                    "id": 4,
+                    "detailType": 34,
+                    "detailKey": 23,
+                    "amount": 40000.00,
+                    "businessAccountDetails":6
+                }
+            ]
+        }
+    ]
+}

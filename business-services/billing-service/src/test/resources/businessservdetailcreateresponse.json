@@ -1,0 +1,17 @@
+{
+  "ResponseInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": null
+  },
+  "BusinessServiceDetails":[{
+    "id":"1",
+    "businessService":"Test Business Service",
+    "collectionModesNotAllowed":[],
+    "tenantId":"ap.kurnool",
+    "auditDetails": null
+  }]
+}

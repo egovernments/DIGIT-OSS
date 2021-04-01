@@ -1,0 +1,121 @@
+{
+    "RequestInfo":{
+        "apiId":"org.egov.collection",
+        "ver":"1.0",
+        "action":"POST",
+        "did":"4354648646",
+        "key":"xyz",
+        "msgId":"654654",
+        "authToken":"345678f",
+        "userInfo":
+        {
+        	"id":1
+        }
+     },
+   "BusinessDetails":[{
+"id":"",
+"code":"TL",
+"name":"Trade Licence",
+"active":true,
+"businessCategory":1,
+"businessType":"C",
+"businessUrl":"/receipts/receipt-create.action",
+"voucherCreation":true,
+"isVoucherApproved":true,
+"callBackForApportioning":true,
+"ordernumber":2,
+"fund":"12",
+"function":"123",
+"fundSource":"234",
+"functionary":"456",
+"department":"56",
+"tenantId":"default",
+"accountDetails":[
+{
+"id":1,
+"businessDetails":1,
+"chartOfAccounts":56,
+"amount":"1000.00",
+"tenantId":"default"
+},
+{
+"id":2,
+"businessDetails":1,
+"chartOfAccounts":57,
+"amount":"2000.00",
+"tenantId":"default"
+}
+],
+"subledgerDetails":
+[
+{
+"id":1,
+"detailType":34,
+"detailKey":23,
+"amount":10000.00,
+"businessAccountDetails":1
+},
+{
+"id":2,
+"detailType":35,
+"detailKey":24,
+"amount":20000.00,
+"businessAccountDetails":1
+}
+
+]
+},
+     {
+       "id":"",
+       "code":"PT",
+       "name":"Property Tax",
+       "active":true,
+       "businessCategory":1,
+       "businessType":"C",
+       "businessUrl":"/receipts/receipt-create.action",
+       "voucherCreation":true,
+       "isVoucherApproved":true,
+       "callBackForApportioning":false,
+       "ordernumber":3,
+       "fund":"12",
+       "function":"123",
+       "fundSource":"234",
+       "functionary":"456",
+       "department":"56",
+       "tenantId":"default",
+       "accountDetails":[
+         {
+           "id":1,
+           "businessDetails":1,
+           "chartOfAccounts":56,
+           "amount":"1000.00",
+           "tenantId":"default"
+         },
+         {
+           "id":2,
+           "businessDetails":1,
+           "chartOfAccounts":57,
+           "amount":"2000.00",
+           "tenantId":"default"
+         }
+       ],
+       "subledgerDetails":
+       [
+         {
+           "id":1,
+           "detailType":34,
+           "detailKey":23,
+           "amount":10000.00,
+           "businessAccountDetails":1
+         },
+         {
+           "id":2,
+           "detailType":35,
+           "detailKey":24,
+           "amount":20000.00,
+           "businessAccountDetails":1
+         }
+
+       ]
+     }]
+}

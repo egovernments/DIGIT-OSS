@@ -1,0 +1,73 @@
+ServiceMaps:
+ serviceName: BPA Service
+ version: 1.0.0
+ mappings:
+  - topic: save-bpa-buildingplan
+    configKey: INDEX
+    indexes:
+    - name: bpa-index
+      type: bpaapplication
+      id: $.id, $.tenantId
+      isBulk: false
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.BPA
+      customJsonMapping:
+        indexMapping: {"Data":{"businessService":"businessService","edcrNumber":"edcrNumber","riskType":"riskType","applicationNo":"applicationNo","landInfo": {},"approvalNo":"approvalNo","applicationDate":"applicationDate","status":"status","approvalDate":"approvalDate","tenantId":"tenantId","@timestamp":"timestamp"}}
+        fieldMapping:
+        - inJsonPath: $.businessService
+          outJsonPath: $.Data.businessService
+        - inJsonPath: $.edcrNumber
+          outJsonPath: $.Data.edcrNumber        
+        - inJsonPath: $.riskType
+          outJsonPath: $.Data.riskType
+        - inJsonPath: $.applicationNo
+          outJsonPath: $.Data.applicationNo
+        - inJsonPath: $.landInfo
+          outJsonPath: $.Data.landInfo 
+        - inJsonPath: $.approvalNo
+          outJsonPath: $.Data.approvalNo
+        - inJsonPath: $.applicationDate
+          outJsonPath: $.Data.applicationDate
+        - inJsonPath: $.status
+          outJsonPath: $.Data.status
+        - inJsonPath: $.approvalDate
+          outJsonPath: $.Data.approvalDate
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+          
+  - topic: update-bpa-buildingplan
+    configKey: INDEX
+    indexes:
+    - name: bpa-index
+      type: bpaapplication
+      id: $.id, $.tenantId
+      isBulk: false
+      jsonPath: $.BPA
+      timeStampField: $.auditDetails.createdTime
+      customJsonMapping:
+        indexMapping: {"Data":{"businessService":"businessService","edcrNumber":"edcrNumber","riskType":"riskType","applicationNo":"applicationNo","landInfo":  {},"approvalNo":"approvalNo","applicationDate":"applicationDate","status":"status","approvalDate":"approvalDate","tenantId":"tenantId","@timestamp":"timestamp"}}
+        fieldMapping:
+        - inJsonPath: $.businessService
+          outJsonPath: $.Data.businessService
+        - inJsonPath: $.edcrNumber
+          outJsonPath: $.Data.edcrNumber        
+        - inJsonPath: $.riskType
+          outJsonPath: $.Data.riskType
+        - inJsonPath: $.applicationNo
+          outJsonPath: $.Data.applicationNo
+        - inJsonPath: $.landInfo
+          outJsonPath: $.Data.landInfo 
+        - inJsonPath: $.approvalNo
+          outJsonPath: $.Data.approvalNo
+        - inJsonPath: $.applicationDate
+          outJsonPath: $.Data.applicationDate
+        - inJsonPath: $.status
+          outJsonPath: $.Data.status
+        - inJsonPath: $.approvalDate
+          outJsonPath: $.Data.approvalDate
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp      

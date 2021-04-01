@@ -1,0 +1,12 @@
+ServiceMaps:
+ serviceName: Citizen Charges
+ version: 1.0.0
+ mappings:
+  - topic: egov.cs.test-create
+    indexes:
+    - name: csindex
+      type: cstype
+      id: $.Connection.id
+      isBulk: false
+      jsonPath:
+      customJsonMapping:

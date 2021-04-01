@@ -1,0 +1,22 @@
+{
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+  "StructureType": [
+    {
+      "code": "IMMOVABLE.PUCCA",
+      "active": true
+    },
+    {
+      "code": "IMMOVABLE.KUTCHA",
+      "active": true
+    },
+    {
+      "code": "MOVABLE.HDV",
+      "active": true
+    },
+    {
+      "code": "MOVABLE.MDV",
+      "active": true
+    }
+  ]
+}

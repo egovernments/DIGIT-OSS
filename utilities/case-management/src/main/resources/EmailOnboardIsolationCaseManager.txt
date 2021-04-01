@@ -1,0 +1,12 @@
+Greetings,
+
+You have been successfully registered as an Isolation Case Manager for <district-name> district. As an isolation case manager, it is your responsibility to share the details of all the citizens that have been home quarantined in your district.
+
+Instructions:
+    1. Download the attached excel sheet and
+    2. Use this sheet to capture the details of the home isolated citizens.
+    3. Make sure that the format of the sheet remains the same and is not altered.
+    4. Once done, please reply to this email along with the completed excel sheet to register the cases.
+    5. After the system verifies the details shared by you, it will send back a confirmation email along with errors if there are any.
+
+Thanks.

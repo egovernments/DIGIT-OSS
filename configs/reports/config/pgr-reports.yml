@@ -1,0 +1,2361 @@
+ReportDefinitions:
+- reportName: GrievanceByType
+  summary: Report grouped by Grievance Type and status - based on a date period
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.complainttype.name
+    type: string
+    source: egpgr_complainttype
+  - name: registered
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByGrievanceType
+      linkedColumn: _parent?reportName={reportName}&status={currentColumnName}&complainttype={name}  
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source: completed
+    linkedReport:
+      reportName: DrillDownComplaintDetailByGrievanceType
+      linkedColumn: _parent?reportName={reportName}&status=FORWARDED','PROCESSING&complainttype={name}
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+    linkedReport:
+      reportName: DrillDownComplaintDetailByGrievanceType
+      linkedColumn: _parent?reportName={reportName}&status=COMPLETED','WITHDRAWN&complainttype={name}
+  - name: reopened
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByGrievanceType
+      linkedColumn: _parent?reportName={reportName}&status={currentColumnName}&complainttype={name}
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByGrievanceType
+      linkedColumn: _parent?reportName={reportName}&status={currentColumnName}&complainttype={name}
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByGrievanceTypeWithINSLA
+      linkedColumn: _parent?reportName={reportName}&complainttype={name}
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByGrievanceTypeBeyondSLA
+      linkedColumn: _parent?reportName={reportName}&complainttype={name}
+  - name: issla
+    label: reports.pgr.status.issla
+    type: string
+    source: seva
+    showColumn: false
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: complainttype
+    label: reports.pgr.complainttype
+    type: singlevaluelist
+    pattern: http://pgr-master:8080/pgr-master/service/v1/_search?tenantId=$tenantid&keywords=complaint|$..serviceCode|$..serviceName
+    source: seva
+    isMandatory: true
+  query: SELECT ctype.name,
+    count(CASE WHEN cs.status::text = 'REGISTERED'::text THEN 1 ELSE NULL::integer END) AS registered,
+    count(CASE WHEN cs.status::text = ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+    count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,'WITHDRAWN'::character varying::text]) THEN 1 ELSE NULL::integer END) AS completed,
+    count(CASE WHEN cs.status::text = 'REOPENED'::text THEN 1 ELSE NULL::integer END) AS reopened,
+    count(CASE WHEN cs.status::text ='REJECTED'::text THEN 1 ELSE NULL::integer END) AS rejected,
+    sum(CASE WHEN (cs.status in ('COMPLETED',  'REJECTED','WITHDRAWN' , 'PROCESSING' , 'REGISTERED','REOPENED', 'ONHOLD','FORWARDED'))
+    AND   (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 ELSE 0 END) AS withinsla,
+    sum(CASE WHEN (cs.status in ('COMPLETED',  'REJECTED','WITHDRAWN' , 'PROCESSING' , 'REGISTERED','REOPENED', 'ONHOLD', 'FORWARDED'))
+    AND (now() - cs.createddate::timestamp   with time zone) > ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 ELSE 0 END) AS beyondsla,
+    CASE WHEN bool_or((cs.status::text = ANY (ARRAY['COMPLETED'::character
+    varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+    AND (cs.lastmodifieddate - cs.createddate) < ('01:00:00'::interval * ctype.slahours::double
+    precision)) THEN 'Yes'::text WHEN bool_or((cs.status::text <> ALL (ARRAY['COMPLETED'::character
+    varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+    AND (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval
+    * ctype.slahours::double precision)) THEN 'Yes'::text ELSE 'No'::text END AS issla
+    FROM submission cs, egpgr_complainttype ctype WHERE cs.servicecode = ctype.code
+    and ctype.code = $complainttype and cs.createddate >= $fromDate and cs.createddate
+    <= $toDate and cs.tenantid = $tenantid
+    and ctype.tenantid = $tenantid
+    GROUP BY ctype.name;
+
+
+- reportName: DrillDownComplaintDetailByGrievanceType
+  summary: DrillDown ComplaintDetail By GrievanceType
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: submission
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: submission
+  - name: withinsla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: submission
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: status
+    label: reports.pgr.dateto
+    type: string
+    source: seva
+    isMandatory: true
+  - name: complainttype
+    label: reports.pgr.dateto
+    type: string
+    source: egpgr_complainttype
+    isMandatory: true
+  query: select cs.crn,cs.createddate,cs.name as complainantname,requesteraddress as address,
+         cs.details,cs.status,(select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback,
+         CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision)
+         THEN 'Yes'::text ELSE 'No'::text END AS withinsla from submission cs,egpgr_complainttype ctype , servicetype_keyword sk
+         where ctype.code=cs.servicecode  and cs.status in ($status) and cs.createddate >= $fromDate and cs.createddate <=$toDate
+         and ctype.code = $complainttype and ctype.code=sk.servicecode and upper(sk.keyword) = upper('complaint')
+         and sk.tenantid =$tenantid
+         and cs.tenantid = $tenantid
+         and ctype.tenantid =$tenantid
+
+
+- reportName: DrillDownComplaintDetailByGrievanceTypeWithINSLA
+  summary: DrillDown ComplaintDetail By GrievanceType
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: submission
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: submission
+  - name: withinsla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: submission
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: status
+    label: reports.pgr.dateto
+    type: string
+    source: seva
+    isMandatory: true
+  - name: complainttype
+    label: reports.pgr.dateto
+    type: string
+    source: egpgr_complainttype
+    isMandatory: true
+  query: select cs.crn,cs.createddate,cs.name as complainantname,requesteraddress as address,cs.details,cs.status,(select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback, CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS withinsla from submission cs,egpgr_complainttype ctype ,servicetype_keyword sk  where ctype.code=cs.servicecode and cs.createddate >= $fromDate and cs.createddate <=$toDate and ctype.code = $complainttype
+        AND cs.status::text = ANY (ARRAY['REGISTERED'::character varying::text, 'PROCESSING'::character varying::text, 'COMPLETED'::character varying::text, 'REJECTED'::character varying::text, 'REOPENED'::character varying::text, 'ONHOLD'::character varying::text])
+        AND (cs.lastmodifieddate - cs.createddate) < ('01:00:00'::interval * ctype.slahours::double precision)
+        AND (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) and ctype.code=sk.servicecode
+        and upper(sk.keyword) = upper('complaint')
+        and cs.tenantid = $tenantid
+        and ctype.tenantid =$tenantid
+        and sk.tenantid=$tenantid
+
+- reportName: DrillDownComplaintDetailByGrievanceTypeBeyondSLA
+  summary: DrillDown ComplaintDetail By GrievanceType
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: submission
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: submission
+  - name: withinsla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: submission
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: status
+    label: reports.pgr.dateto
+    type: string
+    source: seva
+    isMandatory: true
+  - name: complainttype
+    label: reports.pgr.dateto
+    type: string
+    source: egpgr_complainttype
+    isMandatory: true
+  query: select cs.crn,cs.createddate,cs.name as complainantname,requesteraddress as address,cs.details,cs.status,(select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback, CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS withinsla from submission cs,egpgr_complainttype ctype ,servicetype_keyword sk  where  ctype.code=cs.servicecode and cs.createddate >= $fromDate and cs.createddate <=$toDate and ctype.code = $complainttype
+         AND cs.status::text = ANY(ARRAY['REGISTERED'::character varying::text, 'PROCESSING'::character varying::text, 'COMPLETED'::character varying::text, 'REJECTED'::character varying::text, 'REOPENED'::character varying::text, 'ONHOLD'::character varying::text])
+         AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double precision)
+         AND (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double precision) AND ctype.code=sk.servicecode AND upper(sk.keyword) = upper('complaint')
+         AND sk.tenantid=$tenantid
+         AND cs.tenantid = $tenantid
+         AND ctype.tenantid =$tenantid
+
+- reportName: GrievanceByFunctionary
+  summary: Functionary Report grouped by Functionary Name - based on a date period
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: employeeusername
+    label: reports.pgr.functionary.name
+    type: string
+    source: egpgr_user
+    showColumn: false    
+  - name: employeename
+    label: reports.pgr.functionary.name
+    type: string
+    source: eg_user    
+  - name: registered
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByFunctionary
+      linkedColumn: _parent?reportName={reportName}&status={currentColumnName}&username={employeeusername}
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source:
+    linkedReport:
+      reportName: DrillDownComplaintDetailByFunctionary
+      linkedColumn: _parent?reportName={reportName}&status=FORWARDED','PROCESSING','NOTCOMPLETED','ONHOLD&username={employeeusername}
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+    linkedReport:
+      reportName: DrillDownComplaintDetailByFunctionary
+      linkedColumn: _parent?reportName={reportName}&status=COMPLETED','WITHDRAWN','CLOSED&username={employeeusername}
+  - name: reopened
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByFunctionary
+      linkedColumn: _parent?reportName={reportName}&status={currentColumnName}&username={employeeusername}
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByFunctionary
+      linkedColumn: _parent?reportName={reportName}&status={currentColumnName}&username={employeeusername}
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByFunctionaryWithINSLA
+      linkedColumn: _parent?reportName={reportName}&username={employeeusername}
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+    linkedReport:
+      reportName: DrillDownComplaintDetailByFunctionaryBeyondSLA
+      linkedColumn: _parent?reportName={reportName}&username={employeeusername}
+  - name: issla
+    label: reports.pgr.status.issla
+    type: string
+    source: seva
+    showColumn: false
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  query: SELECT us.username AS employeeusername, us.name AS employeename,  count(CASE WHEN cs.status::text = 'REGISTERED'::text
+    THEN 1 ELSE NULL::integer END) AS registered, count(CASE WHEN cs.status::text =
+    ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text, 
+    'NOTCOMPLETED'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+    count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,
+    'WITHDRAWN'::character varying::text, 'CLOSED'::character varying::text]) THEN
+    1 ELSE NULL::integer END) AS completed, count(CASE WHEN cs.status::text = 'REOPENED'::text
+    THEN 1 ELSE NULL::integer END) AS reopened, count(CASE WHEN cs.status::text = 'REJECTED'::text
+    THEN 1 ELSE NULL::integer END) AS rejected,
+    sum(CASE WHEN (cs.status in ('COMPLETED',  'REJECTED','WITHDRAWN' , 'PROCESSING' , 'REGISTERED','REOPENED', 'ONHOLD','FORWARDED'))
+    AND (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 ELSE 0 END) AS withinsla,
+    sum(CASE WHEN (cs.status in ('COMPLETED',  'REJECTED','WITHDRAWN' , 'PROCESSING' , 'REGISTERED','REOPENED', 'ONHOLD','FORWARDED'))
+    AND (now() - cs.createddate::timestamp   with time zone) > ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 ELSE 0 END) AS beyondsla,
+    CASE WHEN bool_or((cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+    < ('01:00:00'::interval * ctype.slahours::double precision)) THEN 'Yes'::text
+    WHEN bool_or((cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+    'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+    (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double
+    precision)) THEN 'Yes'::text ELSE 'No'::text END AS issla FROM submission cs,
+    egpgr_complainttype ctype, egeis_assignment ass, eg_user us ,servicetype_keyword sk
+    WHERE cs.positionid = ass.positionid and ass.employeeid=us.id
+    and cs.servicecode = ctype.code
+    and cs.createddate >= ass.fromdate and cs.createddate <= ass.todate and isprimary=true
+    and cs.createddate >= $fromDate and cs.createddate <= $toDate
+    and ctype.code=sk.servicecode and upper(sk.keyword) = upper('complaint')
+    and us.tenantid = ctype.tenantid
+    and sk.tenantid = $tenantid
+    and us.tenantid = $tenantid
+    and ass.tenantid = $tenantid
+    and cs.tenantid = $tenantid
+    and ctype.tenantid = $tenantid
+    GROUP BY us.username, us.name;
+
+
+- reportName: DrillDownComplaintDetailByFunctionary
+  summary: DrillDown ComplaintDetail By Functionary Report
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: seva
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: seva
+  - name: issla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: seva
+
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: status
+    label: reports.pgr.status
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: username
+    label: reports.pgr.username
+    type: epoch
+    source: seva
+    isMandatory: true
+  query: select cs.crn,cs.createddate,cs.name as complainantname,
+         requesteraddress as address,cs.details,cs.status,
+         (select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback,
+         CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS issla
+         from submission cs,egpgr_complainttype ctype,egeis_assignment ass, eg_user us ,servicetype_keyword sk
+         where ctype.code=cs.servicecode and cs.status IN ($status)
+         and cs.createddate >= $fromDate and cs.createddate <= $toDate
+         and cs.positionid = ass.positionid and ass.employeeid=us.id
+         and cs.createddate >= ass.fromdate and cs.createddate <= ass.todate
+         and isprimary=true
+         and us.username =$username
+         and ctype.code=sk.servicecode
+         and upper(sk.keyword) = upper('complaint')
+         and sk.tenantid = $tenantid
+         and ctype.tenantid = $tenantid
+         and us.tenantid = $tenantid
+         and cs.tenantid = $tenantid ;
+
+- reportName: DrillDownComplaintDetailByFunctionaryWithINSLA
+  summary: DrillDown ComplaintDetail By Functionary Report
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: seva
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: seva
+  - name: issla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: seva
+
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: status
+    label: reports.pgr.status
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: username
+    label: reports.pgr.username
+    type: epoch
+    source: seva
+    isMandatory: true
+  query: select cs.crn,cs.createddate,cs.name as complainantname,
+         requesteraddress as address,
+         cs.details,
+         cs.status,
+         (select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback,
+         CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS issla
+         from submission cs,egpgr_complainttype ctype,egeis_assignment ass, eg_user us,servicetype_keyword sk
+         where ctype.code=cs.servicecode
+         and cs.createddate >= $fromDate
+         and cs.createddate <= $toDate
+         and cs.positionid = ass.positionid
+         and ass.employeeid=us.id
+         and cs.createddate >= ass.fromdate
+         and cs.createddate <= ass.todate
+         and isprimary=true and us.username =$username
+         AND cs.status::text = ANY (ARRAY['REGISTERED'::character varying::text, 'PROCESSING'::character varying::text, 'COMPLETED'::character varying::text, 'REJECTED'::character varying::text, 'REOPENED'::character varying::text, 'ONHOLD'::character varying::text])
+         AND ctype.code=sk.servicecode
+         and upper(sk.keyword) = upper('complaint')
+         AND (cs.lastmodifieddate - cs.createddate) < ('01:00:00'::interval * ctype.slahours::double precision)
+         AND (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision)
+         and cs.tenantid = $tenantid
+         and us.tenantid = $tenantid
+         and ctype.tenantid = $tenantid
+         and sk.tenantid = $tenantid
+
+
+- reportName: DrillDownComplaintDetailByFunctionaryBeyondSLA
+  summary: DrillDown ComplaintDetail By Functionary Report
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: seva
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: seva
+  - name: issla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: seva
+    showColumn: false
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: status
+    label: reports.pgr.status
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: username
+    label: reports.pgr.username
+    type: epoch
+    source: seva
+    isMandatory: true
+  query: select cs.crn,cs.createddate,
+         cs.name as complainantname,
+         requesteraddress as address,
+         cs.details,
+         cs.status,
+         (select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback,
+         CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS issla
+         from submission cs,egpgr_complainttype ctype,egeis_assignment ass, eg_user us , servicetype_keyword sk
+         where ctype.code=cs.servicecode and cs.createddate >= $fromDate
+         AND cs.createddate <= $toDate
+         AND cs.positionid = ass.positionid
+         AND ass.employeeid=us.id
+         AND cs.createddate >= ass.fromdate
+         AND cs.createddate <= ass.todate and isprimary=true
+         AND us.username =$username
+         AND cs.status::text = ANY(ARRAY['REGISTERED'::character varying::text, 'PROCESSING'::character varying::text, 'COMPLETED'::character varying::text, 'REJECTED'::character varying::text, 'REOPENED'::character varying::text, 'ONHOLD'::character varying::text])
+         AND ctype.code=sk.servicecode
+         AND upper(sk.keyword) = upper('complaint')
+         AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double precision)
+         AND (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double precision)
+         AND cs.tenantid = $tenantid
+         AND us.tenantid = $tenantid
+         AND ctype.tenantid = $tenantid
+         AND sk.tenantid = $tenantid
+
+- reportName: DrillDownByDepartment
+  summary: Drill Down Report grouped by Department Name - based on a date period
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.department.name
+    type: string
+    source: eg_department
+    linkedReport:
+      reportName: DrillDownDepartmentGetGrievanceType
+      linkedColumn: _parent?reportName={reportName}&deptname={name}
+  - name: registered
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source: completed
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+  - name: rejected
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  query: select dept.name, count(CASE WHEN cs.status::text = 'REGISTERED'::text THEN 1 ELSE NULL::integer END) AS registered,
+         count(CASE WHEN cs.status::text = ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+         count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,'WITHDRAWN'::character varying::text]) THEN 1 ELSE NULL::integer END) AS completed,
+         count(CASE WHEN cs.status::text = 'REOPENED'::text THEN 1 ELSE NULL::integer END) AS reopened,
+         count(CASE WHEN cs.status::text ='REJECTED'::text THEN 1 ELSE NULL::integer END) AS rejected,
+         sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+        'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+        < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 WHEN (cs.status::text
+        <> ALL (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+        'WITHDRAWN'::character varying::text])) AND (now() - cs.createddate::timestamp
+        with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN
+        1 ELSE 0 END) AS withinsla, sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character
+        varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+        AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double
+        precision) THEN 1 WHEN (cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+        'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+        (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double
+        precision) THEN 1 ELSE 0 END) AS beyondsla FROM submission cs,
+        eg_department dept, egpgr_complainttype ctype WHERE cs.department=dept.id and
+        cs.servicecode = ctype.code and cs.createddate >= $fromDate and cs.createddate
+        <= $toDate
+        and cs.tenantid = $tenantid
+        and ctype.tenantid = $tenantid
+        and dept.tenantid = $tenantid
+        GROUP BY dept.name;
+
+- reportName: DrillDownDepartmentGetGrievanceType
+  summary: DrillDown Department Report Get GrievanceType
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.complaint.name
+    type: string
+    source: submission
+    linkedReport:
+      reportName: DrillDownDepartmentGrievanceTypeGetUserNamePosition
+      linkedColumn: _parent?reportName={reportName}&complainttype={name}&categoryid={categoryid}
+  - name: categoryid
+    label: reports.pgr.complaint.category
+    type: number
+    source: submission
+    showColumn: false      
+  - name: registered
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source: completed
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+  - name: rejected
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: deptname
+    label: reports.pgr.dept.name
+    type: epoch
+    source: eg_department
+    isMandatory: true
+  query: SELECT ctype.name, (select id from egpgr_complainttype_category where id = ctype.category and tenantid = $tenantid) as categoryid, count(CASE WHEN cs.status::text = 'REGISTERED'::text
+    THEN 1 ELSE NULL::integer END) AS registered, count(CASE WHEN cs.status::text
+    = ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text, 
+    'NOTCOMPLETED'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+    count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,
+    'WITHDRAWN'::character varying::text, 'CLOSED'::character varying::text]) THEN
+    1 ELSE NULL::integer END) AS completed, count(CASE WHEN cs.status::text = 'REOPENED'::text
+    THEN 1 ELSE NULL::integer END) AS reopened, count(CASE WHEN cs.status::text =
+    'REJECTED'::text THEN 1 ELSE NULL::integer END) AS rejected, sum(CASE WHEN (cs.status::text
+    = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+    < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 WHEN (cs.status::text
+    <> ALL (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (now() - cs.createddate::timestamp
+    with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN
+    1 ELSE 0 END) AS withinsla, sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character
+    varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+    AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 WHEN (cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+    'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+    (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 ELSE 0 END) AS beyondsla FROM submission cs,
+    egpgr_complainttype ctype,eg_department dept ,servicetype_keyword sk WHERE
+    cs.servicecode = ctype.code and cs.department=dept.id and cs.createddate >= $fromDate and cs.createddate
+    <= $toDate and dept.name = $deptname  and ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint')
+    and cs.tenantid = $tenantid
+    and ctype.tenantid = $tenantid
+    and dept.tenantid = $tenantid
+    and sk.tenantid = $tenantid
+    GROUP BY ctype.name, ctype.category;
+
+- reportName: DrillDownDepartmentGrievanceTypeGetUserNamePosition
+  summary: DrillDown Department Report Grievance Type Get UserName Position
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: userposition
+    label: reports.pgr.complaint.userposition
+    type: string
+    source: egpgr_ddDeptGrievanceTypeUserNamePosition
+    linkedReport:
+      reportName: DrillDownDepartmentGrievanceTypeGetUserNamePositionGetComplaints
+      linkedColumn: _parent?reportName={reportName}&username={userposition}
+  - name: registered
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source: completed
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+  - name: rejected
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: deptname
+    label: reports.pgr.deptname
+    type: string
+    source: seva
+    isMandatory: true
+  - name: complainttype
+    label: reports.pgr.complainttype
+    type: string
+    source: seva
+    isMandatory: true
+  - name: categoryid
+    label: reports.pgr.category.name
+    type: number
+    source: seva
+    isMandatory: true    
+  query: SELECT us.username as userposition,count(CASE WHEN cs.status::text = 'REGISTERED'::text THEN 1 ELSE NULL::integer END) AS registered,
+         count(CASE WHEN cs.status::text = ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+         count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,'WITHDRAWN'::character varying::text]) THEN 1 ELSE NULL::integer END) AS completed,
+         count(CASE WHEN cs.status::text = 'REOPENED'::text THEN 1 ELSE NULL::integer END) AS reopened,
+         count(CASE WHEN cs.status::text ='REJECTED'::text THEN 1 ELSE NULL::integer END) AS rejected,sum(CASE WHEN (cs.status::text
+    = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+    < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 WHEN (cs.status::text
+    <> ALL (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (now() - cs.createddate::timestamp
+    with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN
+    1 ELSE 0 END) AS withinsla, sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character
+    varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+    AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 WHEN (cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+    'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+    (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 ELSE 0 END) AS beyondsla FROM submission cs,
+    egpgr_complainttype ctype,eg_department dept,egeis_position pos,egeis_assignment ass,eg_user us WHERE
+    cs.positionid = ass.positionid and ass.employeeid=us.id and cs.servicecode = ctype.code and cs.department=dept.id and cs.positionid = pos.id
+    and cs.createddate >= ass.fromdate and cs.createddate <= ass.todate and isprimary=true and cs.createddate >= $fromDate and cs.createddate
+    <= $toDate and dept.name = $deptname and ctype.code = (select code from egpgr_complainttype where name=$complainttype and tenantid=$tenantid and category = $categoryid) 
+     and cs.tenantid = $tenantid
+     and ctype.tenantid = $tenantid
+     and dept.tenantid = $tenantid
+     and us.tenantid = $tenantid
+     GROUP BY us.username,pos.name
+
+
+
+- reportName: DrillDownDepartmentGrievanceTypeGetUserNamePositionGetComplaints
+  summary: DrillDown Department Report GrievanceType Get UserName Position Get Complaints
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: seva
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: seva
+  - name: withinsla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: deptname
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: complainttype
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: username
+    label: reports.pgr.username
+    type: string
+    source: seva
+    isMandatory: true
+  - name: categoryid
+    label: reports.pgr.category.name
+    type: number
+    source: seva
+    isMandatory: true    
+  query: select cs.crn,cs.createddate,cs.name as complainantname,requesteraddress as address,cs.details,cs.status, (select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback, CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS withinsla from submission cs, egpgr_complainttype ctype,eg_department dept,egeis_position pos,egeis_assignment ass,eg_user us WHERE cs.positionid = ass.positionid and ass.employeeid=us.id and cs.servicecode = ctype.code and cs.department=dept.id and cs.positionid = pos.id and cs.createddate >= $fromDate and cs.createddate <= $toDate and dept.name = $deptname and ctype.code = (select code from egpgr_complainttype where name=$complainttype and tenantid=$tenantid and category = $categoryid) and us.username = $username
+         and cs.tenantid = $tenantid
+         and ctype.tenantid = $tenantid
+         and dept.tenantid = $tenantid
+         and us.tenantid = $tenantid
+
+
+- reportName: DrillDownByBoundary
+  summary: Drill Down Report grouped by Boundary Name - based on a date period
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.boundary.name
+    type: string
+    source: egpgr_complainttype
+    linkedReport:
+      reportName: DrillDownByBoundaryLocalityGetDepartment
+      linkedColumn: _parent?reportName={reportName}&parentboundary={name}
+  - name: registered
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source: completed
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+  - name: reopened
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  query: SELECT boundary.name, count(CASE WHEN cs.status::text = 'REGISTERED'::text THEN 1 ELSE NULL::integer END) AS registered,
+         count(CASE WHEN cs.status::text = ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+         count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,'WITHDRAWN'::character varying::text]) THEN 1 ELSE NULL::integer END) AS completed,
+         count(CASE WHEN cs.status::text = 'REOPENED'::text THEN 1 ELSE NULL::integer END) AS reopened,
+         count(CASE WHEN cs.status::text ='REJECTED'::text THEN 1 ELSE NULL::integer END) AS rejected,
+    sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+    < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 WHEN (cs.status::text
+    <> ALL (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (now() - cs.createddate::timestamp
+    with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN
+    1 ELSE 0 END) AS withinsla, sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character
+    varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+    AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 WHEN (cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+    'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+    (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 ELSE 0 END) AS beyondsla FROM submission cs,submission_attribute sa,
+    eg_boundary boundary, egpgr_complainttype ctype ,servicetype_keyword sk WHERE cs.crn = sa.crn and boundary.id = sa.code::integer
+    and cs.servicecode = ctype.code and cs.createddate >= $fromDate and cs.createddate
+    <= $toDate and sa.key = 'systemLocationId'  and  ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint')
+    and sk.tenantid = $tenantid
+    and ctype.tenantid  = $tenantid
+    and boundary.tenantid = $tenantid
+    and sa.tenantid = $tenantid
+    and cs.tenantid = $tenantid
+    GROUP BY boundary.name;
+
+- reportName: DrillDownByBoundaryGetLocality
+  summary: DrillDown By Boundary Get Locality
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.locality.name
+    type: string
+    source: egpgr_ddbGetLocality
+  - name: registered
+    linkedReport:
+      reportName: DrillDownByBoundaryLocalityGetDepartment
+      linkedColumn: _parent?reportName={reportName}&locality={name}
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source: completed
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+  - name: rejected
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+  - name: issla
+    label: reports.pgr.status.issla
+    type: string
+    source: seva
+    showColumn: false
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: parentboundary
+    label: reports.pgr.parentboundaryid
+    type: epoch
+    source: seva
+    isMandatory: true
+  query: SELECT boundary.name,
+     count(CASE WHEN cs.status::text = 'REGISTERED'::text THEN 1 ELSE NULL::integer END) AS registered,
+     count(CASE WHEN cs.status::text = ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+     count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,'WITHDRAWN'::character varying::text]) THEN 1 ELSE NULL::integer END) AS completed,
+     count(CASE WHEN cs.status::text = 'REOPENED'::text THEN 1 ELSE NULL::integer END) AS reopened,
+     count(CASE WHEN cs.status::text ='REJECTED'::text THEN 1 ELSE NULL::integer END) AS rejected,
+     sum(CASE WHEN (cs.status::text
+    = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+    < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 WHEN (cs.status::text
+    <> ALL (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (now() - cs.createddate::timestamp
+    with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN
+    1 ELSE 0 END) AS withinsla, sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character
+    varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+    AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 WHEN (cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+    'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+    (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 ELSE 0 END) AS beyondsla, CASE WHEN bool_or((cs.status::text
+    = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+    < ('01:00:00'::interval * ctype.slahours::double precision)) THEN 'Yes'::text
+    WHEN bool_or((cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+    'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+    (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double
+    precision)) THEN 'Yes'::text ELSE 'No'::text END AS issla FROM submission cs,
+    eg_boundary boundary, egpgr_complainttype ctype ,servicetype_keyword sk WHERE cs.latitude = boundary.latitude AND cs.longitude
+    = boundary.longitude and cs.servicecode = ctype.code and cs.createddate >= $fromDate and cs.createddate
+    <= $toDate and boundary.parent = (select id from eg_boundary where name = $parentboundary and tenantid=$tenantid) and  ctype.code = sk.servicecode
+    and upper(sk.keyword) = upper('complaint')
+    and sk.tenantid = $tenantid
+    and ctype.tenantid  = $tenantid
+    and boundary.tenantid = $tenantid
+    and dept.tenantid = $tenantid
+    and sa.tenantid = $tenantid
+    GROUP BY boundary.name;
+
+
+- reportName: DrillDownByBoundaryLocalityGetDepartment
+  summary: Drill Down Report By Boundary Locality Get Department
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.department.name
+    type: string
+    source: eg_department
+    linkedReport:
+      reportName: DrillDownByBoundaryLocalityDepartmentGetComplaintType
+      linkedColumn: _parent?reportName={reportName}&deptname={name}
+  - name: registered
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source: completed
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+  - name: rejected
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: parentboundary
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  query: SELECT dept.name,
+    count(CASE WHEN cs.status::text = 'REGISTERED'::text THEN 1 ELSE NULL::integer END) AS registered,
+    count(CASE WHEN cs.status::text = ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+    count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,'WITHDRAWN'::character varying::text]) THEN 1 ELSE NULL::integer END) AS completed,
+    count(CASE WHEN cs.status::text = 'REOPENED'::text THEN 1 ELSE NULL::integer END) AS reopened,
+    count(CASE WHEN cs.status::text ='REJECTED'::text THEN 1 ELSE NULL::integer END) AS rejected,sum(CASE WHEN (cs.status::text
+    = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+    < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 WHEN (cs.status::text
+    <> ALL (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (now() - cs.createddate::timestamp
+    with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN
+    1 ELSE 0 END) AS withinsla, sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character
+    varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+    AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 WHEN (cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+    'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+    (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 ELSE 0 END) AS beyondsla FROM submission cs,submission_attribute sa,
+    eg_boundary boundary, egpgr_complainttype ctype,eg_department dept, servicetype_keyword sk WHERE
+    cs.crn = sa.crn and boundary.id = sa.code::integer
+     and cs.servicecode = ctype.code and cs.department=dept.id and cs.createddate >= $fromDate and cs.createddate
+    <= $toDate and sa.key = 'systemLocationId' and boundary.id = (select id from eg_boundary where name = $parentboundary and boundary.tenantid=$tenantid
+     and boundarytype =  (select id from eg_boundary_type where hierarchytype =(select id  from eg_hierarchy_type where code = 'ADMIN' and tenantid = $tenantid)
+     and name = 'Ward' and tenantid = $tenantid))
+     and cs.tenantid=$tenantid and  ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint')
+     and sk.tenantid = $tenantid
+     and ctype.tenantid  = $tenantid
+     and boundary.tenantid = $tenantid
+     and dept.tenantid = $tenantid
+     and sa.tenantid = $tenantid
+     GROUP BY dept.name;
+
+
+- reportName: DrillDownByBoundaryLocalityDepartmentGetComplaintType
+  summary: Drill Down Report By Boundary Locality Department Get Complaint Type
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.complainttype.name
+    type: string
+    source: egpgr_complainttype
+    linkedReport:
+      reportName: DrillDownByBoundaryLocalityDepartmentGetUserNamePosition
+      linkedColumn: _parent?reportName={reportName}&complainttype={name}&categoryid={categoryid}
+  - name: categoryid
+    label: reports.pgr.complaint.category
+    type: number
+    source: submission
+    showColumn: false      
+  - name: registered
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source: completed
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+  - name: rejected
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: parentboundary
+    label: reports.pgr.boundaryparentid
+    type: string
+    source: seva
+    isMandatory: true
+  - name: deptname
+    label: reports.pgr.department
+    type: string
+    source: seva
+    isMandatory: true
+  query: SELECT ctype.name, (select id from egpgr_complainttype_category where id = ctype.category and tenantid = $tenantid) as categoryid,
+     count(CASE WHEN cs.status::text = 'REGISTERED'::text THEN 1 ELSE NULL::integer END) AS registered,
+     count(CASE WHEN cs.status::text = ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+     count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,'WITHDRAWN'::character varying::text]) THEN 1 ELSE NULL::integer END) AS completed,
+     count(CASE WHEN cs.status::text = 'REOPENED'::text THEN 1 ELSE NULL::integer END) AS reopened,
+     count(CASE WHEN cs.status::text ='REJECTED'::text THEN 1 ELSE NULL::integer END) AS rejected,
+     sum(CASE WHEN (cs.status::text
+    = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+    < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 WHEN (cs.status::text
+    <> ALL (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+    'WITHDRAWN'::character varying::text])) AND (now() - cs.createddate::timestamp
+    with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN
+    1 ELSE 0 END) AS withinsla, sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character
+    varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+    AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 WHEN (cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+    'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+    (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double
+    precision) THEN 1 ELSE 0 END) AS beyondsla FROM submission cs,submission_attribute sa,
+    eg_boundary boundary, egpgr_complainttype ctype,eg_department dept ,servicetype_keyword sk WHERE
+    cs.crn = sa.crn and boundary.id = sa.code::integer
+     and cs.servicecode = ctype.code and cs.department=dept.id and cs.createddate >= $fromDate and cs.createddate
+    <= $toDate and sa.key = 'systemLocationId' and boundary.id = (select id from eg_boundary where name = $parentboundary and cs.tenantid=$tenantid
+    and boundarytype =  (select id from eg_boundary_type where hierarchytype =(select id  from eg_hierarchy_type where code = 'ADMIN' and tenantid = $tenantid)
+    and name = 'Ward' and tenantid = $tenantid))
+    and cs.tenantid=$tenantid  and  ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint')
+    and dept.name = $deptname
+    and sa.tenantid  = $tenantid
+    and cs.tenantid = $tenantid
+    and ctype.tenantid = $tenantid
+    and boundary.tenantid = $tenantid
+    and sk.tenantid = $tenantid
+    GROUP BY ctype.name, ctype.category;
+
+- reportName: DrillDownByBoundaryLocalityDepartmentGetUserNamePosition
+  summary: Drill Down Report By Boundary Locality Department Get UserName Position
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: userposition
+    label: reports.pgr.complaint.userposition
+    type: string
+    source: submission
+    linkedReport:
+      reportName: DrillDownByBoundaryLocalityDepartmentUserNamePositionGetComplaints
+      linkedColumn: _parent?reportName={reportName}&username={userposition}
+  - name: registered
+    label: reports.pgr.status.registered
+    type: number
+    source: seva
+  - name: inprocess
+    label: reports.pgr.status.inprocess
+    type: number
+    source: completed
+  - name: completed
+    label: reports.pgr.status.completed
+    type: number
+    source: reopened
+  - name: rejected
+    label: reports.pgr.status.reopened
+    type: number
+    source: seva
+  - name: rejected
+    label: reports.pgr.status.rejected
+    type: number
+    source: seva
+  - name: withinsla
+    label: reports.pgr.status.withinsla
+    type: number
+    source: seva
+  - name: beyondsla
+    label: reports.pgr.status.beyondsla
+    type: number
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: parentboundary
+    label: reports.pgr.boundaryparentid
+    type: epoch
+    source: eg_boundary
+    isMandatory: true
+  - name: localityid
+    label: reports.pgr.locality
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: deptname
+    label: reports.pgr.deptname
+    type: string
+    source: eg_department
+    isMandatory: true
+  - name: complainttype
+    label: reports.pgr.complainttypecode
+    type: string
+    source: egpgr_complainttype
+    isMandatory: true
+  - name: categoryid
+    label: reports.pgr.category.name
+    type: number
+    source: seva
+    isMandatory: true    
+  query : SELECT us.username as userposition,
+      count(CASE WHEN cs.status::text = 'REGISTERED'::text THEN 1 ELSE NULL::integer END) AS registered,
+      count(CASE WHEN cs.status::text = ANY (ARRAY['FORWARDED'::character varying::text, 'PROCESSING'::character varying::text, 'ONHOLD'::character varying::text]) THEN 1 ELSE NULL::integer END) AS inprocess,
+      count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,'WITHDRAWN'::character varying::text]) THEN 1 ELSE NULL::integer END) AS completed,
+      count(CASE WHEN cs.status::text = 'REOPENED'::text THEN 1 ELSE NULL::integer END) AS reopened,
+      count(CASE WHEN cs.status::text ='REJECTED'::text THEN 1 ELSE NULL::integer END) AS rejected,
+      sum(CASE WHEN (cs.status::text  = ANY (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+      'WITHDRAWN'::character varying::text])) AND (cs.lastmodifieddate - cs.createddate)
+      < ('01:00:00'::interval * ctype.slahours::double precision) THEN 1 WHEN (cs.status::text
+      <> ALL (ARRAY['COMPLETED'::character varying::text, 'REJECTED'::character varying::text,
+      'WITHDRAWN'::character varying::text])) AND (now() - cs.createddate::timestamp
+      with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN
+      1 ELSE 0 END) AS withinsla, sum(CASE WHEN (cs.status::text = ANY (ARRAY['COMPLETED'::character
+      varying::text, 'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text]))
+      AND (cs.lastmodifieddate - cs.createddate) > ('01:00:00'::interval * ctype.slahours::double
+      precision) THEN 1 WHEN (cs.status::text <> ALL (ARRAY['COMPLETED'::character varying::text,
+      'REJECTED'::character varying::text, 'WITHDRAWN'::character varying::text])) AND
+      (now() - cs.createddate::timestamp with time zone) > ('01:00:00'::interval * ctype.slahours::double
+      precision) THEN 1 ELSE 0 END) AS beyondsla FROM submission cs,submission_attribute sa,
+      eg_boundary boundary, egpgr_complainttype ctype,eg_department dept,egeis_position pos,egeis_assignment ass, eg_user us WHERE
+      cs.crn = sa.crn and boundary.id = sa.code::integer and
+      cs.servicecode = ctype.code and cs.department=dept.id and cs.positionid = pos.id and cs.createddate >= $fromDate and cs.createddate
+      <= $toDate and sa.key = 'systemLocationId' and boundary.id = (select id from eg_boundary where name = $parentboundary and cs.tenantid=$tenantid
+      and boundarytype =  (select id from eg_boundary_type where hierarchytype =(select id  from eg_hierarchy_type where code = 'ADMIN' and tenantid = $tenantid)
+      and name = 'Ward' and tenantid = $tenantid))
+      and dept.name = $deptname
+      and cs.positionid = ass.positionid and ass.employeeid=us.id and cs.createddate >= ass.fromdate and cs.createddate <= ass.todate and isprimary=true
+      and ctype.code = (select code from egpgr_complainttype where name=$complainttype and tenantid=$tenantid and category = $categoryid)
+      and sa.tenantid  = $tenantid and cs.tenantid = $tenantid  and ctype.tenantid = $tenantid
+      and us.tenantid = $tenantid   and pos.tenantid = $tenantid   and boundary.tenantid = $tenantid    GROUP BY us.username,pos.name;
+
+- reportName: DrillDownByBoundaryLocalityDepartmentUserNamePositionGetComplaints
+  summary: Drill Down By Boundary Locality Department UserName Position GetComplaints
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: seva
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: seva
+  - name: issla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: seva
+
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: parentboundary
+    label: reports.pgr.boundaryparentid
+    type: number
+    source: seva
+    isMandatory: true
+  - name: deptname
+    label: reports.pgr.dept.name
+    type: string
+    source: seva
+    isMandatory: true
+  - name: complainttype
+    label: reports.pgr.complainttype
+    type: string
+    source: seva
+    isMandatory: true
+  - name: username
+    label: reports.pgr.username
+    type: string
+    source: seva
+    isMandatory: true
+  - name: categoryid
+    label: reports.pgr.category.name
+    type: number
+    source: seva
+    isMandatory: true    
+  query: SELECT cs.crn as crn,cs.createddate,cs.name as complainantname,requesteraddress as address,cs.details,cs.status, (select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback, CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS issla
+         FROM submission cs,submission_attribute sa,
+          eg_boundary boundary, egpgr_complainttype ctype,eg_department dept,egeis_position pos,egeis_assignment ass, eg_user us WHERE
+          cs.crn = sa.crn and boundary.id = sa.code::integer and cs.positionid = pos.id and
+          cs.positionid = ass.positionid and ass.employeeid=us.id and cs.createddate >= ass.fromdate and cs.createddate <= ass.todate and isprimary=true
+           and cs.servicecode = ctype.code and cs.department=dept.id and cs.createddate >= $fromDate and cs.createddate
+         <= $toDate and sa.key = 'systemLocationId' and boundary.id = (select id from eg_boundary where name = $parentboundary and cs.tenantid=$tenantid
+          and boundarytype =  (select id from eg_boundary_type where hierarchytype =(select id  from eg_hierarchy_type where code = 'ADMIN' and tenantid = $tenantid)
+          and name = 'Ward' and tenantid = $tenantid))
+          and cs.tenantid=$tenantid
+          and dept.name = $deptname and ctype.code = (select code from egpgr_complainttype where name=$complainttype and tenantid=$tenantid and category = $categoryid)
+          and ctype.tenantid=$tenantid
+          and cs.tenantid =$tenantid
+          and sa.tenantid =$tenantid
+          and dept.tenantid =$tenantid
+          and sa.tenantid =$tenantid
+          and pos.tenantid =$tenantid
+          and us.tenantid =$tenantid
+          and us.username = $username ;
+
+- reportName: AgeingByDepartment
+  summary: Ageing report by department
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.department.name
+    type: string
+    source: eg_department
+  - name: greater30
+    label: reports.pgr.ageing.greater.30days
+    type: number
+    source: submission
+  - name: btw10to30
+    label: reports.pgr.ageing.between.10_30days
+    type: number
+    source: submission
+  - name: btw5to10
+    label: reports.pgr.ageing.between.5_10days
+    type: number
+    source: submission
+  - name: btw2to5
+    label: reports.pgr.ageing.between.2_5days
+    type: number
+    source: submission
+  - name: lsthn2
+    label: reports.pgr.ageing.between.0_2days
+    type: number
+    source: submission
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: grievancestatustype
+    label: reports.pgr.grievancestatustype
+    type: singlevaluelist
+    pattern: 'list://COMPLETED''_''WITHDRAWN:COMPLETED,REGISTERED''_''FORWARDED''_''PROCESSING''_''REOPENED''_''ONHOLD:PENDING,REJECTED:REJECTED'
+    source: seva
+    isMandatory: true
+  query: SELECT dept.name, count(CASE WHEN (date_part('epoch'::text, cs.lastmodifieddate
+    - cs.createddate) / 86400::double precision) > 30::double precision THEN 1 ELSE
+    NULL::integer END) AS greater30, count(CASE WHEN (date_part('epoch'::text, cs.lastmodifieddate
+    - cs.createddate) / 86400::double precision) >= 10::double precision AND (date_part('epoch'::text,
+    cs.lastmodifieddate - cs.createddate) / 86400::double precision) <= 30::double
+    precision THEN 1 ELSE NULL::integer END) AS btw10to30, count(CASE WHEN (date_part('epoch'::text,
+    cs.lastmodifieddate - cs.createddate) / 86400::double precision) >= 5::double
+    precision AND (date_part('epoch'::text, cs.lastmodifieddate - cs.createddate)
+    / 86400::double precision) <= 10::double precision THEN 1 ELSE NULL::integer END)
+    AS btw5to10, count(CASE WHEN (date_part('epoch'::text, cs.lastmodifieddate - cs.createddate)
+    / 86400::double precision) >= 2::double precision AND (date_part('epoch'::text,
+    cs.lastmodifieddate - cs.createddate) / 86400::double precision) <= 5::double
+    precision THEN 1 ELSE NULL::integer END) AS btw2to5, count(CASE WHEN (date_part('epoch'::text,
+    cs.lastmodifieddate - cs.createddate) / 86400::double precision) >= 0::double
+    precision AND (date_part('epoch'::text, cs.lastmodifieddate - cs.createddate)
+    / 86400::double precision) <= 2::double precision THEN 1 ELSE NULL::integer END)
+    AS lsthn2 FROM egpgr_complainttype ctype, submission cs, eg_department dept,servicetype_keyword sk WHERE
+    dept.id = cs.department and cs.servicecode = ctype.code and cs.createddate >=
+    $fromDate and cs.createddate <= $toDate and cs.status IN ($grievancestatustype)
+    and cs.tenantid =$tenantid  and ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint')
+    and ctype.tenantid = $tenantid
+    and sk.tenantid = $tenantid
+    and dept.tenantid = $tenantid
+    GROUP BY dept.name;
+
+- reportName: RouterEscalation
+  summary: Router Escalation Report
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: ctname
+    label: reports.pgr.complainttype.name
+    type: string
+    source: egpgr_complainttype
+    isMandatory: false
+  - name: routerposname
+    label: reports.pgr.position.name
+    type: number
+    source: egeis_position
+  - name: bndryname
+    label: reports.pgr.boundary.name
+    type: number
+    source: eg_boundary
+  - name: esclvl1posname
+    label: reports.pgr.position1.name
+    type: number
+    source: egpgr_router
+  - name: esclvl2posname
+    label: reports.pgr.position2.name
+    type: number
+    source: egpgr_router
+  - name: esclvl3posname
+    label: reports.pgr.position3.name
+    type: number
+    source: egpgr_router
+
+  searchParams:
+  - name: complaintcategorytype
+    label: reports.pgr.complaintcategorytype
+    type: singlevaluelist
+    pattern: http://pgr-master:8080/pgr-master/serviceGroup/v1/_search?tenantId=$tenantid&keyword=complaint|$..id|$..name
+    source: seva
+    isMandatory: false
+    searchClause: and cc.id=$complaintcategorytype 
+  - name: complainttype
+    label: reports.pgr.complainttype
+    type: url
+    pattern: /pgr-master/service/v1/_search?tenantId=$tenantid&categoryId={complaintcategorytype}&keywords=complaint|$..serviceCode|$..serviceName
+    source: seva
+    isMandatory: false
+    searchClause: and ct.code=$complainttype 
+  - name: positiontype
+    label: reports.pgr.positiontype
+    type: multivaluelist
+    pattern: http://hr-masters:8080/hr-masters/positions/_search?tenantId=$tenantid&pageSize=500|$.Position[*].id|$.Position[*].name
+    source: seva
+    isMandatory: false
+    searchClause: and p.id IN ($positiontype)
+  - name: wardtype
+    label: reports.pgr.wardtype
+    type: singlevaluelist
+    pattern: http://egov-location:8080/egov-location/boundarys/boundariesByBndryTypeNameAndHierarchyTypeName?boundaryTypeName=Ward&hierarchyTypeName=Administration&tenantId=$tenantid|$..id|$..name
+    source: seva
+    isMandatory: false
+    searchClause: and b.id=$wardtype
+  - name: isactive
+    label: pgr.lbl.active
+    type: checkbox
+    pattern: false
+    source: seva
+    isMandatory: false
+    searchClause: and ct.isactive=$isactive
+
+  query: SELECT COALESCE(ct.name, 'NA'::character varying) AS ctname, p.name AS routerposname, b.name AS bndryname,
+         COALESCE(( SELECT esclvl1pos.name FROM egeis_position esclvl1pos WHERE esclvl1pos.id = (( SELECT ph.toposition FROM egpgr_escalation_hierarchy ph WHERE ph.fromposition = r.position AND ph.servicecode::text = ct.code::text))), 'NA'::character varying) AS esclvl1posname,
+         COALESCE(( SELECT esclvl2pos.name FROM egeis_position esclvl2pos WHERE esclvl2pos.id = (( SELECT ph.toposition FROM egpgr_escalation_hierarchy ph WHERE ph.servicecode::text = ct.code::text AND ph.fromposition = (( SELECT ph_1.toposition FROM egpgr_escalation_hierarchy ph_1 WHERE ph_1.fromposition = r.position AND ph_1.servicecode::text = ct.code::text))))), 'NA'::character varying) AS esclvl2posname,
+         COALESCE(( SELECT escalvl3pos.name FROM egeis_position escalvl3pos WHERE escalvl3pos.id = (( SELECT ph.toposition FROM egpgr_escalation_hierarchy ph WHERE ph.servicecode::text = ct.code::text  AND ph.fromposition = (( SELECT ph_1.toposition FROM egpgr_escalation_hierarchy ph_1 WHERE ph_1.servicecode::text = ct.code::text  AND ph_1.fromposition = (( SELECT ph_2.toposition FROM egpgr_escalation_hierarchy ph_2 WHERE ph_2.fromposition = r.position AND ph_2.servicecode::text = ct.code::text ))))))), 'NA'::character varying) AS esclvl3posname
+         FROM egpgr_router r LEFT JOIN egpgr_complainttype ct ON r.complainttypeid = ct.id LEFT JOIN egpgr_complainttype_category cc ON ct.category = cc.id
+         LEFT JOIN eg_boundary b ON r.bndryid = b.id LEFT JOIN servicetype_keyword sk ON ct.code=sk.servicecode and upper(sk.keyword) = upper('complaint')
+         LEFT JOIN egeis_position p ON r.position = p.id where r.tenantid=$tenantid and upper(cc.keyword) = upper('complaint')
+         and ct.tenantid = sk.tenantid
+         and sk.tenantid = $tenantid
+  groupBy: ORDER BY r.complainttypeid;
+
+- reportName: AgeingByBoundary
+  summary: Ageing report by boundary
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.boundary.name
+    type: string
+    source: eg_boundary
+  - name: greater30
+    label: reports.pgr.ageing.greater.30days
+    type: number
+    source: submission
+  - name: btw10to30
+    label: reports.pgr.ageing.between.10_30days
+    type: number
+    source: submission
+  - name: btw5to10
+    label: reports.pgr.ageing.between.5_10days
+    type: number
+    source: submission
+  - name: btw2to5
+    label: reports.pgr.ageing.between.2_5days
+    type: number
+    source: submission
+  - name: lsthn2
+    label: reports.pgr.ageing.between.0_2days
+    type: number
+    source: submission
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: grievancestatustype
+    label: reports.pgr.grievancestatustype
+    type: singlevaluelist
+    pattern: 'list://COMPLETED''_''WITHDRAWN:COMPLETED,REGISTERED''_''FORWARDED''_''PROCESSING''_''REOPENED''_''ONHOLD:PENDING,REJECTED:REJECTED'
+    source: seva
+    isMandatory: true
+  query: SELECT boundary.name, count(CASE WHEN (date_part('epoch'::text, cs.lastmodifieddate
+    - cs.createddate) / 86400::double precision) > 30::double precision THEN 1 ELSE
+    NULL::integer END) AS greater30, count(CASE WHEN (date_part('epoch'::text, cs.lastmodifieddate
+    - cs.createddate) / 86400::double precision) >= 10::double precision AND (date_part('epoch'::text,
+    cs.lastmodifieddate - cs.createddate) / 86400::double precision) <= 30::double
+    precision THEN 1 ELSE NULL::integer END) AS btw10to30, count(CASE WHEN (date_part('epoch'::text,
+    cs.lastmodifieddate - cs.createddate) / 86400::double precision) >= 5::double
+    precision AND (date_part('epoch'::text, cs.lastmodifieddate - cs.createddate)
+    / 86400::double precision) <= 10::double precision THEN 1 ELSE NULL::integer END)
+    AS btw5to10, count(CASE WHEN (date_part('epoch'::text, cs.lastmodifieddate - cs.createddate)
+    / 86400::double precision) >= 2::double precision AND (date_part('epoch'::text,
+    cs.lastmodifieddate - cs.createddate) / 86400::double precision) <= 5::double
+    precision THEN 1 ELSE NULL::integer END) AS btw2to5, count(CASE WHEN (date_part('epoch'::text,
+    cs.lastmodifieddate - cs.createddate) / 86400::double precision) >= 0::double
+    precision AND (date_part('epoch'::text, cs.lastmodifieddate - cs.createddate)
+    / 86400::double precision) <= 2::double precision THEN 1 ELSE NULL::integer END)
+    AS lsthn2 FROM egpgr_complainttype ctype, submission cs,submission_attribute sa,eg_boundary
+    boundary ,servicetype_keyword sk where cs.servicecode = ctype.code and cs.crn = sa.crn and sa.key = 'systemLocationId'
+    and boundary.id = sa.code::integer and cs.createddate >= $fromDate and cs.createddate <= $toDate
+    and cs.tenantid = $tenantid AND cs.status IN ($grievancestatustype) and  ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint')
+    and ctype.tenantid = $tenantid
+    and sk.tenantid = $tenantid
+    and boundary.tenantid = $tenantid
+    GROUP BY boundary.name ;
+    
+- reportName: ComplaintSummaryRegister
+  summary: Report grouped by Grievance Type and ward - based on a date period
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: name
+    label: reports.pgr.ward
+    type: string
+    source: eg_boundary
+  - name: complainttype
+    label: reports.pgr.complainttype.name
+    type: string
+    source: egpgr_complainttype
+    linkedReport:
+      reportName: DrillDownComplaintSummaryRegister
+      linkedColumn: _parent?reportName={reportName}&complaintcode={complainttype}&wardname={name}&categoryname={categoryname}
+  - name: categoryname
+    label: reports.pgr.complaint.category
+    type: string
+    source: submission
+    showColumn: false
+  - name: totalcount
+    label: reports.pgr.totalcount
+    type: number
+    source: totalcount
+  - name: completed
+    label: reports.pgr.completed
+    type: number
+    source: completed   
+  - name: inprocess
+    label: reports.pgr.inprocess
+    type: number
+    source: inprocess
+  - name: pending
+    label: reports.pgr.pending
+    type: number
+    source: pending
+  - name: onhold
+    label: reports.pgr.onhold
+    type: number
+    source: onhold
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: electionward
+    label: reports.pgr.ward
+    type: multivaluelist
+    source: seva
+    isMandatory: false
+    pattern: http://egov-location:8080/egov-location/boundarys/boundariesByBndryTypeNameAndHierarchyTypeName?boundaryTypeName=Ward&hierarchyTypeName=Administration&tenantId=$tenantid|$..id|$..name
+    searchClause: and sa.code::bigint in ($electionward)
+  query: SELECT boundary.name, (select name from egpgr_complainttype where code = ctype.code and tenantid = $tenantid) as complainttype, (select name from egpgr_complainttype_category where id = ctype.category and tenantid = $tenantid) as categoryname, count(*) as totalcount, count(CASE WHEN cs.status::text = ANY (ARRAY['COMPLETED'::character varying::text,'WITHDRAWN'::character varying::text,'REJECTED'::character varying::text]) THEN 1 ELSE NULL::integer END) AS completed,count(CASE WHEN cs.status::text ='PROCESSING'::text THEN 1 ELSE NULL::integer END) AS inprocess,count(CASE WHEN cs.status::text = ANY (ARRAY['FORWARDED'::character varying::text, 'REOPENED'::character varying::text, 'REGISTERED'::character varying::text]) THEN 1 ELSE NULL::integer END) AS pending,count(CASE WHEN cs.status::text ='ONHOLD'::text THEN 1 ELSE NULL::integer END) AS onhold FROM submission cs,submission_attribute sa, eg_boundary boundary, egpgr_complainttype ctype ,servicetype_keyword sk WHERE cs.crn = sa.crn and boundary.id = sa.code::integer and cs.createddate >= $fromDate and cs.createddate <= $toDate and cs.servicecode = ctype.code and sa.key = 'systemLocationId' and ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint') and sk.tenantid = $tenantid and ctype.tenantid  = $tenantid and boundary.tenantid = $tenantid and sa.tenantid = $tenantid and cs.tenantid = $tenantid
+  groupBy: GROUP BY boundary.name, ctype.code, ctype.category ORDER By boundary.name;
+  
+- reportName: DrillDownComplaintSummaryRegister
+  summary: Report To List Complaints for Grievance Type and ward - based on a date period
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: seva
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: seva
+  - name: issla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: complaintcode
+    label: reports.pgr.complainttype
+    type: string
+    source: seva
+    isMandatory: true
+  - name: wardname
+    label: reports.pgr.boundary.name
+    type: string
+    source: seva
+    isMandatory: true
+  - name: categoryname
+    label: reports.pgr.category.name
+    type: string
+    source: seva
+    isMandatory: true
+  query: SELECT cs.crn, cs.createddate,cs.name as complainantname, requesteraddress as address, cs.details,cs.status, (select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn and sa.tenantid = $tenantid) as feedback, CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS issla FROM submission cs,submission_attribute sa, eg_boundary boundary, egpgr_complainttype ctype ,servicetype_keyword sk WHERE cs.crn = sa.crn and boundary.id = sa.code::integer and cs.createddate >= $fromDate and cs.createddate <= $toDate and cs.servicecode = ctype.code and sa.key = 'systemLocationId' and ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint') and sk.tenantid = $tenantid and ctype.tenantid  = $tenantid and boundary.tenantid = $tenantid and sa.tenantid = $tenantid and cs.tenantid = $tenantid
+    and ctype.code = (select code from egpgr_complainttype where name = $complaintcode and  tenantid = $tenantid and category = (select id from egpgr_complainttype_category where name = $categoryname and tenantid = $tenantid)) and sa.code::bigint = (select id from eg_boundary where name = $wardname and tenantid = $tenantid and boundarytype = (select id from eg_boundary_type where name = 'Ward' and hierarchytype = (select id from eg_hierarchy_type where name = 'ADMINISTRATION' and tenantid = $tenantid) and tenantid = $tenantid));
+    
+- reportName: DrillDownComplaintSummaryRegisterStatus
+  summary: Report To List Complaints for Grievance Type and ward - based on a date period
+  version: 1.0.0
+  moduleName: pgr
+  sourceColumns:
+  - name: crn
+    label: reports.pgr.complaint.crn
+    type: string
+    source: submission
+    linkedReport:
+      reportName: ComplaintDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  - name: createddate
+    label: reports.pgr.complaint.createddate
+    type: epoch
+    source: seva
+  - name: complainantname
+    label: reports.pgr.complaint.complainantname
+    type: string
+    source: submission
+  - name: address
+    label: reports.pgr.complaint.address
+    type: string
+    source: submission
+  - name: details
+    label: reports.pgr.complaint.details
+    type: string
+    source: submission
+  - name: status
+    label: reports.pgr.complaint.status
+    type: string
+    source: submission
+  - name: feedback
+    label: reports.pgr.complaint.feedback
+    type: string
+    source: seva
+  - name: issla
+    label: reports.pgr.complaint.issla
+    type: string
+    source: seva
+  searchParams:
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: seva
+    isMandatory: true
+  - name: complaintcode
+    label: reports.pgr.complainttype
+    type: string
+    source: seva
+    isMandatory: true
+  - name: wardname
+    label: reports.pgr.boundary.name
+    type: string
+    source: seva
+    isMandatory: true
+  - name: status
+    label: reports.pgr.status
+    type: string
+    source: seva
+    isMandatory: true
+  query: SELECT cs.crn, cs.createddate,cs.name as complainantname, requesteraddress as address, cs.details,cs.status, (select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback, CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS issla FROM submission cs,submission_attribute sa, eg_boundary boundary, egpgr_complainttype ctype ,servicetype_keyword sk WHERE cs.crn = sa.crn and boundary.id = sa.code::integer and cs.createddate >= $fromDate and cs.createddate <= $toDate and cs.servicecode = ctype.code and sa.key = 'systemLocationId' and ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint') and sk.tenantid = $tenantid and ctype.tenantid  = $tenantid and boundary.tenantid = $tenantid and sa.tenantid = $tenantid and cs.tenantid = $tenantid
+    and ctype.code = (select code from egpgr_complainttype where name = $complaintcode and tenantid = $tenantid) and sa.code::bigint = (select id from eg_boundary where name = $wardname and tenantid = $tenantid) and cs.status IN ($status);
+
+- reportName: ULBReport
+  summary: Fetches complaint stats based on department types for a ULB
+  version: 1.0.0
+  moduleName: pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:    
+  - name: tenantid
+    label: reports.pgr.tenantid
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: assigned
+    label: reports.pgr.assigned
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: received
+    label: reports.pgr.received
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: rating
+    label: reports.pgr.rating
+    type: number
+    source: eg_pgr_service
+    total: true
+  - name: resolvedwithinsla
+    label: reports.pgr.resolvedwithinsla
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: resolvedoutsidesla
+    label: reports.pgr.resolvedoutsidesla
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: opencomplaintswithinsla
+    label: reports.pgr.opencomplaintswithinsla
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: opencomplaintsoutsidesla
+    label: reports.pgr.opencomplaintsoutsidesla
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND pgr_data.tenantid = $ulb
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: true
+    searchClause: AND pgr_data.createdtime >= $fromDate
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: true
+    searchClause: AND pgr_data.createdtime <= $toDate
+  - name: status
+    label: reports.pgr.status
+    type: singlevaluelist
+    pattern: 'list://open:open,assigned:assigned,closed:closed,rejected:rejected,reassignrequested:reassignrequested'
+    source: seva
+    isMandatory: false
+    searchClause: AND pgr_data.status = $status
+  - name: deptname
+    label: reports.pgr.dept.name
+    type: singlevaluelist
+    source: eg_pgr_service
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$.MdmsRes.common-masters.Department[*].code|$.MdmsRes.common-masters.Department[*].name   
+    isMandatory: false
+    searchClause: AND deptmap_def.name = $deptname
+  query: |  
+    with pgr_data as (select  
+      servicerequestid, 
+      servicecode,
+      createdtime, 
+      status,
+      tenantid,
+      rating,
+      (select max("when") from eg_pgr_action where action='resolve' and businesskey = servicerequestid) as resolvedtime,
+      (select min("when") from eg_pgr_action where action='open' and businesskey = servicerequestid) as opentime
+      from eg_pgr_service as ps
+      where 
+      tenantid = $tenantid)
+    select 
+      initcap(split_part(tenantid, '.', 2)) as tenantid,      
+      deptmap_def.name as department,    
+      SUM (CASE WHEN status in ('assigned', 'reassignrequested') THEN 1 ELSE 0 END) as assigned,
+      count(status) as received,
+      rating,
+      SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedwithinsla,
+      SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla,
+      SUM (CASE WHEN status in ('open') and (extract(epoch from now()) * 1000 - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END)  as opencomplaintswithinsla,
+      SUM (CASE WHEN status in ('open') and (extract(epoch from now()) * 1000 - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as opencomplaintsoutsidesla
+      from pgr_data
+      INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
+      INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
+      WHERE 1=1
+  groupby: GROUP BY tenantid,deptmap_def.name,rating
+  orderby: ORDER BY tenantid,deptmap_def.name,rating
+
+
+- reportName: LMEPerformanceReport
+  summary: Fetches employee performance report
+  version: 1.0.0
+  moduleName: pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:
+  - name: employee
+    label: reports.pgr.employee
+    type: string
+    source: pgr_data
+    total: false
+  - name: department
+    label: reports.pgr.department
+    type: string
+    source: pgr_data
+    total: false
+  - name: designation
+    label: reports.pgr.designation
+    type: string
+    source: pgr_data
+    total: false
+  - name: resolvedwithinsla
+    label: reports.pgr.resolvedwithinsla
+    type: string
+    source: pgr_data
+    total: true
+  - name: resolvedoutsidesla
+    label: reports.pgr.resolvedoutsidesla
+    type: string
+    source: pgr_data
+    total: true
+  - name: assigned
+    label: reports.pgr.assigned
+    type: string
+    source: pgr_data
+    total: true
+  - name: open
+    label: reports.pgr.open
+    type: string
+    source: pgr_data
+    total: true
+  - name: reopen
+    label: reports.pgr.reopen
+    type: string
+    source: pgr_data
+    total: true
+  - name: rating
+    label: reports.pgr.rating
+    type: number
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND pgr_data.tenantid = $ulb
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime >= $fromDate
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime <= $toDate
+  - name: deptname
+    label: reports.pgr.dept.name
+    type: singlevaluelist
+    source: eg_pgr_service
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$.MdmsRes.common-masters.Department[*].code|$.MdmsRes.common-masters.Department[*].name   
+    isMandatory: false
+    searchClause: AND pgr_data.deptmap_def.name = $deptname
+  query: |
+    with pgr_data as (select  
+      (select assignee from eg_pgr_action as pa where 
+      pa.businesskey = ps.servicerequestid 
+      and pa."action" in ('assign', 'reassign')
+      order by "when" desc
+      fetch first 1 rows only
+      ) as assignee, 
+      servicerequestid, 
+      createdtime, 
+      servicecode,
+      status,
+      rating,
+      (select max("when") from eg_pgr_action where action='resolve' and businesskey = servicerequestid) as resolvedtime,
+      (select min("when") from eg_pgr_action where action='open' and businesskey = servicerequestid) as opentime
+    from eg_pgr_service as ps
+    where 
+    tenantid = $tenantid)
+    select 
+      coalesce((select name from eg_user where id::varchar = assignee),'-- Unassigned --') as employee, 
+      deptmap_def.name as department,    
+      (select desig.name from egeis_assignment assign, egeis_designation desig 
+       where assign.employeeid::varchar = assignee and desig.id = assign.designationid and assign.isprimary= true and desig.tenantid=$tenantid) as designation,      
+      SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedwithinsla,
+      SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla,
+      SUM (CASE WHEN status in ('assigned', 'reassignrequested') THEN 1 ELSE 0 END) as assigned,
+      SUM (CASE WHEN status in ('open') THEN 1 ELSE 0 END) as open,
+      SUM (CASE WHEN status in ('reopen') THEN 1 ELSE 0 END) as reopen,
+      rating    
+      from pgr_data
+      INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
+      INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
+      WHERE 1=1
+  orderby: ORDER BY assignee NULLS FIRST,deptmap_def.name,rating
+  groupby: GROUP BY assignee,deptmap_def.name,rating
+  
+- reportName: GROPerformanceReport
+  summary: Fetches GRO performance report
+  version: 1.0.0
+  moduleName: pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:
+  - name: employee
+    label: reports.pgr.employee
+    type: string
+    source: pgr_data
+    total: false
+  - name: department
+    label: reports.pgr.department
+    type: string
+    source: pgr_data
+    total: false
+  - name: designation
+    label: reports.pgr.designation
+    type: string
+    source: pgr_data
+    total: false
+  - name: assigned
+    label: reports.pgr.assigned
+    type: string
+    source: pgr_data
+    total: true
+  - name: reopen
+    label: reports.pgr.reopen
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND pgr_data.tenantid = $ulb
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime >= $fromDate
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime <= $toDate
+  - name: deptname
+    label: reports.pgr.dept.name
+    type: singlevaluelist
+    source: eg_pgr_service
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$.MdmsRes.common-masters.Department[*].code|$.MdmsRes.common-masters.Department[*].name   
+    isMandatory: false
+    searchClause: AND pgr_data.deptmap_def.name = $deptname
+  query: |
+    with pgr_data as (select  
+      (select assignee from eg_pgr_action as pa where 
+      pa.businesskey = ps.servicerequestid 
+      and pa."action" in ('assign', 'reassign')
+      and pa.by like '%Grievance Routing Officer'
+      order by "when" desc
+      fetch first 1 rows only
+      ) as assignee, 
+      servicerequestid, 
+      createdtime, 
+      servicecode,
+      status
+    from eg_pgr_service as ps
+    where 
+    tenantid = $tenantid)
+    select 
+      coalesce((select name from eg_user where id::varchar = assignee),'-- Unassigned --') as employee, 
+      deptmap_def.name as department,    
+      (select desig.name from egeis_assignment assign, egeis_designation desig 
+       where assign.employeeid::varchar = assignee and desig.id = assign.designationid and assign.isprimary= true and desig.tenantid=$tenantid) as designation,      
+      SUM (CASE WHEN status in ('assigned', 'reassignrequested') THEN 1 ELSE 0 END) as assigned,
+      SUM (CASE WHEN status in ('reopen') THEN 1 ELSE 0 END) as reopen      
+      from pgr_data
+      INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
+      INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
+      WHERE 1=1
+  orderby: ORDER BY assignee NULLS FIRST,deptmap_def.name
+  groupby: GROUP BY assignee,deptmap_def.name

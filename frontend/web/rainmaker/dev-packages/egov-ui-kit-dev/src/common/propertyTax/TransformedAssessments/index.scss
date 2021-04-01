@@ -1,0 +1,22 @@
+.pt-assessment-info {
+  display: flex;
+  flex-direction: row;
+}
+.pt-assessment-item{
+display: flex;
+justify-content: space-between;
+}
+.pt-assessment-key{
+width:20%;
+}
+.pt-assessment-value{
+width:50%;
+}
+@media only screen and (max-width: 768px) {
+.pt-assessment-key{
+  width:40%;
+  }
+  .pt-assessment-value{
+    width:50%;
+  }
+}

@@ -1,0 +1,62 @@
+serviceMaps:
+ serviceName: Indexer
+ mappings:
+ - version: 1.0
+   name: Indexer
+   description: Persists index jobs to table
+   fromTopic: save-index-jobs
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO eg_indexer_job(tenantid, jobid, requesterid, typeofjob, oldindex, newindex, jobstatus, totaltimetakeninms, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      basePath: job
+      jsonMaps:
+
+
+       - jsonPath: $.job.tenantId
+
+       - jsonPath: $.job.jobId
+
+       - jsonPath: $.job.requesterId
+
+       - jsonPath: $.job.typeOfJob
+
+       - jsonPath: $.job.oldIndex
+
+       - jsonPath: $.job.newIndex
+
+       - jsonPath: $.job.jobStatus
+       
+       - jsonPath: $.job.totalTimeTakenInMS
+
+       - jsonPath: $.job.auditDetails.createdBy
+
+       - jsonPath: $.job.auditDetails.createdTime
+
+       - jsonPath: $.job.auditDetails.lastModifiedBy
+
+       - jsonPath: $.job.auditDetails.lastModifiedTime
+       
+ 
+ 
+ - version: 1.0
+   name: Indexer
+   description: Updates index jobs in the table
+   fromTopic: update-index-jobs
+   isTransaction: true
+   queryMaps:
+    - query: UPDATE eg_indexer_job SET jobStatus = ?, totalTimeTakenInMS = ?, lastmodifiedby =?, lastmodifiedtime = ? WHERE jobid = ?
+      basePath: job
+      jsonMaps:
+
+
+       - jsonPath: $.job.jobStatus
+       
+       - jsonPath: $.job.totalTimeTakenInMS
+
+       - jsonPath: $.job.auditDetails.lastModifiedBy
+
+       - jsonPath: $.job.auditDetails.lastModifiedTime
+       
+       - jsonPath: $.job.jobId
+ 
+       

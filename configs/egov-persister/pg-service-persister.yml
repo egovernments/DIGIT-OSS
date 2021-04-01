@@ -1,0 +1,147 @@
+serviceMaps:
+  serviceName: PaymentGateway
+  mappings:
+  - version: 1.0
+    name: pg-service
+    description: Persists transactions
+    fromTopic: save-pg-txns
+    isTransaction: true
+    queryMaps:
+    - query: INSERT INTO eg_pg_transactions (txn_id, txn_amount, txn_status, txn_status_msg, gateway, consumer_code, bill_id, product_info, user_uuid, user_name, mobile_number, email_id, name, user_tenant_id,  tenant_id, gateway_txn_id, gateway_payment_mode, gateway_status_code, gateway_status_msg, receipt, additional_details, created_by, created_time, last_modified_by, last_modified_time) VALUES (?, ?::numeric, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Transaction
+      jsonMaps:
+
+      - jsonPath: $.Transaction.txnId
+
+      - jsonPath: $.Transaction.txnAmount
+
+      - jsonPath: $.Transaction.txnStatus
+
+      - jsonPath: $.Transaction.txnStatusMsg
+
+      - jsonPath: $.Transaction.gateway
+
+      - jsonPath: $.Transaction.consumerCode
+
+      - jsonPath: $.Transaction.billId
+
+      - jsonPath: $.Transaction.productInfo
+
+      - jsonPath: $.Transaction.user.uuid
+
+      - jsonPath: $.Transaction.user.userName
+
+      - jsonPath: $.Transaction.user.mobileNumber
+
+      - jsonPath: $.Transaction.user.emailId
+
+      - jsonPath: $.Transaction.user.name
+
+      - jsonPath: $.Transaction.user.tenantId
+
+      - jsonPath: $.Transaction.tenantId
+
+      - jsonPath: $.Transaction.gatewayTxnId
+
+      - jsonPath: $.Transaction.gatewayPaymentMode
+
+      - jsonPath: $.Transaction.gatewayStatusCode
+
+      - jsonPath: $.Transaction.gatewayStatusMsg
+
+      - jsonPath: $.Transaction.receipt
+
+      - jsonPath: $.Transaction.additionalDetails
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Transaction.auditDetails.createdBy
+
+      - jsonPath: $.Transaction.auditDetails.createdTime
+
+      - jsonPath: $.Transaction.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Transaction.auditDetails.lastModifiedTime
+
+
+
+  - version: 1.0
+    name: pg-service
+    description: Persists transaction requests / response to and from gateways
+    fromTopic: save-pg-txns-dump
+    isTransaction: true
+    queryMaps:
+
+    - query: INSERT INTO eg_pg_transactions_dump (txn_id, txn_request, txn_response, created_by, created_time, last_modified_by, last_modified_time) VALUES (?, ?, ?, ?, ?, ?, ?);
+
+      basePath: TransactionDump
+      jsonMaps:
+
+      - jsonPath: $.TransactionDump.txnId
+
+      - jsonPath: $.TransactionDump.txnRequest
+
+      - jsonPath: $.TransactionDump.txnResponse
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.TransactionDump.auditDetails.createdBy
+
+      - jsonPath: $.TransactionDump.auditDetails.createdTime
+
+      - jsonPath: $.TransactionDump.auditDetails.lastModifiedBy
+
+      - jsonPath: $.TransactionDump.auditDetails.lastModifiedTime
+
+  - version: 1.0
+    description: Update transaction
+    fromTopic: update-pg-txns
+    isTransaction: true
+    queryMaps:
+
+    - query: UPDATE eg_pg_transactions SET txn_status=?, txn_status_msg=?, gateway_txn_id=?,gateway_payment_mode=?,gateway_status_code=?, gateway_status_msg=?, receipt=?, last_modified_by=?, last_modified_time=? where txn_id=? AND tenant_id=?;
+      basePath: Transaction
+      jsonMaps:
+
+      - jsonPath: $.Transaction.txnStatus
+
+      - jsonPath: $.Transaction.txnStatusMsg
+
+      - jsonPath: $.Transaction.gatewayTxnId
+
+      - jsonPath: $.Transaction.gatewayPaymentMode
+
+      - jsonPath: $.Transaction.gatewayStatusCode
+
+      - jsonPath: $.Transaction.gatewayStatusMsg
+
+      - jsonPath: $.Transaction.receipt
+
+      - jsonPath: $.Transaction.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Transaction.auditDetails.lastModifiedTime
+
+      - jsonPath: $.Transaction.txnId
+
+      - jsonPath: $.Transaction.tenantId
+
+  - version: 1.0
+    description: Update transaction dump
+    fromTopic: update-pg-txns-dump
+    isTransaction: true
+    queryMaps:
+
+    - query: UPDATE eg_pg_transactions_dump SET txn_response=?, last_modified_by=?, last_modified_time=? where txn_id=? ;
+      basePath: TransactionDump
+      jsonMaps:
+
+      - jsonPath: $.TransactionDump.txnResponse
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.TransactionDump.auditDetails.lastModifiedBy
+
+      - jsonPath: $.TransactionDump.auditDetails.lastModifiedTime
+
+      - jsonPath: $.TransactionDump.txnId

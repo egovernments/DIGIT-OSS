@@ -1,0 +1,124 @@
+{
+  "key": "consolidated-pdf2",
+  "DataConfigs": {
+    "serviceName": "rainmaker-common",
+    "version": "1.0.0",
+    "baseKeyPath": "$.Receipt.*",
+    "isCommonTableBorderRequired": true,
+    "mappings": [
+      {
+        "topic": "common-pdf-generation-1",
+        "staticConfigPath": "https://raw.githubusercontent.com/egovernments/egov-services/vishal-feature-filestore/core/egov-indexer/src/main/resources/rainmaker-pgr-indexer.yml",
+        "mappings": [
+          {
+            "direct": [
+              {
+                "variable": "variable1",
+                "url": "https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                "type": "image"
+              },
+              {
+                "variable": "variable2",
+                "value": {
+                  "path": "$.Bill[0].payerName"
+                }
+              },
+              {
+                "variable": "variable3",
+                "value": {
+                  "path": "$.Bill[0].mobileNumber"
+                }
+              },
+              {
+                "variable": "variable4",
+                "value": {
+                  "path": "$.Bill[0].payerAddress"
+                }
+              },
+              {
+                "variable": "variable5",
+                "value": {
+                  "path": "$.Bill[0].billDetails[0].billNumber"
+                }
+              },
+              {
+                "variable": "variable6",
+                "value": {
+                  "path": "$.Bill[0].billDetails[0].fromPeriod"
+                }
+              },
+              {
+                "variable": "variable7",
+                "value": {
+                  "path": "$.Bill[0].billDetails[0].toPeriod"
+                }
+              },
+              {
+                "variable": "variable8",
+                "value": {
+                  "path": "$.Bill[0].billDetails[0].billDate"
+                }
+              },
+              {
+                "variable": "variable9",
+                "value": {
+                  "path": "$.Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"
+                }
+              },
+              {
+                "variable": "variable10",
+                "value": {
+                  "path": "$.Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+                }
+              },
+              {
+                "variable": "variable11",
+                "value": {
+                  "path": "$.Bill[0].billDetails[0].totalAmount"
+                }
+              },
+              {
+                "variable": "variable12",
+                "value": {
+                  "path": "$.transactionId"
+                }
+              },
+              {
+                "variable": "variable13",
+                "value": {
+                  "path": "$.Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+                }
+              },
+              {
+                "variable": "variable14",
+                "value": {
+                  "path": "$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"
+                }
+              },
+              {
+                "variable": "variable15",
+                "value": {
+                  "path": "$.consumerCode"
+                }
+              },
+              {
+                "variable": "variable16",
+                "value": {
+                  "path": "$.Bill[0].billDetails[0].amountPaid"
+                }
+              }
+            ]
+          },
+          {
+            "derived": [
+              {
+                "variable": "variable19",
+                "formula": "{{variable16}}-{{variable17}}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "responseInfo": null,
+  "error": {
+    "code": 400,
+    "message": "OTP request for password reset failed",
+    "description": null,
+    "fields": [
+      {
+        "code": "OTP.UNKNOWN_MOBILE_NUMBER",
+        "message": "Mobile number is unknown.",
+        "field": "otp.mobileNumber"
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "files": [
+    {
+      "url": "/filestore/v1/files/id?fileStoreId=fileStoreId1",
+      "contentType": "image/png"
+    },
+    {
+      "url": "/filestore/v1/files/id?fileStoreId=fileStoreId2",
+      "contentType": "application/pdf"
+    }
+  ]
+}

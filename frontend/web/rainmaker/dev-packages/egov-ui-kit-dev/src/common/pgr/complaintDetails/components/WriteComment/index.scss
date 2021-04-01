@@ -1,0 +1,28 @@
+.write-comment-align-ComplaintTimeLine {
+  display: flex !important;
+  background-color: #f2f2f2;
+  border: solid 1px #e6e6e6;
+  align-items: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  /* opacity: 0.74; */
+  height: 36px;
+  margin-left: -15px;
+  margin-top: -11px;
+}
+
+.write-complaint-chat-field textarea {
+}
+
+.write-complaint-profile-cont {
+  padding: 0 !important;
+}
+
+.write-comment-time-cont {
+  margin-top: 4px;
+}
+
+.timeline-comment-style .TextArea .TextField .label-text {
+  width: 100%;
+  word-break: break-word;
+}

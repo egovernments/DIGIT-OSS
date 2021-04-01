@@ -1,0 +1,71 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Recovery Negative",
+		"_postman_id": "d83af2f9-9f64-1961-46e8-8113e9f2e4f4",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8280/egf-master/recoverys/_update",
+			"request": {
+				"url": "http://localhost:8280/egf-master/recoverys/_update",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n \"requestInfo\": {\n   \"resMsgId\": \"placeholder\",\n   \"status\": \"200\",\n   \"apiId\": null,\n   \"ver\": null,\n   \"ts\": \"01-01-2017 01:01:01\",\n   \"key\": null\n   },\n  \"recoverys\": [\n    {\n   \"code\":\"final\",\n      \"name\":\"final\",\n      \"chartOfAccount\":{\n      \"glcode\":\"341\",\n      \"tenantId\":\"default\"\n      },\n      \"active\":true,\n      \"type\":\"M\",\n      \"flat\":\"100\",\n      \"remitted\":\"S\",\n      \"ifscCode\":\"SBIN0005532U\",\n      \"accountNumber\":\"3049223457\",\n      \"tenantId\":\"default\",\n      \"mode\":\"M\",\n      \"remittanceMode\":\"M\"\n    }\n    \n    ]\n}"
+				},
+				"description": "Recovery Update fails because no ID is provided"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8280/egf-master/recoverys/_create",
+			"request": {
+				"url": "http://localhost:8280/egf-master/recoverys/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n \"requestInfo\": {\n   \"resMsgId\": \"placeholder\",\n   \"status\": \"200\",\n   \"apiId\": null,\n   \"ver\": null,\n   \"ts\": \"01-01-2017 01:01:01\",\n   \"key\": null\n   },\n  \"recoverys\": [\n    {\n      \"name\":\"final\",\n      \"chartOfAccount\":{\n      \"glcode\":\"341\",\n      \"tenantId\":\"default\"\n      },\n      \"active\":true,\n      \"type\":\"M\",\n      \"flat\":\"100\",\n      \"remitted\":\"S\",\n      \"ifscCode\":\"SBIN0005532U\",\n      \"accountNumber\":\"3049223457\",\n      \"tenantId\":\"default\",\n      \"mode\":\"M\",\n      \"remittanceMode\":\"M\"\n    }\n    \n    ]\n}"
+				},
+				"description": "Recovery Create Failed since mandatory fields not sent in request"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8280/egf-master/recoverys/_search",
+			"request": {
+				"url": "http://localhost:8280/egf-master/recoverys/_search",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "Search fails because no tenantId is provided"
+			},
+			"response": []
+		}
+	]
+}

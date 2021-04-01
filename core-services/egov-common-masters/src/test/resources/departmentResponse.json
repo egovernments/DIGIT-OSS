@@ -1,0 +1,29 @@
+{
+  "ResponseInfo": {
+    "apiId": "org.egov.commons",
+    "ver": "1.0",
+    "msgId": "654654",
+    "resMsgId": "uief87324",
+    "status": "200"
+  },
+  "Department": [
+    {
+      "id": 1,
+      "name": "HEALTH",
+      "code": "HLT",
+      "active": true,
+      "tenantId": "default",
+      "createdBy": 1,
+      "lastModifiedBy": 1
+    },
+    {
+      "id": 2,
+      "name": "COLLECTION",
+      "code": "COL",
+      "active": true,
+      "tenantId": "default",
+      "createdBy": 1,
+      "lastModifiedBy": 1
+    }
+  ]
+}

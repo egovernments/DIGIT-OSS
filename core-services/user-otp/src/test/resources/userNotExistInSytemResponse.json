@@ -1,0 +1,15 @@
+{
+    "responseInfo": null,
+    "error": {
+        "code": 400,
+        "message": "OTP request for login failed",
+        "description": null,
+        "fields": [
+            {
+                "code": "OTP.UNKNOWN_USER",
+                "message": "User not Found With this UserName",
+                "field": "otp.mobileNumber"
+            }
+        ]
+    }
+}

@@ -1,0 +1,68 @@
+{
+  "responseInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": "200"
+  },
+  "user": [
+    {
+      "id": 1,
+      "userName": "userName",
+      "salutation": "salutation",
+      "name": "name",
+      "gender": "FEMALE",
+      "mobileNumber": "mobileNumber1",
+      "emailId": "email",
+      "altContactNumber": "mobileNumber2",
+      "pan": "pan",
+      "aadhaarNumber": "aadhaarNumber",
+      "permanentAddress": "house number 1, area/locality/sector, street/road/line, landmark, city/town/village 1, post office, sub district, district, state, country, PIN: pincode 1",
+      "permanentCity": "city/town/village 1",
+      "permanentPinCode": "pincode 1",
+      "correspondenceAddress": "house number 2, area/locality/sector, street/road/line, landmark, city/town/village 2, post office, sub district, district, state, country, PIN: pincode 2",
+      "correspondenceCity": "city/town/village 2",
+      "correspondencePinCode": "pincode 2",
+      "active": true,
+      "locale": "en_IN",
+      "type": "CITIZEN",
+      "accountLocked": false,
+      "fatherOrHusbandName": "name of relative",
+      "signature": "7a9d7f12-bdcb-4487-9d43-709838a0ad39",
+      "bloodGroup": "A+",
+      "photo": "3b26fb49-e43d-401b-899a-f8f0a1572de0",
+      "identificationMark": "identification mark",
+      "createdBy": 1,
+      "password": null,
+      "otpReference": null,
+      "lastModifiedBy": 1,
+      "tenantId": null,
+      "roles": [
+        {
+          "id": 1,
+          "name": "name of the role 1",
+          "description": "description",
+          "createdBy": 0,
+          "createdDate": "07/01/1990",
+          "lastModifiedBy": 0,
+          "lastModifiedDate": "07/01/1990"
+        },
+        {
+          "id": 2,
+          "name": "name of the role 2",
+          "description": "description",
+          "createdBy": 0,
+          "createdDate": "07/01/1990",
+          "lastModifiedBy": 0,
+          "lastModifiedDate": "07/01/1990"
+        }
+      ],
+      "createdDate": "01-07-1990 16:41:11",
+      "lastModifiedDate": "01-07-1990 16:41:11",
+      "dob": "07/01/1990",
+      "pwdExpiryDate": "01-07-1990 16:41:11"
+    }
+  ]
+}

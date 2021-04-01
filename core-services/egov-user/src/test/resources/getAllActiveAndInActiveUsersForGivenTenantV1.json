@@ -1,0 +1,14 @@
+{
+  "RequestInfo": {
+    "apiId": "apiId",
+    "ver": "version",
+    "action": "action",
+    "did": "did",
+    "key": "key",
+    "msgId": "msgId",
+    "requesterId": "requestId",
+    "authToken": "authToken"
+  },
+  "active": null,
+  "tenantId": "tenant1"
+}

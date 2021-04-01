@@ -1,0 +1,170 @@
+.complaints-main-container {
+  position: relative;
+}
+
+.complaints-card-main-cont:hover {
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 6px, rgba(0, 0, 0, 0.12) 0px 5px 4px;
+}
+
+.complaint-card-wrapper {
+  padding: 0;
+}
+
+.complaint-track-button div {
+  display: flex;
+}
+
+.complaint-header,
+.complaint-status-text {
+  line-height: 1;
+  letter-spacing: 0.7px;
+}
+
+.complaint-header {
+  font-size: 16px;
+}
+
+.complaint-date {
+  font-size: 12px;
+  letter-spacing: 0.6px;
+}
+
+.complaint-date-cont,
+.complaint-image-cont,
+.complaint-header-cont {
+  padding-bottom: 16px;
+}
+
+.complaint-number-cont {
+  padding-bottom: 10px;
+}
+
+.complaint-number {
+  display: block;
+  line-height: 14px;
+  height: 14px;
+  font-size: 12px;
+}
+
+.complaint-address-cont {
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+
+.complaint-address {
+  font-size: 12px;
+  padding-top: 2px;
+}
+
+.complaint-header-cont {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 8px;
+}
+
+.complaint-address-display {
+  display: block;
+}
+
+.comma-style {
+  display: none;
+}
+
+.complaint-date-cont,
+.complaint-address-cont {
+  display: flex;
+}
+
+.complaint-image-cont:last-child {
+  padding: 0;
+}
+
+.complaint-date-cont > svg {
+  color: #969696 !important;
+  fill: currentColor !important;
+  padding: 0 !important;
+  margin-right: 10px;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.complaint-image-cont {
+  white-space: nowrap;
+  overflow: none;
+  display: flex;
+}
+
+.complaint-image-wrapper {
+  display: inline-block;
+  margin-right: 14px;
+  width: 32%;
+}
+
+.complaint-image-wrapper:last-child {
+  margin: 0;
+}
+
+.complaint-track-button-cont {
+  text-align: right;
+}
+
+.complaint-track-button-cont i {
+  margin: 0 !important;
+}
+
+.employee-bottom-info-cont {
+  position: relative;
+}
+
+.submitted-by-text {
+  margin-bottom: 8px;
+}
+.complaint-number-cont .label-container,
+.complaint-number-cont .label-text {
+  display: inline;
+  letter-spacing: 0.6px;
+}
+.complaint-status-text .label-container,
+.complaint-status-text .label-text {
+  display: inline;
+}
+
+.no-complaints-message-cont {
+  padding: 0 34px;
+  text-align: center;
+  height: calc(100vh - 64px);
+  display: inline-flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.inline-Localization-text {
+  float: left;
+}
+
+@media only screen and (min-width: 768px) {
+  .complaint-image {
+    min-height: 200px !important;
+  }
+  .complaint-image-wrapper {
+    max-width: 200px;
+  }
+  .no-complaints-message-cont {
+    height: calc(100vh - 124px);
+  }
+
+  .complaint-address-display {
+    display: flex;
+  }
+
+  .comma-style {
+    display: inherit;
+  }
+}

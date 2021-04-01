@@ -1,0 +1,1165 @@
+---
+openapi: "3.0.0"
+info:
+  title: "eGov Building Plan Application System v1.1"
+  description: "Stakeholders will apply for a building permit using the scrutinised\
+    \ number from eDCR.A stakeholder is a registered user in the system who logs in\
+    \ to the portal and apply for a service. \nThe building permit application is\
+    \ one of the services in the building plan approval system.\n"
+  contact:
+    name: "Egovernments Foundation"
+    email: "contact@egovernments.org"
+  version: "1.0.0"
+servers:
+- url: "https://virtserver.swaggerhub.com/egov-foundation/BPA/1.0.0"
+  description: "SwaggerHub API Auto Mocking"
+- url: "https://virtserver.swaggerhub.com/egovernmets-faoundat/PT-2.0/1.0.0"
+  description: "SwaggerHub API Auto Mocking"
+- url: "https://egov-micro-dev.egovernments.org"
+paths:
+  /v1/land/_create:
+    post:
+      tags:
+      - "Land Registry"
+      summary: "Crete land detail in land registry"
+      description: "Citizen, Employee, Or an Architect can create for new build plan\
+        \ approval"
+      requestBody:
+        description: "Fill Bpa application details and submit the request."
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LandInfoRequest"
+        required: true
+      responses:
+        "202":
+          description: "Reqeuset submitted successfully"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LandInfoResponse"
+        "400":
+          description: "Failed to process the request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorRes"
+      x-roles: "BPA_ARCHITECT,CITIZEN,EMPLOYEE"
+  /v1/land/_update:
+    post:
+      tags:
+      - "Land Registry"
+      summary: "Update existing application."
+      description: "Updates a given `application` with newer details."
+      requestBody:
+        description: "Request to update existing application details."
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LandInfoRequest"
+        required: true
+      responses:
+        "202":
+          description: "successfully updated"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LandInfoResponse"
+        "400":
+          description: "Failed to update"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorRes"
+      x-roles: "BPA_ARCHITECT,CITIZEN,EMPLOYEE"
+  /v1/land/_search:
+    post:
+      tags:
+      - "Land Registry"
+      summary: "Get the list of land information."
+      description: "Get the list of land information..\n"
+      parameters:
+      - name: "tenantId"
+        in: "query"
+        description: "Unique id for a tenant."
+        required: true
+        schema:
+          type: "string"
+          format: "varchar"
+      - name: "ids"
+        in: "query"
+        description: "List of system generated ids of BPA applications."
+        required: false
+        style: "form"
+        explode: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+      - name: "landUId"
+        in: "query"
+        description: "land identifier."
+        required: false
+        style: "form"
+        explode: true
+        schema:
+          type: "string"
+      - name: "mobileNumber"
+        in: "query"
+        description: "MobileNumber of land owners"
+        required: false
+        style: "form"
+        explode: true
+        schema:
+          type: "integer"
+          format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestInfo"
+        required: true
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BPAResponse"
+        "400":
+          description: "Invalid input."
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorRes"
+      x-roles: "BPA_ARCHITECT,CITIZEN,EMPLOYEE"
+  /v1/bpa/_create:
+    post:
+      tags:
+      - "BPA_APPLY"
+      summary: "Apply for new building plan application."
+      description: "Citizen, Employee, Or an Architect can apply for new build plan\
+        \ approval"
+      requestBody:
+        description: "Fill Bpa application details and submit the request."
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BPARequest"
+        required: true
+      responses:
+        "202":
+          description: "Application submitted successfully"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BPAResponse"
+        "400":
+          description: "Failed to process the application"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorRes"
+      x-roles: "BPA_ARCHITECT,CITIZEN,EMPLOYEE"
+  /v1/bpa/_update:
+    post:
+      tags:
+      - "BPA_APPLY"
+      summary: "Update existing application."
+      description: "Updates a given `application` with newer details."
+      requestBody:
+        description: "Request to update existing application details."
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BPARequest"
+        required: true
+      responses:
+        "202":
+          description: "Application updated successfully"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BPAResponse"
+        "400":
+          description: "Failed to update"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorRes"
+      x-roles: "BPA_ARCHITECT,CITIZEN,EMPLOYEE"
+  /v1/bpa/_search:
+    post:
+      tags:
+      - "BPA_APPLY"
+      summary: "Get the list of application by passing the diffrent search criteria."
+      description: "Get the properties list based on the input parameters.\n"
+      parameters:
+      - name: "tenantId"
+        in: "query"
+        description: "Unique id for a tenant."
+        required: true
+        schema:
+          type: "string"
+          format: "varchar"
+      - name: "ids"
+        in: "query"
+        description: "List of system generated ids of BPA applications."
+        required: false
+        style: "form"
+        explode: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
+      - name: "edcrNumber"
+        in: "query"
+        description: "edcr Number."
+        required: false
+        style: "form"
+        explode: true
+        schema:
+          type: "string"
+      - name: "applicationNo"
+        in: "query"
+        description: "application numbers"
+        required: false
+        style: "form"
+        explode: true
+        schema:
+          type: "string"
+      - name: "mobileNumber"
+        in: "query"
+        description: "MobileNumber of land owners"
+        required: false
+        style: "form"
+        explode: true
+        schema:
+          type: "integer"
+          format: "int64"
+      - name: "approvalNo"
+        in: "query"
+        description: "approval no"
+        required: false
+        style: "form"
+        explode: true
+        schema:
+          type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestInfo"
+        required: true
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BPAResponse"
+        "400":
+          description: "Invalid input."
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorRes"
+      x-roles: "BPA_ARCHITECT,CITIZEN,EMPLOYEE"
+components:
+  schemas:
+    LandInfo:
+      title: "LandInfo"
+      required:
+      - "address"
+      - "owners"
+      - "tenantId"
+      type: "object"
+      properties:
+        id:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Unique Identifier(UUID) of the land for internal reference."
+          readOnly: true
+        landUId:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Unique formatted Identifier of the Land."
+          readOnly: true
+        landUniqueRegNo:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Unique Identifier of the Land in municipal departmrnt (eg.\
+            \ registration no, survey no etc)."
+        tenantId:
+          maxLength: 256
+          minLength: 2
+          type: "string"
+          description: "tenant id of the Property"
+        status:
+          $ref: "#/components/schemas/Status"
+        address:
+          $ref: "#/components/schemas/Address"
+        ownershipCategory:
+          maxLength: 64
+          type: "string"
+          description: "The type of ownership of the property."
+        owners:
+          type: "array"
+          description: "Property owners, these will be citizen users in system."
+          items:
+            $ref: "#/components/schemas/OwnerInfo"
+        institution:
+          $ref: "#/components/schemas/Institution"
+        source:
+          $ref: "#/components/schemas/Source"
+        channel:
+          $ref: "#/components/schemas/Channel"
+        documents:
+          type: "array"
+          description: "Attach the documents."
+          items:
+            $ref: "#/components/schemas/Document_2"
+        unit:
+          type: "array"
+          description: "Unit details of the plot."
+          items:
+            $ref: "#/components/schemas/Unit"
+        additionalDetails:
+          type: "object"
+          description: "The json to capturing the custom fields"
+        auditDetails:
+          $ref: "#/components/schemas/AuditDetails_2"
+    BPA:
+      required:
+      - "address"
+      - "owners"
+      - "tenantId"
+      type: "object"
+      properties:
+        id:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Unique Identifier(UUID) of the bpa application for internal\
+            \ reference."
+          readOnly: true
+        applicationNo:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Generate formatted Unique Identifier of the building permit\
+            \ application. Keep the format in mdms"
+          readOnly: true
+        approvalNo:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Generate Approval number based on wf status. When to generate\
+            \ approvalNo will be depends on wf state so make it configurable at  application\
+            \ level"
+          readOnly: true
+        accountId:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Initiator User UUID"
+        edcrNumber:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Unique Identifier scrutinized edcr number"
+        riskType:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Risk type will be drived based on mdms configuration"
+          readOnly: true
+        landId:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Unique Identifier(UUID) of the land for internal reference."
+        tenantId:
+          maxLength: 256
+          minLength: 2
+          type: "string"
+          description: "Unique ULB identifier."
+          nullable: false
+        status:
+          maxLength: 256
+          minLength: 2
+          type: "string"
+          description: "status of the application."
+          readOnly: true
+        documents:
+          type: "array"
+          description: "The documents attached by owner for exemption."
+          items:
+            $ref: "#/components/schemas/Document_2"
+        landInfo:
+          $ref: "#/components/schemas/LandInfo"
+        workflow:
+          $ref: "#/components/schemas/Workflow"
+        auditDetails:
+          $ref: "#/components/schemas/AuditDetails_2"
+        additionalDetails:
+          type: "object"
+          description: "The json to capturing the custom fields"
+      description: "BPA application object to capture the details of land, land owners,\
+        \ and address of the land."
+    Workflow:
+      type: "object"
+      properties:
+        action:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Action on the application in certain"
+        assignes:
+          type: "array"
+          items:
+            type: "string"
+        comments:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Unique Identifier scrutinized number"
+        varificationDocuments:
+          type: "array"
+          description: "Attach the workflow varification documents."
+          items:
+            $ref: "#/components/schemas/Document_2"
+      description: "BPA application object to capture the details of land, land owners,\
+        \ and address of the land."
+    Status:
+      title: "Status"
+      type: "string"
+      description: "status of the Property"
+      enum:
+      - "ACTIVE"
+      - "INACTIVE"
+    BPARequest:
+      required:
+      - "BPA"
+      - "RequestInfo"
+      properties:
+        RequestInfo:
+          $ref: "#/components/schemas/RequestInfo"
+        BPA:
+          $ref: "#/components/schemas/BPA"
+      description: "Contract class to receive request. Array of Property items  are\
+        \ used in case of create . Where as single Property item is used for update"
+    BPAResponse:
+      properties:
+        ResponseInfo:
+          $ref: "#/components/schemas/ResponseInfo"
+        BPA:
+          $ref: "#/components/schemas/BPA"
+      description: "Contains the ResponseHeader and the created/updated property"
+    LandInfoRequest:
+      required:
+      - "LandInfo"
+      - "RequestInfo"
+      properties:
+        RequestInfo:
+          $ref: "#/components/schemas/RequestInfo"
+        LandInfo:
+          $ref: "#/components/schemas/LandInfo"
+      description: "Contract class to receive request. Array of Land items  are used\
+        \ in case of create . Where as single Land item is used for update"
+    LandInfoResponse:
+      properties:
+        ResponseInfo:
+          $ref: "#/components/schemas/ResponseInfo"
+        LandInfo:
+          $ref: "#/components/schemas/LandInfo"
+      description: "Contains the ResponseHeader and the created/updated property"
+    ErrorRes:
+      required:
+      - "ResponseHeader"
+      type: "object"
+      properties:
+        ResponseHeader:
+          $ref: "#/components/schemas/ResponseHeader"
+        Errors:
+          minLength: 1
+          type: "array"
+          description: "Error response array corresponding to Request Object array.\
+            \ In case of single object submission or _search related paths this may\
+            \ be an array of one error element"
+          items:
+            $ref: "#/components/schemas/Error"
+      description: "All APIs will return ErrorRes in case of failure which will carry\
+        \ ResponseHeader as metadata and Error object as actual representation of\
+        \ error. In case of bulk apis, some apis may chose to return the array of\
+        \ Error objects to indicate individual failure."
+    ResponseHeader:
+      required:
+      - "msgId"
+      - "resMsgId"
+      - "status"
+      type: "object"
+      properties:
+        ts:
+          type: "integer"
+          description: "response time in epoch"
+          format: "int64"
+        resMsgId:
+          maxLength: 256
+          type: "string"
+          description: "unique response message id (UUID) - will usually be the correlation\
+            \ id from the server"
+        msgId:
+          maxLength: 256
+          type: "string"
+          description: "message id of the request"
+        status:
+          type: "string"
+          description: "status of request processing"
+          enum:
+          - "COMPLETED"
+          - "ACCEPTED"
+          - "FAILED"
+        signature:
+          type: "string"
+          description: "Hash describing the current ResponseHeader"
+        error:
+          $ref: "#/components/schemas/Error"
+        information:
+          type: "object"
+          description: "Additional information from API"
+        debug:
+          type: "object"
+          description: "Debug information when requested"
+        additionalInfo:
+          type: "object"
+          description: "Any additional information if required e.g. status url (to\
+            \ find out the current status of an asynchronous processing response),\
+            \ additional links to perform special functions like file uploads etc."
+      description: "ResponseHeader should be used to carry metadata information about\
+        \ the response from the server. apiId, ver and msgId in ResponseHeader should\
+        \ always correspond to the same values in respective request's RequestHeader."
+      readOnly: true
+    Error:
+      required:
+      - "code"
+      - "message"
+      type: "object"
+      properties:
+        code:
+          type: "string"
+          description: "Error Code will be module specific error label/code to identiffy\
+            \ the error. All modules should also publish the Error codes with their\
+            \ specific localized values in localization service to ensure clients\
+            \ can print locale specific error messages. Example for error code would\
+            \ be User.NotFound to indicate User Not Found by User/Authentication service.\
+            \ All services must declare their possible Error Codes with brief description\
+            \ in the error response section of their API path."
+        message:
+          type: "string"
+          description: "English locale message of the error code. Clients should make\
+            \ a separate call to get the other locale description if configured with\
+            \ the service. Clients may choose to cache these locale specific messages\
+            \ to enhance performance with a reasonable TTL (May be defined by the\
+            \ localization service based on tenant + module combination)."
+        description:
+          type: "string"
+          description: "Optional long description of the error to help clients take\
+            \ remedial action. This will not be available as part of localization\
+            \ service."
+        params:
+          type: "array"
+          description: "Some error messages may carry replaceable fields (say $1,\
+            \ $2) to provide more context to the message. E.g. Format related errors\
+            \ may want to indicate the actual field for which the format is invalid.\
+            \ Client's should use the values in the param array to replace those fields."
+          items:
+            type: "string"
+      description: "Error object will be returned as a part of reponse body in conjunction\
+        \ with ResponseHeader as part of ErrorResponse whenever the request processing\
+        \ status in the ResponseHeader is FAILED. HTTP return in this scenario will\
+        \ usually be HTTP 400."
+    RequestInfo:
+      required:
+      - "action"
+      - "apiId"
+      - "msgId"
+      - "ts"
+      - "ver"
+      type: "object"
+      properties:
+        apiId:
+          maxLength: 128
+          type: "string"
+          description: "unique API ID"
+        ver:
+          maxLength: 32
+          type: "string"
+          description: "API version - for HTTP based request this will be same as\
+            \ used in path"
+        ts:
+          type: "integer"
+          description: "time in epoch"
+          format: "int64"
+        action:
+          maxLength: 32
+          type: "string"
+          description: "API action to be performed like _create, _update, _search\
+            \ (denoting POST, PUT, GET) or _oauth etc"
+        did:
+          maxLength: 1024
+          type: "string"
+          description: "Device ID from which the API is called"
+        key:
+          maxLength: 256
+          type: "string"
+          description: "API key (API key provided to the caller in case of server\
+            \ to server communication)"
+        msgId:
+          maxLength: 256
+          type: "string"
+          description: "Unique request message id from the caller"
+        requesterId:
+          maxLength: 256
+          type: "string"
+          description: "UserId of the user calling"
+        authToken:
+          type: "string"
+          description: "//session/jwt/saml token/oauth token - the usual value that\
+            \ would go into HTTP bearer token"
+        userInfo:
+          $ref: "#/components/schemas/UserInfo"
+        correlationId:
+          type: "string"
+          readOnly: true
+      description: "RequestInfo should be used to carry meta information about the\
+        \ requests to the server as described in the fields below. All eGov APIs will\
+        \ use requestinfo as a part of the request body to carry this meta information.\
+        \ Some of this information will be returned back from the server as part of\
+        \ the ResponseInfo in the response body to ensure correlation."
+    UserInfo:
+      required:
+      - "primaryrole"
+      - "tenantId"
+      - "userName"
+      type: "object"
+      properties:
+        tenantId:
+          type: "string"
+          description: "Unique Identifier of the tenant to which user primarily belongs"
+        uuid:
+          type: "string"
+          description: "System Generated User id of the authenticated user."
+        userName:
+          type: "string"
+          description: "Unique user name of the authenticated user"
+        password:
+          type: "string"
+          description: "password of the user."
+        idToken:
+          type: "string"
+          description: "This will be the OTP."
+        mobile:
+          type: "string"
+          description: "mobile number of the autheticated user"
+        email:
+          type: "string"
+          description: "email address of the authenticated user"
+        primaryrole:
+          type: "array"
+          description: "List of all the roles for the primary tenant"
+          items:
+            $ref: "#/components/schemas/Role"
+        additionalroles:
+          type: "array"
+          description: "array of additional tenantids authorized for the authenticated\
+            \ user"
+          items:
+            $ref: "#/components/schemas/TenantRole"
+      description: "This is acting ID token of the authenticated user on the server.\
+        \ Any value provided by the clients will be ignored and actual user based\
+        \ on authtoken will be used on the server."
+      readOnly: true
+    Role:
+      required:
+      - "name"
+      type: "object"
+      properties:
+        name:
+          maxLength: 64
+          type: "string"
+          description: "Unique name of the role"
+        code:
+          maxLength: 64
+          type: "string"
+          description: "Unique code of the role"
+        description:
+          type: "string"
+          description: "brief description of the role"
+      description: "minimal representation of the Roles in the system to be carried\
+        \ along in UserInfo with RequestInfo meta data. Actual authorization service\
+        \ to extend this to have more role related attributes\n"
+    TenantRole:
+      required:
+      - "roles"
+      - "tenantId"
+      type: "object"
+      properties:
+        tenantId:
+          type: "string"
+          description: "tenantid for the tenant"
+        roles:
+          type: "array"
+          description: "Roles assigned for a particular tenant - array of role codes/names"
+          items:
+            $ref: "#/components/schemas/Role"
+      description: "User role carries the tenant related role information for the\
+        \ user. A user can have multiple roles per tenant based on the need of the\
+        \ tenant. A user may also have multiple roles for multiple tenants."
+    Address:
+      required:
+      - "locality"
+      - "tenantId"
+      type: "object"
+      properties:
+        tenantId:
+          type: "string"
+          description: "Unique Identifier of the tenant to which user primarily belongs"
+        doorNo:
+          type: "string"
+          description: "House number or door number."
+        plotNo:
+          type: "string"
+          description: "Plot number of the house."
+        id:
+          type: "string"
+          description: "System generated id for the address"
+          readOnly: true
+        landmark:
+          type: "string"
+          description: "additional landmark to help locate the address"
+        city:
+          type: "string"
+          description: "City of the address. Can be represented by the tenantid itself"
+        district:
+          type: "string"
+          description: "The district in which the property is located"
+        region:
+          type: "string"
+          description: "The Region in which the property is located"
+        state:
+          type: "string"
+          description: "The State in which the property is located"
+        country:
+          type: "string"
+          description: "The country in which the property is located"
+        pincode:
+          type: "string"
+          description: "PIN code of the address. Indian pincodes will usually be all\
+            \ numbers."
+        additionDetails:
+          type: "string"
+          description: "more address detail as may be needed"
+        buildingName:
+          maxLength: 64
+          minLength: 2
+          type: "string"
+          description: "Name of the building"
+        street:
+          maxLength: 64
+          minLength: 2
+          type: "string"
+          description: "Street Name"
+        locality:
+          $ref: "#/components/schemas/Boundary"
+        geoLocation:
+          $ref: "#/components/schemas/GeoLocation"
+      description: "Representation of a address. Indiavidual APIs may choose to extend\
+        \ from this using allOf if more details needed to be added in their case.\n"
+    Boundary:
+      required:
+      - "code"
+      - "name"
+      type: "object"
+      properties:
+        code:
+          type: "string"
+          description: "code of the boundary."
+        name:
+          type: "string"
+          description: "name of the boundary."
+        label:
+          type: "string"
+          description: "localized label for the boundry."
+        latitude:
+          type: "string"
+          description: "latitude of the boundary."
+        longitude:
+          type: "string"
+          description: "longitude of the boundary."
+        children:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Boundary"
+        materializedPath:
+          type: "string"
+          description: "materialized path of the boundary - this would be of the format\
+            \ tenantid.[code] from parentt till teh current boundary"
+          readOnly: true
+    GeoLocation:
+      type: "object"
+      properties:
+        latitude:
+          type: "number"
+          description: "latitude of the address"
+          format: "double"
+        longitude:
+          type: "number"
+          description: "longitude of the address"
+          format: "double"
+        additionalDetails:
+          type: "object"
+          description: "Json object to capture any extra information which is not\
+            \ accommodated by model"
+    OwnerInfo:
+      title: "OwnerInfo"
+      required:
+      - "fatherOrHusbandName"
+      - "gender"
+      - "mobileNumber"
+      - "name"
+      - "relationship"
+      type: "object"
+      properties:
+        name:
+          maxLength: 256
+          type: "string"
+          description: "The name of the owner."
+        mobileNumber:
+          maxLength: 256
+          type: "string"
+          description: "MobileNumber of the owner."
+        gender:
+          maxLength: 256
+          type: "string"
+          description: "Gender of the owner."
+        fatherOrHusbandName:
+          maxLength: 256
+          type: "string"
+          description: "Father or Husband name of the owner."
+        correspondenceAddress:
+          maxLength: 1024
+          type: "string"
+          description: "The current address of the owner for correspondence."
+        isPrimaryOwner:
+          type: "boolean"
+          description: "The owner is primary or not"
+        ownerShipPercentage:
+          type: "number"
+          description: "Ownership percentage."
+        ownerType:
+          maxLength: 256
+          type: "string"
+          description: "Type of owner, based on this option Exemptions will be applied.\
+            \ This is master data defined in mdms."
+        institutionId:
+          maxLength: 64
+          type: "string"
+          description: "The id of the institution if the owner is the authorized person\
+            \ for one"
+        documents:
+          type: "array"
+          description: "The documents attached by owner for exemption."
+          items:
+            $ref: "#/components/schemas/Document"
+        relationship:
+          $ref: "#/components/schemas/Relationship"
+        additionalDetails:
+          type: "object"
+          description: "Json object to capture any extra information which is not\
+            \ accommodated of model"
+    Document:
+      title: "Document"
+      type: "object"
+      properties:
+        id:
+          maxLength: 64
+          type: "string"
+          description: "system id of the Document."
+        documentType:
+          type: "string"
+          description: "unique document type code, should be validated with document\
+            \ type master"
+        fileStore:
+          type: "string"
+          description: "File store reference key."
+        documentUid:
+          maxLength: 64
+          type: "string"
+          description: "The unique id(Pancard Number,Adhar etc.) of the given Document."
+        additionalDetails:
+          type: "object"
+          description: "Json object to capture any extra information which is not\
+            \ accommodated by model"
+      description: "This object holds list of documents attached during the transaciton\
+        \ for a property"
+    Relationship:
+      title: "Relationship"
+      type: "string"
+      description: "The relationship of gaurdian."
+      enum:
+      - "FATHER"
+      - "HUSBAND"
+    Institution:
+      title: "Institution"
+      type: "object"
+      properties:
+        id:
+          maxLength: 64
+          type: "string"
+          description: "Unique Identifier of the Institution(UUID)."
+        tenantId:
+          maxLength: 256
+          type: "string"
+          description: "tenant id of the Property"
+        type:
+          maxLength: 64
+          type: "string"
+          description: "Institution type."
+        designation:
+          maxLength: 64
+          type: "string"
+          description: "Designation of the person creating/updatingentity on behalf\
+            \ of the institution"
+        nameOfAuthorizedPerson:
+          maxLength: 256
+          type: "string"
+          description: "Name of the person who is taking action on behalf of institution"
+        additionalDetails:
+          type: "object"
+          description: "Json object to capture any extra information which is not\
+            \ accommodated by model"
+    Source:
+      title: "Source"
+      type: "string"
+      description: "Source of a constructionDetail data. The constructionDetail will\
+        \ be created in a system based on the data avaialble in their manual records\
+        \ or during field survey. There can be more from client to client."
+      enum:
+      - "MUNICIPAL_RECORDS"
+      - "FIELD_SURVEY"
+    Channel:
+      title: "Channel"
+      type: "string"
+      description: "constructionDetail details can be created from different channels\
+        \ Eg. System (properties created by ULB officials), CFC Counter (From citizen\
+        \ faciliation counters) etc. Here we are defining some known channels, there\
+        \ can be more client to client."
+      enum:
+      - "SYSTEM"
+      - "CFC_COUNTER"
+      - "CITIZEN"
+      - "DATA_ENTRY"
+      - "MIGRATION"
+    Document_2:
+      type: "object"
+      properties:
+        id:
+          maxLength: 64
+          type: "string"
+          description: "system id of the Document."
+        documentType:
+          type: "string"
+          description: "unique document type code, should be validated with document\
+            \ type master"
+        fileStore:
+          type: "string"
+          description: "File store reference key."
+        documentUid:
+          maxLength: 64
+          type: "string"
+          description: "The unique id(Pancard Number,Adhar etc.) of the given Document."
+        additionalDetails:
+          type: "object"
+          description: "Json object to capture any extra information which is not\
+            \ accommodated by model"
+      description: "This object holds list of documents attached during the transaciton\
+        \ for a property"
+    Unit:
+      title: "Unit"
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Unique Identifier of the Unit(UUID)."
+        tenantId:
+          maxLength: 256
+          minLength: 2
+          type: "string"
+          description: "tenant id of the Property"
+        floorNo:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "floor number of the Unit"
+        unitType:
+          type: "string"
+          description: "Unit type is master data."
+          example: "Building, Room, Kitchen etc."
+        usageCategory:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "This is about the usage of the property like Residential,\
+            \ Non-residential, Mixed(Property witch is gettiong used for Residential,\
+            \ Non-residential purpose)"
+        occupancyType:
+          $ref: "#/components/schemas/OccupancyType2"
+        occupancyDate:
+          type: "integer"
+          description: "Date on which unit is occupied."
+          format: "int64"
+        constructionDetail:
+          $ref: "#/components/schemas/ConstructionDetail"
+        additionalDetails:
+          type: "object"
+          description: "Json object to capture any extra information which is not\
+            \ accommodated by model"
+    OccupancyType2:
+      title: "OccupancyType2"
+      type: "string"
+      description: "Value denoting if the unit is rented or occupied by owner"
+      enum:
+      - "OWNER"
+      - "TENANT"
+    ConstructionDetail:
+      title: "ConstructionDetail"
+      type: "object"
+      properties:
+        id:
+          maxLength: 64
+          type: "string"
+          description: "id of the property with which the constructionDetail is associated."
+        carpetArea:
+          type: "number"
+          description: "Total built up area in sq ft(built-up area = carpet area +\
+            \ areas covered by walls)"
+        builtUpArea:
+          type: "number"
+          description: "Total built up area in sq ft(built-up area = carpet area +\
+            \ areas covered by walls)"
+        plinthArea:
+          type: "number"
+          description: "Area of the extension builtup of the Unit, Like balcony, sitouts."
+        superBuiltUpArea:
+          type: "number"
+          description: "Total built up area in sq ft(built-up area + Common area =\
+            \ Super built-up area)"
+        constructionType:
+          maxLength: 64
+          minLength: 1
+          type: "string"
+          description: "Construction type is defined in MDMS ConstructionTypeMaster."
+        constructionDate:
+          type: "integer"
+          description: "The date when the property was constructed"
+          format: "int64"
+        dimensions:
+          type: "object"
+          description: "The dimensions of the plot or building or any unit"
+        auditDetails:
+          $ref: "#/components/schemas/AuditDetails"
+        additionalDetails:
+          type: "object"
+          description: "The json (array of '#/definitions/Factor')"
+      description: "Construction/constructionDetail details are captured here. Detail\
+        \ information of the constructionDetail including floor wise usage and area\
+        \ are saved as seperate units .For each financial year construction details\
+        \ may change. constructionDetail object is required for tax calculation"
+    AuditDetails:
+      title: "AuditDetails"
+      type: "object"
+      properties:
+        createdBy:
+          type: "string"
+          description: "username (preferred) or userid of the user that created the\
+            \ object"
+        lastModifiedBy:
+          type: "string"
+          description: "username (preferred) or userid of the user that last modified\
+            \ the object"
+        createdTime:
+          type: "integer"
+          description: "epoch of the time object is created"
+          format: "int64"
+        lastModifiedTime:
+          type: "integer"
+          description: "epoch of the time object is last modified"
+          format: "int64"
+      description: "Collection of audit related fields used by most models"
+    AuditDetails_2:
+      type: "object"
+      properties:
+        createdBy:
+          type: "string"
+          description: "username (preferred) or userid of the user that created the\
+            \ object"
+        lastModifiedBy:
+          type: "string"
+          description: "username (preferred) or userid of the user that last modified\
+            \ the object"
+        createdTime:
+          type: "integer"
+          description: "epoch of the time object is created"
+          format: "int64"
+        lastModifiedTime:
+          type: "integer"
+          description: "epoch of the time object is last modified"
+          format: "int64"
+      description: "Collection of audit related fields used by most models"
+      readOnly: true
+    ResponseInfo:
+      required:
+      - "apiId"
+      - "status"
+      - "ts"
+      - "ver"
+      type: "object"
+      properties:
+        apiId:
+          maxLength: 128
+          type: "string"
+          description: "unique API ID"
+        ver:
+          maxLength: 32
+          type: "string"
+          description: "API version"
+        ts:
+          type: "integer"
+          description: "response time in epoch"
+          format: "int64"
+        resMsgId:
+          maxLength: 256
+          type: "string"
+          description: "unique response message id (UUID) - will usually be the correlation\
+            \ id from the server"
+        msgId:
+          maxLength: 256
+          type: "string"
+          description: "message id of the request"
+        status:
+          type: "string"
+          description: "status of request processing - to be enhanced in futuer to\
+            \ include INPROGRESS"
+          enum:
+          - "SUCCESSFUL"
+          - "FAILED"
+      description: "ResponseInfo should be used to carry metadata information about\
+        \ the response from the server. apiId, ver and msgId in ResponseInfo should\
+        \ always correspond to the same values in respective request's RequestInfo."
+      readOnly: true
+x-module: "BPA"
+x-common-path: "https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml"
