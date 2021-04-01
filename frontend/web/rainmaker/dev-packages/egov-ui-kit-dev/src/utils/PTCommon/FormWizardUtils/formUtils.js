@@ -381,11 +381,13 @@ const createProperty = async (Properties, action, props) => {
       set(propertyPayload, `units[${i}].usageCategory`,propertyPayload.usageCategory)
   }
 
-  let newUnits =   propertyPayload.units && propertyPayload.units;
+ if(propertyMethodAction==="_update")
+ {
+  let newUnits =  propertyPayload &&  propertyPayload.units && propertyPayload.units;
 
-  let availableUnits = newProperties[0].units && newProperties[0].units;
+  let availableUnits = newProperties && newProperties[0].units && newProperties[0].units;
 
-  let results = availableUnits.filter(({ id: id1 }) => !newUnits.some(({ id: id2 }) => id2 === id1));
+  let results = availableUnits && availableUnits.filter(({ id: id1 }) => newUnits && !newUnits.some(({ id: id2 }) => id2 === id1));
 
 
   if (results)
@@ -399,6 +401,7 @@ const createProperty = async (Properties, action, props) => {
       }
       propertyPayload.units = propertyPayload.units.concat(results);
   }
+}
 
 
   /* if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
