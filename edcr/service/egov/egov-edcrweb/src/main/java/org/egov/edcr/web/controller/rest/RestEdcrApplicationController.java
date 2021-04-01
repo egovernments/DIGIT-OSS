@@ -294,9 +294,8 @@ public class RestEdcrApplicationController {
     @PostMapping(value = "/scrutinydetails", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> scrutinyDetails(@ModelAttribute EdcrRequest edcrRequest,
-            @RequestBody @Valid RequestInfoWrapper requestInfoWrapper, final HttpServletRequest request) {
-        String userInfo = request.getHeader(USER_INFO_HEADER_NAME);
-        LOGGER.info("###User Info####"+userInfo);
+            @RequestBody @Valid RequestInfoWrapper requestInfoWrapper) {
+        LOGGER.info("###Request Info####"+requestInfoWrapper.toString());
         List<EdcrDetail> edcrDetail = edcrRestService.fetchEdcr(edcrRequest, requestInfoWrapper);
         if (!edcrDetail.isEmpty() && edcrDetail.get(0).getErrors() != null) {
             return new ResponseEntity<>(edcrDetail.get(0).getErrors(), HttpStatus.OK);

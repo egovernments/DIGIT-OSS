@@ -348,13 +348,14 @@ public class EdcrRestService {
     public List<EdcrDetail> fetchEdcr(final EdcrRequest edcrRequest, final RequestInfoWrapper reqInfoWrapper) {
         List<EdcrApplicationDetail> edcrApplications = new ArrayList<>();
         UserInfo userInfo = reqInfoWrapper.getRequestInfo() == null ? null : reqInfoWrapper.getRequestInfo().getUserInfo();
+        LOG.info("****User Info***" + String.valueOf(userInfo));
         String userId = "";
         if (userInfo != null && StringUtils.isNoneBlank(userInfo.getUuid()))
             userId = userInfo.getUuid();
         else if (userInfo != null && StringUtils.isNoneBlank(userInfo.getId()))
             userId = userInfo.getId();
         // When the user is ANONYMOUS, then search application by edcrno or transaction number
-        if (StringUtils.isNoneBlank(userId) && !userInfo.getPrimaryrole().isEmpty()) {
+        if (userInfo != null && StringUtils.isNoneBlank(userId) && !userInfo.getPrimaryrole().isEmpty()) {
             List<String> roles = userInfo.getPrimaryrole().stream().map(Role::getCode).collect(Collectors.toList());
             LOG.info("****Roles***" + roles);
             if (roles.contains("ANONYMOUS"))
