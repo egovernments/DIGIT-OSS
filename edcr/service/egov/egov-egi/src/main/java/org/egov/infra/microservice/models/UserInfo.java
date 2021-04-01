@@ -198,4 +198,11 @@ public class UserInfo implements Serializable {
 		this.id = id;
 	}
 
+    @Override
+    public String toString() {
+        return "UserInfo [id=" + id + ", userName=" + userName + ", name=" + name + ", type=" + type + ", mobile=" + mobile
+                + ", email=" + email + ", uuid=" + uuid + ", password=" + password + ", idToken=" + idToken + ", primaryrole="
+                + primaryrole + ", additionalroles=" + additionalroles + ", tenantId=" + tenantId + "]";
+    }
+
 }
