@@ -348,7 +348,6 @@ public class EdcrRestService {
     public List<EdcrDetail> fetchEdcr(final EdcrRequest edcrRequest, final RequestInfoWrapper reqInfoWrapper) {
         List<EdcrApplicationDetail> edcrApplications = new ArrayList<>();
         UserInfo userInfo = reqInfoWrapper.getRequestInfo() == null ? null : reqInfoWrapper.getRequestInfo().getUserInfo();
-        LOG.info("****User Info***" + userInfo.toString());
         String userId = "";
         if (userInfo != null && StringUtils.isNoneBlank(userInfo.getUuid()))
             userId = userInfo.getUuid();

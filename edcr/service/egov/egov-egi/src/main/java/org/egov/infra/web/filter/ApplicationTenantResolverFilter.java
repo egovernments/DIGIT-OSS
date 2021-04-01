@@ -117,8 +117,8 @@ public class ApplicationTenantResolverFilter implements Filter {
         ApplicationThreadLocals.setTenantID(environmentSettings.schemaName(domainName));
         ApplicationThreadLocals.setDomainName(domainName);
         ApplicationThreadLocals.setDomainURL(domainURL);
-        LOG.info("***Tenant ID-->" + ApplicationThreadLocals.getTenantID());
         prepareRestService(customRequest, session);
+        LOG.info("***Tenant ID-->" + ApplicationThreadLocals.getTenantID());
         chain.doFilter(customRequest, response);
     }
 

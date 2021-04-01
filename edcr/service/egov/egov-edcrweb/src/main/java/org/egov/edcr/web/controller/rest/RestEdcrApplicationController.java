@@ -295,7 +295,6 @@ public class RestEdcrApplicationController {
     @ResponseBody
     public ResponseEntity<?> scrutinyDetails(@ModelAttribute EdcrRequest edcrRequest,
             @RequestBody @Valid RequestInfoWrapper requestInfoWrapper) {
-        LOGGER.info("###Request Info####"+requestInfoWrapper.toString());
         List<EdcrDetail> edcrDetail = edcrRestService.fetchEdcr(edcrRequest, requestInfoWrapper);
         if (!edcrDetail.isEmpty() && edcrDetail.get(0).getErrors() != null) {
             return new ResponseEntity<>(edcrDetail.get(0).getErrors(), HttpStatus.OK);
@@ -391,12 +390,12 @@ public class RestEdcrApplicationController {
 
         List<ErrorDetail> errors = ocComparisonService.validateEdcrMandatoryFields(comparisonRequest);
         if (!errors.isEmpty())
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errors, HttpStatus.OK);
 
         ComparisonDetail comparisonDetail = ocComparisonService.process(comparisonRequest);
 
         if (comparisonDetail.getErrors() != null && !comparisonDetail.getErrors().isEmpty())
-            return new ResponseEntity<>(comparisonDetail.getErrors(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(comparisonDetail.getErrors(), HttpStatus.OK);
 
         return getComparisonSuccessResponse(comparisonDetail, requestInfoWrapper.getRequestInfo());
     }

@@ -58,7 +58,6 @@ import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.stereotype.Service;
@@ -75,9 +74,6 @@ public final class TenantUtils {
 
     @Autowired
     private ConfigurableEnvironment environment;
-
-    @Value("${dev.mode}")
-    private String devMode;
 
     private TenantUtils() {
         // Not to be initialized
@@ -113,26 +109,25 @@ public final class TenantUtils {
 
             });
             // second: get it only from application config properties if it is not override
-            if (Boolean.valueOf(devMode))
-                environment.getPropertySources().iterator().forEachRemaining(propertySource -> {
-                    if (LOG.isInfoEnabled())
-                        LOG.info(
-                                "Property Source" + propertySource.getName() + " Class Name"
-                                        + propertySource.getClass().getSimpleName());
-                    if (propertySource.getName().contains("application-config.properties")
-                            && propertySource instanceof MapPropertySource) {
-                        ((MapPropertySource) propertySource).getSource().forEach((key, value) -> {
-                            if (key.startsWith(TENANT) && !tenants.containsKey(value)) {
-                                tenants.put(value.toString(), url.getProtocol() + "://" + key.replace(TENANT, "")
-                                        + (url.getPort() == -1 ? "" : ":" + url.getPort()));
-                                LOG.info(
-                                        "*****application config tenants******" + value.toString() + url.getProtocol() + "://"
-                                                + key.replace(TENANT, "") + (url.getPort() == -1 ? "" : ":" + url.getPort()));
-                            }
-                        });
-                    }
+            environment.getPropertySources().iterator().forEachRemaining(propertySource -> {
+                if (LOG.isInfoEnabled())
+                    LOG.info(
+                            "Property Source" + propertySource.getName() + " Class Name"
+                                    + propertySource.getClass().getSimpleName());
+                if (propertySource.getName().contains("application-config.properties")
+                        && propertySource instanceof MapPropertySource) {
+                    ((MapPropertySource) propertySource).getSource().forEach((key, value) -> {
+                        if (key.startsWith(TENANT) && !tenants.containsKey(value)) {
+                            tenants.put(value.toString(), url.getProtocol() + "://" + key.replace(TENANT, "")
+                                    + (url.getPort() == -1 ? "" : ":" + url.getPort()));
+                            LOG.info(
+                                    "*****application config tenants******" + value.toString() + url.getProtocol() + "://"
+                                            + key.replace(TENANT, "") + (url.getPort() == -1 ? "" : ":" + url.getPort()));
+                        }
+                    });
+                }
 
-                });
+            });
         } catch (MalformedURLException e) {
             LOG.error("Error occurred, while forming URL", e);
         }
