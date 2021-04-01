@@ -138,38 +138,26 @@ export const searchPropertyDetails = getCommonCard({
     labelKey: "PT_HOME_SEARCH_RESULTS_DESC"
   }),
   ulbCityContainer: getCommonContainer({
-    ulbCity: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-pt",
-      componentPath: "AutosuggestContainer",
-      props: {
-        className: "autocomplete-dropdown",
-        suggestions: [],
-        label: {
-          labelName: "ULB",
-          labelKey: "PT_ULB_CITY"
-        },
-        placeholder: {
-          labelName: "Select ULB",
-          labelKey: "PT_ULB_CITY_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName: "TENANT",
-          masterName: "TENANTS"
-        },
-        jsonPath: "searchScreen.tenantId",
-        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-        labelsFromLocalisation: true,
-        required: true,
-        isClearable: true,
-        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-        inputLabelProps: {
-          shrink: true
-        }
+    ulbCity: getSelectField({
+      label: {
+        labelName: "City",
+        labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY"
       },
-      required: true,
+      placeholder: {
+        labelName: "Select City",
+        labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY_PLACEHOLDER"
+      },
+      localePrefix: {
+        moduleName: "TENANT",
+        masterName: "TENANTS"
+      },
       jsonPath: "searchScreen.tenantId",
       sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+      required: true,
+      props: {
+        required: true,
+        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+      },
       gridDefination: {
         xs: 12,
         sm: 4
@@ -177,7 +165,7 @@ export const searchPropertyDetails = getCommonCard({
     beforeFieldChange: async (action, state, dispatch) => {
       let tenant = action.value;
       if(process.env.REACT_APP_NAME === "Citizen" && action.value){
-        debugger
+        
         const tenantRequestBody = {
           MdmsCriteria: {
             tenantId: getTenantId(),
@@ -248,8 +236,9 @@ export const searchPropertyDetails = getCommonCard({
           );
             dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
         }
-    }
+            
     },
+  }),
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",
