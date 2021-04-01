@@ -110,15 +110,15 @@ public class AssessmentEnrichmentService {
                 enrichPropertyFromAssessment(property, request.getAssessment());
             }
         }
-        if(!CollectionUtils.isEmpty(assessment.getDocuments())) {
-            for(Document doc: assessment.getDocuments()) {
-                if(StringUtils.isEmpty(doc.getId())) {
-                    doc.setId(String.valueOf(UUID.randomUUID()));
-                    doc.setAuditDetails(auditDetails);
-                    doc.setStatus(Status.ACTIVE);
-                }
-            }
-        }
+//        if(!CollectionUtils.isEmpty(assessment.getDocuments())) {
+//            for(Document doc: assessment.getDocuments()) {
+//                if(StringUtils.isEmpty(doc.getId())) {
+//                    doc.setId(String.valueOf(UUID.randomUUID()));
+//                    doc.setAuditDetails(auditDetails);
+//                    doc.setStatus(Status.ACTIVE);
+//                }
+//            }
+//        }
         assessment.getAuditDetails().setLastModifiedBy(auditDetails.getLastModifiedBy());
         assessment.getAuditDetails().setLastModifiedTime(auditDetails.getLastModifiedTime());
     }
