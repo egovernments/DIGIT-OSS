@@ -36,7 +36,10 @@ import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AssessmentService {
 
 	private AssessmentValidator validator;
@@ -249,10 +252,13 @@ public class AssessmentService {
 				try {
 					Assessment assessment = mapper.readValue(mapper.writeValueAsString(actualAssessment),
 							Assessment.class);
+					log.info("Assessment: "+assessment);
 					AssessmentRequest assessmentRequest = enrichLegacyAssessment(assessment, demand.getTaxPeriodFrom(),
 							requestInfo);
 					assessmentEnrichmentService.enrichAssessmentCreate(assessmentRequest);
+					log.info("Assessment Request: "+assessmentRequest);
 					newAssessments.add(assessmentRequest);
+					log.info("New Assessments: "+newAssessments);
 				} catch (Exception ex) {
 					throw new CustomException("JSON_DATA_PARSE_EXCEPTION", "Exception in parsing request");
 				}
@@ -262,8 +268,11 @@ public class AssessmentService {
 		for (Assessment assessment : assessmentsFromDB) {
 			AssessmentRequest assessmentRequest = AssessmentRequest.builder().requestInfo(requestInfo)
 					.assessment(assessment).build();
+			log.info("Assessment Request: "+assessmentRequest);
 			assessmentEnrichmentService.enrichAssessmentUpdate(assessmentRequest, property);
 			oldAssessments.add(assessmentRequest);
+			log.info("Old Assessments : "+ oldAssessments);
+
 		}
 		calculationService.updateDemands(demands, request.getRequestInfo());
 		publishLegacyAssessmentRequests(newAssessments, props.getCreateAssessmentTopic());
