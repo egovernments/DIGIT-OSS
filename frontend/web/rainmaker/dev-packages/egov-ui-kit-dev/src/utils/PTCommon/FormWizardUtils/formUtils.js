@@ -4,7 +4,7 @@ import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { showSpinner, hideSpinner } from "egov-ui-kit/redux/common/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getBusinessServiceNextAction } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
-import { get, set, isEqual } from "lodash";
+import { get, set, isEqual, differenceWith } from "lodash";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import cloneDeep from "lodash/cloneDeep";
@@ -379,6 +379,25 @@ const createProperty = async (Properties, action, props) => {
   {
       if (propertyPayload.units[i].usageCategory==="undefined")
       set(propertyPayload, `units[${i}].usageCategory`,propertyPayload.usageCategory)
+  }
+
+  let newUnits =   propertyPayload.units && propertyPayload.units;
+
+  let availableUnits = newProperties[0].units && newProperties[0].units;
+
+  let results = availableUnits.filter(({ id: id1 }) => !newUnits.some(({ id: id2 }) => id2 === id1));
+
+
+  if (results)
+  {
+      for(let i=0; results && i< results.length ;i++)
+      {
+          if (results[i].active===true)
+          {
+          results[i].active="false"
+          }
+      }
+      propertyPayload.units = propertyPayload.units.concat(results);
   }
 
 
