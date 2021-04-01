@@ -375,8 +375,11 @@ const createProperty = async (Properties, action, props) => {
 
   let  isLegacy = get(propertyPayload, "source",'');
 
-
-
+  for(let i=0; propertyPayload && propertyPayload.units && i< propertyPayload.units.length ;i++)
+  {
+      if (propertyPayload.units[i].usageCategory==="undefined")
+      set(propertyPayload, `units[${i}].usageCategory`,propertyPayload.usageCategory)
+  }
 
 
   /* if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
