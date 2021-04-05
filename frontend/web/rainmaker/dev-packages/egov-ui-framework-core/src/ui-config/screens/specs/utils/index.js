@@ -569,7 +569,7 @@ export const getPattern = type => {
     case "DoorHouseNo":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
     case "BuildingStreet":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i;
     case "Pincode":
       return /^[1-9][0-9]{5}$/i;
     case "Landline":
