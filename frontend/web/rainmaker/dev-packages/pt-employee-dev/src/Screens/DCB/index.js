@@ -606,6 +606,14 @@ class FormWizardDataEntry extends Component {
                           
               }
             );  
+
+            let latestFinalData = getFinalData();
+
+            for(let i=0; i<latestFinalData.length;i++)
+            {
+              if(finalYear===latestFinalData[i].financialYear)
+              yearKey =i;
+            }
                    
             prepareFinalObject(
               `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`, 
