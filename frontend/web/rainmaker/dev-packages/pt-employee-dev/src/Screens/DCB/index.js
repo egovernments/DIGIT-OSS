@@ -609,7 +609,7 @@ class FormWizardDataEntry extends Component {
 
             let latestFinalData = getFinalData();
 
-            for(let i=0; i<latestFinalData.length;i++)
+            for(let i=0; latestFinalData && i<latestFinalData.length;i++)
             {
               if(finalYear===latestFinalData[i].financialYear)
               yearKey =i;
