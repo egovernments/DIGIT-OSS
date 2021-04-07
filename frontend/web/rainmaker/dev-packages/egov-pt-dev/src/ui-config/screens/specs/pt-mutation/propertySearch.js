@@ -31,6 +31,19 @@ const getMDMSData = async (action, dispatch) => {
       ]
     } 
   ]
+
+  const documentModuleDetails  =
+  [
+    {
+      moduleName: "PropertyTax", 
+      masterDetails: [
+        { name: "Documents" }
+       ] 
+     },
+  ]
+
+  getRequiredDocData(action, dispatch, documentModuleDetails);
+
   let tenantId =
     process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId : getTenantId();
 
