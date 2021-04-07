@@ -102,6 +102,7 @@ const formConfig = {
   isFormValid: false,
   beforeInitForm: (action, store) => {
     try {
+      set(action, "form.fields.typeOfBuilding.value", null)
       let state = store.getState();
       //localStorageSet("previousFloorNo", -1);
       let previousFloorNo = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].noOfFloors",null);
