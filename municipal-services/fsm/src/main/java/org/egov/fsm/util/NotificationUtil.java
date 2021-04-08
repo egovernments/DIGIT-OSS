@@ -84,7 +84,7 @@ public class NotificationUtil {
 		String message = null, messageTemplate;
 
 			FSM fsm = fsmRequest.getFsm();
-			Vendor vendor = this.dsoSerevice.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null, fsmRequest.getRequestInfo());
+			Vendor vendor = this.dsoSerevice.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null,null, fsmRequest.getRequestInfo());
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
 			
 			if (!StringUtils.isEmpty(messageTemplate)) {
@@ -131,11 +131,13 @@ public class NotificationUtil {
 				if (message.contains("<FSM_DSO_REJECT_REASON>") ) {
 					
 					String reasonComment = fsmRequest.getWorkflow().getComments();
+					reasonComment = reasonComment.split("~")[0];
 					String localizedCmt = getMessageTemplate(reasonComment, localizationMessage);
 					message = message.replace("<FSM_DSO_REJECT_REASON>", org.springframework.util.StringUtils.isEmpty(localizedCmt)? reasonComment : localizedCmt);
 				}
 				if (message.contains("<FSM_CANCEL_REASON>") ) {
 					String reasonComment = fsmRequest.getWorkflow().getComments();
+					reasonComment = reasonComment.split("~")[0];
 					String localizedCmt = getMessageTemplate(reasonComment, localizationMessage);
 					message = message.replace("<FSM_CANCEL_REASON>", org.springframework.util.StringUtils.isEmpty(localizedCmt)? reasonComment : localizedCmt);
 				}

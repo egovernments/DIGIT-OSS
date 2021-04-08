@@ -245,7 +245,7 @@ public class FSMService {
 	private void handleDSOAccept(FSMRequest fsmRequest, FSM oldFSM) {
 		FSM fsm = fsmRequest.getFsm();
 		org.egov.common.contract.request.User dsoUser = fsmRequest.getRequestInfo().getUserInfo();
-		Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(),fsm.getTenantId(), dsoUser.getUuid(),null, fsmRequest.getRequestInfo());
+		Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(),fsm.getTenantId(), dsoUser.getUuid(),null,null, fsmRequest.getRequestInfo());
 		if(vendor == null) {
 			throw new CustomException(FSMErrorConstants.INVALID_DSO," DSO is invalid, cannot take an action, Application is not assigned to current logged in user !");
 		}
@@ -389,7 +389,7 @@ public class FSMService {
 		if(requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN) ) {
 			List<Role> roles = requestInfo.getUserInfo().getRoles();
 			if( roles.stream().anyMatch(role -> Objects.equals(role.getCode(), FSMConstants.ROLE_FSM_DSO))) {
-			  	Vendor dso = dsoService.getVendor(null, criteria.getTenantId(), null, requestInfo.getUserInfo().getMobileNumber(), requestInfo);
+			  	Vendor dso = dsoService.getVendor(null, criteria.getTenantId(), null, requestInfo.getUserInfo().getMobileNumber(),null, requestInfo);
 			  	if(dso!=null && org.apache.commons.lang3.StringUtils.isNotEmpty(dso.getId())) {
 			  		dsoId = dso.getId();
 			  	}

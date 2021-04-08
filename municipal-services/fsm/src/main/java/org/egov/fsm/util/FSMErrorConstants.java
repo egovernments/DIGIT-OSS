@@ -22,6 +22,7 @@ public class FSMErrorConstants {
 	public static final String INVALID_UPDATE ="Invlaid Update";
 	public static final String INVALID_COMMENT_CANCEL_REJECT ="INVALID_COMMENT_CANCEL_REJECT";
 	public static final String INVALID_VEHICLE_TYPE = "INVALID_VEHICLE_TYPE";
+	public static final String NO_VEHICLE_VEHICLE_TYPE = "NO_VEHICLE_VEHICLE_TYPE";
 	
 	
 	public static final String INVALID_APPLICANT_ERROR ="INVALID_APPLICANT_ERROR";
