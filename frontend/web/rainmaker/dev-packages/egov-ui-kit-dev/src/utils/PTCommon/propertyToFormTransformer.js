@@ -94,6 +94,7 @@ export const getInstituteAuthority = (propertyResponse) => {
   const { Properties } = propertyResponse;
   const instituteDataFromApi = get(Properties[0], "propertyDetails[0].owners", []);
   const designationPath = get(institutionAuthority, "fields.designation.jsonPath", "");
+  
   let instituteAuthorityForm = {};
   instituteDataFromApi.forEach((instituteDetails, index) => {
     if (!!instituteDetails.altContactNumber) {
@@ -102,13 +103,14 @@ export const getInstituteAuthority = (propertyResponse) => {
       };
     }
   });
-  set(instituteAuthorityForm, "institutionAuthority.fields.designation.value", get(propertyResponse.Properties[0], designationPath, ""));
   if (
     get(instituteAuthorityForm, "institutionAuthority.fields.mobile.value", "") ===
     get(instituteAuthorityForm, "institutionAuthority.fields.telephone.value", "")
   ) {
     set(instituteAuthorityForm, "institutionAuthority.fields.mobile.value", "");
   }
+  set(instituteAuthorityForm, "institutionAuthority.fields.designation.value", get(propertyResponse.Properties[0], designationPath, ""));
+  
 
   return instituteAuthorityForm;
 };
@@ -144,8 +146,7 @@ export const convertRawDataToFormConfig = (propertyResponse) => {
   ownershipCategoryFromApi.toLowerCase().indexOf("insti") !== -1) {
     institutionAuthority = getInstituteAuthority(propertyResponse);
     institutionDetails = getInstituteDetails(properties[0]);
-    set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", 
-    get(propertyResponse, "Properties[0].propertyDetails[0].ownershipCategory", ""));
+    set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value",ownershipCategoryFromApi );
   } else {
     //TODO
     set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", "INDIVIDUAL.SINGLEOWNER");
