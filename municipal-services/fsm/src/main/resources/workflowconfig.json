@@ -187,16 +187,6 @@
                         {
                             "tenantId": "pb",
                             "currentState": "DSO_INPROGRESS",
-                            "action": "DECLINE",
-                            "nextState": "ASSING_DSO",
-                            "roles": [
-                                "FSM_DSO",
-                                "FSM_EDITOR_EMP"
-                            ]
-                        },
-                        {
-                            "tenantId": "pb",
-                            "currentState": "DSO_INPROGRESS",
                             "action": "COMPLETED",
                             "nextState": "CITIZEN_FEEDBACK_PENDING",
                             "roles": [
