@@ -109,7 +109,7 @@ export const getInstituteAuthority = (propertyResponse) => {
   ) {
     set(instituteAuthorityForm, "institutionAuthority.fields.mobile.value", "");
   }
-  set(instituteAuthorityForm, "institutionAuthority.fields.designation.value", get(propertyResponse.Properties[0], designationPath, ""));
+  set(instituteAuthorityForm, "institutionAuthority.fields.designation.value", get(propertyResponse, designationPath, ""));
   
 
   return instituteAuthorityForm;
