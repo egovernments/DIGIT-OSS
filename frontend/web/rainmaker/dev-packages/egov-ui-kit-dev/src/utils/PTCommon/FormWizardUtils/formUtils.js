@@ -415,6 +415,14 @@ if (!newId)
 
 }
 }
+  
+  let  ownershipCategory1 = get(propertyPayload, "ownershipCategory",'');
+if (propertyMethodAction === "_update" && propertyPayload.institution && (ownershipCategory1==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER" || ownershipCategory1==="INDIVIDUAL.INDIVIDUAL.MULTIPLEOWNERS" ) ) {
+
+  propertyPayload.institution=null;
+
+ 
+}
 
 
   /* if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
