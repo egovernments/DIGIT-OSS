@@ -6,23 +6,25 @@ DIGIT focuses on inclusion and is designed on the principle of enhancing both pl
 
 ## Useful Links:
 
-* ## [Documentation](https://docs.digit.org)
+* ### [Documentation](https://docs.digit.org)
 
-* ## [Discuss with community](https://github.com/egovernments/DIGIT/discussions)
+* ### [Discuss with community](https://github.com/egovernments/DIGIT/discussions)
 
-* ## [Issue Reporting](https://github.com/egovernments/DIGIT/issues)
+* ### [Issue Reporting](https://github.com/egovernments/DIGIT/issues)
 
-# DIGIT Core Principles
+## DIGIT Core Principles
 <img src="https://egov-images.s3.ap-south-1.amazonaws.com/DIGIT-Core-Principles.png" width="1000">
 
-# Some of the DIGIT Platform/Features
+## Some of the DIGIT Platform/Features
 <img src="https://egov-images.s3.ap-south-1.amazonaws.com/DIGIT+-+Features.png" width="1000">
 
-# Stack Overview
+## Stack Overview
 <img src="https://egov-images.s3.ap-south-1.amazonaws.com/DIGIT-Stack-Overview-1.jpeg" width="1000">
 
-# Tech Overview
+## Tech Overview
 <img src="https://egov-images.s3.ap-south-1.amazonaws.com/DIGIT+-+TechStack.png" width="1000">
 
 
-DIGIT Code is open sources under the MIT License and under [Contributor License Agreement](https://forms.gle/nnNZjB7P1YPuEHb69)
+### DIGIT Code is open sources under the MIT License and under [Contributor License Agreement](https://forms.gle/nnNZjB7P1YPuEHb69)
+
+## DIGIT is Developed and Maintained by eGovrnments Foundation (A non-profit and non-governmental organisation)
