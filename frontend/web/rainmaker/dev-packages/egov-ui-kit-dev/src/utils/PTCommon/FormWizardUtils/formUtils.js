@@ -402,7 +402,7 @@ const createProperty = async (Properties, action, props) => {
       propertyPayload.units = propertyPayload.units.concat(results);
   }
 }
-if(propertyMethodAction==="_update" && propertyPayload.institution)
+if(propertyMethodAction==="_update" && propertyPayload.institution && newProperties[0].institution)
 {
 let newId =  propertyPayload &&  propertyPayload.institution.id && propertyPayload.institution.id;
 
