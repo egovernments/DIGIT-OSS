@@ -5,6 +5,7 @@ import static org.egov.edcr.utility.DcrConstants.FILESTORE_MODULECODE;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -235,7 +236,13 @@ public class EdcrApplicationService {
 
     private static String readFile(File srcFile) {
         String fileAsString = null;
-
+        try {
+            String canonicalPath = srcFile.getCanonicalPath();
+            if (!canonicalPath.equals(srcFile.getPath())) 
+               throw new FileNotFoundException("Invalid file path, please try again.");
+        } catch (IOException e) {
+            LOG.error("Invalid file path, please try again.", e);
+        }
         try (InputStream is = new FileInputStream(srcFile);
                 BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
             String line = br.readLine();
