@@ -160,6 +160,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
     private PersistenceService persistenceService;
     @Autowired
     private EgovCommon egovCommon;
+    private CityService cityService;
     @Autowired
     @Qualifier("preApprovedActionHelper")
     private PreApprovedActionHelper preApprovedActionHelper;
@@ -521,9 +522,17 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                     Long.valueOf(parameters.get(VHID)[0]));
             from = FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL;
         }
-        heading = ReportUtil.getCityName();
+       //heading = ReportUtil.getCityName();
+       heading = microserviceUtils.getHeaderNameForTenant().toUpperCase();
         getMasterDataForBillVoucher();
         getHeaderMandateFields();
+        
+     //   Map<String, Object> cityInfo = cityService.cityDataAsMap();
+    //   cityInfo.get(CITY_CODE_KEY);
+    //   cityInfo.get(CITY_NAME_KEY);
+       // applicationIndex.setCityGrade(defaultString((String) cityInfo.get(CITY_CORP_GRADE_KEY)));
+      //  applicationIndex.setDistrictName(defaultString((String) cityInfo.get(CITY_DIST_NAME_KEY)));
+       // applicationIndex.setRegionName(defaultString((String) cityInfo.get(CITY_REGION_NAME_KEY)));
         return "view";
     }
 

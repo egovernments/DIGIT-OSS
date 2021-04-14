@@ -131,6 +131,7 @@
 			<s:actionmessage />
 		</span>
 		<div class="formmainbox">
+			<div class="subheadnew"><label name="head" style="align:center;">Urban Local Body</label></div>
 			<div class="subheadnew"><label name="head" style="align:center;"><s:property
 							value="%{heading}" /></label></div>
 			<div class="subheadnew">Voucher View</div>
