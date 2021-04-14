@@ -30,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OcComparisonService {
     private static final Logger LOG = Logger.getLogger(OcComparisonService.class);
+    
+    public static final String FILE_DOWNLOAD_URL = "%s/edcr/rest/dcr/downloadfile";
 
     @Autowired
     private CustomImplProvider specificRuleService;
@@ -327,9 +329,8 @@ public class OcComparisonService {
     }
 
     public String getFileDownloadUrl(final String fileStoreId, final String tenantId) {
-        return String.format("%s/edcr/rest/dcr/downloadfile/", ApplicationThreadLocals.getDomainURL()) + fileStoreId
-                + "?tenantId="
-                + tenantId;
+        return String.format(FILE_DOWNLOAD_URL, ApplicationThreadLocals.getDomainURL()) + "?tenantId="
+                + tenantId + "&fileStoreId=" + fileStoreId;
     }
 
 }
