@@ -68,12 +68,16 @@ public class RedisHttpSessionConfiguration {
     
     @Value("${common.domain.name}")
     private String commonDomainName;
+    
+    @Value("${secure.cookie}")
+    private boolean secureCookie;
 
     @Bean
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
         serializer.setCookieName(SESSION_COOKIE_NAME);
         serializer.setCookiePath(SESSION_COOKIE_PATH);
+        serializer.setUseSecureCookie(secureCookie);
         serializer.setDomainName(commonDomainName);
         return serializer;
     }
