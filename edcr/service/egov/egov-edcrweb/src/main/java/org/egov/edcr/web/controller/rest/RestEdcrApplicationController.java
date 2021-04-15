@@ -295,6 +295,12 @@ public class RestEdcrApplicationController {
     @ResponseBody
     public ResponseEntity<?> scrutinyDetails(@ModelAttribute EdcrRequest edcrRequest,
             @RequestBody @Valid RequestInfoWrapper requestInfoWrapper) {
+        ErrorDetail edcReqRes = edcrValidator.validate(edcrRequest);
+        if (edcReqRes != null && StringUtils.isNotBlank(edcReqRes.getErrorMessage()))
+            return new ResponseEntity<>(edcReqRes, HttpStatus.BAD_REQUEST);
+        ErrorDetail edcRes = edcrValidator.validate(requestInfoWrapper);
+        if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
+            return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
         List<EdcrDetail> edcrDetail = edcrRestService.fetchEdcr(edcrRequest, requestInfoWrapper);
         if (!edcrDetail.isEmpty() && edcrDetail.get(0).getErrors() != null) {
             return new ResponseEntity<>(edcrDetail.get(0).getErrors(), HttpStatus.OK);
@@ -387,6 +393,12 @@ public class RestEdcrApplicationController {
     @ResponseBody
     public ResponseEntity<?> ocComparisonReport(@ModelAttribute ComparisonRequest comparisonRequest,
             @RequestBody @Valid RequestInfoWrapper requestInfoWrapper) {
+        ErrorDetail comparision = edcrValidator.validate(comparisonRequest);
+        if (comparision != null && StringUtils.isNotBlank(comparision.getErrorMessage()))
+            return new ResponseEntity<>(comparision, HttpStatus.BAD_REQUEST);
+        ErrorDetail edcRes = edcrValidator.validate(requestInfoWrapper);
+        if (edcRes != null && StringUtils.isNotBlank(edcRes.getErrorMessage()))
+            return new ResponseEntity<>(edcRes, HttpStatus.BAD_REQUEST);
 
         List<ErrorDetail> errors = ocComparisonService.validateEdcrMandatoryFields(comparisonRequest);
         if (!errors.isEmpty())

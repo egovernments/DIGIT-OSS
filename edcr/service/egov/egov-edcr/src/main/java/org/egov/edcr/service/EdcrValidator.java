@@ -5,7 +5,9 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.egov.common.entity.dcr.helper.ErrorDetail;
+import org.egov.edcr.contract.ComparisonRequest;
 import org.egov.edcr.contract.EdcrRequest;
+import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.utils.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class EdcrValidator {
     private static Logger LOG = Logger.getLogger(EdcrValidator.class);
     private static final String INVALID_VAL = "The %s value is invalid";
-    private static final String ALPHANUMERIC_WITH_SPECIAL_CHARS = "^([a-zA-Z0-9]+([ _\\-&:,/.()])?[a-zA-Z0-9])+$";
+    private static final String ALPHANUMERIC_WITH_SPECIAL_CHARS = "^[a-zA-Z0-9]?(([ _\\-&:,/.()])?[a-zA-Z0-9])+$";
     private static final String INVALID_CHAR_MSG = "_\\-&:,/.()";
     private static final String INVALID_CHAR = "The %s contains some invalid  special characters. Only following are allowed %s";
 
@@ -28,16 +30,62 @@ public class EdcrValidator {
             ErrorDetail error = new ErrorDetail();
             Field[] edcrFields = edcr.getClass().getDeclaredFields();
             ErrorDetail e1 = validateAttributes(edcr, edcrFields, error);
-            if(e1 != null)
+            if (e1 != null)
                 return error;
-            Field[] reqInfoFields = edcr.getRequestInfo().getClass().getDeclaredFields();
-            ErrorDetail e2 = validateAttributes(edcr.getRequestInfo(), reqInfoFields, error);
-            if(e2 != null)
-                return error;
-            Field[] userInfoFields = edcr.getRequestInfo().getUserInfo().getClass().getDeclaredFields();
-            ErrorDetail e3 = validateAttributes(edcr.getRequestInfo().getUserInfo(), userInfoFields, error);
-            if(e3 != null)
-                return error;
+            if (edcr.getRequestInfo() != null) {
+                Field[] reqInfoFields = edcr.getRequestInfo().getClass().getDeclaredFields();
+                ErrorDetail e2 = validateAttributes(edcr.getRequestInfo(), reqInfoFields, error);
+                if (e2 != null)
+                    return error;
+            }
+            if (edcr.getRequestInfo() != null && edcr.getRequestInfo().getUserInfo() != null) {
+                Field[] userInfoFields = edcr.getRequestInfo().getUserInfo().getClass().getDeclaredFields();
+                ErrorDetail e3 = validateAttributes(edcr.getRequestInfo().getUserInfo(), userInfoFields, error);
+                if (e3 != null)
+                    return error;
+            }
+        }
+        return null;
+    }
+
+    public ErrorDetail validate(final RequestInfoWrapper requestInfoWrapper) {
+        if (requestInfoWrapper != null) {
+            ErrorDetail error = new ErrorDetail();
+            if (requestInfoWrapper.getRequestInfo() != null) {
+                Field[] reqInfoFields = requestInfoWrapper.getRequestInfo().getClass().getDeclaredFields();
+                ErrorDetail e2 = validateAttributes(requestInfoWrapper.getRequestInfo(), reqInfoFields, error);
+                if (e2 != null)
+                    return e2;
+            }
+            if (requestInfoWrapper.getRequestInfo() != null && requestInfoWrapper.getRequestInfo().getUserInfo() != null) {
+                Field[] userInfoFields = requestInfoWrapper.getRequestInfo().getUserInfo().getClass().getDeclaredFields();
+                ErrorDetail e3 = validateAttributes(requestInfoWrapper.getRequestInfo().getUserInfo(), userInfoFields, error);
+                if (e3 != null)
+                    return e3;
+            }
+        }
+        return null;
+    }
+
+    public ErrorDetail validate(final ComparisonRequest comparisonRequest) {
+        if (comparisonRequest != null) {
+            ErrorDetail error = new ErrorDetail();
+            Field[] compaFields = comparisonRequest.getClass().getDeclaredFields();
+            ErrorDetail e1 = validateAttributes(comparisonRequest, compaFields, error);
+            if (e1 != null)
+                return e1;
+            if (comparisonRequest.getRequestInfo() != null) {
+                Field[] reqInfoFields = comparisonRequest.getRequestInfo().getClass().getDeclaredFields();
+                ErrorDetail e2 = validateAttributes(comparisonRequest.getRequestInfo(), reqInfoFields, error);
+                if (e2 != null)
+                    return e2;
+            }
+            if (comparisonRequest.getRequestInfo() != null && comparisonRequest.getRequestInfo().getUserInfo() != null) {
+                Field[] userInfoFields = comparisonRequest.getRequestInfo().getUserInfo().getClass().getDeclaredFields();
+                ErrorDetail e3 = validateAttributes(comparisonRequest.getRequestInfo().getUserInfo(), userInfoFields, error);
+                if (e3 != null)
+                    return e3;
+            }
         }
         return null;
     }
@@ -62,7 +110,7 @@ public class EdcrValidator {
                             error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
                             return error;
                         }
-                        
+
                         if (value.length() > 256) {
                             error.setErrorCode("EDCR-32");
                             error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), "Upto 256 characters only allowed"));
