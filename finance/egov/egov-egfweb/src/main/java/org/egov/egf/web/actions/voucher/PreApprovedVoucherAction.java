@@ -522,6 +522,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                     Long.valueOf(parameters.get(VHID)[0]));
             from = FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL;
         }
+
        //heading = ReportUtil.getCityName();
        heading = microserviceUtils.getHeaderNameForTenant().toUpperCase();
         getMasterDataForBillVoucher();

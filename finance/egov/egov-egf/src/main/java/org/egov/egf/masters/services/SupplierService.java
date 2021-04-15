@@ -159,6 +159,7 @@ public class SupplierService implements EntityTypeService {
         }
 
         createQuery.where(predicates.toArray(new Predicate[] {}));
+        createQuery.orderBy(cb.asc(suppliers.get("name")));
         final TypedQuery<Supplier> query = entityManager.createQuery(createQuery);
         return query.getResultList();
 
