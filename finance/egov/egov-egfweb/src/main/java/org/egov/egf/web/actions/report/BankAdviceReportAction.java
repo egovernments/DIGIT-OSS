@@ -61,11 +61,15 @@ import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.model.BankAdviceReportInfo;
+import org.egov.infra.admin.master.entity.City;
+import org.egov.infra.admin.master.service.CityService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportOutput;
 import org.egov.infra.reporting.engine.ReportRequest;
 import org.egov.infra.reporting.engine.ReportService;
+import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.reporting.viewer.ReportViewerUtil;
 import org.egov.infra.utils.DateUtils;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -128,6 +132,8 @@ public class BankAdviceReportAction extends BaseFormAction {
     private Long financialYearId;
     private String mode;
     private String heading;
+    @Autowired
+    private CityService cityService;
 
     public InputStream getInStream() {
         return inStream;
@@ -412,7 +418,7 @@ public class BankAdviceReportAction extends BaseFormAction {
         final Map<String, Object> reportParams = new HashMap<String, Object>();
         final StringBuffer letterContext = new StringBuffer();
         letterContext
-                .append("             I request you to transfer the amount indicated below through RTGS duly debiting from the")
+                .append("             I request you to transfer the amount indicated below through RTGS/NEFT duly debiting from the")
                 .append("  Current Account No: ")
                 .append(getBankAccountNumber(bankaccount.getId()) != null ? getBankAccountNumber(bankaccount.getId()) : "")
                 .append("  under your bank to the following bank accounts:");
@@ -467,11 +473,13 @@ public class BankAdviceReportAction extends BaseFormAction {
         final Map<String, Object> reportParams = new HashMap<String, Object>();
         final StringBuffer letterContext = new StringBuffer();
         letterContext
-                .append("             I request you to transfer the amount indicated below through RTGS duly debiting from the")
+                .append("             I request you to transfer the amount indicated below through RTGS/NEFT duly debiting from the")
                 .append("  Current Account No: ")
                 .append(getBankAccountNumber(bankaccount.getId()) != null ? getBankAccountNumber(bankaccount.getId()) : " ")
                 .append("  under your bank to the following bank accounts:");
         reportParams.put("bankName", getBankName(bank.getId()));
+        final City city = cityService.getCityByCode(ApplicationThreadLocals.getCityCode());
+        reportParams.put("ulbName", city.getName());
         reportParams.put("branchName", getBankBranchName(bankbranch.getId()));
         reportParams.put("letterContext", letterContext.toString());
         reportParams.put("accountNumber", getBankAccountNumber(bankaccount.getId()));
