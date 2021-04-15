@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class EdcrValidator {
     private static Logger LOG = Logger.getLogger(EdcrValidator.class);
     private static final String INVALID_VAL = "The %s value is invalid";
-    private static final String ALPHANUMERIC_WITH_SPECIAL_CHARS = "^[a-zA-Z0-9]?(([ _\\-&:,/.()])?[a-zA-Z0-9])+$";
+    private static final String ALPHANUMERIC_WITH_SPECIAL_CHARS = "^([a-zA-Z0-9]+([ _\\-&:,/.()])?[a-zA-Z0-9])+$";
     private static final String INVALID_CHAR_MSG = "_\\-&:,/.()";
     private static final String INVALID_CHAR = "The %s contains some invalid  special characters. Only following are allowed %s";
 
@@ -103,7 +103,7 @@ public class EdcrValidator {
                         error.setErrorMessage(String.format(INVALID_VAL, f.getName()));
                         return error;
                     }
-                    if (StringUtils.isNotBlank(value)) {
+                    if (StringUtils.isNotBlank(value) && value.length() > 1) {
                         boolean isAllow = Pattern.matches(ALPHANUMERIC_WITH_SPECIAL_CHARS, value);
                         if (!isAllow) {
                             error.setErrorCode("EDCR-31");
