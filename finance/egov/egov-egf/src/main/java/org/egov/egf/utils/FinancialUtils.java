@@ -397,14 +397,14 @@ public class FinancialUtils {
                     fileStoreS3 = fileStoreService.store(file, fileStoreMapperNFS.getFileName(),
                             fileStoreMapperNFS.getContentType(), FinancialConstants.FILESTORE_MODULECODE);
                     LOGGER.info(("NFSFile-------------------" + fileStoreMapperNFS.getFileStoreId()));
-
-                    LOGGER.info("S3File-------------------" + fileStoreS3.getFileStoreId());
-                    docs.getFileStore().setFileStoreId(fileStoreS3.getFileStoreId());
                     if (fileStoreS3 != null) {
-                        docs.setIsMigrated(true);
+                        LOGGER.info("S3File-------------------" + fileStoreS3.getFileStoreId());
+                        docs.getFileStore().setFileStoreId(fileStoreS3.getFileStoreId());
+                        if (fileStoreS3 != null) {
+                            docs.setIsMigrated(true);
+                        }
+                        documentUploadRepository.save(docs);
                     }
-
-                    documentUploadRepository.save(docs);
                 }
             } catch (ApplicationRuntimeException e) {
                 LOGGER.info("Exception while after pushing to S3 bucket filstoreId's : ", e);

@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -137,13 +138,14 @@ public class MicroDiskFileStoreService implements FileStoreService {
         try {
             StorageResponse storageRes = microserviceUtils.getFileStorageService(files, moduleName);
             FileStoreMapper fileMapper = null;
-
-            List<FileReq> filesList = storageRes.getFiles();
-            for (FileReq filesId : filesList) {
-                fileMapper = new FileStoreMapper(filesId.getFileStoreId(), fileName);
-                fileMapper.setContentType(mimeType);
-            }
-            
+            List<FileReq> filesList = new ArrayList<FileReq>();
+            if (storageRes.getFiles() != null && !storageRes.getFiles().isEmpty())
+                filesList = storageRes.getFiles();
+            if (!filesList.isEmpty() && filesList != null)
+                for (FileReq filesId : filesList) {
+                    fileMapper = new FileStoreMapper(filesId.getFileStoreId(), fileName);
+                    fileMapper.setContentType(mimeType);
+                }
             return fileMapper;
         } catch (IOException e) {
             throw new ApplicationRuntimeException(String.format(FILE_STORE_ERROR, getCityCode(), moduleName), e);
