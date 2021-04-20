@@ -221,11 +221,11 @@ class FormWizardDataEntry extends Component {
            };
           });  
           
-          if(duplicatedYears>0)
-                  {
-                    alert("This Property has duplicate demands for  please contact Administrator ");
-                    duplicatedYears = duplicatedYears+1                    
-                  } 
+//           if(duplicatedYears>0)
+//                   {
+//                     alert("This Property has duplicate demands for  please contact Administrator ");
+//                     duplicatedYears = duplicatedYears+1                    
+//                   } 
 
 
         demands.forEach((demand, yearKey) => {
