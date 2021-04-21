@@ -19,6 +19,8 @@ public class FSMErrorConstants {
 
 	public static final String INVALID_APPLICATION_CHANNEL ="INVALID_APPLICATION_CHANNEL";
 	public static final String INVALID_PIT_TYPE ="INVALID_PIT_TYPE";
+	public static final String INVALID_PIT_DIMENSIONS_LBD ="INVALID_PIT_DIMENSIONS_LBD";
+	public static final String INVALID_PIT_DIMENSIONS_DD ="INVALID_PIT_DIMENSIONS_DD";
 	public static final String INVALID_UPDATE ="Invlaid Update";
 	public static final String INVALID_COMMENT_CANCEL_REJECT ="INVALID_COMMENT_CANCEL_REJECT";
 	public static final String INVALID_VEHICLE_TYPE = "INVALID_VEHICLE_TYPE";

@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -94,9 +95,9 @@ public class NotificationUtil {
 					ProcessInstance processInstance = workflowService.getProcessInstance(fsm, fsmRequest.getRequestInfo());
 					Long slatime =null;
 					slatime = ( ( processInstance.getStateSla() != null ) ? processInstance.getStateSla() : processInstance.getBusinesssServiceSla() );
-					int slaValue = 0;
+					Double slaValue = 0.0;
 					if(slatime != null) {
-						slaValue= (int) Math.ceil(slatime/(1000*60*60));
+						slaValue= Math.ceil(slatime.doubleValue()/(60*60*1000)) ;
 						
 					}
 					message = message.replace("<SLA_HOURS>", String.valueOf(slaValue));
@@ -189,6 +190,10 @@ public class NotificationUtil {
 				if (paymentsArray != null) {
 					JSONObject firstElement = (JSONObject) paymentsArray.get(0);
 					if (firstElement != null) {
+						String payerMobileNumber = firstElement.get("mobileNumber").toString();
+						String payerName = firstElement.get("paidBy").toString();
+						((Map)fsmRequest.getFsm().getAdditionalDetails()).put("payerMobileNumber", payerMobileNumber);
+						((Map)fsmRequest.getFsm().getAdditionalDetails()).put("payerName", payerName);
 						JSONArray paymentDetails = (JSONArray) firstElement.get("paymentDetails");
 						if (paymentDetails != null) {
 							for (int i = 0; i < paymentDetails.length(); i++) {

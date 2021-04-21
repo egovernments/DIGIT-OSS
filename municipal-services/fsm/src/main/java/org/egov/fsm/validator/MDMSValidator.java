@@ -9,6 +9,7 @@ import java.util.Map;
 import org.egov.fsm.util.FSMConstants;
 import org.egov.fsm.util.FSMErrorConstants;
 import org.egov.fsm.web.model.FSMRequest;
+import org.egov.fsm.web.model.PitDetail;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -97,11 +98,23 @@ public class MDMSValidator {
 	 * @param propertyType
 	 * @throws CustomException
 	 */
-	public void validateOnSiteSanitationType(String sanitationType ) throws CustomException{
+	public void validateOnSiteSanitationType(String sanitationType ,PitDetail pitDetail) throws CustomException{
 		
 		Map<String, String> errorMap = new HashMap<>();
-		
-		if( !((List<String>) this.mdmsResMap.get(FSMConstants.MDMS_PIT_TYPE)).contains(sanitationType) ) {
+		List<Map<String,String>> pitMap = (List<Map<String, String>>) this.mdmsResMap.get(FSMConstants.MDMS_PIT_TYPE);
+		List<Map<String,String>>  pitItemMap = JsonPath.parse(pitMap).read("$.[?(@.active==true && @.code=='"+sanitationType+"')]");
+		if(pitItemMap != null && pitItemMap.size() > 0) {
+			HashMap<String,String> pititem =((HashMap<String,String>)pitItemMap.get(0));
+			if(pititem.get("dimension").equalsIgnoreCase("lbd")) {
+				if( pitDetail.getHeight() == null || pitDetail.getWidth() == null || pitDetail.getLength() == null) {
+					errorMap.put(FSMErrorConstants.INVALID_PIT_DIMENSIONS_LBD,"Pit Dimensions Length, Breadth and width are mdantory");
+				}
+			}else if(pititem.get("dimension").equalsIgnoreCase("dd")) {
+				if(  pitDetail.getHeight() == null || pitDetail.getDiameter() == null) {
+					errorMap.put(FSMErrorConstants.INVALID_PIT_DIMENSIONS_DD," Pit Dimensions depth and Diameter are mdantory");
+				}
+			}
+		}else {
 			errorMap.put(FSMErrorConstants.INVALID_PIT_TYPE," On Site PitType is invalid");
 		}
 

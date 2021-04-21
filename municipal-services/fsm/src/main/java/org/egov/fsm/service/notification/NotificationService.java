@@ -205,12 +205,17 @@ public class NotificationService {
 			messageCode=FSMConstants.SMS_NOTIFICATION_PREFIX +FSMConstants.WF_STATUS_CREATED+"_"+FSMConstants.WF_ACTION_CREATE;
 			String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
 			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
+			
 			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
 		}
 		messageCode = FSMConstants.SMS_NOTIFICATION_PREFIX +fsm.getApplicationStatus() +(fsmRequest.getWorkflow() ==null ?  "":"_" + fsmRequest.getWorkflow().getAction());
 
 		String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
 		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
+		HashMap<String,String> fsmAddtlDtls = (HashMap<String,String> )fsmRequest.getFsm().getAdditionalDetails();
+		if(fsmAddtlDtls !=null && fsmAddtlDtls.get("payerMobileNumber") !=null  && fsmAddtlDtls.get("payerName") != null && mobileNumberToOwner.get(fsmAddtlDtls.get("payerMobileNumber")) == null) {
+			mobileNumberToOwner.put(fsmAddtlDtls.get("payerMobileNumber"),  fsmAddtlDtls.get("payerName"));
+		}
 		smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
 	}
 

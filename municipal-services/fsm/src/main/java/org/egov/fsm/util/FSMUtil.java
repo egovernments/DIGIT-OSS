@@ -124,7 +124,7 @@ public class FSMUtil {
 
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_APPLICATION_CHANNEL).filter(filterCode).build());
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_SANITATION_TYPE).filter(filterCode).build());
-		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_PIT_TYPE).filter(filterCode).build());
+		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_PIT_TYPE).filter(activeFilter).build());
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_PROPERTY_TYPE).filter(filterCode).build());
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_CHECKLIST).filter(activeFilter).build());
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_CONFIG).filter(activeFilter).build());

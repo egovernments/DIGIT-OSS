@@ -86,7 +86,7 @@ public class PaymentUpdateService {
 					enrichmentService.enrichFSMSearch(fsms, requestInfo, tenantId);
 					if (CollectionUtils.isEmpty(fsms)) {
 						throw new CustomException(FSMErrorConstants.INVALID_RECEIPT,
-								"No Building Plan Application found for the comsumerCode "
+								"No FSM Application found for the comsumerCode "
 										+ searchCriteria.getApplicationNos());
 					}
 					Workflow workflow = Workflow.builder().action("PAY").build();
