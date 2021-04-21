@@ -85,6 +85,7 @@ import org.egov.commons.EgwStatus;
 import org.egov.commons.dao.EgwStatusHibernateDAO;
 import org.egov.commons.service.ChartOfAccountsService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.microservice.models.BankAccountServiceMapping;
 import org.egov.infra.microservice.models.DishonorReasonContract;
 import org.egov.infra.microservice.models.FinancialStatus;
 import org.egov.infra.microservice.models.Instrument;
@@ -113,6 +114,7 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -168,6 +170,9 @@ public class DishonorChequeService implements FinancialIntegrationService {
     
     @Autowired
     private MicroserviceUtils microserviceUtils;
+    
+    @Value("${collection.payment.searchurl.enabled}")
+    private Boolean paymentSearchEndPointEnabled;
 
     @Transactional
     public DishonorCheque createDishonorCheque(final DishonoredChequeBean chequeForm) throws Exception {
@@ -543,8 +548,24 @@ public class DishonorChequeService implements FinancialIntegrationService {
             List<Instrument> instList = microserviceUtils.getInstrumentsBySearchCriteria(insSearchContra );
             Map<String, String> receiptInstMap = instList.stream().map(Instrument::getInstrumentVouchers).flatMap(x -> x.stream()).collect(Collectors.toMap(InstrumentVoucher::getReceiptHeaderId, InstrumentVoucher::getInstrument));
             Set<String> receiptIds = receiptInstMap.keySet();
-            ReceiptSearchCriteria rSearchcriteria = ReceiptSearchCriteria.builder().receiptNumbers(receiptIds).build();
-            List<Receipt> receipt = microserviceUtils.getReceipt(rSearchcriteria  );
+            ReceiptSearchCriteria rSearchcriteria=null;
+            if (paymentSearchEndPointEnabled) {
+                final Set<String> serviceCodeLists = new HashSet();
+                final Set<String> accNumberList = new HashSet();
+                instList.stream().forEach(ins -> {
+                    accNumberList.add(ins.getBankAccount().getAccountNumber());
+                });
+                List<BankAccountServiceMapping> mappings = microserviceUtils
+                        .getBankAcntServiceMappingsByBankAcc(StringUtils.join(accNumberList, ","), null);
+                for (BankAccountServiceMapping basm : mappings) {
+                    serviceCodeLists.add(basm.getBusinessDetails());
+                }
+                rSearchcriteria = ReceiptSearchCriteria.builder().receiptNumbers(receiptIds)
+                        .businessCodes(serviceCodeLists).build();
+            } else {
+                rSearchcriteria = ReceiptSearchCriteria.builder().receiptNumbers(receiptIds).build();
+            }
+            List<Receipt> receipt = microserviceUtils.getReceipt(rSearchcriteria);
             Map<String, Receipt> receiptIdToReceiptMap= null;
             switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
             case "V2":
@@ -680,7 +701,9 @@ public class DishonorChequeService implements FinancialIntegrationService {
     public void processDishonor(DishonoredChequeBean model) {
         List<Receipt> receiptList = new ArrayList<>();
         Set<String> paymentIdSet = new HashSet();
-        Set<String> receiptNumbers = new HashSet();     
+        Set<String> receiptNumbers = new HashSet();
+        final Set<String> accNumberList = new HashSet();
+        final List<String> serviceCodeList = new ArrayList<>();
         List<Instrument> instruments = microserviceUtils.getInstruments(model.getInstHeaderIds());
         FinancialStatus finStatus = new FinancialStatus();
         finStatus.setCode("Dishonored");
@@ -697,12 +720,22 @@ public class DishonorChequeService implements FinancialIntegrationService {
             ins.getInstrumentVouchers().stream().forEach(insVou -> {
                 receiptNumbers.add(insVou.getReceiptHeaderId());
                });
-            
+            accNumberList.add(ins.getBankAccount().getAccountNumber());
         });
         microserviceUtils.updateInstruments(instruments, null, finStatus );
         // calling cancel receipt api
         if (!receiptNumbers.isEmpty()) {
-            receiptList = microserviceUtils.getReceipts(StringUtils.join(receiptNumbers, ","));
+            if (paymentSearchEndPointEnabled) {
+                List<BankAccountServiceMapping> mappings = microserviceUtils
+                        .getBankAcntServiceMappingsByBankAcc(StringUtils.join(accNumberList, ","), null);
+                for (BankAccountServiceMapping basm : mappings) {
+                    serviceCodeList.add(basm.getBusinessDetails());
+                }
+                receiptList = microserviceUtils.getReceiptsList(StringUtils.join(receiptNumbers, ","),
+                        StringUtils.join(serviceCodeList, ","));
+            } else {
+                receiptList = microserviceUtils.getReceipts(StringUtils.join(receiptNumbers, ","));
+            }
             for (Receipt receipts : receiptList) {
                 paymentIdSet.add(receipts.getPaymentId());
                 break;
@@ -711,8 +744,13 @@ public class DishonorChequeService implements FinancialIntegrationService {
             case "V2":
             case "VERSION2":
                 if (!paymentIdSet.isEmpty()) {
-                    microserviceUtils.performWorkflow(paymentIdSet, PaymentWorkflow.PaymentAction.DISHONOUR,
-                            model.getDishonorReason());
+                    if (paymentSearchEndPointEnabled) {
+                        microserviceUtils.performWorkflowWithModuleName(paymentIdSet,
+                                PaymentWorkflow.PaymentAction.DISHONOUR, model.getDishonorReason(), StringUtils.join(serviceCodeList, ","));
+                    } else {
+                        microserviceUtils.performWorkflow(paymentIdSet, PaymentWorkflow.PaymentAction.DISHONOUR,
+                                model.getDishonorReason());
+                    }
                 }
                 break;
 
@@ -740,7 +778,6 @@ public class DishonorChequeService implements FinancialIntegrationService {
         if(StringUtils.isNotBlank(model.getInstrumentNumber())){
             criteria.setTransactionNumber(model.getInstrumentNumber());
         }
-       
         criteria.setTransactionFromDate(model.getFromDate());
         criteria.setTransactionToDate(model.getToDate());
         
@@ -752,8 +789,26 @@ public class DishonorChequeService implements FinancialIntegrationService {
             List<Instrument> instList = microserviceUtils.getInstrumentsBySearchCriteria(insSearchContra );
             Map<String, String> receiptInstMap = instList.stream().map(Instrument::getInstrumentVouchers).flatMap(x -> x.stream()).collect(Collectors.toMap(InstrumentVoucher::getReceiptHeaderId, InstrumentVoucher::getInstrument));
             Set<String> receiptIds = receiptInstMap.keySet();
-            ReceiptSearchCriteria rSearchcriteria = ReceiptSearchCriteria.builder().receiptNumbers(receiptIds).build();
-            List<Receipt> receipt = microserviceUtils.getReceipt(rSearchcriteria  );
+            ReceiptSearchCriteria rSearchcriteria=null;
+            if (paymentSearchEndPointEnabled) {
+                final Set<String> serviceCodeLists = new HashSet();
+                final Set<String> accNumberList = new HashSet();
+                instList.stream().forEach(ins -> {
+                    accNumberList.add(ins.getBankAccount().getAccountNumber());
+                    LOGGER.info("AccountNumer ---+ins.getBankAccount().getAccountNumber()");
+                });
+                LOGGER.info("AccountNumer ---+accNumberList");
+                List<BankAccountServiceMapping> mappings = microserviceUtils
+                        .getBankAcntServiceMappingsByBankAcc(StringUtils.join(accNumberList, ","), null);
+                for (BankAccountServiceMapping basm : mappings) {
+                    serviceCodeLists.add(basm.getBusinessDetails());
+                }
+                rSearchcriteria = ReceiptSearchCriteria.builder().receiptNumbers(receiptIds)
+                        .businessCodes(serviceCodeLists).build();
+            } else {
+                rSearchcriteria = ReceiptSearchCriteria.builder().receiptNumbers(receiptIds).build();
+            }
+            List<Receipt> receipt = microserviceUtils.getReceipt(rSearchcriteria);
             Map<String, Receipt> receiptIdToReceiptMap= null;
             switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
             case "V2":

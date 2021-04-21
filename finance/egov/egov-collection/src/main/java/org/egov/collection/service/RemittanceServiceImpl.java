@@ -122,6 +122,7 @@ import org.egov.model.instrument.InstrumentHeader;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
@@ -150,6 +151,9 @@ public class RemittanceServiceImpl extends RemittanceService {
     private transient RemittanceSchedulerService remittanceSchedulerService;
     @Autowired
     private MicroserviceUtils microserviceUtils;
+    
+    @Value("${collection.payment.searchurl.enabled}")
+    private Boolean paymentSearchEndPointEnabled;
 
     /**
      * Create Contra Vouchers
@@ -313,8 +317,23 @@ public class RemittanceServiceImpl extends RemittanceService {
         switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
         case "V2":
         case "VERSION2":
-            if(!paymentIdSet.isEmpty()){
-                microserviceUtils.performWorkflow(paymentIdSet,PaymentWorkflow.PaymentAction.REMIT, "Payment got remitted from finance");
+            if (!paymentIdSet.isEmpty()) {
+                if (paymentSearchEndPointEnabled) {
+                    final List<String> serviceCodeList = new ArrayList<>(0);
+                    if (!receiptList.isEmpty()) {
+                        receiptList.stream().forEach(receipt -> {
+                            serviceCodeList.add(receipt.getService());
+                        });
+                        microserviceUtils.performWorkflowWithModuleName(paymentIdSet,
+                                PaymentWorkflow.PaymentAction.REMIT, "Payment got remitted from finance",
+                                StringUtils.join(serviceCodeList, ","));
+                    }
+
+                } else {
+                    microserviceUtils.performWorkflow(paymentIdSet, PaymentWorkflow.PaymentAction.REMIT,
+                            "Payment got remitted from finance");
+
+                }
             }
             break;
 
@@ -1026,7 +1045,8 @@ public class RemittanceServiceImpl extends RemittanceService {
             }
         }
 
-        receiptList = microserviceUtils.getReceipts(receiptNumbers.toString());
+        receiptList = microserviceUtils.getReceiptsList(receiptNumbers.toString(),businessDetails.getCode());
+        LOGGER.info("businesscode " + businessDetails.getCode());
         final Map<String, Object> instrumentDepositMap = financialsUtil.prepareForUpdateInstrumentDepositSQL();
         if (totalChequeVoucherAmt.compareTo(totalChequeAmount) != 0) {
             String validationMessage = "There is a difference of amount " + totalChequeAmount.subtract(totalChequeVoucherAmt)
@@ -1053,7 +1073,15 @@ public class RemittanceServiceImpl extends RemittanceService {
         case "V2":
         case "VERSION2":
             if(!paymentIdSet.isEmpty()){
-                microserviceUtils.performWorkflow(paymentIdSet,PaymentWorkflow.PaymentAction.REMIT, "Payment got remitted from finance");
+                if (paymentSearchEndPointEnabled) {
+                    microserviceUtils.performWorkflowWithModuleName(paymentIdSet, PaymentWorkflow.PaymentAction.REMIT,
+                            "Payment got remitted from finance", businessDetails.getCode());
+
+                } else {
+                    microserviceUtils.performWorkflow(paymentIdSet, PaymentWorkflow.PaymentAction.REMIT,
+                            "Payment got remitted from finance");
+
+                }
             }
             break;
 

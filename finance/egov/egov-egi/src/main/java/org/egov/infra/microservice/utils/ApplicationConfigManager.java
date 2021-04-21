@@ -104,6 +104,13 @@ public class ApplicationConfigManager {
     @Value("${egov.services.collection.service.remittance.search:}")
     private String collSerRemittanceSearch;
     
+    @Value("${egov.services.collection.service.payment.modulename.search:}")
+    private String collSerPaymentModuleNameSearch;
+
+    @Value("${egov.services.collection.service.payment.modulename.workflow:}")
+    private String collSerPaymentModuleNameWorkflow;
+
+    
     public String getEgovHrmsSerHost(){
         return StringUtils.isNotBlank(egovHrmsSerHost) ? egovHrmsSerHost : egovSerHost; 
     }
