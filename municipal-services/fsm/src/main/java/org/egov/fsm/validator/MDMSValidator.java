@@ -104,16 +104,16 @@ public class MDMSValidator {
 		List<Map<String,String>> pitMap = (List<Map<String, String>>) this.mdmsResMap.get(FSMConstants.MDMS_PIT_TYPE);
 		List<Map<String,String>>  pitItemMap = JsonPath.parse(pitMap).read("$.[?(@.active==true && @.code=='"+sanitationType+"')]");
 		if(pitItemMap != null && pitItemMap.size() > 0) {
-			HashMap<String,String> pititem =((HashMap<String,String>)pitItemMap.get(0));
-			if(pititem.get("dimension").equalsIgnoreCase("lbd")) {
-				if( pitDetail.getHeight() == null || pitDetail.getWidth() == null || pitDetail.getLength() == null) {
-					errorMap.put(FSMErrorConstants.INVALID_PIT_DIMENSIONS_LBD,"Pit Dimensions Length, Breadth and width are mdantory");
-				}
-			}else if(pititem.get("dimension").equalsIgnoreCase("dd")) {
-				if(  pitDetail.getHeight() == null || pitDetail.getDiameter() == null) {
-					errorMap.put(FSMErrorConstants.INVALID_PIT_DIMENSIONS_DD," Pit Dimensions depth and Diameter are mdantory");
-				}
-			}
+//			HashMap<String,String> pititem =((HashMap<String,String>)pitItemMap.get(0));
+//			if(pititem.get("dimension").equalsIgnoreCase("lbd")) {
+//				if( pitDetail.getHeight() == null || pitDetail.getWidth() == null || pitDetail.getLength() == null) {
+//					errorMap.put(FSMErrorConstants.INVALID_PIT_DIMENSIONS_LBD,"Pit Dimensions Length, Breadth and width are mdantory");
+//				}
+//			}else if(pititem.get("dimension").equalsIgnoreCase("dd")) {
+//				if(  pitDetail.getHeight() == null || pitDetail.getDiameter() == null) {
+//					errorMap.put(FSMErrorConstants.INVALID_PIT_DIMENSIONS_DD," Pit Dimensions depth and Diameter are mdantory");
+//				}
+//			}
 		}else {
 			errorMap.put(FSMErrorConstants.INVALID_PIT_TYPE," On Site PitType is invalid");
 		}

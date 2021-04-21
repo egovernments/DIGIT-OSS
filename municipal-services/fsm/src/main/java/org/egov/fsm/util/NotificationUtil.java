@@ -100,7 +100,7 @@ public class NotificationUtil {
 						slaValue= Math.ceil(slatime.doubleValue()/(60*60*1000)) ;
 						
 					}
-					message = message.replace("<SLA_HOURS>", String.valueOf(slaValue));
+					message = message.replace("<SLA_HOURS>", String.valueOf(slaValue.intValue()));
 				}
 				
 				if (message.contains("<AMOUNT_TO_BE_PAID>")) {
