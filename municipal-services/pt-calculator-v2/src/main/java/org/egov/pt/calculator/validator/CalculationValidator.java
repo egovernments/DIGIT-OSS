@@ -164,18 +164,18 @@ public class CalculationValidator {
 					CalculatorConstants.PT_ADDITIONALNDETAILS_NULL_MSG);
 			throw new CustomException(error);
 		}
-		if (additionalDetails.containsKey(CalculatorConstants.MARKET_VALUE)) {
-			if (additionalDetails.get(CalculatorConstants.MARKET_VALUE) != null) {
-				boolean numeric = true;
-				String marketValue = additionalDetails.get(CalculatorConstants.MARKET_VALUE).toString();
-				numeric = marketValue.matches(CalculatorConstants.NUMERIC_REGEX);
-				if (!numeric)
-					error.put(CalculatorConstants.PT_MARKETVALUE_NULL, CalculatorConstants.PT_MARKETVALUE_NULL_MSG);
-			}
-		}
-		if (!additionalDetails.containsKey(CalculatorConstants.DOCUMENT_DATE)
-				|| additionalDetails.get(CalculatorConstants.DOCUMENT_DATE) == null)
-			error.put(CalculatorConstants.PT_DOCDATE_NULL, CalculatorConstants.PT_DOCDATE_NULL_MSG);
+// 		if (additionalDetails.containsKey(CalculatorConstants.MARKET_VALUE)) {
+// 			if (additionalDetails.get(CalculatorConstants.MARKET_VALUE) != null) {
+// 				boolean numeric = true;
+// 				String marketValue = additionalDetails.get(CalculatorConstants.MARKET_VALUE).toString();
+// 				numeric = marketValue.matches(CalculatorConstants.NUMERIC_REGEX);
+// 				if (!numeric)
+// 					error.put(CalculatorConstants.PT_MARKETVALUE_NULL, CalculatorConstants.PT_MARKETVALUE_NULL_MSG);
+// 			}
+// 		}
+// 		if (!additionalDetails.containsKey(CalculatorConstants.DOCUMENT_DATE)
+// 				|| additionalDetails.get(CalculatorConstants.DOCUMENT_DATE) == null)
+// 			error.put(CalculatorConstants.PT_DOCDATE_NULL, CalculatorConstants.PT_DOCDATE_NULL_MSG);
 		if (!CollectionUtils.isEmpty(error))
 			throw new CustomException(error);
 	}
