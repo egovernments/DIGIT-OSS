@@ -1,6 +1,8 @@
 package org.egov.edcr.service;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
@@ -24,6 +26,16 @@ public class EdcrValidator {
     private static final String ALPHANUMERIC_WITH_SPECIAL_CHARS = "^([a-zA-Z0-9]+([ _\\-&:,/.()])?[a-zA-Z0-9])+$";
     private static final String INVALID_CHAR_MSG = "_\\-&:,/.()";
     private static final String INVALID_CHAR = "The %s contains some invalid  special characters. Only following are allowed %s";
+    
+    private static final List<String> VALIDATION_NOT_REQUIRED_FIELDS = new ArrayList<>();
+    
+    static {
+        VALIDATION_NOT_REQUIRED_FIELDS.add("ver");
+        VALIDATION_NOT_REQUIRED_FIELDS.add("msgId");
+        VALIDATION_NOT_REQUIRED_FIELDS.add("password");
+        VALIDATION_NOT_REQUIRED_FIELDS.add("did");
+        VALIDATION_NOT_REQUIRED_FIELDS.add("apiId");
+    }
 
     public ErrorDetail validate(final EdcrRequest edcr) {
         if (edcr != null) {
@@ -92,7 +104,7 @@ public class EdcrValidator {
 
     private ErrorDetail validateAttributes(final Object obj, Field[] edcrFields, ErrorDetail error) {
         for (Field f : edcrFields) {
-            if (f.getType().isAssignableFrom(String.class)) {
+            if (f.getType().isAssignableFrom(String.class) && !VALIDATION_NOT_REQUIRED_FIELDS.contains(f.getName())) {
                 f.setAccessible(true);
                 String value;
                 try {
