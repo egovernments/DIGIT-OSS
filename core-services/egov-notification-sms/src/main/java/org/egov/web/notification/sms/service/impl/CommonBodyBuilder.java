@@ -8,7 +8,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class CommonBodyBuilder implements SMSBodyBuilder {
 
 	@Autowired
@@ -16,6 +19,8 @@ public class CommonBodyBuilder implements SMSBodyBuilder {
 
 	public MultiValueMap<String, String> getSmsRequestBody(Sms sms) {
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+		String template_id= null;
+		String pe_id= null;
 		for (String key : smsProps.getConfigMap().keySet()) {
 			String value = smsProps.getConfigMap().get(key);
 			if (value.contains("$")) {
@@ -30,7 +35,21 @@ public class CommonBodyBuilder implements SMSBodyBuilder {
 				} else if (value.equals("$mobileno")) {
 					map.add(key, sms.getMobileNumber());
 				} else if (value.equals("$message")) {
+					log.info("actual message extracted: "+sms.getMessage());
+			        String msgs[]=sms.getMessage().split("\\|"); 
+			        if(msgs.length >1){
+			        	template_id=msgs[1];
+			            if(msgs.length>2)
+			            	pe_id=msgs[2];
+			            log.info("filetered message:"+msgs[0]);
+			            log.info("dlt_entity_id:"+template_id);
+			            log.info("dlt_template_id:"+pe_id);
+			            map.add(key, msgs[0]);
+			            map.add("template_id", template_id);
+			            map.add("pe_id", pe_id);
+			        }else{
 					map.add(key, sms.getMessage());
+			        }
 				} else
 					map.add(key, value);
 			} else {
