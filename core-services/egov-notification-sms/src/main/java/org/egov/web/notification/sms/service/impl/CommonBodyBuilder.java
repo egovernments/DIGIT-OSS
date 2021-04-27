@@ -16,6 +16,10 @@ public class CommonBodyBuilder implements SMSBodyBuilder {
 
 	@Autowired
 	private SMSProperties smsProps;
+	
+	public static final String SMS_TEMPLATE_ID = "template_id";
+	
+	public static final String SMS_PE_ID = "pe_id";
 
 	public MultiValueMap<String, String> getSmsRequestBody(Sms sms) {
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -42,11 +46,11 @@ public class CommonBodyBuilder implements SMSBodyBuilder {
 			            if(msgs.length>2)
 			            	pe_id=msgs[2];
 			            log.info("filetered message:"+msgs[0]);
-			            log.info("dlt_entity_id:"+template_id);
-			            log.info("dlt_template_id:"+pe_id);
+			            log.info("sms_entity_id:"+template_id);
+			            log.info("sms_template_id:"+pe_id);
 			            map.add(key, msgs[0]);
-			            map.add("template_id", template_id);
-			            map.add("pe_id", pe_id);
+			            map.add(SMS_TEMPLATE_ID, template_id);
+			            map.add(SMS_PE_ID, pe_id);
 			        }else{
 					map.add(key, sms.getMessage());
 			        }
