@@ -1,0 +1,21 @@
+    "chartOfAccountDetails": [
+        {
+            "chartOfAccount": {
+                "id": "830bf3dc60504244babfe228bdf80bac",
+                "glcode": "1201",
+                "name": "finalfdf",
+                "description": "accountNumber",
+                "tenantId": "default"
+            },
+            "accountDetailType": {
+                "id": "e647d2406902400cbf3cee71a4befb35",
+                "name": "final",
+                "description": "final",
+                "tableName": "final",
+                "active": true,
+                "fullyQualifiedName": "final",
+                "tenantId": "default"
+            },
+            "tenantId": "default"
+        }
+    ]

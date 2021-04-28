@@ -1,0 +1,236 @@
+{
+    "key":"tl-receipt",
+    "DataConfigs": {
+       "serviceName": "rainmaker-tl",
+       "version": "1.0.0",
+       "baseKeyPath": "$.Licenses.*",
+       "entityIdPath":"$.applicationNumber",
+       "isCommonTableBorderRequired":true,
+       "mappings": [
+          {
+             "topic": "tl-pdf-generation",
+             "staticConfigPath": "https://raw.githubusercontent.com/egovernments/egov-services/vishal-feature-filestore/core/egov-indexer/src/main/resources/rainmaker-pgr-indexer.yml",
+             "mappings": [
+                {
+                   "direct": [
+                                            
+                      {
+                        "variable": "variable1",
+                        "value": {
+                             "path":"$.tradeLicenseDetail.additionalDetail.applicationType"                              
+                        },
+                        "localisation":{
+                           "required":true,
+                           "prefix":"TRADELICENSE_APPLICATIONTYPE",   
+                           "module":"rainmaker-tl"
+                        }
+                     },
+                     {
+                        "variable": "variable33",                        
+                        "url":"https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png",
+                        "type":"image"
+                     },   
+                     {
+                        "variable": "variable30",
+                        "value": {
+                             "path":"$.tenantId"                              
+                        },
+                        "localisation":{
+                           "required":true,
+                           "prefix":"TENANT_TENANTS",   
+                           "module":"rainmaker-common"
+                        },
+                        "isUpperCaseRequired":true 
+                     },
+                     {
+                        "variable": "variable31", 
+                        "type":"citizen-employee-title"
+                     },  
+                     {
+                        "variable": "variable2",
+                        "value": {
+                             "path":"$.oldLicenseNumber"                              
+                        }
+                     },
+                      {
+                         "variable": "variable3",
+                         "value":{
+                              "path":"$.applicationNumber"                           
+                          } 
+                      },
+                      {
+                        "variable": "variable4",
+                        "value": {
+                             "path":"$.financialYear"                              
+                        }
+                     },
+                     {
+                        "variable": "variable5",
+                        "value": {
+                             "path":"$.tradeName"                              
+                        }
+                     },
+                     {
+                        "variable": "variable6",
+                        "value": {
+                             "path":"$.tradeLicenseDetail.tradeUnits[*].tradeType"                              
+                        },
+                        "localisation":{
+                           "required":true,
+                           "prefix":"TRADELICENSE_TRADETYPE",
+                           "module":"rainmaker-tl",
+                           "isCategoryRequired":true
+                        }
+                     },
+                     {
+                        "variable": "variable7",
+                        "value": {
+                             "path":"$.tradeLicenseDetail.tradeUnits[*].tradeType"                              
+                        },
+                        "localisation":{
+                           "required":true,
+                           "prefix":"TRADELICENSE_TRADETYPE",   
+                           "module":"rainmaker-tl",
+                           "isMainTypeRequired":true,
+                           "isSubTypeRequired":true
+                        }
+                     },
+                     {
+                        "variable": "variable8",
+                        "value": {
+                             "path":"$.tradeLicenseDetail.accessories[*].accessoryCategory"                              
+                        },
+                        "localisation":{
+                           "required":true,
+                           "prefix":"TRADELICENSE_ACCESSORIESCATEGORY",   
+                           "module":"rainmaker-tl"
+                        }
+                     },
+                     {
+                        "variable": "variable9",
+                        "value": {
+                             "path":"$.tradeLicenseDetail.address.doorNo"                              
+                        }
+                     },
+                     {
+                        "variable": "variable10",
+                        "value": {
+                             "path":"$.tradeLicenseDetail.address.buildingName"                              
+                        }
+                     },
+                     {
+                        "variable": "variable11",
+                        "value": {
+                             "path":"$.tradeLicenseDetail.address.street"                              
+                        }
+                     },
+                     {
+                        "variable": "variable12",
+                        "value": {
+                             "path":"$.tradeLicenseDetail.address.locality.name"                              
+                        }
+                     },
+                      {
+                        "variable": "variable13",                        
+                        "value":{
+                             "path":"$.tradeLicenseDetail.owners.*"                          
+                         },
+                         "type":"array",
+                         "format":{                            
+                            "type":"string",
+                            "scema":[
+                               {
+                                  "key":"name"
+                               },
+                               {
+                                 "key":"mobileNumber"
+                               }]
+                        } 
+                     } 
+                   ]
+                },
+                {
+                  "derived": [
+                     {
+                        "variable": "variable32",
+                        "formula": "{{variable19}}-{{variable20}}"
+                     }
+                  ]
+               },
+                {
+                   "externalAPI": [
+                     
+                      {
+                         
+                         "path": "http://collection-services:8080/collection-services/receipts/_search",
+                         "queryParam": "consumerCode=$.applicationNumber",
+                         
+                         
+                         "apiRequest": null,
+
+                         "responseMapping":[
+                           {
+                              "variable":"variable16",
+                              "value":"$.Receipt[0].receiptNumber"
+                           },
+                           {
+                              "variable":"variable17",
+                              "value":"$.Receipt[0].instrument.transactionDateInput"
+                           },                           
+                           {
+                              "variable":"variable18",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='TL_TAX')].amount"
+                           },
+                           {
+                              "variable":"variable19",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].totalAmount"
+                           },
+                           {
+                              "variable":"variable20",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].amountPaid"
+                           },
+                           {
+                              "variable":"variable21",
+                              "value":"$.Receipt[0].instrument.instrumentType.name"
+                           },
+                           {
+                              "variable":"variable22",
+                              "value":"$.Receipt[0].transactionId"
+                           },
+                           {
+                              "variable":"variable23",
+                              "value":"$.Receipt[0].instrument.bank.name"
+                           },
+                           {
+                              "variable":"variable24",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].manualReceiptNumber"
+                           },
+                           {
+                              "variable":"variable25",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].manualReceiptDate"
+                           },
+                           {
+                              "variable":"variable26",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='TL_TIME_PENALTY')].amount"
+                           },
+                           {
+                              "variable":"variable27",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='TL_TIME_REBATE')].amount"
+                           },
+                           {
+                              "variable":"variable28",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='TL_ADHOC_PENALTY')].amount"
+                           },
+                           {
+                              "variable":"variable29",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='TL_ADHOC_REBATE')].amount"
+                           }
+                        ]  
+                      }
+                   ]
+                }
+             ]
+          }
+       ]
+    }
+ }

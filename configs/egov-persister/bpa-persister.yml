@@ -1,0 +1,229 @@
+serviceMaps:
+ serviceName: bpa-services
+ mappings:
+ - version: 1.0
+   description: Persists buildingplan details in EG_BPA_BuildingPlan  table
+   fromTopic: save-bpa-buildingplan
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO eg_bpa_buildingplan(id, applicationNo, landId, accountId, edcrNumber, tenantId, status, approvalDate, businessService, additionalDetails, createdBy, lastmodifiedBy, createdTime, lastmodifiedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
+         basePath: BPA
+         jsonMaps:
+          - jsonPath: $.BPA.id
+
+          - jsonPath: $.BPA.applicationNo
+          
+          - jsonPath: $.BPA.landId
+          
+          - jsonPath: $.BPA.accountId
+
+          - jsonPath: $.BPA.edcrNumber
+          
+          - jsonPath: $.BPA.tenantId
+          
+          - jsonPath: $.BPA.status
+          
+          - jsonPath: $.BPA.approvalDate
+          
+          - jsonPath: $.BPA.businessService
+
+          - jsonPath: $.BPA.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.BPA.auditDetails.createdBy
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedBy
+
+          - jsonPath: $.BPA.auditDetails.createdTime
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_bpa_document( id, documenttype, fileStoreId, buildingplanid, documentuid, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: BPA.documents.*
+         jsonMaps:
+          - jsonPath: $.BPA.documents.*.id
+
+          - jsonPath: $.BPA.documents.*.documentType
+
+          - jsonPath: $.BPA.documents.*.fileStoreId
+
+          - jsonPath: $.BPA.id
+
+          - jsonPath: $.BPA.documents.*.documentUid
+
+          - jsonPath: $.BPA.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.BPA.auditDetails.createdBy
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedBy
+
+          - jsonPath: $.BPA.auditDetails.createdTime
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+
+
+       - query: INSERT INTO eg_bpa_auditdetails SELECT * FROM eg_bpa_buildingplan WHERE id =?;
+         basePath: BPA
+         jsonMaps:
+
+          - jsonPath: $.BPA.id
+  
+
+
+
+ - version: 1.0
+   description: update buildingplan details in EG_BPA_BuildingPlan  table
+   fromTopic: update-bpa-buildingplan
+   isTransaction: true
+   queryMaps:
+
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, approvalNo=?, applicationDate=?, status=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, approvalDate=? WHERE id=?;
+         basePath: BPA
+         jsonMaps:
+          - jsonPath: $.BPA.applicationNo
+          
+          - jsonPath: $.BPA.approvalNo
+          
+          - jsonPath: $.BPA.applicationDate
+
+          - jsonPath: $.BPA.status
+
+          - jsonPath: $.BPA.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedBy
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+          - jsonPath: $.BPA.approvalDate
+
+          - jsonPath: $.BPA.id
+
+
+       - query: INSERT INTO eg_bpa_auditdetails SELECT * FROM eg_bpa_buildingplan WHERE id =?;
+         basePath: BPA
+         jsonMaps:
+
+           - jsonPath: $.BPA.id
+
+        
+       - query: INSERT INTO eg_bpa_document(id, documenttype, fileStoreId, buildingplanid, documentuid, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  fileStoreId =?, additionalDetails=?, lastmodifiedby =?, lastmodifiedtime =?;
+         basePath: BPA.documents.*
+         jsonMaps:
+          
+           - jsonPath: $.BPA.documents.*.id
+  
+           - jsonPath: $.BPA.documents.*.documentType
+  
+           - jsonPath: $.BPA.documents.*.fileStoreId
+  
+           - jsonPath: $.BPA.id
+  
+           - jsonPath: $.BPA.documents.*.documentUid
+  
+           - jsonPath: $.BPA.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
+  
+           - jsonPath: $.BPA.auditDetails.createdBy
+  
+           - jsonPath: $.BPA.auditDetails.lastModifiedBy
+  
+           - jsonPath: $.BPA.auditDetails.createdTime
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+           - jsonPath: $.BPA.documents.*.documentType
+
+           - jsonPath: $.BPA.documents.*.fileStoreId
+  
+           - jsonPath: $.BPA.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedBy
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedTime
+          
+ - version: 1.0
+   description: update buildingplan details in EG_BPA_BuildingPlan  table
+   fromTopic: update-bpa-workflow
+   isTransaction: true
+   queryMaps:
+   
+          
+       - query: INSERT INTO eg_bpa_document(id, documentType, fileStoreId, buildingplanid, documentUid, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  fileStoreId =?, additionalDetails=?, lastmodifiedby =?, lastmodifiedtime =?;
+         basePath: BPA.documents.*
+         jsonMaps:
+          
+           - jsonPath: $.BPA.documents.*.id
+  
+           - jsonPath: $.BPA.documents.*.documentType
+  
+           - jsonPath: $.BPA.documents.*.fileStoreId
+  
+           - jsonPath: $.BPA.id
+  
+           - jsonPath: $.BPA.documents.*.documentUid
+  
+           - jsonPath: $.BPA.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
+  
+           - jsonPath: $.BPA.auditDetails.createdBy
+  
+           - jsonPath: $.BPA.auditDetails.lastModifiedBy
+  
+           - jsonPath: $.BPA.auditDetails.createdTime
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+           - jsonPath: $.BPA.documents.*.documentType
+
+           - jsonPath: $.BPA.documents.*.fileStoreId
+  
+           - jsonPath: $.BPA.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedBy
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedTime
+           
+           
+       - query: INSERT INTO eg_bpa_auditdetails SELECT * FROM eg_bpa_buildingplan WHERE id =?;
+         basePath: BPA
+         jsonMaps:
+
+           - jsonPath: $.BPA.id
+
+
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, approvalNo=?, applicationDate=?, status=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, approvalDate=? WHERE id=?;
+         basePath: BPA
+         jsonMaps:
+          - jsonPath: $.BPA.applicationNo
+          
+          - jsonPath: $.BPA.approvalNo
+          
+          - jsonPath: $.BPA.applicationDate
+
+          - jsonPath: $.BPA.status
+
+          - jsonPath: $.BPA.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedBy
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+          - jsonPath: $.BPA.approvalDate
+
+          - jsonPath: $.BPA.id

@@ -1,0 +1,46 @@
+#material-ui-header {
+  display: flex !important;
+  // justify-content: space-between !important;
+}
+.bpa-searchpview #material-ui-header #material-ui-rightContainer {
+  width: 50% !important;
+  }
+.bpa-searchpview #material-ui-header #material-ui-leftContainer {
+  width: 50% !important;
+  }
+#custom-atoms-titlebar2 {
+    display: block !important;
+  }
+#custom-atoms-titlebar2 div:nth-child(0) {
+    padding: 10px 0 !important
+  }
+@media only screen and (min-width: 768px){
+  .apply-wizard-footer {
+    z-index: 110 !important;
+   }
+  }
+#custom-containers-remarks,
+#custom-containers-landRegDetails {
+  line-height: 2rem !important;
+  padding: 2px !important;
+}
+#material-ui-fireNocDetailsCard {
+background-color: #F2F2F2;
+}
+div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
+  font-size: 12px !important; }
+
+.occupancytypeblock {
+    float: right; 
+    width: 50% !important;
+    margin-top: -15px
+  }
+
+  .occupancytypeblock > div {
+    max-width: 100%;
+    flex-basis: 100%;
+  }
+
+   .mymuicontainer #material-ui-cardContent #material-ui-applicantContainer div:nth-child(3) > div:nth-child(1) {
+     display:none;
+   }

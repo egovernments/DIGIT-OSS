@@ -1,0 +1,380 @@
+{
+  "key": "ptmutationcertificate",
+  "documentType": "PTMUTATION",
+  "DataConfigs": {
+    "moduleName": "PT",
+    "version": "1.0.0",
+    "baseKeyPath": "$.Properties.*",
+    "entityIdPath":"$.id",
+    "isCommonTableBorderRequired": true,
+    "mappings": [
+      {
+        "mappings": [
+          {
+            "direct": [
+
+              {
+                "variable": "municipal_corportaion",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_MUNICIPAL_CORPORATION"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+            },
+              {
+                "variable": "corporation_fax",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MUTATION_FAX"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "corporation_website",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MUTATION_WEBSITE"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "corporation_email",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MUTATION_EMAIL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Mutation_Approval_Certificate",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MUATATION_APPROVAL_CERTIFICATE"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Property_ID_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MUATATION_PROPERTY_ID_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Mutation_Number_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MUATATION_NUMBER_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },  
+              {
+                "variable": "Application_Number_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Receipt_Number_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_RECEIPT_NUMBER_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            }, 
+              {
+                "variable": "Approval_Date_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_APPROVAL_DATE_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            }, 
+              {
+                "variable": "Order_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_ORDER_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Mutation_Declaration_Label",
+                "value": {
+                  "path": "$.tenantId"
+                },
+                "localisation":{
+                  "required":true,
+                  "prefix": "PDF_STATIC_LABEL_MUTATION_DECLARATION_LABEL",
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Transferrer_Details_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_TRANSFERRER_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Transferree_Details_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_TRANSFERREE_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Mutation_To_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MUTATION_TO_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Shri_Smt_Label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_SHRI_SMT_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "approved_by",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_APPROVED_BY"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "commissioner",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_COMMISSIONER"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+              }
+            },
+              {
+                "variable": "Property_ID",
+                "value": {
+                  "path": "$.propertyId"
+                }
+            },
+              {
+                "variable": "Mutation_Number",
+                "value": {
+                  "path": "$.acknowldgementNumber"
+                }
+            },
+              {
+                "variable": "Application_Number",
+                "value": {
+                  "path": "$.acknowldgementNumber"
+                }
+            },
+              {
+                "variable": "Transferrer_Name",
+                "value": {
+                  "path": "$.owners[?(@.status == 'INACTIVE')].name"
+                }
+            },
+              {
+                "variable": "Transferrer_Relation",
+                "value": {
+                  "path": "$.owners[?(@.status == 'INACTIVE')].relationship"
+                },
+                "localisation":{
+                  "required":true,
+                  "prefix": "PT_MUTATION",
+                  "module": "rainmaker-common"
+               }
+            },
+              {
+                "variable": "Transferrer_Relative_Name",
+                "value": {
+                  "path": "$.owners[?(@.status == 'INACTIVE')].fatherOrHusbandName"
+                }
+            },
+              {
+                "variable": "Transferree_Name",
+                "value": {
+                  "path": "$.owners[?(@.status == 'ACTIVE')].name"
+                }
+            },
+              {
+                "variable": "Transferree_Relation",
+                "value": {
+                  "path": "$.owners[?(@.status == 'ACTIVE')].relationship"
+                },
+                "localisation":{
+                  "required":true,
+                  "prefix": "PT_MUTATION",
+                  "module": "rainmaker-common"
+               }
+            },
+              {
+                "variable": "Transferree_Relative_Name",
+                "value": {
+                  "path": "$.owners[?(@.status == 'ACTIVE')].fatherOrHusbandName"
+                }
+            },
+              {
+                "variable": "Transferree_Address",
+                "value": {
+                  "path": "$.owners[?(@.status == 'ACTIVE')].permanentAddress"
+                }
+            },
+              {
+                "variable": "Transferree_City",
+                "value": {
+                  "path": "$.owners[?(@.status == 'ACTIVE')].permanentCity"
+                }
+            }
+          ]
+        },
+        {
+          "externalAPI": [     
+            { 
+                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
+                "apiRequest": null,
+                "responseMapping":[
+                  {             
+                    "variable":"ULB_LOGO",
+                    "value":"$.MdmsRes.tenant.tenants[0].logoId",
+                    "type": "image"
+                  },
+                  {             
+                    "variable":"ULB_ADDRESS",
+                    "value":"$.MdmsRes.tenant.tenants[0].address"
+                  },
+                  {             
+                    "variable":"ULB_CITY",
+                    "value":"$.MdmsRes.tenant.tenants[0].name"
+                  },
+                  {
+                    "variable":"CorporationContact_Value",
+                    "value":"$.MdmsRes.tenant.tenants[0].contactNumber"
+                  },
+                  {
+                    "variable":"corporationWebsite",
+                    "value":"$.MdmsRes.tenant.tenants[0].domainUrl"
+                  },
+                  {
+                    "variable":"corporationEmail",
+                    "value":"$.MdmsRes.tenant.tenants[0].emailId"
+                  }
+                ]
+            },
+            {
+              "path": "http://collection-services:8080/collection-services/payments/_search",
+              "queryParam": "tenantId=$.tenantId,consumerCodes=$.acknowldgementNumber,businessServices=PT.MUTATION",
+              "apiRequest": null,
+              "responseMapping":[
+                {            
+                  "variable":"Receipt_Number",
+                  "value":"$.Payments[0].paymentDetails[0].receiptNumber"
+                }
+
+              ]
+           },
+           {
+            "path": "http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search",
+            "queryParam": "businessIds=$.acknowldgementNumber,history=true,tenantId=$.tenantId",
+            "apiRequest": null,
+            "responseMapping":[
+              {            
+                "variable":"approved_by_value",
+                "value":"$.ProcessInstances[?(@.action == 'APPROVE')].assigner.name"
+              },
+              {            
+                "variable":"Approval_Date",
+                "value":"$.ProcessInstances[?(@.action == 'APPROVE')].auditDetails.lastModifiedTime",
+                "type": "date"
+              }
+  
+            ]
+        }
+        
+     ]
+   }
+ ]
+
+}
+]
+}
+}

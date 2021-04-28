@@ -1,0 +1,817 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Apply for FSM 
+  description: |
+    ### API specs for FSM ###
+    * Citizen / Employee can Apply for desludging service
+    * Update the details of the existing application
+    * serarch the application based on criteria
+    * Citizen / Employee can take the actions on the perticular applicationbased on the wf configuration
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: BPA
+x-common-path: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml'
+paths:
+  /fsm/v1/_search:
+    post:
+      summary: Get application details based on below criteria
+      description: |
+        Gets the list of fsm application for a particular ULB based on search criteria.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+        - name: ids
+          in: query
+          description: Search by list of UUID
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: applicationStatus
+          in: query
+          description: search application by list of application Status(s)
+          schema:
+            type: array
+            items:
+              type: string
+        - name: locality
+          in: query
+          description: search application by list of Locality (s)
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ownerIds
+          in: query
+          description: search by list of uuid(s) of the owner of the application
+          schema:
+            type: array
+            items:
+              type: string
+        - name: fromDate
+          in: query
+          description: search by the created date faling between the fromdate and today
+          schema:
+            type: integer
+        - name: toDate
+          in: query
+          description: search by the created date faling between the fromdate and today
+          schema:
+            type: integer
+        - name: applicationNos
+          in: query
+          description: search application by list of applicationNo(s)
+          schema: 
+            type: array
+            items:
+              type: string
+        - name: mobileNumber
+          in: query
+          description: Search applicationb by mobileNumber of the Owner of the application
+          schema:
+            type: string
+        - name : offset
+          in: query
+          description: offset for the pagination results
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: limit for the pagination results
+          schema:
+           type: integer
+        - name: sortOrder
+          in: query
+          description: sort the search results in Ascending or descending order
+          schema:
+           type: string
+           enum:
+            - ASC
+            - DESC
+        - name: sortBy
+          in: query
+          description: sort the search results by fields
+          schema:
+           type: string
+           enum: 
+            - applicationStatus
+            - applicationNumber
+            - propertyUsage
+            - vehicle
+            - locality
+            - createdTime
+      responses:
+        '202':
+          description: Successful response sorted by reverse chrnological order of creation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FSMResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      tags:
+        - FSM
+  /fsm/v1/_audit:
+    post:
+      summary: Get the application audit log for every change in the response. Provides a record for each set of change
+      parameters: 
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+        - name: applicationNo
+          in: query
+          description: search for audit log based on the application no of FSM
+          schema:
+            type: string
+        - name: id
+          in: query
+          description: search for audit log based on the unique id of the application
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Successful response sorted by reverse chrnological order of creation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FSMAuditResponse'
+      tags:
+        - FSM
+        
+  /fsm/v1/_create:
+    post:
+      summary: Apply for desludging 
+      description: Apply for desludging 
+      tags:
+        - FSM
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FSMRequest'
+        description: Request schema.
+        required: true
+      responses:
+        '202':
+          description: Application submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FSMResponse'
+        '400':
+          description: Failed to process the application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+  /fsm/v1/_update:
+    post:
+      summary: Update service requests
+      description: Updates service request
+      tags:
+        - FSM
+      responses:
+        '202':
+          description: Application submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FSMResponse'
+        '400':
+          description: Failed to process the application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FSMRequest'
+        description: Request schema.
+        required: true
+        
+  /fsm-calculator/v1/billingSlab/_create:
+    post:
+      summary: Create Billing Slab record for the combination of propertyusage, slum ,tancapcity
+      tags: 
+        - FSM-Calculator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingSlabRequest'
+        description: Reuqest Schema for BillingSlab
+        required: true
+      responses:
+        '202':
+          description: BillingSlab created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BillingSlabResponse'
+        '400':
+          description: Failed to process the BillingSlab
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+  
+  /fsm-calculator/v1/billingSlab/_update:
+    post:
+      summary: update Billing Slab record for the combination of propertyusage, slum ,tancapcity
+      tags: 
+        - FSM-Calculator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingSlabRequest'
+        description: Reuqest Schema for BillingSlab
+        required: true
+      responses:
+        '202':
+          description: BillingSlab updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BillingSlabResponse'
+        '400':
+          description: Failed to process the BillingSlab
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'  
+                
+  /fsm-calculator/v1/billingSlab/_search:
+    post:
+      summary: Get the BillingSlab based on the search criteria
+      tags: 
+        - FSM-Calculator
+      parameters: 
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+        - name : offset
+          in: query
+          description: offset for the pagination results
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: limit for the pagination results
+          schema:
+           type: integer
+        - name: sortOrder
+          in: query
+          description: sort the search results in Ascending or descending order
+          schema:
+           type: string
+           enum:
+            - ASC
+            - DESC
+        - name: sortBy
+          in: query
+          description: sort the search results by fields
+          schema:
+           type: string
+           enum: 
+            - id
+            - propertyType
+            - capacity
+        - name : ids
+          in: query
+          description: serch by ids of the billingslab
+          schema:
+            type: array
+            items:
+              type: string
+        - name : propertyType
+          in: query
+          description: search by propertyType
+          schema:
+            type: string
+        - name : capacity
+          in: query
+          description: search by capacity
+          schema:
+            type: number
+            format: double
+        - name : slum
+          in: query
+          description: search by slum yes or no
+          schema:
+            type: string
+            enum:
+              - YES
+              - NO
+      responses:
+        '202':
+          description: Successful response sorted by reverse chrnological order of creation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BillingSlabResponse'
+  /fsm-calculator/v1/_calculate:
+    post:
+      summary: Calcualte the FSM Charges and generate Demand for the same, based on the billingslab 
+      tags: 
+        - FSM-Calculator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculationReq'
+        description: Reuqest Schema calculate api
+        required: true
+      responses:
+        '202':
+          description: calculated  successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CalculationRes'
+        '400':
+          description: Failed to process the calcuation
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes' 
+  /fsm-calculator/v1/_estimate:
+    post:
+      summary: Calcualte the FSM Charge, based on the billingslab . Does not create demand
+      tags: 
+        - FSM-Calculator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculationReq'
+        description: Reuqest Schema estimate api
+        required: true
+      responses:
+        '202':
+          description: estimate calculated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CalculationRes'
+        '400':
+          description: Failed to process the estimate
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+components:
+  schemas:
+    Workflow:
+      type: object
+      description: 'BPA application object to capture the details of land, land owners, and address of the land.'
+      properties:
+        action:
+          type: string
+          description: Action on the application in certain
+          minLength: 1
+          maxLength: 64
+        assignes:
+          type: array
+          items:
+            type: string
+        comments:
+          type: string
+          description: Unique Identifier scrutinized number
+          minLength: 1
+          maxLength: 64
+        rating:
+          type: integer
+          description: Rating for the application
+        varificationDocuments:
+          description: Attach the workflow varification documents.
+          type: array
+          items:
+            $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/Document'
+    FSM:
+      type: object
+      description: |
+        Request schema of FSM application. 
+
+      properties:
+        citizen:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/UserInfo'
+        id:
+          type: string
+          readOnly: true
+          description: The server generated unique ID(UUID).
+          minLength: 2
+          maxLength: 64
+        tenantId:
+          type: string
+          description: Unique identifier of the tenant.
+          minLength: 2
+          maxLength: 64
+        applicationNo:
+          type: string
+          readOnly: true
+          description: The unique formatted id for application no.
+          minLength: 2
+          maxLength: 128
+        description:
+          type: string
+          description: Additional information or description of the application
+          minLength: 2
+          maxLength: 256
+        accountId:
+          type: string
+          description: Applier(CItizen) unique id(UUID) from user service. 
+          minLength: 2
+          maxLength: 64
+        additionalDetail:
+          type: object
+          description: This is the json object that will carry the actual input (whereever the metadata requries input). Structure should be same as the schema definition provided in the metadata of the service (schema compliance check to be performed at client/server)
+        applicationStatus:
+          type: string
+          description: The current status of the service request.
+          readOnly: true
+        source:
+          type: string
+          description: 'Source mdms master data. Which captures the source of the service request(ex:- whatsapp, ivr, Swachhata etc)'
+          minLength: 2
+          maxLength: 64
+          example: whatsapp, ivr etc
+        sanitationtype:
+          type: string
+          description: This is the master data defined in MDMS
+          minLength: 2
+          maxLength: 64
+        vehicleType:
+          type: string
+          description: This is the master data defined in MDMS
+          minLength: 2
+          maxLength: 64
+        propertyUsage:
+          type: string
+          description: This is the master data defined in MDMS
+          minLength: 2
+          maxLength: 64
+        noOfTrips:
+          type: integer
+          description: Total no of trips reqired for desludging the PIT
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+        vehicleId:
+          type: string
+          description: Unique Id of the vehicle which got assigned to the perticular application
+          minLength: 2
+          maxLength: 64
+        dsoId:
+          type: string
+          description: Unique Id of the DSO assigned to the application
+          minLength: 2
+          maxLength: 64
+        possibleServiceDate:
+          type: integer
+          description: possible service date populated while assigning vehicle
+          format: date
+        wasteCollected:
+          type: number
+          format: double
+          description: waster collected at the application site
+        pitDetail:
+          $ref: '#/components/schemas/PitDetail'
+        address:
+          $ref: '#/components/schemas/Address'
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+      required:
+        - tenantId
+        - propertyUsage
+    
+    PitDetail:
+      type: object
+      description: |
+        cature the pit details
+      properties:
+        citizen:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/UserInfo'
+        id:
+          type: string
+          readOnly: true
+          description: The server generated unique ID(UUID).
+          minLength: 2
+          maxLength: 64
+        height:
+          type: number
+          format: double
+          description: Hight of the PIT in meter
+          minLength: 2
+          maxLength: 64
+        length:
+          type: number
+          format: double
+          description: Length of the PIT in meter
+          minLength: 2
+          maxLength: 128
+        width:
+          type: number
+          format: double
+          description: Width of the PIT in meter
+          minLength: 2
+          maxLength: 128
+        diameter:
+          type: number
+          format: double
+          description: diameter  of the PIT in meter
+          minLength: 2
+          maxLength: 128          
+        distanceFromRoad:
+          type: number
+          format: double
+          description: Distance of the PIT from road in meter
+          minLength: 2
+          maxLength: 128
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+      required:
+        - width
+    
+    FSMRequest:
+      type: object
+      description: Request object for FSM
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/RequestHeader'
+        fsm:
+          $ref: '#/components/schemas/FSM'
+        workflow:
+          $ref: '#/components/schemas/Workflow'
+      required:
+        - requestInfo
+        - fsm
+    FSMResponse:
+      type: object
+      description: Response of the FSM
+      properties:
+        responseInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+        fsm:
+          $ref: '#/components/schemas/FSM'
+        workflow:
+          $ref: '#/components/schemas/Workflow'
+        totalCount:
+          type: string
+          description: totalcount of records available in the system satifyig the search criteria
+      required:
+        - responseInfo
+        - totalCount
+        - fsm
+    FSMAuditResponse:
+      type: object
+      description: Response of the FSM Audit search
+      properties:
+        responseInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+        fsmAudit:
+          $ref: '#/components/schemas/FSMAudit'
+      required:
+        - responseInfo
+        - fsmAudit   
+    FSMAudit:
+      type: object
+      description: >
+        Representation of FSM Audit
+      properties:
+        who:
+          type: string
+          description: uuid of the user who changed the data of FSM object 
+        when:
+          type: integer
+          format: date
+          description: timestamp of the time change occured
+        what:
+          type: object
+          description: key value pair of the changed key and the changed value
+    Address:
+      type: object
+      description: >
+        Representation of a address. Indiavidual APIs may choose to extend from
+        this using allOf if more details needed to be added in their case.
+      properties:
+        tenantId:
+          type: string
+          description: Unique Identifier of the tenant to which user primarily belongs
+        doorNo:
+          type: string
+          description: House number or door number.
+        plotNo:
+          type: string
+          description: Plot number of the house.
+        id:
+          type: string
+          description: System generated id for the address
+          readOnly: true
+        landmark:
+          description: additional landmark to help locate the address
+          type: string
+        city:
+          description: City of the address. Can be represented by the tenantid itself
+          type: string
+        district:
+          description: The district in which the property is located
+          type: string
+        region:
+          description: The Region in which the property is located
+          type: string
+        state:
+          description: The State in which the property is located
+          type: string
+        country:
+          description: The country in which the property is located
+          type: string
+        pincode:
+          type: string
+          description: PIN code of the address. Indian pincodes will usually be all numbers.
+        additionDetails:
+          type: string
+          description: more address detail as may be needed
+        buildingName:
+          type: string
+          description: Name of the building
+          maxLength: 64
+          minLength: 2
+        street:
+          type: string
+          description: Street Name
+          maxLength: 64
+          minLength: 2
+        slumName:
+          type: string
+          description: Street Name
+          maxLength: 64
+          minLength: 2
+        locality:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-location/contracts/v11-0-0.yml#/definitions/Boundary'
+        geoLocation:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/GeoLocation'
+      required: 
+        - tenantId
+        - locality
+    BillingSlab:
+      type: object
+      description: Representation of billing slab
+      properties:
+        id:
+          type: string
+          description: unique identifier of the billing slab
+        tenantId:
+          type: string
+          description: id of the tenant i.e city
+        capacityFrom:
+          type: number
+          format: double
+          description: billing slab apply for the tankCapacity form 
+        capacityTo:
+          type: number
+          format: double
+          description: billing slab apply for the tankCapacity till
+        propertyType:
+          type: string
+          description: billing slab propertyType
+        slum:
+          type: string
+          description: billing slab applies for slum
+          enum: 
+            - YES
+            - NO
+        price:
+          type: number
+          format: double
+          description: price of the billing slab
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+    BillingSlabRequest:
+      type: object
+      description: Request object for BillingSlab
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/RequestHeader'
+        fsm:
+          $ref: '#/components/schemas/BillingSlab'
+      required:
+        - requestInfo
+        - billingSlab
+    BillingSlabResponse:
+      type: object
+      description: Response of the BillingSlab 
+      properties:
+        responseInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+        billingSlab:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingSlab'
+      required:
+        - responseInfo
+        - billingSlab            
+    CalculationReq:
+      type: object
+      description: Request object for Calcuation
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/RequestHeader'
+        CalulationCriteria:
+          $ref: '#/components/schemas/CalulationCriteria'
+      required:
+        - requestInfo
+        - CalulationCriteria
+    CalculationRes:
+      type: object
+      description: Response of the BillingSlab 
+      properties:
+        responseInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+        Calculations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Calculation'
+      required:
+        - responseInfo
+        - Calculations   
+    CalulationCriteria:
+      type: object
+      description: Calculation Criteria to calcaulte and generate Demand
+      properties:
+        tenantId:
+          type: string
+          description: Unique Identifier of the tenant to which user primarily belongs
+        feeType:
+          type: string
+          description: type of fee to be calcaulted and generrate demand, As of now it is only one
+          enum: 
+            - APPLICATION_FEE
+        fsm:
+          $ref: '#/components/schemas/FSM'
+        applicationNo:
+          type: string
+          description: Application number of the FSM application
+    Calculation:
+      type: object
+      description: ist of calculations 
+      properties:
+        tenantId:
+          type: string
+          description: Unique Identifier of the tenant to which user primarily belongs
+        feeType:
+          type: string
+          description: type of fee to be calcaulted and generrate demand, As of now it is only one
+          enum: 
+            - APPLICATION_FEE
+        fsm:
+          $ref: '#/components/schemas/FSM'
+        applicationNumber:
+          type: string
+          description: Application number of the FSM application
+        taxHeadEstimates:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxHeadEstimate'
+    TaxHeadEstimate:
+      type: object
+      description: Estimate object for each taxHead
+      properties:
+        taxHeadCode:
+          type: string
+        estimateAmount:
+          type: number
+          format: bigdecimal
+        category:
+          type: string
+          enum:
+            - TAX
+            - FEE
+            - REBATE
+            - ADVANCE_COLLECTION
+            - PENALTY
+            - FINES
+            - CHARGES
+        
+servers:
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/phanikiran-wtt-egov/FSM/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/WalkingTreeDev/eGov-FSM/1.0.0

@@ -1,0 +1,77 @@
+serviceMaps:
+ serviceName: Chatbot Persister
+ mappings:
+ - version: 1.0
+   name: chatbot-persister
+   description: Insert new conversationState to database
+   fromTopic: chatbot-conversation-state-insert
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO eg_chat_conversation_state (conversation_id, user_id, active, locale) VALUES (?, ?, ?, ?);
+      basePath: $
+      jsonMaps:
+
+       - jsonPath: $.conversationId
+
+       - jsonPath: $.userId
+
+       - jsonPath: $.active
+
+       - jsonPath: $.locale
+  
+ - version: 1.0
+   name: chatbot-persister
+   description: Update conversationState 
+   fromTopic: chatbot-conversation-state-update
+   isTransaction: true
+   queryMaps:
+    - query: UPDATE eg_chat_conversation_state SET active_node_id=?, question_details=?, last_modified_time=? WHERE conversation_id=?;
+      basePath: $
+      jsonMaps:
+
+       - jsonPath: $.activeNodeId
+
+       - jsonPath: $.questionDetails
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.lastModifiedTime
+
+       - jsonPath: $.conversationId
+
+ - version: 1.0
+   name: chatbot-persister
+   description: Mark conversationState inactive
+   fromTopic: chatbot-conversation-state-deactivate
+   isTransaction: true
+   queryMaps:
+    - query: UPDATE eg_chat_conversation_state SET active=FALSE WHERE conversation_id=?;
+      basePath: $
+      jsonMaps:
+
+       - jsonPath: $.conversationId
+
+
+ - version: 1.0
+   name: chatbot-persister
+   description: Save chatbot message
+   fromTopic: chatbot-message-insert
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO eg_chat_message (message_id, conversation_id, node_id, raw_input, message_content, content_type, is_valid) VALUES (?, ?, ?, ?, ?, ?, ?);
+      basePath: $
+      jsonMaps:
+
+       - jsonPath: $.messageId
+
+       - jsonPath: $.conversationId
+
+       - jsonPath: $.nodeId
+
+       - jsonPath: $.rawInput
+
+       - jsonPath: $.messageContent
+
+       - jsonPath: $.contentType
+
+       - jsonPath: $.valid

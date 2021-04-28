@@ -1,0 +1,14 @@
+   "chartOfAccountDetails": [
+   	{
+	   	"chartOfAccount":{
+	   		"id":"830bf3dc60504244babfe228bdf80bac",
+	   		"tenantId":"default"
+	   	},
+	   	"accountDetailType":{
+	   		"id":"e647d2406902400cbf3cee71a4befb35",
+	   		"tenantId":"default"
+	   	},
+   		"tenantId":"default"
+   	}
+   	
+   	]

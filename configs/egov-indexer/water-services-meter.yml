@@ -1,0 +1,29 @@
+ServiceMaps:
+ serviceName: Meter Connection - rainmaker
+ version: 1.0.0
+ mappings:
+  - topic: save-ws-meter
+    configKey: INDEX
+    indexes:
+      - name: meter-services
+        type: general
+        id: $.id,$.connectionNo
+        jsonPath: $.meterReadings
+        customJsonMapping:
+          indexMapping: {"Data":{"connectionNo":"","meterStatus":"","currentReadingDate":"","currentReading":"","lastReading":"","billingPeriod":"","lastReadingDate":""}}
+          fieldMapping:
+          - inJsonPath: $.connectionNo
+            outJsonPath: $.Data.connectionNo
+          - inJsonPath: $.meterStatus
+            outJsonPath: $.Data.meterStatus
+          - inJsonPath: $.currentReadingDate
+            outJsonPath: $.Data.currentReadingDate
+          - inJsonPath: $.currentReading
+            outJsonPath: $.Data.currentReading
+          - inJsonPath: $.lastReading
+            outJsonPath: $.Data.lastReading
+          - inJsonPath: $.billingPeriod
+            outJsonPath: $.Data.billingPeriod
+          - inJsonPath: $.lastReadingDate
+            outJsonPath: $.Data.lastReadingDate
+         

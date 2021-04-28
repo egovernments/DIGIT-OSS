@@ -1,0 +1,44 @@
+.service-item {
+  padding: 0px !important;
+}
+
+.service-list {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.upper-row {
+  margin-bottom: 30px;
+}
+
+.service-icon {
+  width: 35px !important;
+  height: 35px !important;
+  fill: #fe7a51 !important;
+  overflow: visible !important;
+}
+.module-page-icon {
+  height: 30px;
+  width: 30px;
+  color: #fe7a51;
+}
+
+.card-content-style {
+  padding: 0 !important;
+}
+
+.service-label-cont .label-text {
+  word-break: inherit;
+  word-wrap: inherit;
+}
+
+@media only screen and (min-width: 768px) {
+  .service-module-style {
+    height: 140px !important;
+  }
+
+  .service-icon {
+    width: 45px !important;
+    height: 45px !important;
+  }
+}

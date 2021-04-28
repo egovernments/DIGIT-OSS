@@ -1,0 +1,87 @@
+serviceMaps:
+ serviceName: Property Mutation Calculator
+ mappings:
+ - version: 1.0
+   name: pt-mutation-calculator
+   description: Persists the pt-mutation-calculator related records to db
+   fromTopic: save-pt-mutation-billingslab
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO eg_pt_mutation_billingslab(id, tenantid, propertyType, propertySubType, usageCategoryMajor, usageCategoryMinor, usageCategorySubMinor, usageCategoryDetail, ownershipCategory, subOwnershipCategory, minMarketValue, maxMarketValue, fixedAmount, rate, method) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, cast(? as double precision), cast(? as double precision), cast(? as double precision), cast(? as double precision), ?);
+
+      basePath: MutationBillingSlab.*
+      jsonMaps:
+
+       - jsonPath: $.MutationMutationBillingSlab.*.id
+
+       - jsonPath: $.MutationMutationBillingSlab.*.tenantId
+
+       - jsonPath: $.MutationBillingSlab.*.propertyType
+
+       - jsonPath: $.MutationBillingSlab.*.propertySubType
+
+       - jsonPath: $.MutationBillingSlab.*.usageCategoryMajor
+
+       - jsonPath: $.MutationBillingSlab.*.usageCategoryMinor
+
+       - jsonPath: $.MutationBillingSlab.*.usageCategorySubMinor
+
+       - jsonPath: $.MutationBillingSlab.*.usageCategoryDetail
+
+       - jsonPath: $.MutationBillingSlab.*.ownerShipCategory
+
+       - jsonPath: $.MutationBillingSlab.*.subOwnerShipCategory
+
+       - jsonPath: $.MutationBillingSlab.*.minMarketValue
+
+       - jsonPath: $.MutationBillingSlab.*.maxMarketValue
+
+       - jsonPath: $.MutationBillingSlab.*.fixedAmount
+
+       - jsonPath: $.MutationBillingSlab.*.rate
+
+       - jsonPath: $.MutationBillingSlab.*.type
+
+
+
+ - version: 1.0
+   name: pt-mutation-calculator
+   description: Persists the pt-mutation-calculator related records to db
+   fromTopic: update-pt-mutation-billingslab
+   isTransaction: true
+   queryMaps:
+
+    - query: UPDATE eg_pt_mutation_billingslab SET propertyType=?, propertySubType=?, usageCategoryMajor=?, usageCategoryMinor=?, usageCategorySubMinor=?, usageCategoryDetail=?, ownershipCategory=?, subOwnershipCategory=?, minMarketValue=cast(? as double precision), maxMarketValue=cast(? as double precision), fixedAmount=cast(? as double precision), rate=cast(? as double precision), method=? WHERE tenantid=? AND id=?;
+
+      basePath: MutationBillingSlab.*
+      jsonMaps:
+
+       - jsonPath: $.MutationBillingSlab.*.propertyType
+
+       - jsonPath: $.MutationBillingSlab.*.propertySubType
+
+       - jsonPath: $.MutationBillingSlab.*.usageCategoryMajor
+
+       - jsonPath: $.MutationBillingSlab.*.usageCategoryMinor
+
+       - jsonPath: $.MutationBillingSlab.*.usageCategorySubMinor
+
+       - jsonPath: $.MutationBillingSlab.*.usageCategoryDetail
+
+       - jsonPath: $.MutationBillingSlab.*.ownerShipCategory
+
+       - jsonPath: $.MutationBillingSlab.*.subOwnerShipCategory
+
+       - jsonPath: $.MutationBillingSlab.*.minMarketValue
+
+       - jsonPath: $.MutationBillingSlab.*.maxMarketValue
+
+       - jsonPath: $.MutationBillingSlab.*.fixedAmount
+
+       - jsonPath: $.MutationBillingSlab.*.rate
+
+       - jsonPath: $.MutationBillingSlab.*.type
+
+       - jsonPath: $.MutationBillingSlab.*.tenantId
+
+       - jsonPath: $.MutationBillingSlab.*.id

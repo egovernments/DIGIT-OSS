@@ -1,0 +1,31 @@
+{
+  "tenantId": "pb",
+  "moduleName": "TradeLicense",
+  "AccessoriesCategory": [
+    {
+      "code": "ACC-1",
+      "uom": "HP",
+      "active": true
+    },
+    {
+      "code": "ACC-2",
+      "uom": "HP",
+      "active": true
+    },
+    {
+      "code": "ACC-3",
+      "uom": "HP",
+      "active": true
+    },
+    {
+      "code": "ACC-4",
+      "uom": null,
+      "active": true
+    },
+    {
+      "code": "ACC-5",
+      "uom": null,
+      "active": true
+    }
+  ]
+}

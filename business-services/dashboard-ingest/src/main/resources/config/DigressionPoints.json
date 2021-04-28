@@ -1,0 +1,8 @@
+{
+  "digressionPoints": [
+    {
+      "dataContext": "collection",
+      "paths": [ "Bill", "billDetails" ] 
+    }
+  ]
+}

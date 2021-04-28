@@ -1,0 +1,245 @@
+{
+    "key":"firenoc-receipt",
+    "DataConfigs": {
+       "serviceName": "rainmaker-noc",
+       "version": "1.0.0",
+       "baseKeyPath": "$.FireNOCs.*",
+       "entityIdPath":"$.fireNOCNumber",
+       "isCommonTableBorderRequired":true,
+       "mappings": [
+          {
+             "topic": "noc-pdf-generation",
+             "staticConfigPath": "https://raw.githubusercontent.com/egovernments/egov-services/vishal-feature-filestore/core/egov-indexer/src/main/resources/rainmaker-pgr-indexer.yml",
+             "mappings": [
+                {
+                   "direct": [
+                      {
+                         "variable": "variable1",
+                         "value": {
+                              "path":"$.fireNOCDetails.applicationNumber"                              
+                         }
+                      },
+                      {
+                        "variable": "variable32",                        
+                        "url":"https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png",
+                        "type":"image"
+                      },   
+                      {
+                        "variable": "variable3",
+                        "value": {
+                             "path":"$.fireNOCDetails.applicantDetails.ownerShipType"                              
+                        },
+                        "type":"function",
+                        "format":"return type.startsWith('INSTITUTION')" 
+                      },
+                      {
+                        "variable": "variable21",
+                        "value": {
+                             "path":"$.fireNOCDetails.applicantDetails.ownerShipType"                              
+                        },
+                        "localisation":{
+                           "required":true,
+                           "prefix":"COMMON_MASTERS_OWNERSHIPCATEGORY",   
+                           "module":"rainmaker-common"
+                        }
+                     },
+                     {
+                        "variable": "variable22",
+                        "value": {
+                             "path":"$.fireNOCDetails.applicantDetails.additionalDetail.institutionName"                              
+                        }
+                     },
+                     {
+                        "variable": "variable23",
+                        "value": {
+                             "path":"$.fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber"                              
+                        }
+                     },
+                     {
+                        "variable": "variable24",
+                        "value": {
+                             "path":"$.fireNOCDetails.applicantDetails.owners[0].name"                              
+                        }
+                     },
+                     {
+                        "variable": "variable25",
+                        "value": {
+                             "path":"$.fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation"                              
+                        }
+                     },
+                     {
+                        "variable": "variable26",
+                        "value": {
+                             "path":"$.fireNOCDetails.applicantDetails.owners[0].mobileNumber"                              
+                        }
+                     },
+                     {
+                        "variable": "variable27",
+                        "value": {
+                             "path":"$.fireNOCDetails.applicantDetails.owners[0].emailId"                              
+                        }
+                     },
+                     {
+                        "variable": "variable28",
+                        "value": {
+                             "path":"$.fireNOCDetails.applicantDetails.owners[0].correspondenceAddress"                              
+                        }
+                     },
+                     {
+                        "variable": "variable20",
+                        "value": {
+                             "path":"$.tenantId"                              
+                        },
+                        "localisation":{
+                           "required":true,
+                           "prefix":"TENANT_TENANTS",   
+                           "module":"rainmaker-common"
+                        },
+                        "isUpperCaseRequired":true 
+                      },
+                      {
+                        "variable": "variable2",                        
+                        "value":{
+                             "path":"$.fireNOCDetails.applicantDetails.owners.*"                          
+                         },
+                         "type":"array",
+                         "format":{                            
+                            "type":"string",
+                            "scema":[
+                               {
+                                  "key":"name"
+                               },
+                               {
+                                 "key":"mobileNumber"
+                               }]
+                        } 
+                     }
+                   ]
+                },
+                {
+                  "derived": [
+                     {
+                        "variable": "variable31",
+                        "formula": "{{variable29}}+{{variable30}}"
+                     }
+                  ]
+               },
+               {
+                   "externalAPI": [
+                     
+                      {
+                         
+                         "path": "http://collection-services:8080/collection-services/receipts/_search",
+                         "queryParam": "consumerCode=$.fireNOCDetails.applicationNumber",
+                         "apiRequest": null,
+
+                         "responseMapping":[
+                           {
+                              "variable":"variable6",
+                              "value":"$.Receipt[0].instrument.transactionDateInput"
+                           },
+                           {
+                              "variable":"variable7",
+                              "value":"$.Receipt[0].receiptNumber"
+                           },
+                           {
+                              "variable":"variable8",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='FIRENOC_FEES')].amount"
+                           },
+                           {
+                              "variable":"variable9",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='FIRENOC_TAXES')].amount"
+                           },
+                           {
+                              "variable":"variable29",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='FIRENOC_ADHOC_PENALTY')].amount"
+                           },
+                           {
+                              "variable":"variable30",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].billAccountDetails[?(@.taxHeadCode=='FIRENOC_ADHOC_REBATE')].amount"
+                           },
+                           {
+                              "variable":"variable10",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].totalAmount"
+                           },
+                           {
+                              "variable":"variable11",
+                              "value":"$.Receipt[0].instrument.transactionType"
+                           },
+                           {
+                              "variable":"variable12",
+                              "value":"$.Receipt[0].transactionId"
+                           },
+                           {
+                              "variable":"variable13",
+                              "value":"$.Receipt[0].instrument.bank.name"
+                           },
+                           {
+                              "variable":"variable15",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].receiptNumber"
+                           },
+                           {
+                              "variable":"variable16",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].receiptDate"
+                           },
+                           {
+                              "variable":"variable17",
+                              "value":"$.Receipt[0].Bill[0].billDetails[0].amountPaid"
+                           },
+                           {
+                              "variable":"variable18",
+                              "value":"$.Receipt[0].instrument.instrumentType.name"
+                           },
+                           {
+                              "variable":"variable19",
+                              "value":"$.Receipt[0].instrument.transactionNumber"
+                           }
+                        ]  
+                      }
+                   ]
+                },
+                {
+                  "qrcodeConfig": [
+                     {
+                        "variable": "variable14",
+                        "value":"Application: {{variable1}}, Receipt number: {{variable15}}, Date of payment: {{variable16}}, Fees Paid: {{variable17}}, Payment mode: {{variable18}}, Transaction ID: {{variable19}}"
+                     }
+                  ]
+               },
+                  {
+                     "mdmsDenormalization": [
+                        {
+                           "variable": "$variable",
+                           "moduleName": "common-masters",
+                           "masterName": "Department",
+                           "tenantId": "pb",
+                           "filter": "[?(@.code == $department)]",
+                           "filterMapping": [
+                              {
+                                 "variable": "$department",
+                                 "valueJsonpath": "$.department"
+                              }
+                           ],
+                           "valueJsonPath": "$.TenantBoundary[0].boundary[0].name"
+                        },
+                        {
+                           "variable": "$variable",
+                           "moduleName": "common-masters",
+                           "masterName": "Department",
+                           "tenantId": "pb",
+                           "filter": "[?(@.code == $department)]",
+                           "filterMapping": [
+                              {
+                                 "variable": "$department",
+                                 "valueJsonpath": "$.department"
+                              }
+                           ],
+                           "valueJsonPath": "$.TenantBoundary[0].boundary[0].name"
+                        }
+                     ]
+                }
+             ]
+          }
+       ]
+    }
+ }

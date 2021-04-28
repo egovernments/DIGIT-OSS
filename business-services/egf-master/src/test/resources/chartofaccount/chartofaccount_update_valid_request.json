@@ -1,0 +1,16 @@
+  "chartOfAccounts": 
+	   [
+		   	{
+			    "glcode":"GLCode",
+		   		"name":"MunicipalBank",
+		   		"isActiveForPosting":true,
+				"description": "DefaultDescription",
+		   		"type":"B",
+		   		"classification":123456,
+		   		"functionRequired":true,
+		   		"budgetCheckRequired":true,
+		   		"tenantId":"default"
+		   	}
+	   	
+	   ]
+ 

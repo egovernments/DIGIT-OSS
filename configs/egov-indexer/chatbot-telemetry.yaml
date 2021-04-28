@@ -1,0 +1,12 @@
+ServiceMaps:
+  serviceName: chatbot-messages
+  version: 1.0.0
+  mappings:
+    - topic: send-message-localized
+      configKey: INDEX
+      indexes:
+        - name: chatbot-messages
+          type: general
+          id: $.message.messageId, $.response.timestamp
+          timeStampField: $.timestamp
+          fieldsToBeMasked: ["$.user.mobileNumber", "$.user.authToken", "$.user.refreshToken", "$.user.userInfo", "$.user.expiresAt", "$.extraInfo.recipient", "$.extraInfo.params", "$.conversationState.questionDetails", "$.nextConversationState.questionDetails", "$.message.rawInput", "$.message.messageContent", "$.response.localizationCodes", "$.response.text", "$.response.fileStoreId", "$.response.location", "$.response.contactCard"]

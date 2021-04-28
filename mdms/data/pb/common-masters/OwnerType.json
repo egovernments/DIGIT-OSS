@@ -1,0 +1,30 @@
+{
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+  "OwnerType": [
+    {
+      "code": "FREEDOMFIGHTER",
+      "active": true
+    },
+    {
+      "code": "WIDOW",
+      "active": true
+    },
+    {
+      "code": "HANDICAPPED",
+      "active": true
+    },
+    {
+      "code": "BPL",
+      "active": true
+    },
+    {
+      "code": "DEFENSE",
+      "active": true
+    },
+    {
+      "code": "NONE",
+      "active": true
+    }
+  ]
+}

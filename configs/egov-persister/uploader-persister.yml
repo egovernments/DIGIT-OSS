@@ -1,0 +1,76 @@
+serviceMaps:
+  serviceName: Uploader
+  mappings:
+  - version: 1.0
+    name: Uploader
+    description: Persists upload jobs to table
+    fromTopic: save-upload-jobs
+    isTransaction: true
+    queryMaps:
+    - query: Insert into EGDU_UPLOADREGISTRY(CODE, TENANTID, REQUESTFILE_PATH, MODULE_NAME, DEF_NAME, REQUESTER_NAME, STATUS,FILE_NAME,CREATEDBY,CREATEDDATE,LASTMODIFIEDBY,LASTMODIFIEDDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
+      basePath: UploadJob
+      jsonMaps:
+
+
+      - jsonPath: $.UploadJob.code
+
+      - jsonPath: $.UploadJob.tenantId
+
+      - jsonPath: $.UploadJob.requestFilePath
+
+      - jsonPath: $.UploadJob.moduleName
+
+      - jsonPath: $.UploadJob.defName
+
+      - jsonPath: $.UploadJob.requesterName
+
+      - jsonPath: $.UploadJob.status
+
+      - jsonPath: $.UploadJob.requestFileName
+
+      - jsonPath: $.UploadJob.auditDetails.createdBy
+
+      - jsonPath: $.UploadJob.auditDetails.createdTime
+
+      - jsonPath: $.UploadJob.auditDetails.lastModifiedBy
+
+      - jsonPath: $.UploadJob.auditDetails.lastModifiedTime
+
+
+
+  - version: 1.0
+    name: Uploader
+    description: Updates upload jobs in the table
+    fromTopic: update-upload-jobs
+    isTransaction: true
+    queryMaps:
+    - query: Update EGDU_UPLOADREGISTRY set START_TIME=?, END_TIME=?, TOTAL_ROWS=?, SUCCESS_ROWS=?, FAILED_ROWS=?, RESPONSEFILE_PATH=?, STATUS=?, REASON_FOR_FAILURE = ?, LASTMODIFIEDBY=?, LASTMODIFIEDDATE=? where CODE=? AND TENANTID=?
+      basePath: UploadJobs
+      jsonMaps:
+
+
+      - jsonPath: $.UploadJob.startTime
+
+      - jsonPath: $.UploadJob.endTime
+
+      - jsonPath: $.UploadJob.totalRows
+
+      - jsonPath: $.UploadJob.successfulRows
+
+      - jsonPath: $.UploadJob.failedRows
+
+      - jsonPath: $.UploadJob.responseFilePath
+
+      - jsonPath: $.UploadJob.status
+
+      - jsonPath: $.UploadJob.reasonForFailure
+
+      - jsonPath: $.UploadJob.auditDetails.lastModifiedBy
+
+      - jsonPath: $.UploadJob.auditDetails.lastModifiedTime
+
+      - jsonPath: $.UploadJob.code
+
+      - jsonPath: $.UploadJob.tenantId
+
+

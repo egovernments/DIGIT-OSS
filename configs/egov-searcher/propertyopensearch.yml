@@ -1,0 +1,42 @@
+SearchDefinitions:
+ moduleName: property-services
+ summary: Property Services Open API
+ version: 1.0.0
+ definitions:
+ - name: propertyopensearch
+   query: 
+    baseQuery: Select row_to_json(result) from
+        (
+          select property.tenantid, property.propertyid, surveyid, oldpropertyid, property.createdtime, locality, owner.userid as owneruuid from eg_pt_property as property
+          INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
+          INNER JOIN eg_pt_owner owner ON owner.propertyid=property.id $where
+        ) result
+    groupBy:    
+    orderBy: createdtime,desc
+   searchParams: 
+    condition: AND
+    params:
+    - name: property.tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+    - name: property.propertyId
+      isMandatory: false
+      jsonPath: $.searchCriteria.propertyId
+    - name: property.surveyId
+      isMandatory: false
+      jsonPath: $.searchCriteria.surveyId
+    - name: property.oldPropertyId
+      isMandatory: false
+      jsonPath: $.searchCriteria.oldPropertyId
+    - name: ptadd.doorNo
+      isMandatory: false
+      jsonPath: $.searchCriteria.doorNo
+    - name: ptadd.locality
+      isMandatory: true
+      jsonPath: $.searchCriteria.locality
+
+
+   output:
+    jsonFormat: {"ResponseInfo": {},"Properties": []}
+    outJsonPath: $.Properties
+    responseInfoPath: $.ResponseInfo

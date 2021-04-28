@@ -1,0 +1,50 @@
+{
+  "name": "egov-ui-framework-core",
+  "version": "0.1.41",
+  "license": "egov",
+  "main": "./lib",
+  "dependencies": {
+    "@material-ui/core": "^1.4.1",
+    "@material-ui/icons": "^2.0.0",
+    "aws-amplify": "^1.2.2",
+    "axios": "^0.18.0",
+    "jquery": "^3.3.1",
+    "lodash": "^4.17.10",
+    "marker-animate-unobtrusive": "^0.2.8",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-google-maps": "^9.4.5",
+    "react-json-view": "^1.19.1",
+    "react-loadable": "^5.4.0",
+    "react-redux": "^5.0.7",
+    "react-responsive-carousel": "^3.1.41",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "^1.1.4",
+    "react-swipeable-views": "^0.13.0",
+    "react-text-mask": "^5.4.2",
+    "recompose": "^0.27.1",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "egov-ui-framework": "babel src/ --out-dir ../../packages/egov-ui-framework --copy-files"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-runtime": "^6.26.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/muralim4242/egov-ui-framework-boilerplate.git"
+  }
+}

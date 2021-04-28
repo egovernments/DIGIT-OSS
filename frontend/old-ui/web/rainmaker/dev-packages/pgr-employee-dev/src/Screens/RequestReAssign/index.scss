@@ -1,0 +1,19 @@
+.request-reaasign-main-container {
+  position: relative;
+  padding: 10px 16px 0 16px;
+  background: #ffffff;
+}
+
+.request-reaasign-textArea {
+  padding: 24px 16px 0px 1px;
+}
+
+.request-reaasign-question {
+  padding-top: 12px;
+}
+
+@media only screen and (min-width: 768px) {
+  .request-reaasign-question {
+    padding-top: 0px;
+  }
+}

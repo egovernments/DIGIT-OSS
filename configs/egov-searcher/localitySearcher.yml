@@ -1,0 +1,216 @@
+SearchDefinitions:
+  moduleName: locality
+  summary: Searcher configuration for searching locality in workflow inbox
+  version: 1.0.0
+  definitions:
+
+  - name: tl-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select applicationNumber as referenceNumber,locality from eg_tl_tradelicense tl
+          INNER JOIN eg_tl_TradeLicenseDetail tld ON tld.tradelicenseId = tl.id
+          INNER JOIN eg_tl_address ad ON ad.tradeLicenseDetailId = tld.id
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
+
+  - name: fireNoc
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select fnd.applicationnumber as referenceNumber,locality from eg_fn_firenoc fn
+          INNER JOIN eg_fn_firenocDetail fnd ON fnd.firenocuuid = fn.uuid
+          INNER JOIN eg_fn_address ad ON ad.firenocdetailsuuid = fnd.uuid
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
+      
+
+  - name: BPAREG
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select applicationNumber as referenceNumber,locality from eg_tl_tradelicense tl
+          INNER JOIN eg_tl_TradeLicenseDetail tld ON tld.tradelicenseId = tl.id
+          INNER JOIN eg_tl_address ad ON ad.tradeLicenseDetailId = tld.id
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
+
+  - name: bpa-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select applicationNo as referenceNumber,locality from eg_bpa_buildingplan bpa
+          INNER JOIN eg_land_Address ad ON ad.landInfoId = bpa.landid
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
+
+  - name: pt-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select property.propertyid as referenceNumber,locality from eg_pt_property property
+          INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo  
+
+  - name: PT
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select property.propertyid as referenceNumber,locality from eg_pt_property property
+          INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo    
+      
+  - name: ws-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select applicationno as referenceNumber,locality from eg_ws_connection conn
+          INNER JOIN eg_pt_property property ON property.id = conn.property_id
+          INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo  
+  - name: sw-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+         select applicationno as referenceNumber,locality from eg_sw_connection conn
+          INNER JOIN eg_pt_property property ON property.id = conn.property_id
+          INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
+  - name: noc-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+         select noc.applicationNo as referenceNumber,ad.locality from eg_bpa_buildingplan bpa
+          INNER JOIN eg_land_Address ad ON ad.landInfoId = bpa.landid JOIN eg_noc noc ON noc.sourceRefId = bpa.applicationNo
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo

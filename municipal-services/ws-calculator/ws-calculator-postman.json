@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "a20c3b5d-e0ab-4ac2-8e6c-f31a29f5532d",
+		"name": "New-WS-Calc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "WS-Calc Estimate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"action\": \"_estimate\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"authToken\": \"af598296-731b-4f97-9614-d77e3afd3bc1\"\n  },\n  \"isconnectionCalculation\": false,\n  \"CalculationCriteria\": [\n    {\n      \"applicationNo\": \"WS_AP/107/2020-21/000006\",\n      \"tenantId\": \"pb.amritsar\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/ws-calculator/waterCalculator/_estimate",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"ws-calculator",
+						"waterCalculator",
+						"_estimate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WS-Calc Calculate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"action\": \"_estimate\",\n    \"apiId\": \"Rainmaker\",\n    \"authToken\": \"af598296-731b-4f97-9614-d77e3afd3bc1\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ver\": \".01\"\n  },\n  \"CalculationCriteria\": [\n    {\n      \"applicationNo\": \"WS_AP/107/2020-21/064459\",\n      \"tenantId\": \"pb.amritsar\",\n      \"assessmentYear\":\"2019-20\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/ws-calculator/waterCalculator/_calculate",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"ws-calculator",
+						"waterCalculator",
+						"_calculate"
+					]
+				},
+				"description": "Calculate WaterConnection TaxHeads And Create Demand For Water Connection"
+			},
+			"response": []
+		},
+		{
+			"name": "WS-Calc MeterReading Search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"action\": \"_search\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"authToken\": \"d2dd37fd-654f-4651-9d71-486ccb01e8cb\"\n  }\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/ws-calculator/meterConnection/_search?tenantId=pb.amritsar&connectionNos=WS/107/2020-21/064839&offset=0",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"ws-calculator",
+						"meterConnection",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "pb.amritsar"
+						},
+						{
+							"key": "connectionNos",
+							"value": "WS/107/2020-21/064839"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Search Meter Readings"
+			},
+			"response": []
+		},
+		{
+			"name": "WS-Calc MeterReading Create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"action\": \"\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"authToken\": \"d2dd37fd-654f-4651-9d71-486ccb01e8cb\"\n  },\n  \"meterReadings\": {\n    \"currentReading\": 150,\n    \"currentReadingDate\": 1559413799000,\n    \"billingPeriod\": \"01/05/2019 - 01/06/2019\",\n    \"meterStatus\": \"Working\",\n    \"connectionNo\": \"WS/107/2020-21/064839\",\n    \"lastReading\": 123,\n    \"lastReadingDate\": 1556735399000,\n    \"tenantId\": \"pb.amritsar\"\n  }\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/ws-calculator/meterConnection/_create",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"ws-calculator",
+						"meterConnection",
+						"_create"
+					]
+				},
+				"description": "Create Meter Reading API"
+			},
+			"response": []
+		},
+		{
+			"name": "WS-Calc JobScheduler",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n  \"RequestInfo\": {\n    \"apiId\": \"string\",\n    \"ver\": \"string\",\n    \"ts\": 0,\n    \"action\": \"string\",\n    \"did\": \"string\",\n    \"key\": \"string\",\n    \"msgId\": \"amit|en_IN\",\n    \"requesterId\": \"string\",\n    \"authToken\": \"63b275f2-e2f1-4abd-9862-dd90c782d691\",\n    \"userInfo\": {\n            \"id\": 28039,\n            \"uuid\": \"e0c9e6b1-f813-44b7-a843-423cb89a247f\",\n            \"userName\": \"EMP-107-000258\",\n            \"name\": \"WSEmp1\",\n            \"type\": \"EMPLOYEE\",\n            \"mobileNumber\": \"7382193319\",\n            \"emailId\": null,\n            \"tenantId\": \"pb.amritsar\",\n            \"roles\": [\n                {\n                    \"id\": null,\n                    \"name\": \"Employee\",\n                    \"code\": \"EMPLOYEE\",\n                    \"tenantId\": \"pb.amritsar\"\n                },\n                {\n                    \"id\": null,\n                    \"name\": \"WS Document Verifier\",\n                    \"code\": \"WS_DOC_VERIFIER\",\n                    \"tenantId\": \"pb.amritsar\"\n                },\n                {\n                    \"id\": null,\n                    \"name\": \"WS Counter Employee\",\n                    \"code\": \"WS_CEMP\",\n                    \"tenantId\": \"pb.amritsar\"\n                },\n                {\n                    \"id\": null,\n                    \"name\": \"SW Field Inspector\",\n                    \"code\": \"SW_FIELD_INSPECTOR\",\n                    \"tenantId\": \"pb.amritsar\"\n                },\n                {\n                    \"id\": null,\n                    \"name\": \"SW Counter Employee\",\n                    \"code\": \"SW_CEMP\",\n                    \"tenantId\": \"pb.amritsar\"\n                },\n                {\n                    \"id\": null,\n                    \"name\": \"WS Field Inspector\",\n                    \"code\": \"WS_FIELD_INSPECTOR\",\n                    \"tenantId\": \"pb.amritsar\"\n                },\n                {\n                    \"id\": null,\n                    \"name\": \"SW Document Verifier\",\n                    \"code\": \"SW_DOC_VERIFIER\",\n                    \"tenantId\": \"pb.amritsar\"\n                }\n            ]\n        }\n  }\n }"
+				},
+				"url": {
+					"raw": "http://localhost:8090/ws-calculator/waterCalculator/_jobscheduler",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"ws-calculator",
+						"waterCalculator",
+						"_jobscheduler"
+					]
+				},
+				"description": "Calculate WaterConnection TaxHeads And Create Demand For Water Connection"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

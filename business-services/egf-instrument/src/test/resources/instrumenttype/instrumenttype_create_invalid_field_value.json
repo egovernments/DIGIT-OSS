@@ -1,0 +1,19 @@
+{
+  "requestInfo": {
+	    "action": "action",
+	    "did": "did",
+	    "msgId": "msgId",
+	    "requesterId": "requesterId",
+	    "ts": "01-01-2017 01:01:01",
+	    "authToken": null
+    },
+	"instrumentTypes": [
+   	{
+		"name":"name",
+		"description":"description",
+		"active":true,
+   		"tenantId":"default"
+   	}
+   	
+   	]
+}
