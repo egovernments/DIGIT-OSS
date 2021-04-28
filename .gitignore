@@ -189,8 +189,6 @@ $RECYCLE.BIN/
 *.msp
 
 # Windows shortcuts
-*.lnk
-
 
 web/digit-ui-internals
 .env

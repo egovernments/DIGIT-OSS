@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="image_view">Image View</string>
+	<string name="mgks_promo">mgks.infeeds.com\ngithub.com/mgks</string>
+	<string name="loc_req">Please allow this app to get your location information.</string>
+    <string name="loc_fail">Failed to Find Location</string>
+    <string name="loc_fail_text">Please Check Your GPS Location.</string>
+    <string name="loc_fail_more">Please check if your GPS is enabled, if not, please set it on high accuracy from location settings.</string>
+	<string name="loc_perm_text">Give this app permission to check your location.</string>
+    <string name="loc_perm_more">Please allow this app to know your location for better overall experience.</string>
+</resources>

@@ -1,0 +1,205 @@
+.drawer-list-poweredBy-wrapper {
+  background-color: #ffffff;
+}
+
+.drawer-button-toggle-container {
+  padding-left: 60px !important;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 16px !important;
+  height: auto !important;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.drawer-image-cont .mseva-logo {
+  width: 40% !important;
+  margin-top: 43px !important;
+}
+
+.logout-no-button {
+  margin-right: 14px;
+}
+
+@media only screen and (max-width: 361px) {
+  .drawer-button-toggle-container span {
+    font-size: 13px !important;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+  .logout-no-button {
+    margin-right: 3px !important;
+  }
+  .logout-no-button,
+  .logout-yes-button {
+    min-width: 30px !important;
+  }
+}
+
+.rainmaker-header {
+  position: fixed !important;
+  width: 100% !important;
+  z-index: 1999 !important;
+  background-image: linear-gradient(#16222a, #3a6073) !important;
+}
+
+.rainmaker-header-home-small-screen {
+  position: fixed !important;
+  width: 100% !important;
+  height: 104px;
+  background-image: linear-gradient(#16222a, #3a6073) !important;
+  z-index: 9999 !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .rainmaker-header {
+    background-color: #ffffff !important;
+    position: fixed !important;
+    width: 100vw !important;
+    padding-left: 53px !important;
+    height: auto !important;
+    background-image: none !important;
+  }
+  .rainmaker-header-home-small-screen {
+    background-color: #ffffff !important;
+    position: fixed !important;
+    width: 100vw !important;
+    padding-left: 53px !important;
+    height: auto !important;
+    background-image: none !important;
+  }
+  .rainmaker-header-cont > div:first-child {
+    height: 64px !important;
+  }
+  .appbar-left-icon {
+    display: none;
+  }
+}
+
+#icon-hamburger,
+#back-navigator {
+  fill: #ffffff !important;
+}
+
+.rainmaker-content {
+  margin-top: 76px;
+}
+
+.home-screen-appbar {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.citizen-header-logo-label {
+  display: flex;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+}
+
+.notification-icon {
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.appbar-right-logo {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.citizen-header-logo > img {
+  width: 40px;
+  height: 49px;
+}
+
+.public-search-logo > img {
+  width: 250px;
+  height: 35px;
+}
+
+.appbar-municipal-label .label-text {
+  text-transform: uppercase !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .app-toolbar,
+  .citizen-header-logo,
+  .appbar-right-logo,
+  .appbar-municipal-label {
+    display: none !important;
+  }
+  .notification-icon-web {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .appbar-title-label {
+    display: none !important;
+  }
+  .notification-icon-mobile {
+    display: none !important;
+  }
+  .notification-icon-web {
+    margin-right: 50px;
+  }
+}
+
+.userSettingsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rainmaker-action-menu {
+  height: 85vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.rainmaker-action-menu:hover {
+  height: 85vh;
+  width: 100%;
+  overflow: scroll;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar:horizontal {
+  height: 0.5em;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar-track {
+  background-color: transparent;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar-thumb {
+  background-color:rgb(117, 117, 117);
+  outline: 0;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  width: 0.5em;
+}
+
+/* Track below and above */
+.rainmaker-action-menu::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+}
+
+/* Corner */
+.rainmaker-action-menu::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* Resizer */
+.rainmaker-action-menu::-webkit-scrollbar-resizer {
+  background-color: transparent;
+}

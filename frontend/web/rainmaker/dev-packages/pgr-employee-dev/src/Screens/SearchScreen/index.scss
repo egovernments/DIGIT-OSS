@@ -1,0 +1,25 @@
+.csr-add-button {
+  position: fixed;
+  bottom: 65px;
+  right: 3%;
+}
+
+.csr-action-buttons {
+  text-align: right;
+}
+
+.assigned-label-text,
+.unassigned-label-text {
+  margin-right: 7px;
+}
+
+.padding-0 {
+  padding: 0 !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .csr-action-buttons {
+    text-align: center;
+    padding: 0 !important;
+  }
+}

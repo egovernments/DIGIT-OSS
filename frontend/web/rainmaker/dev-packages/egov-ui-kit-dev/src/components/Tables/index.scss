@@ -1,0 +1,29 @@
+.tableStyle thead tr {
+  background-color: "#d3d3d399";
+}
+.tableHeadStyle,
+.material-table-row {
+  font-family: Roboto;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.5px;
+  text-align: center !important;
+  color: #767676 !important;
+}
+.material-table-row td,
+.tableHeadStyle {
+  font-size: 13px;
+  color: #484848;
+  font-weight: normal;
+  padding: 4px 8px 4px 8px !important;
+  text-align: center !important;
+  max-width: 295px;
+  word-wrap: break-word;
+}
+.material-table-pagination span {
+  font-size: 14px;
+}
+
+.TableUi-tableWrapper-3 {
+  overflow: hidden !important;
+}

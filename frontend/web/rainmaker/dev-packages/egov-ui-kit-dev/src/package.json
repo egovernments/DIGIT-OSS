@@ -1,0 +1,7 @@
+{
+    "name": "egov-ui-kit",
+    "version": "0.0.1",
+    "license": "egov",
+    "main": "lib/",
+    "dependencies": {}
+}

@@ -1,0 +1,47 @@
+.receipt-displayInline {
+  display: flex;
+  margin-top: 15px !important;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.receipt-button {
+  margin-left: 22px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.pt-info-main-cont .pt-info-edit-icon {
+  float: right;
+}
+
+.property-info-title {
+  padding: 15px;
+    letter-spacing: 0.67px;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 400;
+  line-height: 19px;
+  font-size: 18px!important;
+} 
+.property-informtion,.assesment-history-info{
+  margin-left: 10px;
+  padding: 5px;
+  
+}
+@media only screen and (max-width:768px){
+  .property-informtion,.assesment-history-info{
+    padding: 5px;
+  }
+  .assesment-history-info .label-container .label-text{
+    width:60%;
+  }
+  .assignment-title-half{
+    width:60%;
+  }
+  .accesspay-button{
+    width:40%;
+  }
+  .assignment-title-half .assignment-icon{
+    width:35px !important;
+  }
+}

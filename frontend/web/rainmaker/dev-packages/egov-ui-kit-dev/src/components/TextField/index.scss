@@ -1,0 +1,14 @@
+input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  input:invalid {
+    box-shadow:none;
+}
+
+/*
+ * It's also possible to overwrite the styles for certain validation rules.
+ */
+input:required {
+    box-shadow:none;
+}
