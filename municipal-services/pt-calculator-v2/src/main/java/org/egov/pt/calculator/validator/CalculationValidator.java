@@ -173,9 +173,36 @@ public class CalculationValidator {
 // 					error.put(CalculatorConstants.PT_MARKETVALUE_NULL, CalculatorConstants.PT_MARKETVALUE_NULL_MSG);
 // 			}
 // 		}
-// 		if (!additionalDetails.containsKey(CalculatorConstants.DOCUMENT_DATE)
-// 				|| additionalDetails.get(CalculatorConstants.DOCUMENT_DATE) == null)
-// 			error.put(CalculatorConstants.PT_DOCDATE_NULL, CalculatorConstants.PT_DOCDATE_NULL_MSG);
+
+		
+		
+		if (additionalDetails.containsKey(CalculatorConstants.DOCUMENT_NUMBER)) {
+			if (additionalDetails.get(CalculatorConstants.DOCUMENT_NUMBER) == null) {
+					error.put(CalculatorConstants.PT_DOCUMENT_NUMBER_NULL, CalculatorConstants.PT_DOCUMENT_NUMBER_NULL_MSG);
+			}
+		}
+		
+		if (additionalDetails.containsKey(CalculatorConstants.DOCUMENT_DATE))
+				if(additionalDetails.get(CalculatorConstants.DOCUMENT_DATE) == null)
+			error.put(CalculatorConstants.PT_DOCDATE_NULL, CalculatorConstants.PT_DOCDATE_NULL_MSG);
+		
+		
+		if (additionalDetails.containsKey(CalculatorConstants.REASON_FOR_TRANSFER))
+			if(additionalDetails.get(CalculatorConstants.REASON_FOR_TRANSFER) == null)
+		error.put(CalculatorConstants.PT_REASON_FOR_TRANSFER_NULL, CalculatorConstants.PT_REASON_FOR_TRANSFER_NULL_MSG);
+		
+		
+		if (additionalDetails.containsKey(CalculatorConstants.ATTORNEY_REG_NO))
+			if(additionalDetails.get(CalculatorConstants.ATTORNEY_REG_NO) == null)
+		error.put(CalculatorConstants.PT_ATTORNEY_REG_NO_NULL, CalculatorConstants.PT_ATTORNEY_REG_NO_MSG);
+	
+		if (additionalDetails.containsKey(CalculatorConstants.DATE_OF_WRITING_WILL))
+			if(additionalDetails.get(CalculatorConstants.DATE_OF_WRITING_WILL) == null)
+		error.put(CalculatorConstants.PT_DATE_OF_WRITING_WILL_NULL, CalculatorConstants.PT_DATE_OF_WRITING_WILL_MSG);
+	
+	
+		
+		
 		if (!CollectionUtils.isEmpty(error))
 			throw new CustomException(error);
 	}
