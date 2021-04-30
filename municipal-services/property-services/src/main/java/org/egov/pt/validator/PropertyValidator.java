@@ -749,7 +749,7 @@ public class PropertyValidator {
 				errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR", "Single owner of a property cannot be deactivated or removed in a mutation request");
 		}
 		
-		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate)) {
+		if (StringUtils.isEmpty(reasonForTransfer)) {
 				throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
 		}
