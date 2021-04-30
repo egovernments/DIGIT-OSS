@@ -676,14 +676,14 @@ public class PropertyValidator {
 		try {
 			
 			reasonForTransfer = (String) additionalDetails.get("reasonForTransfer");
-			docNo = (String) additionalDetails.get("documentNumber");
-			docDate = Long.valueOf(String.valueOf(additionalDetails.get("documentDate")));
-			if (additionalDetails.get("documentValue") != null) {
-				docVal = Double.valueOf(String.valueOf(additionalDetails.get("documentValue")));
-			}
-			if (additionalDetails.get("marketValue") != null) {
-				marketVal = Double.valueOf(String.valueOf(additionalDetails.get("marketValue")));
-			}
+// 			docNo = (String) additionalDetails.get("documentNumber");
+// 			docDate = Long.valueOf(String.valueOf(additionalDetails.get("documentDate")));
+// 			if (additionalDetails.get("documentValue") != null) {
+// 				docVal = Double.valueOf(String.valueOf(additionalDetails.get("documentValue")));
+// 			}
+// 			if (additionalDetails.get("marketValue") != null) {
+// 				marketVal = Double.valueOf(String.valueOf(additionalDetails.get("marketValue")));
+// 			}
 		} catch (PathNotFoundException e) {
 			throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "Mandatory fields Missing for mutation, please provide the following information in additionalDetails : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
