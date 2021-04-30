@@ -10,6 +10,9 @@ import org.egov.pt.calculator.web.models.demand.DemandStatus;
 
 public class CalculatorConstants {
 
+	
+	
+
 	private CalculatorConstants() {
 
 	}
@@ -342,6 +345,7 @@ public class CalculatorConstants {
 	public static final String SERVICE_FIELD_VALUE_PT_MUTATION = "PT.MUTATION";
 	
 	public static final String DOCUMENT_DATE = "documentDate";
+	public static final String DOCUMENT_NUMBER = "documentNumber";
 
 	public static final String MUTATION_PAYMENT_PERIOD_IN_MONTH = "mutationPaymentPeriodInMonth";
 	
@@ -351,8 +355,8 @@ public class CalculatorConstants {
 	public static final String MARKET_VALUE = "marketValue";
 	public static final String PT_MARKETVALUE_NULL = "PT_MARKETVALUE_NULL";
 	public static final String PT_MARKETVALUE_NULL_MSG = "Market Value is not present in additional details or set as null or not in numeric format ";
-
-
+	public static final String PT_DOCUMENT_NUMBER_NULL="Document Number is Null";
+	public static final String PT_DOCUMENT_NUMBER_NULL_MSG="Document Number is not present in additional details or set as null or not in numeric format ";
 	public static final String PT_DOCDATE_NULL = "PT_DOCDATE_NULL";
 	public static final String PT_DOCDATE_NULL_MSG = "Document date is not present in additional details or set as null";
 
@@ -382,5 +386,22 @@ public class CalculatorConstants {
 	
 	public static final String MDMS_MASTER_MUTATIONFEE = "MutationFee";
 	public static final String MDMS_MASTER_SWACHHATA_TAX = "SwachhataTax";
+
+	public static final String REASON_FOR_TRANSFER = "reasonForTransfer";
+
+	public static final String PT_REASON_FOR_TRANSFER_NULL = "Reason for trasfer can't be null";
+
+	public static final String PT_REASON_FOR_TRANSFER_NULL_MSG = "Reason for trasfer can't be null";
+	public static final String ATTORNEY_REG_NO ="powerOfAttorneyRegNo";
+
+	public static final String PT_ATTORNEY_REG_NO_NULL = "Power of attorney is null";
+
+	public static final String PT_ATTORNEY_REG_NO_MSG ="Power of attorney can't be null";
+
+	public static final String DATE_OF_WRITING_WILL = "DateOfWritingWill";
+
+	public static final String PT_DATE_OF_WRITING_WILL_NULL = "Date of writing will is null";
+
+	public static final String PT_DATE_OF_WRITING_WILL_MSG = "Date of writing will is null";
 
 }
