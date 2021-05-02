@@ -163,19 +163,18 @@ public class CalculationValidator {
 			error.put(CalculatorConstants.PT_ADDITIONALNDETAILS_NULL,
 					CalculatorConstants.PT_ADDITIONALNDETAILS_NULL_MSG);
 			throw new CustomException(error);
-		}
-// 		if (additionalDetails.containsKey(CalculatorConstants.MARKET_VALUE)) {
-// 			if (additionalDetails.get(CalculatorConstants.MARKET_VALUE) != null) {
-// 				boolean numeric = true;
-// 				String marketValue = additionalDetails.get(CalculatorConstants.MARKET_VALUE).toString();
-// 				numeric = marketValue.matches(CalculatorConstants.NUMERIC_REGEX);
-// 				if (!numeric)
-// 					error.put(CalculatorConstants.PT_MARKETVALUE_NULL, CalculatorConstants.PT_MARKETVALUE_NULL_MSG);
-// 			}
-// 		}
+		}		
+// 		if (additionalDetails.containsKey(CalculatorConstants.MARKET_VALUE)) {	
+// 			if (additionalDetails.get(CalculatorConstants.MARKET_VALUE) != null) {	
+// 				boolean numeric = true;	
+// 				String marketValue = additionalDetails.get(CalculatorConstants.MARKET_VALUE).toString();	
+// 				numeric = marketValue.matches(CalculatorConstants.NUMERIC_REGEX);	
+// 				if (!numeric)	
+// 					error.put(CalculatorConstants.PT_MARKETVALUE_NULL, CalculatorConstants.PT_MARKETVALUE_NULL_MSG);	
+// 			}	
+// 		}	
 
-		
-		
+	
 		if (additionalDetails.containsKey(CalculatorConstants.DOCUMENT_NUMBER)) {
 			if (additionalDetails.get(CalculatorConstants.DOCUMENT_NUMBER) == null) {
 					error.put(CalculatorConstants.PT_DOCUMENT_NUMBER_NULL, CalculatorConstants.PT_DOCUMENT_NUMBER_NULL_MSG);
@@ -200,7 +199,81 @@ public class CalculationValidator {
 			if(additionalDetails.get(CalculatorConstants.DATE_OF_WRITING_WILL) == null)
 		error.put(CalculatorConstants.PT_DATE_OF_WRITING_WILL_NULL, CalculatorConstants.PT_DATE_OF_WRITING_WILL_MSG);
 	
-	
+		if (additionalDetails.containsKey(CalculatorConstants.POWER_OF_ATTORNEY_REG_NO))
+			if(additionalDetails.get(CalculatorConstants.POWER_OF_ATTORNEY_REG_NO) == null)
+		error.put(CalculatorConstants.PT_POWER_OF_ATTORNEY_REG_NO_NULL, CalculatorConstants.PT_POWER_OF_ATTORNEY_REG_NO_MSG);
+		
+		
+		
+		
+		if (additionalDetails.containsKey(CalculatorConstants.DOCUMENT_ISSUE_DATE))
+			if(additionalDetails.get(CalculatorConstants.DOCUMENT_ISSUE_DATE) == null)
+		error.put(CalculatorConstants.PT_DOCUMENT_ISSUE_DATE_NULL, CalculatorConstants.PT_DOCUMENT_ISSUE_DATE_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.POWER_OF_ATTORNEY_REG_DATE))
+			if(additionalDetails.get(CalculatorConstants.POWER_OF_ATTORNEY_REG_DATE) == null)
+		error.put(CalculatorConstants.PT_POWER_OF_ATTORNEY_REG_DATE_NULL, CalculatorConstants.PT_POWER_OF_ATTORNEY_REG_DATE_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.NAME_AND_ADDRESS_OF_WITNESS))
+			if(additionalDetails.get(CalculatorConstants.NAME_AND_ADDRESS_OF_WITNESS) == null)
+		error.put(CalculatorConstants.PT_NAME_AND_ADDRESS_OF_WITNESS_NULL, CalculatorConstants.PT_NAME_AND_ADDRESS_OF_WITNESS_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.DECREE_NO))
+			if(additionalDetails.get(CalculatorConstants.DECREE_NO) == null)
+		error.put(CalculatorConstants.PT_DECREE_NO_NULL, CalculatorConstants.PT_DECREE_NO_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.DECREE_DATE))
+			if(additionalDetails.get(CalculatorConstants.DECREE_DATE) == null)
+		error.put(CalculatorConstants.PT_DECREE_DATE_NULL, CalculatorConstants.PT_DECREE_DATE_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.COURT_NAME))
+			if(additionalDetails.get(CalculatorConstants.COURT_NAME) == null)
+		error.put(CalculatorConstants.PT_COURT_NAME_NULL, CalculatorConstants.PT_COURT_NAME_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.DETAILS_OF_UPPER_STAY_ORDER))
+			if(additionalDetails.get(CalculatorConstants.DETAILS_OF_UPPER_STAY_ORDER) == null)
+		error.put(CalculatorConstants.PT_DETAILS_OF_UPPER_STAY_ORDER_NULL, CalculatorConstants.PT_DETAILS_OF_UPPER_STAY_ORDER_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.DETAILS_OF_UPPER_STAY_ORDER_YES_NO))
+			if(additionalDetails.get(CalculatorConstants.DETAILS_OF_UPPER_STAY_ORDER_YES_NO) == null)
+		error.put(CalculatorConstants.PT_DETAILS_OF_UPPER_STAY_ORDER_YES_NO_NULL, CalculatorConstants.PT_DETAILS_OF_UPPER_STAY_ORDER_YES_NO_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.AUCTION_REG_NO))
+			if(additionalDetails.get(CalculatorConstants.AUCTION_REG_NO) == null)
+		error.put(CalculatorConstants.PT_AUCTION_REG_NO_NULL, CalculatorConstants.PT_AUCTION_REG_NO_MSG);
+
+		if (additionalDetails.containsKey(CalculatorConstants.AUCTION_REG_DATE))
+			if(additionalDetails.get(CalculatorConstants.AUCTION_REG_DATE) == null)
+		error.put(CalculatorConstants.PT_AUCTION_REG_DATE_NULL, CalculatorConstants.PT_AUCTION_REG_DATE_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.AUCTION_DATE))
+			if(additionalDetails.get(CalculatorConstants.AUCTION_DATE) == null)
+		error.put(CalculatorConstants.PT_AUCTION_DATE_NULL, CalculatorConstants.PT_AUCTION_DATE_MSG);
+		
+		
+		if (additionalDetails.containsKey(CalculatorConstants.NAME_OF_AUCTION_AUTHORITY))
+			if(additionalDetails.get(CalculatorConstants.NAME_OF_AUCTION_AUTHORITY) == null)
+		error.put(CalculatorConstants.PT_NAME_OF_AUCTION_AUTHORITY_NULL, CalculatorConstants.PT_NAME_OF_AUCTION_AUTHORITY_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.NAME_OF_ISSUING_AUTHORITY))
+			if(additionalDetails.get(CalculatorConstants.NAME_OF_ISSUING_AUTHORITY) == null)
+		error.put(CalculatorConstants.PT_NAME_OF_ISSUING_AUTHORITY_NULL, CalculatorConstants.PT_NAME_OF_ISSUING_AUTHORITY_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.SERIAL_NO))
+			if(additionalDetails.get(CalculatorConstants.SERIAL_NO) == null)
+		error.put(CalculatorConstants.PT_SERIAL_NO_NULL, CalculatorConstants.PT_SERIAL_NO_MSG);
+		
+		if (additionalDetails.containsKey(CalculatorConstants.DATE_OF_ISSUING))
+			if(additionalDetails.get(CalculatorConstants.DATE_OF_ISSUING) == null)
+		error.put(CalculatorConstants.PT_DATE_OF_ISSUING_NULL, CalculatorConstants.PT_DATE_OF_ISSUING_MSG);
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		if (!CollectionUtils.isEmpty(error))
