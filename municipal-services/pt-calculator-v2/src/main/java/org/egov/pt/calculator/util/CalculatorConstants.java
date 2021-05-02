@@ -13,6 +13,11 @@ public class CalculatorConstants {
 	
 	
 
+	
+	
+
+	
+
 	private CalculatorConstants() {
 
 	}
@@ -403,5 +408,71 @@ public class CalculatorConstants {
 	public static final String PT_DATE_OF_WRITING_WILL_NULL = "Date of writing will is null";
 
 	public static final String PT_DATE_OF_WRITING_WILL_MSG = "Date of writing will is null";
+	public static final String POWER_OF_ATTORNEY_REG_NO="powerOfAttorneyRegNo";
+	public static final String PT_POWER_OF_ATTORNEY_REG_NO_NULL="Power of attorney reg. no. is null";
 
+	public static final String PT_POWER_OF_ATTORNEY_REG_NO_MSG = "Power of attorney reg. no. is null";
+
+	public static final String DOCUMENT_ISSUE_DATE = "documentIssueDateField";
+	public static final String PT_DOCUMENT_ISSUE_DATE_NULL = "documentIssueDateField is null";
+	public static final String PT_DOCUMENT_ISSUE_DATE_MSG = "Document Issue Date Field cannot be null";
+
+	public static final String POWER_OF_ATTORNEY_REG_DATE = "PowerOfAttorneyRegDate";
+	public static final String PT_POWER_OF_ATTORNEY_REG_DATE_NULL = "PowerOfAttorneyRegDate is null";
+	public static final String PT_POWER_OF_ATTORNEY_REG_DATE_MSG= "Power Of Attorney Reg Date cannot be null";
+
+	public static final String NAME_AND_ADDRESS_OF_WITNESS = "NameAndAddressOfWitnesses";
+	public static final String PT_NAME_AND_ADDRESS_OF_WITNESS_NULL = "NameAndAddressOfWitnesses is null";
+	public static final String PT_NAME_AND_ADDRESS_OF_WITNESS_MSG = "NameAndAddressOfWitnesses cannot be null";
+
+	public static final String DECREE_NO = "DecreeNo";
+	public static final String PT_DECREE_NO_NULL = "DecreeNo is null";
+	public static final String PT_DECREE_NO_MSG = "DecreeNo cannot be null";
+	
+	public static final String DECREE_DATE = "DecreeDate";
+	public static final String PT_DECREE_DATE_NULL = "DecreeDate is null";
+	public static final String PT_DECREE_DATE_MSG = "DecreeDate cannot be null";
+	
+	public static final String SERIAL_NO = "SerialNumber";
+	public static final String PT_SERIAL_NO_NULL = "SerialNumber is null";
+	public static final String PT_SERIAL_NO_MSG = "SerialNumber cannot be null";
+
+	public static final String COURT_NAME = "CourtName";
+	public static final String PT_COURT_NAME_NULL = "CourtName is null";
+	public static final String PT_COURT_NAME_MSG = "CourtName cannot be null";
+
+	public static final String DETAILS_OF_UPPER_STAY_ORDER = "DetailsOfUpperCourtStayOrder";
+	public static final String PT_DETAILS_OF_UPPER_STAY_ORDER_NULL = "DetailsOfUpperCourtStayOrder is null";
+	public static final String PT_DETAILS_OF_UPPER_STAY_ORDER_MSG = "DetailsOfUpperCourtStayOrder cannot be null";
+	
+	public static final String DETAILS_OF_UPPER_STAY_ORDER_YES_NO = "IsThereAnyStayOrderOnCourtDecreeByUpperCourt";
+	public static final String PT_DETAILS_OF_UPPER_STAY_ORDER_YES_NO_NULL = "IsThereAnyStayOrderOnCourtDecreeByUpperCourt is null";
+	public static final String PT_DETAILS_OF_UPPER_STAY_ORDER_YES_NO_MSG = "IsThereAnyStayOrderOnCourtDecreeByUpperCourt cannot be null";
+
+	public static final String AUCTION_REG_NO = "AuctionRegistrationnumber";
+	public static final String PT_AUCTION_REG_NO_NULL = "AuctionRegistrationnumber is null";
+	public static final String PT_AUCTION_REG_NO_MSG = "AuctionRegistrationnumber cannot be null";
+	
+	public static final String AUCTION_REG_DATE = "AuctionRegistrationDate";
+	public static final String PT_AUCTION_REG_DATE_NULL = "AuctionRegistrationDate is null";
+	public static final String PT_AUCTION_REG_DATE_MSG = "AuctionRegistrationDate cannot be null";
+	
+	public static final String AUCTION_DATE = "AuctionDate";
+	public static final String PT_AUCTION_DATE_NULL = "AuctionDate is null";
+	public static final String PT_AUCTION_DATE_MSG = "AuctionDate cannot be null";
+
+	public static final String NAME_OF_AUCTION_AUTHORITY = "NameOfAuctionAuthority";
+	public static final String PT_NAME_OF_AUCTION_AUTHORITY_NULL = "NameOfAuctionAuthority is null";
+	public static final String PT_NAME_OF_AUCTION_AUTHORITY_MSG= "NameOfAuctionAuthority cannot be null";
+	
+	public static final String NAME_OF_ISSUING_AUTHORITY = "IssuingAuthority";
+	public static final String PT_NAME_OF_ISSUING_AUTHORITY_NULL = "IssuingAuthority is null";
+	public static final String PT_NAME_OF_ISSUING_AUTHORITY_MSG= "IssuingAuthority cannot be null";
+
+	public static final String DATE_OF_ISSUING = "IssuingDate";
+	public static final String PT_DATE_OF_ISSUING_NULL = "IssuingDate is null";
+	public static final String PT_DATE_OF_ISSUING_MSG = "IssuingDate cannot be null";
+	
+	
+	
 }
