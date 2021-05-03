@@ -252,7 +252,7 @@ public class VoucherServiceImpl implements VoucherService {
 		voucher.setModuleId(Long.valueOf(egModules != null ? egModules.getId().toString() : COLLECTIONS_EG_MODULES_ID));
 
 		voucher.setSource(
-				propertiesManager.getReceiptViewSourceUrl() + "?selectedReceipts=" + receiptNumber);
+				propertiesManager.getReceiptViewSourceUrl() + "?selectedReceipts=" + receiptNumber + "&serviceTypeId=" + bsCode);
 
 		voucher.setLedgers(new ArrayList<>());
 		final String serviceAttribute = getServiceAttributeByBusinessService(tenantId, requestInfo, businessService, consumerCode);
