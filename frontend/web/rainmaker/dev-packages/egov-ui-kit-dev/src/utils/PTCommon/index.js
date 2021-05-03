@@ -413,8 +413,18 @@ export const transformPropertyDataToAssessInfo = (data) => {
         jsonPath.includes("bathroomArea") || jsonPath.includes("garageArea"))){
           configFloor["fields"][item].hideField = true
         }
+        var categoryValue = jsonPath.split(".").pop();
+        if (categoryValue === "usageCategoryMinor") {
+         
+          valueInJSON = get(data, modifyEndOfJsonPath(jsonPath, "usageCategoryMajor"));
+          }
+         if (categoryValue === "usageCategoryDetail"){
+
+              valueInJSON = get(data, modifyEndOfJsonPath(jsonPath, "usageCategory"));
+              valueInJSON=valueInJSON.split(".")[1];
+          }
         if (valueInJSON === null) {
-          let categoryValue = jsonPath.split(".").pop();
+
           if (categoryValue === "usageCategoryMinor") {
             valueInJSON = get(data, modifyEndOfJsonPath(jsonPath, "usageCategoryMajor"));
           } else if (categoryValue === "usageCategoryDetail") {
