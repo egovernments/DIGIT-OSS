@@ -425,6 +425,15 @@ const getMutationAdditionalData = async (action, state, dispatch) => {
         isRoleValid
       )
     }
+
+    if (process.env.REACT_APP_NAME == "Citizen") {
+
+      set(
+        action,
+        `screenConfig.components.div.children.body.children.cardContent.children.FeeSummary`,
+        {}
+      )    
+    }
     let mutaDetails = get(action,"screenConfig.components.div.children.body.children.cardContent.children.FeeSummary.children.cardContent.children.cardOne.children.cardContent.children.feedetailsContainer.children");
     dispatch(prepareFinalObject("MutationAdditionalFees", mutationAdditionalFeeData));
       for(var mutKey in mutaDetails){
