@@ -4,6 +4,7 @@ import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField,
 import { disableField, enableField, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import compact from "lodash/compact";
 import get from "lodash/get";
+import set from 'lodash/set';
 import store from "ui-redux/store";
 import { httpRequest } from "../../../../../ui-utils";
 import { prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
@@ -242,6 +243,8 @@ const callBackForApply = async (state, dispatch) => {
   oldDocuments = oldDocuments || [];
   propertyPayload.documents = [...newDocuments, ...oldDocuments];
 
+    set(propertyPayload,"additionalDetails.lateFee", 0 );
+    set(propertyPayload,"additionalDetails.mutationFee", 0);
   try {
     let queryObject = [
       {
