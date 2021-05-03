@@ -212,10 +212,11 @@ public class PropertyService {
 		propertyValidator.validateMutation(request, propertyFromSearch);
 		userService.createUserForMutation(request, !propertyFromSearch.getStatus().equals(Status.INWORKFLOW));		enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichMutationRequest(request, propertyFromSearch);
+		util.mergeAdditionalDetails(request, propertyFromSearch);
 		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
 		
 		// TODO FIX ME block property changes FIXME
-		util.mergeAdditionalDetails(request, propertyFromSearch);
+		//util.mergeAdditionalDetails(request, propertyFromSearch);
 		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
