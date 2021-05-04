@@ -116,6 +116,7 @@ public class PropertyService {
 		Property propertyFromSearch = propertyValidator.validateCommonUpdateInformation(request);
 		
 		boolean isRequestForOwnerMutation = CreationReason.MUTATION.equals(request.getProperty().getCreationReason());
+		System.out.println("isRequestForOwnerMutation -------- "+isRequestForOwnerMutation);
 		
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
@@ -213,6 +214,7 @@ public class PropertyService {
 		userService.createUserForMutation(request, !propertyFromSearch.getStatus().equals(Status.INWORKFLOW));		enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichMutationRequest(request, propertyFromSearch);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
+		System.out.println("--------- merge additionaldetails before calculate ---------- ");
 		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
 		
 		// TODO FIX ME block property changes FIXME
