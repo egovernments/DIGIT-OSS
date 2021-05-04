@@ -650,6 +650,7 @@ public class EstimationService {
 	}
 
 	public Map<String, Calculation> mutationCalculator(PropertyV2 property, RequestInfo requestInfo) {
+		System.out.println("~~~~~~~~~~~~ Inside mutationCalculator ~~~~~~~~~~~~~");
 		Map<String, Calculation> feeStructure = new HashMap<>();
 		Map<String, Object> additionalDetails = mapper.convertValue(property.getAdditionalDetails(), Map.class);
 		calcValidator.validatePropertyForMutationCalculation(additionalDetails);
@@ -698,6 +699,7 @@ public class EstimationService {
 		setTaxperiodForCalculation(requestInfo, property.getTenantId(), calculation);
 		calculation.setTaxAmount(BigDecimal.ZERO);
 		postProcessTheFee(requestInfo, property, calculation, additionalDetails);
+		System.out.println("~~~~~~~~~ Late fee = "+calculation.getLateFee()+", Mutation Fee = "+calculation.getMutationFee()+" ~~~~~~~~~~~~ ");
 		feeStructure.put(property.getAcknowldgementNumber(), calculation);
 		searchDemand(requestInfo, property, calculation, feeStructure);
 
@@ -975,6 +977,7 @@ public class EstimationService {
 		DemandResponse res = new DemandResponse();
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		res = restTemplate.postForObject(url, requestInfoWrapper, DemandResponse.class);
+		System.out.println("~~~~~~~~~~ Demands ~~~~~~~~~~~ "+res.getDemands().size());
 		if (CollectionUtils.isEmpty(res.getDemands()) || res.getDemands() == null)
 			generateDemandsFroMutationFee(property, feeStructure, requestInfo);
 		else
@@ -1062,7 +1065,7 @@ public class EstimationService {
 			}
 			OwnerInfo owner = getActiveOwner(property.getOwners());
 			User payer = utils.getCommonContractUser(owner);
-
+			System.out.println("~~~~~~~~~~~ demand details ~~~~~~~~~~~~~"+details.toString());
 			Demand demand = Demand.builder().auditDetails(null).additionalDetails(null)
 					.businessService(configs.getPtMutationBusinessCode()).consumerCode(key).consumerType(" ")
 					.demandDetails(details).id(null).minimumAmountPayable(configs.getPtMutationMinPayable())
@@ -1118,6 +1121,7 @@ public class EstimationService {
 			Calculation calculation) {
 		List<Demand> demands = response.getDemands();
 		User payer = null;
+		System.out.println("~~~~~~~~~~~ Mutation fee = "+calculation.getTaxAmount()+", late fee = "+calculation.getLateFee());
 		for (int i = 0; i < demands.size(); i++) {
 			demands.get(i).setTaxPeriodFrom(calculation.getFromDate());
 			demands.get(i).setTaxPeriodTo(calculation.getToDate());
