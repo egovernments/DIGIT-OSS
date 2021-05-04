@@ -485,7 +485,7 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
      let showFooter;
-      if(moduleName==='NewWS1'||moduleName==='NewSW1'){
+     if(moduleName==='NewWS1'||moduleName==='NewSW1' || moduleName==='PT.MUTATION'){
          showFooter=true;
       }
       else if(moduleName==='NewTL'||moduleName==='EDITRENEWAL'|| moduleName==='DIRECTRENEWAL'){
