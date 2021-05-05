@@ -77,22 +77,22 @@ public class UserService {
 						}
 						// users exists with mobile number but non of them have the same name, then create new user
 						if( foundUser == Boolean.FALSE) {
-							applicantDetailResponse = createApplicant(applicant,fsmRequest.getRequestInfo());
+							applicantDetailResponse = createApplicant(applicant,fsmRequest.getRequestInfo(),Boolean.FALSE);
 							applicant = applicantDetailResponse.getUser().get(0);
 							
 						}
 					}else {
 						// User exists but only one user with the mobile number and username as same, So create new user
 						
-						applicantDetailResponse = createApplicant(applicant,fsmRequest.getRequestInfo());
+						applicantDetailResponse = createApplicant(applicant,fsmRequest.getRequestInfo(),Boolean.FALSE);
 						applicant = applicantDetailResponse.getUser().get(0);
 						
 					}
 					
 					
 				}else {
-					// User with mobile number ifself not found then create new user and consider the new user as applicant.
-					applicantDetailResponse = createApplicant(applicant,fsmRequest.getRequestInfo());
+					// User with mobile number itself not found then create new user and consider the new user as applicant.
+					applicantDetailResponse = createApplicant(applicant,fsmRequest.getRequestInfo(),Boolean.TRUE);
 					applicant = applicantDetailResponse.getUser().get(0);
 				}
 				
@@ -110,12 +110,15 @@ public class UserService {
 	 * @param requestInfo
 	 * @return
 	 */
-	private UserDetailResponse createApplicant(User applicant, RequestInfo requestInfo) {
+	private UserDetailResponse createApplicant(User applicant, RequestInfo requestInfo,Boolean newUser) {
 		Role role = getCitizenRole();
 		addUserDefaultFields(applicant.getTenantId(), role, applicant);
 		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserContextPath())
 				.append(config.getUserCreateEndpoint());
 		setUserName(applicant);
+		if(newUser == Boolean.TRUE) {
+			applicant.setUserName(applicant.getMobileNumber());
+		}
 		applicant.setType(FSMConstants.CITIZEN);
 		UserDetailResponse userDetailResponse = userCall(new CreateUserRequest(requestInfo, applicant), uri);
 		log.debug("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
