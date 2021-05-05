@@ -514,7 +514,7 @@ export const beforeInitForm = {
         set(action, "form.fields.usageType.disabled", false);
         const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
         set(action, "form.fields.usageType.dropDownData", usageTypeData);
-        unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`, false);
+        unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategory")[0]}usageCategoryMinor`, false);
         if (usageCategoryMajor === "MIXED" && propertyType === "BUILTUP.INDEPENDENTPROPERTY")
         {
           set(action, "form.fields.innerDimensions.value", "false");
@@ -524,7 +524,45 @@ export const beforeInitForm = {
           set(action, "form.fields.balconyArea.hideField", true);
           set(action, "form.fields.garageArea.hideField", true);
           set(action, "form.fields.bathroomArea.hideField", true); 
-         }
+          set(action, "form.fields.subUsageType.hideField", false);
+
+          let usageTypeVal = get(form, "fields.usageType.value") && get(form, "fields.usageType.value");
+        
+          unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath}`, false);
+         
+          let subUsageTypeVal = get(state,`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategory")[0]}usageCategoryMinor`);
+        
+          if(subUsageTypeVal!==undefined)
+          {
+            set(action, "form.fields.subUsageType.hideField", false);
+            let subUsageMinor = 
+              prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true);
+            
+            let filteredSubUsageMinor = subUsageMinor.filter(subUsageMinor => subUsageMinor.usageCategoryMinor  === "NONRESIDENTIAL");
+
+            if (filteredSubUsageMinor.length > 0) {
+              let filteredUsageCategoryDetails = getPresentMasterObj(
+                prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
+                filteredSubUsageMinor,
+                "usageCategorySubMinor"
+              );
+              const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
+              const subUsageData = sortDropdown(mergedMaster, "label", true);
+      
+              set(action, "form.fields.subUsageType.dropDownData", subUsageData);
+              let loclizationsubUsage = getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels);
+
+              set(action, "form.fields.subUsageType.value", loclizationsubUsage);
+              dispatch(setFieldProperty(formKey, "subUsageType", "value", loclizationsubUsage));
+         
+          }
+        }
+          else
+          {
+            set(action, "form.fields.subUsageType.hideField", true);
+            set(action, "form.fields.innerDimensions.hideField", false);
+          }                  
+        }
       } else {
         if(usageCategoryMajor === "NONRESIDENTIAL" && (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || 
         propertyType === "BUILTUP.SHAREDPROPERTY") && usageTypeVal === "Commercial"){
