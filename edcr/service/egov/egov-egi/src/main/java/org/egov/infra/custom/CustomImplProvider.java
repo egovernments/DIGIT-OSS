@@ -177,9 +177,7 @@ public class CustomImplProvider {
 
         } catch (BeansException e) {
             LOG.error("No Bean Defined for the Rule " + parentClazz, e);
-        } catch (RuntimeException e) {
-            LOG.error("Exception in finding bean" + parentClazz, e);
-        }
+        } 
         return bean;
     }
 
@@ -255,8 +253,6 @@ public class CustomImplProvider {
 
         } catch (BeansException e) {
             LOG.error("No Bean Defined for the Rule " + beanName, e);
-        } catch (RuntimeException e) {
-            LOG.error("Exception in finding bean" + beanName, e);
         }
         return bean;
     }

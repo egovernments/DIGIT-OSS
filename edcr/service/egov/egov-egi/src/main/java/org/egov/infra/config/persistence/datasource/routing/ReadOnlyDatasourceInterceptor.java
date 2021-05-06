@@ -48,6 +48,7 @@
 
 package org.egov.infra.config.persistence.datasource.routing;
 
+import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -62,6 +63,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Conditional(RoutingDatasourceConfigCondition.class)
 public class ReadOnlyDatasourceInterceptor implements Ordered {
+    
+    private static final Logger LOG = Logger.getLogger(ReadOnlyDatasourceInterceptor.class);
 
     private int order;
 
@@ -81,14 +84,18 @@ public class ReadOnlyDatasourceInterceptor implements Ordered {
     }
 
     @Around("@annotation(readOnly)")
-    public Object proceed(ProceedingJoinPoint joinPoint, ReadOnly readOnly) throws Throwable {
+    public Object proceed(ProceedingJoinPoint joinPoint, ReadOnly readOnly){
+        Object result = null;
         try {
             DatasourceTypeHolder.setDataSourceType(DatasourceType.READONLY);
-            Object result = joinPoint.proceed();
+            result = joinPoint.proceed();
             DatasourceTypeHolder.clear();
             return result;
+        } catch (Throwable e) {
+            LOG.error("Error occured", e);
         } finally {
             DatasourceTypeHolder.clear();
         }
+        return result;
     }
 }

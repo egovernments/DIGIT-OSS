@@ -48,16 +48,17 @@
 
 package org.egov.infstr.utils;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * The Class EGovConfig. Used to read the values from properties file and XMl configuration files
@@ -96,9 +97,6 @@ public final class EGovConfig {
 			} catch (final ConfigurationException cex) {
 				LOGGER.error("Error occurred in initializeClassVariable", cex);
 				throw new ApplicationRuntimeException("Exception in initializeClassVariable", cex);
-			} catch (final Exception exp) {
-				LOGGER.error("Error occurred in initializeClassVariable", exp);
-				throw new ApplicationRuntimeException("Exception in initializeClassVariable", exp);
 			}
 		}
 
@@ -138,7 +136,7 @@ public final class EGovConfig {
 			final XMLConfiguration configurationXML = getXMLConfiguration(xmlFileName);
 			final String output = configurationXML.getString(categoryName + "." + key);
 			return output == null ? defaultValue : output;
-		} catch (final Exception exp) {
+		} catch (final ClassCastException | NullPointerException exp) {
 			LOGGER.error("Error occurred in while getting property from given xml file", exp);
 			throw new ApplicationRuntimeException("Error occurred in while getting property from given xml file", exp);
 		}
@@ -295,7 +293,7 @@ public final class EGovConfig {
 				propertiesMap.put(filename, properties);
 			}
 			properties = propertiesMap.get(filename);
-		} catch (final Exception exp) {
+		} catch (final IOException | IllegalArgumentException exp) {
 			LOGGER.error("Error Loading Properties File", exp);
 		}
 		return properties.getProperty(messageKey);

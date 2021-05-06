@@ -38,7 +38,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,9 +77,6 @@ public class EdcrApplicationService {
     @Autowired
     private EdcrApplicationDetailService edcrApplicationDetailService;
 
-    @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
-
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
     }
@@ -88,8 +84,8 @@ public class EdcrApplicationService {
     @Transactional
     public EdcrApplication create(final EdcrApplication edcrApplication) {
 
-       // edcrApplication.setApplicationDate(new Date("01/01/2020"));  
-    	edcrApplication.setApplicationDate(new Date());
+        // edcrApplication.setApplicationDate(new Date("01/01/2020"));
+        edcrApplication.setApplicationDate(new Date());
         edcrApplication.setApplicationNumber(applicationNumberGenerator.generate());
         edcrApplication.setSavedDxfFile(saveDXF(edcrApplication));
         edcrApplication.setStatus(ABORTED);
@@ -98,7 +94,7 @@ public class EdcrApplicationService {
 
         edcrIndexService.updateIndexes(edcrApplication, NEW_SCRTNY);
 
-        Plan planDetail = callDcrProcess(edcrApplication, NEW_SCRTNY);
+        callDcrProcess(edcrApplication, NEW_SCRTNY);
         edcrIndexService.updateIndexes(edcrApplication, NEW_SCRTNY);
 
         return edcrApplication;
@@ -114,20 +110,17 @@ public class EdcrApplicationService {
 
         edcrIndexService.updateIndexes(edcrApplication, RESUBMIT_SCRTNY);
 
-        Plan planDetail = callDcrProcess(edcrApplication, RESUBMIT_SCRTNY);
+        callDcrProcess(edcrApplication, RESUBMIT_SCRTNY);
 
         return applicationRes;
     }
 
     private Plan callDcrProcess(EdcrApplication edcrApplication, String applicationType) {
         Plan planDetail = new Plan();
-        try {
-            planDetail = planService.process(edcrApplication, applicationType);
-            updateFile(planDetail, edcrApplication);
-            edcrApplicationDetailService.saveAll(edcrApplication.getEdcrApplicationDetails());
-        } catch (Exception e) {
-            LOG.error("Error occurred, when processing plan scrutiny!!!!!", e);
-        }
+        planDetail = planService.process(edcrApplication, applicationType);
+        updateFile(planDetail, edcrApplication);
+        edcrApplicationDetailService.saveAll(edcrApplication.getEdcrApplicationDetails());
+
         return planDetail;
     }
 
@@ -141,7 +134,7 @@ public class EdcrApplicationService {
         return dxfFile;
 
     }
-    
+
     public File savePlanDXF(final MultipartFile file) {
         FileStoreMapper fileStoreMapper = addToFileStore(file);
         return fileStoreService.fetch(fileStoreMapper.getFileStoreId(), FILESTORE_MODULECODE);
@@ -177,11 +170,11 @@ public class EdcrApplicationService {
     public EdcrApplication findByPlanPermitNumber(String permitNo) {
         return edcrApplicationRepository.findByPlanPermitNumber(permitNo);
     }
-    
+
     public EdcrApplication findByTransactionNumber(String transactionNo) {
         return edcrApplicationRepository.findByTransactionNumber(transactionNo);
     }
-    
+
     public EdcrApplication findByTransactionNumberAndTPUserCode(String transactionNo, String userCode) {
         return edcrApplicationRepository.findByTransactionNumberAndThirdPartyUserCode(transactionNo, userCode);
     }
@@ -189,13 +182,13 @@ public class EdcrApplicationService {
     public List<EdcrApplication> search(EdcrApplication edcrApplication) {
         return edcrApplicationRepository.findAll();
     }
-    
+
     public List<EdcrApplication> findByThirdPartyUserCode(String userCode) {
         return edcrApplicationRepository.findByThirdPartyUserCode(userCode);
     }
 
     public List<EdcrApplication> getEdcrApplications() {
-    	Pageable pageable = new PageRequest(0, 25,Sort.Direction.DESC, "id"); 
+        Pageable pageable = new PageRequest(0, 25, Sort.Direction.DESC, "id");
         Page<EdcrApplication> edcrApplications = edcrApplicationRepository.findAll(pageable);
         return edcrApplications.getContent();
     }
@@ -238,8 +231,8 @@ public class EdcrApplicationService {
         String fileAsString = null;
         try {
             String canonicalPath = srcFile.getCanonicalPath();
-            if (!canonicalPath.equals(srcFile.getPath())) 
-               throw new FileNotFoundException("Invalid file path, please try again.");
+            if (!canonicalPath.equals(srcFile.getPath()))
+                throw new FileNotFoundException("Invalid file path, please try again.");
         } catch (IOException e) {
             LOG.error("Invalid file path, please try again.", e);
         }
@@ -275,12 +268,12 @@ public class EdcrApplicationService {
             LOG.error("Error occurred when reading file!!!!!", e);
         }
     }
-    
+
     @Transactional
     public EdcrApplication createRestEdcr(final EdcrApplication edcrApplication) {
         String comparisonDcrNo = edcrApplication.getEdcrApplicationDetails().get(0).getComparisonDcrNumber();
-        if(edcrApplication.getApplicationDate()==null)
-    	edcrApplication.setApplicationDate(new Date());
+        if (edcrApplication.getApplicationDate() == null)
+            edcrApplication.setApplicationDate(new Date());
         edcrApplication.setApplicationNumber(applicationNumberGenerator.generate());
         edcrApplication.setSavedDxfFile(saveDXF(edcrApplication));
         edcrApplication.setStatus(ABORTED);
