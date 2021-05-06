@@ -997,10 +997,6 @@ public class EstimationService {
 		for (String key : feeStructure.keySet()) {
 			List<DemandDetail> details = new ArrayList<>();
 			Calculation calculation = feeStructure.get(key);
-			DemandDetail detail = DemandDetail.builder().collectionAmount(BigDecimal.ZERO).demandId(null).id(null)
-					.taxAmount(calculation.getTaxAmount()).auditDetails(null)
-					.taxHeadMasterCode(configs.getPtMutationFeeTaxHead()).tenantId(calculation.getTenantId()).build();
-			details.add(detail);
 			if (null != calculation.getPenalty()) {
 				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(BigDecimal.ZERO).demandId(null)
 						.id(null).taxAmount(calculation.getPenalty()).auditDetails(null)
@@ -1015,51 +1011,46 @@ public class EstimationService {
 						.build();
 				details.add(demandDetail);
 			}
-			if (null != feeStructure.get(key).getExemption()
+			/*if (null != feeStructure.get(key).getExemption()
 					&& BigDecimal.ZERO != feeStructure.get(key).getExemption()) {
 				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(BigDecimal.ZERO).demandId(null)
 						.id(null).taxAmount(calculation.getExemption()).auditDetails(null)
 						.taxHeadMasterCode(configs.getPtMutationExemptionTaxHead()).tenantId(calculation.getTenantId())
 						.build();
 				details.add(demandDetail);
-			}
-			if (null != feeStructure.get(key).getApplicationFee()
-					&& BigDecimal.ZERO != feeStructure.get(key).getApplicationFee()) {
+			}*/
+			if (null != feeStructure.get(key).getApplicationFee()) {
 				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(BigDecimal.ZERO).demandId(null)
 						.id(null).taxAmount(calculation.getApplicationFee()).auditDetails(null)
 						.taxHeadMasterCode("PT_MUTATION_APPLICATION_FEE").tenantId(calculation.getTenantId())
 						.build();
 				details.add(demandDetail);
 			}
-			if (null != feeStructure.get(key).getProcessingFee()
-					&& BigDecimal.ZERO != feeStructure.get(key).getProcessingFee()) {
+			if (null != feeStructure.get(key).getProcessingFee()) {
 				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(BigDecimal.ZERO).demandId(null)
 						.id(null).taxAmount(calculation.getProcessingFee()).auditDetails(null)
 						.taxHeadMasterCode("PT_MUTATION_PROCESSING_FEE").tenantId(calculation.getTenantId())
 						.build();
 				details.add(demandDetail);
 			}
-			if (null != feeStructure.get(key).getPublicationFee()
-					&& BigDecimal.ZERO != feeStructure.get(key).getPublicationFee()) {
+			if (null != feeStructure.get(key).getPublicationFee()) {
 				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(BigDecimal.ZERO).demandId(null)
 						.id(null).taxAmount(calculation.getPublicationFee()).auditDetails(null)
 						.taxHeadMasterCode("PT_MUTATION_PUBLICATION_FEE").tenantId(calculation.getTenantId())
 						.build();
 				details.add(demandDetail);
 			}
-			if (null != feeStructure.get(key).getLateFee()
-					&& BigDecimal.ZERO != feeStructure.get(key).getLateFee()) {
+			if (null != feeStructure.get(key).getLateFee()) {
 				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(BigDecimal.ZERO).demandId(null)
 						.id(null).taxAmount(calculation.getLateFee()).auditDetails(null)
 						.taxHeadMasterCode("PT_MUTATION_LATE_FEE").tenantId(calculation.getTenantId())
 						.build();
 				details.add(demandDetail);
 			}
-			if (null != feeStructure.get(key).getMutationFee()
-					&& BigDecimal.ZERO != feeStructure.get(key).getMutationFee()) {
+			if (null != feeStructure.get(key).getMutationFee()) {
 				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(BigDecimal.ZERO).demandId(null)
 						.id(null).taxAmount(calculation.getMutationFee()).auditDetails(null)
-						.taxHeadMasterCode("PT_MUTATION_FEE").tenantId(calculation.getTenantId())
+						.taxHeadMasterCode(configs.getPtMutationFeeTaxHead()).tenantId(calculation.getTenantId())
 						.build();
 				details.add(demandDetail);
 			}
@@ -1132,26 +1123,27 @@ public class EstimationService {
 			}
 
 			List<DemandDetail> demandDetails = demands.get(i).getDemandDetails();
+			System.out.println("~~~~~~~~~~~ demand details in updateDemand ~~~~~~~~~~~~~"+demandDetails.toString());
 			for (int j = 0; j < demandDetails.size(); j++) {
-				if (demandDetails.get(j).getTaxHeadMasterCode() == configs.getPtMutationFeeTaxHead())
-					demands.get(i).getDemandDetails().get(j).setTaxAmount(calculation.getTaxAmount());
+				if (demandDetails.get(j).getTaxHeadMasterCode().equalsIgnoreCase(configs.getPtMutationFeeTaxHead()))
+					demands.get(i).getDemandDetails().get(j).setTaxAmount(calculation.getMutationFee());
 
-				if (demandDetails.get(j).getTaxHeadMasterCode() == configs.getPtMutationPenaltyTaxHead())
+				if (demandDetails.get(j).getTaxHeadMasterCode().equalsIgnoreCase(configs.getPtMutationPenaltyTaxHead()))
 					demands.get(i).getDemandDetails().get(j).setTaxAmount(calculation.getPenalty());
 
-				if (demandDetails.get(j).getTaxHeadMasterCode() == configs.getPtMutationRebateTaxHead())
+				if (demandDetails.get(j).getTaxHeadMasterCode().equalsIgnoreCase(configs.getPtMutationRebateTaxHead()))
 					demands.get(i).getDemandDetails().get(j).setTaxAmount(calculation.getRebate());
 				
-				if (demandDetails.get(j).getTaxHeadMasterCode() == "PT_MUTATION_APPLICATION_FEE")
-					demands.get(i).getDemandDetails().get(j).setTaxAmount(calculation.getRebate());
+				if (demandDetails.get(j).getTaxHeadMasterCode().equalsIgnoreCase("PT_MUTATION_APPLICATION_FEE"))
+					demands.get(i).getDemandDetails().get(j).setTaxAmount(calculation.getApplicationFee());
 				
-				if (demandDetails.get(j).getTaxHeadMasterCode() == "PT_MUTATION_PROCESSING_FEE")
+				if (demandDetails.get(j).getTaxHeadMasterCode().equalsIgnoreCase("PT_MUTATION_PROCESSING_FEE"))
 					demands.get(i).getDemandDetails().get(j).setTaxAmount(calculation.getProcessingFee());
 				
-				if (demandDetails.get(j).getTaxHeadMasterCode() == "PT_MUTATION_PUBLICATION_FEE")
+				if (demandDetails.get(j).getTaxHeadMasterCode().equalsIgnoreCase("PT_MUTATION_PUBLICATION_FEE"))
 					demands.get(i).getDemandDetails().get(j).setTaxAmount(calculation.getPublicationFee());
 				
-				if (demandDetails.get(j).getTaxHeadMasterCode() == "PT_MUTATION_LATE_FEE")
+				if (demandDetails.get(j).getTaxHeadMasterCode().equalsIgnoreCase("PT_MUTATION_LATE_FEE"))
 					demands.get(i).getDemandDetails().get(j).setTaxAmount(calculation.getLateFee());
 			}
 		}
