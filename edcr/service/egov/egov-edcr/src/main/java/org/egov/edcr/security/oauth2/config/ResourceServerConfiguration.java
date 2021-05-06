@@ -50,6 +50,7 @@ package org.egov.edcr.security.oauth2.config;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
@@ -119,11 +120,15 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         final ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
         mapper.configure(SerializationConfig.Feature.AUTO_DETECT_FIELDS, true);
-        try (InputStream is = getResourcesConfig().getInputStream()) {
-            return mapper.readValue(is,
+        InputStream inputStream = null;
+        try {
+        	inputStream = getResourcesConfig().getInputStream();
+            return mapper.readValue(inputStream,
                     SecuredResource.class);
         } catch (IOException e) {
             LOGGER.error("Exception occured while reading data: ", e);
+        } finally {
+			IOUtils.closeQuietly(inputStream);
         }
         return null;
     }
