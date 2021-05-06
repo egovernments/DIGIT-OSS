@@ -1,0 +1,22 @@
+{
+  "tenantRoutingConfig": [
+    {
+      "incomingURI": "/employee/*",
+      "tenantRoutingMap": {
+        "in.pb.amritsar": "http://localhost:9091",
+        "in.pb": "http://localhost:9092",
+        "in.ap": "http://localhost:9092",
+        "in.uk": "http://localhost:9093"
+      }
+    },
+    {
+      "incomingURI": "/todos1/*",
+      "tenantRoutingMap": {
+        "in.pb.amritsar": "http://localhost:9091",
+        "in.pb": "http://localhost:9092",
+        "in.ap": "http://localhost:9092",
+        "in.uk": "http://localhost:9093"
+      }
+    }
+  ]
+}
