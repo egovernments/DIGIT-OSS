@@ -68,14 +68,14 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId, applicationNumber);
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "pt-mutation-reciept", tenantId, applicationNumber);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId, applicationNumber, 'print');
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "pt-mutation-reciept", tenantId, applicationNumber, 'print');
     },
     leftIcon: "receipt"
   };
