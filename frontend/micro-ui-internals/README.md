@@ -6,12 +6,8 @@ DIGIT (Digital Infrastructure for Governance, Impact & Transformation) is India'
 This repository contains source code for web implementation of the new Digit UI modules with dependencies and libraries.
 
 #### Starting local server
-1. To run server locally first change directory to **web** subdirectory
 1. In the project run **yarn install** to install node modules and dependencies 
 1. Run **yarn start** to start the local server
-
-#### Updating modules
-To update the modules run *install-dep.sh* script this will pull all the updates from *digit-ui-internals* repository
 
 #### Reference Docs
 
