@@ -111,7 +111,8 @@ public class TLValidator {
                 errorMap.put("NULL_SUBOWNERSHIPCATEGORY", " SubOwnership Category cannot be null");
             if ((license.getTradeLicenseDetail().getAddress().getLocality() == null)||(license.getTradeLicenseDetail().getAddress().getLocality().getCode() == null))
                 errorMap.put("NULL_LOCALITY", " Locality cannot be null");
-
+            if(license.getTradeLicenseDetail().getApplicationDocuments()==null)
+        	   errorMap.put("NULL_DOCUMENTS", " Documents cannot be null");
             if (!errorMap.isEmpty())
                 throw new CustomException(errorMap);
         });
