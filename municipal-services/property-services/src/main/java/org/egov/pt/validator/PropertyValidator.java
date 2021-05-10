@@ -361,7 +361,7 @@ public class PropertyValidator {
 				String[] usageSplit = usageCategory.split("\\.", 2);
 				if (ObjectUtils.isEmpty(unit.getUsageCategory()) || unit.getUsageCategory() != null
 						&& ((!codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unit.getUsageCategory())) ||
-								(!codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(usageSplit[1])))) {
+								(!codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(usageSplit[0])))) {
 					errorMap.put("INVALID USAGE CATEGORY ", "The Usage CATEGORY '" + unit.getUsageCategory()
 							+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
 				}
