@@ -200,3 +200,10 @@ config:
       - work-dir: "turn-io-adapter"
         image-name: "turn-io-adapter"
         dockerfile: "build/maven/Dockerfile"
+
+        
+  - name: "builds/municipal-services/inbox"
+    build:
+      - work-dir: "inbox"
+        image-name: "inbox"
+        dockerfile: "build/maven/Dockerfile"
