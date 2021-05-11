@@ -48,6 +48,7 @@
 
 package org.egov.infra.config.security.authentication.handler;
 
+import org.owasp.esapi.ESAPI;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
@@ -74,7 +75,7 @@ public class ApplicationLogoutHandler implements LogoutHandler {
             cookie.setMaxAge(0);
             cookie.setPath(SESSION_COOKIE_PATH);
             cookie.setValue(null);
-            response.addCookie(cookie);
+            ESAPI.httpUtilities().addCookie(response, cookie);
         }
     }
 }

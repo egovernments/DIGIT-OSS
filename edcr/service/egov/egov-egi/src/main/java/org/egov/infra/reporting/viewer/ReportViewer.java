@@ -49,6 +49,7 @@
 package org.egov.infra.reporting.viewer;
 
 import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION;
+import static org.egov.infra.utils.ApplicationConstant.CONTENT_TYPE;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -60,6 +61,7 @@ import org.egov.infra.reporting.engine.ReportConstants;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportOutput;
 import org.egov.infra.utils.StringUtils;
+import org.owasp.esapi.ESAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,9 +113,10 @@ public class ReportViewer implements HttpRequestHandler {
 
     private void renderReport(HttpServletResponse resp, byte[] reportData, ReportFormat reportFormat) {
         try (BufferedOutputStream outputStream = new BufferedOutputStream(resp.getOutputStream())) {
-            resp.setHeader(CONTENT_DISPOSITION, StringUtils.sanitize(ReportViewerUtil.getContentDisposition(reportFormat)));
-            resp.setContentType(StringUtils.sanitize(ReportViewerUtil.getContentType(reportFormat)));
+            ESAPI.httpUtilities().addHeader(resp, CONTENT_DISPOSITION, StringUtils.sanitize(ReportViewerUtil.getContentDisposition(reportFormat)));
+            ESAPI.httpUtilities().addHeader(resp, CONTENT_TYPE, StringUtils.sanitize(ReportViewerUtil.getContentType(reportFormat)));
             resp.setContentLength(reportData.length);
+            ESAPI.httpUtilities().setContentType(resp);
             outputStream.write(reportData);
         } catch (IOException e) {
             LOGGER.error("Exception in rendering report with format [{}]!", e);

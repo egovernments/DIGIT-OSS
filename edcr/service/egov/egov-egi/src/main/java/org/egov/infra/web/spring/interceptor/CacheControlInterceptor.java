@@ -48,6 +48,7 @@
 
 package org.egov.infra.web.spring.interceptor;
 
+import org.owasp.esapi.ESAPI;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,10 +60,10 @@ public class CacheControlInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler)
             throws Exception {
         if (response != null) {
-            response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
-            response.setHeader("Pragma", "no-cache");
-            response.setHeader("Expires", "-1");
-            response.setHeader("Vary", "*");
+            ESAPI.httpUtilities().addHeader(response, "Cache-control", "no-cache, no-store, must-revalidate");
+            ESAPI.httpUtilities().addHeader(response, "Pragma", "no-cache");
+            ESAPI.httpUtilities().addHeader(response, "Expires", "-1");
+            ESAPI.httpUtilities().addHeader(response, "Vary", "*");
         }
         return super.preHandle(request, response, handler);
     }
