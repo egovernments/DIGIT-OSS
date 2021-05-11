@@ -50,10 +50,13 @@ package org.egov.edcr.web.controller.rest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,18 +64,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/rest/dcr")
+@Validated
 public class RestExceptionHandler {
 
     @GetMapping(value = "/error", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> getHandleError(HttpServletRequest request, HttpServletResponse response) {
-        return new ResponseEntity<>(request.getAttribute("javax.servlet.error.exception"), HttpStatus.BAD_REQUEST);
+    	String exception = String.valueOf(request.getAttribute("javax.servlet.error.exception"));
+    	boolean isValid = Jsoup.isValid(exception, Whitelist.basic());
+    	if (isValid)
+    		return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    	else 
+    		return new ResponseEntity<>("Invalid Value", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping(value = "/error", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> postHandleError(HttpServletRequest request, HttpServletResponse response) {
-        return new ResponseEntity<>(request.getAttribute("javax.servlet.error.exception"), HttpStatus.BAD_REQUEST);
+    	String exception = String.valueOf(request.getAttribute("javax.servlet.error.exception"));
+    	boolean isValid = Jsoup.isValid(exception, Whitelist.basic());
+    	if (isValid)
+    		return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    	else 
+    		return new ResponseEntity<>("Invalid Value", HttpStatus.BAD_REQUEST);
     }
 
 }

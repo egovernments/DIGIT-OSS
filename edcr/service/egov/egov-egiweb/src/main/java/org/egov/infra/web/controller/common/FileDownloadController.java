@@ -52,9 +52,11 @@ import org.apache.commons.io.IOUtils;
 import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.utils.FileStoreUtils;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,6 +69,7 @@ import java.io.OutputStream;
 
 @Controller
 @RequestMapping("/downloadfile")
+@Validated
 public class FileDownloadController {
 
     @Autowired
@@ -77,7 +80,7 @@ public class FileDownloadController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity download(@RequestParam String fileStoreId, @RequestParam String moduleName,
+    public ResponseEntity download(@SafeHtml @RequestParam String fileStoreId, @SafeHtml @RequestParam String moduleName,
                                    @RequestParam(defaultValue = "false") boolean toSave) {
         return fileStoreUtils.fileAsResponseEntity(fileStoreId, moduleName, toSave);
     }
