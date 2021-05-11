@@ -873,7 +873,7 @@ export const footerReviewTop = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
         { key: "businessService", value:'TL' }    
       ]
-      download(receiptQueryString, "download", receiptKey, state);
+      download(receiptQueryString, "download", receiptKey||"consolidatedreceipt",'PAYMENT' ,state);
       // generateReceipt(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
@@ -886,7 +886,7 @@ export const footerReviewTop = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
         { key: "businessService", value:'TL' }   
       ]
-      download(receiptQueryString, "print", receiptKey, state);
+      download(receiptQueryString, "print", receiptKey||"consolidatedreceipt",'PAYMENT', state);
       // generateReceipt(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"

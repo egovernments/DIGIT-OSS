@@ -11,6 +11,7 @@ import {
   getLocaleLabels, getQueryArg,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { getUserSearchedResponse } from "egov-ui-kit/utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
@@ -483,13 +484,15 @@ export const getMdmsData = async queryObject => {
 // Get user data from uuid API call
 export const getUserDataFromUuid = async bodyObject => {
   try {
-    const response = await httpRequest(
-      "post",
-      "/user/_search",
-      "",
-      [],
-      bodyObject
-    );
+    // const response = await httpRequest(
+    //   "post",
+    //   "/user/_search",
+    //   "",
+    //   [],
+    //   bodyObject
+    // );
+
+    const response = getUserSearchedResponse();
     return response;
   } catch (error) {
     console.log(error);
@@ -507,12 +510,12 @@ export const getBill = async (queryObject, dispatch) => {
     );
     return response;
   } catch (error) {
-    if(!window.location.pathname.includes('acknowledgement')){
+    if (!window.location.pathname.includes('acknowledgement')) {
       dispatch(
         toggleSnackbar(
           true,
           { labelName: error.message, labelKey: error.message },
-          error.message&& error.message.includes&& error.message.includes("No Demands Found") ? "warning" : "error"
+          error.message && error.message.includes && error.message.includes("No Demands Found") ? "warning" : "error"
         )
       );
     }

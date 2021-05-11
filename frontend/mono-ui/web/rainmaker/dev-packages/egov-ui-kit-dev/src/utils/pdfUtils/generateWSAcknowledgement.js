@@ -55,9 +55,11 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
         reviewModificationsEffective = generateKeyValueForModify(preparedFinalObject, reviewModificationsEffectiveDate);
     } else {
         plumberDetail = generateKeyValue(preparedFinalObject, plumberDetails);
-        if (WaterConnection.roadCuttingInfo && WaterConnection.roadCuttingInfo.length > 0) {
+        if (WaterConnection.roadCuttingInfo && WaterConnection.roadCuttingInfo.length > 1) {
             roadDetailInfo = getMultiItems(preparedFinalObject, roadDetails, 'WaterConnection[0].roadCuttingInfo')
             roadDetail = getMultipleItemCard(roadDetailInfo, 'WS_ROAD_CUTTING_CHARGE_DETAILS');
+        } else {
+            roadDetail = generateKeyValue(preparedFinalObject, roadDetails);
         }
     }
 
@@ -100,7 +102,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENTS_DETAILS_HEADER', items: documentCard, hide: documentCard.length === 0 },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ADDITIONAL_CONNECTION_HEADER', items: additionDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PLUMBER_DETAILS_HEADER', items: plumberDetail, hide: plumberDetail.length === 0 },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGES_HEADER', items: roadDetailInfo, type: roadDetailInfo.length > 1 ? 'multiItem' : 'singleItem',  hide: roadDetailInfo.length === 0},
+            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGES_HEADER', items: roadDetail, type: roadDetailInfo.length > 1 ? 'multiItem' : 'singleItem'}, //hide: (roadDetailInfo.length === 0 && roadDetail.length === 0)
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ACTIVATION_DETAILS_HEADER', items: activateDetail },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_MODIFY_EFFECTIVE_DATE_HEADER', items: reviewModificationsEffective, hide: reviewModificationsEffective.length === 0 },
 

@@ -9,6 +9,7 @@ const formConfig = {
       errorMessage: "CORE_COMMON_PHONENO_INVALIDMSG",
       hintText: "CORE_COMMON_PHONE_NUMBER_PLACEHOLDER",
      // pattern: "^([0-9]){10}$",
+     value: "",
     },
     type: {
       id: "otp-type",
@@ -21,6 +22,7 @@ const formConfig = {
       required: true,
       floatingLabelText: "CORE_COMMON_CITY",
       hintText: "CORE_COMMON_CITY_PLACEHOLDER",
+      value:""
     },
     userType: {
       id: "user-type",

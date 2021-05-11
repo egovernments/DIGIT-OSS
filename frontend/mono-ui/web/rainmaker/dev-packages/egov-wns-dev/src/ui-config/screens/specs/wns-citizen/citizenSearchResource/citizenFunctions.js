@@ -3,7 +3,16 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getWSMyResults, getSWMyResults } from '../../../../../ui-utils/commons';
 
 export const fetchData = async (action, state, dispatch) => {
-  let queryObject = [{ key: "mobileNumber", value: JSON.parse(getUserInfo()).mobileNumber }]
+  let queryObject = [
+    { 
+      key: "mobileNumber", 
+      value: JSON.parse(getUserInfo()).mobileNumber 
+    },
+    {
+    key: "tenantId",
+    value: JSON.parse(getUserInfo()).permanentCity ? JSON.parse(getUserInfo()).permanentCity : JSON.parse(getUserInfo()).roles[0].tenantId
+    }
+  ];
   let responseWater = [], responseSewerage = [];
   try { responseWater = await getWSMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseWater = []; console.log(error) }
   try { responseSewerage = await getSWMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseSewerage = []; console.log(error) }

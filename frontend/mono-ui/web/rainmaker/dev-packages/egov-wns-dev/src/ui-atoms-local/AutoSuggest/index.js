@@ -6,9 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
-import "./index.css";
+// import "./index.css";
 import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
-
 const getSuggestions = suggestions => {
   return (
     suggestions &&
@@ -80,6 +79,7 @@ function Control(props) {
   return (
     <TextField
       fullWidth
+      disabled={props.isDisabled}
       InputProps={{
         inputComponent,
         inputProps: {
@@ -227,7 +227,7 @@ class IntegrationReactSelect extends React.Component {
           }}
           options={getSuggestions(suggestions) || []}
           components={components}
-          value={value ? value : this.state.single}
+          value={value}
           placeholder={placeholder}
           {...rest}
           onChange={this.handleChange("single")}

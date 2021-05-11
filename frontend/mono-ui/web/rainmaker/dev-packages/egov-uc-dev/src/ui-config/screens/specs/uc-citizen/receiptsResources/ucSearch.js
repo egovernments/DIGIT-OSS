@@ -15,6 +15,7 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 //const hasApproval = getQueryArg(window.location.href, "hasApproval");
@@ -39,14 +40,18 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  const userName = JSON.parse(getUserInfo()).userName;
   dispatch(
-    handleField(
-      "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNumber",
-      "props.value",
-      ""
-    )
+    prepareFinalObject("ucSearchScreen.mobileNumber", userName)
   );
+  // dispatch(
+  //   handleField(
+  //     "search",
+  //     "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
   dispatch(
     handleField(
       "search",
@@ -63,6 +68,16 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.consumerCodes",
+      "props.value",
+      ""
+    )
+  );
+
 };
 
 export const UCSearchCard = getCommonCard({
@@ -138,6 +153,24 @@ export const UCSearchCard = getCommonCard({
         return action;
       }
     },
+    consumerCodes: getTextField({
+      label: {
+        labelName: "Consumer Code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Consumer Code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL_PLACEHOLDER"
+      },
+      required: false,
+      visible: true,
+      jsonPath: "ucSearchScreen.consumerCodes",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
+   
     mobileNumber: getTextField({
       label: {
         labelName: "Mobile No.",
@@ -150,12 +183,15 @@ export const UCSearchCard = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4
-      },
+      }, 
       iconObj: {
         label: "+91 |",
         position: "start"
       },
       required: false,
+      props: {
+        disabled: true
+      },      
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
       jsonPath: "ucSearchScreen.mobileNumber"

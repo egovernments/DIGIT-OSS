@@ -4,7 +4,6 @@ import {
   getCommonContainer,
   getCommonGrayCard,
   getCommonTitle,
-  getSelectField,
   getTextField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -60,30 +59,46 @@ const institutionTypeInformation = () => {
           pattern: getPattern("Name"),
           jsonPath: "Property.institution.name"
         }),
-
-        privateInstitutionTypeDetails: getSelectField({
-          label: {
-            labelName: "Institution Type",
-            labelKey: "PT_COMMON_INSTITUTION_TYPE"
-          },
-          placeholder: {
-            labelName: "Enter Institution Type",
-            labelKey: "PT_COMMON_INSTITUTION_TYPE_PLACEHOLDER"
-          },
+        privateInstitutionTypeDetails: {
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-pt",
+          componentPath: "AutosuggestContainer",
+          jsonPath: "Property.institution.type",//db sake
           required: true,
-          jsonPath: "Property.institution.type",
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "OwnerShipCategory"
+          props: {
+            style: {
+              width: "100%",
+              cursor: "pointer"
+            },
+            label: {
+              labelName: "Institution Type",
+              labelKey: "PT_COMMON_INSTITUTION_TYPE"
+            },
+            placeholder: {
+              labelName: "Enter Institution Type",
+              labelKey: "PT_COMMON_INSTITUTION_TYPE_PLACEHOLDER"
+            },
+            jsonPath: "Property.institution.type",
+            localePrefix: {
+              moduleName: "common-masters",
+              masterName: "OwnerShipCategory"
+            },
+            required: true,
+            sourceJsonPath: "applyScreenMdmsData.common-masters.Institutions",
+            labelsFromLocalisation: true,
+            suggestions: [],
+            fullwidth: true,
+            isClearable: true,
+            inputLabelProps: {
+              shrink: true
+            },
+    
           },
-          required: true,
-          sourceJsonPath: "applyScreenMdmsData.common-masters.Institutions",
           gridDefination: {
             xs: 12,
-            sm: 12,
-            md: 6
-          }
-        }),
+            sm: 6,
+          },
+        },
       }),
     })
 };
@@ -286,7 +301,7 @@ const commonApplicantInformation = () => {
             {
               labelName: "Transgender",
               labelKey: "PT_COMMON_GENDER_TRANSGENDER",
-              value: "OTHERS"
+              value: "TRANSGENDER"
             }
           ],
           jsonPath: "Property.owners[0].gender",
@@ -318,51 +333,86 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error"
         }
       }),
-      relationshipWithGuardian: getSelectField({
-        label: {
-          labelName: "Relationship with Guardian",
-          labelKey: "PT_COMMON_APPLICANT_RELATIONSHIP_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Relationship with Guardian",
-          labelKey: "PT_COMMON_APPLICANT_RELATIONSHIP_PLACEHOLDER"
-        },
+      relationshipWithGuardian: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "Property.owners[0].relationship",//db sake
         required: true,
-        jsonPath: "Property.owners[0].relationship",
-        data: [{ code: "FATHER" }, { code: "HUSBAND" }],
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerType"
+        props: {
+          style: {
+            width: "100%",
+            cursor: "pointer"
+          },
+          label: {
+            labelName: "Relationship with Guardian",
+            labelKey: "PT_COMMON_APPLICANT_RELATIONSHIP_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Relationship with Guardian",
+            labelKey: "PT_COMMON_APPLICANT_RELATIONSHIP_PLACEHOLDER"
+          },
+          required: true,
+          jsonPath: "Property.owners[0].relationship",
+          data: [{ code: "FATHER" }, { code: "HUSBAND" }],
+          localePrefix: {
+            moduleName: "common-masters",
+            masterName: "OwnerType"
+          },
+          labelsFromLocalisation: true,
+          suggestions: [],
+          fullwidth: true,
+          isClearable: true,
+          inputLabelProps: {
+            shrink: true
+          },
         },
-        //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
-        }
-      }),
-      specialApplicantCategory: getSelectField({
-        label: {
-          labelName: "Special Applicant Category",
-          labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_LABEL"
         },
-        placeholder: {
-          labelName: "Select Special Applicant Category",
-          labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
-        },
+      },
+      specialApplicantCategory: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
         jsonPath: "Property.owners[0].ownerType",
         required: true,
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerType"
+        props: {
+          style: {
+            width: "100%",
+            cursor: "pointer"
+          },
+          label: {
+            labelName: "Special Applicant Category",
+            labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Special Applicant Category",
+            labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
+          },
+          jsonPath: "Property.owners[0].ownerType",
+          required: true,
+          localePrefix: {
+            moduleName: "common-masters",
+            masterName: "OwnerType"
+          },
+          sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+          labelsFromLocalisation: true,
+          suggestions: [],
+          fullwidth: true,
+          isClearable: true,
+          inputLabelProps: {
+            shrink: true
+          },
         },
-        sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
-        }
-      }),
+        },
+      },
       applicantAddress: getTextField({
         label: {
           labelName: "Correspondence Address",
@@ -420,7 +470,16 @@ export const propertyOwnershipDetails = getCommonCard({
   applicantTypeContainer: getCommonContainer({
     applicantTypeSelection: getCommonContainer({
       applicantType: {
-        ...getSelectField({
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "Property.ownershipCategory",
+        props: {
+          style: {
+            width: "100%",
+            cursor: "pointer"
+          },
+          className: "hr-generic-selectfield autocomplete-dropdown",
           label: {
             labelName: "Ownership Type",
             labelKey: "PT_COMMON_OWNERSHIP_TYPE"
@@ -436,15 +495,19 @@ export const propertyOwnershipDetails = getCommonCard({
           },
           required: true,
           sourceJsonPath: "OwnershipCategory",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
+          required: true,
+          isClearable: true,
+          labelsFromLocalisation: true,
+          inputLabelProps: {
+            shrink: true
           },
-          props: {
-            className: "applicant-details-error"
-          }
-        }),
+        },
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
         beforeFieldChange: (action, state, dispatch) => {
 
           let path = "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";

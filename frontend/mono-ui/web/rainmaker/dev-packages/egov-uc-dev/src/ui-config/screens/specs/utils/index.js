@@ -7,6 +7,10 @@ import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import orderBy from "lodash/orderBy";
+import { searchAndDownloadPdf, searchAndPrintPdf } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+
 
 export const getCommonApplyFooter = children => {
   return {
@@ -32,6 +36,19 @@ export const transformById = (payload, id) => {
   );
 };
 
+export const getFeesEstimateCard = props => {
+  const { sourceJsonPath, ...rest } = props;
+  return {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-uc",
+    componentPath: "EstimateCardContainer",
+    props: {
+      sourceJsonPath,
+      ...rest
+    }
+  };
+};
+
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
   let translatedLabel = null;
   if (localizationLabels && localizationLabels.hasOwnProperty(labelKey)) {
@@ -50,18 +67,22 @@ export const validateFields = (
   objectJsonPath,
   state,
   dispatch,
-  screen = "apply"
+  screen
+  //screen = "apply"
+ // screen = "newCollection"
 ) => {
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
     {}
   );
+ console.info("children==",fields);
   let isFormValid = true;
   for (var variable in fields) {
+    
     if (fields.hasOwnProperty(variable)) {
       if (
-        fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" && 
+        fields[variable] &&
         fields[variable].props &&
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
@@ -79,28 +100,6 @@ export const validateFields = (
         )
       ) {
         isFormValid = false;
-      } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props){
-        let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
-        let isIndex = fields[variable].index || 0;
-        dropdownFields.forEach((item, i) => {
-          let isValid = get(
-            state.screenConfiguration.preparedFinalObject ,
-            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
-            ''
-          );
-          if(!isValid || isValid == '' || isValid == 'none') {
-            isFormValid = false;
-            dispatch(
-              handleField(
-                screen,
-                `${fields[variable].componentJsonpath}.props.dropdownFields[${i}]`,
-                "isRequired",
-                true
-              )
-            );
-          }
-        });
-        
       }
     }
   }
@@ -167,6 +166,9 @@ export const ifUserRoleExists = role => {
 };
 
 export const convertEpochToDate = dateEpoch => {
+  if(dateEpoch==null||dateEpoch==''||dateEpoch==undefined){
+    return 'NA';
+  }
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
@@ -320,53 +322,88 @@ export const getEmployeeName = async queryObject => {
   }
 };
 
-export const setServiceCategory = (businessServiceData, dispatch) => {
-  // let nestedServiceData = {};
-  // businessServiceData.forEach(item => {
-  //   if (item.code && item.code.indexOf(".") > 0) {
-  //     if (nestedServiceData[item.code.split(".")[0]]) {
-  //       let child = get(
-  //         nestedServiceData,
-  //         `${item.code.split(".")[0]}.child`,
-  //         []
-  //       );
-  //       child.push(item);
-  //       set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
-  //     } else {
-  //       set(
-  //         nestedServiceData,
-  //         `${item.code.split(".")[0]}.code`,
-  //         item.code.split(".")[0]
-  //       );
-  //       set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
-  //     }
-  //   } else {
-  //     set(nestedServiceData, `${item.code}`, item);
-  //   }
-  // });
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.nestedServiceData",
-  //     nestedServiceData
-  //   )
-  // );
-  // let serviceCategories = Object.values(nestedServiceData).filter(
-  //   item => item.code
-  // );
-  // dispatch(
-  //   prepareFinalObject(
-  //     "applyScreenMdmsData.serviceCategories",
-  //     serviceCategories
-  //   )
-  // );
-
+export const setServiceCategory = (businessServiceData, dispatch,state,setCategory=true) => {
+  let nestedServiceData = {};
+  businessServiceData.forEach(item => {
+    if (item.code && item.code.indexOf(".") > 0) {
+      if (nestedServiceData[item.code.split(".")[0]]) {
+        let child = get(
+          nestedServiceData,
+          `${item.code.split(".")[0]}.child`,
+          []
+        );
+        child.push(item);
+        set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
+      } else {
+        set(
+          nestedServiceData,
+          `${item.code.split(".")[0]}.code`,
+          item.code.split(".")[0]
+        );
+        set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
+      }
+    } else {
+      set(nestedServiceData, `${item.code}`, item);
+    }
+  });
+  console.log("nestedServiceData",nestedServiceData);
   dispatch(
     prepareFinalObject(
-      "applyScreenMdmsData.serviceCategories",
-      businessServiceData
+      "applyScreenMdmsData.nestedServiceData",
+      nestedServiceData
     )
   );
+  let serviceCategories = Object.values(nestedServiceData).filter(
+    item => item.code
+  );
+  setCategory&&dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.serviceCategories",
+      serviceCategories
+    )
+  );
+  const editingMode = get(
+    state.screenConfiguration,
+    "preparedFinalObject.Challan[0].id",
+    null
+  );
+  if(editingMode!=null){
+    dispatch(
+      handleField(
+        "newCollection",
+        "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory",
+        "props.value",
+        get(
+          state.screenConfiguration,
+          "preparedFinalObject.Challan[0].consumerType",
+          null
+        )
+      )
+    );
+    // dispatch(
+    //   handleField(
+    //     "newCollection",
+    //     "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+    //     "props.value",
+    //     get(
+    //       state.screenConfiguration,
+    //       "preparedFinalObject.Challan[0].serviceType",
+    //       null
+    //     )
+    //   )
+    // );
+  }
 };
+
+
+export const downloadHelpFile = async (state, dispatch) => {  
+  const helpurl = get(state.screenConfiguration.preparedFinalObject,
+    "helpFileUrl",
+    ""
+  );   
+  // window.open(helpurl,"_blank");
+};
+
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
@@ -421,3 +458,12 @@ export const getTextToLocalMapping = label => {
       );
   }
 };
+
+
+export const downloadEchallan =(queryObj,fileName)=>{
+  searchAndDownloadPdf('/egov-pdf/download/UC/mcollect-challan',queryObj,fileName)
+}
+
+export const printEchallan =(queryObj)=>{
+  searchAndPrintPdf('/egov-pdf/download/UC/mcollect-challan',queryObj)
+}

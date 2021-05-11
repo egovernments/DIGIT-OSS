@@ -11,7 +11,7 @@ import {
 
   getTransformedLocale, getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
-import { printPdf } from "egov-ui-kit/utils/commons";
+import { getPaymentSearchAPI, getUserSearchedResponse, printPdf } from "egov-ui-kit/utils/commons";
 import {
   getTenantId,
   getUserInfo,
@@ -28,7 +28,6 @@ import set from "lodash/set";
 import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../ui-utils/api";
 import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import "./index.css";
-import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -905,13 +904,15 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
 // Get user data from uuid API call
 export const getUserDataFromUuid = async bodyObject => {
   try {
-    const response = await httpRequest(
-      "post",
-      "/user/_search",
-      "",
-      [],
-      bodyObject
-    );
+    // const response = await httpRequest(
+    //   "post",
+    //   "/user/_search",
+    //   "",
+    //   [],
+    //   bodyObject
+    // );
+
+    const response = getUserSearchedResponse();
     return response;
   } catch (error) {
     console.log(error);
@@ -4342,7 +4343,7 @@ export const getLoggedinUserRole = (wfState) => {
         else if (wfState === "NOC_VERIFICATION_PENDING") {
           currentRole = "BPA Noc Verifier"
         }
-        else if (window.location.href.includes("noc-search-preview")){
+        else if (window.location.href.includes("noc-search-preview")) {
           currentRole = "NOC Approver"
         }
         else {
@@ -4379,11 +4380,11 @@ const getEditableUserRoleforNoc = (state, isVisibleTrue) => {
   // }
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   roles.map(role => {
-    if(isEmployee && isVisibleTrue && (role.code == "BPA_NOC_VERIFIER")) {
-        allowedToUpload = true;
-    } 
-    if(
-      window.location.href.includes("egov-bpa/apply") || 
+    if (isEmployee && isVisibleTrue && (role.code == "BPA_NOC_VERIFIER")) {
+      allowedToUpload = true;
+    }
+    if (
+      window.location.href.includes("egov-bpa/apply") ||
       window.location.href.includes("oc-bpa/apply")) {
       allowedToUpload = true;
     }
@@ -4421,38 +4422,38 @@ export const prepareNocDocumentsView = async (state, dispatch) => {
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
   allDocuments.map((doc) => {
     doc.map((docs, index) => {
-    uploadedAppDocuments.push(docs);
-    let obj = {};
+      uploadedAppDocuments.push(docs);
+      let obj = {};
 
-    obj.title = getTransformedLocale(docs.documentType);
-    obj.fileStoreId = docs.fileStoreId;
-    obj.linkText = "View";
-    if (docs.auditDetails) {
-      obj["createdTime"] = docs.auditDetails.createdTime;
-    }
+      obj.title = getTransformedLocale(docs.documentType);
+      obj.fileStoreId = docs.fileStoreId;
+      obj.linkText = "View";
+      if (docs.auditDetails) {
+        obj["createdTime"] = docs.auditDetails.createdTime;
+      }
 
-    obj["link"] =
-      (fileUrls &&
-        fileUrls[docs.fileStoreId] &&
-        getFileUrl(fileUrls[docs.fileStoreId])) ||
-      "";
-    obj["name"] =
-      (fileUrls[docs.fileStoreId] &&
-        decodeURIComponent(
-          getFileUrl(fileUrls[docs.fileStoreId])
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        )) ||
-      `Document - ${index + 1}`;
-    obj.createdBy = getLoggedinUserRole(docs.wfState);
-    obj.additionalDetails = docs.additionalDetails;
-    obj['auditDetails'] = docs.auditDetails;
-    // obj = Object.assign(docs);
-    documentsPreview.push(obj);
-    return obj;
-  })
+      obj["link"] =
+        (fileUrls &&
+          fileUrls[docs.fileStoreId] &&
+          getFileUrl(fileUrls[docs.fileStoreId])) ||
+        "";
+      obj["name"] =
+        (fileUrls[docs.fileStoreId] &&
+          decodeURIComponent(
+            getFileUrl(fileUrls[docs.fileStoreId])
+              .split("?")[0]
+              .split("/")
+              .pop()
+              .slice(13)
+          )) ||
+        `Document - ${index + 1}`;
+      obj.createdBy = getLoggedinUserRole(docs.wfState);
+      obj.additionalDetails = docs.additionalDetails;
+      obj['auditDetails'] = docs.auditDetails;
+      // obj = Object.assign(docs);
+      documentsPreview.push(obj);
+      return obj;
+    })
   });
   dispatch(prepareFinalObject("nocDocumentDetailsPreview", documentsPreview));
   return documentsPreview;
@@ -4659,19 +4660,19 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
   if (documentCards && documentCards.length > 0) {
     cards = documentCards[0].cards;
   }
-  
-for (var i = 0; i < cards.length; i++) {
-  cards[i].documents && cards[i].documents.length && 
-  cards[i].documents.map(fidocs =>{
-    nocDocuments && nocDocuments.length &&
-    nocDocuments.forEach(doc => { 
-      if(doc.fileStoreId === fidocs.fileStoreId) {
-        fidocs.link = get(doc, "link");
-        fidocs.name = get(doc, "name");
-      }
-    })
-  })
-}
+
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].documents && cards[i].documents.length &&
+      cards[i].documents.map(fidocs => {
+        nocDocuments && nocDocuments.length &&
+          nocDocuments.forEach(doc => {
+            if (doc.fileStoreId === fidocs.fileStoreId) {
+              fidocs.link = get(doc, "link");
+              fidocs.name = get(doc, "name");
+            }
+          })
+      })
+  }
 
   if (nocDocumentsFromMdms && nocDocumentsFromMdms.length > 0) {
     const allCards = [].concat(...nocDocumentsFromMdms.map(({ cards }) => cards || []));
@@ -4732,12 +4733,12 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
   }
 
   let sendBackCitizen = true;
-  if(bpaDetails.status && bpaDetails.status.includes("CITIZEN_ACTION_PENDING")) {
+  if (bpaDetails.status && bpaDetails.status.includes("CITIZEN_ACTION_PENDING")) {
     sendBackCitizen = false;
   }
 
-  if(get(bpaDetails, "status") === "DOC_VERIFICATION_INPROGRESS" && isVisibleTrue) {
-      isVisibleTrue = true;
+  if (get(bpaDetails, "status") === "DOC_VERIFICATION_INPROGRESS" && isVisibleTrue) {
+    isVisibleTrue = true;
   } else {
     isVisibleTrue = false;
   }
@@ -5201,7 +5202,7 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
 
   let payments = [];
 
-//  if(process.env.REACT_APP_NAME == "Citizen") {
+  //  if(process.env.REACT_APP_NAME == "Citizen") {
   if (window.location.href.includes("oc-bpa")) {
     if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
       if (serviceCode === "BPA.NC_OC_APP_FEE") {
@@ -5227,9 +5228,9 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
       payments.push(paymentPayload.Payments[0]);
     }
   }
-//  } else {
-//   payments.push(get (paymentPayload, "Payments[0]", []));
-//  }
+  //  } else {
+  //   payments.push(get (paymentPayload, "Payments[0]", []));
+  //  }
 
 
   let res = await httpRequest(

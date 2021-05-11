@@ -319,7 +319,7 @@ const goBack = (state, dispatch) => {
   if (demandId) {
     const serviceType = get(demand, "serviceType");
     const serviceCategory = get(demand, "businessService");
-    // const businessService = get(demand[0], "businessService")
+   
   }
   dispatch(setRoute(`/uc/newCollection`));
 };

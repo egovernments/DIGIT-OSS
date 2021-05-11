@@ -83,15 +83,16 @@ function totalAmount(arr) {
 function FeesEstimateCard(props) {
   const { classes, estimate } = props;
   const total = totalAmount(estimate.fees);
+  const isPaid=estimate.payStatus
   const totalHeadClassName = "uc-total-amount-value " + classes.bigheader;
   return (
     <Grid container>
       <Grid xs={12} sm={7}>
-        <LabelContainer
+        {/* <LabelContainer
           labelName={estimate.header.labelName}
           labelKey={estimate.header.labelKey}
           style={styles.cardHeader}
-        />
+        /> */}
         <div style={{ marginTop: 48, maxWidth: 400 }}>
           <Grid container>
             {estimate.fees &&
@@ -180,8 +181,23 @@ function FeesEstimateCard(props) {
           />
         </Typography>
         <Typography className={totalHeadClassName} align="right">
-          Rs {total}
+        ₹ {total}
         </Typography>
+        {isPaid? (
+        <Typography variant="body2" align="right"  style={{ color: 'green' }}>
+          <LabelContainer
+            labelName="Paid Successfully"
+            labelKey="UC_COMMON_PAID_SUCCESS"
+          />
+        </Typography> ):
+         (
+          <Typography variant="body2" align="right" style={{ color: 'red' }}>
+          <LabelContainer
+            labelName="Not Paid"
+            labelKey="UC_COMMON_NOT_PAID"
+          />
+          </Typography> )
+        }
         {estimate.extra && estimate.extra.length !== 0 ? (
           <Card className={classes.whiteCard}>
             {estimate.extra.map((item, key) => {

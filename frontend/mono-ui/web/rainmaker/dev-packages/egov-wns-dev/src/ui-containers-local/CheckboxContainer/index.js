@@ -74,7 +74,7 @@ class CheckboxLabels extends React.Component {
   }
 
   render() {
-    const { classes, required, preparedFinalObject } = this.props;
+    const { classes, required, preparedFinalObject, disabled = false } = this.props;
     let checkedWater, checkedSewerage;
     if (this.state.interChange) {
       checkedWater = this.state.checkedWater;
@@ -99,6 +99,7 @@ class CheckboxLabels extends React.Component {
                   onChange={this.handleWater("checkedWater")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
                   color="primary"
+                  disabled={disabled}
                 />}
               label={<LabelContainer labelKey="WS_APPLY_WATER" />}
             />
@@ -110,6 +111,7 @@ class CheckboxLabels extends React.Component {
                   onChange={this.handleSewerage("checkedSewerage")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
                   color="primary"
+                  disabled={disabled}
                 />}
               label={<LabelContainer labelKey="WS_APPLY_SEWERAGE" />}
             />

@@ -661,9 +661,9 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
 
 const isApplicationPaid = (currentStatus, workflowCode) => {
   let isPAID = false;
-  if (currentStatus === "CITIZENACTIONREQUIRED") {
-    return isPAID;
-  }
+  // if (currentStatus === "CITIZENACTIONREQUIRED") {
+  //   return true;
+  // }
   const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
 
   if (!isEmpty(businessServiceData)) {

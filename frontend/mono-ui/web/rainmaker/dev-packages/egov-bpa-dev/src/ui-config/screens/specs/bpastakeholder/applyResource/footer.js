@@ -918,7 +918,7 @@ export const updateDownloadandPrintMenu = (action, state, dispatch, status) => {
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      download(receiptQueryString,"download");
+      download(receiptQueryString,"download",'consolidatedreceipt','PAYMENT');
     },
     leftIcon: "receipt"
   };
@@ -926,7 +926,7 @@ export const updateDownloadandPrintMenu = (action, state, dispatch, status) => {
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      download(receiptQueryString,"print");
+      download(receiptQueryString,"print",'consolidatedreceipt','PAYMENT');
     },
     leftIcon: "receipt"
   };

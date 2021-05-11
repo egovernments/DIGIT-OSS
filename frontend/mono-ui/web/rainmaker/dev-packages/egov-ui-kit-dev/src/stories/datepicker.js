@@ -23,7 +23,7 @@ storiesOf("DatePicker", module)
       <br />
       <div>
         For more props information please visit{" "}
-        <a href="http://www.material-ui.com/#/components/date-picker" target="_blank">
+        <a href="http://www.material-ui.com/#/components/date-picker" target="_blank" rel="noopener noreferrer">
           Date picker
         </a>
       </div>

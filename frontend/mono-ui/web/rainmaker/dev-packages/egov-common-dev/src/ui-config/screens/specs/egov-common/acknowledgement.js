@@ -19,6 +19,11 @@ const downloadprintMenu = (
     "receiptKey",
     "consolidatedreceipt"
   );
+  const pdfModule = get(
+    uiCommonPayConfig,
+    "pdfModule",
+    "PAYMENT"
+  );
   let receiptDownloadObject = {
     label: {
       labelName: "DOWNLOAD RECEIPT",
@@ -33,7 +38,7 @@ const downloadprintMenu = (
           value: getQueryArg(window.location.href, "businessService"),
         },
       ];
-      download(receiptQueryString, "download", receiptKey, state);
+      download(receiptQueryString, "download", receiptKey, pdfModule,state);
     },
     leftIcon: "receipt",
   };
@@ -48,7 +53,7 @@ const downloadprintMenu = (
           value: getQueryArg(window.location.href, "businessService"),
         },
       ];
-      download(receiptQueryString, "print", receiptKey, state);
+      download(receiptQueryString, "print", receiptKey, pdfModule,state );
     },
     leftIcon: "receipt",
   };

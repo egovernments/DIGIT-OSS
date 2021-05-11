@@ -374,6 +374,8 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
     dispatch(prepareFinalObject("BPA", {}));
+    dispatch(prepareFinalObject("documentsContract", []));
+    dispatch(prepareFinalObject("documentDetailsUploadRedux", {}));
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
     set(state, "screenConfiguration.moduleName", "BPA");

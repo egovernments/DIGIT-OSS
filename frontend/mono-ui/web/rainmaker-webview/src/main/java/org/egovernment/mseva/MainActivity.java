@@ -1,8 +1,8 @@
 package org.egovernment.mseva;
 
 /*
-* Giving right credit to developers encourages them to create better projects, just want you to know that :)
-*/
+ * Giving right credit to developers encourages them to create better projects, just want you to know that :)
+ */
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -10,6 +10,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -81,16 +82,16 @@ public class MainActivity extends AppCompatActivity {
 	public static String HOST	= getHost(URL);
 
 	//Careful with these variable names if altering
-    private WebView webView;
+	private WebView webView;
 
-    private String asw_cam_message;
-    private ValueCallback<Uri> asw_file_message;
-    private ValueCallback<Uri[]> asw_file_path;
+	private String asw_cam_message;
+	private ValueCallback<Uri> asw_file_message;
+	private ValueCallback<Uri[]> asw_file_path;
 
 
-    // permissions code
+	// permissions code
 	private final static int MY_PERMISSIONS_REQUEST_LOCATION = 21;
-    private final static int asw_file_req = 1;
+	private final static int asw_file_req = 1;
 	private final static int REQUEST_FILE_PERMISSIONS = 2;
 	private final static int loc_perm = 3;
 	private final static int sms_receive_perm = 4;
@@ -107,50 +108,50 @@ public class MainActivity extends AppCompatActivity {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            Uri[] results = null;
-            if (resultCode == Activity.RESULT_OK) {
-                if (requestCode == asw_file_req) {
-                    if (null == asw_file_path) {
-                        return;
-                    }
-                    if (intent == null || intent.getFlags() == 0) {
-                        if (asw_cam_message != null) {
-                            results = new Uri[]{Uri.parse(asw_cam_message)};
-                        }
-                    } else {
-                        String dataString = intent.getDataString();
-                        if (dataString != null) {
-                            results = new Uri[]{ Uri.parse(dataString) };
-                        }
-                    }
-                }
-            }
-            asw_file_path.onReceiveValue(results);
-            asw_file_path = null;
-        } else {
-            if (requestCode == asw_file_req) {
-                if (null == asw_file_message) return;
-                Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-                asw_file_message.onReceiveValue(result);
-                asw_file_message = null;
-            }
-        }
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		if (Build.VERSION.SDK_INT >= 21) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+			Uri[] results = null;
+			if (resultCode == Activity.RESULT_OK) {
+				if (requestCode == asw_file_req) {
+					if (null == asw_file_path) {
+						return;
+					}
+					if (intent == null || intent.getFlags() == 0) {
+						if (asw_cam_message != null) {
+							results = new Uri[]{Uri.parse(asw_cam_message)};
+						}
+					} else {
+						String dataString = intent.getDataString();
+						if (dataString != null) {
+							results = new Uri[]{ Uri.parse(dataString) };
+						}
+					}
+				}
+			}
+			asw_file_path.onReceiveValue(results);
+			asw_file_path = null;
+		} else {
+			if (requestCode == asw_file_req) {
+				if (null == asw_file_message) return;
+				Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+				asw_file_message.onReceiveValue(result);
+				asw_file_message = null;
+			}
+		}
+	}
 
-    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-        if (proxy == null) {
-        	proxy = new AppJavaScriptProxy(this);
+		if (proxy == null) {
+			proxy = new AppJavaScriptProxy(this);
 		}
 
 		if (Build.VERSION.SDK_INT >= 23) {
@@ -164,9 +165,10 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 
-        //Move this to Javascript Proxy
+		//Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
+		webView.getSettings().setJavaScriptEnabled(false);
 		webView.addJavascriptInterface(proxy, "mSewaApp");
 
 		String versionName = "";
@@ -183,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 		WebSettings webSettings = webView.getSettings();
 
 		webSettings.setUserAgentString(webSettings.getUserAgentString() + " mSewa V." + versionName + "." + versionCode);
-		webSettings.setJavaScriptEnabled(true);
+		webSettings.setJavaScriptEnabled(false);
 		webSettings.setGeolocationEnabled(true);
 		webSettings.setAllowFileAccess(true);
 		webSettings.setAllowFileAccessFromFileURLs(true);
@@ -192,18 +194,20 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+		if (Build.VERSION.SDK_INT >= 21) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+			webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 			CookieManager cookieManager = CookieManager.getInstance();
 			cookieManager.setAcceptThirdPartyCookies(webView, true);
-        } else if (Build.VERSION.SDK_INT >= 19) {
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }
-        webView.setVerticalScrollBarEnabled(false);
-        webView.setWebViewClient(new CustomWebView());
+		} else if (Build.VERSION.SDK_INT >= 19) {
+			webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+		}
+		webView.setVerticalScrollBarEnabled(false);
+		webView.setWebViewClient(new CustomWebView());
+
+
 		webView.getSettings().setGeolocationDatabasePath(getFilesDir().getPath());
 		if (BuildConfig.DEBUG) {
 			webView.setWebContentsDebuggingEnabled(true);
@@ -212,25 +216,25 @@ public class MainActivity extends AppCompatActivity {
 		webView.setDownloadListener(new DownloadListener() {
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-							== PackageManager.PERMISSION_GRANTED) {
-							Log.v(TAG,"Permission is granted");
-							downloadDialog(url,userAgent,contentDisposition,mimeType);
-						} else {
-
-							Log.v(TAG,"Permission is revoked");
-							//requesting permissions.
-							ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
-						}
-					}
-					else {
-						//Code for devices below API 23 or Marshmallow
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+					if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+						== PackageManager.PERMISSION_GRANTED) {
 						Log.v(TAG,"Permission is granted");
 						downloadDialog(url,userAgent,contentDisposition,mimeType);
+					} else {
+
+						Log.v(TAG,"Permission is revoked");
+						//requesting permissions.
+						ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
 					}
 				}
+				else {
+					//Code for devices below API 23 or Marshmallow
+					Log.v(TAG,"Permission is granted");
+					downloadDialog(url,userAgent,contentDisposition,mimeType);
+				}
+			}
 		});
 
 		/*webView.setDownloadListener(new DownloadListener() {
@@ -261,11 +265,11 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 */
-        //Rendering the default URL
-        loadView(URL,false);
+		//Rendering the default URL
+		loadView(URL,false);
 
-        webView.setWebChromeClient(new WebChromeClient() {
-            // handling geolocation
+		webView.setWebChromeClient(new WebChromeClient() {
+			// handling geolocation
 
 			@Override
 			public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissions.Callback callback) {
@@ -275,15 +279,15 @@ public class MainActivity extends AppCompatActivity {
 					if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION)){
 						String message  = "Allow Rainmaker to access location details?";
 						showMessageOKCancel(message,
-								new DialogInterface.OnClickListener() {
+							new DialogInterface.OnClickListener() {
 
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										mGeoLocationCallback = callback;
-										mGeoLocationRequestOrigin = origin;
-										ActivityCompat.requestPermissions(MainActivity.this, new  String[]{Manifest.permission.ACCESS_FINE_LOCATION},MY_PERMISSIONS_REQUEST_LOCATION);
-									}
-								});
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									mGeoLocationCallback = callback;
+									mGeoLocationRequestOrigin = origin;
+									ActivityCompat.requestPermissions(MainActivity.this, new  String[]{Manifest.permission.ACCESS_FINE_LOCATION},MY_PERMISSIONS_REQUEST_LOCATION);
+								}
+							});
 					}
 					// code is duplication; to be changed!
 					else{
@@ -298,16 +302,16 @@ public class MainActivity extends AppCompatActivity {
 			}
 
 			//Handling input[type="file"] requests for android API 16+
-            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture){
-		  			asw_file_message = uploadMsg;
-                    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                    i.addCategory(Intent.CATEGORY_OPENABLE);
-                    i.setType(FILE_TYPE);
-                    startActivityForResult(Intent.createChooser(i, "File Chooser"), asw_file_req);
+			public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture){
+				asw_file_message = uploadMsg;
+				Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+				i.addCategory(Intent.CATEGORY_OPENABLE);
+				i.setType(FILE_TYPE);
+				startActivityForResult(Intent.createChooser(i, "File Chooser"), asw_file_req);
 
-            }
-            //Handling input[type="file"] requests for android API 21+
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,WebChromeClient.FileChooserParams fileChooserParams){
+			}
+			//Handling input[type="file"] requests for android API 21+
+			public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,WebChromeClient.FileChooserParams fileChooserParams){
 
 				if (asw_file_path != null) {
 					asw_file_path.onReceiveValue(null);
@@ -324,12 +328,12 @@ public class MainActivity extends AppCompatActivity {
 					showFileDialog();
 				}
 				return true;
-            }
+			}
 
 
-        });
-        if (getIntent().getData() != null) {
-            String path     = getIntent().getDataString();
+		});
+		if (getIntent().getData() != null) {
+			String path     = getIntent().getDataString();
             /*
             If you want to check or use specific directories or schemes or hosts
 
@@ -339,11 +343,11 @@ public class MainActivity extends AppCompatActivity {
             List<String> pr = data.getPathSegments();
             String param1   = pr.get(0);
             */
-            loadView(path,false);
-        }
+			loadView(path,false);
+		}
 
 
-    }
+	}
 
 
 	public void downloadDialog(final String url,final String userAgent,String contentDisposition,String mimetype)
@@ -355,37 +359,37 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //Coloring the "recent apps" tab header; doing it onResume, as an insurance
-        if (Build.VERSION.SDK_INT >= 23) {
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-            ActivityManager.TaskDescription taskDesc = null;
-            taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, getColor(R.color.colorPrimary));
-            MainActivity.this.setTaskDescription(taskDesc);
-        }
+	@Override
+	public void onResume() {
+		super.onResume();
+		//Coloring the "recent apps" tab header; doing it onResume, as an insurance
+		if (Build.VERSION.SDK_INT >= 23) {
+			Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+			ActivityManager.TaskDescription taskDesc = null;
+			taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, getColor(R.color.colorPrimary));
+			MainActivity.this.setTaskDescription(taskDesc);
+		}
 
-    }
+	}
 
-    //Setting activity layout visibility
+	//Setting activity layout visibility
 	private class CustomWebView extends WebViewClient {
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
-        }
+		}
 
-        public void onPageFinished(WebView view, String url) {
-        }
-        //For android below API 23
+		public void onPageFinished(WebView view, String url) {
+		}
+		//For android below API 23
 		@SuppressWarnings("deprecation")
 		@Override
-        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            Toast.makeText(getApplicationContext(), description, Toast.LENGTH_SHORT).show();
+		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+			Toast.makeText(getApplicationContext(), description, Toast.LENGTH_SHORT).show();
 //			loadView("file:///android_asset/error.html", false);
 		}
 
-        @Override
-        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+		@Override
+		public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 				Toast.makeText(getApplicationContext(), error.getDescription(), Toast.LENGTH_SHORT).show();
 			}
@@ -407,12 +411,12 @@ public class MainActivity extends AppCompatActivity {
 //			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(request.toString())));
 			return url_actions(view, request.getUrl().toString());
 //			return true;
-        }
+		}
 
 
 
 
-    }
+	}
 
 	//Actions based on shouldOverrideUrlLoading
 	public boolean url_actions(WebView view, String url){
@@ -420,10 +424,12 @@ public class MainActivity extends AppCompatActivity {
 		//Show toast error if not connected to the network
 		if (!DetectConnection.isInternetAvailable(MainActivity.this)) {
 			Toast.makeText(getApplicationContext(), "Please check your Network Connection!", Toast.LENGTH_SHORT).show();
+
 			//Use this in a hyperlink to redirect back to default URL :: href="refresh:android"
 		} else if (url.startsWith("refresh:")) {
 			loadView(URL, false);
-	//Use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
+
+			//Use this in a hyperlink to launch default phone dialer for specific number :: href="tel:+919876543210"
 		} else if (url.startsWith("tel:")) {
 			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
 			startActivity(intent);
@@ -442,13 +448,14 @@ public class MainActivity extends AppCompatActivity {
 			intent.addCategory(Intent.CATEGORY_HOME);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
-
-			//Use to do download support
 		}
-//		else if (url.contains("98jf4")) {
-//			loadView(url, true);
-//			//Opening external URLs in android default web browser
-//		} 
+
+		/** added a new condition  to support 3 rd party payment    **/
+		else if (getHost(url).contains(BuildConfig.gatewayHost)) {
+			return false;
+		}
+
+		//Use to do download support
 		else if (!getHost(url).equals(HOST)) {
 			try {
 				Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
@@ -466,6 +473,9 @@ public class MainActivity extends AppCompatActivity {
 				loadView(url,false);
 			}
 
+		}
+		else if(!getHost(url).contains("digit.org")){
+			return true;
 		} else {
 			returnValue  = false;
 		}
@@ -502,14 +512,26 @@ public class MainActivity extends AppCompatActivity {
 
 	//Opening URLs inside webview with request
 	void loadView(String url, Boolean tab) {
+		Intent request = getIntent(); // possibly coming from a malicious app
+		ComponentName component = request.getComponent();
+		if(  isValidComponent(component) ) {
 		if (tab) {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setData(Uri.parse(url));
 			startActivity(intent);
 		} else {
 			webView.loadUrl(url);
-		}
+		}}
 	}
+	// Validates the request component
+	private boolean isValidComponent(ComponentName component) {
+		String activityName = component.getClassName();
+		if(activityName.contains("MainActivity")){
+			return true;
+		}
+		return false;
+	}
+
 
 
 	//Checking if particular permission is given or not
@@ -568,13 +590,13 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	//Creating image file for upload
-    private File create_image() throws IOException {
-        @SuppressLint("SimpleDateFormat")
-        String file_name    = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
-        String new_name     = "file_"+file_name+"_";
-        File sd_directory   = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        return File.createTempFile(new_name, ".jpg", sd_directory);
-    }
+	private File create_image() throws IOException {
+		@SuppressLint("SimpleDateFormat")
+		String file_name    = new SimpleDateFormat("yyyy_mm_ss").format(new Date());
+		String new_name     = "file_"+file_name+"_";
+		File sd_directory   = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		return File.createTempFile(new_name, ".jpg", sd_directory);
+	}
 
 
 	@Override
@@ -600,12 +622,12 @@ public class MainActivity extends AppCompatActivity {
 						//path may be dynamic. need to be changed acc to UI
 						if(currentWebViewUrl.endsWith("/employee/all-complaints") || currentWebViewUrl.endsWith("/citizen/")){
 							showMessageOKCancel(message,
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-											finish();
-										}
-									});
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										finish();
+									}
+								});
 						}
 						else{
 							webView.goBack();
@@ -619,35 +641,35 @@ public class MainActivity extends AppCompatActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
+	@Override
+	protected void onStart() {
+		super.onStart();
+	}
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+	@Override
+	protected void onStop() {
+		super.onStop();
 //		if (proxy.smsReceiverRunning()) {
 //			proxy.stopSMSReceiver();
 //		}
-    }
+	}
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-        webView.saveState(outState);
-    }
+	@Override
+	protected void onSaveInstanceState(Bundle outState){
+		super.onSaveInstanceState(outState);
+		webView.saveState(outState);
+	}
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState){
-        super.onRestoreInstanceState(savedInstanceState);
-        webView.restoreState(savedInstanceState);
-    }
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState){
+		super.onRestoreInstanceState(savedInstanceState);
+		webView.restoreState(savedInstanceState);
+	}
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -665,14 +687,14 @@ public class MainActivity extends AppCompatActivity {
 				// Check for ACCESS_FINE_LOCATION
 				if (perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-					) {
+				) {
 					// All Permissions Granted
 					// Do nothing
 
 				} else {
 					// Permission Denied
 					Toast.makeText(MainActivity.this, "One or More Permissions are DENIED Exiting App", Toast.LENGTH_SHORT)
-							.show();
+						.show();
 					finish();
 				}
 			}
@@ -695,7 +717,7 @@ public class MainActivity extends AppCompatActivity {
 
 			case REQUEST_FILE_PERMISSIONS : {
 				if (check_permission(2) && check_permission(3)){
-				 	showFileDialog();
+					showFileDialog();
 				}
 				else{
 					Toast.makeText(getApplicationContext(), "Please give access to External Storage and Camera", Toast.LENGTH_SHORT).show();
@@ -724,10 +746,10 @@ public class MainActivity extends AppCompatActivity {
 
 				for (int i = 1; i < permissionsNeeded.size(); i++)
 					requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
-							REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+						REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
 			}
 			requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
-					REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+				REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
 			return;
 		}
 	}
@@ -735,11 +757,11 @@ public class MainActivity extends AppCompatActivity {
 
 	private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
 		new AlertDialog.Builder(MainActivity.this)
-				.setMessage(message)
-				.setPositiveButton("OK", okListener)
-				.setNegativeButton("Cancel", null)
-				.create()
-				.show();
+			.setMessage(message)
+			.setPositiveButton("OK", okListener)
+			.setNegativeButton("Cancel", null)
+			.create()
+			.show();
 	}
 
 

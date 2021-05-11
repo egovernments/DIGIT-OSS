@@ -39,16 +39,14 @@ export const searchApiCall = async (state, dispatch) => {
       events.map((item) => {
         //const status = item.eventDetails && item.eventDetails.toDate > currentDate ? item.status : "INACTIVE";
         return {
-          ["EVENTS_MESSAGE_LABEL"]: item.name,
-          ["EVENTS_POSTING_DATE_LABEL"]: epochToYmd(item.auditDetails.lastModifiedTime),
-          ["EVENTS_START_DATE_LABEL"]: item.eventDetails
-            ? epochToYmd(item.eventDetails.fromDate)
-            : "-",
-          ["EVENTS_END_DATE_LABEL"]: item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
-          ["EVENTS_POSTEDBY_LABEL"]: get(userResponse, item.auditDetails.lastModifiedBy).name,
-          ["EVENTS_STATUS_LABEL"]: item.status,
-          ["ID"]: item.id,
-          ["TENANT_ID"]: item.tenantId,
+          ["EVENTS_MESSAGE_LABEL"]: item&&item.name,
+          ["EVENTS_POSTING_DATE_LABEL"]: item&&item.auditDetails&&epochToYmd(item.auditDetails.lastModifiedTime),
+          ["EVENTS_START_DATE_LABEL"]: item&&item.eventDetails ? epochToYmd(item.eventDetails.fromDate) : "-",
+          ["EVENTS_END_DATE_LABEL"]: item&&item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
+          ["EVENTS_POSTEDBY_LABEL"]: get(userResponse, item&&item.auditDetails.lastModifiedBy,{}).name,
+          ["EVENTS_STATUS_LABEL"]: item&&item.status,
+          ["ID"]: item&&item.id,
+          ["TENANT_ID"]: item&&item.tenantId,
         };
       });
     dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));

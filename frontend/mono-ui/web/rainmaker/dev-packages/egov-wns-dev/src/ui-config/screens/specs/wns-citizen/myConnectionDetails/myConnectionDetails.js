@@ -15,8 +15,12 @@ export const fetchData = async (action, state, dispatch) => {
         {
             key: "searchType",
             value: 'CONNECTION'
-        }  
-    ]
+        },
+        {
+            key: "tenantId",
+            value: JSON.parse(getUserInfo()).permanentCity ? JSON.parse(getUserInfo()).permanentCity : JSON.parse(getUserInfo()).roles[0].tenantId
+        }
+    ];
 
     const response = await getWSMyResults(queryObject, "CONNECTION", dispatch);
     const swResponse = await getSWMyResults(queryObject, "CONNECTION", dispatch);

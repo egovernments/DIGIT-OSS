@@ -80,32 +80,44 @@ export const searchPropertyDetails = getCommonCard({
     labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_DESC"
   }),
   ulbCityContainer: getCommonContainer({
-    ulbCity: getSelectField({
-      label: {
-        labelName: "City",
-        labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY"
-      },
-      placeholder: {
-        labelName: "Select City",
-        labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY_PLACEHOLDER"
-      },
-
-      localePrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
+    ulbCity: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "AutosuggestContainer",
       jsonPath: "searchScreen.tenantId",
-      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       required: true,
       props: {
+        style: {
+          width: "100%",
+          cursor: "pointer"
+        },
+        label: {
+          labelName: "City",
+          labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY"
+        },
+        placeholder: {
+          labelName: "Select City",
+          labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY_PLACEHOLDER"
+        },
         required: true,
-        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+        jsonPath: "searchScreen.tenantId",
+        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        labelsFromLocalisation: true,
+        suggestions: [],
+        fullwidth: true,
+        isClearable: true,
+        inputLabelProps: {
+          shrink: true
+        },
+        isDisabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
+      isDisabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+      gridDefination: { xs: 12, sm: 4 }
+    },
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",

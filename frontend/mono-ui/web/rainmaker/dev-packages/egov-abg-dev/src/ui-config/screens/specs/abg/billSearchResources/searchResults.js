@@ -168,7 +168,7 @@ const getActionButton = (value, tableMeta) => {
             { key: "tenantId", value: tableMeta.rowData[10] },
             { key: "businessService", value:tableMeta.rowData[7] } 
           ];
-          download(receiptQueryString , "download" ,tableMeta.rowData[8]);
+          download(receiptQueryString , "download" ,tableMeta.rowData[8]||'consolidatedreceipt','PAYMENT');
         } else {
           const url =
             process.env.NODE_ENV === "development"

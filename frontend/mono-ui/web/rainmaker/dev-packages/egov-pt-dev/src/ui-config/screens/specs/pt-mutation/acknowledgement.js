@@ -185,7 +185,14 @@ const getHeader = (applicationNumber, moduleName) => {
         labelKey: "PT_CREATE_APPLICATION_HEADER"
       }),
     })
-  } else if (moduleName == 'ASMT') {
+  }  if (moduleName == 'PT.UPDATE') {
+    return getCommonContainer({
+      header: getCommonHeader({
+        labelName: `Application for Transfer of Ownership`,
+        labelKey: "PT_UPDATE_APPLICATION_HEADER"
+      }),
+    })
+  }else if (moduleName == 'ASMT') {
     return getCommonContainer({
       header: getCommonHeader({
         labelName: `Application for Transfer of Ownership`,

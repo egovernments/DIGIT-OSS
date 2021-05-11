@@ -88,31 +88,28 @@ const waterSubSourceChange = (reqObj) => {
 export const commonRoadCuttingChargeInformation = () => {
   return getCommonGrayCard({
     roadDetails: getCommonContainer({
-      roadType: getSelectField({
-        label: {
-          labelName: "Road Type",
-          labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName: "WS",
-          masterName: "ROADTYPE"
-        },
-        required: false,
-        sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        errorMessage: "ERR_INVALID_BILLING_PERIOD",
+      roadType: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-wns",
+        componentPath: "AutosuggestContainer",
         jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
         props: {
-          jsonPath: "applyScreen.roadCuttingInfo[0].roadType"
-        }
-      }),
+          className: "hr-generic-selectfield autocomplete-dropdown",
+          label: { labelKey: "WS_ADDN_DETAIL_ROAD_TYPE", labelName: "Road Type" },
+          placeholder: { labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER", labelName: "Select Road Type" },
+          required: false,
+          isClearable: true,
+          labelsFromLocalisation: true,
+          jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
+          sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",
+        },
+        required: false,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+      },
       enterArea: getTextField({
         label: {
           labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
@@ -143,15 +140,22 @@ export const additionDetails = getCommonCard({
 
     connectionDetails: getCommonContainer({
       connectionType: {
-        ...getSelectField({
-          label: { labelKey: "WS_SERV_DETAIL_CONN_TYPE" },
-          placeholder: { labelKey: "WS_ADDN_DETAILS_CONN_TYPE_PLACEHOLDER" },
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-wns",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "applyScreen.connectionType",
+        props: {
+          className: "hr-generic-selectfield autocomplete-dropdown",
+          label: { labelKey: "WS_SERV_DETAIL_CONN_TYPE", labelName: "Connection type" },
+          placeholder: { labelKey: "WS_ADDN_DETAILS_CONN_TYPE_PLACEHOLDER", labelName: "Select Connetion Type" },
           required: false,
+          isClearable: true,
+          labelsFromLocalisation: true,
+          jsonPath: "applyScreen.connectionType",
           sourceJsonPath: "applyScreenMdmsData.ws-services-masters.connectionType",
-          gridDefination: { xs: 12, sm: 6 },
-          errorMessage: "ERR_INVALID_BILLING_PERIOD",
-          jsonPath: "applyScreen.connectionType"
-        }),
+        },
+        required: false,
+        gridDefination: { xs: 12, sm: 6 },
         afterFieldChange: async (action, state, dispatch) => {
           let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
           console.log('connType');
@@ -180,11 +184,19 @@ export const additionDetails = getCommonCard({
           dropdownFields: [
             {
               key : 'waterSourceType',
-              callBack: waterSourceTypeChange 
+              fieldType : "autosuggest",
+              className:"applicant-details-error autocomplete-dropdown",
+              callBack: waterSourceTypeChange,
+              isRequired: false,
+              requiredValue: false
             },
             {
               key : 'waterSubSource',
-              callBack: waterSubSourceChange 
+              fieldType : "autosuggest",
+              className:"applicant-details-error autocomplete-dropdown",
+              callBack: waterSubSourceChange,
+              isRequired: false,
+              requiredValue: false
             }
           ],
           moduleName: "ws-services-masters",
@@ -193,15 +205,28 @@ export const additionDetails = getCommonCard({
           callBackEdit: updateWaterSource
         }
       },
-      pipeSize: getSelectField({
-        label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE" },
-        placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
-        gridDefination: { xs: 12, sm: 6 },
-        sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
+      pipeSize: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-wns",
+        componentPath: "AutosuggestContainer",
         jsonPath: "applyScreen.pipeSize",
-        pattern: /^[0-9]*$/i,
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
-      }),
+        props: {
+          className: "hr-generic-selectfield autocomplete-dropdown",
+          label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE", labelName: "Pipe Size" },
+          placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER", labelName: "Select Pipe Size" },
+          required: false,
+          isClearable: true,
+          labelsFromLocalisation: true,
+          jsonPath: "applyScreen.pipeSize",
+          sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
+        },
+        required: false,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+      },
 
       noOfWaterClosets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
@@ -398,7 +423,7 @@ export const additionDetails = getCommonCard({
           xs: 12,
           sm: 6
         },
-        required: false,
+        required: true,
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.dateEffectiveFrom",

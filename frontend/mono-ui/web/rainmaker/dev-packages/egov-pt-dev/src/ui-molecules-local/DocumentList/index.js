@@ -181,10 +181,10 @@ class DocumentList extends Component {
           }
         });
     });
-    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    prepareFinalObject("ptmDocumentsUploadRedux", documentsUploadRedux);
     prepareFinalObject(
-      "documentsUploadRedux.2.dropdown.value",
-      `${get(preparedFinalObject, 'documentsUploadRedux.2.documentCode', '')}.${get(preparedFinalObject, 'Property.additionalDetails.reasonForTransfer', '')}`
+      "ptmDocumentsUploadRedux.2.dropdown.value",
+      `${get(preparedFinalObject, 'ptmDocumentsUploadRedux.2.documentCode', '')}.${get(preparedFinalObject, 'Property.additionalDetails.reasonForTransfer', '')}`
     )
     if (isEdit && get(preparedFinalObject, 'DocumentsPrefill', false)) {
       this.prefillDocuments();
@@ -224,7 +224,7 @@ class DocumentList extends Component {
         }
       })
     })
-    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    prepareFinalObject("ptmDocumentsUploadRedux", documentsUploadRedux);
     prepareFinalObject("DocumentsPrefill", false);
   }
 
@@ -237,7 +237,7 @@ class DocumentList extends Component {
     const { prepareFinalObject, documentsUploadRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
-    prepareFinalObject("documentsUploadRedux", {
+    prepareFinalObject("ptmDocumentsUploadRedux", {
       ...documentsUploadRedux,
       [uploadedDocIndex]: {
         ...documentsUploadRedux[uploadedDocIndex],
@@ -255,7 +255,7 @@ class DocumentList extends Component {
   removeDocument = remDocIndex => {
     const { prepareFinalObject } = this.props;
     prepareFinalObject(
-      `documentsUploadRedux.${remDocIndex}.documents`,
+      `ptmDocumentsUploadRedux.${remDocIndex}.documents`,
       undefined
     );
     this.forceUpdate();
@@ -263,7 +263,7 @@ class DocumentList extends Component {
 
   handleChange = (key, event) => {
     const { documentsUploadRedux, prepareFinalObject } = this.props;
-    prepareFinalObject(`documentsUploadRedux`, {
+    prepareFinalObject(`ptmDocumentsUploadRedux`, {
       ...documentsUploadRedux,
       [key]: {
         ...documentsUploadRedux[key],
@@ -274,7 +274,7 @@ class DocumentList extends Component {
 
   getUploadCard = (card, key) => {
     const { classes, documentsUploadRedux } = this.props;
-    let jsonPath = `documentsUploadRedux[${key}].dropdown.value`;
+    let jsonPath = `ptmDocumentsUploadRedux[${key}].dropdown.value`;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
@@ -404,9 +404,9 @@ DocumentList.propTypes = {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { moduleName, preparedFinalObject } = screenConfiguration;
-  const { DocumentsPrefill = false, documentsUploadRedux = {} } = preparedFinalObject;
+  const { DocumentsPrefill = false, ptmDocumentsUploadRedux = {} } = preparedFinalObject;
 
-  return { documentsUploadRedux, preparedFinalObject, moduleName, DocumentsPrefill };
+  return { documentsUploadRedux:ptmDocumentsUploadRedux, preparedFinalObject, moduleName, DocumentsPrefill };
 };
 
 const mapDispatchToProps = dispatch => {

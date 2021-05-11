@@ -61,37 +61,34 @@ export const citizenApplication = getCommonCard({
         labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
     }),
     cityPropertyAndMobNumContainer: getCommonContainer({
-        city: getSelectField({
-            label: {
-                labelKey: "WS_PROP_DETAIL_CITY"
-            },
+        city: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-wns",
+            componentPath: "AutosuggestContainer",
+            jsonPath: "searchScreen.tenantId",
             props: {
-                label: {
-                  labelKey: "WS_PROP_DETAIL_CITY"
-                },
-                placeholder: {
-                  labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
-                },
-                localePrefix: {
-                  moduleName: "TENANT",
-                  masterName: "TENANTS"
-                }
-            },
-            placeholder: {
-                labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
-            },
-            labelPrefix: {
+              className: "hr-generic-selectfield autocomplete-dropdown",
+              label: {
+                labelKey: "WS_PROP_DETAIL_CITY",
+                labelName: "City"
+              },
+              placeholder: {
+                labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER",
+                labelName: "Select City"
+              },
+              localePrefix: {
                 moduleName: "TENANT",
                 masterName: "TENANTS"
+              },
+              required: true,
+              isClearable: true,
+              labelsFromLocalisation: true,
+              jsonPath: "searchScreen.tenantId",
+              sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
             },
-            sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-            jsonPath: "searchScreen.tenantId",//db sake
             required: true,
-            gridDefination: {
-                xs: 12,
-                sm: 4
-            },
-        }),
+            gridDefination: { xs: 12, sm: 4 },
+          },
         propertyid: getTextField({
             label: {
                 labelKey: "WS_PROPERTY_ID_LABEL"

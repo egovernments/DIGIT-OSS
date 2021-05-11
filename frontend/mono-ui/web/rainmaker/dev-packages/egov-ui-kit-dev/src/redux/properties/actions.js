@@ -9,6 +9,7 @@ import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/form
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import orderby from "lodash/orderBy";
+import { downloadConReceipt } from "egov-common/ui-utils/commons";
 import * as actionTypes from "./actionTypes";
 
 const reset_property_reset = () => {
@@ -684,7 +685,8 @@ export const getFileUrlFromAPI = async fileStoreId => {
   }
 };
 
-export const downloadReceipt = (receiptQueryString) => {
+/* Download Receipt using PDF service */
+/* export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
     if (receiptQueryString) {
       // dispatch(downloadReceiptPending());
@@ -722,7 +724,22 @@ export const downloadReceipt = (receiptQueryString) => {
       }
     }
   }
+} */
+
+/* Download Receipt using EGOV-PDF service */
+export const downloadReceipt = (receiptQueryString) => {
+  return async (dispatch) => {
+    if (receiptQueryString) {
+      // dispatch(downloadReceiptPending());
+      try {
+        downloadConReceipt(receiptQueryString,'consolidatedreceipt',"PAYMENT",`PTRECEIPT-consolidated.pdf` )
+      } catch (error) {
+        dispatch(downloadReceiptError(error.message));
+      }
+    }
+  }
 }
+
 
 const download =(Payments,tenant)=>{
   const queryStr = [

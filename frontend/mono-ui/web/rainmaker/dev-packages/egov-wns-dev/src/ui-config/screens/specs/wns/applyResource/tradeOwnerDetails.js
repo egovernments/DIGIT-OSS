@@ -1,22 +1,16 @@
 import {
   getCommonCard,
-  getCommonGrayCard,
-  getCommonTitle,
-  getCommonSubHeader,
-  getTextField,
-  getSelectField,
-  getCommonContainer,
+  getCommonContainer, getCommonGrayCard,
+  getCommonSubHeader, getCommonTitle,
   getDateField,
-  getPattern
+  getPattern, getSelectField, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
 import {
   getDetailsForOwner,
   getTodaysDateInYMD
 } from "../../utils";
-import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getRadioButton } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 export const getOwnerMobNoField = getTextField({
   label: {
@@ -71,7 +65,7 @@ export const getOwnerGenderField = getSelectField({
       label: "COMMON_GENDER_FEMALE"
     },
     {
-      code: "OTHERS",
+      code: "TRANSGENDER",
       label: "COMMON_GENDER_TRANSGENDER"
     }
   ]
@@ -151,34 +145,34 @@ export const getRelationshipRadioButton = {
       key: "TL_COMMON_RELATIONSHIP_LABEL"
 
     },
-//     {
-//       label: "Husband",
-//       labelKey: "COMMON_RELATION_HUSBAND",
-//       value: "HUSBAND"
-//     }
-//   ],
-//   "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-//   ""
-// );
+    //     {
+    //       label: "Husband",
+    //       labelKey: "COMMON_RELATION_HUSBAND",
+    //       value: "HUSBAND"
+    //     }
+    //   ],
+    //   "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+    //   ""
+    // );
 
-buttons: [
-  {
-    labelName: "Father",
-    labelKey: "COMMON_RELATION_FATHER",
-    value: "FATHER"
+    buttons: [
+      {
+        labelName: "Father",
+        labelKey: "COMMON_RELATION_FATHER",
+        value: "FATHER"
+      },
+      {
+        label: "Husband",
+        labelKey: "COMMON_RELATION_HUSBAND",
+        value: "HUSBAND"
+      }
+    ],
+    jsonPath:
+      "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
+    required: true
   },
-  {
-    label: "Husband",
-    labelKey: "COMMON_RELATION_HUSBAND",
-    value: "HUSBAND"
-  }
-],
-jsonPath:
-  "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
-required: true
-},
-required: true,
-type: "array"
+  required: true,
+  type: "array"
 };
 
 export const ownerInfoInstitutional = {
@@ -436,8 +430,7 @@ export const tradeOwnerDetails = getCommonCard({
               "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed",
               get(
                 state.screenConfiguration.preparedFinalObject,
-                `applyScreenMdmsData.common-masters.OwnerShipCategory.${
-                  action.value
+                `applyScreenMdmsData.common-masters.OwnerShipCategory.${action.value
                 }`,
                 []
               )

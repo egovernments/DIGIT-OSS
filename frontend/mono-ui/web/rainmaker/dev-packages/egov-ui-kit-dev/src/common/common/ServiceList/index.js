@@ -15,6 +15,11 @@ const styles = (theme) => ({
     width: "10%",
     padding: "1%"
   },
+  webRoot1: {
+    flexGrow: "unset",
+    width: "11em",
+    padding: "1%"
+  },
   mobileRoot: {
     flexGrow: 1,
     padding: '1%',
@@ -76,7 +81,7 @@ class ServiceList extends React.Component {
       <Grid container>
         <Hidden smUp>
           {actionList.map((service) => {
-           service.leftIcon= service.name== "digit-ui FSM"? "custom:localShipping":service.leftIcon;
+            service.leftIcon = service.name == "digit-ui FSM" ? "custom:localShipping" : service.leftIcon;
             const translatedLabel = service.displayName.toUpperCase().replace(/[.:\-\s]/g, "_");
 
             return (
@@ -108,7 +113,7 @@ class ServiceList extends React.Component {
           {actionList.map((service) => {
             const translatedLabel = service.displayName.toUpperCase().replace(/[.:\-\s]/g, "_");
             return (
-              <Grid className={classes.webRoot} item align="center">
+              <Grid className={actionList.length > 10 ? classes.webRoot1 : classes.webRoot} item align="center">
                 <Card
                   className={`${classes.paper} service-module-style`}
                   onClick={(e) => {

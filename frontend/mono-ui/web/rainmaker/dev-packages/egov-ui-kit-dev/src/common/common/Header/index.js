@@ -60,6 +60,11 @@ class Header extends Component {
     this.props.history.goBack();
   };
 
+  _handleBackToHome= () => {
+    this.props.history.push('/');
+  };
+
+
   _logout = () => {
     this._closeLogoutDialog();
     this.props.logout();
@@ -104,9 +109,10 @@ class Header extends Component {
       </div>
     );
 
-    const onLeftIconButtonClick = isHomeScreen ? this._handleToggleMenu : hideBackButton ? null : this._handleBackNavigation;
+    let  onLeftIconButtonClick = isHomeScreen ? this._handleToggleMenu : hideBackButton ? null : this._handleBackNavigation;
     const onToolBarIconClick = this._handleToggleMenu;
-
+    let pathname=window.location.pathname;
+    onLeftIconButtonClick= pathname&&(pathname.includes('/property-tax')||pathname.includes('/home'))?this._handleBackToHome:onLeftIconButtonClick;
     return { style, iconElementLeft, onLeftIconButtonClick, onToolBarIconClick, isHomeScreen };
   };
 

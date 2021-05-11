@@ -224,6 +224,8 @@ class InboxData extends React.Component {
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
     if (row[0].subtext === "PT.CREATE" ) {
       queryParams += '&type=property';
+    } else if (row[0].subtext === "PT.UPDATE" ) {
+      queryParams += '&type=updateProperty';
     } 
     else if (row[0].subtext === "PT.LEGACY") {
       queryParams += '&type=legacy';

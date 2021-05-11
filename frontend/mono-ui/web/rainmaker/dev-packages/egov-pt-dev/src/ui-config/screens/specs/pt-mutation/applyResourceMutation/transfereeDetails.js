@@ -73,7 +73,7 @@ const commonApplicantInformation = () => {
             {
               labelName: "Transgender",
               labelKey: "PT_MUTATION_TRANSFEREE_GENDER_TRANSGENDER_RADIOBUTTON",
-              value: "OTHERS"
+              value: "TRANSGENDER"
             }
           ],
           jsonPath:
@@ -151,37 +151,79 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error"
         }
       }),
-      relationshipWithGuardian: getSelectField({
-        label: {
-          labelName: "Relationship with Guardian",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Relationship with Guardian",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL_PLACEHOLDER"
+      relationshipWithGuardian: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
+        props: {
+          label: {
+            labelName: "Relationship with Guardian",
+            labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Relationship with Guardian",
+            labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL_PLACEHOLDER"
+          },
+          required: true,
+          localePrefix: {
+            moduleName: "common-masters",
+            masterName: "OwnerType"
+          },
+          isClearable: true,
+          labelsFromLocalisation: true,
+          className: "autocomplete-dropdown",
+          jsonPath:
+          "Property.ownersTemp[0].relationship",
+          data: [
+            {
+              code: "FATHER"
+            },
+            {
+              code: "HUSBAND"
+            }
+          ],
+          // sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
         },
         required: true,
         jsonPath:
-          "Property.ownersTemp[0].relationship",
-        data: [
-          {
-            code: "FATHER"
-          },
-          {
-            code: "HUSBAND"
-          }
-        ],
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerType"
-        },
-        //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+        "Property.ownersTemp[0].relationship",
+        // sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         }
-      }),
+      },
+      //   label: {
+      //     labelName: "Relationship with Guardian",
+      //     labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Select Relationship with Guardian",
+      //     labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL_PLACEHOLDER"
+      //   },
+      //   required: true,
+      //   jsonPath:
+      //     "Property.ownersTemp[0].relationship",
+      //   data: [
+      //     {
+      //       code: "FATHER"
+      //     },
+      //     {
+      //       code: "HUSBAND"
+      //     }
+      //   ],
+      //   localePrefix: {
+      //     moduleName: "common-masters",
+      //     masterName: "OwnerType"
+      //   },
+      //   //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   }
+      // }),
       applicantEmail: getTextField({
         label: {
           labelName: "Email",

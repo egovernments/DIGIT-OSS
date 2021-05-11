@@ -106,7 +106,7 @@ export const propertyAssemblySummary = getCommonGrayCard({
           moduleName: "COMMON",
           masterName: "PROPSUBUSGTYPE"
         },
-        jsonPath: "Property.units[0].usageCategory",
+        jsonPath: "Property.additionalDetails.subUsageCategory",
         // callBack: checkValueForNA
         callBack: value => {
           let state = store.getState();

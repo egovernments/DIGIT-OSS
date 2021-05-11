@@ -186,10 +186,10 @@ export const updatePFOforSearchResults = async (
       structureType:structureType,
       structureSubType:get(payload,'Licenses[0].tradeLicenseDetail.structureType','')||'none'
     }]
-    dispatch(
-      prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
-      dispatch(
-        prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType.${structureType}`,[])));
+    // dispatch(
+    //   prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
+    //   dispatch(
+    //     prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType.${structureType}`,[])));
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
@@ -330,7 +330,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     //------ removing null from document array ------
     let documentArray = compact(get(queryObject[0], "tradeLicenseDetail.applicationDocuments"));
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
-    documents=documents.filter(item=> item.fileUrl&&item.fileName);
+    documents=documents.filter(item=> item.fileUrl&&item.fileName).map(item=>{
+      delete item.fileUrl;
+      return{...item}});
     set(queryObject[0], "tradeLicenseDetail.applicationDocuments", documents);
     //-----------------------------------------------
     // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");

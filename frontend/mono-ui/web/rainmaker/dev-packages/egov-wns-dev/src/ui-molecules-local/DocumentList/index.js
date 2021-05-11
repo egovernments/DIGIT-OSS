@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
+import { AutosuggestContainer } from "../../ui-containers-local";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -258,7 +259,7 @@ class DocumentList extends Component {
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropdown && (
-            <TextFieldContainer
+            <AutosuggestContainer
               select={true}
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
@@ -268,6 +269,10 @@ class DocumentList extends Component {
               required={(card.required)?true:false}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
+              className= "autocomplete-dropdown"
+              labelsFromLocalisation= {true}
+              isDisabled={card.disabled ? card.disabled : false}
+              isClearable={true}
             />
           )}
         </Grid>
@@ -295,6 +300,7 @@ class DocumentList extends Component {
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
             buttonLabel={this.props.buttonLabel}
+            disabled={card.disabled ? card.disabled : false}
           />
         </Grid>
       </Grid>

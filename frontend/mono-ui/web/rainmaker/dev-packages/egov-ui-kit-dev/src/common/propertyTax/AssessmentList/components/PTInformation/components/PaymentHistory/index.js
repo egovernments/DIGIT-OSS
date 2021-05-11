@@ -8,7 +8,7 @@ import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
 import { getFullRow } from "../AssessmentHistory";
 import { downloadReceipt } from "egov-ui-kit/redux/properties/actions";
-
+import get from "lodash/get";
 class PaymentHistory extends Component {
     constructor(props) {
         super(props);
@@ -59,9 +59,9 @@ class PaymentHistory extends Component {
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
                                     const receiptQueryString= [
-                                            { key: "receiptNumbers", value: payment.paymentDetails[0].receiptNumber },
+                                            { key: "consumerCode", value: get(payment,'paymentDetails[0].bill.consumerCode') },
                                             { key: "tenantId", value: payment.paymentDetails[0].tenantId },
-                                            { key: "businessService", value: 'PT' }
+                                            { key: "bussinessService", value: 'PT' }
                                           ]
                                     downloadReceipt(receiptQueryString)
                                     // lastElement.onClick();

@@ -23,7 +23,7 @@ storiesOf("TimePicker", module)
       <br />
       <div>
         For more props information please visit{" "}
-        <a href="http://www.material-ui.com/#/components/time-picker" target="_blank">
+        <a href="http://www.material-ui.com/#/components/time-picker" target="_blank" rel="noopener noreferrer">
           Time picker
         </a>
       </div>

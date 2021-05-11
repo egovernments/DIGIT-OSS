@@ -539,6 +539,12 @@ const screenConfig = {
     );
     dispatch(
       prepareFinalObject(
+        "ptmDocumentsUploadRedux",
+        {}
+      )
+    );
+    dispatch(
+      prepareFinalObject(
         "Property.additionalDetails",
         {}
       )

@@ -52,3 +52,15 @@
     width: 100% !important;
     margin: 8px 0px !important; }
   
+    .autocomplete-dropdown {
+      min-width: 80% !important;
+      position: absolute !important;
+      z-index: 1900 !important;
+      max-height: 150px !important;
+      overflow: hidden !important;
+    }
+    .autocomplete-dropdown div {
+      min-width: 80% !important;
+      max-height: 150px !important;
+      overflow: auto !important;
+    }

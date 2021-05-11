@@ -3,7 +3,7 @@ import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { disableField, enableField, getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
-import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantIdCommon, getUserInfo, getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
@@ -96,9 +96,9 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
                 let queryObject1 = [];
                 uuids = uuids.substring(0, uuids.length - 1);
                 if (process.env.REACT_APP_NAME === "Citizen") {
-                    queryObject1 = [{ key: "uuids", value: uuids }];
+                    queryObject1 = [{ key: "propertyIds", value: uuids }];
                 } else {
-                    queryObject1 = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "uuids", value: uuids }];
+                    queryObject1 = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "propertyIds", value: uuids }];
                 }
 
                 if(locality) {
@@ -111,7 +111,7 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
                     let payload = await getPropertyResultsWODispatch(queryObject1);
                     if (payload.Properties.length > 0) {
                         for (var j = 0; j < payload.Properties.length; j++) {
-                            propertyArr[payload.Properties[j].id] = payload.Properties[j]
+                            propertyArr[payload.Properties[j].propertyId] = payload.Properties[j]
                         }
                     }
                 }
@@ -135,6 +135,13 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
             }
         }
     }
+    if(get(waterConnection[0], "property.owners")) {
+        waterConnection[0].property.owners = waterConnection[0].property.owners.filter(owner => owner.status == "ACTIVE");
+    }
+    if(get(waterConnection[0], "property.units") == "NA" && get(waterConnection[0], "property.additionalDetails") && get(waterConnection[0], "property.additionalDetails.subUsageCategory")) {
+        waterConnection[0].property.units = [];
+        waterConnection[0].property.units.push({usageCategory: get(waterConnection[0], "property.additionalDetails.subUsageCategory")})
+      } 
     return waterConnection;
 }
 
@@ -587,7 +594,7 @@ const parserFunction = (state) => {
         noOfWaterClosets: parseInt(queryObject.noOfWaterClosets),
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
-        propertyId: (queryObject.property) ? queryObject.property.id : null,
+        propertyId: (queryObject.property) ? queryObject.property.propertyId : null,
         additionalDetails: {
             initialMeterReading: (
                 queryObject.additionalDetails !== undefined &&
@@ -1812,6 +1819,25 @@ export const waterEstimateCalculation = async (queryObject, dispatch) => {
 
 };
 
+// api call to calculate water estimate
+export const waterSewerageBillingSearch = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "billing-service/bill/v2/_search",
+            "",
+            queryObject,
+        );
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
+
 // api call to calculate sewerage estimate
 export const swEstimateCalculation = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
@@ -2204,3 +2230,35 @@ export const getOpenSearchResultsForSewerage = async (queryObject, requestBody, 
         console.log(error)
     }
 };
+
+export const transformById = (payload, id) => {
+    return (
+      payload &&
+      payload.reduce((result, item) => {
+        result[item[id]] = {
+          ...item
+        };
+  
+        return result;
+      }, {})
+    );
+  };
+
+export const getLocaleLabels = (label, labelKey, localizationLabels) => {
+    if (!localizationLabels)
+      localizationLabels = transformById(
+        JSON.parse(getLocalization(`localization_${getLocale()}`)),
+        "code"
+      );
+    if(labelKey) {label = labelKey}
+    if (label) {
+      let translatedLabel = getTranslatedLabel(label, localizationLabels);
+      if (!translatedLabel || label === translatedLabel) {
+        return translatedLabel;
+      } else {
+        return translatedLabel;
+      }
+    } else {
+      return label;
+    }
+  };

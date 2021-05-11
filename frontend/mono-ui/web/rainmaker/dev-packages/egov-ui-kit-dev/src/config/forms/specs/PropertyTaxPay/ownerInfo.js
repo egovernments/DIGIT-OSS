@@ -3,6 +3,8 @@ import { setDependentFields } from "./utils/enableDependentFields";
 import get from "lodash/get";
 import set from "lodash/set";
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import { getPattern
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const formConfig = {
   name: "ownerInfo",
@@ -15,7 +17,7 @@ const formConfig = {
       hintText: "PT_FORM3_OWNER_NAME_PLACEHOLDER",
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,_:;“”‘’]{1,64}$/i,
+      pattern:getPattern("Name") ,
       errorMessage: "PT_NAME_ERROR_MESSAGE",
     },
     ownerMobile: {
@@ -25,7 +27,7 @@ const formConfig = {
       floatingLabelText: "PT_FORM3_MOBILE_NO",
       hintText: "PT_FORM3_MOBILE_NO_PLACEHOLDER",
       required: true,
-      pattern: /^([0]|((\+\d{1,2}[-]{0,1})))?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i,
+      pattern: getPattern("MobileNo") ,
       errorMessage: "PT_MOBILE_NUMBER_ERROR_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     },
@@ -35,7 +37,7 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME",
       hintText: "PT_FORM3_GUARDIAN_PLACEHOLDER",
-      pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,_:;“”‘’]{1,64}$/i,
+      pattern:getPattern("Name") ,
       required: true,
       errorMessage: "PT_NAME_ERROR_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
@@ -48,7 +50,7 @@ const formConfig = {
       hintText: "PT_FORM3_EMAIL_ID_PLACEHOLDER",
       errorMessage: "PT_EMAIL_ID_ERROR_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/,
+      pattern: getPattern("Email"),
     },
     ownerAddress: {
       id: "ownerAddress",
@@ -57,11 +59,12 @@ const formConfig = {
       floatingLabelText: "PT_FORM3_CORRESPONDENCE_ADDRESS",
       hintText: "PT_FORM3_CORRESPONDENCE_ADDRESS_PLACEHOLDER",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,256}$/,
+      pattern: getPattern("Address"),
       errorMessage: "PT_ADDRESS_ERROR_MESSAGE",
     },
     ownerRelationship: {
       id: "ownerRelationship",
+      required: true,
       jsonPath: "Properties[0].propertyDetails[0].owners[0].relationship",
       type: "AutocompleteDropdown",
       localePrefix: "PT_RELATION",

@@ -70,7 +70,7 @@ const searchApiCall = async (state, dispatch) => {
       let propertyData = response.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners.map(owner=>owner.name).join(",") || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners.filter(owner => owner.status == "ACTIVE").map(owner=>owner.name).join(",") || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: (item.status === 'ACTIVE')?"SELECT":item.status,

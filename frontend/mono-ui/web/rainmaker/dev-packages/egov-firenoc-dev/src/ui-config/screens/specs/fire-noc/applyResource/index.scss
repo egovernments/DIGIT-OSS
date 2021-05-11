@@ -27,3 +27,6 @@
 #custom-containers-propertyMohalla{div{p{
   font-size: 14px;
 }}}
+#material-ui-nocDetailsContainer > div:nth-child(2) > div > div{
+  visibility: visible !important;
+}

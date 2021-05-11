@@ -153,7 +153,8 @@ export const edcrHttpRequest = async (
 ) => {
   store.dispatch(toggleSpinner());
   let apiError = "No Record Found";
-
+  // const authToken = getAccessToken();
+  // headers = { "Content-Type": "application/json", "auth-token": authToken }
   if (headers)
     edcrInstance.defaults = Object.assign(edcrInstance.defaults, {
       headers

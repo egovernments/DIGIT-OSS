@@ -11,7 +11,8 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateNocApplication,
-  prepareDocumentsUploadData
+  prepareDocumentsUploadData,
+  setDocsForEditFlow
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -38,7 +39,9 @@ const moveToReview = (state, dispatch) => {
 
   for (let i = 0; i < documentsFormat.length; i++) {
     let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
+    // let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
+    let isDocumentTypeRequired =false;
+
 
     let documents = get(documentsFormat[i], "documents");
     if (isDocumentRequired) {
@@ -179,6 +182,8 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
+ setDocsForEditFlow(state, dispatch) 
+
   }
 
   if (activeStep === 2) {
@@ -260,7 +265,68 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
-    moveToReview(state, dispatch);
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    if (getQueryArg(window.location.href, "action") === "edit") {
+
+
+
+let ownerDocs=[];
+let buildDocs=[];
+let docs=[];
+let docsForEdit={}
+ const documentsUploadRedux = get(state,
+  "screenConfiguration.preparedFinalObject.documentsUploadRedux",
+  {}
+);
+Object.keys(documentsUploadRedux).map((key,index)=>{
+if(documentsUploadRedux[key].documents && Array.isArray(documentsUploadRedux[key].documents) && documentsUploadRedux[key].documents.length>0){
+let documentObj={ fileName:documentsUploadRedux[key].documents[0].fileName || `Document - ${index + 1}`,
+
+fileUrl:documentsUploadRedux[key].documents[0].fileUrl,
+documentType:documentsUploadRedux[key].documents[0].documentType,
+fileStoreId:documentsUploadRedux[key].documents[0].fileStoreId,
+tenantId:tenantId};
+  if(documentsUploadRedux[key].documentType=="OWNER"){
+
+    ownerDocs.push({...documentObj})
+    docsForEdit[documentsUploadRedux[key].documentCode]={...documentObj};
+  }else if(documentsUploadRedux[key].documentType=="BUILDING"){
+    let key1 =documentsUploadRedux[key].documentSubCode?documentsUploadRedux[key].documentSubCode:documentsUploadRedux[key].documentCode
+    buildDocs.push({...documentObj,documentType:key1})
+    docsForEdit[key1]={...documentObj};
+  }
+  docs.push({...documentObj})
+
+}
+})
+dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.documents", [...ownerDocs]));
+dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.buildings[0].applicationDocuments", [...buildDocs]));
+dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.ownerAuditionalDetail", [...ownerDocs]));
+dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documents", [...docs]));
+
+
+
+
+      //EDIT FLOW
+      const businessId = getQueryArg(
+        window.location.href,
+        "applicationNumber"
+      );
+   
+      dispatch(
+        setRoute(
+          `/fire-noc/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
+        )
+      );
+      const updateMessage = {
+        labelName: "Rates will be updated on submission",
+        labelKey: "TL_COMMON_EDIT_UPDATE_MESSAGE"
+      };
+      dispatch(toggleSnackbar(true, updateMessage, "info"));
+    }
+    else {
+      moveToReview(state, dispatch);
+    }
   }
 
   if (activeStep !== 3) {

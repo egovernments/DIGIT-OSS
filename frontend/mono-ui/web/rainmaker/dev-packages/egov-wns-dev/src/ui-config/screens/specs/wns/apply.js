@@ -240,6 +240,37 @@ const showHideFieldModifyConnection = (action) => {
   }
 }
 
+const showHideFiedsPendingForConnectionActivation = (action, state, dispatch) => {
+  let applicationStatus = get(state.screenConfiguration.preparedFinalObject, "applyScreen.applicationStatus", "");
+  if(applicationStatus === "PENDING_FOR_CONNECTION_ACTIVATION") {
+
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.props.disabled", true);
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.props.isDisabled", true);
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props.disabled", true);
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.disabled", true);
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets.props.disabled", true);
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.props.disabled", true);
+      set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.hasAddItem", false);
+      set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.scheama.children.cardContent.children.roadDetails.children.enterArea.props.disabled", true);
+      set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.scheama.children.cardContent.children.roadDetails.children.roadType.props.isDisabled", true);
+
+  } else {
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.props.disabled", false);
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.props.disabled", false);
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props.disabled", false);
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.disabled", false);
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets.props.disabled", false);
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.props.disabled", false);
+    set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.hasAddItem", true);
+    set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.scheama.children.cardContent.children.roadDetails.children.enterArea.props.disabled", false);
+    set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.scheama.children.cardContent.children.roadDetails.children.roadType.props.disabled", false);
+  }
+  if(getQueryArg(window.location.href, "action")=='edit'){
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props.disabled", true);
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.disabled", true);
+  }
+}      
+
 export const getData = async (action, state, dispatch) => {
   let applicationNo = getQueryArg(window.location.href, "applicationNumber");
   const connectionNo = getQueryArg(window.location.href, "connectionNumber");
@@ -304,7 +335,7 @@ export const getData = async (action, state, dispatch) => {
       // For Modify connection details
       if (isModifyMode() && !isModifyModeAction()) {
         // this delete for initiate modify connection 
-        delete combinedArray[0].id; combinedArray[0].documents = [];
+        if (!window.location.href.includes("mode=MODIFY&action=edit")) delete combinedArray[0].id; combinedArray[0].documents = [];
       }
       if (isModifyMode() && isModifyModeAction()) {
         // ModifyEdit should not call create.
@@ -457,6 +488,14 @@ export const getData = async (action, state, dispatch) => {
       }
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       await prefillDocuments(docs, "displayDocs", dispatch);
+      showHideFiedsPendingForConnectionActivation(action, state, dispatch);
+      let applicationStatus = get(state.screenConfiguration.preparedFinalObject, "applyScreen.applicationStatus", "");
+      if(applicationStatus === "PENDING_FOR_FIELD_INSPECTION") {
+        dispatch( handleField( "apply", "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.scheama.children.cardContent.children.roadDetails.children.enterArea", "required", true ) ); 
+        dispatch( handleField( "apply", "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.scheama.children.cardContent.children.roadDetails.children.enterArea", "props.required", true ) );
+        dispatch( handleField( "apply", "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.scheama.children.cardContent.children.roadDetails.children.roadType", "required", true ) ); 
+        dispatch( handleField( "apply", "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.scheama.children.cardContent.children.roadDetails.children.roadType", "props.required", true ) );
+      }
     }
   } else if (propertyID) {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
@@ -476,6 +515,13 @@ const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
   if (!isActiveProperty(propertyObj)) {
     dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyObj.status}`, labelName: `Property Status is ${propertyObj.status}` }, "warning"));
     showHideFieldsFirstStep(dispatch, propertyObj.propertyId, false);
+  }
+  if(propertyObj && propertyObj.owners && propertyObj.owners.length > 0) {
+    propertyObj.owners = propertyObj.owners.filter(owner => owner.status == "ACTIVE");
+  }
+  if(propertyObj.units == "NA" && propertyObj.additionalDetails && propertyObj.additionalDetails.subUsageCategory) {
+    propertyObj.units = [];
+    propertyObj.units.push({usageCategory: propertyObj.additionalDetails.subUsageCategory})
   }
   dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
   dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
@@ -556,6 +602,14 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    
+    // dispatch(prepareFinalObject("applyScreen.water", true));
+    // dispatch(prepareFinalObject("applyScreen.sewerage", false));
+    const propertyId = getQueryArg(window.location.href, "propertyId");
+
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
+    if (getQueryArg(window.location.href, "edited") != "true") {
     pageReset(dispatch);
     getData(action, state, dispatch).then(() => {
       let ownershipCategory = get(
@@ -572,10 +626,6 @@ const screenConfig = {
     });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
-    const propertyId = getQueryArg(window.location.href, "propertyId");
-
-    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-
     if (propertyId) {
       togglePropertyFeilds(action, true);
       if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
@@ -614,6 +664,31 @@ const screenConfig = {
         toggleSewerageFeilds(action, false);
       }
     }
+  } else {
+    togglePropertyFeilds(action, true);
+      if (applicationNumber.includes("SW")) {
+        dispatch(prepareFinalObject("applyScreen.water", false));
+        dispatch(prepareFinalObject("applyScreen.sewerage", true));
+        toggleWaterFeilds(action, false);
+        toggleSewerageFeilds(action, true);
+      } else {
+        dispatch(prepareFinalObject("applyScreen.water", true));
+        dispatch(prepareFinalObject("applyScreen.sewerage", false));
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, false);
+      }
+      set(
+        action,
+        `screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.visible`,
+        true
+      );
+      set(
+        action,
+        `screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.props.number`,
+        applicationNumber
+      );
+      showHideFiedsPendingForConnectionActivation(action, state, dispatch);
+  }
     if (isModifyMode()) {
       triggerModificationsDisplay(action, true);
     } else {
@@ -649,6 +724,13 @@ let mode = getQueryArg(window.location.href, "mode");
     set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.props.mode",isModifyMode() && !isModifyModeAction());
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.url", modifyLink)
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.isMode", isMode)
+    if(getQueryArg(window.location.href, "action")=='edit'){
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props.disabled", true);
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.disabled", true);
+    }else{
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.props.disabled", false);
+      set(action, "screenConfig.components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getCheckboxContainer.disabled", false);
+    }
     return action;
   },
 

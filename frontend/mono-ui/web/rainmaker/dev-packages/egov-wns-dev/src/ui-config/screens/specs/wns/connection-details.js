@@ -117,7 +117,8 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
     { key: "tenantId", value: tenantId },
     { key: "connectionNumber", value: connectionNumber },
   ];
-  if (service === serviceConst.SEWERAGE) {
+  let serviceUrl = getQueryArg(window.location.href, "service");
+  if (serviceUrl === serviceConst.SEWERAGE) {
     let payloadData = await getSearchResultsForSewerage(
       queryObject,
       dispatch,
@@ -136,7 +137,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         payloadData.SewerageConnections
       );
       let propTenantId = sewerageConnection.property.tenantId.split(".")[0];
-      sewerageConnection.service = service;
+      sewerageConnection.service = serviceUrl;
 
       if (sewerageConnection.property.propertyType !== undefined) {
         const propertyTpe =
@@ -217,7 +218,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
       ];
       const bill = await getDemand(queryObjForBill, dispatch);
-      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let billAMDSearch = process.env.REACT_APP_NAME !== "Citizen" ? await getBillAmdSearchResult(queryObjForBill, dispatch): [];
       let amendments=get(billAMDSearch, "Amendments", []);
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
@@ -225,8 +226,46 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
 
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
+
+      dispatch(
+        handleField(
+          "connection-details",
+          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.sewerDetails",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "connection-details",
+          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.waterDetails",
+          "visible",
+          false
+        )
+      );
+
+      if(sewerageConnection && sewerageConnection.length > 0 && sewerageConnection[0].uom) {
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.sewerDetails.children.unitOfMeasurement",
+            "visible",
+            true
+          )
+        );
+      } else {
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.sewerDetails.children.unitOfMeasurement",
+            "visible",
+            false
+          )
+        );
+      }
+      
     }
-  } else if (service === serviceConst.WATER) {
+  } else if (serviceUrl === serviceConst.WATER) {
     let payloadData = await getSearchResults(queryObject, true);
     if (
       payloadData !== null &&
@@ -237,7 +276,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         payloadData.WaterConnection
       );
       let waterConnection = getActiveConnectionObj(payloadData.WaterConnection);
-      waterConnection.service = service;
+      waterConnection.service = serviceUrl;
       let propTenantId = waterConnection.property.tenantId.split(".")[0];
       if (waterConnection.connectionExecutionDate !== undefined) {
         waterConnection.connectionExecutionDate = convertEpochToDate(
@@ -312,7 +351,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
       ];
       const bill = await getDemand(queryObjForBill, dispatch);
-      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let billAMDSearch = process.env.REACT_APP_NAME !== "Citizen" ? await getBillAmdSearchResult(queryObjForBill, dispatch): [];
       let amendments=get(billAMDSearch, "Amendments", []);
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
@@ -320,6 +359,22 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
       getApplicationNumber(dispatch, payloadData.WaterConnection);
+      dispatch(
+        handleField(
+          "connection-details",
+          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.sewerDetails",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "connection-details",
+          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.waterDetails",
+          "visible",
+          true
+        )
+      );
     }
   }
 };

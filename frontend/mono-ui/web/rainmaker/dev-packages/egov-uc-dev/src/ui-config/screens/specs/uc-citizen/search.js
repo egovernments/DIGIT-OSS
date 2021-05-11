@@ -1,18 +1,16 @@
 import {
-  getCommonHeader,
-  getLabel,
-  getBreak
+  getBreak, getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+import { httpRequest } from "../../../../ui-utils";
 import { setServiceCategory } from "../utils";
-import { UCSearchCard } from "./receiptsResources/ucSearch";
+import "./index.css";
 //import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchResult } from "./receiptsResources/searchResult";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import "./index.css";
+import { UCSearchCard } from "./receiptsResources/ucSearch";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -20,16 +18,9 @@ const header = getCommonHeader({
   labelKey: "UC_RECEIPT"
 });
 
-const hasButton = getQueryArg(window.location.href, "hasButton");
-let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
-
-const getData = async (action, state, dispatch) => {
-  await getMDMSData(action, state, dispatch);
-};
 const getBusinessServiceMdmsData = async (businessServiceData, dispatch) => {
   let businessServiceDataList = [];
-  if(businessServiceData && businessServiceData.length > 0) {
+  if (businessServiceData && businessServiceData.length > 0) {
     businessServiceData.map(data => {
       businessServiceDataList.push(data.code);
     })
@@ -42,6 +33,14 @@ const getBusinessServiceMdmsData = async (businessServiceData, dispatch) => {
   );
 };
 
+const hasButton = getQueryArg(window.location.href, "hasButton");
+let enableButton = true;
+enableButton = hasButton && hasButton === "false" ? false : true;
+
+const getData = async (action, state, dispatch) => {
+  await getMDMSData(action, state, dispatch);
+};
+
 const getMDMSData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -51,6 +50,13 @@ const getMDMSData = async (action, state, dispatch) => {
           moduleName: "BillingService",
           masterDetails: [
             { name: "BusinessService", filter: "[?(@.type=='Adhoc')]" }
+          ]
+        }, {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "uiCommonPay"
+            }
           ]
         }
       ]
@@ -64,12 +70,19 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-        setServiceCategory(
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.serviceCategories",
+        get(payload, "MdmsRes.BillingService.BusinessService", [])
+      )
+    );
+    dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig", get(payload.MdmsRes, "common-masters.uiCommonPay")))
+    setServiceCategory(
       get(payload, "MdmsRes.BillingService.BusinessService", []),
-      dispatch
+      dispatch, null, false
     );
     getBusinessServiceMdmsData(get(payload, "MdmsRes.BillingService.BusinessService", []), dispatch);
-   
+
   } catch (e) {
     console.log(e);
   }
@@ -81,6 +94,10 @@ const ucSearchAndResult = {
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("ucSearchScreen", {}));
     getData(action, state, dispatch);
+    const userName = JSON.parse(getUserInfo()).userName;
+    dispatch(
+      prepareFinalObject("ucSearchScreen.mobileNumber", userName)
+    );
     return action;
   },
   components: {

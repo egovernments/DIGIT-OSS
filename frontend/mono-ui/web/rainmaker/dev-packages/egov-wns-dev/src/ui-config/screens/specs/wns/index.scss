@@ -169,3 +169,33 @@
       position: relative !important;
     }
   }
+
+  .autocomplete-dropdown {
+    min-width: 80% !important;
+    position: absolute !important;
+    z-index: 1900 !important;
+    max-height: 150px !important;
+    overflow: hidden !important;
+  }
+  .autocomplete-dropdown div {
+    min-width: 80% !important;
+    max-height: 150px !important;
+    overflow: auto !important;
+  }
+
+  #material-ui-OwnerInfoCard,
+  #material-ui-roadCuttingChargeContainer {
+    overflow: visible !important;
+  }
+  #custom-containers-local-applicationType,
+  #custom-containers-local-applicationstatus {
+    background-color: white !important;
+  }
+  #custom-containers-local-applicationType div,
+  #custom-containers-local-applicationstatus div {
+    background-color: white !important;
+  }
+  #custom-containers-local-applicationType div div,
+  #custom-containers-local-applicationstatus div div {
+    background-color: white !important;
+  }

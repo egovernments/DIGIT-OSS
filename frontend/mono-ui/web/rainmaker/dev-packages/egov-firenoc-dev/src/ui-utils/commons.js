@@ -6,7 +6,7 @@ import {
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTransformedLocale, enableField, disableField } from "egov-ui-framework/ui-utils/commons";
+import { disableField, enableField, getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -71,13 +71,78 @@ export const getSearchResults = async (queryObject, dispatch) => {
     throw error;
   }
 };
+export const setDocsForEditFlow = async (state, dispatch) => {
+  let applicationDocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.additionalDetail.documents",
+    []
+  );
+  /* To change the order of application documents similar order of mdms order*/
+  const mdmsDocs = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.FireNoc.Documents",
+    []
+  );
+  let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
+    let applicationDocument = {}
+    applicationDocuments&&applicationDocuments.map(appDoc => {
+      if (appDoc.documentType == mdmsDoc.code) {
+        applicationDocument = { ...appDoc }
+      }
+    })
+    return applicationDocument;
+  }
+  ).filter(docObj => Object.keys(docObj).length > 0)
+  applicationDocuments = [...orderedApplicationDocuments];
+  dispatch(
+    prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documents", applicationDocuments)
+  );
+
+  let uploadedDocuments = {};
+  let fileStoreIds =
+    applicationDocuments &&
+    applicationDocuments.map(item => item.fileStoreId).join(",");
+  const fileUrlPayload =
+    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  applicationDocuments &&
+    applicationDocuments.forEach((item, index) => {
+      uploadedDocuments[index] = 
+        {
+          fileName:
+            (fileUrlPayload &&
+              fileUrlPayload[item.fileStoreId] &&
+              decodeURIComponent(
+                getFileUrl(fileUrlPayload[item.fileStoreId])
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+                  .slice(13)
+              )) ||
+            `Document - ${index + 1}`,
+          fileStoreId: item.fileStoreId,
+          fileUrl: Object.values(fileUrlPayload)[index],
+          documentType: item.documentType,
+          tenantId: item.tenantId,
+          id: item.id
+        }
+      
+    });
+
+  dispatch(
+    prepareFinalObject("documentsUploadRedux", uploadedDocuments)
+  );
+};
 
 export const createUpdateNocApplication = async (state, dispatch, status) => {
   let nocId = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].id"
   );
+  
   let method = nocId ? "UPDATE" : "CREATE";
+  if (getQueryArg(window.location.href, "action") == 'edit') {
+    method = 'edit'
+  }
   try {
     let payload = get(
       state.screenConfiguration.preparedFinalObject,
@@ -100,14 +165,15 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     );
 
     let isDocumentValid = true;
-    Object.keys(reduxDocuments).map((key) => {
-        if(reduxDocuments[key].documentType==="OWNER" && reduxDocuments[key].documents && reduxDocuments[key].documents.length > 0 && !(reduxDocuments[key].dropdown && reduxDocuments[key].dropdown.value)){
-            isDocumentValid = false;
-        }
-    });
-    if(!isDocumentValid){
-        dispatch(toggleSnackbar(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
-        return;
+    // Object.keys(reduxDocuments).map((key) => {
+    //   // if (reduxDocuments[key].documentType === "OWNER" && reduxDocuments[key].documents && reduxDocuments[key].documents.length > 0 && !(reduxDocuments[key].dropdown && reduxDocuments[key].dropdown.value)) {
+    //     if (reduxDocuments[key].documentType === "OWNER" && reduxDocuments[key].documents && reduxDocuments[key].documents.length > 0 && !(reduxDocuments[key].dropdown && reduxDocuments[key].dropdown.value)) {
+    //     isDocumentValid = false;
+    //   }
+    // });
+    if (!isDocumentValid) {
+      dispatch(toggleSnackbar(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
+      return;
     }
 
     handleDeletedCards(payload[0], "fireNOCDetails.buildings", "id");
@@ -246,7 +312,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "fireNOCDetails.additionalDetail.documents",
       otherDocuments
     );
-    disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+    disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
     // disableField('summary',"components.div.children.footer.children.submitButton",dispatch);
 
     // Set Channel and Financial Year
@@ -275,7 +341,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         { FireNOCs: payload }
       );
       response = furnishNocResponse(response);
-      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+      enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
       // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);
@@ -288,15 +354,20 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         { FireNOCs: payload }
       );
       response = furnishNocResponse(response);
-      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+      enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
       // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
+    } else if (method === 'edit') {
+
+      enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+      // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
+      dispatch(prepareFinalObject("FireNOCs", payload));
     }
 
     return { status: "success", message: response };
   } catch (error) {
-    enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-    enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
+    enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+    enableField('summary', "components.div.children.footer.children.submitButton", dispatch);
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
 
     // Revert the changed pfo in case of request failure

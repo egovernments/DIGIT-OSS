@@ -17,7 +17,7 @@ class DownloadFileContainer extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
   let uploadedDocData = get(
-    state.screenConfiguration.preparedFinalObject,    "documentsUploadRedux",
+    state.screenConfiguration.preparedFinalObject,    "ptmDocumentsUploadRedux",
     []
   );
   let keys = Object.keys(uploadedDocData)

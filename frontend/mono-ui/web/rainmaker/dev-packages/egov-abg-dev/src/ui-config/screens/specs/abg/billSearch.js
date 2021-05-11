@@ -56,7 +56,12 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.billGineiURL);
+    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.billGineiURL)
+  //   payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.map(service => {if(!service.billGineiURL){
+  //     // service.billGineiURL= "egov-searcher/bill-genie/mcollectbills/_get"
+  //   }
+  //   return {...service}
+  // });
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);

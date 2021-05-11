@@ -4,9 +4,10 @@ import {
   addQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import store from "../ui-redux/store";
-import { showSpinner ,hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getAccessToken
+  getAccessToken,
+  getLocale
   //getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -26,7 +27,8 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     action: action,
     did: "1",
     key: "",
-    msgId: "20170310130900|en_IN",
+   // msgId: "20170310130900|en_IN",
+    msgId: `20170310130900|${getLocale()}`,
     requesterId: "",
     authToken: authToken //Please change this before deploying
   };
@@ -49,7 +51,7 @@ export const httpRequest = async (
   headers = [],
   customRequestInfo = {}
 ) => {
-  store.dispatch(showSpinner());
+  store.dispatch(toggleSpinner());
   let apiError = "Api Error";
 
   if (headers)
@@ -71,7 +73,7 @@ export const httpRequest = async (
         response = await instance.get(endPoint);
     }
     const responseStatus = parseInt(response.status, 10);
-    store.dispatch(hideSpinner());
+    store.dispatch(toggleSpinner());
     if (responseStatus === 200 || responseStatus === 201) {
       return response.data;
     }
@@ -92,7 +94,7 @@ export const httpRequest = async (
         (data.hasOwnProperty("error_description") && data.error_description) ||
         apiError;
     }
-    store.dispatch(hideSpinner());
+    store.dispatch(toggleSpinner());
   }
   // unhandled error
   throw new Error(apiError);

@@ -86,7 +86,7 @@ storiesOf("Card", module)
       <br />
       <div>
         For more props information please visit{" "}
-        <a href="http://www.material-ui.com/#/components/card" target="_blank">
+        <a href="http://www.material-ui.com/#/components/card" target="_blank" rel="noopener noreferrer">
           Card
         </a>
       </div>

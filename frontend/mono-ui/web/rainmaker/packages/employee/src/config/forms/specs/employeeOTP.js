@@ -9,6 +9,7 @@ const formConfig = {
       errorMessage: "CORE_OTP_ERRORMSG",
       hintText: "CORE_OTP_PLACEHOLDER",
       pattern: "^([0-9]){6}$",
+      value: "",
     },
     newPassword: {
       id: "employee-forgot-password-new-password",

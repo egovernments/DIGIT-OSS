@@ -197,7 +197,7 @@ const callBackForApply = async (state, dispatch) => {
       }
     }
     // Property.landArea Property.totalConstructedArea
-    if (propertyPayload.superBuiltUpArea > propertyPayload.landArea) {
+    if (parseFloat(propertyPayload.superBuiltUpArea) > parseFloat(propertyPayload.landArea)) {
       dispatch(
         toggleSnackbar(
           true, {
@@ -254,7 +254,8 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.tenantId = propertyPayload.address.city;
     propertyPayload.address.city = propertyPayload.address.city.split(".")[1];
     let additionalDetails = {
-      isRainwaterHarvesting: false
+      isRainwaterHarvesting: false,
+      subUsageCategory: propertyPayload.subUsageCategory
     }
     propertyPayload.additionalDetails = additionalDetails;
     try {

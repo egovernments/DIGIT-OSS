@@ -333,17 +333,25 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
         let queries = []
         uniqueModules.map((uniqueModule, ind) => {
           if (uniqueModule == "PT") {
-            const acknowledgementIds = [...ptApplicationNo];
-            for (let i = 0; i <= ptApplicationNo.length + 50; i += 50) {
-              let acknowledgementId = acknowledgementIds.splice(0, 50);
-              if (acknowledgementId && acknowledgementId.length > 0) {
-                const query = [{ key: "tenantId", value: getTenantId() },
-                { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
-                requestBodies.push(undefined)
-                queries.push(query)
-                endpoints.push("property-services/property/_search")
+            // const acknowledgementIds = [...ptApplicationNo];
+            // for (let i = 0; i <= ptApplicationNo.length + 50; i += 50) {
+            //   let acknowledgementId = acknowledgementIds.splice(0, 50);
+            //   if (acknowledgementId && acknowledgementId.length > 0) {
+            //     const query = [{ key: "tenantId", value: getTenantId() },
+            //     { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
+            //     requestBodies.push(undefined)
+            //     queries.push(query)
+            //     endpoints.push("property-services/property/_search")
+            //   }
+            // }
+
+            requestBodies.push({
+              searchCriteria: {
+                "referenceNumber": ptApplicationNo
               }
-            }
+            })
+            queries.push([])
+            endpoints.push(`egov-searcher/locality/property-services/_get`)
           } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services") {
 
           } else {
@@ -568,11 +576,11 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
       const requestBody1 = [{ key: "tenantId", value: tenantId }];
       let maxCount = await httpRequest("egov-workflow-v2/egov-wf/process/_count", "_search", requestBody1);
       maxCount = maxCount ;
-      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? Math.round(maxCount / 3) : maxCount }];
+      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? 200 : maxCount }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
       if (maxCount > 500) {
-        this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: Math.round(maxCount / 3) }, { key: "limit", value: Math.round(maxCount / 3) * 2 + 2 }], responseData)
+        this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: 200 }, { key: "limit", value: maxCount-200 }], responseData)
       } else {
         this.loadLocalityForAllData(allData);
       }

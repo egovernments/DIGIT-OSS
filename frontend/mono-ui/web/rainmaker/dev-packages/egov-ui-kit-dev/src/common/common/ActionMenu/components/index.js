@@ -371,7 +371,7 @@ class ActionMenuComp extends Component {
               );
             } else {
               return (
-                <a href={item.url} target="_blank">
+                <a href={item.url} target="_blank" rel="noopener noreferrer">
                   <div className="sideMenuItem">
                     {/* <Tooltip
                       id={"menu-toggle-tooltip"}

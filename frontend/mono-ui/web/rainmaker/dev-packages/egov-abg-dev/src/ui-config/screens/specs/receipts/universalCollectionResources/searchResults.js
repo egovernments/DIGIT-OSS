@@ -24,7 +24,7 @@ export const searchResults = {
                 { key: "tenantId", value: tableMeta.rowData[8] },
                 { key: "businessService", value: tableMeta.rowData[9] }
               ]
-              download(receiptQueryString , "download" ,tableMeta.rowData[7]) ;
+              download(receiptQueryString , "download" ,tableMeta.rowData[7]||'consolidatedreceipt','PAYMENT') ;
             }} style={{color:'#2196F3'}}>
               {value}
             </div>

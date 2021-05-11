@@ -155,6 +155,7 @@ export const payeeDetails = getCommonContainer({
       labelKey: "NOC_PAYMENT_PAYER_NAME_PLACEHOLDER"
     },
     jsonPath: "ReceiptTemp[0].Bill[0].paidBy",
+    pattern: getPattern("Name"),
     required: true
   }),
   payerMobileNo: getTextField({

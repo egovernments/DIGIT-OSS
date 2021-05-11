@@ -2312,6 +2312,12 @@ export const updateStructureTypes = async ( state, dispatch ) => {
             structType
           )
         );
+        dispatch(
+          prepareFinalObject(
+            "LicensesTemp[0].tradeLicenseDetail.structureSubType",
+            structType
+          )
+        );
     } catch (e) {
       console.log(e);
     }    

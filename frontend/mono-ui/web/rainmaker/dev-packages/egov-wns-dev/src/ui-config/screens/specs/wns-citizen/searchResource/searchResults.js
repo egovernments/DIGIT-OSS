@@ -26,7 +26,19 @@ export const searchResults = {
           )
         }
       },
-      { name: "Consumer No",  labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL" },
+      // { name: "Consumer No",  labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL" },
+      {
+        name: "Consumer No",
+        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL", 
+        options: {
+          filter: false,
+          customBodyRender: (value, index) => (
+            <div className="linkStyle" onClick={() => getConnectionDetails(index)}>
+              <a>{value}</a>
+            </div>
+          )
+        }
+      },
       { name : "Owner Name",  labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
       { name : "Status", labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL" },
       { name: "Due", labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL" },
@@ -102,6 +114,11 @@ export const searchResults = {
   }
 };
 
+const getConnectionDetails = data => {
+  const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+  const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+  window.location.assign(`${origin}${environment}/wns/connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}&due=${data.rowData[4]}`);
+}
 
 const getViewBillDetails = data => {  
   store.dispatch(

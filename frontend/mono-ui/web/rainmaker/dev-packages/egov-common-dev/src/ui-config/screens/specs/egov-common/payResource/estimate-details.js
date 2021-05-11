@@ -1,11 +1,10 @@
 import { getCommonGrayCard } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getFeesEstimateCard } from "../../utils";
 
 const estimate = getCommonGrayCard({
   estimateCard: {
     uiFramework: "custom-containers-local",
     componentPath: "EstimateCardContainer",
-    moduleName:"egov-common",
+    moduleName: "egov-common",
     props: {
       estimate: {
         header: { labelName: "Fee Estimate", labelKey: "NOC_SUMMARY_FEE_EST" },

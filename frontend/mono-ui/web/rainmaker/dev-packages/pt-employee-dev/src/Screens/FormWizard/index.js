@@ -17,7 +17,7 @@ import { fetchFromLocalStorage, isDocumentValid } from "egov-ui-kit/utils/common
 import { getTenantId, getUserInfo, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { getEstimateFromBill, getFinancialYearFromQuery, getQueryValue, resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { addOwner, callDraft, configOwnersDetailsFromDraft, getCalculationScreenData, getHeaderLabel, getImportantDates, getInstituteInfo, getMultipleOwnerInfo, getSelectedCombination, getSingleOwnerInfo, getSortedTaxSlab, getTargetPropertiesDetails, normalizePropertyDetails, removeAdhocIfDifferentFY, renderPlotAndFloorDetails, validateUnitandPlotSize } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
-import { formWizardConstants, getFormattedEstimate, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getFormattedEstimate, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE,getPTApplicationTypes } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import { convertRawDataToFormConfig } from "egov-ui-kit/utils/PTCommon/propertyToFormTransformer";
 import Label from "egov-ui-kit/utils/translationNode";
 import { get, isEqual, set } from "lodash";
@@ -321,6 +321,7 @@ class FormWizard extends Component {
     fetchLocalizationLabel(getLocale(), tenantId, tenantId);
     let requestBody = generalMDMSDataRequestObj(commonConfig.tenantId);
     fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName()); 
+    await getPTApplicationTypes(this.props.prepareFinalObject);
     this.loadUlbLogo(tenantId)
     const draftUuid = getQueryValue(search, "uuid");
     const assessmentId =
@@ -1347,7 +1348,7 @@ class FormWizard extends Component {
       prepareFinalObject
     } = this.state;
     const financialYearFromQuery = getFinancialYearFromQuery();
-    let { form, common, location, hideSpinner } = this.props;
+    let { form, common, location, hideSpinner,  preparedFinalObject } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
@@ -1481,7 +1482,7 @@ class FormWizard extends Component {
       this
     );
     // Create/Update property call, action will be either create or update
-    propertySubmitAction(properties, action, this.props, isModify, prepareFinalObject);
+    propertySubmitAction(properties, action, this.props, isModify, preparedFinalObject);
   };
 
 
@@ -1864,7 +1865,8 @@ const mapStateToProps = state => {
     adhocExemptionPenalty,
     requiredDocCount, Assessments,
     base64UlbLogoForPdf,
-    propertyAdditionalDetails
+    propertyAdditionalDetails,
+    preparedFinalObject
   };
 };
 

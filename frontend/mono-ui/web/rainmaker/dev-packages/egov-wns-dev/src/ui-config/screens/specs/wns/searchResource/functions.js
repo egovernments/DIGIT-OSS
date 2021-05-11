@@ -108,18 +108,49 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             }); 
           }
 
+          // let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
+          // billResults && billResults.Bill &&Array.isArray(billResults.Bill)&&billResults.Bill.length>0? billResults.Bill.map(bill => {
+          //   let updatedDueDate = 0;
+          //   if(element.service === serviceConst.WATER) {
+          //     updatedDueDate = (element.connectionType === 'Metered' ?
+          //     (bill.billDetails[0].toPeriod+waterMeteredDemandExipryDate) :
+          //     (bill.billDetails[0].toPeriod+waterNonMeteredDemandExipryDate));
+          //   } else if (element.service === serviceConst.SEWERAGE) {
+          //     updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
+          //   }
+          //   finalArray.push({
+          //     due: bill.totalAmount,
+          //     dueDate: updatedDueDate,
+          //     service: element.service,
+          //     connectionNo: element.connectionNo,
+          //     name: (element.property)?element.property.owners[0].name:'',
+          //     status: element.status,
+          //     address: handleAddress(element),
+          //     connectionType: element.connectionType,
+          //     tenantId:element.tenantId
+          //   })
+          // }) : finalArray.push({
+          //   due: 'NA',
+          //   dueDate: 'NA',
+          //   service: element.service,
+          //   connectionNo: element.connectionNo,
+          //   name: (element.property)?element.property.owners[0].name:'',
+          //   status: element.status,
+          //   address: handleAddress(element),
+          //   connectionType: element.connectionType,
+          //   tenantId:element.tenantId
+          // })
           let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
-          billResults && billResults.Bill &&Array.isArray(billResults.Bill)&&billResults.Bill.length>0? billResults.Bill.map(bill => {
-            let updatedDueDate = 0;
+          let updatedDueDate = 0;
+          billResults && billResults.Bill && Array.isArray(billResults.Bill) && billResults.Bill.length>0 && billResults.Bill[0].billDetails.map(bill => {
             if(element.service === serviceConst.WATER) {
-              updatedDueDate = (element.connectionType === 'Metered' ?
-              (bill.billDetails[0].toPeriod+waterMeteredDemandExipryDate) :
-              (bill.billDetails[0].toPeriod+waterNonMeteredDemandExipryDate));
+              updatedDueDate = bill.expiryDate;
             } else if (element.service === serviceConst.SEWERAGE) {
-              updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
+              updatedDueDate = bill.expiryDate;
             }
-            finalArray.push({
-              due: bill.totalAmount,
+          });
+          billResults && billResults.Bill && Array.isArray(billResults.Bill) && billResults.Bill.length>0 ? finalArray.push({
+              due: billResults.Bill[0].totalAmount,
               dueDate: updatedDueDate,
               service: element.service,
               connectionNo: element.connectionNo,
@@ -129,8 +160,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               connectionType: element.connectionType,
               tenantId:element.tenantId
             })
-          }) : finalArray.push({
-            due: 'NA',
+           : finalArray.push({
+            due: '0',
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,

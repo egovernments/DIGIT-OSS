@@ -216,6 +216,19 @@ class WorkFlowContainer extends React.Component {
           data = beforeSubmitHook(data);
         }
       }
+
+      if (window.location.href.includes("wns/search-preview")) {
+          if(data.roadCuttingInfo && data.roadCuttingInfo.length > 0) {
+            data.roadCuttingInfo = [];
+            data.roadCuttingInfo = data.roadCuttingInfos || [];
+            data.roadCuttingInfos = [];
+          }
+      }
+      if(get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.action") === "SENDBACKTOCITIZEN") {
+        set(data[0], 'fireNOCDetails.status', "CITIZENACTIONREQUIRED");
+        set(data[0],'fireNOCDetails.additionalDetail.assignee' ,[get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")]);
+      }
+      
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -227,7 +240,7 @@ class WorkFlowContainer extends React.Component {
       if (payload) {
         let path = "";
         this.props.hideSpinner();
-        if (moduleName == "PT.CREATE" || moduleName == "PT.LEGACY") {
+        if (moduleName == "PT.CREATE" ||moduleName == "PT.UPDATE" || moduleName == "PT.LEGACY") {
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
           )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
@@ -352,7 +365,7 @@ class WorkFlowContainer extends React.Component {
       }
     } else if (moduleName === "PT") {
       bservice = "PT"
-    } else if (moduleName === "PT.CREATE" || moduleName === "PT.LEGACY") {
+    } else if (moduleName === "PT.CREATE" || moduleName === "PT.UPDATE" || moduleName === "PT.LEGACY") {
       return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION";

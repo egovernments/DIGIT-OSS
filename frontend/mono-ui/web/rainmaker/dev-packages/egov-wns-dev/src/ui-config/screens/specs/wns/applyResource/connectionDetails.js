@@ -25,7 +25,8 @@ export const getCheckboxContainer = {
   props: {
     jsonPathSewerage: "applyScreen.sewerage",
     jsonPathWater: "applyScreen.water",
-    required: true
+    required: true,
+    disabled: false
   },
   type: "array",
 };
@@ -49,16 +50,33 @@ export const OwnerInfoCard = getCommonCard({
       pattern: /^[0-9]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     }),
-
-    pipeSize: getSelectField({
-      label: { labelKey: "WS_CONN_DETAIL_PIPE_SIZE" },
-      sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
-      placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
+    pipeSize: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-wns",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "applyScreen.proposedPipeSize",
+      props: {
+        className:"applicant-details-error autocomplete-dropdown",
+        label: { labelKey: "WS_CONN_DETAIL_PIPE_SIZE", labelName: "Pipe Size" },
+        placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER", labelName: "Select Pipe Size" },
+        required: true,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        jsonPath: "applyScreen.proposedPipeSize",
+        sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
+        inputLabelProps: {
+          shrink: true
+        },
+        suggestions: [],
+        fullwidth: true,
+      },
       required: true,
-      gridDefination: { xs: 12, sm: 6 },
-      jsonPath: "applyScreen.proposedPipeSize"
-    }),
-
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+    },
     numberOfWaterClosets: getTextField({
       label: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS" },
       placeholder: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS_PLACEHOLDER" },

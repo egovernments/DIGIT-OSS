@@ -6,6 +6,9 @@ import get from "lodash/get";
 import React from "react";
 import PropertyInfoCard from "../PropertyInfoCard";
 
+const checkNA = (val = '') => {
+  return val != null && val ? `${val}` : 'NA';
+}
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 
@@ -51,7 +54,7 @@ export const getUsageTypeInfo = (propertyDetails) => {
 
 export const getPlotSizeInfo = (propertyDetails) => {
   return propertyDetails.propertySubType === "SHAREDPROPERTY"
-    ? "NA" : propertyDetails.uom ? `${propertyDetails.landArea} ${propertyDetails.uom}` : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`;
+    ? checkNA(propertyDetails.landArea) : propertyDetails.uom ? `${propertyDetails.landArea} ${propertyDetails.uom}` : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`;
 }
 
 export const getRainWaterHarvestingInfo = (properties) => {

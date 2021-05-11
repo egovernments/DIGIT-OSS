@@ -16,6 +16,7 @@ import {
   furnishNocResponse,
   getSearchResults
 } from "../../../../../ui-utils/commons";
+import "./index.css";
 
 const loadProvisionalNocData = async (state, dispatch) => {
   let fireNOCNumber = get(
@@ -142,6 +143,16 @@ export const nocDetails = getCommonCard({
               "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
               "props.style",
               {}
+            )
+          );
+        }
+        if(get(state.screenConfiguration.preparedFinalObject, "FireNOCs[0].fireNOCDetails.action", "") === "SENDBACKTOCITIZEN") {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocSelect",
+              "props.disabled",
+              true
             )
           );
         }

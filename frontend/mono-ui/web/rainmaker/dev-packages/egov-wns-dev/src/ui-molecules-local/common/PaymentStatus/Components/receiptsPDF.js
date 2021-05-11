@@ -84,7 +84,6 @@ const generateReceipt = (role, details, generalMDMSDataById) => {
         const flatArray = transformedArray.reduce((acc, val) => acc.concat(val), []);
 
         let newArray = [];
-        while (flatArray.length > 0) newArray.push(flatArray.splice(0, noOfColumns));
         return newArray;
       };
 

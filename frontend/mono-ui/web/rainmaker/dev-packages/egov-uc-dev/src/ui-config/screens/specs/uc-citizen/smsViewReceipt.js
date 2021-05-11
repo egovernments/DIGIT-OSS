@@ -1,5 +1,6 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { generateCitizenReciept } from "../utils/recieptPdf";
+import {download} from "egov-common/ui-utils/commons"
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
   prepareFinalObject,
@@ -18,11 +19,13 @@ const fetchAndGenerate = async (dispatch, receiptNo, tenantId) => {
     }
   ];
   const response = await getSearchResults(queryObj);
-  if (response && response.Receipt && response.Receipt.length) {
+  if (response && response.Payments && response.Payments.length) {
     dispatch(prepareFinalObject("receiptSearchResponse", response));
-    let pdfGenerateData = {};
-    pdfGenerateData["Receipt No"] = receiptNo;
-    await generateCitizenReciept(pdfGenerateData);
+    const receiptQueryString = [
+      { key: "receiptNumbers", value:  receiptNo},
+      { key: "tenantId", value: tenantId }
+    ]
+    download(receiptQueryString);
   } else {
     dispatch(
       toggleSnackbar(

@@ -19,37 +19,42 @@ export const wnsApplication = getCommonCard({
     labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
   }),
   wnsApplicationContainer: getCommonContainer({
-      city: getSelectField({
+    city: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "searchConnection.tenantId",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      props: {
+        optionLabel: "name",
+        optionValue: "code",
         label: {
-            labelKey: "WS_PROP_DETAIL_CITY"
+          labelName: "ULB",
+          labelKey: "WS_PROP_DETAIL_CITY"
         },
-        props: {
-          label: {
-            labelKey: "WS_PROP_DETAIL_CITY"
-          },
-          placeholder: {
-            labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
-          },
-          localePrefix: {
-            moduleName: "TENANT",
-            masterName: "TENANTS"
-          }
-        },  
         placeholder: {
-            labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
+          labelName: "Select ULB",
+          labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
         },
-        labelPrefix: {
-            moduleName: "TENANT",
-            masterName: "TENANTS"
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
         },
+        className: "autocomplete-dropdown",
         sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-        jsonPath: "searchConnection.tenantId",//db sake
+        jsonPath: "searchConnection.tenantId",
+        labelsFromLocalisation: true,
         required: true,
-        gridDefination: {
-            xs: 12,
-            sm: 4
-        },
-    }),
+        disabled: true,
+        isDisabled:true,
+      },
+      required: true,
+      disabled: true,
+      isDisabled:true,
+    },
     propertyid: getTextField({
         label: {
             labelKey: "WS_PROPERTY_ID_LABEL"

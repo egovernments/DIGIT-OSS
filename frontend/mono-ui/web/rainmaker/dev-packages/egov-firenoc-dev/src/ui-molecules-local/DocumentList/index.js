@@ -123,14 +123,16 @@ const requiredIcon = (
 
 class DocumentList extends Component {
   state = {
-    uploadedDocIndex: 0
+    uploadedDocIndex: 0,
+    loadedDocs:false
   };
 
   componentDidMount = () => {
     const {
       documentsList,
       documentsUploadRedux = {},
-      prepareFinalObject
+      prepareFinalObject,
+      documentsEditFlow={}
     } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
@@ -160,6 +162,11 @@ class DocumentList extends Component {
                   documentCode: card.name,
                   documentSubCode: subCard.name
                 };
+                if(documentsEditFlow&&documentsEditFlow[subCard.name]){
+                  documentsUploadRedux[index]['documents'] =[{...documentsEditFlow[subCard.name]}]
+                  documentsUploadRedux[index]['dropdown']={};
+                  documentsUploadRedux[index]['dropdown']["value"] =documentsEditFlow[subCard.name]["documentType"]
+                }
               }
               index++;
             });
@@ -181,12 +188,18 @@ class DocumentList extends Component {
                   ? card.dropdown.required
                   : false
               };
+              if(documentsEditFlow&&documentsEditFlow[card.name]){
+                documentsUploadRedux[index]['documents'] =[{...documentsEditFlow[card.name]}]
+                documentsUploadRedux[index]['dropdown']={};
+                documentsUploadRedux[index]['dropdown']["value"] =documentsEditFlow[card.name]["documentType"]
+              }
             }
             index++;
           }
         });
     });
     prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    this.setState({loadedDocs:true});
   };
 
   onUploadClick = uploadedDocIndex => {
@@ -266,7 +279,7 @@ class DocumentList extends Component {
           {card.required && requiredIcon}
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
-          {card.dropdown && (
+          {false && (
             <AutosuggestContainer
               select={true}
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
@@ -315,6 +328,7 @@ class DocumentList extends Component {
   render() {
     const { classes, documentsList } = this.props;
     let index = 0;
+    const {loadedDocs}=this.state;
     return (
       <div>
         {documentsList &&
@@ -324,6 +338,7 @@ class DocumentList extends Component {
                 <LabelContainer
                   labelKey={getTransformedLocale(container.title)}
                   style={styles.documentTitle}
+                  loadedDocs
                 />
                 {container.cards.map(card => {
                   return (
@@ -368,7 +383,12 @@ const mapStateToProps = state => {
     "documentsUploadRedux",
     {}
   );
-  return { documentsUploadRedux, moduleName };
+  const documentsEditFlow = get(
+    screenConfiguration.preparedFinalObject,
+    "documentsEditFlow",
+    {}
+  );
+  return { documentsUploadRedux,documentsEditFlow, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

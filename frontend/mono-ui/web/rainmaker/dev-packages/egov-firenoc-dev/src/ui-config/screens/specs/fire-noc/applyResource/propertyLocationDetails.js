@@ -17,7 +17,89 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import "./index.css";
+export const onchangeOfTenant=async(action, state, dispatch)=>{
+  dispatch(
+    prepareFinalObject(
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+      action.value
+    )
+  );
+  try {
+    dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
+    let payload = await httpRequest(
+      "post",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "_search",
+      [{ key: "tenantId", value: action.value }],
+      {}
+    );
+    const mohallaData =
+      payload &&
+      payload.TenantBoundary[0] &&
+      payload.TenantBoundary[0].boundary &&
+      payload.TenantBoundary[0].boundary.reduce((result, item) => {
+        result.push({
+          ...item,
+          name: `${action.value
+            .toUpperCase()
+            .replace(
+              /[.]/g,
+              "_"
+            )}_REVENUE_${item.code
+            .toUpperCase()
+            .replace(/[._:-\s\/]/g, "_")}`
+        });
+        return result;
+      }, []);
 
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.tenant.localities",
+        mohallaData
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
+        "props.suggestions",
+        mohallaData
+      )
+    );
+    const mohallaLocalePrefix = {
+      moduleName: action.value,
+      masterName: "REVENUE"
+    };
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
+        "props.localePrefix",
+        mohallaLocalePrefix
+      )
+    );
+
+  } catch (e) {
+    console.log(e);
+  }
+  // Set Firestation based on ULBl
+  let fireStationsList = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
+    []
+  );
+  let fireStations = fireStationsList.filter(firestation => {
+    return firestation.baseTenantId === action.value;
+  });
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyFirestation",
+      "props.data",
+      fireStations
+    )
+  );
+}
 const showHideMapPopup = (state, dispatch) => {
   let toggle = get(
     state.screenConfiguration.screenConfig["apply"],
@@ -197,7 +279,6 @@ export const propertyLocationDetails = getCommonCard(
           sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
           className:"applicant-details-error autocomplete-dropdown",
           required: true,
-          isClearable: true,
         },
         required: true,
         gridDefination: {
@@ -207,87 +288,7 @@ export const propertyLocationDetails = getCommonCard(
         },
         beforeFieldChange: async (action, state, dispatch) => {
           //Below only runs for citizen - not required here in employee
-          dispatch(
-            prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-              action.value
-            )
-          );
-          try {
-            dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
-            let payload = await httpRequest(
-              "post",
-              "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-              "_search",
-              [{ key: "tenantId", value: action.value }],
-              {}
-            );
-            const mohallaData =
-              payload &&
-              payload.TenantBoundary[0] &&
-              payload.TenantBoundary[0].boundary &&
-              payload.TenantBoundary[0].boundary.reduce((result, item) => {
-                result.push({
-                  ...item,
-                  name: `${action.value
-                    .toUpperCase()
-                    .replace(
-                      /[.]/g,
-                      "_"
-                    )}_REVENUE_${item.code
-                    .toUpperCase()
-                    .replace(/[._:-\s\/]/g, "_")}`
-                });
-                return result;
-              }, []);
-
-            dispatch(
-              prepareFinalObject(
-                "applyScreenMdmsData.tenant.localities",
-                mohallaData
-              )
-            );
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
-                "props.suggestions",
-                mohallaData
-              )
-            );
-            const mohallaLocalePrefix = {
-              moduleName: action.value,
-              masterName: "REVENUE"
-            };
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
-                "props.localePrefix",
-                mohallaLocalePrefix
-              )
-            );
-
-          } catch (e) {
-            console.log(e);
-          }
-          // Set Firestation based on ULBl
-          let fireStationsList = get(
-            state,
-            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
-            []
-          );
-          let fireStations = fireStationsList.filter(firestation => {
-            return firestation.baseTenantId === action.value;
-          });
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyFirestation",
-              "props.data",
-              fireStations
-            )
-          );
+         await onchangeOfTenant(action, state, dispatch);
         }
       },
       propertyPlotSurveyNo: getTextField({
@@ -366,7 +367,6 @@ export const propertyLocationDetails = getCommonCard(
           suggestions: [],
           fullwidth: true,
           required: true,
-          isClearable: true,
           inputLabelProps: {
             shrink: true
           }
@@ -469,7 +469,6 @@ export const propertyLocationDetails = getCommonCard(
             labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_PLACEHOLDER"
           },
           required: true,
-          isClearable: true,
           labelsFromLocalisation: true,
           localePrefix: {
             moduleName: "firenoc",

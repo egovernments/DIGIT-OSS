@@ -28,7 +28,7 @@ const setReviewPageRoute = (state, dispatch) => {
 };
 const moveToReview = (state, dispatch) => {
   const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
+    get(state.screenConfiguration.preparedFinalObject, "ptmDocumentsUploadRedux")
   );
 
   let validateDocumentField = false;
@@ -136,7 +136,7 @@ const callBackForApply = async (state, dispatch) => {
 
 
   let documentsUploadRedux = get(
-    state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
+    state, "screenConfiguration.preparedFinalObject.ptmDocumentsUploadRedux");
 
   let isDocumentValid = true;
   Object.keys(documentsUploadRedux).map((key) => {

@@ -1,22 +1,16 @@
 import {
   getCommonCard,
-  getCommonGrayCard,
-  getCommonTitle,
-  getCommonSubHeader,
-  getTextField,
-  getSelectField,
-  getCommonContainer,
+  getCommonContainer, getCommonGrayCard,
+  getCommonSubHeader, getCommonTitle,
   getDateField,
-  getPattern
+  getPattern, getSelectField, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg,getTodaysDateInYMD, getMaxDate } from "egov-ui-framework/ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getMaxDate, getQueryArg, getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
 import {
-  getDetailsForOwner,
   updateOwnerShipEdit
 } from "../../utils";
-import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 
 export const getOwnerMobNoField = getTextField({
@@ -24,8 +18,8 @@ export const getOwnerMobNoField = getTextField({
     labelName: "Mobile No.",
     labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
   },
-  props:{
-    className:"applicant-details-error"
+  props: {
+    className: "applicant-details-error"
   },
   placeholder: {
     labelName: "Enter Mobile No.",
@@ -75,7 +69,7 @@ export const getOwnerGenderField = getSelectField({
       label: "COMMON_GENDER_FEMALE"
     },
     {
-      code: "OTHERS",
+      code: "TRANSGENDER",
       label: "COMMON_GENDER_TRANSGENDER"
     }
   ]
@@ -102,8 +96,8 @@ export const getOwnerEmailField = getTextField({
     labelName: "Email",
     labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
   },
-  props:{
-    className:"applicant-details-error"
+  props: {
+    className: "applicant-details-error"
   },
   placeholder: {
     labelName: "Enter Email",
@@ -118,8 +112,8 @@ export const getFatherNameField = getTextField({
     labelName: "Father/Spouse Name",
     labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
   },
-  props:{
-    className:"applicant-details-error"
+  props: {
+    className: "applicant-details-error"
   },
   placeholder: {
     labelName: "Enter Father/Spouse Name",
@@ -155,7 +149,7 @@ export const getRelationshipRadioButton = {
         value: "HUSBAND"
       }
     ],
-    jsonPath:"Licenses[0].tradeLicenseDetail.owners[0].relationship",
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
     required: true
   },
   required: true,
@@ -184,8 +178,8 @@ export const OwnerInfoCard = {
             labelName: "Mobile No.",
             labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
           },
-          props:{
-            className:"applicant-details-error"
+          props: {
+            className: "applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Mobile No.",
@@ -216,8 +210,8 @@ export const OwnerInfoCard = {
             labelName: "Name",
             labelKey: "TL_NEW_OWNER_DETAILS_NAME_LABEL"
           },
-          props:{
-            className:"applicant-details-error"
+          props: {
+            className: "applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Name",
@@ -232,8 +226,8 @@ export const OwnerInfoCard = {
             labelName: "Father/Spouse Name",
             labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
           },
-          props:{
-            className:"applicant-details-error"
+          props: {
+            className: "applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Father/Spouse Name",
@@ -303,9 +297,9 @@ export const OwnerInfoCard = {
                 value: "FEMALE"
               },
               {
-                label: "Others",
+                label: "TRANSGENDER",
                 labelKey: "COMMON_GENDER_TRANSGENDER",
-                value: "OTHERS"
+                value: "TRANSGENDER"
               }
             ],
             jsonPath:
@@ -343,8 +337,8 @@ export const OwnerInfoCard = {
             labelName: "Email",
             labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
           },
-          props:{
-            className:"applicant-details-error"
+          props: {
+            className: "applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Email",
@@ -358,8 +352,8 @@ export const OwnerInfoCard = {
             labelName: "PAN No.",
             labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
           },
-          props:{
-            className:"applicant-details-error"
+          props: {
+            className: "applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Owner's PAN No.",
@@ -373,8 +367,8 @@ export const OwnerInfoCard = {
             labelName: "Correspondence Address",
             labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
           },
-          props:{
-            className:"applicant-details-error"
+          props: {
+            className: "applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Correspondence Address",
@@ -437,8 +431,8 @@ export const ownerInfoInstitutional = {
           labelName: "Mobile No.",
           labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Mobile No.",
@@ -469,8 +463,8 @@ export const ownerInfoInstitutional = {
           labelName: "Official Telephone No.",
           labelKey: "TL_NEW_OWNER_PHONE_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Official Telephone No.",
@@ -486,8 +480,8 @@ export const ownerInfoInstitutional = {
           labelName: "Name of Authorised Person",
           labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Name of Authorised Person",
@@ -503,8 +497,8 @@ export const ownerInfoInstitutional = {
           labelName: "Designation",
           labelKey: "TL_NEW_OWNER_DESIG_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Designation",
@@ -519,8 +513,8 @@ export const ownerInfoInstitutional = {
           labelName: "Father/Spouse Name",
           labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Father/Spouse Name",
@@ -586,7 +580,7 @@ export const ownerInfoInstitutional = {
             label: "COMMON_GENDER_FEMALE"
           },
           {
-            code: "OTHERS",
+            code: "TRANSGENDER",
             label: "COMMON_GENDER_TRANSGENDER"
           }
         ]
@@ -619,8 +613,8 @@ export const ownerInfoInstitutional = {
           labelName: "Email",
           labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Email",
@@ -634,8 +628,8 @@ export const ownerInfoInstitutional = {
           labelName: "Official Corrospondence Address",
           labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
+        props: {
+          className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Official Corrospondence Address",
@@ -653,48 +647,48 @@ export const ownerInfoInstitutional = {
 const ownerShipChange = (reqObj) => {
   try {
     let { value, dispatch, state } = reqObj;
-      if (value === "INDIVIDUAL") {
-        if (get( state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.institution")) {
-          dispatch(pFO("Licenses[0].tradeLicenseDetail.institution", null));
-        }
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-            "visible",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
-            "visible",
-            false
-          )
-        );
-      } else {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-            "visible",
-            false
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
-            "visible",
-            true
-          )
-        );
+    if (value === "INDIVIDUAL") {
+      if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.institution")) {
+        dispatch(pFO("Licenses[0].tradeLicenseDetail.institution", null));
       }
       dispatch(
-        pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "visible",
+          true
+        )
       );
-  } catch (e){
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
+          "visible",
+          false
+        )
+      );
+    } else {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
+          "visible",
+          true
+        )
+      );
+    }
+    dispatch(
+      pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
+    );
+  } catch (e) {
     console.log(e);
   }
 }
@@ -749,7 +743,7 @@ const subOwnerShipChange = (reqObj) => {
       );
     }
     dispatch(pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", value));
-  } catch (e){
+  } catch (e) {
     console.log(e);
   }
 }
@@ -767,36 +761,36 @@ export const tradeOwnerDetails = getCommonCard({
     }
   ),
   ownershipType: getCommonContainer({
-    dynamicMdmsOwnerShip : {
+    dynamicMdmsOwnerShip: {
       uiFramework: "custom-containers",
       componentPath: "DynamicMdmsContainer",
       props: {
         dropdownFields: [
           {
-            key : 'ownership',
+            key: 'ownership',
             callBack: ownerShipChange,
-            fieldType : "autosuggest",
-            defaultValue : "INDIVIDUAL",
-            className:"applicant-details-error autocomplete-dropdown",
+            fieldType: "autosuggest",
+            defaultValue: "INDIVIDUAL",
+            className: "applicant-details-error autocomplete-dropdown",
           },
           {
-            key : 'subOwnership',
+            key: 'subOwnership',
             callBack: subOwnerShipChange,
-            defaultValue : "INDIVIDUAL.SINGLEOWNER",
-            fieldType : "autosuggest",
-            className:"applicant-details-error autocomplete-dropdown",
+            defaultValue: "INDIVIDUAL.SINGLEOWNER",
+            fieldType: "autosuggest",
+            className: "applicant-details-error autocomplete-dropdown",
           }
         ],
         moduleName: "common-masters",
         masterName: "OwnerShipCategory",
-        rootBlockSub : 'tradeOwner',
+        rootBlockSub: 'tradeOwner',
         callBackEdit: updateOwnerShipEdit
       }
     }
   },
-  {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}}
+    { style: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? { "pointer-events": "none" } : {} }
   ),
-  
+
   OwnerInfoCard,
   ownerInfoInstitutional
 });

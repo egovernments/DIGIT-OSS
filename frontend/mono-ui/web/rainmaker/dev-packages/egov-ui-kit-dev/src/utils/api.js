@@ -3,6 +3,8 @@ import commonConfig from "egov-ui-kit/config/common.js";
 import { getAccessToken, getLocale, getTenantId, localStorageGet, localStorageSet, setLocale, setTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import some from "lodash/some";
 import { addQueryArg, hasTokenExpired, prepareForm } from "./commons";
+import store from "ui-redux/store";
+import { hideSpinner,showSpinner } from "egov-ui-kit/redux/common/actions";
 
 axios.interceptors.response.use(
   (response) => {
@@ -210,6 +212,7 @@ export const loginRequest = async (username = null, password = null, refreshToke
     const response = await loginInstance.post("/user/oauth/token", params);
     const responseStatus = parseInt(response.status, 10);
     if (responseStatus === 200 || responseStatus === 201) {
+      localStorage.setItem("citizen.userRequestObject",JSON.stringify(response.data.UserRequest));
       return response.data;
     }
   } catch (error) {
@@ -347,6 +350,7 @@ export const commonApiPost = (
             var _tntId = getTenantId() || "default";
             var lang_response = localStorageGet("lang_response");
             localStorage.clear();
+            sessionStorage.clear();
             setLocale(locale);
             setTenantId(_tntId);
             localStorageSet("lang_response", lang_response);
@@ -365,4 +369,76 @@ export const commonApiPost = (
         } else throw new Error("Oops! Something isn't right. Please try again later.");
       }
     });
+};
+
+
+const downloadPdf = (blob, fileName) => {
+  const link = document.createElement('a');
+  // create a blobURI pointing to our Blob
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  // some browser needs the anchor to be in the doc
+  document.body.append(link);
+  link.click();
+  link.remove();
+  // in case the Blob uses a lot of memory
+  setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+};
+
+
+const printPdf=(blob)=>{
+  const fileURL = URL.createObjectURL(blob);
+  var myWindow = window.open(fileURL);
+  if (myWindow != undefined) {
+    myWindow.addEventListener("load", event => {
+      myWindow.focus();
+      myWindow.print();
+    });
+  }
+}
+
+export const downloadPdfFile = async  ( endPoint,
+action,
+queryObject = [],
+requestBody = {},
+customRequestInfo = {},
+ignoreTenantId = false,
+fileName='download.pdf',
+onSuccess
+) => {
+const tenantId = getTenantId() || commonConfig.tenantId;
+  const downloadInstance = axios.create({
+    baseURL: window.location.origin,
+    responseType: "arraybuffer",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/pdf"
+    },
+  });
+
+  if (!some(queryObject, ["key", "tenantId"]) && !ignoreTenantId) {
+    queryObject &&
+      queryObject.push({
+        key: "tenantId",
+        value: tenantId,
+      });
+  }
+  if (queryObject && queryObject.length) {
+    endPoint = addQueryArg(endPoint, queryObject);
+  }
+  try {
+    store.dispatch(showSpinner());
+    const response = await downloadInstance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+    const responseStatus = parseInt(response.status, 10);
+ 
+    if (responseStatus === 201 || responseStatus === 200) {
+     
+      fileName=='print'?printPdf(new Blob([response.data], { type: "application/pdf" })):downloadPdf(new Blob([response.data], { type: "application/pdf" }), fileName);
+      onSuccess?onSuccess():{};
+      store.dispatch(hideSpinner());
+    }
+  } catch (error) {
+    store.dispatch(hideSpinner());
+    throw new Error(error);
+  }
 };

@@ -123,18 +123,31 @@ export const getService = () => {
                 }
             },
         },
-        serviceCardContainer: renderService()
+        // serviceCardContainer: renderService()
+        waterDetails:  waterDetailsCard(),
+        sewerDetails: sewerDetailsCard(),
     });
 };
 
-export const renderService = () => {
-    if (service === serviceConst.WATER) {
-        if (connectionType === "Metered") {
-            return getCommonContainer({ serviceType, propertyUsage, connType, meterId, meterStatus, meterReadingDate, consumption, currentMeterReading, lastMeterReading });
-        } else {
-            return getCommonContainer({ serviceType, propertyUsage, connType });
-        }
-    } else if (service === serviceConst.SEWERAGE) {
-        return getCommonContainer({ serviceType, propertyUsage })
+// export const renderService = () => {
+//     if (service === serviceConst.WATER) {
+//         if (connectionType === "Metered") {
+//             return getCommonContainer({ serviceType, propertyUsage, connType, meterId, meterStatus, meterReadingDate, consumption, currentMeterReading, lastMeterReading });
+//         } else {
+//             return getCommonContainer({ serviceType, propertyUsage, connType });
+//         }
+//     } else if (service === serviceConst.SEWERAGE) {
+//         return getCommonContainer({ serviceType, propertyUsage })
+//     }
+// }
+
+export const waterDetailsCard = () => {
+    if (connectionType === "Metered") {
+        return getCommonContainer({ serviceType, propertyUsage, connType, meterId, meterStatus, meterReadingDate, consumption, currentMeterReading, lastMeterReading });
+    } else {
+        return getCommonContainer({ serviceType, propertyUsage, connType });
     }
+}
+export const sewerDetailsCard = () => {
+    return getCommonContainer({ serviceType, propertyUsage });
 }

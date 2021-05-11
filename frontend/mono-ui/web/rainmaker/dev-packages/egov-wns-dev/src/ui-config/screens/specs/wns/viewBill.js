@@ -4,7 +4,7 @@ import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptio
 import set from "lodash/set";
 import get from "lodash/get";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { 
   createEstimateData,
   getFeesEstimateCard,
@@ -48,7 +48,8 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
         }
         if (viewBillTooltip.length >= data.Bill[0].billDetails.length) {          
           let bPeriodMDMS = get(state.screenConfiguration.preparedFinalObject, "billingPeriodMDMS", {});
-          let expiryDemandDate = billingPeriodMDMS(bills.toPeriod,bPeriodMDMS,service);
+          // let expiryDemandDate = billingPeriodMDMS(bills.toPeriod,bPeriodMDMS,service);
+          let expiryDemandDate = bills.expiryDate;
           let dataArray = [{
             total: data.Bill[0].totalAmount,
             expiryDate: expiryDemandDate
@@ -120,14 +121,15 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: consumerCode }]
   let queryObjectForConsumptionDetails = [{ key: "tenantId", value: tenantId }, { key: "connectionNos", value: consumerCode }]
   let viewBillTooltip = [], data;
-  if (service === serviceConst.WATER) {
+  let serviceUrl = getQueryArg(window.location.href, "service");
+  if (serviceUrl === serviceConst.WATER) {
     let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails, dispatch);
     let payload = await getSearchResults(queryObjForSearch,true);
     let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: consumerCode }, { key: "businessService", value: "WS" }];
     data = await fetchBill(queryObjectForFetchBill, dispatch);
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
       if (payload.WaterConnection.length > 0 && data.Bill.length > 0) {
-        payload.WaterConnection[0].service = service
+        payload.WaterConnection[0].service = serviceUrl
         await processBills(state,data, viewBillTooltip, dispatch);
         if (meterReadingsData !== null && meterReadingsData !== undefined && meterReadingsData.meterReadings.length > 0) {
           payload.WaterConnection[0].consumption = meterReadingsData.meterReadings[0].currentReading - meterReadingsData.meterReadings[0].lastReading
@@ -156,20 +158,35 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
         if (payload.WaterConnection[0].additionalDetails.adhocRebateReason === 'NA' || payload.WaterConnection[0].additionalDetails.adhocRebateReason === null || payload.WaterConnection[0].additionalDetails.adhocRebateReason === undefined) {
           payload.WaterConnection[0].additionalDetails.adhocRebateReason = "";
         }
-
+        dispatch(
+          handleField(
+            "viewBill",
+            "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.sewerDetails",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "viewBill",
+            "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.waterDetails",
+            "visible",
+            true
+          )
+        );
         dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
         dispatch(prepareFinalObject("consumptionDetails[0]", meterReadingsData.meterReadings[0]))
       }
     }
-  } else if (service === serviceConst.SEWERAGE) {
+  } else if (serviceUrl === serviceConst.SEWERAGE) {
     let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: consumerCode }, { key: "businessService", value: "SW" }];
     let payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch,true);
     data = await fetchBill(queryObjectForFetchBill, dispatch)
     let viewBillTooltip = []
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
       if (payload.SewerageConnections.length > 0 && data.Bill.length > 0) {
-        payload.SewerageConnections[0].service = service;
+        payload.SewerageConnections[0].service = serviceUrl;
         await processBills(state,data, viewBillTooltip, dispatch);
         /*if (payload.SewerageConnections[0].property.usageCategory !== null && payload.SewerageConnections[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.SewerageConnections[0].property.usageCategory) + ")]"
@@ -189,6 +206,22 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
         if (payload.SewerageConnections[0].additionalDetails.adhocRebateReason === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocRebateReason === null || payload.SewerageConnections[0].additionalDetails.adhocRebateReason === undefined) {
           payload.SewerageConnections[0].additionalDetails.adhocRebateReason = "";
         }
+        dispatch(
+          handleField(
+            "viewBill",
+            "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.sewerDetails",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "viewBill",
+            "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.waterDetails",
+            "visible",
+            false
+          )
+        );
         dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
       }

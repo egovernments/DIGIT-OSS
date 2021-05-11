@@ -71,7 +71,7 @@ export const downloadPrintContainer = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") },
         { key: "businessService", value:'FIRENOC' }        
       ]
-      download(receiptQueryString, "download", "consolidatedreceipt", state);
+      download(receiptQueryString, "download", "consolidatedreceipt",'PAYMENT', state);
     },
     leftIcon: "receipt"
   };
@@ -83,7 +83,7 @@ export const downloadPrintContainer = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") },
         { key: "businessService", value:'FIRENOC' }      
       ]
-      download(receiptQueryString, "print", "consolidatedreceipt", state);
+      download(receiptQueryString, "print", "consolidatedreceipt",'PAYMENT', state);
     },
     leftIcon: "receipt"
   };
@@ -294,7 +294,9 @@ const setSearchResponse = async (
   applicationNumber,
   tenantId
 ) => {
-  const response = await getSearchResults([
+  let edited =getQueryArg(window.location.href, "edited")
+
+  const response =edited?{FireNOCs:get(state.screenConfiguration.preparedFinalObject,'FireNOCs')}: await getSearchResults([
     {
       key: "tenantId",
       value: tenantId
@@ -304,7 +306,6 @@ const setSearchResponse = async (
   // const response = sampleSingleSearch();
   set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.assignee[0]','');
   set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.comment','');
-  
   set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.wfDocuments',[]);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
@@ -444,7 +445,6 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "FireNOCs",
             moduleName: "FIRENOC",
@@ -460,7 +460,7 @@ const screenConfig = {
           documentsSummary: documentsSummary
         }),
         citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+          process.env.REACT_APP_NAME === "Citizen" ? {} : {}
       }
     }
   }

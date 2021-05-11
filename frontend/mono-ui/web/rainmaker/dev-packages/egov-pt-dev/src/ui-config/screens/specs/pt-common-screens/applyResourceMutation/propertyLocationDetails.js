@@ -3,7 +3,6 @@ import {
   getCommonContainer,
   getCommonTitle,
   getTextField,
-  getSelectField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
@@ -30,25 +29,44 @@ export const propertyLocationDetails = getCommonCard({
   ),
   propertyLocationDetailsContainer: getCommonContainer({
     city: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "Property.address.city",
+      props: {
+        style: {
+          width: "100%",
+          cursor: "pointer"
+        },
+        optionLabel: "name",
+        optionValue: "code",
+        className: "hr-generic-selectfield autocomplete-dropdown",
         label: {
-          labelKey: "PT_COMMON_CITY"
+          labelKey: "PT_COMMON_CITY",
+          labelName: "City"
         },
         placeholder: {
-          labelKey: "PT_COMMON_CITY_PLACEHOLDER"
+          labelKey: "PT_COMMON_CITY_PLACEHOLDER",
+          labelName: "Select City"
         },
         localePrefix: {
           moduleName: "TENANT",
           masterName: "TENANTS"
         },
+        required: true,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        inputLabelProps: {
+          shrink: true
+        },
         sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
         jsonPath: "Property.address.city",//db sake
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-      }),
+      },
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
       beforeFieldChange: async (action, state, dispatch) => {
         //Below only runs for citizen - not required here in employee
         dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
@@ -115,7 +133,6 @@ export const propertyLocationDetails = getCommonCard({
           console.log(e);
         }
       }
-
     },
     localityOrMohalla: {
       uiFramework: "custom-containers-local",
@@ -129,14 +146,14 @@ export const propertyLocationDetails = getCommonCard({
           cursor: "pointer"
         },
         label: {
-          labelName:"Locality/Mohalla",
-              labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA"
-            },
-            placeholder: {
-              labelName:"Enter Mohalla",
-              labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA_PLACEHOLDER"
-            },
-            jsonPath: "Property.address.locality.code",//db sake
+          labelName: "Locality/Mohalla",
+          labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA"
+        },
+        placeholder: {
+          labelName: "Enter Mohalla",
+          labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA_PLACEHOLDER"
+        },
+        jsonPath: "Property.address.locality.code",//db sake
         sourceJsonPath: "applyScreenMdmsData.tenant.localities",
         labelsFromLocalisation: true,
         suggestions: [],
@@ -145,9 +162,9 @@ export const propertyLocationDetails = getCommonCard({
         inputLabelProps: {
           shrink: true
         },
-        
+
       },
-      gridDefination:{
+      gridDefination: {
         xs: 12,
         sm: 6,
       },

@@ -78,13 +78,33 @@ export const searchApplications = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.mobileNumber"
     }),
-    applicationType: getSelectField({
-      label: { labelName: "To Date", labelKey: "WS_APPLICATION_TYPE_LABEL" },
-      placeholder: { labelName: "Select to Date", labelKey: "WS_COMMON_APPLICATION_TYPE_PLACEHOLDER" },
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+    applicationType: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-wns",
+      componentPath: "AutosuggestContainer",
       jsonPath: "searchScreen.applicationType",
-      gridDefination: { xs: 12, sm: 4 },
+      props: {
+        className: "autocomplete-dropdown",
+        style: {
+          width: "100%",
+          cursor: "pointer",
+          zIndex: 2000
+        },
+        label: { labelName: "To Date", labelKey: "WS_APPLICATION_TYPE_LABEL" },
+        placeholder: { labelName: "Select to Date", labelKey: "WS_COMMON_APPLICATION_TYPE_PLACEHOLDER" },
+        sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+        jsonPath: "searchScreen.applicationType",
+        required: false,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        suggestions: [],
+        fullwidth: true,
+        inputLabelProps: {
+          shrink: true
+        }
+      },
       required: false,
+      gridDefination: { xs: 12, sm: 4 },
       beforeFieldChange: async (action, state, dispatch) => {
         if (action.value === "NEW WATER CONNECTION" || action.value ==="NEW SEWERAGE CONNECTION") {
           dispatch(
@@ -108,24 +128,31 @@ export const searchApplications = getCommonCard({
           )
         }
       }
-    }),
-    applicationstatus: getSelectField({
-      label: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
-      },
-      placeholder: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+    },
+    applicationstatus: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-wns",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "searchScreen.applicationStatus",
+      props: {
+        className: "autocomplete-dropdown",
+        label: {
+          labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL",
+          labelName: "Status"
+        },
+        placeholder: {
+          labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER",
+          labelName: "Select Placeholder"
+        },
+        required: false,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        jsonPath: "searchScreen.applicationStatus",
+        sourceJsonPath: "appTypewithAppStatus",
       },
       required: false,
-      sourceJsonPath: "appTypewithAppStatus",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      required: false,
-      errorMessage: "ERR_INVALID_BILLING_PERIOD",
-      jsonPath: "searchScreen.applicationStatus"
-    }),
+      gridDefination: { xs: 12, sm: 4 },
+    },
 
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "WS_COMMON_FROM_DATE_LABEL" },

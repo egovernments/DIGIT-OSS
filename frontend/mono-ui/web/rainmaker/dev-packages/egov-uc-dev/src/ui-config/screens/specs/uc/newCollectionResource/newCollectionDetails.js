@@ -548,13 +548,14 @@ const setTaxHeadFields = (value, state, dispatch) => {
               .split(".")
               .join("_")}`,
             required: item.isRequired || false,
-            pattern: getPattern("Amount"),
+            pattern: /^[0-9]{0,8}$/i,
             errorMessage: "Invalid Amount",
             visible: true,
             // required: true,
             props: {
               // required: true
             },
+            type:"number",
             jsonPath: `Demands[0].demandDetails[${index}].taxAmount`
           })
         )

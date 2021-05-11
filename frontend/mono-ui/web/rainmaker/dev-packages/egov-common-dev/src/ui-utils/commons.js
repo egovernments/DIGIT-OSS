@@ -10,6 +10,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { searchAndDownloadPdf, searchAndPrintPdf } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -536,8 +537,8 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showC
   });
 }
 
-
-export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state,showConfirmation=false) => {
+/*  Download version with pdf service  */
+/* export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state,showConfirmation=false) => {
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
@@ -608,8 +609,61 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
       , "error"));
   }
-}
+} */
 
+/*  Download version with egov-pdf service  */
+export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", pdfModule="PAYMENT",state,showConfirmation=false) => {
+  if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
+    configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
+  }
+  let onSuccess=()=>{
+    console.info('Success in Receipt Generation');
+  }
+
+  try {
+    let businessService = '';
+    receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+      if (query.key == "businessService") {
+        businessService = query.value;
+      }
+    })
+    receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
+    httpRequest("post", getPaymentSearchAPI(businessService), "_search", receiptQueryString).then((payloadReceiptDetails) => {
+    if(showConfirmation){
+      onSuccess=()=>{
+        console.info('Success in Receipt Generation');
+        if(localStorage.getItem('receipt-channel')=='whatsapp'&&localStorage.getItem('receipt-redirectNumber')!=''){
+          setTimeout(() => {
+            const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
+            window.location.href = weblink
+          }, 1500)
+        }
+        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+      , "success"));
+      }
+
+    }
+
+    if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
+      console.log("Could not find any receipts");
+      store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
+        , "error"));
+      return;
+    }
+    const queryStr = [
+      { key: "consumerCode", value: get(payloadReceiptDetails,"Payments[0].paymentDetails[0].bill.consumerCode" )},
+      { key: "bussinessService", value: get(payloadReceiptDetails,"Payments[0].paymentDetails[0].businessService" )},
+      { key: "tenantId", value: get(payloadReceiptDetails,"Payments[0].paymentDetails[0].tenantId" ) }
+    ]
+    mode=='download'? downloadConReceipt(queryStr,configKey,pdfModule,`RECEIPT-${get(payloadReceiptDetails,"Payments[0].paymentDetails[0].receiptNumber")}.pdf`,onSuccess):printConReceipt(queryStr,configKey,pdfModule);  
+ })
+ } catch (exception) {
+    console.log('Some Error Occured while downloading Receipt!');
+    store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
+      , "error"));
+  }
+}
 
 export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
   const searchCriteria = {
@@ -683,4 +737,44 @@ export const downloadMultipleFileFromFilestoreIds = (fileStoreIds = [], mode, te
       }
     })
   });
+}
+
+export const downloadChallan = async (queryStr, mode = 'download') => {
+
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/egov-pdf/download/UC/mcollect-challan",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+
+}
+
+
+
+export const downloadConReceipt =(queryObj,receiptKey='consolidatedreceipt',pdfModule='PAYMENT',fileName,onSuccess)=>{
+  pdfModule='PAYMENT';   // Temporary fix to download receipts from common pays
+  receiptKey=pdfModule=='PAYMENT'?"consolidatedreceipt":receiptKey;
+  searchAndDownloadPdf(`/egov-pdf/download/${pdfModule}/${receiptKey}`,queryObj,fileName,onSuccess)
+}
+
+export const printConReceipt =(queryObj,receiptKey='consolidatedreceipt',pdfModule='PAYMENT')=>{
+  pdfModule='PAYMENT';
+  receiptKey=pdfModule=='PAYMENT'?"consolidatedreceipt":receiptKey;
+  searchAndPrintPdf(`/egov-pdf/download/${pdfModule}/${receiptKey}`,queryObj)
 }

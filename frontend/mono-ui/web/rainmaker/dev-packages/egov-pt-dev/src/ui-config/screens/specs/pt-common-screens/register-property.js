@@ -242,7 +242,7 @@ const screenConfig = {
           {}
         );
         props.value = tenantId;
-        props.disabled = true;
+        props.isDisabled = true;
         set(
           action.screenConfig,
           "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city.props",

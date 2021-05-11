@@ -905,6 +905,8 @@ export const navigateToApplication = (businessService, propsHistory, application
     setRoute(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
   } else if (businessService == 'PT.CREATE') {
     setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
+  } else if (businessService == 'PT.UPDATE') {
+    setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=updateProperty`);
   } else if (businessService == 'PT.LEGACY') {
     setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=legacy`);
   } else {
@@ -927,7 +929,7 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
       } else if (creationReason == 'LEGACY_ENTRY') {
         return 'PT.LEGACY';
       } else if (creationReason == 'UPDATE') {
-        return 'PT.CREATE';
+        return 'PT.UPDATE';
       }
       else {
         return 'NA';
@@ -1115,4 +1117,11 @@ export const getPaymentSearchAPI = (businessService='')=>{
 
 export const getFetchBillAPI = () => {
   return `${FETCHBILL.GET.URL}`
+}
+
+
+
+export const getUserSearchedResponse =()=>{
+  const userObject=JSON.parse(localStorage.getItem("citizen.userRequestObject"))||{};
+  return {user:[userObject]};
 }

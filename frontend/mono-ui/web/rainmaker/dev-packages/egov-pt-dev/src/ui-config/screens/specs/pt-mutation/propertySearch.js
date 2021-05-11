@@ -5,6 +5,7 @@ import { getQueryArg, getRequiredDocData,showHideAdhocPopup } from "egov-ui-fram
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import get from "lodash/get";
+import set from "lodash/set";
 import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
@@ -41,6 +42,14 @@ const getMDMSData = async (action, dispatch) => {
             "ptSearchScreen.tenantId",
             tenant
           )
+        );
+        set(action.screenConfig,
+            "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity.props.isDisabled",
+            true
+        );
+        set(action.screenConfig,
+            "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity.isDisabled",
+            true
         );
       }
       const tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
