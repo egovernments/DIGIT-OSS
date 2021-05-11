@@ -171,8 +171,8 @@ config:
       - work-dir: "zuul"
         image-name: "zuul"
         dockerfile: "build/maven/Dockerfile"
-        
-    - name: "builds/core-services/internal-gateway"
+
+  - name: "builds/core-services/internal-gateway"
     build:
       - work-dir: "internal-gateway"
         image-name: "internal-gateway"
