@@ -172,6 +172,12 @@ config:
         image-name: "zuul"
         dockerfile: "build/maven/Dockerfile"
         
+    - name: "builds/core-services/internal-gateway"
+    build:
+      - work-dir: "internal-gateway"
+        image-name: "internal-gateway"
+        dockerfile: "build/maven/Dockerfile"
+        
   - name: "builds/core-services/egov-user-event"
     build:
       - work-dir: "egov-user-event"
