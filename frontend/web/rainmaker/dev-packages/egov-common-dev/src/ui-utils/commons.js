@@ -609,6 +609,49 @@ let getModifiedPayment = (payments) =>{
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
 }
+  else if(payments[0].paymentDetails[0].businessService === 'PT.MUTATION'){
+  let ptMutationFee=0;
+  let ptMutationLateFee=0;
+  let ptMutationApplicationFee=0;
+  let ptMutationProcessingFee=0;
+  let ptMutationPublicationFee=0
+  let currentDate=convertDateToEpoch(new Date());
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.amount!==0)
+    {
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_MUTATION_FEE":
+          ptMutationFee = Math.round((ptMutationFee+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_MUTATION_LATE_FEE":
+          ptMutationLateFee = Math.round((ptMutationLateFee+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_MUTATION_APPLICATION_FEE":
+          ptMutationApplicationFee = Math.round((ptMutationApplicationFee+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_MUTATION_PROCESSING_FEE":
+          ptMutationProcessingFee = Math.round((ptMutationProcessingFee+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_MUTATION_PUBLICATION_FEE":
+          ptMutationPublicationFee = Math.round((ptMutationPublicationFee+(billAccountDetail.amount))*100)/100;
+            break;      
+          default:
+            break;
+        }
+      })
+    }
+  }
+  })
+  let totalAmount =   get(payments, `[0].paymentDetails[0].bill.totalAmount`,null);
+  set(payments, `[0].paymentDetails[0].bill.totalAmount`, totalAmount.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationFee`, ptMutationFee.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationLateFee`, ptMutationLateFee.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationApplicationFee`, ptMutationApplicationFee.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationProcessingFee`, ptMutationProcessingFee.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationPublicationFee`, ptMutationPublicationFee.toFixed(2));
+}
 else if(payments[0].paymentDetails[0].businessService === 'TL'){
   let tax=0;
   let adhocPenalty=0;
