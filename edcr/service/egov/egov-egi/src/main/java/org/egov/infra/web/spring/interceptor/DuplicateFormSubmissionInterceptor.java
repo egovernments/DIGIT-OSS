@@ -48,6 +48,7 @@
 
 package org.egov.infra.web.spring.interceptor;
 
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -60,8 +61,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.web.spring.annotation.DuplicateRequestToken;
 import org.egov.infra.web.spring.annotation.ValidateToken;
+import org.owasp.esapi.ESAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -91,8 +94,12 @@ public class DuplicateFormSubmissionInterceptor extends HandlerInterceptorAdapte
                 if (havingValidToken(request, session))
                     removeToken(request, session);
                 else {
-                    response.sendRedirect(request.getContextPath() + errorPage);
-                    return false;
+                    if (Arrays.asList(new String[] { "edcr", "egi" }).contains(request.getContextPath())) {
+                        ESAPI.httpUtilities().sendRedirect(request.getContextPath() + errorPage);
+                        return false;
+                    } else {
+                        throw new ApplicationRuntimeException("Invalid URL!!!");
+                    }
                 }
             }
         }
