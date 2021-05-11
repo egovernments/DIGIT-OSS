@@ -76,7 +76,7 @@
     <bean id="securityContextPersistenceFilter"
           class="org.springframework.security.web.context.SecurityContextPersistenceFilter"/>
 
-    <bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+    <!-- <bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
         <constructor-arg value="/index.jsp"/>
         <constructor-arg>
             <list>
@@ -85,7 +85,7 @@
             </list>
         </constructor-arg>
         <property name="filterProcessesUrl" value="/logout"/>
-    </bean>
+    </bean> -->
 
     <bean id="authenticationProcessingFilter"
           class="org.egov.infra.config.security.authentication.filter.ApplicationAuthenticationFilter">
