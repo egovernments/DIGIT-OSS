@@ -94,6 +94,7 @@ public final class ApplicationConstant {
     public static final String CONTENT_DISPOSITION_ATTACH = "attachment;filename=\"%s\"";
     public static final String CONTENT_DISPOSITION_INLINE = "inline;filename=\"%s\"";
     public static final String CONTENT_DISPOSITION = "content-disposition";
+    public static final String CONTENT_TYPE = "content-type";
 
     public static final Character Y = 'Y';
     public static final Character N = 'N';

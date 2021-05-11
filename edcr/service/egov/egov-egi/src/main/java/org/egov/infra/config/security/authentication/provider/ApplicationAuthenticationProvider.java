@@ -48,9 +48,18 @@
 
 package org.egov.infra.config.security.authentication.provider;
 
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.egov.infra.security.utils.SecurityConstants.LOGIN_PASS_FIELD;
+import static org.egov.infra.security.utils.SecurityConstants.MAX_LOGIN_ATTEMPT_ALLOWED;
+
+import java.util.HashMap;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.egov.infra.security.audit.entity.LoginAttempt;
 import org.egov.infra.security.audit.service.LoginAttemptService;
-import org.egov.infra.security.utils.captcha.CaptchaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -61,15 +70,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Optional;
-
-import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.egov.infra.security.utils.SecurityConstants.LOGIN_PASS_FIELD;
-import static org.egov.infra.security.utils.SecurityConstants.MAX_LOGIN_ATTEMPT_ALLOWED;
 
 public class ApplicationAuthenticationProvider extends DaoAuthenticationProvider {
 
@@ -88,9 +88,6 @@ public class ApplicationAuthenticationProvider extends DaoAuthenticationProvider
     @Autowired
     private LoginAttemptService loginAttemptService;
 
-    @Autowired
-    private CaptchaUtils recaptchaUtils;
-
     @Override
     public Authentication authenticate(Authentication authentication) {
         try {
@@ -107,12 +104,13 @@ public class ApplicationAuthenticationProvider extends DaoAuthenticationProvider
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         if (isNotBlank(request.getParameter(RECAPTCHA_FIELD)) || isNotBlank(request.getParameter(CAPTCHA_FIELD))) {
-            if (recaptchaUtils.captchaIsValid(request)) {
-                loginAttemptService.resetFailedAttempt(authentication.getName());
-                return super.authenticate(authentication);
-            } else {
-                throw new LockedException(format(INVALID_CAPTCHA_MSG_FORMAT, le.getMessage()));
-            }
+            /*
+             * if (recaptchaUtils.captchaIsValid(request)) { loginAttemptService.resetFailedAttempt(authentication.getName());
+             * return super.authenticate(authentication); } else { throw new LockedException(format(INVALID_CAPTCHA_MSG_FORMAT,
+             * le.getMessage())); }
+             */
+            loginAttemptService.resetFailedAttempt(authentication.getName());
+            return super.authenticate(authentication);
         }
         throw le;
     }

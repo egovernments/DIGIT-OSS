@@ -53,7 +53,7 @@ public final class SecurityConstants {
     public static final String LOCATION_FIELD = "locationId";
     public static final String IPADDR_FIELD = "ipAddress";
     public static final String USERAGENT_FIELD = "userAgentInfo";
-    public static final String SESSION_COOKIE_PATH = "/";
+    public static final String SESSION_COOKIE_PATH = "/edcr";
     public static final String SESSION_COOKIE_NAME = "SESSIONID";
     public static final String LOGIN_PASS_FIELD = "j_password";
     public static final String USERNAME_FIELD = "j_username";

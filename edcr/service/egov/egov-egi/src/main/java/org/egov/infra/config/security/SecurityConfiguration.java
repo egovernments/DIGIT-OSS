@@ -48,8 +48,6 @@
 
 package org.egov.infra.config.security;
 
-import org.egov.infra.security.utils.captcha.DefaultCaptchaService;
-import org.egov.infra.security.utils.captcha.DefaultCaptchaStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -63,13 +61,4 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public DefaultCaptchaService captchaService() {
-        return new DefaultCaptchaService(defaultCaptchaStore());
-    }
-
-    @Bean
-    protected DefaultCaptchaStore defaultCaptchaStore() {
-        return new DefaultCaptchaStore();
-    }
 }
