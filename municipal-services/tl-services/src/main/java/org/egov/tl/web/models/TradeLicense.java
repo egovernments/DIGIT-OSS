@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 import lombok.*;
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.calculation.Calculation;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,10 +32,12 @@ import io.swagger.annotations.ApiModel;
 @Builder
 public class  TradeLicense   {
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("id")
         private String id = null;
 
         @NotNull
+        @SafeHtml
         @Size(max=64)
         @JsonProperty("tenantId")
         private String tenantId = null;
@@ -99,6 +102,7 @@ public class  TradeLicense   {
         }
     }
 
+        @SafeHtml
         @JsonProperty("businessService")
         private String businessService = "TL";
 
@@ -108,35 +112,43 @@ public class  TradeLicense   {
         @JsonProperty("applicationType")
         private ApplicationTypeEnum applicationType = null;
 
+        @SafeHtml
         @JsonProperty("workflowCode")
         private String workflowCode = null;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("licenseNumber")
         private String licenseNumber = null;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("applicationNumber")
         private String applicationNumber;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("oldLicenseNumber")
         private String oldLicenseNumber = null;
 
 
         @Size(max=256)
+        @SafeHtml
         @JsonProperty("propertyId")
         private String propertyId = null;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("oldPropertyId")
         private String oldPropertyId = null;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("accountId")
         private String accountId = null;
 
         @Size(max=256)
+        @SafeHtml
         @JsonProperty("tradeName")
         private String tradeName = null;
 
@@ -150,6 +162,7 @@ public class  TradeLicense   {
         private Long issuedDate = null;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("financialYear")
         private String financialYear = null;
 
@@ -165,6 +178,7 @@ public class  TradeLicense   {
 
         @NotNull
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("action")
         private String action = null;
 
@@ -176,6 +190,7 @@ public class  TradeLicense   {
         private List<Document> wfDocuments;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("status")
         private String status = null;
 
@@ -191,8 +206,10 @@ public class  TradeLicense   {
         private AuditDetails auditDetails = null;
 
         @Size(max=128)
+        @SafeHtml
         private String comment;
 
+        @SafeHtml
         @JsonProperty("fileStoreId")
         private String fileStoreId = null;
 

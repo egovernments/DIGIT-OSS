@@ -3,6 +3,7 @@ package org.egov.tl.web.models.calculation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.egov.tl.web.models.TradeLicense;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ import java.util.List;
 @Builder
 public class Calculation {
 
+	@SafeHtml
 	@JsonProperty("applicationNumber")
 	private String applicationNumber = null;
 
@@ -29,6 +31,7 @@ public class Calculation {
 	private TradeLicense tradeLicense = null;
 
 	@NotNull
+	@SafeHtml
 	@JsonProperty("tenantId")
 	@Size(min = 2, max = 256)
 	private String tenantId = null;

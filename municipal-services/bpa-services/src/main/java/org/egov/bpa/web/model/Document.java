@@ -5,6 +5,7 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,15 +26,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Document   {
+  @SafeHtml
   @JsonProperty("id")
   private String id = null;
 
+  @SafeHtml
   @JsonProperty("documentType")
   private String documentType = null;
 
+  @SafeHtml
   @JsonProperty("fileStoreId")
   private String fileStoreId = null;
 
+  @SafeHtml
   @JsonProperty("documentUid")
   private String documentUid = null;
 

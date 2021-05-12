@@ -82,6 +82,7 @@ public class FSMValidator {
 			}
 			if(!StringUtils.isEmpty(fsm.getSanitationtype())) {
 				mdmsValidator.validateOnSiteSanitationType(fsm.getSanitationtype(),fsm.getPitDetail());
+
 			}
 			
 		}else if( fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)) {
@@ -96,6 +97,7 @@ public class FSMValidator {
 			mdmsValidator.validateApplicationChannel(fsm.getSource());
 			if(!StringUtils.isEmpty(fsm.getSanitationtype())) {
 				mdmsValidator.validateOnSiteSanitationType(fsm.getSanitationtype(),fsm.getPitDetail());
+
 			}
 			validateTripAmount(fsmRequest, mdmsData);
 		}else {

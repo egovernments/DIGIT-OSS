@@ -20,6 +20,8 @@ export default ({ config }) => {
     "/_create",
     asyncHandler(async ({ body }, res, next) => {
       let response = await createApiResponse({ body }, res, next);
+      if(response.Errors)
+        res.status(400);
       res.json(response);
     })
   );

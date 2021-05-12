@@ -13,6 +13,7 @@ export const getApprovedList = async request => {
         ? fireNOCNumber
         : await addIDGenId(RequestInfo, [
             {
+              idName: envVariables.EGOV_IDGEN_FN_CERTIFICATE_NO_NAME,
               tenantId: FireNOCs[i].tenantId,
               format: envVariables.EGOV_CIRTIFICATE_FORMATE
             }

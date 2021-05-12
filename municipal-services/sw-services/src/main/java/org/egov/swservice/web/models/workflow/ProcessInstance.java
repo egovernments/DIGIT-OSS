@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 import org.egov.common.contract.request.User;
 import org.egov.swservice.web.models.Document;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -39,30 +40,36 @@ import lombok.ToString;
 public class ProcessInstance {
 
 	@Size(max = 64)
+	@SafeHtml
 	@JsonProperty("id")
 	private String id;
 
 	@NotNull
+	@SafeHtml
 	@Size(max = 128)
 	@JsonProperty("tenantId")
 	private String tenantId;
 
 	@NotNull
+	@SafeHtml
 	@Size(max = 128)
 	@JsonProperty("businessService")
 	private String businessService;
 
 	@NotNull
+	@SafeHtml
 	@Size(max = 128)
 	@JsonProperty("businessId")
 	private String businessId;
 
 	@NotNull
+	@SafeHtml
 	@Size(max = 128)
 	@JsonProperty("action")
 	private String action;
 
 	@NotNull
+	@SafeHtml
 	@Size(max = 64)
 	@JsonProperty("moduleName")
 	private String moduleName;
@@ -70,6 +77,7 @@ public class ProcessInstance {
 	@JsonProperty("state")
 	private State state;
 
+	@SafeHtml
 	@JsonProperty("comment")
 	private String comment;
 

@@ -72,6 +72,19 @@ public class DemandService {
 
         if(!CollectionUtils.isEmpty(updateCalculations))
             updateDemand(requestInfo,updateCalculations,businessService);
+            //Calling fetchbill service after demand creation/updation to handle duplicate bill generation issue
+        for (Calculation calculation : calculations) {
+            if(calculation.getChallan().getApplicationStatus()!=null && !calculation.getChallan().getApplicationStatus().equals(StatusEnum.CANCELLED.toString())) {
+                String tenantId = calculation.getTenantId();
+                String consumerCode = calculation.getChallan().getChallanNo();
+                GenerateBillCriteria billCriteria = GenerateBillCriteria.builder().
+                        tenantId(tenantId).
+                        consumerCode(consumerCode).
+                        businessService(businessService)
+                        .build();
+                generateBill(requestInfo,billCriteria);
+            }
+        }
     }
 
 
@@ -200,15 +213,13 @@ public class DemandService {
      * @param billCriteria The criteria for bill generation
      * @return The response of the bill generate
      */
-    private BillResponse generateBill(RequestInfo requestInfo,GenerateBillCriteria billCriteria,String businessServiceFromPath){
+    private BillResponse generateBill(RequestInfo requestInfo,GenerateBillCriteria billCriteria){
 
         String consumerCode = billCriteria.getConsumerCode();
         String tenantId = billCriteria.getTenantId();
 
         List<Demand> demands = searchDemand(tenantId,Collections.singleton(consumerCode),requestInfo,billCriteria.getBusinessService());
 
-        if(!StringUtils.equals(businessServiceFromPath,billCriteria.getBusinessService()))
-            throw new CustomException("BUSINESSSERVICE_MISMATCH","Business Service in Path variable and bill criteria are different");
 
         if(CollectionUtils.isEmpty(demands))
             throw new CustomException("INVALID CONSUMERCODE","Bill cannot be generated.No demand exists for the given consumerCode");

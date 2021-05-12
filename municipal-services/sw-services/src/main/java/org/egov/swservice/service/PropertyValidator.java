@@ -16,7 +16,7 @@ public class PropertyValidator implements SewerageActionValidator {
 		Map<String, String> errorMap = new HashMap<>();
 		
 		if(StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getPropertyId())) {
-			errorMap.put("INVALID_PROPERTY_UUID", "Property uuid should not be empty");
+			errorMap.put("INVALID_PROPERTY_UNIQUE_ID", "Property Unique Id should not be empty");
 		}
 		if (!errorMap.isEmpty())
 			return new ValidatorResult(false, errorMap);

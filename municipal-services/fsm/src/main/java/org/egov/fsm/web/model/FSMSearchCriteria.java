@@ -2,6 +2,7 @@ package org.egov.fsm.web.model;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -23,11 +24,13 @@ public class FSMSearchCriteria {
     private Integer offset;
 
     @JsonProperty("limit")
-    private Integer limit; 
-    
+    private Integer limit;
+
+    @SafeHtml
     @JsonProperty("tenantId")
     private String tenantId;
-    
+
+    @SafeHtml
     @JsonProperty("mobileNumber")
     private String mobileNumber; 
     

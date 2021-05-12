@@ -9,6 +9,7 @@ import org.egov.userevent.web.contract.Event;
 import org.egov.userevent.web.contract.EventDetails;
 import org.egov.userevent.web.contract.Recepient;
 import org.egov.userevent.web.contract.Event.EventBuilder;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import lombok.AllArgsConstructor;
@@ -28,11 +29,14 @@ import lombok.ToString;
 @ToString
 @Builder
 public class Document {
-	
+
+	@SafeHtml
 	private String documentType;
-	
+
+	@SafeHtml
 	private String fileName;
-	
+
+	@SafeHtml
 	private String fileStoreId;
 
 }

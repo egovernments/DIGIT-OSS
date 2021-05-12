@@ -3,7 +3,7 @@ import producer from "../kafka/producer";
 import envVariables from "../envVariables";
 const asyncHandler = require("express-async-handler");
 import mdmsData from "../utils/mdmsData";
-import { addUUIDAndAuditDetails, updateStatus } from "../utils/create";
+import { addUUIDAndAuditDetails, updateStatus,  enrichAssignees} from "../utils/create";
 import { getApprovedList } from "../utils/update";
 
 import {
@@ -23,13 +23,15 @@ export default ({ config }) => {
   api.post(
     "/_update",
     asyncHandler(async ({ body }, res, next) => {
-      let response = await updateApiResponse({ body }, next);
+      let response = await updateApiResponse({ body }, true, next);
+      if(response.Errors)
+        res.status(400);
       res.json(response);
     })
   );
   return api;
 };
-export const updateApiResponse = async ({ body }, next = {}) => {
+export const updateApiResponse = async ({ body }, isExternalCall, next = {}) => {
   //console.log("Update Body: "+JSON.stringify(body));
   let payloads = [];
   let mdms = await mdmsData(body.RequestInfo, body.FireNOCs[0].tenantId);
@@ -47,7 +49,6 @@ export const updateApiResponse = async ({ body }, next = {}) => {
   );
 
   let errors = await validateFireNOCModel(body, mdms);
-  console.log("Error Check:"+JSON.stringify(errors));
   if (errors.length > 0) {
     return next({
       errorType: "custom",
@@ -60,16 +61,38 @@ export const updateApiResponse = async ({ body }, next = {}) => {
   }
 
   body = await addUUIDAndAuditDetails(body);
+  let { FireNOCs = [], RequestInfo = {} } = body;
+  let errorMap = [];
 
   //Check records for approved
   // let approvedList=await getApprovedList(cloneDeep(body));
 
+  //Enrich assignee
+  body.FireNOCs = await enrichAssignees(FireNOCs, RequestInfo);
+
   //applay workflow
   let workflowResponse = await createWorkFlow(body);
-  //console.log("workflowResponse"+JSON.stringify(workflowResponse));
+
+
+
+  for (var i = 0; i < FireNOCs.length; i++) {
+    if(isExternalCall && FireNOCs[i].fireNOCDetails.action === 'PAY'){
+      errorMap.push({"INVALID_ACTION":"PAY action cannot perform directly on application "+FireNOCs[i].fireNOCDetails.applicationNumber});
+    }
+  }
+
+  if (errorMap.length > 0) {
+    return next({
+      errorType: "custom",
+      errorReponse: {
+        ResponseInfo: requestInfoToResponseInfo(RequestInfo, false),
+        Errors: errorMap
+      }
+    });
+    return;
+  }
 
   //calculate call
-  let { FireNOCs = [], RequestInfo = {} } = body;
   for (var i = 0; i < FireNOCs.length; i++) {
     let firenocResponse = await calculate(FireNOCs[i], RequestInfo);
   }

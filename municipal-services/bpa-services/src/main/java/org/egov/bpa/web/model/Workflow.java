@@ -14,6 +14,8 @@ import org.egov.bpa.web.model.AuditDetails.AuditDetailsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -28,6 +30,7 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @Builder
 public class Workflow   {
+  @SafeHtml
   @JsonProperty("action")
   private String action = null;
 
@@ -35,6 +38,7 @@ public class Workflow   {
   @Valid
   private List<String> assignes = null;
 
+  @SafeHtml
   @JsonProperty("comments")
   private String comments = null;
 

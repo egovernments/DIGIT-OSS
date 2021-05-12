@@ -5,6 +5,7 @@ import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -32,9 +33,12 @@ import lombok.Setter;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-11-12T10:46:14.653+05:30[Asia/Kolkata]")
 public class MeterReading {
+
+	@SafeHtml
 	@JsonProperty("id")
 	private String id = null;
 
+	@SafeHtml
 	@JsonProperty("billingPeriod")
 	private String billingPeriod = null;
 
@@ -92,6 +96,7 @@ public class MeterReading {
 	@JsonProperty("currentReadingDate")
 	private Long currentReadingDate = null;
 
+	@SafeHtml
 	@JsonProperty("connectionNo")
 	private String connectionNo = null;
 
@@ -104,6 +109,7 @@ public class MeterReading {
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails = null;
 
+	@SafeHtml
 	@JsonProperty("tenantId")
 	private String tenantId = null;
 

@@ -18,7 +18,7 @@ import lombok.Setter;
 @Builder
 public class BPASearchCriteria {
 
-	 @JsonProperty("tenantId")
+	 	@JsonProperty("tenantId")
 	    private String tenantId;
 
 	    @JsonProperty("ids")

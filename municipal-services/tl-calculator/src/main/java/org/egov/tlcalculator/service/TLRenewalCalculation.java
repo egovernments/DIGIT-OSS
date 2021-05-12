@@ -319,7 +319,7 @@ public class TLRenewalCalculation {
     private void setDateToCalendar(String[] time, Calendar cal) {
 
         cal.clear();
-        TimeZone timeZone = TimeZone.getTimeZone("Asia/Kolkata");
+        TimeZone timeZone = TimeZone.getTimeZone(config.getEgovAppTimeZone());
         cal.setTimeZone(timeZone);
         Integer day = Integer.valueOf(time[0]);
         Integer month = Integer.valueOf(time[1])-1;

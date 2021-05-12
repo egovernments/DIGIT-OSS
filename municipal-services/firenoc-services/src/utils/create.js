@@ -23,6 +23,7 @@ export const addUUIDAndAuditDetails = async (request, method = "_update") => {
         ? fireNOCApplication
         : await addIDGenId(RequestInfo, [
             {
+              idName: envVariables.EGOV_IDGEN_FN_CERTIFICATE_NO_NAME,
               tenantId: FireNOCs[i].tenantId,
               format: envVariables.EGOV_APPLICATION_FORMATE
             }
@@ -83,15 +84,36 @@ export const addUUIDAndAuditDetails = async (request, method = "_update") => {
     ) {
       let owners = FireNOCs[i].fireNOCDetails.applicantDetails.owners;
       for (var owneriter = 0; owneriter < owners.length; owneriter++) {
-        let userCreateResponse = await createUser(
+        let userResponse = {};
+        let userSearchReqCriteria = {};
+        let userSearchResponse = {};
+
+        userSearchReqCriteria.mobileNumber = owners[owneriter].mobileNumber;
+        userSearchReqCriteria.name = owners[owneriter].name;
+        userSearchReqCriteria.tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
+
+        userSearchResponse = await userService.searchUser(
           RequestInfo,
-          owners[owneriter],
-          envVariables.EGOV_DEFAULT_STATE_ID
+          userSearchReqCriteria
         );
+        if (get(userSearchResponse, "user", []).length > 0) {
+        userResponse = await userService.updateUser(RequestInfo, {
+        ...userSearchResponse.user[0],
+        ...owners[owneriter]
+        });
+        }
+        else{
+          userResponse = await createUser(
+            RequestInfo,
+            owners[owneriter],
+            envVariables.EGOV_DEFAULT_STATE_ID
+          );
+        }
+
         let ownerUUID = get(owners[owneriter], "ownerUUID");
         owners[owneriter] = {
           ...owners[owneriter],
-          ...get(userCreateResponse, "user.0", []),
+          ...get(userResponse, "user.0", []),
           ownerUUID: ownerUUID && method != "_create" ? ownerUUID : uuidv1()
         };
       }
@@ -173,6 +195,7 @@ const checkApproveRecord = async (fireNoc = {}, RequestInfo) => {
       ? fireNOCNumber
       : await addIDGenId(RequestInfo, [
           {
+            idName: envVariables.EGOV_IDGEN_FN_CERTIFICATE_NO_NAME,
             tenantId: fireNoc.tenantId,
             format: envVariables.EGOV_CIRTIFICATE_FORMATE
           }
@@ -218,4 +241,54 @@ export const updateStatus = (FireNOCs, workflowResponse) => {
     return firenoc;
   });
   return FireNOCs;
+};
+
+export const enrichAssignees = async (FireNOCs, RequestInfo) => {
+
+  for (var i = 0; i < FireNOCs.length; i++) {
+    if(FireNOCs[i].fireNOCDetails.action === 'SENDBACKTOCITIZEN'){
+      let assignes = []; 
+      let owners = FireNOCs[i].fireNOCDetails.applicantDetails.owners;
+      for (let owner of owners)
+        assignes.push(owner.uuid);
+
+      let uuids = await getUUidFromUserName(owners, RequestInfo);
+      if(uuids.length > 0)
+        assignes = [...new Set([...assignes, ...uuids])];
+
+      FireNOCs[i].fireNOCDetails.additionalDetail.assignee = assignes;
+    }
+  }
+  return FireNOCs;
+};
+
+const getUUidFromUserName = async (owners, RequestInfo) => {
+  let uuids = [];
+  let mobileNumbers = [];
+
+  for(let owner of owners)
+    mobileNumbers.push(owner.mobileNumber);
+
+  var mobileNumberSet = [...new Set(mobileNumbers)];
+
+  for(let mobileNumber of mobileNumberSet){
+    let userSearchReqCriteria = {};
+    let userSearchResponse = {};
+
+    userSearchReqCriteria.userName = mobileNumber;
+    userSearchReqCriteria.tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
+
+    userSearchResponse = await userService.searchUser(
+      RequestInfo,
+      userSearchReqCriteria
+    );
+
+    if (get(userSearchResponse, "user", []).length > 0) {
+      uuids.push(userSearchResponse.user[0].uuid);
+    }
+
+  }
+  let uuidsSet = [...new Set(uuids)];
+
+  return uuidsSet;
 };

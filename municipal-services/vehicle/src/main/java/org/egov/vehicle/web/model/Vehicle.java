@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,24 +30,29 @@ import lombok.ToString;
 @Builder
 public class Vehicle {
 
+    @SafeHtml
     @JsonProperty("id")
     private String id = null;
 
 	@Size(max=64)
+    @SafeHtml
     @JsonProperty("tenantId")
     private String tenantId = null;
 
     @NonNull
+    @SafeHtml
 	@Size(max=64)
     @JsonProperty("registrationNumber")
     private String registrationNumber  = null;
 
     @NonNull
+    @SafeHtml
 	@Size(max=64)
     @JsonProperty("model")
     private String model = null;
 
     @NonNull
+    @SafeHtml
 	@Size(max=64)
     @JsonProperty("type")
     private String type = null;
@@ -55,6 +61,7 @@ public class Vehicle {
     @JsonProperty("tankCapacity")
     private Double tankCapacity;
     
+    @SafeHtml
     @JsonProperty("suctionType")
     private String suctionType = null;
 
@@ -76,9 +83,11 @@ public class Vehicle {
     @JsonProperty("additionalDetails")
     private Object additionalDetails = null;
 
+    @SafeHtml
     @JsonProperty("source")
     private String source = null;
-    
+
+    @SafeHtml
     @JsonProperty("ownerId")
     private String ownerId = null;
 

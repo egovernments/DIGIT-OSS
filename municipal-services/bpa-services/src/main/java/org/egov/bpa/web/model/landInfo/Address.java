@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.egov.bpa.web.model.AuditDetails;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,45 +28,59 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Address   {
+  @SafeHtml
   @JsonProperty("tenantId")
   private String tenantId = null;
 
+  @SafeHtml
   @JsonProperty("doorNo")
   private String doorNo = null;
 
+  @SafeHtml
   @JsonProperty("plotNo")
   private String plotNo = null;
 
+  @SafeHtml
   @JsonProperty("id")
   private String id = null;
 
+  @SafeHtml
   @JsonProperty("landmark")
   private String landmark = null;
 
+  @SafeHtml
   @JsonProperty("city")
   private String city = null;
 
+  @SafeHtml
   @JsonProperty("district")
   private String district = null;
 
+  @SafeHtml
   @JsonProperty("region")
   private String region = null;
 
+  @SafeHtml
   @JsonProperty("state")
   private String state = null;
 
+  @SafeHtml
   @JsonProperty("country")
   private String country = null;
 
+  @SafeHtml
   @JsonProperty("pincode")
   private String pincode = null;
 
+  @SafeHtml
   @JsonProperty("additionDetails")
   private String additionDetails = null;
 
+  @SafeHtml
   @JsonProperty("buildingName")
   private String buildingName = null;
 
+  @SafeHtml
   @JsonProperty("street")
   private String street = null;
 

@@ -14,6 +14,7 @@ import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Source;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.ProcessInstance;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.javers.core.metamodel.annotation.DiffIgnore;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -38,12 +39,15 @@ import lombok.ToString;
 public class Property extends PropertyInfo {
 
 	@JsonProperty("acknowldgementNumber")
+	@SafeHtml
 	private String acknowldgementNumber;
 
 	@JsonProperty("propertyType")
+	@SafeHtml
 	private String propertyType;
 
 	@JsonProperty("ownershipCategory")
+	@SafeHtml
 	private String ownershipCategory;
 
 	@JsonProperty("owners")
@@ -58,6 +62,7 @@ public class Property extends PropertyInfo {
 	private CreationReason creationReason;
 	
 	@JsonProperty("usageCategory")
+	@SafeHtml
 	private String usageCategory;
 
 	@Max(value = 500)

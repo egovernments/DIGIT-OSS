@@ -56,6 +56,8 @@ public class WaterConnectionValidator {
 		ValidatorResult isMeterInfoValidated = meterInfoValidator.validate(waterConnectionRequest, reqType);
 		if (!isMeterInfoValidated.isStatus())
 			errorMap.putAll(isMeterInfoValidated.getErrorMessage());
+		if(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase("PAY"))
+			errorMap.put("INVALID_ACTION","Pay action cannot be perform directly");
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);

@@ -5,7 +5,7 @@
 	<artifactId>noc-services</artifactId>
 	<packaging>jar</packaging>
 	<name>noc-services</name>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<properties>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
@@ -50,6 +50,11 @@
 			<groupId>org.javers</groupId>
 			<artifactId>javers-core</artifactId>
 			<version>3.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.egov.services</groupId>

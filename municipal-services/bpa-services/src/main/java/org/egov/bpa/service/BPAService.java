@@ -529,6 +529,7 @@ public class BPAService {
 			throw new CustomException(BPAErrorConstants.INVALID_REQUEST, "Approval Number is required.");
 		}
 
+		Exception exception = null;
 		try {
 			this.createTempReport(bpaRequest, fileName, document);
 			String localizationMessages = notificationUtil.getLocalizationMessages(bpa.getTenantId(),
@@ -540,6 +541,7 @@ public class BPAService {
 			this.addDataToPdf(document, bpaRequest, permitNo, generatedOn,fileName);
 
 		} catch (Exception ex) {
+			exception = ex;
 			log.debug("Exception occured while downloading pdf", ex.getMessage());
 			throw new CustomException(BPAErrorConstants.UNABLE_TO_DOWNLOAD, "Unable to download the file");
 		} finally {
@@ -547,8 +549,8 @@ public class BPAService {
 				if (document != null) {
 					document.close();
 				}
-			} catch (Exception ex) {
-				throw new CustomException(BPAErrorConstants.INVALID_FILE, "unable to close this file");
+			} catch (Throwable t) {
+				exception.addSuppressed(t);
 			}
 		}
 	}
@@ -594,16 +596,23 @@ public class BPAService {
 	private void createTempReport(BPARequest bpaRequest,String fileName,PDDocument document) throws Exception {
 		URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
 		// Read the PDF from the URL and save to a local file
-		FileOutputStream writeStream = new FileOutputStream(fileName);
-		byte[] byteChunck = new byte[1024];
-		int baLength;
-		InputStream readStream = downloadUrl.openStream();
-		while ((baLength = readStream.read(byteChunck)) != -1) {
-			writeStream.write(byteChunck, 0, baLength);
+		FileOutputStream writeStream = null;
+		InputStream readStream = null;
+		try {
+			writeStream = new FileOutputStream(fileName);
+			byte[] byteChunck = new byte[1024];
+			int baLength;
+			readStream = downloadUrl.openStream();
+			while ((baLength = readStream.read(byteChunck)) != -1) {
+				writeStream.write(byteChunck, 0, baLength);
+			}
+		}catch (Exception e){
+			log.error("Error while creating temp report.");
+		}finally {
+			writeStream.flush();
+			writeStream.close();
+			readStream.close();
 		}
-		writeStream.flush();
-		writeStream.close();
-		readStream.close();
 
 		document = PDDocument.load(new File(fileName));
 	}

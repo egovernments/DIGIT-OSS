@@ -75,10 +75,10 @@ public class SewerageServicesUtil {
 	 */
 
 	public List<Property> propertySearch(SewerageConnectionRequest sewerageConnectionRequest) {
-		HashSet<String> propertyUUID = new HashSet<>();
+		HashSet<String> propertyIds = new HashSet<>();
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
-		propertyUUID.add(sewerageConnectionRequest.getSewerageConnection().getPropertyId());
-		propertyCriteria.setUuids(propertyUUID);
+		propertyIds.add(sewerageConnectionRequest.getSewerageConnection().getPropertyId());
+		propertyCriteria.setPropertyIds(propertyIds);
 		if (sewerageConnectionRequest.getRequestInfo().getUserInfo() != null
 				&& "EMPLOYEE".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())) {
 			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());

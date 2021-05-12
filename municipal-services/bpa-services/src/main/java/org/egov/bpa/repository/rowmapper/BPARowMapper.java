@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.bpa.web.model.AuditDetails;
 import org.egov.bpa.web.model.BPA;
 import org.egov.bpa.web.model.Document;
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 @Component
+@Slf4j
 public class BPARowMapper implements ResultSetExtractor<List<BPA>> {
 
 	@Autowired
@@ -104,7 +106,7 @@ public class BPARowMapper implements ResultSetExtractor<List<BPA>> {
 			try {
 				additionalDetail = mapper.readTree(pgObj.getValue());
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error("Failed to parse additionalDetails",e);
 			}
 			bpa.setAdditionalDetails(additionalDetail);
 		}

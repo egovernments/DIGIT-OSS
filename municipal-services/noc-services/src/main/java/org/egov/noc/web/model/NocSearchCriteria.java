@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Getter
 @Setter
@@ -21,25 +22,31 @@ import lombok.Setter;
 public class NocSearchCriteria {
 
 	    @NotNull
+		@SafeHtml
 	    @JsonProperty("tenantId")
 	    private String tenantId;
 
 	    @JsonProperty("ids")
 	    private List<String> ids;
 
+		@SafeHtml
 	    @JsonProperty("applicationNo")
 	    private String applicationNo;
-	    	
-	    @JsonProperty("nocNo")
+
+		@SafeHtml
+		@JsonProperty("nocNo")
 	    private String nocNo;
-	    
-	    @JsonProperty("source")
+
+		@SafeHtml
+		@JsonProperty("source")
 	    private String source;
-	    
-	    @JsonProperty("nocType")
+
+		@SafeHtml
+		@JsonProperty("nocType")
 	    private String nocType;
-	    
-	    @JsonProperty("sourceRefId")
+
+		@SafeHtml
+		@JsonProperty("sourceRefId")
 	    private String sourceRefId;
 	    
 	    @JsonProperty("offset")

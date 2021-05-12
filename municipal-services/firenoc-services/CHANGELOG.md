@@ -3,6 +3,15 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.3.0 - 2021-05-11
+
+- Fixed security issue of untrusted data pass as user input.
+- Fixed issue of workflow approval without payment
+
+## 1.2.0 - 2021-03-19
+
+- Added sendback to citizen feature in product.
+
 ## 1.1.2 - 2021-02-26
 
 - Updated domain name in application.properties.

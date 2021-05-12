@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.egov.vehicle.web.model.AuditDetails;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,28 +31,31 @@ import lombok.Setter;
 
 public class VehicleTripDetail {
 
-
+	  @SafeHtml
 	  @JsonProperty("id")
 	  private String id = null;
 
 	  @NotNull
+	  @SafeHtml
 	  @NotBlank
 	  @JsonProperty("tenantId")
 	  private String tenantId = null;
 	  
 	  @NotNull
+	  @SafeHtml
 	  @NotBlank
 	  @JsonProperty("referenceNo")
 	  private String referenceNo = null;
 	  
 	  @NotBlank
 	  @NotNull
+	  @SafeHtml
 	  @JsonProperty("referenceStatus")
 	  private String referenceStatus = null;
 	  
 
-	    @JsonProperty("additionalDetails")
-	    private Object additionalDetails = null;
+	  @JsonProperty("additionalDetails")
+	  private Object additionalDetails = null;
 	    
 	  /**
 	   * Gets or Sets status

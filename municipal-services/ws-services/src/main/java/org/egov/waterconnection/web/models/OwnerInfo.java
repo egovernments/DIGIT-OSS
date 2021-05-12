@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Getter
 @Setter
@@ -25,19 +26,24 @@ import lombok.ToString;
 @NoArgsConstructor
 public class OwnerInfo extends User{
 
+	@SafeHtml
 	@JsonProperty("ownerInfoUuid")
 	private String ownerInfoUuid;
 	
 	@NotNull
+	@SafeHtml
 	@JsonProperty("mobileNumber")
 	private String mobileNumber;
 
+	@SafeHtml
 	@JsonProperty("gender")
 	private String gender;
 
+	@SafeHtml
 	@JsonProperty("fatherOrHusbandName")
 	private String fatherOrHusbandName;
 
+	@SafeHtml
 	@JsonProperty("correspondenceAddress")
 	private String correspondenceAddress;
 
@@ -48,9 +54,11 @@ public class OwnerInfo extends User{
 	private Double ownerShipPercentage;
 
 	@NotNull
+	@SafeHtml
 	@JsonProperty("ownerType")
 	private String ownerType;
 
+	@SafeHtml
 	@JsonProperty("institutionId")
 	private String institutionId;
 	

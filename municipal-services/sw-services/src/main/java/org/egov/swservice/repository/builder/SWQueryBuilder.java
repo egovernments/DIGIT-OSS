@@ -79,7 +79,7 @@ public class SWQueryBuilder {
 		
 		if (!StringUtils.isEmpty(criteria.getMobileNumber()) || !StringUtils.isEmpty(criteria.getPropertyId())) {
 			List<Property> propertyList = sewerageServicesUtil.propertySearchOnCriteria(criteria, requestInfo);
-			propertyList.forEach(property -> propertyIds.add(property.getId()));
+			propertyList.forEach(property -> propertyIds.add(property.getPropertyId()));
 			criteria.setPropertyIds(propertyIds);
 			if (!propertyIds.isEmpty()) {
 				addClauseIfRequired(preparedStatement, query);
@@ -117,8 +117,14 @@ public class SWQueryBuilder {
 		
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
 			addClauseIfRequired(preparedStatement, query);
-			query.append(" conn.tenantid = ? ");
-			preparedStatement.add(criteria.getTenantId());
+			if(criteria.getTenantId().equalsIgnoreCase(config.getStateLevelTenantId())){
+				query.append(" conn.tenantid LIKE ? ");
+				preparedStatement.add(criteria.getTenantId() + '%');
+			}
+			else{
+				query.append(" conn.tenantid = ? ");
+				preparedStatement.add(criteria.getTenantId());
+			}
 		}
 
 		if (!StringUtils.isEmpty(criteria.getPropertyId()) && StringUtils.isEmpty(criteria.getMobileNumber())) {

@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.egov.tl.web.models.AuditDetails;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -27,10 +28,12 @@ import javax.validation.constraints.*;
 public class Accessory   {
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("id")
         private String id;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("tenantId")
         private String tenantId = null;
 
@@ -38,14 +41,17 @@ public class Accessory   {
         private Boolean active;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("accessoryCategory")
         private String accessoryCategory = null;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("uom")
         private String uom = null;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("uomValue")
         private String uomValue = null;
 

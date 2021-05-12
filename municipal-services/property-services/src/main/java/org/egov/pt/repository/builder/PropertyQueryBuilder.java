@@ -25,7 +25,7 @@ public class PropertyQueryBuilder {
 	private static String PROEPRTY_AUDIT_QUERY = "select property from eg_pt_property_audit where propertyid=?";
 
 	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace})";
-	
+
 	private static String REPLACE_STRING = "{replace}";
 	
 	private static String WITH_CLAUSE_QUERY = " WITH propertyresult AS ({replace}) SELECT * FROM propertyresult "
@@ -78,9 +78,7 @@ public class PropertyQueryBuilder {
 			
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid "
-			
-			+ " WHERE ";
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
 	
 
 
@@ -171,60 +169,48 @@ public class PropertyQueryBuilder {
 
 		if (null != criteria.getStatus()) {
 
-			if(appendAndQuery)
-				builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList,builder);
 			builder.append("property.status = ?");
 			preparedStmtList.add(criteria.getStatus());
-			appendAndQuery= true;
 		}
 		
 		if (null != criteria.getLocality()) {
 
-			if(appendAndQuery)
-				builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList,builder);
 			builder.append("address.locality = ?");
 			preparedStmtList.add(criteria.getLocality());
-			appendAndQuery= true;
 		}
 
 		Set<String> propertyIds = criteria.getPropertyIds();
 		if (!CollectionUtils.isEmpty(propertyIds)) {
 
-			if(appendAndQuery)
-				builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList,builder);
 			builder.append("property.propertyid IN (").append(createQuery(propertyIds)).append(")");
 			addToPreparedStatementWithUpperCase(preparedStmtList, propertyIds);
-			appendAndQuery= true;
 		}
 		
 		Set<String> acknowledgementIds = criteria.getAcknowledgementIds();
 		if (!CollectionUtils.isEmpty(acknowledgementIds)) {
 
-			if(appendAndQuery)
-				builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList,builder);
 			builder.append("property.acknowldgementnumber IN (").append(createQuery(acknowledgementIds)).append(")");
 			addToPreparedStatementWithUpperCase(preparedStmtList, acknowledgementIds);
-			appendAndQuery= true;
 		}
 		
 		Set<String> uuids = criteria.getUuids();
 		if (!CollectionUtils.isEmpty(uuids)) {
 
-			if(appendAndQuery)
-				builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList,builder);
 			builder.append("property.id IN (").append(createQuery(uuids)).append(")");
 			addToPreparedStatement(preparedStmtList, uuids);
-			appendAndQuery= true;
 		}
 
 		Set<String> oldpropertyids = criteria.getOldpropertyids();
 		if (!CollectionUtils.isEmpty(oldpropertyids)) {
 
-			if(appendAndQuery)
-				builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList,builder);
 			builder.append("property.oldpropertyid IN (").append(createQuery(oldpropertyids)).append(")");
 			addToPreparedStatement(preparedStmtList, oldpropertyids);
-			appendAndQuery= true;
 		}
 
 		String withClauseQuery = WITH_CLAUSE_QUERY.replace(REPLACE_STRING, builder);
@@ -283,33 +269,42 @@ public class PropertyQueryBuilder {
 
 		Set<String> propertyIds = criteria.getPropertyIds();
 		if (!CollectionUtils.isEmpty(propertyIds)) {
-			if(appendAndQuery)
-				builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList,builder);
 			builder.append("property.propertyid IN (").append(createQuery(propertyIds)).append(")");
 			addToPreparedStatementWithUpperCase(preparedStmtList, propertyIds);
-			appendAndQuery= true;
 		}
 
 		Set<String> uuids = criteria.getUuids();
 		if (!CollectionUtils.isEmpty(uuids)) {
 
-			if(appendAndQuery)
-				builder.append(AND_QUERY);
+			addClauseIfRequired(preparedStmtList,builder);
 			builder.append("property.id IN (").append(createQuery(uuids)).append(")");
 			addToPreparedStatement(preparedStmtList, uuids);
-			appendAndQuery= true;
 		}
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 	}
 
-	public String getPropertyIdsQuery(Set<String> ownerIds, List<Object> preparedStmtList) {
+	public String getPropertyIdsQuery(Set<String> ownerIds, String tenantId, List<Object> preparedStmtList) {
 
 		StringBuilder query = new StringBuilder("(");
 		query.append(createQuery(ownerIds));
 		addToPreparedStatement(preparedStmtList, ownerIds);
 		query.append(")");
-		
-		return PROEPRTY_ID_QUERY.replace(REPLACE_STRING, query).toString();
+
+		StringBuilder propertyIdQuery = new StringBuilder(PROEPRTY_ID_QUERY.replace(REPLACE_STRING, query));
+
+		if(tenantId.equalsIgnoreCase(config.getStateLevelTenantId())){
+			propertyIdQuery.append(AND_QUERY);
+			propertyIdQuery.append(" tenantId LIKE ? ");
+			preparedStmtList.add(tenantId + '%');
+		}
+		else{
+			propertyIdQuery.append(AND_QUERY);
+			propertyIdQuery.append(" tenantId= ? ");
+			preparedStmtList.add(tenantId);
+		}
+
+		return propertyIdQuery.toString();
 	}
 
 	private String createQuery(Set<String> ids) {
@@ -339,7 +334,7 @@ public class PropertyQueryBuilder {
 		if (values.isEmpty())
 			queryString.append(" WHERE ");
 		else {
-			queryString.append(" AND");
+			queryString.append(" AND ");
 		}
 	}
 

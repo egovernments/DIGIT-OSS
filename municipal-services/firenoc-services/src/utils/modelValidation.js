@@ -2,6 +2,7 @@ import get from "lodash/get";
 import some from "lodash/some";
 const fireNOCSchema = require("../model/fireNOC.js");
 const fireNOCSearchSchema = require("../model/fireNOCSearch.js");
+var xss = require('xss');
 
 const getAjvInstance = () => {
   const Ajv = require("ajv");
@@ -33,6 +34,16 @@ export const validateFireNOCModel = (data, mdmsData) => {
   // ];
   const ajv = getAjvInstance();
   // console.log(financialYear);
+
+  ajv.addKeyword("valid_htmlData", {
+    validate: function(schema, data) {
+      return (xss(data)==data) ? true : false;
+    },
+    errors: false
+  });
+
+
+
   ajv.addKeyword("valid_firestation", {
     validate: function(schema, data) {
       return some(fireStations, { code: data });

@@ -2,14 +2,7 @@ package org.egov.swcalculation.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -701,23 +694,25 @@ public class DemandService {
 		url.append("businessService=");
 		url.append("{2}");
 		url.append("&");
-		url.append("demandId=");
+		url.append("consumerCode=");
 		url.append("{3}");
+		url.append("&");
+		url.append("isPaymentCompleted=false");
 		return url;
 	}
 	/**
 	 * 
 	 * @param tenantId - Tenant ID
-	 * @param demandId - List of Demand Ids
+	 * @param consumerCode - Connection number
 	 * @param requestInfo - Request Info Object
 	 * @return List of Demand
 	 */
-	private List<Demand> searchDemandBasedOnDemandId(String tenantId, Set<String> demandId,
+	private List<Demand> searchDemandBasedOnConsumerCode(String tenantId, String consumerCode,
 			RequestInfo requestInfo) {
 		String uri = getDemandSearchURLForDemandId().toString();
 		uri = uri.replace("{1}", tenantId);
 		uri = uri.replace("{2}", configs.getBusinessService());
-		uri = uri.replace("{3}", StringUtils.join(demandId, ','));
+		uri = uri.replace("{3}", consumerCode);
 		Object result = serviceRequestRepository.fetchResult(new StringBuilder(uri),
 				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
 		try {
@@ -785,13 +780,20 @@ public class DemandService {
 		public List<Calculation> updateDemandForAdhocTax(RequestInfo requestInfo, List<Calculation> calculations) {
 			List<Demand> demands = new LinkedList<>();
 			for (Calculation calculation : calculations) {
-				Set<String> consumerCodes = new HashSet<>();
-				consumerCodes = Collections.singleton(calculation.getApplicationNO());
-				List<Demand> searchResult = searchDemandBasedOnDemandId(calculation.getTenantId(), consumerCodes,
+				String consumerCode = calculation.getConnectionNo();
+				List<Demand> searchResult = searchDemandBasedOnConsumerCode(calculation.getTenantId(), consumerCode,
 						requestInfo);
 				if (CollectionUtils.isEmpty(searchResult))
 					throw new CustomException("INVALID_DEMAND_UPDATE",
-							"No demand exists for Number: " + consumerCodes.toString());
+							"No demand exists for Number: " + consumerCode);
+
+				Collections.sort(searchResult, new Comparator<Demand>() {
+					@Override
+					public int compare(Demand d1, Demand d2) {
+						return d1.getTaxPeriodFrom().compareTo(d2.getTaxPeriodFrom());
+					}
+				});
+
 				Demand demand = searchResult.get(0);
 				demand.setDemandDetails(getUpdatedAdhocTax(calculation, demand.getDemandDetails()));
 				demands.add(demand);

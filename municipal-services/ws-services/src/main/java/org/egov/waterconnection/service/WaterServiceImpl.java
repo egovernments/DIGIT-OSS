@@ -171,6 +171,7 @@ public class WaterServiceImpl implements WaterService {
 		actionValidator.validateUpdateRequest(waterConnectionRequest, businessService, previousApplicationStatus);
 		waterConnectionValidator.validateUpdate(waterConnectionRequest, searchResult, WCConstants.UPDATE_APPLICATION);
 		userService.updateUser(waterConnectionRequest, searchResult);
+		//Call workflow
 		wfIntegrator.callWorkFlow(waterConnectionRequest, property);
 		//call calculator service to generate the demand for one time fee
 		calculationService.calculateFeeAndGenerateDemand(waterConnectionRequest, property);
@@ -179,7 +180,6 @@ public class WaterServiceImpl implements WaterService {
 		//Enrich file store Id After payment
 		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
 		userService.createUser(waterConnectionRequest);
-		//Call workflow
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);

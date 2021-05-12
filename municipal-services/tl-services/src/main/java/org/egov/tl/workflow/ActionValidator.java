@@ -2,6 +2,7 @@ package org.egov.tl.workflow;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
+import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.TradeLicense;
 import org.egov.tl.web.models.TradeLicenseRequest;
@@ -24,10 +25,13 @@ public class ActionValidator {
 
     private WorkflowService workflowService;
 
+    private TLConfiguration config;
+
     @Autowired
-    public ActionValidator(WorkflowConfig workflowConfig, WorkflowService workflowService) {
+    public ActionValidator(WorkflowConfig workflowConfig, WorkflowService workflowService, TLConfiguration config) {
         this.workflowConfig = workflowConfig;
         this.workflowService = workflowService;
+        this.config = config;
     }
 
 
@@ -96,7 +100,21 @@ public class ActionValidator {
         validateDocumentsForUpdate(request);
        // validateRole(request);
        // validateAction(request);
+        validatePayAction(request);
         validateIds(request,businessService);
+    }
+
+    private void validatePayAction(TradeLicenseRequest request){
+        Map<String,String> errorMap = new HashMap<>();
+        if(config.getIsExternalWorkFlowEnabled()){
+            request.getLicenses().forEach(license -> {
+                if(license.getAction().equalsIgnoreCase(ACTION_PAY))
+                    errorMap.put("INVALID_ACTION","Pay action cannot perform directly");
+            });
+
+            if(!errorMap.isEmpty())
+                throw new CustomException(errorMap);
+        }
     }
 
 

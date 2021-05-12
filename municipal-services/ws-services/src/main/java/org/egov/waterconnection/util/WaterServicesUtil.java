@@ -93,9 +93,9 @@ public class WaterServicesUtil {
 	 */
 	public List<Property> propertySearch(WaterConnectionRequest waterConnectionRequest) {
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
-		HashSet<String> propertyUUID = new HashSet<>();
-		propertyUUID.add(waterConnectionRequest.getWaterConnection().getPropertyId());
-		propertyCriteria.setUuids(propertyUUID);
+		HashSet<String> propertyIds = new HashSet<>();
+		propertyIds.add(waterConnectionRequest.getWaterConnection().getPropertyId());
+		propertyCriteria.setPropertyIds(propertyIds);
 		if (waterConnectionRequest.getRequestInfo().getUserInfo() != null
 				&& "EMPLOYEE".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getType())) {
 			propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());

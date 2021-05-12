@@ -190,7 +190,7 @@ public class TLValidator {
      * @return time in millis
      */
     private Long getStartOfDay(){
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("IST"));
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(config.getEgovAppTimeZone()));
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);

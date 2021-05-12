@@ -101,27 +101,27 @@ consumerGroup.on("message", function(message) {
         case "INITIATED":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} has been generated. Your application no. is ${applicationNumber}.`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} has been generated. Your application no. is ${applicationNumber}.\n\nEGOVS`;
           break;
         case "PENDINGPAYMENT":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} has been submitted. Your application no. is ${applicationNumber}. Please pay your NoC Fees online or at your applicable fire office`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} has been submitted. Your application no. is ${applicationNumber}. Please pay your NoC Fees online or at your applicable fire office\n\nEGOVS`;
           break;
         case "DOCUMENTVERIFY":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for field inpsection.`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for field inpsection.\n\nEGOVS`;
           break;
         case "FIELDINSPECTION":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for document verifier.`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for document verifier.\n\nEGOVS`;
           break;
         case "PENDINGAPPROVAL":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for approver.`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been forwarded for approver.\n\nEGOVS`;
           break;
         case "APPROVED":
           var currentDate = new Date(validTo);
@@ -138,12 +138,18 @@ consumerGroup.on("message", function(message) {
 
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} is approved.And your fire NoC has been generated.Your Fire NoC No. is ${fireNOCNumber}. It is valid till ${dateString}`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} is approved.And your fire NoC has been generated.Your Fire NoC No. is ${fireNOCNumber}. It is valid till ${dateString}\n\nEGOVS`;
+          break;
+        case "SENDBACKTOCITIZEN":
+          smsRequest[
+            "message"
+          ] = `Dear ${ownerName}, 
+          Your application for ${firenocType} Fire NOC Certificate with application no. ${applicationNumber} is send back to you for further actions.Please check the comments and Re-submit application through mSeva App or by ULB counter.\n\nEGOVS`;
           break;
         case "REJECTED":
           smsRequest[
             "message"
-          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been rejected.To know more details please contact your applicable fire office`;
+          ] = `Dear ${ownerName},Your application for ${firenocType} with application no. is ${applicationNumber} has been rejected.To know more details please contact your applicable fire office\n\nEGOVS`;
           break;
         // case "CANCELLED":
         //   break;
@@ -213,13 +219,13 @@ consumerGroup.on("message", function(message) {
             for(var index =0; index < RequestInfo.userInfo.roles.length;index++){
               let tenantId = get(RequestInfo.userInfo,"tenantId");
               set(RequestInfo.userInfo.roles[index],"tenantId",tenantId);
-              console.log("Workflow TenantId",get(body.RequestInfo.userInfo.roles[index],"tenantId"));
+              //console.log("Workflow TenantId",get(body.RequestInfo.userInfo.roles[index],"tenantId"));
             }
 
             const updateBody = { RequestInfo, FireNOCs };
             const updateRequest = { body: updateBody };
             //console.log("update Request: "+JSON.stringify(updateRequest));
-            const updateResponse = await updateApiResponse(updateRequest);
+            const updateResponse = await updateApiResponse(updateRequest, false);
             //console.log("update Response: "+JSON.stringify(updateResponse));
           }
         }

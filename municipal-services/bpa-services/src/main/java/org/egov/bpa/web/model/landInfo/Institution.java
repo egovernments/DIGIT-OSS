@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import org.egov.bpa.web.model.AuditDetails.AuditDetailsBuilder;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -23,18 +24,23 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @Builder
 public class Institution   {
+  @SafeHtml
   @JsonProperty("id")
   private String id = null;
 
+  @SafeHtml
   @JsonProperty("tenantId")
   private String tenantId = null;
 
+  @SafeHtml
   @JsonProperty("type")
   private String type = null;
 
+  @SafeHtml
   @JsonProperty("designation")
   private String designation = null;
 
+  @SafeHtml
   @JsonProperty("nameOfAuthorizedPerson")
   private String nameOfAuthorizedPerson = null;
 

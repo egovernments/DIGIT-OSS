@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 import org.egov.common.contract.request.User;
 import org.egov.vehicle.web.model.AuditDetails;
 import org.egov.vehicle.web.model.Vehicle;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -36,11 +37,13 @@ import lombok.Setter;
 @Setter
 public class VehicleTrip   {
 
+  @SafeHtml
   @JsonProperty("id")
   private String id = null;
 
   @NotNull
   @NotBlank
+  @SafeHtml
   @Size(max=64)
   @JsonProperty("tenantId")
   private String tenantId = null;
@@ -49,6 +52,7 @@ public class VehicleTrip   {
   @Valid
   private User tripOwner = null;
   
+  @SafeHtml
   @JsonProperty("tripOwnerId")
   private String tripOwnerId = null;
   
@@ -57,6 +61,7 @@ public class VehicleTrip   {
   private User driver = null;
   
   @JsonProperty("driverId")
+  @SafeHtml
   @Size(max=64)
   private String driverId = null;
   
@@ -66,10 +71,11 @@ public class VehicleTrip   {
   @Valid
   private Vehicle vehicle;
   
-
+  @SafeHtml
   @JsonProperty("vehicleId")
   private String vehicleId = null;
 
+  @SafeHtml
   @JsonProperty("applicationNo")
   private String applicationNo = null;
   
@@ -108,10 +114,11 @@ public class VehicleTrip   {
 
   @NotNull
   @NotBlank
+  @SafeHtml
   @JsonProperty("businessService")
   private String businessService = null;
-  
-  
+
+  @SafeHtml
   @JsonProperty("applicationStatus")
   private String applicationStatus = null;
 

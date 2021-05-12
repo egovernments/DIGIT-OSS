@@ -155,9 +155,9 @@ public class WSCalculationUtil {
 	 */
 	public List<Property> propertySearch(WaterConnectionRequest waterConnectionRequest) {
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
-		HashSet<String> propertyUUID = new HashSet<>();
-		propertyUUID.add(waterConnectionRequest.getWaterConnection().getPropertyId());
-		propertyCriteria.setUuids(propertyUUID);
+		HashSet<String> propertyIds = new HashSet<>();
+		propertyIds.add(waterConnectionRequest.getWaterConnection().getPropertyId());
+		propertyCriteria.setPropertyIds(propertyIds);
 		propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 		Object result = serviceRequestRepository.fetchResult(getPropertyURL(propertyCriteria),
 				RequestInfoWrapper.builder().requestInfo(waterConnectionRequest.getRequestInfo()).build());

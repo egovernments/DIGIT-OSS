@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>land-services</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>land-services</name>
 	<properties>
 		<java.version>1.8</java.version>
@@ -42,6 +42,16 @@
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-core</artifactId>
 			<version>1.5.18</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.0.16.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.10.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>

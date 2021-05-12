@@ -152,14 +152,17 @@ public class NotificationUtil {
     			
 					message = message.replace("{PAY_LINK}", getShortenedUrl(actionLink));
 				}
+
 				
 				if (message.contains("{RECEIPT_LINK}") ) {
+
 					String actionLink = config.getDownloadLink().replace("$mobile", fsm.getCitizen().getMobileNumber())
     						.replace("$consumerCode", fsm.getApplicationNo())
     						.replace("$tenantId", fsm.getTenantId())
     						.replace("$receiptNumber", getPaymentData("receiptNumber",fsmRequest))
     						.replace("$businessService",FSMConstants.FSM_PAY_BUSINESS_SERVICE);
 					message = message.replace("{RECEIPT_LINK}", getShortenedUrl(config.getUiAppHost()+actionLink));
+
 				}
 				
 				if (message.contains("{RECEIPT_NO}") ) {
@@ -169,8 +172,10 @@ public class NotificationUtil {
 				if (message.contains("{FSM_APPL_LINK}") ) {
 					message = message.replace("{FSM_APPL_LINK}", getShortenedUrl(config.getUiAppHost()+config.getFsmAppLink()+fsm.getApplicationNo()));
 				}	
+
 				if (message.contains("{NEW_FSM_LINK}") ) {
 					message = message.replace("{NEW_FSM_LINK}", getShortenedUrl(config.getUiAppHost()+config.getNewFsmLink())); 
+
 				}
 					
 			}

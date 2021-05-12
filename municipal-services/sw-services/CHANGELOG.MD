@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.4.0 - 2021-05-11
+
+- Fixed security issue of untrusted data pass as user input.
+- Fixed issue of estimation letter which does not regenerate in case of any changes in calculation parameter.
+- Fixed issue of workflow approval without payment
+
 ## 1.3.0 - 2021-02-26
 - Updated domain name in application.properties
 - Added road cutting info details for calculating fees

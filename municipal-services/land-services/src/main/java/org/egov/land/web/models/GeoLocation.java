@@ -2,6 +2,7 @@ package org.egov.land.web.models;
 
 import java.util.Objects;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,8 +21,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeoLocation   {
-	  @JsonProperty("id")
-	  private String id = null;	
+
+
+  @SafeHtml
+  @JsonProperty("id")
+  private String id = null;
+
   @JsonProperty("latitude")
   private Double latitude = null;
 

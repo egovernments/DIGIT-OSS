@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Data
 @AllArgsConstructor
@@ -12,9 +13,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RoadCuttingInfo {
 
+  @SafeHtml
   @JsonProperty("id")
   private String id ;
 
+  @SafeHtml
   @JsonProperty("roadType")
   private String roadType = null;
 

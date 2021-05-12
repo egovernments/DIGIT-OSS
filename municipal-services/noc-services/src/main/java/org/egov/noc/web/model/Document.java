@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -16,15 +17,19 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-07-30T05:26:25.138Z[GMT]")
 public class Document   {
+  @SafeHtml
   @JsonProperty("id")
   private String id = null;
 
+  @SafeHtml
   @JsonProperty("documentType")
   private String documentType = null;
 
+  @SafeHtml
   @JsonProperty("fileStoreId")
   private String fileStoreId = null;
 
+  @SafeHtml
   @JsonProperty("documentUid")
   private String documentUid = null;
 

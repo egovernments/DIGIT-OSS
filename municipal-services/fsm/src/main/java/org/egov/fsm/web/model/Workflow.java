@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,6 +27,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Workflow   {
+  @SafeHtml
   @JsonProperty("action")
   private String action = null;
 
@@ -33,6 +35,7 @@ public class Workflow   {
   @Valid
   private List<String> assignes = null;
 
+  @SafeHtml
   @JsonProperty("comments")
   private String comments = null;
 

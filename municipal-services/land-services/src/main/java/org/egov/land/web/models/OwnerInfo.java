@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,25 +29,32 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OwnerInfo {
-	
+
+	@SafeHtml
 	@JsonProperty("tenantId")
 	private String tenantId = null;
 
+	@SafeHtml
 	@JsonProperty("name")
 	private String name = null;
 
+	@SafeHtml
 	@JsonProperty("ownerId")
 	private String ownerId = null;
 
+	@SafeHtml
 	@JsonProperty("mobileNumber")
 	private String mobileNumber = null;
 
+	@SafeHtml
 	@JsonProperty("gender")
 	private String gender = null;
 
+	@SafeHtml
 	@JsonProperty("fatherOrHusbandName")
 	private String fatherOrHusbandName = null;
 
+	@SafeHtml
 	@JsonProperty("correspondenceAddress")
 	private String correspondenceAddress = null;
 
@@ -56,9 +64,11 @@ public class OwnerInfo {
 	@JsonProperty("ownerShipPercentage")
 	private BigDecimal ownerShipPercentage = null;
 
+	@SafeHtml
 	@JsonProperty("ownerType")
 	private String ownerType = null;
 
+	@SafeHtml
 	@JsonProperty("institutionId")
 	private String institutionId = null;
 
@@ -76,53 +86,66 @@ public class OwnerInfo {
     private Long id;
 	 
     @Size(max=64)
+	@SafeHtml
     @JsonProperty("uuid")
     private String uuid;
 
     @Size(max=64)
+	@SafeHtml
     @JsonProperty("userName")
     private String userName;
 
     @Size(max=64)
+	@SafeHtml
     @JsonProperty("password")
     private String password;
 
+	@SafeHtml
     @JsonProperty("salutation")
     private String salutation;
 
     @Size(max=128)
+	@SafeHtml
     @JsonProperty("emailId")
     private String emailId;
 
     @Size(max=50)
+	@SafeHtml
     @JsonProperty("altContactNumber")
     private String altContactNumber;
 
     @Size(max=10)
+	@SafeHtml
     @JsonProperty("pan")
     private String pan;
 
     @Pattern(regexp = "^[0-9]{12}$", message = "AdharNumber should be 12 digit number")
+	@SafeHtml
     @JsonProperty("aadhaarNumber")
     private String aadhaarNumber;
 
     @Size(max=300)
+	@SafeHtml
     @JsonProperty("permanentAddress")
     private String permanentAddress;
 
     @Size(max=300)
+	@SafeHtml
     @JsonProperty("permanentCity")
     private String permanentCity;
 
     @Size(max=10)
+	@SafeHtml
     @JsonProperty("permanentPinCode")
     private String permanentPincode;
 
     @Size(max=300)
+	@SafeHtml
     @JsonProperty("correspondenceCity")
     private String correspondenceCity;
 
     @Size(max=10)
+	@SafeHtml
     @JsonProperty("correspondencePinCode")
     private String correspondencePincode;
 
@@ -136,13 +159,16 @@ public class OwnerInfo {
     private Long pwdExpiryDate;
 
     @Size(max=16)
+	@SafeHtml
     @JsonProperty("locale")
     private String locale;
 
     @Size(max=50)
+	@SafeHtml
     @JsonProperty("type")
     private String type;
 
+	@SafeHtml
     @JsonProperty("signature")
     private String signature;
 
@@ -154,13 +180,16 @@ public class OwnerInfo {
     private List<Role> roles;
 
     @Size(max=32)
+	@SafeHtml
     @JsonProperty("bloodGroup")
     private String bloodGroup;
 
+	@SafeHtml
     @JsonProperty("identificationMark")
     private String identificationMark;
 
-    @JsonProperty("photo")
+	@SafeHtml
+	@JsonProperty("photo")
     private String photo;
 
     @Size(max=64)
@@ -177,6 +206,7 @@ public class OwnerInfo {
     @JsonProperty("lastModifiedDate")
     private Long lastModifiedDate;
 
+	@SafeHtml
     @JsonProperty("otpReference")
     private String otpReference;
 

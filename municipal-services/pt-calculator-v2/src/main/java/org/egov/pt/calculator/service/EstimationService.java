@@ -768,6 +768,8 @@ public class EstimationService {
 				calculation.setToDate(taxPeriod.getToDate());
 			}
 		}
+		if(calculation.getFromDate() == null || calculation.getToDate() == null)
+			throw new CustomException(TAX_PERIOD_SEARCH_FAILED, TAX_PERIOD_SEARCH_FAILED_MSG);
 
 	}
 

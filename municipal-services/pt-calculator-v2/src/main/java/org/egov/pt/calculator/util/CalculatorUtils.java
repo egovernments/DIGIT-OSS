@@ -92,8 +92,14 @@ public class CalculatorUtils {
     @Autowired
     private ObjectMapper mapper;
 
-
     private Map<String, Integer> taxHeadApportionPriorityMap;
+
+    private static String timeZone;
+
+    @Value("${id.timezone}")
+    public  void setTimeZone(String zone){
+        CalculatorUtils.timeZone = zone;
+    }
 
     public Map<String, Integer> getTaxHeadApportionPriorityMap() {
 
@@ -610,9 +616,9 @@ public class CalculatorUtils {
      */
     public static Long getEODEpoch(Long epoch) {
         LocalDate date =
-                Instant.ofEpochMilli(epoch).atZone(ZoneId.of(ZoneId.SHORT_IDS.get("IST"))).toLocalDate();
+                Instant.ofEpochMilli(epoch).atZone(ZoneId.of(ZoneId.SHORT_IDS.get(timeZone))).toLocalDate();
         LocalDateTime endOfDay = LocalDateTime.of(date, LocalTime.MAX);
-        Long eodEpoch = endOfDay.atZone(ZoneId.of(ZoneId.SHORT_IDS.get("IST"))).toInstant().toEpochMilli();
+        Long eodEpoch = endOfDay.atZone(ZoneId.of(ZoneId.SHORT_IDS.get(timeZone))).toInstant().toEpochMilli();
         return eodEpoch;
     }
 

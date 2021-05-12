@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.egov.noc.web.model.enums.ApplicationType;
 import org.egov.noc.web.model.enums.Status;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -29,15 +30,19 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @Builder
 public class Noc   {
+  @SafeHtml
   @JsonProperty("id")
   private String id = null;
 
+  @SafeHtml
   @JsonProperty("tenantId")
   private String tenantId = null;
 
+  @SafeHtml
   @JsonProperty("applicationNo")
   private String applicationNo = null;
 
+  @SafeHtml
   @JsonProperty("nocNo")
   private String nocNo = null;
 
@@ -45,18 +50,23 @@ public class Noc   {
   @JsonProperty("applicationType")
   private ApplicationType applicationType = null;
 
+  @SafeHtml
   @JsonProperty("nocType")
   private String nocType = null;
 
+  @SafeHtml
   @JsonProperty("accountId")
   private String accountId = null;
 
+  @SafeHtml
   @JsonProperty("source")
   private String source = null;
 
+  @SafeHtml
   @JsonProperty("sourceRefId")
   private String sourceRefId = null;
 
+  @SafeHtml
   @JsonProperty("landId")
   private String landId = null;
 
@@ -64,6 +74,7 @@ public class Noc   {
   @JsonProperty("status")
   private Status status = null;
 
+  @SafeHtml
   @JsonProperty("applicationStatus")
   private String applicationStatus = null;
 

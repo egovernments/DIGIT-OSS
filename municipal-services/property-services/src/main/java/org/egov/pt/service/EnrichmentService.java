@@ -36,12 +36,14 @@ public class EnrichmentService {
     @Autowired
     private PropertyConfiguration config;
 
+	@Autowired
+	private UserService userService;
+
 
 
     /**
      * Assigns UUIDs to all id fields and also assigns acknowledgement-number and assessment-number generated from id-gen
      * @param request  PropertyRequest received for property creation
-     * @param onlyPropertyDetail if true only the fields related to propertyDetail are enriched(assigned)
      */
 	public void enrichCreateRequest(PropertyRequest request) {
 
@@ -98,7 +100,7 @@ public class EnrichmentService {
      * Assigns UUID for new fields that are added and sets propertyDetail and address id from propertyId
      * 
      * @param request  PropertyRequest received for property update
-     * @param propertiesFromResponse Properties returned by calling search based on id in PropertyRequest
+     * @param propertyFromDb Properties returned from DB
      */
     public void enrichUpdateRequest(PropertyRequest request,Property propertyFromDb) {
     	
@@ -193,7 +195,7 @@ public class EnrichmentService {
 
     /**
      *  Enriches the locality object
-     * @param request The propertyRequest received for create or update
+     * @param property The property object received for create or update
      */
     public void enrichBoundary(Property property, RequestInfo requestInfo){
     	
@@ -321,9 +323,14 @@ public class EnrichmentService {
                        assignes.add(ownerInfo);
                     });
 
-                    // Adding creator of license
+                    // Adding creator of application
                     if(property.getAccountId()!=null)
                         assignes.add(OwnerInfo.builder().uuid(property.getAccountId()).build());
+
+					Set<User> registeredUsers = userService.getUUidFromUserName(property);
+
+					if(!CollectionUtils.isEmpty(registeredUsers))
+						assignes.addAll(registeredUsers);
 
                     property.getWorkflow().setAssignes(assignes);
             }

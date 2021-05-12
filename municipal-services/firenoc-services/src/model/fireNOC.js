@@ -125,11 +125,13 @@ const Address = {
   properties: {
     tenantId: {
       type: "string",
+      valid_htmlData: true,
       description:
         "Unique Identifier of the tenant to which user primarily belongs"
     },
     doorNo: {
       type: "string",
+      valid_htmlData: true,
       description: "House number or door number."
     },
     latitude: {
@@ -144,11 +146,13 @@ const Address = {
     },
     addressId: {
       type: "string",
+      valid_htmlData: true,
       description: "System generated id for the address",
       readOnly: true
     },
     addressNumber: {
       description: "House, Door, Building number in the address",
+      valid_htmlData: true,
       type: "string"
     },
     type: {
@@ -161,39 +165,47 @@ const Address = {
     },
     addressLine1: {
       description: "Apartment, Block, Street of the address",
+      valid_htmlData: true,
       type: "string"
     },
     addressLine2: {
       description: "Locality, Area, Zone, Ward of the address",
+      valid_htmlData: true,
       type: "string"
     },
     landmark: {
       description: "additional landmark to help locate the address",
+      valid_htmlData: true,
       type: "string"
     },
     city: {
       description:
         "City of the address. Can be represented by the tenantid itself",
-      type: "string"
+      type: "string",
+      valid_htmlData: true,
     },
     pincode: {
       type: "string",
+      valid_htmlData: true,
       description:
         "PIN code of the address. Indian pincodes will usually be all numbers."
     },
     detail: {
       type: "string",
+      valid_htmlData: true,
       description: "more address detail as may be needed"
     },
     buildingName: {
       type: "string",
       description: "Name of the building",
+      valid_htmlData: true,
       maxLength: 64,
       minLength: 2
     },
     street: {
       type: "string",
       description: "Street Name",
+      valid_htmlData: true,
       maxLength: 64,
       minLength: 2
     },
@@ -241,12 +253,14 @@ const Document = {
   properties: {
     tenantId: {
       type: "string",
+      valid_htmlData: true,
       description: "Unique Identifier of ULB",
       maxLength: 128,
       minLength: 2
     },
     documentType: {
       type: "string",
+      valid_htmlData: true,
       minLength: 2,
       maxLength: 64,
       description:
@@ -254,12 +268,14 @@ const Document = {
     },
     fileStoreId: {
       type: "string",
+      valid_htmlData: true,
       minLength: 2,
       maxLength: 64,
       description: "Unique file store id of uploaded document."
     },
     documentUid: {
       type: "string",
+      valid_htmlData: true,
       minLength: 2,
       maxLength: 64,
       description: "document number(eg.Pan number, aadhar number)."
@@ -283,6 +299,7 @@ const OwnerInfo = {
     },
     ownerType: {
       type: "string",
+      valid_htmlData: true,
       description:
         "Type of owner, based on this option Exemptions will be applied. This is master data defined in mdms."
       // maxLength: 256,
@@ -300,6 +317,7 @@ const OwnerInfo = {
     mobileNumber: {
       type: "string",
       description: "mobile number of the autheticated user",
+      valid_htmlData: true,
       pattern: "^[6789][0-9]{9}$"
     },
     gender: {
@@ -315,7 +333,8 @@ const OwnerInfo = {
       // enum: ["MALE", "FEMALE", "TRANSGENDER"]
     },
     name: {
-      type: "string"
+      type: "string",
+      valid_htmlData: true
     },
     dob: {
       type: ["integer", "null"]
@@ -343,11 +362,13 @@ const PropertyDetails = {
       type: "string",
       minLength: 2,
       maxLength: 64,
+      valid_htmlData: true,
       description: "Unique Identifier of the property details (UUID)",
       readOnly: true
     },
     propertyId: {
-      type: "string"
+      type: "string",
+      valid_htmlData: true
     },
     address: Address
   }
@@ -361,17 +382,20 @@ const Buildings = {
       type: "string",
       minLength: 2,
       maxLength: 64,
+      valid_htmlData: true,
       description: "Unique Identifier of the Fire NOC building details (UUID)",
       readOnly: true
     },
     tenantId: {
       type: "string",
+      valid_htmlData: true,
       description: "Unique Identifier of ULB",
       maxLength: 128,
       minLength: 2
     },
     name: {
       type: "string",
+      valid_htmlData: true,
       description: "name of the building"
     },
     usageType: {
@@ -402,11 +426,13 @@ const FireNOCDetails = {
       type: "string",
       minLength: 2,
       maxLength: 64,
+      valid_htmlData: true,
       description: "Unique Identifier of the Fire FireNOC Details (UUID)",
       readOnly: true
     },
     applicationNumber: {
       type: "string",
+      valid_htmlData: true,
       description:
         "Unique Application FireNOC Number of the Fire FireNOC. This is  unique in system for a tenant. This is mandatory but always be generated on the final approval.",
       maxLength: 64,
@@ -415,6 +441,7 @@ const FireNOCDetails = {
     },
     fireNOCType: {
       type: "string",
+      valid_htmlData: true,
       description: "type of fire NOC from mdms"
     },
     firestationId: {
@@ -467,7 +494,9 @@ const FireNOCDetails = {
         "ADHOC",
         "FORWARD",
         "REFER",
-        "SENDBACK"
+        "SENDBACK",
+        "SENDBACKTOCITIZEN",
+        "RESUBMIT"
       ]
     },
     channel: {
@@ -556,13 +585,15 @@ const FireNOC = {
       minLength: 2,
       maxLength: 64,
       description: "Unique Identifier of the Fire NOC (UUID)",
-      readOnly: true
+      readOnly: true,
+      valid_htmlData: true
     },
     tenantId: {
       type: "string",
       description: "Unique Identifier of ULB",
       maxLength: 128,
-      minLength: 2
+      minLength: 2,
+      valid_htmlData: true
     },
     fireNOCNumber: {
       type: "string",
@@ -570,6 +601,7 @@ const FireNOC = {
         "Unique Fire NOC Number of the Fire NOC. This is  unique in system for a tenant. This is mandatory but always be generated on the final approval.",
       maxLength: 64,
       minLength: 2,
+      valid_htmlData: true,
       readOnly: true
     },
     provisionFireNOCNumber: {
@@ -577,6 +609,7 @@ const FireNOC = {
       description:
         "Unique Fire NOC Number of the Provision Fire NOC number that will be used for linking provision fire NOC number with new fire NOC number. This is  unique in system for a tenant. This is mandatory but always be generated on the final approval.",
       maxLength: 64,
+      valid_htmlData: true,
       minLength: 2
     },
     oldFireNOCNumber: {
@@ -584,7 +617,8 @@ const FireNOC = {
       description:
         "Unique Old License Number of the Fire NOC. This is  unique in system for a tenant. This is mandatory  for legacy license(DataEntry).",
       maxLength: 64,
-      minLength: 2
+      minLength: 2,
+      valid_htmlData: true
     },
     dateOfApplied: {
       type: "integer",

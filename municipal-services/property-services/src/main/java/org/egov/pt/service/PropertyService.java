@@ -312,6 +312,7 @@ public class PropertyService {
 
 
 	List<Property> getPropertiesPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
+		
 		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
 			criteria.setLimit(config.getMaxSearchLimit());
 		if(criteria.getLimit()==null)
@@ -326,13 +327,13 @@ public class PropertyService {
 				propertyCriteria.setPropertyIds(criteria.getPropertyIds());
 
 		} else {
-			List<String> uuids = repository.fetchIds(criteria);
+			List<String> uuids = repository.fetchIds(criteria, true);
 			if (uuids.isEmpty())
 				return Collections.emptyList();
 			propertyCriteria.setUuids(new HashSet<>(uuids));
 		}
 		propertyCriteria.setLimit(criteria.getLimit());
-		List<Property> properties = repository.getPropertiesForBulkSearch(propertyCriteria);
+		List<Property> properties = repository.getPropertiesForBulkSearch(propertyCriteria, true);
 		if(properties.isEmpty())
 			return Collections.emptyList();
 		Set<String> ownerIds = properties.stream().map(Property::getOwners).flatMap(List::stream)

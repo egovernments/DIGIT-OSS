@@ -4,7 +4,7 @@
     <artifactId>pgr-services</artifactId>
     <packaging>jar</packaging>
     <name>pgr-services</name>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <properties>
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -60,6 +60,11 @@
             <groupId>io.swagger</groupId>
             <artifactId>swagger-core</artifactId>
             <version>1.5.18</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.10.2</version>
         </dependency>
         <!-- Egov dependencies -->
         <dependency>

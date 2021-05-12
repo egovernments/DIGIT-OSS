@@ -1,6 +1,11 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.5 - 2021-05-11
+
+- Fixed security issue of untrusted data pass as user input.
+- Fixed issue of send back to citizen feature.
+
 ## 1.1.4 - 2021-02-26
 
 - Updated domain name in applicaation.properties

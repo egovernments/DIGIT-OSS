@@ -2,6 +2,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.4 - 2021-05-11
+
+- Fixed security issue of untrusted data pass as user input.
+- Fixed issue of workflow approval without payment
 
 ## 1.1.3 - 2021-02-26
 - Updated domain name in application.properties

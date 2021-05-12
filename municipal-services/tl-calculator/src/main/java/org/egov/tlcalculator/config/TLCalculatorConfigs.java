@@ -106,5 +106,7 @@ public class TLCalculatorConfigs {
     @Value("${egov.tl.calculationtype.accessory.default}")
     private String defaultAccessoryCalculationType;
 
+    @Value("${id.timezone}")
+    private String egovAppTimeZone;
 
 }

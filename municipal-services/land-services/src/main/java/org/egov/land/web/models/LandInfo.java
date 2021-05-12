@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,15 +28,19 @@ import net.minidev.json.annotate.JsonIgnore;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LandInfo   {
+  @SafeHtml
   @JsonProperty("id")
   private String id = null;
 
+  @SafeHtml
   @JsonProperty("landUId")
   private String landUId = null;
 
+  @SafeHtml
   @JsonProperty("landUniqueRegNo")
   private String landUniqueRegNo = null;
 
+  @SafeHtml
   @JsonProperty("tenantId")
   private String tenantId = null;
 
@@ -45,6 +50,7 @@ public class LandInfo   {
   @JsonProperty("address")
   private Address address = null;
 
+  @SafeHtml
   @JsonProperty("ownershipCategory")
   private String ownershipCategory = null;
 

@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.SafeHtml;
 
 /**
  * Unit
@@ -30,9 +31,11 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" })
 public class Unit {
 
+	@SafeHtml
 	@JsonProperty("id")
 	private String id;
 
+	@SafeHtml
 	@JsonProperty("tenantId")
 	private String tenantId;
 
@@ -40,13 +43,16 @@ public class Unit {
 	@JsonProperty("floorNo")
 	private Integer floorNo;
 
+	@SafeHtml
 	@JsonProperty("unitType")
 	private String unitType;
 
 	@JsonProperty("usageCategory")
+	@SafeHtml
 	@NotNull
 	private String usageCategory;
 
+	@SafeHtml
 	@JsonProperty("occupancyType")
 	private String occupancyType;
 

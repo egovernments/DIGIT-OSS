@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.SafeHtml;
 
 /**
  * Construction/constructionDetail details are captured here. Detail information
@@ -45,6 +46,7 @@ public class ConstructionDetail {
 	@JsonProperty("superBuiltUpArea")
 	private BigDecimal superBuiltUpArea;
 
+	@SafeHtml
 	@JsonProperty("constructionType")
 	private String constructionType;
 

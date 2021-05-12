@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.*;
 import org.egov.common.contract.request.Role;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -31,10 +32,12 @@ public class OwnerInfo extends User  {
         private Double ownerShipPercentage;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("ownerType")
         private String ownerType;
 
         @Size(max=64)
+        @SafeHtml
         @JsonProperty("institutionId")
         private String institutionId;
 

@@ -62,14 +62,17 @@ public class MockController {
 
     @RequestMapping(value = "/requests/_create", method = RequestMethod.POST)
     public ResponseEntity<String> requestsCreatePost() throws IOException {
+        InputStream mockDataFile = null;
         try {
             Resource resource = resourceLoader.getResource("classpath:mockData.json");
-            InputStream mockDataFile = resource.getInputStream();
+            mockDataFile = resource.getInputStream();
             log.info("mock file: " + mockDataFile.toString());
             String res = IOUtils.toString(mockDataFile, StandardCharsets.UTF_8.name());
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
             throw new CustomException("FILEPATH_ERROR", "Failed to read file for mock data");
+        }finally {
+            mockDataFile.close();
         }
 
     }
@@ -77,28 +80,38 @@ public class MockController {
     @RequestMapping(value = "/requests/_search", method = RequestMethod.POST)
     public ResponseEntity<String> requestsSearchPost(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                      @Valid @ModelAttribute RequestSearchCriteria criteria) {
+        InputStream mockDataFile = null;
         try {
             Resource resource = resourceLoader.getResource("classpath:mockData.json");
-            InputStream mockDataFile = resource.getInputStream();
+            mockDataFile = resource.getInputStream();
             log.info("mock file: " + mockDataFile.toString());
             String res = IOUtils.toString(mockDataFile, StandardCharsets.UTF_8.name());
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
             throw new CustomException("FILEPATH_ERROR", "Failed to read file for mock data");
+        }finally {
+            try {
+                mockDataFile.close();
+            } catch (IOException e) {
+                log.error("Error while closing mock data file");
+            }
         }
 
     }
 
     @RequestMapping(value = "/requests/_update", method = RequestMethod.POST)
     public ResponseEntity<String> requestsUpdatePost() throws IOException {
+        InputStream mockDataFile = null;
         try {
             Resource resource = resourceLoader.getResource("classpath:mockData.json");
-            InputStream mockDataFile = resource.getInputStream();
+            mockDataFile = resource.getInputStream();
             log.info("mock file: " + mockDataFile.toString());
             String res = IOUtils.toString(mockDataFile, StandardCharsets.UTF_8.name());
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
             throw new CustomException("FILEPATH_ERROR", "Failed to read file for mock data");
+        }finally {
+            mockDataFile.close();
         }
     }
 

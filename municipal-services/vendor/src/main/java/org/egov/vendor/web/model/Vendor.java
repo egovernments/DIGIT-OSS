@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 import org.egov.vendor.web.model.location.Address;
 import org.egov.vendor.web.model.user.User;
 import org.egov.vendor.web.model.vehicle.Vehicle;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -35,14 +36,17 @@ import lombok.Setter;
 @Setter
 public class Vendor {
 
+	@SafeHtml
 	@JsonProperty("id")
 	private String id = null;
 
 	@JsonProperty("tenantId")
+	@SafeHtml
 	@Size(max=64)
 	private String tenantId = null;
 
 	@JsonProperty("name")
+	@SafeHtml
 	@Size(max=128)
 	private String name = null;
 
@@ -64,13 +68,16 @@ public class Vendor {
 	@JsonProperty("additionalDetails")
 	private Object additionalDetails = null;
 
+	@SafeHtml
 	@JsonProperty("source")
 	private String source = null;
 
+	@SafeHtml
 	@JsonProperty("description")
 	private String description = null;
 	
 	@JsonProperty("ownerId")
+	@SafeHtml
 	@Size(max=64)
 	private String ownerId = null;
 

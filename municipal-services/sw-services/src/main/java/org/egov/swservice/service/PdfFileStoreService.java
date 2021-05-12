@@ -185,9 +185,8 @@ public class PdfFileStoreService {
 
 		HashMap<String, Object> addDetail = mapper
 				.convertValue(sewerageConnectionRequest.getSewerageConnection().getAdditionalDetails(), HashMap.class);
-		if (sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction()
-				.equalsIgnoreCase(SWConstants.APPROVE_CONNECTION_CONST)
-				&& addDetail.getOrDefault(SWConstants.ESTIMATION_FILESTORE_ID, null) == null) {
+		if (sewerageConnectionRequest.getSewerageConnection().getApplicationStatus()
+				.equalsIgnoreCase(SWConstants.PENDING_APPROVAL_FOR_CONNECTION_CODE)) {
 			addDetail.put(SWConstants.ESTIMATION_DATE_CONST, System.currentTimeMillis());
 			addDetail.put(SWConstants.ESTIMATION_FILESTORE_ID,
 					getFileStoreId(sewerageConnectionRequest, property, SWConstants.PDF_ESTIMATION_KEY));
