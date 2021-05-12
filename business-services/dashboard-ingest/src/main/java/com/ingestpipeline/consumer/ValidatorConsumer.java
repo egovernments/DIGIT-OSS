@@ -55,7 +55,6 @@ public class ValidatorConsumer implements KafkaConsumer {
 			LOGGER.info("Next Key: " + nextKey);
 
 		} catch (final Exception e) {
-			e.printStackTrace();
 			LOGGER.error("Exception Encountered while processing the received message : " + e.getMessage());
 		}
     	

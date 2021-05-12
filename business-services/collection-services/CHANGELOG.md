@@ -3,6 +3,15 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+
+## 1.1.4 - 2021-05-11
+- RAIN-2515 Added regex pattern for paid by, payer name, email and mobilenumber
+- VUL-WEB-L008: added @SafeHtml annotaion on string fields
+- VUL-WEB-L008: updated POM to add safeHtml validator libraries
+- Query optimized made in sync with prod
+- RAIN-2420 Added url shortend link for payment message
+
+- 
 ## 1.1.3 - 2021-02-26
 - Updated domain name in application.properties
 

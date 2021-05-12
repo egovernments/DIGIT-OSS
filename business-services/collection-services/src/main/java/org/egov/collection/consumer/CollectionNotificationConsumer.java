@@ -99,7 +99,9 @@ public class CollectionNotificationConsumer{
             link.append(applicationProperties.getUiHost() + "/citizen").append("/otpLogin?mobileNo=").append(bill.getMobileNumber()).append("&redirectTo=")
                     .append(applicationProperties.getUiRedirectUrl()).append("&params=").append(paymentDetail.getTenantId() + "," + paymentDetail.getReceiptNumber());
 
-            content = content.replaceAll("<rcpt_link>", link.toString());
+            String receiptLink = getShortenedUrl(link.toString());
+
+            content = content.replaceAll("<rcpt_link>", receiptLink);
 
             String moduleName = fetchContentFromLocalization(requestInfo, paymentDetail.getTenantId(),
                     BUSINESSSERVICE_LOCALIZATION_MODULE, formatCodes(paymentDetail.getBusinessService()));
@@ -160,5 +162,25 @@ public class CollectionNotificationConsumer{
         code = code.replaceAll(" ", "_");
 
         return BUSINESSSERVICELOCALIZATION_CODE_PREFIX + code.toUpperCase();
+    }
+
+    /**
+     * Method to shortent the url
+     * returns the same url if shortening fails
+     * @param url
+     */
+    public String getShortenedUrl(String url){
+
+        HashMap<String,String> body = new HashMap<>();
+        body.put("url",url);
+        StringBuilder builder = new StringBuilder(applicationProperties.getUrlShortnerHost());
+        builder.append(applicationProperties.getUrlShortnerEndpoint());
+        String res = restTemplate.postForObject(builder.toString(), body, String.class);
+
+        if(StringUtils.isEmpty(res)){
+            log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
+            return url;
+        }
+        else return res;
     }
 }

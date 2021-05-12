@@ -38,7 +38,7 @@ public class User {
     @JsonProperty("uuid")
     private String uuid;
 
-    @Size(max=64)
+    @Size(max=180)
     @JsonProperty("userName")
     private String userName;
 
@@ -46,11 +46,12 @@ public class User {
     @JsonProperty("password")
     private String password;
 
+    @Size(max = 5)
     @JsonProperty("salutation")
     private String salutation;
 
     @NotNull
-    @Size(max=100)
+    @Size(max=250)
     @Pattern(regexp = "^[a-zA-Z \\-'`\\.]*$", message = "Invalid name. Only alphabets and special characters -, ',`, .")
     @JsonProperty("name")
     private String name;
@@ -59,6 +60,7 @@ public class User {
     private String gender;
 
     @NotNull
+    @Pattern(regexp = "^[0-9]{10}$", message = "MobileNumber should be 10 digit number")
     @JsonProperty("mobileNumber")
     private String mobileNumber;
 

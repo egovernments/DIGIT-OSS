@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
@@ -40,6 +41,9 @@ import com.ingestpipeline.util.ReadUtil;
 public class RestApiController {
 
 	public static final Logger logger = LoggerFactory.getLogger(RestApiController.class);
+
+	@Value("${id.timezone}")
+	private String timeZone;
 
 	@Autowired
 	IngestService ingestService;
@@ -183,7 +187,7 @@ public class RestApiController {
 		logger.info("System Time is : " + new Date());
 		SimpleDateFormat sd = new SimpleDateFormat(Constants.DATE_FORMAT);
 		Date date = new Date();
-		sd.setTimeZone(TimeZone.getTimeZone(Constants.INDIAN_TIMEZONE));
+		sd.setTimeZone(TimeZone.getTimeZone(timeZone));
 		logger.info("Time at timezone IST : " + sd.format(date));
 	}
 }

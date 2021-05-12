@@ -73,7 +73,6 @@ public class EnrichmentConsumer implements KafkaConsumer {
 				ingestProducer.pushToPipeline(incomingData, ERROR_INTENT, null);
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
 			LOGGER.error("Exception Encountered while processing the received message : " + e.getMessage());
 		}
 

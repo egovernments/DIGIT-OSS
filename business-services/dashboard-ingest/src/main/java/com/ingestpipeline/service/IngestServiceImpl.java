@@ -57,7 +57,6 @@ public class IngestServiceImpl implements IngestService {
 
 		} catch (Exception e) {
 			LOGGER.error("Encountered an error while reading Topic to Context Configuration" + e.getMessage());
-			e.printStackTrace();
 		}
 	}
 	

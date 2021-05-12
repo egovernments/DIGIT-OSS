@@ -242,10 +242,10 @@ public abstract class JdbcRepository {
                 paramValues.put(s, f.get(ob));
             } catch (IllegalArgumentException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                LOG.error("Illegal Argument exception occurred: " + e1.getMessage());
             } catch (IllegalAccessException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                LOG.error("Illegal access exception occurred: " + e1.getMessage());
             }
         }
 

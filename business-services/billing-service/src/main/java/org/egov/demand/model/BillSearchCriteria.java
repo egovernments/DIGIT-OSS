@@ -3,6 +3,8 @@ package org.egov.demand.model;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.egov.demand.model.BillV2.BillStatus;
 import org.hibernate.validator.constraints.Email;
@@ -20,6 +22,7 @@ import lombok.NoArgsConstructor;
 public class BillSearchCriteria {
 
 	@NotNull
+	@Size(max = 256)
 	private String tenantId;
 	
 	private Set<String> billId;
@@ -29,9 +32,11 @@ public class BillSearchCriteria {
 	private Boolean isCancelled;
 	
 	private Set<String> consumerCode;
-	
+
+	@Size(max = 256)
 	private String billNumber;
-	
+
+	@Size(max = 256)
 	private String service;
 
 	@Default
@@ -45,6 +50,7 @@ public class BillSearchCriteria {
 	private String email;
 	
 	private BillStatus status;
-	
+
+	@Pattern(regexp = "^[0-9]{10}$", message = "MobileNumber should be 10 digit number")
 	private String mobileNumber;
 }

@@ -147,7 +147,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 				client.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Error while closing ES client");
 			}
 		}
 		return null;
@@ -265,7 +265,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.info("Error occured while searching");
 		}
 		return null;
 

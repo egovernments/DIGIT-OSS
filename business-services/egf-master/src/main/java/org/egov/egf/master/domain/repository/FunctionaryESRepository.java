@@ -16,6 +16,8 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +28,7 @@ public class FunctionaryESRepository extends ESRepository {
     public FunctionaryESRepository(TransportClient esClient) {
         this.esClient = esClient;
     }
+    public static final Logger LOGGER = LoggerFactory.getLogger(FunctionaryESRepository.class);
 
     public Pagination<Functionary> search(FunctionarySearchContract functionarySearchContract) {
 
@@ -79,7 +82,7 @@ public class FunctionaryESRepository extends ESRepository {
             try {
                 functionary = mapper.readValue(hit.getSourceAsString(), Functionary.class);
             } catch (Exception e1) {
-                e1.printStackTrace();
+                LOGGER.error("Exception while reading functionary: " + e1.getMessage());
             }
 
             functionarys.add(functionary);

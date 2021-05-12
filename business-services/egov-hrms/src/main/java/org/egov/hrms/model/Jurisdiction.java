@@ -45,6 +45,7 @@ import lombok.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
@@ -57,20 +58,25 @@ import org.springframework.validation.annotation.Validated;
 @ToString
 public class Jurisdiction {
 
+    @SafeHtml
     private String id;
 
+    @SafeHtml
     @NotNull
     @Size(min=2, max=100)
     private String hierarchy;
 
+    @SafeHtml
     @NotNull
     @Size(min=2, max=100)
     private String boundary;
 
+    @SafeHtml
     @NotNull
     @Size(max=256)
     private String boundaryType;
-    
+
+    @SafeHtml
     private String tenantId;
 
     private AuditDetails auditDetails;

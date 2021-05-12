@@ -66,8 +66,7 @@ public class EnhanceDomainConfig implements DomainConfig {
             LOGGER.info("After loading, domainIndexConfigMap size  = "+ domainIndexConfigMap.size());
 
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.error("on construction domain collection map: "+ e.getMessage());
+            LOGGER.error("Error occurred on construction domain collection map: "+ e.getMessage());
         }
 
     }

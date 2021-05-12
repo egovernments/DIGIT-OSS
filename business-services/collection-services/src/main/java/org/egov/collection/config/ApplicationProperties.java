@@ -252,5 +252,11 @@ public class ApplicationProperties {
     @Value("${collection.search.default.limit}")
     private Integer maxSearchLimit;
 
+    @Value("${egov.url.shortner.host}")
+    private String urlShortnerHost;
+
+    @Value("${egov.url.shortner.endpoint}")
+    private String urlShortnerEndpoint;
+
 
 }

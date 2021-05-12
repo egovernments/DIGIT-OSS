@@ -172,8 +172,16 @@ public class MetadataServiceImpl implements MetadataService {
 
 		File getFile = new File(
 				System.getProperty("user.dir") + System.getProperty("file.separator") + "data/tenants.json");
-		BufferedReader br = new BufferedReader(new FileReader(getFile));
-		Tenants sample = new Gson().fromJson(br, Tenants.class);
+		BufferedReader br = null;
+		Tenants sample = null;
+		try{
+			br = new BufferedReader(new FileReader(getFile));
+			sample = new Gson().fromJson(br, Tenants.class);
+		}catch (Exception e){
+			logger.info("Error occured while reading tenants file.");
+		}finally{
+			br.close();
+		}
 		JSONArray jsonArray = new JSONArray();
 		Map<String, List<Object>> mapDistrictUlb = new HashMap();
 		Map<String, Object> DistrictMap = new HashMap();

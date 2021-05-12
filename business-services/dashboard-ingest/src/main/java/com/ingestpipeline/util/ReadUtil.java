@@ -32,6 +32,7 @@ import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -49,6 +50,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -58,6 +60,39 @@ import com.ingestpipeline.service.IngestService;
 
 @Component("readUtil")
 public class ReadUtil {
+
+
+	@Value("${filename.length}")
+	private Integer filenameLengthValue;
+
+
+	@Value("${filename.useletters}")
+	private Boolean useLettersValue;
+
+	@Value("${filename.usenumbers}")
+	private Boolean useNumbersValue;
+
+
+	private static Integer filenameLength;
+
+	private static Boolean useLetters;
+
+	private static Boolean useNumbers;
+
+	@Value("${filename.length}")
+	public void setFilenameLength(Integer filenameLengthValue) {
+		ReadUtil.filenameLength = filenameLengthValue;
+	}
+
+	@Value("${filename.useletters}")
+	public void setUseLetters(Boolean useLettersValue) {
+		ReadUtil.useLetters = useLettersValue;
+	}
+
+	@Value("${filename.usenumbers}")
+	public void setUseNumbers(Boolean useNumbersValue) {
+		ReadUtil.useNumbers = useNumbersValue;
+	}
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(ReadUtil.class);
 	private static String UPLOADED_FOLDER = "";
@@ -71,15 +106,17 @@ public class ReadUtil {
 			uploadFile.mkdir();
 		}
 		UPLOADED_FOLDER = uploadFile.toString();
-		path = Paths.get(UPLOADED_FOLDER + System.getProperty("file.separator") + file.getOriginalFilename());
+
+
+		String orignalFileName = file.getOriginalFilename();
+		String randomString = RandomStringUtils.random(filenameLength, useLetters, useNumbers);
+		String fileName =  System.currentTimeMillis() + randomString;
+		String extension = FilenameUtils.getExtension(orignalFileName);
+
+		path = Paths.get(UPLOADED_FOLDER + System.getProperty("file.separator") + fileName + '.' + extension);
 		Files.write(path, bytes);
 		JSONArray fileIntoJsonArray = readFilefromDirectory();
-		String filename = null;
-		Path p = Paths.get(file.getOriginalFilename());
-		if (p.toString().indexOf(".") > 0) {
-			filename = p.toString().substring(0, p.toString().lastIndexOf("."));
-		}
-		String jsonArrayFileName = filename + ".json";
+		String jsonArrayFileName = fileName + ".json";
 		writeJsonArrayToFile(fileIntoJsonArray, jsonArrayFileName);
 		return fileIntoJsonArray;
 	}
@@ -339,9 +376,15 @@ public class ReadUtil {
 		String currentWorkingFolder = System.getProperty("user.dir"),
 				filePathSeperator = System.getProperty("file.separator"),
 				filePath = currentWorkingFolder + filePathSeperator + fileName;
-		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(filePath)));
-		bufferedWriter.write(data.toString());
-		bufferedWriter.flush();
-		bufferedWriter.close();
+		BufferedWriter bufferedWriter = null;
+		try {
+			bufferedWriter = new BufferedWriter(new FileWriter(new File(filePath)));
+			bufferedWriter.write(data.toString());
+		}catch (Exception e){
+			LOGGER.error("Error while writing to file. ");
+		}finally {
+			bufferedWriter.flush();
+			bufferedWriter.close();
+		}
 	}
 }

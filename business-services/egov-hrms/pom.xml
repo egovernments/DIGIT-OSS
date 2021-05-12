@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egov-hrms</artifactId>
-  <version>1.2.1-SNAPSHOT</version>
+  <version>1.2.2-SNAPSHOT</version>
   <name>egov-hrms</name>
   <description>HR Management System</description>
   <properties>
@@ -80,6 +80,16 @@
       <groupId>org.egov.services</groupId>
       <artifactId>tracer</artifactId>
       <version>2.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.0.16.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>1.10.2</version>
     </dependency>
   </dependencies>
   <repositories>

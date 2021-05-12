@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Size;
+
 
 @AllArgsConstructor
 @Getter
@@ -44,7 +46,8 @@ public class EmployeeSearchCriteria {
 	public List<Long> positions;
 	
 	public Boolean isActive;
-	
+
+	@Size(max = 250)
 	public String tenantId;
 	
 	public String phone;

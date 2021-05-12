@@ -44,6 +44,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
@@ -56,16 +57,20 @@ import org.springframework.validation.annotation.Validated;
 @ToString
 public class DepartmentalTest {
 
+	@SafeHtml
 	private String id;
 
+	@SafeHtml
 	@NotNull
 	private String test;
 
 	@NotNull
 	private Long yearOfPassing;
 
+	@SafeHtml
 	private String remarks;
-	
+
+	@SafeHtml
 	private String tenantId;
 	
 	private AuditDetails auditDetails;

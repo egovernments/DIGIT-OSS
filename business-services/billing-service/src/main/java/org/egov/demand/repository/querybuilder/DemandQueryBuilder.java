@@ -39,6 +39,7 @@
  */
 package org.egov.demand.repository.querybuilder;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -143,7 +144,8 @@ public class DemandQueryBuilder {
 					query.append("AND");
 				
 				query.append(" dmd.businessservice='"+businessService+"' AND dmd.consumercode IN ("
-						+getIdQueryForStrings(consumerCodes));
+						+getIdQueryForStrings(consumerCodes)+")");
+				addToPreparedStatement(preparedStmtList, consumerCodes);
 				orFlag=true;
 			}
 		}
@@ -176,11 +178,13 @@ public class DemandQueryBuilder {
 		
 		if (demandCriteria.getDemandId() != null && !demandCriteria.getDemandId().isEmpty()) {
 			addAndClause(demandQuery);
-			demandQuery.append("dmd.id IN (" + getIdQueryForStrings(demandCriteria.getDemandId()));
+			demandQuery.append("dmd.id IN (" + getIdQueryForStrings(demandCriteria.getDemandId()) + ")");
+			addToPreparedStatement(preparedStatementValues, demandCriteria.getDemandId());
 		}
 		if (!CollectionUtils.isEmpty(demandCriteria.getPayer())) {
 			addAndClause(demandQuery);
-			demandQuery.append("dmd.payer IN (" + getIdQueryForStrings(demandCriteria.getPayer()));
+			demandQuery.append("dmd.payer IN (" + getIdQueryForStrings(demandCriteria.getPayer()) + ")");
+			addToPreparedStatement(preparedStatementValues, demandCriteria.getPayer());
 		}
 		if (demandCriteria.getBusinessService() != null) {
 			addAndClause(demandQuery);
@@ -209,7 +213,8 @@ public class DemandQueryBuilder {
 		if (demandCriteria.getConsumerCode() != null && !demandCriteria.getConsumerCode().isEmpty()) {
 			addAndClause(demandQuery);
 			demandQuery.append("dmd.consumercode IN ("
-			+ getIdQueryForStrings(demandCriteria.getConsumerCode()));
+			+ getIdQueryForStrings(demandCriteria.getConsumerCode()) + ")");
+			addToPreparedStatement(preparedStatementValues, demandCriteria.getConsumerCode());
 		}
 
 		addOrderByClause(demandQuery, DEMAND_QUERY_ORDER_BY_CLAUSE);
@@ -237,15 +242,17 @@ public class DemandQueryBuilder {
 	
 	private static String getIdQueryForStrings(Set<String> idList) {
 
-		StringBuilder query = new StringBuilder();
-		if (!idList.isEmpty()) {
-
-			String[] list = idList.toArray(new String[idList.size()]);
-			query.append("'"+list[0]+"'");
-			for (int i = 1; i < idList.size(); i++) {
-				query.append("," + "'"+list[i]+"'");
-			}
+		StringBuilder builder = new StringBuilder();
+		int length = idList.size();
+		for( int i = 0; i< length; i++){
+			builder.append(" ? ");
+			if(i != length -1) builder.append(",");
 		}
-		return query.append(")").toString();
+		return builder.toString();
+	}
+
+	private void addToPreparedStatement(List<Object> preparedStmtList, Collection<String> ids)
+	{
+		ids.forEach(id ->{ preparedStmtList.add(id);});
 	}
 }

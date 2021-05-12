@@ -39,7 +39,10 @@ public class BillDetailV2 {
 
 	@JsonProperty("amount")
 	private BigDecimal amount;
-
+	
+	@JsonProperty("amountPaid")
+	private BigDecimal amountPaid;
+	
 	@JsonProperty("fromPeriod")
 	private Long fromPeriod;
 

@@ -121,7 +121,6 @@ public class CollectionTransformationService implements TransformService {
             return Boolean.TRUE;
 
         } catch (Exception e) {
-            e.printStackTrace();
             LOGGER.error("Encountered an error : " + e.getMessage());
             return Boolean.FALSE;
 

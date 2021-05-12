@@ -5,6 +5,9 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.util.ApplicationThreadLocals;
+import org.egov.egf.master.domain.repository.AccountCodePurposeESRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -13,6 +16,7 @@ import java.util.Arrays;
 @Aspect
 @Component
 public class SetThreadLocals {
+    public static final Logger LOGGER = LoggerFactory.getLogger(SetThreadLocals.class);
 
     /**
      * A join point is in the web layer if the method is defined
@@ -53,7 +57,7 @@ public class SetThreadLocals {
                     }
 
                 } catch (Exception e) {
-                    System.out.print(e.getMessage());
+                    LOGGER.error("Exception occurred: " + e.getMessage());
                 }
             }
 

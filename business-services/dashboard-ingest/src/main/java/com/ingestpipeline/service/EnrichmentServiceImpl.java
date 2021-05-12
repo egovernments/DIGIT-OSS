@@ -174,7 +174,7 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 				try{
 					elasticService.push(targetData);
 				}catch (Exception e ){
-					e.printStackTrace();
+					LOGGER.error("Exception occurred while pushing data to ES: " + e.getMessage());
 				}
 
 			});
@@ -289,7 +289,6 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 					LOGGER.info("Enhance Data Transformed");
 
 				} catch (Exception e) {
-					e.printStackTrace();
 					LOGGER.error("Pre-processing Enhance data - failed  :: {}" , e.getMessage());
 				}
 			} else {

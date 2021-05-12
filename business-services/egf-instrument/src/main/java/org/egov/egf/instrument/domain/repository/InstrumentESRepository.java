@@ -15,6 +15,8 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -26,6 +28,7 @@ public class InstrumentESRepository extends ESRepository {
 
     private TransportClient esClient;
     private ElasticSearchQueryFactory elasticSearchQueryFactory;
+    public static final Logger logger = LoggerFactory.getLogger(InstrumentESRepository.class);
 
     public InstrumentESRepository(TransportClient esClient, ElasticSearchQueryFactory elasticSearchQueryFactory) {
         this.esClient = esClient;
@@ -53,13 +56,13 @@ public class InstrumentESRepository extends ESRepository {
                 instrument = mapper.readValue(hit.getSourceAsString(), Instrument.class);
             } catch (JsonParseException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                logger.error("Error occurred while parsing JSON: " + e1.getMessage());
             } catch (JsonMappingException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                logger.error("JSON Mapping exception occurred: " + e1.getMessage());
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                logger.error("IO Exception occurred: " + e1.getMessage());
             }
 
             instruments.add(instrument);

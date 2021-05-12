@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.SafeHtml;
 
 /**
  * A object holds a demand and collection values for a tax head and period.
@@ -21,13 +22,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class DemandDetail   {
-	
+
+        @SafeHtml
         @JsonProperty("id")
         private String id;
-        
+
+        @SafeHtml
         @JsonProperty("demandId")
         private String demandId;
 
+        @SafeHtml
         @NotNull @JsonProperty("taxHeadMasterCode")
         private String taxHeadMasterCode;
 
@@ -43,6 +47,7 @@ public class DemandDetail   {
         @JsonProperty("auditDetails")
         private AuditDetails auditDetails;
 
+        @SafeHtml
         @JsonProperty("tenantId")
         private String tenantId;
 }

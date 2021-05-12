@@ -111,7 +111,7 @@ public class EmployeeController {
 	 */
 	@PostMapping(value = "/_search")
 	@ResponseBody
-	public ResponseEntity<?> search(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper, @ModelAttribute EmployeeSearchCriteria criteria) {
+	public ResponseEntity<?> search(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper, @ModelAttribute @Valid EmployeeSearchCriteria criteria) {
 		validator.validateSearchRequest(requestInfoWrapper.getRequestInfo(), criteria);
 		EmployeeResponse employeeResponse = employeeService.search(criteria, requestInfoWrapper.getRequestInfo());
 		return new ResponseEntity<>(employeeResponse,HttpStatus.OK);

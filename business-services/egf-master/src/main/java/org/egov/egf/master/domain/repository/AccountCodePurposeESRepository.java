@@ -15,6 +15,8 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -26,6 +28,7 @@ public class AccountCodePurposeESRepository extends ESRepository {
 
     private TransportClient esClient;
     private ElasticSearchQueryFactory elasticSearchQueryFactory;
+    public static final Logger LOGGER = LoggerFactory.getLogger(AccountCodePurposeESRepository.class);
 
     public AccountCodePurposeESRepository(TransportClient esClient, ElasticSearchQueryFactory elasticSearchQueryFactory) {
         this.esClient = esClient;
@@ -55,13 +58,13 @@ public class AccountCodePurposeESRepository extends ESRepository {
                 accountCodePurpose = mapper.readValue(hit.getSourceAsString(), AccountCodePurpose.class);
             } catch (JsonParseException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                LOGGER.error("Exception occurred while parsing JSON: " + e1.getMessage());
             } catch (JsonMappingException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                LOGGER.error("JSON Mapping Exception occurred: " + e1.getMessage());
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                LOGGER.error("IO Exception occurred: " + e1.getMessage());
             }
 
             accountCodePurposes.add(accountCodePurpose);

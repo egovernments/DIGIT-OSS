@@ -71,15 +71,22 @@ public class ConfigLoader {
      */
     private String getContent(Resource resource) {
         String content = null;
+        InputStream is = null;
         try {
-            InputStream is = resource.getInputStream();
+            is = resource.getInputStream();
             byte[] encoded = IOUtils.toByteArray(is);
             content = new String(encoded, Charset.forName("UTF-8"));
 
         } catch (IOException e) {
             logger.error("Cannot load resource " + resource.getFilename());
 
-        } 
+        } finally{
+            try {
+                is.close();
+            } catch (IOException e) {
+                logger.error("Error while closing input stream. ");
+            }
+        }
         return content;
     }
 

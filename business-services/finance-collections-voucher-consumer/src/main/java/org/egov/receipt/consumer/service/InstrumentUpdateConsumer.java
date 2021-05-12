@@ -41,7 +41,7 @@ public class InstrumentUpdateConsumer {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Exception occurred while listening to record: " + e.getMessage());
 		}
 	}
 }

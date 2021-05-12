@@ -58,7 +58,6 @@ public class VoucherIntegartionLogRepository{
 			namedParameterJdbcTemplate.update(INSERT_VOUCHER_LOG_SQL, getParametersForVoucherIntegartionLog(vilog));
 		} catch (Exception e) {
 			log.error("Failed to save the log record"+e.getCause());
-			e.printStackTrace();
 		}
 	}
 }
