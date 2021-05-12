@@ -118,7 +118,7 @@ public class ExceptionAdvise {
 						err.setMessage("JSON body has errors or is missing");
 						JsonPath.parse(request).json();
 					} catch (Exception jsonParseException) {
-						log.warn("Error while parsing JSON", jsonParseException);
+						log.error("Error while parsing JSON", jsonParseException);
 					}
  					err.setCode("MissingJsonException");
 				}

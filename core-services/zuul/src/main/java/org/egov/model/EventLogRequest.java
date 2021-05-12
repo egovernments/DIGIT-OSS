@@ -68,7 +68,7 @@ public class EventLogRequest {
                 try {
                     body = IOUtils.toString(ctx.getRequest().getInputStream());
                 } catch (IOException e) {
-
+                    log.error("Exception while converting input stream to string: " + e.getMessage());
                 }
             }
         }

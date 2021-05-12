@@ -88,9 +88,9 @@ public class PostHookFilter extends ZuulFilter {
             responseBody = CharStreams.toString(new InputStreamReader(responseDataStream, "UTF-8"));
             //ctx.setResponseBody(responseBody);
         } catch (IOException e) {
-            log.info("Error reading body", e);
+            log.error("Error reading body", e);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception while reading response body: " + e.getMessage());
         }
         return responseBody;
     }
@@ -103,7 +103,7 @@ public class PostHookFilter extends ZuulFilter {
             payload = IOUtils.toString(is);
             //request.getRequestURI();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("REQUEST_PARSING_ERROR", e.getMessage());
         }
         return JsonPath.parse(payload);
     }

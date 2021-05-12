@@ -75,6 +75,9 @@ public class IndexerUtils {
 	@Value("${topic.push.enabled}")
 	private Boolean topicPushEnable;
 
+	@Value("${id.timezone}")
+	private String timezone;
+
 	@Autowired
 	private IndexerProducer producer;
 
@@ -183,6 +186,7 @@ public class IndexerUtils {
 							queryParam = queryParamExpression[1].trim();
 						}
 					} catch (Exception e) {
+						log.error("Error while building URI: " + e.getMessage());
 						continue;
 					}
 					StringBuilder resolvedParam = new StringBuilder();
@@ -483,8 +487,8 @@ public class IndexerUtils {
 					String expression = getProcessedJsonPath(fieldJsonPath);
 					context.put(expression, expressionArray[expressionArray.length - 1], "XXXXXXXX");
 				} catch (Exception e) {
-					log.info("Exception while masking field: ", e);
-					log.info("Data: " + context.jsonString());
+					log.error("Exception while masking field: ", e);
+					log.error("Data: " + context.jsonString());
 				}
 			}
 			return context;
@@ -510,11 +514,11 @@ public class IndexerUtils {
 			}
 			Date date = new Date(Long.valueOf(convertEpochToLong(epochValue)));
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-			formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+			formatter.setTimeZone(TimeZone.getTimeZone(timezone));
 			context.put("$", "@timestamp", formatter.format(date));
 		} catch (Exception e) {
-			log.info("Exception while adding timestamp: ",e);
-			log.info("Time stamp field: "+index.getTimeStampField());
+			log.error("Exception while adding timestamp: ",e);
+			log.error("Time stamp field: "+index.getTimeStampField());
 		}
 
 		return context;
@@ -531,8 +535,8 @@ public class IndexerUtils {
 		try {
 			encodedString = getObjectMapper().writeValueAsString(stringToBeEncoded);
 		} catch (Exception e) {
-			log.info("Exception while encoding non ascii characters ", e);
-			log.info("Data: " + stringToBeEncoded);
+			log.error("Exception while encoding non ascii characters ", e);
+			log.error("Data: " + stringToBeEncoded);
 			encodedString = stringToBeEncoded;
 		}
 		return encodedString;

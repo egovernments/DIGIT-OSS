@@ -3,6 +3,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.2 - 2021-05-11
+- Added html validations on input
+- Cleaned the code for any instance of printing stack trace
+
 ## 1.2.1 - 2021-02-26
 - Updated domain name in application.properties
 

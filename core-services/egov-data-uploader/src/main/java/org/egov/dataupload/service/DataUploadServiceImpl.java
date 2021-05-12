@@ -142,7 +142,7 @@ public class DataUploadServiceImpl {
                             "\\employee.json"), UploadDefinition.class);
             uploadDefinition = definition.getDefinitions().get(0);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IO exception while processing excel: " + e.getMessage());
         }
 
 //        Definition uploadDefinition = definitionOptional.get();

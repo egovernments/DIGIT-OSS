@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.3.1 - 2021-05-11
+
+- Made timezome configurable
+- Corrections to error handling
+- Removed print stack trace
+
 ## 1.3.0 - 2020-07-02
 
 - Added functionality for decryption of encrypted user PII data

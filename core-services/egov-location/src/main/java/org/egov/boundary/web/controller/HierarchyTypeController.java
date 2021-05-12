@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import org.egov.boundary.domain.service.HierarchyTypeService;
 import org.egov.boundary.exception.CustomException;
@@ -65,6 +66,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,6 +78,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 @RequestMapping("/hierarchytypes")
 public class HierarchyTypeController {
@@ -136,7 +139,7 @@ public class HierarchyTypeController {
 	@PutMapping(value = "/{code}")
 	@ResponseBody
 	public ResponseEntity<?> update(@Valid @RequestBody HierarchyTypeRequest hierarchyTypeRequest, BindingResult errors,
-			@PathVariable String code, @RequestParam(value = "tenantId", required = true) String tenantId) {
+			@PathVariable @Size(max = 50) String code, @RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId) {
 
 		if (errors.hasErrors()) {
 			ErrorResponse errRes = populateErrors(errors);
@@ -179,7 +182,7 @@ public class HierarchyTypeController {
 	@GetMapping
 	@ResponseBody
 	public ResponseEntity<?> search(@Valid @RequestParam(value = "hierarchyType", required = false) Long hierarchyType,
-			@RequestParam(value = "tenantId", required = false) String tenantId,@ModelAttribute HierarchyTypeRequest hierarchyTypeRequest,BindingResult errors) {
+			@RequestParam(value = "tenantId", required = false) @Size(max = 256) String tenantId,@ModelAttribute HierarchyTypeRequest hierarchyTypeRequest,BindingResult errors) {
 
 		if (errors.hasErrors()) {
 			LOGGER.info("HierarchyTypeRequest binding error: " + hierarchyTypeRequest);

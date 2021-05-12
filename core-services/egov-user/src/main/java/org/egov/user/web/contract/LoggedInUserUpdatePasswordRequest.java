@@ -3,7 +3,11 @@ package org.egov.user.web.contract;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.user.config.UserServiceConstants;
 import org.egov.user.domain.model.enums.UserType;
+
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,6 +20,9 @@ LoggedInUserUpdatePasswordRequest {
     private RequestInfo requestInfo;
     private String existingPassword;
     private String newPassword;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_TENANT)
+    @Size(max = 256)
     private String tenantId;
     private UserType type;
 

@@ -63,9 +63,9 @@ public class MdmsClientService {
 			log.info("HttpClientErrorException:" + excep);
 			throw new ServiceCallException(excep);
 		} catch (Exception ex) {
-			log.info("Exception:" + ex.getMessage());
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
+			log.error("Exception: " + ex.getMessage());
+			throw new CustomException("MDMS_RESPONSE_ERROR", "Error while fetching data from MDMS: " + ex.getMessage());
+
 		}
 		return mdmsResponse;
 	}

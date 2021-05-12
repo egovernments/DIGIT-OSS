@@ -7,14 +7,17 @@ import org.egov.domain.service.MessageService;
 import org.egov.web.contract.*;
 import org.egov.web.exception.InvalidMessageRequest;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
+@Validated
 @RequestMapping("/messages")
 public class MessageController {
 
@@ -33,8 +36,8 @@ public class MessageController {
 
 	@PostMapping("/v1/_search")
 	public MessagesResponse getMessages(@RequestParam("locale") String locale,
-			@RequestParam(value = "module", required = false) String module,
-			@RequestParam("tenantId") String tenantId,@RequestParam(value = "codes",required = false) Set<String> codes) {
+			@RequestParam(value = "module", required = false)  String module,
+			@RequestParam("tenantId") @Size(max = 256) String tenantId,@RequestParam(value = "codes",required = false) Set<String> codes) {
 		final MessageSearchCriteria searchCriteria = MessageSearchCriteria.builder().locale(locale)
 				.tenantId(new Tenant(tenantId)).codes(codes).module(module).build();
 		List<org.egov.domain.model.Message> domainMessages = messageService.getFilteredMessages(searchCriteria);

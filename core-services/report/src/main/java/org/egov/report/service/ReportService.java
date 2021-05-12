@@ -236,7 +236,7 @@ public class ReportService {
                 auditDecryptRequest(maps, reportDefinition.getdecryptionPathId(),
                         reportRequest.getRequestInfo().getUserInfo());
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("IO exception while decrypting report: " + e.getMessage());
                 throw new CustomException("REPORT_DECRYPTION_ERROR", "Error while decrypting report data");
             }
         }

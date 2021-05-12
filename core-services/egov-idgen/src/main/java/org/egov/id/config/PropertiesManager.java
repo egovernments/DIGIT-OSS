@@ -43,6 +43,8 @@ public class PropertiesManager {
 
 	private String serverContextpath;
 
+	private String timeZone;
+
 	public String getInvalidInput() {
 		return environment.getProperty("invalid.input");
 	}
@@ -90,4 +92,8 @@ public class PropertiesManager {
     public String getCityCodeNotFound() {
         return environment.getProperty("city.code.notfound");
     }
+
+    public String getTimeZone(){
+		return environment.getProperty("id.timezone");
+	}
 }

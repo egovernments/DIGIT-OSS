@@ -88,7 +88,7 @@ public class PreHookFilter extends ZuulFilter {
             payload = IOUtils.toString(is);
             //request.getRequestURI();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("REQUEST_PARSING_ERROR", e.getMessage());
         }
         return JsonPath.parse(payload);
     }

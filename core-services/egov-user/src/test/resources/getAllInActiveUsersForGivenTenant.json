@@ -10,5 +10,5 @@
     "authToken": "authToken"
   },
   "active": false,
-  "tenantId": "tenant1"
+  "tenantId": "tenant"
 }

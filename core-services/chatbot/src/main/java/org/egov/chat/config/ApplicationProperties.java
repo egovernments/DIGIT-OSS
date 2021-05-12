@@ -31,4 +31,7 @@ public class ApplicationProperties {
     @Value("${state.level.tenant.id}")
     private String stateLevelTenantId;
 
+    @Value("${id.timezone}")
+    private String timezone;
+
 }

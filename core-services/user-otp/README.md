@@ -17,6 +17,11 @@ User-OTP service handles the OTP for user registration, user login and password 
 ## Service Details
 The user-otp service send the OTP to user on login request, on password change request and during new user registration.
 
+| Environment Variable                              | Description                                                                                                          |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------|
+| `egov.localisation.tenantid.strip.suffix.count`   | Depend on the value of tenantIdStripSuffixCount, the level of tenantid is removed from suffix of provided tenantid   |
+
+
 ### API Details
 
 `BasePath` /user-otp/v1/[API endpoint]

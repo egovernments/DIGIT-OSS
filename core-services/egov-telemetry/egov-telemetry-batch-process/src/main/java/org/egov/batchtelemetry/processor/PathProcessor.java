@@ -25,6 +25,7 @@ public class PathProcessor {
     private String kafkaTopic;
     private Producer producer;
     private Configuration configuration;
+    private static String timezone;
 
 
     private List<InputPath> inputPaths;
@@ -35,6 +36,7 @@ public class PathProcessor {
         producer = new Producer();
         kafkaTopic = appProperties.getOutputKafkaTopic();
         configuration = Configuration.defaultConfiguration().addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL, Option.SUPPRESS_EXCEPTIONS);
+        timezone = appProperties.getTimezone();
 
         inputPaths = new ArrayList<>();
 
@@ -113,7 +115,7 @@ public class PathProcessor {
     private static String getTimestamp(Long timestamp) {
         Date date = new Date(Long.valueOf(timestamp));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        formatter.setTimeZone(TimeZone.getTimeZone(timezone));
         return formatter.format(date);
     }
 

@@ -40,4 +40,4 @@ As the react-app will be running in a web browser and not a server, a few of the
 Please modify the following environment variables in [env-variables.js](../nodejs/src/env-variables.js) file before running the app:
  
 1. Disable kafka consumer by marking kafkaConsumerEnabled to be false
-2. In case of hostnames of services, the react-app picks it from the proxy configured in [package.json](./package.json). So configure a common hostname there and replace egovServicesHost - 'https://egov-micro-dev.egovernments.org/' (and any other hostname that is being used to make an api call) in the env-variables.js with just '/'.
+2. In case of hostnames of services, the react-app picks it from the proxy configured in [package.json](./package.json). So configure a common hostname there and replace egovServicesHost - 'https://dev.digit.org/' (and any other hostname that is being used to make an api call) in the env-variables.js with just '/'.

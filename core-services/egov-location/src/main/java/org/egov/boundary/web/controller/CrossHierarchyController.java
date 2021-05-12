@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import org.egov.boundary.domain.service.BoundaryService;
 import org.egov.boundary.domain.service.BoundaryTypeService;
@@ -67,6 +68,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,6 +80,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 @RequestMapping("/crosshierarchys")
 public class CrossHierarchyController {
@@ -142,8 +145,8 @@ public class CrossHierarchyController {
 	@PutMapping(value = "/{code}")
 	@ResponseBody
 	public ResponseEntity<?> update(@RequestBody @Valid CrossHierarchyRequest crossHierarchyRequest,
-			BindingResult errors, @PathVariable String code,
-			@RequestParam(value = "tenantId", required = true) String tenantId) {
+			BindingResult errors, @PathVariable @Size(max = 100) String code,
+			@RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId) {
 		if (errors.hasErrors()) {
 			ErrorResponse errRes = populateErrors(errors);
 			return new ResponseEntity<ErrorResponse>(errRes, HttpStatus.BAD_REQUEST);
@@ -180,7 +183,7 @@ public class CrossHierarchyController {
 
 	@GetMapping
 	@ResponseBody
-	public ResponseEntity<?> search(@ModelAttribute CrossHierarchySearchRequest crossHierarchyRequest) {
+	public ResponseEntity<?> search(@ModelAttribute @Valid CrossHierarchySearchRequest crossHierarchyRequest) {
 
 		CrossHierarchyResponse crossHierarchyResponse = new CrossHierarchyResponse();
 		if (crossHierarchyRequest.getCrossHierarchy() != null

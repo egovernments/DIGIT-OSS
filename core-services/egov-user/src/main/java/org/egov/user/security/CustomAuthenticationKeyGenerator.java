@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.common.util.OAuth2Utils;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
@@ -20,6 +21,9 @@ public class CustomAuthenticationKeyGenerator implements AuthenticationKeyGenera
     private static final String SCOPE = "scope";
 
     private static final String USERNAME = "username";
+
+    @Value("${key.generator.hash.algorithm}")
+    private String hashAlgorithm;
 
     @Override
     public String extractKey(OAuth2Authentication authentication) {
@@ -40,9 +44,9 @@ public class CustomAuthenticationKeyGenerator implements AuthenticationKeyGenera
 
         MessageDigest digest;
         try {
-            digest = MessageDigest.getInstance("MD5");
+            digest = MessageDigest.getInstance(hashAlgorithm);
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("MD5 algorithm not available.  Fatal (should be in the JDK).");
+            throw new IllegalStateException(hashAlgorithm+" algorithm not available.  Fatal (should be in the JDK).");
         }
 
         try {

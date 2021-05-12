@@ -3,6 +3,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.5 2021-05-11
+- Inbox and processInstance count for each status
+
 ## 1.1.4 2021-03-17
 - Bug fix for rate action validation
 

@@ -43,6 +43,7 @@ package org.egov.boundary.domain.model;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.egov.boundary.web.contract.HierarchyType;
 
@@ -54,15 +55,19 @@ import lombok.Setter;
 public class BoundaryType {
 
 	private Long id;
+	@Size(max = 64)
 	private String name;
+	@Size(max = 22)
 	private String code;
 	private HierarchyType hierarchyType;
 	private BoundaryType parent;
 	private Long hierarchy;
+	@Size(max = 64)
 	private String localName;
 	private String parentName;
 	private Set<BoundaryType> childBoundaryTypes;
 	@NotNull
+	@Size(max = 256)
 	private String tenantId;
 
 }

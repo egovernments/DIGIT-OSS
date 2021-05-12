@@ -11,19 +11,24 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.egov.telemetry.utils.ValidationUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 @Slf4j
 public class TelemetryFormatChecker {
 
     private boolean isValid(String jsonData) {
+        InputStream inputStream = null;
         try {
-            String schema = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("telemetryMessageSchema.json"));
+            inputStream = getClass().getClassLoader().getResourceAsStream("telemetryMessageSchema.json");
+            String schema = IOUtils.toString(inputStream);
             return ValidationUtils.isJsonValid(schema, jsonData);
         } catch (IOException e) {
             log.error("Not able to read Telemetry Message Schema");
         } catch (ProcessingException e) {
             log.error("Not able to validate JSON Schema");
+        } finally {
+            IOUtils.closeQuietly(inputStream);
         }
         return false;
     }

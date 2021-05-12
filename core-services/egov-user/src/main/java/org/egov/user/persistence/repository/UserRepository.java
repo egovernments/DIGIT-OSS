@@ -220,7 +220,7 @@ public class UserRepository {
                 updateuserInputs.put("Gender", 1);
             } else if (Gender.MALE.toString().equals(user.getGender().toString())) {
                 updateuserInputs.put("Gender", 2);
-            } else if (Gender.OTHERS.toString().equals(user.getGender().toString())) {
+            } else if (Gender.TRANSGENDER.toString().equals(user.getGender().toString())) {
                 updateuserInputs.put("Gender", 3);
             } else {
                 updateuserInputs.put("Gender", 0);
@@ -468,7 +468,7 @@ public class UserRepository {
             userInputs.put("gender", 1);
         } else if (Gender.MALE.equals(entityUser.getGender())) {
             userInputs.put("gender", 2);
-        } else if (Gender.OTHERS.equals(entityUser.getGender())) {
+        } else if (Gender.TRANSGENDER.equals(entityUser.getGender())) {
             userInputs.put("gender", 3);
         } else {
             userInputs.put("gender", 0);

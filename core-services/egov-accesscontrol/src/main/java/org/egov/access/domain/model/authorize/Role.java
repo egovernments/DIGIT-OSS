@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Size;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @AllArgsConstructor
@@ -16,12 +18,15 @@ public class Role {
     @JsonProperty("id")
     private Long id;
 
+    @Size(max = 32)
     @JsonProperty("name")
     private String name;
 
+    @Size(max = 50)
     @JsonProperty("code")
     private String code;
 
+    @Size(max = 50)
     @JsonProperty("tenantId")
     private String tenantId;
 

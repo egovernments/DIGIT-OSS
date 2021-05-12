@@ -54,7 +54,7 @@ public class UrlProvider {
             try {
                 map = mapper.readValue(resource.getInputStream(),map.getClass());
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("IO Exception while mapping resource: " + e.getMessage());
             }
 
         } else {

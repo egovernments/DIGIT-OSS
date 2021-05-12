@@ -1,12 +1,11 @@
 package org.egov;
 
 import java.io.File;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.jayway.jsonpath.Configuration;
+import org.apache.commons.io.IOUtils;
 import org.egov.infra.indexer.web.contract.Mapping;
 import org.egov.infra.indexer.web.contract.Services;
 import org.slf4j.Logger;
@@ -25,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ObjectUtils;
 
 @Slf4j
 @Component
@@ -127,9 +125,10 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 			for (String yamlLocation : ymlUrlS) {
 				logger.info("Reading....: " + yamlLocation);
 				Resource resource = resourceLoader.getResource(yamlLocation);
-
+				InputStream inputStream = null;
 				try {
-						service = mapper.readValue(resource.getInputStream(), Services.class);
+						inputStream = resource.getInputStream();
+						service = mapper.readValue(inputStream, Services.class);
 						String version = service.getServiceMaps().getVersion();
 						for (Mapping mapping : (service.getServiceMaps().getMappings())) {
 							 mappingsMap.put(mapping.getTopic(), mapping);
@@ -153,6 +152,8 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 					} catch (Exception e) {
 						logger.error("Exception while fetching service map for: " + yamlLocation , e);
 						failed = true;
+					} finally {
+							IOUtils.closeQuietly(inputStream);
 					}
 			}
 		} catch (Exception e) {

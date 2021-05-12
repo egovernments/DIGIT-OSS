@@ -57,6 +57,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -65,8 +67,12 @@ import lombok.Setter;
 public class Boundary {
 
 	private Long id;
+
+	@Size(max = 512)
 	private String name;
 	private Long boundaryNum;
+
+	@Size(max = 22)
 	private String code;
 	private String area;
 	private String codes;

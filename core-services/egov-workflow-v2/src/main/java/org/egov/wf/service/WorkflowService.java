@@ -10,6 +10,7 @@ import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -91,16 +92,50 @@ public class WorkflowService {
     public Integer count(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         Integer count;
         if(criteria.isNull()){
-            enrichSearchCriteriaFromUser(requestInfo, criteria);
-            count = workflowRepository.getInboxCount(criteria);
+        	enrichSearchCriteriaForCount(requestInfo, criteria);
+            count = workflowRepository.getInboxCount(criteria,Boolean.FALSE);
         }
-        else count = workflowRepository.getProcessInstancesCount(criteria);
+        else {
+        	List<String> origCriteriaStatuses = criteria.getStatus();
+        	enrichSearchCriteriaForCount(requestInfo, criteria);
+        	String tenantId = (criteria.getTenantId() == null ? (requestInfo.getUserInfo().getTenantId()) :(criteria.getTenantId()));
+        	List<String> finalCriteriaStatuses = new ArrayList<String>();
+        	if(origCriteriaStatuses != null && !origCriteriaStatuses.isEmpty()) {
+        		origCriteriaStatuses.forEach((status) ->{
+        			finalCriteriaStatuses.add(tenantId+":"+status);
+        		});
+        		criteria.setStatus(finalCriteriaStatuses);
+        	}
+        	count = workflowRepository.getProcessInstancesCount(criteria,Boolean.FALSE);
+        }
 
         return count;
     }
 
 
 
+    public List statusCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
+        List result;
+        if(criteria.isNull()){
+        	enrichSearchCriteriaForCount(requestInfo, criteria);
+            result = workflowRepository.getInboxStatusCount(criteria,Boolean.TRUE);
+        }
+        else {
+        	List<String> origCriteriaStatuses = criteria.getStatus();
+        	enrichSearchCriteriaForCount(requestInfo, criteria);
+        	String tenantId = (criteria.getTenantId() == null ? (requestInfo.getUserInfo().getTenantId()) :(criteria.getTenantId()));
+        	List<String> finalCriteriaStatuses = new ArrayList<String>();
+        	if(origCriteriaStatuses != null && !origCriteriaStatuses.isEmpty()) {
+        		origCriteriaStatuses.forEach((status) ->{
+        			finalCriteriaStatuses.add(tenantId+":"+status);
+        		});
+        		criteria.setStatus(finalCriteriaStatuses);
+        	}
+        	result = workflowRepository.getProcessInstancesStatusCount(criteria,Boolean.TRUE);
+        }
+
+        return result;
+    }
 
 
     /**
@@ -158,6 +193,37 @@ public class WorkflowService {
             businessServiceSearchCriteria.setTenantIds(Collections.singletonList(criteria.getTenantId()));
         else
             businessServiceSearchCriteria.setTenantIds(util.getTenantIds(requestInfo.getUserInfo()));
+
+        List<BusinessService> businessServices = businessServiceRepository.getBusinessServices(businessServiceSearchCriteria);
+        List<String> actionableStatuses = util.getActionableStatusesForRole(requestInfo,businessServices,criteria);
+        criteria.setAssignee(requestInfo.getUserInfo().getUuid());
+        criteria.setStatus(actionableStatuses);
+
+    }
+    
+    /**
+     * Enriches processInstance search criteria based on requestInfo and criteria
+     * @param requestInfo
+     * @param criteria
+     */
+    private void enrichSearchCriteriaForCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
+
+        BusinessServiceSearchCriteria businessServiceSearchCriteria = new BusinessServiceSearchCriteria();
+
+        /*
+         * If tenantId is sent in query param processInstances only for that tenantId is returned
+         * else all tenantIds for which the user has roles are returned
+         * */
+        if(criteria.getTenantId()!=null)
+            businessServiceSearchCriteria.setTenantIds(Collections.singletonList(criteria.getTenantId()));
+        else
+            businessServiceSearchCriteria.setTenantIds(util.getTenantIds(requestInfo.getUserInfo()));
+        
+        if(!StringUtils.isEmpty(criteria.getBusinessService())) {
+        	List<String> businessServices = new ArrayList<String>();
+        	businessServices.add(criteria.getBusinessService());
+        	businessServiceSearchCriteria.setBusinessServices(businessServices);
+        }
 
         List<BusinessService> businessServices = businessServiceRepository.getBusinessServices(businessServiceSearchCriteria);
         List<String> actionableStatuses = util.getActionableStatusesForRole(requestInfo,businessServices,criteria);

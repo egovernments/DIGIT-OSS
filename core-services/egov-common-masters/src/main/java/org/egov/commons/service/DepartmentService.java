@@ -126,6 +126,7 @@ public class DepartmentService {
 				result = mapper.convertValue(JsonPath.read(apiResponse, "$.MdmsRes.common-masters.Department"), List.class);
 			}
 		}catch(Exception e) {
+			log.error("Error while fetching department data from MDMS: " + e.getMessage());
 			result = new ArrayList<>();
 		}
 		return result;

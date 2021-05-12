@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.egov.Utils.ExceptionUtils;
 import org.egov.contract.User;
 import org.egov.model.RequestBodyInspector;
+import org.egov.tracer.model.CustomException;
 import org.egov.wrapper.CustomRequestWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +108,7 @@ public class RequestEnrichmentFilter extends ZuulFilter {
             enrichRequestBody();
         } catch (IOException e) {
             logger.error(FAILED_TO_ENRICH_REQUEST_BODY_MESSAGE, e);
-            throw new RuntimeException(e);
+            throw new CustomException("FAILED_TO_ENRICH_REQUEST_BODY", e.getMessage());
         }
     }
 

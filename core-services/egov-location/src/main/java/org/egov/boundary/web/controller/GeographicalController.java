@@ -12,9 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,7 @@ import java.util.Optional;
  * Handles all requests related to Geographical boundaries by providing appropriate GeoJson and other information
  */
 
+@Validated
 @RestController
 @RequestMapping("/location/v11")
 public class GeographicalController {
@@ -50,7 +53,7 @@ public class GeographicalController {
      */
     @RequestMapping(value = "/geography/_search", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<GeographicalResponse> geographySearchPost(@RequestParam(value = "tenantId") String tenantId,
+    public ResponseEntity<GeographicalResponse> geographySearchPost(@RequestParam(value = "tenantId") @Size(max = 256) String tenantId,
                                                                     @RequestParam(value = "filter", required = false) final String
                                                                             filter,
                                                                     @Valid @RequestBody RequestInfoWrapper requestInfoWapper) {

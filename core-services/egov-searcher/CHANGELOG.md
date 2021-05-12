@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.3 - 11-05-2021
+
+- Added finally block wherever required
+- Corrections to error handling
+
 ## 1.1.2 - 26-02-2021
 
 - Minor bug fixes for new operators

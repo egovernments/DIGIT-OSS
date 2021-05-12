@@ -54,14 +54,15 @@ const envVariables = {
     },
 
     egovServices: {
-        egovServicesHost: process.env.EGOV_SERVICES_HOST || 'https://egov-micro-dev.egovernments.org/',
-        externalHost: process.env.EXTERNAL_HOST || 'https://egov-micro-dev.egovernments.org/',
+        egovServicesHost: process.env.EGOV_SERVICES_HOST || 'https://dev.digit.org/',
+        externalHost: process.env.EXTERNAL_HOST || 'https://dev.digit.org/',
         searcherHost: process.env.EGOV_SEARCHER_HOST || "http://egov-searcher.egov:8080/",
 
-        userServiceHost: process.env.USER_SERVICE_HOST || 'https://egov-micro-dev.egovernments.org/',
+        userServiceHost: process.env.USER_SERVICE_HOST || 'https://dev.digit.org/',
         userServiceOAuthPath: process.env.USER_SERVICE_OAUTH_PATH || 'user/oauth/token',
         userServiceCreateCitizenPath: process.env.USER_SERVICE_CREATE_CITIZEN_PATH || 'user/citizen/_create',
         userServiceUpdateProfilePath: process.env.USER_SERVICE_UPDATE_PROFILE_PATH || 'user/profile/_update',
+        userServiceCitizenDetailsPath: process.env.USER_SERVICE_CITIZEN_DETAILS_PATH || 'user/_details',
 
         mdmsSearchPath: process.env.MDMS_SEARCH_PATH || 'egov-mdms-service/v1/_search',
         localisationServiceSearchPath: process.env.LOCALISATION_SERVICE_SEARCH_PATH || 'localization/messages/v1/_search',

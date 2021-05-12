@@ -8,10 +8,13 @@ import lombok.NoArgsConstructor;
 import org.egov.domain.model.TokenRequest;
 import org.egov.domain.model.TokenSearchCriteria;
 
+import javax.validation.Valid;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OtpRequest {
+    @Valid
     private Otp otp;
 
     public TokenRequest getTokenRequest() {

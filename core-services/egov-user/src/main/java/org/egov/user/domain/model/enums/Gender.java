@@ -42,5 +42,5 @@ package org.egov.user.domain.model.enums;
 
 public enum Gender {
     //This order should not be interrupted
-    FEMALE, MALE, OTHERS;
+    FEMALE, MALE, TRANSGENDER;
 }

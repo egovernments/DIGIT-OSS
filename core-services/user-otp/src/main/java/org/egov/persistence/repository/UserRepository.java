@@ -51,7 +51,7 @@ public class UserRepository {
                 return null;
             }
         } catch (Exception e) {
-            log.info("Exception WhileFetching User from user : " + e.getMessage());
+            log.error("Exception WhileFetching User from user : " + e.getMessage());
         }
 
         return null;

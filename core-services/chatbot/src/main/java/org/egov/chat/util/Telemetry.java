@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
+import org.egov.chat.config.ApplicationProperties;
 import org.egov.chat.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -21,8 +22,13 @@ public class Telemetry {
 
     @Autowired
     private ObjectMapper objectMapper;
+
     @Autowired
     private KafkaTemplate<String, JsonNode> kafkaTemplate;
+
+    @Autowired
+    private ApplicationProperties applicationProperties;
+
 
     private String telemetryTopicName = "chatbot-telemetry";
 
@@ -40,7 +46,7 @@ public class Telemetry {
     public ObjectNode changeToElasticSearchCompatibleTimestamp(ObjectNode chatNode) {
         Date date = new Date(chatNode.get("timestamp").asLong());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        formatter.setTimeZone(TimeZone.getTimeZone(applicationProperties.getTimezone()));
         chatNode.put("@timestamp", formatter.format(date));
         return chatNode;
     }

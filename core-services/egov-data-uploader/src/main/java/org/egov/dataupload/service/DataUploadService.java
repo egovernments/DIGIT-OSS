@@ -595,6 +595,7 @@ public class DataUploadService {
             logger.error(failureMessage.toString());
             return failureMessage.toString();
         }catch (Exception e) {
+            logger.error("Error occurred while hitting API: " + e.getMessage());
         	return e.getClass().getSimpleName().concat("--").concat(e.getMessage());
         }
 
@@ -783,6 +784,7 @@ public class DataUploadService {
                         originalChild.add(newChildEntry);
                     }
                 } catch (Exception e) {
+                    logger.error("Error occurred while deep merging: " + e.getMessage());
                     if (!originalChild.contains(newChildEntry)) {
                         originalChild.add(newChildEntry);
                         continue;

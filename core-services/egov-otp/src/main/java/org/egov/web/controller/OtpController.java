@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 public class OtpController {
 
@@ -25,13 +27,13 @@ public class OtpController {
 
     @PostMapping("v1/_create")
     @ResponseStatus(HttpStatus.CREATED)
-    public OtpResponse createOtp(@RequestBody OtpRequest otpRequest) {
+    public OtpResponse createOtp(@RequestBody @Valid OtpRequest otpRequest) {
         final Token token = tokenService.create(otpRequest.getTokenRequest());
         return new OtpResponse(token);
     }
 
     @PostMapping("v1/_validate")
-    public OtpResponse validateOtp(@RequestBody OtpValidateRequest request) {
+    public OtpResponse validateOtp(@RequestBody @Valid OtpValidateRequest request) {
         final Token token = tokenService.validate(request.toDomainValidateRequest());
         token.setNumber(request.toDomainValidateRequest().getOtp());
         return new OtpResponse(token);

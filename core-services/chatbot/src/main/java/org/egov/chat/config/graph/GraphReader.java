@@ -9,7 +9,9 @@ import org.jgrapht.io.CSVImporter;
 import org.jgrapht.io.ImportException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.apache.commons.io.IOUtils;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,13 +25,20 @@ public class GraphReader {
 
     @Autowired
     public GraphReader() throws ImportException {
+        InputStream inputStream = null;
         CSVImporter<String, DefaultEdge> csvImporter = new CSVImporter<>((s, map) -> s,
                 (s, v1, s2, map) -> new DefaultEdge(), CSVFormat.ADJACENCY_LIST, ',');
 
         graph = new DefaultDirectedGraph<>(DefaultEdge.class);
-
-        csvImporter.importGraph(graph, getClass().getClassLoader().getResourceAsStream("GRAPH_ADJACENCY_LIST.csv"));
-
+        try {
+            inputStream = GraphReader.class.getResourceAsStream("GRAPH_ADJACENCY_LIST.csv");
+            csvImporter.importGraph(graph, inputStream);
+        }
+        catch (Exception e) {
+            log.error("Exception while fetching file" , e);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
     }
 
     public List<String> getNextNodes(String node) {

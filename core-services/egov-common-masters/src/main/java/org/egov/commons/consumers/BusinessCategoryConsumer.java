@@ -15,6 +15,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
+import org.egov.tracer.model.CustomException;
 
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class BusinessCategoryConsumer {
 				businessCategoryService.update(businessCategoryList);
 		} catch (Exception exception) {
 			log.debug("processMessage:" + exception);
-			throw exception;
+			throw new CustomException("RECORD_PROCESSING_ERROR", exception.getMessage());
 		}
 	}
 

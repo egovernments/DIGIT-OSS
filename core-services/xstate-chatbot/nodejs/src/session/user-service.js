@@ -19,6 +19,25 @@ class UserService {
       await this.createUser(mobileNumber, tenantId);
       user = await this.loginUser(mobileNumber, tenantId);
     }
+
+    user = await this.enrichuserDetails(user);
+    return user;
+  }
+
+  async enrichuserDetails(user) {
+    let url = config.egovServices.userServiceHost + config.egovServices.userServiceCitizenDetailsPath + '?access_token=' + user.authToken ;
+    let options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    let response = await fetch(url, options);
+    if(response.status === 200) {
+      let body = await response.json();
+      user.userInfo.name = body.name
+    } 
     return user;
   }
 

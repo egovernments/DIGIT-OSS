@@ -26,6 +26,7 @@ public class SessionProcessor {
 
     private static ObjectMapper mapper;
     private static String kafkaTopic;
+    private static String timezone;
     private static AppProperties appProperties;
     private static Producer producer;
     private static Configuration configuration;
@@ -47,6 +48,7 @@ public class SessionProcessor {
         mapper = new ObjectMapper();
         producer = new Producer();
         kafkaTopic = appProperties.getOutputKafkaTopic();
+        timezone = appProperties.getTimezone();
 
         configuration = Configuration.defaultConfiguration().addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL, Option.SUPPRESS_EXCEPTIONS);
 
@@ -158,7 +160,7 @@ public class SessionProcessor {
     private static String getTimestamp(Long startTime) {
         Date date = new Date(Long.valueOf(startTime));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        formatter.setTimeZone(TimeZone.getTimeZone(timezone));
         return formatter.format(date);
     }
 

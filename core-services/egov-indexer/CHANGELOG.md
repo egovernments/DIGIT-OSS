@@ -3,6 +3,12 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.4 - 2021-05-11
+
+- Updated error handling
+- added finally blocks wherever missing 
+- made timezone configurable 
+
 ## 1.1.3 - 2021-02-26
 
 - Updated domain name in application.properties

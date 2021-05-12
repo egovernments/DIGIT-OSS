@@ -3,6 +3,7 @@ package org.egov.wrapper;
 import com.netflix.zuul.http.HttpServletRequestWrapper;
 import com.netflix.zuul.http.ServletInputStreamWrapper;
 import org.apache.commons.io.IOUtils;
+import org.egov.tracer.model.CustomException;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public class CustomRequestWrapper extends HttpServletRequestWrapper {
         try {
             payload = IOUtils.toString(request.getInputStream());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("INPUT_TO_STRING_CONVERSION_ERROR", e.getMessage());
         }
     }
 

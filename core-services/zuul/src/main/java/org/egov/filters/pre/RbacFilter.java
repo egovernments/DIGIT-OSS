@@ -180,7 +180,7 @@ public class RbacFilter extends ZuulFilter {
             log.warn("Exception while attempting to authorize via access control", e);
             return false;
         } catch (Exception e) {
-            log.warn("Unknown exception occurred while attempting to authorize via access control", e);
+            log.error("Unknown exception occurred while attempting to authorize via access control", e);
             return false;
         }
 

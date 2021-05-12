@@ -48,7 +48,7 @@ public class CustomAsyncFilter extends ZuulFilter {
 			log.info("CustomAsyncFilter Topic:" + topic);
 			kafkaTemplate.send(topic, customAsyncRequest);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Exception while sending async request to kafka topic: " + ex.getMessage());
 		}
 		return null;
 	}
@@ -78,9 +78,9 @@ public class CustomAsyncFilter extends ZuulFilter {
 				responseBody = CharStreams.toString(new InputStreamReader(responseDataStream, "UTF-8"));
 			ctx.setResponseBody(responseBody);
 		} catch (IOException e) {
-			log.info("Error reading body", e);
+			log.error("Error reading body", e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception while reading response body: " + e.getMessage());
 		}
 		return responseBody;
 	}
@@ -93,7 +93,7 @@ public class CustomAsyncFilter extends ZuulFilter {
 				});
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("IO exception while converting json to map: " + e.getMessage());
 			}
 		}
 		return resMap;

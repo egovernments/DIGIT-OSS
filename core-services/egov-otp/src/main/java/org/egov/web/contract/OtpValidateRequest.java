@@ -7,6 +7,8 @@ import lombok.*;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.domain.model.ValidateRequest;
 
+import javax.validation.Valid;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +17,7 @@ public class OtpValidateRequest {
     private RequestInfo requestInfo;
 
     @JsonProperty("otp")
+    @Valid
     private Otp otp;
 
     public ValidateRequest toDomainValidateRequest() {

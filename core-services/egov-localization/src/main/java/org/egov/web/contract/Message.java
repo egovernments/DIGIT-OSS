@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.egov.domain.model.MessageIdentity;
 import org.egov.domain.model.Tenant;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Builder
 @Getter
@@ -15,12 +16,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 @NoArgsConstructor
 public class Message {
 	@NotEmpty
+    @SafeHtml
 	private String code;
 	@NotEmpty
+    @SafeHtml
 	private String message;
 	@NotEmpty
+    @SafeHtml
 	private String module;
 	@NotEmpty
+    @SafeHtml
 	private String locale;
 
 	public Message(org.egov.domain.model.Message domainMessage) {

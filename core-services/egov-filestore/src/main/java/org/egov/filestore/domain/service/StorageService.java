@@ -107,7 +107,7 @@ public class StorageService {
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("IO Exception while mapping files to artifact: " + e.getMessage());
 			}
 			storageValidator.validate(artifact);
 			

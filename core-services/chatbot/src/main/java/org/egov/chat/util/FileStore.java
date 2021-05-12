@@ -109,13 +109,13 @@ public class FileStore {
     }
 
     public File getFileForFileStoreId(String fileStoreId, String tenantId) throws IOException {
-        if (fileStoreId.length() > 40) {                     // TODO : Check if direct link provided (If length > 40 then direct link is provided)
+        /*if (fileStoreId.length() > 40) {                     // TODO : Check if direct link provided (If length > 40 then direct link is provided)
             String fileURL = fileStoreId;
             String refinedURL = getRefinedFileURL(fileURL);
             String filename = FilenameUtils.getName(refinedURL);
             filename = filename.substring(13, filename.indexOf("?"));
             return getFileAt(refinedURL, filename);
-        }
+        }*/
         UriComponentsBuilder uriComponents = UriComponentsBuilder.fromUriString(fileStoreHost + fileStoreGetEndpoint);
         uriComponents.queryParam("tenantId", tenantId);
         uriComponents.queryParam("fileStoreIds", fileStoreId);

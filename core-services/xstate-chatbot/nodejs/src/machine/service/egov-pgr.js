@@ -51,7 +51,13 @@ class PGRService {
   }
   
   async fetchFrequentComplaints(tenantId) {
-    let complaintTypes = await this.fetchMdmsData(tenantId, "RAINMAKER-PGR", "ServiceDefs", "$.[?(@.order && @.active == true)].serviceCode");
+    let complaintTypeMdmsData = await this.fetchMdmsData(tenantId, "RAINMAKER-PGR", "ServiceDefs", "$.[?(@.order && @.active == true)]");
+    let sortedData = complaintTypeMdmsData.slice().sort((a, b) => a.order - b.order);
+    let complaintTypes = [];
+    for(let data of sortedData){
+      if(!complaintTypes.includes(data.serviceCode))
+        complaintTypes.push(data.serviceCode);
+    }
     let localisationPrefix = 'SERVICEDEFS.';
     let messageBundle = {};
     for(let complaintType of complaintTypes) {

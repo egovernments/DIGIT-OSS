@@ -11,18 +11,22 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 public class CrossHierarchy {
 
 	private Long id;
 	private Boundary parent;
+	@Size(max = 100)
 	private String code;
 	private Boundary child;
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private BoundaryType parentType;
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private BoundaryType childType;
+	@Size(max = 256)
 	private String tenantId;
 	private Long createdBy;
 	private Date createdDate;

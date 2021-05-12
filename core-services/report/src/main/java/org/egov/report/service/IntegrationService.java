@@ -16,6 +16,7 @@ import org.egov.swagger.model.MetadataResponse;
 import org.egov.swagger.model.ReportDefinition;
 import org.egov.swagger.model.SearchColumn;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +29,9 @@ public class IntegrationService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Value("${id.timezone}")
+    private String timezone;
 
     public MetadataResponse getData(ReportDefinition reportDefinition, MetadataResponse metadataResponse, RequestInfo requestInfo, String moduleName) {
 
@@ -114,7 +118,7 @@ public class IntegrationService {
 
                         columnDetail.setDefaultValue(map);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error("Exception while fetching data: " + e.getMessage());
                     }
 
                 }
@@ -141,7 +145,7 @@ public class IntegrationService {
 
     public long getCurrentTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTimeZone(TimeZone.getTimeZone(timezone));
         return calendar.getTimeInMillis();
     }
 }

@@ -11,8 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,20 +82,35 @@ public class WorKflowRepository {
      * @param criteria
      * @return
      */
-    public Integer getInboxCount(ProcessInstanceSearchCriteria criteria) {
+    public Integer getInboxCount(ProcessInstanceSearchCriteria criteria, boolean statuCount) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getInboxCount(criteria, preparedStmtList);
+        String query = queryBuilder.getInboxCount(criteria, preparedStmtList,statuCount);
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }
 
-    public Integer getProcessInstancesCount(ProcessInstanceSearchCriteria criteria){
+    public Integer getProcessInstancesCount(ProcessInstanceSearchCriteria criteria, boolean statuCount){
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getProcessInstanceCount(criteria, preparedStmtList);
+        String query = queryBuilder.getProcessInstanceCount(criteria, preparedStmtList,statuCount);
         return jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
     }
 
+    /**
+     * Returns the count based on the search criteria
+     * @param criteria
+     * @return
+     */
+    public List getInboxStatusCount(ProcessInstanceSearchCriteria criteria, boolean statuCount) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getInboxCount(criteria, preparedStmtList,statuCount);
+        return jdbcTemplate.queryForList(query, preparedStmtList.toArray());
+    }
 
+    public List getProcessInstancesStatusCount(ProcessInstanceSearchCriteria criteria, boolean statuCount){
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getProcessInstanceCount(criteria, preparedStmtList,statuCount);
+        return  jdbcTemplate.queryForList(query, preparedStmtList.toArray());
+    }
 
     private List<String> getInboxSearchIds(ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();

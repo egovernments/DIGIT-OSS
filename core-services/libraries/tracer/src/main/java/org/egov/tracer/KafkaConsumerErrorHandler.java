@@ -28,8 +28,7 @@ public class KafkaConsumerErrorHandler extends LoggingErrorHandler {
             try {
                 body = objectMapper.writeValueAsString(record.value());
             } catch (Exception ex) {
-                log.error("KafkaConsumerErrorHandller Kafka consumer can not parse json data");
-                ex.printStackTrace();
+                log.error("KafkaConsumerErrorHandller Kafka consumer can not parse json data " + ex.getMessage());
             }
             exceptionAdvise.sendErrorMessage(body, thrownException, record.topic(), null, false);
         }

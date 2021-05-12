@@ -12,10 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
+@Validated
 @RestController
 @RequestMapping("/location/v11")
 public class TenantController {
@@ -43,7 +46,7 @@ public class TenantController {
      */
     @RequestMapping(value = "/tenant/_search", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<TenantResponse> tenantSearchPost(@RequestParam(value = "tenantId") String baseTenantId,
+    public ResponseEntity<TenantResponse> tenantSearchPost(@RequestParam(value = "tenantId") @Size(max = 256) String baseTenantId,
                                                            @RequestParam(value = "lat") final Double lat,
                                                            @RequestParam(value = "lng") final Double lng,
                                                            @Valid @RequestBody RequestInfoWrapper requestInfoWapper) {

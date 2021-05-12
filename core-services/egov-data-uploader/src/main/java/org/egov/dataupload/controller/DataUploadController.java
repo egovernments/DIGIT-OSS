@@ -4,6 +4,7 @@ import org.egov.dataupload.model.*;
 import org.egov.dataupload.service.DataUploadService;
 import org.egov.dataupload.utils.DataUploadUtils;
 import org.egov.dataupload.utils.ResponseInfoFactory;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class DataUploadController {
 						.uploadJobs(uploadJobs).build();
 				return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch(Exception e){
-			throw e;
+			throw new CustomException("JOBS_CREATE_ERROR", e.getMessage());
 		}
 	}
 	
@@ -61,7 +62,7 @@ public class DataUploadController {
 						.moduleDefs(moduleDefs).build();
 				return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch(Exception e){
-			throw e;
+			throw new CustomException("ERROR_UPLOAD_DEFINITIONS_SEARCH", e.getMessage());
 		}
 	}
 	
@@ -76,7 +77,7 @@ public class DataUploadController {
 						.uploadJobs(uploadJobs).build();
 				return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch(Exception e){
-			throw e;
+			throw new CustomException("ERROR_JOBS_SEARCH", e.getMessage());
 		}
 	}
 

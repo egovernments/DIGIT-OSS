@@ -47,6 +47,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import org.egov.boundary.domain.model.BoundarySearchRequest;
 import org.egov.boundary.domain.service.BoundaryService;
@@ -78,6 +79,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,6 +93,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Validated
 @RestController
 @RequestMapping("/boundarys")
 @Slf4j
@@ -156,7 +159,7 @@ public class BoundaryController {
 	@PutMapping(value = "/{code}")
 	@ResponseBody
 	public ResponseEntity<?> update(@RequestBody @Valid BoundaryRequest boundaryRequest, BindingResult errors,
-			@PathVariable String code, @RequestParam(value = "tenantId", required = true) String tenantId) {
+			@PathVariable @Size(max = 22) String code, @RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId) {
 
 		if (errors.hasErrors()) {
 			ErrorResponse errRes = populateErrors(errors);
@@ -199,7 +202,7 @@ public class BoundaryController {
 	@GetMapping
 	@ResponseBody
 	public ResponseEntity<?> search(@Valid @RequestParam(value = "boundary", required = false) Long boundary,
-			@RequestParam(value = "tenantId", required = false) String tenantId,
+			@RequestParam(value = "tenantId", required = false) @Size(max = 256) String tenantId,
 			@ModelAttribute BoundaryRequest boundaryRequest, BindingResult errors) {
 		BoundaryResponse boundaryResponse = new BoundaryResponse();
 		ResponseInfo responseInfo = new ResponseInfo();
@@ -247,8 +250,8 @@ public class BoundaryController {
 
 	@GetMapping("/getLocationByLocationName")
 	@ResponseBody
-	public ResponseEntity<?> getLocation(@RequestParam(value = "tenantId", required = true) String tenantId,
-			@RequestParam("locationName") final String locationName) {
+	public ResponseEntity<?> getLocation(@RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId,
+			@RequestParam("locationName") @Size(max = 512) final String locationName) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
 			if (tenantId != null && !tenantId.isEmpty()) {
@@ -256,6 +259,7 @@ public class BoundaryController {
 			}
 			return new ResponseEntity<List<Map<String, Object>>>(list, HttpStatus.OK);
 		} catch (final Exception e) {
+			log.error("Error while fetching location: " + e.getMessage());
 			return new ResponseEntity<String>("error in request", HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -263,7 +267,7 @@ public class BoundaryController {
 	@PostMapping(value = "/childLocationsByBoundaryId")
 	@ResponseBody
 	public ResponseEntity<?> getChildLocationsByBoundaryId(
-			@RequestParam(value = "tenantId", required = true) String tenantId,
+			@RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId,
 			@RequestParam(value = "boundaryId", required = true) final String boundaryId) {
 		BoundaryResponse boundaryResponse = new BoundaryResponse();
 		if (tenantId != null && !tenantId.isEmpty() && boundaryId != null && !boundaryId.isEmpty()) {
@@ -281,7 +285,7 @@ public class BoundaryController {
 	@ResponseBody
 	public ResponseEntity<?> getBoundaryByBoundaryTypeId(
 			@RequestParam(value = "boundaryTypeId", required = true) final String boundaryTypeId,
-			@RequestParam(value = "tenantId", required = true) final String tenantId) {
+			@RequestParam(value = "tenantId", required = true) @Size(max = 256) final String tenantId) {
 		BoundaryResponse boundaryResponse = new BoundaryResponse();
 		if (boundaryTypeId != null && !boundaryTypeId.isEmpty()) {
 			ResponseInfo responseInfo = new ResponseInfo();
@@ -320,9 +324,9 @@ public class BoundaryController {
 	@PostMapping(value = "/boundariesByBndryTypeNameAndHierarchyTypeName")
 	@ResponseBody
 	public ResponseEntity<?> getBoundariesByBndryTypeNameAndHierarchyTypeName(
-			@RequestParam(value = "tenantId", required = true) String tenantId,
-			@RequestParam(value = "boundaryTypeName", required = true) final String boundaryTypeName,
-			@RequestParam(value = "hierarchyTypeName", required = true) final String hierarchyTypeName) {
+			@RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId,
+			@RequestParam(value = "boundaryTypeName", required = true) @Size(max = 64) final String boundaryTypeName,
+			@RequestParam(value = "hierarchyTypeName", required = true) @Size(max = 128) final String hierarchyTypeName) {
 		BoundaryResponse boundaryResponse = new BoundaryResponse();
 		if (tenantId != null && !tenantId.isEmpty() && boundaryTypeName != null && !boundaryTypeName.isEmpty()
 				&& hierarchyTypeName != null && !hierarchyTypeName.isEmpty()) {
@@ -340,7 +344,7 @@ public class BoundaryController {
 
 	@PostMapping("/isshapefileexist")
 	@ResponseBody
-	public ResponseEntity<?> isShapeFileExist(@RequestParam(value = "tenantId", required = true) String tenantId,
+	public ResponseEntity<?> isShapeFileExist(@RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId,
 			@RequestBody @Valid final RequestInfoWrapper requestInfoWrapper) {
 		final RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
 		boolean exist = false;
@@ -352,13 +356,14 @@ public class BoundaryController {
 			return getFailureResponse(requestInfo);
 
 		} catch (final Exception e) {
+			LOGGER.error("Error while checking for shape file: " + e.getMessage());
 			return new ResponseEntity<String>("error in request", HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/getshapefile")
 	@ResponseBody
-	public ResponseEntity<Resource> fetchShapeFileForTenant(@RequestParam(value = "tenantid", required = true, defaultValue = "default") final String tenantId) throws IOException {
+	public ResponseEntity<Resource> fetchShapeFileForTenant(@RequestParam(value = "tenantid", required = true, defaultValue = "default") @Size(max = 256) final String tenantId) throws IOException {
 
 		Resource resource = boundaryService.fetchShapeFile(tenantId);
 
@@ -369,11 +374,11 @@ public class BoundaryController {
 
 	@PostMapping(value = "/_search")
 	@ResponseBody
-	public ResponseEntity<?> boundarySearch(@RequestParam(value = "tenantId", required = true) String tenantId,
+	public ResponseEntity<?> boundarySearch(@RequestParam(value = "tenantId", required = true) @Size(max = 256)String tenantId,
 			@RequestParam(value = "boundaryIds", required = false) final List<Long> boundaryIds,
 			@RequestParam(value = "boundaryNum", required = false) final List<Long> boundaryNum,
-			@RequestParam(value = "boundaryType", required = false) final String boundaryType,
-			@RequestParam(value = "hierarchyType", required = false) final String hierarchyType,
+			@RequestParam(value = "boundaryType", required = false) @Size(max = 64) final String boundaryType,
+			@RequestParam(value = "hierarchyType", required = false) @Size(max = 128)final String hierarchyType,
 			@RequestParam(value = "codes", required = false) final List<String> codes) {
 		BoundaryResponse boundaryResponse = new BoundaryResponse();
 		ResponseInfo responseInfo = new ResponseInfo();

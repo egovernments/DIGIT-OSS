@@ -333,7 +333,7 @@ public class IdGenerationService {
             dateFormat = dateFormat.substring(dateFormat.indexOf(":") + 1);
             dateFormat = dateFormat.trim();
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat.trim());
-            formatter.setTimeZone(TimeZone.getTimeZone("IST"));
+            formatter.setTimeZone(TimeZone.getTimeZone(propertiesManager.getTimeZone()));
             String formattedDate = formatter.format(date);
             return formattedDate;
 

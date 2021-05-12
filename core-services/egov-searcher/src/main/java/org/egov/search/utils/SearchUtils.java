@@ -115,6 +115,7 @@ public class SearchUtils {
 						continue;
 
 				} catch (Exception e) {
+					log.error("Error while building where clause: " + e.getMessage());
 					continue;
 				}
 				
@@ -258,6 +259,7 @@ public class SearchUtils {
 					try{
 						result.add(obj.getValue());
 					}catch(Exception e){
+						log.error("Errow while adding object value to result: " + e.getMessage());
 						throw e;
 					}
 				}

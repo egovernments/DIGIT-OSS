@@ -1,42 +1,11 @@
 {
-    "responseInfo": {
-        "apiId": null,
-        "ver": null,
-        "ts": null,
-        "resMsgId": null,
-        "msgId": null,
-        "status": null
-    },
-    "error": {
-        "code": 400,
-        "message": null,
-        "description": null,
-        "fields": [
-            {
-                "code": "NotEmpty",
-                "message": "may not be empty",
-                "field": "messages[1].message"
-            },
-            {
-                "code": "NotEmpty",
-                "message": "may not be empty",
-                "field": "messages[1].code"
-            },
-            {
-                "code": "NotEmpty",
-                "message": "may not be empty",
-                "field": "module"
-            },
-            {
-                "code": "NotEmpty",
-                "message": "may not be empty",
-                "field": "tenantId"
-            },
-            {
-                "code": "NotEmpty",
-                "message": "may not be empty",
-                "field": "locale"
-            }
-        ]
-    }
+    "ResponseInfo": null,
+    "Errors": [
+        {
+            "code": "ConstraintViolationException",
+            "message": "An unhandled exception occurred on the server",
+            "description": "update.messageRequest.messages[1].message: may not be empty, update.messageRequest.messages[1].code: may not be empty, update.messageRequest.locale: may not be empty, update.messageRequest.tenantId: may not be empty, update.messageRequest.module: may not be empty",
+            "params": null
+        }
+    ]
 }

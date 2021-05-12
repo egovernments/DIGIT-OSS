@@ -13,6 +13,7 @@ import org.egov.commons.service.BusinessCategoryService;
 import org.egov.commons.service.BusinessDetailsService;
 import org.egov.commons.web.contract.*;
 import org.egov.commons.web.contract.BusinessAccountDetails;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class BusinessDetailsConsumer {
 
 		} catch (Exception exception) {
 			log.debug("processMessage:" + exception);
-			throw exception;
+			throw new CustomException("ERROR_PROCESSING_RECORD", exception.getMessage());
 		}
 	}
 

@@ -52,10 +52,13 @@ import org.egov.boundary.web.contract.City;
 import org.egov.boundary.web.contract.CityRequest;
 import org.egov.boundary.web.contract.CityResponse;
 import org.egov.common.contract.response.ResponseInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,6 +71,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
+@Validated
 @RestController
 @RequestMapping("/city")
 public class CityController {
@@ -78,9 +85,11 @@ public class CityController {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	public static final Logger logger = LoggerFactory.getLogger(CityController.class);
+
 	@GetMapping
-	public String getCity(@RequestParam(value = "tenantId", required = true) String tenantId,
-			@RequestParam(value = "code", required = false) String code) {
+	public String getCity(@RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId,
+			@RequestParam(value = "code", required = false) @Size(max = 4) String code) {
 		List<District> districts;
 		List<District> result = new ArrayList<>();
 		String jsonInString = "";
@@ -103,7 +112,7 @@ public class CityController {
 			else
 				jsonInString = objectMapper.writeValueAsString(districts);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Error while reading cities JSON: " + e.getMessage());
 		}
 
 		return jsonInString;
@@ -111,7 +120,7 @@ public class CityController {
 
 	@PostMapping(value = "/getCitybyCityRequest")
 	@ResponseBody
-	public ResponseEntity<?> search(@RequestBody CityRequest cityRequest) {
+	public ResponseEntity<?> search(@RequestBody @Valid CityRequest cityRequest) {
 		CityResponse cityResponse = new CityResponse();
 		if (cityRequest.getCity() != null && cityRequest.getCity().getTenantId() != null
 				&& !cityRequest.getCity().getTenantId().isEmpty()) {

@@ -9,6 +9,7 @@ import org.egov.user.domain.model.Role;
 import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.*;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -26,7 +27,13 @@ import javax.validation.constraints.Size;
 public class UserRequest {
 
     private Long id;
+
+    @SafeHtml
+    @Size(max = 64)
     private String userName;
+
+    @SafeHtml
+    @Size(max = 5)
     private String salutation;
 
     @Pattern(regexp = UserServiceConstants.PATTERN_NAME)
@@ -34,28 +41,59 @@ public class UserRequest {
     private String name;
 
     @Pattern(regexp = UserServiceConstants.PATTERN_GENDER)
-    @Size(max = 10)
+    @Size(max = 15)
     private String gender;
 
     @Pattern(regexp = UserServiceConstants.PATTERN_MOBILE)
     private String mobileNumber;
 
     @Email
+    @Size(max = 128)
     private String emailId;
+
+    @SafeHtml
+    @Size(max = 50)
     private String altContactNumber;
+
+    @SafeHtml
+    @Size(max = 10)
     private String pan;
+
+    @SafeHtml
+    @Size(max = 20)
     private String aadhaarNumber;
+
+    @SafeHtml
+    @Size(max = 300)
     private String permanentAddress;
 
+    @SafeHtml
     @Pattern(regexp = UserServiceConstants.PATTERN_CITY)
     @Size(max = 50)
     private String permanentCity;
+
+    @SafeHtml
+    @Pattern(regexp = UserServiceConstants.PATTERN_PINCODE)
+    @Size(max = 10)
     private String permanentPinCode;
+
+    @SafeHtml
+    @Size(max = 300)
     private String correspondenceAddress;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_CITY)
+    @Size(max = 50)
     private String correspondenceCity;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_PINCODE)
+    @Size(max = 10)
     private String correspondencePinCode;
     private Boolean active;
+
+    @SafeHtml
+    @Size(max = 16)
     private String locale;
+
     private UserType type;
     private Boolean accountLocked;
     private Long accountLockedDate;
@@ -64,12 +102,22 @@ public class UserRequest {
     @Size(max = 50)
     private String fatherOrHusbandName;
     private GuardianRelation relationship;
+
+    @SafeHtml
     private String signature;
+
+    @SafeHtml
     private String bloodGroup;
+
+    @SafeHtml
     private String photo;
+
+    @SafeHtml
     private String identificationMark;
     private Long createdBy;
     private String password;
+
+    @SafeHtml
     private String otpReference;
     private Long lastModifiedBy;
 
@@ -79,6 +127,8 @@ public class UserRequest {
 
     private Set<RoleRequest> roles;
 
+    @SafeHtml
+    @Size(max = 36)
     private String uuid;
 
 

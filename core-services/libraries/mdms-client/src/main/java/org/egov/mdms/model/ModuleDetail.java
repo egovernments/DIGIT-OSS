@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.egov.mdms.model.MasterDetail.MasterDetailBuilder;
 
@@ -23,6 +24,7 @@ import lombok.ToString;
 public class ModuleDetail {
 	
 	@NotNull
+	@Size(max=256)
 	private String moduleName;
 	
 	private List<MasterDetail> masterDetails;

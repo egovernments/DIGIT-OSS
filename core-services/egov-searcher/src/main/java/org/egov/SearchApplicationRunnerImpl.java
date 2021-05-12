@@ -2,12 +2,14 @@ package org.egov;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.io.IOUtils;
 import org.egov.search.model.SearchDefinition;
 import org.egov.search.model.SearchDefinitions;
 import org.slf4j.Logger;
@@ -131,8 +133,10 @@ public class SearchApplicationRunnerImpl implements ApplicationRunner {
 
             for (String yamlLocation : ymlUrlS) {
                 Resource resource = resourceLoader.getResource(yamlLocation);
+                InputStream inputStream = null;
                 try {
-                    searchDefinitions = mapper.readValue(resource.getInputStream(), SearchDefinitions.class);
+                    inputStream = resource.getInputStream();
+                    searchDefinitions = mapper.readValue(inputStream, SearchDefinitions.class);
                     logger.info("Parsed search definition : " + searchDefinitions.getSearchDefinition().getModuleName());
                     
                     map.put(searchDefinitions.getSearchDefinition().getModuleName(),
@@ -140,6 +144,8 @@ public class SearchApplicationRunnerImpl implements ApplicationRunner {
                 } catch (IOException e) {
                     log.error("Failed to load file - " + yamlLocation, e);
                     failed = true;
+                } finally {
+                    IOUtils.closeQuietly(inputStream);
                 }
             }
 

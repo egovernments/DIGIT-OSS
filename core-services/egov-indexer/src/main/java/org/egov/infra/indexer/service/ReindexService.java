@@ -238,6 +238,7 @@ public class ReindexService {
 						recordsIndexed += resultSize;
 						log.info("Records indexed: " + recordsIndexed);
 					} catch (Exception e) {
+						log.error("Error while indexing records: " + e.getMessage());
 						threadRun = false;
 					}
 					threadRun = false;

@@ -55,13 +55,13 @@ public class ActionController {
 	}*/
 	
 	@PostMapping(value = "_search")
-	public ActionResponse getActionsBasedOnRoles(@RequestBody final ActionRequest actionRequest) throws UnsupportedEncodingException, JSONException {
+	public ActionResponse getActionsBasedOnRoles(@RequestBody @Valid final ActionRequest actionRequest) throws UnsupportedEncodingException, JSONException {
 		List<Action> actionsList = actionService.getAllMDMSActions(actionRequest);
 		return getSuccessResponse(actionsList);
 	}
 
 	@PostMapping(value = "_list")
-	public ResponseEntity<?> getAllActionsBasedOnRoles(@RequestBody final ActionRequest actionRequest) {
+	public ResponseEntity<?> getAllActionsBasedOnRoles(@RequestBody @Valid final ActionRequest actionRequest) {
 
 		final List<ErrorResponse> errorResponses = validateActionRequest(actionRequest, "list");
 
@@ -75,7 +75,7 @@ public class ActionController {
 	}
 
 	@PostMapping(value = "_get")
-	public ResponseEntity<?> getAllActions(@RequestBody final ActionRequest actionRequest){
+	public ResponseEntity<?> getAllActions(@RequestBody @Valid final ActionRequest actionRequest){
 
 		final List<ErrorResponse> errorResponses = validateActionRequest(actionRequest, "get");
 
@@ -88,7 +88,7 @@ public class ActionController {
 	}
 	
 	@PostMapping(value = "mdms/_get")
-	public ResponseEntity<?> getAllMDMSActions(@RequestBody final ActionRequest actionRequest) throws JSONException, UnsupportedEncodingException{
+	public ResponseEntity<?> getAllMDMSActions(@RequestBody @Valid final ActionRequest actionRequest) throws JSONException, UnsupportedEncodingException{
 
 		final List<ErrorResponse> errorResponses = validateActionRequest(actionRequest, "get");
 
@@ -102,7 +102,7 @@ public class ActionController {
     
 	
 	@PostMapping(value = "_validate")
-	public ValidateActionResponse validateAction(@RequestBody ValidateActionRequest validateActionRequest) {
+	public ValidateActionResponse validateAction(@RequestBody @Valid ValidateActionRequest validateActionRequest) {
 		ActionValidation actionValidation = actionService.validate(validateActionRequest.toDomain());
 		return getValidateActionResponse(actionValidation);
 	}

@@ -45,6 +45,10 @@ public class ReportQueryBuilder {
     @Value("${mdms.search.enabled}")
     private boolean isSearchEnabled;
 
+    @Value("${id.timezone}")
+    private String timezone;
+
+
 
     public String buildQuery(List<SearchParam> searchParams, String tenantId, ReportDefinition reportDefinition, String authToken, Long userId) {
 
@@ -100,7 +104,7 @@ public class ReportQueryBuilder {
                     requestInfoJson = gson.toJson(map);
                 } catch (Exception e1) {
                     // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    log.error("Exception while converting gson to JSON: " + e1.getMessage());
                 }
                 requestInfoJson = StringUtils.chop(requestInfoJson);
                 finalJson = jsonObjecttest.replaceAll("\\$RequestInfo", requestInfoJson);
@@ -555,7 +559,7 @@ public class ReportQueryBuilder {
 
     public long getCurrentTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTimeZone(TimeZone.getTimeZone(timezone));
         return calendar.getTimeInMillis();
     }
 

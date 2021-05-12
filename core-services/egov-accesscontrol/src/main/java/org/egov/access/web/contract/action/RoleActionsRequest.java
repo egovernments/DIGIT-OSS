@@ -2,7 +2,9 @@ package org.egov.access.web.contract.action;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.egov.access.domain.model.Action;
 import org.egov.access.domain.model.Role;
@@ -25,6 +27,8 @@ public class RoleActionsRequest {
 	@JsonProperty("RequestInfo")
 	private RequestInfo requestInfo;
 	private Role role;
+
+	@Size(max = 256)
 	private String tenantId;
 	private List<Action> actions;
 

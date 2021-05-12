@@ -166,22 +166,25 @@ public class WorkflowUtil {
         
         for(Map.Entry<String,List<String>> entry : tenantIdToUserRolesMap.entrySet()){
             if(entry.getKey().equals(criteria.getTenantId())){
-                List<BusinessService> businessServicesByTenantId ;
+                List<BusinessService> businessServicesByTenantId = new ArrayList();
                 if(config.getIsStateLevel()){
                     businessServicesByTenantId = tenantIdToBuisnessSevicesMap.get(entry.getKey().split("\\.")[0]);
                 }else{
                     businessServicesByTenantId = tenantIdToBuisnessSevicesMap.get(entry.getKey());
                 }
-                businessServicesByTenantId.forEach(service -> {
-                    List<State> states = service.getStates();
-                    states.forEach(state -> {
-                        Set<String> stateRoles = stateToRoleMap.get(state.getUuid());
-                        if(!CollectionUtils.isEmpty(stateRoles) && !Collections.disjoint(stateRoles,entry.getValue())){
-                            actionableStatuses.add(entry.getKey() + ':' + state.getUuid());
-                        }
+                if(businessServicesByTenantId != null ) {
+                	 businessServicesByTenantId.forEach(service -> {
+                         List<State> states = service.getStates();
+                         states.forEach(state -> {
+                             Set<String> stateRoles = stateToRoleMap.get(state.getUuid());
+                             if(!CollectionUtils.isEmpty(stateRoles) && !Collections.disjoint(stateRoles,entry.getValue())){
+                                 actionableStatuses.add(entry.getKey() + ':' + state.getUuid());
+                             }
 
-                    });
-                });
+                         });
+                     });
+                }
+               
             }         
         }
         return actionableStatuses;

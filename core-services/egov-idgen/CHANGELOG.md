@@ -1,5 +1,9 @@
 All notable changes to this module will be documented in this file.
 
+## 1.2.2 - 2021-05-11
+
+- TimeZone is now made configurable
+
 ## 1.2.1 - 2021-02-26
 
 - Updated domain name in application.properties

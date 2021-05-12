@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.eq;
@@ -119,7 +120,11 @@ public class MessageControllerTest {
             .contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(content().json(getFileContents("createMessageRequestWithMissingMandatoryFieldsResponse.json")));
+            .andExpect(content().string(containsString("createMessages.messageRequest.messages[1].message: may not be empty")))
+            .andExpect(content().string(containsString("createMessages.messageRequest.messages[1].module: may not be empty")))
+            .andExpect(content().string(containsString("createMessages.messageRequest.messages[1].code: may not be empty")))
+            .andExpect(content().string(containsString("createMessages.messageRequest.messages[1].locale: may not be empty")))
+            .andExpect(content().string(containsString("createMessages.messageRequest.tenantId: may not be empty")));
     }
 
     @Test
@@ -143,7 +148,11 @@ public class MessageControllerTest {
             .contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(content().json(getFileContents("updateMessageRequestWithMissingMandatoryFieldsResponse.json")));
+            .andExpect(content().string(containsString("update.messageRequest.messages[1].message: may not be empty")))
+            .andExpect(content().string(containsString("update.messageRequest.messages[1].code: may not be empty")))
+            .andExpect(content().string(containsString("update.messageRequest.locale: may not be empty")))
+            .andExpect(content().string(containsString("update.messageRequest.tenantId: may not be empty")))
+            .andExpect(content().string(containsString("update.messageRequest.module: may not be empty")));
     }
 
     @Test

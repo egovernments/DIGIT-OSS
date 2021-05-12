@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.commons.model.Department;
 import org.egov.commons.service.DepartmentService;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class DepartmentConsumer {
             }
         } catch (Exception exception) {
             log.debug("DepartmentConsumer:processMessage:" + exception);
-            throw exception;
+            throw new CustomException("ERROR_PROCESSING_RECORD", exception.getMessage());
         }
     }
 

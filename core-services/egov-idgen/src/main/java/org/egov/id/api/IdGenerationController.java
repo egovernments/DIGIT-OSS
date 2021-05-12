@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * api's related to the IdGeneration Controller
  * 
@@ -30,7 +32,7 @@ public class IdGenerationController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, path = "_generate")
 	public IdGenerationResponse generateIdResponse(
-			@RequestBody IdGenerationRequest idGenerationRequest)
+			@RequestBody @Valid IdGenerationRequest idGenerationRequest)
 			throws Exception {
 
 		IdGenerationResponse idGenerationResponse = idGenerationService

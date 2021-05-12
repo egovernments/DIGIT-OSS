@@ -9,6 +9,7 @@ import org.egov.domain.model.AuthenticatedUser;
 import org.egov.domain.model.NotAuthenticatedException;
 import org.egov.domain.model.Tenant;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -23,6 +24,8 @@ public class CreateMessagesRequest {
 	private RequestInfo requestInfo;
 
 	@NotEmpty
+    @SafeHtml
+    @Size(max = 256)
 	private String tenantId;
 
 	@Size(min = 1)

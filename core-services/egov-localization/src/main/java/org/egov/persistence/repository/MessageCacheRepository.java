@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.domain.model.Message;
 import org.egov.domain.model.Tenant;
 import org.egov.persistence.dto.MessageCacheEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class MessageCacheRepository {
 	private static final String COMPUTED_MESSAGES_HASH_KEY = "computedMessages";
 	private StringRedisTemplate stringRedisTemplate;
 	private ObjectMapper objectMapper;
+    public static final Logger logger = LoggerFactory.getLogger(MessageCacheRepository.class);
 
 	public MessageCacheRepository(StringRedisTemplate stringRedisTemplate, ObjectMapper objectMapper) {
 		this.stringRedisTemplate = stringRedisTemplate;
@@ -107,7 +110,7 @@ public class MessageCacheRepository {
 			final String cacheEntry = objectMapper.writeValueAsString(messageCacheEntry);
 			stringRedisTemplate.opsForHash().put(hashKey, messageKey, cacheEntry);
 		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
+			logger.error("Exception occurred while processing JSON: " + e.getMessage());
 		}
 	}
 

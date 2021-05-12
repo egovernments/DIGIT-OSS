@@ -181,26 +181,19 @@ abstract public class BaseSMSService implements SMSService, SMSBodyBuilder {
     @PostConstruct
     protected void setupSSL() {
         if (!smsProperties.isVerifySSL()) {
-            TrustStrategy acceptingTrustStrategy = new TrustStrategy() {
-                @Override
-                public boolean isTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) {
-                    return true;
-                }
 
-            };
-
-            SSLContext sslContext = null;
+            SSLContext ctx = null;
             try {
-                sslContext = org.apache.http.ssl.SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy)
-                        .build();
+
+                ctx =  SSLContext.getInstance("SSL");
+                ctx.init(null, null, SecureRandom.getInstance("SHA1PRNG"));
+
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             } catch (KeyManagementException e) {
                 e.printStackTrace();
-            } catch (KeyStoreException e) {
-                e.printStackTrace();
             }
-            SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+            SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(ctx, new NoopHostnameVerifier());
             CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(csf).build();
             HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
             requestFactory.setHttpClient(httpClient);

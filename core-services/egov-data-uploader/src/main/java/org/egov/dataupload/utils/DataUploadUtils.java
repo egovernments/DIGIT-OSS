@@ -374,6 +374,7 @@ public class DataUploadUtils {
                     logger.debug("Response value from JSON Path {} is {}", path.toString(), value);
                     values.add(value);
                 }catch(Exception e){
+                    logger.error("Error while reading response data: " + e.getMessage());
                     values.add(null);
                 }
             }

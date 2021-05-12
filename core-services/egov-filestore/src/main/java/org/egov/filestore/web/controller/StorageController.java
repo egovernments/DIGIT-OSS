@@ -18,6 +18,8 @@ import org.egov.filestore.web.contract.FileStoreResponse;
 import org.egov.filestore.web.contract.GetFilesByTagResponse;
 import org.egov.filestore.web.contract.ResponseFactory;
 import org.egov.filestore.web.contract.StorageResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +41,7 @@ public class StorageController {
 	private StorageService storageService;
 	private ResponseFactory responseFactory;
 	private StorageUtil storageUtil;
+	public static final Logger logger = LoggerFactory.getLogger(StorageController.class);
 	
 	@Autowired
 	public StorageController(StorageService storageService, ResponseFactory responseFactory,
@@ -58,7 +61,7 @@ public class StorageController {
 			resource = storageService.retrieve(fileStoreId, tenantId);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while retrieving file: " + e.getMessage());
 		}
 		String fileName=resource.getFileName().substring(resource.getFileName().lastIndexOf('/')+1,resource.getFileName().length());
 		return ResponseEntity.ok()
@@ -75,7 +78,7 @@ public class StorageController {
 		    resource = storageService.retrieve(fileStoreId, tenantId);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while fetching metadata: " + e.getMessage());
 		}
 		resource.setResource(null);
 		return new ResponseEntity<>(resource, HttpStatus.OK);

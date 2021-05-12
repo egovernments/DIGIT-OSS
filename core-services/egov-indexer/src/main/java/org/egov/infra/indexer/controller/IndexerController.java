@@ -49,6 +49,7 @@ public class IndexerController {
 		try {
 			indexerProducer.producer(topic, indexJson);
 		} catch (Exception e) {
+			logger.error("Error while pushing record to topic: " + e.getMessage());
 			return new ResponseEntity<>(indexJson, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(indexJson, HttpStatus.OK);	

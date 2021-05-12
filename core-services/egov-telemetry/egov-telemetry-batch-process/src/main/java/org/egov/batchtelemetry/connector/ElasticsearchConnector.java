@@ -64,7 +64,7 @@ public class ElasticsearchConnector {
             userIds = JsonPath.read(response, "$.aggregations.distinct_uid.buckets.[*].key");
 
         } catch (Exception e) {
-            log.info(e.getMessage());
+            log.error("Error while fetching userIds: " + e.getMessage());
         }
 
         return userIds;
@@ -80,7 +80,7 @@ public class ElasticsearchConnector {
             String response = executeQuery(esURL, distinctUserQuery);
             return JsonPath.read(response, "$.aggregations.numberOfUsers.value");
         } catch (Exception e) {
-            log.info(e.getMessage());
+            log.error("Error while fetching number of existing users: " + e.getMessage());
         }
         return 10000;
     }

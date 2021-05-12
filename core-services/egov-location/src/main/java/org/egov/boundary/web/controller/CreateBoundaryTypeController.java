@@ -50,12 +50,17 @@ import org.egov.boundary.web.contract.HierarchyType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
+@Validated
 @Controller
 @RequestMapping(value = "/boundarytype/create")
 public class CreateBoundaryTypeController {
@@ -76,7 +81,7 @@ public class CreateBoundaryTypeController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String newForm(@RequestParam(value = "tenantId", required = true) String tenantId) {
+	public String newForm(@RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId) {
 		if (tenantId != null && !tenantId.isEmpty()) {
 			HierarchyType hh = hierarchyTypeService.getHierarchyTypeByNameAndTenantId("Kmani", tenantId);
 			/*
@@ -108,8 +113,8 @@ public class CreateBoundaryTypeController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String create(@ModelAttribute BoundaryType boundaryType, final BindingResult errors,
-			RedirectAttributes redirectAttrs) {
+	public String create(@ModelAttribute @Valid BoundaryType boundaryType, final BindingResult errors,
+						 RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors())
 			return "boundaryType-form";

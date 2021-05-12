@@ -4,8 +4,10 @@ package org.egov.batchtelemetry.config;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +24,7 @@ public class AppProperties {
     private String esHost;
     private String esPort;
     private String esNodesWANOnly;
+    private String timezone;
 
     private String inputTelemetryIndex;
     private String outputTelemetrySessionsIndex;
@@ -40,16 +43,20 @@ public class AppProperties {
         esHost = System.getenv("ES_HOST");
         esPort = System.getenv("ES_PORT");
         esNodesWANOnly = System.getenv("ES_NODE_WAN_ONLY");
+        timezone = System.getenv("ID_TIMEZONE");
 
         inputTelemetryIndex = System.getenv("ES_INPUT_TELEMETRY_INDEX");
         outputTelemetrySessionsIndex = System.getenv("ES_OUTPUT_TELEMETRY_BATCH_INDEX");
 
         Properties properties = new Properties();
-
+        InputStream inputStream = null;
         try {
-            properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
+            inputStream = getClass().getClassLoader().getResourceAsStream("application.properties");
+            properties.load(inputStream);
         } catch (IOException e) {
             log.error("Error reading application.properties");
+        } finally {
+            IOUtils.closeQuietly(inputStream);
         }
 
         if(sessionTimeout == null)
@@ -73,6 +80,9 @@ public class AppProperties {
             inputTelemetryIndex = properties.getProperty("ES_INPUT_TELEMETRY_INDEX");
         if(outputTelemetrySessionsIndex == null)
             outputTelemetrySessionsIndex = properties.getProperty("ES_OUTPUT_TELEMETRY_BATCH_INDEX");
+
+        if(timezone == null)
+            timezone = properties.getProperty("ID_TIMEZONE");
 
     }
 

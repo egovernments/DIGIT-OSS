@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import org.egov.boundary.domain.model.BoundarySearchRequest;
 import org.egov.boundary.domain.service.BoundaryService;
@@ -57,6 +58,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +66,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 @RequestMapping("/location/v11")
 public class LocationBoundaryController {
@@ -78,10 +81,10 @@ public class LocationBoundaryController {
 
 	@PostMapping(value = "/boundarys/_search")
 	@ResponseBody
-	public ResponseEntity<?> boundarySearch(@RequestParam(value = "tenantId", required = true) String tenantId,
-			@RequestParam(value = "hierarchyTypeCode", required = false) final String hierarchyType,
+	public ResponseEntity<?> boundarySearch(@RequestParam(value = "tenantId", required = true) @Size(max = 256) String tenantId,
+			@RequestParam(value = "hierarchyTypeCode", required = false) @Size(max = 128) final String hierarchyType,
 			@RequestParam(value = "codes", required = false) final List<String> codes,
-			@RequestParam(value = "boundaryType", required = false) final String boundaryType,
+			@RequestParam(value = "boundaryType", required = false) @Size(max = 64) final String boundaryType,
 			@RequestBody @Valid RequestInfo requestInfo) {
 		Long startTime;
 		Long endTime;

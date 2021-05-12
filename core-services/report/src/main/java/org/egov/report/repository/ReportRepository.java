@@ -103,7 +103,7 @@ public class ReportRepository {
             }
         } catch (Exception e) {
             log.info("Query Execution Failed: ", e);
-            throw e;
+            throw new CustomException("QUERY_EXEC_ERROR", "Error while executing query: " + e.getMessage());
         }
 
         Long endTime = new Date().getTime();

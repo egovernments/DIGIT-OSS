@@ -10,6 +10,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Size;
+
 @Getter
 @Builder
 @EqualsAndHashCode
@@ -18,9 +20,11 @@ import lombok.NoArgsConstructor;
 public class MessageSearchCriteria {
 	
 	private Tenant tenantId;
-	
+
+	@Size(max = 255)
 	private String locale;
-	
+
+	@Size(max = 255)
 	private String module;
 	
 	private Set<String> codes;

@@ -3,6 +3,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.3.1 - 2021-05-11
+- Added finally blocked wherever missing
+- Changes to error handling
+
+
 ## 1.3.0 - 2020-05-29
 
 - Added typescript definition generation plugin

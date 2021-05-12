@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.egov.infra.persist.web.contract.Mapping;
 import org.egov.infra.persist.web.contract.Service;
 import org.egov.infra.persist.web.contract.TopicMap;
@@ -20,6 +21,7 @@ import org.springframework.core.io.ResourceLoader;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @SpringBootApplication
@@ -105,10 +107,12 @@ public class EgovPersistApplication {
             }
 
             for (String configPath : yamlUrls) {
+                InputStream inputStream = null;
                 try {
                     log.info("Attempting to load config: " + configPath);
                     Resource resource = resourceLoader.getResource(configPath);
-                    Service service = mapper.readValue(resource.getInputStream(), Service.class);
+                    inputStream = resource.getInputStream();
+                    Service service = mapper.readValue(inputStream, Service.class);
 
                     for (Mapping mapping : service.getServiceMaps().getMappings()) {
                         if (mappingsMap.containsKey(mapping.getFromTopic())) {
@@ -128,6 +132,9 @@ public class EgovPersistApplication {
                     log.error("Exception while fetching service map for: " + configPath, e);
                     errorMap.put("FAILED_TO_FETCH_FILE", configPath);
                     failed = true;
+                }
+                finally {
+                    IOUtils.closeQuietly(inputStream);
                 }
             }
 

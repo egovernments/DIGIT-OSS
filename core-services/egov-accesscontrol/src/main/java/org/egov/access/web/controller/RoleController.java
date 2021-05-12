@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import org.egov.access.domain.criteria.RoleSearchCriteria;
 import org.egov.access.domain.model.Role;
@@ -29,12 +30,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 @RequestMapping("/v1/roles")
 public class RoleController {
@@ -53,8 +56,8 @@ public class RoleController {
 	}
 
 		@PostMapping(value = "_search")
-	public RoleResponse getMDMSRoles(@RequestParam(value = "code", required = false) String code,@RequestParam(value = "tenantId", required = false) String tenantId,
-			@RequestBody final RoleRequest roleRequest) throws UnsupportedEncodingException, JSONException {
+	public RoleResponse getMDMSRoles(@RequestParam(value = "code", required = false) @Size(max = 50) String code, @RequestParam(value = "tenantId", required = false) @Size(max = 50) String tenantId,
+									 @RequestBody @Valid final RoleRequest roleRequest) throws UnsupportedEncodingException, JSONException {
 
 		RoleSearchCriteria roleSearchCriteria = RoleSearchCriteria.builder().codes(new ArrayList<String>()).tenantId(tenantId).build();
 		

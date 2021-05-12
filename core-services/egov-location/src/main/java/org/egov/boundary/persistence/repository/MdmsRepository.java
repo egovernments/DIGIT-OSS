@@ -102,7 +102,7 @@ public class MdmsRepository {
 		try{
 		response = restTemplate.postForObject(mdmsBySearchCriteriaUrl, request, MdmsResponse.class);
 		}catch(Exception e){
-			System.out.println("Invalid TenantId" + e.getMessage());
+			LOG.error("Invalid TenantId" + e.getMessage());
 		}
 		if (response == null || response.getMdmsRes() == null || !response.getMdmsRes().containsKey(moduleName)
 				|| response.getMdmsRes().get(moduleName) == null

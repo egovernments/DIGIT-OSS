@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.Valid;
+
 /**
  * <h1>IdGenerationRequest</h1>
  * 
@@ -26,6 +28,7 @@ public class IdGenerationRequest {
 	@JsonProperty("RequestInfo")
 	private RequestInfo requestInfo;
 
+	@Valid
 	private List<IdRequest> idRequests;
 
 }

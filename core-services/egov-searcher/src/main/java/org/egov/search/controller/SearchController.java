@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.egov.search.model.SearchRequest;
 import org.egov.search.service.SearchService;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class SearchController {
 			if(null != searchResult)
 				return new ResponseEntity<>(searchResult, HttpStatus.OK);
 			else
-				throw e;
+				throw new CustomException("SEARCH_ERROR", "Error occurred while searching : " + e.getMessage());
 		}
 		
 		//return new ResponseEntity<>(searchResult, HttpStatus.OK);

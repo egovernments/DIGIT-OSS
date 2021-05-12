@@ -171,6 +171,7 @@ public class DataTransformationService {
                     documentContext.put(expression, expressionArray[expressionArray.length - 1],
                             JsonPath.read(kafkaJson, fieldMapping.getInjsonpath()));
                 } catch (Exception e) {
+                    log.error("Error while building custom JSON for index: " + e.getMessage());
                     continue;
                 }
 

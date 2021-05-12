@@ -1,6 +1,11 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.2.2 - 2021-05-11
+
+- Changes to error handling
+- Removed stack trace printing
+
 ## 1.2.1 - 2021-02-26
 
 - Updated domain name in routes.properties

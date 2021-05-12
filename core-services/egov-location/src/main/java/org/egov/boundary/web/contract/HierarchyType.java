@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.Length;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 public class HierarchyType {
@@ -18,6 +20,7 @@ public class HierarchyType {
 	private String code;
 	@Length(max = 256)
 	private String localName;
+	@Size(max = 256)
 	private String tenantId;
 	private Long createdBy;
 	private Long createdDate;

@@ -2,8 +2,10 @@ package org.egov.telemetry.config;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 
@@ -59,10 +61,14 @@ public class AppProperties {
             deDupStorageTime = Integer.parseInt(System.getenv("DEDUP_STORAGE_TIME"));
 
         Properties properties = new Properties();
+        InputStream inputStream = null;
         try {
-            properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
+            inputStream = getClass().getClassLoader().getResourceAsStream("application.properties");
+            properties.load(inputStream);
         } catch (IOException e) {
             log.error("application.properties not found");
+        } finally {
+            IOUtils.closeQuietly(inputStream);
         }
 
         if(kafkaBootstrapServerConfig == null)

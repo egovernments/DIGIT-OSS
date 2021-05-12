@@ -45,6 +45,7 @@ import java.util.Map;
 import org.egov.commons.config.ApplicationProperties;
 import org.egov.commons.service.CalendarYearService;
 import org.egov.commons.web.contract.CalendarYearRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -78,7 +79,7 @@ public class CalendarYearConsumer {
                 calendarYearService.update(objectMapper.convertValue(record, CalendarYearRequest.class));
         } catch (final Exception exception) {
             log.debug("processMessage:" + exception);
-            throw exception;
+            throw new CustomException("ERROR_PROCESSING_RECORD", exception.getMessage());
         }
 
     }

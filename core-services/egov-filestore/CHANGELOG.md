@@ -1,5 +1,10 @@
 # Changelog
 
+##1.2.2 - 2021-05-11
+
+- Added validation on content type
+- Cleaned the code for stack trace
+
 ##1.2.2 - 2021-02-26
 
 - File now saved with application generated name

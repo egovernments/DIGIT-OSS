@@ -3,6 +3,7 @@ package org.egov.access.web.contract.action;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.egov.access.domain.criteria.ActionSearchCriteria;
 import org.egov.access.domain.model.Action;
@@ -27,6 +28,8 @@ public class ActionRequest {
 	private RequestInfo requestInfo;
 	private List<String> roleCodes;
 	private List<Long> featureIds;
+
+	@Size(max = 50)
 	private String tenantId;
 	private Boolean enabled;
 	private List<Action> actions;

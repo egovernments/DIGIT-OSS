@@ -1,5 +1,6 @@
 package org.egov;
 
+import java.io.InputStream;
 import java.lang.reflect.*;
 import java.util.*;
 import java.io.File;
@@ -162,11 +163,15 @@ public class MDMSApplicationRunnerImpl {
     public void readMdmsConfigFiles(String masterConfigUrl) {
         log.info("Loading master configs from: " + masterConfigUrl);
         Resource resource = resourceLoader.getResource(masterConfigUrl);
+        InputStream inputStream = null;
         try {
-            masterConfigMap = objectMapper.readValue(resource.getInputStream(), new TypeReference<Map<String, Map<String, Object>>>() {
+            inputStream = resource.getInputStream();
+            masterConfigMap = objectMapper.readValue(inputStream, new TypeReference<Map<String, Map<String, Object>>>() {
             });
         } catch (IOException e) {
             log.error("Exception while fetching service map for: ", e);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
         }
 
         log.info("the Master config Map : " + masterConfigMap);

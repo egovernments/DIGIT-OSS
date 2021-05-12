@@ -1,6 +1,10 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.3 - 2021-05-11
+
+-  Added finally block wherever required
+
 ## 1.1.2 - 2021-01-15
 
 -  Add readme for persister versioning 

@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 @Builder
@@ -18,8 +20,14 @@ import lombok.Setter;
 public class Role {
 
 	private Long id;
+
+	@Size(max = 128)
 	private String name;
+
+	@Size(max = 128)
 	private String description;
+
+	@Size(max = 50)
 	private String code;
 	private Date createdDate;
 	private Long createdBy;

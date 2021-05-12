@@ -50,6 +50,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -61,14 +64,18 @@ public class BoundaryType {
 	private String id;
 
 	@JsonProperty("name")
+	@Size(max = 64)
 	private String name;
 
 	@JsonProperty("code")
+	@Size(max = 22)
 	private String code;
 
+	@Valid
 	@JsonProperty("hierarchyType")
 	private HierarchyType hierarchyType;
 
+	@Valid
 	@JsonProperty("parent")
 	private BoundaryType parent;
 
@@ -76,6 +83,7 @@ public class BoundaryType {
 	private Long hierarchy;
 
 	@JsonProperty("localName")
+	@Size(max = 64)
 	private String localName;
 
 	@JsonProperty("parentName")
@@ -85,6 +93,7 @@ public class BoundaryType {
 	private Set<BoundaryType> childBoundaryTypes;
 
 	@JsonProperty("tenantId")
+	@Size(max = 256)
 	private String tenantId;
 
 	private Long createdBy;

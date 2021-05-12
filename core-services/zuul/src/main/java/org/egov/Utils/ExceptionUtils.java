@@ -45,7 +45,7 @@ public class ExceptionUtils {
             error.put("description", description);
             return errorInfo;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IO Exception while getting errorInfo object: " + e.getMessage());
         }
 
         return null;
@@ -130,7 +130,7 @@ public class ExceptionUtils {
                 _setExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR, getErrorInfoObject(exceptionName, exceptionMessage, exceptionMessage));
             }
         } catch (Exception e1) {
-            e1.printStackTrace();
+            logger.error("Exception while raising error filter exception: " + e1.getMessage());
         }
     }
 }

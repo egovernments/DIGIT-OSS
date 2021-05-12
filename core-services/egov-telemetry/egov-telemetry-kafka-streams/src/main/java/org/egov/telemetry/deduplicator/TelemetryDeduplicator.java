@@ -161,7 +161,7 @@ public class TelemetryDeduplicator {
 
         KStream<byte[], String> input = builder.stream(inputTopic);
         KStream<byte[], String> deduplicated = input.transform(
-                () -> new DeduplicationTransformer<>(maintainDurationPerEventInMs, (key, value) -> RemoveMetaData.getMD5(String.valueOf(value))),
+                () -> new DeduplicationTransformer<>(maintainDurationPerEventInMs, (key, value) -> RemoveMetaData.getDigest(String.valueOf(value))),
                 storeName);
         deduplicated.to(outputTopic);
 
@@ -176,13 +176,13 @@ public class TelemetryDeduplicator {
 
 
     private static class RemoveMetaData {
-        public static String getMD5(String value) {
+        public static String getDigest(String value) {
             JSONObject jsonObject = new JSONObject(value);
             jsonObject.remove("syncts");                        //Remove Timestamp (added by server)
             jsonObject.remove("mid");                           //Remove MessageId (added by server)
             String timeRemovedValue = jsonObject.toString();
 
-            return DigestUtils.md5Hex(timeRemovedValue).toUpperCase();
+            return DigestUtils.sha256Hex(timeRemovedValue).toUpperCase();
         }
     }
 

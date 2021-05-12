@@ -69,7 +69,12 @@ public class UserControllerTest {
     @Test
     @WithMockUser
     public void test_should_search_users() throws Exception {
-        when(userService.searchUsers(argThat(new UserSearchMatcher(getUserSearch())), anyBoolean(), any())).thenReturn(getUserModels());
+        final UserSearchCriteria expectedSearchCriteria = UserSearchCriteria.builder()
+                .active(true)
+                .build();
+
+        when(userService.searchUsers(argThat(new UserSearchActiveFlagMatcher(expectedSearchCriteria)), anyBoolean(), any()))
+                .thenReturn(getUserModels());
 
         mockMvc.perform(post("/_search/").contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(getFileContents("getUserByIdRequest.json"))).andExpect(status().isOk())

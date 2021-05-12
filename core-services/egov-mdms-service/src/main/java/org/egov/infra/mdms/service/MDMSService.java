@@ -105,6 +105,7 @@ public class MDMSService {
                 isStateLevel = JsonPath.read(mapper.writeValueAsString(masterData),
                         MDMSConstants.STATE_LEVEL_JSONPATH);
             } catch (Exception e) {
+                log.error("Error while determining state level, falling back to false state.");
                 isStateLevel = false;
             }
         }

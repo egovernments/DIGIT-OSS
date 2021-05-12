@@ -50,8 +50,16 @@ public class PropertyFileReader {
 
 		// Creating a Workbook from an Excel file (.xls or .xlsx)
 //		Workbook workbook = WorkbookFactory.create(new File(location));
-		FileInputStream excelFile = new FileInputStream(new File(location));
-		Workbook workbook = new XSSFWorkbook(excelFile);
+		FileInputStream excelFile = null;
+		Workbook workbook = null;
+		try {
+			excelFile = new FileInputStream(new File(location));
+			workbook = new XSSFWorkbook(excelFile);
+		}catch(Exception e){
+			log.error("Error while creating workbook.");
+		}finally {
+			excelFile.close();
+		}
 		// Retrieving the number of sheets in the Workbook
 		log.info("Workbook has " + workbook.getNumberOfSheets() + " Sheets : ");
 

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.domain.model.ReportDefinitions;
 import org.egov.swagger.model.ReportDefinition;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -121,8 +122,7 @@ public class ReportApp implements EnvironmentAware {
                             rd = mapper.readValue(new InputStreamReader(oracle.openStream()), ReportDefinitions.class);
                         } catch (Exception e) {
                             log.info("Skipping the report definition " + yamlLocation);
-                            e.printStackTrace();
-
+                            log.error("Error while loading report definition: " + e.getMessage());
                         }
                         localrd.addAll(rd.getReportDefinitions());
 
@@ -134,7 +134,7 @@ public class ReportApp implements EnvironmentAware {
                             rd = mapper.readValue(yamlFile, ReportDefinitions.class);
                         } catch (Exception e) {
                             log.info("Skipping the report definition " + yamlLocation);
-                            e.printStackTrace();
+                            log.error("Error while loading report definition: " + e.getMessage());
                         }
                         localrd.addAll(rd.getReportDefinitions());
 
@@ -148,7 +148,7 @@ public class ReportApp implements EnvironmentAware {
                             rd = mapper.readValue(new InputStreamReader(oracle.openStream()), ReportDefinitions.class);
                         } catch (Exception e) {
                             log.info("Skipping the report definition " + yamlLocation);
-                            throw new Exception(e.getMessage());
+                            throw new CustomException("REPORT_DEF_LOAD_ERROR", e.getMessage());
                         }
                         localrd.addAll(rd.getReportDefinitions());
 
@@ -160,7 +160,7 @@ public class ReportApp implements EnvironmentAware {
                             rd = mapper.readValue(yamlFile, ReportDefinitions.class);
                         } catch (Exception e) {
                             log.info("Skipping the report definition " + moduleYaml[1]);
-                            throw new Exception(e.getMessage());
+                            throw new CustomException("REPORT_DEF_LOAD_ERROR", e.getMessage());
                         }
                         localrd.addAll(rd.getReportDefinitions());
 
@@ -169,7 +169,7 @@ public class ReportApp implements EnvironmentAware {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("IO exception while loading report definitions: " + e.getMessage());
 
         }
     }
