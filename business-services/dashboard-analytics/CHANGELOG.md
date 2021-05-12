@@ -2,6 +2,9 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.4 - 2021-05-11
+- security fixes
+
 ## 1.1.3 - 2021-02-26
 - Updated egov mdms host name in application.properties
 

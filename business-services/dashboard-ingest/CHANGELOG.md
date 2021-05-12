@@ -2,6 +2,10 @@
 
 All notable changes to this module will be documented in this file.
 
+
+## 1.1.2 - 2021-05-11
+- security fixes 
+
 ## 1.1.1 - 2020-09-01
 
 - Added README and LOCALSETUP
