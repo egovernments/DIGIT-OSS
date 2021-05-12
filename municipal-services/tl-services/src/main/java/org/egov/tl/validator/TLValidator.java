@@ -623,6 +623,9 @@ public class TLValidator {
     private void validateDuplicateDocuments(TradeLicenseRequest request){
         List<String> documentFileStoreIds = new LinkedList();
         request.getLicenses().forEach(license -> {
+             if(license.getTradeLicenseDetail().getApplicationDocuments()==null) {
+        		throw new CustomException("NO_DOCUMENT_PRESENT","No document present "); 
+        	 }
             if(license.getTradeLicenseDetail().getApplicationDocuments()!=null){
                 license.getTradeLicenseDetail().getApplicationDocuments().forEach(
                         document -> {
