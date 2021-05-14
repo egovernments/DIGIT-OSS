@@ -72,7 +72,25 @@ const formConfig = {
           setDependentFields(["bathroomArea"],dispatch,formKey,true)
           setDependentFields(["balconyArea"],dispatch,formKey,true)
           setDependentFields(["subUsageType"], dispatch, formKey, false);
+            let subUsageMinor =
+              prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryMinor"), true);
+
+            let filteredSubUsageMinor = subUsageMinor.filter(subUsageMinor => subUsageMinor.usageCategoryMajor === "NONRESIDENTIAL");
+
+            if (filteredSubUsageMinor.length > 0) {
+              let filteredUsageCategoryDetails = getPresentMasterObj(
+                prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
+                filteredSubUsageMinor,
+                "usageCategorySubMinor"
+              );
+
+              const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategoryMinor");
+              const subUsageData = sortDropdown(mergedMaster, "label", true);
+
+              setDependentFields(["subUsageType"], dispatch, formKey, subUsageData, "dropDownData");
+
           }
+        }
 
         }
         if (!isEmpty(minorObject)) {
