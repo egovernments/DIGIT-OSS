@@ -108,8 +108,9 @@ const formConfig = {
       let previousFloorNo = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].noOfFloors",null);
       localStorageSet("previousFloorNo", previousFloorNo);
       var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
-      var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
-      const mergedMaster = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
+      var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
+      let mergedMaster = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
+      mergedMaster =    mergedMaster.filter((v,i,a)=>a.findIndex(t=>(t.value===v.value))===i)
       const typeOfUsageSorted = sortDropdown(mergedMaster, "label", true);
       set(action, "form.fields.typeOfUsage.dropDownData", typeOfUsageSorted);
       masterOne = Object.values(get(state, "common.generalMDMSDataById.PropertyType")).filter(item=> item.code !== "BUILTUP");

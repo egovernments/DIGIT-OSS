@@ -1,23 +1,51 @@
-import { sortDropdown } from "egov-ui-kit/utils/PTCommon";
-import { prepareFormData, fetchGeneralMDMSData, toggleSpinner } from "egov-ui-kit/redux/common/actions";
-import { setDependentFields } from "./enableDependentFields";
-import { removeFormKey } from "./removeFloors";
-import { removeForm } from "egov-ui-kit/redux/form/actions";
-import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import {
+  sortDropdown
+} from "egov-ui-kit/utils/PTCommon";
+import {
+  prepareFormData,
+  fetchGeneralMDMSData,
+  toggleSpinner
+} from "egov-ui-kit/redux/common/actions";
+import {
+  setDependentFields
+} from "./enableDependentFields";
+import {
+  removeFormKey
+} from "./removeFloors";
+import {
+  removeForm
+} from "egov-ui-kit/redux/form/actions";
+import {
+  getTranslatedLabel
+} from "egov-ui-kit/utils/commons";
 import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import filter from "lodash/filter";
-import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import {
+  localStorageSet,
+  localStorageGet
+} from "egov-ui-kit/utils/localStorageUtils";
+import {
+  setFieldProperty
+} from "egov-ui-kit/redux/form/actions";
 import store from "redux/store";
 
 let floorDropDownData = [];
-let innerDimensionsData = [{ value: "true", label: "YES" }, { value: "false", label: "NO" }];
+let innerDimensionsData = [{
+  value: "true",
+  label: "YES"
+}, {
+  value: "false",
+  label: "NO"
+}];
 // let constructiontypes = [{ value: "road1", label: "rd1" }];
 
 for (var i = 1; i <= 25; i++) {
-  floorDropDownData.push({ label: i, value: i });
+  floorDropDownData.push({
+    label: i,
+    value: i
+  });
 }
 
 export const plotSize = {
@@ -32,19 +60,24 @@ export const plotSize = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 6,
-    updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    updateDependentFields: ({
+      formKey,
+      field,
+      dispatch,
+      state
+    }) => {
       let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
 
       //let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
 
-      if (propertyType === "VACANT" ) {
+      if (propertyType === "VACANT") {
         dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
         dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
       }
       if (propertyType === "BUILTUP.INDEPENDENTPROPERTY") {
         dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
-       // dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
-      }     
+        // dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
+      }
     },
   },
 };
@@ -62,25 +95,30 @@ export const floorCount = {
     required: true,
     numcols: 6,
     dropDownData: floorDropDownData,
-    updateDependentFields: ({ formKey, field, dispatch, state }) => {
-       //removeFormKey(formKey, field, dispatch, state);
-       var previousFloorNo = localStorageGet("previousFloorNo") || -1;
-    localStorageSet("previousFloorNo", field.value);
-    // dispatch(toggleSpinner());
-    if (previousFloorNo > field.value) {
-      for (var i = field.value; i < previousFloorNo; i++) {
-        if (state.form.hasOwnProperty(`customSelect_${i}`)) {
-          dispatch(removeForm(`customSelect_${i}`));
-        }
-        for (var variable in state.form) {
-          if (state.form.hasOwnProperty(variable) && variable.startsWith(`floorDetails_${i}`)) {
-            dispatch(removeForm(variable));    
+    updateDependentFields: ({
+      formKey,
+      field,
+      dispatch,
+      state
+    }) => {
+      //removeFormKey(formKey, field, dispatch, state);
+      var previousFloorNo = localStorageGet("previousFloorNo") || -1;
+      localStorageSet("previousFloorNo", field.value);
+      // dispatch(toggleSpinner());
+      if (previousFloorNo > field.value) {
+        for (var i = field.value; i < previousFloorNo; i++) {
+          if (state.form.hasOwnProperty(`customSelect_${i}`)) {
+            dispatch(removeForm(`customSelect_${i}`));
+          }
+          for (var variable in state.form) {
+            if (state.form.hasOwnProperty(variable) && variable.startsWith(`floorDetails_${i}`)) {
+              dispatch(removeForm(variable));
+            }
           }
         }
       }
-    } 
-    
-  
+
+
     },
   },
 };
@@ -94,12 +132,21 @@ export const subUsageType = {
     localePrefix: "PROPERTYTAX_BILLING_SLAB",
     floatingLabelText: "PT_FORM2_SUB_USAGE_TYPE",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     dropDownData: [],
     required: true,
     numcols: 4,
-    menuHeight:"190px",
-    updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    menuHeight: "190px",
+    updateDependentFields: ({
+      formKey,
+      field,
+      dispatch,
+      state
+    }) => {
       let subUsageMinor = get(state, `common.generalMDMSDataById.UsageCategoryDetail[${field.value}]`);
       if (!isEmpty(subUsageMinor)) {
         dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryDetail")[0]}usageCategorySubMinor`, subUsageMinor.usageCategorySubMinor));
@@ -116,16 +163,29 @@ export const occupancy = {
     id: "assessment-occupancy",
     jsonPath: "Properties[0].propertyDetails[0].units[0].occupancyType",
     type: "singleValueList",
-    localePrefix: { moduleName: "PropertyTax", masterName: "OccupancyType" },
+    localePrefix: {
+      moduleName: "PropertyTax",
+      masterName: "OccupancyType"
+    },
     floatingLabelText: "PT_FORM2_OCCUPANCY",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     required: true,
     numcols: 4,
     dropDownData: [],
-    updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
-      const { localizationLabels } = state.app;
-      let consturctType = Object.values(get(state, `common.loadMdmsData.PropertyTax.ConstructionType`,[])).map((item, index) => {
-        return { value: item.code, label: getTranslatedLabel(`PROPERTYTAX_CONSTRUCTIONTYPE_${item.code}`,localizationLabels) };
+    updateDependentFields: ({
+      formKey,
+      field: sourceField,
+      dispatch,
+      state
+    }) => {
+      const {
+        localizationLabels
+      } = state.app;
+      let consturctType = Object.values(get(state, `common.loadMdmsData.PropertyTax.ConstructionType`, [])).map((item, index) => {
+        return {
+          value: item.code,
+          label: getTranslatedLabel(`PROPERTYTAX_CONSTRUCTIONTYPE_${item.code}`, localizationLabels)
+        };
       });
       dispatch(setFieldProperty(formKey, "constructionType", "dropDownData", consturctType));
       // const { value } = sourceField;
@@ -145,27 +205,33 @@ export const occupancy = {
 export const innerDimensions = {
   innerDimensions: {
     id: "innerDimensions",
-     jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown",
     type: "singleValueList",
     floatingLabelText: "PT_ASSESMENT_INFO_INNER_DIMENSION",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     // errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
-  //  pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    //  pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
     dropDownData: innerDimensionsData,
-    required:true,
+    required: true,
     localePrefix: "COMMON_MASTER",
-    value:"false",
-    updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
-      const { value } = sourceField;
-      innnerDimentionUtilFucntion(value,dispatch,formKey);
+    value: "false",
+    updateDependentFields: ({
+      formKey,
+      field: sourceField,
+      dispatch
+    }) => {
+      const {
+        value
+      } = sourceField;
+      innnerDimentionUtilFucntion(value, dispatch, formKey);
 
     },
   },
 };
 
-const innnerDimentionUtilFucntion=(value,dispatch,formKey)=>{
+const innnerDimentionUtilFucntion = (value, dispatch, formKey) => {
   const dependentFields1 = ["roomArea", "balconyArea", "garageArea", "bathroomArea"];
   const dependentFields2 = ["builtArea"];
   // switch (value) {
@@ -184,8 +250,7 @@ const innnerDimentionUtilFucntion=(value,dispatch,formKey)=>{
   if (value == "false") {
     setDependentFields(dependentFields1, dispatch, formKey, true);
     setDependentFields(dependentFields2, dispatch, formKey, false);
-  }
-  else {
+  } else {
     setDependentFields(dependentFields1, dispatch, formKey, false);
     setDependentFields(dependentFields2, dispatch, formKey, true);
   }
@@ -194,7 +259,7 @@ const innnerDimentionUtilFucntion=(value,dispatch,formKey)=>{
 export const roomArea = {
   roomArea: {
     id: "roomArea",
-     jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.roomsArea",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.roomsArea",
     type: "number",
     floatingLabelText: "PROPERTYTAX_BILLING_SLAB_SUBMNR26",
     hintText: "PT_FORM2_ROOM_AREA_PLACEHOLDER",
@@ -202,7 +267,7 @@ export const roomArea = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
-    required:true
+    required: true
     // updateDependentFields: ({ formKey, field, dispatch, state }) => {
     //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
     //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
@@ -217,7 +282,7 @@ export const roomArea = {
 export const balconyArea = {
   balconyArea: {
     id: "balconyArea",
-     jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.commonArea",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.commonArea",
     type: "number",
     floatingLabelText: "PROPERTYTAX_BILLING_SLAB_SUBMNR27",
     hintText: "PT_FORM2_BALCONY_AREA_PLACEHOLDER",
@@ -225,7 +290,7 @@ export const balconyArea = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
-    required:true
+    required: true
     // updateDependentFields: ({ formKey, field, dispatch, state }) => {
     //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
     //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
@@ -248,7 +313,7 @@ export const garageArea = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
-    required:true
+    required: true
     // updateDependentFields: ({ formKey, field, dispatch, state }) => {
     //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
     //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
@@ -263,7 +328,7 @@ export const garageArea = {
 export const bathroomArea = {
   bathroomArea: {
     id: "bathroomArea",
-     jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.bathroomArea",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.bathroomArea",
     type: "number",
     floatingLabelText: "PROPERTYTAX_BILLING_SLAB_SUBMNR29",
     hintText: "PT_FORM2_BATHROOM_AREA_PLACEHOLDER",
@@ -271,14 +336,14 @@ export const bathroomArea = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
-    required:true
+    required: true
   },
 };
 
 export const coveredArea = {
   coveredArea: {
     id: "coveredArea",
-     jsonPath: "Properties[0].propertyDetails[0].units[0].coverArea",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].coverArea",
     type: "number",
     floatingLabelText: "Covered Area(sq ft)",
     hintText: "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
@@ -310,15 +375,22 @@ export const constructionType = {
   constructionType: {
     id: "constructiontype",
     jsonPath: "Properties[0].propertyDetails[0].units[0].ConstructionType",
-    localePrefix: { moduleName: "PropertyTax", masterName: "ConstructionType" },
+    localePrefix: {
+      moduleName: "PropertyTax",
+      masterName: "ConstructionType"
+    },
     type: "singleValueList",
     floatingLabelText: "PT_ASSESMENT_INFO_CONSTRUCTION_TYPE",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     fullWidth: true,
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     numcols: 4,
-    required:true,
-    dropDownData:[]
+    required: true,
+    dropDownData: []
   },
 };
 
@@ -330,13 +402,22 @@ export const superArea = {
     floatingLabelText: "PT_FORM2_TOTAL_BUILT_AREA",
     hintText: "PT_FORM2_TOTAL_BUILT_AREA_PLACEHOLDER",
     ErrorText: "PT_SUPER_AREA_ERROR_MESSAGE",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     toolTip: true,
     toolTipMessage: "PT_SUPER_AREA_TOOLTIP_MESSAGE",
     //required: true,
     numcols: 4,
     hideField: false,
-    updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    updateDependentFields: ({
+      formKey,
+      field,
+      dispatch,
+      state
+    }) => {
       dispatch(prepareFormData("Properties[0].propertyDetails[0].units[0].unitArea", field.value));
     },
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
@@ -354,7 +435,11 @@ export const annualRent = {
     hintText: "PT_FORM2_TOTAL_ANNUAL_RENT_PLACEHOLDER",
     ErrorText: "PT_ANNUAL_RENT_ERROR_MESSAGE",
     errorMessage: "PT_ANNUAL_RENT_ERROR_MESSAGE",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     toolTip: true,
     toolTipMessage: "PT_TOTAL_ANNUAL_RENT_TOOLTIP_MESSAGE",
     required: true,
@@ -382,40 +467,53 @@ export const floorName = {
     id: "floorName",
     type: "singleValueList",
     floatingLabelText: "PT_FORM2_SELECT_FLOOR",
-    localePrefix: { moduleName: "PropertyTax", masterName: "Floor" },
+    localePrefix: {
+      moduleName: "PropertyTax",
+      masterName: "Floor"
+    },
     hintText: "PT_FORM2_SELECT_FLOOR",
     numcols: 4,
     errorMessage: "",
     required: true,
     jsonPath: "Properties[0].propertyDetails[0].units[0].floorNo",
     hideField: true,
-    menuHeight:"110px"
+    menuHeight: "110px"
   },
 };
 
 export const beforeInitForm = {
   beforeInitForm: (action, store) => {
     let state = store.getState();
-    let { dispatch } = store;
-    const { form } = action;
-    const { name: formKey, fields } = form;
+    let {
+      dispatch
+    } = store;
+    const {
+      form
+    } = action;
+    const {
+      name: formKey,
+      fields
+    } = form;
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
-    const propertyUsage = get(state,"form.basicInformation.fields.typeOfUsage.value")
-    
-   const { Floor } = state.common && state.common.generalMDMSDataById;
+    const propertyUsage = get(state, "form.basicInformation.fields.typeOfUsage.value")
+
+
+    const {
+      Floor
+    } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "BUILTUP.SHAREDPROPERTY") {
         set(action, "form.fields.floorName.hideField", false);
         set(action, "form.fields.floorName.dropDownData", prepareDropDownData(Floor));
-        if(propertyUsage === "MIXED"){
+        if (propertyUsage === "MIXED") {
           set(action, "form.fields.innerDimensions.hideField", true);
-          setDependentFields(["innerDimensions"],dispatch,formKey,true)
+          setDependentFields(["innerDimensions"], dispatch, formKey, true)
           set(action, "form.fields.builtArea.hideField", false);
           set(action, "form.fields.roomArea.hideField", true);
           set(action, "form.fields.balconyArea.hideField", true);
           set(action, "form.fields.garageArea.hideField", true);
           set(action, "form.fields.bathroomArea.hideField", true);
-        }else{
+        } else {
           set(action, "form.fields.innerDimensions.hideField", false);
         }
       } else {
@@ -430,7 +528,9 @@ export const beforeInitForm = {
       const unitIndex = parseInt(arr[3]);
       const property = get(state, `common.prepareFormData.Properties[0].propertyDetails[0]`);
       let unitsCount = null;
-      const { localizationLabels } = state.app;
+      const {
+        localizationLabels
+      } = state.app;
       if (state.form[formKey]) {
         unitsCount = state.form[formKey].unitsIndex;
       } else {
@@ -443,15 +543,20 @@ export const beforeInitForm = {
       } else {
         const updatedFields = Object.keys(fields).reduce((updatedFields, fieldKey) => {
           const jsonPath = fields[fieldKey].jsonPath;
-          updatedFields[fieldKey] = { ...fields[fieldKey], unitsIndex: unitsCount };
-          if ( jsonPath && jsonPath.indexOf("units[") > -1) {
+          updatedFields[fieldKey] = {
+            ...fields[fieldKey],
+            unitsIndex: unitsCount
+          };
+          if (jsonPath && jsonPath.indexOf("units[") > -1) {
             const first = jsonPath.split("units[")[0];
             const last = jsonPath.split("units[")[1].split("]")[1];
             updatedFields[fieldKey].jsonPath = `${first}units[${unitsCount}]${last}`;
           }
           return updatedFields;
         }, {});
-        set(action, "form.fields", { ...updatedFields });
+        set(action, "form.fields", {
+          ...updatedFields
+        });
         if (!state.form[formKey]) {
           const customSelectObj = state.form[`customSelect_${floorIndex}`];
           const floorNo = customSelectObj.fields && customSelectObj.fields.floorName && customSelectObj.fields.floorName.value;
@@ -505,40 +610,72 @@ export const beforeInitForm = {
     if (usageCategoryMinor && usageCategoryMajor !== "MIXED") {
       unitFormUpdate("common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
     } else {
-      let  usageTypeVal = get(form, "fields.usageType.value")
+      let usageTypeVal = get(form, "fields.usageType.value")
       if (usageCategoryMajor === "MIXED") {
         var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
-        var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
-        var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
+
+        console.log("reddy masterOne", masterOne);
+
+        var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
+
+        console.log("reddy masterTwo", masterTwo);
+
+        var usageTypes = mergeMaster(masterOne, masterTwo , "usageCategoryMajor");
+
+        console.log("reddy usageTypes", usageTypes);
+
+         // usageTypes =  usageTypes.filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i)
+
+       usageTypes =    usageTypes.filter((v,i,a)=>a.findIndex(t=>(t.label === v.label && t.value===v.value))===i)
+
+        //usageTypes = usageTypes.filter((item) => item.value !=item.value);
+
+        console.log("reddy usageTypes after filter", usageTypes);
+
+
         var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
+
+        console.log("reddy filterArrayWithoutMixed", filterArrayWithoutMixed);
+
         set(action, "form.fields.usageType.disabled", false);
+
         const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
+
+
         set(action, "form.fields.usageType.dropDownData", usageTypeData);
+
+        console.log("reddy usageTypeData 2nd place", usageTypeData);
+
         unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategory")[0]}usageCategoryMinor`, false);
-        if (usageCategoryMajor === "MIXED" && propertyType === "BUILTUP.INDEPENDENTPROPERTY")
-        {
+        if (usageCategoryMajor === "MIXED" && propertyType === "BUILTUP.INDEPENDENTPROPERTY") {
           set(action, "form.fields.innerDimensions.value", "false");
           set(action, "form.fields.innerDimensions.hideField", "true");
           set(action, "form.fields.builtArea.hideField", false);
           set(action, "form.fields.roomArea.hideField", true);
           set(action, "form.fields.balconyArea.hideField", true);
           set(action, "form.fields.garageArea.hideField", true);
-          set(action, "form.fields.bathroomArea.hideField", true); 
+          set(action, "form.fields.bathroomArea.hideField", true);
           set(action, "form.fields.subUsageType.hideField", false);
 
           let usageTypeVal = get(form, "fields.usageType.value") && get(form, "fields.usageType.value");
-        
+
+
           unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath}`, false);
-         
-          let subUsageTypeVal = get(state,`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategory")[0]}usageCategoryMinor`);
-        
-          if(subUsageTypeVal!==undefined)
-          {
+
+          let subUsageTypeVal = get(state, `common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategory")[0]}usageCategoryMinor`);
+
+
+
+          if (subUsageTypeVal !== undefined) {
             set(action, "form.fields.subUsageType.hideField", false);
-            let subUsageMinor = 
-              prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true);
-            
-            let filteredSubUsageMinor = subUsageMinor.filter(subUsageMinor => subUsageMinor.usageCategoryMinor  === "NONRESIDENTIAL");
+            let subUsageMinor =
+              prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryMinor"), true);
+
+
+
+
+            let filteredSubUsageMinor = subUsageMinor.filter(subUsageMinor => subUsageMinor.usageCategoryMajor === "NONRESIDENTIAL");
+
 
             if (filteredSubUsageMinor.length > 0) {
               let filteredUsageCategoryDetails = getPresentMasterObj(
@@ -546,38 +683,38 @@ export const beforeInitForm = {
                 filteredSubUsageMinor,
                 "usageCategorySubMinor"
               );
-              const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
+              const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategoryMinor");
               const subUsageData = sortDropdown(mergedMaster, "label", true);
-      
+
+
+
               set(action, "form.fields.subUsageType.dropDownData", subUsageData);
               let loclizationsubUsage = getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels);
 
               set(action, "form.fields.subUsageType.value", loclizationsubUsage);
               dispatch(setFieldProperty(formKey, "subUsageType", "value", loclizationsubUsage));
-         
-          }
-        }
-          else
-          {
+
+            }
+          } else {
             set(action, "form.fields.subUsageType.hideField", true);
             set(action, "form.fields.innerDimensions.hideField", false);
-          }                  
+          }
         }
       } else {
-        if(usageCategoryMajor === "NONRESIDENTIAL" && (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || 
-        propertyType === "BUILTUP.SHAREDPROPERTY") && usageTypeVal === "Commercial"){
-        set(action, "form.fields.subUsageType.hideField", false);
-        unitFormUpdate(`common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`, false);
-        let subUsageTypeVal = get(state,`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`);
-        set(action, "form.fields.subUsageType.value", getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels));
-        dispatch(setFieldProperty(formKey, "subUsageType", "value", getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels)));
-        }else{
-        set(action, "form.fields.subUsageType.hideField", true);
+        if (usageCategoryMajor === "NONRESIDENTIAL" && (propertyType === "BUILTUP.INDEPENDENTPROPERTY" ||
+            propertyType === "BUILTUP.SHAREDPROPERTY") && usageTypeVal === "Commercial") {
+          set(action, "form.fields.subUsageType.hideField", false);
+          unitFormUpdate(`common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`, false);
+          let subUsageTypeVal = get(state, `common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`);
+          set(action, "form.fields.subUsageType.value", getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels));
+          dispatch(setFieldProperty(formKey, "subUsageType", "value", getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels)));
+        } else {
+          set(action, "form.fields.subUsageType.hideField", true);
         }
       }
     }
     set(action, "form.fields.occupancy.dropDownData", prepareDropDownData(occupancy));
-    if( get(state, "form.basicInformation.fields.typeOfBuilding.value")){
+    if (get(state, "form.basicInformation.fields.typeOfBuilding.value")) {
       set(action, "form.fields.constructionType.dropDownData", prepareDropDownData(cT));
     }
     if (get(action, "form.fields.subUsageType.jsonPath") && usageCategoryMajor !== "MIXED") {
@@ -594,7 +731,7 @@ export const beforeInitForm = {
       // set(action, "form.fields.annualRent.hideField", true);
     }
 
-  if (get(state, `common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`)==="RESIDENTIAL") {
+    if (get(state, `common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`) === "RESIDENTIAL") {
       if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
         set(action, "form.fields.innerDimensions.value", "false");
         set(action, "form.fields.builtArea.hideField", false);
@@ -602,8 +739,7 @@ export const beforeInitForm = {
         set(action, "form.fields.balconyArea.hideField", true);
         set(action, "form.fields.garageArea.hideField", true);
         set(action, "form.fields.bathroomArea.hideField", true);
-      }    
-         else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
+      } else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}` == "false")) {
         set(action, "form.fields.innerDimensions.value", "false");
         set(action, "form.fields.builtArea.hideField", false);
         set(action, "form.fields.roomArea.hideField", true);
@@ -611,15 +747,15 @@ export const beforeInitForm = {
         set(action, "form.fields.garageArea.hideField", true);
         set(action, "form.fields.bathroomArea.hideField", true);
       }
-     /*  else {
-        set(action, "form.fields.innerDimensions.value", "false");
-        set(action, "form.fields.builtArea.hideField", true);
-        set(action, "form.fields.roomArea.hideField", false);
-        set(action, "form.fields.balconyArea.hideField", false);
-        set(action, "form.fields.garageArea.hideField", false);
-        set(action, "form.fields.bathroomArea.hideField", false);
-      } */
-    } 
+      /*  else {
+         set(action, "form.fields.innerDimensions.value", "false");
+         set(action, "form.fields.builtArea.hideField", true);
+         set(action, "form.fields.roomArea.hideField", false);
+         set(action, "form.fields.balconyArea.hideField", false);
+         set(action, "form.fields.garageArea.hideField", false);
+         set(action, "form.fields.bathroomArea.hideField", false);
+       } */
+    }
     return action;
   },
 };
@@ -627,18 +763,21 @@ export const beforeInitForm = {
 export const beforeInitFormForPlot = {
   beforeInitForm: (action, store) => {
     let state = store.getState();
-    let { dispatch } = store;
+    let {
+      dispatch
+    } = store;
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
     // const propertyUsage = get(state, "form.basicInformation.fields.typeOfUsage.value")
-    let innerDimensionsTranslatedData = innerDimensionsData.map(item =>{
+    let innerDimensionsTranslatedData = innerDimensionsData.map(item => {
       return {
-        value:item.value,
-        label: item.label === "YES"? getTranslatedLabel("COMMON_MASTER_TRUE",state.app.localizationLabels)
-                :getTranslatedLabel("COMMON_MASTER_FALSE",state.app.localizationLabels)
+        value: item.value,
+        label: item.label === "YES" ? getTranslatedLabel("COMMON_MASTER_TRUE", state.app.localizationLabels) : getTranslatedLabel("COMMON_MASTER_FALSE", state.app.localizationLabels)
       }
     })
-    set(action,"form.fields.innerDimensions.dropDownData",innerDimensionsTranslatedData)
-    const { Floor } = state.common && state.common.generalMDMSDataById;
+    set(action, "form.fields.innerDimensions.dropDownData", innerDimensionsTranslatedData)
+    const {
+      Floor
+    } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "BUILTUP.SHAREDPROPERTY") {
         set(action, "form.fields.floorName.hideField", false);
@@ -694,12 +833,13 @@ export const beforeInitFormForPlot = {
           var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
           set(action, "form.fields.usageType.disabled", false);
           const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
+
           set(action, "form.fields.usageType.dropDownData", usageTypeData);
         }
         set(action, "form.fields.subUsageType.hideField", true);
       }
       set(action, "form.fields.occupancy.dropDownData", prepareDropDownData(occupancy));
-      if( get(state, "form.basicInformation.fields.typeOfBuilding.value")){
+      if (get(state, "form.basicInformation.fields.typeOfBuilding.value")) {
         set(action, "form.fields.constructionType.dropDownData", prepareDropDownData(cT));
       }
       if (get(action, "form.fields.subUsageType.jsonPath") && usageCategoryMajor !== "MIXED") {
@@ -713,7 +853,7 @@ export const beforeInitFormForPlot = {
     }
     if (propertyType == "VACANT") {
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 1));
-     // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`,[]));
+      // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`,[]));
     }
     if (propertyType == "BUILTUP.SHAREDPROPERTY") {
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 2));
@@ -724,7 +864,7 @@ export const beforeInitFormForPlot = {
     } else {
       // set(action, "form.fields.annualRent.hideField", true);
     }
-    if (get(state, `common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`)==="RESIDENTIAL") {
+    if (get(state, `common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`) === "RESIDENTIAL") {
       if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
         set(action, "form.fields.innerDimensions.hideField", false);
         set(action, "form.fields.innerDimensions.value", "false");
@@ -733,8 +873,7 @@ export const beforeInitFormForPlot = {
         set(action, "form.fields.balconyArea.hideField", true);
         set(action, "form.fields.garageArea.hideField", true);
         set(action, "form.fields.bathroomArea.hideField", true);
-      }
-      else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
+      } else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}` == "false")) {
         set(action, "form.fields.innerDimensions.value", "false");
         set(action, "form.fields.builtArea.hideField", false);
         set(action, "form.fields.roomArea.hideField", true);
@@ -742,7 +881,7 @@ export const beforeInitFormForPlot = {
         set(action, "form.fields.garageArea.hideField", true);
         set(action, "form.fields.bathroomArea.hideField", true);
       }
-      if ((get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)==="true")){
+      if ((get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`) === "true")) {
         set(action, "form.fields.innerDimensions.value", "true");
         set(action, "form.fields.builtArea.hideField", true);
         set(action, "form.fields.roomArea.hideField", false);
@@ -750,16 +889,16 @@ export const beforeInitFormForPlot = {
         set(action, "form.fields.garageArea.hideField", false);
         set(action, "form.fields.bathroomArea.hideField", false);
       }
-   /*    else {
-        set(action, "form.fields.innerDimensions.value", "false");
-        set(action, "form.fields.builtArea.hideField", true);
-        set(action, "form.fields.roomArea.hideField", false);
-        set(action, "form.fields.balconyArea.hideField", false);
-        set(action, "form.fields.garageArea.hideField", false);
-        set(action, "form.fields.bathroomArea.hideField", false);
-      } */
+      /*    else {
+           set(action, "form.fields.innerDimensions.value", "false");
+           set(action, "form.fields.builtArea.hideField", true);
+           set(action, "form.fields.roomArea.hideField", false);
+           set(action, "form.fields.balconyArea.hideField", false);
+           set(action, "form.fields.garageArea.hideField", false);
+           set(action, "form.fields.bathroomArea.hideField", false);
+         } */
     }
-       return action;
+    return action;
   },
 };
 
@@ -772,80 +911,84 @@ export const city = {
     floatingLabelText: "CORE_COMMON_CITY",
     className: "pt-emp-property-address-city",
     disabled: true,
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     fullWidth: true,
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     numcols: 6,
     dataFetchConfig: {
-      dependants: [
-        {
-          fieldKey: "mohalla",
-        },
-      ],
+      dependants: [{
+        fieldKey: "mohalla",
+      }, ],
     },
-    updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    updateDependentFields: ({
+      formKey,
+      field,
+      dispatch,
+      state
+    }) => {
       dispatch(prepareFormData("Properties[0].tenantId", field.value));
       let requestBody = {
         MdmsCriteria: {
           tenantId: field.value,
-          moduleDetails: [
-            {
-              moduleName: "PropertyTax",
-              masterDetails: [
-                {
-                  name: "Floor",
-                },
-                {
-                  name: "OccupancyType",
-                },
-                {
-                  name: "OwnerShipCategory",
-                },
-                {
-                  name: "OwnerType",
-                },
-                {
-                  name: "PropertySubType",
-                },
-                {
-                  name: "PropertyType",
-                },
-                {
-                  name: "SubOwnerShipCategory",
-                },
-                {
-                  name: "UsageCategoryDetail",
-                },
-                {
-                  name: "UsageCategoryMajor",
-                },
-                {
-                  name: "UsageCategoryMinor",
-                },
-                {
-                  name: "UsageCategorySubMinor",
-                },
-                {
-                  name: "ConstructionType",
-                },
-                {
-                  name: "Rebate",
-                },
-                {
-                  name: "Interest",
-                },
-                {
-                  name: "FireCess",
-                },
-                {
-                  name: "RoadType",
-                },
-                {
-                  name: "Thana",
-                }
-              ],
-            },
-          ],
+          moduleDetails: [{
+            moduleName: "PropertyTax",
+            masterDetails: [{
+                name: "Floor",
+              },
+              {
+                name: "OccupancyType",
+              },
+              {
+                name: "OwnerShipCategory",
+              },
+              {
+                name: "OwnerType",
+              },
+              {
+                name: "PropertySubType",
+              },
+              {
+                name: "PropertyType",
+              },
+              {
+                name: "SubOwnerShipCategory",
+              },
+              {
+                name: "UsageCategoryDetail",
+              },
+              {
+                name: "UsageCategoryMajor",
+              },
+              {
+                name: "UsageCategoryMinor",
+              },
+              {
+                name: "UsageCategorySubMinor",
+              },
+              {
+                name: "ConstructionType",
+              },
+              {
+                name: "Rebate",
+              },
+              {
+                name: "Interest",
+              },
+              {
+                name: "FireCess",
+              },
+              {
+                name: "RoadType",
+              },
+              {
+                name: "Thana",
+              }
+            ],
+          }, ],
         },
       };
 
@@ -893,15 +1036,19 @@ export const houseNumber = {
   houseNumber: {
     id: "house-number",
     jsonPath: "Properties[0].address.doorNo",
-    required:true,
+    required: true,
     type: "textfield",
     floatingLabelText: "PT_PROPERTY_DETAILS_DOOR_NUMBER",
     hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",
     numcols: 6,
     errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     maxLength: 64,
-    required:true
+    required: true
   },
 };
 
@@ -914,7 +1061,11 @@ export const colony = {
     hintText: "PT_PROPERTY_DETAILS_BUILDING_COLONY_NAME_PLACEHOLDER",
     numcols: 6,
     errorMessage: "PT_PROPERTY_DETAILS_COLONY_NAME_ERRORMSG",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     maxLength: 64,
   },
 };
@@ -928,7 +1079,11 @@ export const street = {
     hintText: "PT_PROPERTY_DETAILS_STREET_NAME_PLACEHOLDER",
     numcols: 6,
     errorMessage: "PT_PROPERTY_DETAILS_STREET_ERRORMSG",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     maxLength: 64,
   },
 };
@@ -956,9 +1111,17 @@ export const mohalla = {
       isDependent: true,
       hierarchyType: "REVENUE",
     },
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     required: true,
-    updateDependentFields: ({ formKey, field, dispatch }) => {
+    updateDependentFields: ({
+      formKey,
+      field,
+      dispatch
+    }) => {
       if (field.value && field.value.length > 0) {
         const mohalla = field.dropDownData.find((option) => {
           return option.value === field.value;
@@ -979,7 +1142,11 @@ export const pincode = {
     numcols: 6,
     //errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
     errorMessage: "PT_PINCODE_ERROR_MESSAGE",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
     pattern: "^([0-9]){6}$",
   },
 };
@@ -991,7 +1158,11 @@ export const thana = {
     floatingLabelText: "PT_PROPERTY_ADDRESS_THANA",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
   },
 };
 
@@ -1004,28 +1175,40 @@ export const roadType = {
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     numcols: 6,
     errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: {
+      position: "absolute",
+      bottom: -8,
+      zIndex: 5
+    },
   },
 };
 
 export const prepareDropDownData = (master, withOriginal = false) => {
   let state = store.getState();
 
-  const { localizationLabels } = state.app;
+  const {
+    localizationLabels
+  } = state.app;
   let dropDownData = [];
   for (var variable in master) {
     if (master.hasOwnProperty(variable)) {
       if (withOriginal) {
         dropDownData.push(master[variable]);
-      } 
-      else if(master[variable].code==="RENTED"||master[variable].code ==="SELFOCCUPIED"||master[variable].code==="UNOCCUPIED") {
-        dropDownData.push({ label: getTranslatedLabel(`PROPERTYTAX_OCCUPANCYTYPE_${master[variable].code}`,localizationLabels), value: master[variable].code });
-      }
-      else if(master[variable].code==="PUCCA"||master[variable].code ==="SEMIPUCCA"||master[variable].code==="KUCCHA") {
-        dropDownData.push({ label: getTranslatedLabel(`PROPERTYTAX_CONSTRUCTIONTYPE_${master[variable].code}`,localizationLabels), value: master[variable].code });
-      }
-     else {
-        dropDownData.push({ label: getTranslatedLabel(`PROPERTYTAX_FLOOR_${master[variable].code}`,localizationLabels), value: master[variable].code });
+      } else if (master[variable].code === "RENTED" || master[variable].code === "SELFOCCUPIED" || master[variable].code === "UNOCCUPIED") {
+        dropDownData.push({
+          label: getTranslatedLabel(`PROPERTYTAX_OCCUPANCYTYPE_${master[variable].code}`, localizationLabels),
+          value: master[variable].code
+        });
+      } else if (master[variable].code === "PUCCA" || master[variable].code === "SEMIPUCCA" || master[variable].code === "KUCCHA") {
+        dropDownData.push({
+          label: getTranslatedLabel(`PROPERTYTAX_CONSTRUCTIONTYPE_${master[variable].code}`, localizationLabels),
+          value: master[variable].code
+        });
+      } else {
+        dropDownData.push({
+          label: getTranslatedLabel(`PROPERTYTAX_FLOOR_${master[variable].code}`, localizationLabels),
+          value: master[variable].code
+        });
       }
     }
   }
@@ -1057,12 +1240,18 @@ export const mergeMaster = (masterOne, masterTwo, parentName = "") => {
   let parentList = [];
   for (var variable in masterTwo) {
     if (masterTwo.hasOwnProperty(variable)) {
-      dropDownData.push({ label: masterTwo[variable].name, value: masterTwo[variable].code });
+      dropDownData.push({
+        label: masterTwo[variable].name,
+        value: masterTwo[variable].code
+      });
     }
   }
   let masterOneData = getAbsentMasterObj(prepareDropDownData(masterOne, true), prepareDropDownData(masterTwo, true), parentName);
   for (var i = 0; i < masterOneData.length; i++) {
-    dropDownData.push({ label: masterOneData[i].name, value: masterOneData[i].code });
+    dropDownData.push({
+      label: masterOneData[i].name,
+      value: masterOneData[i].code
+    });
   }
   return dropDownData;
 };

@@ -76,16 +76,16 @@ const formConfig = {
         if (!isEmpty(minorObject)) {
           dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, minorObject.usageCategoryMajor));
           var filteredSubUsageMinor = filter(
-            prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategorySubMinor"), true),
+            prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryMinor"), true),
             (subUsageMinor) => {
-              return subUsageMinor.usageCategoryMinor === field.value;
+              return subUsageMinor.usageCategoryMajor === field.value;
             }
           );
           if (filteredSubUsageMinor.length > 0) {
             var filteredUsageCategoryDetails = getPresentMasterObj(
               prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
               filteredSubUsageMinor,
-              "usageCategorySubMinor"
+              "usageCategoryMinor"
             );
             if(field.value === "NONRESIDENTIAL")
                 {
@@ -95,7 +95,7 @@ const formConfig = {
                 {
                   setDependentFields(["subUsageType"], dispatch, formKey, true);
                 }
-               const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
+               const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategoryMinor");
                const subUsageData = sortDropdown(mergedMaster, "label", true);
                setDependentFields(["subUsageType"], dispatch, formKey, subUsageData, "dropDownData");
           }

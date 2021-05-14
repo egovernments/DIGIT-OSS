@@ -399,7 +399,7 @@ const createProperty = async (Properties, action, props) => {
           results[i].active="false"
           }
       }
-      propertyPayload.units = propertyPayload.units.concat(results);
+      propertyPayload.units = propertyPayload.units && propertyPayload.units.concat(results);
   }
 }
 if(propertyMethodAction==="_update" && propertyPayload.institution && newProperties[0].institution)
