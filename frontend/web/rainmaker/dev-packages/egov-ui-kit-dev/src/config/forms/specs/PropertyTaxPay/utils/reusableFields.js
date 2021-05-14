@@ -614,15 +614,12 @@ export const beforeInitForm = {
       if (usageCategoryMajor === "MIXED") {
         var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
 
-        console.log("reddy masterOne", masterOne);
 
         var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
 
-        console.log("reddy masterTwo", masterTwo);
 
         var usageTypes = mergeMaster(masterOne, masterTwo , "usageCategoryMajor");
 
-        console.log("reddy usageTypes", usageTypes);
 
          // usageTypes =  usageTypes.filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i)
 
@@ -630,12 +627,10 @@ export const beforeInitForm = {
 
         //usageTypes = usageTypes.filter((item) => item.value !=item.value);
 
-        console.log("reddy usageTypes after filter", usageTypes);
 
 
         var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
 
-        console.log("reddy filterArrayWithoutMixed", filterArrayWithoutMixed);
 
         set(action, "form.fields.usageType.disabled", false);
 
@@ -644,7 +639,6 @@ export const beforeInitForm = {
 
         set(action, "form.fields.usageType.dropDownData", usageTypeData);
 
-        console.log("reddy usageTypeData 2nd place", usageTypeData);
 
         unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategory")[0]}usageCategoryMinor`, false);
         if (usageCategoryMajor === "MIXED" && propertyType === "BUILTUP.INDEPENDENTPROPERTY") {

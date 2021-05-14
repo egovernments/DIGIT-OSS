@@ -40,7 +40,7 @@ const formConfig = {
       numcols: 4,
       dropDownData: [],
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        let minorObject={};
+              let minorObject={};
         if(window.location.href.includes('dataentry') && field.value !="RESIDENTIAL" || !window.location.href.includes('dataentry')){
          minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
        }
@@ -62,6 +62,7 @@ const formConfig = {
         {
           if(field.value === "RESIDENTIAL"){
             setDependentFields(["innerDimensions"],dispatch, formKey, false)
+            setDependentFields(["subUsageType"], dispatch, formKey, true);
           }else  if(field.value === "NONRESIDENTIAL"){
           dispatch(setFieldProperty(formKey, "innerDimensions", "value", "false"));
           setDependentFields(["innerDimensions"],dispatch, formKey, true)
@@ -70,6 +71,7 @@ const formConfig = {
           setDependentFields(["garageArea"],dispatch,formKey,true)
           setDependentFields(["bathroomArea"],dispatch,formKey,true)
           setDependentFields(["balconyArea"],dispatch,formKey,true)
+          setDependentFields(["subUsageType"], dispatch, formKey, false);
           }
 
         }
@@ -100,7 +102,7 @@ const formConfig = {
                setDependentFields(["subUsageType"], dispatch, formKey, subUsageData, "dropDownData");
           }
         } else {
-          setDependentFields(["subUsageType"], dispatch, formKey, true);
+          //setDependentFields(["subUsageType"], dispatch, formKey, true);
           dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, field.value));
           dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMinor`, null));
         }
