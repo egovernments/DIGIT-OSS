@@ -504,8 +504,8 @@ class Property extends Component {
     />
     } */
     let payLen = Payments && Payments.find(item =>{
-          return item && item.instrumentStatus === "APPROVED"
-        });
+          return item && item.instrumentStatus === "APPROVED" || item.instrumentStatus === "REMITTED"
+        });   
     return (
       <Screen className={clsName}>
         <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} downloadPrintButton={true} download={() => this.download()} print={() => this.print()} />
@@ -537,7 +537,8 @@ class Property extends Component {
         }        
 
                       
-         {!isCitizen && Payments.length<=0 &&
+        {isMigratedProperty && !isCitizen && (Payments.length<=0 || Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED"  
+        || !payLen ) &&
            <Button
               label={
                 <Label buttonLabel={true}
