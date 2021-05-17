@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
         try{
             updateReceiptText();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Log.e(TAG, "Receipt failed", ex);
         }
     }
 
@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
                      openBluetoothPrinter();
                      printData();
                 }catch(Exception ex){
-                   ex.printStackTrace();
+                    Log.e(TAG, "Printing Data Failed", ex);
                 }
             }
         });
@@ -107,7 +107,6 @@ public class MainActivity extends Activity {
     }
 
     void openBluetoothPrinter() throws IOException{
-
         try{
             UUID uuidString = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
             mBluetoothSocket = mBluetoothDevice.createRfcommSocketToServiceRecord(uuidString);
@@ -115,7 +114,7 @@ public class MainActivity extends Activity {
             outputStream = mBluetoothSocket.getOutputStream();
             inputStream = mBluetoothSocket.getInputStream();
          }catch(Exception ex){
-            ex.printStackTrace();
+            Log.e(TAG, "Bluetooth connection failed", ex);
         }
     }
 

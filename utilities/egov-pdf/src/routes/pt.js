@@ -40,7 +40,7 @@ router.post(
       try {
         resProperty = await search_property(uuid, tenantId, requestinfo);
       } catch (ex) {
-        console.log(ex.stack);
+        
         if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of the property", 500);
       }
@@ -73,7 +73,7 @@ router.post(
               400
             );
         } catch (ex) {
-          console.log(ex.stack);
+          
           if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(
             res,
@@ -91,7 +91,7 @@ router.post(
             requestinfo
           );
         } catch (ex) {
-          console.log(ex.stack);
+          
           if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(res, "Failed to generate PDF for property", 500);
         }
@@ -112,7 +112,7 @@ router.post(
         );
       }
     } catch (ex) {
-      console.log(ex.stack);
+      return renderError(res, "Failed to query certificate details of the property", 500);
     }
   })
 );
@@ -137,7 +137,7 @@ router.post(
       try {
         resProperty = await search_property(uuid, tenantId, requestinfo, true);
       } catch (ex) {
-        console.log(ex.stack);
+        
         if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of the property", 500);
       }
@@ -152,7 +152,7 @@ router.post(
         try {
           billresponse = await search_bill(propertyid, tenantId, requestinfo);
         } catch (ex) {
-          console.log(ex.stack);
+          
           if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(res, `Failed to query bills for property`, 500);
         }
@@ -169,7 +169,7 @@ router.post(
               requestinfo
             );
           } catch (ex) {
-            console.log(ex.stack);
+            
             if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, "Failed to generate PDF for property", 500);
           }
@@ -193,7 +193,7 @@ router.post(
         );
       }
     } catch (ex) {
-      console.log(ex.stack);
+      return renderError(res, "Failed to query bill details of the property", 500);
     }
   })
 );
@@ -218,7 +218,7 @@ router.post(
       try {
         resProperty = await search_property(uuid, tenantId, requestinfo);
       } catch (ex) {
-        console.log(ex.stack);
+        
         if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of the property", 500);
       }
@@ -239,7 +239,7 @@ router.post(
             bussinessService
           );
         } catch (ex) {
-          console.log(ex.stack);
+          
           if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(res, `Failed to query payment for property`, 500);
         }
@@ -255,7 +255,7 @@ router.post(
               requestinfo
             );
           } catch (ex) {
-            console.log(ex.stack);
+            
             if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, "Failed to generate PDF for property", 500);
           }
@@ -279,7 +279,7 @@ router.post(
         );
       }
     } catch (ex) {
-      console.log(ex.stack);
+      return renderError(res, "Failed to query receipt details of the property", 500);
     }
   })
 );

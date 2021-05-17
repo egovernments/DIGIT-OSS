@@ -34,7 +34,7 @@ router.post(
       try {
         resProperty = await search_payment(consumerCode, tenantId, requestinfo, bussinessService);
       } catch (ex) {
-        console.log(ex.stack);
+        
         if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of the payment", 500);
       }
@@ -50,7 +50,7 @@ router.post(
             requestinfo
           );
         } catch (ex) {
-          console.log(ex.stack);
+          
           if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(res, "Failed to generate PDF for payment", 500);
         }
@@ -71,7 +71,7 @@ router.post(
         );
       }
     } catch (ex) {
-      console.log(ex.stack);
+      return renderError(res, "Failed to query details of the payment", 500);
     }
   })
 );

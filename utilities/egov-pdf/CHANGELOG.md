@@ -1,7 +1,12 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.0.1 -2021-01-12
+## 1.1.0 - 2021-05-12
+
+- Added rotes/middleware for amendment certificate, consolidate bill, TL bill and W&S bill and receipt PDF.
+- Fixed security issue.
+
+## 1.0.1 - 2021-01-12
 - Added changes due to collection service dependency
 
 ## 1.0.0 - 2020-06-16

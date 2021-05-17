@@ -30,7 +30,7 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
     try {
       resPass = await search_epass(uuid, tenantId);
     } catch (ex) {
-      console.log(ex.stack);
+      
       if (ex.response && ex.response.data)
           console.log(ex.response.data);
       return renderError(res, "Failed to query details of the pass");
@@ -55,7 +55,7 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
       try{
         pdfResponse = await create_pdf(tenantId, config.pdf.epass_pdf_template, passes);
       } catch (ex) {
-        console.log(ex.stack);
+        
         if (ex.response && ex.response.data)
           console.log(ex.response.data);
       return renderError(res, "Failed to generate PDF for the pass");
@@ -70,11 +70,11 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
       });
       pdfResponse.data.pipe(res);
     } else {
-      console.log(ex.stack);
+      
       return renderError(res, "There is no pass for this id");
     }
   } catch  (ex) {
-    console.log(ex.stack);
+    return renderError(res, "Failed to query details of the pass");
   }
 }));
 

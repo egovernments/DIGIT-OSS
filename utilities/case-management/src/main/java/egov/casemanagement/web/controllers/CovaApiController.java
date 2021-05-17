@@ -10,6 +10,7 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import egov.casemanagement.service.CovaService;
 import egov.casemanagement.web.models.HealthdetailCreateRequest;
 import egov.casemanagement.web.models.RequestInfoWrapper;
+import org.apache.commons.io.IOUtils;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -46,7 +48,18 @@ public class CovaApiController {
         this.covaService = covaService;
 
         final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
-        JsonNode schema = JsonLoader.fromReader(new InputStreamReader(resource.getInputStream()));
+        InputStream inputStream = null;
+        JsonNode schema = null;
+        try{
+            inputStream = resource.getInputStream();
+            schema = JsonLoader.fromReader(new InputStreamReader(inputStream));
+        }
+        catch (IOException e){
+            throw new CustomException("IO ERROR","Failed to read the resource");
+        }
+        finally {
+            IOUtils.closeQuietly(inputStream);
+        }
         jsonSchema = factory.getJsonSchema(schema);
     }
 
