@@ -2,13 +2,13 @@ package org.egov.Utils;
 
 import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.entity.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.egov.constants.RequestContextConstants.FILESTORE_REGEX;
-import static org.egov.constants.RequestContextConstants.POST;
+import static org.egov.constants.RequestContextConstants.*;
 
 public class Utils {
 
@@ -27,8 +27,11 @@ public class Utils {
     }
 
     public static boolean isRequestBodyCompatible(HttpServletRequest servletRequest) {
-        return POST.equalsIgnoreCase(getRequestMethod(servletRequest))
-            && !getRequestURI(servletRequest).matches(FILESTORE_REGEX)
+        return (
+            POST.equalsIgnoreCase(getRequestMethod(servletRequest))
+                || PUT.equalsIgnoreCase(getRequestMethod(servletRequest))
+                || PATCH.equalsIgnoreCase(getRequestMethod(servletRequest))
+            )
             && getRequestContentType(servletRequest).contains(JSON_TYPE);
     }
 

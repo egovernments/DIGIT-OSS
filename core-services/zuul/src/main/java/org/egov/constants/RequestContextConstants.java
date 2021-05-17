@@ -12,6 +12,9 @@ public class RequestContextConstants {
     public static final String CURRENT_REQUEST_END_TIME = "request.time.end";
     public static final String GET = "GET";
     public static final String POST = "POST";
+    public static final String PUT = "PUT";
+    public static final String PATCH = "PATCH";
+
     public static final String FILESTORE_REGEX = "^/filestore/.*";
     public static final String REQUEST_INFO_FIELD_NAME_PASCAL_CASE = "RequestInfo";
     public static final String REQUEST_INFO_FIELD_NAME_CAMEL_CASE = "requestInfo";

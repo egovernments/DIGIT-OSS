@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Action {
+public class Action implements java.io.Serializable {
+
+    private static final long serialVersionUID = -6066170463373957428L;
+
     private static final String OPENING_BRACES = "{";
     private static final String CLOSING_BRACES = "}";
     private static final String PARAMETER_PLACEHOLDER_REGEX = "\\{\\w+\\}";

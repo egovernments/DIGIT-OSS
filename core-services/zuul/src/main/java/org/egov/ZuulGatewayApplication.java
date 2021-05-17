@@ -2,6 +2,10 @@ package org.egov;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.RateLimitUtils;
+import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.properties.RateLimitProperties;
+import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.support.SecuredRateLimitUtils;
+import org.egov.Utils.CustomRateLimitUtils;
 import org.egov.Utils.UserUtils;
 import org.egov.filters.pre.AuthFilter;
 import org.egov.filters.pre.AuthPreCheckFilter;
@@ -11,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,7 +30,7 @@ import java.util.HashSet;
 @EnableZuulProxy
 @EnableCaching
 @SpringBootApplication
-@PropertySource("${zuul.routes.filepath}")
+@PropertySource({"${zuul.routes.filepath}","${zuul.limiter.filepath}"})
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(ZuulGatewayApplication.class, args);
@@ -57,6 +63,9 @@ public class ZuulGatewayApplication {
     @Autowired
     private UserUtils userUtils;
 
+    @Autowired
+    private CustomRateLimitUtils customRateLimitUtils;
+
     @Bean
     public AuthPreCheckFilter authCheckFilter() {
         return new AuthPreCheckFilter(new HashSet<>(Arrays.asList(openEndpointsWhitelist)),
@@ -80,4 +89,20 @@ public class ZuulGatewayApplication {
             new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist))
         );
     }
+
+    @Configuration
+    public static class RateLimitUtilsConfiguration {
+
+        @Bean
+        @ConditionalOnClass(name = "org.springframework.security.core.Authentication")
+        public RateLimitUtils securedRateLimitUtils(final RateLimitProperties rateLimitProperties) {
+            return new SecuredRateLimitUtils(rateLimitProperties);
+        }
+
+        @Bean
+        public RateLimitUtils rateLimitUtils(final RateLimitProperties rateLimitProperties) {
+            return new CustomRateLimitUtils(rateLimitProperties);
+        }
+    }
+
 }

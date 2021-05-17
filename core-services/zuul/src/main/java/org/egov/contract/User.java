@@ -10,7 +10,10 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public class User {
+public class User implements java.io.Serializable {
+
+    private static final long serialVersionUID = 3446500028655161135L;
+
     @JsonProperty("id")
     private Integer id;
     

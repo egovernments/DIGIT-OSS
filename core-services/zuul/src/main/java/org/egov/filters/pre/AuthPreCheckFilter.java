@@ -5,14 +5,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import org.egov.Utils.ExceptionUtils;
-import org.egov.Utils.UserUtils;
+import org.egov.Utils.*;
 import org.egov.contract.User;
 import org.egov.model.RequestBodyInspector;
 import org.egov.wrapper.CustomRequestWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -88,6 +88,7 @@ public class AuthPreCheckFilter extends ZuulFilter {
             ExceptionUtils.RaiseException(e);
             return null;
         }
+
         RequestContext.getCurrentContext().set(AUTH_TOKEN_KEY, authToken);
         if (authToken == null) {
             if (mixedModeEndpointsWhitelist.contains(getRequestURI())) {
@@ -107,16 +108,33 @@ public class AuthPreCheckFilter extends ZuulFilter {
     }
 
     private String getAuthTokenFromRequest() throws IOException {
-        if (GET.equalsIgnoreCase(getRequestMethod()) || getRequestURI().matches(FILESTORE_REGEX)) {
-            logger.debug(AUTH_TOKEN_HEADER_MESSAGE, getRequestURI());
-            return getAuthTokenFromRequestHeader();
-        } else {
-            logger.debug(AUTH_TOKEN_BODY_MESSAGE, getRequestURI());
-            return getAuthTokenFromRequestBody();
+
+        String authToken = getAuthTokenFromRequestHeader();
+        // header will be preferred for auth body
+        String authTokenFromBody = null;
+
+        HttpServletRequest req = RequestContext.getCurrentContext().getRequest();
+
+        if (Utils.isRequestBodyCompatible(req)) {
+            // if body is json try and extract the token from body
+            // call this method even if we found authtoken in header
+            // this is just to make sure the authToken doesn't get leaked
+            // if it was both in header as well as body
+            authTokenFromBody = getAuthTokenFromRequestBody();
         }
+
+        if (ObjectUtils.isEmpty(authTokenFromBody)) {
+            // if token is not there, return whatever we had from header
+            authTokenFromBody = authToken;
+        }
+
+        return authTokenFromBody;
     }
 
     private String getAuthTokenFromRequestBody() throws IOException {
+        if (!Utils.isRequestBodyCompatible(getRequest()))
+            return null;
+
         CustomRequestWrapper requestWrapper = new CustomRequestWrapper(getRequest());
         HashMap<String, Object> requestBody = getRequestBody(requestWrapper);
         final RequestBodyInspector requestBodyInspector = new RequestBodyInspector(requestBody);
@@ -154,7 +172,7 @@ public class AuthPreCheckFilter extends ZuulFilter {
         ctx.setRequest(requestWrapper);
     }
 
-    private String getAuthTokenFromRequestHeader() {
+    private String  getAuthTokenFromRequestHeader() {
         RequestContext ctx = RequestContext.getCurrentContext();
         return ctx.getRequest().getHeader(AUTH_TOKEN_HEADER_NAME);
     }

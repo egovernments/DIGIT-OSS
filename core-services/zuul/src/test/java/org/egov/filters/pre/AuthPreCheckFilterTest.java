@@ -186,6 +186,7 @@ public class AuthPreCheckFilterTest {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.addHeader("auth-token", "token");
         request.setMethod("POST");
+        request.setContentType("application/json");
         request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\", \"authToken\": \"authtoken\"}}")));
         request.setRequestURI("other-endpoint");
         ctx.setRequest(request);
@@ -199,6 +200,7 @@ public class AuthPreCheckFilterTest {
     public void testThatAuthShouldHappenForOtherPUTEndpointsOnAuthTokenInRequestBody() throws IOException {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.addHeader("auth-token", "token");
+        request.setContentType("application/json");
         request.setMethod("PUT");
         request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\", \"authToken\": \"authtoken\"}}")));
         request.setRequestURI("other-endpoint");
@@ -266,6 +268,7 @@ public class AuthPreCheckFilterTest {
     public void testThatFilterShouldAbortForPOSTEndpointsOnNoRequestBody() throws Throwable {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setMethod("POST");
+        request.setContentType("application/json");
         request.setRequestURI("other-endpoint");
         ctx.setRequest(request);
 
@@ -313,6 +316,7 @@ public class AuthPreCheckFilterTest {
     public void testThatFilterShouldAbortForPUTEndpointsOnNoRequestBody() throws Throwable {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.setMethod("PUT");
+        request.setContentType("application/json");
         request.setRequestURI("other-endpoint");
         ctx.setRequest(request);
 
@@ -342,6 +346,7 @@ public class AuthPreCheckFilterTest {
         RequestContext ctx = RequestContext.getCurrentContext();
         request.addHeader("auth-token", "token");
         request.setMethod("PUT");
+        request.setContentType("application/json");
         request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\", \"authToken\": \"authtoken\", \"userInfo\": {\"name\": \"fubarred\"}}}")));
         request.setRequestURI("other-endpoint");
         ctx.setRequest(request);

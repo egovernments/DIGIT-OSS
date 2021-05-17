@@ -123,7 +123,11 @@ public class ExceptionUtils {
                     _setExceptionBody(((HttpClientErrorException) e).getStatusCode(), existingResponse);
             } else if (exceptionName.equalsIgnoreCase("InvalidAccessTokenException")) {
                 _setExceptionBody(HttpStatus.UNAUTHORIZED, getErrorInfoObject(exceptionName, exceptionMessage, exceptionMessage));
-            } else if (exceptionName.equalsIgnoreCase("CustomException")) {
+            } else if (exceptionName.equalsIgnoreCase("RateLimitExceededException")) {
+                _setExceptionBody(HttpStatus.TOO_MANY_REQUESTS, getErrorInfoObject(exceptionName, "Rate limit exceeded", null));
+            }else if (exceptionName.equalsIgnoreCase("JsonParseException")) {
+                _setExceptionBody(HttpStatus.BAD_REQUEST, getErrorInfoObject(exceptionName, "Bad request", null));
+            }else if (exceptionName.equalsIgnoreCase("CustomException")) {
                 CustomException ce = (CustomException)e;
                 _setExceptionBody(HttpStatus.valueOf(ce.nStatusCode), getErrorInfoObject(exceptionName, exceptionMessage, exceptionMessage));
             } else {
