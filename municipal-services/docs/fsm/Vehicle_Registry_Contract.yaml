@@ -531,6 +531,14 @@ components:
           type: integer
           format: int64
           description: epoc of the time trip ended.
+        fstpEntryTime:
+          type: integer
+          format: int64
+          description: epoc of the time vehicle entry time at FSTP plant.
+        fstpExitTime:
+          type: integer
+          format: int64
+          description: epoc of the time vehicle exit time from FSTP plant.
         volumeCarried:
           type: integer
           format: int64
