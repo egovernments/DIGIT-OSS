@@ -70,10 +70,10 @@ public class RestExceptionHandler {
     @GetMapping(value = "/error", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> getHandleError(HttpServletRequest request, HttpServletResponse response) {
-    	String exception = String.valueOf(request.getAttribute("javax.servlet.error.exception"));
-    	boolean isValid = Jsoup.isValid(exception, Whitelist.basic());
+    	String requestAttr = String.valueOf(request.getAttribute("javax.servlet.error.exception"));
+    	boolean isValid = Jsoup.isValid(requestAttr, Whitelist.basic());
     	if (isValid)
-    		return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    		return new ResponseEntity<>(requestAttr, HttpStatus.BAD_REQUEST);
     	else 
     		return new ResponseEntity<>("Invalid Value", HttpStatus.BAD_REQUEST);
     }
@@ -81,10 +81,10 @@ public class RestExceptionHandler {
     @PostMapping(value = "/error", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> postHandleError(HttpServletRequest request, HttpServletResponse response) {
-    	String exception = String.valueOf(request.getAttribute("javax.servlet.error.exception"));
-    	boolean isValid = Jsoup.isValid(exception, Whitelist.basic());
+    	String requestAttr = String.valueOf(request.getAttribute("javax.servlet.error.exception"));
+    	boolean isValid = Jsoup.isValid(requestAttr, Whitelist.basic());
     	if (isValid)
-    		return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    		return new ResponseEntity<>(requestAttr, HttpStatus.BAD_REQUEST);
     	else 
     		return new ResponseEntity<>("Invalid Value", HttpStatus.BAD_REQUEST);
     }
