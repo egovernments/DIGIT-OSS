@@ -425,6 +425,14 @@ const getMutationAdditionalData = async (action, state, dispatch) => {
         isRoleValid
       )
     }
+    else
+    {
+      set(
+        action,
+        `screenConfig.components.div.children.body.children.cardContent.children.FeeSummary`,
+        {}
+      )  
+    }
 
     if (process.env.REACT_APP_NAME == "Citizen") {
 
