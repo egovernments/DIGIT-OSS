@@ -69,6 +69,7 @@ const TextField = ({
   dataFetchConfig,
   jsonPath,
   toolTip,
+  autoComplete,
   updateDependentFields,
   toolTipMessage,
   ...rest
@@ -104,8 +105,8 @@ const TextField = ({
       type={type}
       autoFocus={autoFocus}
       maxLength={maxLength}
-      autoComplete={type === "password" ? "new-password" : "off"}
-   //  autoComplete={"off"}
+      autoComplete={type === "password" ? "off" : "on"}
+      //  autoComplete={"off"}
       multiLine={multiLine}
       underlineDisabledStyle={underlineDisabledStyle}
       {...rest}
@@ -118,6 +119,7 @@ TextField.propTypes = {
   errorText: PropTypes.string,
   errorStyle: PropTypes.object,
   value: PropTypes.string,
+  autoComplete: PropTypes.string,
   disabled: PropTypes.bool,
   label: PropTypes.string,
   hintText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
