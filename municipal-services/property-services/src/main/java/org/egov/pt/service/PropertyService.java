@@ -1,5 +1,6 @@
 package org.egov.pt.service;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +88,7 @@ public class PropertyService {
 		if (config.getIsWorkflowEnabled()
 				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_UPLOAD)
 				&& !"LEGACY_RECORD".equals(request.getProperty().getSource().toString())) {
-			wfService.updateWorkflow(request, request.getProperty().getCreationReason());
+			wfService.updateWorkflow(request, request.getProperty().getCreationReason(), EMPTY);
 
 		} else {
 
@@ -171,7 +172,7 @@ public class PropertyService {
 		
 		if(config.getIsWorkflowEnabled() && ! "LEGACY_RECORD".equals(request.getProperty().getSource().toString())) {
 			
-			State state = wfService.updateWorkflow(request, CreationReason.UPDATE);
+			State state = wfService.updateWorkflow(request, CreationReason.UPDATE, EMPTY);
 
 			if (state.getIsStartState() == true
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
@@ -216,6 +217,8 @@ public class PropertyService {
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		System.out.println("--------- merge additionaldetails before calculate ---------- ");
 		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
+		String feesPresent = calculatorService.checkApplicableFees(request.getRequestInfo(), request.getProperty());
+		System.out.println("--------- feesPresent = "+feesPresent);
 		
 		// TODO FIX ME block property changes FIXME
 		//util.mergeAdditionalDetails(request, propertyFromSearch);
@@ -226,7 +229,7 @@ public class PropertyService {
 		
 		if (config.getIsMutationWorkflowEnabled()) {
 
-			State state = wfService.updateWorkflow(request, CreationReason.MUTATION);
+			State state = wfService.updateWorkflow(request, CreationReason.MUTATION, feesPresent);
       
 			/*
 			 * updating property from search to INACTIVE status
@@ -237,10 +240,10 @@ public class PropertyService {
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 				
-				if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
+				/*if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
 						.contains(state.getApplicationStatus())) {
 					skipPayment(request);
-				}
+				}*/
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);

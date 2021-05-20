@@ -1,8 +1,11 @@
 package org.egov.pt.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Demand;
@@ -95,6 +98,34 @@ public class CalculationService {
 
 		serviceRequestRepository.fetchResult(url, demandRequest);
 
+	}
+	
+	/**
+	 * Checks if applicable fees are present
+	 * @param requestInfo
+	 * @param property
+	 * @return
+	 */
+	public String checkApplicableFees(RequestInfo requestInfo, Property property){
+   	 String feesPresent = StringUtils.EMPTY;
+        PropertyRequest propertyRequest = PropertyRequest.builder()
+        		.requestInfo(requestInfo)
+        		.property(property)
+        		.build();
+
+		StringBuilder url = new StringBuilder(config.getCalculationHost())
+				.append(config.getCalculationContextPath())
+				.append(config.getMutationApplicableFeesEndpoint());
+
+		Optional<Object> response = serviceRequestRepository.fetchResult(url, propertyRequest);
+		System.out.println("response ------------------- "+response);
+		if (response.isPresent()) {
+			Map responseMap = (Map) response.get();
+			System.out.println("value ----- "+responseMap.get("feesPresent"));
+			if(!responseMap.isEmpty())
+				feesPresent = (String) responseMap.get("feesPresent");
+		}
+		return feesPresent;
 	}
 
 }

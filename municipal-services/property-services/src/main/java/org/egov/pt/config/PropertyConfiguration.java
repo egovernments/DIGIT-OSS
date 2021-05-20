@@ -331,4 +331,7 @@ public class PropertyConfiguration {
 	@Value("${egov.property.skippayment.status}")
 	private String skipPaymentStatuses;
 	
+	@Value("${egov.calculation.mutation.checkapplicablefees.endpoint}")
+    private String mutationApplicableFeesEndpoint;
+	
 }
