@@ -4,7 +4,7 @@
 
 ### DB UML Diagram
 
-- NA
+![DB UML](./images/egov-user.png)
 
 ### Service Dependencies
 

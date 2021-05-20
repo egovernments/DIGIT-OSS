@@ -4,7 +4,7 @@ Encryption Service is used to secure the data. It provides functionality to encr
 
 ### DB UML Diagram
 
-- To Do
+![DB UML](./images/egov-encryption.png)
 
 ### Service Dependencies
 

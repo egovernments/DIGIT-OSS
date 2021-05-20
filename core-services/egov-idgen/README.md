@@ -4,7 +4,7 @@ The egov-idgen service generates new id based on the id formats passed. The appl
 
 ### DB UML Diagram
 
-- TBD
+![DB UML](./images/egov-idgen.png)
 
 ### Service Dependencies
 

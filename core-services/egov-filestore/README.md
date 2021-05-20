@@ -5,7 +5,7 @@ Filestore provides file upload capability for all the rest of the modules in the
 
 ### DB UML Diagram
 
-
+![DB UML](./images/egov-filestore.png)
 
 
 ### Service Dependencies

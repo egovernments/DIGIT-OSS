@@ -4,7 +4,7 @@ Chatbot service is a chatbot which provides functionality to the user to access 
 
 ### DB UML Diagram
 
-- NA
+![DB UML](./images/chatbot.png)
 
 ### Service Dependencies
 

@@ -5,7 +5,7 @@ This service provides localisation capacity to the Digit suite of services.
 
 ### DB UML Diagram
 
-
+![DB UML](./images/egov-localization.png)
 
 
 ### Service Dependencies
