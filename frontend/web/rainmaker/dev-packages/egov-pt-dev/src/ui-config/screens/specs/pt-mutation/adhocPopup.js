@@ -327,7 +327,40 @@ export const adhocPopupFee = getCommonContainer({
         required: false,
         pattern: /^[0-9]*$/i,
         jsonPath: "Property.additionalDetails.lateFee"
-      })
+      }),
+      submitButton: getCommonContainer({
+        openFeeDetails: {
+          componentPath: "Button",
+          props: {
+            variant: "outlined",
+            color: "primary",
+            style: {
+              minWidth: "200px",
+              height: "48px",
+              marginRight: "16px"
+            }
+          },
+          children: {
+            downloadReceiptButtonLabel: getLabel({
+              labelName: "Submit",
+              labelKey: "PT_MUTATION_SUBMIT"
+            })
+          },
+          onClickDefination: { 
+              action: "condition",
+          callBack: (state, dispatch) => {
+            let toggle = get(
+               state.screenConfiguration.screenConfig["search-preview"],
+               "components.adhocDialog.props.open",
+               false
+             );
+             dispatch(
+               handleField("search-preview", "components.adhocDialog", "props.open", !toggle)
+             );
+            }      
+          }
+        },
+      }),
     }),
  
 });

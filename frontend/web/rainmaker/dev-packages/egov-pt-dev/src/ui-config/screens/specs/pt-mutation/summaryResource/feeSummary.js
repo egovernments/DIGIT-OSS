@@ -78,8 +78,8 @@ import {
         callBack: value => {
           return value ? value : "0";
         }
-      }
-    ),
+      }             
+    ),  
   });
   
   const mutationFeeDetails = getCommonGrayCard({
@@ -133,6 +133,12 @@ import {
                   "visible",
                   visible
                 ))
+                 dispatch(handleField(
+                  "search-preview",
+                  "components.div.children.body.children.cardContent.children.FeeSummary.children.cardContent.children.adhocDialog.children.popup.children.feeDetails.children.submitButton",
+                  "visible",
+                  true
+                )) 
               }
             }
           }
