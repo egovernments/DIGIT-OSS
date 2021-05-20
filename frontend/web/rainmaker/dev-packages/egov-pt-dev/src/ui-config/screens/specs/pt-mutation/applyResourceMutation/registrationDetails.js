@@ -74,7 +74,7 @@ export const registrationDetails = getCommonCard(
             md: 6
           },
           afterFieldChange: async (action, state, dispatch) => {
-            let fields = ["marketValue","powerOfAttorneyRegNo","PowerOfAttorneyRegDate","documentNumber","documentIssueDateField",
+            let fields = ["marketValue","powerOfAttorneyRegNo","powerOfAttorneyRegDate","documentNumber","documentIssueDateField",
             "documentValue","remarks","NameAndAddressOfWitnesses","DateOfWritingWill","NameOfAuctionAuthority","AuctionDate",
             "AuctionRegistrationnumber",
             "AuctionRegistrationDate","SerialNumber",
@@ -193,6 +193,26 @@ export const registrationDetails = getCommonCard(
         jsonPath: "Property.additionalDetails.powerOfAttorneyRegNo",
         visible: false,
       }),
+       powerOfAttorneyRegDate: {
+        ...getDateField({
+          label: { labelName: "Power Of Attorney Reg Date", labelKey: "PT_MUTATION_POWERATT_REG_DATE" },
+          placeholder: {
+            labelName: "Enter Power Of Attorney Reg Date",
+            labelKey: "PT_MUTATION_POWERATT_REG_DATE_PLACEHOLDER"
+          },
+          required: true,
+          pattern: getPattern("Date"),
+          isDOB: true,
+          errorMessage: "PT_DOCUMENT_DATE_ERROR_MESSAGE",
+          jsonPath: "Property.additionalDetails.powerOfAttorneyRegDate",
+          visible: false,
+          props: {
+            inputProps: {
+              max: getTodaysDateInYMD()
+            }
+          }
+        })
+      },
       DecreeNo: getTextField({
         label: {
           labelName: "DecreeNo",

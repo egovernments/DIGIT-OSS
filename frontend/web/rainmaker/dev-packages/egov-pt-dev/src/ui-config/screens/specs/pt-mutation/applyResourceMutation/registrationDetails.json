@@ -9,7 +9,8 @@
     "SALEPOWEROFATTORNEY": [
         "documentNumber",
         "documentIssueDateField",
-        "powerOfAttorneyRegNo"
+        "powerOfAttorneyRegNo",
+        "powerOfAttorneyRegDate"
         
     ],
     "REGISTEREDWILLDEED": [
