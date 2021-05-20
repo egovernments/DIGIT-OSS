@@ -1192,4 +1192,50 @@ public class EstimationService {
 		return objToBeReturned;
 
 	}
+	
+	/**
+	 * Checks whether applicable fees exist or not
+	 * @param property
+	 * @param requestInfo
+	 * @return
+	 */
+	public Map<String, String> checkApplicableFees(PropertyV2 property, RequestInfo requestInfo) {
+		Map<String, String> resultMap = new HashMap<>();
+		Object mdmsData = mdmsService.mDMSCall(requestInfo, property.getTenantId());
+		Map<String, List<Object>> attributeValues = mdmsService.getAttributeValues(mdmsData);
+		List<Object> mutationFee = attributeValues.get("MutationFee");
+		String usageCategory = property.getUsageCategory();
+		String usage = "";
+		if (usageCategory.contains(".")) {
+			String[] usageSplit = usageCategory.split("\\.");
+			usage = usageSplit[0];
+		} else {
+			usage = usageCategory;
+		}
+		Map<String, Object> additionalDetail = mapper.convertValue(property.getAdditionalDetails(), Map.class);
+		String reasonForTransfer = (String) additionalDetail.get("reasonForTransfer");
+		reasonForTransfer = "GIFTDEED";
+		Map<String, Object> applicableMasterData = getApplicableMasterData(mutationFee, usage, reasonForTransfer);
+		
+		if(!applicableMasterData.isEmpty()) {
+			Object applicationFeeValue = applicableMasterData.get("applicationFee");
+			Object processingFeeValue = applicableMasterData.get("processingFee");
+			Object publicationFeeValue = applicableMasterData.get("publicationFee");
+			BigDecimal applicationFee = BigDecimal.ZERO;
+			BigDecimal processingFee = BigDecimal.ZERO;
+			BigDecimal publicationFee = BigDecimal.ZERO;
+			if (applicationFeeValue != null) 
+				applicationFee = BigDecimal.valueOf((Integer) applicationFeeValue);
+			if (processingFeeValue != null) 
+				processingFee = BigDecimal.valueOf((Integer) processingFeeValue);
+			if (publicationFeeValue != null) 
+				publicationFee = BigDecimal.valueOf((Integer) publicationFeeValue);
+			
+			if (applicationFee.compareTo(BigDecimal.ZERO) == 0 && processingFee.compareTo(BigDecimal.ZERO) == 0
+					&& publicationFee.compareTo(BigDecimal.ZERO) == 0) {
+				resultMap.put("feesPresent", "no");
+			}
+		}
+		return resultMap;
+	}
 }

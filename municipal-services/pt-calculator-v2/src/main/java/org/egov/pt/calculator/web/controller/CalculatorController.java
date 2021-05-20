@@ -85,5 +85,9 @@ public class CalculatorController {
 		return new ResponseEntity<>(demandService.updatePTDemands(request.getDemands(), request.getRequestInfo()),
 				HttpStatus.OK);
 	}
-
+	
+	@PostMapping(value="/mutation/_checkapplicablefees")
+	public ResponseEntity<Map<String, String>> checkApplicableFees(@RequestBody @Valid PropertyRequestV2 request) {
+		return new ResponseEntity<>(calculatorService.checkApplicableFees(request.getProperty(), request.getRequestInfo()), HttpStatus.OK);
+	}
 }
