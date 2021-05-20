@@ -1214,7 +1214,6 @@ public class EstimationService {
 		}
 		Map<String, Object> additionalDetail = mapper.convertValue(property.getAdditionalDetails(), Map.class);
 		String reasonForTransfer = (String) additionalDetail.get("reasonForTransfer");
-		reasonForTransfer = "GIFTDEED";
 		Map<String, Object> applicableMasterData = getApplicableMasterData(mutationFee, usage, reasonForTransfer);
 		
 		if(!applicableMasterData.isEmpty()) {
