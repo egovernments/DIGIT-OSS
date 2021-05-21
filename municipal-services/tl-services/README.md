@@ -6,7 +6,7 @@ the steps for approval of the application.
 
 ### DB UML Diagram
 
-- TBD
+![DB UML](./images/tl-services.png)
 
 ### Service Dependencies
 

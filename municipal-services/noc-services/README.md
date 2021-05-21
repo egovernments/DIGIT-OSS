@@ -6,7 +6,7 @@ Module is used to apply NOC application for approval of respective noc users.
 
 ### DB UML Diagram
 
-
+- ![DB UML](./images/noc-services.png)
 
 ### Service Dependencies
 

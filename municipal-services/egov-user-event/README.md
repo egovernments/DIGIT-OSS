@@ -6,7 +6,7 @@ This service provides APIs to create , update and search such events for the use
 
 ### DB UML Diagram
 
-- TBD
+- ![DB UML](./images/egov-user-event.png)
 
 ### Service Dependencies
 

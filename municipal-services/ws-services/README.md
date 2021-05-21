@@ -2,7 +2,7 @@
 This module created to manage WaterService connections against a Property in the system.
 ### DB UML Diagram
 
-- NA
+![DB UML](./images/ws-services.png)
 
 ### Service Dependencies
 - egov-mdms service

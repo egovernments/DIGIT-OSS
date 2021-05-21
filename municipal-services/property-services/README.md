@@ -4,7 +4,7 @@
 
 ### DB UML Diagram
 
-NA
+![DB UML](./images/property-services.png)
 
 ### Service Dependencies
 

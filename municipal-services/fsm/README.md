@@ -4,7 +4,7 @@ Faecal sludge management (FSM) is a system that enables citizen to raise a reque
 
 ### DB UML Diagram
 
-![plot](./fsm.png)
+![DB UML](./images/fsm.png)
 
 
 ### Service Dependencies

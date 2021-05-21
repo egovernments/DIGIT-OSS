@@ -5,7 +5,7 @@ This service is the major service supporting bpa-services which handles the data
 
 ### DB UML Diagram
 
-
+![DB UML](./images/land-services.png)
 
 ### Service Dependencies
 

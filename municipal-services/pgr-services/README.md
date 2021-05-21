@@ -3,7 +3,7 @@ The objective of this service is to provide a functionality to raise a complaint
 the citizen and will be updated by notifications whenever the status of the complaint progresses further.
 ### DB UML Diagram
 
-- NA
+- ![DB UML](./images/pgr-services.png)
 
 ### Service Dependencies
 - egov-user

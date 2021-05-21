@@ -4,7 +4,7 @@ This service is used to calculate the Tradelicense fees based on the defined bil
 
 ### DB UML Diagram
 
-- TBD
+![DB UML](./images/tl-calculator.png)
 
 ### Service Dependencies
 
