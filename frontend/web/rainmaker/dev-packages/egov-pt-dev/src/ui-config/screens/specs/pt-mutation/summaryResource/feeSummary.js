@@ -99,7 +99,7 @@ import {
         children: {
           downloadReceiptButtonLabel: getLabel({
             labelName: "Open Fee details",
-            labelKey: "Open Fee details"
+            labelKey: "PT_MUTATION_OPEN_FEE_DETAILS"
           })
         },
         onClickDefination: {
