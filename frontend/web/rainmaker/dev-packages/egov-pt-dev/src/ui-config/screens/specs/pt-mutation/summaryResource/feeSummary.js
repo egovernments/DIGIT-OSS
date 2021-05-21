@@ -162,7 +162,7 @@ import {
           },
           ...getCommonSubHeader({
             labelName: "PT Mutation Fee",
-            labelKey: "PT_MUTATION_FEE"
+            labelKey: "PT_MUTATION_FEES"
           })
         }
       }
