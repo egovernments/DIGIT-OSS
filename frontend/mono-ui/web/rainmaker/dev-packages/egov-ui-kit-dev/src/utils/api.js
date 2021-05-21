@@ -194,7 +194,7 @@ export const loginRequest = async (username = null, password = null, refreshToke
     baseURL: window.location.origin,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0",
+      Authorization: "Basic ZWdvdi11c2VyLWNsaWVudDo=",
     },
   });
 

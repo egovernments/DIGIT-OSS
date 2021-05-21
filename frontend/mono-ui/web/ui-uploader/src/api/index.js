@@ -123,7 +123,7 @@ export const Api = () => {
     };
     const headers = {
       "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0"
+      Authorization: "Basic ZWdvdi11c2VyLWNsaWVudDo="
     };
     const endPoint = getRequestUrl(
       apiEndpoints.USER_LOGIN_ENDPOINT,
