@@ -4,7 +4,7 @@ egf-instrument service used to create, search, update and delete instruments.
 
 ### DB UML Diagram
 
-NA
+![DB UML](./images/egf-instrument.png)
 
 ### Service Dependencies
 

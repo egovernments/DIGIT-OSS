@@ -4,7 +4,7 @@ egf master service is used to search finance masters.
 
 ### DB UML Diagram
 
-NA
+![DB UML](./images/egf-master.png)
 
 ### Service Dependencies
 

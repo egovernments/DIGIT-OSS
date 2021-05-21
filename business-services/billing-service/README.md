@@ -4,7 +4,7 @@
 
 ### DB UML Diagram
 
-NA
+![DB UML](./images/billing-services.png)
 
 ### Service Dependencies
 

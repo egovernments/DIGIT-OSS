@@ -4,7 +4,7 @@ finance-collections-voucher-consumer service creates vouchers and instruments fo
 
 ### DB UML Diagram
 
-NA
+![DB UML](./images/finance-collection-voucher-consumer.png)
 
 ### Service Dependencies
 

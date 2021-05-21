@@ -4,7 +4,7 @@ The objective of HRMS is to provide a service that manages all the employees enr
 
 ### DB UML Diagram
 
-- NA
+![DB UML](./images/egov-hrms.png)
 
 ### Service Dependencies
 - egov-user
