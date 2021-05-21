@@ -161,8 +161,8 @@ import {
             xs: 8
           },
           ...getCommonSubHeader({
-            labelName: "Property fee",
-            labelKey: "Property fee"
+            labelName: "PT Mutation Fee",
+            labelKey: "PT_MUTATION_FEE"
           })
         }
       }
