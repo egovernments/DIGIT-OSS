@@ -94,6 +94,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class VoucherServiceImpl implements VoucherService {
 	
+	private static final String ADVANCE = "advance";
 	@Autowired
 	private PropertiesManager propertiesManager;
 	@Autowired
@@ -260,7 +261,11 @@ public class VoucherServiceImpl implements VoucherService {
 		amountMapwithGlcode = new LinkedHashMap<>();
 		// Setting glcode and amount in Map as key value pair.
 		for (BillAccountDetail bad : billDetail.getBillAccountDetails()) {
-			if (bad.getAdjustedAmount().compareTo(new BigDecimal(0)) != 0) {
+			BigDecimal adjustedAmount = bad.getAdjustedAmount();
+		    if (bad.getTaxHeadCode().toLowerCase().contains(ADVANCE))
+		    	adjustedAmount = bad.getAmount().abs();
+			if (bad.getTaxHeadCode().toLowerCase().contains(ADVANCE)
+					|| adjustedAmount.compareTo(new BigDecimal(0)) != 0) {
 				String taxHeadCode = bad.getTaxHeadCode();
 				List<TaxHeadMaster> findFirst = taxHeadMasterByBusinessServiceCode.stream()
 						.filter(tx -> serviceAttribute != null
@@ -278,9 +283,9 @@ public class VoucherServiceImpl implements VoucherService {
 				}
 				String glcode = findFirst.get(0).getGlcode();
 				if (amountMapwithGlcode.get(glcode) != null) {
-					amountMapwithGlcode.put(glcode, amountMapwithGlcode.get(glcode).add(bad.getAdjustedAmount()));
+					amountMapwithGlcode.put(glcode, amountMapwithGlcode.get(glcode).add(adjustedAmount));
 				} else {
-					amountMapwithGlcode.put(glcode, bad.getAdjustedAmount());
+					amountMapwithGlcode.put(glcode, adjustedAmount);
 				}
 			}
 		}
