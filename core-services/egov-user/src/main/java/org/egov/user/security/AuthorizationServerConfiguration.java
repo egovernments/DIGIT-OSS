@@ -47,7 +47,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         final int accessTokenValidityInSeconds = accessTokenValidityInMinutes * 60;
         final int refreshTokenValidityInSeconds = refreshTokenValidityInMinutes * 60;
-        clients.inMemory().withClient(USER_CLIENT_ID).secret("egov-user-secret")
+        clients.inMemory().withClient(USER_CLIENT_ID)
                 .authorizedGrantTypes("authorization_code", "refresh_token", "password")
                 .authorities("ROLE_APP", "ROLE_CITIZEN", "ROLE_ADMIN", "ROLE_EMPLOYEE").scopes("read", "write")
                 .refreshTokenValiditySeconds(refreshTokenValidityInSeconds)
