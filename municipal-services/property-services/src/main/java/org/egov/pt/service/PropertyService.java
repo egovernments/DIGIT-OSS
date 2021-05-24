@@ -88,7 +88,7 @@ public class PropertyService {
 		if (config.getIsWorkflowEnabled()
 				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_UPLOAD)
 				&& !"LEGACY_RECORD".equals(request.getProperty().getSource().toString())) {
-			wfService.updateWorkflow(request, request.getProperty().getCreationReason(), EMPTY);
+			wfService.updateWorkflow(request, request.getProperty().getCreationReason());
 
 		} else {
 
@@ -172,7 +172,7 @@ public class PropertyService {
 		
 		if(config.getIsWorkflowEnabled() && ! "LEGACY_RECORD".equals(request.getProperty().getSource().toString())) {
 			
-			State state = wfService.updateWorkflow(request, CreationReason.UPDATE, EMPTY);
+			State state = wfService.updateWorkflow(request, CreationReason.UPDATE);
 
 			if (state.getIsStartState() == true
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
@@ -217,8 +217,8 @@ public class PropertyService {
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		System.out.println("--------- merge additionaldetails before calculate ---------- ");
 		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
-		String feesPresent = calculatorService.checkApplicableFees(request.getRequestInfo(), request.getProperty());
-		System.out.println("--------- feesPresent = "+feesPresent);
+		//String feesPresent = calculatorService.checkApplicableFees(request.getRequestInfo(), request.getProperty());
+		//System.out.println("--------- feesPresent = "+feesPresent);
 		
 		// TODO FIX ME block property changes FIXME
 		//util.mergeAdditionalDetails(request, propertyFromSearch);
@@ -229,7 +229,7 @@ public class PropertyService {
 		
 		if (config.getIsMutationWorkflowEnabled()) {
 
-			State state = wfService.updateWorkflow(request, CreationReason.MUTATION, feesPresent);
+			State state = wfService.updateWorkflow(request, CreationReason.MUTATION);
       
 			/*
 			 * updating property from search to INACTIVE status
@@ -240,10 +240,10 @@ public class PropertyService {
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 				
-				/*if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
+				if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
 						.contains(state.getApplicationStatus())) {
-					skipPayment(request);
-				}*/
+					skipPayment(request, state.getApplicationStatus());
+				}
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
@@ -378,11 +378,16 @@ public class PropertyService {
 		return properties;
 	}
 	
-    public void skipPayment(PropertyRequest propertyRequest ){
+    public void skipPayment(PropertyRequest propertyRequest, String applicationStatus){
     	Property property = propertyRequest.getProperty();
 		BigDecimal demandAmount = util.getDemandAmount(propertyRequest);
 		if (!(demandAmount.compareTo(BigDecimal.ZERO) > 0)) {
-			ProcessInstance workflow = ProcessInstance.builder().action(PTConstants.ACTION_SKIP_PAY).build();
+			String action = EMPTY;
+			if("APPLICATION_FEE_PAYMENT".equalsIgnoreCase(applicationStatus))
+				action = PTConstants.ACTION_SKIP_PAY;
+			else if("APPROVED".equalsIgnoreCase(applicationStatus))
+				action = PTConstants.ACTION_FINAL_SKIP_PAY;
+			ProcessInstance workflow = ProcessInstance.builder().action(action).build();
 			property.setWorkflow(workflow);
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(propertyRequest.getRequestInfo(),
 					Collections.singletonList(workflow));

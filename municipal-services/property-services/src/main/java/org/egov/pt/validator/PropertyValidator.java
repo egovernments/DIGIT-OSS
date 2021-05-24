@@ -830,7 +830,8 @@ public class PropertyValidator {
 	private void validateSkipPaymentAction(PropertyRequest propertyRequest) {
 		Property property = propertyRequest.getProperty();
 		if (property.getWorkflow().getAction() != null
-				&& (property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.ACTION_SKIP_PAY))) {
+				&& (property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.ACTION_SKIP_PAY) 
+						|| property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.ACTION_FINAL_SKIP_PAY))) {
 			BigDecimal demandAmount = propertyUtil.getDemandAmount(propertyRequest);
 			if ((demandAmount.compareTo(BigDecimal.ZERO) > 0)) {
 				throw new CustomException(ErrorConstants.INVALID_ACTION,

@@ -127,7 +127,7 @@ public class PropertyUtil extends CommonUtils {
 					.build();
 	}
 	
-	public ProcessInstanceRequest getWfForPropertyRegistry(PropertyRequest request, CreationReason creationReasonForWorkflow, String feesPresent) {
+	public ProcessInstanceRequest getWfForPropertyRegistry(PropertyRequest request, CreationReason creationReasonForWorkflow) {
 		
 		Property property = request.getProperty();
 		ProcessInstance wf = null != property.getWorkflow() ? property.getWorkflow() : new ProcessInstance();
@@ -156,31 +156,6 @@ public class PropertyUtil extends CommonUtils {
 			break;
 
 		case MUTATION :
-			System.out.println("~~~~~~~~~ Mutation Case ~~~~~~~~~~ ");
-			if ("OPEN".equalsIgnoreCase(property.getWorkflow().getAction()) && "no".equalsIgnoreCase(feesPresent)) {
-				System.out.println("------- 1st level payment skipped due to no fees --------- ");
-				wf.setBusinessService(configs.getMutationWfName());
-				wf.setModuleName(configs.getPropertyModuleName());
-				wf.setAction("VERIFY");
-			} else if ("APPROVE".equalsIgnoreCase(property.getWorkflow().getAction())) {
-				BigDecimal demandAmount = getDemandAmount(request);
-				System.out.println("--------- demand from demand details -------- " + demandAmount);
-				Map<String, Object> additionalDetails = mapper.convertValue(property.getAdditionalDetails(), Map.class);
-				BigDecimal lateFee = additionalDetails.get("lateFee") != null
-						? BigDecimal.valueOf((Integer) additionalDetails.get("lateFee"))
-						: BigDecimal.ZERO;
-				BigDecimal mutationFee = additionalDetails.get("mutationFee") != null
-						? BigDecimal.valueOf((Integer) additionalDetails.get("mutationFee"))
-						: BigDecimal.ZERO;
-
-				System.out.println("--------- mutation fee = " + mutationFee + ", late fee = " + lateFee);
-				if (mutationFee.compareTo(BigDecimal.ZERO) == 0 && lateFee.compareTo(BigDecimal.ZERO) == 0) {
-					System.out.println("------- 2nd level payment skipped due to no fees --------- ");
-					wf.setBusinessService(configs.getMutationWfName());
-					wf.setModuleName(configs.getPropertyModuleName());
-					wf.setAction("PAY");
-				}
-			}
 			break;
 			
 		default:
