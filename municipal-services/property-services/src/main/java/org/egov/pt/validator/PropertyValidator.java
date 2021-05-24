@@ -832,8 +832,10 @@ public class PropertyValidator {
 		if (property.getWorkflow().getAction() != null
 				&& (property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.ACTION_SKIP_PAY) 
 						|| property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.ACTION_FINAL_SKIP_PAY))) {
+			System.out.println("~~~~~~~~~~ Inside skip payment for action = "+ property.getWorkflow().getAction());
 			BigDecimal demandAmount = propertyUtil.getDemandAmount(propertyRequest);
 			if ((demandAmount.compareTo(BigDecimal.ZERO) > 0)) {
+				System.out.println("~~~~~~~ Demand is present, skipping not possible, demand ="+demandAmount);
 				throw new CustomException(ErrorConstants.INVALID_ACTION,
 						"Payment can't be skipped once demand is generated.");
 			}

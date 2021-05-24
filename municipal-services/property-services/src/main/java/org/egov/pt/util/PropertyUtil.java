@@ -265,7 +265,7 @@ public class PropertyUtil extends CommonUtils {
 	public BigDecimal getDemandAmount(PropertyRequest propertyRequest) {
 		Property property = propertyRequest.getProperty();
 		RequestInfo requestInfo = propertyRequest.getRequestInfo();
-		Optional<Object> fetchResult = restRepo.fetchResult(getBillUri(property), new RequestInfoWrapper(requestInfo));
+		Optional<Object> fetchResult = restRepo.fetchResult(getBillUriForMutation(property), new RequestInfoWrapper(requestInfo));
 		LinkedHashMap responseMap = (LinkedHashMap) fetchResult.get();
 		JSONObject jsonObject = new JSONObject(responseMap);
 		double amount = 0.0;
@@ -291,15 +291,15 @@ public class PropertyUtil extends CommonUtils {
 		}
 	}
 
-	public StringBuilder getBillUri(Property property) {
+	public StringBuilder getBillUriForMutation(Property property) {
 		StringBuilder builder = new StringBuilder(configs.getEgbsHost());
 		builder.append(configs.getEgbsSearchDemand());
 		builder.append("?tenantId=");
 		builder.append(property.getTenantId());
 		builder.append("&consumerCode=");
-		builder.append(property.getPropertyId());
+		builder.append(property.getAcknowldgementNumber());
 		builder.append("&businessService=");
-		builder.append("PT");
+		builder.append("PT.MUTATION");
 		return builder;
 	}
 
