@@ -380,8 +380,8 @@ public class PropertyService {
 	
     public void skipPayment(PropertyRequest propertyRequest, String applicationStatus){
     	Property property = propertyRequest.getProperty();
-		BigDecimal demandAmount = util.getDemandAmount(propertyRequest);
-		if (!(demandAmount.compareTo(BigDecimal.ZERO) > 0)) {
+		BigDecimal balanceAmount = util.getBalanceAmount(propertyRequest);
+		if (!(balanceAmount.compareTo(BigDecimal.ZERO) > 0)) {
 			String action = EMPTY;
 			if("APPLICATION_FEE_PAYMENT".equalsIgnoreCase(applicationStatus))
 				action = PTConstants.ACTION_SKIP_PAY;

@@ -262,13 +262,13 @@ public class PropertyUtil extends CommonUtils {
 		return copyOwners;
 	}
 	
-	public BigDecimal getDemandAmount(PropertyRequest propertyRequest) {
+	public BigDecimal getBalanceAmount(PropertyRequest propertyRequest) {
 		Property property = propertyRequest.getProperty();
 		RequestInfo requestInfo = propertyRequest.getRequestInfo();
 		Optional<Object> fetchResult = restRepo.fetchResult(getBillUriForMutation(property), new RequestInfoWrapper(requestInfo));
 		LinkedHashMap responseMap = (LinkedHashMap) fetchResult.get();
 		JSONObject jsonObject = new JSONObject(responseMap);
-		double amount = 0.0;
+		double balance = 0.0;
 		try {
 			JSONArray demandArray = (JSONArray) jsonObject.get("Demands");
 			if (demandArray != null && demandArray.length() > 0) {
@@ -279,12 +279,13 @@ public class PropertyUtil extends CommonUtils {
 						for (int i = 0; i < demandDetails.length(); i++) {
 							JSONObject object = (JSONObject) demandDetails.get(i);
 							Double taxAmt = Double.valueOf((object.get("taxAmount").toString()));
-							amount = amount + taxAmt;
+							Double collAmt = Double.valueOf((object.get("collectionAmount").toString()));
+							balance = balance + (taxAmt-collAmt);
 						}
 					}
 				}
 			}
-			return BigDecimal.valueOf(amount);
+			return BigDecimal.valueOf(balance);
 		} catch (Exception e) {
 			throw new CustomException("PARSING ERROR",
 					"Failed to parse the response using jsonPath: " + PTConstants.BILL_AMOUNT);
