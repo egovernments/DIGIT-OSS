@@ -3,7 +3,7 @@
 Workflows are a series of steps that moves a process from one state to another state by actions performed by different kind of Actors - Humans, Machines, Time based events etc. to achieve a goal like on boarding an employee, or approve an application or grant a resource etc. The egov-workflow-v2 is a workflow engine which helps in performing this operations seamlessly using a predefined configuration. 
 
 ### DB UML Diagram
-![DB UML](./images/egov-workflow-v2.png)
+- NA
 
 ### Service Dependencies
 - egov-mdms

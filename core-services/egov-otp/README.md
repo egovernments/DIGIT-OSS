@@ -8,7 +8,7 @@ The functionality is exposed via REST API.
 
 ### DB UML Diagram
 
-![DB UML](./images/egov-otp.png)
+- TBD
 
 
 

@@ -4,7 +4,7 @@ Module acts as a liaison between eGov apps and external payment gateways. It fac
 
 ### DB UML Diagram
 
-![DB UML](./images/egov-pg-service.png)
+- To Do
 
 ### Service Dependencies
 

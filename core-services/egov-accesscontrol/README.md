@@ -5,7 +5,7 @@ Access Control Service(ACS) main job is to Authorize end user based on their rol
 
 ### DB UML Diagram
 
-![DB UML](./images/egov-accesscontrol.png)
+- NA
 
 ### Service Dependencies
 - egov-mdms service

@@ -3,7 +3,7 @@
 An eGov core application which provides location details of the tenant for which the services are being provided.
 ### DB UML Diagram
 
-![DB UML](./images/egov-location.png)
+- NA
 
 ### Service Dependencies
 - egov-mdms service

@@ -5,7 +5,7 @@ this service compresses the url.
 
 ### DB UML Diagram
 
-![DB UML](./images/egov-url-shortening.png)
+- NA
 
 ### Service Dependencies
 
