@@ -1140,6 +1140,7 @@ public class ReceiptAction extends BaseFormAction {
         receiptlist.stream().forEach(receipt -> {
 
             receipt.getBill().forEach(bill -> {
+		BigDecimal totalAmountPaid = BigDecimal.ZERO;
                 bill.getBillDetails().forEach(billDetail -> {
                     ReceiptHeader header = new ReceiptHeader();
                     receiptHeader.setReceiptnumber(billDetail.getReceiptNumber());
@@ -1151,7 +1152,7 @@ public class ReceiptAction extends BaseFormAction {
                     receiptHeader.setPaidBy(bill.getPaidBy());
                     receiptHeader.setPayeeName(bill.getPayerName());
                     receiptHeader.setPayeeAddress(bill.getPayerAddress());
-                    receiptHeader.setTotalAmount(billDetail.getAmountPaid());
+                    receiptHeader.setTotalAmount(totalAmountPaid.add(billDetail.getAmountPaid()));
                     receiptHeader.setCurretnStatus(billDetail.getStatus());
                     receiptHeader.setCurrentreceipttype(billDetail.getReceiptType());
                     receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
