@@ -768,12 +768,14 @@ export const downloadChallan = async (queryStr, mode = 'download') => {
 
 
 export const downloadConReceipt =(queryObj,receiptKey='consolidatedreceipt',pdfModule='PAYMENT',fileName,onSuccess)=>{
+  queryObj&&queryObj.push(  { key: "pdfKey", value: receiptKey});
   pdfModule='PAYMENT';   // Temporary fix to download receipts from common pays
   receiptKey=pdfModule=='PAYMENT'?"consolidatedreceipt":receiptKey;
   searchAndDownloadPdf(`/egov-pdf/download/${pdfModule}/${receiptKey}`,queryObj,fileName,onSuccess)
 }
 
 export const printConReceipt =(queryObj,receiptKey='consolidatedreceipt',pdfModule='PAYMENT')=>{
+  queryObj&&queryObj.push(  { key: "pdfKey", value: receiptKey});
   pdfModule='PAYMENT';
   receiptKey=pdfModule=='PAYMENT'?"consolidatedreceipt":receiptKey;
   searchAndPrintPdf(`/egov-pdf/download/${pdfModule}/${receiptKey}`,queryObj)
