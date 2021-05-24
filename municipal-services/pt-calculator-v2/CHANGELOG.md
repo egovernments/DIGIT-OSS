@@ -3,6 +3,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.4 - 2021-05-24
+- demand error for empty result removed
+
 ## 1.1.3 - 2021-02-26
 - Updated domain name in application.properties
 - Fixed security issue for throwable statement
