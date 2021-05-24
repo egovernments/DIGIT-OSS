@@ -242,7 +242,7 @@ public class PropertyService {
 				
 				if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
 						.contains(state.getApplicationStatus())) {
-					skipPayment(request, state.getApplicationStatus());
+					skipPayment(request, state.getApplicationStatus(), state);
 				}
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
@@ -378,16 +378,23 @@ public class PropertyService {
 		return properties;
 	}
 	
-    public void skipPayment(PropertyRequest propertyRequest, String applicationStatus){
+    public void skipPayment(PropertyRequest propertyRequest, String applicationStatus, State state){
+    	System.out.println("~~~~~~~~~~ Current state = "+state.getState());
     	Property property = propertyRequest.getProperty();
 		BigDecimal balanceAmount = util.getBalanceAmount(propertyRequest);
 		if (!(balanceAmount.compareTo(BigDecimal.ZERO) > 0)) {
 			String action = EMPTY;
-			if("APPLICATION_FEE_PAYMENT".equalsIgnoreCase(applicationStatus))
+			String currentState = EMPTY;
+			if("OPEN".equalsIgnoreCase(applicationStatus)) {
 				action = PTConstants.ACTION_SKIP_PAY;
-			else if("APPROVED".equalsIgnoreCase(applicationStatus))
+				currentState = PTConstants.STATE_INITIAL_SKIP_PAYMENT;
+			} else if("APPROVED".equalsIgnoreCase(applicationStatus)) {
 				action = PTConstants.ACTION_FINAL_SKIP_PAY;
-			ProcessInstance workflow = ProcessInstance.builder().action(action).build();
+				currentState = PTConstants.ACTION_FINAL_SKIP_PAY;
+			}
+			state.setState(currentState);
+			System.out.println("~~~~~~~~~~ Updated current state = "+state.getState());
+			ProcessInstance workflow = ProcessInstance.builder().action(action).state(state).build();
 			property.setWorkflow(workflow);
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(propertyRequest.getRequestInfo(),
 					Collections.singletonList(workflow));

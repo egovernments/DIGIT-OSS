@@ -315,6 +315,8 @@ public class PTConstants {
     
 	public static final String BILL_AMOUNT = "$.Demands[0].demandDetails[0].taxAmount";
 
+	public static final String STATE_INITIAL_SKIP_PAYMENT = "INITIAL_SKIP_PAYMENT";
+	
     public static final String ACTION_FINAL_SKIP_PAY = "FINAL_SKIP_PAYMENT";
 
 
