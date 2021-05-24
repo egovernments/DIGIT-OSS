@@ -19,6 +19,7 @@ router.post(
     var tenantId = req.query.tenantId;
     var consumerCode = req.query.consumerCode;
     var bussinessService = req.query.bussinessService;
+    var receiptKey = req.query.pdfKey;
     var requestinfo = req.body;
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
@@ -41,7 +42,7 @@ router.post(
       var payments = resProperty.data;
       if (payments && payments.Payments && payments.Payments.length > 0) {
         var pdfResponse;
-        var pdfkey = config.pdf.consolidated_receipt_template;
+        var pdfkey = receiptKey || config.pdf.consolidated_receipt_template;
         try {
           pdfResponse = await create_pdf(
             tenantId,
