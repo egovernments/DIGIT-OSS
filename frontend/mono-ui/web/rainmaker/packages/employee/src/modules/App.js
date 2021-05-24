@@ -12,6 +12,7 @@ import routes from "./Routes";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
 import { LoadingIndicator, CommonShareContainer } from "components";
+import { async } from "babel-runtime/regenerator";
 
 class App extends Component {
   constructor(props) {
@@ -80,12 +81,28 @@ class App extends Component {
 
   render() {
     const { toast, loading, defaultUrl, hasLocalisation } = this.props;
+    let loginScreens = false;
+    let logginScreensUrls=['/employee/user/login', '/employee/forgot-password', '/employee/language-selection'];
+    if (logginScreensUrls.includes(window.location.pathname)) {
+      loginScreens = true;
+    }
     return (
       <div>
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
         <CommonShareContainer componentId="rainmaker-common-share" />
+
+        {!loginScreens && <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <img style={{ display: "inline-flex", height: '1em' }} alt={"Powered by DIGIT"} src={'./digit-footer.png'} onError={"this.src='./../digit-footer.png'"}></img>
+          </div>
+        </div>}
+        {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <img style={{ display: "inline-flex", height: '1em' }} alt={"Powered by DIGIT"} src={'./digit-footer-bw.png'} onError={"this.src='./../digit-footer-bw.png'"}></img>        
+          </div>
+        </div>}
       </div>
     );
   }

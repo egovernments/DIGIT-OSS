@@ -105,19 +105,9 @@ const NavigationDrawer = ({
             </div>
           );
         })}
-
-        <div className="rainmaker-displayInline" style={{ justifyContent: "left" ,marginLeft:"10px"}}>
-          <div style={{ marginTop: "42px" }}>
-            <img  src={logo} height="14px !important"/>
-          </div >
-          <div style={{ marginLeft: "2px", marginTop: "44px"  }}>
-            <Label bold={true} fontSize="13px" bold={true} label="|" />
-          </div>
-          <div style={{ marginLeft: "2px" ,marginTop: "44px"  }}>
-            <Label bold={true} color="black" bold={true} fontSize="13px" label="STATE_LABEL" />
-          </div >
-          <div style={{ marginTop: "42px" ,marginLeft:"65px" }}>
-          <img src={digitLogo} height="14px !important" />
+        <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <img style={{ display: "inline-flex", height: '1em' }} alt={"Powered by DIGIT"} src={'./digit-footer.png'} onError={"this.src='./../digit-footer.png'"}></img>
           </div>
         </div>
       </div>
