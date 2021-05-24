@@ -117,7 +117,7 @@ The system has a citizen interface and an employee interface.
 
 ### DB UML Diagram
 
-![DB UML](./images/rainmaker-pgr.png)
+- TBD
 
 ### Service Dependencies
 

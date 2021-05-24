@@ -6,7 +6,7 @@ Generates the Demand after calculating the charges for the given application usi
 
 ### DB UML Diagram
 
-![DB UML](./images/fsm-calculator.png)
+![plot](./fsm-calculator.png)
 
 ### Service Dependencies
 

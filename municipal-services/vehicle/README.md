@@ -5,7 +5,7 @@ Vehicle Registry is a system that enables ULB Employees to create and search Veh
 ### DB UML Diagram
 
 
-![DB UML](./images/vehicle.png)
+![plot](./vehicle.png)
 
 ### Service Dependencies
 

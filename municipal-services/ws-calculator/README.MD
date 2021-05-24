@@ -2,7 +2,7 @@
 This module created to manage the Bill calculation for the registered water service connections in the system.
 
 ### DB UML Diagram
-![DB UML](./images/ws-caclulator.png)
+- To Do
 
 ### Service Dependencies
 - egov-mdms service

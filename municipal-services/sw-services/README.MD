@@ -2,7 +2,7 @@
 This module created to manage Sewerage Service connections against a Property in the system.
 
 ### DB UML Diagram
-![DB UML](./images/sw-services.png)
+- To Do
 
 ### Service Dependencies
 - egov-mdms service
