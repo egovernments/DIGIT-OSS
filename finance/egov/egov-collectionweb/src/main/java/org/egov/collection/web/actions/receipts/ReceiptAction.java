@@ -1151,7 +1151,7 @@ public class ReceiptAction extends BaseFormAction {
                     receiptHeader.setPaidBy(bill.getPaidBy());
                     receiptHeader.setPayeeName(bill.getPayerName());
                     receiptHeader.setPayeeAddress(bill.getPayerAddress());
-                    receiptHeader.setTotalAmount(billDetail.getTotalAmount());
+                    receiptHeader.setTotalAmount(billDetail.getAmountPaid());
                     receiptHeader.setCurretnStatus(billDetail.getStatus());
                     receiptHeader.setCurrentreceipttype(billDetail.getReceiptType());
                     receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
