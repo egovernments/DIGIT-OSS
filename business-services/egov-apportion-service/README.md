@@ -5,10 +5,6 @@
 
 Module is used to distribute the paid amount among the taxHeads.
 
-#DB UML Diagram
-
-![DB UML](./images/egov-apportion-service.png)
-
 ### Apportion 
 The Apportioning service is used to distribute the paid amount among the respective taxHead. 
 There are two API's first is  /apportion-service/bill/_apportion endpoint which is used to apportion the bill. In this case each bill is processed seperately.
