@@ -4,6 +4,7 @@ import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } f
 import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 import {
   enableField,disableField
@@ -129,7 +130,7 @@ const getAddress = (item) => {
 }
 
 const searchApiCall = async (state, dispatch, index) => {
-  showHideTable(false, dispatch, 0);
+   showHideTable(false, dispatch, 0);
   showHideTable(false, dispatch, 1);
 
   let searchScreenObject = get(
@@ -137,6 +138,14 @@ const searchApiCall = async (state, dispatch, index) => {
     "searchScreen",
     {}
   );
+
+  let tenants = state.common.cities && state.common.cities;
+
+ let filterTenant = tenants && tenants.filter(m=>m.key===getTenantId() ||searchScreenObject.tenantId );
+
+ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+
+
   if ((!searchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(
@@ -172,7 +181,7 @@ const searchApiCall = async (state, dispatch, index) => {
       formValid = true;
     }
   }
-  if (!formValid) {
+  if (!formValid) {   
     dispatch(
       toggleSnackbar(
         true,
@@ -342,7 +351,7 @@ const searchApiCall = async (state, dispatch, index) => {
         else if (key === "ids") {
           queryObject.push({
             key: "propertyIds",
-            value: searchScreenObject[key].trim()
+            value: "PT-"+tenantUniqueId+"-"+searchScreenObject[key].trim()
           });
         }
 

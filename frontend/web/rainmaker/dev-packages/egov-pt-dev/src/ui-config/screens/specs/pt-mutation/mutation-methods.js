@@ -275,12 +275,13 @@ export const searchPropertyDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4,
-
+  
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.ids"
+      //pattern: /^[0-9]*$/i,
+      pattern: getPattern("NewPropertyID"),
+      errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
+      jsonPath: "searchScreen.ids"  
     }),
     mohalla: {
       uiFramework: "custom-containers-local",
@@ -492,8 +493,8 @@ export const searchApplicationDetails = getCommonCard({
 
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_PROPERTY_ID",
+      pattern: getPattern("NewPropertyID"),
+      errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
       jsonPath: "searchScreen.ids"
     }),
   }),

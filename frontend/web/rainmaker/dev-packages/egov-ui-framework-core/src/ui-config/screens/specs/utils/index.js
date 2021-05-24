@@ -546,6 +546,8 @@ export const getPattern = type => {
       return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
+    case "NewPropertyID":
+      return /^[0-9]{6}$/i;
     case "Amount":
       return /^[0-9]{0,9}$/i;
     case "Email":
