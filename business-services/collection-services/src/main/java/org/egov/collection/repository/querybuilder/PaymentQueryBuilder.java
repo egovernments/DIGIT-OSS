@@ -324,7 +324,7 @@ public class PaymentQueryBuilder {
                                                              Map<String, Object> preparedStatementValues) {
         StringBuilder selectQuery = new StringBuilder(SELECT_PAYMENT_SQL);
 
-        addWhereClause(selectQuery, preparedStatementValues, searchCriteria);
+        addWhereClauseForPlainSearch(selectQuery, preparedStatementValues, searchCriteria);
 
 
         return addOrderByClause(selectQuery);
@@ -691,6 +691,102 @@ public class PaymentQueryBuilder {
         } catch (SQLException e) {
             throw new CustomException("UNABLE_TO_CREATE_RECEIPT", "Invalid JSONB value provided");
         }
+
+    }
+
+    private static void addWhereClauseForPlainSearch(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
+                                       PaymentSearchCriteria searchCriteria) {
+
+        if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            if(searchCriteria.getTenantId().split("\\.").length > 1) {
+                selectQuery.append(" py.tenantId =:tenantId");
+                preparedStatementValues.put("tenantId", searchCriteria.getTenantId());
+            }
+            else {
+                selectQuery.append(" py.tenantId LIKE :tenantId");
+                preparedStatementValues.put("tenantId", searchCriteria.getTenantId() + "%");
+            }
+
+        }
+
+        if(!CollectionUtils.isEmpty(searchCriteria.getIds())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.id IN (:id)  ");
+            preparedStatementValues.put("id", searchCriteria.getIds());
+        }
+
+        if (!CollectionUtils.isEmpty(searchCriteria.getStatus())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" UPPER(py.paymentstatus) in (:status)");
+            preparedStatementValues.put("status",
+                    searchCriteria.getStatus()
+                            .stream()
+                            .map(String::toUpperCase)
+                            .collect(toSet())
+            );
+        }
+
+        if (!CollectionUtils.isEmpty(searchCriteria.getInstrumentStatus())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" UPPER(py.instrumentStatus) in (:instrumentStatus)");
+            preparedStatementValues.put("instrumentStatus",
+                    searchCriteria.getInstrumentStatus()
+                            .stream()
+                            .map(String::toUpperCase)
+                            .collect(toSet())
+            );
+        }
+
+        if (!CollectionUtils.isEmpty(searchCriteria.getPaymentModes())) {
+
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" UPPER(py.paymentMode) in (:paymentMode)");
+            preparedStatementValues.put("paymentMode",
+                    searchCriteria.getPaymentModes()
+                            .stream()
+                            .map(String::toUpperCase)
+                            .collect(toSet())
+            );
+        }
+
+        if (StringUtils.isNotBlank(searchCriteria.getMobileNumber())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.mobileNumber = :mobileNumber");
+            preparedStatementValues.put("mobileNumber", searchCriteria.getMobileNumber());
+        }
+
+        if (StringUtils.isNotBlank(searchCriteria.getTransactionNumber())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.transactionNumber = :transactionNumber");
+            preparedStatementValues.put("transactionNumber", searchCriteria.getTransactionNumber());
+        }
+
+        if (searchCriteria.getFromDate() != null) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.transactionDate >= :fromDate");
+            preparedStatementValues.put("fromDate", searchCriteria.getFromDate());
+        }
+
+        if (searchCriteria.getToDate() != null) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.transactionDate <= :toDate");
+            Calendar c = Calendar.getInstance();
+            c.setTime(new Date(searchCriteria.getToDate()));
+            c.add(Calendar.DATE, 1);
+            searchCriteria.setToDate(c.getTime().getTime());
+
+            preparedStatementValues.put("toDate", searchCriteria.getToDate());
+        }
+
+        if (!CollectionUtils.isEmpty(searchCriteria.getPayerIds())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.payerid IN (:payerid)  ");
+            preparedStatementValues.put("payerid", searchCriteria.getPayerIds());
+        }
+
+        addPaymentDetailWhereClause(selectQuery, preparedStatementValues, searchCriteria);
+        addBillWhereCluase(selectQuery, preparedStatementValues, searchCriteria);
 
     }
 
