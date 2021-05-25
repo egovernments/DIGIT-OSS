@@ -306,7 +306,11 @@ class ShowField extends Component {
       ) {
         return this.addCommas(Number(val) % 1 === 0 ? Number(val) : Number(val).toFixed(2));
       } else {
-        return val;
+        return  <Label
+        className="report-header-row-label"
+        labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
+        label={val}
+      />;
       }
     }
   };

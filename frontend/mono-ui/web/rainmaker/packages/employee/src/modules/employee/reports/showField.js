@@ -11,7 +11,7 @@ import boundaryConfig from "./commons/config";
 import isEmpty from "lodash/isEmpty";
 import filter from "lodash/filter";
 import AutoSuggestDropdown from "egov-ui-kit/components/AutoSuggestDropdown";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels ,getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export default class ShowField extends Component {
   constructor(props) {
@@ -36,7 +36,7 @@ export default class ShowField extends Component {
     if (!isEmpty(obj.defaultValue)) {
       dropDownData.push({
         value: "All",
-        label: "All",
+        label: "RT_ALL",
       });
     }
 
@@ -44,7 +44,7 @@ export default class ShowField extends Component {
       for (var variable in obj.defaultValue) {
         dropDownData.push({
           value: variable,
-          label: obj.defaultValue[variable],
+          label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:`RT_${getTransformedLocale(variable)}`,
         });
       }
     }
@@ -149,6 +149,7 @@ export default class ShowField extends Component {
           <Grid item xs={12} sm={4} md={4} lg={4}>
             <AutoSuggestDropdown
             dataSource={dropDownData}
+            labelsFromLocalisation={true}
             value={typeof obj.value === undefined ? "" : getDropdownLabel(obj.value, dropDownData)}
             hintText="Select"
             hintStyle={{fontSize: "14px",color: "#767676"}}
@@ -278,5 +279,5 @@ const getDropdownLabel = (value, data) => {
   if (object.length > 0) {
     label = object[0].label;
   }
-  return label;
+  return label&&getLocaleLabels("NA", label);
 };

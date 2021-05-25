@@ -125,7 +125,7 @@ const screenConfig = {
     const footerUrlConfig = [{
 
       url: getRedirectionURL(),
-      labelName: "GO TO HOME",
+      labelName: "NOC_COMMON_BUTTON_HOME",
       labelKey: "NOC_COMMON_BUTTON_HOME",
       style: {
         minWidth: "180px",
@@ -136,7 +136,7 @@ const screenConfig = {
     if (purpose === "apply" && status === "success") {
       footerUrlConfig.push({
         url:  `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC` ,
-        labelName: "Proceed to payment",
+        labelName: "NOC_PROCEED_PAYMENT",
         labelKey: "NOC_PROCEED_PAYMENT",
         style: {
           minWidth: "180px",
@@ -149,7 +149,7 @@ const screenConfig = {
     if (purpose === "pay" && status === "failure") {
       footerUrlConfig.push({
         url: `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`,
-        labelName: "RETRY",
+        labelName: "NOC_PAYMENT_RETRY",
         labelKey: "NOC_PAYMENT_RETRY",
         style: {
           minWidth: "180px",
