@@ -10,6 +10,7 @@ import get from "lodash/get";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
+import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 const styles = {
   card: {
     marginLeft: 8,
@@ -68,7 +69,7 @@ class MeterReading extends React.Component {
                       </Grid>
                       <Grid item md={8} xs={6}>
                         <Label
-                          labelName={item.meterStatus}
+                          labelName={`${getLocaleLabels("NA", `WS_SERVICES_CALCULATION_METERSTATUS_${getTransformedLocale(item.meterStatus)}`)}`}
                           fontSize={14}
                           style={{ fontSize: 14 }}
                         />

@@ -263,7 +263,7 @@ export const meterReadingEditable =
                         placeholder: {
                             labelKey: "WS_SELECT_METER_STATUS_PLACEHOLDER"
                         },
-                        labelPrefix: {
+                        localePrefix: {
                             moduleName: "ws-services-calculation",
                             masterName: "MeterStatus"
                         },
