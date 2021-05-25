@@ -273,6 +273,7 @@ class Footer extends React.Component {
   }
 
   downloadMenu = downloadMenu && downloadMenu.filter(m=>m.labelKey!=="WF_PT.MUTATION_SKIP_PAYMENT");
+  downloadMenu = downloadMenu && downloadMenu.filter(m=>m.labelKey!=="WF_PT.MUTATION_FINAL_SKIP_PAYMENT");
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",
