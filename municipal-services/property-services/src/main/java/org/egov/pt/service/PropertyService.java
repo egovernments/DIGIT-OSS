@@ -254,7 +254,7 @@ public class PropertyService {
 					info.setStatus(Status.INACTIVE);
 				}
 
-				propertyFromSearch.setStatus(Status.INACTIVE);
+				//propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
 
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
@@ -270,6 +270,7 @@ public class PropertyService {
 				for (OwnerInfo info : request.getProperty().getOwners()) {
 					info.setStatus(Status.ACTIVE);
 				}
+				propertyFromSearch.setStatus(Status.INACTIVE);
 
 				terminateWorkflowAndReInstatePreviousRecord(request, propertyFromSearch);
 			} else {
