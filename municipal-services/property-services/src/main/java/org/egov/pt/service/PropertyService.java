@@ -231,11 +231,6 @@ public class PropertyService {
 
 			State state = wfService.updateWorkflow(request, CreationReason.MUTATION);
       
-			System.out.println("Request State ~~~~~~~~~~~~~~~~~~~~"+request.getProperty().getWorkflow().getState().getState());
-			if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
-					.contains(state.getState())) {
-				skipPayment(request, state.getState());
-			}
 			/*
 			 * updating property from search to INACTIVE status
 			 * 
@@ -245,10 +240,10 @@ public class PropertyService {
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 				
-				/*if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
-						.contains(state.getState())) {
-					skipPayment(request, state.getApplicationStatus(), state);
-				}*/
+				if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
+						.contains(state.getApplicationStatus())) {
+					skipPayment(request, state.getApplicationStatus());
+				}
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
@@ -383,22 +378,16 @@ public class PropertyService {
 		return properties;
 	}
 	
-    public void skipPayment(PropertyRequest propertyRequest, String currentState){
-    	System.out.println("~~~~~~~~~~ Current state = "+currentState);
+    public void skipPayment(PropertyRequest propertyRequest, String applicationStatus){
     	Property property = propertyRequest.getProperty();
 		BigDecimal balanceAmount = util.getBalanceAmount(propertyRequest);
 		if (!(balanceAmount.compareTo(BigDecimal.ZERO) > 0)) {
 			String action = EMPTY;
-			if("APPLICATION_FEE_PAYMENT".equalsIgnoreCase(currentState))
+			if("APPLICATION_FEE_PAYMENT".equalsIgnoreCase(applicationStatus))
 				action = PTConstants.ACTION_SKIP_PAY;
-			else if("APPROVED".equalsIgnoreCase(currentState)) 
+			else if("APPROVED".equalsIgnoreCase(applicationStatus))
 				action = PTConstants.ACTION_FINAL_SKIP_PAY;
-			
 			ProcessInstance workflow = ProcessInstance.builder().action(action).build();
-			workflow.setBusinessId(property.getAcknowldgementNumber());
-			workflow.setTenantId(property.getTenantId());
-			workflow.setBusinessService(config.getMutationWfName());
-			workflow.setModuleName(config.getPropertyModuleName());
 			property.setWorkflow(workflow);
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(propertyRequest.getRequestInfo(),
 					Collections.singletonList(workflow));
