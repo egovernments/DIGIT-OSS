@@ -504,13 +504,15 @@ public class DemandService {
 			if (!detail.getTaxHeadMasterCode().equalsIgnoreCase(PT_ROUNDOFF)) {
 				taxAmount = taxAmount.add(detail.getTaxAmount().subtract(detail.getCollectionAmount()));
 			} else {
-				currentRoundOff = detail.getTaxAmount();
+				currentRoundOff = detail.getTaxAmount().subtract(detail.getCollectionAmount());
 			}
 		}
 
 		/*
 		 * An estimate object will be returned incase if there is a decimal value If no
 		 * decimal value found null object will be returned
+		 * 
+		 * 
 		 */
 		if(taxAmount.compareTo(BigDecimal.ZERO) != 0){
 		TaxHeadEstimate roundOffEstimate = payService.roundOffDecimals(taxAmount, currentRoundOff);
@@ -525,8 +527,8 @@ public class DemandService {
 						.setTaxAmount(roundOffEstimate.getEstimateAmount());
 			}
 		}
-		}else {
-			if (!CollectionUtils.isEmpty(details.stream().filter(dtl -> dtl.getTaxHeadMasterCode().equals(PT_ROUNDOFF)).collect(Collectors.toList())))
+		}else if (currentRoundOff.compareTo(BigDecimal.ZERO) != 0 && !CollectionUtils.isEmpty(details.stream().filter(dtl -> dtl.getTaxHeadMasterCode().equals(PT_ROUNDOFF)).collect(Collectors.toList())))
+		{
 				utils.getLatestDemandDetailByTaxHead(PT_ROUNDOFF, details).getLatestDemandDetail()
 						.setTaxAmount(BigDecimal.ZERO);
 		}
