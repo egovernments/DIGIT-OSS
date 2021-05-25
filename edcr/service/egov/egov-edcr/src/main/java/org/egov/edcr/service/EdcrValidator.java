@@ -35,6 +35,8 @@ public class EdcrValidator {
         VALIDATION_NOT_REQUIRED_FIELDS.add("password");
         VALIDATION_NOT_REQUIRED_FIELDS.add("did");
         VALIDATION_NOT_REQUIRED_FIELDS.add("apiId");
+        VALIDATION_NOT_REQUIRED_FIELDS.add("action");
+        VALIDATION_NOT_REQUIRED_FIELDS.add("userName");
     }
 
     public ErrorDetail validate(final EdcrRequest edcr) {
@@ -119,6 +121,7 @@ public class EdcrValidator {
                         value = value.trim();
                         boolean isAllow = Pattern.matches(ALPHANUMERIC_WITH_SPECIAL_CHARS, value);
                         if (!isAllow) {
+                            LOG.info("The Inalid Value is" + value);
                             error.setErrorCode("EDCR-31");
                             error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
                             return error;
