@@ -525,8 +525,9 @@ public class DemandService {
 			}
 		}
 		}else {
-			utils.getLatestDemandDetailByTaxHead(PT_ROUNDOFF, details).getLatestDemandDetail()
-			.setTaxAmount(BigDecimal.ZERO);
+			if (null != details.stream().filter(dtl -> dtl.getTaxHeadMasterCode().equals(PT_ROUNDOFF)))
+				utils.getLatestDemandDetailByTaxHead(PT_ROUNDOFF, details).getLatestDemandDetail()
+						.setTaxAmount(BigDecimal.ZERO);
 		}
 
 	}
