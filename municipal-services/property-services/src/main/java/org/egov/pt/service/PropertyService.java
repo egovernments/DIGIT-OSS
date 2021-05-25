@@ -245,7 +245,7 @@ public class PropertyService {
 					skipPayment(request, state.getApplicationStatus(), state);
 				}
 
-				//propertyFromSearch.setStatus(Status.INACTIVE);
+				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
 
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
