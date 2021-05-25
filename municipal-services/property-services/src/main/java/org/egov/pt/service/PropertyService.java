@@ -222,15 +222,12 @@ public class PropertyService {
 		
 		// TODO FIX ME block property changes FIXME
 		//util.mergeAdditionalDetails(request, propertyFromSearch);
-		String feesPresent = calculatorService.checkApplicableFees(request.getRequestInfo(), request.getProperty());
-		System.out.println("--------- feesPresent = "+feesPresent);
+		
 		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
 				.build();
-		System.out.println("--------- request from propertyyyy which is old = "+oldPropertyRequest);
-		System.out.println("--------- request from propertyyyy which is new = "+request);
-		System.out.println("--------- request from propertyyyy from search  = "+propertyFromSearch);
+		
 		if (config.getIsMutationWorkflowEnabled()) {
 
 			State state = wfService.updateWorkflow(request, CreationReason.MUTATION);
@@ -240,6 +237,7 @@ public class PropertyService {
 			 * 
 			 * to create new entry for new Mutation
 			 */
+			
 			if (state.getIsStartState() == true
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
@@ -247,6 +245,13 @@ public class PropertyService {
 				if (Arrays.asList(config.getSkipPaymentStatuses().split(","))
 						.contains(state.getApplicationStatus())) {
 					skipPayment(request, state.getApplicationStatus(), state);
+				}
+				for (OwnerInfo info : propertyFromSearch.getOwners()) {
+					info.setStatus(Status.ACTIVE);
+				}
+				
+				for (OwnerInfo info : request.getProperty().getOwners()) {
+					info.setStatus(Status.INACTIVE);
 				}
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
@@ -258,6 +263,13 @@ public class PropertyService {
 
 			} else if (state.getIsTerminateState()
 					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
+				for (OwnerInfo info : propertyFromSearch.getOwners()) {
+					info.setStatus(Status.INACTIVE);
+				}
+				
+				for (OwnerInfo info : request.getProperty().getOwners()) {
+					info.setStatus(Status.ACTIVE);
+				}
 
 				terminateWorkflowAndReInstatePreviousRecord(request, propertyFromSearch);
 			} else {
