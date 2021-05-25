@@ -159,7 +159,7 @@ const callBackForApply = async (state, dispatch) => {
     "moduleName": "PT"
   },
     propertyPayload.owners.map(owner => {
-      owner.status = "INACTIVE";
+      owner.status = "ACTIVE";
 
     })
 
@@ -176,14 +176,14 @@ const callBackForApply = async (state, dispatch) => {
 
   if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
-      owner.status = "ACTIVE";
+      owner.status = "INACTIVE";
       owner.ownerType = 'NONE';
     })
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
   } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
-      owner.status = "ACTIVE";
+      owner.status = "INACTIVE";
       owner.ownerType = 'NONE';
     })
     propertyPayload.institution = null;
