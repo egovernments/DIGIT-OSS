@@ -222,11 +222,15 @@ public class PropertyService {
 		
 		// TODO FIX ME block property changes FIXME
 		//util.mergeAdditionalDetails(request, propertyFromSearch);
+		String feesPresent = calculatorService.checkApplicableFees(request.getRequestInfo(), request.getProperty());
+		System.out.println("--------- feesPresent = "+feesPresent);
 		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
 				.build();
-		
+		System.out.println("--------- request from propertyyyy which is old = "+oldPropertyRequest);
+		System.out.println("--------- request from propertyyyy which is new = "+request);
+		System.out.println("--------- request from propertyyyy from search  = "+propertyFromSearch);
 		if (config.getIsMutationWorkflowEnabled()) {
 
 			State state = wfService.updateWorkflow(request, CreationReason.MUTATION);
