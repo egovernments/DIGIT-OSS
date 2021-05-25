@@ -5,6 +5,7 @@ import set from "lodash/set";
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 
 const formConfig = {
   name: "ownerInfo",
@@ -75,7 +76,7 @@ const formConfig = {
         xs: 12,
         sm: 6
       },
-      dropDownData: [{ label: "Father", value: "FATHER" }, { label: "Husband", value: "HUSBAND" }],
+      dropDownData: [{ label: getLocaleLabels("Father's Name", "PT_ACK_LOCALIZATION_FATHERS_NAME"), value: "FATHER" }, { label: getLocaleLabels("Husband's Name", "PT_ACK_LOCALIZATION_HUSBAND_NAME"), value: "HUSBAND" }],
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       formName: "ownerInfo"
     },
@@ -116,7 +117,7 @@ const formConfig = {
             currAcc.push(dropDownData);
             return currAcc;
           }, []);
-
+        documentTypes && documentTypes.length > 0 && documentTypes.forEach(data => { data.label = getLocaleLabels(`PROPERTYTAX_OWNERTYPEDOCUMENT_${data.value}`, `PROPERTYTAX_OWNERTYPEDOCUMENT_${data.value}`) });
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "dropDownData", documentTypes));
         dispatch(handleFieldChange(formKey, "ownerCategoryIdType", get(documentTypes, "[0].value", "")));
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "value", get(documentTypes, "[0].value", "")));       
@@ -157,6 +158,7 @@ const formConfig = {
             currAcc.push(dropDownData);
             return currAcc;
           }, []);
+        documentTypes && documentTypes.length > 0 && documentTypes.forEach(data => { data.label = getLocaleLabels(`PROPERTYTAX_OWNERTYPEDOCUMENT_${data.value}`, `PROPERTYTAX_OWNERTYPEDOCUMENT_${data.value}`) });
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "dropDownData", documentTypes));
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "value", get(documentTypes, "[0].value", "")));
         if (propertyValue.length > 0) {
@@ -257,7 +259,8 @@ const formConfig = {
       // let financialYearFromQuery = window.location.search.split("FY=")[1];
       // financialYearFromQuery = financialYearFromQuery.split("&")[0];
       // const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes), financialYearFromQuery);
-      const dropdownData = getOwnerCategory(Object.values(OwnerTypes));
+      let dropdownData = getOwnerCategory(Object.values(OwnerTypes));
+      dropdownData && dropdownData.length > 0 && dropdownData.forEach(data => { data.label = getLocaleLabels(`COMMON_MASTERS_OWNERTYPE_${data.value}`, `COMMON_MASTERS_OWNERTYPE_${data.value}`) });
       set(action, "form.fields.ownerCategory.dropDownData", dropdownData);
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
       if (ownerShipType === "SINGLEOWNER") {
@@ -302,7 +305,7 @@ const formConfig = {
           currAcc.push(dropDownData);
           return currAcc;
         }, []);
-
+      documentTypes && documentTypes.length > 0 && documentTypes.forEach(data => { data.label = getLocaleLabels(`PROPERTYTAX_OWNERTYPEDOCUMENT_${data.value}`, `PROPERTYTAX_OWNERTYPEDOCUMENT_${data.value}`) });
       dispatch(setFieldProperty(action.form.name, "ownerCategoryIdType", "dropDownData", documentTypes));
       return action;
     } catch (e) {

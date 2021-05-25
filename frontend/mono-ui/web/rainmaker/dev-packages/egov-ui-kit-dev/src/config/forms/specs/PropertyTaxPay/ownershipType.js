@@ -4,6 +4,7 @@ import get from "lodash/get";
 import { updateInstituteType } from "./utils/formConfigModifier";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 
 const formConfig = {
   name: "ownershipType",
@@ -44,6 +45,7 @@ const formConfig = {
     const { dispatch } = store;
     const ownerDetails = getOwnerDetails(state);
     if(ownerDetails && ownerDetails.length){
+      ownerDetails && ownerDetails.length > 0 && ownerDetails.forEach(data => { data.label = getLocaleLabels(`PT_OWNERSHIP_${data.value}`, `PT_OWNERSHIP_${data.value}`) });
       const currentOwnershipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", ownerDetails[0].value);
       set(action, "form.fields.typeOfOwnership.dropDownData", ownerDetails);
       set(action, "form.fields.typeOfOwnership.value", currentOwnershipType);

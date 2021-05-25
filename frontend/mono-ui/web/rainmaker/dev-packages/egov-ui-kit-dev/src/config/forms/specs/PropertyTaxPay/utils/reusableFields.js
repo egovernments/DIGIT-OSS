@@ -10,6 +10,7 @@ import isEmpty from "lodash/isEmpty";
 import filter from "lodash/filter";
 import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 
 let floorDropDownData = [];
 
@@ -248,8 +249,10 @@ export const beforeInitForm = {
     const { Floor } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "SHAREDPROPERTY") {
+        let floorData = prepareDropDownData(Floor);
+        floorData && floorData.length > 0 && floorData.forEach(data => { data.label = getLocaleLabels(`PROPERTYTAX_FLOOR_${data.value}`, `PROPERTYTAX_FLOOR_${data.value}`) });
         set(action, "form.fields.floorName.hideField", false);
-        set(action, "form.fields.floorName.dropDownData", prepareDropDownData(Floor));
+        set(action, "form.fields.floorName.dropDownData", floorData);
       } else {
         set(action, "form.fields.floorName.hideField", true);
       }
@@ -324,7 +327,8 @@ export const beforeInitForm = {
           "usageCategorySubMinor"
         );
         const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
-        const subUsageData = sortDropdown(mergedMaster, "label", true);
+        let subUsageData = sortDropdown(mergedMaster, "label", true);
+        subUsageData.forEach(data => { data.label = getLocaleLabels(`PT_${data.value}`, `PROPERTYTAX_BILLING_SLAB_${data.value}`) });
         set(action, "form.fields.subUsageType.dropDownData", subUsageData);
         if (get(action, "form.fields.subUsageType.jsonPath") && skipMajorUpdate) {
           dispatch(
@@ -349,14 +353,17 @@ export const beforeInitForm = {
         var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
         var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
         set(action, "form.fields.usageType.disabled", false);
-        const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
+        let usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
+        usageTypeData.forEach(data => { data.label = getLocaleLabels(`PT_${data.value}`, `PROPERTYTAX_BILLING_SLAB_${data.value}`) });
         set(action, "form.fields.usageType.dropDownData", usageTypeData);
         unitFormUpdate(`common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`, false);
       } else {
         set(action, "form.fields.subUsageType.hideField", true);
       }
     }
-    set(action, "form.fields.occupancy.dropDownData", prepareDropDownData(occupancy));
+    let occupancyPrepareData = prepareDropDownData(occupancy);
+    occupancyPrepareData && occupancyPrepareData.length > 0 && occupancyPrepareData.forEach(data => { data.label = getLocaleLabels(`PROPERTYTAX_OCCUPANCYTYPE_${data.value}`, `PROPERTYTAX_OCCUPANCYTYPE_${data.value}`) });
+    set(action, "form.fields.occupancy.dropDownData", occupancyPrepareData);
     if (get(action, "form.fields.subUsageType.jsonPath") && usageCategoryMajor !== "MIXED") {
       dispatch(
         prepareFormData(
@@ -382,8 +389,10 @@ export const beforeInitFormForPlot = {
     const { Floor } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "SHAREDPROPERTY") {
+        let floorData = prepareDropDownData(Floor);
+        floorData && floorData.length > 0 && floorData.forEach(data => { data.label = getLocaleLabels(`PROPERTYTAX_FLOOR_${data.value}`, `PROPERTYTAX_FLOOR_${data.value}`) });
         set(action, "form.fields.floorName.hideField", false);
-        set(action, "form.fields.floorName.dropDownData", prepareDropDownData(Floor));
+        set(action, "form.fields.floorName.dropDownData", floorData);
       } else {
         set(action, "form.fields.floorName.hideField", true);
       }
@@ -408,7 +417,8 @@ export const beforeInitFormForPlot = {
             "usageCategorySubMinor"
           );
           const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategorySubMinor");
-          const subUsageData = sortDropdown(mergedMaster, "label", true);
+          let subUsageData = sortDropdown(mergedMaster, "label", true);
+          subUsageData.forEach(data => { data.label = getLocaleLabels(`PT_${data.value}`, `PROPERTYTAX_BILLING_SLAB_${data.value}`) });
           set(action, "form.fields.subUsageType.dropDownData", subUsageData);
           // set(
           //   action,
@@ -433,12 +443,15 @@ export const beforeInitFormForPlot = {
           var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
           var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
           set(action, "form.fields.usageType.disabled", false);
-          const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
+          let usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
+          usageTypeData.forEach(data => { data.label = getLocaleLabels(`PT_${data.value}`, `PROPERTYTAX_BILLING_SLAB_${data.value}`) });
           set(action, "form.fields.usageType.dropDownData", usageTypeData);
         }
         set(action, "form.fields.subUsageType.hideField", true);
       }
-      set(action, "form.fields.occupancy.dropDownData", prepareDropDownData(occupancy));
+      let occupancyPrepareData = prepareDropDownData(occupancy);
+      occupancyPrepareData && occupancyPrepareData.length > 0 && occupancyPrepareData.forEach(data => { data.label = getLocaleLabels(`PROPERTYTAX_OCCUPANCYTYPE_${data.value}`, `PROPERTYTAX_OCCUPANCYTYPE_${data.value}`) })
+      set(action, "form.fields.occupancy.dropDownData", occupancyPrepareData);
       if (get(action, "form.fields.subUsageType.jsonPath") && usageCategoryMajor !== "MIXED") {
         dispatch(
           prepareFormData(
