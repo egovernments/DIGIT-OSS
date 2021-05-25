@@ -204,10 +204,10 @@ class Footer extends React.Component {
    let currentDatetoEpoch = convertDateToEpoch(currentDate);
 
 
-    const downloadMenu =
+    let downloadMenu =
       contractData &&
       contractData.map(item => {
-        const { buttonLabel, moduleName } = item;
+        let { buttonLabel, moduleName } = item;
         return {
           labelName: { buttonLabel },
           labelKey: `WF_${moduleName.toUpperCase()}_${buttonLabel}`,
@@ -272,6 +272,7 @@ class Footer extends React.Component {
     
   }
 
+  downloadMenu = downloadMenu && downloadMenu.filter(m=>m.labelKey!=="WF_PT.MUTATION_SKIP_PAYMENT");
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",
