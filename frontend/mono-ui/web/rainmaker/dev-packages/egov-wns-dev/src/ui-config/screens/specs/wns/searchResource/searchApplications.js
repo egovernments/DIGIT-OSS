@@ -83,6 +83,10 @@ export const searchApplications = getCommonCard({
       moduleName: "egov-wns",
       componentPath: "AutosuggestContainer",
       jsonPath: "searchScreen.applicationType",
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "APPLICATION_TYPE"
+      },
       props: {
         className: "autocomplete-dropdown",
         style: {
@@ -101,7 +105,11 @@ export const searchApplications = getCommonCard({
         fullwidth: true,
         inputLabelProps: {
           shrink: true
-        }
+        },
+        localePrefix: {
+          moduleName: "WS",
+          masterName: "APPLICATION_TYPE"
+        },
       },
       required: false,
       gridDefination: { xs: 12, sm: 4 },

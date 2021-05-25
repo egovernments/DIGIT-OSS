@@ -93,6 +93,10 @@ export const commonRoadCuttingChargeInformation = () => {
         moduleName: "egov-wns",
         componentPath: "AutosuggestContainer",
         jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
+        localePrefix: {
+          moduleName: "WS",
+          masterName: "ROADTYPE"
+        },
         props: {
           className: "hr-generic-selectfield autocomplete-dropdown",
           label: { labelKey: "WS_ADDN_DETAIL_ROAD_TYPE", labelName: "Road Type" },
@@ -102,6 +106,10 @@ export const commonRoadCuttingChargeInformation = () => {
           labelsFromLocalisation: true,
           jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
           sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",
+          localePrefix: {
+            moduleName: "WS",
+            masterName: "ROADTYPE"
+          }
         },
         required: false,
         gridDefination: {
@@ -144,6 +152,10 @@ export const additionDetails = getCommonCard({
         moduleName: "egov-wns",
         componentPath: "AutosuggestContainer",
         jsonPath: "applyScreen.connectionType",
+        localePrefix: {
+          moduleName: "WS",
+          masterName: "CONNECTIONTYPE"
+        },
         props: {
           className: "hr-generic-selectfield autocomplete-dropdown",
           label: { labelKey: "WS_SERV_DETAIL_CONN_TYPE", labelName: "Connection type" },
@@ -153,6 +165,10 @@ export const additionDetails = getCommonCard({
           labelsFromLocalisation: true,
           jsonPath: "applyScreen.connectionType",
           sourceJsonPath: "applyScreenMdmsData.ws-services-masters.connectionType",
+          localePrefix: {
+            moduleName: "WS",
+            masterName: "CONNECTIONTYPE"
+          }
         },
         required: false,
         gridDefination: { xs: 12, sm: 6 },

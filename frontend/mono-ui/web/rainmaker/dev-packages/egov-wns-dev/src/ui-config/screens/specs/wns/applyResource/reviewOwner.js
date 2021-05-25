@@ -48,6 +48,10 @@ export const reviewConnectionType = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "applyScreen.connectionType",
+    localePrefix: {
+      moduleName: "WS_SERVICES_MASTERS",
+      masterName: "WATERSOURCE"
+    },
     callBack: handleNA
   },
   {
@@ -55,6 +59,10 @@ export const reviewConnectionType = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "applyScreenOld.connectionType",
+    localePrefix: {
+      moduleName: "WS_SERVICES_MASTERS",
+      masterName: "WATERSOURCE"
+    },
     callBack: handleNA
   }
 );
@@ -82,6 +90,10 @@ export const reviewWaterSource = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "WaterConnection[0].waterSource",
+    localePrefix: {
+      moduleName: "WS_SERVICES_MASTERS",
+      masterName: "WATERSOURCE"
+    },
     callBack: handleNA
   },
   {

@@ -32,7 +32,11 @@ export const connType = getLabelWithValue(
         labelKey: "WS_SERV_DETAIL_CONN_TYPE"
     },
     {
-        jsonPath: "WaterConnection[0].connectionType"
+        jsonPath: "WaterConnection[0].connectionType",
+        localePrefix: {
+            moduleName: "WS_SERVICES_MASTERS",
+            masterName: "WATERSOURCE"
+          },
     }
 );
 

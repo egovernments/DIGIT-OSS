@@ -483,6 +483,10 @@ export const specialApplicantCategory = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "applyScreen.property.owners[0].ownerType",
+    localePrefix: {
+      moduleName: "COMMON_MASTERS",
+      masterName: "OWNERTYPE"
+    },
     callBack: handleNA
   },
   {
@@ -595,6 +599,10 @@ const propertyOwnerDetails = () => {
             },
             {
               jsonPath: "applyScreen.property.owners[0].ownerType",
+              localePrefix: {
+                moduleName: "COMMON_MASTERS",
+                masterName: "OWNERTYPE"
+              },
               callBack: handleNA
             }
           )
@@ -620,6 +628,10 @@ export const taskApplicationType = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "applyScreen.service",
+    localePrefix: {
+      moduleName: "WS",
+      masterName: "APPLY"
+    },
     callBack: handleNA
   },
   {
@@ -627,6 +639,10 @@ export const taskApplicationType = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "applyScreenOld.service",
+    localePrefix: {
+      moduleName: "WS",
+      masterName: "APPLY"
+    },
     callBack: handleNA
   },
 );

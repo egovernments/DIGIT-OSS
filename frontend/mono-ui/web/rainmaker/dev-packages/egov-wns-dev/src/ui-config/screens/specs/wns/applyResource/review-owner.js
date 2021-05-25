@@ -298,12 +298,20 @@ export const connectionWater={
     },
     {
       jsonPath: "WaterConnection[0].connectionType",
+      localePrefix: {
+        moduleName: "WS_SERVICES_MASTERS",
+        masterName: "WATERSOURCE"
+      },
       callBack: handleNA
     }, {
       labelKey: "WS_OLD_LABEL_NAME"
     },
     {
       jsonPath: "WaterConnectionOld[0].connectionType",
+      localePrefix: {
+        moduleName: "WS_SERVICES_MASTERS",
+        masterName: "WATERSOURCE"
+      },
       callBack: handleNA
     }
   ),
@@ -330,6 +338,10 @@ export const connectionWater={
     },
     {
       jsonPath: "WaterConnection[0].waterSource",
+      localePrefix: {
+        moduleName: "WS_SERVICES_MASTERS",
+        masterName: "WATERSOURCE"
+      },
       callBack: handleNA
     }, {
       labelKey: "WS_OLD_LABEL_NAME"
@@ -383,11 +395,19 @@ export const connectionSewerage={
     },
     {
       jsonPath: "WaterConnection[0].connectionType",
+      localePrefix: {
+        moduleName: "WS_SERVICES_MASTERS",
+        masterName: "WATERSOURCE"
+      },
       callBack: handleNA
     }, {
       labelKey: "WS_OLD_LABEL_NAME"
     }, {
       jsonPath: "WaterConnectionOld[0].connectionType",
+      localePrefix: {
+        moduleName: "WS_SERVICES_MASTERS",
+        masterName: "WATERSOURCE"
+      },
       callBack: handleNA
     }
   ),

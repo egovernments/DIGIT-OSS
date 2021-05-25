@@ -68,10 +68,18 @@ export const getConnectionDetails = () => {
         },
         {
             jsonPath: "WaterConnection[0].service",
+            localePrefix: {
+                moduleName: "WS",
+                masterName: "APPLY"
+              },
         },  {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "WaterConnectionOld[0].service" }),
+          { jsonPath: "WaterConnectionOld[0].service",
+          localePrefix: {
+            moduleName: "WS",
+            masterName: "APPLY"
+          }, }),
     
      taskNumberOfTapsPropsed : getLabelWithValueForModifiedLabel(
         {
@@ -103,10 +111,18 @@ export const getConnectionDetails = () => {
         },
         {
             jsonPath: "WaterConnection[0].service",
+            localePrefix: {
+                moduleName: "WS",
+                masterName: "APPLY"
+              },
         },  {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "WaterConnectionOld[0].service" }),
+          { jsonPath: "WaterConnectionOld[0].service",
+          localePrefix: {
+            moduleName: "WS",
+            masterName: "APPLY"
+          }, }),
     taskNoOfClosets : getLabelWithValueForModifiedLabel(
         {
             labelName:"No of closets proposed",

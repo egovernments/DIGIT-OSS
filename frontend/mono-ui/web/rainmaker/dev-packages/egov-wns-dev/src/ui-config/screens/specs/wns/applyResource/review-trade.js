@@ -450,11 +450,15 @@ export const propertyOwnerDetail={
    },
    {
      jsonPath: "WaterConnection[0].property.owners[0].ownerType",
+     localePrefix: {
+      moduleName: "COMMON_MASTERS",
+      masterName: "OWNERTYPE"
+    },
      callBack: handleNA
    },  {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].ownerType", callBack: handleNA },)
+  { jsonPath: "WaterConnectionOld[0].property.owners[0].ownerType",localePrefix: { moduleName: "COMMON_MASTERS",masterName: "OWNERTYPE"}, callBack: handleNA },)
 }
 
 const ownerDetails = {
