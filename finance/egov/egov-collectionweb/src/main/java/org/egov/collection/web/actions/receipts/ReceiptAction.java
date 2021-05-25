@@ -116,6 +116,7 @@ import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.BillDetail;
 import org.egov.infra.microservice.models.BillDetailAdditional;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.BusinessService;
@@ -1140,8 +1141,8 @@ public class ReceiptAction extends BaseFormAction {
         receiptlist.stream().forEach(receipt -> {
 
             receipt.getBill().forEach(bill -> {
-		BigDecimal totalAmountPaid = BigDecimal.ZERO;
-                bill.getBillDetails().forEach(billDetail -> {
+            	BigDecimal totalAmountPaid = BigDecimal.ZERO;
+                for (BillDetail billDetail : bill.getBillDetails()) {
                     ReceiptHeader header = new ReceiptHeader();
                     receiptHeader.setReceiptnumber(billDetail.getReceiptNumber());
                     receiptHeader.setReceiptdate(new Date(billDetail.getReceiptDate()));
@@ -1152,7 +1153,8 @@ public class ReceiptAction extends BaseFormAction {
                     receiptHeader.setPaidBy(bill.getPaidBy());
                     receiptHeader.setPayeeName(bill.getPayerName());
                     receiptHeader.setPayeeAddress(bill.getPayerAddress());
-                    receiptHeader.setTotalAmount(totalAmountPaid.add(billDetail.getAmountPaid()));
+                    totalAmountPaid = totalAmountPaid.add(billDetail.getAmountPaid());
+                    receiptHeader.setTotalAmount(totalAmountPaid);
                     receiptHeader.setCurretnStatus(billDetail.getStatus());
                     receiptHeader.setCurrentreceipttype(billDetail.getReceiptType());
                     receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
@@ -1275,7 +1277,7 @@ public class ReceiptAction extends BaseFormAction {
                     // receiptHeaderList.add(receiptHeader);
                     receipts[0] = receiptHeader;
 
-                });
+                };
             });
 
         });
