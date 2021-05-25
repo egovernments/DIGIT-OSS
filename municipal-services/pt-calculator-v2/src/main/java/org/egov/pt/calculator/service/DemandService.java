@@ -497,7 +497,7 @@ public class DemandService {
 		String demandId = demand.getId();
 
 		BigDecimal taxAmount = BigDecimal.ZERO;
-		BigDecimal currentRoundOff = BigDecimal.ZERO;
+		BigDecimal currentRoundOff = null;
 
 		for (DemandDetail detail : demand.getDemandDetails()) {
 
@@ -527,7 +527,7 @@ public class DemandService {
 						.setTaxAmount(roundOffEstimate.getEstimateAmount());
 			}
 		}
-		}else if (currentRoundOff.compareTo(BigDecimal.ZERO) != 0 && !CollectionUtils.isEmpty(details.stream().filter(dtl -> dtl.getTaxHeadMasterCode().equals(PT_ROUNDOFF)).collect(Collectors.toList())))
+		}else if (currentRoundOff != null && currentRoundOff.compareTo(BigDecimal.ZERO) != 0 && !CollectionUtils.isEmpty(details.stream().filter(dtl -> dtl.getTaxHeadMasterCode().equals(PT_ROUNDOFF)).collect(Collectors.toList())))
 		{
 				utils.getLatestDemandDetailByTaxHead(PT_ROUNDOFF, details).getLatestDemandDetail()
 						.setTaxAmount(BigDecimal.ZERO);
