@@ -222,7 +222,6 @@ public class PropertyService {
 		
 		// TODO FIX ME block property changes FIXME
 		//util.mergeAdditionalDetails(request, propertyFromSearch);
-		
 		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
@@ -237,7 +236,6 @@ public class PropertyService {
 			 * 
 			 * to create new entry for new Mutation
 			 */
-			
 			if (state.getIsStartState() == true
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
@@ -246,15 +244,8 @@ public class PropertyService {
 						.contains(state.getApplicationStatus())) {
 					skipPayment(request, state.getApplicationStatus(), state);
 				}
-				for (OwnerInfo info : propertyFromSearch.getOwners()) {
-					info.setStatus(Status.ACTIVE);
-				}
-				
-				for (OwnerInfo info : request.getProperty().getOwners()) {
-					info.setStatus(Status.INACTIVE);
-				}
 
-				//propertyFromSearch.setStatus(Status.INACTIVE);
+				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
 
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
@@ -263,14 +254,6 @@ public class PropertyService {
 
 			} else if (state.getIsTerminateState()
 					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
-				for (OwnerInfo info : propertyFromSearch.getOwners()) {
-					info.setStatus(Status.INACTIVE);
-				}
-				
-				for (OwnerInfo info : request.getProperty().getOwners()) {
-					info.setStatus(Status.ACTIVE);
-				}
-				propertyFromSearch.setStatus(Status.INACTIVE);
 
 				terminateWorkflowAndReInstatePreviousRecord(request, propertyFromSearch);
 			} else {
