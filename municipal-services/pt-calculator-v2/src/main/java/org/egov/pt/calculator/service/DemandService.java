@@ -497,7 +497,7 @@ public class DemandService {
 		String demandId = demand.getId();
 
 		BigDecimal taxAmount = BigDecimal.ZERO;
-		BigDecimal currentRoundOff = null;
+		BigDecimal currentRoundOff = BigDecimal.ZERO;
 
 		for (DemandDetail detail : demand.getDemandDetails()) {
 
