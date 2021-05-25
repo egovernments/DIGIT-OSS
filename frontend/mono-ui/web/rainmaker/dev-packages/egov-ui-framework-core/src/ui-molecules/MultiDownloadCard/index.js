@@ -41,6 +41,7 @@ function MultiCardDownloadGrid(props) {
   return (
     <Grid container {...rest}>
       {data && data.length && data.map((item, key) => {
+         let linkText=`CS_${item.linkText&&item.linkText.toUpperCase()||'NA'}`;
         return (
           <Grid
             item
@@ -66,7 +67,11 @@ function MultiCardDownloadGrid(props) {
               </Grid>
               <Grid xs={6} align="right">
                 <Button target="_blank" href={item.link} color="primary" rel="noopener noreferrer">
-                  {item.linkText}
+                 
+                  <LabelContainer
+                labelName={linkText}
+                labelKey={linkText}
+              />
                 </Button>
               </Grid>
             </Grid>

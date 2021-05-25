@@ -5,6 +5,7 @@ import get from "lodash/get";
 import React from "react";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { validateFields } from "../utils/index";
+import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch, 0)
@@ -121,8 +122,8 @@ const getAddress = (item) => {
   let doorNo = item.address.doorNo != null ? (item.address.doorNo + ",") : '';
   let buildingName = item.address.buildingName != null ? (item.address.buildingName + ",") : '';
   let street = item.address.street != null ? (item.address.street + ",") : '';
-  let mohalla = item.address.locality.name ? (item.address.locality.name + ",") : '';
-  let city = item.address.city != null ? (item.address.city) : '';
+  let mohalla = item.address.locality.name ? (getLocaleLabels("NA", `${getTransformedLocale(item.tenantId)}_REVENUE_${item.address.locality.code}`) + ",") : '';
+  let city = item.tenantId != null ? (getLocaleLabels("NA", `TENANT_TENANTS_${getTransformedLocale(item.tenantId)}`)) : '';
   return (doorNo + buildingName + street + mohalla + city);
 }
 

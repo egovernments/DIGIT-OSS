@@ -1,21 +1,21 @@
-import { compose } from "recompose";
 import { Button } from "components";
-import { withRouter } from "react-router-dom";
+import { downloadReceipt } from "egov-ui-kit/redux/properties/actions";
+import Label from "egov-ui-kit/utils/translationNode";
+import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Label from "egov-ui-kit/utils/translationNode";
-import HistoryCard from "../../../../../Property/components/HistoryCard";
+import { withRouter } from "react-router-dom";
+import { compose } from "recompose";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
+import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFullRow } from "../AssessmentHistory";
-import { downloadReceipt } from "egov-ui-kit/redux/properties/actions";
-import get from "lodash/get";
 class PaymentHistory extends Component {
     constructor(props) {
         super(props);
         this.state = {
             items: [],
             showItems: false,
-            errorMessage:"PT_PAYMENT_HISTORY_ERROR"
+            errorMessage: "PT_PAYMENT_HISTORY_ERROR"
         };
     }
     getBillPeriod(billDetails = []) {
@@ -41,14 +41,14 @@ class PaymentHistory extends Component {
             outline: "none",
             alignItems: "right",
         };
-        const { Payments = [] ,downloadReceipt} = this.props;
+        const { Payments = [], downloadReceipt } = this.props;
         const paymentHistoryItems = Payments.map((payment, index) => {
-            const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
+            const amount = payment.totalAmountPaid == 0 ? '0' : payment.totalAmountPaid;
             return (
                 <div>
                     {getFullRow("PT_HISTORY_RECEIPT_NO", payment.paymentDetails[0].receiptNumber ? '' + payment.paymentDetails[0].receiptNumber : "NA", 12)}
-                    {getFullRow("PT_HISTORY_AMOUNT_PAID", amount ? 'Rs ' + amount : "NA", 12)}
-                    {getFullRow("PT_HISTORY_PAYMENT_STATUS", payment.paymentStatus ? payment.paymentStatus  : "NA", 12)}
+                    {getFullRow("PT_HISTORY_AMOUNT_PAID", amount ? 'Rs ' + amount : "PT_NA", 12)}
+                    {getFullRow("PT_HISTORY_PAYMENT_STATUS", payment.paymentStatus ? `CS_${payment.paymentStatus}` : "PT_NA", 12)}
                     {getFullRow("PT_HISTORY_PAYMENT_DATE", payment.transactionDate ? getFormattedDate(payment.transactionDate) : "NA", 12)}
                     {getFullRow("PT_HISTORY_BILL_NO", payment.paymentDetails[0].bill.billNumber ? '' + payment.paymentDetails[0].bill.billNumber : "NA", 12)}
                     {getFullRow("PT_HISTORY_BILL_PERIOD", this.getBillPeriod(payment.paymentDetails[0].bill.billDetails), 6)}
@@ -58,11 +58,11 @@ class PaymentHistory extends Component {
                                 label={<Label buttonLabel={true} label="PT_DOWNLOAD_RECEIPT" color="rgb(254, 122, 81)" fontSize="16px" height="35px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
-                                    const receiptQueryString= [
-                                            { key: "consumerCode", value: get(payment,'paymentDetails[0].bill.consumerCode') },
-                                            { key: "tenantId", value: payment.paymentDetails[0].tenantId },
-                                            { key: "bussinessService", value: 'PT' }
-                                          ]
+                                    const receiptQueryString = [
+                                        { key: "consumerCode", value: get(payment, 'paymentDetails[0].bill.consumerCode') },
+                                        { key: "tenantId", value: payment.paymentDetails[0].tenantId },
+                                        { key: "bussinessService", value: 'PT' }
+                                    ]
                                     downloadReceipt(receiptQueryString)
                                     // lastElement.onClick();
                                 }}
@@ -84,7 +84,7 @@ class PaymentHistory extends Component {
             paymentHistoryItem = this.getTransformedPaymentHistory();
         }
         const items = this.state.showItems ? this.state.items : [];
-        const errorMessage = this.state.showItems&&items.length==0 ? this.state.errorMessage : '';
+        const errorMessage = this.state.showItems && items.length == 0 ? this.state.errorMessage : '';
         return (<HistoryCard header={'PT_PAYMENT_HISTORY'} items={items} errorMessage={errorMessage} onHeaderClick={() => {
             console.log("clicked");
             this.setState({ showItems: !this.state.showItems, items: paymentHistoryItem })
@@ -107,9 +107,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-     downloadReceipt: (receiptQueryString) => dispatch(downloadReceipt(receiptQueryString)),
+        downloadReceipt: (receiptQueryString) => dispatch(downloadReceipt(receiptQueryString)),
     };
-  };
+};
 //   [
 //     { key: "consumerCodes", value: decodeURIComponent(this.props.match.params.propertyId) },
 //     { key: "tenantId", value: this.props.match.params.tenantId }

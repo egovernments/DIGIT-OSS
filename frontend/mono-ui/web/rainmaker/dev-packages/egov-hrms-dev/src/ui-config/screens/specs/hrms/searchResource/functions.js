@@ -2,6 +2,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import get from "lodash/get";
@@ -91,7 +92,7 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getSearchResults(queryObject.filter(query=>query.key!='ulb'), dispatch);
+    let response = await getSearchResults(queryObject.filter(query => query.key != 'ulb'), dispatch);
     try {
       let data = response.Employees.map(item => {
         // GET ALL CURRENT DESIGNATIONS OF EMPLOYEE
@@ -100,7 +101,7 @@ export const searchApiCall = async (state, dispatch) => {
             return assignment.isCurrentAssignment;
           })
           .map(assignment => {
-            return assignment.designation;
+            return getLocaleLabels("NA", `COMMON_MASTERS_DESIGNATION_${assignment.designation}`);
           });
 
         // GET ALL CURRENT DEPARTMENTS OF EMPLOYEE
@@ -109,20 +110,22 @@ export const searchApiCall = async (state, dispatch) => {
             return assignment.isCurrentAssignment;
           })
           .map(assignment => {
-            return assignment.department;
+            return getLocaleLabels("NA", `COMMON_MASTERS_DEPARTMENT_${assignment.department}`);
           });
-let role=get(item, "user.roles", []).map(role => {
-  return ` ${role.name}`;
-}).join();
+        let role = get(item, "user.roles", []).map(role => {
+
+
+          return ` ${getLocaleLabels("NA", `ACCESSCONTROL_ROLES_ROLES_${getTransformedLocale(role.code)}`)}`;
+        }).join();
         return {
           ["HR_COMMON_TABLE_COL_EMP_ID"]: get(item, "code", "-") || "-",
           ["HR_COMMON_TABLE_COL_NAME"]: get(item, "user.name", "-") || "-",
           ["HR_COMMON_TABLE_COL_ROLE"]:
-            get(item, "user.roles", false)?role&&role.length<50?role:`${role.slice(0,50)}...`: "-",
+            get(item, "user.roles", false) ? role && role.length < 50 ? role : `${role.slice(0, 50)}...` : "-",
           ["HR_COMMON_TABLE_COL_DESG"]:
-            getDesigName(state, currentDesignations) || "-",
+            currentDesignations && currentDesignations.length && currentDesignations.join && currentDesignations.join(',') || "-",
           ["HR_COMMON_TABLE_COL_DEPT"]:
-            getDeptName(state, currentDepartments) || "-",
+            currentDepartments && currentDepartments.length && currentDepartments.join && currentDepartments.join(',') || "-",
           ["HR_COMMON_TABLE_COL_STATUS"]:
             get(item, "isActive", false) ? "ACTIVE" : "INACTIVE" || "-",
           ["HR_COMMON_TABLE_COL_TENANT_ID"]: get(item, "tenantId", "-")
