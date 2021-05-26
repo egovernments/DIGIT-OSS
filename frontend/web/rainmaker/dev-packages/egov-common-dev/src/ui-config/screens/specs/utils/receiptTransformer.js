@@ -68,7 +68,7 @@ export const loadUlbLogo = tenantid => {
     );
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  img.src = `/ukd-egov-assets/${tenantid}/logo.png`;
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {

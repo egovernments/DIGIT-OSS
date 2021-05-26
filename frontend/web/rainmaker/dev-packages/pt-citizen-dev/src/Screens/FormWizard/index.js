@@ -378,7 +378,7 @@ class FormWizard extends Component {
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
       if (selected > 2) {
         const { tenantId: id } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];
-        let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
+        let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/${id}/logo.png`;
         this.convertImgToDataURLviaCanvas(
           receiptImageUrl,
           function (data) {

@@ -312,7 +312,7 @@ class HowItWorks extends Component {
         <div className="col-sm-12" style={{ padding: "15px 0px 30px 0px" }}>
           <a
             href={
-              "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb/PT_User_Manual_Citizen.pdf"
+              "https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/pb/PT_User_Manual_Citizen.pdf"
             }
             target="_blank"
           >
