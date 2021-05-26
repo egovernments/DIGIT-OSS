@@ -265,6 +265,7 @@ public class PropertyService {
 				/*
 				 * If property is In Workflow then continue
 				 */
+				System.out.println("~~~~~~~~~~~~ Updating property in else ~~~~~~~~~~~ ");
 				producer.push(config.getUpdatePropertyTopic(), request);
 			}
 
@@ -402,7 +403,11 @@ public class PropertyService {
 			property.setWorkflow(workflow);
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(propertyRequest.getRequestInfo(),
 					Collections.singletonList(workflow));
-			 wfService.callWorkFlow(workflowRequest);
+			wfService.callWorkFlow(workflowRequest);
+			System.out.println("~~~~~~~~~ Payment skipped ~~~~~~~~~~");
+			//Activate the property while skipping payment after approval
+			if("APPROVED".equalsIgnoreCase(currentState)) 
+				propertyRequest.getProperty().setStatus(Status.ACTIVE);
 		}
 	}
     
