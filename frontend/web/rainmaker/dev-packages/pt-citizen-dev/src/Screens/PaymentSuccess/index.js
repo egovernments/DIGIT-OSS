@@ -156,7 +156,7 @@ class PaymentSuccess extends Component {
   };
 
   createImageUrl = tenantId => {
-    return `https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/${tenantId}/logo.png`;
+    return `https://s3.ap-south-1.amazonaws.com/ukd-assets/${tenantId}/logo.png`;
   };
 
   render() {

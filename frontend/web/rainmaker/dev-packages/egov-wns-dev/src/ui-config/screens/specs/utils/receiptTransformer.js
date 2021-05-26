@@ -66,7 +66,7 @@ export const loadUlbLogo = tenantid => {
     store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
-  img.src = `/ukd-egov-assets/${tenantid}/logo.png`;
+  img.src = `/ukd-assets/${tenantid}/logo.png`;
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
