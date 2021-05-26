@@ -24,6 +24,7 @@ import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import PropertyInformation from "./components/PropertyInformation";
 import "./index.css";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 
 const innerDivStyle = {
   padding: "0",
@@ -466,9 +467,9 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
             value: generalMDMSDataById
               ? propertyDetails.propertySubType
                 ? generalMDMSDataById["PropertySubType"] && generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType]
-                  ? get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.name`, "NA") : 'NA'
+                  ? getLocaleLabels(`PROPERTYTAX_BILLING_SLAB_${get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.code`, "NA")}`, `PROPERTYTAX_BILLING_SLAB_${get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.code`, "NA")}`) : 'NA'
                 : generalMDMSDataById["PropertyType"] && generalMDMSDataById["PropertyType"][propertyDetails.propertyType]
-                  ? get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.name`, "NA") : "NA" : "NA"
+                  ? getLocaleLabels(`PROPERTYTAX_BILLING_SLAB_${get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.code`, "NA")}`, `PROPERTYTAX_BILLING_SLAB_${get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.code`, "NA")}`) : "NA" : "NA"
           },
           {
             key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
@@ -549,7 +550,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                       institution.type &&
                       generalMDMSDataById &&
                       generalMDMSDataById["SubOwnerShipCategory"] &&
-                      generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
+                      getLocaleLabels(generalMDMSDataById["SubOwnerShipCategory"][institution.type].name, generalMDMSDataById["SubOwnerShipCategory"][institution.type].name)) ||
                     "NA",
                 }
                 : {

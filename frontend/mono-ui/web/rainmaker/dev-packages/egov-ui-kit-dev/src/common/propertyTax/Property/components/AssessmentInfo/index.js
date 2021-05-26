@@ -5,6 +5,8 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import React from "react";
 import PropertyInfoCard from "../PropertyInfoCard";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
+
 
 const checkNA = (val = '') => {
   return val != null && val ? `${val}` : 'NA';
@@ -42,9 +44,9 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 
 export const getBuildingTypeInfo = (generalMDMSDataById, propertyDetails) => {
   if (!generalMDMSDataById) {
-    return propertyDetails.propertySubType ? propertyDetails.propertySubType : propertyDetails.propertyType ? propertyDetails.propertyType : 'NA';
+    return propertyDetails.propertySubType ? propertyDetails.propertySubType : propertyDetails.propertyType ? getLocaleLabels(`PROPERTYTAX_BILLING_SLAB_${propertyDetails.propertyType}`, `PROPERTYTAX_BILLING_SLAB_${propertyDetails.propertyType}`) : getLocaleLabels('NA','NA');
   } else {
-    return get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.name`, get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.name`, "NA"))
+    return getLocaleLabels(`PROPERTYTAX_BILLING_SLAB_${get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.code`, get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.code`, "NA"))}`, `PROPERTYTAX_BILLING_SLAB_${get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.code`, get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.code`, "NA"))}`)
   }
 }
 

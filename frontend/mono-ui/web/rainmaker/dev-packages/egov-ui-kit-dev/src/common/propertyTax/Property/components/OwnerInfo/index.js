@@ -20,6 +20,7 @@ import PropertyInfoCard from "../PropertyInfoCard";
 import TransferOwnerShipDialog from "../TransferOwnerShipDialog";
 import ViewHistoryDialog from "../ViewHistory";
 import "./index.css";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 
@@ -53,13 +54,14 @@ export const getOwnershipTypeInfoCategory = (ownershipCategory, subOwnershipCate
   return subOwnershipCategory? getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${subOwnershipCategory}`,localizationLabelsData) : getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`,localizationLabelsData);
 }
 
-export const getOwnershipInfoUserCategory = (owner, generalMDMSDataById) => {
+export const getOwnershipInfoUserCategory = (owner, generalMDMSDataById, localizationLabelsData) => {
   return (owner &&
     owner.ownerType &&
     generalMDMSDataById &&
     generalMDMSDataById["OwnerType"] &&
     generalMDMSDataById["OwnerType"][owner.ownerType] &&
-    generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
+    // generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
+    getLocaleLabels(`COMMON_MASTERS_OWNERTYPE_${generalMDMSDataById["OwnerType"][owner.ownerType].code}`, `COMMON_MASTERS_OWNERTYPE_${generalMDMSDataById["OwnerType"][owner.ownerType].code}`)) ||
   "NA";
 }
 
@@ -111,8 +113,8 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_GENDER", localizationLabelsData),
-              value: owner.gender || "NA",
-              oldValue: oldPropertydetails && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners) && oldPropertydetails.owners[index].gender,
+              value: getLocaleLabels(`PT_FORM3_${owner.gender.toUpperCase()}`, `PT_FORM3_${owner.gender.toUpperCase()}`) || getLocaleLabels("NA", "NA"),
+              oldValue: oldPropertydetails && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners) && getLocaleLabels(`PT_FORM3_${oldPropertydetails.owners[index].gender.toUpperCase()}`, `PT_FORM3_${oldPropertydetails.owners[index].gender.toUpperCase()}`),
               jsonPath:'gender'
             },
           isInstitution
@@ -151,8 +153,8 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_USER_CATEGORY", localizationLabelsData),
-              value: getOwnershipInfoUserCategory(owner, generalMDMSDataById),
-              oldValue: oldPropertydetails&& oldPropertydetails.owners&& Array.isArray( oldPropertydetails.owners) && getOwnershipInfoUserCategory(oldPropertydetails.owners[index], generalMDMSDataById)
+              value: getOwnershipInfoUserCategory(owner, generalMDMSDataById, localizationLabelsData),
+              oldValue: oldPropertydetails&& oldPropertydetails.owners&& Array.isArray( oldPropertydetails.owners) && getOwnershipInfoUserCategory(oldPropertydetails.owners[index], generalMDMSDataById, localizationLabelsData)
             },
           isInstitution
             ? {
