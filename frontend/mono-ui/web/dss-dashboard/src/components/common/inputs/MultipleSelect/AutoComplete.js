@@ -16,6 +16,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import variables from '../../../../styles/variables';
 import { isMobile } from 'react-device-detect';
 import Chip from '@material-ui/core/Chip';
+import { getLocaleLabels } from '../../../../utils/commons';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" style={{ color: 'grey' }} />;
@@ -27,36 +28,46 @@ const theme = createMuiTheme({
             useNextVariants: true,
             fontFamily: variables.primaryFont
         },
-        MuiAutocomplete:{            
-            option:{
-                fontSize:'0.8rem'
+        MuiAutocomplete: {
+            option: {
+                fontSize: '0.8rem'
             },
             popupIndicator: {
-                float:'right'
+                float: 'right'
             },
-            inputRoot:{
-                paddingRight:'0px !important', 
-                minWidth:'180px',               
-                '@media (min-width: 1367px)':{                       
-                    minWidth:'180px !important',
-                    maxWidth:'180px !important'                    
+            inputRoot: {
+                paddingRight: '0px !important',
+                minWidth: '180px',
+                '@media (min-width: 1367px)': {
+                    minWidth: '180px !important',
+                    maxWidth: '180px !important'
                 },
-                '@media (min-width: 1026px) and (max-width:1300px)':{                     
-                    minWidth:'150px !important',
-                    maxWidth:'150px !important'                    
+                '@media (min-width: 1026px) and (max-width:1300px)': {
+                    minWidth: '150px !important',
+                    maxWidth: '150px !important'
                 }
             },
-            endAdornment:{
-                bottom:'0px !important',
+            endAdornment: {
+                bottom: '0px !important',
                 top: 'initial !important'
             },
-            clearIndicator:{
-                display:'none !important'
+            clearIndicator: {
+                display: 'none !important'
             }
         }
 
     }
 });
+
+const localaliseTenant = ((tenant, type) => {
+    let prefix = 'DSS_'
+    if (type == "DDRS") {
+        prefix = `TENANT_TENANTS_PB_`
+    } else if (type == "ULBS") {
+        prefix = `TENANT_TENANTS_PB_`
+    }
+    return getLocaleLabels(`${prefix}${tenant.toUpperCase()}`);
+})
 
 class CheckboxesTags extends React.Component {
     constructor(props) {
@@ -70,14 +81,14 @@ class CheckboxesTags extends React.Component {
         };
     }
 
-    componentDidUpdate(prevProps){
-        if(prevProps.item !== this.props.item && this.props.item){
+    componentDidUpdate(prevProps) {
+        if (prevProps.item !== this.props.item && this.props.item) {
             this.setState({
                 localItems: this.props.item
             })
         }
 
-        if((prevProps.item !== this.props.item)  && Array.isArray(this.props.item) && this.props.item.length <= 0) {
+        if ((prevProps.item !== this.props.item) && Array.isArray(this.props.item) && this.props.item.length <= 0) {
             this.setState({
                 label: "All " + this.props.target,
             })
@@ -130,7 +141,7 @@ class CheckboxesTags extends React.Component {
 
                 <div className={classes.root}>
 
-                    <FormControl className={classes.formControl} style={isMobile?{width:"100%"}:{}} >
+                    <FormControl className={classes.formControl} style={isMobile ? { width: "100%" } : {}} >
                         {/* <InputLabel htmlFor="select-multiple-checkbox">{label || 'Select'}</InputLabel> */}
                         <div className={classes.list}>
                             {/* <div>
@@ -139,97 +150,98 @@ class CheckboxesTags extends React.Component {
                                 </SVG>
                             </div> */}
 
+
                             {
                                 this.props.type === 'Wards' ? <Autocomplete
-                                onChange={this.handleChange.bind(this)}
-                                style={isMobile?{width:"100%",margin:"-6"}:''}
-                                multiple
-                                id="checkboxes-tags-demo"
-                                options={this.state.localItems.sort()}
-                                disableCloseOnSelect
-                                getOptionLabel={option => option}
-                                defaultValue = {this.props.defaultValue ? this.props.defaultValue : []}
-                                value = {this.props.defaultValue ? this.props.defaultValue : []}
-                                
-                                renderOption={(option, { selected }) => (
-                                    <React.Fragment>
-                                        <Checkbox
-                                            icon={icon}
-                                            checkedIcon={checkedIcon}
-                                            style={{ margin: '0px 0px 2px 0px',padding:0,  color:'black' }}
-                                            checked={selected}
-                                        />
-                                        {option}
-                                    </React.Fragment>
-                                )}
+                                    onChange={this.handleChange.bind(this)}
+                                    style={isMobile ? { width: "100%", margin: "-6" } : ''}
+                                    multiple
+                                    id="checkboxes-tags-demo"
+                                    options={this.state.localItems.sort().map(value => value)}
+                                    disableCloseOnSelect
+                                    getOptionLabel={value => localaliseTenant(value)}
+                                    defaultValue={this.props.defaultValue ? this.props.defaultValue : []}
+                                    value={this.props.defaultValue ? this.props.defaultValue : []}
 
-                                renderTags={(value, getTagProps) =>{
-                                    return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
-                                        (this.props.defaultValue && this.props.defaultValue.includes(option)) || this.props.type !=='Wards' ? <Chip  label={option} {...getTagProps({ index })} /> : <div></div>
-                                    )) : ''
-                                }
-                                }
-                                
-                                style={(isMobile) ? { width: "100%", margin:"-6"} : {}}                                  
-                                renderInput={params => (
-                                    <div style={isMobile?{color:'black',margin:"0px -6px 0px 0px"}:{color:'black'}}>
+                                    renderOption={(option, { selected }) => (
+                                        <React.Fragment>
+                                            <Checkbox
+                                                icon={icon}
+                                                checkedIcon={checkedIcon}
+                                                style={{ margin: '0px 0px 2px 0px', padding: 0, color: 'black' }}
+                                                checked={selected}
+                                            />
+                                            {localaliseTenant(option, this.props.logo)}
+                                        </React.Fragment>
+                                    )}
 
-                                    <TextField
-                                        {...params}
-                                        variant="standard"
-                                        fullWidth
-                                        placeholder={this.state.label}
-                                        style={isMobile?{color:'black',margin:"0px -6px 0 0"}:{color:'black'}}
-                                    /></div>
-                                )}
-                            /> : <Autocomplete
-                            onChange={this.handleChange.bind(this)}
-                            style={isMobile?{width:"100%",margin:"-6"}:''}
-                            multiple
-                            id="checkboxes-tags-demo"
-                            options={this.state.localItems.sort()}
-                            disableCloseOnSelect
-                            getOptionLabel={option => option}
-                            
-                            renderOption={(option, { selected }) => (
-                                <React.Fragment>
-                                    <Checkbox
-                                        icon={icon}
-                                        checkedIcon={checkedIcon}
-                                        style={{ margin: '0px 0px 2px 0px',padding:0,  color:'black' }}
-                                        checked={selected}
-                                    />
-                                    {option}
-                                </React.Fragment>
-                            )}
+                                    renderTags={(value, getTagProps) => {
+                                        return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
+                                            (this.props.defaultValue && this.props.defaultValue.includes(option)) || this.props.type !== 'Wards' ? <Chip label={localaliseTenant(option, this.props.logo)} {...getTagProps({ index })} /> : <div></div>
+                                        )) : ''
+                                    }
+                                    }
 
-                            renderTags={(value, getTagProps) =>{
-                                return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
-                                    (this.props.defaultValue && this.props.defaultValue.includes(option)) || this.props.type !=='Wards' ? <Chip  label={option} {...getTagProps({ index })} /> : <div></div>
-                                )) : ''
-                            }
-                            }
-                            
-                            style={(isMobile) ? { width: "100%", margin:"-6"} : {}}                                  
-                            renderInput={params => (
-                                <div style={isMobile?{color:'black',margin:"0px -6px 0px 0px"}:{color:'black'}}>
+                                    style={(isMobile) ? { width: "100%", margin: "-6" } : {}}
+                                    renderInput={params => (
+                                        <div style={isMobile ? { color: 'black', margin: "0px -6px 0px 0px" } : { color: 'black' }}>
 
-                                <TextField
-                                    {...params}
-                                    variant="standard"
-                                    fullWidth
-                                    placeholder={this.state.label}
-                                    style={isMobile?{color:'black',margin:"0px -6px 0 0"}:{color:'black'}}
-                                    // InputLabelProps={{
-                                    //     style: {
-                                        
-                                    //     } }}
-                                    // // InputLabelProps={{
-                                    // //     className: classes.floatingLabelFocusStyle,
-                                    // // }}
-                                /></div>
-                            )}
-                            /> }
+                                            <TextField
+                                                {...params}
+                                                variant="standard"
+                                                fullWidth
+                                                placeholder={localaliseTenant(this.state.label)}
+                                                style={isMobile ? { color: 'black', margin: "0px -6px 0 0" } : { color: 'black' }}
+                                            /></div>
+                                    )}
+                                /> : <Autocomplete
+                                    onChange={this.handleChange.bind(this)}
+                                    style={isMobile ? { width: "100%", margin: "-6" } : ''}
+                                    multiple
+                                    id="checkboxes-tags-demo"
+                                    options={this.state.localItems.sort().map(option => option)}
+                                    disableCloseOnSelect
+                                    getOptionLabel={value => value}
+
+                                    renderOption={(option, { selected }) => (
+                                        <React.Fragment>
+                                            <Checkbox
+                                                icon={icon}
+                                                checkedIcon={checkedIcon}
+                                                style={{ margin: '0px 0px 2px 0px', padding: 0, color: 'black' }}
+                                                checked={selected}
+                                            />
+                                            {localaliseTenant(option, this.props.logo)}
+                                        </React.Fragment>
+                                    )}
+
+                                    renderTags={(value, getTagProps) => {
+                                        return this.state.localItems && this.state.localItems.length > 0 ? value.map((option, index) => (
+                                            (this.props.defaultValue && this.props.defaultValue.includes(option)) || this.props.type !== 'Wards' ? <Chip label={localaliseTenant(option, this.props.logo)} {...getTagProps({ index })} /> : <div></div>
+                                        )) : ''
+                                    }
+                                    }
+
+                                    style={(isMobile) ? { width: "100%", margin: "-6" } : {}}
+                                    renderInput={params => (
+                                        <div style={isMobile ? { color: 'black', margin: "0px -6px 0px 0px" } : { color: 'black' }}>
+
+                                            <TextField
+                                                {...params}
+                                                variant="standard"
+                                                fullWidth
+                                                placeholder={localaliseTenant(this.state.label)}
+                                                style={isMobile ? { color: 'black', margin: "0px -6px 0 0" } : { color: 'black' }}
+                                            // InputLabelProps={{
+                                            //     style: {
+
+                                            //     } }}
+                                            // // InputLabelProps={{
+                                            // //     className: classes.floatingLabelFocusStyle,
+                                            // // }}
+                                            /></div>
+                                    )}
+                                />}
                         </div>
                     </FormControl>
 

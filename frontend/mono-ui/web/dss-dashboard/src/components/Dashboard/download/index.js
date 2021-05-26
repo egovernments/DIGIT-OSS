@@ -137,13 +137,13 @@ export function CustomizedMenus(props) {
                     <ListItemIcon>
                         <PdfIcon style={{color: '#ff0000'}}/>
                     </ListItemIcon>
-                    <ListItemText primary="PDF" />
+                    <ListItemText  primary={props.strings['DSS_DOWNLOAD_PDF'] || 'DSS_DOWNLOAD_PDF'}  />
                 </StyledMenuItem>
                 <StyledMenuItem onClick={downloadImage.bind(this)}>
                     <ListItemIcon>
                         <ImageIcon style={{color: '#ff0000'}}/>
                     </ListItemIcon>
-                    <ListItemText primary="Image" />
+                    <ListItemText primary={props.strings['DSS_DOWNLOAD_IMAGE'] || 'DSS_DOWNLOAD_IMAGE'} />
                 </StyledMenuItem>
             </StyledMenu>
         </div>

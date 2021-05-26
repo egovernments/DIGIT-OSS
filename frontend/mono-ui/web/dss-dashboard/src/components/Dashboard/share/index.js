@@ -268,25 +268,25 @@ class CustomizedShare extends Component {
                         <ListItemIcon>
                             <DraftsIcon fontSize="small" style={{ color: Variables.email }} />
                         </ListItemIcon>
-                        <ListItemText primary="PDF" />
+                        <ListItemText primary={this.props.strings['DSS_DOWNLOAD_PDF'] || 'DSS_DOWNLOAD_PDF'} />
                     </StyledMenuItem>
                     <StyledMenuItem onClick={this.shareEmailImage.bind(this)}>
                         <ListItemIcon>
                             <DraftsIcon fontSize="small" style={{ color: Variables.email }} />
                         </ListItemIcon>
-                        <ListItemText primary="Image" />
+                        <ListItemText primary={this.props.strings['DSS_DOWNLOAD_IMAGE'] || 'DSS_DOWNLOAD_IMAGE'} />
                     </StyledMenuItem>
                     <StyledMenuItem onClick={this.shareWhatsAppPDF.bind(this)}>
                         <ListItemIcon>
                             <WhatsappIcon fontSize="small" style={{ color: Variables.whatsApp }} />
                         </ListItemIcon>
-                        <ListItemText primary="PDF" />
+                        <ListItemText primary={this.props.strings['DSS_DOWNLOAD_PDF'] || 'DSS_DOWNLOAD_PDF'} />
                     </StyledMenuItem>
                     <StyledMenuItem onClick={this.shareWhatsAppImage.bind(this)}>
                         <ListItemIcon>
                             <WhatsappIcon fontSize="small" style={{ color: Variables.whatsApp }} />
                         </ListItemIcon>
-                        <ListItemText primary="Image" />
+                        <ListItemText primary={this.props.strings['DSS_DOWNLOAD_IMAGE'] || 'DSS_DOWNLOAD_IMAGE'} />
                     </StyledMenuItem>
                 </StyledMenu>
             </div>

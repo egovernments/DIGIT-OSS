@@ -25,7 +25,7 @@ const getRedirectionForPayment = async (state, dispatch) => {
 
 const callDownloadBill = ( mode) => {
   let tenantId=getQueryArg(window.location.href, "tenantId");
-  const businessService = connectionNo.includes("WS") ? "WS" : "SW";
+  const businessService = getQueryArg(window.location.href, "connectionNumber")&&getQueryArg(window.location.href, "connectionNumber").includes("WS") ? "WS" : "SW";
   const val = [
     {
       key: 'consumerCode',

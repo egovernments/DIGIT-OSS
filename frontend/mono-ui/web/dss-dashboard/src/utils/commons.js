@@ -9,8 +9,12 @@ export const removeSignFromInsightData = (value = '') => {
     }
     return value;
 }
-
+let localisation={};
 export const getLocaleLabels = (key = "", strings = {}) => {
+    if(strings&&Object.keys(strings).length>0){
+        localisation=strings
+    }
+    strings=strings&&Object.keys(strings).length>0?strings:localisation;
     return strings[removeSpaceInLocalisationKey(key)] || removeSpaceInLocalisationKey(key);
 }
 
