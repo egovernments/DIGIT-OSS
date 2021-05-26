@@ -261,7 +261,7 @@ class DocumentList extends Component {
           {card.dropdown && (
             <AutosuggestContainer
               select={true}
-              label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
+              label={{ labelKey: getTransformedLocale(card.dropdown.label), labelName:  getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
               data={card.dropdown.menu}
               optionValue="code"

@@ -567,7 +567,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
                 return item.active;
             });
             dropdown.menu = dropdown.menu.map(item => {
-                return { code: item.code, label: getTransformedLocale(item.code) };
+                return { code: item.code, label: getTransformedLocale(item.code), name: getTransformedLocale(item.code)  };
             });
             card["dropdown"] = dropdown;
         }
