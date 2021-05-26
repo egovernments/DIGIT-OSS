@@ -88,9 +88,9 @@ class ShowField extends Component {
 
     const { tabLabel, metaData } = _this.props;
     const reportDetails = metaData.hasOwnProperty("reportDetails") ? metaData.reportDetails : {};
-    const additionalConfig = reportDetails.hasOwnProperty("additionalConfig") && reportDetails.additionalConfig ? reportDetails.additionalConfig: {};
+    const additionalConfig = reportDetails.hasOwnProperty("additionalConfig") && reportDetails.additionalConfig ? reportDetails.additionalConfig : {};
     const reportHeader = reportDetails.hasOwnProperty("reportHeader") ? reportDetails.reportHeader : [];
-    const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
+    const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize) ? additionalConfig.print.pdfPageSize : "LEGAL"
     let reportTitle = this.getReportTitle();
     let xlsTitle = this.getXlsReportTitle();
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
@@ -108,7 +108,7 @@ class ShowField extends Component {
         orientation: orientation,
         pageSize: pageSize,
         footer: true,
-        customize: function(doc) {
+        customize: function (doc) {
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "mSeva System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
@@ -162,12 +162,12 @@ class ShowField extends Component {
       scrollY: 400,
       aLengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
       scrollX: true,
-      fnInitComplete: function() {
+      fnInitComplete: function () {
         this.css("visibility", "visible");
 
         $(".dataTables_scrollBody thead tr").css({ visibility: "collapse" });
       },
-      drawCallback: function(settings) {
+      drawCallback: function (settings) {
         $(".dataTables_scrollBody thead tr").css({ visibility: "collapse" });
       },
       ...tableConfig,
@@ -224,7 +224,7 @@ class ShowField extends Component {
           searchParams,
         }
       ).then(
-        function(response) {
+        function (response) {
           if (response.viewPath && response.reportData && response.reportData[0]) {
             localStorage.reportData = JSON.stringify(response.reportData);
             setReturnUrl(window.location.hash.split("#/")[1]);
@@ -249,7 +249,7 @@ class ShowField extends Component {
             setFlag(1);
           }
         },
-        function(err) {
+        function (err) {
           console.log(err);
         }
       );
@@ -305,12 +305,31 @@ class ShowField extends Component {
         (reportResult.reportHeader[i].type == "currency" || reportResult.reportHeader[i].total)
       ) {
         return this.addCommas(Number(val) % 1 === 0 ? Number(val) : Number(val).toFixed(2));
-      } else {
-        return  <Label
-        className="report-header-row-label"
-        labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
-        label={val}
-      />;
+      }
+      else if (val && i && reportResult &&
+        reportResult.reportHeader &&
+        reportResult.reportHeader.length &&
+        reportResult.reportHeader[i] &&
+        reportResult.reportHeader[i].isLocalisationRequired && reportResult.reportHeader[i].localisationPrefix) {
+
+          if(reportResult.reportHeader[i].localisationPrefix=='ACCESSCONTROL_ROLES_ROLES_'){
+            let list=val&&val.split(',');
+            return list.map(v1=>(<Label
+            className="report-header-row-label"
+            labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
+            label={`${reportResult.reportHeader[i].localisationPrefix}${v1}`}
+          />))           
+            
+          }
+        return <Label
+          className="report-header-row-label"
+          labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
+          label={`${reportResult.reportHeader[i].localisationPrefix}${val}`}
+        />;
+      }
+      else {
+        return val;
+
       }
     }
   };
@@ -426,7 +445,7 @@ class ShowField extends Component {
       let resulturl = getResultUrl(match.params.moduleName);
 
       var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
-        resulturl &&
+      resulturl &&
         commonApiPost(
           resulturl,
           {},
@@ -436,14 +455,14 @@ class ShowField extends Component {
             searchParams,
           }
         ).then(
-          function(response) {
+          function (response) {
             if (response.viewPath && response.reportData) {
               localStorage.reportData = JSON.stringify(response.reportData);
               setReturnUrl(window.location.hash.split("#/")[1]);
               setRoute("/print/report/" + response.viewPath);
             }
           },
-          function(err) {
+          function (err) {
             console.log(err);
           }
         );
@@ -457,7 +476,7 @@ class ShowField extends Component {
       reportResult.reportHeader &&
       reportResult.reportHeader.length &&
       reportResult.reportHeader[i] &&
-      (reportResult.reportHeader[i].type == "currency" ||reportResult.reportHeader[i].total)
+      (reportResult.reportHeader[i].type == "currency" || reportResult.reportHeader[i].total)
     ) {
       return { textAlign: "right" };
     } else {
@@ -565,7 +584,7 @@ class ShowField extends Component {
       sumColumn.unshift(firstColObj);
     }
 
-    var intVal = function(i) {
+    var intVal = function (i) {
       if (typeof i === "string") {
         let a = i.replace(/,/g, "");
         a = a.replace(/[^-+0-9. ]/g, " ").split(" ")[0];
@@ -657,7 +676,7 @@ class ShowField extends Component {
         if (char.length == 1) {
           reportTitle = char + "";
           reportHeaderName += char;
-        } else if(typeof char === "object") {
+        } else if (typeof char === "object") {
           reportTitle = char.text + "";
         } else {
           reportTitle = " " + char;
@@ -669,7 +688,7 @@ class ShowField extends Component {
     // return reportTitle;
     return [reportHeaderName];
   };
-  
+
 
   render() {
     let { isTableShow, metaData, reportResult } = this.props;

@@ -44,7 +44,8 @@ export default class ShowField extends Component {
       for (var variable in obj.defaultValue) {
         dropDownData.push({
           value: variable,
-          label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:`RT_${getTransformedLocale(variable)}`,
+          label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:obj.defaultValue[variable],
+          // label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:`RT_${getTransformedLocale(variable)}`,
         });
       }
     }

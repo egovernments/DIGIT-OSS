@@ -62,9 +62,9 @@ const theme = createMuiTheme({
 const localaliseTenant = ((tenant, type) => {
     let prefix = 'DSS_'
     if (type == "DDRS") {
-        prefix = `TENANT_TENANTS_PB_`
+        prefix = `TENANT_TENANTS_${getTenantId().split('.')[0]}_` ;
     } else if (type == "ULBS") {
-        prefix = `TENANT_TENANTS_PB_`
+        prefix = `TENANT_TENANTS_${getTenantId().split('.')[0]}_` ; 
     }
     return getLocaleLabels(`${prefix}${tenant.toUpperCase()}`);
 })
