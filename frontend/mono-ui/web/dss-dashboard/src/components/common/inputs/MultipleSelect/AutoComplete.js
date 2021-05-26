@@ -16,7 +16,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import variables from '../../../../styles/variables';
 import { isMobile } from 'react-device-detect';
 import Chip from '@material-ui/core/Chip';
-import { getLocaleLabels } from '../../../../utils/commons';
+import { getLocaleLabels, getTenantId } from '../../../../utils/commons';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" style={{ color: 'grey' }} />;
