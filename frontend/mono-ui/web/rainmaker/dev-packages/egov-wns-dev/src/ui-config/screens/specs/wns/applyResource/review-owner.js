@@ -117,13 +117,17 @@ export const plumberDetails={
     },
     {
       jsonPath: "WaterConnection[0].additionalDetails.detailsProvidedBy",
-      callBack: handleNA
+      callBack: value => {
+        return value ? `WS_PLUMBER_${value.toUpperCase()}` : handleNA;
+      }
     }, {
       labelKey: "WS_OLD_LABEL_NAME"
     },
     {
       jsonPath: "WaterConnectionOld[0].additionalDetails.detailsProvidedBy",
-      callBack: handleNA
+      callBack: value => {
+        return value ? `WS_PLUMBER_${value.toUpperCase()}` : handleNA;
+      }
     }
   ),
   reviewPlumberLicenseNo : getLabelWithValueForModifiedLabel(

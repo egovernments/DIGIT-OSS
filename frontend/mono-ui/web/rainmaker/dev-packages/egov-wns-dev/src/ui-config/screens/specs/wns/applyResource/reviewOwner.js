@@ -182,14 +182,18 @@ export const reviewPlumberProvidedBy = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "applyScreen.additionalDetails.detailsProvidedBy",
-    callBack: handleNA
+    callBack: value => {
+      return value ? `WS_PLUMBER_${value.toUpperCase()}` : handleNA;
+    }
   },
   {
     labelKey: "WS_OLD_LABEL_NAME"
   },
   {
     jsonPath: "applyScreenOld.additionalDetails.detailsProvidedBy",
-    callBack: handleNA
+    callBack: value => {
+      return value ? `WS_PLUMBER_${value.toUpperCase()}` : handleNA;
+    }
   }
 );
 export const reviewPlumberLicenseNo = getLabelWithValueForModifiedLabel(
