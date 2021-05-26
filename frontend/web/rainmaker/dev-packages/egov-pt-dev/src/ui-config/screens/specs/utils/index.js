@@ -527,7 +527,7 @@ export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/firenoc-calculator/v1/_getbill",
+      "/billing-service/bill/v2/_fetchbill",
       "",
       queryObject
     );
@@ -565,8 +565,12 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
         value: tenantId
       },
       {
-        key: "applicationNumber",
+        key: "consumerCode",
         value: applicationNumber
+      },
+      {
+        key: "businessService",
+        value: "PT.MUTATION"
       }
     ]);
 
