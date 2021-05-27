@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import Router from "./Router";
 import routes from "./Routes";
-
+import './index.css';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -136,14 +136,16 @@ class App extends Component {
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
-        {!loginScreens && <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <img style={{ display: "inline-flex", height: '1em' }} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"}></img>
-          </div>
+        {!loginScreens && <div className={"jk-footer"}>
+          <img style={{ height: '1.3em' }} className={"jk-footer-image jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"} onClick={() => {
+            window.open('https://www.digit.org/', '_blank').focus();
+          }}></img>
         </div>}
         {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <img style={{ display: "inline-flex", height: '1em' }} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer-bw.png`} onError={"this.src='./../digit-footer-bw.png'"}></img>        
+          <img style={{ display: "inline-flex", height: '1em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer-bw.png`} onError={"this.src='./../digit-footer-bw.png'"} onClick={() => {
+            window.open('https://www.digit.org/', '_blank').focus();
+          }}></img>        
           </div>
         </div>}
       </div>
