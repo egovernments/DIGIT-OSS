@@ -219,7 +219,7 @@ export const searchPropertyDetails = getCommonCard({
 
         let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
 
-         tenantUniqueId = "PT-"+tenantUniqueId;
+         tenantUniqueId = "PT-"+tenantUniqueId+"-";
 
          dispatch(
           handleField(
@@ -238,7 +238,7 @@ export const searchPropertyDetails = getCommonCard({
 
         let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
 
-         tenantUniqueId = "PT-"+tenantUniqueId;
+        tenantUniqueId = "PT-"+tenantUniqueId+"-";
 
          dispatch(
           handleField(
@@ -319,7 +319,7 @@ export const searchPropertyDetails = getCommonCard({
       },
       placeholder: {
         labelName: "Enter Property Tax Unique Id",
-        labelKey: "PT_PROPERTY_UNIQUE_ID_PLACEHOLDER"
+        labelKey: "PT_PROPERTY_XXXX_ID_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
