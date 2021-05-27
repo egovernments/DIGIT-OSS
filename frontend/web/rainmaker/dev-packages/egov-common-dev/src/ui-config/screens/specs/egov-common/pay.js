@@ -220,7 +220,6 @@ const fetchBillingServiceData = async(state,tenantId) =>{
         }
       };
       try {
-          console.log("mounika",mdmsBody)
         const payload1 = await httpRequest(
           "post",
           "/egov-mdms-service/v1/_search",
@@ -228,7 +227,6 @@ const fetchBillingServiceData = async(state,tenantId) =>{
           [],
           mdmsBody
         )
-        console.log("mounika",payload1)
           
         const MdmsData = payload1.MdmsRes;
         const yeardataInfo =
@@ -255,7 +253,6 @@ const fetchBillingServiceData = async(state,tenantId) =>{
         yeardata1[data]["taxHead"] = [...taxdata1];
         return yeardata[data];
         });
-        console.log("finalData",finalData)
         {
         finalData && finalData.length
             ? localStorage.setItem("finalData", JSON.stringify(finalData))
