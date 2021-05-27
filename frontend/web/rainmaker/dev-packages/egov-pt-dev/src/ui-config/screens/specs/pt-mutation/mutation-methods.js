@@ -13,7 +13,8 @@ import { propertySearch, applicationSearch } from "./functions";
 import { getTenantId, getUserInfo,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-
+import get from "lodash/get";
+import set from "lodash/set";
 // import "./index.css";
 
 
@@ -188,8 +189,7 @@ export const searchPropertyDetails = getCommonCard({
             "_search",
             [],
             tenantRequestBody
-        ).then(res => {
-         debugger
+        ).then(res => {         
             citywiseconfig:res.MdmsRes.tenant.citywiseconfig
             let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
             let enableButton = enabledCities && enabledCities.includes(action.value);
@@ -202,6 +202,43 @@ export const searchPropertyDetails = getCommonCard({
               )
             );
           });
+      
+
+        let tenants = state.common.cities && state.common.cities;
+
+        let filterTenant = tenants && tenants.filter(m=>m.key===action.value);
+
+        let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+
+         tenantUniqueId = "PT-"+tenantUniqueId;
+
+         dispatch(
+          handleField(
+              "propertySearch",
+              "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+              "label",
+              tenantUniqueId
+          )
+        ); 
+
+      }
+      else if(process.env.REACT_APP_NAME === "Employee"){
+        let tenants = state.common.cities && state.common.cities;
+
+        let filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
+
+        let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+
+         tenantUniqueId = "PT-"+tenantUniqueId;
+
+         dispatch(
+          handleField(
+              "propertySearch",
+              "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+              "label",
+              tenantUniqueId
+          )
+        );     
       }
       dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
       let mohallaPayload = await httpRequest(
@@ -236,7 +273,7 @@ export const searchPropertyDetails = getCommonCard({
           );
             dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
         }
-            
+      
     },
   }),
     ownerMobNo: getTextField({
@@ -276,6 +313,10 @@ export const searchPropertyDetails = getCommonCard({
         xs: 12,
         sm: 4,
   
+      },
+      iconObj: {
+       // label: "PT-",
+        position: "start"
       },
       required: false,
       //pattern: /^[0-9]*$/i,
