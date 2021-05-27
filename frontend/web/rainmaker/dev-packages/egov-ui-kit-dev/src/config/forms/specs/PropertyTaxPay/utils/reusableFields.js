@@ -698,7 +698,33 @@ export const beforeInitForm = {
         if (usageCategoryMajor === "NONRESIDENTIAL" && (propertyType === "BUILTUP.INDEPENDENTPROPERTY" ||
             propertyType === "BUILTUP.SHAREDPROPERTY") && usageTypeVal === "Commercial") {
           set(action, "form.fields.subUsageType.hideField", false);
-          unitFormUpdate(`common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`, false);
+         // unitFormUpdate(`common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`, false);
+         set(action, "form.fields.subUsageType.hideField", false);
+         let subUsageMinor =
+           prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryMinor"), true);
+
+         let filteredSubUsageMinor = subUsageMinor.filter(subUsageMinor => subUsageMinor.usageCategoryMajor === "NONRESIDENTIAL");
+
+
+         if (filteredSubUsageMinor.length > 0) {
+           let filteredUsageCategoryDetails = getPresentMasterObj(
+             prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryDetail"), true),
+             filteredSubUsageMinor,
+             "usageCategorySubMinor"
+           );
+           const mergedMaster = mergeMaster(filteredSubUsageMinor, filteredUsageCategoryDetails, "usageCategoryMinor");
+           const subUsageData = sortDropdown(mergedMaster, "label", true);
+
+
+
+           set(action, "form.fields.subUsageType.dropDownData", subUsageData);
+           let loclizationsubUsage = getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels);
+
+           set(action, "form.fields.subUsageType.value", loclizationsubUsage);
+           dispatch(setFieldProperty(formKey, "subUsageType", "value", loclizationsubUsage));
+
+         }
+         
           let subUsageTypeVal = get(state, `common.prepareFormData.${action.form.fields.subUsageType.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`);
           set(action, "form.fields.subUsageType.value", getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels));
           dispatch(setFieldProperty(formKey, "subUsageType", "value", getTranslatedLabel(subUsageTypeVal, state.app.localizationLabels)));
