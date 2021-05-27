@@ -165,6 +165,15 @@ export const searchPropertyDetails = getCommonCard({
       },
     beforeFieldChange: async (action, state, dispatch) => {
       let tenant = action.value;
+
+      dispatch(
+        handleField(
+            "propertySearch",
+            "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+            "label",
+            ""
+        )
+      ); 
       if(process.env.REACT_APP_NAME === "Citizen" && action.value){
         
         const tenantRequestBody = {
@@ -241,13 +250,15 @@ export const searchPropertyDetails = getCommonCard({
         );     
       }
       dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
-      let mohallaPayload = await httpRequest(
+      if (action.value)
+      {
+        let mohallaPayload = await httpRequest(
         "post",
         "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
         "_search",
         [{ key: "tenantId", value: tenant }],
         {}
-      );
+      );     
       if(mohallaPayload &&
         mohallaPayload.TenantBoundary[0] &&
         mohallaPayload.TenantBoundary[0].boundary){
@@ -273,6 +284,7 @@ export const searchPropertyDetails = getCommonCard({
           );
             dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
         }
+      }
       
     },
   }),
