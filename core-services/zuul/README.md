@@ -51,6 +51,7 @@ We can add any number of filters for a particular url pattern.
 - Validation Filter to check if a tenant of a particular module is enabled or not.
 - Multitenancy Validation Filter. Take the tenant id from Req body or Query Param and validate against additional tenant role or primary tenant role.
 - Devops efficiency: API Response time logging and Send notification if it is taking more time.
+- Rate Throttling
 
 **Routing Property**
 
@@ -60,6 +61,18 @@ For each service, below mentioned property has to be add in **`routes.properties
 -zuul.routes.{serviceName}.stripPrefix = {true/false}
 -zuul.routes.{serviceName}.url = {service host name}
 ```
+
+**Rate Limiting Property**
+
+For endpoints which requires rate throttling, below mentioned property has to be added in **`limiter.properties`**
+```ini
+-zuul.ratelimit.policy-list.{serviceName}[0].limit={request number limit per refresh interval window}
+-zuul.ratelimit.policy-list.{serviceName}[0].quota={request time limit per refresh interval window (in seconds)}
+-zuul.ratelimit.policy-list.{serviceName}[0].refresh-interval={refresh interval in seconds}
+-zuul.ratelimit.policy-list.{serviceName}[0].type[0]=url={url of API endpoint}
+-zuul.ratelimit.policy-list.{serviceName}[0].type[1]={type of throttling eg: user, origin etc.}
+```
+
 ### Kafka Consumers
 
 - NA
