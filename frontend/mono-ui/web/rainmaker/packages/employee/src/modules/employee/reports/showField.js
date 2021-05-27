@@ -152,7 +152,7 @@ export default class ShowField extends Component {
             dataSource={dropDownData}
             labelsFromLocalisation={true}
             value={typeof obj.value === undefined ? "" : getDropdownLabel(obj.value, dropDownData)}
-            hintText="Select"
+            hintText={getLocaleLabels("RT_SELECT_PLACEHOLDER","RT_SELECT_PLACEHOLDER")}
             hintStyle={{fontSize: "14px",color: "#767676"}}
             floatingLabelText={
               <div className="rainmaker-displayInline">

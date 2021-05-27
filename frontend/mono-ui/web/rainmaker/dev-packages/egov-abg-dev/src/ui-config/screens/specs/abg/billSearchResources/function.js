@@ -181,10 +181,10 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
 
 const getActionItem = (status) => {
   switch (status) {
-    case "ACTIVE": return "PAY";
+    case "ACTIVE": return "ABG_PAY";
     case "CANCELLED":
-    case "EXPIRED": return "GENERATE NEW BILL"
-    case "PAID": return "DOWNLOAD RECEIPT"
-    case "PARTIALLY_PAID": return "PARTIALLY PAID"
+    case "EXPIRED": return "ABG_GENERATE_NEW_BILL"
+    case "PAID": return "ABG_DOWNLOAD_RECEIPT"
+    case "PARTIALLY_PAID": return "ABG_PARTIALLY_PAID"
   }
 }

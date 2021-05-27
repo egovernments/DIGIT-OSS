@@ -26,7 +26,7 @@ class IFrameInterface extends React.Component {
     const isOrign = get(uiCommonConstants, `${moduleName}.iframe-routes.${pageName}.isOrigin`, false);
     const domain = isOrign
       ? process.env.NODE_ENV === "development"
-        ? "https://egov-micro-dev.egovernments.org"
+        ? "https://qa.digit.org"
         : document.location.origin
       : get(uiCommonConstants, `${moduleName}.iframe-routes.${pageName}.domain`, "");
 

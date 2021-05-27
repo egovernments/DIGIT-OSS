@@ -66,7 +66,7 @@ export const searchResults = {
         labelKey: "ABG_COMMON_TABLE_COL_ACTION",
         options: {
           filter: false,
-          customBodyRender: (value, tableMeta) => value === "PAY" ? (tableMeta.rowData[4] > 0 ? getActionButton(value, tableMeta):(tableMeta.rowData[4] <= 0 && tableMeta.rowData[13] ? getActionButton(value, tableMeta) : "")) : getActionButton(value, tableMeta)
+          customBodyRender: (value, tableMeta) => value === "ABG_PAY" ? (tableMeta.rowData[4] > 0 ? getActionButton(value, tableMeta):(tableMeta.rowData[4] <= 0 && tableMeta.rowData[13] ? getActionButton(value, tableMeta) : "")) : getActionButton(value, tableMeta)
         }
       },
       {
@@ -162,7 +162,7 @@ const getActionButton = (value, tableMeta) => {
           process.env.REACT_APP_NAME === "Citizen"
             ? "citizen"
             : "employee";
-        if (tableMeta.rowData[5] === "PAID") {
+        if (tableMeta.rowData[5] === "ABG_PAID") {
           const receiptQueryString = [
             { key: "billIds", value: tableMeta.rowData[11] },
             { key: "tenantId", value: tableMeta.rowData[10] },

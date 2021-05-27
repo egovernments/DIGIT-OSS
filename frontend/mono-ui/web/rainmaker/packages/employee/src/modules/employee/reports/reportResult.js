@@ -24,6 +24,7 @@ import { getResultUrl } from "./commons/url";
 import Label from "egov-ui-kit/utils/translationNode";
 import commonConfig from "config/common.js";
 import { getTenantId, setReturnUrl, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocaleLabels ,getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -97,14 +98,14 @@ class ShowField extends Component {
 
     const buttons = [
       {
-        text: "<span>Download as : </span>",
+        text: `<span>${getLocaleLabels("RT_DOWNLOAD_AS","RT_DOWNLOAD_AS")}</span>`,
         className: "report-download-button-text",
       },
       {
         extend: "pdf",
         filename: _this.state.reportName,
         messageTop: tabLabel,
-        text: "PDF",
+        text: getLocaleLabels("RT_DOWNLOAD_PDF","RT_DOWNLOAD_PDF"),
         orientation: orientation,
         pageSize: pageSize,
         footer: true,
@@ -117,7 +118,7 @@ class ShowField extends Component {
       },
       {
         extend: "excel",
-        text: "XLS",
+        text: getLocaleLabels("RT_DOWNLOAD_XLS","RT_DOWNLOAD_XLS"),
         filename: _this.state.reportName,
         title: xlsTitle,
         messageTop: tabLabel,
@@ -367,7 +368,11 @@ class ShowField extends Component {
       <thead>
         <tr className="report-table-header">
           <th key={"S. No."} className="report-header-cell">
-            S. No
+            <Label
+                      className="report-header-row-label"
+                      labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }}
+                      label={'RT_SNO'}
+                    />
           </th>
           {metaData && metaData.reportDetails && metaData.reportDetails.selectiveDownload && (
             <th key={"testKey"}>
@@ -627,7 +632,7 @@ class ShowField extends Component {
               return (
                 <th style={index !== 0 ? { textAlign: "right" } : {}} key={index}>
                   {index === 0
-                    ? "Total"
+                    ? getLocaleLabels('RT_TOTAL',"RT_TOTAL")
                     : this.addCommas(Number(total[index - 1]) % 1 === 0 ? total[index - 1] : Number(total[index - 1]).toFixed(2))}
                 </th>
               );
