@@ -719,7 +719,7 @@ return payments;
 }
 
 const getBankname = async(payment) =>{
-  const ifscCode = payment[0].ifscCode;
+  const ifscCode = payment[0] &&  payment[0].ifscCode && payment[0].ifscCode;
   let payload;
   if (ifscCode) {
     payload = await axios.get(`https://ifsc.razorpay.com/${ifscCode}`);
@@ -757,6 +757,12 @@ export const download = (receiptQueryString, mode = "download") => {
       if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT') {
         queryStr = [
           { key: "key", value: "consolidatedreceipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
+      }
+      else   if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT.MUTATION') {
+        queryStr = [
+          { key: "key", value: "pt-mutation-reciept" },
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
         ]
       }
