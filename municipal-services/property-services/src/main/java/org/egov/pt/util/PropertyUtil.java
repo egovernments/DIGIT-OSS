@@ -120,7 +120,8 @@ public class PropertyUtil extends CommonUtils {
 				.tenantId(property.getTenantId())
 				.action(PTConstants.ACTION_PAY)
 				.build();
-			
+
+			System.out.println("~~~~~~~~~~~~~ getProcessInstanceForMutationPayment ~~~~~~~~~~~~");
 			return ProcessInstanceRequest.builder()
 					.requestInfo(propertyRequest.getRequestInfo())
 					.processInstances(Arrays.asList(process))
