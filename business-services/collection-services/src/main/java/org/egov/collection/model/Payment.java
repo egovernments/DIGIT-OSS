@@ -87,14 +87,12 @@ public class Payment {
 
     @SafeHtml
     @Size(max=64)
-    @NotNull
     @Pattern(regexp = "^[6-9][0-9]{9}$", message = "Invalid mobile number")
     @JsonProperty("mobileNumber")
     private String mobileNumber = null;
 
     @SafeHtml
     @Size(max=128)
-    @NotNull
     @Pattern(regexp = "^[a-zA-Z]+(([_\\-'`\\. ][a-zA-Z ])?[a-zA-Z]*)*$", message = "Invalid name. Only alphabets and special characters -, ',`, ., _")
     @JsonProperty("payerName")
     private String payerName = null;
