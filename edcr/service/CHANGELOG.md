@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.1
+
+- Enhanced Door, to support door widths with color code. The color code is used to identify type of door.
+
 ## 1.1.0
 - Added portico feature
 - Added glass facade openings feature
