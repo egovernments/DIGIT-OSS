@@ -149,7 +149,7 @@ public class PropertiesManager {
     @Value("${egov.services.egfmaster.hostname}")
     private String egfMasterHostUrl;
     
-    @Value("${token.authorizaton.key}")
+    @Value("${token.authorization.key}")
     private String tokenAuhorizationtKey;
     
     @Value("${egov.collection.receipt.voucher.save.topic}")
