@@ -177,6 +177,13 @@ function check()
        addSelectedToForm2();
        disableSelectedRows();
 		document.form2.action='${pageContext.request.contextPath}/payment/payment-save.action';
+		jQuery(form2).append(
+				jQuery('<input>', {
+	                type: 'hidden',
+	                name: '${_csrf.parameterName}',
+	                value: '${_csrf.token}'
+	            })
+	        );
 		document.form2.submit();
 	}             
 	if(document.getElementById('miscount').value==0)
@@ -189,6 +196,13 @@ function check()
     addSelectedToForm2();
     disableSelectedRows();
 	document.form2.action='${pageContext.request.contextPath}/payment/payment-save.action';
+	jQuery(form2).append(
+			jQuery('<input>', {
+	            type: 'hidden',
+	            name: '${_csrf.parameterName}',
+	            value: '${_csrf.token}'
+	        })
+	    );
 	document.form2.submit();
 	return true;
 }
@@ -206,6 +220,13 @@ function search()
 		document.getElementById("search").innerHTML=document.getElementById("searchtab").innerHTML;
 		setSelectedValues();
 		document.form2.action='${pageContext.request.contextPath}/payment/payment-search.action';
+		jQuery(form2).append(
+				jQuery('<input>', {
+	                type: 'hidden',
+	                name: '${_csrf.parameterName}',
+	                value: '${_csrf.token}'
+	            })
+	        );
 		document.form2.submit();  
 		
 	}

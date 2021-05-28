@@ -70,6 +70,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -145,7 +147,7 @@ public class BankAccountAction extends JQueryGridActionSupport {
                     bankAccount.setChartofaccounts(COA);
                 }
             }
-        } catch (final Exception e) {
+        } catch (final ApplicationRuntimeException e) {
             sendAJAXResponse(e.getMessage());
             throw new ApplicationRuntimeException(e.getMessage());
         }
@@ -155,7 +157,7 @@ public class BankAccountAction extends JQueryGridActionSupport {
     }
 
     public String prepareBankAccCode(final String accID, final String code)
-            throws Exception {
+            {
         String glCode = "";
         Long glcode;
         Long tempCode = 0L;
@@ -183,7 +185,7 @@ public class BankAccountAction extends JQueryGridActionSupport {
     }
 
     public String postInChartOfAccounts(final String glCode,
-                                        final String parentId, final String accNumber) throws Exception {
+                                        final String parentId, final String accNumber) {
         final Bankbranch bankBranch = persistenceService
                 .getSession().load(Bankbranch.class, bankBranchId);
         int majorCodeLength = 0;

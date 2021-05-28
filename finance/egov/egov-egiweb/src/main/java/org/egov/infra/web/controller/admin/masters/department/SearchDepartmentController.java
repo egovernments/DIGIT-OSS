@@ -48,14 +48,16 @@
 
 package org.egov.infra.web.controller.admin.masters.department;
 
+import javax.validation.Valid;
+
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @author subhash
@@ -78,19 +80,19 @@ public class SearchDepartmentController {
         return new Department();
     }
 
-    @RequestMapping(value = { VIEW, UPDATE }, method = RequestMethod.GET)
+    @GetMapping(value = { VIEW, UPDATE })
     public String searchForm(final Model model) {
         model.addAttribute("departments", departmentService.getAllDepartments());
         return "department-search";
     }
 
-    @RequestMapping(value = VIEW, method = RequestMethod.POST)
-    public String viewDepartment(@ModelAttribute final Department department) {
+    @GetMapping(value = VIEW)
+    public String viewDepartment(@Valid @ModelAttribute final Department department) {
         return "redirect:/department/view/" + department.getName();
     }
 
-    @RequestMapping(value = UPDATE, method = RequestMethod.POST)
-    public String updateDepartmentForm(@ModelAttribute final Department department) {
+    @GetMapping(value = UPDATE)
+    public String updateDepartmentForm(@Valid @ModelAttribute final Department department) {
         return "redirect:/department/update/" + department.getName();
     }
 }

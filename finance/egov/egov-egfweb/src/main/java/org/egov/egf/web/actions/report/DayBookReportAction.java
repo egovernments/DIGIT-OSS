@@ -77,8 +77,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @ParentPackage("egov")
@@ -155,31 +157,41 @@ public class DayBookReportAction extends BaseFormAction {
         return "result";
     }
 
-    private String getQuery() {
+    private Map<String, Map<String, Object>> getQuery() {
+        final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+        final Map<String, Object> params = new HashMap<>();
+        final String fundId = dayBookReport.getFundId();
         final SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-        String startDate = "", endDate = "", fundId = "";
-        fundId = dayBookReport.getFundId();
+        Date startDate = null;
+        Date endDate = null;
         try {
-            startDate = sdf.format(formatter.parse(dayBookReport.getStartDate()));
-            endDate = sdf.format(formatter.parse(dayBookReport.getEndDate()));
+            startDate = formatter.parse(dayBookReport.getStartDate());
+            endDate = formatter.parse(dayBookReport.getEndDate());
         } catch (ParseException e) {
 
         }
-        String query = "SELECT voucherdate as vdate, TO_CHAR(voucherdate, 'dd-Mon-yyyy')  AS  voucherdate, vouchernumber as vouchernumber , gd.glcode AS glcode,ca.name AS particulars ,vh.name ||' - '|| vh.TYPE AS type"
-                + ", CASE WHEN vh.description is null THEN ' ' ELSE vh.description END AS narration, CASE  WHEN status=0 THEN ( 'Approved') ELSE ( case WHEN status=1 THEN 'Reversed' else (case WHEN status=2 THEN 'Reversal' else ' ' END) END ) END as status , debitamount  , "
-                + " creditamount,vh.CGVN ,vh.isconfirmed as \"isconfirmed\",vh.id as vhId FROM voucherheader vh, generalledger gd, chartofaccounts ca WHERE vh.ID=gd.VOUCHERHEADERID "
-                + " AND ca.GLCODE=gd.GLCODE AND voucherdate >= '"
-                + startDate
-                + "' and voucherdate <= '"
-                + endDate
-                + "' and vh.status not in (4,5)  and vh.fundid = " + fundId + " ORDER BY vdate,vouchernumber";
-        return query;
+        StringBuilder query = new StringBuilder("SELECT voucherdate as vdate, TO_CHAR(voucherdate, 'dd-Mon-yyyy')  AS  voucherdate, vouchernumber as vouchernumber ,")
+                            .append(" gd.glcode AS glcode,ca.name AS particulars ,vh.name ||' - '|| vh.TYPE AS type, ")
+                            .append(" CASE WHEN vh.description is null THEN ' ' ELSE vh.description END AS narration, ")
+                            .append(" CASE  WHEN status=0 THEN ( 'Approved') ELSE ( case WHEN status=1 THEN 'Reversed' else ")
+                            .append(" (case WHEN status=2 THEN 'Reversal' else ' ' END) END ) END as status , debitamount  , ")
+                            .append(" creditamount,vh.CGVN ,vh.isconfirmed as \"isconfirmed\",vh.id as vhId FROM voucherheader vh, generalledger gd, ")
+                            .append(" chartofaccounts ca WHERE vh.ID=gd.VOUCHERHEADERID ")
+			                .append(" AND ca.GLCODE=gd.GLCODE AND voucherdate >=:startDate ")
+			                .append(" and voucherdate <= :endDate ")
+                            .append(" and vh.status not in (4,5)  and vh.fundid =:fundId ")
+                            .append(" ORDER BY vdate,vouchernumber");
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
+        params.put("fundId", Long.valueOf(fundId));
+        queryMap.put(query.toString(), params);
+        return queryMap;
     }
 
     private void prepareResultList() {
-        String voucherDate = "", voucherNumber = "", voucherType = "", narration = "", status = "";
-        Query query = null;
-        query = persistenceService.getSession().createSQLQuery(getQuery())
+    	String voucherDate = "", voucherNumber = "", voucherType = "", narration = "", status = "";
+        final Map.Entry<String, Map<String, Object>> queryMapEntry = getQuery().entrySet().iterator().next();
+        final Query query = persistenceService.getSession().createSQLQuery(queryMapEntry.getKey())
                 .addScalar("voucherdate", StringType.INSTANCE)
                 .addScalar("vouchernumber", StringType.INSTANCE)
                 .addScalar("glcode", StringType.INSTANCE)
@@ -191,6 +203,7 @@ public class DayBookReportAction extends BaseFormAction {
                 .addScalar("debitamount", StringType.INSTANCE)
                 .addScalar("vhId", StringType.INSTANCE)
                 .setResultTransformer(Transformers.aliasToBean(DayBook.class));
+        queryMapEntry.getValue().entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
         dayBookDisplayList = query.list();
         for (DayBook bean : dayBookDisplayList) {
             bean.setDebitamount(new BigDecimal(bean.getDebitamount()).setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
@@ -235,7 +248,7 @@ public class DayBookReportAction extends BaseFormAction {
         String heading = "Day Book report from " + dayBookReport.getStartDate() + " to " + dayBookReport.getEndDate();
         Fund fund = new Fund();
         if (checkNullandEmpty(dayBookReport.getFundId())) {
-            fund = (Fund) persistenceService.find("from Fund where id = ?", Integer.parseInt(dayBookReport.getFundId()));
+            fund = (Fund) persistenceService.find("from Fund where id = ?", Long.valueOf(dayBookReport.getFundId()));
             heading = heading + " under " + fund.getName() + " ";
         }
         return heading;

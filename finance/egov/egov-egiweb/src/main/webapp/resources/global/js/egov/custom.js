@@ -392,9 +392,10 @@ function disableRefresh(e) {
 }
 
 function preventBack(){
-	history.pushState(null, null, document.URL);
+	var sanitizedUrl = sanitizeHTML(document.URL);
+	history.pushState(null, null, sanitizedUrl);
     window.addEventListener('popstate', function () {
-        history.pushState(null, null, document.URL);
+        history.pushState(null, null, sanitizedUrl);
     });
 }
 
@@ -414,4 +415,8 @@ function select2initialize(obj,data,multiple){
 		width:'100%'
 	});
 	
+}
+
+function sanitizeHTML(text) {
+	return jQuery('<div>').text(text).html();
 }

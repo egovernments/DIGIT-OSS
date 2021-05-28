@@ -50,6 +50,7 @@ package org.egov.model.masters;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -59,7 +60,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
 
 import org.egov.commons.EgwStatus;
 import org.egov.commons.Fund;
@@ -68,11 +69,10 @@ import org.egov.commons.SubScheme;
 import org.egov.commons.utils.EntityType;
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.egov.infra.persistence.validator.annotation.OptionalPattern;
-import org.egov.infra.persistence.validator.annotation.Required;
 import org.egov.infra.persistence.validator.annotation.Unique;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @Table(name = "EGF_PURCHASEORDER")
@@ -88,38 +88,37 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
     @GeneratedValue(generator = SEQ_EGF_PURCHASEORDER, strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @SafeHtml
     @Length(max = 100, message = "Maximum of 100 Characters allowed for Order Number")
     @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in Order Number")
-    @NotEmpty
+    @Column(updatable = false)
     private String orderNumber;
 
-    @Required(message = "Please Enter the Name")
+    @SafeHtml
     @Length(max = 100, message = "Maximum of 100 Characters allowed for Name")
     @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in Name")
-    @NotEmpty
     private String name;
 
-    @NotNull
     private Date orderDate;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "supplier")
     private Supplier supplier;
 
-    @NotNull
+    @Min(1)
     private BigDecimal orderValue;
 
+    @Min(1)
     private BigDecimal advancePayable;
 
+    @SafeHtml
     private String description;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "fund")
     private Fund fund;
 
-    @NotEmpty
+    @SafeHtml
     private String department;
 
     @ManyToOne
@@ -130,11 +129,11 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
     @JoinColumn(name = "subScheme")
     private SubScheme subScheme;
 
+    @SafeHtml
     private String sanctionNumber;
 
     private Date sanctionDate;
 
-    @NotNull
     private Boolean active;
 
     @Transient
@@ -145,79 +144,67 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
 
     @Override
     public String getBankname() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getBankaccount() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getPanno() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getTinno() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getIfsccode() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
         return name;
     }
 
     @Override
     public String getModeofpay() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getCode() {
-        // TODO Auto-generated method stub
         return orderNumber;
     }
 
     @Override
     public Integer getEntityId() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getEntityDescription() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public EgwStatus getEgwStatus() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Long getId() {
-        // TODO Auto-generated method stub
         return id;
     }
 
     @Override
     protected void setId(Long id) {
-
+    	this.id = id;
     }
 
     public String getOrderNumber() {

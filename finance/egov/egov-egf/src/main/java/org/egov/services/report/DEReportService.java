@@ -47,6 +47,16 @@
  */
 package org.egov.services.report;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.apache.log4j.Logger;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
@@ -62,13 +72,6 @@ import org.egov.utils.FinancialConstants;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 public class DEReportService {
 
@@ -114,10 +117,9 @@ public class DEReportService {
 
     public Date getFinancialYearStartDate(final Date date) {
         CFinancialYear cFinancialYear = null;
-        // if(LOGGER.isInfoEnabled()) LOGGER.info("Obtained session");
-        final Query query = persistenceService.getSession()
-                .createQuery(
-                        " from CFinancialYear cfinancialyear where cfinancialyear.startingDate <=:sDate and cfinancialyear.endingDate >=:eDate");
+		final Query query = persistenceService.getSession().createQuery(
+				new StringBuilder(" from CFinancialYear cfinancialyear where cfinancialyear.startingDate <=:sDate")
+						.append(" and cfinancialyear.endingDate >=:eDate").toString());
         query.setDate("sDate", date);
         query.setDate("eDate", date);
         final ArrayList list = (ArrayList) query.list();
@@ -141,205 +143,192 @@ public class DEReportService {
         return previousDate.getTime();
     }
 
-    public Query getConcurrenceDateForPeriod(final DepartmentwiseExpenditureReport deObject) {
+	public Query getConcurrenceDateForPeriod(final DepartmentwiseExpenditureReport deObject) {
 
-        StringBuffer stringQry = new StringBuffer();
-        String fundcondition = " ";
-        String fmDate = "";
-        String toDate = "";
-        Query query = null;
-        if (!deObject.getFundId().equals("") || deObject.getFundId().equals("0"))
-            fundcondition = " and vh.fundId=" + deObject.getFundId();
-        if (deObject.getPeriod().equalsIgnoreCase("current")) {
-            fmDate = getFormattedDate(deObject.getFromDate());
-            toDate = getFormattedDate(deObject.getToDate());
-        } else if (deObject.getPeriod().equalsIgnoreCase("previous")) {
-            fmDate = getFormattedDate(getPreviousYearFor(deObject.getFromDate()));
-            toDate = getFormattedDate(getPreviousYearFor(deObject.getToDate()));
-        }
-        if (!(deObject.getAssetCode() != null && deObject.getAssetCode().equals("0"))) {
-            // String oppCode=deObject.getAssetCode().equals("412")?"410":"412";
-            stringQry = stringQry
-                    .append(" SELECT dept.dept_name as departmentName, "
-                            +
-                            "  ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount, "
-                            +
-                            "   TO_date(ph.concurrenceDate)  as concurrenceDate "
-                            +
-                            "  FROM voucherheader vh,  generalledger gl, vouchermis mis,  eg_department dept,  paymentheader ph  "
-                            +
-                            "   WHERE vh.id   = gl.voucherheaderid AND vh.id   =mis.voucherheaderid" +
-                            "  AND vh.id   = ph.voucherheaderid AND dept.id_dept = mis.departmentid  ")
-                            // .append(" AND gl1.glcode LIKE '"+oppCode+"%' AND gl1.creditamount! =0 and gl1.voucherheaderid= gl.voucherheaderid")
-                            .append(" and TO_date(ph.concurrenceDate) >= TO_date('" + fmDate
-                                    + "','dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)" +
-                                    "<=TO_date('" + toDate + "','dd-Mon-yyyy') and gl.glcode like '" + deObject.getAssetCode() + "%'")
-                                    .append(fundcondition + " AND vh.status  =0 AND vh.name!='"
-                                            + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK +
-                                            "' AND vh.type ='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT
-                                            + "' group by  TO_date(ph.concurrenceDate)" +
-                                            " order by  TO_date(ph.concurrenceDate) ");
-            query = persistenceService.getSession().createSQLQuery(stringQry.toString()).addScalar("departmentName")
-                    .addScalar("concurrenceAmount").addScalar("concurrenceDate");
-        } else {
-            stringQry = stringQry
-                    .append(" SELECT dept.dept_name as departmentName, "
-                            +
-                            "  ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount, "
-                            +
-                            " TO_date(ph.concurrenceDate) as concurrenceDate "
-                            +
-                            "  FROM voucherheader vh,  generalledger gl,  vouchermis mis,  eg_department dept,  paymentheader ph  "
-                            +
-                            "   WHERE vh.id   = gl.voucherheaderid AND vh.id   =mis.voucherheaderid" +
-                            "  AND vh.id   = ph.voucherheaderid AND dept.id_dept = mis.departmentid  ")
-                            .append(" and TO_date(ph.concurrenceDate) >= TO_date('" + fmDate
-                                    + "','dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)" +
-                                    "<=TO_date('" + toDate + "','dd-Mon-yyyy') ")
-                                    .append(fundcondition + " AND vh.status  =0 AND vh.name!='"
-                                            + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK +
-                                            "' AND vh.type ='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT
-                                            + "' group by  TO_date(ph.concurrenceDate)" +
-                                            " order by  TO_date(ph.concurrenceDate) ");
-            query = persistenceService.getSession().createSQLQuery(stringQry.toString()).addScalar("departmentName")
-                    .addScalar("concurrenceAmount").addScalar("concurrenceDate");
-        }
-        return query;
-    }
+		final StringBuilder stringQry = new StringBuilder();
+		final Map<String, Object> params = new HashMap<>();
+		String fundcondition = " ";
+		String fmDate = "";
+		String toDate = "";
+		if (!deObject.getFundId().equals("") || deObject.getFundId().equals("0")) {
+			fundcondition = " and vh.fundId=:fundId";
+			params.put("fundId", deObject.getFundId());
+		}
+		if (deObject.getPeriod().equalsIgnoreCase("current")) {
+			fmDate = getFormattedDate(deObject.getFromDate());
+			toDate = getFormattedDate(deObject.getToDate());
+		} else if (deObject.getPeriod().equalsIgnoreCase("previous")) {
+			fmDate = getFormattedDate(getPreviousYearFor(deObject.getFromDate()));
+			toDate = getFormattedDate(getPreviousYearFor(deObject.getToDate()));
+		}
+		if (!(deObject.getAssetCode() != null && deObject.getAssetCode().equals("0"))) {
+			stringQry.append(" SELECT dept.dept_name as departmentName, ")
+					.append("  ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount, ")
+					.append("   TO_date(ph.concurrenceDate)  as concurrenceDate ")
+					.append("  FROM voucherheader vh,  generalledger gl, vouchermis mis,  eg_department dept,  paymentheader ph  ")
+					.append("   WHERE vh.id   = gl.voucherheaderid AND vh.id   =mis.voucherheaderid")
+					.append("  AND vh.id   = ph.voucherheaderid AND dept.id_dept = mis.departmentid  ")
+					.append(" and TO_date(ph.concurrenceDate) >= TO_date(:fmDate,'dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)")
+					.append("<=TO_date(:toDate,'dd-Mon-yyyy') and gl.glcode like :glCode").append(fundcondition)
+					.append(" AND vh.status  =0 AND vh.name!=:vhName")
+					.append(" AND vh.type =:vhType group by  TO_date(ph.concurrenceDate)")
+					.append(" order by  TO_date(ph.concurrenceDate) ");
 
-    public List<DepartmentwiseExpenditureReport> getConcurrenceGivenFortheFinancialYearTillGivenDate(
-            final DepartmentwiseExpenditureReport deObject) {
-        final List<DepartmentwiseExpenditureReport> departmentwiseExpList = new ArrayList<DepartmentwiseExpenditureReport>();
-        StringBuffer stringQry = new StringBuffer();
-        String fundcondition = "";
-        String fmDate = "";
-        String toDate = "";
-        Query query = null;
-        if (!deObject.getFundId().equals("") || deObject.getFundId().equals("0"))
-            fundcondition = " and vh.fundId=" + deObject.getFundId();
-        if (deObject.getPeriod().equalsIgnoreCase("current")) {
-            fmDate = getFormattedDate(getFinancialYearStartDate(deObject.getFromDate()));
-            toDate = getFormattedDate(deObject.getFromDate());
-        } else if (deObject.getPeriod().equalsIgnoreCase("previous")) {
-            fmDate = getFormattedDate(getFinancialYearStartDate(getPreviousYearFor(deObject.getFromDate())));
-            toDate = getFormattedDate(getPreviousYearFor(deObject.getFromDate()));
-        }
-        if (!(deObject.getAssetCode() != null && deObject.getAssetCode().equals("0"))) {
-            // String oppCode=deObject.getAssetCode().equals("412")?"410":"412";
-            stringQry = stringQry
-                    .append(" SELECT dept.dept_name as departmentName, "
-                            +
-                            "  ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount "
-                            +
-                            "  FROM voucherheader vh,  generalledger gl, vouchermis mis,eg_department dept,"
-                            +
-                            " paymentheader ph   WHERE vh.id= gl.voucherheaderid "
-                            +
-                            "  AND vh.id  =mis.voucherheaderid AND vh.id  = ph.voucherheaderid AND dept.id_dept =mis.departmentid ")
-                            .append(" and TO_date(ph.concurrenceDate) >= TO_date('" + fmDate
-                                    + "','dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)" +
-                                    "<TO_date('" + toDate + "','dd-Mon-yyyy') and gl.debitamount!=0  and gl.glcode like '"
-                                    + deObject.getAssetCode() + "%'")
-                                    // .append(" AND gl1.glcode LIKE '"+oppCode+"%' AND gl1.creditamount! =0 and gl1.voucherheaderid= gl.voucherheaderid")
-                                    .append(fundcondition + " AND vh.status  =0 AND vh.name!='"
-                                            + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK +
-                                            "' AND vh.type ='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' group by dept.dept_name" +
-                                            "  order by dept.dept_name ");
-            query = persistenceService.getSession().createSQLQuery(stringQry.toString()).addScalar("departmentName")
-                    .addScalar("concurrenceAmount");
-        } else {
-            stringQry = stringQry
-                    .append(" SELECT dept.dept_name as departmentName, "
-                            +
-                            "  ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount "
-                            +
-                            "  FROM voucherheader vh,  generalledger gl,  vouchermis mis,eg_department dept,paymentheader ph "
-                            +
-                            "  WHERE vh.id= gl.voucherheaderid "
-                            +
-                            "  AND vh.id  =mis.voucherheaderid AND vh.id  = ph.voucherheaderid AND dept.id_dept =mis.departmentid ")
-                            .append(" and TO_date(ph.concurrenceDate) >= TO_date('" + fmDate
-                                    + "','dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)" +
-                                    " <=TO_date('" + toDate + "','dd-Mon-yyyy')")
-                                    .append(fundcondition + " AND vh.status  =0 AND vh.name!='"
-                                            + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK +
-                                            "' AND vh.type ='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' group by dept.dept_name" +
-                                            "  order by dept.dept_name ");
-            query = persistenceService.getSession().createSQLQuery(stringQry.toString()).addScalar("departmentName")
-                    .addScalar("concurrenceAmount");
-        }
-        query.setResultTransformer(Transformers.aliasToBean(DepartmentwiseExpenditureReport.class));
-        departmentwiseExpList.addAll(query.list());
-        return departmentwiseExpList;
-    }
+			params.put("fmDate", fmDate);
+			params.put("toDate", toDate);
+			params.put("glCode", deObject.getAssetCode() + "%");
+			params.put("vhName", FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK);
+			params.put("vhType", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
+		} else {
+			stringQry.append(" SELECT dept.dept_name as departmentName, ")
+					.append("  ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount, ")
+					.append(" TO_date(ph.concurrenceDate) as concurrenceDate ")
+					.append("  FROM voucherheader vh,  generalledger gl,  vouchermis mis,  eg_department dept,  paymentheader ph  ")
+					.append("  WHERE vh.id   = gl.voucherheaderid AND vh.id   =mis.voucherheaderid")
+					.append("  AND vh.id   = ph.voucherheaderid AND dept.id_dept = mis.departmentid  ")
+					.append(" and TO_date(ph.concurrenceDate) >= TO_date(:fmDate,'dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)")
+					.append("<=TO_date(:toDate,'dd-Mon-yyyy') ").append(fundcondition)
+					.append(" AND vh.status  =0 AND vh.name!= :vhName")
+					.append(" AND vh.type =:vhType group by  TO_date(ph.concurrenceDate)")
+					.append(" order by  TO_date(ph.concurrenceDate) ");
 
-    public List<DepartmentwiseExpenditureReport> getConcurrenceGivenForthePeriodQuery(
-            final DepartmentwiseExpenditureReport deObject) {
-        final List<DepartmentwiseExpenditureReport> deList = new ArrayList<DepartmentwiseExpenditureReport>();
-        StringBuffer stringQry = new StringBuffer();
-        String fundcondition = " ";
-        String fmDate = "";
-        String toDate = "";
-        Query query = null;
-        if (!deObject.getFundId().equals("") || deObject.getFundId().equals("0"))
-            fundcondition = " and vh.fundId=" + deObject.getFundId();
-        if (deObject.getPeriod().equalsIgnoreCase("current")) {
-            fmDate = getFormattedDate(deObject.getFromDate());
-            toDate = getFormattedDate(deObject.getToDate());
-        } else if (deObject.getPeriod().equalsIgnoreCase("previous")) {
-            fmDate = getFormattedDate(getPreviousYearFor(deObject.getFromDate()));
-            toDate = getFormattedDate(getPreviousYearFor(deObject.getToDate()));
-        }
-        if (!(deObject.getAssetCode() != null && deObject.getAssetCode().equals("0"))) {
-            // String oppCode=deObject.getAssetCode().equals("412")?"410":"412";
+			params.put("fmDate", fmDate);
+			params.put("toDate", toDate);
+			params.put("vhName", FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK);
+			params.put("vhType", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
+		}
+		final Query query = persistenceService.getSession().createSQLQuery(stringQry.toString())
+				.addScalar("departmentName").addScalar("concurrenceAmount").addScalar("concurrenceDate");
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		return query;
+	}
 
-            stringQry = stringQry
-                    .append(" SELECT dept.dept_name as departmentName, " +
-                            " ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount ," +
-                            "  TO_date(ph.concurrenceDate)  as concurrenceDate " +
-                            "  FROM voucherheader vh,  generalledger gl, vouchermis mis,  eg_department dept,  paymentheader ph" +
-                            "  WHERE vh.id   = gl.voucherheaderid AND vh.id   =mis.voucherheaderid" +
-                            " AND vh.id   = ph.voucherheaderid AND dept.id_dept = mis.departmentid " +
-                            " and gl.glcode like '" + deObject.getAssetCode() + "%' and gl.debitamount!=0 ")
-                            // .append(" AND gl1.glcode LIKE '"+oppCode+"%' AND gl1.creditamount! =0 and gl1.voucherheaderid= gl.voucherheaderid")
-                            .append(" and TO_date(ph.concurrenceDate) >= TO_date('" + fmDate
-                                    + "','dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)" +
-                                    " <=TO_date('" + toDate + "','dd-Mon-yyyy')")
-                                    .append(fundcondition + " AND vh.status  =0 AND vh.name!='"
-                                            + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK +
-                                            "' AND vh.type ='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT
-                                            + "' group by dept.dept_name,  TO_date(ph.concurrenceDate)" +
-                                            " order by  TO_date(ph.concurrenceDate) ");
-            query = persistenceService.getSession().createSQLQuery(stringQry.toString()).addScalar("departmentName")
-                    .addScalar("concurrenceAmount").addScalar("concurrenceDate");
-            query.setResultTransformer(Transformers.aliasToBean(DepartmentwiseExpenditureReport.class));
+	public List<DepartmentwiseExpenditureReport> getConcurrenceGivenFortheFinancialYearTillGivenDate(
+			final DepartmentwiseExpenditureReport deObject) {
+		final List<DepartmentwiseExpenditureReport> departmentwiseExpList = new ArrayList<DepartmentwiseExpenditureReport>();
+		final StringBuilder stringQry = new StringBuilder();
+		final Map<String, Object> params = new HashMap<>();
+		String fundcondition = "";
+		String fmDate = "";
+		String toDate = "";
+		if (!deObject.getFundId().equals("") || deObject.getFundId().equals("0")) {
+			fundcondition = " and vh.fundId=:fundId";
+			params.put("fundId", deObject.getFundId());
+		}
+		if (deObject.getPeriod().equalsIgnoreCase("current")) {
+			fmDate = getFormattedDate(getFinancialYearStartDate(deObject.getFromDate()));
+			toDate = getFormattedDate(deObject.getFromDate());
+		} else if (deObject.getPeriod().equalsIgnoreCase("previous")) {
+			fmDate = getFormattedDate(getFinancialYearStartDate(getPreviousYearFor(deObject.getFromDate())));
+			toDate = getFormattedDate(getPreviousYearFor(deObject.getFromDate()));
+		}
+		if (!(deObject.getAssetCode() != null && deObject.getAssetCode().equals("0"))) {
+			stringQry.append(" SELECT dept.dept_name as departmentName, ")
+					.append("  ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount ")
+					.append("  FROM voucherheader vh,  generalledger gl, vouchermis mis,eg_department dept,")
+					.append(" paymentheader ph   WHERE vh.id= gl.voucherheaderid ")
+					.append("  AND vh.id  =mis.voucherheaderid AND vh.id  = ph.voucherheaderid AND dept.id_dept =mis.departmentid ")
+					.append(" and TO_date(ph.concurrenceDate) >= TO_date(:fmDate,'dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)")
+					.append("<TO_date(:toDate,'dd-Mon-yyyy') and gl.debitamount!=0  and gl.glcode like :glcode")
+					.append(fundcondition).append(" AND vh.status  =0 AND vh.name!=:vhName")
+					.append(" AND vh.type =:vhType group by dept.dept_name").append("  order by dept.dept_name ");
+			params.put("fmDate", fmDate);
+			params.put("toDate", toDate);
+			params.put("glcode", deObject.getAssetCode() + "%");
+			params.put("vhName", FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK);
+			params.put("vhType", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
 
-        } else {
-            stringQry = stringQry
-                    .append(" SELECT dept.dept_name as departmentName, " +
-                            " ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount ," +
-                            "  TO_date(ph.concurrenceDate) as concurrenceDate " +
-                            "  FROM voucherheader vh,  generalledger gl,  vouchermis mis,  eg_department dept,  paymentheader ph"
-                            +
-                            " WHERE vh.id   = gl.voucherheaderid AND vh.id   =mis.voucherheaderid" +
-                            "  AND vh.id   = ph.voucherheaderid AND dept.id_dept = mis.departmentid  ")
-                            .append(" and TO_date(ph.concurrenceDate) >= TO_date('" + fmDate
-                                    + "','dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)" +
-                                    " <=TO_date('" + toDate + "','dd-Mon-yyyy')")
-                                    .append(fundcondition + " AND vh.status  =0 AND vh.name!='"
-                                            + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK +
-                                            "' AND vh.type ='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT
-                                            + "' group by dept.dept_name, TO_date(ph.concurrenceDate)" +
-                                            " order by  TO_date(ph.concurrenceDate) ");
-            query = persistenceService.getSession().createSQLQuery(stringQry.toString()).addScalar("departmentName")
-                    .addScalar("concurrenceAmount").addScalar("concurrenceDate");
-            query.setResultTransformer(Transformers.aliasToBean(DepartmentwiseExpenditureReport.class));
-        }
+		} else {
+			stringQry.append(" SELECT dept.dept_name as departmentName, ")
+					.append("  ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount ")
+					.append("  FROM voucherheader vh,  generalledger gl,  vouchermis mis,eg_department dept,paymentheader ph ")
+					.append("  WHERE vh.id= gl.voucherheaderid ")
+					.append("  AND vh.id  =mis.voucherheaderid AND vh.id  = ph.voucherheaderid AND dept.id_dept =mis.departmentid ")
+					.append(" and TO_date(ph.concurrenceDate) >= TO_date(:fmDate,'dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)")
+					.append(" <=TO_date(:toDate,'dd-Mon-yyyy')").append(fundcondition)
+					.append(" AND vh.status  =0 AND vh.name!=:vhName")
+					.append(" AND vh.type =:vhType group by dept.dept_name").append("  order by dept.dept_name ");
 
-        deList.addAll(query.list());
+			params.put("fmDate", fmDate);
+			params.put("toDate", toDate);
+			params.put("vhName", FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK);
+			params.put("vhType", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
+		}
+		final Query query = persistenceService.getSession().createSQLQuery(stringQry.toString())
+				.addScalar("departmentName").addScalar("concurrenceAmount")
+				.setResultTransformer(Transformers.aliasToBean(DepartmentwiseExpenditureReport.class));
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		departmentwiseExpList.addAll(query.list());
+		return departmentwiseExpList;
+	}
 
-        return deList;
-    }
+	public List<DepartmentwiseExpenditureReport> getConcurrenceGivenForthePeriodQuery(
+			final DepartmentwiseExpenditureReport deObject) {
+		final List<DepartmentwiseExpenditureReport> deList = new ArrayList<DepartmentwiseExpenditureReport>();
+		final StringBuilder stringQry = new StringBuilder();
+		final Map<String, Object> params = new HashMap<>();
+		String fundcondition = " ";
+		String fmDate = "";
+		String toDate = "";
+		if (!deObject.getFundId().equals("") || deObject.getFundId().equals("0")) {
+			fundcondition = " and vh.fundId=:fundId";
+			params.put("fundId", deObject.getFundId());
+		}
+		if (deObject.getPeriod().equalsIgnoreCase("current")) {
+			fmDate = getFormattedDate(deObject.getFromDate());
+			toDate = getFormattedDate(deObject.getToDate());
+		} else if (deObject.getPeriod().equalsIgnoreCase("previous")) {
+			fmDate = getFormattedDate(getPreviousYearFor(deObject.getFromDate()));
+			toDate = getFormattedDate(getPreviousYearFor(deObject.getToDate()));
+		}
+		if (!(deObject.getAssetCode() != null && deObject.getAssetCode().equals("0"))) {
+
+			stringQry.append(" SELECT dept.dept_name as departmentName, ")
+					.append(" ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount ,")
+					.append("  TO_date(ph.concurrenceDate)  as concurrenceDate ")
+					.append("  FROM voucherheader vh,  generalledger gl, vouchermis mis,  eg_department dept,  paymentheader ph")
+					.append("  WHERE vh.id   = gl.voucherheaderid AND vh.id   =mis.voucherheaderid")
+					.append(" AND vh.id   = ph.voucherheaderid AND dept.id_dept = mis.departmentid ")
+					.append(" and gl.glcode like :glcode and gl.debitamount!=0 ")
+					.append(" and TO_date(ph.concurrenceDate) >= TO_date(:fmDate,'dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)")
+					.append(" <=TO_date(:toDate,'dd-Mon-yyyy')").append(fundcondition)
+					.append(" AND vh.status  =0 AND vh.name!=:vhName")
+					.append(" AND vh.type = :vhType group by dept.dept_name,  TO_date(ph.concurrenceDate)")
+					.append(" order by  TO_date(ph.concurrenceDate) ");
+			params.put("glcode", deObject.getAssetCode() + "%");
+			params.put("fmDate", fmDate);
+			params.put("toDate", toDate);
+			params.put("vhName", FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK);
+			params.put("vhType", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
+
+		} else {
+			stringQry.append(" SELECT dept.dept_name as departmentName, ")
+					.append(" ROUND(SUM(gl.debitamount)/100000,2) AS concurrenceAmount ,")
+					.append("  TO_date(ph.concurrenceDate) as concurrenceDate ")
+					.append("  FROM voucherheader vh,  generalledger gl,  vouchermis mis,  eg_department dept,  paymentheader ph")
+					.append(" WHERE vh.id   = gl.voucherheaderid AND vh.id   =mis.voucherheaderid")
+					.append("  AND vh.id   = ph.voucherheaderid AND dept.id_dept = mis.departmentid  ")
+					.append(" and TO_date(ph.concurrenceDate) >= TO_date(:fmDate,'dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)")
+					.append(" <=TO_date(:toDate,'dd-Mon-yyyy')").append(fundcondition)
+					.append(" AND vh.status  =0 AND vh.name!=:vhName")
+					.append(" AND vh.type = :vhType group by dept.dept_name, TO_date(ph.concurrenceDate)")
+					.append(" order by  TO_date(ph.concurrenceDate) ");
+
+			params.put("fmDate", fmDate);
+			params.put("toDate", toDate);
+			params.put("vhName", FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK);
+			params.put("vhType", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
+		}
+
+		final Query query = persistenceService.getSession().createSQLQuery(stringQry.toString())
+				.addScalar("departmentName").addScalar("concurrenceAmount").addScalar("concurrenceDate")
+				.setResultTransformer(Transformers.aliasToBean(DepartmentwiseExpenditureReport.class));
+
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		deList.addAll(query.list());
+
+		return deList;
+	}
 
     @SuppressWarnings("unchecked")
     public void populateDepartment(final DepartmentwiseExpenditureReport deptReport) {
@@ -361,63 +350,60 @@ public class DEReportService {
         // deptReport.getCurrentyearDepartmentList()
     }
 
-    public Query getConcurrenceDaywiseTotalQuery(final DepartmentwiseExpenditureReport deObject) {
-        StringBuffer stringQry = new StringBuffer();
-        String fundcondition = " ";
-        String fmDate = "";
-        String toDate = "";
-        if (deObject.getPeriod().equalsIgnoreCase("current")) {
-            fmDate = getFormattedDate(deObject.getFromDate());
-            toDate = getFormattedDate(deObject.getToDate());
-        } else if (deObject.getPeriod().equalsIgnoreCase("previous")) {
-            fmDate = getFormattedDate(getPreviousYearFor(deObject.getFromDate()));
-            toDate = getFormattedDate(getPreviousYearFor(deObject.getToDate()));
-        }
-        if (!deObject.getFundId().equals("") || deObject.getFundId().equals("0"))
-            fundcondition = " and vh.fundId=" + deObject.getFundId();
-        if (!(deObject.getAssetCode() != null && deObject.getAssetCode().equals("0")))
-            // String oppCode=deObject.getAssetCode().equals("412")?"410":"412";
-            stringQry = stringQry
-            .append(" SELECT dept.dept_name as departmentName, "
-                    +
-                    " SUM(gl.debitamount) AS concurrenceAmount "
-                    +
-                    "  FROM voucherheader vh,  generalledger gl,  vouchermis mis,eg_department dept,paymentheader ph "
-                    +
-                    "  WHERE vh.id= gl.voucherheaderid "
-                    +
-                    " AND vh.id  =mis.voucherheaderid AND vh.id  = ph.voucherheaderid AND dept.id_dept =mis.departmentid ")
-                    .append(" and TO_date(ph.concurrenceDate) >= TO_date('" + fmDate
-                            + "','dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)" +
-                            " <=TO_date('" + toDate + "','dd-Mon-yyyy')")
-                            .append(" and gl.glcode like '" + deObject.getAssetCode() + "%' and gl.debitamount!=0")
-                            // .append(" AND gl1.glcode LIKE '"+oppCode+"%' AND gl1.creditamount! =0 and gl1.voucherheaderid= gl.voucherheaderid")
-                            .append(fundcondition +
-                                    " AND vh.status  =0 AND vh.name!='" + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK +
-                                    "' AND vh.type ='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' group by dept.dept_name" +
-                                    " order by dept.dept_name");
-        else
-            stringQry = stringQry
-            .append(" SELECT dept.dept_name as departmentName, "
-                    +
-                    " SUM(gl.debitamount)  AS concurrenceAmount "
-                    +
-                    "  FROM voucherheader vh,  generalledger gl,  vouchermis mis,eg_department dept,paymentheader ph "
-                    +
-                    "  WHERE vh.id= gl.voucherheaderid "
-                    +
-                    " AND vh.id  =mis.voucherheaderid AND vh.id  = ph.voucherheaderid AND dept.id_dept =mis.departmentid ")
-                    .append(" and TO_date(ph.concurrenceDate) >= TO_date('" + fmDate
-                            + "','dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)" +
-                            " <=TO_date('" + toDate + "','dd-Mon-yyyy')")
-                            .append(fundcondition +
-                                    " AND vh.status  =0 AND vh.name!='" + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK +
-                                    "' AND vh.type ='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' group by dept.dept_name" +
-                                    " order by dept.dept_name");
-        final Query query = persistenceService.getSession().createSQLQuery(stringQry.toString()).addScalar("departmentName")
-                .addScalar("concurrenceAmount");
-        return query;
-    }
+	public Query getConcurrenceDaywiseTotalQuery(final DepartmentwiseExpenditureReport deObject) {
+		final StringBuilder stringQry = new StringBuilder();
+		final Map<String, Object> params = new HashMap<>();
+		String fundcondition = " ";
+		String fmDate = "";
+		String toDate = "";
+		if (deObject.getPeriod().equalsIgnoreCase("current")) {
+			fmDate = getFormattedDate(deObject.getFromDate());
+			toDate = getFormattedDate(deObject.getToDate());
+		} else if (deObject.getPeriod().equalsIgnoreCase("previous")) {
+			fmDate = getFormattedDate(getPreviousYearFor(deObject.getFromDate()));
+			toDate = getFormattedDate(getPreviousYearFor(deObject.getToDate()));
+		}
+		if (!deObject.getFundId().equals("") || deObject.getFundId().equals("0")) {
+			fundcondition = " and vh.fundId=:fundId";
+			params.put("fundId", deObject.getFundId());
+		}
+		if (!(deObject.getAssetCode() != null && deObject.getAssetCode().equals("0"))) {
+			stringQry.append(" SELECT dept.dept_name as departmentName, ")
+					.append(" SUM(gl.debitamount) AS concurrenceAmount ")
+					.append("  FROM voucherheader vh,  generalledger gl,  vouchermis mis,eg_department dept,paymentheader ph ")
+					.append("  WHERE vh.id= gl.voucherheaderid ")
+					.append(" AND vh.id  =mis.voucherheaderid AND vh.id  = ph.voucherheaderid AND dept.id_dept =mis.departmentid ")
+					.append(" and TO_date(ph.concurrenceDate) >= TO_date(:fmDate,'dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)")
+					.append(" <=TO_date(:toDate,'dd-Mon-yyyy')")
+					.append(" and gl.glcode like :glcode and gl.debitamount!=0").append(fundcondition)
+					.append(" AND vh.status  =0 AND vh.name!=:vhName")
+					.append(" AND vh.type =:vhType group by dept.dept_name order by dept.dept_name");
+			params.put("fmDate", fmDate);
+			params.put("toDate", toDate);
+			params.put("glcode", deObject.getAssetCode() + "%");
+			params.put("vhName", FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK);
+			params.put("vhYype", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
+		} else {
+			stringQry.append(" SELECT dept.dept_name as departmentName, ")
+					.append(" SUM(gl.debitamount)  AS concurrenceAmount ")
+					.append("  FROM voucherheader vh,  generalledger gl,  vouchermis mis,eg_department dept,paymentheader ph ")
+					.append("  WHERE vh.id= gl.voucherheaderid ")
+					.append(" AND vh.id  =mis.voucherheaderid AND vh.id  = ph.voucherheaderid AND dept.id_dept =mis.departmentid ")
+					.append(" and TO_date(ph.concurrenceDate) >= TO_date(:fmDate,'dd-Mon-yyyy') and  TO_date(ph.concurrenceDate)")
+					.append(" <=TO_date(:toDate,'dd-Mon-yyyy')").append(fundcondition)
+					.append(" AND vh.status  =0 AND vh.name!=:vhName").append(" AND vh.type = :vhType")
+					.append(" group by dept.dept_name order by dept.dept_name");
+
+			params.put("fmDate", fmDate);
+			params.put("toDate", toDate);
+			params.put("vhName", FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK);
+			params.put("vhYype", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
+		}
+		final Query query = persistenceService.getSession().createSQLQuery(stringQry.toString())
+				.addScalar("departmentName").addScalar("concurrenceAmount");
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		return query;
+	}
 
     public List<DepartmentwiseExpenditureReport> getConcurrenceReportDateWise() {
         final List<DepartmentwiseExpenditureReport> deptReport = new ArrayList<DepartmentwiseExpenditureReport>();

@@ -47,12 +47,12 @@
  */
 package org.egov.collection.entity;
 
+import org.apache.log4j.Logger;
 import org.egov.commons.Accountdetailkey;
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.commons.EgovCommon;
 import org.egov.infra.exception.ApplicationException;
-import org.egov.infra.exception.ApplicationRuntimeException;
 
 import java.math.BigDecimal;
 
@@ -61,24 +61,23 @@ import java.math.BigDecimal;
  * AccountPayeeDetail in subledger detail.
  */
 public class AccountPayeeDetailInfo {
+     
+    private static final Logger LOGGER = Logger.getLogger(AccountPayeeDetailInfo.class);
     private AccountPayeeDetail accountPayeeDetail = null;
     private EntityType entityType;
 
     public AccountPayeeDetailInfo(final AccountPayeeDetail accountPayeeDetail, final EgovCommon egovCommon) {
         this.accountPayeeDetail = accountPayeeDetail;
-        try {
-            populateEntityType(accountPayeeDetail, egovCommon);
-        } catch (final ApplicationException e) {
-            throw new ApplicationRuntimeException("Could not get entity type for account detail type ["
-                    + accountPayeeDetail.getAccountDetailType().getTablename() + "], account detail key id ["
-                    + accountPayeeDetail.getAccountDetailKey().getId() + "]", e);
-        }
+        populateEntityType(accountPayeeDetail, egovCommon);
     }
 
-    public void populateEntityType(final AccountPayeeDetail accountPayeeDetail, final EgovCommon egovCommon)
-            throws ApplicationException {
-        entityType = egovCommon.getEntityType(accountPayeeDetail.getAccountDetailType(), accountPayeeDetail
-                .getAccountDetailKey().getDetailkey());
+    public void populateEntityType(final AccountPayeeDetail accountPayeeDetail, final EgovCommon egovCommon) {
+        try {
+            entityType = egovCommon.getEntityType(accountPayeeDetail.getAccountDetailType(), accountPayeeDetail
+                    .getAccountDetailKey().getDetailkey());
+        } catch (ApplicationException e) {
+            LOGGER.error("error occured while getting entity type details" +e.getMessage());
+        }
     }
 
     /**

@@ -277,6 +277,13 @@
  		disableAll();
  		document.getElementById('button').value='surrender';
  		document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-save.action';
+ 		jQuery(chequeAssignment).append(
+ 				jQuery('<input>', {
+                    type: 'hidden',
+                    name: '${_csrf.parameterName}',
+                    value: '${_csrf.token}'
+                })
+            );
 		document.chequeAssignment.submit();
 		 return true;
  	}
@@ -334,7 +341,15 @@
 	 	
  		}
 	 	disableAll();
-	 	document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-save.action?containsRTGS='+document.getElementById('containsRTGS').value;
+	 	document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-save.action?containsRTGS='
+		 	+sanitizeHTML(document.getElementById('containsRTGS').value);
+	 	jQuery(chequeAssignment).append(
+	 			jQuery('<input>', {
+	                type: 'hidden',
+	                name: '${_csrf.parameterName}',
+	                value: '${_csrf.token}'
+	            })
+	        );
 		document.chequeAssignment.submit();
 		
  	}
@@ -342,7 +357,8 @@
 		console.log('departmentid'+departmentid.value);
 		console.log('bankaccount'+document.getElementById('bankaccount').value);
 		jQuery.ajax({
-			url: "/services/EGF/voucher/common-ajaxYearCode.action?departmentId="+departmentid.value+"&bankaccount="+document.getElementById('bankaccount').value,
+			url: "/services/EGF/voucher/common-ajaxYearCode.action?departmentId="+sanitizeHTML(departmentid.value)
+			+"&bankaccount="+sanitizeHTML(document.getElementById('bankaccount').value),
 			method: 'GET',
 		    async : false,
 		    

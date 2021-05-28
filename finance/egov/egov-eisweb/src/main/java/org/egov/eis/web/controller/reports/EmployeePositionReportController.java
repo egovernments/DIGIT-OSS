@@ -47,6 +47,17 @@
  */
 package org.egov.eis.web.controller.reports;
 
+import static org.egov.infra.utils.JsonUtils.toJSON;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.IOUtils;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.reports.entity.EmployeePositionResult;
@@ -58,102 +69,91 @@ import org.egov.eis.web.adaptor.EmployeePositionReportAdaptor;
 import org.egov.infra.admin.master.service.DepartmentService;
 import org.egov.pims.commons.Position;
 import org.hibernate.Session;
+import org.owasp.esapi.ESAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.egov.infra.utils.JsonUtils.toJSON;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 @RequestMapping(value = "/report")
 public class EmployeePositionReportController {
 
-    public static final String CONTENTTYPE_JSON = "application/json";
+	public static final String CONTENTTYPE_JSON = "application/json";
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @Autowired
-    private DepartmentService departmentService;
+	@Autowired
+	private DepartmentService departmentService;
 
-    @Autowired
-    private DesignationService designationService;
+	@Autowired
+	private DesignationService designationService;
 
-    @Autowired
-    private PositionMasterService positionMasterService;
+	@Autowired
+	private PositionMasterService positionMasterService;
 
-    @Autowired
-    private AssignmentService assignmentService;
+	@Autowired
+	private AssignmentService assignmentService;
 
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
-    }
+	public Session getCurrentSession() {
+		return entityManager.unwrap(Session.class);
+	}
 
-    @RequestMapping(method = RequestMethod.GET, value = "/employeePositionReport")
-    public String searchEmployeePositionForm(final Model model) {
-        setDropDownValues(model);
-        model.addAttribute("employee", new EmployeePositionSearch());
-        return "employeePositionReport-form";
-    }
+	@GetMapping(value = "/employeePositionReport")
+	public String searchEmployeePositionForm(final Model model) {
+		setDropDownValues(model);
+		model.addAttribute("employee", new EmployeePositionSearch());
+		return "employeePositionReport-form";
+	}
 
-    @RequestMapping(value = "/empPositionList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody void search(final HttpServletRequest request, final HttpServletResponse response,
-            final EmployeePositionSearch employeeSearch, final Model model)
-            throws IOException {
-        final List<EmployeePositionResult> empPosResultList = new ArrayList<>();
-        final List<Assignment> assignList = assignmentService.getAssignmentList(employeeSearch);
-        for (final Assignment assign : assignList) {
-            final EmployeePositionResult empPosition = new EmployeePositionResult();
-            empPosition.setCode(assign.getEmployee().getCode());
-            empPosition.setName(assign.getEmployee().getName());
-            empPosition.setDepartment(assign.getDepartment());
-            empPosition.setDesignation(assign.getDesignation());
-            empPosition.setPosition(assign.getPosition());
-            empPosition.setIsPrimary(assign.getPrimary());
-            empPosition.setFromDate(assign.getFromDate());
-            empPosition.setToDate(assign.getToDate());
+	@GetMapping(value = "/empPositionList", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody void search(final HttpServletRequest request, final HttpServletResponse response,
+			final EmployeePositionSearch employeeSearch, final Model model) throws IOException {
+		final List<EmployeePositionResult> empPosResultList = new ArrayList<>();
+		final List<Assignment> assignList = assignmentService.getAssignmentList(employeeSearch);
+		for (final Assignment assign : assignList) {
+			final EmployeePositionResult empPosition = new EmployeePositionResult();
+			empPosition.setCode(assign.getEmployee().getCode());
+			empPosition.setName(assign.getEmployee().getName());
+			empPosition.setDepartment(assign.getDepartment());
+			empPosition.setDesignation(assign.getDesignation());
+			empPosition.setPosition(assign.getPosition());
+			empPosition.setIsPrimary(assign.getPrimary());
+			empPosition.setFromDate(assign.getFromDate());
+			empPosition.setToDate(assign.getToDate());
 
-            empPosResultList.add(empPosition);
-        }
+			empPosResultList.add(empPosition);
+		}
 
-        final StringBuilder employeePositionJSONData = new StringBuilder("{\"data\":")
-                .append(toJSON(empPosResultList, EmployeePositionResult.class, EmployeePositionReportAdaptor.class))
-                .append("}");
-        response.setContentType(CONTENTTYPE_JSON);
-        IOUtils.write(employeePositionJSONData, response.getWriter());
-    }
+		final StringBuilder employeePositionJSONData = new StringBuilder("{\"data\":")
+				.append(toJSON(empPosResultList, EmployeePositionResult.class, EmployeePositionReportAdaptor.class))
+				.append("}");
+		ESAPI.httpUtilities().addHeader(response, "Content-Type", CONTENTTYPE_JSON);
+		IOUtils.write(employeePositionJSONData, response.getWriter());
+	}
 
-    private void setDropDownValues(final Model model) {
-        model.addAttribute("department", departmentService.getAllDepartments());
-        model.addAttribute("desigList", designationService.getAllDesignations());
-        model.addAttribute("position", positionMasterService.getAllPositions());
-    }
+	private void setDropDownValues(final Model model) {
+		model.addAttribute("department", departmentService.getAllDepartments());
+		model.addAttribute("desigList", designationService.getAllDesignations());
+		model.addAttribute("position", positionMasterService.getAllPositions());
+	}
 
-    @RequestMapping(value = "/positions", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Position> getPositionByDepartmentAndDesignation(@RequestParam final Long deptId,
-            @RequestParam final Long desigId) {
-        if (deptId != null && desigId != null)
-            return positionMasterService.getPositionsByDepartmentAndDesignation(deptId, desigId);
-        else if (deptId != null)
-            return positionMasterService.getPositionsByDepartment(deptId);
-        else if (desigId != null)
-            return positionMasterService.getPositionsByDesignation(desigId);
-        else
-            return positionMasterService.getAllPositions();
-    }
+	@GetMapping(value = "/positions", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Position> getPositionByDepartmentAndDesignation(@RequestParam final Long deptId,
+			@RequestParam final Long desigId) {
+		if (deptId != null && desigId != null)
+			return positionMasterService.getPositionsByDepartmentAndDesignation(deptId, desigId);
+		else if (deptId != null)
+			return positionMasterService.getPositionsByDepartment(deptId);
+		else if (desigId != null)
+			return positionMasterService.getPositionsByDesignation(desigId);
+		else
+			return positionMasterService.getAllPositions();
+	}
 
 }

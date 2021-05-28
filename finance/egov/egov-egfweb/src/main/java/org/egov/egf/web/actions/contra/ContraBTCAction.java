@@ -49,6 +49,8 @@ package org.egov.egf.web.actions.contra;
 
 import com.exilant.GLEngine.ChartOfAccounts;
 import com.exilant.GLEngine.Transaxtion;
+import com.exilant.exility.common.TaskFailedException;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -312,7 +314,7 @@ public class ContraBTCAction extends BaseVoucherAction {
 	}
 
 	@Action(value = "/contra/contraBTC-newForm")
-	public String newForm() throws Exception {
+	public String newForm() {
 		return NEW;
 	}
 
@@ -394,7 +396,7 @@ public class ContraBTCAction extends BaseVoucherAction {
 			try {
 				availableBalance = egovCommon.getAccountBalance(voucherHeader.getVoucherDate(),
 						Long.valueOf(parameters.get("accountNumberId")[0]));
-			} catch (final Exception e) {
+			} catch (final NumberFormatException e) {
 				LOGGER.error("Error in retriving balance" + e.getMessage(), e);
 				availableBalance = BigDecimal.valueOf(-1);
 			}
@@ -423,10 +425,11 @@ public class ContraBTCAction extends BaseVoucherAction {
 					Arrays.asList(new ValidationError(EXCEPTION_WHILE_SAVING_DATA, TRANSACTION_FAILED)));
 		} catch (final ValidationException e) {
 			throw e;
-		} catch (final Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { LOGGER.error(e.getMessage(), e); throw
+           * new ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		return voucherHeader;
 	}
 
@@ -578,7 +581,7 @@ public class ContraBTCAction extends BaseVoucherAction {
 				createLedgerAndPost(oldVoucher);
 				addActionMessage(getText("transaction.success") + oldVoucher.getVoucherNumber());
 				return Constants.VIEW;
-			} catch (final Exception e) {
+			} catch (final HibernateException | TaskFailedException e) {
 				LOGGER.error(e.getMessage(), e);
 				final List<ValidationError> errors = new ArrayList<ValidationError>();
 				errors.add(new ValidationError("exp", e.getMessage()));
@@ -587,7 +590,7 @@ public class ContraBTCAction extends BaseVoucherAction {
 		return "edit";
 	}
 
-	void createLedgerAndPost(final CVoucherHeader voucher) {
+	void createLedgerAndPost(final CVoucherHeader voucher) throws TaskFailedException {
 		try {
 			createVoucher.deleteVoucherdetailAndGL(voucher);
 			persistenceService.getSession().flush();
@@ -615,10 +618,11 @@ public class ContraBTCAction extends BaseVoucherAction {
 			LOGGER.error(e.getMessage(), e);
 			throw new ValidationException(
 					Arrays.asList(new ValidationError(EXCEPTION_WHILE_SAVING_DATA, TRANSACTION_FAILED)));
-		} catch (final Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { LOGGER.error(e.getMessage(), e); throw
+           * new ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 	}
 
 	public void modifyInstrument(final InstrumentHeader ih, final CVoucherHeader vh) {

@@ -54,11 +54,15 @@ package com.exilant.eGov.src.reports;
 
 import com.exilant.eGov.src.common.EGovernCommon;
 import com.exilant.exility.common.TaskFailedException;
+
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import org.apache.log4j.Logger;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.infstr.utils.EGovConfig;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -71,8 +75,11 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 class OpBalance {
     public double dr;
@@ -86,15 +93,17 @@ public class CashBook {
     List<Object[]> resultset = null;
     List<Object[]> resultset1 = null;
     TaskFailedException taskExc;
-    String startDate, endDate, effTime, rType = "gl";
+    String startDate, endDate, rType = "gl";
+
+	Map<String, Map<String, Object>> effTime;
     NumberFormat numberformatter = new DecimalFormat("##############0.00");
     private final CommnFunctions commonFun = new CommnFunctions();
     private static final Logger LOGGER = Logger.getLogger(CashBook.class);
    
- @Autowired
- @Qualifier("persistenceService")
- private PersistenceService persistenceService;
- @Autowired
+	@Autowired
+	@Qualifier("persistenceService")
+	private PersistenceService persistenceService;
+	@Autowired
     private FinancialYearHibernateDAO financialYearDAO;
     final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     final SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MMM-yyyy");
@@ -108,7 +117,8 @@ public class CashBook {
         connection = con;
     }
 
-    public LinkedList getGeneralLedgerList(final GeneralLedgerReportBean reportBean)
+    @SuppressWarnings("unchecked")
+	public LinkedList getGeneralLedgerList(final GeneralLedgerReportBean reportBean)
             throws TaskFailedException {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Inside getGeneralLedgerList");
@@ -138,16 +148,16 @@ public class CashBook {
                 glCode2 = getMaxCode(glCode2);
             }
 
-            try {
-                final String snapShotDateTime = reportBean.getSnapShotDateTime();
-                if (snapShotDateTime.equalsIgnoreCase(""))
-                    effTime = "";
-                else
-                    effTime = eGovernCommon.getEffectiveDateFilter(snapShotDateTime);
-            } catch (final Exception ex) {
-                LOGGER.error("exception in getGeneralLedgerList", ex);
-                throw taskExc;
-            }
+			try {
+				final String snapShotDateTime = reportBean.getSnapShotDateTime();
+				if (snapShotDateTime.equalsIgnoreCase(""))
+					effTime = new HashMap<>();
+				else
+					effTime = eGovernCommon.getEffectiveDateFilter(snapShotDateTime);
+			} catch (final TaskFailedException ex) {
+				LOGGER.error("exception in getGeneralLedgerList", ex);
+				throw taskExc;
+			}
 
             String formstartDate = "", formendDate = "";
             Date dt = new Date();
@@ -163,7 +173,7 @@ public class CashBook {
                 endDate = reportBean.getEndDate();
                 dt = sdf.parse(endDate);
                 formendDate = formatter1.format(dt);
-            } catch (final Exception e) {
+            } catch (final ParseException e) {
                 LOGGER.error("inside the try-startdate", e);
                 throw taskExc;
             }
@@ -173,7 +183,7 @@ public class CashBook {
                     dt = sdf.parse(startDate);
                     formstartDate = formatter1.format(dt);
                 }
-            } catch (final Exception e) {
+            } catch (final ParseException e) {
                 LOGGER.error("inside the try-startdate", e);
                 throw taskExc;
             }
@@ -203,7 +213,7 @@ public class CashBook {
             try {
                 dt = formatter1.parse(startDateformat);
                 startDateformat1 = sdf.format(dt);
-            } catch (final Exception e) {
+            } catch (final ParseException e) {
                 LOGGER.error("Parse Exception", e);
                 throw taskExc;
             }
@@ -230,21 +240,8 @@ public class CashBook {
 
             final ReportEngineBean reBean = engine
                     .populateReportEngineBean(reportBean);
-            final String engineQry = engine.getVouchersListQuery(reBean);
-
-            final String query = getQuery(engineQry);
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("**************QUERY: " + query);
-
-            // try{
-
-            try {
-                pstmt = persistenceService.getSession().createSQLQuery(query);
-            } catch (final Exception e) {
-                LOGGER.error("Exception in creating statement:", e);
-                throw taskExc;
-            }
-            resultset1 = pstmt.list();
+            final Entry<String, Map<String, Object>> queryWithParams = engine.getVouchersListQuery(reBean).entrySet().iterator().next();
+            resultset1 = getQuery(queryWithParams).list();
             String accCode = "", vcNum = "", vcDate = "";
             StringBuffer detail = new StringBuffer();
             StringBuffer amount = new StringBuffer();
@@ -286,409 +283,401 @@ public class CashBook {
             dataList.add(glbeanOpBal);
 
             int count2skip1stRow = 0;
-            for (final Object[] element : resultset1)
-                // if(LOGGER.isInfoEnabled()) LOGGER.info(" inside resultset");
-                try {
-
-                    code = element[0].toString();
-                    isconfirmed = element[20].toString();
-                    // 9 is the dummy value used in the query
-                    // To display X in Y are unconfirmed
-                    if (isconfirmed != null
-                            && !isconfirmed.equalsIgnoreCase("")
-                            && !isconfirmed.equalsIgnoreCase("9")) {
-                        final String vn1 = element[11].toString();
-                        if (!vn1.equalsIgnoreCase(vn2)) {
-                            vn2 = vn1;
-                            totalCount = totalCount + 1;
-                            if (isconfirmed.equalsIgnoreCase("0"))
-                                isConfirmedCount = isConfirmedCount + 1;
-                        }
+            for (final Object[] element : resultset1) {
+                code = element[0].toString();
+                isconfirmed = element[20].toString();
+                // 9 is the dummy value used in the query
+                // To display X in Y are unconfirmed
+                if (isconfirmed != null
+                        && !isconfirmed.equalsIgnoreCase("")
+                        && !isconfirmed.equalsIgnoreCase("9")) {
+                    final String vn1 = element[11].toString();
+                    if (!vn1.equalsIgnoreCase(vn2)) {
+                        vn2 = vn1;
+                        totalCount = totalCount + 1;
+                        if (isconfirmed.equalsIgnoreCase("0"))
+                            isConfirmedCount = isConfirmedCount + 1;
                     }
-
-                    vhId = Integer.parseInt(element[8].toString());
-                    if (LOGGER.isInfoEnabled())
-                        LOGGER.info("check1>>vhId:" + vhId + " VhidPrevious:"
-                                + VhidPrevious + " code:" + code + " accCode:"
-                                + accCode);
-
-                    if (vhId != VhidPrevious) {
-                        if (LOGGER.isInfoEnabled())
-                            LOGGER.info("inside vhId!=VhidPrevious & vhType="
-                                    + vhType);
-                        final GeneralLedgerReportBean glbean = new GeneralLedgerReportBean(
-                                "&nbsp;");
-
-                        if (currentCredit.doubleValue() > 0) {
-                            if (LOGGER.isInfoEnabled())
-                                LOGGER.info("inside Receipt>>>>>>" + accCode);
-                            glbean.setRcptVchrNo(vcNum);
-                            if (vcDate != null && !vcDate.equalsIgnoreCase(""))
-                                glbean.setRcptVchrDate(vcDate);
-                            if (bgtCode != null
-                                    && !bgtCode.equalsIgnoreCase(""))
-                                glbean.setRcptBgtCode(bgtCode);
-                            if (funcCode != null
-                                    && !funcCode.equalsIgnoreCase(""))
-                                glbean.setRcptFuncCode(funcCode);
-                            if (purposeid.equalsIgnoreCase(cashPId)) {
-                                if (amount != null && !amount.equals(""))
-                                    glbean.setRcptcashInHandAmt(amount
-                                            .toString());
-                            } else if (amount != null && !amount.equals(""))
-                                glbean.setRcptChqInHandAmt(amount
-                                        .toString());
-                            if (detail != null && !detail.equals(""))
-                                glbean.setRcptParticulars(detail.toString());
-                            if (srcOfFinance != null
-                                    && !srcOfFinance.equals(""))
-                                glbean.setRcptSrcOfFinance(srcOfFinance);
-                            // if(accCode!=null && !accCode.equals(""))
-                            // glbean.setRcptAccCode(accCode);
-                            if (accCodebuffer != null
-                                    && !accCodebuffer.equals(""))
-                                glbean.setRcptAccCode(accCodebuffer.toString());
-
-                        } else {
-                            if (LOGGER.isInfoEnabled())
-                                LOGGER.info("inside Payment>>>>>>" + accCode);
-                            glbean.setPmtVchrNo(vcNum);
-                            if (vcDate != null && !vcDate.equalsIgnoreCase(""))
-                                glbean.setpmtVchrDate(vcDate);
-                            if (bgtCode != null
-                                    && !bgtCode.equalsIgnoreCase(""))
-                                glbean.setPmtBgtCode(bgtCode);
-                            if (funcCode != null
-                                    && !funcCode.equalsIgnoreCase(""))
-                                glbean.setPmtFuncCode(funcCode);
-                            if (purposeid.equalsIgnoreCase(cashPId)) {
-                                if (amount != null && !amount.equals(""))
-                                    glbean.setPmtCashInHandAmt(amount
-                                            .toString());
-                            } else if (amount != null && !amount.equals(""))
-                                glbean.setPmtChqInHandAmt(amount.toString());
-                            if (detail != null && !detail.equals(""))
-                                glbean.setPmtParticulars(detail.toString());
-                            if (srcOfFinance != null
-                                    && !srcOfFinance.equals(""))
-                                glbean.setPmtSrcOfFinance(srcOfFinance);
-                            // if(accCode!=null && !accCode.equals(""))
-                            // glbean.setPmtAccCode(accCode);
-                            if (accCodebuffer != null
-                                    && !accCodebuffer.equals(""))
-                                glbean.setPmtAccCode(accCodebuffer.toString());
-
-                        }
-                        if (LOGGER.isInfoEnabled())
-                            LOGGER.info("cgn before adding: " + cgn);
-                        glbean.setCGN(cgn);
-                        reportBean.setStartDate(startDateformat1);
-                        reportBean.setTotalCount(Integer.toString(totalCount));
-                        reportBean.setIsConfirmedCount(Integer
-                                .toString(isConfirmedCount));
-                        if (count2skip1stRow != 0)
-                            dataList.add(glbean);// skip to insert blank row at
-                        // the top
-                        count2skip1stRow++;
-                        currVhDate = element[10].toString();
-                        if (LOGGER.isInfoEnabled())
-                            LOGGER.info("vcDate:" + vcDate + " currVhDate:"
-                                    + currVhDate);
-                        if (!vcDate.equalsIgnoreCase(currVhDate)
-                                && !vcDate.equalsIgnoreCase("")) {
-
-                            final GeneralLedgerReportBean glbeanCb = new GeneralLedgerReportBean(
-                                    "&nbsp;");
-                            glbeanCb.setPmtParticulars("<B>Closing: By balance c/d</B>");
-                            glbeanCb.setPmtCashInHandAmt("<B>"
-                                    + numberToString(cashcreditTotal.subtract(
-                                            cashdebitTotal).toString())
-                                            + "</B>");
-                            glbeanCb.setPmtChqInHandAmt("<B>"
-                                    + numberToString(chequecreditTotal
-                                            .subtract(chequedebitTotal)
-                                            .toString()) + "</B>");
-                            dataList.add(glbeanCb);
-                            final GeneralLedgerReportBean glbean1 = new GeneralLedgerReportBean(
-                                    "<hr>&nbsp;</hr>");
-                            glbean1.setRcptVchrDate("<hr><B>Total</B></hr>");
-                            glbean1.setRcptcashInHandAmt("<hr><B>"
-                                    + numberToString(cashcreditTotal.toString())
-                                    + "</B></hr>");
-                            glbean1.setPmtCashInHandAmt("<hr><B>"
-                                    + numberToString(cashdebitTotal.add(
-                                            cashcreditTotal
-                                            .subtract(cashdebitTotal))
-                                            .toString()) + "</B></hr>");
-                            glbean1.setRcptChqInHandAmt("<hr><B>"
-                                    + numberToString(chequecreditTotal
-                                            .toString()) + "</B></hr>");
-                            glbean1.setPmtChqInHandAmt("<hr><B>"
-                                    + numberToString(chequedebitTotal
-                                            .add(chequecreditTotal
-                                                    .subtract(chequedebitTotal))
-                                                    .toString()) + "</B></hr>");
-                            dataList.add(glbean1);
-                            if (LOGGER.isInfoEnabled())
-                                LOGGER.info(cashcreditTotal + ":crDr: "
-                                        + cashdebitTotal);
-                            final GeneralLedgerReportBean glbeanOb = new GeneralLedgerReportBean(
-                                    "<hr>&nbsp;</hr>");
-                            glbeanOb.setRcptParticulars("<hr><B>Opening: To balance b/d</B></hr>");
-                            // glbeanOb.setRcptcashInHandAmt("<hr><B>"+(numberformatter.format(cashcreditTotal.subtract(cashdebitTotal).doubleValue()))+"</B></hr>");
-                            // glbeanOb.setRcptChqInHandAmt("<hr><B>"+(numberformatter.format(chequecreditTotal.subtract(chequedebitTotal).doubleValue()))+"</B></hr>");
-                            glbeanOb.setRcptcashInHandAmt("<hr><B>"
-                                    + numberToString(cashcreditTotal.subtract(
-                                            cashdebitTotal).toString())
-                                            + "</B></hr>");
-                            glbeanOb.setRcptChqInHandAmt("<hr><B>"
-                                    + numberToString(chequecreditTotal
-                                            .subtract(chequedebitTotal)
-                                            .toString()) + "</B></hr>");
-                            dataList.add(glbeanOb);
-                            cashcreditTotal = cashcreditTotal
-                                    .subtract(cashdebitTotal);
-                            chequecreditTotal = chequecreditTotal
-                                    .subtract(chequedebitTotal);
-                            cashdebitTotal = new BigDecimal("0.00");
-                            chequedebitTotal = new BigDecimal("0.00");
-                        }
-                        vcNum = vcDate = bgtCode = funcCode = srcOfFinance = accCode = cgn = vhType = "";
-                        amount.delete(0, amount.length());
-                        detail.delete(0, detail.length());
-                        accCodebuffer.delete(0, accCodebuffer.length());
-                    }
-
-                    accCode = element[12].toString();
-                    if (LOGGER.isInfoEnabled())
-                        LOGGER.info("check2>>vhId:" + vhId + " VhidPrevious:"
-                                + VhidPrevious + " code:" + code + " accCode:"
-                                + accCode);
-                    if (vhId == VhidPrevious && !code.equalsIgnoreCase(accCode)) {
-                        if (LOGGER.isInfoEnabled())
-                            LOGGER.info("inside vhId==VhidPrevious ");
-                        vhType = element[1].toString();
-                        // vhName=resultset1.getString("vhname");
-                        String bLine = "<Br>";
-                        currentDebit = new BigDecimal("0.00");
-                        currentCredit = new BigDecimal("0.00");
-                        cgn = element[2].toString();
-                        vcDate = element[10].toString();
-                        vcNum = element[11].toString();
-                        funcCode = element[7].toString();
-                        // bgtCode=resultset1.getString("BGCODE");
-                        srcOfFinance = element[6].toString();
-                        final String name[] = element[13].toString().split(" ");
-                        int wordLength = 0;
-                        String formatedName = "";
-                        // String formatedAccCode="";
-                        for (final String element2 : name) {
-                            wordLength = element2.length();
-                            if (formatedName.length()
-                                    - formatedName.lastIndexOf("<Br>") + wordLength < 25)
-                                formatedName = formatedName + " " + element2;
-                            else {
-                                formatedName = formatedName.concat("<Br>"
-                                        + element2);
-                                bLine = bLine.concat("<Br>");
-                            }
-                        }
-                        detail = detail.append(" " + formatedName + "<br>");
-                        accCodebuffer = accCodebuffer.append(" " + accCode
-                                + bLine);
-                        currentDebit = new BigDecimal(element[17].toString());
-                        currentCredit = new BigDecimal(element[18].toString());
-                        if (LOGGER.isInfoEnabled())
-                            LOGGER.info("currentCredit:" + currentCredit
-                                    + " currentDebit:" + currentDebit
-                                    + " chequedebitTotal:" + chequedebitTotal
-                                    + "chequecreditTotal:" + chequecreditTotal);
-                        if (LOGGER.isInfoEnabled())
-                            LOGGER.info(" BEFORE>>>>cashdebitTotal:"
-                                    + cashdebitTotal + "cashcreditTotal:"
-                                    + cashcreditTotal);
-                        if (currentDebit.doubleValue() > 0) {
-                            if (LOGGER.isInfoEnabled())
-                                LOGGER.info("if purposeid:" + purposeid
-                                        + ">>cashPId:" + cashPId);
-                            // amount=amount.append(" " +
-                            // numberformatter.format(currentDebit.doubleValue())
-                            // + bLine);
-                            amount = amount.append(" "
-                                    + numberToString(currentDebit.toString())
-                                    + bLine);
-                            if (purposeid.equalsIgnoreCase(cashPId))
-                                cashdebitTotal = cashdebitTotal
-                                .add(currentDebit);
-                            else
-                                chequedebitTotal = chequedebitTotal
-                                .add(currentDebit);
-                        } else {
-                            if (LOGGER.isInfoEnabled())
-                                LOGGER.info("else purposeid:" + purposeid
-                                        + ">>cashPId:" + cashPId);
-                            // amount=amount.append(" " +
-                            // numberformatter.format(currentCredit.doubleValue())
-                            // + bLine);
-                            amount = amount.append(" "
-                                    + numberToString(currentCredit.toString())
-                                    + bLine);
-                            if (purposeid.equalsIgnoreCase(cashPId))
-                                cashcreditTotal = cashcreditTotal
-                                .add(currentCredit);
-                            else
-                                chequecreditTotal = chequecreditTotal
-                                .add(currentCredit);
-                        }
-                        if (LOGGER.isInfoEnabled())
-                            LOGGER.info("after adding currentCredit:"
-                                    + currentCredit + " currentDebit:"
-                                    + currentDebit + " chequedebitTotal:"
-                                    + chequedebitTotal + "chequecreditTotal:"
-                                    + chequecreditTotal);
-                        if (LOGGER.isInfoEnabled())
-                            LOGGER.info(" AFTER>>>>cashdebitTotal:"
-                                    + cashdebitTotal + "cashcreditTotal:"
-                                    + cashcreditTotal);
-                        cgn = element[2].toString();
-                        // if(LOGGER.isInfoEnabled()) LOGGER.info("cgn: "+cgn);
-
-                    } else
-                        purposeid = element[3].toString();
-                    VhidPrevious = vhId;
-                    if (element.equals(resultset1.get(resultset1.size() - 1))) {
-                        final GeneralLedgerReportBean glbean = new GeneralLedgerReportBean(
-                                "&nbsp;");
-
-                        if (currentCredit.doubleValue() > 0) {
-                            if (LOGGER.isInfoEnabled())
-                                LOGGER.info("inside Receipt>>>>>>" + accCode);
-                            glbean.setRcptVchrNo(vcNum);
-                            if (vcDate != null && !vcDate.equalsIgnoreCase(""))
-                                glbean.setRcptVchrDate(vcDate);
-                            if (bgtCode != null
-                                    && !bgtCode.equalsIgnoreCase(""))
-                                glbean.setRcptBgtCode(bgtCode);
-                            if (funcCode != null
-                                    && !funcCode.equalsIgnoreCase(""))
-                                glbean.setRcptFuncCode(funcCode);
-                            if (purposeid.equalsIgnoreCase(cashPId)) {
-                                if (amount != null && !amount.equals(""))
-                                    glbean.setRcptcashInHandAmt(amount
-                                            .toString());
-                            } else if (amount != null && !amount.equals(""))
-                                glbean.setRcptChqInHandAmt(amount
-                                        .toString());
-                            if (detail != null && !detail.equals(""))
-                                glbean.setRcptParticulars(detail.toString());
-                            if (srcOfFinance != null
-                                    && !srcOfFinance.equals(""))
-                                glbean.setRcptSrcOfFinance(srcOfFinance);
-                            if (accCodebuffer != null
-                                    && !accCodebuffer.equals(""))
-                                glbean.setRcptAccCode(accCodebuffer.toString());
-                            // if(accCode!=null && !accCode.equals(""))
-                            // glbean.setRcptAccCode(accCode);
-
-                        } else {
-                            if (LOGGER.isInfoEnabled())
-                                LOGGER.info("inside Payment>>>>>>" + accCode);
-                            glbean.setPmtVchrNo(vcNum);
-                            if (vcDate != null && !vcDate.equalsIgnoreCase(""))
-                                glbean.setpmtVchrDate(vcDate);
-                            if (bgtCode != null
-                                    && !bgtCode.equalsIgnoreCase(""))
-                                glbean.setPmtBgtCode(bgtCode);
-                            if (funcCode != null
-                                    && !funcCode.equalsIgnoreCase(""))
-                                glbean.setPmtFuncCode(funcCode);
-                            if (purposeid.equalsIgnoreCase(cashPId)) {
-                                if (amount != null && !amount.equals(""))
-                                    glbean.setPmtCashInHandAmt(amount
-                                            .toString());
-                            } else if (amount != null && !amount.equals(""))
-                                glbean.setPmtChqInHandAmt(amount.toString());
-                            if (detail != null && !detail.equals(""))
-                                glbean.setPmtParticulars(detail.toString());
-                            if (srcOfFinance != null
-                                    && !srcOfFinance.equals(""))
-                                glbean.setPmtSrcOfFinance(srcOfFinance);
-                            // if(accCode!=null && !accCode.equals(""))
-                            // glbean.setPmtAccCode(accCode);
-                            if (accCodebuffer != null
-                                    && !accCodebuffer.equals(""))
-                                glbean.setPmtAccCode(accCodebuffer.toString());
-
-                        }
-                        glbean.setCGN(cgn);
-                        reportBean.setStartDate(startDateformat1);
-                        reportBean.setTotalCount(Integer.toString(totalCount));
-                        reportBean.setIsConfirmedCount(Integer
-                                .toString(isConfirmedCount));
-                        dataList.add(glbean);
-                        currVhDate = element[10].toString();
-                        {
-                            final GeneralLedgerReportBean glbeanCb = new GeneralLedgerReportBean(
-                                    "&nbsp;");
-                            glbeanCb.setPmtParticulars("<B>Closing: By balance c/d</B>");
-                            glbeanCb.setPmtCashInHandAmt("<B>"
-                                    + numberToString(cashcreditTotal.subtract(
-                                            cashdebitTotal).toString())
-                                            + "</B>");
-                            glbeanCb.setPmtChqInHandAmt("<B>"
-                                    + numberToString(chequecreditTotal
-                                            .subtract(chequedebitTotal)
-                                            .toString()) + "</B>");
-                            dataList.add(glbeanCb);
-
-                            final GeneralLedgerReportBean glbean1 = new GeneralLedgerReportBean(
-                                    "<hr>&nbsp;</hr>");
-                            glbean1.setRcptVchrDate("<hr><B>Total</B></hr>");
-                            glbean1.setRcptcashInHandAmt("<hr><B>"
-                                    + numberToString(cashcreditTotal.toString())
-                                    + "</B></hr>");
-                            glbean1.setPmtCashInHandAmt("<hr><B>"
-                                    + numberToString(cashdebitTotal.add(
-                                            cashcreditTotal
-                                            .subtract(cashdebitTotal))
-                                            .toString()) + "</B></hr>");
-                            glbean1.setRcptChqInHandAmt("<hr><B>"
-                                    + numberToString(chequecreditTotal
-                                            .toString()) + "</B></hr>");
-                            glbean1.setPmtChqInHandAmt("<hr><B>"
-                                    + numberToString(chequedebitTotal
-                                            .add(chequecreditTotal
-                                                    .subtract(chequedebitTotal))
-                                                    .toString()) + "</B></hr>");
-                            dataList.add(glbean1);
-                            final GeneralLedgerReportBean glbeanOb = new GeneralLedgerReportBean(
-                                    "<hr>&nbsp;</hr>");
-                            glbeanOb.setRcptParticulars("<hr><B>Opening: To balance b/d</B></hr>");
-                            glbeanOb.setRcptcashInHandAmt("<hr><B>"
-                                    + numberToString(cashcreditTotal.subtract(
-                                            cashdebitTotal).toString())
-                                            + "</B></hr>");
-                            glbeanOb.setRcptcashInHandAmt("<hr><B>"
-                                    + numberToString(cashcreditTotal.subtract(
-                                            cashdebitTotal).toString())
-                                            + "</B></hr>");
-                            glbeanOb.setRcptChqInHandAmt("<hr><B>"
-                                    + numberToString(chequecreditTotal
-                                            .subtract(chequedebitTotal)
-                                            .toString()) + "</B></hr>");
-                            glbeanOb.setRcptChqInHandAmt("<hr><B>"
-                                    + numberToString(chequecreditTotal
-                                            .subtract(chequedebitTotal)
-                                            .toString()) + "</B></hr>");
-                            dataList.add(glbeanOb);
-                        }
-                    }
-                } catch (final Exception e) {
-
-                    LOGGER.error(
-                            "error in resultset processing" + e.getMessage(), e);
-                    throw taskExc;
                 }
+
+                vhId = Integer.parseInt(element[8].toString());
+                if (LOGGER.isInfoEnabled())
+                    LOGGER.info("check1>>vhId:" + vhId + " VhidPrevious:"
+                            + VhidPrevious + " code:" + code + " accCode:"
+                            + accCode);
+
+                if (vhId != VhidPrevious) {
+                    if (LOGGER.isInfoEnabled())
+                        LOGGER.info("inside vhId!=VhidPrevious & vhType="
+                                + vhType);
+                    final GeneralLedgerReportBean glbean = new GeneralLedgerReportBean(
+                            "&nbsp;");
+
+                    if (currentCredit.doubleValue() > 0) {
+                        if (LOGGER.isInfoEnabled())
+                            LOGGER.info("inside Receipt>>>>>>" + accCode);
+                        glbean.setRcptVchrNo(vcNum);
+                        if (vcDate != null && !vcDate.equalsIgnoreCase(""))
+                            glbean.setRcptVchrDate(vcDate);
+                        if (bgtCode != null
+                                && !bgtCode.equalsIgnoreCase(""))
+                            glbean.setRcptBgtCode(bgtCode);
+                        if (funcCode != null
+                                && !funcCode.equalsIgnoreCase(""))
+                            glbean.setRcptFuncCode(funcCode);
+                        if (purposeid.equalsIgnoreCase(cashPId)) {
+                            if (amount != null && !amount.equals(""))
+                                glbean.setRcptcashInHandAmt(amount
+                                        .toString());
+                        } else if (amount != null && !amount.equals(""))
+                            glbean.setRcptChqInHandAmt(amount
+                                    .toString());
+                        if (detail != null && !detail.equals(""))
+                            glbean.setRcptParticulars(detail.toString());
+                        if (srcOfFinance != null
+                                && !srcOfFinance.equals(""))
+                            glbean.setRcptSrcOfFinance(srcOfFinance);
+                        // if(accCode!=null && !accCode.equals(""))
+                        // glbean.setRcptAccCode(accCode);
+                        if (accCodebuffer != null
+                                && !accCodebuffer.equals(""))
+                            glbean.setRcptAccCode(accCodebuffer.toString());
+
+                    } else {
+                        if (LOGGER.isInfoEnabled())
+                            LOGGER.info("inside Payment>>>>>>" + accCode);
+                        glbean.setPmtVchrNo(vcNum);
+                        if (vcDate != null && !vcDate.equalsIgnoreCase(""))
+                            glbean.setpmtVchrDate(vcDate);
+                        if (bgtCode != null
+                                && !bgtCode.equalsIgnoreCase(""))
+                            glbean.setPmtBgtCode(bgtCode);
+                        if (funcCode != null
+                                && !funcCode.equalsIgnoreCase(""))
+                            glbean.setPmtFuncCode(funcCode);
+                        if (purposeid.equalsIgnoreCase(cashPId)) {
+                            if (amount != null && !amount.equals(""))
+                                glbean.setPmtCashInHandAmt(amount
+                                        .toString());
+                        } else if (amount != null && !amount.equals(""))
+                            glbean.setPmtChqInHandAmt(amount.toString());
+                        if (detail != null && !detail.equals(""))
+                            glbean.setPmtParticulars(detail.toString());
+                        if (srcOfFinance != null
+                                && !srcOfFinance.equals(""))
+                            glbean.setPmtSrcOfFinance(srcOfFinance);
+                        // if(accCode!=null && !accCode.equals(""))
+                        // glbean.setPmtAccCode(accCode);
+                        if (accCodebuffer != null
+                                && !accCodebuffer.equals(""))
+                            glbean.setPmtAccCode(accCodebuffer.toString());
+
+                    }
+                    if (LOGGER.isInfoEnabled())
+                        LOGGER.info("cgn before adding: " + cgn);
+                    glbean.setCGN(cgn);
+                    reportBean.setStartDate(startDateformat1);
+                    reportBean.setTotalCount(Integer.toString(totalCount));
+                    reportBean.setIsConfirmedCount(Integer
+                            .toString(isConfirmedCount));
+                    if (count2skip1stRow != 0)
+                        dataList.add(glbean);// skip to insert blank row at
+                    // the top
+                    count2skip1stRow++;
+                    currVhDate = element[10].toString();
+                    if (LOGGER.isInfoEnabled())
+                        LOGGER.info("vcDate:" + vcDate + " currVhDate:"
+                                + currVhDate);
+                    if (!vcDate.equalsIgnoreCase(currVhDate)
+                            && !vcDate.equalsIgnoreCase("")) {
+
+                        final GeneralLedgerReportBean glbeanCb = new GeneralLedgerReportBean(
+                                "&nbsp;");
+                        glbeanCb.setPmtParticulars("<B>Closing: By balance c/d</B>");
+                        glbeanCb.setPmtCashInHandAmt("<B>"
+                                + numberToString(cashcreditTotal.subtract(
+                                        cashdebitTotal).toString())
+                                        + "</B>");
+                        glbeanCb.setPmtChqInHandAmt("<B>"
+                                + numberToString(chequecreditTotal
+                                        .subtract(chequedebitTotal)
+                                        .toString()) + "</B>");
+                        dataList.add(glbeanCb);
+                        final GeneralLedgerReportBean glbean1 = new GeneralLedgerReportBean(
+                                "<hr>&nbsp;</hr>");
+                        glbean1.setRcptVchrDate("<hr><B>Total</B></hr>");
+                        glbean1.setRcptcashInHandAmt("<hr><B>"
+                                + numberToString(cashcreditTotal.toString())
+                                + "</B></hr>");
+                        glbean1.setPmtCashInHandAmt("<hr><B>"
+                                + numberToString(cashdebitTotal.add(
+                                        cashcreditTotal
+                                        .subtract(cashdebitTotal))
+                                        .toString()) + "</B></hr>");
+                        glbean1.setRcptChqInHandAmt("<hr><B>"
+                                + numberToString(chequecreditTotal
+                                        .toString()) + "</B></hr>");
+                        glbean1.setPmtChqInHandAmt("<hr><B>"
+                                + numberToString(chequedebitTotal
+                                        .add(chequecreditTotal
+                                                .subtract(chequedebitTotal))
+                                                .toString()) + "</B></hr>");
+                        dataList.add(glbean1);
+                        if (LOGGER.isInfoEnabled())
+                            LOGGER.info(cashcreditTotal + ":crDr: "
+                                    + cashdebitTotal);
+                        final GeneralLedgerReportBean glbeanOb = new GeneralLedgerReportBean(
+                                "<hr>&nbsp;</hr>");
+                        glbeanOb.setRcptParticulars("<hr><B>Opening: To balance b/d</B></hr>");
+                        // glbeanOb.setRcptcashInHandAmt("<hr><B>"+(numberformatter.format(cashcreditTotal.subtract(cashdebitTotal).doubleValue()))+"</B></hr>");
+                        // glbeanOb.setRcptChqInHandAmt("<hr><B>"+(numberformatter.format(chequecreditTotal.subtract(chequedebitTotal).doubleValue()))+"</B></hr>");
+                        glbeanOb.setRcptcashInHandAmt("<hr><B>"
+                                + numberToString(cashcreditTotal.subtract(
+                                        cashdebitTotal).toString())
+                                        + "</B></hr>");
+                        glbeanOb.setRcptChqInHandAmt("<hr><B>"
+                                + numberToString(chequecreditTotal
+                                        .subtract(chequedebitTotal)
+                                        .toString()) + "</B></hr>");
+                        dataList.add(glbeanOb);
+                        cashcreditTotal = cashcreditTotal
+                                .subtract(cashdebitTotal);
+                        chequecreditTotal = chequecreditTotal
+                                .subtract(chequedebitTotal);
+                        cashdebitTotal = new BigDecimal("0.00");
+                        chequedebitTotal = new BigDecimal("0.00");
+                    }
+                    vcNum = vcDate = bgtCode = funcCode = srcOfFinance = accCode = cgn = vhType = "";
+                    amount.delete(0, amount.length());
+                    detail.delete(0, detail.length());
+                    accCodebuffer.delete(0, accCodebuffer.length());
+                }
+
+                accCode = element[12].toString();
+                if (LOGGER.isInfoEnabled())
+                    LOGGER.info("check2>>vhId:" + vhId + " VhidPrevious:"
+                            + VhidPrevious + " code:" + code + " accCode:"
+                            + accCode);
+                if (vhId == VhidPrevious && !code.equalsIgnoreCase(accCode)) {
+                    if (LOGGER.isInfoEnabled())
+                        LOGGER.info("inside vhId==VhidPrevious ");
+                    vhType = element[1].toString();
+                    // vhName=resultset1.getString("vhname");
+                    String bLine = "<Br>";
+                    currentDebit = new BigDecimal("0.00");
+                    currentCredit = new BigDecimal("0.00");
+                    cgn = element[2].toString();
+                    vcDate = element[10].toString();
+                    vcNum = element[11].toString();
+                    funcCode = element[7].toString();
+                    // bgtCode=resultset1.getString("BGCODE");
+                    srcOfFinance = element[6].toString();
+                    final String name[] = element[13].toString().split(" ");
+                    int wordLength = 0;
+                    String formatedName = "";
+                    // String formatedAccCode="";
+                    for (final String element2 : name) {
+                        wordLength = element2.length();
+                        if (formatedName.length()
+                                - formatedName.lastIndexOf("<Br>") + wordLength < 25)
+                            formatedName = formatedName + " " + element2;
+                        else {
+                            formatedName = formatedName.concat("<Br>"
+                                    + element2);
+                            bLine = bLine.concat("<Br>");
+                        }
+                    }
+                    detail = detail.append(" " + formatedName + "<br>");
+                    accCodebuffer = accCodebuffer.append(" " + accCode
+                            + bLine);
+                    currentDebit = new BigDecimal(element[17].toString());
+                    currentCredit = new BigDecimal(element[18].toString());
+                    if (LOGGER.isInfoEnabled())
+                        LOGGER.info("currentCredit:" + currentCredit
+                                + " currentDebit:" + currentDebit
+                                + " chequedebitTotal:" + chequedebitTotal
+                                + "chequecreditTotal:" + chequecreditTotal);
+                    if (LOGGER.isInfoEnabled())
+                        LOGGER.info(" BEFORE>>>>cashdebitTotal:"
+                                + cashdebitTotal + "cashcreditTotal:"
+                                + cashcreditTotal);
+                    if (currentDebit.doubleValue() > 0) {
+                        if (LOGGER.isInfoEnabled())
+                            LOGGER.info("if purposeid:" + purposeid
+                                    + ">>cashPId:" + cashPId);
+                        // amount=amount.append(" " +
+                        // numberformatter.format(currentDebit.doubleValue())
+                        // + bLine);
+                        amount = amount.append(" "
+                                + numberToString(currentDebit.toString())
+                                + bLine);
+                        if (purposeid.equalsIgnoreCase(cashPId))
+                            cashdebitTotal = cashdebitTotal
+                            .add(currentDebit);
+                        else
+                            chequedebitTotal = chequedebitTotal
+                            .add(currentDebit);
+                    } else {
+                        if (LOGGER.isInfoEnabled())
+                            LOGGER.info("else purposeid:" + purposeid
+                                    + ">>cashPId:" + cashPId);
+                        // amount=amount.append(" " +
+                        // numberformatter.format(currentCredit.doubleValue())
+                        // + bLine);
+                        amount = amount.append(" "
+                                + numberToString(currentCredit.toString())
+                                + bLine);
+                        if (purposeid.equalsIgnoreCase(cashPId))
+                            cashcreditTotal = cashcreditTotal
+                            .add(currentCredit);
+                        else
+                            chequecreditTotal = chequecreditTotal
+                            .add(currentCredit);
+                    }
+                    if (LOGGER.isInfoEnabled())
+                        LOGGER.info("after adding currentCredit:"
+                                + currentCredit + " currentDebit:"
+                                + currentDebit + " chequedebitTotal:"
+                                + chequedebitTotal + "chequecreditTotal:"
+                                + chequecreditTotal);
+                    if (LOGGER.isInfoEnabled())
+                        LOGGER.info(" AFTER>>>>cashdebitTotal:"
+                                + cashdebitTotal + "cashcreditTotal:"
+                                + cashcreditTotal);
+                    cgn = element[2].toString();
+                    // if(LOGGER.isInfoEnabled()) LOGGER.info("cgn: "+cgn);
+
+                } else
+                    purposeid = element[3].toString();
+                VhidPrevious = vhId;
+                if (element.equals(resultset1.get(resultset1.size() - 1))) {
+                    final GeneralLedgerReportBean glbean = new GeneralLedgerReportBean(
+                            "&nbsp;");
+
+                    if (currentCredit.doubleValue() > 0) {
+                        if (LOGGER.isInfoEnabled())
+                            LOGGER.info("inside Receipt>>>>>>" + accCode);
+                        glbean.setRcptVchrNo(vcNum);
+                        if (vcDate != null && !vcDate.equalsIgnoreCase(""))
+                            glbean.setRcptVchrDate(vcDate);
+                        if (bgtCode != null
+                                && !bgtCode.equalsIgnoreCase(""))
+                            glbean.setRcptBgtCode(bgtCode);
+                        if (funcCode != null
+                                && !funcCode.equalsIgnoreCase(""))
+                            glbean.setRcptFuncCode(funcCode);
+                        if (purposeid.equalsIgnoreCase(cashPId)) {
+                            if (amount != null && !amount.equals(""))
+                                glbean.setRcptcashInHandAmt(amount
+                                        .toString());
+                        } else if (amount != null && !amount.equals(""))
+                            glbean.setRcptChqInHandAmt(amount
+                                    .toString());
+                        if (detail != null && !detail.equals(""))
+                            glbean.setRcptParticulars(detail.toString());
+                        if (srcOfFinance != null
+                                && !srcOfFinance.equals(""))
+                            glbean.setRcptSrcOfFinance(srcOfFinance);
+                        if (accCodebuffer != null
+                                && !accCodebuffer.equals(""))
+                            glbean.setRcptAccCode(accCodebuffer.toString());
+                        // if(accCode!=null && !accCode.equals(""))
+                        // glbean.setRcptAccCode(accCode);
+
+                    } else {
+                        if (LOGGER.isInfoEnabled())
+                            LOGGER.info("inside Payment>>>>>>" + accCode);
+                        glbean.setPmtVchrNo(vcNum);
+                        if (vcDate != null && !vcDate.equalsIgnoreCase(""))
+                            glbean.setpmtVchrDate(vcDate);
+                        if (bgtCode != null
+                                && !bgtCode.equalsIgnoreCase(""))
+                            glbean.setPmtBgtCode(bgtCode);
+                        if (funcCode != null
+                                && !funcCode.equalsIgnoreCase(""))
+                            glbean.setPmtFuncCode(funcCode);
+                        if (purposeid.equalsIgnoreCase(cashPId)) {
+                            if (amount != null && !amount.equals(""))
+                                glbean.setPmtCashInHandAmt(amount
+                                        .toString());
+                        } else if (amount != null && !amount.equals(""))
+                            glbean.setPmtChqInHandAmt(amount.toString());
+                        if (detail != null && !detail.equals(""))
+                            glbean.setPmtParticulars(detail.toString());
+                        if (srcOfFinance != null
+                                && !srcOfFinance.equals(""))
+                            glbean.setPmtSrcOfFinance(srcOfFinance);
+                        // if(accCode!=null && !accCode.equals(""))
+                        // glbean.setPmtAccCode(accCode);
+                        if (accCodebuffer != null
+                                && !accCodebuffer.equals(""))
+                            glbean.setPmtAccCode(accCodebuffer.toString());
+
+                    }
+                    glbean.setCGN(cgn);
+                    reportBean.setStartDate(startDateformat1);
+                    reportBean.setTotalCount(Integer.toString(totalCount));
+                    reportBean.setIsConfirmedCount(Integer
+                            .toString(isConfirmedCount));
+                    dataList.add(glbean);
+                    currVhDate = element[10].toString();
+                    {
+                        final GeneralLedgerReportBean glbeanCb = new GeneralLedgerReportBean(
+                                "&nbsp;");
+                        glbeanCb.setPmtParticulars("<B>Closing: By balance c/d</B>");
+                        glbeanCb.setPmtCashInHandAmt("<B>"
+                                + numberToString(cashcreditTotal.subtract(
+                                        cashdebitTotal).toString())
+                                        + "</B>");
+                        glbeanCb.setPmtChqInHandAmt("<B>"
+                                + numberToString(chequecreditTotal
+                                        .subtract(chequedebitTotal)
+                                        .toString()) + "</B>");
+                        dataList.add(glbeanCb);
+
+                        final GeneralLedgerReportBean glbean1 = new GeneralLedgerReportBean(
+                                "<hr>&nbsp;</hr>");
+                        glbean1.setRcptVchrDate("<hr><B>Total</B></hr>");
+                        glbean1.setRcptcashInHandAmt("<hr><B>"
+                                + numberToString(cashcreditTotal.toString())
+                                + "</B></hr>");
+                        glbean1.setPmtCashInHandAmt("<hr><B>"
+                                + numberToString(cashdebitTotal.add(
+                                        cashcreditTotal
+                                        .subtract(cashdebitTotal))
+                                        .toString()) + "</B></hr>");
+                        glbean1.setRcptChqInHandAmt("<hr><B>"
+                                + numberToString(chequecreditTotal
+                                        .toString()) + "</B></hr>");
+                        glbean1.setPmtChqInHandAmt("<hr><B>"
+                                + numberToString(chequedebitTotal
+                                        .add(chequecreditTotal
+                                                .subtract(chequedebitTotal))
+                                                .toString()) + "</B></hr>");
+                        dataList.add(glbean1);
+                        final GeneralLedgerReportBean glbeanOb = new GeneralLedgerReportBean(
+                                "<hr>&nbsp;</hr>");
+                        glbeanOb.setRcptParticulars("<hr><B>Opening: To balance b/d</B></hr>");
+                        glbeanOb.setRcptcashInHandAmt("<hr><B>"
+                                + numberToString(cashcreditTotal.subtract(
+                                        cashdebitTotal).toString())
+                                        + "</B></hr>");
+                        glbeanOb.setRcptcashInHandAmt("<hr><B>"
+                                + numberToString(cashcreditTotal.subtract(
+                                        cashdebitTotal).toString())
+                                        + "</B></hr>");
+                        glbeanOb.setRcptChqInHandAmt("<hr><B>"
+                                + numberToString(chequecreditTotal
+                                        .subtract(chequedebitTotal)
+                                        .toString()) + "</B></hr>");
+                        glbeanOb.setRcptChqInHandAmt("<hr><B>"
+                                + numberToString(chequecreditTotal
+                                        .subtract(chequedebitTotal)
+                                        .toString()) + "</B></hr>");
+                        dataList.add(glbeanOb);
+                    }
+                }
+            }
 
         } catch (final SQLException ex) {
             LOGGER.error("ERROR in  getGeneralLedgerList " + ex.getMessage(),
@@ -700,27 +689,42 @@ public class CashBook {
         return dataList;
     }
 
-    private String getQuery(final String engineQry) {
-        return "SELECT distinct gl1.glcode as \"code\",vh.type as \"vhType\",vh.cgn as \"CGN\",coa.purposeid as \"purposeid\",case  coa.purposeid when 4 then 1 when 5 then 1 else 0 end as \"order\","
-                + "(select ca.type from chartofaccounts ca where glcode=gl1.glcode) as \"glType\","
-                + " (select name from fundsource where id=vh.FUNDSOURCEID) as \"fundsource\",(select name from function where id=gl.FUNCTIONID) as \"function\","
-                + " vh.id AS \"vhid\", vh.voucherDate AS \"vDate\", "
-                + "to_char(vh.voucherDate, 'dd-Mon-yyyy') AS \"voucherdate\", "
-                + "vh.voucherNumber AS \"vouchernumber\", gl.glCode AS \"glcode\", "
-                + "coa.name||case  vh.STATUS when 1 then '(Reversed)' when 2 then '(Reversal)' else '' end AS \"name\",case when gl.debitAmount = 0 then (case (gl.creditamount) when 0 then gl.creditAmount||'.00cr' when floor(gl.creditamount)    then gl.creditAmount||'.00cr' else  gl.creditAmount||'cr'  end ) else (case (gl.debitamount) when 0 then gl.debitamount||'.00dr' when floor(gl.debitamount)    then gl.debitamount||'.00dr' else  gl.debitamount||'dr' 	 end ) end AS \"amount\", "
-                + "gl.description AS \"narration\", vh.name AS \"vhname\", "
-                + "gl.debitamount  AS \"debitamount\", gl.creditamount  AS \"creditamount\",f.name as \"fundName\",  vh.isconfirmed as \"isconfirmed\"  "
-                + "FROM generalLedger gl, voucherHeader vh, chartOfAccounts coa, generalLedger gl1, fund f "
-                + "WHERE coa.glCode = gl.glCode AND gl.voucherHeaderId = vh.id AND gl.voucherHeaderId = vh.id "
-                + " AND gl.voucherHeaderId = gl1.voucherHeaderId AND f.id=vh.fundId "
-                + effTime
-                + " AND gl1.glcode in (SELECT GLCODE FROM CHARTOFACCOUNTS WHERE PURPOSEID=4 or purposeid=5) "
-                + " AND vh.id in ("
-                + engineQry
-                + " )"
-                + " AND (gl.debitamount>0 OR gl.creditamount>0)  "
-                + " order by \"vDate\",\"vhid\",\"order\" desc ";
-    }
+	private Query getQuery(final Entry<String, Map<String, Object>> queryWithParams) {
+		StringBuilder query = new StringBuilder(
+				"SELECT distinct gl1.glcode as \"code\",vh.type as \"vhType\",vh.cgn as \"CGN\",").append(
+						"coa.purposeid as \"purposeid\",case  coa.purposeid when 4 then 1 when 5 then 1 else 0 end as \"order\",")
+						.append("(select ca.type from chartofaccounts ca where glcode=gl1.glcode) as \"glType\",")
+						.append(" (select name from fundsource where id=vh.FUNDSOURCEID) as \"fundsource\",")
+						.append(" (select name from function where id=gl.FUNCTIONID) as \"function\",")
+						.append(" vh.id AS \"vhid\", vh.voucherDate AS \"vDate\", ")
+						.append("to_char(vh.voucherDate, 'dd-Mon-yyyy') AS \"voucherdate\", ")
+						.append("vh.voucherNumber AS \"vouchernumber\", gl.glCode AS \"glcode\", ")
+						.append("coa.name||case  vh.STATUS when 1 then '(Reversed)' when 2 then '(Reversal)' else '' end AS \"name\",")
+						.append(" case when gl.debitAmount = 0 then (case (gl.creditamount) when 0 then gl.creditAmount||'.00cr'")
+						.append(" when floor(gl.creditamount)    then gl.creditAmount||'.00cr' else  gl.creditAmount||'cr'  end )")
+						.append(" else (case (gl.debitamount) when 0 then gl.debitamount||'.00dr' when floor(gl.debitamount) ")
+						.append("then gl.debitamount||'.00dr' else  gl.debitamount||'dr' 	 end ) end AS \"amount\", ")
+						.append("gl.description AS \"narration\", vh.name AS \"vhname\", ")
+						.append("gl.debitamount  AS \"debitamount\", gl.creditamount  AS \"creditamount\",f.name as \"fundName\",")
+						.append("  vh.isconfirmed as \"isconfirmed\"  ")
+						.append("FROM generalLedger gl, voucherHeader vh, chartOfAccounts coa, generalLedger gl1, fund f ")
+						.append("WHERE coa.glCode = gl.glCode AND gl.voucherHeaderId = vh.id AND gl.voucherHeaderId = vh.id ")
+						.append(" AND gl.voucherHeaderId = gl1.voucherHeaderId AND f.id=vh.fundId ");
+		if (!effTime.isEmpty()) {
+			query.append(effTime.entrySet().iterator().next().getKey());
+		}
+		query.append(" AND gl1.glcode in (SELECT GLCODE FROM CHARTOFACCOUNTS WHERE PURPOSEID=4 or purposeid=5) ")
+				.append(" AND vh.id in (").append(queryWithParams.getKey()).append(" )")
+				.append(" AND (gl.debitamount>0 OR gl.creditamount>0)  ")
+				.append(" order by \"vDate\",\"vhid\",\"order\" desc ");
+		Query sqlQuery = persistenceService.getSession().createSQLQuery(query.toString());
+		if (!effTime.isEmpty()) {
+			effTime.entrySet().iterator().next().getValue().entrySet()
+					.forEach(entry -> sqlQuery.setParameter(entry.getKey(), entry.getValue()));
+		}
+		queryWithParams.getValue().entrySet().forEach(rec -> sqlQuery.setParameter(rec.getKey(), rec.getValue()));
+		return sqlQuery;
+	}
 
     private OpBalance getOpeningBalance(final String glCode, final String fundId,
             final String fundSourceId, final String fyId, final String tillDate)
@@ -734,20 +738,21 @@ public class CashBook {
             fundCondition = "fundId = ? AND ";
         if (!fundSourceId.equalsIgnoreCase(""))
             fundSourceCondition = "fundSourceId = ? AND ";
-        final String queryYearOpBal = "SELECT case when sum(openingDebitBalance) = null then 0 else sum(openingDebitBalance) end AS \"openingDebitBalance\", "
-                + "case when sum(openingCreditBalance) = null then 0 else sum(openingCreditBalance) AS \"openingCreditBalance\" "
-                + "FROM transactionSummary WHERE "
-                + fundCondition
-                + fundSourceCondition
-                + " financialYearId=? "
-                + "AND glCodeId = (SELECT id FROM chartOfAccounts WHERE glCode in(?))";
+        final StringBuilder queryYearOpBal = new StringBuilder("SELECT case when sum(openingDebitBalance) = null then 0 else")
+        		.append(" sum(openingDebitBalance) end AS \"openingDebitBalance\", ")
+        		.append("case when sum(openingCreditBalance) = null then 0 else sum(openingCreditBalance) AS \"openingCreditBalance\" ")
+        		.append("FROM transactionSummary WHERE ")
+        		.append(fundCondition)
+        		.append(fundSourceCondition)
+        		.append(" financialYearId=? ")
+        		.append("AND glCodeId = (SELECT id FROM chartOfAccounts WHERE glCode in(?))");
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("***********: OPBAL for glcode -->" + glCode
                     + " is-->: " + queryYearOpBal);
 
         int j = 1;
         pstmt = persistenceService.getSession()
-                .createSQLQuery(queryYearOpBal);
+                .createSQLQuery(queryYearOpBal.toString());
         if (!fundId.equalsIgnoreCase(""))
             pstmt.setString(j++, fundId);
         if (!fundSourceId.equalsIgnoreCase(""))
@@ -769,18 +774,20 @@ public class CashBook {
                 fundCondition = "AND vh.fundId = ? ";
             if (!fundSourceId.equalsIgnoreCase(""))
                 fundSourceCondition = "AND vh.fundId = ? ";
-            String queryTillDateOpBal = "";
+            StringBuilder queryTillDateOpBal = new StringBuilder("");
             // if(showRev.equalsIgnoreCase("on")){
 
-            queryTillDateOpBal = "SELECT case when sum(gl.debitAmount) = null then 0 else sum(gl.debitAmount) end AS \"debitAmount\", "
-                    + "case when sum(gl.creditAmount)  = null then 0 else sum(gl.creditAmount) end AS \"creditAmount\" "
-                    + "FROM generalLedger gl, voucherHeader vh "
-                    + "WHERE vh.id = gl.voucherHeaderId "
-                    + "AND gl.glCode in(?) "
-                    + fundCondition
-                    + fundSourceCondition
-                    + effTime
-                    + "AND vh.voucherDate >= ? AND vh.voucherDate < ? AND vh.status<>4";
+			queryTillDateOpBal.append("SELECT case when sum(gl.debitAmount) = null then 0 else sum(gl.debitAmount) end")
+					.append(" AS \"debitAmount\", ")
+					.append("case when sum(gl.creditAmount)  = null then 0 else sum(gl.creditAmount) end AS \"creditAmount\" ")
+					.append("FROM generalLedger gl, voucherHeader vh ").append("WHERE vh.id = gl.voucherHeaderId ")
+					.append("AND gl.glCode in(?) ").append(fundCondition).append(fundSourceCondition);
+
+			if (!effTime.isEmpty()) {
+				queryTillDateOpBal.append(effTime.entrySet().iterator().next().getKey());
+			}
+
+			queryTillDateOpBal.append(" AND vh.voucherDate >= ? AND vh.voucherDate < ? AND vh.status<>4");
 
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("***********: tilldate OPBAL for glcode -->"
@@ -788,7 +795,7 @@ public class CashBook {
 
             int i = 1;
             pstmt = persistenceService.getSession().createSQLQuery(
-                    queryTillDateOpBal);
+                    queryTillDateOpBal.toString());
             pstmt.setString(i++, glCode);
             if (!fundId.equalsIgnoreCase(""))
                 pstmt.setString(i++, fundId);
@@ -796,6 +803,10 @@ public class CashBook {
                 pstmt.setString(i++, fundSourceId);
             pstmt.setString(i++, startDate);
             pstmt.setString(i++, tillDate);
+            if (!effTime.isEmpty()) {
+    			effTime.entrySet().iterator().next().getValue().entrySet()
+    					.forEach(entry -> pstmt.setParameter(entry.getKey(), entry.getValue()));
+    		}
             resultset = null;
             resultset = pstmt.list();
             for (final Object[] element : resultset) {
@@ -829,37 +840,25 @@ public class CashBook {
     public String getMinCode(final String minGlCode) throws TaskFailedException {
         // if(LOGGER.isInfoEnabled()) LOGGER.info("coming");
         String minCode = "";
-        try {
-            final String query = "select glcode from chartofaccounts where glcode like ?|| '%' and classification = 4 order by glcode asc";
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            pstmt.setString(0, minGlCode);
-            final List<Object[]> rset = pstmt.list();
-            for (final Object[] element : rset)
-                minCode = element[0].toString();
-        } catch (final Exception sqlex) {
-            LOGGER.error(
-                    "Exception while getting minGlCode" + sqlex.getMessage(),
-                    sqlex);
-            throw taskExc;
-        }
+        final StringBuilder query = new StringBuilder("select glcode from chartofaccounts ")
+        		.append("where glcode like ?|| '%' and classification = 4 order by glcode asc");
+        pstmt = persistenceService.getSession().createSQLQuery(query.toString());
+        pstmt.setString(0, minGlCode);
+        final List<Object[]> rset = pstmt.list();
+        for (final Object[] element : rset)
+            minCode = element[0].toString();
         return minCode;
     }
 
     public String getMaxCode(final String maxGlCode) throws TaskFailedException {
         String maxCode = "";
-        try {
-            final String query = "  select glcode from chartofaccounts where glcode like ?|| '%' and classification = 4 order by glcode desc";
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            pstmt.setString(0, maxGlCode);
-            final List<Object[]> rset = pstmt.list();
-            for (final Object[] element : rset)
-                maxCode = element[0].toString();
-        } catch (final Exception sqlex) {
-            LOGGER.error(
-                    "Exception while getting maxGlCode" + sqlex.getMessage(),
-                    sqlex);
-            throw taskExc;
-        }
+        final StringBuilder query = new StringBuilder("  select glcode from chartofaccounts ")
+        		.append("where glcode like ?|| '%' and classification = 4 order by glcode desc");
+        pstmt = persistenceService.getSession().createSQLQuery(query.toString());
+        pstmt.setString(0, maxGlCode);
+        final List<Object[]> rset = pstmt.list();
+        for (final Object[] element : rset)
+            maxCode = element[0].toString();
         return maxCode;
     }
 
@@ -877,7 +876,7 @@ public class CashBook {
                 for (final Object[] element : rsCgn)
                     cgn = element[0].toString();
 
-            } catch (final Exception sqlex) {
+            } catch (final HibernateException sqlex) {
                 LOGGER.error("cgnCatch#" + sqlex.getMessage(), sqlex);
                 throw taskExc;
             }
@@ -885,7 +884,7 @@ public class CashBook {
         return cgn;
     }
 
-    public void isCurDate(final String VDate) throws TaskFailedException {
+    public void isCurDate(final String VDate) throws TaskFailedException  {
 
         try {
 
@@ -904,9 +903,9 @@ public class CashBook {
                                                     .parseInt(dt2[0]) < Integer
                                                     .parseInt(dt1[0]) ? -1 : 0;
                                             if (ret == -1)
-                                                throw new Exception();
+                                                throw new ParseException(today, ret);
 
-        } catch (final Exception ex) {
+        } catch (final ParseException ex) {
             LOGGER.error("Exception in isCurDate():" + ex.getMessage(), ex);
             throw new TaskFailedException(
                     "Date Should be within the today's date");
@@ -920,21 +919,23 @@ public class CashBook {
 
         try {
 
-            final String query = "select glcode as \"glcode\" from chartofaccounts where id in (select cashinhand from codemapping where eg_boundaryid=?)";
+            final StringBuilder query = new StringBuilder("select glcode as \"glcode\" from chartofaccounts ")
+            		.append("where id in (select cashinhand from codemapping where eg_boundaryid=?)");
             if (LOGGER.isInfoEnabled())
                 LOGGER.info(query);
-            pstmt = persistenceService.getSession().createSQLQuery(query);
+            pstmt = persistenceService.getSession().createSQLQuery(query.toString());
             pstmt.setString(0, bId);
             rs = pstmt.list();
             for (final Object[] element : rs)
                 glcode[0] = element[0].toString();
-            final String str = "select glcode from chartofaccounts where id in (select chequeinHand from codemapping where eg_boundaryid=?)";
-            pstmt = persistenceService.getSession().createSQLQuery(str);
+            final StringBuilder str = new StringBuilder("select glcode from chartofaccounts ")
+            		.append("where id in (select chequeinHand from codemapping where eg_boundaryid=?)");
+            pstmt = persistenceService.getSession().createSQLQuery(str.toString());
             pstmt.setString(0, bId);
             rs = pstmt.list();
             for (final Object[] element : rs)
                 glcode[1] = element[0].toString();
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             LOGGER.error("Inside getGlcode", e);
             throw taskExc;
         }
@@ -946,19 +947,13 @@ public class CashBook {
         List<Object[]> rs = null;
         String ulbName = "";
         Query pstmt = null;
-        try {
-
-            final String query = "select name as \"name\" from companydetail";
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            if (LOGGER.isInfoEnabled())
-                LOGGER.info(query);
-            rs = pstmt.list();
-            for (final Object[] element : rs)
-                ulbName = element[0].toString();
-        } catch (final Exception e) {
-            LOGGER.error("Inside getUlbDetails", e);
-            throw taskExc;
-        }
+        final String query = "select name as \"name\" from companydetail";
+        pstmt = persistenceService.getSession().createSQLQuery(query);
+        if (LOGGER.isInfoEnabled())
+            LOGGER.info(query);
+        rs = pstmt.list();
+        for (final Object[] element : rs)
+            ulbName = element[0].toString();
         return ulbName;
     }
 

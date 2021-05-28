@@ -170,7 +170,7 @@ public class BankAction extends BaseFormAction {
             addActionMessage(getText("Bank Saved Successfully"));
         } catch (final ConstraintViolationException e) {
             throw new ValidationException(Arrays.asList(new ValidationError("Duplicate Bank", "Duplicate Bank")));
-        } catch (final Exception e) {
+        } catch (final ValidationException e) {
             addActionMessage(getText("Bank information can't be saved."));
             throw new ValidationException(Arrays.asList(new ValidationError("An error occured contact Administrator",
                     "An error occured contact Administrator")));

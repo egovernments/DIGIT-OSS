@@ -48,6 +48,7 @@
 package org.egov.egf.masters.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +71,7 @@ import org.egov.egf.masters.repository.WorkOrderRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.masters.WorkOrder;
+import org.egov.model.masters.WorkOrderSearchRequest;
 import org.egov.services.masters.SchemeService;
 import org.egov.services.masters.SubSchemeService;
 import org.hibernate.Session;
@@ -85,188 +87,195 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class WorkOrderService implements EntityTypeService {
 
-    @Autowired
-    private WorkOrderRepository workOrderRepository;
+	@Autowired
+	private WorkOrderRepository workOrderRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @Autowired
-    private AccountDetailKeyService accountDetailKeyService;
+	@Autowired
+	private AccountDetailKeyService accountDetailKeyService;
 
-    @Autowired
-    private AccountdetailtypeService accountdetailtypeService;
+	@Autowired
+	private AccountdetailtypeService accountdetailtypeService;
 
-    @Autowired
-    private FundService fundService;
+	@Autowired
+	private FundService fundService;
 
-    @Autowired
-    private ContractorService contractorService;
+	@Autowired
+	private ContractorService contractorService;
 
-    @Autowired
-    private SchemeService schemeService;
+	@Autowired
+	private SchemeService schemeService;
 
-    @Autowired
-    private SubSchemeService subSchemeService;
+	@Autowired
+	private SubSchemeService subSchemeService;
 
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
-    }
+	public Session getCurrentSession() {
+		return entityManager.unwrap(Session.class);
+	}
 
-    public WorkOrder getById(final Long id) {
-        return workOrderRepository.findOne(id);
-    }
+	public WorkOrder getById(final Long id) {
+		return workOrderRepository.findOne(id);
+	}
 
-    public List<WorkOrder> getByContractorId(final Long contractorId) {
-        return workOrderRepository.findByContractor_Id(contractorId);
-    }
+	public List<WorkOrder> getByContractorId(final Long contractorId) {
+		return workOrderRepository.findByContractor_Id(contractorId);
+	}
 
-    public WorkOrder getByOrderNumber(final String orderNumber) {
-        return workOrderRepository.findByOrderNumber(orderNumber);
-    }
+	public WorkOrder getByOrderNumber(final String orderNumber) {
+		return workOrderRepository.findByOrderNumber(orderNumber);
+	}
 
-    @Transactional
-    public WorkOrder create(WorkOrder workOrder) {
+	@SuppressWarnings("deprecation")
+	@Transactional
+	public WorkOrder create(WorkOrder workOrder) {
 
-        setAuditDetails(workOrder);
-        if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
-            workOrder.setFund(fundService.findOne(workOrder.getFund().getId()));
-        }
-        if (workOrder.getScheme() != null && workOrder.getScheme().getId() != null) {
-            workOrder.setScheme(schemeService.findById(workOrder.getScheme().getId(), false));
-        } else {
-            workOrder.setScheme(null);
-        }
-        if (workOrder.getSubScheme() != null && workOrder.getSubScheme().getId() != null) {
-            workOrder.setSubScheme(subSchemeService.findById(workOrder.getSubScheme().getId(), false));
-        } else {
-            workOrder.setSubScheme(null);
-        }
-        if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
-            workOrder.setContractor(contractorService.getById(workOrder.getContractor().getId()));
-        }
-        workOrder = workOrderRepository.save(workOrder);
-        saveAccountDetailKey(workOrder);
-        return workOrder;
-    }
+		setAuditDetails(workOrder);
+		if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
+			workOrder.setFund(fundService.findOne(workOrder.getFund().getId()));
+		}
+		if (workOrder.getScheme() != null && workOrder.getScheme().getId() != null) {
+			workOrder.setScheme(schemeService.findById(workOrder.getScheme().getId(), false));
+		} else {
+			workOrder.setScheme(null);
+		}
+		if (workOrder.getSubScheme() != null && workOrder.getSubScheme().getId() != null) {
+			workOrder.setSubScheme(subSchemeService.findById(workOrder.getSubScheme().getId(), false));
+		} else {
+			workOrder.setSubScheme(null);
+		}
+		if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
+			workOrder.setContractor(contractorService.getById(workOrder.getContractor().getId()));
+		}
+		workOrder = workOrderRepository.save(workOrder);
+		saveAccountDetailKey(workOrder);
+		return workOrder;
+	}
 
-    @Transactional
-    public void saveAccountDetailKey(WorkOrder workOrder) {
+	@Transactional
+	public void saveAccountDetailKey(WorkOrder workOrder) {
 
-        Accountdetailkey accountdetailkey = new Accountdetailkey();
-        accountdetailkey.setDetailkey(workOrder.getId().intValue());
-        accountdetailkey.setDetailname(workOrder.getName());
-        accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(workOrder.getClass().getSimpleName()));
-        accountdetailkey.setGroupid(1);
-        accountDetailKeyService.create(accountdetailkey);
-    }
+		Accountdetailkey accountdetailkey = new Accountdetailkey();
+		accountdetailkey.setDetailkey(workOrder.getId().intValue());
+		accountdetailkey.setDetailname(workOrder.getName());
+		accountdetailkey
+				.setAccountdetailtype(accountdetailtypeService.findByName(workOrder.getClass().getSimpleName()));
+		accountdetailkey.setGroupid(1);
+		accountDetailKeyService.create(accountdetailkey);
+	}
 
-    @Transactional
-    public WorkOrder update(WorkOrder workOrder) {
-        if (workOrder.getEditAllFields()) {
-            setAuditDetails(workOrder);
-            if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
-                workOrder.setFund(fundService.findOne(workOrder.getFund().getId()));
-            }
-            if (workOrder.getScheme() != null && workOrder.getScheme().getId() != null) {
-                workOrder.setScheme(schemeService.findById(workOrder.getScheme().getId(), false));
-            } else {
-                workOrder.setScheme(null);
-            }
-            if (workOrder.getSubScheme() != null && workOrder.getSubScheme().getId() != null) {
-                workOrder.setSubScheme(subSchemeService.findById(workOrder.getSubScheme().getId(), false));
-            } else {
-                workOrder.setSubScheme(null);
-            }
-            if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
-                workOrder.setContractor(contractorService.getById(workOrder.getContractor().getId()));
-            }
-            workOrder = workOrderRepository.save(workOrder);
-        } else {
-            setAuditDetails(workOrder);
-            WorkOrder savedWorkOrder = workOrderRepository.findOne(workOrder.getId());
-            savedWorkOrder.setName(workOrder.getName());
-            savedWorkOrder.setDescription(workOrder.getDescription());
-            savedWorkOrder.setActive(workOrder.getActive());
-            savedWorkOrder.setSanctionNumber(workOrder.getSanctionNumber());
-            savedWorkOrder.setSanctionDate(workOrder.getSanctionDate());
+	@SuppressWarnings("deprecation")
+	@Transactional
+	public WorkOrder update(WorkOrder workOrder) {
+		if (workOrder.getEditAllFields().booleanValue()) {
+			setAuditDetails(workOrder);
+			if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
+				workOrder.setFund(fundService.findOne(workOrder.getFund().getId()));
+			}
+			if (workOrder.getScheme() != null && workOrder.getScheme().getId() != null) {
+				workOrder.setScheme(schemeService.findById(workOrder.getScheme().getId(), false));
+			} else {
+				workOrder.setScheme(null);
+			}
+			if (workOrder.getSubScheme() != null && workOrder.getSubScheme().getId() != null) {
+				workOrder.setSubScheme(subSchemeService.findById(workOrder.getSubScheme().getId(), false));
+			} else {
+				workOrder.setSubScheme(null);
+			}
+			if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
+				workOrder.setContractor(contractorService.getById(workOrder.getContractor().getId()));
+			}
+			workOrder = workOrderRepository.save(workOrder);
+		} else {
+			setAuditDetails(workOrder);
+			WorkOrder savedWorkOrder = workOrderRepository.findOne(workOrder.getId());
+			savedWorkOrder.setName(workOrder.getName());
+			savedWorkOrder.setDescription(workOrder.getDescription());
+			savedWorkOrder.setActive(workOrder.getActive());
+			savedWorkOrder.setSanctionNumber(workOrder.getSanctionNumber());
+			savedWorkOrder.setSanctionDate(workOrder.getSanctionDate());
 
-            workOrder = workOrderRepository.save(savedWorkOrder);
-        }
-        return workOrder;
-    }
+			workOrder = workOrderRepository.save(savedWorkOrder);
+		}
+		return workOrder;
+	}
 
-    private void setAuditDetails(WorkOrder workOrder) {
-        if (workOrder.getId() == null) {
-            workOrder.setCreatedDate(new Date());
-            workOrder.setCreatedBy(ApplicationThreadLocals.getUserId());
-        }
-        workOrder.setLastModifiedDate(new Date());
-        workOrder.setLastModifiedBy(ApplicationThreadLocals.getUserId());
-    }
+	private void setAuditDetails(WorkOrder workOrder) {
+		if (workOrder.getId() == null) {
+			workOrder.setCreatedDate(new Date());
+			workOrder.setCreatedBy(ApplicationThreadLocals.getUserId());
+		}
+		workOrder.setLastModifiedDate(new Date());
+		workOrder.setLastModifiedBy(ApplicationThreadLocals.getUserId());
+	}
 
-    public List<WorkOrder> search(final WorkOrder workOrder) {
-        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<WorkOrder> createQuery = cb.createQuery(WorkOrder.class);
-        final Root<WorkOrder> workOrders = createQuery.from(WorkOrder.class);
-        createQuery.select(workOrders);
-        final Metamodel m = entityManager.getMetamodel();
-        final EntityType<WorkOrder> WorkOrder_ = m.entity(WorkOrder.class);
+	public List<WorkOrder> search(final WorkOrderSearchRequest workOrderSearchRequest) {
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<WorkOrder> createQuery = cb.createQuery(WorkOrder.class);
+		final Root<WorkOrder> workOrders = createQuery.from(WorkOrder.class);
+		createQuery.select(workOrders);
+		final Metamodel m = entityManager.getMetamodel();
+		final EntityType<WorkOrder> workOrderEntityType = m.entity(WorkOrder.class);
 
-        final List<Predicate> predicates = new ArrayList<Predicate>();
-        if (workOrder.getName() != null) {
-            final String name = "%" + workOrder.getName().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(workOrders.get("name")));
-            predicates.add(cb.like(
-                    cb.lower(workOrders.get(WorkOrder_.getDeclaredSingularAttribute("name", String.class))), name));
-        }
-        if (workOrder.getOrderNumber() != null) {
-            final String code = "%" + workOrder.getOrderNumber().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(workOrders.get("orderNumber")));
-            predicates.add(cb.like(
-                    cb.lower(workOrders.get(WorkOrder_.getDeclaredSingularAttribute("orderNumber", String.class))), code));
-        }
+		final List<Predicate> predicates = new ArrayList<>();
+		if (workOrderSearchRequest.getName() != null) {
+			final String name = "%" + workOrderSearchRequest.getName().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(workOrders.get("name")));
+			predicates.add(cb.like(
+					cb.lower(workOrders.get(workOrderEntityType.getDeclaredSingularAttribute("name", String.class))),
+					name));
+		}
+		if (workOrderSearchRequest.getOrderNumber() != null) {
+			final String code = "%" + workOrderSearchRequest.getOrderNumber().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(workOrders.get("orderNumber")));
+			predicates.add(cb.like(
+					cb.lower(workOrders
+							.get(workOrderEntityType.getDeclaredSingularAttribute("orderNumber", String.class))),
+					code));
+		}
 
-        if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
-            predicates.add(cb.equal(workOrders.get("contractor").get("id"), workOrder.getContractor().getId()));
-        }
-        if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
-            predicates.add(cb.equal(workOrders.get("fund").get("id"), workOrder.getFund().getId()));
-        }
+		if (workOrderSearchRequest.getContractorId() != null) {
+			predicates.add(cb.equal(workOrders.get("contractor").get("id"), workOrderSearchRequest.getContractorId()));
+		}
+		if (workOrderSearchRequest.getFundId() != null) {
+			predicates.add(cb.equal(workOrders.get("fund").get("id"), workOrderSearchRequest.getFundId()));
+		}
 
-        createQuery.where(predicates.toArray(new Predicate[] {}));
-        final TypedQuery<WorkOrder> query = entityManager.createQuery(createQuery);
-        return query.getResultList();
+		createQuery.where(predicates.toArray(new Predicate[] {}));
+		final TypedQuery<WorkOrder> query = entityManager.createQuery(createQuery);
+		return query.getResultList();
 
-    }
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
 
-        return workOrderRepository.findActiveOrders();
-    }
+		return workOrderRepository.findActiveOrders();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
-            Integer accountDetailTypeId) {
-        return workOrderRepository.findByNameLikeIgnoreCaseOrOrderNumberLikeIgnoreCaseAndActive(filterKey + "%", filterKey + "%", true);
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
+			Integer accountDetailTypeId) {
+		return workOrderRepository.findByNameLikeIgnoreCaseOrOrderNumberLikeIgnoreCaseAndActive(filterKey + "%",
+				filterKey + "%", true);
+	}
 
-    @Override
-    public List getAssetCodesForProjectCode(Integer accountdetailkey) throws ValidationException {
+	@Override
+	public List<?> getAssetCodesForProjectCode(Integer accountdetailkey) throws ValidationException {
+		return Collections.emptyList();
+	}
 
-        return null;
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> validateEntityForRTGS(List<Long> idsList)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> validateEntityForRTGS(List<Long> idsList)
-            throws ValidationException {
-        return null;
-    }
-
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> getEntitiesById(List<Long> idsList) throws ValidationException {
-        return null;
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> getEntitiesById(List<Long> idsList)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 
 }

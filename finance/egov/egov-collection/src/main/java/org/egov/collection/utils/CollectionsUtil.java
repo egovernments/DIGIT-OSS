@@ -84,6 +84,7 @@ import org.egov.commons.dao.EgwStatusHibernateDAO;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.commons.dao.InstallmentHibDao;
 import org.egov.commons.exception.NoSuchObjectException;
+import org.egov.commons.exception.TooManyValuesException;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.entity.Employee;
 import org.egov.eis.entity.EmployeeView;
@@ -123,6 +124,8 @@ import org.egov.pims.model.PersonalInformation;
 import org.egov.pims.service.EisUtilService;
 import org.egov.pims.service.SearchPositionService;
 import org.egov.pims.utils.EisManagersUtill;
+import org.elasticsearch.index.IndexNotFoundException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -608,15 +611,17 @@ public class CollectionsUtil {
      * @param boundaryId Boundary Id
      * @param functionaryId Functionary Id
      * @return PersonalInformation
+     * @throws NoSuchObjectException 
+     * @throws TooManyValuesException 
      */
 
     public PersonalInformation getEmployeeByDepartmentDesignationBoundaryandFunctionary(final Long deptId,
-            final Long designationId, final Integer boundaryId, final Integer functionaryId) {
+            final Long designationId, final Integer boundaryId, final Integer functionaryId) throws TooManyValuesException, NoSuchObjectException {
         PersonalInformation personalInformation = null;
         try {
             personalInformation = EisManagersUtill.getEmployeeService().getEmployeeByFunctionary(deptId, designationId,
                     Long.valueOf(boundaryId), functionaryId);
-        } catch (final Exception e) {
+        } catch (final ObjectNotFoundException e) {
             final String errorMsg = "Could not get PersonalInformation";
             LOGGER.error(errorMsg, e);
             throw new ApplicationRuntimeException(errorMsg, e);
@@ -647,7 +652,7 @@ public class CollectionsUtil {
                 for (final EmployeeView employeeView : employeeViewList)
                     if (!employeeView.getAssignment().getPrimary())
                         departmentlist.add(employeeView.getAssignment().getDepartment());
-        } catch (final Exception e) {
+        } catch (final ObjectNotFoundException e) {
             final String errorMsg = "Could not get list of assignments";
             LOGGER.error(errorMsg, e);
             throw new ApplicationRuntimeException(errorMsg, e);
@@ -746,8 +751,8 @@ public class CollectionsUtil {
      * @return last three online transaction for the consumerCode
      */
     public List<OnlinePayment> getOnlineTransactionHistory(final String consumerCode) {
-        final String hql = "select online from ReceiptHeader rh, org.egov.collection.entity.OnlinePayment online where rh.id = online.receiptHeader.id and rh.consumerCode =:consumercode  order by online.id desc";
-        final Query query = persistenceService.getSession().createQuery(hql);
+        final StringBuilder hql = new StringBuilder("select online from ReceiptHeader rh, org.egov.collection.entity.OnlinePayment online where rh.id = online.receiptHeader.id and rh.consumerCode =:consumercode  order by online.id desc");
+        final Query query = persistenceService.getSession().createQuery(hql.toString());
         query.setString("consumercode", consumerCode);
         query.setMaxResults(3);
         return query.list();
@@ -795,7 +800,7 @@ public class CollectionsUtil {
         ReceiptAmountInfo receiptAmountInfo = null;
         try {
             receiptAmountInfo = restTemplate.postForObject(url, billReceiptInfoReq, ReceiptAmountInfo.class);
-        } catch (final Exception e) {
+        } catch (final ObjectNotFoundException e) {
             final String errMsg = "Exception while updateReceiptDetailsAndGetReceiptAmountInfo for bill number  ["
                     + billReceipt.getBillReferenceNum() + "]!";
             LOGGER.error(errMsg, e);
@@ -827,7 +832,7 @@ public class CollectionsUtil {
                             receiptHeader.getService() + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
                     receiptAmountInfo = billingServiceBean.receiptAmountBifurcation(billReceipt);
                 }
-            } catch (final Exception e) {
+            } catch (final IndexNotFoundException e) {
                 final String errMsg = "Exception while constructing collection index for receipt number ["
                         + receiptHeader.getReceiptnumber() + "]!";
                 LOGGER.error(errMsg, e);

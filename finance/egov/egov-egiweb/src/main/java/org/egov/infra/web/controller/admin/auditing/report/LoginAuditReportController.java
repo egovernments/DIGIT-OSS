@@ -48,6 +48,13 @@
 
 package org.egov.infra.web.controller.admin.auditing.report;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.audit.contract.LoginAuditReportRequest;
 import org.egov.infra.security.audit.entity.LoginAudit;
@@ -60,11 +67,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @Controller
 @RequestMapping("/audit/report/login")
@@ -90,7 +92,7 @@ public class LoginAuditReportController {
 
     @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public DataTable<LoginAudit> loginAuditReport(@ModelAttribute LoginAuditReportRequest loginAuditReportRequest) {
+    public DataTable<LoginAudit> loginAuditReport(@Valid @ModelAttribute LoginAuditReportRequest loginAuditReportRequest) {
         return new DataTable<>(loginAuditService.getLoginAudits(loginAuditReportRequest),
                 loginAuditReportRequest.draw());
     }

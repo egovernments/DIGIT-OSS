@@ -4,41 +4,72 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.egov.infra.persistence.validator.annotation.DateFormat;
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class RemittanceReportModel {
     private Long id;
     private int srNo;
     private Boolean selected;
+    @SafeHtml
     private String receiptId;
+    @SafeHtml
     private String receiptDate;
+    @SafeHtml
     private String receiptNumber;
     private BigDecimal instrumentAmount;
+    @SafeHtml
     private String service;
+    @SafeHtml
     private String instrumentType;
+    @SafeHtml
     private String instrumentNumber;
+    @SafeHtml
     private String instrumentDate;
+    @SafeHtml
     private String instrumentId;
+    @SafeHtml
     private String fund;
+    @SafeHtml
     private String department;
+    @SafeHtml
     private String fundName;
+    @SafeHtml
     private String departmentName;
+    @SafeHtml
     private String serviceName;
+    @SafeHtml
     private String bankBranch;
+    @SafeHtml
     private String bank;
+    @SafeHtml
     private String remittanceReferenceNumber;
+    @SafeHtml
     private String bankAccount;
     private Long financialYear;
+    @DateFormat
     private Date fromDate;
+    @DateFormat
     private Date toDate;
+    @SafeHtml
     private String remittedOn;
+    @SafeHtml
     private String remitterId;
+    @SafeHtml
     private String remittedBy;
+    @SafeHtml
     private String transactionNumber;
+    @SafeHtml
     private String payee;
+    @SafeHtml
     private String drawer;
+    @SafeHtml
     private String createdBy;
     private int totalCount;
     private List linkedRemittedList;
+    @SafeHtml
     private String receiptSourceUrl;
+    @SafeHtml
     private String ifscCode;
     public Boolean getSelected() {
         return selected;

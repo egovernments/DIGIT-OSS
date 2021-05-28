@@ -79,7 +79,7 @@ public class EmployeePositionController {
     @ResponseBody
     String checkPositionExistsInWF(@RequestBody final EmployeeRequest employeeRequest,
                                    @RequestParam final String tenantId,
-                                   final HttpServletResponse response) throws Exception {
+                                   final HttpServletResponse response) throws IOException {
 
         //  List<ErrorDetail> errorList = new ArrayList<>(0);
         //  final ErrorDetail re = new ErrorDetail();

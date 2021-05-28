@@ -104,6 +104,7 @@ public class PaymentUtils {
         receipt.setReceiptDate(paymentDetail.getReceiptDate());
         receipt.setReceiptNumber(paymentDetail.getReceiptNumber());
         receipt.setTenantId(paymentDetail.getTenantId());
+        receipt.setService(paymentDetail.getBusinessService());
 //        receipt.setBill(bill);
         this.prepareBillData(payment, paymentDetail, receipt);
 //        receipt.setTransactionId(transactionId);

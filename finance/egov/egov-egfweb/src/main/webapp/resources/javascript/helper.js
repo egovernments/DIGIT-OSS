@@ -492,3 +492,7 @@ function initiateRequest() {
 		}
 	}
 }
+
+function sanitizeHTML(text) {
+	return jQuery('<div>').text(text).html();
+}

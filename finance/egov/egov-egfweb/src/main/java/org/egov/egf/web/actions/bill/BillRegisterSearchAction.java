@@ -50,7 +50,7 @@
  */
 package org.egov.egf.web.actions.bill;
 
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -64,7 +64,6 @@ import org.egov.commons.Scheme;
 import org.egov.commons.SubScheme;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infstr.services.PersistenceService;
@@ -74,14 +73,21 @@ import org.egov.model.bills.EgBillregistermis;
 import org.egov.utils.FinancialConstants;
 import org.egov.utils.VoucherHelper;
 import org.hibernate.Query;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author manoranjan
@@ -104,6 +110,7 @@ public class BillRegisterSearchAction extends BaseFormAction {
     private List<Map<String, Object>> billList;
     @Autowired
     private AppConfigValueService appConfigValueService;
+    DateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
    
  @Autowired
  @Qualifier("persistenceService")
@@ -171,24 +178,37 @@ public class BillRegisterSearchAction extends BaseFormAction {
     }
 
     @Action(value = "/bill/billRegisterSearch-search")
-    public String search() {
-
+    public String search() throws ParseException {
+        validateMandatoryFields();
+        if (hasErrors())
+            return NEW;
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("BillRegisterSearchAction | search | Start");
-        final StringBuffer query = new StringBuffer(500);
-        query
-        .append(
-                "select br.expendituretype , br.billtype ,br.billnumber , br.billdate , br.billamount , br.passedamount ,egwstatus.description,billmis.sourcePath,")
-                .append(" br.id ,br.status.id,egwstatus.description ,br.state.id,br.lastModifiedBy.id ")
-                .append(
-                        " from EgBillregister br, EgBillregistermis billmis , EgwStatus egwstatus where   billmis.egBillregister.id = br.id and egwstatus.id = br.status.id  ")
-                        .append(" and br.expendituretype=?").append(
-                                VoucherHelper
-                                .getBillDateQuery(billDateFrom, billDateTo))
-                                .append(VoucherHelper.getBillMisQuery(billregister));
+        final Map<String, Object> params = new HashMap<>();
+        final StringBuilder query = new StringBuilder(
+                "select br.expendituretype , br.billtype ,br.billnumber , br.billdate ,")
+                        .append(" br.billamount , br.passedamount ,egwstatus.description,billmis.sourcePath,")
+                        .append(" br.id ,br.status.id,egwstatus.description ,br.state.id,br.lastModifiedBy.id ")
+                        .append(" from EgBillregister br, EgBillregistermis billmis , EgwStatus egwstatus")
+                        .append(" where   billmis.egBillregister.id = br.id and egwstatus.id = br.status.id  ")
+                        .append(" and br.expendituretype=:expendituretype");
 
-        final List<Object[]> list = persistenceService.findAllBy(query.toString(),
-                expType);
+        Entry<String, Map<String, Object>> queryWithParams = VoucherHelper.getBillDateQuery(billDateFrom, billDateTo)
+                .entrySet().iterator().next();
+
+        query.append(queryWithParams.getKey());
+        params.putAll(queryWithParams.getValue());
+
+        queryWithParams = VoucherHelper.getBillMisQuery(billregister).entrySet().iterator().next();
+        query.append(queryWithParams.getKey());
+        params.putAll(queryWithParams.getValue());
+
+        params.put("expendituretype", expType);
+
+        final Query qry = persistenceService.getSession().createQuery(query.toString());
+        params.entrySet().forEach(entry -> qry.setParameter(entry.getKey(), entry.getValue()));
+
+        final List<Object[]> list = qry.list();
         final List<Long> stateIds = new ArrayList<Long>();
         final Map<Long, String> stateIdAndOwnerNameMap = new HashMap<Long, String>();
         for (final Object[] object : list)
@@ -223,17 +243,17 @@ public class BillRegisterSearchAction extends BaseFormAction {
                 if (null != object[7])
                     billMap.put("sourcepath", object[7].toString());
                 else
-                    billMap.put("sourcepath",
-                            "/services/EGF/bill/billView-view.action?billId=" + object[8].toString());
+                    billMap.put("sourcepath", "/services/EGF/bill/billView-view.action?billId=" + object[8].toString());
                 // If bill is created from create bill screen
-                if (object[11] != null)
-                {
-                    if (!(getStringValue(object[10]).equalsIgnoreCase(FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS) || getStringValue(
-                            object[10]).equalsIgnoreCase(FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS)))
-                        billMap.put(
-                                "ownerName",
-                                stateIdAndOwnerNameMap.get(getLongValue(object[11])) != null ? stateIdAndOwnerNameMap
-                                        .get(getLongValue(object[11])) : "-");
+                if (object[11] != null) {
+                    if (!(getStringValue(object[10])
+                            .equalsIgnoreCase(FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS)
+                            || getStringValue(object[10])
+                                    .equalsIgnoreCase(FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS)))
+                        billMap.put("ownerName",
+                                stateIdAndOwnerNameMap.get(getLongValue(object[11])) != null
+                                        ? stateIdAndOwnerNameMap.get(getLongValue(object[11]))
+                                        : "-");
                     else
                         billMap.put("ownerName", "-");
                 } else
@@ -243,6 +263,44 @@ public class BillRegisterSearchAction extends BaseFormAction {
         } else
             billList = new ArrayList<Map<String, Object>>();
         return NEW;
+    }
+    
+    
+    public void validateMandatoryFields() throws ParseException {
+        if (expType == null || expType.equals("-1")) {
+            addFieldError("expType", getText("msg.please.select.expenditure.type"));
+        }
+        if (billregister.getEgBillregistermis().getFund() == null
+                || billregister.getEgBillregistermis().getFund().getId() == -1) {
+            addFieldError("egBillregistermis.fund", getText("msg.please.select.fund"));
+        }
+        if (billDateFrom == null || StringUtils.isEmpty(billDateFrom)) {
+            addFieldError("billDateFrom", getText("msg.please.select.bill.from.date"));
+        }
+        if (billDateTo == null || StringUtils.isEmpty(billDateTo)) {
+            addFieldError("billDateTo", getText("msg.please.select.bill.to.date"));
+        }
+        if (!billDateFrom.isEmpty() || !billDateTo.isEmpty()) {
+            boolean isDateFrom = false;
+            boolean isDateTo = false;
+            String fromDate = billDateFrom;
+            String toDate = billDateTo;
+            String datePattern = "\\d{1,2}/\\d{1,2}/\\d{4}";
+            isDateFrom = fromDate.matches(datePattern);
+            isDateTo = toDate.matches(datePattern);
+            if (!isDateFrom || !isDateTo) {
+                addFieldError("billDateTo", getText("msg.please.select.bill.valid.date"));
+            }
+        }
+        Date datefrom = null;
+        Date dateto = null;
+        if (StringUtils.isNotEmpty(billDateFrom) && StringUtils.isNotEmpty(billDateTo)) {
+            datefrom = sdf1.parse(billDateFrom);
+            dateto = sdf1.parse(billDateTo);
+            if (datefrom.after(dateto)) {
+                addFieldError("toDate", getText("msg.from.to.date.greater"));
+            }
+        }
     }
 
     private List<Object[]> getOwnersForWorkFlowState(final List<Long> stateIds)
@@ -291,9 +349,13 @@ public class BillRegisterSearchAction extends BaseFormAction {
     }
 
     public EgwStatus getStatusId(final String moduleType, final Integer statusid) {
-        final String statusQury = "from EgwStatus where upper(moduletype)=upper('" + moduleType + "') and  id=" + statusid;
-        // "upper(description)=upper('"+ statusString + "')";
-        final EgwStatus egwStatus = (EgwStatus) persistenceService.find(statusQury);
+    	
+    	StringBuffer statusQuery = new StringBuffer();
+        statusQuery.append("from EgwStatus where upper(moduletype)=upper(:moduleType) and id=:statusId");
+        final Query query = persistenceService.getSession().createQuery(statusQuery.toString())
+                .setParameter("moduleType", moduleType, StringType.INSTANCE)
+                .setParameter("statusId", statusid, IntegerType.INSTANCE);
+        final EgwStatus egwStatus = (EgwStatus) persistenceService.find(query.toString());
         return egwStatus;
 
     }

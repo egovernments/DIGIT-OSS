@@ -71,7 +71,6 @@ import org.egov.deduction.model.EgRemittance;
 import org.egov.deduction.model.EgRemittanceDetail;
 import org.egov.deduction.model.EgRemittanceGl;
 import org.egov.deduction.model.EgRemittanceGldtl;
-import org.egov.egf.dashboard.event.FinanceEventType;
 import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
@@ -169,11 +168,12 @@ public class PaymentActionHelper {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
         return paymentheader;
     }
 
@@ -195,12 +195,12 @@ public class PaymentActionHelper {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
         return paymentheader;
     }
 
@@ -326,7 +326,7 @@ public class PaymentActionHelper {
                     " from Miscbilldetail where payVoucherHeader.id = ? order by paidto",
                     paymentheader.getVoucherheader().getId());
 
-        } catch (final Exception e) {
+        } catch (final ValidationException e) {
             throw new ValidationException("", "Total Paid Amount Exceeding Net Amount For This Bill");
         }
         if (LOGGER.isDebugEnabled())
@@ -374,9 +374,10 @@ public class PaymentActionHelper {
                 remitDetail.setLastmodifieddate(currDate);
                 egRemittanceDetail.add(remitDetail);
             } else if (rbean.getRemittance_gl_Id() != null) {
-                SQLQuery createSQLQuery = persistenceService.getSession()
-                        .createSQLQuery("select * from eg_remittance_gl where id=" + rbean.getRemittance_gl_Id());
-                List<EgRemittanceGl> list = createSQLQuery.addEntity(EgRemittanceGl.class).list();
+				SQLQuery createSQLQuery = persistenceService.getSession()
+						.createSQLQuery("select * from eg_remittance_gl where id=:remGlid");
+				List<EgRemittanceGl> list = createSQLQuery.addEntity(EgRemittanceGl.class)
+						.setParameter("remGlid", rbean.getRemittance_gl_Id()).list();
                 if (!list.isEmpty()) {
                     EgRemittanceGl remittancegl = list.get(0);
                     remittancegl.setRemittedamt(rbean.getPartialAmount());
@@ -548,11 +549,12 @@ public class PaymentActionHelper {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-            // handle engine exception
-            LOGGER.error(e.getMessage(), e);
-            throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-        }
+        } /*
+           * catch (final Exception e) { // handle engine exception
+           * LOGGER.error(e.getMessage(), e); throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Posted to Ledger " + voucherHeader.getId());
         return voucherHeader;

@@ -105,7 +105,7 @@ function exportPdf(){
 <body>
 	<div id="container">
 		<iframe id="report" name="report"
-			src='/EGF/voucher/journalVoucherPrint-ajaxPrint.action?id=<s:property value="id"/>'></iframe>
+			src='/services/EGF/voucher/journalVoucherPrint-ajaxPrint.action?id=<s:property value="id"/>'></iframe>
 	</div>
 
 	<s:form name="journalVoucherPrint" action="journalVoucherPrint"

@@ -63,6 +63,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.egov.commons.CFinancialYear;
 import org.egov.enums.CloseTypeEnum;
@@ -70,6 +71,7 @@ import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.AuditOverrides;
 import org.hibernate.envers.Audited;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @Table(name = "closedperiods")
@@ -104,6 +106,8 @@ public class ClosedPeriod extends AbstractAuditable {
     @JoinColumn(name = "financialYearId", nullable = false)
     private CFinancialYear financialYear;
 
+    @SafeHtml
+    @NotNull
     private String remarks;
 
     public int getFromDate() {

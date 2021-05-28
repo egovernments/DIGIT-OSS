@@ -50,7 +50,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
-<form:form role="form" action="search" modelAttribute="accountEntity"
+<form:form role="form" action="search" modelAttribute="accountEntitySearchRequest"
 	id="accountEntitysearchform"
 	cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
@@ -66,7 +66,7 @@
 							<label class="col-sm-3 control-label text-right"><spring:message
 									code="lbl.accountdetailtype" text="Account detail type"/> </label>
 							<div class="col-sm-3 add-margin">
-								<form:select path="accountdetailtype.id"
+								<form:select path="accountdetailtypeId"
 									id="accountdetailtype.id" cssClass="form-control"
 									cssErrorClass="form-control error">
 									<form:option value="">
@@ -75,7 +75,7 @@
 									<form:options items="${accountdetailtypes}" itemValue="id"
 										itemLabel="name" />
 								</form:select>
-								<form:errors path="accountdetailtype" cssClass="error-msg" />
+								<form:errors path="accountdetailtypeId" cssClass="error-msg" />
 							</div>
 							<label class="col-sm-3 control-label text-right"><spring:message
 									code="lbl.name" text="Name"/> </label>

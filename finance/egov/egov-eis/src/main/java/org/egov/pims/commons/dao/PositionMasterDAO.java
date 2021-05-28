@@ -51,6 +51,7 @@ import org.apache.log4j.Logger;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.pims.commons.Position;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -94,11 +95,11 @@ public class PositionMasterDAO
         {
             if(position==null)
             {
-            	throw new ApplicationException("position.master.null");
+            	throw new NullPointerException("position.master.null");
             }
             getCurrentSession().delete(position);
         }
-        catch(Exception e)
+        catch(HibernateException e)
         {
         	throw new ApplicationRuntimeException(e.getMessage(),e);
         }
@@ -112,7 +113,7 @@ public class PositionMasterDAO
             desig = (Position)getCurrentSession().get(Position.class, Integer.valueOf(posId));
             return desig;
         }
-        catch(Exception e)
+        catch(HibernateException e)
         {
         	throw new ApplicationRuntimeException(e.getMessage(),e);
         }
@@ -134,7 +135,7 @@ public class PositionMasterDAO
             }
             return b;
         }
-        catch(Exception e)
+        catch(HibernateException e)
         {
         	throw new ApplicationRuntimeException(e.getMessage(),e);
         }
@@ -157,12 +158,9 @@ public class PositionMasterDAO
             }
             return positionId;
         }
-        catch(Exception e)
+        catch(HibernateException e)
         {
         	throw new ApplicationRuntimeException(e.getMessage(),e);
         }
     }
-    
-    
-
 }

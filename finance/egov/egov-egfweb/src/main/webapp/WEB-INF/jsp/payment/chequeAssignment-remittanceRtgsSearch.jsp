@@ -159,7 +159,7 @@
 			</table>
 			<div class="buttonbottom">
 				<s:submit method="searchRemittanceRTGS" key="lbl.search"
-					id="searchBtn" cssClass="buttonsubmit" />
+					id="searchBtn" cssClass="buttonsubmit" onclick="submitForm()"/>
 				<input type="button" value='<s:text name="lbl.close"/>'
 					onclick="javascript:window.close()" class="button" />
 			</div>
@@ -176,6 +176,16 @@
 		<s:hidden name="recoveryCode" id="recoveryCode" />
 	</s:form>
 	<script>
+	function submitForm() {
+
+		document.chequeAssignment.action = "/services/EGF/payment/chequeAssignment-searchRemittanceRTGS.action";
+		jQuery(chequeAssignment).append(jQuery('<input>', {
+            type : 'hidden',
+            name : '${_csrf.parameterName}',
+            value : '${_csrf.token}'
+        }));
+		document.chequeAssignment.submit();
+	}
 				var date='<s:date name="currentDate" format="dd/MM/yyyy"/>';
 				function onload()
 				{

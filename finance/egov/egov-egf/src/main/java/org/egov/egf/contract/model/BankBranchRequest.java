@@ -4,113 +4,125 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.egov.infra.microservice.models.RequestInfo;
+import org.hibernate.validator.constraints.SafeHtml;
 
 public class BankBranchRequest implements Serializable {
 
-	private RequestInfo requestInfo;
-	private String tenantId;
-	private List<Long> ids;
-	private Long bank;
-	private String code;
-	private Boolean active;
-	private Integer offset;
-	private Integer pageSize;
-	private String sortBy;
-	private String name;
-	public BankBranchRequest(){}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 9056373628830876075L;
+    private RequestInfo requestInfo;
+    @SafeHtml
+    private String tenantId;
+    private List<Long> ids;
+    private Long bank;
+    @SafeHtml
+    private String code;
+    private Boolean active;
+    private Integer offset;
+    private Integer pageSize;
+    @SafeHtml
+    private String sortBy;
+    @SafeHtml
+    private String name;
 
-	public BankBranchRequest(RequestInfo requestInfo, String tenantId, List<Long> ids, Long bank, String code,
-			Boolean active, Integer offset, Integer pageSize, String sortBy,String name) {
-		this.requestInfo = requestInfo;
-		this.tenantId = tenantId;
-		this.ids = ids;
-		this.bank = bank;
-		this.code = code;
-		this.active = active;
-		this.offset = offset;
-		this.pageSize = pageSize;
-		this.sortBy = sortBy;
-		this.name = name;
-	}
+    public BankBranchRequest() {
+    }
 
-	public RequestInfo getRequestInfo() {
-		return requestInfo;
-	}
+    public BankBranchRequest(final RequestInfo requestInfo, final String tenantId, final List<Long> ids,
+            final Long bank, final String code, final Boolean active, final Integer offset, final Integer pageSize,
+            final String sortBy, final String name) {
+        this.requestInfo = requestInfo;
+        this.tenantId = tenantId;
+        this.ids = ids;
+        this.bank = bank;
+        this.code = code;
+        this.active = active;
+        this.offset = offset;
+        this.pageSize = pageSize;
+        this.sortBy = sortBy;
+        this.name = name;
+    }
 
-	public void setRequestInfo(RequestInfo requestInfo) {
-		this.requestInfo = requestInfo;
-	}
+    public RequestInfo getRequestInfo() {
+        return requestInfo;
+    }
 
-	public String getTenantId() {
-		return tenantId;
-	}
+    public void setRequestInfo(final RequestInfo requestInfo) {
+        this.requestInfo = requestInfo;
+    }
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
+    public String getTenantId() {
+        return tenantId;
+    }
 
-	public List<Long> getIds() {
-		return ids;
-	}
+    public void setTenantId(final String tenantId) {
+        this.tenantId = tenantId;
+    }
 
-	public void setIds(List<Long> ids) {
-		this.ids = ids;
-	}
+    public List<Long> getIds() {
+        return ids;
+    }
 
-	public Long getBank() {
-		return bank;
-	}
+    public void setIds(final List<Long> ids) {
+        this.ids = ids;
+    }
 
-	public void setBank(Long bank) {
-		this.bank = bank;
-	}
+    public Long getBank() {
+        return bank;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public void setBank(final Long bank) {
+        this.bank = bank;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public Boolean getActive() {
-		return active;
-	}
+    public void setCode(final String code) {
+        this.code = code;
+    }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+    public Boolean getActive() {
+        return active;
+    }
 
-	public Integer getOffset() {
-		return offset;
-	}
+    public void setActive(final Boolean active) {
+        this.active = active;
+    }
 
-	public void setOffset(Integer offset) {
-		this.offset = offset;
-	}
+    public Integer getOffset() {
+        return offset;
+    }
 
-	public Integer getPageSize() {
-		return pageSize;
-	}
+    public void setOffset(final Integer offset) {
+        this.offset = offset;
+    }
 
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
+    public Integer getPageSize() {
+        return pageSize;
+    }
 
-	public String getSortBy() {
-		return sortBy;
-	}
+    public void setPageSize(final Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
-	}
+    public String getSortBy() {
+        return sortBy;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setSortBy(final String sortBy) {
+        this.sortBy = sortBy;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
 }

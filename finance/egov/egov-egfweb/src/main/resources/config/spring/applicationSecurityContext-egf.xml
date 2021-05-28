@@ -47,10 +47,10 @@
   ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
   ~
   -->
-<beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:security="http://www.springframework.org/schema/security"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+<beans xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
 	   http://www.springframework.org/schema/beans/spring-beans.xsd
 	   http://www.springframework.org/schema/security
 	   http://www.springframework.org/schema/security/spring-security.xsd" default-lazy-init="true">
@@ -79,7 +79,7 @@
 				<security:filter-chain pattern="/report/balanceSheetReport*.action" filters="none" />
 				<security:filter-chain pattern="/report/billPaymentVoucherPrint*.action" filters="none" /> -->
 				<security:filter-chain pattern="/voucher/preApprovedVoucher-loadvoucherview.action" filters="none" />
-				<security:filter-chain pattern="/payment/payment-view.action" filters="none" />
+				<security:filter-chain pattern="/payment/payment-view.action" filters="csrfFilter" />
 				<security:filter-chain pattern="/deduction/remitRecovery-beforeView.action" filters="none" />
 				<security:filter-chain pattern="/bill/contingentBill-beforeView.action" filters="none" />
 				<security:filter-chain pattern="/voucher/common-ajaxLoadAccountNumbers.action" filters="none" />
@@ -95,7 +95,7 @@
 				<security:filter-chain pattern="/payment/directBankPayment-beforeView.action" filters="none" />
 				<security:filter-chain pattern="/findashboard/*" filters="none" />
 				<security:filter-chain pattern="/rest/**" filters="none" />
-				<security:filter-chain pattern="/**"  filters="concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeAuthenticationFilter,anonymousAuthenticationFilter,exceptionTranslationFilter,filterSecurityInterceptor" />
+				<security:filter-chain pattern="/**"  filters="concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,headerWriterFilter,csrfFilter,securityContextHolderAwareRequestFilter,rememberMeAuthenticationFilter,anonymousAuthenticationFilter,exceptionTranslationFilter,filterSecurityInterceptor" />
 			</list> 
 		</constructor-arg>
 	</bean>	

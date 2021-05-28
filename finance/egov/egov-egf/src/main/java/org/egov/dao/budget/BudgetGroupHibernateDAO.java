@@ -53,6 +53,12 @@
  */
 package org.egov.dao.budget;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.log4j.Logger;
 import org.egov.commons.CChartOfAccounts;
 import org.egov.commons.CFinancialYear;
@@ -65,11 +71,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
 
 @Transactional(readOnly = true)
 public class BudgetGroupHibernateDAO implements BudgetGroupDAO {
@@ -125,12 +126,13 @@ public class BudgetGroupHibernateDAO implements BudgetGroupDAO {
                 LOGGER.info("budgetGroup saved id" + budgetGroup.getName());
         } catch (final ValidationException v) {
             LOGGER.error("Error in createBudgetGroup===" + v.getErrors());
-            throw new ValidationException(v.getErrors());
-        } catch (final Exception e) {
-            LOGGER.error(e.getCause() + " Error in createBudgetGroup");
-            throw new ValidationException(EMPTY_STRING, "egovexception in creation of budgetGroup" + e);
-        }
-
+            throw new ValidationException(EMPTY_STRING, "egovexception in creation of budgetGroup" + v);
+        } /*
+           * catch (final Exception e) { LOGGER.error(e.getCause() +
+           * " Error in createBudgetGroup"); throw new
+           * ValidationException(EMPTY_STRING,
+           * "egovexception in creation of budgetGroup" + e); }
+           */
         return budgetGroup;
     }
 
@@ -147,7 +149,8 @@ public class BudgetGroupHibernateDAO implements BudgetGroupDAO {
                 throw new ValidationException(EMPTY_STRING, "Date is not defined in the Financial year master");
 
             qryStr.append(
-                    "from BudgetGroup bg where  bg in ( select bd.budgetGroup from BudgetDetail bd  where bd.budget.financialYear=:financialYearId   ");
+                    "from BudgetGroup bg where  bg in ( select bd.budgetGroup from BudgetDetail bd ")
+            .append(" where bd.budget.financialYear=:financialYearId   ");
 
             if (functionCode != null && !functionCode.equals("")) {
                 function = functionDAO.getFunctionByCode(functionCode);
@@ -223,8 +226,8 @@ public class BudgetGroupHibernateDAO implements BudgetGroupDAO {
                 if (function == null || function.getId() == null)
                     throw new ValidationException(EMPTY_STRING, "Function Code is not defined in the system");
 
-                qryStr.append(
-                        "from BudgetGroup bg where  bg in ( select distinct bd.budgetGroup from BudgetDetail bd  where bd.function=:functionId ) order by bg.name");
+				qryStr.append("from BudgetGroup bg where  bg in ( select distinct bd.budgetGroup from BudgetDetail bd")
+						.append("  where bd.function=:functionId ) order by bg.name");
             }
             session = getCurrentSession();
             final Query qry = session.createQuery(qryStr.toString());
@@ -255,160 +258,162 @@ public class BudgetGroupHibernateDAO implements BudgetGroupDAO {
      * @param chartOfAccountsList
      * @throws ValidationException
      */
-    @Override
-    public List<BudgetGroup> getBudgetHeadByCOAandFunction(final String functionCode,
-            final List<CChartOfAccounts> chartOfAccountsList) throws ValidationException {
+	@Override
+	public List<BudgetGroup> getBudgetHeadByCOAandFunction(final String functionCode,
+			final List<CChartOfAccounts> chartOfAccountsList) throws ValidationException {
 
-        List<BudgetGroup> budgetHeadList = new ArrayList<BudgetGroup>();
-        try {
-            // If only function code is given.
-            if (functionCode != null && !functionCode.equals("")
-                    && (chartOfAccountsList == null || chartOfAccountsList.size() == 0))
-                return getBudgetHeadByFunction(functionCode);
-            else if (chartOfAccountsList != null && chartOfAccountsList.size() > 0
-                    && (functionCode == null || functionCode.equals(""))) {
+		List<BudgetGroup> budgetHeadList = new ArrayList<BudgetGroup>();
+		try {
+			// If only function code is given.
+			if (functionCode != null && !functionCode.equals("")
+					&& (chartOfAccountsList == null || chartOfAccountsList.size() == 0))
+				return getBudgetHeadByFunction(functionCode);
+			else if (chartOfAccountsList != null && chartOfAccountsList.size() > 0
+					&& (functionCode == null || functionCode.equals(""))) {
 
-                final List<Long> coaIds = new ArrayList<Long>();
-                for (final CChartOfAccounts coa : chartOfAccountsList)
-                    coaIds.add(coa.getId());
-                int size = coaIds.size();
-                if (size > 999) {
-                    int fromIndex = 0;
-                    int toIndex = 0;
-                    final int step = 1000;
-                    List<BudgetGroup> newbudgetHeadList;
-                    while (size - step >= 0) {
-                        newbudgetHeadList = new ArrayList<BudgetGroup>();
-                        toIndex += step;
-                        final Query budgetHeadsQuery = getCurrentSession()
-                                .createQuery(
-                                        " from BudgetGroup bg where  bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 )");
-                        budgetHeadsQuery.setParameterList("IDS1", coaIds.subList(fromIndex, toIndex));
-                        budgetHeadsQuery.setParameterList("IDS2", coaIds.subList(fromIndex, toIndex));
-                        newbudgetHeadList = budgetHeadsQuery.list();
-                        fromIndex = toIndex;
-                        size -= step;
-                        if (newbudgetHeadList != null)
-                            budgetHeadList.addAll(newbudgetHeadList);
+				final List<Long> coaIds = new ArrayList<Long>();
+				for (final CChartOfAccounts coa : chartOfAccountsList)
+					coaIds.add(coa.getId());
+				int size = coaIds.size();
+				if (size > 999) {
+					int fromIndex = 0;
+					int toIndex = 0;
+					final int step = 1000;
+					List<BudgetGroup> newbudgetHeadList;
+					while (size - step >= 0) {
+						newbudgetHeadList = new ArrayList<BudgetGroup>();
+						toIndex += step;
+						final Query budgetHeadsQuery = getCurrentSession().createQuery(
+								" from BudgetGroup bg where  bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 )");
+						budgetHeadsQuery.setParameterList("IDS1", coaIds.subList(fromIndex, toIndex));
+						budgetHeadsQuery.setParameterList("IDS2", coaIds.subList(fromIndex, toIndex));
+						newbudgetHeadList = budgetHeadsQuery.list();
+						fromIndex = toIndex;
+						size -= step;
+						if (newbudgetHeadList != null)
+							budgetHeadList.addAll(newbudgetHeadList);
 
-                    }
+					}
 
-                    if (size > 0) {
-                        newbudgetHeadList = new ArrayList<BudgetGroup>();
-                        fromIndex = toIndex;
-                        toIndex = fromIndex + size;
-                        final Query budgetHeadsQuery = getCurrentSession().createQuery(
-                                " from BudgetGroup bg where bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 )");
-                        budgetHeadsQuery.setParameterList("IDS1", coaIds.subList(fromIndex, toIndex));
-                        budgetHeadsQuery.setParameterList("IDS2", coaIds.subList(fromIndex, toIndex));
-                        newbudgetHeadList = budgetHeadsQuery.list();
-                        if (newbudgetHeadList != null)
-                            budgetHeadList.addAll(newbudgetHeadList);
-                    }
+					if (size > 0) {
+						newbudgetHeadList = new ArrayList<BudgetGroup>();
+						fromIndex = toIndex;
+						toIndex = fromIndex + size;
+						final Query budgetHeadsQuery = getCurrentSession().createQuery(
+								" from BudgetGroup bg where bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 )");
+						budgetHeadsQuery.setParameterList("IDS1", coaIds.subList(fromIndex, toIndex));
+						budgetHeadsQuery.setParameterList("IDS2", coaIds.subList(fromIndex, toIndex));
+						newbudgetHeadList = budgetHeadsQuery.list();
+						if (newbudgetHeadList != null)
+							budgetHeadList.addAll(newbudgetHeadList);
+					}
 
-                } else {
-                    final Query budgetHeadsQuery = getCurrentSession().createQuery(
-                            " from BudgetGroup bg where  bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 )");
-                    budgetHeadsQuery.setParameterList("IDS1", coaIds);
-                    budgetHeadsQuery.setParameterList("IDS2", coaIds);
-                    budgetHeadList = budgetHeadsQuery.list();
-                }
-                if (budgetHeadList.isEmpty() || budgetHeadList.size() == 0)
-                    throw new ValidationException(EMPTY_STRING, "No budget heads mapped for the function code - "
-                            + functionCode);
-                return budgetHeadList;
+				} else {
+					final Query budgetHeadsQuery = getCurrentSession().createQuery(
+							" from BudgetGroup bg where  bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 )");
+					budgetHeadsQuery.setParameterList("IDS1", coaIds);
+					budgetHeadsQuery.setParameterList("IDS2", coaIds);
+					budgetHeadList = budgetHeadsQuery.list();
+				}
+				if (budgetHeadList.isEmpty() || budgetHeadList.size() == 0)
+					throw new ValidationException(EMPTY_STRING,
+							"No budget heads mapped for the function code - " + functionCode);
+				return budgetHeadList;
 
-                // If function code and chartOfAccountsList is given.
-            } else if (chartOfAccountsList != null && chartOfAccountsList.size() > 0 && functionCode != null
-                    && !functionCode.equals("")) {
+				// If function code and chartOfAccountsList is given.
+			} else if (chartOfAccountsList != null && chartOfAccountsList.size() > 0 && functionCode != null
+					&& !functionCode.equals("")) {
 
-                final List<Long> coaIds = new ArrayList<Long>();
-                CFunction function = null;
+				final List<Long> coaIds = new ArrayList<Long>();
+				CFunction function = null;
 
-                if (functionCode != null && !functionCode.equals("")) {
-                    function = functionDAO.getFunctionByCode(functionCode);
-                    if (function == null || function.getId() == null)
-                        throw new ValidationException(EMPTY_STRING, "Function Code is not defined in the system");
+				if (functionCode != null && !functionCode.equals("")) {
+					function = functionDAO.getFunctionByCode(functionCode);
+					if (function == null || function.getId() == null)
+						throw new ValidationException(EMPTY_STRING, "Function Code is not defined in the system");
 
-                }
+				}
 
-                for (final CChartOfAccounts coa : chartOfAccountsList)
-                    coaIds.add(coa.getId());
-                int size = coaIds.size();
-                if (size > 999) {
-                    int fromIndex = 0;
-                    int toIndex = 0;
-                    final int step = 1000;
-                    List<BudgetGroup> newbudgetHeadList;
-                    while (size - step >= 0) {
-                        newbudgetHeadList = new ArrayList<BudgetGroup>();
-                        toIndex += step;
-                        final Query budgetHeadsQuery = getCurrentSession()
-                                .createQuery(
-                                        " from BudgetGroup bg where bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 ) and bg in ( select bd.budgetGroup from BudgetDetail bd  where bd.function=:functionId ) order by bg.name");
-                        budgetHeadsQuery.setParameterList("IDS1", coaIds.subList(fromIndex, toIndex));
-                        budgetHeadsQuery.setParameterList("IDS2", coaIds.subList(fromIndex, toIndex));
-                        if (functionCode != null && !functionCode.equals(""))
-                            budgetHeadsQuery.setLong("functionId", function.getId());
-                        newbudgetHeadList = budgetHeadsQuery.list();
-                        fromIndex = toIndex;
-                        size -= step;
-                        if (newbudgetHeadList != null)
-                            budgetHeadList.addAll(newbudgetHeadList);
+				for (final CChartOfAccounts coa : chartOfAccountsList)
+					coaIds.add(coa.getId());
+				int size = coaIds.size();
+				if (size > 999) {
+					int fromIndex = 0;
+					int toIndex = 0;
+					final int step = 1000;
+					List<BudgetGroup> newbudgetHeadList;
+					while (size - step >= 0) {
+						newbudgetHeadList = new ArrayList<BudgetGroup>();
+						toIndex += step;
+						final Query budgetHeadsQuery = getCurrentSession().createQuery(new StringBuilder(
+								" from BudgetGroup bg where bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 )")
+										.append(" and bg in ( select bd.budgetGroup from BudgetDetail bd  where bd.function=:functionId )")
+										.append(" order by bg.name").toString());
+						budgetHeadsQuery.setParameterList("IDS1", coaIds.subList(fromIndex, toIndex));
+						budgetHeadsQuery.setParameterList("IDS2", coaIds.subList(fromIndex, toIndex));
+						if (functionCode != null && !functionCode.equals(""))
+							budgetHeadsQuery.setLong("functionId", function.getId());
+						newbudgetHeadList = budgetHeadsQuery.list();
+						fromIndex = toIndex;
+						size -= step;
+						if (newbudgetHeadList != null)
+							budgetHeadList.addAll(newbudgetHeadList);
 
-                    }
+					}
 
-                    if (size > 0) {
-                        newbudgetHeadList = new ArrayList<BudgetGroup>();
-                        fromIndex = toIndex;
-                        toIndex = fromIndex + size;
-                        final Query budgetHeadsQuery = getCurrentSession()
-                                .createQuery(
-                                        " from BudgetGroup bg where  bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 ) and bg in ( select bd.budgetGroup from BudgetDetail bd  where bd.function=:functionId ) order by bg.name");
-                        budgetHeadsQuery.setParameterList("IDS1", coaIds.subList(fromIndex, toIndex));
-                        budgetHeadsQuery.setParameterList("IDS2", coaIds.subList(fromIndex, toIndex));
-                        if (functionCode != null && !functionCode.equals(""))
-                            budgetHeadsQuery.setLong("functionId", function.getId());
-                        newbudgetHeadList = budgetHeadsQuery.list();
-                        if (newbudgetHeadList != null)
-                            budgetHeadList.addAll(newbudgetHeadList);
-                    }
+					if (size > 0) {
+						newbudgetHeadList = new ArrayList<BudgetGroup>();
+						fromIndex = toIndex;
+						toIndex = fromIndex + size;
+						final Query budgetHeadsQuery = getCurrentSession().createQuery(new StringBuilder(
+								" from BudgetGroup bg where  bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 )")
+										.append(" and bg in ( select bd.budgetGroup from BudgetDetail bd")
+										.append("  where bd.function=:functionId ) order by bg.name").toString());
+						budgetHeadsQuery.setParameterList("IDS1", coaIds.subList(fromIndex, toIndex));
+						budgetHeadsQuery.setParameterList("IDS2", coaIds.subList(fromIndex, toIndex));
+						if (functionCode != null && !functionCode.equals(""))
+							budgetHeadsQuery.setLong("functionId", function.getId());
+						newbudgetHeadList = budgetHeadsQuery.list();
+						if (newbudgetHeadList != null)
+							budgetHeadList.addAll(newbudgetHeadList);
+					}
 
-                } else {
-                    final Query budgetHeadsQuery = getCurrentSession()
-                            .createQuery(
-                                    " from BudgetGroup bg where  bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 ) and bg in ( select bd.budgetGroup from BudgetDetail bd  where bd.function=:functionId ) order by bg.name ");
-                    budgetHeadsQuery.setParameterList("IDS1", coaIds);
-                    budgetHeadsQuery.setParameterList("IDS2", coaIds);
-                    if (functionCode != null && !functionCode.equals(""))
-                        budgetHeadsQuery.setLong("functionId", function.getId());
-                    budgetHeadList = budgetHeadsQuery.list();
-                }
-                if (budgetHeadList.isEmpty() || budgetHeadList.size() == 0)
-                    throw new ValidationException(EMPTY_STRING, "No budget heads mapped for the function code - "
-                            + functionCode);
-                return budgetHeadList;
-                // If both are not given.
-            } else {
+				} else {
+					final Query budgetHeadsQuery = getCurrentSession().createQuery(new StringBuilder(
+							" from BudgetGroup bg where  bg.maxCode.id in ( :IDS1 ) and bg.minCode.id in ( :IDS2 )")
+									.append(" and bg in ( select bd.budgetGroup from BudgetDetail bd ")
+									.append(" where bd.function=:functionId ) order by bg.name ").toString());
+					budgetHeadsQuery.setParameterList("IDS1", coaIds);
+					budgetHeadsQuery.setParameterList("IDS2", coaIds);
+					if (functionCode != null && !functionCode.equals(""))
+						budgetHeadsQuery.setLong("functionId", function.getId());
+					budgetHeadList = budgetHeadsQuery.list();
+				}
+				if (budgetHeadList.isEmpty() || budgetHeadList.size() == 0)
+					throw new ValidationException(EMPTY_STRING,
+							"No budget heads mapped for the function code - " + functionCode);
+				return budgetHeadList;
+				// If both are not given.
+			} else {
 
-                final StringBuffer qryStr = new StringBuffer();
-                qryStr.append("from BudgetGroup bg order by bg.name");
-                session = getCurrentSession();
-                final Query qry = session.createQuery(qryStr.toString());
+				final StringBuffer qryStr = new StringBuffer();
+				qryStr.append("from BudgetGroup bg order by bg.name");
+				session = getCurrentSession();
+				final Query qry = session.createQuery(qryStr.toString());
 
-                budgetHeadList = qry.list();
-            }
+				budgetHeadList = qry.list();
+			}
 
-        } catch (final ValidationException v) {
-            LOGGER.error("Exception in getBudgetHeadByFunction API()" + v.getErrors());
-            throw new ValidationException(v.getErrors());
-        } catch (final Exception e) {
-            LOGGER.error("Exception in getBudgetHeadByFunction API()=======" + e.getMessage());
-            throw new ValidationException(EMPTY_STRING, e.getMessage());
-        }
-        return budgetHeadList;
+		} catch (final ValidationException v) {
+			LOGGER.error("Exception in getBudgetHeadByFunction API()" + v.getErrors());
+			throw new ValidationException(v.getErrors());
+		} catch (final Exception e) {
+			LOGGER.error("Exception in getBudgetHeadByFunction API()=======" + e.getMessage());
+			throw new ValidationException(EMPTY_STRING, e.getMessage());
+		}
+		return budgetHeadList;
 
-    }
+	}
 
     /**
      * Returns a list of BudgetGroup having entry in budget detail with the given fund,function,department and account type.
@@ -416,55 +421,55 @@ public class BudgetGroupHibernateDAO implements BudgetGroupDAO {
      * @param fund,function,department and account type
      * @throws ValidationException
      */
-    @Override
-    public List<BudgetGroup> getBudgetGroupsByFundFunctionDeptAndAccountType(final Integer fund, final Long dept,
-            final Long function, final String accountType) throws ValidationException {
+	@Override
+	public List<BudgetGroup> getBudgetGroupsByFundFunctionDeptAndAccountType(final Integer fund, final Long dept,
+			final Long function, final String accountType) throws ValidationException {
 
-        List<BudgetGroup> budgetHeadList = new ArrayList<BudgetGroup>();
-        try {
-            final StringBuffer qryStr = new StringBuffer();
-            final StringBuffer filtersQryStr = new StringBuffer();
-            final StringBuffer accountTypeQryStr = new StringBuffer();
-            if (fund != null)
-                filtersQryStr.append(" and bd.fund.id =:fund ");
-            if (dept != null)
-                filtersQryStr.append(" and bd.executingDepartment.id =:dept ");
-            if (function != null)
-                filtersQryStr.append(" and bd.function.id =:function ");
-            if (accountType != null)
-                accountTypeQryStr.append(" and bg.accountType =:accountType ");
+		List<BudgetGroup> budgetHeadList = new ArrayList<BudgetGroup>();
+		try {
+			final StringBuffer qryStr = new StringBuffer();
+			final StringBuffer filtersQryStr = new StringBuffer();
+			final StringBuffer accountTypeQryStr = new StringBuffer();
+			if (fund != null)
+				filtersQryStr.append(" and bd.fund.id =:fund ");
+			if (dept != null)
+				filtersQryStr.append(" and bd.executingDepartment.id =:dept ");
+			if (function != null)
+				filtersQryStr.append(" and bd.function.id =:function ");
+			if (accountType != null)
+				accountTypeQryStr.append(" and bg.accountType =:accountType ");
 
-            qryStr.append(
-                    "from BudgetGroup bg where  bg in ( select distinct bd.budgetGroup from BudgetDetail bd  where bd.id is not null ");
-            qryStr.append(filtersQryStr);
-            qryStr.append(" ) ");
-            qryStr.append(accountTypeQryStr);
-            qryStr.append("order by bg.name");
-            session = getCurrentSession();
-            final Query qry = session.createQuery(qryStr.toString());
-            if (fund != null)
-                qry.setInteger("fund", fund);
-            if (dept != null)
-                qry.setLong("dept", dept);
-            if (function != null)
-                qry.setLong("function", function);
-            if (accountType != null)
-                qry.setString("accountType", accountType);
+			qryStr.append("from BudgetGroup bg where  bg in ( select distinct bd.budgetGroup ")
+					.append("from BudgetDetail bd  where bd.id is not null ");
+			qryStr.append(filtersQryStr);
+			qryStr.append(" ) ");
+			qryStr.append(accountTypeQryStr);
+			qryStr.append("order by bg.name");
+			session = getCurrentSession();
+			final Query qry = session.createQuery(qryStr.toString());
+			if (fund != null)
+				qry.setInteger("fund", fund);
+			if (dept != null)
+				qry.setLong("dept", dept);
+			if (function != null)
+				qry.setLong("function", function);
+			if (accountType != null)
+				qry.setString("accountType", accountType);
 
-            budgetHeadList = qry.list();
+			budgetHeadList = qry.list();
 
-            if (budgetHeadList.isEmpty() || budgetHeadList.size() == 0)
-                throw new ValidationException(EMPTY_STRING,
-                        "No budget heads mapped for the given fund,department,function and account type ");
-        } catch (final ValidationException v) {
-            LOGGER.error("Exception in getBudgetGroupsByFundFunctionDeptAndAccountType API()" + v.getErrors());
-            throw new ValidationException(v.getErrors());
-        } catch (final Exception e) {
-            LOGGER.error("Exception in getBudgetGroupsByFundFunctionDeptAndAccountType API()=======" + e.getMessage());
-            throw new ValidationException(EMPTY_STRING, e.getMessage());
-        }
-        return budgetHeadList;
+			if (budgetHeadList.isEmpty() || budgetHeadList.size() == 0)
+				throw new ValidationException(EMPTY_STRING,
+						"No budget heads mapped for the given fund,department,function and account type ");
+		} catch (final ValidationException v) {
+			LOGGER.error("Exception in getBudgetGroupsByFundFunctionDeptAndAccountType API()" + v.getErrors());
+			throw new ValidationException(v.getErrors());
+		} catch (final Exception e) {
+			LOGGER.error("Exception in getBudgetGroupsByFundFunctionDeptAndAccountType API()=======" + e.getMessage());
+			throw new ValidationException(EMPTY_STRING, e.getMessage());
+		}
+		return budgetHeadList;
 
-    }
+	}
 
 }

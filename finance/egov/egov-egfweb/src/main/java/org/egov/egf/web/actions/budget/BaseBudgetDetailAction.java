@@ -328,17 +328,19 @@ public abstract class BaseBudgetDetailAction extends GenericWorkFlowAction {
 
     public void loadBudgets(final String bere) {
         budgetList = new ArrayList<Budget>();
+        StringBuilder query1 = new StringBuilder("from Budget where id not in (select parent from Budget where parent is not null) ")
+                .append("and isactivebudget = true  and isbere=?")
+                .append(" and status.code!='Approved' and financialYear.id = ?")
+                .append(" order by name");
+
+        StringBuilder query2 = new StringBuilder("from Budget where id not in (select parent from Budget where parent is not null) ")
+                .append("and isactivebudget = true  and isbere=?")
+                .append(" and financialYear.id = ?")
+                .append(" order by name");
         if (!addNewDetails)
-            budgetList.addAll(persistenceService
-                    .findAllBy("from Budget where id not in (select parent from Budget where parent is not null) "
-                            + "and isactivebudget = true  and isbere='" + bere.toUpperCase()
-                            + "' and status.code!='Approved' and financialYear.id = " + getFinancialYear().getId()
-                            + " order by name"));
+            budgetList.addAll(persistenceService.findAllBy(query1.toString(), bere.toUpperCase(), getFinancialYear().getId()));
         else
-            budgetList.addAll(persistenceService
-                    .findAllBy("from Budget where id not in (select parent from Budget where parent is not null) "
-                            + "and isactivebudget = true  and isbere='" + bere.toUpperCase()
-                            + "'  and financialYear.id = " + getFinancialYear().getId() + " order by name"));
+            budgetList.addAll(persistenceService.findAllBy(query2.toString(), bere.toUpperCase(), getFinancialYear().getId()));
 
     }
 
@@ -391,7 +393,7 @@ public abstract class BaseBudgetDetailAction extends GenericWorkFlowAction {
         if (shouldShowField(Constants.BOUNDARY))
             dropdownData.put("boundaryList", persistenceService.findAllBy("from Boundary order by name"));
         addDropdownData("financialYearList", getPersistenceService()
-                .findAllBy("from CFinancialYear where isActive=true order by " + "finYearRange desc "));
+                .findAllBy("from CFinancialYear where isActive=true order by finYearRange desc "));
         dropdownData.put("departmentList", masterDataCache.get(EGI_DEPARTMENT));
         dropdownData.put("designationList", Collections.emptyList());
         dropdownData.put("userList", Collections.emptyList());
@@ -505,16 +507,18 @@ public abstract class BaseBudgetDetailAction extends GenericWorkFlowAction {
     protected void setBudgetDropDown() {
         if (addNewDetails) {
             if (getFinancialYear() != null && getFinancialYear().getId() != null) {
-                budgetList.addAll(persistenceService
-                        .findAllBy("from Budget where id not in (select parent from Budget where parent is not null) "
-                                + "and isactivebudget = true and state.type='Budget' and isbere='RE' and financialYear.id = "
-                                + getFinancialYear().getId() + " order by name"));
+                StringBuilder queryString = new StringBuilder("from Budget where id not in (select parent from Budget where parent is not null) ")
+                        .append("and isactivebudget = true and state.type='Budget' and isbere='RE' and financialYear.id = ?")
+                        .append(" order by name");
+                budgetList.addAll(persistenceService.findAllBy(queryString.toString(), getFinancialYear().getId()));
                 dropdownData.put(BUDGETLIST, budgetList);
             } else
                 dropdownData.put(BUDGETLIST, Collections.emptyList());
         } else
-            dropdownData.put(BUDGETLIST, persistenceService.findAllBy(
-                    "from Budget where id not in (select parent from Budget where parent is not null) and isactivebudget = true and state.type='Budget' and (state.value='NEW' or lower(state.value) like lower('Forwarded by SMADMIN%')) order by name"));
+            dropdownData.put(BUDGETLIST, persistenceService.findAllBy(new StringBuilder("from Budget where id not in (select parent from Budget where parent is not null)")
+                    .append(" and isactivebudget = true and state.type='Budget' and (state.value='NEW'")
+                    .append(" or lower(state.value) like lower('Forwarded by SMADMIN%')) order by name").toString()));
+        
     }
 
     public List<BudgetDetail> getSavedbudgetDetailList() {

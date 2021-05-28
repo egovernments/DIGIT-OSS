@@ -57,17 +57,20 @@ import org.egov.egf.commons.bank.service.CreateBankService;
 import org.egov.egf.masters.services.SupplierService;
 import org.egov.egf.web.adaptor.SupplierJsonAdaptor;
 import org.egov.model.masters.Supplier;
+import org.egov.model.masters.SupplierSearchRequest;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -82,111 +85,114 @@ import com.google.gson.GsonBuilder;
 @RequestMapping(value = "/supplier")
 public class CreateSupplierController {
 
-    private static final String NEW = "supplier-new";
-    private static final String RESULT = "supplier-result";
-    private static final String EDIT = "supplier-edit";
-    private static final String VIEW = "supplier-view";
-    private static final String SEARCH = "supplier-search";
+	private static final String STR_SUPPLIER = "supplier";
+	private static final String STR_SUPPLIER_SEARCH_REQUEST = "supplierSearchRequest";
+	private static final String NEW = "supplier-new";
+	private static final String RESULT = "supplier-result";
+	private static final String EDIT = "supplier-edit";
+	private static final String VIEW = "supplier-view";
+	private static final String SEARCH = "supplier-search";
 
-    @Autowired
-    private CreateBankService createBankService;
+	@Autowired
+	private CreateBankService createBankService;
 
-    @Autowired
-    private EgwStatusHibernateDAO egwStatusHibDAO;
+	@Autowired
+	private EgwStatusHibernateDAO egwStatusHibDAO;
 
-    @Autowired
-    private SupplierService supplierService;
+	@Autowired
+	private SupplierService supplierService;
 
-    @Autowired
-    private MessageSource messageSource;
+	@Autowired
+	private MessageSource messageSource;
 
-    private void prepareNewForm(final Model model) {
-        model.addAttribute("banks", createBankService.getByIsActiveTrueOrderByName());
-        model.addAttribute("statuses",
-                egwStatusHibDAO.getStatusByModule(FinancialConstants.STATUS_MODULE_NAME_SUPPLIER));
-    }
+	private void prepareNewForm(final Model model) {
+		model.addAttribute("banks", createBankService.getByIsActiveTrueOrderByName());
+		model.addAttribute("statuses",
+				egwStatusHibDAO.getStatusByModule(FinancialConstants.STATUS_MODULE_NAME_SUPPLIER));
+	}
 
-    @RequestMapping(value = "/newform", method = RequestMethod.POST)
-    public String showNewForm(@ModelAttribute("supplier") final Supplier supplier, final Model model) {
-        prepareNewForm(model);
-        model.addAttribute("supplier", new Supplier());
-        return NEW;
-    }
+	@PostMapping(value = "/newform")
+	public String showNewForm(@ModelAttribute(STR_SUPPLIER) final Supplier supplier, final Model model) {
+		prepareNewForm(model);
+		model.addAttribute(STR_SUPPLIER, new Supplier());
+		return NEW;
+	}
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute final Supplier supplier, final BindingResult errors, final Model model,
-            final RedirectAttributes redirectAttrs) throws IOException {
+	@PostMapping(value = "/create")
+	public String create(@Valid @ModelAttribute final Supplier supplier, final BindingResult errors, final Model model,
+			final RedirectAttributes redirectAttrs) throws IOException {
 
-        if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return NEW;
-        }
+		if (errors.hasErrors()) {
+			prepareNewForm(model);
+			return NEW;
+		}
 
-        supplierService.create(supplier);
+		supplierService.create(supplier);
 
-        redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.supplier.success", null, null));
+		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.supplier.success", null, null));
 
-        return "redirect:/supplier/result/" + supplier.getId() + "/create";
-    }
+		return "redirect:/supplier/result/" + supplier.getId() + "/create";
+	}
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public String edit(@PathVariable("id") final Long id, final Model model) {
-        final Supplier supplier = supplierService.getById(id);
-        prepareNewForm(model);
-        model.addAttribute("supplier", supplier);
-        return EDIT;
-    }
+	@GetMapping(value = "/edit/{id}")
+	public String edit(@PathVariable("id") final Long id, final Model model) {
+		final Supplier supplier = supplierService.getById(id);
+		prepareNewForm(model);
+		model.addAttribute(STR_SUPPLIER, supplier);
+		return EDIT;
+	}
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@Valid @ModelAttribute final Supplier supplier, final BindingResult errors, final Model model,
-            final RedirectAttributes redirectAttrs) {
-        if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return EDIT;
-        }
-        supplierService.update(supplier);
-        redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.supplier.success", null, null));
-        return "redirect:/supplier/result/" + supplier.getId() + "/view";
-    }
+	@PostMapping(value = "/update")
+	public String update(@Valid @ModelAttribute final Supplier supplier, final BindingResult errors, final Model model,
+			final RedirectAttributes redirectAttrs) {
+		if (errors.hasErrors()) {
+			prepareNewForm(model);
+			return EDIT;
+		}
+		supplierService.update(supplier);
+		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.supplier.success", null, null));
+		return "redirect:/supplier/result/" + supplier.getId() + "/view";
+	}
 
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.POST)
-    public String view(@PathVariable("id") final Long id, final Model model) {
-        final Supplier supplier = supplierService.getById(id);
-        prepareNewForm(model);
-        model.addAttribute("supplier", supplier);
-        model.addAttribute("mode", "view");
-        return VIEW;
-    }
+	@GetMapping(value = "/view/{id}")
+	public String view(@PathVariable("id") final Long id, final Model model) {
+		final Supplier supplier = supplierService.getById(id);
+		prepareNewForm(model);
+		model.addAttribute(STR_SUPPLIER, supplier);
+		model.addAttribute("mode", "view");
+		return VIEW;
+	}
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
-    public String search(@PathVariable("mode") final String mode, final Model model) {
-        final Supplier supplier = new Supplier();
-        prepareNewForm(model);
-        model.addAttribute("supplier", supplier);
-        return SEARCH;
+	@PostMapping(value = "/search/{mode}")
+	public String search(@PathVariable("mode") @SafeHtml final String mode, final Model model) {
+		final SupplierSearchRequest supplierSearchRequest = new SupplierSearchRequest();
+		prepareNewForm(model);
+		model.addAttribute(STR_SUPPLIER_SEARCH_REQUEST, supplierSearchRequest);
+		return SEARCH;
 
-    }
+	}
 
-    @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    @ResponseBody
-    public String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-            @ModelAttribute final Supplier supplier) {
-        final List<Supplier> searchResultList = supplierService.search(supplier);
-        return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
-    }
+	@PostMapping(value = "/ajaxsearch/{mode}", produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
+	public String ajaxsearch(@PathVariable("mode") @SafeHtml final String mode, final Model model,
+			@Valid @ModelAttribute final SupplierSearchRequest supplierSearchRequest) {
+		final List<Supplier> searchResultList = supplierService.search(supplierSearchRequest);
+		return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
+	}
 
-    public Object toSearchResultJson(final Object object) {
-        final GsonBuilder gsonBuilder = new GsonBuilder();
-        final Gson gson = gsonBuilder.registerTypeAdapter(Supplier.class, new SupplierJsonAdaptor()).create();
-        return gson.toJson(object);
-    }
+	public Object toSearchResultJson(final Object object) {
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		final Gson gson = gsonBuilder.registerTypeAdapter(Supplier.class, new SupplierJsonAdaptor()).create();
+		return gson.toJson(object);
+	}
 
-    @RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
-    public String result(@PathVariable("id") final Long id, @PathVariable("mode") final String mode, final Model model) {
-        final Supplier supplier = supplierService.getById(id);
-        model.addAttribute("supplier", supplier);
-        model.addAttribute("mode", mode);
-        return RESULT;
-    }
+	@GetMapping(value = "/result/{id}/{mode}")
+	public String result(@PathVariable("id") final Long id, @PathVariable("mode") @SafeHtml final String mode,
+			final Model model) {
+		final Supplier supplier = supplierService.getById(id);
+		model.addAttribute(STR_SUPPLIER, supplier);
+		model.addAttribute("mode", mode);
+		return RESULT;
+	}
 
 }

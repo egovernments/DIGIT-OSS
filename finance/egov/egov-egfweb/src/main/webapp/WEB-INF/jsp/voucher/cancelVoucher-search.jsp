@@ -107,6 +107,7 @@ function loadNamesForSelectedType()
 			<s:actionmessage theme="simple" />
 		</div>
 		<s:form action="cancelVoucher" name="cancelVoucher" theme="simple">
+		<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<table align="center" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td class="greybox">&nbsp;</td>
@@ -229,6 +230,7 @@ function loadNamesForSelectedType()
 
 	function validateVouchers()
 	{
+		var csrfToken = document.getElementById('csrfTokenValue').value;
 		var objLen=<s:property value="%{voucherSearchList.size()}"/>;
 		var queryParams="";
 		var index;
@@ -247,7 +249,7 @@ function loadNamesForSelectedType()
 			bootbox.alert("<s:text name='msg.please.select.atleast.one.voucher'/>");
 			return false;
 		}else{            
-			document.cancelVoucher.action = "${pageContext.request.contextPath}/voucher/cancelVoucher-update.action?"+queryParams;
+			document.cancelVoucher.action = "${pageContext.request.contextPath}/voucher/cancelVoucher-update.action?"+queryParams+'&_csrf='+csrfToken;
 			document.cancelVoucher.submit();
 		}          
 	 return true;
@@ -277,7 +279,6 @@ function loadSearch(){
 
 function fieldReset()
 {
-
 	document.cancelVoucher.action = "${pageContext.request.contextPath}/voucher/cancelVoucher-beforeSearch.action";
 	document.cancelVoucher.submit();
 	/* document.getElementById('voucherNumber').value="";

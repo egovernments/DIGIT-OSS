@@ -51,11 +51,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+ 
+import org.egov.infra.persistence.validator.annotation.DateFormat;
+import org.hibernate.validator.constraints.Length;
 public class DishonoredChequeBean {
-    
     private String voucherNumber;
     private String receiptNumber;
     private Long receiptDate;
+    @Length(min = 6,max=6)
     private String instrumentNumber;
     private String instrumentDate;
     private String bankName;
@@ -75,8 +78,7 @@ public class DishonoredChequeBean {
     private String detailKeyId;
     private String detailTypeId;
     private String amount;
-   
-
+    @DateFormat
     private Date transactionDate;
     private String dishonorReason;
     private String remarks;
@@ -85,15 +87,16 @@ public class DishonoredChequeBean {
     private String voucherHeaderIds;
     private String receiptGLDetails;
     private String remittanceGLDetails;
-    
     private String instrumentMode;
     private String receiptSourceUrl;
     private List<AccountCode> receiptVoucherGLDetails;
     private List<AccountCode> payInSlipVoucherGLDetails;
+    @DateFormat
     private Date dishonorDate;
     private String bankBranch;
-    
+    @DateFormat
     private Date fromDate;
+    @DateFormat
     private Date toDate;
     private String service;
 
@@ -409,41 +412,51 @@ public class DishonoredChequeBean {
         this.bankBranch = bankBranch;
     }
 
-    public static class  AccountCode {
+    public static class AccountCode {
         private String glcode;
         private String accounthead;
         private Double debitamount;
         private Double creditamount;
+
         public AccountCode() {
             // TODO Auto-generated constructor stub
         }
+
         public AccountCode(String glcode, String accounthead, Double debitamount, Double creditamount) {
             this.glcode = glcode;
             this.accounthead = accounthead;
             this.debitamount = debitamount;
             this.creditamount = creditamount;
         }
+
         public String getGlcode() {
             return glcode;
         }
+
         public void setGlcode(String glcode) {
             this.glcode = glcode;
         }
+
         public String getAccounthead() {
             return accounthead;
         }
+
         public void setAccounthead(String accounthead) {
             this.accounthead = accounthead;
         }
+
         public Double getDebitamount() {
             return debitamount;
         }
+
         public void setDebitamount(Double debitamount) {
             this.debitamount = debitamount;
         }
+
         public Double getCreditamount() {
             return creditamount;
         }
+
         public void setCreditamount(Double creditamount) {
             this.creditamount = creditamount;
         }

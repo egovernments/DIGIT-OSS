@@ -40,67 +40,69 @@
 
 package org.egov.infra.microservice.contract;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-
 import javax.validation.constraints.NotNull;
 
 import org.egov.infra.microservice.models.Designation;
+import org.hibernate.validator.constraints.SafeHtml;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DepartmentDesignation {
 
-	@NotNull
-	private Long id;
+    @NotNull
+    private Long id;
 
-	@NotNull
-	@JsonProperty("department")
-	private Long departmentId;
+    @NotNull
+    @JsonProperty("department")
+    private Long departmentId;
 
-	private Designation designation;
+    private Designation designation;
 
-	@NotNull
-	private String tenantId;
-	
-	public DepartmentDesignation(Long id, Long departmentId, Designation designation, String tenantId) {
-		this.id = id;
-		this.departmentId = departmentId;
-		this.designation = designation;
-		this.tenantId = tenantId;
-	}
-	
-	public DepartmentDesignation(){}
+    @NotNull
+    @SafeHtml
+    private String tenantId;
 
-	public Long getId() {
-		return id;
-	}
+    public DepartmentDesignation(final Long id, final Long departmentId, final Designation designation,
+            final String tenantId) {
+        this.id = id;
+        this.departmentId = departmentId;
+        this.designation = designation;
+        this.tenantId = tenantId;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public DepartmentDesignation() {
+    }
 
-	public Long getDepartmentId() {
-		return departmentId;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
-	}
+    public void setId(final Long id) {
+        this.id = id;
+    }
 
-	public Designation getDesignation() {
-		return designation;
-	}
+    public Long getDepartmentId() {
+        return departmentId;
+    }
 
-	public void setDesignation(Designation designation) {
-		this.designation = designation;
-	}
+    public void setDepartmentId(final Long departmentId) {
+        this.departmentId = departmentId;
+    }
 
-	public String getTenantId() {
-		return tenantId;
-	}
+    public Designation getDesignation() {
+        return designation;
+    }
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
+    public void setDesignation(final Designation designation) {
+        this.designation = designation;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(final String tenantId) {
+        this.tenantId = tenantId;
+    }
 
 }

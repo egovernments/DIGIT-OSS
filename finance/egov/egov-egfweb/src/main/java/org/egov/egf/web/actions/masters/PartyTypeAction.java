@@ -48,7 +48,10 @@
 package org.egov.egf.web.actions.masters;
 
 
-import com.opensymphony.xwork2.validator.annotations.Validation;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -63,11 +66,11 @@ import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.infstr.utils.EgovMasterDataCaching;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Arrays;
-import java.util.List;
+import com.opensymphony.xwork2.validator.annotations.Validation;
 
 @ParentPackage("egov")
 @Validation()
@@ -146,7 +149,7 @@ public class PartyTypeAction extends BaseFormAction {
             persistenceService.getSession().flush();
             persistenceService.getSession().clear();
             setSuccess("yes");
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             setSuccess("no");
             LOGGER.error("Exception occurred in PartyTypeAction-create ", e);
 
@@ -188,7 +191,7 @@ public class PartyTypeAction extends BaseFormAction {
             persistenceService.persist(partyType);
             // showMode = "view";
             setSuccess("yes");
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             setSuccess("no");
             LOGGER.error("Exception occurred in PartyTypeAction-edit ", e);
 
@@ -208,17 +211,22 @@ public class PartyTypeAction extends BaseFormAction {
     @Action(value = "/masters/partyType-search")
     public String search() {
         final StringBuffer query = new StringBuffer();
-
+        final List params = new ArrayList();
         query.append("From EgPartytype where createdBy is not null ");
-        if (!partyType.getCode().isEmpty())
-            query.append(" and upper(code) like upper('%" + partyType.getCode() + "%')");
-        if (!partyType.getDescription().isEmpty())
-            query.append(" and upper(description) like upper('%" + partyType.getDescription() + "%')");
-        if (partyType.getEgPartytype() != null && partyType.getEgPartytype().getId() != null)
-            query.append(" and egPartytype =" + partyType.getEgPartytype());
-        partySearchList = persistenceService.findAllBy(query.toString());
+        if (!partyType.getCode().isEmpty()) {
+            query.append(" and upper(code) like upper(?)");
+            params.add(new StringBuilder("%").append(partyType.getCode()).append("%").toString());
+        }
+        if (!partyType.getDescription().isEmpty()) {
+            query.append(" and upper(description) like upper(?)");
+            params.add(new StringBuilder("%").append(partyType.getDescription()).append("%").toString());
 
-        // this.partySearchList = masterDataCache.get(query.toString());
+        }
+        if (partyType.getEgPartytype() != null && partyType.getEgPartytype().getId() != null) {
+            query.append(" and egPartytype = ?");
+            params.add(partyType.getEgPartytype());
+        }
+        partySearchList = persistenceService.findAllBy(query.toString(), params.toArray());
         return "search";
     }
 

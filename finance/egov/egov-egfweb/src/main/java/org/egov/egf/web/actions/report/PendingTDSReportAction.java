@@ -82,6 +82,7 @@ import org.egov.infra.reporting.engine.ReportOutput;
 import org.egov.infra.reporting.engine.ReportRequest;
 import org.egov.infra.reporting.engine.ReportService;
 import org.egov.infra.utils.DateUtils;
+import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.infstr.utils.EgovMasterDataCaching;
@@ -92,6 +93,12 @@ import org.egov.services.deduction.RemitRecoveryService;
 import org.egov.utils.Constants;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.FlushMode;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.type.DateType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -170,7 +177,7 @@ public class PendingTDSReportAction extends BaseFormAction {
     }
 
     @Action(value = "/report/pendingTDSReport-summaryReport")
-    public String summaryReport() throws Exception {
+    public String summaryReport() {
         return "summaryForm";
     }
 
@@ -188,7 +195,7 @@ public class PendingTDSReportAction extends BaseFormAction {
     }
 
     @Action(value = "/report/pendingTDSReport-ajaxLoadData")
-    public String ajaxLoadData() {
+    public String ajaxLoadData() throws NumberFormatException, ValidationException, NoSuchMethodException, SecurityException {
         populateData();
         return "results";
     }
@@ -212,7 +219,7 @@ public class PendingTDSReportAction extends BaseFormAction {
     }
 
     @Action(value = "/report/pendingTDSReport-exportPdf")
-    public String exportPdf() throws JRException, IOException {
+    public String exportPdf() throws JRException, IOException, NumberFormatException, ValidationException, NoSuchMethodException, SecurityException {
         generateReport();
         return "PDF";
     }
@@ -223,7 +230,7 @@ public class PendingTDSReportAction extends BaseFormAction {
         return "summary-PDF";
     }
 
-    private void generateReport() {
+    private void generateReport() throws NumberFormatException, ValidationException, NoSuchMethodException, SecurityException {
         populateData();
         final ReportRequest reportInput = new ReportRequest(jasperpath, pendingTDS, getParamMap());
         final ReportOutput reportOutput = reportService.createReport(reportInput);
@@ -276,7 +283,7 @@ public class PendingTDSReportAction extends BaseFormAction {
     }
 
     @ReadOnly
-    private void populateData() {
+    private void populateData() throws NumberFormatException, ValidationException, NoSuchMethodException, SecurityException {
         validateFinYear();
         if (getFieldErrors().size() > 0)
             return;
@@ -293,8 +300,7 @@ public class PendingTDSReportAction extends BaseFormAction {
         List<EgRemittanceDetail> result1 = new ArrayList<EgRemittanceDetail>();
         if(remitRecoveryService.isNonControlledCodeTds(remittanceBean)){
             if (department.getCode() != null && !department.getCode().equals("-1") )//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
-                deptQuery = " and egRemittanceGl.glid.voucherHeaderId.vouchermis.departmentcode='"
-                        + department.getCode()+"'";
+                deptQuery = " and egRemittanceGl.glid.voucherHeaderId.vouchermis.departmentcode= ? ";
             pendingTDS = remitRecoveryService.getRecoveryDetailsForNonControlledCode(remittanceBean, getVoucherHeader());
             query1.append("from EgRemittanceDetail where  egRemittanceGl.glid.glcodeId.id=? ")
                   .append("and egRemittance.fund.id=? and egRemittance.voucherheader.status = 5 and egRemittanceGl.glid.voucherHeaderId.status=0 and ")
@@ -324,9 +330,8 @@ public class PendingTDSReportAction extends BaseFormAction {
                 tds.setAmount(entry.getRemittedamt());
                 if (entry.getEgRemittance().getVoucherheader() != null)
                     tds.setPaymentVoucherNumber(entry.getEgRemittance().getVoucherheader().getVoucherNumber());
-                final List<InstrumentVoucher> ivList = persistenceService.findAllBy("from InstrumentVoucher where" +
-                        " instrumentHeaderId.statusId.description in(?,?,?) and voucherHeaderId=?"
-                        , FinancialConstants.INSTRUMENT_DEPOSITED_STATUS, FinancialConstants.INSTRUMENT_CREATED_STATUS,
+                final List<InstrumentVoucher> ivList = persistenceService.findAllBy("from InstrumentVoucher where instrumentHeaderId.statusId.description in(?,?,?) and voucherHeaderId=?",
+                        FinancialConstants.INSTRUMENT_DEPOSITED_STATUS, FinancialConstants.INSTRUMENT_CREATED_STATUS,
                         FinancialConstants.INSTRUMENT_RECONCILED_STATUS, entry.getEgRemittance().getVoucherheader());
                 boolean isMultiple = false;
                 for (final InstrumentVoucher iv : ivList)
@@ -345,8 +350,7 @@ public class PendingTDSReportAction extends BaseFormAction {
             }
             if (showRemittedEntries) {
                 if (department.getCode() != null && !department.getCode().equals("-1") )//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
-                    deptQuery = " and egRemittanceGl.glid.voucherHeaderId.vouchermis.departmentcode='"
-                            + department.getCode()+"'";
+                    deptQuery = " and egRemittanceGl.glid.voucherHeaderId.vouchermis.departmentcode=?";
                 final StringBuffer query = new StringBuffer(1000);
                 query.append("from EgRemittanceDetail where  egRemittanceGl.glid.glcodeId.id=? ")
                      .append("and egRemittance.fund.id=? and egRemittance.voucherheader.status = 0 and egRemittanceGl.glid.voucherHeaderId.status=0 and ")
@@ -359,10 +363,10 @@ public class PendingTDSReportAction extends BaseFormAction {
                 query.append(" order by egRemittanceGl.glid.voucherHeaderId.voucherNumber ");
                 if (fromDate != null)
                     result = persistenceService.findAllBy(query.toString(), recovery.getChartofaccounts().getId(), fund.getId(),
-                            asOnDate, fromDate);
+                            asOnDate, fromDate, department.getCode());
                 else
                     result = persistenceService.findAllBy(query.toString(), recovery.getChartofaccounts().getId(), fund.getId(),
-                            asOnDate);
+                            asOnDate, department.getCode());
                 
                 Boolean createPartialRow = false;
                 for (final EgRemittanceDetail entry : result) {
@@ -378,9 +382,8 @@ public class PendingTDSReportAction extends BaseFormAction {
                     tds.setAmount(entry.getRemittedamt());
                     if (entry.getEgRemittance().getVoucherheader() != null)
                         tds.setPaymentVoucherNumber(entry.getEgRemittance().getVoucherheader().getVoucherNumber());
-                    final List<InstrumentVoucher> ivList = persistenceService.findAllBy("from InstrumentVoucher where" +
-                            " instrumentHeaderId.statusId.description in(?,?,?) and voucherHeaderId=?"
-                            , FinancialConstants.INSTRUMENT_DEPOSITED_STATUS, FinancialConstants.INSTRUMENT_CREATED_STATUS,
+                    final List<InstrumentVoucher> ivList = persistenceService.findAllBy("from InstrumentVoucher where instrumentHeaderId.statusId.description in(?,?,?) and voucherHeaderId=?",
+                            FinancialConstants.INSTRUMENT_DEPOSITED_STATUS, FinancialConstants.INSTRUMENT_CREATED_STATUS,
                             FinancialConstants.INSTRUMENT_RECONCILED_STATUS, entry.getEgRemittance().getVoucherheader());
                     boolean isMultiple = false;
                     for (final InstrumentVoucher iv : ivList)
@@ -397,30 +400,26 @@ public class PendingTDSReportAction extends BaseFormAction {
                     }
                     remittedTDS.add(tds);
                 }
-                
             }
         }else{
             if (department.getCode() != null && !department.getCode().equals("-1") )//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
-                deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentcode='"
-                        + department.getCode()+"'";
+                deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentcode=?";
             if (detailKey != null && detailKey != -1)
-                partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailKeyId=" + detailKey;
+                partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailKeyId=?";
             pendingTDS = remitRecoveryService.getRecoveryDetailsForReport(remittanceBean, getVoucherHeader(), detailKey);
-            query1.append("from EgRemittanceDetail where  egRemittanceGldtl.generalledgerdetail.generalLedgerId.glcodeId.id=? "
-                    +
-                    "and egRemittance.fund.id=? and egRemittance.voucherheader.status = 5 and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.status=0 and "
-                    +
-                    "egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.voucherDate <= ? ");
+            query1.append("from EgRemittanceDetail where  egRemittanceGldtl.generalledgerdetail.generalLedgerId.glcodeId.id=? ")
+                   .append("and egRemittance.fund.id=? and egRemittance.voucherheader.status = 5 and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.status=0 and ")
+                   .append("egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.voucherDate <= ? ");
             if (fromDate != null)
                 query1.append(" and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.voucherDate >= ?");
             query1.append(deptQuery).append(partyNameQuery);
             query1.append(" order by egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.voucherNumber ");
             if (fromDate != null)
                 result1 = persistenceService.findAllBy(query1.toString(), recovery.getChartofaccounts().getId(), fund.getId(),
-                        asOnDate, fromDate);
+                        asOnDate, fromDate, department.getCode(), detailKey);
             else
                 result1 = persistenceService.findAllBy(query1.toString(), recovery.getChartofaccounts().getId(), fund.getId(),
-                        asOnDate);
+                        asOnDate, department.getCode(), detailKey);
             Boolean createPartialRow1 = false;
             for (final EgRemittanceDetail entry : result1) {
                 createPartialRow1 = false;
@@ -435,9 +434,8 @@ public class PendingTDSReportAction extends BaseFormAction {
                 tds.setAmount(entry.getRemittedamt());
                 if (entry.getEgRemittance().getVoucherheader() != null)
                     tds.setPaymentVoucherNumber(entry.getEgRemittance().getVoucherheader().getVoucherNumber());
-                final List<InstrumentVoucher> ivList = persistenceService.findAllBy("from InstrumentVoucher where" +
-                        " instrumentHeaderId.statusId.description in(?,?,?) and voucherHeaderId=?"
-                        , FinancialConstants.INSTRUMENT_DEPOSITED_STATUS, FinancialConstants.INSTRUMENT_CREATED_STATUS,
+                final List<InstrumentVoucher> ivList = persistenceService.findAllBy("from InstrumentVoucher where instrumentHeaderId.statusId.description in(?,?,?) and voucherHeaderId=?",
+                        FinancialConstants.INSTRUMENT_DEPOSITED_STATUS, FinancialConstants.INSTRUMENT_CREATED_STATUS,
                         FinancialConstants.INSTRUMENT_RECONCILED_STATUS, entry.getEgRemittance().getVoucherheader());
                 boolean isMultiple = false;
                 for (final InstrumentVoucher iv : ivList)
@@ -456,28 +454,25 @@ public class PendingTDSReportAction extends BaseFormAction {
             }
             if (showRemittedEntries) {
                 if (department.getCode() != null && !department.getCode().equals("-1") )//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
-                    deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentcode='"
-                            + department.getCode()+"'";
+                    deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentcode=?";
                 if (detailKey != null && detailKey != -1)
-                    partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailKeyId=" + detailKey;
+                    partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailKeyId=?";
                 final StringBuffer query = new StringBuffer(1000);
                 
                 List<EgRemittanceDetail> result = new ArrayList<EgRemittanceDetail>();
-                query.append("from EgRemittanceDetail where  egRemittanceGldtl.generalledgerdetail.generalLedgerId.glcodeId.id=? "
-                        +
-                        "and egRemittance.fund.id=? and egRemittance.voucherheader.status = 0 and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.status=0 and "
-                        +
-                        "egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.voucherDate <= ? ");
+                query.append("from EgRemittanceDetail where  egRemittanceGldtl.generalledgerdetail.generalLedgerId.glcodeId.id=? ")
+                		.append("and egRemittance.fund.id=? and egRemittance.voucherheader.status = 0 and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.status=0 and ")
+                        .append("egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.voucherDate <= ? ");
                 if (fromDate != null)
                     query.append(" and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.voucherDate >= ?");
                 query.append(deptQuery).append(partyNameQuery);
                 query.append(" order by egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.voucherNumber ");
                 if (fromDate != null)
                     result = persistenceService.findAllBy(query.toString(), recovery.getChartofaccounts().getId(), fund.getId(),
-                            asOnDate, fromDate);
+                            asOnDate, fromDate, department.getCode(), detailKey);
                 else
                     result = persistenceService.findAllBy(query.toString(), recovery.getChartofaccounts().getId(), fund.getId(),
-                            asOnDate);
+                            asOnDate, department.getCode(), detailKey);
                 
                 Boolean createPartialRow = false;
                 for (final EgRemittanceDetail entry : result) {
@@ -493,9 +488,8 @@ public class PendingTDSReportAction extends BaseFormAction {
                     tds.setAmount(entry.getRemittedamt());
                     if (entry.getEgRemittance().getVoucherheader() != null)
                         tds.setPaymentVoucherNumber(entry.getEgRemittance().getVoucherheader().getVoucherNumber());
-                    final List<InstrumentVoucher> ivList = persistenceService.findAllBy("from InstrumentVoucher where" +
-                            " instrumentHeaderId.statusId.description in(?,?,?) and voucherHeaderId=?"
-                            , FinancialConstants.INSTRUMENT_DEPOSITED_STATUS, FinancialConstants.INSTRUMENT_CREATED_STATUS,
+                    final List<InstrumentVoucher> ivList = persistenceService.findAllBy("from InstrumentVoucher where instrumentHeaderId.statusId.description in(?,?,?) and voucherHeaderId=?",
+                            FinancialConstants.INSTRUMENT_DEPOSITED_STATUS, FinancialConstants.INSTRUMENT_CREATED_STATUS,
                             FinancialConstants.INSTRUMENT_RECONCILED_STATUS, entry.getEgRemittance().getVoucherheader());
                     boolean isMultiple = false;
                     for (final InstrumentVoucher iv : ivList)
@@ -537,85 +531,95 @@ public class PendingTDSReportAction extends BaseFormAction {
         String deptQuery = "";
         String partyNameQuery = "";
         if (department.getCode() != null && !department.getCode().equals("-1"))
-            deptQuery = " and mis.departmentcode='" + department.getCode()+"'";
+            deptQuery = " and mis.departmentcode=:deptCode ";
         if (detailKey != null && detailKey != -1)
-            partyNameQuery = " and gld.detailkeyid=" + detailKey;
+            partyNameQuery = " and gld.detailkeyid=:detailKey ";
         List<Object[]> result = new ArrayList<Object[]>();
         List<Object[]> resultTolDeduction = new ArrayList<Object[]>();
         try {
             RemittanceBean remittanceBean = new RemittanceBean();
             remittanceBean.setRecoveryId(recovery.getId());
             if(remitRecoveryService.isNonControlledCodeTds(remittanceBean)){
-                final String qry = "select vh.name,sum(erd.remittedamt),er.month "
-                        + "FROM eg_remittance_detail erd,voucherheader vh1 RIGHT OUTER JOIN eg_remittance er ON vh1.id=er.paymentvhid,"
-                        + "voucherheader vh,vouchermis mis,generalledger gl,fund f, eg_remittance_gl ergl WHERE erd.remittanceglid = ergl.id AND "
-                        + "erd.remittanceid=er.id  AND gl.glcodeid ="+recovery.getChartofaccounts().getId()+" AND vh.id =mis.voucherheaderid AND vh1.status =0  AND "
-                        + "gl.id = ergl.glid  AND gl.voucherheaderid     =vh.id  AND er.fundid =f.id AND f.id = "+fund.getId()+" AND vh.status =0 AND "
-                        + "vh.voucherDate <= to_date('"+Constants.DDMMYYYYFORMAT2.format(asOnDate)+"','dd/MM/yyyy') and  "
-                        + "vh.voucherDate >= to_date('"+Constants.DDMMYYYYFORMAT2.format(financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate())+"','dd/MM/yyyy') "+ deptQuery
-                        + "group by er.month,vh.name order by er.month,vh.name";
+                final StringBuilder qry = new StringBuilder("select vh.name,sum(erd.remittedamt),er.month ")
+                        .append("FROM eg_remittance_detail erd,voucherheader vh1 RIGHT OUTER JOIN eg_remittance er ON vh1.id=er.paymentvhid,")
+                        .append("voucherheader vh,vouchermis mis,generalledger gl,fund f, eg_remittance_gl ergl WHERE erd.remittanceglid = ergl.id AND ")
+                        .append("erd.remittanceid=er.id  AND gl.glcodeid =:glCode AND vh.id =mis.voucherheaderid AND vh1.status =0  AND ")
+                        .append("gl.id = ergl.glid  AND gl.voucherheaderid     =vh.id  AND er.fundid =f.id AND f.id =:fundId AND vh.status =0 AND ")
+                        .append("vh.voucherDate <= to_date(:date1,'dd/MM/yyyy') and  ")
+                        .append("vh.voucherDate >= to_date(:date2,'dd/MM/yyyy') ")
+                        .append(deptQuery)
+                        .append("group by er.month,vh.name order by er.month,vh.name");
                 if (LOGGER.isDebugEnabled())
                     LOGGER.debug(qry);
-                result = persistenceService.getSession().createSQLQuery(qry).list();
+				Query sqlQuery = persistenceService.getSession().createSQLQuery(qry.toString());
+				sqlQuery.setParameter("glCode", recovery.getChartofaccounts().getId(), LongType.INSTANCE)
+						.setParameter("fundId", fund.getId(), LongType.INSTANCE)
+						.setParameter("date1", asOnDate)
+						.setParameter("date2",financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate());
+				if (!deptQuery.equals(""))
+					sqlQuery.setParameter("deptCode", department.getCode(), StringType.INSTANCE);
+				result = sqlQuery.list();
                 
              // Query to get total deduction
-                final String qryTolDeduction = "SELECT type,MONTH,SUM(glamt) FROM (SELECT DISTINCT er.month AS MONTH,ergl.glamt AS glamt,ergl.glid as glid,vh.name AS type "
-                        + "FROM eg_remittance_detail erd,voucherheader vh1 RIGHT OUTER JOIN eg_remittance er ON vh1.id=er.paymentvhid,"
-                        + "voucherheader vh,vouchermis mis,generalledger gl,fund f, eg_remittance_gl ergl WHERE erd.remittanceglid = ergl.id AND "
-                        + "erd.remittanceid=er.id  AND gl.glcodeid = "+recovery.getChartofaccounts().getId()+" AND vh.id =mis.voucherheaderid AND vh1.status =0  AND "
-                        + "gl.id = ergl.glid  AND gl.voucherheaderid     =vh.id  AND er.fundid =f.id AND f.id = "+fund.getId()+" AND vh.status =0 AND "
-                        + "vh.voucherDate <= to_date('"+Constants.DDMMYYYYFORMAT2.format(asOnDate)+"','dd/MM/yyyy') and  "
-                        + "vh.voucherDate >= to_date('"+Constants.DDMMYYYYFORMAT2.format(financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate())+"','dd/MM/yyyy')) "
-                        + "as temptable group by type,month";
-                resultTolDeduction = persistenceService.getSession().createSQLQuery(qryTolDeduction).list();
+                final StringBuilder qryTolDeduction = new StringBuilder("SELECT type,MONTH,SUM(glamt) FROM (SELECT DISTINCT er.month AS MONTH,ergl.glamt AS glamt,ergl.glid as glid,vh.name AS type ")
+                		.append("FROM eg_remittance_detail erd,voucherheader vh1 RIGHT OUTER JOIN eg_remittance er ON vh1.id=er.paymentvhid,")
+                		.append("voucherheader vh,vouchermis mis,generalledger gl,fund f, eg_remittance_gl ergl WHERE erd.remittanceglid = ergl.id AND ")
+                		.append("erd.remittanceid=er.id  AND gl.glcodeid =:glCode AND vh.id =mis.voucherheaderid AND vh1.status =0  AND ")
+                		.append("gl.id = ergl.glid  AND gl.voucherheaderid     =vh.id  AND er.fundid =f.id AND f.id =:fundId AND vh.status =0 AND ")
+                		.append("vh.voucherDate <= to_date(:date1,'dd/MM/yyyy') and vh.voucherDate >= to_date(:date2,'dd/MM/yyyy')) ")
+                		.append("as temptable group by type,month");
+				Query sqlQuery2 = persistenceService.getSession().createSQLQuery(qryTolDeduction.toString());
+				sqlQuery2.setParameter("glCode", recovery.getChartofaccounts().getId(), LongType.INSTANCE)
+						.setParameter("fundId", fund.getId(), LongType.INSTANCE)
+						.setParameter("date1", asOnDate)
+						.setParameter("date2",financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate());
+                resultTolDeduction = sqlQuery2.list();
             }else{
-                final String qry = "select vh.name,sum(erd.remittedamt),er.month from eg_remittance_detail erd,"
-                        +
-                        " voucherheader vh1 right outer join eg_remittance er on vh1.id=er.paymentvhid,voucherheader vh,vouchermis mis,generalledger gl,generalledgerdetail gld,fund f,eg_remittance_gldtl ergl where "
-                        +
-                        " erd.remittancegldtlid= ergl.id and erd.remittanceid=er.id and gl.glcodeid="
-                        + recovery.getChartofaccounts().getId()
-                        + " and vh.id=mis.voucherheaderid and "
-                        +
-                        "  vh1.status=0 and ergl.gldtlid=gld.id and gl.id=gld.generalledgerid and gl.voucherheaderid=vh.id and er.fundid=f.id and f.id="
-                        + fund.getId() +
-                        " and vh.status=0 and vh.voucherDate <= to_date('" + Constants.DDMMYYYYFORMAT2.format(asOnDate)
-                        + "','dd/MM/yyyy') and " + "vh.voucherDate >= to_date('"
-                        + Constants.DDMMYYYYFORMAT2.format(financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate())
-                        + "','dd/MM/yyyy') " + deptQuery + partyNameQuery + " group by er.month,vh.name order by er.month,vh.name";
+                final StringBuilder qry = new StringBuilder("select vh.name,sum(erd.remittedamt),er.month from eg_remittance_detail erd,")
+                        .append(" voucherheader vh1 right outer join eg_remittance er on vh1.id=er.paymentvhid,voucherheader vh,vouchermis mis,generalledger gl,generalledgerdetail gld,fund f,eg_remittance_gldtl ergl where ")
+                        .append(" erd.remittancegldtlid= ergl.id and erd.remittanceid=er.id and gl.glcodeid=:glCode and vh.id=mis.voucherheaderid and ")
+                        .append("  vh1.status=0 and ergl.gldtlid=gld.id and gl.id=gld.generalledgerid and gl.voucherheaderid=vh.id and er.fundid=f.id and f.id=:fundId")
+                        .append(" and vh.status=0 and vh.voucherDate <= to_date(:date1,'dd/MM/yyyy') and vh.voucherDate >= to_date(:date2,'dd/MM/yyyy') ")
+                        .append(deptQuery)
+                        .append(partyNameQuery)
+                        .append(" group by er.month,vh.name order by er.month,vh.name");
                 if (LOGGER.isDebugEnabled())
                     LOGGER.debug(qry);
-                result = persistenceService.getSession().createSQLQuery(qry).list();
+				Query sqlQuery = persistenceService.getSession().createSQLQuery(qry.toString());
+				sqlQuery.setParameter("glCode", recovery.getChartofaccounts().getId(), LongType.INSTANCE)
+						.setParameter("fundId", fund.getId(), LongType.INSTANCE)
+						.setParameter("date1", asOnDate).setParameter("date2",
+								financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate());
+				if (!deptQuery.equals(""))
+					sqlQuery.setParameter("deptCode", department.getCode(), StringType.INSTANCE);
+				sqlQuery.setParameter("detailKey", detailKey, StringType.INSTANCE);
+				result = sqlQuery.list();
                 // Query to get total deduction
-                final String qryTolDeduction = "SELECT type,MONTH,SUM(gldtamt) FROM (SELECT DISTINCT er.month AS MONTH,ergl.gldtlamt AS gldtamt,"
-                        +
-                        "ergl.gldtlid as gldtlid,vh.name AS type FROM eg_remittance_detail erd,voucherheader vh1 RIGHT OUTER JOIN eg_remittance er ON vh1.id=er.paymentvhid,"
-                        +
-                        "voucherheader vh,vouchermis mis,generalledger gl,generalledgerdetail gld,fund f, eg_remittance_gldtl ergl WHERE erd.remittancegldtlid= ergl.id"
-                        +
-                        " AND erd.remittanceid=er.id  AND gl.glcodeid ="
-                        + recovery.getChartofaccounts().getId()
-                        + " AND vh.id =mis.voucherheaderid AND vh1.status =0 "
-                        +
-                        " AND ergl.gldtlid =gld.id  AND gl.id = gld.generalledgerid  AND gl.voucherheaderid     =vh.id  AND er.fundid =f.id"
-                        +
-                        " AND f.id ="
-                        + fund.getId()
-                        + " AND vh.status =0 AND vh.voucherDate <= to_date('"
-                        + Constants.DDMMYYYYFORMAT2.format(asOnDate)
-                        + "','dd/MM/yyyy') and "
-                        + " vh.voucherDate >= to_date('"
-                        + Constants.DDMMYYYYFORMAT2.format(financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate())
-                        + "','dd/MM/yyyy') " + deptQuery + partyNameQuery + ") as temptable group by type,month";
-                resultTolDeduction = persistenceService.getSession().createSQLQuery(qryTolDeduction).list();
+				final StringBuilder qryTolDeduction = new StringBuilder(
+						"SELECT type,MONTH,SUM(gldtamt) FROM (SELECT DISTINCT er.month AS MONTH,ergl.gldtlamt AS gldtamt,")
+								.append("ergl.gldtlid as gldtlid,vh.name AS type FROM eg_remittance_detail erd,voucherheader vh1 RIGHT OUTER JOIN eg_remittance er ON vh1.id=er.paymentvhid,")
+								.append("voucherheader vh,vouchermis mis,generalledger gl,generalledgerdetail gld,fund f, eg_remittance_gldtl ergl WHERE erd.remittancegldtlid= ergl.id")
+								.append(" AND erd.remittanceid=er.id  AND gl.glcodeid =:glCode AND vh.id =mis.voucherheaderid AND vh1.status =0 ")
+								.append(" AND ergl.gldtlid =gld.id  AND gl.id = gld.generalledgerid  AND gl.voucherheaderid     =vh.id  AND er.fundid =f.id")
+								.append(" AND f.id =:fundId AND vh.status =0 AND vh.voucherDate <= to_date(:date1,'dd/MM/yyyy') and vh.voucherDate >= to_date(:date2,'dd/MM/yyyy') ")
+								.append(deptQuery)
+								.append(partyNameQuery)
+								.append(") as temptable group by type,month");
+				Query sqlQuery2 = persistenceService.getSession().createSQLQuery(qryTolDeduction.toString());
+				sqlQuery2.setParameter("glCode", recovery.getChartofaccounts().getId(), LongType.INSTANCE)
+						.setParameter("fundId", fund.getId(), LongType.INSTANCE)
+						.setParameter("date1", asOnDate)
+						.setParameter("date2",financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate())
+						.setParameter("deptCode", department.getCode(), StringType.INSTANCE)
+						.setParameter("detailKey", detailKey, StringType.INSTANCE);
+                resultTolDeduction = sqlQuery2.list();
             }
         } catch (final ApplicationRuntimeException e) {
             message = e.getMessage();
             return;
-        } catch (final Exception e) {
-            message = e.getMessage();
-            return;
-        }
+        } /*
+           * catch (final Exception e) { message = e.getMessage(); return; }
+           */
         for (final Object[] entry : result)
             for (final Object[] dedentry : resultTolDeduction) {
                 final TDSEntry tds = new TDSEntry();
@@ -690,7 +694,7 @@ public class PendingTDSReportAction extends BaseFormAction {
     }
 
     @Action(value = "/report/pendingTDSReport-exportXls")
-    public String exportXls() throws JRException, IOException {
+    public String exportXls() throws JRException, IOException, NumberFormatException, ValidationException, NoSuchMethodException, SecurityException {
         populateData();
         final ReportRequest reportInput = new ReportRequest(jasperpath, pendingTDS, getParamMap());
         reportInput.setReportFormat(ReportFormat.XLS);

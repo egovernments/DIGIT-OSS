@@ -52,9 +52,9 @@ import org.egov.commons.CVoucherHeader;
 import java.util.List;
 
 public interface VoucherHeaderDAO {
-	public List<CVoucherHeader> getVoucherHeadersByStatus(Integer status) throws Exception;
+	public List<CVoucherHeader> getVoucherHeadersByStatus(Integer status);
 
-	public List<CVoucherHeader> getVoucherHeadersByStatusAndType(Integer status, String type) throws Exception;
+	public List<CVoucherHeader> getVoucherHeadersByStatusAndType(Integer status, String type);
 
 	public CVoucherHeader getVoucherHeadersByCGN(String cgn);
 	 CVoucherHeader   findById(Number id, boolean lock);

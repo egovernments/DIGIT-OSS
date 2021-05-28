@@ -66,7 +66,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReceiptService extends PersistenceService<ReceiptVoucher, Long> {
     @Autowired
@@ -142,33 +144,38 @@ public class ReceiptService extends PersistenceService<ReceiptVoucher, Long> {
     }
 
     // TODO : Need to move to collection
-    public String getReceiptHeaderforDishonor(final String mode, final Long bankAccId, final Long bankId,
-            final String chequeDDNo, final String chqueDDDate) {
+    public Map<String, List<Object>> getReceiptHeaderforDishonor(final String mode, final Long bankAccId, final Long bankId, final String chequeDDNo, final String chqueDDDate) {
+        final Map<String, List<Object>> queryWithParams = new HashMap<>();
+        final List<Object> params = new ArrayList<>();
         final StringBuilder sb = new StringBuilder(300);
-        new ArrayList<Object>();
-        sb.append("FROM egcl_collectionheader rpt,egcl_collectioninstrument ci,egf_instrumentheader ih,egf_instrumenttype it,egw_status status,bank b,"
-                + "bankbranch bb,bankaccount ba WHERE rpt.id = ci.collectionheader AND ci.instrumentheader = ih.id AND status.id = ih.id_status "
-                + "AND b.id = bb.bankid AND bb.id = ba.branchid AND ba.id = ih.bankaccountid AND ih.instrumenttype = it.id and it.type  = '"
-                + mode
-                + "' AND ((ih.ispaycheque ='0' AND status.moduletype ='Instrument' "
-                + "AND status.description = 'Deposited') OR (ih.ispaycheque = '1' AND status.moduletype = 'Instrument' AND status.description = 'New'))");
-        /*
-         * sb.append("from org.egov.collection.entity.ReceiptHeader rpt join " +
-         * "rpt.receiptInstrument ih where ih.instrumentType.type=? " +
-         * "and ((ih.isPayCheque=0 and ih.statusId.moduletype='Instrument' and ih.statusId.description='Deposited') or " +
-         * "(ih.isPayCheque=1 and ih.statusId.moduletype='Instrument' and ih.statusId.description='New'))");
-         */
+		sb.append("FROM egcl_collectionheader rpt,egcl_collectioninstrument ci,egf_instrumentheader ih,")
+				.append("egf_instrumenttype it,egw_status status,bank b,")
+				.append("bankbranch bb,bankaccount ba WHERE rpt.id = ci.collectionheader AND ci.instrumentheader = ih.id")
+				.append(" AND status.id = ih.id_status ")
+				.append("AND b.id = bb.bankid AND bb.id = ba.branchid AND ba.id = ih.bankaccountid AND ih.instrumenttype = it.id")
+				.append(" and it.type  = ? AND ((ih.ispaycheque ='0' AND status.moduletype ='Instrument' ")
+				.append("AND status.description = 'Deposited') OR (ih.ispaycheque = '1' AND status.moduletype = 'Instrument'")
+				.append(" AND status.description = 'New'))");
+		params.add(mode);
 
-        if (bankAccId != null && bankAccId != 0 && bankAccId != -1)
-            sb.append(" AND ih.bankaccountid=" + bankAccId + "");
+        if (bankAccId != null && bankAccId != 0 && bankAccId != -1) {
+            sb.append(" AND ih.bankaccountid=?");
+            params.add(bankAccId);
+        }
         if ((bankAccId == null || bankAccId == 0) && bankId != null
-                && bankId != 0)
-            sb.append(" AND ih.bankid=" + bankAccId + "");
-        if (!"".equals(chequeDDNo) && chequeDDNo != null)
-            sb.append(" AND ih.instrumentnumber=trim('" + chequeDDNo + "') ");
-        if (!"".equals(chqueDDDate) && chqueDDDate != null)
-            sb.append(" AND ih.instrumentdate >= '" + chqueDDDate + "' ");
-
-        return sb.toString();
+                && bankId != 0) {
+            sb.append(" AND ih.bankid=?");
+            params.add(bankId);
+        }
+        if (!"".equals(chequeDDNo) && chequeDDNo != null) {
+            sb.append(" AND ih.instrumentnumber=trim(?) ");
+            params.add(chequeDDNo);
+        }
+        if (!"".equals(chqueDDDate) && chqueDDDate != null) {
+            sb.append(" AND ih.instrumentdate >= ?");
+            params.add(chqueDDDate);
+        }
+        queryWithParams.put(sb.toString(), params);
+        return queryWithParams;
     }
 }

@@ -50,8 +50,12 @@ package org.egov.egf.contract.model;
 
 import static org.apache.commons.lang.StringUtils.EMPTY;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class ErrorDetail {
+    @SafeHtml
     private String errorCode;
+    @SafeHtml
     private String errorMessage;
 
     public ErrorDetail() {

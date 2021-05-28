@@ -1112,6 +1112,7 @@ function showHideMandataryMark(obj){
 	</s:if>
 
 	<s:form theme="simple" name="collDetails" action="receipt">
+	<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<s:token />
 	<s:push value="model">
 

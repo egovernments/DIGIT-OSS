@@ -48,13 +48,14 @@
 package org.egov.commons;
 
 import org.egov.infra.persistence.entity.AbstractAuditable;
+import org.egov.infra.persistence.validator.annotation.DateFormat;
 import org.egov.infra.persistence.validator.annotation.Unique;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.AuditOverrides;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -90,19 +91,23 @@ public class CFinancialYear extends AbstractAuditable {
     private Long id;
 
     @Length(min = 1, max = 25)
-    @NotBlank
+    @NotNull
+    @SafeHtml
     @Column(name="financialyear")
     private String finYearRange;
 
   
     @NotNull
+    @DateFormat
     private Date startingDate;
 
     @NotNull
+    @DateFormat
     private Date endingDate;
     
     private Boolean isActive;
   
+    @NotNull
     private Boolean isActiveForPosting;
     
     private Boolean isClosed;

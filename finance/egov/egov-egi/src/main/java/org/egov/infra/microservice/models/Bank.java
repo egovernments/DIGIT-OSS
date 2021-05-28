@@ -45,6 +45,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -58,13 +59,16 @@ public class Bank {
 
     @NotNull
     @Length(max = 50, min = 1)
+    @SafeHtml
     private String code;
 
     @NotNull
     @Length(max = 100, min = 2)
+    @SafeHtml
     private String name;
 
     @Length(max = 250)
+    @SafeHtml
     private String description;
 
     @NotNull
@@ -72,8 +76,9 @@ public class Bank {
     // is this required?
 
     @Length(max = 50)
+    @SafeHtml
     private String type;
-
+    @SafeHtml
     private String tenantId;
 
     public Long getId() {

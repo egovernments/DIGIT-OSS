@@ -8,40 +8,45 @@ import org.egov.infra.microservice.contract.ResponseInfo;
 
 public class BankResponse implements Serializable {
 
-	private ResponseInfo responseInfo;
-	private List<Bank> banks;
-	private Pagination page;
-	
-	public BankResponse(){}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 3346360754326833147L;
+    private ResponseInfo responseInfo;
+    private List<Bank> banks;
+    private Pagination page;
 
-	public BankResponse(ResponseInfo responseInfo, List<Bank> banks, Pagination page) {
-		this.responseInfo = responseInfo;
-		this.banks = banks;
-		this.page = page;
-	}
+    public BankResponse() {
+    }
 
-	public ResponseInfo getResponseInfo() {
-		return responseInfo;
-	}
+    public BankResponse(final ResponseInfo responseInfo, final List<Bank> banks, final Pagination page) {
+        this.responseInfo = responseInfo;
+        this.banks = banks;
+        this.page = page;
+    }
 
-	public void setResponseInfo(ResponseInfo responseInfo) {
-		this.responseInfo = responseInfo;
-	}
+    public ResponseInfo getResponseInfo() {
+        return responseInfo;
+    }
 
-	public List<Bank> getBanks() {
-		return banks;
-	}
+    public void setResponseInfo(final ResponseInfo responseInfo) {
+        this.responseInfo = responseInfo;
+    }
 
-	public void setBanks(List<Bank> banks) {
-		this.banks = banks;
-	}
+    public List<Bank> getBanks() {
+        return banks;
+    }
 
-	public Pagination getPage() {
-		return page;
-	}
+    public void setBanks(final List<Bank> banks) {
+        this.banks = banks;
+    }
 
-	public void setPage(Pagination page) {
-		this.page = page;
-	}
-	
+    public Pagination getPage() {
+        return page;
+    }
+
+    public void setPage(final Pagination page) {
+        this.page = page;
+    }
+
 }

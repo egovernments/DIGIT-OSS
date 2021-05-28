@@ -53,6 +53,8 @@
  */
 package com.exilant.eGov.src.transactions;
 
+import java.text.ParseException;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -100,7 +102,7 @@ public class ExilPrecision
         double dNum = 0;
         try {
             dNum = Double.parseDouble(sNum);
-        } catch (final Exception e) {
+        } catch (final NumberFormatException e) {
             LOGGER.error("There is error " + e.getMessage());
             return 0;
         }
@@ -118,12 +120,7 @@ public class ExilPrecision
     {
         // precision++;
         double dNum = 0;
-        try {
-            dNum = Double.parseDouble(sNum);
-        } catch (final Exception e) {
-            LOGGER.error("There is error " + e.getMessage());
-            return "0";
-        }
+        dNum = Double.parseDouble(sNum);
         final int afterPoint = (int) Math.pow(10, precision);
         String fraction = "0.";
         for (int i = 0; i < precision; i++)

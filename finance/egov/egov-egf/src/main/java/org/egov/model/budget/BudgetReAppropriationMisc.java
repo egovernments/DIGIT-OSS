@@ -47,96 +47,95 @@
  */
 package org.egov.model.budget;
 
-import org.egov.commons.EgwStatus;
-import org.egov.infra.workflow.entity.StateAware;
-import org.egov.pims.commons.Position;
-import org.egov.utils.Constants;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.egov.commons.EgwStatus;
+import org.egov.infra.workflow.entity.StateAware;
+import org.egov.utils.Constants;
+
 public class BudgetReAppropriationMisc extends StateAware {
-    private static final long serialVersionUID = 3462810824735494382L;
-    private Long id;
-    private String sequenceNumber;
-    private String remarks;
-    private Date reAppropriationDate;
-    private EgwStatus status;
-    private Set<BudgetReAppropriation> budgetReAppropriations = new HashSet<>();
+	private static final long serialVersionUID = 3462810824735494382L;
+	private Long id;
+	private String sequenceNumber;
+	private String remarks;
+	private Date reAppropriationDate;
+	private EgwStatus status;
+	private Set<BudgetReAppropriation> budgetReAppropriations = new HashSet<>();
 
-    public Set<BudgetReAppropriation> getBudgetReAppropriations() {
-        return budgetReAppropriations;
-    }
+	public Set<BudgetReAppropriation> getBudgetReAppropriations() {
+		return budgetReAppropriations;
+	}
 
-    public void setBudgetReAppropriations(final Set<BudgetReAppropriation> budgetReAppropriations) {
-        this.budgetReAppropriations = budgetReAppropriations;
-    }
+	public void setBudgetReAppropriations(final Set<BudgetReAppropriation> budgetReAppropriations) {
+		this.budgetReAppropriations = budgetReAppropriations;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    @Override
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	@Override
+	protected void setId(final Long id) {
+		this.id = id;
+	}
 
-    public String getSequenceNumber() {
-        return sequenceNumber;
-    }
+	public String getSequenceNumber() {
+		return sequenceNumber;
+	}
 
-    public void setSequenceNumber(final String sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
+	public void setSequenceNumber(final String sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
+	}
 
-    public String getRemarks() {
-        return remarks;
-    }
+	public String getRemarks() {
+		return remarks;
+	}
 
-    public void setRemarks(final String remarks) {
-        this.remarks = remarks;
-    }
+	public void setRemarks(final String remarks) {
+		this.remarks = remarks;
+	}
 
-    public Date getReAppropriationDate() {
-        return reAppropriationDate;
-    }
+	public Date getReAppropriationDate() {
+		return reAppropriationDate;
+	}
 
-    public void setReAppropriationDate(final Date reAppropriationDate) {
-        this.reAppropriationDate = reAppropriationDate;
-    }
+	public void setReAppropriationDate(final Date reAppropriationDate) {
+		this.reAppropriationDate = reAppropriationDate;
+	}
 
-    @Override
-    public String getStateDetails() {
-        return sequenceNumber == null ? "" : sequenceNumber;
-    }
+	@Override
+	public String getStateDetails() {
+		return sequenceNumber == null ? "" : sequenceNumber;
+	}
 
-    public List<BudgetReAppropriation> getNonApprovedReAppropriations() {
-        final List<BudgetReAppropriation> reAppList = new ArrayList<>();
-        budgetReAppropriations = budgetReAppropriations == null ? new HashSet<>() : budgetReAppropriations;
-        for (final BudgetReAppropriation entry : budgetReAppropriations)
-            if (!Constants.END.equalsIgnoreCase(entry.getState().getValue())
-                    || !"APPROVED".equalsIgnoreCase(entry.getState().getValue()))
-                reAppList.add(entry);
-        return reAppList;
-    }
+	public List<BudgetReAppropriation> getNonApprovedReAppropriations() {
+		final List<BudgetReAppropriation> reAppList = new ArrayList<>();
+		budgetReAppropriations = budgetReAppropriations == null ? new HashSet<>() : budgetReAppropriations;
+		for (final BudgetReAppropriation entry : budgetReAppropriations)
+			if (!Constants.END.equalsIgnoreCase(entry.getState().getValue())
+					|| !"APPROVED".equalsIgnoreCase(entry.getState().getValue()))
+				reAppList.add(entry);
+		return reAppList;
+	}
 
-    public BudgetReAppropriation getBudgetReAppropriationWithId(final Long id) {
-        for (final BudgetReAppropriation reAppropriation : budgetReAppropriations)
-            if (id.equals(reAppropriation.getId()))
-                return reAppropriation;
-        return null;
-    }
+	public BudgetReAppropriation getBudgetReAppropriationWithId(final Long id) {
+		for (final BudgetReAppropriation reAppropriation : budgetReAppropriations)
+			if (id.equals(reAppropriation.getId()))
+				return reAppropriation;
+		return null;
+	}
 
-    public EgwStatus getStatus() {
-        return status;
-    }
+	public EgwStatus getStatus() {
+		return status;
+	}
 
-    public void setStatus(EgwStatus status) {
-        this.status = status;
-    }
+	public void setStatus(EgwStatus status) {
+		this.status = status;
+	}
 
 }

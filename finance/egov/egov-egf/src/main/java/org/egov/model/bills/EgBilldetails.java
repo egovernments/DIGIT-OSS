@@ -51,6 +51,7 @@ import org.egov.commons.CChartOfAccounts;
 import org.egov.commons.CFunction;
 import org.egov.infra.persistence.entity.AbstractPersistable;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -65,6 +66,9 @@ import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -84,19 +88,21 @@ public class EgBilldetails extends AbstractPersistable<Integer> implements java.
 
     @ManyToOne
     @JoinColumn(name = "billid")
+    @NotNull
     private EgBillregister egBillregister;
 
     private BigDecimal functionid;
-
+    @NotNull
     private BigDecimal glcodeid;
-
+    @Min(1)
     private BigDecimal debitamount;
-
+    @Min(1)
     private BigDecimal creditamount;
 
     private Date lastupdatedtime;
 
     @Length(max = 250)
+    @SafeHtml
     private String narration;
 
     @Transient

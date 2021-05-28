@@ -83,6 +83,12 @@
     }
 </style>
     <form:form name="supplierBillForm" role="form" method="post" action="create" modelAttribute="egBillregister" id="egBillregister" class="form-horizontal form-groups-bordered" enctype="multipart/form-data">
+
+<c:if test="${not empty errorMessage}">
+	<div class="alert alert-danger" role="alert">
+		<c:out value="${errorMessage}" />
+	</div>
+</c:if>
 	
     <div class="position_alert">
         <spring:message code="lbl.netpayable.amount" text="Net Payable Amount"/>

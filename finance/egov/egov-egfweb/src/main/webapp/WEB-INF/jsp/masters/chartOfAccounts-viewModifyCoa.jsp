@@ -81,6 +81,7 @@
 		<s:fielderror /></span>
 	<s:form name="chartOfAccountsForm" id="chartOfAccountsForm"
 		action="chartOfAccounts" theme="simple">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<div class="formmainbox">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0"
 				id="chartOfAccountsTable">

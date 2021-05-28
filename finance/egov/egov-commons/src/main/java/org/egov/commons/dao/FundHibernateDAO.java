@@ -113,7 +113,7 @@ public class FundHibernateDAO {
         return (Fund) qry.uniqueResult();
     }
 
-    public Fund fundById(Integer id, boolean b) {
+    public Fund fundById(Long id, boolean b) {
         return (Fund) getCurrentSession().get(Fund.class, id);
     }
 }

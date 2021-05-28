@@ -193,6 +193,11 @@
 		}
 		function submitForm() {
 			document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-searchRTGS.action';
+			jQuery(chequeAssignment).append(jQuery('<input>', {
+	            type : 'hidden',
+	            name : '${_csrf.parameterName}',
+	            value : '${_csrf.token}'
+	        }));
 			document.chequeAssignment.submit();
 		}
 	</script>

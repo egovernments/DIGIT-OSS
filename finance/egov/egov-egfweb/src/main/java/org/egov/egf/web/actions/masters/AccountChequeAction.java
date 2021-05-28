@@ -75,6 +75,7 @@ import org.egov.model.cheque.ChequeDeptMapping;
 import org.egov.model.masters.ChequeDetail;
 import org.egov.services.cheque.AccountChequesService;
 import org.egov.utils.Constants;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -272,7 +273,7 @@ public class AccountChequeAction extends BaseFormAction {
                             ? Long.parseLong(split[7]) : split[7].substring(0, split[7].lastIndexOf(";")).isEmpty() ? 0l
                                     : Long.parseLong(split[7].substring(0, split[7].lastIndexOf(";")))
                             : null);
-                } catch (Exception e) {
+                } catch (ObjectNotFoundException e) {
                     LOGGER.error("ERROR occurred while setting the cheque details123",e.getCause());
                 }
                 chequeDetailsList.add(cd);

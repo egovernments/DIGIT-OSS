@@ -57,4 +57,9 @@
     <context:component-scan base-package="org.egov.collection.web">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+    
+    <bean id="filterMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="20971520"/>
+		<property name="maxInMemorySize" value="1048576"/>
+	</bean>
 </beans>

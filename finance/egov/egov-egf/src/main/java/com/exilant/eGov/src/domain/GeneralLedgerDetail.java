@@ -121,16 +121,17 @@ public class GeneralLedgerDetail {
     {
         setId(String.valueOf(PrimaryKeyGenerator.getNextKey("GeneralLedgerDetail")));
 
-        final String insertQuery = "INSERT INTO GeneralLedgerDetail (id, generalLedgerId, detailKeyId, detailTypeId,amount) " +
-                "VALUES ( ?, ?, ?, ?, ?)";
+		final StringBuilder insertQuery = new StringBuilder(
+				"INSERT INTO GeneralLedgerDetail (id, generalLedgerId, detailKeyId,")
+						.append(" detailTypeId,amount) VALUES ( ?, ?, ?, ?, ?)");
 
-        final Query pst = persistenceService.getSession().createSQLQuery(insertQuery);
-        pst.setLong(0, Long.valueOf(id));
-        pst.setLong(1, Long.valueOf(glId));
-        pst.setLong(2, Long.valueOf(detailKeyId));
-        pst.setLong(3, Long.valueOf(detailTypeId));
-        pst.setBigDecimal(4, new BigDecimal(detailAmt));
-        pst.executeUpdate();
+		final Query pst = persistenceService.getSession().createSQLQuery(insertQuery.toString());
+		pst.setLong(0, Long.valueOf(id));
+		pst.setLong(1, Long.valueOf(glId));
+		pst.setLong(2, Long.valueOf(detailKeyId));
+		pst.setLong(3, Long.valueOf(detailTypeId));
+		pst.setBigDecimal(4, new BigDecimal(detailAmt));
+		pst.executeUpdate();
         if (LOGGER.isInfoEnabled())
             LOGGER.info(insertQuery);
     }

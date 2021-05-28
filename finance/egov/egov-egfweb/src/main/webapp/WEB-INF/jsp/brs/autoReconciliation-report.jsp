@@ -56,12 +56,22 @@
 function exportXls()
 {
 	document.forms[0].action='autoReconciliation-generateXLS.action';
+	jQuery(document.forms[0]).append(jQuery('<input>', {
+    	type : 'hidden',
+        name : '${_csrf.parameterName}',
+        value : '${_csrf.token}'
+    }));
 	document.forms[0].submit();
 	}
 
 function exportPdf()
 {
 	document.forms[0].action='autoReconciliation-generatePDF.action';
+	jQuery(document.forms[0]).append(jQuery('<input>', {
+    	type : 'hidden',
+        name : '${_csrf.parameterName}',
+        value : '${_csrf.token}'
+    }));
 	document.forms[0].submit();
 	}
 </script>

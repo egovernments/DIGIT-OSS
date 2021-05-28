@@ -67,7 +67,7 @@ public interface AssignmentDAO
 {
 	public Assignment getAssignmentById(Integer id);
 	public List getListOfEmployeeWithoutAssignment(Date fromdate);
-	public Assignment getLatestAssignmentForEmployeeByToDate(Integer empId,Date todate) throws Exception;
+	public Assignment getLatestAssignmentForEmployeeByToDate(Integer empId,Date todate);
 	public abstract List<EmployeeView> getEmployeeWithTempAssignment(Date givenDate,Integer posId);
 	public List<EmployeeView> getEmployeeWithTempAssignment(String code,Date givenDate,Integer posId);
 

@@ -47,111 +47,110 @@
  */
 package org.egov.model.budget;
 
-import org.egov.commons.EgwStatus;
-import org.egov.infra.workflow.entity.StateAware;
-import org.egov.pims.commons.Position;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.egov.commons.EgwStatus;
+import org.egov.infra.workflow.entity.StateAware;
+
 public class BudgetReAppropriation extends StateAware {
-    private static final long serialVersionUID = 2343135780753283100L;
-    private Long id = null;
-    private BudgetDetail budgetDetail;
-    private BigDecimal additionAmount = new BigDecimal("0.0");
-    private BigDecimal deductionAmount = new BigDecimal("0.0");
-    private BigDecimal originalAdditionAmount = new BigDecimal("0.0");
-    private BigDecimal originalDeductionAmount = new BigDecimal("0.0");
-    private BigDecimal anticipatoryAmount = new BigDecimal("0.0");
-    private EgwStatus status;
-    private Date asOnDate;
-    private BudgetReAppropriationMisc reAppropriationMisc;
+	private static final long serialVersionUID = 2343135780753283100L;
+	private Long id = null;
+	private BudgetDetail budgetDetail;
+	private BigDecimal additionAmount = new BigDecimal("0.0");
+	private BigDecimal deductionAmount = new BigDecimal("0.0");
+	private BigDecimal originalAdditionAmount = new BigDecimal("0.0");
+	private BigDecimal originalDeductionAmount = new BigDecimal("0.0");
+	private BigDecimal anticipatoryAmount = new BigDecimal("0.0");
+	private EgwStatus status;
+	private Date asOnDate;
+	private BudgetReAppropriationMisc reAppropriationMisc;
 
-    public EgwStatus getStatus() {
-        return status;
-    }
+	public EgwStatus getStatus() {
+		return status;
+	}
 
-    public void setStatus(final EgwStatus status) {
-        this.status = status;
-    }
+	public void setStatus(final EgwStatus status) {
+		this.status = status;
+	}
 
-    public BudgetReAppropriationMisc getReAppropriationMisc() {
-        return reAppropriationMisc;
-    }
+	public BudgetReAppropriationMisc getReAppropriationMisc() {
+		return reAppropriationMisc;
+	}
 
-    public void setReAppropriationMisc(final BudgetReAppropriationMisc reAppropriationMisc) {
-        this.reAppropriationMisc = reAppropriationMisc;
-    }
+	public void setReAppropriationMisc(final BudgetReAppropriationMisc reAppropriationMisc) {
+		this.reAppropriationMisc = reAppropriationMisc;
+	}
 
-    public BigDecimal getAnticipatoryAmount() {
-        return anticipatoryAmount;
-    }
+	public BigDecimal getAnticipatoryAmount() {
+		return anticipatoryAmount;
+	}
 
-    public void setAnticipatoryAmount(final BigDecimal anticipatoryAmount) {
-        this.anticipatoryAmount = anticipatoryAmount;
-    }
+	public void setAnticipatoryAmount(final BigDecimal anticipatoryAmount) {
+		this.anticipatoryAmount = anticipatoryAmount;
+	}
 
-    public BudgetDetail getBudgetDetail() {
-        return budgetDetail;
-    }
+	public BudgetDetail getBudgetDetail() {
+		return budgetDetail;
+	}
 
-    public void setBudgetDetail(final BudgetDetail budgetDetail) {
-        this.budgetDetail = budgetDetail;
-    }
+	public void setBudgetDetail(final BudgetDetail budgetDetail) {
+		this.budgetDetail = budgetDetail;
+	}
 
-    public BigDecimal getAdditionAmount() {
-        return additionAmount;
-    }
+	public BigDecimal getAdditionAmount() {
+		return additionAmount;
+	}
 
-    public void setAdditionAmount(final BigDecimal additionAmount) {
-        this.additionAmount = additionAmount;
-    }
+	public void setAdditionAmount(final BigDecimal additionAmount) {
+		this.additionAmount = additionAmount;
+	}
 
-    public BigDecimal getDeductionAmount() {
-        return deductionAmount;
-    }
+	public BigDecimal getDeductionAmount() {
+		return deductionAmount;
+	}
 
-    public void setDeductionAmount(final BigDecimal deductionAmount) {
-        this.deductionAmount = deductionAmount;
-    }
+	public void setDeductionAmount(final BigDecimal deductionAmount) {
+		this.deductionAmount = deductionAmount;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    @Override
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	@Override
+	protected void setId(final Long id) {
+		this.id = id;
+	}
 
-    @Override
-    public String getStateDetails() {
-        return null;
-    }
+	@Override
+	public String getStateDetails() {
+		return null;
+	}
 
-    public BigDecimal getOriginalAdditionAmount() {
-        return originalAdditionAmount;
-    }
+	public BigDecimal getOriginalAdditionAmount() {
+		return originalAdditionAmount;
+	}
 
-    public void setOriginalAdditionAmount(final BigDecimal originalAdditionAmount) {
-        this.originalAdditionAmount = originalAdditionAmount;
-    }
+	public void setOriginalAdditionAmount(final BigDecimal originalAdditionAmount) {
+		this.originalAdditionAmount = originalAdditionAmount;
+	}
 
-    public BigDecimal getOriginalDeductionAmount() {
-        return originalDeductionAmount;
-    }
+	public BigDecimal getOriginalDeductionAmount() {
+		return originalDeductionAmount;
+	}
 
-    public void setOriginalDeductionAmount(final BigDecimal originalDeductionAmount) {
-        this.originalDeductionAmount = originalDeductionAmount;
-    }
+	public void setOriginalDeductionAmount(final BigDecimal originalDeductionAmount) {
+		this.originalDeductionAmount = originalDeductionAmount;
+	}
 
-    public Date getAsOnDate() {
-        return asOnDate;
-    }
+	public Date getAsOnDate() {
+		return asOnDate;
+	}
 
-    public void setAsOnDate(final Date asOnDate) {
-        this.asOnDate = asOnDate;
-    }
+	public void setAsOnDate(final Date asOnDate) {
+		this.asOnDate = asOnDate;
+	}
 
 }

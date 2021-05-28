@@ -160,6 +160,11 @@
 		function validateSearch() {
 
 			document.forms[0].action = '/services/EGF/payment/chequeAssignment-search.action';
+			jQuery(document.forms[0]).append(jQuery('<input>', {
+	            type : 'hidden',
+	            name : '${_csrf.parameterName}',
+	            value : '${_csrf.token}'
+	        }));
 			//document.forms[0].submit();
 
 			return true;

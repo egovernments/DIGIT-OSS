@@ -49,6 +49,7 @@ package org.egov.commons.dao;
 
 import org.egov.commons.Bankbranch;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
@@ -67,7 +68,7 @@ public class BankbranchDAO {
 		try {
 			getSession().save(bankbranch);
 
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException((new StringBuilder("Hibernate Exception : ")).append(e.getMessage()).toString());
 		}
 	}
@@ -75,7 +76,7 @@ public class BankbranchDAO {
 	public void updateBankbranch(final Bankbranch bankbranch) {
 		try {
 			getSession().saveOrUpdate(bankbranch);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException((new StringBuilder("Hibernate Exception : ")).append(e.getMessage()).toString());
 		}
 	}
@@ -83,7 +84,7 @@ public class BankbranchDAO {
 	public void removeBankbranch(final Bankbranch bankbranch) {
 		try {
 			getSession().delete(bankbranch);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException((new StringBuilder("Hibernate Exception : ")).append(e.getMessage()).toString());
 		}
 	}
@@ -92,7 +93,7 @@ public class BankbranchDAO {
 		try {
 
 			return (Bankbranch) getSession().get(Bankbranch.class, bankbranch);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException((new StringBuilder("Hibernate Exception : ")).append(e.getMessage()).toString());
 		}
 	}

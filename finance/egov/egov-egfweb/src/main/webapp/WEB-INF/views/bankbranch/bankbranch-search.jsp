@@ -50,7 +50,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn"%>
-<form:form role="form" action="search" modelAttribute="bankbranch" id="bankbranchsearchform" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
+<form:form role="form" action="search" modelAttribute="bankbranchSearchRequest" id="bankbranchsearchform" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
@@ -63,19 +63,19 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.bank" text="Bank"/></label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="bank" data-first-option="false" id="bank" class="form-control">
+							<form:select path="bankId" data-first-option="false" id="bank" class="form-control">
 								<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 								<form:options items="${banks}" itemValue="id" itemLabel="name" />
 							</form:select>
-							<form:errors path="bank" cssClass="error-msg" />
+							<form:errors path="bankId" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.bankbranch" text="Bank Branch"/>  </label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="id" id="bankbranchname" class="form-control">
+							<form:select path="bankBranchId" id="bankbranchname" class="form-control">
 								<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 								<form:options items="${bankbranches}" itemValue="id" itemLabel="branchname" />
 							</form:select>
-							<form:errors path="id" cssClass="error-msg" />
+							<form:errors path="bankBranchId" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">

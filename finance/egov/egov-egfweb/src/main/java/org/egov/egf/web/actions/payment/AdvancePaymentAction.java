@@ -324,7 +324,7 @@ public class AdvancePaymentAction extends BasePaymentAction {
         populateBankAccounts(paymentheader.getBankaccount().getBankbranch().getId(), fund.getId());
     }
 
-    private void populateBankAccounts(final Integer bankBranchId, final Integer fundId) {
+    private void populateBankAccounts(final Integer bankBranchId, final Long fundId) {
         addDropdownData("accountNumberList", persistenceService.findAllBy(
                 "from Bankaccount ba where ba.bankbranch.id=? and ba.fund.id=? and ba.type in (?,?) "
                         + "and ba.isactive=true order by ba.chartofaccounts.glcode", bankBranchId, fundId,
@@ -347,7 +347,7 @@ public class AdvancePaymentAction extends BasePaymentAction {
                         .getBankaccount().getChartofaccounts().getId()));
                 balance = commonBean.getAvailableBalance();
                 return true;
-            } catch (final Exception e) {
+            } catch (final NumberFormatException e) {
                 balance = BigDecimal.valueOf(-1);
                 return true;
             }
@@ -419,11 +419,12 @@ public class AdvancePaymentAction extends BasePaymentAction {
         } catch (final ValidationException e) {
             LOGGER.error(e.getMessage(), e);
             throw e;
-        } catch (final Exception e) {
-            // handle engine exception
-            LOGGER.error(e.getMessage(), e);
-            throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-        }
+        } /*
+           * catch (final Exception e) { // handle engine exception
+           * LOGGER.error(e.getMessage(), e); throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Posted to Ledger " + voucherHeader.getId());
         return voucherHeader;
@@ -558,8 +559,8 @@ public class AdvancePaymentAction extends BasePaymentAction {
         addDropdownData("designationList", (List<Designation>) map.get("designationList"));
 
         if (bDefaultDeptId && !dName.equals("")) {
-            final Department dept = (Department) persistenceService.find("from Department where deptName like '%"
-                    + dName + "' ");
+            final Department dept = (Department) persistenceService.find("from Department where deptName like ?",
+                    "%".concat(dName));
             departmentId = dept.getId().intValue();
         }
         wfitemstate = map.get("wfitemstate") != null ? map.get("wfitemstate").toString() : "";

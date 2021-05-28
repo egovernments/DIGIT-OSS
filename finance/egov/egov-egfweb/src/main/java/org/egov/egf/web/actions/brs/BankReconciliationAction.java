@@ -49,6 +49,8 @@
 package org.egov.egf.web.actions.brs;
 
 import com.exilant.eGov.src.domain.BankReconciliationSummary;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -61,6 +63,7 @@ import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.BankHibernateDAO;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.egf.commons.EgovCommon;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.Instrument;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.model.brs.BrsEntries;
@@ -146,11 +149,9 @@ public class BankReconciliationAction extends BaseFormAction {
         try {
             dt = sdf.parse(bankSDate);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	throw new ApplicationRuntimeException(e.getMessage());
         }
         CFinancialYear finYearByDate = financialYearDAO.getFinYearByDate(dt);
-        String recDate = formatter.format(dt);
         Date fromDate = finYearByDate.getStartingDate();
         if (CHEQUE_DD_ISSUED_NP_IN_BANK.equals(actionName)) {
             chequDDNotPresentInBank = bankReconciliationSummary.getIssuedInstrumentsNotPresentInBank("Cheque/DD", fromDate, dt, bankAccId);
@@ -196,6 +197,11 @@ public class BankReconciliationAction extends BaseFormAction {
 
 		bankSDate = parameters.get("bankStmtDate")[0];
 		balanceAsPerStatement = parameters.get("bankStBalance")[0];
+		
+		validateBrsSummary();
+		if (hasErrors()) {
+			return NEW;
+		}
 
 		bankAccount = (Bankaccount) persistenceService.find(
 				"from Bankaccount where id=?", accountId.longValue());
@@ -240,11 +246,29 @@ public class BankReconciliationAction extends BaseFormAction {
 					+ accountBalance.doubleValue();
 			netTotal = subTotal - ( unReconciledDr + unReconciledDrOthers + unReconciledDrBrsEntry);
 
-		} catch (Exception e) {
+		} catch (ParseException e) {
 
 		}
 
 		return "result";
+	}
+
+	private void validateBrsSummary() {
+		if (StringUtils.isEmpty(bankSDate)) {
+			addActionError(getText("msg.enter.bank.statement.date"));
+		}
+		if (StringUtils.isEmpty(balanceAsPerStatement)) {
+			addActionError(getText("msg.enter.bank.statement.balance"));
+		}
+		if (accountId == null) {
+			addActionError(getText("msg.please.select.bank.account"));
+		}
+		if (bankId == null) {
+			addActionError(getText("msg.please.select.bank"));
+		}
+		if (branchId == null) {
+			addActionError(getText("msg.please.select.bank.branch"));
+		}
 	}
 
 	public void setEgovCommon(final EgovCommon egovCommon) {

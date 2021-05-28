@@ -89,6 +89,7 @@ import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.RoleService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.contract.AccountCodeTemplate;
 import org.egov.infra.microservice.contract.ActionRequest;
 import org.egov.infra.microservice.contract.ActionResponse;
@@ -363,10 +364,8 @@ public class MicroserviceUtils {
             final RestTemplate restTemplate = new RestTemplate();
             try {
                 restTemplate.postForObject(userServiceUrl, createUserRequest, UserDetailResponse.class);
-            } catch (final Exception e) {
-                final String errMsg = "Exception while creating User in microservice ";
-                // throw new ApplicationRuntimeException(errMsg, e);
-                LOGGER.fatal(errMsg, e);
+            } catch (final RestClientException e) {
+            	LOGGER.warn("Exception while creating User in microservice ", e);
             }
         }
     }
@@ -413,7 +412,7 @@ public class MicroserviceUtils {
             if (postForObject != null) {
                 return mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.common-masters.Department"),new TypeReference<List<Department>>(){});
             }
-        } catch (Exception e) {
+        } catch (ApplicationRuntimeException e) {
             LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceByCodes method: ",e);
         }
         // try {
@@ -469,12 +468,7 @@ public class MicroserviceUtils {
 
     private Department fetchByDepartmentCode(String departmentCode) {
         List<Department> departments = getDepartments(departmentCode);
-        try {
-            return !departments.isEmpty() ? departments.get(0) : null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return !departments.isEmpty() ? departments.get(0) : null;
     }
 
     public List<Designation> getDesignation(String code) {
@@ -489,7 +483,7 @@ public class MicroserviceUtils {
                         new TypeReference<List<Designation>>() {
                         });
             }
-        } catch (Exception e) {
+        } catch (ApplicationRuntimeException e) {
             LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceByCodes method: ",
                     e);
         }
@@ -565,8 +559,9 @@ public class MicroserviceUtils {
             if (null != mdmsmap && mdmsmap.size() > 0) {
                 return mdmsmap.get(name);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (RestClientException e) {
+            LOGGER.error("ERROR occurred while fetching finance mdms method: ",
+                    e);
         }
         return null;
     }
@@ -660,7 +655,7 @@ public class MicroserviceUtils {
         final RestTemplate restTemplate = createRestTemplate();
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        header.add("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0");
+        header.add("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDo=");
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("username", this.siUser);
         map.add("scope", this.siScope);
@@ -871,7 +866,7 @@ public class MicroserviceUtils {
                         new TypeReference<List<BankAccountServiceMapping>>() {
                         });
             }
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error("ERROR occurred while fetching header name of tenant in getHeaderNameForTenant : ", e);
         }
         return basm;
@@ -1216,10 +1211,8 @@ public class MicroserviceUtils {
                 LOGGER.info("call:" + workflowServiceUrl);
                 tresp = restTemplate.postForObject(workflowServiceUrl, requestInfo, TaskResponse.class);
                 tasks = tresp.getTasks();
-            } catch (final Exception e) {
-                final String errMsg = "Exception while getting inbox items from microservice ";
-                // throw new ApplicationRuntimeException(errMsg, e);
-                LOGGER.fatal(errMsg, e);
+            } catch (final  RestClientException e) {
+            	LOGGER.warn("Exception while getting inbox items from microservice ",e);
             }
         }
         return tasks;
@@ -1357,7 +1350,7 @@ public class MicroserviceUtils {
         try {
             StringBuilder uri = new StringBuilder(appConfigManager.getEgovIndexerSerHost()).append(egovIndexerUrl);
             Object postForObject = restTemplate.postForObject(uri.toString(), data, Object.class, topicName);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             Log.error("ERROR occurred while trying to push the data to indexer : ", e);
         }
     }
@@ -1396,7 +1389,7 @@ public class MicroserviceUtils {
             }
             if (ulbGrade != null && !ulbGrade.isEmpty())
                 ulbGrade = environment.getProperty(ulbGrade, ulbGrade);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error("ERROR occurred while fetching header name of tenant in getHeaderNameForTenant : ", e);
         }
         return tenentId.split(Pattern.quote("."))[1] + " " + (ulbGrade != null ? ulbGrade : "");
@@ -1477,7 +1470,7 @@ public class MicroserviceUtils {
             if (serviceByCodes != null && !serviceByCodes.isEmpty()) {
                 serviceName = serviceByCodes.get(0).getBusinessService();
             }
-        } catch (Exception e) {
+        } catch (ApplicationRuntimeException e) {
             LOGGER.error(
                     "ERROR occurred while fetching business service details in getBusinessServiceNameByCode method: ",
                     e);
@@ -1504,7 +1497,7 @@ public class MicroserviceUtils {
                         new TypeReference<List<BusinessService>>() {
                         });
             }
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceByCodes method: ",
                     e);
         }
@@ -1559,7 +1552,9 @@ public class MicroserviceUtils {
                     fieldValue = (String) field.get(criteria);
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace();
+                LOGGER.error(
+                        "ERROR occurred while fetching business service mapping details in getBusinessServiceMappingBySearchCriteria method: ",
+                        e);
             }
             if (StringUtils.isNotBlank(fieldValue)) {
                 for (String str : StringUtils.split(fieldValue, ",")) {
@@ -1639,7 +1634,7 @@ public class MicroserviceUtils {
                 return mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.common-masters.Department[0]"),
                         Department.class);
             }
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error("ERROR occurred while fetching the Department for code : " + code, e);
         }
         return null;
@@ -1668,7 +1663,7 @@ public class MicroserviceUtils {
                 response = restTemplate.postForObject(url.toString(), reqWrapper, PaymentResponse.class);
             }
             return response.getPayments();
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error("ERROR occurred while fetching the Payment list : ", e);
         }
         return null;
@@ -1704,7 +1699,7 @@ public class MicroserviceUtils {
         return restTemplate.postForObject(uri.toString(), request, StorageResponse.class);
     }
     
-    public ResponseEntity<byte[]> fetchFilesFromDigitService(String fileStoreId) throws RuntimeException {
+    public ResponseEntity<byte[]> fetchFilesFromDigitService(String fileStoreId) {
         Map<String, String> request = new HashMap<String, String>();
         String tenantId=getTenentId();
         request.put("tenantId", tenantId);
@@ -1855,7 +1850,7 @@ public class MicroserviceUtils {
             if (postForObject != null) {
                 return mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.FinanceModule.AccountCodeTemplate"),new TypeReference<List<AccountCodeTemplate>>(){});
             }
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error("ERROR occurred while fetching AccountCode Templates in getAccountCodeTemplate method: ",e);
         }
         return null;

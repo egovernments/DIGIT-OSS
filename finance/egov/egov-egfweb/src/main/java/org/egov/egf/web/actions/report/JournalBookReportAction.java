@@ -80,6 +80,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,9 +167,9 @@ public class JournalBookReportAction extends BaseFormAction {
     }
 
     private void prepareResultList() {
+        final Map.Entry<String, Map<String, Object>> queryMapEntry = getQuery().entrySet().iterator().next();
         String voucherDate = "", voucherNumber = "", voucherName = "", narration = "";
-        Query query = null;
-        query = persistenceService.getSession().createSQLQuery(getQuery())
+        final Query query = persistenceService.getSession().createSQLQuery(queryMapEntry.getKey())
                 .addScalar("voucherdate", StringType.INSTANCE)
                 .addScalar("vouchernumber", StringType.INSTANCE)
                 .addScalar("code", StringType.INSTANCE)
@@ -180,6 +181,7 @@ public class JournalBookReportAction extends BaseFormAction {
                 .addScalar("vhId", StringType.INSTANCE)
                 .setParameterList("voucherName", VoucherHelper.VOUCHER_TYPE_NAMES.get(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL))
                 .setResultTransformer(Transformers.aliasToBean(GeneralLedgerBean.class));
+        queryMapEntry.getValue().entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
         journalBookDisplayList = query.list();
         for (GeneralLedgerBean bean : journalBookDisplayList) {
             bean.setDebitamount(new BigDecimal(bean.getDebitamount()).setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
@@ -212,42 +214,51 @@ public class JournalBookReportAction extends BaseFormAction {
         }
     }
 
-    private String getQuery() {
-        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
-        String startDate = "", endDate = "";
+    private Map<String, Map<String, Object>> getQuery() {
+        final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+        final Map<String, Object> params = new HashMap<>();
+        Date startDate = null;
+        Date endDate = null;
         try {
-            startDate = formatter.format(sdf.parse(journalBookReport.getStartDate()));
-            endDate = formatter.format(sdf.parse(journalBookReport.getEndDate()));
+            final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            startDate = sdf.parse(journalBookReport.getStartDate());
+            endDate = sdf.parse(journalBookReport.getEndDate());
         } catch (ParseException e) {
 
         }
-        String query = "", subQuery = "";
-        if (journalBookReport.getFund_id() != null && !journalBookReport.getFund_id().equals(""))
-            subQuery = subQuery + " and f.id= " + journalBookReport.getFund_id() + " ";
-        if (journalBookReport.getVoucher_name() != null && !journalBookReport.getVoucher_name().equals(""))
-            subQuery = subQuery + " and vh.Name='" + journalBookReport.getVoucher_name() + "' ";
-        if (journalBookReport.getDept_name() != null && !journalBookReport.getDept_name().equals(""))
-            subQuery = subQuery + " and vmis.departmentcode='" + journalBookReport.getDept_name() + "' ";
-        if (journalBookReport.getFunctionId() != null && !journalBookReport.getFunctionId().equals(""))
-            subQuery = subQuery + " and vmis.functionid  =" + journalBookReport.getFunctionId() + " ";
-        query = "SELECT TO_CHAR(vh.voucherdate,'dd-Mon-yyyy') AS voucherdate,vh.vouchernumber AS vouchernumber,f.name AS fund,gl.glcode AS code,coa.name AS accName,"
-                + "vh.description AS narration,vh.isconfirmed AS isconfirmed,gl.debitamount AS debitamount, gl.creditamount AS creditamount,vh.name AS voucherName,vh.id AS vhId "
-                + " FROM voucherheader vh, generalledger gl,fund f,function fn ,vouchermis vmis,chartofaccounts coa WHERE vh.id = gl.voucherheaderid AND gl.glcodeid = coa.id AND vh.fundid = f.id"
-                + " AND vmis.functionid = fn.id AND vmis.voucherheaderid=vh.id AND vh.status NOT IN (4,5)"
-                + subQuery
-                + " and vh.voucherdate >='"
-                + startDate
-                + "' "
-                + " and vh.voucherdate<='"
-                + endDate + "'"
-                + " and vh.name in (:voucherName)";
-        return query;
+        StringBuilder subQuery = new StringBuilder();
+        if (journalBookReport.getFund_id() != null && !journalBookReport.getFund_id().equals("")) {
+            subQuery.append(" and f.id=:fundId ");
+            params.put("fundId", Long.valueOf(journalBookReport.getFund_id()));
+        }
+        if (journalBookReport.getVoucher_name() != null && !journalBookReport.getVoucher_name().equals("")) {
+            subQuery.append(" and vh.Name=:voucherName ");
+            params.put("voucherName", journalBookReport.getVoucher_name());
+        }
+        if (journalBookReport.getDept_name() != null && !journalBookReport.getDept_name().equals("")) {
+            subQuery.append(" and vmis.departmentcode=:departmentName");
+            params.put("departmentName", journalBookReport.getDept_name());
+        }
+        if (journalBookReport.getFunctionId() != null && !journalBookReport.getFunctionId().equals("")) {
+            subQuery.append(" and vmis.functionid =:functionId");
+            params.put("functionId", journalBookReport.getFunctionId());
+        }
 
+        StringBuilder query = new StringBuilder("SELECT TO_CHAR(vh.voucherdate,'dd-Mon-yyyy') AS voucherdate,vh.vouchernumber AS vouchernumber,f.name AS fund, ")
+                            .append(" gl.glcode AS code,coa.name AS accName,vh.description AS narration,vh.isconfirmed AS isconfirmed, ")
+                .append("gl.debitamount AS debitamount, gl.creditamount AS creditamount,vh.name AS voucherName,vh.id AS vhId ")
+                .append(" FROM voucherheader vh, generalledger gl,fund f,function fn ,vouchermis vmis,chartofaccounts coa")
+                .append(" WHERE vh.id = gl.voucherheaderid AND gl.glcodeid = coa.id AND vh.fundid = f.id")
+                .append(" AND vmis.functionid = fn.id AND vmis.voucherheaderid=vh.id AND vh.status NOT IN (4,5)")
+                .append(subQuery.toString())
+                .append(" and vh.voucherdate >=:startDate ")
+                .append(" and vh.voucherdate<=:endDate and vh.name in (:voucherName) ");
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
+        queryMap.put(query.toString(), params);
+        return queryMap;
     }
     
-    
-
     private String getGLHeading() {
     	Map<String, String> depMap = new HashMap<>();
 		List<org.egov.infra.microservice.models.Department> list = masterDataCache.get("egi-department");

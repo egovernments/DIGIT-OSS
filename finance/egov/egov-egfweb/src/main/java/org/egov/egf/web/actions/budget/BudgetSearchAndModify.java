@@ -180,9 +180,8 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
             comments = topBudget.getState().getExtraInfo();
         }
         // if u want only selected function centre filter here by owner
-        final String query = " from BudgetDetail bd where bd.budget=? and bd.function=" + budgetDetail.getFunction().getId()
-                + "  order by bd.function.name,bd.budgetGroup.name";
-        savedbudgetDetailList = budgetDetailService.findAllBy(query, topBudget);
+        final String query = " from BudgetDetail bd where bd.budget=? and bd.function=? order by bd.function.name,bd.budgetGroup.name";
+        savedbudgetDetailList = budgetDetailService.findAllBy(query, topBudget, budgetDetail.getFunction().getId());
         re = checkRe(topBudget);
         // check what actuals needs to be shown for next year be AND possible remove if
         if (LOGGER.isInfoEnabled())
@@ -715,7 +714,7 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
 
         addDropdownData("designationList", (List<Designation>) map.get("designationList"));
         if (bDefaultDeptId && !dName.equals("")) {
-            final Department dept = (Department) persistenceService.find("from Department where deptName like '%" + dName + "' ");
+            final Department dept = (Department) persistenceService.find("from Department where deptName like ? ", "%".concat(dName));
 //            defaultDept = dept.getId().intValue();
         }
         wfitemstate = map.get("wfitemstate") != null ? map.get("wfitemstate").toString() : "";

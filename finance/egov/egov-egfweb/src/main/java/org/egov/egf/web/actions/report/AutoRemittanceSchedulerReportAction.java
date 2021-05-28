@@ -120,20 +120,17 @@ public class AutoRemittanceSchedulerReportAction extends SearchFormAction {
     @Override
     public SearchQuery prepareQuery(final String sortField, final String sortOrder) {
         final String query = getSearchQuery();
-        final String countQry = "select count(*) from  RemittanceSchedulerLog  as s " + dynQuery + " ";
+        final String countQry = "select count(*) from  RemittanceSchedulerLog  as s ".concat(dynQuery.toString());
         setPageSize(PAGE_SIZE);
         return new SearchQueryHQL(query, countQry, paramList);
     }
 
     private String getSearchQuery() {
         paramList = new ArrayList<Object>();
-        String queryBeginning = " ";
-        queryBeginning = "select distinct (SELECT COUNT(sp.schId)  from RemittanceSchedulePayment sp  WHERE sp.schId = s.id) AS COUNT, "
-                +
-                "s.schJobName,s.lastRunDate, s.schType, s.glcode, s.status, s.remarks,s.id from RemittanceSchedulerLog as s ";
-
+        StringBuilder queryBeginning = new StringBuilder("select distinct (SELECT COUNT(sp.schId)  from RemittanceSchedulePayment sp  WHERE sp.schId = s.id) AS COUNT, ")
+                .append("s.schJobName,s.lastRunDate, s.schType, s.glcode, s.status, s.remarks,s.id from RemittanceSchedulerLog as s ");
         if (schedulerType.equals("Auto")) {
-            dynQuery.append(" where  s.schType=?");
+            dynQuery.append(" where s.schType=?");
             paramList.add(FinancialConstants.REMITTANCE_SCHEDULER_SCHEDULAR_TYPE_AUTO);
         }
         else if (schedulerType.equals("Manual")) {
@@ -162,7 +159,7 @@ public class AutoRemittanceSchedulerReportAction extends SearchFormAction {
         }
 
         dynQuery.append(" order by lastRunDate desc");
-        return queryBeginning + dynQuery.toString();
+        return queryBeginning.toString() + dynQuery.toString();
     }
 
     public String searchList() {

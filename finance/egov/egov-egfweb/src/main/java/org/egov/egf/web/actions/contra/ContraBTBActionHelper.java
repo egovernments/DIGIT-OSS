@@ -115,7 +115,7 @@ public class ContraBTBActionHelper {
 
 	@Transactional
 	public CVoucherHeader create(ContraBean contraBean, ContraJournalVoucher contraVoucher,
-			CVoucherHeader voucherHeader) throws Exception {
+			CVoucherHeader voucherHeader) {
 		try {
 			voucherHeader2 = null;
 			final List<InstrumentHeader> instrumentList = instrumentService
@@ -149,9 +149,11 @@ public class ContraBTBActionHelper {
 		} catch (final ValidationException e) {
 			throw new ValidationException(Arrays
 					.asList(new ValidationError(e.getErrors().get(0).getMessage(), e.getErrors().get(0).getMessage())));
-		} catch (final Exception e) {
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		return voucherHeader;
 	}
 
@@ -223,9 +225,11 @@ public class ContraBTBActionHelper {
 		} catch (final ValidationException e) {
 			throw new ValidationException(Arrays
 					.asList(new ValidationError(e.getErrors().get(0).getMessage(), e.getErrors().get(0).getMessage())));
-		} catch (final Exception e) {
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		return iList;
 	}
 
@@ -380,9 +384,11 @@ public class ContraBTBActionHelper {
 		} catch (final ValidationException e) {
 			throw new ValidationException(Arrays
 					.asList(new ValidationError(e.getErrors().get(0).getMessage(), e.getErrors().get(0).getMessage())));
-		} catch (final Exception e) {
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Posted to Ledger " + voucher.getId());
 		return voucher;
@@ -458,9 +464,11 @@ public class ContraBTBActionHelper {
 		} catch (final ValidationException e) {
 			throw new ValidationException(Arrays
 					.asList(new ValidationError(e.getErrors().get(0).getMessage(), e.getErrors().get(0).getMessage())));
-		} catch (final Exception e) {
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Posted to Ledger " + voucher.getId());
 		return voucher;
@@ -479,9 +487,11 @@ public class ContraBTBActionHelper {
 		} catch (final ValidationException e) {
 			throw new ValidationException(Arrays
 					.asList(new ValidationError(e.getErrors().get(0).getMessage(), e.getErrors().get(0).getMessage())));
-		} catch (final Exception e) {
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 	}
 
 	@Transactional
@@ -505,9 +515,11 @@ public class ContraBTBActionHelper {
 		} catch (final ValidationException e) {
 			throw new ValidationException(Arrays
 					.asList(new ValidationError(e.getErrors().get(0).getMessage(), e.getErrors().get(0).getMessage())));
-		} catch (final Exception e) {
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		return cjv;
 	}
 

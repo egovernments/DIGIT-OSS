@@ -50,39 +50,60 @@ package org.egov.model.instrument;
 import org.egov.commons.CChartOfAccounts;
 import org.egov.infstr.models.BaseModel;
 
+@SuppressWarnings("deprecation")
 public class InstrumentAccountCodes extends BaseModel {
-    /**
-     *
-     */
-    private static final long serialVersionUID = -9045887826712853952L;
-    private Long id;
-    private InstrumentType instrumentType;
-    private CChartOfAccounts accountCode;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -9045887826712853952L;
+	private InstrumentType instrumentType;
+	private CChartOfAccounts accountCode;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	public InstrumentType getInstrumentType() {
+		return instrumentType;
+	}
 
-    @Override
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	public void setInstrumentType(final InstrumentType instrumentType) {
+		this.instrumentType = instrumentType;
+	}
 
-    public InstrumentType getInstrumentType() {
-        return instrumentType;
-    }
+	public CChartOfAccounts getAccountCode() {
+		return accountCode;
+	}
 
-    public void setInstrumentType(final InstrumentType instrumentType) {
-        this.instrumentType = instrumentType;
-    }
+	public void setAccountCode(final CChartOfAccounts accountCode) {
+		this.accountCode = accountCode;
+	}
 
-    public CChartOfAccounts getAccountCode() {
-        return accountCode;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((accountCode == null) ? 0 : accountCode.hashCode());
+		result = prime * result + ((instrumentType == null) ? 0 : instrumentType.hashCode());
+		return result;
+	}
 
-    public void setAccountCode(final CChartOfAccounts accountCode) {
-        this.accountCode = accountCode;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InstrumentAccountCodes other = (InstrumentAccountCodes) obj;
+		if (accountCode == null) {
+			if (other.accountCode != null)
+				return false;
+		} else if (!accountCode.equals(other.accountCode))
+			return false;
+		if (instrumentType == null) {
+			if (other.instrumentType != null)
+				return false;
+		} else if (!instrumentType.equals(other.instrumentType))
+			return false;
+		return true;
+	}
 
 }

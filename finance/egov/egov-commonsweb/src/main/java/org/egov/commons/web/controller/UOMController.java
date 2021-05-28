@@ -48,36 +48,40 @@
 
 package org.egov.commons.web.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.egov.common.entity.UOM;
 import org.egov.commons.service.UOMCategoryService;
 import org.egov.commons.service.UOMService;
 import org.egov.commons.web.adaptor.UOMJsonAdaptor;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/uom")
 public class UOMController {
-    private final static String UOM_NEW = "uom-new";
-    private final static String UOM_RESULT = "uom-result";
-    private final static String UOM_EDIT = "uom-edit";
-    private final static String UOM_VIEW = "uom-view";
-    private final static String UOM_SEARCH = "uom-search";
+    private static final String UOM_NEW = "uom-new";
+    private static final String UOM_RESULT = "uom-result";
+    private static final String UOM_EDIT = "uom-edit";
+    private static final String UOM_VIEW = "uom-view";
+    private static final String UOM_SEARCH = "uom-search";
     @Autowired
     private UOMService uomService;
     @Autowired
@@ -89,7 +93,7 @@ public class UOMController {
         model.addAttribute("categories", uomCategoryService.findAll());
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @GetMapping(value = "/new")
     public String newForm(final Model model) {
         prepareNewForm(model);
 
@@ -98,11 +102,10 @@ public class UOMController {
         return UOM_NEW;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PostMapping(value = "/create")
     public String create(@Valid @ModelAttribute final UOM uom, final BindingResult errors, final Model model,
             final RedirectAttributes redirectAttrs) {
         if (errors.hasErrors()) {
-
             prepareNewForm(model);
             return UOM_NEW;
         }
@@ -111,7 +114,7 @@ public class UOMController {
         return "redirect:/uom/result/" + uom.getId();
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/edit/{id}")
     public String edit(@PathVariable("id") final Long id, final Model model) {
         final UOM uom = uomService.findOne(id);
         prepareNewForm(model);
@@ -120,7 +123,7 @@ public class UOMController {
         return UOM_EDIT;
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @PostMapping(value = "/update")
     public String update(@Valid @ModelAttribute final UOM uom, final BindingResult errors, final Model model,
             final RedirectAttributes redirectAttrs) {
         if (errors.hasErrors()) {
@@ -132,7 +135,7 @@ public class UOMController {
         return "redirect:/uom/result/" + uom.getId();
     }
 
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/view/{id}")
     public String view(@PathVariable("id") final Long id, final Model model) {
         final UOM uom = uomService.findOne(id);
         prepareNewForm(model);
@@ -140,15 +143,15 @@ public class UOMController {
         return UOM_VIEW;
     }
 
-    @RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/result/{id}")
     public String result(@PathVariable("id") final Long id, final Model model) {
         final UOM uom = uomService.findOne(id);
         model.addAttribute("UOM", uom);
         return UOM_RESULT;
     }
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
-    public String search(@PathVariable("mode") final String mode, final Model model) {
+    @GetMapping(value = "/search/{mode}")
+    public String search(@PathVariable("mode") @SafeHtml final String mode, final Model model) {
         final UOM uom = new UOM();
         model.addAttribute("unitOfMeasurement", uomService.findAll());
         prepareNewForm(model);
@@ -157,19 +160,17 @@ public class UOMController {
 
     }
 
-    @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-            @ModelAttribute final UOM uom) {
+    @PostMapping(value = "/ajaxsearch/{mode}", produces = MediaType.TEXT_PLAIN_VALUE)
+    public @ResponseBody String ajaxsearch(@PathVariable("mode") @SafeHtml final String mode, final Model model,
+           @Valid @ModelAttribute final UOM uom) {
         final List<UOM> searchResultList = uomService.search(uom);
-        final String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
+        return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
                 .toString();
-        return result;
     }
 
     public Object toSearchResultJson(final Object object) {
         final GsonBuilder gsonBuilder = new GsonBuilder();
         final Gson gson = gsonBuilder.registerTypeAdapter(UOM.class, new UOMJsonAdaptor()).create();
-        final String json = gson.toJson(object);
-        return json;
+        return gson.toJson(object);
     }
 }

@@ -49,6 +49,7 @@
 package org.egov.infra.config.session;
 
 import org.egov.infra.config.security.authentication.listener.UserSessionDestroyListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.session.FindByIndexNameSessionRepository;
@@ -62,14 +63,18 @@ import static org.egov.infra.security.utils.SecurityConstants.SESSION_COOKIE_NAM
 import static org.egov.infra.security.utils.SecurityConstants.SESSION_COOKIE_PATH;
 
 @Configuration
-@EnableRedisHttpSession(/*maxInactiveIntervalInSeconds=30*/)
+@EnableRedisHttpSession
 public class RedisHttpSessionConfiguration {
 
+	@Value("${secure.cookie}")
+    private boolean secureCookie;
+	
     @Bean
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
         serializer.setCookieName(SESSION_COOKIE_NAME);
         serializer.setCookiePath(SESSION_COOKIE_PATH);
+        serializer.setUseSecureCookie(secureCookie);
         return serializer;
     }
 

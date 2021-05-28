@@ -70,7 +70,7 @@
 	<constant name="struts.custom.i18n.resources" value="messages/common-errors,messages/common-labels,custom" />
 	<constant name="struts.locale" value="en_IN" />
 	<constant name="struts.multipart.maxSize" value="26214400" />
-	<constant name="struts.multipart.parser" value="jakarta" />
+	<constant name="struts.multipart.parser" value="springMultipartParser" />
 	<constant name="struts.convention.action.mapAllMatches" value="true" />
 	<constant name="struts.convention.default.parent.package" value="egov" />
 	<!-- Comma separated list of regular expressions of jar URLs to be scanned -->
@@ -84,6 +84,8 @@
 	<!-- This makes the URL for an action like HelloWorldAction.java be /helloWorld.action 
 		rather than /hello-world By default Struts2 uses the SEOActionNameBuilder. -->
 	<bean type="org.apache.struts2.convention.ActionNameBuilder" name="defaultActionNameBuilder" class="org.apache.struts2.convention.DefaultActionNameBuilder" />
+	<bean type="org.apache.struts2.dispatcher.multipart.MultiPartRequest" name="springMultipartParser"
+		  class="org.egov.infra.web.struts.parser.SpringMultipartParser" scope="prototype"/>
 	<constant name="struts.convention.actionNameBuilder" value="defaultActionNameBuilder" />
 	<constant name="struts.convention.action.name.lowercase" value="true"/>
 	<!-- <constant name="struts.convention.action.alwaysMapExecute" value="false"/> -->
@@ -92,19 +94,13 @@
 		<interceptors>
 			<interceptor name="egov-validator" class="org.egov.infra.web.struts.interceptors.ValidationInterceptor" />
 			<interceptor name="egov-trim" class="org.egov.infra.web.struts.interceptors.TrimInterceptor" />
-			<interceptor name="egov-exception" class="org.egov.infra.web.struts.interceptors.ExceptionInterceptor" />
 			<interceptor name="egov-cahecontrol" class="org.egov.infra.web.struts.interceptors.CacheControlInterceptor"/>
-			<!-- <interceptor name="i18n" class="org.egov.infra.web.struts.interceptors.CustomI18nInterceptor"/> -->
 			<interceptor-stack name="egov-interceptors">
 				<!-- 
 				Commenting out for now since this interceptor creating problem
 				<interceptor-ref name="token">
 					<param name="includeMethods">saveOrupdate,save,create,approve,forward,moveEstimate,createFile,saveFile,saveAsDraft,createFileNotification</param>
 				</interceptor-ref> -->
-				<interceptor-ref name="egov-exception">
-					<param name="logEnabled">true</param>
-					<param name="logLevel">ERROR</param>
-				</interceptor-ref>
 				<interceptor-ref name="alias" />
 				<interceptor-ref name="params"/>
 				<interceptor-ref name="servletConfig" />

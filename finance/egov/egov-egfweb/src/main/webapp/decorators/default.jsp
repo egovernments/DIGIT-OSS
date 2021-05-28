@@ -55,7 +55,9 @@
 	<c:if test="${analyticsEnabled}">
 		<spring:eval expression="@environment.getProperty('analytics.config')" scope="application"/>
 	</c:if>
- <%@ include file="/includes/meta.jsp" %>    
+ 		<%@ include file="/includes/meta.jsp" %>  
+ 		<meta name="_csrf" content="${_csrf.token}"/>
+    	<meta name="_csrf_header" content="${_csrf.headerName}"/>  
 		<title>eGov Financials <decorator:title/></title>
 		<link rel="icon" href="<cdn:url value='/resources/global/images/favicon.png' context='/services/egi'/>" sizes="32x32">
 		<link href="<cdn:url value='/resources/css/budget.css?rnd=${app_release_no}'/>" rel="stylesheet" type="text/css" />
@@ -86,6 +88,11 @@
 		<script src="<cdn:url value='/resources/global/js/bootstrap/bootbox.min.js' context='/services/egi'/>"></script>
 		<link rel="stylesheet" href="<cdn:url value='/resources/global/css/bootstrap/bootstrap-datepicker.css' context='/services/egi'/>"/>
 		<script src="<cdn:url value='/resources/global/js/bootstrap/bootstrap-datepicker.js' context='/services/egi'/>" ></script>
+		<script src="<cdn:url value='/resources/global/js/egov/csrf.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
+		<script>
+	        const tokenVal = '${_csrf.token}';
+	        const tokenName = '${_csrf.parameterName}';
+	    </script>
 		<decorator:head/>
 	</head>
 	

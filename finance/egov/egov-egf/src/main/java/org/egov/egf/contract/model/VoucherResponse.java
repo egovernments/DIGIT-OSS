@@ -62,17 +62,15 @@ public class VoucherResponse {
     private ResponseInfo responseInfo;
     private PageContract page;
 
-   
-
     public List<Voucher> getVouchers() {
-		return vouchers;
-	}
+        return vouchers;
+    }
 
-	public void setVouchers(List<Voucher> vouchers) {
-		this.vouchers = vouchers;
-	}
+    public void setVouchers(final List<Voucher> vouchers) {
+        this.vouchers = vouchers;
+    }
 
-	public ResponseInfo getResponseInfo() {
+    public ResponseInfo getResponseInfo() {
         return responseInfo;
     }
 

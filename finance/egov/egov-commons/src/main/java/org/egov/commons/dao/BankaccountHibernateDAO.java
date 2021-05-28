@@ -145,7 +145,7 @@ public class BankaccountHibernateDAO {
         return bankAccount;
     }
 
-    public List<Bankaccount> getBankAccountByBankBranchForReceiptsPayments(final Integer bankBranchId, Integer fundId) {
+    public List<Bankaccount> getBankAccountByBankBranchForReceiptsPayments(final Integer bankBranchId, Long fundId) {
         final StringBuilder query = new StringBuilder(
                 "from Bankaccount bankacc where bankacc.isactive=true and bankacc.type in ('RECEIPTS_PAYMENTS','RECEIPTS') and bankacc.bankbranch.id=:bankBranchId");
         if (fundId != null) {
@@ -154,7 +154,7 @@ public class BankaccountHibernateDAO {
         final Query qry = getCurrentSession().createQuery(query.toString());
         qry.setInteger("bankBranchId", bankBranchId);
         if (fundId != null) {
-            qry.setInteger("fundId", fundId);
+            qry.setLong("fundId", fundId);
         }
         List<Bankaccount> bankAccount = null;
         if (qry.list().size() != 0) {

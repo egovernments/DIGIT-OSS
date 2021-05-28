@@ -49,6 +49,7 @@ package com.exilant.exility.common;
 
 import org.apache.log4j.Logger;
 import org.egov.infstr.utils.EGovConfig;
+import org.springframework.jms.support.converter.MessageConversionException;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -166,7 +167,7 @@ public class Messages {
             }
             messageToReturn.text = sbf.toString();
 
-        } catch (final Exception e) {
+        } catch (final MessageConversionException e) {
             LOGGER.error("Error in getting Message" + e.getMessage());
             messageToReturn.sevirity = Messages.UNDEFINED;
             messageToReturn.text = code + " is not a valid message code"; // what

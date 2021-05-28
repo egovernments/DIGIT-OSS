@@ -129,6 +129,7 @@ background: #DEDEDE;
 	<s:form name="generalLedgerForm" id="generalLedgerForm"
 		action="generalLedgerReport" theme="css_xhtml" validate="true">
 		<s:push value="generalLedgerReport">
+		<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="formmainbox">
 				<div class="subheadnew">
 					<s:text name="generalLedger.search.title" />

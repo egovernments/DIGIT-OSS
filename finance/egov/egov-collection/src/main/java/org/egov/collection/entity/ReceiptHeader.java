@@ -64,6 +64,8 @@ import org.egov.infra.admin.master.entity.Location;
 import org.egov.infra.persistence.entity.Auditable;
 import org.egov.infra.workflow.entity.StateAware;
 import org.egov.model.instrument.InstrumentHeader;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 public class ReceiptHeader extends StateAware implements Auditable {
     private static final long serialVersionUID = 1L;
@@ -71,19 +73,23 @@ public class ReceiptHeader extends StateAware implements Auditable {
 
     private ReceiptHeader receiptHeader;
     private Set<ReceiptHeader> receiptHeaders = new HashSet<>();
-
+    @SafeHtml
     private String referencenumber;
     private Date referencedate;
+    @SafeHtml
     private String consumerCode;
     /* The details of associated bill that billing application has sent */
+    @SafeHtml
     private String referenceDesc;
     private char receipttype;
+    @SafeHtml
     private String receiptnumber;
     private Date receiptdate;
+    @SafeHtml
     private String manualreceiptnumber;
     private Date manualreceiptdate;
     private Boolean isModifiable;
-
+    @SafeHtml
     private String service;
     private Character collectiontype;
     private Set<ReceiptDetail> receiptDetails = new LinkedHashSet<>();
@@ -93,38 +99,59 @@ public class ReceiptHeader extends StateAware implements Auditable {
     private Location location;
     private Boolean isReconciled;
     private EgwStatus status;
+    @SafeHtml
     private String reasonForCancellation;
+    @SafeHtml
+    @Length(min = 1,max=64)
     private String paidBy;
     private Boolean overrideAccountHeads;
     private Boolean partPaymentAllowed;
     private Boolean callbackForApportioning;
+    @SafeHtml
     private String collModesNotAllwd;
+    @SafeHtml
     private String displayMsg;
     private BigDecimal totalAmount;
     private BigDecimal minimumAmount;
     private BigDecimal totalAmountToBeCollected;
     private Date voucherDate;
+    @SafeHtml
     private String voucherNum;
     private OnlinePayment onlinePayment;
     private Challan challan;
+    @SafeHtml
     private String payeeName;
+    @SafeHtml
     private String payeeAddress;
+    @SafeHtml
     private String workflowUserName = "NA";
+    @SafeHtml
     private String instrumentsAsString;
+    @SafeHtml
     private String source;
+    @SafeHtml
     private String remittanceReferenceNumber;
+    @SafeHtml
     private String payeeEmail;
+    @SafeHtml
     private String consumerType;
     private Long version;
+    @SafeHtml
     private String serviceCategory;
     private BigDecimal totalcramount;
-
+    @SafeHtml
     private String curretnStatus;
+    @SafeHtml
     private String currentreceipttype;
+    @SafeHtml
     private String modOfPayment;
+    @SafeHtml
     private String createdUser;
+    @SafeHtml
     private String serviceIdText;
+    @SafeHtml
     private String g8data;
+    @SafeHtml
     private String paymentId;
     public ReceiptHeader() {
     }

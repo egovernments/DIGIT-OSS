@@ -133,7 +133,7 @@ public class JasperReportService extends AbstractReportService<JasperReport> {
             JasperPrint jasperPrint = JasperFillManager.fillReport(getTemplate(reportInput.getReportTemplate()),
                     reportInput.getReportParams(), connection);
             return new ReportOutput(exportReport(reportInput, jasperPrint), reportInput);
-        } catch (JRException | IOException e) {
+        } catch (JRException e) {
             LOGGER.error(EXCEPTION_IN_REPORT_CREATION, e);
             throw new ApplicationRuntimeException(EXCEPTION_IN_REPORT_CREATION, e);
         }
@@ -156,7 +156,7 @@ public class JasperReportService extends AbstractReportService<JasperReport> {
             JasperPrint jasperPrint = JasperFillManager.fillReport(getTemplate(reportInput.getReportTemplate()),
                     reportInput.getReportParams(), dataSource);
             return new ReportOutput(exportReport(reportInput, jasperPrint), reportInput);
-        } catch (JRException | IOException e) {
+        } catch (JRException e) {
             LOGGER.error(EXCEPTION_IN_REPORT_CREATION, e);
             throw new ApplicationRuntimeException(EXCEPTION_IN_REPORT_CREATION, e);
         }
@@ -175,7 +175,7 @@ public class JasperReportService extends AbstractReportService<JasperReport> {
             jrc.setValue(JRHibernateQueryExecuterFactory.PROPERTY_HIBERNATE_FIELD_MAPPING_DESCRIPTIONS, false);
             JasperPrint jasperPrint = JasperFillManager.getInstance(jrc).fill(getTemplate(reportInput.getReportTemplate()), reportParams);
             return new ReportOutput(exportReport(reportInput, jasperPrint), reportInput);
-        } catch (JRException | IOException e) {
+        } catch (JRException e) {
             LOGGER.error(EXCEPTION_IN_REPORT_CREATION, e);
             throw new ApplicationRuntimeException(EXCEPTION_IN_REPORT_CREATION, e);
         }
@@ -191,12 +191,12 @@ public class JasperReportService extends AbstractReportService<JasperReport> {
         }
     }
 
-    private byte[] exportReport(ReportRequest reportInput, JasperPrint jasperPrint) throws JRException, IOException {
+    private byte[] exportReport(ReportRequest reportInput, JasperPrint jasperPrint) {
         try (ByteArrayOutputStream reportOutputStream = new ByteArrayOutputStream()) {
             Exporter exporter = getExporter(reportInput, jasperPrint, reportOutputStream);
             exporter.exportReport();
             return reportOutputStream.toByteArray();
-        } catch (Exception e) {
+        } catch (JRException | IOException e) {
             LOGGER.error(EXCEPTION_IN_REPORT_CREATION, e);
             throw new ApplicationRuntimeException(EXCEPTION_IN_REPORT_CREATION, e);
         }

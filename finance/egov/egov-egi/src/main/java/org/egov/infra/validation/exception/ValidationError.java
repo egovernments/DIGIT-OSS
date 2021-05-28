@@ -56,10 +56,16 @@ public class ValidationError implements Serializable {
     private final String key;
     private final String message;
     private String[] args = null;
+    private boolean nonFieldError = false;
 
     public ValidationError(final String key, final String message) {
         this.key = key;
         this.message = message;
+    }
+
+    public ValidationError(String key, String message, boolean nonFieldError) {
+        this(key, message);
+        this.nonFieldError = nonFieldError;
     }
 
     /**
@@ -76,6 +82,11 @@ public class ValidationError implements Serializable {
         this.args = args;
     }
 
+    public ValidationError(String key, String message, boolean nonFieldError, String... args) {
+        this(key, message, args);
+        this.nonFieldError = nonFieldError;
+    }
+
     public String getKey() {
         return key;
     }
@@ -86,6 +97,14 @@ public class ValidationError implements Serializable {
 
     public String[] getArgs() {
         return args;
+    }
+
+    public boolean isNonFieldError() {
+        return nonFieldError;
+    }
+
+    public void setNonFieldError(boolean nonFieldError) {
+        this.nonFieldError = nonFieldError;
     }
 
     @Override
@@ -112,11 +131,8 @@ public class ValidationError implements Serializable {
         } else if (!key.equals(other.key))
             return false;
         if (message == null) {
-            if (other.message != null)
-                return false;
-        } else if (!message.equals(other.message))
-            return false;
-        return true;
+            return other.message == null;
+        } else return message.equals(other.message);
     }
 
     @Override

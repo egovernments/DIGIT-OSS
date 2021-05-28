@@ -99,6 +99,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.orm.hibernate4.HibernateQueryException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,6 +111,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -335,11 +337,12 @@ public class AutoReconcileHelper{
             LOGGER.error("ERROR occurred while doing upload for bank reconciliation : ",npe);
             throw new ValidationException(Arrays.asList(new ValidationError(bankStatementFormat,
                     bankStatementFormat)));
-        } catch (final Exception e) {
-            LOGGER.error("ERROR occurred while doing upload for bank reconciliation : ",e);
-            throw new ValidationException(Arrays.asList(new ValidationError(bankStatementFormat,
-                    bankStatementFormat)));
-        }
+        } /*
+           * catch (final Exception e) { LOGGER.
+           * error("ERROR occurred while doing upload for bank reconciliation : "
+           * ,e); throw new ValidationException(Arrays.asList(new
+           * ValidationError(bankStatementFormat, bankStatementFormat))); }
+           */
 
         return "upload";
     }
@@ -771,7 +774,7 @@ public class AutoReconcileHelper{
                 try {
                     numericCellValue = Double.parseDouble(strValue);
                     bigDecimalValue = BigDecimal.valueOf(numericCellValue);
-                } catch (final Exception e) {
+                } catch (final NumberFormatException e) {
                     if (LOGGER.isDebugEnabled())
                         LOGGER.debug("Found : Non numeric value in Numeric Field :" + strValue + ":");
                 }
@@ -806,7 +809,7 @@ public class AutoReconcileHelper{
         List<Instrument> instLists = null;
         try {
             instLists = this.getRecieptInstruments(accountId,fromDate,toDate);
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             LOGGER.error(String.format("ERROR occurred while fetching the Receipt Instruments for accountId : %1$s and for date range from %2$s to %3$s", accountId,fromDate,toDate));
         }
         Map<String, Instrument> instChequeMap = new HashMap<String, Instrument>();
@@ -939,7 +942,7 @@ public class AutoReconcileHelper{
                 backupdateFailureQuery.setLong("id", bean.getId());
                 backupdateFailureQuery.executeUpdate();
 
-            } catch (final Exception e) {
+            } catch (final HibernateQueryException e) {
                 backupdateFailureQuery.setLong("id", bean.getId());
                 backupdateFailureQuery.setString("e", e.getMessage());
                 backupdateFailureQuery.executeUpdate();
@@ -959,9 +962,9 @@ public class AutoReconcileHelper{
                     backupdateQuery.executeUpdate();
                 }else{
                     count -= recInsIds.size();
-                    throw new Exception("Error while doing conciliation for receipt voucher instruments");
+                    throw new ApplicationRuntimeException("Error while doing conciliation for receipt voucher instruments");
                 }
-            } catch (Exception e) {
+            } catch (HibernateException e) {
                 backupdateFailureQuery.setParameterList("id", recInsIds);
                 backupdateFailureQuery.setString("e", e.getMessage());
                 backupdateFailureQuery.executeUpdate();
@@ -1133,11 +1136,12 @@ public class AutoReconcileHelper{
                 backupdateFailureQuery.setLong("id", bean.getId());
                 backupdateFailureQuery.executeUpdate();
 
-            } catch (final Exception e) {
-                backupdateFailureQuery.setLong("id", bean.getId());
-                backupdateFailureQuery.setString("e", e.getMessage());
-                backupdateFailureQuery.executeUpdate();
-            }
+            } /*
+               * catch (final Exception e) {
+               * backupdateFailureQuery.setLong("id", bean.getId());
+               * backupdateFailureQuery.setString("e", e.getMessage());
+               * backupdateFailureQuery.executeUpdate(); }
+               */
 
         }
 
@@ -1162,15 +1166,13 @@ public class AutoReconcileHelper{
     @Action(value = "/brs/autoReconciliation-generateReport")
     @SuppressWarnings({"unchecked", "deprecation"})
     @Transactional(readOnly = true)
-    public String generateReport() {
+    public String generateReport() throws ParseException {
         // bankStatments not in BankBook
 
         try {
             bankBookBalance = eGovernCommon.getAccountBalance(dateFormatter.format(toDate), accountId.toString()).setScale(2,
                     BigDecimal.ROUND_HALF_UP);
         } catch (final HibernateException e) {
-            throw new ApplicationRuntimeException(e.getMessage());
-        } catch (final TaskFailedException e) {
             throw new ApplicationRuntimeException(e.getMessage());
         }
         bankAccount = (Bankaccount) persistenceService.find("from Bankaccount ba where id=?", Long.valueOf(accountId));

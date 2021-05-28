@@ -53,7 +53,7 @@
 		<td class="bluebox" width="20%"><strong><s:text
 					name="subscheme.form.scheme" /><span class="mandatory1"> *</span></strong></td>
 		<td class="bluebox"><s:select list="dropdownData.schemeList"
-				listKey="id" listValue="name" id="scheme" name="scheme"
+				listKey="id" listValue="name" id="scheme" name="schemeId"
 				headerKey="0" headerValue="%{getText('lbl.choose.options')}" value="%{scheme.id}"></s:select>
 		</td>
 		<td class="bluebox" width="20%"><strong><s:text

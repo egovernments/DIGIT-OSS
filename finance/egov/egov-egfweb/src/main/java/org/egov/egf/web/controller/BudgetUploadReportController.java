@@ -50,10 +50,11 @@ package org.egov.egf.web.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.egov.commons.dao.FunctionDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.egf.web.adaptor.BudgetUploadReportJsonAdaptor;
-import org.egov.infra.admin.master.service.DepartmentService;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.budget.Budget;
 import org.egov.model.budget.BudgetUploadReport;
@@ -65,7 +66,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,10 +78,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@SuppressWarnings("deprecation")
 @Controller
 @RequestMapping("/budgetuploadreport")
+@Validated
 public class BudgetUploadReportController {
-	private final static String BUDGETUPLOADREPORT_SEARCH = "budgetuploadreport-search";
+	private static final String BUDGETUPLOADREPORT_SEARCH = "budgetuploadreport-search";
 	@Autowired
 	private BudgetUploadReportService budgetUploadReportService;
 	@Autowired
@@ -85,8 +91,6 @@ public class BudgetUploadReportController {
 	private BudgetService budgetService;
 	@Autowired
 	private FundHibernateDAO fundDAO;
-	@Autowired
-	private DepartmentService departmentService;
 	@Autowired
 	private FunctionDAO functionDAO;
 	@Autowired
@@ -111,15 +115,14 @@ public class BudgetUploadReportController {
 
 	}
 
-	@RequestMapping(value = "/ajaxsearch", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-	public @ResponseBody String ajaxsearch(Model model, @ModelAttribute final BudgetUploadReport budgetUploadReport) {
+	@PostMapping(value = "/ajaxsearch", produces = MediaType.TEXT_PLAIN_VALUE)
+	public @ResponseBody String ajaxsearch(Model model, @Valid @ModelAttribute final BudgetUploadReport budgetUploadReport) {
 		List<BudgetUploadReport> searchResultList = budgetUploadReportService.search(budgetUploadReport);
-		String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
+		return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
 				.toString();
-		return result;
 	}
 
-	@RequestMapping(value = "/ajax/getReferenceBudget", method = RequestMethod.GET)
+	@GetMapping(value = "/ajax/getReferenceBudget")
 	public @ResponseBody String getReferenceBudget(@RequestParam("budgetId") Long budgetId) {
 		if (budgetId != null) {
 			Budget refBudget = budgetService.getReferenceBudgetFor(budgetService.findById(budgetId, false));
@@ -133,7 +136,6 @@ public class BudgetUploadReportController {
 		final GsonBuilder gsonBuilder = new GsonBuilder();
 		final Gson gson = gsonBuilder.registerTypeAdapter(BudgetUploadReport.class, new BudgetUploadReportJsonAdaptor())
 				.create();
-		final String json = gson.toJson(object);
-		return json;
+		return gson.toJson(object);
 	}
 }

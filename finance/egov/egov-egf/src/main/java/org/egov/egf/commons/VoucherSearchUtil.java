@@ -49,8 +49,11 @@ package org.egov.egf.commons;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -60,7 +63,6 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infstr.services.PersistenceService;
-import org.egov.services.closeperiod.ClosedPeriodService;
 import org.egov.utils.Constants;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.Query;
@@ -82,17 +84,20 @@ public class VoucherSearchUtil {
 	public List<CVoucherHeader> search(final CVoucherHeader voucherHeader, final Date fromDate, final Date toDate,
 			final String mode) throws ApplicationException, ParseException {
 
-		String sql = "", editModeQuery1, editModeQuery2;
+		final StringBuilder sql = new StringBuilder();
+		final Map<String, Object> sqlParams = new HashMap<>();
+		final Map<String, Object> jvmModifyParams = new HashMap<>();
+		String editModeQuery1, editModeQuery2;
 		List<CVoucherHeader> voucherList = new ArrayList<CVoucherHeader>();
-		sql = sql + voucherFilterQuery(voucherHeader, fromDate, toDate, mode);
+		sql.append(voucherFilterQuery(voucherHeader, fromDate, toDate, mode, sqlParams));
 		String statusExclude = excludeVoucherStatus();
 
 		final boolean modeIsNotBlank = null != mode && !StringUtils.isBlank(mode);
 		if (modeIsNotBlank) {
 			if ("edit".equalsIgnoreCase(mode))
-				sql = sql + " and (vh.isConfirmed is null or vh.isConfirmed != 1)";
+				sql.append(" and (vh.isConfirmed is null or vh.isConfirmed != 1)");
 			else if ("reverse".equalsIgnoreCase(mode))
-				sql = sql + " and vh.isConfirmed = 1";
+				sql.append(" and vh.isConfirmed = 1");
 			statusExclude = statusExclude + "," + FinancialConstants.REVERSEDVOUCHERSTATUS.toString() + ","
 					+ FinancialConstants.REVERSALVOUCHERSTATUS;
 		}
@@ -100,16 +105,14 @@ public class VoucherSearchUtil {
 		if (modeIsNotBlank && "edit".equalsIgnoreCase(mode)
 				&& voucherHeader.getType().equalsIgnoreCase(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL)) {
 			/**
-			 * Logic is as explained below 1.Get all vouchers created from JV
-			 * screen (stateid null) and which does not have payments 2.Get all
-			 * Vouchers which has payments (Any state 0,1,2,4,5) 3. Add 1 and 2
-			 * ==>A 4.Get all vouchers which has active payments 5.Get all
-			 * vouchers which has active remittance payments 6. Add 4 and 5 ==>B
-			 * 7. Remove All Bs from A
+			 * Logic is as explained below 1.Get all vouchers created from JV screen
+			 * (stateid null) and which does not have payments 2.Get all Vouchers which has
+			 * payments (Any state 0,1,2,4,5) 3. Add 1 and 2 ==>A 4.Get all vouchers which
+			 * has active payments 5.Get all vouchers which has active remittance payments
+			 * 6. Add 4 and 5 ==>B 7. Remove All Bs from A
 			 */
-			final String jvModifyCondition = " and vh.status in (" + FinancialConstants.CREATEDVOUCHERSTATUS
-					+ ") and vh.moduleId is null ";
-
+			final String jvModifyCondition = " and vh.status in (:vhStatus) and vh.moduleId is null ";
+			jvmModifyParams.put("vhStatus", FinancialConstants.CREATEDVOUCHERSTATUS);
 			// editModeQuery1 :Get all vouchers created from JV screen and
 			// payments are not done
 			editModeQuery1 = " from CVoucherHeader vh where vh not in ( select billVoucherHeader from Miscbilldetail) "
@@ -117,10 +120,15 @@ public class VoucherSearchUtil {
 
 			// editModeQuery2 :-check for voucher for which payments are in
 			// created (any state)
-			editModeQuery2 = " select distinct(vh) from  Miscbilldetail misc left join misc.billVoucherHeader vh where misc.billVoucherHeader is not null"
-					+ jvModifyCondition + sql;
+			editModeQuery2 = new StringBuilder(
+					" select distinct(vh) from  Miscbilldetail misc left join misc.billVoucherHeader vh")
+							.append(" where misc.billVoucherHeader is not null").append(jvModifyCondition).append(sql)
+							.toString();
 
-			voucherList.addAll(persistenceService.findAllBy(editModeQuery1 + sql));
+			final Query query = persistenceService.getSession().createQuery(editModeQuery1 + sql);
+			sqlParams.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+			jvmModifyParams.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+			voucherList.addAll(query.list());
 			if (LOGGER.isDebugEnabled()) {
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug("---NO Associated Payment");
@@ -130,7 +138,10 @@ public class VoucherSearchUtil {
 			}
 			// Assumption:editModeQuery1 and editModeQuery2 will always return
 			// different list (not duplicate)
-			voucherList.addAll(persistenceService.findAllBy(editModeQuery2));
+			final Query qry = persistenceService.getSession().createQuery(editModeQuery2);
+			sqlParams.entrySet().forEach(entry -> qry.setParameter(entry.getKey(), entry.getValue()));
+			jvmModifyParams.entrySet().forEach(entry -> qry.setParameter(entry.getKey(), entry.getValue()));
+			voucherList.addAll(qry.list());
 			if (LOGGER.isDebugEnabled()) {
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug("---Associated Payment");
@@ -141,19 +152,33 @@ public class VoucherSearchUtil {
 
 			// editModeQuery3 :-check for voucher for for which payments are
 			// active 0,5 this will be removed from above two list
-			final String editModeQuery3 = " select misc.billVoucherHeader.id from CVoucherHeader ph, Miscbilldetail misc,CVoucherHeader vh  where misc.payVoucherHeader=ph "
-					+ "and   misc.billVoucherHeader is not null and misc.billVoucherHeader=vh " + "and ph.status  in ("
-					+ FinancialConstants.CREATEDVOUCHERSTATUS + "," + FinancialConstants.PREAPPROVEDVOUCHERSTATUS + ") "
-					+ jvModifyCondition + sql;
-			final List<Long> vouchersHavingActivePayments = persistenceService.findAllBy(editModeQuery3);
+			final StringBuilder editModeQuery3 = new StringBuilder(
+					" select misc.billVoucherHeader.id from CVoucherHeader ph, Miscbilldetail misc,CVoucherHeader vh")
+							.append("  where misc.payVoucherHeader=ph and misc.billVoucherHeader is not null")
+							.append(" and misc.billVoucherHeader=vh and ph.status  in (:phStatus) ")
+							.append(jvModifyCondition).append(sql);
+
+			final Query queryThree = persistenceService.getSession().createQuery(editModeQuery3.toString());
+			queryThree.setParameter("phStatus", Arrays.asList(FinancialConstants.CREATEDVOUCHERSTATUS,
+					FinancialConstants.PREAPPROVEDVOUCHERSTATUS));
+			sqlParams.entrySet().forEach(entry -> queryThree.setParameter(entry.getKey(), entry.getValue()));
+			jvmModifyParams.entrySet().forEach(entry -> queryThree.setParameter(entry.getKey(), entry.getValue()));
+			final List<Long> vouchersHavingActivePayments = queryThree.list();
 
 			final List<CVoucherHeader> vchList = voucherList;
-			final String uncancelledRemittances = " SELECT distinct(vh.id) FROM EgRemittanceDetail r, EgRemittanceGldtl rgd, Generalledgerdetail gld, CGeneralLedger gl, EgRemittance rd,"
-					+ " CVoucherHeader vh ,Vouchermis billmis, CVoucherHeader remittedvh  WHERE r.egRemittanceGldtl=rgd AND rgd.generalledgerdetail=gld"
-					+ " AND gld.generalledger=gl AND r.egRemittance=rd AND rd.voucherheader=remittedvh AND gl.voucherHeaderId =vh"
-					+ " AND remittedvh =billmis.voucherheaderid and remittedvh.status!="
-					+ FinancialConstants.CANCELLEDVOUCHERSTATUS + " ";
-			final List<Long> remittanceBillVhIdList = persistenceService.findAllBy(uncancelledRemittances + sql);
+			final StringBuilder uncancelledRemittances = new StringBuilder(
+					" SELECT distinct(vh.id) FROM EgRemittanceDetail r, EgRemittanceGldtl rgd, Generalledgerdetail gld,")
+							.append(" CGeneralLedger gl, EgRemittance rd,")
+							.append(" CVoucherHeader vh ,Vouchermis billmis, CVoucherHeader remittedvh ")
+							.append(" WHERE r.egRemittanceGldtl=rgd AND rgd.generalledgerdetail=gld")
+							.append(" AND gld.generalledger=gl AND r.egRemittance=rd AND rd.voucherheader=remittedvh")
+							.append(" AND gl.voucherHeaderId =vh")
+							.append(" AND remittedvh =billmis.voucherheaderid and remittedvh.status!=:remittedvhStatus");
+			final Query ucrQuery = persistenceService.getSession()
+					.createQuery(uncancelledRemittances.append(sql).toString());
+			ucrQuery.setParameter("remittedvhStatus", FinancialConstants.CANCELLEDVOUCHERSTATUS);
+			sqlParams.entrySet().forEach(entry -> ucrQuery.setParameter(entry.getKey(), entry.getValue()));
+			final List<Long> remittanceBillVhIdList = ucrQuery.list();
 			if (LOGGER.isDebugEnabled()) {
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug("---Active Bill  Remittance Payments");
@@ -172,9 +197,14 @@ public class VoucherSearchUtil {
 					voucherList.remove(vh);
 			}
 			return voucherList;
-		} else
-			voucherList = persistenceService.findAllBy(" from CVoucherHeader vh where vh.status not in ("
-					+ statusExclude + ") " + sql + " order by vh.voucherNumber ");
+		} else {
+			final Query query = persistenceService.getSession()
+					.createQuery(new StringBuilder(" from CVoucherHeader vh where vh.status not in (:statusExclude)")
+							.append(sql).append(" order by vh.voucherNumber ").toString());
+			query.setParameter("statusExclude", statusExclude);
+			sqlParams.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+			voucherList = query.list();
+		}
 		return voucherList;
 	}
 
@@ -192,49 +222,79 @@ public class VoucherSearchUtil {
 	public List<CVoucherHeader> searchNonBillVouchers(final CVoucherHeader voucherHeader, final Date fromDate,
 			final Date toDate, final String mode) {
 
-		String sql = "";
+		final StringBuilder sql = new StringBuilder();
+		final Map<String, Object> params = new HashMap<>();
 		List<CVoucherHeader> voucherList = new ArrayList<CVoucherHeader>();
-		if (!voucherHeader.getType().equals("-1"))
-			sql = sql + " and vh.type='" + voucherHeader.getType() + "'";
-
-		if (voucherHeader.getName() != null && !voucherHeader.getName().equalsIgnoreCase("-1"))
-			sql = sql + " and vh.name='" + voucherHeader.getName() + "'";
-		else
-			sql = sql + " and vh.name in ('" + FinancialConstants.JOURNALVOUCHER_NAME_CONTRACTORJOURNAL + "','"
-					+ FinancialConstants.JOURNALVOUCHER_NAME_SUPPLIERJOURNAL + "','"
-					+ FinancialConstants.JOURNALVOUCHER_NAME_SALARYJOURNAL + "')";
-		if (voucherHeader.getVoucherNumber() != null && !voucherHeader.getVoucherNumber().equals(""))
-			sql = sql + " and vh.voucherNumber like '%" + voucherHeader.getVoucherNumber() + "%'";
-		if (fromDate != null)
-			sql = sql + " and vh.voucherDate>='" + Constants.DDMMYYYYFORMAT1.format(fromDate) + "'";
-		if (toDate != null)
-			sql = sql + " and vh.voucherDate<='" + Constants.DDMMYYYYFORMAT1.format(toDate) + "'";
-		if (voucherHeader.getFundId() != null)
-			sql = sql + " and vh.fundId=" + voucherHeader.getFundId().getId();
-		if (voucherHeader.getVouchermis().getFundsource() != null)
-			sql = sql + " and vh.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId();
-		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
-			sql = sql + " and vh.vouchermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentcode();
-		if (voucherHeader.getVouchermis().getSchemeid() != null)
-			sql = sql + " and vh.vouchermis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId();
-		if (voucherHeader.getVouchermis().getSubschemeid() != null)
-			sql = sql + " and vh.vouchermis.subschemeid=" + voucherHeader.getVouchermis().getSubschemeid().getId();
-		if (voucherHeader.getVouchermis().getFunctionary() != null)
-			sql = sql + " and vh.vouchermis.functionary=" + voucherHeader.getVouchermis().getFunctionary().getId();
-		if (voucherHeader.getVouchermis().getDivisionid() != null)
-			sql = sql + " and vh.vouchermis.divisionid=" + voucherHeader.getVouchermis().getDivisionid().getId();
-		final String sql1 = sql
-				+ " and  (vh.id  in (select voucherHeader.id from EgBillregistermis) and vh.id not in (select billVoucherHeader.id from Miscbilldetail where billVoucherHeader is not null and  payVoucherHeader  in (select id from CVoucherHeader where status not in (4,1) and type='Payment')) )";
+		if (!voucherHeader.getType().equals("-1")) {
+			sql.append(" and vh.type=:vhType");
+			params.put("vhType", voucherHeader.getType());
+		}
+		if (voucherHeader.getName() != null && !voucherHeader.getName().equalsIgnoreCase("-1")) {
+			sql.append(" and vh.name=:vhName");
+			params.put("vhName", voucherHeader.getName());
+		} else {
+			sql.append(" and vh.name in (:vhName)");
+			params.put("vhName",
+					Arrays.asList(FinancialConstants.JOURNALVOUCHER_NAME_CONTRACTORJOURNAL,
+							FinancialConstants.JOURNALVOUCHER_NAME_SUPPLIERJOURNAL,
+							FinancialConstants.JOURNALVOUCHER_NAME_SALARYJOURNAL));
+		}
+		if (voucherHeader.getVoucherNumber() != null && !voucherHeader.getVoucherNumber().equals("")) {
+			sql.append(" and vh.voucherNumber like :voucherNumber");
+			params.put("voucherNumber", "%" + voucherHeader.getVoucherNumber() + "%");
+		}
+		if (fromDate != null) {
+			sql.append(" and vh.voucherDate>=:voucherFromDate");
+			params.put("voucherFromDate", Constants.DDMMYYYYFORMAT1.format(fromDate));
+		}
+		if (toDate != null) {
+			sql.append(" and vh.voucherDate<=:voucherToDate");
+			params.put("voucherToDate", Constants.DDMMYYYYFORMAT1.format(toDate));
+		}
+		if (voucherHeader.getFundId() != null) {
+			sql.append(" and vh.fundId=:fundId");
+			params.put("fundId", voucherHeader.getFundId().getId());
+		}
+		if (voucherHeader.getVouchermis().getFundsource() != null) {
+			sql.append(" and vh.fundsourceId=:fundsourceId");
+			params.put("fundsourceId", voucherHeader.getVouchermis().getFundsource().getId());
+		}
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null) {
+			sql.append(" and vh.vouchermis.departmentid=:departmentid");
+			params.put("departmentid", voucherHeader.getVouchermis().getDepartmentcode());
+		}
+		if (voucherHeader.getVouchermis().getSchemeid() != null) {
+			sql.append(" and vh.vouchermis.schemeid=:schemeid");
+			params.put("schemeid", voucherHeader.getVouchermis().getSchemeid().getId());
+		}
+		if (voucherHeader.getVouchermis().getSubschemeid() != null) {
+			sql.append(" and vh.vouchermis.subschemeid=:subschemeid");
+			params.put("subschemeid", voucherHeader.getVouchermis().getSubschemeid().getId());
+		}
+		if (voucherHeader.getVouchermis().getFunctionary() != null) {
+			sql.append(" and vh.vouchermis.functionary=:functionary");
+			params.put("functionary", voucherHeader.getVouchermis().getFunctionary().getId());
+		}
+		if (voucherHeader.getVouchermis().getDivisionid() != null) {
+			sql.append(" and vh.vouchermis.divisionid=:divisionid");
+			params.put("divisionid", voucherHeader.getVouchermis().getDivisionid().getId());
+		}
+		final String sql1 = sql.append(" and  (vh.id  in (select voucherHeader.id from EgBillregistermis)")
+				.append(" and vh.id not in (select billVoucherHeader.id from Miscbilldetail")
+				.append(" where billVoucherHeader is not null and  payVoucherHeader in")
+				.append(" (select id from CVoucherHeader where status not in (4,1) and type='Payment')) )").toString();
 		final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("finance",
 				"statusexcludeReport");
 		String statusExclude = appList.get(0).getValue();
 		statusExclude = statusExclude + "," + FinancialConstants.REVERSEDVOUCHERSTATUS.toString() + ","
 				+ FinancialConstants.REVERSALVOUCHERSTATUS;
 
-		final String finalQuery = " from CVoucherHeader vh where vh.status not in (" + statusExclude + ") " + sql1
-				+ "  ";
+		final String finalQuery = " from CVoucherHeader vh where vh.status not in (:statusExclude) " + sql1 + "  ";
+		params.put("statusExclude", Arrays.asList(StringUtils.split(statusExclude, ",")));
 
-		voucherList = persistenceService.findAllBy(finalQuery);
+		final Query query = persistenceService.getSession().createQuery(finalQuery);
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		voucherList = query.list();
 		return voucherList;
 
 	}
@@ -243,43 +303,68 @@ public class VoucherSearchUtil {
 	 * Forming query for filter search
 	 */
 	public String voucherFilterQuery(final CVoucherHeader voucherHeader, final Date fromDate, final Date toDate,
-			final String mode) {
-		String sql = "";
-		if (!voucherHeader.getType().equals("-1"))
-			sql = sql + " and vh.type='" + voucherHeader.getType() + "'";
-
+			final String mode, Map<String, Object> params) {
+		final StringBuilder sql = new StringBuilder();
+		if (!voucherHeader.getType().equals("-1")) {
+			sql.append(" and vh.type=:vhType");
+			params.put("vhType", voucherHeader.getType());
+		}
 		if (voucherHeader.getName() != null && !voucherHeader.getName().equalsIgnoreCase("0")
-				&& !voucherHeader.getName().equalsIgnoreCase("-1"))
-			sql = sql + " and vh.name='" + voucherHeader.getName() + "'";
-		if (voucherHeader.getVoucherNumber() != null && !voucherHeader.getVoucherNumber().equals(""))
-			sql = sql + " and vh.voucherNumber like '%" + voucherHeader.getVoucherNumber() + "%'";
-		if (fromDate != null)
-			sql = sql + " and vh.voucherDate>='" + Constants.DDMMYYYYFORMAT1.format(fromDate) + "'";
-		if (toDate != null)
-			sql = sql + " and vh.voucherDate<='" + Constants.DDMMYYYYFORMAT1.format(toDate) + "'";
-		if (voucherHeader.getFundId() != null)
-			sql = sql + " and vh.fundId=" + voucherHeader.getFundId().getId();
-		if (voucherHeader.getVouchermis().getFundsource() != null)
-			sql = sql + " and vh.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId();
-		if (voucherHeader.getVouchermis().getDepartmentcode() != null && !voucherHeader.getVouchermis().getDepartmentcode().equals("-1"))
-			sql = sql + " and vh.vouchermis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'";
-		if (voucherHeader.getVouchermis().getSchemeid() != null)
-			sql = sql + " and vh.vouchermis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId();
-		if (voucherHeader.getVouchermis().getSubschemeid() != null)
-			sql = sql + " and vh.vouchermis.subschemeid=" + voucherHeader.getVouchermis().getSubschemeid().getId();
-		if (voucherHeader.getVouchermis().getFunctionary() != null)
-			sql = sql + " and vh.vouchermis.functionary=" + voucherHeader.getVouchermis().getFunctionary().getId();
-		if (voucherHeader.getVouchermis().getDivisionid() != null)
-			sql = sql + " and vh.vouchermis.divisionid=" + voucherHeader.getVouchermis().getDivisionid().getId();
+				&& !voucherHeader.getName().equalsIgnoreCase("-1")) {
+			sql.append(" and vh.name=:vhName");
+			params.put("vhName", voucherHeader.getName());
+		}
+		if (voucherHeader.getVoucherNumber() != null && !voucherHeader.getVoucherNumber().equals("")) {
+			sql.append(" and vh.voucherNumber like :voucherNumber");
+			params.put("voucherNumber", "%" + voucherHeader.getVoucherNumber() + "%");
+		}
+		if (fromDate != null) {
+			sql.append(" and vh.voucherDate>=:voucherFromDate");
+			params.put("voucherFromDate", fromDate);
+		}
+		if (toDate != null) {
+			sql.append(" and vh.voucherDate<=:voucherToDate");
+			params.put("voucherToDate", toDate);
+		}
+		if (voucherHeader.getFundId() != null) {
+			sql.append(" and vh.fundId.id=:fundId");
+			params.put("fundId", voucherHeader.getFundId().getId());
+		}
+		if (voucherHeader.getVouchermis().getFundsource() != null) {
+			sql.append(" and vh.fundsourceId=:fundsourceId");
+			params.put("fundsourceId", voucherHeader.getVouchermis().getFundsource().getId());
+		}
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null
+				&& !voucherHeader.getVouchermis().getDepartmentcode().equals("-1")) {
+			sql.append(" and vh.vouchermis.departmentcode=:departmentcode");
+			params.put("departmentcode", voucherHeader.getVouchermis().getDepartmentcode());
+		}
+		if (voucherHeader.getVouchermis().getSchemeid() != null) {
+			sql.append(" and vh.vouchermis.schemeid=:schemeid");
+			params.put("schemeid", voucherHeader.getVouchermis().getSchemeid().getId());
+		}
+		if (voucherHeader.getVouchermis().getSubschemeid() != null) {
+			sql.append(" and vh.vouchermis.subschemeid=:subschemeid");
+			params.put("subschemeid", voucherHeader.getVouchermis().getSubschemeid().getId());
+		}
+		if (voucherHeader.getVouchermis().getFunctionary() != null) {
+			sql.append(" and vh.vouchermis.functionary=:functionary");
+			params.put("functionary", voucherHeader.getVouchermis().getFunctionary().getId());
+		}
+		if (voucherHeader.getVouchermis().getDivisionid() != null) {
+			sql.append(" and vh.vouchermis.divisionid=:divisionid");
+			params.put("divisionid", voucherHeader.getVouchermis().getDivisionid().getId());
+		}
 		if (voucherHeader.getModuleId() != null)
 			// -2 For vouchers created from the financial module. -2 is set in
 			// populateSourceMap() of VoucherSearchAction.
 			if (voucherHeader.getModuleId() == -2)
-			sql = sql + " and vh.moduleId is null ";
-			else
-			sql = sql + " and vh.moduleId=" + voucherHeader.getModuleId();
-
-		return sql;
+				sql.append(" and vh.moduleId is null ");
+			else {
+				sql.append(" and vh.moduleId=:moduleId");
+				params.put("moduleId", voucherHeader.getModuleId());
+			}
+		return sql.toString();
 	}
 
 	public String excludeVoucherStatus() {
@@ -296,13 +381,22 @@ public class VoucherSearchUtil {
 			final String mode) {
 		final List<Query> queryList = new ArrayList<Query>();
 		final String statusExclude = excludeVoucherStatus();
-		final String sql = voucherFilterQuery(voucherHeader, fromDate, toDate, mode);
-		final String sqlQuery = "from CVoucherHeader vh where vh.status not in (" + statusExclude + ") " + sql
-				+ " order by vh.voucherNumber ,vh.voucherDate,vh.name ";
+		List<Integer> list = new ArrayList<>();
+		for (String s : statusExclude.split(",")) {
+			list.add(Integer.valueOf(s));
+		}
+		final Map<String, Object> params = new HashMap<>();
+		final String sql = voucherFilterQuery(voucherHeader, fromDate, toDate, mode, params);
+		final String sqlQuery = new StringBuilder("from CVoucherHeader vh where vh.status not in (:statusExclude) ")
+				.append(sql).append(" order by vh.voucherNumber ,vh.voucherDate,vh.name ").toString();
 		final Query query1 = persistenceService.getSession().createQuery(sqlQuery);
+		params.entrySet().forEach(entry -> query1.setParameter(entry.getKey(), entry.getValue()));
+		query1.setParameterList("statusExclude", list);
 		queryList.add(query1);
 		final Query query2 = persistenceService.getSession().createQuery(
-				"select count(*) from CVoucherHeader vh where vh.status not in (" + statusExclude + ") " + sql);
+				"select count(*) from CVoucherHeader vh where vh.status not in (:statusExclude) " + sql);
+		params.entrySet().forEach(entry -> query2.setParameter(entry.getKey(), entry.getValue()));
+		query2.setParameterList("statusExclude", list);
 		queryList.add(query2);
 		return queryList;
 	}

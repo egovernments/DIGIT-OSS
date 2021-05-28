@@ -47,6 +47,17 @@
  */
 package org.egov.eis.web.controller.masters.employee;
 
+import static org.egov.infra.utils.JsonUtils.toJSON;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.IOUtils;
 import org.egov.eis.entity.Employee;
 import org.egov.eis.entity.EmployeeAdaptor;
@@ -57,75 +68,66 @@ import org.egov.eis.service.DesignationService;
 import org.egov.eis.service.OldEmployeeService;
 import org.egov.infra.admin.master.service.DepartmentService;
 import org.hibernate.Session;
+import org.owasp.esapi.ESAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.egov.infra.utils.JsonUtils.toJSON;
 
 @Controller
 @RequestMapping(value = "/employee")
 public class SearchEmployeeController {
 
-    public static final String CONTENTTYPE_JSON = "application/json";
+	public static final String CONTENTTYPE_JSON = "application/json";
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @Autowired
-    private DepartmentService departmentService;
+	@Autowired
+	private DepartmentService departmentService;
 
-    @Autowired
-    private OldEmployeeService employeeService;
+	@Autowired
+	private OldEmployeeService employeeService;
 
-    @Autowired
-    private EmployeeTypeRepository employeeTypeRepository;
+	@Autowired
+	private EmployeeTypeRepository employeeTypeRepository;
 
-    @Autowired
-    private DesignationService designationService;
+	@Autowired
+	private DesignationService designationService;
 
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
-    }
+	public Session getCurrentSession() {
+		return entityManager.unwrap(Session.class);
+	}
 
-    @RequestMapping(value = "search/{mode}", method = RequestMethod.GET)
-    public String searchForm(@PathVariable("mode") final String mode, final Model model) {
-        setDropDownValues(model);
-        model.addAttribute("employee", new EmployeeSearchDTO());
-        return "employeesearch-form";
-    }
+	@GetMapping(value = "search/{mode}")
+	public String searchForm(@PathVariable("mode") final String mode, final Model model) {
+		setDropDownValues(model);
+		model.addAttribute("employee", new EmployeeSearchDTO());
+		return "employeesearch-form";
+	}
 
-    @RequestMapping(value = "search/ajaxemployees", method = RequestMethod.GET)
-    public @ResponseBody void springPaginationDataTables(final HttpServletRequest request,
-            final HttpServletResponse response, final EmployeeSearchDTO employee) throws IOException {
-        final List<Employee> employees = employeeService.searchEmployees(employee);
-        final StringBuilder employeeJSONData = new StringBuilder("{\"data\":")
-                .append(toJSON(employees, Employee.class, EmployeeAdaptor.class)).append("}");
-        response.setContentType(CONTENTTYPE_JSON);
-        IOUtils.write(employeeJSONData, response.getWriter());
-    }
+	@GetMapping(value = "search/ajaxemployees")
+	public @ResponseBody void springPaginationDataTables(final HttpServletRequest request,
+			final HttpServletResponse response, final EmployeeSearchDTO employee) throws IOException {
+		final List<Employee> employees = employeeService.searchEmployees(employee);
+		final StringBuilder employeeJSONData = new StringBuilder("{\"data\":")
+				.append(toJSON(employees, Employee.class, EmployeeAdaptor.class)).append("}");
+		ESAPI.httpUtilities().addHeader(response, "Content-Type", CONTENTTYPE_JSON);
+		IOUtils.write(employeeJSONData, response.getWriter());
+	}
 
-    private void setDropDownValues(final Model model) {
-        model.addAttribute("employeeStatus", Arrays.asList(EmployeeStatus.values()));
-        model.addAttribute("department", departmentService.getAllDepartments());
-        model.addAttribute("employeeTypes", employeeTypeRepository.findAll());
-        model.addAttribute("fundList", employeeService.getAllFunds());
-        model.addAttribute("functionaryList", employeeService.getAllFunctionaries());
-        model.addAttribute("functionList", employeeService.getAllFunctions());
-        model.addAttribute("gradeList", employeeService.getAllGrades());
-        model.addAttribute("desigList", designationService.getAllDesignations());
-    }
+	private void setDropDownValues(final Model model) {
+		model.addAttribute("employeeStatus", Arrays.asList(EmployeeStatus.values()));
+		model.addAttribute("department", departmentService.getAllDepartments());
+		model.addAttribute("employeeTypes", employeeTypeRepository.findAll());
+		model.addAttribute("fundList", employeeService.getAllFunds());
+		model.addAttribute("functionaryList", employeeService.getAllFunctionaries());
+		model.addAttribute("functionList", employeeService.getAllFunctions());
+		model.addAttribute("gradeList", employeeService.getAllGrades());
+		model.addAttribute("desigList", designationService.getAllDesignations());
+	}
 
 }

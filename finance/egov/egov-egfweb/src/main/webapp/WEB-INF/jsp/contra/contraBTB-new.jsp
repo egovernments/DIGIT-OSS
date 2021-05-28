@@ -107,7 +107,7 @@
 						<td class="bluebox" width="18%"><s:text name="voucher.date" /><span
 							class="mandatory1">*</span></td>
 						<td class="bluebox" width="34%"><s:textfield id="voucherDate"
-								name="voucherDate" data-date-end-date="0d"
+								name="voucherDate" data-date-end-date="0d" value="{voucherDate}"
 								onkeyup="DateFormat(this,this.value,event,false,'3')"
 								placeholder="DD/MM/YYYY" class="form-control datepicker"
 								data-inputmask="'mask': 'd/m/y'" /></td>
@@ -252,7 +252,7 @@ function	onLoadTask_new()
 		
 		jQuery(document).ready(function() {
 			jQuery("#voucherDate").datepicker().datepicker("setDate", new Date());
-			});
+		});
 </script>
 </body>
 </html>

@@ -61,10 +61,10 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
-import org.apache.log4j.Logger;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.Bankbranch;
 import org.egov.commons.CChartOfAccounts;
+import org.egov.commons.contracts.BankAccountSearchRequest;
 import org.egov.commons.service.ChartOfAccountsService;
 import org.egov.egf.commons.bankaccount.repository.BankAccountRepository;
 import org.egov.egf.commons.bankbranch.service.CreateBankBranchService;
@@ -85,192 +85,185 @@ import com.exilant.GLEngine.CoaCache;
  * @author venki
  */
 
+@SuppressWarnings("deprecation")
 @Service
 @Transactional(readOnly = true)
 public class CreateBankAccountService {
 
-    private final String code = EGovConfig.getProperty("egf_config.xml", "glcodeMaxLength", "", "AccountCode");
+	private final String code = EGovConfig.getProperty("egf_config.xml", "glcodeMaxLength", "", "AccountCode");
 
-    private static final Logger LOGGER = Logger.getLogger(CreateBankAccountService.class);
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	private final BankAccountRepository bankAccountRepository;
 
-    private final BankAccountRepository bankAccountRepository;
+	@Autowired
+	private AppConfigValueService appConfigValuesService;
 
-    @Autowired
-    private AppConfigValueService appConfigValuesService;
+	@Autowired
+	@Qualifier(value = "chartOfAccountsService")
+	private ChartOfAccountsService chartOfAccountsService;
 
-    @Autowired
-    @Qualifier(value = "chartOfAccountsService")
-    private ChartOfAccountsService chartOfAccountsService;
+	@Autowired
+	private CreateBankBranchService createBankBranchService;
 
-    @Autowired
-    private CreateBankBranchService createBankBranchService;
+	@Autowired
+	private CoaCache coaCache;
 
-    @Autowired
-    private CoaCache coaCache;
+	public Session getCurrentSession() {
+		return entityManager.unwrap(Session.class);
+	}
 
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
-    }
+	@Autowired
+	public CreateBankAccountService(final BankAccountRepository bankAccountRepository) {
+		this.bankAccountRepository = bankAccountRepository;
+	}
 
-    @Autowired
-    public CreateBankAccountService(final BankAccountRepository bankAccountRepository) {
-        this.bankAccountRepository = bankAccountRepository;
-    }
+	public Bankaccount getById(final Long id) {
+		return bankAccountRepository.findOne(id);
+	}
 
-    public Bankaccount getById(final Long id) {
-        return bankAccountRepository.findOne(id);
-    }
+	public Bankaccount getByGlcode(final String glcode) {
+		return bankAccountRepository.findByChartofaccounts_Glcode(glcode);
+	}
 
-    public Bankaccount getByGlcode(final String glcode) {
-        return bankAccountRepository.findByChartofaccounts_Glcode(glcode);
-    }
+	public List<Bankaccount> getByBranchId(final Integer branchId) {
+		return bankAccountRepository.findByBankbranch_Id(branchId);
+	}
 
-    public List<Bankaccount> getByBranchId(final Integer branchId) {
-        return bankAccountRepository.findByBankbranch_Id(branchId);
-    }
+	@Transactional
+	public Bankaccount create(final Bankaccount bankaccount) {
+		String newGLCode;
+		if (autoBankAccountGLCodeEnabled().booleanValue()) {
+			if (!bankaccount.getAccounttype().isEmpty()) {
+				final CChartOfAccounts coa = chartOfAccountsService
+						.getByGlCode(bankaccount.getAccounttype().split("-")[0].trim());
+				newGLCode = prepareBankAccCode(bankaccount.getAccounttype().split("-")[0].trim(), code);
+				final Long coaID = postInChartOfAccounts(newGLCode, coa.getId(), bankaccount.getAccountnumber(),
+						bankaccount.getBankbranch().getId());
+				if (coaID != null) {
+					final CChartOfAccounts chartofaccounts = chartOfAccountsService.getById(coaID);
+					bankaccount.setChartofaccounts(chartofaccounts);
+				}
+			}
+		} else if (bankaccount.getChartofaccounts() != null && !bankaccount.getChartofaccounts().getGlcode().isEmpty())
+			bankaccount.setChartofaccounts(
+					chartOfAccountsService.getByGlCode(bankaccount.getChartofaccounts().getGlcode()));
+		bankaccount.setCreatedDate(new Date());
+		bankaccount.setCreatedBy(ApplicationThreadLocals.getUserId());
+		return bankAccountRepository.save(bankaccount);
+	}
 
-    @Transactional
-    public Bankaccount create(final Bankaccount bankaccount) {
-        String newGLCode;
-        if (autoBankAccountGLCodeEnabled()) {
-            if (!bankaccount.getAccounttype().isEmpty()) {
-                final CChartOfAccounts coa = chartOfAccountsService
-                        .getByGlCode(bankaccount.getAccounttype().split("-")[0].trim());
-                newGLCode = prepareBankAccCode(bankaccount.getAccounttype().split("-")[0].trim(), code);
-                final Long coaID = postInChartOfAccounts(newGLCode, coa.getId(), bankaccount.getAccountnumber(),
-                        bankaccount.getBankbranch().getId());
-                if (coaID != null) {
-                    final CChartOfAccounts chartofaccounts = chartOfAccountsService.getById(coaID);
-                    bankaccount.setChartofaccounts(chartofaccounts);
-                }
-            }
-        } else if (bankaccount.getChartofaccounts() != null && !bankaccount.getChartofaccounts().getGlcode().isEmpty())
-            bankaccount
-                    .setChartofaccounts(chartOfAccountsService.getByGlCode(bankaccount.getChartofaccounts().getGlcode()));
-        bankaccount.setCreatedDate(new Date());
-        bankaccount.setCreatedBy(ApplicationThreadLocals.getUserId());
-        Bankaccount account = bankAccountRepository.save(bankaccount);
-        return account;
-    }
+	@Transactional
+	public Bankaccount update(final Bankaccount bankaccount) {
 
-    @Transactional
-    public Bankaccount update(final Bankaccount bankaccount) {
+		bankaccount.setLastModifiedDate(new Date());
+		bankaccount.setLastModifiedBy(ApplicationThreadLocals.getUserId());
+		return bankAccountRepository.save(bankaccount);
+	}
 
-        bankaccount.setLastModifiedDate(new Date());
-        bankaccount.setLastModifiedBy(ApplicationThreadLocals.getUserId());
-        return bankAccountRepository.save(bankaccount);
-    }
+	public List<Bankaccount> search(final BankAccountSearchRequest bankAccountSearchRequest) {
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<Bankaccount> createQuery = cb.createQuery(Bankaccount.class);
+		final Root<Bankaccount> bankaccounts = createQuery.from(Bankaccount.class);
+		createQuery.select(bankaccounts);
+		final Metamodel m = entityManager.getMetamodel();
+		final EntityType<Bankaccount> tempBankaccount = m.entity(Bankaccount.class);
 
-    public List<Bankaccount> search(final Bankaccount bankaccount) {
-        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Bankaccount> createQuery = cb.createQuery(Bankaccount.class);
-        final Root<Bankaccount> bankaccounts = createQuery.from(Bankaccount.class);
-        createQuery.select(bankaccounts);
-        final Metamodel m = entityManager.getMetamodel();
-        final EntityType<Bankaccount> tempBankaccount = m.entity(Bankaccount.class);
+		final List<Predicate> predicates = new ArrayList<>();
+		if (bankAccountSearchRequest.getAccountnumber() != null) {
+			final String accountnumber = "%" + bankAccountSearchRequest.getAccountnumber().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(bankaccounts.get("accountnumber")));
+			predicates.add(cb.like(
+					cb.lower(bankaccounts
+							.get(tempBankaccount.getDeclaredSingularAttribute("accountnumber", String.class))),
+					accountnumber));
+		}
 
-        final List<Predicate> predicates = new ArrayList<>();
-        if (bankaccount.getAccountnumber() != null) {
-            final String accountnumber = "%" + bankaccount.getAccountnumber().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(bankaccounts.get("accountnumber")));
-            predicates.add(cb.like(
-                    cb.lower(bankaccounts.get(tempBankaccount.getDeclaredSingularAttribute("accountnumber", String.class))),
-                    accountnumber));
-        }
+		if (bankAccountSearchRequest.getFundId() != null)
+			predicates.add(cb.equal(bankaccounts.get("fund").get("id"), bankAccountSearchRequest.getFundId()));
 
-        if (bankaccount.getFund() != null && bankaccount.getFund().getId() != null)
-            predicates.add(cb.equal(bankaccounts.get("fund").get("id"), bankaccount.getFund().getId()));
+		if (bankAccountSearchRequest.getBankId() != null)
+			predicates.add(cb.equal(bankaccounts.get("bankbranch").get("bank").get("id"),
+					bankAccountSearchRequest.getBankId()));
 
-        if (bankaccount.getBankbranch() != null && bankaccount.getBankbranch().getBank() != null)
-            predicates.add(cb.equal(bankaccounts.get("bankbranch").get("bank").get("id"),
-                    bankaccount.getBankbranch().getBank().getId()));
+		if (bankAccountSearchRequest.getBankbranchId() != null)
+			predicates.add(
+					cb.equal(bankaccounts.get("bankbranch").get("id"), bankAccountSearchRequest.getBankbranchId()));
 
-        if (bankaccount.getBankbranch() != null && bankaccount.getBankbranch().getId() != null)
-            predicates.add(cb.equal(bankaccounts.get("bankbranch").get("id"), bankaccount.getBankbranch().getId()));
+		if (bankAccountSearchRequest.getGlcode() != null)
+			predicates.add(
+					cb.equal(bankaccounts.get("chartofaccounts").get("glcode"), bankAccountSearchRequest.getGlcode()));
 
-        if (bankaccount.getChartofaccounts() != null && bankaccount.getChartofaccounts().getGlcode() != null)
-            predicates.add(
-                    cb.equal(bankaccounts.get("chartofaccounts").get("glcode"), bankaccount.getChartofaccounts().getGlcode()));
+		if (bankAccountSearchRequest.getAccounttype() != null)
+			predicates.add(cb.equal(bankaccounts.get("accounttype"), bankAccountSearchRequest.getAccounttype()));
 
-        if (bankaccount.getAccounttype() != null)
-            predicates.add(cb.equal(bankaccounts.get("accounttype"), bankaccount.getAccounttype()));
+		if (bankAccountSearchRequest.getPayTo() != null)
+			predicates.add(cb.equal(bankaccounts.get("payTo"), bankAccountSearchRequest.getPayTo()));
 
-        if (bankaccount.getPayTo() != null)
-            predicates.add(cb.equal(bankaccounts.get("payTo"), bankaccount.getPayTo()));
+		if (bankAccountSearchRequest.getType() != null)
+			predicates.add(cb.equal(bankaccounts.get("type"), bankAccountSearchRequest.getType()));
 
-        if (bankaccount.getType() != null)
-            predicates.add(cb.equal(bankaccounts.get("type"), bankaccount.getType()));
+		if (bankAccountSearchRequest.getNarration() != null)
+			predicates.add(cb.equal(bankaccounts.get("narration"), bankAccountSearchRequest.getNarration()));
 
-        if (bankaccount.getNarration() != null)
-            predicates.add(cb.equal(bankaccounts.get("narration"), bankaccount.getNarration()));
+		if (bankAccountSearchRequest.getIsactive().booleanValue())
+			predicates.add(cb.equal(bankaccounts.get("isactive"), true));
 
-        if (bankaccount.getIsactive())
-            predicates.add(cb.equal(bankaccounts.get("isactive"), true));
+		createQuery.where(predicates.toArray(new Predicate[] {}));
+		final TypedQuery<Bankaccount> query = entityManager.createQuery(createQuery);
+		return query.getResultList();
 
-        createQuery.where(predicates.toArray(new Predicate[] {}));
-        final TypedQuery<Bankaccount> query = entityManager.createQuery(createQuery);
-        return query.getResultList();
+	}
 
-    }
+	public Boolean autoBankAccountGLCodeEnabled() {
+		final AppConfigValues appConfigValue = appConfigValuesService.getConfigValuesByModuleAndKey(
+				FinancialConstants.MODULE_NAME_APPCONFIG, FinancialConstants.APPCONFIG_AUTO_BANKACCOUNT_GLCODE).get(0);
+		return "YES".equalsIgnoreCase(appConfigValue.getValue());
+	}
 
-    public Boolean autoBankAccountGLCodeEnabled() {
-        final AppConfigValues appConfigValue = appConfigValuesService
-                .getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG,
-                        FinancialConstants.APPCONFIG_AUTO_BANKACCOUNT_GLCODE)
-                .get(0);
-        return "YES".equalsIgnoreCase(appConfigValue.getValue());
-    }
+	@SuppressWarnings("deprecation")
+	public String prepareBankAccCode(final String glCode, final String code) {
+		String newGlCode;
+		Long glcode;
+		Long tempCode;
+		final String subminorvalue = EGovConfig.getProperty("egf_config.xml", "subminorvalue", "", "AccountCode");
+		newGlCode = glCode.substring(0, Integer.parseInt(subminorvalue));
+		final CChartOfAccounts coa = chartOfAccountsService.getByGlCodeDesc(newGlCode);
+		newGlCode = coa.getGlcode();
+		final String zero = EGovConfig.getProperty("egf_config.xml", "zerofill", "", "AccountCode");
+		if (newGlCode.length() == Integer.parseInt(code)) {
+			glcode = Long.parseLong(newGlCode);
+			tempCode = glcode + 1;
+		} else {
+			newGlCode = newGlCode + zero;
+			glcode = Long.parseLong(newGlCode);
+			tempCode = glcode + 1;
+		}
+		newGlCode = Long.toString(tempCode);
+		return newGlCode;
+	}
 
-    @SuppressWarnings("deprecation")
-    public String prepareBankAccCode(final String glCode, final String code) {
-        String newGlCode;
-        Long glcode;
-        Long tempCode;
-        final String subminorvalue = EGovConfig.getProperty("egf_config.xml", "subminorvalue", "", "AccountCode");
-        newGlCode = glCode.substring(0, Integer.parseInt(subminorvalue));
-        final CChartOfAccounts coa = chartOfAccountsService.getByGlCodeDesc(newGlCode);
-        newGlCode = coa.getGlcode();
-        final String zero = EGovConfig.getProperty("egf_config.xml", "zerofill", "", "AccountCode");
-        if (newGlCode.length() == Integer.parseInt(code)) {
-            glcode = Long.parseLong(newGlCode);
-            tempCode = glcode + 1;
-        } else {
-            newGlCode = newGlCode + zero;
-            glcode = Long.parseLong(newGlCode);
-            tempCode = glcode + 1;
-        }
-        newGlCode = Long.toString(tempCode);
-        return newGlCode;
-    }
+	public Long postInChartOfAccounts(final String glCode, final Long parentId, final String accNumber,
+			final Integer branchId) {
+		final Bankbranch bankBranch = createBankBranchService.getById(branchId);
+		int majorCodeLength;
+		majorCodeLength = Integer
+				.valueOf(appConfigValuesService.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG,
+						FinancialConstants.APPCONFIG_COA_MAJORCODE_LENGTH).get(0).getValue());
+		final CChartOfAccounts chart = new CChartOfAccounts();
+		chart.setGlcode(glCode);
+		chart.setName(bankBranch.getBank().getName() + " " + bankBranch.getBranchname() + " " + accNumber);
+		chart.setParentId(parentId);
+		chart.setType('A');
+		chart.setClassification(Long.parseLong("4"));
+		chart.setIsActiveForPosting(true);
+		chart.setMajorCode(chart.getGlcode().substring(0, majorCodeLength));
+		chartOfAccountsService.persist(chart);
+		return chart.getId();
+	}
 
-    public Long postInChartOfAccounts(final String glCode, final Long parentId, final String accNumber,
-            final Integer branchId) {
-        final Bankbranch bankBranch = createBankBranchService.getById(branchId);
-        int majorCodeLength;
-        majorCodeLength = Integer
-                .valueOf(appConfigValuesService.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG,
-                        FinancialConstants.APPCONFIG_COA_MAJORCODE_LENGTH).get(0).getValue());
-        final CChartOfAccounts chart = new CChartOfAccounts();
-        chart.setGlcode(glCode);
-        chart.setName(bankBranch.getBank().getName() + " "
-                + bankBranch.getBranchname() + " " + accNumber);
-        chart.setParentId(parentId);
-        chart.setType('A');
-        chart.setClassification(Long.parseLong("4"));
-        chart.setIsActiveForPosting(true);
-        chart.setMajorCode(chart.getGlcode().substring(0, majorCodeLength));
-        chartOfAccountsService.persist(chart);
-        return chart.getId();
-    }
-
-    public void clearCache() {
-        try {
-            coaCache.reLoad();
-        } catch (Exception e) {
-            LOGGER.error("Error while reloading coa cache");
-        }
-    }
+	public void clearCache() {
+		coaCache.reLoad();
+	}
 }

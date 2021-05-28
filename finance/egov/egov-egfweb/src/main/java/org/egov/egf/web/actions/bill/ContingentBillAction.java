@@ -66,6 +66,7 @@ import org.egov.commons.CFunction;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.autonumber.ExpenseBillNumberGenerator;
+import org.egov.egf.commons.CommonsUtil;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.core.ApplicationThreadLocals;
@@ -91,6 +92,10 @@ import org.egov.model.voucher.VoucherDetails;
 import org.egov.model.voucher.WorkflowBean;
 import org.egov.utils.CheckListHelper;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -123,6 +128,7 @@ import java.util.Set;
         @Result(name = ContingentBillAction.VIEW, location = "contingentBill-view.jsp")
 })
 public class ContingentBillAction extends BaseBillAction {
+	private static final String INVALID_APPROVER = "invalid.approver";
     public class COAcomparator implements Comparator<CChartOfAccounts> {
         @Override
         public int compare(final CChartOfAccounts o1, final CChartOfAccounts o2) {
@@ -132,7 +138,7 @@ public class ContingentBillAction extends BaseBillAction {
 
     }
 
-    private final static String FORWARD = "Forward";
+    private static final  String FORWARD = "Forward";
     private static final String ACCOUNT_DETAIL_TYPE_LIST = "accountDetailTypeList";
     private static final String BILL_SUB_TYPE_LIST = "billSubTypeList";
     private static final String USER_LIST = "userList";
@@ -166,6 +172,9 @@ public class ContingentBillAction extends BaseBillAction {
     @Autowired
     private AutonumberServiceBeanResolver beanResolver;
 
+    @Autowired
+    private CommonsUtil commonsUtil;
+    
     @Override
     public StateAware getModel() {
         return super.getModel();
@@ -224,9 +233,10 @@ public class ContingentBillAction extends BaseBillAction {
                         .valueOf(configValuesByModuleAndKey.get(i).getValue()));
             } catch (final NumberFormatException e) {
                 LOGGER.error("Inside getNetPayableCodes" + e.getMessage(), e);
-            } catch (final Exception e) {
-                LOGGER.error("inside getNetPayableCodes" + e.getMessage());
-            }
+            } /*
+               * catch (final Exception e) {
+               * LOGGER.error("inside getNetPayableCodes" + e.getMessage()); }
+               */
             for (final CChartOfAccounts coa : accountCodeByPurpose)
                 // defaultNetPayCode=coa;
                 detailTypeIdandName = coa.getGlcode() + "~" + getDetailTypesForCoaId(coa.getId()) + "^" + detailTypeIdandName;
@@ -312,12 +322,12 @@ public class ContingentBillAction extends BaseBillAction {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
 
         return "messages";
     }
@@ -352,6 +362,13 @@ public class ContingentBillAction extends BaseBillAction {
             LOGGER.info(billDetailsTableCreditFinal);
         System.out.println("*********** ExpenseBill creation started*********************");
         try {
+        	populateWorkflowBean();
+            if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
+                if (!commonsUtil.isValidApprover(bill, workflowBean.getApproverPositionId())) {
+                    addActionError(getText(INVALID_APPROVER));
+                    return NEW;
+                }
+            }
             voucherHeader.setVoucherDate(commonBean.getBillDate());
             voucherHeader.setVoucherNumber(commonBean.getBillNumber());
             String voucherDate = formatter1.format(voucherHeader.getVoucherDate());
@@ -377,7 +394,6 @@ public class ContingentBillAction extends BaseBillAction {
                 if (!isBillNumUnique(commonBean.getBillNumber()))
                     throw new ValidationException(Arrays.asList(new ValidationError("bill number", "Duplicate Bill Number : "
                             + commonBean.getBillNumber())));
-            populateWorkflowBean();
             bill = egBillRegisterService.createBill(bill, workflowBean, checkListsTable);
             addActionMessage(getText("cbill.transaction.succesful") + bill.getBillnumber());
             billRegisterId = bill.getId();
@@ -529,9 +545,12 @@ public class ContingentBillAction extends BaseBillAction {
             cbill.getCreatedBy();
         // billRegisterWorkflowService.transition(parameters.get(ACTION_NAME)[0]+"|"+userId, cbill,parameters.get("comments")[0]);
         cbill.transition().end().withOwner(getPosition()).withComments(parameters.get("comments")[0]);
-        final String statusQury = "from EgwStatus where upper(moduletype)=upper('" + FinancialConstants.CONTINGENCYBILL_FIN
-                + "') and  upper(description)=upper('" + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "')";
-        final EgwStatus egwStatus = (EgwStatus) persistenceService.find(statusQury);
+		StringBuilder statusQuery =  new StringBuilder();
+        statusQuery = statusQuery.append("from EgwStatus where upper(moduletype)=upper(:contigencyBill) and upper(description) = upper(:contigencyBillCancel)");
+        final Query query = persistenceService.getSession().createQuery(statusQuery.toString())
+                .setParameter("contigencyBill",FinancialConstants.CONTINGENCYBILL_FIN, StringType.INSTANCE)
+                .setParameter("contigencyBillCancel",FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS, StringType.INSTANCE);
+        final EgwStatus egwStatus = (EgwStatus) persistenceService.find(query.toString());
         cbill.setStatus(egwStatus);
         cbill.setBillstatus(FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS);
         // persistenceService.setType(Cbill.class);
@@ -638,7 +657,7 @@ public class ContingentBillAction extends BaseBillAction {
                 billDet = (EgBilldetails) billDetItr.next();
                 // if(LOGGER.isDebugEnabled()) LOGGER.debug(" billDet "+ billDet.getId());
                 billDetItr.remove();
-            } catch (final Exception e) {
+            } catch (final ObjectNotFoundException e) {
                 LOGGER.error("Inside updateBill" + e.getMessage(), e);
 
             }
@@ -661,11 +680,12 @@ public class ContingentBillAction extends BaseBillAction {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
         return bill;
     }
 
@@ -791,7 +811,7 @@ public class ContingentBillAction extends BaseBillAction {
                     else
                         entity = (EntityType) persistenceService.find(
                                 "from " + tableName + " where id=? order by name", payeedetail.getAccountDetailKeyId());
-                } catch (final Exception e) {
+                } catch (final HibernateException | NoSuchMethodException | SecurityException e) {
                     LOGGER.error("prepareForViewModifyReverse" + e.getMessage(), e);
                     throw new ApplicationRuntimeException(e.getMessage());
                 }
@@ -1191,9 +1211,13 @@ public class ContingentBillAction extends BaseBillAction {
         }
 
         bill.setBillstatus(FinancialConstants.CONTINGENCYBILL_CREATED_STATUS);
-        final String statusQury = "from EgwStatus where upper(moduletype)=upper('" + FinancialConstants.CONTINGENCYBILL_FIN
-                + "') and  upper(description)=upper('" + FinancialConstants.CONTINGENCYBILL_CREATED_STATUS + "')";
-        final EgwStatus egwStatus = (EgwStatus) persistenceService.find(statusQury);
+        
+        StringBuilder statusQuery = new StringBuilder();
+        statusQuery = statusQuery.append("from EgwStatus where upper(moduletype)=upper(:moduletype) and upper(description)=:description");
+        final Query query = persistenceService.getSession().createQuery(statusQuery.toString())
+                .setParameter("moduletype" , FinancialConstants.CONTINGENCYBILL_FIN, StringType.INSTANCE)
+                .setParameter("description" , FinancialConstants.CONTINGENCYBILL_CREATED_STATUS.toUpperCase(), StringType.INSTANCE);
+        final EgwStatus egwStatus = (EgwStatus) query.uniqueResult();
         bill.setStatus(egwStatus);
         bill.setBilltype("Final Bill");
 
@@ -1250,8 +1274,12 @@ public class ContingentBillAction extends BaseBillAction {
 
     public boolean isBillNumUnique(final String billNumber) {
 
-        final String billNum = (String) persistenceService.find("select billnumber from EgBillregister where upper(billnumber)='"
-                + billNumber.toUpperCase() + "'");
+    	StringBuilder billNumQuery = new StringBuilder();
+    	billNumQuery = billNumQuery.append("select billnumber from EgBillregister where upper(billnumber)=:billnumber");
+        final Query query = persistenceService.getSession().createQuery(billNumQuery.toString())
+                .setParameter("billnumber" , billNumber.toUpperCase(), StringType.INSTANCE);
+        final String billNum = (String) query.uniqueResult();
+        
         if (null == billNum)
             return true;
         else

@@ -220,6 +220,11 @@ table.its th {
 	<script>
 		function validate() {
 			document.bankAdviceReport.action = '/services/EGF/report/bankAdviceReport-search.action';
+			jQuery(bankAdviceReport).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
 			document.bankAdviceReport.submit();
 			return true;
 		}

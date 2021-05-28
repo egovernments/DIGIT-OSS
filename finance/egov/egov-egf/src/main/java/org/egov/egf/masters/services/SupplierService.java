@@ -48,6 +48,7 @@
 package org.egov.egf.masters.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -69,6 +70,7 @@ import org.egov.egf.masters.repository.SupplierRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.masters.Supplier;
+import org.egov.model.masters.SupplierSearchRequest;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,122 +84,121 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class SupplierService implements EntityTypeService {
 
-    @Autowired
-    private SupplierRepository supplierRepository;
+	@Autowired
+	private SupplierRepository supplierRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @Autowired
-    private AccountDetailKeyService accountDetailKeyService;
+	@Autowired
+	private AccountDetailKeyService accountDetailKeyService;
 
-    @Autowired
-    private AccountdetailtypeService accountdetailtypeService;
+	@Autowired
+	private AccountdetailtypeService accountdetailtypeService;
 
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
-    }
+	public Session getCurrentSession() {
+		return entityManager.unwrap(Session.class);
+	}
 
-    public Supplier getById(final Long id) {
-        return supplierRepository.findOne(id);
-    }
+	public Supplier getById(final Long id) {
+		return supplierRepository.findOne(id);
+	}
 
-    @Transactional
-    public Supplier create(Supplier supplier) {
-        setAuditDetails(supplier);
-        supplier = supplierRepository.save(supplier);
-        saveAccountDetailKey(supplier);
-        return supplier;
-    }
+	@Transactional
+	public Supplier create(Supplier supplier) {
+		setAuditDetails(supplier);
+		supplier = supplierRepository.save(supplier);
+		saveAccountDetailKey(supplier);
+		return supplier;
+	}
 
-    @Transactional
-    public Supplier update(final Supplier supplier) {
-        setAuditDetails(supplier);
-        return supplierRepository.save(supplier);
-    }
+	@Transactional
+	public Supplier update(final Supplier supplier) {
+		setAuditDetails(supplier);
+		return supplierRepository.save(supplier);
+	}
 
-    @Transactional
-    public void saveAccountDetailKey(Supplier supplier) {
+	@Transactional
+	public void saveAccountDetailKey(Supplier supplier) {
 
-        Accountdetailkey accountdetailkey = new Accountdetailkey();
-        accountdetailkey.setDetailkey(supplier.getId().intValue());
-        accountdetailkey.setDetailname(supplier.getName());
-        accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(supplier.getClass().getSimpleName()));
-        accountdetailkey.setGroupid(1);
-        accountDetailKeyService.create(accountdetailkey);
-    }
+		Accountdetailkey accountdetailkey = new Accountdetailkey();
+		accountdetailkey.setDetailkey(supplier.getId().intValue());
+		accountdetailkey.setDetailname(supplier.getName());
+		accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(supplier.getClass().getSimpleName()));
+		accountdetailkey.setGroupid(1);
+		accountDetailKeyService.create(accountdetailkey);
+	}
 
-    private void setAuditDetails(Supplier supplier) {
-        if (supplier.getId() == null) {
-            supplier.setCreatedDate(new Date());
-            supplier.setCreatedBy(ApplicationThreadLocals.getUserId());
-        }
-        supplier.setLastModifiedDate(new Date());
-        supplier.setLastModifiedBy(ApplicationThreadLocals.getUserId());
-    }
+	private void setAuditDetails(Supplier supplier) {
+		if (supplier.getId() == null) {
+			supplier.setCreatedDate(new Date());
+			supplier.setCreatedBy(ApplicationThreadLocals.getUserId());
+		}
+		supplier.setLastModifiedDate(new Date());
+		supplier.setLastModifiedBy(ApplicationThreadLocals.getUserId());
+	}
 
-    public List<Supplier> search(final Supplier supplier) {
-        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Supplier> createQuery = cb.createQuery(Supplier.class);
-        final Root<Supplier> suppliers = createQuery.from(Supplier.class);
-        createQuery.select(suppliers);
-        final Metamodel m = entityManager.getMetamodel();
-        final EntityType<Supplier> Supplier_ = m.entity(Supplier.class);
+	public List<Supplier> search(final SupplierSearchRequest supplierSearchRequest) {
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<Supplier> createQuery = cb.createQuery(Supplier.class);
+		final Root<Supplier> suppliers = createQuery.from(Supplier.class);
+		createQuery.select(suppliers);
+		final Metamodel m = entityManager.getMetamodel();
+		final EntityType<Supplier> supplierEntityType = m.entity(Supplier.class);
 
-        final List<Predicate> predicates = new ArrayList<Predicate>();
-        if (supplier.getName() != null) {
-            final String name = "%" + supplier.getName().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(suppliers.get("name")));
-            predicates.add(cb
-                    .like(cb.lower(suppliers.get(Supplier_.getDeclaredSingularAttribute("name", String.class))), name));
-        }
-        if (supplier.getCode() != null) {
-            final String code = "%" + supplier.getCode().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(suppliers.get("code")));
-            predicates.add(cb
-                    .like(cb.lower(suppliers.get(Supplier_.getDeclaredSingularAttribute("code", String.class))), code));
-        }
+		final List<Predicate> predicates = new ArrayList<>();
+		if (supplierSearchRequest.getName() != null) {
+			final String name = "%" + supplierSearchRequest.getName().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(suppliers.get("name")));
+			predicates.add(cb.like(
+					cb.lower(suppliers.get(supplierEntityType.getDeclaredSingularAttribute("name", String.class))),
+					name));
+		}
+		if (supplierSearchRequest.getCode() != null) {
+			final String code = "%" + supplierSearchRequest.getCode().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(suppliers.get("code")));
+			predicates.add(cb.like(
+					cb.lower(suppliers.get(supplierEntityType.getDeclaredSingularAttribute("code", String.class))),
+					code));
+		}
 
-        createQuery.where(predicates.toArray(new Predicate[] {}));
-        createQuery.orderBy(cb.asc(suppliers.get("name")));
-        final TypedQuery<Supplier> query = entityManager.createQuery(createQuery);
-        return query.getResultList();
+		createQuery.where(predicates.toArray(new Predicate[] {}));
+		createQuery.orderBy(cb.asc(suppliers.get("name")));
+		final TypedQuery<Supplier> query = entityManager.createQuery(createQuery);
+		return query.getResultList();
 
-    }
+	}
 
-    public List<Supplier> getAllActiveSuppliers() {
-        return supplierRepository.findByStatus();
-    }
+	public List<Supplier> getAllActiveSuppliers() {
+		return supplierRepository.findByStatus();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
-        // TODO Auto-generated method stub
-        return supplierRepository.findByStatus();
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
+		return supplierRepository.findByStatus();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
-            Integer accountDetailTypeId) {
-        return supplierRepository.findByNameLikeIgnoreCaseOrCodeLikeIgnoreCase(filterKey + "%", filterKey + "%");
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
+			Integer accountDetailTypeId) {
+		return supplierRepository.findByNameLikeIgnoreCaseOrCodeLikeIgnoreCase(filterKey + "%", filterKey + "%");
+	}
 
-    @Override
-    public List getAssetCodesForProjectCode(Integer accountdetailkey) throws ValidationException {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> getAssetCodesForProjectCode(Integer accountdetailkey)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> validateEntityForRTGS(List<Long> idsList)
-            throws ValidationException {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> validateEntityForRTGS(List<Long> idsList)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> getEntitiesById(List<Long> idsList) throws ValidationException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> getEntitiesById(List<Long> idsList)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 }

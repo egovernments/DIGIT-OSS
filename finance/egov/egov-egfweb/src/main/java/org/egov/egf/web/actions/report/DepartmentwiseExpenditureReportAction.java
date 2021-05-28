@@ -48,6 +48,7 @@
 package org.egov.egf.web.actions.report;
 
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -75,6 +76,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -144,7 +146,7 @@ public class DepartmentwiseExpenditureReportAction extends BaseFormAction {
     @SkipValidation
     @ValidationErrorPage(value = NEW)
     @Action(value = "/report/departmentwiseExpenditureReport-search")
-    public String search() throws Exception
+    public String search() throws JRException, IOException
     {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("@-- Inside search method --@");
@@ -162,7 +164,7 @@ public class DepartmentwiseExpenditureReportAction extends BaseFormAction {
         return NEW;
     }
 
-    public void populateResult() throws Exception {
+    public void populateResult() {
         if (LOGGER.isInfoEnabled())
             LOGGER.info(" @-- Inside popgetConcurrenceDateForPeriodulateResult --@");
         populateCurrentYearReport();
@@ -512,7 +514,7 @@ public class DepartmentwiseExpenditureReportAction extends BaseFormAction {
 
     }
 
-    public String generateReportXls() throws Exception {
+    public String generateReportXls() throws JRException, IOException {
         // populateReAppropriationData();
         // prepareFormattedList();
         final String title = getUlbName() + "\\n" + heading.toString();
@@ -523,7 +525,7 @@ public class DepartmentwiseExpenditureReportAction extends BaseFormAction {
         return "XLS";
     }
 
-    public String generateReportPdf() throws Exception {
+    public String generateReportPdf() throws JRException, IOException {
         // populateReAppropriationData();
         // prepareFormattedList();
         final String title = getUlbName() + "\\n" + heading.toString();
@@ -533,7 +535,7 @@ public class DepartmentwiseExpenditureReportAction extends BaseFormAction {
         return "PDF";
     }
 
-    public String generateReportHTML() throws Exception {
+    public String generateReportHTML() throws JRException, IOException {
         final String title = getUlbName() + "\\n" + heading.toString();
         final JasperPrint jasper = reportHelper.generateDepartmentwiseExpenditureJasperPrint(deptReport, title,
                 Preheading.toString());

@@ -49,6 +49,7 @@ package org.egov.services.payment;
 
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.Department;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.instrument.InstrumentHeader;
@@ -58,6 +59,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -73,30 +75,30 @@ public class ChequeAssignmentHelper {
     @Transactional
     public List<InstrumentHeader> reassignInstrument(final List<ChequeAssignment> chequeAssignmentList,
             final String paymentMode, final Integer bankaccount, final Map<String, String[]> parameters,
-            final String dept) throws Exception {
+            final String dept) {
         List<InstrumentHeader> instHeaderList = new ArrayList<InstrumentHeader>();
         try {
             instHeaderList = paymentService.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,
                     parameters, dept);
 
-        } catch (final ValidationException e) {
+        } catch (final ValidationException |ApplicationRuntimeException | ParseException e) {
 
             final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
+            errors.add(new ValidationError("exp", ((ValidationException) e).getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
         return instHeaderList;
     }
 
     @Transactional
     public List<InstrumentHeader> createInstrument(final List<ChequeAssignment> chequeAssignmentList,
             final String paymentMode, final Integer bankaccount, final Map<String, String[]> parameters,
-            final String dept) throws Exception {
+            final String dept) {
         List<InstrumentHeader> instHeaderList = new ArrayList<InstrumentHeader>();
         try {
             instHeaderList = paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount, parameters, dept);
@@ -106,11 +108,9 @@ public class ChequeAssignmentHelper {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
+        } catch (final ApplicationRuntimeException | ParseException e) {
+            LOGGER.error("while processing instrument header list", e);
+            throw new ApplicationRuntimeException("while processing instrument header list");
         }
         return instHeaderList;
     }

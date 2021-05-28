@@ -127,6 +127,8 @@
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <property name="validationMessageSource" ref="messageSource"/>
     </bean>
+    
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>
 
     <bean id="messageSource" name="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="parentMessageSource" ref="parentMessageSource" />

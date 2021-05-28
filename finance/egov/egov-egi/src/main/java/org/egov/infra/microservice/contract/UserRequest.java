@@ -49,6 +49,7 @@ package org.egov.infra.microservice.contract;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.egov.infra.persistence.entity.enums.UserType;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,34 +60,58 @@ import java.util.stream.Collectors;
 public class UserRequest {
 
     private Long id;
+    @SafeHtml
     private String userName;
+    @SafeHtml
     private String salutation;
+    @SafeHtml
     private String name;
+    @SafeHtml
     private String gender;
+    @SafeHtml
     private String mobileNumber;
+    @SafeHtml
     private String emailId;
+    @SafeHtml
     private String altContactNumber;
+    @SafeHtml
     private String pan;
+    @SafeHtml
     private String aadhaarNumber;
+    @SafeHtml
     private String permanentAddress;
+    @SafeHtml
     private String permanentCity;
+    @SafeHtml
     private String permanentPinCode;
+    @SafeHtml
     private String correspondenceAddress;
+    @SafeHtml
     private String correspondenceCity;
+    @SafeHtml
     private String correspondencePinCode;
     private Boolean active;
+    @SafeHtml
     private String locale;
     private UserType type;
     private Boolean accountLocked;
+    @SafeHtml
     private String fatherOrHusbandName;
+    @SafeHtml
     private String signature;
+    @SafeHtml
     private String bloodGroup;
+    @SafeHtml
     private String photo;
+    @SafeHtml
     private String identificationMark;
     private Long createdBy;
+    @SafeHtml
     private String password;
+    @SafeHtml
     private String otpReference;
     private Long lastModifiedBy;
+    @SafeHtml
     private String tenantId;
     private List<RoleRequest> roles;
 

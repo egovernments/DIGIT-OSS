@@ -163,12 +163,11 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Exception occuerd while postiong into contractorJournal");
             throw new HibernateException(e);
-        } catch (final Exception e) {
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("Exception occuerd while postiong into contractorJournal");
-            throw new HibernateException(e);
-
-        }
+        } /*
+           * catch (final Exception e) { if (LOGGER.isDebugEnabled()) LOGGER.
+           * debug("Exception occuerd while postiong into contractorJournal");
+           * throw new HibernateException(e); }
+           */
         return existingCJV;
     }
 
@@ -186,12 +185,11 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Exception occuerd while updateBankreconciliation" + e);
             throw new HibernateException(e);
-        } catch (final Exception e) {
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("Exception occuerd while updateBankreconciliation" + e);
-            throw new HibernateException(e);
-
-        }
+        } /*
+           * catch (final Exception e) { if (LOGGER.isDebugEnabled())
+           * LOGGER.debug("Exception occuerd while updateBankreconciliation" +
+           * e); throw new HibernateException(e); }
+           */
 
         return existingBR;
     }
@@ -633,10 +631,10 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
      */
     public void addToBankReconcilationSQL(final Map instrumentDetailsMap)
             throws ApplicationRuntimeException {
-        final String brsSql = "Insert into bankreconciliation (ID,BANKACCOUNTID,AMOUNT,TRANSACTIONTYPE,INSTRUMENTHEADERID) values "
-                +
-                " (nextVal('seq_bankreconciliation'),:bankAccId,:amount,:trType,:ihId)";
-        final SQLQuery brsSQLQuery = getSession().createSQLQuery(brsSql);
+		final StringBuilder brsSql = new StringBuilder(
+				"Insert into bankreconciliation (ID,BANKACCOUNTID,AMOUNT,TRANSACTIONTYPE,").append(
+						"INSTRUMENTHEADERID) values (nextVal('seq_bankreconciliation'),:bankAccId,:amount,:trType,:ihId)");
+		final SQLQuery brsSQLQuery = getSession().createSQLQuery(brsSql.toString());
 
         brsSQLQuery.setLong("bankAccId", (Long) instrumentDetailsMap.get("bankaccountid"))
                 .setBigDecimal("amount", (BigDecimal) instrumentDetailsMap.get("instrumentamount"))
@@ -667,11 +665,11 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
 
     private void addToContraSql(final Map instrumentDetailsMap) {
 
-        final String ioSql = "Insert into contrajournalvoucher (ID,VOUCHERHEADERID,FROMBANKACCOUNTID,TOBANKACCOUNTID,INSTRUMENTHEADERID"
-                +
-                " ,STATE_ID,CREATEDBY,LASTMODIFIEDBY) values " +
-                " (nextVal('seq_contrajournalvoucher'),:vhId,null,:depositedBankId,:ihId,null,:createdBy,:createdBy)";
-        final SQLQuery ioSQLQuery = getSession().createSQLQuery(ioSql);
+		final StringBuilder ioSql = new StringBuilder(
+				"Insert into contrajournalvoucher (ID,VOUCHERHEADERID,FROMBANKACCOUNTID,")
+						.append("TOBANKACCOUNTID,INSTRUMENTHEADERID,STATE_ID,CREATEDBY,LASTMODIFIEDBY) values ")
+						.append(" (nextVal('seq_contrajournalvoucher'),:vhId,null,:depositedBankId,:ihId,null,:createdBy,:createdBy)");
+		final SQLQuery ioSQLQuery = getSession().createSQLQuery(ioSql.toString());
         ioSQLQuery.setLong("vhId", (Long) instrumentDetailsMap.get("payinid"))
                 .setLong("ihId", (Long) instrumentDetailsMap.get("instrumentheader"))
                 .setLong("depositedBankId", (Long) instrumentDetailsMap.get("bankaccountid"))

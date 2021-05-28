@@ -181,8 +181,9 @@ function getData(){
 	isValid = validateData();
 	if(isValid == false)
 		return false;
-	var url = '/services/EGF/report/pendingTDSReport-ajaxLoadData.action?skipPrepare=true&asOnDate='+asOnDate+'&fromDate='+fromDate+'&department.code='+
-							department+'&fund.id='+fund+'&partyName='+partyName+'&recovery.id='+recovery+'&detailKey='+detailKey+'&showRemittedEntries='+showRemittedEntries;
+	var csrfToken = document.getElementById('csrfTokenValue').value;
+	var url = '/services/EGF/report/pendingTDSReport-ajaxLoadData.action?skipPrepare=true&asOnDate='+asOnDate+'&_csrf='+csrfToken+'&fromDate='+fromDate+'&department.code='+
+	department+'&fund.id='+fund+'&partyName='+partyName+'&recovery.id='+recovery+'&detailKey='+detailKey+'&showRemittedEntries='+showRemittedEntries;
 	YAHOO.util.Connect.asyncRequest('POST', url, callback, null);
 	//loadWaitingImage();
 	doLoadingMask();

@@ -61,8 +61,13 @@
 				return false;
 			}
 			var value = obj.value;
-					document.chartOfAccountsForm.action='${pageContext.request.contextPath}/masters/chartOfAccounts-viewSearch.action';
-		    		document.chartOfAccountsForm.submit();
+			document.chartOfAccountsForm.action='${pageContext.request.contextPath}/masters/chartOfAccounts-viewSearch.action';
+			jQuery(chartOfAccountsForm).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
+			document.chartOfAccountsForm.submit();
 			return true;
 		}
 

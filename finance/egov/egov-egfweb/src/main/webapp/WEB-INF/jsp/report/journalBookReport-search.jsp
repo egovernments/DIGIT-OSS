@@ -124,6 +124,7 @@
 	<s:form name="journalBookForm" id="journalBookForm"
 		action="journalBookReport" theme="css_xhtml" validate="true">
 		<s:push value="journalBookReport">
+			<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="formmainbox">
 				<div class="subheadnew">
 					<s:text name="journalBook.search.title" />

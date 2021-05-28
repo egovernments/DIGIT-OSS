@@ -28,6 +28,7 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.dao.voucher.VoucherHibernateDAO;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BillDetail;
 import org.egov.infra.microservice.models.BusinessService;
 import org.egov.infra.microservice.models.BusinessServiceCriteria;
@@ -47,11 +48,16 @@ import org.egov.infra.microservice.models.TransactionType;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.utils.DateUtils;
 import org.egov.model.remittance.RemittanceReportModel;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.exception.DataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
+import com.google.zxing.NotFoundException;
 
 @Service
 public class RemittanceServiceImpl implements RemittanceService{
@@ -487,7 +493,7 @@ public class RemittanceServiceImpl implements RemittanceService{
         return bankaccountHibernateDAO.getBankAccountByAccountNumbers(accNos);
     }
 
-    public List<RemittanceReportModel> getPendingRemittance(RemittanceReportModel remittanceReportModel) throws Exception{
+    public List<RemittanceReportModel> getPendingRemittance(RemittanceReportModel remittanceReportModel){
         // search instruments with status New based on criteria
         List<RemittanceReportModel> reportModelList = new ArrayList<>();
         InstrumentSearchContract contract = new InstrumentSearchContract();
@@ -544,7 +550,7 @@ public class RemittanceServiceImpl implements RemittanceService{
     }
 
     private void prepareReportModel(Map<String, Instrument> recInstrumentMap, Map<String, String> receiptVoucherMap,
-            List<Receipt> receipts, Map<String, CVoucherHeader> voucherHeaderMap, List<RemittanceReportModel> tempReportModelList) throws Exception{
+            List<Receipt> receipts, Map<String, CVoucherHeader> voucherHeaderMap, List<RemittanceReportModel> tempReportModelList) {
         String collectionVersion = ApplicationThreadLocals.getCollectionVersion().toUpperCase();
         try {
             for(Receipt rec : receipts){
@@ -565,14 +571,14 @@ public class RemittanceServiceImpl implements RemittanceService{
                 tempReportModel.setBankBranch(instrument.getBranchName());
                 tempReportModelList.add(tempReportModel);
             }
-        } catch (Exception e) {
+        } catch (ObjectNotFoundException e) {
             LOGGER.error("Error while preparing report model ", e);
-            throw new Exception("Error while preparing report model");
+            throw new ApplicationRuntimeException("Error while preparing report model", e);
         }
     }
 
     private void prepareConslidatedPendingRemittance(List<RemittanceReportModel> tempReportModelList,
-            List<RemittanceReportModel> reportModelList) throws Exception{
+            List<RemittanceReportModel> reportModelList){
         try {
             Map<String, Map<String, Map<String, List<RemittanceReportModel>>>> groupedMap = tempReportModelList.stream().collect(
                     Collectors.groupingBy(RemittanceReportModel::getReceiptDate,
@@ -609,9 +615,9 @@ public class RemittanceServiceImpl implements RemittanceService{
                 }
             }
             
-        } catch (Exception e) {
+        } catch (ObjectNotFoundException e) {
             LOGGER.error("Error while preparing conslidated pending remittance report model ", e);
-            throw new Exception("Error while preparing conslidated pending remittance report model ");
+            throw new ApplicationRuntimeException("Error while preparing conslidated pending remittance report model ");
         }
         
     }
@@ -632,7 +638,7 @@ public class RemittanceServiceImpl implements RemittanceService{
         });
     }
 
-    private void populateMasterData(List<RemittanceReportModel> tempReportModelList) throws Exception{
+    private void populateMasterData(List<RemittanceReportModel> tempReportModelList){
         try {
             Set<String> serviceSet = tempReportModelList.stream().map(RemittanceReportModel::getService).collect(Collectors.toSet());
             Set<String> deptSet = tempReportModelList.stream().map(RemittanceReportModel::getDepartment).collect(Collectors.toSet());
@@ -645,9 +651,9 @@ public class RemittanceServiceImpl implements RemittanceService{
                 model.setServiceName(businessCodeMap.get(model.getService()).getBusinessService());
                 model.setDepartmentName(deptCodeMap.get(model.getDepartment()).getName());
             });
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             LOGGER.error("Error while populating master data for report model", e);
-            throw new Exception("Error while populating master data for report model");
+            throw new ApplicationRuntimeException("Error while populating master data for report model");
         }
     }
 

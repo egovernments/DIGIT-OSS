@@ -48,10 +48,10 @@
 
 package org.egov.commons;
 
-import org.egov.infra.persistence.entity.AbstractPersistable;
-import org.egov.infra.persistence.validator.annotation.Unique;
-import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.Length;
+import static org.egov.commons.Accountdetailtype.SEQ_ACCOUNTDETAILTYPE;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,10 +61,12 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.Date;
 
-import static org.egov.commons.Accountdetailtype.SEQ_ACCOUNTDETAILTYPE;
+import org.egov.infra.persistence.entity.AbstractPersistable;
+import org.egov.infra.persistence.validator.annotation.Unique;
+import org.hibernate.envers.Audited;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @Table(name = "ACCOUNTDETAILTYPE")
@@ -82,20 +84,26 @@ public class Accountdetailtype extends AbstractPersistable<Integer> {
 
     @Column(nullable = false, unique = true)
     @Length(max = 50)
+    @SafeHtml
+    @NotNull
     private String name;
 
     @NotNull
     @Length(max = 50)
+    @SafeHtml
     private String description;
 
     @Length(max = 25)
+    @SafeHtml
     private String tablename;
 
     @Length(max = 25)
+    @SafeHtml
     private String columnname;
 
     @Column(nullable = false, unique = true)
     @Length(max = 50)
+    @SafeHtml
     private String attributename;
 
     @NotNull

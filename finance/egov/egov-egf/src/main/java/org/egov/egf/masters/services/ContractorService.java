@@ -48,6 +48,7 @@
 package org.egov.egf.masters.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -69,6 +70,7 @@ import org.egov.egf.masters.repository.ContractorRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.masters.Contractor;
+import org.egov.model.masters.ContractorSearchRequest;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,26 +139,26 @@ public class ContractorService implements EntityTypeService {
         contractor.setLastModifiedBy(ApplicationThreadLocals.getUserId());
     }
 
-    public List<Contractor> search(final Contractor contractor) {
+    public List<Contractor> search(final ContractorSearchRequest contractorSearchRequest) {
         final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         final CriteriaQuery<Contractor> createQuery = cb.createQuery(Contractor.class);
         final Root<Contractor> contractors = createQuery.from(Contractor.class);
         createQuery.select(contractors);
         final Metamodel m = entityManager.getMetamodel();
-        final EntityType<Contractor> Contractor_ = m.entity(Contractor.class);
+        final EntityType<Contractor> contractorEntityType = m.entity(Contractor.class);
 
-        final List<Predicate> predicates = new ArrayList<Predicate>();
-        if (contractor.getName() != null) {
-            final String name = "%" + contractor.getName().toLowerCase() + "%";
+        final List<Predicate> predicates = new ArrayList<>();
+        if (contractorSearchRequest.getName() != null) {
+            final String name = "%" + contractorSearchRequest.getName().toLowerCase() + "%";
             predicates.add(cb.isNotNull(contractors.get("name")));
             predicates.add(cb.like(
-                    cb.lower(contractors.get(Contractor_.getDeclaredSingularAttribute("name", String.class))), name));
+                    cb.lower(contractors.get(contractorEntityType.getDeclaredSingularAttribute("name", String.class))), name));
         }
-        if (contractor.getCode() != null) {
-            final String code = "%" + contractor.getCode().toLowerCase() + "%";
+        if (contractorSearchRequest.getCode() != null) {
+            final String code = "%" + contractorSearchRequest.getCode().toLowerCase() + "%";
             predicates.add(cb.isNotNull(contractors.get("code")));
             predicates.add(cb.like(
-                    cb.lower(contractors.get(Contractor_.getDeclaredSingularAttribute("code", String.class))), code));
+                    cb.lower(contractors.get(contractorEntityType.getDeclaredSingularAttribute("code", String.class))), code));
         }
 
         createQuery.where(predicates.toArray(new Predicate[] {}));
@@ -168,10 +170,9 @@ public class ContractorService implements EntityTypeService {
     public List<Contractor> getAllActiveContractors() {
         return contractorRepository.findByStatus();
     }
+    
     @Override
     public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
-        // TODO Auto-generated method stub
-        
         return contractorRepository.findByStatus();
     }
 
@@ -181,25 +182,22 @@ public class ContractorService implements EntityTypeService {
         return contractorRepository.findByNameLikeIgnoreCaseOrCodeLikeIgnoreCase(filterKey + "%", filterKey + "%");
     }
 
-    @Override
-    public List getAssetCodesForProjectCode(Integer accountdetailkey) throws ValidationException {
-        // TODO Auto-generated method stub
-       
-        
-        return null;
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> getAssetCodesForProjectCode(Integer accountdetailkey)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> validateEntityForRTGS(List<Long> idsList)
-            throws ValidationException {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> validateEntityForRTGS(List<Long> idsList)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> getEntitiesById(List<Long> idsList) throws ValidationException {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> getEntitiesById(List<Long> idsList)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 
 }

@@ -57,17 +57,24 @@ package com.exilant.eGov.src.transactions;
 
 
 import com.exilant.exility.common.TaskFailedException;
+
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import org.apache.log4j.Logger;
 import org.egov.commons.CFiscalPeriod;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.persistence.utils.GenericSequenceNumberGenerator;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.utils.VoucherHelper;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -85,25 +92,26 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the cash in hand code account for the boundary
 	 */
 	@Override
-	public String getCashInHand(final int BoundaryId, final Connection connection) throws Exception {
+	public String getCashInHand(final int BoundaryId, final Connection connection) {
 		String cashinHandCode = "";
 		try {
-			final String query = " SELECT a.glcode FROM CHARTOFACCOUNTS a,EG_BOUNDARY b,eg_boundary_type c "
-					+
-					" WHERE id=(SELECT cashinhand FROM CODEMAPPING WHERE EG_BOUNDARYID= ? )  and b.ID_BNDRY_TYPE=c.ID_BNDRY_TYPE and b.ID_BNDRY= ?";
-			Query pst = persistenceService.getSession().createSQLQuery(query);
+			final StringBuilder query = new StringBuilder(
+					" SELECT a.glcode FROM CHARTOFACCOUNTS a,EG_BOUNDARY b,eg_boundary_type c ")
+							.append(" WHERE id=(SELECT cashinhand FROM CODEMAPPING WHERE EG_BOUNDARYID= ? ) ")
+							.append(" and b.ID_BNDRY_TYPE=c.ID_BNDRY_TYPE and b.ID_BNDRY= ?");
+			Query pst = persistenceService.getSession().createSQLQuery(query.toString());
 			pst.setInteger(0, BoundaryId);
 			pst.setInteger(1, BoundaryId);
 			List<Object[]> rset = pst.list();
 			for (final Object[] element : rset)
 				cashinHandCode = element[0].toString();
 			if (rset == null || rset.size() == 0)
-				throw new Exception();
+				throw new NullPointerException();
 			if (LOGGER.isInfoEnabled())
 				LOGGER.info(">>>cashinHandCode " + cashinHandCode);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			LOGGER.error(" Glcode for cashinhand not found " + e.toString(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return cashinHandCode;
 	}
@@ -112,25 +120,26 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the Cheque in hand code account for the boundary
 	 */
 	@Override
-	public String getChequeInHand(final int BoundaryId, final Connection connection) throws Exception {
+	public String getChequeInHand(final int BoundaryId, final Connection connection) {
 		String chequeinHandCode = "";
 		try {
-			final String query = " SELECT a.glcode FROM CHARTOFACCOUNTS a,EG_BOUNDARY b,eg_boundary_type c "
-					+
-					" WHERE id=(SELECT chequeinhand FROM CODEMAPPING WHERE EG_BOUNDARYID= ? )  and b.ID_BNDRY_TYPE=c.ID_BNDRY_TYPE and b.ID_BNDRY= ?";
-			Query pst = persistenceService.getSession().createSQLQuery(query);
+			final StringBuilder query = new StringBuilder(
+					" SELECT a.glcode FROM CHARTOFACCOUNTS a,EG_BOUNDARY b,eg_boundary_type c ")
+							.append(" WHERE id=(SELECT chequeinhand FROM CODEMAPPING WHERE EG_BOUNDARYID= ? ) ")
+							.append(" and b.ID_BNDRY_TYPE=c.ID_BNDRY_TYPE and b.ID_BNDRY= ?");
+			Query pst = persistenceService.getSession().createSQLQuery(query.toString());
 			pst.setInteger(0, BoundaryId);
 			pst.setInteger(1, BoundaryId);
 			List<Object[]> rset = pst.list();
 			for (final Object[] element : rset)
 				chequeinHandCode = element[0].toString();
 			if (rset == null || rset.size() == 0)
-				throw new Exception("Chequeinhand Code not Found");
+				throw new NullPointerException("Chequeinhand Code not Found");
 			if (LOGGER.isInfoEnabled())
 				LOGGER.info(">>>chequeinHandCode " + chequeinHandCode);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			LOGGER.error(" Glcode for chequeinHandCode not found ", e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 
 		return chequeinHandCode;
@@ -140,7 +149,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the property tax code for the year
 	 */
 	@Override
-	public String getPTCode(final String forYear, final Connection connection) throws Exception
+	public String getPTCode(final String forYear, final Connection connection)
 	{
 		String ptCodeAndName = "";
 		try {
@@ -157,8 +166,9 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					fId = element[0].toString();
 				if (rset == null || rset.size() == 0)
 				{
-					final String query2 = "select a.glcode,a.name from chartofaccounts a,egf_tax_account_mapping b where b.glcodeid=a.id and upper(b.financialyear)=upper('old')";
-					pst = persistenceService.getSession().createSQLQuery(query2);
+					final StringBuilder query2 = new StringBuilder("select a.glcode,a.name from chartofaccounts a,")
+							.append("egf_tax_account_mapping b where b.glcodeid=a.id and upper(b.financialyear)=upper('old')");
+					pst = persistenceService.getSession().createSQLQuery(query2.toString());
 					rset = pst.list();
 					for (final Object[] element : rset) {
 						ptCodeAndName = element[0].toString();
@@ -169,8 +179,11 @@ public class CommonMethodsImpl implements CommonMethodsI {
 				}
 				if (!fId.equalsIgnoreCase(""))
 				{
-					final String query3 = "select a.isold from egf_tax_account_mapping a,egf_tax_code b,financialyear c where a.taxcodeid=b.id and b.code='PT' and a.financialyear=c.financialyear and c.financialyear= ?";
-					pst = persistenceService.getSession().createSQLQuery(query3);
+					final StringBuilder query3 = new StringBuilder(
+							"select a.isold from egf_tax_account_mapping a,egf_tax_code b,").append(
+									"financialyear c where a.taxcodeid=b.id and b.code='PT' and a.financialyear=c.financialyear")
+									.append(" and c.financialyear= ?");
+					pst = persistenceService.getSession().createSQLQuery(query3.toString());
 					pst.setString(0, fId);
 					rset = pst.list();
 					for (final Object[] element : rset) {
@@ -182,8 +195,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					{
 						if (LOGGER.isInfoEnabled())
 							LOGGER.info("   inside 4    ");
-						final String query4 = "select a.glcode,a.name from chartofaccounts a,egf_tax_account_mapping b where b.glcodeid=a.id and upper(b.financialyear)=upper('old')";
-						pst = persistenceService.getSession().createSQLQuery(query4);
+						final StringBuilder query4 = new StringBuilder("select a.glcode,a.name")
+								.append(" from chartofaccounts a,egf_tax_account_mapping b")
+								.append(" where b.glcodeid=a.id and upper(b.financialyear)=upper('old')");
+						pst = persistenceService.getSession().createSQLQuery(query4.toString());
 						rset = pst.list();
 						for (final Object[] element : rset) {
 							ptCodeAndName = element[0].toString();
@@ -196,8 +211,11 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					{
 						if (LOGGER.isInfoEnabled())
 							LOGGER.info("   inside 5   ");
-						final String query5 = "select a.glcode,a.name from chartofaccounts a,egf_tax_account_mapping b,egf_tax_code c,financialyear d where b.taxcodeid=c.id and c.code='PT' and b.glcodeid=a.id and b.financialyear=d.financialyear and d.financialyear= ?";
-						pst = persistenceService.getSession().createSQLQuery(query5);
+						final StringBuilder query5 = new StringBuilder("select a.glcode,a.name from chartofaccounts a,")
+								.append("egf_tax_account_mapping b,egf_tax_code c,financialyear d where b.taxcodeid=c.id")
+								.append(" and c.code='PT' and b.glcodeid=a.id and b.financialyear=d.financialyear")
+								.append(" and d.financialyear= ?");
+						pst = persistenceService.getSession().createSQLQuery(query5.toString());
 						pst.setString(0, fId);
 						rset = pst.list();
 						for (final Object[] element : rset) {
@@ -207,7 +225,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 								LOGGER.info(">>>ptCodeAndName " + ptCodeAndName);
 						}
 						if (rset == null || rset.size() == 0)
-							throw new Exception("Property Tax code not Found for " + forYear);
+							throw new NullPointerException("Property Tax code not Found for " + forYear);
 
 					}
 				}
@@ -215,8 +233,9 @@ public class CommonMethodsImpl implements CommonMethodsI {
 			else
 			{
 				// if foryear is not given, then use Sespense code
-				final String query = "select a.glcode, a.name from chartofaccounts a,egf_accountcode_purpose b where a.purposeid=b.id and upper(b.name)=upper('SuspenseCode')";
-				Query pst = persistenceService.getSession().createSQLQuery(query);
+				final StringBuilder query = new StringBuilder("select a.glcode, a.name from chartofaccounts a,").append(
+						"egf_accountcode_purpose b where a.purposeid=b.id and upper(b.name)=upper('SuspenseCode')");
+				Query pst = persistenceService.getSession().createSQLQuery(query.toString());
 				List<Object[]> rset = pst.list();
 				for (final Object[] element : rset) {
 					ptCodeAndName = element[0].toString();
@@ -225,12 +244,12 @@ public class CommonMethodsImpl implements CommonMethodsI {
 						LOGGER.info(">>>ptCodeAndName1 " + ptCodeAndName);
 				}
 				if (rset == null || rset.size() == 0)
-					throw new Exception("Property Tax code not Found for " + forYear);
+					throw new NullPointerException("Property Tax code not Found for " + forYear);
 			}
-		} catch (final Exception e)
+		} catch (final HibernateException e)
 		{
 			LOGGER.error(" PT code not found " + e.toString(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return ptCodeAndName;
 	}
@@ -239,7 +258,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the account code for the bank account
 	 */
 	@Override
-	public String getBankCode(final int bankAccountId, final Connection connection) throws Exception
+	public String getBankCode(final int bankAccountId, final Connection connection)
 	{
 		String bankCodeAndName = "";
 		try {
@@ -254,10 +273,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.info(">>>bankCodeAndName " + bankCodeAndName);
 			}
 			if (rset == null || rset.size() == 0)
-				throw new Exception("BAnk Code Not Found");
-		} catch (final Exception e) {
+				throw new NullPointerException("BAnk Code Not Found");
+		} catch (final HibernateException e) {
 			LOGGER.error(" Bank code not found " + e.toString(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return bankCodeAndName;
 	}
@@ -266,7 +285,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the fiscal period id for the date passed
 	 */
 	@Override
-	public String getFiscalPeriod(final String vDate, final Connection connection) throws TaskFailedException, Exception
+	public String getFiscalPeriod(final String vDate, final Connection connection) throws TaskFailedException
 	{
 		String fiscalPeriodID = "null";
 		try
@@ -286,11 +305,11 @@ public class CommonMethodsImpl implements CommonMethodsI {
 		{
 			LOGGER.error("fiscal Period Not Found=" + e.getMessage(), e);
 			throw new TaskFailedException("fiscal Period Not Found");
-		} catch (final Exception e)
-		{
-			LOGGER.error("failed to get fiscalperiodId " + e.toString(), e);
-			throw new Exception(e.toString());
-		}
+        } /*
+           * catch (final Exception e) {
+           * LOGGER.error("failed to get fiscalperiodId " + e.toString(), e);
+           * throw new Exception(e.toString()); }
+           */
 		return fiscalPeriodID;
 	}
 
@@ -298,12 +317,13 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the bank and bank branch of the bank acocunt
 	 */
 	@Override
-	public String getBankId(final int bankAccountId, final Connection connection) throws Exception
+	public String getBankId(final int bankAccountId, final Connection connection)
 	{
 		String bankAndBranchId = "null";
 		try {
-			final String sql = "select b.id,c.id from bankaccount a,bankbranch b,bank c where a.branchid=b.id and b.bankid=c.id and a.id= ?";
-			Query pst = persistenceService.getSession().createSQLQuery(sql);
+			final StringBuilder sql = new StringBuilder("select b.id,c.id from bankaccount a,bankbranch b,bank c")
+					.append(" where a.branchid=b.id and b.bankid=c.id and a.id= ?");
+			Query pst = persistenceService.getSession().createSQLQuery(sql.toString());
 			pst.setInteger(0, bankAccountId);
 			List<Object[]> rset = pst.list();
 			for (final Object[] element : rset) {
@@ -313,10 +333,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.info(">>>bankAndBranchId " + bankAndBranchId);
 			}
 			if (rset == null || rset.size() == 0)
-				throw new Exception("Bank Code Not Found");
-		} catch (final Exception e) {
+				throw new NullPointerException("Bank Code Not Found");
+		} catch (final HibernateException e) {
 			LOGGER.error(" Bank Id not found " + e.toString(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return bankAndBranchId;
 	}
@@ -325,18 +345,19 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the bank balance for the bank account
 	 */
 	@Override
-	public double getAccountBalance(final int bankAccountId, final String vcDate, final Connection connection) throws Exception
+	public double getAccountBalance(final int bankAccountId, final String vcDate, final Connection connection)
 	{
 		double opeAvailable = 0, totalAvailable = 0;
 		try {
 
-			final String str = "SELECT case when sum(openingDebitBalance) = null then 0 ELSE sum(openingDebitBalance) end - case when sum(openingCreditBalance) = null then 0 else sum(openingCreditBalance) end AS \"openingBalance\" "
-					+
-					"FROM transactionSummary WHERE financialYearId=( SELECT id FROM financialYear WHERE startingDate <= ?" +
-					"AND endingDate >= ?)  AND glCodeId =(select glcodeid from bankaccount where id= ?)";
+			final StringBuilder str = new StringBuilder("SELECT case when sum(openingDebitBalance) = null then 0")
+					.append(" ELSE sum(openingDebitBalance) end - case when sum(openingCreditBalance) = null then 0")
+					.append(" else sum(openingCreditBalance) end AS \"openingBalance\" ")
+					.append("FROM transactionSummary WHERE financialYearId=( SELECT id FROM financialYear WHERE startingDate <= ?")
+					.append("AND endingDate >= ?)  AND glCodeId =(select glcodeid from bankaccount where id= ?)");
 			if (LOGGER.isInfoEnabled())
 				LOGGER.info(str);
-			Query pst = persistenceService.getSession().createSQLQuery(str);
+			Query pst = persistenceService.getSession().createSQLQuery(str.toString());
 			pst.setString(0, vcDate);
 			pst.setString(1, vcDate);
 			pst.setInteger(2, bankAccountId);
@@ -346,16 +367,16 @@ public class CommonMethodsImpl implements CommonMethodsI {
 			if (LOGGER.isInfoEnabled())
 				LOGGER.info("opening balance  " + opeAvailable);
 
-			final String str1 = "SELECT (case when sum(gl.debitAmount) = null then 0 else sum(gl.debitAmount) end - case when sum(gl.creditAmount)  = null then 0 else sum(gl.creditAmount) end) + "
-					+ opeAvailable
-					+ ""
-					+
-					" as \"totalAmount\" FROM   generalLedger gl, voucherHeader vh WHERE vh.id = gl.voucherHeaderId AND gl.glCodeid = (select glcodeid from bankaccount where id= ?) AND  "
-					+
-					" vh.voucherDate >=( SELECT TO_CHAR(startingDate, 'dd-Mon-yyyy') FROM financialYear WHERE startingDate <= ? AND endingDate >= ?) AND vh.voucherDate <= ?";
+			final StringBuilder str1 = new StringBuilder("SELECT (case when sum(gl.debitAmount) = null then 0")
+					.append(" else sum(gl.debitAmount) end - case when sum(gl.creditAmount)  = null then 0")
+					.append(" else sum(gl.creditAmount) end) + ").append(opeAvailable).append("")
+					.append(" as \"totalAmount\" FROM   generalLedger gl, voucherHeader vh WHERE vh.id = gl.voucherHeaderId")
+					.append(" AND gl.glCodeid = (select glcodeid from bankaccount where id= ?) AND  ")
+					.append(" vh.voucherDate >=( SELECT TO_CHAR(startingDate, 'dd-Mon-yyyy')")
+					.append(" FROM financialYear WHERE startingDate <= ? AND endingDate >= ?) AND vh.voucherDate <= ?");
 			if (LOGGER.isInfoEnabled())
 				LOGGER.info(str1);
-			pst = persistenceService.getSession().createSQLQuery(str1);
+			pst = persistenceService.getSession().createSQLQuery(str1.toString());
 			pst.setInteger(0, bankAccountId);
 			pst.setString(1, vcDate);
 			pst.setString(2, vcDate);
@@ -367,9 +388,9 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.info("total balance  " + totalAvailable);
 			}
 
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			LOGGER.error(" could not get Bankbalance  " + e.toString(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return totalAvailable;
 	}
@@ -378,12 +399,14 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the acccount code and name for the account with the purposeid
 	 */
 	@Override
-	public String getCodeName(final String purposeId) throws Exception
+	public String getCodeName(final String purposeId)
 	{
 		String codeAndName = "null";
 		try {
-			final String query = "select a.glcode, a.name from chartofaccounts a,egf_accountcode_purpose b where a.purposeid=b.id and b.id= ?";
-			Query pst = persistenceService.getSession().createSQLQuery(query);
+			final StringBuilder query = new StringBuilder(
+					"select a.glcode, a.name from chartofaccounts a,egf_accountcode_purpose b")
+							.append(" where a.purposeid=b.id and b.id= ?");
+			Query pst = persistenceService.getSession().createSQLQuery(query.toString());
 			pst.setString(0, purposeId);
 			List<Object[]> rset = pst.list();
 			// for(int i=0;rset.next();i++){
@@ -392,9 +415,9 @@ public class CommonMethodsImpl implements CommonMethodsI {
 				codeAndName = codeAndName + "#" + element[1].toString();
 			}
 
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			LOGGER.error(" code not found for purpose id " + e.toString(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return codeAndName;
 	}
@@ -403,7 +426,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the name of the accountcode passed
 	 */
 	@Override
-	public String getNameFromCode(final String glcode, final Connection connection) throws Exception
+	public String getNameFromCode(final String glcode, final Connection connection)
 	{
 
 		String codeName = "null";
@@ -420,10 +443,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.info("  codeName   " + codeName);
 			}
 			if (rset == null || rset.size() == 0)
-				throw new Exception("code not found");
-		} catch (final Exception e) {
+				throw new NullPointerException("code not found");
+		} catch (final HibernateException e) {
 			LOGGER.error(" code not found " + e.toString(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return codeName;
 	}
@@ -432,7 +455,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the accountcode of the is paased.
 	 */
 	@Override
-	public String getGlCode(final String glCodeId, final Connection connection) throws Exception
+	public String getGlCode(final String glCodeId, final Connection connection)
 	{
 		String glCode = "null";
 		try {
@@ -448,10 +471,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.info("  glCode   " + glCode);
 			}
 			if (rset == null || rset.size() == 0)
-				throw new Exception("id not found");
-		} catch (final Exception e) {
+				throw new NullPointerException("id not found");
+		} catch (final HibernateException e) {
 			LOGGER.error(" id not found " + e.toString(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return glCode;
 	}
@@ -460,7 +483,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * This is to check if a record already exist in integrationlog
 	 */
 	@Override
-	public String checkRecordIdInLog(final String recordId, final int userId, final Connection connection) throws Exception
+	public String checkRecordIdInLog(final String recordId, final int userId, final Connection connection)
 	{
 		String cgn = null;
 		try
@@ -477,10 +500,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 				if (LOGGER.isInfoEnabled())
 					LOGGER.info("  cgn in log  " + cgn);
 			}
-		} catch (final Exception e)
+		} catch (final HibernateException e)
 		{
 			LOGGER.error("Exp=" + e.getMessage(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return cgn;
 	}
@@ -489,7 +512,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the division code of the id passed
 	 */
 	@Override
-	public String getDivisionCode(final Integer divid, final Connection connection) throws Exception
+	public String getDivisionCode(final Integer divid, final Connection connection)
 	{
 		String divCode = null;
 		final String sql = "SELECT distinct BNDRY_NUM FROM EG_BOUNDARY where ID_BNDRY= ?";
@@ -506,10 +529,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.debug("divCode >>>>>>>" + divCode);
 			}
 
-		} catch (final Exception e)
+		} catch (final HibernateException e)
 		{
 			LOGGER.error("Exp=" + e.getMessage(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return divCode;
 	}
@@ -518,25 +541,26 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the division id for the sub field passed
 	 */
 	@Override
-	public Integer getDivisionId(final Integer fieldId, final Connection connection) throws Exception
+	public Integer getDivisionId(final Integer fieldId, final Connection connection)
 	{
 		Integer divId = null;
 		// String sql="SELECT distinct BNDRY_NUM FROM EG_BOUNDARY where ID_BNDRY='"+divid+"'";
-		final String sql = "Select PARENT from EG_BOUNDARY where ID_BNDRY='" + fieldId + "'";
+		final String sql = "Select PARENT from EG_BOUNDARY where ID_BNDRY=:fieldId";
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Division id query-->>>>>>>> " + sql);
 		try {
 
 			Query pst = persistenceService.getSession().createSQLQuery(sql);
+			pst.setParameter("fieldId", fieldId);
 			List<Object[]> rset = pst.list();
 			for (final Object[] element : rset)
 				divId = Integer.parseInt(element[0].toString());
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Division id is >>>>>>>" + divId);
-		} catch (final Exception e)
+		} catch (final HibernateException e)
 		{
 			LOGGER.error("Exp=" + e.getMessage());
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return divId;
 	}
@@ -545,13 +569,13 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * Get the financial year for the data passed
 	 */
 	@Override
-	public String getFinacialYear(final String vDate, final Connection connection) throws Exception
+	public String getFinacialYear(final String vDate, final Connection connection)
 	{
 		String finYear = "null";
-		final String sql = "select FINANCIALYEAR from FINANCIALYEAR  where '" + vDate + "' between startingdate and endingdate";
-		try
-		{
+		final String sql = "select FINANCIALYEAR from FINANCIALYEAR  where :vDate between startingdate and endingdate";
+		try {
 			Query pst = persistenceService.getSession().createSQLQuery(sql);
+			pst.setParameter("vDate", vDate);
 			List<Object[]> rset = pst.list();
 			for (final Object[] element : rset) {
 				finYear = element[0].toString();
@@ -559,10 +583,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.debug("finYear id>>>>>>>" + finYear);
 			}
 
-		} catch (final Exception e)
+		} catch (final HibernateException e)
 		{
 			LOGGER.error("Exp=" + e.getMessage());
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return finYear;
 	}
@@ -571,7 +595,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * This method gets the GlCodeId by passing GLCODE as parameter added by Sapna
 	 */
 	@Override
-	public String getGlCodeId(final String glCode, final Connection connection) throws Exception
+	public String getGlCodeId(final String glCode, final Connection connection)
 	{
 		String glCodeId = "null";
 		try {
@@ -587,10 +611,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.debug("  glCodeId   " + glCodeId);
 			}
 			if (rset == null || rset.size() == 0)
-				throw new Exception("id not found");
-		} catch (final Exception e) {
+				throw new NullPointerException("id not found");
+		} catch (final HibernateException e) {
 			LOGGER.error(" id not found " + e.toString(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return glCodeId;
 	}
@@ -598,9 +622,10 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	/**
 	 * This API will return the transaction no for any type of txn. Input :Type,transaction date and connection Output
 	 * :Transaction number in the format txnType+number+/+month+/+year
+	 * @throws ParseException 
 	 */
 	@Override
-	public String getTxnNumber(final String txnType, final String vDate) throws Exception
+	public String getTxnNumber(final String txnType, final String vDate) throws ParseException
 	{
 		String finYear = "";
 		String fiscalPeriod = "";
@@ -615,60 +640,54 @@ public class CommonMethodsImpl implements CommonMethodsI {
 		// dt = sdf.parse( vDate );
 		final String txndate = formatter.format(sdf.parse(vDate));
 
-		final String sql = "select a.FINANCIALYEAR,b.id from FINANCIALYEAR a,fiscalperiod b  where a.id=b.financialyearid AND ? between b.startingdate and b.endingdate";
+		final StringBuilder sql = new StringBuilder("select a.FINANCIALYEAR,b.id from FINANCIALYEAR a,fiscalperiod b ")
+				.append(" where a.id=b.financialyearid AND ? between b.startingdate and b.endingdate");
 		if (LOGGER.isInfoEnabled())
 			LOGGER.info(sql);
-		try
-		{
-			Query pst = persistenceService.getSession().createSQLQuery(sql);
-			pst.setString(0, txndate);
-			List<Object[]> rset = pst.list();
-			for (final Object[] element : rset) {
-				finYear = element[0].toString();
-				fiscalPeriod = element[1].toString();
-				if (LOGGER.isInfoEnabled())
-					LOGGER.info("finYear id>>>>>>>" + finYear + " fiscalPeriod :" + fiscalPeriod);
-			}
-			if (rset == null || rset.size() == 0)
-				throw new Exception("Year is not defined in the system");
+		Query pst = persistenceService.getSession().createSQLQuery(sql.toString());
+        pst.setString(0, txndate);
+        List<Object[]> rset = pst.list();
+        for (final Object[] element : rset) {
+        	finYear = element[0].toString();
+        	fiscalPeriod = element[1].toString();
+        	if (LOGGER.isInfoEnabled())
+        		LOGGER.info("finYear id>>>>>>>" + finYear + " fiscalPeriod :" + fiscalPeriod);
+        }
+        if (rset == null || rset.size() == 0)
+        	throw new NullPointerException("Year is not defined in the system");
 
-			final String year = finYear.substring(2, 4) + finYear.substring(finYear.length() - 2, finYear.length());
-			if (LOGGER.isInfoEnabled())
-				LOGGER.info(" The year String :" + year);
-			// ---
-			if (LOGGER.isDebugEnabled())
-				LOGGER.debug(" In CommonMethodsImpl :getTxnNumber method ");
-			//persistenceService.setType(CFiscalPeriod.class);
-			final CFiscalPeriod fiscalPeriodObj = (CFiscalPeriod) persistenceService.find("from CFiscalPeriod where id=?",
-					Long.parseLong(fiscalPeriod));
-			// Sequence name will be SQ_U_DBP_CGVN_FP7 for txnType U/DBP/CGVN and fiscalPeriodIdStr 7
-			final String sequenceName = VoucherHelper.sequenceNameFor(txnType, fiscalPeriodObj.getName());
-			Serializable runningNumber =   genericSequenceNumberGenerator.getNextSequence(sequenceName);
-			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("----- Txn Number : " + runningNumber);
-			// ---
+        final String year = finYear.substring(2, 4) + finYear.substring(finYear.length() - 2, finYear.length());
+        if (LOGGER.isInfoEnabled())
+        	LOGGER.info(" The year String :" + year);
+        // ---
+        if (LOGGER.isDebugEnabled())
+        	LOGGER.debug(" In CommonMethodsImpl :getTxnNumber method ");
+        //persistenceService.setType(CFiscalPeriod.class);
+        final CFiscalPeriod fiscalPeriodObj = (CFiscalPeriod) persistenceService.find("from CFiscalPeriod where id=?",
+        		Long.parseLong(fiscalPeriod));
+        // Sequence name will be SQ_U_DBP_CGVN_FP7 for txnType U/DBP/CGVN and fiscalPeriodIdStr 7
+        final String sequenceName = VoucherHelper.sequenceNameFor(txnType, fiscalPeriodObj.getName());
+        Serializable runningNumber =   genericSequenceNumberGenerator.getNextSequence(sequenceName);
+        if (LOGGER.isDebugEnabled())
+        	LOGGER.debug("----- Txn Number : " + runningNumber);
+        // ---
 
-			retVal = txnType + runningNumber.toString() + "/" + month[1] + "/" + year;
-			if (LOGGER.isInfoEnabled())
-				LOGGER.info("Return value is :" + retVal);
-		
-		} catch (final Exception e)
-		{
-			LOGGER.error("Exp=" + e.getMessage(), e);
-			throw new Exception(e.toString());
-		}
+        retVal = txnType + runningNumber.toString() + "/" + month[1] + "/" + year;
+        if (LOGGER.isInfoEnabled())
+        	LOGGER.info("Return value is :" + retVal);
 		return retVal;
 	}
 
 	/**
 	 * added by Iliyaraja This API will return the generated Voucher number. Input :Fund Id,txnType,transaction date and
 	 * connection Output :Transaction number in the format fundType+txnType+/+number+/+month+/+year
+	 * @throws ParseException 
 	 */
 	@Override
-	public String getTxnNumber(final String fundId, String txnType, final String vDate, final Connection con) throws Exception
+	public String getTxnNumber(final String fundId, String txnType, final String vDate, final Connection con) throws ParseException
 	{
 		if (txnType == null || txnType.equals(""))
-			throw new Exception("Configuration setting for voucher numbering is not done");
+			throw new NullPointerException("Configuration setting for voucher numbering is not done");
 
 		String fType = "";
 		String finYear = "";
@@ -682,66 +701,58 @@ public class CommonMethodsImpl implements CommonMethodsI {
 		final SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
 		final String txndate = formatter.format(sdf.parse(vDate));
 
-		final String sql = "select a.FINANCIALYEAR,b.id from FINANCIALYEAR a,fiscalperiod b  where a.id=b.financialyearid AND '"
-				+ txndate + "' between b.startingdate and b.endingdate";
+		final StringBuilder sql = new StringBuilder("select a.FINANCIALYEAR,b.id from FINANCIALYEAR a,fiscalperiod b ")
+				.append(" where a.id=b.financialyearid AND :txndate between b.startingdate and b.endingdate");
 		if (LOGGER.isInfoEnabled())
 			LOGGER.info(sql);
-		try
-		{
+		// This is for getting fund type based on the fund id.
+        final String query = "SELECT identifier as \"fund_identi\" from fund where id= ?";
+        Query pst = persistenceService.getSession().createSQLQuery(query);
+        pst.setString(0, fundId);
+        List<Object[]> rset = pst.list();
+        for (final Object[] element : rset) {
+        	fType = element[0].toString();
 
-			// This is for getting fund type based on the fund id.
-			final String query = "SELECT identifier as \"fund_identi\" from fund where id= ?";
-			Query pst = persistenceService.getSession().createSQLQuery(query);
-			pst.setString(0, fundId);
-			List<Object[]> rset = pst.list();
-			for (final Object[] element : rset) {
-				fType = element[0].toString();
+        	if (LOGGER.isInfoEnabled())
+        		LOGGER.info("Fund Id--->" + fundId + " Fund Type---->" + fType);
+        }
+        if (rset == null || rset.size() == 0)
+        	throw new NullPointerException("Fund is not defined in the system");
 
-				if (LOGGER.isInfoEnabled())
-					LOGGER.info("Fund Id--->" + fundId + " Fund Type---->" + fType);
-			}
-			if (rset == null || rset.size() == 0)
-				throw new Exception("Fund is not defined in the system");
+        pst = persistenceService.getSession().createSQLQuery(sql.toString());
+        pst.setParameter("txndate", txndate);
+        rset = pst.list();
+        for (final Object[] element : rset) {
+        	finYear = element[0].toString();
+        	fiscalPeriod = element[1].toString();
+        	if (LOGGER.isInfoEnabled())
+        		LOGGER.info("finYear id>>>>>>>" + finYear + " fiscalPeriod :" + fiscalPeriod);
+        }
+        if (rset == null || rset.size() == 0)
+        	throw new NullPointerException("Year is not defined in the system");
 
-			pst = persistenceService.getSession().createSQLQuery(sql);
-			rset = pst.list();
-			for (final Object[] element : rset) {
-				finYear = element[0].toString();
-				fiscalPeriod = element[1].toString();
-				if (LOGGER.isInfoEnabled())
-					LOGGER.info("finYear id>>>>>>>" + finYear + " fiscalPeriod :" + fiscalPeriod);
-			}
-			if (rset == null || rset.size() == 0)
-				throw new Exception("Year is not defined in the system");
+        final String year = finYear.substring(2, 4) + finYear.substring(finYear.length() - 2, finYear.length());
+        if (LOGGER.isInfoEnabled())
+        	LOGGER.info(" The year String :" + year);
+        txnType = fType.concat(txnType);
 
-			final String year = finYear.substring(2, 4) + finYear.substring(finYear.length() - 2, finYear.length());
-			if (LOGGER.isInfoEnabled())
-				LOGGER.info(" The year String :" + year);
-			txnType = fType.concat(txnType);
+        // ---
+        if (LOGGER.isDebugEnabled())
+        	LOGGER.debug(" In CommonMethodsImpl :getTxnNumber method ");
+        // persistenceService.setSessionFactory(new SessionFactory());
+        //persistenceService.setType(CFiscalPeriod.class);
+        final CFiscalPeriod fiscalPeriodObj = (CFiscalPeriod) persistenceService.find("from CFiscalPeriod where id=?",
+        		Long.parseLong(fiscalPeriod));
+        // Sequence name will be SQ_U_DBP_CGVN_FP7 for txnType U/DBP/CGVN and fiscalPeriodIdStr 7
+        final String sequenceName = VoucherHelper.sequenceNameFor(txnType, fiscalPeriodObj.getName());
+        Serializable runningNumber = genericSequenceNumberGenerator.getNextSequence(sequenceName);
+        if (LOGGER.isDebugEnabled())
+        	LOGGER.debug("----- Txn Number : " + runningNumber);
+        // ---
 
-			// ---
-			if (LOGGER.isDebugEnabled())
-				LOGGER.debug(" In CommonMethodsImpl :getTxnNumber method ");
-			// persistenceService.setSessionFactory(new SessionFactory());
-			//persistenceService.setType(CFiscalPeriod.class);
-			final CFiscalPeriod fiscalPeriodObj = (CFiscalPeriod) persistenceService.find("from CFiscalPeriod where id=?",
-					Long.parseLong(fiscalPeriod));
-			// Sequence name will be SQ_U_DBP_CGVN_FP7 for txnType U/DBP/CGVN and fiscalPeriodIdStr 7
-			final String sequenceName = VoucherHelper.sequenceNameFor(txnType, fiscalPeriodObj.getName());
-			Serializable runningNumber = genericSequenceNumberGenerator.getNextSequence(sequenceName);
-			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("----- Txn Number : " + runningNumber);
-			// ---
-
-			retVal = txnType + "/" + runningNumber.toString() + "/" + month[1] + "/" + year;
-			if (LOGGER.isInfoEnabled())
-				LOGGER.info("Return value is :" + retVal);
-		
-		} catch (final Exception e)
-		{
-			LOGGER.error("Exp=" + e.getMessage(), e);
-			throw new Exception(e.toString());
-		}
+        retVal = txnType + "/" + runningNumber.toString() + "/" + month[1] + "/" + year;
+        if (LOGGER.isInfoEnabled())
+        	LOGGER.info("Return value is :" + retVal);
 		return retVal;
 	}
 
@@ -750,11 +761,11 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * transaction number.
 	 */
 	@Override
-	public String getTransRunningNumber(final String fundId, String txnType, final String vDate, final Connection con)
-			throws Exception {
+	public String getTransRunningNumber(final String fundId, String txnType, final String vDate, final Connection con) throws ParseException
+		 {
 
 		if (txnType == null || txnType.equals(""))
-			throw new Exception("Configuration setting for voucher numbering is not done");
+			throw new NullPointerException("Configuration setting for voucher numbering is not done");
 
 		String fType = "";
 		String finYear = "";
@@ -765,12 +776,11 @@ public class CommonMethodsImpl implements CommonMethodsI {
 		final SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
 		final String txndate = formatter.format(sdf.parse(vDate));
 
-		final String sql = "select a.FINANCIALYEAR,b.id from FINANCIALYEAR a,fiscalperiod b  where a.id=b.financialyearid AND '"
-				+ txndate + "' between b.startingdate and b.endingdate";
+		final StringBuilder sql = new StringBuilder("select a.FINANCIALYEAR,b.id from FINANCIALYEAR a,fiscalperiod b ")
+				.append(" where a.id=b.financialyearid AND :txndate between b.startingdate and b.endingdate");
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("sql in getTransRunningNumber() :" + sql);
-		try
-		{
+		try {
 
 			// This is for getting fund type based on the fund id.
 			final String query = "SELECT identifier as \"fund_identi\" from fund where id= ?";
@@ -783,8 +793,9 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.info("Fund Id  :--->" + fundId + " Fund Type  :---->" + fType);
 			}
 			if (rset == null || rset.size() == 0)
-				throw new Exception("Fund is not defined in the system");
-			pst = persistenceService.getSession().createSQLQuery(sql);
+				throw new NullPointerException("Fund is not defined in the system");
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("txndate", txndate);
 			rset = pst.list();
 			for (final Object[] element : rset) {
 				finYear = element[0].toString();
@@ -793,7 +804,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 					LOGGER.debug("finYear id>>>>>>>" + finYear + " fiscalPeriod :" + fiscalPeriod);
 			}
 			if (rset == null || rset.size() == 0)
-				throw new Exception("Year is not defined in the system");
+				throw new NullPointerException("Year is not defined in the system");
 
 			txnType = fType.concat(txnType);
 			// ---
@@ -812,9 +823,9 @@ public class CommonMethodsImpl implements CommonMethodsI {
 			if (LOGGER.isInfoEnabled())
 				LOGGER.info("Return value is in getTransRunningNumber() :" + retVal);
 		
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			LOGGER.error("Exp occured in getTransRunningNumber() :" + e.getMessage(), e);
-			throw new Exception(e.toString());
+			throw new HibernateException(e.toString());
 		}
 		return retVal;
 	}
@@ -824,7 +835,7 @@ public class CommonMethodsImpl implements CommonMethodsI {
 	 * field value will come first.
 	 */
 	@Override
-	public Integer getDivisionIdFromCode(final String divisionCode, final Connection connection) throws Exception
+	public Integer getDivisionIdFromCode(final String divisionCode, final Connection connection)
 	{
 		Integer divId = null;
 		final String sql = "Select id_bndry from EG_BOUNDARY where BNDRY_NUM= ? and is_bndry_active=1 order by id_bndry_type desc";

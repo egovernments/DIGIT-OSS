@@ -47,6 +47,15 @@
  */
 package org.egov.services.report;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.egov.commons.CFinancialYear;
 import org.egov.egf.model.Statement;
@@ -57,13 +66,6 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 public class RPService extends ScheduleService {
  @Autowired
  @Qualifier("persistenceService")
@@ -72,221 +74,191 @@ public class RPService extends ScheduleService {
 
     final static Logger LOGGER = Logger.getLogger(RPService.class);
 
-    public List<Object> getTransactionType(final String scheduleNo) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getReceiptScheduleNoAndName............");
-        StringBuffer query = new StringBuffer();
-        query = query.append("select transaction_type from egf_rpreport_schedulemaster where schedule_no='" + scheduleNo + "'");
-        final List<Object> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getReceiptScheduleNoAndName..........." + query.toString());
+	public List<Object> getTransactionType(final String scheduleNo) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getReceiptScheduleNoAndName............");
+		final StringBuilder query = new StringBuilder();
+		query.append("select transaction_type from egf_rpreport_schedulemaster where schedule_no=:scheduleNo");
+		final List<Object> result = persistenceService.getSession().createSQLQuery(query.toString())
+				.setParameter("scheduleNo", scheduleNo).list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getReceiptScheduleNoAndName..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public List<StatementResultObject> getScheduleNoAndName() {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getReceiptScheduleNoAndName............");
-        StringBuffer query = new StringBuffer();
-        query = query.append("select m.schedule_no as scheduleNumber, m.schedule_name as scheduleName,m.transaction_type as type"
-                +
-                " from egf_rpreport_schedulemaster m where is_subschedule=0 order by m.transaction_type desc,m.id ");
+	public List<StatementResultObject> getScheduleNoAndName() {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getReceiptScheduleNoAndName............");
+		final StringBuilder query = new StringBuilder();
+		query.append(
+				"select m.schedule_no as scheduleNumber, m.schedule_name as scheduleName,m.transaction_type as type")
+				.append(" from egf_rpreport_schedulemaster m where is_subschedule=0 order by m.transaction_type desc,m.id ");
 
-        final Query queryObj = persistenceService.getSession().createSQLQuery(query.toString()).addScalar("scheduleNumber")
-                .addScalar("scheduleName").addScalar("type")
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
-        ;
+		final Query queryObj = persistenceService.getSession().createSQLQuery(query.toString())
+				.addScalar("scheduleNumber").addScalar("scheduleName").addScalar("type")
+				.setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
 
-        final List<StatementResultObject> result = queryObj.list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getReceiptScheduleNoAndName..........." + query.toString());
+		final List<StatementResultObject> result = queryObj.list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getReceiptScheduleNoAndName..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public String getConditionalQuery(final CFinancialYear finId, final Statement statement) {
-        final StringBuffer query = new StringBuffer();
-        if (statement.getPeriod().equals("Yearly"))
-            query.append(" and vh.voucherdate between '" + getFormattedDate(finId.getStartingDate()) + "' And '"
-                    + getFormattedDate(finId.getEndingDate()) + "'");
-        else if (statement.getPeriod().equals("Date Range"))
-            query.append(" and vh.voucherdate between '" + getFormattedDate(statement.getFromDate()) + "' And '"
-                    + getFormattedDate(statement.getToDate()) + "'");
-        if (statement.getFund() != null && statement.getFund().getId() != null && statement.getFund().getId() != 0)
-            query.append(" AND rpmap.is_consolidated = 0 and rpmap.fund_code = '" + statement.getFund().getCode() + "'");
-        else
-            query.append("AND rpmap.is_consolidated = 1 ");
+	public String getConditionalQuery(final CFinancialYear finId, final Statement statement,
+			final Map<String, Object> params) {
+		final StringBuilder query = new StringBuilder();
+		if (statement.getPeriod().equals("Yearly")) {
+			query.append(" and vh.voucherdate between :voucherFromDate And :voucherToDate");
+			params.put("voucherFromDate", getFormattedDate(finId.getStartingDate()));
+			params.put("voucherToDate", getFormattedDate(finId.getEndingDate()));
+		} else if (statement.getPeriod().equals("Date Range")) {
+			query.append(" and vh.voucherdate between :voucherFromDate And :voucherToDate");
+			params.put("voucherFromDate", getFormattedDate(statement.getFromDate()));
+			params.put("voucherToDate", getFormattedDate(statement.getToDate()));
+		}
+		if (statement.getFund() != null && statement.getFund().getId() != null && statement.getFund().getId() != 0) {
+			query.append(" AND rpmap.is_consolidated = 0 and rpmap.fund_code = :fundCode");
+			params.put("fundCode", statement.getFund().getCode());
+		} else
+			query.append("AND rpmap.is_consolidated = 1 ");
 
-        return query.toString();
-    }
+		return query.toString();
+	}
 
-    public List<StatementResultObject> getData(final CFinancialYear finId, final Statement statement) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getData............");
-        StringBuffer queryNG = new StringBuffer();
-        StringBuffer queryG = new StringBuffer();
-        String amountNG = "";
-        String amountG = "";
-        final String SelConditionQuery = getConditionalQuery(finId, statement);
+	public List<StatementResultObject> getData(final CFinancialYear finId, final Statement statement) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getData............");
+		final StringBuilder queryNG = new StringBuilder();
+		final StringBuilder queryG = new StringBuilder();
+		String amountNG = "";
+		String amountG = "";
+		final Map<String, Object> params = new HashMap<>();
+		final String SelConditionQuery = getConditionalQuery(finId, statement, params);
 
-        if (statement.getCurrencyInAmount().equals(new BigDecimal(1))) {
-            amountNG = "case when rpm.transaction_type = 'R' then SUM(gl.creditamount) else SUM(gl.debitamount) end  AS amount";
-            amountG = "SUM(gl.creditamount)  AS amount";
-        } else {
-            amountNG = "case when rpm.transaction_type  = 'R' then SUM(round(gl.creditamount/" + statement.getCurrencyInAmount()
-                    + ",0)) else SUM(round(gl.debitamount/" + statement.getCurrencyInAmount() + ",0)) end  AS amount";
-            amountG = "SUM(round(gl.creditamount/" + statement.getCurrencyInAmount() + ",0))  AS amount";
-        }
+		if (statement.getCurrencyInAmount().equals(new BigDecimal(1))) {
+			amountNG = "case when rpm.transaction_type = 'R' then SUM(gl.creditamount) else SUM(gl.debitamount) end  AS amount";
+			amountG = "SUM(gl.creditamount)  AS amount";
+		} else {
+			amountNG = new StringBuilder(
+					"case when rpm.transaction_type  = 'R' then SUM(round(gl.creditamount/:currencyInAmount")
+							.append(",0)) else SUM(round(gl.debitamount/:currencyInAmount")
+							.append(",0)) end  AS amount").toString();
+			amountG = "SUM(round(gl.creditamount/:currencyInAmount,0))  AS amount";
+			params.put("currencyInAmount", statement.getCurrencyInAmount());
+		}
 
-        queryNG = queryNG.append("SELECT rpm.schedule_no as scheduleNumber, " + amountNG + " , rpm.transaction_type as type  " +
-                " ,rpm.schedule_name as scheduleName FROM egf_rpreport_schedulemaster rpm," +
-                "  egf_rpreport_schedulemapping rpmap," +
-                "  voucherheader vh," +
-                "  generalledger gl," +
-                " fiscalperiod p," +
-                " financialyear f" +
-                " WHERE rpm.id     = rpmap.rpscheduleid" +
-                " AND vh.id        = gl.voucherheaderid" +
-                " AND rpmap.glcode = gl.glcode" +
-                " and p.id = vh.fiscalperiodid" +
-                " and f.id = p.financialyearid" +
-                " and vh.status <> 4" +
-                " and f.id = " + finId.getId() + "" +
-                SelConditionQuery +
-                " and vh.name <> 'JVGeneral'" +
-                " group by rpm.schedule_no,rpm.transaction_type,rpm.schedule_name");
+		queryNG.append("SELECT rpm.schedule_no as scheduleNumber, ").append(amountNG)
+				.append(" , rpm.transaction_type as type  ")
+				.append(" ,rpm.schedule_name as scheduleName FROM egf_rpreport_schedulemaster rpm,")
+				.append("  egf_rpreport_schedulemapping rpmap, voucherheader vh, generalledger gl, fiscalperiod p, financialyear f")
+				.append(" WHERE rpm.id     = rpmap.rpscheduleid AND vh.id = gl.voucherheaderid AND rpmap.glcode = gl.glcode")
+				.append(" and p.id = vh.fiscalperiodid and f.id = p.financialyearid and vh.status <> 4 and f.id = :finId")
+				.append(SelConditionQuery)
+				.append(" and vh.name <> 'JVGeneral' group by rpm.schedule_no,rpm.transaction_type,rpm.schedule_name");
 
-        final Query queryObjNG = persistenceService.getSession().createSQLQuery(queryNG.toString()).addScalar("scheduleNumber")
-                .addScalar("scheduleName")
-                .addScalar("amount").addScalar("type")
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
-        final List<StatementResultObject> resultNG = queryObjNG.list();
+		params.put("finId", finId.getId());
 
-        queryG = queryG.append("SELECT rpm.schedule_no as scheduleNumber, " + amountG + " , rpm.transaction_type as type  " +
-                " ,rpm.schedule_name as scheduleName FROM egf_rpreport_schedulemaster rpm," +
-                "  egf_rpreport_schedulemapping rpmap," +
-                "  voucherheader vh," +
-                "  generalledger gl," +
-                " fiscalperiod p," +
-                " financialyear f," +
-                "  egf_instrumentheader ih," +
-                "  egf_instrumentvoucher iv," +
-                "  egw_status s" +
-                " WHERE rpm.id     = rpmap.rpscheduleid" +
-                " AND vh.id        = gl.voucherheaderid" +
-                " AND rpmap.glcode = gl.glcode" +
-                " and p.id = vh.fiscalperiodid" +
-                " and f.id = p.financialyearid " +
-                " AND ih.id        = iv.instrumentheaderid " +
-                " AND ih.id_status = s.id" +
-                " and vh.status <> 4 " +
-                " and vh.type = 'Journal Voucher' " +
-                " and iv.voucherheaderid = vh.id " +
-                " and s.moduletype = 'Instrument' " +
-                " and s.description in ('Deposited','Reconciled')" +
-                " and f.id = " + finId.getId() + "" +
-                SelConditionQuery +
-                " and vh.name = 'JVGeneral'" +
-                " group by rpm.schedule_no,rpm.transaction_type,rpm.schedule_name");
+		final Query queryObjNG = persistenceService.getSession().createSQLQuery(queryNG.toString())
+				.addScalar("scheduleNumber").addScalar("scheduleName").addScalar("amount").addScalar("type")
+				.setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+		params.entrySet().forEach(entry -> queryObjNG.setParameter(entry.getKey(), entry.getValue()));
+		final List<StatementResultObject> resultNG = queryObjNG.list();
 
-        final Query queryObjG = persistenceService.getSession().createSQLQuery(queryG.toString()).addScalar("scheduleNumber")
-                .addScalar("scheduleName")
-                .addScalar("amount").addScalar("type")
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
-        final List<StatementResultObject> resultG = queryObjG.list();
+		queryG.append("SELECT rpm.schedule_no as scheduleNumber, ").append(amountG).append(
+				" , rpm.transaction_type as type,rpm.schedule_name as scheduleName FROM egf_rpreport_schedulemaster rpm,")
+				.append("  egf_rpreport_schedulemapping rpmap, voucherheader vh, generalledger gl, fiscalperiod p, financialyear f,")
+				.append("  egf_instrumentheader ih, egf_instrumentvoucher iv, egw_status s WHERE rpm.id     = rpmap.rpscheduleid")
+				.append(" AND vh.id        = gl.voucherheaderid AND rpmap.glcode = gl.glcode and p.id = vh.fiscalperiodid")
+				.append(" and f.id = p.financialyearid AND ih.id        = iv.instrumentheaderid AND ih.id_status = s.id")
+				.append(" and vh.status <> 4 and vh.type = 'Journal Voucher' and iv.voucherheaderid = vh.id and s.moduletype = 'Instrument' ")
+				.append(" and s.description in ('Deposited','Reconciled') and f.id = :finId").append(SelConditionQuery)
+				.append(" and vh.name = 'JVGeneral'")
+				.append(" group by rpm.schedule_no,rpm.transaction_type,rpm.schedule_name");
 
-        final List<StatementResultObject> finalResult = new ArrayList<StatementResultObject>();
-        for (final StatementResultObject entryNG : resultG) {
-            boolean found = false;
-            inner: for (final StatementResultObject entryG : resultNG)
-                if (entryNG.getScheduleNumber().equals(entryG.getScheduleNumber())
-                        && entryNG.getGlCode().equals(entryG.getGlCode())) {
-                    entryG.setAmount(entryNG.getAmount().add(entryG.getAmount()));
-                    found = true;
-                    break inner;
-                }
-            if (found == false)
-                if (entryNG != null)
-                    finalResult.add(entryNG);
-        }
-        resultNG.addAll(finalResult);
-        return resultNG;
-    }
+		final Query queryObjG = persistenceService.getSession().createSQLQuery(queryG.toString())
+				.addScalar("scheduleNumber").addScalar("scheduleName").addScalar("amount").addScalar("type")
+				.setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+
+		params.entrySet().forEach(entry -> queryObjG.setParameter(entry.getKey(), entry.getValue()));
+
+		final List<StatementResultObject> resultG = queryObjG.list();
+
+		final List<StatementResultObject> finalResult = new ArrayList<StatementResultObject>();
+		for (final StatementResultObject entryNG : resultG) {
+			boolean found = false;
+			inner: for (final StatementResultObject entryG : resultNG)
+				if (entryNG.getScheduleNumber().equals(entryG.getScheduleNumber())
+						&& entryNG.getGlCode().equals(entryG.getGlCode())) {
+					entryG.setAmount(entryNG.getAmount().add(entryG.getAmount()));
+					found = true;
+					break inner;
+				}
+			if (found == false)
+				if (entryNG != null)
+					finalResult.add(entryNG);
+		}
+		resultNG.addAll(finalResult);
+		return resultNG;
+	}
 
     public List<StatementResultObject> getConsolidatedResult(final CFinancialYear finId, final Statement statement) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getConsolidatedResult............");
-        StringBuffer queryNG = new StringBuffer();
-        StringBuffer queryG = new StringBuffer();
-        String amountNG = "";
-        String amountG = "";
-        final String SelConditionQuery = getConditionalQuery(finId, statement);
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getConsolidatedResult............");
+		final StringBuilder queryNG = new StringBuilder();
+		final StringBuilder queryG = new StringBuilder();
+		String amountNG = "";
+		String amountG = "";
+		final Map<String, Object> params = new HashMap<>();
+		final String SelConditionQuery = getConditionalQuery(finId, statement, params);
 
-        if (statement.getCurrencyInAmount().equals(new BigDecimal(1))) {
-            amountNG = "case when rpm.transaction_type = 'R' then SUM(gl.creditamount) else SUM(gl.debitamount) end  AS amount";
-            amountG = "SUM(gl.creditamount)  AS amount";
-        } else {
-            amountNG = "case when rpm.transaction_type = 'R' then SUM(round(gl.creditamount/" + statement.getCurrencyInAmount()
-                    + ",0))  else SUM(round(gl.debitamount/" + statement.getCurrencyInAmount() + ",0))  AS amount";
-            amountG = "SUM(round(gl.creditamount/" + statement.getCurrencyInAmount() + ",0))  AS amount";
-        }
+		if (statement.getCurrencyInAmount().equals(new BigDecimal(1))) {
+			amountNG = "case when rpm.transaction_type = 'R' then SUM(gl.creditamount) else SUM(gl.debitamount) end  AS amount";
+			amountG = "SUM(gl.creditamount)  AS amount";
+		} else {
+			amountNG = new StringBuilder("case when rpm.transaction_type = 'R' ")
+					.append("then SUM(round(gl.creditamount/:currencyInAmount")
+					.append(",0))  else SUM(round(gl.debitamount/:currencyInAmount,0))  AS amount").toString();
+			amountG = "SUM(round(gl.creditamount/:currencyInAmount,0))  AS amount";
+			params.put("currencyInAmount", statement.getCurrencyInAmount());
+		}
 
-        queryNG = queryNG.append("SELECT rpm.schedule_no as scheduleNumber, " + amountNG + " ,rpmap.fund_Code as fundCode, " +
-                " rpm.schedule_name as scheduleName, rpm.transaction_type as type FROM egf_rpreport_schedulemaster rpm," +
-                "  egf_rpreport_schedulemapping rpmap," +
-                "  voucherheader vh," +
-                "  generalledger gl," +
-                " fiscalperiod p," +
-                " financialyear f" +
-                " WHERE rpm.id     = rpmap.rpscheduleid" +
-                " AND vh.id        = gl.voucherheaderid" +
-                " AND rpmap.glcode = gl.glcode" +
-                " and p.id = vh.fiscalperiodid" +
-                " and f.id = p.financialyearid" +
-                " and vh.status <> 4" +
-                " and f.id = " + finId.getId() + "" +
-                SelConditionQuery +
-                " and vh.name <> 'JVGeneral'" +
-                " group by rpm.schedule_no,rpmap.fund_Code,rpm.schedule_name,rpm.transaction_type");
+		queryNG.append("SELECT rpm.schedule_no as scheduleNumber, ").append(amountNG)
+				.append(" ,rpmap.fund_Code as fundCode, ")
+				.append(" rpm.schedule_name as scheduleName, rpm.transaction_type as type FROM egf_rpreport_schedulemaster rpm,")
+				.append("  egf_rpreport_schedulemapping rpmap, voucherheader vh, generalledger gl, fiscalperiod p,")
+				.append(" financialyear f WHERE rpm.id     = rpmap.rpscheduleid AND vh.id        = gl.voucherheaderid")
+				.append(" AND rpmap.glcode = gl.glcode and p.id = vh.fiscalperiodid and f.id = p.financialyearid")
+				.append(" and vh.status <> 4 and f.id = :finId").append(SelConditionQuery)
+				.append(" and vh.name <> 'JVGeneral'")
+				.append(" group by rpm.schedule_no,rpmap.fund_Code,rpm.schedule_name,rpm.transaction_type");
 
-        final Query queryObjNG = persistenceService.getSession().createSQLQuery(queryNG.toString()).addScalar("scheduleNumber")
-                .addScalar("amount")
-                .addScalar("fundCode").addScalar("scheduleName").addScalar("type")
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
-        final List<StatementResultObject> resultNG = queryObjNG.list();
+		params.put("finId", finId.getId());
 
-        queryG = queryG.append("SELECT rpm.schedule_no as scheduleNumber, " + amountG + " ,rpmap.fund_Code as fundCode, " +
-                " rpm.schedule_name as scheduleName, rpm.transaction_type as type FROM egf_rpreport_schedulemaster rpm," +
-                "  egf_rpreport_schedulemapping rpmap," +
-                "  voucherheader vh," +
-                "  generalledger gl," +
-                " fiscalperiod p," +
-                " financialyear f," +
-                "  egf_instrumentheader ih," +
-                "  egf_instrumentvoucher iv," +
-                "  egw_status s" +
-                " WHERE rpm.id     = rpmap.rpscheduleid" +
-                " AND vh.id        = gl.voucherheaderid" +
-                " AND rpmap.glcode = gl.glcode" +
-                " and p.id = vh.fiscalperiodid" +
-                " and f.id = p.financialyearid" +
-                " AND ih.id        = iv.instrumentheaderid " +
-                " AND ih.id_status = s.id" +
-                " and vh.status <> 4" +
-                " and vh.type = 'Journal Voucher' " +
-                " and iv.voucherheaderid = vh.id " +
-                " and s.moduletype = 'Instrument' " +
-                " and s.description in ('Deposited','Reconciled')" +
-                " and f.id = " + finId.getId() + "" +
-                SelConditionQuery +
-                " and vh.name = 'JVGeneral'" +
-                " group by rpm.schedule_no,rpmap.fund_Code,rpm.schedule_name,rpm.transaction_type");
+		final Query queryObjNG = persistenceService.getSession().createSQLQuery(queryNG.toString())
+				.addScalar("scheduleNumber").addScalar("amount").addScalar("fundCode").addScalar("scheduleName")
+				.addScalar("type").setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+		params.entrySet().forEach(entry -> queryObjNG.setParameter(entry.getKey(), entry.getValue()));
+		final List<StatementResultObject> resultNG = queryObjNG.list();
 
-        final Query queryObjG = persistenceService.getSession().createSQLQuery(queryG.toString()).addScalar("scheduleNumber")
-                .addScalar("amount")
-                .addScalar("fundCode").addScalar("scheduleName").addScalar("type")
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
-        final List<StatementResultObject> resultG = queryObjG.list();
+		queryG.append("SELECT rpm.schedule_no as scheduleNumber, ").append(amountG).append(
+				" ,rpmap.fund_Code as fundCode, rpm.schedule_name as scheduleName, rpm.transaction_type as type")
+				.append(" FROM egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemapping rpmap, voucherheader vh,")
+				.append("  generalledger gl, fiscalperiod p, financialyear f, egf_instrumentheader ih, egf_instrumentvoucher iv,")
+				.append("  egw_status s WHERE rpm.id     = rpmap.rpscheduleid AND vh.id        = gl.voucherheaderid")
+				.append(" AND rpmap.glcode = gl.glcode and p.id = vh.fiscalperiodid and f.id = p.financialyearid")
+				.append(" AND ih.id        = iv.instrumentheaderid AND ih.id_status = s.id and vh.status <> 4")
+				.append(" and vh.type = 'Journal Voucher' and iv.voucherheaderid = vh.id and s.moduletype = 'Instrument' ")
+				.append(" and s.description in ('Deposited','Reconciled') and f.id = :finId").append(SelConditionQuery)
+				.append(" and vh.name = 'JVGeneral'")
+				.append(" group by rpm.schedule_no,rpmap.fund_Code,rpm.schedule_name,rpm.transaction_type");
+
+		final Query queryObjG = persistenceService.getSession().createSQLQuery(queryG.toString())
+				.addScalar("scheduleNumber").addScalar("amount").addScalar("fundCode").addScalar("scheduleName")
+				.addScalar("type").setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+		params.entrySet().forEach(entry -> queryObjG.setParameter(entry.getKey(), entry.getValue()));
+		final List<StatementResultObject> resultG = queryObjG.list();
 
         final List<StatementResultObject> finalResult = new ArrayList<StatementResultObject>();
         for (final StatementResultObject entryNG : resultG) {
@@ -307,432 +279,333 @@ public class RPService extends ScheduleService {
         return resultNG;
     }
 
-    public List<Object[]> getSubScheduleMaster(final String scheduleNo, final String fundCode) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getSubScheduleMaster............");
-        StringBuffer query = new StringBuffer();
+	public List<Object[]> getSubScheduleMaster(final String scheduleNo, final String fundCode) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getSubScheduleMaster............");
+		final StringBuilder query = new StringBuilder();
 
-        query = query.append("SELECT rpm1.schedule_no, rpm1.schedule_name, rpm1.id " +
-                "FROM egf_rpreport_schedulemaster rpm1, egf_rpreport_schedulemaster rpm2, egf_rpreport_schedulemapping rpmap " +
-                "WHERE rpm1.id             = rpmap.subschedule_id and rpm2.id = rpmap.rpscheduleid AND rpmap.fund_code      ='"
-                + fundCode + "' " +
-                "and rpm2.schedule_no = '" + scheduleNo + "' AND rpmap.is_consolidated=0 " +
-                "group by rpm1.schedule_no, rpm1.schedule_name, rpm1.id order by rpm1.id");
+		query.append("SELECT rpm1.schedule_no, rpm1.schedule_name, rpm1.id ").append(
+				"FROM egf_rpreport_schedulemaster rpm1, egf_rpreport_schedulemaster rpm2, egf_rpreport_schedulemapping rpmap ")
+				.append("WHERE rpm1.id = rpmap.subschedule_id and rpm2.id = rpmap.rpscheduleid")
+				.append(" AND rpmap.fund_code = :fundCode and rpm2.schedule_no = :scheduleNo AND rpmap.is_consolidated=0 ")
+				.append("group by rpm1.schedule_no, rpm1.schedule_name, rpm1.id order by rpm1.id");
 
-        final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getSubScheduleMaster..........." + query.toString());
+		final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString())
+				.setParameter("fundCode", fundCode).setParameter("scheduleNo", scheduleNo).list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getSubScheduleMaster..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public List<Object[]> getSubScheduleMasterConsolidated(final String scheduleNo) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getSubScheduleMaster............");
-        StringBuffer query = new StringBuffer();
+	public List<Object[]> getSubScheduleMasterConsolidated(final String scheduleNo) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getSubScheduleMaster............");
+		final StringBuilder query = new StringBuilder();
 
-        query = query.append("SELECT rpm1.schedule_no, rpm1.schedule_name, rpm1.id " +
-                "FROM egf_rpreport_schedulemaster rpm1, egf_rpreport_schedulemaster rpm2, egf_rpreport_schedulemapping rpmap " +
-                "WHERE rpm1.id             = rpmap.subschedule_id and rpm2.id = rpmap.rpscheduleid " +
-                "and rpm2.schedule_no = '" + scheduleNo + "' AND rpmap.is_consolidated=1 " +
-                "group by rpm1.schedule_no, rpm1.schedule_name, rpm1.id order by rpm1.id");
+		query.append("SELECT rpm1.schedule_no, rpm1.schedule_name, rpm1.id ").append(
+				"FROM egf_rpreport_schedulemaster rpm1, egf_rpreport_schedulemaster rpm2, egf_rpreport_schedulemapping rpmap ")
+				.append("WHERE rpm1.id = rpmap.subschedule_id and rpm2.id = rpmap.rpscheduleid ")
+				.append("and rpm2.schedule_no = :scheduleNo AND rpmap.is_consolidated=1 ")
+				.append("group by rpm1.schedule_no, rpm1.schedule_name, rpm1.id order by rpm1.id");
 
-        final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getSubScheduleMaster..........." + query.toString());
+		final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString())
+				.setParameter("scheduleNo", scheduleNo).list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getSubScheduleMaster..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public List<Object[]> getfundMaster() {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getfundMaster............");
-        StringBuffer query = new StringBuffer();
+	public List<Object[]> getfundMaster() {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getfundMaster............");
+		final StringBuilder query = new StringBuilder();
 
-        query = query.append("select f.code, f.name from fund f order by code");
+		query.append("select f.code, f.name from fund f order by code");
 
-        final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getfundMaster..........." + query.toString());
+		final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getfundMaster..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public List<Object[]> getDetailGlcodeNonSubSchedule(final String scheduleNo, final String fundCode) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getReceiptScheduleNoAndName............");
-        StringBuffer query = new StringBuffer();
+	public List<Object[]> getDetailGlcodeNonSubSchedule(final String scheduleNo, final String fundCode) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getReceiptScheduleNoAndName............");
+		final StringBuilder query = new StringBuilder();
 
-        query = query
-                .append("select rpmap.glcode, coa.name from egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemapping rpmap,"
-                        +
-                        "chartofaccounts COA where rpm.id = rpmap.rpscheduleid and rpmap.fund_code='" + fundCode + "' and" +
-                        " coa.glcode=rpmap.glcode and  rpmap.is_consolidated=0 and rpm.schedule_no='" + scheduleNo
-                        + "' and rpmap.subschedule_id is null  order by COA.glcode");
+		query.append("select rpmap.glcode, coa.name from egf_rpreport_schedulemaster rpm,")
+				.append(" egf_rpreport_schedulemapping rpmap, chartofaccounts COA where rpm.id = rpmap.rpscheduleid")
+				.append(" and rpmap.fund_code= :fundCode and coa.glcode=rpmap.glcode and  rpmap.is_consolidated=0")
+				.append(" and rpm.schedule_no=:scheduleNo and rpmap.subschedule_id is null  order by COA.glcode");
 
-        final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getReceiptScheduleNoAndName..........." + query.toString());
+		final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString())
+				.setParameter("fundCode", fundCode).setParameter("scheduleNo", scheduleNo).list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getReceiptScheduleNoAndName..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public List<Object[]> getDetailGlcodeNonSubScheduleConsolidated(final String scheduleNo) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getDetailGlcodeNonSubScheduleConsolidated............");
-        StringBuffer query = new StringBuffer();
+	public List<Object[]> getDetailGlcodeNonSubScheduleConsolidated(final String scheduleNo) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getDetailGlcodeNonSubScheduleConsolidated............");
+		final StringBuilder query = new StringBuilder();
 
-        query = query
-                .append("select rpmap.glcode, coa.name from egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemapping rpmap,"
-                        +
-                        "chartofaccounts COA where rpm.id = rpmap.rpscheduleid  and" +
-                        " coa.glcode=rpmap.glcode and  rpmap.is_consolidated=1 and rpm.schedule_no='" + scheduleNo
-                        + "' and rpmap.subschedule_id is null  order by COA.glcode");
+		query.append("select rpmap.glcode, coa.name from egf_rpreport_schedulemaster rpm,").append(
+				" egf_rpreport_schedulemapping rpmap, chartofaccounts COA where rpm.id = rpmap.rpscheduleid  and")
+				.append(" coa.glcode=rpmap.glcode and  rpmap.is_consolidated=1 and rpm.schedule_no=:scheduleNo")
+				.append(" and rpmap.subschedule_id is null  order by COA.glcode");
 
-        final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getReceiptScheduleNoAndName..........." + query.toString());
+		final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString())
+				.setParameter("scheduleNo", scheduleNo).list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getReceiptScheduleNoAndName..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public List<Object[]> getDetailGlcodeSubSchedule(final String scheduleNo, final String fundCode) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getDetailGlcodeSubSchedule............");
-        StringBuffer query = new StringBuffer();
+	public List<Object[]> getDetailGlcodeSubSchedule(final String scheduleNo, final String fundCode) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getDetailGlcodeSubSchedule............");
+		final StringBuilder query = new StringBuilder();
 
-        query = query.append("SELECT rpmap.glcode, rpmss.schedule_no " +
-                "FROM egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemaster rpmss, egf_rpreport_schedulemapping rpmap " +
-                "WHERE rpm.id             = rpmap.rpscheduleid and rpmss.id = rpmap.subschedule_id AND rpmap.fund_code      ='"
-                + fundCode + "' " +
-                "AND rpmap.is_consolidated=0 AND rpm.schedule_no      ='" + scheduleNo + "' ORDER BY rpmap.glcode");
+		query.append("SELECT rpmap.glcode, rpmss.schedule_no ")
+				.append("FROM egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemaster rpmss,")
+				.append(" egf_rpreport_schedulemapping rpmap ")
+				.append("WHERE rpm.id  = rpmap.rpscheduleid and rpmss.id = rpmap.subschedule_id")
+				.append(" AND rpmap.fund_code  = :fundCode ")
+				.append("AND rpmap.is_consolidated=0 AND rpm.schedule_no  =:scheduleNo ORDER BY rpmap.glcode");
 
-        final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getDetailGlcodeSubSchedule..........." + query.toString());
+		final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString())
+				.setParameter("fundCode", fundCode).setParameter("scheduleNo", scheduleNo).list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getDetailGlcodeSubSchedule..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public List<Object[]> getDetailGlcodeSubScheduleConsolidated(final String scheduleNo) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getDetailGlcodeSubSchedule............");
-        StringBuffer query = new StringBuffer();
+	public List<Object[]> getDetailGlcodeSubScheduleConsolidated(final String scheduleNo) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getDetailGlcodeSubSchedule............");
+		final StringBuilder query = new StringBuilder();
 
-        query = query.append("SELECT rpmap.glcode, rpmss.schedule_no " +
-                "FROM egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemaster rpmss, egf_rpreport_schedulemapping rpmap " +
-                "WHERE rpm.id             = rpmap.rpscheduleid and rpmss.id = rpmap.subschedule_id " +
-                "AND rpmap.is_consolidated=1 AND rpm.schedule_no      ='" + scheduleNo + "' ORDER BY rpmap.glcode");
+		query.append("SELECT rpmap.glcode, rpmss.schedule_no ")
+				.append("FROM egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemaster rpmss,")
+				.append(" egf_rpreport_schedulemapping rpmap ")
+				.append("WHERE rpm.id = rpmap.rpscheduleid and rpmss.id = rpmap.subschedule_id ")
+				.append("AND rpmap.is_consolidated=1 AND rpm.schedule_no = :scheduleNo ORDER BY rpmap.glcode");
 
-        final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getDetailGlcodeSubSchedule..........." + query.toString());
+		final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString())
+				.setParameter("scheduleNo", scheduleNo).list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getDetailGlcodeSubSchedule..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public List<Object[]> getGlcodeForConsolidatedReport(final String scheduleNo) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getDetailGlcodeForConsolidatedReport............");
-        StringBuffer query = new StringBuffer();
+	public List<Object[]> getGlcodeForConsolidatedReport(final String scheduleNo) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getDetailGlcodeForConsolidatedReport............");
+		final StringBuilder query = new StringBuilder();
 
-        query = query
-                .append("select rpmap.glcode, coa.name from egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemapping rpmap,"
-                        +
-                        "chartofaccounts COA where rpm.id = rpmap.rpscheduleid  and" +
-                        " coa.glcode=rpmap.glcode and  rpmap.is_consolidated=1 and rpm.schedule_no='" + scheduleNo
-                        + "' order by COA.glcode");
+		query.append("select rpmap.glcode, coa.name from egf_rpreport_schedulemaster rpm,")
+				.append(" egf_rpreport_schedulemapping rpmap,")
+				.append("chartofaccounts COA where rpm.id = rpmap.rpscheduleid  and")
+				.append(" coa.glcode=rpmap.glcode and  rpmap.is_consolidated=1 and rpm.schedule_no=:scheduleNo")
+				.append(" order by COA.glcode");
 
-        final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString()).list();
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Finished getDetailGlcodeForConsolidatedReport..........." + query.toString());
+		final List<Object[]> result = persistenceService.getSession().createSQLQuery(query.toString())
+				.setParameter("scheduleNo", scheduleNo).list();
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Finished getDetailGlcodeForConsolidatedReport..........." + query.toString());
 
-        return result;
-    }
+		return result;
+	}
 
-    public List<StatementResultObject> getDetailData(final CFinancialYear finId, final String transactionType,
-            final String scheduleNo,
-            final Statement statement) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getData.....Testing.......");
-        StringBuffer queryNG = new StringBuffer();
-        StringBuffer queryG = new StringBuffer();
-        String amountNG = "";
-        String amountG = "";
-        String dateCondition = new String();
+	public List<StatementResultObject> getDetailData(final CFinancialYear finId, final String transactionType,
+			final String scheduleNo, final Statement statement) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getData.....Testing.......");
+		final StringBuilder queryNG = new StringBuilder();
+		final StringBuilder queryG = new StringBuilder();
+		String amountNG = "";
+		String amountG = "";
+		String dateCondition = new String();
 
-        dateCondition = getDateRangeQuery(finId, statement);
+		final Map<String, Object> params = new HashMap<>();
+		dateCondition = getDateRangeQuery(finId, statement, params);
 
-        if (statement.getCurrencyInAmount().equals(new BigDecimal(1))) {
-            amountNG = "case when rpm.transaction_type = 'R' then SUM(gl.creditamount) else SUM(gl.debitamount) end   AS amount";
-            amountG = "SUM(gl.creditamount)  AS amount";
-        } else {
-            amountNG = "case when rpm.transaction_type = 'R' then SUM(round(gl.creditamount/" + statement.getCurrencyInAmount()
-                    + ",0)) else SUM(round(gl.debitamount/" + statement.getCurrencyInAmount() + ",0))  AS amount";
-            amountG = "SUM(round(gl.creditamount/" + statement.getCurrencyInAmount() + ",0))  AS amount";
-        }
+		if (statement.getCurrencyInAmount().equals(new BigDecimal(1))) {
+			amountNG = "case when rpm.transaction_type = 'R' then SUM(gl.creditamount) else SUM(gl.debitamount) end   AS amount";
+			amountG = "SUM(gl.creditamount)  AS amount";
+		} else {
+			amountNG = new StringBuilder("case when rpm.transaction_type = 'R'")
+					.append(" then SUM(round(gl.creditamount/:currencyInAmount,0))")
+					.append(" else SUM(round(gl.debitamount/:currencyInAmount,0))  AS amount").toString();
+			amountG = "SUM(round(gl.creditamount/:currencyInAmount,0))  AS amount";
+			params.put("currencyInAmount", statement.getCurrencyInAmount());
+		}
 
-        queryNG = queryNG
-                .append("SELECT rpmap.glcode as glCode, "
-                        + amountNG
-                        + " , rpmap.fund_Code as fundCode, rpm.transaction_type as type, rpm.schedule_no as scheduleNumber "
-                        +
-                        " FROM egf_rpreport_schedulemaster rpm,"
-                        +
-                        "  egf_rpreport_schedulemapping rpmap,"
-                        +
-                        "  voucherheader vh,"
-                        +
-                        "  generalledger gl,"
-                        +
-                        " fiscalperiod p,"
-                        +
-                        " financialyear f"
-                        +
-                        " WHERE rpm.id     = rpmap.rpscheduleid"
-                        +
-                        " AND vh.id        = gl.voucherheaderid"
-                        +
-                        " AND rpmap.glcode = gl.glcode"
-                        +
-                        " and p.id = vh.fiscalperiodid"
-                        +
-                        " and f.id = p.financialyearid"
-                        +
-                        " and vh.status <> 4"
-                        +
-                        " and f.id = "
-                        + finId.getId()
-                        + ""
-                        +
-                        // check if this trasaction type can be joined with rpmap type
-                        " and rpm.transaction_type='"
-                        + transactionType
-                        + "'"
-                        +
-                        " and vh.name <> 'JVGeneral'"
-                        + dateCondition
-                        +
-                        " and rpm.schedule_no='"
-                        + scheduleNo
-                        + "' "
-                        +
-                        " group by rpmap.glcode, rpmap.fund_Code ,rpm.transaction_type, rpm.schedule_no ORDER BY rpm.schedule_no, rpmap.glcode");
+		queryNG.append("SELECT rpmap.glcode as glCode, ").append(amountNG).append(
+				" , rpmap.fund_Code as fundCode, rpm.transaction_type as type, rpm.schedule_no as scheduleNumber ")
+				.append(" FROM egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemapping rpmap,")
+				.append("  voucherheader vh, generalledger gl, fiscalperiod p,")
+				.append(" financialyear f WHERE rpm.id     = rpmap.rpscheduleid")
+				.append(" AND vh.id        = gl.voucherheaderid AND rpmap.glcode = gl.glcode")
+				.append(" and p.id = vh.fiscalperiodid and f.id = p.financialyearid and vh.status <> 4")
+				.append(" and f.id = :finId")
+				// check if this trasaction type can be joined with rpmap type
+				.append(" and rpm.transaction_type=:transactionType and vh.name <> 'JVGeneral'").append(dateCondition)
+				.append(" and rpm.schedule_no=:scheduleNo ")
+				.append(" group by rpmap.glcode, rpmap.fund_Code ,rpm.transaction_type, rpm.schedule_no")
+				.append(" ORDER BY rpm.schedule_no, rpmap.glcode");
 
-        final Query detailQueryNG = persistenceService.getSession().createSQLQuery(queryNG.toString()).addScalar("glCode")
-                .addScalar("amount").addScalar("fundCode").addScalar("type").addScalar("scheduleNumber")
+		params.put("finId", finId.getId());
+		params.put("transactionType", transactionType);
+		params.put("scheduleNo", scheduleNo);
 
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
-        final List<StatementResultObject> resultNG = detailQueryNG.list();
+		final Query detailQueryNG = persistenceService.getSession().createSQLQuery(queryNG.toString())
+				.addScalar("glCode").addScalar("amount").addScalar("fundCode").addScalar("type")
+				.addScalar("scheduleNumber")
+				.setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+		params.entrySet().forEach(entry -> detailQueryNG.setParameter(entry.getKey(), entry.getValue()));
+		final List<StatementResultObject> resultNG = detailQueryNG.list();
 
-        queryG = queryG
-                .append("SELECT rpmap.glcode as glCode, "
-                        + amountG
-                        + " , rpmap.fund_Code as fundCode, rpm.transaction_type as type, rpm.schedule_no as scheduleNumber "
-                        +
-                        " FROM egf_rpreport_schedulemaster rpm,"
-                        +
-                        "  egf_rpreport_schedulemapping rpmap,"
-                        +
-                        "  voucherheader vh,"
-                        +
-                        "  generalledger gl,"
-                        +
-                        " fiscalperiod p,"
-                        +
-                        " financialyear f,"
-                        +
-                        "  egf_instrumentheader ih,"
-                        +
-                        "  egf_instrumentvoucher iv,"
-                        +
-                        "  egw_status s"
-                        +
-                        " WHERE rpm.id     = rpmap.rpscheduleid"
-                        +
-                        " AND vh.id        = gl.voucherheaderid"
-                        +
-                        " AND rpmap.glcode = gl.glcode"
-                        +
-                        " and p.id = vh.fiscalperiodid"
-                        +
-                        " and f.id = p.financialyearid"
-                        +
-                        " AND ih.id        = iv.instrumentheaderid "
-                        +
-                        " AND ih.id_status = s.id"
-                        +
-                        " and vh.status <> 4"
-                        +
-                        " and vh.type = 'Journal Voucher' "
-                        +
-                        " and iv.voucherheaderid = vh.id "
-                        +
-                        " and s.moduletype = 'Instrument' "
-                        +
-                        " and s.description in ('Deposited','Reconciled')"
-                        +
-                        " and f.id = "
-                        + finId.getId()
-                        + ""
-                        +
-                        // check if this trasaction type can be joined with rpmap type
-                        " and rpm.transaction_type='"
-                        + transactionType
-                        + "'"
-                        +
-                        " and vh.name = 'JVGeneral'"
-                        +
-                        dateCondition
-                        +
-                        " and rpm.schedule_no='"
-                        + scheduleNo
-                        + "' "
-                        +
-                        " group by rpmap.glcode, rpmap.fund_Code ,rpm.transaction_type, rpm.schedule_no ORDER BY  rpm.schedule_no ,rpmap.glcode");
+		queryG.append("SELECT rpmap.glcode as glCode, ").append(amountG).append(
+				" , rpmap.fund_Code as fundCode, rpm.transaction_type as type, rpm.schedule_no as scheduleNumber ")
+				.append(" FROM egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemapping rpmap,")
+				.append("  voucherheader vh, generalledger gl, fiscalperiod p,")
+				.append(" financialyear f, egf_instrumentheader ih, egf_instrumentvoucher iv,")
+				.append("  egw_status s WHERE rpm.id = rpmap.rpscheduleid")
+				.append(" AND vh.id  = gl.voucherheaderid AND rpmap.glcode = gl.glcode")
+				.append(" and p.id = vh.fiscalperiodid and f.id = p.financialyearid")
+				.append(" AND ih.id = iv.instrumentheaderid AND ih.id_status = s.id")
+				.append(" and vh.status <> 4 and vh.type = 'Journal Voucher' ")
+				.append(" and iv.voucherheaderid = vh.id and s.moduletype = 'Instrument' ")
+				.append(" and s.description in ('Deposited','Reconciled') and f.id = :finId")
+				// check if this trasaction type can be joined with rpmap type
+				.append(" and rpm.transaction_type=:transactionType and vh.name = 'JVGeneral'").append(dateCondition)
+				.append(" and rpm.schedule_no=:scheduleNo ")
+				.append(" group by rpmap.glcode, rpmap.fund_Code ,rpm.transaction_type, rpm.schedule_no")
+				.append(" ORDER BY  rpm.schedule_no ,rpmap.glcode");
 
-        final Query detailQueryG = persistenceService.getSession().createSQLQuery(queryG.toString()).addScalar("glCode")
-                .addScalar("amount").addScalar("fundCode").addScalar("type").addScalar("scheduleNumber")
+		final Query detailQueryG = persistenceService.getSession().createSQLQuery(queryG.toString()).addScalar("glCode")
+				.addScalar("amount").addScalar("fundCode").addScalar("type").addScalar("scheduleNumber")
+				.setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+		params.entrySet().forEach(entry -> detailQueryG.setParameter(entry.getKey(), entry.getValue()));
+		final List<StatementResultObject> resultG = detailQueryG.list();
 
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
-        final List<StatementResultObject> resultG = detailQueryG.list();
+		final List<StatementResultObject> finalResult = new ArrayList<StatementResultObject>();
+		for (final StatementResultObject entryNG : resultG) {
+			boolean found = false;
+			inner: for (final StatementResultObject entryG : resultNG)
+				if (entryNG.getScheduleNumber().equals(entryG.getScheduleNumber())
+						&& entryNG.getGlCode().equals(entryG.getGlCode())) {
+					entryG.setAmount(entryNG.getAmount().add(entryG.getAmount()));
+					found = true;
+					break inner;
+				}
+			if (found == false)
+				if (entryNG != null)
+					finalResult.add(entryNG);
+		}
+		resultNG.addAll(finalResult);
 
-        final List<StatementResultObject> finalResult = new ArrayList<StatementResultObject>();
-        for (final StatementResultObject entryNG : resultG) {
-            boolean found = false;
-            inner: for (final StatementResultObject entryG : resultNG)
-                if (entryNG.getScheduleNumber().equals(entryG.getScheduleNumber())
-                        && entryNG.getGlCode().equals(entryG.getGlCode())) {
-                    entryG.setAmount(entryNG.getAmount().add(entryG.getAmount()));
-                    found = true;
-                    break inner;
-                }
-            if (found == false)
-                if (entryNG != null)
-                    finalResult.add(entryNG);
-        }
-        resultNG.addAll(finalResult);
+		return resultNG;
+	}
 
-        return resultNG;
-    }
+	public List<StatementResultObject> getCurrentYearConsolidatedReportForGlcode(final CFinancialYear finId,
+			final String transactionType, final String scheduleNo, final Statement statement) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Starting getData............");
+		final StringBuilder queryNG = new StringBuilder();
+		final StringBuilder queryG = new StringBuilder();
+		String amountNG = "";
+		String amountG = "";
+		String dateCondition = new String();
+		final Map<String, Object> params = new HashMap<>();
+		dateCondition = getDateRangeQuery(finId, statement, params);
 
-    public List<StatementResultObject> getCurrentYearConsolidatedReportForGlcode(final CFinancialYear finId,
-            final String transactionType,
-            final String scheduleNo, final Statement statement) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Starting getData............");
-        StringBuffer queryNG = new StringBuffer();
-        StringBuffer queryG = new StringBuffer();
-        String amountNG = "";
-        String amountG = "";
-        String dateCondition = new String();
-        dateCondition = getDateRangeQuery(finId, statement);
+		if (statement.getCurrencyInAmount().equals(new BigDecimal(1))) {
+			amountNG = "case when rpm.transaction_type = 'R' then SUM(gl.creditamount) else SUM(gl.debitamount) end  AS amount";
+			amountG = "SUM(gl.creditamount)  AS amount";
+		} else {
+			amountNG = new StringBuilder(
+					"case when rpm.transaction_type = 'R' then SUM(round(gl.creditamount/:currencyInAmount")
+							.append(",0)) else SUM(round(gl.debitamount/:currencyInAmount,0)) AS amount").toString();
+			amountG = "SUM(round(gl.creditamount/:currencyInAmount,0))  AS amount";
+			params.put("currencyInAmount", statement.getCurrencyInAmount());
+		}
 
-        if (statement.getCurrencyInAmount().equals(new BigDecimal(1))) {
-            amountNG = "case when rpm.transaction_type = 'R' then SUM(gl.creditamount) else SUM(gl.debitamount) end  AS amount";
-            amountG = "SUM(gl.creditamount)  AS amount";
-        } else {
-            amountNG = "case when rpm.transaction_type = 'R' then SUM(round(gl.creditamount/" + statement.getCurrencyInAmount()
-                    + ",0)) else SUM(round(gl.debitamount/" + statement.getCurrencyInAmount() + ",0))  AS amount";
-            amountG = "SUM(round(gl.creditamount/" + statement.getCurrencyInAmount() + ",0))  AS amount";
-        }
+		queryNG.append("SELECT rpmap.glcode as glCode, ").append(amountNG).append(
+				" , rpmap.fund_Code as fundCode ,rpm.transaction_type as type, rpm.schedule_no as scheduleNumber")
+				.append(" FROM egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemapping rpmap, voucherheader vh,")
+				.append("  generalledger gl, fiscalperiod p, financialyear f WHERE rpm.id     = rpmap.rpscheduleid")
+				.append(" AND vh.id        = gl.voucherheaderid AND rpmap.glcode = gl.glcode and p.id = vh.fiscalperiodid")
+				.append(" and f.id = p.financialyearid and vh.status <> 4 and f.id = :finId")
+				.append(" and rpm.transaction_type=:transactionType and vh.name <> 'JVGeneral'").append(dateCondition)
+				.append(" group by rpmap.glcode, rpmap.fund_Code ,rpm.transaction_type, rpm.schedule_no");
 
-        queryNG = queryNG.append("SELECT rpmap.glcode as glCode, " + amountNG
-                + " , rpmap.fund_Code as fundCode ,rpm.transaction_type as type, rpm.schedule_no as scheduleNumber" +
-                " FROM egf_rpreport_schedulemaster rpm," +
-                "  egf_rpreport_schedulemapping rpmap," +
-                "  voucherheader vh," +
-                "  generalledger gl," +
-                " fiscalperiod p," +
-                " financialyear f" +
-                " WHERE rpm.id     = rpmap.rpscheduleid" +
-                " AND vh.id        = gl.voucherheaderid" +
-                " AND rpmap.glcode = gl.glcode" +
-                " and p.id = vh.fiscalperiodid" +
-                " and f.id = p.financialyearid" +
-                " and vh.status <> 4" +
-                " and f.id = " + finId.getId() + "" +
-                " and rpm.transaction_type='" + transactionType + "'" +
-                " and vh.name <> 'JVGeneral'" +
-                dateCondition +
-                " group by rpmap.glcode, rpmap.fund_Code ,rpm.transaction_type, rpm.schedule_no");
+		params.put("finId", finId.getId());
+		params.put("transactionType", transactionType);
 
-        final Query detailQueryNG = persistenceService.getSession().createSQLQuery(queryNG.toString()).addScalar("glCode")
-                .addScalar("amount")
-                .addScalar("fundCode").addScalar("type").addScalar("scheduleNumber")
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
-        final List<StatementResultObject> resultNG = detailQueryNG.list();
+		final Query detailQueryNG = persistenceService.getSession().createSQLQuery(queryNG.toString())
+				.addScalar("glCode").addScalar("amount").addScalar("fundCode").addScalar("type")
+				.addScalar("scheduleNumber")
+				.setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+		params.entrySet().forEach(entry -> detailQueryNG.setParameter(entry.getKey(), entry.getValue()));
 
-        queryG = queryG.append("SELECT rpmap.glcode as glCode, " + amountG
-                + " , rpmap.fund_Code as fundCode ,rpm.transaction_type as type, rpm.schedule_no as scheduleNumber" +
-                " FROM egf_rpreport_schedulemaster rpm," +
-                "  egf_rpreport_schedulemapping rpmap," +
-                "  voucherheader vh," +
-                "  generalledger gl," +
-                " fiscalperiod p," +
-                " financialyear f," +
-                "  egf_instrumentheader ih," +
-                "  egf_instrumentvoucher iv," +
-                "  egw_status s" +
-                " WHERE rpm.id     = rpmap.rpscheduleid" +
-                " AND vh.id        = gl.voucherheaderid" +
-                " AND rpmap.glcode = gl.glcode" +
-                " and p.id = vh.fiscalperiodid" +
-                " and f.id = p.financialyearid" +
-                " AND ih.id        = iv.instrumentheaderid " +
-                " AND ih.id_status = s.id" +
-                " and vh.status <> 4" +
-                " and vh.type = 'Journal Voucher' " +
-                " and iv.voucherheaderid = vh.id " +
-                " and s.moduletype = 'Instrument' " +
-                " and s.description in ('Deposited','Reconciled')" +
-                " and f.id = " + finId.getId() + "" +
-                " and rpm.transaction_type='" + transactionType + "'" +
-                " and vh.name = 'JVGeneral'" +
-                dateCondition +
-                " group by rpmap.glcode, rpmap.fund_Code ,rpm.transaction_type, rpm.schedule_no");
+		final List<StatementResultObject> resultNG = detailQueryNG.list();
 
-        final Query detailQueryG = persistenceService.getSession().createSQLQuery(queryG.toString()).addScalar("glCode")
-                .addScalar("amount")
-                .addScalar("fundCode").addScalar("type").addScalar("scheduleNumber")
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
-        final List<StatementResultObject> resultG = detailQueryG.list();
+		queryG.append("SELECT rpmap.glcode as glCode, ").append(amountG).append(
+				" , rpmap.fund_Code as fundCode ,rpm.transaction_type as type, rpm.schedule_no as scheduleNumber")
+				.append(" FROM egf_rpreport_schedulemaster rpm, egf_rpreport_schedulemapping rpmap, voucherheader vh,")
+				.append("  generalledger gl, fiscalperiod p, financialyear f, egf_instrumentheader ih, egf_instrumentvoucher iv,")
+				.append("  egw_status s WHERE rpm.id = rpmap.rpscheduleid AND vh.id = gl.voucherheaderid")
+				.append(" AND rpmap.glcode = gl.glcode and p.id = vh.fiscalperiodid and f.id = p.financialyearid")
+				.append(" AND ih.id        = iv.instrumentheaderid AND ih.id_status = s.id and vh.status <> 4")
+				.append(" and vh.type = 'Journal Voucher' and iv.voucherheaderid = vh.id and s.moduletype = 'Instrument' ")
+				.append(" and s.description in ('Deposited','Reconciled') and f.id = :finId")
+				.append(" and rpm.transaction_type=:transactionType and vh.name = 'JVGeneral'").append(dateCondition)
+				.append(" group by rpmap.glcode, rpmap.fund_Code ,rpm.transaction_type, rpm.schedule_no");
 
-        final List<StatementResultObject> finalResult = new ArrayList<StatementResultObject>();
-        for (final StatementResultObject entryNG : resultG) {
-            boolean found = false;
-            inner: for (final StatementResultObject entryG : resultNG)
-                if (entryNG.getScheduleNumber().equals(entryG.getScheduleNumber())
-                        && entryNG.getGlCode().equals(entryG.getGlCode())) {
-                    entryG.setAmount(entryNG.getAmount().add(entryG.getAmount()));
-                    found = true;
-                    break inner;
-                }
-            if (found == false)
-                if (entryNG != null)
-                    finalResult.add(entryNG);
-        }
-        resultNG.addAll(finalResult);
+		final Query detailQueryG = persistenceService.getSession().createSQLQuery(queryG.toString()).addScalar("glCode")
+				.addScalar("amount").addScalar("fundCode").addScalar("type").addScalar("scheduleNumber")
+				.setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+		params.entrySet().forEach(entry -> detailQueryG.setParameter(entry.getKey(), entry.getValue()));
+		final List<StatementResultObject> resultG = detailQueryG.list();
 
-        return resultNG;
-    }
+		final List<StatementResultObject> finalResult = new ArrayList<StatementResultObject>();
+		for (final StatementResultObject entryNG : resultG) {
+			boolean found = false;
+			inner: for (final StatementResultObject entryG : resultNG)
+				if (entryNG.getScheduleNumber().equals(entryG.getScheduleNumber())
+						&& entryNG.getGlCode().equals(entryG.getGlCode())) {
+					entryG.setAmount(entryNG.getAmount().add(entryG.getAmount()));
+					found = true;
+					break inner;
+				}
+			if (found == false)
+				if (entryNG != null)
+					finalResult.add(entryNG);
+		}
+		resultNG.addAll(finalResult);
 
-    public String getDateRangeQuery(final CFinancialYear finId, final Statement statement) {
-        final StringBuffer query = new StringBuffer();
-        /*
-         * if(statement.getPeriod().equals("Yearly")){
-         * query.append(" and vh.voucherdate between '"+getFormattedDate(finId.getStartingDate
-         * ())+"' And '"+getFormattedDate(finId.getEndingDate())+"'"); }else if(statement.getPeriod().equals("Date Range")){
-         * query.
-         * append(" and vh.voucherdate between '"+getFormattedDate(statement.getFromDate())+"' And '"+getFormattedDate(statement
-         * .getToDate())+"'"); }
-         */
-        if (statement.getFund() != null && statement.getFund().getId() != null && statement.getFund().getId() != 0)
-            query.append(" AND rpmap.is_consolidated = 0 and rpmap.fund_code = '" + statement.getFund().getCode() + "'");
-        else
-            query.append("AND rpmap.is_consolidated = 1 ");
-        return query.toString();
-    }
+		return resultNG;
+	}
+
+	public String getDateRangeQuery(final CFinancialYear finId, final Statement statement, Map<String, Object> params) {
+		final StringBuilder query = new StringBuilder();
+		if (statement.getFund() != null && statement.getFund().getId() != null && statement.getFund().getId() != 0) {
+			query.append(" AND rpmap.is_consolidated = 0 and rpmap.fund_code = :fundCode");
+			params.put("fundCode", statement.getFund().getCode());
+		} else
+			query.append("AND rpmap.is_consolidated = 1 ");
+		return query.toString();
+	}
 
     public Date getCurrentYearToDate(final Statement statement) {
         if ("Date Range".equalsIgnoreCase(statement.getPeriod()) && statement.getToDate() != null

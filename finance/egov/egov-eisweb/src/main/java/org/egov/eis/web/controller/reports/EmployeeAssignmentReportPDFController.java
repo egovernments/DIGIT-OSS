@@ -56,6 +56,8 @@ import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
 import ar.com.fdvs.dj.domain.constants.Border;
 import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.constants.Page;
+
+import com.fasterxml.jackson.core.JsonParseException;
 import com.lowagie.text.DocumentException;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -127,7 +129,7 @@ public class EmployeeAssignmentReportPDFController {
             @RequestParam("departmentId") final Long departmentId,
             @RequestParam("designationId") final Long designationId, @RequestParam("positionId") final Long positionId,
             @RequestParam("contentType") final String contentType, @RequestParam("date") final Date date,
-            final HttpSession session, final Model model) throws DocumentException {
+            final HttpSession session, final Model model) {
         final EmployeeAssignmentSearch employeeAssignmentSearch = new EmployeeAssignmentSearch();
         employeeAssignmentSearch.setEmployeeCode(code);
         employeeAssignmentSearch.setEmployeeName(name);
@@ -201,7 +203,7 @@ public class EmployeeAssignmentReportPDFController {
             jasperPrint = generateEmployeeAssignmentReport(searchResult, maxTempAssignments, searchString);
             outputBytes = new ByteArrayOutputStream(MB);
             JasperExportManager.exportReportToPdfStream(jasperPrint, outputBytes);
-        } catch (final Exception e) {
+        } catch (final ColumnBuilderException | ClassNotFoundException | JRException e) {
             Log.error("Error while generating employee assignment report ", e);
         }
         final ReportOutput reportOutput = new ReportOutput();

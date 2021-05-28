@@ -80,7 +80,7 @@ public interface EmployeeServiceOld
 	public abstract PersonalInformation getEmloyeeById(Integer employeeId);
 	public abstract GenericMaster getGenericMaster(Integer masterId,String masterName);
 
-	public abstract ServiceHistory getServiceId(Integer serviceId)throws Exception;
+	public abstract ServiceHistory getServiceId(Integer serviceId);
 	public abstract PersonalInformation getEmpForUserId(Long userId);
 
 	public abstract Assignment getAssignmentById(Integer assignmentId);
@@ -95,14 +95,14 @@ public interface EmployeeServiceOld
 	public abstract Map getMapForList(List list);
 	public abstract Map getMapForList(List list, String fieldName1, String fieldName2);
 
-	public abstract List searchEmployee(Integer departmentId,Integer designationId,String code,String name,Integer status)throws Exception;
+	public abstract List searchEmployee(Integer departmentId,Integer designationId,String code,String name,Integer status);
 	/*
 	 * search employee by department,designation,functionary,code and name
 	 */
-	public abstract List searchEmployee(Integer departmentId,Integer designationId,Integer functionaryId,String code,String name,Integer status)throws Exception;
+	public abstract List searchEmployee(Integer departmentId,Integer designationId,Integer functionaryId,String code,String name,Integer status);
 	@Deprecated
-	public abstract List searchEmployee(Integer departmentId,Integer designationId,String code,String name,String searchAll)throws Exception;
-	public abstract List searchEmployee(Integer empId)throws Exception;
+	public abstract List searchEmployee(Integer departmentId,Integer designationId,String code,String name,String searchAll);
+	public abstract List searchEmployee(Integer empId);
 	public abstract void deleteLangKnownForEmp(PersonalInformation personalInformation);
 	public abstract Integer getNextVal();
 	public abstract boolean checkPos(Integer posId,Date fromDate,Date toDate,Integer empId,String isPrimary);
@@ -111,7 +111,7 @@ public interface EmployeeServiceOld
 	public abstract String getEmployeeCode();
 	public abstract List getListOfPersonalInformationByEmpIdsList(List empIdsList);
 	public List getListOfEmployeeWithoutAssignment(Date fromdate);/*new*/
-	public Assignment getLatestAssignmentForEmployeeByToDate(Integer empId,Date todate) throws Exception;
+	public Assignment getLatestAssignmentForEmployeeByToDate(Integer empId,Date todate);
 	public PersonalInformation getEmployee(Integer deptId, Integer designationId, Long Boundaryid)throws TooManyValuesException, NoSuchObjectException;
 	public PersonalInformation getEmployeeByFunctionary(Long deptId, Long designationId, Long Boundaryid,Integer functionaryId)throws TooManyValuesException, NoSuchObjectException;
 	public Assignment getLastAssignmentByEmp(Integer empId);
@@ -125,20 +125,20 @@ public interface EmployeeServiceOld
 	 * search employee by department,designation,functionary,code and name and employee type
 	 */
 	@Deprecated
-	public abstract List searchEmployee(Integer departmentId,Integer designationId,Integer functionaryId,String code,String name,Integer status,Integer empType)throws Exception;
+	public abstract List searchEmployee(Integer departmentId,Integer designationId,Integer functionaryId,String code,String name,Integer status,Integer empType);
 	/*
 	 * Api to get Employee based on Position Id and Date
 	 * toDate will take sysdate if it is not provided.
 	 */
-	public abstract PersonalInformation  getEmpForPositionAndDate(Date date,Integer posId)throws Exception;
+	public abstract PersonalInformation  getEmpForPositionAndDate(Date date,Integer posId);
 
 
-	public abstract List searchEmployeeByGrouping(LinkedList<String> groupingByOrder)throws Exception;
+	public abstract List searchEmployeeByGrouping(LinkedList<String> groupingByOrder);
 
 
 	public abstract List getAllDesignationByDept(Integer deptId);
 
-	public abstract List getAllActiveUsersByGivenDesg(Integer DesgId)throws Exception;
+	public abstract List getAllActiveUsersByGivenDesg(Integer DesgId);
 
 	public abstract List<EmployeeView> getEmployeeWithTempAssignment(Date givenDate,Integer posId);
 
@@ -156,7 +156,7 @@ public interface EmployeeServiceOld
 	 public List<Position> getPositionsForUser(User user, Date date)throws ApplicationException;
 
 	 public abstract List getEmpPrimaryAssignment(String code,Date givenDate,Integer posId);
-	 public  List searchEmployee(Integer status,Date fromDate,Date toDate)throws Exception;
+	 public  List searchEmployee(Integer status,Date fromDate,Date toDate);
 
 		/*
 		 * Api to get the department for the employee who has logged in
@@ -172,10 +172,10 @@ public interface EmployeeServiceOld
 		public abstract List<EmployeeView> getEmployeeInfoBasedOnDeptAndDesg(Integer deptId ,Integer desgId);
 		public List<EmployeeView> getEmployeeInfoBasedOnDeptAndDate(Integer deptId, Date date);
 		public List<EmployeeView> searchEmployee(Integer designationId,String code,String name,
-				Integer statusId,Integer empTypeId,Map<String,Integer> finParams)throws Exception;
+				Integer statusId,Integer empTypeId,Map<String,Integer> finParams);
 		public List<PersonalInformation> getAllEmployees();
-		public List getListOfUsersNotMappedToEmp() throws Exception;
-		public List <PersonalInformation>getEmpListForPositionAndDate(Date dateEntered,Integer posId)throws Exception;
+		public List getListOfUsersNotMappedToEmp();
+		public List <PersonalInformation>getEmpListForPositionAndDate(Date dateEntered,Integer posId);
 		public Designation getPresentDesignation(Integer  idPersonalInformation);
 
 }

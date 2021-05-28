@@ -48,18 +48,19 @@
 
 package org.egov.infra.web.controller.admin.masters.department;
 
+import javax.validation.Valid;
+
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.validation.Valid;
 
 /**
  * @author subhash
@@ -80,13 +81,13 @@ public class UpdateDepartmentController {
         return departmentService.getDepartmentByName(name);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public String updateDepartmentForm() {
         return "department-updateForm";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String updateDepartment(@ModelAttribute @Valid final Department department, final BindingResult errors,
+    @PostMapping
+    public String updateDepartment(@Valid @ModelAttribute final Department department, final BindingResult errors,
             final RedirectAttributes redirectAttributes) {
         if (errors.hasErrors())
             return "department-updateForm";

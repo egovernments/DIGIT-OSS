@@ -104,6 +104,7 @@ import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.BoundaryService;
 import org.egov.infra.admin.master.service.CityService;
+import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportRequest;
@@ -114,6 +115,7 @@ import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.models.ServiceDetails;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.instrument.InstrumentHeader;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
@@ -480,7 +482,7 @@ public class CollectionCommon {
         return billDetailslist;
     }
 
-    public List<ReceiptDetailInfo> setAccountPayeeList(final ReceiptHeader rh) {
+    public List<ReceiptDetailInfo> setAccountPayeeList(final ReceiptHeader rh) throws ApplicationException {
         // To load subledgerlist data to subLedgerlist
         final List<ReceiptDetailInfo> subLedgerlist = new ArrayList<>(0);
         try {
@@ -507,7 +509,7 @@ public class CollectionCommon {
                     subLedgerlist.add(rInfo);
                 }
 
-        } catch (final Exception e) {
+        } catch (final ObjectNotFoundException e) {
             LOGGER.error("Exception while setting subledger details", e);
             throw new ApplicationRuntimeException("Exception while setting subledger details", e);
         }

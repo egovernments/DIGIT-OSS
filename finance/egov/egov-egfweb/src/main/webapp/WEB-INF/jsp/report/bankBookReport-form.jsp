@@ -74,7 +74,7 @@ function getData(){
 	var startDate =  document.getElementById('startDate').value;
 	var endDate =  document.getElementById('endDate').value;
 	var bankAccount = document.getElementById('accountNumber').value;
-	
+	var csrfToken = document.getElementById('csrfTokenValue').value;
     
 
 	//var isDateValid =validateFromAndToDate(startDate,endDate);
@@ -85,7 +85,7 @@ function getData(){
 		}
 	
 	//doLoadingMask();
-	var url = '/services/EGF/report/bankBookReport-ajaxLoadBankBook.action?skipPrepare=true&bankAccount.id='+bankAccount+'&startDate='+startDate+'&endDate='+endDate+getMiscData();
+	var url = '/services/EGF/report/bankBookReport-ajaxLoadBankBook.action?skipPrepare=true&bankAccount.id='+bankAccount+'&startDate='+startDate+'&endDate='+endDate+getMiscData()+'&_csrf='+csrfToken;
 	YAHOO.util.Connect.asyncRequest('POST', url, callback, null);
 }
 
@@ -233,6 +233,7 @@ function showChequeDetails(voucherId){
 
 
 		<s:form action="bankBookReport" theme="simple" name="bankBookReport">
+			<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 			
 			<tr>

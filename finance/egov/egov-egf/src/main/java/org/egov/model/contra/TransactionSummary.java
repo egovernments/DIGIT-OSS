@@ -61,6 +61,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccounts;
@@ -71,6 +73,7 @@ import org.egov.commons.Fund;
 import org.egov.commons.Fundsource;
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 /**
  * @author msahoo
@@ -93,6 +96,7 @@ public class TransactionSummary extends AbstractAuditable {
     private Accountdetailtype accountdetailtype;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "FINANCIALYEARID")
     private CFinancialYear financialyear;
 
@@ -104,22 +108,29 @@ public class TransactionSummary extends AbstractAuditable {
     @JoinColumn(name = "FUNDID")
     private Fund fund;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "GLCODEID")
     private CChartOfAccounts glcodeid;
 
     @Transient
+    @SafeHtml
     private String glcodeDetail;
 
+    @NotNull
+    @Min(1)
     private BigDecimal openingdebitbalance;
 
+    @NotNull
+    @Min(1)
     private BigDecimal openingcreditbalance;
 
     private Integer accountdetailkey;
 
     @Length(max = 300)
+    @SafeHtml
     private String narration;
-
+    @SafeHtml
     private String departmentCode;
 
     @ManyToOne

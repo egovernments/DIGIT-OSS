@@ -47,6 +47,23 @@
  */
 package org.egov.services.instrument;
 
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_ADVICE;
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_ATM;
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_BANK;
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_BANK_TO_BANK;
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_CARD;
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_CASH;
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_CHEQUE;
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_DD;
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_ECS;
+import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_ONLINE;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.Bank;
@@ -66,15 +83,11 @@ import org.egov.model.instrument.InstrumentHeader;
 import org.egov.model.instrument.InstrumentOtherDetails;
 import org.egov.model.instrument.InstrumentType;
 import org.egov.model.instrument.InstrumentVoucher;
-import org.egov.model.payment.ChequeAssignment;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
-import org.hibernate.type.BigDecimalType;
-import org.hibernate.type.BigIntegerType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.slf4j.Logger;
@@ -82,24 +95,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_ADVICE;
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_ATM;
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_BANK;
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_BANK_TO_BANK;
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_CARD;
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_CASH;
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_CHEQUE;
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_DD;
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_ECS;
-import static org.egov.utils.FinancialConstants.INSTRUMENT_TYPE_ONLINE;
 
 @Transactional(readOnly = true)
 public class InstrumentService {
@@ -269,9 +264,8 @@ public class InstrumentService {
                     .setBankBranchName(instrMap.get(BRANCH_NAME) != null ? instrMap
                             .get(BRANCH_NAME).toString() : null);
             final EgwStatus status = (EgwStatus) persistenceService
-                    .find("from EgwStatus where upper(moduletype)=upper('Instrument') and upper(description)=upper('"
-                            + FinancialConstants.INSTRUMENT_CREATED_STATUS
-                            + "')");
+					.find("from EgwStatus where upper(moduletype)=upper('Instrument') and upper(description)=?",
+							FinancialConstants.INSTRUMENT_CREATED_STATUS.toUpperCase());
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("Created Status of Instrument"
                         + status.getDescription());
@@ -766,26 +760,25 @@ public class InstrumentService {
     }
 
     @Transactional
-    public boolean cancelInstrument(final InstrumentHeader ih)
-            throws ApplicationRuntimeException {
+    public boolean cancelInstrument(final InstrumentHeader ih){
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Cancelling " + ih);
         boolean result = false;
         try {
-            final String cancelStatusQuiery = "from EgwStatus where upper(moduletype)=upper('instrument') and  upper(description)=upper('"
-                    + FinancialConstants.INSTRUMENT_CANCELLED_STATUS + "')";
-            final EgwStatus cancelStatus = (EgwStatus) persistenceService
-                    .find(cancelStatusQuiery);
+			final String cancelStatusQuiery = "from EgwStatus where upper(moduletype)=upper('instrument')"
+					+ " and  upper(description)=upper(?)";
+			final EgwStatus cancelStatus = (EgwStatus) persistenceService.find(cancelStatusQuiery,
+					FinancialConstants.INSTRUMENT_CANCELLED_STATUS);
             ih.setStatusId(cancelStatus);
             instrumentHeaderService.update(ih);
             result = true;
         } catch (final HibernateException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new ApplicationRuntimeException(e.getMessage());
-        } catch (final Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new ApplicationRuntimeException(e.getMessage());
-        }
+            throw new HibernateException(e.getMessage());
+        } /*
+           * catch (final Exception e) { LOGGER.error(e.getMessage(), e); throw
+           * new ApplicationRuntimeException(e.getMessage()); }
+           */
         return result;
     }
 
@@ -812,21 +805,21 @@ public class InstrumentService {
      *
      * @return List of InstrumentVouchers
      */
-    public List<InstrumentVoucher> getReconciledCheques(
-            final Date reconcilationFromDate, final Date reconcilationToDate)
-            throws ApplicationRuntimeException {
-        if (reconcilationFromDate == null || reconcilationToDate == null)
-            throw new ApplicationRuntimeException(
-                    "reconcilationFromDate and reconcilationToDate should not be null");
-        final Query qry = persistenceService.getSession()
-                .createQuery(
-                        "select iv from InstrumentVoucher iv inner join iv.instrumentHeaderId as  ih   where ih.statusId.description=:status"
-                                + " and ih in (select iih from InstrumentOtherDetails io inner join io.instrumentHeaderId as iih where io.instrumentStatusDate>=:startDate and io.instrumentStatusDate<=:endDate )");
-        qry.setString("status", FinancialConstants.INSTRUMENT_RECONCILED_STATUS);
-        qry.setDate("startDate", reconcilationFromDate);
-        qry.setDate("endDate", reconcilationToDate);
-        return qry.list();
-    }
+	public List<InstrumentVoucher> getReconciledCheques(final Date reconcilationFromDate,
+			final Date reconcilationToDate) throws ApplicationRuntimeException {
+		if (reconcilationFromDate == null || reconcilationToDate == null)
+			throw new ApplicationRuntimeException("reconcilationFromDate and reconcilationToDate should not be null");
+		final Query qry = persistenceService.getSession().createQuery(
+				new StringBuilder("select iv from InstrumentVoucher iv inner join iv.instrumentHeaderId as  ih  ")
+						.append(" where ih.statusId.description=:status")
+						.append(" and ih in (select iih from InstrumentOtherDetails io inner join")
+						.append(" io.instrumentHeaderId as iih where io.instrumentStatusDate>=:startDate")
+						.append(" and io.instrumentStatusDate<=:endDate )").toString());
+		qry.setString("status", FinancialConstants.INSTRUMENT_RECONCILED_STATUS);
+		qry.setDate("startDate", reconcilationFromDate);
+		qry.setDate("endDate", reconcilationToDate);
+		return qry.list();
+	}
 
     /**
      * returns List of InstrumentVouhcers dishonored from dishonoredFromDate to dishonoredToDate to get list of InstrumentVouchers
@@ -841,13 +834,15 @@ public class InstrumentService {
         if (dishonoredFromDate == null || dishonoredToDate == null)
             throw new ApplicationRuntimeException(
                     "dishonoredFromDate and dishonoredToDate should not be null");
-        final Query qry = persistenceService.getSession()
-                .createQuery(
-                        "select iv from InstrumentVoucher iv inner join iv.instrumentHeaderId as  ih   where ih.statusId.description=:status"
-                                + " and ih in (select iih from InstrumentOtherDetails io inner join io.instrumentHeaderId as iih where io.modifiedDate>=:startDate and io.modifiedDate<=:endDate ) order by iv.instrumentHeaderId desc");
-        qry.setString("status", FinancialConstants.INSTRUMENT_DISHONORED_STATUS);
-        qry.setDate("startDate", dishonoredFromDate);
-        qry.setDate("endDate", dishonoredToDate);
+		final Query qry = persistenceService.getSession().createQuery(
+				new StringBuilder("select iv from InstrumentVoucher iv inner join iv.instrumentHeaderId as  ih ")
+						.append(" where ih.statusId.description=:status")
+						.append(" and ih in (select iih from InstrumentOtherDetails io inner join")
+						.append(" io.instrumentHeaderId as iih where io.modifiedDate>=:startDate")
+						.append(" and io.modifiedDate<=:endDate ) order by iv.instrumentHeaderId desc").toString());
+		qry.setString("status", FinancialConstants.INSTRUMENT_DISHONORED_STATUS);
+		qry.setDate("startDate", dishonoredFromDate);
+		qry.setDate("endDate", dishonoredToDate);
         return qry.list();
     }
 
@@ -862,8 +857,7 @@ public class InstrumentService {
         return iType;
     }
 
-    public InstrumentType getInstrumentTypeByType(final String type)
-            throws ApplicationRuntimeException {
+    public InstrumentType getInstrumentTypeByType(final String type) {
         InstrumentType iType = null;
         if (type == null)
             throw new ApplicationRuntimeException(INSTRUMENT_TYPE + IS_NULL);
@@ -874,7 +868,7 @@ public class InstrumentService {
             try {
                 qry = "from InstrumentType  where type=? and isActive=true";
                 iType = instrumentTypeService.find(qry, type);
-            } catch (final Exception e) {
+            } catch (final HibernateException e) {
                 LOGGER.error("Error while getting InstrumentType from database"
                         + e.getMessage(), e);
             }
@@ -883,14 +877,11 @@ public class InstrumentService {
         return iType;
     }
 
-    public EgwStatus getStatusId(final String statusString) {
-        final String statusQury = "from EgwStatus where upper(moduletype)=upper('instrument') and  upper(description)=upper('"
-                + statusString + "')";
-        final EgwStatus egwStatus = (EgwStatus) persistenceService
-                .find(statusQury);
-        return egwStatus;
-
-    }
+	public EgwStatus getStatusId(final String statusString) {
+		final String statusQury = "from EgwStatus where upper(moduletype)=upper('instrument') and  upper(description)=upper(?)";
+		final EgwStatus egwStatus = (EgwStatus) persistenceService.find(statusQury, statusString);
+		return egwStatus;
+	}
 
     public InstrumentHeader getInstrumentHeader(final Long bankaccountId,
             final String instrumentNo, final String payTo) {
@@ -931,15 +922,18 @@ public class InstrumentService {
             final String serialNo) {
         AccountCheques accountCheques = new AccountCheques();
         if (serialNo != null)
-            accountCheques = (AccountCheques) persistenceService
-                    .find("select ac from AccountCheques ac, ChequeDeptMapping cd where ac.id = cd.accountCheque.id and "
-                            + " ac.bankAccountId.id=? and cd.allotedTo=? and ? between ac.fromChequeNumber and ac.toChequeNumber and ac.serialNo=? ",
-                            bankAccountId, departmentId, chequeNumber, Long.valueOf(serialNo));
+			accountCheques = (AccountCheques) persistenceService.find(
+					new StringBuilder("select ac from AccountCheques ac, ChequeDeptMapping cd")
+							.append(" where ac.id = cd.accountCheque.id and ")
+							.append(" ac.bankAccountId.id=? and cd.allotedTo=? and ? between ac.fromChequeNumber")
+							.append(" and ac.toChequeNumber and ac.serialNo=? ").toString(),
+					bankAccountId, departmentId, chequeNumber, Long.valueOf(serialNo));
         else
-            accountCheques = (AccountCheques) persistenceService
-                    .find("select ac from AccountCheques ac, ChequeDeptMapping cd where ac.id = cd.accountCheque.id and "
-                            + " ac.bankAccountId.id=? and cd.allotedTo=? and ? between ac.fromChequeNumber and ac.toChequeNumber ",
-                            bankAccountId, departmentId, chequeNumber);
+			accountCheques = (AccountCheques) persistenceService
+					.find(new StringBuilder("select ac from AccountCheques ac, ChequeDeptMapping cd")
+							.append(" where ac.id = cd.accountCheque.id and ")
+							.append(" ac.bankAccountId.id=? and cd.allotedTo=? and ? between ac.fromChequeNumber")
+							.append(" and ac.toChequeNumber ").toString(), bankAccountId, departmentId, chequeNumber);
         if (accountCheques == null)
             return false;
         return true;
@@ -950,17 +944,17 @@ public class InstrumentService {
         final InstrumentType instrumentType = getInstrumentTypeByType("cheque");
         List<InstrumentHeader> list = new ArrayList<InstrumentHeader>();
         if (serialNo != null)
-            list = instrumentHeaderService
-                    .findAllBy(
-                            "from InstrumentHeader where instrumentNumber=? and instrumentType.id=? and bankAccountId.id=? and isPayCheque='1' and "
-                                    + "serialNo.id=?", chequeNumber,
-                            instrumentType.getId(), bankAccountId, Long.valueOf(serialNo));
+			list = instrumentHeaderService
+					.findAllBy(
+							new StringBuilder("from InstrumentHeader where instrumentNumber=? and instrumentType.id=?")
+									.append(" and bankAccountId.id=? and isPayCheque='1' and serialNo.id=?")
+									.toString(),
+							chequeNumber, instrumentType.getId(), bankAccountId, Long.valueOf(serialNo));
         else
-            list = instrumentHeaderService
-                    .findAllBy(
-                            "from InstrumentHeader where instrumentNumber=? and instrumentType.id=? and bankAccountId.id=? and isPayCheque='1' ",
-                            chequeNumber,
-                            instrumentType.getId(), bankAccountId);
+			list = instrumentHeaderService.findAllBy(
+					new StringBuilder("from InstrumentHeader where instrumentNumber=? and instrumentType.id=?")
+							.append(" and bankAccountId.id=? and isPayCheque='1' ").toString(),
+					chequeNumber, instrumentType.getId(), bankAccountId);
         if (list != null && list.size() > 0)
             return false;
         return true;
@@ -968,28 +962,24 @@ public class InstrumentService {
 
    public  boolean isRtgsNumberUnique(final String chequeNumber,
             final Long bankAccountId) {
-        final InstrumentType instrumentType = getInstrumentTypeByType("advice");
-        final List<InstrumentHeader> list = instrumentHeaderService
-                .findAllBy(
-                        "from InstrumentHeader where transactionNumber=? and instrumentType.id=? and bankAccountId.id=? and isPayCheque='1' ",
-                        chequeNumber, instrumentType.getId(), bankAccountId);
-        if (list != null && list.size() > 0)
-            return false;
-        return true;
+		final InstrumentType instrumentType = getInstrumentTypeByType("advice");
+		final List<InstrumentHeader> list = instrumentHeaderService.findAllBy(
+				new StringBuilder("from InstrumentHeader where transactionNumber=? and instrumentType.id=?")
+						.append(" and bankAccountId.id=? and isPayCheque='1' ").toString(),
+				chequeNumber, instrumentType.getId(), bankAccountId);
+		if (list != null && list.size() > 0)
+			return false;
+		return true;
     }
 
    public  boolean isChequeIsSurrenderdForReassign(final String chequeNumber,
             final Long bankAccountId, final String serialNo) {
         final InstrumentType instrumentType = getInstrumentTypeByType("cheque");
-        final List<InstrumentHeader> list = instrumentHeaderService
-                .findAllBy(
-                        "from InstrumentHeader where instrumentNumber=? and instrumentType.id=? and bankAccountId.id=? and statusId in (?) "
-                                + "and serialNo.id=?",
-                        chequeNumber,
-                        instrumentType.getId(),
-                        bankAccountId,
-                        getStatusId(FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS),
-                        Long.valueOf(serialNo));
+		final List<InstrumentHeader> list = instrumentHeaderService.findAllBy(
+				new StringBuilder("from InstrumentHeader where instrumentNumber=? and instrumentType.id=?")
+						.append(" and bankAccountId.id=? and statusId in (?) and serialNo.id=?").toString(),
+				chequeNumber, instrumentType.getId(), bankAccountId,
+				getStatusId(FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS), Long.valueOf(serialNo));
         if (list != null && list.size() > 0)
             return true;
         return false;
@@ -1126,76 +1116,92 @@ public class InstrumentService {
     }
     
     public List<Object[]> getBankBranchByFundId(int fundId){
-        StringBuilder builderQuery = new StringBuilder("select distinct concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '), bankBranch.branchname) as bankbranchname  from Bank bank,  "
-                + "Bankbranch bankBranch,  Bankaccount bankaccount where bank.id = bankBranch.bankid AND bank.isactive=true AND bankBranch.isactive=true AND bankaccount.type IN (:type) "
-                + "AND bankBranch.id = bankaccount.branchid ");
-        if(fundId != 0){
-            builderQuery.append(" and bankaccount.fundid=:fundId ");
-        }
-        SQLQuery createSQLQuery = persistenceService.getSession().createSQLQuery(builderQuery.toString());
-        createSQLQuery.setParameterList("type", new String[]{FinancialConstants.TYPEOFACCOUNT_RECEIPTS_PAYMENTS,FinancialConstants.TYPEOFACCOUNT_PAYMENTS});
-        if(fundId != 0){
-            createSQLQuery.setInteger("fundId", fundId);
-        }
-        List list = createSQLQuery.list();
-        return list;
+		StringBuilder builderQuery = new StringBuilder("select distinct concat(concat(bank.id,'-'),bankBranch.id)")
+				.append(" as bankbranchid,concat(concat(bank.name,' '), bankBranch.branchname) as bankbranchname ")
+				.append(" from Bank bank, Bankbranch bankBranch,  Bankaccount bankaccount")
+				.append(" where bank.id = bankBranch.bankid AND bank.isactive=true AND bankBranch.isactive=true")
+				.append(" AND bankaccount.type IN (:type) AND bankBranch.id = bankaccount.branchid ");
+		if (fundId != 0) {
+			builderQuery.append(" and bankaccount.fundid=:fundId ");
+		}
+		SQLQuery createSQLQuery = persistenceService.getSession().createSQLQuery(builderQuery.toString());
+		createSQLQuery.setParameterList("type", new String[] { FinancialConstants.TYPEOFACCOUNT_RECEIPTS_PAYMENTS,
+				FinancialConstants.TYPEOFACCOUNT_PAYMENTS });
+		if (fundId != 0) {
+			createSQLQuery.setInteger("fundId", fundId);
+		}
+		List list = createSQLQuery.list();
+		return list;
     }
     
     public List<Object[]> getBankAccount(int fundId, int branchId){
-        StringBuilder queryBuilder = new StringBuilder("SELECT  CAST(bankaccount.id AS INTEGER) AS id,  coa.glcode AS glCode, bankaccount.accountnumber AS accountnumber,  bank.name AS bankName  FROM chartofaccounts coa, "
-                + "bankaccount bankaccount ,bankbranch branch,bank bank  WHERE coa.id = bankaccount.glcodeid AND bankaccount.type     IN (:type) "
-                + "AND bankaccount.branchid = branch.id and branch.bankid = bank.id  and  bankaccount.branchid  =:branchId and bankaccount.isactive=true  ");
-        if(fundId != 0){
-            queryBuilder.append(" AND bankaccount.fundid=:fundId");
-        }
-        
-        SQLQuery createSQLQuery = persistenceService.getSession().createSQLQuery(queryBuilder.toString());
-        createSQLQuery.setParameterList("type", new String[]{FinancialConstants.TYPEOFACCOUNT_RECEIPTS_PAYMENTS,FinancialConstants.TYPEOFACCOUNT_PAYMENTS});
-        createSQLQuery.setInteger("branchId", branchId);
-        if(fundId != 0){
-            createSQLQuery.setInteger("fundId", fundId);
-        }
-        List list = createSQLQuery.list();
+		StringBuilder queryBuilder = new StringBuilder(
+				"SELECT  CAST(bankaccount.id AS INTEGER) AS id,  coa.glcode AS glCode,").append(
+						" bankaccount.accountnumber AS accountnumber,  bank.name AS bankName  FROM chartofaccounts coa, ")
+						.append("bankaccount bankaccount ,bankbranch branch,bank bank  WHERE coa.id = bankaccount.glcodeid")
+						.append(" AND bankaccount.type     IN (:type) ")
+						.append("AND bankaccount.branchid = branch.id and branch.bankid = bank.id ")
+						.append(" and  bankaccount.branchid  =:branchId and bankaccount.isactive=true  ");
+		if (fundId != 0) {
+			queryBuilder.append(" AND bankaccount.fundid=:fundId");
+		}
+
+		SQLQuery createSQLQuery = persistenceService.getSession().createSQLQuery(queryBuilder.toString());
+		createSQLQuery.setParameterList("type", new String[] { FinancialConstants.TYPEOFACCOUNT_RECEIPTS_PAYMENTS,
+				FinancialConstants.TYPEOFACCOUNT_PAYMENTS });
+		createSQLQuery.setInteger("branchId", branchId);
+		if (fundId != 0) {
+			createSQLQuery.setInteger("fundId", fundId);
+		}
+		List list = createSQLQuery.list();
         return list;
     }
     
     public List<ChequeReportModel> getSurrenderedCheque(ChequeReportModel model){
-        StringBuilder queryBuilder = new StringBuilder("select ih.id as id, concat(concat(_bank.name,'-'),_bankBranch.branchname) as bankBranch, ba.accountnumber as bankAccountNumber, ih.instrumentdate as chequeDate, ih.instrumentnumber as chequeNumber, ih.payto as payTo, ih.surrendarreason as surrenderReason,");
-        queryBuilder.append(" vh.vouchernumber as voucherNumber, vh.voucherdate, vh.id as voucherHeaderId from egf_instrumentheader ih inner join egf_instrumentvoucher iv on ih.id=iv.instrumentheaderid inner join bank _bank on _bank.id=ih.bankid ");
-        queryBuilder.append("inner join bankbranch _bankBranch on _bankBranch.bankid=_bank.id inner join bankaccount ba on ba.branchid=_bankBranch.id inner join voucherheader vh on vh.id=iv.voucherheaderid ");
-        queryBuilder.append("where ih.id_status=:status and ih.ispaycheque=:payCheque and ba.id=ih.bankaccountid");
+		StringBuilder queryBuilder = new StringBuilder(
+				"select ih.id as id, concat(concat(_bank.name,'-'),_bankBranch.branchname) as bankBranch,")
+						.append(" ba.accountnumber as bankAccountNumber, ih.instrumentdate as chequeDate,")
+						.append(" ih.instrumentnumber as chequeNumber, ih.payto as payTo, ih.surrendarreason as surrenderReason,")
+						.append(" vh.vouchernumber as voucherNumber, vh.voucherdate, vh.id as voucherHeaderId")
+						.append(" from egf_instrumentheader ih inner join egf_instrumentvoucher iv on ih.id=iv.instrumentheaderid")
+						.append(" inner join bank _bank on _bank.id=ih.bankid ")
+						.append("inner join bankbranch _bankBranch on _bankBranch.bankid=_bank.id inner join bankaccount ba")
+						.append(" on ba.branchid=_bankBranch.id inner join voucherheader vh on vh.id=iv.voucherheaderid ")
+						.append("where ih.id_status=:status and ih.ispaycheque=:payCheque and ba.id=ih.bankaccountid");
         EgwStatus status = getStatusId(FinancialConstants.INSTRUMENT_SURRENDERED_STATUS);
         addWhereClause(model, queryBuilder);
-        SQLQuery createSQLQuery = persistenceService.getSession().createSQLQuery(queryBuilder.toString());
-        createSQLQuery.addScalar("id",IntegerType.INSTANCE).addScalar("bankBranch").addScalar("bankAccountNumber").addScalar("chequeDate").addScalar("chequeNumber").addScalar("payTo").addScalar("surrenderReason").addScalar("voucherNumber")
-        .addScalar("voucherDate").addScalar("voucherHeaderId",LongType.INSTANCE).setResultTransformer(Transformers.aliasToBean(ChequeReportModel.class));
-        createSQLQuery.setInteger("status", status.getId());
-        createSQLQuery.setString("payCheque", "1");
-        if(StringUtils.isNotBlank(model.getBankBranchId())){
-            createSQLQuery.setInteger("bankId", Integer.parseInt(model.getBankBranchId().split("-")[0]));
-            createSQLQuery.setInteger("branchId", Integer.parseInt(model.getBankBranchId().split("-")[1]));
-        }
-        if(model.getBankAccountId() !=0){
-            createSQLQuery.setInteger("bankAccountId", model.getBankAccountId());
-        }
-        if(model.getFundId() != 0){
-            createSQLQuery.setInteger("fundId", model.getFundId());
-        }
-        if(model.getFromDate() != null){
-            createSQLQuery.setDate("fromDate", model.getFromDate());
-        }
-        if(model.getToDate() != null){
-            createSQLQuery.setDate("toDate", model.getToDate());
-        }
-        if(model.getSurrenderReason() != null){
-            if(model.getSurrenderReason().equalsIgnoreCase("Surrender: cheque leaf to be re-used.|Y")){
-                createSQLQuery.setString("surrenderReason", "Surrender: cheque leaf to be re-used.");
-            }else{
-                createSQLQuery.setString("surrenderReason", model.getSurrenderReason());
-            }
-        }
-        List<ChequeReportModel> list = createSQLQuery.list();
-        return list;
+		SQLQuery createSQLQuery = persistenceService.getSession().createSQLQuery(queryBuilder.toString());
+		createSQLQuery.addScalar("id", IntegerType.INSTANCE).addScalar("bankBranch").addScalar("bankAccountNumber")
+				.addScalar("chequeDate").addScalar("chequeNumber").addScalar("payTo").addScalar("surrenderReason")
+				.addScalar("voucherNumber").addScalar("voucherDate").addScalar("voucherHeaderId", LongType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(ChequeReportModel.class));
+		createSQLQuery.setInteger("status", status.getId());
+		createSQLQuery.setString("payCheque", "1");
+		if (StringUtils.isNotBlank(model.getBankBranchId())) {
+			createSQLQuery.setInteger("bankId", Integer.parseInt(model.getBankBranchId().split("-")[0]));
+			createSQLQuery.setInteger("branchId", Integer.parseInt(model.getBankBranchId().split("-")[1]));
+		}
+		if (model.getBankAccountId() != 0) {
+			createSQLQuery.setInteger("bankAccountId", model.getBankAccountId());
+		}
+		if (model.getFundId() != 0) {
+			createSQLQuery.setInteger("fundId", model.getFundId());
+		}
+		if (model.getFromDate() != null) {
+			createSQLQuery.setDate("fromDate", model.getFromDate());
+		}
+		if (model.getToDate() != null) {
+			createSQLQuery.setDate("toDate", model.getToDate());
+		}
+		if (model.getSurrenderReason() != null) {
+			if (model.getSurrenderReason().equalsIgnoreCase("Surrender: cheque leaf to be re-used.|Y")) {
+				createSQLQuery.setString("surrenderReason", "Surrender: cheque leaf to be re-used.");
+			} else {
+				createSQLQuery.setString("surrenderReason", model.getSurrenderReason());
+			}
+		}
+		List<ChequeReportModel> list = createSQLQuery.list();
+		return list;
     }
 
     private void addWhereClause(ChequeReportModel model, StringBuilder queryBuilder) {

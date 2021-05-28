@@ -49,18 +49,23 @@ package org.egov.model.report;
 
 import java.util.Date;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class ReportBean {
 
     private Integer fundId;
     private Integer functionId;
+    @SafeHtml
     private String departmentCode;
-	private Integer functionaryId;
+    private Integer functionaryId;
     private Integer divisionId;
     private Date fromDate;
     private Date toDate;
+    @SafeHtml
     private String functionName;
-
+    @SafeHtml
     private String reportType;
+    @SafeHtml
     private String exportType;
 
     public String getExportType() {
@@ -142,14 +147,13 @@ public class ReportBean {
     public void setFunctionName(final String functionName) {
         this.functionName = functionName;
     }
-    
+
     public String getDepartmentCode() {
-		return departmentCode;
-	}
+        return departmentCode;
+    }
 
-	public void setDepartmentCode(String departmentCode) {
-		this.departmentCode = departmentCode;
-	}
-
+    public void setDepartmentCode(final String departmentCode) {
+        this.departmentCode = departmentCode;
+    }
 
 }

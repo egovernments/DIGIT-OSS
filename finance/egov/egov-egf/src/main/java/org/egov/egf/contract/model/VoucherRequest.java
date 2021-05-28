@@ -53,6 +53,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.egov.infra.microservice.models.RequestInfo;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -60,6 +61,7 @@ public class VoucherRequest {
 
     @NotNull
     @JsonProperty("tenantId")
+    @SafeHtml
     private String tenantId;
 
     @JsonProperty("RequestInfo")

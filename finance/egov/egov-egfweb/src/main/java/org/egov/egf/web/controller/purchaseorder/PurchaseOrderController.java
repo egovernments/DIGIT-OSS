@@ -60,17 +60,22 @@ import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.model.bills.EgBillregister;
 import org.egov.model.masters.PurchaseOrder;
+import org.egov.model.masters.PurchaseOrderSearchRequest;
 import org.egov.services.bills.EgBillRegisterService;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -85,130 +90,134 @@ import com.google.gson.GsonBuilder;
 @RequestMapping(value = "/purchaseorder")
 public class PurchaseOrderController {
 
-    private static final String NEW = "purchaseorder-new";
-    private static final String RESULT = "purchaseorder-result";
-    private static final String EDIT = "purchaseorder-edit";
-    private static final String VIEW = "purchaseorder-view";
-    private static final String SEARCH = "purchaseorder-search";
+	private static final String PURCHASE_ORDER = "purchaseOrder";
+	private static final String PURCHASE_ORDER_SEARCH_REQUEST = "purchaseOrderSearchRequest";
+	private static final String NEW = "purchaseorder-new";
+	private static final String RESULT = "purchaseorder-result";
+	private static final String EDIT = "purchaseorder-edit";
+	private static final String VIEW = "purchaseorder-view";
+	private static final String SEARCH = "purchaseorder-search";
 
-    @Autowired
-    private FundService fundService;
+	@Autowired
+	private FundService fundService;
 
-    @Autowired
-    private PurchaseOrderService purchaseOrderService;
+	@Autowired
+	private PurchaseOrderService purchaseOrderService;
 
-    @Autowired
-    private MicroserviceUtils microserviceUtils;
+	@Autowired
+	private MicroserviceUtils microserviceUtils;
 
-    @Autowired
-    private MessageSource messageSource;
+	@Autowired
+	private MessageSource messageSource;
 
-    @Autowired
-    private SupplierService supplierService;
+	@Autowired
+	private SupplierService supplierService;
 
-    @Autowired
-    private EgBillRegisterService egBillRegisterService;
+	@Autowired
+	private EgBillRegisterService egBillRegisterService;
 
-    private void prepareNewForm(final Model model) {
-        model.addAttribute("funds", fundService.findAllActiveAndIsnotleaf());
-        model.addAttribute("departments", microserviceUtils.getDepartments());
-        model.addAttribute("suppliers", supplierService.getAllActiveEntities(null));
-    }
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.setDisallowedFields("id");
+	}
 
-    @RequestMapping(value = "/newform", method = RequestMethod.POST)
-    public String showNewForm(@ModelAttribute("purchaseOrder") final PurchaseOrder purchaseOrder, final Model model) {
-        prepareNewForm(model);
-        model.addAttribute("purchaseOrder", new PurchaseOrder());
-        return NEW;
-    }
+	private void prepareNewForm(final Model model) {
+		model.addAttribute("funds", fundService.findAllActiveAndIsnotleaf());
+		model.addAttribute("departments", microserviceUtils.getDepartments());
+		model.addAttribute("suppliers", supplierService.getAllActiveEntities(null));
+	}
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute final PurchaseOrder purchaseOrder, final BindingResult errors,
-            final Model model, final RedirectAttributes redirectAttrs) throws IOException {
+	@PostMapping(value = "/newform")
+	public String showNewForm(@ModelAttribute(PURCHASE_ORDER) final PurchaseOrder purchaseOrder, final Model model) {
+		prepareNewForm(model);
+		model.addAttribute(PURCHASE_ORDER, new PurchaseOrder());
+		return NEW;
+	}
 
-        if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return NEW;
-        }
+	@PostMapping(value = "/create")
+	public String create(@Valid @ModelAttribute final PurchaseOrder purchaseOrder, final BindingResult errors,
+			final Model model, final RedirectAttributes redirectAttrs) throws IOException {
 
-        purchaseOrderService.create(purchaseOrder);
+		if (errors.hasErrors()) {
+			prepareNewForm(model);
+			return NEW;
+		}
 
-        redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.purchaseOrder.success", null, null));
+		purchaseOrderService.create(purchaseOrder);
 
-        return "redirect:/purchaseorder/result/" + purchaseOrder.getId() + "/create";
-    }
+		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.purchaseOrder.success", null, null));
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public String edit(@PathVariable("id") final Long id, final Model model) {
-        final PurchaseOrder purchaseOrder = purchaseOrderService.getById(id);
-        List<EgBillregister> bills = egBillRegisterService.getBillsByWorkOrderNumber(purchaseOrder.getOrderNumber());
-        if (bills != null && !bills.isEmpty()) {
-            purchaseOrder.setEditAllFields(false);
-        } else {
-            purchaseOrder.setEditAllFields(true);
-        }
-        prepareNewForm(model);
-        model.addAttribute("purchaseOrder", purchaseOrder);
-        return EDIT;
-    }
+		return "redirect:/purchaseorder/result/" + purchaseOrder.getId() + "/create";
+	}
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@Valid @ModelAttribute final PurchaseOrder purchaseOrder, final BindingResult errors,
-            final Model model, final RedirectAttributes redirectAttrs) {
-        if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return EDIT;
-        }
-        purchaseOrderService.update(purchaseOrder);
-        redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.purchaseOrder.success", null, null));
-        return "redirect:/purchaseorder/result/" + purchaseOrder.getId() + "/view";
-    }
+	@GetMapping(value = "/edit/{id}")
+	public String edit(@PathVariable("id") final Long id, final Model model) {
+		final PurchaseOrder purchaseOrder = purchaseOrderService.getById(id);
+		List<EgBillregister> bills = egBillRegisterService.getBillsByWorkOrderNumber(purchaseOrder.getOrderNumber());
+		purchaseOrder.setEditAllFields(bills.isEmpty());
+		prepareNewForm(model);
+		model.addAttribute(PURCHASE_ORDER, purchaseOrder);
+		return EDIT;
+	}
 
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.POST)
-    public String view(@PathVariable("id") final Long id, final Model model) {
-        final PurchaseOrder purchaseOrder = purchaseOrderService.getById(id);
-        populateDepartmentName(purchaseOrder);
-        prepareNewForm(model);
-        model.addAttribute("purchaseOrder", purchaseOrder);
-        model.addAttribute("mode", "view");
-        return VIEW;
-    }
+	@PostMapping(value = "/update")
+	public String update(@Valid @ModelAttribute final PurchaseOrder purchaseOrder, final BindingResult errors,
+			final Model model, final RedirectAttributes redirectAttrs) {
+		if (errors.hasErrors()) {
+			prepareNewForm(model);
+			return EDIT;
+		}
+		purchaseOrderService.update(purchaseOrder);
+		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.purchaseOrder.success", null, null));
+		return "redirect:/purchaseorder/result/" + purchaseOrder.getId() + "/view";
+	}
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
-    public String search(@PathVariable("mode") final String mode, final Model model) {
-        final PurchaseOrder purchaseOrder = new PurchaseOrder();
-        prepareNewForm(model);
-        model.addAttribute("purchaseOrder", purchaseOrder);
-        return SEARCH;
+	@GetMapping(value = "/view/{id}")
+	public String view(@PathVariable("id") final Long id, final Model model) {
+		final PurchaseOrder purchaseOrder = purchaseOrderService.getById(id);
+		populateDepartmentName(purchaseOrder);
+		prepareNewForm(model);
+		model.addAttribute(PURCHASE_ORDER, purchaseOrder);
+		model.addAttribute("mode", "view");
+		return VIEW;
+	}
 
-    }
+	@PostMapping(value = "/search/{mode}")
+	public String search(@PathVariable("mode") @SafeHtml final String mode, final Model model) {
+		final PurchaseOrderSearchRequest purchaseOrderSearchRequest = new PurchaseOrderSearchRequest();
+		prepareNewForm(model);
+		model.addAttribute(PURCHASE_ORDER_SEARCH_REQUEST, purchaseOrderSearchRequest);
+		return SEARCH;
 
-    @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    @ResponseBody
-    public String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-            @ModelAttribute final PurchaseOrder purchaseOrder) {
-        final List<PurchaseOrder> searchResultList = purchaseOrderService.search(purchaseOrder);
-        return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
-    }
+	}
 
-    public Object toSearchResultJson(final Object object) {
-        final GsonBuilder gsonBuilder = new GsonBuilder();
-        final Gson gson = gsonBuilder.registerTypeAdapter(PurchaseOrder.class, new PurchaseOrderJsonAdaptor()).create();
-        return gson.toJson(object);
-    }
+	@PostMapping(value = "/ajaxsearch/{mode}", produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
+	public String ajaxsearch(@PathVariable("mode") @SafeHtml final String mode, final Model model,
+			@Valid @ModelAttribute final PurchaseOrderSearchRequest purchaseOrderSearchRequest) {
+		final List<PurchaseOrder> searchResultList = purchaseOrderService.search(purchaseOrderSearchRequest);
+		return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
+	}
 
-    @RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
-    public String result(@PathVariable("id") final Long id, @PathVariable("mode") final String mode, final Model model) {
-        final PurchaseOrder purchaseOrder = purchaseOrderService.getById(id);
-        populateDepartmentName(purchaseOrder);
-        model.addAttribute("purchaseOrder", purchaseOrder);
-        model.addAttribute("mode", mode);
-        return RESULT;
-    }
+	public Object toSearchResultJson(final Object object) {
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		final Gson gson = gsonBuilder.registerTypeAdapter(PurchaseOrder.class, new PurchaseOrderJsonAdaptor()).create();
+		return gson.toJson(object);
+	}
 
-    private void populateDepartmentName(PurchaseOrder purchaseOrder) {
-        Department dept = microserviceUtils.getDepartmentByCode(purchaseOrder.getDepartment());
-        purchaseOrder.setDepartmentName(dept.getName());
-    }
+	@GetMapping(value = "/result/{id}/{mode}")
+	public String result(@PathVariable("id") final Long id, @PathVariable("mode") @SafeHtml final String mode,
+			final Model model) {
+		final PurchaseOrder purchaseOrder = purchaseOrderService.getById(id);
+		populateDepartmentName(purchaseOrder);
+		model.addAttribute(PURCHASE_ORDER, purchaseOrder);
+		model.addAttribute("mode", mode);
+		return RESULT;
+	}
+
+	private void populateDepartmentName(PurchaseOrder purchaseOrder) {
+		Department dept = microserviceUtils.getDepartmentByCode(purchaseOrder.getDepartment());
+		purchaseOrder.setDepartmentName(dept.getName());
+	}
 
 }

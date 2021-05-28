@@ -39,21 +39,26 @@
  */
 package org.egov.infra.microservice.models;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class InstrumentVoucher {
 
     /*
      * instrumentHeaderId is the reference of the instrument attached to a voucher
      */
+    @SafeHtml
     private String instrument;
 
     /*
      * voucherHeaderId is the reference of the voucher attached to a instrument.
      */
+    @SafeHtml
     private String voucherHeaderId;
 
     /*
      * receiptHeaderId is the reference of the receipt attached to a instrument.
      */
+    @SafeHtml
     private String receiptHeaderId;
 
     public String getInstrument() {

@@ -405,11 +405,12 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		} catch (final ValidationException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw e;
-		} catch (final Exception e) {
-			// handle engine exception
-			LOGGER.error(e.getMessage(), e);
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { // handle engine exception
+           * LOGGER.error(e.getMessage(), e); throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Posted to Ledger " + voucherHeader.getId());
 		return voucherHeader;
@@ -510,7 +511,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		final List<String> repeatedglCodes = VoucherHelper.getRepeatedGlcodes(billDetailslist);
 		for (final VoucherDetails voucherDetails : billDetailslist) {
 			final CChartOfAccountDetail chartOfAccountDetail = (CChartOfAccountDetail) getPersistenceService().find(
-					" from CChartOfAccountDetail" + " where glCodeId=(select id from CChartOfAccounts where glcode=?)",
+					" from CChartOfAccountDetail where glCodeId=(select id from CChartOfAccounts where glcode=?)",
 					voucherDetails.getGlcodeDetail());
 			if (null != chartOfAccountDetail) {
 				accountDetailMap = new HashMap<>();
@@ -610,10 +611,10 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 			}
 
 		final StringBuffer fyQuery = new StringBuffer();
-		fyQuery.append("from CFinancialYear where isActiveForPosting=true and startingDate <= '")
-				.append(Constants.DDMMYYYYFORMAT1.format(voucherHeader.getVoucherDate())).append("' AND endingDate >='")
-				.append(Constants.DDMMYYYYFORMAT1.format(voucherHeader.getVoucherDate())).append("'");
-		final List<CFinancialYear> list = persistenceService.findAllBy(fyQuery.toString());
+        fyQuery.append("from CFinancialYear where isActiveForPosting=true and startingDate <= ? AND endingDate >= ?");
+		final List<CFinancialYear> list = persistenceService.findAllBy(fyQuery.toString(),
+				voucherHeader.getVoucherDate(), voucherHeader.getVoucherDate());
+        
 		if (list.size() == 0) {
 			addActionError(getText("journalvoucher.fYear.notActive"));
 			return true;
@@ -628,7 +629,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 			final Integer branchId = Integer
 					.valueOf(contraBean.getBankBranchId().substring(index1 + 1, contraBean.getBankBranchId().length()));
 			final List<Bankaccount> bankAccountList = getPersistenceService().findAllBy(
-					"from Bankaccount ba where ba.bankbranch.id=? " + "  and isactive=true order by id", branchId);
+					"from Bankaccount ba where ba.bankbranch.id=? and isactive=true order by id", branchId);
 			addDropdownData("accNumList", bankAccountList);
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Account number list size " + bankAccountList.size());
@@ -642,7 +643,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 			final int index1 = bankBranchId.indexOf('-');
 			final Integer branchId = Integer.valueOf(bankBranchId.substring(index1 + 1, bankBranchId.length()));
 			final List<Bankaccount> bankAccountList = getPersistenceService().findAllBy(
-					"from Bankaccount ba where ba.bankbranch.id=? " + "  and isactive=true order by id", branchId);
+					"from Bankaccount ba where ba.bankbranch.id=? and isactive=true order by id", branchId);
 			addDropdownData("accNumList", bankAccountList);
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Account number list size " + bankAccountList.size());
@@ -657,12 +658,12 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		try {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("FUND ID = " + voucherHeader.getFundId().getId());
-			final List<Object[]> bankBranch = getPersistenceService().findAllBy(
-					"select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),bankBranch.branchname) as bankbranchname "
-							+ " FROM Bank bank,Bankbranch bankBranch,Bankaccount bankaccount "
-							+ " where  bank.isactive=true  and bankBranch.isactive=true and bank.id = bankBranch.bank.id and bankBranch.id = bankaccount.bankbranch.id"
-							+ " and bankaccount.fund.id=?",
-					voucherHeader.getFundId().getId());
+			final List<Object[]> bankBranch = getPersistenceService()
+                    .findAllBy(new StringBuilder(
+                            "select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),bankBranch.branchname) as bankbranchname ")
+                            .append(" FROM Bank bank,Bankbranch bankBranch,Bankaccount bankaccount ")
+                            .append(" where  bank.isactive=true  and bankBranch.isactive=true and bank.id = bankBranch.bank.id and bankBranch.id = bankaccount.bankbranch.id")
+                            .append(" and bankaccount.fund.id=?").toString(), voucherHeader.getFundId().getId());
 
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Bank list size is " + bankBranch.size());
@@ -766,6 +767,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 	}
 
 	protected void removeEmptyRowsSubledger(final List<VoucherDetails> list) {
+	    if(list!=null && !list.isEmpty())
 		for (final Iterator<VoucherDetails> detail = list.iterator(); detail.hasNext();) {
 			final VoucherDetails next = detail.next();
 			if (next != null && (next.getSubledgerCode() == null || next.getSubledgerCode().equals("")))

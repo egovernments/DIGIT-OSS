@@ -77,6 +77,7 @@ import org.egov.utils.FinancialConstants;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -85,6 +86,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -156,7 +158,7 @@ public class AutoRemittanceReportAction extends BaseFormAction {
     }
 
     @Action(value = "/report/autoRemittanceReport-newform")
-    public String newform() throws Exception {
+    public String newform() {
         return "reportForm";
     }
 
@@ -179,7 +181,7 @@ public class AutoRemittanceReportAction extends BaseFormAction {
     }
 
     @Action(value = "/report/autoRemittanceReport-ajaxLoadData")
-    public String ajaxLoadData() {
+    public String ajaxLoadData() throws NumberFormatException, NoSuchMethodException, SecurityException {
 
         populateData();
         boolean addList = false;
@@ -281,16 +283,15 @@ public class AutoRemittanceReportAction extends BaseFormAction {
     }
 
     @Action(value = "/report/autoRemittanceReport-exportXls")
-    public String exportXls() throws JRException, IOException {
+    public String exportXls() throws JRException, IOException, NumberFormatException, NoSuchMethodException, SecurityException {
         populateData();
         if (level.equals("atcoc"))
         {
-            final StringBuffer finyearQuery = new StringBuffer();
+        	final StringBuffer finyearQuery = new StringBuffer();
             final Date currentDate = new Date();
-            finyearQuery.append("from CFinancialYear where  startingDate <= '")
-                    .append(Constants.DDMMYYYYFORMAT1.format(currentDate)).append("' AND endingDate >='")
-                    .append(Constants.DDMMYYYYFORMAT1.format(currentDate)).append("'");
-            final CFinancialYear financialyear = (CFinancialYear) persistenceService.find(finyearQuery.toString());
+            finyearQuery.append("from CFinancialYear where  startingDate <= ? AND endingDate >= ?");
+            final CFinancialYear financialyear = (CFinancialYear) persistenceService.find(finyearQuery.toString(), Constants.DDMMYYYYFORMAT1.format(currentDate),
+                    Constants.DDMMYYYYFORMAT1.format(currentDate));
             if (null == paymentVoucherFromDate)
                 paymentVoucherFromDate = financialyear.getStartingDate();
             if (null == paymentVoucherToDate)
@@ -314,17 +315,16 @@ public class AutoRemittanceReportAction extends BaseFormAction {
     }
 
     @Action(value = "/report/autoRemittanceReport-exportPdf")
-    public String exportPdf()
+    public String exportPdf() throws NumberFormatException, NoSuchMethodException, SecurityException
     {
         populateData();
         if (level.equals("atcoc"))
         {
-            final StringBuffer finyearQuery = new StringBuffer();
+        	final StringBuffer finyearQuery = new StringBuffer();
             final Date currentDate = new Date();
-            finyearQuery.append("from CFinancialYear where  startingDate <= '")
-                    .append(Constants.DDMMYYYYFORMAT1.format(currentDate)).append("' AND endingDate >='")
-                    .append(Constants.DDMMYYYYFORMAT1.format(currentDate)).append("'");
-            final CFinancialYear financialyear = (CFinancialYear) persistenceService.find(finyearQuery.toString());
+            finyearQuery.append("from CFinancialYear where  startingDate <=? AND endingDate >=? ");
+            final CFinancialYear financialyear = (CFinancialYear) persistenceService.find(finyearQuery.toString(),Constants.DDMMYYYYFORMAT1.format(currentDate),
+                    Constants.DDMMYYYYFORMAT1.format(currentDate));
             if (null == paymentVoucherFromDate)
                 paymentVoucherFromDate = financialyear.getStartingDate();
             if (null == paymentVoucherToDate)
@@ -429,145 +429,150 @@ public class AutoRemittanceReportAction extends BaseFormAction {
         return paramMap;
     }
 
-    private void populateData()
+    private void populateData() throws NumberFormatException, NoSuchMethodException, SecurityException
     {
         final StringBuffer query = new StringBuffer("");
         final Date currentDate = new Date();
         final StringBuffer finyearQuery = new StringBuffer();
+        final Map<String, Object> params = new HashMap<>();
 
-        finyearQuery.append("from CFinancialYear where  startingDate <= '").append(Constants.DDMMYYYYFORMAT1.format(currentDate))
-                .append("' AND endingDate >='").append(Constants.DDMMYYYYFORMAT1.format(currentDate)).append("'");
-        final CFinancialYear financialyear = (CFinancialYear) persistenceService.find(finyearQuery.toString());
+        finyearQuery.append("from CFinancialYear where  startingDate <= ? AND endingDate >= ?");
+        final CFinancialYear financialyear = (CFinancialYear) persistenceService.find(finyearQuery.toString(),Constants.DDMMYYYYFORMAT1.format(currentDate),
+                                                Constants.DDMMYYYYFORMAT1.format(currentDate));
 
         if (level.equals("atcoc"))
-            query.append("SELECT CONCAT(CONCAT(coa.GLCODE ,' - ') ,coa.NAME) AS remittanceCOA,"
-                    +
-                    "      dept.DEPT_NAME  AS department,CONCAT(	CONCAT(DO.NAME,'/') , DO.TAN) AS drawingOfficer , "
-                    +
-                    " CONCAT(CONCAT( CONCAT(CONCAT(bank.NAME, '  '),bnkbranch.BRANCHNAME), ' - '), bnkacc.ACCOUNTNUMBER) AS bankbranchAccount,"
-                    +
-                    "  vh.VOUCHERNUMBER AS remittancePaymentNo, CONCAT(CONCAT(ih.INSTRUMENTNUMBER ,'/'),ih.INSTRUMENTDATE ) rtgsNoDate,"
-                    +
-                    " ih.INSTRUMENTAMOUNT AS rtgsamount, remdt.ID AS remittanceDTId ,vh.id as paymentVoucherId "
-                    +
-                    " FROM EG_REMITTANCE rem, EG_REMITTANCE_DETAIL remdt,EG_REMITTANCE_GLDTL remgltl,"
-                    +
-                    " EGF_INSTRUMENTHEADER ih,EGF_INSTRUMENTVOUCHER iv, VOUCHERHEADER vh,TDS TDS,PAYMENTHEADER ph,BANKACCOUNT bnkacc,"
-                    +
-                    " GENERALLEDGER gl, GENERALLEDGERDETAIL gld, chartofaccounts coa, fund fund,bank bank,bankbranch bnkbranch,EG_DEPARTMENT dept,EG_DRAWINGOFFICER DO "
-                    +
-                    " WHERE rem.id = remdt.REMITTANCEID AND remdt.REMITTANCEGLDTLID =remgltl.ID"
-                    +
-                    " AND   rem.paymentvhid = iv.voucherheaderid AND  iv.instrumentheaderid = ih.ID AND  iv.voucherheaderid= vh.id "
-                    +
-                    " AND rem.tdsid = TDS.id AND 	 fund.id= vh.fundid "
-                    +
-                    " AND TDS.REMITTANCE_MODE='A' AND vh.status=0 "
-                    +
-                    " AND ph.VOUCHERHEADERID = vh.id  "
-                    +
-                    " AND ph.BANKACCOUNTNUMBERID = bnkacc.ID AND gl.VOUCHERHEADERID= vh.id AND gld.GENERALLEDGERID=gl.id AND  dept.ID_DEPT = vh.departmentid "
-                    +
-                    " AND DO.ID =ph.DRAWINGOFFICER_ID	 AND ph.DRAWINGOFFICER_ID IS NOT NULL AND rem.paymentvhid IS  NOT  NULL " +
-                    " AND ih.ID_STATUS= (SELECT  id  FROM EGW_STATUS WHERE moduletype='Instrument' AND code='New') " +
-                    " AND bnkacc.BRANCHID=bnkbranch.ID  AND bank.id =bnkbranch.BANKID   AND coa.id= tds.GLCODEID ");
+        	query.append("SELECT CONCAT(CONCAT(coa.GLCODE ,' - ') ,coa.NAME) AS remittanceCOA,")
+            .append(" dept.DEPT_NAME AS department,CONCAT(CONCAT(DO.NAME,'/') , DO.TAN) AS drawingOfficer , ")
+            .append(" CONCAT(CONCAT( CONCAT(CONCAT(bank.NAME, '  '),bnkbranch.BRANCHNAME), ' - '), bnkacc.ACCOUNTNUMBER) AS bankbranchAccount,")
+            .append("  vh.VOUCHERNUMBER AS remittancePaymentNo, CONCAT(CONCAT(ih.INSTRUMENTNUMBER ,'/'),ih.INSTRUMENTDATE ) rtgsNoDate,")
+            .append(" ih.INSTRUMENTAMOUNT AS rtgsamount, remdt.ID AS remittanceDTId ,vh.id as paymentVoucherId ")
+            .append(" FROM EG_REMITTANCE rem, EG_REMITTANCE_DETAIL remdt,EG_REMITTANCE_GLDTL remgltl,")
+            .append(" EGF_INSTRUMENTHEADER ih,EGF_INSTRUMENTVOUCHER iv, VOUCHERHEADER vh,TDS TDS,PAYMENTHEADER ph,BANKACCOUNT bnkacc,")
+            .append(" GENERALLEDGER gl, GENERALLEDGERDETAIL gld, chartofaccounts coa, fund fund,bank bank,bankbranch bnkbranch,EG_DEPARTMENT dept,EG_DRAWINGOFFICER DO ")
+            .append(" WHERE rem.id = remdt.REMITTANCEID AND remdt.REMITTANCEGLDTLID =remgltl.ID")
+            .append(" AND   rem.paymentvhid = iv.voucherheaderid AND  iv.instrumentheaderid = ih.ID AND  iv.voucherheaderid= vh.id ")
+            .append(" AND rem.tdsid = TDS.id AND 	 fund.id= vh.fundid ")
+            .append(" AND TDS.REMITTANCE_MODE='A' AND vh.status=0 ")
+            .append(" AND ph.VOUCHERHEADERID = vh.id  ")
+            .append(" AND ph.BANKACCOUNTNUMBERID = bnkacc.ID AND gl.VOUCHERHEADERID= vh.id AND gld.GENERALLEDGERID=gl.id AND  dept.ID_DEPT = vh.departmentid ")
+            .append(" AND DO.ID =ph.DRAWINGOFFICER_ID	 AND ph.DRAWINGOFFICER_ID IS NOT NULL AND rem.paymentvhid IS  NOT  NULL ")
+            .append(" AND ih.ID_STATUS= (SELECT  id  FROM EGW_STATUS WHERE moduletype='Instrument' AND code='New') ")
+            .append(" AND bnkacc.BRANCHID=bnkbranch.ID  AND bank.id =bnkbranch.BANKID   AND coa.id= tds.GLCODEID ");
         else
-            query.append("SELECT CONCAT(CONCAT(coa.GLCODE ,' - ') ,coa.NAME) AS remittanceCOA,"
-                    +
-                    " fund.NAME AS fundName, CONCAT(CONCAT( CONCAT(CONCAT(bank.NAME, '  '),bnkbranch.BRANCHNAME), ' - '), bnkacc.ACCOUNTNUMBER) AS bankbranchAccount,"
-                    +
-                    "  vh.VOUCHERNUMBER AS remittancePaymentNo, CONCAT(CONCAT(ih.INSTRUMENTNUMBER ,'/'),ih.INSTRUMENTDATE ) rtgsNoDate,"
-                    +
-                    " ih.INSTRUMENTAMOUNT AS rtgsamount, remdt.ID AS remittanceDTId ,vh.id as paymentVoucherId "
-                    +
-                    " FROM EG_REMITTANCE rem, EG_REMITTANCE_DETAIL remdt,EG_REMITTANCE_GLDTL remgltl,"
-                    +
-                    " EGF_INSTRUMENTHEADER ih,EGF_INSTRUMENTVOUCHER iv, VOUCHERHEADER vh,TDS TDS,PAYMENTHEADER ph,BANKACCOUNT bnkacc,"
-                    +
-                    " GENERALLEDGER gl, GENERALLEDGERDETAIL gld, chartofaccounts coa, fund fund,bank bank,bankbranch bnkbranch "
-                    +
-                    " WHERE rem.id = remdt.REMITTANCEID AND remdt.REMITTANCEGLDTLID =remgltl.ID"
-                    +
-                    " AND   rem.paymentvhid = iv.voucherheaderid AND  iv.instrumentheaderid = ih.ID AND  iv.voucherheaderid= vh.id "
-                    +
-                    " AND rem.tdsid = TDS.id AND 	 fund.id= vh.fundid "
-                    +
-                    " AND TDS.REMITTANCE_MODE='A' AND vh.status=0 "
-                    +
-                    " AND ph.VOUCHERHEADERID = vh.id  "
-                    +
-                    " AND ph.BANKACCOUNTNUMBERID = bnkacc.ID AND gl.VOUCHERHEADERID= vh.id AND gld.GENERALLEDGERID=gl.id AND  rem.paymentvhid IS  NOT  NULL "
-                    +
-                    " AND ih.ID_STATUS= (SELECT  id  FROM EGW_STATUS WHERE moduletype='Instrument' AND code='New') " +
-                    " AND bnkacc.BRANCHID=bnkbranch.ID  AND bank.id =bnkbranch.BANKID   AND coa.id= tds.GLCODEID ");
-        if (null != department && null != department.getId() && department.getId() != -1)
-            query.append(" AND vh.DEPARTMENTID = " + department.getId());
-        if (null != recovery && null != recovery.getId() && recovery.getId() != -1)
-            query.append(" AND  TDS.id = " + recovery.getId());
-
+        	query.append("SELECT CONCAT(CONCAT(coa.GLCODE ,' - ') ,coa.NAME) AS remittanceCOA,")
+            .append(" fund.NAME AS fundName, CONCAT(CONCAT( CONCAT(CONCAT(bank.NAME, '  '),bnkbranch.BRANCHNAME), ' - '), bnkacc.ACCOUNTNUMBER) AS bankbranchAccount,")
+            .append("  vh.VOUCHERNUMBER AS remittancePaymentNo, CONCAT(CONCAT(ih.INSTRUMENTNUMBER ,'/'),ih.INSTRUMENTDATE ) rtgsNoDate,")
+            .append(" ih.INSTRUMENTAMOUNT AS rtgsamount, remdt.ID AS remittanceDTId ,vh.id as paymentVoucherId ")
+            .append(" FROM EG_REMITTANCE rem, EG_REMITTANCE_DETAIL remdt,EG_REMITTANCE_GLDTL remgltl,")
+            .append(" EGF_INSTRUMENTHEADER ih,EGF_INSTRUMENTVOUCHER iv, VOUCHERHEADER vh,TDS TDS,PAYMENTHEADER ph,BANKACCOUNT bnkacc,")
+            .append(" GENERALLEDGER gl, GENERALLEDGERDETAIL gld, chartofaccounts coa, fund fund,bank bank,bankbranch bnkbranch ")
+            .append(" WHERE rem.id = remdt.REMITTANCEID AND remdt.REMITTANCEGLDTLID =remgltl.ID")
+            .append(" AND   rem.paymentvhid = iv.voucherheaderid AND  iv.instrumentheaderid = ih.ID AND  iv.voucherheaderid= vh.id ")
+            .append(" AND rem.tdsid = TDS.id AND 	 fund.id= vh.fundid ")
+            .append(" AND TDS.REMITTANCE_MODE='A' AND vh.status=0 ")
+            .append(" AND ph.VOUCHERHEADERID = vh.id  ")
+            .append(" AND ph.BANKACCOUNTNUMBERID = bnkacc.ID AND gl.VOUCHERHEADERID= vh.id AND gld.GENERALLEDGERID=gl.id AND  rem.paymentvhid IS  NOT  NULL ")
+            .append(" AND ih.ID_STATUS= (SELECT  id  FROM EGW_STATUS WHERE moduletype='Instrument' AND code='New') ")
+            .append(" AND bnkacc.BRANCHID=bnkbranch.ID  AND bank.id =bnkbranch.BANKID   AND coa.id= tds.GLCODEID ");
+        
+        
+        if (null != department && null != department.getId() && department.getId() != -1) {
+            query.append(" AND vh.DEPARTMENTID = :departmentId");
+            params.put("departmentId", department.getId());
+        }
+        if (null != recovery && null != recovery.getId() && recovery.getId() != -1) {
+            query.append(" AND  TDS.id = :recoveryId");
+            params.put("recoveryId", recovery.getId());
+        }
+        
         if (level.equals("atcoc"))
         {
-            if (null != paymentVoucherFromDate)
-                query.append(" AND vh.voucherdate >= '" + Constants.DDMMYYYYFORMAT1.format(paymentVoucherFromDate) + "'");
-            else
-                query.append(" AND vh.voucherdate >= '" + Constants.DDMMYYYYFORMAT1.format(financialyear.getStartingDate()) + "'");
-            if (null != paymentVoucherToDate)
-                query.append(" AND vh.voucherdate <= '" + Constants.DDMMYYYYFORMAT1.format(paymentVoucherToDate) + "'");
-            else
-                query.append(" AND vh.voucherdate <= '" + Constants.DDMMYYYYFORMAT1.format(financialyear.getEndingDate()) + "'");
+        	if (null != paymentVoucherFromDate) {
+                query.append(" AND vh.voucherdate >= :voucherFromDate");
+                params.put("voucherFromDate", Constants.DDMMYYYYFORMAT1.format(paymentVoucherFromDate));
+            } else {
+                query.append(" AND vh.voucherdate >= :finStartingDate");
+                params.put("finStartingDate", Constants.DDMMYYYYFORMAT1.format(financialyear.getStartingDate()));
+            }
+            if (null != paymentVoucherToDate) {
+                query.append(" AND vh.voucherdate <= :voucherToDate");
+                params.put("voucherToDate", Constants.DDMMYYYYFORMAT1.format(paymentVoucherToDate));
+            } else {
+                query.append(" AND vh.voucherdate <= :finEndtingDate'");
+                params.put("finEndtingDate", Constants.DDMMYYYYFORMAT1.format(financialyear.getEndingDate()));
+            }
         }
         else
         {
-            if (null != paymentVoucherFromDate)
-                query.append(" AND vh.voucherdate >= '" + Constants.DDMMYYYYFORMAT1.format(paymentVoucherFromDate) + "'");
-            if (null != paymentVoucherToDate)
-                query.append(" AND vh.voucherdate <= '" + Constants.DDMMYYYYFORMAT1.format(paymentVoucherToDate) + "'");
+        	if (null != paymentVoucherFromDate) {
+                query.append(" AND vh.voucherdate >= :voucherFromDate");
+                params.put("voucherFromDate", Constants.DDMMYYYYFORMAT1.format(paymentVoucherFromDate));
+            }
+            if (null != paymentVoucherToDate) {
+                query.append(" AND vh.voucherdate <= :voucherToDate");
+                params.put("voucherToDate", Constants.DDMMYYYYFORMAT1.format(paymentVoucherToDate));
+            }
         }
-        if (null != fund && null != fund.getId() && fund.getId() != -1)
-            query.append(" AND vh.fundid= " + fund.getId());
-        if (null != drawingOfficer && null != drawingOfficer.getId() && drawingOfficer.getId() != -1)
-            query.append(" AND ph.DRAWINGOFFICER_ID =" + drawingOfficer.getId());
-        if (null != rtgsAssignedFromDate)
-            query.append(" AND ih.INSTRUMENTDATE >= '" + Constants.DDMMYYYYFORMAT1.format(rtgsAssignedFromDate) + "'");
-        if (null != rtgsAssignedToDate)
-        {
-            query.append(" AND ih.INSTRUMENTDATE <= '" + Constants.DDMMYYYYFORMAT1.format(rtgsAssignedToDate) + "'");
-            query.append(rtgsAssignedToDate + "'");
+        if (null != fund && null != fund.getId() && fund.getId() != -1) {
+            query.append(" AND vh.fundid= :fundId");
+            params.put("fundId", fund.getId());
         }
-        if (null != instrumentNumber)
-            query.append(" AND ih.INSTRUMENTNUMBER = '" + instrumentNumber + "'");
-        if (null != bank && null != bank.getId() && bank.getId() != -1)
-            query.append("AND bank.id = " + bank.getId());
-        if (null != supplierCode && !supplierCode.isEmpty())
-            query.append(" AND ( gld.DETAILKEYID = ").append(supplierCode)
-                    .append(" AND gld.DETAILTYPEID=(SELECT id FROM accountdetailtype WHERE name='Creditor'))");
-        if (null != contractorCode && !contractorCode.isEmpty())
-            query.append(" AND ( gld.DETAILKEYID = ").append(contractorCode)
-                    .append(" AND gld.DETAILTYPEID=(SELECT id FROM accountdetailtype WHERE name='contractor'))");
-        if (null != bankbranch && null != bankbranch.getId() && bankbranch.getId() != -1)
-            query.append("AND bnkacc.BRANCHID = " + bankbranch.getId());
-        if (null != bankaccount && null != bankaccount.getId() && bankaccount.getId() != -1)
-            query.append(" AND bnkacc.id = " + bankaccount.getId());
+        if (null != drawingOfficer && null != drawingOfficer.getId() && drawingOfficer.getId() != -1) {
+            query.append(" AND ph.DRAWINGOFFICER_ID = :drawingOffId");
+            params.put("drawingOffId", drawingOfficer.getId());
+        }
+        if (null != rtgsAssignedFromDate) {
+            query.append(" AND ih.INSTRUMENTDATE >= :rtgsFromDate");
+            params.put("rtgsFromDate", Constants.DDMMYYYYFORMAT1.format(rtgsAssignedFromDate));
+        }
+        if (null != rtgsAssignedToDate) {
+            query.append(" AND ih.INSTRUMENTDATE <= :rtgsToDate");
+            params.put("rtgsToDate", Constants.DDMMYYYYFORMAT1.format(rtgsAssignedToDate));
+        }
+        if (null != instrumentNumber) {
+            query.append(" AND ih.INSTRUMENTNUMBER = :instrumentNumber");
+            params.put("instrumentNumber", instrumentNumber);
+        }
+        if (null != bank && null != bank.getId() && bank.getId() != -1) {
+            query.append("AND bank.id = :bankId");
+            params.put("bankId", bank.getId());
+        }
+        if (null != supplierCode && !supplierCode.isEmpty()) {
+            query.append(" AND ( gld.DETAILKEYID = :supplierCode");
+            params.put("supplierCode", supplierCode);
+            query.append(" AND gld.DETAILTYPEID=(SELECT id FROM accountdetailtype WHERE name='Creditor'))");
+        }
+        if (null != contractorCode && !contractorCode.isEmpty()) {
+            query.append(" AND ( gld.DETAILKEYID = :contractorCode");
+            params.put("contractorCode", contractorCode);
+            query.append(" AND gld.DETAILTYPEID=(SELECT id FROM accountdetailtype WHERE name='contractor'))");
+        }
+        if (null != bankbranch && null != bankbranch.getId() && bankbranch.getId() != -1) {
+            query.append("AND bnkacc.BRANCHID = :bankBranchId");
+            params.put("bankBranchId", bankbranch.getId());
+        }
+        if (null != bankaccount && null != bankaccount.getId() && bankaccount.getId() != -1) {
+            query.append(" AND bnkacc.id = :bankAccId");
+            params.put("bankAccId", bankaccount.getId());
+        }
         if (level.equals("atcoc"))
             query.append("  GROUP BY coa.GLCODE ,coa.NAME,dept.DEPT_NAME, DO.NAME, DO.TAN,");
         else
             query.append("  GROUP BY coa.GLCODE ,coa.NAME, fund.NAME ,");
 
-        query.append(" bank.NAME,bnkbranch.BRANCHNAME, bnkacc.ACCOUNTNUMBER, vh.VOUCHERNUMBER ,ih.INSTRUMENTNUMBER ,ih.INSTRUMENTDATE,"
-                +
-                " ih.INSTRUMENTAMOUNT,remdt.ID,vh.id ");
+        query.append(" bank.NAME,bnkbranch.BRANCHNAME, bnkacc.ACCOUNTNUMBER, vh.VOUCHERNUMBER ,ih.INSTRUMENTNUMBER ,ih.INSTRUMENTDATE,")
+                .append( " ih.INSTRUMENTAMOUNT,remdt.ID,vh.id ");
 
         if (level.equals("atcoc"))
             query.append(" order by  coa.GLCODE ,coa.NAME,dept.DEPT_NAME, DO.NAME, DO.TAN,");
         else
             query.append(" order by  coa.GLCODE ,coa.NAME, fund.NAME ,");
 
-        query.append(" bank.NAME,bnkbranch.BRANCHNAME, bnkacc.ACCOUNTNUMBER, vh.VOUCHERNUMBER ,ih.INSTRUMENTNUMBER ,ih.INSTRUMENTDATE,"
-                +
-                " ih.INSTRUMENTAMOUNT,remdt.ID ");
+        query.append(" bank.NAME,bnkbranch.BRANCHNAME, bnkacc.ACCOUNTNUMBER, vh.VOUCHERNUMBER ,ih.INSTRUMENTNUMBER ,ih.INSTRUMENTDATE,")
+                .append(" ih.INSTRUMENTAMOUNT,remdt.ID ");
 
         final Session session = persistenceService.getSession();
-        Query sqlQuery = null;
+        final Query sqlQuery;
         if (level.equals("atcoc"))
             sqlQuery = session.createSQLQuery(query.toString())
                     .addScalar("remittanceCOA").addScalar("department").addScalar("drawingOfficer")
@@ -581,122 +586,143 @@ public class AutoRemittanceReportAction extends BaseFormAction {
                     .addScalar("remittancePaymentNo").addScalar("rtgsNoDate")
                     .addScalar("rtgsAmount").addScalar("remittanceDTId").addScalar("paymentVoucherId")
                     .setResultTransformer(Transformers.aliasToBean(AutoRemittanceBeanReport.class));
+        params.entrySet().forEach(entry -> sqlQuery.setParameter(entry.getKey(), entry.getValue()));
         autoRemittance = remitRecoveryService.populateAutoRemittanceDetailbySQL(sqlQuery);
-
     }
 
     public void populateCOCLevelSummaryData()
     {
-        final StringBuffer queryString1 = new StringBuffer("SELECT (SUM(case when  glcode = "
-                + FinancialConstants.INCOMETAX_CAPITAL +
-                "then  rmtAmt  else (case when GLCODE = " + FinancialConstants.INCOMETAX_REVENUE
-                + "  then RMTAMT else NULL end)  end)) AS  incomeTaxRemittedAmt," +
-                " (SUM(case when glcode =  " + FinancialConstants.SALESTAX_CAPITAL + "  then rmtAmt else " +
-                "  (case when GLCODE = " + FinancialConstants.SALESTAX_REVENUE
-                + "  then RMTAMT else NULL end) )) AS  salesTaxRemittedAmt," +
-                " (SUM(case when  glcode = " + FinancialConstants.MWGWF_MAINTENANCE + " THEN rmtAmt else " +
-                "  (case when GLCODE =  " + FinancialConstants.MWGWF_CAPITAL
-                + "  then RMTAMT else  NULL end)end)) AS  mwgwfRemittedAmt," +
-                " (SUM(case when GLCODE = " + FinancialConstants.SERVICETAX_REVENUE
-                + " then RMTAMT else NULL end  ))AS serviceTaxRemittedAmt," +
-                " SUM(rmtamt) AS grandTotal FROM( SELECT * FROM (" +
-                " SELECT remdt.REMITTEDAMT AS rmtAmt,tds.TYPE  AS glcode" +
-                " FROM tds tds, eg_remittance rem, eg_remittance_detail remdt,eg_remittance_gldtl remgltl, voucherheader vh " +
-                " WHERE rem.id=remdt.REMITTANCEID" +
-                " AND remdt.REMITTANCEGLDTLID = remgltl.id" +
-                " AND tds.id=rem.TDSID" +
-                " AND vh.status=0 " +
-                " AND tds.REMITTANCE_MODE ='A'" +
-                " AND rem.PAYMENTVHID =vh.id " +
-                " AND tds.TYPE IN ("
-                + FinancialConstants.INCOMETAX_CAPITAL + ","
-                + FinancialConstants.INCOMETAX_REVENUE + ","
-                + FinancialConstants.SALESTAX_CAPITAL + ","
-                + FinancialConstants.SALESTAX_REVENUE + ","
-                + FinancialConstants.MWGWF_MAINTENANCE + ","
-                + FinancialConstants.MWGWF_CAPITAL + ","
-                + FinancialConstants.SERVICETAX_REVENUE + ")");
+    	final StringBuffer queryString1 = new StringBuffer("SELECT (SUM(case when  glcode =:incometaxCapital ")
+                .append("then  rmtAmt  else (case when GLCODE =:incometaxRevenue ")
+                .append("  then RMTAMT else NULL end)  end)) AS  incomeTaxRemittedAmt,")
+                .append(" (SUM(case when glcode =:saletaxCapital ")
+                .append("  then rmtAmt else ")
+                .append("  (case when GLCODE =:saletaxRevenue ")
+                .append(" then RMTAMT else NULL end) )) AS  salesTaxRemittedAmt,")
+                .append(" (SUM(case when  glcode =:maintainance ")
+                .append(" THEN rmtAmt else ").append(" (case when GLCODE =:maintainanceCapital ")
+                .append("  then RMTAMT else  NULL end)end)) AS  mwgwfRemittedAmt,")
+                .append(" (SUM(case when GLCODE =:serviceTaxRevenue ")
+                .append(" then RMTAMT else NULL end  ))AS serviceTaxRemittedAmt,")
+                .append(" SUM(rmtamt) AS grandTotal FROM( SELECT * FROM (")
+                .append(" SELECT remdt.REMITTEDAMT AS rmtAmt,tds.TYPE  AS glcode")
+                .append(" FROM tds tds, eg_remittance rem, eg_remittance_detail remdt,eg_remittance_gldtl remgltl, voucherheader vh ")
+                .append(" WHERE rem.id=remdt.REMITTANCEID")
+                .append(" AND remdt.REMITTANCEGLDTLID = remgltl.id")
+                .append(" AND tds.id=rem.TDSID")
+                .append(" AND vh.status=0 ")
+                .append(" AND tds.REMITTANCE_MODE ='A'")
+                .append(" AND rem.PAYMENTVHID =vh.id ")
+                .append(" AND tds.TYPE IN (:types)");
+    	
         final Date currentDate = new Date();
         final StringBuffer finyearQuery = new StringBuffer();
+        Map<String, Object> params = new HashMap<>();
 
-        finyearQuery.append("from CFinancialYear where  startingDate <= '").append(Constants.DDMMYYYYFORMAT1.format(currentDate))
-                .append("' AND endingDate >='").append(Constants.DDMMYYYYFORMAT1.format(currentDate)).append("'");
-        final CFinancialYear financialyear = (CFinancialYear) persistenceService.find(finyearQuery.toString());
-
-        if (null != paymentVoucherFromDate)
-            queryString1.append(" AND vh.voucherdate >= '" + Constants.DDMMYYYYFORMAT1.format(paymentVoucherFromDate) + "'");
-        else
-            queryString1.append(" AND vh.voucherdate >= '" + Constants.DDMMYYYYFORMAT1.format(financialyear.getStartingDate())
-                    + "'");
-        if (null != paymentVoucherToDate)
-            queryString1.append(" AND vh.voucherdate <= '" + Constants.DDMMYYYYFORMAT1.format(paymentVoucherToDate) + "'");
-        else
-            queryString1.append(" AND vh.voucherdate <= '" + Constants.DDMMYYYYFORMAT1.format(financialyear.getEndingDate())
-                    + "'");
+        finyearQuery.append("from CFinancialYear where  startingDate <= ? ").append(" AND endingDate >= ?");
+        final CFinancialYear financialyear = (CFinancialYear) persistenceService.find(finyearQuery.toString(),Constants.DDMMYYYYFORMAT1.format(currentDate),
+                Constants.DDMMYYYYFORMAT1.format(currentDate));
+        
+        if (null != paymentVoucherFromDate) {
+            queryString1.append(" AND vh.voucherdate >=:paymentVoucherFromDate ");
+            params.put("paymentVoucherFromDate", Constants.DDMMYYYYFORMAT1.format(paymentVoucherFromDate));
+        }else {
+            queryString1.append(" AND vh.voucherdate >=:startingDate ");
+            params.put("startingDate", Constants.DDMMYYYYFORMAT1.format(financialyear.getStartingDate()));
+        }
+        if (null != paymentVoucherToDate) {
+            queryString1.append(" AND vh.voucherdate <=:paymentVoucherToDate ");
+            params.put("paymentVoucherToDate", Constants.DDMMYYYYFORMAT1.format(paymentVoucherToDate));
+        }else {
+            queryString1.append(" AND vh.voucherdate <=:endingDate ");
+            params.put("endingDate", Constants.DDMMYYYYFORMAT1.format(financialyear.getEndingDate()));
+        }
 
         queryString1.append(" )) ");
+        
         final Session session = persistenceService.getSession();
         final Query sqlQuery = session.createSQLQuery(queryString1.toString())
                 .addScalar("incomeTaxRemittedAmt").addScalar("salesTaxRemittedAmt").addScalar("mwgwfRemittedAmt")
                 .addScalar("serviceTaxRemittedAmt").addScalar("grandTotal")
                 .setResultTransformer(Transformers.aliasToBean(AutoRemittanceCOCLevelBeanReport.class));
+        sqlQuery.setParameter("incometaxCapital",FinancialConstants.INCOMETAX_CAPITAL, StringType.INSTANCE)
+                .setParameter("incometaxRevenue",FinancialConstants.INCOMETAX_REVENUE, StringType.INSTANCE)
+                .setParameter("saletaxCapital",FinancialConstants.SALESTAX_CAPITAL, StringType.INSTANCE)
+                .setParameter("saletaxRevenue",FinancialConstants.SALESTAX_REVENUE, StringType.INSTANCE)
+                .setParameter("maintainance",FinancialConstants.MWGWF_MAINTENANCE, StringType.INSTANCE)
+                .setParameter("maintainanceCapital",FinancialConstants.MWGWF_CAPITAL, StringType.INSTANCE)
+                .setParameter("serviceTaxRevenue",FinancialConstants.SERVICETAX_REVENUE, StringType.INSTANCE);
+        params.entrySet().forEach(rec -> sqlQuery.setParameter(rec.getKey(),rec.getValue()));
+        sqlQuery.setParameterList("types", Arrays.asList(FinancialConstants.INCOMETAX_CAPITAL,FinancialConstants.INCOMETAX_REVENUE,
+                FinancialConstants.SALESTAX_CAPITAL,FinancialConstants.SALESTAX_REVENUE, FinancialConstants.MWGWF_MAINTENANCE,FinancialConstants.MWGWF_CAPITAL,
+                FinancialConstants.SERVICETAX_REVENUE));
         coaAbstract = sqlQuery.list();
         map.put("coaAbstratct", coaAbstract);
-
-        final StringBuffer queryString2 = new StringBuffer(" SELECT departmentCode," +
-                " (SUM(case when  glcode = " + FinancialConstants.INCOMETAX_CAPITAL + " then rmtAmt else " +
-                "   (case when GLCODE =" + FinancialConstants.INCOMETAX_REVENUE
-                + " then RMTAMT else NULL end) end)) AS  incomeTaxRemittedAmt," +
-                " (SUM(case when  glcode = " + FinancialConstants.SALESTAX_CAPITAL + " then rmtAmt else " +
-                "  (case when GLCODE=" + FinancialConstants.SALESTAX_REVENUE
-                + "  then RMTAMT else  NULL end) end)) AS  salesTaxRemittedAmt," +
-                " (SUM(case when  glcode= " + FinancialConstants.MWGWF_MAINTENANCE + " then rmtAmt else " +
-                " (case when GLCODE = " + FinancialConstants.MWGWF_CAPITAL
-                + " then RMTAMT else NULL end )end)) AS  mwgwfRemittedAmt," +
-                " (SUM(case when GLCODE=" + FinancialConstants.SERVICETAX_REVENUE
-                + " then RMTAMT else NULL end  ))AS serviceTaxRemittedAmt, " +
-                " SUM(rmtamt) AS departmentTotal FROM(" +
-                "  SELECT * FROM (" +
-                " SELECT dept.DEPT_code  departmentcode, remdt.REMITTEDAMT AS rmtAmt, tds.TYPE  AS glcode" +
-                " FROM tds tds, eg_remittance rem, eg_remittance_detail remdt,eg_remittance_gldtl remgltl, voucherheader vh," +
-                " eg_department dept" +
-                " WHERE rem.id=remdt.REMITTANCEID" +
-                " AND remdt.REMITTANCEGLDTLID = remgltl.id" +
-                " AND tds.id=rem.TDSID" +
-                " AND dept.ID_DEPT = vh.DEPARTMENTID" +
-                " AND tds.REMITTANCE_MODE ='A'" +
-                " AND vh.status=0" +
-                "  AND rem.PAYMENTVHID =vh.id" +
-                " AND tds.TYPE IN ("
-                + FinancialConstants.INCOMETAX_CAPITAL + ","
-                + FinancialConstants.INCOMETAX_REVENUE + ","
-                + FinancialConstants.SALESTAX_CAPITAL + ","
-                + FinancialConstants.SALESTAX_REVENUE + ","
-                + FinancialConstants.MWGWF_MAINTENANCE + ","
-                + FinancialConstants.MWGWF_CAPITAL + ","
-                + FinancialConstants.SERVICETAX_REVENUE +
-                "  )");
-
-        if (null != paymentVoucherFromDate)
-            queryString2.append(" AND vh.voucherdate >= '" + Constants.DDMMYYYYFORMAT1.format(paymentVoucherFromDate) + "'");
-        else
-            queryString2.append(" AND vh.voucherdate >= '" + Constants.DDMMYYYYFORMAT1.format(financialyear.getStartingDate())
-                    + "'");
-        if (null != paymentVoucherToDate)
-            queryString2.append(" AND vh.voucherdate <= '" + Constants.DDMMYYYYFORMAT1.format(paymentVoucherToDate) + "'");
-        else
-            queryString2.append(" AND vh.voucherdate <= '" + Constants.DDMMYYYYFORMAT1.format(financialyear.getEndingDate())
-                    + "'");
+        
+        final StringBuffer queryString2 = new StringBuffer(" SELECT departmentCode,")
+                .append(" (SUM(case when  glcode =:incomeTaxCapital ")
+                .append(" then rmtAmt else ")
+                .append(" (case when GLCODE =:incomeTaxRevenue")
+                .append(" then RMTAMT else NULL end) end)) AS  incomeTaxRemittedAmt,")
+                .append(" (SUM(case when  glcode =:saleTaxCapital ").append(" then rmtAmt else ")
+                .append("  (case when GLCODE=:saleTaxRevenue ")
+                .append("  then RMTAMT else  NULL end) end)) AS  salesTaxRemittedAmt,")
+                .append(" (SUM(case when  glcode=:maintenance ").append( " then rmtAmt else ")
+                .append(" (case when GLCODE =:maintenanceCapital " )
+                .append(" then RMTAMT else NULL end )end)) AS  mwgwfRemittedAmt," )
+                .append(" (SUM(case when GLCODE=:serviceTaxRevenue ")
+                .append(" then RMTAMT else NULL end  ))AS serviceTaxRemittedAmt, ")
+                .append(" SUM(rmtamt) AS departmentTotal FROM(")
+                .append("  SELECT * FROM (" )
+                .append(" SELECT dept.DEPT_code  departmentcode, remdt.REMITTEDAMT AS rmtAmt, tds.TYPE  AS glcode")
+                .append(" FROM tds tds, eg_remittance rem, eg_remittance_detail remdt,eg_remittance_gldtl remgltl, voucherheader vh,")
+                .append(" eg_department dept")
+                .append(" WHERE rem.id=remdt.REMITTANCEID")
+                .append(" AND remdt.REMITTANCEGLDTLID = remgltl.id")
+                .append(" AND tds.id=rem.TDSID" )
+                .append(" AND dept.ID_DEPT = vh.DEPARTMENTID")
+                .append(" AND tds.REMITTANCE_MODE ='A'")
+                .append(" AND vh.status=0")
+                .append("  AND rem.PAYMENTVHID =vh.id")
+                .append(" AND tds.TYPE IN (:tdsTypes)");
+        
+        Map<String, Object> parameters = new HashMap<>();
+        if (null != paymentVoucherFromDate) {
+            queryString2.append(" AND vh.voucherdate >=:paymentVoucherFromDate ");
+            parameters.put("paymentVoucherFromDate",Constants.DDMMYYYYFORMAT1.format(paymentVoucherFromDate));
+        }else {
+            queryString2.append(" AND vh.voucherdate >=:startDate ");
+            parameters.put("startDate", Constants.DDMMYYYYFORMAT1.format(financialyear.getStartingDate()));
+        }
+        if (null != paymentVoucherToDate) {
+            queryString2.append(" AND vh.voucherdate <=:paymentVoucherToDate ");
+            parameters.put("paymentVoucherToDate", Constants.DDMMYYYYFORMAT1.format(paymentVoucherToDate));
+        }else {
+            queryString2.append(" AND vh.voucherdate <=:endDate ");
+            parameters.put("endDate", Constants.DDMMYYYYFORMAT1.format(financialyear.getEndingDate()));
+        }
         queryString2.append(" ))GROUP BY departmentcode  ORDER BY departmentcode ");
-
+        
+        
         final Query sqlQuery2 = session.createSQLQuery(queryString2.toString())
                 .addScalar("departmentCode")
                 .addScalar("incomeTaxRemittedAmt").addScalar("salesTaxRemittedAmt").addScalar("mwgwfRemittedAmt")
                 .addScalar("serviceTaxRemittedAmt").addScalar("departmentTotal")
                 .setResultTransformer(Transformers.aliasToBean(AutoRemittanceCOCLevelBeanReport.class));
+        sqlQuery2.setParameter("incomeTaxCapital",FinancialConstants.INCOMETAX_CAPITAL,StringType.INSTANCE)
+                 .setParameter("incomeTaxRevenue",FinancialConstants.INCOMETAX_REVENUE,StringType.INSTANCE)
+                 .setParameter("saleTaxCapital",FinancialConstants.SALESTAX_CAPITAL,StringType.INSTANCE)
+                 .setParameter("saleTaxRevenue",FinancialConstants.SALESTAX_REVENUE,StringType.INSTANCE)
+                 .setParameter("maintenance",FinancialConstants.MWGWF_MAINTENANCE, StringType.INSTANCE)
+                 .setParameter("maintenanceCapital",FinancialConstants.MWGWF_CAPITAL,StringType.INSTANCE)
+                 .setParameter("serviceTaxRevenue",FinancialConstants.SERVICETAX_REVENUE);
+        parameters.entrySet().forEach(entry -> sqlQuery2.setParameter(entry.getKey(), entry.getValue()));
+        sqlQuery2.setParameterList("tdsTypes", Arrays.asList(FinancialConstants.INCOMETAX_CAPITAL,FinancialConstants.INCOMETAX_REVENUE,
+                FinancialConstants.SALESTAX_CAPITAL,FinancialConstants.SALESTAX_REVENUE,FinancialConstants.MWGWF_MAINTENANCE,
+                FinancialConstants.MWGWF_CAPITAL,FinancialConstants.SERVICETAX_REVENUE));
+
         remittanceList = sqlQuery2.list();
         map.put("summarryList", remittanceList);
-
     }
 
     public String getFormattedDate(final Date date) {

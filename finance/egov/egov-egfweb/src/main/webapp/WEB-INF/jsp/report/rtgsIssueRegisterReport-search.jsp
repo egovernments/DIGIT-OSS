@@ -291,6 +291,11 @@
 			}
 			document.rtgsIssueRegisterReport.action = '/services/EGF/report/rtgsIssueRegisterReport-'
 					+ method + '.action';
+			jQuery(rtgsIssueRegisterReport).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
 			document.rtgsIssueRegisterReport.submit();
 			return true;
 		}

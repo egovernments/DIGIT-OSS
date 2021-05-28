@@ -500,6 +500,13 @@
 			doLoadingMask();
 			enableAll();
 			document.bankEntriesNotInBankBookform.action = '/services/EGF/payment/bankEntriesNotInBankBook-search.action';
+			jQuery(bankEntriesNotInBankBookform).append(
+					jQuery('<input>', {
+		                type: 'hidden',
+		                name: '${_csrf.parameterName}',
+		                value: '${_csrf.token}'
+		            })
+		        );
 			document.bankEntriesNotInBankBookform.submit();
 
 		}
@@ -589,6 +596,13 @@
 			doLoadingMask();
 			enableAll();
 			document.bankEntriesNotInBankBookform.action = '/services/EGF/payment/bankEntriesNotInBankBook-save.action';
+			jQuery(bankEntriesNotInBankBookform).append(
+					jQuery('<input>', {
+		                type: 'hidden',
+		                name: '${_csrf.parameterName}',
+		                value: '${_csrf.token}'
+		            })
+		        );
 			document.bankEntriesNotInBankBookform.submit();
 		}
 

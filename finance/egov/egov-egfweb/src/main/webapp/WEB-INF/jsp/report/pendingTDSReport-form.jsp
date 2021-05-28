@@ -68,6 +68,7 @@ function resetPage(){
 
 	<s:form action="pendingTDSReport" theme="simple"
 		name="pendingTDSReport">
+		<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<table width="100%" cellpadding="0" cellspacing="0" border="0">
 			<tr>
 				<td class="greybox" width="10%"><s:text name="lbl.recovery.code" />:<span

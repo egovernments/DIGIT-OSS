@@ -47,10 +47,15 @@
  */
 package org.egov.egf.contract.model;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class EgwStatusContract {
     private Long id;
+    @SafeHtml
     private String moduleType;
+    @SafeHtml
     private String code;
+    @SafeHtml
     private String description;
 
     public Long getId() {
@@ -85,9 +90,9 @@ public class EgwStatusContract {
         this.description = description;
     }
 
-	public EgwStatusContract code(Integer status) {
-	this.setCode(status.toString());
-	return this;
-	}
+    public EgwStatusContract code(final Integer status) {
+        setCode(status.toString());
+        return this;
+    }
 
 }

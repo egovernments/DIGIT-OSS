@@ -48,9 +48,20 @@
 
 package org.egov.egf.web.controller.bankstatement;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.egov.egf.commons.bank.service.CreateBankService;
 import org.egov.egf.commons.bankbranch.service.CreateBankBranchService;
 import org.egov.egf.web.actions.brs.AutoReconcileHelper;
@@ -59,112 +70,111 @@ import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.model.bills.DocumentUpload;
 import org.egov.model.brs.BankStatementUploadFile;
 import org.egov.utils.FinancialConstants;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.HTTPUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/bankstatement")
+@Validated
 public class BankStatementUploadSearchController {
 
-    private static final int BUFFER_SIZE = 4096;
-    @Autowired
-    private CreateBankService createBankService;
-    @Autowired
-    private CreateBankBranchService createBankBranchService;
-    @Autowired
-    private AutoReconcileHelper autoReconcileHelper;
-    @Autowired
-    private FileStoreService fileStoreService;
+	private static final int BUFFER_SIZE = 4096;
+	@Autowired
+	private CreateBankService createBankService;
+	@Autowired
+	private CreateBankBranchService createBankBranchService;
+	@Autowired
+	private AutoReconcileHelper autoReconcileHelper;
+	@Autowired
+	private FileStoreService fileStoreService;
 
-    private void setDropDownValues(final Model model) {
-        model.addAttribute("banks", createBankService.getByIsActiveTrueOrderByName());
-        model.addAttribute("bankbranches", createBankBranchService.getByIsActiveTrueOrderByBranchname());
-    }
+	private void setDropDownValues(final Model model) {
+		model.addAttribute("banks", createBankService.getByIsActiveTrueOrderByName());
+		model.addAttribute("bankbranches", createBankBranchService.getByIsActiveTrueOrderByBranchname());
+	}
 
-    @RequestMapping(value = "/search", method = {RequestMethod.POST,RequestMethod.GET})
-    public String search(final Model model) {
-        setDropDownValues(model);
-        model.addAttribute("bankStatementUploadFile", new BankStatementUploadFile());
-        return "bankstatement-search";
+	@RequestMapping(value = "/search", method = { RequestMethod.POST, RequestMethod.GET })
+	public String search(final Model model) {
+		setDropDownValues(model);
+		model.addAttribute("bankStatementUploadFile", new BankStatementUploadFile());
+		return "bankstatement-search";
 
-    }
+	}
 
-    @RequestMapping(value = "/ajaxsearch", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    @ResponseBody
-    public String ajaxsearch(final Model model, @ModelAttribute final BankStatementUploadFile bankStatementUploadFile) {
+	@PostMapping(value = "/ajaxsearch", produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
+	public String ajaxsearch(final Model model,
+			@Valid @ModelAttribute final BankStatementUploadFile bankStatementUploadFile) {
 
-        List<DocumentUpload> list = autoReconcileHelper.getUploadedFiles(bankStatementUploadFile);
-        List<DocumentUpload> sortedList = list.stream()
-        .sorted(Comparator.comparing(DocumentUpload::getCreatedDate).reversed())
-        .collect(Collectors.toList());
-        return new StringBuilder("{ \"data\":")
-                .append(toSearchResultJson(sortedList)).append("}")
-                .toString();
-    }
+		List<DocumentUpload> list = autoReconcileHelper.getUploadedFiles(bankStatementUploadFile);
+		List<DocumentUpload> sortedList = list.stream()
+				.sorted(Comparator.comparing(DocumentUpload::getCreatedDate).reversed()).collect(Collectors.toList());
+		return new StringBuilder("{ \"data\":").append(toSearchResultJson(sortedList)).append("}").toString();
+	}
 
-    public Object toSearchResultJson(final Object object) {
-        final GsonBuilder gsonBuilder = new GsonBuilder();
-        final Gson gson = gsonBuilder.registerTypeAdapter(DocumentUpload.class, new DocumentUploadJsonAdaptor()).create();
-        return gson.toJson(object);
-    }
+	public Object toSearchResultJson(final Object object) {
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		final Gson gson = gsonBuilder.registerTypeAdapter(DocumentUpload.class, new DocumentUploadJsonAdaptor())
+				.create();
+		return gson.toJson(object);
+	}
 
-    @RequestMapping(value = "/downloadDoc", method = RequestMethod.GET)
-    public void getBillDoc(final HttpServletRequest request, final HttpServletResponse response)
-            throws IOException {
-        final ServletContext context = request.getServletContext();
-        final String fileStoreId = request.getParameter("fileStoreId");
-        String fileName = "";
-        final File downloadFile = fileStoreService.fetch(fileStoreId, FinancialConstants.FILESTORE_MODULECODE);
-        final FileInputStream inputStream = new FileInputStream(downloadFile);
+	@GetMapping(value = "/downloadDoc")
+	public void getBillDoc(final HttpServletRequest request, final HttpServletResponse response)
+			throws IOException, FileNotFoundException {
+		final ServletContext context = request.getServletContext();
+		final String fileStoreId = request.getParameter("fileStoreId");
+		String fileName = "";
+		final File downloadFile = fileStoreService.fetch(fileStoreId, FinancialConstants.FILESTORE_MODULECODE);
+		String canonicalPath = downloadFile.getCanonicalPath();
+		if (!canonicalPath.equals(downloadFile.getPath()))
+			throw new FileNotFoundException("Invalid file path, please try again.");
 
-        DocumentUpload doc = autoReconcileHelper.getDocumentsByFileStoreId(fileStoreId);
-        if (doc.getFileStore().getFileStoreId().equalsIgnoreCase(fileStoreId))
-            fileName = doc.getFileStore().getFileName();
+		try (final FileInputStream inputStream = new FileInputStream(downloadFile);
+				final OutputStream outStream = response.getOutputStream();) {
 
-        // get MIME type of the file
-        String mimeType = context.getMimeType(downloadFile.getAbsolutePath());
-        if (mimeType == null)
-            // set to binary type if MIME mapping not found
-            mimeType = "application/octet-stream";
+			DocumentUpload doc = autoReconcileHelper.getDocumentsByFileStoreId(fileStoreId);
+			if (doc.getFileStore().getFileStoreId().equalsIgnoreCase(fileStoreId))
+				fileName = doc.getFileStore().getFileName();
 
-        // set content attributes for the response
-        response.setContentType(mimeType);
-        response.setContentLength((int) downloadFile.length());
+			// get MIME type of the file
+			String mimeType = context.getMimeType(downloadFile.getAbsolutePath());
+			if (mimeType == null)
+				// set to binary type if MIME mapping not found
+				mimeType = "application/octet-stream";
 
-        // set headers for the response
-        final String headerKey = "Content-Disposition";
-        final String headerValue = String.format("attachment; filename=\"%s\"", fileName);
-        response.setHeader(headerKey, headerValue);
+			// set content attributes for the response
+			HTTPUtilities httpUtilities = ESAPI.httpUtilities();
+			httpUtilities.setCurrentHTTP(request, response);
+			httpUtilities.setHeader("Content-Type", mimeType);
+			response.setContentLength((int) downloadFile.length());
 
-        // get output stream of the response
-        final OutputStream outStream = response.getOutputStream();
+			// set headers for the response
+			final String headerKey = "Content-Disposition";
+			final String headerValue = String.format("attachment; filename=\"%s\"", fileName);
+			httpUtilities.setHeader(headerKey, headerValue);
 
-        final byte[] buffer = new byte[BUFFER_SIZE];
-        int bytesRead = -1;
+			final byte[] buffer = new byte[BUFFER_SIZE];
+			int bytesRead = -1;
 
-        // write bytes read from the input stream into the output stream
-        while ((bytesRead = inputStream.read(buffer)) != -1)
-            outStream.write(buffer, 0, bytesRead);
-
-        inputStream.close();
-        outStream.close();
-    }
+			// write bytes read from the input stream into the output stream
+			while ((bytesRead = inputStream.read(buffer)) != -1)
+				outStream.write(buffer, 0, bytesRead);
+		}
+	}
 
 }

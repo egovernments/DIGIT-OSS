@@ -54,96 +54,97 @@ import java.util.Set;
 
 public class Scheme implements java.io.Serializable {
 
-    private static final long serialVersionUID = 825465695975976653L;
+	private static final long serialVersionUID = 825465695975976653L;
 
-    private Integer id;
+	private Integer id;
 
-    private Fund fund;
+	private Fund fund;
 
-    private String code;
+	private String code;
 
-    private String name;
+	private String name;
 
-    private Date validfrom;
+	private Date validfrom;
 
-    private Date validto;
+	private Date validto;
 
-    private Boolean isactive=false;
+	private Boolean isactive = false;
 
-    private String description;
+	private String description;
 
-    private BigDecimal sectorid;
+	private BigDecimal sectorid;
 
-    private BigDecimal aaes;
+	private BigDecimal aaes;
 
-    private BigDecimal fieldid;
+	private BigDecimal fieldid;
 
-    private Set<SubScheme> subSchemes = new HashSet<SubScheme>(0);
+	private Set<SubScheme> subSchemes = new HashSet<>(0);
 
-    private Long createdBy;
+	private Long createdBy;
 
-    private Long lastModifiedBy;
+	private Long lastModifiedBy;
 
-    private Date createdDate;
+	private Date createdDate;
 
-    private Date lastModifiedDate;
+	private Date lastModifiedDate;
 
-    public Scheme() {
-    }
+	public Scheme() {
+	}
 
-    public Scheme(final Integer id) {
-        this.id = id;
-    }
+	public Scheme(final Integer id) {
+		this.id = id;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(final Integer id) {
-        this.id = id;
-    }
+	@SuppressWarnings("unused")
+	private void setId(final Integer id) {
+		this.id = id;
+	}
 
-    public Fund getFund() {
-        return fund;
-    }
+	public Fund getFund() {
+		return fund;
+	}
 
-    public void setFund(final Fund fund) {
-        this.fund = fund;
-    }
+	public void setFund(final Fund fund) {
+		this.fund = fund;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setCode(final String code) {
-        this.code = code;
-    }
+	public void setCode(final String code) {
+		this.code = code;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
-    public Date getValidfrom() {
-        return validfrom;
-    }
+	public Date getValidfrom() {
+		return validfrom;
+	}
 
-    public void setValidfrom(final Date validfrom) {
-        this.validfrom = validfrom;
-    }
+	public void setValidfrom(final Date validfrom) {
+		this.validfrom = validfrom;
+	}
 
-    public Date getValidto() {
-        return validto;
-    }
+	public Date getValidto() {
+		return validto;
+	}
 
-    public void setValidto(final Date validto) {
-        this.validto = validto;
-    }
+	public void setValidto(final Date validto) {
+		this.validto = validto;
+	}
 
-    public Boolean getIsactive() {
+	public Boolean getIsactive() {
 		return isactive;
 	}
 
@@ -152,110 +153,110 @@ public class Scheme implements java.io.Serializable {
 	}
 
 	public String getDescription() {
-        return description;
-    }
+		return description;
+	}
 
-    public void setDescription(final String description) {
-        this.description = description;
-    }
+	public void setDescription(final String description) {
+		this.description = description;
+	}
 
-    public BigDecimal getSectorid() {
-        return sectorid;
-    }
+	public BigDecimal getSectorid() {
+		return sectorid;
+	}
 
-    public void setSectorid(final BigDecimal sectorid) {
-        this.sectorid = sectorid;
-    }
+	public void setSectorid(final BigDecimal sectorid) {
+		this.sectorid = sectorid;
+	}
 
-    public Scheme(final Integer id, final Fund fund, final String code, final String name, final Date validfrom,
-            final Date validto, final boolean isactive, final String description, final BigDecimal sectorid,
-            final BigDecimal aaes, final BigDecimal fieldid, final Set<SubScheme> subSchemes) {
-        this.id = id;
-        this.fund = fund;
-        this.code = code;
-        this.name = name;
-        this.validfrom = validfrom;
-        this.validto = validto;
-        this.isactive = isactive;
-        this.description = description;
-        this.sectorid = sectorid;
-        this.aaes = aaes;
-        this.fieldid = fieldid;
-        this.subSchemes = subSchemes;
-    }
+	public Scheme(final Integer id, final Fund fund, final String code, final String name, final Date validfrom,
+			final Date validto, final boolean isactive, final String description, final BigDecimal sectorid,
+			final BigDecimal aaes, final BigDecimal fieldid, final Set<SubScheme> subSchemes) {
+		this.id = id;
+		this.fund = fund;
+		this.code = code;
+		this.name = name;
+		this.validfrom = validfrom;
+		this.validto = validto;
+		this.isactive = isactive;
+		this.description = description;
+		this.sectorid = sectorid;
+		this.aaes = aaes;
+		this.fieldid = fieldid;
+		this.subSchemes = subSchemes;
+	}
 
-    public void reset() {
-        id = null;
-        code = null;
-        name = null;
-        isactive = false;
-        description = null;
-        fund = null;
-        validfrom = null;
-        validto = null;
+	public void reset() {
+		id = null;
+		code = null;
+		name = null;
+		isactive = false;
+		description = null;
+		fund = null;
+		validfrom = null;
+		validto = null;
 
-    }
+	}
 
-    public BigDecimal getAaes() {
-        return aaes;
-    }
+	public BigDecimal getAaes() {
+		return aaes;
+	}
 
-    public void setAaes(final BigDecimal aaes) {
-        this.aaes = aaes;
-    }
+	public void setAaes(final BigDecimal aaes) {
+		this.aaes = aaes;
+	}
 
-    public BigDecimal getFieldid() {
-        return fieldid;
-    }
+	public BigDecimal getFieldid() {
+		return fieldid;
+	}
 
-    public void setFieldid(final BigDecimal fieldid) {
-        this.fieldid = fieldid;
-    }
+	public void setFieldid(final BigDecimal fieldid) {
+		this.fieldid = fieldid;
+	}
 
-    public Set<SubScheme> getSubSchemes() {
-        return subSchemes;
-    }
+	public Set<SubScheme> getSubSchemes() {
+		return subSchemes;
+	}
 
-    public void setSubSchemes(final Set<SubScheme> subSchemes) {
-        this.subSchemes = subSchemes;
-    }
+	public void setSubSchemes(final Set<SubScheme> subSchemes) {
+		this.subSchemes = subSchemes;
+	}
 
-    public Long getCreatedBy() {
-        return createdBy;
-    }
+	public Long getCreatedBy() {
+		return createdBy;
+	}
 
-    public void setCreatedBy(final Long createdBy) {
-        this.createdBy = createdBy;
-    }
+	public void setCreatedBy(final Long createdBy) {
+		this.createdBy = createdBy;
+	}
 
-    public Long getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+	public Long getLastModifiedBy() {
+		return lastModifiedBy;
+	}
 
-    public void setLastModifiedBy(final Long lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+	public void setLastModifiedBy(final Long lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
+	public Date getCreatedDate() {
+		return createdDate;
+	}
 
-    public void setCreatedDate(final Date createdDate) {
-        this.createdDate = createdDate;
-    }
+	public void setCreatedDate(final Date createdDate) {
+		this.createdDate = createdDate;
+	}
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
 
-    public void setLastModifiedDate(final Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+	public void setLastModifiedDate(final Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
 
-    @Override
-    public String toString() {
+	@Override
+	public String toString() {
 
-        return "id:" + id + ",Code:" + code + "," + "isActive:" + isactive;
-    }
+		return "id:" + id + ",Code:" + code + "," + "isActive:" + isactive;
+	}
 
 }

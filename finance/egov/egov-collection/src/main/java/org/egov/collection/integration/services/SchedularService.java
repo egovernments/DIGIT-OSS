@@ -47,6 +47,7 @@
  */
 package org.egov.collection.integration.services;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.OnlinePayment;
@@ -56,6 +57,7 @@ import org.egov.collection.integration.pgi.AxisAdaptor;
 import org.egov.collection.integration.pgi.PaymentResponse;
 import org.egov.collection.integration.pgi.SbimopsAdaptor;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.utils.DateUtils;
 import org.egov.infra.validation.exception.ValidationError;
@@ -67,10 +69,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.xml.bind.JAXBException;
 
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -171,9 +176,7 @@ public class SchedularService {
         StringBuilder queryString = new StringBuilder(200);
         queryString.append(
                 "select receipt from org.egov.collection.entity.OnlinePayment as receipt where receipt.status.code=:onlinestatuscode")
-                .append(" and receipt.service.code=:paymentservicecode and receipt.createdDate<:thirtyminslesssysdate  and MOD(receipt.id, ")
-                .append(CollectionConstants.QUARTZ_ATOM_RECONCILE_BULK_JOBS)
-                .append(") = :modulo  order by receipt.id asc");
+                .append(" and receipt.service.code=:paymentservicecode and receipt.createdDate<:thirtyminslesssysdate  and MOD(receipt.id, :bulkJobs ) = :modulo  order by receipt.id asc");
         final Query query = persistenceService
                 .getSession()
                 .createQuery(queryString.toString())
@@ -181,6 +184,7 @@ public class SchedularService {
         query.setString("onlinestatuscode", CollectionConstants.ONLINEPAYMENT_STATUS_CODE_PENDING);
         query.setString("paymentservicecode", CollectionConstants.SERVICECODE_ATOM);
         query.setParameter("thirtyminslesssysdate", new Date(cal.getTimeInMillis()));
+        query.setParameter("bulkJobs", CollectionConstants.QUARTZ_ATOM_RECONCILE_BULK_JOBS);
         query.setParameter("modulo", modulo);
         final List<OnlinePayment> reconcileList = query.list();
         LOGGER.debug("Thread ID = " + Thread.currentThread().getId() + ": got " + reconcileList.size() + " results.");
@@ -237,6 +241,14 @@ public class SchedularService {
                 }
             } catch (final ApplicationRuntimeException exp) {
                 LOGGER.error("ATOM payment reconciliation failed", exp);
+            } catch (ClientProtocolException e) {
+                LOGGER.error(e);
+            } catch (ApplicationException e) {
+                LOGGER.error(e);
+            } catch (IOException e) {
+                LOGGER.error(e);
+            } catch (JAXBException e) {
+                LOGGER.error(e);
             }
         }
     }
@@ -278,9 +290,7 @@ public class SchedularService {
         StringBuilder queryString = new StringBuilder(200);
         queryString.append(
                 "select receipt from org.egov.collection.entity.OnlinePayment as receipt where receipt.status.code=:onlinestatuscode")
-                .append(" and receipt.service.code=:paymentservicecode and receipt.createdDate<:thirtyminslesssysdate  and MOD(receipt.id, ")
-                .append(QUARTZ_SBIMOPS_RECONCILE_BULK_JOBS)
-                .append(") = :modulo  order by receipt.id asc");
+                .append(" and receipt.service.code=:paymentservicecode and receipt.createdDate<:thirtyminslesssysdate  and MOD(receipt.id, :bulkJobs ) = :modulo  order by receipt.id asc");
         final Query query = persistenceService
                 .getSession()
                 .createQuery(queryString.toString())
@@ -288,6 +298,7 @@ public class SchedularService {
         query.setString("onlinestatuscode", CollectionConstants.ONLINEPAYMENT_STATUS_CODE_PENDING);
         query.setString("paymentservicecode", paymentServiceCode);
         query.setParameter("thirtyminslesssysdate", new Date(cal.getTimeInMillis()));
+        query.setParameter("bulkJobs", QUARTZ_SBIMOPS_RECONCILE_BULK_JOBS);
         query.setParameter("modulo", modulo);
         return query.list();
     }

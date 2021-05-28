@@ -47,6 +47,7 @@
  */
 package org.egov.collection.utils;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,7 @@ import org.egov.commons.CChartOfAccounts;
 import org.egov.commons.CVoucherHeader;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.dao.ChartOfAccountsHibernateDAO;
+import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.instrument.InstrumentHeader;
@@ -112,7 +114,7 @@ public class FinancialsUtil {
         try {
             voucherHeaderCash = financialsVoucherUtil.createApprovedVoucher(headerdetails, accountCodeList,
                     subledgerList);
-        } catch (final Exception e) {
+        } catch (final ApplicationRuntimeException e) {
             LOGGER.error("Error in createBankRemittance createPreApprovalVoucher when cash amount>0");
             throw new ApplicationRuntimeException(
                     "Error in createBankRemittance createPreApprovalVoucher when cash amount>0", e);
@@ -150,18 +152,22 @@ public class FinancialsUtil {
      *
      * @param paramList
      * @return CVoucherHeader
+     * @throws ParseException 
      */
-    public CVoucherHeader getReversalVoucher(final List<HashMap<String, Object>> paramList) {
+    public CVoucherHeader getReversalVoucher(final List<HashMap<String, Object>> paramList) throws ParseException {
         CVoucherHeader voucherHeaders = null;
         try {
             voucherHeaders = createVoucher.reverseVoucher(paramList);
         } catch (final ApplicationRuntimeException re) {
             LOGGER.error("Runtime Exception while creating reversal voucher!", re);
             throw re;
-        } catch (final Exception e) {
-            LOGGER.error("Exception while creating reversal voucher!", e);
-            throw new ApplicationRuntimeException("Exception while creating reversal voucher!", e);
-        }
+        } /*
+           * catch (final Exception e) {
+           * LOGGER.error("Exception while creating reversal voucher!", e);
+           * throw new
+           * ApplicationRuntimeException("Exception while creating reversal voucher!"
+           * , e); }
+           */
         return voucherHeaders;
     }
 
@@ -258,7 +264,8 @@ public class FinancialsUtil {
         if (purposeId != null)
             try {
                 final SQLQuery query = persistenceService.getSession().createSQLQuery(
-                        "SELECT NAME FROM EGF_ACCOUNTCODE_PURPOSE WHERE ID = " + purposeId);
+                        "SELECT NAME FROM EGF_ACCOUNTCODE_PURPOSE WHERE ID = :id");
+                query.setParameter("id", purposeId);
                 final List<String> purposeNames = query.list();
                 if (purposeNames != null && purposeNames.size() == 1) {
                     final String purposeName = purposeNames.get(0);
@@ -271,7 +278,7 @@ public class FinancialsUtil {
                             || purposeName.equals(CollectionConstants.PURPOSE_NAME_THIRD_PARTY_COLLECTION))
                         return true;
                 }
-            } catch (final Exception e) {
+            } catch (final NullPointerException e) {
                 throw new ApplicationRuntimeException("Exception in fetching purpose name for id [" + purposeId + "]",
                         e);
             }

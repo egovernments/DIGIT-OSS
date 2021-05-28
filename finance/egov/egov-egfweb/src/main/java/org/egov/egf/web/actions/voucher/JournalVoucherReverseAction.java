@@ -52,6 +52,7 @@ import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.commons.CVoucherHeader;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
@@ -117,13 +118,13 @@ public class JournalVoucherReverseAction extends BaseVoucherAction {
     }
 
     @ValidationErrorPage(value = REVERSE)
-    public String reverse() {
+    public String reverse() throws ApplicationRuntimeException, ParseException {
         saveReverse();
         setMessage(getText("transaction.success") + voucherHeader.getVoucherNumber());
         return REVERSE;
     }
 
-    public void saveReverse() {
+    public void saveReverse() throws ApplicationRuntimeException, ParseException {
         CVoucherHeader reversalVoucher = null;
         final HashMap<String, Object> reversalVoucherMap = new HashMap<String, Object>();
         if (LOGGER.isDebugEnabled())
@@ -172,15 +173,13 @@ public class JournalVoucherReverseAction extends BaseVoucherAction {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-            clearMessages();
-            resetVoucherHeader();
-            if (subLedgerlist.size() == 0)
-                subLedgerlist.add(new VoucherDetails());
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { clearMessages(); resetVoucherHeader();
+           * if (subLedgerlist.size() == 0) subLedgerlist.add(new
+           * VoucherDetails()); final List<ValidationError> errors = new
+           * ArrayList<ValidationError>(); errors.add(new ValidationError("exp",
+           * e.getMessage())); throw new ValidationException(errors); }
+           */
         addActionMessage(getText("transaction.success") + reversalVoucher.getVoucherNumber());
         voucherHeader = reversalVoucher;
         setTarget("success");

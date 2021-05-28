@@ -48,6 +48,7 @@
 package org.egov.egf.masters.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +71,7 @@ import org.egov.egf.masters.repository.PurchaseOrderRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.masters.PurchaseOrder;
+import org.egov.model.masters.PurchaseOrderSearchRequest;
 import org.egov.services.masters.SchemeService;
 import org.egov.services.masters.SubSchemeService;
 import org.hibernate.Session;
@@ -85,189 +87,198 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PurchaseOrderService implements EntityTypeService {
 
-    @Autowired
-    private PurchaseOrderRepository purchaseOrderRepository;
+	@Autowired
+	private PurchaseOrderRepository purchaseOrderRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @Autowired
-    private AccountDetailKeyService accountDetailKeyService;
+	@Autowired
+	private AccountDetailKeyService accountDetailKeyService;
 
-    @Autowired
-    private AccountdetailtypeService accountdetailtypeService;
+	@Autowired
+	private AccountdetailtypeService accountdetailtypeService;
 
-    @Autowired
-    private FundService fundService;
+	@Autowired
+	private FundService fundService;
 
-    @Autowired
-    private SupplierService supplierService;
+	@Autowired
+	private SupplierService supplierService;
 
-    @Autowired
-    private SchemeService schemeService;
+	@Autowired
+	private SchemeService schemeService;
 
-    @Autowired
-    private SubSchemeService subSchemeService;
+	@Autowired
+	private SubSchemeService subSchemeService;
 
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
-    }
+	public Session getCurrentSession() {
+		return entityManager.unwrap(Session.class);
+	}
 
-    public PurchaseOrder getById(final Long id) {
-        return purchaseOrderRepository.findOne(id);
-    }
+	public PurchaseOrder getById(final Long id) {
+		return purchaseOrderRepository.findOne(id);
+	}
 
-    public List<PurchaseOrder> getBySupplierId(final Long supplierId) {
-        return purchaseOrderRepository.findBySupplier_Id(supplierId);
-    }
+	public List<PurchaseOrder> getBySupplierId(final Long supplierId) {
+		return purchaseOrderRepository.findBySupplier_Id(supplierId);
+	}
 
-    public PurchaseOrder getByOrderNumber(final String orderNumber) {
-        return purchaseOrderRepository.findByOrderNumber(orderNumber);
-    }
+	public PurchaseOrder getByOrderNumber(final String orderNumber) {
+		return purchaseOrderRepository.findByOrderNumber(orderNumber);
+	}
 
-    @Transactional
-    public PurchaseOrder create(PurchaseOrder purchaseOrder) {
+	@SuppressWarnings("deprecation")
+	@Transactional
+	public PurchaseOrder create(PurchaseOrder purchaseOrder) {
 
-        setAuditDetails(purchaseOrder);
-        if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
-            purchaseOrder.setFund(fundService.findOne(purchaseOrder.getFund().getId()));
-        }
-        if (purchaseOrder.getScheme() != null && purchaseOrder.getScheme().getId() != null) {
-            purchaseOrder.setScheme(schemeService.findById(purchaseOrder.getScheme().getId(), false));
-        } else {
-            purchaseOrder.setScheme(null);
-        }
-        if (purchaseOrder.getSubScheme() != null && purchaseOrder.getSubScheme().getId() != null) {
-            purchaseOrder.setSubScheme(subSchemeService.findById(purchaseOrder.getSubScheme().getId(), false));
-        } else {
-            purchaseOrder.setSubScheme(null);
-        }
-        if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
-            purchaseOrder.setSupplier(supplierService.getById(purchaseOrder.getSupplier().getId()));
-        }
-        purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
-        saveAccountDetailKey(purchaseOrder);
-        return purchaseOrder;
-    }
+		setAuditDetails(purchaseOrder);
+		if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
+			purchaseOrder.setFund(fundService.findOne(purchaseOrder.getFund().getId()));
+		}
+		if (purchaseOrder.getScheme() != null && purchaseOrder.getScheme().getId() != null) {
+			purchaseOrder.setScheme(schemeService.findById(purchaseOrder.getScheme().getId(), false));
+		} else {
+			purchaseOrder.setScheme(null);
+		}
+		if (purchaseOrder.getSubScheme() != null && purchaseOrder.getSubScheme().getId() != null) {
+			purchaseOrder.setSubScheme(subSchemeService.findById(purchaseOrder.getSubScheme().getId(), false));
+		} else {
+			purchaseOrder.setSubScheme(null);
+		}
+		if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
+			purchaseOrder.setSupplier(supplierService.getById(purchaseOrder.getSupplier().getId()));
+		}
+		purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
+		saveAccountDetailKey(purchaseOrder);
+		return purchaseOrder;
+	}
 
-    @Transactional
-    public void saveAccountDetailKey(PurchaseOrder purchaseOrder) {
+	@Transactional
+	public void saveAccountDetailKey(PurchaseOrder purchaseOrder) {
 
-        Accountdetailkey accountdetailkey = new Accountdetailkey();
-        accountdetailkey.setDetailkey(purchaseOrder.getId().intValue());
-        accountdetailkey.setDetailname(purchaseOrder.getName());
-        accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(purchaseOrder.getClass().getSimpleName()));
-        accountdetailkey.setGroupid(1);
-        accountDetailKeyService.create(accountdetailkey);
-    }
+		Accountdetailkey accountdetailkey = new Accountdetailkey();
+		accountdetailkey.setDetailkey(purchaseOrder.getId().intValue());
+		accountdetailkey.setDetailname(purchaseOrder.getName());
+		accountdetailkey
+				.setAccountdetailtype(accountdetailtypeService.findByName(purchaseOrder.getClass().getSimpleName()));
+		accountdetailkey.setGroupid(1);
+		accountDetailKeyService.create(accountdetailkey);
+	}
 
-    @Transactional
-    public PurchaseOrder update(PurchaseOrder purchaseOrder) {
+	@SuppressWarnings("deprecation")
+	@Transactional
+	public PurchaseOrder update(PurchaseOrder purchaseOrder) {
 
-        if (purchaseOrder.getEditAllFields()) {
-            setAuditDetails(purchaseOrder);
-            if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
-                purchaseOrder.setFund(fundService.findOne(purchaseOrder.getFund().getId()));
-            }
-            if (purchaseOrder.getScheme() != null && purchaseOrder.getScheme().getId() != null) {
-                purchaseOrder.setScheme(schemeService.findById(purchaseOrder.getScheme().getId(), false));
-            } else {
-                purchaseOrder.setScheme(null);
-            }
-            if (purchaseOrder.getSubScheme() != null && purchaseOrder.getSubScheme().getId() != null) {
-                purchaseOrder.setSubScheme(subSchemeService.findById(purchaseOrder.getSubScheme().getId(), false));
-            } else {
-                purchaseOrder.setSubScheme(null);
-            }
-            if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
-                purchaseOrder.setSupplier(supplierService.getById(purchaseOrder.getSupplier().getId()));
-            }
-            purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
-        } else {
-            PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.findOne(purchaseOrder.getId());
-            savedPurchaseOrder.setName(purchaseOrder.getName());
-            savedPurchaseOrder.setDescription(purchaseOrder.getDescription());
-            savedPurchaseOrder.setActive(purchaseOrder.getActive());
-            savedPurchaseOrder.setSanctionNumber(purchaseOrder.getSanctionNumber());
-            savedPurchaseOrder.setSanctionDate(purchaseOrder.getSanctionDate());
-            setAuditDetails(savedPurchaseOrder);
-            purchaseOrder = purchaseOrderRepository.save(savedPurchaseOrder);
-        }
-        return purchaseOrder;
-    }
+		if (purchaseOrder.getEditAllFields().booleanValue()) {
+			setAuditDetails(purchaseOrder);
+			if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
+				purchaseOrder.setFund(fundService.findOne(purchaseOrder.getFund().getId()));
+			}
+			if (purchaseOrder.getScheme() != null && purchaseOrder.getScheme().getId() != null) {
+				purchaseOrder.setScheme(schemeService.findById(purchaseOrder.getScheme().getId(), false));
+			} else {
+				purchaseOrder.setScheme(null);
+			}
+			if (purchaseOrder.getSubScheme() != null && purchaseOrder.getSubScheme().getId() != null) {
+				purchaseOrder.setSubScheme(subSchemeService.findById(purchaseOrder.getSubScheme().getId(), false));
+			} else {
+				purchaseOrder.setSubScheme(null);
+			}
+			if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
+				purchaseOrder.setSupplier(supplierService.getById(purchaseOrder.getSupplier().getId()));
+			}
+			purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
+		} else {
+			PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.findOne(purchaseOrder.getId());
+			savedPurchaseOrder.setName(purchaseOrder.getName());
+			savedPurchaseOrder.setDescription(purchaseOrder.getDescription());
+			savedPurchaseOrder.setActive(purchaseOrder.getActive());
+			savedPurchaseOrder.setSanctionNumber(purchaseOrder.getSanctionNumber());
+			savedPurchaseOrder.setSanctionDate(purchaseOrder.getSanctionDate());
+			setAuditDetails(savedPurchaseOrder);
+			purchaseOrder = purchaseOrderRepository.save(savedPurchaseOrder);
+		}
+		return purchaseOrder;
+	}
 
-    private void setAuditDetails(PurchaseOrder purchaseOrder) {
-        if (purchaseOrder.getId() == null) {
-            purchaseOrder.setCreatedDate(new Date());
-            purchaseOrder.setCreatedBy(ApplicationThreadLocals.getUserId());
-        }
-        purchaseOrder.setLastModifiedDate(new Date());
-        purchaseOrder.setLastModifiedBy(ApplicationThreadLocals.getUserId());
-    }
+	private void setAuditDetails(PurchaseOrder purchaseOrder) {
+		if (purchaseOrder.getId() == null) {
+			purchaseOrder.setCreatedDate(new Date());
+			purchaseOrder.setCreatedBy(ApplicationThreadLocals.getUserId());
+		}
+		purchaseOrder.setLastModifiedDate(new Date());
+		purchaseOrder.setLastModifiedBy(ApplicationThreadLocals.getUserId());
+	}
 
-    public List<PurchaseOrder> search(final PurchaseOrder purchaseOrder) {
-        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<PurchaseOrder> createQuery = cb.createQuery(PurchaseOrder.class);
-        final Root<PurchaseOrder> purchaseOrders = createQuery.from(PurchaseOrder.class);
-        createQuery.select(purchaseOrders);
-        final Metamodel m = entityManager.getMetamodel();
-        final EntityType<PurchaseOrder> PurchaseOrder_ = m.entity(PurchaseOrder.class);
+	public List<PurchaseOrder> search(final PurchaseOrderSearchRequest purchaseOrderSearchRequest) {
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<PurchaseOrder> createQuery = cb.createQuery(PurchaseOrder.class);
+		final Root<PurchaseOrder> purchaseOrders = createQuery.from(PurchaseOrder.class);
+		createQuery.select(purchaseOrders);
+		final Metamodel m = entityManager.getMetamodel();
+		final EntityType<PurchaseOrder> purchaseOrderEntityType = m.entity(PurchaseOrder.class);
 
-        final List<Predicate> predicates = new ArrayList<Predicate>();
-        if (purchaseOrder.getName() != null) {
-            final String name = "%" + purchaseOrder.getName().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(purchaseOrders.get("name")));
-            predicates.add(cb.like(
-                    cb.lower(purchaseOrders.get(PurchaseOrder_.getDeclaredSingularAttribute("name", String.class))), name));
-        }
-        if (purchaseOrder.getOrderNumber() != null) {
-            final String code = "%" + purchaseOrder.getOrderNumber().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(purchaseOrders.get("orderNumber")));
-            predicates.add(cb.like(
-                    cb.lower(purchaseOrders.get(PurchaseOrder_.getDeclaredSingularAttribute("orderNumber", String.class))),
-                    code));
-        }
-        if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
-            predicates.add(cb.equal(purchaseOrders.get("supplier").get("id"), purchaseOrder.getSupplier().getId()));
-        }
+		final List<Predicate> predicates = new ArrayList<>();
+		if (purchaseOrderSearchRequest.getName() != null) {
+			final String name = "%" + purchaseOrderSearchRequest.getName().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(purchaseOrders.get("name")));
+			predicates
+					.add(cb.like(
+							cb.lower(purchaseOrders
+									.get(purchaseOrderEntityType.getDeclaredSingularAttribute("name", String.class))),
+							name));
+		}
+		if (purchaseOrderSearchRequest.getOrderNumber() != null) {
+			final String code = "%" + purchaseOrderSearchRequest.getOrderNumber().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(purchaseOrders.get("orderNumber")));
+			predicates.add(cb.like(
+					cb.lower(purchaseOrders
+							.get(purchaseOrderEntityType.getDeclaredSingularAttribute("orderNumber", String.class))),
+					code));
+		}
+		if (purchaseOrderSearchRequest.getSupplierId() != null) {
+			predicates.add(
+					cb.equal(purchaseOrders.get("supplier").get("id"), purchaseOrderSearchRequest.getSupplierId()));
+		}
 
-        if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
-            predicates.add(cb.equal(purchaseOrders.get("fund").get("id"), purchaseOrder.getFund().getId()));
-        }
+		if (purchaseOrderSearchRequest.getFundId() != null) {
+			predicates.add(cb.equal(purchaseOrders.get("fund").get("id"), purchaseOrderSearchRequest.getFundId()));
+		}
 
-        createQuery.where(predicates.toArray(new Predicate[] {}));
-        final TypedQuery<PurchaseOrder> query = entityManager.createQuery(createQuery);
-        return query.getResultList();
+		createQuery.where(predicates.toArray(new Predicate[] {}));
+		final TypedQuery<PurchaseOrder> query = entityManager.createQuery(createQuery);
+		return query.getResultList();
 
-    }
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
 
-        return purchaseOrderRepository.findActiveOrders();
-    }
+		return purchaseOrderRepository.findActiveOrders();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
-            Integer accountDetailTypeId) {
-        return purchaseOrderRepository.findByNameLikeIgnoreCaseOrOrderNumberLikeIgnoreCaseAndActive(filterKey + "%", filterKey + "%", true);
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
+			Integer accountDetailTypeId) {
+		return purchaseOrderRepository.findByNameLikeIgnoreCaseOrOrderNumberLikeIgnoreCaseAndActive(filterKey + "%",
+				filterKey + "%", true);
+	}
 
-    @Override
-    public List getAssetCodesForProjectCode(Integer accountdetailkey) throws ValidationException {
+	@Override
+	public List<?> getAssetCodesForProjectCode(Integer accountdetailkey) throws ValidationException {
+		return Collections.emptyList();
+	}
 
-        return null;
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> validateEntityForRTGS(List<Long> idsList)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> validateEntityForRTGS(List<Long> idsList)
-            throws ValidationException {
-        return null;
-    }
-
-    @Override
-    public List<? extends org.egov.commons.utils.EntityType> getEntitiesById(List<Long> idsList) throws ValidationException {
-        return null;
-    }
+	@Override
+	public List<? extends org.egov.commons.utils.EntityType> getEntitiesById(List<Long> idsList)
+			throws ValidationException {
+		return Collections.emptyList();
+	}
 
 }

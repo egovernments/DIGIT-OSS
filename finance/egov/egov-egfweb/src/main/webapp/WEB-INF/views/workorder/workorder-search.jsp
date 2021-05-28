@@ -50,7 +50,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
-<form:form role="form" action="search" modelAttribute="workOrder" id="workordersearchform"
+<form:form role="form" action="search" modelAttribute="workOrderSearchRequest" id="workordersearchform"
   cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
   <div class="main-content">
     <div class="row">
@@ -77,7 +77,7 @@
 				<label class="col-sm-2 control-label text-right" for="contractor"> <spring:message code="workorder.contractor" text="Contractor Name"/>
 				</label>
 				<div class="col-sm-3 add-margin contactPerson"> 
-					<form:select path="contractor" data-first-option="false" id="contractor" class="form-control">
+					<form:select path="contractorId" data-first-option="false" id="contractor" class="form-control">
 						<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 						<c:forEach var="contractor" items="${contractors}">
 							<form:option  value="${contractor.id}" >
@@ -85,7 +85,7 @@
 							</form:option>
 						</c:forEach>
 					</form:select>
-					<form:errors path="contractor" cssClass="add-margin error-msg" />
+					<form:errors path="contractorId" cssClass="add-margin error-msg" />
 				</div>
 				<label class="col-sm-2 control-label text-right" for="contractorcode"> <spring:message code="workorder.contractorcode" text="Contractor Code"/>
 				</label>
@@ -97,11 +97,11 @@
 				<label class="col-sm-2 control-label text-right" for="fund"> <spring:message code="workorder.fund" text="Fund"/>
 				</label>
 				<div class="col-sm-3 add-margin">
-					<form:select path="fund.id" data-first-option="false" id="fund" class="form-control">
+					<form:select path="fundId" data-first-option="false" id="fund" class="form-control">
 						<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 						<form:options items="${funds}" itemValue="id" itemLabel="name" />
 					</form:select>
-					<form:errors path="fund.id" cssClass="add-margin error-msg" />
+					<form:errors path="fundId" cssClass="add-margin error-msg" />
 				</div>
 			</div>
             <div class="form-group">

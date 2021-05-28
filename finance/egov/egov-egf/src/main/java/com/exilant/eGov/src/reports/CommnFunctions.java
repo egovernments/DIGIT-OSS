@@ -54,8 +54,12 @@
 package com.exilant.eGov.src.reports;
 
 import com.exilant.exility.common.TaskFailedException;
+
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import org.apache.log4j.Logger;
 import org.egov.infstr.services.PersistenceService;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -63,6 +67,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
@@ -99,39 +104,31 @@ public class CommnFunctions
      * @param type2 :The type of account code (A,E,L,I)
      * @throws Exception
      */
-    public void getFundList(final String fundId, final String startDate, final String endDate) throws Exception
+    public void getFundList(final String fundId, final String startDate, final String endDate)
     {
         String fundCondition = "";
-        // String fundCondition1="";
         if (!fundId.equalsIgnoreCase(""))
-            fundCondition = " AND Id=? ";
-        // fundCondition1="AND transactionsummary.fundId="+fundId+" ";
-        try
-        {
-            final String query = " select id,name from fund where isactive=true and isnotleaf!=true " + fundCondition + " order by id";
-            if (LOGGER.isInfoEnabled())
-                LOGGER.info("getFundList: " + query);
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            if (!fundId.equalsIgnoreCase(""))
-                pstmt.setString(0, fundId);
-            resultset = pstmt.list();
-            int resSize = 0, i = 0;
-            resSize = resultset.size();
-            reqFundId = new String[resSize];
-            reqFundName = new String[resSize];
-            if (LOGGER.isInfoEnabled())
-                LOGGER.info("resSize  " + resSize);
-            for (final Object[] element : resultset) {
-                reqFundId[i] = element[0].toString();
-                reqFundName[i] = element[1].toString();
-                i += 1;
+            fundCondition = " AND Id = ? ";
+        final StringBuilder query = new StringBuilder(
+        		" select id,name from fund where isactive=true and isnotleaf!=true ").append(fundCondition)
+        				.append(" order by id");
+        if (LOGGER.isInfoEnabled())
+        	LOGGER.info("getFundList: " + query);
+        pstmt = persistenceService.getSession().createSQLQuery(query.toString());
+        if (!fundId.equalsIgnoreCase(""))
+        	pstmt.setString(0, fundId);
+        resultset = pstmt.list();
+        int resSize = 0, i = 0;
+        resSize = resultset.size();
+        reqFundId = new String[resSize];
+        reqFundName = new String[resSize];
+        if (LOGGER.isInfoEnabled())
+            LOGGER.info("resSize  " + resSize);
+        for (final Object[] element : resultset) {
+            reqFundId[i] = element[0].toString();
+            reqFundName[i] = element[1].toString();
+            i += 1;
 
-            }
-        } catch (final Exception ex)
-        {
-            LOGGER.error("ERROR in FundList coomonfun" + ex.getMessage(), ex);
-            LOGGER.error("Error in getting fund list");
-            throw taskExc;
         }
     }
 
@@ -148,39 +145,40 @@ public class CommnFunctions
      * @param classification:Classification of the code for which opening balance has to be calculated
      * @param reqFundId1 :List of fundIds
      * @param openingBal :This parameter is called by reference so it acts as input & output
+     * @throws TaskFailedException 
      * @throws Exception
      */
     public void getOpeningBalance(final String fundId, final String type1, final String type2, final String substringVal,
             final String startDate,
-            final String endDate, final int classification, final String reqFundId1[], final HashMap openingBal) throws Exception
+            final String endDate, final int classification, final String reqFundId1[], final HashMap openingBal) throws TaskFailedException
     {
         String fundCondition = "";
         if (!fundId.equalsIgnoreCase(""))
-            fundCondition = "AND f.Id=? ";
+            fundCondition = "AND f.Id = ? ";
         String glcode = "", fuId = "";
-        final String query = "SELECT substr(coa.glcode,0,"
-                + substringVal
-                + ") as \"glcode\",ts.fundid as \"fundid\" ,"
-                + " case when coa.type = ? then sum(ts.openingcreditbalance)-sum(ts.openingdebitbalance) else sum(ts.openingdebitbalance)-sum(ts.openingcreditbalance) end as \"amount\" "
-                + " FROM transactionsummary ts,  chartofaccounts coa,fund  f   WHERE (coa.TYPE = ? OR coa.TYPE = ?) and coa.id = ts.glcodeid "
-                + " AND financialyearid =(SELECT ID FROM financialyear WHERE startingdate <= ? AND endingdate >= ?)  "
-                + fundCondition + " and f.id=ts.fundid and f.isactive=true and f.isnotleaf!=true "
-                + " GROUP BY substr(coa.glcode,0," + substringVal + "), fundid ,coa.type ";
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("query " + query);
-        try
-        {
-            int j = 1;
-            getFundList(fundId, startDate, endDate);
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            pstmt.setString(j++, type2);
-            pstmt.setString(j++, type1);
-            pstmt.setString(j++, type2);
-            pstmt.setString(j++, startDate);
-            pstmt.setString(j++, endDate);
-            if (!fundId.equalsIgnoreCase(""))
-                pstmt.setString(j++, fundId);
-            resultset = pstmt.list();
+		final StringBuilder query = new StringBuilder("SELECT substr(coa.glcode,0,").append(substringVal)
+				.append(") as \"glcode\",ts.fundid as \"fundid\" ,")
+				.append(" case when coa.type = ? then sum(ts.openingcreditbalance)-sum(ts.openingdebitbalance)")
+				.append(" else sum(ts.openingdebitbalance)-sum(ts.openingcreditbalance) end as \"amount\" ")
+				.append(" FROM transactionsummary ts,  chartofaccounts coa,fund  f   WHERE (coa.TYPE = ? OR coa.TYPE = ?)")
+				.append(" and coa.id = ts.glcodeid ")
+				.append(" AND financialyearid =(SELECT ID FROM financialyear WHERE startingdate <= ? AND endingdate >= ?)  ")
+				.append(fundCondition).append(" and f.id=ts.fundid and f.isactive=true and f.isnotleaf!=true ")
+				.append(" GROUP BY substr(coa.glcode,0,").append(substringVal).append("), fundid ,coa.type ");
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("query " + query);
+		try {
+			int j = 1;
+			getFundList(fundId, startDate, endDate);
+			pstmt = persistenceService.getSession().createSQLQuery(query.toString());
+			pstmt.setString(j++, type2);
+			pstmt.setString(j++, type1);
+			pstmt.setString(j++, type2);
+			pstmt.setString(j++, startDate);
+			pstmt.setString(j++, endDate);
+			if (!fundId.equalsIgnoreCase(""))
+				pstmt.setString(j++, fundId);
+			resultset = pstmt.list();
             Double opeBal = null;
             HashMap openingBalsubList = null;
             for (final Object[] element : resultset) {
@@ -189,6 +187,7 @@ public class CommnFunctions
                 opeBal = Double.parseDouble(element[2].toString());
                 if (!openingBal.containsKey(glcode))
                 {
+                    
                     openingBalsubList = new HashMap();
                     for (final String element2 : reqFundId1)
                         if (element2.equalsIgnoreCase(fuId))
@@ -200,7 +199,7 @@ public class CommnFunctions
                     ((HashMap) openingBal.get(glcode)).put(fuId, opeBal);
 
             }
-        } catch (final Exception e)
+        } catch (final HibernateException e)
         {
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("Error in getOpeningBalance" + e.getMessage(), e);
@@ -227,58 +226,52 @@ public class CommnFunctions
     public void getTxnBalance(final Connection conn, final String fundid, final String type1, final String type2,
             final String substringVal, final String startDate,
             final String endDate, final int classification, final String effFilter, final HashMap txnBalancehasmap)
-            throws Exception
+           
     {
         String fundCondition = " ";
         if (fundid != null && !fundid.equals(""))
             fundCondition = " and vh.fundid= ?";
 
-        final String query1 = "SELECT SUBSTR(coa.GLCODE,1,2)as \"glCode\",vh.fundid as \"fundId\",case when sum(gl.debitamount)-sum(gl.creditAmount) = null then 0 else sum(gl.debitamount)-sum(gl.creditAmount)"
-                + "as \"amount\" FROM chartofaccounts  coa,generalledger gl,"
-                + " voucherHeader vh WHERE coa.TYPE = ? and vh.ID =  gl.VOUCHERHEADERID AND  gl.glcode=coa.glcode "
-                + " AND vh.VOUCHERDATE >= ? AND vh.VOUCHERDATE <= ?" + fundCondition + "  " + effFilter;
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("getI: " + query1);
-        try
-        {
-            int j = 1;
-            pstmt = persistenceService.getSession().createSQLQuery(query1);
-            pstmt.setString(j++, type1);
-            pstmt.setString(j++, startDate);
-            pstmt.setString(j++, endDate);
-            if (fundid != null && !fundid.equals(""))
-                pstmt.setString(j++, fundid);
-            resultset = pstmt.list();
-            final Object[] firstElement = resultset != null && resultset.size() > 0 ? resultset.get(1) : null;
-            for (final Object[] element : resultset) {
-                final String accntCode = element[0].toString();
-                // String accntCode2=accntCode;
-                final String fund = element[1].toString();
-                final String amt = element[2].toString();
-                final HashMap txnBalance = new HashMap();
-                /** Storing fund and amount pairs of same GLCode into HashMap **/
-                if (!txnBalancehasmap.containsKey(accntCode))// accntCode2.equalsIgnoreCase(accntCode))//Loops until GlCode
-                    // changes
-                {
-                    for (final String element2 : reqFundId)
-                        if (element2.equalsIgnoreCase(fund))
-                            txnBalance.put(fund, amt);// openingBalsubList.put(reqFundId1[i],opeBal);
-                        else
-                            txnBalance.put(element2, new Double(0));
+		final StringBuilder query1 = new StringBuilder(
+				"SELECT SUBSTR(coa.GLCODE,1,2)as \"glCode\",vh.fundid as \"fundId\",").append(
+						"case when sum(gl.debitamount)-sum(gl.creditAmount) = null then 0 else sum(gl.debitamount)-sum(gl.creditAmount)")
+						.append("as \"amount\" FROM chartofaccounts  coa,generalledger gl,")
+						.append(" voucherHeader vh WHERE coa.TYPE = ? and vh.ID =  gl.VOUCHERHEADERID AND  gl.glcode=coa.glcode ")
+						.append(" AND vh.VOUCHERDATE >= ? AND vh.VOUCHERDATE <= ?").append(fundCondition).append("  ")
+						.append(effFilter);
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("getI: " + query1);
+		int j = 1;
+        pstmt = persistenceService.getSession().createSQLQuery(query1.toString());
+        pstmt.setString(j++, type1);
+        pstmt.setString(j++, startDate);
+        pstmt.setString(j++, endDate);
+        if (fundid != null && !fundid.equals(""))
+        	pstmt.setString(j++, fundid);
+        resultset = pstmt.list();
+        final Object[] firstElement = resultset != null && resultset.size() > 0 ? resultset.get(1) : null;
+        for (final Object[] element : resultset) {
+            final String accntCode = element[0].toString();
+            final String fund = element[1].toString();
+            final String amt = element[2].toString();
+            final HashMap txnBalance = new HashMap();
+            /** Storing fund and amount pairs of same GLCode into HashMap **/
+            if (!txnBalancehasmap.containsKey(accntCode))// accntCode2.equalsIgnoreCase(accntCode))//Loops until GlCode
+                // changes
+            {
+                for (final String element2 : reqFundId)
+                    if (element2.equalsIgnoreCase(fund))
+                        txnBalance.put(fund, amt);// openingBalsubList.put(reqFundId1[i],opeBal);
+                    else
+                        txnBalance.put(element2, new Double(0));
 
-                    txnBalancehasmap.put(accntCode, txnBalance);
-                } else
-                    ((HashMap) txnBalancehasmap.get(accntCode)).put(fund, amt);
-                if (firstElement.equals(element))
-                    break;
-                /** Storing GLCode and (fund-amount paired HashMap) pairs into HashMap **/
                 txnBalancehasmap.put(accntCode, txnBalance);
-            }
-
-        } catch (final Exception se)
-        {
-            LOGGER.error("Error in getschedulewiseOB" + se.getMessage(), se);
-            throw taskExc;
+            } else
+                ((HashMap) txnBalancehasmap.get(accntCode)).put(fund, amt);
+            if (firstElement.equals(element))
+                break;
+            /** Storing GLCode and (fund-amount paired HashMap) pairs into HashMap **/
+            txnBalancehasmap.put(accntCode, txnBalance);
         }
     }
 
@@ -292,13 +285,11 @@ public class CommnFunctions
      * @param endDate :The end date of the financial year for which opening balance has to be calculated
      * @param classification :Classification of the code for which opening balance has to be calculated
      * @param txnCreditBalance :This parameter is called by reference so it acts as input & output
-     * @throws Exception
+     * 
      */
     public void getTxnCreditBalance(final Connection conn, final String fundId, final String type1, final String type2,
             final String substringVal,
-            final String startDate, final String endDate, final int classification, final HashMap txnCreditBalance)
-            throws Exception
-    {
+            final String startDate, final String endDate, final int classification, final HashMap txnCreditBalance){
         String fundCondition = "";
         if (!fundId.equalsIgnoreCase(""))
             fundCondition = "AND f.Id=? ";
@@ -306,52 +297,45 @@ public class CommnFunctions
         String type = "(coa.TYPE = ? OR coa.TYPE = ?) and";
         if (type1 == null || type1.trim().equals(""))
             type = "";
-        final String query = "SELECT substr(coa.glcode,0," + substringVal + ") as \"glcode\",ts.fundid as \"fundid\" ,"
-                + " sum(ts.openingcreditbalance) as \"amount\" "
-                + " FROM transactionsummary ts,  chartofaccounts coa,fund  f   WHERE " + type + " coa.id = ts.glcodeid "
-                + " AND financialyearid =(SELECT ID FROM financialyear WHERE startingdate <= ? AND endingdate >= ?)  "
-                + fundCondition + " and f.id=ts.fundid and f.isactive=true and f.isnotleaf!=true "
-                + " GROUP BY substr(coa.glcode,0," + substringVal + "), fundid ,coa.type";
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("query " + query);
-        try
-        {
-            int j = 1;
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            if (type1 == null || type1.trim().equals("")) {
-                pstmt.setString(j++, type1);
-                pstmt.setString(j++, type2);
-            }
-            pstmt.setString(j++, startDate);
-            pstmt.setString(j++, endDate);
-            if (!fundId.equalsIgnoreCase(""))
-                pstmt.setString(j++, fundId);
-            resultset = pstmt.list();
-            Double opeBal = null;
-            HashMap creditBalsubList = null;
-            for (final Object[] element : resultset) {
-                glcode = element[0].toString();
-                fuId = element[1].toString();
-                opeBal = Double.parseDouble(element[2].toString());
-                if (!txnCreditBalance.containsKey(glcode))
-                {
-                    creditBalsubList = new HashMap();
-                    for (final String element2 : reqFundId)
-                        if (element2.equalsIgnoreCase(fuId))
-                            creditBalsubList.put(element2, opeBal);
-                        else
-                            creditBalsubList.put(element2, new Double(0));
-                    txnCreditBalance.put(glcode, creditBalsubList);
-                } else
-                    ((HashMap) txnCreditBalance.get(glcode)).put(fuId, opeBal);
+		final StringBuilder query = new StringBuilder("SELECT substr(coa.glcode,0,").append(substringVal)
+				.append(") as \"glcode\",ts.fundid as \"fundid\" ,")
+				.append(" sum(ts.openingcreditbalance) as \"amount\" ")
+				.append(" FROM transactionsummary ts,  chartofaccounts coa,fund  f   WHERE ").append(type)
+				.append(" coa.id = ts.glcodeid ")
+				.append(" AND financialyearid =(SELECT ID FROM financialyear WHERE startingdate <= ? AND endingdate >= ?)  ")
+				.append(fundCondition).append(" and f.id=ts.fundid and f.isactive=true and f.isnotleaf!=true ")
+				.append(" GROUP BY substr(coa.glcode,0,").append(substringVal).append("), fundid ,coa.type");
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("query " + query);
+		int j = 1;
+        pstmt = persistenceService.getSession().createSQLQuery(query.toString());
+        if (type1 == null || type1.trim().equals("")) {
+        	pstmt.setString(j++, type1);
+        	pstmt.setString(j++, type2);
+        }
+        pstmt.setString(j++, startDate);
+        pstmt.setString(j++, endDate);
+        if (!fundId.equalsIgnoreCase(""))
+        	pstmt.setString(j++, fundId);
+        resultset = pstmt.list();
+        Double opeBal = null;
+        HashMap creditBalsubList = null;
+        for (final Object[] element : resultset) {
+            glcode = element[0].toString();
+            fuId = element[1].toString();
+            opeBal = Double.parseDouble(element[2].toString());
+            if (!txnCreditBalance.containsKey(glcode))
+            {
+                creditBalsubList = new HashMap();
+                for (final String element2 : reqFundId)
+                    if (element2.equalsIgnoreCase(fuId))
+                        creditBalsubList.put(element2, opeBal);
+                    else
+                        creditBalsubList.put(element2, new Double(0));
+                txnCreditBalance.put(glcode, creditBalsubList);
+            } else
+                ((HashMap) txnCreditBalance.get(glcode)).put(fuId, opeBal);
 
-            }
-        } catch (final Exception e)
-        {
-            LOGGER.error("Error in getCreditBalance");
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("Exp=" + e.getMessage(), e);
-            throw new Exception();
         }
     }
 
@@ -365,61 +349,54 @@ public class CommnFunctions
      * @param endDate :The end date of the financial year for which opening balance has to be calculated
      * @param classification :classification of the code for which opening balance has to be calculated
      * @param txnDebitBalance:This parameter is called by reference so it acts as input & output
-     * @throws Exception
+     * @throws TaskFailedException 
+     * 
      */
     public void getTxnDebitBalance(final Connection conn, final String fundId, final String type1, final String type2,
             final String substringVal,
-            final String startDate, final String endDate, final int classification, final HashMap txnDebitBalance)
-            throws Exception
+            final String startDate, final String endDate, final int classification, final HashMap txnDebitBalance) throws TaskFailedException
     {
         String fundCondition = "";
         if (!fundId.equalsIgnoreCase(""))
             fundCondition = "AND f.Id=? ";
         String glcode = "", fuId = "";
-        final String query = "SELECT substr(coa.glcode,0,"
-                + substringVal
-                + ") as \"glcode\",ts.fundid as \"fundid\" ,"
-                + " sum(ts.openingdebitbalance) as \"amount\" "
-                + " FROM transactionsummary ts,  chartofaccounts coa,fund  f   WHERE (coa.TYPE = ? OR coa.TYPE = ?) and coa.id = ts.glcodeid "
-                + " AND financialyearid =(SELECT ID FROM financialyear WHERE startingdate <= ? AND endingdate >= ?)  "
-                + fundCondition + " and f.id=ts.fundid and f.isactive=true and f.isnotleaf!=true "
-                + " GROUP BY substr(coa.glcode,0," + substringVal + "), fundid ,coa.type";
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("query " + query);
-        try
-        {
-            int j = 1;
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            pstmt.setString(j++, type1);
-            pstmt.setString(j++, type2);
-            pstmt.setString(j++, startDate);
-            pstmt.setString(j++, endDate);
-            if (!fundId.equalsIgnoreCase(""))
-                pstmt.setString(j++, fundId);
-            resultset = pstmt.list();
-            Double opeBal = null;
-            HashMap debitBalsubList = null;
-            for (final Object[] element : resultset) {
-                glcode = element[0].toString();
-                fuId = element[1].toString();
-                opeBal = Double.parseDouble(element[2].toString());
-                if (!txnDebitBalance.containsKey(glcode))
-                {
-                    debitBalsubList = new HashMap();
-                    for (final String element2 : reqFundId)
-                        if (element2.equalsIgnoreCase(fuId))
-                            debitBalsubList.put(element2, opeBal);
-                        else
-                            debitBalsubList.put(element2, new Double(0));
-                    txnDebitBalance.put(glcode, debitBalsubList);
-                } else
-                    ((HashMap) txnDebitBalance.get(glcode)).put(fuId, opeBal);
+		final StringBuilder query = new StringBuilder("SELECT substr(coa.glcode,0,").append(substringVal)
+				.append(") as \"glcode\",ts.fundid as \"fundid\" ,")
+				.append(" sum(ts.openingdebitbalance) as \"amount\" ")
+				.append(" FROM transactionsummary ts,  chartofaccounts coa,fund  f ")
+				.append(" WHERE (coa.TYPE = ? OR coa.TYPE = ?) and coa.id = ts.glcodeid ")
+				.append(" AND financialyearid =(SELECT ID FROM financialyear WHERE startingdate <= ? AND endingdate >= ?)  ")
+				.append(fundCondition).append(" and f.id=ts.fundid and f.isactive=true and f.isnotleaf!=true ")
+				.append(" GROUP BY substr(coa.glcode,0,").append(substringVal).append("), fundid ,coa.type");
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("query " + query);
+		int j = 1;
+        pstmt = persistenceService.getSession().createSQLQuery(query.toString());
+        pstmt.setString(j++, type1);
+        pstmt.setString(j++, type2);
+        pstmt.setString(j++, startDate);
+        pstmt.setString(j++, endDate);
+        if (!fundId.equalsIgnoreCase(""))
+        	pstmt.setString(j++, fundId);
+        resultset = pstmt.list();
+        Double opeBal = null;
+        HashMap debitBalsubList = null;
+        for (final Object[] element : resultset) {
+            glcode = element[0].toString();
+            fuId = element[1].toString();
+            opeBal = Double.parseDouble(element[2].toString());
+            if (!txnDebitBalance.containsKey(glcode))
+            {
+                debitBalsubList = new HashMap();
+                for (final String element2 : reqFundId)
+                    if (element2.equalsIgnoreCase(fuId))
+                        debitBalsubList.put(element2, opeBal);
+                    else
+                        debitBalsubList.put(element2, new Double(0));
+                txnDebitBalance.put(glcode, debitBalsubList);
+            } else
+                ((HashMap) txnDebitBalance.get(glcode)).put(fuId, opeBal);
 
-            }
-        } catch (final Exception e)
-        {
-            LOGGER.error("Error in getDebitBalance" + e.getMessage(), e);
-            throw taskExc;
         }
     }
 
@@ -464,20 +441,12 @@ public class CommnFunctions
     {
         String startDate = "" ;
         final String query = "SELECT TO_CHAR(startingdate,'DD/MM/YYYY') FROM FINANCIALYEAR WHERE id= ?";
-        try
-        {
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            pstmt.setInteger(0, finYearId);
+        pstmt = persistenceService.getSession().createSQLQuery(query);
+        pstmt.setInteger(0, finYearId);
 
-            List list = pstmt.list();
-            if(list!=null)
-            	startDate = list.get(0).toString();
-
-        } catch (final Exception sql)
-        {
-            LOGGER.error("Exp in getStartDate :" + sql.getMessage(), sql);
-            throw taskExc;
-        }
+        List list = pstmt.list();
+        if(list!=null)
+        	startDate = list.get(0).toString();
         return startDate;
     }
 
@@ -492,18 +461,11 @@ public class CommnFunctions
     {
         String endDate = "";
         final String query = "SELECT TO_CHAR(endingdate,'DD/MM/YYYY') FROM FINANCIALYEAR WHERE id= ?";
-        try
-        {
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            pstmt.setInteger(0, finYearId);
-            resultset = pstmt.list();
-            for (final Object[] element : resultset)
-                endDate = element[0].toString();
-        } catch (final Exception sql)
-        {
-            LOGGER.error("error inside getEndDate" + sql.getMessage(), sql);
-            throw taskExc;
-        }
+        pstmt = persistenceService.getSession().createSQLQuery(query);
+        pstmt.setInteger(0, finYearId);
+        resultset = pstmt.list();
+        for (final Object[] element : resultset)
+            endDate = element[0].toString();
         return endDate;
     }
 

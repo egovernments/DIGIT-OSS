@@ -52,7 +52,7 @@
     <parent>
         <groupId>org.egov</groupId>
         <artifactId>egov-erp</artifactId>
-        <version>3.0.0-COE-SNAPSHOT</version>
+        <version>3.0.1-COE-SNAPSHOT</version>
     </parent>
 
     <artifactId>egov-commonsweb</artifactId>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-egi</artifactId>
-            <version>3.0.0-COE-SNAPSHOT</version>
+            <version>3.0.1-COE-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-commons</artifactId>
-            <version>3.0.0-COE-SNAPSHOT</version>
+            <version>3.0.1-COE-SNAPSHOT</version>
         </dependency>
 
         <!-- VIEWS RELATED END -->

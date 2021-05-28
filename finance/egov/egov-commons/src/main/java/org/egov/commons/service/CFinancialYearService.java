@@ -48,103 +48,141 @@
 
 package org.egov.commons.service;
 
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.CFiscalPeriod;
+import org.egov.commons.contracts.CFinanancialYearSearchRequest;
 import org.egov.commons.repository.CFinancialYearRepository;
+import org.egov.infra.utils.DateUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import org.springframework.validation.BindingResult;
 
 @Service
 @Transactional(readOnly = true)
 public class CFinancialYearService {
 
-    private final CFinancialYearRepository cFinancialYearRepository;
+	private final CFinancialYearRepository cFinancialYearRepository;
 
-    @Autowired
-    public CFinancialYearService(final CFinancialYearRepository cFinancialYearRepository) {
-        this.cFinancialYearRepository = cFinancialYearRepository;
-    }
+	@Autowired
+	public CFinancialYearService(final CFinancialYearRepository cFinancialYearRepository) {
+		this.cFinancialYearRepository = cFinancialYearRepository;
+	}
 
-    @Transactional
-    public CFinancialYear create(final CFinancialYear cFinancialYear) {
-        return cFinancialYearRepository.save(cFinancialYear);
-    }
+	@Transactional
+	public CFinancialYear create(final CFinancialYear cFinancialYear) {
+		return cFinancialYearRepository.save(cFinancialYear);
+	}
 
-    @Transactional
-    public CFinancialYear update(final CFinancialYear cFinancialYear) {
-        return cFinancialYearRepository.save(cFinancialYear);
-    }
+	@Transactional
+	public CFinancialYear update(final CFinancialYear cFinancialYear) {
+		return cFinancialYearRepository.save(cFinancialYear);
+	}
 
-    public List<CFinancialYear> findAll() {
-        return cFinancialYearRepository.findAll(new Sort(Sort.Direction.ASC, "finYearRange"));
-    }
+	public List<CFinancialYear> findAll() {
+		return cFinancialYearRepository.findAll(new Sort(Sort.Direction.ASC, "finYearRange"));
+	}
 
-    public List<CFinancialYear> getAllFinancialYears() {
-        return cFinancialYearRepository.getAllFinancialYears();
-    }
+	public List<CFinancialYear> getAllFinancialYears() {
+		return cFinancialYearRepository.getAllFinancialYears();
+	}
 
-    public CFinancialYear findOne(final Long id) {
-        return cFinancialYearRepository.findOne(id);
-    }
+	public CFinancialYear findOne(final Long id) {
+		return cFinancialYearRepository.findOne(id);
+	}
 
-    public List<CFinancialYear> search(final CFinancialYear cFinancialYear) {
-        if (cFinancialYear.getFinYearRange() != null)
-            return cFinancialYearRepository.findByFinancialYearRange(cFinancialYear.getFinYearRange());
-        else
-            return findAll();
-    }
+	public List<CFinancialYear> search(final CFinanancialYearSearchRequest cFinanancialYearSearchRequest) {
+		if (cFinanancialYearSearchRequest.getFinYearRange() != null)
+			return cFinancialYearRepository.findByFinancialYearRange(cFinanancialYearSearchRequest.getFinYearRange());
+		else
+			return findAll();
+	}
 
-    public Date getNextFinancialYearStartingDate() {
-        final List<CFinancialYear> cFinYear = cFinancialYearRepository.getFinYearLastDate();
-        final Calendar cal = Calendar.getInstance();
-        cal.setTime(cFinYear.get(0).getEndingDate());
-        cal.add(Calendar.DATE, +1);
-        return cal.getTime();
-    }
+	public Date getNextFinancialYearStartingDate() {
+		final List<CFinancialYear> cFinYear = cFinancialYearRepository.getFinYearLastDate();
+		final Calendar cal = Calendar.getInstance();
+		cal.setTime(cFinYear.get(0).getEndingDate());
+		cal.add(Calendar.DATE, +1);
+		return cal.getTime();
+	}
 
-    public CFiscalPeriod findByFiscalName(final String name) {
-        return cFinancialYearRepository.findByFiscalName(name);
-    }
+	public CFiscalPeriod findByFiscalName(final String name) {
+		return cFinancialYearRepository.findByFiscalName(name);
+	}
 
-    public CFinancialYear getFinancialYearByDate(Date date) {
-        return cFinancialYearRepository.getFinancialYearByDate(date);
-    }
+	public CFinancialYear getFinancialYearByDate(Date date) {
+		return cFinancialYearRepository.getFinancialYearByDate(date);
+	}
 
-    public List<CFinancialYear> getFinancialYearNotClosed() {
-        return cFinancialYearRepository.findByIsClosedFalseOrderByFinYearRangeDesc();
-    }
+	public List<CFinancialYear> getFinancialYearNotClosed() {
+		return cFinancialYearRepository.findByIsClosedFalseOrderByFinYearRangeDesc();
+	}
 
-    public CFinancialYear getFinacialYearByYearRange(String finYearRange) {
-        return cFinancialYearRepository.findByFinYearRange(finYearRange);
-    }
+	public CFinancialYear getFinacialYearByYearRange(String finYearRange) {
+		return cFinancialYearRepository.findByFinYearRange(finYearRange);
+	}
 
-    public List<CFinancialYear> getFinancialYears(List<Long> financialYearList) {
-        return cFinancialYearRepository.findByIdIn(financialYearList);
-    }
+	public List<CFinancialYear> getFinancialYears(List<Long> financialYearList) {
+		return cFinancialYearRepository.findByIdIn(financialYearList);
+	}
 
-    public CFinancialYear getPreviousFinancialYearForDate(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.YEAR, -1);
-        return cFinancialYearRepository.getFinancialYearByDate(cal.getTime());
-    }
+	public CFinancialYear getPreviousFinancialYearForDate(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.YEAR, -1);
+		return cFinancialYearRepository.getFinancialYearByDate(cal.getTime());
+	}
 
-    public CFinancialYear getCurrentFinancialYear() {
-        return getFinancialYearByDate(new Date());
-    }
+	public CFinancialYear getCurrentFinancialYear() {
+		return getFinancialYearByDate(new Date());
+	}
 
-    public CFinancialYear getLatestFinancialYear() {
-        return getFinancialYearByDate(new DateTime().withMonthOfYear(4).withDayOfMonth(1).toDate());
-    }
-    
-    public List<CFinancialYear> getFinancialYearNotClosedAndActive() {
-        return cFinancialYearRepository.findByIsClosedFalseAndIsActiveForPostingTrueOrderByFinYearRangeDesc();
-    }
+	public CFinancialYear getLatestFinancialYear() {
+		return getFinancialYearByDate(new DateTime().withMonthOfYear(4).withDayOfMonth(1).toDate());
+	}
+
+	public List<CFinancialYear> getFinancialYearNotClosedAndActive() {
+		return cFinancialYearRepository.findByIsClosedFalseAndIsActiveForPostingTrueOrderByFinYearRangeDesc();
+	}
+
+	public void validateMandatoryFields(CFinancialYear financialYear, final BindingResult errors)
+			throws ParseException {
+		final Date nextStartingDate = getNextFinancialYearStartingDate();
+		if (financialYear.getStartingDate().after(financialYear.getEndingDate())) {
+			errors.reject("msg.startdate.enddate.greater",
+					new String[] { DateUtils.getDefaultFormattedDate(financialYear.getStartingDate()) }, null);
+		}
+		if (financialYear.getStartingDate().equals(nextStartingDate)) {
+			errors.reject("msg.enter.valid.startdate",
+					new String[] { DateUtils.getDefaultFormattedDate(financialYear.getStartingDate()) }, null);
+		}
+		for (CFiscalPeriod fiscalperiod : financialYear.getcFiscalPeriod()) {
+			if (fiscalperiod.getName() == null || StringUtils.isEmpty(fiscalperiod.getName()))
+				errors.reject("msg.enter.fiscal.period.name",
+						new String[] { DateUtils.getDefaultFormattedDate(financialYear.getStartingDate()) }, null);
+			if (fiscalperiod.getStartingDate() == null)
+				errors.reject("msg.enter.startdate",
+						new String[] { DateUtils.getDefaultFormattedDate(fiscalperiod.getStartingDate()) }, null);
+			if (fiscalperiod.getEndingDate() == null)
+				errors.reject("msg.enter.endingdate",
+						new String[] { DateUtils.getDefaultFormattedDate(fiscalperiod.getEndingDate()) }, null);
+			if (fiscalperiod.getStartingDate() != null && fiscalperiod.getEndingDate() != null) {
+				if (fiscalperiod.getStartingDate().after(fiscalperiod.getEndingDate()))
+					errors.reject("msg.startdate.enddate.greater",
+							new String[] { DateUtils.getDefaultFormattedDate(fiscalperiod.getStartingDate()) }, null);
+				if (fiscalperiod.getStartingDate().equals(nextStartingDate)) {
+					errors.reject("msg.enter.valid.startdate",
+							new String[] { DateUtils.getDefaultFormattedDate(fiscalperiod.getStartingDate()) }, null);
+				}
+			}
+		}
+	}
 }

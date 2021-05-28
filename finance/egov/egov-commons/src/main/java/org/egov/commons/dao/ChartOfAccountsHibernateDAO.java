@@ -70,6 +70,7 @@ import javax.persistence.PersistenceContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -180,7 +181,7 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
     }
 
     @Deprecated
-    public int getDetailTypeId(final String glCode, final Connection connection) throws Exception {
+    public int getDetailTypeId(final String glCode, final Connection connection) throws SQLException {
         int detailTypeId = 0;
         ResultSet rs;
         String qryDetailType = "Select detailtypeid from chartofaccountdetail where glcodeid=(select id from chartofaccounts where glcode=?)";
@@ -276,6 +277,7 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
      * 
      * @param purposeId
      * @return list of COA object(s)
+     * @throws ApplicationException 
      */
     public List<CChartOfAccounts> getAccountCodeByPurpose(final Integer purposeId) {
         final List<CChartOfAccounts> accountCodeList = new ArrayList<CChartOfAccounts>();
@@ -311,7 +313,7 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
                             " FROM CChartOfAccounts WHERE purposeid=:purposeId AND classification=4 AND isActiveForPosting=true ");
             query.setLong("purposeId", purposeId);
             accountCodeList.addAll((List<CChartOfAccounts>) query.list());
-        } catch (final Exception e) {
+        } catch (final ApplicationException e) {
             LOG.error(e);
             throw new ApplicationRuntimeException("Error occurred while getting Account Code by purpose", e);
         }
@@ -324,16 +326,10 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
      * @return list of chartofaccount objects.
      */
     public List<CChartOfAccounts> getNonControlCodeList() {
-        try {
-            return getCurrentSession()
-                    .createQuery(
-                            " from CChartOfAccounts acc where acc.classification=4 and acc.isActiveForPosting=true and acc.id not in (select cd.glCodeId from CChartOfAccountDetail cd) ")
-                    .list();
-
-        } catch (final Exception e) {
-            LOG.error(e);
-            throw new ApplicationRuntimeException("Error occurred while getting Non-Control Code list", e);
-        }
+        return getCurrentSession()
+                .createQuery(
+                        " from CChartOfAccounts acc where acc.classification=4 and acc.isActiveForPosting=true and acc.id not in (select cd.glCodeId from CChartOfAccountDetail cd) ")
+                .list();
     }
 
     /**
@@ -362,7 +358,7 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
             query.setString("glCode", glCode);
             query.setCacheable(true);
             return query.list().isEmpty() ? null : query.list(); // NOPMD
-        } catch (final Exception e) {
+        } catch (final ApplicationRuntimeException e) {
             LOG.error(e);
             throw new ApplicationRuntimeException("Error occured while getting Account Detail Types for GL Code ", e);
         }
@@ -586,7 +582,7 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
                             "SELECT coa FROM CChartOfAccounts coa,EgfAccountcodePurpose purpose WHERE coa.purposeId=purpose.id and purpose.name = :purposeName AND coa.classification=4 AND coa.isActiveForPosting=true ");
             query.setString("purposeName", purposeName);
             accountCodeList.addAll((List<CChartOfAccounts>) query.list());
-        } catch (final Exception e) {
+        } catch (final ApplicationException e) {
             LOG.error(e);
             throw new ApplicationRuntimeException("Error occurred while getting Account Code by purpose", e);
         }

@@ -99,14 +99,16 @@ public class RecoveryService {
             return recoveryRepository.findAll();
     }
     
-    public List<Recovery> search(Recovery recovery,String type,String recoveryName) {
-        type = StringUtils.isNotBlank(type) ? type : "" ;
-        recoveryName = StringUtils.isNotBlank(recoveryName) ? recoveryName : "";
-        if(recovery.getChartofaccounts().getId() == null){
-            return recoveryRepository.findByTypeContainingIgnoreCaseAndRecoveryNameContainingIgnoreCase(type, recoveryName);
-        }
-        return recoveryRepository.findByChartofaccountsAndTypeContainingIgnoreCaseAndRecoveryNameContainingIgnoreCase(recovery.getChartofaccounts(), type, recoveryName);
-    }
+	public List<Recovery> search(CChartOfAccounts chartOfAccounts, String type, String recoveryName) {
+		type = StringUtils.isNotBlank(type) ? type : "";
+		recoveryName = StringUtils.isNotBlank(recoveryName) ? recoveryName : "";
+		if (chartOfAccounts == null || chartOfAccounts.getId() == null) {
+			return recoveryRepository.findByTypeContainingIgnoreCaseAndRecoveryNameContainingIgnoreCase(type,
+					recoveryName);
+		}
+		return recoveryRepository.findByChartofaccountsAndTypeContainingIgnoreCaseAndRecoveryNameContainingIgnoreCase(
+				chartOfAccounts, type, recoveryName);
+	}
 
     public List<Recovery> getAllActiveRecoverys() {
         return recoveryRepository.findByIsactive(true);

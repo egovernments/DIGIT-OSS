@@ -55,6 +55,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -331,6 +332,17 @@ public class PersistenceService<T, ID extends Serializable> {
 		}
 		baseModel.setModifiedBy(ApplicationThreadLocals.getUserId());
 		baseModel.setModifiedDate(currentDate);
+	}
+	
+	public Query populateQueryWithParams(final Query query, final Map<String, Object> params) {
+
+		for (Entry<String, Object> entry : params.entrySet()) {
+			if (entry.getValue() instanceof Collection)
+				query.setParameterList(entry.getKey(), (Collection) entry.getValue());
+			else
+				query.setParameter(entry.getKey(), entry.getValue());
+		}
+		return query;
 	}
 
 }

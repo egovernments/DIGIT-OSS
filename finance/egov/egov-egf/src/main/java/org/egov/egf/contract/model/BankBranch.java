@@ -2,175 +2,194 @@ package org.egov.egf.contract.model;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class BankBranch implements Serializable {
-	
-	private Long id;
-	private Bank bank;
-	private String code;
-	private String name;
-	private String address;
-	private String address2;
-	private String city;
-	private String state;
-	private String pincode;
-	private String phone;
-	private String fax;
-	private String contactPerson;
-	private boolean active;
-	private String description;
-	private String micr;
-	private AuditDetails auditDetails;
-	public BankBranch(Long id, Bank bank, String code, String name, String address, String address2, String city,
-			String state, String pincode, String phone, String fax, String contactPerson, boolean active,
-			String description, String micr, AuditDetails auditDetails) {
-		this.id = id;
-		this.bank = bank;
-		this.code = code;
-		this.name = name;
-		this.address = address;
-		this.address2 = address2;
-		this.city = city;
-		this.state = state;
-		this.pincode = pincode;
-		this.phone = phone;
-		this.fax = fax;
-		this.contactPerson = contactPerson;
-		this.active = active;
-		this.description = description;
-		this.micr = micr;
-		this.auditDetails = auditDetails;
-	}
-	
-	public BankBranch(){}
 
-	public Long getId() {
-		return id;
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = -1341882041083855081L;
+    private Long id;
+    private Bank bank;
+    @SafeHtml
+    private String code;
+    @SafeHtml
+    private String name;
+    @SafeHtml
+    private String address;
+    @SafeHtml
+    private String address2;
+    @SafeHtml
+    private String city;
+    @SafeHtml
+    private String state;
+    @SafeHtml
+    private String pincode;
+    @SafeHtml
+    private String phone;
+    @SafeHtml
+    private String fax;
+    @SafeHtml
+    private String contactPerson;
+    private boolean active;
+    @SafeHtml
+    private String description;
+    @SafeHtml
+    private String micr;
+    private AuditDetails auditDetails;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public BankBranch(final Long id, final Bank bank, final String code, final String name, final String address,
+            final String address2, final String city, final String state, final String pincode, final String phone,
+            final String fax, final String contactPerson, final boolean active, final String description,
+            final String micr, final AuditDetails auditDetails) {
+        this.id = id;
+        this.bank = bank;
+        this.code = code;
+        this.name = name;
+        this.address = address;
+        this.address2 = address2;
+        this.city = city;
+        this.state = state;
+        this.pincode = pincode;
+        this.phone = phone;
+        this.fax = fax;
+        this.contactPerson = contactPerson;
+        this.active = active;
+        this.description = description;
+        this.micr = micr;
+        this.auditDetails = auditDetails;
+    }
 
-	public Bank getBank() {
-		return bank;
-	}
+    public BankBranch() {
+    }
 
-	public void setBank(Bank bank) {
-		this.bank = bank;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public void setId(final Long id) {
+        this.id = id;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public Bank getBank() {
+        return bank;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setBank(final Bank bank) {
+        this.bank = bank;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public void setCode(final String code) {
+        this.code = code;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getAddress2() {
-		return address2;
-	}
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-	public void setAddress2(String address2) {
-		this.address2 = address2;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public void setAddress(final String address) {
+        this.address = address;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public String getAddress2() {
+        return address2;
+    }
 
-	public String getState() {
-		return state;
-	}
+    public void setAddress2(final String address2) {
+        this.address2 = address2;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public String getPincode() {
-		return pincode;
-	}
+    public void setCity(final String city) {
+        this.city = city;
+    }
 
-	public void setPincode(String pincode) {
-		this.pincode = pincode;
-	}
+    public String getState() {
+        return state;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public void setState(final String state) {
+        this.state = state;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public String getPincode() {
+        return pincode;
+    }
 
-	public String getFax() {
-		return fax;
-	}
+    public void setPincode(final String pincode) {
+        this.pincode = pincode;
+    }
 
-	public void setFax(String fax) {
-		this.fax = fax;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public String getContactPerson() {
-		return contactPerson;
-	}
+    public void setPhone(final String phone) {
+        this.phone = phone;
+    }
 
-	public void setContactPerson(String contactPerson) {
-		this.contactPerson = contactPerson;
-	}
+    public String getFax() {
+        return fax;
+    }
 
-	public boolean isActive() {
-		return active;
-	}
+    public void setFax(final String fax) {
+        this.fax = fax;
+    }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+    public String getContactPerson() {
+        return contactPerson;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setContactPerson(final String contactPerson) {
+        this.contactPerson = contactPerson;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public boolean isActive() {
+        return active;
+    }
 
-	public String getMicr() {
-		return micr;
-	}
+    public void setActive(final boolean active) {
+        this.active = active;
+    }
 
-	public void setMicr(String micr) {
-		this.micr = micr;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public AuditDetails getAuditDetails() {
-		return auditDetails;
-	}
+    public void setDescription(final String description) {
+        this.description = description;
+    }
 
-	public void setAuditDetails(AuditDetails auditDetails) {
-		this.auditDetails = auditDetails;
-	}
-	
-	
+    public String getMicr() {
+        return micr;
+    }
+
+    public void setMicr(final String micr) {
+        this.micr = micr;
+    }
+
+    public AuditDetails getAuditDetails() {
+        return auditDetails;
+    }
+
+    public void setAuditDetails(final AuditDetails auditDetails) {
+        this.auditDetails = auditDetails;
+    }
 
 }

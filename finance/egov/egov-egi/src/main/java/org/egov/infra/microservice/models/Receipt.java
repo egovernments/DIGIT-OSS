@@ -8,19 +8,24 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Receipt {
+    @SafeHtml
     @NotNull
     private String tenantId;
-
+    @SafeHtml
     private String transactionId;
 
     // Read only, populated during search
+    @SafeHtml
     private String receiptNumber;
 
     // Read only, populated during search
+    @SafeHtml
     private String consumerCode;
 
     // Read only, populated during search
@@ -38,31 +43,49 @@ public class Receipt {
     private Instrument instrument;
     
     @JsonIgnore
+    @SafeHtml
     private String paymentId;
     
     @JsonIgnore
     private Date remittedOn;
     
     @JsonIgnore
+    @SafeHtml
     private String remitterId;
     
     @JsonIgnore
+    @SafeHtml
     private String bankName;
     
     @JsonIgnore
+    @SafeHtml
     private String branchName;
     
     @JsonIgnore
+    @SafeHtml
     private String accNumber;
     
     @JsonIgnore
+    @SafeHtml
     private String payee;
     
     @JsonIgnore
+    @SafeHtml
     private String drawer;
     
     @JsonIgnore
+    @SafeHtml
     private String transactionNumber;
+    
+    private String service;
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
 
     public String getTenantId() {
         return tenantId;

@@ -52,64 +52,63 @@ import org.egov.commons.CVoucherHeader;
 import org.egov.infra.persistence.entity.Auditable;
 import org.egov.infra.workflow.entity.StateAware;
 import org.egov.model.instrument.InstrumentHeader;
-import org.egov.pims.commons.Position;
 
 public class ContraJournalVoucher extends StateAware implements Auditable {
 
-    private static final long serialVersionUID = 8375001509911609969L;
+	private static final long serialVersionUID = 8375001509911609969L;
 
-    private Long id;
+	private Long id;
 
-    private CVoucherHeader voucherHeaderId;
-    private Bankaccount fromBankAccountId;
-    private Bankaccount toBankAccountId;
-    private InstrumentHeader instrumentHeaderId;
+	private CVoucherHeader voucherHeaderId;
+	private Bankaccount fromBankAccountId;
+	private Bankaccount toBankAccountId;
+	private InstrumentHeader instrumentHeaderId;
 
-    public CVoucherHeader getVoucherHeaderId() {
-        return voucherHeaderId;
-    }
+	public CVoucherHeader getVoucherHeaderId() {
+		return voucherHeaderId;
+	}
 
-    public void setVoucherHeaderId(final CVoucherHeader voucherHeaderId) {
-        this.voucherHeaderId = voucherHeaderId;
-    }
+	public void setVoucherHeaderId(final CVoucherHeader voucherHeaderId) {
+		this.voucherHeaderId = voucherHeaderId;
+	}
 
-    public Bankaccount getFromBankAccountId() {
-        return fromBankAccountId;
-    }
+	public Bankaccount getFromBankAccountId() {
+		return fromBankAccountId;
+	}
 
-    public void setFromBankAccountId(final Bankaccount fromBankAccountId) {
-        this.fromBankAccountId = fromBankAccountId;
-    }
+	public void setFromBankAccountId(final Bankaccount fromBankAccountId) {
+		this.fromBankAccountId = fromBankAccountId;
+	}
 
-    public Bankaccount getToBankAccountId() {
-        return toBankAccountId;
-    }
+	public Bankaccount getToBankAccountId() {
+		return toBankAccountId;
+	}
 
-    public void setToBankAccountId(final Bankaccount toBankAccountId) {
-        this.toBankAccountId = toBankAccountId;
-    }
+	public void setToBankAccountId(final Bankaccount toBankAccountId) {
+		this.toBankAccountId = toBankAccountId;
+	}
 
-    public InstrumentHeader getInstrumentHeaderId() {
-        return instrumentHeaderId;
-    }
+	public InstrumentHeader getInstrumentHeaderId() {
+		return instrumentHeaderId;
+	}
 
-    public void setInstrumentHeaderId(final InstrumentHeader instrumentHeaderId) {
-        this.instrumentHeaderId = instrumentHeaderId;
-    }
+	public void setInstrumentHeaderId(final InstrumentHeader instrumentHeaderId) {
+		this.instrumentHeaderId = instrumentHeaderId;
+	}
 
-    @Override
-    public String getStateDetails() {
-        return voucherHeaderId.getVoucherNumber();
-    }
+	@Override
+	public String getStateDetails() {
+		return voucherHeaderId.getVoucherNumber();
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    @Override
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	@Override
+	protected void setId(final Long id) {
+		this.id = id;
+	}
 
 }

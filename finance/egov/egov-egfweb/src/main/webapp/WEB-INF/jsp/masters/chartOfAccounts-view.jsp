@@ -66,6 +66,11 @@
 		var id = '<s:property value="coaId"/>';
 		document.chartOfAccountsForm.action = '${pageContext.request.contextPath}/masters/chartOfAccounts-addNewCoa.action?parentId='
 				+ id + "&model.id=" + id;
+		jQuery(chartOfAccountsForm).append(jQuery('<input>', {
+            type : 'hidden',
+            name : '${_csrf.parameterName}',
+            value : '${_csrf.token}'
+        }));
 		document.chartOfAccountsForm.submit();
 
 		return true;

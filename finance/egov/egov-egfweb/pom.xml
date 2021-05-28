@@ -52,7 +52,7 @@
     <parent>
         <artifactId>egov-erp</artifactId>
         <groupId>org.egov</groupId>
-        <version>3.0.0-COE-SNAPSHOT</version>
+        <version>3.0.1-COE-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -64,12 +64,12 @@
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-egf</artifactId>
-            <version>3.0.0-COE-SNAPSHOT</version>
+            <version>3.0.1-COE-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-egi</artifactId>
-            <version>3.0.0-COE-SNAPSHOT</version>
+            <version>3.0.1-COE-SNAPSHOT</version>
         </dependency>
 
         <!-- VIEWS RELATED END -->

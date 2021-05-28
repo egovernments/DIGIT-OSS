@@ -48,12 +48,14 @@
 
 package org.egov.infra.microservice.models;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class ChartOfAccounts {
 
     private Long id;
-
+    @SafeHtml
     private String glcode;
-
+    @SafeHtml
     private String name;
     
     private Boolean isSubLedger;

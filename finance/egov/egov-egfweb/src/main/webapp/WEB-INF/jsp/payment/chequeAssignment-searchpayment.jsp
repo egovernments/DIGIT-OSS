@@ -284,6 +284,7 @@
 					</tr>
 				</table>
 			</div>
+			<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="buttonbottom">
 			<s:hidden id="selectedRowsId" name="selectedRowsId"
 					value="%{selectedRowsId}" />
@@ -363,6 +364,13 @@
 						}
 				dom.get('departmentid').disabled=false;  
 				document.forms[0].action='${pageContext.request.contextPath}/payment/chequeAssignment-create.action';
+				jQuery(document.forms[0]).append(
+						jQuery('<input>', {
+                            type: 'hidden',
+                            name: '${_csrf.parameterName}',
+                            value: '${_csrf.token}'
+                        })
+                    );
 		    	document.forms[0].submit();
 				
 				return result;   
@@ -510,8 +518,9 @@
 					return true;
 				}
 				else {
+				var csrfToken = document.getElementById('csrfTokenValue').value;
 				var slNo = dom.get(name).options[dom.get(name).selectedIndex].value;
-				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo;
+				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo+'&_csrf='+csrfToken;
 				var transaction = YAHOO.util.Connect.asyncRequest('POST', url,callback , null);
 				}
 				return true;
@@ -560,9 +569,10 @@
 				{
 				name=name.replace("chequeNumber","serialNo");
 				}
+				var csrfToken = document.getElementById('csrfTokenValue').value;
 				var dept = dom.get('departmentid').options[dom.get('departmentid').selectedIndex].value;
 				var slNo = dom.get(name).options[dom.get(name).selectedIndex].value;
-				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateReassignSurrenderChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo;
+				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateReassignSurrenderChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo+'&_csrf='+csrfToken;
 				var transaction = YAHOO.util.Connect.asyncRequest('POST', url, callbackReassign, null);
 			}
 			var callback = {

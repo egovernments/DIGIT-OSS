@@ -80,10 +80,18 @@ $(document).ready(function()
 	
 	
 $('#approvalDepartment').change(function(){
-		
 		$.ajax({
 			url: "/services/EGF/designations",     
 			type:'GET',
+			data: {
+				approvalDepartment : $('#approvalDepartment').val(),
+				departmentRule : $('#approvalDepartment').find("option:selected").text(),
+				type : $('#stateType').val(),
+				currentState : $('#currentState').val(),
+				amountRule : $('#amountRule').val(),
+				additionalRule : $('#additionalRule').val(),
+				pendingAction : $('#pendingActions').val()
+			},
 			contentType:'application/json',
 			//data:JSON.stringify(jsonData),
 			success: function (response) {

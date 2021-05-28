@@ -152,7 +152,7 @@
 <body class="page-body" oncontextmenu="return false;" onload="loadDropDownCodesFunction();">
 	<jsp:include page="../template/header.jsp" />
 	<form:form role="form" action="create" modelAttribute="transactionSummaryDto" id="transactionSummaryform" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
-	
+	<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<jsp:include page="transactionsummary-form.jsp" />
 	
 	<table class="table table-bordered display-hide" id="result">

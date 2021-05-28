@@ -48,17 +48,6 @@
 
 package org.egov.infra.utils;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.text.RandomStringGenerator;
-import org.egov.infra.exception.ApplicationRuntimeException;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.toEncodedString;
 import static org.egov.infra.utils.ApplicationConstant.NA;
 import static org.egov.infra.utils.ApplicationConstant.NO;
@@ -68,72 +57,82 @@ import static org.egov.infra.utils.ApplicationConstant.YES;
 import static org.egov.infra.utils.DateUtils.currentDateToFileNameFormat;
 import static org.egov.infra.validation.regex.Constants.UNSIGNED_NUMERIC;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.RandomStringGenerator;
+import org.egov.infra.exception.ApplicationRuntimeException;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.errors.EncodingException;
+
 public class StringUtils extends org.apache.commons.lang.StringUtils {
 
-    public static final RandomStringGenerator UNIQUE_STRING_GENERATOR = new RandomStringGenerator.Builder()
-            .withinRange('a', 'z').build();
+	public static final RandomStringGenerator UNIQUE_STRING_GENERATOR = new RandomStringGenerator.Builder()
+			.withinRange('a', 'z').build();
 
-    public static String escapeSpecialChars(final String str) {
-        return str.replaceAll("\\s\\s+|\\r\\n", "<br/>").replaceAll("\'", "\\\\'");
-    }
+	public static String escapeSpecialChars(final String str) {
+		return str.replaceAll("\\s\\s+|\\r\\n", "<br/>").replaceAll("\'", "\\\\'");
+	}
 
-    public static String escapeJavaScript(final String str) {
-        return StringEscapeUtils.escapeJavaScript(str);
-    }
+	public static String escapeJavaScript(final String str) {
+		return StringEscapeUtils.escapeJavaScript(str);
+	}
 
-    public static String emptyIfNull(final String value) {
-        return value == null ? EMPTY : value;
-    }
+	public static String emptyIfNull(final String value) {
+		return value == null ? EMPTY : value;
+	}
 
-    public static List<String> toList(final String... values) {
-        return Arrays.asList(values);
-    }
+	public static List<String> toList(final String... values) {
+		return Arrays.asList(values);
+	}
 
-    public static String encodeString(String string) {
-        return toEncodedString(string.getBytes(), Charset.forName("UTF-8"));
-    }
+	public static String encodeString(String string) {
+		return toEncodedString(string.getBytes(), StandardCharsets.UTF_8);
+	}
 
-    public static String[] listToStringArray(List<String> values) {
-        return values.stream().toArray(String[]::new);
-    }
+	public static String[] listToStringArray(List<String> values) {
+		return values.stream().toArray(String[]::new);
+	}
 
-    public static String toYesOrNo(boolean value) {
-        return value ? YES : NO;
-    }
+	public static String toYesOrNo(boolean value) {
+		return value ? YES : NO;
+	}
 
-    public static String defaultIfBlank(String value) {
-        return defaultIfBlank(value, NA);
-    }
+	public static String defaultIfBlank(String value) {
+		return defaultIfBlank(value, NA);
+	}
 
-    public static String appendTimestamp(String name) {
-        return new StringBuilder().append(name).append(UNDERSCORE).append(currentDateToFileNameFormat()).toString();
-    }
+	public static String appendTimestamp(String name) {
+		return new StringBuilder().append(name).append(UNDERSCORE).append(currentDateToFileNameFormat()).toString();
+	}
 
-    public static String append(String value, String append) {
-        return new StringBuilder().append(value).append(append).toString();
-    }
+	public static String append(String value, String append) {
+		return new StringBuilder().append(value).append(append).toString();
+	}
 
-    public static String prepend(String value, String prepend) {
-        return new StringBuilder().append(prepend).append(value).toString();
-    }
+	public static String prepend(String value, String prepend) {
+		return new StringBuilder().append(prepend).append(value).toString();
+	}
 
-    public static boolean isUnsignedNumber(String value) {
-        return isNotBlank(value) && value.matches(UNSIGNED_NUMERIC);
-    }
+	public static boolean isUnsignedNumber(String value) {
+		return isNotBlank(value) && value.matches(UNSIGNED_NUMERIC);
+	}
 
-    public static String stripExtraSpaces(String value) {
-        return value.trim().replaceAll("\\s{2,}", WHITESPACE);
-    }
+	public static String stripExtraSpaces(String value) {
+		return value.trim().replaceAll("\\s{2,}", WHITESPACE);
+	}
 
-    public static String uniqueString(int codePoint) {
-        return UNIQUE_STRING_GENERATOR.generate(codePoint);
-    }
+	public static String uniqueString(int codePoint) {
+		return UNIQUE_STRING_GENERATOR.generate(codePoint);
+	}
 
-    public static String encodeURL(String value) {
-        try {
-            return URLEncoder.encode(value, UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-            throw new ApplicationRuntimeException("Error occurred while encoding URL value", e);
-        }
-    }
+	public static String encodeURL(String value) {
+		try {
+			return ESAPI.encoder().encodeForURL(value);
+		} catch (EncodingException e) {
+			throw new ApplicationRuntimeException("Error occurred while encoding URL value", e);
+		}
+	}
 }

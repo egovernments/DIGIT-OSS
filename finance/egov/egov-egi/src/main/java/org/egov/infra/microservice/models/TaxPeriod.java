@@ -39,20 +39,22 @@
  */
 package org.egov.infra.microservice.models;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class TaxPeriod {
-
+    @SafeHtml
     private String id;
-
+    @SafeHtml
     private String tenantId;
 
     private Long fromDate;
 
     private Long toDate;
-
+    @SafeHtml
     private String service;
-
+    @SafeHtml
     private String code;
-
+    @SafeHtml
     private String financialYear;
 
     public String getId() {

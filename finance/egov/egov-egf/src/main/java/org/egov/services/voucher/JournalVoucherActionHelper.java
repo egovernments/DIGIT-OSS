@@ -83,6 +83,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.exilant.GLEngine.ChartOfAccounts;
 import com.exilant.GLEngine.Transaxtion;
+import com.exilant.exility.common.TaskFailedException;
 
 @Transactional(readOnly = true)
 @Service
@@ -114,7 +115,7 @@ public class JournalVoucherActionHelper {
 
     @Transactional
     public CVoucherHeader createVoucher(List<VoucherDetails> billDetailslist, List<VoucherDetails> subLedgerlist,
-            CVoucherHeader voucherHeader, VoucherTypeBean voucherTypeBean, WorkflowBean workflowBean) throws Exception {
+            CVoucherHeader voucherHeader, VoucherTypeBean voucherTypeBean, WorkflowBean workflowBean) {
         try {
             voucherHeader.setName(voucherTypeBean.getVoucherName());
             voucherHeader.setType(voucherTypeBean.getVoucherType());
@@ -139,19 +140,19 @@ public class JournalVoucherActionHelper {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
         return voucherHeader;
     }
 
     @Transactional
     public CVoucherHeader editVoucher(List<VoucherDetails> billDetailslist, List<VoucherDetails> subLedgerlist,
             CVoucherHeader voucherHeader, VoucherTypeBean voucherTypeBean, WorkflowBean workflowBean, String totaldbamount)
-            throws Exception {
+             {
         try {
             voucherHeader = voucherService.updateVoucherHeader(voucherHeader, voucherTypeBean);
 
@@ -188,11 +189,8 @@ public class JournalVoucherActionHelper {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
+        } catch (final TaskFailedException e) {
+          throw new ApplicationRuntimeException("preparing transactions for chartofaccounts");
         }
         return voucherHeader;
     }
@@ -358,11 +356,12 @@ public class JournalVoucherActionHelper {
         } catch (final ValidationException e) {
             LOGGER.error(e.getMessage(), e);
             throw e;
-        } catch (final Exception e) {
-            // handle engine exception
-            LOGGER.error(e.getMessage(), e);
-            throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-        }
+        } /*
+           * catch (final Exception e) { // handle engine exception
+           * LOGGER.error(e.getMessage(), e); throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Posted to Ledger " + voucherHeader.getId());
         return voucherHeader;

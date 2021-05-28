@@ -79,7 +79,7 @@ public class BudgetUsage {
     /**
      * @param id to set
      */
-    public void setId(final Long id) {
+    private void setId(final Long id) {
         this.id = id;
     }
 

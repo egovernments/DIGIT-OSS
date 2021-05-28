@@ -56,6 +56,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -71,10 +73,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @EqualsAndHashCode
 public class Payment {
+    @SafeHtml
     @Size(max=64)
     @JsonProperty("id")
     private String id;
 
+    @SafeHtml
     @NotNull
     @Size(max=64)
     @JsonProperty("tenantId")
@@ -87,6 +91,7 @@ public class Payment {
     @JsonProperty("totalAmountPaid")
     private BigDecimal totalAmountPaid;
 
+    @SafeHtml
     @Size(max=128)
     @JsonProperty("transactionNumber")
     private String transactionNumber;
@@ -102,6 +107,7 @@ public class Payment {
     @JsonProperty("instrumentDate")
     private Long instrumentDate;
 
+    @SafeHtml
     @Size(max=128)
     @JsonProperty("instrumentNumber")
     private String instrumentNumber;
@@ -109,6 +115,7 @@ public class Payment {
     @JsonProperty("instrumentStatus")
     private InstrumentStatusEnum instrumentStatus;
 
+    @SafeHtml
     @Size(max=64)
     @JsonProperty("ifscCode")
     private String ifscCode;
@@ -123,28 +130,34 @@ public class Payment {
     @Valid
     private List<PaymentDetail> paymentDetails;
 
+    @SafeHtml
     @Size(max=128)
     @NotNull
     @JsonProperty("paidBy")
     private String paidBy = null;
 
+    @SafeHtml
     @Size(max=64)
     @NotNull
     @JsonProperty("mobileNumber")
     private String mobileNumber = null;
 
+    @SafeHtml
     @Size(max=128)
     @JsonProperty("payerName")
     private String payerName = null;
 
+    @SafeHtml
     @Size(max=1024)
     @JsonProperty("payerAddress")
     private String payerAddress = null;
 
+    @SafeHtml
     @Size(max=64)
     @JsonProperty("payerEmail")
     private String payerEmail = null;
 
+    @SafeHtml
     @Size(max=64)
     @JsonProperty("payerId")
     private String payerId = null;

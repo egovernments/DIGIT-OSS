@@ -47,6 +47,11 @@
  */
 package org.egov.egf.web.controller.voucher;
 
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.egov.commons.CVoucherHeader;
 import org.egov.egf.utils.FinancialUtils;
 import org.egov.egf.voucher.service.JournalVoucherService;
@@ -54,17 +59,19 @@ import org.egov.eis.web.contract.WorkflowContainer;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 
 /**
  * @author venki
@@ -73,6 +80,7 @@ import java.util.Date;
 
 @Controller
 @RequestMapping(value = "/journalvoucher")
+@Validated
 public class CreateJournalVoucherController extends BaseVoucherController {
 
     private static final String JOURNALVOUCHER_FORM = "journalvoucher-form";
@@ -92,6 +100,11 @@ public class CreateJournalVoucherController extends BaseVoucherController {
     public CreateJournalVoucherController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
     }
+    
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+    	binder.setDisallowedFields("id");
+    }
 
     @Override
     protected void setDropDownValues(final Model model) {
@@ -99,7 +112,7 @@ public class CreateJournalVoucherController extends BaseVoucherController {
         model.addAttribute("voucherSubTypes", FinancialUtils.VOUCHER_SUBTYPES);
     }
 
-    @RequestMapping(value = "/newform", method = RequestMethod.GET)
+    @GetMapping(value = "/newform")
     public String showNewForm(@ModelAttribute("voucherHeader") final CVoucherHeader voucherHeader, final Model model,final HttpServletRequest request) {
         voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL);
         setDropDownValues(model);
@@ -111,9 +124,9 @@ public class CreateJournalVoucherController extends BaseVoucherController {
         return JOURNALVOUCHER_FORM;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@ModelAttribute("voucherHeader") final CVoucherHeader voucherHeader, final Model model,
-            final BindingResult resultBinder, final HttpServletRequest request, @RequestParam final String workFlowAction) {
+    @PostMapping(value = "/create")
+    public String create(@Valid @ModelAttribute("voucherHeader") final CVoucherHeader voucherHeader, final Model model,
+            final BindingResult resultBinder, final HttpServletRequest request, @RequestParam @SafeHtml final String workFlowAction) {
 
         voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL);
         voucherHeader.setEffectiveDate(voucherHeader.getVoucherDate());
@@ -161,8 +174,8 @@ public class CreateJournalVoucherController extends BaseVoucherController {
         }
     }
 
-    @RequestMapping(value = "/success", method = RequestMethod.GET)
-    public String showSuccessPage(@RequestParam("voucherNumber") final String voucherNumber, final Model model,
+    @GetMapping(value = "/success")
+    public String showSuccessPage(@RequestParam("voucherNumber") @SafeHtml final String voucherNumber, final Model model,
             final HttpServletRequest request) {
         final String workFlowAction = request.getParameter("workFlowAction");
         final String[] keyNameArray = request.getParameter("approverDetails").split(",");
@@ -170,7 +183,7 @@ public class CreateJournalVoucherController extends BaseVoucherController {
         String approverName = "";
         String currentUserDesgn = "";
         String nextDesign = "";
-        if (keyNameArray.length != 0 && keyNameArray.length > 0)
+        if (keyNameArray.length != 0 && keyNameArray.length > 0) {
             if (keyNameArray.length == 1)
                 id = Long.parseLong(keyNameArray[0].trim());
             else if (keyNameArray.length == 3) {
@@ -183,7 +196,7 @@ public class CreateJournalVoucherController extends BaseVoucherController {
                 currentUserDesgn = keyNameArray[2];
                 nextDesign = keyNameArray[3];
             }
-
+        }
         if (id != null)
             model.addAttribute("approverName", approverName);
         model.addAttribute("currentUserDesgn", currentUserDesgn);

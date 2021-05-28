@@ -59,12 +59,12 @@ public class BankBookEntry {
     public String voucherNumber;
     public Date voucherDate;
     public String particulars;
-    public  BigDecimal amount;
+    public BigDecimal amount;
     private BigDecimal creditAmount;
     private BigDecimal debitAmount;
     public String chequeNumber;
-    public  String chequeDate;
-    public   String type;
+    public String chequeDate;
+    public String type;
     private String chequeDetail;
     private String glCode;
     private BigDecimal receiptAmount;

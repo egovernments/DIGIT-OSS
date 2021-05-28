@@ -49,6 +49,7 @@ package org.egov.pims.dao;
 
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.pims.model.StatusMaster;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -63,6 +64,8 @@ import java.io.Serializable;
  */
 public class StatusMasterDAO implements Serializable
 {
+    private final static String STR_HIB_EXP = "Hibernate Exception : ";
+
 	@PersistenceContext
 	private EntityManager entityManager;
 	    
@@ -78,7 +81,7 @@ public class StatusMasterDAO implements Serializable
 			
 
 		}
-		catch (Exception e)
+		catch (HibernateException e)
 		{
 			
 			throw new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
@@ -92,7 +95,7 @@ public class StatusMasterDAO implements Serializable
 		{
 			getCurrentSession().saveOrUpdate(statusMaster);
 		}
-		catch (Exception e)
+		catch (HibernateException e)
 		{
 			
 			throw new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
@@ -109,7 +112,7 @@ public class StatusMasterDAO implements Serializable
 			
 
 		}
-		catch (Exception e)
+		catch (HibernateException e)
 		{
 			
 			throw new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
@@ -126,7 +129,7 @@ public class StatusMasterDAO implements Serializable
 
 			return sm ;
 		}
-		catch (Exception e)
+		catch (HibernateException e)
 		{
 				
 			throw new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
@@ -143,22 +146,10 @@ public class StatusMasterDAO implements Serializable
 				qry.setString("name", name);
 				return (StatusMaster)qry.uniqueResult();
 			}
-			catch (Exception e)
+			catch (HibernateException e)
 			{
 					throw new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
 			}
 
-
 	}
-
-
-
-
-
-
-	private final static String STR_HIB_EXP = "Hibernate Exception : ";
-
-
-
-
 }

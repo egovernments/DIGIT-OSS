@@ -48,6 +48,13 @@
 package org.egov.commons;
 
 import javax.persistence.Transient;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -56,12 +63,24 @@ import java.util.Set;
 public class CGeneralLedger implements Serializable {
 
     private Long id = null;
+    
+    @NotNull
     private Integer voucherlineId;
     private Date effectiveDate;
+    @NotNull
     private CChartOfAccounts glcodeId;
+    
+    @SafeHtml
+    @NotNull
+    @Length(max = 50)
     private String glcode;
+    @NotNull
+    @Digits(fraction = 2, integer = 10)
     private Double debitAmount;
+    @NotNull
+    @Digits(fraction = 2, integer = 10)
     private Double creditAmount;
+    @SafeHtml
     private String description;
     private CVoucherHeader voucherHeaderId;
     private Integer functionId;
@@ -94,7 +113,7 @@ public class CGeneralLedger implements Serializable {
     /**
      * @param id The id to set.
      */
-    public void setId(final Long id) {
+    private void setId(final Long id) {
         this.id = id;
     }
 

@@ -327,6 +327,11 @@
 			if(document.getElementById('voucherNumber')!=null && document.getElementById('voucherNumber').value!="")
 				{
 				document.voucherSearch.action='${pageContext.request.contextPath}/voucher/voucherSearch-search.action';
+				jQuery(voucherSearch).append(jQuery('<input>', {
+		            type : 'hidden',
+		            name : '${_csrf.parameterName}',
+		            value : '${_csrf.token}'
+		        }));
 	    		document.voucherSearch.submit();
 	    		return true;
 				}
@@ -337,6 +342,11 @@
 			else
 				{
 				document.voucherSearch.action='${pageContext.request.contextPath}/voucher/voucherSearch-search.action';
+				jQuery(voucherSearch).append(jQuery('<input>', {
+		            type : 'hidden',
+		            name : '${_csrf.parameterName}',
+		            value : '${_csrf.token}'
+		        }));
 	    		document.voucherSearch.submit();
 				return true;
 				}

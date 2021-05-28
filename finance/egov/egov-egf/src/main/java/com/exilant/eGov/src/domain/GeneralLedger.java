@@ -65,6 +65,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -111,8 +112,7 @@ public class GeneralLedger {
 
     @SuppressWarnings("deprecation")
     @Transactional
-    public void insert() throws SQLException,
-    TaskFailedException {
+    public void insert() throws TaskFailedException {
         final EGovernCommon commommethods = new EGovernCommon();
         Query pst = null;
         try {
@@ -130,27 +130,28 @@ public class GeneralLedger {
 
             if (functionId == null || functionId.equals(""))
                 functionId = null;
-            String insertQuery;
-            insertQuery = "INSERT INTO generalledger (id, voucherLineID, effectiveDate, glCodeID, "
-                    + "glCode, debitAmount, creditAmount,";
-            insertQuery += "description,voucherHeaderId,functionId) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			final StringBuilder insertQuery = new StringBuilder(
+					"INSERT INTO generalledger (id, voucherLineID, effectiveDate, glCodeID, ")
+							.append("glCode, debitAmount, creditAmount,description,voucherHeaderId,functionId)")
+							.append(" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             if (LOGGER.isInfoEnabled())
                 LOGGER.info(insertQuery);
-            pst = persistenceService.getSession().createSQLQuery(insertQuery);
-            pst.setBigInteger(0, BigInteger.valueOf(Long.valueOf(id)));
-            pst.setBigInteger(1,voucherLineId == null ?BigInteger.ZERO:BigInteger.valueOf(Long.valueOf(voucherLineId)));
-            pst.setTimestamp(2, dt);
-            pst.setBigInteger(3, glCodeId.equalsIgnoreCase("null") ? null : BigInteger.valueOf(Long.valueOf(glCodeId)));
-            pst.setString(4, glCode);
-            pst.setDouble(5, debitAmount.equalsIgnoreCase("null") ? null : Double.parseDouble(debitAmount));
-            pst.setDouble(6, creditAmount.equalsIgnoreCase("null") ? null : Double.parseDouble(creditAmount));
-            pst.setString(7, description);
-            pst.setBigInteger(8,
-                    voucherHeaderId.equalsIgnoreCase("null") ? null : BigInteger.valueOf(Long.valueOf(voucherHeaderId)));
-            pst.setBigInteger(9, functionId == null ? null : BigInteger.valueOf(Long.valueOf(functionId)));
-            pst.executeUpdate();
-        } catch (final Exception e) {
+			pst = persistenceService.getSession().createSQLQuery(insertQuery.toString());
+			pst.setBigInteger(0, BigInteger.valueOf(Long.valueOf(id)));
+			pst.setBigInteger(1,
+					voucherLineId == null ? BigInteger.ZERO : BigInteger.valueOf(Long.valueOf(voucherLineId)));
+			pst.setTimestamp(2, dt);
+			pst.setBigInteger(3, glCodeId.equalsIgnoreCase("null") ? null : BigInteger.valueOf(Long.valueOf(glCodeId)));
+			pst.setString(4, glCode);
+			pst.setDouble(5, debitAmount.equalsIgnoreCase("null") ? null : Double.parseDouble(debitAmount));
+			pst.setDouble(6, creditAmount.equalsIgnoreCase("null") ? null : Double.parseDouble(creditAmount));
+			pst.setString(7, description);
+			pst.setBigInteger(8, voucherHeaderId.equalsIgnoreCase("null") ? null
+					: BigInteger.valueOf(Long.valueOf(voucherHeaderId)));
+			pst.setBigInteger(9, functionId == null ? null : BigInteger.valueOf(Long.valueOf(functionId)));
+			pst.executeUpdate();
+        } catch (final ParseException e) {
             LOGGER.error(e.getMessage(), e);
             throw taskExc;
         } finally {
@@ -162,24 +163,24 @@ public class GeneralLedger {
      * Fucntion for update generalledger
      *
      * @param connection
+     * @throws TaskFailedException 
+     * @throws  
      * @throws SQLException
      */
     @Transactional
-    public void update() throws SQLException,
-    TaskFailedException {
+    public void update() throws TaskFailedException {
         try {
             final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             final SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
             created = formatter.format(sdf.parse(created));
             newUpdate();
-        } catch (final Exception e) {
+        } catch (final ParseException e) {
             LOGGER.error(e.getMessage(), e);
             throw taskExc;
         }
     }
 
-    public void newUpdate() throws TaskFailedException,
-    SQLException {
+    public void newUpdate() throws TaskFailedException {
         Query pstmt = null;
         final StringBuilder query = new StringBuilder(500);
         query.append("update generalledger set ");
@@ -204,34 +205,29 @@ public class GeneralLedger {
         final int lastIndexOfComma = query.lastIndexOf(",");
         query.deleteCharAt(lastIndexOfComma);
         query.append(" where id=?");
-        try {
-            int i = 1;
-            pstmt = persistenceService.getSession().createSQLQuery(query.toString());
-            if (voucherLineId != null)
-                pstmt.setString(i++, voucherLineId);
-            if (effectiveDate != null)
-                pstmt.setString(i++, effectiveDate);
-            if (glCodeId != null)
-                pstmt.setString(i++, glCodeId);
-            if (glCode != null)
-                pstmt.setString(i++, glCode);
-            if (debitAmount != null)
-                pstmt.setString(i++, debitAmount);
-            if (creditAmount != null)
-                pstmt.setString(i++, creditAmount);
-            if (description != null)
-                pstmt.setString(i++, description);
-            if (voucherHeaderId != null)
-                pstmt.setString(i++, voucherHeaderId);
-            if (functionId != null)
-                pstmt.setString(i++, functionId);
-            pstmt.setString(i++, id);
+        int i = 1;
+        pstmt = persistenceService.getSession().createSQLQuery(query.toString());
+        if (voucherLineId != null)
+            pstmt.setString(i++, voucherLineId);
+        if (effectiveDate != null)
+            pstmt.setString(i++, effectiveDate);
+        if (glCodeId != null)
+            pstmt.setString(i++, glCodeId);
+        if (glCode != null)
+            pstmt.setString(i++, glCode);
+        if (debitAmount != null)
+            pstmt.setString(i++, debitAmount);
+        if (creditAmount != null)
+            pstmt.setString(i++, creditAmount);
+        if (description != null)
+            pstmt.setString(i++, description);
+        if (voucherHeaderId != null)
+            pstmt.setString(i++, voucherHeaderId);
+        if (functionId != null)
+            pstmt.setString(i++, functionId);
+        pstmt.setString(i++, id);
 
-            pstmt.executeUpdate();
-        } catch (final Exception e) {
-            LOGGER.error("Exp in update: " + e.getMessage());
-            throw taskExc;
-        }
+        pstmt.executeUpdate();
     }
 
     /**
@@ -248,7 +244,7 @@ public class GeneralLedger {
      */
     public HashMap getRecoveryForSubLedgerNotInFund(final Integer ACCOUNTDETAILTYPE,
             final Integer ACCOUNTDETAILKEY, final Integer FUND, final Date date, final int status)
-                    throws SQLException, TaskFailedException {
+                     {
         final HashMap<String, BigDecimal> hmA = new HashMap<String, BigDecimal>();
         final HashMap<String, BigDecimal> hmB = new HashMap<String, BigDecimal>();
         HashMap<String, BigDecimal> hmFinal = new HashMap<String, BigDecimal>();
@@ -259,17 +255,20 @@ public class GeneralLedger {
         try {
 
             // Query1 - to get the sum of credit amount glcode wise
-            String selQuery = "SELECT GL.GLCODE as ACCOUNTCODE,SUM(GLD.AMOUNT) AS CREDITAMOUNT FROM VOUCHERHEADER VH,GENERALLEDGER GL,GENERALLEDGERDETAIL GLD "
-                    + " WHERE VH.FUNDID NOT IN (?) AND GLD.DETAILTYPEID= ? AND DETAILKEYID= ? AND VH.STATUS= ? AND GL.CREDITAMOUNT>0 "
-                    + " AND VH.ID=GL.VOUCHERHEADERID AND GL.ID=GLD.GENERALLEDGERID AND VH.VOUCHERDATE<= ? GROUP BY GL.GLCODE";
+			StringBuilder selQuery = new StringBuilder(
+					"SELECT GL.GLCODE as ACCOUNTCODE,SUM(GLD.AMOUNT) AS CREDITAMOUNT")
+							.append(" FROM VOUCHERHEADER VH,GENERALLEDGER GL,GENERALLEDGERDETAIL GLD ")
+							.append(" WHERE VH.FUNDID NOT IN (?) AND GLD.DETAILTYPEID= ? AND DETAILKEYID= ? AND VH.STATUS= ?")
+							.append(" AND GL.CREDITAMOUNT>0 AND VH.ID=GL.VOUCHERHEADERID AND GL.ID=GLD.GENERALLEDGERID")
+							.append(" AND VH.VOUCHERDATE<= ? GROUP BY GL.GLCODE");
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("query (CreditAmount)--> " + selQuery);
-            pst = persistenceService.getSession().createSQLQuery(selQuery);
-            pst.setInteger(0, FUND);
-            pst.setInteger(1, ACCOUNTDETAILTYPE);
-            pst.setInteger(2, ACCOUNTDETAILKEY);
-            pst.setInteger(3, status);
-            pst.setString(4, vDate);
+			pst = persistenceService.getSession().createSQLQuery(selQuery.toString());
+			pst.setInteger(0, FUND);
+			pst.setInteger(1, ACCOUNTDETAILTYPE);
+			pst.setInteger(2, ACCOUNTDETAILKEY);
+			pst.setInteger(3, status);
+			pst.setString(4, vDate);
             rs = pst.list();
             for (final Object[] element : rs)
                 hmA.put(element[0].toString(), new BigDecimal(element[1].toString()));
@@ -277,18 +276,20 @@ public class GeneralLedger {
                 LOGGER.debug("map size -------> " + hmA.size());
 
             // Query2 - to get the sum of debit amount glcode wise
-            selQuery = "SELECT GL.GLCODE AS GLCODE ,SUM(GLD.AMOUNT) AS DEBITAMOUNT FROM VOUCHERHEADER VH,GENERALLEDGER GL,GENERALLEDGERDETAIL GLD  "
-                    + " WHERE VH.FUNDID NOT IN (?)	AND GLD.DETAILTYPEID= ? AND DETAILKEYID= ? AND VH.STATUS= ? AND GL.DEBITAMOUNT>0 AND  "
-                    + " VH.ID=GL.VOUCHERHEADERID AND GL.ID=GLD.GENERALLEDGERID AND VH.VOUCHERDATE<= ? GROUP BY GL.GLCODE";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("query (DebitAmount)--> " + selQuery);
-            pst = persistenceService.getSession().createSQLQuery(selQuery);
-            pst.setInteger(0, FUND);
-            pst.setInteger(1, ACCOUNTDETAILTYPE);
-            pst.setInteger(2, ACCOUNTDETAILKEY);
-            pst.setInteger(3, status);
-            pst.setString(4, vDate);
-            rs = pst.list();
+			selQuery = new StringBuilder("SELECT GL.GLCODE AS GLCODE ,SUM(GLD.AMOUNT) AS DEBITAMOUNT")
+					.append(" FROM VOUCHERHEADER VH,GENERALLEDGER GL,GENERALLEDGERDETAIL GLD  ")
+					.append(" WHERE VH.FUNDID NOT IN (?)	AND GLD.DETAILTYPEID= ? AND DETAILKEYID= ? AND VH.STATUS= ?")
+					.append(" AND GL.DEBITAMOUNT>0 AND VH.ID=GL.VOUCHERHEADERID AND GL.ID=GLD.GENERALLEDGERID")
+					.append(" AND VH.VOUCHERDATE<= ? GROUP BY GL.GLCODE");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("query (DebitAmount)--> " + selQuery);
+			pst = persistenceService.getSession().createSQLQuery(selQuery.toString());
+			pst.setInteger(0, FUND);
+			pst.setInteger(1, ACCOUNTDETAILTYPE);
+			pst.setInteger(2, ACCOUNTDETAILKEY);
+			pst.setInteger(3, status);
+			pst.setString(4, vDate);
+			rs = pst.list();
             for (final Object[] elementB : rs)
                 hmB.put(elementB[0].toString(), new BigDecimal(elementB[1].toString()));
             if (LOGGER.isDebugEnabled())
@@ -319,11 +320,6 @@ public class GeneralLedger {
                             new BigDecimal(-1)));
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("hmCopy------>" + hmFinal);
-        } catch (final Exception e) {
-            LOGGER
-            .error("Exception in getRecoveryForSubLedgerNotInFund():"
-                    + e);
-            throw taskExc;
         } finally {
         }
         return hmFinal;
@@ -343,10 +339,10 @@ public class GeneralLedger {
      */
     public HashMap getRecoveryForSubLedger(final Integer ACCOUNTDETAILTYPE,
             final Integer ACCOUNTDETAILKEY, final Integer FUND, final Date date, final int status)
-                    throws SQLException, TaskFailedException {
-        final HashMap<String, BigDecimal> hmA = new HashMap<String, BigDecimal>();
-        final HashMap<String, BigDecimal> hmB = new HashMap<String, BigDecimal>();
-        HashMap<String, BigDecimal> hmFinal = new HashMap<String, BigDecimal>();
+                     {
+        final HashMap<String, BigDecimal> hmA = new HashMap<>();
+        final HashMap<String, BigDecimal> hmB = new HashMap<>();
+        HashMap<String, BigDecimal> hmFinal = new HashMap<>();
         Query pst = null;
         List<Object[]> rs = null;
         final SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
@@ -354,36 +350,40 @@ public class GeneralLedger {
         try {
 
             // Query1 - to get the sum of credit amount glcode wise
-            String selQuery = " SELECT GL.GLCODE as ACCOUNTCODE, SUM(GLD.AMOUNT) as CREDITAMOUNT FROM VOUCHERHEADER VH,GENERALLEDGER GL,GENERALLEDGERDETAIL GLD "
-                    + " WHERE VH.FUNDID= ?	AND GLD.DETAILTYPEID= ? AND DETAILKEYID= ? AND VH.STATUS= ? AND GL.CREDITAMOUNT>0 "
-                    + " AND VH.ID=GL.VOUCHERHEADERID AND GL.ID=GLD.GENERALLEDGERID AND VH.VOUCHERDATE<= ? GROUP BY GL.GLCODE";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("query (CreditAmount)--> " + selQuery);
-            pst = persistenceService.getSession().createSQLQuery(selQuery);
-            pst.setInteger(0, FUND);
-            pst.setInteger(1, ACCOUNTDETAILTYPE);
-            pst.setInteger(2, ACCOUNTDETAILKEY);
-            pst.setInteger(3, status);
-            pst.setString(4, vDate);
-            rs = pst.list();
+			StringBuilder selQuery = new StringBuilder(
+					" SELECT GL.GLCODE as ACCOUNTCODE, SUM(GLD.AMOUNT) as CREDITAMOUNT")
+							.append(" FROM VOUCHERHEADER VH,GENERALLEDGER GL,GENERALLEDGERDETAIL GLD ")
+							.append(" WHERE VH.FUNDID= ? AND GLD.DETAILTYPEID= ? AND DETAILKEYID= ? AND VH.STATUS= ? AND GL.CREDITAMOUNT>0 ")
+							.append(" AND VH.ID=GL.VOUCHERHEADERID AND GL.ID=GLD.GENERALLEDGERID AND VH.VOUCHERDATE<= ?")
+							.append(" GROUP BY GL.GLCODE");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("query (CreditAmount)--> " + selQuery);
+			pst = persistenceService.getSession().createSQLQuery(selQuery.toString());
+			pst.setInteger(0, FUND);
+			pst.setInteger(1, ACCOUNTDETAILTYPE);
+			pst.setInteger(2, ACCOUNTDETAILKEY);
+			pst.setInteger(3, status);
+			pst.setString(4, vDate);
+			rs = pst.list();
             for (final Object[] element : rs)
                 hmA.put(element[0].toString(), new BigDecimal(element[1].toString()));
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("map size -------> " + hmA.size());
 
             // Query2 - to get the sum of debit amount glcode wise
-            selQuery = "SELECT GL.GLCODE as GLCODE, SUM(GLD.AMOUNT) as DEBITAMOUNT FROM VOUCHERHEADER VH,GENERALLEDGER GL,GENERALLEDGERDETAIL GLD  "
-                    + "WHERE VH.FUNDID= ? AND GLD.DETAILTYPEID= ? AND DETAILKEYID= ? AND VH.STATUS= ? AND GL.DEBITAMOUNT>0 AND "
-                    + "VH.ID=GL.VOUCHERHEADERID AND GL.ID=GLD.GENERALLEDGERID AND VH.VOUCHERDATE<= ? GROUP BY GL.GLCODE";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("query (DebitAmount)--> " + selQuery);
-            pst = persistenceService.getSession().createSQLQuery(selQuery);
-            pst.setInteger(0, FUND);
-            pst.setInteger(1, ACCOUNTDETAILTYPE);
-            pst.setInteger(2, ACCOUNTDETAILKEY);
-            pst.setInteger(3, status);
-            pst.setString(4, vDate);
-            rs = pst.list();
+			selQuery = new StringBuilder("SELECT GL.GLCODE as GLCODE, SUM(GLD.AMOUNT) as DEBITAMOUNT")
+					.append(" FROM VOUCHERHEADER VH,GENERALLEDGER GL,GENERALLEDGERDETAIL GLD  ")
+					.append("WHERE VH.FUNDID= ? AND GLD.DETAILTYPEID= ? AND DETAILKEYID= ? AND VH.STATUS= ? AND GL.DEBITAMOUNT>0 AND ")
+					.append("VH.ID=GL.VOUCHERHEADERID AND GL.ID=GLD.GENERALLEDGERID AND VH.VOUCHERDATE<= ? GROUP BY GL.GLCODE");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("query (DebitAmount)--> " + selQuery);
+			pst = persistenceService.getSession().createSQLQuery(selQuery.toString());
+			pst.setInteger(0, FUND);
+			pst.setInteger(1, ACCOUNTDETAILTYPE);
+			pst.setInteger(2, ACCOUNTDETAILKEY);
+			pst.setInteger(3, status);
+			pst.setString(4, vDate);
+			rs = pst.list();
             for (final Object[] element : rs)
                 hmB.put(element[0].toString(), new BigDecimal(element[1].toString()));
             if (LOGGER.isDebugEnabled())
@@ -411,9 +411,6 @@ public class GeneralLedger {
                             new BigDecimal(-1)));
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("hmCopy------>" + hmFinal);
-        } catch (final Exception e) {
-            LOGGER.error("Exception in getRecoveryForSubLedger():" + e);
-            throw taskExc;
         } finally {
         }
         return hmFinal;

@@ -87,31 +87,30 @@ public class IESchedules extends AbstractTask {
     }
 
     private void printSchedules(final DataCollection dc) throws TaskFailedException {
-        final String tableTime = dc.getValue("tableToDrop");
-        final String mainTable = "coaie" + tableTime;
-        final String report = "SELECT scheduleglCode AS \"glcode\", case when operation = 'L' then 'Less: ' else ' ' end  || schedulename AS \"name\", 'Schedule ' || schschedule || ': ' || summaryname || '[Code No ' || summaryglcode || ']' AS \"schTitle\", case when schschedule = NULL then '-' else schschedule AS \"schedule\", curYearAmount AS \"curyearamount\", preyearamount AS \"preyearamount\", operation AS \"operation\", TYPE AS \"type\" FROM "
-                + mainTable
-                + " WHERE TYPE = 'I' OR TYPE = 'E' ORDER BY scheduleglCode, TYPE, operation";
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        final ArrayList ar = new ArrayList();
-        double curAmt = 0, preAmt = 0, sumCur = 0, sumPre = 0;
-        String operation = "", schedule = "", preSchedule = "", title = "";
-        final String schTitle[] = new String[20];
-        int grids = 0, rowCount = 0, cnt = 0;
-        final int rows[] = new int[20];
+		final String tableTime = dc.getValue("tableToDrop");
+		final String mainTable = "coaie" + tableTime;
+		final StringBuilder report = new StringBuilder("SELECT scheduleglCode AS \"glcode\", case when operation = 'L'")
+				.append(" then 'Less: ' else ' ' end  || schedulename AS \"name\", 'Schedule ' || schschedule || ': ' ")
+				.append("|| summaryname || '[Code No ' || summaryglcode || ']' AS \"schTitle\", case when schschedule = NULL")
+				.append(" then '-' else schschedule AS \"schedule\", curYearAmount AS \"curyearamount\",")
+				.append(" preyearamount AS \"preyearamount\", operation AS \"operation\", TYPE AS \"type\" FROM ")
+				.append(mainTable).append(" WHERE TYPE = 'I' OR TYPE = 'E' ORDER BY scheduleglCode, TYPE, operation");
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		final ArrayList ar = new ArrayList();
+		double curAmt = 0, preAmt = 0, sumCur = 0, sumPre = 0;
+		String operation = "", schedule = "", preSchedule = "", title = "";
+		final String schTitle[] = new String[20];
+		int grids = 0, rowCount = 0, cnt = 0;
+		final int rows[] = new int[20];
 
-        final String sDate = dc.getValue("sDate") == null ? "start of FY" : dc
-                .getValue("sDate");
-        final String eDate = dc.getValue("eDate") == null ? "today" : dc
-                .getValue("eDate");
-        dc.addValue("pageTitle",
-                "Income & Expenditure Schedules For the period of " + sDate
-                + " to " + eDate);
+		final String sDate = dc.getValue("sDate") == null ? "start of FY" : dc.getValue("sDate");
+		final String eDate = dc.getValue("eDate") == null ? "today" : dc.getValue("eDate");
+		dc.addValue("pageTitle", "Income & Expenditure Schedules For the period of " + sDate + " to " + eDate);
 
-        try {
-            pst = conn.prepareStatement(report);
-            rs = pst.executeQuery();
+		try {
+			pst = conn.prepareStatement(report.toString());
+			rs = pst.executeQuery();
 
             while (rs.next()) {
                 curAmt = rs.getDouble("curyearamount");

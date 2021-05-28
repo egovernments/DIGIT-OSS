@@ -1586,14 +1586,14 @@ function paintCodes(responseText,autorow,menu,completeTable)
         clearTable(completeTable);
         
     }
-	var i=0;
+	/*var i=0;
 	while(codeArray[i] != null)
 	{
 	var accountcodes = codeArray[i];
 	appendCodes(accountcodes,completeTable);
 	i++;
 	
-	}
+	}*/
 	
 }//paintCodes
 

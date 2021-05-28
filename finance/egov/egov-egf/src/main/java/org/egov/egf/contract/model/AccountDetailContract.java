@@ -52,38 +52,36 @@ import java.util.List;
 
 import org.egov.commons.CGeneralLedger;
 import org.egov.commons.CGeneralLedgerDetail;
+import org.hibernate.validator.constraints.SafeHtml;
 
 public class AccountDetailContract {
 
     public AccountDetailContract() {
-		super();
-	}
+        super();
+    }
 
-	private Long id;
+    private Long id;
     private Long orderId;
+    @SafeHtml
     private String glcode;
     private Double debitAmount;
     private Double creditAmount;
     private FunctionContract function;
     private List<SubledgerDetailContract> subledgerDetails = new ArrayList<>(0);
 
-    public AccountDetailContract(CGeneralLedger gl) {
-		 this.id=gl.getId();
-		 this.glcode=gl.getGlcode();
-		 this.creditAmount=gl.getCreditAmount();
-		 this.debitAmount=gl.getDebitAmount();
-		 if(gl.getFunctionId()!=null)
-		 {
-			 this.function=new FunctionContract().id(new Long(gl.getFunctionId()));
-		 }
-		 for(CGeneralLedgerDetail sub:gl.getGeneralLedgerDetails())
-		 {
-			this.subledgerDetails.add( new SubledgerDetailContract(sub));
-		 }
-		 
-	}
+    public AccountDetailContract(final CGeneralLedger gl) {
+        id = gl.getId();
+        glcode = gl.getGlcode();
+        creditAmount = gl.getCreditAmount();
+        debitAmount = gl.getDebitAmount();
+        if (gl.getFunctionId() != null)
+            function = new FunctionContract().id(new Long(gl.getFunctionId()));
+        for (final CGeneralLedgerDetail sub : gl.getGeneralLedgerDetails())
+            subledgerDetails.add(new SubledgerDetailContract(sub));
 
-	public Long getId() {
+    }
+
+    public Long getId() {
         return id;
     }
 

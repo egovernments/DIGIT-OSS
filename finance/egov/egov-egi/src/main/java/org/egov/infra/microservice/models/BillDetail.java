@@ -45,36 +45,45 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class BillDetail {
+    @SafeHtml
     @JsonProperty("id")
     private String id = null;
 
+    @SafeHtml
     @JsonProperty("tenantId")
     private String tenantId = null;
 
+    @SafeHtml
     @JsonProperty("demandId")
     private String demandId = null;
 
+    @SafeHtml
     @JsonProperty("bill")
     private String bill = null;
 
+    @SafeHtml
     @JsonProperty("businessService")
     private String businessService = null;
 
+    @SafeHtml
     @JsonProperty("billNumber")
     private String billNumber = null;
-
+    
     @JsonProperty("billDate")
     private Long billDate = null;
 
+    @SafeHtml
     @JsonProperty("consumerCode")
     private String consumerCode = null;
 
+    @SafeHtml
     @JsonProperty("consumerType")
     private String consumerType = null;
 
@@ -106,48 +115,60 @@ public class BillDetail {
     @JsonProperty("additionalDetails")
     private JsonNode additionalDetails = null;
 
+    @SafeHtml
     @JsonProperty("receiptNumber")
     private String receiptNumber = null;
 
     @JsonProperty("receiptDate")
     private Long receiptDate = null;
 
+    @SafeHtml
     @JsonProperty("receiptType")
     private String receiptType = null;
 
+    @SafeHtml
     @JsonProperty("channel")
     private String channel = null;
 
+    @SafeHtml
     @JsonProperty("voucherHeader")
     private String voucherHeader = null;
 
+    @SafeHtml
     @JsonProperty("boundary")
     private String boundary = null;
 
+    @SafeHtml
     @JsonProperty("reasonForCancellation")
     private String reasonForCancellation = null;
 
+    @SafeHtml
     @JsonProperty("manualReceiptNumber")
     private String manualReceiptNumber = null;
 
     @JsonProperty("manualReceiptDate")
     private Long manualReceiptDate = null;
 
+    @SafeHtml
     @JsonProperty("stateId")
     private String stateId = null;
 
+    @SafeHtml
     @JsonProperty("fund")
     private String fund = null;
 
+    @SafeHtml
     @JsonProperty("function")
     private String function = null;
 
+    @SafeHtml
     @JsonProperty("department")
     private String department = null;
 
     @JsonProperty("billAccountDetails")
     private List<BillAccountDetail> billAccountDetails = null;
 
+    @SafeHtml
     @JsonProperty("status")
     private String status = null;
 
@@ -158,14 +179,16 @@ public class BillDetail {
     @JsonProperty("isAdvanceAllowed")
     private Boolean isAdvanceAllowed;
 
+    @SafeHtml
     private String billDescription;
 
     private Long expiryDate;
 
+    @SafeHtml
     private String displayMessage;
 
     private Boolean callBackForApportioning;
-
+    @SafeHtml
     private String cancellationRemarks;
 
     public Boolean addBillAccountDetail(BillAccountDetail billAccountDetail) {

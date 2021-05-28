@@ -100,8 +100,9 @@ function validateMandatoryFields(){
 }
 function getData(){
 	if(validateMandatoryFields()){
+		var csrfToken = document.getElementById('csrfTokenValue').value;
 		doLoadingMask();
-		var url = '/services/EGF/report/incomeExpenditureReport-ajaxPrintIncomeExpenditureReport.action?showDropDown=false&model.period='+document.getElementById('period').value+'&model.currency='+document.getElementById('currency').value+'&model.financialYear.id='+document.getElementById('financialYear').value+'&model.department.code='+document.getElementById('department').value+'&model.function.id='+document.getElementById('function').value+'&model.asOndate='+document.getElementById('asOndate').value+'&model.fund.id='+document.getElementById('fund').value;
+		var url = '/services/EGF/report/incomeExpenditureReport-ajaxPrintIncomeExpenditureReport.action?showDropDown=false&model.period='+document.getElementById('period').value+'&model.currency='+document.getElementById('currency').value+'&model.financialYear.id='+document.getElementById('financialYear').value+'&model.department.code='+document.getElementById('department').value+'&model.function.id='+document.getElementById('function').value+'&model.asOndate='+document.getElementById('asOndate').value+'&model.fund.id='+document.getElementById('fund').value+'&_csrf='+csrfToken;
 		YAHOO.util.Connect.asyncRequest('POST', url, callback, null);
 		return true;
     }
@@ -149,6 +150,7 @@ th.bluebgheadtd {
 		<div class="formmainbox">
 			<div class="formheading"></div>
 			<div class="subheadnew"><s:text name="lbl.income.expenditure.report"/> </div>
+			<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="10%" class="bluebox">&nbsp;</td>

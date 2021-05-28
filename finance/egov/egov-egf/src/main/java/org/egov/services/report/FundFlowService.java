@@ -65,11 +65,15 @@ import org.hibernate.type.BooleanType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mani
@@ -93,319 +97,291 @@ public class FundFlowService extends PersistenceService {
      * All amounts is in lakhs
      */
 
-    public List<FundFlowBean> getOutStandingPayments(final Date asPerDate, final Long fundId) {
-        final String voucherDate = sqlformat.format(asPerDate);
-        final List<AppConfigValues> appConfig = appConfigValuesService.getConfigValuesByModuleAndKey(Constants.EGF,
-                "VOUCHER_STATUS_TO_CHECK_BANK_BALANCE");
-        if (appConfig == null || appConfig.isEmpty())
-            throw new ValidationException("", "VOUCHER_STATUS_TO_CHECK_BANK_BALANCE is not defined in AppConfig");
+	public List<FundFlowBean> getOutStandingPayments(final Date asPerDate, final Long fundId) {
+		final String voucherDate = sqlformat.format(asPerDate);
+		final List<AppConfigValues> appConfig = appConfigValuesService.getConfigValuesByModuleAndKey(Constants.EGF,
+				"VOUCHER_STATUS_TO_CHECK_BANK_BALANCE");
+		if (appConfig == null || appConfig.isEmpty())
+			throw new ValidationException("", "VOUCHER_STATUS_TO_CHECK_BANK_BALANCE is not defined in AppConfig");
 
-        String appConfigValue = "";
-        boolean condtitionalAppConfigIsPresent = false;
-        String designationName = null;
-        String functionaryName = null;
-        String stateWithoutCondition = "";
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Before Appconfig Check ------");
-        for (final AppConfigValues app : appConfig)
-        {
-            appConfigValue = app.getValue();
-            if (appConfigValue.contains(FinancialConstants.DELIMITER_FOR_VOUCHER_STATUS_TO_CHECK_BANK_BALANCE))
-            {
-                condtitionalAppConfigIsPresent = true;
-                final String[] array = appConfigValue
-                        .split(FinancialConstants.DELIMITER_FOR_VOUCHER_STATUS_TO_CHECK_BANK_BALANCE);
-                if (array.length != 2)
-                    throw new ValidationException("", "VOUCHER_STATUS_TO_CHECK_BANK_BALANCE is invalid");
-                // Order assumed is first is designation Name, second functionary Name
-                designationName = array[0];
-                functionaryName = array[1];
-            } else
-                stateWithoutCondition = appConfigValue;
-        }
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("After Appconfig Check ------");
-        // get BPVs for the cuurent date which are in the workflow
-        StringBuffer outstandingPaymentQryStr = new StringBuffer(500);
-        if (condtitionalAppConfigIsPresent)
-        {
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("condtitionalAppConfigIsPresent ------");
-            outstandingPaymentQryStr =
-                    outstandingPaymentQryStr
-                    .
-                    append("SELECT DISTINCT( ba.accountnumber)      AS accountNumber ,  ROUND(SUM(ph.paymentamount)/100000,2) AS outStandingBPV"
-                            +
-                            " FROM voucherheader vh,paymentheader ph,bankaccount ba,eg_wf_states state, eg_eis_employeeinfo empinfo, "
-                            +
-                            " eg_designation desg, functionary func "
-                            +
-                            " where ph.state_id =state.id and empinfo.pos_id= state.owner and empinfo.functionary_id=func.id  and empinfo.isactive=true "
-                            +
-                            " and empinfo.DESIGNATIONID=desg.DESIGNATIONID and vh.id =ph.voucherheaderid and  ba.id=ph.bankaccountnumberid"
-                            +
-                            " and desg.DESIGNATION_NAME like '"
-                            + designationName
-                            + "' and func.NAME like '"
-                            + functionaryName + "' ");
-            if (fundId != null && fundId != -1)
-            {
-                outstandingPaymentQryStr.append(" and vh.fundid =" + fundId);
-                outstandingPaymentQryStr.append(" and ba.fundid =" + fundId);
-            }
-            outstandingPaymentQryStr.append(" and vh.voucherdate <='")
-            .append(voucherDate)
-            .append("'  and vh.voucherdate >='" + START_FINANCIALYEAR_DATE)
-            .append("' group by accountNumber  ");
-        }
-        else
-        {
-            outstandingPaymentQryStr =
-                    outstandingPaymentQryStr
-                    .
-                    append("SELECT DISTINCT( ba.accountnumber)      AS accountNumber ,  ROUND(SUM(ph.paymentamount)/100000,2) AS outStandingBPV"
-                            +
-                            " FROM voucherheader vh,paymentheader ph,bankaccount ba,eg_wf_states state where ph.state_id     =state.id "
-                            +
-                            "	and vh.id =ph.voucherheaderid and  ba.id=ph.bankaccountnumberid");
-            if (fundId != null && fundId != -1)
-            {
-                outstandingPaymentQryStr.append(" and vh.fundid =" + fundId);
-                outstandingPaymentQryStr.append(" and ba.fundid =" + fundId);
-            }
-            outstandingPaymentQryStr.append(" and vh.voucherdate <='")
-            .append(voucherDate)
-            .append("'  and vh.voucherdate >='" + START_FINANCIALYEAR_DATE)
-            .append("' and state.value like '")
-            .append(stateWithoutCondition)
-            .append("' group by accountNumber  ");
-        }
+		String appConfigValue = "";
+		boolean condtitionalAppConfigIsPresent = false;
+		String designationName = null;
+		String functionaryName = null;
+		String stateWithoutCondition = "";
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Before Appconfig Check ------");
+		for (final AppConfigValues app : appConfig) {
+			appConfigValue = app.getValue();
+			if (appConfigValue.contains(FinancialConstants.DELIMITER_FOR_VOUCHER_STATUS_TO_CHECK_BANK_BALANCE)) {
+				condtitionalAppConfigIsPresent = true;
+				final String[] array = appConfigValue
+						.split(FinancialConstants.DELIMITER_FOR_VOUCHER_STATUS_TO_CHECK_BANK_BALANCE);
+				if (array.length != 2)
+					throw new ValidationException("", "VOUCHER_STATUS_TO_CHECK_BANK_BALANCE is invalid");
+				// Order assumed is first is designation Name, second functionary Name
+				designationName = array[0];
+				functionaryName = array[1];
+			} else
+				stateWithoutCondition = appConfigValue;
+		}
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("After Appconfig Check ------");
+		// get BPVs for the cuurent date which are in the workflow
+		final StringBuilder outstandingPaymentQryStr = new StringBuilder();
+		final Map<String, Object> queryParams = new HashMap<>();
+		if (condtitionalAppConfigIsPresent) {
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("condtitionalAppConfigIsPresent ------");
+			outstandingPaymentQryStr.append("SELECT DISTINCT( ba.accountnumber)      AS accountNumber , ")
+					.append(" ROUND(SUM(ph.paymentamount)/100000,2) AS outStandingBPV")
+					.append(" FROM voucherheader vh,paymentheader ph,bankaccount ba,eg_wf_states state, eg_eis_employeeinfo empinfo, ")
+					.append(" eg_designation desg, functionary func ")
+					.append(" where ph.state_id =state.id and empinfo.pos_id= state.owner and empinfo.functionary_id=func.id ")
+					.append(" and empinfo.isactive=true ")
+					.append(" and empinfo.DESIGNATIONID=desg.DESIGNATIONID and vh.id =ph.voucherheaderid")
+					.append(" and  ba.id=ph.bankaccountnumberid").append(" and desg.DESIGNATION_NAME like :designation")
+					.append(" and func.NAME like :functionaryName ");
 
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Out Standing Payment Query " + outstandingPaymentQryStr.toString());
-        final Query outstandingQry = getSession().createSQLQuery(outstandingPaymentQryStr.toString())
-                .addScalar("accountNumber")
-                .addScalar("outStandingBPV")
-                .setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
-        return outstandingQry.list();
-    }
+			queryParams.put("designation", designationName);
+			queryParams.put("functionaryName", functionaryName);
 
-    public List<FundFlowBean> getConcurrancePayments(final Date asPerDate, final Long fundId) {
-        final String voucherDate = sqlformat.format(asPerDate);
-        final List<AppConfigValues> appConfig = appConfigValuesService.getConfigValuesByModuleAndKey(Constants.EGF,
-                "PAYMENT_WF_STATUS_FOR_BANK_BALANCE_CHECK");
-        if (appConfig == null || appConfig.isEmpty())
-            throw new ValidationException("", "PAYMENT_WF_STATUS_FOR_BANK_BALANCE_CHECK is not defined in AppConfig");
-        String voucherStatus = "";
-        final StringBuffer values = new StringBuffer(200);
-        for (final AppConfigValues app : appConfig)
-        {
-            values.append("'");
-            values.append(app.getValue());
-            values.append("',");
-        }
-        // need to ommit the last comma
-        voucherStatus = values.substring(0, values.length() - 1);
+			if (fundId != null && fundId != -1) {
+				outstandingPaymentQryStr.append(" and vh.fundid =:fundId");
+				outstandingPaymentQryStr.append(" and ba.fundid =:fundId");
+				queryParams.put("fundId", fundId);
+			}
+			outstandingPaymentQryStr.append(" and vh.voucherdate <=:voucherDate")
+					.append("  and vh.voucherdate >=:finStartDate").append(" group by accountNumber  ");
 
-        // get BPVs for the cuurent date which are in the workflow
-        StringBuffer conCurrancePaymentQryStr = new StringBuffer(500);
-        conCurrancePaymentQryStr =
-                conCurrancePaymentQryStr
-                .
-                append("SELECT DISTINCT( ba.accountnumber)      AS accountNumber ,  ROUND(SUM(ph.paymentamount)/100000,2) AS concurranceBPV"
-                        +
-                        " FROM voucherheader vh,paymentheader ph,bankaccount ba,eg_wf_states state where ph.state_id     =state.id "
-                        +
-                        "	and vh.id =ph.voucherheaderid and  ba.id=ph.bankaccountnumberid and  vh.voucherdate >='"
-                        + START_FINANCIALYEAR_DATE + "'");
+			queryParams.put("voucherDate", voucherDate);
+			queryParams.put("finStartDate", START_FINANCIALYEAR_DATE);
+		} else {
+			outstandingPaymentQryStr.append("SELECT DISTINCT( ba.accountnumber)      AS accountNumber , ")
+					.append(" ROUND(SUM(ph.paymentamount)/100000,2) AS outStandingBPV")
+					.append(" FROM voucherheader vh,paymentheader ph,bankaccount ba,eg_wf_states state")
+					.append(" where ph.state_id =state.id and vh.id =ph.voucherheaderid and  ba.id=ph.bankaccountnumberid");
+			if (fundId != null && fundId != -1) {
+				outstandingPaymentQryStr.append(" and vh.fundid = :fundId");
+				outstandingPaymentQryStr.append(" and ba.fundid = :fundId");
+				queryParams.put("fundid", fundId);
+			}
+			outstandingPaymentQryStr.append(" and vh.voucherdate <= :voucherDate")
+					.append("  and vh.voucherdate >= :finStartDate").append(" and state.value like ")
+					.append(stateWithoutCondition).append(" group by accountNumber  ");
 
-        if (fundId != null && fundId != -1)
-        {
-            conCurrancePaymentQryStr.append(" and vh.fundid =" + fundId);
-            conCurrancePaymentQryStr.append(" and ba.fundid =" + fundId);
-        }
-        conCurrancePaymentQryStr.append(" and to_char(created_date,'dd-Mon-yyyy') ='")
-        .append(voucherDate)
-        .append("' and ( state.value in (")
-        .append(voucherStatus)
-        .append(")OR vh.status=0 ) group by accountNumber  ");
+			queryParams.put("voucherDate", voucherDate);
+			queryParams.put("finStartDate", START_FINANCIALYEAR_DATE);
+		}
 
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Concurrancey payment " + conCurrancePaymentQryStr.toString());
-        final Query conCurranceQry = getSession().createSQLQuery(conCurrancePaymentQryStr.toString())
-                .addScalar("accountNumber")
-                .addScalar("concurranceBPV")
-                .setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
-        return conCurranceQry.list();
-    }
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Out Standing Payment Query " + outstandingPaymentQryStr.toString());
+		final Query outstandingQry = getSession().createSQLQuery(outstandingPaymentQryStr.toString())
+				.addScalar("accountNumber").addScalar("outStandingBPV")
+				.setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
+		queryParams.entrySet().forEach(entry -> outstandingQry.setParameter(entry.getKey(), entry.getValue()));
+		return outstandingQry.list();
+	}
+
+	public List<FundFlowBean> getConcurrancePayments(final Date asPerDate, final Long fundId) {
+		final String voucherDate = sqlformat.format(asPerDate);
+		final List<AppConfigValues> appConfig = appConfigValuesService.getConfigValuesByModuleAndKey(Constants.EGF,
+				"PAYMENT_WF_STATUS_FOR_BANK_BALANCE_CHECK");
+		if (appConfig == null || appConfig.isEmpty())
+			throw new ValidationException("", "PAYMENT_WF_STATUS_FOR_BANK_BALANCE_CHECK is not defined in AppConfig");
+		String voucherStatus = "";
+		final StringBuffer values = new StringBuffer(200);
+		for (final AppConfigValues app : appConfig) {
+			values.append("'");
+			values.append(app.getValue());
+			values.append("',");
+		}
+		// need to ommit the last comma
+		voucherStatus = values.substring(0, values.length() - 1);
+
+		// get BPVs for the cuurent date which are in the workflow
+		final StringBuilder conCurrancePaymentQryStr = new StringBuilder();
+		final Map<String, Object> queryParams = new HashMap<>();
+
+		conCurrancePaymentQryStr.append("SELECT DISTINCT( ba.accountnumber)      AS accountNumber , ")
+				.append(" ROUND(SUM(ph.paymentamount)/100000,2) AS concurranceBPV")
+				.append(" FROM voucherheader vh,paymentheader ph,bankaccount ba,eg_wf_states state where ph.state_id =state.id ")
+				.append("	and vh.id =ph.voucherheaderid and  ba.id=ph.bankaccountnumberid and  vh.voucherdate >= :finStartDate");
+
+		queryParams.put("finStartDate", START_FINANCIALYEAR_DATE);
+
+		if (fundId != null && fundId != -1) {
+			conCurrancePaymentQryStr.append(" and vh.fundid = :fundid");
+			conCurrancePaymentQryStr.append(" and ba.fundid = :fundid");
+			queryParams.put("fundid", fundId);
+		}
+		conCurrancePaymentQryStr.append(" and to_char(created_date,'dd-Mon-yyyy') =:voucherDate")
+				.append(" and ( state.value in (:voucherStatus) OR vh.status=0 ) group by accountNumber  ");
+
+		queryParams.put("voucherDate", voucherDate);
+		queryParams.put("voucherStatus", voucherStatus);
+
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Concurrancey payment " + conCurrancePaymentQryStr.toString());
+		final Query conCurranceQry = getSession().createSQLQuery(conCurrancePaymentQryStr.toString())
+				.addScalar("accountNumber").addScalar("concurranceBPV")
+				.setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
+		queryParams.entrySet().forEach(entry -> conCurranceQry.setParameter(entry.getKey(), entry.getValue()));
+		return conCurranceQry.list();
+	}
 
     /**
      * All Payment Bank Accounts
      */
-    public List<FundFlowBean> getAllpaymentAccounts(final Long fundId) {
-        final StringBuffer allPaymentAccounts = new StringBuffer(500);
-        allPaymentAccounts
-        .append("select ba.id as bankAccountId, ba.accountnumber as accountNumber, coa.glcode as glcode,b.code as bankName ,fd.name as fundName "
-                +
-                "from Chartofaccounts  coa,  fund fd, bankaccount ba left outer join bankbranch bb  on ba.branchid=bb.id left outer "
-                +
-                "join bank b on bb.bankid=b.id where  coa.id=ba.glcodeid and ba.fundid= fd.id and ba.isactive=true and ba.type in ('PAYMENTS','RECEIPTS_PAYMENTS') ");
-        if (fundId != null && fundId != -1)
-            allPaymentAccounts.append("and ba.fundid=" + fundId);
-        else
-            allPaymentAccounts.append(" order by fd.code,b.code,coa.glcode,ba.accountnumber");
+	public List<FundFlowBean> getAllpaymentAccounts(final Long fundId) {
+		final StringBuilder allPaymentAccounts = new StringBuilder();
+		allPaymentAccounts
+				.append("select ba.id as bankAccountId, ba.accountnumber as accountNumber, coa.glcode as glcode,")
+				.append("b.code as bankName ,fd.name as fundName ")
+				.append("from Chartofaccounts  coa,  fund fd, bankaccount ba left outer join bankbranch bb on ba.branchid=bb.id")
+				.append(" left outer join bank b on bb.bankid=b.id where  coa.id=ba.glcodeid and ba.fundid= fd.id")
+				.append(" and ba.isactive=true and ba.type in ('PAYMENTS','RECEIPTS_PAYMENTS') ");
+		if (fundId != null && fundId != -1)
+			allPaymentAccounts.append("and ba.fundid = :fundid");
+		else
+			allPaymentAccounts.append(" order by fd.code,b.code,coa.glcode,ba.accountnumber");
 
-        final Query allPaymentAccountsQry = getSession().createSQLQuery(allPaymentAccounts.toString())
-                .addScalar("bankAccountId")
-                .addScalar("accountNumber")
-                .addScalar("glcode")
-                .addScalar("bankName")
-                .addScalar("fundName")
-                .setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
-        return allPaymentAccountsQry.list();
-    }
+		final Query allPaymentAccountsQry = getSession().createSQLQuery(allPaymentAccounts.toString())
+				.addScalar("bankAccountId").addScalar("accountNumber").addScalar("glcode").addScalar("bankName")
+				.addScalar("fundName").setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
+		if (fundId != null && fundId != -1)
+			allPaymentAccountsQry.setParameter("fundid", fundId);
+		return allPaymentAccountsQry.list();
+	}
 
-    /**
-     * get All Receipt Bank Accounts for the selected Fund
-     *
-     */
-    public List<FundFlowBean> getAllReceiptAccounts(final Long fundId) {
-        final StringBuffer allAccounts = new StringBuffer(500);
-        allAccounts
-        .append("select ba.id as bankAccountId, ba.accountnumber as accountNumber, coa.glcode as glcode,b.code as bankName ,fd.name as fundName, "
-                +
-                " case when ba.narration = null then 0 else (case when instr(ba.narration,'"
-                + FinancialConstants.BANKACCOUNT_WALKIN_PAYMENT_DESCRIPTION
-                + "',1)  = 1 then 1 else 0 end ) end as walkinPaymentAccount "
-                +
-                " from Chartofaccounts  coa, fund fd, bankaccount ba left outer join bankbranch bb  on ba.branchid=bb.id left outer "
-                +
-                " join bank b on bb.bankid=b.id where coa.id=ba.glcodeid and ba.fundid= fd.id and ba.isactive=true and ba.type in ('RECEIPTS') ");
-        if (fundId != null && fundId != -1)
-            allAccounts.append(" and ba.fundid=" + fundId);
-        else
-            allAccounts.append(" order by fd.code, walkinPaymentAccount, b.code,coa.glcode,ba.accountnumber");
-        final Query allAccountsQry = getSession().createSQLQuery(allAccounts.toString())
-                .addScalar("bankAccountId")
-                .addScalar("accountNumber")
-                .addScalar("glcode")
-                .addScalar("bankName")
-                .addScalar("fundName")
-                .addScalar("walkinPaymentAccount", BooleanType.INSTANCE)
-                .setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
-        final List<FundFlowBean> allAccountslist = allAccountsQry.list();
-        return allAccountslist;
+	/**
+	 * get All Receipt Bank Accounts for the selected Fund
+	 *
+	 */
+	public List<FundFlowBean> getAllReceiptAccounts(final Long fundId) {
+		final StringBuilder allAccounts = new StringBuilder();
+		allAccounts.append("select ba.id as bankAccountId, ba.accountnumber as accountNumber, coa.glcode as glcode,")
+				.append("b.code as bankName ,fd.name as fundName, ")
+				.append(" case when ba.narration = null then 0 else (")
+				.append(String.format("case when instr(ba.narration,%s",
+						FinancialConstants.BANKACCOUNT_WALKIN_PAYMENT_DESCRIPTION))
+				.append(",1)  = 1 then 1 else 0 end ) end as walkinPaymentAccount ")
+				.append(" from Chartofaccounts  coa, fund fd, bankaccount ba left outer join bankbranch bb")
+				.append(" on ba.branchid=bb.id left outer ")
+				.append(" join bank b on bb.bankid=b.id where coa.id=ba.glcodeid and ba.fundid= fd.id")
+				.append(" and ba.isactive=true and ba.type in ('RECEIPTS') ");
+		if (fundId != null && fundId != -1)
+			allAccounts.append(" and ba.fundid=:fundid");
+		else
+			allAccounts.append(" order by fd.code, walkinPaymentAccount, b.code,coa.glcode,ba.accountnumber");
+		final Query allAccountsQry = getSession().createSQLQuery(allAccounts.toString()).addScalar("bankAccountId")
+				.addScalar("accountNumber").addScalar("glcode").addScalar("bankName").addScalar("fundName")
+				.addScalar("walkinPaymentAccount", BooleanType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
+		if (fundId != null && fundId != -1)
+			allAccountsQry.setParameter("fundid", fundId);
 
-    }
+		final List<FundFlowBean> allAccountslist = allAccountsQry.list();
+		return allAccountslist;
+
+	}
 
     /**
      * @return
      */
-    public List<FundFlowBean> getContraReceiptsForTheDay(final Date asPerDate, final Long fundId) {
-        final String voucherDate = sqlformat.format(asPerDate);
-        StringBuffer temp = new StringBuffer(1000);
-        temp = temp
-                .append(" SELECT gl.glcodeid as codeId, ba.accountnumber as accountNumber, b.name as bankName,round(SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end)/100000,2) AS btbReceipt FROM"
-                        +
-                        " contrajournalvoucher CV  , voucherheader vh ,  generalledger gl, bankaccount ba, bankbranch bb,bank b WHERE ");
-        if (fundId != null && fundId != -1)
-            temp.append(" vh.fundid =" + fundId + " AND ba.fundid         =" + fundId + " and");
-        temp.append(" vh.voucherdate    ='" + voucherDate + "'and gl.voucherheaderid= vh.id " +
-                "  and vh.name in ('" + FinancialConstants.CONTRAVOUCHER_NAME_BTOB + "','"
-                + FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND + "') " +
-                "  and cv.voucherheaderid=vh.id and ba.id= cv.tobankaccountid and ba.glcodeid= gl.glcodeid AND vh.status =0   " +
-                "  and bb.bankid= b.id and ba.branchid=bb.id GROUP BY GL.GLCODEID,ba.accountnumber,b.name");
+	public List<FundFlowBean> getContraReceiptsForTheDay(final Date asPerDate, final Long fundId) {
+		final String voucherDate = sqlformat.format(asPerDate);
+		final StringBuilder temp = new StringBuilder();
+		temp.append(" SELECT gl.glcodeid as codeId, ba.accountnumber as accountNumber, b.name as bankName,").append(
+				"round(SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end)/100000,2) AS btbReceipt FROM")
+				.append(" contrajournalvoucher CV  , voucherheader vh ,  generalledger gl, bankaccount ba, bankbranch bb,bank b WHERE ");
+		if (fundId != null && fundId != -1)
+			temp.append(" vh.fundid =:fundId AND ba.fundid =:fundId and");
+		temp.append(" vh.voucherdate :voucherDate and gl.voucherheaderid= vh.id  and vh.name in (:vhName) ").append(
+				"  and cv.voucherheaderid=vh.id and ba.id= cv.tobankaccountid and ba.glcodeid= gl.glcodeid AND vh.status =0 ")
+				.append("  and bb.bankid= b.id and ba.branchid=bb.id GROUP BY GL.GLCODEID,ba.accountnumber,b.name");
 
-        List<FundFlowBean> tempPayList;
-        final Query tempQry = getSession().createSQLQuery(temp.toString())
-                .addScalar("accountNumber")
-                .addScalar("bankName")
-                .addScalar("btbReceipt")
-                .setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
-        tempPayList = tempQry.list();
-        return tempPayList;
-    }
+		List<FundFlowBean> tempPayList;
+		final Query tempQry = getSession().createSQLQuery(temp.toString()).addScalar("accountNumber")
+				.addScalar("bankName").addScalar("btbReceipt")
+				.setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
+		if (fundId != null && fundId != -1)
+			tempQry.setParameter("fundId", fundId);
+		tempQry.setParameter("voucherDate", voucherDate);
+		tempQry.setParameterList("vhName", Arrays.asList(FinancialConstants.CONTRAVOUCHER_NAME_BTOB,
+				FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND));
+		tempPayList = tempQry.list();
+		return tempPayList;
+	}
 
-    /**
-     * get Receipt Bank Accounts of selected Fund which has Contra payment for current day
-     * @param voucherDate
-     * @return
-     */
-    public List<FundFlowBean> getContraPaymentsForTheDay(final Date asPerDate, final Long fundId) {
-        final String voucherDate = sqlformat.format(asPerDate);
-        StringBuffer qry = new StringBuffer(1000);
-        qry = qry
-                .append(" SELECT gl.glcodeid as codeId, ba.accountnumber as accountNumber, b.name as bankName, round(SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end)/100000,2) AS btbPayment FROM"
-                        +
-                        " contrajournalvoucher CV  , voucherheader vh ,  generalledger gl, bankaccount ba, bankbranch bb,bank b WHERE ");
-        if (fundId != null && fundId != -1)
-            qry.append(" vh.fundid =" + fundId + " AND ba.fundid         =" + fundId + " and ");
-        qry.append("vh.voucherdate    ='"
-                + voucherDate
-                + "'and gl.voucherheaderid= vh.id "
-                +
-                "  and vh.name in ('"
-                + FinancialConstants.CONTRAVOUCHER_NAME_BTOB
-                + "','"
-                + FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND
-                + "') "
-                +
-                "  and cv.voucherheaderid=vh.id and ba.id= cv.frombankaccountid and ba.glcodeid= gl.glcodeid AND vh.status =0  and ba.fundid=vh.fundid  "
-                +
-                "  and bb.bankid= b.id and ba.branchid=bb.id GROUP BY gl.glcodeId,ba.accountnumber,b.name ");
-        List<FundFlowBean> tempList;
-        final Query q = getSession().createSQLQuery(qry.toString())
-                .addScalar("accountNumber")
-                .addScalar("bankName")
-                .addScalar("btbPayment")
-                .setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
-        tempList = q.list();
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("account containg transactions ------" + tempList.size());
-        return tempList;
-    }
+	/**
+	 * get Receipt Bank Accounts of selected Fund which has Contra payment for
+	 * current day
+	 * 
+	 * @param voucherDate
+	 * @return
+	 */
+	public List<FundFlowBean> getContraPaymentsForTheDay(final Date asPerDate, final Long fundId) {
+		final String voucherDate = sqlformat.format(asPerDate);
+		final StringBuilder qry = new StringBuilder();
+		qry.append(" SELECT gl.glcodeid as codeId, ba.accountnumber as accountNumber, b.name as bankName, ").append(
+				"round(SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end)/100000,2) AS btbPayment FROM")
+				.append(" contrajournalvoucher CV  , voucherheader vh ,  generalledger gl, bankaccount ba, bankbranch bb,bank b WHERE ");
+		if (fundId != null && fundId != -1)
+			qry.append(" vh.fundid = :fundId AND ba.fundid = :fundId and ");
+		qry.append("vh.voucherdate = :voucherDate and gl.voucherheaderid = vh.id and vh.name in (:vhName) ")
+				.append("  and cv.voucherheaderid=vh.id and ba.id= cv.frombankaccountid and ba.glcodeid= gl.glcodeid ")
+				.append("AND vh.status =0  and ba.fundid=vh.fundid  ")
+				.append("  and bb.bankid= b.id and ba.branchid=bb.id GROUP BY gl.glcodeId,ba.accountnumber,b.name ");
+		List<FundFlowBean> tempList;
+		final Query q = getSession().createSQLQuery(qry.toString()).addScalar("accountNumber").addScalar("bankName")
+				.addScalar("btbPayment").setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
+		if (fundId != null && fundId != -1)
+			q.setParameter("fundId", fundId);
+		q.setParameter("voucherDate", voucherDate);
+		q.setParameterList("vhName", Arrays.asList(FinancialConstants.CONTRAVOUCHER_NAME_BTOB,
+				FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND));
+		tempList = q.list();
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("account containg transactions ------" + tempList.size());
+		return tempList;
+	}
 
-    /**
-     * get Receipt Bank Accounts of selected Fund which has Contra payment for current day When you use contraJournal voucher put
-     * fund condition for voucherheader which will remove duplicate entry duplicate is coming since Interfund transfer creates two
-     * vouchers with two different funds.
-     * @param voucherDate
-     * @return
-     */
-    public List<FundFlowBean> getContraPaymentsForTheDayFromPaymentBanks(final Date asPerDate, final Long fundId) {
-        final String voucherDate = sqlformat.format(asPerDate);
-        StringBuffer qry = new StringBuffer(1000);
-        qry = qry
-                .append(" SELECT gl.glcodeid as codeId, ba.accountnumber as accountNumber, b.name as bankName, round(SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end)/100000,2) AS btbPayment FROM"
-                        +
-                        " contrajournalvoucher CV  , voucherheader vh ,  generalledger gl, bankaccount ba, bankbranch bb,bank b WHERE  ");
-        if (fundId != null && fundId != -1)
-            qry = qry.append(" vh.fundid =" + fundId + " AND ba.fundid =" + fundId + " and ");
-        qry = qry
-                .append(" vh.voucherdate    ='"
-                        + voucherDate
-                        + "'and gl.voucherheaderid= vh.id "
-                        +
-                        "  and vh.name in ('"
-                        + FinancialConstants.CONTRAVOUCHER_NAME_BTOB
-                        + "','"
-                        + FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND
-                        + "') "
-                        +
-                        "  and cv.voucherheaderid=vh.id and ba.id= cv.frombankaccountid and ba.glcodeid= gl.glcodeid AND vh.status =0 and ba.fundid=vh.fundid  "
-                        +
-                        "  and bb.bankid= b.id and ba.branchid=bb.id GROUP BY gl.glcodeId,ba.accountnumber,b.name");
-        List<FundFlowBean> tempList;
-        final Query q = getSession().createSQLQuery(qry.toString())
-                .addScalar("accountNumber")
-                .addScalar("bankName")
-                .addScalar("btbPayment")
-                .setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
-        tempList = q.list();
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("account containg transactions ------" + tempList.size());
-        return tempList;
-    }
+	/**
+	 * get Receipt Bank Accounts of selected Fund which has Contra payment for
+	 * current day When you use contraJournal voucher put fund condition for
+	 * voucherheader which will remove duplicate entry duplicate is coming since
+	 * Interfund transfer creates two vouchers with two different funds.
+	 * 
+	 * @param voucherDate
+	 * @return
+	 */
+	public List<FundFlowBean> getContraPaymentsForTheDayFromPaymentBanks(final Date asPerDate, final Long fundId) {
+		final String voucherDate = sqlformat.format(asPerDate);
+		final StringBuilder qry = new StringBuilder();
+		qry.append(" SELECT gl.glcodeid as codeId, ba.accountnumber as accountNumber, b.name as bankName,").append(
+				" round(SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end)/100000,2) AS btbPayment FROM")
+				.append(" contrajournalvoucher CV  , voucherheader vh ,  generalledger gl, bankaccount ba, bankbranch bb,bank b WHERE  ");
+		if (fundId != null && fundId != -1)
+			qry.append(" vh.fundid =:fundId AND ba.fundid =:fundId and ");
+		qry.append(" vh.voucherdate    = :voucherDate and gl.voucherheaderid= vh.id ")
+				.append("  and vh.name in (:vhName) ")
+				.append("  and cv.voucherheaderid=vh.id and ba.id= cv.frombankaccountid and ba.glcodeid= gl.glcodeid")
+				.append(" AND vh.status =0 and ba.fundid=vh.fundid  ")
+				.append("  and bb.bankid= b.id and ba.branchid=bb.id GROUP BY gl.glcodeId,ba.accountnumber,b.name");
+		List<FundFlowBean> tempList;
+		final Query q = getSession().createSQLQuery(qry.toString()).addScalar("accountNumber").addScalar("bankName")
+				.addScalar("btbPayment").setResultTransformer(Transformers.aliasToBean(FundFlowBean.class));
+		if (fundId != null && fundId != -1)
+			q.setParameter("fundId", fundId);
+		q.setParameter("voucherDate", voucherDate);
+		q.setParameterList("vhName", Arrays.asList(FinancialConstants.CONTRAVOUCHER_NAME_BTOB,
+				FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND));
+		tempList = q.list();
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("account containg transactions ------" + tempList.size());
+		return tempList;
+	}
 
     public BigDecimal getBankBalance(final Long bankaccountId, Date asPerDate, final Long bankAccGlcodeId)
     {
@@ -420,7 +396,7 @@ public class FundFlowService extends PersistenceService {
             calfrom.set(Calendar.AM_PM, Calendar.AM);
             asPerDate = calfrom.getTime();
 
-        } catch (final Exception e) {
+        } catch (final ParseException e) {
             throw new ValidationException(Arrays.asList(new ValidationError("cannot.format.date",
                     "Failed during date Formatting ")));
         }
@@ -458,155 +434,145 @@ public class FundFlowService extends PersistenceService {
         return bankBalance;
     }
 
-    /**
-     * it is for single bankaccount
-     * @param asPerDate
-     * @param bankId TODO
-     * @param bankaccountId
-     */
-    private BigDecimal getContraPayment(final Long bankaccountId, final Date asPerDate, final Long accountGlcodeId) {
-        final StringBuffer qry = new StringBuffer(100);
-        if (accountGlcodeId != null)
-            qry.append(" select case when SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end) = null then 0 else SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end) end as payment from "
-                    +
-                    "  voucherheader vh, generalledger gl where vh.id=gl.voucherheaderid and gl.glcodeId="
-                    + accountGlcodeId
-                    +
-                    "  and vh.name in ('"
-                    + FinancialConstants.CONTRAVOUCHER_NAME_BTOB
-                    + "','"
-                    + FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND
-                    + "') "
-                    +
-                    "  and vh.fiscalperiodid in (select id from fiscalperiod where financialyearid=(select f.id from financialyear f where CURRENT_DATE between f.startingdate and f.endingdate))"
-                    +
-                    " and vh.voucherdate='" + sqlformat.format(asPerDate) + "'   and vh.status =0");
-        else
-            qry.append(" select case when SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end) = null then 0 else SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end) end as payment from BankAccount  acc,"
-                    +
-                    " voucherheader vh, generalledger gl where vh.id=gl.voucherheaderid and acc.glcodeId= gl.glcodeId "
-                    +
-                    "  and vh.name in ('"
-                    + FinancialConstants.CONTRAVOUCHER_NAME_BTOB
-                    + "','"
-                    + FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND
-                    + "') "
-                    +
-                    " and vh.voucherdate='"
-                    + sqlformat.format(asPerDate)
-                    + "'  and acc.id="
-                    + bankaccountId
-                    + " and vh.status =0");
-        final List list = getSession().createSQLQuery(qry.toString()).list();
-        final BigDecimal contraPayment = (BigDecimal) list.get(0);
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Contra Payments For BankId " + accountGlcodeId + " And Date " + sqlformat.format(asPerDate) + " is : "
-                    + contraPayment);
-        return contraPayment;
-    }
+	/**
+	 * it is for single bankaccount
+	 * 
+	 * @param asPerDate
+	 * @param bankId        TODO
+	 * @param bankaccountId
+	 */
+	private BigDecimal getContraPayment(final Long bankaccountId, final Date asPerDate, final Long accountGlcodeId) {
+		final StringBuilder qry = new StringBuilder();
+		final Map<String, Object> params = new HashMap<>();
+		if (accountGlcodeId != null) {
+			qry.append(
+					" select case when SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end) = null then 0")
+					.append(" else SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end) end as payment from ")
+					.append("  voucherheader vh, generalledger gl where vh.id=gl.voucherheaderid and gl.glcodeId=:glcode")
+					.append("  and vh.name in (:vhName) ")
+					.append("  and vh.fiscalperiodid in (select id from fiscalperiod where financialyearid=(select f.id")
+					.append(" from financialyear f where CURRENT_DATE between f.startingdate and f.endingdate))")
+					.append(" and vh.voucherdate=:voucherdate and vh.status =0");
+			params.put("glcode", accountGlcodeId);
+			params.put("vhName", Arrays.asList(FinancialConstants.CONTRAVOUCHER_NAME_BTOB,
+					FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND));
+			params.put("voucherdate", sqlformat.format(asPerDate));
+		} else {
+			qry.append(
+					" select case when SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end) = null then 0")
+					.append(" else SUM(case when gl.creditamount = NULL then 0 else gl.creditamount end) end as payment")
+					.append(" from BankAccount acc,")
+					.append(" voucherheader vh, generalledger gl where vh.id=gl.voucherheaderid and acc.glcodeId= gl.glcodeId ")
+					.append("  and vh.name in (:vhName) and vh.voucherdate=:voucherdate and acc.id=:bankaccountId and vh.status =0");
+			params.put("vhName", Arrays.asList(FinancialConstants.CONTRAVOUCHER_NAME_BTOB,
+					FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND));
+			params.put("voucherdate", sqlformat.format(asPerDate));
+			params.put("bankaccountId", bankaccountId);
+		}
+		final Query query = getSession().createSQLQuery(qry.toString());
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		final List list = query.list();
+		final BigDecimal contraPayment = (BigDecimal) list.get(0);
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Contra Payments For BankId " + accountGlcodeId + " And Date " + sqlformat.format(asPerDate)
+					+ " is : " + contraPayment);
+		return contraPayment;
+	}
 
-    /**
-     * it is for single bankaccount
-     * @param bankaccountId
-     * @param asPerDate
-     *
-     */
-    private BigDecimal getContraReceipt(final Long bankaccountId, final Date asPerDate, final Long accountGlcodeId) {
-        final StringBuffer qry = new StringBuffer(100);
-        if (accountGlcodeId != null)
-            qry.append(" select case when SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end) = null then 0 else SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end) end as receipt from "
-                    +
-                    " voucherheader vh, generalledger gl where vh.id=gl.voucherheaderid and gl.glcodeId="
-                    + accountGlcodeId
-                    +
-                    "  and vh.name in ('"
-                    + FinancialConstants.CONTRAVOUCHER_NAME_BTOB
-                    + "','"
-                    + FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND
-                    + "') "
-                    +
-                    "  and vh.fiscalperiodid in (select id from fiscalperiod where financialyearid=(select f.id from financialyear f where CURRENT_DATE between f.startingdate and f.endingdate))"
-                    +
-                    " and vh.voucherdate='" + sqlformat.format(asPerDate) + "'  and vh.status =0");
-        else
-            qry.append(" select case when SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end) = null then 0 else SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end) end as receipt from BankAccount acc,"
-                    +
-                    " voucherheader vh, generalledger gl where vh.id=gl.voucherheaderid and acc.glcodeid= gl.glcodeid "
-                    +
-                    "  and vh.name in ('"
-                    + FinancialConstants.CONTRAVOUCHER_NAME_BTOB
-                    + "','"
-                    + FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND
-                    + "') "
-                    +
-                    " and vh.voucherdate='"
-                    + sqlformat.format(asPerDate)
-                    + "'  and acc.id="
-                    + bankaccountId
-                    + " and vh.status =0");
-        final List list = getSession().createSQLQuery(qry.toString()).list();
-        final BigDecimal contraReceipt = (BigDecimal) list.get(0);
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Contra Receipt For BankId " + accountGlcodeId + " And Date " + sqlformat.format(asPerDate) + " is : "
-                    + contraReceipt);
-        return contraReceipt;
-    }
+	/**
+	 * it is for single bankaccount
+	 * 
+	 * @param bankaccountId
+	 * @param asPerDate
+	 *
+	 */
+	private BigDecimal getContraReceipt(final Long bankaccountId, final Date asPerDate, final Long accountGlcodeId) {
+		final StringBuilder qry = new StringBuilder();
+		final Map<String, Object> params = new HashMap<>();
+		if (accountGlcodeId != null) {
+			qry.append(
+					" select case when SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end) = null then")
+					.append(" 0 else SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end) end as receipt from ")
+					.append(" voucherheader vh, generalledger gl where vh.id=gl.voucherheaderid and gl.glcodeId=:glcode")
+					.append("  and vh.name in (:vhName) ")
+					.append("  and vh.fiscalperiodid in (select id from fiscalperiod where financialyearid=(select f.id")
+					.append(" from financialyear f where CURRENT_DATE between f.startingdate and f.endingdate))")
+					.append(" and vh.voucherdate = :voucherdate and vh.status =0");
+			params.put("glcode", accountGlcodeId);
+			params.put("vhName", Arrays.asList(FinancialConstants.CONTRAVOUCHER_NAME_BTOB,
+					FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND));
+			params.put("voucherdate", sqlformat.format(asPerDate));
+		} else {
+			qry.append(
+					" select case when SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end) = null then")
+					.append(" 0 else SUM(case when gl.debitamount = NULL then 0 else gl.debitamount end) end as receipt")
+					.append(" from BankAccount acc,")
+					.append(" voucherheader vh, generalledger gl where vh.id=gl.voucherheaderid and acc.glcodeid= gl.glcodeid ")
+					.append("  and vh.name in (:vhName) and vh.voucherdate=:voucherdate and acc.id=:bankaccountId and vh.status =0");
+			params.put("vhName", Arrays.asList(FinancialConstants.CONTRAVOUCHER_NAME_BTOB,
+					FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND));
+			params.put("voucherdate", sqlformat.format(asPerDate));
+			params.put("bankaccountId", bankaccountId);
+		}
+		final Query query = getSession().createSQLQuery(qry.toString());
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		final List list = query.list();
+		final BigDecimal contraReceipt = (BigDecimal) list.get(0);
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Contra Receipt For BankId " + accountGlcodeId + " And Date " + sqlformat.format(asPerDate)
+					+ " is : " + contraReceipt);
+		return contraReceipt;
+	}
 
-    /**
-     * it is for single bankaccount Will return the concurrence done for the day for the give bank account
-     * @param bankaccountId
-     * @param asPerDate
-     * @return
-     */
-    private BigDecimal getOutStandingPayment(final Long bankaccountId, final Date asPerDate)
-    {
-        final List<AppConfigValues> appConfig = appConfigValuesService.getConfigValuesByModuleAndKey(Constants.EGF,
-                "PAYMENT_WF_STATUS_FOR_BANK_BALANCE_CHECK");
-        if (appConfig == null || appConfig.isEmpty())
-            throw new ValidationException("", "PAYMENT_WF_STATUS_FOR_BANK_BALANCE_CHECK is not defined in AppConfig");
-        String voucherStatus = "";
-        final StringBuffer values = new StringBuffer(200);
-        for (final AppConfigValues app : appConfig)
-        {
-            values.append("'");
-            values.append(app.getValue());
-            values.append("',");
-        }
-        // need to ommit the last comma
-        voucherStatus = values.substring(0, values.length() - 1);
+	/**
+	 * it is for single bankaccount Will return the concurrence done for the day for
+	 * the give bank account
+	 * 
+	 * @param bankaccountId
+	 * @param asPerDate
+	 * @return
+	 */
+	private BigDecimal getOutStandingPayment(final Long bankaccountId, final Date asPerDate) {
+		final List<AppConfigValues> appConfig = appConfigValuesService.getConfigValuesByModuleAndKey(Constants.EGF,
+				"PAYMENT_WF_STATUS_FOR_BANK_BALANCE_CHECK");
+		if (appConfig == null || appConfig.isEmpty())
+			throw new ValidationException("", "PAYMENT_WF_STATUS_FOR_BANK_BALANCE_CHECK is not defined in AppConfig");
+		String voucherStatus = "";
+		final StringBuffer values = new StringBuffer(200);
+		for (final AppConfigValues app : appConfig) {
+			values.append("'");
+			values.append(app.getValue());
+			values.append("',");
+		}
+		// need to ommit the last comma
+		voucherStatus = values.substring(0, values.length() - 1);
 
-        StringBuffer outstandingPaymentQryStr = new StringBuffer(500);
-        outstandingPaymentQryStr =
-                outstandingPaymentQryStr
-                .
-                append("SELECT case when SUM(case when ph.paymentamount = null then 0 else ph.paymentamount end ) = null then 0 else SUM(case when ph.paymentamount = null then 0 else ph.paymentamount) end AS concurranceBPV"
-                        +
-                        " FROM voucherheader vh right join  paymentheader ph on vh.id=ph.voucherheaderid,bankaccount ba,eg_wf_states state where ph.state_id     =state.id "
-                        +
-                        "	and vh.id =ph.voucherheaderid and  ba.id=ph.bankaccountnumberid and ba.id="
-                        + bankaccountId
-                        + "")
-                        .append(" and vh.fiscalperiodid in (select id from fiscalperiod where financialyearid=(select f.id from financialyear f where CURRENT_DATE between f.startingdate and f.endingdate))")
-                        .append(" and vh.voucherdate >= '")
-                        .append(START_FINANCIALYEAR_DATE + "' ")
-                        .append(" and to_char(created_date,'dd-Mon-yyyy') ='")
-                        .append(sqlformat.format(asPerDate))
-                        .append("' and ( state.value in (")
-                        .append(voucherStatus)
+		final StringBuilder outstandingPaymentQryStr = new StringBuilder();
+		outstandingPaymentQryStr.append(
+				"SELECT case when SUM(case when ph.paymentamount = null then 0 else ph.paymentamount end ) = null then 0")
+				.append(" else SUM(case when ph.paymentamount = null then 0 else ph.paymentamount) end AS concurranceBPV")
+				.append(" FROM voucherheader vh right join  paymentheader ph on vh.id=ph.voucherheaderid,bankaccount ba,")
+				.append("eg_wf_states state where ph.state_id     =state.id ")
+				.append("	and vh.id =ph.voucherheaderid and  ba.id=ph.bankaccountnumberid and ba.id = :bankaccountId")
+				.append(" and vh.fiscalperiodid in (select id from fiscalperiod where financialyearid=(select f.id ")
+				.append("from financialyear f where CURRENT_DATE between f.startingdate and f.endingdate))")
+				.append(" and vh.voucherdate >= :startFinDate and to_char(created_date,'dd-Mon-yyyy') = :asPerDate")
+				.append(" and ( state.value in (:voucherStatus) OR vh.status=0 ) group by accountNumber  ");
 
-                        .append(")OR vh.status=0 ) group by accountNumber  ");
-
-        BigDecimal outStandingPayment = BigDecimal.ZERO;
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Executing outstandingPaymentQryStr query----------------------------------------------"
-                    + outstandingPaymentQryStr);
-        final List list = getSession().createSQLQuery(outstandingPaymentQryStr.toString()).list();
-        if (!list.isEmpty())
-            outStandingPayment = (BigDecimal) list.get(0);
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("OutStanding payments for BankId " + bankaccountId + " And Date " + sqlformat.format(asPerDate)
-                    + " is : " + outStandingPayment);
-        return outStandingPayment;
-    }
+		BigDecimal outStandingPayment = BigDecimal.ZERO;
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Executing outstandingPaymentQryStr query----------------------------------------------"
+					+ outstandingPaymentQryStr);
+		final List list = getSession().createSQLQuery(outstandingPaymentQryStr.toString())
+				.setParameter("bankaccountId", bankaccountId).setParameter("startFinDate", START_FINANCIALYEAR_DATE)
+				.setParameter("asPerDate", sqlformat.format(asPerDate)).setParameter("voucherStatus", voucherStatus)
+				.list();
+		if (!list.isEmpty())
+			outStandingPayment = (BigDecimal) list.get(0);
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("OutStanding payments for BankId " + bankaccountId + " And Date " + sqlformat.format(asPerDate)
+					+ " is : " + outStandingPayment);
+		return outStandingPayment;
+	}
 
 }

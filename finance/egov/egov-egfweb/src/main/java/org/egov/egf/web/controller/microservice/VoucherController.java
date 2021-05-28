@@ -1,6 +1,5 @@
 package org.egov.egf.web.controller.microservice;
 
-import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +27,8 @@ import org.egov.infra.microservice.models.VoucherSearchCriteria;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.services.voucher.VoucherService;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.errors.EncodingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 public class VoucherController {
@@ -53,45 +55,45 @@ public class VoucherController {
 	public VoucherResponse search(@RequestBody VoucherSearchRequest voucherSearchRequest) {
 		try {
 			VoucherResponse response = voucherService.findVouchers(voucherSearchRequest);
-			response.setResponseInfo(MicroserviceUtils.getResponseInfo(voucherSearchRequest.getRequestInfo(),
-					HttpStatus.SC_OK, null));
-			
+			response.setResponseInfo(
+					MicroserviceUtils.getResponseInfo(voucherSearchRequest.getRequestInfo(), HttpStatus.SC_OK, null));
+
 			return response;
-		} catch (Exception e) {
+		} catch (HttpClientErrorException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
 
 	}
-	
+
 	@PostMapping(value = "/rest/voucher/_ismanualreceiptdateenabled")
-        @ResponseBody
-        public AppConfigValues getManualReceiptDateConsiderationForVoucher() {
-                try {
-                    return voucherService.isManualReceiptDateEnabledForVoucher();
-                } catch (Exception e) {
-                        LOGGER.error(e.getMessage(), e);
-                        throw new ApplicationRuntimeException(e.getMessage());
-                }
-        }
-	
+	@ResponseBody
+	public AppConfigValues getManualReceiptDateConsiderationForVoucher() {
+		try {
+			return voucherService.isManualReceiptDateEnabledForVoucher();
+		} catch (HttpClientErrorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ApplicationRuntimeException(e.getMessage());
+		}
+	}
+
 	@PostMapping(value = "/rest/voucher/_getmoduleidbyname")
-        @ResponseBody
-        public EgModules getEgModuleIdByName(@Param("moduleName") String moduleName) {
-                try {
-                        return voucherService.getModulesIdByName(moduleName);
-                } catch (Exception e) {
-                        LOGGER.error(e.getMessage(), e);
-                        throw new ApplicationRuntimeException(e.getMessage());
-                }
-        }
+	@ResponseBody
+	public EgModules getEgModuleIdByName(@Param("moduleName") String moduleName) {
+		try {
+			return voucherService.getModulesIdByName(moduleName);
+		} catch (HttpClientErrorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ApplicationRuntimeException(e.getMessage());
+		}
+	}
 
 	@PostMapping(value = "/rest/voucher/_create")
 	@ResponseBody
 	public VoucherResponse create(@RequestBody VoucherRequest voucherRequest) {
 
 		VoucherResponse response = new VoucherResponse();
-		final HashMap<String, Object> headerDetails = new HashMap<String, Object>();
+		final HashMap<String, Object> headerDetails = new HashMap<>();
 		HashMap<String, Object> detailMap = null;
 		HashMap<String, Object> subledgertDetailMap = null;
 		final List<HashMap<String, Object>> accountdetails = new ArrayList<>();
@@ -110,14 +112,12 @@ public class VoucherController {
 				headerDetails.put(VoucherConstant.MODULEID, voucher.getModuleId());
 				String source = voucher.getSource();
 				headerDetails.put(VoucherConstant.SOURCEPATH, source);
-//				String receiptNumber = !source.isEmpty() & source != null ? source.indexOf("?selectedReceipts=") != -1 ? source.substring(source.indexOf("?selectedReceipts=")).split("=")[1]: "" : "";
-				if(voucher.getReferenceDocument() != null && !voucher.getReferenceDocument().isEmpty()){
-				    headerDetails.put(VoucherConstant.REFERENCEDOC, voucher.getReferenceDocument());
+				if (voucher.getReferenceDocument() != null && !voucher.getReferenceDocument().isEmpty()) {
+					headerDetails.put(VoucherConstant.REFERENCEDOC, voucher.getReferenceDocument());
 				}
-				if(voucher.getServiceName() != null && !voucher.getServiceName().isEmpty()){
-				    headerDetails.put(VoucherConstant.SERVICE_NAME, voucher.getServiceName());
+				if (voucher.getServiceName() != null && !voucher.getServiceName().isEmpty()) {
+					headerDetails.put(VoucherConstant.SERVICE_NAME, voucher.getServiceName());
 				}
-				// headerDetails.put(VoucherConstant.BUDGETCHECKREQ, voucher());
 				if (voucher.getFund() != null)
 					headerDetails.put(VoucherConstant.FUNDCODE, voucher.getFund().getCode());
 
@@ -149,7 +149,7 @@ public class VoucherController {
 						subledgertDetailMap.put(VoucherConstant.DETAILAMOUNT, sl.getAmount());
 						subledgertDetailMap.put(VoucherConstant.DETAIL_TYPE_ID, sl.getAccountDetailType().getId());
 						subledgertDetailMap.put(VoucherConstant.DETAIL_KEY_ID, sl.getAccountDetailKey().getId());
-						if (chartOfAccountDetailService.getByGlcodeAndDetailTypeId(ac.getGlcode().toString(),
+						if (chartOfAccountDetailService.getByGlcodeAndDetailTypeId(ac.getGlcode(),
 								Integer.valueOf(sl.getAccountDetailType().getId().intValue())) != null) {
 							subledgerDetails.add(subledgertDetailMap);
 						}
@@ -162,69 +162,67 @@ public class VoucherController {
 				response.getVouchers().add(voucher);
 				response.setResponseInfo(MicroserviceUtils.getResponseInfo(voucherRequest.getRequestInfo(),
 						HttpStatus.SC_CREATED, null));
-			} catch (ValidationException e) {
-				throw e;
-
-			} catch (ApplicationRuntimeException e) {
-
+			} catch (ValidationException | ApplicationRuntimeException e) {
 				throw e;
 			} catch (ParseException e) {
-
 				throw new ApplicationRuntimeException(e.getMessage());
 			}
-
 		}
 		return response;
 	}
+
 	@PostMapping(value = "/rest/voucher/_cancel")
 	@ResponseBody
 	public VoucherResponse cancel(@RequestBody VoucherSearchRequest voucherSearchRequest) {
 		try {
 			VoucherResponse response = voucherService.cancel(voucherSearchRequest);
-			response.setResponseInfo(MicroserviceUtils.getResponseInfo(voucherSearchRequest.getRequestInfo(),
-					HttpStatus.SC_OK, null));
-			
+			response.setResponseInfo(
+					MicroserviceUtils.getResponseInfo(voucherSearchRequest.getRequestInfo(), HttpStatus.SC_OK, null));
+
 			return response;
-		} catch (Exception e) {
+		} catch (HttpClientErrorException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
 
 	}
-	
-	@PostMapping(value = "/rest/voucher/_searchbyserviceandreference",produces="application/json")
-        @ResponseBody
-        public VoucherResponse searchVoucherByServiceCodeAndReferenceDoc(@RequestParam(name="servicecode",required=false)  String serviceCode, @RequestParam("referencedocument")  String referenceDocument) {
-                try {
-                        referenceDocument = URLDecoder.decode(referenceDocument, "UTF-8");
-                        List<CVoucherHeader> cVoucherHeaders = voucherService.getVoucherByServiceNameAndReferenceDocument(serviceCode, referenceDocument);
-                        VoucherResponse res = new VoucherResponse();
-                        if(cVoucherHeaders == null){
-                            res.setResponseInfo(MicroserviceUtils.getResponseInfo(null,
-                                    HttpStatus.SC_NOT_FOUND, null));
-                        }else{
-                            res.setVouchers(cVoucherHeaders.stream().map(cv -> new Voucher(cv)).collect(Collectors.toList()));
-                        }
-                        return res;
-                } catch (Exception e) {
-                        LOGGER.error(e.getMessage(), e);
-                        throw new ApplicationRuntimeException(e.getMessage());
-                }
-        }
-	
-	@PostMapping(value = "/rest/voucher/v2/_search")
-        public  @ResponseBody ResponseEntity<VoucherResponse>  search(@ModelAttribute VoucherSearchCriteria criteria, @RequestBody VoucherSearchRequest voucherSearchRequest) {
-                try {
-                        VoucherResponse response = voucherService.findVouchersByCriteria(criteria, voucherSearchRequest);
-                        response.setResponseInfo(MicroserviceUtils.getResponseInfo(voucherSearchRequest.getRequestInfo(),
-                                        HttpStatus.SC_OK, null));
-                        
-                        return new ResponseEntity<>(response, org.springframework.http.HttpStatus.OK);
-                } catch (Exception e) {
-                        LOGGER.error(e.getMessage(), e);
-                        throw new ApplicationRuntimeException(e.getMessage());
-                }
 
-        }
+	@PostMapping(value = "/rest/voucher/_searchbyserviceandreference", produces = "application/json")
+	@ResponseBody
+	public VoucherResponse searchVoucherByServiceCodeAndReferenceDoc(
+			@RequestParam(name = "servicecode", required = false) String serviceCode,
+			@RequestParam("referencedocument") String referenceDocument) {
+		try {
+			referenceDocument = ESAPI.encoder().encodeForURL(referenceDocument);
+			List<CVoucherHeader> cVoucherHeaders = voucherService
+					.getVoucherByServiceNameAndReferenceDocument(serviceCode, referenceDocument);
+			VoucherResponse res = new VoucherResponse();
+			if (cVoucherHeaders == null) {
+				res.setResponseInfo(MicroserviceUtils.getResponseInfo(null, HttpStatus.SC_NOT_FOUND, null));
+			} else {
+				res.setVouchers(cVoucherHeaders.stream().map(cv -> new Voucher(cv)).collect(Collectors.toList()));
+			}
+			return res;
+		} catch (EncodingException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ApplicationRuntimeException(e.getMessage());
+		}
+	}
+
+	@PostMapping(value = "/rest/voucher/v2/_search")
+	public @ResponseBody ResponseEntity<VoucherResponse> search(@ModelAttribute VoucherSearchCriteria criteria,
+			@RequestBody VoucherSearchRequest voucherSearchRequest) {
+		try {
+			VoucherResponse response = voucherService.findVouchersByCriteria(criteria, voucherSearchRequest);
+			response.setResponseInfo(
+					MicroserviceUtils.getResponseInfo(voucherSearchRequest.getRequestInfo(), HttpStatus.SC_OK, null));
+
+			return new ResponseEntity<>(response, org.springframework.http.HttpStatus.OK);
+		} catch (HttpClientErrorException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ApplicationRuntimeException(e.getMessage());
+		}
+
+	}
 
 }

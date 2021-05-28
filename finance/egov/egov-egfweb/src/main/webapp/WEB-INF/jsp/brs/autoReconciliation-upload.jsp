@@ -95,6 +95,11 @@ jQuery(document).ready(function() {
 		
 		
 		document.forms[0].action='autoReconciliation-upload.action';
+		jQuery(arform).append(jQuery('<input>', {
+            type : 'hidden',
+            name : '${_csrf.parameterName}',
+            value : '${_csrf.token}'
+        }));
         document.forms[0].submit();
      	
 	}

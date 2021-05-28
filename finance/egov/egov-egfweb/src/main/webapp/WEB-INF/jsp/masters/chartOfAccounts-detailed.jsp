@@ -67,6 +67,13 @@
 				return false;
 			}
 			document.chartOfAccountsForm.action = '${pageContext.request.contextPath}/masters/chartOfAccounts-create.action';
+			jQuery(chartOfAccountsForm).append(
+            	jQuery('<input>', {
+                	type: 'hidden',
+                    name: '${_csrf.parameterName}',
+                    value: '${_csrf.token}'
+            	})
+            );
 			document.chartOfAccountsForm.submit();
 				
 			return true;

@@ -48,20 +48,24 @@
 
 package org.egov.infra.web.controller.admin.masters.config;
 
+import java.util.List;
+
 import org.egov.infra.admin.master.entity.Module;
 import org.egov.infra.admin.master.service.ModuleService;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 
 @Controller
 @RequestMapping("/app/config/update")
+@Validated
 public class SearchAppConfigController {
 
     @Autowired
@@ -72,13 +76,14 @@ public class SearchAppConfigController {
         return moduleService.getAllTopModules();
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public String searchAppConfigForm() {
         return "search-appconfig";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String search(@RequestParam String appConfigModuleName, @RequestParam String appConfigKeyName) {
+    @PostMapping
+	public String search(@RequestParam @SafeHtml String appConfigModuleName,
+			@RequestParam @SafeHtml String appConfigKeyName) {
         return "redirect:/app/config/update/" + appConfigModuleName + "/" + appConfigKeyName;
     }
 }

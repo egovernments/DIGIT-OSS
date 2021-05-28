@@ -48,10 +48,18 @@
 
 package org.egov.infra.web.controller.common;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.IOUtils;
 import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.utils.FileStoreUtils;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.HTTPUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -60,44 +68,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 @Controller
 @RequestMapping("/downloadfile")
 public class FileDownloadController {
 
-    @Autowired
-    private FileStoreUtils fileStoreUtils;
+	@Autowired
+	private FileStoreUtils fileStoreUtils;
 
-    @Autowired
-    private CityService cityService;
+	@Autowired
+	private CityService cityService;
 
-    @GetMapping
-    @ResponseBody
-    public ResponseEntity download(@RequestParam String fileStoreId, @RequestParam String moduleName,
-                                   @RequestParam(defaultValue = "false") boolean toSave) {
-        return fileStoreUtils.fileAsResponseEntity(fileStoreId, moduleName, toSave);
-    }
+	@GetMapping
+	@ResponseBody
+	public ResponseEntity download(@RequestParam String fileStoreId, @RequestParam String moduleName,
+			@RequestParam(defaultValue = "false") boolean toSave) {
+		return fileStoreUtils.fileAsResponseEntity(fileStoreId, moduleName, toSave);
+	}
 
-    @GetMapping("/logo")
-    public void getLogo(HttpServletResponse response) throws IOException {
-        IOUtils.write(cityService.getCityLogoAsBytes(), response.getOutputStream());
-    }
+	@GetMapping("/logo")
+	public void getLogo(HttpServletResponse response) throws IOException {
+		IOUtils.write(cityService.getCityLogoAsBytes(), response.getOutputStream());
+	}
 
-    @GetMapping("/gis")
-    public void getKML(HttpServletResponse response) throws IOException {
-        try (final InputStream in = Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("gis/" + ApplicationThreadLocals.getTenantID() + "/wards.kml");
-             final OutputStream out = response.getOutputStream()) {
-            if (in != null) {
-                response.setHeader("Content-Disposition", "inline;filename=wards.kml");
-                response.setContentType("application/vnd.google-earth.kml+xml");
-                IOUtils.write(IOUtils.toByteArray(in), out);
-            }
-        }
-    }
+	@GetMapping("/gis")
+	public void getKML(HttpServletResponse response) throws IOException {
+		try (final InputStream in = Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream("gis/" + ApplicationThreadLocals.getTenantID() + "/wards.kml");
+				final OutputStream out = response.getOutputStream()) {
+			if (in != null) {
+				HTTPUtilities httpUtilities = ESAPI.httpUtilities();
+				httpUtilities.addHeader(response, "Content-Disposition", "inline;filename=wards.kml");
+				httpUtilities.addHeader(response, "Content-Type", "application/vnd.google-earth.kml+xml");
+				IOUtils.write(IOUtils.toByteArray(in), out);
+			}
+		}
+	}
 
 }

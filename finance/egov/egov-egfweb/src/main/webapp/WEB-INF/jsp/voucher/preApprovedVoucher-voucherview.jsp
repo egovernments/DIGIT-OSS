@@ -97,6 +97,11 @@ function validate(name,value){
 function onSubmit()
 {
 			document.forms[0].action='${pageContext.request.contextPath}/voucher/preApprovedVoucher-update.action';
+			jQuery(document.forms[0]).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
     		document.forms[0].submit();
 			return false;
 }

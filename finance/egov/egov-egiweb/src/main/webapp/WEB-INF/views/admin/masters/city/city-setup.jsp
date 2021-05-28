@@ -77,7 +77,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.name"/><span class="mandatory"></span></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.name"/>
+                                    <spring:message code="help.city.name" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="name" id="name" type="text"
@@ -92,7 +92,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.local.name"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.local.name"/>
+                                    <spring:message code="help.city.local.name" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="localName" id="localName" type="text"
@@ -107,7 +107,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.code"/><span class="mandatory"></span></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.code"/>
+                                    <spring:message code="help.city.code" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="code" id="code" type="text"
@@ -123,7 +123,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.domain.url"/><span class="mandatory"></span></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.domain.url"/>
+                                    <spring:message code="help.city.domain.url" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="domainURL" id="domainURL" type="text"
@@ -139,7 +139,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.district.name"/><span class="mandatory"></span></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.district.name"/>
+                                    <spring:message code="help.city.district.name" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="districtName" id="districtName" type="text"
@@ -156,7 +156,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.district.code"/><span class="mandatory"></span></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.district.code"/>
+                                    <spring:message code="help.city.district.code" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="districtCode" id="districtCode" type="text"
@@ -172,7 +172,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.region.name"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.region.name"/>
+                                    <spring:message code="help.city.region.name" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="regionName" id="regionName" type="text"
@@ -186,7 +186,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.grade"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.grade"/>
+                                    <spring:message code="help.city.grade" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="grade" id="grade" type="text"
@@ -216,7 +216,7 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><spring:message code="lbl.city.logo"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.corp.logo"/>
+                                    <spring:message code="help.corp.logo" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <img id="imglogo" height="60" width="60"
@@ -234,10 +234,10 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.corp.name"/><span class="mandatory"></span></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.corp.name"/>
+                                    <spring:message code="help.corp.name" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
-                                    <form:input path="preferences.municipalityName" id="latitude"
+                                    <form:input path="preferences.municipalityName" id="municipalityName"
                                                 type="text" data-toggle="popover" data-trigger="focus" data-placement="right"
                                                 data-content="${helptext}" cssClass="form-control" placeholder=""
                                                 autocomplete="off" required="required"/>
@@ -250,7 +250,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.corp.address"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.corp.address"/>
+                                    <spring:message code="help.corp.address" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:textarea path="preferences.municipalityAddress"
@@ -265,7 +265,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.corp.contact.no"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.corp.contact.no"/>
+                                    <spring:message code="help.corp.contact.no" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="preferences.municipalityContactNo"
@@ -280,7 +280,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.corp.contact.email"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.corp.contact.email"/>
+                                    <spring:message code="help.corp.contact.email" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="preferences.municipalityContactEmail"
@@ -296,7 +296,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.corp.callcenter.no"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.corp.callcenter.no"/>
+                                    <spring:message code="help.corp.callcenter.no" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="preferences.municipalityCallCenterNo"
@@ -312,7 +312,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.corp.gis.location.link"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.corp.gis.location.link"/>
+                                    <spring:message code="help.corp.gis.location.link" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="preferences.municipalityGisLocation"
@@ -327,7 +327,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.corp.fb.link"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.corp.fb.link"/>
+                                    <spring:message code="help.corp.fb.link" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="preferences.municipalityFacebookLink" id="facebookLink"
@@ -342,7 +342,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.corp.twitter.link"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.corp.twitter.link"/>
+                                    <spring:message code="help.corp.twitter.link" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="preferences.municipalityTwitterLink" id="twitterLink"
@@ -357,9 +357,9 @@
                         <div id="configuration" class="tab-pane fade">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><spring:message
-                                        code="lbl.city.lat"/></label>
+                                        code="lbl.city.lat" htmlEscape="false"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.coord.lat"/>
+                                    <spring:message code="help.city.coord.lat" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="latitude" id="latitude" type="text"
@@ -372,9 +372,9 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><spring:message
-                                        code="lbl.city.lng"/></label>
+                                        code="lbl.city.lng" htmlEscape="false"/></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.coord.lng"/>
+                                    <spring:message code="help.city.coord.lng" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="longitude" id="longitude" type="text"
@@ -389,7 +389,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.recaptcha.pri"/><span class="mandatory"></span></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.recaptcha.pvt.key"/>
+                                    <spring:message code="help.city.recaptcha.pvt.key" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="preferences.recaptchaPK" id="recaptchaPK" type="password"
@@ -405,7 +405,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.recaptcha.pub"/><span class="mandatory"></span></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.recaptcha.pub.key"/>
+                                    <spring:message code="help.city.recaptcha.pub.key" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="preferences.recaptchaPub" id="recaptchaPub" type="password"
@@ -422,7 +422,7 @@
                                 <label class="col-sm-3 control-label"><spring:message
                                         code="lbl.city.google.api.key"/><span class="mandatory"></span></label>
                                 <c:set var="helptext">
-                                    <spring:message code="help.city.google.api.key"/>
+                                    <spring:message code="help.city.google.api.key" htmlEscape="false"/>
                                 </c:set>
                                 <div class="col-sm-6" style="padding-top: 7px">
                                     <form:input path="preferences.googleApiKey" id="googleApiKey" type="password"

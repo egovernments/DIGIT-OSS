@@ -237,6 +237,13 @@ href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
  		disableAll();
  		document.getElementById('button').value='surrender';
  		document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-save.action?containsRTGS=true';
+ 		jQuery(chequeAssignment).append(
+ 				jQuery('<input>', {
+ 	                type: 'hidden',
+ 	                name: '${_csrf.parameterName}',
+ 	                value: '${_csrf.token}'
+ 	            })
+ 	        );
 		document.chequeAssignment.submit();
 		return true;
  	}

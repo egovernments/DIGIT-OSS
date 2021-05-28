@@ -48,6 +48,7 @@
 package org.egov.egf.web.actions.report;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
@@ -171,7 +172,7 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 	@SkipValidation
 	@Action(value = "/report/generalLedgerReport-ajaxSearch")
 	@ReadOnly
-	public String ajaxSearch() throws TaskFailedException {
+	public String ajaxSearch() {
 
 		persistenceService.getSession().setDefaultReadOnly(true);
 		persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
@@ -179,7 +180,8 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 			LOGGER.debug("GeneralLedgerAction | Search | start");
 		try {
 			generalLedgerDisplayList = generalLedgerReport.getGeneralLedgerList(generalLedgerReportBean);
-		} catch (final Exception e) {
+		} catch (final TaskFailedException |ParseException e) {
+                    LOGGER.error("GeneralLedgerAction | list | End",e);
 
 		}
 		if (LOGGER.isDebugEnabled())
@@ -199,7 +201,8 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 			LOGGER.debug("GeneralLedgerAction | Search | start");
 		try {
 			generalLedgerDisplayList = generalLedgerReport.getGeneralLedgerList(generalLedgerReportBean);
-		} catch (final Exception e) {
+		} catch (final TaskFailedException  |ParseException e) {
+                    LOGGER.error("GeneralLedgerAction | list | End",e);
 
 		}
 		if (LOGGER.isDebugEnabled())
@@ -224,7 +227,7 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 				fund = (Fund) persistenceService.find("from Fund where id = ?", 0);
 			} else
 				fund = (Fund) persistenceService.find("from Fund where id = ?",
-						Integer.parseInt(generalLedgerReportBean.getFund_id()));
+						Long.valueOf(generalLedgerReportBean.getFund_id()));
 		}
 		if (fund == null && glCode!=null) {
 			heading = "General Ledger Report for " + glCode.getGlcode() + ":" + glCode.getName() + " from "

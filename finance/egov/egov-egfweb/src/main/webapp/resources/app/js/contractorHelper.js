@@ -100,14 +100,9 @@ function callAjaxSearch() {
 							'click',
 							function() {
 								console.log(data.id);
-								 var form = document.createElement("form");
-								 form.setAttribute("method", "post");
-								 form.setAttribute("action", '/services/EGF/contractor/' + $('#mode').val()+ '/' + data.id, '');
-								 form.setAttribute("target", "NewFile");
-								 document.body.appendChild(form);
-								 window.open("post.htm", "NewFile", 'width=800, height=600');
-								 form.submit();
-								 document.body.removeChild(form);
+								window.open('/services/EGF/contractor/' + $('#mode').val()
+										+ '/' + data.id, '',
+										'width=800, height=600');
 							});
 				},
 				"bDestroy" : true,

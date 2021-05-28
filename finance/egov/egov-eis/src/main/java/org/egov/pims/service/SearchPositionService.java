@@ -91,7 +91,7 @@ public class SearchPositionService {
 	public  List<EmployeeView> getPositionBySearchParameters(String beginsWith,Integer desId,Integer deptId,Long jurdId,Integer roleId,Date userDate,Integer maxResults) throws NoSuchObjectException{
 		List<EmployeeView> posList = new ArrayList<EmployeeView>() ;
 		logger.debug("inside getPositionBySearchParameters method ***********"+desId);
-		String searchQuery="";
+		StringBuilder searchQuery;
 		List userListInJur=null;
 		String myBeginsWith = beginsWith;
 		if (myBeginsWith == null)
@@ -106,13 +106,10 @@ public class SearchPositionService {
 		try
 		{
 
-			searchQuery="Select EV from EmployeeView EV,Position P where " +
-			
-			"EV.position.id=P.id  and "+
-			"trim(upper(P.name))  like '"+myBeginsWith.trim().toUpperCase()+"%' and "+
-			" ((EV.toDate IS NULL AND EV.fromDate <= :userDate)OR(EV.fromDate <= :userDate AND EV.toDate >= :userDate))and EV.userActive ='1'";
-		
-			
+			searchQuery = new StringBuilder("Select EV from EmployeeView EV,Position P where ")
+					.append("EV.position.id=P.id  and ").append("trim(upper(P.name))  like '")
+					.append(myBeginsWith.trim().toUpperCase()).append("%' and ")
+					.append(" ((EV.toDate IS NULL AND EV.fromDate <= :userDate)OR(EV.fromDate <= :userDate AND EV.toDate >= :userDate))and EV.userActive ='1'");
 
 			//Jurisdiction J,JurisdictionValues JurVal,
 			if(userListInJur!=null && !userListInJur.isEmpty())
@@ -123,23 +120,23 @@ public class SearchPositionService {
 		"(JurVal.toDate IS NULL and JurVal.fromDate <= :userDate) " +
 		"OR " +
 		"(JurVal.fromDate <= :userDate and JurVal.toDate >= :userDate)))  " ;*/
-				searchQuery+= "and EV.userMaster in (:bndryObjList)    "; 
+				searchQuery.append("and EV.userMaster in (:bndryObjList)    "); 
 			}
 			if(desId!= null&& desId.intValue() != 0)
-				searchQuery += " and EV.designation.id = :desId  ";
+				searchQuery.append(" and EV.designation.id = :desId  ");
 			if(deptId!= null&& deptId.intValue() != 0)
-				searchQuery +=" and EV.department.id= :deptId ";
+				searchQuery.append(" and EV.department.id= :deptId ");
 			if(roleId!=null && roleId!=null)
 			{
 				//FIXME: add isHistory check
-				searchQuery+=" and EV.employee.id IN ( Select U.user.id from UserRole U where U.role.id=:roleId and U.isHistory='N'and "+
-				"((U.toDate IS NULL AND U.fromDate <= :userDate)OR(U.fromDate <= :userDate AND U.toDate > :userDate)))" ;
+				searchQuery.append(" and EV.employee.id IN ( Select U.user.id from UserRole U where U.role.id=:roleId and U.isHistory='N'and "+
+				"((U.toDate IS NULL AND U.fromDate <= :userDate)OR(U.fromDate <= :userDate AND U.toDate > :userDate)))" );
 
 
 				//searchQuery +=" EV.userid = userrole.user and userrole.roleid = :roleId and userrole.from";
 			}
 
-			Query query =getCurrentSession().createQuery(searchQuery);
+			Query query =getCurrentSession().createQuery(searchQuery.toString());
 			logger.info("quey >>>"+query.toString());
 			
 			if(userListInJur!=null && !userListInJur.isEmpty())

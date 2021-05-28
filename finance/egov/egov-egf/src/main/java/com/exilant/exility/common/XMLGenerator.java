@@ -50,6 +50,7 @@ package com.exilant.exility.common;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,7 +96,7 @@ public class XMLGenerator {
             final Method method = objclass.getMethod("toXML", clsarr);
             method.setAccessible(true);
             return (String) method.invoke(object, objarr);
-        } catch (final Exception e) {
+        } catch (final NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("Failed to invoke method" + e.getMessage());
         } // no sweat if you failed. Carry on...
@@ -106,7 +107,7 @@ public class XMLGenerator {
         if (tag == null || tag.length() == 0)
             try {
                 tag = ObjectGetSetter.get(object, "type").toString();  // try type field for tag
-            } catch (final Exception e) {
+            } catch (final IllegalArgumentException| IllegalAccessException  e) {
                 LOGGER.error("Error in toXML" + e.getMessage());
             }
         if (tag == null || tag.length() == 0) {
@@ -125,27 +126,51 @@ public class XMLGenerator {
             sbf.append(object.toString());
             sbf.append("\"/>\n");
         } else if (objclass.isArray())
-            sbf.append(arrayToXML(object, tag, tabs));
+            try {
+                sbf.append(arrayToXML(object, tag, tabs));
+            } catch (ArrayIndexOutOfBoundsException | IllegalAccessException | IllegalArgumentException
+                    | InvocationTargetException e) {
+                LOGGER.error(e);
+            }
         else if (objclass.equals(HashMap.class))
-            sbf.append(hashMapToXML((HashMap) object, tag, tabs));
+            try {
+                sbf.append(hashMapToXML((HashMap) object, tag, tabs));
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                LOGGER.error(e);
+
+            }
         else if (objclass.equals(ArrayList.class))
-            sbf.append(arrayListToXML((ArrayList) object, tag, tabs));
+            try {
+                sbf.append(arrayListToXML((ArrayList) object, tag, tabs));
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                LOGGER.error(e);
+
+            }
         else {
             final HashMap values = ObjectGetSetter.getAll(object, false);
-            sbf.append(hashMapToXML(values, tag, tabs));
+            try {
+                sbf.append(hashMapToXML(values, tag, tabs));
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                LOGGER.error(e);
+
+            }
         }
         return sbf.toString();
     }
 
     /*****************************************
      * Helper classes declared as private
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
+     * @throws IllegalAccessException 
+     * @throws ArrayIndexOutOfBoundsException 
      ****************************************/
 
     /*
      * returns XML String for an array object with name as tag
      */
 
-    private String arrayToXML(final Object object, final String tag, final String tabs) {
+    private String arrayToXML(final Object object, final String tag, final String tabs) throws ArrayIndexOutOfBoundsException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         final StringBuffer sbf = new StringBuffer();
 
@@ -206,7 +231,7 @@ public class XMLGenerator {
      * attributes and other elements as 'children'
      */
 
-    private String hashMapToXML(final HashMap object, final String tag, final String tabs) {
+    private String hashMapToXML(final HashMap object, final String tag, final String tabs) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         final StringBuffer sbf = new StringBuffer();
         boolean childfound = false;
@@ -277,7 +302,7 @@ public class XMLGenerator {
      * attributes and other elements as 'children'
      */
 
-    private String arrayListToXML(final ArrayList object, final String tag, final String tabs) {
+    private String arrayListToXML(final ArrayList object, final String tag, final String tabs) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         final int size = object.size();
         final StringBuffer sbf = new StringBuffer();

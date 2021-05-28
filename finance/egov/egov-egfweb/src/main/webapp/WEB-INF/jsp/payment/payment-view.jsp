@@ -83,6 +83,13 @@ function fetchDeptId() {
 
 function printVoucher(){
 	document.forms[0].action='../report/billPaymentVoucherPrint-print.action?id=<s:property value="paymentheader.id"/>';
+	jQuery(document.forms[0]).append(
+            jQuery('<input>', {
+                type: 'hidden',
+                name: '${_csrf.parameterName}',
+                value: '${_csrf.token}'
+            })
+        );
 	document.forms[0].submit();
 } 
 function showHistory(stateId)
@@ -528,6 +535,13 @@ function openVoucher(vid)
 		function onSubmit()
 		{
 					document.forms[0].action='${pageContext.request.contextPath}/payment/payment-sendForApproval.action';
+					jQuery(document.forms[0]).append(
+		                     jQuery('<input>', {
+		                         type: 'hidden',
+		                         name: '${_csrf.parameterName}',
+		                         value: '${_csrf.token}'
+		                     })
+		                 );
 		    		document.forms[0].submit();
 		    		return false;					
 		}

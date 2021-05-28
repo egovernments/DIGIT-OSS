@@ -342,6 +342,11 @@ function addYUIRow_billDetailTable(obj)
 function printVoucher(){
 	
 	document.forms[0].action='../report/billPaymentVoucherPrint-print.action?id=<s:property value="paymentheader.id"/>';
+	jQuery(document.forms[0]).append(jQuery('<input>', {
+        type : 'hidden',
+        name : '${_csrf.parameterName}',
+        value : '${_csrf.token}'
+    }));
 	document.forms[0].submit();
 }
 
@@ -619,6 +624,11 @@ if(document.getElementById('actionName').value!='')
 	    function onSubmit()
 	    {
 	    	document.forms[0].action='${pageContext.request.contextPath}/payment/directBankPayment-sendForApproval.action';
+	    	jQuery(document.forms[0]).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
     		document.forms[0].submit();
 	    }
 </script>

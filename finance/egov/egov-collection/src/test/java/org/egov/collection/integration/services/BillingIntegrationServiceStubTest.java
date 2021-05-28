@@ -56,6 +56,8 @@ import org.junit.After;
 import org.junit.Before;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -88,10 +90,10 @@ public class BillingIntegrationServiceStubTest  {
 			File deleteFile = (File) method.invoke(billingIntgrnServiceStub, "BillReceiptOutput.xml");
 			if (deleteFile.exists()){
 				if(!deleteFile.delete()) {
-					throw new Exception("Could not delete BillReceiptOutput.xml");
+					throw new IOException("Could not delete BillReceiptOutput.xml");
 				}
 			}
-		} catch(Exception e) {
+		} catch( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
 
 		}
 	}

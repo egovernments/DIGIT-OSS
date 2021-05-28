@@ -54,6 +54,12 @@
 <title><s:text name="lbl.budget.report.functionwise"/> </title>
 </head>
 <body>
+	<s:if test="%{hasErrors()}">
+		<div id="actionErrorMessages" class="errorstyle">
+			<s:actionerror />
+			<s:fielderror />
+		</div>
+	</s:if>
 	<s:form action="budgetReport" theme="simple" name="budgetDetailReportForm">
 		<jsp:include page="../budget/budgetHeader.jsp">
 			<jsp:param name="heading" value="Budget Report - Functionwise" />

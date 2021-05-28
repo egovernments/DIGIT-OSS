@@ -59,58 +59,57 @@ import java.sql.Statement;
 /**
  * @author raghu.bhandi, Exilant Consulting
  *
- * Executes a SQL statement and extracs the results into a dataCollection This is a singleton
+ *         Executes a SQL statement and extracs the results into a
+ *         dataCollection This is a singleton
  */
 
 public class DataUpdater {
-    private static final Logger LOGGER = Logger.getLogger(DataUpdater.class);
-    private static DataUpdater singletonInstance;
+	private static final Logger LOGGER = Logger.getLogger(DataUpdater.class);
+	private static DataUpdater singletonInstance;
 
-    public static DataUpdater getUpdater() {
-        if (singletonInstance == null)
-            singletonInstance = new DataUpdater();
-        return singletonInstance;
-    }
+	public static DataUpdater getUpdater() {
+		if (singletonInstance == null)
+			singletonInstance = new DataUpdater();
+		return singletonInstance;
+	}
 
-    private DataUpdater() {
-        super();
-    }
+	private DataUpdater() {
+		super();
+	}
 
-    public int update(final String sql, final Connection con, final DataCollection dc,
-            final boolean errorOnNoUpdate) throws TaskFailedException {
-        if (sql == null || sql.length() == 0)
-            return 0;
-        // temp code to test when database is not available
-        int i = dc.getInt("sqlCount");
-        i++;
-        dc.addValue("sqlCount", i);
-        /*
-         * commented in egf dc.addValue("sql" + i, sql);
-         */
-        if (null == con)
-            return 0;
-        // end of temp patch. You should remove this patch when going to
-        // production
-        int noOfRowsEffected = 0;
-        try {
-            final Statement statement = con.createStatement();
-            final PreparedStatement pstmt = con.prepareStatement(sql);
-            noOfRowsEffected = pstmt.executeUpdate();
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("SSSSSSSS>>>>>>>>>>>>>>>>>>>>>>>>" + sql);
-            if (noOfRowsEffected == 0 && errorOnNoUpdate)
-                throw new TaskFailedException();
-            else
-                dc.addMessage("masterInsertUpdate");
-            statement.close();
-        } catch (final SQLException e) {
-            LOGGER.error("err Message  " + e.getErrorCode(), e);
-            if (e.getErrorCode() == 1)
-                dc.addMessage("exilDuplicate");
-            else
-                dc.addMessage("exilSQLException", e.getMessage());
-            throw new TaskFailedException();
-        }
-        return noOfRowsEffected;
-    }
+	public int update(final String sql, final Connection con, final DataCollection dc, final boolean errorOnNoUpdate)
+			throws TaskFailedException {
+		if (sql == null || sql.length() == 0)
+			return 0;
+		// temp code to test when database is not available
+		int i = dc.getInt("sqlCount");
+		i++;
+		dc.addValue("sqlCount", i);
+		/*
+		 * commented in egf dc.addValue("sql" + i, sql);
+		 */
+		if (null == con)
+			return 0;
+		// end of temp patch. You should remove this patch when going to
+		// production
+		int noOfRowsEffected = 0;
+		try (final Statement statement = con.createStatement();
+				final PreparedStatement pstmt = con.prepareStatement(sql);) {
+			noOfRowsEffected = pstmt.executeUpdate();
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("SSSSSSSS>>>>>>>>>>>>>>>>>>>>>>>>" + sql);
+			if (noOfRowsEffected == 0 && errorOnNoUpdate)
+				throw new TaskFailedException();
+			else
+				dc.addMessage("masterInsertUpdate");
+		} catch (final SQLException e) {
+			LOGGER.error("err Message  " + e.getErrorCode(), e);
+			if (e.getErrorCode() == 1)
+				dc.addMessage("exilDuplicate");
+			else
+				dc.addMessage("exilSQLException", e.getMessage());
+			throw new TaskFailedException();
+		}
+		return noOfRowsEffected;
+	}
 }

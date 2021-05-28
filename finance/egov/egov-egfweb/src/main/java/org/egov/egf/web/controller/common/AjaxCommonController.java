@@ -54,6 +54,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.Bankbranch;
@@ -86,13 +87,15 @@ import org.egov.model.masters.WorkOrder;
 import org.egov.services.masters.SchemeService;
 import org.egov.services.masters.SubSchemeService;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -106,7 +109,10 @@ import com.google.gson.JsonSerializer;
 
 @Controller
 @RequestMapping(value = "/common")
+@Validated
 public class AjaxCommonController {
+    private static final Logger LOGGER = Logger.getLogger(AjaxCommonController.class);
+
     @Autowired
     @Qualifier("schemeService")
     private SchemeService schemeService;
@@ -152,23 +158,23 @@ public class AjaxCommonController {
     @Autowired
     private MicroserviceUtils microserviceUtils;
 
-    @RequestMapping(value = "/getschemesbyfundid", method = RequestMethod.GET)
+    @GetMapping(value = "/getschemesbyfundid")
     @ResponseBody
-    public List<Scheme> getAllSchemesByFundId(@RequestParam("fundId") final String fundId)
+    public List<Scheme> getAllSchemesByFundId(@RequestParam("fundId") @SafeHtml final String fundId)
             throws ApplicationException {
         return schemeService.getByFundId(Integer.parseInt(fundId));
     }
 
-    @RequestMapping(value = "/getpurchaseodersbysupplierid", method = RequestMethod.GET)
+    @GetMapping(value = "/getpurchaseodersbysupplierid")
     @ResponseBody
-    public List<PurchaseOrder> getAllPurchaseOrdersBySupplierId(@RequestParam("supplierId") final String supplierId)
+    public List<PurchaseOrder> getAllPurchaseOrdersBySupplierId(@RequestParam("supplierId") @SafeHtml final String supplierId)
             throws ApplicationException {
         return purchaseOrderService.getBySupplierId(Long.parseLong(supplierId));
     }
 
-    @RequestMapping(value = "/getpurchaseoderbyordernumber", method = RequestMethod.GET)
+    @GetMapping(value = "/getpurchaseoderbyordernumber")
     @ResponseBody
-    public List<PurchaseOrder> getAllPurchaseOrderByOrderNumber(@RequestParam("orderNumber") final String orderNumber)
+    public List<PurchaseOrder> getAllPurchaseOrderByOrderNumber(@RequestParam("orderNumber") @SafeHtml final String orderNumber)
             throws ApplicationException {
         PurchaseOrder po = purchaseOrderService.getByOrderNumber(orderNumber);
         Department dept = microserviceUtils.getDepartmentByCode(po.getDepartment());
@@ -176,16 +182,16 @@ public class AjaxCommonController {
         return Collections.singletonList(po);
     }
 
-    @RequestMapping(value = "/getworkordersbycontractorid", method = RequestMethod.GET)
+    @GetMapping(value = "/getworkordersbycontractorid")
     @ResponseBody
-    public List<WorkOrder> getAllWorkOrdersByContractorId(@RequestParam("contractorId") final String contractorId)
+    public List<WorkOrder> getAllWorkOrdersByContractorId(@RequestParam("contractorId") @SafeHtml final String contractorId)
             throws ApplicationException {
         return workOrderService.getByContractorId(Long.parseLong(contractorId));
     }
 
-    @RequestMapping(value = "/getworkorderbyordernumber", method = RequestMethod.GET)
+    @GetMapping(value = "/getworkorderbyordernumber")
     @ResponseBody
-    public List<WorkOrder> getAllWorkOrderByOrderNumber(@RequestParam("orderNumber") final String orderNumber)
+    public List<WorkOrder> getAllWorkOrderByOrderNumber(@RequestParam("orderNumber") @SafeHtml final String orderNumber)
             throws ApplicationException {
         WorkOrder wo = workOrderService.getByOrderNumber(orderNumber);
         Department dept = microserviceUtils.getDepartmentByCode(wo.getDepartment());
@@ -193,36 +199,37 @@ public class AjaxCommonController {
         return Collections.singletonList(wo);
     }
 
-    @RequestMapping(value = "/getsubschemesbyschemeid", method = RequestMethod.GET)
+    @GetMapping(value = "/getsubschemesbyschemeid")
     @ResponseBody
-    public List<SubScheme> getAllSubSchemesBySchemeId(@RequestParam("schemeId") final String schemeId)
+    public List<SubScheme> getAllSubSchemesBySchemeId(@RequestParam("schemeId") @SafeHtml final String schemeId)
             throws ApplicationException {
         return subSchemeService.getBySchemeId(Integer.parseInt(schemeId));
     }
 
-    @RequestMapping(value = "/getfundsourcesbysubschemeid", method = RequestMethod.GET)
+    @GetMapping(value = "/getfundsourcesbysubschemeid")
     @ResponseBody
     public List<Fundsource> getAllFundSourcesBySubSchemeId(
-            @RequestParam("subSchemeId") final String subSchemeId) throws ApplicationException {
+            @RequestParam("subSchemeId") @SafeHtml final String subSchemeId) throws ApplicationException {
         return fundsourceService.getBySubSchemeId(Integer.parseInt(subSchemeId));
     }
 
-    @RequestMapping(value = "/ajaxfunctionnames", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/ajaxfunctionnames", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> findFunctionNames(@RequestParam final String name) {
+    public List<String> findFunctionNames(@RequestParam @SafeHtml final String name) {
         final List<String> functionNames = new ArrayList<>();
         final List<CFunction> functions = functionService.findByNameLikeOrCodeLike(name);
         for (final CFunction function : functions)
-            if (!function.getIsNotLeaf())
+            if (!function.getIsNotLeaf().booleanValue())
                 functionNames.add(function.getCode() + " - " + function.getName() + " ~ " + function.getId());
 
         return functionNames;
     }
 
-    @RequestMapping(value = "/getentitesbyaccountdetailtype", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @SuppressWarnings("unchecked")
+	@GetMapping(value = "/getentitesbyaccountdetailtype", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> findEntitesByAccountDetailType(@RequestParam final String name,
-            @RequestParam final String accountDetailType) {
+    public List<String> findEntitesByAccountDetailType(@RequestParam @SafeHtml final String name,
+            @RequestParam @SafeHtml final String accountDetailType) {
         final List<String> entityNames = new ArrayList<>();
         List<EntityType> entitiesList = new ArrayList<>();
         final Accountdetailtype detailType = accountdetailtypeService.findOne(Integer.parseInt(accountDetailType));
@@ -234,8 +241,8 @@ public class AjaxCommonController {
 
             final EntityTypeService entityService = (EntityTypeService) applicationContext.getBean(simpleName);
             entitiesList = (List<EntityType>) entityService.filterActiveEntities(name, 20, detailType.getId());
-        } catch (final Exception e) {
-            e.printStackTrace();
+        } catch (final ClassNotFoundException e) {
+            LOGGER.error("Error occured entity is not found" + e.getMessage());
             entitiesList = new ArrayList<>();
         }
         for (final EntityType entity : entitiesList)
@@ -244,87 +251,69 @@ public class AjaxCommonController {
         return entityNames;
     }
 
-    @RequestMapping(value = "/getsupplierdebitcodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String findSupplierDebitAccountCodes(@RequestParam final String glcode) {
-        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getSupplierDebitAccountCodes(glcode);
-        for (final CChartOfAccounts coa : chartOfAccounts)
-            if (coa.getChartOfAccountDetails().isEmpty())
-                coa.setIsSubLedger(false);
-            else
-                coa.setIsSubLedger(true);
-        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
-    }
+	@GetMapping(value = "/getsupplierdebitcodes", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String findSupplierDebitAccountCodes(@RequestParam @SafeHtml final String glcode) {
+		final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getSupplierDebitAccountCodes(glcode);
+		for (final CChartOfAccounts coa : chartOfAccounts)
+			coa.setIsSubLedger(!coa.getChartOfAccountDetails().isEmpty());
+		return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+	}
 
-    @RequestMapping(value = "/getsuppliercreditcodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String findSupplierCreditAccountCodes(@RequestParam final String glcode) {
-        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getSupplierCreditAccountCodes(glcode);
-        for (final CChartOfAccounts coa : chartOfAccounts)
-            if (coa.getChartOfAccountDetails().isEmpty())
-                coa.setIsSubLedger(false);
-            else
-                coa.setIsSubLedger(true);
-        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
-    }
+	@GetMapping(value = "/getsuppliercreditcodes", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String findSupplierCreditAccountCodes(@RequestParam @SafeHtml final String glcode) {
+		final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getSupplierCreditAccountCodes(glcode);
+		for (final CChartOfAccounts coa : chartOfAccounts)
+			coa.setIsSubLedger(!coa.getChartOfAccountDetails().isEmpty());
+		return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+	}
 
-    @RequestMapping(value = "/getcontractordebitcodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String findContractorDebitAccountCodes(@RequestParam final String glcode) {
-        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getContractorDebitAccountCodes(glcode);
-        for (final CChartOfAccounts coa : chartOfAccounts)
-            if (coa.getChartOfAccountDetails().isEmpty())
-                coa.setIsSubLedger(false);
-            else
-                coa.setIsSubLedger(true);
-        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
-    }
+	@GetMapping(value = "/getcontractordebitcodes", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String findContractorDebitAccountCodes(@RequestParam @SafeHtml final String glcode) {
+		final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getContractorDebitAccountCodes(glcode);
+		for (final CChartOfAccounts coa : chartOfAccounts)
+			coa.setIsSubLedger(!coa.getChartOfAccountDetails().isEmpty());
+		return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+	}
 
-    @RequestMapping(value = "/getcontractorcreditcodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String findContractorCreditAccountCodes(@RequestParam final String glcode) {
-        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getContractorCreditAccountCodes(glcode);
-        for (final CChartOfAccounts coa : chartOfAccounts)
-            if (coa.getChartOfAccountDetails().isEmpty())
-                coa.setIsSubLedger(false);
-            else
-                coa.setIsSubLedger(true);
-        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
-    }
+	@GetMapping(value = "/getcontractorcreditcodes", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String findContractorCreditAccountCodes(@RequestParam @SafeHtml final String glcode) {
+		final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getContractorCreditAccountCodes(glcode);
+		for (final CChartOfAccounts coa : chartOfAccounts)
+			coa.setIsSubLedger(!coa.getChartOfAccountDetails().isEmpty());
+		return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+	}
 
-    @RequestMapping(value = "/getaccountcodesforaccountdetailtype", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String findAccountCodesForAccountDetailType(@RequestParam final String glcode,
-            @RequestParam final String accountDetailType) {
-        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService
-                .getSubledgerAccountCodesForAccountDetailTypeAndNonSubledgers(Integer.parseInt(accountDetailType),
-                        glcode);
-        for (final CChartOfAccounts coa : chartOfAccounts)
-            if (coa.getChartOfAccountDetails().isEmpty())
-                coa.setIsSubLedger(false);
-            else
-                coa.setIsSubLedger(true);
-        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
-    }
+	@GetMapping(value = "/getaccountcodesforaccountdetailtype", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String findAccountCodesForAccountDetailType(@RequestParam @SafeHtml final String glcode,
+			@RequestParam @SafeHtml final String accountDetailType) {
+		final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService
+				.getSubledgerAccountCodesForAccountDetailTypeAndNonSubledgers(Integer.parseInt(accountDetailType),
+						glcode);
+		for (final CChartOfAccounts coa : chartOfAccounts)
+			coa.setIsSubLedger(!coa.getChartOfAccountDetails().isEmpty());
+		return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+	}
 
-    @RequestMapping(value = "/getnetpayablecodesbyaccountdetailtype", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String getNetPayableCodesByAccountDetailType(
-            @RequestParam("accountDetailType") final String accountDetailType) throws ApplicationException {
-        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService
-                .getNetPayableCodesByAccountDetailType(Integer.parseInt(accountDetailType));
-        for (final CChartOfAccounts coa : chartOfAccounts)
-            if (coa.getChartOfAccountDetails().isEmpty())
-                coa.setIsSubLedger(false);
-            else
-                coa.setIsSubLedger(true);
-        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
-    }
+	@GetMapping(value = "/getnetpayablecodesbyaccountdetailtype", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String getNetPayableCodesByAccountDetailType(
+			@RequestParam("accountDetailType") @SafeHtml final String accountDetailType) throws ApplicationException {
+		final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService
+				.getNetPayableCodesByAccountDetailType(Integer.parseInt(accountDetailType));
+		for (final CChartOfAccounts coa : chartOfAccounts)
+			coa.setIsSubLedger(!coa.getChartOfAccountDetails().isEmpty());
+		return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+	}
 
-    @RequestMapping(value = "/getchecklistbybillsubtype", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/getchecklistbybillsubtype", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<AppConfigValues> getCheckListByBillSubType(
-            @RequestParam("billSubType") final String billSubType) {
+            @RequestParam("billSubType") @SafeHtml final String billSubType) {
         final EgBillSubType egBillSubType = egBillSubTypeService.getById(Long.parseLong(billSubType));
 
         List<AppConfigValues> checkList;
@@ -337,28 +326,25 @@ public class AjaxCommonController {
         return checkList;
     }
 
-    @RequestMapping(value = "/getallaccountcodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String findAllAccountCodes(@RequestParam final String glcode) {
-        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getAllAccountCodes(glcode);
-        for (final CChartOfAccounts coa : chartOfAccounts)
-            if (coa.getChartOfAccountDetails().isEmpty())
-                coa.setIsSubLedger(false);
-            else
-                coa.setIsSubLedger(true);
-        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
-    }
+	@GetMapping(value = "/getallaccountcodes", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String findAllAccountCodes(@RequestParam @SafeHtml final String glcode) {
+		final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getAllAccountCodes(glcode);
+		for (final CChartOfAccounts coa : chartOfAccounts)
+			coa.setIsSubLedger(!coa.getChartOfAccountDetails().isEmpty());
+		return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+	}
 
-    @RequestMapping(value = "/getaccountdetailtypesbyglcodeid", method = RequestMethod.GET)
+    @GetMapping(value = "/getaccountdetailtypesbyglcodeid")
     @ResponseBody
-    public List<Accountdetailtype> getAccountDetailTypesByGlcodeId(@RequestParam("glcodeId") final String glcodeId)
+    public List<Accountdetailtype> getAccountDetailTypesByGlcodeId(@RequestParam("glcodeId") @SafeHtml final String glcodeId)
             throws ApplicationException {
         return accountdetailtypeService.findByGlcodeId(Long.parseLong(glcodeId));
     }
 
-    @RequestMapping(value = "/getbankbranchesbybankid", method = RequestMethod.GET)
+    @GetMapping(value = "/getbankbranchesbybankid")
     @ResponseBody
-    public List<Bankbranch> getBankbranchesByBankId(@RequestParam("bankId") final String bankId)
+    public List<Bankbranch> getBankbranchesByBankId(@RequestParam("bankId") @SafeHtml final String bankId)
             throws ApplicationException {
         if (!"0".equals(bankId))
             return createBankBranchService.getByBankId(Integer.parseInt(bankId));
@@ -366,9 +352,9 @@ public class AjaxCommonController {
             return createBankBranchService.getByIsActiveTrueOrderByBranchname();
     }
 
-    @RequestMapping(value = "/getbankaccountbybranchid", method = RequestMethod.GET)
+    @GetMapping(value = "/getbankaccountbybranchid")
     @ResponseBody
-    public List<Bankaccount> getBankAccountByBranchId(@RequestParam("branchId") final String branchId)
+    public List<Bankaccount> getBankAccountByBranchId(@RequestParam("branchId") @SafeHtml final String branchId)
             throws ApplicationException {
         return createBankAccountService.getByBranchId(Integer.parseInt(branchId));
     }

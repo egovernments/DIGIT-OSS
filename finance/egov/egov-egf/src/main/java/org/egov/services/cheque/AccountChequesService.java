@@ -97,11 +97,10 @@ public class AccountChequesService extends PersistenceService<AccountCheques, Lo
 
                 if (chequeDetail.getAccountChequeId() != null
                         && null == chequeIdMap.get(chequeDetail.getAccountChequeId().toString())) {
-                    session.createQuery(
-                            "delete from ChequeDeptMapping where accountCheque.id=" + chequeDetail.getAccountChequeId())
-                            .executeUpdate();
-                    session.createQuery("delete from AccountCheques where id=" + chequeDetail.getAccountChequeId())
-                            .executeUpdate();
+					session.createQuery("delete from ChequeDeptMapping where accountCheque.id = :id")
+							.setParameter("id", chequeDetail.getAccountChequeId()).executeUpdate();
+					session.createQuery("delete from AccountCheques where id = :id")
+							.setParameter("id", chequeDetail.getAccountChequeId()).executeUpdate();
                     chequeIdMap.put(chequeDetail.getAccountChequeId().toString(), chequeDetail.getAccountChequeId().toString());
 
                 }
@@ -133,28 +132,29 @@ public class AccountChequesService extends PersistenceService<AccountCheques, Lo
 
     // delete the record from chequedeptmapping and accountcheques if all the departments that are mapped for that cheque leaf is
     // deleted by user.
-    @Transactional
-    public void deleteRecords(String deletedChqDeptId, Bankaccount bankaccount) {
+	@Transactional
+	public void deleteRecords(String deletedChqDeptId, Bankaccount bankaccount) {
 
-        final Session session = getSession();
+		final Session session = getSession();
 
-        if (null != deletedChqDeptId && !deletedChqDeptId.equalsIgnoreCase("")) {
-            final Query qry = session.createQuery("delete from ChequeDeptMapping where id in (" + deletedChqDeptId + ")");
-            qry.executeUpdate();
-        }
+		if (null != deletedChqDeptId && !deletedChqDeptId.equalsIgnoreCase("")) {
+			final Query qry = session.createQuery("delete from ChequeDeptMapping where id in (:deletedChqDeptId)")
+					.setParameter("deletedChqDeptId", deletedChqDeptId);
+			qry.executeUpdate();
+		}
 
-        // delete the cheque leafs that are not mapped to any department.
-        final StringBuffer accChqDelquery = new StringBuffer();
-        accChqDelquery.append("delete from AccountCheques where id in ( select id from AccountCheques where id not in")
-                .append("( select ac.id from AccountCheques ac,ChequeDeptMapping cd where ac.id=cd.accountCheque.id ")
-                .append(" and ac.bankAccountId.id=:bankAccId) and bankAccountId.id=:bankAccId)");
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("AccountChequeAction | save | accChqDelquery " + accChqDelquery.toString());
-        final Query delqry = session.createQuery(accChqDelquery.toString());
-        delqry.setLong("bankAccId", bankaccount.getId());
-        delqry.executeUpdate();
+		// delete the cheque leafs that are not mapped to any department.
+		final StringBuilder accChqDelquery = new StringBuilder();
+		accChqDelquery.append("delete from AccountCheques where id in ( select id from AccountCheques where id not in")
+				.append("( select ac.id from AccountCheques ac,ChequeDeptMapping cd where ac.id=cd.accountCheque.id ")
+				.append(" and ac.bankAccountId.id=:bankAccId) and bankAccountId.id=:bankAccId)");
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("AccountChequeAction | save | accChqDelquery " + accChqDelquery.toString());
+		final Query delqry = session.createQuery(accChqDelquery.toString());
+		delqry.setLong("bankAccId", bankaccount.getId());
+		delqry.executeUpdate();
 
-    }
+	}
 
     // delete the record from chequedeptmapping and accountcheques if all the departments that are mapped for that cheque leaf is
     // deleted by user.
@@ -163,19 +163,20 @@ public class AccountChequesService extends PersistenceService<AccountCheques, Lo
 
         final Session session = getSession();
 
-        final Query qry = session.createQuery(
-                "delete from ChequeDeptMapping where accountCheque.id in (select id from AccountCheques where bankAccountId.id=:bankAccId)");
-        qry.setLong("bankAccId", bankaccount.getId());
-        qry.executeUpdate();
+		final Query qry = session
+				.createQuery(new StringBuilder("delete from ChequeDeptMapping where accountCheque.id in")
+						.append(" (select id from AccountCheques where bankAccountId.id=:bankAccId)").toString());
+		qry.setLong("bankAccId", bankaccount.getId());
+		qry.executeUpdate();
 
-        // delete the cheque leafs that are not mapped to any department.
-        final StringBuffer accChqDelquery = new StringBuffer();
-        accChqDelquery.append("delete from AccountCheques where bankAccountId.id=:bankAccId");
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("AccountChequeAction | save | accChqDelquery " + accChqDelquery.toString());
-        final Query delqry = session.createQuery(accChqDelquery.toString());
-        delqry.setLong("bankAccId", bankaccount.getId());
-        delqry.executeUpdate();
+		// delete the cheque leafs that are not mapped to any department.
+		final StringBuilder accChqDelquery = new StringBuilder();
+		accChqDelquery.append("delete from AccountCheques where bankAccountId.id=:bankAccId");
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("AccountChequeAction | save | accChqDelquery " + accChqDelquery.toString());
+		final Query delqry = session.createQuery(accChqDelquery.toString());
+		delqry.setLong("bankAccId", bankaccount.getId());
+		delqry.executeUpdate();
 
     }
 

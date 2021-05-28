@@ -152,6 +152,11 @@
 		function submitForm() {
 
 			document.chequeAssignment.action = "/services/EGF/payment/chequeAssignment-searchChequesOfRemittance.action";
+			jQuery(chequeAssignment).append(jQuery('<input>', {
+	            type : 'hidden',
+	            name : '${_csrf.parameterName}',
+	            value : '${_csrf.token}'
+	        }));
 			document.chequeAssignment.submit();
 		}
 		var date = '<s:date name="currentDate" format="dd/MM/yyyy"/>';

@@ -47,6 +47,9 @@
  */
 package org.egov.eis.web.controller.masters.employee;
 
+import java.util.Date;
+import java.util.List;
+
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
 import org.egov.eis.service.DesignationService;
@@ -56,62 +59,53 @@ import org.egov.pims.commons.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 @RequestMapping(value = "/employee")
 public class EmployeeAjaxController {
 
-    @Autowired
-    private DesignationService designationService;
+	@Autowired
+	private DesignationService designationService;
 
-    @Autowired
-    private PositionMasterService positionMasterService;
+	@Autowired
+	private PositionMasterService positionMasterService;
 
-    @Autowired
-    private AssignmentService assignmentService;
+	@Autowired
+	private AssignmentService assignmentService;
 
-    @RequestMapping(value = "/ajax/designations", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Designation> getAllDesignationsByNameLike(
-            @ModelAttribute("employeeBean") @RequestParam final String designationName) {
-        return designationService.getAllDesignationsByNameLike(designationName);
-    }
+	@GetMapping(value = "/ajax/designations", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Designation> getAllDesignationsByNameLike(@RequestParam final String designationName) {
+		return designationService.getAllDesignationsByNameLike(designationName);
+	}
 
-    @RequestMapping(value = "/ajax/positions", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Position> getPositionForDeptAndDesig(
-            @ModelAttribute("employeeBean") @RequestParam final Long deptId, @RequestParam final Long desigId,
-            @RequestParam final Date fromDate, @RequestParam final Date toDate, @RequestParam final String positionName,
-            @RequestParam final boolean primary) {
-        List<Position> posList = new ArrayList<Position>();
-        if (primary)
-            posList = positionMasterService.getPositionsForDeptDesigAndName(deptId, desigId, fromDate, toDate,
-                    positionName);
-        else
-            posList = positionMasterService.getPositionsForDeptDesigAndNameLike(deptId, desigId, positionName);
-        return posList;
-    }
+	@GetMapping(value = "/ajax/positions", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Position> getPositionForDeptAndDesig(@RequestParam final Long deptId,
+			@RequestParam final Long desigId, @RequestParam final Date fromDate, @RequestParam final Date toDate,
+			@RequestParam final String positionName, @RequestParam final boolean primary) {
+		List<Position> posList;
+		if (primary)
+			posList = positionMasterService.getPositionsForDeptDesigAndName(deptId, desigId, fromDate, toDate,
+					positionName);
+		else
+			posList = positionMasterService.getPositionsForDeptDesigAndNameLike(deptId, desigId, positionName);
+		return posList;
+	}
 
-    @RequestMapping(value = "/ajax/primaryPosition", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody String getPrimaryAssignmentsForPosition(
-            @ModelAttribute("employeeBean") @RequestParam final Long positionId,
-            @RequestParam final Long assignmentId, @RequestParam final Date fromDate, @RequestParam final Date toDate,
-            @RequestParam final String code) {
-        final List<Assignment> assignment = assignmentService.getPrimaryAssignmentForPositionAndDateRange(positionId, fromDate,
-                toDate);
-        String empCode = "";
-        for (final Assignment assign : assignment)
-            if (assign.getId() != assignmentId && !assign.getEmployee().getCode().equalsIgnoreCase(code))
-                empCode = empCode.concat(assign.getEmployee().getCode()).concat(",");
-        return empCode;
-    }
+	@GetMapping(value = "/ajax/primaryPosition", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody String getPrimaryAssignmentsForPosition(@RequestParam final Long positionId,
+			@RequestParam final Long assignmentId, @RequestParam final Date fromDate, @RequestParam final Date toDate,
+			@RequestParam final String code) {
+		final List<Assignment> assignment = assignmentService.getPrimaryAssignmentForPositionAndDateRange(positionId,
+				fromDate, toDate);
+		String empCode = "";
+		for (final Assignment assign : assignment)
+			if (assign.getId() != assignmentId && !assign.getEmployee().getCode().equalsIgnoreCase(code))
+				empCode = empCode.concat(assign.getEmployee().getCode()).concat(",");
+		return empCode;
+	}
 
 }

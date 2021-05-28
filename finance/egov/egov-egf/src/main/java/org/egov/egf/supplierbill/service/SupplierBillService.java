@@ -356,7 +356,7 @@ public class SupplierBillService {
                     && workFlowAction.equals(FinancialConstants.BUTTONCANCEL))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                         FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS));
-            else if (FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS.equals(egBillregister.getStatus().getCode())
+            else if (FinancialConstants.SUPPLIERBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
                     && workFlowAction.equals(FinancialConstants.BUTTONFORWARD))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                         FinancialConstants.SUPPLIERBILL_CREATED_STATUS));
@@ -655,7 +655,7 @@ public class SupplierBillService {
 
     private Assignment getCurrentUserAssignmet(Long userId) {
         // Long userId = ApplicationThreadLocals.getUserId();
-        List<EmployeeInfo> emplist = microServiceUtil.getEmployee(userId, new Date(), null, null);
+        List<EmployeeInfo> emplist = microServiceUtil.getEmployee(userId, null, null, null);
         Assignment assignment = new Assignment();
         if (null != emplist && emplist.size() > 0 && emplist.get(0).getAssignments().size() > 0) {
             Position position = new Position();
@@ -687,6 +687,6 @@ public class SupplierBillService {
 
     private Designation getDesignationDetails(String desgnCode) {
         List<Designation> desgnList = microServiceUtil.getDesignation(desgnCode);
-        return desgnList.get(0);
+        return !desgnList.isEmpty() ?  desgnList.get(0) : null;
     }
 }

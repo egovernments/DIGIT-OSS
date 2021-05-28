@@ -47,106 +47,114 @@
  */
 package org.egov.model.payment;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
 import org.egov.commons.Bankaccount;
 import org.egov.commons.CVoucherHeader;
 import org.egov.eis.entity.DrawingOfficer;
 import org.egov.infra.workflow.entity.StateAware;
-import org.egov.pims.commons.Position;
-
-import java.math.BigDecimal;
-import java.util.Date;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 public class Paymentheader extends StateAware {
 
-    private static final long serialVersionUID = 1300661952219397466L;
-    private Long id;
-    private CVoucherHeader voucherheader;
-    private String isSelected;
-    private String type;
-    private Date concurrenceDate;
+	private static final long serialVersionUID = 1300661952219397466L;
+	private Long id;
+	@NotNull
+	private CVoucherHeader voucherheader;
+	@SafeHtml
+	private String isSelected;
+	@NotNull
+	@SafeHtml
+	@Length(max = 50)
+	private String type;
+	private Date concurrenceDate;
 
-    private Bankaccount bankaccount;
-    private BigDecimal paymentAmount;
-    private DrawingOfficer drawingOfficer;
+	private Bankaccount bankaccount;
+	private BigDecimal paymentAmount;
+	private DrawingOfficer drawingOfficer;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    @Override
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	@Override
+	protected void setId(final Long id) {
+		this.id = id;
+	}
 
-    public CVoucherHeader getVoucherheader() {
-        return voucherheader;
-    }
+	public CVoucherHeader getVoucherheader() {
+		return voucherheader;
+	}
 
-    public void setVoucherheader(final CVoucherHeader voucherheader) {
-        this.voucherheader = voucherheader;
-    }
+	public void setVoucherheader(final CVoucherHeader voucherheader) {
+		this.voucherheader = voucherheader;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setType(final String type) {
-        this.type = type;
-    }
+	public void setType(final String type) {
+		this.type = type;
+	}
 
-    public Bankaccount getBankaccount() {
-        return bankaccount;
-    }
+	public Bankaccount getBankaccount() {
+		return bankaccount;
+	}
 
-    public void setBankaccount(final Bankaccount bankaccount) {
-        this.bankaccount = bankaccount;
-    }
+	public void setBankaccount(final Bankaccount bankaccount) {
+		this.bankaccount = bankaccount;
+	}
 
-    public String getIsSelected() {
-        return isSelected;
-    }
+	public String getIsSelected() {
+		return isSelected;
+	}
 
-    public void setIsSelected(final String isSelected) {
-        this.isSelected = isSelected;
-    }
+	public void setIsSelected(final String isSelected) {
+		this.isSelected = isSelected;
+	}
 
-    @Override
-    public String getStateDetails() {
-        // Added to show mode of paymentType for the inbox items.
-        String temp = "";
-        if (type != null && !type.isEmpty())
-            temp = "-" + type.toUpperCase();
-        return voucherheader.getVoucherNumber() + temp;
-    }
+	@Override
+	public String getStateDetails() {
+		// Added to show mode of paymentType for the inbox items.
+		String temp = "";
+		if (type != null && !type.isEmpty())
+			temp = "-" + type.toUpperCase();
+		return voucherheader.getVoucherNumber() + temp;
+	}
 
-    public BigDecimal getPaymentAmount() {
-        return paymentAmount;
-    }
+	public BigDecimal getPaymentAmount() {
+		return paymentAmount;
+	}
 
-    public void setPaymentAmount(final BigDecimal paymentAmount) {
-        this.paymentAmount = paymentAmount;
-    }
+	public void setPaymentAmount(final BigDecimal paymentAmount) {
+		this.paymentAmount = paymentAmount;
+	}
 
-    @Override
-    public String toString() {
-        return type + " " + isSelected;
-    }
+	@Override
+	public String toString() {
+		return type + " " + isSelected;
+	}
 
-    public Date getConcurrenceDate() {
-        return concurrenceDate;
-    }
+	public Date getConcurrenceDate() {
+		return concurrenceDate;
+	}
 
-    public void setConcurrenceDate(final Date concurrenceDate) {
-        this.concurrenceDate = concurrenceDate;
-    }
+	public void setConcurrenceDate(final Date concurrenceDate) {
+		this.concurrenceDate = concurrenceDate;
+	}
 
-    public DrawingOfficer getDrawingOfficer() {
-        return drawingOfficer;
-    }
+	public DrawingOfficer getDrawingOfficer() {
+		return drawingOfficer;
+	}
 
-    public void setDrawingOfficer(final DrawingOfficer drawingOfficer) {
-        this.drawingOfficer = drawingOfficer;
-    }
+	public void setDrawingOfficer(final DrawingOfficer drawingOfficer) {
+		this.drawingOfficer = drawingOfficer;
+	}
 
 }

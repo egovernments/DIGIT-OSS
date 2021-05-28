@@ -284,7 +284,7 @@ public class VoucherSearchAction extends BaseFormAction {
 		if (null == showMode || showMode.equals("")) {
 			qryObj = voucherSearchUtil.voucherSearchQuery(voucherHeader, fromDate, toDate, showMode);
 			final Query qry = qryObj.get(0);
-			final Long count = (Long) persistenceService.find(qryObj.get(1).getQueryString());
+			final Long count = (Long) qryObj.get(1).list().get(0);
 			final Page resPage = new Page(qry, page, pageSize);
 			pagedResults = new EgovPaginatedList(resPage, count.intValue());
 			list = pagedResults != null ? pagedResults.getList() : null;

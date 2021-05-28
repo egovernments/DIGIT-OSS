@@ -69,6 +69,8 @@ import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.payment.Paymentheader;
+import org.hibernate.Query;
+import org.hibernate.type.LongType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
@@ -76,7 +78,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 
@@ -113,8 +117,7 @@ public class PaymentReversalAction extends BaseVoucherAction {
         addDropdownData("accNumList", Collections.EMPTY_LIST);
         addDropdownData("voucherNameList",
                 persistenceService
-                .findAllBy("select distinct vh.name from CVoucherHeader vh where vh.type='Payment' and status not in ("
-                        + statusExclude + ") order by vh.name"));
+                .findAllBy(new StringBuilder("select distinct vh.name from CVoucherHeader vh where vh.type='Payment' and status not in (?) order by vh.name").toString(), statusExclude));
     }
 
     public PaymentReversalAction() {
@@ -155,27 +158,35 @@ public class PaymentReversalAction extends BaseVoucherAction {
     }
 
     public String searchVouchersForReversal() throws ApplicationException, ParseException {
-        voucherHeader.setType("Payment");
+    	voucherHeader.setType("Payment");
         voucherHeaderList = voucherSearchUtil.search(voucherHeader, getFromDate(), getToDate(), "reverse");
-        final String query = formQuery(voucherHeaderList);
-        if (voucherHeaderList != null && voucherHeaderList.size() > 0)
-            if (bankAccount != null && bankAccount.getId() != null)
-                paymentHeaderList = persistenceService.findAllBy(query + " and bankaccount.id=?",
-                        bankAccount.getId());
-            else
-                paymentHeaderList = persistenceService.findAllBy(query);
+        final Map.Entry<String, Map<String, Object>> queryMapEntry = formQuery(voucherHeaderList).entrySet().iterator().next();
+        final String queryString = queryMapEntry.getKey();
+        final Map<String, Object> queryParams = queryMapEntry.getValue();
+        final Query query;
+        if (voucherHeaderList != null && voucherHeaderList.size() > 0) {
+            if (bankAccount != null && bankAccount.getId() != null) {
+                query = persistenceService.getSession().createQuery(queryString.concat(" and bankaccount.id=:accId)"));
+                query.setParameter("accId", bankAccount.getId(), LongType.INSTANCE);
+            } else
+                query = persistenceService.getSession().createQuery(queryString);
+            queryParams.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+            paymentHeaderList = query.list();
+        }
         if (paymentHeaderList.size() == 0)
             message = getText("no.records");
         return "reversalVouchers";
     }
 
-    private String formQuery(final List<CVoucherHeader> voucherHeaderList) {
-        StringBuffer query = new StringBuffer("from Paymentheader where voucherheader.id in (");
-        for (final CVoucherHeader voucherHeader : voucherHeaderList)
-            query = query.append(voucherHeader.getId()).append(",");
-        if (voucherHeaderList.size() > 0)
-            return query.substring(0, query.length() - 1).concat(" ) ");
-        return query.toString().concat(" ) ");
+    private Map<String, Map<String, Object>> formQuery(final List<CVoucherHeader> voucherHeaderList) {
+        final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+        final Map<String, Object> queryParams = new HashMap<>();
+        final StringBuffer query = new StringBuffer("from Paymentheader where voucherheader.id in (:ids)");
+        List<Long> ids = new ArrayList<>();
+        voucherHeaderList.forEach(cVoucherHeader -> ids.add(cVoucherHeader.getId()));
+        queryParams.put("ids", ids);
+        queryMap.put(query.toString(), queryParams);
+        return queryMap;
     }
 
     public void setVoucherSearchUtil(final VoucherSearchUtil voucherSearchUtil) {

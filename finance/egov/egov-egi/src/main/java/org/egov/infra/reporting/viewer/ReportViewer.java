@@ -48,84 +48,86 @@
 
 package org.egov.infra.reporting.viewer;
 
+import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION;
+
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.reporting.engine.ReportConstants;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportOutput;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.HTTPUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-
-import static org.egov.infra.utils.ApplicationConstant.CONTENT_DISPOSITION;
-
 @Component("reportViewer")
 public class ReportViewer implements HttpRequestHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReportViewer.class);
-    private static final String REPORT_ERROR_RESPONSE = "<html><body><b>Report not generated, Reason : %s!</b></body></html>";
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReportViewer.class);
+	private static final String REPORT_ERROR_RESPONSE = "<html><body><b>Report not generated, Reason : %s!</b></body></html>";
 
-    @Autowired
-    private ReportViewerUtil reportViewerUtil;
+	@Autowired
+	private ReportViewerUtil reportViewerUtil;
 
-    @Override
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String reportId = request.getParameter(ReportConstants.REQ_PARAM_REPORT_ID);
-        try {
-            ReportOutput reportOutput = reportViewerUtil.getReportOutputFormCache(reportId);
-            if (reportOutput == null) {
-                renderError(response, "Report output not available");
-                return;
-            }
+	@Override
+	public void handleRequest(HttpServletRequest request, HttpServletResponse response) {
+		String reportId = request.getParameter(ReportConstants.REQ_PARAM_REPORT_ID);
+		try {
+			ReportOutput reportOutput = reportViewerUtil.getReportOutputFormCache(reportId);
+			if (reportOutput == null) {
+				renderError(request, response, "Report output not available");
+				return;
+			}
 
-            ReportFormat reportFormat = reportOutput.getReportFormat();
-            if (reportFormat == null) {
-                renderError(response, "Report format not available");
-                return;
-            }
+			ReportFormat reportFormat = reportOutput.getReportFormat();
+			if (reportFormat == null) {
+				renderError(request, response, "Report format not available");
+				return;
+			}
 
-            byte[] reportData = reportOutput.getReportOutputData();
-            if (reportData == null) {
-                renderError(response, "Report data not available");
-                return;
-            }
+			byte[] reportData = reportOutput.getReportOutputData();
+			if (reportData == null) {
+				renderError(request, response, "Report data not available");
+				return;
+			}
+			renderReport(request, response, reportOutput);
+		} finally {
+			reportViewerUtil.removeReportOutputFromCache(reportId);
+		}
+	}
 
-            renderReport(response, reportOutput);
-        } catch (Exception e) {
-            LOGGER.error("Invalid report id [{}]", reportId, e);
-            renderError(response, "Report can not be rendered");
-        } finally {
-            reportViewerUtil.removeReportOutputFromCache(reportId);
-        }
-    }
+	private void renderReport(HttpServletRequest request, HttpServletResponse resp, ReportOutput reportOutput) {
+		try (BufferedOutputStream outputStream = new BufferedOutputStream(resp.getOutputStream())) {
+			HTTPUtilities httpUtilities = ESAPI.httpUtilities();
+			httpUtilities.setCurrentHTTP(request, resp);
+			httpUtilities.setHeader("Content-Type", ReportViewerUtil.getContentType(reportOutput.getReportFormat()));
+			resp.setContentLength(reportOutput.getReportOutputData().length);
+			httpUtilities.setHeader(CONTENT_DISPOSITION, reportOutput.reportDisposition());
+			outputStream.write(reportOutput.getReportOutputData());
+		} catch (IOException e) {
+			LOGGER.error("Exception in rendering report response with format [{}]!", reportOutput.getReportFormat(), e);
+			throw new ApplicationRuntimeException("Error occurred in report viewer", e);
+		}
+	}
 
-    private void renderReport(HttpServletResponse resp, ReportOutput reportOutput) {
-        try (BufferedOutputStream outputStream = new BufferedOutputStream(resp.getOutputStream())) {
-            resp.setHeader(CONTENT_DISPOSITION, reportOutput.reportDisposition());
-            resp.setContentType(ReportViewerUtil.getContentType(reportOutput.getReportFormat()));
-            resp.setContentLength(reportOutput.getReportOutputData().length);
-            outputStream.write(reportOutput.getReportOutputData());
-        } catch (Exception e) {
-            LOGGER.error("Exception in rendering report response with format [{}]!", reportOutput.getReportFormat(), e);
-            throw new ApplicationRuntimeException("Error occurred in report viewer", e);
-        }
-    }
-
-    private void renderError(HttpServletResponse resp, String error) {
-        byte[] errorResponse = String.format(REPORT_ERROR_RESPONSE, error).getBytes();
-        try (BufferedOutputStream outputStream = new BufferedOutputStream(resp.getOutputStream())) {
-            resp.setContentType(ReportViewerUtil.getContentType(ReportFormat.HTM));
-            resp.setContentLength(errorResponse.length);
-            outputStream.write(errorResponse);
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while preparing report error response!", e);
-            throw new ApplicationRuntimeException("Error occurred in report viewer", e);
-        }
-    }
+	private void renderError(HttpServletRequest request, HttpServletResponse resp, String error) {
+		byte[] errorResponse = String.format(REPORT_ERROR_RESPONSE, error).getBytes();
+		try (BufferedOutputStream outputStream = new BufferedOutputStream(resp.getOutputStream())) {
+			HTTPUtilities httpUtilities = ESAPI.httpUtilities();
+			httpUtilities.setCurrentHTTP(request, resp);
+			httpUtilities.setHeader("Content-Type", ReportViewerUtil.getContentType(ReportFormat.HTM));
+			resp.setContentLength(errorResponse.length);
+			outputStream.write(errorResponse);
+		} catch (IOException e) {
+			LOGGER.error("Error occurred while preparing report error response!", e);
+			throw new ApplicationRuntimeException("Error occurred in report viewer", e);
+		}
+	}
 }

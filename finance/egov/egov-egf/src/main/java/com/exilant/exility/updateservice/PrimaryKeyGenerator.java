@@ -49,11 +49,13 @@ package com.exilant.exility.updateservice;
 
 import org.apache.log4j.Logger;
 import org.egov.infstr.services.PersistenceService;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.List;
 
 public class PrimaryKeyGenerator
@@ -92,8 +94,8 @@ public class PrimaryKeyGenerator
             final List<BigInteger> rs = pst.list();
             key = rs != null ? rs.get(0).longValue() : 0l;
             if (rs == null || rs.size() == 0)
-                throw new Exception();
-        } catch (final Exception e)
+                throw new NullPointerException();
+        } catch (final HibernateException e)
         {
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Exp=" + e.getMessage());

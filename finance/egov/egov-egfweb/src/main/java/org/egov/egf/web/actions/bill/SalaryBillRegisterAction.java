@@ -176,8 +176,9 @@ public class SalaryBillRegisterAction extends BaseFormAction {
                 "EGF",
                 "salaryBillDefaultPurposeId");
         final String cBillDefaulPurposeId = defaultConfigValuesByModuleAndKey.get(0).getValue();
-        final List<CChartOfAccounts> salaryPayableCoa = persistenceService.findAllBy("FROM CChartOfAccounts WHERE purposeid in ("
-                + cBillDefaulPurposeId + ") and isactiveforposting = true and classification=4");
+        final List<CChartOfAccounts> salaryPayableCoa = persistenceService.findAllBy(new StringBuilder("FROM CChartOfAccounts WHERE purposeid in (?) and isactiveforposting = true")
+                .append(" and classification=4").toString(), cBillDefaulPurposeId);
+        
         for (final CChartOfAccounts chartOfAccounts : salaryPayableCoa) {
             final EgBilldetails billdetails = new EgBilldetails();
             billdetails.setGlcodeid(BigDecimal.valueOf(chartOfAccounts.getId()));
@@ -289,12 +290,9 @@ public class SalaryBillRegisterAction extends BaseFormAction {
     public String view() {
         setBillregister((EgBillregister) persistenceService.find("from EgBillregister where id=?", billregisterId));
         billregistermis = getBillregister().getEgBillregistermis();
-        earningsList = persistenceService.findAllBy("from EgBilldetails where egBillregister.id=? and glcodeid in ("
-                + getGlCodeIds(earningsCodes) + ")", billregisterId);
-        deductionsList = persistenceService.findAllBy("from EgBilldetails where egBillregister.id=? and glcodeid in ("
-                + getGlCodeIds(deductionsCodes) + ")", billregisterId);
-        subledgerList = persistenceService.findAllBy("from EgBillPayeedetails where egBilldetailsId.id in ("
-                + getBillDetailsId(earningsList, deductionsList) + ")");
+        earningsList = persistenceService.findAllBy("from EgBilldetails where egBillregister.id=? and glcodeid in (?)", billregisterId, getGlCodeIds(earningsCodes));
+        deductionsList = persistenceService.findAllBy("from EgBilldetails where egBillregister.id=? and glcodeid in (?)", billregisterId, getGlCodeIds(deductionsCodes));
+        subledgerList = persistenceService.findAllBy("from EgBillPayeedetails where egBilldetailsId.id in (?)", getBillDetailsId(earningsList, deductionsList));
         return Constants.VIEW;
     }
 

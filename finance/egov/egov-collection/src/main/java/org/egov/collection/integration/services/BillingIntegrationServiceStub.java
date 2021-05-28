@@ -58,6 +58,7 @@ import org.egov.collection.xml.converter.BillReceiptInfoConverter;
 import org.egov.collection.xml.converter.ReceiptAccountInfoConverter;
 import org.egov.collection.xml.converter.ReceiptInstrumentInfoConverter;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.springframework.oxm.XmlMappingException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -78,12 +79,12 @@ public class BillingIntegrationServiceStub implements BillingIntegrationService 
     private static final Logger LOGGER = Logger.getLogger(BillingIntegrationServiceStub.class);
 
     @Override
-    public void updateReceiptDetails(final Set<BillReceiptInfo> billReceipts) throws ApplicationRuntimeException {
+    public void updateReceiptDetails(final Set<BillReceiptInfo> billReceipts) {
         try {
             final String xml = convertToXML(billReceipts);
             LOGGER.debug("Written bill details to file successfully " + xml);
 
-        } catch (final Exception e) {
+        } catch (final XmlMappingException e) {
             LOGGER.error("Error occrured while updating dishonored cheque status to billing system : " + e);
             throw new ApplicationRuntimeException("Exception Occured" + e);
         }

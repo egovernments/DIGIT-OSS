@@ -145,8 +145,8 @@ public class FinancingSourceAction extends BaseFormAction {
     @Action(value = "/masters/financingSource-getIntEstAmt")
     public String getIntEstAmt() {
 
-        final SubScheme subscheme = (SubScheme) persistenceService.find("from SubScheme  where id = "
-                + Integer.valueOf(parameters.get("subSchemeId")[0]));
+        final SubScheme subscheme = (SubScheme) persistenceService.find("from SubScheme  where id = ?",
+                Integer.valueOf(parameters.get("subSchemeId")[0]));
         initialEstimateAmount = subscheme.getInitialEstimateAmount();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug(" initial estimate amount received = " + initialEstimateAmount);
@@ -157,8 +157,8 @@ public class FinancingSourceAction extends BaseFormAction {
 
     public String getOwnSrcAmount() {
 
-        final Fundsource fundsource = (Fundsource) persistenceService.find("from Fundsource where id="
-                + Integer.valueOf(parameters.get("finSrcOwnSrcId")[0]));
+        final Fundsource fundsource = (Fundsource) persistenceService.find("from Fundsource where id=?", 
+                Integer.valueOf(parameters.get("finSrcOwnSrcId")[0]));
         initialEstimateAmount = fundsource.getSourceAmount();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug(" initial estimate amount received = " + initialEstimateAmount);
@@ -177,9 +177,7 @@ public class FinancingSourceAction extends BaseFormAction {
     public boolean getCodeCheck() {
 
         boolean codeExistsOrNot = false;
-        final Fundsource fundsourceObj = (Fundsource) persistenceService.find("from Fundsource where code='"
-                + fundsource.getCode()
-                + "'");
+        final Fundsource fundsourceObj = (Fundsource) persistenceService.find("from Fundsource where code=?", fundsource.getCode());
         if (null != fundsourceObj)
             codeExistsOrNot = true;
         return codeExistsOrNot;
@@ -194,9 +192,7 @@ public class FinancingSourceAction extends BaseFormAction {
     public boolean getNameCheck() {
 
         boolean nameExistsOrNot = false;
-        final Fundsource fundsourceObj = (Fundsource) persistenceService.find("from Fundsource where name='"
-                + fundsource.getName()
-                + "'");
+        final Fundsource fundsourceObj = (Fundsource) persistenceService.find("from Fundsource where name=?", fundsource.getName());
         if (null != fundsourceObj)
             nameExistsOrNot = true;
         return nameExistsOrNot;
@@ -227,7 +223,7 @@ public class FinancingSourceAction extends BaseFormAction {
                     financingSourceService.persist(fundsource);
                 }
             addActionMessage(getText("masters.finsrc.saved.sucess"));
-        } catch (final Exception e) {
+        } catch (final ValidationException e) {
             LOGGER.error("error occured while creating financial source" + e.getMessage(), e);
             clearMessages();
             final List<ValidationError> errors = new ArrayList<ValidationError>();

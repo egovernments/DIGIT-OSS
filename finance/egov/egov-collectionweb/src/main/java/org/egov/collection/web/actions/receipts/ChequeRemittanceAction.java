@@ -184,6 +184,11 @@ public class ChequeRemittanceAction extends BaseFormAction {
     @Action(value = "/receipts/chequeRemittance-listData")
     @SkipValidation
     public String listData() {
+    	validateSearchCriteria();
+    	if (hasErrors()) {
+    		populateRemittanceList();
+    		return NEW;
+    	}
         isListData = true;
         remitAccountNumber = "";
         if (accountNumberId != null) {
@@ -219,6 +224,24 @@ public class ChequeRemittanceAction extends BaseFormAction {
         }
         return NEW;
     }
+    
+    private void validateSearchCriteria() {
+		if ((finYearId == null || finYearId == -1) && (fromDate == null && toDate == null)) {
+			addActionError(getText("msg.please.enter.either.financial.year.or.fromDate.and.toDate"));
+		}
+
+		if (StringUtils.isEmpty(accountNumberId) || accountNumberId.equals("-1")) {
+			addActionError(getText("bankremittance.error.noaccountNumberselected"));
+		}
+
+		if (fromDate != null && toDate == null) {
+			addActionError(getText("common.datemandatory.todate"));
+		}
+
+		if (toDate != null && fromDate == null) {
+			addActionError(getText("common.datemandatory.fromdate"));
+		}
+	}
 
     @Action(value = "/receipts/chequeRemittance-printBankChallan")
     @SkipValidation

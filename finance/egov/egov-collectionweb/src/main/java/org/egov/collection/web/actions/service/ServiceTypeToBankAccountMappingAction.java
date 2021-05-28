@@ -48,8 +48,10 @@
 
 package org.egov.collection.web.actions.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +59,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
@@ -169,9 +172,10 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
         for (BankAccountServiceMapping basm : mappings) {
             accountNumbers.add(basm.getBankAccount());
         }
-        final String serviceBankQueryString = "select distinct ba.bankbranch.bank from Bankaccount ba where ba.accountnumber in(:accountnumbers))";
+		final StringBuilder serviceBankQueryString = new StringBuilder(
+				"select distinct ba.bankbranch.bank from Bankaccount ba where ba.accountnumber in(:accountnumbers))");
 
-        final Query bankListQuery = persistenceService.getSession().createQuery(serviceBankQueryString);
+		final Query bankListQuery = persistenceService.getSession().createQuery(serviceBankQueryString.toString());
         if(!accountNumbers.isEmpty()){
             bankListQuery.setParameterList("accountnumbers", accountNumbers);
         }
@@ -187,9 +191,10 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
                 accountNumbers.add(basm.getBankAccount());
             }
         }
-        final String serviceBankQueryString = "select distinct ba from Bankaccount ba where ba.accountnumber in(:accountnumbers))";
+		final StringBuilder serviceBankQueryString = new StringBuilder(
+				"select distinct ba from Bankaccount ba where ba.accountnumber in(:accountnumbers))");
 
-        final Query bankAccListQuery = persistenceService.getSession().createQuery(serviceBankQueryString);
+		final Query bankAccListQuery = persistenceService.getSession().createQuery(serviceBankQueryString.toString());
         bankAccListQuery.setParameterList("accountnumbers", accountNumbers);
         return bankAccListQuery.list();
     }
@@ -245,6 +250,9 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
     @ValidationErrorPageExt(action = NEW, makeCall = true, toMethod = "newform")
     @Action(value = "/service/serviceTypeToBankAccountMapping-create")
     public String create() {
+        validateMandatoryFields();
+        if (hasErrors())
+            return SUCCESS;
         if (bankAccountServiceMap.getBankAccountId().getId() != null)
             bankAccountServiceMap
                     .setBankAccountId(bankAccountHibernateDAO.findById(bankAccountServiceMap.getBankAccountId().getId(), false));
@@ -312,6 +320,24 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
         }
     }
 
+
+    public void validateMandatoryFields() {
+        if (serviceCategory == null || serviceCategory.equals("-1")) {
+            addFieldError("serviceCategory", getText("error.select.service.category"));
+        }
+        if (bankId == null || bankId == -1) {
+            addFieldError("bankId", getText("error.select.bank"));
+        }
+        if (branchId == null || branchId == -1) {
+            addFieldError("branchId", getText("error.select.bankbranch"));
+        }
+        if (bankAccountServiceMap.getBankAccountId() == null
+                || bankAccountServiceMap.getBankAccountId().getId() == -1) {
+            addFieldError("bankAccountId", getText("error.select.bankaccount"));
+        }
+
+    }
+    
     @Override
     public Object getModel() {
         return bankAccountServiceMap;

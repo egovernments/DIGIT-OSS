@@ -56,19 +56,24 @@ import javax.validation.Valid;
 
 import org.egov.commons.service.CFinancialYearService;
 import org.egov.egf.model.ClosedPeriod;
+import org.egov.egf.model.ClosedPeriodSearchRequest;
 import org.egov.egf.web.adaptor.ClosedPeriodJsonAdaptor;
 import org.egov.enums.CloseTypeEnum;
 import org.egov.infra.utils.DateUtils;
 import org.egov.services.closeperiod.ClosedPeriodService;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -79,11 +84,14 @@ import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/closedperiod")
+@Validated
 public class ClosedPeriodController {
-    private static final String CLOSEDPERIOD_RESULT = "closedperiod-result";
+    private static final String CLOSED_PERIOD = "closedPeriod";
+    private static final String CLOSED_PERIOD_SEARCH_REQUEST = "closedPeriodSearchRequest";
+	private static final String CLOSEDPERIOD_RESULT = "closedperiod-result";
     private static final String CLOSEDPERIOD_REOPEN = "closedperiod-reopen";
     private static final String CLOSEDPERIOD_SEARCH = "closedperiod-search";
-    private static final String CLOSEDPERIOD = "closedPeriod";
+    private static final String CLOSEDPERIOD = CLOSED_PERIOD;
     private static final String CLOSEDPERIOD_NEW = "closedperiod-new";
     private static final String CLOSEDPERIOD_VIEW = "closedperiod-view";
     final SimpleDateFormat dtFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -109,11 +117,11 @@ public class ClosedPeriodController {
         prepareNewForm(model);
         final ClosedPeriod attributeValue = new ClosedPeriod();
         attributeValue.setFromDate(FinancialConstants.FINANCIALYEAR_STARTING_MONTH);
-        model.addAttribute("closedPeriod", attributeValue);
+        model.addAttribute(CLOSED_PERIOD, attributeValue);
         return CLOSEDPERIOD_NEW;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PostMapping(value = "/create")
     public String create(@Valid @ModelAttribute final ClosedPeriod closedPeriod, final Model model,
             final BindingResult errors, final HttpServletRequest request, final RedirectAttributes redirectAttrs) {
 
@@ -131,19 +139,19 @@ public class ClosedPeriodController {
         return "redirect:/closedperiod/result/" + closedPeriod.getId();
     }
 
-    @RequestMapping(value = "/reopen/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/reopen/{id}")
     public String edit(@PathVariable("id") final Long id, final Model model) {
         final ClosedPeriod closedPeriod = closedPeriodService.findOne(id);
 
         prepareNewForm(model);
-        if (closedPeriod.getIsClosed())
+        if (closedPeriod.getIsClosed().booleanValue())
             closedPeriod.setRemarks("");
         model.addAttribute(CLOSEDPERIOD, closedPeriod);
         return CLOSEDPERIOD_REOPEN;
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@ModelAttribute final ClosedPeriod closedPeriod, final BindingResult errors, final Model model,
+    @PostMapping(value = "/update")
+    public String update(@Valid @ModelAttribute final ClosedPeriod closedPeriod, final BindingResult errors, final Model model,
             final RedirectAttributes redirectAttrs) {
         if (errors.hasErrors()) {
             prepareSoftClosePeriod(model);
@@ -166,7 +174,7 @@ public class ClosedPeriodController {
         return CLOSEDPERIOD_VIEW;
     }
 
-    @RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/result/{id}")
     public String result(@PathVariable("id") final Long id, final Model model) {
         final ClosedPeriod closedPeriod = closedPeriodService.findOne(id);
         model.addAttribute(CLOSEDPERIOD, closedPeriod);
@@ -174,26 +182,26 @@ public class ClosedPeriodController {
     }
 
     @RequestMapping(value = "/search/{mode}", method = { RequestMethod.GET, RequestMethod.POST })
-    public String search(@PathVariable("mode") final String mode, final Model model) {
-        final ClosedPeriod closedPeriod = new ClosedPeriod();
+    public String search(@PathVariable("mode") @SafeHtml final String mode, final Model model) {
+        final ClosedPeriodSearchRequest closedPeriodSearchRequest = new ClosedPeriodSearchRequest();
 
         if (mode.equalsIgnoreCase("reopen"))
             prepareSoftClosePeriod(model);
         else
             prepareNewForm(model);
-        model.addAttribute(CLOSEDPERIOD, closedPeriod);
+        model.addAttribute(CLOSED_PERIOD_SEARCH_REQUEST, closedPeriodSearchRequest);
         return CLOSEDPERIOD_SEARCH;
 
     }
 
-    @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(value = "/ajaxsearch/{mode}", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-            @ModelAttribute final ClosedPeriod closedPeriod) {
+    public String ajaxsearch(@PathVariable("mode") @SafeHtml final String mode, final Model model,
+        @Valid @ModelAttribute final ClosedPeriodSearchRequest closedPeriodSearchRequest) {
         if (mode.equalsIgnoreCase("reopen"))
-            closedPeriod.setCloseType(CloseTypeEnum.SOFTCLOSE);
-        closedPeriod.setIsClosed(true);
-        final List<ClosedPeriod> searchResultList = closedPeriodService.search(closedPeriod);
+            closedPeriodSearchRequest.setCloseType(CloseTypeEnum.SOFTCLOSE);
+        closedPeriodSearchRequest.setIsClosed(true);
+        final List<ClosedPeriod> searchResultList = closedPeriodService.search(closedPeriodSearchRequest);
         return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
     }
 

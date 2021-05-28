@@ -50,6 +50,8 @@ package org.egov.egf.web.actions.contra;
 
 import com.exilant.GLEngine.ChartOfAccounts;
 import com.exilant.GLEngine.Transaxtion;
+import com.exilant.exility.common.TaskFailedException;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
@@ -240,7 +242,7 @@ public class ContraCTBAction extends BaseVoucherAction
                     throw new ValidationException(errors);
                 } else
                     contraBean.setResult("sucess");
-            } catch (final Exception e) {
+            } catch (final TaskFailedException e) {
 
                 final List<ValidationError> errors = new ArrayList<ValidationError>();
                 errors.add(new ValidationError("exp", e.getMessage()));

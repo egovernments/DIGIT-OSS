@@ -353,4 +353,8 @@ function validateNumber(elem){
 	return true;
 }
 
+function sanitizeHTML(text) {
+	return jQuery('<div>').text(text).html();
+}
+
 

@@ -60,12 +60,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.egov.infra.persistence.entity.AbstractPersistable;
-import org.egov.infra.persistence.validator.annotation.Required;
 import org.egov.infra.persistence.validator.annotation.Unique;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @Table(name = "BANK")
@@ -82,24 +83,28 @@ public class Bank extends AbstractPersistable<Integer> {
 	@JsonIgnore
 	private Integer id;
 
-	@Required
+	@NotNull
 	@Length(max = 50)
+	@SafeHtml
 	private String code;
 
-	@Required
+	@NotNull
 	@Length(max = 100)
+	@SafeHtml
 	private String name;
 
 	@JsonIgnore
 	@Length(max = 250)
+	@SafeHtml
 	private String narration;
 
 	@JsonIgnore
-	@Required
+	@NotNull
 	private Boolean isactive;
 
 	@JsonIgnore
 	@Length(max = 50)
+	@SafeHtml
 	private String type;
 
 	@JsonIgnore

@@ -74,8 +74,8 @@ public class ContraBean {
     private String modeOfCollection;
     private String fromBankBalance;
     private String toBankBalance;
-    private Integer fromFundId;
-    private Integer toFundId;
+    private Long fromFundId;
+    private Long toFundId;
     private String sourceGlcode;
     private String destinationGlcode;
     private String toDepartment;
@@ -302,19 +302,19 @@ public class ContraBean {
         this.modeOfCollection = modeOfCollection;
     }
 
-    public Integer getFromFundId() {
+    public Long getFromFundId() {
         return fromFundId;
     }
 
-    public void setFromFundId(final Integer fromFundId) {
+    public void setFromFundId(final Long fromFundId) {
         this.fromFundId = fromFundId;
     }
 
-    public Integer getToFundId() {
+    public Long getToFundId() {
         return toFundId;
     }
 
-    public void setToFundId(final Integer toFundId) {
+    public void setToFundId(final Long toFundId) {
         this.toFundId = toFundId;
     }
 

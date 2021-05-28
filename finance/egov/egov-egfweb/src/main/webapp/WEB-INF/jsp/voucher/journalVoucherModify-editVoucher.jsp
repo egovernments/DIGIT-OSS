@@ -84,6 +84,7 @@
 					Loading...
 				</div>
 			</div>
+			<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<jsp:include page="../budget/budgetHeader.jsp">
 				<jsp:param name="heading" value="Journal voucher -Modify" />
 			</jsp:include>
@@ -235,6 +236,10 @@ function validateApproverUser(name,value){
 		return false;
 		}
 	</s:if> return true;
+}
+function printJV(){
+	var id = '<s:property value="voucherHeader.id"/>';
+	window.open("${pageContext.request.contextPath}/voucher/journalVoucherPrint-print.action?id="+id,'Print','resizable=yes,scrollbars=yes,left=300,top=40, width=900, height=700');
 }
 function onSubmit()
 {

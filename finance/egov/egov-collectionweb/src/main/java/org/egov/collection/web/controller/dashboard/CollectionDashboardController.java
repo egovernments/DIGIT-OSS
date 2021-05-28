@@ -48,6 +48,11 @@
 
 package org.egov.collection.web.controller.dashboard;
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.egov.collection.bean.dashboard.CollectionDashBoardRequest;
 import org.egov.collection.bean.dashboard.TaxPayerDashBoardResponseDetails;
 import org.egov.collection.bean.dashboard.TotalCollectionDashBoardStats;
@@ -57,16 +62,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = { "/public/dashboard", "/dashboard" })
+@Validated
 public class CollectionDashboardController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CollectionDashboardController.class);
 
@@ -87,18 +92,18 @@ public class CollectionDashboardController {
      * @return response JSON
      * @throws IOException
      */
-    @RequestMapping(value = "/otherrevenuecollectionstats", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public TotalCollectionDashBoardStats getConsolidatedCollDetails(
-            @RequestBody final CollectionDashBoardRequest collectionDashBoardRequest) throws IOException {
-        final Long startTime = System.currentTimeMillis();
-        final TotalCollectionDashBoardStats consolidatedCollectionDetails = collectionDashboardService
-                .getTotalCollectionStats(collectionDashBoardRequest);
-        final Long timeTaken = System.currentTimeMillis() - startTime;
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Time taken to serve collectionstats is : " + timeTaken + MILLISECS);
-        return consolidatedCollectionDetails;
-
-    }
+	@PostMapping(value = "/otherrevenuecollectionstats", produces = MediaType.APPLICATION_JSON_VALUE)
+	public TotalCollectionDashBoardStats getConsolidatedCollDetails(
+			@Valid @RequestBody final CollectionDashBoardRequest collectionDashBoardRequest, final BindingResult errors)
+			throws IOException {
+		final Long startTime = System.currentTimeMillis();
+		final TotalCollectionDashBoardStats consolidatedCollectionDetails = collectionDashboardService
+				.getTotalCollectionStats(collectionDashBoardRequest);
+		final Long timeTaken = System.currentTimeMillis() - startTime;
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug(String.format("Time taken to serve collectionstats is : %s", timeTaken + MILLISECS));
+		return consolidatedCollectionDetails;
+	}
 
     /**
      * Provides Collection Index details across all ULBs
@@ -106,25 +111,28 @@ public class CollectionDashboardController {
      * @return response JSON
      * @throws IOException
      */
-    @RequestMapping(value = "/otherrevenuecollectiondashboard", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<TotalCollectionStatistics> getCollectionDetails(
-            @RequestBody final CollectionDashBoardRequest collectionDashBoardRequest) throws IOException {
-        final Long startTime = System.currentTimeMillis();
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("CollectionDashBoardRequest input for otherrevenuecollectiondashboard : regionName = "
-                    + collectionDashBoardRequest.getRegionName() + "," + DISTRICTNAME + " = "
-                    + collectionDashBoardRequest.getDistrictName() + "," + ULBGRADE + "= "
-                    + collectionDashBoardRequest.getUlbGrade() + "," + ULBCODE + "= "
-                    + collectionDashBoardRequest.getUlbCode() + "," + FROMDATE + "= "
-                    + collectionDashBoardRequest.getFromDate() + "," + TODATE + "= "
-                    + collectionDashBoardRequest.getToDate() + "," + TYPE + "= " + collectionDashBoardRequest.getType());
-        final List<TotalCollectionStatistics> collectionDetails = collectionDashboardService
-                .getCollectionIndexDetails(collectionDashBoardRequest);
-        final Long timeTaken = System.currentTimeMillis() - startTime;
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Time taken to serve collectiondashboard is : " + timeTaken + MILLISECS);
-        return collectionDetails;
-    }
+	@PostMapping(value = "/otherrevenuecollectiondashboard", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<TotalCollectionStatistics> getCollectionDetails(
+			@Valid @RequestBody final CollectionDashBoardRequest collectionDashBoardRequest, final BindingResult errors)
+			throws IOException {
+		final Long startTime = System.currentTimeMillis();
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug(String.format(
+					"CollectionDashBoardRequest input for otherrevenuecollectiondashboard : regionName = %s",
+					collectionDashBoardRequest.getRegionName() + "," + DISTRICTNAME + " = "
+							+ collectionDashBoardRequest.getDistrictName() + "," + ULBGRADE + "= "
+							+ collectionDashBoardRequest.getUlbGrade() + "," + ULBCODE + "= "
+							+ collectionDashBoardRequest.getUlbCode() + "," + FROMDATE + "= "
+							+ collectionDashBoardRequest.getFromDate() + "," + TODATE + "= "
+							+ collectionDashBoardRequest.getToDate() + "," + TYPE + "= "
+							+ collectionDashBoardRequest.getType()));
+		final List<TotalCollectionStatistics> collectionDetails = collectionDashboardService
+				.getCollectionIndexDetails(collectionDashBoardRequest);
+		final Long timeTaken = System.currentTimeMillis() - startTime;
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug(String.format("Time taken to serve collectiondashboard is : %s", timeTaken + MILLISECS));
+		return collectionDetails;
+	}
 
     /**
      * Returns Top Ten Tax Performers Across all ULB's
@@ -133,23 +141,26 @@ public class CollectionDashboardController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/otherrevenuetoptencollection", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<TaxPayerDashBoardResponseDetails> getTopTenTaxProducers(
-            @RequestBody final CollectionDashBoardRequest collectionDashBoardRequest) throws IOException {
+	@PostMapping(value = "/otherrevenuetoptencollection", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<TaxPayerDashBoardResponseDetails> getTopTenTaxProducers(
+			@Valid @RequestBody final CollectionDashBoardRequest collectionDashBoardRequest, final BindingResult errors)
+			throws IOException {
         final Long startTime = System.currentTimeMillis();
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("CollectionDashBoardRequest input for otherrevenuetoptencollection : regionName = "
-                    + collectionDashBoardRequest.getRegionName() + "," + DISTRICTNAME + " = "
-                    + collectionDashBoardRequest.getDistrictName() + "," + ULBGRADE + "= "
-                    + collectionDashBoardRequest.getUlbGrade() + "," + ULBCODE + "= "
-                    + collectionDashBoardRequest.getUlbCode() + "," + FROMDATE + "= "
-                    + collectionDashBoardRequest.getFromDate() + "," + TODATE + "= "
-                    + collectionDashBoardRequest.getToDate() + "," + TYPE + "= " + collectionDashBoardRequest.getType());
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug(
+					String.format("CollectionDashBoardRequest input for otherrevenuetoptencollection : regionName = %s",
+							collectionDashBoardRequest.getRegionName() + "," + DISTRICTNAME + " = "
+									+ collectionDashBoardRequest.getDistrictName() + "," + ULBGRADE + "= "
+									+ collectionDashBoardRequest.getUlbGrade() + "," + ULBCODE + "= "
+									+ collectionDashBoardRequest.getUlbCode() + "," + FROMDATE + "= "
+									+ collectionDashBoardRequest.getFromDate() + "," + TODATE + "= "
+									+ collectionDashBoardRequest.getToDate() + "," + TYPE + "= "
+									+ collectionDashBoardRequest.getType()));
         final List<TaxPayerDashBoardResponseDetails> taxPayerDetails = collectionDashboardService
                 .getTopTenTaxProducers(collectionDashBoardRequest);
         final Long timeTaken = System.currentTimeMillis() - startTime;
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Time taken to serve toptentaxers is : " + timeTaken + MILLISECS);
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug(String.format("Time taken to serve toptentaxers is : %s", timeTaken + MILLISECS));
         return taxPayerDetails;
     }
 
@@ -160,23 +171,26 @@ public class CollectionDashboardController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value = "/otherrevenuebottomtencollection", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<TaxPayerDashBoardResponseDetails> getBottomTenTaxProducers(
-            @RequestBody final CollectionDashBoardRequest collectionDashBoardRequest) throws IOException {
+	@PostMapping(value = "/otherrevenuebottomtencollection", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<TaxPayerDashBoardResponseDetails> getBottomTenTaxProducers(
+			@Valid @RequestBody final CollectionDashBoardRequest collectionDashBoardRequest, final BindingResult errors)
+			throws IOException {
         final Long startTime = System.currentTimeMillis();
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("CollectionDashBoardRequest input for otherrevenuebottomtencollection : regionName = "
-                    + collectionDashBoardRequest.getRegionName() + "," + DISTRICTNAME + " = "
-                    + collectionDashBoardRequest.getDistrictName() + "," + ULBGRADE + "= "
-                    + collectionDashBoardRequest.getUlbGrade() + "," + ULBCODE + "= "
-                    + collectionDashBoardRequest.getUlbCode() + "," + FROMDATE + "= "
-                    + collectionDashBoardRequest.getFromDate() + "," + TODATE + "= "
-                    + collectionDashBoardRequest.getToDate() + "," + TYPE + "= " + collectionDashBoardRequest.getType());
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug(String.format(
+					"CollectionDashBoardRequest input for otherrevenuebottomtencollection : regionName = %s",
+					collectionDashBoardRequest.getRegionName() + "," + DISTRICTNAME + " = "
+							+ collectionDashBoardRequest.getDistrictName() + "," + ULBGRADE + "= "
+							+ collectionDashBoardRequest.getUlbGrade() + "," + ULBCODE + "= "
+							+ collectionDashBoardRequest.getUlbCode() + "," + FROMDATE + "= "
+							+ collectionDashBoardRequest.getFromDate() + "," + TODATE + "= "
+							+ collectionDashBoardRequest.getToDate() + "," + TYPE + "= "
+							+ collectionDashBoardRequest.getType()));
         final List<TaxPayerDashBoardResponseDetails> taxPayerDetails = collectionDashboardService
                 .getBottomTenTaxProducers(collectionDashBoardRequest);
         final Long timeTaken = System.currentTimeMillis() - startTime;
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Time taken to serve bottomtentaxers is : " + timeTaken + MILLISECS);
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug(String.format("Time taken to serve bottomtentaxers is : %s", timeTaken + MILLISECS));
         return taxPayerDetails;
     }
 

@@ -4,198 +4,205 @@ import java.util.Collections;
 import java.util.List;
 
 import org.egov.infra.microservice.models.RequestInfo;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserSearchRequest {
-	
-	@JsonProperty("RequestInfo")
-	private RequestInfo requestInfo;
 
-	@JsonProperty("id")
-	private List<Long> id;
-	
-	@JsonProperty("uuid")
-	private List<String> uuid;
+    @JsonProperty("RequestInfo")
+    private RequestInfo requestInfo;
 
-	@JsonProperty("userName")
-	private String userName;
+    @JsonProperty("id")
+    private List<Long> id;
 
-	@JsonProperty("name")
-	private String name;
+    @JsonProperty("uuid")
+    private List<String> uuid;
 
-	@JsonProperty("mobileNumber")
-	private String mobileNumber;
+    @JsonProperty("userName")
+    @SafeHtml
+    private String userName;
 
-	@JsonProperty("aadhaarNumber")
-	private String aadhaarNumber;
+    @JsonProperty("name")
+    @SafeHtml
+    private String name;
 
-	@JsonProperty("pan")
-	private String pan;
+    @JsonProperty("mobileNumber")
+    @SafeHtml
+    private String mobileNumber;
 
-	@JsonProperty("emailId")
-	private String emailId;
+    @JsonProperty("aadhaarNumber")
+    @SafeHtml
+    private String aadhaarNumber;
 
-	@JsonProperty("fuzzyLogic")
-	private boolean fuzzyLogic;
+    @JsonProperty("pan")
+    @SafeHtml
+    private String pan;
 
-	@JsonProperty("active")
-	private Boolean active;
+    @JsonProperty("emailId")
+    @SafeHtml
+    private String emailId;
 
-	@JsonProperty("tenantId")
-	private String tenantId;
+    @JsonProperty("fuzzyLogic")
+    private boolean fuzzyLogic;
 
-	@JsonProperty("pageSize")
-	private int pageSize;
+    @JsonProperty("active")
+    private Boolean active;
 
-	@JsonProperty("pageNumber")
-	private int pageNumber = 0;
+    @JsonProperty("tenantId")
+    @SafeHtml
+    private String tenantId;
 
-	@JsonProperty("sort")
-	private List<String> sort = Collections.singletonList("name");
+    @JsonProperty("pageSize")
+    private int pageSize;
 
-	@JsonProperty("userType")
-	private String userType;
+    @JsonProperty("pageNumber")
+    private int pageNumber = 0;
 
-	@JsonProperty("roleCodes")
-	private List<String> roleCodes;
+    @JsonProperty("sort")
+    private List<String> sort = Collections.singletonList("name");
 
-	public RequestInfo getRequestInfo() {
-		return requestInfo;
-	}
+    @JsonProperty("userType")
+    @SafeHtml
+    private String userType;
 
-	public void setRequestInfo(RequestInfo requestInfo) {
-		this.requestInfo = requestInfo;
-	}
+    @JsonProperty("roleCodes")
+    private List<String> roleCodes;
 
-	public List<Long> getId() {
-		return id;
-	}
+    public RequestInfo getRequestInfo() {
+        return requestInfo;
+    }
 
-	public void setId(List<Long> id) {
-		this.id = id;
-	}
+    public void setRequestInfo(final RequestInfo requestInfo) {
+        this.requestInfo = requestInfo;
+    }
 
-	public List<String> getUuid() {
-		return uuid;
-	}
+    public List<Long> getId() {
+        return id;
+    }
 
-	public void setUuid(List<String> uuid) {
-		this.uuid = uuid;
-	}
+    public void setId(final List<Long> id) {
+        this.id = id;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public List<String> getUuid() {
+        return uuid;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setUuid(final List<String> uuid) {
+        this.uuid = uuid;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setUserName(final String userName) {
+        this.userName = userName;
+    }
 
-	public String getMobileNumber() {
-		return mobileNumber;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setMobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
-	}
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-	public String getAadhaarNumber() {
-		return aadhaarNumber;
-	}
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
 
-	public void setAadhaarNumber(String aadhaarNumber) {
-		this.aadhaarNumber = aadhaarNumber;
-	}
+    public void setMobileNumber(final String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
 
-	public String getPan() {
-		return pan;
-	}
+    public String getAadhaarNumber() {
+        return aadhaarNumber;
+    }
 
-	public void setPan(String pan) {
-		this.pan = pan;
-	}
+    public void setAadhaarNumber(final String aadhaarNumber) {
+        this.aadhaarNumber = aadhaarNumber;
+    }
 
-	public String getEmailId() {
-		return emailId;
-	}
+    public String getPan() {
+        return pan;
+    }
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
-	}
+    public void setPan(final String pan) {
+        this.pan = pan;
+    }
 
-	public boolean isFuzzyLogic() {
-		return fuzzyLogic;
-	}
+    public String getEmailId() {
+        return emailId;
+    }
 
-	public void setFuzzyLogic(boolean fuzzyLogic) {
-		this.fuzzyLogic = fuzzyLogic;
-	}
+    public void setEmailId(final String emailId) {
+        this.emailId = emailId;
+    }
 
-	public Boolean getActive() {
-		return active;
-	}
+    public boolean isFuzzyLogic() {
+        return fuzzyLogic;
+    }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+    public void setFuzzyLogic(final boolean fuzzyLogic) {
+        this.fuzzyLogic = fuzzyLogic;
+    }
 
-	public String getTenantId() {
-		return tenantId;
-	}
+    public Boolean getActive() {
+        return active;
+    }
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
+    public void setActive(final Boolean active) {
+        this.active = active;
+    }
 
-	public int getPageSize() {
-		return pageSize;
-	}
+    public String getTenantId() {
+        return tenantId;
+    }
 
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
+    public void setTenantId(final String tenantId) {
+        this.tenantId = tenantId;
+    }
 
-	public int getPageNumber() {
-		return pageNumber;
-	}
+    public int getPageSize() {
+        return pageSize;
+    }
 
-	public void setPageNumber(int pageNumber) {
-		this.pageNumber = pageNumber;
-	}
+    public void setPageSize(final int pageSize) {
+        this.pageSize = pageSize;
+    }
 
-	public List<String> getSort() {
-		return sort;
-	}
+    public int getPageNumber() {
+        return pageNumber;
+    }
 
-	public void setSort(List<String> sort) {
-		this.sort = sort;
-	}
+    public void setPageNumber(final int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
 
-	public String getUserType() {
-		return userType;
-	}
+    public List<String> getSort() {
+        return sort;
+    }
 
-	public void setUserType(String userType) {
-		this.userType = userType;
-	}
+    public void setSort(final List<String> sort) {
+        this.sort = sort;
+    }
 
-	public List<String> getRoleCodes() {
-		return roleCodes;
-	}
+    public String getUserType() {
+        return userType;
+    }
 
-	public void setRoleCodes(List<String> roleCodes) {
-		this.roleCodes = roleCodes;
-	}
-	
-	
+    public void setUserType(final String userType) {
+        this.userType = userType;
+    }
+
+    public List<String> getRoleCodes() {
+        return roleCodes;
+    }
+
+    public void setRoleCodes(final List<String> roleCodes) {
+        this.roleCodes = roleCodes;
+    }
 
 }

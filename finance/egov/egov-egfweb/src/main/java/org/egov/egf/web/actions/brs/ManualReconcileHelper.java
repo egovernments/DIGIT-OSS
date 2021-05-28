@@ -48,6 +48,14 @@
 
 package org.egov.egf.web.actions.brs;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.commons.Bankaccount;
@@ -69,23 +77,18 @@ import org.egov.model.instrument.InstrumentHeader;
 import org.egov.services.instrument.InstrumentHeaderService;
 import org.egov.services.instrument.InstrumentOtherDetailsService;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.BigDecimalType;
+import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 @Service
 public class ManualReconcileHelper {
 
@@ -127,35 +130,40 @@ public class ManualReconcileHelper {
 		//String instrumentsForOtherTotal="decode(br.voucherHeaderId,null,ih.instrumentAmount,0)";
 		String voucherExcludeStatuses=getExcludeStatuses();
 		
-		String totalQuery="SELECT (sum(CASE WHEN ih.ispaycheque='1' then ih.instrumentAmount else 0 end ))  AS \"brs_creditTotal\", "
-			+" (sum(CASE WHEN ih.ispaycheque = '0' then  ih.instrumentAmount else 0 end)) AS \"brs_debitTotal\" "
-			+" FROM egf_instrumentheader ih 	WHERE   ih.bankAccountId =:bankAccountId "
-			+" AND IH.INSTRUMENTDATE >= :fromDate" 
-			+" AND IH.INSTRUMENTDATE <= :toDate"
-			+" AND  ( (ih.ispaycheque='0' and  ih.id_status=(select id from egw_status where moduletype='Instrument' "
-			+ " and description='Deposited'))or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where "
-			+ " moduletype='Instrument'  and description='New'))) "
-			+" and ih.instrumentnumber is not null";
-	//see u might need to exclude brs entries here 
+		StringBuilder totalQuery = new StringBuilder("SELECT (sum(CASE WHEN ih.ispaycheque='1' then ih.instrumentAmount else 0 end ))  AS \"brs_creditTotal\", ")
+                .append(" (sum(CASE WHEN ih.ispaycheque = '0' then  ih.instrumentAmount else 0 end)) AS \"brs_debitTotal\" ")
+                .append(" FROM egf_instrumentheader ih 	WHERE   ih.bankAccountId =:bankAccountId ")
+                .append(" AND IH.INSTRUMENTDATE >= :fromDate")
+                .append(" AND IH.INSTRUMENTDATE <= :toDate")
+                .append(" AND  ( (ih.ispaycheque='0' and  ih.id_status=(select id from egw_status where moduletype='Instrument' ")
+                .append(" and description='Deposited'))or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where ")
+                .append(" moduletype='Instrument'  and description='New'))) ")
+                .append(" and ih.instrumentnumber is not null");
+		//see u might need to exclude brs entries here 
 		
-		String otherTotalQuery=" SELECT (sum(case when ih.ispaycheque='1' then ih.instrumentAmount else 0 end))  AS \"brs_creditTotalOthers\", "
-			+" (sum(case when ih.ispaycheque= '0' then ih.instrumentAmount else 0 end))  AS \"brs_debitTotalOthers\" "
-			+" FROM  egf_instrumentheader ih	WHERE   ih.bankAccountId =:bankAccountId"
-			+" AND IH.transactiondate >= :fromDate"
-			+" AND IH.transactiondate <= :toDate  "
-			+" AND ( (ih.ispaycheque='0' and ih.id_status=(select id from egw_status where moduletype='Instrument'"
-			+ "  and description='Deposited'))or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where"
-			+ " moduletype='Instrument'  and description='New'))) "
-			+" AND ih.transactionnumber is not null";
+		StringBuilder otherTotalQuery = new StringBuilder(" SELECT (sum(case when ih.ispaycheque='1' then ih.instrumentAmount else 0 end))  AS \"brs_creditTotalOthers\", ")
+                .append(" (sum(case when ih.ispaycheque= '0' then ih.instrumentAmount else 0 end))  AS \"brs_debitTotalOthers\" ")
+                .append(" FROM  egf_instrumentheader ih	WHERE   ih.bankAccountId =:bankAccountId")
+                .append(" AND IH.transactiondate >= :fromDate")
+                .append(" AND IH.transactiondate <= :toDate  ")
+                .append(" AND ( (ih.ispaycheque='0' and ih.id_status=(select id from egw_status where moduletype='Instrument'")
+                .append("  and description='Deposited'))or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where")
+                .append(" moduletype='Instrument'  and description='New'))) ")
+                .append(" AND ih.transactionnumber is not null");
 		
-		String brsEntryQuery=" SELECT (sum(case when ih.ispaycheque= '1' then "+instrumentsForBrsEntryTotal+" else 0 end ))  AS \"brs_creditTotalBrsEntry\", "
-		+" (sum(case when ih.ispaycheque= '0' then "+instrumentsForBrsEntryTotal+" else 0 end))  AS \"brs_debitTotalBrsEntry\" "
-		+" FROM egf_instrumentheader ih, bankentries br	WHERE   ih.bankAccountId = :bankAccountId"
-		+" AND IH.transactiondate >= :fromDate  "
-		+" AND IH.transactiondate <= :toDate "
-		+" AND ( (ih.ispaycheque='0' and ih.id_status=(select id from egw_status where moduletype='Instrument' "
-		+ " and description='Deposited')) or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) "
-		+" AND br.instrumentHeaderid=ih.id and ih.transactionnumber is not null"	;
+		StringBuilder brsEntryQuery = new StringBuilder(" SELECT (sum(case when ih.ispaycheque= '1' then ")
+                .append(instrumentsForBrsEntryTotal)
+                .append(" else 0 end ))  AS \"brs_creditTotalBrsEntry\", ")
+                .append(" (sum(case when ih.ispaycheque= '0' then ")
+                .append(instrumentsForBrsEntryTotal)
+                .append(" else 0 end))  AS \"brs_debitTotalBrsEntry\" ")
+                .append(" FROM egf_instrumentheader ih, bankentries br	WHERE   ih.bankAccountId = :bankAccountId")
+                .append(" AND IH.transactiondate >= :fromDate  ")
+                .append(" AND IH.transactiondate <= :toDate ")
+                .append(" AND ( (ih.ispaycheque='0' and ih.id_status=(select id from egw_status where moduletype='Instrument' ")
+                .append(" and description='Deposited')) or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) ")
+                .append(" AND br.instrumentHeaderid=ih.id and ih.transactionnumber is not null");
+		
 	
 		if(LOGGER.isInfoEnabled())     LOGGER.info("  query  for  total : "+totalQuery);
 		
@@ -173,7 +181,7 @@ public class ManualReconcileHelper {
 		
 		try
 		{
-			SQLQuery totalSQLQuery = persistenceService.getSession().createSQLQuery(totalQuery);
+			SQLQuery totalSQLQuery = persistenceService.getSession().createSQLQuery(totalQuery.toString());
 			totalSQLQuery.setLong("bankAccountId",bankAccId);
 			totalSQLQuery.setDate("fromDate",fromDate);
 			totalSQLQuery.setDate("toDate",toDate);
@@ -188,7 +196,7 @@ public class ManualReconcileHelper {
 			}
 
 			if(LOGGER.isInfoEnabled())     LOGGER.info("  query  for other than cheque/DD: "+otherTotalQuery);
-			totalSQLQuery = persistenceService.getSession().createSQLQuery(otherTotalQuery);
+			totalSQLQuery = persistenceService.getSession().createSQLQuery(otherTotalQuery.toString());
 			totalSQLQuery.setLong("bankAccountId",bankAccId);
 			totalSQLQuery.setDate("fromDate",fromDate);
 			totalSQLQuery.setDate("toDate",toDate);
@@ -202,7 +210,7 @@ public class ManualReconcileHelper {
 			}
 			if(LOGGER.isInfoEnabled())     LOGGER.info("  query  for bankEntries: "+brsEntryQuery);
 
-			totalSQLQuery = persistenceService.getSession().createSQLQuery(brsEntryQuery);
+			totalSQLQuery = persistenceService.getSession().createSQLQuery(brsEntryQuery.toString());
 			totalSQLQuery.setLong("bankAccountId",bankAccId);
 			totalSQLQuery.setDate("fromDate",fromDate);
 			totalSQLQuery.setDate("toDate",toDate);
@@ -236,7 +244,7 @@ public class ManualReconcileHelper {
 		+",Cheque/DD/Cash Receipts:"+(debitTotal!= null ? debitTotal : "0") +",Other Receipts:"+( debitOtherTotal!= null ? debitOtherTotal : "0")+""+
 		"/"+(creditTotalBrsEntry!= null ? creditTotalBrsEntry : "0") +",Net:"+( debitTotalBrsEntry!= null ? debitTotalBrsEntry : "0")+"";*/
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			LOGGER.error("Exp in getUnReconciledDrCr"+e.getMessage());
 			
@@ -258,34 +266,43 @@ public class ManualReconcileHelper {
 		String instrumentCondition="";
 		if(reconBean.getInstrumentNo()!=null && !reconBean.getInstrumentNo().isEmpty())
 		{
-			instrumentCondition="and (ih.instrumentNumber='"+reconBean.getInstrumentNo()+"' or ih.transactionnumber='"+reconBean.getInstrumentNo()+"' )";
+			instrumentCondition = " and (ih.instrumentNumber=:instrumentNo or ih.transactionnumber=:transactionNo ) ";
 		}
 		try{
 		String voucherExcludeStatuses=getExcludeStatuses();
-        StringBuffer query=new StringBuffer().append(" select string_agg(distinct v.vouchernumber, ',') as \"voucherNumber\" ,ih.id as \"ihId\", case when ih.instrumentNumber is null then 'Direct' else ih.instrumentNumber  end as \"chequeNumber\", " +
-		" to_char(ih.instrumentdate,'dd/mm/yyyy') as \"chequeDate\" ,ih.instrumentAmount as \"chequeAmount\",rec.transactiontype as \"txnType\" , "
-		+ " case when rec.transactionType='Cr' then  'Payment' else 'Receipt' end as \"type\"  , insType.type as instrumentType FROM BANKRECONCILIATION rec, BANKACCOUNT BANK,"
-		+" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv, egf_instrumenttype insType	WHERE "
-		+ "  ih.bankAccountId = BANK.ID AND bank.id =:bankAccId   AND IH.INSTRUMENTDATE <= :toDate  "
-		+" AND v.ID= iv.voucherheaderid  and v.STATUS not in  ("+voucherExcludeStatuses+")  "  +instrumentCondition 
-		+" AND ((ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='Deposited') and ih.ispaycheque='0') or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) "
-		+" AND rec.instrumentHeaderId=cast(ih.id as varchar(100))	 and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id  and insType.id=ih.instrumenttype and ih.instrumentNumber is not null"
-		+ " group by ih.id,rec.transactiontype,insType.type "
-	
-		+ " union  "
-		
-		+" select string_agg(distinct v.vouchernumber, ',') as \"voucherNumber\" , ih.id as \"ihId\", case when ih.transactionnumber is null then 'Direct' else ih.transactionnumber end as \"chequeNumber\", " +
-		" to_char(ih.transactiondate,'dd/mm/yyyy') as \"chequedate\" ,ih.instrumentAmount as \"chequeamount\",rec.transactiontype as \"txnType\", case when rec.transactionType= 'Cr' then 'Payment' else 'Receipt' end    as \"type\" , insType.type as instrumentType FROM BANKRECONCILIATION rec, BANKACCOUNT BANK,"
-		+" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv, egf_instrumenttype insType	WHERE   ih.bankAccountId = BANK.ID AND bank.id = :bankAccId "
-		+"   AND IH.transactiondate <= :toDate " +instrumentCondition 
-		+" AND v.ID= iv.voucherheaderid and v.STATUS not in  ("+voucherExcludeStatuses+") AND ((ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='Deposited') and ih.ispaycheque='0')or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) "
-		+" AND rec.instrumentHeaderId=cast(ih.id as varchar(100)) and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and insType.id=ih.instrumenttype  and ih.transactionnumber is not null"
-		+"   group by ih.id,rec.transactiontype,insType.type order by 4 " );
+        StringBuffer query = new StringBuffer().append(" select string_agg(distinct v.vouchernumber, ',') as \"voucherNumber\" ,ih.id as \"ihId\",")
+                .append(" case when ih.instrumentNumber is null then 'Direct' else ih.instrumentNumber  end as \"chequeNumber\", ")
+                .append(" to_char(ih.instrumentdate,'dd/mm/yyyy') as \"chequeDate\" ,ih.instrumentAmount as \"chequeAmount\",rec.transactiontype as \"txnType\" , ")
+                .append(" case when rec.transactionType='Cr' then  'Payment' else 'Receipt' end as \"type\", insType.type as instrumentType FROM BANKRECONCILIATION rec, BANKACCOUNT BANK,")
+                .append(" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv, egf_instrumenttype insType	WHERE ")
+                .append("  ih.bankAccountId = BANK.ID AND bank.id =:bankAccId   AND IH.INSTRUMENTDATE <= :toDate  ")
+                .append(" AND v.ID= iv.voucherheaderid  and v.STATUS not in  (")
+                .append(voucherExcludeStatuses)
+                .append(")")
+                .append(instrumentCondition)
+                .append(" AND ((ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='Deposited') and ih.ispaycheque='0')")
+                .append(" or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) ")
+                .append(" AND rec.instrumentHeaderId=cast(ih.id as varchar(100))	 and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and insType.id=ih.instrumenttype and ih.instrumentNumber is not null")
+                .append(" group by ih.id,rec.transactiontype,insType.type ")
+                .append(" union  ")
+                .append(" select string_agg(distinct v.vouchernumber, ',') as \"voucherNumber\" , ih.id as \"ihId\", case when ih.transactionnumber is null")
+                .append(" then 'Direct' else ih.transactionnumber end as \"chequeNumber\", ")
+                .append(" to_char(ih.transactiondate,'dd/mm/yyyy') as \"chequedate\" ,ih.instrumentAmount as \"chequeamount\",rec.transactiontype as \"txnType\",")
+                .append(" case when rec.transactionType= 'Cr' then 'Payment' else 'Receipt' end    as \"type\" , insType.type as instrumentType ")
+                .append(" FROM BANKRECONCILIATION rec, BANKACCOUNT BANK,")
+                .append(" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv, egf_instrumenttype insType WHERE   ih.bankAccountId = BANK.ID")
+                .append(" AND bank.id = :bankAccId  AND IH.transactiondate <= :toDate ")
+                .append(instrumentCondition)
+                .append(" AND v.ID= iv.voucherheaderid and v.STATUS not in  (")
+                .append(voucherExcludeStatuses)
+                .append(") AND ((ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='Deposited') and ih.ispaycheque='0')")
+                .append(" or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) ")
+                .append(" AND rec.instrumentHeaderId=cast(ih.id as varchar(100))  and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and insType.id=ih.instrumenttype and ih.transactionnumber is not null")
+                .append(" group by ih.id,rec.transactiontype,insType.type order by 4 ");
+        
        
-        
-        
         if(reconBean.getLimit() != null && reconBean.getLimit() != 0){
-            query.append(" limit "+reconBean.getLimit());
+            query.append(" limit :limit");
         }else{
             query.append(" limit "+DEFAULT_LIMIT );
             reconBean.setLimit(DEFAULT_LIMIT);
@@ -304,6 +321,13 @@ public class ManualReconcileHelper {
         
         
 		SQLQuery createSQLQuery = persistenceService.getSession().createSQLQuery(query.toString());
+		if (reconBean.getInstrumentNo() != null && !reconBean.getInstrumentNo().isEmpty()) {
+			createSQLQuery.setParameter("instrumentNo", reconBean.getInstrumentNo(), StringType.INSTANCE)
+                    .setParameter("transactionNo", reconBean.getInstrumentNo(), StringType.INSTANCE);
+        }
+		if (reconBean.getLimit() != null & reconBean.getLimit() != 0)
+			createSQLQuery.setParameter("limit", reconBean.getLimit(), IntegerType.INSTANCE);
+		
 		createSQLQuery.setLong("bankAccId", reconBean.getAccountId());
 		createSQLQuery.setDate("toDate", reconBean.getReconciliationDate());
 		createSQLQuery.addScalar("voucherNumber",StringType.INSTANCE);
@@ -315,14 +339,15 @@ public class ManualReconcileHelper {
 		createSQLQuery.addScalar("type",StringType.INSTANCE);
 		createSQLQuery.addScalar("instrumentType",StringType.INSTANCE);
 		createSQLQuery.setResultTransformer(Transformers.aliasToBean(ReconcileBean.class));
-	        list = (List<ReconcileBean>)createSQLQuery.list();
+	    list = (List<ReconcileBean>)createSQLQuery.list();
+	        
 	        try {
 	            this.getUnreconsiledReceiptInstruments(reconBean,list);
-                } catch (Exception e) {
+                } catch (ObjectNotFoundException e) {
                     LOGGER.error("ERROR occurred while fetching the unrconciled receipt instruments : "+e.getMessage());
                 }
 		}
-		catch(Exception e)
+		catch(ApplicationRuntimeException e)
 		{
 			LOGGER.error("Exp in getUnReconciledCheques:"+e.getMessage());
 			throw new ApplicationRuntimeException(e.getMessage());

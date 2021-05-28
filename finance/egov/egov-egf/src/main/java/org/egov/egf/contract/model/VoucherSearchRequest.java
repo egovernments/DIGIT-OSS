@@ -47,12 +47,10 @@
  */
 package org.egov.egf.contract.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import org.egov.infra.microservice.models.RequestInfo;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -60,39 +58,37 @@ public class VoucherSearchRequest {
 
     @NotNull
     @JsonProperty("tenantId")
+    @SafeHtml
     private String tenantId;
 
     @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;
 
+    @SafeHtml
     private String voucherNumbers;
 
-  
+    public String getVoucherNumbers() {
+        return voucherNumbers;
+    }
 
-	public String getVoucherNumbers() {
-		return voucherNumbers;
-	}
+    public void setVoucherNumbers(final String voucherNumbers) {
+        this.voucherNumbers = voucherNumbers;
+    }
 
-	public void setVoucherNumbers(String voucherNumbers) {
-		this.voucherNumbers = voucherNumbers;
-	}
+    public void setRequestInfo(final RequestInfo requestInfo) {
+        this.requestInfo = requestInfo;
+    }
 
-	public void setRequestInfo(RequestInfo requestInfo) {
-		this.requestInfo = requestInfo;
-	}
-
-	public String getTenantId() {
+    public String getTenantId() {
         return tenantId;
     }
 
-    public void setTenantId(String tenantId) {
+    public void setTenantId(final String tenantId) {
         this.tenantId = tenantId;
     }
 
     public RequestInfo getRequestInfo() {
         return requestInfo;
     }
-
-  
 
 }

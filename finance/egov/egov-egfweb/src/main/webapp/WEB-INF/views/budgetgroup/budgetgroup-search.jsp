@@ -48,7 +48,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
-<form:form role="form" action="search" modelAttribute="budgetGroup"
+<form:form role="form" action="search" modelAttribute="budgetGroupSearchRequest"
 	id="budgetGroupsearchform"
 	cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">

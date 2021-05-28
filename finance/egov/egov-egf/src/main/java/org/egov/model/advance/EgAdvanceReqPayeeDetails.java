@@ -73,7 +73,7 @@ public class EgAdvanceReqPayeeDetails implements Serializable {
         return id;
     }
 
-    public void setId(final Long id) {
+    private void setId(final Long id) {
         this.id = id;
     }
 

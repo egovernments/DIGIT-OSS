@@ -50,6 +50,9 @@
  */
 package org.egov.services.cheque;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.egov.commons.Bankaccount;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.exception.ApplicationRuntimeException;
@@ -57,9 +60,6 @@ import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.cheque.AccountCheques;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author mani
@@ -105,8 +105,10 @@ public class ChequeService extends PersistenceService<AccountCheques, Long> {
 		final Bankaccount bankaccount = getBankaccount(accId);
 		// final Department department = getDepartment(allotId);
 
-		final String chqQuery = "select ac from AccountCheques ac, ChequeDeptMapping cd where ac.id=cd.accountCheque.id and ac.bankAccountId=? and cd.allotedTo=?  and (ac.isExhausted is null or ac.isExhausted=0)  order by ac.id";
-		final List<AccountCheques> chqList = findAllBy(chqQuery, bankaccount, allotId);
+		final StringBuilder chqQuery = new StringBuilder("select ac from AccountCheques ac, ChequeDeptMapping cd")
+				.append(" where ac.id=cd.accountCheque.id and ac.bankAccountId=? and cd.allotedTo=? ")
+				.append(" and (ac.isExhausted is null or ac.isExhausted=0)  order by ac.id");
+		final List<AccountCheques> chqList = findAllBy(chqQuery.toString(), bankaccount, allotId);
 		if (chqList == null || chqList.size() == 0)
 			throw new ValidationException(
 					Arrays.asList(new ValidationError("No cheques available", "No cheques available")));

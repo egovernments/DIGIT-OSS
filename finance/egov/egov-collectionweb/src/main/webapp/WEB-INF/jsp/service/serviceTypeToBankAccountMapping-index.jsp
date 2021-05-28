@@ -183,7 +183,8 @@
 				<br />
 			</div>
 			<div class="buttonbottom">
-				<s:submit name="sumbit" cssClass="buttonsubmit" id="button32" onclick="document.serviceBankMappingForm.action='serviceTypeToBankAccountMapping-search.action';" value="View" />
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				<s:submit name="sumbit" cssClass="buttonsubmit" id="button32" onclick="document.serviceBankMappingForm.action='serviceTypeToBankAccountMapping-search.action';" value="View"/>
 				<input type="button" class="button" value="Reset" id="resetbutton" name="clear" onclick="resetValues();">
 				<input name="close" type="button" class="button" id="button" onclick="window.close()" value="Close" />
 			</div>

@@ -51,6 +51,7 @@ package org.egov.infstr.utils;
 import static org.apache.commons.lang.StringUtils.EMPTY;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -72,8 +73,11 @@ import org.egov.infra.exception.MicroServiceInvalidTokenException;
 import org.egov.infra.exception.MicroServiceNotAuthroizedException;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.cache.CacheException;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,7 +170,7 @@ public class EgovMasterDataCaching {
                 LOGGER.info("EgovMasterDataCaching: Got directly from cache, not from db");
             
 
-        } catch (final Exception e) {
+        } catch (final MicroServiceInvalidTokenException | MicroServiceNotAuthroizedException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching", e);
             if(e instanceof MicroServiceInvalidTokenException || e instanceof MicroServiceNotAuthroizedException)
                 throw e;
@@ -224,7 +228,7 @@ public class EgovMasterDataCaching {
                 CACHE_MANAGER.getCache().put(applName + PATH_DELIM + domainName + PATH_DELIM + sqlTagName, hm);
             } else
                 throw new ApplicationRuntimeException("This type (" + type + ") is not supported for " + sqlTagName);
-        } catch (final Exception e) {
+        } catch (final CacheException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching getMap", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching getMap", e);
         }
@@ -248,7 +252,7 @@ public class EgovMasterDataCaching {
             final String domainName = ApplicationThreadLocals.getDomainName();
             final String applName = temp[0];
             CACHE_MANAGER.getCache().remove(applName + PATH_DELIM + domainName + PATH_DELIM + sqlTagName);
-        } catch (final Exception e) {
+        } catch (final CacheException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching removeFromCache", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching removeFromCache", e);
         }
@@ -270,7 +274,7 @@ public class EgovMasterDataCaching {
             else if (queryType.trim().equalsIgnoreCase(SQL_QUERY_TYPE))
                 list = queryByJdbc(query);
 
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadQLMasterData", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadQLMasterData", e);
         }
@@ -288,7 +292,7 @@ public class EgovMasterDataCaching {
      */
 
     private List loadJavaAPIMasterDataList(final String className, final String methodName, final String parametertype[],
-            final String parametervalue[]) throws ApplicationRuntimeException {
+            final String parametervalue[]) {
         List list = null;
         try {
             if (parametertype.length != parametervalue.length)
@@ -296,7 +300,7 @@ public class EgovMasterDataCaching {
             final Class cls = Class.forName(className);
             final Method method = cls.getMethod(methodName, loadMethodParameter(parametertype));
             list = (List) method.invoke(cls.newInstance(), loadMethodArguments(parametertype, parametervalue));
-        } catch (final Exception e) {
+        } catch (final NoSuchMethodException | SecurityException | ApplicationRuntimeException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException | ClassNotFoundException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadJavaAPIMasterDataList", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadJavaAPIMasterDataList", e);
         }
@@ -322,7 +326,7 @@ public class EgovMasterDataCaching {
             final Class cls = Class.forName(className);
             final Method method = cls.getMethod(methodName, loadMethodParameter(parametertype));
             dataMap = (HashMap) method.invoke(cls.newInstance(), loadMethodArguments(parametertype, parametervalue));
-        } catch (final Exception e) {
+        } catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException | NoSuchMethodException | SecurityException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadJavaAPIMasterDataMap", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadJavaAPIMasterDataMap", e);
         }
@@ -345,7 +349,7 @@ public class EgovMasterDataCaching {
                 for (int i = 0; i < parametertype.length; i++)
                     class_name[i] = Class.forName(parametertype[i]);
             }
-        } catch (final Exception e) {
+        } catch (final ClassNotFoundException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadMethodParameter", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadMethodParameter", e);
         }
@@ -376,7 +380,7 @@ public class EgovMasterDataCaching {
                     else
                         throw new ApplicationRuntimeException("This " + parametertype[i] + " datatype is not supported");
             }
-        } catch (final Exception e) {
+        } catch (final ObjectNotFoundException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching loadMethodArguments", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching loadMethodArguments", e);
         }
@@ -396,7 +400,7 @@ public class EgovMasterDataCaching {
         try {
             final Query qry = getCurrentSession().createQuery(query);
             list = qry.list();
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching queryByHibernate", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching queryByHibernate", e);
         }
@@ -421,7 +425,7 @@ public class EgovMasterDataCaching {
             resultlist = getCurrentSession().createSQLQuery(query).list();
             if (resultlist != null)
                 returnList = resultSetToArrayList(resultlist);
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching queryByJdbc", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching queryByJdbc", e);
         }
@@ -448,7 +452,7 @@ public class EgovMasterDataCaching {
                 labelValueBean.setName((String) objArr[1]);
                 list.add(labelValueBean);
             }
-        } catch (final Exception e) {
+        } catch (final ObjectNotFoundException e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching resultSetToArrayList", e);
             throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching resultSetToArrayList", e);
         }

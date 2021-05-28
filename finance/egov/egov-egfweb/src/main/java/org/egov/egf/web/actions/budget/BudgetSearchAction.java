@@ -84,6 +84,7 @@ import org.egov.services.budget.BudgetService;
 import org.egov.utils.BudgetDetailConfig;
 import org.egov.utils.BudgetDetailHelper;
 import org.egov.utils.Constants;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -336,6 +337,11 @@ public class BudgetSearchAction extends BaseFormAction {
     // serach screen
     @Action(value = "/budget/budgetSearch-groupedBudgets")
     public String groupedBudgets() {
+		if (budgetDetail.getBudget().getFinancialYear() == null
+				|| budgetDetail.getBudget().getFinancialYear().getId() == null) {
+			addActionError(getText("msg.please.select.financial.year"));
+			return Constants.LIST;
+		}
         final Budget budget = budgetDetail.getBudget();
         final Budget selectedBudget=budget;
         // Dont restrict search by the selected budget, but by all budgets in the tree of selected budget
@@ -372,7 +378,7 @@ public class BudgetSearchAction extends BaseFormAction {
                 if(dept.getCode().equals(deptCode))
                     return dept.getName();
             }
-        }catch(Exception excep){
+        }catch(ObjectNotFoundException excep){
             excep.printStackTrace();
         }
         return "";
@@ -579,7 +585,7 @@ public class BudgetSearchAction extends BaseFormAction {
         try {
             // TODO: Now employee is extending user so passing userid to get assingment -- changes done by Vaibhav
             pos = eisCommonService.getPrimaryAssignmentPositionForEmp(ApplicationThreadLocals.getUserId());
-        } catch (final Exception e) {
+        } catch (final ObjectNotFoundException e) {
             throw new ApplicationRuntimeException("Unable to get Position for the user");
         }
         return pos;

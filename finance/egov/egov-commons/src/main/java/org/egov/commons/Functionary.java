@@ -89,7 +89,7 @@ public class Functionary implements java.io.Serializable {
 
 	}
 
-	public void setId(Integer id) {
+	private void setId(Integer id) {
 		this.id = id;
 	}
 

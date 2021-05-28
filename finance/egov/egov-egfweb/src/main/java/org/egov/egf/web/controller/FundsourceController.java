@@ -55,16 +55,18 @@ import javax.validation.Valid;
 import org.egov.commons.Fundsource;
 import org.egov.commons.service.FundsourceService;
 import org.egov.egf.web.adaptor.FundsourceJsonAdaptor;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -74,11 +76,12 @@ import com.google.gson.GsonBuilder;
 @Controller
 @RequestMapping("/fundsource")
 public class FundsourceController {
-	private final static String FUNDSOURCE_NEW = "fundsource-new";
-	private final static String FUNDSOURCE_RESULT = "fundsource-result";
-	private final static String FUNDSOURCE_EDIT = "fundsource-edit";
-	private final static String FUNDSOURCE_VIEW = "fundsource-view";
-	private final static String FUNDSOURCE_SEARCH = "fundsource-search";
+	private static final String FUNDSOURCE = "fundsource";
+	private static final String FUNDSOURCE_NEW = "fundsource-new";
+	private static final String FUNDSOURCE_RESULT = "fundsource-result";
+	private static final String FUNDSOURCE_EDIT = "fundsource-edit";
+	private static final String FUNDSOURCE_VIEW = "fundsource-view";
+	private static final String FUNDSOURCE_SEARCH = "fundsource-search";
 	@Autowired
 	private FundsourceService fundsourceService;
 	@Autowired
@@ -88,14 +91,14 @@ public class FundsourceController {
 		model.addAttribute("fundsources", fundsourceService.findAll());
 	}
 
-	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	@GetMapping(value = "/new")
 	public String newForm(final Model model) {
 		prepareNewForm(model);
-		model.addAttribute("fundsource", new Fundsource());
+		model.addAttribute(FUNDSOURCE, new Fundsource());
 		return FUNDSOURCE_NEW;
 	}
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@PostMapping(value = "/create")
 	public String create(@Valid @ModelAttribute final Fundsource fundsource, final BindingResult errors,
 			final Model model, final RedirectAttributes redirectAttrs) {
 		if (errors.hasErrors()) {
@@ -108,15 +111,15 @@ public class FundsourceController {
 		return "redirect:/fundsource/result/" + fundsource.getId();
 	}
 
-	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/edit/{id}")
 	public String edit(@PathVariable("id") final Long id, final Model model) {
 		final Fundsource fundsource = fundsourceService.findOne(id);
 		prepareNewForm(model);
-		model.addAttribute("fundsource", fundsource);
+		model.addAttribute(FUNDSOURCE, fundsource);
 		return FUNDSOURCE_EDIT;
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@PostMapping(value = "/update")
 	public String update(@Valid @ModelAttribute final Fundsource fundsource, final BindingResult errors,
 			final Model model, final RedirectAttributes redirectAttrs) {
 		if (errors.hasErrors()) {
@@ -129,43 +132,40 @@ public class FundsourceController {
 		return "redirect:/fundsource/result/" + fundsource.getId();
 	}
 
-	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/view/{id}")
 	public String view(@PathVariable("id") final Long id, final Model model) {
 		final Fundsource fundsource = fundsourceService.findOne(id);
 		prepareNewForm(model);
-		model.addAttribute("fundsource", fundsource);
+		model.addAttribute(FUNDSOURCE, fundsource);
 		return FUNDSOURCE_VIEW;
 	}
 
-	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/result/{id}")
 	public String result(@PathVariable("id") final Long id, final Model model) {
 		final Fundsource fundsource = fundsourceService.findOne(id);
-		model.addAttribute("fundsource", fundsource);
+		model.addAttribute(FUNDSOURCE, fundsource);
 		return FUNDSOURCE_RESULT;
 	}
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
-	public String search(@PathVariable("mode") final String mode, final Model model) {
+	@GetMapping(value = "/search/{mode}")
+	public String search(@PathVariable("mode") @SafeHtml final String mode, final Model model) {
 		final Fundsource fundsource = new Fundsource();
 		prepareNewForm(model);
-		model.addAttribute("fundsource", fundsource);
+		model.addAttribute(FUNDSOURCE, fundsource);
 		return FUNDSOURCE_SEARCH;
 
 	}
 
-	@RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-	public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-			@ModelAttribute final Fundsource fundsource) {
+	@PostMapping(value = "/ajaxsearch/{mode}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public @ResponseBody String ajaxsearch(@PathVariable("mode") @SafeHtml final String mode, final Model model,
+			@Valid @ModelAttribute final Fundsource fundsource) {
 		final List<Fundsource> searchResultList = fundsourceService.search(fundsource);
-		final String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
-				.toString();
-		return result;
+		return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
 	}
 
 	public Object toSearchResultJson(final Object object) {
 		final GsonBuilder gsonBuilder = new GsonBuilder();
 		final Gson gson = gsonBuilder.registerTypeAdapter(Fundsource.class, new FundsourceJsonAdaptor()).create();
-		final String json = gson.toJson(object);
-		return json;
+		return gson.toJson(object);
 	}
 }

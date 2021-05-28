@@ -62,6 +62,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 
 
@@ -117,14 +118,17 @@ public class FundingAgencyAction extends BaseFormAction {
             persistenceService.persist(ac);
             //persistenceService.setType(FundingAgency.class);
         } catch (final ValidationException e) {
-            throw e;
+            throw new ValidationException(Arrays.asList(new ValidationError("An error occured contact Administrator",
+                    "An error occured contact Administrator")));
         } catch (final ConstraintViolationException e) {
             throw new ValidationException(
                     Arrays.asList(new ValidationError("Duplicate FundingAgency", "Duplicate FundingAgency")));
-        } catch (final Exception e) {
-            throw new ValidationException(Arrays.asList(new ValidationError("An error occured contact Administrator",
-                    "An error occured contact Administrator")));
-        }
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError("An error occured contact Administrator",
+           * "An error occured contact Administrator"))); }
+           */
         addActionMessage(getText("Funding Agency Created Successfully"));
         clearValues = true;
         return NEW;
@@ -135,14 +139,22 @@ public class FundingAgencyAction extends BaseFormAction {
     @Action(value = "/masters/fundingAgency-search")
     public String search() {
         final StringBuffer query = new StringBuffer();
+        List params = new ArrayList();
         query.append("From FundingAgency");
-        if (!fundingAgency.getCode().equals("") && !fundingAgency.getName().equals(""))
-            query.append(" where code like '%" + fundingAgency.getCode() + "%' and name like '%" + fundingAgency.getName() + "%'");
+        if (!fundingAgency.getCode().equals("") && !fundingAgency.getName().equals("")) {
+            query.append(" where code like ? and name like ?");
+            params.add(new StringBuilder("%").append(fundingAgency.getCode()).append("%").toString());
+            params.add(new StringBuilder("%").append(fundingAgency.getName()).append("%").toString());
+        }
         else {
-            if (!fundingAgency.getCode().isEmpty())
-                query.append(" where code like '%" + fundingAgency.getCode() + "%'");
-            if (!fundingAgency.getName().isEmpty())
-                query.append(" where name like '%" + fundingAgency.getName() + "%'");
+            if (!fundingAgency.getCode().isEmpty()) {
+                query.append(" where code like ?");
+                params.add(new StringBuilder("%").append(fundingAgency.getName()).append("%").toString());
+            }
+            if (!fundingAgency.getName().isEmpty()) {
+                query.append(" where name like ?");
+                params.add(new StringBuilder("%").append(fundingAgency.getName()).append("%"));
+            }
         }
         fundingAgencyList = persistenceService.findAllBy(query.toString());
         return "search";

@@ -264,9 +264,9 @@ public class BudgetLoadAction extends BaseFormAction {
                     "from FileStoreMapper where fileName like '%budget_original%' order by id desc ").setMaxResults(5).list();
             outPutFiles = (List<FileStoreMapper>) persistenceService.getSession().createQuery(
                     "from FileStoreMapper where fileName like '%budget_output%' order by id desc ").setMaxResults(5).list();
-            throw new ValidationException(Arrays.asList(new ValidationError(e.getErrors().get(0).getMessage(),
-                    e.getErrors().get(0).getMessage())));
-        } catch (final Exception e)
+            throw new ValidationException(Arrays.asList(new ValidationError(budgetUploadError,
+                    budgetUploadError)));
+        } catch (final IOException e)
         {
             originalFiles = (List<FileStoreMapper>) persistenceService.getSession().createQuery(
                     "from FileStoreMapper where fileName like '%budget_original%' order by id desc ").setMaxResults(5).list();
@@ -498,11 +498,11 @@ public class BudgetLoadAction extends BaseFormAction {
         {
             throw new ValidationException(Arrays.asList(new ValidationError(e.getErrors().get(0).getMessage(),
                     e.getErrors().get(0).getMessage())));
-        } catch (final Exception e)
-        {
-            throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(),
-                    e.getMessage())));
-        }
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
         return tempList;
     }
 
@@ -540,11 +540,11 @@ public class BudgetLoadAction extends BaseFormAction {
         {
             throw new ValidationException(Arrays.asList(new ValidationError(e.getErrors().get(0).getMessage(),
                     e.getErrors().get(0).getMessage())));
-        } catch (final Exception e)
-        {
-            throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(),
-                    e.getMessage())));
-        }
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
         return tempList;
     }
 
@@ -561,11 +561,11 @@ public class BudgetLoadAction extends BaseFormAction {
         {
             throw new ValidationException(Arrays.asList(new ValidationError(e.getErrors().get(0).getMessage(),
                     e.getErrors().get(0).getMessage())));
-        } catch (final Exception e)
-        {
-            throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(),
-                    e.getMessage())));
-        }
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
         return budgetUploadList;
 
     }
@@ -602,11 +602,11 @@ public class BudgetLoadAction extends BaseFormAction {
         {
             throw new ValidationException(Arrays.asList(new ValidationError(e.getErrors().get(0).getMessage(),
                     e.getErrors().get(0).getMessage())));
-        } catch (final Exception e)
-        {
-            throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(),
-                    e.getMessage())));
-        }
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
         return budget;
     }
 
@@ -628,11 +628,12 @@ public class BudgetLoadAction extends BaseFormAction {
         {
             throw new ValidationException(Arrays.asList(new ValidationError(e.getErrors().get(0).getMessage(),
                     e.getErrors().get(0).getMessage())));
-        } catch (final Exception e)
-        {
-            throw new ValidationException(Arrays.asList(new ValidationError(getText("year.is.not.exist"),
-                    getText("year.is.not.exist"))));
-        }
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(getText("year.is.not.exist"),
+           * getText("year.is.not.exist")))); }
+           */
     }
 
     @Override
@@ -692,7 +693,7 @@ public class BudgetLoadAction extends BaseFormAction {
             try {
                 numericCellValue = Double.parseDouble(strValue);
                 bigDecimalValue = BigDecimal.valueOf(numericCellValue);
-            } catch (final Exception e)
+            } catch (final NumberFormatException e)
             {
                 if (LOGGER.isDebugEnabled())
                     LOGGER.debug("Found : Non numeric value in Numeric Field :" + strValue + ":");

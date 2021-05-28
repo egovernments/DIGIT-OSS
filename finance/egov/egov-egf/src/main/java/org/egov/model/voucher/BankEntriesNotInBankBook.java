@@ -53,17 +53,25 @@ package org.egov.model.voucher;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class BankEntriesNotInBankBook {
 
     private Long beId;
+    @SafeHtml
     private String refNum;
+    @SafeHtml
     private String type;
     private Date date;
+    @SafeHtml
     private String dateId;
     private BigDecimal amount;
+    @SafeHtml
     private String remarks;
     private Long glcodeIdDetail;
+    @SafeHtml
     private String glcodeDetail;
+    @SafeHtml
     private String accounthead;
     private Boolean createVoucher;
 

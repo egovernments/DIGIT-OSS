@@ -4,101 +4,105 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.egov.infra.microservice.models.RequestInfo;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FundRequest implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	@JsonProperty("RequestInfo")
-	private RequestInfo requestInfo;
-	
-	private String tenantId;
-	private List<Integer> ids;
-	private String name;
-	private String code;
-	private Boolean active;
-	private Integer pageSize;
-	private Integer Offset;
-	private String sortBy;
-	
-	public FundRequest(){}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public RequestInfo getRequestInfo() {
-		return requestInfo;
-	}
+    @JsonProperty("RequestInfo")
+    private RequestInfo requestInfo;
+    @SafeHtml
+    private String tenantId;
+    private List<Integer> ids;
+    @SafeHtml
+    private String name;
+    @SafeHtml
+    private String code;
+    private Boolean active;
+    private Integer pageSize;
+    private Integer Offset;
+    @SafeHtml
+    private String sortBy;
 
-	public void setRequestInfo(RequestInfo requestInfo) {
-		this.requestInfo = requestInfo;
-	}
+    public FundRequest() {
+    }
 
-	public String getTenantId() {
-		return tenantId;
-	}
+    public RequestInfo getRequestInfo() {
+        return requestInfo;
+    }
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
+    public void setRequestInfo(final RequestInfo requestInfo) {
+        this.requestInfo = requestInfo;
+    }
 
-	public List<Integer> getIds() {
-		return ids;
-	}
+    public String getTenantId() {
+        return tenantId;
+    }
 
-	public void setIds(List<Integer> ids) {
-		this.ids = ids;
-	}
+    public void setTenantId(final String tenantId) {
+        this.tenantId = tenantId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public List<Integer> getIds() {
+        return ids;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setIds(final List<Integer> ids) {
+        this.ids = ids;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-	public Boolean getActive() {
-		return active;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+    public void setCode(final String code) {
+        this.code = code;
+    }
 
-	public Integer getPageSize() {
-		return pageSize;
-	}
+    public Boolean getActive() {
+        return active;
+    }
 
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
+    public void setActive(final Boolean active) {
+        this.active = active;
+    }
 
-	public Integer getOffset() {
-		return Offset;
-	}
+    public Integer getPageSize() {
+        return pageSize;
+    }
 
-	public void setOffset(Integer offset) {
-		Offset = offset;
-	}
+    public void setPageSize(final Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 
-	public String getSortBy() {
-		return sortBy;
-	}
+    public Integer getOffset() {
+        return Offset;
+    }
 
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
-	}
-	
-	
+    public void setOffset(final Integer offset) {
+        Offset = offset;
+    }
+
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(final String sortBy) {
+        this.sortBy = sortBy;
+    }
+
 }

@@ -47,14 +47,9 @@
  */
 package org.egov.egf.commons.bank.service;
 
-import org.egov.commons.Bank;
-import org.egov.egf.commons.bank.repository.BankRepository;
-import org.egov.infra.admin.master.entity.User;
-import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -65,9 +60,15 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import org.egov.commons.Bank;
+import org.egov.commons.contracts.BankSearchRequest;
+import org.egov.egf.commons.bank.repository.BankRepository;
+import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author venki
@@ -77,81 +78,83 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class CreateBankService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    private final BankRepository bankRepository;
+	private final BankRepository bankRepository;
 
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
-    }
+	public Session getCurrentSession() {
+		return entityManager.unwrap(Session.class);
+	}
 
-    @Autowired
-    public CreateBankService(final BankRepository bankRepository) {
-        this.bankRepository = bankRepository;
-    }
+	@Autowired
+	public CreateBankService(final BankRepository bankRepository) {
+		this.bankRepository = bankRepository;
+	}
 
-    public Bank getById(final Integer id) {
-        return bankRepository.findOne(id);
-    }
+	public Bank getById(final Integer id) {
+		return bankRepository.findOne(id);
+	}
 
-    public List<Bank> getByIsActive(final Boolean isActive) {
-        return bankRepository.findByIsactive(isActive);
-    }
+	public List<Bank> getByIsActive(final Boolean isActive) {
+		return bankRepository.findByIsactive(isActive);
+	}
 
-    public List<Bank> getByIsActiveTrueOrderByName() {
-        return bankRepository.findByIsactiveTrueOrderByNameAsc();
-    }
+	public List<Bank> getByIsActiveTrueOrderByName() {
+		return bankRepository.findByIsactiveTrueOrderByNameAsc();
+	}
 
-    @Transactional
-    public Bank create(final Bank bank) {
+	@Transactional
+	public Bank create(final Bank bank) {
 
-        bank.setCreatedDate(new Date());
-        bank.setCreatedBy(ApplicationThreadLocals.getUserId());
+		bank.setCreatedDate(new Date());
+		bank.setCreatedBy(ApplicationThreadLocals.getUserId());
 
-        return bankRepository.save(bank);
-    }
+		return bankRepository.save(bank);
+	}
 
-    @Transactional
-    public Bank update(final Bank bank) {
+	@Transactional
+	public Bank update(final Bank bank) {
 
-        bank.setLastModifiedDate(new Date());
-        bank.setLastModifiedBy(ApplicationThreadLocals.getUserId());
-        return bankRepository.save(bank);
-    }
+		bank.setLastModifiedDate(new Date());
+		bank.setLastModifiedBy(ApplicationThreadLocals.getUserId());
+		return bankRepository.save(bank);
+	}
 
-    public List<Bank> search(final Bank bank) {
-        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Bank> createQuery = cb.createQuery(Bank.class);
-        final Root<Bank> banks = createQuery.from(Bank.class);
-        createQuery.select(banks);
-        final Metamodel m = entityManager.getMetamodel();
-        final EntityType<Bank> tempBank = m.entity(Bank.class);
+	public List<Bank> search(final BankSearchRequest bankSearchRequest) {
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<Bank> createQuery = cb.createQuery(Bank.class);
+		final Root<Bank> banks = createQuery.from(Bank.class);
+		createQuery.select(banks);
+		final Metamodel m = entityManager.getMetamodel();
+		final EntityType<Bank> tempBank = m.entity(Bank.class);
 
-        final List<Predicate> predicates = new ArrayList<>();
-        if (bank.getName() != null) {
-            final String name = "%" + bank.getName().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(banks.get("name")));
-            predicates.add(cb.like(cb.lower(banks.get(tempBank.getDeclaredSingularAttribute("name", String.class))), name));
-        }
-        if (bank.getCode() != null) {
-            final String code = "%" + bank.getCode().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(banks.get("code")));
-            predicates.add(cb.like(cb.lower(banks.get(tempBank.getDeclaredSingularAttribute("code", String.class))), code));
-        }
-        if (bank.getIsactive())
-            predicates.add(cb.equal(banks.get("isactive"), true));
-        if (bank.getNarration() != null)
-            predicates.add(cb.equal(banks.get("narration"), bank.getNarration()));
+		final List<Predicate> predicates = new ArrayList<>();
+		if (bankSearchRequest.getName() != null) {
+			final String name = "%" + bankSearchRequest.getName().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(banks.get("name")));
+			predicates.add(
+					cb.like(cb.lower(banks.get(tempBank.getDeclaredSingularAttribute("name", String.class))), name));
+		}
+		if (bankSearchRequest.getCode() != null) {
+			final String code = "%" + bankSearchRequest.getCode().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(banks.get("code")));
+			predicates.add(
+					cb.like(cb.lower(banks.get(tempBank.getDeclaredSingularAttribute("code", String.class))), code));
+		}
+		if (bankSearchRequest.getIsactive().booleanValue())
+			predicates.add(cb.equal(banks.get("isactive"), true));
+		if (bankSearchRequest.getNarration() != null)
+			predicates.add(cb.equal(banks.get("narration"), bankSearchRequest.getNarration()));
 
-        createQuery.where(predicates.toArray(new Predicate[] {}));
-        final TypedQuery<Bank> query = entityManager.createQuery(createQuery);
-        return query.getResultList();
+		createQuery.where(predicates.toArray(new Predicate[] {}));
+		final TypedQuery<Bank> query = entityManager.createQuery(createQuery);
+		return query.getResultList();
 
-    }
+	}
 
-    public List<Bank> getAll() {
-        return bankRepository.findAll();
-    }
+	public List<Bank> getAll() {
+		return bankRepository.findAll();
+	}
 
 }

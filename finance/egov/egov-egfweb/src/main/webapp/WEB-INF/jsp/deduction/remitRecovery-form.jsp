@@ -279,6 +279,13 @@ function validateSearch()
 		}
 	}
 	document.remitRecoveryForm.action='/services/EGF/deduction/remitRecovery-search.action';
+	jQuery(remitRecoveryForm).append(
+			jQuery('<input>', {
+	            type: 'hidden',
+	            name: '${_csrf.parameterName}',
+	            value: '${_csrf.token}'
+	        })
+	    );
 	document.remitRecoveryForm.submit();
 	return true;
 }
@@ -380,6 +387,13 @@ function validateRemit(){
 	}
 	disableAll();
 	document.remitRecoveryForm.action='/services/EGF/deduction/remitRecovery-remit.action';
+	jQuery(remitRecoveryForm).append(
+			jQuery('<input>', {
+	            type: 'hidden',
+	            name: '${_csrf.parameterName}',
+	            value: '${_csrf.token}'
+	        })
+	    );
 	document.remitRecoveryForm.submit();
 	return true;
 }
@@ -410,6 +424,13 @@ function disableAll()
 function resetSubmit()
 {
 	document.remitRecoveryForm.action='/services/EGF/deduction/remitRecovery-newform.action';
+	jQuery(remitRecoveryForm).append(
+			jQuery('<input>', {
+	            type: 'hidden',
+	            name: '${_csrf.parameterName}',
+	            value: '${_csrf.token}'
+	        })
+	    );
 	document.remitRecoveryForm.submit();
 	
 	}

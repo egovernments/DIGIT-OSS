@@ -2,20 +2,30 @@ package org.egov.infra.microservice.models;
 
 import java.util.Date;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class InstrumentSearchContract {
+    @SafeHtml
     private String ids;
+    @SafeHtml
     private String sortBy;
     private Integer pageSize;
     private Integer offset;
+    @SafeHtml
     private String instrumentTypes;
+    @SafeHtml
     private String receiptIds;
+    @SafeHtml
     private String financialStatuses;
     private Date transactionFromDate;
     private Date transactionToDate;
+    @SafeHtml
     private String transactionNumber;
     private Date transactionDate;
+    @SafeHtml
     private String bankAccountNumber;
     private TransactionType transactionType;
+    @SafeHtml
     private String bankId;
     public InstrumentSearchContract() {
         // TODO Auto-generated constructor stub

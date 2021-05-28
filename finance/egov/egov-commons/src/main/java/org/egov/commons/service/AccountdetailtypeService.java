@@ -61,6 +61,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.Metamodel;
 
 import org.egov.commons.Accountdetailtype;
+import org.egov.commons.contracts.AccountDetailTypeSearchRequest;
 import org.egov.commons.repository.AccountdetailtypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -106,7 +107,7 @@ public class AccountdetailtypeService {
         return accountdetailtypeRepository.findByFullQualifiedName(fullQualifiedName);
     }
 
-    public List<Accountdetailtype> search(final Accountdetailtype accountdetailtype, final String mode) {
+    public List<Accountdetailtype> search(final AccountDetailTypeSearchRequest accountDetailTypeSearchRequest, final String mode) {
         final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         final CriteriaQuery<Accountdetailtype> createQuery = cb.createQuery(Accountdetailtype.class);
         final Root<Accountdetailtype> accountdetailtypes = createQuery.from(Accountdetailtype.class);
@@ -115,15 +116,15 @@ public class AccountdetailtypeService {
         final javax.persistence.metamodel.EntityType<Accountdetailtype> tempAccountDetailType = m.entity(Accountdetailtype.class);
 
         final List<Predicate> predicates = new ArrayList<>();
-        if (accountdetailtype.getName() != null) {
-            final String name = "%" + accountdetailtype.getName().toLowerCase() + "%";
+        if (accountDetailTypeSearchRequest.getName() != null) {
+            final String name = "%" + accountDetailTypeSearchRequest.getName().toLowerCase() + "%";
             predicates.add(cb.isNotNull(accountdetailtypes.get("name")));
             predicates.add(cb.like(
                     cb.lower(accountdetailtypes.get(tempAccountDetailType.getDeclaredSingularAttribute("name", String.class))),
                     name));
         }
-        if (accountdetailtype.getDescription() != null) {
-            final String code = "%" + accountdetailtype.getDescription().toLowerCase() + "%";
+        if (accountDetailTypeSearchRequest.getDescription() != null) {
+            final String code = "%" + accountDetailTypeSearchRequest.getDescription().toLowerCase() + "%";
             predicates.add(cb.isNotNull(accountdetailtypes.get("description")));
             predicates.add(cb.like(
                     cb.lower(

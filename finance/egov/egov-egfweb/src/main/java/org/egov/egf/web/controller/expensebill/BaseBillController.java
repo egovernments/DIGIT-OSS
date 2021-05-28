@@ -48,9 +48,13 @@
 package org.egov.egf.web.controller.expensebill;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccountDetail;
 import org.egov.commons.service.AccountdetailtypeService;
@@ -59,13 +63,16 @@ import org.egov.commons.utils.EntityType;
 import org.egov.egf.billsubtype.service.EgBillSubTypeService;
 import org.egov.egf.expensebill.service.ExpenseBillService;
 import org.egov.egf.web.controller.voucher.BaseVoucherController;
+import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.utils.DateUtils;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.bills.EgBillPayeedetails;
 import org.egov.model.bills.EgBillSubType;
 import org.egov.model.bills.EgBilldetails;
 import org.egov.model.bills.EgBillregister;
+import org.egov.utils.Constants;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +107,9 @@ public abstract class BaseBillController extends BaseVoucherController {
     private PersistenceService persistenceService;
 
     protected boolean isBillDateDefaultValue;
+    private final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Constants.LOCALE);
+    DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+    DateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
 
     public BaseBillController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
@@ -123,6 +133,9 @@ public abstract class BaseBillController extends BaseVoucherController {
             if (!expenseBillService.isBillNumUnique(egBillregister.getBillnumber()))
                 resultBinder.reject("msg.expense.bill.duplicate.bill.number",
                         new String[] { egBillregister.getBillnumber() }, null);
+        if (egBillregister.getEgBillregistermis().getPayto() == null
+                || StringUtils.isEmpty(egBillregister.getEgBillregistermis().getPayto()))
+            resultBinder.reject("msg.expense.payto", new String[] {}, null);
     }
 
     protected void validateLedgerAndSubledger(final EgBillregister egBillregister, final BindingResult resultBinder) {
@@ -218,7 +231,6 @@ public abstract class BaseBillController extends BaseVoucherController {
         }
     }
 
-    @SuppressWarnings("unchecked")
     protected void populateBillDetails(final EgBillregister egBillregister) {
         egBillregister.getEgBilldetailes().clear();
 
@@ -226,7 +238,10 @@ public abstract class BaseBillController extends BaseVoucherController {
             egBillregister.getEgBilldetailes().addAll(egBillregister.getBillDetails());
         } else {
             egBillregister.getEgBilldetailes().addAll(egBillregister.getDebitDetails());
-            egBillregister.getEgBilldetailes().addAll(egBillregister.getCreditDetails());
+            egBillregister.getCreditDetails().forEach(billDetails -> {
+            	if (billDetails.getGlcodeid() != null)
+            		egBillregister.getEgBilldetailes().add(billDetails);
+            });
             egBillregister.getEgBilldetailes().addAll(egBillregister.getNetPayableDetails());
         }
 
@@ -265,8 +280,9 @@ public abstract class BaseBillController extends BaseVoucherController {
     }
     
     private List<Object[]> getAccountDetails(Integer accountDetailKeyId, Integer accountDetailTypeId) {
-        String queryString = "select adk.detailname as detailkeyname,adt.name as detailtypename from accountdetailkey adk inner join accountdetailtype adt on adk.detailtypeid=adt.id where adk.detailtypeid=:detailtypeid and adk.detailkey=:detailkey";
-        SQLQuery sqlQuery = persistenceService.getSession().createSQLQuery(queryString);
+        StringBuilder queryString = new StringBuilder(); 
+        queryString.append("select adk.detailname as detailkeyname,adt.name as detailtypename from accountdetailkey adk inner join accountdetailtype adt on adk.detailtypeid=adt.id where adk.detailtypeid=:detailtypeid and adk.detailkey=:detailkey");
+        SQLQuery sqlQuery = persistenceService.getSession().createSQLQuery(queryString.toString());
         sqlQuery.setInteger("detailtypeid", accountDetailTypeId);
         sqlQuery.setInteger("detailkey", accountDetailKeyId);
         return sqlQuery.list();
@@ -297,12 +313,26 @@ public abstract class BaseBillController extends BaseVoucherController {
                 else
                     entity = (EntityType) persistenceService.find("from " + tableName + " where id=? order by name",
                             payeeDetails.getAccountDetailKeyId());
-            } catch (final Exception e) {
+            } catch (final ClassNotFoundException | NoSuchMethodException | SecurityException e) {
                 throw new ApplicationRuntimeException(e.getMessage());
             }
             payeeDetails.setDetailTypeName(detailType.getName());
             payeeDetails.setDetailKeyName(entity.getName());
 
+        }
+    }
+    
+    public void validateCuttofDate(final EgBillregister egBillregister, final BindingResult resultBinder)
+            throws ParseException {
+        final List<AppConfigValues> cutOffDateconfigValue = appConfigValuesService.getConfigValuesByModuleAndKey(
+                FinancialConstants.MODULE_NAME_APPCONFIG, FinancialConstants.KEY_DATAENTRYCUTOFFDATE);
+
+        Date date = df.parse(cutOffDateconfigValue.get(0).getValue());
+        String cutOffDate = formatter.format(date);
+        final Date cuttDate = DateUtils.parseDate(cutOffDate, "dd/MM/yyyy");
+        if (egBillregister.getBilldate().after(cuttDate)) {
+            resultBinder.reject("msg.cutoff.warnig.message",
+                    new String[] { DateUtils.getDefaultFormattedDate(cuttDate) }, null);
         }
     }
 

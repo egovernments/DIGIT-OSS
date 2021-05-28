@@ -139,6 +139,13 @@ function populateUser(){
 
 function printVoucher(){
 	document.forms[0].action='../report/billPaymentVoucherPrint-print.action?id=<s:property value="paymentheader.id"/>';
+	jQuery(document.forms[0]).append(
+            jQuery('<input>', {
+                type: 'hidden',
+                name: '${_csrf.parameterName}',
+                value: '${_csrf.token}'
+            })
+        );
 	document.forms[0].submit();
 }
 	function validate(obj,name,value)
@@ -170,6 +177,13 @@ function printVoucher(){
 			var disabled = myform.find(':input:disabled').removeAttr('disabled'); 
 			disableRemitRecoverView();
 			document.remittanceForm.action='${pageContext.request.contextPath}/deduction/remitRecovery-sendForApproval.action';
+			jQuery(remittanceForm).append(
+                    jQuery('<input>', {
+                        type: 'hidden',
+                        name: '${_csrf.parameterName}',
+                        value: '${_csrf.token}'
+                    })
+                );
 			document.remittanceForm.submit();
 		}
 		return true;

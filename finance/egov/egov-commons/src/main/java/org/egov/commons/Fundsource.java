@@ -50,6 +50,7 @@ package org.egov.commons;
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.egov.infra.persistence.validator.annotation.Unique;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -81,13 +82,16 @@ public class Fundsource extends AbstractAuditable {
 
     @Length(min = 1, max = 25)
     @NotNull
+    @SafeHtml
     private String code;
 
     @Length(min = 1, max = 25)
     @NotNull
+    @SafeHtml
     private String name;
 
     @Length(min = 1, max = 25)
+    @SafeHtml
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -106,6 +110,7 @@ public class Fundsource extends AbstractAuditable {
 
     @Length(min = 1, max = 25)
     @Column(name = "funding_type")
+    @SafeHtml
     private String fundingType;
 
     @Column(name = "loan_percentage")
@@ -125,6 +130,7 @@ public class Fundsource extends AbstractAuditable {
 
     @Length(min = 1, max = 25)
     @Column(name = "repayment_frequency")
+    @SafeHtml
     private String repaymentFrequency;
 
     @Column(name = "no_of_installment")
@@ -136,6 +142,7 @@ public class Fundsource extends AbstractAuditable {
 
     @Length(min = 1, max = 25)
     @Column(name = "govt_order")
+    @SafeHtml
     private String govtOrder;
 
     @Column(name = "govt_date")
@@ -143,14 +150,17 @@ public class Fundsource extends AbstractAuditable {
 
     @Length(min = 1, max = 25)
     @Column(name = "dp_code_number")
+    @SafeHtml
     private String dpCodeNum;
 
     @Length(min = 1, max = 25)
     @Column(name = "dp_code_resg")
+    @SafeHtml
     private String dpCodeResistration;
 
     @Length(min = 1, max = 25)
     @Column(name = "fin_inst_letter_num")
+    @SafeHtml
     private String finInstLetterNum;
 
     @Column(name = "fin_inst_letter_date")
@@ -158,6 +168,7 @@ public class Fundsource extends AbstractAuditable {
 
     @Length(min = 1, max = 25)
     @Column(name = "fin_inst_schm_num")
+    @SafeHtml
     private String finInstSchmNum;
 
     @Column(name = "fin_inst_schm_date")

@@ -249,6 +249,13 @@
 			else {
 				disableParameters();
 				document.chequeMaster.action = '/services/EGF/masters/accountCheque-save.action';
+				jQuery(chequeMaster).append(
+						jQuery('<input>', {
+	                        type: 'hidden',
+	                        name: '${_csrf.parameterName}',
+	                        value: '${_csrf.token}'
+	                    })
+	                );
 				document.chequeMaster.submit();
 			}
 

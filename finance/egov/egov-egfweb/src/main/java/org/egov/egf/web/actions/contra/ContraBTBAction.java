@@ -252,7 +252,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 	 */
 	@ValidationErrorPage(value = NEW)
 	@Action(value = "/contra/contraBTB-create")
-	public String create() throws ValidationException {
+	public String create() {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Starting Bank to Bank Transfer ...");
 		try {
@@ -272,10 +272,11 @@ public class ContraBTBAction extends BaseVoucherAction {
 			LoadAjaxedDropDowns();
 			throw new ValidationException(Arrays
 					.asList(new ValidationError(e.getErrors().get(0).getMessage(), e.getErrors().get(0).getMessage())));
-		} catch (final Exception e) {
-			LoadAjaxedDropDowns();
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { LoadAjaxedDropDowns(); throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		return SUCCESS;
 	}
 
@@ -485,11 +486,12 @@ public class ContraBTBAction extends BaseVoucherAction {
 			throw new ValidationException(
 					Arrays.asList(new ValidationError(EXCEPTION_WHILE_SAVING_DATA, TRANSACTION_FAILED)));
 
-		} catch (final Exception e) {
-			// handle engine exception
-			LOGGER.error(e.getMessage());
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { // handle engine exception
+           * LOGGER.error(e.getMessage()); throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Posted to Ledger ");
 		return voucher;
@@ -565,19 +567,14 @@ public class ContraBTBAction extends BaseVoucherAction {
 	@SkipValidation
 	@Action(value = "/contra/contraBTB-newform")
 	public String newform() {
-		try {
-
-			reset();
-			LoadAjaxedDropDowns();
-			loadDefalutDates();
-			final Date currDate = new Date();
-			final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			contraBean.setChequeDate(sdf.format(currDate));
-			contraBean.setModeOfCollection(MDC_OTHER);
-			voucherDate = sdf.parse(sdf.format(currDate));
-		} catch (ParseException e) {
-
-		}
+		reset();
+		LoadAjaxedDropDowns();
+		loadDefalutDates();
+		final Date currDate = new Date();
+		final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		contraBean.setChequeDate(sdf.format(currDate));
+		contraBean.setModeOfCollection(MDC_OTHER);
+		voucherDate = new Date();
 		return NEW;
 	}
 
@@ -841,11 +838,12 @@ public class ContraBTBAction extends BaseVoucherAction {
 		} catch (final ValidationException e) {
 			LOGGER.error(e.getMessage());
 			throw e;
-		} catch (final Exception e) {
-			// handle engine exception
-			LOGGER.error(e.getMessage());
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { // handle engine exception
+           * LOGGER.error(e.getMessage()); throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Posted to Ledger " + voucherHeader.getId());
 		return voucherHeader;
@@ -946,11 +944,12 @@ public class ContraBTBAction extends BaseVoucherAction {
 		} catch (final ValidationException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw e;
-		} catch (final Exception e) {
-			// handle engine exception
-			LOGGER.error(e.getMessage());
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { // handle engine exception
+           * LOGGER.error(e.getMessage()); throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Posted to Ledger " + voucherHeader.getId());
 		return voucherHeader;
@@ -1253,17 +1252,18 @@ public class ContraBTBAction extends BaseVoucherAction {
 			throw new ValidationException(
 					Arrays.asList(new ValidationError(EXCEPTION_WHILE_SAVING_DATA, TRANSACTION_FAILED)));
 
-		} catch (final Exception e) {
-			// handle engine exception
-			LOGGER.error(e.getMessage());
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+        } /*
+           * catch (final Exception e) { // handle engine exception
+           * LOGGER.error(e.getMessage()); throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError(e.getMessage(), e.getMessage()))); }
+           */
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Posted to Ledger ");
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Bankaccount> getAccountNumbers(final Integer branchId, final Integer fundId,
+	private List<Bankaccount> getAccountNumbers(final Integer branchId, final Long fundId,
 			final String typeOfAccount) {
 		List<Bankaccount> accountNumbersList = new ArrayList<Bankaccount>();
 		typeOfAccount.split(",");
@@ -1276,15 +1276,17 @@ public class ContraBTBAction extends BaseVoucherAction {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map getBankBranches(final Integer fundId, final String typeOfAccount) {
+	private Map getBankBranches(final Long fundId, final String typeOfAccount) {
 		typeOfAccount.split(",");
 		final Map<String, Object> bankBrmap = new LinkedHashMap();
 		if (fundId != null) {
-			final List<Object[]> bankBranch = persistenceService.findAllBy(
-					"select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),bankBranch.branchname) as bankbranchname "
-							+ " FROM Bank bank,Bankbranch bankBranch,Bankaccount bankaccount "
-							+ " where  bank.isactive=true  and bankBranch.isactive=true and bankaccount.isactive=true and bank.id = bankBranch.bank.id and bankBranch.id = bankaccount.bankbranch.id"
-							+ " and bankaccount.fund.id=?",
+			final List<Object[]> bankBranch = persistenceService.findAllBy(new StringBuilder(
+					"select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),")
+							.append("bankBranch.branchname) as bankbranchname ")
+							.append(" FROM Bank bank,Bankbranch bankBranch,Bankaccount bankaccount ")
+							.append(" where  bank.isactive=true  and bankBranch.isactive=true and bankaccount.isactive=true")
+							.append(" and bank.id = bankBranch.bank.id and bankBranch.id = bankaccount.bankbranch.id")
+							.append(" and bankaccount.fund.id=?").toString(),
 					fundId);
 			for (final Object[] element : bankBranch)
 				bankBrmap.put(element[0].toString(), element[1].toString());
@@ -1334,7 +1336,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 				if (contraBean.getFromFundId() != null && contraBean.getFromFundId() != -1)
 
 					addDropdownData("fromAccNumList", getAccountNumbers(Integer.valueOf(split[1]),
-							Integer.valueOf(contraBean.getFromFundId()), "RECEIPTS_PAYMENTS,RECEIPTS"));
+							contraBean.getFromFundId(), "RECEIPTS_PAYMENTS,RECEIPTS"));
 				else
 					addDropdownData("fromAccNumList", Collections.EMPTY_LIST);
 		} else
@@ -1383,7 +1385,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 			try {
 				fromBalance = egovCommon.getAccountBalance(voucherHeader.getVoucherDate(),
 						contraVoucher.getFromBankAccountId().getId());
-			} catch (final Exception e) {
+			} catch (final NumberFormatException e) {
 				LOGGER.error(e.getMessage());
 				fromBalance = BigDecimal.valueOf(-1);
 			}
@@ -1397,7 +1399,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 			try {
 				toBalance = egovCommon.getAccountBalance(voucherHeader.getVoucherDate(),
 						contraVoucher.getToBankAccountId().getId());
-			} catch (final Exception e) {
+			} catch (final NumberFormatException e) {
 				LOGGER.error(e.getMessage());
 				toBalance = BigDecimal.valueOf(-1);
 			}

@@ -48,20 +48,21 @@
 package org.egov.commons.dao;
 
 import org.egov.commons.CGeneralLedger;
+import org.egov.infra.exception.ApplicationException;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface GeneralLedgerDAO{
-	String getActualsPrev(String accCode, String functionId, String budgetingType) throws Exception;
+	String getActualsPrev(String accCode, String functionId, String budgetingType) throws ApplicationException;
 
-	String getActualsDecCurr(String accCode, String functionId, String budgetingType) throws Exception;
+	String getActualsDecCurr(String accCode, String functionId, String budgetingType) throws ApplicationException;
 
-	List<CGeneralLedger> findCGeneralLedgerByVoucherHeaderId(Long voucherHeaderId) throws Exception;
+	List<CGeneralLedger> findCGeneralLedgerByVoucherHeaderId(Long voucherHeaderId);
 
 	String getCBillDeductionAmtByVhId(Long voucherHeaderId);
 
-	BigDecimal getGlAmountForBudgetingType(Long budType, List glcodeList, String fiscalYearID, String functionId, String schemeId, String subSchemeId, String asOnDate) throws Exception;
+	BigDecimal getGlAmountForBudgetingType(Long budType, List glcodeList, String fiscalYearID, String functionId, String schemeId, String subSchemeId, String asOnDate) throws ApplicationException;
 
-	BigDecimal getGlAmountbyGlcodeList(List glCodeList, BigDecimal glAmount) throws Exception;
+	BigDecimal getGlAmountbyGlcodeList(List glCodeList, BigDecimal glAmount) throws ApplicationException;
 }

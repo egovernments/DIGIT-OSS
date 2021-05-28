@@ -53,6 +53,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,28 +138,31 @@ public abstract class BaseFormAction extends ActionSupport
             }
     }
 
-    private void setRelationship(final String relationshipName, final Class class1) throws IntrospectionException {
-        final String[] ids = parameters.get(relationshipName);
-        if (ids != null && ids.length > 0) {
-            final String id = ids[0];
-            if (!"department".equals(relationshipName) && !"executingDepartment".equals(relationshipName) && isNotBlank(id) && Long.valueOf(id) > 0) {
-                final PropertyDescriptor propDiscriptor = new PropertyDescriptor("id", class1);
-                if (class1 != null && "Fund".equals(class1.getSimpleName()))
-                    setValue(relationshipName, getPersistenceService().load(Integer.valueOf(id), class1));
-                else if (propDiscriptor.getPropertyType().isAssignableFrom(Long.class))
-                    setValue(relationshipName, getPersistenceService().getSession().get(class1, Long.valueOf(id)));
-                else
-                    setValue(relationshipName, getPersistenceService().load(Integer.valueOf(id), class1));
-            }else if("department".equals(relationshipName) && id != null){
-                Department dept = microserviceUtils.getDepartmentByCode(id);
-                setValue(relationshipName, dept);
-            }else if("executingDepartment".equals(relationshipName) && id != null){
-                Department dept = microserviceUtils.getDepartmentByCode(id);
-                setValue(relationshipName, dept.getCode());
-            }
+	private void setRelationship(final String relationshipName, final Class class1) throws IntrospectionException {
+		final String[] ids = parameters.get(relationshipName);
+		final List<String> relationNames = Arrays.asList("department", "executingDepartment", "vouchermis.schemeid",
+				"vouchermis.subschemeid");
+		if (ids != null && ids.length > 0) {
+			final String id = ids[0];
+			if (!relationNames.contains(relationshipName) && isNotBlank(id) && Long.valueOf(id) > 0) {
+				final PropertyDescriptor propDiscriptor = new PropertyDescriptor("id", class1);
+				if (propDiscriptor.getPropertyType().isAssignableFrom(Long.class))
+					setValue(relationshipName, getPersistenceService().getSession().get(class1, Long.valueOf(id)));
+				else
+					setValue(relationshipName, getPersistenceService().load(Integer.valueOf(id), class1));
+			} else if (("vouchermis.schemeid".equals(relationshipName)
+					|| "vouchermis.subschemeid".equals(relationshipName)) && id != null && !id.equals("-1")) {
+				setValue(relationshipName, getPersistenceService().load(Integer.valueOf(id), class1));
+			} else if ("department".equals(relationshipName) && id != null && !id.equals("-1")) {
+				Department dept = microserviceUtils.getDepartmentByCode(id);
+				setValue(relationshipName, dept);
+			} else if ("executingDepartment".equals(relationshipName) && id != null) {
+				Department dept = microserviceUtils.getDepartmentByCode(id);
+				setValue(relationshipName, dept.getCode());
+			}
 
-        }
-    }
+		}
+	}
 
     protected void setValue(final String relationshipName, final Object relation) {
         ActionContext.getContext().getValueStack().setValue("model." + relationshipName, relation);

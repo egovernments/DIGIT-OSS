@@ -53,10 +53,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.egov.commons.CChartOfAccounts;
 import org.egov.commons.service.ChartOfAccountsService;
 import org.egov.commons.service.CheckListService;
+import org.egov.egf.commons.CommonsUtil;
 import org.egov.egf.expensebill.repository.DocumentUploadRepository;
 import org.egov.egf.expensebill.service.ExpenseBillService;
 import org.egov.egf.utils.FinancialUtils;
@@ -65,28 +67,45 @@ import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.models.EgChecklists;
 import org.egov.model.bills.DocumentUpload;
 import org.egov.model.bills.EgBilldetails;
 import org.egov.model.bills.EgBillregister;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/expensebill")
+@Validated
 public class UpdateExpenseBillController extends BaseBillController {
 
+	private static final String DESIGNATION = "designation";
+
+	private static final String EXPENSEBILL_UPDATE = "expensebill-update";
+
+	private static final String STATE_TYPE = "stateType";
+
+	protected static final String UNAUTHORIZED = "unuthorized";
+	
+	private static final String INVALID_APPROVER = "invalid.approver";
+	
     private static final String NET_PAYABLE_AMOUNT = "netPayableAmount";
 
     private static final String APPROVAL_DESIGNATION = "approvalDesignation";
@@ -111,13 +130,22 @@ public class UpdateExpenseBillController extends BaseBillController {
     private CheckListService checkListService;
     @Autowired
     private MicroserviceUtils microServiceUtil;
+    @Autowired
+    private SecurityUtils securityUtils;
+    @Autowired
+    private CommonsUtil commonsUtil;
 
     public UpdateExpenseBillController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+    	binder.setDisallowedFields("id");
+    }
+
     @ModelAttribute(EG_BILLREGISTER)
-    public EgBillregister getEgBillregister(@PathVariable String billId) {
+    public EgBillregister getEgBillregister(@PathVariable @SafeHtml String billId) {
         if (billId.contains("showMode")) {
             String[] billIds = billId.split("\\&");
             billId = billIds[0];
@@ -125,10 +153,12 @@ public class UpdateExpenseBillController extends BaseBillController {
         return expenseBillService.getById(Long.parseLong(billId));
     }
 
-    @RequestMapping(value = "/update/{billId}", method = RequestMethod.GET)
-    public String updateForm(final Model model, @PathVariable final String billId,
+    @GetMapping(value = "/update/{billId}")
+    public String updateForm(final Model model, @PathVariable @SafeHtml final String billId,
             final HttpServletRequest request) throws ApplicationException {
         final EgBillregister egBillregister = expenseBillService.getById(Long.parseLong(billId));
+        if (!commonsUtil.isApplicationOwner(securityUtils.getCurrentUser(), egBillregister))
+            return UNAUTHORIZED;
         if (egBillregister.getExpendituretype().equalsIgnoreCase(FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE)) {
             return "redirect:/supplierbill/update/" + billId;
         }
@@ -136,7 +166,7 @@ public class UpdateExpenseBillController extends BaseBillController {
         egBillregister.setDocumentDetail(documents);
         List<Map<String, Object>> budgetDetails = null;
         setDropDownValues(model);
-        model.addAttribute("stateType", egBillregister.getClass().getSimpleName());
+         model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
         if (egBillregister.getState() != null)
             model.addAttribute("currentState", egBillregister.getState().getValue());
         model.addAttribute("workflowHistory",
@@ -165,7 +195,7 @@ public class UpdateExpenseBillController extends BaseBillController {
                 && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
                         || financialUtils.isBillEditable(egBillregister.getState()))) {
             model.addAttribute("mode", "edit");
-            return "expensebill-update";
+            return EXPENSEBILL_UPDATE;
         } else {
             model.addAttribute("mode", "view");
             if (egBillregister.getEgBillregistermis().getBudgetaryAppnumber() != null
@@ -178,10 +208,10 @@ public class UpdateExpenseBillController extends BaseBillController {
         }
     }
 
-    @RequestMapping(value = "/update/{billId}", method = RequestMethod.POST)
-    public String update(@ModelAttribute(EG_BILLREGISTER) final EgBillregister egBillregister,
+    @PostMapping(value = "/update/{billId}")
+    public String update(@Valid @ModelAttribute(EG_BILLREGISTER) final EgBillregister egBillregister,
             final BindingResult resultBinder, final RedirectAttributes redirectAttributes, final Model model,
-            final HttpServletRequest request, @RequestParam final String workFlowAction)
+            final HttpServletRequest request, @RequestParam @SafeHtml final String workFlowAction)
             throws ApplicationException, IOException {
 
         String mode = "";
@@ -196,6 +226,14 @@ public class UpdateExpenseBillController extends BaseBillController {
 
         if (request.getParameter("approvalComent") != null)
             approvalComment = request.getParameter("approvalComent");
+        
+		if (workFlowAction != null && FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workFlowAction)
+				&& !commonsUtil.isValidApprover(egBillregister, approvalPosition)) {
+			model.addAttribute("errorMessage", getLocalizedMessage(INVALID_APPROVER, null, null));
+			prepareBillDetailsForView(egBillregister);
+			expenseBillService.validateSubledgeDetails(egBillregister);
+			return populateOnException(egBillregister, model, request);
+		}
 
         if (request.getParameter(APPROVAL_POSITION) != null && !request.getParameter(APPROVAL_POSITION).isEmpty())
             approvalPosition = Long.valueOf(request.getParameter(APPROVAL_POSITION));
@@ -207,6 +245,15 @@ public class UpdateExpenseBillController extends BaseBillController {
         if (request.getParameter(APPROVAL_DESIGNATION) != null && !request.getParameter(APPROVAL_DESIGNATION).isEmpty())
             apporverDesignation = String.valueOf(request.getParameter(APPROVAL_DESIGNATION));
 
+        
+		if (workFlowAction != null && FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workFlowAction)
+				&& !commonsUtil.isValidApprover(egBillregister, approvalPosition)) {
+			model.addAttribute("errorMessage", getLocalizedMessage(INVALID_APPROVER, null, null));
+			prepareBillDetailsForView(egBillregister);
+			expenseBillService.validateSubledgeDetails(egBillregister);
+			return populateOnException(egBillregister, model, request);
+		}
+
         if (egBillregister.getState() != null
                 && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
                         || financialUtils.isBillEditable(egBillregister.getState()))) {
@@ -216,19 +263,19 @@ public class UpdateExpenseBillController extends BaseBillController {
         }
         if (resultBinder.hasErrors()) {
             setDropDownValues(model);
-            model.addAttribute("stateType", egBillregister.getClass().getSimpleName());
+            model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
             prepareWorkflow(model, egBillregister, new WorkflowContainer());
             model.addAttribute(APPROVAL_DESIGNATION, request.getParameter(APPROVAL_DESIGNATION));
             model.addAttribute(APPROVAL_POSITION, request.getParameter(APPROVAL_POSITION));
             model.addAttribute(NET_PAYABLE_ID, request.getParameter(NET_PAYABLE_ID));
             model.addAttribute(NET_PAYABLE_AMOUNT, request.getParameter(NET_PAYABLE_AMOUNT));
-            model.addAttribute("designation", request.getParameter("designation"));
+            model.addAttribute(DESIGNATION, request.getParameter(DESIGNATION));
             if (egBillregister.getState() != null
                     && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
                             || financialUtils.isBillEditable(egBillregister.getState()))) {
                 prepareValidActionListByCutOffDate(model);
                 model.addAttribute("mode", "edit");
-                return "expensebill-update";
+                return EXPENSEBILL_UPDATE;
             } else {
                 model.addAttribute("mode", "view");
                 return EXPENSEBILL_VIEW;
@@ -239,24 +286,7 @@ public class UpdateExpenseBillController extends BaseBillController {
                     updatedEgBillregister = expenseBillService.update(egBillregister, approvalPosition, approvalComment, null,
                             workFlowAction, mode, apporverDesignation);
             } catch (final ValidationException e) {
-                setDropDownValues(model);
-                model.addAttribute("stateType", egBillregister.getClass().getSimpleName());
-                prepareWorkflow(model, egBillregister, new WorkflowContainer());
-                model.addAttribute(APPROVAL_DESIGNATION, request.getParameter(APPROVAL_DESIGNATION));
-                model.addAttribute(APPROVAL_POSITION, request.getParameter(APPROVAL_POSITION));
-                model.addAttribute(NET_PAYABLE_ID, request.getParameter(NET_PAYABLE_ID));
-                model.addAttribute(NET_PAYABLE_AMOUNT, request.getParameter(NET_PAYABLE_AMOUNT));
-                model.addAttribute("designation", request.getParameter("designation"));
-                if (egBillregister.getState() != null
-                        && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
-                                || financialUtils.isBillEditable(egBillregister.getState()))) {
-                    prepareValidActionListByCutOffDate(model);
-                    model.addAttribute("mode", "edit");
-                    return "expensebill-update";
-                } else {
-                    model.addAttribute("mode", "view");
-                    return EXPENSEBILL_VIEW;
-                }
+            	populateOnException(egBillregister, model, request);
             }
 
             redirectAttributes.addFlashAttribute(EG_BILLREGISTER, updatedEgBillregister);
@@ -275,8 +305,29 @@ public class UpdateExpenseBillController extends BaseBillController {
         }
     }
 
-    @RequestMapping(value = "/view/{billId}", method = RequestMethod.GET)
-    public String view(final Model model, @PathVariable String billId,
+    private String populateOnException(final EgBillregister egBillregister, final Model model,
+			final HttpServletRequest request) {
+		setDropDownValues(model);
+		model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
+		prepareWorkflow(model, egBillregister, new WorkflowContainer());
+		model.addAttribute(APPROVAL_DESIGNATION, request.getParameter(APPROVAL_DESIGNATION));
+		model.addAttribute(APPROVAL_POSITION, request.getParameter(APPROVAL_POSITION));
+		model.addAttribute(NET_PAYABLE_ID, request.getParameter(NET_PAYABLE_ID));
+		model.addAttribute(NET_PAYABLE_AMOUNT, request.getParameter(NET_PAYABLE_AMOUNT));
+		model.addAttribute(DESIGNATION, request.getParameter(DESIGNATION));
+		if (egBillregister.getState() != null
+		        && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
+		        || financialUtils.isBillEditable(egBillregister.getState()))) {
+		    model.addAttribute("mode", "edit");
+		    return EXPENSEBILL_UPDATE;
+		} else {
+		    model.addAttribute("mode", "view");
+		    return EXPENSEBILL_VIEW;
+		}
+	}
+    
+    @GetMapping(value = "/view/{billId}")
+    public String view(final Model model, @PathVariable @SafeHtml String billId,
             final HttpServletRequest request) throws ApplicationException {
         if (billId.contains("showMode")) {
             String[] billIds = billId.split("\\&");
@@ -326,7 +377,8 @@ public class UpdateExpenseBillController extends BaseBillController {
         super.setDropDownValues(model);
     }
 
-    private String getDepartmentName(String departmentCode) {
+    @SuppressWarnings({ "deprecation", "unchecked" })
+	private String getDepartmentName(String departmentCode) {
 
         List<Department> deptlist = this.masterDataCache.get("egi-department");
         String departmentName = null;
@@ -336,7 +388,7 @@ public class UpdateExpenseBillController extends BaseBillController {
             List<Department> dept = deptlist.stream()
                     .filter(department -> departmentCode.equalsIgnoreCase(department.getCode()))
                     .collect(Collectors.toList());
-            if (null != dept && dept.size() > 0)
+            if (null != dept && !dept.isEmpty())
                 departmentName = dept.get(0).getName();
         }
 

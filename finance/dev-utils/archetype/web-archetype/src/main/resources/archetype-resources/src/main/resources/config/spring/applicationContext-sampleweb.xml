@@ -57,7 +57,7 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 	
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<bean id="filterMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="${symbol_dollar}{max.file.upload.size}"/>
 		<property name="maxInMemorySize" value="${symbol_dollar}{max.file.inmemory.size}"/>
     </bean>

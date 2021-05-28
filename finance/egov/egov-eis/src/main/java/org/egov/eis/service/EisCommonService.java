@@ -54,6 +54,7 @@ import org.egov.eis.repository.HeadOfDepartmentsRepository;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.workflow.matrix.entity.WorkFlowMatrix;
 import org.egov.pims.commons.Designation;
 import org.egov.pims.commons.Position;
 import org.egov.pims.model.PersonalInformation;
@@ -61,7 +62,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -76,189 +80,204 @@ import java.util.Set;
 @Transactional(readOnly = true)
 public class EisCommonService {
 
-    @Autowired
-    private PositionHierarchyService positionHierarchyService;
+	@Autowired
+	private PositionHierarchyService positionHierarchyService;
 
-    @Autowired
-    private AssignmentService assignmentService;
+	@Autowired
+	private AssignmentService assignmentService;
 
-    @Autowired
-    private PersonalInformationService personalInformationService;
+	@Autowired
+	private PersonalInformationService personalInformationService;
 
-    @Autowired
-    private HeadOfDepartmentsRepository employeeDepartmentRepository;
+	@Autowired
+	private HeadOfDepartmentsRepository employeeDepartmentRepository;
 
-    /**
-     * Refer to position master service for the same API
-     *
-     * @param objectId
-     * @param posId
-     * @return returns position object
-     */
-    @Deprecated
-    public Position getSuperiorPositionByObjectTypeAndPositionFrom(final Integer objectId, final Long posId) {
-        return positionHierarchyService.getPositionHierarchyByPosAndObjectType(posId, objectId).getToPosition();
-    }
+	/**
+	 * Refer to position master service for the same API
+	 *
+	 * @param objectId
+	 * @param posId
+	 * @return returns position object
+	 */
+	@Deprecated
+	public Position getSuperiorPositionByObjectTypeAndPositionFrom(final Integer objectId, final Long posId) {
+		return positionHierarchyService.getPositionHierarchyByPosAndObjectType(posId, objectId).getToPosition();
+	}
 
-    /**
-     * Refer to position master service for the same API
-     *
-     * @param objectId
-     * @param objectSubType
-     * @param posId
-     * @return returns position object
-     */
-    @Deprecated
-    public Position getSuperiorPositionByObjectAndObjectSubTypeAndPositionFrom(final Integer objectId,
-                                                                               final String objectSubType, final Long posId) {
-        return positionHierarchyService.getPosHirByPosAndObjectTypeAndObjectSubType(posId, objectId, objectSubType)
-                .getToPosition();
-    }
+	/**
+	 * Refer to position master service for the same API
+	 *
+	 * @param objectId
+	 * @param objectSubType
+	 * @param posId
+	 * @return returns position object
+	 */
+	@Deprecated
+	public Position getSuperiorPositionByObjectAndObjectSubTypeAndPositionFrom(final Integer objectId,
+			final String objectSubType, final Long posId) {
+		return positionHierarchyService.getPosHirByPosAndObjectTypeAndObjectSubType(posId, objectId, objectSubType)
+				.getToPosition();
+	}
 
-    /**
-     * Returns user for the given position
-     *
-     * @param posId
-     * @param givenDate
-     * @return User object
-     */
-    public User getUserForPosition(final Long posId, final Date givenDate) {
-        try {
-            List<Assignment> assignments = assignmentService.getAssignmentsForPosition(posId, givenDate);
-            return assignments.isEmpty() ? null : assignments.get(0).getEmployee();
-        } catch (final Exception e) {
-            throw new ApplicationRuntimeException("User Not Found", e);
-        }
-    }
+	/**
+	 * Returns user for the given position
+	 *
+	 * @param posId
+	 * @param givenDate
+	 * @return User object
+	 */
+	public User getUserForPosition(final Long posId, final Date givenDate) {
+		try {
+			List<Assignment> assignments = assignmentService.getAssignmentsForPosition(posId, givenDate);
+			return assignments.isEmpty() ? null : assignments.get(0).getEmployee();
+		} catch (final ApplicationRuntimeException e) {
+			throw new ApplicationRuntimeException("User Not Found", e);
+		}
+	}
 
-    /**
-     * Refer to designation service
-     *
-     * @param posId
-     * @return Designation object
-     */
-    @Deprecated
-    public Designation getEmployeeDesignation(final Long posId) {
-        return assignmentService.getPrimaryAssignmentForPositon(posId).getDesignation();
-    }
+	/**
+	 * Refer to designation service
+	 *
+	 * @param posId
+	 * @return Designation object
+	 */
+	@Deprecated
+	public Designation getEmployeeDesignation(final Long posId) {
+		return assignmentService.getPrimaryAssignmentForPositon(posId).getDesignation();
+	}
 
-    /**
-     * Returns employee department for user
-     *
-     * @param userId
-     * @return Department object
-     */
-    public Department getDepartmentForUser(final Long userId) {
-        return assignmentService.getPrimaryAssignmentForUser(userId).getDepartment();
-    }
+	/**
+	 * Returns employee department for user
+	 *
+	 * @param userId
+	 * @return Department object
+	 */
+	public Department getDepartmentForUser(final Long userId) {
+		return assignmentService.getPrimaryAssignmentForUser(userId).getDepartment();
+	}
 
-    /**
-     * Returns employee position for user
-     *
-     * @param userId
-     * @return Position object
-     */
-    @Deprecated
-    public Position getPositionByUserId(final Long userId) {
-        return assignmentService.getPrimaryAssignmentForUser(userId).getPosition();
-    }
+	/**
+	 * Returns employee position for user
+	 *
+	 * @param userId
+	 * @return Position object
+	 */
+	@Deprecated
+	public Position getPositionByUserId(final Long userId) {
+		return assignmentService.getPrimaryAssignmentForUser(userId).getPosition();
+	}
 
-    /**
-     * Please refer the same API from Assignment service
-     *
-     * @param empId
-     * @return Assignment object
-     */
-    @Deprecated
-    public Assignment getLatestAssignmentForEmployee(final Long empId) {
-        return assignmentService.getPrimaryAssignmentForEmployee(empId);
-    }
+	/**
+	 * Please refer the same API from Assignment service
+	 *
+	 * @param empId
+	 * @return Assignment object
+	 */
+	@Deprecated
+	public Assignment getLatestAssignmentForEmployee(final Long empId) {
+		return assignmentService.getPrimaryAssignmentForEmployee(empId);
+	}
 
-    /**
-     * Please refer the same API from Assignment service
-     *
-     * @param empId
-     * @param toDate
-     * @return Assignment object
-     */
-    @Deprecated
-    public Assignment getLatestAssignmentForEmployeeByToDate(final Long empId, final Date toDate) {
-        return assignmentService.getPrimaryAssignmentForEmployeeByToDate(empId, toDate);
-    }
+	/**
+	 * Please refer the same API from Assignment service
+	 *
+	 * @param empId
+	 * @param toDate
+	 * @return Assignment object
+	 */
+	@Deprecated
+	public Assignment getLatestAssignmentForEmployeeByToDate(final Long empId, final Date toDate) {
+		return assignmentService.getPrimaryAssignmentForEmployeeByToDate(empId, toDate);
+	}
 
-    public Assignment getLatestAssignmentForEmployeeByDate(final Long empId, final Date toDate) {
-        return assignmentService.findByEmployeeAndGivenDate(empId, toDate).get(0);
-    }
+	public Assignment getLatestAssignmentForEmployeeByDate(final Long empId, final Date toDate) {
+		return assignmentService.findByEmployeeAndGivenDate(empId, toDate).get(0);
+	}
 
-    /**
-     * Refer to Position master service for the same API
-     *
-     * @param empId
-     * @return Position object
-     */
-    @Deprecated
-    public Position getPrimaryAssignmentPositionForEmp(final Long empId) {
-        return assignmentService.getPrimaryAssignmentForEmployee(empId).getPosition();
-    }
+	/**
+	 * Refer to Position master service for the same API
+	 *
+	 * @param empId
+	 * @return Position object
+	 */
+	@Deprecated
+	public Position getPrimaryAssignmentPositionForEmp(final Long empId) {
+		return assignmentService.getPrimaryAssignmentForEmployee(empId).getPosition();
+	}
 
-    /**
-     * Refer to employee service for the same API
-     *
-     * @param posId
-     * @return Employee object
-     */
-    @Deprecated
-    public Employee getPrimaryAssignmentEmployeeForPos(final Long posId) {
-        return assignmentService.getPrimaryAssignmentForPositon(posId).getEmployee();
-    }
+	/**
+	 * Refer to employee service for the same API
+	 *
+	 * @param posId
+	 * @return Employee object
+	 */
+	@Deprecated
+	public Employee getPrimaryAssignmentEmployeeForPos(final Long posId) {
+		return assignmentService.getPrimaryAssignmentForPositon(posId).getEmployee();
+	}
 
-    /**
+	/**
      * Refer EmployeeService for getting Employee object by user id i.e. EmployeeService.getEmployeeById
-     *
-     * @param userId
-     * @return PersonalInformation object
-     */
-    @Deprecated
-    public PersonalInformation getEmployeeByUserId(final Long userId) {
-        return personalInformationService.getEmployeeByUserId(userId);
-    }
+	 *
+	 * @param userId
+	 * @return PersonalInformation object
+	 */
+	@Deprecated
+	public PersonalInformation getEmployeeByUserId(final Long userId) {
+		return personalInformationService.getEmployeeByUserId(userId);
+	}
 
-    /**
-     * Refer the same API in assignment service
-     *
-     * @param assignId
-     * @return true if HOD else false
-     */
-    @Deprecated
-    public Boolean isHod(final Long assignId) {
-        final List<HeadOfDepartments> hodList = employeeDepartmentRepository.getAllHodDepartments(assignId);
-        return !hodList.isEmpty();
-    }
+	/**
+	 * Refer the same API in assignment service
+	 *
+	 * @param assignId
+	 * @return true if HOD else false
+	 */
+	@Deprecated
+	public Boolean isHod(final Long assignId) {
+		final List<HeadOfDepartments> hodList = employeeDepartmentRepository.getAllHodDepartments(assignId);
+		return !hodList.isEmpty();
+	}
 
-    /**
-     * Refer the same API in employee service
-     *
-     * @param posId
-     * @param givenDate
-     * @return Employee object
-     */
-    @Deprecated
-    public Employee getEmployeeForPositionAndDate(final Long posId, final Date givenDate) {
-        return assignmentService.getPrimaryAssignmentForPositionAndDate(posId, givenDate).getEmployee();
-    }
+	/**
+	 * Refer the same API in employee service
+	 *
+	 * @param posId
+	 * @param givenDate
+	 * @return Employee object
+	 */
+	@Deprecated
+	public Employee getEmployeeForPositionAndDate(final Long posId, final Date givenDate) {
+		return assignmentService.getPrimaryAssignmentForPositionAndDate(posId, givenDate).getEmployee();
+	}
 
-    /**
-     * Get all active users by designation as per the current date
-     *
-     * @param designationId
-     * @return List of active users
-     */
-    public List<User> getAllActiveUsersByGivenDesig(final Long designationId) {
-        final Set<User> users = new HashSet<>();
-        final List<Assignment> assignments = assignmentService.getAllActiveAssignments(designationId);
-        for (final Assignment assign : assignments)
-            users.add(assign.getEmployee());
-        return new ArrayList<>(users);
-    }
+	/**
+	 * Get all active users by designation as per the current date
+	 *
+	 * @param designationId
+	 * @return List of active users
+	 */
+	public List<User> getAllActiveUsersByGivenDesig(final Long designationId) {
+		final Set<User> users = new HashSet<>();
+		final List<Assignment> assignments = assignmentService.getAllActiveAssignments(designationId);
+		for (final Assignment assign : assignments)
+			users.add(assign.getEmployee());
+		return new ArrayList<>(users);
+	}
+
+	/**
+	 * Validates whether the position is valid as per the workflow matrix.
+	 * 
+	 * @param workFlowMatrix - Matrix for the current state
+	 * @param desginations   - Approver position
+	 * @return
+	 */
+	public boolean isValidAppover(WorkFlowMatrix workFlowMatrix, String designation) {
+		if (workFlowMatrix.getCurrentDesignation() != null) {
+			return Arrays.asList(workFlowMatrix.getCurrentDesignation().toLowerCase().split(","))
+					.contains(designation.toLowerCase());
+		}
+		return false;
+	}
 
 }

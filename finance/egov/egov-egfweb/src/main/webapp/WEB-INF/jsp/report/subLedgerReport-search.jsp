@@ -158,6 +158,7 @@ background: #DEDEDE;
 				<s:hidden name="accEntityKey" id="accEntityKey"
 					value="%{accEntityKey}" />
 				<s:hidden name="glCode2" id="glCode2" value="%{glCode2}" />
+				<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<div class="tbl-header" id="tbl-header">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 						<tr>

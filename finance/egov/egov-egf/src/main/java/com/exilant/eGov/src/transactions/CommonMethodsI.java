@@ -58,45 +58,46 @@ package com.exilant.eGov.src.transactions;
 import com.exilant.exility.common.TaskFailedException;
 
 import java.sql.Connection;
+import java.text.ParseException;
 
 public interface CommonMethodsI {
 
-    public String getChequeInHand(int boundaryId, Connection connection) throws Exception;
+    public String getChequeInHand(int boundaryId, Connection connection);
 
-    public String getCashInHand(int boundaryId, Connection connection) throws Exception;
+    public String getCashInHand(int boundaryId, Connection connection);
 
-    public String getPTCode(String forYear, Connection connection) throws Exception;
+    public String getPTCode(String forYear, Connection connection);
 
-    public String getBankCode(int bankAccountId, Connection connection) throws Exception;
+    public String getBankCode(int bankAccountId, Connection connection);
 
-    public String getFiscalPeriod(String vDate, Connection connection) throws TaskFailedException, Exception;
+    public String getFiscalPeriod(String vDate, Connection connection) throws TaskFailedException;
 
-    public String getBankId(int bankAccountId, Connection connection) throws Exception;
+    public String getBankId(int bankAccountId, Connection connection);
 
-    public double getAccountBalance(int bankAccountId, String vcDate, Connection connection) throws Exception;
+    public double getAccountBalance(int bankAccountId, String vcDate, Connection connection);
 
-    public String getCodeName(String purposeId) throws Exception;
+    public String getCodeName(String purposeId);
 
-    public String getNameFromCode(String glcode, Connection connection) throws Exception;
+    public String getNameFromCode(String glcode, Connection connection);
 
-    public String getGlCode(String glCodeId, Connection connection) throws Exception;
+    public String getGlCode(String glCodeId, Connection connection);
 
-    public String checkRecordIdInLog(String recordId, int userId, Connection connection) throws Exception;
+    public String checkRecordIdInLog(String recordId, int userId, Connection connection);
 
-    public String getDivisionCode(Integer divid, Connection connection) throws Exception;
+    public String getDivisionCode(Integer divid, Connection connection);
 
-    public String getFinacialYear(String vDate, Connection connection) throws Exception;
+    public String getFinacialYear(String vDate, Connection connection);
 
-    public Integer getDivisionId(Integer fieldId, Connection connection) throws Exception;
+    public Integer getDivisionId(Integer fieldId, Connection connection);
 
     // This method gets the GlCodeId by passing GLCODE as parameter ---added by Sapna
-    public String getGlCodeId(String glCode, Connection connection) throws Exception;
+    public String getGlCodeId(String glCode, Connection connection) ;
 
-    public Integer getDivisionIdFromCode(String divisionCode, Connection connection) throws Exception;
+    public Integer getDivisionIdFromCode(String divisionCode, Connection connection);
 
-    public String getTxnNumber(String txnType, String vDate) throws Exception;
+    public String getTxnNumber(String txnType, String vDate) throws ParseException;
 
-    public String getTxnNumber(String fundId, String txnType, String vDate, Connection connection) throws Exception;
+    public String getTxnNumber(String fundId, String txnType, String vDate, Connection connection) throws ParseException;
 
-    public String getTransRunningNumber(String fundId, String txnType, String vDate, Connection connection) throws Exception;
+    public String getTransRunningNumber(String fundId, String txnType, String vDate, Connection connection) throws ParseException;
 }

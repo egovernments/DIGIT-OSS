@@ -48,51 +48,66 @@
 
 package org.egov.infra.web.filter;
 
+import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.HTTPUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * This Filter is used to improve ui performance by setting Cache-Control header to static resources like js,css,jpg,gif,etc.
+ * This Filter is used to improve ui performance by setting Cache-Control header
+ * to static resources like js,css,jpg,gif,etc.
  */
 public class CacheControlFilter implements Filter {
 
-    private static final String EXPIRE_HEADER = "Expires";
-    private static final String ETAG_HEADER = "ETag";
-    private static final String CACHE_CONTROL_HEADER = "Cache-Control";
-    private static final String PRAGMA_HEADER = "Pragma";
-    public static final long DEFAULT_EXPIRES_SECONDS = 30 * 24 * 60 * 60;
+	private static final Logger LOGGER = LoggerFactory.getLogger(CacheControlFilter.class);
 
-    private long expireInSeconds = 0;
+	private static final String EXPIRE_HEADER = "Expires";
+	private static final String ETAG_HEADER = "ETag";
+	private static final String CACHE_CONTROL_HEADER = "Cache-Control";
+	private static final String PRAGMA_HEADER = "Pragma";
+	public static final long DEFAULT_EXPIRES_SECONDS = 30 * 24 * 60 * 60;
 
-    @Override
-    public void init(final FilterConfig filterConfig) throws ServletException {
-    	System.out.println("********************** CacheControlFilter: init");
-        if (filterConfig.getInitParameter("expireInSeconds") == null)
-            expireInSeconds = DEFAULT_EXPIRES_SECONDS;
-        else
-            expireInSeconds = Long.valueOf(filterConfig.getInitParameter("expireInSeconds"));
-    }
-    
-    @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
-       
-    	System.out.println("********************** CacheControlFilter: doFilter");
-    	
-    	final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setHeader(CACHE_CONTROL_HEADER, "public,max-age=" + expireInSeconds);
-        httpServletResponse.setDateHeader(EXPIRE_HEADER, System.currentTimeMillis() + expireInSeconds * 1000L);
-        httpServletResponse.setHeader(PRAGMA_HEADER, null);
-        httpServletResponse.setHeader(ETAG_HEADER, null);
-        chain.doFilter(request, httpServletResponse);
-    }
+	private long expireInSeconds = 0;
 
-    @Override
-    public void destroy() {
-    }
+	@Override
+	public void init(final FilterConfig filterConfig) throws ServletException {
+		LOGGER.info("********************** CacheControlFilter: init");
+		if (filterConfig.getInitParameter("expireInSeconds") == null)
+			expireInSeconds = DEFAULT_EXPIRES_SECONDS;
+		else
+			expireInSeconds = Long.valueOf(filterConfig.getInitParameter("expireInSeconds"));
+	}
+
+	@Override
+	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+			throws IOException, ServletException {
+
+		LOGGER.info("********************** CacheControlFilter: doFilter");
+
+		final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
+		final HTTPUtilities httpUtilities = ESAPI.httpUtilities();
+		httpUtilities.setCurrentHTTP((HttpServletRequest) request, (HttpServletResponse) response);
+		httpUtilities.setHeader(CACHE_CONTROL_HEADER, "public,max-age=" + expireInSeconds);
+		httpUtilities.setHeader(PRAGMA_HEADER, "");
+		httpUtilities.setHeader(ETAG_HEADER, "");
+
+		httpServletResponse.setDateHeader(EXPIRE_HEADER, System.currentTimeMillis() + expireInSeconds * 1000L);
+		chain.doFilter(request, httpServletResponse);
+	}
+
+	@Override
+	public void destroy() {
+	}
 }

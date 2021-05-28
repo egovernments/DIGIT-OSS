@@ -252,24 +252,42 @@ public class ReportHelper {
 
     public JasperPrint generateDepartmentwiseExpenditureJasperPrint(final DepartmentwiseExpenditureReport deReport,
             final String heading,
-            final String subreportheading) throws JRException, IOException, Exception {
+            final String subreportheading) throws JRException, IOException {
         final Style detailAmountStyle = getConcurrenceAmountStyle();
         FastReportBuilder drb = new FastReportBuilder();
         final Style columnStyle = getConcurrenceColumnStyle();
         getDepartmentTitleStyle();
 
-        drb = drb.addColumn("Sl No", "slNo", Integer.class.getName(), 8, columnStyle);
-        drb
-        .addColumn("Department Name", "departmentNm", String.class.getName(), 70, columnStyle)
-        .addColumn(
-                "Concurrence given \\n upto " + FORMATDDMMYYYY.format(deReport.getCurrentYearConcurrenceGivenUptoDate()),
-                "concurrenceGiven", BigDecimal.class.getName(), 35, detailAmountStyle);
+        try {
+            drb = drb.addColumn("Sl No", "slNo", Integer.class.getName(), 8, columnStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
+        try {
+            drb
+            .addColumn("Department Name", "departmentNm", String.class.getName(), 70, columnStyle)
+            .addColumn(
+                    "Concurrence given \\n upto " + FORMATDDMMYYYY.format(deReport.getCurrentYearConcurrenceGivenUptoDate()),
+                    "concurrenceGiven", BigDecimal.class.getName(), 35, detailAmountStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
 
         for (final String dt : deReport.getConcurrenceDateSet())
-            drb.addColumn(dt, "dayAmountMap." + dt, BigDecimal.class.getName(), 22, false, "0.00", detailAmountStyle);
-        drb.addColumn("Total Concurrence\\n given till" + FORMATDDMMYYYY.format(deReport.getToDate()),
-                "totalConcurrenceGivenTillDate",
-                BigDecimal.class.getName(), 22, detailAmountStyle);
+            try {
+                drb.addColumn(dt, "dayAmountMap." + dt, BigDecimal.class.getName(), 22, false, "0.00", detailAmountStyle);
+            } catch (ColumnBuilderException | ClassNotFoundException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        try {
+            drb.addColumn("Total Concurrence\\n given till" + FORMATDDMMYYYY.format(deReport.getToDate()),
+                    "totalConcurrenceGivenTillDate",
+                    BigDecimal.class.getName(), 22, detailAmountStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+
+        }
 
         // Added Blank Space for painting subtitle left and right aligned
         drb.setTitle(heading)
@@ -305,24 +323,41 @@ public class ReportHelper {
 
     public Subreport createSubreport(final DepartmentwiseExpenditureReport deReport, final String heading,
             final FastReportBuilder mainrep)
-            throws JRException, IOException, Exception {
+            throws JRException, IOException {
         final Style detailAmountStyle = getConcurrenceAmountStyle();
         FastReportBuilder drb = new FastReportBuilder();
         final Style columnStyle = getConcurrenceColumnStyle();
         getDepartmentTitleStyle();
-        drb = drb.addColumn("Sl No", "slNo", Integer.class.getName(), 8, columnStyle);
-        drb
-        .addColumn("Department Name", "departmentNm", String.class.getName(), 70, columnStyle)
-        .addColumn(
-                "Concurrence given \\n upto " + FORMATDDMMYYYY.format(deReport.getPreviousYearConcurrenceGivenUptoDate()),
-                "concurrenceGiven",
-                BigDecimal.class.getName(), 35, detailAmountStyle);
+        try {
+            drb = drb.addColumn("Sl No", "slNo", Integer.class.getName(), 8, columnStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
+        try {
+            drb
+            .addColumn("Department Name", "departmentNm", String.class.getName(), 70, columnStyle)
+            .addColumn(
+                    "Concurrence given \\n upto " + FORMATDDMMYYYY.format(deReport.getPreviousYearConcurrenceGivenUptoDate()),
+                    "concurrenceGiven",
+                    BigDecimal.class.getName(), 35, detailAmountStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
 
         for (final String dt : deReport.getPreviousConcurrenceDateSet())
-            drb.addColumn(dt, "dayAmountMap." + dt, BigDecimal.class.getName(), 22, false, "0.00", detailAmountStyle);
-        drb.addColumn(
-                "Total Concurrence Given\\n till" + FORMATDDMMYYYY.format(deReport.getPreviousYearConcurrenceGivenTillDate()),
-                "totalConcurrenceGivenTillDate", BigDecimal.class.getName(), 22, detailAmountStyle);
+            try {
+                drb.addColumn(dt, "dayAmountMap." + dt, BigDecimal.class.getName(), 22, false, "0.00", detailAmountStyle);
+            } catch (ColumnBuilderException | ClassNotFoundException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        try {
+            drb.addColumn(
+                    "Total Concurrence Given\\n till" + FORMATDDMMYYYY.format(deReport.getPreviousYearConcurrenceGivenTillDate()),
+                    "totalConcurrenceGivenTillDate", BigDecimal.class.getName(), 22, detailAmountStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
 
         // Added Blank Space for painting subtitle left and right aligned
         drb.setTitle(heading).setPrintBackgroundOnOddRows(false).setWhenNoData("No data", null)
@@ -347,22 +382,30 @@ public class ReportHelper {
 
     public JasperPrint generateIncomeExpenditureReportJasperPrint(
             final Statement balanceSheet, final String heading,
-            final String fromDate, final String toDate, final String subtitle, final boolean showScheduleColumn)
-                    throws Exception {
+            final String fromDate, final String toDate, final String subtitle, final boolean showScheduleColumn) throws JRException
+                   {
         final Style detailAmountStyle = getDetailAmountStyle();
         final Style columnStyle = getColumnStyle();
         FastReportBuilder drb = new FastReportBuilder();
         if (LOGGER.isInfoEnabled())
             LOGGER.info("Generating Income Expenditure pdf/excel ");
         // drb.addsubre
-        drb = drb
-                .addColumn("Account Code", "glCode",
-                        String.class.getName(), 55, columnStyle).addColumn(
-                                "Head of Account", "accountName", String.class.getName(), 100,
-                                columnStyle);
+        try {
+            drb = drb
+                    .addColumn("Account Code", "glCode",
+                            String.class.getName(), 55, columnStyle).addColumn(
+                                    "Head of Account", "accountName", String.class.getName(), 100,
+                                    columnStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
         if (showScheduleColumn)
-            drb.addColumn("Schedule No", "scheduleNo", String.class.getName(),
-                    60, columnStyle);
+            try {
+                drb.addColumn("Schedule No", "scheduleNo", String.class.getName(),
+                        60, columnStyle);
+            } catch (ColumnBuilderException | ClassNotFoundException e) {
+                LOGGER.error("Error" + e.getMessage());
+            }
 //        drb.addColumn("Revised Estimate" + balanceSheet.getFinancialYear().getFinYearRange(), "budgetAmount", BigDecimal.class
 //                .getName(), 70, false, "0.00", detailAmountStyle);
         drb.setTitle(heading)
@@ -380,22 +423,38 @@ public class ReportHelper {
         drb.setPageSizeAndOrientation(new Page(612, 792, false));
         if (balanceSheet.getFunds().size() == 1)
             for (final Fund fund : balanceSheet.getFunds()) {
-                drb.addColumn(toDate + "(Rs)",
-                        "netAmount." + fund.getName(), BigDecimal.class.getName(),
-                        70, false, "0.00", detailAmountStyle);
-                drb.addColumn(fromDate + "(Rs)",
-                        "previousYearAmount." + fund.getName(), BigDecimal.class
-                        .getName(), 70, false, "0.00", detailAmountStyle);
+                try {
+                    drb.addColumn(toDate + "(Rs)",
+                            "netAmount." + fund.getName(), BigDecimal.class.getName(),
+                            70, false, "0.00", detailAmountStyle);
+                } catch (ColumnBuilderException | ClassNotFoundException e1) {
+                    LOGGER.error("Error" + e1.getMessage());
+                }
+                try {
+                    drb.addColumn(fromDate + "(Rs)",
+                            "previousYearAmount." + fund.getName(), BigDecimal.class
+                            .getName(), 70, false, "0.00", detailAmountStyle);
+                } catch (ColumnBuilderException | ClassNotFoundException e) {
+                    LOGGER.error("Error" + e.getMessage());
+                }
             }
         else
             for (final Fund fund : balanceSheet.getFunds()) {
-                drb.addColumn(fund.getName() + " Totals As On:" + toDate + "(Rs)",
-                        "netAmount." + fund.getName(), BigDecimal.class.getName(),
-                        70, false, "0.00", detailAmountStyle);
-                drb.addColumn(
-                        fund.getName() + " Totals As On:" + fromDate + "(Rs)",
-                        "previousYearAmount." + fund.getName(), BigDecimal.class
-                        .getName(), 70, false, "0.00", detailAmountStyle);
+                try {
+                    drb.addColumn(fund.getName() + " Totals As On:" + toDate + "(Rs)",
+                            "netAmount." + fund.getName(), BigDecimal.class.getName(),
+                            70, false, "0.00", detailAmountStyle);
+                } catch (ColumnBuilderException | ClassNotFoundException e) {
+                    LOGGER.error("Error" + e.getMessage());
+                }
+                try {
+                    drb.addColumn(
+                            fund.getName() + " Totals As On:" + fromDate + "(Rs)",
+                            "previousYearAmount." + fund.getName(), BigDecimal.class
+                            .getName(), 70, false, "0.00", detailAmountStyle);
+                } catch (ColumnBuilderException | ClassNotFoundException e) {
+                    LOGGER.error("Error" + e.getMessage());
+                }
             }
 
         final DynamicReport dr = drb.build();
@@ -406,8 +465,8 @@ public class ReportHelper {
 
     public JasperPrint generateReceiptPaymentReportJasperPrint(final Statement receiptPaymentObj, final String heading,
             final String subtitle,
-            final String currentYearDate, final String PreviousYearDate, final boolean showScheduleColumn)
-                    throws Exception {
+            final String currentYearDate, final String PreviousYearDate, final boolean showScheduleColumn) throws ColumnBuilderException, ClassNotFoundException, JRException
+                     {
         final Style detailAmountStyle = getDetailAmountStyle();
         final Style columnStyle = getColumnStyle();
         FastReportBuilder drb = new FastReportBuilder();
@@ -417,8 +476,20 @@ public class ReportHelper {
         drb = drb;
         if (!showScheduleColumn)
         {
-            drb.addColumn("Schedule Number", "accountName", String.class.getName(), 100, columnStyle);
-            drb.addColumn("Account Code", "glCode", String.class.getName(), 55, columnStyle);
+            try {
+                drb.addColumn("Schedule Number", "accountName", String.class.getName(), 100, columnStyle);
+            } catch (ColumnBuilderException e) {
+                LOGGER.error("Error" + e.getMessage());
+            } catch (ClassNotFoundException e) {
+                LOGGER.error("Error" + e.getMessage());
+            }
+            try {
+                drb.addColumn("Account Code", "glCode", String.class.getName(), 55, columnStyle);
+            } catch (ColumnBuilderException e) {
+                LOGGER.error("Error" + e.getMessage());
+            } catch (ClassNotFoundException e) {
+                LOGGER.error("Error" + e.getMessage());
+            }
         }
 
         if (showScheduleColumn) {
@@ -457,8 +528,7 @@ public class ReportHelper {
     public JasperPrint generateBudgetAppropriationJasperPrint(final List<BudgetReAppReportBean> BudgetAppDisplay,
             final String heading,
             final String subtitle, final String budName, final String showFundColumn, final String showFunctionColumn,
-            final String showDepartmentColumn)
-                    throws Exception {
+            final String showDepartmentColumn) throws ColumnBuilderException, ClassNotFoundException, JRException{
         final Style detailAmountStyle = getDetailAmountStyle();
         final Style columnStyle = getColumnStyle();
         FastReportBuilder drb = new FastReportBuilder();
@@ -501,8 +571,7 @@ public class ReportHelper {
             final String subtitle,
             final String beforePreviousYearRange, final String previousYearRange, final String currentYearRange,
             final String nextYearRange,
-            final boolean isConsolidated)
-                    throws Exception {
+            final boolean isConsolidated) throws ColumnBuilderException, ClassNotFoundException, JRException {
         getDetailAmountStyle();
         final Style columnStyle = getBudgetColumnStyle();
         final String conSubtitle = isConsolidated ? subtitle
@@ -560,16 +629,24 @@ public class ReportHelper {
 
     public JasperPrint generateFinancialStatementReportJasperPrint(
             final Statement balanceSheet, final String heading, final String addheading, final String fromDate,
-            final String toDate, final boolean showScheduleColumn) throws Exception {
+            final String toDate, final boolean showScheduleColumn) throws JRException {
         final Style detailAmountStyle = getDetailAmountStyle();
         FastReportBuilder drb = new FastReportBuilder();
         final Style columnStyle = getColumnStyle();
-        drb = drb.addColumn("Account Code", "glCode",
-                String.class.getName(), 50, columnStyle).addColumn("Head of Account",
-                        "accountName", String.class.getName(), 100, columnStyle);
+        try {
+            drb = drb.addColumn("Account Code", "glCode",
+                    String.class.getName(), 50, columnStyle).addColumn("Head of Account",
+                            "accountName", String.class.getName(), 100, columnStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
         if (showScheduleColumn)
-            drb.addColumn("Schedule No", "scheduleNo", String.class.getName(),
-                    60, columnStyle);
+            try {
+                drb.addColumn("Schedule No", "scheduleNo", String.class.getName(),
+                        60, columnStyle);
+            } catch (ColumnBuilderException | ClassNotFoundException e) {
+                LOGGER.error("Error" + e.getMessage());
+            }
         // Added Blank Space for painting subtitle left and right aligned
         drb.setTitle(heading + " " + balanceSheet.getFinancialYear().getFinYearRange() + " " + addheading)
         .setSubtitle(
@@ -587,12 +664,21 @@ public class ReportHelper {
         drb.setPageSizeAndOrientation(new Page(612, 792, false));
         if (balanceSheet.getFunds().size() > 1)
             for (final Fund fund : balanceSheet.getFunds())
-                drb.addColumn(fund.getName() + " (Rs)", "fundWiseAmount." + fund.getName(), BigDecimal.class.getName(), 55,
-                        false,
-                        "0.00", detailAmountStyle);
-        drb.addColumn(fromDate + "(Rs)", "currentYearTotal", BigDecimal.class.getName(), 55, false, "0.00", detailAmountStyle)
-        .addColumn(toDate + "(Rs)", "previousYearTotal", BigDecimal.class.getName(), 55, false, "0.00",
-                detailAmountStyle);
+                try {
+                    drb.addColumn(fund.getName() + " (Rs)", "fundWiseAmount." + fund.getName(), BigDecimal.class.getName(), 55,
+                            false,
+                            "0.00", detailAmountStyle);
+                } catch (ColumnBuilderException | ClassNotFoundException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+        try {
+            drb.addColumn(fromDate + "(Rs)", "currentYearTotal", BigDecimal.class.getName(), 55, false, "0.00", detailAmountStyle)
+            .addColumn(toDate + "(Rs)", "previousYearTotal", BigDecimal.class.getName(), 55, false, "0.00",
+                    detailAmountStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
         final DynamicReport dr = drb.build();
         final JRDataSource ds = new JRBeanCollectionDataSource(balanceSheet
                 .getEntries());
@@ -602,35 +688,51 @@ public class ReportHelper {
 
     public JasperPrint generateBudgetReportJasperPrint(final List inputData,
             final String heading, final boolean enableBeApproved, final boolean enableReApproved,
-            final String lastYearRange, final String currentYearRange, final String nextYearRange)
-                    throws Exception {
+            final String lastYearRange, final String currentYearRange, final String nextYearRange) throws JRException
+                   {
         final Style detailAmountStyle = getBudgetReportDetailAmountStyle();
         FastReportBuilder drb = new FastReportBuilder();
-        drb = drb.addColumn("Department Code",
-                "departmentCode", String.class.getName(), 50).addColumn(
-                        "Function Code", "functionCode", String.class.getName(), 50)
-                        .addColumn("Account Head", "budgetGroupName",
-                                String.class.getName(), 90).addColumn(
-                                        "Actuals " + lastYearRange + "(Rs)", "actualsLastYear",
-                                        BigDecimal.class.getName(), 100, false, "0.00",
-                                        detailAmountStyle).addColumn(
-                                                "BE " + currentYearRange + "(Rs)",
-                                                "beCurrentYearApproved", BigDecimal.class.getName(),
-                                                100, false, "0.00", detailAmountStyle).addColumn(
-                                                        "RE Proposed " + currentYearRange + "(Rs)",
-                                                        "reCurrentYearOriginal", BigDecimal.class.getName(),
-                                                        100, false, "0.00", detailAmountStyle);
+        try {
+            drb = drb.addColumn("Department Code",
+                    "departmentCode", String.class.getName(), 50).addColumn(
+                            "Function Code", "functionCode", String.class.getName(), 50)
+                            .addColumn("Account Head", "budgetGroupName",
+                                    String.class.getName(), 90).addColumn(
+                                            "Actuals " + lastYearRange + "(Rs)", "actualsLastYear",
+                                            BigDecimal.class.getName(), 100, false, "0.00",
+                                            detailAmountStyle).addColumn(
+                                                    "BE " + currentYearRange + "(Rs)",
+                                                    "beCurrentYearApproved", BigDecimal.class.getName(),
+                                                    100, false, "0.00", detailAmountStyle).addColumn(
+                                                            "RE Proposed " + currentYearRange + "(Rs)",
+                                                            "reCurrentYearOriginal", BigDecimal.class.getName(),
+                                                            100, false, "0.00", detailAmountStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
         if (enableReApproved)
-            drb.addColumn("RE Approved " + currentYearRange + "(Rs)",
-                    "reCurrentYearApproved", BigDecimal.class.getName(), 100,
-                    false, "0.00", detailAmountStyle);
-        drb.addColumn("BE Proposed " + nextYearRange + "(Rs)",
-                "beNextYearOriginal", BigDecimal.class.getName(), 100, false,
-                "0.00", detailAmountStyle);
+            try {
+                drb.addColumn("RE Approved " + currentYearRange + "(Rs)",
+                        "reCurrentYearApproved", BigDecimal.class.getName(), 100,
+                        false, "0.00", detailAmountStyle);
+            } catch (ColumnBuilderException | ClassNotFoundException e) {
+                LOGGER.error("Error" + e.getMessage());
+            }
+        try {
+            drb.addColumn("BE Proposed " + nextYearRange + "(Rs)",
+                    "beNextYearOriginal", BigDecimal.class.getName(), 100, false,
+                    "0.00", detailAmountStyle);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
         if (enableBeApproved)
-            drb.addColumn("BE Approved " + nextYearRange + "(Rs)",
-                    "beNextYearApproved", BigDecimal.class.getName(), 100,
-                    false, "0.00", detailAmountStyle);
+            try {
+                drb.addColumn("BE Approved " + nextYearRange + "(Rs)",
+                        "beNextYearApproved", BigDecimal.class.getName(), 100,
+                        false, "0.00", detailAmountStyle);
+            } catch (ColumnBuilderException | ClassNotFoundException e) {
+                LOGGER.error("Error" + e.getMessage());
+            }
         drb.setTitle(heading).setWhenNoData("No data", null).setDefaultStyles(
                 getTitleStyle(), getSubTitleStyle(), getHeaderStyle(),
                 getBudgetReportDetailStyle()).setDetailHeight(20)
@@ -642,28 +744,36 @@ public class ReportHelper {
     }
 
     public JasperPrint generateFunctionwiseIEJasperPrint(
-            final FunctionwiseIE functionwiseIE, final String cityName, final String type)
-                    throws Exception {
+            final FunctionwiseIE functionwiseIE, final String cityName, final String type) throws JRException
+                     {
         final Style detailAmountStyle = getDetailAmountStyle();
         FastReportBuilder drb = new FastReportBuilder();
-        drb = (FastReportBuilder) drb.addColumn("Sl.No.", "slNo",
-                String.class.getName(), 10).addColumn("Function Code",
-                        "functionCode", String.class.getName(), 20).addColumn(
-                                "Function Head", "functionName", String.class.getName(), 50)
-                                .addColumn("Total " + type + " (Rs.)", "totalIncome",
-                                        BigDecimal.class.getName(), 50, false, "0.00",
-                                        detailAmountStyle).setTitle(cityName).setSubtitle(
-                                                "FUNCTIONWISE " + type.toUpperCase()
-                                                + " SUBSIDARY REGISTER")
-                                                .setPrintBackgroundOnOddRows(true).setWhenNoData("No Data",
-                                                        null).setDefaultStyles(getTitleStyle(),
-                                                                getSubTitleStyle(), getHeaderStyle(), getDetailStyle())
-                                                                .setOddRowBackgroundStyle(getOddRowStyle()).setDetailHeight(20)
-                                                                .setUseFullPageWidth(true).setTitleHeight(50).setSubtitleHeight(35);
+        try {
+            drb = (FastReportBuilder) drb.addColumn("Sl.No.", "slNo",
+                    String.class.getName(), 10).addColumn("Function Code",
+                            "functionCode", String.class.getName(), 20).addColumn(
+                                    "Function Head", "functionName", String.class.getName(), 50)
+                                    .addColumn("Total " + type + " (Rs.)", "totalIncome",
+                                            BigDecimal.class.getName(), 50, false, "0.00",
+                                            detailAmountStyle).setTitle(cityName).setSubtitle(
+                                                    "FUNCTIONWISE " + type.toUpperCase()
+                                                    + " SUBSIDARY REGISTER")
+                                                    .setPrintBackgroundOnOddRows(true).setWhenNoData("No Data",
+                                                            null).setDefaultStyles(getTitleStyle(),
+                                                                    getSubTitleStyle(), getHeaderStyle(), getDetailStyle())
+                                                                    .setOddRowBackgroundStyle(getOddRowStyle()).setDetailHeight(20)
+                                                                    .setUseFullPageWidth(true).setTitleHeight(50).setSubtitleHeight(35);
+        } catch (ColumnBuilderException | ClassNotFoundException e) {
+            LOGGER.error("Error" + e.getMessage());
+        }
 
         for (final String s : functionwiseIE.getMajorCodeList())
-            drb.addColumn(s, "majorcodeWiseAmount." + s, BigDecimal.class
-                    .getName(), 35, false, "0.00", detailAmountStyle);
+            try {
+                drb.addColumn(s, "majorcodeWiseAmount." + s, BigDecimal.class
+                        .getName(), 35, false, "0.00", detailAmountStyle);
+            } catch (ColumnBuilderException | ClassNotFoundException e) {
+                LOGGER.error("Error" + e.getMessage());
+            }
         final DynamicReport dr = drb.build();
         final JRDataSource ds = new JRBeanCollectionDataSource(functionwiseIE
                 .getEntries());

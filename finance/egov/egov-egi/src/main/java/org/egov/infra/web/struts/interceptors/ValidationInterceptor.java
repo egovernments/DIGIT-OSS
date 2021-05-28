@@ -58,9 +58,14 @@ import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infra.web.struts.annotation.ValidationErrorPageExt;
 import org.egov.infra.web.struts.annotation.ValidationErrorPageForward;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.stream.Stream;
+
+import static org.apache.struts2.StrutsStatics.HTTP_REQUEST;
+import static org.egov.infra.security.utils.XSSValidator.validate;
 
 public class ValidationInterceptor extends AbstractInterceptor {
 
@@ -92,47 +97,62 @@ public class ValidationInterceptor extends AbstractInterceptor {
 				actionMethod = action.getClass().getDeclaredMethod(forwarder.forwarderMethod());
 				isInvokeAndForward = true;
 			}
-			final ValidationAware validationAwareAction = (ValidationAware) invocation.getAction();
-			if (validationAwareAction.hasErrors()) {
-				if (isInvokeAndForward) {
-					return (String) actionMethod.invoke(action);
-				} else {
-					this.invokeActionMethod(actionMethod, action);
-					return form;
-				}
-			}
-			return invocation.invoke();
-		} catch (final ValidationException e) {
-			if (BaseFormAction.class.isAssignableFrom(invocation.getAction().getClass())) {
-				this.transformValidationErrors(invocation, e);
-				if (isInvokeAndForward) {
-					return (String) actionMethod.invoke(action);
-				} else {
-					this.invokeActionMethod(actionMethod, action);
-					return form;
-				}
-			}
-			throw e;
-		}
-	}
 
-	private void invokeActionMethod(final Method actionMethod, final Object action) throws IllegalAccessException, InvocationTargetException, RuntimeException {
-		if (actionMethod != null) {
-			actionMethod.setAccessible(true);
-			actionMethod.invoke(action);
-		}
-	}
+            HttpServletRequest request = (HttpServletRequest) invocation.getInvocationContext().get(HTTP_REQUEST);
+            invocation.getInvocationContext().getParameters().keySet().stream().forEach(fieldName -> {
+                String[] paramValues = request.getParameterValues(fieldName);
+                if (paramValues != null)
+                    Stream.of(paramValues).forEach(value -> validate(fieldName, value));
+            });
 
-	private void transformValidationErrors(final ActionInvocation invocation, final ValidationException e) {
-		final BaseFormAction action = (BaseFormAction) invocation.getAction();
-		final List<ValidationError> errors = e.getErrors();
-		for (final ValidationError error : errors) {
-			if (error.getArgs() == null || error.getArgs().length == 0) {
-				action.addFieldError("model." + error.getKey(), action.getText(error.getMessage(), error.getMessage()));
-			} else {
-				action.addFieldError("model." + error.getKey(), action.getText(error.getMessage(), error.getMessage(), error.getArgs()));
-			}
-		}
-	}
+            ValidationAware validationAwareAction = (ValidationAware) invocation.getAction();
+            if (validationAwareAction.hasErrors()) {
+                if (isInvokeAndForward) {
+                    return (String) actionMethod.invoke(action);
+                } else {
+                    this.invokeActionMethod(actionMethod, action);
+                    return form;
+                }
+            }
+            return invocation.invoke();
+        } catch (ValidationException e) {
+            if (BaseFormAction.class.isAssignableFrom(invocation.getAction().getClass())) {
+                this.transformValidationErrors(invocation, e);
+                if (isInvokeAndForward) {
+                    return (String) actionMethod.invoke(action);
+                } else {
+                    this.invokeActionMethod(actionMethod, action);
+                    return form;
+                }
+            }
+            throw e;
+        }
+    }
+
+    private void invokeActionMethod(Method actionMethod, Object action) throws IllegalAccessException,
+            InvocationTargetException {
+        if (actionMethod != null) {
+            actionMethod.setAccessible(true);
+            actionMethod.invoke(action);
+        }
+    }
+
+    private void transformValidationErrors(ActionInvocation invocation, ValidationException ve) {
+        BaseFormAction action = (BaseFormAction) invocation.getAction();
+        List<ValidationError> errors = ve.getErrors();
+        for (ValidationError error : errors) {
+            if (error.getArgs() == null || error.getArgs().length == 0) {
+                if (error.isNonFieldError())
+                    action.addActionError(action.getText(error.getMessage(), error.getMessage()));
+                else
+                    action.addFieldError("model." + error.getKey(), action.getText(error.getMessage(), error.getMessage()));
+            } else {
+                if (error.isNonFieldError())
+                    action.addActionError(action.getText(error.getMessage(), error.getMessage(), error.getArgs()));
+                else
+                    action.addFieldError("model." + error.getKey(), action.getText(error.getMessage(), error.getMessage(), error.getArgs()));
+            }
+        }
+    }
 
 }

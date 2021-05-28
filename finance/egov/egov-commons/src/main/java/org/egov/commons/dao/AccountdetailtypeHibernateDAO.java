@@ -105,8 +105,12 @@ public class AccountdetailtypeHibernateDAO  {
      * @param master
      * @return
      * @throws ApplicationException
+     * @throws ClassNotFoundException 
+     * @throws SecurityException 
+     * @throws IllegalAccessException 
+     * @throws IllegalArgumentException 
      */
-    public Integer getDetailtypeforObject(final Object master) throws ApplicationException {
+    public Integer getDetailtypeforObject(final Object master) throws ApplicationException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
         if (null == master)
             throw new ApplicationException("The object supplied is null");
         try {
@@ -122,8 +126,6 @@ public class AccountdetailtypeHibernateDAO  {
         } catch (final NoSuchFieldException e) {
             return null;// return the null if the object passed doesnot have the
                         // instance variable tablename.
-        } catch (final Exception e) {
-            throw new ApplicationException("Exception occured while getting detailtypeid ", e);
         }
 
     }

@@ -127,6 +127,7 @@
 	<s:form name="openingBalanceForm" id="openingBalanceForm"
 		action="openingBalanceReport" theme="css_xhtml" validate="true">
 		<s:push value="openingBalanceReport">
+			<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="formmainbox">
 				<div class="subheadnew">
 					<s:text name="openingBalance.search.title" />

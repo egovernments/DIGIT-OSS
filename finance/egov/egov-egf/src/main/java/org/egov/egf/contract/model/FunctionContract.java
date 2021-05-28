@@ -47,11 +47,16 @@
  */
 package org.egov.egf.contract.model;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class FunctionContract {
 
     private Long id;
+    @SafeHtml
     private String name;
+    @SafeHtml
     private String code;
+    @SafeHtml
     private Long level;
     private Boolean active;
     private Boolean isParent;

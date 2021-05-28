@@ -133,6 +133,7 @@ import org.egov.utils.FinancialConstants;
 import org.egov.utils.VoucherHelper;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +145,7 @@ import com.exilant.GLEngine.Transaxtion;
 import com.exilant.GLEngine.TransaxtionParameter;
 import com.exilant.eGov.src.common.EGovernCommon;
 import com.exilant.eGov.src.transactions.VoucherTypeForULB;
+import com.exilant.exility.common.TaskFailedException;
 
 @Service
 public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
@@ -347,34 +349,40 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 			if (!paymentheader.getVoucherheader().getName()
 					.equalsIgnoreCase(FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK)) {
 				final Paymentheader ph = (Paymentheader) persistenceService.find(
-						"select ph from Paymentheader ph , Miscbilldetail misc ,CVoucherHeader vh,CGeneralLedger gl where misc.payVoucherHeader = ph.voucherheader and misc.billVoucherHeader = vh and gl.voucherHeaderId = vh and vh.status not in ("
-								+ FinancialConstants.CANCELLEDVOUCHERSTATUS
-								+ ") and gl.debitAmount > 0  and (gl.glcode like '210%' or gl.glcode like '460%') and ph = ? ",
-						paymentheader);
+						new StringBuffer("select ph from Paymentheader ph , Miscbilldetail misc ,CVoucherHeader vh,")
+								.append("CGeneralLedger gl where misc.payVoucherHeader = ph.voucherheader")
+								.append(" and misc.billVoucherHeader = vh and gl.voucherHeaderId = vh and vh.status not in (?)")
+								.append(" and gl.debitAmount > 0  and (gl.glcode like '210%' or gl.glcode like '460%') and ph = ? ")
+								.toString(),
+						FinancialConstants.CANCELLEDVOUCHERSTATUS, paymentheader);
 				if (ph != null)
 					return (double) 0;
 				else {
-					final Double grossAmount = (Double) persistenceService.find(
-							"select sum(gl.debitAmount) from Paymentheader ph , Miscbilldetail misc ,CVoucherHeader vh,CGeneralLedger gl where misc.payVoucherHeader = ph.voucherheader and misc.billVoucherHeader = vh and gl.voucherHeaderId = vh and vh.status not in ("
-									+ FinancialConstants.CANCELLEDVOUCHERSTATUS + ") and gl.debitAmount > 0 and ph = ?",
-							paymentheader);
+					final Double grossAmount = (Double) persistenceService.find(new StringBuilder(
+							"select sum(gl.debitAmount) from Paymentheader ph , Miscbilldetail misc ,").append(
+									"CVoucherHeader vh,CGeneralLedger gl where misc.payVoucherHeader = ph.voucherheader")
+									.append(" and misc.billVoucherHeader = vh and gl.voucherHeaderId = vh and vh.status not in (?)")
+									.append(" and gl.debitAmount > 0 and ph = ?").toString(),
+							FinancialConstants.CANCELLEDVOUCHERSTATUS, paymentheader);
 
 					return grossAmount != null ? grossAmount : (double) 0;
 
 				}
 			} else {
-				final Paymentheader ph = (Paymentheader) persistenceService.find(
-						"select ph from Paymentheader ph ,CVoucherHeader vh,CGeneralLedger gl where ph.voucherheader = vh and gl.voucherHeaderId = vh and vh.status not in ("
-								+ FinancialConstants.CANCELLEDVOUCHERSTATUS
-								+ ") and gl.debitAmount > 0 and (gl.glcode like '210%' or gl.glcode like '460%') and ph = ? ",
-						paymentheader);
+				final Paymentheader ph = (Paymentheader) persistenceService.find(new StringBuilder(
+						"select ph from Paymentheader ph ,CVoucherHeader vh,CGeneralLedger gl").append(
+								" where ph.voucherheader = vh and gl.voucherHeaderId = vh and vh.status not in (?)")
+								.append(" and gl.debitAmount > 0 and (gl.glcode like '210%' or gl.glcode like '460%') and ph = ? ")
+								.toString(),
+						FinancialConstants.CANCELLEDVOUCHERSTATUS, paymentheader);
 				if (ph != null)
 					return (double) 0;
 				else {
-					final Double grossAmount = (Double) persistenceService.find(
-							"select sum(gl.debitAmount) from Paymentheader ph ,CVoucherHeader vh,CGeneralLedger gl where ph.voucherheader = vh and gl.voucherHeaderId = vh and vh.status not in ("
-									+ FinancialConstants.CANCELLEDVOUCHERSTATUS + ") and gl.debitAmount > 0 and ph = ?",
-							paymentheader);
+					final Double grossAmount = (Double) persistenceService.find(new StringBuilder(
+							"select sum(gl.debitAmount) from Paymentheader ph ,CVoucherHeader vh,CGeneralLedger gl")
+									.append(" where ph.voucherheader = vh and gl.voucherHeaderId = vh and vh.status not in (?)")
+									.append(" and gl.debitAmount > 0 and ph = ?").toString(),
+							FinancialConstants.CANCELLEDVOUCHERSTATUS, paymentheader);
 
 					return grossAmount != null ? grossAmount : (double) 0;
 
@@ -493,10 +501,15 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 			}
 		} catch (final HibernateException e) {
 			LOGGER.error("Exception occured in VoucherSerive |getVoucherInfo " + e);
-		} catch (final Exception e) {
-			LOGGER.error("Exception occured in VoucherSerive |getVoucherInfo " + e);
-		}
-
+        } /*
+           * catch (final Exception e) {
+           * LOGGER.error("Exception occured in VoucherSerive |getVoucherInfo "
+           * + e); }
+           */ catch (NoSuchMethodException e) {
+               LOGGER.error("Exception occured in VoucherSerive |getVoucherInfo " + e);
+        } catch (SecurityException e) {
+            LOGGER.error("Exception occured in VoucherSerive |getVoucherInfo " + e);
+        }
 		voucherMap.put(Constants.GLDEATILLIST, billDetailslist);
 		/**
 		 * create empty sub ledger row
@@ -655,7 +668,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 
 			}
 			// conn.close();
-		} catch (final Exception e) {
+		} catch (final ApplicationRuntimeException | TaskFailedException e) {
 			LOGGER.error(e);
 			throw new ApplicationRuntimeException(
 					"Exception occured while getting upadetd voucher number and cgvn number" + e);
@@ -752,7 +765,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 					transaction.setTransaxtionParam(reqParams);
 				transaxtionList.add(transaction);
 			}
-		} catch (final Exception e) {
+		} catch (final ObjectNotFoundException e) {
 			LOGGER.error("Exception occured while posting data into voucher detail and transaction");
 			throw new ApplicationRuntimeException(
 					"Exception occured while posting data into voucher detail and transaction" + e.getMessage());
@@ -781,7 +794,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	}
 
 	public CVoucherHeader postIntoVoucherHeader(final CVoucherHeader voucherHeader,
-			final VoucherTypeBean voucherTypeBean) throws Exception {
+			final VoucherTypeBean voucherTypeBean) throws TaskFailedException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("start | insertIntoVoucherHeader");
 		voucherHeader.setName(voucherTypeBean.getVoucherName());
@@ -800,7 +813,8 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 		/*
 		 * if("Auto".equalsIgnoreCase(vNumGenMode)){ if(LOGGER.isDebugEnabled())
 		 * LOGGER.debug("Generating auto voucher number"); String vDate =
-		 * Constants.DDMMYYYYFORMAT2.format(voucherHeader.getVoucherDate());
+		 * Constants.DDMMYYYYFORMAT2.format(voucherHe
+		 * ader.getVoucherDate());
 		 * //String vn1 =
 		 * getGeneratedVoucherNumber(voucherHeader.getFundId().getId(),
 		 * autoVoucherType, voucherHeader.getVoucherDate()); voucherHeader
@@ -854,7 +868,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 				update(voucherHeader);
 			}
 
-		} catch (final ApplicationRuntimeException e) {
+		} catch (final ApplicationRuntimeException | TaskFailedException e) {
 			LOGGER.error(e);
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
@@ -908,10 +922,10 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 		} catch (final HibernateException he) {
 			LOGGER.error(he.getMessage());
 			throw new HibernateException(he);
-		} catch (final Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new HibernateException(e);
-		}
+        } /*
+           * catch (final Exception e) { LOGGER.error(e.getMessage()); throw new
+           * HibernateException(e); }
+           */
 
 	}
 
@@ -1214,11 +1228,11 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 			final List<ValidationError> errors = new ArrayList<>();
 			errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
 			throw new ValidationException(errors);
-		} catch (final Exception e) {
-			final List<ValidationError> errors = new ArrayList<>();
-			errors.add(new ValidationError("exp", e.getMessage()));
-			throw new ValidationException(errors);
-		}
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<>(); errors.add(new ValidationError("exp",
+           * e.getMessage())); throw new ValidationException(errors); }
+           */
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("VoucherService | createBillForVoucherSubType | End | bill number : = "
 					+ egBillregister.getBillnumber());
@@ -1251,7 +1265,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 		EgBillregister egBillregister = null;
 		try {
 			egBillregister = (EgBillregister) persistenceService.find(
-					"from EgBillregister br where br.egBillregistermis.voucherHeader.id=" + voucherHeader.getId());
+					"from EgBillregister br where br.egBillregistermis.voucherHeader.id = ?", voucherHeader.getId());
 			final EgBillregistermis egBillregistermis = egBillregister.getEgBillregistermis();
 			if (null != voucherTypeBean.getBillDate())
 				egBillregister.setBilldate(voucherTypeBean.getBillDate());
@@ -1294,11 +1308,11 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 			final List<ValidationError> errors = new ArrayList<>();
 			errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
 			throw new ValidationException(errors);
-		} catch (final Exception e) {
-			final List<ValidationError> errors = new ArrayList<>();
-			errors.add(new ValidationError("exp", e.getMessage()));
-			throw new ValidationException(errors);
-		}
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<>(); errors.add(new ValidationError("exp",
+           * e.getMessage())); throw new ValidationException(errors); }
+           */
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Voucher Service | updateBillForVSubType | End");
 		return egBillregister;
@@ -1360,8 +1374,8 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 
 	private boolean isBillNumUnique(final String billNumber) {
 
-		final String billNum = (String) persistenceService.find(
-				"select billnumber from EgBillregister where upper(billnumber)='" + billNumber.toUpperCase() + "'");
+		final String billNum = (String) persistenceService
+				.find("select billnumber from EgBillregister where upper(billnumber)= ?", billNumber.toUpperCase());
 		return billNum == null;
 	}
 

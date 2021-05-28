@@ -100,8 +100,8 @@ public class FiscalPeriodHibernateDAO   implements FiscalPeriodDAO {
         logger.info("Obtained session");
         StringBuffer result = new StringBuffer();
         Query query = getCurrentSession().createQuery(
-                "select cfiscalperiod.id from CFiscalPeriod cfiscalperiod where cfiscalperiod.financialYearId = '"
-                        + financialYearId + "'  ");
+                "select cfiscalperiod.id from CFiscalPeriod cfiscalperiod where cfiscalperiod.financialYearId = :financialYearId  ");
+        query.setParameter("financialYearId", financialYearId);
         ArrayList list = (ArrayList) query.list();
         if (list.size() > 0) {
             if (list.get(0) == null)

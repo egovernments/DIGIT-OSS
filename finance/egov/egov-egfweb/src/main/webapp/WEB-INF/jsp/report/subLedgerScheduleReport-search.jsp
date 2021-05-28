@@ -133,6 +133,7 @@ background: #DEDEDE;
 	<s:form name="subLedgerScheduleForm" id="subLedgerScheduleForm"
 		action="subLedgerScheduleReport" theme="css_xhtml" validate="true">
 		<s:push value="subLedgerScheduleReport">
+			<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="formmainbox">
 				<div class="subheadnew">
 					<s:text name="subLedgerSchedule.search.title" />

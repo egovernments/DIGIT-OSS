@@ -4,31 +4,36 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ErrorResponse implements Serializable {
-	
-	private ResponseInfo responseInfo;
-	private List<Error> errors;
 
-	public ErrorResponse(){}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 2406705204682954355L;
+    private ResponseInfo responseInfo;
+    private List<Error> errors;
 
-	public ErrorResponse(ResponseInfo responseInfo, List<Error> errors) {
-		this.responseInfo = responseInfo;
-		this.errors = errors;
-	}
+    public ErrorResponse() {
+    }
 
-	public ResponseInfo getResponseInfo() {
-		return responseInfo;
-	}
+    public ErrorResponse(final ResponseInfo responseInfo, final List<Error> errors) {
+        this.responseInfo = responseInfo;
+        this.errors = errors;
+    }
 
-	public void setResponseInfo(ResponseInfo responseInfo) {
-		this.responseInfo = responseInfo;
-	}
+    public ResponseInfo getResponseInfo() {
+        return responseInfo;
+    }
 
-	public List<Error> getErrors() {
-		return errors;
-	}
+    public void setResponseInfo(final ResponseInfo responseInfo) {
+        this.responseInfo = responseInfo;
+    }
 
-	public void setErrors(List<Error> errors) {
-		this.errors = errors;
-	}
-	
+    public List<Error> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(final List<Error> errors) {
+        this.errors = errors;
+    }
+
 }

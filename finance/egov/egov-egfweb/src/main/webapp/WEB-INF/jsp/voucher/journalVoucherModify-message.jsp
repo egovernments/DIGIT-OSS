@@ -75,7 +75,11 @@
 		function printVoucher() {
 
 			document.forms[0].action = "journalVoucherPrint-print.action";
-
+			jQuery(document.forms[0]).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
 			document.forms[0].submit();
 		}
 	</script>

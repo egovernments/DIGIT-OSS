@@ -139,9 +139,9 @@ public class AutoRemittanceAction extends BaseFormAction {
             addActionError("failed");
         } catch (final HibernateException e) {
             addActionError("failed");
-        } catch (final Exception e) {
-            addActionError("failed");
-        }
+        } /*
+           * catch (final Exception e) { addActionError("failed"); }
+           */
 
         return "manual";
 
@@ -177,12 +177,14 @@ public class AutoRemittanceAction extends BaseFormAction {
                     .toString(), scheduledRemittanceService.getErrorMessage().toString())));
         }
 
-        catch (final Exception e)
-        {
-            addActionMessage(getText("schedular.failed"));
-            throw new ValidationException(Arrays.asList(new ValidationError(scheduledRemittanceService.getErrorMessage()
-                    .toString(), scheduledRemittanceService.getErrorMessage().toString())));
-        }
+        /*
+         * catch (final Exception e) {
+         * addActionMessage(getText("schedular.failed")); throw new
+         * ValidationException(Arrays.asList(new
+         * ValidationError(scheduledRemittanceService.getErrorMessage()
+         * .toString(),
+         * scheduledRemittanceService.getErrorMessage().toString()))); }
+         */
         final List<String> findAllBy = persistenceService.findAllBy("select voucherheaderId.voucherNumber from " +
                         "RemittanceSchedulePayment  where schId.id=?", remittanceScheduler.getId());
         if (findAllBy.isEmpty())

@@ -60,6 +60,7 @@ import org.egov.infra.workflow.entity.State;
 import org.egov.infra.workflow.entity.StateAware;
 import org.egov.pims.commons.Position;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -97,6 +98,7 @@ public class BudgetDetail extends StateAware {
     @Transient
     private Long nextYrId = null;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "budgetgroup")
     private BudgetGroup budgetGroup;
@@ -120,9 +122,11 @@ public class BudgetDetail extends StateAware {
     private BigDecimal anticipatoryAmount = new BigDecimal("0.0");
 
     @Column(name = "using_department")
+    @SafeHtml
     private String usingDepartment;
 
     @Column(name = "executing_department")
+    @SafeHtml
     private String executingDepartment;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -150,6 +154,7 @@ public class BudgetDetail extends StateAware {
     private Boundary boundary;
 
     @Length(max = 10)
+    @SafeHtml
     private String materializedPath;
 
     @OneToMany(mappedBy = "budgetDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -160,6 +165,7 @@ public class BudgetDetail extends StateAware {
     private Long documentNumber;
 
     @Length(max = 32)
+    @SafeHtml
     private String uniqueNo;
     private BigDecimal planningPercent;
 
@@ -168,6 +174,7 @@ public class BudgetDetail extends StateAware {
     private EgwStatus status;
 
     @Transient
+    @SafeHtml
     private String comment;
     
     @Transient

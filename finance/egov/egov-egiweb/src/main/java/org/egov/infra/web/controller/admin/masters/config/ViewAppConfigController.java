@@ -48,27 +48,32 @@
 
 package org.egov.infra.web.controller.admin.masters.config;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.egov.infra.admin.master.contracts.AppConfigSearchRequest;
 import org.egov.infra.admin.master.entity.AppConfig;
 import org.egov.infra.admin.master.service.AppConfigService;
 import org.egov.infra.admin.master.service.ModuleService;
 import org.egov.infra.web.contract.response.AppConfigJsonAdapter;
 import org.egov.infra.web.support.ui.DataTable;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
-
 @Controller
 @RequestMapping("/app/config")
+@Validated
 public class ViewAppConfigController {
 
     @Autowired
@@ -79,7 +84,7 @@ public class ViewAppConfigController {
 
     @GetMapping(value = "/formodule/{moduleName}", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<AppConfig> getAppConfigsForModule(@PathVariable String moduleName) {
+    public List<AppConfig> getAppConfigsForModule(@PathVariable @SafeHtml String moduleName) {
         return appConfigService.getAllAppConfigByModuleName(moduleName);
     }
 
@@ -91,7 +96,7 @@ public class ViewAppConfigController {
 
     @GetMapping(value = "/list", produces = TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String showAppConfigs(AppConfigSearchRequest searchRequest) {
+    public String showAppConfigs(@Valid AppConfigSearchRequest searchRequest) {
         return new DataTable<>(appConfigService.getAllAppConfig(searchRequest),
                 searchRequest.draw()).toJson(AppConfigJsonAdapter.class);
     }

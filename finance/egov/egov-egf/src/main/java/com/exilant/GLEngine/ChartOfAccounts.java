@@ -89,6 +89,7 @@ import org.egov.infstr.services.PersistenceService;
 import org.egov.model.recoveries.Recovery;
 import org.egov.services.voucher.VoucherService;
 import org.egov.utils.FinancialConstants;
+import org.elasticsearch.index.mapper.MapperException;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.exilant.eGov.src.transactions.ExilPrecision;
 import com.exilant.exility.common.DataCollection;
 import com.exilant.exility.common.TaskFailedException;
+import com.jayway.jsonpath.spi.mapper.MappingException;
 
 /**
  * This Singleton class contains all the account codes for the organization
@@ -182,12 +184,7 @@ public class ChartOfAccounts {
 			LOGGER.debug("loadAccountData called");
 
 		HashMap<String, HashMap> hm = null;
-		try {
-			hm = (HashMap<String, HashMap>) applicationCacheManager.get(ROOTNODE);
-
-		} catch (Exception e1) {
-
-		}
+		hm = (HashMap<String, HashMap>) applicationCacheManager.get(ROOTNODE);
 		if (hm == null) {
 
 			coaCache.loadAccountData();
@@ -289,7 +286,7 @@ public class ChartOfAccounts {
 		return true;
 	}
 
-	public boolean validateGLCode(final Transaxtion txn) throws Exception {
+	public boolean validateGLCode(final Transaxtion txn) throws TaskFailedException {
 		// validate each gl code
 		if (LOGGER.isInfoEnabled())
 			LOGGER.info("Inside the ValidateGLCode1");
@@ -359,7 +356,7 @@ public class ChartOfAccounts {
 		return true;
 	}
 
-	private boolean isRequiredPresent(final Transaxtion txn, final GLAccount glAcc) throws Exception {
+	private boolean isRequiredPresent(final Transaxtion txn, final GLAccount glAcc) throws TaskFailedException{
 		int requiredCount = 0;
 		int foundCount = 0;
 		final ArrayList glParamList = glAcc.getGLParameters();
@@ -407,7 +404,7 @@ public class ChartOfAccounts {
 				dbAmt += Double.parseDouble(txn.getDrAmount());
 				crAmt += Double.parseDouble(txn.getCrAmount());
 			}
-		} catch (final Exception e) {
+		} catch (final NumberFormatException e) {
 			dc.addMessage(EXILRPERROR, e.toString());
 			LOGGER.error(e.getMessage(), e);
 			throw new TaskFailedException();
@@ -421,7 +418,7 @@ public class ChartOfAccounts {
 		return true;
 	}
 
-	private boolean validateTxns(final Transaxtion txnList[]) throws Exception {
+	private boolean validateTxns(final Transaxtion txnList[]) throws TaskFailedException   {
 		// validate the array list for the total number of txns
 		if (txnList.length < 2)
 			return false;
@@ -435,12 +432,6 @@ public class ChartOfAccounts {
 				dbAmt += Double.parseDouble(txn.getDrAmount());
 				crAmt += Double.parseDouble(txn.getCrAmount());
 			}
-		} catch (final TaskFailedException e) {
-			throw new TaskFailedException(e.getMessage());
-		} catch (final Exception e) {
-			LOGGER.error(e.getMessage());
-
-			return false;
 		} finally {
 			RequiredValidator.clearEmployeeMap();
 		}
@@ -456,7 +447,7 @@ public class ChartOfAccounts {
 	}
 
 	@Transactional(readOnly = true)
-	private boolean checkBudget(final Transaxtion txnList[]) throws Exception, ValidationException {
+	private boolean checkBudget(final Transaxtion txnList[]) {
 		Map<String, Object> paramMap = null;
 		Transaxtion txnObj = null;
 
@@ -507,8 +498,7 @@ public class ChartOfAccounts {
 	}
 
 	@Transactional
-	public boolean postTransaxtions(final Transaxtion txnList[], final String vDate)
-			throws Exception, ValidationException {
+	public boolean postTransaxtions(final Transaxtion txnList[], final String vDate) throws TaskFailedException {
 
 		if (!checkBudget(txnList))
 			throw new TaskFailedException(FinancialConstants.BUDGET_CHECK_ERROR_MESSAGE);
@@ -520,7 +510,7 @@ public class ChartOfAccounts {
 						"Voucher Date is not within an open period. Please use an open period for posting");
 			if (!validateTxns(txnList))
 				return false;
-		} catch (final Exception e) {
+		} catch (final TaskFailedException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new TaskFailedException(e.getMessage());
 		}
@@ -530,7 +520,7 @@ public class ChartOfAccounts {
 		return true;
 	}
 
-	private void checkfuctreqd(final String glcode, final String fuctid, final DataCollection dc) throws Exception {
+	private void checkfuctreqd(final String glcode, final String fuctid, final DataCollection dc) throws TaskFailedException {
 
 		final String sql = "select FUNCTIONREQD from chartofaccounts where glcode = ?";
 		final Query pst = persistenceService.getSession().createSQLQuery(sql);
@@ -598,7 +588,7 @@ public class ChartOfAccounts {
 
 					try {
 						checkfuctreqd(txn.getGlCode(), txn.getFunctionId(), dc);
-					} catch (final Exception e) {
+					} catch (final TaskFailedException e) {
 						LOGGER.error("Inside checkfuctreqd" + e.getMessage(), e);
 						return false;
 					}
@@ -612,7 +602,7 @@ public class ChartOfAccounts {
 					// LOGGER.info("inside the postin gl function before insert
 					// ----");
 					generalLedgerPersistenceService.persist(gLedger);
-				} catch (final Exception e) {
+				} catch (final HibernateException e) {
 					if (LOGGER.isInfoEnabled())
 						LOGGER.info("error in the gl++++++++++" + e, e);
 					return false;
@@ -682,7 +672,7 @@ public class ChartOfAccounts {
 
 											remitanceDetPersistenceService.persist(egRemitGldtl);
 										}
-									} catch (final Exception e) {
+									} catch (final TaskFailedException e) {
 										LOGGER.error("Error while inserting to eg_remittance_gldtl " + e, e);
 										return false;
 									}
@@ -703,7 +693,7 @@ public class ChartOfAccounts {
 						 * "Error while inserting to eg_remittance_gldtl " +e);
 						 * return false; }
 						 */
-					} catch (final Exception e) {
+					} catch (final HibernateException e) {
 						LOGGER.error("Inside postInGL " + e.getMessage(), e);
 						dc.addMessage(EXILRPERROR, "General Ledger Details Error " + e.toString());
 						return false;
@@ -714,7 +704,7 @@ public class ChartOfAccounts {
 	}
 
 	@Transactional
-	private boolean postInGL(final Transaxtion txnList[]) throws Exception {
+	private boolean postInGL(final Transaxtion txnList[]) throws TaskFailedException {
 
 		CGeneralLedger gLedger = null;
 		CGeneralLedgerDetail gLedgerDet = null;
@@ -776,7 +766,7 @@ public class ChartOfAccounts {
 					generalLedgerPersistenceService.persist(gLedger);
 					//populating the data related to non controlled remitted code
 					populateDataForNonControlledRemittedCode(gLedger);
-				} catch (final Exception e) {
+				} catch (final TaskFailedException e) {
 					LOGGER.error("error in the gl++++++++++" + e, e);
 					return false;
 				}
@@ -794,66 +784,62 @@ public class ChartOfAccounts {
 				String detKeyName = "";
 				if (LOGGER.isInfoEnabled())
 					LOGGER.info("glParamList size :" + glParamList.size());
-				for (int a = 0; a < glParamList.size(); a++)
-					try {
-						// post the defaults set for details
-						final GLParameter glPrm = (GLParameter) glParamList.get(a);
+				for (int a = 0; a < glParamList.size(); a++) {
+                    // post the defaults set for details
+                    final GLParameter glPrm = (GLParameter) glParamList.get(a);
 
-						{ // Post the details sent apart from defaults
-							for (int z = 0; z < txnPrm.size(); z++) {
-								final TransaxtionParameter tParam = (TransaxtionParameter) txnPrm.get(z);
-								if (LOGGER.isInfoEnabled())
-									LOGGER.info("tParam.getGlcodeId():" + tParam.getGlcodeId());
-								if (LOGGER.isInfoEnabled())
-									LOGGER.info("gLedger.getglCodeId():" + gLedger.getGlcodeId());
-								if (tParam.getDetailName().equalsIgnoreCase(glPrm.getDetailName())
-										&& tParam.getGlcodeId().equals(gLedger.getGlcodeId().getId().toString())) {
-									gLedgerDet = new CGeneralLedgerDetail();
-									detKeyName = tParam.getDetailName();
-									detKeyId = tParam.getDetailKey();
-									gLedgerDet.setGeneralLedgerId(gLedger);
-									Accountdetailtype acctype = (Accountdetailtype) persistenceService.getSession()
-											.load(Accountdetailtype.class, glPrm.getDetailId());
-									gLedgerDet.setDetailTypeId(acctype);
-									gLedgerDet.setDetailKeyId(Integer.parseInt(detKeyId));
-									gLedgerDet.setDetailKeyName(detKeyName);
-									gLedgerDet.setAmount(new BigDecimal(tParam.getDetailAmt()));
-									generalLedgerDetPersistenceService.persist(gLedgerDet);
-									try {
-										if (validRecoveryGlcode(String.valueOf(gLedger.getGlcodeId().getId()))
-												&& gLedger.getCreditAmount() > 0) {
-											egRemitGldtl = new EgRemittanceGldtl();
-											// if(LOGGER.isInfoEnabled())
-											// LOGGER.info("----------"+gLedger.getGlCodeId());
-											egRemitGldtl.setGeneralledgerdetail(gLedgerDet);
-											egRemitGldtl.setGldtlamt(gLedgerDet.getAmount());
-											Recovery tdsentry = null;
-											if (tParam.getTdsId() != null)
-												tdsentry = (Recovery) persistenceService.find(
-														"from Recovery where id=?", Long.parseLong(tParam.getTdsId()));
-											if (tdsentry != null) {
-												egRemitGldtl.setRecovery(tdsentry);
-											}
-											remitanceDetPersistenceService.persist(egRemitGldtl);
-										}
-									} catch (final Exception e) {
-										LOGGER.error("Error while inserting to eg_remittance_gldtl " + e, e);
-										return false;
-									}
-									if(gLedger.getGeneralLedgerDetails() == null){
-									    Set<CGeneralLedgerDetail> gldSet = new HashSet<>();
-									    gldSet.add(gLedgerDet);
-									    gLedger.setGeneralLedgerDetails(gldSet);
-									}else{
-									    gLedger.getGeneralLedgerDetails().add(gLedgerDet);
-									}
-								}
-							}
-						}
-					} catch (final Exception e) {
-						LOGGER.error("inside postInGL" + e.getMessage(), e);
-						throw new TaskFailedException();
-					}
+                    { // Post the details sent apart from defaults
+                    	for (int z = 0; z < txnPrm.size(); z++) {
+                    		final TransaxtionParameter tParam = (TransaxtionParameter) txnPrm.get(z);
+                    		if (LOGGER.isInfoEnabled())
+                    			LOGGER.info("tParam.getGlcodeId():" + tParam.getGlcodeId());
+                    		if (LOGGER.isInfoEnabled())
+                    			LOGGER.info("gLedger.getglCodeId():" + gLedger.getGlcodeId());
+                    		if (tParam.getDetailName().equalsIgnoreCase(glPrm.getDetailName())
+                    				&& tParam.getGlcodeId().equals(gLedger.getGlcodeId().getId().toString())) {
+                    			gLedgerDet = new CGeneralLedgerDetail();
+                    			detKeyName = tParam.getDetailName();
+                    			detKeyId = tParam.getDetailKey();
+                    			gLedgerDet.setGeneralLedgerId(gLedger);
+                    			Accountdetailtype acctype = (Accountdetailtype) persistenceService.getSession()
+                    					.load(Accountdetailtype.class, glPrm.getDetailId());
+                    			gLedgerDet.setDetailTypeId(acctype);
+                    			gLedgerDet.setDetailKeyId(Integer.parseInt(detKeyId));
+                    			gLedgerDet.setDetailKeyName(detKeyName);
+                    			gLedgerDet.setAmount(new BigDecimal(tParam.getDetailAmt()));
+                    			generalLedgerDetPersistenceService.persist(gLedgerDet);
+                    			try {
+                    				if (validRecoveryGlcode(String.valueOf(gLedger.getGlcodeId().getId()))
+                    						&& gLedger.getCreditAmount() > 0) {
+                    					egRemitGldtl = new EgRemittanceGldtl();
+                    					// if(LOGGER.isInfoEnabled())
+                    					// LOGGER.info("----------"+gLedger.getGlCodeId());
+                    					egRemitGldtl.setGeneralledgerdetail(gLedgerDet);
+                    					egRemitGldtl.setGldtlamt(gLedgerDet.getAmount());
+                    					Recovery tdsentry = null;
+                    					if (tParam.getTdsId() != null)
+                    						tdsentry = (Recovery) persistenceService.find(
+                    								"from Recovery where id=?", Long.parseLong(tParam.getTdsId()));
+                    					if (tdsentry != null) {
+                    						egRemitGldtl.setRecovery(tdsentry);
+                    					}
+                    					remitanceDetPersistenceService.persist(egRemitGldtl);
+                    				}
+                    			} catch (final TaskFailedException e) {
+                    				LOGGER.error("Error while inserting to eg_remittance_gldtl " + e, e);
+                    				return false;
+                    			}
+                    			if(gLedger.getGeneralLedgerDetails() == null){
+                    			    Set<CGeneralLedgerDetail> gldSet = new HashSet<>();
+                    			    gldSet.add(gLedgerDet);
+                    			    gLedger.setGeneralLedgerDetails(gldSet);
+                    			}else{
+                    			    gLedger.getGeneralLedgerDetails().add(gLedgerDet);
+                    			}
+                    		}
+                    	}
+                    }
+                }
 			}
 		}
 		return true;
@@ -913,9 +899,9 @@ public class ChartOfAccounts {
 			LOGGER.info("count**********" + count);
 		for (int k = 0; k < count; k++)
 			try {
-				final String delremitsql = "delete from eg_remittance_gldtl where gldtlid in (select id from generalledgerdetail where generalledgerid='"
-						+ glHeaderId.get(k).toString() + "')";
-				pst = persistenceService.getSession().createSQLQuery(delremitsql);
+				final StringBuilder delremitsql = new StringBuilder("delete from eg_remittance_gldtl")
+						.append(" where gldtlid in (select id from generalledgerdetail where generalledgerid=?)");
+				pst = persistenceService.getSession().createSQLQuery(delremitsql.toString());
 				pst.setString(0, glHeaderId.get(k).toString());
 				if (LOGGER.isInfoEnabled())
 					LOGGER.info("deleting remittance Query " + delremitsql);
@@ -947,7 +933,7 @@ public class ChartOfAccounts {
 					if (LOGGER.isInfoEnabled())
 						LOGGER.info("DELETE FROM generalledger WHERE voucherheaderid=" + VoucherHeaderId);
 
-			} catch (final Exception e) {
+			} catch (final HibernateException e) {
 				if (LOGGER.isInfoEnabled())
 					LOGGER.info("Exp in reading from generalledger: " + e, e);
 			}
@@ -974,7 +960,7 @@ public class ChartOfAccounts {
 				// LOGGER.info("inside the postin gl function before insert
 				// ----");
 				generalLedgerPersistenceService.persist(gLedger);
-			} catch (final Exception e) {
+			} catch (final HibernateException e) {
 				if (LOGGER.isInfoEnabled())
 					LOGGER.info("error in the gl++++++++++" + e, e);
 				dc.addMessage("exilSQLError", e.toString());
@@ -1040,7 +1026,7 @@ public class ChartOfAccounts {
 										egRemitGldtl.setRecovery(tdsentry);
 										remitanceDetPersistenceService.persist(egRemitGldtl);
 									}
-								} catch (final Exception e) {
+								} catch (final HibernateException e) {
 									LOGGER.error("Error while inserting to eg_remittance_gldtl " + e, e);
 									return false;
 								}
@@ -1060,7 +1046,7 @@ public class ChartOfAccounts {
 					 * "Error while inserting to eg_remittance_gldtl "+e);
 					 * return false; }
 					 */
-				} catch (final Exception e) {
+				} catch (final TaskFailedException e) {
 					LOGGER.error("Inside updateInGl" + e.getMessage(), e);
 					throw new TaskFailedException();
 				}
@@ -1069,18 +1055,18 @@ public class ChartOfAccounts {
 		return true;
 	}
 
-	public String getGLCode(final String detailName, final String detailKey, final Connection con)
-			throws TaskFailedException {
+	public String getGLCode(final String detailName, final String detailKey, final Connection con) {
 		String code = "";
 		try {
-			final String str = "select glcode as \"code\" from chartofaccounts,bankaccount where bankaccount.glcodeid=chartofaccounts.id and bankaccount.id= ?";
-			final PreparedStatement pst = con.prepareStatement(str);
+			final StringBuilder str = new StringBuilder("select glcode as \"code\" from chartofaccounts,bankaccount")
+					.append(" where bankaccount.glcodeid=chartofaccounts.id and bankaccount.id= ?");
+			final PreparedStatement pst = con.prepareStatement(str.toString());
 			pst.setString(0, detailKey);
 			final ResultSet resultset = pst.executeQuery();
 
 			if (resultset.next())
 				code = resultset.getString("code");
-		} catch (final Exception e) {
+		} catch (final SQLException e) {
 			LOGGER.error("error" + e.toString(), e);
 		}
 		return code;
@@ -1088,25 +1074,25 @@ public class ChartOfAccounts {
 
 	public String getFiscalYearID(final String voucherDate, final Connection con, final DataCollection dc) {
 		String fiscalyearid = "";
-		final String sql = "select ID as \"fiscalperiodID\" from fiscalperiod where "
-				+ "to_date(?,'dd-mon-yyyy') between startingdate and endingdate";
+		final StringBuilder sql = new StringBuilder("select ID as \"fiscalperiodID\" from fiscalperiod where ")
+				.append("to_date(?,'dd-mon-yyyy') between startingdate and endingdate");
 		try {
-			final PreparedStatement pst = con.prepareStatement(sql);
+			final PreparedStatement pst = con.prepareStatement(sql.toString());
 			pst.setString(0, voucherDate);
 			final ResultSet rs = pst.executeQuery();
 			if (rs.next())
 				fiscalyearid = rs.getString("fiscalperiodID");
-		} catch (final Exception e) {
+		} catch (final SQLException e) {
 			LOGGER.error("Excepion in getFiscalYearID() " + e, e);
 		}
 		return fiscalyearid;
 	}
 
-	private boolean validPeriod(final String vDate) throws TaskFailedException {
+	private boolean validPeriod(final String vDate) throws TaskFailedException  {
 		try {
 			if (isClosedForPosting(vDate))
 				return false;
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			LOGGER.error("Inside validPeriod " + e.getMessage(), e);
 			throw new TaskFailedException();
 		}
@@ -1135,14 +1121,14 @@ public class ChartOfAccounts {
 			HashMap cacheValuesHashMap = new HashMap<Object, Object>();
 			try {
 				cacheValuesHashMap = (HashMap) applicationCacheManager.get(ROOTNODE);
-			} catch (Exception e) {
+			} catch (MappingException e) {
 				// return null;
 
 			}
 			if (cacheValuesHashMap != null && !cacheValuesHashMap.isEmpty())
 				retMap = (HashMap) cacheValuesHashMap.get(ACCOUNTDETAILTYPENODE);
 
-		} catch (final Exception e) {
+		} catch (final MappingException e) {
 			LOGGER.debug(EXP + e.getMessage());
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
@@ -1159,7 +1145,7 @@ public class ChartOfAccounts {
 			HashMap cacheValuesHashMap = new HashMap<Object, Object>();
 			try {
 				cacheValuesHashMap = (HashMap) applicationCacheManager.get(ROOTNODE);
-			} catch (Exception e) {
+			} catch (MappingException e) {
 				// return null;
 			}
 			if (cacheValuesHashMap != null && !cacheValuesHashMap.isEmpty())
@@ -1167,7 +1153,7 @@ public class ChartOfAccounts {
 			if (retMap != null)
 				LOGGER.debug("in getGlAccountCodes() size is :" + retMap.size());
 
-		} catch (final Exception e) {
+		} catch (final MappingException e) {
 			LOGGER.debug(EXP + e.getMessage());
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
@@ -1184,14 +1170,14 @@ public class ChartOfAccounts {
 			HashMap cacheValuesHashMap = new HashMap<Object, Object>();
 			try {
 				cacheValuesHashMap = (HashMap) applicationCacheManager.get(ROOTNODE);
-			} catch (Exception e) {
+			} catch (MappingException e) {
 				// not yet initialised
 				// return null;
 			}
 			if (cacheValuesHashMap != null && !cacheValuesHashMap.isEmpty())
 				retMap = (HashMap) cacheValuesHashMap.get(GLACCIDNODE);
 
-		} catch (final Exception e) {
+		} catch (final MappingException e) {
 			LOGGER.debug(EXP + e.getMessage());
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
@@ -1220,11 +1206,12 @@ public class ChartOfAccounts {
 
 			if (!isClosed) {
 				List<Object[]> rs = null;
-				final String qry = "SELECT id FROM closedPeriods WHERE isClosed=true and to_char(startingDate, 'DD-MON-YYYY')<='" + date
-						+ "' AND endingDate>='" + date + "'";
+				final StringBuilder qry = new StringBuilder("SELECT id FROM closedPeriods WHERE isClosed=true")
+						.append(" and to_char(startingDate, 'DD-MON-YYYY')<=:date AND endingDate>=:date");
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug(qry);
-				psmt1 = persistenceService.getSession().createSQLQuery(qry);
+				psmt1 = persistenceService.getSession().createSQLQuery(qry.toString());
+				psmt1.setParameter("date", formatter.parse(date));
 				rs = psmt1.list();
 
 				if (!(rs != null && rs.size() > 0))
@@ -1233,23 +1220,24 @@ public class ChartOfAccounts {
 					isClosed = true;
 			}
 
-		} catch (final HibernateException e) {
+		} catch (final HibernateException | ParseException e) {
 			isClosed = true;
 			LOGGER.error("Exception occured while getting the data " + e.getMessage(),
 					new HibernateException(e.getMessage()));
-		} catch (final Exception e) {
-			isClosed = true;
-			LOGGER.error("Exception occured while getting the data " + e.getMessage(), new Exception(e.getMessage()));
-		}
+        } /*
+           * catch (final Exception e) { isClosed = true;
+           * LOGGER.error("Exception occured while getting the data " +
+           * e.getMessage(), new Exception(e.getMessage())); }
+           */
 		return isClosed;
 	}
 	
-	  public boolean checkClosedPeriods(final String vDate) throws Exception, ValidationException {
+	  public boolean checkClosedPeriods(final String vDate) throws TaskFailedException {
                try {
                        if (!validPeriod(vDate))
                                throw new TaskFailedException(
                                                "Voucher Date is not within an open period. Please use an open period for posting");
-               } catch (final Exception e) {
+               } catch (final ValidationException e) {
                        LOGGER.error(e.getMessage(), e);
                        throw new TaskFailedException(e.getMessage());
                }

@@ -94,10 +94,11 @@ public class SearchFirmController {
     @RequestMapping(value = "/search", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public @ResponseBody String searchFirmToModify(final Model model,
             @ModelAttribute final SearchRequestFirm searchRequestFirm) {
-        return new StringBuilder("{ \"data\":")
+        /*return new StringBuilder("{ \"data\":")
                 .append(toJSON(firmService.searchFirm(searchRequestFirm),
                         Firm.class, SearchFirmJsonAdaptor.class))
-                .append("}").toString();
+                .append("}").toString();*/
+    	return null;
 
     }
 

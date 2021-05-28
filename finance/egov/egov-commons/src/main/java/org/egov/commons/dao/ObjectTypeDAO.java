@@ -49,6 +49,7 @@ package org.egov.commons.dao;
 
 import org.egov.commons.ObjectType;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -67,7 +68,7 @@ public class ObjectTypeDAO {
 	public void createObjectType(final ObjectType objectType) {
 		try {
 			getSession().save(objectType);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException("Error occurred while creating Object Type",e);
 		}
 	}
@@ -75,7 +76,7 @@ public class ObjectTypeDAO {
 	public void updateObjectType(final ObjectType objectType) {
 		try {
 			getSession().saveOrUpdate(objectType);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException("Error occurred while updating Object Type",e);
 		}
 	}
@@ -83,7 +84,7 @@ public class ObjectTypeDAO {
 	public void removeObjectType(final ObjectType objectType) {
 		try {
 			getSession().delete(objectType);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException("Error occurred while deleting Object Type",e);
 		}
 	}
@@ -91,7 +92,7 @@ public class ObjectTypeDAO {
 	public ObjectType getObjectType(final int objType) {
 		try {
 			return (ObjectType) getSession().get(ObjectType.class, new Integer(objType));
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException("Error occurred while getting Object Type",e);
 		}
 	}

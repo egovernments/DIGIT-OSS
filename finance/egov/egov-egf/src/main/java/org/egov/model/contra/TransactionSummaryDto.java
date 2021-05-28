@@ -48,112 +48,110 @@
 
 package org.egov.model.contra;
 
+import java.util.List;
+
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.CFunction;
 import org.egov.commons.Functionary;
 import org.egov.commons.Fund;
 import org.egov.commons.Fundsource;
-import org.egov.infra.admin.master.entity.Department;
-
-import java.util.List;
+import org.hibernate.validator.constraints.SafeHtml;
 
 /**
  * @author manoj
- *
  */
 public class TransactionSummaryDto {
 
-	private Long id;
-    
+    private Long id;
+
     private CFinancialYear financialyear;
-    
+
     private Fundsource fundsource;
-    
+
     private Fund fund;
-    
+    @SafeHtml
     private String departmentcode;
-    
+
     private Functionary functionaryid;
-    
+
     private CFunction functionid;
-    
+
     private Integer divisionid;
-    
+
     List<TransactionSummary> transactionSummaryList;
-    
+
     public TransactionSummaryDto() {
-	}
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(final Long id) {
+        this.id = id;
+    }
 
-	public CFinancialYear getFinancialyear() {
-		return financialyear;
-	}
+    public CFinancialYear getFinancialyear() {
+        return financialyear;
+    }
 
-	public void setFinancialyear(CFinancialYear financialyear) {
-		this.financialyear = financialyear;
-	}
+    public void setFinancialyear(final CFinancialYear financialyear) {
+        this.financialyear = financialyear;
+    }
 
-	public Fundsource getFundsource() {
-		return fundsource;
-	}
+    public Fundsource getFundsource() {
+        return fundsource;
+    }
 
-	public void setFundsource(Fundsource fundsource) {
-		this.fundsource = fundsource;
-	}
+    public void setFundsource(final Fundsource fundsource) {
+        this.fundsource = fundsource;
+    }
 
-	public Fund getFund() {
-		return fund;
-	}
+    public Fund getFund() {
+        return fund;
+    }
 
-	public void setFund(Fund fund) {
-		this.fund = fund;
-	}
+    public void setFund(final Fund fund) {
+        this.fund = fund;
+    }
 
-	public Functionary getFunctionaryid() {
-		return functionaryid;
-	}
+    public Functionary getFunctionaryid() {
+        return functionaryid;
+    }
 
-	public void setFunctionaryid(Functionary functionaryid) {
-		this.functionaryid = functionaryid;
-	}
+    public void setFunctionaryid(final Functionary functionaryid) {
+        this.functionaryid = functionaryid;
+    }
 
-	public CFunction getFunctionid() {
-		return functionid;
-	}
+    public CFunction getFunctionid() {
+        return functionid;
+    }
 
-	public void setFunctionid(CFunction functionid) {
-		this.functionid = functionid;
-	}
+    public void setFunctionid(final CFunction functionid) {
+        this.functionid = functionid;
+    }
 
-	public Integer getDivisionid() {
-		return divisionid;
-	}
+    public Integer getDivisionid() {
+        return divisionid;
+    }
 
-	public void setDivisionid(Integer divisionid) {
-		this.divisionid = divisionid;
-	}
+    public void setDivisionid(final Integer divisionid) {
+        this.divisionid = divisionid;
+    }
 
-	public String getDepartmentcode() {
-		return departmentcode;
-	}
+    public String getDepartmentcode() {
+        return departmentcode;
+    }
 
-	public void setDepartmentcode(String departmentcode) {
-		this.departmentcode = departmentcode;
-	}
+    public void setDepartmentcode(final String departmentcode) {
+        this.departmentcode = departmentcode;
+    }
 
-	public List<TransactionSummary> getTransactionSummaryList() {
-		return transactionSummaryList;
-	}
+    public List<TransactionSummary> getTransactionSummaryList() {
+        return transactionSummaryList;
+    }
 
-	public void setTransactionSummaryList(
-			List<TransactionSummary> transactionSummaryList) {
-		this.transactionSummaryList = transactionSummaryList;
-	}
+    public void setTransactionSummaryList(final List<TransactionSummary> transactionSummaryList) {
+        this.transactionSummaryList = transactionSummaryList;
+    }
 }

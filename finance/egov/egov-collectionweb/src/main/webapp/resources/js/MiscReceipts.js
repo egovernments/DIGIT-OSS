@@ -660,7 +660,7 @@ function createDropdownFormatterPJV(prefix){
                 }
             }
             else {
-                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+                selectEl.innerHTML = "<option selected value=\"" + sanitizeHTML(selectedValue) + "\">" + sanitizeHTML(selectedValue) + "</option>";
             }
         }
         else {
@@ -707,7 +707,7 @@ function createDropdownFormatterDetailCode(prefix){
 	                }
 	            }
 	            else {
-	                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+	                selectEl.innerHTML = "<option selected value=\"" + sanitizeHTML(selectedValue) + "\">" + sanitizeHTML(selectedValue) + "</option>";
 	            }
 	        }
 	        else {
@@ -780,7 +780,7 @@ function createDropdownFormatterDetail(prefix){
                 }
             }
             else {
-                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+                selectEl.innerHTML = "<option selected value=\"" + sanitizeHTML(selectedValue) + "\">" + sanitizeHTML(selectedValue) + "</option>";
             }
         }
         else {
@@ -863,7 +863,7 @@ function createDropdownFormatterCode(prefix){
                 }
             }
             else {
-                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+                selectEl.innerHTML = "<option selected value=\"" + sanitizeHTML(selectedValue) + "\">" + sanitizeHTML(selectedValue) + "</option>";
             }
         }
         else {
@@ -873,7 +873,7 @@ function createDropdownFormatterCode(prefix){
 }
 var selecteddetailtype;
 var onDropdownChange = function(index,obj) { 
-	
+		var csrfToken = document.getElementById('csrfTokenValue').value;
 		var subledgerid=document.getElementById('subLedgerlist['+obj.value+'].glcode.id');
 		var accountCode = subledgerid.options[subledgerid.selectedIndex].text;
 		if(subledgerid.options[subledgerid.selectedIndex].value==0){
@@ -881,7 +881,7 @@ var onDropdownChange = function(index,obj) {
 		}
 		selecteddetailtype=document.getElementById('subLedgerlist['+obj.value+'].detailType.id').value;
 		//document.getElementById('subLedgerlist['+obj.value+'].subledgerCode').value= subledgerid.options[subledgerid.selectedIndex].text;
-		var url = path+'/receipts/ajaxReceiptCreate-getDetailType.action?accountCode='+accountCode+'&index='+obj.value+'&selectedDetailType='+selecteddetailtype+'&onload=false';
+		var url = path+'/receipts/ajaxReceiptCreate-getDetailType.action?accountCode='+accountCode+'&index='+obj.value+'&selectedDetailType='+selecteddetailtype+'&onload=false'+'&_csrf='+csrfToken;
 		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, postType, null);
 };
 var postType = {
@@ -993,7 +993,7 @@ function getDetailCodeValue(val){
 
 }
 function check(){
-	
+	var csrfToken = document.getElementById('csrfTokenValue').value;
 	var accountCodes=new Array();
 	var count=0;
 	for(var i=0;i<billDetailTableIndex+1;i++){
@@ -1008,7 +1008,7 @@ function check(){
 			count++;
 		}
 	}
-	var url =  path+'/receipts/ajaxReceiptCreate-getDetailCode.action?accountCodes='+accountCodes;
+	var url =  path+'/receipts/ajaxReceiptCreate-getDetailCode.action?accountCodes='+accountCodes+'&_csrf='+csrfToken;
 	var transaction = YAHOO.util.Connect.asyncRequest('POST', url, callbackJV, null);
 	
 }
@@ -1215,7 +1215,7 @@ function validateAccountDetail(){
 				document.getElementById('billRebateDetailslist['+j+'].glcodeDetail').value.length!=0)&&
 				(document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value == document.getElementById('billRebateDetailslist['+j+'].glcodeDetail').value ))
 				{
-					document.getElementById('receipt_error_area').innerHTML+='Duplicate record in Rebates/Discounts. Please check account : ' + document.getElementById('billRebateDetailslist['+j+'].glcodeDetail').value+'<br>';
+					document.getElementById('receipt_error_area').innerHTML+='Duplicate record in Rebates/Discounts. Please check account : ' + sanitizeHTML(document.getElementById('billRebateDetailslist['+j+'].glcodeDetail').value) + '<br>';
 					return false;
 				}
 				
@@ -1231,7 +1231,7 @@ function validateAccountDetail(){
 			{
 				if(document.getElementById('billCreditDetailslist['+i+'].glcodeDetail')!=null && document.getElementById('billCreditDetailslist['+j+'].glcodeDetail')!=null  ){
 					if ((document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value.length!=0 && document.getElementById('billCreditDetailslist['+j+'].glcodeDetail').value.length!=0)&&(document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value == document.getElementById('billCreditDetailslist['+j+'].glcodeDetail').value ))
-					{	document.getElementById('receipt_error_area').innerHTML+='Duplicate record in Receipt Heads. Please check account : ' + document.getElementById('billCreditDetailslist['+j+'].glcodeDetail').value+'<br>';
+					{	document.getElementById('receipt_error_area').innerHTML+='Duplicate record in Receipt Heads. Please check account : ' + sanitizeHTML(document.getElementById('billCreditDetailslist['+j+'].glcodeDetail').value) + '<br>';
 						i=billCreditDetailsTable.getRecordSet().getLength();
 						return false;
 					}
@@ -1243,25 +1243,25 @@ function validateAccountDetail(){
 			if (  document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value.length > 0 && document.getElementById('billCreditDetailslist['+i+'].accounthead').value.length==0)
 			{
 				document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter correct data in Receipt Heads for the account code:'+document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value +'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter correct data in Receipt Heads for the account code:' + sanitizeHTML(document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value) +'<br>';
 				return false;
 			}
 			if(document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').value.startsWith('+')){
 				document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Receipt Heads for account :'+document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Receipt Heads for account :' + sanitizeHTML(document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				return false;
 			}
 			if(isNaN(document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').value)){
 				document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Receipt Heads for account :'+document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Receipt Heads for account :' + sanitizeHTML(document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				return false;
 			}
-			credit = eval(document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').value);
+			credit = document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').value;
 			credit = isNaN(credit)?0:credit;
 			creditTotal = creditTotal + credit;
 			if(credit<0){
 				document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Receipt Heads for account :'+document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Receipt Heads for account :' + sanitizeHTML(document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				return false;
 			}
 			if (credit>0 &&  document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value.length == 0)
@@ -1274,7 +1274,7 @@ function validateAccountDetail(){
 			if (credit == 0 && document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value.length!= 0)
 			{
 				document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter credit amount for the account code ' +document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value +'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter credit amount for the account code ' + sanitizeHTML(document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value) +'<br>';
 				return false;
 			}
 			
@@ -1289,7 +1289,7 @@ function validateAccountDetail(){
 				if(document.getElementById('billRebateDetailslist['+i+'].glcodeDetail')!=null && document.getElementById('billRebateDetailslist['+j+'].glcodeDetail')!=null){
 					if ( (document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value.length!=0 && document.getElementById('billRebateDetailslist['+j+'].glcodeDetail').value.length!=0)&&(document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value == document.getElementById('billRebateDetailslist['+j+'].glcodeDetail').value ))
 					{
-						document.getElementById('receipt_error_area').innerHTML+='Duplicate record in Rebates/Discounts. Please check account :: ' + document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value +'<br>';
+						document.getElementById('receipt_error_area').innerHTML+='Duplicate record in Rebates/Discounts. Please check account :: ' + sanitizeHTML(document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value) +'<br>';
 						i=billCreditDetailsTable.getRecordSet().getLength();
 						return false;
 					}
@@ -1301,25 +1301,25 @@ function validateAccountDetail(){
 			if (document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value.length > 0 && document.getElementById('billRebateDetailslist['+i+'].accounthead').value.length==0)
 			{
 				document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter correct data in Rebates/Discounts for the account code:'+document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value +'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter correct data in Rebates/Discounts for the account code:' + sanitizeHTML(document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value) +'<br>';
 				return false;
 			}
 			if(document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').value.startsWith('+')){
 				document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Rebates/Discounts for account :'+document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Rebates/Discounts for account :' + sanitizeHTML(document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				return false;
 			}
 			if(isNaN(document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').value)){
 				document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Rebates/Discounts for account :'+document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Rebates/Discounts for account :' + sanitizeHTML(document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				return false;
 			}
-			debit = eval(document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').value);
+			debit = document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').value;
 			debit = isNaN(debit)?0:debit;
 			debitTotal = debitTotal + debit;
 			if(debit<0){
 				document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Rebates/Discounts for account :'+document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter correct amount in Rebates/Discounts for account :' + sanitizeHTML(document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				return false;
 			}
 			if (debit>0 &&  document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value.length == 0)
@@ -1332,7 +1332,7 @@ function validateAccountDetail(){
 			if (debit==0  && document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value.length!= 0)
 			{
 				document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').focus();
-				document.getElementById('receipt_error_area').innerHTML+='Please enter debit/credit amount for the account code ' +document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('receipt_error_area').innerHTML+='Please enter debit/credit amount for the account code ' + sanitizeHTML(document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				return false;
 			}
 			
@@ -1385,11 +1385,11 @@ var subledgerselected = new Array();
 					}
 					if (accountCode == subledgerid.options[subledgerid.selectedIndex].text.trim())
 					{
-						if(eval(document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').value) > 0){
+						if(document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').value > 0){
 		
 							accountDetailamount = document.getElementById('billCreditDetailslist['+i+'].creditAmountDetail').value;
 						}
-						subledgerTotalAmt = subledgerTotalAmt + eval(document.getElementById('subLedgerlist['+j+'].amount').value);
+						subledgerTotalAmt = subledgerTotalAmt + document.getElementById('subLedgerlist['+j+'].amount').value;
 					}
 					if(subledgerselected == 0){
 						subledgerselected[0] = subledgerAccCode;
@@ -1410,7 +1410,7 @@ var subledgerselected = new Array();
 		
 			if(Math.round(accountDetailamount*100)/100  != Math.round(subledgerTotalAmt*100)/100)
 			{
-				document.getElementById('receipt_error_area').innerHTML += "Total subledger amount is not matching for account code : "+ document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('receipt_error_area').innerHTML += "Total subledger amount is not matching for account code : "+ sanitizeHTML(document.getElementById('billCreditDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				return false;
 			}
 		}
@@ -1454,12 +1454,12 @@ var subledgerselected = new Array();
 						}
 						if (accountCode == subledgerid.options[subledgerid.selectedIndex].text.trim())
 						{
-							if(eval(document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').value) >0){
+							if(document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').value >0){
 			
 								accountDetailamount = document.getElementById('billRebateDetailslist['+i+'].debitAmountDetail').value;
 					
 							} 
-							subledgerTotalAmt = subledgerTotalAmt + eval(document.getElementById('subLedgerlist['+j+'].amount').value);
+							subledgerTotalAmt = subledgerTotalAmt + document.getElementById('subLedgerlist['+j+'].amount').value;
 						}
 						if(subledgerselected == 0){
 							subledgerselected[0] = subledgerAccCode;
@@ -1480,7 +1480,7 @@ var subledgerselected = new Array();
 			
 			if(Math.round(accountDetailamount*100)/100  != Math.round(subledgerTotalAmt*100)/100)
 			{
-				document.getElementById('receipt_error_area').innerHTML += "Total subledger amount is not matching for account code : "+ document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('receipt_error_area').innerHTML += "Total subledger amount is not matching for account code : "+ sanitizeHTML(document.getElementById('billRebateDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				return false;
 			}
 		}

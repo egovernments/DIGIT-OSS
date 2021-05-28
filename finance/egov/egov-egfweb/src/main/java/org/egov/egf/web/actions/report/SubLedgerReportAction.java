@@ -49,6 +49,7 @@
 package org.egov.egf.web.actions.report;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
@@ -152,8 +153,8 @@ public class SubLedgerReportAction extends BaseFormAction {
 			LOGGER.debug("SubLedgerAction | Search | start");
 		try {
 			subLedgerDisplayList = generalLedgerReport.getGeneralLedgerList(subLedgerReport);
-		} catch (final ValidationException e) {
-			throw new ValidationException(e.getErrors());
+		} catch (final ValidationException | ParseException e) {
+			throw new ValidationException(((ValidationException) e).getErrors());
 		}
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("SubLedgerAction | list | End");
@@ -177,7 +178,7 @@ public class SubLedgerReportAction extends BaseFormAction {
 			glCode = (CChartOfAccounts) persistenceService.find("from CChartOfAccounts where glcode = ?",
 					subLedgerReport.getGlCode1());
 			fund = (Fund) persistenceService.find("from Fund where id = ?",
-					Integer.parseInt(subLedgerReport.getFund_id()));
+					Long.valueOf(subLedgerReport.getFund_id()));
 		}
 		heading = "Sub Ledger Report for " + subLedgerReport.getEntityName() + " in " + glCode.getName() + " under "
 				+ fund.getName() + " from " + subLedgerReport.getStartDate() + " to " + subLedgerReport.getEndDate();

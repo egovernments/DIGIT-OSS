@@ -124,6 +124,11 @@
 		function submitForm(method) {
 			document.budgetDetailReportForm.action = "/services/EGF/budget/budgetReport-"
 					+ method + ".action";
+			jQuery(budgetDetailReportForm).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
 			document.budgetDetailReportForm.submit();
 		}
 	</script>

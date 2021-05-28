@@ -77,8 +77,14 @@
 			}
 			
 			 document.billVoucher.action='${pageContext.request.contextPath}/voucher/billVoucher-lists.action';
+			 jQuery(billVoucher).append(
+                     jQuery('<input>', {
+                         type: 'hidden',
+                         name: '${_csrf.parameterName}',
+                         value: '${_csrf.token}'
+                     })
+                 );
 			 document.billVoucher.submit();
-		
 		   
 			document.getElementById('expType').disabled=false;
 			return true;

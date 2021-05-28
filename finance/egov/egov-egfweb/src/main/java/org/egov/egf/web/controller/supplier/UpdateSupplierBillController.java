@@ -58,12 +58,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.egov.commons.CChartOfAccountDetail;
 import org.egov.commons.CChartOfAccounts;
 import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.commons.service.ChartOfAccountsService;
 import org.egov.commons.service.CheckListService;
+import org.egov.egf.commons.CommonsUtil;
 import org.egov.egf.expensebill.repository.DocumentUploadRepository;
 import org.egov.egf.masters.services.PurchaseOrderService;
 import org.egov.egf.masters.services.SupplierService;
@@ -75,29 +77,45 @@ import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.models.EgChecklists;
+import org.egov.model.bills.BillType;
 import org.egov.model.bills.DocumentUpload;
 import org.egov.model.bills.EgBillPayeedetails;
 import org.egov.model.bills.EgBilldetails;
 import org.egov.model.bills.EgBillregister;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/supplierbill")
+@Validated
 public class UpdateSupplierBillController extends BaseBillController {
 
+	private static final String SUPPLIERBILL_UPDATE = "supplierbill-update";
+
+	protected static final String UNAUTHORIZED = "unuthorized";
+	
+	private static final String INVALID_APPROVER = "invalid.approver";
+	
+	private static final String BILL_TYPES = "billTypes";
+	
     private static final String APPROVER_NAME = "approverName";
 
     private static final String DESIGNATION = "designation";
@@ -150,20 +168,30 @@ public class UpdateSupplierBillController extends BaseBillController {
     private PurchaseOrderService purchaseOrderService;
     @Autowired
     private AccountdetailtypeService accountdetailtypeService;
+    @Autowired
+    private SecurityUtils securityUtils;
+    @Autowired
+    private CommonsUtil commonsUtil;
 
     public UpdateSupplierBillController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+    	binder.setDisallowedFields("id");
+    }
+    
     @Override
     protected void setDropDownValues(final Model model) {
         super.setDropDownValues(model);
+        model.addAttribute(BILL_TYPES, BillType.values());
         model.addAttribute(SUPPLIERS, supplierService.getAllActiveSuppliers());
         model.addAttribute(NET_PAYABLE_CODES, chartOfAccountsService.getSupplierNetPayableAccountCodes());
     }
 
     @ModelAttribute(EG_BILLREGISTER)
-    public EgBillregister getEgBillregister(@PathVariable String billId) {
+    public EgBillregister getEgBillregister(@PathVariable @SafeHtml String billId) {
         if (billId.contains("showMode")) {
             String[] billIds = billId.split("\\&");
             billId = billIds[0];
@@ -171,10 +199,12 @@ public class UpdateSupplierBillController extends BaseBillController {
         return supplierBillService.getById(Long.parseLong(billId));
     }
 
-    @RequestMapping(value = "/update/{billId}", method = RequestMethod.GET)
-    public String updateForm(final Model model, @PathVariable final String billId,
+    @GetMapping(value = "/update/{billId}")
+    public String updateForm(final Model model, @PathVariable @SafeHtml final String billId,
             final HttpServletRequest request) throws ApplicationException {
         final EgBillregister egBillregister = supplierBillService.getById(Long.parseLong(billId));
+        if (!commonsUtil.isApplicationOwner(securityUtils.getCurrentUser(), egBillregister))
+            return UNAUTHORIZED;
         final List<DocumentUpload> documents = documentUploadRepository.findByObjectId(Long.valueOf(billId));
         egBillregister.setDocumentDetail(documents);
         List<Map<String, Object>> budgetDetails = null;
@@ -223,7 +253,7 @@ public class UpdateSupplierBillController extends BaseBillController {
                 (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue()) ||
                         financialUtils.isBillEditable(egBillregister.getState()))) {
             model.addAttribute("mode", "edit");
-            return "supplierbill-update";
+            return SUPPLIERBILL_UPDATE;
         } else {
             model.addAttribute("mode", "view");
             if (egBillregister.getEgBillregistermis().getBudgetaryAppnumber() != null &&
@@ -260,29 +290,29 @@ public class UpdateSupplierBillController extends BaseBillController {
                                 && !cad.getDetailTypeId().getName().equalsIgnoreCase(SUPPLIER)) {
                             check = true;
                         }
-                        if (check) {
+                        if (check.booleanValue()) {
                             resultBinder.reject("msg.supplier.bill.wrong.sub.ledger.mapped",
                                     new String[] { details.getChartOfAccounts().getGlcode() }, null);
                         }
                     }
                 }
 
-                if (poExist || (poExist && supplierExist)) {
+                if (poExist.booleanValue() || (poExist && supplierExist)) {
                     payeeDetail = new EgBillPayeedetails();
                     payeeDetail.setEgBilldetailsId(details);
-                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
+                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) > 0)
                         payeeDetail.setDebitAmount(details.getDebitamount());
-                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
+                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) > 0)
                         payeeDetail.setCreditAmount(details.getCreditamount());
                     payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName(PURCHASE_ORDER).getId());
                     payeeDetail.setAccountDetailKeyId(
                             purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
-                } else if (supplierExist) {
+                } else if (supplierExist.booleanValue()) {
                     payeeDetail = new EgBillPayeedetails();
                     payeeDetail.setEgBilldetailsId(details);
-                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
+                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) > 0)
                         payeeDetail.setDebitAmount(details.getDebitamount());
-                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
+                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) > 0)
                         payeeDetail.setCreditAmount(details.getCreditamount());
                     payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName(SUPPLIER).getId());
                     payeeDetail.setAccountDetailKeyId(
@@ -306,16 +336,16 @@ public class UpdateSupplierBillController extends BaseBillController {
         egBillregister.setDebitDetails(new ArrayList<>());
         egBillregister.setNetPayableDetails(new ArrayList<>());
         for (EgBilldetails bd : egBillregister.getEgBilldetailes()) {
-            if (bd.getDebitamount() != null && bd.getDebitamount().compareTo(BigDecimal.ZERO) == 1) {
+            if (bd.getDebitamount() != null && bd.getDebitamount().compareTo(BigDecimal.ZERO) > 0) {
                 egBillregister.getDebitDetails().add(bd);
             }
 
-            if (bd.getCreditamount() != null && bd.getCreditamount().compareTo(BigDecimal.ZERO) == 1
+            if (bd.getCreditamount() != null && bd.getCreditamount().compareTo(BigDecimal.ZERO) > 0
                     && coaMap.get(bd.getChartOfAccounts().getGlcode()) == null) {
                 egBillregister.getCreditDetails().add(bd);
             }
 
-            if (bd.getCreditamount() != null && bd.getCreditamount().compareTo(BigDecimal.ZERO) == 1
+            if (bd.getCreditamount() != null && bd.getCreditamount().compareTo(BigDecimal.ZERO) > 0
                     && coaMap.get(bd.getChartOfAccounts().getGlcode()) != null) {
                 egBillregister.getNetPayableDetails().add(bd);
             }
@@ -323,10 +353,10 @@ public class UpdateSupplierBillController extends BaseBillController {
         }
     }
 
-    @RequestMapping(value = "/update/{billId}", method = RequestMethod.POST)
-    public String update(@ModelAttribute(EG_BILLREGISTER) final EgBillregister egBillregister,
+    @PostMapping(value = "/update/{billId}")
+    public String update(@Valid @ModelAttribute(EG_BILLREGISTER) final EgBillregister egBillregister,
             final BindingResult resultBinder, final RedirectAttributes redirectAttributes, final Model model,
-            final HttpServletRequest request, @RequestParam final String workFlowAction)
+            final HttpServletRequest request, @RequestParam @SafeHtml final String workFlowAction)
             throws ApplicationException, IOException {
 
         String mode = "";
@@ -351,6 +381,14 @@ public class UpdateSupplierBillController extends BaseBillController {
             approvalPosition = Long.valueOf(request.getParameter(APPROVAL_POSITION));
         if (request.getParameter(APPROVAL_DESIGNATION) != null && !request.getParameter(APPROVAL_DESIGNATION).isEmpty())
             apporverDesignation = String.valueOf(request.getParameter(APPROVAL_DESIGNATION));
+        
+		if (workFlowAction != null && FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workFlowAction)
+				&& !commonsUtil.isValidApprover(egBillregister, approvalPosition)) {
+			model.addAttribute("errorMessage", getLocalizedMessage(INVALID_APPROVER, null, null));
+			prepareBillDetailsForView(egBillregister);
+			supplierBillService.validateSubledgeDetails(egBillregister);
+			return populateOnException(egBillregister, model, request);
+		}
 
         if (egBillregister.getState() != null
                 && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
@@ -364,26 +402,7 @@ public class UpdateSupplierBillController extends BaseBillController {
                 purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
 
         if (resultBinder.hasErrors()) {
-            setDropDownValues(model);
-            model.addAttribute(SUPPLIER_ID,
-                    purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
-            model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
-            prepareWorkflow(model, egBillregister, new WorkflowContainer());
-            model.addAttribute(APPROVAL_DESIGNATION, request.getParameter(APPROVAL_DESIGNATION));
-            model.addAttribute(APPROVAL_POSITION, request.getParameter(APPROVAL_POSITION));
-            model.addAttribute(NET_PAYABLE_ID, request.getParameter(NET_PAYABLE_ID));
-            model.addAttribute(NET_PAYABLE_AMOUNT, request.getParameter(NET_PAYABLE_AMOUNT));
-            model.addAttribute(DESIGNATION, request.getParameter(DESIGNATION));
-            if (egBillregister.getState() != null
-                    && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
-                            || financialUtils.isBillEditable(egBillregister.getState()))) {
-                prepareValidActionListByCutOffDate(model);
-                model.addAttribute("mode", "edit");
-                return "supplierbill-update";
-            } else {
-                model.addAttribute("mode", "view");
-                return SUPPLIERBILL_VIEW;
-            }
+            return populateOnException(egBillregister, model, request);
         } else {
             try {
                 if (null != workFlowAction)
@@ -403,7 +422,7 @@ public class UpdateSupplierBillController extends BaseBillController {
                                 || financialUtils.isBillEditable(egBillregister.getState()))) {
                     prepareValidActionListByCutOffDate(model);
                     model.addAttribute("mode", "edit");
-                    return "supplierbill-update";
+                    return SUPPLIERBILL_UPDATE;
                 } else {
                     model.addAttribute("mode", "view");
                     return SUPPLIERBILL_VIEW;
@@ -426,8 +445,32 @@ public class UpdateSupplierBillController extends BaseBillController {
         }
     }
 
-    @RequestMapping(value = "/view/{billId}", method = RequestMethod.GET)
-    public String view(final Model model, @PathVariable String billId,
+	private String populateOnException(final EgBillregister egBillregister, final Model model,
+			final HttpServletRequest request) {
+		setDropDownValues(model);
+		model.addAttribute(SUPPLIER_ID,
+		        purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
+		model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
+		prepareWorkflow(model, egBillregister, new WorkflowContainer());
+		model.addAttribute(APPROVAL_DESIGNATION, request.getParameter(APPROVAL_DESIGNATION));
+		model.addAttribute(APPROVAL_POSITION, request.getParameter(APPROVAL_POSITION));
+		model.addAttribute(NET_PAYABLE_ID, request.getParameter(NET_PAYABLE_ID));
+		model.addAttribute(NET_PAYABLE_AMOUNT, request.getParameter(NET_PAYABLE_AMOUNT));
+		model.addAttribute(DESIGNATION, request.getParameter(DESIGNATION));
+		if (egBillregister.getState() != null
+		        && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
+		                || financialUtils.isBillEditable(egBillregister.getState()))) {
+		    prepareValidActionListByCutOffDate(model);
+		    model.addAttribute("mode", "edit");
+		    return SUPPLIERBILL_UPDATE;
+		} else {
+		    model.addAttribute("mode", "view");
+		    return SUPPLIERBILL_VIEW;
+		}
+	}
+
+    @GetMapping(value = "/view/{billId}")
+    public String view(final Model model, @PathVariable @SafeHtml String billId,
             final HttpServletRequest request) throws ApplicationException {
         if (billId.contains("showMode")) {
             String[] billIds = billId.split("\\&");
@@ -457,7 +500,8 @@ public class UpdateSupplierBillController extends BaseBillController {
         egBillregister.getCheckLists().addAll(checkLists);
     }
 
-    private String getDepartmentName(String departmentCode) {
+    @SuppressWarnings({ "deprecation", "unchecked" })
+	private String getDepartmentName(String departmentCode) {
 
         List<Department> deptlist = this.masterDataCache.get("egi-department");
         String departmentName = null;
@@ -467,7 +511,7 @@ public class UpdateSupplierBillController extends BaseBillController {
             List<Department> dept = deptlist.stream()
                     .filter(department -> departmentCode.equalsIgnoreCase(department.getCode()))
                     .collect(Collectors.toList());
-            if (null != dept && dept.size() > 0)
+            if (null != dept && !dept.isEmpty())
                 departmentName = dept.get(0).getName();
         }
 

@@ -98,10 +98,11 @@ public class LoadSubLedgerData extends AbstractTask {
             String relationBillTable = "";
             String relationBillID = "";
             String chequeId = "";
-            String sql = "select sph.type,sph.chequeid from subledgerpaymentheader sph,voucherheader  vh  where " +
-                    " sph.voucherheaderid=vh.id and vh.cgn= ?";
-            pst = persistenceService.getSession().createSQLQuery(sql);
-            pst.setString(0, cgn);
+			StringBuilder sql = new StringBuilder(
+					"select sph.type,sph.chequeid from subledgerpaymentheader sph,voucherheader  vh")
+							.append("  where sph.voucherheaderid=vh.id and vh.cgn = :cgn");
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("cgn", cgn);
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug(sql);
             rset = pst.list();
@@ -117,23 +118,18 @@ public class LoadSubLedgerData extends AbstractTask {
             relationTypeID = relationType + "id";
             relationBillTable = relationType + "billdetail";
             relationBillID = relationType + "billid";
-            sql = "select sph.type as \"pay_type\","
-                    + relationTypeID
-                    + " as \"payToid\","
-                    +
-                    " paidby as \"paidByid\",bankaccountid as \"accId\",worksdetailid as \"worksDetailid\", "
-                    +
-                    "f.name as \"fund_name\",f.id as \"fund_id\",fsrc.name as \"fundSource_id\",fsrc.name as \"fundSource_name\" "
-                    +
-                    " from subledgerpaymentheader" +
-                    " sph,voucherheader  vh ,fund f ,fundsource fsrc where " +
-                    " sph.voucherheaderid=vh.id  and f.id=vh.fundid and fsrc.id=vh.fundsourceid" +
-                    " and vh.cgn= ?";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(sql);
-            pst = persistenceService.getSession().createSQLQuery(sql);
-            pst.setString(0, cgn);
-            rset = pst.list();
+			sql = new StringBuilder("select sph.type as \"pay_type\",").append(relationTypeID)
+					.append(" as \"payToid\",")
+					.append(" paidby as \"paidByid\",bankaccountid as \"accId\",worksdetailid as \"worksDetailid\", ")
+					.append("f.name as \"fund_name\",f.id as \"fund_id\",fsrc.name as \"fundSource_id\",fsrc.name as \"fundSource_name\" ")
+					.append(" from subledgerpaymentheader sph,voucherheader  vh ,fund f ,fundsource fsrc where ")
+					.append(" sph.voucherheaderid=vh.id  and f.id=vh.fundid and fsrc.id=vh.fundsourceid")
+					.append(" and vh.cgn = :cgn");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(sql);
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("cgn", cgn);
+			rset = pst.list();
             for (final Object[] element : rset) {
                 dc.addValue("pay_type", element[0].toString());
                 dc.addValue("payToid", element[1].toString());
@@ -145,110 +141,111 @@ public class LoadSubLedgerData extends AbstractTask {
                 dc.addValue("fundSource_id", element[7].toString());
                 dc.addValue("fundSource_name", element[8].toString());
             }
-            // rset.close();
+
             // billcollector
-            sql = "select a.name as \"paidBy\",b.glcode as \"billCollector_cashInHandDesc\" from billcollector a,chartofaccounts b where "
-                    +
-                    " a.cashinhand=b.id and a.id= ?";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(sql);
-            pst = persistenceService.getSession().createSQLQuery(sql);
-            pst.setString(0, dc.getValue("paidByid"));
-            rset = pst.list();
+			sql = new StringBuilder("select a.name as \"paidBy\",b.glcode as \"billCollector_cashInHandDesc\"")
+					.append(" from billcollector a,chartofaccounts b where ")
+					.append(" a.cashinhand=b.id and a.id = :billCollectorId");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(sql);
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("billCollectorId", dc.getValue("paidByid"));
+			rset = pst.list();
             for (final Object[] element : rset) {
                 dc.addValue("paidBy", element[0].toString());
                 dc.addValue("billCollector_cashInHandDesc", element[1].toString());
             }
-            // rset.close();
+
             // supplier/contractor name
-            sql = "select name  as \"payTo\" from relation where id= ?";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(sql);
-            pst = persistenceService.getSession().createSQLQuery(sql);
-            pst.setString(0, dc.getValue("payToid"));
-            rset = pst.list();
+			sql = new StringBuilder("select name  as \"payTo\" from relation where id = :id");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(sql);
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("id", dc.getValue("payToid"));
+			rset = pst.list();
             for (final Object[] element : rset)
                 dc.addValue("payTo", element[0].toString());
-            // rset.close();
+
             // workorder
-            sql = "select name  as \"worksDetail_id\" ,advanceamount as \"worksDetail_advanceAmount\" from worksDetail where id= ?";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(sql);
-            pst = persistenceService.getSession().createSQLQuery(sql);
-            pst.setString(0, dc.getValue("worksDetailid"));
-            rset = pst.list();
+			sql = new StringBuilder(
+					"select name  as \"worksDetail_id\" ,advanceamount as \"worksDetail_advanceAmount\"")
+							.append(" from worksDetail where id = :id");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(sql);
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("id", dc.getValue("worksDetailid"));
+			rset = pst.list();
             for (final Object[] element : rset) {
                 dc.addValue("worksDetail_id", element[0].toString());
                 dc.addValue("worksDetail_advanceAmount", element[1].toString());
             }
-            // rset.close();
+
             // bank name
-            sql = "select a.name||' '||b.branchname as \"subLedgerPaymentHeader_bankId\" from bank a ,bankbranch b, bankaccount c  where"
-                    +
-                    " a.id=b.bankid and b.id=c.branchid and c.id= ?";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(sql);
-            pst = persistenceService.getSession().createSQLQuery(sql);
-            pst.setString(0, dc.getValue("accId"));
-            rset = pst.list();
+			sql = new StringBuilder("select a.name||' '||b.branchname as \"subLedgerPaymentHeader_bankId\"")
+					.append(" from bank a ,bankbranch b, bankaccount c  where")
+					.append(" a.id=b.bankid and b.id=c.branchid and c.id= :id");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(sql);
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("id", dc.getValue("accId"));
+			rset = pst.list();
             for (final Object[] element : rset)
                 dc.addValue("subLedgerPaymentHeader_bankId", element[0].toString());
-            // rset.close();
+
             // acount number
-            sql = "select accountnumber as \"branchAccountId\" from bankaccount where id= ?";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(sql);
-            pst = persistenceService.getSession().createSQLQuery(sql);
-            pst.setString(0, dc.getValue("accId"));
-            rset = pst.list();
+			sql = new StringBuilder("select accountnumber as \"branchAccountId\" from bankaccount where id= :id");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(sql);
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("id", dc.getValue("accId"));
+			rset = pst.list();
             for (final Object[] element : rset)
                 dc.addValue("branchAccountId", element[0].toString());
-            // rset.close();
-            sql = "select count(*)" +
-                    " from " + relationBillTable + " a ," +
-                    " voucherheader b ,subledgerpaymentheader sph  " +
-                    " where b.id=a.voucherheaderid  and " +
-                    " sph." + relationBillID + "=a.id and " +
-                    " sph.voucherheaderid =(select id from voucherheader where cgn= ?)" +
-                    " and passedamount>(a.paidamount+tdsamount+advadjamt)-sph.paidamount " +
-                    " and a." + relationTypeID + "= ? and b.fundid=" +
-                    " and a.worksdetailid= ?" + " order by a.billDate";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(sql);
-            pst = persistenceService.getSession().createSQLQuery(sql);
-            pst.setString(0, cgn);
-            pst.setString(1, dc.getValue("payToid"));
-            pst.setString(2, dc.getValue("fund_id"));
-            pst.setString(3, dc.getValue("worksDetailid"));
-            rset = pst.list();
+
+            sql = new StringBuilder("select count(*)").append(" from ").append(relationBillTable).append(" a ,")
+					.append(" voucherheader b ,subledgerpaymentheader sph  ")
+					.append(" where b.id=a.voucherheaderid  and sph.").append(relationBillID).append("=a.id and ")
+					.append(" sph.voucherheaderid =(select id from voucherheader where cgn = :cgn)")
+					.append(" and passedamount>(a.paidamount+tdsamount+advadjamt)-sph.paidamount ").append(" and a.")
+					.append(relationTypeID).append("= :payToId and b.fundid=:fundId")
+					.append(" and a.worksdetailid = :worksDetailid order by a.billDate");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(sql);
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("cgn", cgn);
+			pst.setParameter("payToId", dc.getValue("payToid"));
+			pst.setParameter("fundId", dc.getValue("fund_id"));
+			pst.setParameter("worksDetailid", dc.getValue("worksDetailid"));
+			rset = pst.list();
             for (final Object[] element : rset)
                 noOfRec = Integer.parseInt(element[0].toString());
-            // rset.close();
+
             if (noOfRec > 0) {
                 final String[][] grid = new String[noOfRec + 1][13];
-                sql = "select a.id as \"billNoId\",billNumber as\"billNo\",vouchernumber as \"d_voucherNo\" ," +
-                        "to_char(billdate,'dd-Mon-yyyy') as \"billDate\",a.PassedAmount as \"passedAmount\"," +
-                        " advadjamt as \"advance\",TDSamount as \"tds\",OtherRecoveries as \"otherRecoveries\"," +
-                        " a.passedAmount-(advadjamt+tdsamount+otherrecoveries) as \"net\"," +
-                        " a.PaidAmount-sph.paidamount as \"earlierPayment\" ," +
-                        " sph.paidamount as \"slph_paidAmount\"," +
-                        // ((a.passedAmount-(advadjamt+tdsamount+otherrecoveries))-a.paidamount)
-                        " rownum as \"slNo\" ,'1' as \"billSelect\" from " + relationBillTable + " a ," +
-                        " voucherheader b ,subledgerpaymentheader sph  " +
-                        " where b.id=a.voucherheaderid  and " +
-                        " sph." + relationBillID + "=a.id and " +
-                        " sph.voucherheaderid =(select id from voucherheader where cgn= ?)" +
-                        " and passedamount>(a.paidamount+tdsamount+advadjamt)-sph.paidamount " +
-                        " and a." + relationTypeID + "= ? and b.fundid= ?" +
-                        " and a.worksdetailid= ? order by a.billDate";
-                if (LOGGER.isDebugEnabled())
-                    LOGGER.debug(sql);
-                pst = persistenceService.getSession().createSQLQuery(sql);
-                pst.setString(0, cgn);
-                pst.setString(1, dc.getValue("payToid"));
-                pst.setString(2, dc.getValue("fund_id"));
-                pst.setString(3, dc.getValue("worksDetailid"));
-                rset = pst.list();
+				sql = new StringBuilder(
+						"select a.id as \"billNoId\",billNumber as\"billNo\",vouchernumber as \"d_voucherNo\" ,")
+								.append("to_char(billdate,'dd-Mon-yyyy') as \"billDate\",a.PassedAmount as \"passedAmount\",")
+								.append(" advadjamt as \"advance\",TDSamount as \"tds\",OtherRecoveries as \"otherRecoveries\",")
+								.append(" a.passedAmount-(advadjamt+tdsamount+otherrecoveries) as \"net\",")
+								.append(" a.PaidAmount-sph.paidamount as \"earlierPayment\" ,")
+								.append(" sph.paidamount as \"slph_paidAmount\",")
+								// ((a.passedAmount-(advadjamt+tdsamount+otherrecoveries))-a.paidamount)
+								.append(" rownum as \"slNo\" ,'1' as \"billSelect\" from ").append(relationBillTable)
+								.append(" a ,").append(" voucherheader b ,subledgerpaymentheader sph  ")
+								.append(" where b.id=a.voucherheaderid  and ").append(" sph.").append(relationBillID)
+								.append("=a.id and ")
+								.append(" sph.voucherheaderid =(select id from voucherheader where cgn= :cgn)")
+								.append(" and passedamount>(a.paidamount+tdsamount+advadjamt)-sph.paidamount ")
+								.append(" and a.").append(relationTypeID).append("= :payToId and b.fundid= :fundId")
+								.append(" and a.worksdetailid= :worksDetailId order by a.billDate");
+				if (LOGGER.isDebugEnabled())
+					LOGGER.debug(sql);
+				pst = persistenceService.getSession().createSQLQuery(sql.toString());
+				pst.setParameter("cgn", cgn);
+				pst.setParameter("payToId", dc.getValue("payToid"));
+				pst.setParameter("fundId", dc.getValue("fund_id"));
+				pst.setParameter("worksDetailId", dc.getValue("worksDetailid"));
+				rset = pst.list();
                 // grid[0][x] we filled control name
                 for (final Object[] element : rset) {
                     dc.addValue("billNoId", element[0].toString());
@@ -284,26 +281,25 @@ public class LoadSubLedgerData extends AbstractTask {
                 }
                 dc.addGrid(gridName, grid);
             }
-            sql = "select cgn as \"voucherHeader_cgn\",vouchernumber as \"voucherHeader_voucherNumber\",to_char(voucherdate,'dd-Mon-yyyy') as \"voucherHeader_voucherDate\","
-                    +
-                    " chequenumber as \"chequeDetail_chequeNumber\" ,to_char(chequedate,'dd-Mon-yyyy')  as \"chequeDetail_chequeDate\",vh.description as \"narration\",vh.fundsourceid as \"fundsource_id\" from voucherheader vh,subledgerpaymentheader sph,chequedetail cq where"
-                    +
-                    " sph.voucherheaderid=vh.id  and cq.id=sph.chequeid"
-                    +
-                    " and chequeid >0 and chequeid is not null  and vh.cgn= ?"
-                    +
-                    " union "
-                    +
-                    " select cgn as \"voucherHeader_cgn\",vouchernumber as \"voucherHeader_voucherNumber\",to_char(voucherdate,'dd-Mon-yyyy') as \"voucherHeader_voucherDate\",'','',vh.description as \"narration\",vh.fundsourceid as \"fundsource_id\" from voucherheader vh,subledgerpaymentheader sph  where"
-                    +
-                    " sph.voucherheaderid=vh.id " +
-                    " and (chequeid is  null or chequeid=0) and vh.cgn= ?";
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(sql);
-            pst = persistenceService.getSession().createSQLQuery(sql);
-            pst.setString(0, cgn);
-            pst.setString(1, cgn);
-            rset = pst.list();
+			sql = new StringBuilder(
+					"select cgn as \"voucherHeader_cgn\",vouchernumber as \"voucherHeader_voucherNumber\",")
+							.append("to_char(voucherdate,'dd-Mon-yyyy') as \"voucherHeader_voucherDate\",")
+							.append(" chequenumber as \"chequeDetail_chequeNumber\" ,to_char(chequedate,'dd-Mon-yyyy')")
+							.append(" as \"chequeDetail_chequeDate\",vh.description as \"narration\",vh.fundsourceid as \"fundsource_id\"")
+							.append(" from voucherheader vh,subledgerpaymentheader sph,chequedetail cq where")
+							.append(" sph.voucherheaderid=vh.id  and cq.id=sph.chequeid")
+							.append(" and chequeid >0 and chequeid is not null  and vh.cgn= :cgn").append(" union ")
+							.append(" select cgn as \"voucherHeader_cgn\",vouchernumber as \"voucherHeader_voucherNumber\",")
+							.append("to_char(voucherdate,'dd-Mon-yyyy') as \"voucherHeader_voucherDate\",'','',")
+							.append("vh.description as \"narration\",")
+							.append("vh.fundsourceid as \"fundsource_id\" from voucherheader vh,subledgerpaymentheader sph  where")
+							.append(" sph.voucherheaderid=vh.id ")
+							.append(" and (chequeid is  null or chequeid=0) and vh.cgn= :cgn");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(sql);
+			pst = persistenceService.getSession().createSQLQuery(sql.toString());
+			pst.setParameter("cgn", cgn);
+			rset = pst.list();
             for (final Object[] element : rset) {
                 dc.addValue("voucherHeader_cgn", element[0].toString());
                 dc.addValue("voucherHeader_voucherNumber", element[1].toString());
@@ -313,8 +309,6 @@ public class LoadSubLedgerData extends AbstractTask {
                 dc.addValue("subLedgerPaymentHeader_narration", element[5].toString());
                 dc.addValue("fundsource_id", element[6].toString());
             }
-            // rset.close();
-            // st.close();
         } catch (final Exception e) {
             LOGGER.error("Error in executing query");
             throw taskExc;

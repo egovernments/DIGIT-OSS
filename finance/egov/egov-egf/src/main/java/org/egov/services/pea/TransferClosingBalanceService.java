@@ -48,6 +48,11 @@
 
 package org.egov.services.pea;
 
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.infra.config.core.ApplicationThreadLocals;
@@ -57,8 +62,6 @@ import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.SimpleDateFormat;
 
 @Transactional(readOnly = true)
 public class TransferClosingBalanceService extends PersistenceService {
@@ -78,57 +81,62 @@ public class TransferClosingBalanceService extends PersistenceService {
     }
 
 
-    @Transactional
-    public void transfer(Long financialYear, CFinancialYear fy,
-            CFinancialYear nextFinancialYear) {
+	@Transactional
+	public void transfer(Long financialYear, CFinancialYear fy, CFinancialYear nextFinancialYear) {
 
-        Query query = null;
+		deleteNextFYTransactionSummary(nextFinancialYear);
 
-        deleteNextFYTransactionSummary(nextFinancialYear);
+		String fyStartingDate = FORMATDDMMYYYY.format(fy.getStartingDate());
+		String fyEndingDate = FORMATDDMMYYYY.format(fy.getEndingDate());
 
-        String fyStartingDate = FORMATDDMMYYYY.format(fy.getStartingDate());
-        String fyEndingDate = FORMATDDMMYYYY.format(fy.getEndingDate());
+		/*
+		 * Processing all the COA which are non- subledger codes. Also we will process
+		 * for all COAs that are control codes which are having data with accountdetail
+		 * type which is not same as that of what is mentioned in the database. The
+		 * result data is been inserted into the opening balance Note- COA code for
+		 * Excess IE is been excluded for processing as this will be taken care
+		 * separately.
+		 */
+		Map<String, Map<String, Object>> queryMap = getQueryForNonControlCodesAndMisMatchsInControlCodes(financialYear,
+				fyStartingDate, fyEndingDate, nextFinancialYear);
+		Entry<String, Map<String, Object>> queryEntry = queryMap.entrySet().iterator().next();
+		final Query nonControCodesQuery = getSession().createSQLQuery(queryEntry.getKey());
+		queryEntry.getValue().entrySet()
+				.forEach(entry -> nonControCodesQuery.setParameter(entry.getKey(), entry.getValue()));
+		nonControCodesQuery.executeUpdate();
 
-        /*
-         * Processing all the COA which are non- subledger codes. Also we will process for all COAs that are control codes which
-         * are having data with accountdetail type which is not same as that of what is mentioned in the database. The result data
-         * is been inserted into the opening balance Note- COA code for Excess IE is been excluded for processing as this will be
-         * taken care separately.
-         */
-        query = getSession().createSQLQuery(
-                getQueryForNonControlCodesAndMisMatchsInControlCodes(financialYear, fyStartingDate, fyEndingDate,
-                        nextFinancialYear));
-        query.executeUpdate();
+		/*
+		 * Processing all control codes both transaction and opening balance and the net
+		 * balance is been inserted as the opening balance.
+		 */
+		queryMap = getQueryForControlCodes(financialYear, fyStartingDate, fyEndingDate, nextFinancialYear);
+		queryEntry = queryMap.entrySet().iterator().next();
+		final Query controlCodesQuery = getSession().createSQLQuery(queryEntry.getKey());
+		queryEntry.getValue().entrySet()
+				.forEach(entry -> controlCodesQuery.setParameter(entry.getKey(), entry.getValue()));
+		controlCodesQuery.executeUpdate();
 
-        /*
-         * Processing all control codes both transaction and opening balance and the net balance is been inserted as the opening
-         * balance.
-         */
-        query = null;
-        query = getSession().createSQLQuery(
-                getQueryForControlCodes(financialYear, fyStartingDate, fyEndingDate, nextFinancialYear));
-        query.executeUpdate();
+		/*
+		 * COA for Excess IE transaction balance + Opening balance will be calculated
+		 * along with the Income - expenses for that year.
+		 */
+		queryMap = getQueryForIncomeOverExpense(financialYear, fyStartingDate, fyEndingDate, nextFinancialYear);
+		queryEntry = queryMap.entrySet().iterator().next();
 
-        /*
-         * COA for Excess IE transaction balance + Opening balance will be calculated along with the Income - expenses for that
-         * year.
-         */
-        query = null;
-        query = getSession().createSQLQuery(
-                getQueryForIncomeOverExpense(financialYear, fyStartingDate, fyEndingDate, nextFinancialYear));
-        query.executeUpdate();
+		final Query query = getSession().createSQLQuery(queryEntry.getKey());
+		queryEntry.getValue().entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		query.executeUpdate();
 
-        updateCurrentYearTransferClosingBalance(fy);
-    }
+		updateCurrentYearTransferClosingBalance(fy);
+	}
 
-    @Transactional
-    public void deleteNextFYTransactionSummary(CFinancialYear nextFinancialYear) {
-        Query query = null;
-        query = getSession().createSQLQuery(
-                "delete from TransactionSummary where financialyearid = "
-                        + nextFinancialYear.getId() + "");
-        query.executeUpdate();
-    }
+	@Transactional
+	public void deleteNextFYTransactionSummary(CFinancialYear nextFinancialYear) {
+		Query query = null;
+		query = getSession().createSQLQuery("delete from TransactionSummary where financialyearid = :financialyearid")
+				.setParameter("financialyearid", nextFinancialYear.getId());
+		query.executeUpdate();
+	}
 
     @Transactional
     public void updateCurrentYearTransferClosingBalance(CFinancialYear fy) {
@@ -155,79 +163,96 @@ public class TransferClosingBalanceService extends PersistenceService {
      * 
      */
 
-    private String getQueryForNonControlCodesAndMisMatchsInControlCodes(Long financialYear, String fyStartingDate,
-            String fyEndingDate, CFinancialYear nextFinancialYear) {
-        StringBuilder query = new StringBuilder();
-        query.append(" INSERT INTO TransactionSummary (id, financialYearId, lastmodifiedby, glcodeid,fundId,departmentCode,functionid ,openingdebitbalance, openingcreditbalance, accountdetailtypeid, accountdetailkey,lastmodifieddate)");
-        query.append(" SELECT nextval('seq_transactionsummary'), ");
-        query.append(nextFinancialYear.getId());
-        query.append(" , ");
-        query.append(ApplicationThreadLocals.getUserId());
-        query.append(" ,glcodeId AS glCodeId, fundid AS fundId,deptId AS deptId ,functionid AS functionId,CASE WHEN balance > 0 THEN abs(balance) ELSE 0 END AS openingbalancedebitamount,CASE WHEN balance < 0 THEN abs(balance) ELSE 0 END AS openingbalancecreditamount,null,null,current_date ");
-        query.append(" FROM ( ");
-        query.append(" SELECT glcodeId AS glCodeId,fundId AS fundId,deptId AS deptId,functionid AS functionId,SUM(dr) AS dr,SUM(cr) AS cr,SUM(balance) AS balance ");
-        query.append(" FROM ( ");
+	private Map<String, Map<String, Object>> getQueryForNonControlCodesAndMisMatchsInControlCodes(Long financialYear, String fyStartingDate,
+			String fyEndingDate, CFinancialYear nextFinancialYear) {
+		final StringBuilder query = new StringBuilder();
+		final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+		final Map<String, Object> queryParms = new HashMap<>();
+		query.append(
+				" INSERT INTO TransactionSummary (id, financialYearId, lastmodifiedby, glcodeid,fundId,departmentCode,")
+				.append("functionid ,openingdebitbalance, openingcreditbalance, accountdetailtypeid, accountdetailkey,lastmodifieddate)")
+				.append(String.format(" SELECT nextval('seq_transactionsummary'), %d, %d", nextFinancialYear.getId(),
+						ApplicationThreadLocals.getUserId()))
+				.append(" ,glcodeId AS glCodeId, fundid AS fundId,deptId AS deptId ,functionid AS functionId,CASE")
+				.append(" WHEN balance > 0 THEN abs(balance) ELSE 0 END AS openingbalancedebitamount,CASE WHEN balance < 0")
+				.append(" THEN abs(balance) ELSE 0 END AS openingbalancecreditamount,null,null,current_date ")
+				.append(" FROM ( ")
+				.append(" SELECT glcodeId AS glCodeId,fundId AS fundId,deptId AS deptId,functionid AS functionId,SUM(dr) AS dr,")
+				.append("SUM(cr) AS cr,SUM(balance) AS balance FROM ( ");
 
-        // Transaction entries for Non-Control codes(1st Query)
+		// Transaction entries for Non-Control codes(1st Query)
 
-        query.append(" SELECT gl.glcodeId AS glCodeId,vh.fundId AS fundId,mis.departmentCode  AS deptId, gl.functionid AS functionId,SUM(CASE WHEN debitamount = 0 THEN 0 ELSE debitamount END) AS dr, ");
-        query.append(" SUM(CASE WHEN creditAmount = 0 THEN 0 ELSE creditAmount END) AS cr,(SUM(CASE WHEN debitamount = 0 THEN 0 ELSE debitamount END) - SUM(CASE WHEN creditAmount = 0 THEN 0 ELSE creditAmount END)) AS balance ");
-        query.append(" FROM voucherHeader vh,vouchermis mis,chartOfAccounts coa,generalledger gl LEFT JOIN generalledgerdetail gld ON gl.id = gld.generalledgerid ");
-        query.append(" WHERE gld.id IS NULL AND vh.id = gl.voucherHeaderId AND gl.glCode=coa.glcode ");
-        query.append(" AND (coa.purposeid IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) ) AND vh.id = mis.voucherheaderid AND vh.voucherDate >=to_date('");
-        query.append(fyStartingDate);
-        query.append("','dd/mm/yyyy') ");
-        query.append(" AND vh.voucherDate <=to_date('");
-        query.append(fyEndingDate);
-        query.append("','dd/mm/yyyy') AND vh.status NOT  IN(4,5) AND coa.type IN('A','L') ");
-        query.append(" GROUP BY gl.glcodeId,vh.fundId,mis.departmentCode,gl.functionid ");
+		query.append(" SELECT gl.glcodeId AS glCodeId,vh.fundId AS fundId,mis.departmentCode  AS deptId, ").append(
+				"gl.functionid AS functionId,SUM(CASE WHEN debitamount = 0 THEN 0 ELSE debitamount END) AS dr, ")
+				.append(" SUM(CASE WHEN creditAmount = 0 THEN 0 ELSE creditAmount END) AS cr,(SUM(CASE WHEN debitamount = 0")
+				.append(" THEN 0 ELSE debitamount END) - SUM(CASE WHEN creditAmount = 0 THEN 0 ELSE creditAmount END)) AS balance ")
+				.append(" FROM voucherHeader vh,vouchermis mis,chartOfAccounts coa,generalledger gl LEFT JOIN")
+				.append(" generalledgerdetail gld ON gl.id = gld.generalledgerid ")
+				.append(" WHERE gld.id IS NULL AND vh.id = gl.voucherHeaderId AND gl.glCode=coa.glcode ")
+				.append(" AND (coa.purposeid IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose")
+				.append(" WHERE name = 'ExcessIE' ) ) AND vh.id = mis.voucherheaderid AND vh.voucherDate >=")
+				.append("to_date(:fyStartingDate,'dd/mm/yyyy') AND vh.voucherDate <=to_date(:fyEndingDate,'dd/mm/yyyy')")
+				.append(" AND vh.status NOT  IN(4,5) AND coa.type IN('A','L') ")
+				.append(" GROUP BY gl.glcodeId,vh.fundId,mis.departmentCode,gl.functionid UNION ALL ");
 
-        query.append(" UNION ALL ");
+		// Opening Balance entries for Non-Control codes(2nd Query)
 
-        // Opening Balance entries for Non-Control codes(2nd Query)
+		query.append(" SELECT ts.glcodeid AS glCodeId,ts.fundid AS fundId,ts.departmentCode  AS deptId,")
+				.append("ts.functionid AS functionId,SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE")
+				.append(" ts.openingdebitbalance END) AS dr, ")
+				.append(" SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END) AS cr,")
+				.append("(SUM( CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END) - SUM(CASE")
+				.append(" WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END)) AS balance ")
+				.append(" FROM transactionsummary ts,chartofaccounts coa ")
+				.append(" WHERE  ts.ACCOUNTDETAILKEY  IS NULL AND ts.ACCOUNTDETAILTYPEID IS NULL AND coa.id = ts.glcodeid")
+				.append(" AND (coa.purposeid IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose")
+				.append(" WHERE name = 'ExcessIE') ) ")
+				.append(" AND coa.type IN('A','L') AND ts.financialyearid = :financialyearid")
+				.append(" GROUP BY ts.glcodeid,ts.fundid ,ts.departmentCode ,ts.functionid UNION ALL ");
 
-        query.append(" SELECT ts.glcodeid AS glCodeId,ts.fundid AS fundId,ts.departmentCode  AS deptId,ts.functionid AS functionId,SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END) AS dr, ");
-        query.append(" SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END) AS cr,(SUM( CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END) - SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END)) AS balance ");
-        query.append(" FROM transactionsummary ts,chartofaccounts coa ");
-        query.append(" WHERE  ts.ACCOUNTDETAILKEY  IS NULL AND ts.ACCOUNTDETAILTYPEID IS NULL AND coa.id = ts.glcodeid AND (coa.purposeid IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE') ) ");
-        query.append(" AND coa.type IN('A','L') AND ts.financialyearid = ");
-        query.append(financialYear);
-        query.append(" ");
-        query.append(" GROUP BY ts.glcodeid,ts.fundid ,ts.departmentCode ,ts.functionid ");
+		// Mismatch Transaction entries for Control codes(3rd Query)
 
-        query.append(" UNION ALL ");
+		query.append(" SELECT gl.glcodeId AS glCodeId,vh.fundId AS fundId,mis.departmentCode AS deptId,").append(
+				"gl.functionid AS functionId,SUM(CASE WHEN gl.debitamount = 0 THEN 0 ELSE gld.amount END) AS dr,")
+				.append(" SUM(CASE WHEN gl.creditamount = 0 THEN 0 ELSE gld.amount END) AS cr, ")
+				.append(" SUM(CASE WHEN gl.debitamount = 0 THEN 0 ELSE gld.amount END)-SUM(CASE WHEN gl.creditamount = 0")
+				.append(" THEN 0 ELSE gld.amount END) AS balance ")
+				.append(" FROM voucherHeader vh, vouchermis mis, chartOfAccounts coa,generalledger gl,generalLedgerDetail gld")
+				.append(" WHERE  vh.id= gl.voucherHeaderId  AND vh.id =mis.voucherheaderid AND gl.glCode =coa.glcode ")
+				.append("AND (coa.purposeid IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose")
+				.append(" WHERE name = 'ExcessIE' ) ) ")
+				.append(" AND gl.id  = gld.generalLedgerId AND gld.detailtypeid NOT IN (SELECT coadtl.detailtypeid")
+				.append(" FROM chartofaccountdetail coadtl WHERE coadtl.glcodeid = coa.id )")
+				.append(" AND vh.voucherDate >=to_date(:fyStartingDate,'dd/mm/yyyy') AND vh.voucherDate <=")
+				.append("to_date(:fyEndingDate,'dd/mm/yyyy') AND coa.type IN('A','L') AND vh.status NOT  IN(4,5) ")
+				.append(" GROUP BY gl.glcodeId,vh.fundId,mis.departmentCode,gl.functionid UNION ALL ");
 
-        // Mismatch Transaction entries for Control codes(3rd Query)
+		// Mismatch Opening Balance entries for Control codes(4th Query)
+		query.append(" SELECT ts.glcodeid AS glCodeId,ts.fundid AS fundId,ts.departmentCode  AS deptId,")
+				.append("ts.functionid AS functionId,SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0")
+				.append(" ELSE ts.openingdebitbalance END) AS dr, ")
+				.append(" SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance  END) AS cr,")
+				.append("(SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END)")
+				.append(" - SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END)) AS balance ")
+				.append(" FROM transactionsummary ts,chartofaccounts coa ")
+				.append(" WHERE (ts.accountdetailtypeid is not null and ts.accountdetailtypeid NOT IN (")
+				.append("SELECT coadtl.detailtypeid FROM chartofaccountdetail coadtl WHERE coadtl.glcodeid = coa.id ))")
+				.append(" AND (coa.purposeid   IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose ")
+				.append("WHERE name = 'ExcessIE' ) ) ")
+				.append(" AND coa.id = ts.glcodeid AND coa.type IN('A','L') AND ts.financialyearid = :financialyearid")
+				.append(" GROUP BY ts.glcodeid,ts.fundid ,ts.departmentCode ,ts.functionid) closingbalance")
+				.append(" GROUP BY glcodeId ,fundId ,deptId ,functionid ")
+				.append(" ORDER BY glcodeId ,fundId ,deptId ,functionid ) final");
 
-        query.append(" SELECT gl.glcodeId AS glCodeId,vh.fundId AS fundId,mis.departmentCode AS deptId,gl.functionid AS functionId,SUM(CASE WHEN gl.debitamount = 0 THEN 0 ELSE gld.amount END) AS dr, SUM(CASE WHEN gl.creditamount = 0 THEN 0 ELSE gld.amount END) AS cr, ");
-        query.append(" SUM(CASE WHEN gl.debitamount = 0 THEN 0 ELSE gld.amount END)-SUM(CASE WHEN gl.creditamount = 0 THEN 0 ELSE gld.amount END) AS balance ");
-        query.append(" FROM voucherHeader vh, vouchermis mis, chartOfAccounts coa,generalledger gl,generalLedgerDetail gld");
-        query.append(" WHERE  vh.id= gl.voucherHeaderId  AND vh.id =mis.voucherheaderid AND gl.glCode =coa.glcode AND (coa.purposeid IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) ) ");
-        query.append(" AND gl.id  = gld.generalLedgerId AND gld.detailtypeid NOT IN (SELECT coadtl.detailtypeid FROM chartofaccountdetail coadtl WHERE coadtl.glcodeid = coa.id ) AND vh.voucherDate >=to_date('");
-        query.append(fyStartingDate);
-        query.append("','dd/mm/yyyy') AND vh.voucherDate <=to_date('");
-        query.append(fyEndingDate);
-        query.append("','dd/mm/yyyy') AND coa.type IN('A','L') AND vh.status NOT  IN(4,5) ");
-        query.append(" GROUP BY gl.glcodeId,vh.fundId,mis.departmentCode,gl.functionid ");
+		queryParms.put("fyStartingDate", fyStartingDate);
+		queryParms.put("fyEndingDate", fyEndingDate);
+		queryParms.put("financialyearid", financialYear);
 
-        query.append(" UNION ALL ");
+		queryMap.put(query.toString(), queryParms);
+		
+		return queryMap;
 
-        // Mismatch Opening Balance entries for Control codes(4th Query)
-        query.append(" SELECT ts.glcodeid AS glCodeId,ts.fundid AS fundId,ts.departmentCode  AS deptId,ts.functionid AS functionId,SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END) AS dr, ");
-        query.append(" SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance  END) AS cr,(SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END) - SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END)) AS balance ");
-        query.append(" FROM transactionsummary ts,chartofaccounts coa ");
-        query.append(" WHERE (ts.accountdetailtypeid is not null and ts.accountdetailtypeid NOT IN (SELECT coadtl.detailtypeid FROM chartofaccountdetail coadtl WHERE coadtl.glcodeid = coa.id )) AND (coa.purposeid   IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) ) ");
-        query.append(" AND coa.id = ts.glcodeid AND coa.type IN('A','L') AND ts.financialyearid = ");
-        query.append(financialYear);
-        query.append("");
-        query.append(" GROUP BY ts.glcodeid,ts.fundid ,ts.departmentCode ,ts.functionid");
-
-        query.append(") closingbalance");
-        query.append(" GROUP BY glcodeId ,fundId ,deptId ,functionid ");
-        query.append(" ORDER BY glcodeId ,fundId ,deptId ,functionid ) final");
-        return query.toString();
-
-    }
+	}
 
     /**
      * This function is called to calculate the closing balance for GlCodes of type A,L (Excluding ExcessIE code)
@@ -240,51 +265,66 @@ public class TransferClosingBalanceService extends PersistenceService {
      * 
      * 
      */
-    private String getQueryForControlCodes(Long financialYear, String fyStartingDate, String fyEndingDate,
-            CFinancialYear nextFinancialYear) {
-        StringBuilder query = new StringBuilder();
-        query.append(" INSERT INTO TransactionSummary (id, financialYearId, lastmodifiedby, glcodeid,fundId,departmentCode,functionid , accountdetailtypeid, accountdetailkey,openingdebitbalance, openingcreditbalance,lastmodifieddate)");
-        query.append(" SELECT nextval('seq_transactionsummary'), ");
-        query.append(nextFinancialYear.getId());
-        query.append(" , ");
-        query.append(ApplicationThreadLocals.getUserId());
-        query.append(" ,glcodeId AS glCodeId, fundid AS fundId,deptId AS deptId ,functionid AS functionId, detailTypeId  AS detailTypeId,detailKeyId AS detailKeyId, CASE WHEN balance > 0 THEN abs(balance) ELSE 0 END AS openingbalancedebitamount, CASE WHEN balance < 0 THEN abs(balance) ELSE 0 END AS openingbalancecreditamount,current_date ");
-        query.append(" FROM ( ");
-        query.append(" SELECT glcodeId AS glCodeId,fundId AS fundId, deptId AS deptId,functionid AS functionId,detailTypeId  AS detailTypeId,detailKeyId AS detailKeyId,SUM(dr) AS dr,SUM(cr) AS cr,SUM(balance)   AS balance ");
-        query.append(" FROM (");
+	private Map<String, Map<String, Object>> getQueryForControlCodes(Long financialYear, String fyStartingDate,
+			String fyEndingDate, CFinancialYear nextFinancialYear) {
+		final StringBuilder query = new StringBuilder();
+		final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+		final Map<String, Object> queryParams = new HashMap<>();
+		query.append(
+				" INSERT INTO TransactionSummary (id, financialYearId, lastmodifiedby, glcodeid,fundId,departmentCode,")
+				.append("functionid , accountdetailtypeid, accountdetailkey,openingdebitbalance, openingcreditbalance,lastmodifieddate)")
+				.append(String.format(" SELECT nextval('seq_transactionsummary'), %d, %d", nextFinancialYear.getId(),
+						ApplicationThreadLocals.getUserId()))
+				.append(" ,glcodeId AS glCodeId, fundid AS fundId,deptId AS deptId ,functionid AS functionId,")
+				.append(" detailTypeId  AS detailTypeId,detailKeyId AS detailKeyId, CASE WHEN balance > 0 THEN abs(balance)")
+				.append(" ELSE 0 END AS openingbalancedebitamount, CASE WHEN balance < 0 THEN abs(balance) ELSE 0 END")
+				.append(" AS openingbalancecreditamount,current_date FROM ( ")
+				.append(" SELECT glcodeId AS glCodeId,fundId AS fundId, deptId AS deptId,functionid AS functionId,detailTypeId ")
+				.append(" AS detailTypeId,detailKeyId AS detailKeyId,SUM(dr) AS dr,SUM(cr) AS cr,SUM(balance)   AS balance ")
+				.append(" FROM (");
 
-        // Transaction entries for Control codes(1st Query)
+		// Transaction entries for Control codes(1st Query)
 
-        query.append(" SELECT gl.glcodeId AS glCodeId,vh.fundId AS fundId,mis.departmentCode  AS deptId,gl.functionid AS functionId,gld.detailTypeId  AS detailTypeId,gld.detailKeyId AS detailKeyId,SUM(CASE WHEN gl.debitamount = 0 THEN 0 ELSE gld.amount END) AS dr, ");
-        query.append(" SUM(CASE WHEN gl.creditamount = 0 THEN 0 ELSE gld.amount END) AS cr,SUM(CASE WHEN gl.debitamount = 0 THEN 0 ELSE gld.amount END)-SUM(CASE WHEN gl.creditamount = 0   THEN 0 ELSE gld.amount END) AS balance ");
-        query.append(" FROM voucherHeader vh,vouchermis mis,chartOfAccounts coa,chartofaccountdetail coadtl,generalledger gl,generalLedgerDetail gld ");
-        query.append(" WHERE vh.id = gl.voucherHeaderId AND vh.id  =mis.voucherheaderid AND gl.glCode=coa.glcode AND coa.id = coadtl.glcodeid AND (coa.purposeid   IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) ) ");
-        query.append(" AND gl.id = gld.generalLedgerId AND gld.detailtypeid = coadtl.detailtypeid AND vh.voucherDate  >=to_date('");
-        query.append(fyStartingDate);
-        query.append("','dd/mm/yyyy') AND vh.voucherDate  <=to_date('");
-        query.append(fyEndingDate);
-        query.append("','dd/mm/yyyy') AND coa.type IN('A','L') AND vh.status NOT IN(4,5) ");
-        query.append(" GROUP BY gl.glcodeId,gld.detailTypeId,gld.detailKeyId,vh.fundId,mis.departmentCode,gl.functionid ");
+		query.append(" SELECT gl.glcodeId AS glCodeId,vh.fundId AS fundId,mis.departmentCode  AS deptId,")
+				.append("gl.functionid AS functionId,gld.detailTypeId  AS detailTypeId,gld.detailKeyId AS detailKeyId,")
+				.append("SUM(CASE WHEN gl.debitamount = 0 THEN 0 ELSE gld.amount END) AS dr, ")
+				.append(" SUM(CASE WHEN gl.creditamount = 0 THEN 0 ELSE gld.amount END) AS cr,SUM(CASE WHEN gl.debitamount = 0")
+				.append(" THEN 0 ELSE gld.amount END)-SUM(CASE WHEN gl.creditamount = 0   THEN 0 ELSE gld.amount END) AS balance ")
+				.append(" FROM voucherHeader vh,vouchermis mis,chartOfAccounts coa,chartofaccountdetail coadtl,generalledger gl,")
+				.append("generalLedgerDetail gld ")
+				.append(" WHERE vh.id = gl.voucherHeaderId AND vh.id  =mis.voucherheaderid AND gl.glCode=coa.glcode")
+				.append(" AND coa.id = coadtl.glcodeid AND (coa.purposeid   IS NULL OR coa.purposeid NOT IN")
+				.append(" (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) ) ")
+				.append(" AND gl.id = gld.generalLedgerId AND gld.detailtypeid = coadtl.detailtypeid")
+				.append(" AND vh.voucherDate  >=to_date(:fyStartingDate,'dd/mm/yyyy') AND vh.voucherDate")
+				.append(" <=to_date(:fyEndingDate,'dd/mm/yyyy') AND coa.type IN('A','L') AND vh.status NOT IN(4,5) ")
+				.append(" GROUP BY gl.glcodeId,gld.detailTypeId,gld.detailKeyId,vh.fundId,mis.departmentCode,gl.functionid ")
+				.append(" UNION ALL ");
 
-        query.append(" UNION ALL ");
+		// Opening Balance entries for Control codes(2nd Query)
 
-        // Opening Balance entries for Control codes(2nd Query)
+		query.append(" SELECT ts.glcodeid AS glCodeId,ts.fundid AS fundId,ts.departmentCode AS deptId,").append(
+				"ts.functionid AS functionId,ts.accountdetailtypeid AS detailTypeId ,ts.accountdetailkey AS detailKeyId ,")
+				.append("SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END) AS dr, ")
+				.append(" SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END) AS cr,")
+				.append("(SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END)")
+				.append(" - SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END)) AS balance ")
+				.append(" FROM transactionsummary ts,chartofaccounts coa,chartofaccountdetail coadtl WHERE coa.id = coadtl.glcodeid")
+				.append(" AND ts.accountdetailtypeid =coadtl.detailtypeid AND coa.id = ts.glcodeid AND (coa.purposeid IS NULL")
+				.append(" OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) ) ")
+				.append(" AND coa.type IN('A','L') AND ts.financialyearid = :financialyearid")
+				.append(" GROUP BY ts.glcodeid,ts.accountdetailtypeid ,ts.accountdetailkey,ts.fundid ,ts.departmentCode ,ts.functionid ")
+				.append(" ) closingbalance ")
+				.append(" GROUP BY glcodeId ,detailTypeId,detailKeyId,fundId ,deptId ,functionid ")
+				.append("ORDER BY glcodeId ,detailTypeId,detailKeyId,fundId ,deptId ,functionid ) final");
 
-        query.append(" SELECT ts.glcodeid AS glCodeId,ts.fundid AS fundId,ts.departmentCode AS deptId,ts.functionid AS functionId,ts.accountdetailtypeid AS detailTypeId ,ts.accountdetailkey AS detailKeyId ,SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END) AS dr, ");
-        query.append(" SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END) AS cr,(SUM(CASE WHEN ts.openingdebitbalance = 0 THEN 0 ELSE ts.openingdebitbalance END) - SUM(CASE WHEN ts.openingcreditbalance = 0 THEN 0 ELSE ts.openingcreditbalance END)) AS balance ");
-        query.append(" FROM transactionsummary ts,chartofaccounts coa,chartofaccountdetail coadtl WHERE coa.id = coadtl.glcodeid AND ts.accountdetailtypeid =coadtl.detailtypeid AND coa.id = ts.glcodeid AND (coa.purposeid IS NULL OR coa.purposeid NOT IN (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) ) ");
-        query.append(" AND coa.type IN('A','L') AND ts.financialyearid = ");
-        query.append(financialYear);
-        query.append(" ");
-        query.append(" GROUP BY ts.glcodeid,ts.accountdetailtypeid ,ts.accountdetailkey,ts.fundid ,ts.departmentCode ,ts.functionid ");
+		queryParams.put("fyStartingDate", fyStartingDate);
+		queryParams.put("fyEndingDate", fyEndingDate);
+		queryParams.put("financialyearid", financialYear);
 
-        query.append(" ) closingbalance ");
-        query.append(" GROUP BY glcodeId ,detailTypeId,detailKeyId,fundId ,deptId ,functionid ");
-        query.append("ORDER BY glcodeId ,detailTypeId,detailKeyId,fundId ,deptId ,functionid ");
-        query.append(" ) final");
-        return query.toString();
-
-    }
+		queryMap.put(query.toString(), queryParams);
+		return queryMap;
+	}
 
     /**
      * This function is called to calculate the closing balance for GlCodes of type I,E and ExcessIE Code
@@ -309,82 +349,84 @@ public class TransferClosingBalanceService extends PersistenceService {
      * Opening Balance entries for ExcessIE Code(4th Query)
      * 
      */
-    private String getQueryForIncomeOverExpense(Long financialYear, String fyStartingDate, String fyEndingDate,
-            CFinancialYear nextFinancialYear) {
-        StringBuilder query = new StringBuilder();
-        query.append(" INSERT INTO TransactionSummary (id, financialYearId, lastmodifiedby, glcodeid,fundId,departmentCode,functionid ,openingdebitbalance, openingcreditbalance, accountdetailtypeid, accountdetailkey,lastmodifieddate)");
-        query.append(" SELECT nextval('seq_transactionsummary'), ");
-        query.append(nextFinancialYear.getId());
-        query.append(" , ");
-        query.append(ApplicationThreadLocals.getUserId());
-        query.append(" ,(select id from chartofaccounts where purposeid in (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' )), fundid AS fundId,deptId  AS deptId ,functionid  AS functionId,CASE WHEN balance < 0 THEN abs(balance) ELSE 0 END AS openingbalancedebitamount,CASE WHEN balance > 0 THEN abs(balance) ELSE 0 END AS openingbalancecreditamount,null,null,current_date ");
-        query.append(" FROM ( ");
-        query.append(" SELECT fundid AS fundId,deptId  AS deptId , functionid   AS functionId, SUM(balance) AS balance ");
-        query.append(" FROM ( ");
+	private Map<String, Map<String, Object>> getQueryForIncomeOverExpense(Long financialYear, String fyStartingDate,
+			String fyEndingDate, CFinancialYear nextFinancialYear) {
+		final StringBuilder query = new StringBuilder();
+		final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+		final Map<String, Object> queryParams = new HashMap<>();
+		query.append(" INSERT INTO TransactionSummary (id, financialYearId, lastmodifiedby, glcodeid,fundId,")
+				.append("departmentCode,functionid ,openingdebitbalance, openingcreditbalance, accountdetailtypeid,")
+				.append(" accountdetailkey,lastmodifieddate)")
+				.append(String.format(" SELECT nextval('seq_transactionsummary'), %d, %d ", nextFinancialYear.getId(),
+						ApplicationThreadLocals.getUserId()))
+				.append(" ,(select id from chartofaccounts where purposeid in (SELECT id FROM egf_accountcode_purpose")
+				.append(" WHERE name = 'ExcessIE' )), fundid AS fundId,deptId  AS deptId ,functionid  AS functionId,")
+				.append("CASE WHEN balance < 0 THEN abs(balance) ELSE 0 END AS openingbalancedebitamount,CASE WHEN balance > 0")
+				.append(" THEN abs(balance) ELSE 0 END AS openingbalancecreditamount,null,null,current_date ")
+				.append(" FROM ( ")
+				.append(" SELECT fundid AS fundId,deptId  AS deptId , functionid   AS functionId, SUM(balance) AS balance ")
+				.append(" FROM ( ");
 
-        // (X-Y)
+		// (X-Y)
+		query.append(
+				" SELECT fundid AS fundId, deptId AS deptId ,functionid AS functionId,SUM(Income)-SUM(Expense) AS balance ")
+				.append(" FROM ( ");
 
-        query.append(" SELECT fundid AS fundId, deptId AS deptId ,functionid AS functionId,SUM(Income)-SUM(Expense) AS balance ");
-        query.append(" FROM ( ");
+		// Transaction entries for Income codes(1st Query) (X)
+		query.append(" SELECT vh.fundid AS fundId,vmis.departmentCode AS deptId ,gl.functionid AS functionId,")
+				.append("CASE WHEN SUM(gl.creditAmount)-SUM(gl.debitamount) IS NULL THEN 0 ELSE SUM(gl.creditAmount)")
+				.append("-SUM(gl.debitamount) END AS Income, 0   AS Expense ")
+				.append(" FROM chartofaccounts coa, generalledger gl,voucherHeader vh,vouchermis vmis WHERE vh.ID = gl.VOUCHERHEADERID ")
+				.append(" AND gl.glcode =coa.glcode AND vmis.voucherheaderid=vh.id AND vh.VOUCHERDATE >= ")
+				.append("to_date(:fyStartingDate,'dd/mm/yyyy') AND vh.VOUCHERDATE <= to_date(:fyEndingDate,'dd/mm/yyyy')")
+				.append(" AND vh.status NOT IN(4,5) AND coa.TYPE = 'I' ")
+				.append(" GROUP BY vh.fundId,vmis.departmentCode,gl.functionid UNION ALL ");
 
-        // Transaction entries for Income codes(1st Query) (X)
+		// Transaction entries for Expense codes(2nd Query) (Y)
 
-        query.append(" SELECT vh.fundid AS fundId,vmis.departmentCode AS deptId ,gl.functionid AS functionId,CASE WHEN SUM(gl.creditAmount)-SUM(gl.debitamount) IS NULL THEN 0 ELSE SUM(gl.creditAmount)-SUM(gl.debitamount) END AS Income, 0   AS Expense ");
-        query.append(" FROM chartofaccounts coa, generalledger gl,voucherHeader vh,vouchermis vmis WHERE vh.ID = gl.VOUCHERHEADERID  AND gl.glcode =coa.glcode AND vmis.voucherheaderid=vh.id AND vh.VOUCHERDATE >= to_date('");
-        query.append(fyStartingDate);
-        query.append("','dd/mm/yyyy') AND vh.VOUCHERDATE <= to_date('");
-        query.append(fyEndingDate);
-        query.append("','dd/mm/yyyy') AND vh.status NOT IN(4,5)");
-        query.append(" AND coa.TYPE = 'I' ");
-        query.append(" GROUP BY vh.fundId,vmis.departmentCode,gl.functionid ");
+		query.append(" SELECT vh.fundid    AS fundId,vmis.departmentCode AS deptId ,gl.functionid AS functionId,")
+				.append(" 0 AS Income,CASE WHEN SUM(gl.debitamount)-SUM(gl.creditAmount) IS NULL THEN 0 ELSE")
+				.append(" SUM(gl.debitamount)-SUM(gl.creditAmount) END AS Expense ")
+				.append(" FROM chartofaccounts coa,generalledger gl,voucherHeader vh,vouchermis vmis")
+				.append(" WHERE vh.ID = gl.VOUCHERHEADERID AND gl.glcode =coa.glcode AND vmis.voucherheaderid=vh.id")
+				.append(" AND vh.VOUCHERDATE  >= to_date(:fyStartingDate,'dd/mm/yyyy') AND vh.VOUCHERDATE <= ")
+				.append("to_date(:fyEndingDate,'dd/mm/yyyy') AND vh.status NOT IN(4,5) AND coa.TYPE = 'E' ")
+				.append(" GROUP BY vh.fundId,vmis.departmentCode,gl.functionid ) IncomeAndExpense GROUP BY fundId,deptId,functionId ")
+				.append(" UNION ALL ");
 
-        query.append(" UNION ALL ");
+		// Transaction entries for ExcessIE Code(3rd Query)
 
-        // Transaction entries for Expense codes(2nd Query) (Y)
+		query.append(" SELECT fundid  AS fundId,deptId AS deptId ,functionid  AS functionId, SUM(balance) AS balance ")
+				.append(" FROM ( ")
+				.append(" SELECT vh.fundid   AS fundId,vmis.departmentCode AS deptId ,gl.functionid AS functionId,CASE")
+				.append(" WHEN SUM(gl.creditAmount)-SUM(gl.debitamount) IS NULL THEN 0 ELSE SUM(gl.creditAmount)-SUM(gl.debitamount)")
+				.append(" END AS balance ")
+				.append(" FROM chartofaccounts coa,generalledger gl,voucherHeader vh,vouchermis vmis ")
+				.append(" WHERE vh.ID = gl.VOUCHERHEADERID AND gl.glcode = coa.glcode AND coa.purposeid IN ")
+				.append("(SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) AND vmis.voucherheaderid=vh.id")
+				.append(" AND vh.VOUCHERDATE >= to_date(:fyStartingDate,'dd/mm/yyyy') AND vh.VOUCHERDATE <=")
+				.append(" to_date(:fyEndingDate,'dd/mm/yyyy') AND vh.status NOT IN(4,5) ")
+				.append(" GROUP BY vh.fundId,vmis.departmentCode,gl.functionid UNION ALL ");
 
-        query.append(" SELECT vh.fundid    AS fundId,vmis.departmentCode AS deptId ,gl.functionid AS functionId, 0 AS Income,CASE WHEN SUM(gl.debitamount)-SUM(gl.creditAmount) IS NULL THEN 0 ELSE SUM(gl.debitamount)-SUM(gl.creditAmount) END AS Expense ");
-        query.append(" FROM chartofaccounts coa,generalledger gl,voucherHeader vh,vouchermis vmis WHERE vh.ID = gl.VOUCHERHEADERID AND gl.glcode =coa.glcode AND vmis.voucherheaderid=vh.id AND vh.VOUCHERDATE  >= to_date('");
-        query.append(fyStartingDate);
-        query.append("','dd/mm/yyyy') AND vh.VOUCHERDATE <= to_date('");
-        query.append(fyEndingDate);
-        query.append("','dd/mm/yyyy') AND vh.status NOT IN(4,5) AND coa.TYPE = 'E' ");
-        query.append(" GROUP BY vh.fundId,vmis.departmentCode,gl.functionid ) IncomeAndExpense GROUP BY fundId,deptId,functionId ");
+		// Opening Balance entries for ExcessIE Code(4th Query)
 
-        query.append(" UNION ALL ");
+		query.append(" SELECT ts.fundid AS fundId,ts.departmentCode  AS deptId,ts.functionid AS functionId,")
+				.append("SUM( ts.openingcreditbalance ) - SUM( ts.openingdebitbalance ) AS balance ")
+				.append(" FROM transactionsummary ts,chartofaccounts coa ")
+				.append(" WHERE coa.id  = ts.glcodeid AND coa.purposeid IN (SELECT id FROM egf_accountcode_purpose")
+				.append(" WHERE name = 'ExcessIE' ) AND ts.financialyearid = :financialyearid")
+				.append(" GROUP BY ts.fundid ,ts.departmentCode ,ts.functionid ) ExcessIECode ")
+				.append(" GROUP BY fundid , deptId ,functionid ) IncomeOverExpense ")
+				.append(" GROUP BY fundid ,deptId ,functionid ) final");
 
-        // Transaction entries for ExcessIE Code(3rd Query)
+		queryParams.put("fyStartingDate", fyStartingDate);
+		queryParams.put("fyEndingDate", fyEndingDate);
+		queryParams.put("financialyearid", financialYear);
 
-        query.append(" SELECT fundid  AS fundId,deptId AS deptId ,functionid  AS functionId, SUM(balance) AS balance ");
-        query.append(" FROM ( ");
-        query.append(" SELECT vh.fundid   AS fundId,vmis.departmentCode AS deptId ,gl.functionid AS functionId,CASE WHEN SUM(gl.creditAmount)-SUM(gl.debitamount) IS NULL THEN 0 ELSE SUM(gl.creditAmount)-SUM(gl.debitamount) END AS balance ");
-        query.append(" FROM chartofaccounts coa,generalledger gl,voucherHeader vh,vouchermis vmis ");
-        query.append(" WHERE vh.ID = gl.VOUCHERHEADERID AND gl.glcode = coa.glcode AND coa.purposeid IN (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) AND vmis.voucherheaderid=vh.id AND vh.VOUCHERDATE >= to_date('");
-        query.append(fyStartingDate);
-        query.append("','dd/mm/yyyy') AND vh.VOUCHERDATE <= to_date('");
-        query.append(fyEndingDate);
-        query.append("','dd/mm/yyyy') ");
-        query.append(" AND vh.status NOT IN(4,5) ");
-        query.append(" GROUP BY vh.fundId,vmis.departmentCode,gl.functionid ");
+		queryMap.put(query.toString(), queryParams);
 
-        query.append(" UNION ALL ");
+		return queryMap;
 
-        // Opening Balance entries for ExcessIE Code(4th Query)
-
-        query.append(" SELECT ts.fundid AS fundId,ts.departmentCode  AS deptId,ts.functionid AS functionId,SUM( ts.openingcreditbalance ) - SUM( ts.openingdebitbalance ) AS balance ");
-        query.append(" FROM transactionsummary ts,chartofaccounts coa ");
-        query.append(" WHERE coa.id  = ts.glcodeid AND coa.purposeid IN (SELECT id FROM egf_accountcode_purpose WHERE name = 'ExcessIE' ) AND ts.financialyearid = ");
-        query.append(financialYear);
-        query.append(" ");
-        query.append(" GROUP BY ts.fundid ,ts.departmentCode ,ts.functionid ");
-
-        query.append(" ) ExcessIECode ");
-        query.append(" GROUP BY fundid , deptId ,functionid ");
-        query.append(" ) IncomeOverExpense ");
-
-        query.append(" GROUP BY fundid ,deptId ,functionid ");
-        query.append(" ) final");
-        return query.toString();
-
-    }
+	}
 
 }

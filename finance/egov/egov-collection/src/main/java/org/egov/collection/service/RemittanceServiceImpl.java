@@ -171,10 +171,10 @@ public class RemittanceServiceImpl extends RemittanceService {
         InstrumentAccountCode accountCode = microserviceUtils
                 .getInstrumentAccountGlCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CASH);
 
-        final String cashInHandQueryString = "SELECT COA.GLCODE FROM CHARTOFACCOUNTS COA WHERE COA.GLCODE = '"
-                + accountCode.getGlcode()
-                + "'";
-        final Query cashInHand = persistenceService.getSession().createSQLQuery(cashInHandQueryString);
+		final StringBuilder cashInHandQueryString = new StringBuilder(
+				"SELECT COA.GLCODE FROM CHARTOFACCOUNTS COA WHERE COA.GLCODE = :glcode");
+		final Query cashInHand = persistenceService.getSession().createSQLQuery(cashInHandQueryString.toString());
+		cashInHand.setParameter("glcode", accountCode.getGlcode());
 
         String cashInHandGLCode = null;
 
@@ -944,10 +944,10 @@ public class RemittanceServiceImpl extends RemittanceService {
         InstrumentAccountCode accountCode = microserviceUtils
                 .getInstrumentAccountGlCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
 
-        final String cashInHandQueryString = "SELECT COA.GLCODE FROM CHARTOFACCOUNTS COA WHERE COA.GLCODE = '"
-                + accountCode.getGlcode()
-                + "'";
-        final Query chequeInHand = persistenceService.getSession().createSQLQuery(cashInHandQueryString);
+		final StringBuilder cashInHandQueryString = new StringBuilder(
+				"SELECT COA.GLCODE FROM CHARTOFACCOUNTS COA WHERE COA.GLCODE = :glcode");
+		final Query chequeInHand = persistenceService.getSession().createSQLQuery(cashInHandQueryString.toString());
+		chequeInHand.setParameter("glcode", accountCode.getGlcode());
 
         String chequeInHandGlcode = null;
 
@@ -1102,8 +1102,8 @@ public class RemittanceServiceImpl extends RemittanceService {
     }
 
     private List<CVoucherHeader> getVoucher(String voucherHeaderId) {
-        final String sqlQuery = "from CVoucherHeader vh where voucherNumber=:voucherNumber";
-        final Query query = persistenceService.getSession().createQuery(sqlQuery);
+        final StringBuilder sqlQuery = new StringBuilder("from CVoucherHeader vh where voucherNumber=:voucherNumber");
+        final Query query = persistenceService.getSession().createQuery(sqlQuery.toString());
         query.setParameter("voucherNumber", voucherHeaderId);
         return query.list();
     }

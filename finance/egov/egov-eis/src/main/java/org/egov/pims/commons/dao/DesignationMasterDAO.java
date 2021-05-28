@@ -133,7 +133,7 @@ public class DesignationMasterDAO
             return retMap;
     }
 
-    public boolean checkDuplication(String designationName, String className)
+    public boolean checkDuplication(String designationName, String className) throws ApplicationException
     {
         try
         {
@@ -157,7 +157,7 @@ public class DesignationMasterDAO
             }
             return b;
         }
-        catch(Exception e)
+        catch(ApplicationRuntimeException e)
         {
         	throw new ApplicationRuntimeException(e.getMessage(),e);
         }
@@ -188,7 +188,7 @@ public class DesignationMasterDAO
             }
             return desig;
         }
-        catch(Exception e)
+        catch(ApplicationRuntimeException e)
         {
            throw new ApplicationRuntimeException(e.getMessage(),e);
         }

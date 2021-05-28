@@ -93,9 +93,14 @@ function validateMandatoryFields(){
 	function balanceSheetReportSubmit()
 	{
 		if(validateMandatoryFields()){
-	document.balanceSheetReport.action='/services/EGF/report/balanceSheetReport-printBalanceSheetReport.action';
-	document.balanceSheetReport.submit();
-	return true;
+			document.balanceSheetReport.action='/services/EGF/report/balanceSheetReport-printBalanceSheetReport.action';
+			jQuery(balanceSheetReport).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
+			document.balanceSheetReport.submit();
+			return true;
 		}
 		return false;
 
@@ -151,6 +156,12 @@ th.bluebgheadtd {
 }
 </style>
 <div id="non-printable">
+	<s:if test="%{hasErrors()}">
+		<div id="actionErrorMessages" class="errorstyle">
+			<s:actionerror />
+			<s:fielderror />
+		</div>
+	</s:if>
 	<s:form name="balanceSheetReport" action="balanceSheetReport"
 		theme="simple">
 		<div class="formmainbox">

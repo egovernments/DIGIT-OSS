@@ -101,6 +101,11 @@
 		}
 		
 	document.forms[0].action='/services/EGF/brs/bankReconciliation-brsSummary.action';
+	jQuery(document.forms[0]).append(jQuery('<input>', {
+        type : 'hidden',
+        name : '${_csrf.parameterName}',
+        value : '${_csrf.token}'
+    }));
 	document.forms[0].submit();
 	return true;
 	

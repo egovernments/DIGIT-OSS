@@ -115,7 +115,10 @@ public class TransferClosingBalanceAction extends BaseFormAction {
     @Action(value = "/pea/transferClosingBalance-transfer")
     public String transfer() {
         try {
-
+            if (financialYear == -1 || financialYear == null || financialYear==0) {
+                addFieldError("searchCriteria", "Please select FinancialYear");
+                return NEW;
+             }
             fy = financialYearDAO.getFinancialYearById(financialYear);
 
             try {
@@ -124,7 +127,7 @@ public class TransferClosingBalanceAction extends BaseFormAction {
             } catch (final ApplicationRuntimeException e) {
                 // Ignore
 
-            } catch (final Exception e) {
+            } catch (final ValidationException e) {
 
                 final List<ValidationError> errors = new ArrayList<ValidationError>();
                 errors.add(new ValidationError("exp", e.getMessage()));
@@ -139,7 +142,7 @@ public class TransferClosingBalanceAction extends BaseFormAction {
                         "Next Financial Year does not exist in system.",
                         "Next Financial Year does not exist in system.");
 
-            } catch (final Exception e) {
+            } catch (final ValidationException e) {
 
                 final List<ValidationError> errors = new ArrayList<ValidationError>();
                 errors.add(new ValidationError("exp", e.getMessage()));
@@ -167,12 +170,12 @@ public class TransferClosingBalanceAction extends BaseFormAction {
             errors.add(new ValidationError("exp", e.getErrors().get(0)
                     .getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
         return NEW;
     }
 

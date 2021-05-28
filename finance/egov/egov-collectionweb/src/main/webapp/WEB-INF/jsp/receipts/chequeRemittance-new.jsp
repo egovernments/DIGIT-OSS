@@ -250,6 +250,11 @@
 		       	doLoadingMask('#loadingMask');
 				jQuery('#finYearId').prop("disabled", false);
 				document.chequeRemittanceForm.action = "chequeRemittance-create.action";
+				jQuery(chequeRemittanceForm).append(jQuery('<input>', {
+		            type : 'hidden',
+		            name : '${_csrf.parameterName}',
+		            value : '${_csrf.token}'
+		        }));
 				return true;
 		}
 
@@ -333,6 +338,11 @@
 		jQuery('#finYearId').prop("disabled", false);
 		jQuery('#remittanceAmount').val("");
 		document.chequeRemittanceForm.action = "chequeRemittance-listData.action";
+		jQuery(chequeRemittanceForm).append(jQuery('<input>', {
+            type : 'hidden',
+            name : '${_csrf.parameterName}',
+            value : '${_csrf.token}'
+        }));
 		return true;
 	}
 

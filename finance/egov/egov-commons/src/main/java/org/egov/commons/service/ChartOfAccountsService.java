@@ -66,6 +66,7 @@ import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.contract.AccountCodeTemplate;
 import org.egov.infra.microservice.models.ChartOfAccounts;
 import org.egov.infstr.services.PersistenceService;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,14 +116,13 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
 
     }
 
-    @Transactional
-    public void updateActiveForPostingByMaterializedPath(final String materializedPath) {
-        getSession()
-                .createSQLQuery(
-                        "update chartofaccounts set isactiveforposting = true where isactiveforposting = false and id in (select distinct bg.mincode from egf_budgetgroup bg,egf_budgetdetail bd where bd.budgetgroup = bg.id  and bd.materializedpath like'"
-                                + materializedPath + "%') ")
-                .executeUpdate();
-    }
+	@Transactional
+	public void updateActiveForPostingByMaterializedPath(final String materializedPath) {
+		final Query entitysQuery = getSession().createSQLQuery(
+				"update chartofaccounts set isactiveforposting = true where isactiveforposting = false and id in (select distinct bg.mincode from egf_budgetgroup bg,egf_budgetdetail bd where bd.budgetgroup = bg.id  and bd.materializedpath like :materializedPath ) ");
+		entitysQuery.setString("materializedPath", materializedPath + "%");
+		entitysQuery.executeUpdate();
+	}
 
     public List<CChartOfAccounts> getSupplierDebitAccountCodes(final String glcode) {
         final Query entitysQuery = getSession()
@@ -228,7 +228,7 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
         }
     }
     
-    public List<CChartOfAccounts> getAccountCodeByPurpose(final Integer purposeId) {
+    public List<CChartOfAccounts> getAccountCodeByPurpose(final Integer purposeId) throws ApplicationException {
         final List<CChartOfAccounts> accountCodeList = new ArrayList<CChartOfAccounts>();
         try {
             if (purposeId == null || purposeId.intValue() == 0)
@@ -257,7 +257,7 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
                             " FROM CChartOfAccounts WHERE purposeid=:purposeId AND classification=4 AND isActiveForPosting=true ");
             query.setLong(PURPOSE_ID, purposeId);
             accountCodeList.addAll(query.list());
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             throw new ApplicationRuntimeException("Error occurred while getting Account Code by purpose", e);
         }
         return accountCodeList;
@@ -292,7 +292,7 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
                             "SELECT coa FROM CChartOfAccounts coa,EgfAccountcodePurpose purpose WHERE coa.purposeId=purpose.id and purpose.name = :purposeName AND coa.classification=4 AND coa.isActiveForPosting=true ");
             query.setString("purposeName", purposeName);
             accountCodeList.addAll(query.list());
-        } catch (final Exception e) {
+        } catch (final ApplicationException e) {
             throw new ApplicationRuntimeException("Error occurred while getting Account Code by purpose name", e);
         }
         return accountCodeList;
@@ -307,7 +307,7 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
             try {
                 accountCodeByPurpose = getAccountCodeByPurpose(Integer
                         .valueOf(configValuesByModuleAndKey.get(i).getValue()));
-            } catch (final Exception e) {
+            } catch (final ApplicationException e) {
                 // Ignore
             }
 
@@ -339,7 +339,7 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
             try {
                 accountCodeByPurpose = getAccountCodeByPurpose(Integer
                         .valueOf(configValuesByModuleAndKey.get(i).getValue()));
-            } catch (final Exception e) {
+            } catch (final ApplicationException e) {
                 // Ignore
             }
 

@@ -81,28 +81,22 @@ public class AccountEntity extends AbstractPersistable<Integer> implements java.
 	@GeneratedValue(generator = SEQ, strategy = GenerationType.SEQUENCE)
 	private Integer id;
 
-	// @SearchField
-	// @SearchResult
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "detailtypeid")
 	private Accountdetailtype accountdetailtype;
 
-	// @SearchField
-	// @SearchResult
 	@NotNull
 	@Length(max = 350)
 	private String name;
 
-	// @SearchField
-	// @SearchResult
 	@NotNull
 	@Length(max = 25)
 	private String code;
 
 	@Length(max = 250)
 	private String narration;
-	// @SearchResult
+
 	private Boolean isactive;
 
 	private Long createdBy;

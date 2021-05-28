@@ -57,7 +57,9 @@ import com.exilant.exility.service.TreeService;
 import com.exilant.exility.service.UpdateService;
 import org.apache.log4j.Logger;
 
+import java.rmi.ServerException;
 import java.util.HashMap;
+import java.util.ServiceConfigurationError;
 
 /**
  * @author raghu.bhandi, Exilant Consulting
@@ -95,7 +97,7 @@ public class ServiceAgent {
             try {
                 ((ExilServiceInterface) service).doService(dc);
 
-            } catch (final Exception e) {
+            } catch (final ServiceConfigurationError e) {
                 LOGGER.error("exilServerError" + e.getMessage());
                 dc.addMessage("exilServerError", e.getMessage());
             }

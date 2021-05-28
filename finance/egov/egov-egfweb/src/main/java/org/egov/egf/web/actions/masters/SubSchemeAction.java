@@ -47,8 +47,12 @@
  */
 package org.egov.egf.web.actions.masters;
 
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.Validations;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
@@ -56,9 +60,6 @@ import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.egov.commons.Scheme;
 import org.egov.commons.SubScheme;
-import org.egov.commons.dao.SubSchemeHibernateDAO;
-import org.egov.infra.admin.master.entity.Department;
-import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -69,315 +70,283 @@ import org.egov.services.masters.SubSchemeService;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
 
+@SuppressWarnings("deprecation")
 @ParentPackage("egov")
 
-@Results({
-    @Result(name = SubSchemeAction.NEW, location = "subScheme-new.jsp"),
-    @Result(name = SubSchemeAction.SEARCH, location = "subScheme-search.jsp"),
-    @Result(name = SchemeAction.UNIQUECHECKFIELD, location = "subScheme-fieldUniqueCheck.jsp"),
-    @Result(name = SubSchemeAction.VIEW, location = "subScheme-view.jsp") })
+@Results({ @Result(name = BaseFormAction.NEW, location = "subScheme-new.jsp"),
+		@Result(name = SubSchemeAction.SEARCH, location = "subScheme-search.jsp"),
+		@Result(name = SchemeAction.UNIQUECHECKFIELD, location = "subScheme-fieldUniqueCheck.jsp"),
+		@Result(name = SubSchemeAction.VIEW, location = "subScheme-view.jsp") })
 public class SubSchemeAction extends BaseFormAction {
-    private static final long serialVersionUID = -3712472100095261379L;
-    private SubScheme subScheme = new SubScheme();
-    @Autowired
-    SubSchemeHibernateDAO subSchemeHibernateDAO;
-    private boolean isactive = false;
-    private boolean clearValues = false;
-    private int fundId;
-    private static final String REQUIRED = "required";
-    private int schemeId;
-    private Long subSchemeId;
-    private List<SubScheme> subSchemeList;
-    public static final String SEARCH = "search";
-    public static final String VIEW = "view";
-    private String showMode;
-    private SubSchemeService subSchemeService;
-    public static final String UNIQUECHECKFIELD = "fieldUniqueCheck";
-    private boolean uniqueCode = false;
-    private String code;
+	private static final String SUB_SCHEME_LIST = "subSchemeList";
+	private static final String FUND_QUERY = "from Fund where isActive=true order by name";
+	private static final String FUND_LIST = "fundList";
+	private static final String DUPLICATE_SUBSCHEME = "duplicate.subscheme";
+	private static final String AN_ERROR_OCCURED_CONTACT_ADMINISTRATOR = "An error occured contact Administrator";
+	private static final String DEPARTMENT_LIST = "departmentList";
+	private static final String SCHEME_LIST = "schemeList";
+	private static final long serialVersionUID = -3712472100095261379L;
+	private SubScheme subScheme = new SubScheme();
+	private boolean isactive = false;
+	private boolean clearValues = false;
+	private long fundId;
+	private static final String REQUIRED = "required";
+	private Integer schemeId;
+	private Integer subSchemeId;
+	private List<SubScheme> subSchemeList;
+	public static final String SEARCH = "search";
+	public static final String VIEW = "view";
+	private String showMode;
+	private transient SubSchemeService subSchemeService;
+	public static final String UNIQUECHECKFIELD = "fieldUniqueCheck";
+	private boolean uniqueCode = false;
+	private String code;
 	private String name;
 	@Autowired
-	private EgovMasterDataCaching egovMasterDataCaching;
-    @Override
-    public Object getModel() {
-        return subScheme;
-    }
+	private transient EgovMasterDataCaching egovMasterDataCaching;
 
-    public SubSchemeAction() {
-        addRelatedEntity("scheme", Scheme.class, "name");
-//        addRelatedEntity("department", Department.class, "name");
-    }
+	@Override
+	public Object getModel() {
+		if (subSchemeId != null && subSchemeId != -1)
+			subScheme = (SubScheme) persistenceService.find("from SubScheme where id=?", subSchemeId);
+		if (schemeId != null && schemeId != -1)
+			subScheme.setScheme((Scheme) persistenceService.find("from Scheme where id=?", schemeId));
+		return subScheme;
+	}
 
-    @Override
-    public void prepare() {
-        super.prepare();
-        setupDropdownDataExcluding();
-        dropdownData.put("schemeList", persistenceService.findAllBy("from Scheme where isactive=true order by name"));
-        dropdownData.put("departmentList", egovMasterDataCaching.get("egi-department"));
+	@Override
+	public void prepare() {
+		super.prepare();
+		setupDropdownDataExcluding();
+		dropdownData.put(SCHEME_LIST, persistenceService.findAllBy("from Scheme where isactive=true order by name"));
+		dropdownData.put(DEPARTMENT_LIST, egovMasterDataCaching.get("egi-department"));
+	}
 
-    }
+	@SkipValidation
+	@Action(value = "/masters/subScheme-newForm")
+	public String newForm() {
+		showMode = "new";
+		return NEW;
+	}
 
-    @SkipValidation
-    @Action(value = "/masters/subScheme-newForm")
-    public String newForm() {
-        showMode = "new";
-        return NEW;
+	@Validations(requiredFields = { @RequiredFieldValidator(fieldName = "scheme", message = "", key = REQUIRED),
+			@RequiredFieldValidator(fieldName = "code", message = "", key = REQUIRED),
+			@RequiredFieldValidator(fieldName = "name", message = "", key = REQUIRED),
+			@RequiredFieldValidator(fieldName = "validfrom", message = "", key = REQUIRED),
+			@RequiredFieldValidator(fieldName = "validto", message = "", key = REQUIRED) })
+	@ValidationErrorPage(value = NEW)
+	@Action(value = "/masters/subScheme-create")
+	public String save() {
+		subScheme.setIsactive(isactive);
+		subScheme.setCreatedDate(new Date());
+		subScheme.setCreatedBy(ApplicationThreadLocals.getUserId());
+		subScheme.setLastmodifieddate(new Date());
 
-    }
+		try {
+			subSchemeService.persist(subScheme);
+			subSchemeService.getSession().flush();
+		} catch (final ValidationException e) {
+			throw new ValidationException(Arrays.asList(new ValidationError(AN_ERROR_OCCURED_CONTACT_ADMINISTRATOR,
+					AN_ERROR_OCCURED_CONTACT_ADMINISTRATOR)));
+		} catch (final ConstraintViolationException e) {
+			addActionError(getText(DUPLICATE_SUBSCHEME));
+			return NEW;
+		}
+		clearValues = true;
+		addActionMessage(getText("subscheme.saved.successfully"));
+		showMode = "new";
+		EgovMasterDataCaching.removeFromCache(" egi-subscheme");
+		return VIEW;
+	}
 
-    @Validations(requiredFields = { @RequiredFieldValidator(fieldName = "scheme", message = "", key = REQUIRED),
-            @RequiredFieldValidator(fieldName = "code", message = "", key = REQUIRED),
-            @RequiredFieldValidator(fieldName = "name", message = "", key = REQUIRED),
-            @RequiredFieldValidator(fieldName = "validfrom", message = "", key = REQUIRED),
-            @RequiredFieldValidator(fieldName = "validto", message = "", key = REQUIRED) })
-    @ValidationErrorPage(value = NEW)
-    @Action(value = "/masters/subScheme-create")
-    public String save() {
-        if (isactive)
-            subScheme.setIsactive(true);
-        else
-            subScheme.setIsactive(false);
+	@Action(value = "/masters/subScheme-edit")
+	public String editSubScheme() {
+		subScheme.setIsactive(isactive);
+		subScheme.setLastModifiedBy(ApplicationThreadLocals.getUserId());
+		subScheme.setLastmodifieddate(new Date());
+		try {
+			subSchemeService.persist(subScheme);
+			subSchemeService.getSession().flush();
+		} catch (final ValidationException e) {
+			throw new ValidationException(Arrays.asList(new ValidationError(AN_ERROR_OCCURED_CONTACT_ADMINISTRATOR,
+					AN_ERROR_OCCURED_CONTACT_ADMINISTRATOR)));
+		} catch (final ConstraintViolationException e) {
+			throw new ValidationException(Arrays.asList(new ValidationError(DUPLICATE_SUBSCHEME, DUPLICATE_SUBSCHEME)));
+		}
+		clearValues = true;
+		addActionMessage(getText("subscheme.modified.successfully"));
+		showMode = "";
+		EgovMasterDataCaching.removeFromCache("egi-subscheme");
+		return VIEW;
+	}
 
-        subScheme.setCreatedDate(new Date());
-        subScheme.setCreatedBy(ApplicationThreadLocals.getUserId());
-        subScheme.setLastmodifieddate(new Date());
-       
-        try {
-            subSchemeService.persist(subScheme);
-            subSchemeService.getSession().flush();
-        } catch (final ValidationException e) {
-            throw e;
-        } catch (final ConstraintViolationException e) {
-            addActionError(getText("duplicate.subscheme"));
-            return NEW;
-        } catch (final Exception e) {
-            throw new ValidationException(Arrays.asList(new ValidationError("An error occured contact Administrator",
-                    "An error occured contact Administrator")));
-        }
-        clearValues = true;
-        addActionMessage(getText("subscheme.saved.successfully"));
-        showMode = "new";
-        egovMasterDataCaching.removeFromCache(" egi-subscheme");
-        return VIEW;
-    }
+	@SkipValidation
+	@Action(value = "/masters/subScheme-beforeEdit")
+	public String beforeEdit() {
+		if (subScheme != null && subScheme.getIsactive())
+			isactive = true;
+		return NEW;
+	}
 
-    @Action(value = "/masters/subScheme-edit")
-    public String edit() {
-        if (subSchemeId != null)
-            subScheme.setId(subSchemeId.intValue());
-        if (isactive)
-            subScheme.setIsactive(true);
-        else
-            subScheme.setIsactive(false);
+	@SkipValidation
+	@Action(value = "/masters/subScheme-beforeSearch")
+	public String beforeSearch() {
+		dropdownData.put(FUND_LIST, persistenceService.findAllBy(FUND_QUERY));
+		dropdownData.put(SCHEME_LIST, Collections.emptyList());
+		dropdownData.put(SUB_SCHEME_LIST, Collections.emptyList());
+		fundId = 0;
+		return SEARCH;
+	}
 
-        subScheme.setLastModifiedBy(ApplicationThreadLocals.getUserId());
-        subScheme.setLastmodifieddate(new Date());
-        try {
-            subSchemeService.persist(subScheme);
-            subSchemeService.getSession().flush();
-        } catch (final ValidationException e) {
-            throw e;
-        } catch (final ConstraintViolationException e) {
-            throw new ValidationException(Arrays.asList(new ValidationError("duplicate.subscheme", "duplicate.subscheme")));
-        } catch (final Exception e) {
-            throw new ValidationException(Arrays.asList(new ValidationError("An error occured contact Administrator",
-                    "An error occured contact Administrator")));
-        }
-        clearValues = true;
-        addActionMessage(getText("subscheme.modified.successfully"));
-        showMode = "";
-        egovMasterDataCaching.removeFromCache("egi-subscheme");
-        return VIEW;
-    }
+	@SkipValidation
+	@Action(value = "/masters/subScheme-beforeSearch-edit")
+	public String beforeSearchEdit() {
+		dropdownData.put(FUND_LIST, persistenceService.findAllBy(FUND_QUERY));
+		dropdownData.put(SCHEME_LIST, Collections.emptyList());
+		dropdownData.put(SUB_SCHEME_LIST, Collections.emptyList());
+		showMode = "edit";
+		fundId = 0;
+		return SEARCH;
+	}
 
-    @SkipValidation
-    @Action(value = "/masters/subScheme-beforeEdit")
-    public String beforeEdit()
-    {
-        subScheme = (SubScheme) persistenceService.find("from SubScheme where id=?", subScheme.getId());
-        if (subScheme!=null && subScheme.getIsactive())
-        	isactive = true;
-        return NEW;
-    }
+	@SuppressWarnings("unchecked")
+	@SkipValidation
+	@Action(value = "/masters/subScheme-search")
+	public String searchSubScheme() {
+		final StringBuilder query = new StringBuilder(500);
+		final List<Object> params = new ArrayList<>();
+		query.append("From SubScheme s ");
+		if (fundId != 0) {
+			query.append("where s.scheme.fund.id=?");
+			params.add(fundId);
+			if (schemeId != -1) {
+				query.append(" and  s.scheme.id=?");
+				params.add(schemeId);
+				if (subScheme.getId() != -1) {
+					query.append(" and s.id=?");
+					params.add(subScheme.getId());
+				}
+			}
+		}
+		loadDropDowns();
+		subSchemeList = persistenceService.findAllBy(query.toString(), params.toArray());
+		return SEARCH;
+	}
 
-    @SkipValidation
-    @Action(value = "/masters/subScheme-beforeSearch")
-    public String beforeSearch() {
+	@SkipValidation
+	@Action(value = "/masters/subScheme-viewSubScheme")
+	public String viewSubScheme() {
+		showMode = "view";
+		return VIEW;
+	}
 
-        dropdownData.put("fundList", persistenceService
-                .findAllBy("from Fund where isActive=true order by name"));
-        dropdownData.put("schemeList", Collections.emptyList());
-        dropdownData.put("subSchemeList", Collections.emptyList());
-        fundId = 0;
-        return SEARCH;
-    }
-    
-    @SkipValidation
-    @Action(value = "/masters/subScheme-beforeSearch-edit")
-    public String beforeSearchEdit(){
-        dropdownData.put("fundList", persistenceService
-                .findAllBy("from Fund where isActive=true order by name"));
-        dropdownData.put("schemeList", Collections.emptyList());
-        dropdownData.put("subSchemeList", Collections.emptyList());
-        showMode="edit";
-        fundId = 0;
-        return SEARCH;
-    }
+	private void loadDropDowns() {
+		dropdownData.put(FUND_LIST, persistenceService.findAllBy(FUND_QUERY));
+		final StringBuilder st = new StringBuilder();
 
-    @SkipValidation
-    @Action(value = "/masters/subScheme-search")
-    public String search() {
-        final StringBuffer query = new StringBuffer(500);
-        new StringBuffer(100);
-        query.append("From SubScheme s ");
-        if (fundId != 0) {
-            query.append("where s.scheme.fund.id= " + fundId);
-            // params.append(""+fundId);
+		if (fundId != 0) {
+			st.append("from Scheme where isactive=true and fund.id=?");
+			dropdownData.put(SCHEME_LIST, persistenceService.findAllBy(st.toString(), fundId));
+			st.delete(0, st.length() - 1);
+		} else
+			dropdownData.put(SCHEME_LIST, Collections.emptyList());
+		if (schemeId != -1)
+			dropdownData.put(SUB_SCHEME_LIST,
+					persistenceService.findAllBy("from SubScheme where isactive=true and scheme.id=?", schemeId));
+		else
+			dropdownData.put(SUB_SCHEME_LIST, Collections.emptyList());
+	}
 
-            if (schemeId != -1) {
-                query.append("and  s.scheme.id= " + schemeId);
-                // params.append(","+schemeId);
+	@SkipValidation
+	public boolean getCheckField() {
+		SubScheme subSchemeValidate = null;
+		boolean isDuplicate = false;
 
-                if (subScheme.getId() != -1)
-                    query.append("and s.id=" + subScheme.getId());
-                // params.append(","+subSchemeId);
-            }
-        }
-        loadDropDowns();
-        subSchemeList = persistenceService.findAllBy(query.toString());
-        return SEARCH;
-    }
+		if (uniqueCode) {
+			if (!subScheme.getCode().equals("") && subScheme.getId() != null)
+				subSchemeValidate = (SubScheme) persistenceService.find("from SubScheme where code=? and id!=?",
+						subScheme.getCode().toLowerCase(), subScheme.getId());
+			else if (!subScheme.getCode().equals(""))
+				subSchemeValidate = (SubScheme) persistenceService.find("from SubScheme where code=?",
+						subScheme.getCode().toLowerCase());
+			uniqueCode = false;
+		} else if (!subScheme.getName().equals("") && subScheme.getId() != null)
+			subSchemeValidate = (SubScheme) persistenceService.find("from SubScheme where name=? and id!=?",
+					subScheme.getName().toLowerCase(), subScheme.getId());
+		else if (!subScheme.getName().equals(""))
+			subSchemeValidate = (SubScheme) persistenceService.find("from SubScheme where name=?",
+					subScheme.getName().toLowerCase());
+		if (subSchemeValidate != null)
+			isDuplicate = true;
 
-    @SkipValidation
-    @Action(value = "/masters/subScheme-viewSubScheme")
-    public String viewSubScheme() {
-        subScheme = (SubScheme) persistenceService.find("from SubScheme where id=?", subScheme.getId());
-        showMode = "view";
-        return VIEW;
-    }
+		return isDuplicate;
+	}
 
-    private void loadDropDowns() {
+	@SkipValidation
+	@Action(value = "/masters/subScheme-codeUniqueCheck")
+	public String codeUniqueCheck() {
+		uniqueCode = true;
+		return UNIQUECHECKFIELD;
+	}
 
-        dropdownData.put("fundList", persistenceService
-                .findAllBy("from Fund where isActive=true order by name"));
-        final StringBuffer st = new StringBuffer();
+	@SkipValidation
+	@Action(value = "/masters/subScheme-nameUniqueCheck")
+	public String nameUniqueCheck() {
+		return UNIQUECHECKFIELD;
+	}
 
-        if (fundId != 0) {
+	public void setFundId(final long fundId) {
+		this.fundId = fundId;
+	}
 
-            st.append("from Scheme where isactive=true and fund.id=");
-            st.append(fundId);
-            dropdownData.put("schemeList", persistenceService.findAllBy(st
-                    .toString()));
-            st.delete(0, st.length() - 1);
+	public long getFundId() {
+		return fundId;
+	}
 
-        } else
-            dropdownData.put("schemeList", Collections.emptyList());
-        if (schemeId != -1)
-            dropdownData.put("subSchemeList",
-                    persistenceService.findAllBy("from SubScheme where isactive=true and scheme.id=?", schemeId));
-        else
-            dropdownData.put("subSchemeList", Collections.emptyList());
+	public void setSchemeId(final Integer schemeId) {
+		this.schemeId = schemeId;
+	}
 
-    }
-    
-    
-    @SkipValidation
-    public boolean getCheckField() {
-    	SubScheme subScheme_validate = null;
-        boolean isDuplicate = false;
-        
-        if (uniqueCode) {
-            if (!subScheme.getCode().equals("") && subScheme.getId() != null)
-            	subScheme_validate = (SubScheme) persistenceService.find("from SubScheme where code=? and id!=?",
-                		subScheme.getCode().toLowerCase(), subScheme.getId());
-            else if (!subScheme.getCode().equals(""))
-            	subScheme_validate = (SubScheme) persistenceService.find("from SubScheme where code=?", subScheme.getCode().toLowerCase());
-            uniqueCode = false;
-        } else if (!subScheme.getName().equals("") && subScheme.getId() != null)
-        	subScheme_validate = (SubScheme) persistenceService.find("from SubScheme where name=? and id!=?", subScheme.getName().toLowerCase(),
-            		subScheme.getId());
-        else if (!subScheme.getName().equals(""))
-        	subScheme_validate = (SubScheme) persistenceService.find("from SubScheme where name=?", subScheme.getName().toLowerCase());
-        if (subScheme_validate != null)
-            isDuplicate = true;
-        
-        return isDuplicate;
-    }
-    
-    @SkipValidation
-    @Action(value = "/masters/subScheme-codeUniqueCheck")
-    public String codeUniqueCheck() {
-        
-        uniqueCode = true;
-        return UNIQUECHECKFIELD;
-    }
+	public Integer getSchemeId() {
+		return schemeId;
+	}
 
-    @SkipValidation
-    @Action(value = "/masters/subScheme-nameUniqueCheck")
-    public String nameUniqueCheck() {
-        
-        return UNIQUECHECKFIELD;
-    }
+	public void setSubSchemeList(final List<SubScheme> subSchemeList) {
+		this.subSchemeList = subSchemeList;
+	}
 
-    private User getLoggedInUser() {
-        return (User) persistenceService.getSession().load(User.class, ApplicationThreadLocals.getUserId());
-    }
+	public List<SubScheme> getSubSchemeList() {
+		return subSchemeList;
+	}
 
-    public void setFundId(final int fundId) {
-        this.fundId = fundId;
-    }
+	public void setShowMode(final String showMode) {
+		this.showMode = showMode;
+	}
 
-    public int getFundId() {
-        return fundId;
-    }
+	public String getShowMode() {
+		return showMode;
+	}
 
-    public void setSchemeId(final int schemeId) {
-        this.schemeId = schemeId;
-    }
+	public SubSchemeService getSubSchemeService() {
+		return subSchemeService;
+	}
 
-    public int getSchemeId() {
-        return schemeId;
-    }
+	public void setSubSchemeService(final SubSchemeService subSchemeService) {
+		this.subSchemeService = subSchemeService;
+	}
 
-    public void setSubSchemeList(final List<SubScheme> subSchemeList) {
-        this.subSchemeList = subSchemeList;
-    }
+	public void setSubScheme(final SubScheme subScheme) {
+		this.subScheme = subScheme;
+	}
 
-    public List<SubScheme> getSubSchemeList() {
-        return subSchemeList;
-    }
+	public SubScheme getSubScheme() {
+		return subScheme;
+	}
 
-    public void setShowMode(final String showMode) {
-        this.showMode = showMode;
-    }
-
-    public String getShowMode() {
-        return showMode;
-    }
-
-    public SubSchemeService getSubSchemeService() {
-        return subSchemeService;
-    }
-
-    public void setSubSchemeService(final SubSchemeService subSchemeService) {
-        this.subSchemeService = subSchemeService;
-    }
-
-    public void setSubScheme(final SubScheme subScheme) {
-        this.subScheme = subScheme;
-    }
-
-    public SubScheme getSubScheme() {
-        return subScheme;
-    }
-
-
-    public boolean isIsactive() {
+	public boolean isIsactive() {
 		return isactive;
 	}
 
@@ -386,20 +355,20 @@ public class SubSchemeAction extends BaseFormAction {
 	}
 
 	public void setClearValues(final boolean clearValues) {
-        this.clearValues = clearValues;
-    }
+		this.clearValues = clearValues;
+	}
 
-    public boolean isClearValues() {
-        return clearValues;
-    }
+	public boolean isClearValues() {
+		return clearValues;
+	}
 
-    public Long getSubSchemeId() {
-        return subSchemeId;
-    }
+	public Integer getSubSchemeId() {
+		return subSchemeId;
+	}
 
-    public void setSubSchemeId(final Long subSchemeId) {
-        this.subSchemeId = subSchemeId;
-    }
+	public void setSubSchemeId(final Integer subSchemeId) {
+		this.subSchemeId = subSchemeId;
+	}
 
 	public String getCode() {
 		return code;

@@ -64,6 +64,10 @@
         <param-name>parentContextKey</param-name>
         <param-value>erpApplicationContext</param-value>
     </context-param>
+    <context-param>
+        <param-name>defaultHtmlEscape</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
     <filter>
         <filter-name>CacheControlFilter</filter-name>

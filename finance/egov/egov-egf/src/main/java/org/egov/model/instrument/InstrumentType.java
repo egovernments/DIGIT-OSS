@@ -47,58 +47,43 @@
  */
 package org.egov.model.instrument;
 
-import org.egov.infstr.models.BaseModel;
-
 import java.util.HashSet;
 import java.util.Set;
 
+import org.egov.infstr.models.BaseModel;
+
+@SuppressWarnings("deprecation")
 public class InstrumentType extends BaseModel {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 8681244690485333431L;
-    private Long id;
-    private String type;
-    private Boolean isActive;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 8681244690485333431L;
+	private String type;
+	private Boolean isActive;
+	private Set<InstrumentAccountCodes> instrumentAccountCodes = new HashSet<>();
 
-   
+	public String getType() {
+		return type;
+	}
 
-    private Set instrumentAccountCodes = new HashSet<InstrumentAccountCodes>();
+	public void setType(final String type) {
+		this.type = type;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	public Set<InstrumentAccountCodes> getInstrumentAccountCodes() {
+		return instrumentAccountCodes;
+	}
 
-    @Override
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	public void setInstrumentAccountCodes(final Set<InstrumentAccountCodes> instrumentAccountCodes) {
+		this.instrumentAccountCodes = instrumentAccountCodes;
+	}
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public Set<InstrumentAccountCodes> getInstrumentAccountCodes() {
-        return instrumentAccountCodes;
-    }
-
-    public void setInstrumentAccountCodes(
-            final Set<InstrumentAccountCodes> instrumentAccountCodes) {
-        this.instrumentAccountCodes = instrumentAccountCodes;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuffer itBuffer = new StringBuffer();
-        itBuffer.append("[id=" + id).append(",type=" + type).append(
-                ",isActive=" + isActive).append("]");
-        return itBuffer.toString();
-    }
+	@Override
+	public String toString() {
+		final StringBuilder itBuffer = new StringBuilder();
+		itBuffer.append("[id=" + id).append(",type=" + type).append(",isActive=" + isActive).append("]");
+		return itBuffer.toString();
+	}
 
 	public Boolean getIsActive() {
 		return isActive;

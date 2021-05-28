@@ -53,54 +53,56 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.egov.commons.CFunction;
+import org.egov.commons.contracts.FunctionSearchRequest;
 import org.egov.commons.service.FunctionService;
 import org.egov.egf.web.adaptor.FunctionJsonAdaptor;
 import org.egov.infstr.utils.EgovMasterDataCaching;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@SuppressWarnings("deprecation")
 @Controller
 @RequestMapping("/function")
 public class FunctionController {
-	private final static String FUNCTION_NEW = "function-new";
-	private final static String FUNCTION_RESULT = "function-result";
-	private final static String FUNCTION_EDIT = "function-edit";
-	private final static String FUNCTION_VIEW = "function-view";
-	private final static String FUNCTION_SEARCH = "function-search";
+	private static final String STR_FUNCTION = "function";
+	private static final String STR_FUNCTION_REQUEST = "functionSearchRequest";
+	private static final String FUNCTION_NEW = "function-new";
+	private static final String FUNCTION_RESULT = "function-result";
+	private static final String FUNCTION_EDIT = "function-edit";
+	private static final String FUNCTION_VIEW = "function-view";
+	private static final String FUNCTION_SEARCH = "function-search";
 	@Autowired
 	private FunctionService functionService;
 	@Autowired
 	private MessageSource messageSource;
-	@Autowired
-	private EgovMasterDataCaching egovMasterDataCaching;
-	
-	
 
 	private void prepareNewForm(Model model) {
 		model.addAttribute("functions", functionService.findAllIsNotLeafTrue());
 	}
 
-	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	@PostMapping(value = "/new")
 	public String newForm(final Model model) {
 		prepareNewForm(model);
 		model.addAttribute("CFunction", new CFunction());
 		return FUNCTION_NEW;
 	}
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@PostMapping(value = "/create")
 	public String create(@Valid @ModelAttribute final CFunction function,
 			final BindingResult errors, final Model model,
 			final RedirectAttributes redirectAttrs) {
@@ -116,12 +118,12 @@ public class FunctionController {
 		functionService.create(function);
 		redirectAttrs.addFlashAttribute("message",
 				messageSource.getMessage("msg.function.success", null, null));
-		egovMasterDataCaching.removeFromCache("egi-activeFunctions");
-		egovMasterDataCaching.removeFromCache("egi-function");
+		EgovMasterDataCaching.removeFromCache("egi-activeFunctions");
+		EgovMasterDataCaching.removeFromCache("egi-function");
 		return "redirect:/function/result/" + function.getId()+"/create";
 	}
 
-	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/edit/{id}")
 	public String edit(@PathVariable("id") final Long id, Model model) {
 		CFunction function = functionService.findOne(id);
 		prepareNewForm(model);
@@ -129,7 +131,7 @@ public class FunctionController {
 		return FUNCTION_EDIT;
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@PostMapping(value = "/update")
 	public String update(@Valid @ModelAttribute final CFunction function,
 			final BindingResult errors, final Model model,
 			final RedirectAttributes redirectAttrs) {
@@ -140,53 +142,51 @@ public class FunctionController {
 		functionService.update(function);
 		redirectAttrs.addFlashAttribute("message",
 				messageSource.getMessage("msg.function.success", null, null));
-		egovMasterDataCaching.removeFromCache("egi-activeFunctions");
-		 egovMasterDataCaching.removeFromCache("egi-function");
+		EgovMasterDataCaching.removeFromCache("egi-activeFunctions");
+		EgovMasterDataCaching.removeFromCache("egi-function");
 		return "redirect:/function/result/" + function.getId()+"/view";
 	}
 
-	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/view/{id}")
 	public String view(@PathVariable("id") final Long id, Model model) {
 		CFunction function = functionService.findOne(id);
 		prepareNewForm(model);
-		model.addAttribute("function", function);
+		model.addAttribute(STR_FUNCTION, function);
 		model.addAttribute("mode","view");
 		return FUNCTION_VIEW;
 	}
 
-	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
-	public String result(@PathVariable("id") final Long id,@PathVariable("mode") final String mode, Model model) {
+	@GetMapping(value = "/result/{id}/{mode}")
+	public String result(@PathVariable("id") final Long id,@PathVariable("mode") @SafeHtml final String mode, Model model) {
 		CFunction function = functionService.findOne(id);
-		model.addAttribute("function", function);
+		model.addAttribute(STR_FUNCTION, function);
 		model.addAttribute("mode", mode);
 		return FUNCTION_RESULT;
 	}
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
-	public String search(@PathVariable("mode") final String mode, Model model) {
-		CFunction function = new CFunction();
+	@PostMapping(value = "/search/{mode}")
+	public String search(@PathVariable("mode") @SafeHtml final String mode, Model model) {
+		FunctionSearchRequest functionSearchRequest = new FunctionSearchRequest();
 		prepareNewForm(model);
-		model.addAttribute("function", function);
+		model.addAttribute(STR_FUNCTION_REQUEST, functionSearchRequest);
 		return FUNCTION_SEARCH;
 
 	}
 
-	@RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	@PostMapping(value = "/ajaxsearch/{mode}", produces = MediaType.TEXT_PLAIN_VALUE)
 	public @ResponseBody String ajaxsearch(
-			@PathVariable("mode") final String mode, Model model,
-			@ModelAttribute final CFunction function) {
-		List<CFunction> searchResultList = functionService.search(function);
-		String result = new StringBuilder("{ \"data\":")
+			@PathVariable("mode") @SafeHtml final String mode, Model model,
+			@Valid @ModelAttribute final FunctionSearchRequest functionSearchRequest) {
+		List<CFunction> searchResultList = functionService.search(functionSearchRequest);
+		return new StringBuilder("{ \"data\":")
 				.append(toSearchResultJson(searchResultList)).append("}")
 				.toString();
-		return result;
 	}
 
 	public Object toSearchResultJson(final Object object) {
 		final GsonBuilder gsonBuilder = new GsonBuilder();
 		final Gson gson = gsonBuilder.registerTypeAdapter(CFunction.class,
 				new FunctionJsonAdaptor()).create();
-		final String json = gson.toJson(object);
-		return json;
+		return gson.toJson(object);
 	}
 }

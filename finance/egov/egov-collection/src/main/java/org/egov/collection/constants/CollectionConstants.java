@@ -118,7 +118,7 @@ public final class CollectionConstants {
     public static final String REPORT_TEMPLATE_RECEIPT_REGISTER = "collection_receipt_register";
 
     // Receipt View Source Path for Financials
-    public static final String RECEIPT_VIEW_SOURCEPATH = "/collection/receipts/receipt-viewReceipts.action?selectedReceipts=";
+    public static final String RECEIPT_VIEW_SOURCEPATH = "/collection/receipts/receipt-viewReceipts.action?selectedReceipts=&serviceTypeId=";
 
     // action method return values
     public static final String REPORT = "report";

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.egov.egf.es.integration.dao.ESDashboardDAO;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.hibernate.HibernateException;
@@ -55,12 +56,12 @@ public class ESSchedularService {
             }
         } catch (HibernateException e) {
             LOGGER.error(e.getMessage());
-        } catch (Exception e){
+        } catch (ApplicationRuntimeException e){
             LOGGER.error(e.getMessage());
         }
      }
     
-    private void pushDataToEsIndex(RollOutAdoptionData rollOutAdoptionData) throws Exception{
+    private void pushDataToEsIndex(RollOutAdoptionData rollOutAdoptionData){
         RollOutAdoptionDataWrapper wrapper = new RollOutAdoptionDataWrapper();
         wrapper.setRollOutAdoptionData(rollOutAdoptionData);
         RequestInfo requestInfo = new RequestInfo();

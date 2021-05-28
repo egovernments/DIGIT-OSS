@@ -48,6 +48,20 @@
 package org.egov.services.deduction;
 
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
 import org.egov.commons.Bankaccount;
@@ -87,20 +101,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author mani
@@ -207,7 +207,7 @@ public class ScheduledRemittanceService {
             loadCommonData();
             validate(glcode);
             new Date();
-            recovery = recoveryService.find("from Recovery where chartofaccounts.glcode=" + glcode);
+            recovery = recoveryService.find("from Recovery where chartofaccounts.glcode = ?", glcode);
             if (recovery == null)
             {
                 LOGGER.error("glcode is not mapped to tds :" + glcode + "\n");
@@ -310,8 +310,8 @@ public class ScheduledRemittanceService {
                             // Here there is no chance of voucherheader coming as null as create voucher throws validation
                             // exception on any issues
                             final Bankaccount ba = (Bankaccount) persistenceService.
-                                    find(" from  Bankaccount where id="
-                                            + Integer.parseInt(voucher.split("-")[bankAccountIdIndex]) + "");
+                                    find(" from  Bankaccount where id = ?",
+                                    		Integer.parseInt(voucher.split("-")[bankAccountIdIndex]));
 
                             if (ba == null)
                             {
@@ -351,14 +351,13 @@ public class ScheduledRemittanceService {
 
                         }
 
-                    catch (final Exception e) {
-
-                        errorMessage.append(dept + ":" + e.getMessage() + "\n");
-                        successForAutoRemittance = false;
-
-                        // updateScheduleLog(errorMessage.toString(),jobName,glcode,false);
-
-                    }
+                    /*
+                     * catch (final Exception e) { errorMessage.append(dept +
+                     * ":" + e.getMessage() + "\n"); successForAutoRemittance =
+                     * false; //
+                     * updateScheduleLog(errorMessage.toString(),jobName,glcode,
+                     * false); }
+                     */
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("Done for Department :" + deptMap.get(dept));
                         LOGGER.debug("**********************************************");
@@ -376,11 +375,10 @@ public class ScheduledRemittanceService {
 
         }
 
-        catch (final Exception e) {
-            successForAutoRemittance = false;
-            errorMessage.append(e.getMessage() + "\n");
-
-        } finally
+        /*
+         * catch (final Exception e) { successForAutoRemittance = false;
+         * errorMessage.append(e.getMessage() + "\n"); }
+         */ finally
         {
             updateScheduleLog(errorMessage.toString(), jobName, glcode, true, schedularLogId);
 
@@ -428,7 +426,7 @@ public class ScheduledRemittanceService {
                 // Here there is no chance of voucherheader coming as null as create voucher throws validation exception on any
                 // issues
                 final Bankaccount ba = (Bankaccount) persistenceService.
-                        find(" from  Bankaccount where id=" + Integer.parseInt(voucher.split("-")[bankAccountIdIndex]) + "");
+                        find(" from  Bankaccount where id = ?", Integer.parseInt(voucher.split("-")[bankAccountIdIndex]));
                 if (ba == null)
                 {
                     LOGGER.error("Bank Glcode for fundId " + fundMap.get(Integer.parseInt(voucher.split("-")[fundIndex]))
@@ -459,12 +457,12 @@ public class ScheduledRemittanceService {
                 errorMessage.append(dept + ":" + e.getErrors() + "\n");
                 // updateScheduleLog(errorMessage.toString(),jobName,glcode,false);
 
-            } catch (final Exception e) {
-
-                errorMessage.append(dept + ":" + e.getMessage() + "\n");
-                // updateScheduleLog(errorMessage.toString(),jobName,glcode,false);
-
-            }
+            } /*
+               * catch (final Exception e) { errorMessage.append(dept + ":" +
+               * e.getMessage() + "\n"); //
+               * updateScheduleLog(errorMessage.toString(),jobName,glcode,false)
+               * ; }
+               */
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Done for Department :" + deptMap.get(dept));
             LOGGER.debug("**********************************************");
@@ -484,56 +482,49 @@ public class ScheduledRemittanceService {
      * care. Should be maintained as same.
      */
 
-    private List<AutoRemittanceBean> getNonControleCodeReceiptRecoveries(final Integer dept, final int bankaccount) {
+	private List<AutoRemittanceBean> getNonControleCodeReceiptRecoveries(final Integer dept, final int bankaccount) {
 
-        final StringBuffer qry = new StringBuffer(2048);
-        qry.append(" SELECT DISTINCT gl.id AS generalledgerId,  vh.fundid  AS fundId,  gl.debitAmount   "
-                +
-                "   AS gldtlAmount, "
-                + bankaccount
-                + " AS bankAccountId  "
-                +
-                " FROM VOUCHERHEADER vh ,  VOUCHERMIS mis,  GENERALLEDGER gl ,  VOUCHERHEADER payinslip,fund f,  "
-                +
-                " EGF_INSTRUMENTHEADER ih,EGF_INSTRUMENTOTHERDETAILS io , egcl_collectionvoucher cv,egcl_collectioninstrument ci, TDS recovery "
-                +
-                " WHERE  recovery.GLCODEID =gl.GLCODEID  AND vh.ID =gl.VOUCHERHEADERID"
-                +
-                " AND gl.remittanceDate    IS NULL AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS =0 and vh.fundid=f.id "
-                +
-                " AND io.payinslipid =payinslip.id and io.instrumentheaderid=ih.id "
-                +
-                " and cv.voucherheaderid= vh.id and ci.collectionheaderid= cv.collectionheaderid and ci.instrumentmasterid= ih.id "
-                +
-                " and payinslip.status=0 AND ih.id_status NOT     IN  (" +
-                " select id from egw_status where moduletype='Instrument' and  description in ('"
-                + FinancialConstants.INSTRUMENT_CANCELLED_STATUS
-                + "','" + FinancialConstants.INSTRUMENT_SURRENDERED_STATUS
-                + "','" + FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS + "') )" +
-                " AND recovery.ID      =" + recovery.getId() + " AND payinslip.voucherdate    >= :startdate  ");
-        if (lastRunDate != null)
-            qry.append(" and  payinslip.voucherdate    <= :lastrundate");
+		final StringBuilder qry = new StringBuilder();
+		qry.append(" SELECT DISTINCT gl.id AS generalledgerId,  vh.fundid  AS fundId,  gl.debitAmount   ")
+				.append(String.format(" AS gldtlAmount,%d AS bankAccountId", bankaccount))
+				.append(" FROM VOUCHERHEADER vh ,  VOUCHERMIS mis,  GENERALLEDGER gl ,  VOUCHERHEADER payinslip,fund f,  ")
+				.append(" EGF_INSTRUMENTHEADER ih,EGF_INSTRUMENTOTHERDETAILS io , egcl_collectionvoucher cv,")
+				.append("egcl_collectioninstrument ci, TDS recovery ")
+				.append(" WHERE  recovery.GLCODEID =gl.GLCODEID  AND vh.ID =gl.VOUCHERHEADERID")
+				.append(" AND gl.remittanceDate    IS NULL AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS =0 and vh.fundid=f.id ")
+				.append(" AND io.payinslipid =payinslip.id and io.instrumentheaderid=ih.id ")
+				.append(" and cv.voucherheaderid= vh.id and ci.collectionheaderid= cv.collectionheaderid and ci.instrumentmasterid= ih.id ")
+				.append(" and payinslip.status=0 AND ih.id_status NOT IN  (")
+				.append(" select id from egw_status where moduletype='Instrument' and  description in (:description) )")
+				.append(" AND recovery.ID = :recoveryId() AND payinslip.voucherdate >= :startdate  ");
+		if (lastRunDate != null)
+			qry.append(" and  payinslip.voucherdate <= :lastrundate");
 
-        if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
-            qry.append(" and  f.code in (:fundCodes) ");
+		if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
+			qry.append(" and  f.code in (:fundCodes) ");
 
-        final SQLQuery query = persistenceService.getSession().createSQLQuery(qry.toString());
-        query.addScalar("generalledgerId", IntegerType.INSTANCE)
-        .addScalar("fundId", IntegerType.INSTANCE)
-        .addScalar("gldtlAmount", DoubleType.INSTANCE)
-        .addScalar("bankAccountId", IntegerType.INSTANCE);
-        if (lastRunDate != null)
-            query.setDate("lastrundate", new java.sql.Date(lastRunDate.getTime()));
+		final SQLQuery query = persistenceService.getSession().createSQLQuery(qry.toString());
+		query.addScalar("generalledgerId", IntegerType.INSTANCE).addScalar("fundId", IntegerType.INSTANCE)
+				.addScalar("gldtlAmount", DoubleType.INSTANCE).addScalar("bankAccountId", IntegerType.INSTANCE);
 
-        if (startDate != null)
-            query.setDate("startdate", new java.sql.Date(startDate.getTime()));
-        if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
-            query.setParameterList("fundCodes", receiptFundCodes);
-        query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("ReceiptRecoveries query " + qry);
-        return query.list();
-    }
+		query.setParameterList("description",
+				Arrays.asList(FinancialConstants.INSTRUMENT_CANCELLED_STATUS,
+						FinancialConstants.INSTRUMENT_SURRENDERED_STATUS,
+						FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS))
+				.setParameter("recoveryId", recovery.getId());
+
+		if (lastRunDate != null)
+			query.setDate("lastrundate", new java.sql.Date(lastRunDate.getTime()));
+
+		if (startDate != null)
+			query.setDate("startdate", new java.sql.Date(startDate.getTime()));
+		if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
+			query.setParameterList("fundCodes", receiptFundCodes);
+		query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("ReceiptRecoveries query " + qry);
+		return query.list();
+	}
 
     private DrawingOfficer validateDrawingOfficer(final StringBuffer errorMessage, final Integer dept) {
 
@@ -1032,79 +1023,83 @@ public class ScheduledRemittanceService {
     }
 
     private Collection<? extends AutoRemittanceBean> getNonControleCodeGJVRecovries(final Integer dept, final int bankaccount) {
-        final StringBuffer qry = new StringBuffer(2048);
-        qry.append(" SELECT DISTINCT gl.id AS generalledgerId,  vh.fundid           AS fundId,  gl.creditamount   " +
-                "   AS gldtlAmount, " + bankaccount + " AS bankAccountId " +
-                " FROM VOUCHERHEADER vh ,  VOUCHERMIS mis,  GENERALLEDGER gl , fund f, TDS recovery " +
-                " WHERE  recovery.GLCODEID =gl.GLCODEID  AND vh.ID =gl.VOUCHERHEADERID" +
-                " AND gl.remittanceDate    IS NULL AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS =0 and vh.fundid=f.id " +
-                " and vh.name='" + FinancialConstants.JOURNALVOUCHER_NAME_GENERAL + "' and vh.moduleid is null " +
-                " AND recovery.ID      =" + recovery.getId() + " AND vh.voucherdate    >= :startdate  ");
-        if (lastRunDate != null)
-            qry.append(" and  vh.voucherdate    <= :lastrundate");
+		final StringBuilder qry = new StringBuilder();
+		qry.append(" SELECT DISTINCT gl.id AS generalledgerId,  vh.fundid   AS fundId,  gl.creditamount   ")
+				.append(String.format("   AS gldtlAmount, %d AS bankAccountId ", bankaccount))
+				.append(" FROM VOUCHERHEADER vh ,  VOUCHERMIS mis,  GENERALLEDGER gl , fund f, TDS recovery ")
+				.append(" WHERE  recovery.GLCODEID =gl.GLCODEID  AND vh.ID =gl.VOUCHERHEADERID")
+				.append(" AND gl.remittanceDate    IS NULL AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS =0 and vh.fundid=f.id ")
+				.append(" and vh.name= :vhName and vh.moduleid is null ")
+				.append(" AND recovery.ID = :recoveryId AND vh.voucherdate    >= :startdate  ");
+		if (lastRunDate != null)
+			qry.append(" and  vh.voucherdate    <= :lastrundate");
 
-        if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
-            qry.append(" and  f.code in (:fundCodes) ");
+		if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
+			qry.append(" and  f.code in (:fundCodes) ");
 
-        final SQLQuery query = persistenceService.getSession().createSQLQuery(qry.toString());
-        query.addScalar("generalledgerId", IntegerType.INSTANCE)
-        .addScalar("fundId", IntegerType.INSTANCE)
-        .addScalar("gldtlAmount", DoubleType.INSTANCE)
-        .addScalar("bankAccountId", IntegerType.INSTANCE);
-        if (lastRunDate != null)
-            query.setDate("lastrundate", new java.sql.Date(lastRunDate.getTime()));
+		final SQLQuery query = persistenceService.getSession().createSQLQuery(qry.toString());
+		query.addScalar("generalledgerId", IntegerType.INSTANCE).addScalar("fundId", IntegerType.INSTANCE)
+				.addScalar("gldtlAmount", DoubleType.INSTANCE).addScalar("bankAccountId", IntegerType.INSTANCE);
 
-        if (startDate != null)
-            query.setDate("startdate", new java.sql.Date(startDate.getTime()));
-        if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
-            query.setParameterList("fundCodes", receiptFundCodes);
-        query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("ReceiptRecoveries query " + qry);
-        return query.list();
+		query.setParameter("vhName", FinancialConstants.JOURNALVOUCHER_NAME_GENERAL).setParameter("recoveryId",
+				recovery.getId());
 
-    }
+		if (lastRunDate != null)
+			query.setDate("lastrundate", new java.sql.Date(lastRunDate.getTime()));
 
-    private List<AutoRemittanceBean> getNonControleCodeJVRecoveries(final Integer dept) {
-
-        final StringBuffer qry = new StringBuffer(2048);
-        qry.append(" SELECT DISTINCT gl.id AS generalledgerId,  vh.fundid           AS fundId,  gl.creditamount   " +
-                "   AS gldtlAmount,ih.bankaccountid AS bankAccountId " +
-                " FROM VOUCHERHEADER vh ,  VOUCHERMIS mis,  GENERALLEDGER gl ,  VOUCHERHEADER payment,  " +
-                " EGF_INSTRUMENTHEADER ih, EGF_INSTRUMENTVOUCHER iv ,TDS recovery,miscbilldetail mb " +
-                " WHERE  recovery.GLCODEID =gl.GLCODEID  AND vh.ID =gl.VOUCHERHEADERID " +
-                " AND gl.remittanceDate    IS NULL AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS =0  " +
-                " AND ih.id =iv.instrumentheaderid " +
-                " AND iv.voucherheaderid    =payment.id and payment.status=0 AND ih.id_status NOT     IN (" +
-                "select id from egw_status where moduletype='Instrument' and description in ('"
-                + FinancialConstants.INSTRUMENT_CANCELLED_STATUS
-                + "','" + FinancialConstants.INSTRUMENT_SURRENDERED_STATUS
-                + "','" + FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS + "') " +
-                " ) and mb.billvhid=vh.id and mb.payvhid=payment.id " +
-                " AND recovery.ID      =" + recovery.getId() + "  ");
-
-        if (lastRunDate != null)
-            qry.append(" and (ih.instrumentdate<= :lastrundate or ih.transactiondate<=:lastrundate )");
-        if (startDate != null)
-            qry.append(" and (ih.instrumentdate >=:startdate or ih.transactiondate>=:startdate )");
-
-        final SQLQuery query = persistenceService.getSession().createSQLQuery(qry.toString());
-        query.addScalar("generalledgerId", IntegerType.INSTANCE)
-        .addScalar("fundId", IntegerType.INSTANCE)
-        .addScalar("gldtlAmount", DoubleType.INSTANCE)
-        .addScalar("bankAccountId", IntegerType.INSTANCE);
-        if (lastRunDate != null)
-            query.setDate("lastrundate", new java.sql.Date(lastRunDate.getTime()));
-
-        if (startDate != null)
-            query.setDate("startdate", new java.sql.Date(startDate.getTime()));
-
-        query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("getNonControleCodeJVRecoveries query " + qry);
-        return query.list();
+		if (startDate != null)
+			query.setDate("startdate", new java.sql.Date(startDate.getTime()));
+		if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
+			query.setParameterList("fundCodes", receiptFundCodes);
+		query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("ReceiptRecoveries query " + qry);
+		return query.list();
 
     }
+
+	private List<AutoRemittanceBean> getNonControleCodeJVRecoveries(final Integer dept) {
+
+		final StringBuilder qry = new StringBuilder();
+		qry.append(" SELECT DISTINCT gl.id AS generalledgerId,  vh.fundid AS fundId,  gl.creditamount   ")
+				.append("   AS gldtlAmount,ih.bankaccountid AS bankAccountId ")
+				.append(" FROM VOUCHERHEADER vh ,  VOUCHERMIS mis,  GENERALLEDGER gl ,  VOUCHERHEADER payment,  ")
+				.append(" EGF_INSTRUMENTHEADER ih, EGF_INSTRUMENTVOUCHER iv ,TDS recovery,miscbilldetail mb ")
+				.append(" WHERE  recovery.GLCODEID =gl.GLCODEID  AND vh.ID =gl.VOUCHERHEADERID ")
+				.append(" AND gl.remittanceDate    IS NULL AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS =0  ")
+				.append(" AND ih.id =iv.instrumentheaderid ")
+				.append(" AND iv.voucherheaderid    =payment.id and payment.status=0 AND ih.id_status NOT IN (")
+				.append("select id from egw_status where moduletype='Instrument' and description in (:description) ")
+				.append(" ) and mb.billvhid=vh.id and mb.payvhid=payment.id ")
+				.append(" AND recovery.ID = :recoveryId ");
+
+		if (lastRunDate != null)
+			qry.append(" and (ih.instrumentdate<= :lastrundate or ih.transactiondate<=:lastrundate )");
+		if (startDate != null)
+			qry.append(" and (ih.instrumentdate >=:startdate or ih.transactiondate>=:startdate )");
+
+		final SQLQuery query = persistenceService.getSession().createSQLQuery(qry.toString());
+		query.addScalar("generalledgerId", IntegerType.INSTANCE).addScalar("fundId", IntegerType.INSTANCE)
+				.addScalar("gldtlAmount", DoubleType.INSTANCE).addScalar("bankAccountId", IntegerType.INSTANCE);
+
+		query.setParameterList("description",
+				Arrays.asList(FinancialConstants.INSTRUMENT_CANCELLED_STATUS,
+						FinancialConstants.INSTRUMENT_SURRENDERED_STATUS,
+						FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS))
+				.setParameter("recoveryId", recovery.getId());
+
+		if (lastRunDate != null)
+			query.setDate("lastrundate", new java.sql.Date(lastRunDate.getTime()));
+
+		if (startDate != null)
+			query.setDate("startdate", new java.sql.Date(startDate.getTime()));
+
+		query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("getNonControleCodeJVRecoveries query " + qry);
+		return query.list();
+
+	}
 
     private void loadStartDate() {
         final SimpleDateFormat stringToDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -1137,75 +1132,65 @@ public class ScheduledRemittanceService {
      * @param glcode will return all GJV recoveries which dont have payments attached to it fund condition is not added as we have
      * to search . Whatever mapped in app config should succed others should fail
      */
-    @SuppressWarnings("unchecked")
-    private List<AutoRemittanceBean> getGJVRecovries(final Integer deptId, final Integer gjvBankAccountId) {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Fetching GJVRecovries");
+	@SuppressWarnings("unchecked")
+	private List<AutoRemittanceBean> getGJVRecovries(final Integer deptId, final Integer gjvBankAccountId) {
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Fetching GJVRecovries");
 
-        final StringBuffer queryStr = new StringBuffer(
-                "SELECT distinct gl.id as generalledgerId,  vh.fundid AS fundId,  egr.GLDTLAMT AS gldtlAmount,   gld.DETAILTYPEID  AS detailtypeId,"
-                        +
-                        " gld.DETAILKEYID   AS detailkeyId,   egr.ID   AS remittanceGldtlId, "
-                        + gjvBankAccountId
-                        + " as bankAccountId,  "
-                        +
-                        " egr.GLDTLAMT- (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0 else SUM(egd.REMITTEDAMT) end     "
-                        +
-                        " FROM EG_REMITTANCE_GLDTL egr1,     eg_remittance_detail egd,     eg_remittance eg,     voucherheader vh   WHERE vh.status!    =4  "
-                        +
-                        " AND eg.PAYMENTVHID  =vh.id   AND egd.remittanceid=eg.id   AND egr1.id         =egd.remittancegldtlid  "
-                        +
-                        " AND egr1.id         =egr.id   ) AS pendingAmount FROM VOUCHERHEADER vh ,  "
-                        +
-                        " VOUCHERMIS mis,   GENERALLEDGER gl ,"
-                        +
-                        " GENERALLEDGERDETAIL gld,   EG_REMITTANCE_GLDTL egr,   TDS recovery5_ WHERE recovery5_.GLCODEID =gl.GLCODEID AND"
-                        +
-                        " gld.ID                =egr.GLDTLID AND gl.ID                 =gld.GENERALLEDGERID AND vh.ID   =gl.VOUCHERHEADERID "
-                        +
-                        " and gl.remittanceDate is null "
-                        +
-                        " AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS=0 and vh.moduleid is null  and vh.name= '"
-                        + FinancialConstants.JOURNALVOUCHER_NAME_GENERAL
-                        + "'"
-                        +
-                        " AND mis.departmentid  =  "
-                        + deptId
-                        +
-                        " AND vh.moduleid is null"
-                        +
-                        " AND egr.GLDTLAMT-   (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0 else SUM(egd.REMITTEDAMT) end   FROM EG_REMITTANCE_GLDTL egr1,  "
-                        +
-                        " eg_remittance_detail egd,     eg_remittance eg,     voucherheader vh   WHERE vh.status !=4  "
-                        +
-                        " AND eg.PAYMENTVHID   =vh.id   AND egd.remittanceid =eg.id   AND egr1.id          =egd.remittancegldtlid   "
-                        +
-                        " AND egr1.id          =egr.id   )                   >0 AND recovery5_.ID      =" + recovery.getId());
+		final StringBuilder queryStr = new StringBuilder(
+				"SELECT distinct gl.id as generalledgerId,  vh.fundid AS fundId,  egr.GLDTLAMT AS gldtlAmount,")
+						.append("  gld.DETAILTYPEID  AS detailtypeId,")
+						.append(" gld.DETAILKEYID   AS detailkeyId,   egr.ID   AS remittanceGldtlId, ")
+						.append(String.format("%d as bankAccountId,  ", gjvBankAccountId))
+						.append(" egr.GLDTLAMT- (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0 else SUM(egd.REMITTEDAMT) end     ")
+						.append(" FROM EG_REMITTANCE_GLDTL egr1,     eg_remittance_detail egd,     eg_remittance eg,  ")
+						.append("  voucherheader vh   WHERE vh.status!    =4  ")
+						.append(" AND eg.PAYMENTVHID  =vh.id   AND egd.remittanceid=eg.id   AND egr1.id = egd.remittancegldtlid  ")
+						.append(" AND egr1.id = egr.id   ) AS pendingAmount FROM VOUCHERHEADER vh ,  ")
+						.append(" VOUCHERMIS mis,   GENERALLEDGER gl ,")
+						.append(" GENERALLEDGERDETAIL gld,   EG_REMITTANCE_GLDTL egr,   TDS recovery5_")
+						.append(" WHERE recovery5_.GLCODEID =gl.GLCODEID AND")
+						.append(" gld.ID =egr.GLDTLID AND gl.ID =gld.GENERALLEDGERID AND vh.ID   =gl.VOUCHERHEADERID ")
+						.append(" and gl.remittanceDate is null ")
+						.append(" AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS=0 and vh.moduleid is null  and vh.name = :vhName")
+						.append(" AND mis.departmentid  =  :deptId AND vh.moduleid is null")
+						.append(" AND egr.GLDTLAMT-   (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0")
+						.append(" else SUM(egd.REMITTEDAMT) end FROM EG_REMITTANCE_GLDTL egr1,  ")
+						.append(" eg_remittance_detail egd,     eg_remittance eg,     voucherheader vh   WHERE vh.status !=4  ")
+						.append(" AND eg.PAYMENTVHID   =vh.id  AND egd.remittanceid =eg.id   AND egr1.id  =egd.remittancegldtlid   ")
+						.append(" AND egr1.id = egr.id   ) >0 AND recovery5_.ID = :recoveryId");
 
-        if (lastRunDate != null)
-            queryStr.append(" and vh.voucherdate<= '" + sdf.format(lastRunDate) + "' ");
+		if (lastRunDate != null)
+			queryStr.append(" and vh.voucherdate<= :lastRunDate");
 
-        if (startDate != null)
-            queryStr.append(" and vh.voucherdate>= '" + sdf.format(startDate) + "' ");
-        final SQLQuery query = persistenceService.getSession().createSQLQuery(queryStr.toString());
-        query.addScalar("generalledgerId", IntegerType.INSTANCE)
-        .addScalar("fundId", IntegerType.INSTANCE)
-        .addScalar("gldtlAmount", DoubleType.INSTANCE)
-        .addScalar("detailtypeId", IntegerType.INSTANCE)
-        .addScalar("detailkeyId", IntegerType.INSTANCE)
-        .addScalar("remittanceGldtlId", IntegerType.INSTANCE)
-        .addScalar("pendingAmount", DoubleType.INSTANCE)
-        .addScalar("bankAccountId", IntegerType.INSTANCE);
-        /*
-         * if(lastRunDate!=null) { query.setDate("lastrundate", new java.sql.Date(lastRunDate.getTime())); } if(lastRunDate!=null)
-         * { query.setDate("startdate", new java.sql.Date(startDate.getTime())); }
-         */
-        query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Query for GJVRecovries" + queryStr);
-        return query.list();
+		if (startDate != null)
+			queryStr.append(" and vh.voucherdate>=:startDate");
+		final SQLQuery query = persistenceService.getSession().createSQLQuery(queryStr.toString());
+		query.addScalar("generalledgerId", IntegerType.INSTANCE).addScalar("fundId", IntegerType.INSTANCE)
+				.addScalar("gldtlAmount", DoubleType.INSTANCE).addScalar("detailtypeId", IntegerType.INSTANCE)
+				.addScalar("detailkeyId", IntegerType.INSTANCE).addScalar("remittanceGldtlId", IntegerType.INSTANCE)
+				.addScalar("pendingAmount", DoubleType.INSTANCE).addScalar("bankAccountId", IntegerType.INSTANCE);
+		/*
+		 * if(lastRunDate!=null) { query.setDate("lastrundate", new
+		 * java.sql.Date(lastRunDate.getTime())); } if(lastRunDate!=null) {
+		 * query.setDate("startdate", new java.sql.Date(startDate.getTime())); }
+		 */
+		query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
 
-    }
+		query.setParameter("vhName", FinancialConstants.JOURNALVOUCHER_NAME_GENERAL).setParameter("deptId", deptId)
+				.setParameter("recoveryId", recovery.getId());
+
+		if (lastRunDate != null)
+			query.setParameter("lastRunDate", sdf.format(lastRunDate));
+
+		if (startDate != null)
+			query.setParameter("startDate", sdf.format(startDate));
+
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Query for GJVRecovries" + queryStr);
+		return query.list();
+
+	}
 
     /**
      *
@@ -1213,78 +1198,67 @@ public class ScheduledRemittanceService {
      * @param deptId
      * @return
      */
-    @SuppressWarnings("deprecation")
-    private List<AutoRemittanceBean> getJVRecoveries(final Integer deptId) {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Fetching JVRecoveries");
-        final StringBuffer queryStr = new StringBuffer(
-                "SELECT distinct gl.id as generalledgerId,  vh.fundid AS fundId,  egr.GLDTLAMT AS gldtlAmount,   gld.DETAILTYPEID  AS detailtypeId,"
-                        +
-                        " gld.DETAILKEYID   AS detailkeyId,   egr.ID   AS remittanceGldtlId,ih.bankaccountid as bankAccountId,  "
-                        +
-                        " egr.GLDTLAMT- (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0 else SUM(egd.REMITTEDAMT) end    "
-                        +
-                        " FROM EG_REMITTANCE_GLDTL egr1,     eg_remittance_detail egd,     eg_remittance eg,     voucherheader vh   WHERE vh.status!    =4  "
-                        +
-                        " AND eg.PAYMENTVHID  =vh.id   AND egd.remittanceid=eg.id   AND egr1.id         =egd.remittancegldtlid  "
-                        +
-                        " AND egr1.id         =egr.id   ) AS pendingAmount FROM VOUCHERHEADER vh left outer JOIN miscbilldetail mb on vh.id=mb.billvhid ,  "
-                        +
-                        " VOUCHERMIS mis,   GENERALLEDGER gl,   voucherheader ph,   egf_instrumentheader ih,   egf_instrumentvoucher iv ,"
-                        +
-                        " GENERALLEDGERDETAIL gld,   EG_REMITTANCE_GLDTL egr,   TDS recovery5_ WHERE recovery5_.GLCODEID =gl.GLCODEID AND"
-                        +
-                        " gld.ID                =egr.GLDTLID AND gl.ID                 =gld.GENERALLEDGERID AND vh.ID   =gl.VOUCHERHEADERID "
-                        +
-                        " and gl.remittanceDate is null "
-                        +
-                        " AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS=0 AND mb.payvhid =ph.id AND ih.id =iv.instrumentheaderid "
-                        +
-                        " AND iv.voucherheaderid    =ph.id and ph.status!=4 AND ih.id_status NOT    IN ("
-                        +
-                        " select id from egw_status where moduletype='Instrument' and description in ('"
-                        + FinancialConstants.INSTRUMENT_CANCELLED_STATUS
-                        + "','"
-                        + FinancialConstants.INSTRUMENT_SURRENDERED_STATUS
-                        + "','"
-                        + FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS
-                        + "') "
-                        +
-                        " ) AND mis.departmentid  =  "
-                        + deptId
-                        +
-                        " AND egr.GLDTLAMT-   (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0 else SUM(egd.REMITTEDAMT) end   FROM EG_REMITTANCE_GLDTL egr1,  "
-                        +
-                        " eg_remittance_detail egd,     eg_remittance eg,     voucherheader vh   WHERE vh.status !=4  "
-                        +
-                        " AND eg.PAYMENTVHID   =vh.id   AND egd.remittanceid =eg.id   AND egr1.id          =egd.remittancegldtlid   "
-                        +
-                        " AND egr1.id          =egr.id   )                   >0 AND recovery5_.ID      =" + recovery.getId());
-        if (lastRunDate != null)
-            queryStr.append(" and (ih.instrumentdate<='" + sdf.format(lastRunDate) + "'  or ih.transactiondate<='"
-                    + sdf.format(lastRunDate) + "') ");
-        if (startDate != null)
-            queryStr.append(" and (ih.instrumentdate>='" + sdf.format(startDate) + "' or ih.transactiondate>='"
-                    + sdf.format(startDate) + "' ) ");
-        final SQLQuery query = persistenceService.getSession().createSQLQuery(queryStr.toString());
-        query.addScalar("generalledgerId", IntegerType.INSTANCE)
-        .addScalar("fundId", IntegerType.INSTANCE)
-        .addScalar("gldtlAmount", DoubleType.INSTANCE)
-        .addScalar("detailtypeId", IntegerType.INSTANCE)
-        .addScalar("detailkeyId", IntegerType.INSTANCE)
-        .addScalar("remittanceGldtlId", IntegerType.INSTANCE)
-        .addScalar("pendingAmount", DoubleType.INSTANCE)
-        .addScalar("bankAccountId", IntegerType.INSTANCE);
-        /*
-         * if(lastRunDate!=null) { query.setDate("lastrundate", new java.sql.Date(lastRunDate.getTime())); } if(lastRunDate!=null)
-         * { query.setDate("startdate", new java.sql.Date(startDate.getTime())); }
-         */
-        query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("JVRecoveries query " + queryStr);
-        return query.list();
+	@SuppressWarnings("deprecation")
+	private List<AutoRemittanceBean> getJVRecoveries(final Integer deptId) {
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Fetching JVRecoveries");
+		final StringBuilder queryStr = new StringBuilder(
+				"SELECT distinct gl.id as generalledgerId,  vh.fundid AS fundId,  egr.GLDTLAMT AS gldtlAmount,  ")
+						.append(" gld.DETAILTYPEID  AS detailtypeId,")
+						.append(" gld.DETAILKEYID   AS detailkeyId,   egr.ID   AS remittanceGldtlId,ih.bankaccountid as bankAccountId,  ")
+						.append(" egr.GLDTLAMT- (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0 else SUM(egd.REMITTEDAMT) end    ")
+						.append(" FROM EG_REMITTANCE_GLDTL egr1,     eg_remittance_detail egd,     eg_remittance eg, voucherheader vh")
+						.append(" WHERE vh.status!    =4  ")
+						.append(" AND eg.PAYMENTVHID  =vh.id   AND egd.remittanceid=eg.id   AND egr1.id         =egd.remittancegldtlid  ")
+						.append(" AND egr1.id         =egr.id   ) AS pendingAmount FROM VOUCHERHEADER vh left outer JOIN")
+						.append(" miscbilldetail mb on vh.id=mb.billvhid ,  ")
+						.append(" VOUCHERMIS mis,   GENERALLEDGER gl,   voucherheader ph,   egf_instrumentheader ih,")
+						.append(" egf_instrumentvoucher iv ,")
+						.append(" GENERALLEDGERDETAIL gld,   EG_REMITTANCE_GLDTL egr,   TDS recovery5_")
+						.append(" WHERE recovery5_.GLCODEID =gl.GLCODEID AND")
+						.append(" gld.ID =egr.GLDTLID AND gl.ID  =gld.GENERALLEDGERID AND vh.ID   =gl.VOUCHERHEADERID ")
+						.append(" and gl.remittanceDate is null ")
+						.append(" AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS=0 AND mb.payvhid =ph.id AND ih.id =iv.instrumentheaderid ")
+						.append(" AND iv.voucherheaderid    =ph.id and ph.status!=4 AND ih.id_status NOT    IN (")
+						.append(" select id from egw_status where moduletype='Instrument' and description in (:description) ")
+						.append(" ) AND mis.departmentid  =  :deptId AND egr.GLDTLAMT-(SELECT case when SUM(egd.REMITTEDAMT) = NULL")
+						.append(" then 0 else SUM(egd.REMITTEDAMT) end   FROM EG_REMITTANCE_GLDTL egr1,  ")
+						.append(" eg_remittance_detail egd,     eg_remittance eg,     voucherheader vh   WHERE vh.status !=4  ")
+						.append(" AND eg.PAYMENTVHID   =vh.id   AND egd.remittanceid =eg.id   AND egr1.id =egd.remittancegldtlid   ")
+						.append(" AND egr1.id =egr.id ) >0 AND recovery5_.ID = :recoveryId");
+		if (lastRunDate != null)
+			queryStr.append(" and (ih.instrumentdate<= :lastRunDate or ih.transactiondate<= :lastRunDate) ");
+		if (startDate != null)
+			queryStr.append(" and (ih.instrumentdate>= :startDate or ih.transactiondate>= :startDate) ");
+		final SQLQuery query = persistenceService.getSession().createSQLQuery(queryStr.toString());
+		query.addScalar("generalledgerId", IntegerType.INSTANCE).addScalar("fundId", IntegerType.INSTANCE)
+				.addScalar("gldtlAmount", DoubleType.INSTANCE).addScalar("detailtypeId", IntegerType.INSTANCE)
+				.addScalar("detailkeyId", IntegerType.INSTANCE).addScalar("remittanceGldtlId", IntegerType.INSTANCE)
+				.addScalar("pendingAmount", DoubleType.INSTANCE).addScalar("bankAccountId", IntegerType.INSTANCE);
+		/*
+		 * if(lastRunDate!=null) { query.setDate("lastrundate", new
+		 * java.sql.Date(lastRunDate.getTime())); } if(lastRunDate!=null) {
+		 * query.setDate("startdate", new java.sql.Date(startDate.getTime())); }
+		 */
+		query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
 
-    }
+		query.setParameter("description",
+				Arrays.asList(FinancialConstants.INSTRUMENT_CANCELLED_STATUS,
+						FinancialConstants.INSTRUMENT_SURRENDERED_STATUS,
+						FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS))
+				.setParameter("deptId", deptId).setParameter("recoveryId", recovery.getId());
+
+		if (lastRunDate != null)
+			query.setParameter("lastRunDate", sdf.format(lastRunDate));
+
+		if (startDate != null)
+			query.setParameter("startDate", sdf.format(startDate));
+
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("JVRecoveries query " + queryStr);
+		return query.list();
+
+	}
 
     /**
      *
@@ -1296,86 +1270,71 @@ public class ScheduledRemittanceService {
      * @return
      *
      */
-    private List getReceiptRecoveries(final Integer deptId, final Integer receiptBankAccountId) {
+	private List getReceiptRecoveries(final Integer deptId, final Integer receiptBankAccountId) {
 
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Fetching ReceiptRecoveries");
-        final StringBuffer queryStr = new StringBuffer(
-                "SELECT distinct gl.id as generalledgerId,  vh.fundid AS fundId,  egr.GLDTLAMT AS gldtlAmount,   gld.DETAILTYPEID  AS detailtypeId,"
-                        +
-                        " gld.DETAILKEYID   AS detailkeyId,   egr.ID   AS remittanceGldtlId,"
-                        + receiptBankAccountId
-                        + " as bankAccountId, "
-                        +
-                        " egr.GLDTLAMT- (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0 else SUM(egd.REMITTEDAMT) end    "
-                        +
-                        " FROM EG_REMITTANCE_GLDTL egr1,     eg_remittance_detail egd,     eg_remittance eg,     voucherheader vh   WHERE vh.status!    =4  "
-                        +
-                        " AND eg.PAYMENTVHID  =vh.id   AND egd.remittanceid=eg.id   AND egr1.id         =egd.remittancegldtlid  "
-                        +
-                        " AND egr1.id         =egr.id   ) AS pendingAmount FROM VOUCHERHEADER vh ,  "
-                        +
-                        " VOUCHERMIS mis,   GENERALLEDGER gl,   voucherheader payinslip, fund f,  egf_instrumentheader ih,  egf_instrumentotherdetails io,"
-                        +
-                        " GENERALLEDGERDETAIL gld,   EG_REMITTANCE_GLDTL egr,  egcl_collectionvoucher cv, egcl_collectioninstrument ci,TDS recovery5_ WHERE recovery5_.GLCODEID =gl.GLCODEID AND"
-                        +
-                        " gld.ID                =egr.GLDTLID AND gl.ID                 =gld.GENERALLEDGERID AND vh.ID   =gl.VOUCHERHEADERID "
-                        +
-                        " and gl.remittanceDate is null and f.id=vh.fundid "
-                        +
-                        " AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS=0  AND io.payinslipid =payinslip.id "
-                        +
-                        " and cv.voucherheaderid= vh.id 	and ci.collectionheaderid= cv.collectionheaderid and ci.instrumentmasterid= ih.id"
-                        +
-                        " and payinslip.status=0 AND ih.id_status NOT     IN ("
-                        +
-                        "select id from egw_status where moduletype='Instrument' and description in ('"
-                        + FinancialConstants.INSTRUMENT_CANCELLED_STATUS
-                        + "','"
-                        + FinancialConstants.INSTRUMENT_SURRENDERED_STATUS
-                        + "','"
-                        + FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS
-                        + "') "
-                        +
-                        " ) AND mis.departmentid  =  "
-                        + deptId
-                        +
-                        " AND egr.GLDTLAMT-   (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0 else SUM(egd.REMITTEDAMT) end   FROM EG_REMITTANCE_GLDTL egr1,  "
-                        +
-                        " eg_remittance_detail egd,     eg_remittance eg,     voucherheader vh   WHERE vh.status !=4  "
-                        +
-                        " AND eg.PAYMENTVHID   =vh.id   AND egd.remittanceid =eg.id   AND egr1.id          =egd.remittancegldtlid   "
-                        +
-                        " AND egr1.id          =egr.id   )                   >0 AND recovery5_.ID      =" + recovery.getId());
-        if (lastRunDate != null)
-            queryStr.append(" and payinslip.voucherdate<='" + sdf.format(lastRunDate) + "' ");
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Fetching ReceiptRecoveries");
+		final StringBuilder queryStr = new StringBuilder(
+				"SELECT distinct gl.id as generalledgerId,  vh.fundid AS fundId,  egr.GLDTLAMT AS gldtlAmount,")
+						.append(" gld.DETAILTYPEID  AS detailtypeId,")
+						.append(" gld.DETAILKEYID   AS detailkeyId,   egr.ID   AS remittanceGldtlId,")
+						.append(String.format("%d  as bankAccountId, ", receiptBankAccountId))
+						.append(" egr.GLDTLAMT- (SELECT case when SUM(egd.REMITTEDAMT) = NULL then 0 else SUM(egd.REMITTEDAMT) end    ")
+						.append(" FROM EG_REMITTANCE_GLDTL egr1,     eg_remittance_detail egd,     eg_remittance eg, ")
+						.append("  voucherheader vh   WHERE vh.status!    =4  ")
+						.append(" AND eg.PAYMENTVHID  =vh.id   AND egd.remittanceid=eg.id   AND egr1.id         =egd.remittancegldtlid  ")
+						.append(" AND egr1.id         =egr.id   ) AS pendingAmount FROM VOUCHERHEADER vh ,  ")
+						.append(" VOUCHERMIS mis,   GENERALLEDGER gl,   voucherheader payinslip, fund f,  egf_instrumentheader ih, ")
+						.append(" egf_instrumentotherdetails io,")
+						.append(" GENERALLEDGERDETAIL gld,   EG_REMITTANCE_GLDTL egr,  egcl_collectionvoucher cv,")
+						.append(" egcl_collectioninstrument ci,TDS recovery5_ WHERE recovery5_.GLCODEID =gl.GLCODEID AND")
+						.append(" gld.ID = egr.GLDTLID AND gl.ID = gld.GENERALLEDGERID AND vh.ID = gl.VOUCHERHEADERID ")
+						.append(" and gl.remittanceDate is null and f.id=vh.fundid ")
+						.append(" AND mis.VOUCHERHEADERID   =vh.ID AND vh.STATUS=0  AND io.payinslipid =payinslip.id ")
+						.append(" and cv.voucherheaderid= vh.id 	and ci.collectionheaderid= cv.collectionheaderid")
+						.append(" and ci.instrumentmasterid= ih.id")
+						.append(" and payinslip.status=0 AND ih.id_status NOT     IN (")
+						.append("select id from egw_status where moduletype='Instrument' and description in (:description) ")
+						.append(" ) AND mis.departmentid  =  :deptId AND egr.GLDTLAMT- (SELECT case when SUM(egd.REMITTEDAMT) = NULL")
+						.append(" then 0 else SUM(egd.REMITTEDAMT) end   FROM EG_REMITTANCE_GLDTL egr1,  ")
+						.append(" eg_remittance_detail egd,     eg_remittance eg,     voucherheader vh   WHERE vh.status !=4  ")
+						.append(" AND eg.PAYMENTVHID   =vh.id   AND egd.remittanceid =eg.id   AND egr1.id =egd.remittancegldtlid   ")
+						.append(" AND egr1.id  =egr.id   ) >0 AND recovery5_.ID = :recoveryId");
 
-        if (startDate != null)
-            queryStr.append(" and payinslip.voucherdate>='" + sdf.format(startDate) + "'");
-        if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
-            queryStr.append(" and f.code in (:fundCodes) ");
+		if (lastRunDate != null)
+			queryStr.append(" and payinslip.voucherdate<= :lastRunDate");
+		if (startDate != null)
+			queryStr.append(" and payinslip.voucherdate>= :startDate");
+		if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
+			queryStr.append(" and f.code in (:fundCodes) ");
 
-        final SQLQuery query = persistenceService.getSession().createSQLQuery(queryStr.toString());
-        query.addScalar("generalledgerId", IntegerType.INSTANCE)
-        .addScalar("fundId", IntegerType.INSTANCE)
-        .addScalar("gldtlAmount", DoubleType.INSTANCE)
-        .addScalar("detailtypeId", IntegerType.INSTANCE)
-        .addScalar("detailkeyId", IntegerType.INSTANCE)
-        .addScalar("remittanceGldtlId", IntegerType.INSTANCE)
-        .addScalar("pendingAmount", DoubleType.INSTANCE)
-        .addScalar("bankAccountId", IntegerType.INSTANCE);
-        /*
-         * if(lastRunDate!=null) { query.setDate("lastrundate", new java.sql.Date(lastRunDate.getTime())); } if(startDate!=null) {
-         * query.setDate("startdate", new java.sql.Date(startDate.getTime())); }
-         */
-        if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
-            query.setParameterList("fundCodes", receiptFundCodes);
-        query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("ReceiptRecoveries query " + queryStr);
-        return query.list();
+		final SQLQuery query = persistenceService.getSession().createSQLQuery(queryStr.toString());
+		query.addScalar("generalledgerId", IntegerType.INSTANCE).addScalar("fundId", IntegerType.INSTANCE)
+				.addScalar("gldtlAmount", DoubleType.INSTANCE).addScalar("detailtypeId", IntegerType.INSTANCE)
+				.addScalar("detailkeyId", IntegerType.INSTANCE).addScalar("remittanceGldtlId", IntegerType.INSTANCE)
+				.addScalar("pendingAmount", DoubleType.INSTANCE).addScalar("bankAccountId", IntegerType.INSTANCE);
 
-    }
+		if (receiptFundCodes != null && !receiptFundCodes.isEmpty())
+			query.setParameterList("fundCodes", receiptFundCodes);
+		query.setResultTransformer(Transformers.aliasToBean(AutoRemittanceBean.class));
+
+		query.setParameterList("description",
+				Arrays.asList(FinancialConstants.INSTRUMENT_CANCELLED_STATUS,
+						FinancialConstants.INSTRUMENT_SURRENDERED_STATUS,
+						FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS))
+				.setParameter("deptId", deptId).setParameter("recoveryId", recovery.getId());
+
+		if (lastRunDate != null)
+			query.setParameter("lastRunDate", sdf.format(lastRunDate));
+
+		if (startDate != null)
+			query.setParameter("startDate", sdf.format(startDate));
+
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("ReceiptRecoveries query " + queryStr);
+		return query.list();
+
+	}
 
     public void setFinancialYearDAO(final FinancialYearDAO financialYearDAO) {
         this.financialYearDAO = financialYearDAO;

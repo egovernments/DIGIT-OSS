@@ -264,6 +264,11 @@
 				} 
 			
  			document.forms[0].action='/services/EGF/report/voucherStatusReport-search.action';
+ 			jQuery(document.forms[0]).append(jQuery('<input>', {
+ 		        type : 'hidden',
+ 		        name : '${_csrf.parameterName}',
+ 		        value : '${_csrf.token}'
+ 		    }));
 			document.forms[0].submit();
 			return true;
 		}
@@ -272,16 +277,31 @@
 		{
 
 			document.forms[0].action='${pageContext.request.contextPath}/report/voucherStatusReport-beforeSearch.action';
+			jQuery(document.forms[0]).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
 			document.forms[0].submit();
 		}
 		function generatePdfsubmit()
 		{
 			document.forms[0].action='${pageContext.request.contextPath}/report/voucherStatusReport-generatePdf.action';
+			jQuery(document.forms[0]).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
 			document.forms[0].submit();
 		}
 		function generateXlsSubmit()
 		{
 			document.forms[0].action='${pageContext.request.contextPath}/report/voucherStatusReport-generateXls.action';
+			jQuery(document.forms[0]).append(jQuery('<input>', {
+		        type : 'hidden',
+		        name : '${_csrf.parameterName}',
+		        value : '${_csrf.token}'
+		    }));
 			document.forms[0].submit();
 		}
 

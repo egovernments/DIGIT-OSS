@@ -177,7 +177,7 @@ public class SubLedgerScheduleReportAction extends BaseFormAction {
             glCode = (CChartOfAccounts) persistenceService.find("from CChartOfAccounts where glcode = ?",
                     subLedgerScheduleReport.getGlcode());
             fund = (Fund) persistenceService.find("from Fund where id = ?",
-                    Integer.parseInt(subLedgerScheduleReport.getFund_id()));
+                    Long.valueOf(subLedgerScheduleReport.getFund_id()));
         }
         heading = "Sub Ledger Schedule Report for " + glCode.getGlcode() + " - " + glCode.getName() + " for "
                 + fund.getName() + " from " + subLedgerScheduleReport.getStartDate() + " to "

@@ -48,6 +48,8 @@
 package org.egov.pims.commons.service;
 
 import org.apache.log4j.Logger;
+import org.egov.commons.exception.NoSuchObjectException;
+import org.egov.commons.exception.TooManyValuesException;
 import org.egov.eis.entity.EmployeeView;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigValueService;
@@ -107,7 +109,7 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		{
 			positionMasterDAO.updatePosition(position);
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			
 			throw new ApplicationRuntimeException("Exception in deleting Installment."+e.getMessage(),e);
@@ -127,7 +129,7 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 			}
 			return pos;
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			
 			throw new ApplicationRuntimeException("Exception in deleting Installment."+e.getMessage(),e);
@@ -144,10 +146,12 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		try
 		{
 
-			String mainStr = "";
-			mainStr = " select POS_ID from EG_EIS_EMPLOYEEINFO ev where ev.USER_ID = :userid and ((ev.to_Date is null and ev.from_Date <= :thisDate ) " +
-					" OR (ev.from_Date <= :thisDate AND ev.to_Date >= :thisDate)) and ev.IS_PRIMARY ='Y'";
-			Query qry = getCurrentSession().createSQLQuery(mainStr).addScalar("POS_ID", IntegerType.INSTANCE);
+			StringBuilder mainStr;
+			mainStr = new StringBuilder(
+					" select POS_ID from EG_EIS_EMPLOYEEINFO ev where ev.USER_ID = :userid and ((ev.to_Date is null and ev.from_Date <= :thisDate ) ")
+							.append(" OR (ev.from_Date <= :thisDate AND ev.to_Date >= :thisDate)) and ev.IS_PRIMARY ='Y'");
+			Query qry = getCurrentSession().createSQLQuery(mainStr.toString()).addScalar("POS_ID",
+					IntegerType.INSTANCE);
 			qry.setLong("userid", userId);
 			qry.setDate("thisDate", currentDate);
 			List retList = qry.list();
@@ -167,10 +171,10 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		catch (HibernateException he) {
 				
 				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			} catch (Exception he)
-			{
-				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			}
+        } /*
+           * catch (Exception he) { throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 			return userPosition;
  
     }
@@ -182,9 +186,11 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		try
 		{
 
-			String mainStr = "";
-			mainStr = " select POS_ID from EG_EIS_EMPLOYEEINFO ev where ev.USER_ID = :userid and ((ev.to_Date is null and ev.from_Date <= :thisDate ) OR (ev.from_Date <= :thisDate AND ev.to_Date > :thisDate))";
-			Query qry = getCurrentSession().createSQLQuery(mainStr).addScalar("POS_ID", IntegerType.INSTANCE);
+			StringBuilder mainStr;
+			mainStr = new StringBuilder(
+					" select POS_ID from EG_EIS_EMPLOYEEINFO ev where ev.USER_ID = :userid and ((ev.to_Date is null and ev.from_Date <= :thisDate ) OR (ev.from_Date <= :thisDate AND ev.to_Date > :thisDate))");
+			Query qry = getCurrentSession().createSQLQuery(mainStr.toString()).addScalar("POS_ID",
+					IntegerType.INSTANCE);
 			qry.setInteger ("userid", userId);
 			qry.setDate("thisDate", assignDate);
 			List retList = qry.list();
@@ -203,10 +209,10 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		}
 		catch (HibernateException he) {
 				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			} catch (Exception he)
-			{
-				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			}
+        } /*
+           * catch (Exception he) { throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 			return userPosition;
 
 	}
@@ -218,9 +224,11 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		try
 		{
 			
-		    String mainStr = "";
-			mainStr = " select 	USER_ID  from EG_EIS_EMPLOYEEINFO ev  where ev.POS_ID = :pos and ((ev.to_Date is null and ev.from_Date <= SYSDATE ) OR (ev.from_Date <= SYSDATE AND ev.to_Date > SYSDATE))";
-			Query qry = getCurrentSession().createSQLQuery(mainStr).addScalar("USER_ID", IntegerType.INSTANCE);
+			StringBuilder mainStr;
+			mainStr = new StringBuilder(
+					" select 	USER_ID  from EG_EIS_EMPLOYEEINFO ev  where ev.POS_ID = :pos and ((ev.to_Date is null and ev.from_Date <= SYSDATE ) OR (ev.from_Date <= SYSDATE AND ev.to_Date > SYSDATE))");
+			Query qry = getCurrentSession().createSQLQuery(mainStr.toString()).addScalar("USER_ID",
+					IntegerType.INSTANCE);
 
 			if(pos != null)
 			{
@@ -237,10 +245,10 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		}
 		catch (HibernateException he) {
 				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			} catch (Exception he)
-			{
-				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			}
+        } /*
+           * catch (Exception he) { throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 			return uerImpl;
 
 	}
@@ -274,11 +282,10 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		 catch (HibernateException he) {
 				
 				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			} catch (Exception he)
-			{
-				
-				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			}
+        } /*
+           * catch (Exception he) { throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 		 return checkEmpCode;
 	 }
 	 
@@ -300,10 +307,10 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 			 }
 			 catch (HibernateException he) {
 					throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-				} catch (Exception he)
-				{
-					throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-				}
+        } /*
+           * catch (Exception he) { throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 				
 		 }
 		
@@ -324,12 +331,11 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 			position = EisManagersUtill.getEmployeeService().getPositionforEmp(personalInfo.getIdPersonalInformation());
 			
 		}
-		}catch(Exception e)
-		{
-			
-			throw new ApplicationRuntimeException("Exception in getCurrentPositionByUser :"+e.getMessage(),e);
-		}
-		return position;
+        } catch (HibernateException e) {
+
+            throw new ApplicationRuntimeException("Exception in getCurrentPositionByUser :" + e.getMessage(), e);
+        }
+        return position;
 	}
 	
 	public  User getUserForPosition(Integer posId, Date date)
@@ -338,11 +344,11 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		
 		try
 		{
-			
-			
-			String mainStr = "";
-			mainStr = " select USER_ID from EG_EIS_EMPLOYEEINFO ev where ev.pos_id = :posId and ((ev.to_Date is null and ev.from_Date <= :thisDate ) OR (ev.from_Date <= :thisDate AND ev.to_Date > :thisDate))";
-			Query qry = getCurrentSession().createSQLQuery(mainStr).addScalar("USER_ID", IntegerType.INSTANCE);
+			StringBuilder mainStr;
+			mainStr = new StringBuilder(
+					" select USER_ID from EG_EIS_EMPLOYEEINFO ev where ev.pos_id = :posId and ((ev.to_Date is null and ev.from_Date <= :thisDate ) OR (ev.from_Date <= :thisDate AND ev.to_Date > :thisDate))");
+			Query qry = getCurrentSession().createSQLQuery(mainStr.toString()).addScalar("USER_ID",
+					IntegerType.INSTANCE);
 			qry.setInteger ("posId", posId);
 			qry.setDate("thisDate", date);
 			List retList = qry.list();
@@ -361,10 +367,10 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 		}
 		catch (HibernateException he) {
 				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			} catch (Exception he)
-			{
-				throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-			}
+        } /*
+           * catch (Exception he) { throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 			return user;
 		
 	}
@@ -374,9 +380,9 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 	 * @param functionaryId
 	 * @return unique designation from view if dept and functionary is 0
 	 * else based on dept and functionary
-	 * @throws Exception
+	 * 
 	 */
-	 public List<Designation> getDesigantionBasedOnFuncDept(Integer deptId,Integer functionaryId) throws Exception
+	 public List<Designation> getDesigantionBasedOnFuncDept(Integer deptId,Integer functionaryId) 
 		{
 		 	
 			
@@ -416,7 +422,7 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 				desgMstr=(List<Designation>)query.list();
 				
 			}
-			catch(Exception e){
+			catch(HibernateException e){
 				
 				throw new ApplicationRuntimeException(e.getMessage(),e);
 			}
@@ -433,9 +439,11 @@ public class EisCommonsServiceImpl implements EisCommonsService {
 	  * @param functionaryId
 	  * @param onDate
 	  * @return Employee
-	  * @throws Exception 
+	 * @throws TooManyValuesException 
+	 * @throws NoSuchObjectException 
+	  * 
 	  */
-	 public PersonalInformation getTempAssignedEmployeeByDeptDesigFunctionaryDate(Integer deptId, Integer desigId, Integer functionaryId, Date onDate) throws Exception{
+	 public PersonalInformation getTempAssignedEmployeeByDeptDesigFunctionaryDate(Integer deptId, Integer desigId, Integer functionaryId, Date onDate) throws NoSuchObjectException, TooManyValuesException {
 		 return pimsDao.getTempAssignedEmployeeByDeptDesigFunctionaryDate(deptId, desigId, functionaryId, onDate);
 	 }
 	 

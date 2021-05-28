@@ -53,6 +53,7 @@ import org.egov.commons.EgwStatus;
 import org.egov.commons.utils.EntityType;
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.egov.pims.commons.Position;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -72,12 +73,16 @@ import static org.egov.eis.entity.DrawingOfficer.SEQ_DRAWINGOFFICER;
 public class DrawingOfficer extends AbstractAuditable implements EntityType {
     public static final String SEQ_DRAWINGOFFICER = "SEQ_EG_DRAWINGOFFICER";
     private static final long serialVersionUID = 1678672850806848215L;
+    @SafeHtml
     private String accountNumber;
+    @SafeHtml
     private String tan;
     @Id
     @GeneratedValue(generator = SEQ_DRAWINGOFFICER, strategy = GenerationType.SEQUENCE)
     private Long id;
+    @SafeHtml
     private String code;
+    @SafeHtml
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank")
@@ -88,7 +93,7 @@ public class DrawingOfficer extends AbstractAuditable implements EntityType {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position")
     private Position position;
-
+    @SafeHtml
     private String ifscCode;
 
     public Long getId() {

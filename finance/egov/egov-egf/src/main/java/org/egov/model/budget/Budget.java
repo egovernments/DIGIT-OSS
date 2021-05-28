@@ -53,8 +53,8 @@ import org.egov.infra.persistence.validator.annotation.Required;
 import org.egov.infra.persistence.validator.annotation.Unique;
 import org.egov.infra.workflow.entity.State;
 import org.egov.infra.workflow.entity.StateAware;
-import org.egov.pims.commons.Position;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,6 +68,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+
 import java.util.Date;
 
 import static org.egov.model.budget.Budget.SEQ_BUDGET;
@@ -86,12 +88,16 @@ public class Budget extends StateAware {
 
     @Required(message = "Name should not be empty")
     @Length(max = 250, message = "Max 250 characters are allowed for description")
+    @SafeHtml
     private String name;
 
+    @SafeHtml
+    @Length(max = 20)
     private String isbere;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FINANCIALYEARID")
+    @NotNull
     private CFinancialYear financialYear;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -99,6 +105,7 @@ public class Budget extends StateAware {
     private Budget parent;
 
     @Length(max = 250, message = "Max 250 characters are allowed for description")
+    @SafeHtml
     private String description;
 
     @Column(name = "AS_ON_DATE")
@@ -109,6 +116,7 @@ public class Budget extends StateAware {
     private boolean isPrimaryBudget;
 
     @Length(max = 10, message = "Max 10 characters are allowed for description")
+    @SafeHtml
     private String materializedPath;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -123,6 +131,7 @@ public class Budget extends StateAware {
     private EgwStatus status;
 
     @Transient
+    @SafeHtml
     private String searchBere;
 
 

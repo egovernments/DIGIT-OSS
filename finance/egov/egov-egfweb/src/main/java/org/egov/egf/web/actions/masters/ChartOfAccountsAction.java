@@ -79,12 +79,17 @@ import org.egov.infstr.services.PersistenceService;
 import org.egov.model.masters.AccountCodePurpose;
 import org.egov.services.voucher.GeneralLedgerService;
 import org.egov.utils.Constants;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
+import org.hibernate.cache.CacheException;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.exilant.GLEngine.ChartOfAccounts;
 import com.exilant.GLEngine.CoaCache;
+import com.mchange.v1.cachedstore.CacheFlushException;
 
 @ParentPackage("egov")
 @Results({
@@ -102,10 +107,10 @@ public class ChartOfAccountsAction extends BaseFormAction {
     private static final long LONG_FOUR = 4l;
     private static final long LONG_TWO = 2l;
    
- @Autowired
- @Qualifier("persistenceService")
- private PersistenceService persistenceService;
- @Autowired
+    @Autowired
+    @Qualifier("persistenceService")
+    private PersistenceService persistenceService;
+    @Autowired
     @Qualifier("chartOfAccountsService")
     private PersistenceService<CChartOfAccounts, Long> chartOfAccountsService;
     @Autowired
@@ -216,7 +221,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
     }
 
     @Action(value = "/masters/chartOfAccounts-view")
-    public String view() throws Exception {
+    public String view() {
         populateAccountCodePurpose();
         populateAccountDetailTypeList();
         populateCoaRequiredFields();
@@ -225,7 +230,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
     }
 
     @Action(value = "/masters/chartOfAccounts-viewChartOfAccounts")
-    public String viewChartOfAccounts() throws Exception {
+    public String viewChartOfAccounts(){
         populateAccountCodePurpose();
         populateAccountDetailTypeList();
         populateCoaRequiredFields();
@@ -233,7 +238,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
         return Constants.VIEW_COA;
     }
     @Action(value = "/masters/chartOfAccounts-modifyChartOfAccounts")
-    public String modifyChartOfAccounts() throws Exception {
+    public String modifyChartOfAccounts() {
         populateAccountCodePurpose();
         populateAccountDetailTypeList();
         populateCoaRequiredFields();
@@ -245,7 +250,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
     }
 
     @Action(value = "/masters/chartOfAccounts-modify")
-    public String modify() throws Exception {
+    public String modify() {
         populateAccountDetailTypeList();
         populateCoaRequiredFields();
         populateAccountCodePurpose();
@@ -264,7 +269,14 @@ public class ChartOfAccountsAction extends BaseFormAction {
     }
 
     @Action(value = "/masters/chartOfAccounts-update")
-    public String update() throws Exception {
+    public String update() {
+    	if (StringUtils.isEmpty(model.getName())) {
+    		addActionError("Please Enter the Name");
+    		populateAccountDetailTypeList();
+            populateCoaRequiredFields();
+            populateAccountCodePurpose();
+    		return EDIT;
+    	}
         setPurposeOnCoa();
         updateOnly = true;
         populateAccountDetailType();
@@ -314,7 +326,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
                     }
                 }
             }
-        } catch (final Exception e) {
+        } catch (final ValidationException e) {
             LOGGER.error(e.getMessage(), e);
             populateAccountDetailTypeList();
             final String message = accountDetail.concat(" ").concat(e.toString());
@@ -323,10 +335,13 @@ public class ChartOfAccountsAction extends BaseFormAction {
     }
 
     boolean hasReference(final Integer id, final String glCode) {
-        final SQLQuery query = persistenceService.getSession().createSQLQuery(
-                "select * from chartofaccounts c,generalledger gl,generalledgerdetail gd " +
-                        "where c.glcode='" + glCode + "' and gl.glcodeid=c.id and gd.generalledgerid=gl.id and gd.DETAILTYPEID="
-                        + id);
+    	
+    	StringBuilder queryString = new StringBuilder("select * from chartofaccounts c,generalledger gl,generalledgerdetail gd ")
+                .append("where c.glcode=:glCode")
+                .append(" and gl.glcodeid=c.id and gd.generalledgerid=gl.id and gd.DETAILTYPEID=:id");
+        final Query query = persistenceService.getSession().createSQLQuery(queryString.toString())
+                .setParameter("glCode", glCode, StringType.INSTANCE)
+                .setParameter("id", id, IntegerType.INSTANCE);
         final List list = query.list();
         if (list != null && list.size() > 0)
             return true;
@@ -335,13 +350,15 @@ public class ChartOfAccountsAction extends BaseFormAction {
 
     boolean validAddtition(final String glCode) {
         boolean flag=true;
+        
         final StringBuffer strQuery = new StringBuffer();
-        strQuery.append("select bd.billid from  eg_billdetails bd, chartofaccounts coa,  eg_billregistermis brm where coa.glcode = '"
-                + glCode + "' and bd.glcodeid = coa.id and brm.billid = bd.billid and brm.voucherheaderid is null ");
-        strQuery.append(" intersect SELECT br.id FROM eg_billregister br, eg_billdetails bd, chartofaccounts coa,egw_status  sts WHERE coa.glcode = '"
-                + glCode + "' AND bd.glcodeid = coa.id AND br.id= bd.billid AND br.statusid=sts.id ");
+        strQuery.append("select bd.billid from  eg_billdetails bd, chartofaccounts coa,  eg_billregistermis brm where coa.glcode =:glCode")
+                .append(" and bd.glcodeid = coa.id and brm.billid = bd.billid and brm.voucherheaderid is null ")
+                .append(" intersect SELECT br.id FROM eg_billregister br, eg_billdetails bd, chartofaccounts coa,egw_status  sts WHERE coa.glcode =:glCode")
+                .append(" AND bd.glcodeid = coa.id AND br.id= bd.billid AND br.statusid=sts.id ");
         strQuery.append(" and sts.id not in (select id from egw_status where upper(moduletype) like '%BILL%' and upper(description) like '%CANCELLED%') ");
-        final SQLQuery query = persistenceService.getSession().createSQLQuery(strQuery.toString());
+        final Query query = persistenceService.getSession().createSQLQuery(strQuery.toString())
+                .setParameter("glCode", glCode, StringType.INSTANCE);
         final List list = query.list();
         if (!list.isEmpty())
             flag = false;
@@ -449,7 +466,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
     }
 
     @Action(value = "/masters/chartOfAccounts-addNewCoa")
-    public String addNewCoa() throws Exception {
+    public String addNewCoa() {
         model = new CChartOfAccounts();
         if (parentId != null)
             model.setParentId(parentId);
@@ -524,7 +541,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
     }
 
     @Action(value = "/masters/chartOfAccounts-save")
-    public String save() throws Exception {
+    public String save() {
         if (generatedGlcode == null || newGlcode == null) {
             addActionMessage(getText("chartOfAccount.invalid.glcode"));
             return NEW;
@@ -593,21 +610,21 @@ public class ChartOfAccountsAction extends BaseFormAction {
 
 
     @Action(value = "/masters/chartOfAccounts-editDetailedCode")
-    public String editDetailedCode() throws Exception {
+    public String editDetailedCode(){
         allChartOfAccounts = chartOfAccountsHibernateDAO.getDetailedCodesList();
         return "detailed-editCode";
     }
 
     @Action(value = "/masters/chartOfAccounts-viewDetailedCode")
-    public String viewDetailedCode() throws Exception {
+    public String viewDetailedCode() {
         allChartOfAccounts = chartOfAccountsHibernateDAO.getDetailedCodesList();
         return "detailed-viewCode";
     }
 
     @SkipValidation
     @Action(value = "/masters/chartOfAccounts-modifySearch")
-    public String modifySearch() throws Exception {
-        if (glCode != null) {
+    public String modifySearch() {
+        if (!StringUtils.isEmpty(glCode)) {
             model = chartOfAccountsService.find("from CChartOfAccounts where classification=4 and glcode=?",
                     glCode.split("-")[0]);
             if (model == null) {
@@ -626,7 +643,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
 
     @SkipValidation
     @Action(value = "/masters/chartOfAccounts-viewSearch")
-    public String viewSearch() throws Exception {
+    public String viewSearch() {
         if (glCode != null) {
             model = chartOfAccountsService.find("from CChartOfAccounts where classification=4 and glcode=?",
                     glCode.split("-")[0]);
@@ -646,14 +663,14 @@ public class ChartOfAccountsAction extends BaseFormAction {
     }
 
     @Action(value = "/masters/chartOfAccounts-addNew")
-    public String addNew() throws Exception {
+    public String addNew(){
         populateCodeLength();
         model = new CChartOfAccounts();
         return "detailed";
     }
 
     @Action(value = "/masters/chartOfAccounts-create")
-    public String create() throws Exception {
+    public String create() {
         if (glCode != null) {
             final CChartOfAccounts parent = chartOfAccountsService.find("from CChartOfAccounts where glcode=?",
                     glCode.split("-")[0]);
@@ -661,9 +678,13 @@ public class ChartOfAccountsAction extends BaseFormAction {
                 addActionMessage(getText("chartOfAccount.no.data"));
                 return addNew();
             }
-            if (generatedGlcode == null || newGlcode == null) {
+            if (StringUtils.isEmpty(generatedGlcode) || StringUtils.isEmpty(newGlcode)) {
                 addActionMessage(getText("chartOfAccount.invalid.glcode"));
                 return "detailed";
+            }
+            if (StringUtils.isEmpty(model.getName())) {
+            	addActionMessage(getText("chartOfAccount.name.mandatory"));
+            	return "detailed";
             }
             final CChartOfAccounts coa = chartOfAccountsService.find("from CChartOfAccounts where glcode=?",
                     generatedGlcode.concat(newGlcode));
@@ -738,7 +759,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
     void clearCache() {
         try {
         	coaCache.reLoad();
-        }catch(Exception e)
+        }catch(CacheException e)
         {
         	LOGGER.error("Error while reloading coa cache");  
         }

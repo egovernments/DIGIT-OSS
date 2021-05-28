@@ -50,7 +50,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
-<form:form role="form" action="search" modelAttribute="supplier" id="suppliersearchform"
+<form:form role="form" action="search" modelAttribute="supplierSearchRequest" id="suppliersearchform"
   cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
   <div class="main-content">
     <div class="row">

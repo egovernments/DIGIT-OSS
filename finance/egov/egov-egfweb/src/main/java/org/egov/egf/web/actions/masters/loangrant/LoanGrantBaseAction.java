@@ -66,9 +66,9 @@ public class LoanGrantBaseAction extends BaseFormAction {
     protected Date toDate;
     protected Integer subSchemeId;
     protected Integer schemeId;
-    protected Integer fundId;
+    protected Long fundId;
     protected @Autowired AppConfigValueService appConfigValuesService;
-    private Integer defaultFundId;
+    private Long defaultFundId;
     @Autowired
     private EgovMasterDataCaching masterDataCache;
 
@@ -81,7 +81,7 @@ public class LoanGrantBaseAction extends BaseFormAction {
                 "loangrant.default.fundid");
         final String fundId = appList.get(0).getValue();
         if (fundId != null && !fundId.isEmpty())
-            defaultFundId = Integer.parseInt(fundId);
+            defaultFundId = Long.valueOf(fundId);
         addDropdownData("fundList", masterDataCache.get("egi-fund"));
 
     }
@@ -92,11 +92,11 @@ public class LoanGrantBaseAction extends BaseFormAction {
         return null;
     }
 
-    public Integer getDefaultFundId() {
+    public Long getDefaultFundId() {
         return defaultFundId;
     }
 
-    public void setDefaultFundId(final Integer defaultFundId) {
+    public void setDefaultFundId(final Long defaultFundId) {
         this.defaultFundId = defaultFundId;
     }
 
@@ -132,11 +132,11 @@ public class LoanGrantBaseAction extends BaseFormAction {
         this.schemeId = schemeId;
     }
 
-    public Integer getFundId() {
+    public Long getFundId() {
         return fundId;
     }
 
-    public void setFundId(final Integer fundId) {
+    public void setFundId(final Long fundId) {
         this.fundId = fundId;
     }
 

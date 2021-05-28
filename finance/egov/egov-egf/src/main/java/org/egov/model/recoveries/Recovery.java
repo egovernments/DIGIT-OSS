@@ -47,12 +47,7 @@
  */
 package org.egov.model.recoveries;
 
-import org.egov.commons.Bank;
-import org.egov.commons.CChartOfAccounts;
-import org.egov.commons.EgPartytype;
-import org.egov.infra.persistence.entity.AbstractAuditable;
-import org.egov.infra.persistence.validator.annotation.Unique;
-import org.hibernate.validator.constraints.Length;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,8 +60,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+
+import org.egov.commons.Bank;
+import org.egov.commons.CChartOfAccounts;
+import org.egov.commons.EgPartytype;
+import org.egov.infra.persistence.entity.AbstractAuditable;
+import org.egov.infra.persistence.validator.annotation.OptionalPattern;
+import org.egov.infra.persistence.validator.annotation.Unique;
+import org.egov.infra.validation.regex.Constants;
+import org.egov.utils.FinancialConstants;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @Table(name = "TDS")
@@ -74,238 +80,208 @@ import java.math.BigDecimal;
 @Unique(id = "id", tableName = "TDS", fields = { "type" }, columnName = { "type" }, enableDfltMsg = true)
 public class Recovery extends AbstractAuditable {
 
-    private static final long serialVersionUID = 6136656142691290863L;
-    public static final String SEQ_RECOVERY = "SEQ_TDS";
+	private static final long serialVersionUID = 6136656142691290863L;
+	public static final String SEQ_RECOVERY = "SEQ_TDS";
 
-    @Id
-    @GeneratedValue(generator = SEQ_RECOVERY, strategy = GenerationType.SEQUENCE)
-    private Long id;
+	@Id
+	@GeneratedValue(generator = SEQ_RECOVERY, strategy = GenerationType.SEQUENCE)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "glcodeid")
-    private CChartOfAccounts chartofaccounts;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "glcodeid")
+	private CChartOfAccounts chartofaccounts;
 
-    @Length(max = 20)
-    private String type;
+	@Length(max = 20)
+	@SafeHtml
+	@NotNull
+	private String type;
 
-    // private Boolean ispaid;
+	private Boolean isactive;
 
-    private Boolean isactive;
+	private BigDecimal rate;
 
-    private BigDecimal rate;
+	@Length(max = 100)
+	@SafeHtml
+	@NotNull
+	private String remitted;
 
-    // private Date effectivefrom;
+	@Length(max = 200)
+	@SafeHtml
+	private String description;
 
-    @Length(max = 100)
-    private String remitted;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "partytypeid")
+	private EgPartytype egPartytype;
 
-    /*
-     * @Length(max = 20) private String bsrcode;
-     */
-    @Length(max = 200)
-    private String description;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "bankid")
+	private Bank bank;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "partytypeid")
-    private EgPartytype egPartytype;
+	private BigDecimal caplimit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bankid")
-    private Bank bank;
+	@Length(max = 50)
+	@SafeHtml
+	@NotNull
+	private String recoveryName;
 
-    private BigDecimal caplimit;
+	@Length(max = 50)
+	@SafeHtml
+	private String calculationType;
 
-    // private String isEarning = "0";
+	@SafeHtml
+	@Length(min = 11, max = 11, message = "Maximum of 11 Characters allowed for IFSC Code")
+	@OptionalPattern(regex = Constants.ALPHANUMERIC, message = "Special Characters are not allowed in IFSC Code")
+	private String ifscCode;
 
-    @Length(max = 50)
-    private String recoveryName;
+	@Length(max = 32)
+	@SafeHtml
+	@OptionalPattern(regex = FinancialConstants.numericwithoutspecialchar, message = "Special Characters are not allowed in accountNumber")
+	private String accountNumber;
 
-    @Length(max = 50)
-    private String calculationType;
+	@NotNull
+	@Column(name = "recovery_mode")
+	private Character recoveryMode;
 
-    /*
-     * @Length(max = 50) private String section;
-     */
+	@Column(name = "remittance_mode")
+	private Character remittanceMode;
 
-    @Length(max = 16)
-    private String ifscCode;
+	@Transient
+	private Boolean bankLoan;
 
-    @Length(max = 32)
-    private String accountNumber;
+	public Long getId() {
+		return id;
+	}
 
-    @NotNull
-    @Column(name = "recovery_mode")
-    private Character recoveryMode;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @Column(name = "remittance_mode")
-    private Character remittanceMode;
+	public CChartOfAccounts getChartofaccounts() {
+		return chartofaccounts;
+	}
 
-    @Transient
-    private Boolean bankLoan;
+	public void setChartofaccounts(CChartOfAccounts chartofaccounts) {
+		this.chartofaccounts = chartofaccounts;
+	}
 
-    public Recovery() {
-    }
+	public String getType() {
+		return type;
+	}
 
-    public Recovery(final Long id, final BigDecimal createdby) {
-        this.id = id;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Boolean getIsactive() {
+		return isactive;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setIsactive(Boolean isactive) {
+		this.isactive = isactive;
+	}
 
-    public CChartOfAccounts getChartofaccounts() {
-        return chartofaccounts;
-    }
+	public BigDecimal getRate() {
+		return rate;
+	}
 
-    public void setChartofaccounts(CChartOfAccounts chartofaccounts) {
-        this.chartofaccounts = chartofaccounts;
-    }
+	public void setRate(BigDecimal rate) {
+		this.rate = rate;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getRemitted() {
+		return remitted;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setRemitted(String remitted) {
+		this.remitted = remitted;
+	}
 
-    /*
-     * public Boolean getIspaid() { return ispaid; } public void setIspaid(Boolean ispaid) { this.ispaid = ispaid; }
-     */
+	public String getDescription() {
+		return description;
+	}
 
-    public Boolean getIsactive() {
-        return isactive;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setIsactive(Boolean isactive) {
-        this.isactive = isactive;
-    }
+	public EgPartytype getEgPartytype() {
+		return egPartytype;
+	}
 
-    public BigDecimal getRate() {
-        return rate;
-    }
+	public void setEgPartytype(EgPartytype egPartytype) {
+		this.egPartytype = egPartytype;
+	}
 
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
+	public Bank getBank() {
+		return bank;
+	}
 
-    /*
-     * public Date getEffectivefrom() { return effectivefrom; } public void setEffectivefrom(Date effectivefrom) {
-     * this.effectivefrom = effectivefrom; }
-     */
+	public void setBank(Bank bank) {
+		this.bank = bank;
+	}
 
-    public String getRemitted() {
-        return remitted;
-    }
+	public BigDecimal getCaplimit() {
+		return caplimit;
+	}
 
-    public void setRemitted(String remitted) {
-        this.remitted = remitted;
-    }
+	public void setCaplimit(BigDecimal caplimit) {
+		this.caplimit = caplimit;
+	}
 
-    /*
-     * public String getBsrcode() { return bsrcode; } public void setBsrcode(String bsrcode) { this.bsrcode = bsrcode; }
-     */
+	public String getRecoveryName() {
+		return recoveryName;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setRecoveryName(String recoveryName) {
+		this.recoveryName = recoveryName;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getCalculationType() {
+		return calculationType;
+	}
 
-    public EgPartytype getEgPartytype() {
-        return egPartytype;
-    }
+	public void setCalculationType(String calculationType) {
+		this.calculationType = calculationType;
+	}
 
-    public void setEgPartytype(EgPartytype egPartytype) {
-        this.egPartytype = egPartytype;
-    }
+	public String getIfscCode() {
+		return ifscCode;
+	}
 
-    public Bank getBank() {
-        return bank;
-    }
+	public void setIfscCode(String ifscCode) {
+		this.ifscCode = ifscCode;
+	}
 
-    public void setBank(Bank bank) {
-        this.bank = bank;
-    }
+	public String getAccountNumber() {
+		return accountNumber;
+	}
 
-    public BigDecimal getCaplimit() {
-        return caplimit;
-    }
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
 
-    public void setCaplimit(BigDecimal caplimit) {
-        this.caplimit = caplimit;
-    }
+	public Character getRecoveryMode() {
+		return recoveryMode;
+	}
 
-    /*
-     * public String getIsEarning() { return isEarning; } public void setIsEarning(String isEarning) { this.isEarning = isEarning;
-     * }
-     */
+	public void setRecoveryMode(Character recoveryMode) {
+		this.recoveryMode = recoveryMode;
+	}
 
-    public String getRecoveryName() {
-        return recoveryName;
-    }
+	public Character getRemittanceMode() {
+		return remittanceMode;
+	}
 
-    public void setRecoveryName(String recoveryName) {
-        this.recoveryName = recoveryName;
-    }
+	public void setRemittanceMode(Character remittanceMode) {
+		this.remittanceMode = remittanceMode;
+	}
 
-    public String getCalculationType() {
-        return calculationType;
-    }
+	public Boolean getBankLoan() {
+		return bankLoan;
+	}
 
-    public void setCalculationType(String calculationType) {
-        this.calculationType = calculationType;
-    }
-
-    /*
-     * public String getSection() { return section; } public void setSection(String section) { this.section = section; }
-     */
-
-    public String getIfscCode() {
-        return ifscCode;
-    }
-
-    public void setIfscCode(String ifscCode) {
-        this.ifscCode = ifscCode;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public Character getRecoveryMode() {
-        return recoveryMode;
-    }
-
-    public void setRecoveryMode(Character recoveryMode) {
-        this.recoveryMode = recoveryMode;
-    }
-
-    public Character getRemittanceMode() {
-        return remittanceMode;
-    }
-
-    public void setRemittanceMode(Character remittanceMode) {
-        this.remittanceMode = remittanceMode;
-    }
-
-    public Boolean getBankLoan() {
-        return bankLoan;
-    }
-
-    public void setBankLoan(Boolean bankLoan) {
-        this.bankLoan = bankLoan;
-    }
+	public void setBankLoan(Boolean bankLoan) {
+		this.bankLoan = bankLoan;
+	}
 
 }

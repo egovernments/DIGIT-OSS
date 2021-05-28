@@ -122,6 +122,11 @@ function onSubmit()
 	var voucherdate =document.getElementById('voucherDate').value ;
 	if(voucherdate!=null && voucherdate!=""){
 		document.preApprovedVoucher.action='${pageContext.request.contextPath}/voucher/preApprovedVoucher-save.action';
+		jQuery(preApprovedVoucher).append(jQuery('<input>', {
+            type : 'hidden',
+            name : '${_csrf.parameterName}',
+            value : '${_csrf.token}'
+        }));
 		return true;
 	}else{
 		bootbox.alert("<s:text name='msg.please.select.voucher.date'/> ");

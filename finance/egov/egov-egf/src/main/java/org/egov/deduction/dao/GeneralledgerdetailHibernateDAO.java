@@ -95,16 +95,16 @@ public class GeneralledgerdetailHibernateDAO {
     }
 
 
-    public List<Generalledgerdetail> getGeneralledgerdetailByFilterBy(final Integer voucherHeaderId,
-            final Integer purposeId) {
-        final Query qry = getCurrentSession()
-                .createQuery(
-                        " from Generalledgerdetail gld where gld.generalledger.voucherHeaderId =:voucherHeaderId  "
-                                + "and gld.generalledger.glcodeId in(select id from CChartOfAccounts where purposeId =:purposeId) ");
-        qry.setInteger("voucherHeaderId", voucherHeaderId);
-        qry.setInteger("purposeId", purposeId);
-        return qry.list();
-    }
+	public List<Generalledgerdetail> getGeneralledgerdetailByFilterBy(final Integer voucherHeaderId,
+			final Integer purposeId) {
+		final Query qry = getCurrentSession().createQuery(new StringBuilder(" from Generalledgerdetail gld")
+				.append(" where gld.generalledger.voucherHeaderId =:voucherHeaderId  ")
+				.append("and gld.generalledger.glcodeId in(select id from CChartOfAccounts where purposeId =:purposeId) ")
+				.toString());
+		qry.setInteger("voucherHeaderId", voucherHeaderId);
+		qry.setInteger("purposeId", purposeId);
+		return qry.list();
+	}
 
     public List<Generalledgerdetail> getGeneralledgerdetailByGlCodeId(final Integer glcodeId) {
         final Query qry = getCurrentSession().createQuery(

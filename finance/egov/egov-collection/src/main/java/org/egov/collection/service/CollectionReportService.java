@@ -162,27 +162,33 @@ public class CollectionReportService {
         final StringBuilder finalAggregateQuery = new StringBuilder();
         final StringBuilder selectQuery = new StringBuilder("SELECT ");
 
-        final StringBuilder fromQuery = new StringBuilder(
-                " FROM EGCL_COLLECTIONHEADER EGCL_COLLECTIONHEADER INNER JOIN EGCL_COLLECTIONINSTRUMENT EGCL_COLLECTIONINSTRUMENT ON EGCL_COLLECTIONHEADER.ID = EGCL_COLLECTIONINSTRUMENT.COLLECTIONHEADER")
-                        .append(" INNER JOIN EGF_INSTRUMENTHEADER EGF_INSTRUMENTHEADER ON EGCL_COLLECTIONINSTRUMENT.INSTRUMENTHEADER = EGF_INSTRUMENTHEADER.ID")
-                        .append(" INNER JOIN EGW_STATUS EGW_STATUS ON EGCL_COLLECTIONHEADER.STATUS = EGW_STATUS.ID")
-                        .append(" INNER JOIN EGF_INSTRUMENTTYPE EGF_INSTRUMENTTYPE ON EGF_INSTRUMENTHEADER.INSTRUMENTTYPE = EGF_INSTRUMENTTYPE.ID")
-                        .append(" INNER JOIN EGCL_COLLECTIONMIS EGCL_COLLECTIONMIS ON EGCL_COLLECTIONHEADER.ID = EGCL_COLLECTIONMIS.COLLECTIONHEADER")
-                        .append(" INNER JOIN EGCL_SERVICEDETAILS SER ON SER.ID = EGCL_COLLECTIONHEADER.SERVICEDETAILS ");
+		final StringBuilder fromQuery = new StringBuilder(
+				" FROM EGCL_COLLECTIONHEADER EGCL_COLLECTIONHEADER INNER JOIN EGCL_COLLECTIONINSTRUMENT").append(
+						" EGCL_COLLECTIONINSTRUMENT ON EGCL_COLLECTIONHEADER.ID = EGCL_COLLECTIONINSTRUMENT.COLLECTIONHEADER")
+						.append(" INNER JOIN EGF_INSTRUMENTHEADER EGF_INSTRUMENTHEADER")
+						.append(" ON EGCL_COLLECTIONINSTRUMENT.INSTRUMENTHEADER = EGF_INSTRUMENTHEADER.ID")
+						.append(" INNER JOIN EGW_STATUS EGW_STATUS ON EGCL_COLLECTIONHEADER.STATUS = EGW_STATUS.ID")
+						.append(" INNER JOIN EGF_INSTRUMENTTYPE EGF_INSTRUMENTTYPE")
+						.append(" ON EGF_INSTRUMENTHEADER.INSTRUMENTTYPE = EGF_INSTRUMENTTYPE.ID")
+						.append(" INNER JOIN EGCL_COLLECTIONMIS EGCL_COLLECTIONMIS ")
+						.append("ON EGCL_COLLECTIONHEADER.ID = EGCL_COLLECTIONMIS.COLLECTIONHEADER")
+						.append(" INNER JOIN EGCL_SERVICEDETAILS SER ON SER.ID = EGCL_COLLECTIONHEADER.SERVICEDETAILS ");
         final StringBuilder whereQuery = new StringBuilder(" WHERE EGW_STATUS.DESCRIPTION != 'Cancelled'");
         final StringBuilder groupQuery = new StringBuilder(" GROUP BY  source, counterName, employeeName, USERID,serviceName ");
-        aggregateQuery.append(
-                " ,count(distinct(EGCL_COLLECTIONHEADER.ID)) as totalReceiptCount ,EGCL_COLLECTIONHEADER.SOURCE AS source, SER.NAME AS serviceName, '' AS counterName, '' AS employeeName, 0 AS USERID ")
-                .append(fromQuery);
-        userwiseQuery.append(
-                " ,count(distinct(EGCL_COLLECTIONHEADER.ID)) as totalReceiptCount ,EGCL_COLLECTIONHEADER.SOURCE AS source, SER.NAME AS serviceName, EG_LOCATION.NAME AS counterName, EG_USER.NAME AS employeeName, EG_USER.ID AS USERID")
-                .append(fromQuery).append(" LEFT JOIN EG_LOCATION EG_LOCATION ON EGCL_COLLECTIONHEADER.LOCATION = EG_LOCATION.ID "
-                        + " INNER JOIN EG_USER EG_USER ON EGCL_COLLECTIONHEADER.CREATEDBY = EG_USER.ID ");
+		aggregateQuery.append(
+				" ,count(distinct(EGCL_COLLECTIONHEADER.ID)) as totalReceiptCount ,EGCL_COLLECTIONHEADER.SOURCE AS source,")
+				.append(" SER.NAME AS serviceName, '' AS counterName, '' AS employeeName, 0 AS USERID ")
+				.append(fromQuery);
+		userwiseQuery.append(
+				" ,count(distinct(EGCL_COLLECTIONHEADER.ID)) as totalReceiptCount ,EGCL_COLLECTIONHEADER.SOURCE AS source,")
+				.append(" SER.NAME AS serviceName, EG_LOCATION.NAME AS counterName, EG_USER.NAME AS employeeName, EG_USER.ID AS USERID")
+				.append(fromQuery)
+				.append(" LEFT JOIN EG_LOCATION EG_LOCATION ON EGCL_COLLECTIONHEADER.LOCATION = EG_LOCATION.ID ")
+				.append(" INNER JOIN EG_USER EG_USER ON EGCL_COLLECTIONHEADER.CREATEDBY = EG_USER.ID ");
 
         if (fromDate != null && toDate != null) {
-            whereQuery.append(" AND EGCL_COLLECTIONHEADER.RECEIPTDATE between to_timestamp('")
-                    .append(fromDateFormatter.format(fromDate) + "', 'YYYY-MM-DD HH24:MI:SS') and " + " to_timestamp('")
-                    .append(toDateFormatter.format(toDate) + "', 'YYYY-MM-DD HH24:MI:SS') ");
+            whereQuery.append(" AND EGCL_COLLECTIONHEADER.RECEIPTDATE between to_timestamp(:fromDate, 'YYYY-MM-DD HH24:MI:SS')")
+            .append(" and to_timestamp(:toDate, 'YYYY-MM-DD HH24:MI:SS') ");
         }
 
         if (!source.isEmpty() && !source.equals(CollectionConstants.ALL)) {
@@ -211,11 +217,17 @@ public class CollectionReportService {
             userwiseQuery = prepareQueryForAllPaymentMode(userwiseQuery, groupQuery);
             aggregateQuery = prepareQueryForAllPaymentMode(aggregateQuery, groupQuery);
         }
-        final StringBuilder finalSelectQuery = new StringBuilder(
-                "SELECT cast(sum(cashCount) AS NUMERIC) AS cashCount,cast(sum(chequeddCount) AS NUMERIC) AS chequeddCount,cast(sum(onlineCount) AS NUMERIC) AS onlineCount,source,counterName,employeeName,serviceName,cast(sum(cashAmount) AS NUMERIC) AS cashAmount, cast(sum(chequeddAmount) AS NUMERIC) AS chequeddAmount, cast(sum(onlineAmount) AS NUMERIC) AS onlineAmount ,USERID,cast(sum(bankCount) AS NUMERIC) AS bankCount, cast(sum(bankAmount) AS NUMERIC) AS bankAmount, "
-                        + "  cast(sum(cardCount) AS NUMERIC) AS cardCount, cast(sum(cardAmount) AS NUMERIC) AS cardAmount, cast(sum(totalReceiptCount) AS NUMERIC) as totalReceiptCount  FROM (");
-        final StringBuilder finalGroupQuery = new StringBuilder(
-                " ) AS RESULT GROUP BY RESULT.source,RESULT.counterName,RESULT.employeeName,RESULT.USERID,RESULT.serviceName order by source,employeeName, serviceName ");
+		final StringBuilder finalSelectQuery = new StringBuilder(
+				"SELECT cast(sum(cashCount) AS NUMERIC) AS cashCount,cast(sum(chequeddCount) AS NUMERIC) AS chequeddCount,")
+						.append("cast(sum(onlineCount) AS NUMERIC) AS onlineCount,source,counterName,employeeName,serviceName,")
+						.append("cast(sum(cashAmount) AS NUMERIC) AS cashAmount, cast(sum(chequeddAmount) AS NUMERIC) AS chequeddAmount,")
+						.append(" cast(sum(onlineAmount) AS NUMERIC) AS onlineAmount ,USERID,cast(sum(bankCount)")
+						.append(" AS NUMERIC) AS bankCount, cast(sum(bankAmount) AS NUMERIC) AS bankAmount, ")
+						.append("  cast(sum(cardCount) AS NUMERIC) AS cardCount, cast(sum(cardAmount) AS NUMERIC) AS cardAmount,")
+						.append(" cast(sum(totalReceiptCount) AS NUMERIC) as totalReceiptCount  FROM (");
+		final StringBuilder finalGroupQuery = new StringBuilder(
+				" ) AS RESULT GROUP BY RESULT.source,RESULT.counterName,RESULT.employeeName,RESULT.USERID,RESULT.serviceName")
+						.append(" order by source,employeeName, serviceName ");
 
         finalUserwiseQuery.append(finalSelectQuery).append(userwiseQuery).append(finalGroupQuery);
         finalAggregateQuery.append(finalSelectQuery).append(aggregateQuery).append(finalGroupQuery);
@@ -239,6 +251,13 @@ public class CollectionReportService {
         if (!serviceType.equals(CollectionConstants.ALL)) {
             userwiseSqluery.setString("serviceType", serviceType);
             aggregateSqlQuery.setString("serviceType", serviceType);
+        }
+        
+        if (fromDate != null && toDate != null) {
+        	userwiseSqluery.setString("fromDate", fromDateFormatter.format(fromDate));
+            aggregateSqlQuery.setString("fromDate", fromDateFormatter.format(fromDate));
+            userwiseSqluery.setString("toDate", toDateFormatter.format(toDate));
+            aggregateSqlQuery.setString("toDate", toDateFormatter.format(toDate));
         }
 
         if (StringUtils.isNotBlank(paymentMode) && !paymentMode.equals(CollectionConstants.ALL))

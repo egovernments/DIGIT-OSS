@@ -85,6 +85,11 @@ function validate()
 	}
 	
 	document.billForm.action='/services/EGF/voucher/cancelBill-search.action';
+	jQuery(billForm).append(jQuery('<input>', {
+        type : 'hidden',
+        name : '${_csrf.parameterName}',
+        value : '${_csrf.token}'
+    }));
 	document.billForm.submit();
 	return true;
 }
@@ -115,6 +120,11 @@ function validateCancel()
 		return false;
 	}
 	document.billForm.action='/services/EGF/voucher/cancelBill-cancelBill.action';
+	jQuery(billForm).append(jQuery('<input>', {
+        type : 'hidden',
+        name : '${_csrf.parameterName}',
+        value : '${_csrf.token}'
+    }));
 	document.billForm.submit();
 	return true;
 }

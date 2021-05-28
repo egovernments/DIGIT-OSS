@@ -65,6 +65,10 @@
         <param-name>parentContextKey</param-name>
         <param-value>erpApplicationContext</param-value>
     </context-param>
+    <context-param>
+        <param-name>defaultHtmlEscape</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <filter>
         <filter-name>CacheControlFilter</filter-name>
         <filter-class>org.egov.infra.web.filter.CacheControlFilter</filter-class>
@@ -114,6 +118,16 @@
             org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter
         </filter-class>
     </filter>
+
+ 	<filter>
+		<filter-name>requestContextFilter</filter-name>
+		<filter-class>org.springframework.web.filter.RequestContextFilter</filter-class>
+	</filter>
+	
+   	<filter>
+       	<filter-name>multipartFilter</filter-name>
+       	<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+   	</filter>
 
     <filter>
         <filter-name>securityFilterChain</filter-name>
@@ -183,6 +197,17 @@
         <filter-name>openEntityManagerInViewFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    
+   	<filter-mapping>
+		<filter-name>requestContextFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+   	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>multipartFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 
     <filter-mapping>
         <filter-name>securityFilterChain</filter-name>

@@ -60,18 +60,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClosedPeriodRepository extends JpaRepository<ClosedPeriod, Long> {
-    ClosedPeriod findByFinancialYearId(Long id);
+	ClosedPeriod findByFinancialYearId(Long id);
 
-    @Query("from ClosedPeriod cp where cp.financialYear.id=:financialYearId and cp.isClosed=true and (cp.startingDate between :startingDate and :endingDate or cp.endingDate between :startingDate2 and :endingDate2)")
-    List<ClosedPeriod> getAllClosedPeriods(@Param("financialYearId") Long financialYearId,
-            @Param("startingDate") Date startingDate, @Param("endingDate") Date endingDate,
-            @Param("startingDate2") Date startingDate2, @Param("endingDate2") Date endingDate2);
-    // List<ClosedPeriod>
-    // findByFinancialYearIdAndIsClosedTrueAndStartingDateBetweenOrEndingDateBetween(Long
-    // financialYearId,Date startingDate1,Date endingDate1,Date
-    // startingDate2,Date endingDate2);
+	@Query("from ClosedPeriod cp where cp.financialYear.id=:financialYearId and cp.isClosed=true"
+			+ " and (cp.startingDate between :startingDate and :endingDate or cp.endingDate between :startingDate2 and :endingDate2)")
+	List<ClosedPeriod> getAllClosedPeriods(@Param("financialYearId") Long financialYearId,
+			@Param("startingDate") Date startingDate, @Param("endingDate") Date endingDate,
+			@Param("startingDate2") Date startingDate2, @Param("endingDate2") Date endingDate2);
 
-    @Query("select distinct cp.financialYear from ClosedPeriod cp where cp.closeType='SOFTCLOSE')")
-    List<CFinancialYear> getAllSoftClosedPeriods();
+	@Query("select distinct cp.financialYear from ClosedPeriod cp where cp.closeType='SOFTCLOSE')")
+	List<CFinancialYear> getAllSoftClosedPeriods();
 
 }

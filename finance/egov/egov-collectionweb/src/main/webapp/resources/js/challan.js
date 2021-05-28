@@ -121,7 +121,7 @@ function validateAccountDetail(){
 			{
 				if(document.getElementById('billDetailslist['+i+'].glcodeDetail')!=null && document.getElementById('billDetailslist['+j+'].glcodeDetail')!=null  ){
 					if ((document.getElementById('billDetailslist['+i+'].glcodeDetail').value.length!=0 && document.getElementById('billDetailslist['+j+'].glcodeDetail').value.length!=0)&&(document.getElementById('billDetailslist['+i+'].glcodeDetail').value == document.getElementById('billDetailslist['+j+'].glcodeDetail').value ))
-					{	document.getElementById('challan_error_area').innerHTML+='Duplicate record in Account Details. Please check account code: ' + document.getElementById('billDetailslist['+j+'].glcodeDetail').value+'<br>';
+					{	document.getElementById('challan_error_area').innerHTML+='Duplicate record in Account Details. Please check account code: ' + sanitizeHTML(document.getElementById('billDetailslist['+j+'].glcodeDetail').value) + '<br>';
 						i=billDetailsTable.getRecordSet().getLength();
 						validate=false;
 					}
@@ -133,26 +133,26 @@ function validateAccountDetail(){
 			if (  document.getElementById('billDetailslist['+i+'].glcodeDetail').value.length > 0 && document.getElementById('billDetailslist['+i+'].accounthead').value.length==0)
 			{
 				document.getElementById('billDetailslist['+i+'].glcodeDetail').focus();
-				document.getElementById('challan_error_area').innerHTML+='Please enter correct data in Account Details for the account code:'+document.getElementById('billDetailslist['+i+'].glcodeDetail').value +'<br>';
+				document.getElementById('challan_error_area').innerHTML+='Please enter correct data in Account Details for the account code:' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) +'<br>';
 				validate=false;
 			}
 			if(document.getElementById('billDetailslist['+i+'].creditAmountDetail').value.startsWith('+')){
 				document.getElementById('billDetailslist['+i+'].creditAmountDetail').focus();
-				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :'+document.getElementById('billDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				validate=false;
 			}
 			if(isNaN(document.getElementById('billDetailslist['+i+'].creditAmountDetail').value)){
 				document.getElementById('billDetailslist['+i+'].creditAmountDetail').focus();
-				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :'+document.getElementById('billDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) +'<br>';
 				validate=false;
 			}
 			else{
-			credit = eval(document.getElementById('billDetailslist['+i+'].creditAmountDetail').value);
+			credit = document.getElementById('billDetailslist['+i+'].creditAmountDetail').value;
 			}
 			credit = isNaN(credit)?0:credit;
 			if(credit<0){
 				document.getElementById('billDetailslist['+i+'].creditAmountDetail').focus();
-				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :'+document.getElementById('billDetailslist['+i+'].glcodeDetail').value+'<br>';
+				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) + '<br>';
 				validate=false;
 			}
 			
@@ -165,21 +165,21 @@ function validateAccountDetail(){
 			}
 //			if(document.getElementById('billDetailslist['+i+'].debitAmountDetail').value.startsWith('+')){
 //				document.getElementById('billDetailslist['+i+'].debitAmountDetail').focus();
-//				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :'+document.getElementById('billDetailslist['+i+'].glcodeDetail').value+'<br>';
+//				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) + '<br>';
 //				validate=false;
 //			}
 //			if(isNaN(document.getElementById('billDetailslist['+i+'].debitAmountDetail').value)){
 //				document.getElementById('billDetailslist['+i+'].debitAmountDetail').focus();
-//				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :'+document.getElementById('billDetailslist['+i+'].glcodeDetail').value+'<br>';
+//				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) + '<br>';
 //				validate=false;
 //			}
 //			else{
-//				debit = eval(document.getElementById('billDetailslist['+i+'].debitAmountDetail').value);
+//				debit = document.getElementById('billDetailslist['+i+'].debitAmountDetail').value;
 //				}
 //			debit = isNaN(debit)?0:debit;
 //			if(debit<0){
 //				document.getElementById('billDetailslist['+i+'].debitAmountDetail').focus();
-//				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :'+document.getElementById('billDetailslist['+i+'].glcodeDetail').value+'<br>';
+//				document.getElementById('challan_error_area').innerHTML+='Please enter correct amount in Account Details for account code :' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) + '<br>';
 //				validate=false;
 //			
 //			}
@@ -197,7 +197,7 @@ function validateAccountDetail(){
 //			if ((credit > 0 && debit>0) )
 //			{
 //				document.getElementById('billDetailslist['+i+'].creditAmountDetail').focus();
-//				document.getElementById('challan_error_area').innerHTML+='Please enter either credit/debit amount for the account code : ' +document.getElementById('billDetailslist['+i+'].glcodeDetail').value +'<br>';
+//				document.getElementById('challan_error_area').innerHTML+='Please enter either credit/debit amount for the account code : ' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) +'<br>';
 //				validate=false;
 //				return false;
 //			}
@@ -205,14 +205,14 @@ function validateAccountDetail(){
 //			if ((credit == 0 && debit==0) && document.getElementById('billDetailslist['+i+'].glcodeDetail').value.length!= 0)
 //			{
 //				document.getElementById('billDetailslist['+i+'].creditAmountDetail').focus();
-//				document.getElementById('challan_error_area').innerHTML+='Please enter either credit/debit amount for the account code : ' +document.getElementById('billDetailslist['+i+'].glcodeDetail').value +'<br>';
+//				document.getElementById('challan_error_area').innerHTML+='Please enter either credit/debit amount for the account code : ' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) +'<br>';
 //				validate=false;
 //				return false;
 //			}
 
 			if( document.getElementById('billDetailslist['+i+'].financialYearId').value=="0" && document.getElementById('billDetailslist['+i+'].glcodeDetail').value.length!= 0){
 				document.getElementById('billDetailslist['+i+'].financialYearId').focus();
-				document.getElementById('challan_error_area').innerHTML+='Please select the year for the account code :'+document.getElementById('billDetailslist['+i+'].glcodeDetail').value +'<br>';
+				document.getElementById('challan_error_area').innerHTML+='Please select the year for the account code :' + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) +'<br>';
 				validate=false;
 			}
 			
@@ -269,15 +269,15 @@ function validateSubLedgerDetail(){
 						}
 						if (accountCode == subledgerid.options[subledgerid.selectedIndex].text.trim())
 						{
-							if(eval(document.getElementById('billDetailslist['+i+'].creditAmountDetail').value) > 0){
+							if(document.getElementById('billDetailslist['+i+'].creditAmountDetail').value > 0){
 			
 								accountDetailamount = document.getElementById('billDetailslist['+i+'].creditAmountDetail').value;
 							}
-							//if(eval(document.getElementById('billDetailslist['+i+'].debitAmountDetail').value) > 0){
+							//if(document.getElementById('billDetailslist['+i+'].debitAmountDetail').value > 0){
 								
 								//accountDetailRebateAmount = document.getElementById('billDetailslist['+i+'].debitAmountDetail').value;
 							//}
-							subledgerTotalAmt = subledgerTotalAmt + eval(document.getElementById('subLedgerlist['+j+'].amount').value);
+							subledgerTotalAmt = subledgerTotalAmt + document.getElementById('subLedgerlist['+j+'].amount').value;
 						}
 						if(subledgerselected == 0){
 							subledgerselected[0] = subledgerAccCode;
@@ -298,14 +298,14 @@ function validateSubLedgerDetail(){
 				if(accountDetailamount>0){
 					if(Math.round(accountDetailamount*100)/100  != Math.round(subledgerTotalAmt*100)/100)
 					{
-						document.getElementById('challan_error_area').innerHTML += "Total subledger amount is not matching for account code :"+ document.getElementById('billDetailslist['+i+'].glcodeDetail').value+'<br>';
+						document.getElementById('challan_error_area').innerHTML += "Total subledger amount is not matching for account code :" + sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) +'<br>';
 						return false;
 					}
 				}
 				/*if(accountDetailRebateAmount>0){
 					if(Math.round(accountDetailRebateAmount*100)/100  != Math.round(subledgerTotalAmt*100)/100)
 					{
-						document.getElementById('challan_error_area').innerHTML += "Total subledger amount is not matching for account code :"+ document.getElementById('billDetailslist['+i+'].glcodeDetail').value+'<br>';
+						document.getElementById('challan_error_area').innerHTML += "Total subledger amount is not matching for account code :"+ sanitizeHTML(document.getElementById('billDetailslist['+i+'].glcodeDetail').value) + '<br>';
 						return false;
 					}
 				}*/
@@ -548,7 +548,7 @@ function createDropdownFormatterFYear(prefix,currentFYearId){
                 }
             }
             else {
-                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+                selectEl.innerHTML = "<option selected value=\"" + sanitizeHTML(selectedValue) + "\">" + sanitizeHTML(selectedValue) + "</option>";
             }
         }
         else {
@@ -594,7 +594,7 @@ function createDropdownFormatterDetailCode(prefix){
 	                }
 	            }
 	            else {
-	                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+	                selectEl.innerHTML = "<option selected value=\"" + sanitizeHTML(selectedValue) + "\">" + sanitizeHTML(selectedValue) + "</option>";
 	            }
 	        }
 	        else {
@@ -671,7 +671,7 @@ function createDropdownFormatterDetail(prefix){
                 }
             }
             else {
-                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+                selectEl.innerHTML = "<option selected value=\"" + sanitizeHTML(selectedValue) + "\">" + sanitizeHTML(selectedValue) + "</option>";
             }
         }
         else {
@@ -753,7 +753,7 @@ function createDropdownFormatterCode(prefix){
                 }
             }
             else {
-                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+                selectEl.innerHTML = "<option selected value=\"" + sanitizeHTML(selectedValue) + "\">" + sanitizeHTML(selectedValue) + "</option>";
             }
         }
         else {

@@ -60,8 +60,10 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -88,8 +90,7 @@ public class SchemeUtilizationReport
     String dynamicSubSchemName[];
     private static TaskFailedException taskExc;
 
-    public ArrayList getSchemeUtilizationReport(final int pschemeid, final String startDate, final String endDate)
-            throws Exception
+    public ArrayList getSchemeUtilizationReport(final int pschemeid, final String startDate, final String endDate) throws ParseException, TaskFailedException
     {
 
         Connection con = null;
@@ -767,7 +768,7 @@ public class SchemeUtilizationReport
 
             // cumulative for Total Closing Balance end
 
-        } catch (final Exception e)
+        } catch (final SQLException e)
         {
             LOGGER.error("Exp in Scheme Report==" + e.getMessage());
             throw taskExc;

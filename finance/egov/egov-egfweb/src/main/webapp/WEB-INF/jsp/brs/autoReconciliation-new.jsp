@@ -63,7 +63,11 @@ function validateSubmit() {
 			return false;
 		}
 		document.forms[0].action = "autoReconciliation-schedule.action"
-
+		jQuery(document.forms[0]).append(jQuery('<input>', {
+	    	type : 'hidden',
+	        name : '${_csrf.parameterName}',
+	        value : '${_csrf.token}'
+	    }));
 		return true;
 	}
 	function populatebranch(obj) {

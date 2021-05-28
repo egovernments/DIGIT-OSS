@@ -96,7 +96,7 @@ public interface BillingIntegrationService {
      * receipt instrument information. The information also includes the event for which the billing system needs to be updated.
      * @return a <code>Boolean</code> indicating if the update has taken place successfully
      */
-    public void updateReceiptDetails(Set<BillReceiptInfo> billReceipts) throws ApplicationRuntimeException;
+    public void updateReceiptDetails(Set<BillReceiptInfo> billReceipts);
 
     /**
      * Collection system will invoke this method when the billing system send "&lt;enablebillapportioning&gt; as true in the

@@ -61,6 +61,7 @@ import org.egov.pims.commons.Designation;
 import org.egov.pims.commons.Position;
 import org.egov.pims.dao.PersonalInformationDAO;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -70,6 +71,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -99,18 +101,20 @@ public class EisUtilService implements OwnerGroupService<Position> {
     public List<Position> getPositionsForUser(Long user, Date date) {
 
         List<Position> positionList;
-        try {
-            String mainStr = "select distinct(a.position) from Assignment a where a.employee.id =?";
-            Date givenDate = date == null ? new Date() : date;
+		try {
+			StringBuilder mainStr = new StringBuilder(
+					"select distinct(a.position) from Assignment a where a.employee.id =?");
+			Date givenDate = date == null ? new Date() : date;
 
-            mainStr += " and ((a.toDate is null and a.fromDate<= ?) or (a.fromDate <= ? and a.toDate >= ?))";
-            positionList = (List) persistenceService.findAllBy(mainStr, user, givenDate, givenDate, givenDate);
+			mainStr.append(" and ((a.toDate is null and a.fromDate<= ?) or (a.fromDate <= ? and a.toDate >= ?))");
+			positionList = (List) persistenceService.findAllBy(mainStr.toString(), user, givenDate, givenDate,
+					givenDate);
 
-        } catch (Exception e) {
-            LOGGER.error("Exception while getting the getPositionsForUser=" + e.getMessage());
-            throw new ApplicationRuntimeException(e.getMessage(), e);
+		} catch (HibernateException e) {
+			LOGGER.error("Exception while getting the getPositionsForUser=" + e.getMessage());
+			throw new HibernateException(e.getMessage(), e);
 
-        }
+		}
         return positionList;
 
     }
@@ -119,42 +123,44 @@ public class EisUtilService implements OwnerGroupService<Position> {
 
         Position position;
 
-        try {
-            String mainStr = "select a.position from Assignment a where a.primary=true";
+		try {
+			StringBuilder mainStr = new StringBuilder("select a.position from Assignment a where a.primary=true");
 
-            if (userId != null && userId != 0) {
-                mainStr += " and a.oldEmployee.userMaster.id =?";
+			if (userId != null && userId != 0) {
+				mainStr.append(" and a.oldEmployee.userMaster.id =?");
 
-            }
+			}
 
-            Date givenDate = date == null ? new Date() : date;
+			Date givenDate = date == null ? new Date() : date;
 
-            mainStr += " and ((a.toDate is null and a.fromDate<= ?) or (a.fromDate <= ? and a.toDate >= ?))";
-            position = (Position) persistenceService.find(mainStr, userId, givenDate, givenDate, givenDate);
+			mainStr.append(" and ((a.toDate is null and a.fromDate<= ?) or (a.fromDate <= ? and a.toDate >= ?))");
+			position = (Position) persistenceService.find(mainStr.toString(), userId, givenDate, givenDate, givenDate);
 
-        } catch (Exception e) {
-            LOGGER.error("Exception while getting the getPrimaryPositionForUser=" + e.getMessage());
-            throw new ApplicationRuntimeException(e.getMessage(), e);
+		} catch (HibernateException e) {
+			LOGGER.error("Exception while getting the getPrimaryPositionForUser=" + e.getMessage());
+			throw new ApplicationRuntimeException(e.getMessage(), e);
 
-        }
+		}
         return position;
 
     }
 
     public User getUserForPosition(Long positionId, Date date) {
         User user;
-        try {
-            String mainStr = "select emp.userMaster from EmployeeView emp where emp.position.id = ?";
+		try {
+			StringBuilder mainStr = new StringBuilder(
+					"select emp.userMaster from EmployeeView emp where emp.position.id = ?");
 
-            Date givenDate = date == null ? new Date() : date;
+			Date givenDate = date == null ? new Date() : date;
 
-            mainStr += " and ((emp.toDate is null and emp.fromDate<= ?) or (emp.fromDate <= ? and emp.toDate >= ?))";
-            user = (User) persistenceService.find(mainStr, positionId, givenDate, givenDate, givenDate);
-        } catch (Exception e) {
-            LOGGER.error("Exception while getting the getUserForPosition=" + e.getMessage());
-            throw new ApplicationRuntimeException(e.getMessage(), e);
+			mainStr.append(
+					" and ((emp.toDate is null and emp.fromDate<= ?) or (emp.fromDate <= ? and emp.toDate >= ?))");
+			user = (User) persistenceService.find(mainStr.toString(), positionId, givenDate, givenDate, givenDate);
+		} catch (HibernateException e) {
+			LOGGER.error("Exception while getting the getUserForPosition=" + e.getMessage());
+			throw new ApplicationRuntimeException(e.getMessage(), e);
 
-        }
+		}
         return user;
 
     }

@@ -239,12 +239,22 @@ public class ConcurrenceReportAction extends BaseFormAction {
     }
 
     private Query generateQuery() {
-        final Query query = persistenceService.getSession().createSQLQuery(
-                getQueryString().toString()).addScalar("bankName").addScalar(
-                        "bankAccountNumber").addScalar("fundId").addScalar(
-                                "departmentName").addScalar("billNumber").addScalar("billDate")
-                                .addScalar("uac").addScalar("bpvNumber").addScalar("bpvDate")
-                                .addScalar("bpvAccountCode").addScalar("amount");
+    	final Map.Entry<String, Map<String, Object>> queryMapEntry = getQueryString().entrySet().iterator().next();
+        final String queryString = queryMapEntry.getKey();
+        final Map<String, Object> queryParams = queryMapEntry.getValue();
+        final Query query = persistenceService.getSession().createSQLQuery(queryString)
+                .addScalar("bankName")
+                .addScalar("bankAccountNumber")
+                .addScalar("fundId")
+                .addScalar("departmentName")
+                .addScalar("billNumber")
+                .addScalar("billDate")
+                .addScalar("uac")
+                .addScalar("bpvNumber")
+                .addScalar("bpvDate")
+                .addScalar("bpvAccountCode")
+                .addScalar("amount");
+        queryParams.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
         return query;
     }
 
@@ -253,8 +263,13 @@ public class ConcurrenceReportAction extends BaseFormAction {
         this.paymentHeaderList = paymentHeaderList;
     }
 
-    private StringBuffer getQueryString() {
-
+    private Map<String, Map<String, Object>> getQueryString() {
+    	final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+        final Map<String, Object> queryParams = new HashMap<>();
+        final Map<String, Object> dateQueryParams = new HashMap<>();
+        final Map<String, Object> bankQueryParams = new HashMap<>();
+        final Map<String, Object> instrumentQueryParams = new HashMap<>();
+        final Map<String, Object> chqOrRtgsQueryParams = new HashMap<>();
         final StringBuffer queryString = new StringBuffer();
         String bankQry = "";
         String dateQry = "";
@@ -266,21 +281,28 @@ public class ConcurrenceReportAction extends BaseFormAction {
             dateQry = "ph.concurrenceDate >=:fromDate and ph.concurrenceDate <= :toDate and ";
 
         if (bankAccountExist) {
-            bankQry = "ph.bankaccountnumberid=" + bankAccount.getId() + " and ";
-            insturmentQry = " where bankaccountid=" + bankAccount.getId();
+        	 bankQry = "ph.bankaccountnumberid=:accNumberId and ";
+             bankQueryParams.put("accNumberId", bankAccount.getId());
+             insturmentQry = " where bankaccountid=:bankAccId";
+             instrumentQueryParams.put("bankAccId", bankAccount.getId());
         } else
             bankQry = " ";
 
         if (StringUtils.isNotBlank(chequeOrRTGS)) {
             // query to fetch vouchers for which no cheque has been assigned
             String chqOrRtgsQry = "";
-            if (Constants.CHEQUE.equals(chequeOrRTGS))
+            if (Constants.CHEQUE.equals(chequeOrRTGS)) {
                 // this part is same as below query except " and iv.VOUCHERHEADERID is null" is removed
-                chqOrRtgsQry = "ih.INSTRUMENTNUMBER is not null and ih.INSTRUMENTTYPE = (select id from egf_instrumenttype where type = '"
-                        + FinancialConstants.INSTRUMENT_TYPE_CHEQUE + "') and iv.instrumentheaderId = ih.id and ";
-            else if (Constants.RTGS.equals(chequeOrRTGS))
-                chqOrRtgsQry = "ih.TRANSACTIONNUMBER is not null and ih.INSTRUMENTTYPE = (select id from egf_instrumenttype where type = '"
-                        + FinancialConstants.INSTRUMENT_TYPE_ADVICE + "') and iv.instrumentheaderId = ih.id and ";
+				chqOrRtgsQry = new StringBuilder(
+						"ih.INSTRUMENTNUMBER is not null and ih.INSTRUMENTTYPE = (select id from egf_instrumenttype where type = :instrumentType)")
+								.append(" and iv.instrumentheaderId = ih.id and ").toString();
+				chqOrRtgsQueryParams.put("instrumentType", FinancialConstants.INSTRUMENT_TYPE_CHEQUE);
+            }
+            else if (Constants.RTGS.equals(chequeOrRTGS)) {
+            	chqOrRtgsQry = new StringBuilder("ih.TRANSACTIONNUMBER is not null and ih.INSTRUMENTTYPE = (select id from egf_instrumenttype where type = :instrumentType)")
+                        .append(" and iv.instrumentheaderId = ih.id and ").toString();
+                chqOrRtgsQueryParams.put("instrumentType", FinancialConstants.INSTRUMENT_TYPE_ADVICE);
+            }
             queryString
             .append("select bk.name   As bankName,ba.accountnumber As bankAccountNumber, vh.fundid As fundId,d.dept_name as departmentName,ms.billnumber as billNumber, ")
             .append("ms.billdate as billDate ,egusr.first_name as uac, vh.vouchernumber as bpvNumber, vh.voucherdate as bpvDate, gl.glcode as bpvAccountCode,")
@@ -295,8 +317,11 @@ public class ConcurrenceReportAction extends BaseFormAction {
             .append(" ph.bankaccountnumberid=ba.id and ba.branchid=bb.id and bb.bankid=bk.id")
             .append(" and  vh1.id=vh.id and vh.status=0  group by vh.fundid, ms.billnumber, d.dept_name,")
             .append(" egusr.first_name, ms.billdate,gl.glcode,vh.vouchernumber,bk.name,ba.accountnumber, vh.voucherdate, ms.paidamount ");
-
-        } else
+            
+            queryParams.putAll(chqOrRtgsQueryParams);
+            queryParams.putAll(dateQueryParams);
+            queryParams.putAll(bankQueryParams);
+        } else {
             queryString
             .append("select bk.name   As bankName,ba.accountnumber As bankAccountNumber, vh.fundid As fundId,d.dept_name as departmentName,ms.billnumber as billNumber, ")
             .append("ms.billdate as billDate ,egusr.first_name as uac, vh.vouchernumber as bpvNumber, vh.voucherdate as bpvDate, gl.glcode as bpvAccountCode,")
@@ -326,9 +351,16 @@ public class ConcurrenceReportAction extends BaseFormAction {
             .append(" and  iv.voucherheaderid=vh.id and iv.instrumentheaderid=ih.id and vh.status=0 and ")
             .append("ih.id_status=egws.id and egws.description in ('Surrendered','Surrender_For_Reassign') and gl.debitamount!=0 and gl.debitamount is not null and ")
             .append(dateQry).append(bankQry)
-            .append(" ph.bankaccountnumberid=ba.id and ba.branchid=bb.id and bb.bankid=bk.id and vh.type='")
-            .append(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT).append("'");
-        return queryString.append("order by fundid ,bankaccountnumber,billdate");
+            .append(" ph.bankaccountnumberid=ba.id and ba.branchid=bb.id and bb.bankid=bk.id and vh.type=:vhType'");
+        
+	        queryParams.putAll(dateQueryParams);
+	        queryParams.putAll(bankQueryParams);
+	        queryParams.putAll(instrumentQueryParams);
+	        queryParams.put("vhType", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
+        }
+        queryString.append("order by fundid ,bankaccountnumber,billdate");
+        queryMap.put(queryString.toString(), queryParams);
+        return queryMap;
     }
 
     public String getChequeOrRTGS() {

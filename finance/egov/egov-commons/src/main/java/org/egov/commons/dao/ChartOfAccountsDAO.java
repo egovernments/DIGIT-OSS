@@ -53,6 +53,7 @@ import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.validation.exception.ValidationException;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public interface ChartOfAccountsDAO {
     public Collection getAccountCodeListForDetails();
 
     @Deprecated
-    public CChartOfAccounts findCodeByPurposeId(int purposeId) throws Exception;
+    public CChartOfAccounts findCodeByPurposeId(int purposeId);
 
     public CChartOfAccounts getCChartOfAccountsByGlCode(String glCode);
 
@@ -70,12 +71,12 @@ public interface ChartOfAccountsDAO {
     public List getChartOfAccountsForTds();
 
     @Deprecated
-    public int getDetailTypeId(String glCode, Connection connection) throws Exception;
+    public int getDetailTypeId(String glCode, Connection connection) throws SQLException;
 
     @Deprecated
-    public int getDetailTypeIdByName(String glCode, Connection connection, String name) throws Exception;
+    public int getDetailTypeIdByName(String glCode, Connection connection, String name);
 
-    public List getGlcode(String minGlcode, String maxGlcode, String majGlcode) throws Exception;
+    public List getGlcode(String minGlcode, String maxGlcode, String majGlcode);
 
     public List<CChartOfAccounts> getActiveAccountsForType(char c) throws ApplicationException;
 
@@ -85,7 +86,7 @@ public interface ChartOfAccountsDAO {
 
     public List<Accountdetailtype> getAccountdetailtypeListByGLCode(final String glCode) throws ApplicationException;
 
-    public Accountdetailtype getAccountDetailTypeIdByName(String glCode, String name) throws Exception;
+    public Accountdetailtype getAccountDetailTypeIdByName(String glCode, String name);
 
     public List<CChartOfAccounts> getDetailedAccountCodeList() throws ApplicationException;
 

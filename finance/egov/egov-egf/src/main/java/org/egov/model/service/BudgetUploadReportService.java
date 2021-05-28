@@ -48,6 +48,11 @@
 
 package org.egov.model.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.budget.Budget;
@@ -62,9 +67,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 @Transactional(readOnly = true)
 public class BudgetUploadReportService {
@@ -77,81 +79,99 @@ public class BudgetUploadReportService {
     @Qualifier("persistenceService")
     private PersistenceService persistenceService;
 
-    @ReadOnly
-    public List<BudgetUploadReport> search(BudgetUploadReport budgetUploadReport) {
+	@ReadOnly
+	public List<BudgetUploadReport> search(BudgetUploadReport budgetUploadReport) {
 
-        String reMaterializedPath = "", beMaterializedPath = "";
-        Long functionId = null;
-        Integer fundId = null;
-        String deptCode = null;
-        Budget reBudget = new Budget();
-        Budget beBudget = new Budget();
-        if (budgetUploadReport.getReBudget() != null && budgetUploadReport.getReBudget().getId() != null) {
-            reBudget = budgetService.findById(budgetUploadReport.getReBudget().getId(), false);
-            reMaterializedPath = reBudget.getMaterializedPath();
-        }
+		String reMaterializedPath = "", beMaterializedPath = "";
+		Long functionId = null;
+		Long fundId = null;
+		String deptCode = null;
+		Budget reBudget = new Budget();
+		Budget beBudget = new Budget();
+		if (budgetUploadReport.getReBudget() != null && budgetUploadReport.getReBudget().getId() != null) {
+			reBudget = budgetService.findById(budgetUploadReport.getReBudget().getId(), false);
+			reMaterializedPath = reBudget.getMaterializedPath();
+		}
 
-        if (reBudget != null) {
-            beBudget = budgetService.getReferenceBudgetFor(reBudget);
-            beMaterializedPath = beBudget.getMaterializedPath();
-        }
+		if (reBudget != null) {
+			beBudget = budgetService.getReferenceBudgetFor(reBudget);
+			beMaterializedPath = beBudget.getMaterializedPath();
+		}
 
-        if (budgetUploadReport.getFund() != null && budgetUploadReport.getFund().getId() != null)
-            fundId = budgetUploadReport.getFund().getId();
+		if (budgetUploadReport.getFund() != null && budgetUploadReport.getFund().getId() != null)
+			fundId = budgetUploadReport.getFund().getId();
 
-        if (budgetUploadReport.getFunction() != null && budgetUploadReport.getFunction().getId() != null)
-            functionId = budgetUploadReport.getFunction().getId();
+		if (budgetUploadReport.getFunction() != null && budgetUploadReport.getFunction().getId() != null)
+			functionId = budgetUploadReport.getFunction().getId();
 
-        if (budgetUploadReport.getDepartment() != null && budgetUploadReport.getDepartment().getCode() != null)
-            deptCode = budgetUploadReport.getDepartment().getCode();
+		if (budgetUploadReport.getDepartment() != null && budgetUploadReport.getDepartment().getCode() != null)
+			deptCode = budgetUploadReport.getDepartment().getCode();
 
-        List<BudgetUploadReport> budgetUploadReportList = new ArrayList<BudgetUploadReport>();
-        Query query = null;
-        query = persistenceService.getSession()
-                .createSQLQuery(getQuery(reMaterializedPath, beMaterializedPath, fundId, functionId, deptCode))
-                .addScalar("fundCode", StringType.INSTANCE)
-                .addScalar("functionCode", StringType.INSTANCE)
-                .addScalar("glCode", StringType.INSTANCE)
-                .addScalar("deptCode", StringType.INSTANCE)
-                .addScalar("approvedReAmount", BigDecimalType.INSTANCE)
-                .addScalar("planningReAmount", BigDecimalType.INSTANCE)
-                .addScalar("approvedBeAmount", BigDecimalType.INSTANCE)
-                .addScalar("planningBeAmount", BigDecimalType.INSTANCE)
-                .setResultTransformer(Transformers.aliasToBean(BudgetUploadReport.class));
-        budgetUploadReportList = query.list();
+		List<BudgetUploadReport> budgetUploadReportList = new ArrayList<BudgetUploadReport>();
+		final Map<String, Object> params = new HashMap<>();
+		Query query = persistenceService.getSession()
+				.createSQLQuery(getQuery(reMaterializedPath, beMaterializedPath, fundId, functionId, deptCode, params))
+				.addScalar("fundCode", StringType.INSTANCE).addScalar("functionCode", StringType.INSTANCE)
+				.addScalar("glCode", StringType.INSTANCE).addScalar("deptCode", StringType.INSTANCE)
+				.addScalar("approvedReAmount", BigDecimalType.INSTANCE)
+				.addScalar("planningReAmount", BigDecimalType.INSTANCE)
+				.addScalar("approvedBeAmount", BigDecimalType.INSTANCE)
+				.addScalar("planningBeAmount", BigDecimalType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(BudgetUploadReport.class));
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		budgetUploadReportList = query.list();
 
-        return budgetUploadReportList;
-    }
+		return budgetUploadReportList;
+	}
 
-    public String getQuery(final String reMaterializedPath, final String beMaterializedPath,
-            final Integer fundId, final Long functionId,
-            final String deptCode) {
+	public String getQuery(final String reMaterializedPath, final String beMaterializedPath, final Long fundId,
+			final Long functionId, final String deptCode, final Map<String, Object> params) {
 
-        String subQuery = "", reMaterializedPathQuery = "", beMaterializedPathQuery = "";
-        if (reMaterializedPath != null)
-            reMaterializedPathQuery = " and bd.materializedpath like '" + reMaterializedPath + "%'";
-        if (beMaterializedPath != null)
-            beMaterializedPathQuery = " and bd.materializedpath like '" + beMaterializedPath + "%'";
-        if (fundId != null)
-            subQuery = subQuery + " and bd.fund = " + fundId;
-        if (deptCode != null)
-            subQuery = subQuery + " and bd.executing_department  = '" + deptCode + "'";
-        if (functionId != null)
-            subQuery = subQuery + " and bd.function = " + functionId;
+		final StringBuilder subQuery = new StringBuilder();
+		String reMaterializedPathQuery = "";
+		String beMaterializedPathQuery = "";
+		if (reMaterializedPath != null) {
+			reMaterializedPathQuery = " and bd.materializedpath like :reMaterializedPath";
+			params.put("reMaterializedPath", reMaterializedPath + "%");
+		}
+		if (beMaterializedPath != null) {
+			beMaterializedPathQuery = " and bd.materializedpath like :beMaterializedPath";
+			params.put("beMaterializedPath", beMaterializedPath + "%");
+		}
+		if (fundId != null) {
+			subQuery.append(" and bd.fund = :fundId");
+			params.put("fundId", fundId);
+		}
+		if (deptCode != null) {
+			subQuery.append(" and bd.executing_department  = :deptCode");
+			params.put("deptCode", deptCode);
+		}
+		if (functionId != null) {
+			subQuery.append(" and bd.function = :functionId");
+			params.put("functionId", functionId);
+		}
 
-        return "SELECT budgetuploadreport.fundCode ,budgetuploadreport.functionCode,budgetuploadreport.glCode,budgetuploadreport.deptCode,sum(budgetuploadreport.approvedReAmount) as approvedReAmount,sum(budgetuploadreport.planningReAmount) as planningReAmount,sum(budgetuploadreport.approvedBeAmount) as approvedBeAmount,sum(budgetuploadreport.planningBeAmount) as planningBeAmount FROM "
-                + "(SELECT f.code AS fundCode,fn.code  AS functionCode,bg.name AS glCode,bd.executing_department  AS deptCode,bd.approvedamount AS approvedReAmount,bd.budgetavailable AS planningReAmount,0 AS approvedBeAmount,0 AS planningBeAmount  FROM egf_budgetdetail bd , egf_budgetgroup bg , fund f, "
-                + "function fn,chartofaccounts coa,egw_status st WHERE bd.status  = st.id  AND st.moduletype  = 'BUDGETDETAIL' AND st.code  = 'Created' AND bd.budgetgroup = bg.id  AND bg.mincode = coa.id "
-                + "AND bd.fund = f.id AND bd.function  = fn.id "
-                + subQuery
-                + " "
-                + reMaterializedPathQuery
-                + " UNION SELECT f.code  AS fundCode,fn.code AS functionCode,bg.name AS glCode, "
-                + "bd.executing_department  AS deptCode,0 AS approvedReAmount,0 AS planningReAmount,bd.approvedamount AS approvedBeAmount,bd.budgetavailable AS planningBeAmount FROM egf_budgetdetail bd ,egf_budgetgroup bg ,fund f,function fn,chartofaccounts coa,egw_status st WHERE bd.status = st.id "
-                + "AND st.moduletype = 'BUDGETDETAIL' AND st.code   = 'Created' AND bd.budgetgroup  = bg.id AND bg.mincode  = coa.id AND bd.fund  = f.id AND bd.function = fn.id "
-                + subQuery
-                + " "
-                + beMaterializedPathQuery
-                + " )  budgetuploadreport GROUP BY budgetuploadreport.fundCode ,budgetuploadreport.functionCode,budgetuploadreport.glCode,budgetuploadreport.deptCode ";
-    }
+		return new StringBuilder("SELECT budgetuploadreport.fundCode ,budgetuploadreport.functionCode,").append(
+				"budgetuploadreport.glCode,budgetuploadreport.deptCode,sum(budgetuploadreport.approvedReAmount)")
+				.append(" as approvedReAmount,sum(budgetuploadreport.planningReAmount) as planningReAmount,")
+				.append("sum(budgetuploadreport.approvedBeAmount) as approvedBeAmount,sum(budgetuploadreport.planningBeAmount)")
+				.append(" as planningBeAmount FROM ")
+				.append("(SELECT f.code AS fundCode,fn.code  AS functionCode,bg.name AS glCode,bd.executing_department ")
+				.append(" AS deptCode,bd.approvedamount AS approvedReAmount,bd.budgetavailable AS planningReAmount,")
+				.append("0 AS approvedBeAmount,0 AS planningBeAmount  FROM egf_budgetdetail bd , egf_budgetgroup bg , fund f, ")
+				.append("function fn,chartofaccounts coa,egw_status st WHERE bd.status  = st.id ")
+				.append(" AND st.moduletype  = 'BUDGETDETAIL' AND st.code  = 'Created' AND bd.budgetgroup = bg.id")
+				.append("  AND bg.mincode = coa.id AND bd.fund = f.id AND bd.function  = fn.id ").append(subQuery)
+				.append(" ").append(reMaterializedPathQuery)
+				.append(" UNION SELECT f.code  AS fundCode,fn.code AS functionCode,bg.name AS glCode, ")
+				.append("bd.executing_department  AS deptCode,0 AS approvedReAmount,0 AS planningReAmount,")
+				.append("bd.approvedamount AS approvedBeAmount,bd.budgetavailable AS planningBeAmount")
+				.append(" FROM egf_budgetdetail bd ,egf_budgetgroup bg ,fund f,function fn,chartofaccounts coa,")
+				.append("egw_status st WHERE bd.status = st.id ")
+				.append("AND st.moduletype = 'BUDGETDETAIL' AND st.code   = 'Created' AND bd.budgetgroup  = bg.id")
+				.append(" AND bg.mincode  = coa.id AND bd.fund  = f.id AND bd.function = fn.id ").append(subQuery)
+				.append(" ").append(beMaterializedPathQuery)
+				.append(" )  budgetuploadreport GROUP BY budgetuploadreport.fundCode ,budgetuploadreport.functionCode,")
+				.append("budgetuploadreport.glCode,budgetuploadreport.deptCode ").toString();
+	}
 }

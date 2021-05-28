@@ -126,7 +126,7 @@ public class BankEntriesNotInBankBookActionHelper {
 
     @Transactional
     public void create(CVoucherHeader voucherHeader, Integer bankaccount,
-            List<BankEntriesNotInBankBook> bankEntriesNotInBankBookList) throws Exception {
+            List<BankEntriesNotInBankBook> bankEntriesNotInBankBookList) {
         try {
             List<BrsEntries> bankEntries = new ArrayList<BrsEntries>();
             BrsEntries bankEntry = new BrsEntries();
@@ -191,12 +191,12 @@ public class BankEntriesNotInBankBookActionHelper {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
     }
 
     @Transactional
@@ -245,12 +245,12 @@ public class BankEntriesNotInBankBookActionHelper {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
         return voucher;
     }
 

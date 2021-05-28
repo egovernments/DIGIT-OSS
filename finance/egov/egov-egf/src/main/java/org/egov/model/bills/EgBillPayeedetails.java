@@ -50,6 +50,7 @@ package org.egov.model.bills;
 import org.egov.infra.persistence.entity.AbstractPersistable;
 import org.egov.model.recoveries.Recovery;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,6 +61,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -78,22 +82,27 @@ public class EgBillPayeedetails extends AbstractPersistable<Integer> implements 
 
     @ManyToOne
     @JoinColumn(name = "billdetailid")
+    @NotNull
     private EgBilldetails egBilldetailsId;
 
+    @NotNull
     private Integer accountDetailTypeId;
 
+    @NotNull
     private Integer accountDetailKeyId;
-
+    @Min(1)
     private BigDecimal debitAmount;
-
+    @Min(1)
     private BigDecimal creditAmount;
 
     private Date lastUpdatedTime;
 
     @Transient
+    @SafeHtml
     private String detailTypeName;
 
     @Transient
+    @SafeHtml
     private String detailKeyName;
 
     @Transient
@@ -104,6 +113,7 @@ public class EgBillPayeedetails extends AbstractPersistable<Integer> implements 
     private Recovery recovery;
 
     @Length(max = 250)
+    @SafeHtml
     private String narration;
 
     public Integer getAccountDetailKeyId() {

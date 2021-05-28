@@ -48,53 +48,84 @@
 package org.egov.model.voucher;
 
 import org.egov.utils.FinancialConstants;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
 public class CommonBean {
+    @SafeHtml
     private String chequeInHand;
+    @SafeHtml
     private String cashInHand;
+    @SafeHtml
     private String bankBranchId;
+    @SafeHtml
     private String accountNumberId;
+    @SafeHtml
     private String fromBankAccountId;
+    @SafeHtml
     private String chequeNumber;
+    @SafeHtml
     private String chequeDate;
+    @SafeHtml
     private String fromBankId;
+    @SafeHtml
     private String bankId;
+    @SafeHtml
     private String toBankId;
     private BigDecimal amount;
+    @SafeHtml
     private String boundaryLevel;
+    @SafeHtml
     private String accnumnar;
     private BigDecimal availableBalance;
+    @SafeHtml
     private String fromBankBranchId;
+    @SafeHtml
     private String toBankBranchId;
+    @SafeHtml
     private String result;
+    @SafeHtml
     private String mode;
     private BigDecimal accountBalance;
+    @SafeHtml
     private String saveMode;
+    @SafeHtml
     private String modeOfCollection;
+    @SafeHtml
     private String fromBankBalance;
+    @SafeHtml
     private String toBankBalance;
+    @SafeHtml
     private String modeOfPayment;
+    @SafeHtml
     private String documentNumber;
     private Date documentDate;
     private Long documentId;
+    @SafeHtml
     private String linkReferenceNumber;
+    @SafeHtml
     private String paidTo;
+    @SafeHtml
     private String billNumber;
     private Integer subledgerType;
     private Date billDate;
     private Integer billSubType;
+    @SafeHtml
     private String inwardSerialNumber;
+    @SafeHtml
     private String partyBillNumber;
     private Date partyBillDate;
     private Map checkListValuesMap;
+    @SafeHtml
     private String functionName;
     private Integer functionId;
+    @SafeHtml
     private String payto;
     private Long stateId;
+    @SafeHtml
     private String budgetReappNo;
 
     public Long getRecoveryId() {

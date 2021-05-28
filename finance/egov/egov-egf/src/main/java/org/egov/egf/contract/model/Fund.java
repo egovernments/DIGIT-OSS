@@ -2,105 +2,110 @@ package org.egov.egf.contract.model;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class Fund implements Serializable {
-	
-	private Long id;
-	private String name;
-	private String code;
-	private Character identifier;
-	private Long parent;
-	private Boolean active;
-	private Boolean isParent;
-	private String level;
-	
-	private AuditDetails auditDetils;
-	
-	public Fund(){}
 
-	public Fund(Long id, String name, String code, Character identifier, Long parent, Boolean active, Boolean isParent,
-			String level, AuditDetails auditDetils) {
-		this.id = id;
-		this.name = name;
-		this.code = code;
-		this.identifier = identifier;
-		this.parent = parent;
-		this.active = active;
-		this.isParent = isParent;
-		this.level = level;
-		this.auditDetils = auditDetils;
-	}
+    private Long id;
+    @SafeHtml
+    private String name;
+    @SafeHtml
+    private String code;
+    private Character identifier;
+    private Long parent;
+    private Boolean active;
+    private Boolean isParent;
+    @SafeHtml
+    private String level;
 
-	public Long getId() {
-		return id;
-	}
+    private AuditDetails auditDetils;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Fund() {
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Fund(Long id, String name, String code, Character identifier, Long parent, Boolean active, Boolean isParent,
+            String level, AuditDetails auditDetils) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
+        this.identifier = identifier;
+        this.parent = parent;
+        this.active = active;
+        this.isParent = isParent;
+        this.level = level;
+        this.auditDetils = auditDetils;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Character getIdentifier() {
-		return identifier;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setIdentifier(Character identifier) {
-		this.identifier = identifier;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public Long getParent() {
-		return parent;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setParent(Long parent) {
-		this.parent = parent;
-	}
+    public Character getIdentifier() {
+        return identifier;
+    }
 
-	public Boolean getActive() {
-		return active;
-	}
+    public void setIdentifier(Character identifier) {
+        this.identifier = identifier;
+    }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+    public Long getParent() {
+        return parent;
+    }
 
-	public Boolean getIsParent() {
-		return isParent;
-	}
+    public void setParent(Long parent) {
+        this.parent = parent;
+    }
 
-	public void setIsParent(Boolean isParent) {
-		this.isParent = isParent;
-	}
+    public Boolean getActive() {
+        return active;
+    }
 
-	public String getLevel() {
-		return level;
-	}
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
-	public void setLevel(String level) {
-		this.level = level;
-	}
+    public Boolean getIsParent() {
+        return isParent;
+    }
 
-	public AuditDetails getAuditDetils() {
-		return auditDetils;
-	}
+    public void setIsParent(Boolean isParent) {
+        this.isParent = isParent;
+    }
 
-	public void setAuditDetils(AuditDetails auditDetils) {
-		this.auditDetils = auditDetils;
-	}
-	
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public AuditDetails getAuditDetils() {
+        return auditDetils;
+    }
+
+    public void setAuditDetils(AuditDetails auditDetils) {
+        this.auditDetils = auditDetils;
+    }
 
 }

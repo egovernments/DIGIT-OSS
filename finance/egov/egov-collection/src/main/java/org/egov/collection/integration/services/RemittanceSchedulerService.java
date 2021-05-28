@@ -93,9 +93,10 @@ public class RemittanceSchedulerService {
         StringBuilder queryString = new StringBuilder(200);
         queryString
                 .append("select rt from org.egov.collection.entity.RemittanceInstrument rt where rt.reconciled=false and rt.instrumentHeader.instrumentType.type=:instType")
-                .append(" and MOD(rt.id, ").append(CollectionConstants.QUARTZ_BULKBILL_JOBS).append(") = :modulo ");
+                .append(" and MOD(rt.id, :billJobs) = :modulo ");
         final Query qry = persistenceService.getSession().createQuery(queryString.toString()).setMaxResults(500);
         qry.setParameter("instType", instrumentType);
+        qry.setParameter("billJobs", CollectionConstants.QUARTZ_BULKBILL_JOBS);
         qry.setParameter("modulo", modulo);
         final List<RemittanceInstrument> reconcileList = qry.list();
         Boolean voucherTypeForChequeDDCard = false;

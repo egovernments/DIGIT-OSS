@@ -48,6 +48,7 @@
 package org.egov.collection.web.actions.receipts;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
@@ -56,7 +57,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.ReceiptHeader;
 import org.egov.collection.utils.CollectionsUtil;
-import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.microservice.models.BillDetail;
@@ -74,9 +74,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
@@ -87,6 +87,7 @@ import java.util.TreeMap;
 })
 public class SearchReceiptAction extends SearchFormAction {
 
+    private static final Logger LOGGER = Logger.getLogger(SearchReceiptAction.class);
     private static final long serialVersionUID = 1L;
     private String serviceTypeId = null;
     private Long userId = (long) -1;
@@ -211,6 +212,10 @@ public class SearchReceiptAction extends SearchFormAction {
     @Override
     @Action(value = "/receipts/searchReceipt-search")
     public String search() {
+    	validateSearchParams();
+    	if (hasErrors())
+    		return SUCCESS;
+    		
         target = "searchresult";
         collectionVersion = ApplicationThreadLocals.getCollectionVersion();
 
@@ -257,8 +262,8 @@ public class SearchReceiptAction extends SearchFormAction {
                         if (null != jsonNode)
                             additional = (BillDetailAdditional) new ObjectMapper().readValue(jsonNode.toString(),
                                     BillDetailAdditional.class);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (IOException e) {
+                        LOGGER.error("error occured reading value from object mapper" +e.getMessage());
                     }
                     if (null != additional) {
 //                        if (null != additional.getBusinessReason()) {
@@ -294,7 +299,14 @@ public class SearchReceiptAction extends SearchFormAction {
         return SUCCESS;
     }
 
-    /**
+	private void validateSearchParams() {
+		if (StringUtils.isEmpty(serviceTypeId) || serviceTypeId.equals("-1"))
+			addActionError(getText("error.select.service.type"));
+		if (fromDate != null && toDate != null && !fromDate.equals(toDate) && !fromDate.before(toDate))
+			addActionError(getText("common.comparedate.errormessage"));
+	}
+
+	/**
      * @return the target
      */
     public String getTarget() {

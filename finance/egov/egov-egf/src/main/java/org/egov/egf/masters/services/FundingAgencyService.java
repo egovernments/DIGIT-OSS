@@ -81,16 +81,18 @@ public class FundingAgencyService extends PersistenceService<FundingAgency, Inte
         return entities;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<EntityType> filterActiveEntities(String filterKey, final int maxRecords, final Integer accountDetailTypeId) {
-        final Integer pageSize = maxRecords > 0 ? maxRecords : null;
-        final List<EntityType> entities = new ArrayList<EntityType>();
-        filterKey = "%" + filterKey + "%";
-        final String qry = "from FundingAgency r where upper(code) like upper(?) or upper(name) like upper(?) and r.isActive=? order by code,name";
-        entities.addAll(findPageBy(qry, 0, pageSize, filterKey, filterKey, true).getList());
-        return entities;
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<EntityType> filterActiveEntities(String filterKey, final int maxRecords,
+			final Integer accountDetailTypeId) {
+		final Integer pageSize = maxRecords > 0 ? maxRecords : null;
+		final List<EntityType> entities = new ArrayList<EntityType>();
+		filterKey = "%" + filterKey + "%";
+		final String qry = "from FundingAgency r where upper(code) like upper(?) or upper(name) like upper(?)"
+				+ " and r.isActive=? order by code,name";
+		entities.addAll(findPageBy(qry, 0, pageSize, filterKey, filterKey, true).getList());
+		return entities;
+	}
 
     /*
      * (non-Javadoc)

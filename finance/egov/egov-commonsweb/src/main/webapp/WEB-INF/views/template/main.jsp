@@ -63,6 +63,8 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	    <meta name="description" content="eGov System" />
 	    <meta name="author" content="eGovernments Foundation" />
+	    <meta name="_csrf" content="${_csrf.token}"/>
+    	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 	
 	    <title><tiles:insertAttribute name="title"/></title>
 		<link rel="icon" href="<cdn:url value='/resources/global/images/favicon.png' context='/services/egi'/>" sizes="32x32">
@@ -75,14 +77,17 @@
 		<script src="<cdn:url value='/resources/global/js/bootstrap/bootbox.min.js' context='/services/egi'/>"></script>
 		<script src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/services/egi'/>"></script>
         <script src="<cdn:url value='/resources/global/js/egov/custom.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
-	    
+	    <script src="<cdn:url value='/resources/global/js/egov/csrf.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
 		
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 		<script src="<cdn:url value='/resources/global/js/ie8/html5shiv.min.js' context='/services/egi'/>"></script>
 		<script src="<cdn:url value='/resources/global/js/ie8/respond.min.js' context='/services/egi'/>"></script>
 		<![endif]-->
-	
+		<script>
+	        const tokenVal = '${_csrf.token}';
+	        const tokenName = '${_csrf.parameterName}';
+	    </script>
 	</head>
     <body class="page-body" oncontextmenu="return false;">
         <div class="page-container">

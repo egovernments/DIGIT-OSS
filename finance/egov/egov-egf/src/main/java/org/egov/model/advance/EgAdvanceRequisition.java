@@ -47,135 +47,134 @@
  */
 package org.egov.model.advance;
 
-import org.egov.commons.EgwStatus;
-import org.egov.infra.workflow.entity.StateAware;
-import org.egov.pims.commons.Position;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.egov.commons.EgwStatus;
+import org.egov.infra.workflow.entity.StateAware;
+
 public class EgAdvanceRequisition extends StateAware implements java.io.Serializable {
 
-    private static final long serialVersionUID = 5350085164408760402L;
-    private Long id;
-    private String advanceRequisitionNumber;
-    private EgwStatus status;
-    private Date advanceRequisitionDate;
-    private BigDecimal advanceRequisitionAmount;
-    private String narration;
-    private String arftype;
+	private static final long serialVersionUID = 5350085164408760402L;
+	private Long id;
+	private String advanceRequisitionNumber;
+	private EgwStatus status;
+	private Date advanceRequisitionDate;
+	private BigDecimal advanceRequisitionAmount;
+	private String narration;
+	private String arftype;
 
-    private EgAdvanceRequisitionMis egAdvanceReqMises;
-    private Set<EgAdvanceRequisitionDetails> egAdvanceReqDetailses = new HashSet<>();
+	private EgAdvanceRequisitionMis egAdvanceReqMises;
+	private Set<EgAdvanceRequisitionDetails> egAdvanceReqDetailses = new HashSet<>();
 
-    public EgAdvanceRequisition() {
-    }
+	public EgAdvanceRequisition() {
+	}
 
-    public EgAdvanceRequisition(final String advanceRequisitionNumber, final EgwStatus status,
-                                final Date advanceRequisitionDate, final BigDecimal advanceRequisitionAmount, final String narration,
-                                final String arftype, final EgAdvanceRequisitionMis egAdvanceReqMises,
-                                final Set<EgAdvanceRequisitionDetails> egAdvanceReqDetailses) {
-        super();
-        this.advanceRequisitionNumber = advanceRequisitionNumber;
-        this.status = status;
-        this.advanceRequisitionDate = advanceRequisitionDate;
-        this.advanceRequisitionAmount = advanceRequisitionAmount;
-        this.narration = narration;
-        this.arftype = arftype;
-        this.egAdvanceReqMises = egAdvanceReqMises;
-        this.egAdvanceReqDetailses = egAdvanceReqDetailses;
-    }
+	public EgAdvanceRequisition(final String advanceRequisitionNumber, final EgwStatus status,
+			final Date advanceRequisitionDate, final BigDecimal advanceRequisitionAmount, final String narration,
+			final String arftype, final EgAdvanceRequisitionMis egAdvanceReqMises,
+			final Set<EgAdvanceRequisitionDetails> egAdvanceReqDetailses) {
+		super();
+		this.advanceRequisitionNumber = advanceRequisitionNumber;
+		this.status = status;
+		this.advanceRequisitionDate = advanceRequisitionDate;
+		this.advanceRequisitionAmount = advanceRequisitionAmount;
+		this.narration = narration;
+		this.arftype = arftype;
+		this.egAdvanceReqMises = egAdvanceReqMises;
+		this.egAdvanceReqDetailses = egAdvanceReqDetailses;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    @Override
-    public void setId(final Long id) {
-        this.id = id;
-    }
+	@Override
+	protected void setId(final Long id) {
+		this.id = id;
+	}
 
-    @Override
-    public String getStateDetails() {
-        return getAdvanceRequisitionNumber();
-    }
+	@Override
+	public String getStateDetails() {
+		return getAdvanceRequisitionNumber();
+	}
 
-    public String getAdvanceRequisitionNumber() {
-        return advanceRequisitionNumber;
-    }
+	public String getAdvanceRequisitionNumber() {
+		return advanceRequisitionNumber;
+	}
 
-    public void setAdvanceRequisitionNumber(final String advanceRequisitionNumber) {
-        this.advanceRequisitionNumber = advanceRequisitionNumber;
-    }
+	public void setAdvanceRequisitionNumber(final String advanceRequisitionNumber) {
+		this.advanceRequisitionNumber = advanceRequisitionNumber;
+	}
 
-    public EgwStatus getStatus() {
-        return status;
-    }
+	public EgwStatus getStatus() {
+		return status;
+	}
 
-    public void setStatus(final EgwStatus status) {
-        this.status = status;
-    }
+	public void setStatus(final EgwStatus status) {
+		this.status = status;
+	}
 
-    public Date getAdvanceRequisitionDate() {
-        return advanceRequisitionDate;
-    }
+	public Date getAdvanceRequisitionDate() {
+		return advanceRequisitionDate;
+	}
 
-    public void setAdvanceRequisitionDate(final Date advanceRequisitionDate) {
-        this.advanceRequisitionDate = advanceRequisitionDate;
-    }
+	public void setAdvanceRequisitionDate(final Date advanceRequisitionDate) {
+		this.advanceRequisitionDate = advanceRequisitionDate;
+	}
 
-    public BigDecimal getAdvanceRequisitionAmount() {
-        return advanceRequisitionAmount;
-    }
+	public BigDecimal getAdvanceRequisitionAmount() {
+		return advanceRequisitionAmount;
+	}
 
-    public void setAdvanceRequisitionAmount(final BigDecimal advanceRequisitionAmount) {
-        this.advanceRequisitionAmount = advanceRequisitionAmount;
-    }
+	public void setAdvanceRequisitionAmount(final BigDecimal advanceRequisitionAmount) {
+		this.advanceRequisitionAmount = advanceRequisitionAmount;
+	}
 
-    public String getNarration() {
-        return narration;
-    }
+	public String getNarration() {
+		return narration;
+	}
 
-    public void setNarration(final String narration) {
-        this.narration = narration;
-    }
+	public void setNarration(final String narration) {
+		this.narration = narration;
+	}
 
-    public String getArftype() {
-        return arftype;
-    }
+	public String getArftype() {
+		return arftype;
+	}
 
-    public void setArftype(final String arftype) {
-        this.arftype = arftype;
-    }
+	public void setArftype(final String arftype) {
+		this.arftype = arftype;
+	}
 
-    public EgAdvanceRequisitionMis getEgAdvanceReqMises() {
-        return egAdvanceReqMises;
-    }
+	public EgAdvanceRequisitionMis getEgAdvanceReqMises() {
+		return egAdvanceReqMises;
+	}
 
-    public void setEgAdvanceReqMises(final EgAdvanceRequisitionMis egAdvanceReqMises) {
-        this.egAdvanceReqMises = egAdvanceReqMises;
-    }
+	public void setEgAdvanceReqMises(final EgAdvanceRequisitionMis egAdvanceReqMises) {
+		this.egAdvanceReqMises = egAdvanceReqMises;
+	}
 
-    public Set<EgAdvanceRequisitionDetails> getEgAdvanceReqDetailses() {
-        return egAdvanceReqDetailses;
-    }
+	public Set<EgAdvanceRequisitionDetails> getEgAdvanceReqDetailses() {
+		return egAdvanceReqDetailses;
+	}
 
-    public void setEgAdvanceReqDetailses(final Set<EgAdvanceRequisitionDetails> egAdvanceReqDetailses) {
-        this.egAdvanceReqDetailses = egAdvanceReqDetailses;
-    }
+	public void setEgAdvanceReqDetailses(final Set<EgAdvanceRequisitionDetails> egAdvanceReqDetailses) {
+		this.egAdvanceReqDetailses = egAdvanceReqDetailses;
+	}
 
-    public void addEgAdvanceReqDetails(final EgAdvanceRequisitionDetails advanceReqDetail) {
-        if (advanceReqDetail != null)
-            getEgAdvanceReqDetailses().add(advanceReqDetail);
-    }
+	public void addEgAdvanceReqDetails(final EgAdvanceRequisitionDetails advanceReqDetail) {
+		if (advanceReqDetail != null)
+			getEgAdvanceReqDetailses().add(advanceReqDetail);
+	}
 
-    @Override
-    public String toString() {
-        return "EgAdvanceRequisition ( Id :  " + (null != getId() ? getId() : "") + "EgAdvanceRequisition arftype: "
-                + (null != getArftype() ? getArftype() : "") + ")";
-    }
+	@Override
+	public String toString() {
+		return "EgAdvanceRequisition ( Id :  " + (null != getId() ? getId() : "") + "EgAdvanceRequisition arftype: "
+				+ (null != getArftype() ? getArftype() : "") + ")";
+	}
 
 }

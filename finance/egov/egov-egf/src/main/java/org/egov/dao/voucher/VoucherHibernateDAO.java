@@ -52,6 +52,7 @@ package org.egov.dao.voucher;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -99,51 +100,74 @@ public class VoucherHibernateDAO extends PersistenceService<CVoucherHeader, Long
         super(type);
     }
 
-    public List<CVoucherHeader> getVoucherList(final CVoucherHeader voucherHeader,
-            final Map<String, Object> searchFilterMap) throws ApplicationException, ParseException {
+	public List<CVoucherHeader> getVoucherList(final CVoucherHeader voucherHeader,
+			final Map<String, Object> searchFilterMap) throws ApplicationException, ParseException {
 
-        final StringBuffer sql = new StringBuffer(500);
-        sql.append(" and vh.type='Journal Voucher' ");
-        sql.append(" and vh.isConfirmed != 1 ");
-        if (null != voucherHeader.getVoucherNumber() && StringUtils.isNotEmpty(voucherHeader.getVoucherNumber()))
-            sql.append(" and vh.voucherNumber like '%").append(voucherHeader.getVoucherNumber()).append("%'");
-        if (null != searchFilterMap.get(Constants.VOUCHERDATEFROM) && StringUtils.isNotEmpty
-                (searchFilterMap.get(Constants.VOUCHERDATEFROM).toString()))
-            sql.append(" and vh.voucherDate>='").append(Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.
-                    parse(searchFilterMap.get(Constants.VOUCHERDATEFROM).toString()))).append("'");
-        if (null != searchFilterMap.get(Constants.VOUCHERDATETO) && StringUtils.isNotEmpty
-                (searchFilterMap.get(Constants.VOUCHERDATETO).toString()))
-            sql.append(" and vh.voucherDate<='").append(Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.
-                    parse(searchFilterMap.get(Constants.VOUCHERDATETO).toString()))).append("'");
+		final StringBuilder sql = new StringBuilder();
+		final Map<String, Object> params = new HashMap<>();
+		sql.append(" and vh.type='Journal Voucher' and vh.isConfirmed != 1 ");
+		if (null != voucherHeader.getVoucherNumber() && StringUtils.isNotEmpty(voucherHeader.getVoucherNumber())) {
+			sql.append(" and vh.voucherNumber like :voucherNumber");
+			params.put("voucherNumber", "%" + voucherHeader.getVoucherNumber() + "%");
+		}
+		if (null != searchFilterMap.get(Constants.VOUCHERDATEFROM)
+				&& StringUtils.isNotEmpty(searchFilterMap.get(Constants.VOUCHERDATEFROM).toString())) {
+			sql.append(" and vh.voucherDate>=:voucherFromDate");
+			params.put("voucherFromDate", Constants.DDMMYYYYFORMAT1.format(
+					Constants.DDMMYYYYFORMAT2.parse(searchFilterMap.get(Constants.VOUCHERDATEFROM).toString())));
+		}
+		if (null != searchFilterMap.get(Constants.VOUCHERDATETO)
+				&& StringUtils.isNotEmpty(searchFilterMap.get(Constants.VOUCHERDATETO).toString())) {
+			sql.append(" and vh.voucherDate<=:voucherToDate");
+			params.put("voucherToDate", Constants.DDMMYYYYFORMAT1
+					.format(Constants.DDMMYYYYFORMAT2.parse(searchFilterMap.get(Constants.VOUCHERDATETO).toString())));
+		}
+		if (null != voucherHeader.getFundId()) {
+			sql.append(" and vh.fundId=:fundId");
+			params.put("fundId", voucherHeader.getFundId().getId());
+		}
+		if (null != voucherHeader.getVouchermis().getFundsource()) {
+			sql.append(" and vh.fundsourceId=:fundsourceId");
+			params.put("fundsourceId", voucherHeader.getVouchermis().getFundsource().getId());
+		}
+		if (null != voucherHeader.getVouchermis().getDepartmentcode()) {
+			sql.append(" and vh.vouchermis.departmentcode=:departmentcode");
+			params.put("departmentcode", voucherHeader.getVouchermis().getDepartmentcode());
+		}
 
-        if (null != voucherHeader.getFundId())
-            sql.append(" and vh.fundId=").append(voucherHeader.getFundId().getId());
-        if (null != voucherHeader.getVouchermis().getFundsource())
-            sql.append(" and vh.fundsourceId=").append(voucherHeader.getVouchermis().getFundsource().getId());
+		if (voucherHeader.getVouchermis().getSchemeid() != null) {
+			sql.append(" and vh.vouchermis.schemeid=:schemeid");
+			params.put("schemeid", voucherHeader.getVouchermis().getSchemeid().getId());
+		}
 
-        if (null != voucherHeader.getVouchermis().getDepartmentcode())
-            sql.append(" and vh.vouchermis.departmentcode='").append(voucherHeader.getVouchermis().getDepartmentcode()+"'");
+		if (null != voucherHeader.getVouchermis().getSubschemeid()) {
+			sql.append(" and vh.vouchermis.subschemeid=:subschemeid");
+			params.put("subschemeid", voucherHeader.getVouchermis().getSubschemeid().getId());
+		}
+		if (null != voucherHeader.getVouchermis().getFunctionary()) {
+			sql.append(" and vh.vouchermis.functionary=:functionary");
+			params.put("functionary", voucherHeader.getVouchermis().getFunctionary().getId());
+		}
+		if (null != voucherHeader.getVouchermis().getDivisionid()) {
+			sql.append(" and vh.vouchermis.divisionid=:divisionid");
+			params.put("divisionid", voucherHeader.getVouchermis().getDivisionid().getId());
+		}
 
-        if (voucherHeader.getVouchermis().getSchemeid() != null)
-            sql.append(" and vh.vouchermis.schemeid=").append(voucherHeader.getVouchermis().getSchemeid().getId());
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("sql====================" + sql.toString());
+		final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("finance",
+				"statusexcludeReport");
+		final String statusExclude = appList.get(0).getValue();
 
-        if (null != voucherHeader.getVouchermis().getSubschemeid())
-            sql.append(" and vh.vouchermis.subschemeid=").append(voucherHeader.getVouchermis().getSubschemeid().getId());
-        if (null != voucherHeader.getVouchermis().getFunctionary())
-            sql.append(" and vh.vouchermis.functionary=").append(voucherHeader.getVouchermis().getFunctionary().getId());
-        if (null != voucherHeader.getVouchermis().getDivisionid())
-            sql.append(" and vh.vouchermis.divisionid=").append(voucherHeader.getVouchermis().getDivisionid().getId());
+		final Query query = getSession()
+				.createQuery(new StringBuilder(" from CVoucherHeader vh where vh.status not in (:statusExclude) ")
+						.append(sql.toString()).append(" order by vh.cgn,vh.voucherNumber,vh.voucherDate ").toString());
+		params.put("statusExclude", statusExclude);
 
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("sql====================" + sql.toString());
-        final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("finance",
-                "statusexcludeReport");
-        final String statusExclude = appList.get(0).getValue();
-
-        final List<CVoucherHeader> list = findAllBy(" from CVoucherHeader vh where vh.status not in ("
-                + statusExclude + ") " + sql.toString() + " order by vh.cgn,vh.voucherNumber,vh.voucherDate ");
-        return list;
-    }
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		final List<CVoucherHeader> list = query.list();
+		return list;
+	}
 
     @SuppressWarnings("unchecked")
     public CVoucherHeader getVoucherHeaderById(final Long voucherId) {
@@ -184,91 +208,74 @@ public class VoucherHibernateDAO extends PersistenceService<CVoucherHeader, Long
 
     }
 
-    public EntityType getEntityInfo(final Integer detailKeyId, final Integer detailtypeId) throws ValidationException
-    {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("VoucherHibernateDAO | getDetailCodeName | start");
-        EntityType entity = null;
-        try {
-            final Accountdetailtype accountdetailtype = getAccountDetailById(detailtypeId);
-            final Class<?> service = Class.forName(accountdetailtype.getFullQualifiedName());
-            // getting the entity type service.
-            final String detailTypeName = service.getSimpleName();
-            String dataType = "";
-            final java.lang.reflect.Method method = service.getMethod("getId");
-            dataType = method.getReturnType().getSimpleName();
-            if (dataType.equals("Long"))
-                entity = (EntityType) persistenceService.find(
-                        "from " + detailTypeName + " where id=? order by name", detailKeyId.longValue());
-            else
-                entity = (EntityType) persistenceService.find(
-                        "from " + detailTypeName + " where id=? order by name", detailKeyId);
-        } catch (final Exception e) {
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("VoucherHibernateDAO | getDetailCodeName | End");
-        return entity;
+	public EntityType getEntityInfo(final Integer detailKeyId, final Integer detailtypeId) throws NoSuchMethodException, SecurityException {
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("VoucherHibernateDAO | getDetailCodeName | start");
+		EntityType entity = null;
+		try {
+			final Accountdetailtype accountdetailtype = getAccountDetailById(detailtypeId);
+			final Class<?> service = Class.forName(accountdetailtype.getFullQualifiedName());
+			// getting the entity type service.
+			final String detailTypeName = service.getSimpleName();
+			String dataType = "";
+			final java.lang.reflect.Method method = service.getMethod("getId");
+			dataType = method.getReturnType().getSimpleName();
+			if (dataType.equals("Long"))
+				entity = (EntityType) persistenceService.find(
+						String.format("from %s where id=? order by name", detailTypeName), detailKeyId.longValue());
+			else
+				entity = (EntityType) persistenceService
+						.find(String.format("from %s where id=? order by name", detailTypeName), detailKeyId);
+		} catch (final ValidationException | ClassNotFoundException e) {
+			final List<ValidationError> errors = new ArrayList<ValidationError>();
+			errors.add(new ValidationError("exp", e.getMessage()));
+			throw new ValidationException(errors);
+		}
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("VoucherHibernateDAO | getDetailCodeName | End");
+		return entity;
 
-    }
+	}
 
-    /*
-     * public void deleteVoucherDetailByVHId(final Object voucherHeaderId){ try { Query qry
-     * =getSession().createQuery("delete from VoucherDetail where voucherHeaderId.id=:vhid");
-     * qry.setLong("vhid", Long.parseLong(voucherHeaderId.toString())); qry.executeUpdate(); } catch (HibernateException e) {
-     * throw new HibernateException("exception in voucherHibDao while deleting from voucher detail"+e); }catch
-     * (ApplicationRuntimeException e) { throw new
-     * ApplicationRuntimeException("exception in voucherHibDao while deleting from voucher detail"+e); } }
-     */
-    @Transactional
-    @SuppressWarnings("unchecked")
-    public void deleteGLDetailByVHId(final Object voucherHeaderId) {
+	@Transactional
+	@SuppressWarnings("unchecked")
+	public void deleteGLDetailByVHId(final Object voucherHeaderId) {
 
-        try {
-            /**
-             * Deleting record from general ledger detail.
-             */
-            final List<CGeneralLedger> glList = getGLInfo(Long.parseLong(voucherHeaderId.toString()));
-            for (final CGeneralLedger generalLedger : glList) {
-                final List<CGeneralLedgerDetail> glDetailList = getSession().
-                        createCriteria(CGeneralLedgerDetail.class)
-                        .add(Restrictions.eq("generalLedgerId.id", generalLedger.getId())).list();
-                for (final CGeneralLedgerDetail generalLedgerDetail : glDetailList) {
-                    final Query qry = getSession().createQuery(
-                            "delete from EgRemittanceGldtl where generalledgerdetail.id=:gldetailId");
-                    qry.setInteger("gldetailId", Integer.valueOf(generalLedgerDetail.getId().toString()));
-                    qry.executeUpdate();
-                }
-            }
-            /**
-             * Deleting record from general ledger .
-             */
-            /*
-             * Query qry
-             * =getSession().createQuery("delete from CGeneralLedger where voucherHeaderId.id=:vhid");
-             * qry.setInteger("vhid", Integer.valueOf(voucherHeaderId.toString())); qry.executeUpdate();
-             */
+		try {
+			/**
+			 * Deleting record from general ledger detail.
+			 */
+			final List<CGeneralLedger> glList = getGLInfo(Long.parseLong(voucherHeaderId.toString()));
+			for (final CGeneralLedger generalLedger : glList) {
+				final List<CGeneralLedgerDetail> glDetailList = getSession().createCriteria(CGeneralLedgerDetail.class)
+						.add(Restrictions.eq("generalLedgerId.id", generalLedger.getId())).list();
+				for (final CGeneralLedgerDetail generalLedgerDetail : glDetailList) {
+					final Query qry = getSession()
+							.createQuery("delete from EgRemittanceGldtl where generalledgerdetail.id=:gldetailId");
+					qry.setInteger("gldetailId", Integer.valueOf(generalLedgerDetail.getId().toString()));
+					qry.executeUpdate();
+				}
+			}
 
-        } catch (final HibernateException e) {
-            throw new HibernateException("exception in voucherHibDao while deleting from general ledger" + e);
-        } catch (final ApplicationRuntimeException e) {
-            throw new ApplicationRuntimeException("exception in voucherHibDao while deleting from general ledger" + e);
-        }
+		} catch (final HibernateException e) {
+			throw new HibernateException("exception in voucherHibDao while deleting from general ledger" + e);
+		} catch (final ApplicationRuntimeException e) {
+			throw new ApplicationRuntimeException("exception in voucherHibDao while deleting from general ledger" + e);
+		}
 
-    }
-    
-    @SuppressWarnings("unchecked")
-    public List<CVoucherHeader> getVoucherHeaderByNumber(final Set<String> voucherNumbers) {
+	}
 
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("VoucherHibernateDAO | getVoucherHeaderById | Start ");
-        final List<CVoucherHeader> vhList = getSession().createCriteria(CVoucherHeader.class).add(Restrictions.in("voucherNumber", voucherNumbers)).list();
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("numer of voucher with voucherNumbers " + voucherNumbers + "=" + vhList.size());
-        return vhList;
-    }
+	@SuppressWarnings("unchecked")
+	public List<CVoucherHeader> getVoucherHeaderByNumber(final Set<String> voucherNumbers) {
+
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("VoucherHibernateDAO | getVoucherHeaderById | Start ");
+		final List<CVoucherHeader> vhList = getSession().createCriteria(CVoucherHeader.class)
+				.add(Restrictions.in("voucherNumber", voucherNumbers)).list();
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("numer of voucher with voucherNumbers " + voucherNumbers + "=" + vhList.size());
+		return vhList;
+	}
 
     public PersistenceService getPersistenceService() {
         return persistenceService;

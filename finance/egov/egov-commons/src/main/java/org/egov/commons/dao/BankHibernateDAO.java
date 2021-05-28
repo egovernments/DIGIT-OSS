@@ -132,14 +132,16 @@ public class BankHibernateDAO {
         return bankList;
     }
 
-    public List<Bank> getAllBanksByFund(Integer fundId) {
+    public List<Bank> getAllBanksByFund(Long fundId) {
         Set<Bank> ss = new LinkedHashSet<Bank>();
         List<Bank> bankList = new ArrayList<Bank>();
 
         Query createQuery = getCurrentSession()
                 .createQuery(
-                        "select distinct b from Bank b,Bankbranch bb , Bankaccount ba  where bb.bank=b and ba.bankbranch =bb and ba.type in ('RECEIPTS_PAYMENTS','PAYMENTS') and ba.fund.id=:fundId")
-                .setInteger("fundId", fundId);
+                        "select distinct b from Bank b,Bankbranch bb , Bankaccount ba  where bb.bank=b"
+                        + " and ba.bankbranch =bb and ba.type in ('RECEIPTS_PAYMENTS','PAYMENTS')"
+                        + " and ba.fund.id=:fundId")
+                .setLong("fundId", fundId);
         if (fundId != null) {
             List<Bank> list = (List<Bank>) createQuery.list();
             if (list != null && !list.isEmpty())

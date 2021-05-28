@@ -58,6 +58,7 @@ import org.egov.infstr.services.PersistenceService;
 import org.egov.model.recoveries.EgDeductionDetails;
 import org.egov.model.recoveries.Recovery;
 import org.egov.utils.Constants;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,7 +98,7 @@ public class RecoveryService extends PersistenceService<Recovery, Long> {
     {
         try {
             return tdsHibernateDAO.findByEstDate(estimateDate);
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             //
             // EgovUtils.rollBackTransaction();
             throw new ApplicationRuntimeException("Exception in searching Tds by estimate Date" + e.getMessage(), e);
@@ -154,7 +155,7 @@ public class RecoveryService extends PersistenceService<Recovery, Long> {
         try
         {
             egDeductionDetHibernateDao.delete(egDeductionDetails);
-        } catch (final Exception e)
+        } catch (final HibernateException e)
         {
             // EgovUtils.rollBackTransaction();
             throw new ApplicationRuntimeException("Exception in Deleting EgDeductionDetails." + e.getMessage(), e);
@@ -221,7 +222,7 @@ public class RecoveryService extends PersistenceService<Recovery, Long> {
 
     public BigDecimal getDeductionAmount(final String recoveryCode, final String partyType, final String subPartyType,
             final String docType,
-            final BigDecimal grossAmount, final Date asOnDate) throws Exception {
+            final BigDecimal grossAmount, final Date asOnDate){
 
         final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Constants.LOCALE);
         BigDecimal incomeTax = new BigDecimal(0);
@@ -280,7 +281,7 @@ public class RecoveryService extends PersistenceService<Recovery, Long> {
         try {
             egDeductionDetails = egDeductionDetHibernateDao.findEgDeductionDetailsForDeduAmt(recovery,
                     egPartytype, egSubPartytype, egwTypeOfWork, asOnDate);
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             LOGGER.error("Exception in egDeductionDetails fetching :" + e);
             throw new ValidationException(EMPTY, "Error while fetching the date for this " + recoveryCode
                     + " code for this " + dateFormatter.format(asOnDate) + " date. " + e.getMessage());

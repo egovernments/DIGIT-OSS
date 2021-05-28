@@ -3,65 +3,71 @@ package org.egov.egf.contract.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class AuditDetails implements Serializable {
-	
-	private String tenantId;
-	private Long createBy;
-	private Long lastModifiedBy;
-	private Date createdDate;
-	private Date lastModifiedDate;
-	
-	public AuditDetails(){}
 
-	public AuditDetails(String tenantId, Long createBy, Long lastModifiedBy, Date createdDate,
-			Date lastModifiedDate) {
-		this.tenantId = tenantId;
-		this.createBy = createBy;
-		this.lastModifiedBy = lastModifiedBy;
-		this.createdDate = createdDate;
-		this.lastModifiedDate = lastModifiedDate;
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = -6546672411255429027L;
+    @SafeHtml
+    private String tenantId;
+    private Long createBy;
+    private Long lastModifiedBy;
+    private Date createdDate;
+    private Date lastModifiedDate;
 
-	public Long getCreateBy() {
-		return createBy;
-	}
+    public AuditDetails() {
+    }
 
-	public void setCreateBy(Long createBy) {
-		this.createBy = createBy;
-	}
+    public AuditDetails(final String tenantId, final Long createBy, final Long lastModifiedBy, final Date createdDate,
+            final Date lastModifiedDate) {
+        this.tenantId = tenantId;
+        this.createBy = createBy;
+        this.lastModifiedBy = lastModifiedBy;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+    }
 
-	public Long getLastModifiedBy() {
-		return lastModifiedBy;
-	}
+    public Long getCreateBy() {
+        return createBy;
+    }
 
-	public void setLastModifiedBy(Long lastModifiedBy) {
-		this.lastModifiedBy = lastModifiedBy;
-	}
+    public void setCreateBy(final Long createBy) {
+        this.createBy = createBy;
+    }
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
 
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
+    public void setLastModifiedBy(final Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
 
-	public Date getLastModifiedDate() {
-		return lastModifiedDate;
-	}
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 
-	public void setLastModifiedDate(Date lastModifiedDate) {
-		this.lastModifiedDate = lastModifiedDate;
-	}
+    public void setCreatedDate(final Date createdDate) {
+        this.createdDate = createdDate;
+    }
 
-	public String getTenantId() {
-		return tenantId;
-	}
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
-	
-	
+    public void setLastModifiedDate(final Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(final String tenantId) {
+        this.tenantId = tenantId;
+    }
 
 }

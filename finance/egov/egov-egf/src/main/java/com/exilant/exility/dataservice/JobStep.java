@@ -90,7 +90,7 @@ public class JobStep {
                 }
             try {
                 task = (AbstractTask) userTaskClass.newInstance();
-            } catch (final Exception e) {
+            } catch (final InstantiationException | IllegalAccessException e) {
                 dc.addMessage("exilNoInstance", name);
                 throw new TaskFailedException();
             }

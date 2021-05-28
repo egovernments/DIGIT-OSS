@@ -63,14 +63,15 @@ package org.egov.dao.bills;
 import org.egov.model.bills.EgBilldetails;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface EgBilldetailsDAO {
     public BigDecimal getOtherBillsAmount(Long minGlCodeId, Long maxGlCodeId, Long majGlCodeId, String finYearID,
             String functionId, String schemeId, String subSchemeId,
-            String asOnDate, String billType) throws Exception;
+            String asOnDate, String billType);
 
-    public EgBilldetails getBillDetails(Long billId, List glcodeIdList) throws Exception;
+    public EgBilldetails getBillDetails(Long billId, List glcodeIdList);
     EgBilldetails  findById(Number  id, boolean lock);
 
    List<  EgBilldetails  > findAll();

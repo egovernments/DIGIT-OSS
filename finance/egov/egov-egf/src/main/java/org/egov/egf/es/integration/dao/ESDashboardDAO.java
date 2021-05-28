@@ -32,27 +32,38 @@ public class ESDashboardDAO {
         return rollOutDatas;
     }
     
-    private String getRolloutAdoptionQuery(){
-        StringBuilder query = new StringBuilder();
-        query.append("select (select ct.code from eg_city ct) as id,");
-        query.append("(select ct.name from eg_city ct) as ulbname,");
-        query.append("(select ct.code from eg_city ct) as ulbcode,");
-        query.append("(select ct.districtName from eg_city ct) as districtname,");
-        query.append("(select ct.regionName from eg_city ct) as regionname,");
-        query.append("(select ct.grade from eg_city ct) as grade,");
-        query.append("(select count(*) from eg_billregister br, egw_status status where br.statusid = status.id and lower(status.code) != 'cancelled') as numberOfbills,");
-        query.append("(select count(*) from voucherheader vh,eg_billregistermis bmis where vh.id = bmis.voucherheaderid and vh.status != 4) as numberofvouchersforbill,");
-        query.append("(select count(*) from paymentheader ph,voucherheader pvh where pvh.id = ph.voucherheaderid and pvh.status != 4 ) as numberofpayments,");
-        query.append("(select sum(br.billamount) from eg_billregister br, egw_status status where br.statusid = status.id and lower(status.code) != 'cancelled') as totalbillamounts,");
-        query.append("(select sum(misc.paidamount) from voucherheader bvh,eg_billregistermis bmis,miscbilldetail misc,voucherheader pvh where bvh.id= bmis.voucherheaderid and bvh.id = misc.billvhid and bvh.status != 4 and pvh.id=misc.payvhid and pvh.status !=4) as billamountpaid,");
-        query.append("(select sum(ph.paymentamount) from voucherheader vh,paymentheader ph where vh.status!=4 and ph.voucherheaderid=vh.id) as totalpaymentamounts,");
-        query.append("(select count(*) from voucherheader vh where vh.type='Receipt' and vh.status!=4) as numberofreceiptvoucher,");
-        query.append("(select sum(gl.debitamount) from voucherheader vh,generalledger gl where vh.id=gl.voucherheaderid and vh.type='Receipt' and vh.status!=4) as totalreceiptvoucheramounts,");
-        query.append("(select 0) as numberofmiscreceipts,");
-        query.append("(select 0) as totalamountofmiscreceipt,");
-        query.append("((select count(*) from egf_contractor cr,egw_status status where cr.status = status.id and status.code = 'Active') + (select count(*) from egf_supplier sr,egw_status status where sr.status = status.id and status.code = 'Active')) as numberofcontractorsuppliers,");
-        query.append("(select count(*) from bankaccount where isactive  = true) as numberofbankaccounts,");
-        query.append("(select count(*) from voucherheader bvh,eg_billregistermis bmis,miscbilldetail misc,voucherheader pvh where bvh.id= bmis.voucherheaderid and bvh.id = misc.billvhid and bvh.status != 4 and pvh.id=misc.payvhid and pvh.status !=4) as numberofbillspaid");
-        return query.toString();
-    }
+	private String getRolloutAdoptionQuery() {
+		StringBuilder query = new StringBuilder("select (select ct.code from eg_city ct) as id,")
+				.append("(select ct.name from eg_city ct) as ulbname,")
+				.append("(select ct.code from eg_city ct) as ulbcode,")
+				.append("(select ct.districtName from eg_city ct) as districtname,")
+				.append("(select ct.regionName from eg_city ct) as regionname,")
+				.append("(select ct.grade from eg_city ct) as grade,")
+				.append("(select count(*) from eg_billregister br, egw_status status")
+				.append(" where br.statusid = status.id and lower(status.code) != 'cancelled') as numberOfbills,")
+				.append("(select count(*) from voucherheader vh,eg_billregistermis bmis")
+				.append(" where vh.id = bmis.voucherheaderid and vh.status != 4) as numberofvouchersforbill,")
+				.append("(select count(*) from paymentheader ph,voucherheader pvh")
+				.append(" where pvh.id = ph.voucherheaderid and pvh.status != 4 ) as numberofpayments,")
+				.append("(select sum(br.billamount) from eg_billregister br, egw_status status")
+				.append(" where br.statusid = status.id and lower(status.code) != 'cancelled') as totalbillamounts,")
+				.append("(select sum(misc.paidamount) from voucherheader bvh,eg_billregistermis bmis,")
+				.append("miscbilldetail misc,voucherheader pvh where bvh.id= bmis.voucherheaderid")
+				.append(" and bvh.id = misc.billvhid and bvh.status != 4 and pvh.id=misc.payvhid and pvh.status !=4) as billamountpaid,")
+				.append("(select sum(ph.paymentamount) from voucherheader vh,paymentheader ph where vh.status!=4")
+				.append(" and ph.voucherheaderid=vh.id) as totalpaymentamounts,")
+				.append("(select count(*) from voucherheader vh where vh.type='Receipt'")
+				.append(" and vh.status!=4) as numberofreceiptvoucher,")
+				.append("(select sum(gl.debitamount) from voucherheader vh,generalledger gl")
+				.append(" where vh.id=gl.voucherheaderid and vh.type='Receipt' and vh.status!=4) as totalreceiptvoucheramounts,")
+				.append("(select 0) as numberofmiscreceipts,(select 0) as totalamountofmiscreceipt,")
+				.append("((select count(*) from egf_contractor cr,egw_status status where cr.status = status.id")
+				.append(" and status.code = 'Active') + (select count(*) from egf_supplier sr,egw_status status")
+				.append(" where sr.status = status.id and status.code = 'Active')) as numberofcontractorsuppliers,")
+				.append("(select count(*) from bankaccount where isactive  = true) as numberofbankaccounts,")
+				.append("(select count(*) from voucherheader bvh,eg_billregistermis bmis,miscbilldetail misc,")
+				.append("voucherheader pvh where bvh.id= bmis.voucherheaderid and bvh.id = misc.billvhid and bvh.status != 4")
+				.append(" and pvh.id=misc.payvhid and pvh.status !=4) as numberofbillspaid");
+		return query.toString();
+	}
 }

@@ -107,6 +107,11 @@ today = dd+'/'+mm+'/'+yyyy;
 
 		//doAfterSubmit();
 		document.forms[0].action='${pageContext.request.contextPath}/report/trialBalance-search.action';
+		jQuery(document.forms[0]).append(jQuery('<input>', {
+	        type : 'hidden',
+	        name : '${_csrf.parameterName}',
+	        value : '${_csrf.token}'
+	    }));
 		document.forms[0].submit();
 		
    return true;

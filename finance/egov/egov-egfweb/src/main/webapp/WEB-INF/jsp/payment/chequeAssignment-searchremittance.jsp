@@ -60,6 +60,7 @@
 <body>
 	<s:form action="chequeAssignment" theme="simple"
 		name="chequeAssignment" id="chequeAssignment">
+		<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<jsp:include page="../budget/budgetHeader.jsp">
 			<jsp:param name="heading" value="Cheque Assignment Search" />
 		</jsp:include>
@@ -307,6 +308,13 @@
 				if(validateChequeDateForNonChequeMode()){
 					resetSelectedRowsId();
 					document.chequeAssignment.action= "/services/EGF/payment/chequeAssignment-create.action";
+					jQuery(chequeAssignment).append(
+							jQuery('<input>', {
+	                            type: 'hidden',
+	                            name: '${_csrf.parameterName}',
+	                            value: '${_csrf.token}'
+	                        })
+	                    );
 					document.chequeAssignment.submit();
 					return true;
 					}
@@ -316,6 +324,13 @@
 				<s:else>
 				resetSelectedRowsId();
 				document.chequeAssignment.action= "/services/EGF/payment/chequeAssignment-create.action";
+				jQuery(chequeAssignment).append(
+						jQuery('<input>', {
+                            type: 'hidden',
+                            name: '${_csrf.parameterName}',
+                            value: '${_csrf.token}'
+                        })
+                    );
 				document.chequeAssignment.submit();
 				return true;
 				</s:else>
@@ -385,11 +400,12 @@
 					obj.value='';
 					return false;
 				}
+				var csrfToken = document.getElementById('csrfTokenValue').value;
 				var name=obj.name;
 				name=name.replace("chequeNo","serialNo");
 				var dept = dom.get('departmentid').options[dom.get('departmentid').selectedIndex].value;
 				var slNo = dom.get(name).options[dom.get(name).selectedIndex].value;
-				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo;
+				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo+'&_csrf='+csrfToken;
 				var transaction = YAHOO.util.Connect.asyncRequest('POST', url,callback , null);
 			}
 			
@@ -437,9 +453,9 @@
 				name=name.replace("chequeNumber","serialNo");
 				}
 				var slNo = dom.get(name).options[dom.get(name).selectedIndex].value;
-				
+				var csrfToken = document.getElementById('csrfTokenValue').value;
 				var dept = dom.get('departmentid').options[dom.get('departmentid').selectedIndex].value;
-				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateReassignSurrenderChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo;
+				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateReassignSurrenderChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo+'&_csrf='+csrfToken;
 				var transaction = YAHOO.util.Connect.asyncRequest('POST', url, callbackReassign, null);
 			}
 			var callback = {

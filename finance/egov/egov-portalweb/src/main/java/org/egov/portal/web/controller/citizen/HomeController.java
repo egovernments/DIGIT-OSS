@@ -94,7 +94,8 @@ public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String showHomePage(ModelMap modelData) {
-        return setupHomePage(modelData);
+        //return setupHomePage(modelData);
+    	return null;
     }
 
     @RequestMapping(value = "/refreshInbox", method = RequestMethod.GET)

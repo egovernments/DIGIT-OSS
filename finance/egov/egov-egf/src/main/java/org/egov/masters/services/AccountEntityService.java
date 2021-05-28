@@ -89,7 +89,8 @@ public class AccountEntityService extends PersistenceService<AccountEntity, Inte
         final Integer pageSize = maxRecords > 0 ? maxRecords : null;
         final List<EntityType> entities = new ArrayList<EntityType>();
         filterKey = "%" + filterKey + "%";
-        final String qry = "from AccountEntity  where accountdetailtype.id=? and ((upper(code) like upper(?) or upper(name) like upper(?))  and isactive=?)   order by code,name";
+        final String qry = "from AccountEntity  where accountdetailtype.id=? and ((upper(code) like upper(?)"
+        		+ " or upper(name) like upper(?))  and isactive=?)   order by code,name";
         entities.addAll(findPageBy(qry, 0, pageSize, accountDetailTypeId, filterKey, filterKey, true)
                 .getList());
         return entities;

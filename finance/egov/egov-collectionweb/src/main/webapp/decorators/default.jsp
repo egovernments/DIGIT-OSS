@@ -99,6 +99,8 @@
 			<spring:eval expression="@environment.getProperty('analytics.config')" scope="application"/>
 		</c:if>
         <%@ include file="/includes/meta.jsp" %>
+        <meta name="_csrf" content="${_csrf.token}"/>
+    	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 
         <title>eGov  - <decorator:title/> </title>
 
@@ -138,7 +140,13 @@
 	<script type="text/javascript" src="<cdn:url value='/resources/js/helper.js' context='/services/collection'/>"></script>
 	<script type="text/javascript" src="<cdn:url value='/resources/js/collections.js' context='/services/collection'/>"></script>
 	<script type="text/javascript" src="<cdn:url value='/resources/js/calender.js' context='/services/collection'/>"></script>
+	<script src="<cdn:url value='/resources/global/js/egov/csrf.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
 
+    <script>
+        const tokenVal = '${_csrf.token}';
+        const tokenName = '${_csrf.parameterName}';
+    </script>
+   
     <decorator:head/>
     </head>
     

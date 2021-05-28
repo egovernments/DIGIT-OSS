@@ -345,21 +345,21 @@ public class ContractorBillService {
     public void contractorBillRegisterStatusChange(final EgBillregister egBillregister, final String workFlowAction) {
         if (null != egBillregister && null != egBillregister.getStatus()
                 && null != egBillregister.getStatus().getCode())
-            if (FinancialConstants.CONTINGENCYBILL_CREATED_STATUS.equals(egBillregister.getStatus().getCode())
+            if (FinancialConstants.CONTRACTORBILL_CREATED_STATUS.equals(egBillregister.getStatus().getCode())
                     && egBillregister.getState() != null && workFlowAction.equalsIgnoreCase(FinancialConstants.BUTTONAPPROVE))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.CONTRACTOR_BILL,
                         FinancialConstants.CONTRACTORBILL_APPROVED_STATUS));
             else if (workFlowAction.equals(FinancialConstants.BUTTONREJECT))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.CONTRACTOR_BILL,
-                        FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS));
-            else if (FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
+                        FinancialConstants.CONTRACTORBILL_REJECTED_STATUS));
+            else if (FinancialConstants.CONTRACTORBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
                     && workFlowAction.equals(FinancialConstants.BUTTONCANCEL))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.CONTRACTOR_BILL,
-                        FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS));
-            else if (FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
+                        FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS));
+            else if (FinancialConstants.CONTRACTORBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
                     && workFlowAction.equals(FinancialConstants.BUTTONFORWARD))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.CONTRACTOR_BILL,
-                        FinancialConstants.CONTINGENCYBILL_CREATED_STATUS));
+                        FinancialConstants.CONTRACTORBILL_CREATED_STATUS));
 
     }
 
@@ -655,7 +655,7 @@ public class ContractorBillService {
 
     private Assignment getCurrentUserAssignmet(Long userId) {
         // Long userId = ApplicationThreadLocals.getUserId();
-        List<EmployeeInfo> emplist = microServiceUtil.getEmployee(userId, new Date(), null, null);
+        List<EmployeeInfo> emplist = microServiceUtil.getEmployee(userId, null, null, null);
         Assignment assignment = new Assignment();
         if (null != emplist && emplist.size() > 0 && emplist.get(0).getAssignments().size() > 0) {
             Position position = new Position();
@@ -687,6 +687,6 @@ public class ContractorBillService {
 
     private Designation getDesignationDetails(String desgnCode) {
         List<Designation> desgnList = microServiceUtil.getDesignation(desgnCode);
-        return desgnList.get(0);
+        return !desgnList.isEmpty() ? desgnList.get(0) : null;
     }
 }

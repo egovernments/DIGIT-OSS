@@ -58,19 +58,31 @@
 
     <security:global-method-security secured-annotations="enabled"
                                      access-decision-manager-ref="accessDecisionManager"/>
-   <!--  <security:http auto-config="false" 
-    	security-context-repository-ref="applicationSecurityContextRepository" 
-    	entry-point-ref="authenticationEntryPoint"
-    	authentication-manager-ref="authenticationManager" >
-    	<security:custom-filter ref="authenticationProcessingFilter" after="FIRST"/>
-    	<security:access-denied-handler  error-page="/error/403"/>
-		
-    </security:http>         -->                         
 
     <bean id="concurrentSessionFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">
         <constructor-arg name="sessionRegistry" ref="springSessionBackedSessionRegistry"/>
     </bean>
-	<bean id ="applicationSecurityContextRepository" class="org.egov.infra.config.security.repository.ApplicationSecurityRepository">
+    
+    <bean id="csrfFilter" class="org.egov.infra.web.filter.CsrfFilter">
+        <constructor-arg name="csrfTokenRepository">
+            <bean class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository"/>
+        </constructor-arg>
+        <property name="accessDeniedHandler" ref="accessDeniedHandler"/>
+    </bean>
+    
+    <bean id="headerWriterFilter" class="org.springframework.security.web.header.HeaderWriterFilter">
+        <constructor-arg name="headerWriters">
+            <list>
+                <bean class="org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter"/>
+                <bean class="org.springframework.security.web.header.writers.HstsHeaderWriter"/>
+                <bean class="org.springframework.security.web.header.writers.XContentTypeOptionsHeaderWriter"/>
+                <bean class="org.springframework.security.web.header.writers.XXssProtectionHeaderWriter"/>
+                <bean class="org.springframework.security.web.header.writers.HpkpHeaderWriter"/>
+            </list>
+        </constructor-arg>
+    </bean>
+    
+    <bean id ="applicationSecurityContextRepository" class="org.egov.infra.config.security.repository.ApplicationSecurityRepository">
 	</bean>
     <bean id="concurrentSessionControlStrategy"
           class="org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy">
@@ -93,7 +105,6 @@
         <constructor-arg value="/index.jsp"/>
         <constructor-arg>
             <list>
-                <ref bean="applicationLogoutHandler"/>
                 <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
             </list>
         </constructor-arg>
@@ -175,6 +186,8 @@
             </bean>
         </property>
     </bean>
+    
+    <bean id="accessDeniedHandler" class="org.springframework.security.web.access.AccessDeniedHandlerImpl"/>
 
     <bean id="authenticationEntryPoint"
           class="org.egov.infra.web.filter.ApplicationAuthenticationEntryPoint">

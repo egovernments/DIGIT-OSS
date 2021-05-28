@@ -82,9 +82,7 @@ import org.egov.model.bills.EgBillregister;
 import org.egov.model.voucher.VoucherDetails;
 import org.egov.pims.service.EisUtilService;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.exilant.eGov.src.common.EGovernCommon;
 import com.exilant.exility.common.TaskFailedException;
@@ -128,108 +126,121 @@ public class VoucherHelper {
 		this.persistenceService = persistenceService;
 	}
 
-	public static String getMisQuery(final CVoucherHeader voucherHeader) {
-		final StringBuffer misQuery = new StringBuffer();
+	public static Map<String, Map<String, Object>> getMisQuery(final CVoucherHeader voucherHeader) {
+		final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+		final Map<String, Object> params = new HashMap<>();
+		final StringBuilder misQuery = new StringBuilder();
 		if (null != voucherHeader && null != voucherHeader.getVouchermis()) {
 			if (null != voucherHeader.getVouchermis().getDepartmentcode()) {
-				misQuery.append(" and mis.departmentcode='");
-				misQuery.append(voucherHeader.getVouchermis().getDepartmentcode()+"'");
+				misQuery.append(" and mis.departmentcode=:misDepartmentcode");
+				params.put("misDepartmentcode", voucherHeader.getVouchermis().getDepartmentcode());
 			}
 			if (null != voucherHeader.getVouchermis().getFunctionary()) {
-				misQuery.append(" and mis.functionary.id=");
-				misQuery.append(voucherHeader.getVouchermis().getFunctionary().getId());
+				misQuery.append(" and mis.functionary.id=:misFunctionaryId");
+				params.put("misFunctionaryId", voucherHeader.getVouchermis().getFunctionary().getId());
 			}
 			if (null != voucherHeader.getVouchermis().getSchemeid()) {
-				misQuery.append(" and mis.schemeid.id=");
-				misQuery.append(voucherHeader.getVouchermis().getSchemeid().getId());
+				misQuery.append(" and mis.schemeid.id=:misSchemeId");
+				params.put("misSchemeId", voucherHeader.getVouchermis().getSchemeid().getId());
 			}
 			if (null != voucherHeader.getVouchermis().getSubschemeid()) {
-				misQuery.append(" and mis.subschemeid.id=");
-				misQuery.append(voucherHeader.getVouchermis().getSubschemeid().getId());
+				misQuery.append(" and mis.subschemeid.id=:misSubschemeId");
+				params.put("misSubschemeId", voucherHeader.getVouchermis().getSubschemeid().getId());
 			}
 			if (null != voucherHeader.getVouchermis().getFundsource()) {
-				misQuery.append(" and mis.fundsource.id=");
-				misQuery.append(voucherHeader.getVouchermis().getFundsource().getId());
+				misQuery.append(" and mis.fundsource.id=:misFundsourceId");
+				params.put("misFundsourceId", voucherHeader.getVouchermis().getFundsource().getId());
 			}
 			if (null != voucherHeader.getVouchermis().getDivisionid()) {
-				misQuery.append(" and mis.divisionid.id=");
-				misQuery.append(voucherHeader.getVouchermis().getDivisionid().getId());
+				misQuery.append(" and mis.divisionid.id=:misDivisionidId");
+				params.put("misDivisionidId", voucherHeader.getVouchermis().getDivisionid().getId());
 			}
+			queryMap.put(misQuery.toString(), params);
 		}
-		return misQuery.toString();
+		return queryMap;
 	}
 
-	public static String getVoucherNumDateQuery(final String voucherNumFrom, final String voucherNumTo,
-			final String voucherDateFrom, final String voucherDateTo) {
-		final StringBuffer numDateQuery = new StringBuffer();
+	public static Map<String, Map<String, Object>> getVoucherNumDateQuery(final String voucherNumFrom,
+			final String voucherNumTo, final String voucherDateFrom, final String voucherDateTo) {
+		final StringBuilder numDateQuery = new StringBuilder();
+		final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+		final Map<String, Object> params = new HashMap<>();
 		try {
 			if (null != voucherNumFrom && StringUtils.isNotEmpty(voucherNumFrom)) {
-				numDateQuery.append(" and vh.voucherNumber >'");
-				numDateQuery.append(voucherNumFrom).append("'");
+				numDateQuery.append(" and vh.voucherNumber > :voucherNumFrom");
+				params.put("voucherNumFrom", voucherNumFrom);
 			}
 			if (null != voucherNumTo && StringUtils.isNotEmpty(voucherNumTo)) {
-				numDateQuery.append(" and vh.voucherNumber <'");
-				numDateQuery.append(voucherNumTo).append("'");
+				numDateQuery.append(" and vh.voucherNumber <:voucherNumTo");
+				params.put("voucherNumTo", voucherNumTo);
 			}
 
-			if (null != voucherDateFrom && StringUtils.isNotEmpty(voucherDateFrom))
-				numDateQuery.append(" and vh.voucherDate>='")
-						.append(Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.parse(voucherDateFrom)))
-						.append("'");
-			if (null != voucherDateTo && StringUtils.isNotEmpty(voucherDateTo))
-				numDateQuery.append(" and vh.voucherDate<='")
-						.append(Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.parse(voucherDateTo)))
-						.append("'");
+			if (null != voucherDateFrom && StringUtils.isNotEmpty(voucherDateFrom)) {
+				numDateQuery.append(" and vh.voucherDate>=:voucherDateFrom");
+				params.put("voucherDateFrom",
+						Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.parse(voucherDateFrom)));
+			}
+			if (null != voucherDateTo && StringUtils.isNotEmpty(voucherDateTo)) {
+				numDateQuery.append(" and vh.voucherDate<=:voucherDateTo");
+				params.put("voucherDateTo",
+						Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.parse(voucherDateTo)));
+			}
+			queryMap.put(numDateQuery.toString(), params);
 		} catch (final ParseException e) {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Exception occured while parsing date" + e);
-		} catch (final Exception e) {
-			LOGGER.error(e);
-			throw new ApplicationRuntimeException("Error occured while executing search instrument query");
-		}
-		return numDateQuery.toString();
+        } /*
+           * catch (final Exception e) { LOGGER.error(e); throw new
+           * ApplicationRuntimeException("Error occured while executing search instrument query"
+           * ); }
+           */
+		return queryMap;
 	}
 
-	public static String getBillMisQuery(final EgBillregister egBillRegister) {
+	public static Map<String, Map<String, Object>> getBillMisQuery(final EgBillregister egBillRegister) {
 
-		final StringBuffer misQuery = new StringBuffer(300);
+		final StringBuilder misQuery = new StringBuilder();
+		final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+		final Map<String, Object> params = new HashMap<>();
 
 		if (null != egBillRegister && null != egBillRegister.getEgBillregistermis()) {
 
-			if (null != egBillRegister.getEgBillregistermis().getFund())
-				misQuery.append(" and billmis.fund.id=")
-						.append(egBillRegister.getEgBillregistermis().getFund().getId());
-
-			if (null != egBillRegister.getEgBillregistermis().getDepartmentcode() && !egBillRegister.getEgBillregistermis().getDepartmentcode().equals("-1")) {
-				misQuery.append(" and billmis.departmentcode='");
-				misQuery.append(egBillRegister.getEgBillregistermis().getDepartmentcode()+"'");
+			if (null != egBillRegister.getEgBillregistermis().getFund()) {
+				misQuery.append(" and billmis.fund.id = :billmisFundId");
+				params.put("billmisFundId", egBillRegister.getEgBillregistermis().getFund().getId());
+			}
+			if (null != egBillRegister.getEgBillregistermis().getDepartmentcode()
+					&& !egBillRegister.getEgBillregistermis().getDepartmentcode().equals("-1")) {
+				misQuery.append(" and billmis.departmentcode=:billmisDepartmentCode");
+				params.put("billmisDepartmentCode", egBillRegister.getEgBillregistermis().getDepartmentcode());
 			}
 			if (null != egBillRegister.getEgBillregistermis().getFunctionaryid()) {
-				misQuery.append(" and billmis.functionaryid.id=");
-				misQuery.append(egBillRegister.getEgBillregistermis().getFunctionaryid().getId());
+				misQuery.append(" and billmis.functionaryid.id=:billmisFunctionaryId");
+				params.put("billmisFunctionaryId", egBillRegister.getEgBillregistermis().getFunctionaryid().getId());
 			}
 			if (null != egBillRegister.getEgBillregistermis().getScheme()) {
-				misQuery.append(" and billmis.scheme.id=");
-				misQuery.append(egBillRegister.getEgBillregistermis().getScheme().getId());
+				misQuery.append(" and billmis.scheme.id = :billmisSchemeId");
+				params.put("billmisSchemeId", egBillRegister.getEgBillregistermis().getScheme().getId());
 			}
 			if (null != egBillRegister.getEgBillregistermis().getSubScheme()) {
-				misQuery.append(" and billmis.subScheme.id=");
-				misQuery.append(egBillRegister.getEgBillregistermis().getSubScheme().getId());
+				misQuery.append(" and billmis.subScheme.id = :billmisSubSchemeId");
+				params.put("billmisSubSchemeId", egBillRegister.getEgBillregistermis().getSubScheme().getId());
 			}
 			if (null != egBillRegister.getEgBillregistermis().getFundsource()) {
-				misQuery.append(" and billmis.fundsource.id=");
-				misQuery.append(egBillRegister.getEgBillregistermis().getFundsource().getId());
+				misQuery.append(" and billmis.fundsource.id = :billmisFundsourceId");
+				params.put("billmisFundsourceId", egBillRegister.getEgBillregistermis().getFundsource().getId());
 			}
 			if (null != egBillRegister.getEgBillregistermis().getFieldid()) {
-				misQuery.append(" and billmis.fieldid.id=");
-				misQuery.append(egBillRegister.getEgBillregistermis().getFieldid().getId());
+				misQuery.append(" and billmis.fieldid.id = :billmisFieldidId");
+				params.put("billmisFieldidId", egBillRegister.getEgBillregistermis().getFieldid().getId());
 			}
 			if (null != egBillRegister.getBillnumber() && !egBillRegister.getBillnumber().equalsIgnoreCase("")) {
-				misQuery.append(" and br.billnumber=");
-				misQuery.append("'" + egBillRegister.getBillnumber() + "'");
+				misQuery.append(" and br.billnumber = :brBillNumber");
+				params.put("brBillNumber", egBillRegister.getBillnumber());
 			}
+			queryMap.put(misQuery.toString(), params);
 		}
-		return misQuery.toString();
+		return queryMap;
 
 	}
 
@@ -247,34 +258,39 @@ public class VoucherHelper {
 				.append(fiscalPeriodName).toString();
 	}
 
-	public static String getBillDateQuery(final String billDateFrom, final String billDateTo) {
-		final StringBuffer numDateQuery = new StringBuffer();
+	public static Map<String, Map<String, Object>> getBillDateQuery(final String billDateFrom, final String billDateTo) {
+		final StringBuilder numDateQuery = new StringBuilder();
+		final Map<String, Map<String, Object>> queryMap = new HashMap<>();
+		final Map<String, Object> params = new HashMap<>();
 		try {
 
-			if (null != billDateFrom && StringUtils.isNotEmpty(billDateFrom))
-				numDateQuery.append(" and br.billdate>='")
-						.append(Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.parse(billDateFrom)))
-						.append("'");
-			if (null != billDateTo && StringUtils.isNotEmpty(billDateTo))
-				numDateQuery.append(" and br.billdate<='")
-						.append(Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.parse(billDateTo)))
-						.append("'");
+			if (null != billDateFrom && StringUtils.isNotEmpty(billDateFrom)) {
+				numDateQuery.append(" and br.billdate>=:billDateFrom");
+				params.put("billDateFrom", Constants.DDMMYYYYFORMAT2.parse(billDateFrom));
+			}
+			if (null != billDateTo && StringUtils.isNotEmpty(billDateTo)) {
+				numDateQuery.append(" and br.billdate<=:billDateTo");
+				params.put("billDateTo", Constants.DDMMYYYYFORMAT2.parse(billDateTo));
+			}
+			queryMap.put(numDateQuery.toString(), params);
 		} catch (final ParseException e) {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Exception occured while parsing date" + e);
-		} catch (final Exception e) {
-			LOGGER.error(e);
-			throw new ApplicationRuntimeException("Error occured while executing search instrument query");
-		}
-		return numDateQuery.toString();
+        } /*
+           * catch (final Exception e) { LOGGER.error(e); throw new
+           * ApplicationRuntimeException("Error occured while executing search instrument query"
+           * ); }
+           */
+		return queryMap;
 	}
 
 	public String getEg_Voucher(final String vouType, final String fiscalPeriodIdStr)
-			throws TaskFailedException, Exception {
+			throws TaskFailedException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug(" In EGovernCommon :getEg_Voucher method ");
 		final Query query = persistenceService.getSession()
-				.createSQLQuery("select name from fiscalperiod where id=" + Integer.parseInt(fiscalPeriodIdStr) + "");
+				.createSQLQuery("select name from fiscalperiod where id = :id");
+		query.setParameter("id", Integer.parseInt(fiscalPeriodIdStr));
 		final List<String> fc = query.list();
 		// Sequence name will be SQ_U_DBP_CGVN_FP7 for vouType U/DBP/CGVN and
 		// fiscalPeriodIdStr 7
@@ -286,8 +302,8 @@ public class VoucherHelper {
 
 	}
 
-	public String getGeneratedVoucherNumber(final Integer fundId, String voucherType, final Date voucherDate,
-			String vNumGenMode, String voucherNumber) throws Exception {
+	public String getGeneratedVoucherNumber(final Long fundId, String voucherType, final Date voucherDate,
+			String vNumGenMode, String voucherNumber) throws TaskFailedException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("fundId | in getGeneratedVoucherNumber      :" + fundId);
 		if (LOGGER.isDebugEnabled())
@@ -383,7 +399,8 @@ public class VoucherHelper {
 	}
 	
 	public List<String> getVoucherNamesByType(String voucherType){
-	    Query query = this.persistenceService.getSession().createSQLQuery("select distinct(name) from voucherheader vh where vh.type = :type");
+	    Query query = this.persistenceService.getSession().createSQLQuery(
+	    		"select distinct(name) from voucherheader vh where vh.type = :type");
 	    query.setString("type", voucherType);
 	    List<String> list = query.list();
 	    return list;

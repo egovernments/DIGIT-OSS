@@ -96,14 +96,14 @@ function populateapportioningamountnew(){
 		dom.get("receipt_error_area").style.display="block";
 		return;
 	}
-	collectiontotal=eval(collectiontotal);
-    	billingtotal=eval(billingtotal);
+	collectiontotal=collectiontotal;
+    	billingtotal=billingtotal;
 
 	for(var j=0;j<noofaccounts; j++)
 	{
 		var advanceRebatePresent=document.getElementById('receiptDetailList['+j+'].isActualDemand').value;
 		var amounttobecollected=document.getElementById('receiptDetailList['+j+'].cramountToBePaid').value;
-		totalCreditAmountToBePaid = eval(totalCreditAmountToBePaid)+eval(amounttobecollected);
+		totalCreditAmountToBePaid = totalCreditAmountToBePaid+amounttobecollected;
 		if(advanceRebatePresent==0){
 			zeroAccHeads=true;
 		}
@@ -168,8 +168,8 @@ function populateapportioningamountnew(){
 								
 							var amt1=amounttobecollected-collectiontotal;
 							amt1=Math.round(amt1*100)/100;
-							document.getElementById('receiptDetailList['+j+'].balanceAmount').value=amt1.toFixed(1);
-							document.getElementById('receiptDetailList['+j+'].balanceAmtDisplay').innerHTML=amt1.toFixed(1);
+							document.getElementById('receiptDetailList['+j+'].balanceAmount').value=parseFloat(amt1.toFixed(1));
+							document.getElementById('receiptDetailList['+j+'].balanceAmtDisplay').innerHTML=parseFloat(amt1.toFixed(1));
 						}
 					}
 					else if(check!=0 && remainingamount>0)
@@ -186,15 +186,15 @@ function populateapportioningamountnew(){
 						}
 						else if(remainingamount<=amounttobecollected)
 						{
-							document.getElementById('receiptDetailList['+j+'].cramount').value=remainingamount.toFixed(1);
-								document.getElementById('receiptDetailList['+j+'].cramountDisplay').innerHTML=remainingamount.toFixed(1);
+							document.getElementById('receiptDetailList['+j+'].cramount').value=parseFloat(remainingamount.toFixed(1));
+							document.getElementById('receiptDetailList['+j+'].cramountDisplay').innerHTML=parseFloat(remainingamount.toFixed(1));
 							
 						
 							var amt2=amounttobecollected-remainingamount;
 							amt2=Math.round(amt2*100)/100;
 							remainingamount=remainingamount-document.getElementById('receiptDetailList['+j+'].cramount').value;
-							document.getElementById('receiptDetailList['+j+'].balanceAmount').value=amt2.toFixed(1);
-							document.getElementById('receiptDetailList['+j+'].balanceAmtDisplay').innerHTML=amt2.toFixed(1);
+							document.getElementById('receiptDetailList['+j+'].balanceAmount').value=parseFloat(amt2.toFixed(1));
+							document.getElementById('receiptDetailList['+j+'].balanceAmtDisplay').innerHTML=parseFloat(amt2.toFixed(1));
 						}
 					}
 					else if(check!=0 && remainingamount==0)
@@ -236,8 +236,8 @@ function calculateCreditTotal(){
 	//this step is done to populate credit amount
     for(var j=0;j<noofaccounts; j++)
 	{
-		var receivedAmount=eval(document.getElementById('receiptDetailList['+j+'].cramount').value);
-		var rebateamount=eval(document.getElementById('receiptDetailList['+j+'].dramount').value);
+		var receivedAmount=document.getElementById('receiptDetailList['+j+'].cramount').value;
+		var rebateamount=document.getElementById('receiptDetailList['+j+'].dramount').value;
 		creditamount = isNaN(receivedAmount)?0:receivedAmount;
 		debitamount = isNaN(rebateamount)?0:rebateamount;
 		credittotal=credittotal+creditamount;
@@ -261,7 +261,7 @@ function validateOnlineReceipt(){
 	{
 		var advanceRebatePresent=document.getElementById('receiptDetailList['+j+'].isActualDemand').value;			
 		var amounttobecollected=document.getElementById('receiptDetailList['+j+'].cramountToBePaid').value;
-		totalCreditAmountToBePaid = eval(totalCreditAmountToBePaid)+eval(amounttobecollected);
+		totalCreditAmountToBePaid = totalCreditAmountToBePaid+amounttobecollected;
 		if(advanceRebatePresent==0){
 			zeroAccHeads=true;
 		}
@@ -273,7 +273,7 @@ function validateOnlineReceipt(){
 		validation=false;
 		return false;
 	}
-	amount=eval(amount);
+	amount=amount;
 
 	if(document.getElementById("callbackForApportioning").value=="false")	
 	{	

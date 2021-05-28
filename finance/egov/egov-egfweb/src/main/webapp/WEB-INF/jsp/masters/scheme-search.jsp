@@ -86,6 +86,13 @@
 
 		
     	document.schemeForm.action='${pageContext.request.contextPath}/masters/scheme-search.action';
+    	jQuery(schemeForm).append(
+                jQuery('<input>', {
+                    type: 'hidden',
+                    name: '${_csrf.parameterName}',
+                    value: '${_csrf.token}'
+                })
+            );
     	document.schemeForm.submit();
     	//return true;
     	
@@ -234,9 +241,9 @@
 	<script type="text/javascript">
 	function urlLoad(id,showMode) {
 		if(showMode=='edit')
-			 url = "../masters/scheme-beforeEdit.action?id="+id+"&mode=edit";
+			 url = "../masters/scheme-beforeEdit.action?schemeId="+id+"&mode=edit";
 		else          
-			 url = "../masters/scheme-beforeView.action?id="+id+"&mode=view"; 
+			 url = "../masters/scheme-beforeView.action?schemeId="+id+"&mode=view"; 
 		window.open(url,'schemeView','resizable=yes,scrollbars=yes,left=300,top=40, width=900, height=700');
 	}
 	</script>

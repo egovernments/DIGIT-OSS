@@ -66,6 +66,7 @@ var callback = {
 		    }
 		}
 function getData(){
+	
 	var asOnDate =  document.getElementById('asOnDate').value;
 	var department = document.getElementById('executingDepartment').value;
 	
@@ -77,7 +78,8 @@ function getData(){
 		bootbox.alert("<s:text name='msg.please.enter.valid.date'/>")
 		return false;
 	}
-	document.budgetVarianceReport.action='/services/EGF/report/budgetVarianceReport-loadData.action?asOnDate='+asOnDate;
+	var csrfToken = document.getElementById('csrfTokenValue').value;
+	document.budgetVarianceReport.action='/services/EGF/report/budgetVarianceReport-loadData.action?asOnDate='+asOnDate+'&_csrf='+csrfToken;
 	document.budgetVarianceReport.submit();  
 	return true;
 }
@@ -170,6 +172,7 @@ function resetSubmit()
 		</h5>
 		<s:form action="budgetVarianceReport" theme="simple"
 			name="budgetVarianceReport">
+			<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 				<tr>
 					<s:if test="%{isFieldMandatory('executingDepartment')}">

@@ -163,6 +163,11 @@
 					document.getElementById("actionName").value = 'save';
 				}
 				document.budgetDetailForm.action='/services/EGF/budget/budgetReAppropriation-'+method+'.action';
+				jQuery(budgetDetailForm).append(jQuery('<input>', {
+		            type : 'hidden',
+		            name : '${_csrf.parameterName}',
+		            value : '${_csrf.token}'
+		        }));
 	    		document.budgetDetailForm.submit();
 				return;
 			}
@@ -260,6 +265,11 @@
 				var isValid =validateMandatoryForGetActual();
 				if(isValid){
 				document.budgetDetailForm.action='/services/EGF/budget/budgetReAppropriation-loadActuals.action';
+				jQuery(budgetDetailForm).append(jQuery('<input>', {
+		            type : 'hidden',
+		            name : '${_csrf.parameterName}',
+		            value : '${_csrf.token}'
+		        }));
 	    		document.budgetDetailForm.submit();
 				};
 			}

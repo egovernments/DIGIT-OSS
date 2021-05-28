@@ -204,6 +204,11 @@
 					 return false;
 		 	  }
 	       	document.billRegisterForm.action='${pageContext.request.contextPath}/bill/billRegisterSearch-search.action';
+	       	jQuery(billRegisterForm).append(jQuery('<input>', {
+	            type : 'hidden',
+	            name : '${_csrf.parameterName}',
+	            value : '${_csrf.token}'
+	        }));
 		 	document.billRegisterForm.submit();
 		 	return true;
 		 }

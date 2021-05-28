@@ -49,6 +49,9 @@ package org.egov.egf.web.actions.report;
 
 
 import com.opensymphony.xwork2.validator.annotations.Validation;
+
+import net.sf.jasperreports.engine.JRException;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -74,6 +77,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -271,14 +275,14 @@ public class FundFlowManualEntryReportAction extends BaseFormAction {
         return paramMap;
     }
 
-    public String generatePdf() throws Exception {
+    public String generatePdf() throws JRException, IOException{
         populateData();
         inputStream = reportHelper.exportPdf(inputStream, JASPERPATH, getParamMap(), manualEntryReportList);
 
         return "PDF";
     }
 
-    public String generateXls() throws Exception {
+    public String generateXls() throws JRException, IOException {
         populateData();
         inputStream = reportHelper.exportXls(inputStream, JASPERPATH, getParamMap(), manualEntryReportList);
         return "XLS";

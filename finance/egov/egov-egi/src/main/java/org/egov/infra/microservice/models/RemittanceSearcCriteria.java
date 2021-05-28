@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,16 +23,26 @@ public class RemittanceSearcCriteria {
     private List<String> referenceNumbers;
     private Long fromDate;
     private Long toDate;
+    @SafeHtml
     private String voucherHeader;
+    @SafeHtml
     private String function;
+    @SafeHtml
     private String fund;
+    @SafeHtml
     private String remarks;
+    @SafeHtml
     private String reasonForDelay;
+    @SafeHtml
     private String status;
+    @SafeHtml
     private String bankaccount;
+    @SafeHtml
     @NotNull
     private String tenantId;
+    @SafeHtml
     private String sortBy;
+    @SafeHtml
     private String sortOrder;
     private Integer pageSize;
     private Integer limit;

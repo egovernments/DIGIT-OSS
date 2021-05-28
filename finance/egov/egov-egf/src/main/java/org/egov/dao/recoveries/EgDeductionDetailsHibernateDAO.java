@@ -50,6 +50,13 @@
 
 package org.egov.dao.recoveries;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.egov.commons.EgPartytype;
 import org.egov.commons.EgwTypeOfWork;
 import org.egov.model.recoveries.EgDeductionDetails;
@@ -57,12 +64,6 @@ import org.egov.model.recoveries.Recovery;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author Iliyaraja s TODO To change the template for this generated type
@@ -115,77 +116,80 @@ public class EgDeductionDetailsHibernateDAO  {
         return qry.list();
     }
 
-    public List<EgDeductionDetails> getEgDeductionDetailsFilterBy(final Recovery tds, final BigDecimal amount,
-            final String date, final EgwTypeOfWork egwTypeOfWork, final EgwTypeOfWork egwSubTypeOfWork) {
-        session = getCurrentSession();
-        Query qry;
-        final StringBuffer qryStr = new StringBuffer();
-        List<EgDeductionDetails> egDeductionDetailsList = null;
-        qryStr.append("from EgDeductionDetails ed where ed.recovery=:tds ");
-        qry = session.createQuery(qryStr.toString());
+	public List<EgDeductionDetails> getEgDeductionDetailsFilterBy(final Recovery tds, final BigDecimal amount,
+			final String date, final EgwTypeOfWork egwTypeOfWork, final EgwTypeOfWork egwSubTypeOfWork) {
+		session = getCurrentSession();
+		Query qry;
+		final StringBuffer qryStr = new StringBuffer();
+		List<EgDeductionDetails> egDeductionDetailsList = null;
+		qryStr.append("from EgDeductionDetails ed where ed.recovery=:tds ");
+		qry = session.createQuery(qryStr.toString());
 
-        if (amount != null) {
-            qryStr.append(" and ((ed.lowlimit<=:amount and ed.highlimit>=:amount and ed.highlimit is not null) or (ed.lowlimit<=:amount and ed.highlimit is null)) ");
-            qry = session.createQuery(qryStr.toString());
-        }
-        if (date != null && !date.equals("")) {
-            qryStr.append(" and ((ed.datefrom<=:date and ed.dateto>=:date and ed.dateto is not null) or(ed.datefrom<=:date and ed.dateto is null))");
-            qry = session.createQuery(qryStr.toString());
-        }
-        if (egwTypeOfWork != null) {
-            qryStr.append(" and ed.workDocType =:egwTypeOfWork");
-            qry = session.createQuery(qryStr.toString());
-        }
-        if (egwSubTypeOfWork != null) {
-            qryStr.append("  and ed.workDocSubType =:egwSubTypeOfWork");
-            qry = session.createQuery(qryStr.toString());
-        }
-        qryStr.append(" order by id");
-        qry = session.createQuery(qryStr.toString());
-        if (tds != null)
-            qry.setEntity("tds", tds);
-        if (date != null && !date.equals(""))
-            qry.setString("date", date);
-        if (amount != null)
-            qry.setBigDecimal("amount", amount);
-        if (egwTypeOfWork != null)
-            qry.setEntity("egwTypeOfWork", egwTypeOfWork);
-        if (egwSubTypeOfWork != null)
-            qry.setEntity("egwSubTypeOfWork", egwSubTypeOfWork);
+		if (amount != null) {
+			qryStr.append(" and ((ed.lowlimit<=:amount and ed.highlimit>=:amount and ed.highlimit is not null)")
+					.append(" or (ed.lowlimit<=:amount and ed.highlimit is null)) ");
+			qry = session.createQuery(qryStr.toString());
+		}
+		if (date != null && !date.equals("")) {
+			qryStr.append(" and ((ed.datefrom<=:date and ed.dateto>=:date and ed.dateto is not null)")
+					.append(" or (ed.datefrom<=:date and ed.dateto is null))");
+			qry = session.createQuery(qryStr.toString());
+		}
+		if (egwTypeOfWork != null) {
+			qryStr.append(" and ed.workDocType =:egwTypeOfWork");
+			qry = session.createQuery(qryStr.toString());
+		}
+		if (egwSubTypeOfWork != null) {
+			qryStr.append("  and ed.workDocSubType =:egwSubTypeOfWork");
+			qry = session.createQuery(qryStr.toString());
+		}
+		qryStr.append(" order by id");
+		qry = session.createQuery(qryStr.toString());
+		if (tds != null)
+			qry.setEntity("tds", tds);
+		if (date != null && !date.equals(""))
+			qry.setString("date", date);
+		if (amount != null)
+			qry.setBigDecimal("amount", amount);
+		if (egwTypeOfWork != null)
+			qry.setEntity("egwTypeOfWork", egwTypeOfWork);
+		if (egwSubTypeOfWork != null)
+			qry.setEntity("egwSubTypeOfWork", egwSubTypeOfWork);
 
-        egDeductionDetailsList = qry.list();
-        return egDeductionDetailsList;
-    }
+		egDeductionDetailsList = qry.list();
+		return egDeductionDetailsList;
+	}
 
-    public EgDeductionDetails findEgDeductionDetailsForDeduAmt(final Recovery recovery, final EgPartytype egPartyType,
-            final EgPartytype egPartySubType, final EgwTypeOfWork docType, final Date date) {
-        EgDeductionDetails egDeductionDetails = null;
-        session = getCurrentSession();
-        Query qry;
-        final StringBuffer qryStr = new StringBuffer();
-        qryStr.append("from EgDeductionDetails ed where ed.recovery=:recovery ");
+	public EgDeductionDetails findEgDeductionDetailsForDeduAmt(final Recovery recovery, final EgPartytype egPartyType,
+			final EgPartytype egPartySubType, final EgwTypeOfWork docType, final Date date) {
+		EgDeductionDetails egDeductionDetails = null;
+		session = getCurrentSession();
+		Query qry;
+		final StringBuffer qryStr = new StringBuffer();
+		qryStr.append("from EgDeductionDetails ed where ed.recovery=:recovery ");
 
-        if (null != egPartySubType)
-            qryStr.append(" and ed.egpartytype =:egPartySubType ");
-        if (null != docType)
-            qryStr.append(" and ed.workDocType =:docType ");
-        if (null != date)
-            qryStr.append(" and ((ed.datefrom <=:date and ed.dateto>=:date and ed.dateto is not null) or (ed.datefrom<=:date and ed.dateto is null)) ");
+		if (null != egPartySubType)
+			qryStr.append(" and ed.egpartytype =:egPartySubType ");
+		if (null != docType)
+			qryStr.append(" and ed.workDocType =:docType ");
+		if (null != date)
+			qryStr.append(" and ((ed.datefrom <=:date and ed.dateto>=:date and ed.dateto is not null)")
+					.append(" or (ed.datefrom<=:date and ed.dateto is null)) ");
 
-        qry = session.createQuery(qryStr.toString());
+		qry = session.createQuery(qryStr.toString());
 
-        if (null != recovery)
-            qry.setEntity("recovery", recovery);
-        if (null != egPartySubType)
-            qry.setEntity("egPartySubType", egPartySubType);
-        if (null != docType)
-            qry.setEntity("docType", docType);
-        if (null != date)
-            qry.setDate("date", date);
+		if (null != recovery)
+			qry.setEntity("recovery", recovery);
+		if (null != egPartySubType)
+			qry.setEntity("egPartySubType", egPartySubType);
+		if (null != docType)
+			qry.setEntity("docType", docType);
+		if (null != date)
+			qry.setDate("date", date);
 
-        egDeductionDetails = (EgDeductionDetails) qry.uniqueResult();
+		egDeductionDetails = (EgDeductionDetails) qry.uniqueResult();
 
-        return egDeductionDetails;
-    }
+		return egDeductionDetails;
+	}
 
 }

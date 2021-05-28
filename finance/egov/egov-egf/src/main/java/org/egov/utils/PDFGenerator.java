@@ -47,6 +47,7 @@
  */
 package org.egov.utils;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -71,8 +72,7 @@ public class PDFGenerator
     public final static Logger LOGGER = Logger.getLogger(PDFGenerator.class);
 
     public void generateReport(final HttpServletRequest req, final HttpServletResponse resp, final String jasperName,
-            final ArrayList al, final HashMap paramMap)
-            throws Exception
+            final ArrayList al, final HashMap paramMap) throws JRException
     {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("generateReport method jasperName=============" + jasperName);
@@ -98,7 +98,7 @@ public class PDFGenerator
         pdfExporter.exportReport();
     }
 
-    public void generateReport(final String jasperName, final ArrayList al, final HashMap paramMap) throws Exception
+    public void generateReport(final String jasperName, final ArrayList al, final HashMap paramMap) throws JRException
     {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("generateReport method jasperName=============" + jasperName);

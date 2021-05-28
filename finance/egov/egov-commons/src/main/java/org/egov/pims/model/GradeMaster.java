@@ -47,64 +47,67 @@
  */
 package org.egov.pims.model;
 
-public class GradeMaster implements GenericMaster {
+import java.io.Serializable;
+import java.util.Date;
+
+public class GradeMaster implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public Integer id;
-	public Integer age;
-	public String name;
-	public java.util.Date fromDate;
-	public java.util.Date toDate;
-	public Integer orderNo;
+	private Integer id;
+	private Integer age;
+	private String name;
+	private Date fromDate;
+	private Date toDate;
+	private Integer orderNo;
+
 	/**
 	 * @return Returns the id.
 	 */
 	public Integer getId() {
 		return id;
 	}
-	
+
 	/**
-	 * @param id
-	 *            The id to set.
+	 * @param id The id to set.
 	 */
-	public void setId(Integer id) {
+	@SuppressWarnings("unused")
+	private void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
-	 * @param name
-	 *            The name to set.
+	 * @param name The name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public java.util.Date getFromDate() {
 		return fromDate;
 	}
-	
+
 	public void setFromDate(java.util.Date fromDate) {
 		this.fromDate = fromDate;
 	}
-	
+
 	public java.util.Date getToDate() {
 		return toDate;
 	}
-	
+
 	public void setToDate(java.util.Date toDate) {
 		this.toDate = toDate;
 	}
-	
+
 	public Integer getAge() {
 		return age;
 	}
-	
+
 	public void setAge(Integer age) {
 		this.age = age;
 	}
@@ -122,5 +125,5 @@ public class GradeMaster implements GenericMaster {
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
-	
+
 }

@@ -265,6 +265,11 @@
 		       	doLoadingMask('#loadingMask');
 				jQuery('#finYearId').prop("disabled", false);
 				document.bankRemittanceForm.action = "bankRemittance-create.action";
+				jQuery(bankRemittanceForm).append(jQuery('<input>', {
+		            type : 'hidden',
+		            name : '${_csrf.parameterName}',
+		            value : '${_csrf.token}'
+		        }));
 				return true;
 		}
 
@@ -311,6 +316,11 @@
 		jQuery('#finYearId').prop("disabled", false);
 		jQuery('#remittanceAmount').val("");
 		document.bankRemittanceForm.action = "bankRemittance-listData.action";
+		jQuery(bankRemittanceForm).append(jQuery('<input>', {
+            type : 'hidden',
+            name : '${_csrf.parameterName}',
+            value : '${_csrf.token}'
+        }));
 		return true;
 	}
 

@@ -51,6 +51,7 @@ package org.egov.infra.microservice.models;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -61,12 +62,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
 public class PaymentWorkflow {
+    @SafeHtml
     @NotNull
     @Length(min = 1)
     private String paymentId;
@@ -74,10 +77,11 @@ public class PaymentWorkflow {
     @NotNull
     private PaymentAction action;
 
+    @SafeHtml
     @NotNull
     @Length(min = 1)
     private String tenantId;
-
+    @SafeHtml
     private String reason;
     private JsonNode additionalDetails;
 
@@ -85,9 +89,7 @@ public class PaymentWorkflow {
      * Current status of the transaction
      */
     public enum PaymentAction {
-        CANCEL("CANCEL"),
-        DISHONOUR("DISHONOUR"),
-        REMIT("REMIT");
+        CANCEL("CANCEL"), DISHONOUR("DISHONOUR"), REMIT("REMIT");
 
         private String value;
 

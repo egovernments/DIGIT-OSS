@@ -71,9 +71,9 @@ import static org.egov.infra.script.entity.Script.SEQ_SCRIPT;
 @SequenceGenerator(name = SEQ_SCRIPT, sequenceName = SEQ_SCRIPT, allocationSize = 1)
 @NamedQueries({
         @NamedQuery(name = Script.BY_NAME,
-                query = "select s from Script s where s.name=:name and current_date between period.startDate and period.endDate"),
+                query = "select s from Script s where s.name=? and current_date between period.startDate and period.endDate"),
         @NamedQuery(name = Script.BY_NAME_AND_DATE,
-                query = "select s from Script as s where s.name=:name and :date between period.startDate and period.endDate")
+                query = "select s from Script as s where s.name=? and ? between period.startDate and period.endDate")
 })
 public class Script extends AbstractAuditable {
     public static final String SEQ_SCRIPT = "SEQ_EG_SCRIPT";

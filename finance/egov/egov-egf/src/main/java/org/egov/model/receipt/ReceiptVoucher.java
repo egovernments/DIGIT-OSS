@@ -49,7 +49,6 @@ package org.egov.model.receipt;
 
 import org.egov.commons.CVoucherHeader;
 import org.egov.infra.workflow.entity.StateAware;
-import org.egov.pims.commons.Position;
 
 public class ReceiptVoucher extends StateAware{
     private static final long serialVersionUID = 1896028685883363477L;
@@ -75,7 +74,7 @@ public class ReceiptVoucher extends StateAware{
     }
 
     @Override
-    public void setId(final Long id) {
+    protected void setId(final Long id) {
         this.id = id;
     }
 }

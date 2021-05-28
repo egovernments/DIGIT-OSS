@@ -154,7 +154,7 @@ function compareDate(dt1, dt2){
 	var d1, m1, y1, d2, m2, y2, ret;
 	dt1 = dt1.split('/');
 	dt2 = dt2.split('/');
-	ret = (eval(dt2[2])>eval(dt1[2])) ? 1 : (eval(dt2[2])<eval(dt1[2])) ? -1 : (eval(dt2[1])>eval(dt1[1])) ? 1 : (eval(dt2[1])<eval(dt1[1])) ? -1 : (eval(dt2[0])>eval(dt1[0])) ? 1 : (eval(dt2[0])<eval(dt1[0])) ? -1 : 0 ;										
+	ret = (dt2[2]>dt1[2]) ? 1 : (dt2[2]<dt1[2]) ? -1 : (dt2[1]>dt1[1]) ? 1 : (dt2[1]<dt1[1]) ? -1 : (dt2[0]>dt1[0]) ? 1 : (dt2[0]<dt1[0]) ? -1 : 0 ;										
 	return ret;
 }
 

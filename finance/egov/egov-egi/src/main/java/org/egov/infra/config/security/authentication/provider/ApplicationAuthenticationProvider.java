@@ -48,9 +48,13 @@
 
 package org.egov.infra.config.security.authentication.provider;
 
+import static java.lang.String.format;
+import static org.egov.infra.security.utils.SecurityConstants.MAX_LOGIN_ATTEMPT_ALLOWED;
+
+import java.util.Optional;
+
 import org.egov.infra.security.audit.entity.LoginAttempt;
 import org.egov.infra.security.audit.service.LoginAttemptService;
-import org.egov.infra.security.utils.captcha.CaptchaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -58,84 +62,46 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Optional;
-
-import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.egov.infra.security.utils.SecurityConstants.LOGIN_PASS_FIELD;
-import static org.egov.infra.security.utils.SecurityConstants.MAX_LOGIN_ATTEMPT_ALLOWED;
-import static org.egov.infra.security.utils.captcha.CaptchaUtils.J_CAPTCHA_RESPONSE;
-import static org.egov.infra.security.utils.captcha.CaptchaUtils.RECAPTCHA_RESPONSE;
 
 public class ApplicationAuthenticationProvider extends DaoAuthenticationProvider {
 
-    private static final String BAD_CRED_MSG_KEY = "AbstractUserDetailsAuthenticationProvider.badCredentials";
-    private static final String BAD_CRED_DEFAULT_MSG = "Bad credentials";
-    private static final String ACCOUNT_LOCKED_MSG_KEY = "AbstractUserDetailsAuthenticationProvider.locked";
-    private static final String ACCOUNT_LOCKED_DEFAULT_MSG = "User account is locked";
-    private static final String TOO_MANY_ATTEMPTS_MSG_FORMAT = "Too many attempts [%d]";
-    private static final String INVALID_CAPTCHA_MSG_FORMAT = "%s - Recaptcha Invalid";
+	private static final String ACCOUNT_LOCKED_MSG_KEY = "AbstractUserDetailsAuthenticationProvider.locked";
+	private static final String ACCOUNT_LOCKED_DEFAULT_MSG = "User account is locked";
+	private static final String TOO_MANY_ATTEMPTS_MSG_FORMAT = "Too many attempts [%d]";
 
+	@Autowired
+	private LoginAttemptService loginAttemptService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Override
+	public Authentication authenticate(Authentication authentication) {
+		try {
+			return super.authenticate(authentication);
+		} catch (BadCredentialsException ex) {
+			lockAccount(authentication);
+			throw ex;
+		} catch (LockedException le) {
+			return unlockAccount(le);
+		}
+	}
 
-    @Autowired
-    private LoginAttemptService loginAttemptService;
+	private Authentication unlockAccount(LockedException le) {
+		throw le;
+	}
 
-    @Autowired
-    private CaptchaUtils recaptchaUtils;
+	private void lockAccount(Authentication authentication) {
+		Optional<LoginAttempt> loginAttempt = loginAttemptService.updateFailedAttempt(authentication.getName());
+		if (loginAttempt.isPresent()) {
+			if (loginAttempt.get().getFailedAttempts() == MAX_LOGIN_ATTEMPT_ALLOWED) {
+				throw new LockedException(messages.getMessage(ACCOUNT_LOCKED_MSG_KEY, ACCOUNT_LOCKED_DEFAULT_MSG));
+			} else if (loginAttempt.get().getFailedAttempts() > 2) {
+				throw new BadCredentialsException(format(TOO_MANY_ATTEMPTS_MSG_FORMAT,
+						MAX_LOGIN_ATTEMPT_ALLOWED - loginAttempt.get().getFailedAttempts()));
+			}
+		}
+	}
 
-    @Override
-    public Authentication authenticate(Authentication authentication) {
-        try {
-            return super.authenticate(authentication);
-        } catch (BadCredentialsException ex) {
-            lockAccount(authentication);
-            throw ex;
-        } catch (LockedException le) {
-            return unlockAccount(authentication, le);
-        }
-    }
-
-    private Authentication unlockAccount(Authentication authentication, LockedException le) {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        if (isNotBlank(request.getParameter(RECAPTCHA_RESPONSE)) || isNotBlank(request.getParameter(J_CAPTCHA_RESPONSE))) {
-            if (recaptchaUtils.captchaIsValid(request)) {
-                loginAttemptService.resetFailedAttempt(authentication.getName());
-                return super.authenticate(authentication);
-            } else {
-                throw new LockedException(format(INVALID_CAPTCHA_MSG_FORMAT, le.getMessage()));
-            }
-        }
-        throw le;
-    }
-
-    private void lockAccount(Authentication authentication) {
-        Optional<LoginAttempt> loginAttempt = loginAttemptService.updateFailedAttempt(authentication.getName());
-        if (loginAttempt.isPresent()) {
-            if (loginAttempt.get().getFailedAttempts() == MAX_LOGIN_ATTEMPT_ALLOWED) {
-                throw new LockedException(messages.getMessage(ACCOUNT_LOCKED_MSG_KEY, ACCOUNT_LOCKED_DEFAULT_MSG));
-            } else if (loginAttempt.get().getFailedAttempts() > 2) {
-                throw new BadCredentialsException(format(TOO_MANY_ATTEMPTS_MSG_FORMAT,
-                        MAX_LOGIN_ATTEMPT_ALLOWED - loginAttempt.get().getFailedAttempts()));
-            }
-        }
-    }
-
-    @Override
-    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) {
-//    	HashMap<String, String> authenticationCredentials = (HashMap<String, String>) authentication.getCredentials();
-//        if (authenticationCredentials == null ||
-//                !passwordEncoder.matches(authenticationCredentials.get(LOGIN_PASS_FIELD), userDetails.getPassword())) {
-//            throw new BadCredentialsException(messages.getMessage(BAD_CRED_MSG_KEY, BAD_CRED_DEFAULT_MSG));
-//        }
-    }
+	@Override
+	protected void additionalAuthenticationChecks(UserDetails userDetails,
+			UsernamePasswordAuthenticationToken authentication) {
+	}
 }

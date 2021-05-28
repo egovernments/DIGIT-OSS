@@ -48,13 +48,14 @@
 
 package org.egov.model.receiptpayment;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.Fund;
 import org.egov.enums.FinancialPeriodEnum;
 import org.egov.infra.persistence.validator.annotation.Required;
-
-import java.math.BigDecimal;
-import java.util.Date;
+import org.hibernate.validator.constraints.SafeHtml;
 
 public class ReceiptPayment {
 
@@ -70,28 +71,26 @@ public class ReceiptPayment {
 
     @Required
     private FinancialPeriodEnum period;
-
+    @SafeHtml
     private String glcode;
-
+    @SafeHtml
     private String minorCode;
-
+    @SafeHtml
     private String name;
 
     private BigDecimal creditAmount = BigDecimal.ZERO;
 
     private BigDecimal debitAmount = BigDecimal.ZERO;
-    ;
 
     private BigDecimal openingBalance = BigDecimal.ZERO;
-    ;
+
     private BigDecimal closingBalance = BigDecimal.ZERO;
-    ;
 
     public CFinancialYear getFinancialYear() {
         return financialYear;
     }
 
-    public void setFinancialYear(CFinancialYear financialYear) {
+    public void setFinancialYear(final CFinancialYear financialYear) {
         this.financialYear = financialYear;
     }
 
@@ -99,7 +98,7 @@ public class ReceiptPayment {
         return fromDate;
     }
 
-    public void setFromDate(Date fromDate) {
+    public void setFromDate(final Date fromDate) {
         this.fromDate = fromDate;
     }
 
@@ -107,7 +106,7 @@ public class ReceiptPayment {
         return toDate;
     }
 
-    public void setToDate(Date toDate) {
+    public void setToDate(final Date toDate) {
         this.toDate = toDate;
     }
 
@@ -115,7 +114,7 @@ public class ReceiptPayment {
         return fund;
     }
 
-    public void setFund(Fund fund) {
+    public void setFund(final Fund fund) {
         this.fund = fund;
     }
 
@@ -123,16 +122,15 @@ public class ReceiptPayment {
         return period;
     }
 
-    public void setPeriod(FinancialPeriodEnum period) {
+    public void setPeriod(final FinancialPeriodEnum period) {
         this.period = period;
     }
-
 
     public String getGlcode() {
         return glcode;
     }
 
-    public void setGlcode(String glcode) {
+    public void setGlcode(final String glcode) {
         this.glcode = glcode;
     }
 
@@ -140,7 +138,7 @@ public class ReceiptPayment {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -148,7 +146,7 @@ public class ReceiptPayment {
         return creditAmount;
     }
 
-    public void setCreditAmount(BigDecimal creditAmount) {
+    public void setCreditAmount(final BigDecimal creditAmount) {
         this.creditAmount = creditAmount;
     }
 
@@ -156,7 +154,7 @@ public class ReceiptPayment {
         return debitAmount;
     }
 
-    public void setDebitAmount(BigDecimal debitAmount) {
+    public void setDebitAmount(final BigDecimal debitAmount) {
         this.debitAmount = debitAmount;
     }
 
@@ -164,7 +162,7 @@ public class ReceiptPayment {
         return minorCode;
     }
 
-    public void setMinorCode(String minorCode) {
+    public void setMinorCode(final String minorCode) {
         this.minorCode = minorCode;
     }
 
@@ -172,7 +170,7 @@ public class ReceiptPayment {
         return openingBalance;
     }
 
-    public void setOpeningBalance(BigDecimal openingBalance) {
+    public void setOpeningBalance(final BigDecimal openingBalance) {
         this.openingBalance = openingBalance;
     }
 
@@ -180,7 +178,7 @@ public class ReceiptPayment {
         return closingBalance;
     }
 
-    public void setClosingBalance(BigDecimal closingBalance) {
+    public void setClosingBalance(final BigDecimal closingBalance) {
         this.closingBalance = closingBalance;
     }
 }

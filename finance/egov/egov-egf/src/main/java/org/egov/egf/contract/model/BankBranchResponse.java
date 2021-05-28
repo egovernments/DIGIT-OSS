@@ -8,41 +8,46 @@ import org.egov.infra.microservice.contract.ResponseInfo;
 
 public class BankBranchResponse implements Serializable {
 
-	private ResponseInfo responseInfo;
-	private List<BankBranch> bankBranches;
-	private Pagination page;
-	
-	public BankBranchResponse(){}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 8098459522682163493L;
+    private ResponseInfo responseInfo;
+    private List<BankBranch> bankBranches;
+    private Pagination page;
 
-	public BankBranchResponse(ResponseInfo responseInfo, List<BankBranch> bankBranches, Pagination page) {
-		this.responseInfo = responseInfo;
-		this.bankBranches = bankBranches;
-		this.page = page;
-	}
+    public BankBranchResponse() {
+    }
 
-	public ResponseInfo getResponseInfo() {
-		return responseInfo;
-	}
+    public BankBranchResponse(final ResponseInfo responseInfo, final List<BankBranch> bankBranches,
+            final Pagination page) {
+        this.responseInfo = responseInfo;
+        this.bankBranches = bankBranches;
+        this.page = page;
+    }
 
-	public void setResponseInfo(ResponseInfo responseInfo) {
-		this.responseInfo = responseInfo;
-	}
+    public ResponseInfo getResponseInfo() {
+        return responseInfo;
+    }
 
-	public List<BankBranch> getBankBranches() {
-		return bankBranches;
-	}
+    public void setResponseInfo(final ResponseInfo responseInfo) {
+        this.responseInfo = responseInfo;
+    }
 
-	public void setBankBranches(List<BankBranch> bankBranches) {
-		this.bankBranches = bankBranches;
-	}
+    public List<BankBranch> getBankBranches() {
+        return bankBranches;
+    }
 
-	public Pagination getPage() {
-		return page;
-	}
+    public void setBankBranches(final List<BankBranch> bankBranches) {
+        this.bankBranches = bankBranches;
+    }
 
-	public void setPage(Pagination page) {
-		this.page = page;
-	}
-	
-	
+    public Pagination getPage() {
+        return page;
+    }
+
+    public void setPage(final Pagination page) {
+        this.page = page;
+    }
+
 }

@@ -2,54 +2,54 @@ package org.egov.infra.microservice.models;
 
 public class BusinessAccountSubLedger {
 
-	private Long id;
+    private Long id;
 
-	private Long detailType;
+    private Long detailType;
 
-	private Long detailKey;
+    private Long detailKey;
 
-	private Double amount;
+    private Double amount;
 
-	private Long businessAccountDetails;
+    private Long businessAccountDetails;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getDetailType() {
-		return detailType;
-	}
+    public Long getDetailType() {
+        return detailType;
+    }
 
-	public void setDetailType(Long detailType) {
-		this.detailType = detailType;
-	}
+    public void setDetailType(Long detailType) {
+        this.detailType = detailType;
+    }
 
-	public Long getDetailKey() {
-		return detailKey;
-	}
+    public Long getDetailKey() {
+        return detailKey;
+    }
 
-	public void setDetailKey(Long detailKey) {
-		this.detailKey = detailKey;
-	}
+    public void setDetailKey(Long detailKey) {
+        this.detailKey = detailKey;
+    }
 
-	public Double getAmount() {
-		return amount == null ? Double.valueOf(0) : amount;
-	}
+    public Double getAmount() {
+        return amount == null ? Double.valueOf(0) : amount;
+    }
 
-	public void setAmount(Double amount) {
-		this.amount = amount;
-	}
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
 
-	public Long getBusinessAccountDetails() {
-		return businessAccountDetails;
-	}
+    public Long getBusinessAccountDetails() {
+        return businessAccountDetails;
+    }
 
-	public void setBusinessAccountDetails(Long businessAccountDetails) {
-		this.businessAccountDetails = businessAccountDetails;
-	}
+    public void setBusinessAccountDetails(Long businessAccountDetails) {
+        this.businessAccountDetails = businessAccountDetails;
+    }
 
 }

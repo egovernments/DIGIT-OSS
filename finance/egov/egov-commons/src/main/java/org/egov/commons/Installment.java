@@ -93,7 +93,7 @@ public class Installment implements Serializable, Comparable<Installment> {
     /**
      * @param id The id to set.
      */
-    public void setId(final Integer id) {
+    private void setId(final Integer id) {
         this.id = id;
     }
 

@@ -60,17 +60,22 @@ import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.model.bills.EgBillregister;
 import org.egov.model.masters.WorkOrder;
+import org.egov.model.masters.WorkOrderSearchRequest;
 import org.egov.services.bills.EgBillRegisterService;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -85,130 +90,134 @@ import com.google.gson.GsonBuilder;
 @RequestMapping(value = "/workorder")
 public class WorkOrderController {
 
-    private static final String NEW = "workorder-new";
-    private static final String RESULT = "workorder-result";
-    private static final String EDIT = "workorder-edit";
-    private static final String VIEW = "workorder-view";
-    private static final String SEARCH = "workorder-search";
+	private static final String WORK_ORDER = "workOrder";
+	private static final String WORK_ORDER_SEARCH_REQUEST = "workOrderSearchRequest";
+	private static final String NEW = "workorder-new";
+	private static final String RESULT = "workorder-result";
+	private static final String EDIT = "workorder-edit";
+	private static final String VIEW = "workorder-view";
+	private static final String SEARCH = "workorder-search";
 
-    @Autowired
-    private FundService fundService;
+	@Autowired
+	private FundService fundService;
 
-    @Autowired
-    private WorkOrderService workOrderService;
+	@Autowired
+	private WorkOrderService workOrderService;
 
-    @Autowired
-    private MicroserviceUtils microserviceUtils;
+	@Autowired
+	private MicroserviceUtils microserviceUtils;
 
-    @Autowired
-    private MessageSource messageSource;
+	@Autowired
+	private MessageSource messageSource;
 
-    @Autowired
-    private ContractorService contractorService;
+	@Autowired
+	private ContractorService contractorService;
 
-    @Autowired
-    private EgBillRegisterService egBillRegisterService;
+	@Autowired
+	private EgBillRegisterService egBillRegisterService;
 
-    private void prepareNewForm(final Model model) {
-        model.addAttribute("funds", fundService.findAllActiveAndIsnotleaf());
-        model.addAttribute("departments", microserviceUtils.getDepartments());
-        model.addAttribute("contractors", contractorService.getAllActiveEntities(null));
-    }
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.setDisallowedFields("id");
+	}
 
-    @RequestMapping(value = "/newform", method = RequestMethod.POST)
-    public String showNewForm(@ModelAttribute("workOrder") final WorkOrder workOrder, final Model model) {
-        prepareNewForm(model);
-        model.addAttribute("workOrder", new WorkOrder());
-        return NEW;
-    }
+	private void prepareNewForm(final Model model) {
+		model.addAttribute("funds", fundService.findAllActiveAndIsnotleaf());
+		model.addAttribute("departments", microserviceUtils.getDepartments());
+		model.addAttribute("contractors", contractorService.getAllActiveEntities(null));
+	}
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute final WorkOrder workOrder, final BindingResult errors,
-            final Model model, final RedirectAttributes redirectAttrs) throws IOException {
+	@PostMapping(value = "/newform")
+	public String showNewForm(@ModelAttribute(WORK_ORDER) final WorkOrder workOrder, final Model model) {
+		prepareNewForm(model);
+		model.addAttribute(WORK_ORDER, new WorkOrder());
+		return NEW;
+	}
 
-        if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return NEW;
-        }
+	@PostMapping(value = "/create")
+	public String create(@Valid @ModelAttribute final WorkOrder workOrder, final BindingResult errors,
+			final Model model, final RedirectAttributes redirectAttrs) throws IOException {
 
-        workOrderService.create(workOrder);
+		if (errors.hasErrors()) {
+			prepareNewForm(model);
+			return NEW;
+		}
 
-        redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.workOrder.success", null, null));
+		workOrderService.create(workOrder);
 
-        return "redirect:/workorder/result/" + workOrder.getId() + "/create";
-    }
+		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.workOrder.success", null, null));
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public String edit(@PathVariable("id") final Long id, final Model model) {
-        final WorkOrder workOrder = workOrderService.getById(id);
-        List<EgBillregister> bills = egBillRegisterService.getBillsByWorkOrderNumber(workOrder.getOrderNumber());
-        if (bills != null && !bills.isEmpty()) {
-            workOrder.setEditAllFields(false);
-        } else {
-            workOrder.setEditAllFields(true);
-        }
-        prepareNewForm(model);
-        model.addAttribute("workOrder", workOrder);
-        return EDIT;
-    }
+		return "redirect:/workorder/result/" + workOrder.getId() + "/create";
+	}
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@Valid @ModelAttribute final WorkOrder workOrder, final BindingResult errors,
-            final Model model, final RedirectAttributes redirectAttrs) {
-        if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return EDIT;
-        }
-        workOrderService.update(workOrder);
-        redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.workOrder.success", null, null));
-        return "redirect:/workorder/result/" + workOrder.getId() + "/view";
-    }
+	@GetMapping(value = "/edit/{id}")
+	public String edit(@PathVariable("id") final Long id, final Model model) {
+		final WorkOrder workOrder = workOrderService.getById(id);
+		List<EgBillregister> bills = egBillRegisterService.getBillsByWorkOrderNumber(workOrder.getOrderNumber());
+		workOrder.setEditAllFields(bills.isEmpty());
+		prepareNewForm(model);
+		model.addAttribute(WORK_ORDER, workOrder);
+		return EDIT;
+	}
 
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.POST)
-    public String view(@PathVariable("id") final Long id, final Model model) {
-        final WorkOrder workOrder = workOrderService.getById(id);
-        populateDepartmentName(workOrder);
-        prepareNewForm(model);
-        model.addAttribute("workOrder", workOrder);
-        model.addAttribute("mode", "view");
-        return VIEW;
-    }
+	@PostMapping(value = "/update")
+	public String update(@Valid @ModelAttribute final WorkOrder workOrder, final BindingResult errors,
+			final Model model, final RedirectAttributes redirectAttrs) {
+		if (errors.hasErrors()) {
+			prepareNewForm(model);
+			return EDIT;
+		}
+		workOrderService.update(workOrder);
+		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.workOrder.success", null, null));
+		return "redirect:/workorder/result/" + workOrder.getId() + "/view";
+	}
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
-    public String search(@PathVariable("mode") final String mode, final Model model) {
-        final WorkOrder workOrder = new WorkOrder();
-        prepareNewForm(model);
-        model.addAttribute("workOrder", workOrder);
-        return SEARCH;
+	@GetMapping(value = "/view/{id}")
+	public String view(@PathVariable("id") final Long id, final Model model) {
+		final WorkOrder workOrder = workOrderService.getById(id);
+		populateDepartmentName(workOrder);
+		prepareNewForm(model);
+		model.addAttribute(WORK_ORDER, workOrder);
+		model.addAttribute("mode", "view");
+		return VIEW;
+	}
 
-    }
+	@PostMapping(value = "/search/{mode}")
+	public String search(@PathVariable("mode") @SafeHtml final String mode, final Model model) {
+		final WorkOrderSearchRequest workOrderSearchRequest = new WorkOrderSearchRequest();
+		prepareNewForm(model);
+		model.addAttribute(WORK_ORDER_SEARCH_REQUEST, workOrderSearchRequest);
+		return SEARCH;
 
-    @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    @ResponseBody
-    public String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-            @ModelAttribute final WorkOrder workOrder) {
-        final List<WorkOrder> searchResultList = workOrderService.search(workOrder);
-        return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
-    }
+	}
 
-    public Object toSearchResultJson(final Object object) {
-        final GsonBuilder gsonBuilder = new GsonBuilder();
-        final Gson gson = gsonBuilder.registerTypeAdapter(WorkOrder.class, new WorkOrderJsonAdaptor()).create();
-        return gson.toJson(object);
-    }
+	@PostMapping(value = "/ajaxsearch/{mode}", produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
+	public String ajaxsearch(@PathVariable("mode") @SafeHtml final String mode, final Model model,
+			@Valid @ModelAttribute final WorkOrderSearchRequest workOrderSearchRequest) {
+		final List<WorkOrder> searchResultList = workOrderService.search(workOrderSearchRequest);
+		return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
+	}
 
-    @RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
-    public String result(@PathVariable("id") final Long id, @PathVariable("mode") final String mode, final Model model) {
-        final WorkOrder workOrder = workOrderService.getById(id);
-        populateDepartmentName(workOrder);
-        model.addAttribute("workOrder", workOrder);
-        model.addAttribute("mode", mode);
-        return RESULT;
-    }
+	public Object toSearchResultJson(final Object object) {
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		final Gson gson = gsonBuilder.registerTypeAdapter(WorkOrder.class, new WorkOrderJsonAdaptor()).create();
+		return gson.toJson(object);
+	}
 
-    private void populateDepartmentName(WorkOrder workOrder) {
-        Department dept = microserviceUtils.getDepartmentByCode(workOrder.getDepartment());
-        workOrder.setDepartmentName(dept.getName());
-    }
+	@GetMapping(value = "/result/{id}/{mode}")
+	public String result(@PathVariable("id") final Long id, @PathVariable("mode") @SafeHtml final String mode,
+			final Model model) {
+		final WorkOrder workOrder = workOrderService.getById(id);
+		populateDepartmentName(workOrder);
+		model.addAttribute(WORK_ORDER, workOrder);
+		model.addAttribute("mode", mode);
+		return RESULT;
+	}
+
+	private void populateDepartmentName(WorkOrder workOrder) {
+		Department dept = microserviceUtils.getDepartmentByCode(workOrder.getDepartment());
+		workOrder.setDepartmentName(dept.getName());
+	}
 
 }

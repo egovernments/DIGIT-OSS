@@ -114,7 +114,7 @@
 					<td></td>
 					<td class="greybox"><s:text name="masters.subscheme.search" />
 					</td>
-					<td class="greybox"><s:select name="subScheme.id"
+					<td class="greybox"><s:select name="subSchemeId"
 							id="subSchemeId" list="dropdownData.subSchemeList" headerKey="-1"
 							headerValue="%{getText('lbl.choose.options')}" listKey="id" listValue="name" />
 					</td>
@@ -229,9 +229,9 @@
 		function urlLoad(subSchemeId,showMode)
 		{
 		if(showMode=='edit')
-			url="../masters/subScheme-beforeEdit.action?id="+subSchemeId+"&showMode=edit";
+			url="../masters/subScheme-beforeEdit.action?subSchemeId="+subSchemeId+"&showMode=edit";
 		else
-			url="../masters/subScheme-viewSubScheme.action?id="+subSchemeId;
+			url="../masters/subScheme-viewSubScheme.action?subSchemeId="+subSchemeId;
 		window.open(url,'subSchemeView','resizable=yes,scrollbars=yes,left=300,top=40, width=900, height=700');
 		}
 				
@@ -243,6 +243,14 @@
 				return false;
 			    }
 	    	document.subSchemeForm.action='/services/EGF/masters/subScheme-search.action';
+	    	jQuery(subSchemeForm).append(
+                    jQuery('<input>', {
+                        type: 'hidden',
+                        name: '${_csrf.parameterName}',
+                        value: '${_csrf.token}'
+                    })
+                );
+	    	
 	    	document.subSchemeForm.submit();
 	    	return true;
 	    }     

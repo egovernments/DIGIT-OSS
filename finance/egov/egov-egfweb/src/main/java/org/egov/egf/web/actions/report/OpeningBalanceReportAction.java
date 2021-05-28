@@ -141,7 +141,7 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 			@RequiredFieldValidator(fieldName = "finYear", message = "", key = FinancialConstants.REQUIRED) })
 	@ValidationErrorPage(value = FinancialConstants.STRUTS_RESULT_PAGE_SEARCH)
 	@Action(value = "/report/openingBalanceReport-ajaxSearch")
-	public String ajaxSearch() throws TaskFailedException {
+	public String ajaxSearch() {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("OpeningBalanceReportAction | Search | start");
 		Map<String, String> depMap = new HashMap<>();
@@ -150,7 +150,7 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 			openingBalanceDisplayList = openingBalance.getOBReport(openingBalanceReport);
 		} catch (final ValidationException e) {
 			throw new ValidationException(e.getErrors());
-		} catch (final Exception e) {
+		} catch (final TaskFailedException e) {
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
 

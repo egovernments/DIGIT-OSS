@@ -54,7 +54,7 @@
 			return;
 		}else
 		{
-			obj.value=eval(obj.value).toFixed(2);
+			obj.value=obj.value.toFixed(2);
 			if(obj.value.length>10)
 		{
 				bootbox.alert("Max number of digits limited to 7 since amounts in LAKH's ");
@@ -63,22 +63,22 @@
 			return;
 		}else
 		{
-		obj.value=eval(obj.value).toFixed(2);	
+		obj.value=obj.value.toFixed(2);	
 		}
 		}
 		var table = document.getElementById('receiptTable');
 		for (i = 0; i < table.rows.length - 3; i++) {
 			if(document.getElementById("receiptList[" + i + "].accountNumber").value!='Total'){
-			document.getElementById("receiptList[" + i + "].fundsAvailable").value = (eval(document
-					.getElementById('receiptList[' + i + '].openingBalance').value)
-					+ eval(document
-							.getElementById('receiptList[' + i + '].currentReceipt').value)).toFixed(2);
+			document.getElementById("receiptList[" + i + "].fundsAvailable").value = (document
+					.getElementById('receiptList[' + i + '].openingBalance').value
+					+ document
+					.getElementById('receiptList[' + i + '].currentReceipt').value).toFixed(2);
 			}
 			else{
-					document.getElementById("receiptList[" + i + "].fundsAvailable").value = (eval(document
-							.getElementById('receiptList[' + i + '].openingBalance').value)
-							+ eval(document
-									.getElementById('receiptList[' + i + '].currentReceipt').value)).toFixed(2);
+					document.getElementById("receiptList[" + i + "].fundsAvailable").value = (document
+							.getElementById('receiptList[' + i + '].openingBalance').value
+							+ document
+							.getElementById('receiptList[' + i + '].currentReceipt').value).toFixed(2);
 		   }
 		}
 		calculateRepFundTotal(obj);
@@ -92,14 +92,17 @@
 		var curRep=0;
 		for (i = 0; i < table.rows.length - 3; i++) {
 			if(document.getElementById("receiptList[" + i + "].accountNumber").value!='Total'){
-				avaTotal=eval(avaTotal)+eval(document.getElementById("receiptList[" + i + "].fundsAvailable").value);
-				closeBal=eval(closeBal)+eval(document.getElementById("receiptList[" + i + "].closingBalance").value);
-				curRep=eval(curRep)+eval(document.getElementById('receiptList[' + i + '].currentReceipt').value);
+				var fundsAvailable = document.getElementById("receiptList[" + i + "].fundsAvailable").value;
+				var closingBalance = document.getElementById("receiptList[" + i + "].closingBalance").value;
+				var currentReceipt = document.getElementById('receiptList[' + i + '].currentReceipt').value;
+				avaTotal = avaTotal + fundsAvailable;
+				closeBal = closeBal + closingBalance;
+				curRep = curRep + currentReceipt;
 			}
 			else{
-				document.getElementById("receiptList[" + i + "].fundsAvailable").value=eval(avaTotal).toFixed(2);
-				document.getElementById("receiptList[" + i + "].closingBalance").value=eval(closeBal).toFixed(2);
-				document.getElementById('receiptList[' + i + '].currentReceipt').value=eval(curRep).toFixed(2);
+				document.getElementById("receiptList[" + i + "].fundsAvailable").value=avaTotal.toFixed(2);
+				document.getElementById("receiptList[" + i + "].closingBalance").value=closeBal.toFixed(2);
+				document.getElementById('receiptList[' + i + '].currentReceipt').value=curRep.toFixed(2);
 				avaTotal=0;	closebal=0,curRep=0;
 			}
 		}
@@ -108,17 +111,17 @@
 		var table = document.getElementById('receiptTable');
 		for (i = 0; i < table.rows.length - 3; i++) {
 			if(document.getElementById("receiptList[" + i + "].accountNumber").value!='Total'){
-			document.getElementById('receiptList[' + i + '].closingBalance').value = (eval(document
-					.getElementById('receiptList[' + i + '].fundsAvailable').value)
-					- eval(document.getElementById('receiptList[' + i + '].btbPayment').value)
-					+ eval(document.getElementById('receiptList[' + i + '].btbReceipt').value)).toFixed(2);
+			document.getElementById('receiptList[' + i + '].closingBalance').value = (document
+					.getElementById('receiptList[' + i + '].fundsAvailable').value
+					- document.getElementById('receiptList[' + i + '].btbPayment').value
+					+ document.getElementById('receiptList[' + i + '].btbReceipt').value).toFixed(2);
 			
 			}
 			else{
-				document.getElementById('receiptList[' + i + '].closingBalance').value = (eval(document
-						.getElementById('receiptList[' + i + '].fundsAvailable').value)
-						- eval(document.getElementById('receiptList[' + i + '].btbPayment').value)
-						+ eval(document.getElementById('receiptList[' + i + '].btbReceipt').value)).toFixed(2);
+				document.getElementById('receiptList[' + i + '].closingBalance').value = (document
+						.getElementById('receiptList[' + i + '].fundsAvailable').value
+						- document.getElementById('receiptList[' + i + '].btbPayment').value
+						+ document.getElementById('receiptList[' + i + '].btbReceipt').value).toFixed(2);
 				}
 		}
 		claulateColumnTotal();
@@ -138,23 +141,13 @@
 		for (i = 0; i < table.rows.length - 3; i++) {
 			
 			if(document.getElementById("receiptList[" + i + "].accountNumber").value!='Total'){
-			opTotal = eval(opTotal)
-					+ eval(document
-							.getElementById('receiptList[' + i + '].openingBalance').value);
-			crTotal = eval(crTotal)
-					+ eval(document
-							.getElementById('receiptList[' + i + '].currentReceipt').value);
-			faTotal = eval(faTotal)
-					+ eval(document
-							.getElementById('receiptList[' + i + '].fundsAvailable').value);
-			paymentTotal = eval(paymentTotal)
-					+ eval(document
-							.getElementById('receiptList[' + i + '].btbPayment').value);
+			opTotal = opTotal + document.getElementById('receiptList[' + i + '].openingBalance').value;
+			crTotal = crTotal + document.getElementById('receiptList[' + i + '].currentReceipt').value;
+			faTotal = faTotal + document.getElementById('receiptList[' + i + '].fundsAvailable').value;
+			paymentTotal = paymentTotal + document.getElementById('receiptList[' + i + '].btbPayment').value;
 			
-			receiptTotal = eval(receiptTotal)+ eval(document.getElementById('receiptList[' + i + '].btbReceipt').value);
-			cbTotal = eval(cbTotal)
-					+ eval(document
-							.getElementById('receiptList[' + i + '].closingBalance').value);
+			receiptTotal = receiptTotal + document.getElementById('receiptList[' + i + '].btbReceipt').value;
+			cbTotal = cbTotal + document.getElementById('receiptList[' + i + '].closingBalance').value;
 			}
 			
 		}
@@ -173,22 +166,23 @@
 	
 	if(document.getElementById('total[0].openingBalance')!=null && document.getElementById('total[1].openingBalance')!=null)
 	{
-		document.getElementById('total[2].openingBalance').value = (eval(document.getElementById('total[0].openingBalance').value)+eval(document.getElementById('total[1].openingBalance').value)).toFixed(2);
+		document.getElementById('total[2].openingBalance').value = (document.getElementById('total[0].openingBalance').value
+				+ document.getElementById('total[1].openingBalance').value).toFixed(2);
 		
-		document.getElementById('total[2].closingBalance').value = (eval(document.getElementById('total[0].closingBalance').value)+
-		eval(document.getElementById('total[1].closingBalance').value)).toFixed(2);
+		document.getElementById('total[2].closingBalance').value = (document.getElementById('total[0].closingBalance').value +
+				document.getElementById('total[1].closingBalance').value).toFixed(2);
 	}
 	else if(document.getElementById('total[0].openingBalance')!=null )
 	{
-	//	document.getElementById('total[2].openingBalance').value = (eval(document.getElementById('total[0].openingBalance').value)).toFixed(2);
+	//	document.getElementById('total[2].openingBalance').value = (document.getElementById('total[0].openingBalance').value).toFixed(2);
 		
-		//document.getElementById('total[2].closingBalance').value = (eval(document.getElementById('total[0].closingBalance').value)).toFixed(2);
+		//document.getElementById('total[2].closingBalance').value = (document.getElementById('total[0].closingBalance').value).toFixed(2);
 	}
 	else if( document.getElementById('total[1].openingBalance')!=null)
 	{
-		document.getElementById('total[2].openingBalance').value = (eval(document.getElementById('total[1].openingBalance').value)).toFixed(2);
+		document.getElementById('total[2].openingBalance').value = (document.getElementById('total[1].openingBalance').value).toFixed(2);
 		
-		document.getElementById('total[2].closingBalance').value = (eval(document.getElementById('total[1].closingBalance').value)).toFixed(2);
+		document.getElementById('total[2].closingBalance').value = (document.getElementById('total[1].closingBalance').value).toFixed(2);
 	}
 		
 		
@@ -201,7 +195,7 @@
 			return;
 		}else
 			{
-			obj.value=eval(obj.value).toFixed(2);
+			obj.value=obj.value.toFixed(2);
 			if(obj.value.length>10)
 			
 		{
@@ -211,7 +205,7 @@
 			return;
 		}else
 		{
-		obj.value=eval(obj.value).toFixed(2);  
+		obj.value=obj.value.toFixed(2);  
 		}
 			}   
 		
@@ -219,20 +213,20 @@
 		for (i = 0; i < table.rows.length - 4; i++) {
 			if(document.getElementById("paymentList[" + i + "].accountNumber").value!='Total'){
 			document.getElementById("paymentList[" + i + "].fundsAvailable").value = 
-				(eval(document.getElementById('paymentList[' + i + '].openingBalance').value)
-					+ eval(document.getElementById('paymentList[' + i + '].currentReceipt').value)
-					- eval(document.getElementById('paymentList[' + i + '].btbPayment').value)
-					+ eval(document.getElementById('paymentList[' + i + '].btbReceipt').value)
-					- eval(document.getElementById('paymentList[' + i + '].concurranceBPV').value)).toFixed(2);
+				(document.getElementById('paymentList[' + i + '].openingBalance').value
+					+ document.getElementById('paymentList[' + i + '].currentReceipt').value
+					- document.getElementById('paymentList[' + i + '].btbPayment').value
+					+ document.getElementById('paymentList[' + i + '].btbReceipt').value
+					- document.getElementById('paymentList[' + i + '].concurranceBPV').value).toFixed(2);
 					
 		}
 			else{
 				document.getElementById("paymentList[" + i + "].fundsAvailable").value = 
-					(eval(document.getElementById('paymentList[' + i + '].openingBalance').value)
-						+ eval(document.getElementById('paymentList[' + i + '].currentReceipt').value)
-						- eval(document.getElementById('paymentList[' + i + '].btbPayment').value)
-						+ eval(document.getElementById('paymentList[' + i + '].btbReceipt').value)
-						- eval(document.getElementById('paymentList[' + i + '].concurranceBPV').value)).toFixed(2);
+					(document.getElementById('paymentList[' + i + '].openingBalance').value
+						+ document.getElementById('paymentList[' + i + '].currentReceipt').value
+						- document.getElementById('paymentList[' + i + '].btbPayment').value
+						+ document.getElementById('paymentList[' + i + '].btbReceipt').value
+						- document.getElementById('paymentList[' + i + '].concurranceBPV').value).toFixed(2);
 			}
 		}
 		calculateFundsTotalForPayment();
@@ -253,44 +247,44 @@ function calculateFundsTotalForPayment(){
 	{
 	for (i = 0; i < table.rows.length - 4; i++) {
 		if(document.getElementById("paymentList[" + i + "].accountNumber").value!='Total'){
-		opTotal1 = eval(opTotal1)
-				+ eval(document
-						.getElementById('paymentList[' + i + '].openingBalance').value);
-		crTotal1 = eval(crTotal1)
-				+ eval(document
-						.getElementById('paymentList[' + i + '].currentReceipt').value);
-		faTotal1 = eval(faTotal1)
-				+ eval(document
-						.getElementById('paymentList[' + i + '].fundsAvailable').value);
+		opTotal1 = opTotal1
+				+ document
+				.getElementById('paymentList[' + i + '].openingBalance').value;
+		crTotal1 = crTotal1
+				+ document
+				.getElementById('paymentList[' + i + '].currentReceipt').value;
+		faTotal1 = faTotal1
+				+ document
+				.getElementById('paymentList[' + i + '].fundsAvailable').value;
 		
-		paymentTotal1 = eval(paymentTotal1)
-		+ eval(document
-				.getElementById('paymentList[' + i + '].btbPayment').value);
+		paymentTotal1 = paymentTotal1
+		+ document
+		.getElementById('paymentList[' + i + '].btbPayment').value;
 
 		
-		receiptTotal1 = eval(receiptTotal1)
-				+ eval(document
-						.getElementById('paymentList[' + i + '].btbReceipt').value);
-		bpvTotal1 = eval(bpvTotal1)
-				+ eval(document
-						.getElementById('paymentList[' + i + '].concurranceBPV').value);							
-		osTotal1 = eval(osTotal1)
-		+ eval(document
-				.getElementById('paymentList[' + i + '].outStandingBPV').value);
-		cbTotal1 = eval(cbTotal1)
-				+ eval(document
-						.getElementById('paymentList[' + i + '].closingBalance').value);
+		receiptTotal1 = receiptTotal1
+				+ document
+				.getElementById('paymentList[' + i + '].btbReceipt').value;
+		bpvTotal1 = bpvTotal1
+				+ document
+				.getElementById('paymentList[' + i + '].concurranceBPV').value;							
+		osTotal1 = osTotal1
+		+ document
+		.getElementById('paymentList[' + i + '].outStandingBPV').value;
+		cbTotal1 = cbTotal1
+				+ document
+				.getElementById('paymentList[' + i + '].closingBalance').value;
 		
 	}
 		else{
-			document.getElementById("paymentList[" + i + "].openingBalance").value=eval(opTotal1).toFixed(2);
-			document.getElementById("paymentList[" + i + "].fundsAvailable").value=eval(faTotal1).toFixed(2);
-			document.getElementById("paymentList[" + i + "].btbPayment").value=eval(paymentTotal1).toFixed(2);
-			document.getElementById("paymentList[" + i + "].btbReceipt").value=eval(receiptTotal1).toFixed(2);
-			document.getElementById("paymentList[" + i + "].concurranceBPV").value=eval(bpvTotal1).toFixed(2);
-			document.getElementById("paymentList[" + i + "].outStandingBPV").value=eval(osTotal1).toFixed(2);
-			document.getElementById("paymentList[" + i + "].closingBalance").value=eval(cbTotal1).toFixed(2);
-			document.getElementById("paymentList[" + i + "].currentReceipt").value=eval(crTotal1).toFixed(2);
+			document.getElementById("paymentList[" + i + "].openingBalance").value=opTotal1.toFixed(2);
+			document.getElementById("paymentList[" + i + "].fundsAvailable").value=faTotal1.toFixed(2);
+			document.getElementById("paymentList[" + i + "].btbPayment").value=paymentTotal1.toFixed(2);
+			document.getElementById("paymentList[" + i + "].btbReceipt").value=receiptTotal1.toFixed(2);
+			document.getElementById("paymentList[" + i + "].concurranceBPV").value=bpvTotal1.toFixed(2);
+			document.getElementById("paymentList[" + i + "].outStandingBPV").value=osTotal1.toFixed(2);
+			document.getElementById("paymentList[" + i + "].closingBalance").value=cbTotal1.toFixed(2);
+			document.getElementById("paymentList[" + i + "].currentReceipt").value=crTotal1.toFixed(2);
 			
 			opTotal1=0;cbTotal1=0,faTotal1=0,osTotal1=0,bpvTotal1=0,receiptTotal1=0,paymentTotal1=0,crTotal1=0;
 		}
@@ -301,14 +295,14 @@ function calculateFundsTotalForPayment(){
 		var table = document.getElementById('paymentTable');
 		for (i = 0; i < table.rows.length - 4; i++) {
 			if(document.getElementById("paymentList[" + i + "].accountNumber").value!='Total'){
-			document.getElementById('paymentList[' + i + '].closingBalance').value = (eval(document
-					.getElementById('paymentList[' + i + '].fundsAvailable').value)
-					- eval(document.getElementById('paymentList[' + i + '].outStandingBPV').value)).toFixed(2);
+			document.getElementById('paymentList[' + i + '].closingBalance').value = (document
+					.getElementById('paymentList[' + i + '].fundsAvailable').value
+					- document.getElementById('paymentList[' + i + '].outStandingBPV').value).toFixed(2);
 		}
 			else{
-				document.getElementById('paymentList[' + i + '].closingBalance').value = (eval(document
-						.getElementById('paymentList[' + i + '].fundsAvailable').value)
-						- eval(document.getElementById('paymentList[' + i + '].outStandingBPV').value)).toFixed(2);
+				document.getElementById('paymentList[' + i + '].closingBalance').value = (document
+						.getElementById('paymentList[' + i + '].fundsAvailable').value
+						- document.getElementById('paymentList[' + i + '].outStandingBPV').value).toFixed(2);
 			}
 	}
 		claulateColumnTotalForPayment();
@@ -328,31 +322,31 @@ function calculateFundsTotalForPayment(){
 		{
 		for (i = 0; i < table.rows.length - 4; i++) {
 			if(document.getElementById("paymentList[" + i + "].accountNumber").value!='Total'){
-			opTotal = eval(opTotal)
-					+ eval(document
-							.getElementById('paymentList[' + i + '].openingBalance').value);
-			crTotal = eval(crTotal)
-					+ eval(document
-							.getElementById('paymentList[' + i + '].currentReceipt').value);
-			faTotal = eval(faTotal)
-					+ eval(document
-							.getElementById('paymentList[' + i + '].fundsAvailable').value);
+			opTotal = opTotal
+					+ document
+					.getElementById('paymentList[' + i + '].openingBalance').value;
+			crTotal = crTotal
+					+ document
+					.getElementById('paymentList[' + i + '].currentReceipt').value;
+			faTotal = faTotal
+					+ document
+					.getElementById('paymentList[' + i + '].fundsAvailable').value;
 			
-			paymentTotal = eval(paymentTotal)
-			+ eval(document
-					.getElementById('paymentList[' + i + '].btbPayment').value);		
-			receiptTotal = eval(receiptTotal)
-					+ eval(document
-							.getElementById('paymentList[' + i + '].btbReceipt').value);
-			bpvTotal = eval(bpvTotal)
-					+ eval(document
-							.getElementById('paymentList[' + i + '].concurranceBPV').value);							
-			osTotal = eval(osTotal)
-			+ eval(document
-					.getElementById('paymentList[' + i + '].outStandingBPV').value);
-			cbTotal = eval(cbTotal)
-					+ eval(document
-							.getElementById('paymentList[' + i + '].closingBalance').value);
+			paymentTotal = paymentTotal
+			+ document
+			.getElementById('paymentList[' + i + '].btbPayment').value;		
+			receiptTotal = receiptTotal
+					+ document
+					.getElementById('paymentList[' + i + '].btbReceipt').value;
+			bpvTotal = bpvTotal
+					+ document
+					.getElementById('paymentList[' + i + '].concurranceBPV').value;							
+			osTotal = osTotal
+			+ document
+			.getElementById('paymentList[' + i + '].outStandingBPV').value;
+			cbTotal = cbTotal
+					+ document
+					.getElementById('paymentList[' + i + '].closingBalance').value;
 			
 		}
 			

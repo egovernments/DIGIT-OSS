@@ -48,6 +48,7 @@
 package org.egov.egf.web.actions.report;
 
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -71,6 +72,9 @@ import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -397,7 +401,7 @@ public class ReceiptPaymentReportAction extends BaseFormAction {
         header.toString();
     }
 
-    public String exportReceiptPaymentScheduleXls() throws Exception {
+    public String exportReceiptPaymentScheduleXls() throws ColumnBuilderException, ClassNotFoundException, JRException, IOException{
         generateScheduleReport();
         final String heading = getUlbName() + "\\n" + header.toString();
         final String subtitle = "Report Run Date-" + DDMMYYYYFORMATS.format(getTodayDate());
@@ -417,7 +421,7 @@ public class ReceiptPaymentReportAction extends BaseFormAction {
         return RECEIPT_PAYMENT_PDF;
     }
 
-    public String exportReceiptPaymentXls() throws Exception {
+    public String exportReceiptPaymentXls() throws ColumnBuilderException, ClassNotFoundException, JRException, IOException {
         generateReceiptPaymentReport();
         final String heading = getUlbName() + "\\n" + header.toString();
         final String subtitle = "Report Run Date-" + DDMMYYYYFORMATS.format(getTodayDate());
@@ -427,7 +431,7 @@ public class ReceiptPaymentReportAction extends BaseFormAction {
         return RECEIPT_PAYMENT_XLS;
     }
 
-    public String exportReceiptPaymentPdf() throws Exception {
+    public String exportReceiptPaymentPdf() throws Exception{
         generateReceiptPaymentReport();
         final String heading = getUlbName() + "\\n" + header.toString();
         final String subtitle = "Report Run Date-" + DDMMYYYYFORMATS.format(getTodayDate());

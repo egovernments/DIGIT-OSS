@@ -63,6 +63,7 @@ import org.egov.egf.model.ReportSearch;
 import org.egov.infra.admin.master.entity.City;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.admin.master.service.CityService;
+import org.egov.infra.exception.ApplicationException;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.services.report.FunctionwiseIEService;
@@ -75,6 +76,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -138,9 +140,9 @@ public class FunctionwiseIEAction extends ReportAction
         persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
         super.prepare();
         if (reportSearch.getStartDate() == null || reportSearch.getStartDate().equals(""))
-            reportSearch.setStartDate(sdf.format(((CFinancialYear) persistenceService
-                    .find(" from CFinancialYear where startingDate <= '" + formatter.format(new Date()) + "' and endingDate >= '"
-                            + formatter.format(new Date()) + "'")).getStartingDate()));
+        	reportSearch.setStartDate(sdf.format(((CFinancialYear) persistenceService
+                    .find(" from CFinancialYear where startingDate <= ? and endingDate >= ?",
+                            formatter.format(new Date()), formatter.format(new Date()))).getStartingDate()));
         if (reportSearch.getEndDate() == null || reportSearch.getEndDate().equals(""))
             reportSearch.setEndDate(sdf.format(new Date()));
         setTodayDate(new Date());
@@ -190,13 +192,13 @@ public class FunctionwiseIEAction extends ReportAction
                         reportHelper.exportMajorAndMinorCodewise(ieWithBudgetList, cityWebsite.getName(), reportSearch, heading));
                 return "functionwiseIE-PDF";
             }
-        } catch (final JRException e) {
+        } catch (final JRException | ApplicationException | ParseException e) {
             LOGGER.error(e, e);
         } catch (final IOException e) {
             LOGGER.error(e, e);
-        } catch (final Exception e) {
-            LOGGER.error(e, e);
-        }
+        } /*
+           * catch (final Exception e) { LOGGER.error(e, e); }
+           */
         return "functionwiseIE-XLS";
     }
 
@@ -219,13 +221,13 @@ public class FunctionwiseIEAction extends ReportAction
                         reportHelper.exportDeptwise(ieWithBudgetList, cityWebsite.getName(), reportSearch, heading));
                 return "functionwiseIE-PDF";
             }
-        } catch (final JRException e) {
+        } catch (final JRException |ApplicationException | ParseException e) {
             LOGGER.error(e, e);
         } catch (final IOException e) {
             LOGGER.error(e, e);
-        } catch (final Exception e) {
-            LOGGER.error(e, e);
-        }
+        } /*
+           * catch (final Exception e) { LOGGER.error(e, e); }
+           */
         return "functionwiseIE-XLS";
     }
 
@@ -248,13 +250,13 @@ public class FunctionwiseIEAction extends ReportAction
                         reportHelper.exportDetailwise(ieWithBudgetList, cityWebsite.getName(), reportSearch, heading));
                 return "functionwiseIE-PDF";
             }
-        } catch (final JRException e) {
+        } catch (final JRException | ApplicationException | ParseException e) {
             LOGGER.error(e, e);
         } catch (final IOException e) {
             LOGGER.error(e, e);
-        } catch (final Exception e) {
-            LOGGER.error(e, e);
-        }
+        } /*
+           * catch (final Exception e) { LOGGER.error(e, e); }
+           */
         return "functionwiseIE-XLS";
     }
 
@@ -286,7 +288,7 @@ public class FunctionwiseIEAction extends ReportAction
      */
 
     @SkipValidation
-    public String searchWithBudget() throws Exception
+    public String searchWithBudget() throws ApplicationException, ParseException
     {
 
         setDatasForBudgetWise();
@@ -362,7 +364,7 @@ public class FunctionwiseIEAction extends ReportAction
     }
 
     @Action(value = "/report/functionwiseIE-deptWiseIEWithBudget")
-    public String deptWiseIEWithBudget() throws Exception
+    public String deptWiseIEWithBudget() throws ApplicationException, ParseException
     {
         setDatasForBudgetWise();
         reportSearch.setByDepartment(true);
@@ -378,7 +380,7 @@ public class FunctionwiseIEAction extends ReportAction
     }
 
     @Action(value = "/report/functionwiseIE-detailWiseIEWithBudget")
-    public String detailWiseIEWithBudget() throws Exception
+    public String detailWiseIEWithBudget() throws ApplicationException, ParseException
     {
         setDatasForBudgetWise();
         // override minor code length with detail code for detail report
@@ -407,7 +409,7 @@ public class FunctionwiseIEAction extends ReportAction
     }
 
     @Action(value = "/report/functionwiseIE-search")
-    public String search() throws Exception
+    public String search() throws ApplicationException, ParseException
     {
         final Integer majorCodeLen = Integer.valueOf(appConfigValuesService.getConfigValuesByModuleAndKey
                 (Constants.EGF, FinancialConstants.APPCONFIG_COA_MAJORCODE_LENGTH).get(0).getValue());
@@ -417,7 +419,7 @@ public class FunctionwiseIEAction extends ReportAction
         return "print";
     }
 
-    public String generateFunctionwiseIEHtml() throws Exception
+    public String generateFunctionwiseIEHtml() throws ApplicationException, ParseException, JRException
     {
         populateDataSource(reportSearch);
         inputStream = reportHelper.exportHtml(
@@ -428,7 +430,7 @@ public class FunctionwiseIEAction extends ReportAction
     }
 
     @Action(value = "/report/functionwiseIE-generateFunctionwiseIEPdf")
-    public String generateFunctionwiseIEPdf() throws Exception {
+    public String generateFunctionwiseIEPdf() throws ApplicationException, ParseException, JRException, IOException {
         populateDataSource(reportSearch);
         inputStream = reportHelper.exportPdf(
                 inputStream,
@@ -438,7 +440,7 @@ public class FunctionwiseIEAction extends ReportAction
     }
 
     @Action(value = "/report/functionwiseIE-generateFunctionwiseIEXls")
-    public String generateFunctionwiseIEXls() throws Exception {
+    public String generateFunctionwiseIEXls() throws ApplicationException, ParseException, JRException, IOException {
         populateDataSource(reportSearch);
         inputStream = reportHelper.exportXls(
                 inputStream,
@@ -447,7 +449,7 @@ public class FunctionwiseIEAction extends ReportAction
         return "functionwiseIE-XLS";
     }
 
-    public void populateDataSource(final ReportSearch reportSearch) throws Exception
+    public void populateDataSource(final ReportSearch reportSearch) throws ApplicationException, ParseException
     {
         // functionwiseIEService.setReportSearch(reportSearch);
         functionwiseIEService.populateData(functionwiseIE, reportSearch);
@@ -455,7 +457,7 @@ public class FunctionwiseIEAction extends ReportAction
         functionwiseIE.setCityName(cityWebsite.getName());
     }
 
-    public void populateDataSourceWithBudget(final ReportSearch reportSearch) throws Exception
+    public void populateDataSourceWithBudget(final ReportSearch reportSearch) throws ApplicationException, ParseException
     {
         if (reportSearch.getIncExp().equalsIgnoreCase("E"))
             ieWithBudgetList = functionwiseIEService.populateDataWithBudget(functionwiseIE, reportSearch);

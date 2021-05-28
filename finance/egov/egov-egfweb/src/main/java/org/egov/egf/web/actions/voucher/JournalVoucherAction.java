@@ -55,12 +55,15 @@ import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.egov.commons.CVoucherHeader;
 import org.egov.egf.budget.service.BudgetControlTypeService;
+import org.egov.egf.commons.CommonsUtil;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.script.service.ScriptService;
+import org.egov.infra.security.utils.SecurityUtils;
+import org.egov.infra.utils.DateUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
@@ -87,10 +90,13 @@ import java.util.Date;
 import java.util.List;
 
 @ParentPackage("egov")
-@Results({ @Result(name = JournalVoucherAction.NEW, location = "journalVoucher-new.jsp") })
+@Results({ @Result(name = JournalVoucherAction.NEW, location = "journalVoucher-new.jsp"),
+	@Result(name = JournalVoucherAction.UNAUTHORIZED, location = "../workflow/unauthorized.jsp")})
 public class JournalVoucherAction extends BaseVoucherAction
 {
     private static final Logger LOGGER = Logger.getLogger(JournalVoucherAction.class);
+    private static final String INVALID_APPROVER = "invalid.approver";
+    protected static final String UNAUTHORIZED = "unuthorized";
     private static final long serialVersionUID = 1L;
     private List<VoucherDetails> billDetailslist;
     private List<VoucherDetails> subLedgerlist;
@@ -126,6 +132,12 @@ public class JournalVoucherAction extends BaseVoucherAction
 
     @Autowired
     private ScriptService scriptService;
+    
+    @Autowired
+    private SecurityUtils securityUtils;
+    
+    @Autowired
+    private CommonsUtil commonsUtil;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -188,17 +200,26 @@ public class JournalVoucherAction extends BaseVoucherAction
     /**
      *
      * @return
+     * @throws ParseException 
      * @throws Exception
      */
     @SkipValidation
     @Action(value = "/voucher/journalVoucher-create")
-    public String create() throws Exception {
+    public String create() throws ParseException {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("VoucherAction | create Method | Start");
+        populateWorkflowBean();
+        if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
+            if (!commonsUtil.isValidApprover(voucherHeader, workflowBean.getApproverPositionId())) {
+                addActionError(getText(INVALID_APPROVER));
+                return NEW;
+            }
+        }
         String voucherDate = formatter1.format(voucherHeader.getVoucherDate());
         String cutOffDate1 = null;
         removeEmptyRowsAccoutDetail(billDetailslist);
         removeEmptyRowsSubledger(subLedgerlist);
+        validateCuttofDate(voucherHeader);
         target = "";
         // for manual voucher number.
         // voucherNumType
@@ -214,7 +235,6 @@ public class JournalVoucherAction extends BaseVoucherAction
                 if (!"JVGeneral".equalsIgnoreCase(voucherTypeBean.getVoucherName())) {
                     voucherTypeBean.setTotalAmount(parameters.get("totaldbamount")[0]);
                 }
-                populateWorkflowBean();
                 voucherHeader = journalVoucherActionHelper.createVoucher(billDetailslist, subLedgerlist, voucherHeader,
                         voucherTypeBean, workflowBean);
 
@@ -302,22 +322,30 @@ public class JournalVoucherAction extends BaseVoucherAction
                 else
                     throw new ValidationException("Voucher creation failed", "Voucher creation failed");
 
-            } catch (final Exception e) {
-
-                clearMessages();
-                if (subLedgerlist.size() == 0)
-                    subLedgerlist.add(new VoucherDetails());
-                voucherHeader.setVoucherNumber(voucherNumber);
-                final List<ValidationError> errors = new ArrayList<ValidationError>();
-                errors.add(new ValidationError("exp", e.getMessage()));
-                throw new ValidationException(errors);
-            } finally {
+            } /*
+               * catch (final Exception e) { clearMessages(); if
+               * (subLedgerlist.size() == 0) subLedgerlist.add(new
+               * VoucherDetails());
+               * voucherHeader.setVoucherNumber(voucherNumber); final
+               * List<ValidationError> errors = new
+               * ArrayList<ValidationError>(); errors.add(new
+               * ValidationError("exp", e.getMessage())); throw new
+               * ValidationException(errors); }
+               */ finally {
             }
         else if (subLedgerlist.size() == 0)
             subLedgerlist.add(new VoucherDetails());
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("VoucherAction | create Method | End");
         return NEW;
+    }
+
+    public void validateCuttofDate(CVoucherHeader voucherHeader) throws ParseException {
+        final Date cuttDate = DateUtils.parseDate(cutOffDate, "dd/MM/yyyy");
+        if (voucherHeader.getVoucherDate().after(cuttDate)) {
+            throw new ValidationException("cutOffDate",
+                    getText("vouchercutoffdate.message", new String[] { DateUtils.getDefaultFormattedDate(cuttDate) }));
+        }
     }
 
     public List<String> getValidActions() {
@@ -404,7 +432,7 @@ public class JournalVoucherAction extends BaseVoucherAction
     }
 
     @ValidationErrorPage(value = "new")
-    public String saveAndView() throws Exception {
+    public String saveAndView() throws ParseException {
         try {
             buttonValue = "view";
             return create();
@@ -414,7 +442,7 @@ public class JournalVoucherAction extends BaseVoucherAction
     }
 
     @ValidationErrorPage(value = "new")
-    public String saveAndPrint() throws Exception {
+    public String saveAndPrint() throws ParseException {
         try {
             buttonValue = "print";
             return create();
@@ -424,7 +452,7 @@ public class JournalVoucherAction extends BaseVoucherAction
     }
 
     @ValidationErrorPage(value = "new")
-    public String saveAndNew() throws Exception {
+    public String saveAndNew() throws ParseException {
         try {
             buttonValue = "new";
             return create();
@@ -434,7 +462,7 @@ public class JournalVoucherAction extends BaseVoucherAction
     }
 
     @ValidationErrorPage(value = "new")
-    public String saveAndClose() throws Exception {
+    public String saveAndClose() throws ParseException {
         buttonValue = "close";
         return create();
     }

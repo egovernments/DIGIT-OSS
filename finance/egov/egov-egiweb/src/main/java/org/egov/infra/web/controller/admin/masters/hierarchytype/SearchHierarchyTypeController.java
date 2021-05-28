@@ -48,19 +48,22 @@
 
 package org.egov.infra.web.controller.admin.masters.hierarchytype;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.egov.infra.admin.master.entity.HierarchyType;
 import org.egov.infra.admin.master.service.HierarchyTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 @RequestMapping("/hierarchytype")
@@ -86,13 +89,13 @@ public class SearchHierarchyTypeController {
         return hierarchyTypeService.getAllHierarchyTypes();
     }
 
-    @RequestMapping(value = { REQUEST_MAP_VIEW, REQUEST_MAP_UPDATE }, method = RequestMethod.GET)
+    @GetMapping(value = { REQUEST_MAP_VIEW, REQUEST_MAP_UPDATE })
     public String showHierarchyTypes(final Model model) {
         return "hierarchyType-list";
     }
 
-    @RequestMapping(value = { REQUEST_MAP_VIEW, REQUEST_MAP_UPDATE }, method = RequestMethod.POST)
-    public String search(@ModelAttribute final HierarchyType hierarchyType, final BindingResult errors,
+    @PostMapping(value = { REQUEST_MAP_VIEW, REQUEST_MAP_UPDATE })
+    public String search(@Valid @ModelAttribute final HierarchyType hierarchyType, final BindingResult errors,
             final RedirectAttributes redirectAttrs, final HttpServletRequest request) {
         if (errors.hasErrors())
             return "boundaryType-form";

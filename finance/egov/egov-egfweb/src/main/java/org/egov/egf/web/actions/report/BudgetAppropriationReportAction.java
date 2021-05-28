@@ -47,6 +47,7 @@
  */
 package org.egov.egf.web.actions.report;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -70,11 +71,16 @@ import org.hibernate.type.BigDecimalType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Results(value = {
 		@Result(name = BudgetAppropriationReportAction.NEW, location = "budgetAppropriationReport-new.jsp"),
@@ -184,58 +190,62 @@ public class BudgetAppropriationReportAction extends BaseFormAction {
 		budgetDisplayList.addAll(query.list());
 	}
 
-	private StringBuffer getQueryString() {
+	private Map<String, Map<String, Object>> getQueryString() {
 		StringBuffer queryString = new StringBuffer();
 		String deptQry = "";
 		String fundQry = "";
 		String functionQry = "";
+		final Map<String, Object> params = new HashMap<>();
+        final Map<String, Map<String, Object>> queryMap = new HashMap<>();
 
-		if (budgetRep.getBudgetDetail().getExecutingDepartment() != null)
-			deptQry = " and bd.EXECUTING_DEPARTMENT="
-					+ budgetRep.getBudgetDetail().getExecutingDepartment();
-		if (budgetRep.getBudgetDetail().getFund() != null
-				&& budgetRep.getBudgetDetail().getFund().getId() != null)
-			fundQry = "  and bd.fund="
-					+ budgetRep.getBudgetDetail().getFund().getId();
-		if (budgetRep.getBudgetDetail().getFunction() != null
-				&& budgetRep.getBudgetDetail().getFunction().getId() != null)
-			functionQry = "  and bd.function="
-					+ budgetRep.getBudgetDetail().getFunction().getId();
-
-		queryString = queryString
-				.append("select dept.name as department,funct.name as function ,fnd.name as fund ,"
-						+ " bg.name  as budgetHead,bmisc.sequence_number as budgetAppropriationNo,bmisc.reappropriation_date as appropriationDate,"
-						+ " bd.approvedamount as actualAmount,br.addition_amount as additionAmount,br.deduction_amount as deductionAmount"
-						+ " from egf_budget B,egf_budget_reappropriation br,egf_budgetdetail bd,egf_budgetgroup bg,egf_reappropriation_misc bmisc"
-						+ ", eg_department dept,fund fnd , function funct"
-						+ "  where  bd.id =br.budgetdetail and bd.budgetgroup=bg.id and br.REAPPROPRIATION_MISC=bmisc.id and bd.budget=b.id "
-						+ " and funct.id=bd.function and fnd.id=bd.fund and dept.id= bd.EXECUTING_DEPARTMENT "
-						+ deptQry
-						+ fundQry
-						+ functionQry
-						+ " and bmisc.reappropriation_date between '"
-						+ YYYY_MM_DD_FORMAT.format(getFromDate())
-						+ "' and '"
-						+ YYYY_MM_DD_FORMAT.format(getToDate())
-						+ "'"
-						+ "  and bd.MATERIALIZEDPATH like ''||(select budinn.MATERIALIZEDPATH ||'%' from egf_budget budinn where budinn.id="
-						+ budgetRep.getBudgetDetail().getBudget().getId()
-						+ ")||''");
-		return queryString
-				.append("  order by fnd.id,dept.id,funct.id,bmisc.reappropriation_date");
-
+        if (budgetRep.getBudgetDetail().getExecutingDepartment() != null) {
+            deptQry = " and bd.EXECUTING_DEPARTMENT=:execDept";
+            params.put("execDept", budgetRep.getBudgetDetail().getExecutingDepartment());
+        }
+        if (budgetRep.getBudgetDetail().getFund() != null
+                && budgetRep.getBudgetDetail().getFund().getId() != null) {
+            fundQry = "  and bd.fund=:fundId";
+            params.put("fundId", budgetRep.getBudgetDetail().getFund().getId());
+        }
+        if (budgetRep.getBudgetDetail().getFunction() != null
+                && budgetRep.getBudgetDetail().getFunction().getId() != null) {
+            functionQry = "  and bd.function=:functionId";
+            params.put("functionId", budgetRep.getBudgetDetail().getFunction().getId());
+        }
+        
+		queryString.append("select dept.name as department,funct.name as function ,fnd.name as fund ,")
+				.append(" bg.name  as budgetHead,bmisc.sequence_number as budgetAppropriationNo,bmisc.reappropriation_date as appropriationDate,")
+				.append(" bd.approvedamount as actualAmount,br.addition_amount as additionAmount,br.deduction_amount as deductionAmount")
+				.append(" from egf_budget B,egf_budget_reappropriation br,egf_budgetdetail bd,egf_budgetgroup bg,egf_reappropriation_misc bmisc")
+				.append(", eg_department dept,fund fnd , function funct")
+				.append("  where  bd.id =br.budgetdetail and bd.budgetgroup=bg.id and br.REAPPROPRIATION_MISC=bmisc.id and bd.budget=b.id ")
+				.append(" and funct.id=bd.function and fnd.id=bd.fund and dept.id= bd.EXECUTING_DEPARTMENT ")
+				.append(deptQry).append(fundQry).append(functionQry)
+				.append(" and bmisc.reappropriation_date between :fromDate and :toDate ")
+				.append("  and bd.MATERIALIZEDPATH like ''||(select budinn.departmentidMATERIALIZEDPATH ||'%' from egf_budget budinn where budinn.id=:budgetDetails")
+				.append(")||''");
+		params.put("fromDate", YYYY_MM_DD_FORMAT.format(getFromDate()));
+		params.put("toDate", YYYY_MM_DD_FORMAT.format(getToDate()));
+		params.put("budgetDetails", budgetRep.getBudgetDetail().getBudget().getId());
+		queryString.append(" order by fnd.id,dept.id,funct.id,bmisc.reappropriation_date");
+		queryMap.put(queryString.toString(), params);
+		return queryMap;
 	}
 
 	private Query generateQuery() {
-		final Query query = persistenceService.getSession()
-				.createSQLQuery(getQueryString().toString())
-				.addScalar("department").addScalar("function")
-				.addScalar("fund").addScalar("budgetHead")
-				.addScalar("budgetAppropriationNo")
-				.addScalar("appropriationDate").addScalar("actualAmount")
-				.addScalar("additionAmount", BigDecimalType.INSTANCE)
-				.addScalar("deductionAmount", BigDecimalType.INSTANCE);
-		return query;
+		final Map.Entry<String, Map<String, Object>> queryMapEntry = getQueryString().entrySet().iterator().next();
+        final String queryString = queryMapEntry.getKey();
+        final Map<String, Object> queryParams = queryMapEntry.getValue();
+        final Query query = persistenceService.getSession()
+                .createSQLQuery(queryString)
+                .addScalar("department").addScalar("function")
+                .addScalar("fund").addScalar("budgetHead")
+                .addScalar("budgetAppropriationNo")
+                .addScalar("appropriationDate").addScalar("actualAmount")
+                .addScalar("additionAmount", BigDecimalType.INSTANCE)
+                .addScalar("deductionAmount", BigDecimalType.INSTANCE);
+        queryParams.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+        return query;
 	}
 
 	protected void setRelatedEntitesOn() {
@@ -271,7 +281,7 @@ public class BudgetAppropriationReportAction extends BaseFormAction {
 	}
 
 	@Action(value = "/report/budgetAppropriationReport-ajaxGenerateReportXls")
-	public String ajaxGenerateReportXls() throws Exception {
+	public String ajaxGenerateReportXls() throws ColumnBuilderException, ClassNotFoundException, JRException, IOException {
 		populateReAppropriationData();
 		prepareFormattedList();
 		final String title = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade());
@@ -286,7 +296,7 @@ public class BudgetAppropriationReportAction extends BaseFormAction {
 	}
 
 	@Action(value = "/report/budgetAppropriationReport-ajaxGenerateReportPdf")
-	public String ajaxGenerateReportPdf() throws Exception {
+	public String ajaxGenerateReportPdf() throws ColumnBuilderException, ClassNotFoundException, JRException, IOException {
 		populateReAppropriationData();
 		prepareFormattedList();
 		final String title = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade());

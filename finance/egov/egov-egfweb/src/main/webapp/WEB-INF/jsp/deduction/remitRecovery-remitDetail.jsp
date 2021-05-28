@@ -251,6 +251,13 @@ function onSubmit()
 		 if (msg == true) {
 			 disableAll();
 			 document.remittanceForm.action='${pageContext.request.contextPath}/deduction/remitRecovery-create.action';
+			 jQuery(remittanceForm).append(
+					 jQuery('<input>', {
+	                     type: 'hidden',
+	                     name: '${_csrf.parameterName}',
+	                     value: '${_csrf.token}'
+	                 })
+	             );
 			 document.remittanceForm.submit();
 			return true;
 		 } else {
@@ -261,6 +268,13 @@ function onSubmit()
 	else{
 		disableAll();
 		document.remittanceForm.action='${pageContext.request.contextPath}/deduction/remitRecovery-create.action';
+		jQuery(remittanceForm).append(
+				jQuery('<input>', {
+                    type: 'hidden',
+                    name: '${_csrf.parameterName}',
+                    value: '${_csrf.token}'
+                })
+            );
 	 	document.remittanceForm.submit();
 	}
 			

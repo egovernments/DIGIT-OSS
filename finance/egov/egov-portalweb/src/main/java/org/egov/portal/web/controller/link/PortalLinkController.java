@@ -84,7 +84,7 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 public class PortalLinkController {
 
-    private static final String REFERER_IP = "103.21.58.98";
+    private static final String REFERER_IP = "";
     @Autowired
     private PortalLinkService portalLinkService;
     @Autowired
@@ -135,9 +135,10 @@ public class PortalLinkController {
                 response.setModuleName(portalLinkRequest.getModuleName());
 
         }
-        return new StringBuilder("{ \"data\":")
+        /*return new StringBuilder("{ \"data\":")
                 .append(toJSON(response, PortallinkJsonAdaptor.class)).append("}")
-                .toString();
+                .toString();*/
+        return null;
     }
 
     @RequestMapping(value = "/citizen/linkconnection/", method = RequestMethod.POST)

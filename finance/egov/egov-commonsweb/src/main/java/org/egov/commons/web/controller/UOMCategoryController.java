@@ -48,36 +48,41 @@
 
 package org.egov.commons.web.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.List;
+import java.util.Locale;
+
+import javax.validation.Valid;
+
 import org.egov.common.entity.UOMCategory;
 import org.egov.commons.service.UOMCategoryService;
 import org.egov.commons.web.adaptor.UOMCategoryJsonAdaptor;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Locale;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/uomcategory")
 public class UOMCategoryController {
-    private final static String UOMCATEGORY_NEW = "uomcategory-new";
-    private final static String UOMCATEGORY_RESULT = "uomcategory-result";
-    private final static String UOMCATEGORY_EDIT = "uomcategory-edit";
-    private final static String UOMCATEGORY_VIEW = "uomcategory-view";
-    private final static String UOMCATEGORY_SEARCH = "uomcategory-search";
+    private static final String UOM_CATEGORY = "UOMCategory";
+	private static final String UOMCATEGORY_NEW = "uomcategory-new";
+    private static final String UOMCATEGORY_RESULT = "uomcategory-result";
+    private static final String UOMCATEGORY_EDIT = "uomcategory-edit";
+    private static final String UOMCATEGORY_VIEW = "uomcategory-view";
+    private static final String UOMCATEGORY_SEARCH = "uomcategory-search";
     @Autowired
     private UOMCategoryService uomCategoryService;
     @Autowired
@@ -86,14 +91,14 @@ public class UOMCategoryController {
     private void prepareNewForm(final Model model) {
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @GetMapping(value = "/new")
     public String newForm(final Model model) {
         prepareNewForm(model);
-        model.addAttribute("UOMCategory", new UOMCategory());
+        model.addAttribute(UOM_CATEGORY, new UOMCategory());
         return UOMCATEGORY_NEW;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PostMapping(value = "/create")
     public String create(@Valid @ModelAttribute final UOMCategory uomCategory, final BindingResult errors,
             final Model model, final RedirectAttributes redirectAttrs) {
         if (errors.hasErrors()) {
@@ -107,15 +112,15 @@ public class UOMCategoryController {
         return "redirect:/uomcategory/result/" + uomCategory.getId();
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/edit/{id}")
     public String edit(@PathVariable("id") final Long id, final Model model) {
         final UOMCategory uomCategory = uomCategoryService.findOne(id);
         prepareNewForm(model);
-        model.addAttribute("UOMCategory", uomCategory);
+        model.addAttribute(UOM_CATEGORY, uomCategory);
         return UOMCATEGORY_EDIT;
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @PostMapping(value = "/update")
     public String update(@Valid @ModelAttribute final UOMCategory uomCategory, final BindingResult errors,
             final Model model, final RedirectAttributes redirectAttrs) {
         if (errors.hasErrors()) {
@@ -128,46 +133,43 @@ public class UOMCategoryController {
         return "redirect:/uomcategory/result/" + uomCategory.getId();
     }
 
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/view/{id}")
     public String view(@PathVariable("id") final Long id, final Model model) {
         final UOMCategory uomCategory = uomCategoryService.findOne(id);
         prepareNewForm(model);
-        model.addAttribute("UOMCategory", uomCategory);
+        model.addAttribute(UOM_CATEGORY, uomCategory);
         return UOMCATEGORY_VIEW;
     }
 
-    @RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/result/{id}")
     public String result(@PathVariable("id") final Long id, final Model model) {
         final UOMCategory uomCategory = uomCategoryService.findOne(id);
-        model.addAttribute("UOMCategory", uomCategory);
+        model.addAttribute(UOM_CATEGORY, uomCategory);
         return UOMCATEGORY_RESULT;
     }
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
-    public String search(@PathVariable("mode") final String mode, final Model model) {
+    @GetMapping(value = "/search/{mode}")
+    public String search(@PathVariable("mode") @SafeHtml final String mode, final Model model) {
         final UOMCategory uomCategory = new UOMCategory();
         model.addAttribute("categories", uomCategoryService.findAll());
         prepareNewForm(model);
-        model.addAttribute("UOMCategory", uomCategory);
+        model.addAttribute(UOM_CATEGORY, uomCategory);
         if (mode.equals("view"))
             return UOMCATEGORY_VIEW;
         else
             return UOMCATEGORY_SEARCH;
     }
 
-    @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-            @ModelAttribute final UOMCategory uomCategory) {
-        final List<UOMCategory> searchResultList = uomCategoryService.search(uomCategory);
-        final String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
-                .toString();
-        return result;
-    }
+	@PostMapping(value = "/ajaxsearch/{mode}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
+			@Valid @ModelAttribute final UOMCategory uomCategory, final BindingResult errors) {
+		final List<UOMCategory> searchResultList = uomCategoryService.search(uomCategory);
+		return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
+	}
 
     public Object toSearchResultJson(final Object object) {
         final GsonBuilder gsonBuilder = new GsonBuilder();
         final Gson gson = gsonBuilder.registerTypeAdapter(UOMCategory.class, new UOMCategoryJsonAdaptor()).create();
-        final String json = gson.toJson(object);
-        return json;
+        return gson.toJson(object);
     }
 }

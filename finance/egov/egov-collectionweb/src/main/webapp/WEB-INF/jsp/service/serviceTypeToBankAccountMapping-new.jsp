@@ -86,6 +86,11 @@
 					.prop('disabled', false);
 		if(valid){
 			document.serviceBankMappingForm.action='serviceTypeToBankAccountMapping-create.action';
+			jQuery(serviceBankMappingForm).append(jQuery('<input>', {
+	            type : 'hidden',
+	            name : '${_csrf.parameterName}',
+	            value : '${_csrf.token}'
+	        }));
 		}
 		
 		return valid;

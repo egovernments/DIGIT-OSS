@@ -24,6 +24,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.quartz.AdaptableJobFactory;
 import org.springframework.stereotype.Service;
 
+import freemarker.template.TemplateNotFoundException;
+import javassist.tools.rmi.ObjectNotFoundException;
+
 @Service
 public class AccountCodeTemplateService {
     
@@ -55,7 +58,7 @@ public class AccountCodeTemplateService {
                 
             }
                 
-        } catch (Exception e) {
+        } catch (ApplicationRuntimeException e) {
             LOGGER.error(e);
             throw new ApplicationRuntimeException("Error occurred while fetching AccountCode Template : "+e.getMessage());
         }

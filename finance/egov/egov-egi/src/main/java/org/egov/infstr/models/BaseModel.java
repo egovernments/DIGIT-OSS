@@ -48,13 +48,12 @@
 
 package org.egov.infstr.models;
 
-import org.egov.infra.admin.master.entity.User;
-import org.egov.infra.validation.exception.ValidationError;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.egov.infra.validation.exception.ValidationError;
 
 /**
  * Old base entity class

@@ -158,19 +158,26 @@ public class FixedDepositAction extends BaseFormAction {
     @SkipValidation
     @Action(value = "/revenue/fixedDeposit-search")
     public String search() {
-        final StringBuffer query = new StringBuffer();
+    	final StringBuffer query = new StringBuffer();
         query.append("From FixedDeposit ");
-        if (fromDate != null && toDate != null)
-            query.append("where date >='" + sdf.format(fromDate) + "' and date <='" + sdf.format(toDate) + "'");
-        else if (fromDate == null && toDate == null)
+        final List<Object> params = new ArrayList<>();
+        if (fromDate != null && toDate != null) {
+            query.append("where date >=? and date <=?");
+            params.add(sdf.format(fromDate));
+            params.add(sdf.format(toDate));
+        } else if (fromDate == null && toDate == null) {
             query.append("where date<= CURRENT_DATE");
-        else if (fromDate != null)
-            query.append("where date>='" + sdf.format(fromDate) + "'");
-        else
-            query.append("where date<='" + sdf.format(toDate) + "'");
+        } else if (fromDate != null) {
+            query.append("where date>=?");
+            params.add(sdf.format(fromDate));
+        } else {
+            query.append("where date<=?");
+            params.add(sdf.format(toDate));
+        }
         query.append("  order by id");
 
-        fixedDepositList = persistenceService.findAllBy(query.toString());
+        fixedDepositList = persistenceService.findAllBy(query.toString(), params.toArray());
+        
         if (LOGGER.isInfoEnabled())
             LOGGER.info("Fixed deposit size= " + fixedDepositList.size());
 

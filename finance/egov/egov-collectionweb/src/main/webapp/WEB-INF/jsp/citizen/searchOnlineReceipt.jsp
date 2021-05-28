@@ -234,8 +234,8 @@ function transitionStates(){
 <div class="formmainbox"><div class="subheadnew"><s:text name="searchOnlineReceipts.title"/>
 </div>
 <div class="subheadsmallnew"><span class="subheadnew"><s:text name="searchOnlineReceipts.criteria"/></span></div>
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-
 	    <tr>
 	      <td width="4%" class="bluebox2">&nbsp;</td>
 	      <td width="21%" class="bluebox2"><s:text name="searchOnlineReceipts.criteria.servicetype"/></td>

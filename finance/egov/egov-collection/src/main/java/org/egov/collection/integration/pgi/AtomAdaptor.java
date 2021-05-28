@@ -48,6 +48,7 @@
 package org.egov.collection.integration.pgi;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.math.BigDecimal;
@@ -64,10 +65,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -89,6 +96,9 @@ import org.egov.infstr.models.ServiceDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * The PaymentRequestAdaptor class frames the request object for the payment service.
@@ -153,11 +163,17 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
                 data.append(line);
             reader.close();
 
+            SAXParserFactory spf = SAXParserFactory.newInstance();
+            spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            
             LOGGER.info("First Response ATOM: " + data.toString());
             JAXBContext jaxbContext = JAXBContext.newInstance(ResponseAtomMmp.class);
             Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();
-            StringReader strReader = new StringReader(data.toString());
-            ResponseAtomMmp responseMmp = (ResponseAtomMmp) unMarshaller.unmarshal(strReader);
+            Source xmlSource = new SAXSource(spf.newSAXParser().getXMLReader(),
+                    new InputSource(new StringReader(data.toString())));
+            ResponseAtomMmp responseMmp = (ResponseAtomMmp) unMarshaller.unmarshal(xmlSource);
 
             // Setting first request response values to second request
             // parameters.
@@ -174,8 +190,8 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
                 }
             }
 
-        } catch (Exception exp) {
-            exp.printStackTrace();
+        } catch (IOException | ParserConfigurationException | JAXBException | SAXException exp) {
+            LOGGER.error("error occured while doing methods" + exp.getMessage());
         }
         String secondRequestStr = paymentServiceDetails.getServiceUrl() + "?ttype=" + ttype + "&tempTxnId=" + tempTxnId
                 + "&token=" + token + "&txnStage=" + txnStage;
@@ -237,7 +253,7 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
     }
 
     @Transactional
-    public PaymentResponse createOfflinePaymentRequest(final OnlinePayment onlinePayment) {
+    public PaymentResponse createOfflinePaymentRequest(final OnlinePayment onlinePayment) throws ApplicationException, ClientProtocolException, IOException, JAXBException {
         LOGGER.debug("Inside AtomAdaptor createOfflinePaymentRequest");
         PaymentResponse atomResponse = new DefaultPaymentResponse();
         try {
@@ -296,7 +312,7 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
                         .setAdditionalInfo6(onlinePayment.getReceiptHeader().getConsumerCode().replace("-", "").replace("/", ""));
                 atomResponse.setAdditionalInfo2(ApplicationThreadLocals.getCityCode());
             }
-        } catch (Exception exp) {
+        } catch (HttpClientErrorException exp) {
             exp.printStackTrace();
         }
         return atomResponse;

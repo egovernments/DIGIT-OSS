@@ -48,12 +48,8 @@
 
 package org.egov.commons.service;
 
-import org.egov.commons.CFunction;
-import org.egov.commons.repository.FunctionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -63,137 +59,142 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.Metamodel;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.egov.commons.CFunction;
+import org.egov.commons.contracts.FunctionSearchRequest;
+import org.egov.commons.repository.FunctionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 public class FunctionService {
 
-    private final FunctionRepository functionRepository;
-    @PersistenceContext
-    private EntityManager entityManager;
+	private final FunctionRepository functionRepository;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-    @Autowired
-    public FunctionService(final FunctionRepository functionRepository) {
-        this.functionRepository = functionRepository;
-    }
+	@Autowired
+	public FunctionService(final FunctionRepository functionRepository) {
+		this.functionRepository = functionRepository;
+	}
 
-    @Transactional
-    public CFunction create(final CFunction function) {
-        return functionRepository.save(function);
-    }
+	@Transactional
+	public CFunction create(final CFunction function) {
+		return functionRepository.save(function);
+	}
 
-    @Transactional
-    public CFunction update(final CFunction function) {
-        return functionRepository.save(function);
-    }
+	@Transactional
+	public CFunction update(final CFunction function) {
+		return functionRepository.save(function);
+	}
 
-    public List<CFunction> findAllActive() {
-        return functionRepository.findByIsActiveAndIsNotLeaf(true, false);
-    }
+	public List<CFunction> findAllActive() {
+		return functionRepository.findByIsActiveAndIsNotLeaf(true, false);
+	}
 
-    public List<CFunction> findAll() {
-        return functionRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
-    }
+	public List<CFunction> findAll() {
+		return functionRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+	}
 
-    public CFunction findByName(final String name) {
-        return functionRepository.findByName(name);
-    }
+	public CFunction findByName(final String name) {
+		return functionRepository.findByName(name);
+	}
 
-    public CFunction findByCode(final String code) {
-        return functionRepository.findByCode(code);
-    }
+	public CFunction findByCode(final String code) {
+		return functionRepository.findByCode(code);
+	}
 
-    public CFunction findOne(final Long id) {
-        return functionRepository.findOne(id);
-    }
+	public CFunction findOne(final Long id) {
+		return functionRepository.findOne(id);
+	}
 
-    public List<CFunction> findAllIsNotLeafTrue() {
-        return functionRepository.findByIsNotLeaf(true);
-    }
+	public List<CFunction> findAllIsNotLeafTrue() {
+		return functionRepository.findByIsNotLeaf(true);
+	}
 
-    public List<CFunction> findByNameLikeOrCodeLike(final String name) {
-        return functionRepository.findByNameContainingIgnoreCaseOrCodeContainingIgnoreCase(name, name);
-    }
+	public List<CFunction> findByNameLikeOrCodeLike(final String name) {
+		return functionRepository.findByNameContainingIgnoreCaseOrCodeContainingIgnoreCase(name, name);
+	}
 
-    public List<CFunction> search(final CFunction function) {
+	public List<CFunction> search(final FunctionSearchRequest functionSearchRequest) {
 
-        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<CFunction> createQuery = cb.createQuery(CFunction.class);
-        final Root<CFunction> functions = createQuery.from(CFunction.class);
-        createQuery.select(functions);
-        final Metamodel m = entityManager.getMetamodel();
-        final javax.persistence.metamodel.EntityType<CFunction> tempFunction = m.entity(CFunction.class);
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<CFunction> createQuery = cb.createQuery(CFunction.class);
+		final Root<CFunction> functions = createQuery.from(CFunction.class);
+		createQuery.select(functions);
+		final Metamodel m = entityManager.getMetamodel();
+		final javax.persistence.metamodel.EntityType<CFunction> tempFunction = m.entity(CFunction.class);
 
-        final List<Predicate> predicates = new ArrayList<>();
-        if (function.getName() != null) {
-            final String name = "%" + function.getName().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(functions.get("name")));
-            predicates.add(cb.like(
-                    cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("name", String.class))), name));
-        }
-        if (function.getCode() != null) {
-            final String code = "%" + function.getCode().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(functions.get("code")));
-            predicates.add(cb.like(
-                    cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("code", String.class))), code));
-        }
-        if (function.getIsActive())
-            predicates.add(
-                    cb.equal(functions.get(tempFunction.getDeclaredSingularAttribute("isActive", Boolean.class)), true));
-        if (function.getParentId() != null)
+		final List<Predicate> predicates = new ArrayList<>();
+		if (functionSearchRequest.getName() != null) {
+			final String name = "%" + functionSearchRequest.getName().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(functions.get("name")));
+			predicates.add(cb.like(
+					cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("name", String.class))), name));
+		}
+		if (functionSearchRequest.getCode() != null) {
+			final String code = "%" + functionSearchRequest.getCode().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(functions.get("code")));
+			predicates.add(cb.like(
+					cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("code", String.class))), code));
+		}
+		if (functionSearchRequest.getIsActive().booleanValue())
+			predicates.add(cb.equal(functions.get(tempFunction.getDeclaredSingularAttribute("isActive", Boolean.class)),
+					true));
+		if (functionSearchRequest.getParentId() != null)
 
-            predicates.add(cb.equal(functions.get("parentId"), function.getParentId()));
+			predicates.add(cb.equal(functions.get("parentId"), functionSearchRequest.getParentId()));
 
-        createQuery.where(predicates.toArray(new Predicate[] {}));
-        final TypedQuery<CFunction> query = entityManager.createQuery(createQuery);
+		createQuery.where(predicates.toArray(new Predicate[] {}));
+		final TypedQuery<CFunction> query = entityManager.createQuery(createQuery);
 
-        return query.getResultList();
-    }
-    
-    
-    public List<CFunction> search(final CFunction function,List<Integer> ids,String sortBy,Integer offset,Integer pageSize){
-    	
-    	
-    	 final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-         final CriteriaQuery<CFunction> createQuery = cb.createQuery(CFunction.class);
-         final Root<CFunction> functions = createQuery.from(CFunction.class);
-         createQuery.select(functions);
-         final Metamodel m = entityManager.getMetamodel();
-         final javax.persistence.metamodel.EntityType<CFunction> tempFunction = m.entity(CFunction.class);
+		return query.getResultList();
+	}
 
-         final List<Predicate> predicates = new ArrayList<>();
-         if (function.getName() != null) {
-             final String name = "%" + function.getName().toLowerCase() + "%";
-             predicates.add(cb.isNotNull(functions.get("name")));
-             predicates.add(cb.like(
-                     cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("name", String.class))), name));
-         }
-         if (function.getCode() != null) {
-             final String code = "%" + function.getCode().toLowerCase() + "%";
-             predicates.add(cb.isNotNull(functions.get("code")));
-             predicates.add(cb.like(
-                     cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("code", String.class))), code));
-         }
-         if (function.getIsActive())
-             predicates.add(
-                     cb.equal(functions.get(tempFunction.getDeclaredSingularAttribute("isActive", Boolean.class)), true));
-         if (function.getParentId() != null)
-             predicates.add(cb.equal(functions.get("parentId"), function.getParentId()));
-         
-         if(null!=ids && ids.size()>0)
-        	 predicates.add(functions.in(ids));
+	public List<CFunction> search(final CFunction function, List<Integer> ids, String sortBy, Integer offset,
+			Integer pageSize) {
 
-         createQuery.where(predicates.toArray(new Predicate[] {}));
-         createQuery.orderBy(cb.asc(functions.get(sortBy)));
-         
-         final TypedQuery<CFunction> query = entityManager.createQuery(createQuery);
-         
-         query.setFirstResult(offset);
-         query.setMaxResults(pageSize);
-    	
-    	return query.getResultList();
-    }
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<CFunction> createQuery = cb.createQuery(CFunction.class);
+		final Root<CFunction> functions = createQuery.from(CFunction.class);
+		createQuery.select(functions);
+		final Metamodel m = entityManager.getMetamodel();
+		final javax.persistence.metamodel.EntityType<CFunction> tempFunction = m.entity(CFunction.class);
+
+		final List<Predicate> predicates = new ArrayList<>();
+		if (function.getName() != null) {
+			final String name = "%" + function.getName().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(functions.get("name")));
+			predicates.add(cb.like(
+					cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("name", String.class))), name));
+		}
+		if (function.getCode() != null) {
+			final String code = "%" + function.getCode().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(functions.get("code")));
+			predicates.add(cb.like(
+					cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("code", String.class))), code));
+		}
+		if (function.getIsActive().booleanValue())
+			predicates.add(cb.equal(functions.get(tempFunction.getDeclaredSingularAttribute("isActive", Boolean.class)),
+					true));
+		if (function.getParentId() != null)
+			predicates.add(cb.equal(functions.get("parentId"), function.getParentId()));
+
+		if (!ids.isEmpty())
+			predicates.add(functions.in(ids));
+
+		createQuery.where(predicates.toArray(new Predicate[] {}));
+		createQuery.orderBy(cb.asc(functions.get(sortBy)));
+
+		final TypedQuery<CFunction> query = entityManager.createQuery(createQuery);
+
+		query.setFirstResult(offset);
+		query.setMaxResults(pageSize);
+
+		return query.getResultList();
+	}
 
 }

@@ -2,83 +2,94 @@ package org.egov.egf.contract.model;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class Bank implements Serializable {
 
-	private Integer id;
-	private String code;
-	private String name;
-	private String description;
-	private Boolean active;
-	private String type;
-	private AuditDetails auditDetails;
-	
-	public Bank(){}
+    /**
+     *
+     */
+    private static final long serialVersionUID = -8344176995296804471L;
+    private Integer id;
+    @SafeHtml
+    private String code;
+    @SafeHtml
+    private String name;
+    @SafeHtml
+    private String description;
+    private Boolean active;
+    @SafeHtml
+    private String type;
+    private AuditDetails auditDetails;
 
-	public Bank(Integer id, String code, String name, String description, Boolean active, String type,
-			AuditDetails auditDetails) {
-		this.id = id;
-		this.code = code;
-		this.name = name;
-		this.description = description;
-		this.active = active;
-		this.type = type;
-		this.auditDetails = auditDetails;
-	}
+    public Bank() {
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Bank(final Integer id, final String code, final String name, final String description, final Boolean active,
+            final String type, final AuditDetails auditDetails) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.description = description;
+        this.active = active;
+        this.type = type;
+        this.auditDetails = auditDetails;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public void setId(final Integer id) {
+        this.id = id;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setCode(final String code) {
+        this.code = code;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public Boolean isActive() {
-		return active;
-	}
+    public void setDescription(final String description) {
+        this.description = description;
+    }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+    public Boolean isActive() {
+        return active;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public void setActive(final Boolean active) {
+        this.active = active;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public AuditDetails getAuditDetails() {
-		return auditDetails;
-	}
+    public void setType(final String type) {
+        this.type = type;
+    }
 
-	public void setAuditDetails(AuditDetails auditDetails) {
-		this.auditDetails = auditDetails;
-	}
-	
+    public AuditDetails getAuditDetails() {
+        return auditDetails;
+    }
+
+    public void setAuditDetails(final AuditDetails auditDetails) {
+        this.auditDetails = auditDetails;
+    }
+
 }

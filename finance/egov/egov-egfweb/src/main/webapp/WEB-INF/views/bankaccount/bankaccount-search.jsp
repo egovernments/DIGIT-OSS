@@ -50,7 +50,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn"%>
-<form:form role="form" action="search" modelAttribute="bankaccount" id="bankaccountsearchform" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
+<form:form role="form" action="search" modelAttribute="bankaccountSearchRequest" id="bankaccountsearchform" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
@@ -63,18 +63,18 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.bank" text="Bank"/>  </label>
 						<div class="col-sm-3 add-margin">
-						<form:select path="bankbranch.bank" data-first-option="false" id="bank" class="form-control" >
+						<form:select path="bankId" data-first-option="false" id="bank" class="form-control" >
 							<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 							<form:options items="${banks}" itemValue="id" itemLabel="name" />
 						</form:select>
 						</div>
 						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.bankbranch" text="Bank Branch"/>  </label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="bankbranch" id="bankbranch" class="form-control" data-first-option="false">
+							<form:select path="bankbranchId" id="bankbranch" class="form-control" data-first-option="false">
 								<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 								<form:options items="${bankbranches}" itemValue="id" itemLabel="branchname" />
 							</form:select>
-							<form:errors path="bankbranch" cssClass="error-msg" />
+							<form:errors path="bankbranchId" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -85,11 +85,11 @@
 						</div>
 						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.fund" text="Fund"/> </label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="fund" data-first-option="false" id="fund" class="form-control" >
+							<form:select path="fundId" data-first-option="false" id="fund" class="form-control" >
 								<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 								<form:options items="${funds}" itemValue="id" itemLabel="name" />
 							</form:select>
-							<form:errors path="fund" cssClass="error-msg" />
+							<form:errors path="fundId" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -139,8 +139,8 @@
 						<c:if test="${!autoglcode}">
 							<label class="col-sm-2 control-label text-right"><spring:message code="lbl.glcode" text="GlCode"/></label>
 							<div class="col-sm-3 add-margin">
-							<form:input path="chartofaccounts.glcode" class="form-control text-left patternvalidation" data-pattern="numeric" maxlength="50" />
-							<form:errors path="chartofaccounts.glcode" cssClass="error-msg" />
+							<form:input path="glcode" class="form-control text-left patternvalidation" data-pattern="numeric" maxlength="50" />
+							<form:errors path="glcode" cssClass="error-msg" />
 							</div>
 						</c:if>
 						

@@ -64,6 +64,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,180 +115,178 @@ public class OpeningBalance
     }
 
     private void getReport() throws SQLException {
-        String query = " ";
+        StringBuilder query = new StringBuilder();
         String fundCondition = "";
         String deptCondition = "";
         double totalDr = 0.0, totalCr = 0.0;
         new DecimalFormat();
         new DecimalFormat("###############.00");
-        if (!fundId.equalsIgnoreCase(""))
-            fundCondition = " and b.id=? ";
-        if (!deptCode.equalsIgnoreCase(""))
-            deptCondition = " and a.departmentcode=? ";
-        query = "SELECT b.name AS \"fund\",c.glcode AS \"accountcode\",c.name AS \"accountname\",'' as \"narration\",SUM(a.openingdebitbalance) AS \"debit\","
-                + " SUM(a.openingcreditbalance)AS \"credit\",a.departmentcode AS \"deptcode\",fn.code AS \"functioncode\"  FROM TRANSACTIONSUMMARY a,FUND  b,CHARTOFACCOUNTS c,function fn "
-                + " WHERE c.id in (select glcodeid from chartofaccountdetail ) and fn.id = a.functionid and  a.financialyearid=? "
-                + fundCondition
-                + deptCondition
-                + " AND a.fundid=b.id AND a.glcodeid=c.id AND (a.openingdebitbalance>0 OR a.openingcreditbalance>0) GROUP BY b.name, c.glcode,c.name,a.departmentcode,fn.code union";
-        query = query + " SELECT b.name AS \"fund\",c.glcode AS \"accountcode\",c.name AS \"accountname\",a.narration as \"narration\",SUM(a.openingdebitbalance) AS \"debit\","
-                + " SUM(a.openingcreditbalance)AS \"credit\",a.departmentcode AS \"deptcode\",fn.code AS \"functioncode\"  FROM TRANSACTIONSUMMARY a,FUND  b,CHARTOFACCOUNTS c,function fn "
-                + " WHERE c.id not in (select glcodeid from chartofaccountdetail  ) and fn.id = a.functionid and  a.financialyearid=? "
-                + fundCondition
-                + deptCondition
-                + " AND a.fundid=b.id AND a.glcodeid=c.id AND (a.openingdebitbalance>0 OR a.openingcreditbalance>0) GROUP BY b.name, c.glcode,c.name,a.departmentcode,fn.code, a.narration ";
+		if (!fundId.equalsIgnoreCase(""))
+			fundCondition = " and b.id=? ";
+		if (!deptCode.equalsIgnoreCase(""))
+			deptCondition = " and a.departmentcode=? ";
+		query.append(
+				"SELECT b.name AS \"fund\",c.glcode AS \"accountcode\",c.name AS \"accountname\",'' as \"narration\",")
+				.append("SUM(a.openingdebitbalance) AS \"debit\",")
+				.append(" SUM(a.openingcreditbalance)AS \"credit\",a.departmentcode AS \"deptcode\",fn.code AS \"functioncode\" ")
+				.append(" FROM TRANSACTIONSUMMARY a,FUND  b,CHARTOFACCOUNTS c,function fn ")
+				.append(" WHERE c.id in (select glcodeid from chartofaccountdetail ) and fn.id = a.functionid and  a.financialyearid=? ")
+				.append(fundCondition).append(deptCondition)
+				.append(" AND a.fundid=b.id AND a.glcodeid=c.id AND (a.openingdebitbalance>0 OR a.openingcreditbalance>0)")
+				.append(" GROUP BY b.name, c.glcode,c.name,a.departmentcode,fn.code union")
+				.append(" SELECT b.name AS \"fund\",c.glcode AS \"accountcode\",c.name AS \"accountname\",a.narration as \"narration\",")
+				.append("SUM(a.openingdebitbalance) AS \"debit\",")
+				.append(" SUM(a.openingcreditbalance)AS \"credit\",a.departmentcode AS \"deptcode\",fn.code AS \"functioncode\" ")
+				.append(" FROM TRANSACTIONSUMMARY a,FUND  b,CHARTOFACCOUNTS c,function fn ")
+				.append(" WHERE c.id not in (select glcodeid from chartofaccountdetail  ) and fn.id = a.functionid and  a.financialyearid=? ")
+				.append(fundCondition).append(deptCondition)
+				.append(" AND a.fundid=b.id AND a.glcodeid=c.id AND (a.openingdebitbalance>0 OR a.openingcreditbalance>0)")
+				.append(" GROUP BY b.name, c.glcode,c.name,a.departmentcode,fn.code, a.narration ");
        if (LOGGER.isDebugEnabled())
             LOGGER.debug("Opening balance Query ...." + query);
 
-        try {
-            OpeningBalanceBean ob = null;
-            pstmt = persistenceService.getSession().createSQLQuery(query);
-            int i = 0;
-            pstmt.setLong(i++, Long.valueOf(finYear));
-            if (!fundId.equalsIgnoreCase(""))
-                pstmt.setLong(i++, Long.valueOf(fundId));
-            if (!deptCode.equalsIgnoreCase(""))
-                pstmt.setString(i++,deptCode);
-            pstmt.setLong(i++, Long.valueOf(finYear));
-            if (!fundId.equalsIgnoreCase(""))
-                pstmt.setLong(i++, Long.valueOf(fundId));
-            if (!deptCode.equalsIgnoreCase(""))
-                pstmt.setString(i++,deptCode);
-            List<Object[]> list= pstmt.list();
-            resultset =list;
-            
-            for (final Object[] element : resultset) {
-                if (!checkFund.equalsIgnoreCase(element[0].toString())
-                        && !checkFund.equalsIgnoreCase("")) {
-                    final OpeningBalanceBean opeBalDiff = new OpeningBalanceBean();
-                    opeBalDiff.setFund("&nbsp;");
-                    opeBalDiff.setAccCode("&nbsp;");
-                    opeBalDiff.setAccName("<b>&nbsp;&nbsp;&nbsp; Difference&nbsp;&nbsp;</b>");
-                    final double diff = totalDr - totalCr;
-                    if (diff > 0)
-                    {
-                        opeBalDiff.setDebit("&nbsp;");
-                        opeBalDiff.setCredit("<b>" + numberToString(((Double) diff).toString()).toString() + "</b>");
-                    }
-                    else
-                    {
-                        opeBalDiff.setDebit("<b>" + numberToString(((Double) diff).toString()).toString() + "</b>");
-                        opeBalDiff.setCredit("&nbsp;");
-                    }
-                    al.add(opeBalDiff);
-                    final OpeningBalanceBean opeBal = new OpeningBalanceBean();
-                    opeBal.setFund("&nbsp;");
-                    opeBal.setAccCode("&nbsp;");
-                    opeBal.setAccName("<b>&nbsp;&nbsp;&nbsp; Total:&nbsp;&nbsp;</b>");
-                    if (diff > 0)
-                    {
-                        totalCr = totalCr + diff;
-                        opeBal.setDebit("<b>" + numberToString(((Double) totalDr).toString()).toString() + "</b>");
-                        opeBal.setCredit("<b>" + numberToString(((Double) totalCr).toString()).toString() + "</b>");
-                    }
-                    else
-                    {
-                        totalDr = totalDr + diff * -1;
-                        opeBal.setDebit("<b>" + numberToString(((Double) totalDr).toString()).toString() + "</b>");
-                        opeBal.setCredit("<b>" + numberToString(((Double) totalCr).toString()).toString() + "</b>");
-                    }
-                    al.add(opeBal);
-                    totalDr = 0.0;
-                    totalCr = 0.0;
-                }
-                // if(LOGGER.isDebugEnabled()) LOGGER.debug("totalDr  "+totalDr+"  totalCr  "+totalCr);
-                fund = element[0].toString();
-                glcode = element[1].toString();
-                name = element[2].toString();
-                if(element[3]!=null)
-                    narration = formatStringToFixedLength(element[3].toString(), 30);
-                debit = Double.parseDouble(element[4].toString());
-                credit = Double.parseDouble(element[5].toString());
-                deptcode = element[6].toString();
-                functioncode = element[7].toString();
-                ob = new OpeningBalanceBean();
-                ob.setFund(fund);
-                ob.setAccCode(glcode);
-                ob.setAccName(name);
-                ob.setDescription(narration);
-                ob.setDeptcode(deptcode);
-                ob.setFunctioncode(functioncode);
-
-                if (debit != null && credit != null)
+        OpeningBalanceBean ob = null;
+        pstmt = persistenceService.getSession().createSQLQuery(query.toString());
+        int i = 0;
+        pstmt.setLong(i++, Long.valueOf(finYear));
+        if (!fundId.equalsIgnoreCase(""))
+            pstmt.setLong(i++, Long.valueOf(fundId));
+        if (!deptCode.equalsIgnoreCase(""))
+            pstmt.setString(i++,deptCode);
+        pstmt.setLong(i++, Long.valueOf(finYear));
+        if (!fundId.equalsIgnoreCase(""))
+            pstmt.setLong(i++, Long.valueOf(fundId));
+        if (!deptCode.equalsIgnoreCase(""))
+            pstmt.setString(i++,deptCode);
+        List<Object[]> list= pstmt.list();
+        resultset =list;
+        
+        for (final Object[] element : resultset) {
+            if (!checkFund.equalsIgnoreCase(element[0].toString())
+                    && !checkFund.equalsIgnoreCase("")) {
+                final OpeningBalanceBean opeBalDiff = new OpeningBalanceBean();
+                opeBalDiff.setFund("&nbsp;");
+                opeBalDiff.setAccCode("&nbsp;");
+                opeBalDiff.setAccName("<b>&nbsp;&nbsp;&nbsp; Difference&nbsp;&nbsp;</b>");
+                final double diff = totalDr - totalCr;
+                if (diff > 0)
                 {
-                    balance = debit - credit;
-                    if (balance > 0)
-                    {
-                        ob.setDebit(numberToString(balance.toString()).toString());
-                        ob.setCredit("&nbsp;");
-                    }
-                    else
-                    {
-                        balance = credit - debit;
-                        ob.setDebit("&nbsp;");
-                        ob.setCredit(numberToString(balance.toString()).toString());
-                    }
+                    opeBalDiff.setDebit("&nbsp;");
+                    opeBalDiff.setCredit("<b>" + numberToString(((Double) diff).toString()).toString() + "</b>");
                 }
-                /*
-                 * if(debit!= null && debit>0) ob.setDebit(numberToString(((Double)debit).toString()).toString()); else
-                 * ob.setDebit("&nbsp;");
-                 */
-                totalDr = totalDr + debit;
-                grandTotalDr = grandTotalDr + debit;
-                /*
-                 * if(credit != null && credit>0) ob.setCredit(numberToString(((Double)credit).toString()).toString()); else
-                 * ob.setCredit("&nbsp;");
-                 */
-                totalCr = totalCr + credit;
-                grandTotalCr = grandTotalCr + credit;
-                al.add(ob);
-                checkFund = fund;
+                else
+                {
+                    opeBalDiff.setDebit("<b>" + numberToString(((Double) diff).toString()).toString() + "</b>");
+                    opeBalDiff.setCredit("&nbsp;");
+                }
+                al.add(opeBalDiff);
+                final OpeningBalanceBean opeBal = new OpeningBalanceBean();
+                opeBal.setFund("&nbsp;");
+                opeBal.setAccCode("&nbsp;");
+                opeBal.setAccName("<b>&nbsp;&nbsp;&nbsp; Total:&nbsp;&nbsp;</b>");
+                if (diff > 0)
+                {
+                    totalCr = totalCr + diff;
+                    opeBal.setDebit("<b>" + numberToString(((Double) totalDr).toString()).toString() + "</b>");
+                    opeBal.setCredit("<b>" + numberToString(((Double) totalCr).toString()).toString() + "</b>");
+                }
+                else
+                {
+                    totalDr = totalDr + diff * -1;
+                    opeBal.setDebit("<b>" + numberToString(((Double) totalDr).toString()).toString() + "</b>");
+                    opeBal.setCredit("<b>" + numberToString(((Double) totalCr).toString()).toString() + "</b>");
+                }
+                al.add(opeBal);
+                totalDr = 0.0;
+                totalCr = 0.0;
             }
-            final OpeningBalanceBean opeBalDiff = new OpeningBalanceBean();
-            opeBalDiff.setFund("&nbsp;");
-            opeBalDiff.setAccCode("&nbsp;");
-            opeBalDiff.setAccName("<b>&nbsp;&nbsp;&nbsp; Difference&nbsp;&nbsp;</b>");
-            opeBalDiff.setDescription("&nbsp;");
-            opeBalDiff.setDeptcode("&nbsp;");
-            opeBalDiff.setFunctioncode("&nbsp;");
-            final double diff = totalDr - totalCr;
-            if (diff > 0)
-            {
-                opeBalDiff.setDebit("&nbsp;");
-                opeBalDiff.setCredit("<b>" + numberToString(((Double) diff).toString()).toString() + "</b>");
-            }
-            else
-            {
-                opeBalDiff.setDebit("<b>" + numberToString(((Double) diff).toString()).toString() + "</b>");
-                opeBalDiff.setCredit("&nbsp;");
-            }
-            al.add(opeBalDiff);
-            final OpeningBalanceBean opeBal = new OpeningBalanceBean();
-            opeBal.setFund("&nbsp;");
-            opeBal.setAccCode("&nbsp;");
-            opeBal.setAccName("<b>&nbsp;&nbsp;&nbsp; Total:&nbsp;&nbsp;</b>");
-            opeBal.setDescription("&nbsp;");
-            opeBal.setDeptcode("&nbsp;");
-            opeBal.setFunctioncode("&nbsp;");
-            if (diff > 0)
-            {
-                totalCr = totalCr + diff;
-                opeBal.setDebit("<b>" + numberToString(((Double) totalDr).toString()).toString() + "</b>");
-                opeBal.setCredit("<b>" + numberToString(((Double) totalCr).toString()).toString() + "</b>");
-            }
-            else
-            {
-                totalDr = totalDr + diff * -1;
-                opeBal.setDebit("<b>" + numberToString(((Double) totalDr).toString()).toString() + "</b>");
-                opeBal.setCredit("<b>" + numberToString(((Double) totalCr).toString()).toString() + "</b>");
-            }
-            al.add(opeBal);
+            // if(LOGGER.isDebugEnabled()) LOGGER.debug("totalDr  "+totalDr+"  totalCr  "+totalCr);
+            fund = element[0].toString();
+            glcode = element[1].toString();
+            name = element[2].toString();
+            if(element[3]!=null)
+                narration = formatStringToFixedLength(element[3].toString(), 30);
+            debit = Double.parseDouble(element[4].toString());
+            credit = Double.parseDouble(element[5].toString());
+            deptcode = element[6].toString();
+            functioncode = element[7].toString();
+            ob = new OpeningBalanceBean();
+            ob.setFund(fund);
+            ob.setAccCode(glcode);
+            ob.setAccName(name);
+            ob.setDescription(narration);
+            ob.setDeptcode(deptcode);
+            ob.setFunctioncode(functioncode);
 
-        } catch (final Exception e)
-        {
-            LOGGER.error("Error in getReport", e);
-            throw new SQLException();
+            if (debit != null && credit != null)
+            {
+                balance = debit - credit;
+                if (balance > 0)
+                {
+                    ob.setDebit(numberToString(balance.toString()).toString());
+                    ob.setCredit("&nbsp;");
+                }
+                else
+                {
+                    balance = credit - debit;
+                    ob.setDebit("&nbsp;");
+                    ob.setCredit(numberToString(balance.toString()).toString());
+                }
+            }
+            /*
+             * if(debit!= null && debit>0) ob.setDebit(numberToString(((Double)debit).toString()).toString()); else
+             * ob.setDebit("&nbsp;");
+             */
+            totalDr = totalDr + debit;
+            grandTotalDr = grandTotalDr + debit;
+            /*
+             * if(credit != null && credit>0) ob.setCredit(numberToString(((Double)credit).toString()).toString()); else
+             * ob.setCredit("&nbsp;");
+             */
+            totalCr = totalCr + credit;
+            grandTotalCr = grandTotalCr + credit;
+            al.add(ob);
+            checkFund = fund;
         }
+        final OpeningBalanceBean opeBalDiff = new OpeningBalanceBean();
+        opeBalDiff.setFund("&nbsp;");
+        opeBalDiff.setAccCode("&nbsp;");
+        opeBalDiff.setAccName("<b>&nbsp;&nbsp;&nbsp; Difference&nbsp;&nbsp;</b>");
+        opeBalDiff.setDescription("&nbsp;");
+        opeBalDiff.setDeptcode("&nbsp;");
+        opeBalDiff.setFunctioncode("&nbsp;");
+        final double diff = totalDr - totalCr;
+        if (diff > 0)
+        {
+            opeBalDiff.setDebit("&nbsp;");
+            opeBalDiff.setCredit("<b>" + numberToString(((Double) diff).toString()).toString() + "</b>");
+        }
+        else
+        {
+            opeBalDiff.setDebit("<b>" + numberToString(((Double) diff).toString()).toString() + "</b>");
+            opeBalDiff.setCredit("&nbsp;");
+        }
+        al.add(opeBalDiff);
+        final OpeningBalanceBean opeBal = new OpeningBalanceBean();
+        opeBal.setFund("&nbsp;");
+        opeBal.setAccCode("&nbsp;");
+        opeBal.setAccName("<b>&nbsp;&nbsp;&nbsp; Total:&nbsp;&nbsp;</b>");
+        opeBal.setDescription("&nbsp;");
+        opeBal.setDeptcode("&nbsp;");
+        opeBal.setFunctioncode("&nbsp;");
+        if (diff > 0)
+        {
+            totalCr = totalCr + diff;
+            opeBal.setDebit("<b>" + numberToString(((Double) totalDr).toString()).toString() + "</b>");
+            opeBal.setCredit("<b>" + numberToString(((Double) totalCr).toString()).toString() + "</b>");
+        }
+        else
+        {
+            totalDr = totalDr + diff * -1;
+            opeBal.setDebit("<b>" + numberToString(((Double) totalDr).toString()).toString() + "</b>");
+            opeBal.setCredit("<b>" + numberToString(((Double) totalCr).toString()).toString() + "</b>");
+        }
+        al.add(opeBal);
     }
 
     private void formatReport()
@@ -317,25 +316,19 @@ public class OpeningBalance
         al.add(ob);
     }
 
-    public void isCurDate(final Connection conn, final String VDate) throws TaskFailedException {
+    public void isCurDate(final Connection conn, final String VDate) throws TaskFailedException, ParseException {
 
-        try {
-            final String today = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-            final String[] dt2 = today.split("/");
-            final String[] dt1 = VDate.split("/");
+        final String today = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        final String[] dt2 = today.split("/");
+        final String[] dt1 = VDate.split("/");
 
-            final int ret = Integer.parseInt(dt2[2]) > Integer.parseInt(dt1[2]) ? 1 : Integer.parseInt(dt2[2]) < Integer
-                    .parseInt(dt1[2]) ? -1 : Integer.parseInt(dt2[1]) > Integer.parseInt(dt1[1]) ? 1 : Integer
-                            .parseInt(dt2[1]) < Integer.parseInt(dt1[1]) ? -1
-                                    : Integer.parseInt(dt2[0]) > Integer.parseInt(dt1[0]) ? 1 : Integer.parseInt(dt2[0]) < Integer
-                                            .parseInt(dt1[0]) ? -1 : 0;
-                                    if (ret == -1)
-                                        throw new Exception();
-
-        } catch (final Exception ex) {
-            LOGGER.error("Exception " + ex, ex);
-            throw new TaskFailedException("Date Should be within the today's date");
-        }
+        final int ret = Integer.parseInt(dt2[2]) > Integer.parseInt(dt1[2]) ? 1 : Integer.parseInt(dt2[2]) < Integer
+                .parseInt(dt1[2]) ? -1 : Integer.parseInt(dt2[1]) > Integer.parseInt(dt1[1]) ? 1 : Integer
+                        .parseInt(dt2[1]) < Integer.parseInt(dt1[1]) ? -1
+                                : Integer.parseInt(dt2[0]) > Integer.parseInt(dt1[0]) ? 1 : Integer.parseInt(dt2[0]) < Integer
+                                        .parseInt(dt1[0]) ? -1 : 0;
+                                if (ret == -1)
+                                    throw new ParseException(today, ret);
 
     }
 

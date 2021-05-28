@@ -65,6 +65,11 @@
 			return false;
 		}
 		document.budgetLoad.action = '/services/EGF/budget/budgetLoad-upload.action';
+		jQuery(budgetLoad).append(jQuery('<input>', {
+            type : 'hidden',
+            name : '${_csrf.parameterName}',
+            value : '${_csrf.token}'
+        }));
 		document.budgetLoad.submit();
 		return true;
 	}

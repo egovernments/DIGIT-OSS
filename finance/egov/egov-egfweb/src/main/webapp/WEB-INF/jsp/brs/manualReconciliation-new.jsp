@@ -87,6 +87,7 @@
 </head>
 <body>
 	<s:form action="autoReconciliation" theme="simple" name="mrform" id="mrform">
+		<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 		<jsp:include page="../budget/budgetHeader.jsp">
 			<jsp:param value="Auto Bank Reconciliation" name="heading" />
 		</jsp:include>

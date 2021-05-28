@@ -248,8 +248,7 @@ public class ChartOfAccts {
     }
 
     @Transactional
-    public void insert(final Connection connection) throws SQLException,
-    TaskFailedException {
+    public void insert(final Connection connection){
         created = new SimpleDateFormat("dd/mm/yyyy").format(new Date());
         try {
             created = formatter.format(sdf.parse(created));
@@ -270,34 +269,27 @@ public class ChartOfAccts {
             setId(String.valueOf(PrimaryKeyGenerator
                     .getNextKey("ChartOfAccounts")));
 
-            final String insertQuery = "INSERT INTO ChartOfAccounts (id, glCode, name, description, isActiveForPosting, "
-                    + " parentId, lastModified, modifiedBy, "
-                    + "created,  purposeid,functionreqd, operation,type,classification,class,budgetCheckReq,majorcode)"
-                    + "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			final StringBuilder insertQuery = new StringBuilder(
+					"INSERT INTO ChartOfAccounts (id, glCode, name, description, isActiveForPosting, ").append(
+							" parentId, lastModified, modifiedBy, created,  purposeid,functionreqd, operation,type,")
+							.append("classification,class,budgetCheckReq,majorcode)")
+							.append("values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug(insertQuery);
 
-            persistenceService.getSession().createSQLQuery(insertQuery)
-            .setInteger(0, Integer.parseInt(id))
-            .setString(1, removeSingleQuotes(glCode))
-            .setString(2, removeSingleQuotes(name))
-            .setString(3, removeSingleQuotes(description))
-            .setString(4, removeSingleQuotes(isActiveForPosting))
-            .setString(5, removeSingleQuotes(parentId))
-            .setString(6, removeSingleQuotes(lastModified))
-            .setString(7, removeSingleQuotes(modifiedBy))
-            .setString(8, removeSingleQuotes(created))
-            .setString(9, removeSingleQuotes(purposeid))
-            .setString(10, removeSingleQuotes(functionreqd))
-            .setString(11, removeSingleQuotes(operation))
-            .setString(12, removeSingleQuotes(type))
-            .setString(13, removeSingleQuotes(classification))
-            .setString(14, removeSingleQuotes(classname))
-            .setString(15, removeSingleQuotes(budgetCheckReqd))
-            .setString(16, removeSingleQuotes(getMajorCode(glCode))).executeUpdate();
+			persistenceService.getSession().createSQLQuery(insertQuery.toString()).setInteger(0, Integer.parseInt(id))
+					.setString(1, removeSingleQuotes(glCode)).setString(2, removeSingleQuotes(name))
+					.setString(3, removeSingleQuotes(description)).setString(4, removeSingleQuotes(isActiveForPosting))
+					.setString(5, removeSingleQuotes(parentId)).setString(6, removeSingleQuotes(lastModified))
+					.setString(7, removeSingleQuotes(modifiedBy)).setString(8, removeSingleQuotes(created))
+					.setString(9, removeSingleQuotes(purposeid)).setString(10, removeSingleQuotes(functionreqd))
+					.setString(11, removeSingleQuotes(operation)).setString(12, removeSingleQuotes(type))
+					.setString(13, removeSingleQuotes(classification)).setString(14, removeSingleQuotes(classname))
+					.setString(15, removeSingleQuotes(budgetCheckReqd))
+					.setString(16, removeSingleQuotes(getMajorCode(glCode))).executeUpdate();
         } catch (final HibernateException e) {
             LOGGER.error("Exception occured while getting the data  " + e.getMessage(), new HibernateException(e.getMessage()));
-        } catch (final Exception e) {
+        } catch (final TaskFailedException | ParseException e) {
             LOGGER.error("Exception occured while getting the data  " + e.getMessage(), new Exception(e.getMessage()));
         }
     }
@@ -450,9 +442,7 @@ public class ChartOfAccts {
             pstmt.executeUpdate();
         } catch (final HibernateException e) {
             LOGGER.error("Exception occured while getting the data  " + e.getMessage(), new HibernateException(e.getMessage()));
-        } catch (final Exception e) {
-            LOGGER.error("Exception occured while getting the data  " + e.getMessage(), new Exception(e.getMessage()));
-        }
+        } 
     }
 
 }

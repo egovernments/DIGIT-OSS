@@ -64,10 +64,12 @@ import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.FlushMode;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -135,7 +137,7 @@ public class DishonoredChequeReportAction extends BaseFormAction {
             LOGGER.debug("DishonoredChequeAction | Search | start");
         try {
             dishonoredChequeDisplayList = dishonoredCheque.getDishonoredChequeDetails(dishonoredChequeReport);
-        } catch (final Exception e) {
+        } catch (final HibernateException | ParseException e) {
 
         }
         if (LOGGER.isDebugEnabled())

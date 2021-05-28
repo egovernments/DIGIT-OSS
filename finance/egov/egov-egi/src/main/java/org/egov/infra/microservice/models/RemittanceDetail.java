@@ -49,14 +49,16 @@ package org.egov.infra.microservice.models;
 
 import java.math.BigDecimal;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class RemittanceDetail {
-
+    @SafeHtml
     private String tenantId;
-
+    @SafeHtml
     private String id;
-
+    @SafeHtml
     private String remittance;
-
+    @SafeHtml
     private String chartOfAccount;
 
     private BigDecimal creditAmount;

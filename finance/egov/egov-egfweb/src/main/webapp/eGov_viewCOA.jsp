@@ -75,11 +75,11 @@
 		session.setAttribute("actionid",actionId);
 	 if(actionId==null)
 		actionId=(String)session.getAttribute("actionid");
-		%>
+	%>
 		
-		var actionId=<%=request.getParameter("actionid")%>
+	 var actionId = sanitizeHTML(<%=request.getParameter("actionid")%>);
 
-	 var userid = <%=session.getAttribute("com.egov.user.LoginUserId")%>;
+	 var userid = sanitizeHTML(<%=session.getAttribute("com.egov.user.LoginUserId")%>);
 	 
 	function openPopupWindow(url, name, width, height)
 	{

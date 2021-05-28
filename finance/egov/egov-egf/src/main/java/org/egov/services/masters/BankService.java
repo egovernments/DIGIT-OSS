@@ -48,19 +48,22 @@
 
 package org.egov.services.masters;
 
-import org.egov.commons.Bank;
-import org.egov.infstr.services.PersistenceService;
-import org.egov.utils.FinancialConstants;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.egov.commons.Bank;
+import org.egov.commons.utils.BankAccountType;
+import org.egov.infstr.services.PersistenceService;
+import org.egov.utils.FinancialConstants;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 public class BankService extends PersistenceService<Bank, Integer> {
@@ -77,7 +80,7 @@ public class BankService extends PersistenceService<Bank, Integer> {
         super(type);
     }
 
-    public List<Map<String,Object>> getPaymentApprovedBankAndBranchName(Integer fundId, Date asOnDate) {
+    public List<Map<String,Object>> getPaymentApprovedBankAndBranchName(Long fundId, Date asOnDate) {
         List<Map<String,Object>> bankBranches = new ArrayList<>();
         final List<String> addedBanks = new ArrayList<>();
         for (final Object[] account : fetchBankAndBranchNameHasApprovedPayment(fundId, asOnDate)) {
@@ -116,7 +119,7 @@ public class BankService extends PersistenceService<Bank, Integer> {
         return bankBranches;
     }
 
-    public List<Map<String, Object>> getAllBankAndBranchName(Integer fundId) {
+    public List<Map<String, Object>> getAllBankAndBranchName(Long fundId) {
         List<Map<String, Object>> bankBranchList = new ArrayList<>();
         for (final Object[] element : fetchAllBankAndBankbranchName(fundId)) {
             Map<String, Object> bankBrmap = new HashMap<>();
@@ -127,9 +130,9 @@ public class BankService extends PersistenceService<Bank, Integer> {
         return bankBranchList;
     }
 
-    public List<Map<String, Object>> getBankByFundAndType(Integer fundId, String typeOfAccount) {
+    public List<Map<String, Object>> getBankByFundAndType(Long fundId, List<BankAccountType> list) {
         List<Map<String, Object>> bankBranchList = new ArrayList<>();
-        for (final Object[] element : fetchBankByFundAndTypeOfAccount(fundId, typeOfAccount)) {
+        for (final Object[] element : fetchBankByFundAndTypeOfAccount(fundId, list)) {
             Map<String, Object> bankBrmap = new HashMap<>();
             bankBrmap.put(BANK_BRANCH_ID, element[0].toString());
             bankBrmap.put(BANK_BRANCH_NAME, element[1].toString());
@@ -138,117 +141,125 @@ public class BankService extends PersistenceService<Bank, Integer> {
         return bankBranchList;
     }
 
-    private List<Object[]> fetchBankByFundAndTypeOfAccount(final Integer fundId, final String typeOfAccount) {
-        final StringBuilder query = new StringBuilder();
-        query.append("select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),bankBranch.branchname) as bankbranchname ").
-                append("FROM Bank bank,Bankbranch bankBranch,Bankaccount bankaccount where  bank.isactive=true  and bankBranch.isactive=true and ").
-                append(" bankaccount.isactive=true and bank.id = bankBranch.bank.id and bankBranch.id = bankaccount.bankbranch.id ");
-        if (fundId != null)
-            query.append("and bankaccount.fund.id=:fundId and bankaccount.type in(");
-        else
-            query.append("and bankaccount.type in(");
-        if (typeOfAccount.indexOf(',') != -1) {
-            String[] strArray = typeOfAccount.split(",");
-            int index = 0;
-            for (final String type : strArray) {
-                query.append("'").append(type).append("'");
-                if (strArray.length > ++index)
-                    query.append(",");
+	private List<Object[]> fetchBankByFundAndTypeOfAccount(final Long fundId, final List<BankAccountType> list) {
+		final StringBuilder query = new StringBuilder();
+		query.append("select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,")
+				.append("concat(concat(bank.name,' '),bankBranch.branchname) as bankbranchname ")
+				.append("FROM Bank bank,Bankbranch bankBranch,Bankaccount bankaccount where  bank.isactive=true ")
+				.append(" and bankBranch.isactive=true and ")
+				.append(" bankaccount.isactive=true and bank.id = bankBranch.bank.id and bankBranch.id = bankaccount.bankbranch.id ");
+		if (fundId != null)
+			query.append("and bankaccount.fund.id=:fundId and bankaccount.type in (:accountType) order by 2 ");
+		else
+			query.append("and bankaccount.type in (:accountType) order by 2 ");
 
-            }
-        } else
-            query.append("'").append(typeOfAccount).append("'");
+		final Query qry = getSession().createQuery(query.toString());
 
-        query.append(") order by 2 ");
+		if (fundId != null)
+			qry.setLong(FUND_ID, fundId);
 
-        List<Object[]> bankBranch;
-        if (fundId != null)
-            bankBranch = getSession().createQuery(query.toString()).setInteger(FUND_ID, fundId).list();
-        else
-            bankBranch = getSession().createQuery(query.toString()).list();
-        return bankBranch;
-    }
+		qry.setParameterList("accountType", list);
 
-    private List<Object[]> fetchAllBankAndBankbranchName(final Integer fundId) {
-        StringBuilder query = new StringBuilder();
-        query.append("select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),bankBranch.branchname) as bankbranchname ").
-                append(" FROM Bank bank,Bankbranch bankBranch,Bankaccount bankaccount  where  bank.isactive=true  and bankBranch.isactive=true and bankaccount.isactive=true ").
-                append("and bank.id = bankBranch.bank.id and bankBranch.id = bankaccount.bankbranch.id and bankaccount.fund.id=:fundId order by 2");
-        return getSession().createSQLQuery(query.toString())
-                .setInteger(FUND_ID, fundId)
-                .list();
-    }
+		List<Object[]> bankBranch = qry.list();
 
-    private List<Object[]> fetchBankAndBranchNameWithRTGSAssigned(final Date asOnDate) {
-        StringBuilder vouchersWithNewInstrumentsQuery = new StringBuilder().append("select voucherheaderid from egf_instrumentvoucher eiv,egf_instrumentheader ih,").
-                append(" egw_status egws where eiv.instrumentheaderid=ih.id and egws.id=ih.id_status and egws.moduletype='Instrument' and egws.description='New' and ").
-                append(" ih.transactionNumber is not null");
+		return bankBranch;
+	}
 
-        StringBuilder queryString = new StringBuilder();
-        queryString = queryString.append("select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),").
-                append("bankBranch.branchname) as bankbranchname from  voucherheader vh,Bank bank,Bankbranch bankBranch,Bankaccount bankaccount, ").
-                append(" paymentheader ph where  ph.voucherheaderid=vh.id and vh.id  in (").append(vouchersWithNewInstrumentsQuery).
-                append(") and bank.isactive=true  and bankBranch.isactive=true ").
-                append(" and  bank.id = bankBranch.bankid and bankBranch.id = bankaccount.BRANCHID and bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS') and vh.voucherdate <= :date").
-                append(" and ph.bankaccountnumberid=bankaccount.id  and bankaccount.isactive=true order by 2");
-        return getSession().createSQLQuery(queryString.toString())
-                .setParameter("date", asOnDate)
-                .list();
-    }
+	private List<Object[]> fetchAllBankAndBankbranchName(final Long fundId) {
+		StringBuilder query = new StringBuilder();
+		query.append("select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,")
+				.append("concat(concat(bank.name,' '),bankBranch.branchname) as bankbranchname ")
+				.append(" FROM Bank bank,Bankbranch bankBranch,Bankaccount bankaccount  where  bank.isactive=true ")
+				.append(" and bankBranch.isactive=true and bankaccount.isactive=true ")
+				.append("and bank.id = bankBranch.bank.id and bankBranch.id = bankaccount.bankbranch.id ")
+				.append("and bankaccount.fund.id=:fundId order by 2");
+		return getSession().createSQLQuery(query.toString()).setLong(FUND_ID, fundId).list();
+	}
 
-    private List<Object[]> fetchBankAndBankBranchWithAssignedCheques(Date asOnDate) {
-        final StringBuilder vouchersWithNewInstrumentsQuery = new StringBuilder().append("select voucherheaderid from egf_instrumentvoucher eiv,egf_instrumentheader ih,").
-                        append(" egw_status egws where eiv.instrumentheaderid=ih.id and egws.id=ih.id_status and egws.moduletype='Instrument' and egws.description='New' ");
-        StringBuilder queryString = new StringBuilder();
-        queryString.append("select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),").
-                append("bankBranch.branchname) as bankbranchname from  voucherheader vh,Bank bank,Bankbranch bankBranch,Bankaccount bankaccount, ").
-                append(" paymentheader ph where ph.voucherheaderid=vh.id and vh.id  in (").append(vouchersWithNewInstrumentsQuery.toString()).
-                append(") and bank.isactive=true  and bankBranch.isactive=true ").
-                append(" and  bank.id = bankBranch.bankid and bankBranch.id = bankaccount.BRANCHID and bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS') and vh.voucherdate <= :date").
-                append(" and ph.bankaccountnumberid=bankaccount.id  and bankaccount.isactive=true order by 2");
-        return getSession().createSQLQuery(queryString.toString())
-                .setParameter("date", asOnDate)
-                .list();
-    }
+	private List<Object[]> fetchBankAndBranchNameWithRTGSAssigned(final Date asOnDate) {
+		StringBuilder vouchersWithNewInstrumentsQuery = new StringBuilder()
+				.append("select voucherheaderid from egf_instrumentvoucher eiv,egf_instrumentheader ih,")
+				.append(" egw_status egws where eiv.instrumentheaderid=ih.id and egws.id=ih.id_status")
+				.append(" and egws.moduletype='Instrument' and egws.description='New' and ")
+				.append(" ih.transactionNumber is not null");
 
-    private List<Object[]> fetchBankAndBranchNameHasApprovedPayment(Integer fundId, Date asOnDate) {
-        StringBuilder queryString = new StringBuilder();
-        // query to fetch vouchers for which no cheque has been assigned
-        queryString.append("select distinct concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),").
-                append(" bankBranch.branchname) as bankbranchname  from Bank bank,  Bankbranch bankBranch,   Bankaccount bankaccount where bankaccount.id in ( ").
-                append(" select DISTINCT ph.bankaccountnumberid from  paymentheader ph,egf_instrumentvoucher iv right outer join voucherheader vh on ").
-                append(" vh.id =iv.VOUCHERHEADERID where ph.voucherheaderid=vh.id  and  vh.status=0  and ").append(" ph.voucherheaderid=vh.id  and iv.VOUCHERHEADERID is null ");
-        if (fundId != null && fundId > 0)
-            queryString.append(" and vh.fundid=:fundId");
-        queryString.append(" and vh.name NOT IN ( '").
-                append(FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE).append("','").
-                append(FinancialConstants.PAYMENTVOUCHER_NAME_SALARY).append("') ").
-                append("and vh.voucherdate <= :asOnDate ) AND bank.id = bankBranch.bankid AND bank.isactive=true AND bankBranch.isactive=true ").
-                append("AND bankaccount.type IN ('RECEIPTS_PAYMENTS','PAYMENTS') AND bankBranch.id = bankaccount.branchid");
-        if (fundId != null && fundId > 0)
-            queryString.append(" and bankaccount.fundid=:fundId");
-        queryString.append(" union select distinct concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),").
-                append("bankBranch.branchname) as bankbranchname from Bank bank,  Bankbranch bankBranch,   Bankaccount bankaccount where bankaccount.id in ( ").
-                append(" select DISTINCT ph.bankaccountnumberid from egf_instrumentvoucher iv,voucherheader vh,").
-                append(" paymentheader ph,egw_status egws,(select ih1.id,ih1.id_status from egf_instrumentheader ih1, ").
-                append("(select bankid,bankaccountid,instrumentnumber,max(id) as id from egf_instrumentheader group by bankid,bankaccountid,").
-                append("instrumentnumber) max_rec where max_rec.bankid=ih1.bankid and max_rec.bankaccountid=ih1.bankaccountid and max_rec.instrumentnumber=ih1.instrumentnumber ").
-                append(" and max_rec.id=ih1.id) ih where ph.voucherheaderid=vh.id and vh.status=0  and ph.voucherheaderid=vh.id and iv.voucherheaderid=vh.id and iv.instrumentheaderid=ih.id and ").
-                append("ih.id_status=egws.id and egws.description in  ('Surrendered','Surrender_For_Reassign')");
-        if (fundId != null && fundId > 0)
-            queryString.append(" and vh.fundid=:fundId");
-        queryString.append("  and vh.voucherdate <= :asOnDate and vh.name NOT IN ( '").
-                append(FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE).append("','").
-                append(FinancialConstants.PAYMENTVOUCHER_NAME_SALARY).append("' ) ) ").
-                append(" AND bank.id = bankBranch.bankid AND bank.isactive=true AND bankBranch.isactive=true ").
-                append("AND bankaccount.type IN ('RECEIPTS_PAYMENTS','PAYMENTS') AND bankBranch.id = bankaccount.branchid");
-        if (fundId != null && fundId > 0)
-            queryString.append(" and bankaccount.fundid=:fundId");
-        return getSession().createSQLQuery(queryString.toString())
-                .setInteger(FUND_ID, fundId)
-                .setDate("asOnDate", asOnDate)
-                .list();
-    }
+		StringBuilder queryString = new StringBuilder();
+		queryString.append(
+				"select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),")
+				.append("bankBranch.branchname) as bankbranchname from  voucherheader vh,Bank bank,")
+				.append("Bankbranch bankBranch,Bankaccount bankaccount, ")
+				.append(" paymentheader ph where  ph.voucherheaderid=vh.id and vh.id  in (")
+				.append(vouchersWithNewInstrumentsQuery)
+				.append(") and bank.isactive=true  and bankBranch.isactive=true ")
+				.append(" and  bank.id = bankBranch.bankid and bankBranch.id = bankaccount.BRANCHID")
+				.append(" and bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS') and vh.voucherdate <= :date")
+				.append(" and ph.bankaccountnumberid=bankaccount.id  and bankaccount.isactive=true order by 2");
+		return getSession().createSQLQuery(queryString.toString()).setParameter("date", asOnDate).list();
+	}
+
+	private List<Object[]> fetchBankAndBankBranchWithAssignedCheques(Date asOnDate) {
+		final StringBuilder vouchersWithNewInstrumentsQuery = new StringBuilder()
+				.append("select voucherheaderid from egf_instrumentvoucher eiv,egf_instrumentheader ih,")
+				.append(" egw_status egws where eiv.instrumentheaderid=ih.id and egws.id=ih.id_status")
+				.append(" and egws.moduletype='Instrument' and egws.description='New' ");
+		StringBuilder queryString = new StringBuilder();
+		queryString.append(
+				"select DISTINCT concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),")
+				.append("bankBranch.branchname) as bankbranchname from  voucherheader vh,Bank bank,Bankbranch bankBranch,")
+				.append("Bankaccount bankaccount, ")
+				.append(" paymentheader ph where ph.voucherheaderid=vh.id and vh.id  in (")
+				.append(vouchersWithNewInstrumentsQuery.toString())
+				.append(") and bank.isactive=true  and bankBranch.isactive=true ")
+				.append(" and  bank.id = bankBranch.bankid and bankBranch.id = bankaccount.BRANCHID")
+				.append(" and bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS') and vh.voucherdate <= :date")
+				.append(" and ph.bankaccountnumberid=bankaccount.id  and bankaccount.isactive=true order by 2");
+		return getSession().createSQLQuery(queryString.toString()).setParameter("date", asOnDate).list();
+	}
+
+	private List<Object[]> fetchBankAndBranchNameHasApprovedPayment(Long fundId, Date asOnDate) {
+		StringBuilder queryString = new StringBuilder();
+		// query to fetch vouchers for which no cheque has been assigned
+		queryString.append(
+				"select distinct concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),")
+				.append(" bankBranch.branchname) as bankbranchname  from Bank bank,  Bankbranch bankBranch,")
+				.append("  Bankaccount bankaccount where bankaccount.id in ( ")
+				.append(" select DISTINCT ph.bankaccountnumberid from  paymentheader ph,egf_instrumentvoucher iv")
+				.append(" right outer join voucherheader vh on ")
+				.append(" vh.id =iv.VOUCHERHEADERID where ph.voucherheaderid=vh.id  and  vh.status=0  and ")
+				.append(" ph.voucherheaderid=vh.id  and iv.VOUCHERHEADERID is null ");
+		if (fundId != null && fundId > 0)
+			queryString.append(" and vh.fundid=:fundId");
+		queryString.append(" and vh.name NOT IN (:vhName) ")
+				.append("and vh.voucherdate <= :asOnDate ) AND bank.id = bankBranch.bankid AND bank.isactive=true")
+				.append(" AND bankBranch.isactive=true ")
+				.append("AND bankaccount.type IN ('RECEIPTS_PAYMENTS','PAYMENTS') AND bankBranch.id = bankaccount.branchid");
+		if (fundId != null && fundId > 0)
+			queryString.append(" and bankaccount.fundid=:fundId");
+		queryString.append(
+				" union select distinct concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),")
+				.append("bankBranch.branchname) as bankbranchname from Bank bank,  Bankbranch bankBranch, ")
+				.append("  Bankaccount bankaccount where bankaccount.id in ( ")
+				.append(" select DISTINCT ph.bankaccountnumberid from egf_instrumentvoucher iv,voucherheader vh,")
+				.append(" paymentheader ph,egw_status egws,(select ih1.id,ih1.id_status from egf_instrumentheader ih1, ")
+				.append("(select bankid,bankaccountid,instrumentnumber,max(id) as id from egf_instrumentheader")
+				.append(" group by bankid,bankaccountid,")
+				.append("instrumentnumber) max_rec where max_rec.bankid=ih1.bankid and max_rec.bankaccountid=ih1.bankaccountid")
+				.append(" and max_rec.instrumentnumber=ih1.instrumentnumber ")
+				.append(" and max_rec.id=ih1.id) ih where ph.voucherheaderid=vh.id and vh.status=0 ")
+				.append(" and ph.voucherheaderid=vh.id and iv.voucherheaderid=vh.id and iv.instrumentheaderid=ih.id and ")
+				.append("ih.id_status=egws.id and egws.description in  ('Surrendered','Surrender_For_Reassign')");
+		if (fundId != null && fundId > 0)
+			queryString.append(" and vh.fundid=:fundId");
+		queryString.append("  and vh.voucherdate <= :asOnDate and vh.name NOT IN (:vhName)) ")
+				.append(" AND bank.id = bankBranch.bankid AND bank.isactive=true AND bankBranch.isactive=true ")
+				.append("AND bankaccount.type IN ('RECEIPTS_PAYMENTS','PAYMENTS') AND bankBranch.id = bankaccount.branchid");
+		if (fundId != null && fundId > 0)
+			queryString.append(" and bankaccount.fundid=:fundId");
+		return getSession().createSQLQuery(queryString.toString()).setLong(FUND_ID, fundId)
+				.setParameterList("vhName", Arrays.asList(FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE,
+						FinancialConstants.PAYMENTVOUCHER_NAME_SALARY))
+				.setDate("asOnDate", asOnDate).list();
+	}
     
     public List<Bank> search(Bank bank,List<Long>ids, String sortBy,int offset,int pageSize){
     	

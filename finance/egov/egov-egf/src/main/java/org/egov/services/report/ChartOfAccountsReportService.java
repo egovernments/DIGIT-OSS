@@ -62,22 +62,24 @@ public class ChartOfAccountsReportService {
             coaSearchResultObj.setAccountCode(accountCodes[0].trim());
         }
 
-        final StringBuilder queryStr = new StringBuilder();
-        queryStr.append(" select coa.glcode as accountCode,coa.name as accountName,concat(minorcoa.glcode,'-',minorcoa.name) as ");
-        queryStr.append(" minorCode,concat(majorcoa.glcode,'-',majorcoa.name) as majorCode,acp.name as purpose,string_agg(acdt.name,',') as accountDetailType ");
-        queryStr.append(" ,coa.type as type,coa.isactiveforposting as isActiveForPosting  ");
-        queryStr.append(" from chartofaccounts coa ");
-        queryStr.append(" left join chartofaccountdetail coad on coa.id=coad.glcodeid ");
-        queryStr.append(" left join accountdetailtype acdt on acdt.id=coad.detailtypeid");
-        queryStr.append(" left join egf_accountcode_purpose acp on coa.purposeid=acp.id ");
-        queryStr.append(",chartofaccounts minorcoa,chartofaccounts majorcoa,chartofaccounts parent"); 
-        queryStr.append(" where coa.parentid=minorcoa.id and minorcoa.parentid=majorcoa.id and majorcoa.parentid=parent.id ");
-        getAppendQuery(coaSearchResultObj, queryStr);
-        queryStr.append(" group by coa.glcode,minorcoa.glcode,majorcoa.glcode,parent.glcode,coa.name,minorcoa.name,majorcoa.name,acp.name,coa.type,coa.isactiveforposting order by coa.glcode asc ");
+		final StringBuilder queryStr = new StringBuilder();
+		queryStr.append(" select coa.glcode as accountCode,coa.name as accountName,")
+				.append("concat(minorcoa.glcode,'-',minorcoa.name) as ")
+				.append(" minorCode,concat(majorcoa.glcode,'-',majorcoa.name) as majorCode,acp.name as purpose,")
+				.append("string_agg(acdt.name,',') as accountDetailType ")
+				.append(" ,coa.type as type,coa.isactiveforposting as isActiveForPosting  ")
+				.append(" from chartofaccounts coa ")
+				.append(" left join chartofaccountdetail coad on coa.id=coad.glcodeid ")
+				.append(" left join accountdetailtype acdt on acdt.id=coad.detailtypeid")
+				.append(" left join egf_accountcode_purpose acp on coa.purposeid=acp.id ")
+				.append(",chartofaccounts minorcoa,chartofaccounts majorcoa,chartofaccounts parent")
+				.append(" where coa.parentid=minorcoa.id and minorcoa.parentid=majorcoa.id and majorcoa.parentid=parent.id ");
+		getAppendQuery(coaSearchResultObj, queryStr);
+		queryStr.append(" group by coa.glcode,minorcoa.glcode,majorcoa.glcode,parent.glcode,coa.name,minorcoa.name,")
+		.append("majorcoa.name,acp.name,coa.type,coa.isactiveforposting order by coa.glcode asc ");
 
-       // getAppendQuery(coaSearchResultObj, queryStr);
         SQLQuery queryResult = persistenceService.getSession().createSQLQuery(queryStr.toString());
-        queryResult = setParametersToQuery(coaSearchResultObj, queryResult);
+        setParametersToQuery(coaSearchResultObj, queryResult);
         final List<Object[]> coaReportList = queryResult.list();
         List<ChartOfAccountsReport> coaReport = new ArrayList<ChartOfAccountsReport>();
         for(Object[] obj : coaReportList) {
@@ -94,7 +96,6 @@ public class ChartOfAccountsReportService {
             coaReport.add(report);
         }
 
-        //return prepareDetailTypeNames(coaReportList);
         return coaReport;
 
     }
@@ -139,31 +140,30 @@ public class ChartOfAccountsReportService {
 
     }
 
-    private SQLQuery setParametersToQuery(final ChartOfAccountsReport coaSearchResultObj, final SQLQuery queryResult) {
+	private SQLQuery setParametersToQuery(final ChartOfAccountsReport coaSearchResultObj, final SQLQuery queryResult) {
 
-        if (StringUtils.isNotBlank(coaSearchResultObj.getAccountCode()))
-            queryResult.setString("accountCode", coaSearchResultObj.getAccountCode());
-        if (coaSearchResultObj.getMajorCodeId() != null)
-            queryResult.setLong("majorCodeId", coaSearchResultObj.getMajorCodeId());
+		if (StringUtils.isNotBlank(coaSearchResultObj.getAccountCode()))
+			queryResult.setString("accountCode", coaSearchResultObj.getAccountCode());
+		if (coaSearchResultObj.getMajorCodeId() != null)
+			queryResult.setLong("majorCodeId", coaSearchResultObj.getMajorCodeId());
 
-        if (coaSearchResultObj.getMinorCodeId() != null)
-            queryResult.setLong("minorCodeId", coaSearchResultObj.getMinorCodeId());
+		if (coaSearchResultObj.getMinorCodeId() != null)
+			queryResult.setLong("minorCodeId", coaSearchResultObj.getMinorCodeId());
 
-        if (coaSearchResultObj.getType() != null)
-            queryResult.setString("type", coaSearchResultObj.getType());
-        if (coaSearchResultObj.getPurposeId() != null)
-            queryResult.setLong("purposeId", coaSearchResultObj.getPurposeId());
-        if (coaSearchResultObj.getDetailTypeId() != null)
-            queryResult.setLong("detailTypeId", coaSearchResultObj.getDetailTypeId());
-        if (coaSearchResultObj.getIsActiveForPosting() != null)
-            queryResult.setBoolean("isActiveForPosting", coaSearchResultObj.getIsActiveForPosting());
-        if (coaSearchResultObj.getFunctionReqd() != null)
-            queryResult.setBoolean("functionReqd", coaSearchResultObj.getFunctionReqd());
-        if (coaSearchResultObj.getBudgetCheckReq() != null)
-            queryResult.setBoolean("budgetCheckReq", coaSearchResultObj.getBudgetCheckReq());
-//        queryResult.setResultTransformer(new AliasToBeanResultTransformer(ChartOfAccountsReport.class));
-        return queryResult;
-    }
+		if (coaSearchResultObj.getType() != null)
+			queryResult.setString("type", coaSearchResultObj.getType());
+		if (coaSearchResultObj.getPurposeId() != null)
+			queryResult.setLong("purposeId", coaSearchResultObj.getPurposeId());
+		if (coaSearchResultObj.getDetailTypeId() != null)
+			queryResult.setLong("detailTypeId", coaSearchResultObj.getDetailTypeId());
+		if (coaSearchResultObj.getIsActiveForPosting() != null)
+			queryResult.setBoolean("isActiveForPosting", coaSearchResultObj.getIsActiveForPosting());
+		if (coaSearchResultObj.getFunctionReqd() != null)
+			queryResult.setBoolean("functionReqd", coaSearchResultObj.getFunctionReqd());
+		if (coaSearchResultObj.getBudgetCheckReq() != null)
+			queryResult.setBoolean("budgetCheckReq", coaSearchResultObj.getBudgetCheckReq());
+		return queryResult;
+	}
 
     public List<CChartOfAccounts> getMinCodeListByMajorCodeId(Long parentId) {
 

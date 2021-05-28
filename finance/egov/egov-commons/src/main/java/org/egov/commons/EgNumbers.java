@@ -86,7 +86,7 @@ public class EgNumbers implements java.io.Serializable {
 		return this.id;
 	}
 
-	public void setId(Long id) {
+	private void setId(Long id) {
 		this.id = id;
 	}
 

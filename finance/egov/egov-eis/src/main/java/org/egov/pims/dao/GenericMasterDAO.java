@@ -47,6 +47,11 @@
  */
 package org.egov.pims.dao;
 
+import java.io.Serializable;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.pims.model.GenericMaster;
 import org.hibernate.HibernateException;
@@ -54,92 +59,67 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.io.Serializable;
 /**
  * @author deepak
  *
  */
 @Service
 @Transactional
-public class GenericMasterDAO implements Serializable
-{
+public class GenericMasterDAO implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3701687349495780728L;
+
 	@PersistenceContext
-	private EntityManager entityManager;
-    
-	public Session  getCurrentSession() {
+	private transient EntityManager entityManager;
+
+	public Session getCurrentSession() {
 		return entityManager.unwrap(Session.class);
 	}
 
-	public void create(GenericMaster genericMaster) 
-	{
-		try
-		{
+	public void create(GenericMaster genericMaster) {
+		try {
 			getCurrentSession().save(genericMaster);
 
-		}
-		catch (HibernateException e)
-		{
-			
-			throw  new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
+		} catch (HibernateException e) {
+
+			throw new ApplicationRuntimeException(STR_HIB_EXP + e.getMessage(), e);
 		}
 
 	}
 
-	public void update(GenericMaster genericMaster)
-	{
-		try
-		{
+	public void update(GenericMaster genericMaster) {
+		try {
 			getCurrentSession().saveOrUpdate(genericMaster);
-		}
-		catch (HibernateException e)
-		{
-			throw  new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
+		} catch (HibernateException e) {
+			throw new ApplicationRuntimeException(STR_HIB_EXP + e.getMessage(), e);
 
 		}
 
 	}
 
-	public void remove(GenericMaster genericMaster)
-	{
-		try
-		{
+	public void remove(GenericMaster genericMaster) {
+		try {
 			getCurrentSession().delete(genericMaster);
-		}
-		catch (HibernateException e)
-		{
-			
-			throw  new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
+		} catch (HibernateException e) {
+
+			throw new ApplicationRuntimeException(STR_HIB_EXP + e.getMessage(), e);
 
 		}
 
 	}
 
-	public GenericMaster getGenericMaster(int Id,String className)
-	{
-		try
-		{
-			String srt = "org.egov.pims.model."+className;
-			GenericMaster imp = (GenericMaster)getCurrentSession().get(Class.forName(srt), Integer.valueOf(Id));
-
-			return imp ;
-		}catch (HibernateException e)
-		{
-			throw  new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
+	public GenericMaster getGenericMaster(int id, String className) {
+		try {
+			String srt = "org.egov.pims.model." + className;
+			return (GenericMaster) getCurrentSession().get(Class.forName(srt), Integer.valueOf(id));
+		} catch (HibernateException | ClassNotFoundException e) {
+			throw new ApplicationRuntimeException(STR_HIB_EXP + e.getMessage(), e);
 
 		}
-		catch (ClassNotFoundException e)
-		{
-				
-			throw  new ApplicationRuntimeException(STR_HIB_EXP+e.getMessage(),e);
-
-		}
-
-
 	}
-	
-	private final static String STR_HIB_EXP = "Hibernate Exception : ";
 
+	private static final String STR_HIB_EXP = "Hibernate Exception : ";
 
 }

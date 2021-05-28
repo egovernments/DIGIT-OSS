@@ -95,18 +95,11 @@ public class Job {
         currentUserName = dc.getValue("current_loginName");
         // if(LOGGER.isDebugEnabled()) LOGGER.debug("######currentUserId: " + currentUserName);
         allowedRoles = roles;
-        // if(LOGGER.isDebugEnabled()) LOGGER.debug("######allowedRoles: " + allowedRoles);
-        try {
-            final User aUser = new User(currentUserName);
-            userRole = aUser.getRole(con);
-            if (allowedRoles != null && allowedRoles.equals("Everyone")
-                    || allowedRoles != null && allowedRoles.indexOf(userRole) > 0)
-                bAccess = true;
-        } catch (final TaskFailedException te)
-        {
-            dc.addMessage("exilRPError", "Access not defined");
-            throw new TaskFailedException();
-        }
+        final User aUser = new User(currentUserName);
+        userRole = aUser.getRole(con);
+        if (allowedRoles != null && allowedRoles.equals("Everyone")
+                || allowedRoles != null && allowedRoles.indexOf(userRole) > 0)
+            bAccess = true;
         return bAccess;
     }
 

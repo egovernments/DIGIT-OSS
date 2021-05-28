@@ -49,7 +49,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn"%>
-<form:form role="form" action="search" modelAttribute="closedPeriod"
+<form:form role="form" action="search" modelAttribute="closedPeriodSearchRequest"
 	id="closedPeriodsearchform"
 	cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
@@ -74,7 +74,7 @@
 						<label class="col-sm-3 control-label text-right"><spring:message
 								code="lbl.cfinancialyearid" /> </label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="financialYear" id="financialYear"
+							<form:select path="financialYearId" id="financialYear"
 								cssClass="form-control" cssErrorClass="form-control error">
 								<form:option value="">
 									<spring:message code="lbl.select" />
@@ -82,7 +82,7 @@
 								<form:options items="${cFinancialYears}" itemValue="id" 
 									itemLabel="finYearRange" />
 							</form:select>
-							<form:errors path="financialYear" cssClass="error-msg" />
+							<form:errors path="financialYearId" cssClass="error-msg" />
 						</div>
 
 					</div>

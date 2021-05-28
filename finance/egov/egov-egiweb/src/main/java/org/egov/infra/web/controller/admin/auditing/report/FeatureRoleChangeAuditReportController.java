@@ -48,6 +48,10 @@
 
 package org.egov.infra.web.controller.admin.auditing.report;
 
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+
+import javax.validation.Valid;
+
 import org.egov.infra.admin.auditing.contract.FeatureRoleChangeAuditReportRequest;
 import org.egov.infra.admin.auditing.service.FeatureAuditService;
 import org.egov.infra.admin.master.service.ModuleService;
@@ -61,8 +65,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @Controller
 @RequestMapping("audit/report/feature-role")
@@ -86,7 +88,7 @@ public class FeatureRoleChangeAuditReportController {
     @PostMapping(produces = TEXT_PLAIN_VALUE)
     @ResponseBody
     public String featureRoleChangeAuditReportSearchResult(
-            @ModelAttribute FeatureRoleChangeAuditReportRequest featureRoleChangeAuditReportRequest) {
+            @Valid @ModelAttribute FeatureRoleChangeAuditReportRequest featureRoleChangeAuditReportRequest) {
         return new DataTable<>(featureAuditService
                 .getFeatureRoleChangeAudit(featureRoleChangeAuditReportRequest), featureRoleChangeAuditReportRequest.draw())
                 .toJson(featureRoleChangeAuditReportAdapter);

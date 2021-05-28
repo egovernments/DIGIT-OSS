@@ -55,7 +55,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FundRepository extends JpaRepository<Fund, Integer> {
+public interface FundRepository extends JpaRepository<Fund, Long> {
     Fund findByName(String name);
 
     Fund findByCode(String code);

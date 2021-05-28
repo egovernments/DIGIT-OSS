@@ -47,21 +47,6 @@
  */
 package org.egov.services.report;
 
-import org.apache.log4j.Logger;
-import org.egov.commons.CVoucherHeader;
-import org.egov.commons.Fund;
-import org.egov.egf.model.IEStatementEntry;
-import org.egov.egf.model.Statement;
-import org.egov.egf.model.StatementEntry;
-import org.egov.infra.admin.master.service.AppConfigValueService;
-import org.egov.infstr.services.PersistenceService;
-import org.egov.utils.Constants;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,11 +58,31 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.egov.commons.CVoucherHeader;
+import org.egov.commons.Fund;
+import org.egov.egf.model.IEStatementEntry;
+import org.egov.egf.model.Statement;
+import org.egov.egf.model.StatementEntry;
+import org.egov.egf.utils.FinancialUtils;
+import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infstr.services.PersistenceService;
+import org.egov.utils.Constants;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public abstract class ScheduleService extends PersistenceService {
     private static final Logger LOGGER = Logger.getLogger(ScheduleService.class);
     static final BigDecimal NEGATIVE = new BigDecimal("-1");
     @Autowired
     AppConfigValueService appConfigValuesService;
+    
+    @Autowired
+    private FinancialUtils financialUtils;
+    
     int minorCodeLength;
     int majorCodeLength;
     int detailCodeLength;
@@ -93,15 +98,15 @@ public abstract class ScheduleService extends PersistenceService {
 
     /* for detailed */
     Map<String, Schedules> getScheduleToGlCodeMapDetailed(final String reportType, final String coaType) {
-        final Query query = getSession().createSQLQuery(
-                "SELECT coa1.glcode, s.schedule, s.schedulename, coa1.type, coa1.name" +
-                		" FROM chartofaccounts coa1, chartofaccounts coa2, chartofaccounts coa3, schedulemapping s" +
-                        " WHERE coa3.scheduleid  = s.id AND coa3.id = coa2.parentid AND coa2.id = coa1.parentid" +
-                        " AND  coa2.classification=2 AND coa1.classification=4" +
-                        " AND coa3.type IN " + coaType + " AND coa2.type IN " + coaType + " AND coa1.type IN " + coaType
-                        + "" +
-                        " AND s.reporttype = '" + reportType + "' ORDER BY coa1.glcode");
-        final List<Object[]> results = query.list();
+		final Query query = getSession().createSQLQuery(
+				new StringBuilder("SELECT coa1.glcode, s.schedule, s.schedulename, coa1.type, coa1.name").append(
+						" FROM chartofaccounts coa1, chartofaccounts coa2, chartofaccounts coa3, schedulemapping s")
+						.append(" WHERE coa3.scheduleid  = s.id AND coa3.id = coa2.parentid AND coa2.id = coa1.parentid")
+						.append(" AND  coa2.classification=2 AND coa1.classification=4")
+						.append(" AND coa3.type IN (:coaType) AND coa2.type IN (:coaType) AND coa1.type IN (:coaType)")
+						.append(" AND s.reporttype = :reportType ORDER BY coa1.glcode").toString());
+		final List<Object[]> results = query.setParameterList("coaType", financialUtils.getCoaTypes(coaType))
+				.setParameter("reportType", reportType).list();
         final Map<String, Schedules> scheduleMap = new LinkedHashMap<String, Schedules>();
         for (final Object[] row : results) {
             if (!scheduleMap.containsKey(row[1].toString()))
@@ -113,12 +118,13 @@ public abstract class ScheduleService extends PersistenceService {
     }
 
     Map<String, Schedules> getScheduleToGlCodeMap(final String reportType, final String coaType) {
-        final Query query = getSession().createSQLQuery(
-                "select distinct coa.glcode,s.schedule,s.schedulename," +
-                        "coa.type,coa.name from chartofaccounts coa, schedulemapping s where s.id=coa.scheduleid and " +
-                        "coa.classification=2 and s.reporttype = '" + reportType + "' and coa.type in " + coaType + " " +
-                        "order by coa.glcode");
-        final List<Object[]> results = query.list();
+		final Query query = getSession()
+				.createSQLQuery(new StringBuilder("select distinct coa.glcode,s.schedule,s.schedulename,").append(
+						"coa.type,coa.name from chartofaccounts coa, schedulemapping s where s.id=coa.scheduleid and ")
+						.append("coa.classification=2 and s.reporttype = :reportType and coa.type in (:coaType) ")
+						.append("order by coa.glcode").toString());
+		final List<Object[]> results = query.setParameter("reportType", reportType)
+				.setParameterList("coaType", financialUtils.getCoaTypes(coaType)).list();
         final Map<String, Schedules> scheduleMap = new LinkedHashMap<String, Schedules>();
         for (final Object[] row : results) {
             if (!scheduleMap.containsKey(row[1].toString()))
@@ -129,53 +135,68 @@ public abstract class ScheduleService extends PersistenceService {
         return scheduleMap;
     }
 
-    List<Object[]> getAllGlCodesForAllSchedule(final String reportType, final String coaType) {
-        final Query query = getSession().createSQLQuery(
-                "select distinct coa.majorcode,s.schedule,s.schedulename," +
-                        "coa.type from chartofaccounts coa, schedulemapping s where s.id=coa.scheduleid and " +
-                        "coa.classification=2 and s.reporttype = '" + reportType + "' and coa.type in " + coaType + " " +
-                "group by coa.majorcode,s.schedule,s.schedulename,coa.type order by coa.majorcode");
-        return query.list();
-    }
+	List<Object[]> getAllGlCodesForAllSchedule(final String reportType, final String coaType) {
+		final Query query = getSession()
+				.createSQLQuery(new StringBuilder("select distinct coa.majorcode,s.schedule,s.schedulename,")
+						.append("coa.type from chartofaccounts coa, schedulemapping s where s.id=coa.scheduleid and ")
+						.append("coa.classification=2 and s.reporttype = :reportType and coa.type in (:coaType) ")
+						.append("group by coa.majorcode,s.schedule,s.schedulename,coa.type order by coa.majorcode")
+						.toString());
+		return query.setParameter("reportType", reportType)
+				.setParameterList("coaType", financialUtils.getCoaTypes(coaType))
+						.list();
+	}
 
     List<Object[]> amountPerFundQueryForAllSchedules(final String filterQuery, final Date toDate, final Date fromDate,
-            final String reportType) {
-        final String voucherStatusToExclude = getAppConfigValueFor("EGF", "statusexcludeReport");
-        final Query query = getSession().createSQLQuery(
-                "select sum(debitamount)-sum(creditamount),v.fundid,substr(c.glcode,1," + minorCodeLength + ")," +
-                        "c.name from generalledger g,chartofaccounts c,voucherheader v ,vouchermis mis where  " +
-                        " v.id=g.voucherheaderid and c.id=g.glcodeid and v.id=mis.voucherheaderid and v.status not in("
-                        + voucherStatusToExclude + ")  AND v.voucherdate <= '" +
-                        getFormattedDate(toDate) + "' and v.voucherdate >='" + getFormattedDate(fromDate) +
-                        "' and substr(c.glcode,1," + minorCodeLength
-                        + ") in (select distinct coa2.glcode from chartofaccounts coa2, " +
-                        "schedulemapping s where s.id=coa2.scheduleid and coa2.classification=2 and s.reporttype = '"
-                        + reportType + "') " + filterQuery +
-                        " group by v.fundid,substr(c.glcode,1," + minorCodeLength + "),c.name order by substr(c.glcode,1,"
-                        + minorCodeLength + ")");
-
-        return query.list();
+            final String reportType, Map<String, Object> params) {
+		final String voucherStatusToExclude = getAppConfigValueFor("EGF", "statusexcludeReport");
+		final Query query = getSession()
+				.createSQLQuery(new StringBuilder("select sum(debitamount)-sum(creditamount),v.fundid,")
+						.append(String.format("substr(c.glcode,1,%d", minorCodeLength))
+						.append("), c.name from generalledger g,chartofaccounts c,voucherheader v ,vouchermis mis where  ")
+						.append(" v.id=g.voucherheaderid and c.id=g.glcodeid and v.id=mis.voucherheaderid ")
+						.append(" and v.status not in (:voucherStatusToExclude)  AND v.voucherdate <= :voucherToDate")
+						.append(" and v.voucherdate >= :voucherFromDate")
+						.append(String.format(" and substr(c.glcode,1,%d", minorCodeLength))
+						.append(") in (select distinct coa2.glcode from chartofaccounts coa2, ")
+						.append("schedulemapping s where s.id=coa2.scheduleid and coa2.classification=2")
+						.append(" and s.reporttype = :reportType").append(") ").append(filterQuery)
+						.append(" group by v.fundid,substr(c.glcode,1," + minorCodeLength + "),c.name")
+						.append(String.format(" order by substr(c.glcode,1,%d", minorCodeLength)).append(")")
+						.toString());
+		params.put("voucherStatusToExclude", financialUtils.getStatuses(voucherStatusToExclude));
+		params.put("voucherToDate", toDate);
+		params.put("voucherFromDate", fromDate);
+		params.put("reportType", reportType);
+		populateQueryWithParams(query, params);
+		return query.list();
     }
 
     /* For view all schedules Detail */
     List<Object[]> amountPerFundQueryForAllSchedulesDetailed(final String filterQuery, final Date toDate, final Date fromDate,
-            final String reportType) {
-        final String voucherStatusToExclude = getAppConfigValueFor("EGF", "statusexcludeReport");
-        final Query query = getSession().createSQLQuery(
-                "select sum(debitamount)-sum(creditamount),v.fundid,substr(c.glcode,1," + detailCodeLength + ")," +
-                        "c.name from generalledger g,chartofaccounts c,voucherheader v ,vouchermis mis where  " +
-                        " v.id=g.voucherheaderid and c.id=g.glcodeid and v.id=mis.voucherheaderid and v.status not in("
-                        + voucherStatusToExclude + ")  AND v.voucherdate <= '" +
-                        getFormattedDate(toDate) + "' and v.voucherdate >='" + getFormattedDate(fromDate) +
-                        "' and substr(c.glcode,1," + detailCodeLength
-                        + ") not in (select DISTINCT coa4.glcode from chartofaccounts coa4 where coa4.parentid in (SELECT coa3.id" +
-                        " FROM chartofaccounts coa3 WHERE coa3.parentid IN(select coa2.id from chartofaccounts coa2, " +
-                        "schedulemapping s where s.id=coa2.scheduleid and coa2.classification=2 and s.reporttype = '"
-                        + reportType + "'))) " + filterQuery +
-                        " group by v.fundid,substr(c.glcode,1," + detailCodeLength + "),c.name order by substr(c.glcode,1,"
-                        + detailCodeLength + ")");
-
-        return query.list();
+            final String reportType, Map<String, Object> params) {
+		final String voucherStatusToExclude = getAppConfigValueFor("EGF", "statusexcludeReport");
+		final Query query = getSession()
+				.createSQLQuery(new StringBuilder("select sum(debitamount)-sum(creditamount),v.fundid,")
+						.append(String.format("substr(c.glcode,1,%d", detailCodeLength)).append("),")
+						.append("c.name from generalledger g,chartofaccounts c,voucherheader v ,vouchermis mis where  ")
+						.append(" v.id=g.voucherheaderid and c.id=g.glcodeid and v.id=mis.voucherheaderid")
+						.append(" and v.status not in (:voucherStatusToExclude)  AND v.voucherdate <= :voucherToDate")
+						.append(" and v.voucherdate >= :voucherFromDate")
+						.append(String.format(" and substr(c.glcode,1,%d", detailCodeLength))
+						.append(") not in (select DISTINCT coa4.glcode from chartofaccounts coa4 where coa4.parentid in (SELECT coa3.id")
+						.append(" FROM chartofaccounts coa3 WHERE coa3.parentid IN(select coa2.id from chartofaccounts coa2, ")
+						.append("schedulemapping s where s.id=coa2.scheduleid and coa2.classification=2")
+						.append(" and s.reporttype = :reportType))) ").append(filterQuery)
+						.append(String.format(" group by v.fundid,substr(c.glcode,1,%d", detailCodeLength))
+						.append(String.format("),c.name order by substr(c.glcode,1,%d", detailCodeLength)).append(")")
+						.toString());
+		params.put("voucherStatusToExclude", financialUtils.getStatuses(voucherStatusToExclude));
+		params.put("voucherToDate", toDate);
+		params.put("voucherFromDate", fromDate);
+		params.put("reportType", reportType);
+		populateQueryWithParams(query, params);
+		return query.list();
     }
 
     public String getAppConfigValueFor(final String module, final String key) {
@@ -202,83 +223,83 @@ public abstract class ScheduleService extends PersistenceService {
         return new ArrayList<Fund>();
     }
 
-    protected List<Object[]> getAllGlCodesForSubSchedule(final String majorCode, final Character type, final String reportType) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Getting schedule for " + majorCode);
-        final Query query = getSession().createSQLQuery(
-                "select distinct coa.glcode,coa.name,s.schedule,s.schedulename from chartofaccounts coa, " +
-                        "schedulemapping s where s.id=coa.scheduleid and coa.classification=2 and s.reporttype = '" + reportType
-                        + "' and coa.majorcode='" +
-                        majorCode + "' and coa.type='" + type + "' order by coa.glcode");
-        return query.list();
-    }
+	protected List<Object[]> getAllGlCodesForSubSchedule(final String majorCode, final Character type,
+			final String reportType) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Getting schedule for " + majorCode);
+		final Query query = getSession().createSQLQuery(new StringBuilder(
+				"select distinct coa.glcode,coa.name,s.schedule,s.schedulename from chartofaccounts coa, ")
+						.append("schedulemapping s where s.id=coa.scheduleid and coa.classification=2")
+						.append(" and s.reporttype = :reportType and coa.majorcode=:majorCode and coa.type=:type order by coa.glcode")
+						.toString());
+		return query.setParameter("reportType", reportType).setParameter("majorCode", majorCode)
+				.setParameter("type", type).list();
+	}
 
-    protected List<Object[]> getAllGlCodesForSchedule(final String reportType) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Getting schedule for ");
-        final Query query = getSession().createSQLQuery(
-                "SELECT coa1.glcode, s.schedule, s.schedulename, coa1.type, coa1.name" +
-                        " FROM chartofaccounts coa1, chartofaccounts coa2, chartofaccounts coa3, schedulemapping s" +
-                        " WHERE coa3.scheduleid  = s.id AND coa3.id = coa2.parentid AND coa2.id = coa1.parentid" +
-                        " AND coa2.classification=2 AND coa1.classification=4" +
-                        " AND coa3.type   IN " + reportType + " AND coa2.type IN " + reportType + " AND coa1.type IN "
-                        + reportType +
-                " AND s.reporttype = 'IE' ORDER BY coa1.glcode");
-        return query.list();
-    }
+	protected List<Object[]> getAllGlCodesForSchedule(final String reportType) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Getting schedule for ");
+		final Query query = getSession().createSQLQuery(
+				new StringBuilder("SELECT coa1.glcode, s.schedule, s.schedulename, coa1.type, coa1.name").append(
+						" FROM chartofaccounts coa1, chartofaccounts coa2, chartofaccounts coa3, schedulemapping s")
+						.append(" WHERE coa3.scheduleid  = s.id AND coa3.id = coa2.parentid AND coa2.id = coa1.parentid")
+						.append(" AND coa2.classification=2 AND coa1.classification=4")
+						.append(" AND coa3.type   IN (:reportType) AND coa2.type in (:reportType)")
+						.append(" AND coa1.type IN (:reportType) AND s.reporttype = 'IE' ORDER BY coa1.glcode")
+						.toString());
+		return query.setParameterList("reportType", financialUtils.getCoaTypes(reportType)).list();
+	}
 
-    protected List<Object[]> getAllDetailGlCodesForSubSchedule(final String majorCode, final Character type,
-            final String reportType) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Getting detail codes for " + majorCode + "reporttype" + reportType);
-        final Query query = getSession().createSQLQuery(
-                "select distinct coad.glcode,coad.name from chartofaccounts coa,chartofaccounts coad," +
-                        " schedulemapping s " +
-                        " where    s.id=coa.scheduleid  AND coa.classification=2 AND s.reporttype='" + reportType
-                        + "' and coad.majorcode='" +
-                        majorCode + "' and coa.type='" + type + "' and  coa.glcode=SUBSTR(coad.glcode,1," + minorCodeLength
-                        + ") and coad.classification=4 order by coad.glcode");
-        return query.list();
-    }
+	protected List<Object[]> getAllDetailGlCodesForSubSchedule(final String majorCode, final Character type,
+			final String reportType) {
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Getting detail codes for " + majorCode + "reporttype" + reportType);
+		final Query query = getSession().createSQLQuery(new StringBuilder(
+				"select distinct coad.glcode,coad.name from chartofaccounts coa,chartofaccounts coad,")
+						.append(" schedulemapping s where s.id=coa.scheduleid  AND coa.classification=2")
+						.append(" AND s.reporttype=:reportType and coad.majorcode=:majorCode and coa.type=:type")
+						.append(String.format(" and  coa.glcode=SUBSTR(coad.glcode,1,%d", minorCodeLength))
+						.append(") and coad.classification=4 order by coad.glcode").toString());
+		return query.setParameter("reportType", reportType).setParameter("majorCode", majorCode)
+				.setParameter("type", type).list();
+	}
 
-    protected List<Object[]> getSchedule(final String majorCode, final Character type, final String reportType) {
-        final Query query = getSession().createSQLQuery(
-                "select distinct coa.glcode,coa.name,s.schedule,s.schedulename from chartofaccounts coa, " +
-                        "schedulemapping s where s.id=coa.scheduleid and coa.classification=2 and s.reporttype = '" + reportType
-                        + "' and coa.majorcode='" +
-                        majorCode + "' and coa.type='" + type + "' order by coa.glcode");
+	protected List<Object[]> getSchedule(final String majorCode, final Character type, final String reportType) {
+		final Query query = getSession().createSQLQuery(new StringBuilder(
+				"select distinct coa.glcode,coa.name,s.schedule,s.schedulename from chartofaccounts coa, ")
+						.append("schedulemapping s where s.id=coa.scheduleid and coa.classification=2")
+						.append(" and s.reporttype = :reportType and coa.majorcode=:majorCode")
+						.append(" and coa.type=:type order by coa.glcode").toString());
 
-        return query.list();
-    }
+		return query.setParameter("reportType", reportType).setParameter("majorCode", majorCode)
+				.setParameter("type", type).list();
+	}
 
-    protected List<Object[]> getAllLedgerTransaction(final String majorcode, final Date toDate, final Date fromDate,
-            final String fundId,
-            final String filterQuery) {
-        if (LOGGER.isInfoEnabled())
-            LOGGER.info("Getting ledger transactions details where >>>> EndDate=" + toDate + "from Date=" + fromDate);
-        final String voucherStatusToExclude = getAppConfigValueFor("EGF", "statusexcludeReport");
-        if (!majorcode.equals("")) {
-        }
+	protected List<Object[]> getAllLedgerTransaction(final String majorcode, final Date toDate, final Date fromDate,
+		final List<Long> fundId, final String filterQuery, Map<String, Object> params) {
 
-        final Query query = getSession()
-                .createSQLQuery(
-                        "select g.glcode,coa.name,sum(g.debitamount)-sum(g.creditamount),v.fundid,coa.type,coa.majorcode from generalledger g,chartofaccounts coa ,"
-                                +
-                                "voucherheader v,vouchermis mis where v.id=mis.voucherheaderid and g.voucherheaderid=v.id and g.glcodeid=coa.id and v.voucherdate BETWEEN '"
-                                + getFormattedDate(fromDate)
-                                + "' and '"
-                                +
-                                getFormattedDate(toDate)
-                                + "' and v.status not in ("
-                                + voucherStatusToExclude
-                                + ") and v.id=g.voucherheaderid and v.fundid in"
-                                + fundId
-                                + filterQuery
-                                + " and g.glcodeid=coa.id  "
-                                +
-                        "GROUP by g.glcode,coa.name,v.fundid ,coa.type ,coa.majorcode order by g.glcode,coa.name,coa.type");
-        return query.list();
-    }
+		if (LOGGER.isInfoEnabled())
+			LOGGER.info("Getting ledger transactions details where >>>> EndDate=" + toDate + "from Date=" + fromDate);
+		final String voucherStatusToExclude = getAppConfigValueFor("EGF", "statusexcludeReport");
+		if (!majorcode.equals("")) {
+		}
+
+		final Query query = getSession().createSQLQuery(new StringBuilder(
+				"select g.glcode,coa.name,sum(g.debitamount)-sum(g.creditamount),v.fundid,coa.type,coa.majorcode")
+						.append(" from generalledger g,chartofaccounts coa ,")
+						.append("voucherheader v,vouchermis mis where v.id=mis.voucherheaderid and g.voucherheaderid=v.id")
+						.append(" and g.glcodeid=coa.id and v.voucherdate BETWEEN :voucherFromDate")
+						.append(" and :voucherToDate and v.status not in (:voucherStatusToExclude) and v.id=g.voucherheaderid")
+						.append(" and v.fundid in (:fundId)").append(filterQuery).append(" and g.glcodeid=coa.id  ")
+						.append("GROUP by g.glcode,coa.name,v.fundid ,coa.type ,coa.majorcode")
+						.append(" order by g.glcode,coa.name,coa.type").toString());
+		params.put("voucherFromDate", fromDate);
+		params.put("voucherToDate", toDate);
+		params.put("voucherStatusToExclude", financialUtils.getStatuses(voucherStatusToExclude));
+		params.put("fundId", fundId);
+		populateQueryWithParams(query, params);
+		return query.list();
+	}
 
     List<Object[]> getRowsForGlcode(final List<Object[]> resultMap, final String glCode) {
         final List<Object[]> rows = new ArrayList<Object[]>();
@@ -349,24 +370,30 @@ public abstract class ScheduleService extends PersistenceService {
         return value == null ? BigDecimal.ZERO : value;
     }
 
-    List<Object[]> currentYearAmountQuery(final String filterQuery, final Date toDate, final Date fromDate,
-            final String majorCode, final String reportType) {
-        final Query query = getSession().createSQLQuery(
-                "select sum(debitamount)-sum(creditamount),v.fundid,c.glcode " +
-                        "from generalledger g,chartofaccounts c,voucherheader v,vouchermis mis  where " +
-                        " v.id=g.voucherheaderid and c.id=g.glcodeid and v.status not in(" + voucherStatusToExclude
-                        + ")  AND v.voucherdate <= '"
-                        + getFormattedDate(toDate) + "' and v.id=mis.voucherheaderid and v.voucherdate >='"
-                        + getFormattedDate(fromDate) + "' " +
-                        "and c.glcode in (select distinct coad.glcode from chartofaccounts coa2, schedulemapping s " +
-                        ",chartofaccounts coad where s.id=coa2.scheduleid and coa2.classification=2 and s.reporttype = '"
-                        + reportType + "'" +
-                        " and coa2.glcode=SUBSTR(coad.glcode,1," + minorCodeLength
-                        + ") and coad.classification=4 and coad.majorcode='" + majorCode + "')  and c.majorcode='" + majorCode
-                        + "' and c.classification=4 " + filterQuery +
-                " group by v.fundid,c.glcode order by c.glcode");
-        return query.list();
-    }
+	List<Object[]> currentYearAmountQuery(final String filterQuery, final Date toDate, final Date fromDate,
+			final String majorCode, final String reportType, Map<String, Object> params) {
+		final Query query = getSession()
+				.createSQLQuery(new StringBuilder("select sum(debitamount)-sum(creditamount),v.fundid,c.glcode ")
+						.append("from generalledger g,chartofaccounts c,voucherheader v,vouchermis mis  where ")
+						.append(" v.id=g.voucherheaderid and c.id=g.glcodeid and v.status not in (:voucherStatusToExclude) ")
+						.append(" AND v.voucherdate <= :voucherToDate and v.id=mis.voucherheaderid")
+						.append(" and v.voucherdate >= :voucherFromDate and c.glcode in (select distinct coad.glcode")
+						.append(" from chartofaccounts coa2, schedulemapping s ")
+						.append(",chartofaccounts coad where s.id=coa2.scheduleid and coa2.classification=2")
+						.append(" and s.reporttype = :reportType")
+						.append(String.format(" and coa2.glcode=SUBSTR(coad.glcode,1,%d", minorCodeLength))
+						.append(") and coad.classification=4 and coad.majorcode=:majorCode) and c.majorcode=:majorCode")
+						.append(" and c.classification=4 ").append(filterQuery)
+						.append(" group by v.fundid,c.glcode order by c.glcode").toString());
+		params.put("voucherStatusToExclude", financialUtils.getStatuses(voucherStatusToExclude));
+		params.put("voucherToDate", toDate);
+		params.put("voucherFromDate", fromDate);
+		params.put("reportType", reportType);
+		params.put("majorCode", majorCode);
+
+		populateQueryWithParams(query, params);
+		return query.list();
+	}
 
 }
 

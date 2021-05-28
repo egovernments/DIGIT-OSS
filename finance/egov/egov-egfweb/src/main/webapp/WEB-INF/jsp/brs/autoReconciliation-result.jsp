@@ -92,6 +92,11 @@
 function validate()
 {
   document.forms[0].action='autoReconciliation-generateReport.action';
+  jQuery(document.forms[0]).append(jQuery('<input>', {
+  	type : 'hidden',
+      name : '${_csrf.parameterName}',
+      value : '${_csrf.token}'
+  }));
 }
 </Script>
 </body>

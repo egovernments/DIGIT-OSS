@@ -60,34 +60,40 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.egov.infra.persistence.entity.AbstractPersistable;
-import org.egov.infra.persistence.validator.annotation.Required;
 import org.egov.infra.persistence.validator.annotation.Unique;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @Table(name = "fund")
 @SequenceGenerator(name = Fund.SEQ, sequenceName = Fund.SEQ, allocationSize = 1)
 @Unique(fields = {"code", "name"}, enableDfltMsg = true)
-public class Fund extends AbstractPersistable<Integer> {
+public class Fund extends AbstractPersistable<Long> {
 
     public static final String SEQ = "SEQ_Fund";
     private static final long serialVersionUID = 7977534010758407945L;
     @Id
     @GeneratedValue(generator = Fund.SEQ, strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
 
     @Length(max = 50, min = 2)
-    @Required
+    @SafeHtml
+    @NotNull
     private String name;
 
     @Length(max = 50, min = 2)
-    @Required
+    @NotNull
+    @SafeHtml
     private String code;
 
     private Character identifier;
-    @Required
+    
+    @NotNull
+    @Min(1)
     private BigDecimal llevel = BigDecimal.ONE;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -105,11 +111,11 @@ public class Fund extends AbstractPersistable<Integer> {
 
     private Date lastModifiedDate;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

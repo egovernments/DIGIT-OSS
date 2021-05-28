@@ -219,7 +219,7 @@ public class MicroDiskFileStoreService implements FileStoreService {
         try {
             path = Files.write(fileDirPath, responseEntity.getBody());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("error occured while fetching path" + e.getMessage());
         }
         return path;
 

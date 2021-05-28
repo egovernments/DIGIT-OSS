@@ -239,7 +239,7 @@ function populateTableforSelectedInstrument(selectedRows){
     table_body += "<tbody>"
     for(var i=0;i<number_of_rows;i++){
       table_body+='<tr role="row">';
-      table_body +='<td class="text-left"> <a href=""  onclick="openReceipt(event,\''+selectedRows.receiptSourceUrl+'\')">'+selectedRows.receiptNumber+'</a></td>';
+      table_body +='<td class="text-left"> <a href=""  onclick="openReceipt(event,\''+selectedRows.receiptSourceUrl+'\',\''+selectedRows.service+'\')">'+selectedRows.receiptNumber+'</a></td>';
       table_body +='<td class=" text-center">'+moment(selectedRows.receiptDate).format('DD/MM/YYYY')+'</td>';
       table_body +='<td class="text-center"> <a href=""  onclick="viewVoucher(event,'+selectedRows.voucherHeaderId+')">'+selectedRows.voucherNumber+'</a></td>';
       table_body +='<td class=" text-center">'+moment(selectedRows.transactionDate).format('DD/MM/YYYY')+'</td>';

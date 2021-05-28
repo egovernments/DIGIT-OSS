@@ -56,19 +56,22 @@ import java.util.Locale;
 import javax.validation.Valid;
 
 import org.egov.commons.Accountdetailtype;
+import org.egov.commons.contracts.AccountDetailTypeSearchRequest;
 import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.egf.web.adaptor.AccountdetailtypeJsonAdaptor;
 import org.egov.infra.security.utils.SecurityUtils;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -78,11 +81,13 @@ import com.google.gson.GsonBuilder;
 @Controller
 @RequestMapping("/accountdetailtype")
 public class AccountdetailtypeController {
-	private final static String ACCOUNTDETAILTYPE_NEW = "accountdetailtype-new";
-	private final static String ACCOUNTDETAILTYPE_RESULT = "accountdetailtype-result";
-	private final static String ACCOUNTDETAILTYPE_EDIT = "accountdetailtype-edit";
-	private final static String ACCOUNTDETAILTYPE_VIEW = "accountdetailtype-view";
-	private final static String ACCOUNTDETAILTYPE_SEARCH = "accountdetailtype-search";
+	private static final String ACCOUNTDETAILTYPE = "accountdetailtype";
+	private static final String ACCOUNTDETAILTYPE_SEARCH_REQUEST = "accountdetailtypeSearchRequest";
+	private static final String ACCOUNTDETAILTYPE_NEW = "accountdetailtype-new";
+	private static final String ACCOUNTDETAILTYPE_RESULT = "accountdetailtype-result";
+	private static final String ACCOUNTDETAILTYPE_EDIT = "accountdetailtype-edit";
+	private static final String ACCOUNTDETAILTYPE_VIEW = "accountdetailtype-view";
+	private static final String ACCOUNTDETAILTYPE_SEARCH = "accountdetailtype-search";
 	@Autowired
 	private AccountdetailtypeService accountdetailtypeService;
 	@Autowired
@@ -94,14 +99,14 @@ public class AccountdetailtypeController {
 
 	}
 
-	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	@PostMapping(value = "/new")
 	public String newForm(final Model model) {
 		prepareNewForm(model);
-		model.addAttribute("accountdetailtype", new Accountdetailtype());
+		model.addAttribute(ACCOUNTDETAILTYPE, new Accountdetailtype());
 		return ACCOUNTDETAILTYPE_NEW;
 	}
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@PostMapping(value = "/create")
 	public String create(@Valid @ModelAttribute final Accountdetailtype accountdetailtype, final BindingResult errors,
 			final Model model, final RedirectAttributes redirectAttrs) {
 		if (errors.hasErrors()) {
@@ -119,18 +124,18 @@ public class AccountdetailtypeController {
 		accountdetailtypeService.create(accountdetailtype);
 		redirectAttrs.addFlashAttribute("message",
 				messageSource.getMessage("msg.accountdetailtype.success", null, null));
-		return "redirect:/accountdetailtype/result/" + accountdetailtype.getId()+"/create";
+		return "redirect:/accountdetailtype/result/" + accountdetailtype.getId() + "/create";
 	}
 
-	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/edit/{id}")
 	public String edit(@PathVariable("id") final Integer id, Model model) {
 		Accountdetailtype accountdetailtype = accountdetailtypeService.findOne(id);
 		prepareNewForm(model);
-		model.addAttribute("accountdetailtype", accountdetailtype);
+		model.addAttribute(ACCOUNTDETAILTYPE, accountdetailtype);
 		return ACCOUNTDETAILTYPE_EDIT;
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@PostMapping(value = "/update")
 	public String update(@ModelAttribute final Accountdetailtype accountdetailtype, final BindingResult errors,
 			final Model model, final RedirectAttributes redirectAttrs) {
 		if (errors.hasErrors()) {
@@ -142,54 +147,52 @@ public class AccountdetailtypeController {
 		accountdetailtype.setNbroflevels(BigDecimal.ONE);
 		accountdetailtype.setColumnname("id");
 		accountdetailtype.setFullQualifiedName("org.egov.masters.model.AccountEntity");
-		// accountdetailtype.setCreated(new Date());
 		accountdetailtype.setLastModifiedDate(new Date());
 		accountdetailtype.setLastModifiedBy(securityUtils.getCurrentUser().getId());
 		accountdetailtypeService.update(accountdetailtype);
 		redirectAttrs.addFlashAttribute("message",
 				messageSource.getMessage("msg.accountdetailtype.success", null, Locale.ENGLISH));
-		return "redirect:/accountdetailtype/result/" + accountdetailtype.getId()+"/update";
+		return "redirect:/accountdetailtype/result/" + accountdetailtype.getId() + "/update";
 	}
 
-	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/view/{id}")
 	public String view(@PathVariable("id") final Integer id, Model model) {
 		Accountdetailtype accountdetailtype = accountdetailtypeService.findOne(id);
 		prepareNewForm(model);
-		model.addAttribute("accountdetailtype", accountdetailtype);
+		model.addAttribute(ACCOUNTDETAILTYPE, accountdetailtype);
 		return ACCOUNTDETAILTYPE_VIEW;
 	}
 
-	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
-	public String result(@PathVariable("id") final Integer id,@PathVariable("mode") final String mode, Model model) {
+	@GetMapping(value = "/result/{id}/{mode}")
+	public String result(@PathVariable("id") final Integer id, @PathVariable("mode") @SafeHtml final String mode,
+			Model model) {
 		Accountdetailtype accountdetailtype = accountdetailtypeService.findOne(id);
-		model.addAttribute("accountdetailtype", accountdetailtype);
+		model.addAttribute(ACCOUNTDETAILTYPE, accountdetailtype);
 		model.addAttribute("mode", mode);
 		return ACCOUNTDETAILTYPE_RESULT;
 	}
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
-	public String search(@PathVariable("mode") final String mode, Model model) {
-		Accountdetailtype accountdetailtype = new Accountdetailtype();
+	@PostMapping(value = "/search/{mode}")
+	public String search(@PathVariable("mode") @SafeHtml final String mode, Model model) {
+		AccountDetailTypeSearchRequest accountDetailTypeSearchRequest = new AccountDetailTypeSearchRequest();
 		prepareNewForm(model);
-		model.addAttribute("accountdetailtype", accountdetailtype);
+		model.addAttribute(ACCOUNTDETAILTYPE_SEARCH_REQUEST, accountDetailTypeSearchRequest);
 		return ACCOUNTDETAILTYPE_SEARCH;
 
 	}
 
-	@RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-	public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, Model model,
-			@ModelAttribute final Accountdetailtype accountdetailtype) {
-		List<Accountdetailtype> searchResultList = accountdetailtypeService.search(accountdetailtype, mode);
-		String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
-				.toString();
-		return result;
+	@PostMapping(value = "/ajaxsearch/{mode}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public @ResponseBody String ajaxsearch(@PathVariable("mode") @SafeHtml final String mode, Model model,
+			@Valid @ModelAttribute final AccountDetailTypeSearchRequest accountDetailTypeSearchRequest) {
+		List<Accountdetailtype> searchResultList = accountdetailtypeService.search(accountDetailTypeSearchRequest,
+				mode);
+		return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
 	}
 
 	public Object toSearchResultJson(final Object object) {
 		final GsonBuilder gsonBuilder = new GsonBuilder();
 		final Gson gson = gsonBuilder.registerTypeAdapter(Accountdetailtype.class, new AccountdetailtypeJsonAdaptor())
 				.create();
-		final String json = gson.toJson(object);
-		return json;
+		return gson.toJson(object);
 	}
 }

@@ -48,6 +48,13 @@
 
 package org.egov.infra.web.controller.admin.masters.boundary;
 
+import static org.egov.infra.utils.JsonUtils.toJSON;
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.egov.infra.admin.master.contracts.BoundarySearchRequest;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.HierarchyType;
@@ -65,11 +72,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
-
-import static org.egov.infra.utils.JsonUtils.toJSON;
-import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @Controller
 @RequestMapping("boundary/search")
@@ -93,7 +95,7 @@ public class SearchBoundaryController {
 
     @PostMapping(produces = TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String searchBoundary(BoundarySearchRequest searchRequest) {
+    public String searchBoundary(@Valid BoundarySearchRequest searchRequest) {
         return new DataTable<>(boundaryService.getPageOfBoundaries(searchRequest), searchRequest.draw())
                 .toJson(BoundaryDatatableAdapter.class);
 

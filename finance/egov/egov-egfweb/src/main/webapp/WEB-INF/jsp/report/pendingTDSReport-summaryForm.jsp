@@ -175,8 +175,9 @@ function getData(){
 	isValid = validateData();
 	if(isValid == false)
 		return false;
+	var csrfToken = document.getElementById('csrfTokenValue').value;
 	var url = '/services/EGF/report/pendingTDSReport-ajaxLoadSummaryData.action?skipPrepare=true&asOnDate='+asOnDate+'&department.code='+
-							department+'&fund.id='+fund+'&partyName='+partyName+'&recovery.id='+recovery+'&detailKey='+detailKey;
+							department+'&fund.id='+fund+'&partyName='+partyName+'&recovery.id='+recovery+'&detailKey='+detailKey+'&_csrf='+csrfToken;
 	YAHOO.util.Connect.asyncRequest('POST', url, callback, null);
 	//loadWaitingImage();
 	doLoadingMask();
@@ -189,6 +190,7 @@ function exportXls(){
 	var recovery =  document.getElementById('recovery').value;
 	var detailKey =  document.getElementById('detailKey').value;
 	var partyName =  document.getElementById('partyName').value;
+	var csrfToken = document.getElementById('csrfTokenValue').value;
 	window.open('/services/EGF/report/pendingTDSReport-exportSummaryXls.action?skipPrepare=true&asOnDate='+asOnDate+'&department.code='+department+'&fund.id='+fund+
 	'&recovery.id='+recovery+'&detailKey='+detailKey+'&partyName='+partyName,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
@@ -200,8 +202,9 @@ function exportPdf(){
 	var recovery =  document.getElementById('recovery').value;
 	var detailKey =  document.getElementById('detailKey').value;
 	var partyName =  document.getElementById('partyName').value;
+	var csrfToken = document.getElementById('csrfTokenValue').value;
 	window.open('/services/EGF/report/pendingTDSReport-exportSummaryPdf.action?skipPrepare=true&asOnDate='+asOnDate+'&department.code='+department+'&fund.id='+
-	fund+'&recovery.id='+recovery+'&detailKey='+detailKey+'&partyName='+partyName,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	fund+'&recovery.id='+recovery+'&detailKey='+detailKey+'&partyName='+partyName+'&_csrf='+csrfToken,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 function hideIncludeRemittance(){
 	document.getElementById('showRemittedEntries').style.display = "none";

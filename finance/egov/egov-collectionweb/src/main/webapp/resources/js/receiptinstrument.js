@@ -223,7 +223,7 @@ function addChequeGrid(tableId, trId2, trId3, trId4, obj, trId5) {
 		var newtablelength = tbl.rows.length;
 
 		var count = document.forms[0].instrumentCount.value;
-		count = eval(count) + 1;
+		count = count + 1;
 		document.forms[0].instrumentCount.value = count;
 		document.forms[0].instrumentChequeNumber[0].value = "";
 		document.forms[0].instrumentDate[0].value = "";
@@ -298,7 +298,7 @@ function deleteChequeObj(obj, tableId, deltable) {
 	var countUI = document.forms[0].instrumentCount.value;
 	var count = document.forms[0].instrumentCount.value;
 	for (var j = newtablelength; j > 0; j = j - 4) {
-		count = eval(count) - 1;
+		count = count - 1;
 		getControlInBranch(tbl.rows[j - 4], 'instrumentChequeNumber').name = "instrumentProxyList["
 				+ count + "].instrumentNumber";
 		getControlInBranch(tbl.rows[j - 4], 'instrumentDate').name = "instrumentProxyList["
@@ -312,7 +312,7 @@ function deleteChequeObj(obj, tableId, deltable) {
 		getControlInBranch(tbl.rows[j - 3], 'bankID').name = "instrumentProxyList["
 				+ count + "].bankId.id";
 	}
-	count = eval(countUI) - 1;
+	count = countUI - 1;
 	document.forms[0].instrumentCount.value = count;
 }
 
@@ -325,11 +325,11 @@ function setChequeInstrumentDetails() {
 		if (getControlInBranch(chequetable.rows[m], 'instrumentChequeAmount') != null) {
 			chequeamount = getControlInBranch(chequetable.rows[m],
 					'instrumentChequeAmount').value;
-			chequeamount = eval(chequeamount);
+			chequeamount = chequeamount;
 			chequeTotal = chequeTotal + chequeamount;
 		}
 	}// end of for loop
-	dom.get("totalamountdisplay").value = eval(chequeTotal).toFixed(2);
+	dom.get("totalamountdisplay").value = chequeTotal.toFixed(2);
 }
 
 function setinstrumenttypevalue(obj) {

@@ -94,15 +94,14 @@ public class VoucherHeaderHibernateDAO  implements VoucherHeaderDAO {
 
 
     @Override
-    public List<CVoucherHeader> getVoucherHeadersByStatus(final Integer status) throws Exception {
+    public List<CVoucherHeader> getVoucherHeadersByStatus(final Integer status) {
         final Query qry = getCurrentSession().createQuery("from CVoucherHeader vh where vh.status=:status");
         qry.setInteger("status", status);
         return qry.list();
     }
 
     @Override
-    public List<CVoucherHeader> getVoucherHeadersByStatusAndType(final Integer status, final String type)
-            throws Exception {
+    public List<CVoucherHeader> getVoucherHeadersByStatusAndType(final Integer status, final String type) {
         final Query qry = getCurrentSession().createQuery(
                 "from CVoucherHeader vh where vh.status=:status and vh.type=:type");
         qry.setInteger("status", status);

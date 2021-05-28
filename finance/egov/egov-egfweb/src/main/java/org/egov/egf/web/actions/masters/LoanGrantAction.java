@@ -70,8 +70,10 @@ import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.services.masters.BankService;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -165,12 +167,16 @@ public class LoanGrantAction extends LoanGrantBaseAction {
         schemeId = loanGrantHeader.getSubScheme().getScheme().getId();
         subSchemeId = loanGrantHeader.getSubScheme().getId();
         projectCodeList = new ArrayList<LoanGrantBean>();
-        final String strQuery = "select pc.id as id , pc.code as code, pc.name as name from egw_projectcode pc," +
-                " egf_subscheme_project sp where pc.id= sp.projectcodeid and sp.subschemeid=" + subSchemeId;
+        final String strQuery = new StringBuilder("select pc.id as id , pc.code as code, pc.name as name")
+                .append(" from egw_projectcode pc, egf_subscheme_project sp")
+                .append(" where pc.id= sp.projectcodeid and sp.subschemeid=:subSchemeId").toString();
         query = persistenceService.getSession().createSQLQuery(strQuery)
                 .addScalar("id", LongType.INSTANCE).addScalar("code").addScalar("name")
+                .setParameter("subSchemeId", subSchemeId, IntegerType.INSTANCE)
                 .setResultTransformer(Transformers.aliasToBean(LoanGrantBean.class));
         projectCodeList = query.list();
+        
+        
         final List<LoanGrantDetail> lgDetailList = loanGrantHeader.getDetailList();
         if (lgDetailList != null && lgDetailList.size() != 0)
         {
@@ -360,11 +366,14 @@ public class LoanGrantAction extends LoanGrantBaseAction {
             //persistenceService.setType(LoanGrantHeader.class);
             persistenceService.persist(loanGrantHeader);
         } catch (final ValidationException e) {
-            throw e;
-        } catch (final Exception e) {
             throw new ValidationException(Arrays.asList(new ValidationError("An error occured contact Administrator",
                     "An error occured contact Administrator")));
-        }
+        } /*
+           * catch (final Exception e) { throw new
+           * ValidationException(Arrays.asList(new
+           * ValidationError("An error occured contact Administrator",
+           * "An error occured contact Administrator"))); }
+           */
         return "result";
     }
 
@@ -424,7 +433,7 @@ public class LoanGrantAction extends LoanGrantBaseAction {
         } catch (final ValidationException e) {
             prepareBeforeEdit();
             throw e;
-        } catch (final Exception e) {
+        } catch (final HibernateException e) {
             prepareBeforeEdit();
             throw new ValidationException(Arrays.asList(new ValidationError("An error occured contact Administrator",
                     "An error occured contact Administrator")));

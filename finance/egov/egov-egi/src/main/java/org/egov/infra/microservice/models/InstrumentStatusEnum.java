@@ -7,14 +7,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum InstrumentStatusEnum {
-    APPROVED("APPROVED", InstrumentStatusEnum.Category.OPEN),
-    APPROVAL_PENDING("APPROVAL_PENDING", InstrumentStatusEnum.Category.OPEN),
-    TO_BE_SUBMITTED("TO_BE_SUBMITTED", InstrumentStatusEnum.Category.OPEN),
-    REMITTED("REMITTED", InstrumentStatusEnum.Category.OPEN),
-    REJECTED("REJECTED", InstrumentStatusEnum.Category.CLOSED),
-    CANCELLED("CANCELLED", InstrumentStatusEnum.Category.CLOSED),
-    DISHONOURED("DISHONOURED", InstrumentStatusEnum.Category.CLOSED);
-
+    APPROVED("APPROVED", InstrumentStatusEnum.Category.OPEN), APPROVAL_PENDING("APPROVAL_PENDING",
+            InstrumentStatusEnum.Category.OPEN), TO_BE_SUBMITTED("TO_BE_SUBMITTED",
+                    InstrumentStatusEnum.Category.OPEN), REMITTED("REMITTED",
+                            InstrumentStatusEnum.Category.OPEN), REJECTED("REJECTED",
+                                    InstrumentStatusEnum.Category.CLOSED), CANCELLED("CANCELLED",
+                                            InstrumentStatusEnum.Category.CLOSED), DISHONOURED("DISHONOURED",
+                                                    InstrumentStatusEnum.Category.CLOSED);
 
     private String value;
 
@@ -57,7 +56,6 @@ public enum InstrumentStatusEnum {
     }
 
     public enum Category {
-        OPEN,
-        CLOSED;
+        OPEN, CLOSED;
     }
 }

@@ -50,7 +50,10 @@ package com.exilant.exility.common;
 import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -75,14 +78,16 @@ public class ObjectGetSetter {
      * @param object : object whose field value is to be returned
      * @param fieldName : Name of the field
      * @return String representing the String value of the field
+     * @throws IllegalAccessException 
+     * @throws IllegalArgumentException 
      */
-    public static Object get(final Object object, final String fieldName) {
+    public static Object get(final Object object, final String fieldName) throws IllegalArgumentException, IllegalAccessException {
 
         try {
             final Field field = ObjectGetSetter.getField(object, fieldName);
             field.setAccessible(true);
             return field.get(object).toString();
-        } catch (final Exception e) {
+        } catch (final NoSuchFieldException e) {
             // logger.error("Problem in get()"+object+"for Fiels"+fieldName);
         } // let us not worry about any exception. We only promised that we will TRY :-)
         return null;
@@ -121,7 +126,7 @@ public class ObjectGetSetter {
                 field.setAccessible(true); // ensures that the field is accessible
                 try {
                     values.put(field.getName(), field.get(object));
-                } catch (final Exception e) {
+                } catch (final IllegalArgumentException | IllegalAccessException e) {
                     // logger.error("Error while putting values to HashMap");
                 }
             }
@@ -160,8 +165,13 @@ public class ObjectGetSetter {
      * @param object
      * @param fieldName
      * @param fieldValue
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws InstantiationException 
+     * @throws NoSuchFieldException 
      */
-    public static void set(final Object object, final String fieldName, final String fieldValue) {
+    public static void set(final Object object, final String fieldName, final String fieldValue) throws InstantiationException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException {
         final Class[] clsarr = { String.class };
         final String[] strarr = { fieldValue };
         Field field;
@@ -199,7 +209,7 @@ public class ObjectGetSetter {
                     field.set(object, o);
                 }
             return;
-        } catch (final Exception e) {
+        } catch (final IllegalArgumentException | IllegalAccessException e) {
             /*
              * Let us try for a generic field named attributes with a put(object, object) method
              */
@@ -220,7 +230,7 @@ public class ObjectGetSetter {
                 final Method met = fldclass.getMethod("put", objectClass);
                 final Object[] objarr = { fieldName, fieldValue };
                 met.invoke(atts, objarr);
-            } catch (final Exception e1) {
+            } catch (final IllegalArgumentException | IllegalAccessException e1) {
                 // logger.error(e.getMessage());
 
             }
@@ -232,8 +242,13 @@ public class ObjectGetSetter {
      * ignored, and no exception is raised
      * @param object
      * @param values
+     * @throws NoSuchFieldException 
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws InstantiationException 
      */
-    public static void setAll(final Object object, final HashMap values) {
+    public static void setAll(final Object object, final HashMap values) throws InstantiationException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException {
         Object o;
         Map.Entry entry;
         final Iterator iter = values.entrySet().iterator();
@@ -252,8 +267,13 @@ public class ObjectGetSetter {
      *
      * @param object
      * @param values
+     * @throws NoSuchFieldException 
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws InstantiationException 
      */
-    public static void setAll(final Object object, final Attributes values) {
+    public static void setAll(final Object object, final Attributes values) throws InstantiationException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException {
         for (int i = 0; i < values.getLength(); i++)
             ObjectGetSetter.set(object, values.getQName(i), values.getValue(i));
     }

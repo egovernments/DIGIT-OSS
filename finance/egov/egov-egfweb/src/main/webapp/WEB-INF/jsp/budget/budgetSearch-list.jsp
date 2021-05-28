@@ -69,8 +69,13 @@
 			function validateAndSubmit()
 			{
 				document.forms[0].action='/services/EGF/budget/budgetSearch-groupedBudgets.action';
+				jQuery(document.forms[0]).append(jQuery('<input>', {
+                    type : 'hidden',
+                    name : '${_csrf.parameterName}',
+                    value : '${_csrf.token}'
+                }));
 				document.forms[0].submit();
-				}
+			}
 			
 		</script>
 	<jsp:include page="budgetHeader.jsp" />

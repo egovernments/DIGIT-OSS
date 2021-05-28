@@ -134,6 +134,7 @@
 
 		<div class="formmainbox">
 			<s:push value="dayBookReport">
+				<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				<div class="subheadnew">
 					<s:text name="dayBook.search.title" />
 				</div>

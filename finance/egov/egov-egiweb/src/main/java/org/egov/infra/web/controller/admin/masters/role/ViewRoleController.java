@@ -48,18 +48,20 @@
 
 package org.egov.infra.web.controller.admin.masters.role;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value = "/role/view/{name}")
@@ -77,13 +79,13 @@ public class ViewRoleController {
         return roleService.getRoleByName(name);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public String viewRole() {
         return "role-view";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String search(@ModelAttribute final Role role, final BindingResult errors, final RedirectAttributes redirectAttrs,
+    @PostMapping
+    public String search(@Valid @ModelAttribute final Role role, final BindingResult errors, final RedirectAttributes redirectAttrs,
             final HttpServletRequest request) {
 
         if (errors.hasErrors())

@@ -50,9 +50,12 @@ package org.egov.commons;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.egov.infra.admin.master.entity.Department;
-
 public class SubScheme implements java.io.Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6047108613048002579L;
 
 	private Integer id;
 
@@ -79,19 +82,16 @@ public class SubScheme implements java.io.Serializable {
 	private Date councilAdminSanctionDate;
 	private Date govtLoanProposalDate;
 	private Date govtAdminSanctionDate;
-
 	private Long createdBy;
 	private Long lastModifiedBy;
 	private Date createdDate;
-
-	public SubScheme() {
-	}
 
 	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	@SuppressWarnings("unused")
+	private void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -132,7 +132,7 @@ public class SubScheme implements java.io.Serializable {
 	}
 
 	public void setValidto(Date validto) {
-		this.validto = (Date) validto;
+		this.validto = validto;
 	}
 
 	public Date getLastmodifieddate() {

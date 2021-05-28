@@ -51,12 +51,16 @@ package org.egov.infra.admin.master.service;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
+
+import javassist.tools.rmi.ObjectNotFoundException;
+
 import org.egov.infra.admin.master.contracts.BoundarySearchRequest;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.BoundaryType;
 import org.egov.infra.admin.master.entity.HierarchyType;
 import org.egov.infra.admin.master.repository.BoundaryRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.utils.StringUtils;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
@@ -74,6 +78,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -288,7 +294,7 @@ public class BoundaryService {
             }
 
             return Optional.empty();
-        } catch (final Exception e) {
+        } catch (final IOException e) {
             LOG.error("Error occurred while fetching boundary from GIS data", e);
             return Optional.empty();
         }

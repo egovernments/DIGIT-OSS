@@ -88,30 +88,30 @@ function updateGridData() {
 	document.getElementById("lblError").innerHTML = "";
 
 	if (document.getElementById("fromChqNo").value.trim() == "") {
-		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.enter.from.cheque.number');
+		document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.please.enter.from.cheque.number'));
 		return false;
 	}
 	if (document.getElementById("toChqNo").value.trim() == "") {
-		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.enter.to.cheque.number') ;
+		document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.please.enter.to.cheque.number'));
 		return false;
 	}
 	if (document.getElementById("fromChqNo").value.trim().length != 6) {
-		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.from.cheque.number.should.be.six.digit');
+		document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.from.cheque.number.should.be.six.digit'));
 		return false;
 	}
 	if (document.getElementById("toChqNo").value.trim().length != 6) {
-		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.to.cheque.number.should.be.six.digit');
+		document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.to.cheque.number.should.be.six.digit'));
 		return false;
 	}
 	if (document.getElementById("fromChqNo").value.trim().length != document
 			.getElementById("toChqNo").value.trim().length) {
 
-		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.from.cheque.number.and.to.cheque.number.length.should.be.same');
+		document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.from.cheque.number.and.to.cheque.number.length.should.be.same'));
 		return false;
 	}
 
 	if (document.getElementById("receivedDate").value.trim() == "") {
-		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.enter.received.date');
+		document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.please.enter.received.date'));
 		return false;
 	}
 	var deptSelectedValue = new Array();
@@ -136,18 +136,18 @@ function updateGridData() {
 	}
 	
 	if (deptSelectedValue == "") {
-		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.select.department');
+		document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.please.select.department'));
 		return false;
 	}
 	if (document.getElementById("serialNo").value == "-1") {
-		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.enter.financial.year');
+		document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.please.enter.financial.year'));
 		return false;
 	}
 	// validate invalid cheque range.
 	var fromchqNum = parseInt(document.getElementById("fromChqNo").value.trim() * 1);
 	var tochqNum = parseInt(document.getElementById("toChqNo").value.trim() * 1);
 	if (fromchqNum > tochqNum) {
-		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.from.cheque.number.should.be.less.than.to.cheque.number');
+		document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.from.cheque.number.should.be.less.than.to.cheque.number'));
 		return false;
 	}
 	for (var i = 0; i < deptSelectedValue.length; i++) {
@@ -158,7 +158,7 @@ function updateGridData() {
 					&& tochqNum == parseInt(tokens[1] * 1)
 					&& deptSelectedValue[i] == tokens[2]
 					&& serialNoSelectedValue[0] == tokens[3]) {
-				document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.cheque.range.already.assigned.for.department',[deptSelectedText[i],serialNoSelectedText[0]]);
+				document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.cheque.range.already.assigned.for.department',[deptSelectedText[i],serialNoSelectedText[0]]));
 				return false;
 			} else if (deptSelectedValue[i] != tokens[2]) {
 				continue;
@@ -173,7 +173,7 @@ function updateGridData() {
 					) {
 				continue;
 			} else {
-				document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.invalid.cheque.range');
+				document.getElementById("lblError").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.invalid.cheque.range'));
 				return false;
 			}
 
@@ -206,13 +206,13 @@ function updateGridData() {
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
 				+ '].toChqNo').value = toChqNo;
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
-				+ '].deptName').innerHTML = deptSelectedText[i];
+				+ '].deptName').innerHTML = sanitizeHTML(deptSelectedText[i]);
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
-				+ '].receivedDateL').innerHTML = receivedDate;
+				+ '].receivedDateL').innerHTML = sanitizeHTML(receivedDate);
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
 				+ '].receivedDate').value = receivedDate;
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
-				+ '].serialNoL').innerHTML =serialNoSelectedText[0];
+				+ '].serialNoL').innerHTML = sanitizeHTML(serialNoSelectedText[0]);
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
 				+ '].serialNo').value = serialNoSelectedValue[0];
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
@@ -261,7 +261,7 @@ function validateCheque(obj) {
 		if (document.getElementById(CHQDETAILSLIST + '[' + index
 				+ '].fromChqNo').value.length != document
 				.getElementById(CHQDETAILSLIST + '[' + index + '].toChqNo').value.length) {
-			document.getElementById("lblErrorGrid").innerHTML = jQuery.i18n.prop('msg.from.chequeNo.and.to.chequeNo.length.should.be.same') ;
+			document.getElementById("lblErrorGrid").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.from.chequeNo.and.to.chequeNo.length.should.be.same')) ;
 			return false;
 
 		}
@@ -280,7 +280,7 @@ function validateCheque(obj) {
 				+ deptCode + "-" + serialNo);
 
 		if (parseInt(fromchqNum) > parseInt(tochqNum)) {
-			document.getElementById("lblErrorGrid").innerHTML = jQuery.i18n.prop('msg.from.chequeNo.should.be.less.than.to.chequeNo');
+			document.getElementById("lblErrorGrid").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.from.chequeNo.should.be.less.than.to.chequeNo'));
 			return false;
 		}
 
@@ -295,7 +295,7 @@ function validateCheque(obj) {
 
 				count = count + 1;
 				if (count > 1) {
-					document.getElementById("lblErrorGrid").innerHTML = jQuery.i18n.prop('msg.cheque.range.already.assigned.for.department',[deptName,serialNo]);;
+					document.getElementById("lblErrorGrid").innerHTML = sanitizeHTML(jQuery.i18n.prop('msg.cheque.range.already.assigned.for.department',[deptName,serialNo]));
 					return false;
 				}
 				continue;
@@ -305,7 +305,7 @@ function validateCheque(obj) {
 			} else if (serialNo != tokens[3]) {
 				continue;
 			} else {
-				document.getElementById("lblErrorGrid").innerHTML =  jQuery.i18n.prop('msg.invalid.cheque.range');
+				document.getElementById("lblErrorGrid").innerHTML =  sanitizeHTML(jQuery.i18n.prop('msg.invalid.cheque.range'));
 				return false;
 			}
 

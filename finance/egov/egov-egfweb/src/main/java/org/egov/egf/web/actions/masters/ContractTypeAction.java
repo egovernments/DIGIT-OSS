@@ -57,18 +57,26 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.egov.commons.Bankaccount;
 import org.egov.commons.EgPartytype;
+import org.egov.commons.EgwStatus;
 import org.egov.commons.EgwTypeOfWork;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.infstr.utils.EgovMasterDataCaching;
+import org.egov.utils.FinancialConstants;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ParentPackage("egov")
 @Validation()
@@ -162,7 +170,7 @@ public class ContractTypeAction extends BaseFormAction {
             persistenceService.getSession().flush();
             persistenceService.getSession().clear();
             setSuccess("yes");
-        } catch (final Exception e) {
+        } catch (final ObjectNotFoundException e) {
             setSuccess("no");
             LOGGER.error("Exception occurred in ContractTypeAction-create ", e);
 
@@ -215,7 +223,7 @@ public class ContractTypeAction extends BaseFormAction {
             persistenceService.persist(typeOfWork);
             showMode = "view";
             setSuccess("yes");
-        } catch (final Exception e) {
+        } catch (final ObjectNotFoundException e) {
             setSuccess("no");
             LOGGER.error("Exception occurred in ContractTypeAction-edit ", e);
 
@@ -233,18 +241,27 @@ public class ContractTypeAction extends BaseFormAction {
     @SkipValidation
     @Action(value = "/masters/contractType-search")
     public String search() {
-        final StringBuffer query = new StringBuffer();
-        query.append("From EgwTypeOfWork where createdBy is not null ");
-        if (!typeOfWork.getCode().isEmpty())
-            query.append(" and upper(code) like upper('%" + typeOfWork.getCode() + "%')");
-        if (!typeOfWork.getDescription().isEmpty())
-            query.append(" and upper(description) like upper('%" + typeOfWork.getDescription() + "%')");
-        if (typeOfWork.getEgPartytype() != null && typeOfWork.getEgPartytype().getId() != null)
-            query.append(" and egPartytype =" + typeOfWork.getEgPartytype());
-        if (typeOfWork.getParentid() != null && typeOfWork.getParentid().getId() != null)
-            query.append(" and parentid = " + typeOfWork.getParentid());
-        typeOfWorkList = persistenceService.findAllBy(query.toString());
-
+        final StringBuffer queryStr = new StringBuffer();
+        queryStr.append("From EgwTypeOfWork where createdBy is not null ");
+        if (!typeOfWork.getCode().isEmpty()) {
+        	queryStr.append(" and upper(code) like upper(:code)");
+        }
+        if (!typeOfWork.getDescription().isEmpty()) {
+        	queryStr.append(" and upper(description) like upper(:description)");
+        }
+        if (typeOfWork.getEgPartytype() != null && typeOfWork.getEgPartytype().getId() != null) {
+        	queryStr.append(" and egPartytype =:partytype");
+        }
+        if (typeOfWork.getParentid() != null && typeOfWork.getParentid().getId() != null) {
+        	queryStr.append(" and parentid =:parentid");
+        }
+        
+        Query query = persistenceService.getSession().createQuery(queryStr.toString())
+        		.setParameter("code", "%".concat(typeOfWork.getCode()).concat("%"))
+        		.setParameter("description", "%".concat(typeOfWork.getDescription()).concat("%"))
+        		.setParameter("partytype",typeOfWork.getEgPartytype())
+        		.setParameter("parentid",typeOfWork.getParentid());
+        typeOfWorkList = query.list();
         return "search";
     }
 

@@ -49,6 +49,7 @@ package com.exilant.exility.common;
 
 import org.apache.log4j.Logger;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -143,7 +144,7 @@ public class DataCollection {
             return ((Number) obj).floatValue();
         try {
             return Float.parseFloat(obj.toString());
-        } catch (final Exception e1) {
+        } catch (final NumberFormatException e1) {
             LOGGER.error("Inside getFloat" + e1.getMessage());
             return 0;
         }
@@ -155,7 +156,7 @@ public class DataCollection {
             return ((Number) obj).doubleValue();
         try {
             return Double.parseDouble(obj.toString());
-        } catch (final Exception e1) {
+        } catch (final NumberFormatException e1) {
             LOGGER.error("Inside getDouble" + e1.getMessage());
             return 0;
         }
@@ -167,7 +168,7 @@ public class DataCollection {
             return ((Number) obj).intValue();
         try {
             return Integer.parseInt(obj.toString());
-        } catch (final Exception e1) {
+        } catch (final NumberFormatException e1) {
             LOGGER.error("Inside getInt" + e1.getMessage());
             return 0;
         }
@@ -179,7 +180,7 @@ public class DataCollection {
             return ((Number) obj).longValue();
         try {
             return Long.parseLong(obj.toString());
-        } catch (final Exception e1) {
+        } catch (final NumberFormatException e1) {
             LOGGER.error("Inside getLong" + e1.getMessage());
             return 0;
         }
@@ -203,7 +204,7 @@ public class DataCollection {
     public String[] getValueList(final String name) {
         try {
             return (String[]) valueLists.get(name);
-        } catch (final Exception e) {
+        } catch (final ArrayIndexOutOfBoundsException e) {
             LOGGER.error("Inside getValueList" + e.getMessage());
         }
         final String[] arr = new String[0];
@@ -218,7 +219,7 @@ public class DataCollection {
         final Object obj = grids.get(name);
         try {
             return (String[][]) obj;
-        } catch (final Exception e) {
+        } catch (final ArrayIndexOutOfBoundsException e) {
             LOGGER.error("Typecasting error in getGrid" + e.getMessage());
         }
         final String[][] arr = new String[0][0];

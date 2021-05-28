@@ -91,6 +91,8 @@ import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.BigDecimalType;
+import org.hibernate.type.DateType;
+import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,25 +192,38 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 		for (final AppConfigValues appConfigVal : printAvailConfig)
 			chequePrintAvailableAt = appConfigVal.getValue();
 
-		final Query query = persistenceService.getSession()
-				.createSQLQuery("select ih.instrumentnumber as chequeNumber,ih.instrumentdate as chequeDate,"
-						+ "ih.instrumentamount as chequeAmount,vh.vouchernumber as voucherNumber,vh.id as vhId,ih.serialno as serialNo,vh.voucherdate as voucherDate,vh.name as voucherName,ih.payto as payTo,mbd.billnumber as billNumber,"
-						+ "mbd.billDate as billDate,vh.type as type,es.DESCRIPTION as chequeStatus,ih.id as instrumentheaderid from egf_instrumentHeader ih,egf_instrumentvoucher iv,EGW_STATUS es,"
-						+ "voucherheader vh left outer join miscbilldetail mbd on  vh.id=mbd.PAYVHID ,vouchermis vmis where ih.instrumentDate <'"
-						+ getFormattedDate(getNextDate(toDate)) + "' and ih.instrumentDate>='"
-						+ getFormattedDate(fromDate) + "' and ih.isPayCheque='1' "
-						+ "and ih.INSTRUMENTTYPE=(select id from egf_instrumenttype where TYPE='cheque' ) and vh.status not in ("
-						+ getExcludeVoucherStatues() + ") and vh.id=iv.voucherheaderid and  bankAccountId="
-						+ accountNumber.getId() + " and ih.id=iv.instrumentheaderid and ih.id_status=es.id "
-						+ " and vmis.voucherheaderid=vh.id " + createQuery()
-						+ " order by ih.instrumentDate,ih.instrumentNumber ")
-				.addScalar("chequeNumber").addScalar("chequeDate", StandardBasicTypes.DATE)
-				.addScalar("chequeAmount", BigDecimalType.INSTANCE).addScalar("voucherNumber")
-				.addScalar("voucherDate", StandardBasicTypes.DATE).addScalar("voucherName").addScalar("payTo")
-				.addScalar("billNumber").addScalar("billDate", StandardBasicTypes.DATE).addScalar("type")
-				.addScalar("vhId", BigDecimalType.INSTANCE).addScalar("serialNo", LongType.INSTANCE)
-				.addScalar("chequeStatus").addScalar("instrumentHeaderId", LongType.INSTANCE)
-				.setResultTransformer(Transformers.aliasToBean(ChequeIssueRegisterDisplay.class));
+		StringBuilder queryString = new StringBuilder("select ih.instrumentnumber as chequeNumber,ih.instrumentdate as chequeDate,")
+                .append(" ih.instrumentamount as chequeAmount,vh.vouchernumber as voucherNumber,vh.id as vhId,ih.serialno as serialNo,vh.voucherdate as voucherDate,")
+                .append(" vh.name as voucherName,ih.payto as payTo,mbd.billnumber as billNumber,")
+                .append(" mbd.billDate as billDate,vh.type as type,es.DESCRIPTION as chequeStatus,ih.id as instrumentheaderid from egf_instrumentHeader ih,")
+                .append(" egf_instrumentvoucher iv,EGW_STATUS es,")
+                .append(" voucherheader vh left outer join miscbilldetail mbd on  vh.id=mbd.PAYVHID ,vouchermis vmis where ih.instrumentDate <:toDate ")
+                .append(" and ih.instrumentDate>=:fromDate ")
+                .append(" and ih.isPayCheque='1' ")
+                .append(" and ih.INSTRUMENTTYPE=(select id from egf_instrumenttype where TYPE='cheque' ) and vh.status not in (:voucherStatus)")
+                .append(" and vh.id=iv.voucherheaderid and  bankAccountId=:bankAccountId")
+                .append(" and ih.id=iv.instrumentheaderid and ih.id_status=es.id ")
+                .append(" and vmis.voucherheaderid=vh.id ");
+		
+		if (deptImpl != null && deptImpl.getCode() != null && !deptImpl.getCode().equals("0"))
+            queryString.append(" and vmis.departmentcode=:deptCode");
+        queryString.append(" order by ih.instrumentDate,ih.instrumentNumber ");
+        
+        final Query query = persistenceService.getSession().createSQLQuery(queryString.toString())
+                .addScalar("chequeNumber").addScalar("chequeDate", StandardBasicTypes.DATE)
+                .addScalar("chequeAmount", BigDecimalType.INSTANCE).addScalar("voucherNumber")
+                .addScalar("voucherDate", StandardBasicTypes.DATE).addScalar("voucherName").addScalar("payTo")
+                .addScalar("billNumber").addScalar("billDate", StandardBasicTypes.DATE).addScalar("type")
+                .addScalar("vhId", BigDecimalType.INSTANCE).addScalar("serialNo", LongType.INSTANCE)
+                .addScalar("chequeStatus").addScalar("instrumentHeaderId", LongType.INSTANCE)
+                .setResultTransformer(Transformers.aliasToBean(ChequeIssueRegisterDisplay.class));
+
+        query.setParameter("toDate", getNextDate(toDate), DateType.INSTANCE)
+                .setParameter("fromDate", fromDate, DateType.INSTANCE)
+                .setParameterList("voucherStatus", getExcludeVoucherStatues(), IntegerType.INSTANCE)
+                .setParameter("bankAccountId", accountNumber.getId(), LongType.INSTANCE);
+        if (deptImpl != null && deptImpl.getCode() != null && !deptImpl.getCode().equals("0"))
+            query.setParameter("deptCode", deptImpl.getCode());
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Search query" + query.getQueryString());
 		chequeIssueRegisterList = query.list();
@@ -247,13 +262,6 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 			else
 				row.remove();
 		}
-	}
-
-	String createQuery() {
-		String query = "";
-		if (deptImpl != null && deptImpl.getCode() != null && !deptImpl.getCode().equals("0"))
-			query = query.concat(" and vmis.departmentcode='" + deptImpl.getCode() + "'");
-		return query;
 	}
 
 	private void updateBillNumber() {
@@ -434,14 +442,21 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 		this.egovCommon = egovCommon;
 	}
 
-	private String getExcludeVoucherStatues() {
-		final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
-				"statusexcludeReport");
-		String statusExclude = "-1";
-		statusExclude = appList.get(0).getValue();
-		return statusExclude;
-	}
-
+	private List<Integer> getExcludeVoucherStatues() {
+        final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
+                "statusexcludeReport");
+        List<Integer> statusExclude = new ArrayList<>();
+        String strArray[] = appList.get(0).getValue().split(",");
+        int intArray[] = new int[strArray.length];
+        for (int count = 0; count < intArray.length ; count++) {
+            intArray[count] = Integer.parseInt(strArray[count]);
+        }
+        for (int s : intArray) {
+            statusExclude.add(s);
+        }
+        return statusExclude;
+    }
+	
 	private void populateUlbName() {
 
 		setUlbName(ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()));

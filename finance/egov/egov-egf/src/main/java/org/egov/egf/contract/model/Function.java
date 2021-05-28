@@ -2,24 +2,33 @@ package org.egov.egf.contract.model;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class Function implements Serializable {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 944845081085224791L;
 	private Long id;
+	@SafeHtml
 	private String name;
+	@SafeHtml
 	private String code;
-	private Integer Level;
+	private Integer level;
 	private Boolean active;
 	private Long parentId;
 	private AuditDetails auditDetails;
-	
-	public Function(){}
 
-	public Function(Long id, String name, String code, Integer level, Boolean active, Long parentId,
-			AuditDetails auditDetails) {
+	public Function() {
+	}
+
+	public Function(final Long id, final String name, final String code, final Integer level, final Boolean active,
+			final Long parentId, final AuditDetails auditDetails) {
 		this.id = id;
 		this.name = name;
 		this.code = code;
-		Level = level;
+		this.level = level;
 		this.active = active;
 		this.parentId = parentId;
 		this.auditDetails = auditDetails;
@@ -29,7 +38,7 @@ public class Function implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -37,7 +46,7 @@ public class Function implements Serializable {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -45,23 +54,23 @@ public class Function implements Serializable {
 		return code;
 	}
 
-	public void setCode(String code) {
+	public void setCode(final String code) {
 		this.code = code;
 	}
 
 	public Integer getLevel() {
-		return Level;
+		return level;
 	}
 
-	public void setLevel(Integer level) {
-		Level = level;
+	public void setLevel(final Integer level) {
+		this.level = level;
 	}
 
 	public Boolean getActive() {
 		return active;
 	}
 
-	public void setActive(Boolean active) {
+	public void setActive(final Boolean active) {
 		this.active = active;
 	}
 
@@ -69,7 +78,7 @@ public class Function implements Serializable {
 		return parentId;
 	}
 
-	public void setParentId(Long parentId) {
+	public void setParentId(final Long parentId) {
 		this.parentId = parentId;
 	}
 
@@ -77,9 +86,8 @@ public class Function implements Serializable {
 		return auditDetails;
 	}
 
-	public void setAuditDetails(AuditDetails auditDetails) {
+	public void setAuditDetails(final AuditDetails auditDetails) {
 		this.auditDetails = auditDetails;
 	}
-	
 
 }

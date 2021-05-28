@@ -81,7 +81,7 @@ public class EgfAccountcodePurpose implements java.io.Serializable {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	private void setId(Integer id) {
 		this.id = id;
 	}
 

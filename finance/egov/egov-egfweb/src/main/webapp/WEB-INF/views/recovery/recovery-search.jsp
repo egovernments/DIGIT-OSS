@@ -50,7 +50,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
-<form:form role="form" action="search" modelAttribute="recovery"
+<form:form role="form" action="search" modelAttribute="recoverySearchRequest"
 	id="recoverysearchform" cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
 	<div class="main-content">
@@ -65,7 +65,7 @@
 							<label class="col-sm-2 control-label text-left"><spring:message
 									code="lbl.chartofaccounts" text="Account Code"/> </label>
 							<div class="col-sm-3">
-								<form:select path="chartofaccounts.id" id="chartofaccounts.id"
+								<form:select path="chartofaccountsId" id="chartofaccounts.id"
 									cssClass="form-control" cssErrorClass="form-control error">
 									<form:option value="">
 										<spring:message code="lbl.select" text="Select"/>
@@ -75,7 +75,7 @@
 											- ${chartOfAccounts.name}</option>
 									</c:forEach>
 								</form:select>
-								<form:errors path="chartofaccounts" cssClass="error-msg" />
+								<form:errors path="chartofaccountsId" cssClass="error-msg" />
 							</div>
 							<label class="col-sm-2 control-label text-left"><spring:message
 									code="lbl.deductions.code" text="Deduction Code"/> </label>

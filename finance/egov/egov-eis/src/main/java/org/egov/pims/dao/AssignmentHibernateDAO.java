@@ -95,14 +95,13 @@ public class AssignmentHibernateDAO implements AssignmentDAO
 	}catch (HibernateException he) {
 		LOGGER.error(he.getMessage());
 		throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-	} catch (Exception he)
-	{
-		LOGGER.error(he.getMessage());
-		throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-	}
+        } /*
+           * catch (Exception he) { LOGGER.error(he.getMessage()); throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 			return employeeAssignList;
 }
-	public Assignment getLatestAssignmentForEmployeeByToDate(Integer empId,Date todate) throws Exception
+	public Assignment getLatestAssignmentForEmployeeByToDate(Integer empId,Date todate)
 	{
 		Assignment assignment = null;
 		try
@@ -121,11 +120,10 @@ public class AssignmentHibernateDAO implements AssignmentDAO
 		{
 			LOGGER.error(he.getMessage());
 			throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-		} catch (Exception he) 
-		{
-			LOGGER.error(he.getMessage());
-			throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-		}
+        } /*
+           * catch (Exception he) { LOGGER.error(he.getMessage()); throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 		return assignment;
 	}
 	
@@ -172,11 +170,10 @@ public class AssignmentHibernateDAO implements AssignmentDAO
 	}catch (HibernateException he) {
 		LOGGER.error(he.getMessage());
 		throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-	} catch (Exception he)
-	{
-		LOGGER.error(he.getMessage());
-		throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-	}
+        } /*
+           * catch (Exception he) { LOGGER.error(he.getMessage()); throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 	
 	return employeeAssignList;
 
@@ -245,11 +242,10 @@ public class AssignmentHibernateDAO implements AssignmentDAO
 	}catch (HibernateException he) {
 		LOGGER.error(he.getMessage());
 		throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-	} catch (Exception he)
-	{
-		LOGGER.error(he.getMessage());
-		throw new ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he);
-	}
+        } /*
+           * catch (Exception he) { LOGGER.error(he.getMessage()); throw new
+           * ApplicationRuntimeException(STR_EXCEPTION + he.getMessage(),he); }
+           */
 	
 	return employeeAssignList;
 

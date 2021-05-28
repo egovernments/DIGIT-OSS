@@ -4,27 +4,30 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Bill {
     @JsonProperty("id")
+    @SafeHtml
     private String id = null;
-
+    @SafeHtml
     @JsonProperty("mobileNumber")
     private String mobileNumber = null;
-    
+    @SafeHtml
     @JsonProperty("paidBy")
     private String paidBy = null;
-
+    @SafeHtml
     @JsonProperty("payerName")
     private String payerName = null;
-
+    @SafeHtml
     @JsonProperty("payerAddress")
     private String payerAddress = null;
-
+    @SafeHtml
     @JsonProperty("payerEmail")
     private String payerEmail = null;
-    
+    @SafeHtml
     @JsonProperty("payerId")
     private String payerId = null;
 
@@ -45,7 +48,7 @@ public class Bill {
     @JsonProperty("billDetails")
     @Valid
     private List<BillDetail> billDetails = null;
-
+    @SafeHtml
     @JsonProperty("tenantId")
     private String tenantId = null;
 

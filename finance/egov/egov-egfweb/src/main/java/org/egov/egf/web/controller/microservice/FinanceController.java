@@ -34,6 +34,7 @@ import org.egov.egf.contract.model.FunctionResponse;
 import org.egov.egf.contract.model.FundRequest;
 import org.egov.egf.contract.model.FundResponse;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.contract.Pagination;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.microservice.contract.ResponseInfo;
@@ -65,7 +66,7 @@ public class FinanceController {
 
 	@PostMapping(value = "/funds/_search")
 	@ResponseBody
-	public FundResponse fundSearch(@RequestBody FundRequest fundRequest) {
+	public FundResponse fundSearch(@RequestBody @Valid FundRequest fundRequest) {
 		Fund fund = new Fund();
 
 		fund.setCode(fundRequest.getCode());
@@ -80,7 +81,7 @@ public class FinanceController {
 
 	@PostMapping(value = "/functions/_search")
 	@ResponseBody
-	public FunctionResponse functionSearch(@RequestBody FunctionRequest funcRequest) {
+	public FunctionResponse functionSearch(@RequestBody @Valid FunctionRequest funcRequest) {
 		CFunction function = new CFunction();
 		function.setCode(funcRequest.getCode());
 		function.setName(funcRequest.getName());
@@ -89,20 +90,17 @@ public class FinanceController {
 		List<CFunction> functions = functionService.search(function, funcRequest.getIds(), funcRequest.getSortBy(),
 				funcRequest.getOffset(), funcRequest.getPageSize());
 
-		FunctionResponse funRep = new FunctionResponse();
-
-		// fundResp.
-
 		return getSuccessFunctionResponse(functions, funcRequest);
 	}
 
 	@PostMapping(value = "/COA")
-	public void COASearch() {
+	public void coaSearch() {
+		throw new UnsupportedOperationException();
 	}
 
 	@PostMapping(value = "/financialyears/_search")
 	@ResponseBody
-	public FinancialYearResponse FinancialYearSearch(@RequestBody FinancialYearRequest fyRequest) {
+	public FinancialYearResponse financialYearSearch(@RequestBody @Valid FinancialYearRequest fyRequest) {
 
 		CFinancialYear finYear = new CFinancialYear();
 		finYear.setFinYearRange(fyRequest.getFinYearRange());
@@ -118,21 +116,12 @@ public class FinanceController {
 
 	@PostMapping(value = "/bank")
 	@ResponseBody
-	public BankResponse BankSearch(@ModelAttribute @Valid BankRequest bankRequest,BindingResult modelAttributeBindingResult
-              ,@RequestBody @Valid RequestInfoWrapper request,BindingResult requestBodyBindingResult) {
-
-//		Bank bank = new Bank();
-//		bank.setCode(bankRequest.getCode());
-//		bank.setName(bankRequest.getName());
-//		bank.setIsactive(bankRequest.isActive());
-//
-//		List<Bank> banks = bankService.search(bank, bankRequest.getIds(), bankRequest.getSortBy(),
-//				bankRequest.getOffset(), bankRequest.getPageSize());
-//
-//		return getSuccessBankResponse(banks, bankRequest);
-	    return null;
+	public BankResponse bankSearch(@ModelAttribute @Valid BankRequest bankRequest,
+			BindingResult modelAttributeBindingResult, @RequestBody @Valid RequestInfoWrapper request,
+			BindingResult requestBodyBindingResult) {
+		return null;
 	}
-	
+
 	@PostMapping(value="/rest/bank/all")
 	@ResponseBody
 	public BankResponse getAllBanks(@ModelAttribute @Valid BankRequest bankRequest,BindingResult modelAttributeBindingResult
@@ -143,7 +132,7 @@ public class FinanceController {
 	}
 	@PostMapping(value = "/bankbranch")
 	@ResponseBody
-	public BankBranchResponse BankBranchSearch(@RequestBody BankBranchRequest bbRequest) {
+	public BankBranchResponse bankBranchSearch(@RequestBody @Valid BankBranchRequest bbRequest) {
 
 		Bankbranch branch = new Bankbranch();
 		branch.setBranchcode(bbRequest.getCode());
@@ -157,13 +146,15 @@ public class FinanceController {
 
 	@PostMapping(value = "/rest/bankaccount")
 	@ResponseBody
-	public BankAccountResponse BankAccountSearch(@ModelAttribute @Valid BankAccountRequest bankaccountrequest,BindingResult modelAttributeBindingResult
-                ,@RequestBody @Valid RequestInfoWrapper request,BindingResult requestBodyBindingResult) {
-	    setSchema(bankaccountrequest.getTenantId());
-	Map<String,String> accounts =   bankaccountService.getAllBankAccounts();
-	  
-	return getSuccessBankAccountResponse(request.getRequestInfo(), accounts);
+	public BankAccountResponse bankAccountSearch(@ModelAttribute @Valid BankAccountRequest bankaccountrequest,
+			BindingResult modelAttributeBindingResult, @RequestBody @Valid RequestInfoWrapper request,
+			BindingResult requestBodyBindingResult) {
+		setSchema(bankaccountrequest.getTenantId());
+		Map<String, String> accounts = bankaccountService.getAllBankAccounts();
+
+		return getSuccessBankAccountResponse(request.getRequestInfo(), accounts);
 	}
+	
 	@PostMapping(value= "/rest/test")
 	@ResponseBody
 	public  String testme(@ModelAttribute @Valid BankRequest bankRequest,BindingResult modelAttributeBindingResult
@@ -172,7 +163,8 @@ public class FinanceController {
 	}
 	
 	@PostMapping(value = "/recovery")
-	public void RecoverySearch() {
+	public void recoverySearch() {
+		throw new UnsupportedOperationException();
 	}
 
 	private ResponseInfo createResponseObj(RequestInfo requestinfo, boolean success) {
@@ -194,8 +186,6 @@ public class FinanceController {
 
 		ResponseInfo responseInfo = createResponseObj(fundRequest.getRequestInfo(), true);
 
-		Fund fu = new Fund();
-
 		List<org.egov.egf.contract.model.Fund> fundlist = new ArrayList<>();
 
 		funds.forEach(fund -> {
@@ -204,19 +194,19 @@ public class FinanceController {
 					fund.getCreatedby() != null ? fund.getCreatedby() : null,
 					fund.getLastModifiedBy() != null ? fund.getLastModifiedBy() : null, fund.getCreatedDate(),
 					fund.getLastModifiedDate());
-			org.egov.egf.contract.model.Fund _fund = new org.egov.egf.contract.model.Fund();
-			_fund.setAuditDetils(auditDetails);
-			_fund.setActive(fund.getIsactive());
-			_fund.setCode(fund.getCode());
-			_fund.setId(fund.getId().longValue());
-			_fund.setIdentifier(fund.getIdentifier());
-			_fund.setIsParent(fund.getIsnotleaf());
-			_fund.setLevel(String.valueOf(fund.getLlevel()));
-			_fund.setName(fund.getName());
+			org.egov.egf.contract.model.Fund fundContractract = new org.egov.egf.contract.model.Fund();
+			fundContractract.setAuditDetils(auditDetails);
+			fundContractract.setActive(fund.getIsactive());
+			fundContractract.setCode(fund.getCode());
+			fundContractract.setId(fund.getId());
+			fundContractract.setIdentifier(fund.getIdentifier());
+			fundContractract.setIsParent(fund.getIsnotleaf());
+			fundContractract.setLevel(String.valueOf(fund.getLlevel()));
+			fundContractract.setName(fund.getName());
 			if (fund.getParentId() != null)
-				_fund.setParent(fund.getParentId().getId().longValue());
+				fundContractract.setParent(fund.getParentId().getId());
 
-			fundlist.add(_fund);
+			fundlist.add(fundContractract);
 		});
 
 		Pagination page = new Pagination();
@@ -236,11 +226,11 @@ public class FinanceController {
 					function.getLastModifiedBy(), function.getCreatedDate(), function.getLastModifiedDate());
 			// Long id, String name, String code, Integer level, Boolean active,
 			// Long parentId, AuditDetails auditDetails)
-			Function _function = new Function(function.getId(), function.getName(), function.getCode(),
-					function.getLlevel(), function.getIsActive(),
-					function.getParentId() != null ? function.getParentId().getId() : 0, auditDetails);
+			Function func = new Function(function.getId(), function.getName(), function.getCode(), function.getLlevel(),
+					function.getIsActive(), function.getParentId() != null ? function.getParentId().getId() : 0,
+					auditDetails);
 
-			funList.add(_function);
+			funList.add(func);
 		});
 		Pagination page = new Pagination();
 		page.setOffSet(funRequest.getOffset());
@@ -256,13 +246,13 @@ public class FinanceController {
 		ResponseInfo responseInfo = createResponseObj(fyRequest.getRequestInfo(), true);
 
 		List<FinancialYear> fyList = new ArrayList<>();
-		financeyears.forEach(FYear -> {
+		financeyears.forEach(fYear -> {
 
-			AuditDetails auditDetails = new AuditDetails(fyRequest.getTeanantId(), FYear.getCreatedBy(),
-					FYear.getLastModifiedBy(), FYear.getCreatedDate(), FYear.getLastModifiedDate());
-			FinancialYear fy = new FinancialYear(FYear.getId(), FYear.getFinYearRange(), FYear.getStartingDate(),
-					FYear.getEndingDate(), FYear.getIsActive(), FYear.getIsActiveForPosting(), FYear.getIsClosed(),
-					FYear.getTransferClosingBalance(), auditDetails);
+			AuditDetails auditDetails = new AuditDetails(fyRequest.getTeanantId(), fYear.getCreatedBy(),
+					fYear.getLastModifiedBy(), fYear.getCreatedDate(), fYear.getLastModifiedDate());
+			FinancialYear fy = new FinancialYear(fYear.getId(), fYear.getFinYearRange(), fYear.getStartingDate(),
+					fYear.getEndingDate(), fYear.getIsActive(), fYear.getIsActiveForPosting(), fYear.getIsClosed(),
+					fYear.getTransferClosingBalance(), auditDetails);
 			fyList.add(fy);
 		});
 
@@ -284,9 +274,9 @@ public class FinanceController {
 			AuditDetails auditDetails = new AuditDetails(bankRequest.getTenantId(), bank.getCreatedBy(),
 					bank.getLastModifiedBy(), bank.getCreatedDate(), bank.getLastModifiedDate());
 
-			org.egov.egf.contract.model.Bank _bank = new org.egov.egf.contract.model.Bank(bank.getId(), bank.getCode(),
+			org.egov.egf.contract.model.Bank bankContract = new org.egov.egf.contract.model.Bank(bank.getId(), bank.getCode(),
 					bank.getName(), bank.getNarration(), bank.getIsactive(), bank.getType(), auditDetails);
-			bankList.add(_bank);
+			bankList.add(bankContract);
 		});
 
 		Pagination page = new Pagination();
@@ -309,42 +299,42 @@ public class FinanceController {
 					branch.getCreatedBy() != null ? branch.getCreatedBy() : null,
 					branch.getLastModifiedBy() != null ? branch.getLastModifiedBy() : null, branch.getCreatedDate(),
 					branch.getLastModifiedDate());
-			BankBranch _branch = new BankBranch();
+			BankBranch bankBranch = new BankBranch();
 
-			_branch.setActive(branch.getIsactive());
-			_branch.setAddress(branch.getBranchaddress1());
-			_branch.setAddress2(branch.getBranchaddress2());
-			_branch.setAuditDetails(branchAudit);
+			bankBranch.setActive(branch.getIsactive());
+			bankBranch.setAddress(branch.getBranchaddress1());
+			bankBranch.setAddress2(branch.getBranchaddress2());
+			bankBranch.setAuditDetails(branchAudit);
 
 			if (branch.getBank() != null) {
 				AuditDetails bankAudit = new AuditDetails(branchRequest.getTenantId(),
 						branch.getBank().getCreatedBy() != null ? branch.getBank().getCreatedBy() : null,
 						branch.getBank().getLastModifiedBy() != null ? branch.getBank().getLastModifiedBy() : null,
 						branch.getBank().getCreatedDate(), branch.getBank().getLastModifiedDate());
-				org.egov.egf.contract.model.Bank _bank = new org.egov.egf.contract.model.Bank();
-				_bank.setCode(branch.getBank().getCode());
-				_bank.setId(branch.getBank().getId());
-				_bank.setName(branch.getBank().getName());
-				_bank.setActive(branch.getBank().getIsactive());
-				_bank.setType(branch.getBank().getType());
-				_bank.setDescription(branch.getBank().getNarration());
-				_bank.setAuditDetails(bankAudit);
-				_branch.setBank(_bank);
+				org.egov.egf.contract.model.Bank bankContract = new org.egov.egf.contract.model.Bank();
+				bankContract.setCode(branch.getBank().getCode());
+				bankContract.setId(branch.getBank().getId());
+				bankContract.setName(branch.getBank().getName());
+				bankContract.setActive(branch.getBank().getIsactive());
+				bankContract.setType(branch.getBank().getType());
+				bankContract.setDescription(branch.getBank().getNarration());
+				bankContract.setAuditDetails(bankAudit);
+				bankBranch.setBank(bankContract);
 			}
 
-			_branch.setCity(branch.getBranchcity());
-			_branch.setCode(branch.getBranchcode());
-			_branch.setContactPerson(branch.getContactperson());
-			_branch.setDescription(branch.getNarration());
-			_branch.setFax(branch.getBranchfax());
-			_branch.setId(branch.getId().longValue());
-			_branch.setMicr(branch.getBranchMICR());
-			_branch.setName(branch.getBranchname());
-			_branch.setPhone(branch.getBranchphone());
-			_branch.setPincode(branch.getBranchpin());
-			_branch.setState(branch.getBranchstate());
+			bankBranch.setCity(branch.getBranchcity());
+			bankBranch.setCode(branch.getBranchcode());
+			bankBranch.setContactPerson(branch.getContactperson());
+			bankBranch.setDescription(branch.getNarration());
+			bankBranch.setFax(branch.getBranchfax());
+			bankBranch.setId(branch.getId().longValue());
+			bankBranch.setMicr(branch.getBranchMICR());
+			bankBranch.setName(branch.getBranchname());
+			bankBranch.setPhone(branch.getBranchphone());
+			bankBranch.setPincode(branch.getBranchpin());
+			bankBranch.setState(branch.getBranchstate());
 
-			branchList.add(_branch);
+			branchList.add(bankBranch);
 		});
 
 		Pagination page = new Pagination();
@@ -354,26 +344,26 @@ public class FinanceController {
 
 		return new BankBranchResponse(responseInfo, branchList, page);
 	}
-	
+
 	private BankAccountResponse getSuccessBankAccountResponse(RequestInfo requestInfo,Map<String,String> accounts){
 	 
 	    ResponseInfo responseInfo = createResponseObj(requestInfo, true);
 	    List<BankAccount> accountlist = new ArrayList<>();
-	    accounts.forEach((key,value)->{
-	        accountlist.add(new BankAccount(key,value));
-	     });;
+	    accounts.forEach((key,value)->
+	        accountlist.add(new BankAccount(key,value))
+	     );
 	    
 	    return new BankAccountResponse(responseInfo, accountlist, new Pagination());
 	}
 	
-	private void setSchema(String tenantid)
-	{
-	    if(null!=tenantid && ""!=tenantid){
-	    String[] tenantParts = tenantid.split("\\.");
-	        if(tenantParts == null||tenantParts.length<2){
-	            throw new Error("tenantid not formed properly");
-	        }
-	       ApplicationThreadLocals.setTenantID(tenantParts[1]); 
-	    }else throw new Error("tenantid not formed properly");
+	private void setSchema(String tenantid) {
+		if (null != tenantid && !"".equals(tenantid)) {
+			String[] tenantParts = tenantid.split("\\.");
+			if (tenantParts == null || tenantParts.length < 2) {
+				throw new ApplicationRuntimeException("tenantid not formed properly");
+			}
+			ApplicationThreadLocals.setTenantID(tenantParts[1]);
+		} else
+			throw new ApplicationRuntimeException("tenantid not formed properly");
 	}
 }

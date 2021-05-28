@@ -46,8 +46,6 @@
 					filters="none" />
 			<!-- 	<security:filter-chain pattern="/help*"
 					filters="none" />
-				<security:filter-chain pattern="/jcaptcha*"
-					filters="none" />
 				<security:filter-chain pattern="/index.jsp"
 					filters="none" />
 				<security:filter-chain
@@ -66,7 +64,7 @@
 					filters="none" />
 				<security:filter-chain pattern="/city/details"
 					filters="none" />
-				<security:filter-chain pattern="/**"  filters="concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeAuthenticationFilter,anonymousAuthenticationFilter,exceptionTranslationFilter,filterSecurityInterceptor" />
+				<security:filter-chain pattern="/**"  filters="concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,headerWriterFilter,csrfFilter,securityContextHolderAwareRequestFilter,rememberMeAuthenticationFilter,anonymousAuthenticationFilter,exceptionTranslationFilter,filterSecurityInterceptor" />
 				<!-- <security:filter-chain pattern="/public/**" filters="anonymousAuthenticationFilter"/> 
 					<security:filter-chain pattern="/**" filters="concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeAuthenticationFilter,anonymousAuthenticationFilter,exceptionTranslationFilter,filterSecurityInterceptor" 
 					/> -->

@@ -2,196 +2,198 @@ package org.egov.infra.microservice.models;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class BusinessDetails {
 
-	private Long id;
+    private Long id;
+    @SafeHtml
+    private String code;
+    @SafeHtml
+    private String name;
 
-	private String code;
+    private Boolean active;
 
-	private String name;
+    private Long businessCategory;
+    @SafeHtml
+    private String businessType;
+    @SafeHtml
+    private String businessUrl;
+    @SafeHtml
+    private String department;
+    @SafeHtml
+    private String fundSource;
+    @SafeHtml
+    private String functionary;
 
-	private Boolean active;
+    private Boolean voucherCreation;
 
-	private Long businessCategory;
+    private Boolean isVoucherApproved;
 
-	private String businessType;
+    private Boolean callBackForApportioning;
 
-	private String businessUrl;
+    private Long voucherCutoffDate;
 
-	private String department;
+    private Integer ordernumber;
+    @SafeHtml
+    private String fund;
+    @SafeHtml
+    private String function;
+    @SafeHtml
+    private String tenantId;
 
-	private String fundSource;
+    private List<BusinessAccountDetails> accountDetails;
 
-	private String functionary;
+    public Long getId() {
+        return id;
+    }
 
-	private Boolean voucherCreation;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	private Boolean isVoucherApproved;
+    public String getCode() {
+        return code;
+    }
 
-	private Boolean callBackForApportioning;
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	private Long voucherCutoffDate;
+    public String getName() {
+        return name;
+    }
 
-	private Integer ordernumber;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	private String fund;
+    public Boolean getActive() {
+        return active;
+    }
 
-	private String function;
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
-	private String tenantId;
+    public Long getBusinessCategory() {
+        return businessCategory;
+    }
 
-	private List<BusinessAccountDetails> accountDetails;
+    public void setBusinessCategory(Long businessCategory) {
+        this.businessCategory = businessCategory;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public String getBusinessType() {
+        return businessType;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public String getBusinessUrl() {
+        return businessUrl;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setBusinessUrl(String businessUrl) {
+        this.businessUrl = businessUrl;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getDepartment() {
+        return department;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
-	public Boolean getActive() {
-		return active;
-	}
+    public String getFundSource() {
+        return fundSource;
+    }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+    public void setFundSource(String fundSource) {
+        this.fundSource = fundSource;
+    }
 
-	public Long getBusinessCategory() {
-		return businessCategory;
-	}
+    public String getFunctionary() {
+        return functionary;
+    }
 
-	public void setBusinessCategory(Long businessCategory) {
-		this.businessCategory = businessCategory;
-	}
+    public void setFunctionary(String functionary) {
+        this.functionary = functionary;
+    }
 
-	public String getBusinessType() {
-		return businessType;
-	}
+    public Boolean getVoucherCreation() {
+        return voucherCreation;
+    }
 
-	public void setBusinessType(String businessType) {
-		this.businessType = businessType;
-	}
+    public void setVoucherCreation(Boolean voucherCreation) {
+        this.voucherCreation = voucherCreation;
+    }
 
-	public String getBusinessUrl() {
-		return businessUrl;
-	}
+    public Boolean getIsVoucherApproved() {
+        return isVoucherApproved;
+    }
 
-	public void setBusinessUrl(String businessUrl) {
-		this.businessUrl = businessUrl;
-	}
+    public void setIsVoucherApproved(Boolean isVoucherApproved) {
+        this.isVoucherApproved = isVoucherApproved;
+    }
 
-	public String getDepartment() {
-		return department;
-	}
+    public Boolean getCallBackForApportioning() {
+        return callBackForApportioning;
+    }
 
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+    public void setCallBackForApportioning(Boolean callBackForApportioning) {
+        this.callBackForApportioning = callBackForApportioning;
+    }
 
-	public String getFundSource() {
-		return fundSource;
-	}
+    public Long getVoucherCutoffDate() {
+        return voucherCutoffDate;
+    }
 
-	public void setFundSource(String fundSource) {
-		this.fundSource = fundSource;
-	}
+    public void setVoucherCutoffDate(Long voucherCutoffDate) {
+        this.voucherCutoffDate = voucherCutoffDate;
+    }
 
-	public String getFunctionary() {
-		return functionary;
-	}
+    public Integer getOrdernumber() {
+        return ordernumber;
+    }
 
-	public void setFunctionary(String functionary) {
-		this.functionary = functionary;
-	}
+    public void setOrdernumber(Integer ordernumber) {
+        this.ordernumber = ordernumber;
+    }
 
-	public Boolean getVoucherCreation() {
-		return voucherCreation;
-	}
+    public String getFund() {
+        return fund;
+    }
 
-	public void setVoucherCreation(Boolean voucherCreation) {
-		this.voucherCreation = voucherCreation;
-	}
+    public void setFund(String fund) {
+        this.fund = fund;
+    }
 
-	public Boolean getIsVoucherApproved() {
-		return isVoucherApproved;
-	}
+    public String getFunction() {
+        return function;
+    }
 
-	public void setIsVoucherApproved(Boolean isVoucherApproved) {
-		this.isVoucherApproved = isVoucherApproved;
-	}
+    public void setFunction(String function) {
+        this.function = function;
+    }
 
-	public Boolean getCallBackForApportioning() {
-		return callBackForApportioning;
-	}
+    public String getTenantId() {
+        return tenantId;
+    }
 
-	public void setCallBackForApportioning(Boolean callBackForApportioning) {
-		this.callBackForApportioning = callBackForApportioning;
-	}
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
-	public Long getVoucherCutoffDate() {
-		return voucherCutoffDate;
-	}
+    public List<BusinessAccountDetails> getAccountDetails() {
+        return accountDetails;
+    }
 
-	public void setVoucherCutoffDate(Long voucherCutoffDate) {
-		this.voucherCutoffDate = voucherCutoffDate;
-	}
-
-	public Integer getOrdernumber() {
-		return ordernumber;
-	}
-
-	public void setOrdernumber(Integer ordernumber) {
-		this.ordernumber = ordernumber;
-	}
-
-	public String getFund() {
-		return fund;
-	}
-
-	public void setFund(String fund) {
-		this.fund = fund;
-	}
-
-	public String getFunction() {
-		return function;
-	}
-
-	public void setFunction(String function) {
-		this.function = function;
-	}
-
-	public String getTenantId() {
-		return tenantId;
-	}
-
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
-
-	public List<BusinessAccountDetails> getAccountDetails() {
-		return accountDetails;
-	}
-
-	public void setAccountDetails(List<BusinessAccountDetails> accountDetails) {
-		this.accountDetails = accountDetails;
-	}
+    public void setAccountDetails(List<BusinessAccountDetails> accountDetails) {
+        this.accountDetails = accountDetails;
+    }
 
 }

@@ -47,12 +47,13 @@
  */
 package org.egov.commons.dao;
 
-import org.egov.commons.Bank;
-import org.egov.infra.exception.ApplicationRuntimeException;
-import org.hibernate.Session;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import org.egov.commons.Bank;
+import org.egov.infra.exception.ApplicationRuntimeException;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 public class BankDAO {
 
@@ -67,7 +68,7 @@ public class BankDAO {
 		try {
 
 			getSession().save(bank);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException("Error occurred while creating Bank", e);
 		}
 	}
@@ -75,7 +76,7 @@ public class BankDAO {
 	public void updateBank(final Bank bank) {
 		try {
 			getSession().saveOrUpdate(bank);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException("Error occurred while updating Bank", e);
 		}
 	}
@@ -83,7 +84,7 @@ public class BankDAO {
 	public void removeBank(final Bank bank) {
 		try {
 			getSession().delete(bank);
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException("Error occurred while deleting Bank", e);
 		}
 	}
@@ -91,7 +92,7 @@ public class BankDAO {
 	public Bank getBankById(final int bank) {
 		try {
 			return (Bank) getSession().get(Bank.class, Integer.valueOf(bank));
-		} catch (final Exception e) {
+		} catch (final HibernateException e) {
 			throw new ApplicationRuntimeException("Error occurred while getting Bank by id", e);
 		}
 	}

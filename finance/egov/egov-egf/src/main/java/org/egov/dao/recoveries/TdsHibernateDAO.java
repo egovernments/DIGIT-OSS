@@ -50,6 +50,17 @@
 
 package org.egov.dao.recoveries;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.log4j.Logger;
 import org.egov.commons.EgPartytype;
 import org.egov.commons.EgwTypeOfWork;
@@ -63,14 +74,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * TODO Brief Description of the purpose of the class/interface
@@ -168,56 +171,62 @@ public class TdsHibernateDAO {
         return qry.list();
     }
 
-    public List<Recovery> getActiveTdsFilterBy(final String estimateDate, final BigDecimal estCost,
-            final EgPartytype egPartytype, final EgwTypeOfWork egwTypeOfWork, final EgwTypeOfWork egwSubTypeOfWork) {
-        Query qry;
-        session = getCurrentSession();
-        final StringBuffer qryStr = new StringBuffer();
-        List<Recovery> tdsList = null;
-        qryStr.append("from Recovery tds where tds.isactive=true ");
-        qry = session.createQuery(qryStr.toString());
+	public List<Recovery> getActiveTdsFilterBy(final String estimateDate, final BigDecimal estCost,
+			final EgPartytype egPartytype, final EgwTypeOfWork egwTypeOfWork, final EgwTypeOfWork egwSubTypeOfWork) {
+		Query qry;
+		session = getCurrentSession();
+		final StringBuffer qryStr = new StringBuffer();
+		List<Recovery> tdsList = null;
+		qryStr.append("from Recovery tds where tds.isactive=true ");
+		qry = session.createQuery(qryStr.toString());
 
-        if (egPartytype != null) {
-            qryStr.append(" and tds.egPartytype=:egPartytype");
-            qry = session.createQuery(qryStr.toString());
-        }
+		if (egPartytype != null) {
+			qryStr.append(" and tds.egPartytype=:egPartytype");
+			qry = session.createQuery(qryStr.toString());
+		}
 
-        if (estCost != null) {
-            qryStr.append(" and tds.id in (select ed.recovery.id from EgDeductionDetails ed where (ed.lowlimit<=:estCost and ed.highlimit>=:estCost and ed.highlimit is not null) or (ed.lowlimit<=:estCost and ed.highlimit is null)) ");
-            qry = session.createQuery(qryStr.toString());
-        }
+		if (estCost != null) {
+			qryStr.append(" and tds.id in (select ed.recovery.id from EgDeductionDetails ed")
+					.append(" where (ed.lowlimit<=:estCost and ed.highlimit>=:estCost and ed.highlimit is not null)")
+					.append(" or (ed.lowlimit<=:estCost and ed.highlimit is null)) ");
+			qry = session.createQuery(qryStr.toString());
+		}
 
-        if (estimateDate != null && !estimateDate.equals("")) {
-            qryStr.append(" and tds.id in (select ed.recovery.id from EgDeductionDetails ed where (ed.datefrom<=:estimateDate and ed.dateto>=:estimateDate and ed.dateto is not null) or(ed.datefrom<=:estimateDate and ed.dateto is null))");
-            qry = session.createQuery(qryStr.toString());
-        }
+		if (estimateDate != null && !estimateDate.equals("")) {
+			qryStr.append(" and tds.id in (select ed.recovery.id from EgDeductionDetails ed").append(
+					" where (ed.datefrom<=:estimateDate and ed.dateto>=:estimateDate and ed.dateto is not null)")
+					.append(" or (ed.datefrom<=:estimateDate and ed.dateto is null))");
+			qry = session.createQuery(qryStr.toString());
+		}
 
-        if (egwTypeOfWork != null) {
-            qryStr.append(" and tds.id in (select ed.recovery.id from EgDeductionDetails ed where ed.workDocType =:egwTypeOfWork)");
-            qry = session.createQuery(qryStr.toString());
-        }
-        if (egwSubTypeOfWork != null) {
-            qryStr.append("  and tds.id in (select ed.recovery.id from EgDeductionDetails ed where ed.workDocSubType =:egwSubTypeOfWork)");
-            qry = session.createQuery(qryStr.toString());
-        }
+		if (egwTypeOfWork != null) {
+			qryStr.append(
+					" and tds.id in (select ed.recovery.id from EgDeductionDetails ed where ed.workDocType =:egwTypeOfWork)");
+			qry = session.createQuery(qryStr.toString());
+		}
+		if (egwSubTypeOfWork != null) {
+			qryStr.append("  and tds.id in (select ed.recovery.id from EgDeductionDetails ed")
+					.append(" where ed.workDocSubType =:egwSubTypeOfWork)");
+			qry = session.createQuery(qryStr.toString());
+		}
 
-        qryStr.append(" order by upper(type)");
-        qry = session.createQuery(qryStr.toString());
+		qryStr.append(" order by upper(type)");
+		qry = session.createQuery(qryStr.toString());
 
-        if (estimateDate != null && !estimateDate.equals(""))
-            qry.setString("estimateDate", estimateDate);
-        if (estCost != null)
-            qry.setBigDecimal("estCost", estCost);
-        if (egPartytype != null)
-            qry.setEntity("egPartytype", egPartytype);
-        if (egwTypeOfWork != null)
-            qry.setEntity("egwTypeOfWork", egwTypeOfWork);
-        if (egwSubTypeOfWork != null)
-            qry.setEntity("egwSubTypeOfWork", egwSubTypeOfWork);
+		if (estimateDate != null && !estimateDate.equals(""))
+			qry.setString("estimateDate", estimateDate);
+		if (estCost != null)
+			qry.setBigDecimal("estCost", estCost);
+		if (egPartytype != null)
+			qry.setEntity("egPartytype", egPartytype);
+		if (egwTypeOfWork != null)
+			qry.setEntity("egwTypeOfWork", egwTypeOfWork);
+		if (egwSubTypeOfWork != null)
+			qry.setEntity("egwSubTypeOfWork", egwSubTypeOfWork);
 
-        tdsList = qry.list();
-        return tdsList;
-    }
+		tdsList = qry.list();
+		return tdsList;
+	}
 
     public List<Recovery> getAllTdsByPartyType(final String partyType) {
         List<Recovery> tdses;
@@ -238,27 +247,33 @@ public class TdsHibernateDAO {
      *            date.
      * @return listTds -List<Recovery> - list of tds objects.
      */
-    public List<Recovery> recoveryForPartyContractor(final Date asOndate) throws ValidationException {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("EgovCommon | recoveryForPartyContractor | Start ");
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("asONDate value received : " + asOndate);
-        final StringBuffer recoveryQuery = new StringBuffer(400);
-        List<Recovery> listTds;
-        recoveryQuery
-                .append("From Recovery where egPartytype.id in ( select id from EgPartytype where code=?) and isactive=true");
-        if (null != asOndate)
-            recoveryQuery.append(" and id in (select recovery.id from EgDeductionDetails where datefrom <= '")
-                    .append(DDMMYYYYFORMAT1.format(asOndate)).append("' AND dateto >='")
-                    .append(DDMMYYYYFORMAT1.format(asOndate)).append("')");
-        listTds = persistenceService.findAllBy(recoveryQuery.toString(), "Contractor");
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("The size of recovery for party type Contractor is :" + listTds.size());
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("EgovCommon | recoveryForPartyContractor | End ");
-        return listTds;
+	public List<Recovery> recoveryForPartyContractor(final Date asOndate) throws ValidationException {
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("EgovCommon | recoveryForPartyContractor | Start ");
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("asONDate value received : " + asOndate);
+		final StringBuilder recoveryQuery = new StringBuilder();
+		final Map<String, Object> params = new HashMap<>();
+		List<Recovery> listTds;
+		recoveryQuery.append("From Recovery where egPartytype.id in ( select id from EgPartytype")
+				.append(" where code=:partyType) and isactive=true");
+		params.put("partyType", "Contractor");
+		if (null != asOndate) {
+			recoveryQuery.append(" and id in (select recovery.id from EgDeductionDetails")
+					.append(" where datefrom <= :fromDate AND dateto >= :toDate)");
+			params.put("fromDate", DDMMYYYYFORMAT1.format(asOndate));
+			params.put("toDate", DDMMYYYYFORMAT1.format(asOndate));
+		}
+		final Query query = persistenceService.getSession().createQuery(recoveryQuery.toString());
+		params.entrySet().forEach(entry -> query.setParameter(entry.getKey(), entry.getValue()));
+		listTds = query.list();
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("The size of recovery for party type Contractor is :" + listTds.size());
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("EgovCommon | recoveryForPartyContractor | End ");
+		return listTds;
 
-    }
+	}
 
     public EgPartytype getPartytypeByCode(final String code) {
         session = getCurrentSession();
@@ -290,8 +305,11 @@ public class TdsHibernateDAO {
         qry.setEntity("egPartytype", egPartytype);
         return (Recovery) qry.uniqueResult();
     }
-    public Recovery findActiveTdsByGlcodeId(Long glcodeId) {
-        return (Recovery)getCurrentSession().createQuery("from Recovery tds where tds.isactive=true and chartofaccounts.id="+glcodeId).uniqueResult();
-}
+
+	public Recovery findActiveTdsByGlcodeId(Long glcodeId) {
+		return (Recovery) getCurrentSession()
+				.createQuery("from Recovery tds where tds.isactive=true and chartofaccounts.id=:glcodeId")
+				.setParameter("glcodeId", glcodeId).uniqueResult();
+	}
 
 }

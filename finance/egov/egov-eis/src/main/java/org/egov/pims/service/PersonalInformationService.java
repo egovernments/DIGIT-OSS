@@ -251,10 +251,10 @@ public class PersonalInformationService extends PersistenceService<PersonalInfor
 
 		} catch (HibernateException he) {
 			throw new ApplicationRuntimeException("Exception:" + he.getMessage(),he);
-		} catch (Exception he) {
-			throw new ApplicationRuntimeException("Exception:" + he.getMessage(),he);
-
-		}
+        } /*
+           * catch (Exception he) { throw new
+           * ApplicationRuntimeException("Exception:" + he.getMessage(),he); }
+           */
 		return employeeList;
 	}
 	/**
@@ -298,10 +298,10 @@ public class PersonalInformationService extends PersistenceService<PersonalInfor
 			}
 		} catch (HibernateException he) {
 			throw new ApplicationRuntimeException("Exception:" + he.getMessage(),he);
-		} catch (Exception he) {
-			throw new ApplicationRuntimeException("Exception:" + he.getMessage(),he);
-
-		}
+        } /*
+           * catch (Exception he) { throw new
+           * ApplicationRuntimeException("Exception:" + he.getMessage(),he); }
+           */
 		return totalSize;
 	}
 
@@ -374,7 +374,7 @@ public class PersonalInformationService extends PersistenceService<PersonalInfor
 			}
 			criteria.addOrder(Order.asc("id"));
 			employeeList = new Page(criteria, pageNo, pageSize).getList();
-		} catch (Exception e) {
+		} catch (HibernateException e) {
 			throw new ApplicationRuntimeException("Error occured in searching for employees",e);
 		}
 		
@@ -442,7 +442,7 @@ public List<EmployeeView> getListOfEmployeeViewBasedOnListOfDesignationAndOtherC
 			}
 			criteria.addOrder(Order.asc("id"));
 			employeeList = new Page(criteria, pageNo, pageSize).getList();
-		} catch (Exception e) {
+		} catch (HibernateException e) {
 			throw new ApplicationRuntimeException("Error occured in searching for employees",e);
 		}
 		

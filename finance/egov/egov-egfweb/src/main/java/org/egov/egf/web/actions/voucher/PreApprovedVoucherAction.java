@@ -48,6 +48,7 @@
 package org.egov.egf.web.actions.voucher;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,6 +61,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -80,6 +82,8 @@ import org.egov.commons.dao.EgwStatusHibernateDAO;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.commons.service.ChartOfAccountDetailService;
 import org.egov.commons.utils.EntityType;
+import org.egov.egf.commons.CommonsUtil;
+import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.egf.commons.EgovCommon;
 import org.egov.egf.dashboard.event.FinanceEventType;
 import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
@@ -98,6 +102,7 @@ import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.util.ReportUtil;
+import org.egov.infra.utils.DateUtils;
 import org.egov.infra.utils.StringUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -135,6 +140,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.exilant.GLEngine.ChartOfAccounts;
 import com.exilant.eGov.src.transactions.VoucherTypeForULB;
+import com.google.zxing.NotFoundException;
 
 @Results({
         @Result(name = "editVoucher", type = "redirectAction", location = "journalVoucherModify-beforeModify", params = {
@@ -143,9 +149,12 @@ import com.exilant.eGov.src.transactions.VoucherTypeForULB;
         @Result(name = PreApprovedVoucherAction.VOUCHEREDIT, location = "preApprovedVoucher-voucheredit.jsp"),
         @Result(name = "billview", location = "preApprovedVoucher-billview.jsp"),
         @Result(name = "voucherview", location = "preApprovedVoucher-voucherview.jsp"),
-        @Result(name = "message", location = "preApprovedVoucher-message.jsp") })
+        @Result(name = "message", location = "preApprovedVoucher-message.jsp"),
+        @Result(name = PreApprovedVoucherAction.UNAUTHORIZED, location = "../workflow/unauthorized.jsp")})
 @ParentPackage("egov")
 public class PreApprovedVoucherAction extends GenericWorkFlowAction {
+    private static final String INVALID_APPROVER = "invalid.approver";
+    protected static final String UNAUTHORIZED = "unuthorized";
     private final static String FORWARD = "Forward";
     private static final long serialVersionUID = 1L;
     private String heading = "";
@@ -234,6 +243,12 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
     FinanceDashboardService finDashboardService;
     @Autowired
     private ChartOfAccounts chartOfAccounts;
+    
+    @Autowired
+    private SecurityUtils securityUtils;
+    
+    @Autowired
+    private CommonsUtil commonsUtil;
 
     @Override
     public StateAware getModel() {
@@ -305,7 +320,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 
             for (final AppConfigValues appConfigVal : configValues)
                 purposeValueVN = appConfigVal.getValue();
-        } catch (final Exception e) {
+        } catch (final ApplicationRuntimeException e) {
             throw new ApplicationRuntimeException(
                     "Appconfig value for VOUCHERDATE_FROM_UI is not defined in the system");
         }
@@ -317,7 +332,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             try {
                 // loading the bill detail info.
                 getMasterDataForBillVoucher();
-            } catch (final Exception e) {
+            } catch (final ValidationException |ApplicationException e) {
                 final List<ValidationError> errors = new ArrayList<ValidationError>();
                 errors.add(new ValidationError("exp", e.getMessage()));
                 throw new ValidationException(errors);
@@ -327,7 +342,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             try {
                 // loading the bill detail info.
                 getMasterDataForBill();
-            } catch (final Exception e) {
+            } catch (final ValidationException |ApplicationException e ) {
                 final List<ValidationError> errors = new ArrayList<ValidationError>();
                 errors.add(new ValidationError("exp", e.getMessage()));
                 throw new ValidationException(errors);
@@ -415,11 +430,11 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
     @SkipValidation
     @Action(value = "/voucher/preApprovedVoucher-loadvoucher")
     public String loadvoucher() {
-        String result = null;
         voucherHeader = (CVoucherHeader) getPersistenceService().find(VOUCHERQUERY,
                 Long.valueOf(parameters.get(VHID)[0]));
+        if (!commonsUtil.isApplicationOwner(securityUtils.getCurrentUser(), voucherHeader))
+            return UNAUTHORIZED;
         voucherId = Long.valueOf(parameters.get(VHID)[0]);
-        boolean ismodifyJv = false;
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("voucherHeader==" + voucherHeader);
         
@@ -436,10 +451,6 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
          * List<ValidationError> errors = new ArrayList<ValidationError>(); errors.add(new ValidationError("exp", "Invalid User"
          * )); throw new ValidationException(errors); }
          */
-        final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
-                "pjv_saveasworkingcopy_enabled");
-        final String pjv_wc_enabled = appList.get(0).getValue();
-
         type = billsService.getBillTypeforVoucher(voucherHeader);
         if (null == type)
             // when the work flow started internally then define the type value
@@ -449,7 +460,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
         try {
             // loading the bill detail info.
             getMasterDataForBillVoucher();
-        } catch (final Exception e) {
+        } catch (final ValidationException | ApplicationException e) {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getMessage()));
             throw new ValidationException(errors);
@@ -457,7 +468,21 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
         getHeaderMandateFields();
         getSession().put("voucherId", parameters.get(VHID)[0]);
 
-        if (voucherHeader.getState() != null && voucherHeader.getState().getValue().contains("Rejected"))
+        String result = getResult();
+        billRegister = (EgBillregister) persistenceService.find(
+                "select mis.egBillregister from EgBillregistermis mis where mis.voucherHeader.id=?",
+                voucherHeader.getId());
+
+        return result;
+    }
+
+	private String getResult() {
+		final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
+                "pjv_saveasworkingcopy_enabled");
+        final String pjv_wc_enabled = appList.get(0).getValue();
+        String result = null;
+        boolean ismodifyJv = false;
+		if (voucherHeader.getState() != null && voucherHeader.getState().getValue().contains("Rejected"))
             if (voucherHeader.getModuleId() == null) {
                 final EgBillregistermis billMis = (EgBillregistermis) persistenceService
                         .find("from EgBillregistermis where voucherHeader.id=?", voucherHeader.getId());
@@ -480,12 +505,8 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                 result = VOUCHEREDIT;
             else
                 result = "voucherview";
-        billRegister = (EgBillregister) persistenceService.find(
-                "select mis.egBillregister from EgBillregistermis mis where mis.voucherHeader.id=?",
-                voucherHeader.getId());
-
-        return result;
-    }
+		return result;
+	}
 
     @SuppressWarnings("unchecked")
     private void loadApproverUser(final String type) {
@@ -607,7 +628,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 	@ValidationErrorPage("billview")
     @SkipValidation
     @Action(value = "/voucher/preApprovedVoucher-save")
-    public String save() throws ValidationException {
+    public String save() {
         mode = "save";
         try {
             if (LOGGER.isDebugEnabled())
@@ -617,8 +638,16 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             String cutOffDate1 = null;
             egBillregister = billsService.getBillRegisterById(Integer.valueOf(parameters.get(BILLID)[0]));
             validateBillVoucherDate(egBillregister, voucherHeader);
-            getMasterDataForBill();
             populateWorkflowBean();
+            getMasterDataForBill();
+            if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
+                if (!commonsUtil.isValidApprover(voucherHeader, workflowBean.getApproverPositionId())) {
+                    voucher();
+                    mode = "";
+                    addActionError(getText(INVALID_APPROVER));
+                    return "billview";
+                }
+            }
             voucherHeader = preApprovedActionHelper.createVoucherFromBill(voucherHeader, workflowBean,
                     Long.parseLong(parameters.get(BILLID)[0]), voucherNumber, voucherHeader.getVoucherDate());
             if (!cutOffDate.isEmpty() && cutOffDate != null) {
@@ -653,14 +682,12 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                 }
             }
 
-        } catch (
-
-        final ValidationException e) {
+        } catch (final ValidationException | ApplicationException e) {
             voucher();
             mode = "";
-            if (e.getErrors().get(0).getMessage() != null
-                    && !e.getErrors().get(0).getMessage().equals(StringUtils.EMPTY))
-                throw new ValidationException(e.getErrors().get(0).getMessage(), e.getErrors().get(0).getMessage());
+            if (((ValidationException) e).getErrors().get(0).getMessage() != null
+                    && !((ValidationException) e).getErrors().get(0).getMessage().equals(StringUtils.EMPTY))
+                throw new ValidationException(((ValidationException) e).getErrors().get(0).getMessage(), ((ValidationException) e).getErrors().get(0).getMessage());
             else
                 throw new ValidationException("Voucher creation failed", "Voucher creation failed");
         } catch (final ApplicationRuntimeException e) {
@@ -669,23 +696,20 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             final List<ValidationError> errors = new ArrayList<ValidationError>();
             errors.add(new ValidationError("exp", e.getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-            voucher();
-            mode = "";
-            if (e.getCause().getClass().equals(ValidationException.class)) {
-
-                final ValidationException s = (ValidationException) e;
-                final List<ValidationError> errors = new ArrayList<ValidationError>();
-                errors.add(new ValidationError("exp", s.getErrors().get(0).getMessage()));
-                throw new ValidationException(errors);
-            }
-            LOGGER.error(e.getMessage());
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            final ValidationException s = (ValidationException) e;
-            errors.add(new ValidationError("exception", s.getErrors().get(0).getMessage()));
-            throw new ValidationException(errors);
-        }
-
+        } /*
+           * catch (final Exception e) { voucher(); mode = ""; if
+           * (e.getCause().getClass().equals(ValidationException.class)) { final
+           * ValidationException s = (ValidationException) e; final
+           * List<ValidationError> errors = new ArrayList<ValidationError>();
+           * errors.add(new ValidationError("exp",
+           * s.getErrors().get(0).getMessage())); throw new
+           * ValidationException(errors); } LOGGER.error(e.getMessage()); final
+           * List<ValidationError> errors = new ArrayList<ValidationError>();
+           * final ValidationException s = (ValidationException) e;
+           * errors.add(new ValidationError("exception",
+           * s.getErrors().get(0).getMessage())); throw new
+           * ValidationException(errors); }
+           */
         getHeaderMandateFields();
         displayVoucherNumber = false;
         return "billview";
@@ -717,19 +741,32 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                 throw new ValidationException("bill.accounting.voucher.date.check",
                         "bill.accounting.voucher.date.check");
             }
+            final Date cuttDate = DateUtils.parseDate(cutOffDate, "dd/MM/yyyy");
+            if(voucherHeader.getVoucherDate().after(cuttDate)) {
+                throw new ValidationException("cutOffDate", getText("vouchercutoffdate.message",
+                        new String[] {DateUtils.getDefaultFormattedDate(cuttDate)}));
+            }
         } catch (ParseException e) {
             LOGGER.error(e.getMessage());
         }
     }
 
     @Action(value = "/voucher/preApprovedVoucher-update")
-    public String update() throws ValidationException {
+    public String update() {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("voucher id=======" + parameters.get(VHID)[0]);
         methodName = "update";
         try {
             voucherHeader = (CVoucherHeader) voucherService.findById(Long.parseLong(parameters.get(VHID)[0]), false);
             populateWorkflowBean();
+            if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
+                if (!commonsUtil.isValidApprover(voucherHeader, workflowBean.getApproverPositionId())) {
+                    addActionError(getText(INVALID_APPROVER));
+                    getHeaderMandateFields();
+                    getMasterDataForBillVoucher();
+                    return getResult();
+                }
+            }
             voucherHeader = preApprovedActionHelper.sendForApproval(voucherHeader, workflowBean);
             type = billsService.getBillTypeforVoucher(voucherHeader);
             if (null == type)
@@ -750,17 +787,17 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             if(voucherHeader.getId() != null && voucherHeader.getId().compareTo(new Long(0)) > 0){
                 finDashboardService.publishEvent(FinanceEventType.voucherUpdateById , new HashSet<>(Arrays.asList(voucherHeader.getId())));
             }
-        } catch (final ValidationException e) {
+        } catch (final ValidationException | ApplicationException e) {
 
             final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
+            errors.add(new ValidationError("exp", ((ValidationException) e).getErrors().get(0).getMessage()));
             throw new ValidationException(errors);
-        } catch (final Exception e) {
-
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
+        } /*
+           * catch (final Exception e) { final List<ValidationError> errors =
+           * new ArrayList<ValidationError>(); errors.add(new
+           * ValidationError("exp", e.getMessage())); throw new
+           * ValidationException(errors); }
+           */
 
         return "message";
     }
@@ -772,7 +809,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
         workflowBean.setCurrentState(currentState);
     }
 
-    public String saveAsWorkingCopy() throws ValidationException {
+    public String saveAsWorkingCopy() throws ValidationException, SQLException {
         methodName = "saveAsWorkingCopy";
         if (parameters.get(VHID)[0].equals("")) {
             egBillregister = (EgBillregister) getPersistenceService().find(" from EgBillregister where id=?",
@@ -1461,7 +1498,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
         try {
             addRelatedEntity(VoucherConstant.GLCODE, CChartOfAccounts.class);
             addRelatedEntity("detailType", Accountdetailtype.class);
-        } catch (final Exception e) {
+        } catch (final ApplicationRuntimeException e) {
             LOGGER.error("Exception in PreApprovedVoucher", e);
             throw new ApplicationRuntimeException(e.getMessage());
         }

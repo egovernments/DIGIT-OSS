@@ -48,10 +48,12 @@
 
 package org.egov.infra.microservice.contract;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 public class Value {
-
+    @SafeHtml
     private String key;
-
+    @SafeHtml
     private String name;
 
     public String getKey() {

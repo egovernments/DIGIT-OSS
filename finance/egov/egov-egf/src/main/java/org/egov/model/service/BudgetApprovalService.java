@@ -84,13 +84,13 @@ public class BudgetApprovalService {
         return cFinancialYearService.getFinancialYears(financialYear());
     }
 
-    public List<Long> financialYear() {
-        final String query = "select bd.financialYear.id from Budget bd where bd.isbere='RE' and "
-                + "bd.status.id=:statusId";
-        final List<Long> budgetDetailsList = persistenceService.getSession().createQuery(query)
-                .setParameter("statusId", getBudgetStatus(FinancialConstants.BUDGET, "Created").getId()).list();
-        return budgetDetailsList;
-    }
+	public List<Long> financialYear() {
+		final String query = "select bd.financialYear.id from Budget bd where bd.isbere='RE' and "
+				+ "bd.status.id=:statusId";
+		final List<Long> budgetDetailsList = persistenceService.getSession().createQuery(query)
+				.setParameter("statusId", getBudgetStatus(FinancialConstants.BUDGET, "Created").getId()).list();
+		return budgetDetailsList;
+	}
 
     public List<Budget> search(final Long financialYearId) {
         return budgetDetailService.getBudgetByStatusAndFinancialYearId(

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.SafeHtml;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -22,18 +24,19 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 public class BillAccountDetail {
+    @SafeHtml
     @Size(max=64)
     @JsonProperty("id")
     private String id = null;
-
+    @SafeHtml
     @Size(max=64)
     @JsonProperty("tenantId")
     private String tenantId = null;
-
+    @SafeHtml
     @Size(max=64)
     @JsonProperty("billDetailId")
     private String billDetailId = null;
-
+    @SafeHtml
     @Size(max=64)
     @JsonProperty("demandDetailId")
     private String demandDetailId = null;
@@ -50,6 +53,7 @@ public class BillAccountDetail {
     @JsonProperty("isActualDemand")
     private Boolean isActualDemand = null;
 
+    @SafeHtml
     @Size(max=64)
     @JsonProperty("taxHeadCode")
     private String taxHeadCode = null;
@@ -63,10 +67,12 @@ public class BillAccountDetail {
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails;
     
+    @SafeHtml
     private String glcode;
 
+    @SafeHtml
     private String accountDescription;
-
+    @SafeHtml
     private String billDetail;
 
     private BigDecimal crAmountToBePaid = BigDecimal.ZERO;

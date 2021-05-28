@@ -90,6 +90,7 @@ import org.egov.utils.FinancialConstants;
 import org.egov.utils.ReportHelper;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.type.LongType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -194,7 +195,7 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
     private boolean deptHeading = true;
     private String functionsNotYetReceiced;
     private Map<Long, BudgetGroup> budgetGroupMap;
-    private Map<Integer, Fund> fundMap;
+    private Map<Long, Fund> fundMap;
     private Map<Long, CFunction> functionMap;
     private Map<String, Department> deptMap;
     private List<AppConfigValues> excludelist = new ArrayList<AppConfigValues>();
@@ -221,7 +222,7 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
         try {
             super.execute();
         } catch (final Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error" + e.getMessage());
         }
         return update();
     }
@@ -335,7 +336,7 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
             functionMap.put(fn.getId(), fn);
 
         final List<Fund> fundList = masterDataCache.get("egi-fund");
-        fundMap = new HashMap<Integer, Fund>();
+        fundMap = new HashMap<Long, Fund>();
         for (final Fund f : fundList)
             fundMap.put(f.getId(), f);
         final List<Department> deptList = masterDataCache.get("egi-department");
@@ -357,8 +358,8 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
             if (factor.equalsIgnoreCase(bigThousand.toString()))
                 amount = amount.multiply(bigThousand);
 
-            final String query = "update egf_budgetdetail set  " + amountField
-                    + "=:amount,Modifiedby=:modifiedby,modifieddate=:modifiedate  where id=:detailId";
+            final String query = new StringBuilder(String.format("update egf_budgetdetail set  %s", amountField))
+                    .append("=:amount,Modifiedby=:modifiedby,modifieddate=:modifiedate  where id=:detailId").toString();
             if (LOGGER.isInfoEnabled())
                 LOGGER.info(query);
 
@@ -381,8 +382,10 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
     public String ajaxDeleteBudgetDetail() {
         try {
             if (bpBean.getId() != null && bpBean.getNextYrId() != null) {
-                persistenceService.getSession().createSQLQuery("delete from egf_budgetdetail where id in ("
-                        + bpBean.getId() + "," + bpBean.getNextYrId() + ")").executeUpdate();
+            	
+            	persistenceService.getSession().createSQLQuery("delete from egf_budgetdetail where id in (:ids)")
+                	.setParameterList("ids", Arrays.asList(bpBean.getId(), bpBean.getNextYrId()), LongType.INSTANCE)
+                	.executeUpdate();
                 persistenceService.getSession().flush();
             }
         } catch (final HibernateException e) {
@@ -405,9 +408,9 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
         if (LOGGER.isInfoEnabled())
             LOGGER.info("Starting budgetDetailApprove()..............");
 
-        final String query = " from BudgetDetail bd where bd.budget=? and (state.value='END' or state.ownerPosition=?) and bd.function="
-                + budgetDetail.getFunction().getId() + "  order by bd.function.name,bd.budgetGroup.name";
-        savedbudgetDetailList = budgetDetailService.findAllBy(query, topBudget, getPosition());
+        final String query = new StringBuilder(" from BudgetDetail bd where bd.budget=? and (state.value='END' or state.ownerPosition=?) and bd.function=?")
+                .append(" order by bd.function.name,bd.budgetGroup.name").toString();
+        savedbudgetDetailList = budgetDetailService.findAllBy(query, topBudget, getPosition(), budgetDetail.getFunction().getId());
 
         if (!savedbudgetDetailList.isEmpty()) {
             populateMajorCodewiseData();

@@ -73,7 +73,7 @@
 	<th class="bluebgheadtdnew"><s:text name="lbl.functionary"/></th>
 </s:if>
 <s:if test="%{shouldShowHeaderField('fundsource')}">
-	<th class="bluebgheadtdnew"><s:text name="lbl.fund.source="/></th>
+	<th class="bluebgheadtdnew"><s:text name="lbl.fund.source"/></th>
 </s:if>
 <s:if test="%{shouldShowHeaderField('scheme')}">
 	<th class="bluebgheadtdnew"><s:text name="lbl.scheme"/></th>

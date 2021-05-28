@@ -130,8 +130,8 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
     public String getAccountForService() {
         setValue(CollectionConstants.BLANK);
         final String serviceId = parameters.get(SERVICEID)[0];
-        final String queryString = "select sd.serviceAccount from ServiceDetails sd where sd.id='" + serviceId + "'";
-        final List<CChartOfAccounts> list = getPersistenceService().findAllBy(queryString);
+        final StringBuilder queryString = new StringBuilder("select sd.serviceAccount from ServiceDetails sd where sd.id= ?");
+        final List<CChartOfAccounts> list = getPersistenceService().findAllBy(queryString.toString(), serviceId);
         for (final CChartOfAccounts accounts : list)
             value += accounts.getId().toString() + "~" + accounts.getGlcode() + "~" + accounts.getName() + "#";
 
@@ -198,10 +198,11 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
      * This method is accessed from challan.js and MiscReceipts.js
      *
      * @return
+     * @throws ClassNotFoundException 
      * @throws Exception
      */
     @Action(value = "/receipts/ajaxReceiptCreate-ajaxValidateDetailCodeNew")
-    public String ajaxValidateDetailCodeNew() throws Exception {
+    public String ajaxValidateDetailCodeNew() throws ClassNotFoundException {
         final String code = parameters.get("code")[0];
         final String index = parameters.get(INDEX)[0];
         final String codeorname = parameters.get("codeorname")[0];
@@ -259,7 +260,7 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
     }
 
     @Action(value = "/receipts/ajaxReceiptCreate-getCodeNew")
-    public String getCodeNew() throws Exception {
+    public String getCodeNew() throws ClassNotFoundException{
         value = "";
         final String detailTypeId = parameters.get("detailTypeId")[0];
         final String filterKey = parameters.get("filterKey")[0];
@@ -332,9 +333,9 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
 
         } catch (final HibernateException e) {
             value = index + "~" + ERROR + "#";
-        } catch (final Exception e) {
-            value = index + "~" + ERROR + "#";
-        }
+        } /*
+           * catch (final Exception e) { value = index + "~" + ERROR + "#"; }
+           */
         return RESULT;
     }
 

@@ -52,7 +52,7 @@ import java.math.BigDecimal;
 public class StatementResultObject {
     private static final BigDecimal NEGATIVE = new BigDecimal(-1);
     BigDecimal amount;
-    Integer fundId;
+    Long fundId;
     String fundCode;
     String glCode = "";
     Character type;
@@ -93,12 +93,12 @@ public class StatementResultObject {
         this.amount = amount;
     }
 
-    public Integer getFundId() {
+    public Long getFundId() {
         return fundId;
     }
 
-    public void setFundId(final BigDecimal fundId) {
-        this.fundId = Integer.valueOf(fundId.intValue());
+    public void setFundId(Long fundId) {
+        this.fundId = fundId;
     }
 
     public String getGlCode() {

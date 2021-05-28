@@ -193,6 +193,7 @@ function findPos(ob) {
 
 function fillNeibrAfterSplitGlcode(obj) {
 	if (validSearch()) {
+		var csrfToken = document.getElementById('csrfTokenValue').value;
 		var glcodeid;
 		var key = obj.value;
 		var temp = obj.value;
@@ -287,7 +288,7 @@ function fillNeibrAfterSplitGlcode(obj) {
 		// =accountCode;
 		if (accountCode != 'Select') {
 			var url = '/services/EGF/voucher/common-getDetailType.action?accountCode='
-					+ accountCode + '&index=0';
+					+ accountCode + '&index=0'+'&_csrf='+csrfToken;
 			var transaction = YAHOO.util.Connect.asyncRequest('POST', url,
 					postType, null);
 		} else {
@@ -354,6 +355,7 @@ function getRowIndex(obj) {
 }
 
 function check() {
+	var csrfToken = document.getElementById('csrfTokenValue').value;
 	var accountCodes = new Array();
 	for (var i = 0; i < billDetailTableIndex + 1; i++) {
 		if (null != document.getElementById('transactionSummaryList[' + i
@@ -363,7 +365,7 @@ function check() {
 		}
 	}
 	var url = '/services/EGF/voucher/common-getDetailCode.action?accountCodes='
-			+ accountCodes;
+			+ accountCodes+'&_csrf='+csrfToken;
 	var transaction = YAHOO.util.Connect.asyncRequest('POST', url, callbackJV,
 			null);
 }

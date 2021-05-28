@@ -47,6 +47,11 @@
  */
 package org.egov.eis.web.controller.reports;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.egov.eis.entity.Employee;
 import org.egov.eis.reports.entity.EmployeeAssignmentSearch;
 import org.egov.eis.service.AssignmentService;
@@ -64,9 +69,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/reports")
@@ -102,7 +104,7 @@ public class AjaxEmployeeAssignmentReportController {
     } 
     
     @RequestMapping(value = "/employeeassignments/search", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public @ResponseBody String searchEmployeeAssignments(@ModelAttribute final EmployeeAssignmentSearch employeeAssignmentSearch) {
+    public @ResponseBody String searchEmployeeAssignments(@Valid @ModelAttribute final EmployeeAssignmentSearch employeeAssignmentSearch) {
         List<Employee> employeeList = assignmentService.searchEmployeeAssignments(employeeAssignmentSearch);
         final String result = new StringBuilder("{ \"data\":").append(JsonUtils.toJSON(employeeList, Employee.class, EmployeeAssignmentSearchJson.class)).append("}").toString();
         return result;

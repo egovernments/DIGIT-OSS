@@ -47,70 +47,73 @@
  */
 package org.egov.eis.web.controller.masters.designation;
 
-import org.apache.commons.io.IOUtils;
-import org.egov.eis.service.DesignationService;
-import org.egov.pims.commons.Designation;
-import org.egov.pims.commons.DesignationAdaptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import static org.egov.infra.utils.JsonUtils.toJSON;
+
+import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.List;
 
-import static org.egov.infra.utils.JsonUtils.toJSON;
+import org.apache.commons.io.IOUtils;
+import org.egov.eis.service.DesignationService;
+import org.egov.pims.commons.Designation;
+import org.egov.pims.commons.DesignationAdaptor;
+import org.owasp.esapi.ESAPI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/designation")
 public class CreateAndViewDesignationController {
 
-    private final DesignationService designationService;
-    public static final String CONTENTTYPE_JSON = "application/json";
+	private final DesignationService designationService;
+	public static final String CONTENTTYPE_JSON = "application/json";
 
-    @Autowired
-    public CreateAndViewDesignationController(final DesignationService designationService) {
-        this.designationService = designationService;
-    }
+	@Autowired
+	public CreateAndViewDesignationController(final DesignationService designationService) {
+		this.designationService = designationService;
+	}
 
-    @RequestMapping(value = "create", method = RequestMethod.GET)
-    public String createForm(final Model model) {
-        model.addAttribute("designation", new Designation());
-        return "designation-form";
-    }
+	@GetMapping(value = "create")
+	public String createForm(final Model model) {
+		model.addAttribute("designation", new Designation());
+		return "designation-form";
+	}
 
-    @RequestMapping(value = "view", method = RequestMethod.GET)
-    public String complaintTypeViewForm(@ModelAttribute final Designation designation, final Model model) {
-        return "designation-view";
-    }
+	@GetMapping(value = "view")
+	public String complaintTypeViewForm(@ModelAttribute final Designation designation, final Model model) {
+		return "designation-view";
+	}
 
-    @RequestMapping(value = "create", method = RequestMethod.POST)
-    public String createDesignation(@Valid @ModelAttribute final Designation designation, final BindingResult errors,
-            final RedirectAttributes redirectAttrs, final Model model) {
-        if (errors.hasErrors())
-            return "designation-form";
-        designationService.createDesignation(designation);
-        redirectAttrs.addFlashAttribute("designation", designation);
-        model.addAttribute("message", "Designation created successfully");
-        return "success-designation";
-    }
+	@PostMapping(value = "create")
+	public String createDesignation(@Valid @ModelAttribute final Designation designation, final BindingResult errors,
+			final RedirectAttributes redirectAttrs, final Model model) {
+		if (errors.hasErrors())
+			return "designation-form";
+		designationService.createDesignation(designation);
+		redirectAttrs.addFlashAttribute("designation", designation);
+		model.addAttribute("message", "Designation created successfully");
+		return "success-designation";
+	}
 
-    @RequestMapping(value = "ajax/result", method = RequestMethod.GET)
-    public @ResponseBody void springPaginationDataTables(final HttpServletRequest request,
-            final HttpServletResponse response) throws IOException {
-        final List<Designation> designationList = designationService.getAllDesignations();
-        final StringBuilder designationJSONData = new StringBuilder("{\"data\":").append(toJSON(designationList, Designation.class, DesignationAdaptor.class))
-                .append("}");
-        response.setContentType(CONTENTTYPE_JSON);
-        IOUtils.write(designationJSONData, response.getWriter());
-    }
+	@GetMapping(value = "ajax/result")
+	public @ResponseBody void springPaginationDataTables(final HttpServletRequest request,
+			final HttpServletResponse response) throws IOException {
+		final List<Designation> designationList = designationService.getAllDesignations();
+		final StringBuilder designationJSONData = new StringBuilder("{\"data\":")
+				.append(toJSON(designationList, Designation.class, DesignationAdaptor.class)).append("}");
+		ESAPI.httpUtilities().addHeader(response, "Content-Type", CONTENTTYPE_JSON);
+		IOUtils.write(designationJSONData, response.getWriter());
+	}
 
 }

@@ -48,7 +48,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
-<form:form role="form" action="search" modelAttribute="budget"
+<form:form role="form" action="search" modelAttribute="budgetDefinitionSearchRequest"
 	id="budgetdefinitionsearchform"
 	cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
@@ -64,7 +64,7 @@
 							<label class="col-sm-2 control-label text-right"><spring:message
 									code="lbl.financialyear" text="Financial Year"/> </label>
 							<div class="col-sm-3 add-margin">
-								<form:select path="financialYear" id="financialYear"
+								<form:select path="financialYearId" id="financialYear"
 									cssClass="form-control" cssErrorClass="form-control error">
 									<form:option value="">
 										<spring:message code="lbl.select" text="Select"/>
@@ -73,7 +73,7 @@
 										<option value="${mc.id}">${mc.finYearRange}</option>
 									</c:forEach>
 								</form:select>
-								<form:errors path="financialYear" cssClass="error-msg" />
+								<form:errors path="financialYearId" cssClass="error-msg" />
 								</div>
 								<label class="col-sm-2 control-label text-right"><spring:message
 									code="lbl.isbere" text="Budget/Revised Estimate"/> </label>

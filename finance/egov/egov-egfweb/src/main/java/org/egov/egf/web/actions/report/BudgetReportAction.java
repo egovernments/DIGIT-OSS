@@ -50,6 +50,8 @@ package org.egov.egf.web.actions.report;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.ValueStack;
+
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -75,6 +77,7 @@ import org.hibernate.FlushMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -150,7 +153,7 @@ public class BudgetReportAction extends BaseFormAction {
     }
 
     @Override
-    public String execute() throws Exception {
+    public String execute(){
         return "form";
     }
 
@@ -198,7 +201,7 @@ public class BudgetReportAction extends BaseFormAction {
         return previousYearToDate.getTime();
     }
 
-    public String exportXls() throws Exception {
+    public String exportXls() throws JRException, IOException {
         generateReport();
         final JasperPrint jasper = reportHelper.generateBudgetReportJasperPrint(budgetDetailsList, getParamMap().get("heading")
                 .toString(),
@@ -218,7 +221,7 @@ public class BudgetReportAction extends BaseFormAction {
         return paramMap;
     }
 
-    public String exportPdf() throws Exception {
+    public String exportPdf() throws JRException, IOException {
         generateReport();
         final JasperPrint jasper = reportHelper.generateBudgetReportJasperPrint(budgetDetailsList, getParamMap().get("heading")
                 .toString(),

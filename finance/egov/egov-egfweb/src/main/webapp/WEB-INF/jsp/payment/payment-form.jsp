@@ -712,6 +712,11 @@
 			{
 				billIdsToPaymentAmountsap('billList','billIdsToPaymentAmountsMapId');
 			 document.forms[0].action='${pageContext.request.contextPath}/payment/payment-create.action';
+			 jQuery(document.forms[0]).append(jQuery('<input>', {
+		            type : 'hidden',
+		            name : '${_csrf.parameterName}',
+		            value : '${_csrf.token}'
+		        }));
 			 document.forms[0].submit();
 			}
 			else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckMandatory){
@@ -724,6 +729,11 @@
 					 if (msg == true) {
 						 billIdsToPaymentAmountsMap('billList','billIdsToPaymentAmountsMapId');
 						 document.forms[0].action='${pageContext.request.contextPath}/payment/payment-create.action';
+						 jQuery(document.forms[0]).append(jQuery('<input>', {
+					            type : 'hidden',
+					            name : '${_csrf.parameterName}',
+					            value : '${_csrf.token}'
+					        }));
 						 document.forms[0].submit();
 					 } else {
 						 undoLoadingMask();
@@ -734,6 +744,11 @@
 			{
 				billIdsToPaymentAmountsMap('billList','billIdsToPaymentAmountsMapId');
 				document.forms[0].action = '${pageContext.request.contextPath}/payment/payment-create.action';
+				jQuery(document.forms[0]).append(jQuery('<input>', {
+		            type : 'hidden',
+		            name : '${_csrf.parameterName}',
+		            value : '${_csrf.token}'
+		        }));
 				document.forms[0].submit();
 			}
 		}  

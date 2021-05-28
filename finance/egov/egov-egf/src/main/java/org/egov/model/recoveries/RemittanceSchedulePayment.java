@@ -63,7 +63,7 @@ public class RemittanceSchedulePayment implements java.io.Serializable
         return id;
     }
 
-    public void setId(final Long id) {
+    private void setId(final Long id) {
         this.id = id;
     }
 

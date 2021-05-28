@@ -52,7 +52,7 @@
     <parent>
         <artifactId>egov-erp</artifactId>
         <groupId>org.egov</groupId>
-        <version>3.0.0-COE-SNAPSHOT</version>
+        <version>3.0.1-COE-SNAPSHOT</version>
     </parent>
     <name>e-governments database</name>
     <artifactId>egov-database</artifactId>

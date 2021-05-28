@@ -49,50 +49,50 @@ package org.egov.commons.dao;
 
 import org.egov.commons.Bankaccount;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 public class BankaccountDAO {
 
-	@PersistenceContext
-	private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	private Session getSession() {
-		return this.entityManager.unwrap(Session.class);
-	}
+    private Session getSession() {
+        return this.entityManager.unwrap(Session.class);
+    }
 
-	public void createBankaccount(final Bankaccount bankaccount) {
-		try {
-			getSession().save(bankaccount);
-		} catch (final Exception e) {
-			throw new ApplicationRuntimeException("Exception occurred while creating Bank Account",e);
-		}
-	}
+    public void createBankaccount(final Bankaccount bankaccount) {
+        try {
+            getSession().save(bankaccount);
+        } catch (HibernateException e) {
+            throw new ApplicationRuntimeException("Exception occurred while creating Bank Account", e);
+        }
+    }
 
-	public void updateBankaccount(final Bankaccount bankaccount) {
-		try {
-			getSession().saveOrUpdate(bankaccount);
-		} catch (final Exception e) {
-			throw new ApplicationRuntimeException("Exception occurred while updating Bank Account",e);
-		}
-	}
+    public void updateBankaccount(final Bankaccount bankaccount) {
+        try {
+            getSession().saveOrUpdate(bankaccount);
+        } catch (final HibernateException e) {
+            throw new ApplicationRuntimeException("Exception occurred while updating Bank Account", e);
+        }
+    }
 
-	public void removeBankaccount(final Bankaccount bankaccount) {
-		try {
-			getSession().delete(bankaccount);
-		} catch (final Exception e) {
-			throw new ApplicationRuntimeException("Exception occurred while deleting Bank Account",e);
-		}
-	}
+    public void removeBankaccount(final Bankaccount bankaccount) {
+        try {
+            getSession().delete(bankaccount);
+        } catch (final HibernateException e) {
+            throw new ApplicationRuntimeException("Exception occurred while deleting Bank Account", e);
+        }
+    }
 
-	public Bankaccount getBankaccountById(final int bankaccount) {
-		try {
-			return (Bankaccount) getSession().get(Bankaccount.class, bankaccount);
-		} catch (final Exception e) {
-			throw new ApplicationRuntimeException("Exception occurred while getting Bank Account by Id",e);
-		}
-	}
+    public Bankaccount getBankaccountById(final int bankaccount) {
+        try {
+            return (Bankaccount) getSession().get(Bankaccount.class, bankaccount);
+        } catch (final HibernateException e) {
+            throw new ApplicationRuntimeException("Exception occurred while getting Bank Account by Id", e);
+        }
+    }
 
 }

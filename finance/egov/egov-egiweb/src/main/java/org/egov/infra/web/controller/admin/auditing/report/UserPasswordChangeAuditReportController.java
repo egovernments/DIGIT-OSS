@@ -48,6 +48,10 @@
 
 package org.egov.infra.web.controller.admin.auditing.report;
 
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+
+import javax.validation.Valid;
+
 import org.egov.infra.admin.auditing.contract.UserPasswordChangeAuditReportRequest;
 import org.egov.infra.admin.auditing.service.UserAuditService;
 import org.egov.infra.web.contract.response.UserPasswordChangeAuditReportAdapter;
@@ -59,8 +63,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @Controller
 @RequestMapping("audit/report/user-password")
@@ -80,7 +82,7 @@ public class UserPasswordChangeAuditReportController {
     @PostMapping(produces = TEXT_PLAIN_VALUE)
     @ResponseBody
     public String userPasswordChangeAuditReportSearchResult(
-            @ModelAttribute UserPasswordChangeAuditReportRequest userPasswordChangeAuditReportRequest) {
+            @Valid @ModelAttribute UserPasswordChangeAuditReportRequest userPasswordChangeAuditReportRequest) {
         return new DataTable<>(userAuditService
                 .getUserPasswordChangeAudit(userPasswordChangeAuditReportRequest), userPasswordChangeAuditReportRequest.draw())
                 .toJson(userPasswordChangeAuditReportAdapter);

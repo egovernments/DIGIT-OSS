@@ -48,6 +48,7 @@
 package org.egov.egf.web.actions.report;
 
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -75,6 +76,7 @@ import org.hibernate.FlushMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -343,7 +345,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
 
     @ReadOnly
     @Action(value = "/report/incomeExpenditureReport-generateIncomeExpenditurePdf")
-    public String generateIncomeExpenditurePdf() throws Exception {
+    public String generateIncomeExpenditurePdf() throws JRException, IOException {
         populateDataSource();
         final String heading = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()) + "\\n" + statementheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate());
@@ -355,7 +357,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
 
     @ReadOnly
     @Action(value = "/report/incomeExpenditureReport-generateDetailCodePdf")
-    public String generateDetailCodePdf() throws Exception {
+    public String generateDetailCodePdf() throws JRException, IOException {
         populateSchedulewiseDetailCodeReport();
         final String heading = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()) + "\\n" + statementheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate());
@@ -367,7 +369,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
 
     @ReadOnly
     @Action(value = "/report/incomeExpenditureReport-generateDetailCodeXls")
-    public String generateDetailCodeXls() throws Exception {
+    public String generateDetailCodeXls() throws JRException, IOException {
         populateSchedulewiseDetailCodeReport();
         final String heading = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()) + "\\n" + statementheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate())
@@ -390,7 +392,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
 
     @ReadOnly
     @Action(value = "/report/incomeExpenditureReport-generateIncomeExpenditureXls")
-    public String generateIncomeExpenditureXls() throws Exception {
+    public String generateIncomeExpenditureXls() throws JRException, IOException {
         populateDataSource();
         final String heading = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()) + "\\n" + statementheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate())
@@ -403,7 +405,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
 
     @ReadOnly
     @Action(value = "/report/incomeExpenditureReport-generateSchedulePdf")
-    public String generateSchedulePdf() throws Exception {
+    public String generateSchedulePdf() throws JRException, IOException {
         populateDataSourceForAllSchedules();
         final JasperPrint jasper = reportHelper.generateFinancialStatementReportJasperPrint(incomeExpenditureStatement,
                 getText("report.ie.heading"), heading.toString(),
@@ -414,7 +416,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
 
     @ReadOnly
     @Action(value = "/report/incomeExpenditureReport-generateScheduleXls")
-    public String generateScheduleXls() throws Exception {
+    public String generateScheduleXls() throws JRException, IOException {
         populateDataSourceForAllSchedules();
         final JasperPrint jasper = reportHelper.generateFinancialStatementReportJasperPrint(incomeExpenditureStatement,
                 getText("report.ie.heading"), heading.toString(),
@@ -425,7 +427,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
 
     @ReadOnly
     @Action(value = "/report/incomeExpenditureReport-generateIncomeExpenditureSchedulePdf")
-    public String generateIncomeExpenditureSchedulePdf() throws Exception {
+    public String generateIncomeExpenditureSchedulePdf() throws JRException, IOException{
         populateDataSourceForSchedule();
         final String heading = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()) + "\\n" + scheduleheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate())
@@ -438,7 +440,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
 
     @ReadOnly
     @Action(value = "/report/incomeExpenditureReport-generateIncomeExpenditureScheduleXls")
-    public String generateIncomeExpenditureScheduleXls() throws Exception {
+    public String generateIncomeExpenditureScheduleXls() throws JRException, IOException {
         populateDataSourceForSchedule();
         final String heading = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()) + "\\n" + scheduleheading.toString();
         // Blank space for space didvidion between left and right corner

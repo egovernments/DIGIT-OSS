@@ -63,6 +63,13 @@
 			return false;
 		}
 		document.transferClosingBalance.action = '/services/EGF/pea/transferClosingBalance-transfer.action';
+		jQuery(transferClosingBalance).append(
+                jQuery('<input>', {
+                    type: 'hidden',
+                    name: '${_csrf.parameterName}',
+                    value: '${_csrf.token}'
+                })
+            );
 		return true;
 	}
 </script>

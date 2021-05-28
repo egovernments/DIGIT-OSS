@@ -99,6 +99,7 @@ import org.egov.model.voucher.VoucherDetails;
 import org.egov.pims.commons.Position;
 import org.egov.utils.Constants;
 import org.egov.utils.ReportHelper;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import net.sf.jasperreports.engine.JRException;
@@ -196,7 +197,7 @@ public class ExpenseBillPrintAction extends BaseFormAction {
 
     @SkipValidation
     @Action(value = "/bill/expenseBillPrint-ajaxPrint")
-    public String ajaxPrint() {
+    public String ajaxPrint() throws NoSuchMethodException, SecurityException, ClassNotFoundException {
         return exportHtml();
     }
 
@@ -210,7 +211,7 @@ public class ExpenseBillPrintAction extends BaseFormAction {
         return PRINT;
     }
 
-    private void populateBill() {
+    private void populateBill() throws NoSuchMethodException, SecurityException, ClassNotFoundException {
         if (parameters.get("id") != null && !parameters.get("id")[0].isEmpty()) {
             cbill = (EgBillregister) persistenceService.find("from EgBillregister where id=?",
                     Long.valueOf(parameters.get("id")[0]));
@@ -221,25 +222,25 @@ public class ExpenseBillPrintAction extends BaseFormAction {
 
     }
 
-    private void generateVoucherReportList() {
+    private void generateVoucherReportList() throws NoSuchMethodException, SecurityException, ClassNotFoundException {
         prepareForPrint();
     }
 
     @Action(value = "/bill/expenseBillPrint-exportPdf")
-    public String exportPdf() throws JRException, IOException {
+    public String exportPdf() throws JRException, IOException, NoSuchMethodException, SecurityException, ClassNotFoundException {
         populateBill();
         inputStream = reportHelper.exportPdf(inputStream, jasperpath, getParamMap(), billReportList);
         return "PDF";
     }
 
-    public String exportHtml() {
+    public String exportHtml() throws NoSuchMethodException, SecurityException, ClassNotFoundException {
         populateBill();
         inputStream = reportHelper.exportHtml(inputStream, jasperpath, getParamMap(), billReportList, "px");
         return "HTML";
     }
 
     @Action(value = "/bill/expenseBillPrint-exportXls")
-    public String exportXls() throws JRException, IOException {
+    public String exportXls() throws JRException, IOException, NoSuchMethodException, SecurityException, ClassNotFoundException {
         populateBill();
         inputStream = reportHelper.exportXls(inputStream, jasperpath, getParamMap(), billReportList);
         return "XLS";
@@ -450,7 +451,7 @@ public class ExpenseBillPrintAction extends BaseFormAction {
 
     }
 
-    private void prepareForPrint() {
+    private void prepareForPrint() throws NoSuchMethodException, SecurityException, ClassNotFoundException {
 
         final Set<EgBilldetails> egBilldetailes = cbill.getEgBilldetailes();
         boolean budgetcheck = false;
@@ -510,14 +511,15 @@ public class ExpenseBillPrintAction extends BaseFormAction {
                         dataType = method.getReturnType().getSimpleName();
                         if (dataType.equals("Long"))
                             entity = (EntityType) persistenceService.find(
-                                    "from " + detailTypeName + " where id=? order by name", payeedetail.getAccountDetailKeyId()
+                                    String.format("from %s where id=? order by name", detailTypeName), payeedetail.getAccountDetailKeyId()
                                             .longValue());
                         else
                             entity = (EntityType) persistenceService.find(
-                                    "from " + detailTypeName + " where id=? order by name", payeedetail.getAccountDetailKeyId());
+                                    String.format("from %s where id=? order by name", detailTypeName), payeedetail.getAccountDetailKeyId());
+                        
                         vd.setDetailKey(entity.getCode());
                         vd.setDetailName(entity.getName());
-                    } catch (final Exception e) {
+                    } catch (final ValidationException e) {
                         final List<ValidationError> errors = new ArrayList<>();
                         errors.add(new ValidationError("exp", e.getMessage()));
                         throw new ValidationException(errors);
@@ -578,14 +580,14 @@ public class ExpenseBillPrintAction extends BaseFormAction {
                         dataType = method.getReturnType().getSimpleName();
                         if (dataType.equals("Long"))
                             entity = (EntityType) persistenceService.find(
-                                    "from " + detailTypeName + " where id=? order by name", payeedetail.getAccountDetailKeyId()
+                                    String.format("from %s where id=? order by name", detailTypeName), payeedetail.getAccountDetailKeyId()
                                             .longValue());
                         else
                             entity = (EntityType) persistenceService.find(
-                                    "from " + detailTypeName + " where id=? order by name", payeedetail.getAccountDetailKeyId());
+                                    String.format("from %s where id=? order by name", detailTypeName), payeedetail.getAccountDetailKeyId());
                         vd.setDetailKey(entity.getCode());
                         vd.setDetailName(entity.getName());
-                    } catch (final Exception e) {
+                    } catch (final HibernateException e) {
                         final List<ValidationError> errors = new ArrayList<>();
                         errors.add(new ValidationError("exp", e.getMessage()));
                         throw new ValidationException(errors);

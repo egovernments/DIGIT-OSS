@@ -47,6 +47,8 @@
  */
 package org.egov.pims.commons.service;
 
+import org.egov.commons.exception.NoSuchObjectException;
+import org.egov.commons.exception.TooManyValuesException;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.pims.commons.Designation;
 import org.egov.pims.commons.Position;
@@ -88,7 +90,7 @@ public interface EisCommonsService
 	public abstract Position getCurrentPositionByUser(User user);
 	
 	public abstract  User getUserForPosition(Integer posId, Date date);
-	public abstract List<Designation> getDesigantionBasedOnFuncDept(Integer deptId,Integer functionaryId) throws Exception;
+	public abstract List<Designation> getDesigantionBasedOnFuncDept(Integer deptId,Integer functionaryId);
 	/**
 	  * Returning temporary  assigned employee object by pepartment,designation,functionary,date 
 	  * @param deptId
@@ -96,8 +98,10 @@ public interface EisCommonsService
 	  * @param functionaryId
 	  * @param onDate
 	  * @return Employee
+	 * @throws TooManyValuesException 
+	 * @throws NoSuchObjectException 
 	  * @throws Exception 
 	  */
-	 public PersonalInformation getTempAssignedEmployeeByDeptDesigFunctionaryDate(Integer deptId, Integer desigId, Integer functionaryId, Date onDate) throws Exception;
+	 public PersonalInformation getTempAssignedEmployeeByDeptDesigFunctionaryDate(Integer deptId, Integer desigId, Integer functionaryId, Date onDate) throws NoSuchObjectException, TooManyValuesException;
 
 }
