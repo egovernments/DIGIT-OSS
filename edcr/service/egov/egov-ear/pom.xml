@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.egov.edcr</groupId>
 		<artifactId>egov-erp</artifactId>
-		<version>1.2.0-SNAPSHOT</version>
+		<version>1.1.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -19,13 +19,13 @@
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-egiweb</artifactId>
-			<version>1.2.0-SNAPSHOT</version>
+			<version>1.1.1-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-edcrweb</artifactId>
-			<version>1.2.0-SNAPSHOT</version>
+			<version>1.1.1-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
 		<!-- EAR Web Dependencies Ends -->
@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-egi</artifactId>
-			<version>1.2.0-SNAPSHOT</version>
+			<version>1.1.1-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>commons-logging</artifactId>
@@ -45,17 +45,17 @@
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-config</artifactId>
-			<version>1.2.0-SNAPSHOT</version>
+			<version>1.1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-commons</artifactId>
-			<version>1.2.0-SNAPSHOT</version>
+			<version>1.1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-edcr</artifactId>
-			<version>1.2.0-SNAPSHOT</version>
+			<version>1.1.1-SNAPSHOT</version>
 		</dependency>
 		<!-- EAR Java Dependencies Ends -->
 
