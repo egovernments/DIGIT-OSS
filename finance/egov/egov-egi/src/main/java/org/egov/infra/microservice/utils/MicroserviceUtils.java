@@ -244,6 +244,9 @@ public class MicroserviceUtils {
     private String accountCodesSearchUrl;
 
     /*---- SI user details-----*/
+    @Value("${token.authorization.key}")
+    private String tokenAuthorizationKey;
+    
     @Value("${si.microservice.user}")
     private String siUser;
 
@@ -655,7 +658,7 @@ public class MicroserviceUtils {
         final RestTemplate restTemplate = createRestTemplate();
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        header.add("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDo=");
+        header.add("Authorization", this.tokenAuthorizationKey);
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("username", this.siUser);
         map.add("scope", this.siScope);
