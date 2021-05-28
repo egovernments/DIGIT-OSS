@@ -147,11 +147,12 @@ export const subUsageType = {
       dispatch,
       state
     }) => {
-      let subUsageMinor = get(state, `common.generalMDMSDataById.UsageCategoryDetail[${field.value}]`);
+      let subUsageMinor = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
       if (!isEmpty(subUsageMinor)) {
-        dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryDetail")[0]}usageCategorySubMinor`, subUsageMinor.usageCategorySubMinor));
+        dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`, subUsageMinor.code));
+        dispatch(prepareFormData(field.jsonPath, null));
       } else {
-        dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryDetail")[0]}usageCategorySubMinor`, field.value));
+        dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryDetail")[0]}usageCategoryMinor`, field.value));
         dispatch(prepareFormData(field.jsonPath, null));
       }
     },
