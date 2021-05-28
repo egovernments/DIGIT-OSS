@@ -35,7 +35,6 @@ div[class^="NavPills-root"] {
     padding-bottom: 10px;
 }}}}}
 
-
 // button[role=tab]{
 //     span{
 //         span{
@@ -177,3 +176,9 @@ div[class^="NavPills-root"] {
 	max-height: 150px;
     overflow: auto;
   }
+
+  #material-ui-ulbCityContainer > div:nth-child(3) > div > div > div > div
+  {
+    margin-right: 0px !important;
+  }
+  
