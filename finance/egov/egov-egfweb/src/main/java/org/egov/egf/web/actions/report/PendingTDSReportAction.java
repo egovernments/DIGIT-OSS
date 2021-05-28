@@ -545,8 +545,8 @@ public class PendingTDSReportAction extends BaseFormAction {
                         .append("voucherheader vh,vouchermis mis,generalledger gl,fund f, eg_remittance_gl ergl WHERE erd.remittanceglid = ergl.id AND ")
                         .append("erd.remittanceid=er.id  AND gl.glcodeid =:glCode AND vh.id =mis.voucherheaderid AND vh1.status =0  AND ")
                         .append("gl.id = ergl.glid  AND gl.voucherheaderid     =vh.id  AND er.fundid =f.id AND f.id =:fundId AND vh.status =0 AND ")
-                        .append("vh.voucherDate <= to_date(:date1,'dd/MM/yyyy') and  ")
-                        .append("vh.voucherDate >= to_date(:date2,'dd/MM/yyyy') ")
+                        .append("vh.voucherDate <= :date1 and  ")
+                        .append("vh.voucherDate >= :date2 ")
                         .append(deptQuery)
                         .append("group by er.month,vh.name order by er.month,vh.name");
                 if (LOGGER.isDebugEnabled())
@@ -566,7 +566,7 @@ public class PendingTDSReportAction extends BaseFormAction {
                 		.append("voucherheader vh,vouchermis mis,generalledger gl,fund f, eg_remittance_gl ergl WHERE erd.remittanceglid = ergl.id AND ")
                 		.append("erd.remittanceid=er.id  AND gl.glcodeid =:glCode AND vh.id =mis.voucherheaderid AND vh1.status =0  AND ")
                 		.append("gl.id = ergl.glid  AND gl.voucherheaderid     =vh.id  AND er.fundid =f.id AND f.id =:fundId AND vh.status =0 AND ")
-                		.append("vh.voucherDate <= to_date(:date1,'dd/MM/yyyy') and vh.voucherDate >= to_date(:date2,'dd/MM/yyyy')) ")
+                		.append("vh.voucherDate <= :date1 and vh.voucherDate >= :date2) ")
                 		.append("as temptable group by type,month");
 				Query sqlQuery2 = persistenceService.getSession().createSQLQuery(qryTolDeduction.toString());
 				sqlQuery2.setParameter("glCode", recovery.getChartofaccounts().getId(), LongType.INSTANCE)
@@ -579,7 +579,7 @@ public class PendingTDSReportAction extends BaseFormAction {
                         .append(" voucherheader vh1 right outer join eg_remittance er on vh1.id=er.paymentvhid,voucherheader vh,vouchermis mis,generalledger gl,generalledgerdetail gld,fund f,eg_remittance_gldtl ergl where ")
                         .append(" erd.remittancegldtlid= ergl.id and erd.remittanceid=er.id and gl.glcodeid=:glCode and vh.id=mis.voucherheaderid and ")
                         .append("  vh1.status=0 and ergl.gldtlid=gld.id and gl.id=gld.generalledgerid and gl.voucherheaderid=vh.id and er.fundid=f.id and f.id=:fundId")
-                        .append(" and vh.status=0 and vh.voucherDate <= to_date(:date1,'dd/MM/yyyy') and vh.voucherDate >= to_date(:date2,'dd/MM/yyyy') ")
+                        .append(" and vh.status=0 and vh.voucherDate <= :date1 and vh.voucherDate >= :date2 ")
                         .append(deptQuery)
                         .append(partyNameQuery)
                         .append(" group by er.month,vh.name order by er.month,vh.name");
@@ -601,7 +601,7 @@ public class PendingTDSReportAction extends BaseFormAction {
 								.append("voucherheader vh,vouchermis mis,generalledger gl,generalledgerdetail gld,fund f, eg_remittance_gldtl ergl WHERE erd.remittancegldtlid= ergl.id")
 								.append(" AND erd.remittanceid=er.id  AND gl.glcodeid =:glCode AND vh.id =mis.voucherheaderid AND vh1.status =0 ")
 								.append(" AND ergl.gldtlid =gld.id  AND gl.id = gld.generalledgerid  AND gl.voucherheaderid     =vh.id  AND er.fundid =f.id")
-								.append(" AND f.id =:fundId AND vh.status =0 AND vh.voucherDate <= to_date(:date1,'dd/MM/yyyy') and vh.voucherDate >= to_date(:date2,'dd/MM/yyyy') ")
+								.append(" AND f.id =:fundId AND vh.status =0 AND vh.voucherDate <= :date1 and vh.voucherDate >= :date2 ")
 								.append(deptQuery)
 								.append(partyNameQuery)
 								.append(") as temptable group by type,month");

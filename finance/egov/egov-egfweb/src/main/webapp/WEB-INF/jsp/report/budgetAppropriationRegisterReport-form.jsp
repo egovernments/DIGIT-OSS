@@ -124,6 +124,11 @@ function generateReport(){
 		return false;
 
 	document.budgetAppropriationRegister.action='/services/EGF/report/budgetAppropriationRegisterReport-search.action';
+	jQuery(document.budgetAppropriationRegister.append(jQuery('<input>', {
+        type : 'hidden',
+        name : '${_csrf.parameterName}',
+        value : '${_csrf.token}'
+    }));
 	document.budgetAppropriationRegister.submit();  
 }
 </script>
