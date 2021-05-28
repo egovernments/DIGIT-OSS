@@ -36,7 +36,7 @@
 	<parent>
 		<groupId>org.egov.edcr</groupId>
 		<artifactId>egov-erp</artifactId>
-		<version>1.1.1-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>egov-edcr</artifactId>
 	<name>e-governments edcr</name>
@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
 			<artifactId>egov-egi</artifactId>
-			<version>1.1.1-SNAPSHOT</version>
+			<version>1.2.0-SNAPSHOT</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
