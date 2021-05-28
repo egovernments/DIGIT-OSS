@@ -252,7 +252,7 @@ const formConfig = {
       Object.values(get(loadMdmsData, "PropertyTax.Thana")).map((item, index) => {
       return { value: item.code, label: getTranslatedLabel('PROPERTYTAX_THANA_' + tenentId.replace(".","_").toUpperCase() + "_" + item.code.toUpperCase(),localizationLabels) };
       });
-      console.log("thanaData------->>>",thanaData)
+     
       let isRequired = true;
 
       if(window.location.href.includes('dataentry'))
