@@ -85,6 +85,7 @@ class App extends Component {
       loginScreens = true;
     }
     let sourceUrl = `${window.location.origin}/employee`;
+    let isInbox='/employee/inbox'.includes(window.location.pathname)?true:false;
     return (
       <div>
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
@@ -92,10 +93,15 @@ class App extends Component {
         {loading && <LoadingIndicator />}
         <CommonShareContainer componentId="rainmaker-common-share" />
 
-        {!loginScreens && <div className={"jk-footer"}>
-          <img style={{ height: '1.3em' }} className={"jk-footer-image jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"} onClick={() => {
+        {!loginScreens && isInbox&& <div className={"jk-footer"}>
+          <img style={{ height: '1.3em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"} onClick={() => {
             window.open('https://www.digit.org/', '_blank').focus();
           }}></img>
+        </div>}
+        {!loginScreens && !isInbox&&<div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <img style={{ display: "inline-flex", height: '1.4em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"}></img>
+          </div>
         </div>}
         {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>

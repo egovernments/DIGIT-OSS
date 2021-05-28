@@ -2,7 +2,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import {
   getLocaleLabels,
 
-  getStatusKey, getTransformedLocalStorgaeLabels
+  getStatusKey, getTransformedLocale, getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
@@ -120,7 +120,15 @@ export const searchResults = {
       },
       {
         labelName: "NOC Type",
-        labelKey: "NOC_TYPE_LABEL"
+        labelKey: "NOC_TYPE_LABEL",
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span style={{ color: '#000000' }}>
+              {getLocaleLabels("NA", getTransformedLocale(`FN_${value}`))}
+            </span>
+          )
+        }
       },
       {
         labelName: "Owner Name",
@@ -188,13 +196,11 @@ export const searchResults = {
 const onRowClick = rowData => {
   switch (rowData[5]) {
     case "INITIATED":
-      routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
+      routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${rowData[6]
         }`)
       break;
     default:
-      routeTo(`search-preview?applicationNumber=${
-        rowData[0]
+      routeTo(`search-preview?applicationNumber=${rowData[0]
         }&tenantId=${rowData[6]}`);
       break;
   }

@@ -35,7 +35,7 @@ const styles = theme => ({
     textAlign: "center",
     paddingTop: theme.spacing(20)
   },
-  panelDetail :{
+  panelDetail: {
     display: "initial !important",
     padding: "0px !important"
   }
@@ -100,7 +100,7 @@ class CustomInfo extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-  downloadAsImage = (id,title) => {
+  downloadAsImage = (id, title) => {
     let { strings } = this.props;
     let div = document.getElementById('card' + id);
     this.props.APITrans(true)
@@ -115,7 +115,7 @@ class CustomInfo extends React.Component {
       }.bind(this))
   }
 
-  shareAsImage = (shareType,id) => {
+  shareAsImage = (shareType, id) => {
     let { strings, title } = this.props;
     let div = document.getElementById('card' + id);
     var ts = Math.round((new Date()).getTime() / 1000);
@@ -134,7 +134,7 @@ class CustomInfo extends React.Component {
         try {
           let fileUploadAPI = new FileUploadAPI(2000, 'dashboard', constants.FILE_UPLOAD_CARD, new File([blobData], blobData.name, { type: "image/jpeg" }));
           APITransport(fileUploadAPI)
-        } catch{ }
+        } catch { }
       }.bind(this))
   }
 
@@ -160,32 +160,32 @@ class CustomInfo extends React.Component {
         let file = this.props.s3ImageCard && this.props.s3ImageCard[fileId]
         if (file) {
           if ((file.match(new RegExp("https", "g")) || []).length > 1) {
-            var fileArr =  file.split(',');
-                    if(fileArr && fileArr.length>0) {                        
-                      image = removeImageExtension(fileArr);
-                    }
+            var fileArr = file.split(',');
+            if (fileArr && fileArr.length > 0) {
+              image = removeImageExtension(fileArr);
+            }
 
           } else {
             image = file
           }
-        this.setState({ anchorEl: null });
-         var type = this.state.type;
-         var isMobileOrTablet = this.isMobileOrTablet();
-         var fakeLink = document.createElement('a');
-         shortenAPI(image,function(err,data){
-            if(data){
+          this.setState({ anchorEl: null });
+          var type = this.state.type;
+          var isMobileOrTablet = this.isMobileOrTablet();
+          var fakeLink = document.createElement('a');
+          shortenAPI(image, function (err, data) {
+            if (data) {
               image = data.data;
-            } 
-            if (image && type === 'whatsapp') {              
+            }
+            if (image && type === 'whatsapp') {
               fakeLink.setAttribute('href', 'https://' + (isMobileOrTablet ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(image));
               fakeLink.setAttribute('data-action', 'share/whatsapp/share');
               fakeLink.setAttribute('target', '_blank');
               fakeLink.click();
             }
-            if (image && type === 'email') {              
+            if (image && type === 'email') {
               fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
               fakeLink.setAttribute('target', '_top');
-              fakeLink.click();              
+              fakeLink.click();
             }
           })
         }
@@ -226,11 +226,11 @@ class CustomInfo extends React.Component {
       anchorEl: null
     })
   };
-  renderMenues(id,title) {
+  renderMenues(id, title) {
     const { classes } = this.props;
     let { strings } = this.props;
     return (<div className={[classes.actionMenues, classes.fullw].join(' ')}>
-      <ActionButtons text={strings["DSS_MORE_ACTIONS"] || "More Actions"} handleClick={this.handleClick} buttonType="info" target="info"></ActionButtons>
+      <ActionButtons text={strings["DSS_MORE_ACTIONS"] || "DSS_MORE_ACTIONS"} handleClick={this.handleClick} buttonType="info" target="info"></ActionButtons>
 
       <StyledMenu
         id="customized-menu"
@@ -240,7 +240,7 @@ class CustomInfo extends React.Component {
         onClose={this.handleClose}
       >
 
-        <StyledMenuItem button onClick={() =>   this.downloadAsImage(id,title)}>
+        <StyledMenuItem button onClick={() => this.downloadAsImage(id, title)}>
           <ListItemIcon className={classes.itemIcon}>
             <CloudDownloadSharp />
           </ListItemIcon>
@@ -260,13 +260,13 @@ class CustomInfo extends React.Component {
         <Collapse in={this.state.open} timeout="auto" unmountOnExit>
           <Divider />
           <List component="div" disablePadding>
-            <StyledMenuItem button onClick={() => this.shareAsImage('email',id,title)}>
+            <StyledMenuItem button onClick={() => this.shareAsImage('email', id, title)}>
               <ListItemIcon>
                 <DraftsIcon style={{ color: Variables.email }} />
               </ListItemIcon>
               <ListItemText primary="Image" />
             </StyledMenuItem>
-            <StyledMenuItem button onClick={() => this.shareAsImage('whatsapp',id,title)}>
+            <StyledMenuItem button onClick={() => this.shareAsImage('whatsapp', id, title)}>
               <ListItemIcon>
                 <WhatsappIcon style={{ color: Variables.whatsApp }} />
               </ListItemIcon>
@@ -278,11 +278,11 @@ class CustomInfo extends React.Component {
     </div>)
   }
 
-  render() { 
-    let { data } = this.props;   
+  render() {
+    let { data } = this.props;
     return (
-      <div style={{padding:'0px 7px'}}>
-        {this.renderMenues(data.id,data.name)}
+      <div style={{ padding: '0px 7px' }}>
+        {this.renderMenues(data.id, data.name)}
       </div>
     );
   }

@@ -88,7 +88,7 @@ let dataL = {
     "DSS_DENOMINATION": "Denomination",
     "DSS_PDF": "PDF",
     "DSS_IMAGE": "Image",
-    "DSS_MORE_ACTIONS": "More Actions",
+    "DSS_MORE_ACTIONS": "DSS_MORE_ACTIONS",
     "DSS_VIEW_ALL": "VIEW_ALL",
     "DSS_BACK_TO_MY_DASHBOARD": "Back to MyDashboard",
     "DSS_ROWS": "Rows",

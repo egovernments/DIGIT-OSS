@@ -7,19 +7,20 @@ import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
 import { isMobile } from 'react-device-detect';
 import CONFIG from '../../config/configs';
+import { getLocaleLabels } from '../../utils/commons';
 
 const options = {
   scales: {
     xAxes: [{
-        gridLines: {
-            color: "rgba(0, 0, 0, 0)",
-        }
+      gridLines: {
+        color: "rgba(0, 0, 0, 0)",
+      }
     }]
-},
+  },
   responsive: true,
   options: {
     responsive: true,
-    
+
     maintainAspectRatio: true,
     scales: {
       yAxes: [{
@@ -43,16 +44,16 @@ class LineChart extends React.Component {
   constructor(props) {
     super(props);
   }
-  
+
   callforNewData(elems) {
   }
-  
-  manupulateData(strings,chartData) {
+
+  manupulateData(strings, chartData) {
     var tempdata = {
       labels: [],
       datasets: []
     };
-    let color = JSON.parse(sessionStorage.getItem('CHART_COLOR_CODE')) ;
+    let color = JSON.parse(sessionStorage.getItem('CHART_COLOR_CODE'));
     chartData.map((d, i) => {
       let tempObj = {
         label: "",
@@ -61,11 +62,11 @@ class LineChart extends React.Component {
         fill: false
       }
       let tempdataArr = [];
-      let tempdatalabel = [],tempVal='';
-      tempObj.label =   strings[d.headerName] || d.headerName;
+      let tempdatalabel = [], tempVal = '';
+      tempObj.label = getLocaleLabels(`DSS_${d.headerName}`, strings) || `DSS_${d.headerName}`;
       d.plots.map((d1, i) => {
         tempVal = NFormatterFun(d1.value, d1.symbol, this.props.GFilterData['Denomination']);
-        tempVal = (typeof tempVal == 'string')?parseFloat(tempVal.replace(/,/g, '')):tempVal;
+        tempVal = (typeof tempVal == 'string') ? parseFloat(tempVal.replace(/,/g, '')) : tempVal;
         tempdataArr.push(tempVal);
         tempdatalabel.push(strings[d1.name] || d1.name);
       })
@@ -76,35 +77,35 @@ class LineChart extends React.Component {
     return tempdata;
   }
 
-  render() { 
-    let { chartData,classes,strings } = this.props;
-    let data = this.manupulateData(strings,chartData);
+  render() {
+    let { chartData, classes, strings } = this.props;
+    let data = this.manupulateData(strings, chartData);
     if (data) {
-      if (isMobile){
-            return ( 
-              <div className={classes.lineChart}>
-                <Line
-                  style={{ fill: 'none'}}
-                  data={data}
-                  options={options}
-                  onElementsClick={this.callforNewData.bind(this)} 
-                  height={350}         
-                >
-                </Line>
-              </div>
-            )
-      }else{
-        return ( 
-              <div className={classes.lineChart}>
-                <Line
-                  style={{ fill: 'none'}}
-                  data={data}
-                  options={options}
-                  onElementsClick={this.callforNewData.bind(this)}
-                >
-                </Line>
-              </div>
-            )
+      if (isMobile) {
+        return (
+          <div className={classes.lineChart}>
+            <Line
+              style={{ fill: 'none' }}
+              data={data}
+              options={options}
+              onElementsClick={this.callforNewData.bind(this)}
+              height={350}
+            >
+            </Line>
+          </div>
+        )
+      } else {
+        return (
+          <div className={classes.lineChart}>
+            <Line
+              style={{ fill: 'none' }}
+              data={data}
+              options={options}
+              onElementsClick={this.callforNewData.bind(this)}
+            >
+            </Line>
+          </div>
+        )
       }
     }
     return <div>Loading...</div>
@@ -122,4 +123,4 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({
   }, dispatch)
 }
-export default  withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(LineChart));
+export default withStyles(style)(connect(mapStateToProps, mapDispatchToProps)(LineChart));

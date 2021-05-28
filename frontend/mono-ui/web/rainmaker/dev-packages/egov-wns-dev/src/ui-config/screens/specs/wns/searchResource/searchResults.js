@@ -1,10 +1,10 @@
-import React from "react";
-import { sortByEpoch, getEpochForDate } from "../../utils";
-import './index.css'
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import React from "react";
 import store from "ui-redux/store";
-
+import { getEpochForDate, sortByEpoch } from "../../utils";
+import './index.css';
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -15,19 +15,24 @@ export const searchResults = {
     columns: [
       {
         name: "Service",
-        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL", 
+        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
             <span style={{ color: '#000000' }}>
-              {value}
+              <LabelContainer
+                labelKey={getTransformedLocale(`WS_${value}`)}
+                style={{
+                  fontSize: 14,
+                }}
+              />
             </span>
           )
         }
       },
       {
         name: "Consumer No",
-        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL", 
+        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
         options: {
           filter: false,
           customBodyRender: (value, index) => (
@@ -37,11 +42,39 @@ export const searchResults = {
           )
         }
       },
-      {name : "Owner Name",labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
-      {name : "Status",labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL" },
-      {name : "Due",labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL" },
-      {name : "Address",labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
-      {name : "Due Date",labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL" },
+      { name: "Owner Name", labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
+      {
+        name: "Status", labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL", options: {
+          filter: false,
+          customBodyRender: value => (
+            <span style={{ color: '#000000' }}>
+              <LabelContainer
+                labelKey={getTransformedLocale(`WS_${value}`)}
+                style={{
+                  fontSize: 14,
+                }}
+              />
+            </span>
+          )
+        }
+      },
+      {
+        name: "Due", labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL", options: {
+          filter: false,
+          customBodyRender: value => (
+            <span style={{ color: '#000000' }}>
+              <LabelContainer
+                labelKey={getTransformedLocale(value)}
+                style={{
+                  fontSize: 14,
+                }}
+              />
+            </span>
+          )
+        }
+      },
+      { name: "Address", labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
+      { name: "Due Date", labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL" },
       {
         name: "Action",
         labelKey: "WS_COMMON_TABLE_COL_ACTION_LABEL",
@@ -62,7 +95,7 @@ export const searchResults = {
               )
             }
             else {
-              return ("NA")
+              return (getLocaleLabels("NA", "NA"))
             }
           }
         }
@@ -82,7 +115,7 @@ export const searchResults = {
         }
       }
     ],
-    title: {labelKey:"WS_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Connections"},
+    title: { labelKey: "WS_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName: "Search Results for Water & Sewerage Connections" },
     options: {
       filter: false,
       download: false,
@@ -117,6 +150,6 @@ const getConnectionDetails = data => {
 
 const getViewBillDetails = data => {
   store.dispatch(
-    setRoute( `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`)
+    setRoute(`viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`)
   )
 }

@@ -1,8 +1,9 @@
-import React from "react";
-import { sortByEpoch, getEpochForDate } from "../../utils";
-import './index.css';
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import React from "react";
 import store from "ui-redux/store";
+import { getEpochForDate, sortByEpoch } from "../../utils";
+import './index.css';
 
 export const searchApplicationResults = {
   uiFramework: "custom-molecules",
@@ -13,7 +14,7 @@ export const searchApplicationResults = {
     columns: [
       {
         name: "Consumer No",
-        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL", 
+        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
         options: {
           filter: false,
           customBodyRender: (value, data) => {
@@ -33,7 +34,7 @@ export const searchApplicationResults = {
       },
       {
         name: "Application No",
-        labelKey: "WS_COMMON_TABLE_COL_APP_NO_LABEL", 
+        labelKey: "WS_COMMON_TABLE_COL_APP_NO_LABEL",
         options: {
           filter: false,
           customBodyRender: (value, data) => {
@@ -58,14 +59,23 @@ export const searchApplicationResults = {
           filter: false,
           customBodyRender: value => (
             <span style={{ color: '#000000' }}>
-              {value}
+              {getLocaleLabels("NA", getTransformedLocale(`WS_${value}`))}
             </span>
           )
         }
       },
-      {name : "Owner Name",labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
-      {name : "Application Status",labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL" },
-      {name : "Address",labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
+      { name: "Owner Name", labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
+      {
+        name: "Application Status", labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL", options: {
+          filter: false,
+          customBodyRender: value => (
+            <span style={{ color: '#000000' }}>
+              {getLocaleLabels("NA", getTransformedLocale(`CS_${value}`))}
+            </span>
+          )
+        }
+      },
+      { name: "Address", labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
       {
         name: "tenantId",
         labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
@@ -75,7 +85,7 @@ export const searchApplicationResults = {
       },
       {
         name: "service",
-        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL", 
+        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL",
         options: {
           display: false
         }
@@ -88,7 +98,7 @@ export const searchApplicationResults = {
         }
       }
     ],
-    title: {labelKey:"WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Application"},
+    title: { labelKey: "WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING", labelName: "Search Results for Water & Sewerage Application" },
     options: {
       filter: false,
       download: false,
@@ -117,7 +127,7 @@ export const searchApplicationResults = {
 
 const getApplicationDetails = data => {
   let connectionNo = `${data.rowData[0]}`;
-  if(connectionNo && connectionNo !== 'NA' && data.rowData[2].includes('MODIFY')) {
+  if (connectionNo && connectionNo !== 'NA' && data.rowData[2].includes('MODIFY')) {
     store.dispatch(
       setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&mode=MODIFY`)
     )

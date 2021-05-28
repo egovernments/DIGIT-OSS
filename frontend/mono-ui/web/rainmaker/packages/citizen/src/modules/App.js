@@ -12,9 +12,9 @@ import isEmpty from "lodash/isEmpty";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import './index.css';
 import Router from "./Router";
 import routes from "./Routes";
-import './index.css';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -126,26 +126,26 @@ class App extends Component {
   render() {
     const { toast, loading, defaultUrl, hasLocalisation } = this.props;
     let loginScreens = false;
-    let logginScreensUrls=['/citizen/user/login', '/citizen/forgot-password', '/citizen/language-selection','/citizen/user/register'];
+    let logginScreensUrls = ['/citizen/user/login', '/citizen/forgot-password', '/citizen/language-selection', '/citizen/user/register'];
     if (logginScreensUrls.includes(window.location.pathname)) {
       loginScreens = true;
     }
-    let sourceUrl=`${window.location.origin}/citizen`;
+    let sourceUrl = `${window.location.origin}/citizen`;
     return (
       <div>
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
-        {!loginScreens && <div className={"jk-footer"}>
-          <img style={{ height: '1.3em' }} className={"jk-footer-image jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"} onClick={() => {
-            window.open('https://www.digit.org/', '_blank').focus();
-          }}></img>
+        {!loginScreens && <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <img style={{ display: "inline-flex", height: '1.4em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"}></img>
+          </div>
         </div>}
         {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <img style={{ display: "inline-flex", height: '1em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer-bw.png`} onError={"this.src='./../digit-footer-bw.png'"} onClick={() => {
-            window.open('https://www.digit.org/', '_blank').focus();
-          }}></img>        
+            <img style={{ display: "inline-flex", height: '1em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer-bw.png`} onError={"this.src='./../digit-footer-bw.png'"} onClick={() => {
+              window.open('https://www.digit.org/', '_blank').focus();
+            }}></img>
           </div>
         </div>}
       </div>

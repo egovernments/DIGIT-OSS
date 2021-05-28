@@ -1,10 +1,11 @@
-import React from "react";
-import { Card, Icon } from "components";
-import Label from "egov-ui-kit/utils/translationNode";
-import ReadMore from "../ReadMore";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
+import { Card, Icon } from "components";
 import { DownloadFileContainer } from "egov-ui-framework/ui-containers";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import Label from "egov-ui-kit/utils/translationNode";
+import React from "react";
+import ReadMore from "../ReadMore";
 import "./index.css";
 
 const pStyle = {
@@ -26,7 +27,7 @@ const divStyle = {
 
 const Notifications = ({ notifications = [], history }) => {
   const renderUpdate = (notification, index) => {
-    const { description, buttons, address, name, SLA, type, id, tenantId, eventDate,eventToDate,documents } = notification;
+    const { description, buttons, address, name, SLA, type, id, tenantId, eventDate, eventToDate, documents } = notification;
     return (
       <Card
         className="home-notification"
@@ -39,10 +40,10 @@ const Notifications = ({ notifications = [], history }) => {
             {type === "EVENTSONGROUND" && (
               <Grid item xs={4} direction="column" style={{ maxWidth: "100px", maxHeight: "100px", minWidth: "100px", minHeight: "100px" }}>
                 <div style={divStyle}>
-                  <Label label={(eventDate.split(":")[0]===eventToDate.split(":")[0])? eventDate.split(":")[0]:eventDate.split(":")[0]+"-"+eventToDate.split(":")[0]} color="#fff" fontSize="17px" />
+                  <Label label={(eventDate.split(":")[0] === eventToDate.split(":")[0]) ? eventDate.split(":")[0] : eventDate.split(":")[0] + "-" + eventToDate.split(":")[0]} color="#fff" fontSize="17px" />
                 </div>
                 <div style={pStyle}>
-                  <Label label={(eventDate.split(":")[1]===eventToDate.split(":")[1]&&eventDate.split(":")[0]===eventToDate.split(":")[0])?eventDate.split(":")[1]: eventDate.split(":")[1]+"-"+eventToDate.split(":")[1]} color="#FC8019" fontSize="34px" />
+                  <Label label={(eventDate.split(":")[1] === eventToDate.split(":")[1] && eventDate.split(":")[0] === eventToDate.split(":")[0]) ? eventDate.split(":")[1] : eventDate.split(":")[1] + "-" + eventToDate.split(":")[1]} color="#FC8019" fontSize="34px" />
                 </div>
               </Grid>
             )}
@@ -55,7 +56,7 @@ const Notifications = ({ notifications = [], history }) => {
               className="update"
               onClick={() => (type === "EVENTSONGROUND" ? history.push(`/event-details?uuid=${id}&tenantId=${tenantId}`) : {})}
             >
-              <Label fontSize={16} color="rgba(0, 0, 0, 0.87)" label={name} containerStyle={{ marginBottom: 10 }} />
+              <Label fontSize={16} color="rgba(0, 0, 0, 0.87)" label={getTransformedLocale(name)} containerStyle={{ marginBottom: 10 }} />
 
               {type != "EVENTSONGROUND" && (
                 <div>

@@ -1,9 +1,10 @@
+import { download } from "egov-common/ui-utils/commons";
+import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-kit/utils/commons";
 import React from "react";
 import {
   getEpochForDate, sortByEpoch
 } from "../../utils";
-import {download} from "egov-common/ui-utils/commons"
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -24,8 +25,8 @@ export const searchResults = {
                 { key: "tenantId", value: tableMeta.rowData[8] },
                 { key: "businessService", value: tableMeta.rowData[9] }
               ]
-              download(receiptQueryString , "download" ,tableMeta.rowData[7]||'consolidatedreceipt','PAYMENT') ;
-            }} style={{color:'#2196F3'}}>
+              download(receiptQueryString, "download", tableMeta.rowData[7] || 'consolidatedreceipt', 'PAYMENT');
+            }} style={{ color: '#2196F3' }}>
               {value}
             </div>
           )
@@ -50,7 +51,15 @@ export const searchResults = {
       },
       {
         labelName: "Status",
-        labelKey: "CR_COMMON_TABLE_COL_STATUS"
+        labelKey: "CR_COMMON_TABLE_COL_STATUS",
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span style={{ color: '#000000' }}>
+              {getLocaleLabels("NA", getTransformedLocale(`RC_${value}`))}
+            </span>
+          )
+        }
       },
       {
         labelName: "Action",
@@ -59,12 +68,12 @@ export const searchResults = {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
             <div onClick={value => {
-              if(tableMeta.rowData[6]=='CANCEL'){
+              if (tableMeta.rowData[6] == 'CANCEL') {
 
                 setRoute(`/receipts/viewReceipt?receiptNumbers=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}&businessService=${tableMeta.rowData[9]}`);
               }
-            }} style={{color:tableMeta.rowData[6]=='CANCEL'?'rgb(254, 122, 81)':"inherit",cursor:tableMeta.rowData[6]=='CANCEL'?'pointer':"initial"}}>
-              {value}
+            }} style={{ color: tableMeta.rowData[6] == 'CANCEL' ? 'rgb(254, 122, 81)' : "inherit", cursor: tableMeta.rowData[6] == 'CANCEL' ? 'pointer' : "initial" }}>
+              {getLocaleLabels("NA", `RC_${value}`)}
             </div>
           )
         }
