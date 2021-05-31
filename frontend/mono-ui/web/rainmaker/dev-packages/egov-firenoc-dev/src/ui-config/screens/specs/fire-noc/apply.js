@@ -318,7 +318,7 @@ export const prepareEditFlow = async (
   
     dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
     await onchangeOfTenant({value:tenantId},state,dispatch);
-    await setDocsForEditFlow(state,dispatch);
+  await setDocsForEditFlow(state,dispatch);
     if (applicationNumber) {
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }
@@ -375,6 +375,8 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("FireNOCs[0].provisionFireNOCNumber", ""));
+    dispatch(prepareFinalObject("DYNAMIC_MDMS_Trigger", false));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"

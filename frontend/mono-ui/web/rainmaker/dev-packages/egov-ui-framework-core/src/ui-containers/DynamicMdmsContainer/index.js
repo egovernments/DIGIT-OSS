@@ -31,7 +31,7 @@ class DynamicMdmsContainer extends Component {
       dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, true));
       await getMdmsJson(state, dispatch, reqObj);
       this.triggerCallback(null, null, null);
-      if (getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL" || getQueryArg(window.location.href, "applicationNumber") != null) {
+      if (getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL" || getQueryArg(window.location.href, "applicationNumber") != null || get(state, `screenConfiguration.preparedFinalObject.DYNAMIC_MDMS_Trigger`,false)) {
         callBackEdit(state, dispatch);
       } else {
         dropdownFields && dropdownFields.forEach((entry, i) => {

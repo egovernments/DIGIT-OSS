@@ -357,6 +357,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
       // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
+      dispatch(prepareFinalObject("DYNAMIC_MDMS_Trigger", false));
     } else if (method === 'edit') {
 
       enableField('apply', "components.div.children.footer.children.nextButton", dispatch);

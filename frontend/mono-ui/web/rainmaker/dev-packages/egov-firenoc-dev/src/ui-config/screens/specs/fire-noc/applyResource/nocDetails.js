@@ -17,6 +17,9 @@ import {
   getSearchResults
 } from "../../../../../ui-utils/commons";
 import "./index.css";
+import { prepareEditFlow } from "../apply";
+import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
+import { onchangeOfTenant } from "./propertyLocationDetails";
 
 const loadProvisionalNocData = async (state, dispatch) => {
   let fireNOCNumber = get(
@@ -45,9 +48,11 @@ const loadProvisionalNocData = async (state, dispatch) => {
   ]);
 
   response = furnishNocResponse(response);
+  
 
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
-
+  const tenantId=get(response, "FireNOCs[0].tenantId", getTenantIdCommon())
+  await onchangeOfTenant({value:tenantId},state,dispatch);
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
     get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
@@ -83,6 +88,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
   // Set fire noc id to null
   dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
+  dispatch(prepareFinalObject("DYNAMIC_MDMS_Trigger", true));
 };
 
 export const nocDetails = getCommonCard({
