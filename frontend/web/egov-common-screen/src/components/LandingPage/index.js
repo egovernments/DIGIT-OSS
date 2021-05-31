@@ -325,7 +325,7 @@ class LandingPage extends React.Component {
                     APPLY HERE
                   </a>
                 </p>
-                <p style={{ color: "#fff", fontSize: "16px" }}><b>"The information provided online is updated, and no physical visit is required."</b></p>
+                <p style={{ color: "#fff", fontSize: "16px" }}><b>The information provided online is updated, and no physical visit is required.</b></p>
               </Grid>
             </Grid>
             <Grid item md={1}></Grid>
