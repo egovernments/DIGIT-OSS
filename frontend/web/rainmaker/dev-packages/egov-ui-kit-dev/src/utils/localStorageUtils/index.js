@@ -21,6 +21,15 @@ export const getLocale = () => {
 export const getFinalData = () => {
   return JSON.parse(localStorage.getItem("finalData"));
 };
+export const getModule = () => {
+  return localStorage.getItem("module");
+};
+export const getLocalizationLabels = () =>{
+  return localStorage.getItem(`localization_${getLocale()}`);
+};
+export const getStoredModulesList = () =>{
+  return localStorage.getItem("storedModulesList");
+};
 
 //SET methods
 export const setUserInfo = (userInfo) => {
@@ -38,18 +47,20 @@ export const setTenantId = (tenantId) => {
 export const setLocale = (locale) => {
   localStorageSet("locale", locale);
 };
+export const setModule = (moduleName) => {
+  localStorageSet("module", moduleName);
+};
 export const setReturnUrl = (url) => {
   localStorageSet("returnUrl", url);
+};
+export const setStoredModulesList =(storedModuleList) =>{
+  localStorage.setItem("storedModulesList", storedModuleList);
 };
 
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith(appName)) {
-      window.localStorage.removeItem(key);
-    }
-  });
-  window.localStorage.removeItem("user-info");
+ window.localStorage.clear();
+ window.sessionStorage.clear();
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {
@@ -70,7 +81,7 @@ export const localStorageSet = (key, data, path) => {
   if (path) {
     set(storedData, path, data);
     window.localStorage.setItem(appName + "." + key, storedData);
-    window.localStorage.setItem( key, storedData);
+    window.localStorage.setItem(key, storedData);
   } else {
     window.localStorage.setItem(appName + "." + key, data);
     window.localStorage.setItem(key, data);
@@ -81,3 +92,9 @@ export const lSRemoveItem = (key) => {
   const appName = process.env.REACT_APP_NAME;
   window.localStorage.removeItem(appName + "." + key);
 };
+
+
+// get tenantId for Employee/Citizen
+export const getTenantIdCommon = () => {
+    return process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
+}
