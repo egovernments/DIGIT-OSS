@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CustomTextField from '../inputs/TextInput/CustomTextField';
 import _ from 'lodash';
 import Search from '@material-ui/icons/Search'
+import { getLocaleLabels } from '../../../utils/commons';
 
 class TableSearch extends Component {
     constructor(props) {
@@ -143,7 +144,7 @@ class TableSearch extends Component {
         return (<div className={tableType !== "ALERT_TABLE" ? classes.textField : classes.textField1} > {this.renderSearchIcon()} {
             displaySearchBox ?
                 <CustomTextField
-                    label="Search"
+                    label={getLocaleLabels('DSS_SEARCH')}
                     defaultValue=""
                     type="text"
                     styl={{ border:'1px solid #e6e6e6'}}

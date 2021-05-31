@@ -15,6 +15,8 @@ import { getResultUrl } from "./commons/url";
 import commonConfig from "config/common.js";
 import { getTenantId, setReturnUrl, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 class ShowForm extends Component {
   state = {
@@ -600,7 +602,8 @@ class ShowForm extends Component {
         return reportTitle;
       });
     }
-    return reportTitle;
+    return reportTitle&&typeof reportTitle =='string'&&getLocaleLabels(getTransformedLocale(reportTitle))||reportTitle;
+    
   };
 
   getReportTitlefromTwoOptions = (metaData) => {
@@ -614,7 +617,9 @@ class ShowForm extends Component {
       );
     } else {
       return (
-        get(metaData, "reportDetails.reportName") && <div className="report-title">{this.getReportTitle(metaData.reportDetails.reportName)}</div>
+        get(metaData, "reportDetails.reportName") && <div className="report-title">
+          {getLocaleLabels(getTransformedLocale(metaData.reportDetails.reportName))}
+          </div>
       );
     }
   };

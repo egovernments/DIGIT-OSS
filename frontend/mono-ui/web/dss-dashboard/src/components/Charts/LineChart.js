@@ -1,13 +1,12 @@
+import { withStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Line } from 'react-chartjs-2';
+import { isMobile } from 'react-device-detect';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import NFormatterFun from '../common/numberFormaterFun';
-import { withStyles } from '@material-ui/core/styles';
-import style from './styles';
-import { isMobile } from 'react-device-detect';
-import CONFIG from '../../config/configs';
 import { getLocaleLabels } from '../../utils/commons';
+import NFormatterFun from '../common/numberFormaterFun';
+import style from './styles';
 
 const options = {
   scales: {

@@ -1,34 +1,34 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import CloudDownloadSharp from '@material-ui/icons/CloudDownloadSharp';
-
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Collapse from '@material-ui/core/Collapse';
+import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ActionButtons from '../inputs/ActionButtons';
-import domtoimage from 'dom-to-image';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { withRouter } from 'react-router-dom';
-import share from '../../../images/share.svg';
-import SVG from 'react-inlinesvg';
-import { APIStatus } from '../../../actions/apiStatus'
-import FileUploadAPI from '../../../actions/fileUpload/fileUpload'
-import APITransport from '../../../actions/apitransport/apitransport'
-import S3ImageAPI from '../../../actions/s3Image/s3Image';
-import constants from '../../../actions/constants'
-import Collapse from '@material-ui/core/Collapse'
-import List from '@material-ui/core/List'
-import Divider from '@material-ui/core/Divider';
-import Variables from '../../../styles/variables'
-import IconExpandLess from '@material-ui/icons/ExpandLess'
-import IconExpandMore from '@material-ui/icons/ExpandMore'
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { withStyles } from "@material-ui/core/styles";
+import CloudDownloadSharp from '@material-ui/icons/CloudDownloadSharp';
 import DraftsIcon from '@material-ui/icons/Drafts';
+import IconExpandLess from '@material-ui/icons/ExpandLess';
+import IconExpandMore from '@material-ui/icons/ExpandMore';
 import WhatsappIcon from '@material-ui/icons/WhatsApp';
-import shortenAPI from '../../../actions/shortenAPI';
+import domtoimage from 'dom-to-image';
+import PropTypes from "prop-types";
+import React from "react";
+import SVG from 'react-inlinesvg';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { APIStatus } from '../../../actions/apiStatus';
+import APITransport from '../../../actions/apitransport/apitransport';
+import constants from '../../../actions/constants';
+import FileUploadAPI from '../../../actions/fileUpload/fileUpload';
 import removeImageExtension from '../../../actions/removeImageExtension';
+import S3ImageAPI from '../../../actions/s3Image/s3Image';
+import shortenAPI from '../../../actions/shortenAPI';
+import share from '../../../images/share.svg';
+import Variables from '../../../styles/variables';
+import ActionButtons from '../inputs/ActionButtons';
+
 
 const styles = theme => ({
   root: {
@@ -264,13 +264,13 @@ class CustomInfo extends React.Component {
               <ListItemIcon>
                 <DraftsIcon style={{ color: Variables.email }} />
               </ListItemIcon>
-              <ListItemText primary="Image" />
+              <ListItemText primary={strings["DSS_MOBILE_IMAGE"] || "DSS_MOBILE_IMAGE"}/>
             </StyledMenuItem>
             <StyledMenuItem button onClick={() => this.shareAsImage('whatsapp', id, title)}>
               <ListItemIcon>
                 <WhatsappIcon style={{ color: Variables.whatsApp }} />
               </ListItemIcon>
-              <ListItemText primary="Image" />
+              <ListItemText  primary={strings["DSS_MOBILE_IMAGE"] || "DSS_MOBILE_IMAGE"}/>
             </StyledMenuItem>
           </List>
         </Collapse>

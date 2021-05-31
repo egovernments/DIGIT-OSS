@@ -160,7 +160,7 @@ const getActionButton = (value, tableMeta) => {
           process.env.REACT_APP_NAME === "Citizen"
             ? "citizen"
             : "employee";
-        if (tableMeta.rowData[5] === "ABG_PAID") {
+        if (tableMeta.rowData[5] === "PAID") {
           const receiptQueryString = [
             { key: "billIds", value: tableMeta.rowData[11] },
             { key: "tenantId", value: tableMeta.rowData[10] },
@@ -180,7 +180,7 @@ const getActionButton = (value, tableMeta) => {
         }
       }}
     >
-      {getLocaleLabels(value, getTransformedLocale(`ABG_${value}`))}
+      {getLocaleLabels(value, getTransformedLocale(`${value}`))}
     </a>
   )
 }
