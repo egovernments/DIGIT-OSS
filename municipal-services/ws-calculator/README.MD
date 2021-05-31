@@ -41,7 +41,7 @@ c) `/waterCalculator/_estimate`
    - To Activate the Water Service application, the user needs to pay the ONE_TIME_FEE for the connection. To calculate the ONE_TIME_FEE ws-calculator/waterCalculator/_estimate API used.
 
 d) `/waterCalculator/_calculate`
-   - This API used to generate /home/rohit/Desktop/Workspace/municipal-services/property-servicesthe demand for metered or non-metered water connection.
+   - This API used to generate the demand for metered or non-metered water connection.
 
 e) `/waterCalculator/_updateDemand`
    - User can pay partial / full / advance amount for the Metered or Non-Metered connection bill. In these cases, Billing service would call back ws-calculator/waterCalculator/_updateDemand API to update the details of the demand generated.

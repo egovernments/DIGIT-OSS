@@ -121,7 +121,7 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
             },
             {
               "action": "SENDBACKTOCITIZEN",
-              "nextState": "CITIZENACTIONREQUIRED",
+              "nextState": "CITIZENACTIONREQUIRED-DV",
               "roles": [
                 "NOC_DOC_VERIFIER"
               ]
@@ -253,6 +253,26 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
           "sla": null,
           "state": "CITIZENACTIONREQUIRED",
           "applicationStatus": "CITIZENACTIONREQUIRED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+              {
+                  "action": "RESUBMIT",
+                  "nextState": "FIELDINSPECTION",
+                  "roles": [
+                      "CITIZEN",
+                      "NOC_CEMP"
+                  ]
+              }
+          ]
+      },
+      
+      {
+          "sla": null,
+          "state": "CITIZENACTIONREQUIRED-DV",
+          "applicationStatus": "CITIZENACTIONREQUIRED-DV",
           "docUploadRequired": false,
           "isStartState": false,
           "isTerminateState": false,
