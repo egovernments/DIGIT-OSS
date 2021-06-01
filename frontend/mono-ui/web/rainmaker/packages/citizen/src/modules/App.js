@@ -126,7 +126,7 @@ class App extends Component {
   render() {
     const { toast, loading, defaultUrl, hasLocalisation } = this.props;
     let loginScreens = false;
-    let logginScreensUrls = ['/citizen/user/login', '/citizen/forgot-password', '/citizen/language-selection', '/citizen/user/register'];
+    let logginScreensUrls = ['/citizen/user/login','/citizen/user/otp', '/citizen/forgot-password', '/citizen/language-selection', '/citizen/user/register'];
     if (logginScreensUrls.includes(window.location.pathname)) {
       loginScreens = true;
     }

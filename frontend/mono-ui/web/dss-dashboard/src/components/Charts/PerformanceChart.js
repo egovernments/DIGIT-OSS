@@ -13,6 +13,7 @@ import ActionButtons from '../common/inputs/ActionButtons';
 import Cards from '../common/Cards/Cards';
 import UiTable from '../common/UiTable/UiTable';
 import variables from '../../styles/variables';
+import { getLocaleLabels } from '../../utils/commons';
 
 class PerformanceChart extends React.Component {
   constructor(props) {
@@ -110,7 +111,7 @@ class PerformanceChart extends React.Component {
       return {
         "fortable": (strings["TENANT_TENANTS_" + label] || label),
         "order": d.headerValue,
-        "label": d.headerName + " " + d.headerValue + " : " + (strings["TENANT_TENANTS_" + label] || label),
+        "label": getLocaleLabels(`DSS_${d.headerName}`,strings) + " " + d.headerValue + " : " + (strings["TENANT_TENANTS_" + label] || label),
         "value": plot.value,
         "label2": (strings[plot.label] || plot.label) + ": ",
         "color": (plot.value > 50) ? "#259b24" : "#e54d42"

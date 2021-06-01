@@ -43,7 +43,7 @@ export const fetchLocalisationRequest = (language) => {
 export const convertLabelValue=(label='',strings={})=>{
     switch(label){
         case "Boundary":
-            return 'DSS_TB_City';
+            return getLocaleLabels('DSS_TB_CITY',strings);
         default:
             return getLocaleLabels(`DSS_TB_${label}`,strings);
     }

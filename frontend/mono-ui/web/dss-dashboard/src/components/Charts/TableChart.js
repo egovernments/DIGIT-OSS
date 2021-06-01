@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import APITransport from '../../actions/apitransport/apitransport';
 import getChartOptions from '../../actions/getChartOptions';
 import getPrevFinancialYearObj from '../../actions/getPrevFinancialYearObj';
+import { getLocaleLabels } from '../../utils/commons';
 import Chips from '../common/Chips/Chips';
 import NFormatterFun from '../common/numberFormaterFun';
 import SwitchButton from '../common/tableswitchs/switchButtons';
@@ -482,7 +483,7 @@ class TableChart extends Component {
           {(this.state.data && !_.isEmpty(this.state.filterList, true)) &&
             <div className="row tableFilterChipWrap">
               <div className="filLabel">
-                Filters Applied
+                {getLocaleLabels('Filters Applied')}
               </div>
               {
                 isMobile ?

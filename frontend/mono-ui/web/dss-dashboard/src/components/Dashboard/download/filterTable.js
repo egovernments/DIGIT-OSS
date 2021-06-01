@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import _ from 'lodash';
+import { getLocaleLabels } from "../../../utils/commons";
 
 export default function FilterTable(props) {
     let initState = props.data;
@@ -9,7 +10,7 @@ export default function FilterTable(props) {
 
         // let header = Object.keys(state.filter)
         return ["Filters Applied", "Filter Values"].map((key, index) => {
-            return <th style={{ border: '1px solid' }} key={index}><span style={{ padding: 10 }}>{key.toUpperCase()}</span></th>
+            return <th style={{ border: '1px solid' }} key={index}><span style={{ padding: 10 }}>{getLocaleLabels(key.toUpperCase())}</span></th>
         })
     }
 

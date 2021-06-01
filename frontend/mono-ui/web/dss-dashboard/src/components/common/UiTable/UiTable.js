@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Arrow_Downward from '../../../images/arrows/Arrow_Downward.svg';
 import Arrow_Upward from '../../../images/arrows/Arrow_Upward.svg';
+import { convertLabelValue, getLocaleLabels } from '../../../utils/commons';
 import ExportToExcel from '../ExportToExel';
 import TableSearch from '../TableSearch/TableSearch';
 import UiTableHead from './UiTableHead';
@@ -193,7 +194,7 @@ class EnhancedTable extends React.Component {
     if (rowName === 'Complaint Date') {
       return value && Number(value) && new Date(Number(value)).toLocaleDateString();
     }
-    return value;
+    return getLocaleLabels(value);
   }
 
   getFilter(value) {
@@ -313,7 +314,7 @@ class EnhancedTable extends React.Component {
               component='td' scope='row' data-title={d} >
               {title === 'CUSTOM' ?
                 d === this.props.column ?
-                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
+                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{convertLabelValue(n[d][1])}</span>
                   : (typeof n[d] === 'object') ?
 
                     this.convertToDateString(n[d][1], d)
@@ -330,7 +331,7 @@ class EnhancedTable extends React.Component {
                     </div>
                 :
                 d === this.props.column ?
-                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
+                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{convertLabelValue(n[d][1])}</span>
                   : (typeof n[d] === 'object') ?
                     this.convertToDateString(n[d][1], d)
                     :
