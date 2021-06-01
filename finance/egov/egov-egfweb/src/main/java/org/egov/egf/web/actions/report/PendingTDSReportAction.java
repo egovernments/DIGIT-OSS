@@ -592,7 +592,8 @@ public class PendingTDSReportAction extends BaseFormAction {
 								financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate());
 				if (!deptQuery.equals(""))
 					sqlQuery.setParameter("deptCode", department.getCode(), StringType.INSTANCE);
-				sqlQuery.setParameter("detailKey", detailKey, StringType.INSTANCE);
+			        if (detailKey != null && detailKey != -1)
+				        sqlQuery.setParameter("detailKey", detailKey);
 				result = sqlQuery.list();
                 // Query to get total deduction
 				final StringBuilder qryTolDeduction = new StringBuilder(
@@ -609,9 +610,11 @@ public class PendingTDSReportAction extends BaseFormAction {
 				sqlQuery2.setParameter("glCode", recovery.getChartofaccounts().getId(), LongType.INSTANCE)
 						.setParameter("fundId", fund.getId(), LongType.INSTANCE)
 						.setParameter("date1", asOnDate)
-						.setParameter("date2",financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate())
-						.setParameter("deptCode", department.getCode(), StringType.INSTANCE)
-						.setParameter("detailKey", detailKey, StringType.INSTANCE);
+						.setParameter("date2",financialYearDAO.getFinancialYearByDate(asOnDate).getStartingDate());
+				if (!deptQuery.equals(""))
+				      sqlQuery2.setParameter("deptCode", department.getCode(), StringType.INSTANCE);
+		                if (detailKey != null && detailKey != -1)
+		                      sqlQuery2.setParameter("detailKey", detailKey);
                 resultTolDeduction = sqlQuery2.list();
             }
         } catch (final ApplicationRuntimeException e) {
