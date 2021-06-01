@@ -41,10 +41,21 @@
 }
 
 @media only screen and (max-width: 600px) {
-    .header-logo 
+   
+    .header-logo-right
     {
-        width : 80% !important;
+        width: 50px !important;
+        height: 50px !important;
+        margin-left: 21px !important;
     } 
+    .header-logo-left
+    {
+        margin-right: 8px !important;
+    margin-left: -16px !important;
+    height: 89%;
+    width: 53%;
+    margin-top: -1px !important;
+     } 
     .common-background {
         background-size: cover!important;
         height: 1300px !important;
