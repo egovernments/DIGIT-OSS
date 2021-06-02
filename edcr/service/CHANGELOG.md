@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.0
+
+- Security audit issues fix
+- Cleanup unused code and database tables
+
 ## 1.1.1
 
 - Enhanced Door, to support door widths with color code. The color code is used to identify type of door.
