@@ -21,9 +21,14 @@ import org.egov.tl.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import static org.egov.tl.util.TLConstants.*;
+import static org.egov.tracer.http.HttpUtils.isInterServiceCall;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -158,9 +163,11 @@ public class TradeLicenseService {
      * @param requestInfo The search request's requestInfo
      * @return List of tradeLicense for the given criteria
      */
-    public List<TradeLicense> search(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath){
+    public List<TradeLicense> search(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
         List<TradeLicense> licenses;
-        tlValidator.validateSearch(requestInfo,criteria,serviceFromPath);
+        // allow mobileNumber based search by citizen if interserviceCall
+        boolean isInterServiceCall = isInterServiceCall(headers);
+        tlValidator.validateSearch(requestInfo,criteria,serviceFromPath, isInterServiceCall);
         criteria.setBusinessService(serviceFromPath);
         enrichmentService.enrichSearchCriteriaWithAccountId(requestInfo,criteria);
          if(criteria.getMobileNumber()!=null){
@@ -256,7 +263,8 @@ public class TradeLicenseService {
         TradeLicense licence = tradeLicenseRequest.getLicenses().get(0);
         TradeLicense.ApplicationTypeEnum applicationType = licence.getApplicationType();
         List<TradeLicense> licenceResponse = null;
-        if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL )&& licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE)){
+        if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL ) &&
+                licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE) && licence.getStatus().equals(TLConstants.STATUS_APPROVED)){
             List<TradeLicense> createResponse = create(tradeLicenseRequest, businessServicefromPath);
             licenceResponse =  createResponse;
         }
@@ -329,22 +337,25 @@ public class TradeLicenseService {
     }
 
     public List<TradeLicense> plainSearch(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
-
-        if(criteria.getLimit() == null)
-            criteria.setLimit(config.getDefaultLimit());
-
-        if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
-            criteria.setLimit(config.getMaxSearchLimit());
-
+        List<TradeLicense> licenses;
         List<String> ids = repository.fetchTradeLicenseIds(criteria);
-        if (ids.isEmpty())
+        if(ids.isEmpty())
             return Collections.emptyList();
 
-        TradeLicenseSearchCriteria newCriteria = TradeLicenseSearchCriteria.builder().ids(ids).build();
-        List<TradeLicense> licenses = repository.getPlainLicenseSearch(newCriteria);
-        licenses = enrichmentService.enrichTradeLicenseSearch(licenses,newCriteria,requestInfo);
+        criteria.setIds(ids);
+
+        TradeLicenseSearchCriteria idsCriteria = TradeLicenseSearchCriteria.builder().ids(ids).build();
+
+        licenses = repository.getPlainLicenseSearch(idsCriteria);
+
+        if(!CollectionUtils.isEmpty(licenses))
+            licenses = enrichmentService.enrichTradeLicenseSearch(licenses,criteria,requestInfo);
+
+        log.info("Total Records Returned: "+licenses.size());
+
         return licenses;
     }
+
 
     /**
      *

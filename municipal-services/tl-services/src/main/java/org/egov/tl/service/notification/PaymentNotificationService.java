@@ -3,6 +3,7 @@ package org.egov.tl.service.notification;
 import com.jayway.jsonpath.DocumentContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -30,6 +31,7 @@ import static org.egov.tl.util.TLConstants.*;
 
 
 @Service
+@Slf4j
 public class PaymentNotificationService {
 
 
@@ -77,6 +79,7 @@ public class PaymentNotificationService {
 
     final String receiptNumberKey = "receiptNumber";
 
+    final String payerNameKey = "payerName";
 
     /**
      * Generates sms from the input record and Sends smsRequest to SMSService
@@ -147,7 +150,7 @@ public class PaymentNotificationService {
             }
         }
         catch (Exception e){
-            e.printStackTrace();
+			log.error("NOTIFICATION_ERROR", e);
         }
     }
     /**
@@ -221,7 +224,7 @@ public class PaymentNotificationService {
         else
             message = util.getPayerPaymentMsg(license,valMap,localizationMessages);
 
-        String customizedMsg = message.replace("<1>",valMap.get(paidByKey));
+        String customizedMsg = message.replace("<1>",valMap.get(payerNameKey));
         SMSRequest smsRequest = new SMSRequest(valMap.get(payerMobileNumberKey),customizedMsg);
         return smsRequest;
     }
@@ -244,13 +247,13 @@ public class PaymentNotificationService {
             valMap.put(businessServiceKey,businessServiceList.isEmpty()?null:businessServiceList.get(0));
             valMap.put(consumerCodeKey,consumerCodeList.isEmpty()?null:consumerCodeList.get(0));
             valMap.put(tenantIdKey,context.read("$.Payment.tenantId"));
-            valMap.put(payerMobileNumberKey,mobileNumberList.isEmpty()?null:mobileNumberList.get(0));
+            valMap.put(payerMobileNumberKey,context.read("$.Payment.mobileNumber"));
             valMap.put(paidByKey,context.read("$.Payment.paidBy"));
             valMap.put(amountPaidKey,amountPaidList.isEmpty()?null:String.valueOf(amountPaidList.get(0)));
             valMap.put(receiptNumberKey,receiptNumberList.isEmpty()?null:receiptNumberList.get(0));
+            valMap.put(payerNameKey,context.read("$.Payment.payerName"));
         }
         catch (Exception e){
-            e.printStackTrace();
             throw new CustomException("RECEIPT ERROR","Unable to fetch values from receipt");
         }
         return valMap;

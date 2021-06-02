@@ -3,6 +3,7 @@ package org.egov.pt.service;
 import java.util.HashMap;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.pt.config.PropertyConfiguration;
@@ -12,7 +13,10 @@ import org.egov.pt.models.collection.Bill;
 import org.egov.pt.models.collection.PaymentDetail;
 import org.egov.pt.models.collection.PaymentRequest;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.workflow.ProcessInstanceRequest;
+import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
+import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
@@ -24,10 +28,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
 @Service
+@Slf4j
 public class PaymentUpdateService {
 
 	@Autowired
-	private PropertyService propertyService;
+	private PropertyRepository propertyRepository;
 
 	@Autowired
 	private PropertyConfiguration config;
@@ -43,6 +48,9 @@ public class PaymentUpdateService {
 	
 	@Autowired
 	private PropertyUtil util;
+	
+	@Autowired
+	private NotificationService notifService;
 
 	/**
 	 * Process the message from kafka and updates the status to paid
@@ -60,15 +68,16 @@ public class PaymentUpdateService {
 			String tenantId = paymentRequest.getPayment().getTenantId();
 
 			for (PaymentDetail paymentDetail : paymentDetails) {
+				
+				Boolean isModuleMutation = paymentDetail.getBusinessService().equalsIgnoreCase(config.getMutationWfName());
+				
+				if (isModuleMutation) {
 
-				if (config.getBusinessServiceList().contains(paymentDetail.getBusinessService())
-						&& paymentDetail.getBusinessService().equalsIgnoreCase("PT")) {
-
-					updateWorkflowForPt(requestInfo, tenantId, paymentDetail);
+					updateWorkflowForMutationPayment(requestInfo, tenantId, paymentDetail);
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("KAFKA_PROCESS_ERROR:", e);
 		}
 
 	}
@@ -80,19 +89,20 @@ public class PaymentUpdateService {
 	 * @param tenantId
 	 * @param paymentDetail
 	 */
-	private void updateWorkflowForPt(RequestInfo requestInfo, String tenantId, PaymentDetail paymentDetail) {
+	private void updateWorkflowForMutationPayment(RequestInfo requestInfo, String tenantId, PaymentDetail paymentDetail) {
+		
 		Bill bill  = paymentDetail.getBill();
 		
 		PropertyCriteria criteria = PropertyCriteria.builder()
-				.propertyIds(Sets.newHashSet(bill.getConsumerCode()))
+				.acknowledgementIds(Sets.newHashSet(bill.getConsumerCode()))
 				.tenantId(tenantId)
 				.build();
 				
-		List<Property> properties = propertyService.getPropertiesWithOwnerInfo(criteria, requestInfo);
+		List<Property> properties = propertyRepository.getPropertiesWithOwnerInfo(criteria, requestInfo, true);
 
 		if (CollectionUtils.isEmpty(properties))
 			throw new CustomException("INVALID RECEIPT",
-					"No tradeLicense found for the comsumerCode " + criteria.getPropertyIds());
+					"No Properties found for the comsumerCode " + criteria.getPropertyIds());
 
 		Role role = Role.builder().code("SYSTEM_PAYMENT").build();
 		requestInfo.getUserInfo().getRoles().add(role);
@@ -102,10 +112,14 @@ public class PaymentUpdateService {
 			PropertyRequest updateRequest = PropertyRequest.builder().requestInfo(requestInfo)
 					.property(property).build();
 			
-			String status = wfIntegrator.callWorkFlow(util.getProcessInstanceForPayment(updateRequest));
-			updateRequest.getProperty().setStatus(Status.fromValue(status));
+			ProcessInstanceRequest wfRequest = util.getProcessInstanceForMutationPayment(updateRequest);
 			
-			producer.push(config.getUpdatePropertyTopic(), updateRequest);
+			State state = wfIntegrator.callWorkFlow(wfRequest);
+			property.setWorkflow(wfRequest.getProcessInstances().get(0));
+			property.getWorkflow().setState(state);
+			updateRequest.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
+			producer.push(config.getUpdatePropertyTopic(), updateRequest);			
+			notifService.sendNotificationForMtPayment(updateRequest, bill.getTotalAmount());
 		});
 	}
 

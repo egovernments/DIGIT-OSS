@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -46,8 +47,13 @@ public class UserEventsValidator {
 		log.info("Validating the request......");
 		Map<String, String> errorMap = new HashMap<>();
 		validateRI(request.getRequestInfo(), errorMap);
+		Set<String> eventTenants = request.getEvents().stream().map(Event :: getTenantId).collect(Collectors.toSet());
+		if(eventTenants.size() != 1) {
+			throw new CustomException("MEN_DIFF_TENANT_ERROR", "All events must belong to the same tenant");
+		}
+		Map<String, List<String>> eventMaster = mdmsService.fetchEventMasters(request.getRequestInfo(), request.getEvents().get(0).getTenantId());
 		request.getEvents().forEach(event -> {
-			validateEventData(request.getRequestInfo(), event, errorMap, isCreate);
+			validateEventData(request.getRequestInfo(), event, errorMap, eventMaster, isCreate);
 		});
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);
@@ -197,7 +203,7 @@ public class UserEventsValidator {
 	 * @param event
 	 * @param errorMap
 	 */
-	private void validateEventData(RequestInfo requestInfo, Event event, Map<String, String> errorMap, Boolean isCreate) {
+	private void validateEventData(RequestInfo requestInfo, Event event, Map<String, String> errorMap, Map<String, List<String>> eventMaster, Boolean isCreate) {
 		if (null != event.getEventDetails()) {
 			if(null !=  event.getEventDetails().getFromDate() && null != event.getEventDetails().getToDate()) {
 				if (event.getEventDetails().getFromDate() > event.getEventDetails().getToDate()) {
@@ -240,7 +246,7 @@ public class UserEventsValidator {
 			}
 		}
 
-		validateMDMSData(requestInfo, event, errorMap);
+		validateMDMSData(requestInfo, event, errorMap, eventMaster);
 	}
 
 	/**
@@ -250,8 +256,7 @@ public class UserEventsValidator {
 	 * @param event
 	 * @param errorMap
 	 */
-	private void validateMDMSData(RequestInfo requestInfo, Event event, Map<String, String> errorMap) {
-		Map<String, List<String>> eventMaster = mdmsService.fetchEventMasters(requestInfo, event.getTenantId());
+	private void validateMDMSData(RequestInfo requestInfo, Event event, Map<String, String> errorMap, Map<String, List<String>> eventMaster) {
 		List<String> eventTypes = eventMaster.get(UserEventsConstants.MEN_MDMS_EVENTMASTER_CODE);
 		List<String> eventCategories = eventMaster.get(UserEventsConstants.MEN_MDMS_EVENTCATEGORY_MASTER_CODE);
 		if (!CollectionUtils.isEmpty(eventTypes) && !CollectionUtils.isEmpty(eventCategories)) {

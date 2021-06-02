@@ -1,61 +1,74 @@
 package org.egov.pt.models;
 
-import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
-import org.egov.pt.models.enums.OccupancyType;
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Unit
  */
 
-@Data
-@AllArgsConstructor
+@ToString
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Unit   {
-	
-        @JsonProperty("id")
-        private String id;
+@EqualsAndHashCode(of = { "id" })
+public class Unit {
 
-        @JsonProperty("floorNo")
-        private String floorNo;
+	@JsonProperty("id")
+	private String id;
 
-        @JsonProperty("unitArea")
-        @NotNull
-        private Double unitArea;
+	@JsonProperty("tenantId")
+	private String tenantId;
 
-        @JsonProperty("usageCategory")
-        @NotNull
-        private String usageCategory;
+	@Max(value = 500)
+	@JsonProperty("floorNo")
+	private Integer floorNo;
 
-        @JsonProperty("occupancyType")
-        @NotNull
-        private OccupancyType occupancyType;
+	@JsonProperty("unitType")
+	private String unitType;
 
-        @JsonProperty("occupancyDate")
-        @NotNull
-        private Long occupancyDate;
+	@JsonProperty("usageCategory")
+	@NotNull
+	private String usageCategory;
 
-        @JsonProperty("constructionType")
-        @NotNull
-        private String constructionType;
-        
-        @JsonProperty("active")
-        private Boolean active;
+	@JsonProperty("occupancyType")
+	private String occupancyType;
 
-        @JsonProperty("arv")
-        private Double arv;
-        
-        @JsonProperty("auditDetails")
-        private AuditDetails auditDetails;
+	@JsonProperty("active")
+	private Boolean active;
 
+	@JsonProperty("occupancyDate")
+	private Long occupancyDate;
+
+	@Valid
+	@NotNull
+	@JsonProperty("constructionDetail")
+	private ConstructionDetail constructionDetail;
+
+	@JsonProperty("additionalDetails")
+	private Object additionalDetails;
+
+	@JsonProperty("auditDetails")
+	private AuditDetails auditDetails;
+
+	@Digits(integer = 8, fraction = 2)
+	@JsonProperty("arv")
+	private BigDecimal arv;
 
 }
-

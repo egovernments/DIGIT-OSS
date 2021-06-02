@@ -4,28 +4,41 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@AllArgsConstructor
+/**
+ * Institution
+ */
+
+@ToString
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Institution {
+
+	@JsonProperty("id")
+	private String id;
+
+	@JsonProperty("tenantId")
+	private String tenantId;
 	
-        @JsonProperty("id")
-        private String id ;
+	@JsonProperty("name")	
+	private String name;
 
-        @JsonProperty("tenantId")
-        private String tenantId ;
+	@JsonProperty("type")
+	private String type;
 
-        @JsonProperty("type")
-        private String type;
-        
-        @JsonProperty("name")
-        private String name;
+	@JsonProperty("designation")
+	private String designation;
 
-        @JsonProperty("designation")
-        private String designation ;
+	@JsonProperty("nameOfAuthorizedPerson")
+	private String nameOfAuthorizedPerson;
+
+	@JsonProperty("additionalDetails")
+	private Object additionalDetails;
 }
-

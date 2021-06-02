@@ -48,7 +48,7 @@ public class TLRenewalCalculation {
         TaxHeadEstimate estimatePenalty = new TaxHeadEstimate();
         List<TaxHeadEstimate> estimateList = new ArrayList<>();
         String tenantId = calulationCriteria.getTenantId();
-        setPropertyMasterValues(requestInfo, tenantId,timeBasedExemptionMasterMap);
+        setTradeLicenseMasterValues(requestInfo, tenantId,timeBasedExemptionMasterMap);
         String financialyear = calulationCriteria.getTradelicense().getFinancialYear();
 
         BigDecimal rebate = getRebate(taxAmt, financialyear,timeBasedExemptionMasterMap.get(TLCalculatorConstants.REBATE_MASTER));
@@ -85,19 +85,15 @@ public class TLRenewalCalculation {
 
         BigDecimal rebateAmt = BigDecimal.ZERO;
         Map<String, Object> rebate = getApplicableMaster(financialyear, rebateMasterList);
-        System.out.println("Rebate Object---->"+rebate);
         if (null == rebate) return rebateAmt;
 
         String[] time = ((String) rebate.get(TLCalculatorConstants.ENDING_DATE_APPLICABLES)).split("/");
         Calendar cal = Calendar.getInstance();
         setDateToCalendar(financialyear, time, cal);
 
-        System.out.println("cal.getTimeInMillis--->"+cal.getTimeInMillis());
-        System.out.println("System.currentTimeMillis--->"+System.currentTimeMillis());
-
         if (cal.getTimeInMillis() > System.currentTimeMillis())
             rebateAmt = calculateApplicables(taxAmt, rebate);
-        System.out.println("rebateAmt rate--->"+rebateAmt);
+
         return rebateAmt;
     }
 
@@ -106,16 +102,16 @@ public class TLRenewalCalculation {
      * Returns the Amount of penalty that has to be applied on the given tax amount for the given period
      *
      * @param taxAmt
-     * @param assessmentYear
+     * @param financialYear
      * @return
      */
-    public BigDecimal getPenalty(BigDecimal taxAmt, String assessmentYear, JSONArray penaltyMasterList) {
+    public BigDecimal getPenalty(BigDecimal taxAmt, String financialYear, JSONArray penaltyMasterList) {
 
         BigDecimal penaltyAmt = BigDecimal.ZERO;
-        Map<String, Object> penalty = getApplicableMaster(assessmentYear, penaltyMasterList);
+        Map<String, Object> penalty = getApplicableMaster(financialYear, penaltyMasterList);
         if (null == penalty) return penaltyAmt;
 
-        String[] time = getStartTime(assessmentYear,penalty);
+        String[] time = getStartTime(financialYear,penalty);
         Calendar cal = Calendar.getInstance();
         setDateToCalendar(time, cal);
         Long currentIST = System.currentTimeMillis()+TLCalculatorConstants.TIMEZONE_OFFSET;
@@ -127,23 +123,22 @@ public class TLRenewalCalculation {
     }
 
     /**
-     * Method to enrich the property Master data Map
+     * Method to call MDMS service to get Rebate and Penalty file data
      *
      * @param requestInfo
      * @param tenantId
      */
-    public void setPropertyMasterValues(RequestInfo requestInfo, String tenantId, Map<String, JSONArray> timeBasedExemptionMasterMap) {
+    public void setTradeLicenseMasterValues(RequestInfo requestInfo, String tenantId, Map<String, JSONArray> timeBasedExemptionMasterMap) {
 
         MdmsResponse response = mapper.convertValue(repository.fetchResult(calculatorUtils.getMdmsSearchUrl(),
                 getPropertyModuleRequest(requestInfo, tenantId)), MdmsResponse.class);
         Map<String, JSONArray> res = response.getMdmsRes().get(MDMS_TRADELICENSE);
-        System.out.println("MDMS--->"+res.toString());
         for (Map.Entry<String, JSONArray> entry : res.entrySet())
             timeBasedExemptionMasterMap.put(entry.getKey(), entry.getValue());
     }
 
     /**
-     * Methods provides all the usage category master for property tax module
+     * Methods to set MDMS criteria requirement for search
      */
     public MdmsCriteriaReq getPropertyModuleRequest(RequestInfo requestInfo, String tenantId) {
 
@@ -163,17 +158,17 @@ public class TLRenewalCalculation {
      *
      * filters the Input based on their effective financial year and starting day
      *
-     * If an object is found with effective year same as assessment year that master entity will be returned
+     * If an object is found with effective year same as financial year that master entity will be returned
      *
-     * If exact match is not found then the entity with latest effective financial year which should be lesser than the assessment year
+     * If exact match is not found then the entity with latest effective financial year which should be lesser than the financial year
      *
-     * NOTE : applicable points to single object  out of all the entries for a given master which fits the period of the property being assessed
      *
-     * @param assessmentYear
+     *
+     * @param financalYear
      * @param masterList
      */
     @SuppressWarnings("unchecked")
-    public Map<String, Object> getApplicableMaster(String assessmentYear, List<Object> masterList) {
+    public Map<String, Object> getApplicableMaster(String financalYear, List<Object> masterList) {
 
         Map<String, Object> objToBeReturned = null;
         String maxYearFromTheList = "0";
@@ -184,17 +179,17 @@ public class TLRenewalCalculation {
             Map<String, Object> objMap = (Map<String, Object>) object;
             String objFinYear = ((String) objMap.get(TLCalculatorConstants.FROMFY_FIELD_NAME)).split("-")[0];
             if(!objMap.containsKey(TLCalculatorConstants.STARTING_DATE_APPLICABLES)){
-                if (objFinYear.compareTo(assessmentYear.split("-")[0]) == 0)
+                if (objFinYear.compareTo(financalYear.split("-")[0]) == 0)
                     return  objMap;
 
-                else if (assessmentYear.split("-")[0].compareTo(objFinYear) > 0 && maxYearFromTheList.compareTo(objFinYear) <= 0) {
+                else if (financalYear.split("-")[0].compareTo(objFinYear) > 0 && maxYearFromTheList.compareTo(objFinYear) <= 0) {
                     maxYearFromTheList = objFinYear;
                     objToBeReturned = objMap;
                 }
             }
             else{
                 String objStartDay = ((String) objMap.get(TLCalculatorConstants.STARTING_DATE_APPLICABLES));
-                if (assessmentYear.split("-")[0].compareTo(objFinYear) >= 0 && maxYearFromTheList.compareTo(objFinYear) <= 0) {
+                if (financalYear.split("-")[0].compareTo(objFinYear) >= 0 && maxYearFromTheList.compareTo(objFinYear) <= 0) {
                     maxYearFromTheList = objFinYear;
                     Long startTime = getStartDayInMillis(objStartDay);
                     Long currentTime = System.currentTimeMillis();
@@ -231,17 +226,17 @@ public class TLRenewalCalculation {
     /**
      * Sets the date in to calendar based on the month and date value present in the time array
      *
-     * @param assessmentYear
+     * @param financalYear
      * @param time
      * @param cal
      */
-    private void setDateToCalendar(String assessmentYear, String[] time, Calendar cal) {
+    private void setDateToCalendar(String financalYear, String[] time, Calendar cal) {
 
         cal.clear();
         Integer day = Integer.valueOf(time[0]);
         Integer month = Integer.valueOf(time[1])-1;
         // One is subtracted because calender reads january as 0
-        Integer year = Integer.valueOf(assessmentYear.split("-")[0]);
+        Integer year = Integer.valueOf( financalYear.split("-")[0]);
         if (month < 3) year += 1;
         cal.set(year, month, day);
     }
@@ -296,18 +291,18 @@ public class TLRenewalCalculation {
 
     /**
      * Fetch the fromFY and take the starting year of financialYear
-     * calculate the difference between the start of assessment financial year and fromFY
+     * calculate the difference between the start of Tl financial year and fromFY
      * Add the difference in year to the year in the starting day
-     * eg: Assessment year = 2017-18 and interestMap fetched from master due to fallback have fromFY = 2015-16
+     * eg: financial year = 2017-18 and interestMap fetched from master due to fallback have fromFY = 2015-16
      * and startingDay = 01/04/2016. Then diff = 2017-2015 = 2
      * Therefore the starting day will be modified from 01/04/2016 to 01/04/2018
-     * @param assessmentYear Year of the assessment
+     * @param financialYear Year of the TL
      * @param interestMap The applicable master data
      * @return list of string with 0'th element as day, 1'st as month and 2'nd as year
      */
-    private String[] getStartTime(String assessmentYear,Map<String, Object> interestMap){
+    private String[] getStartTime(String financialYear,Map<String, Object> interestMap){
         String financialYearOfApplicableEntry = ((String) interestMap.get(TLCalculatorConstants.FROMFY_FIELD_NAME)).split("-")[0];
-        Integer diffInYear = Integer.valueOf(assessmentYear.split("-")[0]) - Integer.valueOf(financialYearOfApplicableEntry);
+        Integer diffInYear = Integer.valueOf(financialYear.split("-")[0]) - Integer.valueOf(financialYearOfApplicableEntry);
         String startDay = ((String) interestMap.get(TLCalculatorConstants.STARTING_DATE_APPLICABLES));
         Integer yearOfStartDayInApplicableEntry = Integer.valueOf((startDay.split("/")[2]));
         startDay = startDay.replace(String.valueOf(yearOfStartDayInApplicableEntry),String.valueOf(yearOfStartDayInApplicableEntry+diffInYear));

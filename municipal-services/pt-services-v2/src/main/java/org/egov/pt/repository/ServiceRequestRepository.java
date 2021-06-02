@@ -33,6 +33,20 @@ public class ServiceRequestRepository {
 			log.error("External Service threw an Exception: ",e);
 			throw new ServiceCallException(e.getResponseBodyAsString());
 		}catch(Exception e) {
+			log.error("Exception while fetching from external service: ",e);
+		}
+		
+		return response;
+	}
+	
+	public String getShortenedURL(StringBuilder uri, Object request) {
+		String response = null;
+		try {
+			response = restTemplate.postForObject(uri.toString(), request, String.class);
+		}catch(HttpClientErrorException e) {
+			log.error("External Service threw an Exception: ",e);
+			throw new ServiceCallException(e.getResponseBodyAsString());
+		}catch(Exception e) {
 			log.error("Exception while fetching from searcher: ",e);
 		}
 		

@@ -97,6 +97,7 @@ public class BillingslabValidator {
 		billingSlabReq.getBillingSlab().parallelStream().forEach(slab -> {
 			BillingSlabSearchCriteria criteria = BillingSlabSearchCriteria.builder().tenantId(slab.getTenantId()).accessoryCategory(slab.getAccessoryCategory())
 					.tradeType(slab.getTradeType())
+					.applicationType(slab.getApplicationType())
 					.licenseType(null == slab.getLicenseType() ? null : slab.getLicenseType().toString())
 					.structureType(slab.getStructureType()).uom(slab.getUom())
 					.type(null == slab.getType() ? null : slab.getType().toString())

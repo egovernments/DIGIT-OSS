@@ -3,6 +3,7 @@ package org.egov.tl.util;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
@@ -11,7 +12,6 @@ import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -30,22 +30,17 @@ public class TLRenewalNotificationUtil {
 
     private Producer producer;
     
-	@Value("${egov.tl.citizen.search}")
-	private String tlCitizenSearchUrl;
+    private NotificationUtil notificationUtil;
 
     @Autowired
-    private ShortUrlUtil shortUrlUtil;
-    
-	@Value("${egov.common.pay}")
-	private String tlCommonPayUrl;
-
-    @Autowired
-    public TLRenewalNotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository,
-                            Producer producer) {
+    public TLRenewalNotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, NotificationUtil notificationUtil) {
         this.config = config;
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
+        this.notificationUtil = notificationUtil;
     }
+
+
 
     final String receiptNumberKey = "receiptNumber";
 
@@ -176,6 +171,9 @@ public class TLRenewalNotificationUtil {
             tenantId = tenantId.split("\\.")[0];
 
         String locale = NOTIFICATION_LOCALE;
+        // if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
+        //     locale = requestInfo.getMsgId().split("\\|")[1];
+
         StringBuilder uri = new StringBuilder();
         uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
                 .append(config.getLocalizationSearchEndpoint()).append("?").append("locale=").append(locale)
@@ -261,17 +259,21 @@ public class TLRenewalNotificationUtil {
      */
     private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
         message = message.replace("<2>", license.getTradeName());
-        String applicationNumber = license.getApplicationNumber();
-		message = message.replace("<3>", applicationNumber);
-        message = message.replace("<4>", amountToBePaid.toString());
-        
-        String shortUrl = shortUrlUtil.getShortUrl(tlCommonPayUrl, applicationNumber,
-				license.getTenantId(),TLConstants.TL_BUSINESS_SERVICE);
-
-		message = message.replace("<5>", shortUrl);
-		
+        message = message.replace("<3>", license.getApplicationNumber());
         String date = epochToDate(license.getValidTo());
-        message = message.replace("<6>", date);
+        message = message.replace("<4>", date);
+
+        String UIHost = config.getUiAppHost();
+
+        String paymentPath = config.getPayLinkSMS();
+        paymentPath = paymentPath.replace("$consumercode",license.getApplicationNumber());
+        paymentPath = paymentPath.replace("$tenantId",license.getTenantId());
+        paymentPath = paymentPath.replace("$businessservice",businessService_TL);
+
+        String finalPath = UIHost + paymentPath;
+
+        message = message.replace(PAYMENT_LINK_PLACEHOLDER,notificationUtil.getShortenedUrl(finalPath));
+
         return message;
     }
 

@@ -193,5 +193,8 @@ public class  TradeLicense   {
         @Size(max=128)
         private String comment;
 
+        @JsonProperty("fileStoreId")
+        private String fileStoreId = null;
+
 }
 

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Property can be created from different channels Eg. System (properties created by ULB officials), CFC Counter (From citizen faciliation counters) etc. Here we are defining some known channels, there can be more client to client.
+ * constructionDetail details can be created from different channels Eg. System (properties created by ULB officials), CFC Counter (From citizen faciliation counters) etc. Here we are defining some known channels, there can be more client to client.
  */
 public enum Channel {
-  
+	
   SYSTEM("SYSTEM"),
   
   CFC_COUNTER("CFC_COUNTER"),
@@ -40,4 +40,3 @@ public enum Channel {
     return null;
   }
 }
-

@@ -1,0 +1,48 @@
+serviceMaps:
+  serviceName: FIRENOC_CALCULATOR
+  mappings:
+    - version: 1.0
+      name: firenoc-calculator
+      description: Persists billing slab details in the table
+      fromTopic: update-firenoc-calculator-billingslab
+      isTransaction: true
+      queryMaps:
+        - query: DELETE FROM eg_firenoc_billingslab
+
+          basePath: BillingSlabs.*
+          jsonMaps:
+            - jsonPath: $.BillingSlabs.*.id
+
+        - query: INSERT INTO eg_firenoc_billingslab (id, tenantid, isactive ,	firenoctype, buildingusagetype, calculationtype, uom, fromuom, touom, fromdate, todate, rate, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+
+          basePath: BillingSlabs.*
+          jsonMaps:
+            - jsonPath: $.BillingSlabs.*.id
+
+            - jsonPath: $.BillingSlabs.*.tenantId
+
+            - jsonPath: $.BillingSlabs.*.isActive
+
+            - jsonPath: $.BillingSlabs.*.fireNOCType
+
+            - jsonPath: $.BillingSlabs.*.buildingUsageType
+
+            - jsonPath: $.BillingSlabs.*.calculationType
+
+            - jsonPath: $.BillingSlabs.*.uom
+
+            - jsonPath: $.BillingSlabs.*.fromUom
+
+            - jsonPath: $.BillingSlabs.*.toUom
+
+            - jsonPath: $.BillingSlabs.*.fromDate
+
+            - jsonPath: $.BillingSlabs.*.toDate
+
+            - jsonPath: $.BillingSlabs.*.auditDetails.createdBy
+
+            - jsonPath: $.BillingSlabs.*.auditDetails.createdDate
+
+            - jsonPath: $.BillingSlabs.*.auditDetails.lastModifiedBy
+
+            - jsonPath: $.BillingSlabs.*.auditDetails.lastModifiedDate

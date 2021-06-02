@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "06d9f82a-c22f-4783-b102-0d5f4fc2c2f0",
+		"name": "Dev-Water-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://egov-micro-dev.egovernments.org/ws-services/wc/_search?connectionNumber=WS/107/2019-20/060069&tenantId=pb.amritsar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"action\": \"\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"authToken\": \"a0791dc2-8776-4bea-82d7-660fe934727e\",\n    \"userInfo\": {\n      \"id\": 24226,\n      \"uuid\": \"11b0e02b-0145-4de2-bc42-c97b96264807\",\n      \"userName\": \"amr001\",\n      \"name\": \"leela\",\n      \"mobileNumber\": \"9814424443\",\n      \"emailId\": \"leela@llgmail.com\",\n      \"locale\": null,\n      \"type\": \"EMPLOYEE\",\n      \"roles\": [\n      \t{\n          \"name\": \"CITIZEN\",\n          \"code\": \"CITIZEN\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Document Verifier\",\n          \"code\": \"WS_DOC_VERIFIER\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Approver\",\n          \"code\": \"WS_APPROVER\",\n          \"tenantId\": \"pb\"\n        },\n         {\n          \"name\": \"WS CLARK\",\n          \"code\": \"WS_CLERK\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"Employee\",\n          \"code\": \"EMPLOYEE\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Counter Employee\",\n          \"code\": \"WS_CEMP\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Field Inspector\",\n          \"code\": \"WS_FIELD_INSPECTOR\",\n          \"tenantId\": \"pb\"\n        }\n        ,\n        {\n          \"name\": \"WS Junior Engineer\",\n          \"code\": \"WS_JUNIOR_ENGINEER\",\n          \"tenantId\": \"pb\"\n        }\n      ],\n      \"active\": true,\n      \"tenantId\": \"pb\"\n    }\n  }}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/ws-services/wc/_search?applicationNumber=WS_AP/107/2020-21/000298&tenantId=pb.amritsar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"ws-services",
+						"wc",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "mobileNumber",
+							"value": "6360807028",
+							"disabled": true
+						},
+						{
+							"key": "propertyId",
+							"value": "PB-PT-2020-02-28-019538",
+							"disabled": true
+						},
+						{
+							"key": "applicationStatus",
+							"value": "INITIATED",
+							"disabled": true
+						},
+						{
+							"key": "fromDate",
+							"value": "1583146870000",
+							"disabled": true
+						},
+						{
+							"key": "toDate",
+							"value": "1583232968000",
+							"disabled": true
+						},
+						{
+							"key": "applicationNumber",
+							"value": "WS_AP/107/2020-21/000298"
+						},
+						{
+							"key": "tenantId",
+							"value": "pb.amritsar"
+						}
+					]
+				},
+				"description": "Water Search API"
+			},
+			"response": []
+		},
+		{
+			"name": "https://egov-micro-dev.egovernments.org/ws-services/wc/_create",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e0250c84-e0fa-4c9a-9720-39dceb8879bf",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"action\": \"\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"authToken\": \"0f5153ff-cf94-4f73-991b-4c203b22333b\",\n    \"userInfo\": {\n      \"id\": 24226,\n      \"uuid\": \"11b0e02b-0145-4de2-bc42-c97b96264807\",\n      \"userName\": \"amr001\",\n      \"name\": \"leela\",\n      \"mobileNumber\": \"9814424443\",\n      \"emailId\": \"leela@llgmail.com\",\n      \"locale\": null,\n      \"type\": \"EMPLOYEE\",\n      \"roles\": [\n      \t{\n          \"name\": \"CITIZEN\",\n          \"code\": \"CITIZEN\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Document Verifier\",\n          \"code\": \"WS_DOC_VERIFIER\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Approver\",\n          \"code\": \"WS_APPROVER\",\n          \"tenantId\": \"pb\"\n        },\n         {\n          \"name\": \"WS CLARK\",\n          \"code\": \"WS_CLERK\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"Employee\",\n          \"code\": \"EMPLOYEE\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Counter Employee\",\n          \"code\": \"WS_CEMP\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Field Inspector\",\n          \"code\": \"WS_FIELD_INSPECTOR\",\n          \"tenantId\": \"pb\"\n        }\n        ,\n        {\n          \"name\": \"WS Junior Engineer\",\n          \"code\": \"WS_JUNIOR_ENGINEER\",\n          \"tenantId\": \"pb\"\n        }\n      ],\n      \"active\": true,\n      \"tenantId\": \"pb.amritsar\"\n    }\n  },\n  \"WaterConnection\": {\n  \t\"propertyId\":\"78322cb7-82f7-4b54-96c0-f101ce166915\",\n\t\"tenantId\":\"pb.amritsar\",\n    \"action\": \"INITIATE\",\n    \"documents\": null,\n    \"proposedTaps\": \"10\",\n    \"proposedPipeSize\": 10,\n    \"processInstance\": {\n    \t\"action\":\"INITIATE\"\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/ws-services/wc/_create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"ws-services",
+						"wc",
+						"_create"
+					],
+					"query": [
+						{
+							"key": "connectionNumber",
+							"value": "Con_1002",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "Active",
+							"disabled": true
+						},
+						{
+							"key": "ids",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "Create Water Connection API"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8090/ws-services/wc/_update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": 1513579888683,\n    \"ver\": \".01\",\n    \"authToken\": \"a0791dc2-8776-4bea-82d7-660fe934727e\",\n    \"userInfo\": {\n      \"id\": 24226,\n      \"uuid\": \"11b0e02b-0145-4de2-bc42-c97b96264807\",\n      \"userName\": \"amr001\",\n      \"name\": \"leela\",\n      \"mobileNumber\": \"9814424443\",\n      \"emailId\": \"leela@llgmail.com\",\n      \"locale\": null,\n      \"type\": \"EMPLOYEE\",\n      \"roles\": [\n        {\n          \"name\": \"CITIZEN\",\n          \"code\": \"CITIZEN\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Document Verifier\",\n          \"code\": \"WS_DOC_VERIFIER\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Approver\",\n          \"code\": \"WS_APPROVER\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS CLARK\",\n          \"code\": \"WS_CLERK\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"Employee\",\n          \"code\": \"EMPLOYEE\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Counter Employee\",\n          \"code\": \"WS_CEMP\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Field Inspector\",\n          \"code\": \"WS_FIELD_INSPECTOR\",\n          \"tenantId\": \"pb\"\n        },\n        {\n          \"name\": \"WS Junior Engineer\",\n          \"code\": \"WS_JUNIOR_ENGINEER\",\n          \"tenantId\": \"pb\"\n        }\n      ],\n      \"active\": true,\n      \"tenantId\": \"pb.amritsar\"\n    }\n  },\n  \"WaterConnection\":  {\n           \"id\": \"da4ea496-778c-4248-915d-0fe05546cc87\",\n           \t\"propertyId\":\"78322cb7-82f7-4b54-96c0-f101ce166915\",\n           \t\"tenantid\":\"pb.amritsar\",\n            \"applicationNo\": \"WS_AP/107/2020-21/000298\",\n            \"applicationStatus\": \"PENDING_FOR_DOCUMENT_VERIFICATION\",\n            \"status\": \"Active\",\n            \"connectionNo\": null,\n            \"oldConnectionNo\": null,\n            \"documents\": [\n                {\n                    \"id\": \"e074f53d-7c84-49b8-aa09-1bc8d4d39a03\",\n                    \"documentType\": \"OWNER.IDENTITYPROOF.AADHAAR\",\n                    \"fileStoreId\": \"e104973c-e1f8-4f2f-8873-d9037bbeaf1f\",\n                    \"documentUid\": \"e074f53d-7c84-49b8-aa09-1bc8d4d39a03\",\n                    \"auditDetails\": null,\n                    \"status\": \"ACTIVE\"\n                },\n                {\n                    \"id\": \"7ce43835-0303-4082-872a-7e75e4db65aa\",\n                    \"documentType\": \"OWNER.ADDRESSPROOF.DL\",\n                    \"fileStoreId\": \"fd473188-0b2b-49c5-b0fc-4cf768a24c43\",\n                    \"documentUid\": \"7ce43835-0303-4082-872a-7e75e4db65aa\",\n                    \"auditDetails\": null,\n                    \"status\": \"ACTIVE\"\n                },\n                {\n                    \"id\": \"201f84c1-8855-4918-add4-2434e09162de\",\n                    \"documentType\": \"ELECTRICITY_BILL\",\n                    \"fileStoreId\": \"34737426-e728-4dd5-a612-9a79477ac690\",\n                    \"documentUid\": \"201f84c1-8855-4918-add4-2434e09162de\",\n                    \"auditDetails\": null,\n                    \"status\": \"ACTIVE\"\n                },\n                {\n                    \"id\": \"b003ae5c-3723-472e-93d1-7faa8bd2c0a2\",\n                    \"documentType\": \"PLUMBER_REPORT_DRAWING\",\n                    \"fileStoreId\": \"8c712e7c-a149-4f19-a2ae-0377b8de770e\",\n                    \"documentUid\": \"b003ae5c-3723-472e-93d1-7faa8bd2c0a2\",\n                    \"auditDetails\": null,\n                    \"status\": \"ACTIVE\"\n                }\n            ],\n            \"plumberInfo\": [\n                {\n                    \"name\": null,\n                    \"licenseNo\": \"wertfg\",\n                    \"mobileNumber\": \"9080098000\",\n                    \"gender\": \"Male\",\n                    \"fatherOrHusbandName\": null,\n                    \"correspondenceAddress\": null,\n                    \"relationship\": null,\n                    \"additionalDetails\": null\n                }\n            ],\n            \"roadType\": \"BERMCUTTINGKATCHA\",\n            \"roadCuttingArea\": 12.0,\n             \"processInstance\": {\n         \t\"action\":\"ACTIVATE_CONNECTION\"\n\t\t\t },\n            \"connectionCategory\": null,\n            \"rainWaterHarvesting\": false,\n            \"connectionType\": \"Metered\",\n            \"waterSource\": \"GROUND.WELL\",\n            \"meterId\": \"Meter-12090\",\n            \"meterInstallationDate\": 1583346599000,\n            \"proposedPipeSize\": 0.25,\n            \"proposedTaps\": 2,\n            \"pipeSize\": 0.75,\n            \"noOfTaps\": 215,\n            \"waterSubSource\": \"HANDPUMP\",\n            \"connectionExecutionDate\": 1583319149000,\n            \"additionalDetails\": {\n                \"initialMeterReading\": 123.90,\n                \"detailsProvidedBy\": \"SELF\"\n            }\n       \n        }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/ws-services/wc/_update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"ws-services",
+						"wc",
+						"_update"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "e1a9aa1b-3f4c-46c5-82cd-0b489d80973f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "cc164796-4fa5-407a-8957-442450ca8da7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
