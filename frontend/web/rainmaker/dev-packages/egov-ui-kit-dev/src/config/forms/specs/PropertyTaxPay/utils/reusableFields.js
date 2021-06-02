@@ -661,7 +661,7 @@ export const beforeInitForm = {
 
 
 
-          if (subUsageTypeVal !== undefined) {
+         if (subUsageTypeVal && subUsageTypeVal.length>0) {
             set(action, "form.fields.subUsageType.hideField", false);
             let subUsageMinor =
               prepareDropDownData(get(state, "common.generalMDMSDataById.UsageCategoryMinor"), true);
@@ -691,8 +691,9 @@ export const beforeInitForm = {
 
             }
           } else {
+             /* 
             set(action, "form.fields.subUsageType.hideField", true);
-            set(action, "form.fields.innerDimensions.hideField", false);
+            set(action, "form.fields.innerDimensions.hideField", false); */
           }
         }
       } else {
