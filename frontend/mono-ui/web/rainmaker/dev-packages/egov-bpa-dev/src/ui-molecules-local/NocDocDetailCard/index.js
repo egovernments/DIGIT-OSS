@@ -230,7 +230,9 @@ class NocDocDetailCard extends Component {
                 variant="subtitle1"
                 style={{ fontWeight: "bold", fontSize: "12px" }}
               >
-                No Documents Uploaded
+                <LabelContainer
+                  labelKey="BPA_NO_DOCUMENTS_UPLOADED_LABEL"
+                />
               </Typography>
             ) : (
               ""
@@ -245,7 +247,9 @@ class NocDocDetailCard extends Component {
                 style={{ float: "right" }}
                 onClick={() => this.props.toggleEditClick(docIndex)}
               >
-                Upload
+                <LabelContainer
+                  labelKey="BPA_UPLOAD_LABEL"
+                />
               </Button>
             )}
           </Grid>
@@ -262,7 +266,9 @@ class NocDocDetailCard extends Component {
                     gutterBottom
                     style={titleStyle}
                   >
-                    File
+                  <LabelContainer
+                    labelKey="BPA_FILE_LABEL"
+                  />
                   </Typography>
                   <LightTooltip title={!doc.fileName ? "" : doc.fileName} arrow>
                   <div style={fontStyle}>
@@ -276,11 +282,13 @@ class NocDocDetailCard extends Component {
                     gutterBottom
                     style={titleStyle}
                   >
-                    Uploaded By
+                  <LabelContainer
+                    labelKey="BPA_UPLOADED_BY_LABEL"
+                  />
                   </Typography>
-                  <LightTooltip title={!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : doc.additionalDetails.uploadedBy} arrow>
+                  <LightTooltip title={!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : <LabelContainer labelKey={doc.additionalDetails.uploadedBy} /> } arrow>
                   <div style={fontStyle}>
-                    {!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : doc.additionalDetails.uploadedBy}
+                    {!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : <LabelContainer labelKey={doc.additionalDetails.uploadedBy} />}
                   </div>
                   </LightTooltip>
                 </Grid>
@@ -290,7 +298,9 @@ class NocDocDetailCard extends Component {
                     gutterBottom
                     style={titleStyle}
                   >
-                    Uploaded Date
+                  <LabelContainer
+                    labelKey="BPA_UPLOADED_DATE_LABEL"
+                  />
                   </Typography>
                   
                   <div style={fontStyle}>
@@ -304,7 +314,9 @@ class NocDocDetailCard extends Component {
                       window.open(doc.link, "_blank");
                     }}
                   >
-                    View File
+                    <LabelContainer
+                      labelKey="BPA_VIEW_FILE_LABEL"
+                    />
                   </Button>
                 </Grid>
               </React.Fragment>)

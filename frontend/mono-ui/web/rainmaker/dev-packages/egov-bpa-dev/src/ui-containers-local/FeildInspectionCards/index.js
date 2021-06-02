@@ -79,7 +79,11 @@ function FeildInspectionCards(props) {
             </Typography>
           </Grid> 
           <Grid item={true} xs={12} sm={6} md={4} className={classes.subtext}> 
-            <Typography className={classes.body2}>{getTransformedLocale(item.value)}</Typography> 
+            <Typography className={classes.body2}>
+              <LabelContainer
+                labelKey={`BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${item.value}`}
+              />
+            </Typography> 
           </Grid> 
           <Grid 
             item={true}

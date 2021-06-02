@@ -419,14 +419,14 @@ export const proposedBuildingDetails = getCommonCard({
                   className: "mymuitable",
                   jsonPath: "edcr.blockDetail[0].blocks",
                   style: { marginBottom: 20 },
-                  columns: {
-                    "Floor Description": {},
-                    "Level": {},
-                    "Occupancy/Sub Occupancy": {},
-                    "Buildup Area": {},
-                    "Floor Area": {},
-                    "Carpet Area": {},
-                  },
+                  columns: [
+                    { key: "Floor Description", name: "BPA_COMMON_TABLE_COL_FLOOR_DES"},
+                    { key: "Level", name: "BPA_COMMON_TABLE_COL_FLOOR_LEVEL"},
+                    { key: "Occupancy/Sub Occupancy", name: "BPA_COMMON_TABLE_COL_OCCUP"},
+                    { key: "Buildup Area", name: "BPA_COMMON_TABLE_COL_BUILD_AREA"},
+                    { key: "Floor Area", name: "BPA_COMMON_TABLE_COL_FLOOR_AREA"},
+                    { key: "Carpet Area", name: "BPA_COMMON_TABLE_COL_CARPET_AREA"}
+                ],
                   title: "",
                   options: {
                     filterType: "dropdown",

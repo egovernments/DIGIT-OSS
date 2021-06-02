@@ -208,7 +208,9 @@ class NocData extends Component {
                         variant="subtitle1"
                         style={{ fontWeight: "bold", fontSize: "12px" , paddingTop: "12px" }}
                       >
-                      Status
+                      <LabelContainer
+                        labelKey="BPA_STATUS_LABEL"
+                      />
                       </Typography>
                         <LabelContainer
                             labelKey={getTransformedLocale(satus)}
@@ -223,7 +225,9 @@ class NocData extends Component {
                       variant="subtitle1"
                       style={{ fontWeight: "bold", fontSize: "12px", paddingTop: "12px" }}
                     >
-                      Submitted On
+                      <LabelContainer
+                        labelKey="BPA_SUDMITTED_ON_LABEL"
+                      />
                       </Typography>
                       <div style={styles.fontStyle}>
                       {!(submittedOn) ? "NA" :convertEpochToDate(JSON.parse(submittedOn))}
@@ -236,7 +240,9 @@ class NocData extends Component {
                         variant="subtitle1"
                         style={{ fontWeight: "bold", fontSize: "12px", paddingTop: "12px" }}
                       >
-                        Approved/Rejected on
+                        <LabelContainer
+                        labelKey="BPA_APPROVED_REJECTED_ON_LABEL"
+                      />
                       </Typography>
                       <div style={styles.fontStyle}>
                         {!satus ? "NA" : docItem.additionalDetails && convertEpochToDate(docItem.additionalDetails.approvedRejectedOn)}
@@ -249,7 +255,11 @@ class NocData extends Component {
                     <Grid item xs={12}>                    
                     <div style={styles.dividerStyle}>
                       <div style={ styles.labelStyle}>
-                        <span>Documents</span>
+                        <span>
+                          <LabelContainer
+                            labelKey="BPA_COMMON_DOCS"
+                          />
+                          </span>
                         <div style={styles.underlineStyle} />
                       </div>
                     </div>

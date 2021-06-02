@@ -259,7 +259,9 @@ class NocDetailCard extends Component {
                         variant="subtitle1"
                         style={{ fontWeight: "bold", fontSize: "12px" }}
                       >
-                      Approval Number
+                      <LabelContainer
+                        labelKey="BPA_APPROVAL_NUMBER_LABEL"
+                      />
                       </Typography>
                       {card.additionalDetails.nocNo ?
                       <div style={styles.fontStyle}>

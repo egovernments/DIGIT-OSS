@@ -681,7 +681,7 @@ const getNocDocuments = (state) =>{
         if(nocDoc.applicationStatus === "CREATED" || nocDoc.applicationStatus === null) {
           url = "";
         }
-        linkDetails.labelName = "Application Number"
+        linkDetails.labelName = "BPA_SEARCH_APPLICATION_NO_LABEL"
         linkDetails.value = url;
         linkDetails.valueName = nocDoc.applicationNo;
         doc.docTypes[0].nocType = doc.nocType;

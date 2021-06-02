@@ -15,18 +15,18 @@ class DownloadFileContainer extends Component {
           documentData[key].previewdocuments &&
           documentData[key].previewdocuments.map(docs => {
             if (docs.wfState === "SEND_TO_CITIZEN") {
-              docs.createdBy = "BPA Architect"
+              docs.createdBy = "BPA_ARCHITECT"
             }
             else if(docs.wfState === "DOC_VERIFICATION_PENDING") {
-              docs.createdBy = "BPA Document Verifier"
+              docs.createdBy = "BPA_DOC_VERIFIER"
             }
             else if (docs.wfState === "FIELDINSPECTION_PENDING") {
-              docs.createdBy = "BPA Field Inspector"   
+              docs.createdBy = "BPA_FIELD_INSPECTOR"   
             }
             else if (docs.wfState === "NOC_VERIFICATION_PENDING") {
-              docs.createdBy = "BPA Noc Verifier"    
+              docs.createdBy = "BPA_NOC_VERIFIER"    
             } else {
-              docs.createdBy = "BPA Architect"
+              docs.createdBy = "BPA_ARCHITECT"
             }
             data.push(docs);
           })

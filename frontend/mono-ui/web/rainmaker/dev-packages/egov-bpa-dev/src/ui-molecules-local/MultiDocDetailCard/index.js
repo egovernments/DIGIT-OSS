@@ -179,7 +179,9 @@ function MultiDocDetailCard(props) {
                 variant="subtitle1"
                 style={{ fontWeight: "bold", fontSize: "12px" }}
               >
-                No Documents Uploaded
+              <LabelContainer
+                labelKey="BPA_NO_DOCUMENTS_UPLOADED_LABEL"
+              />
               </Typography>
             ) : (
               ""
@@ -194,7 +196,9 @@ function MultiDocDetailCard(props) {
                 style={{ float: "right" }}
                 onClick={() => props.toggleEditClick(docIndex)}
               >
-                Upload
+              <LabelContainer
+                labelKey="BPA_UPLOAD_LABEL"
+              />
               </Button>
             )}
           </Grid>
@@ -211,7 +215,9 @@ function MultiDocDetailCard(props) {
                     gutterBottom
                     style={titleStyle}
                   >
-                    File
+                  <LabelContainer
+                    labelKey="BPA_FILE_LABEL"
+                  />
                   </Typography>
                   <LightTooltip title={!doc.name ? "" : doc.name} arrow>
                   <div style={fontStyle}>
@@ -225,11 +231,13 @@ function MultiDocDetailCard(props) {
                     gutterBottom
                     style={titleStyle}
                   >
-                    Uploaded By
+                  <LabelContainer
+                    labelKey="BPA_UPLOADED_BY_LABEL"
+                  />
                   </Typography>
-                  <LightTooltip title={!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : doc.additionalDetails.uploadedBy} arrow>
+                  <LightTooltip title={!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : <LabelContainer labelKey={doc.additionalDetails.uploadedBy} />} arrow>
                   <div style={fontStyle}>
-                    {!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : doc.additionalDetails.uploadedBy}
+                    {!(doc.additionalDetails && doc.additionalDetails.uploadedBy) ? "" : <LabelContainer labelKey={doc.additionalDetails.uploadedBy} />}
                   </div>
                   </LightTooltip>
                 </Grid>
@@ -239,7 +247,9 @@ function MultiDocDetailCard(props) {
                     gutterBottom
                     style={titleStyle}
                   >
-                    Uploaded Date
+                  <LabelContainer
+                    labelKey="BPA_UPLOADED_DATE_LABEL"
+                  />
                   </Typography>
                   
                   <div style={fontStyle}>
@@ -253,7 +263,9 @@ function MultiDocDetailCard(props) {
                       window.open(doc.link, "_blank");
                     }}
                   >
-                    View File
+                    <LabelContainer
+                      labelKey="BPA_VIEW_FILE_LABEL"
+                    />
                   </Button>
                 </Grid>
               </React.Fragment>)

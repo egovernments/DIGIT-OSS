@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 const styles = {
   root: {
@@ -41,7 +42,7 @@ const LinkAtom = (props) => {
   } = props;
   return (
     <div>
-        <div className={classes.root}>{linkDetail.labelName}</div>
+        <div className={classes.root}><LabelContainer labelKey={linkDetail.labelName}/></div>
         {linkDetail.value ? 
          <a className={classes.linkDetails} href={linkDetail.value} target="_blank"  rel="noopener noreferrer">
           {linkDetail.valueName}

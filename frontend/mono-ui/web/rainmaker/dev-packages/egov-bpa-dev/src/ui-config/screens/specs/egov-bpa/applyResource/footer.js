@@ -144,18 +144,18 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
         obj.linkText = "View";
         obj.link = docDetail.fileUrl && docDetail.fileUrl.split(",")[0];
         if (docDetail.wfState === "SEND_TO_CITIZEN") {
-          obj.createdBy = "BPA Architect"
+          obj.createdBy = "BPA_ARCHITECT"
         }
         else if(docDetail.wfState === "DOC_VERIFICATION_PENDING") {
-          obj.createdBy = "BPA Document Verifier"
+          obj.createdBy = "BPA_DOC_VERIFIER"
         }
         else if (docDetail.wfState === "FIELDINSPECTION_PENDING") {
-          obj.createdBy = "BPA Field Inspector"   
+          obj.createdBy = "BPA_FIELD_INSPECTOR"   
         }
         else if (docDetail.wfState === "NOC_VERIFICATION_PENDING") {
-          obj.createdBy = "BPA Noc Verifier"    
+          obj.createdBy = "BPA_NOC_VERIFIER"    
         } else {
-          obj.createdBy = "BPA Architect"
+          obj.createdBy = "BPA_ARCHITECT"
         }
         
         documentsPreview.push(obj);
