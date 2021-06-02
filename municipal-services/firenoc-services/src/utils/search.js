@@ -90,22 +90,23 @@ const fireNocOwnersRowMapper = async (row, mapper = []) => {
     userName: row.username,
     useruuid: row.useruuid,
     active: row.active,
-    ownerType: row.ownertype,
+    ownerType: row.applicantcategory,
     relationship: row.relationship,
     tenantId: row.tenantId,
     fatherOrHusbandName: ""
   };
+
   if (ownerIndex != -1) {
     mapper[ownerIndex] = {
       ...ownerObject,
       ...mapper[ownerIndex]
     };
+    mapper[ownerIndex].ownerType = row.applicantcategory;
   } else {
     let user = {};
     if (row.useruuid) {
       user = await searchUser(requestInfo, row.useruuid);
     }
-    // console.info("user",user);
     user = {
       ...ownerObject,
       ...user
