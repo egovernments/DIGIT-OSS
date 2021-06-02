@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import OldValueLabelContainer from "../../../../../common/common/OldValueLabelContainer";
 import "./index.css";
 
@@ -77,7 +78,7 @@ class PropertyInfoCard extends Component {
                             />
                           )}
                           {units.map((unit, index) => {
-                            const subUnitHeader = hideSubsectionLabel ? undefined : "Unit - " + (index + 1);
+                            const subUnitHeader = hideSubsectionLabel ? undefined : `${getLocaleLabels('PT_UNIT','PT_UNIT')} -` + (index + 1);
                             return <PropertyInfoCard backgroundColor="white" items={unit} header={subUnitHeader}></PropertyInfoCard>;
                           })}
                         </div>

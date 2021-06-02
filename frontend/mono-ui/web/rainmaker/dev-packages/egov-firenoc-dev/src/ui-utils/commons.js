@@ -330,6 +330,9 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
+    if(payload[0]&&payload[0].provisionFireNOCNumber==""){
+      delete payload[0].provisionFireNOCNumber;
+    }
 
     let response;
     if (method === "CREATE") {

@@ -68,15 +68,15 @@ const loadProvisionalNocData = async (state, dispatch) => {
     )
   );
 
-  // Set noc type radiobutton to NEW
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
-      "props.value",
-      "NEW"
-    )
-  );
+  // // Set noc type radiobutton to NEW
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
+  //     "props.value",
+  //     "NEW"
+  //   )
+  // );
 
   // Set provisional fire noc number
   dispatch(

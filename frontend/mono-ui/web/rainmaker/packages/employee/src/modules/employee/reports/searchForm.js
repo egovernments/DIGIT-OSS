@@ -618,7 +618,7 @@ class ShowForm extends Component {
     } else {
       return (
         get(metaData, "reportDetails.reportName") && <div className="report-title">
-          {getLocaleLabels(getTransformedLocale(metaData.reportDetails.reportName))}
+          {getLocaleLabels(getTransformedLocale(metaData.reportDetails.reportName),getTransformedLocale(metaData.reportDetails.reportName))}
           </div>
       );
     }
