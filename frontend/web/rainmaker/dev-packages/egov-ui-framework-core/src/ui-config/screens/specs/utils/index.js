@@ -582,6 +582,8 @@ export const getPattern = type => {
       return /^[0-9]{15}$/i;
     case "DocumentNo":
       return /^[0-9]{1,15}$/i; 
+    case "RegNo":
+      return /^[a-zA-Z0-9-_<>.^*@()%!-]*$/i;
     case "eventName":
       return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,65}$/i;
     case "eventDescription":

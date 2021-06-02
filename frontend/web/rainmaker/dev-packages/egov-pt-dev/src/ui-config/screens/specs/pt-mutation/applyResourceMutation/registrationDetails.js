@@ -155,7 +155,7 @@ export const registrationDetails = getCommonCard(
           labelKey: "PT_MUTATION_DOCUMENT_NO_PLACEHOLDER"
         },
         required:true,
-        pattern: getPattern("DocumentNo"),
+        pattern: getPattern("RegNo"),
         jsonPath: "Property.additionalDetails.documentNumber",
         visible: false,
       }),
