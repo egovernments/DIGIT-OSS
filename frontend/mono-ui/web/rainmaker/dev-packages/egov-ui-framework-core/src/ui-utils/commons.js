@@ -430,6 +430,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 //localizations
 export const getTransformedLocale = label => {
+  if(typeof label === "number") return label;
   return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
