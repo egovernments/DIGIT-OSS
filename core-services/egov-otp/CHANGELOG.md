@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.1 - 2021-05-11
+
+- Added size validation.
+
 ## 1.2.0 - 2020-06-16
 
 - Added typescript definition generation plugin

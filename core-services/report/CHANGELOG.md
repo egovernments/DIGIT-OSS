@@ -1,11 +1,13 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.3.1 - 2021-05-11
+## 1.3.2 - 2021-05-11
 
 - Made timezome configurable
 - Corrections to error handling
 - Removed print stack trace
+
+## 1.3.1 - 2021-03-09
 
 ## 1.3.0 - 2020-07-02
 
