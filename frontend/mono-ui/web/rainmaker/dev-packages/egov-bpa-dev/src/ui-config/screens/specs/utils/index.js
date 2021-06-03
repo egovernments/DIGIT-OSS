@@ -4078,15 +4078,15 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
 
   if (applyFieldinspectionQstns && applyFieldinspectionQstns.length > 0) {
     checklistSelect = [
-      { code: applyFieldinspectionQstns[0].fieldType.split("/")[0], label: applyFieldinspectionQstns[0].fieldType.split("/")[0] },
-      { code: applyFieldinspectionQstns[0].fieldType.split("/")[1], label: applyFieldinspectionQstns[0].fieldType.split("/")[1] },
-      { code: applyFieldinspectionQstns[0].fieldType.split("/")[2], label: applyFieldinspectionQstns[0].fieldType.split("/")[2] }
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[0], label: `BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${applyFieldinspectionQstns[0].fieldType.split("/")[0]}`},
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[1], label: `BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${applyFieldinspectionQstns[0].fieldType.split("/")[1]}`},
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[2], label: `BPA_ADD_HOC_CHARGES_POPUP_BUTTON_${applyFieldinspectionQstns[0].fieldType.split("/")[2]}`}
     ];
 
     const FieldinspectionQstns = applyFieldinspectionQstns.map(v => ({
       code: v.question, title: v.question, cards: [{
         name: v.question, code: v.question, required: true, dropDownValues: {
-          label: "Select", required: true, menu: checklistSelect
+          label: "BPA_SELECT_DOCS_LABEL", required: true, menu: checklistSelect
         }
       }]
     }));

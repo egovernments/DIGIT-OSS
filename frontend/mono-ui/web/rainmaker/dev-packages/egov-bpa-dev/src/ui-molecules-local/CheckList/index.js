@@ -357,8 +357,8 @@ class CheckList extends Component {
         >
         <TextFieldContainer
               select={false}
-              label={{ labelKey: "Remarks" }}
-              placeholder={{ labelKey: "BPA_ENTER_REMARKS" }}
+              label={{ labelKey: getTransformedLocale("BPA_ENTER_REMARKS") }}
+              placeholder={{ labelKey: getTransformedLocale("BPA_ENTER_REMARKS") }}
               value={jsonPathForRemarks}
               onChange={event => this.handleFieldChange(key, event)}              
             />

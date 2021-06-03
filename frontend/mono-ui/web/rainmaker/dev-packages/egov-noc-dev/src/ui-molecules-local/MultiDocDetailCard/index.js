@@ -179,7 +179,9 @@ function MultiDocDetailCard(props) {
                 variant="subtitle1"
                 style={{ fontWeight: "bold", fontSize: "12px" }}
               >
-                No Documents Uploaded
+                <LabelContainer
+                  labelKey={getTransformedLocale("NOC_NO_DOCUMENTS_UPLOADED_LABEL")}
+                />
               </Typography>
             ) : (
               ""
@@ -194,7 +196,9 @@ function MultiDocDetailCard(props) {
                 style={{ float: "right" }}
                 onClick={() => props.toggleEditClick(docIndex)}
               >
-                Upload
+                <LabelContainer
+                  labelKey={getTransformedLocale("NOC_PREVIEW_LABEL")}
+                />
               </Button>
             )}
           </Grid>

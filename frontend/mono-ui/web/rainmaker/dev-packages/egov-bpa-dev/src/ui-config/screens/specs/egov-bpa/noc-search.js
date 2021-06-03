@@ -15,8 +15,8 @@ import get from "lodash/get";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const header = getCommonHeader({
-  labelName: "NOC_APPLICATION_HEADER",
-  labelKey: "NOC Application"
+  labelName: "NOC Application",
+  labelKey: "NOC_APPLICATION_HEADER"
 });
 
 export const getNOCMdmsData = async (action, state, dispatch, mdmsBody) => {

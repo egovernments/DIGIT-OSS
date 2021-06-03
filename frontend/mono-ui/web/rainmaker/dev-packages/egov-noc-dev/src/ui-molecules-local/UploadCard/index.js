@@ -270,7 +270,11 @@ const UploadCard = (props) => {
             color="primary"
             style={{ float: "right" }}
             onClick={() => props.toggleEditClick(docIndex)}
-          >PREVIEW</Button>
+          >
+          <LabelContainer
+            labelKey={getTransformedLocale("NOC_PREVIEW_LABEL")}
+          />
+          </Button>
         </Grid> : ""
       }
     </Grid>
