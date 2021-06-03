@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.4 - 2021-06-03
+- Passing business service value while consuming view receipt api
+- Fixed voucher creation issue in case of advance amount is collected
+- Reading authorisation header key from the configuration files
+
 ## 1.1.3 - 2021-05-11
 - Updated config in application.properties
 
