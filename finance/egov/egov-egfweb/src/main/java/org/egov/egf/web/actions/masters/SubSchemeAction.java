@@ -225,7 +225,7 @@ public class SubSchemeAction extends BaseFormAction {
 			if (schemeId != -1) {
 				query.append(" and  s.scheme.id=?");
 				params.add(schemeId);
-				if (subScheme.getId() != -1) {
+				if (subSchemeId != null && subSchemeId != -1) {
 					query.append(" and s.id=?");
 					params.add(subScheme.getId());
 				}
