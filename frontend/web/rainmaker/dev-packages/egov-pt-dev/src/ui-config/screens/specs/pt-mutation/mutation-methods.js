@@ -128,6 +128,50 @@ export const resetFields = (state, dispatch) => {
 };
 
 
+export const citizenResetFields = (state, dispatch) => {
+  
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
+      "props.value",
+      ""
+    )
+  );  
+  
+  dispatch(prepareFinalObject(
+    "searchScreen.acknowledgementIds",
+    ''
+  ))
+  dispatch(prepareFinalObject(
+    "searchScreen.ids",
+    ''
+  ))
+  dispatch(prepareFinalObject(
+    "searchScreen.mobileNumber",
+    ''
+  ))
+
+};
+
+
+
 export const searchPropertyDetails = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Property",

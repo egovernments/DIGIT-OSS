@@ -9,7 +9,7 @@ import {
     getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { propertySearch, applicationSearch } from "./functions";
-  import { resetFields } from "./mutation-methods";
+  import { citizenResetFields } from "./mutation-methods";
 
  
   
@@ -116,7 +116,7 @@ import {
               },
               onClickDefination: {
                 action: "condition",
-                callBack: resetFields
+                callBack: citizenResetFields
               }
             },
             searchButton: {
