@@ -6,13 +6,17 @@ import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
+import citizenSearchTabs from "./citizen-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
 import { showHideAdhocPopup } from "../utils";
 import { httpRequest } from "../../../../ui-utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import set from "lodash/set";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
+const citizenSearch = getQueryArg(window.location.href, "citizenSearch");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
@@ -159,6 +163,24 @@ const screenConfig = {
     resetFields(state, dispatch);
     dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
+
+    if(citizenSearch) 
+     {
+          set(
+          action.screenConfig,
+            "components.div.children.propertySearchTabs",
+            {}
+          )
+     }  
+      else       
+      {
+        set(
+          action.screenConfig,
+              "components.div.children.citizenSearchTabs",
+              {})
+      }
+ 
+
     const tenantRequestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -269,6 +291,7 @@ const screenConfig = {
             }
           }
         },
+        citizenSearchTabs,
         propertySearchTabs,
         breakAfterSearch: getBreak(),
         searchPropertyTable,
