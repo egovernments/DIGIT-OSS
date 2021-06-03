@@ -614,6 +614,7 @@ const screenConfig = {
     dispatch(prepareFinalObject("BPA", {}));
     dispatch(prepareFinalObject("documentsContract", []));
     dispatch(prepareFinalObject("documentDetailsUploadRedux", {}));
+    dispatch(prepareFinalObject("BPA.OccupanciesList", []));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"

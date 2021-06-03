@@ -3087,6 +3087,9 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
             );
             currOwnersArr = scrutinyData[0];
             dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
+            let occupancyObj = get(currOwnersArr, "planDetail.occupancies[0].typeHelper.type", {});
+            dispatch(prepareFinalObject("BPA.OccupanciesList", [occupancyObj]));
+            dispatch(prepareFinalObject("scrutinyDetails.planDetail.planInformation.occupancies", occupancyObj.code));
             // await riskType(state, dispatch);
             await edcrDetailsToBpaDetails(state, dispatch);
             await residentialType(state, dispatch);

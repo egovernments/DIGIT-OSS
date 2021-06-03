@@ -99,7 +99,28 @@ export const basicDetails = getCommonCard({
         md: 6
       }
     }),
-    riskType: getTextField({
+    // riskType: getTextField({
+    //   label: {
+    //     labelName: "Risk Type",
+    //     labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
+    //   },
+    //   localePrefix: {
+    //     moduleName: "WF",
+    //     masterName: "BPA"
+    //   },
+    //   jsonPath: "BPA.riskType",
+    //   required: true,
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 12,
+    //     md: 6
+    //   },
+    //   props: {
+    //     disabled: true,
+    //     className: "tl-trade-type"
+    //   }
+    // }),
+    riskType: getSelectField({
       label: {
         labelName: "Risk Type",
         labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
@@ -108,16 +129,32 @@ export const basicDetails = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
+      props: {
+        disabled: true,
+        className : "tl-trade-type",
+        optionValue: "code",
+        optionLabel: "code",
+      },
       jsonPath: "BPA.riskType",
+      data: [
+        {
+          code: "LOW",
+          label: "WF_BPA_LOW"
+        },
+        {
+          code: "MEDIUM",
+          label: "WF_BPA_MEDIUM"
+        },
+        {
+          code: "HIGH",
+          label: "WF_BPA_HIGH"
+        }
+      ],
       required: true,
       gridDefination: {
         xs: 12,
         sm: 12,
         md: 6
-      },
-      props: {
-        disabled: true,
-        className: "tl-trade-type"
       }
     }),
     servicetype: getSelectField({

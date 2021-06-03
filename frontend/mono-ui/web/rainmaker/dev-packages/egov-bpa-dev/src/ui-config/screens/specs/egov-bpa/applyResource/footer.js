@@ -518,7 +518,7 @@ const callBackForNext = async (state, dispatch) => {
         if(activeStep === 0){
           const occupancytypeValid = get(
             state,
-            "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.planInformation.occupancy",
+            "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.occupancies[0].typeHelper.type.code",
             []
           );
           if(occupancytypeValid.length === 0){
