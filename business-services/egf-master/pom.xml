@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egf-master</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.2-SNAPSHOT</version>
   <name>egf-master</name>
   <description>egf masters project for egov services</description>
   <properties>
