@@ -138,7 +138,7 @@ export const registrationDetails = getCommonCard(
           labelKey: "PT_MUTATION_AUCTION_REGISTRATION_NO_PLACEHOLDER"
         },
         required:true,
-        pattern: getPattern("DocumentNo"),
+        pattern: getPattern("RegNo"),
         jsonPath: "Property.additionalDetails.AuctionRegistrationnumber",
         visible: false,
       }),
@@ -172,7 +172,7 @@ export const registrationDetails = getCommonCard(
           labelKey: "PT_MUTATION_SERIAL_NO_PLACEHOLDER"
         },
         required:true,
-        pattern: getPattern("DocumentNo"),
+        pattern: getPattern("RegNo"),
         jsonPath: "Property.additionalDetails.SerialNumber",
         visible: false,
       }),
@@ -189,7 +189,7 @@ export const registrationDetails = getCommonCard(
           labelKey: "PT_MUTATION_ATTORNEY_REG_NO_PLACEHOLDER"
         },
         required:true,
-        pattern: getPattern("DocumentNo"),
+        pattern: getPattern("RegNo"),
         jsonPath: "Property.additionalDetails.powerOfAttorneyRegNo",
         visible: false,
       }),
@@ -226,7 +226,7 @@ export const registrationDetails = getCommonCard(
           labelKey: "PT_MUTATION_DECREE_NO_PLACEHOLDER"
         },
         required:true,
-        pattern: getPattern("DocumentNo"),
+        pattern: getPattern("RegNo"),
         jsonPath: "Property.additionalDetails.DecreeNo",
         visible: false,
       }),
