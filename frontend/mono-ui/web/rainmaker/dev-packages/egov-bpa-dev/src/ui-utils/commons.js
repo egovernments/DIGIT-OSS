@@ -541,7 +541,7 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
     };
     if (doc.hasDropdown && doc.dropDownValues) {
       let dropDownValues = {};
-      dropDownValues.label = "Select Documents";
+      dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
       dropDownValues.required = doc.required ? true : false;
       dropDownValues.menu = doc.dropDownValues.filter(item => {
         return item.active;
@@ -599,7 +599,7 @@ export const prepareNOCUploadData = async (state, dispatch) => {
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropDownValues) {
         let dropDownValues = {};
-        dropDownValues.label = "Select Documents";
+        dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
         dropDownValues.required = doc.required;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
           return item.active;

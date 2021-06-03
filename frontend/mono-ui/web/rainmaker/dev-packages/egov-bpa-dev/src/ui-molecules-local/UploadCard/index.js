@@ -228,7 +228,7 @@ const UploadCard = (props) => {
             label={{
               labelKey: getTransformedLocale(docItem.dropDownValues.label),
             }}
-            placeholder={{ labelKey: docItem.dropDownValues.label }}
+            placeholder={{ labelKey: getTransformedLocale(docItem.dropDownValues.label) }}
             data={docItem.dropDownValues.menu}
             optionValue="code"
             optionLabel="label"

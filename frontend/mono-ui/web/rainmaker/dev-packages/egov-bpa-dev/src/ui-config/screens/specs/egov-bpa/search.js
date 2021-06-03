@@ -22,7 +22,7 @@ enableButton = hasButton && hasButton === "false" ? false : true;
 
 const header = getCommonHeader({
   labelName: "BPA",
-  labelKey: "BPA"
+  labelKey: "BPA_TITLE_LABEL"
 });
 
 const pageResetAndChange = (state, dispatch) => {

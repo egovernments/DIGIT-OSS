@@ -4128,7 +4128,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropDownValues) {
         let dropDownValues = {};
-        dropDownValues.label = "Select Documents";
+        dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
         dropDownValues.required = doc.required ? true : false;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
           return item.active;
@@ -4536,7 +4536,7 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
     card["required"] = doc.required ? true : false;
     if (doc.hasDropdown && doc.dropDownValues) {
       let dropDownValues = {};
-      dropDownValues.label = "Select Documents";
+      dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
       dropDownValues.required = doc.required;
       dropDownValues.menu = doc.dropDownValues.filter(item => {
         return item.active;
@@ -4872,7 +4872,7 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
       card["orderNumber"] = get(doc, "order");
       if (doc.hasDropdown && doc.dropDownValues) {
         let dropDownValues = {};
-        dropDownValues.label = "Select Documents";
+        dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
         dropDownValues.required = doc.required;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
           return item.active;

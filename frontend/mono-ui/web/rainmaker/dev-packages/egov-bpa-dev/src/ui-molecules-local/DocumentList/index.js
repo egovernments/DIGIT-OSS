@@ -277,7 +277,7 @@ class DocumentList extends Component {
             <TextFieldContainer
               select={true}
               label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
-              placeholder={{ labelKey: card.dropDownValues.label }}
+              placeholder={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
               data={card.dropDownValues.menu}
               optionValue="code"
               optionLabel="label"
