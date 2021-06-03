@@ -3,8 +3,13 @@
 All notable changes to this module will be documented in this file.
 
 
-## 1.1.2 - 2021-05-11
+## 1.1.3 - 2021-05-11
+
 - security fixes 
+
+## 1.1.2 - 2021-03-09
+
+- Updated README file
 
 ## 1.1.1 - 2020-09-01
 
