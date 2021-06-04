@@ -1,4 +1,4 @@
-import { getBreak, getCommonCard, getCommonContainer, getCommonGrayCard, getCommonTitle, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak,getTitle, getCommonCard, getCommonContainer, getCommonGrayCard, getCommonTitle, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
@@ -117,6 +117,7 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
+     
       // dummyDiv: {
       //   uiFramework: "custom-atoms",
       //   componentPath: "Div",
@@ -637,6 +638,62 @@ export const onChangeTypeOfOwnership = (action, state, dispatch) => {
 
 
 export const transfereeDetails = getCommonCard({
+  oldMobileNumberCard:getCommonGrayCard(
+    {
+      header: getCommonTitle(
+        {
+          labelName: "Mobile Number of Previous Owner",
+          labelKey: "PT_MUTATION_MOBILE_NO_OF_OLD_OWNER_HEADER"
+        },
+        {
+          style: {
+            marginBottom: 18
+          }
+        }
+      ),
+      break: getBreak(),
+        oldMobileNumberContainer: getCommonContainer({
+
+        oldMobileNumber: getTextField({
+            label: {
+              labelName: "Mobile No.",
+              labelKey: "PT_MUTATION_MOBILE_NO_OF_OLD_OWNER_LABEL"
+            },
+            placeholder: {
+              labelName: "Enter Mobile No. of old",
+              labelKey: "PT_MUTATION_APPLICANT_MOBILE_NO_OF_OLD_OWNER_PLACEHOLDER"
+            },
+            required:true ,
+            props: {
+              className: "applicant-details-error"
+            },
+            title: {
+              value: "Please search profile linked to the mobile no.",
+              key: "PT_MUTATION_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
+            },
+            pattern: getPattern("MobileNo"),
+            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+            jsonPath:
+              "Property.oldmobileNumber",
+            // props: {
+            //   style: {
+            //     maxWidth: "450px"
+            //   }
+            // },
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            }, 
+              style: {
+                marginBottom: 18
+              }
+            
+            
+          }),
+      }),
+    }),
+    
   header: getCommonTitle(
     {
       labelName: "Transferee Details",
@@ -644,11 +701,13 @@ export const transfereeDetails = getCommonCard({
     },
     {
       style: {
-        marginBottom: 18
+        marginBottom: 18,
+        marginTop:20
       }
     }
   ),
   break: getBreak(),
+  
   applicantTypeContainer: getCommonContainer({
     applicantTypeSelection: getCommonContainer({
       applicantType: {
