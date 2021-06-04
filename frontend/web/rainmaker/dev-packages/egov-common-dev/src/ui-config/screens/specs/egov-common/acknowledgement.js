@@ -128,8 +128,9 @@ const screenConfig = {
         const status = getQueryArg(window.location.href, "status");
         const consumerCode = getQueryArg(window.location.href, "consumerCode");
         const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
+        const businessService = getQueryArg(window.location.href, "businessService");
         const tenant = getQueryArg(window.location.href, "tenantId");
-        const data = getAcknowledgementCard(
+        let data = getAcknowledgementCard(
             state,
             dispatch,
             status,
@@ -137,6 +138,12 @@ const screenConfig = {
             consumerCode,
             tenant
         );
+       if(businessService!=="PT.MUTATION")
+        {
+            console.log("prasad in mutation");
+            set(data, "applicationSuccessFooter.children.goToApplication", {});
+        } 
+
         set(action, "screenConfig.components.div.children", data);
         return action;
     }

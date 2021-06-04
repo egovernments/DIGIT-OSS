@@ -95,9 +95,14 @@ export const callPGService = async (state, dispatch) => {
         "Payments[0].paymentDetails[0].receiptNumber"
       );
 
+      let businessService = get(
+        searchResponse,
+        "Payments[0].paymentDetails[0].bill.businessService"
+      );
+
       dispatch(
         setRoute(
-          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}`
+          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`
         )
       );
     } else {
@@ -149,7 +154,7 @@ const postPGReqeust = (redirectionUrl) => {
 
 };
 
-const moveToSuccess = (dispatch, receiptNumber) => {
+const moveToSuccess = (dispatch, receiptNumber, businessService) => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
   const status = "success";
@@ -157,7 +162,7 @@ const moveToSuccess = (dispatch, receiptNumber) => {
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   dispatch(
     setRoute(
-      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}`
+      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}`
     )
   );
 };
@@ -169,7 +174,7 @@ const moveToFailure = dispatch => {
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   dispatch(
     setRoute(
-      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}`
+      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`
     )
   );
 };
@@ -230,12 +235,13 @@ const updatePayAction = async (
   dispatch,
   consumerCode,
   tenantId,
-  receiptNumber
+  receiptNumber,
+  businessService 
 ) => {
   try {
-    moveToSuccess(dispatch, receiptNumber);
+    moveToSuccess(dispatch, receiptNumber, businessService);
   } catch (e) {
-    moveToFailure(dispatch);
+    moveToFailure(dispatch, businessService);
     dispatch(
       toggleSnackbar(
         true,
@@ -436,6 +442,10 @@ const callBackForPay = async (state, dispatch) => {
         null
       );
 
+      let businessService = get(
+        response,
+        "Payments[0].paymentDetails[0].bill.businessService"
+      );
       // Search NOC application and update action to PAY
       const consumerCode = getQueryArg(window.location, "consumerCode");
       const tenantId = getQueryArg(window.location, "tenantId");
@@ -444,7 +454,8 @@ const callBackForPay = async (state, dispatch) => {
         dispatch,
         consumerCode,
         tenantId,
-        receiptNumber
+        receiptNumber,
+        businessService
       );
     } catch (e) {
       dispatch(

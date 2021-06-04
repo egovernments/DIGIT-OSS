@@ -1,6 +1,11 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
 import {download} from  "../../../../../ui-utils/commons"
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import set from "lodash/set";
+import get from "lodash/get";
+
+const businessService = getQueryArg(window.location.href, "businessService");
 
 
 const getCommonApplyFooter = children => {
@@ -23,8 +28,40 @@ export const applicationSuccessFooter = (
 ) => {
     const roleExists = ifUserRoleExists("CITIZEN");
     const redirectionURL = roleExists ? "/" : "/inbox";
+    let path ="/";
+    let applicationRedirectionURL ;
+
+    if( businessService && businessService==="PT.MUTATION")
+    {
+         applicationRedirectionURL = "/pt-mutation/search-preview";
+         path = `${applicationRedirectionURL}?applicationNumber=${consumerCode}&tenantId=${tenant}`    
+     }        
+
     return getCommonApplyFooter({
 
+        goToApplication: {
+            componentPath: "Button",
+            props: {
+                variant: "outlined",
+                color: "primary",
+                style: {
+                    minWidth: "180px",
+                    height: "48px",
+                    marginRight: "16px"
+                },
+                className: "DCButton",
+            },
+            children: {
+                downloadFormButtonLabel: getLabel({
+                    labelName: "GOTO APPLICATION",
+                    labelKey: "GO_TO_APPLICATION"
+                })
+            },           
+            onClickDefination: {
+                action: "page_change",
+                path
+            }
+        },
         downloadFormButton: {
             componentPath: "Button",
             props: {
