@@ -101,6 +101,9 @@ public class Payment {
     @JsonProperty("paymentStatus")
     private PaymentStatusEnum paymentStatus;
 
+    @JsonProperty("fileStoreId")
+    private String fileStoreId;
+
 
     public Payment addpaymentDetailsItem(PaymentDetail paymentDetail) {
         if (this.paymentDetails == null) {

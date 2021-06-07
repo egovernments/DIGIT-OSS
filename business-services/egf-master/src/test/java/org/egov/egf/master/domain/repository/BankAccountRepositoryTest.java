@@ -165,7 +165,7 @@ public class BankAccountRepositoryTest {
 
 	@Test
 	public void testAddToSearchQueue() {
-		Mockito.doNothing().when(bankAccountQueueRepository).add(Mockito.any());
+		Mockito.lenient().doNothing().when(bankAccountQueueRepository).add(Mockito.any());
 		BankAccountRequest request = new BankAccountRequest();
 		request.setRequestInfo(getRequestInfo());
 		request.setBankAccounts(new ArrayList<BankAccountContract>());

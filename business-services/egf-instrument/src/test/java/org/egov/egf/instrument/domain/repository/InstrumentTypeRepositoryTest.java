@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -77,7 +78,7 @@ public class InstrumentTypeRepositoryTest {
     public void test_find_by_id_return_null() {
         InstrumentTypeEntity entity = getInstrumentTypeEntity();
 
-        when(instrumentTypeJdbcRepository.findById(null)).thenReturn(entity);
+        Mockito.lenient().when(instrumentTypeJdbcRepository.findById(null)).thenReturn(entity);
 
         InstrumentType actualResult = instrumentTypeRepositoryWithKafka.findById(getInstrumentTypeDomin());
 

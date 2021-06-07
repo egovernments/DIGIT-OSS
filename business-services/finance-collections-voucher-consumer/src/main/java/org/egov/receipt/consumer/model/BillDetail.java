@@ -43,7 +43,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -118,4 +121,25 @@ public class BillDetail {
     private Long stateId;
 
     private Boolean partPaymentAllowed;
+    
+    @JsonProperty("additionalDetails")
+    private JsonNode additionalDetails = null;
+    
+    @NotNull
+    @JsonProperty("expiryDate")
+    private Long expiryDate;
+    
+    @JsonProperty("demandId")
+    private String demandId = null;
+    
+    @NotNull
+    @JsonProperty("fromPeriod")
+    private Long fromPeriod = null;
+
+    @NotNull
+    @JsonProperty("toPeriod")
+    private Long toPeriod = null;
+    
+    @JsonProperty("isAdvanceAllowed")
+    private Boolean isAdvanceAllowed;
 }

@@ -54,11 +54,13 @@ public class InstrumentJdbcRepositoryTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private DishonorReasonJdbcRepository dishonorReasonJdbcRepository;
 
     @Before
     public void setUp() throws Exception {
         instrumentJdbcRepository = new InstrumentJdbcRepository(namedParameterJdbcTemplate, jdbcTemplate,
-                instrumentVoucherJdbcRepository);
+                instrumentVoucherJdbcRepository, dishonorReasonJdbcRepository);
     }
 
     @Test

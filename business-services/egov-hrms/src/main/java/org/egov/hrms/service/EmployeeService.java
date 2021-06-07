@@ -135,10 +135,11 @@ public class EmployeeService {
 	 * @return
 	 */
 	public EmployeeResponse search(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
-		if(null == criteria.getIsActive() || criteria.getIsActive())
+		boolean  userChecked = false;
+		/*if(null == criteria.getIsActive() || criteria.getIsActive())
 			criteria.setIsActive(true);
 		else
-			criteria.setIsActive(false);
+			criteria.setIsActive(false);*/
         Map<String, User> mapOfUsers = new HashMap<String, User>();
 		if(!StringUtils.isEmpty(criteria.getPhone()) || !CollectionUtils.isEmpty(criteria.getRoles())) {
             Map<String, Object> userSearchCriteria = new HashMap<>();
@@ -148,6 +149,7 @@ public class EmployeeService {
             if( !CollectionUtils.isEmpty(criteria.getRoles()) )
                 userSearchCriteria.put(HRMSConstants.HRMS_USER_SEARCH_CRITERA_ROLECODES,criteria.getRoles());
             UserResponse userResponse = userService.getUser(requestInfo, userSearchCriteria);
+			userChecked =true;
             if(!CollectionUtils.isEmpty(userResponse.getUser())) {
                  mapOfUsers.putAll(userResponse.getUser().stream()
                         .collect(Collectors.toMap(User::getUuid, Function.identity())));
@@ -158,6 +160,8 @@ public class EmployeeService {
             else
                 criteria.setUuids(userUUIDs);
 		}
+		//checks if above criteria met and result is not  null will check for name search if list of names are given as user search on name is not bulk api
+
 		if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids()))){
 			if(!CollectionUtils.isEmpty(criteria.getNames())) {
 				List<String> userUUIDs = new ArrayList<>();
@@ -166,6 +170,7 @@ public class EmployeeService {
 					userSearchCriteria.put(HRMSConstants.HRMS_USER_SEARCH_CRITERA_TENANTID,criteria.getTenantId());
 					userSearchCriteria.put(HRMSConstants.HRMS_USER_SEARCH_CRITERA_NAME,name);
 					UserResponse userResponse = userService.getUser(requestInfo, userSearchCriteria);
+					userChecked =true;
 					if(!CollectionUtils.isEmpty(userResponse.getUser())) {
 						mapOfUsers.putAll(userResponse.getUser().stream()
 								.collect(Collectors.toMap(User::getUuid, Function.identity())));
@@ -179,6 +184,8 @@ public class EmployeeService {
 					criteria.setUuids(userUUIDs);
 			}
 		}
+		if(userChecked)
+			criteria.setTenantId(null);
         List <Employee> employees = new ArrayList<>();
         if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !CollectionUtils.isEmpty(criteria.getNames()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids())))
             employees = repository.fetchEmployees(criteria, requestInfo);
@@ -236,7 +243,7 @@ public class EmployeeService {
 		pwdParams.add(employee.getCode());
 		pwdParams.add(employee.getUser().getMobileNumber());
 		pwdParams.add(employee.getTenantId());
-		pwdParams.add(employee.getUser().getName());
+		pwdParams.add(employee.getUser().getName().toUpperCase());
 		employee.getUser().setPassword(hrmsUtils.generatePassword(pwdParams));
 		employee.getUser().setUserName(employee.getCode());
 		employee.getUser().setActive(true);
@@ -329,8 +336,8 @@ public class EmployeeService {
 			enrichUpdateRequest(employee, requestInfo, existingEmployees);
 			updateUser(employee, requestInfo);
 		});
-		hrmsProducer.push(propertiesManager.getUpdateEmployeeTopic(), employeeRequest);
-
+		hrmsProducer.push(propertiesManager.getUpdateTopic(), employeeRequest);
+		//notificationService.sendReactivationNotification(employeeRequest);
 		return generateResponse(employeeRequest);
 	}
 	
@@ -504,6 +511,29 @@ public class EmployeeService {
 			});
 
 		}
+		if(employee.getReactivationDetails() != null){
+			employee.getReactivationDetails().stream().forEach(reactivationDetails -> {
+				if(reactivationDetails.getId() == null){
+					reactivationDetails.setId(UUID.randomUUID().toString());
+					reactivationDetails.setAuditDetails(auditDetails);
+					employee.getDocuments().forEach(employeeDocument -> {
+						employeeDocument.setReferenceId(reactivationDetails.getId());
+					});
+				}
+				else{
+					if(!existingEmpData.getReactivationDetails().stream()
+							.filter(reactivationDetails1 -> reactivationDetails1.getId().equals(reactivationDetails.getId()))
+							.findFirst().orElse(null)
+							.equals(reactivationDetails)){
+						reactivationDetails.getAuditDetails().setLastModifiedBy(requestInfo.getUserInfo().getUserName());
+						reactivationDetails.getAuditDetails().setLastModifiedDate(new Date().getTime());
+					}
+				}
+			});
+
+		}
+
+
 	}
 
 	private EmployeeResponse generateResponse(EmployeeRequest employeeRequest) {

@@ -19,7 +19,9 @@ public class Constants {
 	
 	public static final String TAXPERIOD_PATH_CODE = "$.MdmsRes.BillingService.TaxPeriod";
 	public static final String TAXHEADMASTER_PATH_CODE = "$.MdmsRes.BillingService.TaxHeadMaster";
-	public static final String BUSINESSSERVICE_PATH_CODE = "$.MdmsRes.BillingService.BusinessService";
+	public static final String BUSINESSSERVICE_PATH_CODE = "$.MdmsRes.BillingService.BusinessService.*.code";
+	public static final String BUSINESSSERVICE_MODULE_PATH = "$.MdmsRes.BillingService.BusinessService";
+	
 	
 	public static final String TAXPERIOD_MASTERNAME = "TaxPeriod";
 	public static final String TAXHEAD_MASTERNAME = "TaxHeadMaster";
@@ -129,6 +131,28 @@ public class Constants {
 	public static final String BUSINESSSERVICE_IDS_FILTER = "@.id in [VAL]";
 	public static final String BUSINESSSERVICE_SERVICES_FILTER = "@.code in [VAL]";
 	public static final String MDMS_NO_FILTER_BUSINESSSERVICE = "$.MdmsRes.BillingService.BusinessService.*";
+
+	public static final String ADVANCE_TAXHEAD_JSONPATH_CODE = "$.MdmsRes.BillingService.TaxHeadMaster[?(@.category=='ADVANCE_COLLECTION' && @.service==\"{}\")].code";
+	public static final String ADVANCE_BUSINESSSERVICE_JSONPATH_CODE = "$.MdmsRes.BillingService.BusinessService[?(@.code==\"{}\")].isAdvanceAllowed";
+
+	public static final String RECEIPTNUMBER_KEY = "receiptNumber";
+	public static final String PAYMENT_ID_KEY = "paymentId";
+
+	public static final String EMPLOYEE_TYPE_CODE = "EMPLOYEE";
+	
+	
+	/*
+	 * Amendment Constants
+	 */
+	
+	public static final String NOTETYPE_REPLACE_STRING = "NOTETYPE";
+
+	public static final String CONSUMERCODE_REPLACE_STRING = "CONSUMERCODE";
+	
+	public static final String CREDIT_NOTE_VALUE = "CN";
+	
+	public static final String DEBIT_NOTE_VALUE = "DN";
+	
 
 	private Constants() {}
 }

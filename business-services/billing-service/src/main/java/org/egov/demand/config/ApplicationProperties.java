@@ -136,6 +136,12 @@ public class ApplicationProperties {
 
 	@Value("${user.service.searchpath}")
 	private String userServiceSearchPath;
+	
+    @Value("${demand.is.user.create.enabled}")
+    private Boolean isUserCreateEnabled;
+    
+    @Value("${egov.user.create.user}")
+    private String userCreateEnpoint;
 
 	@Value("#{${bs.businesscode.demand.updateurl}}")
 	private Map<String, String> businessCodeAndDemandUpdateUrlMap;
@@ -148,7 +154,43 @@ public class ApplicationProperties {
 	@Value("${kafka.topics.receipt.cancel.name.v2}")
 	private String receiptCancellationTopicV2;
 	
-	@Value("S{search.pagesize.default}")
-	private String commonSearchDefaultLimit;
+    @Value("${search.pagesize.default}")
+    private String commonSearchDefaultLimit;
+    
 
+    // Apportioning
+	@Value("${egov.apportion.host}")
+	private String apportionHost;
+
+	@Value("${egov.apportion.endpoint}")
+	private String apportionEndpoint;
+
+	// Amendment
+	@Value("${is.amendment.workflow.enabled}")
+	private Boolean isAmendmentworkflowEnabed;
+	
+    @Value("${workflow.host}")
+    private String wfHost;
+
+    @Value("${workflow.transition.path}")
+    private String wfTransitionPath;
+
+    @Value("${workflow.businessservice.search.path}")
+    private String wfBusinessServiceSearchPath;
+
+    @Value("${workflow.processinstance.search.path}")
+    private String wfProcessInstanceSearchPath;
+    
+    @Value("${workflow.open.action}")
+    private String amendmentWfOpenAction;
+    
+    @Value("${workflow.modulename}")
+    private String amendmentWfModuleName;
+    
+    @Value("${amendment.workflow.name}")
+    private String amendmentWfName;
+    
+    @Value("${amendment.id.format.name}")
+    private String amendmentIdFormatName;
+    
 }

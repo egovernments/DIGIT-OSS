@@ -51,7 +51,6 @@ import static org.egov.demand.util.Constants.URL_PARAMS_FOR_SERVICE_BASED_DEMAND
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -259,7 +258,7 @@ public class BillService {
 			demandIds.add(billCriteria.getDemandId());
 
 		if (billCriteria.getConsumerCode() != null)
-			consumerCodes.add(billCriteria.getConsumerCode());
+			consumerCodes.addAll(billCriteria.getConsumerCode());
 
 		DemandCriteria demandCriteria = DemandCriteria.builder()
 				.businessService(billCriteria.getBusinessService())
@@ -294,70 +293,74 @@ public class BillService {
 	 * @param requestInfo 
 	 * @return
 	 */
-	private List<Bill> prepareBill(List<Demand> demands, RequestInfo requestInfo) {
-
-		/* map to keep check on the values of total amount for each business in bill
-		 */
-		Map<String, TaxAndPayment> serviceCodeAndTaxAmountMap = new HashMap<>();
-		User payer = null != demands.get(0).getPayer() ? demands.get(0).getPayer() : new User();
+	private List<Bill> prepareBill(List<Demand> unGroupedDemands, RequestInfo requestInfo) {
 		
-		
-		List<BillDetail> billDetails = new ArrayList<>();
-		/*
-		 * Fetching Required master data
-		 */
-		String tenantId = demands.get(0).getTenantId();
-		Set<String> businessCodes = new HashSet<>();
-		Set<String> taxHeadCodes = new HashSet<>();
+		List<Bill> bills = new ArrayList<>();
+		Map<String, List<Demand>> businessAndconsumerCodeDemandMap = unGroupedDemands.stream()
+				.collect(Collectors.groupingBy(demand -> demand.getBusinessService() + "-" + demand.getConsumerCode()));
 
-		for (Demand demand : demands) {
+		for (Entry<String, List<Demand>> entry : businessAndconsumerCodeDemandMap.entrySet()) {
 
-			businessCodes.add(demand.getBusinessService());
-			demand.getDemandDetails().forEach(detail -> taxHeadCodes.add(detail.getTaxHeadMasterCode()));
-		}
-		
-		Map<String, TaxHeadMaster> taxHeadMap = getTaxHeadMaster(taxHeadCodes, tenantId, requestInfo);
-		Map<String, BusinessServiceDetail> businessMap = getBusinessService(businessCodes, tenantId, requestInfo);
-		List<String> billNumbers = null;
-		Boolean isBusinessServiceOne = false;
-		
-		if(businessCodes.size() == 1) {
-			billNumbers = getBillNumbers(requestInfo, tenantId, demands.get(0).getBusinessService(), demands.size());
-			isBusinessServiceOne = true;
-		}
-		/*
-		 * looping demand to create bill-detail and account-details object
-		 * 
-		 * setting ids to the same
-		 */
-		String billId = UUID.randomUUID().toString();
-		int i = 0;
-		for (Demand demand : demands) {
+			List<Demand> demandsForCurrentBusinessAndConsumer = entry.getValue();
+			/*
+			 * map to keep check on the values of total amount for each business in bill
+			 */
+			Map<String, TaxAndPayment> serviceCodeAndTaxAmountMap = new HashMap<>();
+			User payer = null != demandsForCurrentBusinessAndConsumer.get(0).getPayer()
+					? demandsForCurrentBusinessAndConsumer.get(0).getPayer()
+					: new User();
 
-			/* bill detail Gen */
-			BillDetail billDetail = getBillDetailForDemand(demand, taxHeadMap, businessMap);
+			List<BillDetail> billDetails = new ArrayList<>();
+			/*
+			 * Fetching Required master data
+			 */
+			String tenantId = demandsForCurrentBusinessAndConsumer.get(0).getTenantId();
+			String businessService = demandsForCurrentBusinessAndConsumer.get(0).getBusinessService();
+			Set<String> businessCodeSet = new HashSet<>();
+			businessCodeSet.add(businessService);
+			Set<String> taxHeadCodes = new HashSet<>();
 
-			/* setting ids for billDetail and billAccountDetails*/
-			String billDetailId = UUID.randomUUID().toString();
-			billDetail.setId(billDetailId);
-			billDetail.setBill(billId);
-			if(isBusinessServiceOne)
-				billDetail.setBillNumber(billNumbers.get(i++));
-			else 
-				billDetail.setBillNumber(getBillNumbers(requestInfo, tenantId, demands.get(0).getBusinessService(), 1).get(0));
+			for (Demand demand : demandsForCurrentBusinessAndConsumer) {
 
-			for (BillAccountDetail accDetail : billDetail.getBillAccountDetails()) {
-
-				accDetail.setId(UUID.randomUUID().toString());
-				accDetail.setBillDetail(billDetailId);
+				demand.getDemandDetails().forEach(detail -> taxHeadCodes.add(detail.getTaxHeadMasterCode()));
 			}
 
-			/* updating total amount in map for  business-code per bill detail*/
-			updateServiceCodeAndTaxAmountMap(serviceCodeAndTaxAmountMap, billDetail);
-			billDetails.add(billDetail);
-		}
-		
-		Bill bill = Bill.builder()
+			Map<String, TaxHeadMaster> taxHeadMap = getTaxHeadMaster(taxHeadCodes, tenantId, requestInfo);
+			Map<String, BusinessServiceDetail> businessMap = getBusinessService(businessCodeSet, tenantId, requestInfo);
+			List<String> billNumbers = null;
+
+			billNumbers = getBillNumbers(requestInfo, tenantId, businessService,
+					demandsForCurrentBusinessAndConsumer.size());
+			/*
+			 * looping demand to create bill-detail and account-details object
+			 * 
+			 * setting ids to the same
+			 */
+			String billId = UUID.randomUUID().toString();
+			int i = 0;
+			for (Demand demand : demandsForCurrentBusinessAndConsumer) {
+
+				/* bill detail Gen */
+				BillDetail billDetail = getBillDetailForDemand(demand, taxHeadMap, businessMap);
+
+				/* setting ids for billDetail and billAccountDetails */
+				String billDetailId = UUID.randomUUID().toString();
+				billDetail.setId(billDetailId);
+				billDetail.setBill(billId);
+				billDetail.setBillNumber(billNumbers.get(i++));
+
+				for (BillAccountDetail accDetail : billDetail.getBillAccountDetails()) {
+
+					accDetail.setId(UUID.randomUUID().toString());
+					accDetail.setBillDetail(billDetailId);
+				}
+
+				/* updating total amount in map for business-code per bill detail */
+				updateServiceCodeAndTaxAmountMap(serviceCodeAndTaxAmountMap, billDetail);
+				billDetails.add(billDetail);
+			}
+
+			Bill bill = Bill.builder()
 				.taxAndPayments(new ArrayList<>(serviceCodeAndTaxAmountMap.values()))
 				.auditDetails(util.getAuditDetail(requestInfo))
 				.payerAddress(payer.getPermanentAddress())
@@ -370,9 +373,11 @@ public class BillService {
 				.id(billId)
 				.build();
 		
-		return Arrays.asList(bill);
+			bills.add(bill);
+		}
+		return bills;
 	}
-	
+
 	private List<String> getBillNumbers(RequestInfo requestInfo, String tenantId, String module, int count) {
 
 		String billNumberFormat = appProps.getBillNumberFormat();

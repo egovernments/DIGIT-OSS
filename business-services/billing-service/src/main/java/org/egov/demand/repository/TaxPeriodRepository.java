@@ -51,25 +51,15 @@ import static org.egov.demand.util.Constants.TAXPERIOD_PERIODCYCLE_FILTER;
 import static org.egov.demand.util.Constants.TAXPERIOD_SERVICES_FILTER;
 import static org.egov.demand.util.Constants.TAXPERIOD_TODATE_FILTER;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.model.TaxPeriod;
-import org.egov.demand.repository.querybuilder.TaxPeriodQueryBuilder;
-import org.egov.demand.repository.rowmapper.TaxPeriodRowMapper;
 import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.TaxPeriodCriteria;
-import org.egov.demand.web.contract.TaxPeriodRequest;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -77,54 +67,26 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Repository
-@Slf4j
 public class TaxPeriodRepository {
 
-    @Autowired
+	@Autowired
 	private Util util;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    
-    @Autowired
-    private ObjectMapper mapper;
-
-    @Autowired
-    private TaxPeriodRowMapper taxPeriodRowMapper;
-
-    @Autowired
-    private TaxPeriodQueryBuilder taxPeriodQueryBuilder;
-
-    public List<TaxPeriod> searchTaxPeriods(final TaxPeriodCriteria taxPeriodCriteria) {
-
-        final List<Object> preparedStatementValues = new ArrayList<>();
-        final String queryStr = taxPeriodQueryBuilder.prepareSearchQuery(taxPeriodCriteria, preparedStatementValues);
-        List<TaxPeriod> taxPeriods = new ArrayList<>();
-        try {
-            log.info("queryStr -> " + queryStr + "preparedStatementValues -> " + preparedStatementValues.toString());
-            taxPeriods = jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), taxPeriodRowMapper);
-            log.info("TaxPeriodRepository taxPeriods -> " + taxPeriods);
-        } catch (final Exception ex) {
-            log.info("the exception from searchTaxPeriods : " + ex);
-        }
-        return taxPeriods;
-    }
-
+	@Autowired
+	private ObjectMapper mapper;
 
 	/**
 	 * Fetches the TaxPeriod based on search criteria
-	 * @param requestInfo The requestInfo of the search request
+	 * 
+	 * @param requestInfo       The requestInfo of the search request
 	 * @param taxPeriodCriteria The search criteria for TaxPeriod
 	 * @return List of TaxPeriod
 	 */
-	public List<TaxPeriod> getTaxPeriod(RequestInfo requestInfo,TaxPeriodCriteria taxPeriodCriteria){
+	public List<TaxPeriod> getTaxPeriod(RequestInfo requestInfo, TaxPeriodCriteria taxPeriodCriteria) {
 
-		MdmsCriteriaReq mdmsCriteriaReq = util.prepareMdMsRequest(taxPeriodCriteria.getTenantId(),
-				MODULE_NAME, Collections.singletonList(TAXPERIOD_MASTERNAME), null,
-				requestInfo);
+		MdmsCriteriaReq mdmsCriteriaReq = util.prepareMdMsRequest(taxPeriodCriteria.getTenantId(), MODULE_NAME,
+				Collections.singletonList(TAXPERIOD_MASTERNAME), null, requestInfo);
 
 		DocumentContext documentContext = util.getAttributeValues(mdmsCriteriaReq);
 		StringBuilder filterExpression = new StringBuilder();
@@ -180,136 +142,4 @@ public class TaxPeriodRepository {
 		return mapper.convertValue(documentContext.read(jsonPath), new TypeReference<List<TaxPeriod>>() {
 		});
 	}
-
-
-
-
-	public List<TaxPeriod> create(TaxPeriodRequest taxPeriodRequest){
-    	List<TaxPeriod> taxPeriods = taxPeriodRequest.getTaxPeriods();
-    	RequestInfo requestInfo = taxPeriodRequest.getRequestInfo();
-    	
-    	jdbcTemplate.batchUpdate(taxPeriodQueryBuilder.insertQuery, new BatchPreparedStatementSetter() {
-    		@Override
-			public void setValues(PreparedStatement ps, int index) throws SQLException {
-				TaxPeriod taxPeriod = taxPeriods.get(index);
-
-				ps.setString(1, taxPeriod.getId());
-				ps.setString(2, taxPeriod.getService());
-				ps.setString(3, taxPeriod.getCode());
-				ps.setLong(4, taxPeriod.getFromDate());
-				ps.setLong(5, taxPeriod.getToDate());
-				ps.setString(6, taxPeriod.getFinancialYear());
-				ps.setLong(7, new Date().getTime());
-				ps.setLong(8, new Date().getTime());
-				ps.setString(9, requestInfo.getUserInfo().getId().toString());
-				ps.setString(10, requestInfo.getUserInfo().getId().toString());
-				ps.setString(11, taxPeriod.getTenantId());
-				
-				if(null != taxPeriod.getPeriodCycle())
-					ps.setString(12, taxPeriod.getPeriodCycle().toString());
-			}
-			
-			@Override
-			public int getBatchSize() {
-				return taxPeriods.size();
-			}
-		});	
-    	
-    	return taxPeriods;
-    }
-    
-    public List<TaxPeriod> update(TaxPeriodRequest taxPeriodRequest) {
-    	List<TaxPeriod> taxPeriods = taxPeriodRequest.getTaxPeriods();
-    	RequestInfo requestInfo = taxPeriodRequest.getRequestInfo();
-    	
-    	jdbcTemplate.batchUpdate(taxPeriodQueryBuilder.updateQuery, new BatchPreparedStatementSetter() {
-    		@Override
-			public void setValues(PreparedStatement ps, int index) throws SQLException {
-				TaxPeriod taxPeriod = taxPeriods.get(index);
-
-				ps.setString(1, taxPeriod.getService());
-				ps.setString(2, taxPeriod.getCode());
-				ps.setLong(3, taxPeriod.getFromDate());
-				ps.setLong(4, taxPeriod.getToDate());
-				ps.setString(5, taxPeriod.getFinancialYear());
-				ps.setLong(6, new Date().getTime());
-				ps.setString(7, requestInfo.getUserInfo().getId().toString());
-				ps.setString(8, taxPeriod.getTenantId());
-				
-				if(taxPeriod.getPeriodCycle().toString()!=null)
-					ps.setString(9, taxPeriod.getPeriodCycle().toString());
-				ps.setString(10, taxPeriod.getTenantId());
-				ps.setString(11, taxPeriod.getId());
-			}
-			
-			@Override
-			public int getBatchSize() {
-				return taxPeriods.size();
-			}
-		});	
-
-    	
-    	return taxPeriods;
-    }
-
-   /* public List<TaxPeriod> create(TaxPeriodRequest taxPeriodRequest){
-        List<TaxPeriod> taxPeriods = taxPeriodRequest.getTaxPeriods();
-
-        if(!taxPeriods.isEmpty()){
-            String query = taxPeriodQueryBuilder.getInsertQuery();
-            List<Object[]> argsList = new ArrayList<>();
-            RequestInfo requestInfo = taxPeriodRequest.getRequestInfo();
-            for(int i = 0; i < taxPeriods.size(); i++){
-                Object[] values = { taxPeriods.get(i).getId(), taxPeriods.get(i).getService(), taxPeriods.get(i).getCode(), taxPeriods.get(i).getFromDate(),
-                        taxPeriods.get(i).getToDate(), taxPeriods.get(i).getFinancialYear(), new Date().getTime(), new Date().getTime(),
-                        requestInfo.getUserInfo().getId(),
-                        requestInfo.getUserInfo().getId(), taxPeriods.get(i).getTenantId()};
-                argsList.add(values);
-            }
-            try {
-                jdbcTemplate.batchUpdate(query, argsList);
-            } catch (DataAccessException ex) {
-                ex.printStackTrace();
-                throw new RuntimeException(ex.getMessage());
-            }
-        }
-        return taxPeriods;
-    }*/
-
-    /*public List<TaxPeriod> update(TaxPeriodRequest taxPeriodRequest) {
-        List<TaxPeriod> taxPeriods = taxPeriodRequest.getTaxPeriods();
-        if(!taxPeriods.isEmpty()){
-            String query = taxPeriodQueryBuilder.getUpdateQuery();
-            List<Object[]> argsList = new ArrayList<>();
-            RequestInfo requestInfo = taxPeriodRequest.getRequestInfo();
-           
-            
-            for(int i=0;i<taxPeriods.size();i++){
-                Object[] values = {taxPeriods.get(i).getService(), taxPeriods.get(i).getCode(), taxPeriods.get(i).getFromDate(),
-                        taxPeriods.get(i).getToDate(), taxPeriods.get(i).getFinancialYear(), new Date().getTime(),
-                        requestInfo.getUserInfo().getId(), taxPeriods.get(i).getTenantId(), taxPeriods.get(i).getId()};
-                argsList.add(values);
-            }
-            try {
-                jdbcTemplate.batchUpdate(query, argsList);
-            } catch (DataAccessException ex) {
-                ex.printStackTrace();
-                throw new RuntimeException(ex.getMessage());
-            }
-        }
-        return taxPeriods;
-    }*/
-
-    public boolean checkForDuplicates(List<TaxPeriod> taxPeriodList, String mode){
-        boolean duplicatesExist = false;
-        String query = taxPeriodQueryBuilder.prepareQueryForValidation(taxPeriodList, mode);
-        log.info("the query for taxperiodseacrh : "+query);
-        try {
-            duplicatesExist = jdbcTemplate.queryForObject(query, Boolean.class);
-        } catch (DataAccessException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex.getMessage());
-        }
-        return duplicatesExist;
-    }
 }

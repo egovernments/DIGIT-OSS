@@ -56,10 +56,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestController
-@Slf4j
 @RequestMapping("/businessservices")
 public class BusinessServiceDetailController {
 
@@ -70,7 +67,6 @@ public class BusinessServiceDetailController {
     @ResponseBody
     public ResponseEntity<?> search(@RequestBody @Valid final RequestInfoWrapper requestInfoWrapper,
                                     @ModelAttribute @Valid final BusinessServiceDetailCriteria BusinessServiceDetailsCriteria, final BindingResult bindingResult) {
-        log.info("BusinessServiceDetailsCriteria -> " + BusinessServiceDetailsCriteria + "requestInfoWrapper -> " + requestInfoWrapper);
 
         final BusinessServiceDetailResponse businessServiceDetailResponse = businessServDetailService.searchBusinessServiceDetails(BusinessServiceDetailsCriteria, requestInfoWrapper.getRequestInfo());
         return new ResponseEntity<>(businessServiceDetailResponse, HttpStatus.OK);

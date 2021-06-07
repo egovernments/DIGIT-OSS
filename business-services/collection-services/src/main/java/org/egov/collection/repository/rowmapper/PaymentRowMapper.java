@@ -69,6 +69,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 String payerEmail = rs.getString("payerEmail");
                 String payerId = rs.getString("payerId");
                 String paymentStatus = rs.getString("paymentStatus");
+                String filesoreId = rs.getString("filestoreid");
                 String createdBy = rs.getString("py_createdBy");
 
                 Long createdDate = rs.getLong("py_createdTime");
@@ -102,6 +103,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                         .payerEmail(payerEmail)
                         .payerId(payerId)
                         .paymentStatus(PaymentStatusEnum.fromValue(paymentStatus))
+                        .fileStoreId(filesoreId)
                         .auditDetails(auditDetails)
                         .build();
 
@@ -171,7 +173,6 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .manualReceiptNumber(manualReceiptNo)
                     .receiptType(receiptType)
                     .additionalDetails(getJsonValue(obj))
-                    
                     .auditDetails(auditDetails)
                     .build();
 
@@ -183,7 +184,6 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .lastModifiedBy("bill_lastmodifiedby")
                     .lastModifiedTime(rs.getLong("bill_lastModifiedTime"))
                     .build();*/
-            
             /*List<String> collectionModesAllowedList = new LinkedList<>();
             if(null != rs.getString("collectionmodesnotallowed")) {
                 String[] collectionModesAllowed = rs.getString("collectionmodesnotallowed").split(",");
@@ -191,11 +191,11 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     collectionModesAllowedList = Arrays.asList(collectionModesAllowed);
             }*/
 
-            //PGobject billAdditionalObj = (PGobject) rs.getObject("bill_additionalDetails");
+            // PGobject billAdditionalObj = (PGobject) rs.getObject("bill_additionalDetails");
 
 
 
-            
+
             payment.addpaymentDetailsItem(paymentDetail);
         }
 
@@ -249,7 +249,6 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
 
     }
-    
 
     private JsonNode getJsonValue(PGobject pGobject){
         try {
@@ -269,4 +268,4 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
 
 
-    }
+}

@@ -5,14 +5,7 @@ import static org.egov.collection.config.CollectionServiceConstants.KEY_FILESTOR
 import static org.egov.collection.config.CollectionServiceConstants.KEY_ID;
 import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.egov.collection.model.Payment;
@@ -91,8 +84,9 @@ public class PaymentRepository {
     }
 
 
-    public List<Payment> fetchPayments(PaymentSearchCriteria paymentSearchCriteria){
+    public List<Payment> fetchPayments(PaymentSearchCriteria paymentSearchCriteria) {
         Map<String, Object> preparedStatementValues = new HashMap<>();
+
         List<String> ids = fetchPaymentIdsByCriteria(paymentSearchCriteria);
 
         if(CollectionUtils.isEmpty(ids))
@@ -104,20 +98,45 @@ public class PaymentRepository {
         List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues, paymentRowMapper);
         if (!CollectionUtils.isEmpty(payments)) {
             Set<String> billIds = new HashSet<>();
-            for(Payment payment : payments) {
-            	billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
+            for (Payment payment : payments) {
+                billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
             }
             Map<String, Bill> billMap = getBills(billIds);
-            for(Payment payment : payments) {
-            	payment.getPaymentDetails().forEach(detail -> {
-            		detail.setBill(billMap.get(detail.getBillId()));
-            	});
+            for (Payment payment : payments) {
+                payment.getPaymentDetails().forEach(detail -> {
+                    detail.setBill(billMap.get(detail.getBillId()));
+                });
             }
-           payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
+            payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
         }
 
         return payments;
     }
+
+    public List<Payment> fetchPaymentsForPlainSearch(PaymentSearchCriteria paymentSearchCriteria) {
+        Map<String, Object> preparedStatementValues = new HashMap<>();
+        String query = paymentQueryBuilder.getPaymentSearchQueryForPlainSearch(paymentSearchCriteria, preparedStatementValues);
+        log.info("Query: " + query);
+        log.info("preparedStatementValues: " + preparedStatementValues);
+        List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues, paymentRowMapper);
+        if (!CollectionUtils.isEmpty(payments)) {
+            Set<String> billIds = new HashSet<>();
+            for (Payment payment : payments) {
+                billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
+            }
+            Map<String, Bill> billMap = getBills(billIds);
+            for (Payment payment : payments) {
+                payment.getPaymentDetails().forEach(detail -> {
+                    detail.setBill(billMap.get(detail.getBillId()));
+                });
+            }
+            payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
+        }
+
+        return payments;
+    }
+
+
     
     private Map<String, Bill> getBills(Set<String> ids){
     	Map<String, Bill> mapOfIdAndBills = new HashMap<>();
@@ -197,21 +216,21 @@ public class PaymentRepository {
         }
     }
 
-    public void updateFileStoreId(List<Map<String, String>> idToFileStoreIdMaps) {
+
+    public void updateFileStoreId(List<Map<String,String>> idToFileStoreIdMaps){
 
         List<MapSqlParameterSource> fileStoreIdSource = new ArrayList<>();
 
         idToFileStoreIdMaps.forEach(map -> {
             MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-            sqlParameterSource.addValue("id", map.get(KEY_ID));
-            sqlParameterSource.addValue("filestoreid", map.get(KEY_FILESTOREID));
+            sqlParameterSource.addValue("id",map.get(KEY_ID));
+            sqlParameterSource.addValue("filestoreid",map.get(KEY_FILESTOREID));
             fileStoreIdSource.add(sqlParameterSource);
         });
 
-        namedParameterJdbcTemplate.batchUpdate(FILESTOREID_UPDATE_PAYMENT_SQL, fileStoreIdSource.toArray(new MapSqlParameterSource[0]));
+        namedParameterJdbcTemplate.batchUpdate(FILESTOREID_UPDATE_PAYMENT_SQL,fileStoreIdSource.toArray(new MapSqlParameterSource[0]));
 
     }
-
 
     public List<String> fetchPaymentIds(PaymentSearchCriteria paymentSearchCriteria) {
 
@@ -226,7 +245,7 @@ public class PaymentRepository {
     public List<String> fetchPaymentIdsByCriteria(PaymentSearchCriteria paymentSearchCriteria) {
         Map<String, Object> preparedStatementValues = new HashMap<>();
         String query = paymentQueryBuilder.getIdQuery(paymentSearchCriteria, preparedStatementValues);
+        log.info("query: "+query);
         return namedParameterJdbcTemplate.query(query, preparedStatementValues, new SingleColumnRowMapper<>(String.class));
     }
-
 }

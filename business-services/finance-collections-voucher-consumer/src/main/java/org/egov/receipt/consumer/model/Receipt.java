@@ -46,6 +46,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -87,5 +88,11 @@ public class Receipt {
 
     @Valid
     private Instrument instrument;
+    
+    @JsonIgnore
+    private String paymentId;
+    
+    @JsonIgnore
+    private String paymentDetailId;
 
 }

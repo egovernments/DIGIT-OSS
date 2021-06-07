@@ -7,10 +7,12 @@ Module is used to distribute the paid amount among the taxHeads.
 
 ### Apportion 
 The Apportioning service is used to distribute the paid amount among the respective taxHead. 
-There is only one API /apportion-service/v1/_apportion endpoint which is to be called to apportion the bill.
-Each bill is processed seperately. The billDetails in each bill are grouped by businessService. For each group the apportionPaidAmount() function is called to apportion the paid amount.The interface Apportion is to be implemented for custom logic. Default implementation is provided in class called OrderByPriorityApportion, 
+There are two API's first is  /apportion-service/bill/_apportion endpoint which is used to apportion the bill. In this case each bill is processed seperately.
+The billDetails in each bill are grouped by businessService. For each group the apportionPaidAmount() function is called to apportion the paid amount.
+The second endpoint is /apportion-service/demand/_apportion which is used to apportion advance amount in demands. Demands for the same consumer code should be sent for the apportion.
+The interface Apportion is to be implemented for custom logic. Default implementation is provided in class called OrderByPriorityApportion,
 Default Implementation:
- 1. Apportions the paid amount based on the order in each taxhead (ascending wise priority) 
+ 1. Apportions the paid amount based on the order in each taxhead (ascending wise priority)
  2. If multiple billDetails are present they are sorted by fromPeriod and the oldest one is apportioned first
  3. Validation is placed to enforce that all taxHeads containing negative amounts should have order less than the one with positive amounts
  4. Any advance amount is added to the latest billDetail as new billAccountDetail
@@ -19,8 +21,12 @@ The apportion request and respose are stored for audit using persister
 
 
 
+### Service Dependencies
+- egov-mdms
+- egov-persister
 
-### Project Structure 
+
+### Project Structure
 *Packages*
  - config - Contains all the configuration properties related to module
  - service - Consists of all services containing the business logic.
@@ -40,15 +46,28 @@ The apportion request and respose are stored for audit using persister
 
 
     mvn clean install
-    java -jar target/egov-apportion-service-0.0.1-SNAPSHOT.jar
+    java -jar target/egov-apportion-service-1.1.1-SNAPSHOT.jar
 
 
-## Dependencies
+
+### API Details
+
+`BasePath` /apportion-service/v2/[API endpoint]
+
+##### Method
+**a) Apportion Bill `POST /bill/_apportion` :** API (Bulk API) Apportions the paid amount in the field collectedAmount of billDetails in the bill
+**b) Apportion demands `POST /demand/_apportion` :** API Apportions the advance amount from previous billing cycles in the latest demands
 
 
-- Postgres database to store request and response data.
+### Kafka Consumers
 
-- Persister module for persistence.
+- NA
 
-- MDMS service to get TaxHeads
 
+### Kafka Producers
+
+- Following are the Producer topic.
+    - **save-apportion-bill-request** :- This topic is used to save the bill apportion request for audit.
+    - **save-apportion-bill-response** :- This topic is used to save the bill apportion response for audit.
+    - **save-apportion-demand-request** :- This topic is used to save the demand apportion request for audit.
+    - **save-apportion-demand-response** :- This topic is used to save the demand apportion response for audit.

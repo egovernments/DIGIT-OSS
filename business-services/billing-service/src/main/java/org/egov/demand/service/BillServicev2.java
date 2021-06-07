@@ -68,7 +68,7 @@ import org.egov.demand.model.BillAccountDetailV2;
 import org.egov.demand.model.BillDetailV2;
 import org.egov.demand.model.BillSearchCriteria;
 import org.egov.demand.model.BillV2;
-import org.egov.demand.model.BillV2.StatusEnum;
+import org.egov.demand.model.BillV2.BillStatus;
 import org.egov.demand.model.BusinessServiceDetail;
 import org.egov.demand.model.Demand;
 import org.egov.demand.model.DemandCriteria;
@@ -86,6 +86,7 @@ import org.egov.demand.web.contract.BusinessServiceDetailCriteria;
 import org.egov.demand.web.contract.RequestInfoWrapper;
 import org.egov.demand.web.contract.User;
 import org.egov.demand.web.contract.factory.ResponseFactory;
+import org.egov.demand.web.validator.BillValidator;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -93,6 +94,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -131,6 +133,9 @@ public class BillServicev2 {
 	@Autowired
 	private IdGenRepo idGenRepo;
 	
+	@Autowired
+	private BillValidator billValidator;
+	
 	@Value("${kafka.topics.billgen.topic.name}")
 	private String notifTopicName;
 	
@@ -148,17 +153,22 @@ public class BillServicev2 {
 	 * @return
 	 */
 	public BillResponseV2 fetchBill(GenerateBillCriteria billCriteria, RequestInfoWrapper requestInfoWrapper) {
-		
+
 		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
+		billValidator.validateBillGenRequest(billCriteria, requestInfo);
+		if (CollectionUtils.isEmpty(billCriteria.getConsumerCode()))
+			billCriteria.setConsumerCode(new HashSet<>());
 		BillResponseV2 res = searchBill(billCriteria.toBillSearchCriteria(), requestInfo);
 		List<BillV2> bills = res.getBill();
-		
+
 		/* 
 		 * If no existing bills found then Generate new bill 
 		 */
 		if (CollectionUtils.isEmpty(bills))
 			return generateBill(billCriteria, requestInfo);
 		
+		Map<String, BillV2> consumerCodeAndBillMap = bills.stream().collect(Collectors.toMap(BillV2::getConsumerCode, Function.identity()));
+		billCriteria.getConsumerCode().addAll(consumerCodeAndBillMap.keySet());
 		/*
 		 * Collecting the businessService code and the list of consumer codes for those service codes 
 		 * whose demands needs to be updated.
@@ -166,45 +176,43 @@ public class BillServicev2 {
 		 * grouping by service code and collecting the list of 
 		 * consumerCodes against the service code
 		 */
+ 		List<String> cosnumerCodesNotFoundInBill = new ArrayList<>(billCriteria.getConsumerCode());
+		List<String> cosnumerCodesToBeExpired = new ArrayList<>();
+		List<BillV2> billsToBeReturned = new ArrayList<>();
+		Boolean isBillExpired = false;
 		
-		Map<String, Set<String>> serviceAndConsumerCodeList = new HashMap<>();
-		List<String> billCosnumerCodesToBeExpired = new ArrayList<>();
-		
-		for (BillV2 bill : bills)
-			for (BillDetailV2 billDetail : bill.getBillDetails())
-				if (billDetail.getExpiryDate().compareTo(System.currentTimeMillis()) < 0) {
-					billCosnumerCodesToBeExpired.add(bill.getConsumerCode());
-					addConsumercodeToexpiredMap(bill, serviceAndConsumerCodeList);
-					continue;
-				}
+		for (Entry<String, BillV2> entry : consumerCodeAndBillMap.entrySet()) {
+			BillV2 bill = entry.getValue();
 
+			for (BillDetailV2 billDetail : bill.getBillDetails()) {
+				if (billDetail.getExpiryDate().compareTo(System.currentTimeMillis()) < 0) {
+					isBillExpired = true;
+					break;
+				}
+			}
+			if (!isBillExpired)
+				billsToBeReturned.add(bill);
+			else
+				cosnumerCodesToBeExpired.add(bill.getConsumerCode());
+			cosnumerCodesNotFoundInBill.remove(entry.getKey());
+			isBillExpired = false;
+		}
+			
 		/*
 		 * If none of the billDetails in the bills needs to be updated then return the search result
 		 */
-		if(CollectionUtils.isEmpty(serviceAndConsumerCodeList))
+		if(CollectionUtils.isEmpty(cosnumerCodesToBeExpired) && CollectionUtils.isEmpty(cosnumerCodesNotFoundInBill))
 			return res;
 		else {
-			updateDemandsForexpiredBillDetails(serviceAndConsumerCodeList, billCriteria.getTenantId(), requestInfoWrapper);
-			billRepository.updateBillStatus(billCosnumerCodesToBeExpired, StatusEnum.EXPIRED);
-			return generateBill(billCriteria, requestInfo);
+			
+			billCriteria.getConsumerCode().retainAll(cosnumerCodesToBeExpired);
+			billCriteria.getConsumerCode().addAll(cosnumerCodesNotFoundInBill);
+			updateDemandsForexpiredBillDetails(billCriteria.getBusinessService(), billCriteria.getConsumerCode(), billCriteria.getTenantId(), requestInfoWrapper);
+			billRepository.updateBillStatus(cosnumerCodesToBeExpired, BillStatus.EXPIRED);
+			BillResponseV2 finalResponse = generateBill(billCriteria, requestInfo);
+			finalResponse.getBill().addAll(billsToBeReturned);
+			return finalResponse;
 		}
-	}
-
-	/**
-	 * private method to update consumer code values for expired bills
-	 * 
-	 * @param bill
-	 * @param serviceAndConsumerCodeList
-	 */
-	private void addConsumercodeToexpiredMap(BillV2 bill, Map<String, Set<String>> serviceAndConsumerCodeList) {
-
-		Set<String> consumerCodeSet = serviceAndConsumerCodeList.get(bill.getBusinessService());
-		if (null == consumerCodeSet) {
-			consumerCodeSet = new HashSet<String>();
-			consumerCodeSet.add(bill.getConsumerCode());
-			serviceAndConsumerCodeList.put(bill.getBusinessService(), consumerCodeSet);
-		} else
-			consumerCodeSet.add(bill.getConsumerCode());
 	}
 
 	/**
@@ -214,29 +222,25 @@ public class BillServicev2 {
 	 * @param serviceAndConsumerCodeListMap
 	 * @param tenantId
 	 */
-	private void updateDemandsForexpiredBillDetails(Map<String, Set<String>> serviceAndConsumerCodeListMap,
-			String tenantId, RequestInfoWrapper requestInfoWrapper) {
+	private void updateDemandsForexpiredBillDetails(String businessService, Set<String> consumerCodesTobeUpdated, String tenantId, RequestInfoWrapper requestInfoWrapper) {
 
 		Map<String, String> serviceUrlMap = appProps.getBusinessCodeAndDemandUpdateUrlMap();
 
-		for (Entry<String, Set<String>> entry : serviceAndConsumerCodeListMap.entrySet()) {
 
-			String url = serviceUrlMap.get(entry.getKey());
-
+			String url = serviceUrlMap.get(businessService);
 			if (StringUtils.isEmpty(url)) {
 				
 				log.info(URL_NOT_CONFIGURED_FOR_DEMAND_UPDATE_KEY, URL_NOT_CONFIGURED_FOR_DEMAND_UPDATE_MSG
-						.replace(URL_NOT_CONFIGURED_REPLACE_TEXT, entry.getKey()));
+						.replace(URL_NOT_CONFIGURED_REPLACE_TEXT, businessService));
 				return;
 			}
 
 			StringBuilder completeUrl = new StringBuilder(url)
 					.append(URL_PARAMS_FOR_SERVICE_BASED_DEMAND_APIS.replace(TENANTID_REPLACE_TEXT, tenantId).replace(
-							CONSUMERCODES_REPLACE_TEXT, entry.getValue().toString().replace("[", "").replace("]", "")));
+							CONSUMERCODES_REPLACE_TEXT, consumerCodesTobeUpdated.toString().replace("[", "").replace("]", "")));
 
 			log.info("the url : " + completeUrl);
 			restRepository.fetchResult(completeUrl.toString(), requestInfoWrapper);
-		}
 	}
 
 
@@ -271,7 +275,7 @@ public class BillServicev2 {
 			demandIds.add(billCriteria.getDemandId());
 
 		if (billCriteria.getConsumerCode() != null)
-			consumerCodes.add(billCriteria.getConsumerCode());
+			consumerCodes.addAll(billCriteria.getConsumerCode());
 
 		DemandCriteria demandCriteria = DemandCriteria.builder()
 				.status(org.egov.demand.model.Demand.StatusEnum.ACTIVE.toString())
@@ -280,6 +284,7 @@ public class BillServicev2 {
 				.tenantId(billCriteria.getTenantId())
 				.email(billCriteria.getEmail())
 				.consumerCode(consumerCodes)
+				.isPaymentCompleted(false)
 				.receiptRequired(false)
 				.demandId(demandIds)
 				.build();
@@ -358,8 +363,9 @@ public class BillServicev2 {
 				billAmount = billAmount.add(billDetail.getAmount());
 			}
 			
-			
-			BillV2 bill = BillV2.builder()
+			if (billAmount.compareTo(BigDecimal.ZERO) >= 0) {
+
+				BillV2 bill = BillV2.builder()
 					.auditDetails(util.getAuditDetail(requestInfo))
 					.payerAddress(payer.getPermanentAddress())
 					.mobileNumber(payer.getMobileNumber())
@@ -367,7 +373,7 @@ public class BillServicev2 {
 					.businessService(business.getCode())
 					.payerName(payer.getName())
 					.consumerCode(consumerCode)
-					.status(StatusEnum.ACTIVE)
+					.status(BillStatus.ACTIVE)
 					.billDetails(billDetails)
 					.totalAmount(billAmount)
 					.billNumber(billNumber)
@@ -377,9 +383,10 @@ public class BillServicev2 {
 			
 			bills.add(bill);
 		}
-		return bills;
 	}
-	
+	return bills;
+}
+
 	private List<String> getBillNumbers(RequestInfo requestInfo, String tenantId, String module, int count) {
 
 		String billNumberFormat = appProps.getBillNumberFormat();
@@ -429,7 +436,7 @@ public class BillServicev2 {
 		}
 
 		
-		Long billExpiryDate = getExpiryDateForDemand(demand.getBillExpiryTime());
+		Long billExpiryDate = getExpiryDateForDemand(demand);
 		
 		return BillDetailV2.builder()
 				.billAccountDetails(new ArrayList<>(taxCodeAccountdetailMap.values()))
@@ -448,11 +455,17 @@ public class BillServicev2 {
 	 * 
 	 * @return expiryDate
 	 */
-	private Long getExpiryDateForDemand(Long billExpiryPeriod) {
+	private Long getExpiryDateForDemand(Demand demand) {
 
+		Long billExpiryPeriod = demand.getBillExpiryTime();
+		Long fixedBillExpiryDate = demand.getFixedBillExpiryDate();
 		Calendar cal = Calendar.getInstance();
-		if (null != billExpiryPeriod && 0 < billExpiryPeriod)
+		
+		if (!ObjectUtils.isEmpty(fixedBillExpiryDate) && fixedBillExpiryDate > cal.getTimeInMillis()) {
+			cal.setTimeInMillis(fixedBillExpiryDate);
+		} else if (!ObjectUtils.isEmpty(billExpiryPeriod) && 0 < billExpiryPeriod) {
 			cal.setTimeInMillis(cal.getTimeInMillis() + billExpiryPeriod);
+		}
 
 		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), 23, 59, 59);
 		return cal.getTimeInMillis();
@@ -568,7 +581,9 @@ public class BillServicev2 {
 	}
 	
 	public BillResponseV2 create(BillRequestV2 billRequest) {
-		billRepository.saveBill(billRequest);
+
+		if (!CollectionUtils.isEmpty(billRequest.getBills()))
+			billRepository.saveBill(billRequest);
 		return getBillResponse(billRequest.getBills());
 	}
 	

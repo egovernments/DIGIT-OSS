@@ -13,7 +13,7 @@ import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.BillAccountDetailV2;
 import org.egov.demand.model.BillDetailV2;
 import org.egov.demand.model.BillV2;
-import org.egov.demand.model.BillV2.StatusEnum;
+import org.egov.demand.model.BillV2.BillStatus;
 import org.egov.demand.util.Util;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +54,12 @@ public class BillRowMapperV2 implements ResultSetExtractor<List<BillV2>>{
 					.payerAddress(rs.getString("b_payeraddress"))
 					.payerEmail(rs.getString("b_payeremail"))
 					.mobileNumber(rs.getString("mobilenumber"))
-					.status(StatusEnum.fromValue(rs.getString("b_status")))
+					.status(BillStatus.fromValue(rs.getString("b_status")))
 					.businessService(rs.getString("bd_businessService"))
 					.billNumber(rs.getString("bd_billno"))
 					.billDate(rs.getLong("bd_billDate"))
 					.consumerCode(rs.getString("bd_consumerCode"))
+					.fileStoreId(rs.getString("b_fileStoreId"))
 					.additionalDetails(util.getJsonValue((PGobject) rs.getObject("b_additionalDetails")))
 					.auditDetails(auditDetails)
 					.build();

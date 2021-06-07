@@ -172,6 +172,9 @@ public class CollectionServiceConstants {
     public static final String RECEIPT_CHEQUE_OR_DD_DATE_FIELD = "Cheque/DD Date";
     public static final String RECEIPT_CHEQUE_OR_DD_DATE_MESSAGE = "Cheque/DD date should not be greater than Manual Receipt Date ";
 
+    public static final String RECEIPT_NEFT_OR_RTGS_DATE = "INVALID_NEFT_RTGS_DATE";
+    public static final String RECEIPT_NEFT_OR_RTGS_DATE_MESSAGE = "NEFT/RTGS date should not be greater than Manual Receipt Date ";
+
     public static final String CHEQUE_DD_DATE_WITH_MANUAL_RECEIPT_DATE_CODE = "egcl_0021";
     public static final String CHEQUE_DD_DATE_WITH_MANUAL_RECEIPT_DATE_FIELD = "Cheque/DD Date";
     public static final String CHEQUE_DD_DATE_WITH_MANUAL_RECEIPT_DATE_MESSAGE = "Cheque/DD date should be less than and within 90 days of Manual Receipt Date ";
@@ -259,6 +262,34 @@ public class CollectionServiceConstants {
 
     public static final String KEY_PDF_FILESTOREID = "filestoreids";
 
+    public static final String COLLECTION_LOCALIZATION_MODULE = "collection-services";
 
+    public static final String BUSINESSSERVICE_LOCALIZATION_MODULE = "rainmaker-uc";
+
+    public static final String LOCALIZATION_CODES_JSONPATH = "$.messages.*.code";
+
+    public static final String LOCALIZATION_MSGS_JSONPATH = "$.messages.*.message";
+
+    public static final String BUSINESSSERVICE_CODES_JSONPATH = "$.MdmsRes.BillingService.BusinessService";
+
+    public static final String BUSINESSSERVICE_MDMS_MASTER = "BusinessService";
+
+    public static final String BUSINESSSERVICE_CODES_FILTER = "$.[?(@.type=='Adhoc')].code";
+
+    public static final String BUSINESSSERVICE_MDMS_MODULE = "BillingService";
+
+    public static final String BUSINESSSERVICELOCALIZATION_CODE_PREFIX = "BILLINGSERVICE_BUSINESSSERVICE_";
+
+    public static final String WF_MT_STATUS_OPEN_CODE = "UC_NOTIF_WF_MT_NEW";
+
+    public static final String WF_MT_STATUS_DEPOSITED_CODE = "UC_NOTIF_WF_MT_DEPOSITED";
+
+    public static final String WF_MT_STATUS_CANCELLED_CODE = "UC_NOTIF_WF_MT_CANCELLED";
+
+    public static final String WF_MT_STATUS_DISHONOURED_CODE = "UC_NOTIF_WF_MT_DISHONOURED";
+    
+    public static final String CITIZEN_ROLE = "CITIZEN";
+    
+    public static final String EMPLOYEE_TYPE = "EMPLOYEE";
 
 }

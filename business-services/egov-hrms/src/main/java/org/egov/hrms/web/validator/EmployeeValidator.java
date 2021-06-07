@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.common.protocol.types.Field;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.hrms.config.PropertiesManager;
@@ -18,6 +19,7 @@ import org.egov.hrms.web.contract.EmployeeRequest;
 import org.egov.hrms.web.contract.EmployeeResponse;
 import org.egov.hrms.web.contract.EmployeeSearchCriteria;
 import org.egov.hrms.web.contract.UserResponse;
+import org.egov.mdms.model.MdmsResponse;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,12 +55,49 @@ public class EmployeeValidator {
 		validateExistingDuplicates(request ,errorMap);
 		if(!CollectionUtils.isEmpty(errorMap.keySet()))
 			throw new CustomException(errorMap);
+		Map<String, List<String>> boundaryMap = getBoundaryList(request.getRequestInfo(),request.getEmployees().get(0));
 		Map<String, List<String>> mdmsData = mdmsService.getMDMSData(request.getRequestInfo(), request.getEmployees().get(0).getTenantId());
 		if(!CollectionUtils.isEmpty(mdmsData.keySet())){
-			request.getEmployees().stream().forEach(employee -> validateMdmsData(employee, errorMap, mdmsData));
+			request.getEmployees().stream().forEach(employee -> validateMdmsData(employee, errorMap, mdmsData,boundaryMap));
 		}
 		if(!CollectionUtils.isEmpty(errorMap.keySet()))
 			throw new CustomException(errorMap);
+	}
+
+	public Map<String, List<String>> getBoundaryList(RequestInfo requestInfo,Employee employee){
+		List<String> boundarytList = new ArrayList<>();
+		Map<String, List<String>> eachMasterMap = new HashMap<>();
+		Map<String, List<String>> masterData = new HashMap<>();
+		if(!CollectionUtils.isEmpty(employee.getJurisdictions())){
+			for(Jurisdiction jurisdiction: employee.getJurisdictions()){
+				if(!boundarytList.contains(jurisdiction.getBoundary()))
+					boundarytList.add(jurisdiction.getBoundary());
+			}
+			if(CollectionUtils.isEmpty(boundarytList))
+				boundarytList.add(employee.getTenantId());
+		}
+
+		List<MdmsResponse> boundaryResponseList = new ArrayList<>();
+		for(String boundary: boundarytList){
+			MdmsResponse responseLoc = mdmsService.fetchMDMSDataLoc(requestInfo, boundary);
+			if(!CollectionUtils.isEmpty(responseLoc.getMdmsRes()))
+				boundaryResponseList.add(responseLoc);
+		}
+
+		if(!CollectionUtils.isEmpty(boundaryResponseList)){
+			List<String> tenantBoundaryData = new ArrayList<>();
+			for(MdmsResponse responseLoc : boundaryResponseList){
+				if(!CollectionUtils.isEmpty(responseLoc.getMdmsRes().keySet())) {
+					if(null != responseLoc.getMdmsRes().get(HRMSConstants.HRMS_MDMS_EGOV_LOCATION_MASTERS_CODE)) {
+						eachMasterMap = (Map) responseLoc.getMdmsRes().get(HRMSConstants.HRMS_MDMS_EGOV_LOCATION_MASTERS_CODE);
+						tenantBoundaryData.addAll(eachMasterMap.get(HRMSConstants.HRMS_MDMS_TENANT_BOUNDARY_CODE));
+					}
+				}
+			}
+			if(!CollectionUtils.isEmpty(tenantBoundaryData))
+				masterData.put(HRMSConstants.HRMS_MDMS_TENANT_BOUNDARY_CODE,tenantBoundaryData);
+		}
+		return masterData;
 	}
 	
 	/**
@@ -188,11 +227,11 @@ public class EmployeeValidator {
      * @param errorMap
      * @param mdmsData
      */
-	private void validateMdmsData(Employee employee, Map<String, String> errorMap, Map<String, List<String>> mdmsData) {
+	private void validateMdmsData(Employee employee, Map<String, String> errorMap, Map<String, List<String>> mdmsData, Map<String, List<String>> boundaryMap) {
 		validateEmployee(employee, errorMap, mdmsData);
 		validateAssignments(employee, errorMap, mdmsData);
 		validateServiceHistory(employee, errorMap, mdmsData);
-		validateJurisdicton(employee, errorMap, mdmsData);
+		validateJurisdicton(employee, errorMap, mdmsData, boundaryMap);
 		validateEducationalDetails(employee, errorMap, mdmsData);
 		validateDepartmentalTest(employee, errorMap, mdmsData);
 	}
@@ -409,16 +448,17 @@ public class EmployeeValidator {
 	 * @param errorMap
 	 * @param mdmsData
 	 */
-	private void validateJurisdicton(Employee employee, Map<String, String> errorMap, Map<String, List<String>> mdmsData) {
+	private void validateJurisdicton(Employee employee, Map<String, String> errorMap, Map<String, List<String>> mdmsData,Map<String, List<String>> boundaryMap) {
 		if(CollectionUtils.isEmpty(employee.getJurisdictions().stream().filter(jurisdiction -> null == jurisdiction.getIsActive() || jurisdiction.getIsActive() &&  jurisdiction.getIsActive() ).collect(Collectors.toList()))){
 			errorMap.put(ErrorConstants.HRMS_INVALID_JURISDICTION_ACTIIEV_NULL_CODE,ErrorConstants.HRMS_INVALID_JURISDICTION_ACTIIEV_NULL_MSG);
 		}
 		for(Jurisdiction jurisdiction: employee.getJurisdictions()) {
-				List<String>  hierarchyTypes = JsonPath.read(mdmsData,HRMSConstants.HRMS_TENANTBOUNDARY_HIERARCHY_JSONPATH);
-				String boundary_type_path = String.format(HRMSConstants.HRMS_TENANTBOUNDARY_BOUNDARY_TYPE_JSONPATH,jurisdiction.getHierarchy());
-				String boundary_value_path = String.format(HRMSConstants.HRMS_TENANTBOUNDARY_BOUNDARY_VALUE_JSONPATH,jurisdiction.getHierarchy());
-				List <String> boundaryTypes = JsonPath.read(mdmsData,boundary_type_path);
-				List <String> boundaryValues = JsonPath.read(mdmsData,boundary_value_path);
+				String hierarchy_type_path = String.format(HRMSConstants.HRMS_TENANTBOUNDARY_HIERARCHY_JSONPATH,jurisdiction.getBoundary());
+				String boundary_type_path = String.format(HRMSConstants.HRMS_TENANTBOUNDARY_BOUNDARY_TYPE_JSONPATH,jurisdiction.getHierarchy(),jurisdiction.getBoundary());
+				String boundary_value_path = String.format(HRMSConstants.HRMS_TENANTBOUNDARY_BOUNDARY_VALUE_JSONPATH,jurisdiction.getHierarchy(),jurisdiction.getBoundary());
+				List<String>  hierarchyTypes = JsonPath.read(boundaryMap,hierarchy_type_path);
+				List <String> boundaryTypes = JsonPath.read(boundaryMap,boundary_type_path);
+				List <String> boundaryValues = JsonPath.read(boundaryMap,boundary_value_path);
 				if(!hierarchyTypes.contains(jurisdiction.getHierarchy()))
 					errorMap.put(ErrorConstants.HRMS_INVALID_JURISDICTION_HEIRARCHY_CODE, ErrorConstants.HRMS_INVALID_JURISDICTION_HEIRARCHY_MSG);
 				if(!boundaryTypes.contains(jurisdiction.getBoundaryType()))
@@ -485,6 +525,7 @@ public class EmployeeValidator {
 	 */
 	public void validateUpdateEmployee(EmployeeRequest request) {
 		Map<String, String> errorMap = new HashMap<>();
+		Map<String, List<String>> boundaryMap = getBoundaryList(request.getRequestInfo(),request.getEmployees().get(0));
 		Map<String, List<String>> mdmsData = mdmsService.getMDMSData(request.getRequestInfo(), request.getEmployees().get(0).getTenantId());
 		List <String> uuidList = request.getEmployees().stream().map(Employee :: getUuid).collect(Collectors.toList()); 
 		EmployeeResponse existingEmployeeResponse = employeeService.search(EmployeeSearchCriteria.builder().uuids(uuidList).build(),request.getRequestInfo());
@@ -498,7 +539,7 @@ public class EmployeeValidator {
 				else
 					errorMap.put(ErrorConstants.HRMS_UPDATE_EMPLOYEE_NOT_EXIST_CODE, ErrorConstants.HRMS_UPDATE_EMPLOYEE_NOT_EXIST_MSG);
 			}
-			validateMdmsData(employee, errorMap, mdmsData);
+			validateMdmsData(employee, errorMap, mdmsData,boundaryMap);
 		}
 		if(!CollectionUtils.isEmpty(errorMap.keySet())) {	
 			throw new CustomException(errorMap);

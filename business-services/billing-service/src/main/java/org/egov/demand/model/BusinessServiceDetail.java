@@ -39,17 +39,21 @@
  */
 package org.egov.demand.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BusinessServiceDetail {
 
     private String id;
@@ -65,6 +69,9 @@ public class BusinessServiceDetail {
     private List<String> collectionModesNotAllowed = new ArrayList<>();
 
     private Boolean partPaymentAllowed;
+    
+    @Default
+    private Boolean isBillAmendmentEnabled = false;
     
     private Boolean isAdvanceAllowed;
     

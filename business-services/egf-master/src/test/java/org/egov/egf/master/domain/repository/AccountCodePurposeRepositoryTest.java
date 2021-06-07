@@ -163,7 +163,7 @@ public class AccountCodePurposeRepositoryTest {
 
 	@Test
 	public void testAddToSearchQueue() {
-		Mockito.doNothing().when(accountCodePurposeQueueRepository).add(Mockito.any());
+		Mockito.lenient().doNothing().when(accountCodePurposeQueueRepository).add(Mockito.any());
 		AccountCodePurposeRequest request = new AccountCodePurposeRequest();
 		request.setRequestInfo(getRequestInfo());
 		request.setAccountCodePurposes(new ArrayList<AccountCodePurposeContract>());

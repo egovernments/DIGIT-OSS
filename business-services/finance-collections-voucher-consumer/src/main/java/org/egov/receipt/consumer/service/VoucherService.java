@@ -40,18 +40,29 @@
 package org.egov.receipt.consumer.service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Set;
 
 import org.egov.receipt.consumer.model.FinanceMdmsModel;
+import org.egov.receipt.consumer.model.InstrumentContract;
+import org.egov.receipt.consumer.model.Receipt;
 import org.egov.receipt.consumer.model.ReceiptReq;
 import org.egov.receipt.consumer.model.RequestInfo;
+import org.egov.receipt.consumer.model.Voucher;
 import org.egov.receipt.consumer.model.VoucherResponse;
+import org.egov.receipt.consumer.model.VoucherSearchCriteria;
 import org.egov.receipt.custom.exception.VoucherCustomException;
 
 public interface VoucherService {
-	public VoucherResponse createReceiptVoucher(ReceiptReq req, FinanceMdmsModel finSerMdms) throws Exception;
-	public VoucherResponse cancelReceiptVoucher(ReceiptReq req) throws Exception;
-	public boolean isVoucherCreationEnabled(ReceiptReq req, FinanceMdmsModel finSerMdms) throws Exception;
+	public VoucherResponse createReceiptVoucher(ReceiptReq req, FinanceMdmsModel finSerMdms, String collectionVersion) throws Exception;
+	public VoucherResponse cancelReceiptVoucher(ReceiptReq req,  String tenantId, Set<String> voucherNumbers) throws Exception;
+	public boolean isVoucherCreationEnabled(Receipt receipt, RequestInfo req, FinanceMdmsModel finSerMdms) throws Exception;
 	public boolean isTenantEnabledInFinanceModule(ReceiptReq req, FinanceMdmsModel finSerMdms) throws VoucherCustomException;
 	VoucherResponse getVoucherByServiceAndRefDoc(RequestInfo requestInfo, String tenantId, String serviceCode,
 			String referenceDoc) throws VoucherCustomException, UnsupportedEncodingException;
+	VoucherResponse getVouchers(VoucherSearchCriteria criteria, RequestInfo requestInfo, String tenantId)
+			throws VoucherCustomException;
+	VoucherResponse createVoucher(List<Voucher> vouchers, RequestInfo requestInfo, String tenantId)
+			throws VoucherCustomException;
+	VoucherResponse processReversalVoucher(List<InstrumentContract> instruments, RequestInfo requestInfo);
 }

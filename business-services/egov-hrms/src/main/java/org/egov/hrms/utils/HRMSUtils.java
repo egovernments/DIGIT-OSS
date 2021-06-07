@@ -1,5 +1,6 @@
 package org.egov.hrms.utils;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +14,9 @@ public class HRMSUtils {
 	
 	@Value("${egov.hrms.default.pwd.length}")
 	private Integer pwdLength;
+
+	@Value("${egov.pwd.allowed.special.characters}")
+	private String allowedPasswordSpecialCharacters;
 	
 	/**
 	 * Generates random password for the user to login. Process:
@@ -25,12 +29,17 @@ public class HRMSUtils {
 	 */
 	public String generatePassword(List<String> params) {
 		StringBuilder password = new StringBuilder();
-		Random random = new Random();
+		SecureRandom random = new SecureRandom();
+		params.add(allowedPasswordSpecialCharacters);
 		try {
 			for(int i = 0; i < params.size(); i++) {
 				String param = params.get(i);
-				String val = param.split("")[random.nextInt(param.length() - 1)];
-				if(val.equals(".") || val.equals("-"))
+				String val;
+				if(param.length() == 1)
+					val = param;
+				else
+					val = param.split("")[random.nextInt(param.length() - 1)];
+				if(val.equals(".") || val.equals("-") || val.equals(" "))
 					password.append("x");
 				else
 					password.append(val);

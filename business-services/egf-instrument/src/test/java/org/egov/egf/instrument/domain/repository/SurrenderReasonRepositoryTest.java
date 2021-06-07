@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -76,7 +77,7 @@ public class SurrenderReasonRepositoryTest {
     public void test_find_by_id_return_null() {
         SurrenderReasonEntity entity = getSurrenderReasonEntity();
 
-        when(surrenderReasonJdbcRepository.findById(null)).thenReturn(entity);
+        Mockito.lenient().when(surrenderReasonJdbcRepository.findById(null)).thenReturn(entity);
 
         SurrenderReason actualResult = surrenderReasonRepositoryWithKafka.findById(getSurrenderReasonDomin());
 

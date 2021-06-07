@@ -39,27 +39,22 @@
  */
 package org.egov.demand.repository;
 
-import static org.egov.demand.util.Constants.*;
+import static org.egov.demand.util.Constants.BUSINESSSERVICE_EXPRESSION;
+import static org.egov.demand.util.Constants.BUSINESSSERVICE_IDS_FILTER;
+import static org.egov.demand.util.Constants.BUSINESSSERVICE_MASTERNAME;
+import static org.egov.demand.util.Constants.BUSINESSSERVICE_SERVICES_FILTER;
+import static org.egov.demand.util.Constants.MDMS_NO_FILTER_BUSINESSSERVICE;
+import static org.egov.demand.util.Constants.MODULE_NAME;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.model.BusinessServiceDetail;
-import org.egov.demand.repository.querybuilder.BusinessServDetailQueryBuilder;
-import org.egov.demand.repository.rowmapper.BusinessServDetailRowMapper;
 import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.BusinessServiceDetailCriteria;
-import org.egov.demand.web.contract.BusinessServiceDetailRequest;
 import org.egov.mdms.model.MdmsCriteriaReq;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -70,38 +65,11 @@ import com.jayway.jsonpath.DocumentContext;
 @Repository
 public class BusinessServiceDetailRepository {
 
-    private static final Logger logger = LoggerFactory.getLogger(BusinessServiceDetailRepository.class);
-
     @Autowired
     private Util util;
     
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-    
-    @Autowired
     private ObjectMapper mapper;
-
-    @Autowired
-    private BusinessServDetailRowMapper businessServDetailRowMapper;
-
-    @Autowired
-    private BusinessServDetailQueryBuilder businessServDetailQueryBuilder;
-
-    public List<BusinessServiceDetail> searchBusinessServiceDetails(final BusinessServiceDetailCriteria businessServiceDetailCriteria) {
-
-        final List<Object> preparedStatementValues = new ArrayList<>();
-        final String queryStr = businessServDetailQueryBuilder.prepareSearchQuery(businessServiceDetailCriteria, preparedStatementValues);
-        List<BusinessServiceDetail> businessServiceDetailList = new ArrayList<>();
-        try {
-            logger.info("queryStr -> " + queryStr + "preparedStatementValues -> " + preparedStatementValues.toString());
-            businessServiceDetailList = jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), businessServDetailRowMapper);
-            logger.info("BusinessServiceDetailRepository businessServiceDetailList -> " + businessServiceDetailList);
-        } catch (final Exception ex) {
-            logger.info("the exception from searchBusinessServiceDetails : " + ex);
-        }
-        return businessServiceDetailList;
-    }
-
 
 
     /**
@@ -142,66 +110,4 @@ public class BusinessServiceDetailRepository {
         return  mapper.convertValue(documentContext.read(jsonPath), new TypeReference<List<BusinessServiceDetail>>() {});
     }
 
-
-
-
-
-
-    public List<BusinessServiceDetail> create(BusinessServiceDetailRequest businessServiceDetailRequest) {
-        List<BusinessServiceDetail> businessServiceDetails = businessServiceDetailRequest.getBusinessServiceDetails();
-        if (!businessServiceDetails.isEmpty()) {
-            String query = businessServDetailQueryBuilder.getInsertQuery();
-            List<Object[]> argsList = new ArrayList<>();
-            RequestInfo requestInfo = businessServiceDetailRequest.getRequestInfo();
-            for (int i = 0; i < businessServiceDetails.size(); i++) {
-                Object[] values = {businessServiceDetails.get(i).getId(), businessServiceDetails.get(i).getBusinessService(),
-                        StringUtils.join(businessServiceDetails.get(i).getCollectionModesNotAllowed(), ','), businessServiceDetails.get(i).getPartPaymentAllowed(),
-                        businessServiceDetails.get(i).getCallBackForApportioning(), businessServiceDetails.get(i).getCallBackApportionURL(),
-                        new Date().getTime(), new Date().getTime(), requestInfo.getUserInfo().getId(), requestInfo.getUserInfo().getId(), businessServiceDetails.get(i).getTenantId()};
-                argsList.add(values);
-            }
-            try {
-                jdbcTemplate.batchUpdate(query, argsList);
-            } catch (DataAccessException ex) {
-                ex.printStackTrace();
-                throw new RuntimeException(ex.getMessage());
-            }
-        }
-        return businessServiceDetails;
-    }
-
-    public List<BusinessServiceDetail> update(BusinessServiceDetailRequest businessServiceDetailRequest) {
-        List<BusinessServiceDetail> businessServiceDetails = businessServiceDetailRequest.getBusinessServiceDetails();
-        if (!businessServiceDetails.isEmpty()) {
-            String query = businessServDetailQueryBuilder.getUpdateQuery();
-            List<Object[]> argsList = new ArrayList<>();
-            RequestInfo requestInfo = businessServiceDetailRequest.getRequestInfo();
-            for (int i = 0; i < businessServiceDetails.size(); i++) {
-                Object[] values = {businessServiceDetails.get(i).getBusinessService(), StringUtils.join(businessServiceDetails.get(i).getCollectionModesNotAllowed(), ','),
-                        businessServiceDetails.get(i).getPartPaymentAllowed(), businessServiceDetails.get(i).getCallBackForApportioning(),
-                        businessServiceDetails.get(i).getCallBackApportionURL(), new Date().getTime(), requestInfo.getUserInfo().getId(),
-                        businessServiceDetails.get(i).getTenantId(), businessServiceDetails.get(i).getId()};
-                argsList.add(values);
-            }
-            try {
-                jdbcTemplate.batchUpdate(query, argsList);
-            } catch (DataAccessException ex) {
-                ex.printStackTrace();
-                throw new RuntimeException(ex.getMessage());
-            }
-        }
-        return businessServiceDetails;
-    }
-
-    public boolean checkForDuplicates(List<BusinessServiceDetail> businessServiceDetailList, String mode) {
-        boolean duplicatesExist = false;
-        String query = businessServDetailQueryBuilder.prepareQueryForValidation(businessServiceDetailList, mode);
-        try {
-            duplicatesExist = jdbcTemplate.queryForObject(query, Boolean.class);
-        } catch (DataAccessException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex.getMessage());
-        }
-        return duplicatesExist;
-    }
 }

@@ -16,7 +16,7 @@ import org.egov.demand.model.Bill;
 import org.egov.demand.model.BillAccountDetail;
 import org.egov.demand.model.BillDetail;
 import org.egov.demand.model.BillSearchCriteria;
-import org.egov.demand.model.BillV2.StatusEnum;
+import org.egov.demand.model.BillV2.BillStatus;
 import org.egov.demand.model.BusinessServiceDetail;
 import org.egov.demand.repository.querybuilder.BillQueryBuilder;
 import org.egov.demand.repository.rowmapper.BillRowMapper;
@@ -79,9 +79,9 @@ public class BillRepository {
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
 				Bill bill = bills.get(index);
 
-				StatusEnum status = StatusEnum.ACTIVE;
+				BillStatus status = BillStatus.ACTIVE;
 				if(!ObjectUtils.isEmpty(bill.getIsCancelled()) &&  bill.getIsCancelled() == true)
-					status = StatusEnum.CANCELLED;
+					status = BillStatus.CANCELLED;
 				
 				AuditDetails auditDetails = bill.getAuditDetails();
 				
@@ -217,9 +217,9 @@ public class BillRepository {
 
 		BusinessServiceDetailCriteria businessCriteria = BusinessServiceDetailCriteria.builder()
 				.tenantId(inputBills.get(0).getTenantId()).build();
-		businessServiceDetailRepository.searchBusinessServiceDetails(businessCriteria);
+		
 		Map<String, BusinessServiceDetail> businessServicesMap = businessServiceDetailRepository
-				.searchBusinessServiceDetails(businessCriteria).stream()
+				.getBussinessServiceDetail(requestInfo, businessCriteria).stream()
 				.filter(BusinessServiceDetail::getCallBackForApportioning)
 				.collect(Collectors.toMap(BusinessServiceDetail::getBusinessService, Function.identity()));
 

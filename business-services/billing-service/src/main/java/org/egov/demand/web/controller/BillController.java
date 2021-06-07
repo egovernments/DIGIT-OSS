@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("bill")
+@Deprecated
 public class BillController {
 	
 	@Autowired

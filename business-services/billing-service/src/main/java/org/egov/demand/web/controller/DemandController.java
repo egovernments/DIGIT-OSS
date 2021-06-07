@@ -53,7 +53,6 @@ import org.egov.demand.web.contract.DemandRequest;
 import org.egov.demand.web.contract.DemandResponse;
 import org.egov.demand.web.contract.RequestInfoWrapper;
 import org.egov.demand.web.contract.factory.ResponseFactory;
-import org.egov.demand.web.validator.DemandValidatorV1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -81,16 +80,12 @@ public class DemandController {
 	private ResponseFactory responseFactory;
 	
 	@Autowired
-	private DemandValidatorV1 demandValidatorV1;
-	
-	@Autowired
 	private DemandMigration migrationService;
 
 	/**
 	 * API to create demands
 	 *
 	 * @param demandRequest
-	 * @param bindingResult
 	 * @return ResponseEntity<?>
 	 */
 
@@ -99,10 +94,7 @@ public class DemandController {
 	public ResponseEntity<?> create(@RequestHeader HttpHeaders headers, @RequestBody @Valid DemandRequest demandRequest) {
 
 		log.info("the demand request object : " + demandRequest);
-		/*
-		 * validating master data using mdms and user data
-		 */
-		demandValidatorV1.validatedemandForCreate(demandRequest, true, headers);
+
 		DemandResponse demandResponse = demandService.create(demandRequest);
 
 		return new ResponseEntity<>(demandResponse, HttpStatus.CREATED);
@@ -111,11 +103,7 @@ public class DemandController {
 	@PostMapping("_update")
 	public ResponseEntity<?> update(@RequestHeader HttpHeaders headers, @RequestBody @Valid DemandRequest demandRequest) {
 
-		/*
-		 * validating master data using mdms and user data
-		 */
-		demandValidatorV1.validateForUpdate(demandRequest, headers);
-		return new ResponseEntity<>(demandService.updateAsync(demandRequest), HttpStatus.CREATED);
+		return new ResponseEntity<>(demandService.updateAsync(demandRequest, null), HttpStatus.CREATED);
 	}
 
 	@PostMapping("_search")
@@ -123,9 +111,7 @@ public class DemandController {
 			@ModelAttribute @Valid DemandCriteria demandCriteria) {
 
 		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
-		
-		demandValidatorV1.validateDemandCriteria(demandCriteria);
-		
+
 		List<Demand> demands = demandService.getDemands(demandCriteria, requestInfo);
 		DemandResponse response = DemandResponse.builder().demands(demands)
 				.responseInfo(responseFactory.getResponseInfo(requestInfo, HttpStatus.OK)).build();

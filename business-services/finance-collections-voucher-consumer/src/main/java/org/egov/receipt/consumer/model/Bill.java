@@ -97,6 +97,8 @@ public class Bill {
 	  @Valid
 	  @NotNull
 	  private List<TaxAndPayment> taxAndPayments = null;
+	  
+	  private String businessService;
 
 	  @JsonProperty("billDetails")
 	  @Valid

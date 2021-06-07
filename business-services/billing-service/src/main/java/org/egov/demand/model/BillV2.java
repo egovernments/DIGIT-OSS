@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +38,7 @@ public class BillV2 {
 	private String payerEmail;
 
 	@JsonProperty("status")
-	private StatusEnum status;
+	private BillStatus status;
 
 	@JsonProperty("totalAmount")
 	private BigDecimal totalAmount;
@@ -55,7 +56,7 @@ public class BillV2 {
 	private String consumerCode;
 
 	@JsonProperty("additionalDetails")
-	private Object additionalDetails;
+	private JsonNode additionalDetails;
 
 	@JsonProperty("billDetails")
 	@Valid
@@ -64,13 +65,16 @@ public class BillV2 {
 	@JsonProperty("tenantId")
 	private String tenantId;
 
+	@JsonProperty("fileStoreId")
+	private String fileStoreId;
+
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails;
 	
 	/**
 	 * status of the bill .
 	 */
-	public enum StatusEnum {
+	public enum BillStatus {
 		
 		ACTIVE("ACTIVE"),
 
@@ -86,7 +90,7 @@ public class BillV2 {
 
 		private String value;
 
-		StatusEnum(String value) {
+		BillStatus(String value) {
 			this.value = value;
 		}
 
@@ -97,8 +101,8 @@ public class BillV2 {
 		}
 
 		@JsonCreator
-		public static StatusEnum fromValue(String text) {
-			for (StatusEnum b : StatusEnum.values()) {
+		public static BillStatus fromValue(String text) {
+			for (BillStatus b : BillStatus.values()) {
 				if (String.valueOf(b.value).equalsIgnoreCase(text)) {
 					return b;
 				}

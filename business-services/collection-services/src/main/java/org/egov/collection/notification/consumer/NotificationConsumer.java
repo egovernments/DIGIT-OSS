@@ -79,9 +79,6 @@ public class NotificationConsumer {
 	@Value("${kafka.topics.notification.sms.key}")
 	private String smsTopickey;
 
-	@Value("${sms.enabled}")
-	private Boolean smsEnabled;
-	
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -114,13 +111,11 @@ public class NotificationConsumer {
 	 * @param record
 	 * @param topic
 	 */
-	@KafkaListener(topics = { "${kafka.topics.payment.receiptlink.name}" })
+	//@KafkaListener(topics = { "${kafka.topics.payment.receiptlink.name}" })
 	public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			PaymentRequest req = objectMapper.convertValue(record, PaymentRequest.class);
-			if (smsEnabled) {
-				sendNotification(req);
-			}
+			sendNotification(req);
 		}catch(Exception e) {
 			log.error("Exception while reading from the queue: ", e);
 		}

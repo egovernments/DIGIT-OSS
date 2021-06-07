@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.hrms.model.*;
-import org.egov.hrms.model.enums.DeactivationType;
-import org.egov.hrms.model.enums.ReferenceType;
+import org.egov.hrms.model.enums.EmployeeDocumentReferenceType;
 import org.egov.hrms.web.contract.User;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -42,7 +42,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 						.lastModifiedBy(rs.getString("employee_lastmodifiedby")).lastModifiedDate(rs.getLong("employee_lastmodifieddate")).build();
 				currentEmployee = Employee.builder().id(rs.getLong("employee_id")).uuid(rs.getString("employee_uuid")).tenantId(rs.getString("employee_tenantid"))
 						.code(rs.getString("employee_code")).dateOfAppointment(null == rs.getObject("employee_doa")? null : rs.getLong("employee_doa")).IsActive(rs.getBoolean("employee_active"))
-						.employeeStatus(rs.getString("employee_status")).employeeType(rs.getString("employee_type")).auditDetails(auditDetails)
+						.employeeStatus(rs.getString("employee_status")).employeeType(rs.getString("employee_type")).auditDetails(auditDetails).reActivateEmployee(rs.getBoolean("employee_reactive"))
 						.jurisdictions(new ArrayList<Jurisdiction>()).assignments(new ArrayList<Assignment>()).user(new User())
 						.build();
 			}
@@ -68,6 +68,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 		setServiceHistory(rs, currentEmployee);
 		setDocuments(rs, currentEmployee);
 		setDeactivationDetails(rs, currentEmployee);
+		setReactivationDetails(rs, currentEmployee);
 	}
 	
 	/**
@@ -99,6 +100,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setAssignments(assignments);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Assignments: ",e);
+			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Assignments");
 		}
 	}
 	
@@ -133,6 +135,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setJurisdictions(jurisdictions);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Jurisdictions: ",e);
+			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Jurisdictions");
 		}
 	}
 	
@@ -165,6 +168,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setEducation(educationDetails);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Educational Details: ",e);
+			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Educational Details");
 		}
 	}
 	
@@ -198,6 +202,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setTests(tests);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Departmental Tests: ",e);
+			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Departmental Tests");
 		}
 	}
 	
@@ -229,6 +234,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setServiceHistory(history);
 		}catch(Exception e) {
 			log.error("Error in row mapper while mapping Service History: ",e);
+			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping Service History");
 		}
 	
 	}
@@ -252,14 +258,16 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("docs_createdby")).createdDate(rs.getLong("docs_createddate"))
 						.lastModifiedBy(rs.getString("docs_lastmodifiedby")).lastModifiedDate(rs.getLong("docs_lastmodifieddate")).build();
 				EmployeeDocument document = EmployeeDocument.builder().id(rs.getString("docs_uuid")).documentId(rs.getString("docs_documentid"))
-						.documentName(rs.getString("docs_documentname")).referenceType(rs.getString("docs_referencetype") != null ? ReferenceType.valueOf(rs.getString("docs_referencetype")): null)
+						.documentName(rs.getString("docs_documentname")).referenceType(rs.getString("docs_referencetype") != null ? EmployeeDocumentReferenceType.valueOf(rs.getString("docs_referencetype")): null)
 						.referenceId(rs.getString("docs_referenceid")).tenantId(rs.getString("docs_tenantid")).auditDetails(auditDetails).build();
 				
 				documents.add(document);
 			}
 			currentEmployee.setDocuments(documents);
 		}catch(Exception e) {
-			log.error("Error in row mapper while mapping Service History: ",e);
+			log.error("Error in row mapper while mapping document: ",e);
+			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping document");
+
 		}
 	}
 	
@@ -293,7 +301,37 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 			currentEmployee.setDeactivationDetails(deactDetails);
 
 		}catch(Exception e) {
-			log.error("Error in row mapper while mapping Service History: ",e);
+			log.error("Error in row mapper while mapping deactivation details: ",e);
+			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping deactivation details");
+		}
+	}
+
+	public void setReactivationDetails(ResultSet rs, Employee currentEmployee){
+		try {
+			List<ReactivationDetails> reactDetails = new ArrayList<>();
+			if(CollectionUtils.isEmpty(currentEmployee.getReactivationDetails()))
+				reactDetails = new ArrayList<ReactivationDetails>();
+			else
+				reactDetails = currentEmployee.getReactivationDetails();
+
+			List<String> ids = reactDetails.stream().map(ReactivationDetails::getId).collect(Collectors.toList());
+			if(!StringUtils.isEmpty(rs.getString("react_uuid")) && !ids.contains(rs.getString("react_uuid")) ) {
+				if(rs.getString("react_uuid")!=null){
+					AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("react_createdby")).createdDate(rs.getLong("react_createddate"))
+							.lastModifiedBy(rs.getString("react_lastmodifiedby")).lastModifiedDate(rs.getLong("react_lastmodifieddate")).build();
+
+					ReactivationDetails reactDetail = ReactivationDetails.builder().id(rs.getString("react_uuid")).reasonForReactivation(rs.getString("react_reasonforreactivation"))
+							.effectiveFrom(rs.getLong("react_effectivefrom")).orderNo(rs.getString("react_ordernumber")).remarks(rs.getString("react_remarks")!= null ? (rs.getString("react_remarks")) : null)
+							.tenantId(rs.getString("react_tenantid")).auditDetails(auditDetails).build();
+
+					reactDetails.add(reactDetail);
+				}
+			}
+			currentEmployee.setReactivationDetails(reactDetails);
+
+		}catch(Exception e) {
+			log.error("Error in row mapper while mapping reactivation details ",e);
+			throw new CustomException("ROWMAPPER_ERROR","Error in row mapper while mapping reactivation details");
 		}
 	}
 

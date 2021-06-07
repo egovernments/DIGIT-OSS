@@ -65,7 +65,7 @@ public class FinancialInstrumentListener {
     @Autowired
     private SurrenderReasonService surrenderReasonService;
 
-    @KafkaListener(id = "${kafka.topics.egf.instrument.validated.id}", topics = "${kafka.topics.egf.instrument.validated.topic}", group = "${kafka.topics.egf.instrument.validated.group}")
+    @KafkaListener(id = "${kafka.topics.egf.instrument.validated.id}", topics = "${kafka.topics.egf.instrument.validated.topic}", groupId = "${kafka.topics.egf.instrument.validated.group}")
     public void process(HashMap<String, Object> mastersMap) {
 
         InstrumentAccountCodeMapper accountCodeMapper = new InstrumentAccountCodeMapper();

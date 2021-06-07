@@ -21,6 +21,8 @@ public class PaymentSearchCriteria {
 
     private String tenantId;
 
+    private Set<String> tenantIds;
+
     private Set<String> receiptNumbers;
 
     private Set<String> status;

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -50,7 +51,7 @@ public class ServiceRequestRepository {
 		}catch(HttpClientErrorException e) {
 			log.error("External Service threw an Exception: ",e.getResponseBodyAsString());
 			throw new ServiceCallException(e.getResponseBodyAsString());
-		}catch(Exception e) {
+		}catch(JsonProcessingException e) {
 			log.error("Exception while searching user data : ",e);
 		}
 

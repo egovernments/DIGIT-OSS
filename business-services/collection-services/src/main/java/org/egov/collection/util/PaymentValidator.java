@@ -8,22 +8,29 @@ import static org.egov.collection.config.CollectionServiceConstants.CHEQUE_DD_DA
 import static org.egov.collection.config.CollectionServiceConstants.INSTRUMENT_DATE_DAYS;
 import static org.egov.collection.config.CollectionServiceConstants.RECEIPT_CHEQUE_OR_DD_DATE;
 import static org.egov.collection.config.CollectionServiceConstants.RECEIPT_CHEQUE_OR_DD_DATE_MESSAGE;
+import static org.egov.collection.config.CollectionServiceConstants.RECEIPT_NEFT_OR_RTGS_DATE;
+import static org.egov.collection.config.CollectionServiceConstants.RECEIPT_NEFT_OR_RTGS_DATE_MESSAGE;
 import static org.egov.collection.model.enums.InstrumentStatusEnum.APPROVAL_PENDING;
 import static org.egov.collection.model.enums.InstrumentStatusEnum.APPROVED;
 import static org.egov.collection.model.enums.InstrumentStatusEnum.REMITTED;
+import static org.egov.collection.model.enums.PaymentModeEnum.ONLINE_NEFT;
+import static org.egov.collection.model.enums.PaymentModeEnum.ONLINE_RTGS;
 import static org.egov.collection.util.Utils.jsonMerge;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
+import org.egov.collection.config.CollectionServiceConstants;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
@@ -149,26 +156,47 @@ public class PaymentValidator {
         }
 
         if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CHEQUE.name())
-                || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.DD.name())) {
+                || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.DD.name())
+                || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.OFFLINE_NEFT.name())
+                || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.OFFLINE_RTGS.name())
+                || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.POSTAL_ORDER.name())) {
 
             if (isNull(payment.getInstrumentDate()))
                 errorMap.put("INVALID_INST_DATE", "Instrument Date Input is mandatory for cheque and DD");
 
             if (StringUtils.isEmpty(payment.getInstrumentNumber()))
                 errorMap.put("INVALID_INST_NUMBER", "Instrument Number is mandatory for Cheque, DD, Card");
-            
-            validateChequeDD(payment, errorMap);
+
+            if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CHEQUE.name())
+                    || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.DD.name()))
+                validateChequeDD(payment, errorMap);
+
+            if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.OFFLINE_NEFT.name())
+                    || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.OFFLINE_RTGS.name())
+                    || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.POSTAL_ORDER.name()))
+                validateNEFTAndRTGS(payment, errorMap);
+
         }
 
-        if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CARD.name()) || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.ONLINE.name())) {
+        if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CARD.name()) || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.ONLINE.name())
+                || paymentMode.equalsIgnoreCase(ONLINE_NEFT.name()) || paymentMode.equalsIgnoreCase(ONLINE_RTGS.name())) {
             if (org.apache.commons.lang3.StringUtils.isEmpty(payment.getTransactionNumber()))
-                errorMap.put("INVALID_TXN_NUMBER", "Transaction Number is mandatory for Cheque, DD, Card");
+                errorMap.put("INVALID_TXN_NUMBER", "Transaction Number is mandatory for Card and online payment");
 
             if (org.apache.commons.lang3.StringUtils.isEmpty(payment.getInstrumentNumber()))
                 errorMap.put("INVALID_INSTRUMENT_NUMBER", "Instrument Number is mandatory for Card");
 
         }
 
+    }
+
+
+    private void validateNEFTAndRTGS(Payment payment, Map<String, String> errorMap){
+
+        DateTime instrumentDate = new DateTime(payment.getInstrumentDate());
+        if (instrumentDate.isAfter(System.currentTimeMillis())) {
+            errorMap.put(RECEIPT_NEFT_OR_RTGS_DATE, RECEIPT_NEFT_OR_RTGS_DATE_MESSAGE);
+        }
     }
 
 
@@ -329,12 +357,17 @@ public class PaymentValidator {
 
         Bill bill = paymentDetail.getBill();
 
+        // If IsAdvanceAllowed is null it is interpretated as not allowed
+        Boolean isAdvanceAllowed = !(bill.getIsAdvanceAllowed() == null || !bill.getIsAdvanceAllowed());
+
         // Total amount to be paid should be same in bill and paymentDetail
         if (paymentDetail.getTotalDue().compareTo(bill.getTotalAmount()) != 0)
             errorMap.put("INVALID_PAYMENTDETAIL",
                     "The amount to be paid is mismatching with bill for paymentDetial with bill id: " + bill.getId());
 
-        if(!Utils.isPositiveInteger(paymentDetail.getBill().getTotalAmount()))
+
+        // If advance is not allowed bill total amount should be positive integer
+        if(!isAdvanceAllowed && !Utils.isPositiveInteger(paymentDetail.getBill().getTotalAmount()))
             errorMap.put("INVALID_BILL_AMOUNT","The bill amount of bill: "+paymentDetail.getBill().getId()+" is fractional or less than zero");
 
         // Amount to be paid should be greater than minimum collection amount
@@ -364,7 +397,7 @@ public class PaymentValidator {
             errorMap.put("INVALID_PAYMENTDETAIL",
                     "The amount paid for the paymentDetail with bill number: " + paymentDetail.getBillId());
 
-        // Zero amount payment is allowed only if bill amount is zero
+        // Zero amount payment is allowed only if bill amount is not positive
         if (paymentDetail.getTotalAmountPaid().compareTo(BigDecimal.ZERO) == 0
                 && bill.getTotalAmount().compareTo(BigDecimal.ZERO) > 0)
             errorMap.put("INVALID_PAYMENTDETAIL",
@@ -387,10 +420,57 @@ public class PaymentValidator {
 
     }
 
+    /**
+     * method to validate and update search request information based on APP configs
+     * checks for requestInfo
+     * verifies if requester is citizen and validates the module-name path for employee
+     * adds default status and module-name to criteria if applicable
+     * 
+     * @param paymentSearchCriteria
+     * @param requestInfo
+     * @param moduleName
+     */
+    public void validateAndUpdateSearchRequestFromConfig(PaymentSearchCriteria paymentSearchCriteria, RequestInfo requestInfo, String moduleName) {
+    	
+    	Map<String, String> errorMap = new HashMap<>();
+    	validateUserInfo(requestInfo, errorMap);
+        if (!errorMap.isEmpty())
+            throw new CustomException(errorMap);
+    	
+		Boolean isRequesterEmployee = requestInfo.getUserInfo().getType()
+				.equalsIgnoreCase(CollectionServiceConstants.EMPLOYEE_TYPE);
+		if (isRequesterEmployee && applicationProperties.getIsModuleNameMandatoryInSearchUriForEmployee()
+				&& null == moduleName)
+			throw new CustomException("EGCL_URI_EXCEPTION", "Path variable module name is mandatory for employees");
 
+		/*
+		 * Only Applicable if there is no receipt number search
+		 * Only Applicable when search ignore status has been defined in application properties
+		 * Only Applicable when status has not been already provided for the search
+		 */
+		if ((CollectionUtils.isEmpty(paymentSearchCriteria.getReceiptNumbers()))
+				&& !applicationProperties.getSearchIgnoreStatus().isEmpty()
+				&& (CollectionUtils.isEmpty(paymentSearchCriteria.getStatus()))) {
 
+			// Do not return ignored status for receipts by default
+			Set<String> defaultStatus = new HashSet<>();
+			for (PaymentStatusEnum paymentStatus : PaymentStatusEnum.values()) {
 
+				if (!applicationProperties.getSearchIgnoreStatus().contains(paymentStatus.toString())) {
+					defaultStatus.add(paymentStatus.toString());
+				}
+			}
+			paymentSearchCriteria.setStatus(defaultStatus);
+		}
+        
+		if (null != moduleName) {
 
-
+			if (CollectionUtils.isEmpty(paymentSearchCriteria.getBusinessServices())) {
+				paymentSearchCriteria.setBusinessServices(Stream.of(moduleName).collect(Collectors.toSet()));
+			} else {
+				paymentSearchCriteria.getBusinessServices().add(moduleName);
+			}
+		}
+    }
 
 }

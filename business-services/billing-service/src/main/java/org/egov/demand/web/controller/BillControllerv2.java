@@ -39,11 +39,10 @@ public class BillControllerv2 {
 	@PostMapping("_search")
 	@ResponseBody
 	public ResponseEntity<?> search(@RequestBody @Valid final RequestInfoWrapper requestInfoWrapper,
-			@ModelAttribute @Valid final BillSearchCriteria billCriteria,
-			final BindingResult bindingResult) {
-		
-		billValidator.validateBillSearchCriteria(billCriteria, bindingResult);
+			@ModelAttribute @Valid final BillSearchCriteria billCriteria) {
+
 		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
+		billValidator.validateBillSearchCriteria(billCriteria, requestInfo);
 		return new ResponseEntity<>(billService.searchBill(billCriteria,requestInfo), HttpStatus.OK);
 	}
 

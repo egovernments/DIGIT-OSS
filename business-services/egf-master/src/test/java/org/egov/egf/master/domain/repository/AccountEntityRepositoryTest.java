@@ -153,7 +153,7 @@ public class AccountEntityRepositoryTest {
 
     @Test
     public void testAddToSearchQueue() {
-        Mockito.doNothing().when(accountEntityQueueRepository).add(Mockito.any());
+        Mockito.lenient().doNothing().when(accountEntityQueueRepository).add(Mockito.any());
         AccountEntityRequest request = new AccountEntityRequest();
         request.setRequestInfo(getRequestInfo());
         request.setAccountEntities(new ArrayList<AccountEntityContract>());

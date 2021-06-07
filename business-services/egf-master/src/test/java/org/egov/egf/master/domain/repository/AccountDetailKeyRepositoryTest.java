@@ -164,7 +164,7 @@ public class AccountDetailKeyRepositoryTest {
 
 	@Test
 	public void testAddToSearchQueue() {
-		Mockito.doNothing().when(accountDetailKeyQueueRepository).add(Mockito.any());
+		Mockito.lenient().doNothing().when(accountDetailKeyQueueRepository).add(Mockito.any());
 		AccountDetailKeyRequest request = new AccountDetailKeyRequest();
 		request.setRequestInfo(getRequestInfo());
 		request.setAccountDetailKeys(new ArrayList<AccountDetailKeyContract>());

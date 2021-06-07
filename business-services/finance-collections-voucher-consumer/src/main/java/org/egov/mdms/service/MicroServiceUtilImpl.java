@@ -47,7 +47,10 @@ import java.util.stream.Collectors;
 import org.egov.receipt.consumer.model.BusinessService;
 import org.egov.receipt.consumer.model.FinanceMdmsModel;
 import org.egov.receipt.consumer.model.FinancialStatus;
+import org.egov.receipt.consumer.model.InstrumentContract;
 import org.egov.receipt.consumer.model.InstrumentGlCodeMapping;
+import org.egov.receipt.consumer.model.InstrumentResponse;
+import org.egov.receipt.consumer.model.InstrumentSearchContract;
 import org.egov.receipt.consumer.model.MasterDetail;
 import org.egov.receipt.consumer.model.MdmsCriteria;
 import org.egov.receipt.consumer.model.MdmsCriteriaReq;
@@ -55,6 +58,7 @@ import org.egov.receipt.consumer.model.ModuleDetail;
 import org.egov.receipt.consumer.model.OnlineGLCodeMapping;
 import org.egov.receipt.consumer.model.ProcessStatus;
 import org.egov.receipt.consumer.model.RequestInfo;
+import org.egov.receipt.consumer.model.RequestInfoWrapper;
 import org.egov.receipt.consumer.model.TaxHeadMaster;
 import org.egov.receipt.consumer.model.Tenant;
 import org.egov.receipt.consumer.repository.ServiceRequestRepository;
@@ -152,14 +156,31 @@ public class MicroServiceUtilImpl implements MicroServiceUtil{
 		}
 	}
 	
-	private void addFinanceModule(List<ModuleDetail> moduleDetails,String businessServiceCode){
+	private void addFinanceModule(List<ModuleDetail> moduleDetails,String businessServiceCodes){
 		ArrayList<MasterDetail> masterDetailsList = new ArrayList<>();
-		masterDetailsList.add(new MasterDetail(BUSINESS_SERVICE_MAPP_MASTER,businessServiceCode != null ? "[?(@.code=='" + businessServiceCode + "')]" : null));
-		masterDetailsList.add(new MasterDetail(TAX_HEAD_MAPP_MASTER,businessServiceCode != null ? "[?(@.billingservicecode=='" + businessServiceCode + "')]":null));
+		masterDetailsList.add(new MasterDetail(BUSINESS_SERVICE_MAPP_MASTER,businessServiceCodes != null ? "[?(" + prepareFilter(businessServiceCodes,"code") + ")]" : null));
+		masterDetailsList.add(new MasterDetail(TAX_HEAD_MAPP_MASTER,businessServiceCodes != null ? "[?(" + prepareFilter(businessServiceCodes,"billingservicecode") + ")]":null));
 		masterDetailsList.add(new MasterDetail(INSTRUMENT_GLCODE_MAPP_MASTER,null));
 		masterDetailsList.add(new MasterDetail(FIN_INSTRUMENT_STATUS_MAPP_MASTER,null));
-		masterDetailsList.add(new MasterDetail(ONLINE_GLCODE_MAPP_MASTER,businessServiceCode != null ? "[?(@.servicecode=='" + businessServiceCode + "')]" : null));
+		masterDetailsList.add(new MasterDetail(ONLINE_GLCODE_MAPP_MASTER,businessServiceCodes != null ? "[?(" + prepareFilter(businessServiceCodes,"servicecode") + ")]" : null));
 		moduleDetails.add(new ModuleDetail(FIN_MODULE_NAME, masterDetailsList));
+	}
+	
+	private String prepareFilter(String businessServiceCodes, String key) {
+		StringBuilder builder = new StringBuilder();
+		if(businessServiceCodes.split(",").length <= 1){
+			return builder.append("@.").append(key).append("=='").append(businessServiceCodes).append("'").toString();
+		}else{
+			String[] split = businessServiceCodes.split(",");
+			for(String str:split){
+				if(builder.toString().isEmpty()){
+					builder.append("@.").append(key).append("=='").append(str).append("'");
+				}else {
+					builder.append(" || ").append("@.").append(key).append("=='").append(str).append("'");
+				}
+			}
+		}
+		return builder.toString();
 	}
 
 	private void addBillingServiceModule(List<ModuleDetail> moduleDetails,String businessServiceCode){
@@ -204,7 +225,7 @@ public class MicroServiceUtilImpl implements MicroServiceUtil{
 					return !collect.isEmpty() ? collect.get(0).getGlcode() : null;
 				}else{
 					List<InstrumentGlCodeMapping> list = mapper.convertValue(JsonPath.read(finSerMdms.getFinanceServiceMdmsData(), "$.MdmsRes.FinanceModule.InstrumentGLcodeMapping"),new TypeReference<List<InstrumentGlCodeMapping>>(){});
-					List<InstrumentGlCodeMapping> collect = list.stream().filter(inst -> inst.getInstrumenttype().equals(instrumentType)).collect(Collectors.toList());
+					List<InstrumentGlCodeMapping> collect = list.stream().filter(inst -> inst.getInstrumenttype().equalsIgnoreCase(instrumentType)).collect(Collectors.toList());
 					return !collect.isEmpty() ? collect.get(0).getGlcode() : null;
 				}
 			}
@@ -246,5 +267,16 @@ public class MicroServiceUtilImpl implements MicroServiceUtil{
 		}
 		return list;
 	}
-
+	
+	@Override
+	public List<InstrumentContract> getInstruments(InstrumentSearchContract instrumentSearchContract, RequestInfo requestInfo, String tenantId) throws VoucherCustomException {
+		StringBuilder uri = new StringBuilder(manager.getInstrumentHostUrl()).append(manager.getInstrumentSearch());
+		uri.append("?tenantId=").append(tenantId);
+		if(instrumentSearchContract.getReceiptIds() != null && !instrumentSearchContract.getReceiptIds().isEmpty()){
+			uri.append("&receiptIds=").append(instrumentSearchContract.getReceiptIds());
+		}
+		InstrumentResponse instrumentResponse = mapper.convertValue(serviceRequestRepository.fetchResult(uri, RequestInfoWrapper.builder().requestInfo(requestInfo).build(), tenantId), InstrumentResponse.class);
+		return instrumentResponse != null ? instrumentResponse.getInstruments() : null;
+	}
+	
 }

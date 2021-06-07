@@ -44,6 +44,8 @@ import java.util.List;
 import org.egov.receipt.consumer.model.BusinessService;
 import org.egov.receipt.consumer.model.FinanceMdmsModel;
 import org.egov.receipt.consumer.model.FinancialStatus;
+import org.egov.receipt.consumer.model.InstrumentContract;
+import org.egov.receipt.consumer.model.InstrumentSearchContract;
 import org.egov.receipt.consumer.model.RequestInfo;
 import org.egov.receipt.consumer.model.TaxHeadMaster;
 import org.egov.receipt.consumer.model.Tenant;
@@ -60,4 +62,6 @@ public interface MicroServiceUtil {
 			String statusCode) throws VoucherCustomException;
 	List<Tenant> getFinanceTenantList(String tenantId, String businessCode, RequestInfo requestInfo, FinanceMdmsModel finSerMdms)
 			throws VoucherCustomException;
+	List<InstrumentContract> getInstruments(InstrumentSearchContract instrumentSearchContract, RequestInfo requestInfo,
+			String tenantId) throws VoucherCustomException;
 }

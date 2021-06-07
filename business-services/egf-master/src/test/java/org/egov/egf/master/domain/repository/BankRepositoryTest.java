@@ -160,7 +160,7 @@ public class BankRepositoryTest {
 
 	@Test
 	public void testAddToSearchQueue() {
-		Mockito.doNothing().when(bankQueueRepository).add(Mockito.any());
+		Mockito.lenient().doNothing().when(bankQueueRepository).add(Mockito.any());
 		BankRequest request = new BankRequest();
 		request.setRequestInfo(getRequestInfo());
 		request.setBanks(new ArrayList<BankContract>());

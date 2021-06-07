@@ -70,9 +70,12 @@ public class Demand   {
 
         @JsonProperty("auditDetails")
         private AuditDetails auditDetails;
-        
-        @JsonProperty("billExpiryTime")
-        private Long billExpiryTime;
+
+		@JsonProperty("fixedBillExpiryDate")
+		private Long fixedBillExpiryDate;
+
+		@JsonProperty("billExpiryTime")
+		private Long billExpiryTime;
 
         @JsonProperty("additionalDetails")
         private Object additionalDetails;
@@ -80,6 +83,9 @@ public class Demand   {
         @Default
         @JsonProperty("minimumAmountPayable")
         private BigDecimal minimumAmountPayable = BigDecimal.ZERO;
+        
+        @Default
+        private Boolean isPaymentCompleted = false;
 
               /**
    * Gets or Sets status

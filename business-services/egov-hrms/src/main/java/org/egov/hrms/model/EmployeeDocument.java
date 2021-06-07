@@ -40,7 +40,7 @@
 
 package org.egov.hrms.model;
 
-import org.egov.hrms.model.enums.ReferenceType;
+import org.egov.hrms.model.enums.EmployeeDocumentReferenceType;
 import org.springframework.validation.annotation.Validated;
 
 import lombok.AllArgsConstructor;
@@ -67,7 +67,7 @@ public class EmployeeDocument {
 
 	private  String documentId;
 
-	private ReferenceType referenceType;
+	private EmployeeDocumentReferenceType referenceType;
 
 	private String referenceId;
 	

@@ -193,7 +193,7 @@ public class RemittanceQueryBuilder {
 
         if (searchCriteria.getToDate() != null) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" rh.referenceDate <= :toDate");
+            selectQuery.append(" rem.referenceDate <= :toDate");
             Calendar c = Calendar.getInstance();
             c.setTime(new Date(searchCriteria.getToDate()));
             c.add(Calendar.DATE, 1);

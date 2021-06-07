@@ -105,6 +105,9 @@ public class PropertiesManager {
     private String instrumentAccountCodeUrl;
     
     @Value("${egov.services.egf.voucher.search.by.service.reference}")
+    private String voucherSearchByRefUrl;
+    
+    @Value("${egov.services.egf.voucher.search}")
     private String voucherSearchUrl;
     
     @Value("${egov.services.egf.voucher.manualreceiptdate.config.url}")
@@ -140,6 +143,9 @@ public class PropertiesManager {
     @Value("${egov.services.collections.hostname}")
     private String collectionsHostUrl;
     
+    @Value("${egov.services.businessservice.hostname}")
+    private String businessServiceHostUrl;
+    
     @Value("${egov.services.egfmaster.hostname}")
     private String egfMasterHostUrl;
     
@@ -152,12 +158,24 @@ public class PropertiesManager {
     @Value("${egov.collection.receipt.voucher.cancel.topic}")
     private String voucherCancelTopic;
     
+    @Value("${kafka.topics.payment.create.name}")
+    private String createPaymentTopicName;
+    
+    @Value("${kafka.topics.payment.cancel.name}")
+    private String cancelPaymentTopicName;
+    
     private String siAuthToken;
     private User siUserInfo;
+    
+    @Value("${egov.services.egf.instrument.instruments.search}")
+    private String instrumentSearch;
     
     public String getErpURLBytenantId(String tenantId) throws VoucherCustomException {
     	try {
     		tenantId = tenantId.split(Pattern.quote("."))[1];
+    		if(finCoeErpEnvName != null && finCoeErpEnvName.equalsIgnoreCase("local")){
+    			return "http://jalandhar.lgpunjab.com:8080/";
+    		}
     		if(finCoeErpEnvName != null && !finCoeErpEnvName.isEmpty()){
     			return httpProtocol+"://"+tenantId+"-"+finCoeErpEnvName+"."+finCoeErpDomainName+"/";
     		}else{

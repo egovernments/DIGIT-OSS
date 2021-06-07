@@ -53,13 +53,13 @@ import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.Demand;
 import org.egov.demand.model.DemandCriteria;
 import org.egov.demand.model.DemandDetail;
-import org.egov.demand.model.DemandDetailCriteria;
+import org.egov.demand.model.PaymentBackUpdateAudit;
 import org.egov.demand.repository.querybuilder.DemandQueryBuilder;
-import org.egov.demand.repository.rowmapper.DemandDetailRowMapper;
 import org.egov.demand.repository.rowmapper.DemandRowMapper;
 import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.DemandRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -105,13 +105,6 @@ public class DemandRepository {
 		return jdbcTemplate.query(sql, presparedStmtList.toArray(), demandRowMapper);
 	}
 
-	public List<DemandDetail> getDemandDetails(DemandDetailCriteria demandDetailCriteria) {
-
-		List<Object> preparedStatementValues = new ArrayList<>();
-		String searchDemandDetailQuery = DemandQueryBuilder.getDemandDetailQuery(demandDetailCriteria,preparedStatementValues);
-		return jdbcTemplate.query(searchDemandDetailQuery, preparedStatementValues.toArray(),new DemandDetailRowMapper());
-	}
-
 	@Transactional
 	public void save(DemandRequest demandRequest) {
 
@@ -129,7 +122,7 @@ public class DemandRepository {
 	}
 	
 	@Transactional
-	public void update(DemandRequest demandRequest) {
+	public void update(DemandRequest demandRequest, PaymentBackUpdateAudit paymentBackUpdateAudit) {
 
 		List<Demand> demands = demandRequest.getDemands();
 		List<Demand> oldDemands = new ArrayList<>();
@@ -172,6 +165,9 @@ public class DemandRepository {
 			insertBatch(newDemands, newDemandDetails);
 			insertBatchForAudit(newDemands, newDemandDetails);
 		}
+		
+		if (null != paymentBackUpdateAudit)
+			insertBackUpdateForPayment(paymentBackUpdateAudit);
 	}
 
 	public void insertBatch(List<Demand> newDemands, List<DemandDetail> newDemandDetails) {
@@ -200,6 +196,7 @@ public class DemandRepository {
 				ps.setString(14, status);
 				ps.setObject(15, util.getPGObject(demand.getAdditionalDetails()));
 				ps.setObject(16, demand.getBillExpiryTime());
+				ps.setObject(17, demand.getFixedBillExpiryDate());
 			}
 
 			@Override
@@ -256,8 +253,11 @@ public class DemandRepository {
 				ps.setString(8, status);
 				ps.setObject(9, util.getPGObject(demand.getAdditionalDetails()));
 				ps.setObject(10, demand.getBillExpiryTime());
-				ps.setString(11, demand.getId());
-				ps.setString(12, demand.getTenantId());
+				ps.setBoolean(11, demand.getIsPaymentCompleted());
+				ps.setObject(12, demand.getFixedBillExpiryDate());
+				ps.setString(13, demand.getId());
+				ps.setString(14, demand.getTenantId());
+				
 			}
 
 			@Override
@@ -322,6 +322,7 @@ public class DemandRepository {
 				ps.setObject(13, util.getPGObject(demand.getAdditionalDetails()));
 				ps.setString(14, UUID.randomUUID().toString());
 				ps.setObject(15, demand.getBillExpiryTime());
+				ps.setBoolean(16,demand.getIsPaymentCompleted());
 			}
 
 			@Override
@@ -355,5 +356,45 @@ public class DemandRepository {
 					}
 				});
 	}
-	
+
+	/**
+	 *  Persists back-update log from collection
+	 *  
+	 *  in case of failure or success
+	 *  
+	 * @param paymentBackUpdateAudit
+	 */
+	public void insertBackUpdateForPayment(PaymentBackUpdateAudit paymentBackUpdateAudit) {
+
+		jdbcTemplate.update(DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_INSERT_QUERY, new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+
+				ps.setString(1, paymentBackUpdateAudit.getPaymentId());
+				ps.setBoolean(2, paymentBackUpdateAudit.getIsBackUpdateSucces());
+				ps.setBoolean(3, paymentBackUpdateAudit.getIsReceiptCancellation());
+				ps.setString(4, paymentBackUpdateAudit.getErrorMessage());
+			}
+		});
+	}
+
+	public String searchPaymentBackUpdateAudit(PaymentBackUpdateAudit backUpdateAudit) {
+
+		String paymentId = null;
+		Object[] preparedStatementValues = new Object[] {
+
+				backUpdateAudit.getPaymentId(),
+				backUpdateAudit.getIsBackUpdateSucces(),
+				backUpdateAudit.getIsReceiptCancellation() };
+
+		try {
+			paymentId = jdbcTemplate.queryForObject(
+					DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_SEARCH_QUERY, preparedStatementValues, 	String.class);
+		} catch (DataAccessException e) {
+			log.info("No data found for incoming receipt in backupdate log");
+		}
+
+		return paymentId;
+	}
 }

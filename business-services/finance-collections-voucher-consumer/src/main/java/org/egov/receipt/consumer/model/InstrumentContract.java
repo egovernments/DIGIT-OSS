@@ -59,13 +59,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@ToString
 @JsonPropertyOrder({ "id", "transactionNumber", "transactionDate", "amount", "instrumentType", "bank", "branchName",
         "bankAccount", "financialStatus", "remittanceVoucherId", "transactionType", "payee", "drawer", "surrendarReason",
         "serialNo",
@@ -175,5 +176,7 @@ public class InstrumentContract {
      * instrumentVouchers is the reference to the payment vouchers for which the instrument is attached.
      */
     private List<InstrumentVoucherContract> instrumentVouchers = new ArrayList<>();
+    
+    private DishonorReasonContract dishonor;
 
 }
