@@ -5,6 +5,8 @@ import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {  fetchBill, getPropertyWithBillAmount} from "./publicSearchResource/publicSearchUtils"
+
 
 import {
   enableField,disableField
@@ -700,9 +702,10 @@ const searchApiCall = async (state, dispatch, index) => {
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
      const response = await getSearchResults(queryObject);
 
-      // const response = searchSampleResponse();
+      const billResponse = response && await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
+      const finalResponse =  billResponse && getPropertyWithBillAmount(response, billResponse);
 
-      let propertyData = response.Properties.map(item => ({
+      let propertyData =  finalResponse && finalResponse.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
         ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
@@ -713,6 +716,8 @@ const searchApiCall = async (state, dispatch, index) => {
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["TENANT_ID"]: item.tenantId,
+        ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount },
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
       }));
 

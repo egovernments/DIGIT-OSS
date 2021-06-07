@@ -152,7 +152,20 @@ export const searchPropertyTable = {
         options: {
           display: false
         }
-      }
+      },
+      { labelName: "Amount Due", labelKey: "PT_AMOUNT_DUE" },
+      {
+        labelName: "Action",
+        labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) =>
+              (value.totalAmount > 0 && value.status === "ACTIVE") ? getPayButton (tableMeta) : (
+              value.totalAmount === 0 && value.status === "ACTIVE" ? getMutationButton(tableMeta) : value.status === "ACTIVE"? getMutationButton(tableMeta):""
+            )
+          
+        },
+      },
     ],
     title: {labelKey:"PT_HOME_PROPERTY_RESULTS_TABLE_HEADING", labelName:"Search Results for Properties"},
     rows:"",
@@ -326,3 +339,32 @@ const propertyInformationScreenLink=(propertyId,tenantId)=>{
     return `/property-tax/property/${propertyId}/${tenantId}`;
   }
 }
+
+
+const payAmount = (tableMeta) => {
+  setRoute(`/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`);
+};
+
+const getPayButton = (tableMeta) => {
+return (
+  <a href="javascript:void(0)"
+    onClick={() => payAmount(tableMeta)}
+    style={{ color: "#FE7A51" }}
+  >
+    <LabelContainer labelKey="PT_TOTALDUES_PAY" labelName="PAY" />
+  </a>
+)
+}
+const getMutationButton = (tableMeta) => {
+  return (
+    <a href="javascript:void(0)"
+      onClick={() => startMutation(tableMeta)}
+      style={{ color: "red" }}
+    >
+      <LabelContainer labelKey="PT_MUTATION_START" labelName="Mutation" />
+    </a>
+  )  }
+
+  const startMutation = (tableMeta) => {
+    setRoute(`/pt-mutation/apply?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}`);
+};
