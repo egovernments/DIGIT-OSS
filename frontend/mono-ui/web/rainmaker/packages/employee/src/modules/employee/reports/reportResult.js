@@ -33,6 +33,18 @@ window.JSZip = JSZip;
 var sumColumn = [];
 var footerexist = false;
 let rTable;
+
+const formatLocaleKeys=(key="")=>{
+if(typeof key!='string'){
+  return key;
+}
+key=key.trim&&key.trim()||key;
+key=key.toUpperCase&&key.toUpperCase()||key;
+return key;
+}
+
+
+
 class ShowField extends Component {
   constructor(props) {
     super(props);
@@ -318,14 +330,14 @@ class ShowField extends Component {
             return list.map(v1=>(<Label
             className="report-header-row-label"
             labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
-            label={`${reportResult.reportHeader[i].localisationPrefix}${v1}`}
+            label={`${reportResult.reportHeader[i].localisationPrefix}${formatLocaleKeys(v1)||v1}`}
           />))           
             
           }
         return <Label
           className="report-header-row-label"
           labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
-          label={`${reportResult.reportHeader[i].localisationPrefix}${val}`}
+          label={`${reportResult.reportHeader[i].localisationPrefix}${formatLocaleKeys(val)}`}
         />;
       }
       else {

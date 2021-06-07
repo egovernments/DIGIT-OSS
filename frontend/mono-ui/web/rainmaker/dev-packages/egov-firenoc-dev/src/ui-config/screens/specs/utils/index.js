@@ -715,20 +715,22 @@ export const createBill = async (queryObject, dispatch) => {
     );
     return response;
   } catch (error) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelKey: error.message },
-        "error"
-      )
-    );
-    console.log(error, 'fetxh');
+    if(error.code!="EG_BS_BILL_NO_DEMANDS_FOUND"){
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+          "error"
+        )
+      );
+      console.error(error);
+    }
   }
 };
 
 export const generateBill = async (dispatch, applicationNumber, tenantId, status) => {
   try {
-    if (applicationNumber && tenantId) {
+    if (applicationNumber && tenantId && status) {
       const queryObj = [
         {
           key: "tenantId",

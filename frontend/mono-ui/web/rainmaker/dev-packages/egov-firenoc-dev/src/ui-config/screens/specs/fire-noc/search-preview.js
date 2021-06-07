@@ -355,7 +355,9 @@ const setSearchResponse = async (
       printCont
     )
   }
-  generateBill(dispatch, applicationNumber, tenantId, status);
+  if(status){
+    generateBill(dispatch, applicationNumber, tenantId, status);
+  }
 };
 
 const screenConfig = {

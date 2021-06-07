@@ -12,7 +12,7 @@ function handleNavigation(page) {
     window.location.href = page.startsWith('/digit') ? page : `/${page}`;
     return;
   } else if (page && page.includes && page.includes('fsm')) {
-    window.location.href = '/digit-ui/employee/dss/dashboard';
+    window.open('/digit-ui/employee/dss/dashboard/fsm', '_self')
     return;
   } else {
     history.push(`${process.env.PUBLIC_URL}/` + page);
