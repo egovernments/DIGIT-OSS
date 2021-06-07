@@ -46,8 +46,6 @@ $(document).ready(function(){
 		callAjaxSearch();
 	});
 
-
-
 	function callAjaxSearch() {
 		var bankAccountId = $("#bankAccountId").val();
 		var fromDate = $("#fromDateId").val();
@@ -59,10 +57,14 @@ $(document).ready(function(){
 			bootbox.alert(toDateAlertMsg);
 			return false;
 		}
-		if(fromDate != "" && toDate != "" && fromDate> toDate){
+		if(fromDate != "" && toDate != ""){
+			fromDates = Date.parse(fromDate);
+		    toDates = Date.parse(toDate);
+			if(fromDates>toDates){
 			bootbox.alert(fromDateToDateAlertMsg);
 			return false;
 		}
+	}
 
 		var fileName = 'Dishonoured Cheque Report';
 		var drillDowntableContainer = $("#resultTable");

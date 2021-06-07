@@ -1665,7 +1665,8 @@ public class MicroserviceUtils {
             } else {
                 response = restTemplate.postForObject(url.toString(), reqWrapper, PaymentResponse.class);
             }
-            return response.getPayments();
+            return response!=null ? response.getPayments() : null;
+
         } catch (RestClientException e) {
             LOGGER.error("ERROR occurred while fetching the Payment list : ", e);
         }

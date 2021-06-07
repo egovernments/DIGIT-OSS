@@ -83,6 +83,7 @@ public class PaymentUtils {
         // prepare instrument from payment
         // prepare receipt from each paymentdetails
         Set<String> businessServices = new HashSet<>();
+        if(payments!=null && !payments.isEmpty()) {
         payments.stream().forEach(payment -> {
             Instrument instrument = new Instrument();
             this.prepareInstrument(payment, instrument);
@@ -96,6 +97,7 @@ public class PaymentUtils {
             });
         });
         this.setFinanceSpecificData(receipts);
+        }
     }
 
     private void prepareReceipt(Payment payment, PaymentDetail paymentDetail, Receipt receipt) {
