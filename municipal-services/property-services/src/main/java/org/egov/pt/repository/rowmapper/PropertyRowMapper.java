@@ -36,7 +36,10 @@ import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
 @Component
+@Slf4j
 public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 
 	@Autowired
@@ -46,7 +49,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	public List<Property> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
 		Map<String, Property> propertyMap = new LinkedHashMap<>();
-
+		log.info("Query Result" + rs);
 		while (rs.next()) {
 
 			String propertyUuId = rs.getString("pid");
