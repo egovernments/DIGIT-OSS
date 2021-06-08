@@ -141,7 +141,7 @@ public class NotificationConsumer {
 						request.put("mobileNumber", phNo);
 						request.put("message", message);
 
-						producer.producer(smsTopic, smsTopickey, request);
+						producer.producer(smsTopic, request);
 					} else {
 						log.error("No message configured! Notification will not be sent.");
 					}
