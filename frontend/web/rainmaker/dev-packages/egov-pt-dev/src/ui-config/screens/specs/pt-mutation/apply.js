@@ -183,6 +183,33 @@ const getPropertyData = async (action, state, dispatch) => {
     
     dispatch(prepareFinalObject("PropertyOldNumber",oldmob));
 
+
+    if(payload){
+
+      let oldMobileNumber = get(state, "screenConfiguration.preparedFinalObject.PropertyOldNumber");
+      let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
+      let phoneno = /^[6-9][0-9]{9}$/; 
+      let flag=false
+      //if any owner is having wrong number flag will become true and the input feild will show
+      owners.map(owner => {
+        if(!owner.mobileNumber.match(phoneno) && owner.status=='ACTIVE')
+        {
+          flag=true
+        }
+
+      })
+        if(!flag)
+        {
+          set(
+            action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
+            { visibility: "hidden" }
+          );
+        }
+    }
+    
+
+
   } catch (e) {
     console.log(e);
   }
@@ -577,33 +604,6 @@ const screenConfig = {
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
         []
       );
-     
-
-let oldMobileNumber = get(state, "screenConfiguration.preparedFinalObject.PropertyOldNumber");
-
-let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
-let phoneno = /^[6-9][0-9]{9}$/; 
-let flag=false
-//if any owner is having wrong number flag will become true and the input feild will show
-if(owners){
-owners.map(owner => {
-  if(!owner.mobileNumber.match(phoneno) && owner.status=='ACTIVE')
-  {
-    flag=true
-  }
-
-})}
-if(!flag)
-{
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
-     { visibility: "hidden" }
-  );
-}
-
-   
-        
     
 
 
