@@ -78,7 +78,7 @@ public class PropertyQueryBuilder {
 			
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid and unit.active = 't'"
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit               ON property.id =  unit.propertyid and unit.active = 't'"
 			
 			+ " WHERE  ";
 	
