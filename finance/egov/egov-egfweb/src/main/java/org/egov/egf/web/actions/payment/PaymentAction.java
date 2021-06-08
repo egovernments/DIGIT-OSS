@@ -111,6 +111,7 @@ import org.egov.services.voucher.VoucherService;
 import org.egov.utils.Constants;
 import org.egov.utils.FinancialConstants;
 import org.egov.utils.VoucherHelper;
+import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -431,6 +432,7 @@ public class PaymentAction extends BasePaymentAction {
     @ValidationErrorPage(value = "search")
     @Action(value = "/payment/payment-search")
     public String search() throws ParseException {
+        persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting search...");
         // Get App config value
