@@ -4086,7 +4086,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
     const FieldinspectionQstns = applyFieldinspectionQstns.map(v => ({
       code: v.question, title: v.question, cards: [{
         name: v.question, code: v.question, required: true, dropDownValues: {
-          label: "BPA_SELECT_DOCS_LABEL", required: true, menu: checklistSelect
+          label: "BPA_SELECT_LABEL", required: true, menu: checklistSelect
         }
       }]
     }));

@@ -197,7 +197,7 @@ function MultiDocDetailCard(props) {
                 onClick={() => props.toggleEditClick(docIndex)}
               >
                 <LabelContainer
-                  labelKey={getTransformedLocale("NOC_PREVIEW_LABEL")}
+                  labelKey={getTransformedLocale("BPA_UPLOAD_LABEL")}
                 />
               </Button>
             )}
