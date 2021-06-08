@@ -430,8 +430,15 @@ const callBackForNext = async (state, dispatch) => {
       hasFieldToaster = true;
     }
     if (isFormValid) {
+      const MutationReason = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.additionalDetails.reasonForTransfer",
+        ''
+      );
+      if(MutationReason && MutationReason !=="NAMECORRECTION")
+      {
       errorMsg = validateMobileNumber(state);
-
+      }
       errorMsg ? isFormValid = false : {};
     }
     if (getQueryArg(window.location.href, "action") === "edit") {
