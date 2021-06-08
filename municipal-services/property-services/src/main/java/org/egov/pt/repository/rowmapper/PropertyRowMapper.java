@@ -49,7 +49,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	public List<Property> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
 		Map<String, Property> propertyMap = new LinkedHashMap<>();
-		log.info("Query Result" + rs);
+		log.info("Query Result" + rs.toString());
 		while (rs.next()) {
 
 			String propertyUuId = rs.getString("pid");
