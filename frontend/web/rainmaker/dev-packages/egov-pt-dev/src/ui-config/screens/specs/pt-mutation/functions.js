@@ -464,9 +464,18 @@ const searchApiCall = async (state, dispatch, index) => {
     {}
   );
 
-  let tenants = state.common.cities && state.common.cities;
+   let tenants = state.common.cities && state.common.cities;
 
- let filterTenant = tenants && tenants.filter(m=>m.key===getTenantId() ||searchScreenObject.tenantId );
+
+  if (process.env.REACT_APP_NAME === "Citizen")
+  {
+    let filterTenant = tenants && tenants.filter(m=>m.key===searchScreenObject.tenantId);
+  }
+  else
+  {
+    let filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
+  }
+
 
  let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
 
