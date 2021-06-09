@@ -466,14 +466,15 @@ const searchApiCall = async (state, dispatch, index) => {
 
    let tenants = state.common.cities && state.common.cities;
 
+   let filterTenant ;
 
   if (process.env.REACT_APP_NAME === "Citizen")
   {
-    let filterTenant = tenants && tenants.filter(m=>m.key===searchScreenObject.tenantId);
+     filterTenant = tenants && tenants.filter(m=>m.key===searchScreenObject.tenantId);
   }
   else
   {
-    let filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
+     filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
   }
 
 
