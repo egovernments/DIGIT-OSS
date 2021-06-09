@@ -19,7 +19,7 @@
     "datatables.net-buttons-bs": "^1.5.3",
     "egov-tradelicence": "0.0.1",
     "egov-pt": "1.2.0",
-    "egov-common": "0.0.1",
+    "egov-common": "1.4.0",
     "egov-wns": "0.0.1",
     "egov-abg": "0.0.1",
     "egov-ui-framework": "0.1.41",
@@ -68,7 +68,8 @@
     "url-search-params-polyfill": "^3.0.0",
     "uuid": "3.3.3",
     "webfontloader": "^1.6.28",
-    "print-js": "1.0.63"
+    "print-js": "1.0.63",
+    "disable-browser-back-navigation": "0.1.0"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",

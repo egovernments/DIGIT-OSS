@@ -17,7 +17,7 @@
     "datatables.net-buttons": "^1.5.4",
     "datatables.net-buttons-bs": "^1.5.3",
     "egov-abg": "0.0.1",
-    "egov-common": "0.0.1",
+    "egov-common": "1.4.0",
     "egov-hrms": "0.0.1",
     "egov-pt": "1.2.0",
     "egov-tradelicence": "0.0.1",
@@ -66,7 +66,9 @@
     "redux-thunk": "^2.2.0",
     "url-search-params-polyfill": "^3.0.0",
     "webfontloader": "^1.6.28",
-    "xlsx": "^0.15.5"
+    "xlsx": "^0.15.5",
+    "disable-browser-back-navigation": "0.1.0"
+
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
