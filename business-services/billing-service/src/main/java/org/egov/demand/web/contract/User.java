@@ -23,7 +23,6 @@ public class User {
 	private String name;
 	private String gender;
 	
-	@Pattern(regexp = "(^[3|6-9][0-9]{9}$)", message = "Inavlid mobile number, should start with 6-9 and contain ten digits of 0-9") 
 	private String mobileNumber;
 	
 	private String emailId;
