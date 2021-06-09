@@ -308,11 +308,11 @@ public class ContraBTBActionHelper {
 			final HashMap<String, Object> headerDetails = createHeaderAndMisDetails(voucher);
 
 			headerDetails.put(VoucherConstant.VOUCHERNAME, FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND);
-			if (voucher.getFundId().getCode().equalsIgnoreCase("03")) {
-				final Department department = (Department) persistenceService.find("from Department where code=?", "Z");
-				headerDetails.remove(VoucherConstant.DEPARTMENTCODE);
-				headerDetails.put(VoucherConstant.DEPARTMENTCODE, department.getCode());
-			}
+            /*
+             * if (voucher.getFundId().getCode().equalsIgnoreCase("03")) { final Department department = (Department)
+             * persistenceService.find("from Department where code=?", "Z"); headerDetails.remove(VoucherConstant.DEPARTMENTCODE);
+             * headerDetails.put(VoucherConstant.DEPARTMENTCODE, department.getCode()); }
+             */
 			// update ContraBTB source path
 			headerDetails.put(VoucherConstant.SOURCEPATH, "/services/EGF/contra/contraBTB-beforeView.action?voucherHeader.id=");
 
@@ -347,14 +347,14 @@ public class ContraBTBActionHelper {
 			headerDetails.put(VoucherConstant.VOUCHERNAME, FinancialConstants.CONTRAVOUCHER_NAME_INTERFUND);
 			headerDetails.put(VoucherConstant.VOUCHERNAME, voucher.getName());
 			headerDetails.put(VoucherConstant.FUNDCODE, toFund.getCode());
-			if (toFund.getCode().equalsIgnoreCase("03")) {
+			/*if (toFund.getCode().equalsIgnoreCase("03")) {
 				final Department department = (Department) persistenceService.find("from Department where code=?", "Z");
 				headerDetails.remove(VoucherConstant.DEPARTMENTCODE);
 				headerDetails.put(VoucherConstant.DEPARTMENTCODE, department.getCode());
-			} else {
+			} else {*/
 				headerDetails.remove(VoucherConstant.DEPARTMENTCODE);
 				headerDetails.put(VoucherConstant.DEPARTMENTCODE, toDepartment == null ? "" : toDepartment.getCode());
-			}
+            /* } */
 			headerDetails.remove(VoucherConstant.SCHEMECODE);
 			headerDetails.remove(VoucherConstant.SUBSCHEMECODE);
 			headerDetails.remove(VoucherConstant.FUNDSOURCECODE);
