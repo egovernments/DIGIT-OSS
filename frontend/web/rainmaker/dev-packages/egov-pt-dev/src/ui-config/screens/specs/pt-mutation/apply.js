@@ -190,6 +190,7 @@ const getPropertyData = async (action, state, dispatch) => {
       let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
       let phoneno = /^[6-9][0-9]{9}$/; 
       let flag=false
+      console.log("flag before,falg)
       //if any owner is having wrong number flag will become true and the input feild will show
       owners.map(owner => {
         if(!owner.mobileNumber.match(phoneno) && owner.status=='ACTIVE')
@@ -198,6 +199,7 @@ const getPropertyData = async (action, state, dispatch) => {
         }
 
       })
+       console.log("flag after,falg)
         if(!flag)
         {
           set(
