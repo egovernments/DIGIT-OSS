@@ -38,7 +38,7 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "ucSearchScreen",
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
@@ -60,7 +60,7 @@ export const searchApiCall = async (state, dispatch) => {
     );
   } else if (
     Object.keys(searchScreenObject).length == 0 ||
-    Object.values(searchScreenObject).every(x => x === "")
+    checkEmptyFields(searchScreenObject)
   ) {
     dispatch(
       toggleSnackbar(
@@ -82,10 +82,10 @@ export const searchApiCall = async (state, dispatch) => {
   } else {
     //  showHideProgress(true, dispatch);
     for (var key in searchScreenObject) {
-      if (searchScreenObject.hasOwnProperty(key) && key === "businessCodes") {
+      if (searchScreenObject.hasOwnProperty(key) && key === "businessServices" && searchScreenObject['businessServices']) {
         queryObject.push({ key: key, value: searchScreenObject[key] });
       } else if (
-        searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] &&
         searchScreenObject[key].trim() !== ""
       ) {
         if (key === "fromDate") {
@@ -105,9 +105,29 @@ export const searchApiCall = async (state, dispatch) => {
     }
 
     const responseFromAPI = await getSearchResults(queryObject);
+    const businessServices = get(searchScreenObject, 'businessServices', null);
+    const businessServiceDataList = get(
+      state.screenConfiguration.preparedFinalObject,
+      "applyScreenMdmsData.businessServiceDataList",
+      []
+    );
+    let responseFromFilter = [];
+    if(!businessServices) {
+      get(responseFromAPI, 'Payments', []).map(payment => {
+        if(businessServiceDataList.includes(get(payment, "paymentDetails[0].businessService", ""))) {
+          responseFromFilter.push(payment);
+        }
+      })
+    } else {
+      responseFromFilter = get(responseFromAPI, 'Payments', []).filter(payment => {
+        return get(payment, "paymentDetails[0].businessService", "") == businessServices
+      })
+    }
+    
     dispatch(prepareFinalObject("PaymentsSearchResponse", responseFromAPI));
 
-    const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
+    // const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
+    const Payments = responseFromFilter || [];
     const response = [];
     for (let i = 0; i < Payments.length; i++) {
       const serviceTypeLabel = getTransformedLocale(
@@ -126,13 +146,13 @@ export const searchApiCall = async (state, dispatch) => {
 
     try {
       let data = response.map(item => ({
-        [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
-        [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
-        [getTextToLocalMapping("Service Type")]: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
-        [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
-        [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId || "-"
+        ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+        ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
+        ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+        ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
+        ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
+        ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ["TENANT_ID"]: item.tenantId || "-"
       }));
       dispatch(
         handleField(
@@ -146,8 +166,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResult",
-          "props.title",
-          "Search Results for Payments (" + data.length + ")"
+          "props.rows",
+          data.length
         )
       );
 
@@ -170,3 +190,18 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
     )
   );
 };
+
+const checkEmptyFields = (searchScreenObject) => {
+  const businessServices = get(searchScreenObject, 'businessServices', null)
+  const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
+  const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)) { return true; }
+  return false;
+}
+const checkEmpty = (value) => {
+  value = typeof (value) == "string" ? value.trim() : value;
+  if (value && value != null && value.length > 0) {
+    return false;
+  }
+  return true;
+}

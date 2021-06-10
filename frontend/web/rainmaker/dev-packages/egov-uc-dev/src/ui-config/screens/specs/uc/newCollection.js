@@ -1,36 +1,66 @@
-import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionDetails";
-import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { setServiceCategory } from "../utils";
 import commonConfig from "config/common.js";
+import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
+import { setServiceCategory } from "../utils";
+import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionDetails";
+import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
 
 const header = getCommonHeader({
   labelName: "New Collection",
   labelKey: "UC_COMMON_HEADER"
 });
 const tenantId = getTenantId();
-
-const getData = async (action, state, dispatch, demandId) => {
-  const cityByModulueRequest = {
+const loadServiceType = async (tenantId, dispatch) => {
+  let requestBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: tenantId,
       moduleDetails: [
         {
-          moduleName: "tenant",
-          masterDetails: [{ name: "citymodule" }]
+          moduleName: "BillingService",
+          masterDetails: [
+            {
+              name: "BusinessService",
+              filter: "[?(@.type=='Adhoc')]"
+            },
+            {
+              name: "TaxHeadMaster"
+            },
+            {
+              name: "TaxPeriod"
+            }
+          ]
         }
       ]
     }
   };
-  dispatch(
-    fetchGeneralMDMSData(cityByModulueRequest, "tenant", ["citymodule"])
-  );
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      requestBody
+    );
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.BillingService",
+        payload.MdmsRes.BillingService
+      )
+    );
+    setServiceCategory(
+      get(payload, "MdmsRes.BillingService.BusinessService", []),
+      dispatch
+    );
+  } catch (e) {
+    console.log(e);
+  }
+}
+const getData = async (action, state, dispatch, demandId) => {
 
   let requestBody = {
     MdmsCriteria: {
@@ -41,7 +71,8 @@ const getData = async (action, state, dispatch, demandId) => {
           masterDetails: [
             {
               name: "tenants"
-            }
+            },
+            { name: "citymodule" }
           ]
         }
       ]
@@ -57,18 +88,31 @@ const getData = async (action, state, dispatch, demandId) => {
       [],
       requestBody
     );
-    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+
+    if (payload) {
+      dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+      const citymodule = get(payload, "MdmsRes.tenant.citymodule");
+      const liveTenants = citymodule && citymodule.filter(item => item.code === "UC");
+      dispatch(
+        prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", get(liveTenants[0], "tenants"))
+      );
+    }
     const serviceCategories = get(
       state.screenConfiguration,
       "preparedFinalObject.searchScreenMdmsData.serviceCategory",
       []
     );
-    if (serviceCategories && serviceCategories.length) {
+    if (serviceCategories && serviceCategories.length !== 0) {
       setServiceCategory(
         serviceCategories,
         dispatch
       );
+    } else if (tenantId) {
+      loadServiceType(tenantId, dispatch)
     }
+    dispatch(
+      prepareFinalObject("Demands[0].tenantId", tenantId)
+    );
   } catch (e) {
     console.log(e);
   }
@@ -90,14 +134,12 @@ const getData = async (action, state, dispatch, demandId) => {
           get(payload, "idResponses[0].id", "")
         )
       );
+      loadServiceType(tenantId, dispatch);
     } catch (e) {
       console.log(e);
     }
   }
-  const liveTenants = get(state, "common.citiesByModule.UC.tenants", []);
-  dispatch(
-    prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", liveTenants)
-  );
+
   // return action;
 };
 
@@ -110,11 +152,16 @@ const newCollection = {
       "Demands[0].id",
       null
     );
+    const screenConfigForUpdate = get(
+      state.screenConfiguration,
+      "screenConfig.newCollection"
+    );
+
+    dispatch(prepareFinalObject('DynamicMdms.BillingService.selectedValues',[]));
+    dispatch(prepareFinalObject('DynamicMdms.BillingService.serviceCategories.selectedValues',[]));
+
     if (demandId) {
-      const screenConfigForUpdate = get(
-        state.screenConfiguration,
-        "screenConfig.newCollection"
-      );
+
       set(
         screenConfigForUpdate,
         "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory.props.disabled",
@@ -128,6 +175,7 @@ const newCollection = {
       action.screenConfig = screenConfigForUpdate;
     }
     !demandId && getData(action, state, dispatch, demandId);
+
     return action;
   },
 

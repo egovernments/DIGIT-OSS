@@ -21,11 +21,13 @@ export const searchResults = {
             <div onClick={value => {
                 const receiptQueryString = [
                   { key: "receiptNumbers", value:  tableMeta.rowData[0]},
-                  { key: "tenantId", value: tableMeta.rowData[7] }
+                  { key: "tenantId", value: tableMeta.rowData[7] },
+                  { key: "businessService", value:tableMeta.rowData[8] } 
                 ]
                 download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
               }}>
-              {value}
+       
+              <a href="javascript:void(0)" >{value}</a>
             </div>
           )
         }
@@ -63,7 +65,14 @@ export const searchResults = {
         options: {
           display: false
         }
+      }, {
+        labelName: "Service Type",
+        labelKey: "SERVICE",
+        options: {
+          display: false
+        }
       }
+      
     ],
     title: {
       labelKey: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",

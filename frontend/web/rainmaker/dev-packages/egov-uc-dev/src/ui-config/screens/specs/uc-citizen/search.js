@@ -12,6 +12,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -25,6 +26,20 @@ enableButton = hasButton && hasButton === "false" ? false : true;
 
 const getData = async (action, state, dispatch) => {
   await getMDMSData(action, state, dispatch);
+};
+const getBusinessServiceMdmsData = async (businessServiceData, dispatch) => {
+  let businessServiceDataList = [];
+  if(businessServiceData && businessServiceData.length > 0) {
+    businessServiceData.map(data => {
+      businessServiceDataList.push(data.code);
+    })
+  }
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.businessServiceDataList",
+      businessServiceDataList
+    )
+  );
 };
 
 const getMDMSData = async (action, state, dispatch) => {
@@ -53,6 +68,7 @@ const getMDMSData = async (action, state, dispatch) => {
       get(payload, "MdmsRes.BillingService.BusinessService", []),
       dispatch
     );
+    getBusinessServiceMdmsData(get(payload, "MdmsRes.BillingService.BusinessService", []), dispatch);
    
   } catch (e) {
     console.log(e);
@@ -63,6 +79,7 @@ const ucSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("ucSearchScreen", {}));
     getData(action, state, dispatch);
     return action;
   },

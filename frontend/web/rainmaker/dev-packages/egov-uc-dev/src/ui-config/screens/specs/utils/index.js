@@ -1,19 +1,12 @@
+import { getCommonCaption, getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
-import {
-  getCommonCard,
-  getCommonCaption
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -68,7 +61,7 @@ export const validateFields = (
   for (var variable in fields) {
     if (fields.hasOwnProperty(variable)) {
       if (
-        fields[variable] &&
+        fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" && 
         fields[variable].props &&
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
@@ -86,6 +79,28 @@ export const validateFields = (
         )
       ) {
         isFormValid = false;
+      } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props){
+        let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+        let isIndex = fields[variable].index || 0;
+        dropdownFields.forEach((item, i) => {
+          let isValid = get(
+            state.screenConfiguration.preparedFinalObject ,
+            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
+            ''
+          );
+          if(!isValid || isValid == '' || isValid == 'none') {
+            isFormValid = false;
+            dispatch(
+              handleField(
+                screen,
+                `${fields[variable].componentJsonpath}.props.dropdownFields[${i}]`,
+                "isRequired",
+                true
+              )
+            );
+          }
+        });
+        
       }
     }
   }
@@ -306,42 +321,49 @@ export const getEmployeeName = async queryObject => {
 };
 
 export const setServiceCategory = (businessServiceData, dispatch) => {
-  let nestedServiceData = {};
-  businessServiceData.forEach(item => {
-    if (item.code && item.code.indexOf(".") > 0) {
-      if (nestedServiceData[item.code.split(".")[0]]) {
-        let child = get(
-          nestedServiceData,
-          `${item.code.split(".")[0]}.child`,
-          []
-        );
-        child.push(item);
-        set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
-      } else {
-        set(
-          nestedServiceData,
-          `${item.code.split(".")[0]}.code`,
-          item.code.split(".")[0]
-        );
-        set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
-      }
-    } else {
-      set(nestedServiceData, `${item.code}`, item);
-    }
-  });
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.nestedServiceData",
-      nestedServiceData
-    )
-  );
-  let serviceCategories = Object.values(nestedServiceData).filter(
-    item => item.code
-  );
+  // let nestedServiceData = {};
+  // businessServiceData.forEach(item => {
+  //   if (item.code && item.code.indexOf(".") > 0) {
+  //     if (nestedServiceData[item.code.split(".")[0]]) {
+  //       let child = get(
+  //         nestedServiceData,
+  //         `${item.code.split(".")[0]}.child`,
+  //         []
+  //       );
+  //       child.push(item);
+  //       set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
+  //     } else {
+  //       set(
+  //         nestedServiceData,
+  //         `${item.code.split(".")[0]}.code`,
+  //         item.code.split(".")[0]
+  //       );
+  //       set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
+  //     }
+  //   } else {
+  //     set(nestedServiceData, `${item.code}`, item);
+  //   }
+  // });
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.nestedServiceData",
+  //     nestedServiceData
+  //   )
+  // );
+  // let serviceCategories = Object.values(nestedServiceData).filter(
+  //   item => item.code
+  // );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "applyScreenMdmsData.serviceCategories",
+  //     serviceCategories
+  //   )
+  // );
+
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.serviceCategories",
-      serviceCategories
+      businessServiceData
     )
   );
 };
@@ -391,11 +413,11 @@ export const getTextToLocalMapping = label => {
         "BILLINGSERVICE_BUSINESSSERVICE_PT",
         localisationLabels
       );
-    default : 
-    return getLocaleLabels(
-      label,
-      label,
-      localisationLabels
-    );
+    default:
+      return getLocaleLabels(
+        label,
+        label,
+        localisationLabels
+      );
   }
 };

@@ -12,6 +12,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -37,7 +38,15 @@ const getMDMSData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "BusinessService", filter: "[?(@.type=='Adhoc')]" }
           ]
-        }
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "uiCommonPay"
+            }
+          ]
+        },
       ]
     }
   };
@@ -52,9 +61,9 @@ const getMDMSData = async (action, state, dispatch) => {
     setServiceCategory(
       get(payload, "MdmsRes.BillingService.BusinessService", []),
       dispatch
-    );   
- 
-  } catch (e) {
+    ); 
+    dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig" , get(payload.MdmsRes ,"common-masters.uiCommonPay")))
+    } catch (e) {
     console.log(e);
     alert("Billing service data fetch failed");
   }
@@ -64,6 +73,7 @@ const ucSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("ucSearchScreen", {}));
     getData(action, state, dispatch);
     return action;
   },
@@ -102,6 +112,7 @@ const ucSearchAndResult = {
                 style: {
                   color: "white",
                   borderRadius: "2px",
+                  width: "250px",
                   height: "48px"
                 }
               },
@@ -144,6 +155,7 @@ export default ucSearchAndResult;
 
 const openNewCollectionForm = (state, dispatch) => {
   dispatch(prepareFinalObject("Demands", []));
+  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
   const path =
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/uc/newCollection`

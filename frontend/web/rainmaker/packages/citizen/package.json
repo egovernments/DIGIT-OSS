@@ -25,7 +25,7 @@
     "egov-ui-framework": "0.1.41",
     "egov-ui-kit": "^0.0.1",
     "egov-workflow": "0.0.1",
-    "egov-uc": "0.0.1",
+    "egov-uc": "1.4.0",
     "egov-bpa": "0.0.1",
     "html2canvas": "^1.0.0-alpha.12",
     "jquery": "^3.3.1",

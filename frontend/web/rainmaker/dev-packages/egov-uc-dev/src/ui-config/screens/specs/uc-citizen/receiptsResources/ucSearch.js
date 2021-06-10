@@ -1,7 +1,6 @@
 import {
   getCommonCard,
   getTextField,
-  getSelectField,
   getCommonContainer,
   getPattern,
   getLabel,
@@ -43,7 +42,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNumber",
       "props.value",
       ""
     )
@@ -87,7 +86,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.receiptNumbers",
+      jsonPath: "ucSearchScreen.receiptNumbers",
       // sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
       gridDefination: {
         xs: 12,
@@ -95,7 +94,10 @@ export const UCSearchCard = getCommonCard({
       }
     }),
     serviceType: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-uc",
+      componentPath: "AutosuggestContainer",
+      props: {
         label: {
           labelName: "Service Category",
           labelKey: "UC_SERVICE_CATEGORY_LABEL"
@@ -108,14 +110,19 @@ export const UCSearchCard = getCommonCard({
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
-        required: false,
+        className: "autocomplete-dropdown",
+        required: true,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        sourceJsonPath: "applyScreenMdmsData.serviceCategories",
         jsonPath: "searchScreenMdmsData.businessServiceSelected",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        sourceJsonPath: "applyScreenMdmsData.serviceCategories"
-      }),
+      },
+      required: true,
+      jsonPath: "searchScreenMdmsData.businessServiceSelected",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
       beforeFieldChange: async (action, state, dispatch) => {
         const serviceCategory = get(
           state.screenConfiguration,
@@ -124,14 +131,14 @@ export const UCSearchCard = getCommonCard({
         const selectedCategory = serviceCategory.find(
           item => item.code === action.value
         );
-        const serviceTypes = selectedCategory.child.map(item => item.code);
+        const serviceTypes = selectedCategory && (selectedCategory.child && selectedCategory.child.length > 0 ? selectedCategory.child.map(item => item.code) : selectedCategory.code);
         dispatch(
-          prepareFinalObject("searchScreen.businessCodes", serviceTypes)
+          prepareFinalObject("ucSearchScreen.businessServices", serviceTypes)
         );
         return action;
       }
     },
-    mobileNo: getTextField({
+    mobileNumber: getTextField({
       label: {
         labelName: "Mobile No.",
         labelKey: "UC_MOBILE_NO_LABEL"
@@ -151,7 +158,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNo"
+      jsonPath: "ucSearchScreen.mobileNumber"
     }),
 
     fromDate: getDateField({
@@ -166,7 +173,7 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.fromDate",
+      jsonPath: "ucSearchScreen.fromDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -185,7 +192,7 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.toDate",
+      jsonPath: "ucSearchScreen.toDate",
 
       gridDefination: {
         xs: 12,
@@ -273,4 +280,6 @@ export const UCSearchCard = getCommonCard({
       }
     }
   })
+}, {
+  style: { overflow: "visible" }
 });

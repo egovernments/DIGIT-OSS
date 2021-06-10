@@ -1,21 +1,17 @@
+import commonConfig from "config/common.js";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import get from "lodash/get";
-import set from "lodash/set";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { convertDateToEpoch } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { ifUserRoleExists } from "../../utils";
-import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
-import commonConfig from "config/common.js";
-import "./index.css";
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import set from "lodash/set";
+import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -44,8 +40,7 @@ export const newCollectionFooter = getCommonApplyFooter({
         minWidth: "200px",
         height: "48px",
         marginRight: "16px"
-      },
-      className: "ucButton"      
+      }
     },
     children: {
       downloadReceiptButtonLabel: getLabel({
@@ -105,9 +100,9 @@ const processDemand = async (state, dispatch) => {
           userName: mobileNumber
         }
       );
-      if (payload ) {
-        const uuid = get(payload , "user[0].uuid");
-        dispatch(prepareFinalObject("Demands[0].payer.uuid" , uuid));
+      if (payload) {
+        const uuid = get(payload, "user[0].uuid");
+        dispatch(prepareFinalObject("Demands[0].payer.uuid", uuid));
         await createDemand(state, dispatch);
         allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
           "Demands[0].taxPeriodFrom",
@@ -121,9 +116,13 @@ const processDemand = async (state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "Demands[0].tenantId"
         );
-        getCommonPayUrl(dispatch, applicationNumber, tenantId);
+        const businessService = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Demands[0].serviceType"
+        );
+        getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
       }
-    } catch (error) {}
+    } catch (error) { }
   } else {
     dispatch(
       toggleSnackbar(
@@ -139,16 +138,17 @@ const processDemand = async (state, dispatch) => {
 };
 
 const createDemand = async (state, dispatch) => {
+  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
   let demands = JSON.parse(
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "Demands")
     )
   );
-// Making payer object as null if it is empty object, later will changge in component.
-if(Object.keys(demands[0].payer).length === 0) {
-  demands[0].payer = null;
-}
-  set(demands[0], "consumerType", demands[0].businessService);
+  // Making payer object as null if it is empty object, later will changge in component.
+  if (Object.keys(demands[0].payer).length === 0) {
+    demands[0].payer = null;
+  }
+  // set(demands[0], "consumerType", demands[0].businessService);
   demands[0].demandDetails &&
     demands[0].demandDetails.forEach(item => {
       if (!item.taxAmount) {
@@ -165,10 +165,20 @@ if(Object.keys(demands[0].payer).length === 0) {
   set(demands[0], "taxPeriodTo", convertDateToEpoch(demands[0].taxPeriodTo));
   const mobileNumber = demands[0].mobileNumber;
   const consumerName = demands[0].consumerName;
+  set(demands[0], "payer.mobileNumber", mobileNumber);
+  set(demands[0], "payer.name", consumerName);
   //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
   const taxPeriodValid = isTaxPeriodValid(dispatch, demands[0], state);
-
+  const buttonJsonPath = "components.div.children.newCollectionFooter.children.nextButton";
   if (taxPeriodValid) {
+    dispatch(
+      handleField(
+        "newCollection",
+        buttonJsonPath,
+        "props.disabled",
+        true
+      )
+    );
     const url = get(
       state.screenConfiguration.preparedFinalObject,
       "Demands[0].id",
@@ -195,9 +205,25 @@ if(Object.keys(demands[0].payer).length === 0) {
         //await generateBill(consumerCode, tenantId, businessService, dispatch);
       } else {
         alert("Empty response!!");
+        dispatch(
+          handleField(
+            "newCollection",
+            buttonJsonPath,
+            "props.disabled",
+            false
+          )
+        );
       }
     } catch (e) {
       console.log(e.message);
+      dispatch(
+        handleField(
+          "newCollection",
+          buttonJsonPath,
+          "props.disabled",
+          false
+        )
+      );
       dispatch(
         toggleSnackbar(
           true,
@@ -208,6 +234,7 @@ if(Object.keys(demands[0].payer).length === 0) {
           "error"
         )
       );
+      throw e;
     }
   }
 };
