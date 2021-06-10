@@ -315,6 +315,9 @@ class WorkFlowContainer extends React.Component {
       bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
     } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
       baseUrl = "wns"
+    } else if (moduleName === "PT.MUTATION") {
+      bservice = "PT.MUTATION";
+      baseUrl = "pt-mutation";
     } else {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
     }
@@ -327,7 +330,7 @@ class WorkFlowContainer extends React.Component {
         : licenseNumber && workflowCode === "EDITRENEWAL"
         ? `/${baseUrl}/apply?applicationNumber=${businessId}&licenseNumber=${licenseNumber}&tenantId=${tenant}&action=EDITRENEWAL`
         : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-    }
+    }    
   };
 
 
