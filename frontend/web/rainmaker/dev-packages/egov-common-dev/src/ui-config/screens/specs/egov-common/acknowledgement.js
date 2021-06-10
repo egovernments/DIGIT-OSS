@@ -1,152 +1,249 @@
-import {
-    getCommonHeader,
-    getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
-import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
-import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
 import set from "lodash/set";
-import { ifUserRoleExists } from "../utils";
+import { download } from "../../../../ui-utils/commons";
+import { generateBill, ifUserRoleExists } from "../utils";
+import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
+import { paymentFooter } from "./acknowledgementResource/paymentFooter";
+import "./index.css";
+import { getHeader } from "./pay";
 
-const getAcknowledgementCard = (
-    state,
-    dispatch,
-    status,
-    receiptNumber,
-    consumerCode,
-    tenant
+const downloadprintMenu = (
+  state,
+  applicationNumber,
+  tenantId,
+  uiCommonPayConfig
 ) => {
-    const roleExists = ifUserRoleExists("CITIZEN");
-    if (status === "success") {
-        return {
-            header: getCommonContainer({
-                header: getCommonHeader({
-                    labelName: roleExists ? 'Payment Details' : 'Collection Details',
-                    labelKey: roleExists ? "PAYMENT_HEADER_CITIZEN" : "PAYMENT_HEADER_EMPLOYEE"
-                }),
-                applicationNumber: {
-                    uiFramework: "custom-atoms-local",
-                    moduleName: "egov-common",
-                    componentPath: "ApplicationNoContainer",
-                    props: {
-                        number: consumerCode,
-                        label: {
-                            labelValue:"Consumer Code.:",
-                            labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
-                        }
-                    }                  
-                }
-            }),
-            applicationSuccessCard: {
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
-                children: {
-                    card: acknowledgementCard({
-                        icon: "done",
-                        backgroundColor: "#39CB74",
-                        header: {
-                            labelName: roleExists ? "Payment has been paid successfully!" : "Payment has been collected successfully!",
-                            labelKey: roleExists ? "PAYMENT_MESSAGE_CITIZEN" : "PAYMENT_MESSAGE_EMPLOYEE"
-                        },
-                        body: {
-                            labelName: roleExists ? "A notification regarding Payment has been sent to property owner at registered Mobile No." : "A notification regarding Payment Collection has been sent to property owner at registered Mobile No.",
-                            labelKey: roleExists ? "PAYMENT_MESSAGE_DETAIL_CITIZEN" : "PAYMENT_MESSAGE_DETAIL_EMPLOYEE"
-                        },
-                        tailText: {
-                            labelName: "Payment Receipt No.",
-                            labelKey: "PAYMENT_RECEIPT_NO"
-                        },
-                        number: receiptNumber
-                    })
-                }
+  const receiptKey = get(
+    uiCommonPayConfig,
+    "receiptKey",
+    "consolidatedreceipt"
+  );
+  let receiptDownloadObject = {
+    label: {
+      labelName: "DOWNLOAD RECEIPT",
+      labelKey: "COMMON_DOWNLOAD_RECEIPT",
+    },
+    link: () => {
+      const receiptQueryString = [
+        { key: "receiptNumbers", value: applicationNumber },
+        { key: "tenantId", value: tenantId },
+        {
+          key: "businessService",
+          value: getQueryArg(window.location.href, "businessService"),
+        },
+      ];
+      download(receiptQueryString, "download", receiptKey, state);
+    },
+    leftIcon: "receipt",
+  };
+  let receiptPrintObject = {
+    label: { labelName: "PRINT RECEIPT", labelKey: "COMMON_PRINT_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "receiptNumbers", value: applicationNumber },
+        { key: "tenantId", value: tenantId },
+        {
+          key: "businessService",
+          value: getQueryArg(window.location.href, "businessService"),
+        },
+      ];
+      download(receiptQueryString, "print", receiptKey, state);
+    },
+    leftIcon: "receipt",
+  };
+  let downloadMenu = [];
+  let printMenu = [];
+  downloadMenu = [receiptDownloadObject];
+  printMenu = [receiptPrintObject];
+
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      className: "downloadprint-commonmenu",
+      style: { textAlign: "right", display: "flex" },
+    },
+    children: {
+      disabled: {
+        uiFramework: "custom-atoms-local",
+        componentPath: "DisabledComponent",
+        moduleName: "egov-common",
+      },
+      downloadMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+            leftIcon: "cloud_download",
+            rightIcon: "arrow_drop_down",
+            props: {
+              variant: "outlined",
+              style: { height: "60px", color: "#FE7A51", marginRight: "5px" },
+              className: "tl-download-button",
             },
-            applicationSuccessFooter: applicationSuccessFooter(
-                state,
-                dispatch,
-                receiptNumber,
-                tenant,
-                consumerCode
-            )
-        };
-    } else if (status === "failure") {
-        return {
-            header: getCommonContainer({
-                header: getCommonHeader({
-                    labelName: roleExists ? 'Payment Details' : 'Collection Details',
-                    labelKey: roleExists ? "PAYMENT_HEADER_CITIZEN" : "PAYMENT_HEADER_EMPLOYEE"
-                }),
-                applicationNumber: {
-                    uiFramework: "custom-atoms-local",
-                    moduleName: "egov-common",
-                    componentPath: "ApplicationNoContainer",
-                    props: {
-                        number: consumerCode,
-                        label: {
-                            labelValue:"Consumer Code.:",
-                            labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
-                        }
-                    }
-                }
-            }),
-            applicationSuccessCard: {
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
-                children: {
-                    card: acknowledgementCard({
-                        icon: "close",
-                        backgroundColor: "#E54D42",
-                        header: {
-                            labelName: "Payment has failed!",
-                            labelKey: "PAYMENT_FAILURE_MESSAGE"
-                        },
-                        body: {
-                            labelName: "A notification regarding payment failure has been sent to property owner at registered Mobile No.",
-                            labelKey: "PAYMENT_FAILURE_MESSAGE_DETAIL"
-                        }
-                    })
-                }
+            menu: downloadMenu,
+          },
+        },
+      },
+      printMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+            leftIcon: "print",
+            rightIcon: "arrow_drop_down",
+            props: {
+              variant: "outlined",
+              style: { height: "60px", color: "#FE7A51" },
+              className: "tl-print-button",
             },
-            paymentFailureFooter: paymentFailureFooter(consumerCode, tenant)
-        };
-    }
+            menu: printMenu,
+          },
+        },
+      },
+    },
+  };
+};
+const getAcknowledgementCard = (
+  state,
+  dispatch,
+  status,
+  receiptNumber,
+  consumerCode,
+  tenant
+) => {
+  const roleExists = ifUserRoleExists("CITIZEN");
+  let header = getHeader(state);
+  const businessService = getQueryArg(window.location.href, "businessService");
+  const transBusinessService = businessService
+    ? businessService.toUpperCase().replace(/[._:-\s\/]/g, "_")
+    : "DEFAULT";
+  const uiCommonPayConfig = get(
+    state.screenConfiguration.preparedFinalObject,
+    "commonPayInfo"
+  );
+  if (status === "success") {
+    return {
+      header,
+      headerdownloadprint: downloadprintMenu(
+        state,
+        receiptNumber,
+        tenant,
+        uiCommonPayConfig
+      ),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelKey: roleExists
+                ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE`
+                : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE`,
+            },
+            body: {
+              labelKey: roleExists
+                ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
+                : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`,
+            },
+            tailText: {
+              labelKey: roleExists
+                ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO`
+                : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO`,
+            },
+            number: receiptNumber,
+          }),
+        },
+      },
+      paymentFooter: paymentFooter(
+        state,
+        consumerCode,
+        tenant,
+        status,
+        businessService
+      ),
+    };
+  } else if (status === "failure") {
+    return {
+      header,
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelKey: roleExists
+                ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE`
+                : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE`,
+            },
+            body: {
+              labelKey: roleExists
+                ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
+                : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`,
+            },
+          }),
+        },
+      },
+      paymentFooter: paymentFooter(
+        state,
+        consumerCode,
+        tenant,
+        status,
+        businessService
+      ),
+    };
+  }
 };
 const screenConfig = {
-    uiFramework: "material-ui",
-    name: "acknowledgement",
-    components: {
-        div: {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            props: {
-                className: "common-div-css"
-            },
-            children: {}
-        }
+  uiFramework: "material-ui",
+  name: "acknowledgement",
+  components: {
+    div: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        className: "common-div-css",
+      },
+      children: {},
     },
-    beforeInitScreen: (action, state, dispatch) => {
-        const status = getQueryArg(window.location.href, "status");
-        const consumerCode = getQueryArg(window.location.href, "consumerCode");
-        const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
-        const businessService = getQueryArg(window.location.href, "businessService");
-        const tenant = getQueryArg(window.location.href, "tenantId");
-        let data = getAcknowledgementCard(
-            state,
-            dispatch,
-            status,
-            receiptNumber,
-            consumerCode,
-            tenant
-        );
-       if(businessService!=="PT.MUTATION")
-        {
-            console.log("prasad in mutation");
-            set(data, "applicationSuccessFooter.children.goToApplication", {});
-        } 
-
-        set(action, "screenConfig.components.div.children", data);
-        return action;
+  },
+  beforeInitScreen: (action, state, dispatch) => {
+    const status = getQueryArg(window.location.href, "status");
+    const consumerCode = getQueryArg(window.location.href, "consumerCode");
+    const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
+    const tenant = getQueryArg(window.location.href, "tenantId");
+    const businessService = getQueryArg(
+      window.location.href,
+      "businessService"
+    );
+    if (status == 'success' && localStorage.getItem('pay-channel') && localStorage.getItem('pay-redirectNumber')) {
+      setTimeout(() => {
+        const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
+        window.location.href = weblink
+      }, 1500)
     }
+    // Calling the Bill so that payer information can be set in the PDF for Citizen application
+    if (process.env.REACT_APP_NAME === "Citizen") {
+      generateBill(dispatch, consumerCode, tenant, businessService);
+    }
+    const data = getAcknowledgementCard(
+      state,
+      dispatch,
+      status,
+      receiptNumber,
+      consumerCode,
+      tenant
+    );
+    set(action, "screenConfig.components.div.children", data);
+    return action;
+  },
 };
 
 export default screenConfig;

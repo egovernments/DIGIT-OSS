@@ -11,19 +11,19 @@ const buttonJsonpath =
   `${
     process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"
   }`;
-export const validateAmountInput = (pattern, action, dispatch, state) => {
+export const validateAmountInput = (pattern, action, dispatch, state, minAmountPayable) => {
   const totalAmount = get(
     state,
     "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].totalAmount"
   );
-  if (totalAmount > 100) {
-    const temp = getTemp(action, pattern);
+  if (totalAmount > minAmountPayable) {
+    const temp = getTemp(action, pattern , minAmountPayable);
     if (temp === 1) {
       handleValidation(
         action,
         numberPattern,
         dispatch,
-        "AMOUNT_LESS_THAN_100",
+        `AMOUNT_LESS_THAN_${minAmountPayable}`,
         true
       );
     } else if (temp === 3) {
@@ -50,9 +50,9 @@ export const validateAmountInput = (pattern, action, dispatch, state) => {
   }
 };
 
-export const getTemp = (action, pattern) => {
+export const getTemp = (action, pattern,minAmountPayable) => {
   if (action.value) {
-    if (pattern.test(action.value) && parseInt(action.value) < 100) {
+    if (pattern.test(action.value) && parseInt(action.value) < minAmountPayable) {
       return 1;
     }
     if (!pattern.test(action.value)) {

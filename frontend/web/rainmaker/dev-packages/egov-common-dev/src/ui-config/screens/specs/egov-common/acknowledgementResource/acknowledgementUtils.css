@@ -3,10 +3,13 @@
     display: grid !important;
     text-align: -webkit-center; }
     #material-ui-applicationSuccessContainer #custom-atoms-tail {
-      text-align: center !important; } }
+      text-align: center !important; }
+  .common-footer {
+    width: 100%; }
+  .common-footer-mobile {
+    width: 100%;
+    left: 0 !important; } }
 
-@media only screen and (max-width: 551px) {
-  .DCButton {
-    /*  background-color: #FE7A51 !important;  
-      color: white !important;  */
-    width: 100% !important; } }
+@media only screen and (min-width: 768px) {
+  .footer-com-style {
+    float: right; } }

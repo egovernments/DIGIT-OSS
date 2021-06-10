@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-//import disableBrowserBackButton from 'disable-browser-back-navigation';
+import disableBrowserBackButton from 'disable-browser-back-navigation';
 
 
 class DisabledComponent extends Component{
     componentDidMount(){
-        ////disableBrowserBackButton(); 
+        disableBrowserBackButton(); 
     }
 
   render(){
