@@ -432,6 +432,8 @@ public class PaymentAction extends BasePaymentAction {
     @ValidationErrorPage(value = "search")
     @Action(value = "/payment/payment-search")
     public String search() throws ParseException {
+        persistenceService.getSession().setDefaultReadOnly(true);
+        persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting search...");
         // Get App config value
@@ -975,7 +977,6 @@ public class PaymentAction extends BasePaymentAction {
     @ValidationErrorPage("searchbills")
     @Action(value = "/payment/payment-save")
     public String save() throws ValidationException {
-        persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
         final List<PaymentBean> paymentList = new ArrayList<PaymentBean>();
         final List<AppConfigValues> cutOffDateconfigValue = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "DataEntryCutOffDate");
