@@ -275,6 +275,9 @@ export const getTextField = textScheama => {
     maxValue,
     infoIcon,
     title = {},
+    multiline=false,
+    rows="1",
+    disabled=false,
     errorMessage = "",
     requiredMessage = "",
     ...rest
@@ -300,6 +303,9 @@ export const getTextField = textScheama => {
       iconObj,
       title,
       infoIcon,
+      disabled,
+      multiline,
+      rows,
       errorMessage,
       ...props
     },

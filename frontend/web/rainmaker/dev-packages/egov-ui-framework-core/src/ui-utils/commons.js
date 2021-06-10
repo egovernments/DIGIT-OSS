@@ -707,10 +707,10 @@ export const getStatusKey = (status) => {
 
 export const getRequiredDocData = async (action, dispatch, moduleDetails, closePopUp) => {
   let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId : getTenantId();
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity|| commonConfig.tenantId  : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId:"uk",
+      tenantId: moduleDetails[0].moduleName === "ws-services-masters" ? commonConfig.tenantId : tenantId,
       moduleDetails: moduleDetails
     }
   };
@@ -730,9 +730,9 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
       []
     );
 
-    // if (moduleName === "PropertyTax") {
-    //   payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
-    // }
+  /*   if (moduleName === "PropertyTax") {
+      payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+    } */
     const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName, closePopUp));
     set(
       action,
@@ -886,4 +886,25 @@ export const enableFieldAndHideSpinner = (screenKey, jsonPath = 'components', di
 export const disableFieldAndShowSpinner = (screenKey, jsonPath = 'components', dispatch) => {
   dispatch(showSpinner());
   disableField(screenKey, jsonPath, dispatch);
+}
+
+
+export const sortDropdownNames = (e1, e2) => {
+  if (e1 && e1.name && typeof e1.name == 'string') {
+    return e1 && e1.name && e1.name.localeCompare && e1.name.localeCompare(e2 && e2.name && e2.name || '');
+  } else if (e1 && e1.name && typeof e1.name == 'number') {
+    return e1.name - e2.name;
+  } else {
+    return 1;
+  }
+}
+
+export const sortDropdownLabels = (e1, e2) => {
+  if (e1 && e1.label && typeof e1.label == 'string') {
+    return e1 && e1.label && e1.label.localeCompare && e1.label.localeCompare(e2 && e2.label && e2.label || '');
+  } else if (e1 && e1.label && typeof e1.label == 'number') {
+    return e1.label - e2.label;
+  } else {
+    return 1;
+  }
 }
