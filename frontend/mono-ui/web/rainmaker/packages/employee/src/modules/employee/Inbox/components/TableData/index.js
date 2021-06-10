@@ -356,8 +356,8 @@ class TableData extends Component {
             })
             queries.push([])
             endpoints.push(`egov-searcher/locality/property-services/_get`)
-          } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services" || uniqueModule == "BS") {
-
+          } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services" || uniqueModule == "BS"||uniqueModule == "vehicle" ) {
+            /*Suppress Locality search of modules which ever not found  */
           } else {
             requestBodies.push({
               searchCriteria: {
@@ -582,6 +582,12 @@ class TableData extends Component {
       
       this.loadRemainingData({ "ProcessInstances": [...remainingRecords] }, { "ProcessInstances": [...records] });
       this.setState({loadingLocality:true});
+    }
+
+    if(get(prevProps,'workflowData.count',0)!==get(this.props,'workflowData.count',0)){
+      this.setState({
+        totalRowCount: get(this.props,'workflowData.count',0),
+      });
     }
 
   }

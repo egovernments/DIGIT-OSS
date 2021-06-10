@@ -205,11 +205,12 @@ export const fetchActionItems = (role, ts) => {
         Array.isArray(payload.actions) &&
         payload.actions.some &&
         payload.actions.some((x) => x.name == "rainmaker-common-workflow")) {
-        dispatch(fetchInboxRecordsCount());
+
         const state = getState();
         const { app } = state;
         const { inbox } = app;
         const { loaded = false, loading = false } = inbox || {};
+        loaded == false && loading == false && dispatch(fetchInboxRecordsCount());
         loaded == false && loading == false && dispatch(fetchRecords());
       }
       dispatch(setActionItems(payload.actions));
@@ -377,11 +378,12 @@ export const fetchRecords = () => {
     }
   };
 };
-export const fetchRemRecords = (count) => {
+export const fetchRemRecords = (count = 0) => {
   return async (dispatch, getState) => {
     dispatch(fetchRemInboxRecordsPending());
     try {
       const tenantId = getTenantId();
+      count = localStorage.getItem('jk-test-inbox-record-count') || count;
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 100 }, { key: "limit", value: count - 100 }];
       const payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
       dispatch(fetchRemInboxRecords(payload.ProcessInstances));
