@@ -302,6 +302,7 @@ export const chequeDetails = getCommonContainer({
       labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
     },
     required: true,
+    pattern: "^[A-Z]{4}0[A-Z0-9]{6}$",
     jsonPath: "ReceiptTemp[0].instrument.ifscCode",
     iconObj: {
       iconName: "search",
@@ -440,7 +441,9 @@ export const demandDraftDetails = getCommonContainer({
       labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
     },
     required: true,
+    pattern: "^[A-Z]{4}0[A-Z0-9]{6}$",
     jsonPath: "ReceiptTemp[0].instrument.ifscCode",
+    
     iconObj: {
       iconName: "search",
       position: "end",
