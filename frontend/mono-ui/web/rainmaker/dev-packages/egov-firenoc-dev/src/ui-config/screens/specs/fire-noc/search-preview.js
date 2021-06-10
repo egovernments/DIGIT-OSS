@@ -5,6 +5,7 @@ import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setBu
 import { generateNOCAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateNOCAcknowledgement";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import jp from "jsonpath";
+import { uniqBy } from "lodash";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
@@ -12,13 +13,11 @@ import { checkValueForNA, generateBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import "./index.css";
-import { citizenFooter } from "./searchResource/citizenFooter";
 import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
-import { uniqBy } from "lodash";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -69,9 +68,9 @@ export const downloadPrintContainer = (
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") },
-        { key: "businessService", value:'FIRENOC' }        
+        { key: "businessService", value: 'FIRENOC' }
       ]
-      download(receiptQueryString, "download", "consolidatedreceipt",'PAYMENT', state);
+      download(receiptQueryString, "download", "consolidatedreceipt", 'PAYMENT', state);
     },
     leftIcon: "receipt"
   };
@@ -81,9 +80,9 @@ export const downloadPrintContainer = (
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") },
-        { key: "businessService", value:'FIRENOC' }      
+        { key: "businessService", value: 'FIRENOC' }
       ]
-      download(receiptQueryString, "print", "consolidatedreceipt",'PAYMENT', state);
+      download(receiptQueryString, "print", "consolidatedreceipt", 'PAYMENT', state);
     },
     leftIcon: "receipt"
   };
@@ -264,8 +263,7 @@ const prepareUoms = (state, dispatch) => {
           labelKey: `NOC_PROPERTY_DETAILS_${item.code}_LABEL`
         },
         {
-          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${
-            item.code
+          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${item.code
             }`,
           callBack: checkValueForNA,
         }
@@ -294,9 +292,9 @@ const setSearchResponse = async (
   applicationNumber,
   tenantId
 ) => {
-  let edited =getQueryArg(window.location.href, "edited")
+  let edited = getQueryArg(window.location.href, "edited")
 
-  const response =edited?{FireNOCs:get(state.screenConfiguration.preparedFinalObject,'FireNOCs')}: await getSearchResults([
+  const response = edited ? { FireNOCs: get(state.screenConfiguration.preparedFinalObject, 'FireNOCs') } : await getSearchResults([
     {
       key: "tenantId",
       value: tenantId
@@ -304,9 +302,9 @@ const setSearchResponse = async (
     { key: "applicationNumber", value: applicationNumber }
   ]);
   // const response = sampleSingleSearch();
-  set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.assignee[0]','');
-  set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.comment','');
-  set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.wfDocuments',[]);
+  set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.assignee[0]', '');
+  set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.comment', '');
+  set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.wfDocuments', []);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
   // Set Institution/Applicant info card visibility
@@ -355,7 +353,7 @@ const setSearchResponse = async (
       printCont
     )
   }
-  if(status){
+  if (status) {
     generateBill(dispatch, applicationNumber, tenantId, status);
   }
 };
@@ -372,7 +370,6 @@ const screenConfig = {
       );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     loadUlbLogo(tenantId);
-    generateBill(dispatch, applicationNumber, tenantId);
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "FIRENOC" }
@@ -405,6 +402,11 @@ const screenConfig = {
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
       false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumber.props.number",
+      applicationNumber
     );
     return action;
   },

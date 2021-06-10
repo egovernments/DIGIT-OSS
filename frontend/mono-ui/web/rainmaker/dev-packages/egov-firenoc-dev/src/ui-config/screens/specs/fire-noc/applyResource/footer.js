@@ -2,19 +2,18 @@ import {
   dispatchMultipleFieldChangeAction,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import get from "lodash/get";
-import { getCommonApplyFooter, validateFields } from "../../utils";
-import "./index.css";
+import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateNocApplication,
   prepareDocumentsUploadData,
   setDocsForEditFlow
 } from "../../../../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getCommonApplyFooter, validateFields } from "../../utils";
+import "./index.css";
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
@@ -40,7 +39,7 @@ const moveToReview = (state, dispatch) => {
   for (let i = 0; i < documentsFormat.length; i++) {
     let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
     // let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
-    let isDocumentTypeRequired =false;
+    let isDocumentTypeRequired = false;
 
 
     let documents = get(documentsFormat[i], "documents");
@@ -127,7 +126,7 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = false;
-  let isMultiownerSelected=false;
+  let isMultiownerSelected = false;
 
   if (activeStep === 1) {
     let isPropertyLocationCardValid = validateFields(
@@ -182,7 +181,7 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
- setDocsForEditFlow(state, dispatch) 
+    setDocsForEditFlow(state, dispatch)
 
   }
 
@@ -243,10 +242,10 @@ const callBackForNext = async (state, dispatch) => {
         "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.owners",
         []
       );
-      let ownersArraylength=ownersArray&&ownersArray.length;
-      if(ownersArraylength<2){
-        isMultiownerSelected=true;
-        isFormValid=false;
+      let ownersArraylength = ownersArray && ownersArray.length;
+      if (ownersArraylength < 2) {
+        isMultiownerSelected = true;
+        isFormValid = false;
       }
     } else {
       isMultipleApplicantCardValid = true;
@@ -270,39 +269,41 @@ const callBackForNext = async (state, dispatch) => {
 
 
 
-let ownerDocs=[];
-let buildDocs=[];
-let docs=[];
-let docsForEdit={}
- const documentsUploadRedux = get(state,
-  "screenConfiguration.preparedFinalObject.documentsUploadRedux",
-  {}
-);
-Object.keys(documentsUploadRedux).map((key,index)=>{
-if(documentsUploadRedux[key].documents && Array.isArray(documentsUploadRedux[key].documents) && documentsUploadRedux[key].documents.length>0){
-let documentObj={ fileName:documentsUploadRedux[key].documents[0].fileName || `Document - ${index + 1}`,
+      let ownerDocs = [];
+      let buildDocs = [];
+      let docs = [];
+      let docsForEdit = {}
+      const documentsUploadRedux = get(state,
+        "screenConfiguration.preparedFinalObject.documentsUploadRedux",
+        {}
+      );
+      Object.keys(documentsUploadRedux).map((key, index) => {
+        if (documentsUploadRedux[key].documents && Array.isArray(documentsUploadRedux[key].documents) && documentsUploadRedux[key].documents.length > 0) {
+          let documentObj = {
+            fileName: documentsUploadRedux[key].documents[0].fileName || `Document - ${index + 1}`,
 
-fileUrl:documentsUploadRedux[key].documents[0].fileUrl,
-documentType:documentsUploadRedux[key].documents[0].documentType,
-fileStoreId:documentsUploadRedux[key].documents[0].fileStoreId,
-tenantId:tenantId};
-  if(documentsUploadRedux[key].documentType=="OWNER"){
+            fileUrl: documentsUploadRedux[key].documents[0].fileUrl,
+            documentType: documentsUploadRedux[key].documents[0].documentType,
+            fileStoreId: documentsUploadRedux[key].documents[0].fileStoreId,
+            tenantId: tenantId
+          };
+          if (documentsUploadRedux[key].documentType == "OWNER") {
 
-    ownerDocs.push({...documentObj})
-    docsForEdit[documentsUploadRedux[key].documentCode]={...documentObj};
-  }else if(documentsUploadRedux[key].documentType=="BUILDING"){
-    let key1 =documentsUploadRedux[key].documentSubCode?documentsUploadRedux[key].documentSubCode:documentsUploadRedux[key].documentCode
-    buildDocs.push({...documentObj,documentType:key1})
-    docsForEdit[key1]={...documentObj};
-  }
-  docs.push({...documentObj})
+            ownerDocs.push({ ...documentObj })
+            docsForEdit[documentsUploadRedux[key].documentCode] = { ...documentObj };
+          } else if (documentsUploadRedux[key].documentType == "BUILDING") {
+            let key1 = documentsUploadRedux[key].documentSubCode ? documentsUploadRedux[key].documentSubCode : documentsUploadRedux[key].documentCode
+            buildDocs.push({ ...documentObj, documentType: key1 })
+            docsForEdit[key1] = { ...documentObj };
+          }
+          docs.push({ ...documentObj })
 
-}
-})
-dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.documents", [...ownerDocs]));
-dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.buildings[0].applicationDocuments", [...buildDocs]));
-dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.ownerAuditionalDetail", [...ownerDocs]));
-dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documents", [...docs]));
+        }
+      })
+      dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.documents", [...ownerDocs]));
+      dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.buildings[0].applicationDocuments", [...buildDocs]));
+      dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.ownerAuditionalDetail", [...ownerDocs]));
+      dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documents", [...docs]));
 
 
 
@@ -312,7 +313,7 @@ dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documen
         window.location.href,
         "applicationNumber"
       );
-   
+
       dispatch(
         setRoute(
           `/fire-noc/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
@@ -346,7 +347,7 @@ dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documen
       }
       responseStatus === "success" && changeStep(state, dispatch);
     }
-    else if(isMultiownerSelected){
+    else if (isMultiownerSelected) {
       let errorMessage = {
         labelName: "Please add all the owner details!",
         labelKey: "ERR_FILL_MULTIPLE_OWNER"

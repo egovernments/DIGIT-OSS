@@ -34,7 +34,7 @@ const epochToDate = et => {
 };
 
 export const getMessageFromLocalization = code => {
-  let messageObject = JSON.parse(getLocalization("localization_en_IN")).find(
+  let messageObject = JSON.parse(getLocalization("localization_"+localStorage.getItem("locale") )).find(
     item => {
       return item.code == code;
     }

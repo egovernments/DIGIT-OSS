@@ -85,7 +85,7 @@ export const setDocsForEditFlow = async (state, dispatch) => {
   );
   let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
     let applicationDocument = {}
-    applicationDocuments&&applicationDocuments.map(appDoc => {
+    applicationDocuments && applicationDocuments.map(appDoc => {
       if (appDoc.documentType == mdmsDoc.code) {
         applicationDocument = { ...appDoc }
       }
@@ -106,26 +106,26 @@ export const setDocsForEditFlow = async (state, dispatch) => {
     fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
   applicationDocuments &&
     applicationDocuments.forEach((item, index) => {
-      uploadedDocuments[index] = 
-        {
-          fileName:
-            (fileUrlPayload &&
-              fileUrlPayload[item.fileStoreId] &&
-              decodeURIComponent(
-                getFileUrl(fileUrlPayload[item.fileStoreId])
-                  .split("?")[0]
-                  .split("/")
-                  .pop()
-                  .slice(13)
-              )) ||
-            `Document - ${index + 1}`,
-          fileStoreId: item.fileStoreId,
-          fileUrl: Object.values(fileUrlPayload)[index],
-          documentType: item.documentType,
-          tenantId: item.tenantId,
-          id: item.id
-        }
-      
+      uploadedDocuments[index] =
+      {
+        fileName:
+          (fileUrlPayload &&
+            fileUrlPayload[item.fileStoreId] &&
+            decodeURIComponent(
+              getFileUrl(fileUrlPayload[item.fileStoreId])
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`,
+        fileStoreId: item.fileStoreId,
+        fileUrl: Object.values(fileUrlPayload)[index],
+        documentType: item.documentType,
+        tenantId: item.tenantId,
+        id: item.id
+      }
+
     });
 
   dispatch(
@@ -138,7 +138,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].id"
   );
-  
+
   let method = nocId ? "UPDATE" : "CREATE";
   if (getQueryArg(window.location.href, "action") == 'edit') {
     method = 'edit'
@@ -330,7 +330,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
-    if(payload[0]&&payload[0].provisionFireNOCNumber==""){
+    if (payload[0] && payload[0].provisionFireNOCNumber == "") {
       delete payload[0].provisionFireNOCNumber;
     }
 

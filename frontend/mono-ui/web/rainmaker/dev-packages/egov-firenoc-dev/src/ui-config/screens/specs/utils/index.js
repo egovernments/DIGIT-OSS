@@ -720,7 +720,7 @@ export const createBill = async (queryObject, dispatch) => {
         toggleSnackbar(
           true,
           { labelName: error.message, labelKey: error.message },
-          "error"
+          "warning"
         )
       );
       console.error(error);

@@ -9,8 +9,10 @@ import {
 import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import {
   getQueryArg,
-  getTransformedLocale
+  getTransformedLocale,
+  getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
+
 
 const test = value => {
   value = value ? value.split(".")[0] : "NA";
@@ -248,9 +250,9 @@ export const propertySummary = getCommonGrayCard({
       }
     }
   },
-  propertyDetailsHeader: getHeader("Property Details"),
+  propertyDetailsHeader: getHeader(getLocaleLabels("PROPERTY_DETAILS_HEADER",'PROPERTY_DETAILS_HEADER')),
   break: getBreak(),
   cardOne: propertyDetails,
-  propertyLocationDetailsHeader: getHeader("Property Location Details"),
+  propertyLocationDetailsHeader: getHeader(getLocaleLabels("NOC_PROPERTY_LOCATION_DETAILS_HEADER","NOC_PROPERTY_LOCATION_DETAILS_HEADER")),
   cardTwo: propertyLocationDetails
 });
