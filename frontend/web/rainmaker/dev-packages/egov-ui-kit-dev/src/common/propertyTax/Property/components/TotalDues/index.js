@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import { downloadBill } from "egov-common/ui-utils/commons";
 import "./index.css";
 import get from "lodash/get";
+import { routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
@@ -25,9 +26,23 @@ class TotalDues extends React.Component {
       url: await downloadBill(consumerCode, tenantId , "property-bill"),
     });
   };
+
+  payAction = (consumerCode, tenantId) => {
+  /*   const status = get(this.props, 'propertyDetails[0].status', '');
+    if (status != "ACTIVE") {
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+        "error"
+      );
+    } else { */
+      routeToCommonPay(consumerCode, tenantId);
+   /*  } */
+  }
   render() {
     const { totalBillAmountDue, consumerCode, tenantId, history, citywiseconfig} = this.props;
     let disabledCities = get(citywiseconfig, "[0].enabledCities");
+    const { payAction } = this;
 
     const envURL = "/egov-common/pay";
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
@@ -73,7 +88,7 @@ class TotalDues extends React.Component {
                 primary={true}
                 labelText="PT_TOTALDUES_PAY"
                 onClickAction={() => {
-                  history.push(`${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}`);
+                  payAction(consumerCode, tenantId);
                 }}
               />
             </div>
