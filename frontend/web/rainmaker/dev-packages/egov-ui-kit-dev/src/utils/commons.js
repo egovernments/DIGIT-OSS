@@ -945,3 +945,87 @@ export const getMohallaData = (payload, tenantId) => {
     return result;
   }, []);
 }
+
+export const openPdf = async (link, openIn = '_blank') => {
+  if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp()) {
+    downloadPdf(link, '_self');
+  } else {
+    var response = await axios.get(link, {
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/pdf"
+      }
+    });
+    const file = new Blob([response.data], { type: "application/pdf" });
+    const fileURL = URL.createObjectURL(file);
+    var myWindow = window.open(fileURL, openIn);
+    if (myWindow != undefined) {
+      myWindow.addEventListener("load", event => {
+        myWindow.focus();
+      });
+    }
+  }
+}
+
+export const downloadPdf = (link, openIn = '_blank') => {
+  var win = window.open(link, openIn);
+  if (win) {
+    win.focus();
+  }
+}
+
+export const printPdf = async (link) => {
+  var response = await axios.get(link, {
+    responseType: "arraybuffer",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/pdf"
+    }
+  });
+  const file = new Blob([response.data], { type: "application/pdf" });
+  const fileURL = URL.createObjectURL(file);
+  var myWindow = window.open(fileURL);
+  if (myWindow != undefined) {
+    myWindow.addEventListener("load", event => {
+      myWindow.focus();
+      myWindow.print();
+    });
+  }
+}
+
+export const isDocumentValid = (docUploaded, requiredDocCount) => {
+  const totalDocsKeys = Object.keys(docUploaded) || [];
+  let isValid = true;
+  for (let key = 0; key < totalDocsKeys.length; key++) {
+    if (docUploaded[key].isDocumentRequired) {
+      if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
+        isValid = true;
+      } else {
+        isValid = false;
+        break;
+      }
+    } else {
+      if (docUploaded[key].documents && (!docUploaded[key].dropdown || !docUploaded[key].dropdown.value)) {
+        isValid = false;
+        break;
+      }
+    }
+  }
+  return isValid;
+}
+
+
+
+export const getPaymentSearchAPI = (businessService='')=>{
+  if(businessService=='-1'){
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+  }else if (process.env.REACT_APP_NAME === "Citizen") {
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+  }
+  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
+}
+
+export const getFetchBillAPI = () => {
+  return `${FETCHBILL.GET.URL}`
+}
