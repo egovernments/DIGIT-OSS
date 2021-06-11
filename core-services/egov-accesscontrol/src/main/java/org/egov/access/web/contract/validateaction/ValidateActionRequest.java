@@ -1,9 +1,6 @@
 package org.egov.access.web.contract.validateaction;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 import org.egov.access.domain.criteria.ValidateActionCriteria;
 import org.egov.access.web.contract.role.RoleContract;
 import org.egov.common.contract.request.RequestInfo;
@@ -13,6 +10,7 @@ import java.util.stream.Collectors;
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ValidateActionRequest {
 	@NonNull
 	private RequestInfo requestInfo;

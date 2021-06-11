@@ -1,7 +1,7 @@
 package org.egov.domain.model;
 
 import javax.validation.constraints.NotNull;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.egov.common.contract.request.RequestInfo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,13 +21,13 @@ import lombok.ToString;
 @ToString
 public class MetaDataRequest {
 
-	@NotNull
+    @NotNull
     @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;
-	
-	private String tenantId;
-	
-	private String reportName;
+
+    private String tenantId;
+
+    private String reportName;
 
 }
 

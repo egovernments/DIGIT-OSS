@@ -69,6 +69,7 @@ public class ProcessInstance   {
         @JsonProperty("state")
         private State state = null;
 
+        @Size(max=1024)
         @JsonProperty("comment")
         private String comment = null;
 
@@ -79,8 +80,8 @@ public class ProcessInstance   {
         @JsonProperty("assigner")
         private User assigner = null;
 
-        @JsonProperty("assignee")
-        private User assignee = null;
+        @JsonProperty("assignes")
+        private List<User> assignes = null;
 
         @JsonProperty("nextActions")
         @Valid
@@ -102,6 +103,9 @@ public class ProcessInstance   {
         @JsonProperty("auditDetails")
         private AuditDetails auditDetails = null;
 
+        @JsonProperty("rating")
+        private Integer rating = null;
+
 
         public ProcessInstance addDocumentsItem(Document documentsItem) {
             if (this.documents == null) {
@@ -117,8 +121,18 @@ public class ProcessInstance   {
             if (this.nextActions == null) {
             this.nextActions = new ArrayList<>();
             }
-        this.nextActions.add(nextActionsItem);
-        return this;
+            this.nextActions.add(nextActionsItem);
+            return this;
+        }
+
+        public ProcessInstance addUsersItem(User usersItem) {
+                if (this.assignes == null) {
+                        this.assignes = new ArrayList<>();
+                }
+                if(!this.assignes.contains(usersItem))
+                        this.assignes.add(usersItem);
+
+                return this;
         }
 
 }

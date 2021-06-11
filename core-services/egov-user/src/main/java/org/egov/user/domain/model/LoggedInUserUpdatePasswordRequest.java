@@ -15,18 +15,18 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Getter
 @EqualsAndHashCode
 public class LoggedInUserUpdatePasswordRequest {
-	private String userName;
-	private String tenantId;
-	private UserType type;
-	private String existingPassword;
-	private String newPassword;
+    private String userName;
+    private String tenantId;
+    private UserType type;
+    private String existingPassword;
+    private String newPassword;
 
-	public void validate() {
-		if (isUsernameAbsent() || isTenantAbsent() || isUserTypeAbsent() || isExistingPasswordAbsent() ||
+    public void validate() {
+        if (isUsernameAbsent() || isTenantAbsent() || isUserTypeAbsent() || isExistingPasswordAbsent() ||
                 isNewPasswordAbsent()) {
-			throw new InvalidLoggedInUserUpdatePasswordRequestException(this);
-		}
-	}
+            throw new InvalidLoggedInUserUpdatePasswordRequestException(this);
+        }
+    }
 
     public boolean isUsernameAbsent() {
         return isEmpty(userName);
@@ -43,6 +43,7 @@ public class LoggedInUserUpdatePasswordRequest {
     public boolean isTenantAbsent() {
         return isEmpty(tenantId);
     }
+
     public boolean isUserTypeAbsent() {
         return isNull(type);
     }

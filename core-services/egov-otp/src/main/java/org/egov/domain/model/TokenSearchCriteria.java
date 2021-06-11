@@ -15,7 +15,7 @@ public class TokenSearchCriteria {
     private String tenantId;
 
     public void validate() {
-        if(isIdAbsent() || isTenantIdAbsent()) {
+        if (isIdAbsent() || isTenantIdAbsent()) {
             throw new InvalidTokenSearchCriteriaException(this);
         }
     }

@@ -49,20 +49,6 @@ public class BoundaryServiceTest {
 	}
 
 	@Test
-	public void test_should_check_shapefileexist() {
-
-		assertTrue(boundaryService.checkTenantShapeFileExistOrNot("ap.addanki"));
-
-	}
-
-	@Test
-	public void test_should_check_shapefileNotexist() {
-
-		assertFalse(boundaryService.checkTenantShapeFileExistOrNot("maharashtra.addanki"));
-
-	}
-
-	@Test
 	@Transactional
 	public void test_should_fetch_boundaries_for_boundarytype_and_tenantid() {
 

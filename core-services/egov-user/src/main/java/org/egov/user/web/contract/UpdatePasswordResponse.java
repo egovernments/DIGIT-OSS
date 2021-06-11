@@ -7,5 +7,5 @@ import org.egov.common.contract.response.ResponseInfo;
 @AllArgsConstructor
 @Getter
 public class UpdatePasswordResponse {
-	private ResponseInfo responseInfo;
+    private ResponseInfo responseInfo;
 }

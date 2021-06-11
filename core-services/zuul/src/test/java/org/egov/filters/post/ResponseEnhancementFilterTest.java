@@ -22,7 +22,7 @@ public class ResponseEnhancementFilterTest {
     }
 
     @Test
-    public void test_should_set_correlation_id_response_header() {
+    public void test_should_set_response_header() {
         RequestContext.getCurrentContext().set("CORRELATION_ID", "someCorrelationId");
         final MockHttpServletResponse response = new MockHttpServletResponse();
         response.setStatus(400);
@@ -36,10 +36,21 @@ public class ResponseEnhancementFilterTest {
         final List<Pair<String, String>> zuulResponseHeaders =
             RequestContext.getCurrentContext().getZuulResponseHeaders();
 
-        assertEquals(1, zuulResponseHeaders.size());
-        final Pair<String, String> stringPair = zuulResponseHeaders.get(0);
-        assertEquals("x-correlation-id", stringPair.first());
-        assertEquals("someCorrelationId", stringPair.second());
+        boolean correlationHeaderPresent = false;
+        boolean cacheControlHeadersPresent = false;
+        for(Pair<String, String> header : zuulResponseHeaders){
+
+            if(header.first().equalsIgnoreCase("x-correlation-id")){
+                correlationHeaderPresent = true;
+                assertEquals("someCorrelationId", header.second());
+            }
+
+            if(header.first().equalsIgnoreCase("Cache-Control")){
+                cacheControlHeadersPresent = true;
+                assertEquals("no-cache, no-store, max-age=0, must-revalidate", header.second());
+            }
+        }
+        assert correlationHeaderPresent && cacheControlHeadersPresent;
     }
 
     @Test

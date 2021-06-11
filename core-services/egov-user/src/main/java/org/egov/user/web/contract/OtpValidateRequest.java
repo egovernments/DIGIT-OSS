@@ -14,7 +14,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class OtpValidateRequest {
-	@JsonProperty("RequestInfo")
+    @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;
     private Otp otp;
 }

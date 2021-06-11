@@ -105,20 +105,20 @@ import lombok.ToString;
 @Builder
 public class Error {
 
-	@NotNull
-	private Integer code;
+    @NotNull
+    private Integer code;
 
-	@NotNull
-	private String message;
+    @NotNull
+    private String message;
 
-	private String description;
+    private String description;
 
-	private List<ErrorField> errorFields;
+    private List<ErrorField> errorFields;
 
-	/**
-	 * FIXME : If we take List of Object, it will generate twice the actual
-	 * result. On first line, the key & on next line the value. PROPOSITION :
-	 * Can take Map instead where Key is fieldName, Value is Error description
-	 */
-	private Map<String, Object> fields = new LinkedHashMap<>();
+    /**
+     * FIXME : If we take List of Object, it will generate twice the actual
+     * result. On first line, the key & on next line the value. PROPOSITION :
+     * Can take Map instead where Key is fieldName, Value is Error description
+     */
+    private Map<String, Object> fields = new LinkedHashMap<>();
 }

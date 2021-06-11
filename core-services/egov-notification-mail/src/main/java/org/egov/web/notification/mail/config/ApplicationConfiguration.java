@@ -41,9 +41,12 @@
 package org.egov.web.notification.mail.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+
+import lombok.Getter;
 
 import java.util.Properties;
 
@@ -68,4 +71,35 @@ public class ApplicationConfiguration {
         mailSender.setJavaMailProperties(mailProperties);
         return mailSender;
     }
+    
+    @Value("${egov.localization.host}")
+    @Getter
+    private String localizationHost;
+    
+    @Value("${egov.localization.context.path}")
+    @Getter
+    private String localizationContextPath;
+    
+    @Value("${egov.localization.search.endpoint}")
+    @Getter
+    private String localizationSearchEndpoint;
+    
+
+    @Value("${egov.user.host}")
+    @Getter
+    private String userHost;
+    
+    @Value("${egov.user.context.path}")
+    @Getter
+    private String userContextPath;
+    
+    @Value("${egov.user.search.endpoint}")
+    @Getter
+    private String userSearchEndpoint;
+    
+    @Value("${egov.user.state.tenant.id}")
+    @Getter
+    private String stateTenantId;
+    
+    
 }

@@ -91,8 +91,8 @@ public class Property extends PropertyInfo{
 	}
 
 	@Builder
-	public Property(String propertyId, String tenantId, String acknowldgementNumber, String oldPropertyId, StatusEnum status, Address address, AuditDetails auditDetails, CreationReasonEnum creationReason, Long occupancyDate, List<PropertyDetail> propertyDetails) {
-		super(propertyId, tenantId, acknowldgementNumber, oldPropertyId, status, address);
+	public Property(String propertyId, String tenantId, String acknowldgementNumber, String oldPropertyId, StatusEnum status, Address address, AuditDetails auditDetails, CreationReasonEnum creationReason, Long occupancyDate, List<PropertyDetail> propertyDetails, String usageCategory) {
+		super(propertyId, tenantId, acknowldgementNumber, oldPropertyId, status, address, usageCategory);
 		this.auditDetails = auditDetails;
 		this.creationReason = creationReason;
 		this.occupancyDate = occupancyDate;

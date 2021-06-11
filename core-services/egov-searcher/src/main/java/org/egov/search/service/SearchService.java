@@ -2,6 +2,7 @@ package org.egov.search.service;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,6 @@ import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -56,19 +56,35 @@ public class SearchService {
 		Definition searchDefinition = null;
 		searchDefinition = searchUtils.getSearchDefinition(searchDefinitionMap, moduleName, searchName);
 		List<String> maps = new ArrayList<>();
+		Object data = null;
 		try{
-			maps = searchRepository.fetchData(searchRequest, searchDefinition);
+			if(null != searchDefinition.getIsCustomerRowMapEnabled()) {
+				if(!searchDefinition.getIsCustomerRowMapEnabled()) {
+					maps = searchRepository.fetchData(searchRequest, searchDefinition);
+				}else {
+					//This is a custom logic for bill-genie, we'll need to write code seperately to support custom rowmap logic for any search.
+					data =  searchRepository.fetchWithCustomMapper(searchRequest, searchDefinition);
+					Map<String, Object> result = new HashMap<>();
+					result.put("ResponseInfo", responseInfoFactory.createResponseInfoFromRequestInfo(searchRequest.getRequestInfo(), true));
+					String outputKey = searchDefinition.getOutput().getOutJsonPath().split("\\.")[1];
+					result.put(outputKey, data);
+					data = result;
+				}
+			}else {
+				maps = searchRepository.fetchData(searchRequest, searchDefinition);
+			}
 		}catch(Exception e){
 			log.error("Exception: ",e);
 			throw new CustomException("DB_QUERY_EXECUTION_ERROR", "There was an error encountered at the Db");
 		}
-		Object data = null;
-		try{
-			data = formatResult(maps, searchDefinition, searchRequest);
-		}catch(Exception e){
-			log.error("Exception: ",e);
-			throw new CustomException("RESULT_FORMAT_ERROR", 
-					"There was an error encountered while formatting the result, Verify output config from the yaml file.");
+		if(null == data) {
+			try{
+				data = formatResult(maps, searchDefinition, searchRequest);
+			}catch(Exception e){
+				log.error("Exception: ",e);
+				throw new CustomException("RESULT_FORMAT_ERROR", 
+						"There was an error encountered while formatting the result, Verify output config from the yaml file.");
+			}	
 		}
 		
 		return data;

@@ -85,6 +85,14 @@ public class Artifact extends AbstractPersistable<Long> {
     
     @Column(name = "filesource")
     private String fileSource;
+    
+    private String createdBy;
+
+    private String lastModifiedBy;
+
+    private Long createdTime;
+
+    private Long lastModifiedTime; 
 
     public FileLocation getFileLocation() {
         return new FileLocation(fileStoreId, module, tag,tenantId,fileName,fileSource);

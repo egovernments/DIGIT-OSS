@@ -12,6 +12,10 @@
   },
   "User": {
     "name": "Jamaal Bhai",
-    "roles":[{"code" : "EMPLOYEE"}] 
+    "roles": [
+      {
+        "code": "EMPLOYEE"
+      }
+    ]
   }
 }

@@ -1,17 +1,18 @@
 package org.egov.web.contract;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.egov.domain.model.MessageIdentity;
 import org.egov.domain.model.Tenant;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
 @Builder
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Message {
 	@NotEmpty
 	private String code;

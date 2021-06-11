@@ -21,7 +21,7 @@ public interface MessageJpaRepository extends JpaRepository<Message, Long> {
 	List<Message> find(@Param("tenantId") String tenantId, @Param("locale") String locale,
 			@Param("module") String module, @Param("codes") List<String> codes);
 
-	@Query("select m.id from Message m where m.tenantId = :tenantId and m.locale = :locale and m.module = :module and m.code = :code)")
+	@Query("select m.id from Message m where m.tenantId = :tenantId and m.locale = :locale and m.module = :module and m.code = :code")
 	List<Message> find(@Param("tenantId") String tenantId, @Param("locale") String locale,
 			@Param("module") String module, @Param("code") String code);
 }

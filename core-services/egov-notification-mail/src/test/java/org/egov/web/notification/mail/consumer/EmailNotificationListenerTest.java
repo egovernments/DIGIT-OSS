@@ -1,4 +1,4 @@
-package org.egov.web.notification.mail.consumer;
+/*package org.egov.web.notification.mail.consumer;
 
 import org.egov.web.notification.mail.consumer.contract.EmailRequest;
 import org.egov.web.notification.mail.model.Email;
@@ -36,4 +36,4 @@ public class EmailNotificationListenerTest {
 				.build();
 		verify(emailService).sendEmail(expectedEmail);
 	}
-}
+}*/

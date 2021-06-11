@@ -1,8 +1,12 @@
 package org.egov.web.notification.mail.consumer.contract;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-import org.egov.web.notification.mail.model.Email;
+import org.egov.common.contract.request.RequestInfo;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,18 +14,7 @@ import org.egov.web.notification.mail.model.Email;
 @Setter
 @Getter
 public class EmailRequest {
-    private String email;
-    private String subject;
-    private String body;
-    @JsonProperty("isHTML")
-    private boolean isHTML;
-
-    public Email toDomain() {
-        return Email.builder()
-				.toAddress(email)
-				.subject(subject)
-				.body(body)
-				.html(isHTML)
-				.build();
-    }
+    private RequestInfo requestInfo;
+    
+    private Email email;
 }

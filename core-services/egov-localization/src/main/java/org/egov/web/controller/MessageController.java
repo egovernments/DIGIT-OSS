@@ -1,5 +1,6 @@
 package org.egov.web.controller;
 
+import org.egov.domain.model.MessageRequest;
 import org.egov.domain.model.MessageSearchCriteria;
 import org.egov.domain.model.Tenant;
 import org.egov.domain.service.MessageService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,17 +27,24 @@ public class MessageController {
 	@GetMapping()
 	public MessagesResponse getMessagesForLocale(@RequestParam("locale") String locale,
 			@RequestParam(value = "module", required = false) String module,
-			@RequestParam("tenantId") String tenantId) {
-		return getMessages(locale, module, tenantId);
+			@RequestParam("tenantId") String tenantId,@RequestParam(value = "codes",required = false) Set<String> codes) {
+		return getMessages(locale, module, tenantId, codes);
 	}
 
 	@PostMapping("/v1/_search")
 	public MessagesResponse getMessages(@RequestParam("locale") String locale,
 			@RequestParam(value = "module", required = false) String module,
-			@RequestParam("tenantId") String tenantId) {
+			@RequestParam("tenantId") String tenantId,@RequestParam(value = "codes",required = false) Set<String> codes) {
 		final MessageSearchCriteria searchCriteria = MessageSearchCriteria.builder().locale(locale)
-				.tenantId(new Tenant(tenantId)).module(module).build();
+				.tenantId(new Tenant(tenantId)).codes(codes).module(module).build();
 		List<org.egov.domain.model.Message> domainMessages = messageService.getFilteredMessages(searchCriteria);
+		return createResponse(domainMessages);
+	}
+	
+	@PostMapping("/v2/_search")
+	public MessagesResponse getMessages(@RequestBody MessageRequest messageRequest) {
+		
+		List<org.egov.domain.model.Message> domainMessages = messageService.getFilteredMessages(messageRequest.getMessageSearchCriteria());
 		return createResponse(domainMessages);
 	}
 

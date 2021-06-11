@@ -5,6 +5,7 @@ import org.quartz.JobDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 
@@ -18,7 +19,8 @@ public class EarlyReconciliationJobConfig {
     private AppProperties appProperties;
 
     @Bean
-    JobDetailFactoryBean earlyReconciliationJob() {
+    @Primary
+    JobDetailFactoryBean earlyReconciliationJobs() {
         JobDetailFactoryBean jobDetailFactory = new JobDetailFactoryBean();
         jobDetailFactory.setJobClass(EarlyReconciliationJob.class);
         jobDetailFactory.setGroup("status-update");

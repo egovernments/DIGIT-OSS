@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.egov.pg.config.AppProperties;
 import org.egov.pg.models.CollectionPayment;
 import org.egov.pg.models.CollectionPaymentDetail;
@@ -41,6 +42,7 @@ public class PaymentsService {
 		payment.setInstrumentDate(request.getTransaction().getAuditDetails().getCreatedTime());
 		payment.setInstrumentNumber(request.getTransaction().getTxnId());
 		payment.setTransactionNumber(request.getTransaction().getTxnId());
+		payment.setAdditionalDetails((JsonNode) request.getTransaction().getAdditionalDetails());
 		
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
@@ -111,6 +113,7 @@ public class PaymentsService {
 				.instrumentDate(System.currentTimeMillis())
 				.instrumentNumber("PROV_PAYMENT_VALIDATION")
 				.transactionNumber("PROV_PAYMENT_VALIDATION")
+				.payerName(request.getTransaction().getUser().getName())
 				.build();
 	}
 

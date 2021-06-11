@@ -12,21 +12,21 @@ import static org.junit.Assert.assertNotNull;
 
 public class UserIdMandatoryErrorHandlerTest {
 
-	@Test
-	public void test_should_return_error_response() {
-		final UserIdMandatoryErrorHandler errorHandler = new UserIdMandatoryErrorHandler();
+    @Test
+    public void test_should_return_error_response() {
+        final UserIdMandatoryErrorHandler errorHandler = new UserIdMandatoryErrorHandler();
 
-		final ErrorResponse errorResponse = errorHandler.adapt(null);
+        final ErrorResponse errorResponse = errorHandler.adapt(null);
 
-		assertNotNull(errorResponse);
-		final Error error = errorResponse.getError();
-		assertEquals(400, error.getCode());
-		assertEquals("Update of user profile failed.", error.getMessage());
-		final List<ErrorField> errorFields = error.getFields();
-		assertEquals(1, errorFields.size());
-		assertEquals("USER.USER_ID_MANDATORY", errorFields.get(0).getCode());
-		assertEquals("User id is mandatory.", errorFields.get(0).getMessage());
-		assertEquals("id", errorFields.get(0).getField());
-	}
+        assertNotNull(errorResponse);
+        final Error error = errorResponse.getError();
+        assertEquals(400, error.getCode());
+        assertEquals("Update of user profile failed.", error.getMessage());
+        final List<ErrorField> errorFields = error.getFields();
+        assertEquals(1, errorFields.size());
+        assertEquals("USER.USER_ID_MANDATORY", errorFields.get(0).getCode());
+        assertEquals("User id is mandatory.", errorFields.get(0).getMessage());
+        assertEquals("id", errorFields.get(0).getField());
+    }
 
 }

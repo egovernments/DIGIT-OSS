@@ -36,7 +36,7 @@ public class MessageRepositoryTest {
 
         messageRepository.save(domainMessages, user);
 
-        verify(messageJpaRepository).save(anyListOf(Message.class));
+        verify(messageJpaRepository).saveAll(anyListOf(Message.class));
     }
 
     List<org.egov.domain.model.Message> getDomainMessages() {

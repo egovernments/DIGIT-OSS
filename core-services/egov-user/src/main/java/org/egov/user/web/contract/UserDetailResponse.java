@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 public class UserDetailResponse {
     @JsonProperty("responseInfo")
-	ResponseInfo responseInfo;
+    ResponseInfo responseInfo;
 
     @JsonProperty("user")
     List<UserRequest> user;

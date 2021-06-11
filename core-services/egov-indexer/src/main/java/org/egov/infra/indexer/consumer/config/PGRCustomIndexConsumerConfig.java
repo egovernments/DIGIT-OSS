@@ -20,8 +20,8 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
-import org.springframework.kafka.listener.config.ContainerProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,8 +50,20 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
 	
 	@Value("${egov.indexer.pgr.legacyindex.topic.name}")
 	private String pgrLegacyTopic;
-        
-    @Autowired
+
+	@Value("${pgr.create.topic.name}")
+	private String pgrServicesCreateTopic;
+
+	@Value("${pgr.update.topic.name}")
+	private String pgrServicesUpdateTopic;
+
+	@Value("${pgr.legacy.topic.name}")
+	private String pgrServicesLegacyTopic;
+
+	@Value("${pgr.batch.create.topic.name}")
+	private String pgrServicesBatchCreateTopic;
+
+	@Autowired
     private StoppingErrorHandler stoppingErrorHandler;
     
     @Autowired
@@ -71,10 +83,13 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
     }
     
     public String setTopics(){
-    	String[] topics = new String[3];
+    	String[] topics = new String[6];
     	topics[0] = pgrCreateTopic;
     	topics[1] = pgrUpdateTopic;
     	topics[2] = pgrLegacyTopic;
+		topics[3] = pgrServicesCreateTopic;
+		topics[4] = pgrServicesLegacyTopic;
+		topics[5] = pgrServicesBatchCreateTopic;
 
     	this.topics = topics;  
     	
@@ -103,7 +118,7 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.getContainerProperties().setErrorHandler(stoppingErrorHandler);
+        factory.setErrorHandler(stoppingErrorHandler);
         factory.setConcurrency(3);
         factory.getContainerProperties().setPollTimeout(30000);
         
@@ -116,8 +131,8 @@ public class PGRCustomIndexConsumerConfig implements ApplicationRunner {
     public KafkaMessageListenerContainer<String, String> container() throws Exception { 
     	 setTopics();
     	 ContainerProperties properties = new ContainerProperties(this.topics); // set more properties
-    	 properties.setPauseEnabled(true);
-    	 properties.setPauseAfter(0);
+//    	 properties.setPauseEnabled(true);
+//    	 properties.setPauseAfter(0);
     	 properties.setMessageListener(indexerMessageListener);
     	 
          log.info("PGR KafkaListenerContainer built...");

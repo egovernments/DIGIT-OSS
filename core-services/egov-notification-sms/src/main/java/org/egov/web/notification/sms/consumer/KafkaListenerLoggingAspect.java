@@ -17,8 +17,8 @@ import java.lang.reflect.Method;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Aspect
-@Component
+//@Aspect
+//@Component
 @Slf4j
 public class KafkaListenerLoggingAspect {
 
@@ -37,7 +37,7 @@ public class KafkaListenerLoggingAspect {
         this.objectMapper = new ObjectMapper();
     }
 
-    @Pointcut(value=" within(org.egov..*) && @annotation(org.springframework.kafka.annotation.KafkaListener)")
+    @Pointcut(value = " within(org.egov..*) && @annotation(org.springframework.kafka.annotation.KafkaListener)")
     public void anyKafkaConsumer() {
     }
 
@@ -57,8 +57,7 @@ public class KafkaListenerLoggingAspect {
             final Object result = pjp.proceed();
             log.info(PROCESSED_SUCCESS_MESSAGE);
             return result;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error(EXCEPTION_MESSAGE, e);
             throw e;
         }

@@ -9,11 +9,11 @@ import java.time.ZoneId;
 @Service
 public class LocalDateTimeFactory {
 
-	@Value("${app.timezone}")
-	private String timeZone;
+    @Value("${app.timezone}")
+    private String timeZone;
 
-	public LocalDateTime now() {
-		return LocalDateTime.now(ZoneId.of(timeZone));
-	}
+    public LocalDateTime now() {
+        return LocalDateTime.now(ZoneId.of(timeZone));
+    }
 
 }

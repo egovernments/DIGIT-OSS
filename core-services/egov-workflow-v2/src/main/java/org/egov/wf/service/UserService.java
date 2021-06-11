@@ -1,8 +1,10 @@
 package org.egov.wf.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
+import org.egov.common.contract.response.ResponseInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.repository.ServiceRequestRepository;
@@ -18,6 +20,7 @@ import java.util.*;
 
 
 @Service
+@Slf4j
 public class UserService {
 
 
@@ -116,7 +119,7 @@ public class UserService {
         try {
             d = f.parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error("Error while parsing user date",e);
         }
         return  d.getTime();
     }

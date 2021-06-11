@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.egov.domain.exception.InvalidTokenRequestException;
+import org.egov.web.util.*;
+import org.springframework.beans.factory.annotation.*;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.springframework.util.StringUtils.isEmpty;
@@ -14,14 +16,9 @@ import static org.springframework.util.StringUtils.isEmpty;
 @EqualsAndHashCode
 @ToString
 public class TokenRequest {
-    private static final int TTL_IN_SECONDS = 300;
 
     private String identity;
     private String tenantId;
-
-    public long getTimeToLive() {
-        return TTL_IN_SECONDS;
-    }
 
     public void validate() {
         if (isIdentityAbsent() || isTenantIdAbsent()) {

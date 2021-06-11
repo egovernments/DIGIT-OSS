@@ -1,0 +1,9 @@
+root,pgr.create.tenantId,pgr.track.end
+pgr.create.tenantId,pgr.create.locality
+pgr.create.locality,pgr.create.landmark
+pgr.create.landmark,pgr.create.complaintType
+pgr.create.complaintType,pgr.create.complaintDetails
+pgr.create.complaintDetails,pgr.create.photo
+pgr.create.photo,pgr.create.end
+pgr.create.end
+pgr.track.end

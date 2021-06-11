@@ -1,13 +1,11 @@
 package org.egov.access.web.contract.validateaction;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ActionValidationContract {
 	@NonNull
 	private String allowed;

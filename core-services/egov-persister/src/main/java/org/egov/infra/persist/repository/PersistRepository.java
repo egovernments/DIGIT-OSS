@@ -2,7 +2,6 @@ package org.egov.infra.persist.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
@@ -13,6 +12,7 @@ import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -33,10 +33,40 @@ public class PersistRepository {
     private ObjectMapper objectMapper;
 
 
-    public void persist(String query, List<JsonMap> jsonMaps, String jsonData, String baseJsonPath) {
-        Object document = Configuration.defaultConfiguration().jsonProvider().parse(jsonData);
+    public void persist(String query, List<Object[]> rows) {
 
-        List<LinkedHashMap<String, Object>> dataSource = extractData(baseJsonPath, document);
+        try {
+            if( ! rows.isEmpty()) {
+                log.info("Executing query : "+ query);
+                jdbcTemplate.batchUpdate(query, rows);
+                log.info("Persisted {} row(s) to DB!", rows.size());
+            }
+        } catch (Exception ex) {
+            log.error("Failed to persist {} row(s) using query: {}", rows.size(), query, ex);
+            throw ex;
+        }
+    }
+
+    public void persist(String query, List<JsonMap> jsonMaps, Object jsonObj, String baseJsonPath) {
+
+        List<Object[]> rows = getRows(jsonMaps,jsonObj,baseJsonPath);
+
+        try {
+            if( ! rows.isEmpty()) {
+                log.info("Executing query : "+ query);
+                jdbcTemplate.batchUpdate(query, rows);
+                log.info("Persisted {} row(s) to DB!", rows.size(), baseJsonPath);
+            }
+        } catch (Exception ex) {
+            log.error("Failed to persist {} row(s) using query: {}", rows.size(), query, ex);
+            throw ex;
+        }
+    }
+
+
+    public List<Object[]> getRows(List<JsonMap> jsonMaps, Object jsonObj, String baseJsonPath) {
+
+        List<LinkedHashMap<String, Object>> dataSource = extractData(baseJsonPath, jsonObj);
 
         List<Object[]> rows = new ArrayList<>();
 
@@ -68,7 +98,7 @@ public class PersistRepository {
                 if (jsonPath.contains("{")) {
                     String attribute = jsonPath.substring(jsonPath.indexOf("{") + 1, jsonPath.indexOf("}"));
                     jsonPath = jsonPath.replace("{".concat(attribute).concat("}"), "\"" + rawDataRecord.get(attribute).toString() + "\"");
-                    JSONArray jsonArray = JsonPath.read(document, jsonPath);
+                    JSONArray jsonArray = JsonPath.read(jsonObj, jsonPath);
                     row.add(jsonArray.get(0));
 
                     continue;
@@ -84,9 +114,13 @@ public class PersistRepository {
                 }
 
                 else if ((type.equals(TypeEnum.ARRAY)) && dbType.equals(TypeEnum.STRING)) {
-                    List<Object> list1 = JsonPath.read(document, jsonPath);
-                    value = StringUtils.join(list1.get(i), ",");
-                    value = value.toString().substring(2, value.toString().lastIndexOf("]") - 1).replace("\"", "");
+                    List<Object> list1 = JsonPath.read(jsonObj, jsonPath);
+                    if (CollectionUtils.isEmpty(list1)) {
+                        value = null;
+                    } else {
+                        value = StringUtils.join(list1.get(i), ",");
+                        value = value.toString().substring(2, value.toString().lastIndexOf("]") - 1).replace("\"", "");
+                    }
                 }
 
                 else if (jsonPath.contains("*.")) {
@@ -95,7 +129,7 @@ public class PersistRepository {
                 }
 
                 else if (!(type.equals(TypeEnum.CURRENTDATE) || jsonPath.startsWith("default"))) {
-                    value = JsonPath.read(document, jsonPath);
+                    value = JsonPath.read(jsonObj, jsonPath);
                 }
 
                 if (jsonPath.startsWith("default"))
@@ -151,17 +185,7 @@ public class PersistRepository {
             }
             rows.add(row.toArray());
         }
-
-        try {
-            if( ! rows.isEmpty()) {
-                log.info("Executing query : "+ query);
-			    jdbcTemplate.batchUpdate(query, rows);
-                log.info("Persisted {} row(s) to DB!", rows.size(), baseJsonPath);
-            }
-        } catch (Exception ex) {
-            log.error("Failed to persist {} row(s) using query: {}", rows.size(), query, ex);
-            throw ex;
-        }
+        return rows;
 
     }
 
@@ -190,7 +214,7 @@ public class PersistRepository {
 
     /**
      * Fetch leaf node value recursively based on json path from java represented json tree
-     * 
+     *
      * @param jsonTree Java represented json tree
      * @param jsonPath Path of leaf node
      * @return Value of leaf node
@@ -227,7 +251,7 @@ public class PersistRepository {
     /**
      * Check if leaf node, is null,
      *  for ex, user has optional address in config, if address is null in datasource skip persisting to address table
-     *  
+     *
      * @param baseJsonPath Base json path
      * @param jsonTree Java represented json tree
      * @return If node not available, return true, else false
@@ -244,7 +268,7 @@ public class PersistRepository {
                     return true;
                 }
                 else
-                    temp = (LinkedHashMap<String, Object>) jsonTree.get(baseObjectForNullCheck);
+                    temp = (LinkedHashMap<String, Object>) temp.get(baseObjectForNullCheck);
             }
             return false;
         } else

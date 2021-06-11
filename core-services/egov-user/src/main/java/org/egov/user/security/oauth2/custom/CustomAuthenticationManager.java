@@ -22,7 +22,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
     private List<AuthenticationProvider> authenticationProviders;
 
     @Autowired
-    CustomAuthenticationManager(List<AuthenticationProvider> authenticationProviders){
+    CustomAuthenticationManager(List<AuthenticationProvider> authenticationProviders) {
         this.authenticationProviders = authenticationProviders;
     }
 
@@ -35,7 +35,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
             if (!provider.supports(toTest)) {
                 continue;
             }
-                log.debug("Authentication attempt using "+ provider.getClass().getName());
+            log.debug("Authentication attempt using " + provider.getClass().getName());
 
             try {
                 result = provider.authenticate(authentication);
@@ -44,8 +44,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
                     copyDetails(authentication, result);
                     break;
                 }
-            }
-            catch (AccountStatusException | InternalAuthenticationServiceException e) {
+            } catch (AccountStatusException | InternalAuthenticationServiceException e) {
                 // SEC-546: Avoid polling additional providers if auth failure is due to
                 // invalid account status
                 throw e;
@@ -70,13 +69,12 @@ public class CustomAuthenticationManager implements AuthenticationManager {
     }
 
 
-
     /**
      * Copies the authentication details from a source Authentication object to a
      * destination one, provided the latter does not already have one set.
      *
      * @param source source authentication
-     * @param dest the destination authentication object
+     * @param dest   the destination authentication object
      */
     private void copyDetails(Authentication source, Authentication dest) {
         if ((dest instanceof AbstractAuthenticationToken) && (dest.getDetails() == null)) {

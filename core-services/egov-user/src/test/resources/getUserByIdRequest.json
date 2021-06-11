@@ -9,8 +9,10 @@
     "requesterId": "requestId",
     "authToken": "authToken"
   },
-
-  "id": [1, 2],
+  "id": [
+    1,
+    2
+  ],
   "userName": "userName",
   "name": "name",
   "mobileNumber": "mobileNumber",

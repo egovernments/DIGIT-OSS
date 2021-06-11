@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,5 +24,11 @@ public class FieldMapping {
 
 	  @JsonProperty("outJsonPath")
 	  private String outJsonPath;
+
+	  @JsonProperty("filter")
+	  private String filter;
+
+	  @JsonProperty("filterMapping")
+	  private List<FilterMapping> filterMapping;
 
 }

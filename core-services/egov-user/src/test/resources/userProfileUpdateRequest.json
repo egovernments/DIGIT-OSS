@@ -9,7 +9,6 @@
     "requesterId": "requestId",
     "authToken": "authToken"
   },
-
   "User": {
     "id": 1,
     "pan": "newPan"

@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,6 +48,8 @@ public class BoundaryTypeControllerTest {
 
 	@MockBean
 	private HierarchyTypeService hierarchyTypeService;
+
+	private MediaType contentType = new MediaType("application", "json", Charset.forName("UTF-8"));
 
 	@Test
 	public void testShouldFetchAllBoundarieTypesForHierarchyTypeidAndtenantId() throws Exception {
@@ -119,9 +122,9 @@ public class BoundaryTypeControllerTest {
 		HierarchyType hierarchyType = new HierarchyType();
 		hierarchyType.setCode("Test");
 		when(hierarchyTypeService.findByCodeAndTenantId(any(String.class), any(String.class))).thenReturn(hierarchyType);
-		mockMvc.perform(post("/boundarytypes").contentType(MediaType.APPLICATION_JSON_UTF8)
+		mockMvc.perform(put("/boundarytypes/create").contentType(contentType)
 				.content(getFileContents("boundaryTypeCreateRequestWithoutTenant.json"))).andExpect(status().isBadRequest())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(content().contentType(contentType))
 				.andExpect(content().json(getFileContents("boundaryTypeCreateResponseWithoutTenant.json")));
 	}
 	

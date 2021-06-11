@@ -7,7 +7,6 @@
     "msgId": null,
     "status": "400"
   },
-
   "Error": {
     "code": 400,
     "message": "Invalid user search request",

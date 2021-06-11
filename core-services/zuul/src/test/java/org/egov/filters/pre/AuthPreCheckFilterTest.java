@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.monitoring.MonitoringHelper;
 import org.apache.commons.io.IOUtils;
+import org.egov.Utils.UserUtils;
+import org.egov.contract.User;
 import org.egov.exceptions.CustomException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.io.IOException;
@@ -34,7 +37,9 @@ public class AuthPreCheckFilterTest {
         openEndpointsWhitelist.add("open-endpoint2");
         anonymousEndpointsWhitelist.add("anonymous-endpoint1");
         anonymousEndpointsWhitelist.add("anonymous-endpoint2");
-        authPreCheckFilter = new AuthPreCheckFilter(openEndpointsWhitelist, anonymousEndpointsWhitelist);
+        UserUtils userUtils = Mockito.mock(UserUtils.class);
+        Mockito.when(userUtils.fetchSystemUser()).thenReturn(new User());
+        authPreCheckFilter = new AuthPreCheckFilter(openEndpointsWhitelist, anonymousEndpointsWhitelist, userUtils);
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.clear();
         ctx.setRequest(request);
@@ -104,6 +109,7 @@ public class AuthPreCheckFilterTest {
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
@@ -121,6 +127,7 @@ public class AuthPreCheckFilterTest {
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"ServiceRequest\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
@@ -133,10 +140,12 @@ public class AuthPreCheckFilterTest {
         request.setMethod("PUT");
         request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
+
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
@@ -154,6 +163,7 @@ public class AuthPreCheckFilterTest {
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"ServiceRequest\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));

@@ -38,7 +38,6 @@ public class PTCustomIndexMessageListener implements MessageListener<String, Str
 	 * index 5. Core indexing
 	 */
 	public void onMessage(ConsumerRecord<String, String> data) {
-		log.info("Topic: " + data.topic());
 		ObjectMapper mapper = indexerUtils.getObjectMapper();
 		try {
 			PropertyRequest propertyRequest = mapper.readValue(data.value(), PropertyRequest.class);

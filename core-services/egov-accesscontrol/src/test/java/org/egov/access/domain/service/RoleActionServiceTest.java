@@ -2,6 +2,7 @@ package org.egov.access.domain.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class RoleActionServiceTest {
 	@Test
 	public void testcheckActionNamesAreExistOrNot() {
 
-		when(roleActionRepository.checkActionNamesAreExistOrNot(any(RoleActionsRequest.class))).thenReturn(false);
+		lenient().when(roleActionRepository.checkActionNamesAreExistOrNot(any(RoleActionsRequest.class))).thenReturn(false);
 
 		boolean exist = roleActionService.checkActionNamesAreExistOrNot(any(RoleActionsRequest.class));
 
@@ -77,7 +78,7 @@ public class RoleActionServiceTest {
 	@Test
 	public void TestAddUniqueValidationForTenantAndRoleAndAction() {
 
-		when(roleActionRepository.addUniqueValidationForTenantAndRoleAndAction(any(RoleActionsRequest.class)))
+		lenient().when(roleActionRepository.addUniqueValidationForTenantAndRoleAndAction(any(RoleActionsRequest.class)))
 				.thenReturn(false);
 
 		boolean exist = roleActionService.addUniqueValidationForTenantAndRoleAndAction(any(RoleActionsRequest.class));

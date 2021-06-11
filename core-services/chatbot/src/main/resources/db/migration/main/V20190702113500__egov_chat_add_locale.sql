@@ -1,0 +1,1 @@
+ALTER TABLE eg_chat_conversation_state ADD COLUMN locale character varying(10);

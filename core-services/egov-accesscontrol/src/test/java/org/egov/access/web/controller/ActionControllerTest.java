@@ -12,13 +12,12 @@ import java.util.List;
 
 import org.egov.access.Resources;
 import org.egov.access.TestConfiguration;
-import org.egov.access.domain.criteria.ActionSearchCriteria;
 import org.egov.access.domain.criteria.ValidateActionCriteria;
 import org.egov.access.domain.model.Action;
 import org.egov.access.domain.model.ActionValidation;
 import org.egov.access.domain.service.ActionService;
-import org.egov.access.web.contract.action.ActionRequest;
 import org.egov.access.web.contract.action.Module;
+import org.egov.access.web.contract.action.ActionRequest;
 import org.egov.access.web.contract.factory.ResponseInfoFactory;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
@@ -63,7 +62,7 @@ public class ActionControllerTest {
 				.andExpect(content().json(new Resources().getFileContents("actionResponse.json")));
 	}*/
 
-	@Test
+	/*@Test
 	public void testActionValidation() throws Exception {
 		ActionValidation actionValidation = ActionValidation.builder().allowed(true).build();
 		ValidateActionCriteria criteria = ValidateActionCriteria.builder()
@@ -75,7 +74,7 @@ public class ActionControllerTest {
 				.content(new Resources().getFileContents("validateActionRequest.json"))).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(content().json(new Resources().getFileContents("validateActionResponse.json")));
-	}
+	}*/
 
 	private List<Action> getActions() {
 		List<Action> actions = new ArrayList<Action>();

@@ -1,16 +1,30 @@
-# Reporting Framework
-### Reporting Service
+# Report Service
 Reporting Service is a service running independently on seperate server. This service loads the report configuration from a yaml file at the run time and provides the report details by using
 couple of APIS.
+
+
+### DB UML Diagram
+
+- NA
+
+### Service Dependencies
+- `egov-enc-service`: used for decryption of user PII data if required
+- `egov-mdms-service`: used by encryption library to load encryption configs
+
+### Swagger API Contract
+http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/reportinfra/contracts/reportinfra-1-0-0.yml#!/
+
+## Service Details
+
 #### Features supported
 - Provides metadata about the report.
 - Provides the data for the report.
 - Reload the configuration at runtime
 
 ### YML configuration
-- All the module yml configurations are located in docs/{modulename}/report/report.yml
+- All the module yml configurations are located in https://github.com/egovernments/configs/tree/master/reports
 
-### Sample yml configuration : 
+### Sample yml configuration :
 - https://raw.githubusercontent.com/egovernments/egov-services/master/docs/citizen/reports/report.yml
 
 
@@ -35,83 +49,7 @@ couple of APIS.
 - query: (query string which needs to get execute to generate the report with the place holders for the search params. refer - sample config for clarifications)<br />
 - groupby: group by clause if needed(group by fieldname)<br />
 - orderby: order by clause if needed(order by fieldname asc)<br />
-### API Details:
 
-/report/asset/metadata/_get
-
-Request  Sample for Metadata API:
-{
-   "RequestInfo": {<br />
-       "apiId" : "emp",<br />
-       "ver" : "1.0",<br />
-       "ts" : "10-03-2017 00:00:00",<br />
-       "action" : "create",<br />
-       "did" : "1",<br />
-       "key" : "abcdkey",<br />
-       "msgId" : "20170310130900",<br />
-       "requesterId" : "rajesh",<br />
-       "authToken" : "0348d66f-d818-47fc-933b-ba23079986b8"<br />
-      
-   } ,<br />
-   "tenantId" : "default",<br />
-   "reportName" :"ImmovableAssetRegister"<br />
-   
-}<br />
-#########################
-
-/report/asset/_get<br />
-
-{<br />
-   "RequestInfo": {<br />
-       "apiId" : "emp",<br />
-       "ver" : "1.0",<br />
-       "ts" : "10-03-2017 00:00:00",<br />
-       "action" : "create",<br />
-       "did" : "1",<br />
-       "key" : "abcdkey",<br />
-       "msgId" : "20170310130900",<br />
-       "requesterId" : "rajesh",<br />
-       "authToken" : "39b6d8aa-e312-441e-8162-7032ae1303e1"<br />
-      
-   },<br />
-    "tenantId": "default",<br />
-    "reportName": "ImmovableAssetRegister",<br />
-    "searchParams": [<br />
-    	
-    	{
-              "name" : "assetid"
-              "input": ["1","2"]
-              
-        }
-        
-        
-        
-    ]<br />
-}<br />
-
-########################
-
-: /report/_reload<br />
-Request Sample for reload API:<br />
-{<br />
-   "RequestInfo": {<br />
-       "apiId" : "emp",<br />
-       "ver" : "1.0",<br />
-       "ts" : "10-03-2017 00:00:00",<br />
-       "action" : "create",<br />
-       "did" : "1",<br />
-       "key" : "abcdkey",<br />
-       "msgId" : "20170310130900",<br />
-       "requesterId" : "rajesh",<br />
-       "authToken" : "3081f773-159b-455b-b977-acfd6ed2c61b"<br />
-      
-   } ,<br />
-   "tenantId" : "default",<br />
-  
-   
-}<br />
-
----
 #### Call the MDMS or any other API with the post method
 1. Configuring the post object in the yaml itself like below.
 
@@ -129,3 +67,20 @@ Request Sample for reload API:<br />
           - name: FinancialYear
           filter: "[?(@.id IN [2,3] && @.active == true)]"
 2. Keep the post object in a seperate json file externally and call at runtime.
+
+### API Details:
+a) `POST /report/{moduleName}/metadata/_get`
+
+This request to report service is made to get metadata for any report. The metadata contains information about search filters to be used in the report before actually sending request to get actual data. The user selected values are then used in GET_DATA request to filter data.
+
+b) `POST /report/{moduleName}/_get`
+
+This request to report service is used to get data for the report. Inputs given by user for filters are sent in request body. These filters values are used while querying data from DB.
+
+### Kafka Consumers
+
+- NA
+
+### Kafka Producers
+
+- `audit_data`: used in `kafka.topic.audit` property to push audit data from decryption process

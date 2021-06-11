@@ -24,7 +24,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.TransientDataAccessResourceException;
 
 import lombok.extern.slf4j.Slf4j;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -34,6 +33,7 @@ import java.util.Optional;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -70,13 +70,9 @@ public class TransactionServiceTest {
     public void setUp() {
         user = User.builder().userName("USER001").mobileNumber("9XXXXXXXXX").name("XYZ").tenantId("pb").emailId("").build();
         requestInfo = new RequestInfo("", "", 0L, "", "", "", "", "", "", null);
-
-
-        when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of("ORDERID"));
-
-        Mockito.doNothing().when(producer).push(any(String.class), any(Object.class));
-
-        Mockito.doNothing().when(enrichmentService).enrichCreateTransaction(any(TransactionRequest.class));
+        lenient().when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of("ORDERID"));
+        lenient().doNothing().when(producer).push(any(String.class), any(Object.class));
+        lenient().doNothing().when(enrichmentService).enrichCreateTransaction(any(TransactionRequest.class));
 
         this.transactionService = new TransactionService(validator, gatewayService, producer, transactionRepository,
         		paymentsService,
@@ -124,10 +120,9 @@ public class TransactionServiceTest {
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
         Mockito.doThrow(new CustomException("INVALID_GATEWAY", "Invalid Gateway")).when(validator).validateCreateTxn(any(TransactionRequest.class));
-        when(gatewayService.initiateTxn(any(Transaction.class))).thenThrow(new CustomException());
+        lenient().when(gatewayService.initiateTxn(any(Transaction.class))).thenThrow(new CustomException());
 
         Transaction resp = transactionService.initiateTransaction(transactionRequest);
-
     }
 
     /**
@@ -145,8 +140,8 @@ public class TransactionServiceTest {
 
         Mockito.doNothing().when(validator).validateCreateTxn(any(TransactionRequest.class));
 
-        when(gatewayService.initiateTxn(any(Transaction.class))).thenThrow(new CustomException());
-        when(validator.skipGateway(txn)).thenReturn(true);
+        lenient().when(gatewayService.initiateTxn(any(Transaction.class))).thenThrow(new CustomException());
+        lenient().when(validator.skipGateway(txn)).thenReturn(true);
         Transaction resp = transactionService.initiateTransaction(transactionRequest);
                 
         assertTrue(resp.getTxnStatus().equals(TxnStatusEnum.SUCCESS));

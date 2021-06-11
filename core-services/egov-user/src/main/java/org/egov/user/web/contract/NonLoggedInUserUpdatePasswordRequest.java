@@ -14,18 +14,20 @@ import org.egov.user.domain.model.enums.UserType;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode
+@ToString
 public class NonLoggedInUserUpdatePasswordRequest {
 
-	@JsonProperty("RequestInfo")
-	private RequestInfo requestInfo;
-	private String otpReference;
-	private String userName;
-	private String newPassword;
-	private String tenantId;
-	private UserType type;
+    @JsonProperty("RequestInfo")
+    private RequestInfo requestInfo;
 
-	public org.egov.user.domain.model.NonLoggedInUserUpdatePasswordRequest toDomain() {
-		return org.egov.user.domain.model.NonLoggedInUserUpdatePasswordRequest.builder().otpReference(otpReference)
-				.userName(userName).newPassword(newPassword).type(type).tenantId(tenantId).build();
-	}
+    private String otpReference;
+    private String userName;
+    private String newPassword;
+    private String tenantId;
+    private UserType type;
+
+    public org.egov.user.domain.model.NonLoggedInUserUpdatePasswordRequest toDomain() {
+        return org.egov.user.domain.model.NonLoggedInUserUpdatePasswordRequest.builder().otpReference(otpReference)
+                .userName(userName).newPassword(newPassword).type(type).tenantId(tenantId).build();
+    }
 }

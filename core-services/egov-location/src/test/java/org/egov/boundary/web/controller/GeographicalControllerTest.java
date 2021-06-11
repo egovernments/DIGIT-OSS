@@ -17,11 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,6 +40,8 @@ public class GeographicalControllerTest {
 
     @MockBean
     private MdmsService mdmsService;
+
+    private MediaType contentType = new MediaType("application", "json", Charset.forName("UTF-8"));
 
     @Test
     public void geographySearch() throws Exception {
@@ -56,8 +60,8 @@ public class GeographicalControllerTest {
         ResponseInfo responseInfo = ResponseInfo.builder().status(HttpStatus.BAD_REQUEST.toString()).build();
         when(mdmsService.fetchGeography(any(String.class), any(String.class), any(RequestInfo.class))).thenThrow(new
                 ServiceCallException("{\"ResponseInfo\":null,\"Errors\":[{\"code\":\"NotNull.mdmsCriteriaReq.requestInfo\",\"message\":\"may not be null\",\"description\":null,\"params\":null}]}\n"));
-        mockMvc.perform(post("/location/v11/geography/_search").param("tenantId", "ap.xyz").contentType(MediaType
-                .APPLICATION_JSON_UTF8)
+        mockMvc.perform(get("/location/v11/geography/_search").param("tenantId", "123").contentType(MediaType
+                .APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestInfo))).andExpect(status().isBadRequest());
     }
 

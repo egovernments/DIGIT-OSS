@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class BusinessServiceSearchCriteria {
 
     @NotNull
     @JsonProperty("tenantId")
-    private String tenantId;
+    private List<String> tenantIds;
 
     @JsonProperty("businessServices")
     private List<String> businessServices;
@@ -33,7 +34,7 @@ public class BusinessServiceSearchCriteria {
 
 
     public BusinessServiceSearchCriteria(BusinessServiceSearchCriteria criteria) {
-        this.tenantId = criteria.getTenantId();
+        this.tenantIds = criteria.getTenantIds();
         this.businessServices = criteria.getBusinessServices();
         this.stateUuids = criteria.getStateUuids();
         this.actionUuids = criteria.getActionUuids();

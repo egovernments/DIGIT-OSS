@@ -13,13 +13,13 @@ import static org.mockito.Mockito.when;
 
 public class TokensTest {
 
-	
+
     @Test
     public void test_should_return_true_when_single_non_expired_token_is_present() {
         final Token token1 = mock(Token.class);
-		final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
 
-		when(token1.isExpired(now)).thenReturn(false);
+        when(token1.isExpired(now)).thenReturn(false);
         final Tokens tokens = new Tokens(Collections.singletonList(token1));
 
         assertTrue(tokens.hasSingleNonExpiredToken(now));
@@ -29,7 +29,7 @@ public class TokensTest {
     @Test
     public void test_should_return_false_when_no_matching_tokens_are_present() {
         final Tokens tokens = new Tokens(Collections.emptyList());
-		final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
 
         assertFalse(tokens.hasSingleNonExpiredToken(now));
         assertNull(tokens.getNonExpiredToken(now));
@@ -38,7 +38,7 @@ public class TokensTest {
     @Test
     public void test_should_return_false_when_matching_tokens_is_null() {
         final Tokens tokens = new Tokens(null);
-		final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
 
         assertFalse(tokens.hasSingleNonExpiredToken(now));
     }
@@ -46,8 +46,8 @@ public class TokensTest {
     @Test
     public void test_should_return_false_when_all_tokens_are_expired() {
         final Token token1 = mock(Token.class);
-		final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
-		when(token1.isExpired(now)).thenReturn(true);
+        final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        when(token1.isExpired(now)).thenReturn(true);
         final Token token2 = mock(Token.class);
         when(token2.isExpired(now)).thenReturn(true);
 
