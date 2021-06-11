@@ -81,7 +81,7 @@ export const cityPicker = getCommonContainer({
       moduleName: "egov-hrms",
       componentPath: "AutosuggestContainer",
       jsonPath: "citiesByModule.tenantId",
-      required: true,
+      required: false,
       gridDefination: {
         xs: 12,
         sm: 12
@@ -108,7 +108,8 @@ export const cityPicker = getCommonContainer({
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         fullwidth: true,
-        required: true,
+        required: false,
+        isClearable: true,
         inputLabelProps: {
           shrink: true
         }

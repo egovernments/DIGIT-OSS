@@ -1,40 +1,39 @@
-import {
-  getStepperObject,
-  getCommonHeader,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonContainer, getCommonHeader, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { set } from "lodash";
+import get from "lodash/get";
+import map from "lodash/map";
+import "../../../../index.css";
+import { httpRequest } from "../../../../ui-utils";
+import { assignmentDetails } from "./createResource/assignment-details";
 
-import { footer } from "./createResource/footer";
 import {
   employeeDetails,
   professionalDetails
 } from "./createResource/employee-details";
+import { footer } from "./createResource/footer";
 import { jurisdictionDetails } from "./createResource/jurisdiction-details";
-import { assignmentDetails } from "./createResource/assignment-details";
-import { serviceDetails } from "./createResource/service-details";
 import { otherDetails } from "./createResource/other-details";
-import set from "lodash/set";
-import get from "lodash/get";
-import map from "lodash/map";
-import { httpRequest } from "../../../../ui-utils";
-import { commonTransform, objectArrayToDropdown } from "../utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { serviceDetails } from "./createResource/service-details";
+import { employeeReviewDetails } from "./viewResource/employee-review";
 import { getEmployeeData } from "./viewResource/functions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
+
 
 export const stepsData = [
   { labelName: "Employee Details", labelKey: "HR_NEW_EMPLOYEE_FORM_HEADER" },
   {
-    labelName: "Jurisdiction Details",
-    labelKey: "HR_JURISDICTION_DETAILS_HEADER"
+    labelName: "Jurisdiction & Assignment Details",
+    labelKey: "HR_DETAILS_HEADER"
   },
-  { labelName: "Assignment Details", labelKey: "HR_ASSIGN_DET_HEADER" },
-  { labelName: "Service Details", labelKey: "HR_SER_DET_HEADER" },
-  { labelName: "Other Details", labelKey: "HR_OTHER_DET_HEADER" }
+  // { labelName: "Assignment Details", labelKey: "HR_ASSIGN_DET_HEADER" },
+  { labelName: "Summary", labelKey: "HR_SUMMARY_DETAILS" },
+  // { labelName: "Other Details", labelKey: "HR_OTHER_DET_HEADER" }
 ];
 export const stepper = getStepperObject(
-  { props: { activeStep: 0 } },
+  { props: { activeStep: 0} },
   stepsData
 );
 // export const queryValue = getQueryArg(
@@ -68,46 +67,48 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    jurisdictionDetails
-  },
-  visible: false
-};
-
-export const formwizardThirdStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form3"
-  },
-  children: {
+    jurisdictionDetails,
     assignmentDetails
   },
   visible: false
 };
 
-export const formwizardFourthStep = {
+// export const formwizardThirdStep = {
+//   uiFramework: "custom-atoms",
+//   componentPath: "Form",
+//   props: {
+//     id: "apply_form3"
+//   },
+//   children: {
+//     assignmentDetails
+//   },
+//   visible: false
+// };
+const reviewDetails = employeeReviewDetails(true)
+export const formwizardThirdStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
+ 
   props: {
-    id: "apply_form4"
+    id: "apply_form3"
   },
   children: {
-    serviceDetails
+    reviewDetails
   },
   visible: false
 };
 
-export const formwizardFifthStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form5"
-  },
-  children: {
-    otherDetails
-  },
-  visible: false
-};
+// export const formwizardFifthStep = {
+//   uiFramework: "custom-atoms",
+//   componentPath: "Form",
+//   props: {
+//     id: "apply_form5"
+//   },
+//   children: {
+//     otherDetails
+//   },
+//   visible: false
+// };
 
 const getMdmsData = async (state, dispatch, tenantId) => {
   let mdmsBody = {
@@ -173,6 +174,10 @@ const getMdmsData = async (state, dispatch, tenantId) => {
               filter: "[?(@.active == true)]"
             }
           ]
+        },
+        {
+          moduleName: "tenant",
+          masterDetails: [{ name: "tenants" }]
         }
       ]
     }
@@ -202,7 +207,8 @@ const getYearsList = (startYear, state, dispatch) => {
   startYear = startYear || 1980;
 
   while (startYear <= currentYear) {
-    years.push({ value: (startYear++).toString() });
+    let yearNumbers = startYear++
+    years.push({ code: (yearNumbers).toString(), name: (yearNumbers).toString() });
   }
 
   dispatch(prepareFinalObject("yearsList", years));
@@ -252,6 +258,7 @@ const screenConfig = {
   name: "create",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("empPhoneNumber", ""));
     const pickedTenant = getQueryArg(window.location.href, "tenantId");
     pickedTenant &&
       dispatch(prepareFinalObject("Employee[0].tenantId", pickedTenant));
@@ -259,6 +266,12 @@ const screenConfig = {
       state.screenConfiguration.preparedFinalObject,
       "Employee[0].tenantId"
     );
+    set(
+            action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.professionalDetails.children.cardContent.children.employeeDetailsContainer.children.employeeId.props.disabled",
+            false
+          );
+ 
     const tenantId = pickedTenant || empTenantId || getTenantId();
     const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
     let employeeCode = getQueryArg(window.location.href, "employeeCode");
@@ -300,6 +313,19 @@ const screenConfig = {
     //     );
     //   });
 
+    const step=getQueryArg(
+      window.location.href,
+      "step"
+    );
+if(step&&Number(step)>0){
+  set(action.screenConfig,"components.div.children.stepper.props.activeStep",Number(step));
+  set(action.screenConfig,"components.div.children.formwizardFifthStep.visible",step=='4'?true:false);
+  set(action.screenConfig,"components.div.children.formwizardFourthStep.visible",step=='3'?true:false);
+  set(action.screenConfig,"components.div.children.formwizardThirdStep.visible",step=='2'?true:false);
+  set(action.screenConfig,"components.div.children.formwizardSecondStep.visible",step=='1'?true:false);
+  set(action.screenConfig,"components.div.children.formwizardFirstStep.visible",step=='0'?true:false);
+}
+dispatch(prepareFinalObject("existingPhoneNumbers", []));
     return action;
   },
 
@@ -328,8 +354,8 @@ const screenConfig = {
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
-        formwizardFourthStep,
-        formwizardFifthStep,
+        // formwizardFourthStep,
+        // formwizardFifthStep,
         footer
       }
     }

@@ -52,7 +52,10 @@ const AutoSuggest = Loadable({
   loader: () => import("./AutoSuggest"),
   loading: () => <Loading />
 });
-
+const DisableBackComponent = Loadable({
+  loader:()=>import("./DisableBackComponent"),
+  loading:()=><Loading/>
+})
 export {
   TestAtoms,
   ApplicationNoContainer,
@@ -63,5 +66,6 @@ export {
   Asteric,
   MenuButton,
   Switch,
-  AutoSuggest
+  AutoSuggest,
+  DisableBackComponent
 };

@@ -1,7 +1,9 @@
-import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
+
+import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getLocaleLabels, getStatusKey, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
+import React from "react";
+import { getEpochForDate,  sortByEpoch } from "../../utils";
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
@@ -36,6 +38,12 @@ export const getTextToLocalMapping = label => {
         "HR_COMMON_TABLE_COL_DEPT",
         localisationLabels
       );
+    case "Status":
+      return getLocaleLabels(
+        "Status",
+        "HR_COMMON_TABLE_COL_STATUS",
+        localisationLabels
+      );
     case "Search Results for Employee":
       return getLocaleLabels(
         "Search Results for Employee",
@@ -59,32 +67,54 @@ export const searchResults = {
     columns: [
       {
         labelName: "Employee ID",
-        labelKey: getTextToLocalMapping("Employee ID"),
-      },{
-        labelName: "Name",
-        labelKey:getTextToLocalMapping("Name"),
-      },{
-        labelName: "Role",
-        labelKey: getTextToLocalMapping("Role"),
-      },{
-        labelName: "Designation",
-        labelKey: getTextToLocalMapping("Designation"),
-      },{
-        labelName: "Department",
-        labelKey: getTextToLocalMapping("Department"),
+        labelKey: "HR_COMMON_TABLE_COL_EMP_ID"
       },
-        {
-          labelName: "Tenant ID",
-          labelKey: getTextToLocalMapping("Tenant ID"),
-          options: {
-            display: false
-          }
-        },
+      {
+        labelName: "Name",
+        labelKey: "HR_COMMON_TABLE_COL_NAME"
+      },
+      {
+        labelName: "Role",
+        labelKey: "HR_COMMON_TABLE_COL_ROLE"
+      },
+      {
+        labelName: "Designation",
+        labelKey: "HR_COMMON_TABLE_COL_DESG"
+      },
+      {
+        labelName: "Department",
+        labelKey: "HR_COMMON_TABLE_COL_DEPT"
+      },
+      {
+        labelName: "Status",
+        labelKey: "HR_COMMON_TABLE_COL_STATUS",
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <LabelContainer
+              style={
+                value === "ACTIVE" ? { color: "green" } : { color: "red" }
+              }
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
+          )
+        }
+      },
+      {
+        labelName: "Tenant ID",
+        labelKey: "HR_COMMON_TABLE_COL_TENANT_ID",
+        name: "tenantId",
+        options: {
+          display: false
+        }
+      }
     ],
-    title:{
-      labelName:"Search Results for Employee",
-      labelKey:getTextToLocalMapping("Search Results for Employee")
+    title: {
+      labelName: "Search Results for Employee",
+      labelKey: "HR_HOME_SEARCH_RESULTS_TABLE_HEADING"
     },
+    rows: "",
     options: {
       filter: false,
       download: false,
@@ -95,20 +125,25 @@ export const searchResults = {
       onRowClick: (row, index) => {
         onRowClick(row);
       }
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
     }
   }
 };
 
 const onRowClick = rowData => {
-  window.location.href = `view?employeeID=${rowData[0]}&tenantId=${rowData[5]}`;
+  routeTo(`view?employeeID=${rowData[0]}&tenantId=${rowData[6]}`);
 };
-
-// const onRowClick = rowData => {
-//   let viewEmployeeUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true"
-//       ? "/egov-ui-framework/hrms/view"
-//       : "/hrms/view";
-//   return `${viewEmployeeUrl}?employeeID=${
-//     rowData[get(textToLocalMapping, "Employee ID")]
-//   }&tenantId=${rowData[get(textToLocalMapping, "Tenant ID")]}`;
-// };

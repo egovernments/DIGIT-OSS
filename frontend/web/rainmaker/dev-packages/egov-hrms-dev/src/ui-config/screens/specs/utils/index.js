@@ -1,22 +1,11 @@
-import {
-  getLabel,
-  getTextField,
-  getCommonSubHeader
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.css";
+import commonConfig from "config/common.js";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
-import filter from "lodash/filter";
-import { httpRequest } from "../../../../ui-utils/api";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import isUndefined from "lodash/isUndefined";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import commonConfig from "config/common.js";
+import "./index.css";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -40,6 +29,10 @@ export const transformById = (payload, id) => {
       return result;
     }, {})
   );
+};
+
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
 };
 
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
@@ -69,13 +62,15 @@ const style = {
 };
 
 export const showHideAdhocPopup = (state, dispatch) => {
+
   let toggle = get(
     state.screenConfiguration.screenConfig["view"],
-    "components.adhocDialog.props.open",
+    `components.adhocDialog.props.open`,
     false
   );
+
   dispatch(
-    handleField("view", "components.adhocDialog", "props.open", !toggle)
+    handleField("view", `components.adhocDialog`, "props.open", !toggle)
   );
 };
 
@@ -165,14 +160,14 @@ export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
-          documentsArr.push({
-            name: item,
-            required: true,
-            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-            statement: getStatementForDocType(item)
-          });
-          return documentsArr;
-        }, [])
+        documentsArr.push({
+          name: item,
+          required: true,
+          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          statement: getStatementForDocType(item)
+        });
+        return documentsArr;
+      }, [])
       : [];
   return documentsArr;
 };
@@ -233,7 +228,7 @@ export const epochToYmdDate = et => {
 export const getTodaysDateInYMD = () => {
   let date = new Date();
   let month = date.getMonth() + 1;
-  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  let day = date.getDate() < 9 ? `0${date.getDate()+1}` : date.getDate()+1;
   date = `${date.getFullYear()}-${month}-${day}`;
   return date;
 };
@@ -261,7 +256,7 @@ export const updateDropDowns = async (
           "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
           get(
             state.screenConfiguration.preparedFinalObject.applyScreenMdmsData[
-              "common-masters"
+            "common-masters"
             ],
             `StructureType.${structType.split(".")[0]}`,
             []
@@ -286,7 +281,6 @@ export const updateDropDowns = async (
     "applyScreenMdmsData.TradeLicense.TradeType",
     []
   );
-  // debugger;
   const tradeTypeDropdownData =
     tradeTypes &&
     Object.keys(tradeTypes).map(item => {
@@ -602,22 +596,40 @@ export const showCityPicker = (state, dispatch) => {
 };
 
 export const createEmployee = (state, dispatch) => {
-  const tenantId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "citiesByModule.tenantId.value"
-  );
-  get(state.screenConfiguration.preparedFinalObject, "Employee") &&
-    dispatch(prepareFinalObject("Employee", []));
-  get(
-    state.screenConfiguration.preparedFinalObject,
-    "hrms.reviewScreen.furnishedRolesList"
-  ) && dispatch(prepareFinalObject("hrms.reviewScreen.furnishedRolesList", ""));
-  const tenantIdQueryString = tenantId ? `?tenantId=${tenantId}` : "";
-  const createUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/hrms/create${tenantIdQueryString}`
-      : `/hrms/create${tenantIdQueryString}`;
-  dispatch(setRoute(createUrl));
+  const hrmsPickerFlag = get( state.screenConfiguration.preparedFinalObject, "hrmsPickerFlag", false);
+  let isCityPickerValid = true;
+  if(hrmsPickerFlag) {
+    isCityPickerValid = validateFields(
+      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "search"
+    );
+    if(!isCityPickerValid) isCityPickerValid = false; 
+  }
+
+  if(isCityPickerValid) {
+    let tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "citiesByModule.tenantId"
+    ) || get(
+      state.screenConfiguration.preparedFinalObject,
+      "citiesByModule.tenantId.value"
+    );
+    tenantId=tenantId?tenantId:getTenantId();
+    get(state.screenConfiguration.preparedFinalObject, "Employee") &&
+      dispatch(prepareFinalObject("Employee", []));
+    get(
+      state.screenConfiguration.preparedFinalObject,
+      "hrms.reviewScreen.furnishedRolesList"
+    ) && dispatch(prepareFinalObject("hrms.reviewScreen.furnishedRolesList", ""));
+    const tenantIdQueryString = tenantId ? `?tenantId=${tenantId}` : "";
+    const createUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/hrms/create${tenantIdQueryString}`
+        : `/hrms/create${tenantIdQueryString}`;
+    dispatch(setRoute(createUrl));
+  }
 };
 
 // HRMS
@@ -664,4 +676,22 @@ export const getAdminRole = state => {
       }
     });
   return { hasAdminRole: hasAdminRole, configAdminRoles: configAdminRoles };
+};
+
+
+export const getEpochForDate = date => {
+  const dateSplit = date.split("/");
+  return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
+};
+
+export const sortByEpoch = (data, order) => {
+  if (order) {
+    return data.sort((a, b) => {
+      return a[a.length - 1] - b[b.length - 1];
+    });
+  } else {
+    return data.sort((a, b) => {
+      return b[b.length - 1] - a[a.length - 1];
+    });
+  }
 };

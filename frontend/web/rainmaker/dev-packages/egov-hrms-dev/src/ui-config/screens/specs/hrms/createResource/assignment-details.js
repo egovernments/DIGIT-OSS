@@ -4,12 +4,12 @@ import {
   getCommonTitle,
   getTextField,
   getDateField,
-  getSelectField,
   getCommonContainer,
   getPattern,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 
@@ -31,13 +31,14 @@ const assignmentDetailsCard = {
                 labelKey: "HR_ASMT_FROM_DATE_PLACEHOLDER"
               },
               required: true,
+              
               pattern: getPattern("Date"),
               jsonPath: "Employee[0].assignments[0].fromDate",
               props: {
-                // inputProps: {
-                //   min: getTodaysDateInYMD(),
-                //   max: getFinancialYearDates("yyyy-mm-dd").endDate
-                // }
+                inputProps: {
+                  max: getTodaysDateInYMD(),
+
+                }
               }
             })
           },
@@ -51,14 +52,17 @@ const assignmentDetailsCard = {
                 labelName: "Assigned To Date",
                 labelKey: "HR_ASMT_TO_DATE_PLACEHOLDER"
               },
-              // required: true,
               pattern: getPattern("Date"),
               jsonPath: "Employee[0].assignments[0].toDate",
+             
               props: {
-                // inputProps: {
-                //   min: getTodaysDateInYMD(),
-                //   max: getFinancialYearDates("yyyy-mm-dd").endDate
-                // }
+                checkFieldDisable: true,
+                dependantField:'isCurrentAssignment',
+                jsonPathRemoveKey:"toDate",
+                
+                inputProps: {
+                  min: getTodaysDateInYMD(),
+                }
               }
             })
           },
@@ -130,12 +134,23 @@ const assignmentDetailsCard = {
                       false
                     )
                   );
-                }
+                 }
               }
             }
           },
           department: {
-            ...getSelectField({
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-hrms",
+            componentPath: "AutosuggestContainer",
+            jsonPath: "Employee[0].assignments[0].department",
+            props: {
+              className: "hr-generic-selectfield autocomplete-dropdown",
+              optionValue: "code",
+              optionLabel: "name",
+              localePrefix: {
+                moduleName: "common-masters",
+                masterName: "Department"
+              },
               label: {
                 labelName: "Department",
                 labelKey: "HR_DEPT_LABEL"
@@ -145,41 +160,48 @@ const assignmentDetailsCard = {
                 labelKey: "HR_DEPT_PLACEHOLDER"
               },
               required: true,
+              isClearable: true,
+              labelsFromLocalisation: true,
               jsonPath: "Employee[0].assignments[0].department",
               sourceJsonPath: "createScreenMdmsData.common-masters.Department",
-              props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
-                // hasLocalization: false
-              },
-              localePrefix: {
-                moduleName: "common-masters",
-                masterName: "Department"
-              }
-            })
+            },
+            required: true,
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            },
           },
           designation: {
-            ...getSelectField({
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-hrms",
+            componentPath: "AutosuggestContainer",
+            jsonPath: "Employee[0].assignments[0].designation",
+            props: {
+              className: "hr-generic-selectfield autocomplete-dropdown",
+              optionValue: "code",
+              optionLabel: "name",
+              localePrefix: {
+                moduleName: "common-masters",
+                masterName: "Designation"
+              },
               label: { labelName: "Designation", labelKey: "HR_DESG_LABEL" },
               placeholder: {
                 labelName: "Select Designation",
                 labelKey: "HR_DESIGNATION_PLACEHOLDER"
               },
               required: true,
+              isClearable: true,
+              labelsFromLocalisation: true,
               jsonPath: "Employee[0].assignments[0].designation",
               sourceJsonPath: "createScreenMdmsData.common-masters.Designation",
-              props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
-                // hasLocalization: false
-              },
-              localePrefix: {
-                moduleName: "common-masters",
-                masterName: "Designation"
-              }
-            })
+            },
+            required: true,
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            },
           },
           reportingTo: {
             ...getTextField({
@@ -191,7 +213,7 @@ const assignmentDetailsCard = {
                 labelName: "Reporting To",
                 labelKey: "HR_REP_TO_LABEL"
               },
-              pattern: getPattern("TradeName") || null,
+              pattern: getPattern("Name") || null,
               jsonPath: "Employee[0].assignments[0].reportingTo"
             })
           },
@@ -242,7 +264,7 @@ const assignmentDetailsCard = {
           if (isCurrentAssignment && key === "currentAssignment") {
             set(muliItemContent[key], "props.disabled", false);
           } else {
-            set(muliItemContent[key], "props.disabled", true);
+            // set(muliItemContent[key], "props.disabled", true);
           }
         });
       } else {
@@ -290,4 +312,8 @@ export const assignmentDetails = getCommonCard({
     labelKey: "HR_ASSIGN_DET_SUB_HEADER"
   }),
   assignmentDetailsCard
+},{
+  style:{
+    overflow: "visible"
+  }
 });

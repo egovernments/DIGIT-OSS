@@ -6,10 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
-import classNames from "classnames";
-import Chip from "@material-ui/core/Chip";
-import CancelIcon from "@material-ui/icons/Cancel";
-
+// import "./index.css";
+import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
 const getSuggestions = suggestions => {
   return (
     suggestions &&
@@ -17,7 +15,7 @@ const getSuggestions = suggestions => {
     suggestions.map(suggestion => ({
       value: suggestion.code,
       label: suggestion.name
-    }))
+    })).sort(sortDropdownLabels)
   );
 };
 
@@ -52,9 +50,9 @@ const styles = theme => ({
   ac_paper: {
     position: "absolute",
     zIndex: 1105,
-    marginTop: theme.spacing.unit,
     left: 0,
-    right: 0
+    right: 0,
+    marginTop: theme.spacing.unit
   },
   ac_divider: {
     height: theme.spacing.unit * 2
@@ -81,6 +79,7 @@ function Control(props) {
   return (
     <TextField
       fullWidth
+      disabled={props.isDisabled}
       InputProps={{
         inputComponent,
         inputProps: {
@@ -144,29 +143,16 @@ function ValueContainer(props) {
   );
 }
 
-function MultiValue(props) {
-  return (
-    <Chip
-      tabIndex={-1}
-      label={props.children}
-      className={classNames(props.selectProps.classes.chip, {
-        [props.selectProps.classes.chipFocused]: props.isFocused
-      })}
-      onDelete={props.removeProps.onClick}
-      deleteIcon={<CancelIcon {...props.removeProps} />}
-    />
-  );
-}
-
 function Menu(props) {
+  const { className } = props.selectProps.menuProps;
   return (
     <Paper
       square
-      className={props.selectProps.classes.ac_paper}
+      className={className ? className : props.selectProps.classes.ac_paper}
       {...props.innerProps}
-      style={{ overflowX: "scroll" }}
+      style={{}}
     >
-      <div style={{ width: 800 }}>{props.children}</div>
+      <div style={{}}>{props.children}</div>
     </Paper>
   );
 }
@@ -174,7 +160,6 @@ function Menu(props) {
 const components = {
   Control,
   Menu,
-  MultiValue,
   NoOptionsMessage,
   Option,
   Placeholder,
@@ -184,14 +169,13 @@ const components = {
 
 class IntegrationReactSelect extends React.Component {
   state = {
-    single: null,
-    multi: null
+    single: null
   };
 
   componentDidMount = () => {
     const { fieldValue } = this.props;
     if (fieldValue && fieldValue.code) {
-      this.setState({ single: fieldValue, multi: fieldValue });
+      this.setState({ single: fieldValue });
     }
   };
 
@@ -212,6 +196,7 @@ class IntegrationReactSelect extends React.Component {
       fullwidth = true,
       required = true,
       value,
+      className,
       inputLabelProps = {
         shrink: true
       },
@@ -237,12 +222,15 @@ class IntegrationReactSelect extends React.Component {
             required: required,
             fullWidth: fullwidth
           }}
+          menuProps={{
+            className: className
+          }}
           options={getSuggestions(suggestions) || []}
           components={components}
-          value={value ? value : this.state.multi}
+          value={value}
           placeholder={placeholder}
           {...rest}
-          onChange={this.handleChange("multi")}
+          onChange={this.handleChange("single")}
         />
       </div>
     );

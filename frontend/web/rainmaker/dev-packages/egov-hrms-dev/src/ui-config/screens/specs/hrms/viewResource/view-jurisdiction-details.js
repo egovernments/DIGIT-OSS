@@ -6,6 +6,10 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { checkValueForNA } from "../../utils";
+import { changeStep } from "../createResource/footer";
+
+
 
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
@@ -18,6 +22,11 @@ const gotoCreatePage = (state, dispatch) => {
 const jurisdictionCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
+  // beforeInitScreen: (action, state, dispatch) => {
+  //   // COMMA SEPARATED ROLES IN REVIEW SCREEN
+  //   setRolesList(state, dispatch);
+  //   return action;
+  // },
   props: {
     className: "review-hr",
     scheama: getCommonGrayCard({
@@ -27,22 +36,26 @@ const jurisdictionCard = {
             labelName: "Hierarchy",
             labelKey: "HR_HIERARCHY_LABEL"
           },
-          { jsonPath: "Employee[0].jurisdictions[0].hierarchy",
-          localePrefix :{
-            moduleName : "EGOV_LOCATION",
-            masterName : "TENANTBOUNDARY"
-          }, }
+          {
+            jsonPath: "Employee[0].jurisdictions[0].hierarchy",
+            localePrefix: {
+              moduleName: "EGOV_LOCATION",
+              masterName: "TENANTBOUNDARY"
+            }, callBack: checkValueForNA
+          }
         ),
         reviewBoundaryType: getLabelWithValue(
           {
             labelName: "Boundary Type",
             labelKey: "HR_BOUNDARY_TYPE_LABEL"
           },
-          { jsonPath: "Employee[0].jurisdictions[0].boundaryType",
-          localePrefix :{
-            moduleName : "EGOV_LOCATION",
-            masterName : "BOUNDARYTYPE"
-          }, }
+          {
+            jsonPath: "Employee[0].jurisdictions[0].boundaryType",
+            localePrefix: {
+              moduleName: "EGOV_LOCATION",
+              masterName: "BOUNDARYTYPE"
+            }, callBack: checkValueForNA
+          }
         ),
         reviewBoundary: getLabelWithValue(
           { labelName: "Boundary", labelKey: "HR_BOUNDARY_LABEL" },
@@ -51,9 +64,16 @@ const jurisdictionCard = {
             localePrefix: {
               moduleName: "TENANT",
               masterName: "TENANTS"
-            }
+            }, callBack: checkValueForNA
           }
-        )
+        ),
+        reviewRole: getLabelWithValue(
+          { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
+          {
+            jsonPath: "Employee[0].jurisdictions[0].furnishedRolesList",
+          }
+        ),
+
       })
     }),
 
@@ -113,7 +133,9 @@ export const getJurisdictionDetailsView = (isReview = true) => {
           },
           onClickDefination: {
             action: "condition",
-            callBack: gotoCreatePage
+            callBack: (state, dispatch) => {
+              changeStep(state, dispatch, "", 1);
+            }
           }
         }
       }

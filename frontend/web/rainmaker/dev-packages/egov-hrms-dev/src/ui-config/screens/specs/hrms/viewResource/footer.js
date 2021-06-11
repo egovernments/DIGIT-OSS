@@ -76,6 +76,30 @@ export const hrViewFooter = () => {
         callBack: showHideAdhocPopup
       }
     },
+    activateEmployee: {
+      componentPath: "Button",
+      props: {
+        variant: "outlined",
+        color: "primary",
+        style: {
+          minWidth: "200px",
+          height: "48px",
+          marginRight: "45px"
+        }
+      },
+      children: {
+        activateEmployeeButtonLabel: getLabel({
+          labelName: "ACTIVATE EMPLOYEE",
+          labelKey: "HR_ACTIVATE_EMPLOYEE_LABEL"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: showHideAdhocPopup
+      },
+
+      visible: false
+    },
     editDetails: {
       componentPath: "Button",
       props: {

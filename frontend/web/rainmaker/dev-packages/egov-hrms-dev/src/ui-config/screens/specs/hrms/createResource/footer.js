@@ -1,17 +1,22 @@
-import get from "lodash/get";
 import {
   dispatchMultipleFieldChangeAction,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, showSpinner, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import {
-  getButtonVisibility,
   getCommonApplyFooter,
-  ifUserRoleExists,
+
   validateFields
 } from "../../utils";
+import { createUpdateEmployee, setRolesList } from "../viewResource/functions";
 import "./index.css";
+
+
 
 const moveToReview = dispatch => {
   const reviewUrl =
@@ -44,6 +49,59 @@ export const callBackForNext = async (state, dispatch) => {
     if (!(isEmployeeDetailsValid && isProfessionalDetailsValid)) {
       isFormValid = false;
     }
+    let tenantId = getTenantId();
+    const errorMessage = {
+      labelName: "Mobile number already exists . Please try with different mobile number",
+      labelKey: "ERR_MOBILE_NUMBER_EXISTS_FIELDS"
+    };
+    let existingPhoneNumbers = get(state.screenConfiguration.preparedFinalObject, "existingPhoneNumbers", []);
+    if (get(state.screenConfiguration.preparedFinalObject, "empPhoneNumber") != get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")) {
+
+
+      if (existingPhoneNumbers.includes(get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber"))) {
+        dispatch(toggleSnackbar(true, errorMessage, "error"));
+        return;
+      } else {
+        dispatch(showSpinner());
+        try {
+
+
+          let queryObject = [
+            {
+              key: "phone",
+              value: get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")
+            },
+            {
+              key: "tenantId",
+              value: tenantId
+            }
+          ];
+          const response = await httpRequest(
+            "post",
+            "/egov-hrms/employees/_search",
+            "",
+            queryObject
+          );
+          dispatch(hideSpinner());
+
+          if (response && response.Employees && response.Employees.length == 0) {
+
+
+          } else {
+            dispatch(prepareFinalObject("existingPhoneNumbers", [...existingPhoneNumbers, get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")]));
+
+            dispatch(toggleSnackbar(true, errorMessage, "error"));
+            return
+          }
+        } catch (error) {
+          dispatch(hideSpinner());
+          dispatch(toggleSnackbar(true, { ...errorMessage, labelKey: 'HRMS_SEARCH_ERROR' }, "error"));
+          return
+        }
+      }
+    }
+
+    dispatch(handleField("create", "components.div.children.formwizardSecondStep.children.jurisdictionDetails.children.cardContent.children.jurisdictionDetailsCard", "props.items", []));
   }
   if (activeStep === 1) {
     let jurisdictionDetailsPath =
@@ -70,10 +128,8 @@ export const callBackForNext = async (state, dispatch) => {
     if (!isJurisdictionDetailsValid) {
       isFormValid = false;
     }
-  }
-  if (activeStep === 2) {
     let assignmentDetailsPath =
-      "components.div.children.formwizardThirdStep.children.assignmentDetails.children.cardContent.children.assignmentDetailsCard.props.items";
+      "components.div.children.formwizardSecondStep.children.assignmentDetails.children.cardContent.children.assignmentDetailsCard.props.items";
     let assignmentDetailsItems = get(
       state.screenConfiguration.screenConfig.create,
       assignmentDetailsPath,
@@ -111,9 +167,86 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
       return;
     }
+    let assignmentInvalid = false;
+    assignmentsData.map(assignment => {
+      if (assignment.isCurrentAssignment) {
+
+      } else if (!assignment.isCurrentAssignment && !assignment.toDate) {
+        assignmentInvalid = true;
+      } else if (new Date(assignment.toDate) - new Date(assignment.fromDate) < 0) {
+        assignmentInvalid = true;
+      }
+    })
+    if (assignmentInvalid) {
+      isFormValid = false;
+      const errorMessage1 = {
+        labelName: "Please select at least one current assignment",
+        labelKey: "ERR_INAVLID_ASSIGNMENT"
+      };
+      dispatch(toggleSnackbar(true, errorMessage1, "warning"));
+      return;
+    }
     if (!isAssignmentDetailsValid) {
       isFormValid = false;
     }
+
+    let jurisdictions = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Employee[0].jurisdictions`,
+      []
+    );
+    let deletedJurisdictions = get(
+      state.screenConfiguration.preparedFinalObject,
+      `deletedJurisdiction`,
+      []
+    );
+    let deletedJurisdiction = [];
+    deletedJurisdiction = jurisdictions.filter(jurisdiction => jurisdiction.isDeleted === false && jurisdiction.isActive)
+    deletedJurisdiction = [...deletedJurisdictions, ...deletedJurisdiction]
+    jurisdictions = jurisdictions.filter(jurisdiction => jurisdiction.isDeleted !== false);
+    let rolesList = [];
+    let baseTenant = false;
+    let repeatedTenant = false;
+    let tenants = []
+    jurisdictions.map(judis => {
+      judis && judis.roles && Array.isArray(judis.roles) && judis.roles.map(role => {
+        rolesList.push({ ...role, tenantId: judis.boundary, code: role.value, name: role.label })
+      })
+      if (judis && judis.boundary && judis.boundary == getQueryArg(window.location.href, 'tenantId')) {
+        baseTenant = true;
+      }
+      if (judis && judis.boundary && tenants.includes(judis.boundary)) {
+        repeatedTenant = true;
+      }
+      tenants.push(judis.boundary);
+    })
+    if (!baseTenant) {
+      const errorMessage2 = {
+        labelName: "Please select at least one Role in Base Tenant",
+        labelKey: "ERR_BASE_TENANT_MANDATORY"
+      };
+      dispatch(toggleSnackbar(true, errorMessage2, "warning"));
+      return;
+    }
+    if (repeatedTenant) {
+      const errorMessage3 = {
+        labelName: "Please select at least one Role in Base Tenant",
+        labelKey: "ERR_INVALID_JURISDICTION"
+      };
+      dispatch(toggleSnackbar(true, errorMessage3, "warning"));
+      return;
+    }
+
+    dispatch(prepareFinalObject("deletedJurisdiction", [...deletedJurisdiction]));
+
+    dispatch(prepareFinalObject("Employee[0].jurisdictions", [...jurisdictions]));
+    dispatch(prepareFinalObject("Employee[0].user.roles", rolesList))
+    dispatch(handleField("create", "components.div.children.formwizardThirdStep.children.reviewDetails.children.cardContent.children.viewJurisdictionDetails.children.cardContent.children.viewOne", "props.items", []));
+    dispatch(handleField("create", "components.div.children.formwizardSecondStep.children.jurisdictionDetails.children.cardContent.children.jurisdictionDetailsCard", "props.items", []));
+    setRolesList(state, dispatch);
+  }
+  if (activeStep === 2) {
+
   }
   if (activeStep === 4) {
     moveToReview(dispatch);
@@ -149,8 +282,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 4 ? true : false;
-  const isPayButtonVisible = activeStep === 4 ? true : false;
+  const isNextButtonVisible = activeStep < 2 ? true : false;
+  const isPayButtonVisible = activeStep === 2 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -243,16 +376,16 @@ export const getActionDefinationForStepper = path => {
       property: "visible",
       value: false
     },
-    {
-      path: "components.div.children.formwizardFourthStep",
-      property: "visible",
-      value: false
-    },
-    {
-      path: "components.div.children.formwizardFifthStep",
-      property: "visible",
-      value: false
-    }
+    // {
+    //   path: "components.div.children.formwizardFourthStep",
+    //   property: "visible",
+    //   value: false
+    // },
+    // {
+    //   path: "components.div.children.formwizardFifthStep",
+    //   property: "visible",
+    //   value: false
+    // }
   ];
   for (var i = 0; i < actionDefination.length; i++) {
     actionDefination[i] = {
@@ -273,6 +406,18 @@ export const callBackForPrevious = (state, dispatch) => {
   changeStep(state, dispatch, "previous");
 };
 
+export const handleCreateUpdateEmployee = (state, dispatch) => {
+  let uuid = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Employee[0].uuid",
+    null
+  );
+  if (uuid) {
+    createUpdateEmployee(state, dispatch, "UPDATE");
+  } else {
+    createUpdateEmployee(state, dispatch, "CREATE");
+  }
+};
 export const footer = getCommonApplyFooter({
   previousButton: {
     componentPath: "Button",
@@ -359,7 +504,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: callBackForNext
+      callBack: handleCreateUpdateEmployee
     },
     visible: false
   }

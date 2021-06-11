@@ -6,7 +6,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { convertEpochToDate } from "../../utils";
+import { checkValueForNA } from "../../utils";
 
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
@@ -28,42 +28,43 @@ const assignmentCard = {
             labelName: "Status",
             labelKey: "HR_STATUS_LABEL"
           },
-          { jsonPath: "Employee[0].serviceHistory[0].serviceStatus",
-          localePrefix: {
-            moduleName: "egov-hrms",
-            masterName: "EmployeeStatus"
-          } }
+          {
+            jsonPath: "Employee[0].serviceHistory[0].serviceStatus",
+            localePrefix: {
+              moduleName: "egov-hrms",
+              masterName: "EmployeeStatus"
+            }, callBack: checkValueForNA
+          }
         ),
         reviewServiceFrom: getLabelWithValue(
           {
             labelName: "Service From Date",
             labelKey: "HR_SER_FROM_DATE_LABEL"
           },
-          { jsonPath: "Employee[0].serviceHistory[0].serviceFrom",
-            callBack: convertEpochToDate
+          {
+            jsonPath: "Employee[0].serviceHistory[0].serviceFrom"
+            , callBack: checkValueForNA
+          }
 
-        }
         ),
         reviewServiceTo: getLabelWithValue(
           {
             labelName: "Service To Date",
             labelKey: "HR_SER_TO_DATE_LABEL"
           },
-          { jsonPath: "Employee[0].serviceHistory[0].serviceTo",
-            callBack: convertEpochToDate
-          }
+          { jsonPath: "Employee[0].serviceHistory[0].serviceTo", callBack: checkValueForNA }
         ),
         reviewLocation: getLabelWithValue(
           {
             labelName: "Location",
             labelKey: "HR_LOCATION_LABEL"
           },
-          { jsonPath: "Employee[0].serviceHistory[0].location" }
+          { jsonPath: "Employee[0].serviceHistory[0].location", callBack: checkValueForNA }
         ),
         reviewOrderNo: getLabelWithValue(
           { labelName: "Order No", labelKey: "HR_ORDER_NO_LABEL" },
           {
-            jsonPath: "Employee[0].serviceHistory[0].orderNo"
+            jsonPath: "Employee[0].serviceHistory[0].orderNo", callBack: checkValueForNA
           }
         ),
         reviewCurrentWorking: getLabelWithValue(
@@ -72,7 +73,7 @@ const assignmentCard = {
             labelKey: "HR_CURR_WORKING_LABEL"
           },
           {
-            jsonPath: "Employee[0].serviceHistory[0].isCurrentPosition"
+            jsonPath: "Employee[0].serviceHistory[0].isCurrentPosition", callBack: checkValueForNA
           }
         )
       })
