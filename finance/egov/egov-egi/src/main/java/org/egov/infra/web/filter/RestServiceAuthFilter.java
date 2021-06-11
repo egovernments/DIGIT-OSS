@@ -79,9 +79,7 @@ public class RestServiceAuthFilter implements Filter {
 		if (httpRequest.getRequestURI().contains("/ClearToken")
 				|| httpRequest.getRequestURI().contains("/refreshToken")) {
 			LOGGER.info("Clear Token request recieved ");
-			new SecurityWrapperRequest(httpRequest).getRequestDispatcher(httpRequest.getServletPath()).forward(req,
-					res);
-
+			httpRequest.getRequestDispatcher(httpRequest.getServletPath()).forward(req, res);
 		} else if (httpRequest.getRequestURI().contains("/rest/voucher/")) {
 			try {
 				RestRequestWrapper request = new RestRequestWrapper(httpRequest);
