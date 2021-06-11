@@ -207,6 +207,12 @@ const getPropertyData = async (action, state, dispatch) => {
             "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
             { visibility: "hidden" }
           );
+          
+          set(
+            action.screenConfig,
+            "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.transferorMobileCard",
+            { visibility: "hidden" }
+          );
         }
     }
     
