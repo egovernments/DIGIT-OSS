@@ -116,7 +116,7 @@ export const callPGService = async (state, dispatch) => {
         billId: get(billPayload, "Bill[0].id"),
         consumerCode: consumerCode,
         productInfo: "Common Payment",
-        gateway: "AXIS",
+        gateway: "CCAVENUE",
         taxAndPayments,
         user,
         callbackUrl,
