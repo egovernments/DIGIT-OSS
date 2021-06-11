@@ -86,9 +86,9 @@ public class CommonsUtil {
 			currentState = state.getCurrentState().getValue();
 		final WorkFlowMatrix wfmatrix = workflowService.getWfMatrix(state.getStateType(), null, null, null,
 				currentState, null);
-		if (null != approverPositionId && approverPositionId != -1) {
+		if (approverPositionId!=0 && approverPositionId != -1 && approverPositionId!=null) {
 			EmployeeInfo employee = microserviceUtils.getEmployeeByPositionId(approverPositionId);
-			String designation = microserviceUtils.getDesignation(employee.getAssignments().get(0).getDesignation())
+			String designation = microserviceUtils.getDesignation(employee == null ? "" : employee.getAssignments().get(0).getDesignation())
 					.get(0).getName();
 			return eisCommonService.isValidAppover(wfmatrix, designation);
 		}

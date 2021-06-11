@@ -227,6 +227,9 @@ public class UpdateExpenseBillController extends BaseBillController {
         if (request.getParameter("approvalComent") != null)
             approvalComment = request.getParameter("approvalComent");
         
+        if (request.getParameter(APPROVAL_POSITION) != null && !request.getParameter(APPROVAL_POSITION).isEmpty())
+            approvalPosition = Long.valueOf(request.getParameter(APPROVAL_POSITION));
+        
 		if (workFlowAction != null && FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workFlowAction)
 				&& !commonsUtil.isValidApprover(egBillregister, approvalPosition)) {
 			model.addAttribute("errorMessage", getLocalizedMessage(INVALID_APPROVER, null, null));
@@ -235,8 +238,6 @@ public class UpdateExpenseBillController extends BaseBillController {
 			return populateOnException(egBillregister, model, request);
 		}
 
-        if (request.getParameter(APPROVAL_POSITION) != null && !request.getParameter(APPROVAL_POSITION).isEmpty())
-            approvalPosition = Long.valueOf(request.getParameter(APPROVAL_POSITION));
 
         if ((approvalPosition == null || approvalPosition.equals(Long.valueOf(0)))
                 && request.getParameter(APPROVAL_POSITION) != null
