@@ -1,16 +1,8 @@
 import axios from "axios";
-import { prepareForm, fetchFromLocalStorage, addQueryArg, hasTokenExpired } from "./commons";
+import { addQueryArg, hasTokenExpired, prepareForm } from "./commons";
 import some from "lodash/some";
 import commonConfig from "egov-ui-kit/config/common.js";
-import {
-  getTenantId,
-  getAccessToken,
-  setTenantId,
-  getLocale,
-  setLocale,
-  localStorageSet,
-  localStorageGet,
-} from "egov-ui-kit/utils/localStorageUtils";
+import { getAccessToken, getLocale, getTenantId, localStorageGet, localStorageSet, setLocale, setTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 axios.interceptors.response.use(
   (response) => {
@@ -56,6 +48,51 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   );
 };
 
+export const multiHttpRequest = async (
+  endPoint = [],
+  action,
+  queryObject = [],
+  requestBody = [],
+  headers = [],
+  customRequestInfo = {},
+) => {
+  let apiError = "Api Error";
+
+  if (headers)
+    instance.defaults = Object.assign(instance.defaults, {
+      headers,
+    });
+
+  try {
+
+    const response = await axios.all(requestBody.map((requestB, index) => {
+      if (queryObject && queryObject[index] && queryObject[index].length) {
+        endPoint[index] = addQueryArg(endPoint[index], queryObject[index]);
+      }
+      return instance.post(endPoint[index], wrapRequestBody(requestB, action, customRequestInfo))
+    }))
+    const responseStatus = parseInt(response && response[0] && response[0].status, 10);
+    if (responseStatus === 200 || responseStatus === 201) {
+      return response && response.map(resp => resp.data);
+    }
+
+  } catch (error) {
+    const { data, status } = error.response[0];
+    if (hasTokenExpired(status, data)) {
+      apiError = "INVALID_TOKEN";
+    } else {
+      apiError =
+        (data.hasOwnProperty("Errors") && data.Errors && data.Errors.length && data.Errors[0].message) ||
+        (data.hasOwnProperty("error") && data.error.fields && data.error.fields.length && data.error.fields[0].message) ||
+        (data.hasOwnProperty("error_description") && data.error_description) ||
+        apiError;
+    }
+  }
+  // unhandled error
+  throw new Error(apiError);
+};
+
+
 export const httpRequest = async (
   endPoint,
   action,
@@ -64,7 +101,7 @@ export const httpRequest = async (
   headers = [],
   customRequestInfo = {},
   ignoreTenantId = false,
-  isGetMethod=false
+  isGetMethod = false
 ) => {
   const tenantId = getTenantId() || commonConfig.tenantId;
   let apiError = "Api Error";
@@ -84,22 +121,22 @@ export const httpRequest = async (
   if (queryObject && queryObject.length) {
     endPoint = addQueryArg(endPoint, queryObject);
   }
-  
+
   try {
-if(isGetMethod){
-  const getResponse = await instance.get(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
-  const getResponseStatus = parseInt(getResponse.status, 10);
-  if (getResponseStatus === 200 || getResponseStatus === 201) {    
-    return getResponse.data;
-  }
-}else{
-  const response = await instance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
-  const responseStatus = parseInt(response.status, 10);
-  if (responseStatus === 200 || responseStatus === 201) {    
-    return response.data;
-  }
-}
-   
+    if (isGetMethod) {
+      const getResponse = await instance.get(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+      const getResponseStatus = parseInt(getResponse.status, 10);
+      if (getResponseStatus === 200 || getResponseStatus === 201) {
+        return getResponse.data;
+      }
+    } else {
+      const response = await instance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+      const responseStatus = parseInt(response.status, 10);
+      if (responseStatus === 200 || responseStatus === 201) {
+        return response.data;
+      }
+    }
+
   } catch (error) {
     const { data, status } = error.response;
     if (hasTokenExpired(status, data)) {
