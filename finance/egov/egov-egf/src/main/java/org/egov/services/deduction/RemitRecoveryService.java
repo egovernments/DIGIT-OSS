@@ -120,7 +120,7 @@ public class RemitRecoveryService {
 				.append(" and vh.voucherDate <=:vhVoucherDate");
 		params.put("vhFundId", voucherHeader.getFundId().getId());
 		params.put("recId", remittanceBean.getRecoveryId());
-		params.put("vhVoucherDate", Constants.DDMMYYYYFORMAT1.format(voucherHeader.getVoucherDate()));
+		params.put("vhVoucherDate", voucherHeader.getVoucherDate());
 		if (detailKeyId != null && detailKeyId != -1) {
 			query.append(" and egr.generalledgerdetail.detailkeyid = :gldDetailKeyId");
 			params.put("gldDetailKeyId", detailKeyId);
@@ -143,11 +143,11 @@ public class RemitRecoveryService {
         final Map<String, Object> params = new HashMap<>();
 		if (remittanceBean.getFromVhDate() != null && voucherHeader.getVoucherDate() != null) {
 			dateQry.append(" and vh.VOUCHERDATE >=:FromVhDate and vh.VOUCHERDATE <= :voucherDate ");
-			params.put("FromVhDate", Constants.DDMMYYYYFORMAT1.format(remittanceBean.getFromVhDate()));
-			params.put("voucherDate", Constants.DDMMYYYYFORMAT1.format(voucherHeader.getVoucherDate()));
+			params.put("FromVhDate", remittanceBean.getFromVhDate());
+			params.put("voucherDate", voucherHeader.getVoucherDate());
 		} else {
 			dateQry.append(" and vh.VOUCHERDATE <= :voucherDate ");
-			params.put("voucherDate", Constants.DDMMYYYYFORMAT1.format(voucherHeader.getVoucherDate()));
+			params.put("voucherDate", voucherHeader.getVoucherDate());
 		}
 		if (remittanceBean.getBank() != null && remittanceBean.getBankBranchId() != null
 				&& remittanceBean.getBankAccountId() != null) {
@@ -371,7 +371,7 @@ public class RemitRecoveryService {
 		params.put("vhFundId", voucherHeader.getFundId().getId());
 		params.put("recoveryId", remittanceBean.getRecoveryId());
 		params.put("tdsId", remittanceBean.getRecoveryId());
-		params.put("vhVoucherDate", Constants.DDMMYYYYFORMAT1.format(voucherHeader.getVoucherDate()));
+		params.put("vhVoucherDate", voucherHeader.getVoucherDate());
 
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("RemitRecoveryService | getRecoveryDetails | query := " + query.toString());
