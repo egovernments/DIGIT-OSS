@@ -684,3 +684,214 @@ export const downloadMultipleFileFromFilestoreIds = (fileStoreIds = [], mode, te
     })
   });
 }
+
+let getModifiedPayment = (payments) =>{
+  if(payments[0].paymentDetails[0].businessService === 'PT'){
+  let tax=0;
+  let arrear=0;
+  let penalty=0;
+  let interest=0
+  let rebate=0;
+  let roundOff=0;
+  let swatchatha=0;
+  //let currentDate=convertDateToEpoch(new Date());  
+  let currentDate = payments[0].transactionDate;
+
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.amount!==0)
+    {
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            tax = Math.round((tax+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+      tax = tax-Math.abs(rebate);
+    }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }
+  }
+  })
+  let totalAmount =   get(payments, `[0].paymentDetails[0].bill.totalAmount`,null);
+  set(payments, `[0].paymentDetails[0].bill.totalAmount`, totalAmount.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, -rebate.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
+}
+  else if(payments[0].paymentDetails[0].businessService === 'PT.MUTATION'){
+  let ptMutationFee=0;
+  let ptMutationLateFee=0;
+  let ptMutationApplicationFee=0;
+  let ptMutationProcessingFee=0;
+  let ptMutationPublicationFee=0
+  let currentDate = payments[0].transactionDate;
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.amount!==0)
+    {
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_MUTATION_FEE":
+          ptMutationFee = Math.round((ptMutationFee+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_MUTATION_LATE_FEE":
+          ptMutationLateFee = Math.round((ptMutationLateFee+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_MUTATION_APPLICATION_FEE":
+          ptMutationApplicationFee = Math.round((ptMutationApplicationFee+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_MUTATION_PROCESSING_FEE":
+          ptMutationProcessingFee = Math.round((ptMutationProcessingFee+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_MUTATION_PUBLICATION_FEE":
+          ptMutationPublicationFee = Math.round((ptMutationPublicationFee+(billAccountDetail.amount))*100)/100;
+            break;      
+          default:
+            break;
+        }
+      })
+    }
+  }
+  })
+  let totalAmount =   get(payments, `[0].paymentDetails[0].bill.totalAmount`,null);
+  set(payments, `[0].paymentDetails[0].bill.totalAmount`, totalAmount.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationFee`, ptMutationFee.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationLateFee`, ptMutationLateFee.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationApplicationFee`, ptMutationApplicationFee.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationProcessingFee`, ptMutationProcessingFee.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.ptMutationPublicationFee`, ptMutationPublicationFee.toFixed(2));
+}
+else if(payments[0].paymentDetails[0].businessService === 'TL'){
+  let tax=0;
+  let adhocPenalty=0;
+  let penalty=0;
+  let adhocRebate=0
+  let rebate=0;
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "TL_TAX":
+            tax = Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_TAX":
+            tax =
+              Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          default:
+            break;
+        }
+      })
+    })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocRebate`, adhocRebate);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocPenalty`, adhocPenalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+}
+
+set(payments, `[0].paymentDetails[0].bill.additionalDetails.financialYear`, getFinancialYearFromEPOCH(payments[0].transactionDate));
+return payments;
+}
+
+const getBankname = async(payment) =>{
+  const ifscCode = payment[0] &&  payment[0].ifscCode && payment[0].ifscCode;
+  let payload;
+  if (ifscCode) {
+    payload = await axios.get(`https://ifsc.razorpay.com/${ifscCode}`);
+    console.log("===================>",payload);
+    if (payload.data === "Not Found") {
+      set(payment, `[0].bankName`, "");
+      set(payment, `[0].branchName`, "");
+    } else {
+      const bankName = get(payload.data, "BANK");
+      const bankBranch = get(payload.data, "BRANCH");
+      set(payment, `[0].bankName`, bankName);
+      set(payment, `[0].branchName`, bankBranch);
+    }
+  }
+  return payment;
+}
