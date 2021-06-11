@@ -558,7 +558,7 @@ export const paymentMethods = [
     tabButton: "COMMON_CHEQUE",
     tabIcon: "Schedule",
     tabContent: { cheque }
-  },
+  }/* ,
   {
     code: "DD",
     tabButton: "COMMON_DD",
@@ -588,6 +588,6 @@ export const paymentMethods = [
     tabButton: "COMMON_POSTAL_ORDER",
     tabIcon: "Schedule",
     tabContent: { postal_order }
-  }
+  } */
 ]
 
