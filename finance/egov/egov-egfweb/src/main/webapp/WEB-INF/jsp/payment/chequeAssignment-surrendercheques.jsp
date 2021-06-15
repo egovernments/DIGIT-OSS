@@ -59,6 +59,8 @@
 	<s:form action="chequeAssignment" theme="simple"
 		name="chequeAssignment" id="chequeAssignment">
 		<s:token />
+		<input type="hidden" id="csrfTokenValue" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
 		<jsp:include page="../budget/budgetHeader.jsp">
 			<jsp:param name="heading" value="Surrender/Reassign Cheque" />
 		</jsp:include>
@@ -147,9 +149,17 @@
 									</A>
 								</s:iterator></td>
 							<td style="text-align: center" class="blueborderfortdnew">
-								<s:checkbox name="surrender" id="surrender%{#stat.index}"
-									value='%{surrender[#stat.index]!=null?true:false}'
-									fieldValue="%{id}" /></td>
+								<s:if test="%{id in surrender}">
+									<s:checkbox name="surrender" id="surrender%{#stat.index}"
+										value='%{true}'
+										fieldValue="%{id}" />
+								</s:if>
+								<s:else>
+									<s:checkbox name="surrender" id="surrender%{#stat.index}"
+										value='%{false}'
+										fieldValue="%{id}" />
+								</s:else>
+							</td>
 							<td style="text-align: center" class="blueborderfortdnew"><s:select
 									name="surrendarReasons" id="surrendarReasons"
 									list="surrendarReasonMap" headerKey="-1"
@@ -157,7 +167,7 @@
 									value='%{surrendarReasons[#stat.index]}' /> <s:if
 									test="%{!isChequeNoGenerationAuto()}">
 									<td style="text-align: right" class="blueborderfortdnew">
-										<s:select name="newSerialNo" id="newSerialNo"
+										<s:select name="newSerialNo" id="newSerialNo%{#stat.index}"
 											list="chequeSlNoMap" value='%{newSerialNo[#stat.index]}'
 											class="newSerialNo" />
 									</td>
@@ -242,7 +252,8 @@
 			   var slObj=	document.getElementById(name);
 				var dept = document.getElementById('department').options[dom.get('department').selectedIndex].value;
 				var slNo = slObj.options[slObj.selectedIndex].value;
-				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo;
+				var csrfToken = document.getElementById('csrfTokenValue').value;
+				var url = '${pageContext.request.contextPath}/voucher/common-ajaxValidateChequeNumber.action?bankaccountId='+document.getElementById('bankaccount').value+'&chequeNumber='+obj.value+'&index='+index+'&departmentId='+dept+"&serialNo="+slNo+'&_csrf='+csrfToken;
 				var transaction = YAHOO.util.Connect.asyncRequest('POST', url,callback , null);
 			}
 			

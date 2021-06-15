@@ -1906,6 +1906,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             instrumentVoucherList = (List<InstrumentVoucher>) getSession().get("instrumentVoucherList");
             instrumentHeaderList = (List<InstrumentHeader>) getSession().get("instrumentHeaderList");
             getheader();
+            populateSurrenderData(instrumentHeaderList);
 
             throw e;
         }
@@ -1958,6 +1959,51 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             }
         }
         return instrumentHeaderList;
+    }
+    
+    private void populateSurrenderData(List<InstrumentHeader> instrumentHeaderList) {
+        String[] selectedArray = selectedRowsId.split(";,");
+        if (!instrumentHeaderList.isEmpty()) {
+            int length = instrumentHeaderList.size();
+            surrender = new String[length];
+            newInstrumentNumber = new String[length];
+            newInstrumentDate = new String[length];
+            newSerialNo = new String[length];
+            surrendarReasons = new String[length];
+            int index = 0;
+            for (InstrumentHeader instHeader : instrumentHeaderList) {
+                String selected = null;
+                for (int i = 0; i < selectedArray.length; i++) {
+                    String[] items = selectedArray[i].split("\\~");
+                    if (instHeader.getId().equals(Long.valueOf(items[0]))) {
+                        selected = selectedArray[i];
+                        break;
+                    }
+                }
+                if (selected != null) {
+                    String[] items = selected.split("\\~");
+                    if (items[0] != null && !items[0].isEmpty()) {
+                        surrender[index] = items[0];
+                    }
+                    if (items[1] != null && !items[1].isEmpty()) {
+                        newInstrumentNumber[index] = items[1];
+                    }
+                    if (items[2] != null && !items[2].isEmpty()) {
+                        newInstrumentDate[index] = items[2];
+                    }
+                    if (items[3] != null && !items[3].isEmpty()) {
+                        newSerialNo[index] = items[3];
+                    }
+                    if (items[4] != null && !items[4].isEmpty()) {
+                        String item = items[4];
+                        if (item.contains(";"))
+                            item = items[4].replace(";", "");
+                        surrendarReasons[index] = item;
+                    }
+                }
+                index++;
+            }
+        }
     }
 
     private String getNewChequenumbers(final InstrumentHeader instrumentHeader, final String department) {
