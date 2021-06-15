@@ -357,7 +357,7 @@ public class RemitRecoveryService {
 				.append(" and egr1.id=egd.remittancegldtlid and egr1.id=egr.id)")
 				.append(" <>0 AND recovery5_.ID  = :recoveryId").append(" AND (egr.TDSID  = :tdsId")
 				.append(" OR egr.TDSID  IS NULL) AND vh.VOUCHERDATE <= :vhVoucherDate");
-		if (remittanceBean.getFromDate() != null && !remittanceBean.getFromDate().isEmpty()) {
+		if (remittanceBean.getFromDate() != null) {
 			query.append("  and vh.VoucherDate>= :vhVoucherFromDate");
 			params.put("vhVoucherFromDate", remittanceBean.getFromDate());
 		}

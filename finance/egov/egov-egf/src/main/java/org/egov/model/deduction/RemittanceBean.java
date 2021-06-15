@@ -83,7 +83,7 @@ public class RemittanceBean implements Predicate {
     private BigDecimal partialAmount;
     private Integer remittance_gl_dtlId;
     private Integer remittance_gl_Id;
-    private String fromDate;
+    private Date fromDate;
     private Date fromVhDate;
     private String departmentId;
     private Long functionId;
@@ -264,11 +264,11 @@ public class RemittanceBean implements Predicate {
         this.earlierPayment = earlierPayment;
     }
 
-    public String getFromDate() {
+    public Date getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(final String fromDate) {
+    public void setFromDate(final Date fromDate) {
         this.fromDate = fromDate;
     }
 
