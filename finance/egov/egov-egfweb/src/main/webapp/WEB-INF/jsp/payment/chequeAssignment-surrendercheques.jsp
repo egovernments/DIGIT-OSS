@@ -316,12 +316,12 @@
 	 		var newChqNoObj=document.getElementsByName('newInstrumentNumber');
 	 		var newChqDateObj=document.getElementsByName('newInstrumentDate');
 			var i;
-			var srlNo=document.getElementById('newSerialNo').value;
+			var srlNo=document.getElementsByName('newSerialNo');
 	 		for(i=0;i<surrenderObj.length;i++)
 	 		{
 	 		 if(surrenderObj[i].checked==true)
 	 			{
-	 			if(srlNo=="")
+	 			if(srlNo[i].value=="")
 	 			{
 	 				bootbox.alert("<s:text name='payment.yearcode.invalid'/>");
 	 				return false;
