@@ -72,7 +72,7 @@ export const getSearchResults = async queryObject => {
     if (typeof businessService == 'string') {
       const response = await httpRequest(
         "post",
-        getPaymentSearchAPI(businessService),
+          getPaymentSearchAPI('-1'),
         "",
         queryObject
       );
