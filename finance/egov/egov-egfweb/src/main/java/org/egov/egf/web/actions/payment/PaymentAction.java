@@ -1056,29 +1056,13 @@ public class PaymentAction extends BasePaymentAction {
             }
         } catch (final ValidationException e) {
             LOGGER.error("Validataion Exception:" + e.getMessage());
-            try {
-                this.setMiscount(0);
-                search();
-            } catch (final ParseException e1) {
-                LOGGER.error(e.getMessage(), e1);
-                final List<ValidationError> errors = new ArrayList<ValidationError>();
-                errors.add(new ValidationError("exception", e1.getMessage()));
-                throw new ValidationException(errors);
-            }
+            this.setMiscount(0);
             LOGGER.error(e.getErrors(), e);
             throw new ValidationException(e.getErrors());
         } catch (final ApplicationException e) {
-            try {
-               this.setMiscount(0);
-                search();
-            } catch (final ParseException e1) {
-                LOGGER.error(e.getMessage(), e1);
-                final List<ValidationError> errors = new ArrayList<ValidationError>();
-                errors.add(new ValidationError("exception", e1.getMessage()));
-                throw new ValidationException(errors);
-            }
+            this.setMiscount(0);
             LOGGER.error(e.getMessage(), e);
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
+            final List<ValidationError> errors = new ArrayList<>();
             errors.add(new ValidationError("exception", e.getMessage()));
             throw new ValidationException(errors);
         }
