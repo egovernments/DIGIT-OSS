@@ -1055,6 +1055,7 @@ public class PaymentAction extends BasePaymentAction {
                 voucherdate = formatter.format(new Date());                
             }
         } catch (final ValidationException e) {
+            LOGGER.error("Validataion Exception:" + e.getMessage());
             try {
                 this.setMiscount(0);
                 search();

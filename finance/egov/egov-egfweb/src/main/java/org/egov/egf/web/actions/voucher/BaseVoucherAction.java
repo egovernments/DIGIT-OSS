@@ -253,7 +253,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 	}
 
 	protected void loadSchemeSubscheme() {
-		if (headerFields.contains("scheme") && null != voucherHeader.getFundId())
+		if (headerFields.contains("scheme") && null != voucherHeader.getFundId() && null != voucherHeader.getFundId().getId())
 			addDropdownData("schemeList",
 					getPersistenceService().findAllBy("from Scheme where fund=?", voucherHeader.getFundId()));
 		if (headerFields.contains("subscheme") && voucherHeader.getVouchermis() != null
