@@ -85,7 +85,7 @@ class ApplicationHistory extends Component {
                     let applicationHistoryItem = [];
                     applicationHistoryItem = response.map(item=>{
                         return (
-                            <div>
+                            <div  style={{  borderTop: "1px solid #474343", height: "183px" }}>
                             {getFullRow("PT_PROPERTY_APPLICATION_NO", item.acknowldgementNumber ? item.acknowldgementNumber : "NA", 12)}
                             {getFullRow("PT_PROPERTY_ID_NO", item.propertyId ? item.propertyId : "NA", 12)}
                             {getFullRow("PT_MUTATION_APPLICATION_TYPE", item.creationReason  ? item.creationReason : "NA", 12)}

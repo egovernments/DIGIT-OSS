@@ -45,7 +45,7 @@ class PaymentHistory extends Component {
         const paymentHistoryItems = Payments.map((payment, index) => {
             const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
             return (
-                    <div>
+                <div  style={{borderTop: "1px solid #474343", height: "91px" }}>
                         {getFullRow("PT_HISTORY_RECEIPT_NO", payment.paymentDetails[0].receiptNumber ? '' + payment.paymentDetails[0].receiptNumber : "NA", 12)}
                         {getFullRow("PT_HISTORY_AMOUNT_PAID", amount ? 'Rs ' + amount : "NA", 12)}
                         {getFullRow("PT_HISTORY_PAYMENT_DATE", payment.transactionDate ? getFormattedDate(payment.transactionDate) : "NA", 12)}
