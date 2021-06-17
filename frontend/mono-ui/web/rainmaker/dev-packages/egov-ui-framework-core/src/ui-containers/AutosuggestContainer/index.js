@@ -20,9 +20,33 @@ class AutoSuggestor extends Component {
     //Storing multiSelect values not handled yet
     onChange({ target: { value: value ? value.value : null } });
   };
-
+  shouldComponentUpdate = (nextProps, nextState) => {
+    let {
+      value,
+      suggestions = [],
+      disabled = false,
+      locale,
+      required
+    } = this.props;
+    let {
+      value: valueNew,
+      suggestions: suggestionsNew = [],
+      disabled: disabledNew = false,
+      locale: localeNew,
+      required:requiredNew
+    } = nextProps;
+    if (locale != localeNew ||
+      value != valueNew ||
+      disabled != disabledNew ||
+      required!=requiredNew||
+      Array.isArray(suggestionsNew) != Array.isArray(suggestions) ||
+      suggestions.length != suggestionsNew.length) {
+      return true
+    }
+    return false
+  }
   render() {
-    const {
+    let {
       value,
       preparedFinalObject,
       label,
@@ -30,9 +54,11 @@ class AutoSuggestor extends Component {
       suggestions,
       className,
       localizationLabels,
+      labelsFromLocalisation,
       required,
       errorText,
       disabled,
+      localePrefix,
       defaultSort=true,
       ...rest
     } = this.props;
@@ -47,6 +73,29 @@ class AutoSuggestor extends Component {
       localizationLabels
     );
     //For multiSelect to be enabled, pass isMultiSelect=true in props.
+
+
+
+  //To fetch corresponding labels from localisation for the suggestions, if needed.
+  if (labelsFromLocalisation) {
+    suggestions = getLocalisedSuggestions(
+      JSON.parse(JSON.stringify(suggestions)),
+      localePrefix,
+      localizationLabels
+    );
+  }
+  //To find correct option object as per the value (for showing the selected value).
+  const selectedItem = findItemInArrayOfObject(suggestions, item => {
+    if (item.code === value) {
+      return true;
+    } else return false;
+  });
+  //Make value object as the Autosuggest expects.
+  if (selectedItem && selectedItem.name) {
+    value = { label: selectedItem.name, value: selectedItem.code };
+  }
+
+
     return (
       <div>
         <AutoSuggest
@@ -102,7 +151,7 @@ const getErrorText = (obj, id) => {
 }
 
 const mapStateToProps = (state, ownprops) => {
-  const { localizationLabels } = state.app;
+  const { localizationLabels,locale } = state.app;
   let {
     jsonPath,
     value,
@@ -128,27 +177,8 @@ const mapStateToProps = (state, ownprops) => {
   
    }   
 
-  //To fetch corresponding labels from localisation for the suggestions, if needed.
-  if (labelsFromLocalisation) {
-    suggestions = getLocalisedSuggestions(
-      JSON.parse(JSON.stringify(suggestions)),
-      localePrefix,
-      localizationLabels,
-      defaultSort
-    );
-  }
-  //To find correct option object as per the value (for showing the selected value).
-  const selectedItem = findItemInArrayOfObject(suggestions, item => {
-    if (item.code === value) {
-      return true;
-    } else return false;
-  });
-  //Make value object as the Autosuggest expects.
-  if (selectedItem && selectedItem.name) {
-    value = { label: selectedItem.name, value: selectedItem.code };
-  }
   // console.log(value, suggestions);
-  return { value, jsonPath, suggestions, localizationLabels, errorText };
+  return { value, jsonPath, suggestions, localizationLabels, errorText,locale };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -1,15 +1,17 @@
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  appendModulePrefix, getLocaleLabels, sortDropdownNames
+} from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { AutoSuggest } from "../../ui-atoms-local";
 import { findItemInArrayOfObject } from "../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
-import { getLocaleLabels } from "../../ui-utils/commons";
-import get from "lodash/get";
-import isEmpty from "lodash/isEmpty";
-import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
+
+// const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
+// const transfomedKeys = transformById(localizationLabels, "code");
 class AutoSuggestor extends Component {
- 
   onSelect = value => {
     const { onChange,isMulti } = this.props;
     if(isMulti){
@@ -18,9 +20,34 @@ class AutoSuggestor extends Component {
       onChange({ target: { value: value ? value.value: null } });
     }    
   };
+  shouldComponentUpdate = (nextProps, nextState) => {
+    let {
+      value,
+      suggestions = [],
+      disabled = false,
+      locale,
+      required
+    } = this.props;
+    let {
+      value: valueNew,
+      suggestions: suggestionsNew = [],
+      disabled: disabledNew = false,
+      locale: localeNew,
+      required: requiredNew
+    } = nextProps;
+    if (locale != localeNew ||
+      value != valueNew ||
+      disabled != disabledNew ||
+      required != requiredNew ||
+      Array.isArray(suggestionsNew) != Array.isArray(suggestions) ||
+      suggestions.length != suggestionsNew.length) {
+      return true
+    }
+    return false
+  }
 
   render() {
-    const {
+    let {
       value,
       preparedFinalObject,
       label,
@@ -28,6 +55,8 @@ class AutoSuggestor extends Component {
       suggestions,
       className,
       localizationLabels,
+      labelsFromLocalisation,
+      localePrefix,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -41,6 +70,28 @@ class AutoSuggestor extends Component {
       localizationLabels
     );
     //For multiSelect to be enabled, pass isMultiSelect=true in props.
+
+    //To fetch corresponding labels from localisation for the suggestions, if needed.
+    if (labelsFromLocalisation) {
+      suggestions = getLocalisedSuggestions(
+        JSON.parse(JSON.stringify(suggestions)),
+        localePrefix,
+        localizationLabels
+      );
+    }
+    //To find correct option object as per the value (for showing the selected value).
+    const selectedItem = findItemInArrayOfObject(suggestions, item => {
+      if (item.code === value) {
+        return true;
+      } else return false;
+    });
+    //Make value object as the Autosuggest expects.
+    if (selectedItem && selectedItem.name) {
+      value = { label: selectedItem.name, value: selectedItem.code };
+    }
+
+
+
     return (
       <div>
         <AutoSuggest
@@ -76,7 +127,7 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
 };
 
 const mapStateToProps = (state, ownprops) => {
-  const { localizationLabels } = state.app;
+  const { localizationLabels, locale } = state.app;
   let {
     jsonPath,
     value,
@@ -92,25 +143,9 @@ const mapStateToProps = (state, ownprops) => {
   value = value
     ? value
     : get(state.screenConfiguration.preparedFinalObject, jsonPath);
-  //To fetch corresponding labels from localisation for the suggestions, if needed.
-  if (labelsFromLocalisation) {
-    suggestions = getLocalisedSuggestions(
-      JSON.parse(JSON.stringify(suggestions)),
-      localePrefix,
-      localizationLabels
-    );
-  }
-  //To find correct option object as per the value (for showing the selected value).
-  const selectedItem = findItemInArrayOfObject(suggestions, item => {
-    if (item.code === value) {
-      return true;
-    } else return false;
-  });
-  //Make value object as the Autosuggest expects.
-  if (selectedItem && selectedItem.name) {
-    value = { label: selectedItem.name, value: selectedItem.code };
-  }
-  return { value, jsonPath, suggestions, localizationLabels };
+
+  // console.log(value, suggestions);
+  return { value, jsonPath, suggestions, localizationLabels, locale };
 };
 
 const mapDispatchToProps = dispatch => {
