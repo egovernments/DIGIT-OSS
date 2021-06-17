@@ -279,7 +279,7 @@ class InboxData extends React.Component {
   };
 
   render() {
-    const { data={rows:[],headers:[]}, ProcessInstances, classes } = this.props;
+    const { data={rows:[],headers:[]}, ProcessInstances, classes ,remainingDataLoading} = this.props;
     const { onHistoryClick, onDialogClose, getModuleLink } = this;
     const { isSorting, sortOrder } = this.state;
     const { rows, rowsPerPage, page, rowsPerPageOptions } = this.state;
@@ -324,7 +324,7 @@ class InboxData extends React.Component {
             </TableHead>
             {data.rows.length === 0 ? (
               <TableBody>
-                <Label labelClassName="" label="COMMON_INBOX_NO_DATA" />
+                {!remainingDataLoading&&<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />}
               </TableBody>
             ) : (
                 <TableBody>
@@ -378,7 +378,7 @@ class InboxData extends React.Component {
                   <TableCell colSpan={6} />
                 </TableRow>
               )} */}
-            <TableFooter>
+            {!remainingDataLoading&&<TableFooter>
               <TablePagination
                 rowsPerPageOptions={rowsPerPageOptions}
                 count={data.rows.length}
@@ -389,7 +389,7 @@ class InboxData extends React.Component {
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActionsWrapped}
               />
-            </TableFooter>
+            </TableFooter>}
           </Table>
         </Hidden>
         <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
@@ -408,7 +408,7 @@ class InboxData extends React.Component {
             )}
           </div>
           {data.rows.length === 0 ? (
-            <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
+            <Card textChildren={!remainingDataLoading&&<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
               <div>
                 {data.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
@@ -455,7 +455,7 @@ class InboxData extends React.Component {
                   );
                 })}
                 <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
-                <TableFooter>
+                {!remainingDataLoading&&<TableFooter>
                   <div className={'inbox-table-pagination-sm'}>
                     <TablePagination
                       colSpan={6}
@@ -469,7 +469,7 @@ class InboxData extends React.Component {
                       ActionsComponent={TablePaginationActionsWrapped}
                     />
                   </div>
-                </TableFooter>
+                </TableFooter>}
               </div>
             )}
         </Hidden>

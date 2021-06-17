@@ -86,7 +86,7 @@ class App extends Component {
     }
     let sourceUrl = `${window.location.origin}/employee`;
     let isFixedFooter=false;
-    let otherScreensUrls = ['/employee/inbox', '/employee/integration/dss/home', '/employee/integration/dss/propertytax','/employee/integration/dss/tradelicense','/employee/integration/dss/overview','/employee/integration/dss/pgr'];
+    let otherScreensUrls = ['/employee/inbox', '/inbox','/employee/integration/dss/home', '/employee/integration/dss/propertytax','/employee/integration/dss/tradelicense','/employee/integration/dss/overview','/employee/integration/dss/pgr'];
     if (otherScreensUrls.includes(window.location.pathname)) {
       isFixedFooter = true;
     }

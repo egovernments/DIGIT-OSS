@@ -30,6 +30,28 @@ const initialState = {
     loading: false,
     notifications: [],
   },
+  inbox:{
+    count:0,
+    records:[],
+    loading:false,
+    error:false,
+    errorMessage:'',
+    loaded:false
+  },
+  inboxRemData:{
+    count:0,
+    records:[],
+    loading:false,
+    error:false,
+    errorMessage:'',
+    loaded:false
+  },
+  actionMenuFetch:{
+    loading:false,
+    loaded:false,
+    errorMessage:"",
+    error:false
+  }
 };
 
 const appReducer = (state = initialState, action) => {
@@ -59,8 +81,11 @@ const appReducer = (state = initialState, action) => {
     case actionTypes.SET_USER_CURRENT_LOCATION:
       return { ...state, currentLocation: action.currentLocation };
     case actionTypes.FETCH_ACTIONMENU:
-      return { ...state, menu: action.payload };
-
+      return { ...state,actionMenuFetch:{loading:false,loaded:true,errorMessage:"",error:false}, menu: action.payload };
+    case actionTypes.FETCH_ACTIONMENU_PENDING:
+      return { ...state, actionMenuFetch:{loading:true,loaded:false,errorMessage:"",error:false} };
+    case actionTypes.FETCH_ACTIONMENU_ERROR:
+      return { ...state, actionMenuFetch:{loading:false,loaded:false,errorMessage:'CS_INBOX_MDMS_FETCH_ERROR',error:true} ,menu:[]};
     case actionTypes.ADD_BREADCRUMB_ITEM:
       if (process.env.NODE_ENV !== "development" && action.url && action.url.title !== "" && action.url.path !== "") {
         action.url.path = action.url.path && action.url.path.split("/citizen").pop();
@@ -114,6 +139,87 @@ const appReducer = (state = initialState, action) => {
         ...state,
         notificationObj: {
           loading: false,
+        },
+      };
+    case actionTypes.FETCH_INBOX_COUNT: 
+    return {
+      ...state,
+      inbox: {
+        ...state.inbox,
+        count: action.payload,
+      },
+    };
+    case actionTypes.FETCH_INBOX_RECORDS: 
+      return { 
+        ...state,
+        inbox: {
+          ...state.inbox,
+          loading: false,
+          loaded:true,
+          records: action.payload,
+        },
+      };
+      case actionTypes.FETCH_RESET_INBOX_RECORDS: 
+      return { 
+        ...state,
+        inbox: {
+          ...state.inbox,
+          loading: false,
+          loaded:false,
+          records: [],
+        },
+      };
+      
+    case actionTypes.FETCH_INBOX_RECORDS_PENDING:
+      return {
+        ...state,   
+        inbox: {
+          ...state.inbox,
+          loading: true,
+          loaded:false,
+          error:false,
+          errorMessage:""
+        },
+      };
+    case actionTypes.FETCH_INBOX_RECORDS_ERROR:
+      return {
+        ...state,
+        inbox: {
+          ...state.inbox,
+          loading: false,
+          error:true,
+          errorMessage:action.payload
+        },
+      };
+      case actionTypes.FETCH_REM_INBOX_RECORDS_COMPLETE: 
+      return { 
+        ...state,
+        inboxRemData: {
+          ...state.inboxRemData,
+          loading: false,
+          loaded:true,
+          records: action.payload,
+        },
+      };
+    case actionTypes.FETCH_REM_INBOX_RECORDS_PENDING:
+      return {
+        ...state,   
+        inboxRemData: {
+          ...state.inboxRemData,
+          loading: true,
+          loaded:false,
+          error:false,
+          errorMessage:""
+        },
+      };
+    case actionTypes.FETCH_REM_INBOX_RECORDS_ERROR:
+      return {
+        ...state,
+        inboxRemData: {
+          ...state.inboxRemData,
+          loading: false,
+          error:true,
+          errorMessage:action.payload
         },
       };
     default:
