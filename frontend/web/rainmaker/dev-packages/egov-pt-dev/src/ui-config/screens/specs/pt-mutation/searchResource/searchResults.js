@@ -119,6 +119,7 @@ export const searchPropertyTable = {
         labelKey: "PT_COMMON_TABLE_COL_PT_ID",
         options: {
           filter: false,
+          hint:"Click on Unique Property ID to view Property Information",
           customBodyRender: (value, tableMeta) => (
             <div>
               <a href="javascript:void(0)" onClick={() => onPropertyTabClick(tableMeta)}>{value}</a>
@@ -207,6 +208,7 @@ export const searchApplicationTable = {
         labelKey: "PT_COMMON_TABLE_COL_APP_NO",
         options: {
           filter: false,
+          hint:"Click on Unique Property ID to view Property Information",
           customBodyRender: value => (
             <a href="javascript:void(0)"
               onClick={() => applicationNumberClick(value) }
