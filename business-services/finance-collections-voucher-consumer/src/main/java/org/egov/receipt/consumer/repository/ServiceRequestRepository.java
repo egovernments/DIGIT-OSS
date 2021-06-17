@@ -85,9 +85,7 @@ public class ServiceRequestRepository {
         Object response = null;
 
         try {
-            // check auth token is null
-            if (((VoucherRequest) request).getRequestInfo().getAuthToken() == null)
-                populateWithAdminToken(uri, request, tenantId);
+            populateWithAdminToken(uri, request, tenantId);
             response = restTemplate.postForObject(uri.toString(), request, Map.class);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
@@ -129,7 +127,8 @@ public class ServiceRequestRepository {
         if (field != null) {
             ReflectionUtils.makeAccessible(field);
             requestInfo = (RequestInfo) field.get(request);
-            requestInfo.setAuthToken(tokenService.generateAdminToken(tenantId));
+            if (requestInfo.getAuthToken() == null)
+                requestInfo.setAuthToken(tokenService.generateAdminToken(tenantId));
             ReflectionUtils.setField(field, request, requestInfo);
         } else {
             throw new VoucherCustomException(ProcessStatus.FAILED,
