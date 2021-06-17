@@ -256,6 +256,13 @@
 				if(result)
 				{
 					document.chequeAssignment.action ='/services/EGF/payment/chequeAssignment-update.action';
+					jQuery(document.chequeAssignment).append(
+				    	jQuery('<input>', {
+				        	type: 'hidden',
+				            	name: '${_csrf.parameterName}',
+				                value: '${_csrf.token}'
+						})
+				    );
 					return true; 
 				}
 				else return false;
