@@ -351,7 +351,7 @@ export const newCollectionDetailsCard = getCommonCard(
             moduleName: "BillingService",
             masterName: "BusinessService",
             rootBlockSub: 'serviceCategories',
-            filter: "[?(@.type=='Adhoc')]"
+            filter: "[?(@.type=='Adhoc')][?(@.isActive==true)]"
           }
         },
         fromDate: getDateField({
