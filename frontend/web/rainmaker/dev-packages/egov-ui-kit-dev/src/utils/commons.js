@@ -1119,7 +1119,7 @@ export const isDocumentValid = (docUploaded, requiredDocCount) => {
 
 export const getPaymentSearchAPI = (businessService='')=>{
 
-  return `${PAYMENTSEARCH.GET.URL}/${PAYMENTSEARCH.GET.ACTION}`;
+  return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
 }
 
 export const getFetchBillAPI = () => {
