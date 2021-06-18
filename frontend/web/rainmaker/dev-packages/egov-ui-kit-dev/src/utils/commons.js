@@ -1118,12 +1118,8 @@ export const isDocumentValid = (docUploaded, requiredDocCount) => {
 
 
 export const getPaymentSearchAPI = (businessService='')=>{
-  if(businessService=='-1'){
-    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
-  }else if (process.env.REACT_APP_NAME === "Citizen") {
-    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
-  }
-  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
+
+  return `${PAYMENTSEARCH.GET.URL}/${PAYMENTSEARCH.GET.ACTION}`;
 }
 
 export const getFetchBillAPI = () => {
