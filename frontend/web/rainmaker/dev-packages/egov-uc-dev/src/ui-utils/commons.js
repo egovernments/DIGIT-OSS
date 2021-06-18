@@ -93,7 +93,7 @@ export const getSearchResults = async queryObject => {
         try {
           let respo = await httpRequest(
             "post",
-            getPaymentSearchAPI('-1'),
+            getPaymentSearchAPI(-1),
             "",
             queryObject
           )
