@@ -14,10 +14,33 @@ const downloadprintMenu = (
   tenantId,
   uiCommonPayConfig
 ) => {
-  const receiptKey = get(
+  
+
+   let businessService=getQueryArg(window.location.href, "businessService")
+   let key="";
+   if(businessService=='TL'){
+  
+     key= 'tl-receipt'
+
+   }
+   else if(businessService=='PT'){
+   
+     key= 'consolidatedreceipt'
+  
+   }
+   else if(businessService=='PT.MUTATION'){
+ 
+     key='pt-mutation-receipt'
+  
+   }
+   else{
+      key='misc-receipt';
+   
+   }
+   const receiptKey = get(
     uiCommonPayConfig,
     "receiptKey",
-    "consolidatedreceipt"
+    key
   );
   let receiptDownloadObject = {
     label: {
@@ -37,6 +60,7 @@ const downloadprintMenu = (
     },
     leftIcon: "receipt",
   };
+
   let receiptPrintObject = {
     label: { labelName: "PRINT RECEIPT", labelKey: "COMMON_PRINT_RECEIPT" },
     link: () => {
