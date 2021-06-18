@@ -62,6 +62,6 @@ config:
         dockerfile: "build/maven/Dockerfile"
 
   - name: "builds/utilities/certificate_signer"
-      build:
-        - work-dir: "certificate_signer"
-          image-name: "certificate_signer"
+    build:
+      - work-dir: "certificate_signer"
+        image-name: "certificate_signer"
