@@ -20,6 +20,16 @@
     
   }
   
+
+  @media only screen and (max-width: 551px) {
+    .make-payment-com{
+        width: 100% !important;
+        height: 48px  !important;
+        right: 19px  !important;
+        position: relative  !important;
+        border-radius: 0px   !important;  
+    } 
+  }
   @media only screen and (max-width: 768px) {
     .gen-receipt-com{
         width: 100%;
