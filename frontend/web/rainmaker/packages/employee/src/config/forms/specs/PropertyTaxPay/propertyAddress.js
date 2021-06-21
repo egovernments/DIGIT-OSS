@@ -9,6 +9,7 @@ import { getLocale, getTenantId, localStorageGet } from "egov-ui-kit/utils/local
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from '../../../common'
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import "./index.css";
 
 // const Search = <Icon action="action" name="home" color="#30588c" />;
 
@@ -168,7 +169,7 @@ const formConfig = {
     oldPID: {
       id: "oldpid",
       type: "textfield",
-      className: "pt-old-pid-text-field",
+      className: "pt-old-pid-text-field-changes",
       text: "PT_SEARCH_BUTTON",
       // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
