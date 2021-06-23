@@ -112,7 +112,7 @@
 			<artifactId>batik-all</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/batik-all-1.0.jar</systemPath>
+			<systemPath>${pom.basedir}/lib/batik-all-1.0.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -120,7 +120,7 @@
 			<artifactId>kabeja-svg</artifactId>
 			<version>0.4</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/kabeja-svg-0.4.jar</systemPath>
+			<systemPath>${pom.basedir}/lib/kabeja-svg-0.4.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -128,7 +128,7 @@
 			<artifactId>pdf-transcoder</artifactId>
 			<version>1.1</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/pdf-transcoder-1.1.jar</systemPath>
+			<systemPath>${pom.basedir}/lib/pdf-transcoder-1.1.jar</systemPath>
 		</dependency>
 
 		<dependency>
