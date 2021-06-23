@@ -293,24 +293,6 @@ public class TLConstants {
 
     public static final String PAYMENT_LINK_PLACEHOLDER="{PAYMENT_LINK}";
 
-
-
-    public static final String NOTIF_OWNER_NAME_KEY = "{OWNER_NAME}";
-
-    public static final String NOTIF_TRADE_NAME_KEY = "{TRADE_NAME}";
-
-    public static final String NOTIF_TRADE_LICENSENUMBER_KEY = "{LICENSE_NUMBER}";
-
-    public static final String NOTIF_EXPIRY_DATE_KEY = "{EXPIRY_DATE}";
-
-    public static final String validityPeriodMap = "$.MdmsRes.TradeLicense.TradeType[?(@.code==\"{}\")].validityPeriod";
-
-    public static final String JOB_SMS_REMINDER = "REMINDER";
-
-    public static final String JOB_EXPIRY = "EXPIRY";
-
-    public static final String DEFAULT_WORKFLOW = "NewTL";
-
     public TLConstants() {}
     
     public static final String TL_BUSINESS_SERVICE= "NewTL";

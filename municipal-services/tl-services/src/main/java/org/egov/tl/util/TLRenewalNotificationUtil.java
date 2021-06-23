@@ -12,6 +12,7 @@ import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -31,6 +32,12 @@ public class TLRenewalNotificationUtil {
     private Producer producer;
     
     private NotificationUtil notificationUtil;
+    
+    @Autowired
+	private ShortUrlUtil shortUrlUtil;
+	
+	@Value("${egov.tl.citizen.search}")
+	private String tlCitizenSearchUrl;
 
     @Autowired
     public TLRenewalNotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, NotificationUtil notificationUtil) {

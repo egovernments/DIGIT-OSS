@@ -34,6 +34,12 @@ public class NotificationUtil {
 	private Producer producer;
 
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private ShortUrlUtil shortUrlUtil;
+	
+	@Value("${egov.tl.citizen.search}")
+	private String tlCitizenSearchUrl;
     
 	@Autowired
 	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, RestTemplate restTemplate) {
