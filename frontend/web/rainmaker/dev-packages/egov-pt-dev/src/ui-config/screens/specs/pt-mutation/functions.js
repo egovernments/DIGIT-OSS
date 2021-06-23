@@ -481,7 +481,7 @@ const searchApiCall = async (state, dispatch, index) => {
  let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
 
 
-/*   if ((!searchScreenObject.tenantId) && index == 0) {
+  if ((!searchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(
         true,
@@ -494,7 +494,7 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
 
-  } */
+  } 
   let queryObject = [
     {
       key: "tenantId",
