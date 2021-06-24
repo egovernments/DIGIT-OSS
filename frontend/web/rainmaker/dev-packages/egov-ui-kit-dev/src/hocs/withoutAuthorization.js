@@ -2,14 +2,16 @@ import React from "react";
 import { connect } from "react-redux";
 // import AppBar from "@material-ui/core/AppBar";
 import "./index.css";
-import { getLocale, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId, getUserInfo, setStoredModulesList, setModule } from "egov-ui-kit/utils/localStorageUtils";
 import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
 import Label from "egov-ui-kit/utils/translationNode";
+import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { fetchLocalizationLabel, setLocalizationLabels } from "egov-ui-kit/redux/app/actions";
 import { DropDown, AppBar } from "components";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
+import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
 
 const getUlbGradeLabel = (ulbGrade) => {
   if (ulbGrade) {
@@ -62,11 +64,17 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
         marginBottom: "24px",
       },
       titleStyle: { fontSize: "20px", fontWeight: 500 },
+      headerStyle: {
+        position: "absolute",
+        width: "100%"
+      }
     };
 
     componentDidMount() {
-      if (this.props.authenticated) {
-        this.props.history.push(redirectionUrl);
+      if (this.props.authenticated && !isPublicSearch()) {
+        if(!this.props.isOpenLink){
+          this.props.history.push(redirectionUrl);
+        }
       }
     }
 
@@ -81,28 +89,39 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
         tenantId = userInfo && userInfo.permanentCity;
         tenantId = tenantInfo ? tenantInfo : tenantId;
       }
+      var resetList=[];
+      var newList =JSON.stringify(resetList);
+      setStoredModulesList(newList);
+      let locale= getLocale();
+      let resultArray=[];
+      setLocalizationLabels(locale, resultArray);
       this.props.fetchLocalizationLabel(value, tenantId, tenantId);
     };
+
+    checkForPublicSeach = () => {
+      return isPublicSearch();
+    }
 
     render() {
       const { isOpenLink, ulbLogo, defaultTitle, ulbName, hasLocalisation, languages, ...rest } = this.props;
       const { languageSelected } = this.state;
-
+      const isPublicSearch = this.checkForPublicSeach();
+      const logoClassName = isPublicSearch ? "citizen-header-logo public-search-logo" : "citizen-header-logo"
       const { style } = this;
       return (
         <div>
           {/* FIXME need to move appbar as new component */}
           {isOpenLink ? (
-            <div className="rainmaker-header-cont" style={{ position: "relative" }}>
+            <div className="rainmaker-header-cont" style={isPublicSearch ? style.headerStyle : { position: "relative" }}>
               <div style={{ lineHeight: "64px" }}>
                 <AppBar
                   className="rainmaker-header"
                   title={
                     <div className="citizen-header-logo-label">
-                      <div className="citizen-header-logo">
+                      <div className={logoClassName}>
                         <img src={ulbLogo ? ulbLogo : pbLogo} onError={(event) => event.target.setAttribute("src", pbLogo)} />
                       </div>
-                      <div className="rainmaker-displayInline">
+                      {!isPublicSearch && <div className="rainmaker-displayInline">
                         <Label
                           containerStyle={{ marginLeft: "10px" }}
                           className="screenHeaderLabelStyle appbar-municipal-label"
@@ -113,7 +132,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
                           className="screenHeaderLabelStyle appbar-municipal-label"
                           label={defaultTitle}
                         />
-                      </div>
+                      </div>}
                     </div>
                   }
                   titleStyle={style.titleStyle}
@@ -146,7 +165,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
           ) : (
             <Component {...this.props} />
           )}
-
+          
         </div>
       );
     }
@@ -156,14 +175,14 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
     let { stateInfoById } = state.common || [];
     let hasLocalisation = false;
     let defaultUrl = process.env.REACT_APP_NAME === "Citizen" ? "/user/register" : "/user/login";
-    let isOpenLink = window.location.pathname.includes("openlink");
+    let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
     const cities = state.common.cities || [];
     const tenantId = getTenantId() || process.env.REACT_APP_DEFAULT_TENANT_ID;
     const userTenant = cities && cities.filter((item) => item.code === tenantId);
     const ulbGrade = userTenant && get(userTenant[0], "city.ulbGrade");
     const ulbName = userTenant && get(userTenant[0], "code");
     const defaultTitle = ulbGrade && getUlbGradeLabel(ulbGrade);
-    const ulbLogo = userTenant.length > 0 ? get(userTenant[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
+    const ulbLogo = isPublicSearch() ? msevaLogo : (userTenant.length > 0 ? get(userTenant[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png");
     if (stateInfoById && stateInfoById.length > 0) {
       hasLocalisation = stateInfoById[0].hasLocalisation;
       defaultUrl = stateInfoById[0].defaultUrl;

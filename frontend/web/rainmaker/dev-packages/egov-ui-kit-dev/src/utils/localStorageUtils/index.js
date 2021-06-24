@@ -59,8 +59,9 @@ export const setStoredModulesList =(storedModuleList) =>{
 
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
- window.localStorage.clear();
- window.sessionStorage.clear();
+  Object.keys(localStorage).forEach((key) => {
+      window.localStorage.removeItem(key);
+  });
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {

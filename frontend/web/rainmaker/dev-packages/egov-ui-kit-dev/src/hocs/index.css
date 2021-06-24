@@ -116,6 +116,11 @@
   height: 49px;
 }
 
+.public-search-logo > img {
+  width: 250px;
+  height: 35px;
+}
+
 .appbar-municipal-label .label-text {
   text-transform: uppercase !important;
 }
@@ -148,4 +153,53 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.rainmaker-action-menu {
+  height: 85vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.rainmaker-action-menu:hover {
+  height: 85vh;
+  width: 100%;
+  overflow: scroll;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar:horizontal {
+  height: 0.5em;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar-track {
+  background-color: transparent;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.rainmaker-action-menu::-webkit-scrollbar-thumb {
+  background-color:rgb(117, 117, 117);
+  outline: 0;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  width: 0.5em;
+}
+
+/* Track below and above */
+.rainmaker-action-menu::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+}
+
+/* Corner */
+.rainmaker-action-menu::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* Resizer */
+.rainmaker-action-menu::-webkit-scrollbar-resizer {
+  background-color: transparent;
 }

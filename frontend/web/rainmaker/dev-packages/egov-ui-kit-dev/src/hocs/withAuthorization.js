@@ -1,15 +1,16 @@
+import { Icon } from "components";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { logout } from "egov-ui-kit/redux/auth/actions";
+import { getModuleName, getQueryArg } from "egov-ui-kit/utils/commons";
+import Label from "egov-ui-kit/utils/translationNode";
+import { ActionMenu, Header } from "modules/common";
 import React from "react";
 import { connect } from "react-redux";
-import { Icon } from "components";
 import { compose } from "redux";
-import withData from "./withData";
-import { Header } from "modules/common";
-import { ActionMenu } from "modules/common";
-import IconButton from "material-ui/IconButton";
-import Label from "egov-ui-kit/utils/translationNode";
-import { getQueryArg } from "egov-ui-kit/utils/commons";
-import { logout } from "egov-ui-kit/redux/auth/actions";
 import SortDialog from "../common/common/Header/components/SortDialog";
+import { getLocale, getStoredModulesList, getTenantId, getUserInfo, setModule, setStoredModulesList } from "../utils/localStorageUtils";
+import "./index.css";
+import withData from "./withData";
 
 const withAuthorization = (options = {}) => (Component) => {
   class Wrapper extends React.Component {
@@ -24,6 +25,7 @@ const withAuthorization = (options = {}) => (Component) => {
       titleObject: [],
       sortPopOpen: false,
       menuDrawerOpen: true,
+      localeFetched: false
     };
     style = {
       iconStyle: {
@@ -41,12 +43,37 @@ const withAuthorization = (options = {}) => (Component) => {
       }
     }
 
+    citizenTenantId = () => {
+      const userInfo = JSON.parse(getUserInfo());
+      return userInfo.permanentCity || userInfo.tenantId;
+    }
+
+    fetchLocale = () => {
+      var storedModuleList = [];
+      if (getStoredModulesList() !== null) {
+        storedModuleList = JSON.parse(getStoredModulesList());
+      }
+      if (storedModuleList.includes(getModuleName()) === false) {
+        setModule(getModuleName());
+        storedModuleList.push(getModuleName());
+        var newList = JSON.stringify(storedModuleList);
+        setStoredModulesList(newList);
+        const tenantId = process.env.REACT_APP_NAME === "Citizen" ? this.citizenTenantId() : getTenantId();
+        this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId, true);
+        this.setState({ localeFetched: true });
+      }
+    }
+
+    componentWillReceiveProps() {
+      this.fetchLocale();
+    }
+
     roleFromUserInfo = (userInfo, role) => {
       const roleCodes =
         userInfo && userInfo.roles
           ? userInfo.roles.map((role) => {
-              return role.code;
-            })
+            return role.code;
+          })
           : [];
       return roleCodes && roleCodes.length && roleCodes.indexOf(role) > -1 ? true : false;
     };
@@ -108,14 +135,14 @@ const withAuthorization = (options = {}) => (Component) => {
       const role = this.roleFromUserInfo(userInfo, "CITIZEN")
         ? "citizen"
         : this.roleFromUserInfo(userInfo, "GRO") || this.roleFromUserInfo(userInfo, "DGRO")
-        ? "ao"
-        : this.roleFromUserInfo(userInfo, "CSR")
-        ? "csr"
-        : this.roleFromUserInfo(userInfo, "EMPLOYEE")
-        ? "employee"
-        : this.roleFromUserInfo(userInfo, "PGR-ADMIN")
-        ? "pgr-admin"
-        : "";
+          ? "ao"
+          : this.roleFromUserInfo(userInfo, "CSR")
+            ? "csr"
+            : this.roleFromUserInfo(userInfo, "EMPLOYEE")
+              ? "employee"
+              : this.roleFromUserInfo(userInfo, "PGR-ADMIN")
+                ? "pgr-admin"
+                : "";
 
       //For restricting citizen to access employee url
 
@@ -266,6 +293,7 @@ const withAuthorization = (options = {}) => (Component) => {
   const mapDispatchToProps = (dispatch) => {
     return {
       logout: () => dispatch(logout()),
+      fetchLocalizationLabel: (locale, moduleName, tenantId, isFromModule) => dispatch(fetchLocalizationLabel(locale, moduleName, tenantId, isFromModule))
     };
   };
   return compose(
