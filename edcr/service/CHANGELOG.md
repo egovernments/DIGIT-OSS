@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 2.0.0
+
+- The Extracting data from dxf file module has been made **open source**.
+- The new module named **egov-dcr-extract** has been added as part of **eGov-dcr-serivce** repo, it contains all extraction code.
+
 ## 1.2.0
 
 - Security audit issues fix
