@@ -57,8 +57,8 @@ public class UserRequestTest {
     public void test_contract_to_domain_conversion() {
         UserRequest userRequest = buildUserRequest();
 
-		final long loggedInUserId = 345L;
-		User userForCreate = userRequest.toDomain(loggedInUserId, true);
+        final long loggedInUserId = 345L;
+        User userForCreate = userRequest.toDomain(loggedInUserId, true);
 
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         c.set(2017, 1, 1, 1, 1, 1);
@@ -88,15 +88,15 @@ public class UserRequestTest {
         assertNotNull(userForCreate.getCreatedDate());
         assertNotEquals(expectedDate, userForCreate.getLastModifiedDate().toString());
         assertNotEquals(expectedDate, userForCreate.getCreatedDate().toString());
-		final Set<Role> roles = userForCreate.getRoles();
-		assertEquals(1, roles.size());
-		assertEquals("CITIZEN", roles.iterator().next().getCode());
+        final Set<Role> roles = userForCreate.getRoles();
+        assertEquals(1, roles.size());
+        assertEquals("CITIZEN", roles.iterator().next().getCode());
         assertEquals("ap.public", userForCreate.getTenantId());
         assertEquals("otpreference1", userForCreate.getOtpReference());
         assertEquals("!abcd1234", userForCreate.getPassword());
     }
 
-	private UserRequest buildUserRequest() {
+    private UserRequest buildUserRequest() {
         Set<RoleRequest> roles = new HashSet<>();
         roles.add(RoleRequest.builder().code("CITIZEN").build());
         roles.add(RoleRequest.builder().code("CITIZEN").build());
@@ -161,7 +161,7 @@ public class UserRequestTest {
                 .accountLocked(false)
                 .roles(getListOfRoles())
                 .guardian("name of relative")
-                .guardianRelation(GuardianRelation.Father)
+                .guardianRelation(GuardianRelation.FATHER)
                 .signature("7a9d7f12-bdcb-4487-9d43-709838a0ad39")
                 .bloodGroup(BloodGroup.A_POSITIVE)
                 .photo("3b26fb49-e43d-401b-899a-f8f0a1572de0")
@@ -174,22 +174,22 @@ public class UserRequestTest {
     }
 
     private Address getPermanentAddress() {
-		return Address.builder()
-				.type(AddressType.PERMANENT)
-				.city("city/town/village 1")
-				.address("post office")
-				.pinCode("pincode 1")
-				.build();
-	}
+        return Address.builder()
+                .type(AddressType.PERMANENT)
+                .city("city/town/village 1")
+                .address("post office")
+                .pinCode("pincode 1")
+                .build();
+    }
 
-	private Address getCorrespondenceAddress() {
-    	return Address.builder()
-				.type(AddressType.CORRESPONDENCE)
-				.city("city/town/village 2")
-				.address("post office")
-				.pinCode("pincode 2")
-				.build();
-	}
+    private Address getCorrespondenceAddress() {
+        return Address.builder()
+                .type(AddressType.CORRESPONDENCE)
+                .city("city/town/village 2")
+                .address("post office")
+                .pinCode("pincode 2")
+                .build();
+    }
 
     private Set<Role> getListOfRoles() {
         Calendar calendar = Calendar.getInstance();

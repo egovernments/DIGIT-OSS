@@ -9,14 +9,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
 public class PGRIndexObject {
-	
+
 	List<ServiceIndexObject> serviceRequests = new ArrayList<>();
 
 }

@@ -1,14 +1,16 @@
 package org.egov.persistence.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.egov.domain.model.Message;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.egov.domain.model.Message;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Setter

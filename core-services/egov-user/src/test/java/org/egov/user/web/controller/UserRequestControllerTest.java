@@ -1,6 +1,7 @@
 package org.egov.user.web.controller;
 
 import org.apache.commons.io.IOUtils;
+import org.egov.encryption.EncryptionService;
 import org.egov.user.TestConfiguration;
 import org.egov.user.domain.exception.DuplicateUserNameException;
 import org.egov.user.domain.exception.OtpValidationPendingException;
@@ -55,7 +56,7 @@ public class UserRequestControllerTest {
 
     @MockBean
     private TokenService tokenService;
-    
+
     @MockBean
     private CustomAuthenticationKeyGenerator authenticationKeyGenerator;
 
@@ -82,7 +83,7 @@ public class UserRequestControllerTest {
     @WithMockUser
     public void testShouldThrowErrorWhileRegisteringCitizenWithPendingOtpValidation() throws Exception {
         OtpValidationPendingException exception = new OtpValidationPendingException();
-        when(userService.createCitizen(any(org.egov.user.domain.model.User.class))).thenThrow(exception);
+        when(userService.createCitizen(any(org.egov.user.domain.model.User.class), any())).thenThrow(exception);
 
         String fileContents = getFileContents("createValidatedCitizenSuccessRequest.json");
         mockMvc.perform(post("/citizen/_create")
@@ -94,17 +95,17 @@ public class UserRequestControllerTest {
                 .andExpect(content().json(getFileContents("createCitizenOtpFailureResponse.json")));
     }
 
-	private Date toDate(LocalDateTime localDateTime) {
-		final ZonedDateTime expectedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("Asia/Calcutta"));
-		return Date.from(expectedDateTime.toInstant());
-	}
+    private Date toDate(LocalDateTime localDateTime) {
+        final ZonedDateTime expectedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("Asia/Calcutta"));
+        return Date.from(expectedDateTime.toInstant());
+    }
 
     private User buildUser() {
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         c.set(1917, Calendar.MARCH, 8, 11, 15, 36);
-		final Date expectedDOB = toDate(LocalDateTime.of(1986, 8, 4, 5, 30));
+        final Date expectedDOB = toDate(LocalDateTime.of(1986, 8, 4, 5, 30));
 
-		c.set(2017, Calendar.FEBRUARY, 8, 11, 15, 36);
+        c.set(2017, Calendar.FEBRUARY, 8, 11, 15, 36);
         Date createdDate = c.getTime();
         c.set(2018, Calendar.FEBRUARY, 8, 11, 15, 36);
         Date pwdExpiryDate = c.getTime();
@@ -151,7 +152,7 @@ public class UserRequestControllerTest {
     @Test
     @WithMockUser
     public void testShouldUpdateACitizen() throws Exception {
-        when(userService.updateWithoutOtpValidation(any(org.egov.user.domain.model.User.class))).thenReturn(buildUser());
+        when(userService.updateWithoutOtpValidation(any(org.egov.user.domain.model.User.class), any())).thenReturn(buildUser());
 
         String fileContents = getFileContents("updateValidatedCitizenSuccessRequest.json");
         mockMvc.perform(post("/users/_updatenovalidate")
@@ -169,7 +170,7 @@ public class UserRequestControllerTest {
     public void testShouldThrowErrorWhileUpdatingWithDuplicateCitizen() throws Exception {
         DuplicateUserNameException exception = new DuplicateUserNameException(UserSearchCriteria.builder().userName
                 ("test").build());
-        when(userService.updateWithoutOtpValidation( any(org.egov.user.domain.model.User.class))).thenThrow(exception);
+        when(userService.updateWithoutOtpValidation(any(org.egov.user.domain.model.User.class), any())).thenThrow(exception);
 
         String fileContents = getFileContents("updateCitizenUnsuccessfulRequest.json");
         mockMvc.perform(post("/users/1/_updatenovalidate")
@@ -187,7 +188,7 @@ public class UserRequestControllerTest {
     public void testShouldThrowErrorWhileUpdatingWithInvalidCitizen() throws Exception {
         UserNotFoundException exception = new UserNotFoundException(UserSearchCriteria.builder().userName
                 ("test").build());
-        when(userService.updateWithoutOtpValidation(any(org.egov.user.domain.model.User.class))).thenThrow(exception);
+        when(userService.updateWithoutOtpValidation(any(org.egov.user.domain.model.User.class), any())).thenThrow(exception);
 
         String fileContents = getFileContents("updateCitizenUnsuccessfulRequest.json");
         mockMvc.perform(post("/users/1/_updatenovalidate")

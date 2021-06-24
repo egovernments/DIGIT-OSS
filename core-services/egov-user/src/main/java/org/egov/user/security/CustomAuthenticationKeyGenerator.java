@@ -14,8 +14,7 @@ import org.springframework.security.oauth2.provider.token.AuthenticationKeyGener
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomAuthenticationKeyGenerator implements AuthenticationKeyGenerator
-{
+public class CustomAuthenticationKeyGenerator implements AuthenticationKeyGenerator {
     private static final String CLIENT_ID = "client_id";
 
     private static final String SCOPE = "scope";
@@ -35,23 +34,21 @@ public class CustomAuthenticationKeyGenerator implements AuthenticationKeyGenera
         }
 
         String tenantId = authorizationRequest.getRequestParameters().get("tenantId");
-        if(tenantId != null && !tenantId.isEmpty()) {
+        if (tenantId != null && !tenantId.isEmpty()) {
             values.put("tenantId", tenantId);
         }
 
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("MD5");
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("MD5 algorithm not available.  Fatal (should be in the JDK).");
         }
 
         try {
             byte[] bytes = digest.digest(values.toString().getBytes("UTF-8"));
             return String.format("%032x", new BigInteger(1, bytes));
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException("UTF-8 encoding not available.  Fatal (should be in the JDK).");
         }
     }

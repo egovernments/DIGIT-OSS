@@ -6,6 +6,7 @@ import org.egov.pg.models.Bill;
 import org.egov.pg.models.BillDetail;
 import org.egov.pg.models.Receipt;
 import org.egov.pg.models.Transaction;
+import org.egov.pg.models.Transaction.TxnStatusEnum;
 import org.egov.pg.producer.Producer;
 import org.egov.pg.repository.TransactionRepository;
 import org.egov.pg.validator.TransactionValidator;
@@ -14,6 +15,7 @@ import org.egov.pg.web.models.TransactionRequest;
 import org.egov.pg.web.models.User;
 import org.egov.tracer.model.CustomException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -21,6 +23,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.TransientDataAccessResourceException;
 
+import lombok.extern.slf4j.Slf4j;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -30,9 +33,11 @@ import java.util.Optional;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
+@Slf4j
 public class TransactionServiceTest {
 
     private TransactionService transactionService;
@@ -54,9 +59,9 @@ public class TransactionServiceTest {
 
     @Mock
     private TransactionValidator validator;
-
+    
     @Mock
-    private CollectionService collectionService;
+    private PaymentsService paymentsService;
 
     private User user;
     private RequestInfo requestInfo;
@@ -65,16 +70,12 @@ public class TransactionServiceTest {
     public void setUp() {
         user = User.builder().userName("USER001").mobileNumber("9XXXXXXXXX").name("XYZ").tenantId("pb").emailId("").build();
         requestInfo = new RequestInfo("", "", 0L, "", "", "", "", "", "", null);
-
-
-        when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of("ORDERID"));
-
-        Mockito.doNothing().when(producer).push(any(String.class), any(Object.class));
-
-        Mockito.doNothing().when(enrichmentService).enrichCreateTransaction(any(TransactionRequest.class));
+        lenient().when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of("ORDERID"));
+        lenient().doNothing().when(producer).push(any(String.class), any(Object.class));
+        lenient().doNothing().when(enrichmentService).enrichCreateTransaction(any(TransactionRequest.class));
 
         this.transactionService = new TransactionService(validator, gatewayService, producer, transactionRepository,
-                collectionService,
+        		paymentsService,
                 enrichmentService,
                 appProperties);
     }
@@ -119,10 +120,9 @@ public class TransactionServiceTest {
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
         Mockito.doThrow(new CustomException("INVALID_GATEWAY", "Invalid Gateway")).when(validator).validateCreateTxn(any(TransactionRequest.class));
-        when(gatewayService.initiateTxn(any(Transaction.class))).thenThrow(new CustomException());
+        lenient().when(gatewayService.initiateTxn(any(Transaction.class))).thenThrow(new CustomException());
 
         Transaction resp = transactionService.initiateTransaction(transactionRequest);
-
     }
 
     /**
@@ -130,7 +130,6 @@ public class TransactionServiceTest {
      */
     @Test
     public void initiateTransactionSkipGatewayTest(){
-        String receiptNumber = "XYZ";
         Transaction txn = Transaction.builder().txnAmount("100")
                 .billId("ORDER0012")
                 .productInfo("Property Tax Payment")
@@ -139,24 +138,13 @@ public class TransactionServiceTest {
                 .build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
-        BillDetail billDetail = BillDetail.builder().receiptNumber(receiptNumber).build();
-
-        Bill bill = Bill.builder().billDetails(Collections.singletonList(billDetail)).build();
-
-        Receipt receipt = Receipt.builder()
-                .transactionId("DEFA15273")
-                .bill(Collections.singletonList(bill))
-                .build();
-
         Mockito.doNothing().when(validator).validateCreateTxn(any(TransactionRequest.class));
 
-        when(gatewayService.initiateTxn(any(Transaction.class))).thenThrow(new CustomException());
-        when(validator.skipGateway(txn)).thenReturn(true);
-        when(collectionService.generateReceipt(any(RequestInfo.class), any(Transaction.class))).thenReturn
-                (Collections.singletonList(receipt));
+        lenient().when(gatewayService.initiateTxn(any(Transaction.class))).thenThrow(new CustomException());
+        lenient().when(validator.skipGateway(txn)).thenReturn(true);
         Transaction resp = transactionService.initiateTransaction(transactionRequest);
-
-        assertTrue(resp.getReceipt().equalsIgnoreCase(receiptNumber));
+                
+        assertTrue(resp.getTxnStatus().equals(TxnStatusEnum.SUCCESS));
 
     }
 
@@ -212,22 +200,11 @@ public class TransactionServiceTest {
                 .gateway("PAYTM")
                 .build();
 
-
-        BillDetail billDetail = BillDetail.builder().receiptNumber("XYZ").build();
-
-        Bill bill = Bill.builder().billDetails(Collections.singletonList(billDetail)).build();
-
-        Receipt receipt = Receipt.builder()
-                .transactionId("DEFA15273")
-                .bill(Collections.singletonList(bill))
-                .build();
-
         when(validator.validateUpdateTxn(any(Map.class))).thenReturn(txnStatus);
         when(validator.skipGateway(any(Transaction.class))).thenReturn(false);
         when(validator.shouldGenerateReceipt(any(Transaction.class), any(Transaction.class))).thenReturn(true);
         when(gatewayService.getLiveStatus(txnStatus, Collections.singletonMap("ORDERID", "PT_001"))).thenReturn(finalTxnStatus);
-        when(collectionService.generateReceipt(any(RequestInfo.class), any(Transaction.class))).thenReturn
-                (Collections.singletonList(receipt));
+
 
         assertEquals(transactionService.updateTransaction(requestInfo, Collections.singletonMap
                 ("ORDERID", "PT_001")).get(0).getTxnStatus(), Transaction.TxnStatusEnum.SUCCESS);

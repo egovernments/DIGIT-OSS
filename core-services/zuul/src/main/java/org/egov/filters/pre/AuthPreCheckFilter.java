@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.egov.Utils.ExceptionUtils;
+import org.egov.Utils.UserUtils;
+import org.egov.contract.User;
 import org.egov.model.RequestBodyInspector;
 import org.egov.wrapper.CustomRequestWrapper;
 import org.slf4j.Logger;
@@ -44,12 +46,15 @@ public class AuthPreCheckFilter extends ZuulFilter {
     private HashSet<String> mixedModeEndpointsWhitelist;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ObjectMapper objectMapper;
+    private UserUtils userUtils;
 
 
     public AuthPreCheckFilter(HashSet<String> openEndpointsWhitelist,
-                              HashSet<String> mixedModeEndpointsWhitelist) {
+                              HashSet<String> mixedModeEndpointsWhitelist,
+                              UserUtils userUtils) {
         this.openEndpointsWhitelist = openEndpointsWhitelist;
         this.mixedModeEndpointsWhitelist = mixedModeEndpointsWhitelist;
+        this.userUtils = userUtils;
         objectMapper = new ObjectMapper();
     }
 
@@ -88,6 +93,7 @@ public class AuthPreCheckFilter extends ZuulFilter {
             if (mixedModeEndpointsWhitelist.contains(getRequestURI())) {
                 logger.info(ROUTING_TO_ANONYMOUS_ENDPOINT_MESSAGE, getRequestURI());
                 setShouldDoAuth(false);
+                setAnonymousUser();
             } else {
                 logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, getRequestURI());
                 ExceptionUtils.raiseCustomException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_MESSAGE);
@@ -139,6 +145,7 @@ public class AuthPreCheckFilter extends ZuulFilter {
         try {
             String requestSanitizedBody = objectMapper.writeValueAsString(requestBodyInspector.getRequestBody());
             ctx.set(CURRENT_REQUEST_SANITIZED_BODY, requestBodyInspector.getRequestBody());
+            ctx.set(CURRENT_REQUEST_SANITIZED_BODY_STR, requestSanitizedBody);
             requestWrapper.setPayload(requestSanitizedBody);
         } catch (JsonProcessingException e) {
             logger.error(FAILED_TO_SERIALIZE_REQUEST_BODY_MESSAGE, e);
@@ -168,6 +175,12 @@ public class AuthPreCheckFilter extends ZuulFilter {
 
     private String getRequestMethod() {
         return getRequest().getMethod();
+    }
+
+    private void setAnonymousUser(){
+        User systemUser = userUtils.fetchSystemUser();
+        RequestContext ctx = RequestContext.getCurrentContext();
+        ctx.set(USER_INFO_KEY, systemUser);;
     }
 
 }

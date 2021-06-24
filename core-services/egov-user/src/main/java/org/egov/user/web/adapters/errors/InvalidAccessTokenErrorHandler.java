@@ -15,7 +15,7 @@ public class InvalidAccessTokenErrorHandler {
     private static final String ACCESS_TOKEN_NOT_FOUND_CODE = "ACCESS_TOKEN_NOT_FOUND";
     private static final String ACCESS_TOKEN_NOT_FOUND = "Access Token Not Found";
 
-	public ErrorResponse adapt() {
+    public ErrorResponse adapt() {
         final Error error = getError();
         return new ErrorResponse(null, error);
     }

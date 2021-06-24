@@ -1,5 +1,6 @@
 package org.egov.web.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.domain.service.OtpService;
 import org.egov.web.contract.OtpRequest;
 import org.egov.web.contract.OtpResponse;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 public class OtpController {
 
     private OtpService otpService;
@@ -24,7 +26,8 @@ public class OtpController {
     @ResponseStatus(HttpStatus.CREATED)
     public OtpResponse sendOtp(@RequestBody OtpRequest otpRequest) {
         otpService.sendOtp(otpRequest.toDomain());
-        return new OtpResponse(null, true);
+        return OtpResponse.builder().
+                responseInfo(null).successful(true).build();
     }
 
 }

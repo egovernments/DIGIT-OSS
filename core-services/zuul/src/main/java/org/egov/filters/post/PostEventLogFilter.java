@@ -42,7 +42,7 @@ public class PostEventLogFilter extends ZuulFilter {
     public boolean shouldFilter() {
         RequestContext ctx = RequestContext.getCurrentContext();
         String requestURL = ctx.getRequest().getRequestURI();
-        Boolean toLog = urlsWhiteList.stream().anyMatch(url -> requestURL.startsWith(url));
+        Boolean toLog = urlsWhiteList.stream().anyMatch(url -> requestURL.startsWith(url)) || urlsWhiteList.isEmpty();
         return eventLogEnabled && toLog;
     }
 

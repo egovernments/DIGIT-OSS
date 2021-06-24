@@ -1,33 +1,30 @@
 package org.egov.web.notification.sms.service.impl;
 
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
+import lombok.extern.slf4j.Slf4j;
 import org.egov.web.notification.sms.config.SMSConstants;
 import org.egov.web.notification.sms.config.SMSProperties;
 import org.egov.web.notification.sms.models.Sms;
-import org.egov.web.notification.sms.service.SMSBodyBuilder;
-import org.egov.web.notification.sms.service.SMSService;
+import org.egov.web.notification.sms.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import lombok.extern.slf4j.Slf4j;
+import java.net.*;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
-@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "MSDG")
-public class MSDGSMSServiceImpl implements SMSService {
+@ConditionalOnProperty(value = "sms.provider.class", matchIfMissing = true, havingValue = "MSDG")
+public class MSDGSMSServiceImpl extends BaseSMSService {
 	
 	@Autowired
 	private SMSProperties smsProperties;
@@ -35,19 +32,48 @@ public class MSDGSMSServiceImpl implements SMSService {
 	@Autowired
 	private SMSBodyBuilder bodyBuilder;
 	
-	@Autowired
-	private RestTemplate restTemplate;
 
-	@Override
-	public void sendSMS(Sms sms) {
-		if (!sms.isValid() || Pattern.matches("^(3)(\\d){9}$", sms.getMobileNumber())) {
-			log.error(String.format("Sms %s is not valid", sms));
-			return;
-		}
-		submitToExternalSmsService(sms);
-	}
+    /**
+     * MD5 encryption algorithm
+     *
+     * @param text
+     * @return
+     */
+    private static String MD5(String text) {
+        MessageDigest md;
+        byte[] md5 = new byte[64];
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+            md.update(text.getBytes("iso-8859-1"), 0, text.length());
+            md5 = md.digest();
+        } catch (Exception e) {
+            log.error("Exception while encrypting the pwd: ", e);
+        }
+        return convertedToHex(md5);
 
-	private void submitToExternalSmsService(Sms sms) {
+    }
+
+    private static String convertedToHex(byte[] data) {
+        StringBuffer buf = new StringBuffer();
+
+        for (int i = 0; i < data.length; i++) {
+            int halfOfByte = (data[i] >>> 4) & 0x0F;
+            int twoHalfBytes = 0;
+
+            do {
+                if (0 <= halfOfByte && halfOfByte <= 9)
+                    buf.append((char) ('0' + halfOfByte));
+                else
+                    buf.append((char) ('a' + (halfOfByte - 10)));
+
+                halfOfByte = data[i] & 0x0F;
+
+            } while (twoHalfBytes++ < 1);
+        }
+        return buf.toString();
+    }
+
+    protected void submitToExternalSmsService(Sms sms) {
         String finalmessage = "";
         for(int i = 0 ; i< sms.getMessage().length();i++){
             char ch = sms.getMessage().charAt(i);
@@ -56,25 +82,12 @@ public class MSDGSMSServiceImpl implements SMSService {
             finalmessage = finalmessage+sss;
         }
         sms.setMessage(finalmessage);      
-		try {
 			String url = smsProperties.getUrl();
 			final MultiValueMap<String, String> requestBody = bodyBuilder.getSmsRequestBody(sms);
 			postProcessor(requestBody);
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(requestBody, getHttpHeaders());
-			String response = restTemplate.postForObject(url, request, String.class);
-			log.info("response: " + response);
-		} catch (Exception e) {
-			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
-		}
-	}
-	
-    private HttpHeaders getHttpHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        return headers;
+        executeAPI(URI.create(url), HttpMethod.POST, request, String.class);
     }
-    
-    
 	
     /**
      * Performs post processing on the default parameters
@@ -113,7 +126,6 @@ public class MSDGSMSServiceImpl implements SMSService {
 		}		
 	}
 	
-	
 	/**
 	 * A map to fetch the configured keys for attributes.
 	 * 
@@ -140,7 +152,6 @@ public class MSDGSMSServiceImpl implements SMSService {
 		}
 		return configMap;
 	}
-	
 	
 	/**
 	 * Hash generator
@@ -173,45 +184,4 @@ public class MSDGSMSServiceImpl implements SMSService {
 		return sb.toString();
 	}
 	
-
-	/**
-	 * MD5 encryption algorithm
-	 * 
-	 * @param text
-	 * @return
-	 */
-	private static String MD5(String text) {
-		MessageDigest md;
-		byte[] md5 = new byte[64];
-		try {
-			md = MessageDigest.getInstance("SHA-1");
-			md.update(text.getBytes("iso-8859-1"), 0, text.length());
-			md5 = md.digest();
-		}catch(Exception e) {
-			log.error("Exception while encrypting the pwd: ",e);
-		}
-		return convertedToHex(md5);
-
-	}
-
-	private static String convertedToHex(byte[] data) {
-		StringBuffer buf = new StringBuffer();
-
-		for (int i = 0; i < data.length; i++) {
-			int halfOfByte = (data[i] >>> 4) & 0x0F;
-			int twoHalfBytes = 0;
-
-			do {
-				if (0 <= halfOfByte && halfOfByte <= 9)
-					buf.append((char) ('0' + halfOfByte));
-				else 
-					buf.append((char) ('a' + (halfOfByte - 10)));
-
-				halfOfByte = data[i] & 0x0F;
-
-			} while (twoHalfBytes++ < 1);
-		}
-		return buf.toString();
-	}
-
 }

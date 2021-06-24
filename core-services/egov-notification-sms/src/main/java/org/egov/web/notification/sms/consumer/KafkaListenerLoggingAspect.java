@@ -19,8 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Aspect
-@Component
+//@Aspect
+//@Component
 @Slf4j
 public class KafkaListenerLoggingAspect {
 
@@ -59,8 +59,7 @@ public class KafkaListenerLoggingAspect {
             final Object result = pjp.proceed();
             log.info(PROCESSED_SUCCESS_MESSAGE);
             return result;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error(EXCEPTION_MESSAGE, e);
             throw e;
         }

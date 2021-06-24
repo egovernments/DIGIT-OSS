@@ -12,25 +12,25 @@ import org.egov.user.domain.model.enums.UserType;
 @Setter
 public class
 LoggedInUserUpdatePasswordRequest {
-	@JsonProperty("RequestInfo")
-	private RequestInfo requestInfo;
-	private String existingPassword;
-	private String newPassword;
-	private String tenantId;
-	private UserType type;
+    @JsonProperty("RequestInfo")
+    private RequestInfo requestInfo;
+    private String existingPassword;
+    private String newPassword;
+    private String tenantId;
+    private UserType type;
 
-	public org.egov.user.domain.model.LoggedInUserUpdatePasswordRequest toDomain() {
-		return org.egov.user.domain.model.LoggedInUserUpdatePasswordRequest.builder()
-				.existingPassword(existingPassword)
-				.newPassword(newPassword)
-				.userName(getUsername())
-				.tenantId(tenantId)
+    public org.egov.user.domain.model.LoggedInUserUpdatePasswordRequest toDomain() {
+        return org.egov.user.domain.model.LoggedInUserUpdatePasswordRequest.builder()
+                .existingPassword(existingPassword)
+                .newPassword(newPassword)
+                .userName(getUsername())
+                .tenantId(tenantId)
                 .type(type)
-				.build();
-	}
+                .build();
+    }
 
-	private String getUsername() {
-		return requestInfo == null || requestInfo.getUserInfo() == null ? null : requestInfo.getUserInfo().getUserName();
-	}
+    private String getUsername() {
+        return requestInfo == null || requestInfo.getUserInfo() == null ? null : requestInfo.getUserInfo().getUserName();
+    }
 }
 

@@ -29,7 +29,7 @@ public class BusinessUtil {
      */
     public BusinessService getBusinessService(String tenantId,String businessService){
         BusinessServiceSearchCriteria criteria = new BusinessServiceSearchCriteria();
-        criteria.setTenantId(tenantId);
+        criteria.setTenantIds(Collections.singletonList(tenantId));
         criteria.setBusinessServices(Collections.singletonList(businessService));
         List<BusinessService> businessServices = businessServiceRepository.getBusinessServices(criteria);
         if(CollectionUtils.isEmpty(businessServices))

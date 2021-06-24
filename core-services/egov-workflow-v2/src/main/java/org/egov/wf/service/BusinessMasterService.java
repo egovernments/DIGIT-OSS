@@ -7,6 +7,8 @@ import org.egov.wf.web.models.BusinessService;
 import org.egov.wf.web.models.BusinessServiceRequest;
 import org.egov.wf.web.models.BusinessServiceSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +42,7 @@ public class BusinessMasterService {
      * @param request The BusinessServiceRequest to be persisted
      * @return The enriched object which is persisted
      */
+    @CacheEvict("businessService")
     public List<BusinessService> create(BusinessServiceRequest request){
        enrichmentService.enrichCreateBusinessService(request);
        producer.push(config.getSaveBusinessServiceTopic(),request);
@@ -51,8 +54,9 @@ public class BusinessMasterService {
      * @param criteria The search criteria
      * @return Data fetched from db
      */
+    @Cacheable(value = "businessService")
     public List<BusinessService> search(BusinessServiceSearchCriteria criteria){
-        String tenantId = criteria.getTenantId();
+        String tenantId = criteria.getTenantIds().get(0);
         List<BusinessService> businessServices = repository.getBusinessServices(criteria);
         if(config.getIsStateLevel()){
             enrichmentService.enrichTenantIdForStateLevel(tenantId,businessServices);
@@ -60,6 +64,7 @@ public class BusinessMasterService {
         return businessServices;
     }
 
+    @CacheEvict("businessService")
     public List<BusinessService> update(BusinessServiceRequest request){
         enrichmentService.enrichUpdateBusinessService(request);
         producer.push(config.getUpdateBusinessServiceTopic(),request);

@@ -1,10 +1,12 @@
 package org.egov.pg.service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pg.config.AppProperties;
-import org.egov.pg.constants.PgConstants;
-import org.egov.pg.models.Receipt;
 import org.egov.pg.models.Transaction;
 import org.egov.pg.models.TransactionDump;
 import org.egov.pg.models.TransactionDumpRequest;
@@ -14,15 +16,11 @@ import org.egov.pg.validator.TransactionValidator;
 import org.egov.pg.web.models.TransactionCriteria;
 import org.egov.pg.web.models.TransactionRequest;
 import org.egov.tracer.model.CustomException;
-import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Handles all transaction related requests
@@ -37,20 +35,21 @@ public class TransactionService {
     private EnrichmentService enrichmentService;
     private AppProperties appProperties;
     private TransactionRepository transactionRepository;
-    private CollectionService collectionService;
+    private PaymentsService paymentsService;
+
 
 
     @Autowired
     TransactionService(TransactionValidator validator, GatewayService gatewayService, Producer producer,
                        TransactionRepository
-                               transactionRepository, CollectionService collectionService,
+                               transactionRepository, PaymentsService paymentsService,
                        EnrichmentService enrichmentService,
                        AppProperties appProperties) {
         this.validator = validator;
         this.gatewayService = gatewayService;
         this.producer = producer;
         this.transactionRepository = transactionRepository;
-        this.collectionService = collectionService;
+        this.paymentsService = paymentsService;
         this.enrichmentService = enrichmentService;
         this.appProperties = appProperties;
     }
@@ -83,7 +82,7 @@ public class TransactionService {
 
         if(validator.skipGateway(transaction)){
             transaction.setTxnStatus(Transaction.TxnStatusEnum.SUCCESS);
-            generateReceipt(requestInfo, transaction);
+            paymentsService.registerPayment(transactionRequest);
         }
         else{
             URI uri = gatewayService.initiateTxn(transaction);
@@ -154,7 +153,8 @@ public class TransactionService {
 
         // Check if transaction is successful, amount matches etc
         if (validator.shouldGenerateReceipt(currentTxnStatus, newTxn)) {
-            generateReceipt(requestInfo, newTxn);
+        	TransactionRequest request = TransactionRequest.builder().requestInfo(requestInfo).transaction(newTxn).build();
+        	paymentsService.registerPayment(request);
         }
 
         TransactionDump dump = TransactionDump.builder()
@@ -167,17 +167,6 @@ public class TransactionService {
         producer.push(appProperties.getUpdateTxnDumpTopic(), new TransactionDumpRequest(requestInfo, dump));
 
         return Collections.singletonList(newTxn);
-    }
-
-    private void generateReceipt(RequestInfo requestInfo, Transaction transaction) {
-        try {
-            List<Receipt> receipts = collectionService.generateReceipt(requestInfo, transaction);
-            transaction.setReceipt(receipts.get(0).getBill().get(0).getBillDetails().get(0).getReceiptNumber());
-        } catch (CustomException | ServiceCallException e) {
-            log.error("Unable to generate receipt ", e);
-            transaction.setTxnStatusMsg(PgConstants.TXN_RECEIPT_GEN_FAILED);
-        }
-
     }
 
 }

@@ -39,8 +39,9 @@ hs_err_pid*
 .classpath
 .project
 .settings/
-.mvnw/
+.mvnw
 target/
+*.mvn
 
 # Logs
 logs
@@ -190,3 +191,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+mvnw.cmd
+.mvn/

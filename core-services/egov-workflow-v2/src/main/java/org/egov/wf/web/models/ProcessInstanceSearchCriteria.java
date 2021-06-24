@@ -40,6 +40,12 @@ public class ProcessInstanceSearchCriteria {
     @JsonProperty("limit")
     private Integer limit;
 
+    @JsonProperty("businessService")
+    private String businessService;
+
+    @JsonProperty("moduleName")
+    private String moduleName;
+
 
     public Boolean isNull(){
         if(this.getBusinessIds()==null && this.getIds()==null && this.getAssignee()==null &&

@@ -93,7 +93,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(ciphertextNode, pathsToBeDecrypted);
 
         if(! jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
-            JsonNode returnedDecryptedNode = objectMapper.valueToTree(encryptionServiceRestConnection.callDecrypt(jsonNode));
+            JsonNode returnedDecryptedNode = encryptionServiceRestConnection.callDecrypt(jsonNode);
             decryptNode = JacksonUtils.merge(returnedDecryptedNode, decryptNode);
         }
 

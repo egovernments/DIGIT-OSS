@@ -25,7 +25,6 @@
       "correspondenceAddress": "sub district",
       "correspondenceCity": "city2",
       "correspondencePinCode": "pincode 2",
-      "addresses": null,
       "active": true,
       "locale": "en_IN",
       "type": "CITIZEN",
@@ -44,7 +43,6 @@
           "name": "name of the role 1"
         }
       ]
-      
     }
   ]
 }

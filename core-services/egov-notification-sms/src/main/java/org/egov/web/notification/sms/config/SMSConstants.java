@@ -14,7 +14,4 @@ public class SMSConstants {
 	public static final String SENDER_MOBNO_IDENTIFIER = "senderMobileNoId";
 
 
-
-
-
 }

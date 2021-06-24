@@ -41,5 +41,5 @@
 package org.egov.user.domain.model.enums;
 
 public enum GuardianRelation {
-   Father,Mother,Husband,Other;
+    FATHER, MOTHER, HUSBAND, OTHER;
 }

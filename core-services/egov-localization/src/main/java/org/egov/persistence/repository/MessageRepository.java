@@ -51,7 +51,7 @@ public class MessageRepository {
 		setUUID(entityMessages);
 		log.info("entityMessages: "+entityMessages);
 		try {
-			messageJpaRepository.save(entityMessages);
+			messageJpaRepository.saveAll(entityMessages);
 		} catch (DataIntegrityViolationException ex) {
 			new DataIntegrityViolationExceptionTransformer(ex).transform();
 		}
@@ -63,7 +63,7 @@ public class MessageRepository {
 		if (CollectionUtils.isEmpty(messages)) {
 			return;
 		}
-		messageJpaRepository.delete(messages);
+		messageJpaRepository.deleteAll(messages);
 	}
 
 	public void update(String tenant, String locale, String module, List<Message> domainMessages,
@@ -111,7 +111,7 @@ public class MessageRepository {
 			setAuditFieldsForUpdate(authenticatedUser, entityMessage);
 
 		});
-		messageJpaRepository.save(entityMessages);
+		messageJpaRepository.saveAll(entityMessages);
 	}
 
 	private void setAuditFieldsForUpdate(AuthenticatedUser authenticatedUser,

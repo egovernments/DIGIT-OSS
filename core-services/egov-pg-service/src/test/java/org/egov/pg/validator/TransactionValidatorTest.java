@@ -1,11 +1,24 @@
 package org.egov.pg.validator;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
-import org.egov.pg.models.*;
+import org.egov.pg.config.AppProperties;
+import org.egov.pg.models.Bill;
+import org.egov.pg.models.BillDetail;
+import org.egov.pg.models.TaxAndPayment;
+import org.egov.pg.models.Transaction;
 import org.egov.pg.repository.TransactionRepository;
-import org.egov.pg.service.CollectionService;
 import org.egov.pg.service.GatewayService;
+import org.egov.pg.service.PaymentsService;
 import org.egov.pg.web.models.TransactionCriteria;
 import org.egov.pg.web.models.TransactionRequest;
 import org.egov.tracer.model.CustomException;
@@ -15,15 +28,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
-
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionValidatorTest {
 
@@ -32,9 +36,12 @@ public class TransactionValidatorTest {
 
     @Mock
     private GatewayService gatewayService;
-
+    
     @Mock
-    private CollectionService collectionService;
+    private PaymentsService paymentsService;
+    
+    @Mock
+    private AppProperties props;
 
     private TransactionValidator validator;
     private List<Bill> bills;
@@ -42,10 +49,9 @@ public class TransactionValidatorTest {
 
     @Before
     public void setUp() {
-        validator = new TransactionValidator(gatewayService, transactionRepository, collectionService);
+        validator = new TransactionValidator(gatewayService, transactionRepository, paymentsService, props);
         TaxAndPayment taxAndPayment = TaxAndPayment.builder()
                 .amountPaid(new BigDecimal("100"))
-                .businessService("PT")
                 .taxAmount(new BigDecimal("100"))
                 .build();
         txn = Transaction.builder().txnAmount("100")
@@ -58,7 +64,7 @@ public class TransactionValidatorTest {
                 .consumerCode("PT-21055")
                 .taxAndPayments(Collections.singletonList(taxAndPayment))
                 .build();
-        BillDetail billDetail = BillDetail.builder().partPaymentAllowed(false).totalAmount(new BigDecimal(100)).build();
+        BillDetail billDetail = BillDetail.builder().amountPaid(new BigDecimal(100)).build();
         bills = Collections.singletonList(Bill.builder().billDetails(Collections.singletonList(billDetail))
                 .build());
     }
@@ -72,7 +78,6 @@ public class TransactionValidatorTest {
 
         when(transactionRepository.fetchTransactions(any(TransactionCriteria.class))).thenReturn(Collections.emptyList());
         when(gatewayService.isGatewayActive(txn.getGateway())).thenReturn(true);
-        when(collectionService.validateProvisionalReceipt(transactionRequest)).thenReturn(Collections.singletonList(new Receipt()));
 
         validator.validateCreateTxn(transactionRequest);
 
@@ -81,7 +86,7 @@ public class TransactionValidatorTest {
     /**
      * Txn Amount lesser than bill amount but partial payment is enabled
      */
-    @Test(expected = CustomException.class)
+    @Test
     public void validateCreateTxnByValidatingProvReceipt() {
         User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber("9999999999").build();
         RequestInfo requestInfo = RequestInfo.builder().userInfo(user).build();
@@ -89,7 +94,6 @@ public class TransactionValidatorTest {
 
         when(transactionRepository.fetchTransactions(any(TransactionCriteria.class))).thenReturn(Collections.emptyList());
         when(gatewayService.isGatewayActive(txn.getGateway())).thenReturn(true);
-        when(collectionService.validateProvisionalReceipt(transactionRequest)).thenThrow(new CustomException());
 
 
         validator.validateCreateTxn(transactionRequest);
@@ -107,8 +111,6 @@ public class TransactionValidatorTest {
 
         when(transactionRepository.fetchTransactions(any(TransactionCriteria.class))).thenReturn(Collections.singletonList(txn));
         when(gatewayService.isGatewayActive(txn.getGateway())).thenReturn(true);
-        when(collectionService.validateProvisionalReceipt(transactionRequest)).thenReturn(Collections.singletonList(new Receipt()));
-
 
         validator.validateCreateTxn(transactionRequest);
 
@@ -124,7 +126,6 @@ public class TransactionValidatorTest {
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
         when(gatewayService.isGatewayActive(txn.getGateway())).thenReturn(false);
-        when(collectionService.validateProvisionalReceipt(transactionRequest)).thenReturn(Collections.singletonList(new Receipt()));
 
         validator.validateCreateTxn(transactionRequest);
 

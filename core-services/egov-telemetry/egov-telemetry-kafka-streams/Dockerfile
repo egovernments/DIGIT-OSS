@@ -1,9 +1,26 @@
-FROM openjdk:8
-MAINTAINER Sivaprakash Ramasamy<sivaprakash.ramasamy@tarento.com>
- # INSTRUCTIONS ON HOW TO BUILD JAR:
-# Move to the location where pom.xml is exist in project and build project using below command
-# "mvn clean package"
-COPY target/egov-telemetry-kafka-streams-0.0.1-SNAPSHOT-jar-with-dependencies.jar /opt/egov/egov-telemetry-kafka-streams.jar
-COPY start.sh /usr/bin/start.sh
-RUN chmod +x /usr/bin/start.sh
-CMD ["/usr/bin/start.sh"]
+FROM openjdk:8 AS build 
+ARG WORK_DIR
+WORKDIR /app
+
+# copy the project files
+COPY ${WORK_DIR}/pom.xml ./pom.xml
+COPY start.sh ./start.sh
+
+# not useful for stateless builds
+# RUN mvn -B dependency:go-offline
+
+COPY ${WORK_DIR}/src ./src
+RUN mvn -B -f /app/pom.xml package
+
+
+# Create runtime image
+FROM egovio/8-openjdk-alpine
+
+
+WORKDIR /opt/egov
+
+COPY --from=build /app/target/*.jar /app/start.sh /opt/egov/
+
+RUN chmod +x /opt/egov/start.sh
+
+CMD ["/opt/egov/start.sh"]

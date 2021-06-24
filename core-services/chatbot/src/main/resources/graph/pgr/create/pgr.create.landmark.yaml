@@ -1,0 +1,9 @@
+name : pgr.create.landmark
+description : "Address of the complaint"
+nodeType : step
+
+optional : true
+
+type : text
+
+message : chatbot.messages.pgrCreateLandmark

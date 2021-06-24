@@ -16,39 +16,39 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileStoreRepository {
 
-	@Value("${egov.filestore.host}")
-	private String fileStoreHost;
+    @Value("${egov.filestore.host}")
+    private String fileStoreHost;
 
-	@Value("${egov.filestore.path}")
-	private String fileStorePath;
+    @Value("${egov.filestore.path}")
+    private String fileStorePath;
 
-	@Autowired
-	private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
-	/**
-	 * Get FileStoreUrls By passing FileStore Id's
-	 * 
-	 * @param tenantId
-	 * @param fileStoreId
-	 * @return
-	 * @throws Exception
-	 */
-	public Map<String, String> getUrlByFileStoreId(String tenantId, List<String> fileStoreIds) throws Exception {
-		Map<String, String> fileStoreUrls = null;
+    /**
+     * Get FileStoreUrls By passing FileStore Id's
+     *
+     * @param tenantId
+     * @param fileStoreId
+     * @return
+     * @throws Exception
+     */
+    public Map<String, String> getUrlByFileStoreId(String tenantId, List<String> fileStoreIds) throws Exception {
+        Map<String, String> fileStoreUrls = null;
 
-		String idLIst = fileStoreIds.toString().substring(1, fileStoreIds.toString().length() - 1).replace(", ", ",");
-		log.info("idLIst: " + idLIst);
-		String Url = fileStoreHost + fileStorePath + "?tenantId=" + tenantId + "&fileStoreIds=" + idLIst;
+        String idLIst = fileStoreIds.toString().substring(1, fileStoreIds.toString().length() - 1).replace(", ", ",");
+        log.info("idLIst: " + idLIst);
+        String Url = fileStoreHost + fileStorePath + "?tenantId=" + tenantId + "&fileStoreIds=" + idLIst;
 
-		try {
-			fileStoreUrls = restTemplate.getForObject(Url, Map.class);
-		} catch (HttpClientErrorException e) {
-			throw new RuntimeException(e.getResponseBodyAsString());
-		}
-		log.info("filrStoreUrls " + fileStoreUrls);
-		if (null != fileStoreUrls && !fileStoreUrls.isEmpty())
-			return fileStoreUrls;
-		return null;
-	}
+        try {
+            fileStoreUrls = restTemplate.getForObject(Url, Map.class);
+        } catch (HttpClientErrorException e) {
+            throw new RuntimeException(e.getResponseBodyAsString());
+        }
+        log.info("filrStoreUrls " + fileStoreUrls);
+        if (null != fileStoreUrls && !fileStoreUrls.isEmpty())
+            return fileStoreUrls;
+        return null;
+    }
 
 }

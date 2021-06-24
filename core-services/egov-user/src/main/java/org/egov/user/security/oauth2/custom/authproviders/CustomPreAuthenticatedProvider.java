@@ -1,14 +1,20 @@
 package org.egov.user.security.oauth2.custom.authproviders;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.RequestInfo;
+import org.egov.tracer.model.CustomException;
 import org.egov.user.domain.exception.DuplicateUserNameException;
 import org.egov.user.domain.exception.UserNotFoundException;
 import org.egov.user.domain.model.SecureUser;
 import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.UserType;
 import org.egov.user.domain.service.UserService;
+import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
 import org.egov.user.web.contract.auth.Role;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +25,7 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +38,9 @@ public class CustomPreAuthenticatedProvider implements AuthenticationProvider {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EncryptionDecryptionUtil encryptionDecryptionUtil;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -55,6 +65,16 @@ public class CustomPreAuthenticatedProvider implements AuthenticationProvider {
         User user;
         try {
             user = userService.getUniqueUser(userName, tenantId, UserType.fromValue(userType));
+            /* decrypt here */
+            Set<org.egov.user.domain.model.Role> domain_roles = user.getRoles();
+            List<org.egov.common.contract.request.Role> contract_roles = new ArrayList<>();
+            for (org.egov.user.domain.model.Role role : domain_roles) {
+                contract_roles.add(org.egov.common.contract.request.Role.builder().code(role.getCode()).name(role.getName()).build());
+            }
+            org.egov.common.contract.request.User userInfo = org.egov.common.contract.request.User.builder().uuid(user.getUuid())
+                    .type(user.getType() != null ? user.getType().name() : null).roles(contract_roles).build();
+            RequestInfo requestInfo = RequestInfo.builder().userInfo(userInfo).build();
+            user = encryptionDecryptionUtil.decryptObject(user, "User", User.class, requestInfo);
         } catch (UserNotFoundException e) {
             log.error("User not found", e);
             throw new OAuth2Exception("Invalid login credentials");

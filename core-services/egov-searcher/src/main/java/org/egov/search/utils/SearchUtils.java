@@ -1,6 +1,7 @@
 package org.egov.search.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,108 +15,178 @@ import org.egov.search.model.SearchDefinition;
 import org.egov.search.model.SearchParams;
 import org.egov.search.model.SearchRequest;
 import org.egov.tracer.model.CustomException;
-import org.postgresql.util.PGobject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
-
 import org.json.JSONArray;
+import org.postgresql.util.PGobject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
-@Component
-public class SearchUtils {
+import lombok.extern.slf4j.Slf4j;
 
-	public static final Logger logger = LoggerFactory.getLogger(SearchUtils.class);
+@Component
+@Slf4j
+public class SearchUtils {
 
 	@Value("${pagination.default.page.size}")
 	private String defaultPageSize;
 
 	@Value("${pagination.default.offset}")
 	private String defaultOffset;
-
-	public String buildQuery(SearchRequest searchRequest, SearchParams searchParam, Query query) {
+	
+	@Autowired
+	private ObjectMapper mapper;
+	
+	@Value("${operaters.list}")
+	private List<String> operators;
+	
+	/**
+	 * Builds the query reqd for search
+	 * 
+	 * @param searchRequest
+	 * @param searchParam
+	 * @param query
+	 * @param preparedStatementValues
+	 * @return
+	 */
+	public String buildQuery(SearchRequest searchRequest, SearchParams searchParam, Query query, Map<String, Object> preparedStatementValues) {
 		StringBuilder queryString = new StringBuilder();
 		StringBuilder where = new StringBuilder();
 		String finalQuery = null;
 		queryString.append(query.getBaseQuery());
-		String whereClause = buildWhereClause(searchRequest, searchParam);
-		String paginationClause = getPaginationClause(searchRequest, searchParam.getPagination());
-		if (null == whereClause) {
-			return whereClause;
+		if(!CollectionUtils.isEmpty(searchParam.getParams())) {
+			String whereClause = buildWhereClause(searchRequest, searchParam, preparedStatementValues);
+			String paginationClause = getPaginationClause(searchRequest, searchParam.getPagination());
+			where.append(" WHERE ").append(whereClause + " ");
+			if (null != query.getGroupBy()) {
+				queryString.append(" GROUP BY ").append(query.getGroupBy() + " ");
+			}
+			if (null != query.getOrderBy()) {
+				where.append(" ORDER BY ").append(query.getOrderBy().split(",")[0]).append(" ").append(query.getOrderBy().split(",")[1]);
+			}
+			if (null != query.getSort()) {
+				queryString.append(" " + query.getSort());
+			}
+			finalQuery = queryString.toString().replace("$where", where.toString());
+			finalQuery = finalQuery.replace("$pagination", paginationClause);
+		}else {
+			finalQuery = queryString.toString();
 		}
-		where.append(" where ( ").append(whereClause.toString() + " ) ");
-		if (null != query.getGroupBy()) {
-			queryString.append(" group by ").append(query.getGroupBy());
-		}
-		if (null != query.getOrderBy()) {
-			where.append(" order by ").append(query.getOrderBy().split(",")[0]).append(" ")
-					.append(query.getOrderBy().split(",")[1]);
-		}
-		if (null != query.getSort()) {
-			queryString.append(" " + query.getSort());
-		}
-		finalQuery = queryString.toString().replace("$where", where.toString());
-		finalQuery = finalQuery.replace("$pagination", paginationClause);
-
-		logger.info("Final Query: " + finalQuery);
-
+		
 		return finalQuery;
 	}
-
-	public String buildWhereClause(SearchRequest searchRequest, SearchParams searchParam) {
+	
+	/**
+	 * Builds the where clause based on configs and request
+	 * 
+	 * @param searchRequest
+	 * @param searchParam
+	 * @param preparedStatementValues
+	 * @return
+	 */
+	public String buildWhereClause(SearchRequest searchRequest, SearchParams searchParam,  Map<String, Object> preparedStatementValues) {
 		StringBuilder whereClause = new StringBuilder();
-		ObjectMapper mapper = new ObjectMapper();
 		String condition = searchParam.getCondition();
-		for (Params param : searchParam.getParams()) {
-			Object paramValue = null;
-			try {
-				paramValue = JsonPath.read(mapper.writeValueAsString(searchRequest), param.getJsonPath());
-				if (null == paramValue) {
+		try {
+			
+			String request = mapper.writeValueAsString(searchRequest);
+			List<Params> paramsList = searchParam.getParams();
+			
+			for (int i =0; i < paramsList.size(); i++) {
+				
+				
+				Params param = paramsList.get(i);
+				Object paramValue = null;
+			
+				try {
+
+					if (null != param.getIsConstant()) {
+						if (param.getIsConstant())
+							paramValue = param.getValue();
+						else
+							paramValue = JsonPath.read(request, param.getJsonPath());
+					} else
+						paramValue = JsonPath.read(request, param.getJsonPath());
+
+					if (null == paramValue)
+						continue;
+
+				} catch (Exception e) {
 					continue;
 				}
-			} catch (Exception e) {
-				continue;
-			}
-			if (paramValue instanceof net.minidev.json.JSONArray) { // TODO: might need to add some more types
-				net.minidev.json.JSONArray array = (net.minidev.json.JSONArray) paramValue;
-				StringBuilder paramBuilder = new StringBuilder();
-				for (int i = 0; i < array.size(); i++) {
-					paramBuilder.append("'" + array.get(i) + "'");
-					if (i < array.size() - 1)
-						paramBuilder.append(",");
+				
+				/**
+				 * Add and clause if necessary
+				 */
+				if (i > 0) {
+					whereClause.append(" " + condition + " ");
 				}
-				whereClause.append(param.getName()).append(" IN ").append("(").append(paramBuilder.toString())
-						.append(")");
-			} else {
-				logger.debug("param: " + param.getName());
-				String operator = (null != param.getOperator() && !param.getOperator().isEmpty()) ? param.getOperator()
-						: "=";
 				
-				if (operator.equals("GE"))
-					operator = ">=";
-				if (operator.equals("LE"))
-					operator = "<=";
-				if (operator.equals("NE"))
-					operator = "!=";
-				if (operator.equals("LIKE"))
-					paramValue = "%" + paramValue + "%";
-				
-				whereClause.append(param.getName()).append(" " + operator + " ").append("'" + paramValue + "'");
+				/**
+				 * Array operators
+				 */
+				if (paramValue instanceof net.minidev.json.JSONArray) {
+					String[] validListOperators = {"NOT IN", "IN"};
+					String operator = (!StringUtils.isEmpty(param.getOperator())) ? " " + param.getOperator() + " " : " IN ";
+					if(!Arrays.asList(validListOperators).contains(operator))
+						operator = " IN "; 
+					whereClause.append(param.getName()).append(operator).append("(").append(":"+param.getName()).append(")");
+				} 
+				/**
+				 * single operators
+				 */
+				else {
+					List<String> validOperators = operators;
+					String operator = (!StringUtils.isEmpty(param.getOperator())) ? param.getOperator() : "=";
+
+					if (!validOperators.contains(operator)) {
+						operator = "=";
+					}
+					
+					if (operator.equals("GE")) {
+						operator = ">=";
+					} else if (operator.equals("LE")) {
+						operator = "<=";
+					} else if (operator.equals("NE")) {
+						operator = "!=";
+					} else if (operator.equals("LIKE") || operator.equals("ILIKE")) {
+
+						preparedStatementValues.put(param.getName(), "%" + paramValue + "%");
+					} else if (operator.equals("TOUPPERCASE")) {
+						
+						operator =  "=";
+						paramValue = ((String) paramValue).toUpperCase();
+					} else if (operator.equals("TOLOWERCASE")) {
+
+						operator =  "=";
+						paramValue = ((String) paramValue).toLowerCase();
+					}
+					
+					whereClause.append(param.getName()).append(" " + operator + " ").append(":" + param.getName());
+				}
+
+				preparedStatementValues.put(param.getName(), paramValue);
 			}
-			whereClause.append(" " + condition + " ");
+		} catch (Exception e) {
+			log.error("Exception while bulding query: ", e);
+			throw new CustomException("QUERY_BUILD_ERROR", "Exception while bulding query");
 		}
-		Integer index = whereClause.toString().lastIndexOf(searchParam.getCondition());
-		String where = whereClause.toString().substring(0, index);
-		return where;
+		return whereClause.toString();
 	}
 
+	
+	/**
+	 * Pagination clause builder
+	 * 
+	 * @param searchRequest
+	 * @param pagination
+	 * @return
+	 */
 	public String getPaginationClause(SearchRequest searchRequest, Pagination pagination) {
 		StringBuilder paginationClause = new StringBuilder();
-		ObjectMapper mapper = new ObjectMapper();
 		Object limit = null;
 		Object offset = null;
 		if (null != pagination) {
@@ -123,7 +194,7 @@ public class SearchUtils {
 				limit = JsonPath.read(mapper.writeValueAsString(searchRequest), pagination.getNoOfRecords());
 				offset = JsonPath.read(mapper.writeValueAsString(searchRequest), pagination.getOffset());
 			} catch (Exception e) {
-				logger.error("Error while fetching limit and offset, using default values.");
+				log.error("Error while fetching limit and offset, using default values.");
 			}
 		}
 		paginationClause.append(" LIMIT ")
@@ -136,25 +207,37 @@ public class SearchUtils {
 		return paginationClause.toString();
 	}
 
+	/**
+	 * Fetches Search Definitions, defined in the configuration.
+	 * 
+	 * @param searchDefinitionMap
+	 * @param moduleName
+	 * @param searchName
+	 * @return
+	 */
 	public Definition getSearchDefinition(Map<String, SearchDefinition> searchDefinitionMap, String moduleName,
 			String searchName) {
-		logger.debug("Fetching Definitions for module: " + moduleName + " and search feature: " + searchName);
+		log.debug("Fetching Definitions for module: " + moduleName + " and search feature: " + searchName);
 		List<Definition> definitions = null;
 		try {
-			definitions = searchDefinitionMap.get(moduleName).getDefinitions().parallelStream()
+			definitions = searchDefinitionMap.get(moduleName).getDefinitions().stream()
 					.filter(def -> (def.getName().equals(searchName))).collect(Collectors.toList());
 		} catch (Exception e) {
-			throw new CustomException(HttpStatus.BAD_REQUEST.toString(),
-					"There's no Search Definition provided for this search feature");
+			throw new CustomException("NO_SEARCH_DEFINITION_EXCEPTION", "There's no Search Definition provided for this search feature");
 		}
-		if (0 == definitions.size()) {
-			throw new CustomException(HttpStatus.BAD_REQUEST.toString(),
-					"There's no Search Definition provided for this search feature");
+		if (CollectionUtils.isEmpty(definitions)) {
+			throw new CustomException("NO_SEARCH_DEFINITION_FOUND","There's no Search Definition provided for this search feature");
 		}
 		return definitions.get(0);
 
 	}
 
+	/**
+	 * Formatter util for PG objects.
+	 * 
+	 * @param maps
+	 * @return
+	 */
 	public List<String> convertPGOBjects(List<PGobject> maps){
 		List<String> result = new ArrayList<>();
 		if(null != maps || !maps.isEmpty()) {
@@ -169,7 +252,7 @@ public class SearchUtils {
 							result.add(jsonArray.get(i).toString());
 						}
 					}catch(Exception e) {
-						logger.error("Error while building json array!", e);
+						log.error("Error while building json array!", e);
 					}
 				}else{
 					try{

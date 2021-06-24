@@ -14,9 +14,9 @@ public class UserDetailsErrorHandler implements ErrorAdapter<Void> {
 
     private static final String USER_DETAILS_NOT_FOUND_CODE = "USER_DETAILS_NOT_FOUND";
     private static final String USER_DETAILS_NOT_FOUND = "Error while fetching user details";
-	private static final long serialVersionUID = -6686068213873485044L;
+    private static final long serialVersionUID = -6686068213873485044L;
 
-	public ErrorResponse adapt(Void model) {
+    public ErrorResponse adapt(Void model) {
         final Error error = getError();
         return new ErrorResponse(null, error);
     }

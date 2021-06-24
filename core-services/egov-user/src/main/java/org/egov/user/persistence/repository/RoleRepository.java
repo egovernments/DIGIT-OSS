@@ -29,141 +29,143 @@ import static java.util.Objects.*;
 @Setter
 public class RoleRepository {
 
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	private RestTemplate restTemplate;
-	private ObjectMapper objectMapper;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private RestTemplate restTemplate;
+    private ObjectMapper objectMapper;
 
-	@Value("${mdms.roles.filter}")
-	private String roleFilter;
+    @Value("${mdms.roles.filter}")
+    private String roleFilter;
 
-	@Value("${mdms.roles.masterName}")
-	private String roleMasterName;
+    @Value("${mdms.roles.masterName}")
+    private String roleMasterName;
 
-	@Value("${mdms.roles.moduleName}")
-	private String roleModuleName;
+    @Value("${mdms.roles.moduleName}")
+    private String roleModuleName;
 
-	@Value("${mdms.host}")
-	private String host;
+    @Value("${mdms.host}")
+    private String host;
 
-	@Value("${mdms.path}")
-	private String path;
-	
-	public RoleRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, RestTemplate restTemplate,
-						  ObjectMapper objectMapper){
-		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-		this.restTemplate = restTemplate;
-		this.objectMapper = objectMapper;
-	}
+    @Value("${mdms.path}")
+    private String path;
 
-	/**
-	 * Get UserRoles By UserId And TenantId
-	 * @param userId
-	 * @param tenantId
-	 * @return
-	 */
-	public List<Role> getUserRoles(final long userId, final String tenantId) {
+    public RoleRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, RestTemplate restTemplate,
+                          ObjectMapper objectMapper) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
+    }
 
-		final Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put("userId", userId);
-		parametersMap.put("tenantId", tenantId);
-		List<Role> roleList = namedParameterJdbcTemplate.query(RoleQueryBuilder.GET_ROLES_BY_ID_TENANTID, parametersMap,
-				new UserRoleRowMapper());
-		List<Long> roleIdList = new ArrayList<Long>();
-		String tenantid = null;
-		if (!roleList.isEmpty()) {
-			for (Role role : roleList) {
-				tenantid = role.getTenantId();
-			}
-		}
-		List<Role> roles = new ArrayList<Role>();
-		if (!roleIdList.isEmpty()) {
+    /**
+     * Get UserRoles By UserId And TenantId
+     *
+     * @param userId
+     * @param tenantId
+     * @return
+     */
+    public List<Role> getUserRoles(final long userId, final String tenantId) {
 
-			final Map<String, Object> Map = new HashMap<String, Object>();
-			Map.put("id", roleIdList);
-			Map.put("tenantId", tenantid);
+        final Map<String, Object> parametersMap = new HashMap<String, Object>();
+        parametersMap.put("userId", userId);
+        parametersMap.put("tenantId", tenantId);
+        List<Role> roleList = namedParameterJdbcTemplate.query(RoleQueryBuilder.GET_ROLES_BY_ID_TENANTID, parametersMap,
+                new UserRoleRowMapper());
+        List<Long> roleIdList = new ArrayList<Long>();
+        String tenantid = null;
+        if (!roleList.isEmpty()) {
+            for (Role role : roleList) {
+                tenantid = role.getTenantId();
+            }
+        }
+        List<Role> roles = new ArrayList<Role>();
+        if (!roleIdList.isEmpty()) {
 
-			roles = namedParameterJdbcTemplate.query(RoleQueryBuilder.GET_ROLES_BY_ROLEIDS, Map, new RoleRowMapper());
-		}
+            final Map<String, Object> Map = new HashMap<String, Object>();
+            Map.put("id", roleIdList);
+            Map.put("tenantId", tenantid);
 
-		return roles;
-	}
+            roles = namedParameterJdbcTemplate.query(RoleQueryBuilder.GET_ROLES_BY_ROLEIDS, Map, new RoleRowMapper());
+        }
 
-	/**
-	 * Get Role By role code and tenantId
-	 * @param tenantId
-	 * @param code
-	 * @return
-	 */
-	public Role findByTenantIdAndCode(String tenantId, String code) {
+        return roles;
+    }
 
-		final Map<String, Object> parametersMap = new HashMap<String, Object>();
-		parametersMap.put("code", code);
-		parametersMap.put("tenantId", tenantId);
-		Role role = null;
-		List<Role> roleList = namedParameterJdbcTemplate
-				.query(RoleQueryBuilder.GET_ROLE_BYTENANT_ANDCODE, parametersMap, new RoleRowMapper());
+    /**
+     * Get Role By role code and tenantId
+     *
+     * @param tenantId
+     * @param code
+     * @return
+     */
+    public Role findByTenantIdAndCode(String tenantId, String code) {
 
-		if (!roleList.isEmpty()) {
-			role = roleList.get(0);
-		}
-		return role;
-	}
+        final Map<String, Object> parametersMap = new HashMap<String, Object>();
+        parametersMap.put("code", code);
+        parametersMap.put("tenantId", tenantId);
+        Role role = null;
+        List<Role> roleList = namedParameterJdbcTemplate
+                .query(RoleQueryBuilder.GET_ROLE_BYTENANT_ANDCODE, parametersMap, new RoleRowMapper());
 
-	Set<Role> findRolesByCode(Set<String> roles, String tenantId){
+        if (!roleList.isEmpty()) {
+            role = roleList.get(0);
+        }
+        return role;
+    }
 
-		String url = host + path;
-		List<ModuleDetail> moduleDetail = new ArrayList<ModuleDetail>();
-		RequestInfo requestInfo = new RequestInfo();
-		String roleFilter = getRoleFilter(roles);
+    Set<Role> findRolesByCode(Set<String> roles, String tenantId) {
 
-
-		MasterDetail actionsMasterDetail =
-				MasterDetail.builder().name(roleMasterName).filter(roleFilter).build();
-		moduleDetail.add(ModuleDetail.builder().moduleName(roleModuleName).masterDetails(Collections.singletonList(
-				actionsMasterDetail)).build());
+        String url = host + path;
+        List<ModuleDetail> moduleDetail = new ArrayList<ModuleDetail>();
+        RequestInfo requestInfo = new RequestInfo();
+        String roleFilter = getRoleFilter(roles);
 
 
-		MdmsCriteria mc = new MdmsCriteria();
-		mc.setTenantId(tenantId);
-		mc.setModuleDetails(moduleDetail);
-
-		MdmsCriteriaReq mcq = new MdmsCriteriaReq();
-		mcq.setRequestInfo(requestInfo);
-		mcq.setMdmsCriteria(mc);
-
-		JsonNode response = restTemplate.postForObject(url, mcq,JsonNode.class).findValue(roleMasterName);
-
-		Set<Role> validatedRoles = new HashSet<>();
-
-		if( ! isNull(response) &&  response.isArray()){
-
-			for(JsonNode objNode : response){
-				try {
-				validatedRoles.add(objectMapper.treeToValue(objNode, Role.class));
-				} catch (JsonProcessingException e){
-					log.error("Failed to fetch roles from MDMS", e);
-					throw new CustomException("MDMS_ROLE_FETCH_FAILED", "Unable to fetch roles from MDMS");
-				}
-			}
-		}
-
-		return validatedRoles;
-	}
-
-	private String getRoleFilter(Set<String> roleCodes){
-		StringBuilder filter = new StringBuilder();
-		Iterator<String> iterator = roleCodes.iterator();
+        MasterDetail actionsMasterDetail =
+                MasterDetail.builder().name(roleMasterName).filter(roleFilter).build();
+        moduleDetail.add(ModuleDetail.builder().moduleName(roleModuleName).masterDetails(Collections.singletonList(
+                actionsMasterDetail)).build());
 
 
-		while (iterator.hasNext()){
-			filter.append("'")
-					.append(iterator.next())
-					.append("'");
+        MdmsCriteria mc = new MdmsCriteria();
+        mc.setTenantId(tenantId);
+        mc.setModuleDetails(moduleDetail);
 
-			if(iterator.hasNext())
-				filter.append(",");
-		}
+        MdmsCriteriaReq mcq = new MdmsCriteriaReq();
+        mcq.setRequestInfo(requestInfo);
+        mcq.setMdmsCriteria(mc);
 
-		return roleFilter.replaceAll("\\$code", filter.toString());
-	}
+        JsonNode response = restTemplate.postForObject(url, mcq, JsonNode.class).findValue(roleMasterName);
+
+        Set<Role> validatedRoles = new HashSet<>();
+
+        if (!isNull(response) && response.isArray()) {
+
+            for (JsonNode objNode : response) {
+                try {
+                    validatedRoles.add(objectMapper.treeToValue(objNode, Role.class));
+                } catch (JsonProcessingException e) {
+                    log.error("Failed to fetch roles from MDMS", e);
+                    throw new CustomException("MDMS_ROLE_FETCH_FAILED", "Unable to fetch roles from MDMS");
+                }
+            }
+        }
+
+        return validatedRoles;
+    }
+
+    private String getRoleFilter(Set<String> roleCodes) {
+        StringBuilder filter = new StringBuilder();
+        Iterator<String> iterator = roleCodes.iterator();
+
+
+        while (iterator.hasNext()) {
+            filter.append("'")
+                    .append(iterator.next())
+                    .append("'");
+
+            if (iterator.hasNext())
+                filter.append(",");
+        }
+
+        return roleFilter.replaceAll("\\$code", filter.toString());
+    }
 }

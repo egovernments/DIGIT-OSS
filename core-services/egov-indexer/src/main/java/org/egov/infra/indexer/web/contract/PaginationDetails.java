@@ -30,4 +30,6 @@ public class PaginationDetails {
 	@JsonProperty("startingOffset")
 	public Integer startingOffset = 0;
 
+	@JsonProperty("maxRecords")
+	public Integer maxRecords = 0;
 }

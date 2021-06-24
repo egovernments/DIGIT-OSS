@@ -1,0 +1,8 @@
+name : pgr.create.photo
+nodeType : step
+
+optional : true
+
+type : image
+
+message : chatbot.messages.pgrCreatePhoto

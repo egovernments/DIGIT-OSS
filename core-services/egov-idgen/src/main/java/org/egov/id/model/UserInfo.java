@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,6 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserInfo {
 	@JsonProperty("tenantId")
+	@Size(max=256)
 	@NotNull
 	private String tenantId = null;
 
@@ -31,13 +34,16 @@ public class UserInfo {
 	private Integer id = null;
 
 	@JsonProperty("username")
+	@Size(max=64)
 	@NotNull
 	private String username = null;
 
 	@JsonProperty("mobile")
+	@Pattern(regexp = "^[0-9]{10}$", message = "MobileNumber should be 10 digit number")
 	private String mobile = null;
 
 	@JsonProperty("email")
+	@Size(max=128)
 	private String email = null;
 
 	@JsonProperty("primaryrole")

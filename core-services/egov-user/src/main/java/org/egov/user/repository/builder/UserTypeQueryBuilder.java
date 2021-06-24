@@ -44,6 +44,7 @@ import org.egov.user.domain.model.UserSearchCriteria;
 import org.egov.user.persistence.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Iterator;
 import java.util.List;
@@ -79,13 +80,15 @@ public class UserTypeQueryBuilder {
 
     public static final String SELECT_FAILED_ATTEMPTS_BY_USER_SQL = "select user_uuid, ip, attempt_date, active from " +
             "eg_user_login_failed_attempts WHERE user_uuid = :user_uuid AND attempt_date >= :attempt_date AND active " +
-            "= 'true' " ;
+            "= 'true' ";
 
     public static final String INSERT_FAILED_ATTEMPTS_SQL = " INSERT INTO eg_user_login_failed_attempts (user_uuid, " +
             "ip, attempt_date, active) VALUES ( :user_uuid, :ip , :attempt_date, :active ) ";
 
     public static final String UPDATE_FAILED_ATTEMPTS_SQL = " UPDATE eg_user_login_failed_attempts SET active = " +
             "'false' WHERE user_uuid = :user_uuid";
+
+    private static final String SELECT_USER_ROLE_QUERY = "SELECT distinct(user_id) from eg_userrole_v1 ur";
 
     @SuppressWarnings("rawtypes")
     public String getQuery(final UserSearchCriteria userSearchCriteria, final List preparedStatementValues) {
@@ -98,12 +101,21 @@ public class UserTypeQueryBuilder {
         return addPagingClause(selectQuery, preparedStatementValues, userSearchCriteria);
     }
 
+    @SuppressWarnings("rawtypes")
+    public String getQueryUserRoleSearch(final UserSearchCriteria userSearchCriteria, final List preparedStatementValues) {
+        final StringBuilder selectQuery = new StringBuilder(SELECT_USER_ROLE_QUERY);
+
+        addWhereClauseUserRoles(selectQuery, preparedStatementValues, userSearchCriteria);
+        return selectQuery.toString();
+
+    }
+
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addWhereClause(final StringBuilder selectQuery, final List preparedStatementValues,
                                 final UserSearchCriteria userSearchCriteria) {
 
-        if (userSearchCriteria.getId() == null && userSearchCriteria.getUserName() == null
+        if (CollectionUtils.isEmpty(userSearchCriteria.getId()) && userSearchCriteria.getUserName() == null
                 && userSearchCriteria.getName() == null && userSearchCriteria.getEmailId() == null
                 && userSearchCriteria.getActive() == null && userSearchCriteria.getTenantId() == null
                 && userSearchCriteria.getType() == null && userSearchCriteria.getUuid() == null)
@@ -183,11 +195,11 @@ public class UserTypeQueryBuilder {
                     preparedStatementValues)).append(" )");
         }
 
-        if(!isEmpty(userSearchCriteria.getRoleCodes())){
-            isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" ur.role_code IN (").append(getQueryForCollection(userSearchCriteria.getRoleCodes(),
-                    preparedStatementValues)).append(" )");
-        }
+//        if(!isEmpty(userSearchCriteria.getRoleCodes())){
+//            isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
+//            selectQuery.append(" ur.role_code IN (").append(getQueryForCollection(userSearchCriteria.getRoleCodes(),
+//                    preparedStatementValues)).append(" )");
+//        }
     }
 
     private void addOrderByClause(final StringBuilder selectQuery, final UserSearchCriteria userSearchCriteria) {
@@ -198,15 +210,15 @@ public class UserTypeQueryBuilder {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private String addPagingClause(final StringBuilder selectQuery, final List preparedStatementValues,
-                                 final UserSearchCriteria criteria) {
+                                   final UserSearchCriteria criteria) {
 
-        if(isNull(criteria.getOffset()))
+        if (isNull(criteria.getOffset()))
             criteria.setOffset(0);
 
-        if (criteria.getLimit()!=null && criteria.getLimit() != 0) {
+        if (criteria.getLimit() != null && criteria.getLimit() != 0) {
             String finalQuery = PAGINATION_WRAPPER.replace("{baseQuery}", selectQuery);
             preparedStatementValues.add(criteria.getOffset());
-            preparedStatementValues.add( criteria.getOffset() + criteria.getLimit());
+            preparedStatementValues.add(criteria.getOffset() + criteria.getLimit());
 
             return finalQuery;
         } else
@@ -214,14 +226,36 @@ public class UserTypeQueryBuilder {
 
     }
 
+    private void addWhereClauseUserRoles(final StringBuilder selectQuery, final List preparedStatementValues,
+                                         final UserSearchCriteria userSearchCriteria) {
+
+
+        selectQuery.append(" WHERE");
+        boolean isAppendAndClause = false;
+
+        if (userSearchCriteria.getTenantId() != null) {
+            isAppendAndClause = addAndClauseIfRequired(false, selectQuery);
+            selectQuery.append(" ur.role_tenantid = ?");
+            preparedStatementValues.add(userSearchCriteria.getTenantId().trim());
+        }
+
+
+        if (!isEmpty(userSearchCriteria.getRoleCodes())) {
+            isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
+            selectQuery.append(" ur.role_code IN (").append(getQueryForCollection(userSearchCriteria.getRoleCodes(),
+                    preparedStatementValues)).append(" )");
+        }
+
+    }
+
     private String getQueryForCollection(List<?> ids, List<Object> preparedStmtList) {
         StringBuilder builder = new StringBuilder();
         Iterator<?> iterator = ids.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             builder.append(" ?");
             preparedStmtList.add(iterator.next());
 
-            if(iterator.hasNext())
+            if (iterator.hasNext())
                 builder.append(",");
         }
         return builder.toString();
@@ -259,7 +293,7 @@ public class UserTypeQueryBuilder {
 
 
     public String getUserPresentByUserNameAndTenant() {
-        return "select count(*) from eg_user where username =:userName and tenantId =:tenantId and type = :userType " ;
+        return "select count(*) from eg_user where username =:userName and tenantId =:tenantId and type = :userType ";
     }
 
 }

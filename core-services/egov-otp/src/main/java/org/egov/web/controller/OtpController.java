@@ -5,7 +5,9 @@ import org.egov.domain.service.TokenService;
 import org.egov.web.contract.OtpRequest;
 import org.egov.web.contract.OtpResponse;
 import org.egov.web.contract.OtpValidateRequest;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,6 +19,7 @@ public class OtpController {
     private TokenService tokenService;
 
     public OtpController(TokenService tokenService) {
+
         this.tokenService = tokenService;
     }
 
@@ -30,6 +33,7 @@ public class OtpController {
     @PostMapping("v1/_validate")
     public OtpResponse validateOtp(@RequestBody OtpValidateRequest request) {
         final Token token = tokenService.validate(request.toDomainValidateRequest());
+        token.setNumber(request.toDomainValidateRequest().getOtp());
         return new OtpResponse(token);
     }
 
