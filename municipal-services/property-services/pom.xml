@@ -21,22 +21,6 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>org.cache2k</groupId>
-			<artifactId>cache2k-api</artifactId>
-			<version>${cache2k-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.cache2k</groupId>
-			<artifactId>cache2k-core</artifactId>
-			<version>${cache2k-version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.cache2k</groupId>
-			<artifactId>cache2k-spring</artifactId>
-			<version>${cache2k-version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
