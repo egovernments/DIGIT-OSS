@@ -94,7 +94,6 @@ public class UserUtils {
         try {
             d = f.parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
             throw new CustomException("INVALID_DATE_FORMAT","Failed to parse date format in user");
         }
         return  d.getTime();

@@ -151,7 +151,7 @@ public class TranslationService {
         if(assessment.getAdditionalDetails()!=null){
             // propertyDetail.put("adhocPenalty",);
             try{
-                if(assessment.getAdditionalDetails().get(ADHOC_REBATE_KEY)!=null){
+                if(assessment.getAdditionalDetails().get(ADHOC_REBATE_KEY)!=null && !assessment.getAdditionalDetails().get(ADHOC_REBATE_KEY).isNull()){
                     BigDecimal adhocExemption = new BigDecimal(assessment.getAdditionalDetails().get(ADHOC_REBATE_KEY).doubleValue());
                     propertyDetail.put("adhocExemption",adhocExemption);
                 }
@@ -160,7 +160,7 @@ public class TranslationService {
                     propertyDetail.put("adhocExemptionReason",assessment.getAdditionalDetails().get(ADHOC_REBATE_REASON_KEY).asText());
 
 
-                if(assessment.getAdditionalDetails().get(ADHOC_PENALTY_KEY)!=null){
+                if(assessment.getAdditionalDetails().get(ADHOC_PENALTY_KEY)!=null && !assessment.getAdditionalDetails().get(ADHOC_PENALTY_KEY).isNull()){
                     BigDecimal adhocPenalty = new BigDecimal(assessment.getAdditionalDetails().get(ADHOC_PENALTY_KEY).doubleValue());
                     propertyDetail.put("adhocPenalty",adhocPenalty);
                 }
@@ -168,7 +168,6 @@ public class TranslationService {
                 if(assessment.getAdditionalDetails().get(ADHOC_PENALTY_REASON_KEY)!=null)
                     propertyDetail.put("adhocPenaltyReason", assessment.getAdditionalDetails().get(ADHOC_PENALTY_REASON_KEY).asText());
             } catch (Exception e){
-                e.printStackTrace();
                 throw new CustomException("PARSING_ERROR","Failed to parse additional details in translation");
             }
 

@@ -96,7 +96,7 @@ public class PdfFileStoreService {
 		
 		String applicationStatus = workflowService.getApplicationStatus(sewerageConnectionRequest.getRequestInfo(),
 				sewerageConnectionRequest.getSewerageConnection().getApplicationNo(),
-				sewerageConnectionRequest.getSewerageConnection().getTenantId());
+				sewerageConnectionRequest.getSewerageConnection().getTenantId(), config.getBusinessServiceValue());
 		
 		try {
 			Object response = serviceRequestRepository.fetchResult(sewerageServiceUtil.getEstimationURL(), calRequest);
@@ -120,7 +120,7 @@ public class PdfFileStoreService {
 				sewerageObject.put(pdfTaxhead, cal.getTaxHeadEstimates());
 			}
 			sewerageObject.put(sanctionLetterDate, System.currentTimeMillis());
-			BigDecimal slaDays = workflowService.getSlaForState(
+			BigDecimal slaDays = workflowService.getSlaForState(config.getBusinessServiceValue(),
 					sewerageConnectionRequest.getSewerageConnection().getTenantId(),
 					sewerageConnectionRequest.getRequestInfo(), applicationStatus);
 			sewerageObject.put(sla, slaDays.divide(BigDecimal.valueOf(SWConstants.DAYS_CONST)));

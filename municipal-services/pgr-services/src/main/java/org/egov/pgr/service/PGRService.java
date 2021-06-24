@@ -13,8 +13,7 @@ import org.egov.pgr.web.models.ServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @org.springframework.stereotype.Service
 public class PGRService {
@@ -85,14 +84,33 @@ public class PGRService {
         if(criteria.isEmpty())
             return new ArrayList<>();
 
+        if(criteria.getMobileNumber()!=null && CollectionUtils.isEmpty(criteria.getUserIds()))
+            return new ArrayList<>();
+
+        criteria.setIsPlainSearch(false);
+
         List<ServiceWrapper> serviceWrappers = repository.getServiceWrappers(criteria);
 
         if(CollectionUtils.isEmpty(serviceWrappers))
             return new ArrayList<>();;
 
         userService.enrichUsers(serviceWrappers);
-        workflowService.enrichWorkflow(requestInfo,serviceWrappers);
-        return serviceWrappers;
+        List<ServiceWrapper> enrichedServiceWrappers = workflowService.enrichWorkflow(requestInfo,serviceWrappers);
+        Map<Long, List<ServiceWrapper>> sortedWrappers = new TreeMap<>(Collections.reverseOrder());
+        for(ServiceWrapper svc : enrichedServiceWrappers){
+            if(sortedWrappers.containsKey(svc.getService().getAuditDetails().getCreatedTime())){
+                sortedWrappers.get(svc.getService().getAuditDetails().getCreatedTime()).add(svc);
+            }else{
+                List<ServiceWrapper> serviceWrapperList = new ArrayList<>();
+                serviceWrapperList.add(svc);
+                sortedWrappers.put(svc.getService().getAuditDetails().getCreatedTime(), serviceWrapperList);
+            }
+        }
+        List<ServiceWrapper> sortedServiceWrappers = new ArrayList<>();
+        for(Long createdTimeDesc : sortedWrappers.keySet()){
+            sortedServiceWrappers.addAll(sortedWrappers.get(createdTimeDesc));
+        }
+        return sortedServiceWrappers;
     }
 
 
@@ -117,11 +135,49 @@ public class PGRService {
      * @return
      */
     public Integer count(RequestInfo requestInfo, RequestSearchCriteria criteria){
+        criteria.setIsPlainSearch(false);
         Integer count = repository.getCount(criteria);
         return count;
     }
 
 
+    public List<ServiceWrapper> plainSearch(RequestInfo requestInfo, RequestSearchCriteria criteria) {
+        validator.validatePlainSearch(criteria);
 
+        criteria.setIsPlainSearch(true);
 
+        if(criteria.getLimit()==null)
+            criteria.setLimit(config.getDefaultLimit());
+
+        if(criteria.getOffset()==null)
+            criteria.setOffset(config.getDefaultOffset());
+
+        if(criteria.getLimit()!=null && criteria.getLimit() > config.getMaxLimit())
+            criteria.setLimit(config.getMaxLimit());
+
+        List<ServiceWrapper> serviceWrappers = repository.getServiceWrappers(criteria);
+
+        if(CollectionUtils.isEmpty(serviceWrappers)){
+            return new ArrayList<>();
+        }
+
+        userService.enrichUsers(serviceWrappers);
+        List<ServiceWrapper> enrichedServiceWrappers = workflowService.enrichWorkflow(requestInfo, serviceWrappers);
+
+        Map<Long, List<ServiceWrapper>> sortedWrappers = new TreeMap<>(Collections.reverseOrder());
+        for(ServiceWrapper svc : enrichedServiceWrappers){
+            if(sortedWrappers.containsKey(svc.getService().getAuditDetails().getCreatedTime())){
+                sortedWrappers.get(svc.getService().getAuditDetails().getCreatedTime()).add(svc);
+            }else{
+                List<ServiceWrapper> serviceWrapperList = new ArrayList<>();
+                serviceWrapperList.add(svc);
+                sortedWrappers.put(svc.getService().getAuditDetails().getCreatedTime(), serviceWrapperList);
+            }
+        }
+        List<ServiceWrapper> sortedServiceWrappers = new ArrayList<>();
+        for(Long createdTimeDesc : sortedWrappers.keySet()){
+            sortedServiceWrappers.addAll(sortedWrappers.get(createdTimeDesc));
+        }
+        return sortedServiceWrappers;
+    }
 }

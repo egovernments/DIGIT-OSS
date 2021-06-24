@@ -19,8 +19,11 @@ public class RequestSearchCriteria {
     @JsonProperty("tenantId")
     private String tenantId;
 
+    @JsonProperty("tenantIds")
+    private Set<String> tenantIds;
+
     @JsonProperty("serviceCode")
-    private String serviceCode;
+    private Set<String> serviceCode;
 
     @JsonProperty("applicationStatus")
     private Set<String> applicationStatus;
@@ -31,8 +34,29 @@ public class RequestSearchCriteria {
     @JsonProperty("serviceRequestId")
     private String serviceRequestId;
 
+    @JsonProperty("sortBy")
+    private SortBy sortBy;
+
+    @JsonProperty("sortOrder")
+    private SortOrder sortOrder;
+  
+    @JsonProperty("locality")
+    private Set<String> locality;
+
     @JsonProperty("ids")
     private Set<String> ids;
+
+    @JsonProperty("fromDate")
+    private Long fromDate;
+
+    @JsonProperty("toDate")
+    private Long toDate;
+
+    @JsonProperty("slaDeltaMaxLimit")
+    private Long slaDeltaMaxLimit;
+
+    @JsonProperty("slaDeltaMinLimit")
+    private Long slaDeltaMinLimit;
 
     @JsonProperty("limit")
     private Integer limit;
@@ -43,11 +67,27 @@ public class RequestSearchCriteria {
     @JsonIgnore
     private Set<String> userIds;
 
+    @JsonIgnore
+    private Boolean isPlainSearch;
 
+
+    public enum SortOrder {
+        ASC,
+        DESC
+    }
+
+    public enum SortBy {
+        locality,
+        applicationStatus,
+        serviceRequestId
+    }
+  
+    @JsonProperty("accountId")
+    private String accountId;
 
     public boolean isEmpty(){
         return (this.tenantId==null && this.serviceCode==null && this.mobileNumber==null && this.serviceRequestId==null
-        && this.applicationStatus==null && this.ids==null && this.userIds==null);
+        && this.applicationStatus==null && this.ids==null && this.userIds==null && this.locality==null);
     }
 
 }

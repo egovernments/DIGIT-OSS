@@ -3,10 +3,14 @@ package org.egov.waterconnection.repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
+import org.egov.waterconnection.repository.rowmapper.OpenWaterRowMapper;
 import org.egov.waterconnection.web.models.SearchCriteria;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
@@ -17,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +41,9 @@ public class WaterDaoImpl implements WaterDao {
 
 	@Autowired
 	private WaterRowMapper waterRowMapper;
+
+	@Autowired
+	private OpenWaterRowMapper openWaterRowMapper;
 	
 	@Autowired
 	private WSConfiguration wsConfiguration;
@@ -53,15 +62,20 @@ public class WaterDaoImpl implements WaterDao {
 	@Override
 	public List<WaterConnection> getWaterConnectionList(SearchCriteria criteria,
 			RequestInfo requestInfo) {
+		
+		List<WaterConnection> waterConnectionList = new ArrayList<>();
 		List<Object> preparedStatement = new ArrayList<>();
 		String query = wsQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
+		
 		if (query == null)
 			return Collections.emptyList();
-//		if (log.isDebugEnabled()) {
-			StringBuilder str = new StringBuilder("Constructed query is:: ").append(query);
-			log.debug(str.toString());
-//		}
-		List<WaterConnection> waterConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
+		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
+		
+		if(isOpenSearch)
+			waterConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
+					openWaterRowMapper);
+		else
+			waterConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
 				waterRowMapper);
 		if (waterConnectionList == null)
 			return Collections.emptyList();
@@ -115,6 +129,12 @@ public class WaterDaoImpl implements WaterDao {
 	 */
 	public void saveFileStoreIds(WaterConnectionRequest waterConnectionRequest) {
 		waterConnectionProducer.push(wsConfiguration.getSaveFileStoreIdsTopic(), waterConnectionRequest);
+	}
+
+	public Boolean isSearchOpen(User userInfo) {
+
+		return userInfo.getType().equalsIgnoreCase("SYSTEM")
+				&& userInfo.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()).contains("ANONYMOUS");
 	}
 
 }

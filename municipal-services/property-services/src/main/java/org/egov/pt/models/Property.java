@@ -80,6 +80,7 @@ public class Property extends PropertyInfo {
 
 	@JsonProperty("documents")
 	@Valid
+	@DiffIgnore
 	private List<Document> documents;
 
 	@JsonProperty("units")
@@ -94,6 +95,7 @@ public class Property extends PropertyInfo {
 	private AuditDetails auditDetails;
 
 	@JsonProperty("workflow")
+	@DiffIgnore
 	private ProcessInstance workflow;
 	
 	@Builder

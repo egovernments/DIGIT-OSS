@@ -3,9 +3,12 @@ package org.egov.bpa.service;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -48,21 +51,25 @@ public class EnrichmentService {
 
 	@Autowired
 	private WorkflowService workflowService;
-	
+
 	@Autowired
 	private EDCRService edcrService;
-	
+
 	@Autowired
-	private WorkflowIntegrator wfIntegrator;	
-	
+	private WorkflowIntegrator wfIntegrator;
+
 	@Autowired
 	private NocService nocService;
 
 	@Autowired
 	private BPAUtil util;
 
+	@Autowired
+	private UserService userService;
+
 	/**
 	 * encrich create BPA Reqeust by adding audidetails and uuids
+	 * 
 	 * @param bpaRequest
 	 * @param mdmsData
 	 * @param values
@@ -72,21 +79,21 @@ public class EnrichmentService {
 		AuditDetails auditDetails = bpaUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		bpaRequest.getBPA().setAuditDetails(auditDetails);
 		bpaRequest.getBPA().setId(UUID.randomUUID().toString());
-		
+
 		bpaRequest.getBPA().setAccountId(bpaRequest.getBPA().getAuditDetails().getCreatedBy());
 		String applicationType = values.get(BPAConstants.APPLICATIONTYPE);
-		if(applicationType.equalsIgnoreCase(BPAConstants.BUILDING_PLAN)){
-		if(!bpaRequest.getBPA().getRiskType().equalsIgnoreCase(BPAConstants.LOW_RISKTYPE)){
-			bpaRequest.getBPA().setBusinessService(BPAConstants.BPA_MODULE_CODE);
-		}else{
-			bpaRequest.getBPA().setBusinessService(BPAConstants.BPA_LOW_MODULE_CODE);
-		}
-		}else{
+		if (applicationType.equalsIgnoreCase(BPAConstants.BUILDING_PLAN)) {
+			if (!bpaRequest.getBPA().getRiskType().equalsIgnoreCase(BPAConstants.LOW_RISKTYPE)) {
+				bpaRequest.getBPA().setBusinessService(BPAConstants.BPA_MODULE_CODE);
+			} else {
+				bpaRequest.getBPA().setBusinessService(BPAConstants.BPA_LOW_MODULE_CODE);
+			}
+		} else {
 			bpaRequest.getBPA().setBusinessService(BPAConstants.BPA_OC_MODULE_CODE);
 			bpaRequest.getBPA().setLandId(values.get("landId"));
 		}
-		if(bpaRequest.getBPA().getLandInfo()!=null){
-			bpaRequest.getBPA().setLandId(bpaRequest.getBPA().getLandInfo().getId()); 
+		if (bpaRequest.getBPA().getLandInfo() != null) {
+			bpaRequest.getBPA().setLandId(bpaRequest.getBPA().getLandInfo().getId());
 		}
 		// BPA Documents
 		if (!CollectionUtils.isEmpty(bpaRequest.getBPA().getDocuments()))
@@ -101,8 +108,7 @@ public class EnrichmentService {
 	/**
 	 * Sets the ApplicationNumber for given bpaRequest
 	 *
-	 * @param request
-	 *            bpaRequest which is to be created
+	 * @param request bpaRequest which is to be created
 	 */
 	private void setIdgenIds(BPARequest request) {
 		RequestInfo requestInfo = request.getRequestInfo();
@@ -124,17 +130,12 @@ public class EnrichmentService {
 	/**
 	 * Returns a list of numbers generated from idgen
 	 *
-	 * @param requestInfo
-	 *            RequestInfo from the request
-	 * @param tenantId
-	 *            tenantId of the city
-	 * @param idKey
-	 *            code of the field defined in application properties for which
-	 *            ids are generated for
-	 * @param idformat
-	 *            format in which ids are to be generated
-	 * @param count
-	 *            Number of ids to be generated
+	 * @param requestInfo RequestInfo from the request
+	 * @param tenantId    tenantId of the city
+	 * @param idKey       code of the field defined in application properties for
+	 *                    which ids are generated for
+	 * @param idformat    format in which ids are to be generated
+	 * @param count       Number of ids to be generated
 	 * @return List of ids generated using idGen service
 	 */
 	private List<String> getIdList(RequestInfo requestInfo, String tenantId, String idKey, String idformat, int count) {
@@ -148,7 +149,8 @@ public class EnrichmentService {
 	}
 
 	/**
-	 * enchrich the updateRequest 
+	 * enchrich the updateRequest
+	 * 
 	 * @param bpaRequest
 	 * @param businessService
 	 */
@@ -159,7 +161,7 @@ public class EnrichmentService {
 		auditDetails.setCreatedBy(bpaRequest.getBPA().getAuditDetails().getCreatedBy());
 		auditDetails.setCreatedTime(bpaRequest.getBPA().getAuditDetails().getCreatedTime());
 		bpaRequest.getBPA().getAuditDetails().setLastModifiedTime(auditDetails.getLastModifiedTime());
-		
+		enrichAssignes(bpaRequest.getBPA());
 		// BPA Documents
 		if (!CollectionUtils.isEmpty(bpaRequest.getBPA().getDocuments()))
 			bpaRequest.getBPA().getDocuments().forEach(document -> {
@@ -179,8 +181,9 @@ public class EnrichmentService {
 	}
 
 	/**
-	 * postStatus encrichment to update the status of the workflow to the application
-	 * and generating permit and oc number when applicable
+	 * postStatus encrichment to update the status of the workflow to the
+	 * application and generating permit and oc number when applicable
+	 * 
 	 * @param bpaRequest
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -188,16 +191,16 @@ public class EnrichmentService {
 		BPA bpa = bpaRequest.getBPA();
 		String tenantId = bpaRequest.getBPA().getTenantId().split("\\.")[0];
 		Object mdmsData = util.mDMSCall(bpaRequest.getRequestInfo(), tenantId);
-		
+
 		BusinessService businessService = workflowService.getBusinessService(bpa, bpaRequest.getRequestInfo(),
 				bpa.getApplicationNo());
 		log.info("Application status is : " + bpa.getStatus());
 		String state = workflowService.getCurrentState(bpa.getStatus(), businessService);
 
-		if(state.equalsIgnoreCase(BPAConstants.DOCVERIFICATION_STATE)){
+		if (state.equalsIgnoreCase(BPAConstants.DOCVERIFICATION_STATE)) {
 			bpa.setApplicationDate(Calendar.getInstance().getTimeInMillis());
 		}
-		
+
 		if (StringUtils.isEmpty(bpa.getRiskType())) {
 			if (bpa.getBusinessService().equals(BPAConstants.BPA_LOW_MODULE_CODE)) {
 				bpa.setRiskType(BPAConstants.LOW_RISKTYPE);
@@ -205,19 +208,22 @@ public class EnrichmentService {
 				bpa.setRiskType(BPAConstants.HIGH_RISKTYPE);
 			}
 		}
-		
+
 		log.info("Application state is : " + state);
 		this.generateApprovalNo(bpaRequest, state);
-		nocService.initiateNocWorkflow(bpaRequest,mdmsData);
-		
+		nocService.initiateNocWorkflow(bpaRequest, mdmsData);
+
 	}
+
 	/**
-	 * generate the permit and oc number on approval status of the BPA and BPAOC respectively
+	 * generate the permit and oc number on approval status of the BPA and BPAOC
+	 * respectively
+	 * 
 	 * @param bpaRequest
 	 * @param state
 	 */
-	private void generateApprovalNo(BPARequest bpaRequest,String state) {
-		BPA bpa= bpaRequest.getBPA();
+	private void generateApprovalNo(BPARequest bpaRequest, String state) {
+		BPA bpa = bpaRequest.getBPA();
 		if ((bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_OC_MODULE_CODE)
 				&& bpa.getStatus().equalsIgnoreCase(BPAConstants.APPROVED_STATE))
 				|| (!bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_OC_MODULE_CODE)
@@ -250,8 +256,8 @@ public class EnrichmentService {
 				Map<String, String> edcrResponse = edcrService.getEDCRDetails(bpaRequest.getRequestInfo(),
 						bpaRequest.getBPA());
 				log.debug("applicationType is " + edcrResponse.get(BPAConstants.APPLICATIONTYPE));
-	            log.debug("serviceType is " + edcrResponse.get(BPAConstants.SERVICETYPE));
-	            
+				log.debug("serviceType is " + edcrResponse.get(BPAConstants.SERVICETYPE));
+
 				String condeitionsPath = BPAConstants.CONDITIONS_MAP.replace("{1}", BPAConstants.PENDING_APPROVAL_STATE)
 						.replace("{2}", bpa.getRiskType().toString())
 						.replace("{3}", edcrResponse.get(BPAConstants.SERVICETYPE))
@@ -276,6 +282,7 @@ public class EnrichmentService {
 
 	/**
 	 * handles the skippayment of the BPA when demand is zero
+	 * 
 	 * @param bpaRequest
 	 */
 	public void skipPayment(BPARequest bpaRequest) {
@@ -285,6 +292,44 @@ public class EnrichmentService {
 			Workflow workflow = Workflow.builder().action(BPAConstants.ACTION_SKIP_PAY).build();
 			bpa.setWorkflow(workflow);
 			wfIntegrator.callWorkFlow(bpaRequest);
+		}
+	}
+
+	/**
+	 * In case of SENDBACKTOCITIZEN enrich the assignee with the owners and creator
+	 * of BPA
+	 * 
+	 * @param bpa BPA to be enriched
+	 */
+	public void enrichAssignes(BPA bpa) {
+		Workflow wf = bpa.getWorkflow();
+		Set<String> assignes = new HashSet<>();
+		if (wf != null && wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_SENDBACKTOCITIZEN)
+				|| wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_SEND_TO_CITIZEN)) {
+
+			// Adding owners to assignes list
+			bpa.getLandInfo().getOwners().forEach(ownerInfo -> {
+				assignes.add(ownerInfo.getUuid());
+			});
+
+			Set<String> registeredUUIDS = userService.getUUidFromUserName(bpa);
+
+			if (!CollectionUtils.isEmpty(registeredUUIDS))
+				assignes.addAll(registeredUUIDS);
+
+		} else if (wf != null && (wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_SEND_TO_ARCHITECT)
+				|| (bpa.getStatus().equalsIgnoreCase(BPAConstants.STATUS_CITIZEN_APPROVAL_INPROCESS)
+						&& wf.getAction().equalsIgnoreCase(BPAConstants.ACTION_APPROVE)))) {
+			// Adding creator of BPA(Licensee)
+			if (bpa.getAccountId() != null)
+				assignes.add(bpa.getAccountId());
+		}
+		if(bpa.getWorkflow() == null) {
+			Workflow wfNew = new Workflow();
+			wfNew.setAssignes(new LinkedList<>(assignes));
+			bpa.setWorkflow(wfNew);
+		} else {
+			bpa.getWorkflow().setAssignes(new LinkedList<>(assignes));
 		}
 	}
 }

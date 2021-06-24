@@ -16,15 +16,7 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.constants.WSCalculationConstant;
-import org.egov.wscalculation.web.models.BillingSlab;
-import org.egov.wscalculation.web.models.CalculationCriteria;
-import org.egov.wscalculation.web.models.Property;
-import org.egov.wscalculation.web.models.RequestInfoWrapper;
-import org.egov.wscalculation.web.models.SearchCriteria;
-import org.egov.wscalculation.web.models.Slab;
-import org.egov.wscalculation.web.models.TaxHeadEstimate;
-import org.egov.wscalculation.web.models.WaterConnection;
-import org.egov.wscalculation.web.models.WaterConnectionRequest;
+import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.util.CalculatorUtil;
 import org.egov.wscalculation.util.WSCalculationUtil;
 import org.egov.wscalculation.util.WaterCessUtil;
@@ -72,8 +64,9 @@ public class EstimationService {
 			Map<String, Object> masterData) {
 		String tenantId = requestInfo.getUserInfo().getTenantId();
 		if (criteria.getWaterConnection() == null && !StringUtils.isEmpty(criteria.getConnectionNo())) {
-			criteria.setWaterConnection(
-					calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), tenantId));
+			List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), tenantId);
+			WaterConnection waterConnection = calculatorUtil.getWaterConnectionObject(waterConnectionList);
+			criteria.setWaterConnection(waterConnection);
 		}
 		if (criteria.getWaterConnection() == null || StringUtils.isEmpty(criteria.getConnectionNo())) {
 			StringBuilder builder = new StringBuilder();
@@ -144,7 +137,6 @@ public class EstimationService {
 		BigDecimal waterCharge = BigDecimal.ZERO;
 		if (billingSlabMaster.get(WSCalculationConstant.WC_BILLING_SLAB_MASTER) == null)
 			throw new CustomException("BILLING_SLAB_NOT_FOUND", "Billing Slab are Empty");
-		ObjectMapper mapper = new ObjectMapper();
 		List<BillingSlab> mappingBillingSlab;
 		try {
 			mappingBillingSlab = mapper.readValue(
@@ -404,17 +396,30 @@ public class EstimationService {
 			meterCost = new BigDecimal(feeObj.getAsNumber(WSCalculationConstant.METER_COST_CONST).toString());
 		}
 		BigDecimal roadCuttingCharge = BigDecimal.ZERO;
-		if (criteria.getWaterConnection().getRoadType() != null)
-			roadCuttingCharge = getChargeForRoadCutting(masterData, criteria.getWaterConnection().getRoadType(),
-					criteria.getWaterConnection().getRoadCuttingArea());
+		BigDecimal usageTypeCharge = BigDecimal.ZERO;
+
+		if(criteria.getWaterConnection().getRoadCuttingInfo() != null){
+			for(RoadCuttingInfo roadCuttingInfo : criteria.getWaterConnection().getRoadCuttingInfo()){
+				BigDecimal singleRoadCuttingCharge = BigDecimal.ZERO;
+				if (roadCuttingInfo.getRoadType() != null)
+					singleRoadCuttingCharge = getChargeForRoadCutting(masterData, roadCuttingInfo.getRoadType(),
+							roadCuttingInfo.getRoadCuttingArea());
+
+				BigDecimal singleUsageTypeCharge = BigDecimal.ZERO;
+				if (roadCuttingInfo.getRoadCuttingArea() != null)
+					singleUsageTypeCharge = getUsageTypeFee(masterData,
+							property.getUsageCategory(),
+							roadCuttingInfo.getRoadCuttingArea());
+
+				roadCuttingCharge = roadCuttingCharge.add(singleRoadCuttingCharge);
+				usageTypeCharge = usageTypeCharge.add(singleUsageTypeCharge);
+			}
+		}
+
 		BigDecimal roadPlotCharge = BigDecimal.ZERO;
 		if (property.getLandArea() != null)
 			roadPlotCharge = getPlotSizeFee(masterData, property.getLandArea());
-		BigDecimal usageTypeCharge = BigDecimal.ZERO;
-		if (criteria.getWaterConnection().getRoadCuttingArea() != null)
-			usageTypeCharge = getUsageTypeFee(masterData,
-					property.getUsageCategory(),
-					criteria.getWaterConnection().getRoadCuttingArea());
+
 		BigDecimal totalCharge = formFee.add(scrutinyFee).add(otherCharges).add(meterCost).add(roadCuttingCharge)
 				.add(roadPlotCharge).add(usageTypeCharge);
 		BigDecimal tax = totalCharge.multiply(taxAndCessPercentage.divide(WSCalculationConstant.HUNDRED));

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.egov.common.contract.request.User;
+import org.egov.wscalculation.web.models.AuditDetails;
 import org.egov.wscalculation.web.models.Document;
 import org.springframework.validation.annotation.Validated;
 
@@ -77,8 +78,31 @@ public class ProcessInstance {
 	@Valid
 	private List<Document> documents;
 
+	@JsonProperty("assigner")
+	private User assigner;
+
 	@JsonProperty("assignes")
 	private List<User> assignes;
+	
+	@JsonProperty("nextActions")
+	@Valid
+	private List<Action> nextActions;
+
+	@JsonProperty("stateSla")
+	private Long stateSla;
+
+	@JsonProperty("businesssServiceSla")
+	private Long businesssServiceSla;
+
+	@JsonProperty("previousStatus")
+	@Size(max=128)
+	private String previousStatus;
+
+	@JsonProperty("entity")
+	private Object entity;
+
+	@JsonProperty("auditDetails")
+	private AuditDetails auditDetails;
 
 	public ProcessInstance addDocumentsItem(Document documentsItem) {
 		if (this.documents == null) {
@@ -90,4 +114,21 @@ public class ProcessInstance {
 		return this;
 	}
 
+	public ProcessInstance addNextActionsItem(Action nextActionsItem) {
+		if (this.nextActions == null) {
+			this.nextActions = new ArrayList<>();
+		}
+		this.nextActions.add(nextActionsItem);
+		return this;
+	}
+
+	public ProcessInstance addUsersItem(User usersItem) {
+		if (this.assignes == null) {
+			this.assignes = new ArrayList<>();
+		}
+		if(!this.assignes.contains(usersItem))
+			this.assignes.add(usersItem);
+
+		return this;
+	}
 }

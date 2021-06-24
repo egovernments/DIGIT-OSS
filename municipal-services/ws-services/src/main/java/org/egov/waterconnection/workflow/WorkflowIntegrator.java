@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
+import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.web.models.Property;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
 import org.egov.waterconnection.web.models.workflow.ProcessInstance;
@@ -18,7 +19,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -40,6 +40,9 @@ public class WorkflowIntegrator {
 	
 	@Autowired
 	private RestTemplate rest;
+	
+	@Autowired
+	private WaterServicesUtil wsUtil;
 
 	/**
 	 * Method to integrate with workflow
@@ -53,10 +56,14 @@ public class WorkflowIntegrator {
 	 * @param waterConnectionRequest
 	 */
 	public void callWorkFlow(WaterConnectionRequest waterConnectionRequest, Property property) {
+		String wfBusinessServiceName = config.getBusinessServiceValue();
+		if(wsUtil.isModifyConnectionRequest(waterConnectionRequest)) {
+			wfBusinessServiceName = config.getModifyWSBusinessServiceName();
+		}
 		ProcessInstance processInstance = ProcessInstance.builder()
 				.businessId(waterConnectionRequest.getWaterConnection().getApplicationNo())
 				.tenantId(property.getTenantId())
-				.businessService(config.getBusinessServiceValue()).moduleName(MODULENAMEVALUE)
+				.businessService(wfBusinessServiceName).moduleName(MODULENAMEVALUE)
 				.action(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction()).build();
 		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getProcessInstance())) {
 			if (!CollectionUtils
@@ -74,11 +81,6 @@ public class WorkflowIntegrator {
 						.setComment(waterConnectionRequest.getWaterConnection().getProcessInstance().getComment());
 			}
 
-		}
-		try {
-			log.info("Process Instance request is : " + mapper.writeValueAsString(processInstance));
-		} catch (JsonProcessingException e1) {
-			log.error("Failed to log ProcessInstance : " , e1);
 		}
 		List<ProcessInstance> processInstances = new ArrayList<>();
 		processInstances.add(processInstance);

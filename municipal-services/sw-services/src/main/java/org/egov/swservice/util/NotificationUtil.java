@@ -81,7 +81,7 @@ public class NotificationUtil {
 	 *            The localization messages
 	 * @return message for the specific code
 	 */
-	private String getMessageTemplate(String notificationCode, String localizationMessage) {
+	public String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
 		path = path.replace("{}", notificationCode);
 		try {
@@ -119,8 +119,14 @@ public class NotificationUtil {
 	 * @param localizationMessage Localized message
 	 * @return message template
 	 */
-	public String getCustomizedMsgForSMS(String action, String applicationStatus, String localizationMessage) {
-		StringBuilder notificationCode = new StringBuilder("SW_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+	public String getCustomizedMsgForSMS(String action, String applicationStatus, String localizationMessage, int reqType) {
+		StringBuilder notificationCode = new StringBuilder();
+		if (reqType == SWConstants.UPDATE_APPLICATION) {
+			notificationCode = new StringBuilder("SW_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+		}
+		if(reqType == SWConstants.MODIFY_CONNECTION){
+			notificationCode = new StringBuilder("SW_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+		}
 		return getMessageTemplate(notificationCode.toString(), localizationMessage);
 	}
 
@@ -130,11 +136,17 @@ public class NotificationUtil {
 	 * @param localizationMessage - Localized Message
 	 * @return In app message template
 	 */
-	public String getCustomizedMsgForInApp(String action, String applicationStatus, String localizationMessage) {
-		
-		StringBuilder notificationCode = new StringBuilder("SW_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
+	public String getCustomizedMsgForInApp(String action, String applicationStatus, String localizationMessage, int reqType) {
+		StringBuilder notificationCode = new StringBuilder();
+		if(reqType == SWConstants.UPDATE_APPLICATION){
+			notificationCode.append("SW_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
+		}
+		if(reqType == SWConstants.MODIFY_CONNECTION){
+			notificationCode.append("SW_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
+		}
 		return getMessageTemplate(notificationCode.toString(), localizationMessage);
 	}
+	
 	/**
 	 * Pushes the event request to Kafka Queue.
 	 * 

@@ -25,6 +25,9 @@ public class MeterReadingUtil {
 	@Autowired
 	private WSCalculationConfiguration config;
 
+	@Autowired
+	private ObjectMapper mapper;
+
 	public MeterConnectionRequest getMeterReadingRequest(RequestInfo requestInfo, MeterReading meterReading) {
 		return MeterConnectionRequest.builder().requestInfo(requestInfo).meterReading(meterReading).build();
 	}
@@ -34,7 +37,6 @@ public class MeterReadingUtil {
 	}
 
 	public List<MeterReading> getMeterReadingDetails(Object result) {
-		ObjectMapper mapper = new ObjectMapper();
 		try {
 			MeterReadingResponse meterReadingResponse = mapper.convertValue(result, MeterReadingResponse.class);
 			return meterReadingResponse.getMeterReadings();

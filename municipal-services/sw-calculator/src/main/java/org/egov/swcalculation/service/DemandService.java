@@ -18,6 +18,13 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.swcalculation.config.SWCalculationConfiguration;
 import org.egov.swcalculation.constants.SWCalculationConstant;
+import org.egov.swcalculation.producer.SWCalculationProducer;
+import org.egov.swcalculation.repository.DemandRepository;
+import org.egov.swcalculation.repository.ServiceRequestRepository;
+import org.egov.swcalculation.repository.SewerageCalculatorDao;
+import org.egov.swcalculation.util.CalculatorUtils;
+import org.egov.swcalculation.util.SWCalculationUtil;
+import org.egov.swcalculation.validator.SWCalculationWorkflowValidator;
 import org.egov.swcalculation.web.models.Calculation;
 import org.egov.swcalculation.web.models.CalculationCriteria;
 import org.egov.swcalculation.web.models.CalculationReq;
@@ -34,12 +41,6 @@ import org.egov.swcalculation.web.models.SewerageConnection;
 import org.egov.swcalculation.web.models.SewerageConnectionRequest;
 import org.egov.swcalculation.web.models.TaxHeadEstimate;
 import org.egov.swcalculation.web.models.TaxPeriod;
-import org.egov.swcalculation.producer.SWCalculationProducer;
-import org.egov.swcalculation.repository.DemandRepository;
-import org.egov.swcalculation.repository.ServiceRequestRepository;
-import org.egov.swcalculation.repository.SewerageCalculatorDao;
-import org.egov.swcalculation.util.CalculatorUtils;
-import org.egov.swcalculation.util.SWCalculationUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -98,6 +99,9 @@ public class DemandService {
     
     @Autowired
     private SWCalculationUtil sWCalculationUtil;
+    
+    @Autowired
+	private SWCalculationWorkflowValidator swCalulationWorkflowValidator;
 
 	/**
 	 * Creates or updates Demand
@@ -185,7 +189,9 @@ public class DemandService {
 			
 			String consumerCode = isForConnectionNO ?  calculation.getConnectionNo() : calculation.getApplicationNO();
 			User owner = property.getOwners().get(0).toCommonUser();
-			
+			if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
+				owner = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).toCommonUser();
+			}
 			List<DemandDetail> demandDetails = new LinkedList<>();
 			
 			calculation.getTaxHeadEstimates().forEach(taxHeadEstimate -> {
@@ -319,7 +325,7 @@ public class DemandService {
 		try {
 			response = mapper.convertValue(result, DemandResponse.class);
 			if (CollectionUtils.isEmpty(response.getDemands()))
-				return null;
+				return Collections.emptyList();
 			return response.getDemands();
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("PARSING_ERROR", "Failed to parse response from Demand Search");
@@ -388,6 +394,29 @@ public class DemandService {
 			List<DemandDetail> demandDetails = demand.getDemandDetails();
 			List<DemandDetail> updatedDemandDetails = getUpdatedDemandDetails(calculation, demandDetails);
 			demand.setDemandDetails(updatedDemandDetails);
+
+			if(isForConnectionNo){
+				SewerageConnection connection = calculation.getSewerageConnection();
+				if (connection == null) {
+					List<SewerageConnection> sewerageConnectionList = calculatorUtils.getSewerageConnection(requestInfo,
+							calculation.getConnectionNo(),calculation.getTenantId());
+					int size = sewerageConnectionList.size();
+					connection = sewerageConnectionList.get(size-1);
+
+				}
+
+				if(connection.getApplicationType().equalsIgnoreCase("MODIFY_SEWERAGE_CONNECTION")){
+					SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder().sewerageConnection(connection)
+							.requestInfo(requestInfo).build();
+					Property property = sWCalculationUtil.getProperty(sewerageConnectionRequest);
+					User owner = property.getOwners().get(0).toCommonUser();
+					if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
+						owner = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).toCommonUser();
+					}
+					if(!(demand.getPayer().getUuid().equalsIgnoreCase(owner.getUuid())))
+						demand.setPayer(owner);
+				}
+			}
 			demands.add(demand);
 		}
 
@@ -567,6 +596,10 @@ public class DemandService {
 
 		BigDecimal penalty = interestPenaltyEstimates.get(SWCalculationConstant.SW_TIME_PENALTY);
 		BigDecimal interest = interestPenaltyEstimates.get(SWCalculationConstant.SW_TIME_INTEREST);
+		if(penalty == null)
+			penalty = BigDecimal.ZERO;
+		if(interest == null)
+			interest = BigDecimal.ZERO;
 
 		DemandDetailAndCollection latestPenaltyDemandDetail, latestInterestDemandDetail;
 

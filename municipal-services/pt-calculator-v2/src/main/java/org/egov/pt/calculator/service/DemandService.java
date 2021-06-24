@@ -248,6 +248,10 @@ public class DemandService {
 				consumerCodeToDemandMap.put(demand.getConsumerCode(),demands);
 			}
 		});
+		
+		if (CollectionUtils.isEmpty(consumerCodeToDemandMap))
+			throw new CustomException(CalculatorConstants.EMPTY_DEMAND_ERROR_CODE,
+					"No demands were found for the given consumerCodes : " + getBillCriteria.getConsumerCodes());
 
 		List<Demand> demandsToBeUpdated = new LinkedList<>();
 
@@ -258,8 +262,7 @@ public class DemandService {
 		for (String consumerCode : getBillCriteria.getConsumerCodes()) {
 			List<Demand> demands = consumerCodeToDemandMap.get(consumerCode);
 			if (CollectionUtils.isEmpty(demands))
-				throw new CustomException(CalculatorConstants.EMPTY_DEMAND_ERROR_CODE,
-						"No demand found for the consumerCode: " + consumerCode);
+				continue;
 
 			for(Demand demand : demands){
 				if (demand.getStatus() != null
@@ -384,9 +387,10 @@ public class DemandService {
 		OwnerInfo owner = null;
 
 		for(OwnerInfo ownerInfo : detail.getOwners()){
-			if(ownerInfo.getStatus().toString().equalsIgnoreCase(OwnerInfo.OwnerStatus.ACTIVE.toString()))
+			if(ownerInfo.getStatus().toString().equalsIgnoreCase(OwnerInfo.OwnerStatus.ACTIVE.toString())){
 				owner = ownerInfo;
-			break;
+				break;
+			}
 		}	
 
 		/*if (null != detail.getCitizenInfo())

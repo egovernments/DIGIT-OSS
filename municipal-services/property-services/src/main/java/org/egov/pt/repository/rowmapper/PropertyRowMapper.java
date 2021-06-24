@@ -160,10 +160,12 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 					return;
 			}
 		
+		Long constructionDate = 0 == rs.getLong("constructionDate") ? null : rs.getLong("constructionDate");
+
 		ConstructionDetail consDetail = ConstructionDetail.builder()
 				.constructionType(rs.getString("constructionType"))
 				.dimensions(getadditionalDetail(rs, "dimensions"))
-				.constructionDate(rs.getLong("constructionDate"))
+				.constructionDate(constructionDate)
 				.superBuiltUpArea(rs.getBigDecimal("unitspba"))
 				.builtUpArea(rs.getBigDecimal("builtUpArea"))
 				.carpetArea(rs.getBigDecimal("carpetArea"))

@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 public class WSCalculatorQueryBuilder {
 
 	@Autowired
-	WSCalculationConfiguration config;
+	private WSCalculationConfiguration config;
 
 	private static final String Offset_Limit_String = "OFFSET ? LIMIT ?";
 	private final static String Query = "SELECT mr.id, mr.connectionNo as connectionId, mr.billingPeriod, mr.meterStatus, mr.lastReading, mr.lastReadingDate, mr.currentReading,"
@@ -45,13 +45,18 @@ public class WSCalculatorQueryBuilder {
 	 * @return Query for given criteria
 	 */
 	public String getSearchQueryString(MeterReadingSearchCriteria criteria, List<Object> preparedStatement) {
+		if(criteria.isEmpty()){return  null;}
 		StringBuilder query = new StringBuilder(Query);
-		if (CollectionUtils.isEmpty(criteria.getConnectionNos())) {
-			return null;
+		if(!StringUtils.isEmpty(criteria.getTenantId())){
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" mr.tenantid= ? ");
+			preparedStatement.add(criteria.getTenantId());
 		}
-		addClauseIfRequired(preparedStatement, query);
-		query.append(" mr.connectionNo IN (").append(createQuery(criteria.getConnectionNos())).append(" )");
-		addToPreparedStatement(preparedStatement, criteria.getConnectionNos());
+		if (!CollectionUtils.isEmpty(criteria.getConnectionNos())) {
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" mr.connectionNo IN (").append(createQuery(criteria.getConnectionNos())).append(" )");
+			addToPreparedStatement(preparedStatement, criteria.getConnectionNos());
+		}
 		addOrderBy(query);
 		return addPaginationWrapper(query, preparedStatement, criteria);
 	}
@@ -108,12 +113,18 @@ public class WSCalculatorQueryBuilder {
 	
 	public String getCurrentReadingConnectionQuery(MeterReadingSearchCriteria criteria,
 			List<Object> preparedStatement) {
+		if(criteria.isEmpty()){return null;}
 		StringBuilder query = new StringBuilder(noOfConnectionSearchQueryForCurrentMeterReading);
-		if (CollectionUtils.isEmpty(criteria.getConnectionNos()))
-			return null;
-		addClauseIfRequired(preparedStatement, query);
-		query.append(" mr.connectionNo IN (").append(createQuery(criteria.getConnectionNos())).append(" )");
-		addToPreparedStatement(preparedStatement, criteria.getConnectionNos());
+		if(!StringUtils.isEmpty(criteria.getTenantId())){
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" mr.tenantid= ? ");
+			preparedStatement.add(criteria.getTenantId());
+		}
+		if (!CollectionUtils.isEmpty(criteria.getConnectionNos())) {
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" mr.connectionNo IN (").append(createQuery(criteria.getConnectionNos())).append(" )");
+			addToPreparedStatement(preparedStatement, criteria.getConnectionNos());
+		}
 		query.append(" ORDER BY mr.currentReadingDate DESC LIMIT 1");
 		return query.toString();
 	}
@@ -155,6 +166,8 @@ public class WSCalculatorQueryBuilder {
 		addClauseIfRequired(preparedStatement, query);
 		query.append(" conn.tenantid = ? ");
 		preparedStatement.add(tenantId);
+		addClauseIfRequired(preparedStatement, query);
+		query.append(" conn.connectionno is not null");
 		return query.toString();
 		
 	}

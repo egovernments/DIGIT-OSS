@@ -20,7 +20,7 @@ import lombok.Setter;
 @Component
 public class WSCalculationConfiguration {
 
-	@Value("${egov.ws_calculation.meterReading.default.limit}")
+	@Value("${egov.ws.search.meterReading.pagination.default.limit}")
 	private Integer meterReadingDefaultLimit;
 
 	@Value("${egov.ws_calculation.meterReading.default.offset}")
@@ -66,8 +66,8 @@ public class WSCalculationConfiguration {
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsEndPoint;
 	
-    @Value("${egov.bill.gen.endpoint}")
-    private String billGenerateEndpoint;
+    	@Value("${egov.bill.gen.endpoint}")
+    	private String billGenerateEndpoint;
 
 	// water demand configs
 
@@ -116,39 +116,39 @@ public class WSCalculationConfiguration {
 	private Boolean isLocalizationStateLevel;
 	
 	 //SMS
-    @Value("${kafka.topics.notification.sms}")
-    private String smsNotifTopic;
+    	@Value("${kafka.topics.notification.sms}")
+    	private String smsNotifTopic;
 
-    @Value("${notification.sms.enabled}")
-    private Boolean isSMSEnabled;
+    	@Value("${notification.sms.enabled}")
+    	private Boolean isSMSEnabled;
     
-    @Value("${notification.sms.link}")
-    private String smsNotificationLink;
+    	@Value("${notification.sms.link}")
+    	private String smsNotificationLink;
     
-    @Value("${notification.email.enabled}")
-    private Boolean isEmailEnabled;
+    	@Value("${notification.email.enabled}")
+    	private Boolean isEmailEnabled;
     
-  //Email
-    @Value("${kafka.topics.notification.mail.name}")
-    private String emailNotifyTopic;
+  	//Email
+    	@Value("${kafka.topics.notification.mail.name}")
+    	private String emailNotifyTopic;
     
-    //User Configuration
-    @Value("${egov.user.host}")
-    private String userHost;
+    	//User Configuration
+    	@Value("${egov.user.host}")
+    	private String userHost;
 
-    @Value("${egov.user.context.path}")
-    private String userContextPath;
+    	@Value("${egov.user.context.path}")
+    	private String userContextPath;
 
 
-    @Value("${egov.user.search.path}")
-    private String userSearchEndpoint;
+    	@Value("${egov.user.search.path}")
+    	private String userSearchEndpoint;
     
-    //payment 
-    @Value("${egov.usr.events.pay.triggers}")
+    	//payment 
+    	@Value("${egov.usr.events.pay.triggers}")
    	private String billgenTopic;
     
     
-    //USER EVENTS
+    	//USER EVENTS
 	@Value("${egov.ui.app.host}")
 	private String uiAppHost;
     
@@ -170,18 +170,31 @@ public class WSCalculationConfiguration {
 	@Value("${egov.watercalculatorservice.createdemand.topic}")
 	private String createDemand;
 	
-    @Value("${ws.demand.based.batch.size}")
-    private Integer batchSize;
+    	@Value("${ws.demand.based.batch.size}")
+    	private Integer batchSize;
     
-    @Value("${persister.demand.based.dead.letter.topic.batch}")
-    private String deadLetterTopicBatch;
+    	@Value("${persister.demand.based.dead.letter.topic.batch}")
+    	private String deadLetterTopicBatch;
 
-    @Value("${persister.demand.based.dead.letter.topic.single}")
-    private String deadLetterTopicSingle;
+    	@Value("${persister.demand.based.dead.letter.topic.single}")
+    	private String deadLetterTopicSingle;
     
     
-    @Value("${notification.url}")
-    private String notificationUrl;
-    
+    	@Value("${notification.url}")
+    	private String notificationUrl;
 
+    	@Value("${egov.shortener.url}")
+	private String shortenerURL;
+    
+    	@Value("${egov.property.service.host}")
+	private String propertyHost;
+
+	@Value("${egov.property.searchendpoint}")
+	private String searchPropertyEndPoint;
+
+	@Value("${workflow.workDir.path}")
+	private String workflowHost;
+
+	@Value("${workflow.process.search.path}")
+	private String searchWorkflowProcessEndPoint;
 }

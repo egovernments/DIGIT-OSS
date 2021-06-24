@@ -19,7 +19,7 @@ the citizen and will be updated by notifications whenever the status of the comp
 
 
 ### Swagger API Contract
-- Please refer to the [Swagger API contarct](https://raw.githubusercontent.com/egovernments/municipal-services/pgr-services-v2/pgr-services/src/main/resources/swagger-contract.yml#!/) for PGR service to understand the structure of APIs and to have visualization of all internal APIs.
+- Please refer to the [Swagger API contarct](https://raw.githubusercontent.com/egovernments/municipal-services/master/docs/pgr-services.yml) for PGR service to understand the structure of APIs and to have visualization of all internal APIs.
 
 
 ## Service Details

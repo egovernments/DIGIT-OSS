@@ -1,13 +1,11 @@
 package org.egov.swservice.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -66,6 +64,8 @@ public class SewerageServicesUtil {
 	private String propertyIds = "propertyIds=";
 	private String uuids = "uuids=";
 	private String URL = "url";
+	private String locality = "locality=";
+	private String localityCode = "locality";
 
 	/**
 	 * 
@@ -83,6 +83,21 @@ public class SewerageServicesUtil {
 				&& "EMPLOYEE".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())) {
 			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
 		}
+		if (sewerageConnectionRequest.getRequestInfo().getUserInfo() != null
+				&& "SYSTEM".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())) {
+			sewerageConnectionRequest.getRequestInfo().getUserInfo().setType("EMPLOYEE");
+			List<Role> oldRoles = sewerageConnectionRequest.getRequestInfo().getUserInfo().getRoles();
+			List<Role>  newRoles = new ArrayList<>();
+			for(Role role:oldRoles){
+				if(!role.getCode().equalsIgnoreCase("ANONYMOUS"))
+					newRoles.add(role);
+			}
+			sewerageConnectionRequest.getRequestInfo().getUserInfo().setRoles(newRoles);
+			HashMap<String, Object> addDetail = mapper
+					.convertValue(sewerageConnectionRequest.getSewerageConnection().getAdditionalDetails(), HashMap.class);
+			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+			propertyCriteria.setLocality(addDetail.get(localityCode).toString());
+		}
 		Object result = serviceRequestRepository.fetchResult(
 				getPropertyURL(propertyCriteria),
 				RequestInfoWrapper.builder().requestInfo(sewerageConnectionRequest.getRequestInfo()).build());
@@ -99,14 +114,14 @@ public class SewerageServicesUtil {
 	 *            Response object from property service call
 	 * @return List of property
 	 */
-	private List<Property> getPropertyDetails(Object result) {
+	public List<Property> getPropertyDetails(Object result) {
 		try {
 			return mapper.convertValue(result, PropertyResponse.class).getProperties();
 		} catch (Exception ex) {
 			throw new CustomException("PARSING_ERROR", "The property json cannot be parsed");
 		}
 	}
-	
+ 
 	/**
 	 * 
 	 * @param sewerageConnectionSearchCriteria - Sewerage Connection Search Criteria
@@ -116,7 +131,8 @@ public class SewerageServicesUtil {
 
 	public List<Property> propertySearchOnCriteria(SearchCriteria sewerageConnectionSearchCriteria,
 			RequestInfo requestInfo) {
-		if (StringUtils.isEmpty(sewerageConnectionSearchCriteria.getMobileNumber())) {
+		if (StringUtils.isEmpty(sewerageConnectionSearchCriteria.getMobileNumber())
+				&& StringUtils.isEmpty(sewerageConnectionSearchCriteria.getPropertyId())) {
 			return Collections.emptyList();
 		}
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
@@ -129,6 +145,9 @@ public class SewerageServicesUtil {
 			HashSet<String> propertyIds = new HashSet<>();
 			propertyIds.add(sewerageConnectionSearchCriteria.getPropertyId());
 			propertyCriteria.setPropertyIds(propertyIds);
+		}
+		if (!StringUtils.isEmpty(sewerageConnectionSearchCriteria.getLocality())) {
+			propertyCriteria.setLocality(sewerageConnectionSearchCriteria.getLocality());
 		}
 
 		Object result = serviceRequestRepository.fetchResult(
@@ -215,14 +234,14 @@ public class SewerageServicesUtil {
 		Object response = serviceRequestRepository.getShortningURL(new StringBuilder(url), obj);
 		return response.toString();
 	}
-	
+ 
 	/**
 	 * 
 	 * search url for property search
 	 * @param criteria - Property Search Criteria
 	 * @return property URL
 	 */
-	private StringBuilder getPropertyURL(PropertyCriteria criteria) {
+	public StringBuilder getPropertyURL(PropertyCriteria criteria) {
 		StringBuilder url = new StringBuilder(getPropertyURL());
 		boolean isanyparametermatch = false;
 		url.append("?");
@@ -242,6 +261,11 @@ public class SewerageServicesUtil {
 			isanyparametermatch = true;
 			url.append(mobileNumber).append(criteria.getMobileNumber());
 		}
+		if (!org.springframework.util.StringUtils.isEmpty(criteria.getLocality())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(locality).append(criteria.getLocality());
+		}
 		if (!CollectionUtils.isEmpty(criteria.getUuids())) {
 			if (isanyparametermatch)url.append("&");
 			String uuidString = criteria.getUuids().stream().map(uuid -> uuid).collect(Collectors.toSet()).stream()
@@ -249,6 +273,20 @@ public class SewerageServicesUtil {
 			url.append(uuids).append(uuidString);
 		}
 		return url;
+	}
+ 
+	/**
+	 *
+	 * @param sewerageConnectionRequest
+	 * @return
+	 */
+	public boolean isModifyConnectionRequest(SewerageConnectionRequest sewerageConnectionRequest) {
+		return !org.springframework.util.StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
+	}
+
+	public StringBuilder getcollectionURL() {
+		StringBuilder builder = new StringBuilder();
+		return builder.append(config.getCollectionHost()).append(config.getPaymentSearch());
 	}
 
 }

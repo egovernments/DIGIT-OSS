@@ -57,7 +57,6 @@ public class MDMSService {
 			else
 				throw new Exception();
 		}catch(Exception e) {
-			log.error("Exception while fetching from MDMS: ", e);
 			throw new CustomException(ErrorConstants.MEN_ERROR_FROM_MDMS_CODE, ErrorConstants.MEN_ERROR_FROM_MDMS_MSG);
 		}
 		return eventMasters;

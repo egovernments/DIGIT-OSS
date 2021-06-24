@@ -2,6 +2,7 @@ package org.egov.pgr.web.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
+import org.egov.pgr.annotation.CharacterConstraint;
 import org.springframework.validation.annotation.Validated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 public class Service   {
+
+        @JsonProperty("active")
+        private boolean active = true;
+
         @JsonProperty("citizen")
         private User citizen = null;
 
@@ -55,6 +60,7 @@ public class Service   {
         @JsonProperty("rating")
         private Integer rating ;
 
+        @CharacterConstraint(size = 600)
         @JsonProperty("additionalDetail")
         private Object additionalDetail = null;
 

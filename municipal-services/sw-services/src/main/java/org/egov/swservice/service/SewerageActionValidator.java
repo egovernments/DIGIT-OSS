@@ -5,5 +5,5 @@ import org.egov.swservice.web.models.ValidatorResult;
 
 public interface SewerageActionValidator {
 
-	ValidatorResult validate(SewerageConnectionRequest sewerageConnectionRequest, boolean isUpdate);
+	ValidatorResult validate(SewerageConnectionRequest sewerageConnectionRequest, int reqType);
 }

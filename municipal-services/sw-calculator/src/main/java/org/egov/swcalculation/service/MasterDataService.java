@@ -16,8 +16,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.mdms.model.MdmsCriteriaReq;
-import org.egov.mdms.model.MdmsResponse;
+import org.egov.mdms.model.*;
 import org.egov.swcalculation.constants.SWCalculationConstant;
 import org.egov.swcalculation.web.models.CalculationCriteria;
 import org.egov.swcalculation.web.models.RequestInfoWrapper;
@@ -429,6 +428,33 @@ public class MasterDataService {
 		billingPeriod.put(SWCalculationConstant.Demand_Expiry_Date_String, SWCalculationConstant.APPLICATION_FEE_DEMAND_EXP_DATE);
 		masterMap.put(SWCalculationConstant.BILLING_PERIOD, billingPeriod);
 		return masterMap;
+	}
+
+	public Map<String, List<String>> getAttributeValues(String tenantId, String moduleName, List<String> names,
+														String filter, String jsonPath, RequestInfo requestInfo) {
+		StringBuilder uri = calculatorUtils.getMdmsSearchUrl();
+		MdmsCriteriaReq criteriaReq = prepareMdMsRequest(tenantId, moduleName, names, filter,
+				requestInfo);
+		try {
+			Object result = repository.fetchResult(uri, criteriaReq);
+			return JsonPath.read(result, jsonPath);
+		} catch (Exception e) {
+			log.error("Error while fetching MDMS data", e);
+			throw new CustomException("Invalid Billing Period", "No data found for this Billing Period");
+		}
+	}
+
+	public MdmsCriteriaReq prepareMdMsRequest(String tenantId, String moduleName, List<String> names, String filter,
+											  RequestInfo requestInfo) {
+		List<MasterDetail> masterDetails = new ArrayList<>();
+		names.forEach(name -> {
+			masterDetails.add(MasterDetail.builder().name(name).filter(filter).build());
+		});
+		ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(moduleName).masterDetails(masterDetails).build();
+		List<ModuleDetail> moduleDetails = new ArrayList<>();
+		moduleDetails.add(moduleDetail);
+		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(tenantId).moduleDetails(moduleDetails).build();
+		return MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
 	}
 }
 

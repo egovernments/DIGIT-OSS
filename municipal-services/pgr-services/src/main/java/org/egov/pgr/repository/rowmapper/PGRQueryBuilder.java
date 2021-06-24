@@ -1,9 +1,12 @@
 package org.egov.pgr.repository.rowmapper;
 
 import org.egov.pgr.web.models.RequestSearchCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -32,16 +35,36 @@ public class PGRQueryBuilder {
 
         StringBuilder builder = new StringBuilder(QUERY);
 
-        if (criteria.getTenantId() != null) {
-            addClauseIfRequired(preparedStmtList, builder);
-            builder.append(" ser.tenantid=? ");
-            preparedStmtList.add(criteria.getTenantId());
+        if(criteria.getIsPlainSearch() != null && criteria.getIsPlainSearch()){
+            Set<String> tenantIds = criteria.getTenantIds();
+            if(!CollectionUtils.isEmpty(tenantIds)){
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append(" ser.tenantId IN (").append(createQuery(tenantIds)).append(")");
+                addToPreparedStatement(preparedStmtList, tenantIds);
+            }
         }
+        else {
+            if (criteria.getTenantId() != null) {
+                String tenantId = criteria.getTenantId();
 
-        if (criteria.getServiceCode() != null) {
+                String[] tenantIdChunks = tenantId.split("\\.");
+
+                if (tenantIdChunks.length == 1) {
+                    addClauseIfRequired(preparedStmtList, builder);
+                    builder.append(" ser.tenantid LIKE ? ");
+                    preparedStmtList.add(criteria.getTenantId() + '%');
+                } else {
+                    addClauseIfRequired(preparedStmtList, builder);
+                    builder.append(" ser.tenantid=? ");
+                    preparedStmtList.add(criteria.getTenantId());
+                }
+            }
+        }
+        Set<String> serviceCodes = criteria.getServiceCode();
+        if (!CollectionUtils.isEmpty(serviceCodes)) {
             addClauseIfRequired(preparedStmtList, builder);
-            builder.append(" ser.serviceCode=? ");
-            preparedStmtList.add(criteria.getServiceCode());
+            builder.append(" ser.serviceCode IN (").append(createQuery(serviceCodes)).append(")");
+            addToPreparedStatement(preparedStmtList, serviceCodes);
         }
 
         Set<String> applicationStatuses = criteria.getApplicationStatus();
@@ -64,6 +87,22 @@ public class PGRQueryBuilder {
             addToPreparedStatement(preparedStmtList, ids);
         }
 
+        //When UI tries to fetch "escalated" complaints count.
+        if(criteria.getSlaDeltaMaxLimit() != null && criteria.getSlaDeltaMinLimit() == null){
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" ((extract(epoch FROM NOW())*1000) - ser.createdtime) > ? ");
+            preparedStmtList.add(criteria.getSlaDeltaMaxLimit());
+        }
+        //When UI tries to fetch "other" complaints count.
+        if(criteria.getSlaDeltaMaxLimit() != null && criteria.getSlaDeltaMinLimit() != null){
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" ((extract(epoch FROM NOW())*1000) - ser.createdtime) > ? ");
+            preparedStmtList.add(criteria.getSlaDeltaMinLimit());
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" ((extract(epoch FROM NOW())*1000) - ser.createdtime) < ? ");
+            preparedStmtList.add(criteria.getSlaDeltaMaxLimit());
+        }
+
         Set<String> userIds = criteria.getUserIds();
         if (!CollectionUtils.isEmpty(userIds)) {
             addClauseIfRequired(preparedStmtList, builder);
@@ -71,7 +110,35 @@ public class PGRQueryBuilder {
             addToPreparedStatement(preparedStmtList, userIds);
         }
 
-        addOrderByClause(builder);
+
+        Set<String> localities = criteria.getLocality();
+        if(!CollectionUtils.isEmpty(localities)){
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" ads.locality IN (").append(createQuery(localities)).append(")");
+            addToPreparedStatement(preparedStmtList, localities);
+        }
+
+        if (criteria.getFromDate() != null) {
+            addClauseIfRequired(preparedStmtList, builder);
+
+            //If user does not specify toDate, take today's date as toDate by default.
+            if (criteria.getToDate() == null) {
+                criteria.setToDate(Instant.now().toEpochMilli());
+            }
+
+            builder.append(" ser.createdtime BETWEEN ? AND ?");
+            preparedStmtList.add(criteria.getFromDate());
+            preparedStmtList.add(criteria.getToDate());
+
+        } else {
+            //if only toDate is provided as parameter without fromDate parameter, throw an exception.
+            if (criteria.getToDate() != null) {
+                throw new CustomException("INVALID_SEARCH", "Cannot specify to-Date without a from-Date");
+            }
+        }
+
+
+        addOrderByClause(builder, criteria);
 
         addLimitAndOffset(builder, criteria, preparedStmtList);
 
@@ -85,8 +152,24 @@ public class PGRQueryBuilder {
         return countQuery;
     }
 
-    private void addOrderByClause(StringBuilder builder){
-        builder.append( " ORDER BY ser_createdtime DESC ");
+    private void addOrderByClause(StringBuilder builder, RequestSearchCriteria criteria){
+
+        if(StringUtils.isEmpty(criteria.getSortBy()))
+            builder.append( " ORDER BY ser_createdtime ");
+
+        else if(criteria.getSortBy()== RequestSearchCriteria.SortBy.locality)
+            builder.append(" ORDER BY ads.locality ");
+
+        else if(criteria.getSortBy()== RequestSearchCriteria.SortBy.applicationStatus)
+            builder.append(" ORDER BY ser.applicationStatus ");
+
+        else if(criteria.getSortBy()== RequestSearchCriteria.SortBy.serviceRequestId)
+            builder.append(" ORDER BY ser.serviceRequestId ");
+
+        if(criteria.getSortOrder()== RequestSearchCriteria.SortOrder.ASC)
+            builder.append(" ASC ");
+        else builder.append(" DESC ");
+
     }
 
     private void addLimitAndOffset(StringBuilder builder, RequestSearchCriteria criteria, List<Object> preparedStmtList){

@@ -212,7 +212,8 @@ public class PropertyService {
 	private void processOwnerMutation(PropertyRequest request, Property propertyFromSearch) {
 		
 		propertyValidator.validateMutation(request, propertyFromSearch);
-		userService.createUserForMutation(request, !propertyFromSearch.getStatus().equals(Status.INWORKFLOW));		enrichmentService.enrichAssignes(request.getProperty());
+		userService.createUserForMutation(request, !propertyFromSearch.getStatus().equals(Status.INWORKFLOW));
+		enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichMutationRequest(request, propertyFromSearch);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		System.out.println("--------- merge additionaldetails before calculate ---------- ");

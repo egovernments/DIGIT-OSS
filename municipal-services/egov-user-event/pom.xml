@@ -6,7 +6,7 @@
 	<artifactId>egov-user-event</artifactId>
 	<packaging>jar</packaging>
 	<name>egov-user-event</name>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>1.1.2-SNAPSHOT</version>
 	<description>Service to send out notifications to user based on the events</description>
 
 	<parent>

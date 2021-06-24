@@ -265,7 +265,4 @@ public class OwnerInfo extends User {
 				+ getCreatedDate() + ", LastModifiedBy=" + getLastModifiedBy() + ", LastModifiedDate="
 				+ getLastModifiedDate() + ", TenantId=" + getTenantId() + "]";
 	}
-
-
-	
 }

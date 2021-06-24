@@ -72,8 +72,13 @@ public class PGRConstants {
 
     public static final String USREVENTS_EVENT_POSTEDBY = "SYSTEM-PGR";
 
+    public static final String IMAGE_DOCUMENT_TYPE = "PHOTO";
+
+    public static final String MDMS_DATA_JSONPATH = "$.MdmsRes.RAINMAKER-PGR.ServiceDefs";
+
+    public static final String MDMS_DATA_SERVICE_CODE_KEYWORD = "serviceCode";
+
+    public static final String MDMS_DATA_SLA_KEYWORD = "slaHours";
 
 
-  
-  
 }

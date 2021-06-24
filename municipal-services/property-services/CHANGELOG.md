@@ -1,6 +1,31 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.4 - 2021-02-26
+
+- Updated domain name in applicaation.properties
+- Fixed security issue for throwable statement
+
+## 1.1.4
+
+## 1.1.3 - 2021-01-22
+
+- MobileNuber based user validation for update
+
+## 1.1.3
+
+## 1.1.2 - 2021-01-12
+
+- Mutation & create duplicate owner issue fixed
+- builtup/unit area validation added
+
+## 1.1.2 
+
+## 1.1.1 - 2020-10-15
+- WATER_CHARGES source enum added.
+
+## 1.1.1 
+
 ## 1.1.0 - 2020-10-01
 - SendBack to CITIZEN added in the workflow.
 

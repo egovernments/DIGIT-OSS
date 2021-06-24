@@ -97,6 +97,9 @@ public class Connection {
 	@JsonProperty("roadCuttingArea")
 	private Float roadCuttingArea = null;
 
+	@JsonProperty("roadCuttingInfo")
+	private List<RoadCuttingInfo> roadCuttingInfo = null;
+
 	@JsonProperty("connectionExecutionDate")
 	private Long connectionExecutionDate = null;
 
@@ -114,6 +117,19 @@ public class Connection {
 
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails = null;
+	
+	@JsonProperty("connectionHolders")
+	@Valid
+	private List<OwnerInfo> connectionHolders;
+	
+	@JsonProperty("applicationType")
+	private String applicationType = null;
+
+	@JsonProperty("dateEffectiveFrom")
+	private Long dateEffectiveFrom = null;
+
+	@JsonProperty("oldApplication")
+	private Boolean oldApplication = false;
 
 	public Connection id(String id) {
 		this.id = id;
@@ -161,6 +177,14 @@ public class Connection {
 	public Connection applicationNo(String applicationNo) {
 		this.applicationNo = applicationNo;
 		return this;
+	}
+
+	@ApiModelProperty(value = " ")
+
+	public Boolean getOldApplication() {return oldApplication;}
+
+	public void setOldApplication(Boolean oldApplication) {
+		this.oldApplication = oldApplication;
 	}
 
 	/**
@@ -265,6 +289,20 @@ public class Connection {
 		this.oldConnectionNo = oldConnectionNo;
 	}
 
+	public Connection roadCuttingInfo(List<RoadCuttingInfo> roadCuttingInfo){
+		this.roadCuttingInfo = roadCuttingInfo;
+		return this;
+	}
+
+	public Connection addRoadCuttingInfoList(RoadCuttingInfo roadCuttingInfoItem){
+		if(this.roadCuttingInfo == null)
+			this.roadCuttingInfo = new ArrayList<RoadCuttingInfo>();
+		if(!this.roadCuttingInfo.contains(roadCuttingInfoItem))
+			this.roadCuttingInfo.add(roadCuttingInfoItem);
+
+		return this;
+	}
+
 	public Connection documents(List<Document> documents) {
 		this.documents = documents;
 		return this;
@@ -298,6 +336,12 @@ public class Connection {
 		this.plumberInfo = plumberInfo;
 		return this;
 	}
+
+	@ApiModelProperty(value = "The road cutting information given by owner")
+	@Valid
+	public List<RoadCuttingInfo> getRoadCuttingInfo(){ return roadCuttingInfo; }
+
+	public void setRoadCuttingInfo(List<RoadCuttingInfo> roadCuttingInfo) { this.roadCuttingInfo = roadCuttingInfo; }
 
 	public Connection addPlumberInfoItem(PlumberInfo plumberInfoItem) {
 		if (this.plumberInfo == null) {
@@ -485,6 +529,65 @@ public class Connection {
 		this.propertyId = propertyId;
 		return this;
 	}
+	
+	public Connection addConnectionHolderInfo(OwnerInfo connectionHolderInfo) {
+		if (this.connectionHolders == null) {
+			this.connectionHolders = new ArrayList<OwnerInfo>();
+		}
+		if (!this.connectionHolders.contains(connectionHolderInfo))
+			this.connectionHolders.add(connectionHolderInfo);
+		return this;
+	}
+
+	@ApiModelProperty(value = "The connection holder info will enter by employee or citizen")
+	@Valid
+	public List<OwnerInfo> getConnectionHolders() {
+		return connectionHolders;
+	}
+
+	public void setConnectionHolders(List<OwnerInfo> connectionHolders) {
+		this.connectionHolders = connectionHolders;
+	}
+	
+	public Connection dateEffectiveFrom(Long dateEffectiveFrom) {
+		this.dateEffectiveFrom = dateEffectiveFrom;
+		return this;
+	}
+
+	/**
+	 * Get dateEffectiveFrom
+	 *
+	 * @return dateEffectiveFrom
+	 **/
+	@ApiModelProperty(readOnly = true, value = "")
+	@Valid
+	public Long getDateEffectiveFrom() {
+		return dateEffectiveFrom;
+	}
+
+	public void setDateEffectiveFrom(Long dateEffectiveFrom) {
+		this.dateEffectiveFrom = dateEffectiveFrom;
+	}
+
+	public Connection applicationType(String applicationType) {
+		this.applicationType = applicationType;
+		return this;
+	}
+
+	/**
+	 * It is a master data, defined in MDMS.
+	 *
+	 * @return applicationType
+	 **/
+	@ApiModelProperty(readOnly = true, value = "")
+	@Valid
+	public String getApplicationType() {
+		return applicationType;
+	}
+
+	public void setApplicationType(String applicationType) {
+		this.applicationType = applicationType;
+	}
 
 	@Override
 	public boolean equals(java.lang.Object o) {
@@ -506,18 +609,23 @@ public class Connection {
 				&& Objects.equals(this.plumberInfo, connection.plumberInfo)
 				&& Objects.equals(this.roadType, connection.roadType)
 				&& Objects.equals(this.roadCuttingArea, connection.roadCuttingArea)
+				&& Objects.equals(this.roadCuttingInfo,connection.roadCuttingInfo)
 				&& Objects.equals(this.connectionExecutionDate, connection.connectionExecutionDate)
 				&& Objects.equals(this.connectionCategory, connection.connectionCategory)
 				&& Objects.equals(this.connectionType, connection.connectionType)
 				&& Objects.equals(this.additionalDetails, connection.additionalDetails)
-				&& Objects.equals(this.auditDetails, connection.auditDetails);
+				&& Objects.equals(this.connectionHolders, connection.connectionHolders)
+				&& Objects.equals(this.applicationType, connection.applicationType)
+				&& Objects.equals(this.dateEffectiveFrom, connection.dateEffectiveFrom)
+				&& Objects.equals(this.oldApplication, connection.oldApplication);
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, tenantId, propertyId, applicationNo, applicationStatus, status, connectionNo,
-				oldConnectionNo, documents, plumberInfo, roadType, roadCuttingArea, connectionExecutionDate,
-				connectionCategory, connectionType, additionalDetails, auditDetails);
+				oldConnectionNo, documents, roadCuttingInfo, plumberInfo, roadType, roadCuttingArea, connectionExecutionDate,
+				connectionCategory, connectionType, additionalDetails, auditDetails, connectionHolders,
+				applicationType, dateEffectiveFrom, oldApplication);
 	}
 
 	@Override
@@ -537,11 +645,16 @@ public class Connection {
 		sb.append("    plumberInfo: ").append(toIndentedString(plumberInfo)).append("\n");
 		sb.append("    roadType: ").append(toIndentedString(roadType)).append("\n");
 		sb.append("    roadCuttingArea: ").append(toIndentedString(roadCuttingArea)).append("\n");
+		sb.append("    roadCuttingInfo: ").append(toIndentedString(roadCuttingInfo)).append("\n");
 		sb.append("    connectionExecutionDate: ").append(toIndentedString(connectionExecutionDate)).append("\n");
 		sb.append("    connectionCategory: ").append(toIndentedString(connectionCategory)).append("\n");
 		sb.append("    connectionType: ").append(toIndentedString(connectionType)).append("\n");
 		sb.append("    additionalDetails: ").append(toIndentedString(additionalDetails)).append("\n");
 		sb.append("    auditDetails: ").append(toIndentedString(auditDetails)).append("\n");
+		sb.append("    connectionHolders: ").append(toIndentedString(connectionHolders)).append("\n");
+		sb.append("    applicationType: ").append(toIndentedString(applicationType)).append("\n");
+		sb.append("	   dateEffectiveFrom: ").append(toIndentedString(dateEffectiveFrom)).append("\n");
+		sb.append("	   oldApplication: ").append(toIndentedString(oldApplication)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}

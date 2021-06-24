@@ -11,16 +11,18 @@ import java.util.stream.Stream;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MdmsCriteriaReq;
-import org.egov.tracer.model.CustomException;
-import org.egov.swservice.web.models.SewerageConnection;
-import org.egov.swservice.web.models.SewerageConnectionRequest;
 import org.egov.swservice.repository.ServiceRequestRepository;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
+import org.egov.swservice.web.models.RoadCuttingInfo;
+import org.egov.swservice.web.models.SewerageConnection;
+import org.egov.swservice.web.models.SewerageConnectionRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.jayway.jsonpath.JsonPath;
 
@@ -41,36 +43,26 @@ public class MDMSValidator {
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsEndpoint;
 
-	public void validateMasterData(SewerageConnectionRequest request) {
-		if (request.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION_CONST)){
-		Map<String, String> errorMap = new HashMap<>();
-		List<String> names = new ArrayList<>(Arrays.asList(SWConstants.MDMS_SW_Connection_Type));
-		List<String> taxModelNames = new ArrayList<>(Arrays.asList(SWConstants.SC_ROADTYPE_MASTER));
-		Map<String, List<String>> codes = getAttributeValues(request.getSewerageConnection().getTenantId(), 
-				SWConstants.MDMS_SW_MOD_NAME, names, "$.*.code",
-				SWConstants.JSONPATH_ROOT, request.getRequestInfo());
-		Map<String, List<String>> codeFromCalculatorMaster = getAttributeValues(request.getSewerageConnection().getTenantId(), 
-				SWConstants.SW_TAX_MODULE, taxModelNames, "$.*.code",
-				SWConstants.TAX_JSONPATH_ROOT, request.getRequestInfo());
-		// merge codes
-		
-		Map<String, List<String>> finalCodes = Stream.of(codes, codeFromCalculatorMaster).map(Map::entrySet)
-				.flatMap(Collection::stream).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-		validateMDMSData(finalCodes);
-		validateCodes(request.getSewerageConnection(), finalCodes, errorMap);
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
+	public void validateMasterData(SewerageConnectionRequest request, int reqType) {
+			switch (reqType) {
+				case SWConstants.UPDATE_APPLICATION:
+					validateMasterDataForUpdateConnection(request);
+					break;
+				case SWConstants.MODIFY_CONNECTION:
+					validateMasterDataForModifyConnection(request);
+					break;
+				default:
+					break;
 	     }
 	}
 
 
-	private Map<String, List<String>> getAttributeValues(String tenantId, String moduleName, List<String> names,
+	public Map<String, List<String>> getAttributeValues(String tenantId, String moduleName, List<String> names,
 			String filter, String jsonPath, RequestInfo requestInfo) {
 		StringBuilder uri = new StringBuilder(mdmsHost).append(mdmsEndpoint);
 		MdmsCriteriaReq criteriaReq = sewerageServicesUtil.prepareMdMsRequest(tenantId, moduleName, names, filter,
 				requestInfo);
 		try {
-
 			Object result = serviceRequestRepository.fetchResult(uri, criteriaReq);
 			return JsonPath.read(result, jsonPath);
 		} catch (Exception e) {
@@ -79,8 +71,7 @@ public class MDMSValidator {
 		}
 	}
 
-	private void validateMDMSData(Map<String, List<String>> codes) {
-		String[] masterNames = { SWConstants.MDMS_SW_Connection_Type, SWConstants.SC_ROADTYPE_MASTER };
+	private void validateMDMSData(String[] masterNames, Map<String, List<String>> codes) {
 		Map<String, String> errorMap = new HashMap<>();
 		for (String masterName : masterNames) {
 			if (CollectionUtils.isEmpty(codes.get(masterName))) {
@@ -95,18 +86,109 @@ public class MDMSValidator {
 			Map<String, List<String>> codes, Map<String, String> errorMap) {
 		StringBuilder messageBuilder;
 		if (sewerageConnection.getConnectionType() != null 
-				&& !codes.get(SWConstants.MDMS_SW_Connection_Type).contains(sewerageConnection.getConnectionType())) {
+				&& !codes.get(SWConstants.MDMS_SW_CONNECTION_TYPE).contains(sewerageConnection.getConnectionType())) {
 			messageBuilder = new StringBuilder();
 			messageBuilder.append("Connection type value is invalid, please enter proper value! ");
 			errorMap.put("INVALID SEWERAGE CONNECTION TYPE", messageBuilder.toString());
 		}
-		if (sewerageConnection.getRoadType() != null
-				&& !codes.get(SWConstants.SC_ROADTYPE_MASTER).contains(sewerageConnection.getRoadType())) {
-			messageBuilder = new StringBuilder();
-			messageBuilder.append("Road type value is invalid, please enter proper value! ");
-			errorMap.put("INVALID_WATER_ROAD_TYPE", messageBuilder.toString());
+		
+		if(sewerageConnection.getRoadCuttingInfo() == null){
+			errorMap.put("INVALID_ROAD_INFO", "Road Cutting Information should not be empty");
 		}
+
+		if(sewerageConnection.getRoadCuttingInfo() != null){
+			for(RoadCuttingInfo roadCuttingInfo : sewerageConnection.getRoadCuttingInfo()){
+				if (!StringUtils.isEmpty(roadCuttingInfo.getRoadType())
+						&& !codes.get(SWConstants.SC_ROADTYPE_MASTER).contains(roadCuttingInfo.getRoadType())) {
+					messageBuilder = new StringBuilder();
+					messageBuilder.append("Road type value is invalid, please enter proper value! ");
+					errorMap.put("INVALID_WATER_ROAD_TYPE", messageBuilder.toString());
+				}
+			}
+		}
+		
 		return errorMap;
+	}
+	
+	/**
+	 * Validate master data of sewerage connection request
+	 *
+	 * @param request sewerage connection request
+	 */
+	public void validateMasterForCreateRequest(SewerageConnectionRequest request) {
+		// calling property related master
+		List<String> propertyModuleMasters = new ArrayList<>(Arrays.asList(SWConstants.PROPERTY_OWNERTYPE));
+		Map<String, List<String>> codesFromPropetyMasters = getAttributeValues(request.getSewerageConnection().getTenantId(),
+				SWConstants.PROPERTY_MASTER_MODULE, propertyModuleMasters, "$.*.code",
+				SWConstants.PROPERTY_JSONPATH_ROOT, request.getRequestInfo());
+		// merge codes
+		String[] finalmasterNames = {SWConstants.PROPERTY_OWNERTYPE};
+		validateMDMSData(finalmasterNames, codesFromPropetyMasters);
+		validateCodesForCreateRequest(request, codesFromPropetyMasters);
+	}
+
+	/**
+	 *  @param request Sewerage connection request
+	 * @param codes list of master data codes to verify against the sewerage connection request
+	 */
+	public void validateCodesForCreateRequest(SewerageConnectionRequest request, Map<String, List<String>> codes) {
+		Map<String, String> errorMap = new HashMap<>();
+		if (!CollectionUtils.isEmpty(request.getSewerageConnection().getConnectionHolders())) {
+			request.getSewerageConnection().getConnectionHolders().forEach(holderDetail -> {
+				if (!StringUtils.isEmpty(holderDetail.getOwnerType())
+						&&
+						!codes.get(SWConstants.PROPERTY_OWNERTYPE).contains(holderDetail.getOwnerType())) {
+					errorMap.put("INVALID_CONNECTION_HOLDER_TYPE",
+							"The Connection holder type '" + holderDetail.getOwnerType() + "' does not exists");
+				}
+			});
+		}
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+	}
+	
+	public void validateMasterDataForUpdateConnection(SewerageConnectionRequest request) {
+		if (request.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION_CONST)) {
+			Map<String, String> errorMap = new HashMap<>();
+			List<String> names = new ArrayList<>(Arrays.asList(SWConstants.MDMS_SW_CONNECTION_TYPE));
+			List<String> taxModelnames = new ArrayList<>(Arrays.asList(SWConstants.SC_ROADTYPE_MASTER));
+			Map<String, List<String>> codes = getAttributeValues(request.getSewerageConnection().getTenantId(),
+					SWConstants.MDMS_SW_MOD_NAME, names, "$.*.code",
+					SWConstants.JSONPATH_ROOT, request.getRequestInfo());
+			Map<String, List<String>> codeFromCalculatorMaster = getAttributeValues(request.getSewerageConnection().getTenantId(),
+					SWConstants.SW_TAX_MODULE, taxModelnames, "$.*.code",
+					SWConstants.TAX_JSONPATH_ROOT, request.getRequestInfo());
+			// merge codes
+			String[] masterNames = {SWConstants.MDMS_SW_CONNECTION_TYPE, SWConstants.SC_ROADTYPE_MASTER};
+			Map<String, List<String>> finalcodes = Stream.of(codes, codeFromCalculatorMaster).map(Map::entrySet)
+					.flatMap(Collection::stream).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+			validateMDMSData(masterNames, finalcodes);
+			validateCodes(request.getSewerageConnection(), finalcodes, errorMap);
+			if (!errorMap.isEmpty())
+				throw new CustomException(errorMap);
+		}
+	}
+
+	public  void validateMasterDataForModifyConnection(SewerageConnectionRequest request) {
+		if (request.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase(SWConstants.APPROVE_CONNECTION)) {
+			Map<String, String> errorMap = new HashMap<>();
+			List<String> names = new ArrayList<>(Arrays.asList(SWConstants.MDMS_SW_CONNECTION_TYPE));
+			List<String> taxModelnames = new ArrayList<>(Arrays.asList(SWConstants.SC_ROADTYPE_MASTER));
+			Map<String, List<String>> codes = getAttributeValues(request.getSewerageConnection().getTenantId(),
+					SWConstants.MDMS_SW_MOD_NAME, names, "$.*.code",
+					SWConstants.JSONPATH_ROOT, request.getRequestInfo());
+			Map<String, List<String>> codeFromCalculatorMaster = getAttributeValues(request.getSewerageConnection().getTenantId(),
+					SWConstants.SW_TAX_MODULE, taxModelnames, "$.*.code",
+					SWConstants.TAX_JSONPATH_ROOT, request.getRequestInfo());
+			// merge codes
+			String[] masterNames = {SWConstants.MDMS_SW_CONNECTION_TYPE, SWConstants.SC_ROADTYPE_MASTER};
+			Map<String, List<String>> finalcodes = Stream.of(codes, codeFromCalculatorMaster).map(Map::entrySet)
+					.flatMap(Collection::stream).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+			validateMDMSData(masterNames, finalcodes);
+			validateCodes(request.getSewerageConnection(), finalcodes, errorMap);
+			if (!errorMap.isEmpty())
+				throw new CustomException(errorMap);
+		}
 	}
 
 }

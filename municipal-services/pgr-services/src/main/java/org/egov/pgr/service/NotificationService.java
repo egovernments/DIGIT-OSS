@@ -208,7 +208,6 @@ public class NotificationService {
             res = JsonPath.read(mdmsData,jsonPath);
         }
         catch (Exception e){
-            e.printStackTrace();
             throw new CustomException("JSONPATH_ERROR","Failed to parse mdms response");
         }
 
@@ -242,7 +241,6 @@ public class NotificationService {
             hrmsDepartmentList = JsonPath.read(response, HRMS_DEPARTMENT_JSONPATH);
         }
         catch (Exception e){
-            e.printStackTrace();
             throw new CustomException("JSONPATH_ERROR","Failed to parse mdms response for department");
         }
 
@@ -262,7 +260,6 @@ public class NotificationService {
             employeeName = JsonPath.read(response, HRMS_EMP_NAME_JSONPATH);
         }
         catch (Exception e){
-            e.printStackTrace();
             throw new CustomException("JSONPATH_ERROR","Failed to parse mdms response for department");
         }
 

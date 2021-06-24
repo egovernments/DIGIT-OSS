@@ -2,6 +2,8 @@ package org.egov.swcalculation.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,11 +16,15 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.swcalculation.config.SWCalculationConfiguration;
 import org.egov.swcalculation.constants.SWCalculationConstant;
+import org.egov.swcalculation.repository.ServiceRequestRepository;
+import org.egov.swcalculation.web.models.Property;
+import org.egov.swcalculation.web.models.PropertyResponse;
 import org.egov.swcalculation.web.models.RequestInfoWrapper;
 import org.egov.swcalculation.web.models.SearchCriteria;
 import org.egov.swcalculation.web.models.SewerageConnection;
 import org.egov.swcalculation.web.models.SewerageConnectionResponse;
-import org.egov.swcalculation.repository.ServiceRequestRepository;
+import org.egov.swcalculation.web.models.workflow.ProcessInstance;
+import org.egov.swcalculation.web.models.workflow.ProcessInstanceResponse;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,6 +44,9 @@ public class CalculatorUtils {
 
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
+
+	@Autowired
+	private ObjectMapper mapper;
 
 	/**
 	 * Prepares and returns MDMS search request with financial master criteria
@@ -82,8 +91,7 @@ public class CalculatorUtils {
 	 *            The tenantId of the sewerage connection
 	 * @return The water connection fo the particular connection no
 	 */
-	public SewerageConnection getSewerageConnection(RequestInfo requestInfo, String connectionNo, String tenantId) {
-		ObjectMapper mapper = new ObjectMapper();
+	public List<SewerageConnection> getSewerageConnection(RequestInfo requestInfo, String connectionNo, String tenantId) {
 		Object result = serviceRequestRepository.fetchResult(getSewerageSearchURL(tenantId, connectionNo),
 				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
 
@@ -97,7 +105,30 @@ public class CalculatorUtils {
 		if (response == null || CollectionUtils.isEmpty(response.getSewerageConnections()))
 			return null;
 
-		return response.getSewerageConnections().get(0);
+		Collections.sort(response.getSewerageConnections(), new Comparator<SewerageConnection>() {
+			@Override
+			public int compare(SewerageConnection sc1, SewerageConnection sc2) {
+				return sc1.getAuditDetails().getLastModifiedTime().compareTo(sc2.getAuditDetails().getLastModifiedTime());
+			}
+		});
+
+		return response.getSewerageConnections();
+	}
+
+	public  SewerageConnection getSewerageConnectionObject(List<SewerageConnection> sewerageConnectionList){
+		int size = sewerageConnectionList.size();
+		if(size>1){
+			SewerageConnection sewerageConnection = null;
+			if(sewerageConnectionList.get(size-1).getApplicationType().equalsIgnoreCase("MODIFY_SEWERAGE_CONNECTION") && sewerageConnectionList.get(size-1).getDateEffectiveFrom() > System.currentTimeMillis()){
+				sewerageConnection =  sewerageConnectionList.get(size-2);
+			}
+			else
+				sewerageConnection =  sewerageConnectionList.get(size-1);
+
+			return sewerageConnection;
+		}
+		else
+			return sewerageConnectionList.get(0);
 	}
 
 	/**
@@ -186,7 +217,6 @@ public class CalculatorUtils {
 	 */
 	public SewerageConnection getSewerageConnectionOnApplicationNO(RequestInfo requestInfo, SearchCriteria searchCriteria,
 			String tenantId) {
-		ObjectMapper mapper = new ObjectMapper();
 		String url = getSewerageSearchURL(searchCriteria);
 		Object result = serviceRequestRepository.fetchResult(new StringBuilder(url),
 				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
@@ -281,5 +311,63 @@ public class CalculatorUtils {
 		}
 		List<Map<String, Object>> jsonOutput = JsonPath.read(res, SWCalculationConstant.JSONPATH_ROOT_FOR_BilingPeriod);
 		return jsonOutput.get(0);
+	}
+	
+	public Property getProperty(RequestInfo requestInfo, String tenantId, String propertyId){
+		String propertySearchURL = getPropertySearchURL(propertyId,tenantId);
+		Object propertyResult = serviceRequestRepository.fetchResult(new StringBuilder(propertySearchURL),
+				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+
+		PropertyResponse properties = null;
+
+		try {
+			properties = mapper.convertValue(propertyResult, PropertyResponse.class);
+		}
+		catch (IllegalArgumentException e){
+			throw new CustomException("PARSING ERROR","Error while parsing response of Property Search");
+		}
+
+		if(properties==null || CollectionUtils.isEmpty(properties.getProperties()))
+			return null;
+
+
+		return properties.getProperties().get(0);
+	}
+
+	public String getPropertySearchURL(String propertyId,String tenantId){
+		StringBuilder url = new StringBuilder(configurations.getPropertyHost());
+		url.append(configurations.getSearchPropertyEndPoint()).append("?");
+		url.append("tenantId=").append(tenantId).append("&");
+		url.append("uuids=").append(propertyId);
+		return url.toString();
+	}
+
+
+	public List<ProcessInstance> getWorkFlowProcessInstance(RequestInfo requestInfo, String tenantId, String businessIds){
+		String workflowProcessInstanceSearchURL = getWorkflowProcessInstanceSearchURL(tenantId,businessIds);
+		Object result = serviceRequestRepository.fetchResult(new StringBuilder(workflowProcessInstanceSearchURL),
+				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+
+		ProcessInstanceResponse processInstanceResponse = null;
+
+		try {
+			processInstanceResponse =mapper.convertValue(result, ProcessInstanceResponse.class);
+		}
+		catch (IllegalArgumentException e){
+			throw new CustomException("PARSING ERROR","Error while parsing response of process Instance Search");
+		}
+
+		if(processInstanceResponse==null || CollectionUtils.isEmpty(processInstanceResponse.getProcessInstances()))
+			return Collections.emptyList();
+
+		return processInstanceResponse.getProcessInstances();
+	}
+
+	public String getWorkflowProcessInstanceSearchURL(String tenantId, String businessIds){
+		StringBuilder url = new StringBuilder(configurations.getWorkflowHost());
+		url.append(configurations.getSearchWorkflowProcessEndPoint()).append("?");
+		url.append("tenantId=").append(tenantId).append("&");
+		url.append("businessIds=").append(businessIds);
+		return url.toString();
 	}
 }

@@ -1,7 +1,7 @@
 package org.egov.swcalculation.service;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -64,7 +64,7 @@ public class PayService {
 			String assessmentYear, Map<String, JSONArray> timeBasedExemptionMasterMap, Long billingExpiryDate) {
 
 		if (BigDecimal.ZERO.compareTo(sewerageCharge) >= 0)
-			return null;
+			return Collections.emptyMap();
 		Map<String, BigDecimal> estimates = new HashMap<>();
 		long currentUTC = System.currentTimeMillis();
 		long numberOfDaysInMillis = billingExpiryDate - currentUTC;

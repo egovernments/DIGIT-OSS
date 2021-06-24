@@ -63,6 +63,7 @@ public class ServiceRequestValidator {
         validateDepartment(request, mdmsData);
         validateReOpen(request);
         RequestSearchCriteria criteria = RequestSearchCriteria.builder().ids(Collections.singleton(id)).build();
+        criteria.setIsPlainSearch(false);
         List<ServiceWrapper> serviceWrappers = repository.getServiceWrappers(criteria);
 
         if(CollectionUtils.isEmpty(serviceWrappers))
@@ -119,7 +120,6 @@ public class ServiceRequestValidator {
             res = JsonPath.read(mdmsData,jsonPath);
         }
         catch (Exception e){
-            e.printStackTrace();
             throw new CustomException("JSONPATH_ERROR","Failed to parse mdms response");
         }
 
@@ -155,7 +155,6 @@ public class ServiceRequestValidator {
             res = JsonPath.read(mdmsData,jsonPath);
         }
         catch (Exception e){
-            e.printStackTrace();
             throw new CustomException("JSONPATH_ERROR","Failed to parse mdms response for department");
         }
 
@@ -230,6 +229,9 @@ public class ServiceRequestValidator {
         if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE" ) && criteria.isEmpty())
             throw new CustomException("INVALID_SEARCH","Search without params is not allowed");
 
+        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") && criteria.getTenantId().split("\\.").length == 1){
+            throw new CustomException("INVALID_SEARCH", "Employees cannot perform state level searches.");
+        }
 
         String allowedParamStr = null;
 
@@ -273,5 +275,9 @@ public class ServiceRequestValidator {
     }
 
 
-
+    public void validatePlainSearch(RequestSearchCriteria criteria) {
+        if(CollectionUtils.isEmpty(criteria.getTenantIds())){
+            throw new CustomException("TENANT_ID_LIST_EMPTY", "Tenant ids not provided for searching.");
+        }
+    }
 }

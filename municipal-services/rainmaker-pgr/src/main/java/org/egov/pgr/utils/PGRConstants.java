@@ -11,7 +11,7 @@ public class PGRConstants {
 	
 	private PGRConstants() {}
 
-	public static final String SERV_REQ_ID_NAME = "pgr.servicerequestid";
+	public static final String SERV_REQ_ID_NAME = "rainmaker.pgr.servicerequestid";
 	public static final String SERV_REQ_ID_FORMAT = "[cy:dd]/[cy:MM]/[cy:yyyy]/[SEQ_EG_PGR_SERVICEREQUESTID]";
 		
 	//Notification

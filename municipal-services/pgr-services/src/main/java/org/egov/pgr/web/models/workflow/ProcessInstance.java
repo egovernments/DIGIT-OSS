@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.egov.pgr.web.models.AuditDetails;
 import org.egov.pgr.web.models.Document;
 import org.egov.common.contract.request.User;
 import org.springframework.validation.annotation.Validated;
@@ -84,6 +85,12 @@ public class ProcessInstance {
 
     @JsonProperty("assigner")
     private User assigner = null;
+
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails = null;
+
+    @JsonProperty("businesssServiceSla")
+    private Long businesssServiceSla = null;
 
     public ProcessInstance addDocumentsItem(Document documentsItem) {
         if (this.documents == null) {

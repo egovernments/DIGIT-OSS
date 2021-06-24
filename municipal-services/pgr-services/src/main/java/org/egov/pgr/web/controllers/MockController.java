@@ -69,7 +69,6 @@ public class MockController {
             String res = IOUtils.toString(mockDataFile, StandardCharsets.UTF_8.name());
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new CustomException("FILEPATH_ERROR", "Failed to read file for mock data");
         }
 
@@ -85,7 +84,6 @@ public class MockController {
             String res = IOUtils.toString(mockDataFile, StandardCharsets.UTF_8.name());
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new CustomException("FILEPATH_ERROR", "Failed to read file for mock data");
         }
 
@@ -100,7 +98,6 @@ public class MockController {
             String res = IOUtils.toString(mockDataFile, StandardCharsets.UTF_8.name());
             return new ResponseEntity<>(res, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new CustomException("FILEPATH_ERROR", "Failed to read file for mock data");
         }
     }

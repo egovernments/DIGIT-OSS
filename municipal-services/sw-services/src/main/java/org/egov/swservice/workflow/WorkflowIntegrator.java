@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.Property;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
@@ -40,6 +41,9 @@ public class WorkflowIntegrator {
 	private ObjectMapper mapper;
 
 	@Autowired
+	private SewerageServicesUtil servicesUtil;
+	
+	@Autowired
 	public WorkflowIntegrator(RestTemplate rest, SWConfiguration config) {
 		this.rest = rest;
 		this.config = config;
@@ -56,12 +60,15 @@ public class WorkflowIntegrator {
 	 * @param property - Property Object
 	 */
 	public void callWorkFlow(SewerageConnectionRequest sewerageConnectionRequest, Property property) {
-
+		String wfBusinessServiceName = config.getBusinessServiceValue();
+		if(servicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)){
+			wfBusinessServiceName = config.getModifySWBusinessServiceName();
+		}
 		SewerageConnection connection = sewerageConnectionRequest.getSewerageConnection();
 		ProcessInstance processInstance = ProcessInstance.builder()
 				.businessId(sewerageConnectionRequest.getSewerageConnection().getApplicationNo())
 				.tenantId(property.getTenantId())
-				.businessService(config.getBusinessServiceValue()).moduleName(MODULE_NAME_VALUE)
+				.businessService(wfBusinessServiceName).moduleName(MODULE_NAME_VALUE)
 				.action(connection.getProcessInstance().getAction()).build();
 
 		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getProcessInstance())) {

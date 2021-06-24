@@ -106,8 +106,9 @@ public class EnrichmentService {
     	
     	Property property = request.getProperty();
         RequestInfo requestInfo = request.getRequestInfo();
-		AuditDetails auditDetailsForUpdate = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), false);
-		propertyFromDb.setAuditDetails(auditDetailsForUpdate); 
+        AuditDetails auditDetailsForUpdate = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), true);
+        propertyFromDb.setAuditDetails(auditDetailsForUpdate);
+        
 		       
 		Boolean isWfEnabled = config.getIsWorkflowEnabled();
 		Boolean iswfStarting = propertyFromDb.getStatus().equals(Status.ACTIVE);

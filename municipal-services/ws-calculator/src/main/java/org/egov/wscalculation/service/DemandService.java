@@ -19,6 +19,13 @@ import org.egov.common.contract.request.User;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.config.WSCalculationConfiguration;
 import org.egov.wscalculation.constants.WSCalculationConstant;
+import org.egov.wscalculation.producer.WSCalculationProducer;
+import org.egov.wscalculation.repository.DemandRepository;
+import org.egov.wscalculation.repository.ServiceRequestRepository;
+import org.egov.wscalculation.repository.WSCalculationDao;
+import org.egov.wscalculation.util.CalculatorUtil;
+import org.egov.wscalculation.util.WSCalculationUtil;
+import org.egov.wscalculation.validator.WSCalculationWorkflowValidator;
 import org.egov.wscalculation.web.models.Calculation;
 import org.egov.wscalculation.web.models.CalculationCriteria;
 import org.egov.wscalculation.web.models.CalculationReq;
@@ -35,12 +42,6 @@ import org.egov.wscalculation.web.models.TaxHeadEstimate;
 import org.egov.wscalculation.web.models.TaxPeriod;
 import org.egov.wscalculation.web.models.WaterConnection;
 import org.egov.wscalculation.web.models.WaterConnectionRequest;
-import org.egov.wscalculation.producer.WSCalculationProducer;
-import org.egov.wscalculation.repository.DemandRepository;
-import org.egov.wscalculation.repository.ServiceRequestRepository;
-import org.egov.wscalculation.repository.WSCalculationDao;
-import org.egov.wscalculation.util.CalculatorUtil;
-import org.egov.wscalculation.util.WSCalculationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -93,6 +94,8 @@ public class DemandService {
     @Autowired
     private WSCalculationUtil wsCalculationUtil;
 
+    @Autowired
+	private WSCalculationWorkflowValidator wsCalulationWorkflowValidator;
 
 	/**
 	 * Creates or updates Demand
@@ -179,7 +182,9 @@ public class DemandService {
 			String consumerCode = isForConnectionNO ? calculation.getConnectionNo()
 					: calculation.getApplicationNO();
 			User owner = property.getOwners().get(0).toCommonUser();
-
+			if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+				owner = waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).toCommonUser();
+			}
 			List<DemandDetail> demandDetails = new LinkedList<>();
 			calculation.getTaxHeadEstimates().forEach(taxHeadEstimate -> {
 				demandDetails.add(DemandDetail.builder().taxAmount(taxHeadEstimate.getEstimateAmount())
@@ -505,6 +510,32 @@ public class DemandService {
 						+ consumerCodes.toString());
 			Demand demand = searchResult.get(0);
 			demand.setDemandDetails(getUpdatedDemandDetails(calculation, demand.getDemandDetails()));
+
+			if(isForConnectionNo){
+				WaterConnection connection = calculation.getWaterConnection();
+				if (connection == null) {
+					List<WaterConnection> waterConnectionList = calculatorUtils.getWaterConnection(requestInfo,
+							calculation.getConnectionNo(),calculation.getTenantId());
+					int size = waterConnectionList.size();
+					connection = waterConnectionList.get(size-1);
+
+				}
+
+				if(connection.getApplicationType().equalsIgnoreCase("MODIFY_WATER_CONNECTION")){
+					WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder().waterConnection(connection)
+							.requestInfo(requestInfo).build();
+					Property property = wsCalculationUtil.getProperty(waterConnectionRequest);
+					User owner = property.getOwners().get(0).toCommonUser();
+					if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+						owner = waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).toCommonUser();
+					}
+					if(!(demand.getPayer().getUuid().equalsIgnoreCase(owner.getUuid())))
+						demand.setPayer(owner);
+				}
+
+
+			}
+
 			demands.add(demand);
 		}
 
@@ -573,6 +604,10 @@ public class DemandService {
 
 		BigDecimal penalty = interestPenaltyEstimates.get(WSCalculationConstant.WS_TIME_PENALTY);
 		BigDecimal interest = interestPenaltyEstimates.get(WSCalculationConstant.WS_TIME_INTEREST);
+		if(penalty == null)
+			penalty = BigDecimal.ZERO;
+		if(interest == null)
+			interest = BigDecimal.ZERO;
 
 		DemandDetailAndCollection latestPenaltyDemandDetail, latestInterestDemandDetail;
 

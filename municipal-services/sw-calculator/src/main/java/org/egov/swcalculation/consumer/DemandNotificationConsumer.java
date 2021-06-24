@@ -41,7 +41,7 @@ public class DemandNotificationConsumer {
 			StringBuilder builder = new StringBuilder();
 			builder.append("Error while listening to value: ").append(record).append(" on topic: ").append(topic)
 					.append(": ").append(e);
-			log.error("", builder.toString());
+			log.error("KAFKA_ERROR: ", builder.toString());
 		}
 	}
 

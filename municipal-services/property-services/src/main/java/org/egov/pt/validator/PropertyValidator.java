@@ -120,10 +120,31 @@ public class PropertyValidator {
 			
 			ConstructionDetail consDtl = unit.getConstructionDetail();
 			
+			Boolean isBuiltUpAreaNull = consDtl.getBuiltUpArea() == null;
+			
+			if (isBuiltUpAreaNull) {
+
+				if (consDtl.getPlinthArea() == null || consDtl.getSuperBuiltUpArea() == null)
+					errorMap.put("EG_PT_UNIT_AREA_ERROR",
+							"Any one of the following either builtUpArea or (plinthArea + superBuiltUpArea) should be provided");
+
+				if (consDtl.getPlinthArea() != null && consDtl.getSuperBuiltUpArea() != null) {
+					consDtl.setBuiltUpArea(consDtl.getSuperBuiltUpArea().subtract(consDtl.getPlinthArea()));
+					isBuiltUpAreaNull = false;
+					
+				}
+
+			} else if(!isBuiltUpAreaNull) {
+
+				if (consDtl.getBuiltUpArea().compareTo(configs.getMinUnitArea()) <= 0)
+					errorMap.put("EG_PT_UNIT_BUILTUPAREA_ERROR", "BuiltUpArea cannot be lesser than minimum value of : "
+							+ configs.getMinUnitArea() + " " + configs.getLandAreaUnit());
+
 			if (consDtl.getCarpetArea() != null && !property.getPropertyType().contains(PTConstants.PT_TYPE_VACANT)
 					&& consDtl.getCarpetArea().compareTo(consDtl.getBuiltUpArea()) >= 0)
 				errorMap.put("UNIT INFO ERROR ", "Carpet area cannot be greater or equal than builtUp area");
 		}
+	}
 	}
 
 	/**
@@ -176,7 +197,7 @@ public class PropertyValidator {
 		
 		if (!isstateUpdatable && (!CollectionUtils.isEmpty(objectsAdded) || !CollectionUtils.isEmpty(fieldsUpdated)))
 			throw new CustomException("EG_PT_WF_UPDATE_ERROR",
-					"The current state of workflow does not allow chnages to property");
+					"The current state of workflow does not allow changes to property");
 		
 		}
         /*
@@ -502,12 +523,13 @@ public class PropertyValidator {
      */
 	private void validateAssessees(PropertyRequest request,Property propertyFromSearch, Map<String, String> errorMap) {
 
+		String mobileNumberFromRequestInfo = request.getRequestInfo().getUserInfo().getMobileNumber();
 		String uuid = request.getRequestInfo().getUserInfo().getUuid();
 		Property property = request.getProperty();
 
-		Set<String> ownerIds = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
+		Set<String> ownerMobileNumbers = propertyFromSearch.getOwners().stream().map(OwnerInfo::getMobileNumber).collect(Collectors.toSet());
 
-		if (!(ownerIds.contains(uuid) || uuid.equalsIgnoreCase(propertyFromSearch.getAccountId()))) {
+		if (!(ownerMobileNumbers.contains(mobileNumberFromRequestInfo) || uuid.equalsIgnoreCase(propertyFromSearch.getAccountId()))) {
 			errorMap.put("EG_PT_UPDATE AUTHORIZATION FAILURE",
 					"Not Authorized to update property with propertyId " + property.getPropertyId());
 		}

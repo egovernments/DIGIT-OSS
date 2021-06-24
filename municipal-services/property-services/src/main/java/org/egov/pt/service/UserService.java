@@ -95,7 +95,8 @@ public class UserService {
 			setOwnerFields(ownerFromRequest, userDetailResponse, requestInfo);
 		}
 	}
-	
+
+
     /**
      * update existing user
      * 

@@ -38,5 +38,7 @@ public class PropertyCriteria {
 	private Long offset;
 
 	private Long limit;
+
+	private String locality;
 	
 }

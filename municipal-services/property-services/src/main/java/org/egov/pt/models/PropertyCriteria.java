@@ -23,6 +23,8 @@ public class PropertyCriteria {
 
 	private Set<String> propertyIds;
 	
+	private Set<String> tenantIds;
+	
 	private Set<String> acknowledgementIds;
 	
 	private Set<String> uuids;
@@ -42,6 +44,10 @@ public class PropertyCriteria {
 	private Long offset;
 
 	private Long limit;
+	
+	private Long fromDate;
+
+	private Long toDate;
 	
 	private String locality;
 	

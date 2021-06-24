@@ -3,13 +3,13 @@ package org.egov.swservice.web.models.users;
 import java.util.List;
 
 import org.egov.common.contract.response.ResponseInfo;
-import org.egov.swservice.web.models.OwnerInfo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.egov.swservice.web.models.OwnerInfo;
 
 @AllArgsConstructor
 @NoArgsConstructor

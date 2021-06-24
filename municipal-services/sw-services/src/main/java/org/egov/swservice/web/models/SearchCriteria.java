@@ -29,6 +29,10 @@ public class SearchCriteria {
 
 	@JsonProperty("status")
 	private String status;
+	
+	private Set<String> propertyIds;
+	
+	private Set<String> userIds;
 
 	@JsonProperty("ids")
 	private Set<String> ids;
@@ -65,6 +69,19 @@ public class SearchCriteria {
 
 	@JsonProperty("limit")
 	private Integer limit;
+	
+	@JsonProperty("applicationType")
+	private String applicationType;
+
+	@JsonProperty("searchType")
+	private String searchType = "APPLICATION";
+
+	@JsonProperty("locality")
+	private String locality;
+
+	@JsonProperty("isPropertyDetailsRequired")
+	private Boolean isPropertyDetailsRequired = false;
+
 
 	@JsonIgnore
 	private List<String> ownerIds;
@@ -75,13 +92,14 @@ public class SearchCriteria {
 				&& StringUtils.isEmpty(this.oldConnectionNumber) && StringUtils.isEmpty(this.connectionNumber)
 				&& StringUtils.isEmpty(this.status) && StringUtils.isEmpty(this.applicationNumber)
 				&& StringUtils.isEmpty(this.applicationStatus) && StringUtils.isEmpty(this.fromDate)
-				&& StringUtils.isEmpty(this.toDate));
+				&& StringUtils.isEmpty(this.toDate) && StringUtils.isEmpty(this.applicationType));
 	}
 
 	public boolean tenantIdOnly() {
 		return (this.tenantId != null && this.status == null && this.ids == null && this.applicationNumber == null
 				&& this.connectionNumber == null && this.oldConnectionNumber == null && this.mobileNumber == null
-				&& this.fromDate == null && this.toDate == null && this.ownerIds == null && this.propertyId == null);
+				&& this.fromDate == null && this.toDate == null && this.ownerIds == null && this.propertyId == null
+				&& this.applicationType == null);
 	}
 
 }

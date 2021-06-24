@@ -4,14 +4,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.repository.ServiceRequestRepository;
 import org.egov.bpa.util.BPAConstants;
 import org.egov.bpa.web.model.BPA;
 import org.egov.bpa.web.model.BPASearchCriteria;
+import org.egov.bpa.web.model.landInfo.OwnerInfo;
 import org.egov.bpa.web.model.user.UserDetailResponse;
 import org.egov.bpa.web.model.user.UserSearchRequest;
 import org.egov.common.contract.request.RequestInfo;
@@ -161,6 +164,49 @@ public class UserService {
 			userSearchRequest.setUuid(criteria.getOwnerIds());
 		return userSearchRequest;
 	}
-
 	
+	private UserDetailResponse searchByUserName(String userName,String tenantId){
+        UserSearchRequest userSearchRequest = new UserSearchRequest();
+        userSearchRequest.setUserType("CITIZEN");
+        userSearchRequest.setUserName(userName);
+        userSearchRequest.setTenantId(tenantId);
+        StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
+        return userCall(userSearchRequest,uri);
+
+    }
+	
+	private String getStateLevelTenant(String tenantId){
+        return tenantId.split("\\.")[0];
+    }
+
+	/**
+     * Searches registered user for mobileNumbers in the given BPA
+     * @param bpa
+     * @return uuids of the users
+     */
+    public Set<String> getUUidFromUserName(BPA bpa){
+
+        String tenantId = bpa.getTenantId();
+        List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners();
+
+        Set<String> mobileNumbers = new HashSet<>();
+
+        // Get all unique mobileNumbers in the license
+        ownerInfos.forEach(owner -> {
+            mobileNumbers.add(owner.getMobileNumber());
+        });
+
+        Set<String> uuids = new HashSet<>();
+
+        // For every unique mobilenumber search the use with mobilenumber as username and get uuid
+        mobileNumbers.forEach(mobileNumber -> {
+            UserDetailResponse userDetailResponse = searchByUserName(mobileNumber, getStateLevelTenant(tenantId));
+            if(!CollectionUtils.isEmpty(userDetailResponse.getUser())){
+                uuids.add(userDetailResponse.getUser().get(0).getUuid());
+            }
+        });
+
+        return uuids;
+    }
+    
 }
