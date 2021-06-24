@@ -683,7 +683,7 @@ export const getFileUrlFromAPI = async fileStoreId => {
   }
 };
 
-export const downloadReceipt = (receiptQueryString) => {
+/* export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
     if (receiptQueryString) {
       // dispatch(downloadReceiptPending());
@@ -721,7 +721,7 @@ export const downloadReceipt = (receiptQueryString) => {
       }
     }
   }
-}
+} */
 
 const download =(Payments,tenant)=>{
   const queryStr = [
@@ -746,7 +746,7 @@ export const getFinancialYearFromEPOCH = (epochTime) => {
   financialYear = date.getFullYear()-1 + "-" + String(date.getFullYear()).slice(2);
   return financialYear;
 };
-
+/* 
 export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
   getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
     if (mode === 'download') {
@@ -940,7 +940,7 @@ const getBankname = async(payment) =>{
     }
   }
   return payment;
-}
+} */
 
 export const downloadReceipt = (receiptQueryString, mode = "download") => {
   return async (dispatch) => {
