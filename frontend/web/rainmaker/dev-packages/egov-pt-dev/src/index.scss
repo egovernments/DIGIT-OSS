@@ -128,6 +128,7 @@ input[type="date"]:valid::before {
 @media only screen and (max-width: 768px) {
   #custom-atoms-applicationSuccessFooter,
   #custom-atoms-paymentSuccessFooter {
+    width:3000px !important;
     display: block;
     text-align: center;
   }
@@ -148,6 +149,7 @@ input[type="date"]:valid::before {
     margin-top: 16px;
   }
   .citizen-payment-confirmation .pt-apply-wizard-footer {
+    width:3000px !important;
     display: block;
     text-align: center;
   }
