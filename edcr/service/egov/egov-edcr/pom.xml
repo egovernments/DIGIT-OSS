@@ -61,7 +61,7 @@
 
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
-			<artifactId>egov-dcr-extract</artifactId>  
+			<artifactId>egov-edcr-extract</artifactId>  
 			<version>2.0.0-SNAPSHOT</version>
 		</dependency>
 

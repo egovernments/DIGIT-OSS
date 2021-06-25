@@ -38,9 +38,9 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<name>e-governments dcr extract</name>
+	<name>e-governments edcr extract</name>
 	
-	<artifactId>egov-dcr-extract</artifactId>
+	<artifactId>egov-edcr-extract</artifactId>
 
 	<organization>
 		<name>eGovernments Foundation</name>
@@ -79,6 +79,12 @@
 			<id>JSPRESSO</id>
 			<url>http://repository.jspresso.org/maven2/</url>
 		</repository>
+		<!-- Customized In Project Repository -->
+		<repository>
+			<id>in-project</id>
+			<name>In Project Repo</name>
+			<url>file://${project.basedir}/lib</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -108,27 +114,21 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.edcr</groupId>
+			<groupId>batik-custom</groupId>
 			<artifactId>batik-all</artifactId>
 			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${pom.basedir}/lib/batik-all-1.0.jar</systemPath>
 		</dependency>
 
 		<dependency>
-			<groupId>org.edcr</groupId>
+			<groupId>kabeja-svg-custom</groupId>
 			<artifactId>kabeja-svg</artifactId>
 			<version>0.4</version>
-			<scope>system</scope>
-			<systemPath>${pom.basedir}/lib/kabeja-svg-0.4.jar</systemPath>
 		</dependency>
 
 		<dependency>
-			<groupId>org.edcr</groupId>
+			<groupId>pdf-transcoder-custom</groupId>
 			<artifactId>pdf-transcoder</artifactId>
 			<version>1.1</version>
-			<scope>system</scope>
-			<systemPath>${pom.basedir}/lib/pdf-transcoder-1.1.jar</systemPath>
 		</dependency>
 
 		<dependency>

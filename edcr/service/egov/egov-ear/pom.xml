@@ -54,22 +54,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
-			<artifactId>egov-dcr-extract</artifactId>  
+			<artifactId>egov-edcr-extract</artifactId>  
 			<version>2.0.0-SNAPSHOT</version>
- 			<exclusions>
-                    <exclusion>
-                        <artifactId>egov-config</artifactId>
-                        <groupId>org.egov</groupId>
-                    </exclusion>
-										<exclusion>
-                        <artifactId>egov-egi</artifactId>
-                        <groupId>org.egov</groupId>
-                    </exclusion>
-										<exclusion>
-                        <artifactId>egov-commons</artifactId>
-                        <groupId>org.egov</groupId>
-                    </exclusion>
-                </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.egov.edcr</groupId>
