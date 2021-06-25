@@ -430,7 +430,7 @@ export const searchPropertyDetails = getCommonCard({
           moduleName:getTenantId(),
           masterName: "REVENUE"
         },   
-        errorMessage: "Required Field",    
+        errorMessage: "ERR_REQUIRED_FILED",    
         jsonPath: "searchScreen.locality",
         sourceJsonPath: "searchScreenMdmsData.tenant.localities",
         required: true,
