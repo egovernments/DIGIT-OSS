@@ -344,8 +344,6 @@ export const searchPropertyDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4,
-
-
       },
       iconObj: {
         label: "+91 |",
@@ -367,14 +365,13 @@ export const searchPropertyDetails = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
-  
+        sm: 4,  
       },
       iconObj: {
        // label: "PT-",
         position: "start"
       },
-      required: false,
+      required: true,
       //pattern: /^[0-9]*$/i,
       pattern: getPattern("NewPropertyID"),
       errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
@@ -430,7 +427,7 @@ export const searchPropertyDetails = getCommonCard({
           moduleName:getTenantId(),
           masterName: "REVENUE"
         },   
-        errorMessage: "Required Field",    
+        errorMessage: "ERR_REQUIRED_FILED",    
         jsonPath: "searchScreen.locality",
         sourceJsonPath: "searchScreenMdmsData.tenant.localities",
         required: true,
