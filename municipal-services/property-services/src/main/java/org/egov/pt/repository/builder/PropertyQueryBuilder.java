@@ -158,6 +158,12 @@ public class PropertyQueryBuilder {
 			preparedStmtList.add(criteria.getLocality());
 			preparedStmtList.add(criteria.getDoorNo());
 			appendAndQuery= true;
+		}else if(null != criteria.getLocality()){
+			if(appendAndQuery)
+				builder.append(AND_QUERY);
+			builder.append("address.locality = ?");
+			preparedStmtList.add(criteria.getLocality());
+			appendAndQuery= true;
 		}
 
 		Set<String> propertyIds = criteria.getPropertyIds();
