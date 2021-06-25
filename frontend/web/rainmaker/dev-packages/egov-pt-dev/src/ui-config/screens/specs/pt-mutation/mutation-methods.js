@@ -380,7 +380,7 @@ export const searchPropertyDetails = getCommonCard({
       errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
       jsonPath: "searchScreen.ids"  
     }),
-    mohalla: {
+/*   mohalla: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-pt",
       componentPath: "AutosuggestContainer",
@@ -416,7 +416,33 @@ export const searchPropertyDetails = getCommonCard({
         xs: 12,
         sm: 4
       }
-    },
+    },   */
+      mohalla: getSelectField({
+        label: {
+          labelName: "Mohalla",
+          labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+        },
+        placeholder: {
+          labelName: "Select mohalla",
+          labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName:getTenantId(),
+          masterName: "REVENUE"
+        },   
+        errorMessage: "Required Field",    
+        jsonPath: "searchScreen.locality",
+        sourceJsonPath: "searchScreenMdmsData.tenant.localities",
+        required: true,
+        props: {
+          required: true,
+          disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }}),
+
     houseNumber: getTextField({
       label: {
         labelName: "House/Shop No.",
