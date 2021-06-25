@@ -1,6 +1,11 @@
 # Compiled class file
 *.class
 
+#Eclipse Artifacts
+.project
+.classpath
+.settings/
+
 # Log file
 *.log
 
