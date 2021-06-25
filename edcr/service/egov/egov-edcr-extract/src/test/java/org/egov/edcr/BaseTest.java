@@ -65,7 +65,7 @@ public class BaseTest {
         featureExtract.setLayerNames(layerNames);
         messageSource.setBasename("i18n/messages");
         File file = new File(
-                featureExtract.getClass().getClassLoader().getResource("messages/service-message-edcr.properties").getFile());
+                featureExtract.getClass().getClassLoader().getResource("messages/service-message-edcr-extract.properties").getFile());
         FileInputStream stm = new FileInputStream(file);
         Properties commonMessages = new Properties();
         commonMessages.load(stm);
