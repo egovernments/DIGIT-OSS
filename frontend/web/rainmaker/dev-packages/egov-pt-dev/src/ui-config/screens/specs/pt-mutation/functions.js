@@ -481,6 +481,20 @@ const searchApiCall = async (state, dispatch, index) => {
  let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
 
 
+ if (!searchScreenObject.locality) {
+  dispatch(
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Please Select Mohalla to Search",
+        labelKey: "ERR_PT_FILL_MOHALLA_VALID"
+      },
+      "error"
+    )
+  );
+  return;
+
+} 
   if ((!searchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(
