@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.egov.edcr</groupId>
         <artifactId>egov-erp-edcr-impl</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -49,6 +49,11 @@
         <dependency>
             <groupId>org.egov.edcr</groupId>
             <artifactId>egov-commons</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.egov.edcr</groupId>
+            <artifactId>egov-edcr-extract</artifactId>
         </dependency>
         
         <dependency>
