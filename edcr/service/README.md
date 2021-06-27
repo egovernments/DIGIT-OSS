@@ -1,23 +1,7 @@
-# eGov SmartCity eGovernance Suite [![License: MIT](https://img.shields.io/badge/license-MIT-green)](https://github.com/egovernments/frontend/blob/master/LICENSE)
+# eGov Development Control Regulations
+  Module used to scrutinize the building plan diagrams which are in the .dxf file format. It will extract data from from dxf file and will validate against ULB rules and will generate the scrutiny report in the pdf format, the scrutiny report contains the rules which are passing and failing.
 
-[![Join the chat at https://gitter.im/egovernments/eGov](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/egovernments/eGov?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](http://ci.egovernments.org/buildStatus/icon?job=eGov-Github-Develop)](http://ci.egovernments.org/job/eGov-Github-Develop/) [![][codacy img]][codacy] [![][versioneye img]][versioneye]
-
-eGovernments Foundation transforms urban governance with the use of scalable and replicable technology solutions that enable efficient and effective municipal operations, better decision making, and contact-less urban service delivery.
-
-Our comprehensive software products enable Governments to put their resources to efficient use by minimising overheads. We also help bring in transparency, accountability and citizen centricity in the delivery of Government services.
-
-eGovernments Foundation has been in the forefront of implementing eGovernance solutions since 2003. Our products have been serving over 325 ULBs across the country. Our time tested products have impacted the ULBs in a large way. We have also been involved in several eGovernance initiatives in the country.
-
-Our primary business motivator is to increase the footprint of eGovernance across the country and help adoption in as many ULBs as possible. Going opensource with our products is a measure in this direction. It also gives us the ability to tap into the immense talent pool in India for strengthening and improving our cities. Open source also blends well with our ethical fabric of being open and transparent in our business.
-
-#### Issue Tracking
-Report issues via the [eGov Opensource JIRA][].
-#### License
-The eGov suit is released under version 3.0 of the [GPL][].
-#### Powered By
-<a href="https://www.atlassian.com/" target="_blank"><img src="http://downloads.egovernments.org/atlassian.png"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/" target="_blank"><img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" width="48"></a>
 
 ## User Guide
 This section contains steps that are involved in build and deploy the application.
@@ -56,6 +40,7 @@ $ cd ${HOME}/egovgithub/eGov-dcr-service && make deploy
 * Install [Jboss Wildfly v11.x][Wildfly Customized]
 * Install [Git 2.8.3][Git]
 * Install [JDK 8 update 112 or higher][JDK8 build]
+* Install [Postman 8.7.0][Postman]
 #### Database Setup
 1. Create a database and user in postgres
 2. Create the schema's called `state` & `generic`
@@ -137,6 +122,17 @@ By default eGov suit uses embedded redis server (work only in Linux & OSx), to m
     <password><YOUR_DB_USER_PASSWORD></password
   </security>
   ```
+ * Overriding default post request size (Default is 10 MB). Can override using 'max-post-size' attribute in the below location,
+  ```
+  <server name="default-server">
+   <http-listener name="default" socket-binding="http" max-post-size="104857600" redirect-socket="https" enable-http2="true"/>
+   <https-listener name="https" max-post-size="104857600"  socket-binding="https" security-realm="ApplicationRealm" enable-http2="true"/>
+   <host name="default-host" alias="localhost">
+   <location name="/" handler="welcome-content"/>
+   <http-invoker security-realm="ApplicationRealm"/>
+   </host>
+ </server>
+  ```
  * Check HTTP port configuration is correct in
   ```
   <socket-binding name="http" port="${jboss.http.port:8080}"/>
@@ -163,27 +159,47 @@ By default eGov suit uses embedded redis server (work only in Linux & OSx), to m
   
   `-b 0.0.0.0` only required if application accessed using IP address or  domain name.
 
-6. Monitor the logs and in case of successful deployment, just hit `http://localhost:<YOUR_HTTP_PORT>/egi` in your favorite browser.
-7. Login using username as `egovernments` and password `demo`
+6. Monitor the logs and in case of successful deployment, just hit `http://localhost:<YOUR_HTTP_PORT>/edcr/rest/dcr/scrutinize` from your postman.
+
+8. Download postman collection from https://github.com/egovernments/eGov-dcr-service/blob/master/egov/egov-edcr/Postman/eDcr%20Collection.postman_collectionv.1.json and import into your local postman and use for testing.
+
+### Setup Multitenancy Locally
+1. The state is configured by adding property tenant.{domain_name}=schema_name (state_name) in egov-erp-override.properties.
+
+2. Each new ULB is enabled by adding a schema name and domain name in egov-erp-override.properties file(Available in Wildfly server under ${HOME_DIR}/wildfly-11.0.0.Final/modules/system/layers/base/org/egov/settings/main/config). Schema names should follow a naming standard, It should be the same as that of the city name.
+
+3. Each ULB can be configured by adding an entry like tenant.{domain_name}=schema_name (city_name) in egov-erp-override.properties file. 
+
+5. In the state schema, the state_name passed in the request and city code in the state.eg_table must be the same. Example, In the request tenant id is pb.amritsar, then in the state schema city table, the city code value should be pb. For other schema this change is not required.
+
+5. Insert data into eg_city, in the city table domain URL value should be the same as configured tenant domain_name in the egov-erp-override.properties.
+
+6. After completing above steps, the local ubuntu machine need to update the domain URLs in the host file which you are going to use for scrutinizing and fetching the plan.
+
+7. Navigate to the root directory and from there open the host config file available in the location 'etc/hosts'. Map the domain URLs with a local IP address in the hosts file and save the changes.
 
 #### Accessing the application using IP address and domain name
+
+* After setup is done APIs one must use state domain URL and in the contract tenantId of concern, the city has to be passed to scrutinize multiple cities.
+
+* One should not use the city domain URL to scrutinize or fetch plan if used that way, the response will be empty.
+
+* The tenantId used should follow {state_name.city_name} naming convention, then the state_name passed in the request and city code in the state schema must be the same, ex, In the request tenant id is pb.amritsar, then in the state schema city table, the city code value should be pb  .
 
 This section is to be referred only if you want the application to run using any ip address or domain name.
 
 ###### 1. To access the application using IP address:
 * Have an entry in eg_city table in database with an IP address of the machine where application server is running (for ex: domainurl="172.16.2.164") to access application using IP address.
-* Access the application using an url http://172.16.2.164:8080/egi/ where 172.16.2.164 is the IP and 8080 is the port of the machine where application server is running.
+* Access the application using an url http://172.16.2.164:8080/edcr/rest/dcr/scrutinize where 172.16.2.164 is the IP and 8080 is the port of the machine where application server is running.
 
 ###### 2. To access the application using domain name:
 
 * Have an entry in eg_city table in database with domain name (for ex: domainurl= "www.egovbpa.org") to access application using domain name.
 * Add the entry in hosts file of your system with details as 172.16.2.164    www.egovbpa.org (This needs to be done both in server machine as well as the machines in which the application needs to be accessed since this is not a public domain).
-* Access the application  using an url http://www.egovbpa.org:8080/egi/ where www.egovbpa.org is the domain name and 8080 is the port of the machine where application server is running.
+* Access the application  using an url http://www.egovbpa.org:8080/edcr/rest/dcr/scrutinize where www.egovbpa.org is the domain name and 8080 is the port of the machine where application server is running.
 
-Always start the wildfly server with the below command to access the application using IP address or  domain name.
-```
- nohup ./standalone.sh -b 0.0.0.0 &
-```
+### Download Sample Postman Collection
+ https://github.com/egovernments/eGov-dcr-service/blob/master/egov/egov-edcr/Postman/eDcr%20Collection.postman_collectionv.1.json
 
 ## Developer Guide
 This section gives more details regarding developing and contributing to eGov suit.
@@ -200,6 +216,7 @@ This section gives more details regarding developing and contributing to eGov su
 * Install [Jboss Wildfly v11.x][Wildfly Customized]
 * Install [Git 2.8.3][Git]
 * Install [JDK 8 update 112 or later][JDK8 build]
+* Install [Postman 8.7.0][Postman]
 
 __Note__: Please check in [eGov Tools Repository] for any of the above software installables before downloading from internet.
 
@@ -246,9 +263,7 @@ OS:-
 * Windows (If Redis server standalone installed). 
 
 Browser:-
-* Chrome (Recommended)
-* Firefox
-* Internet Explorer
+* Postman
 
 [Git]: https://git-scm.com/downloads
 [JDK8 build]: http://www.oracle.com/technetwork/java/javase/downloads
@@ -267,5 +282,6 @@ Browser:-
 [versioneye img]:https://www.versioneye.com/user/projects/5a0e82590fb24f00104d87b2/badge.svg?style=flat-square
 [codacy]:https://www.codacy.com/app/egovernments/eGov
 [codacy img]:https://api.codacy.com/project/badge/Grade/8e3a009a64a44d1a9d75f78261272987
+[Postman]:https://www.postman.com/downloads/
 
 
