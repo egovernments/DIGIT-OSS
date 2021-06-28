@@ -334,4 +334,31 @@ public class PropertyConfiguration {
 	@Value("${egov.calculation.mutation.checkapplicablefees.endpoint}")
     private String mutationApplicableFeesEndpoint;
 	
+
+
+    // ES Config
+
+    @Value("${elasticsearch.host}")
+    private String esHost;
+
+    @Value("${property.es.index}")
+    private String esPTIndex;
+
+    @Value("${elasticsearch.search.endpoint}")
+    private String esSearchEndpoint;
+
+    @Value("${pt.search.name.fuziness}")
+    private String nameFuziness;
+
+    @Value("${pt.search.doorno.fuziness}")
+    private String doorNoFuziness;
+
+    @Value("${pt.search.oldpropertyid.fuziness}")
+    private String oldPropertyIdFuziness;
+
+    @Value("${pt.fuzzy.searh.is.wildcard}")
+    private Boolean isSearchWildcardBased;
+
+
+
 }

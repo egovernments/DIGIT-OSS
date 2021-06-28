@@ -81,6 +81,22 @@ public class PropertyQueryBuilder {
 			+	LEFT_JOIN  +  " EG_PT_UNIT unit               ON property.id =  unit.propertyid and unit.active = 't'"
 			
 			+ " WHERE  ";
+
+	private static final String ID_QUERY = SELECT
+
+			+   " property.id FROM EG_PT_PROPERTY property "
+
+			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid "
+
+			+   LEFT_JOIN  +  " EG_PT_INSTITUTION institution ON property.id = institution.propertyid "
+
+			+   LEFT_JOIN  +  " EG_PT_DOCUMENT pdoc           ON property.id = pdoc.entityid "
+
+			+   INNER_JOIN +  " EG_PT_OWNER owner             ON property.id = owner.propertyid "
+
+			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
+
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
 	
 
 
@@ -116,7 +132,7 @@ public class PropertyQueryBuilder {
 	 * @param preparedStmtList
 	 * @return
 	 */
-	public String getPropertySearchQuery(PropertyCriteria criteria, List<Object> preparedStmtList) {
+	public String getPropertySearchQuery(PropertyCriteria criteria, List<Object> preparedStmtList,Boolean isPlainSearch, Boolean onlyIds) {
 
 		Boolean isEmpty = CollectionUtils.isEmpty(criteria.getPropertyIds())
 					&& CollectionUtils.isEmpty(criteria.getAcknowledgementIds())
@@ -125,12 +141,19 @@ public class PropertyQueryBuilder {
 					&& null == criteria.getMobileNumber()
 					&& null == criteria.getName()
 					&& null == criteria.getLocality()
-					&& null == criteria.getDoorNo();
+					&& null == criteria.getDoorNo()
+					&& null == criteria.getOldPropertyId();
 		
 		if(isEmpty)
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No criteria given for the property search");
-		
-		StringBuilder builder = new StringBuilder(QUERY);
+
+		StringBuilder builder;
+
+		if(onlyIds)
+			builder = new StringBuilder(ID_QUERY);
+		else
+			builder = new StringBuilder(QUERY);
+
 		Boolean appendAndQuery = false;
 
 		if (!ObjectUtils.isEmpty(criteria.getTenantId())) {
@@ -207,7 +230,11 @@ public class PropertyQueryBuilder {
 		}
 
 		String withClauseQuery = WITH_CLAUSE_QUERY.replace(REPLACE_STRING, builder);
-		return addPaginationWrapper(withClauseQuery, preparedStmtList, criteria);
+
+		if (onlyIds)
+			return builder.toString();
+		else
+			return addPaginationWrapper(withClauseQuery, preparedStmtList, criteria);
 	}
 
 

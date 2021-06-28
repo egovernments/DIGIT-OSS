@@ -575,7 +575,8 @@ public class PropertyValidator {
 				&& null == criteria.getMobileNumber()
 				&& null == criteria.getName()
 				&& null == criteria.getLocality()
-				&& null == criteria.getDoorNo();
+				&& null == criteria.getDoorNo()
+				&& null == criteria.getOldPropertyId();
 		
 		if (isUserCitizen) {
 			

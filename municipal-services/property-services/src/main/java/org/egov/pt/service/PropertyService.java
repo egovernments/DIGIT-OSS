@@ -72,6 +72,9 @@ public class PropertyService {
     @Autowired
 	private CalculationService calculatorService;
 
+	@Autowired
+	private FuzzySearchService fuzzySearchService;
+
 
     
 	/**
@@ -321,6 +324,12 @@ public class PropertyService {
 
 			throw new CustomException("EG_PT_PROPERTY_AUDIT_ERROR", "Audit can only be provided for a single propertyId");
 		}
+
+
+		if(criteria.getDoorNo()!=null || criteria.getName()!=null || criteria.getOldPropertyId()!=null){
+			return fuzzySearchService.getProperties(requestInfo, criteria);
+		}
+
 
 		if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
 

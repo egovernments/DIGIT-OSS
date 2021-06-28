@@ -319,6 +319,13 @@ public class PTConstants {
 	
     public static final String ACTION_FINAL_SKIP_PAY = "FINAL_SKIP_PAYMENT";
 
+    // Fuzzy Search
+    public static final String ES_DATA_PATH = "$..Data";
+
+    public static final String ES_DATA_TENANTID_PATH = "$.tenantData.code";
+
+    public static final String ES_DATA_PROPERTYID_PATH = "$.propertyId";
+
 
 }
 

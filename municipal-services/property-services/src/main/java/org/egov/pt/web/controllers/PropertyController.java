@@ -11,10 +11,13 @@ import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.oldProperty.OldPropertyCriteria;
+import org.egov.pt.repository.ElasticSearchRepository;
+import org.egov.pt.service.FuzzySearchService;
 import org.egov.pt.service.MigrationService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
 import org.egov.pt.validator.PropertyValidator;
+import org.egov.pt.web.contracts.FuzzySearchCriteria;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.PropertyResponse;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
@@ -45,68 +48,71 @@ public class PropertyController {
 	@Autowired
     private PropertyValidator propertyValidator;
 
-	@PostMapping("/_create")
-	public ResponseEntity<PropertyResponse> create(@Valid @RequestBody PropertyRequest propertyRequest) {
+    @Autowired
+    FuzzySearchService fuzzySearchService;
 
-		Property property = propertyService.createProperty(propertyRequest);
-		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
-		PropertyResponse response = PropertyResponse.builder()
-				.properties(Arrays.asList(property))
-				.responseInfo(resInfo)
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
-	}
+    @PostMapping("/_create")
+    public ResponseEntity<PropertyResponse> create(@Valid @RequestBody PropertyRequest propertyRequest) {
 
-	
-	@PostMapping("/_update")
-	public ResponseEntity<PropertyResponse> update(@Valid @RequestBody PropertyRequest propertyRequest) {
-		
-		Property property = propertyService.updateProperty(propertyRequest);
-		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
-		PropertyResponse response = PropertyResponse.builder()
-				.properties(Arrays.asList(property))
-				.responseInfo(resInfo)
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+        Property property = propertyService.createProperty(propertyRequest);
+        ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
+        PropertyResponse response = PropertyResponse.builder()
+                .properties(Arrays.asList(property))
+                .responseInfo(resInfo)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
-	@PostMapping("/_search")
-	public ResponseEntity<PropertyResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-			@Valid @ModelAttribute PropertyCriteria propertyCriteria) {
-		
-		propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
-		List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
-		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
 
-	@PostMapping("/_migration")
-	public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-															  @Valid @ModelAttribute OldPropertyCriteria propertyCriteria, @RequestParam List<String> tenantIdList) {
-		long startTime = System.nanoTime();
-		Map<String, String> resultMap = null;
-		Map<String, String> errorMap = new HashMap<>();
+    @PostMapping("/_update")
+    public ResponseEntity<PropertyResponse> update(@Valid @RequestBody PropertyRequest propertyRequest) {
 
-		resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap, tenantIdList);
+        Property property = propertyService.updateProperty(propertyRequest);
+        ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
+        PropertyResponse response = PropertyResponse.builder()
+                .properties(Arrays.asList(property))
+                .responseInfo(resInfo)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
-		long endtime = System.nanoTime();
-		long elapsetime = endtime - startTime;
-		System.out.println("Elapsed time--->"+elapsetime);
-		
-		return new ResponseEntity<>(resultMap, HttpStatus.OK);
-	}
+    @PostMapping("/_search")
+    public ResponseEntity<PropertyResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                   @Valid @ModelAttribute PropertyCriteria propertyCriteria) {
 
-	@RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
-	public ResponseEntity<PropertyResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-														@Valid @ModelAttribute PropertyCriteria propertyCriteria) {
-		List<Property> properties = propertyService.searchPropertyPlainSearch(propertyCriteria, requestInfoWrapper.getRequestInfo());
-		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+        propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
+        List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/_migration")
+    public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                               @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
+        long startTime = System.nanoTime();
+        Map<String, String> resultMap = null;
+        Map<String, String> errorMap = new HashMap<>();
+
+        resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap);
+
+        long endtime = System.nanoTime();
+        long elapsetime = endtime - startTime;
+        System.out.println("Elapsed time--->"+elapsetime);
+
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+    public ResponseEntity<PropertyResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                        @Valid @ModelAttribute PropertyCriteria propertyCriteria) {
+        List<Property> properties = propertyService.searchPropertyPlainSearch(propertyCriteria, requestInfoWrapper.getRequestInfo());
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 //	@RequestMapping(value = "/_cancel", method = RequestMethod.POST)
 //	public ResponseEntity<PropertyResponse> cancel(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 //												   @Valid @ModelAttribute PropertyCancelCriteria propertyCancelCriteria) {
@@ -117,5 +123,18 @@ public class PropertyController {
 //				.build();
 //		return new ResponseEntity<>(response, HttpStatus.OK);
 //	}
+
+
+
+    @PostMapping("/fuzzy/_search")
+    public ResponseEntity<PropertyResponse> fuzzySearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                      @Valid @ModelAttribute PropertyCriteria fuzzySearchCriteria) {
+
+        List<Property> properties = fuzzySearchService.getProperties(requestInfoWrapper.getRequestInfo(), fuzzySearchCriteria);
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }
