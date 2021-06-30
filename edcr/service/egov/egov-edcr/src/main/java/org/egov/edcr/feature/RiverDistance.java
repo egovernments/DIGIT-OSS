@@ -47,9 +47,6 @@
 
 package org.egov.edcr.feature;
 
-import static org.egov.edcr.constants.DxfFileConstants.MAINRIVER;
-import static org.egov.edcr.constants.DxfFileConstants.SUBRIVER;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,164 +66,168 @@ import org.springframework.stereotype.Service;
 @Service
 public class RiverDistance extends FeatureProcess {
 
-	private static final String RULE_22 = "22";
-	public static final String RIVER_GANGA_DESCRIPTION = "Distance from ganga river";
-	public static final String RIVER_NON_GANGA_DESCRIPTION = "Distance from non ganga river";
-	public static final String PROTECTION_WALL_GANGA_DESCRIPTION = "Distance from protection wall ganga";
-	public static final String EMBANKMENT_GANGA_DESCRIPTION = "Distance from embankment ganga";
-	public static final String NO_DISTANCT_MENTIONED = "No distance is provided from protection wall ganga/embankment/river ganga edge or non ganga river";
+    private static final String RULE_22 = "22";
+    public static final String MAIN_RIVER_DESCRIPTION = "Distance from main river";
+    public static final String SUB_RIVER_DESCRIPTION = "Distance from sub river";
+    public static final String MAIN_RIVER_PROTECTION_WALL_DESCRIPTION = "Distance from main river protection wall";
+    public static final String MAIN_RIVER_EMBANKMENT_DESCRIPTION = "Distance from main river embankment";
+    public static final String NO_DISTANCT_MENTIONED = "No distance is provided from protection wall embankment/river main edge or sub river";
+    private static final Integer MAIN_RIVER = 1;
+    private static final Integer SUB_RIVER = 2;
 
-	@Override
-	public Plan validate(Plan pl) {
+    @Override
+    public Plan validate(Plan pl) {
 
-		return pl;
-	}
+        return pl;
+    }
 
-	@Override
-	public Plan process(Plan pl) {
+    @Override
+    public Plan process(Plan pl) {
 
-		ScrutinyDetail scrutinyDetail = new ScrutinyDetail();
-		scrutinyDetail.setKey("Common_River Distance");
-		scrutinyDetail.addColumnHeading(1, RULE_NO);
-		scrutinyDetail.addColumnHeading(2, DESCRIPTION);
-		scrutinyDetail.addColumnHeading(3, PERMITTED);
-		scrutinyDetail.addColumnHeading(4, PROVIDED);
-		scrutinyDetail.addColumnHeading(5, STATUS);
+        ScrutinyDetail scrutinyDetail = new ScrutinyDetail();
+        scrutinyDetail.setKey("Common_River Distance");
+        scrutinyDetail.addColumnHeading(1, RULE_NO);
+        scrutinyDetail.addColumnHeading(2, DESCRIPTION);
+        scrutinyDetail.addColumnHeading(3, PERMITTED);
+        scrutinyDetail.addColumnHeading(4, PROVIDED);
+        scrutinyDetail.addColumnHeading(5, STATUS);
 
-		HashMap<String, String> errors = new HashMap<>();
-		Map<String, String> details = new HashMap<>();
-		details.put(RULE_NO, RULE_22);
+        HashMap<String, String> errors = new HashMap<>();
+        Map<String, String> details = new HashMap<>();
+        details.put(RULE_NO, RULE_22);
 
-		BigDecimal minDistanceFromProtectionWall = BigDecimal.ZERO;
-		BigDecimal minDistanceFromEmbankment = BigDecimal.ZERO;
-		BigDecimal minDistanceFromMainRiverEdge = BigDecimal.ZERO;
-		BigDecimal minDistanceFromSubRiver = BigDecimal.ZERO;
+        BigDecimal minDistanceFromProtectionWall = BigDecimal.ZERO;
+        BigDecimal minDistanceFromEmbankment = BigDecimal.ZERO;
+        BigDecimal minDistanceFromMainRiverEdge = BigDecimal.ZERO;
+        BigDecimal minDistanceFromSubRiver = BigDecimal.ZERO;
 
-		List<River> mainRiver = new ArrayList<>();
-		List<River> subRiver = new ArrayList<>();
-		List<River> rivers = pl.getDistanceToExternalEntity().getRivers();
+        List<River> mainRiver = new ArrayList<>();
+        List<River> subRiver = new ArrayList<>();
+        List<River> rivers = pl.getDistanceToExternalEntity().getRivers();
 
-		if (!rivers.isEmpty()) {
-			mainRiver = rivers.stream().filter(river -> river.getName().equalsIgnoreCase(MAINRIVER))
-					.collect(Collectors.toList());
-			subRiver = rivers.stream().filter(river -> river.getName().equalsIgnoreCase(SUBRIVER))
-					.collect(Collectors.toList());
+        if (!rivers.isEmpty()) {
+            mainRiver = rivers.stream().filter(river -> river.getColorCode().equals(MAIN_RIVER))
+                    .collect(Collectors.toList());
+            subRiver = rivers.stream().filter(river -> river.getColorCode().equals(SUB_RIVER))
+                    .collect(Collectors.toList());
 
-		}
-		List<BigDecimal> distancesFromRiverProtectionWall = !mainRiver.isEmpty()
-				? mainRiver.get(0).getDistancesFromProtectionWall() : new ArrayList<>();
-		List<BigDecimal> distancesFromEmbankment = !mainRiver.isEmpty() ? mainRiver.get(0).getDistancesFromEmbankment()
-				: new ArrayList<>();
-		List<BigDecimal> distancesFromMainRiverEdge = !mainRiver.isEmpty()
-				? mainRiver.get(0).getDistancesFromRiverEdge() : new ArrayList<>();
-		List<BigDecimal> distancesFromSubRiver = !subRiver.isEmpty() ? subRiver.get(0).getDistancesFromProtectionWall()
-				: new ArrayList<>();
+        }
+        List<BigDecimal> distancesFromRiverProtectionWall = !mainRiver.isEmpty()
+                ? mainRiver.get(0).getDistancesFromProtectionWall()
+                : new ArrayList<>();
+        List<BigDecimal> distancesFromEmbankment = !mainRiver.isEmpty() ? mainRiver.get(0).getDistancesFromEmbankment()
+                : new ArrayList<>();
+        List<BigDecimal> distancesFromMainRiverEdge = !mainRiver.isEmpty()
+                ? mainRiver.get(0).getDistancesFromRiverEdge()
+                : new ArrayList<>();
+        List<BigDecimal> distancesFromSubRiver = !subRiver.isEmpty() ? subRiver.get(0).getDistancesFromProtectionWall()
+                : new ArrayList<>();
 
-		if (StringUtils.isNotBlank(pl.getPlanInformation().getBuildingNearToRiver())
-				&& "YES".equalsIgnoreCase(pl.getPlanInformation().getBuildingNearToRiver())) {
-			if (distancesFromRiverProtectionWall != null && !distancesFromRiverProtectionWall.isEmpty()) {
+        if (StringUtils.isNotBlank(pl.getPlanInformation().getBuildingNearToRiver())
+                && "YES".equalsIgnoreCase(pl.getPlanInformation().getBuildingNearToRiver())) {
+            if (distancesFromRiverProtectionWall != null && !distancesFromRiverProtectionWall.isEmpty()) {
 
-				minDistanceFromProtectionWall = distancesFromRiverProtectionWall.stream().reduce(BigDecimal::min).get();
+                minDistanceFromProtectionWall = distancesFromRiverProtectionWall.stream().reduce(BigDecimal::min).get();
 
-				if (minDistanceFromProtectionWall.compareTo(BigDecimal.valueOf(30)) > 0) {
-					details.put(DESCRIPTION, PROTECTION_WALL_GANGA_DESCRIPTION);
-					details.put(PERMITTED, ">30");
-					details.put(PROVIDED, minDistanceFromProtectionWall.toString());
-					details.put(STATUS, Result.Accepted.getResultVal());
-					scrutinyDetail.getDetail().add(details);
-					pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
-				} else {
-					details.put(DESCRIPTION, PROTECTION_WALL_GANGA_DESCRIPTION);
-					details.put(PERMITTED, "<=30");
-					details.put(PROVIDED, minDistanceFromProtectionWall.toString());
-					details.put(STATUS, Result.Not_Accepted.getResultVal());
-					scrutinyDetail.getDetail().add(details);
-					pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
+                if (minDistanceFromProtectionWall.compareTo(BigDecimal.valueOf(30)) > 0) {
+                    details.put(DESCRIPTION, MAIN_RIVER_PROTECTION_WALL_DESCRIPTION);
+                    details.put(PERMITTED, ">30");
+                    details.put(PROVIDED, minDistanceFromProtectionWall.toString());
+                    details.put(STATUS, Result.Accepted.getResultVal());
+                    scrutinyDetail.getDetail().add(details);
+                    pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
+                } else {
+                    details.put(DESCRIPTION, MAIN_RIVER_PROTECTION_WALL_DESCRIPTION);
+                    details.put(PERMITTED, "<=30");
+                    details.put(PROVIDED, minDistanceFromProtectionWall.toString());
+                    details.put(STATUS, Result.Not_Accepted.getResultVal());
+                    scrutinyDetail.getDetail().add(details);
+                    pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 
-				}
-			} else if (distancesFromRiverProtectionWall != null && !distancesFromEmbankment.isEmpty()) {
-				details = new HashMap<>();
-				details.put(RULE_NO, RULE_22);
+                }
+            } else if (distancesFromRiverProtectionWall != null && !distancesFromEmbankment.isEmpty()) {
+                details = new HashMap<>();
+                details.put(RULE_NO, RULE_22);
 
-				minDistanceFromEmbankment = distancesFromEmbankment.stream().reduce(BigDecimal::min).get();
+                minDistanceFromEmbankment = distancesFromEmbankment.stream().reduce(BigDecimal::min).get();
 
-				if (minDistanceFromEmbankment.compareTo(BigDecimal.valueOf(50)) > 0) {
-					details.put(DESCRIPTION, EMBANKMENT_GANGA_DESCRIPTION);
-					details.put(PERMITTED, ">50");
-					details.put(PROVIDED, minDistanceFromEmbankment.toString());
-					details.put(STATUS, Result.Accepted.getResultVal());
-					scrutinyDetail.getDetail().add(details);
-					pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
-				} else {
-					details.put(DESCRIPTION, EMBANKMENT_GANGA_DESCRIPTION);
-					details.put(PERMITTED, "<=50");
-					details.put(PROVIDED, minDistanceFromEmbankment.toString());
-					details.put(STATUS, Result.Not_Accepted.getResultVal());
-					scrutinyDetail.getDetail().add(details);
-					pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
+                if (minDistanceFromEmbankment.compareTo(BigDecimal.valueOf(50)) > 0) {
+                    details.put(DESCRIPTION, MAIN_RIVER_EMBANKMENT_DESCRIPTION);
+                    details.put(PERMITTED, ">50");
+                    details.put(PROVIDED, minDistanceFromEmbankment.toString());
+                    details.put(STATUS, Result.Accepted.getResultVal());
+                    scrutinyDetail.getDetail().add(details);
+                    pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
+                } else {
+                    details.put(DESCRIPTION, MAIN_RIVER_EMBANKMENT_DESCRIPTION);
+                    details.put(PERMITTED, "<=50");
+                    details.put(PROVIDED, minDistanceFromEmbankment.toString());
+                    details.put(STATUS, Result.Not_Accepted.getResultVal());
+                    scrutinyDetail.getDetail().add(details);
+                    pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 
-				}
-			} else if (distancesFromMainRiverEdge != null && !distancesFromMainRiverEdge.isEmpty()) {
-				details = new HashMap<>();
-				details.put(RULE_NO, RULE_22);
+                }
+            } else if (distancesFromMainRiverEdge != null && !distancesFromMainRiverEdge.isEmpty()) {
+                details = new HashMap<>();
+                details.put(RULE_NO, RULE_22);
 
-				minDistanceFromMainRiverEdge = distancesFromMainRiverEdge.stream().reduce(BigDecimal::min).get();
+                minDistanceFromMainRiverEdge = distancesFromMainRiverEdge.stream().reduce(BigDecimal::min).get();
 
-				if (minDistanceFromMainRiverEdge.compareTo(BigDecimal.valueOf(200)) > 0) {
-					details.put(DESCRIPTION, RIVER_GANGA_DESCRIPTION);
-					details.put(PERMITTED, ">200");
-					details.put(PROVIDED, minDistanceFromMainRiverEdge.toString());
-					details.put(STATUS, Result.Accepted.getResultVal());
-					scrutinyDetail.getDetail().add(details);
-					pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
-				} else {
-					details.put(DESCRIPTION, RIVER_GANGA_DESCRIPTION);
-					details.put(PERMITTED, "<=200");
-					details.put(PROVIDED, minDistanceFromMainRiverEdge.toString());
-					details.put(STATUS, Result.Not_Accepted.getResultVal());
-					scrutinyDetail.getDetail().add(details);
-					pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
+                if (minDistanceFromMainRiverEdge.compareTo(BigDecimal.valueOf(200)) > 0) {
+                    details.put(DESCRIPTION, MAIN_RIVER_DESCRIPTION);
+                    details.put(PERMITTED, ">200");
+                    details.put(PROVIDED, minDistanceFromMainRiverEdge.toString());
+                    details.put(STATUS, Result.Accepted.getResultVal());
+                    scrutinyDetail.getDetail().add(details);
+                    pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
+                } else {
+                    details.put(DESCRIPTION, MAIN_RIVER_DESCRIPTION);
+                    details.put(PERMITTED, "<=200");
+                    details.put(PROVIDED, minDistanceFromMainRiverEdge.toString());
+                    details.put(STATUS, Result.Not_Accepted.getResultVal());
+                    scrutinyDetail.getDetail().add(details);
+                    pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 
-				}
-			}
+                }
+            }
 
-			if (distancesFromSubRiver != null && !distancesFromSubRiver.isEmpty()) {
+            if (distancesFromSubRiver != null && !distancesFromSubRiver.isEmpty()) {
 
-				minDistanceFromSubRiver = distancesFromSubRiver.stream().reduce(BigDecimal::min).get();
-				details = new HashMap<>();
-				details.put(RULE_NO, RULE_22);
+                minDistanceFromSubRiver = distancesFromSubRiver.stream().reduce(BigDecimal::min).get();
+                details = new HashMap<>();
+                details.put(RULE_NO, RULE_22);
 
-				if (minDistanceFromSubRiver.compareTo(BigDecimal.valueOf(100)) > 0) {
-					details.put(DESCRIPTION, RIVER_NON_GANGA_DESCRIPTION);
-					details.put(PERMITTED, ">100");
-					details.put(PROVIDED, minDistanceFromSubRiver.toString());
-					details.put(STATUS, Result.Accepted.getResultVal());
-					scrutinyDetail.getDetail().add(details);
-					pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
-				} else {
-					details.put(DESCRIPTION, RIVER_NON_GANGA_DESCRIPTION);
-					details.put(PERMITTED, "<=100");
-					details.put(PROVIDED, minDistanceFromSubRiver.toString());
-					details.put(STATUS, Result.Not_Accepted.getResultVal());
-					scrutinyDetail.getDetail().add(details);
-					pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
+                if (minDistanceFromSubRiver.compareTo(BigDecimal.valueOf(100)) > 0) {
+                    details.put(DESCRIPTION, SUB_RIVER_DESCRIPTION);
+                    details.put(PERMITTED, ">100");
+                    details.put(PROVIDED, minDistanceFromSubRiver.toString());
+                    details.put(STATUS, Result.Accepted.getResultVal());
+                    scrutinyDetail.getDetail().add(details);
+                    pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
+                } else {
+                    details.put(DESCRIPTION, SUB_RIVER_DESCRIPTION);
+                    details.put(PERMITTED, "<=100");
+                    details.put(PROVIDED, minDistanceFromSubRiver.toString());
+                    details.put(STATUS, Result.Not_Accepted.getResultVal());
+                    scrutinyDetail.getDetail().add(details);
+                    pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
 
-				}
-			}
+                }
+            }
 
-			if (distancesFromRiverProtectionWall.isEmpty() && distancesFromEmbankment.isEmpty()
-					&& distancesFromMainRiverEdge.isEmpty() && distancesFromSubRiver.isEmpty()) {
-				errors.put("Distance_From_River", NO_DISTANCT_MENTIONED);
+            if (distancesFromRiverProtectionWall.isEmpty() && distancesFromEmbankment.isEmpty()
+                    && distancesFromMainRiverEdge.isEmpty() && distancesFromSubRiver.isEmpty()) {
+                errors.put("Distance_From_River", NO_DISTANCT_MENTIONED);
 
-				pl.addErrors(errors);
-			}
-		}
-		return pl;
-	}
+                pl.addErrors(errors);
+            }
+        }
+        return pl;
+    }
 
-	@Override
-	public Map<String, Date> getAmendments() {
-		return new LinkedHashMap<>();
-	}
+    @Override
+    public Map<String, Date> getAmendments() {
+        return new LinkedHashMap<>();
+    }
 
 }

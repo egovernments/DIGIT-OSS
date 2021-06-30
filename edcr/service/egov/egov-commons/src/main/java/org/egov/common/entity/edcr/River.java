@@ -51,61 +51,78 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Transient;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 
  * @author pradeep
  *
- *         PoJo used to keep water source details.
+ * PoJo used to keep water source details.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class River implements Serializable {
 
-	private static final long serialVersionUID = 5131449150804243780L;
-	private String name;
-	
-	/**
-	 * This field will be used to capture distance from river as default value.
-	 */
-	
-	private List<BigDecimal> distancesFromRiverEdge = new ArrayList<>();
-	private List<BigDecimal> distancesFromProtectionWall = new ArrayList<>();
-	private List<BigDecimal> distancesFromEmbankment = new ArrayList<>();
+    private static final long serialVersionUID = 5131449150804243780L;
+    private String name;
+    
+    //Color code used to identify river type
+    private Integer colorCode;
+    
+    private List<BigDecimal> distancesFromRiver = new ArrayList<>();
+    
+    private List<BigDecimal> distancesFromRiverEdge = new ArrayList<>();
+    
+    private List<BigDecimal> distancesFromProtectionWall = new ArrayList<>();
+    
+    private List<BigDecimal> distancesFromEmbankment = new ArrayList<>();
+    
+    public String getName() {
+        return name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Integer getColorCode() {
+        return colorCode;
+    }
 
-	public List<BigDecimal> getDistancesFromRiverEdge() {
-		return distancesFromRiverEdge;
-	}
+    public void setColorCode(Integer colorCode) {
+        this.colorCode = colorCode;
+    }
 
-	public void setDistancesFromRiverEdge(List<BigDecimal> distancesFromRiverEdge) {
-		this.distancesFromRiverEdge = distancesFromRiverEdge;
-	}
+    public List<BigDecimal> getDistancesFromRiver() {
+        return distancesFromRiver;
+    }
 
-	public List<BigDecimal> getDistancesFromProtectionWall() {
-		return distancesFromProtectionWall;
-	}
+    public void setDistancesFromRiver(List<BigDecimal> distancesFromRiver) {
+        this.distancesFromRiver = distancesFromRiver;
+    }
 
-	public void setDistancesFromProtectionWall(List<BigDecimal> distancesFromProtectionWall) {
-		this.distancesFromProtectionWall = distancesFromProtectionWall;
-	}
+    public List<BigDecimal> getDistancesFromRiverEdge() {
+        return distancesFromRiverEdge;
+    }
 
-	public List<BigDecimal> getDistancesFromEmbankment() {
-		return distancesFromEmbankment;
-	}
+    public void setDistancesFromRiverEdge(List<BigDecimal> distancesFromRiverEdge) {
+        this.distancesFromRiverEdge = distancesFromRiverEdge;
+    }
 
-	public void setDistancesFromEmbankment(List<BigDecimal> distancesFromEmbankment) {
-		this.distancesFromEmbankment = distancesFromEmbankment;
-	}
+    public List<BigDecimal> getDistancesFromProtectionWall() {
+        return distancesFromProtectionWall;
+    }
+
+    public void setDistancesFromProtectionWall(List<BigDecimal> distancesFromProtectionWall) {
+        this.distancesFromProtectionWall = distancesFromProtectionWall;
+    }
+
+    public List<BigDecimal> getDistancesFromEmbankment() {
+        return distancesFromEmbankment;
+    }
+
+    public void setDistancesFromEmbankment(List<BigDecimal> distancesFromEmbankment) {
+        this.distancesFromEmbankment = distancesFromEmbankment;
+    }
 
 }

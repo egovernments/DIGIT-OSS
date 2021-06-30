@@ -3,7 +3,8 @@ package org.egov.edcr.feature;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.egov.common.entity.edcr.River;
@@ -17,58 +18,74 @@ import org.springframework.stereotype.Service;
 public class RiverDistanceExtract extends FeatureExtract {
 
     private static final Logger LOG = Logger.getLogger(RiverDistanceExtract.class);
-    public static final String MAINRIVER="MainRiver";
-    public static final String  SUBRIVER="SubRiver";
     @Autowired
     private LayerNames layerNames;
 
     @Override
     public PlanDetail extract(PlanDetail pl) {
 
-		List<River> mainRiver = new ArrayList<River>();
-		List<River> subRiver = new ArrayList<River>();
-		List<River> rivers = pl.getDistanceToExternalEntity().getRivers();
+        List<River> rivers = new ArrayList<River>();
 
-		if (!rivers.isEmpty()) {
-			mainRiver = rivers.stream().filter(river -> river.getName().equalsIgnoreCase(MAINRIVER))
-					.collect(Collectors.toList());
-			subRiver = rivers.stream().filter(river -> river.getName().equalsIgnoreCase(SUBRIVER))
-					.collect(Collectors.toList());
+        Map<Integer, List<BigDecimal>> distancesFromRiver = Util.extractAndMapDimensionValuesByColorCode(pl,
+                layerNames.getLayerName("LAYER_NAME_DISTANCE_FROM_RIVER"));
+        for (Map.Entry<Integer, List<BigDecimal>> distance : distancesFromRiver.entrySet()) {
+            River river = new River();
+            river.setName(String.valueOf(distance.getKey()));
+            river.setColorCode(distance.getKey());
+            river.setDistancesFromRiver(distance.getValue());
+            rivers.add(river);
+        }
 
-		}
+        Map<Integer, List<BigDecimal>> distancesFromProtectionWall = Util.extractAndMapDimensionValuesByColorCode(pl,
+                layerNames.getLayerName("LAYER_NAME_DISTANCE_FROM_RIVER_PROTECTION_WALL"));
+        for (Map.Entry<Integer, List<BigDecimal>> distance : distancesFromProtectionWall.entrySet()) {
+            Optional<River> existRiver = rivers.stream().filter(river -> river.getColorCode() == distance.getKey()).findAny();
+            if (existRiver.isPresent()) {
+                River r = existRiver.get();
+                r.setDistancesFromProtectionWall(distance.getValue());
+            } else {
+                River river = new River();
+                river.setName(String.valueOf(distance.getKey()));
+                river.setColorCode(distance.getKey());
+                river.setDistancesFromProtectionWall(distance.getValue());
+                rivers.add(river);
+            }
+        }
 
-                List<BigDecimal> distancesFromProtectionWallGanga = Util.getListOfDimensionValueByLayer(pl,
-                        layerNames.getLayerName("LAYER_NAME_DISTANCE_FROM_RIVER_PROTECTION_WALL_GANGA"));
-                getRiverObject(pl, mainRiver, MAINRIVER).setDistancesFromProtectionWall(distancesFromProtectionWallGanga);
-        
-                List<BigDecimal> distancesFromEmbankmentGanga = Util.getListOfDimensionValueByLayer(pl,
-                        layerNames.getLayerName("LAYER_NAME_DISTANCE_FROM_EMBANKMENT_GANGA"));
-                getRiverObject(pl, mainRiver, MAINRIVER).setDistancesFromEmbankment(distancesFromEmbankmentGanga);
-        
-                List<BigDecimal> distancesFromEdgeGanga = Util.getListOfDimensionValueByLayer(pl,
-                        layerNames.getLayerName("LAYER_NAME_DISTANCE_FROM_EDGE_GANGA"));
-                getRiverObject(pl, mainRiver, MAINRIVER).setDistancesFromRiverEdge(distancesFromEdgeGanga);
-        
-                List<BigDecimal> distancesFromRiverNonGanga = Util.getListOfDimensionValueByLayer(pl,
-                        layerNames.getLayerName("LAYER_NAME_DISTANCE_FROM_RIVER_NON_GANGA"));
-                getRiverObject(pl, subRiver, SUBRIVER).setDistancesFromProtectionWall(distancesFromRiverNonGanga);
+        Map<Integer, List<BigDecimal>> distancesFromEmbankment = Util.extractAndMapDimensionValuesByColorCode(pl,
+                layerNames.getLayerName("LAYER_NAME_DISTANCE_FROM_RIVER_EMBANKMENT"));
+        for (Map.Entry<Integer, List<BigDecimal>> distance : distancesFromEmbankment.entrySet()) {
+            Optional<River> existRiver = rivers.stream().filter(river -> river.getColorCode() == distance.getKey()).findAny();
+            if (existRiver.isPresent()) {
+                River r = existRiver.get();
+                r.setDistancesFromEmbankment(distance.getValue());
+            } else {
+                River river = new River();
+                river.setName(String.valueOf(distance.getKey()));
+                river.setColorCode(distance.getKey());
+                river.setDistancesFromEmbankment(distance.getValue());
+                rivers.add(river);
+            }
+        }
 
+        Map<Integer, List<BigDecimal>> distancesFromEdge = Util.extractAndMapDimensionValuesByColorCode(pl,
+                layerNames.getLayerName("LAYER_NAME_DISTANCE_FROM_RIVER_EDGE"));
+        for (Map.Entry<Integer, List<BigDecimal>> distance : distancesFromEdge.entrySet()) {
+            Optional<River> existRiver = rivers.stream().filter(river -> river.getColorCode() == distance.getKey()).findAny();
+            if (existRiver.isPresent()) {
+                River r = existRiver.get();
+                r.setDistancesFromRiverEdge(distance.getValue());
+            } else {
+                River river = new River();
+                river.setName(String.valueOf(distance.getKey()));
+                river.setColorCode(distance.getKey());
+                river.setDistancesFromRiverEdge(distance.getValue());
+                rivers.add(river);
+            }
+        }
+        pl.getDistanceToExternalEntity().getRivers().addAll(rivers);
         return pl;
     }
-
-	private River getRiverObject(PlanDetail pl, List<River> riverList, String riverType) {
-		
-		if(riverList.isEmpty())
-		  {
-			River river= new River();
-			river.setName(riverType);
-			riverList.add(river);
-			pl.getDistanceToExternalEntity().addRivers(river);
-			return river;
-			  
-		  }else
-			 return  riverList.get(0);
-	}
 
     @Override
     public PlanDetail validate(PlanDetail pl) {
