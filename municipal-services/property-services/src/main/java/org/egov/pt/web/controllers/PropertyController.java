@@ -90,12 +90,12 @@ public class PropertyController {
 
     @PostMapping("/_migration")
     public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                               @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
+                                               @Valid @ModelAttribute OldPropertyCriteria propertyCriteria, @RequestParam List<String> tenantIdList) {
         long startTime = System.nanoTime();
         Map<String, String> resultMap = null;
         Map<String, String> errorMap = new HashMap<>();
 
-        resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap);
+        resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap,tenantIdList);
 
         long endtime = System.nanoTime();
         long elapsetime = endtime - startTime;
