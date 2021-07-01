@@ -4,7 +4,8 @@ All notable changes to this module will be documented in this file.
 ## 2.0.0
 
 - The Extracting data from dxf file module has been made **open source**.
-- The new module named **egov-dcr-extract** has been added as part of **eGov-dcr-serivce** repo, it contains all extraction code.
+- The new module named **egov-edcr-extract** has been added as part of **eGov-dcr-serivce** repo, it contains all extraction code.
+- Enhance river, to support with color code. The color code used to identify river type.
 
 ## 1.2.0
 
