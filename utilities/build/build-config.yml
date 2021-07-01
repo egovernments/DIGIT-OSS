@@ -65,3 +65,8 @@ config:
     build:
       - work-dir: "certificate_signer"
         image-name: "certificate_signer"
+
+  - name: "builds/utilities/verification"
+    build:
+      - work-dir: "verification"
+        image-name: "verification"
