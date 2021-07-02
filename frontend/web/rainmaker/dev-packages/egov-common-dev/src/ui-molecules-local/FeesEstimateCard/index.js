@@ -7,6 +7,8 @@ import Divider from "@material-ui/core/Divider";
 import Tooltip from "@material-ui/core/Tooltip";
 import Icon from "@material-ui/core/Icon";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
+import EstimateCardContainer from "../../ui-containers-local/EstimateCardContainer";
+import get from "lodash/get";
 
 const styles = {
   card: {
@@ -77,13 +79,30 @@ function totalAmount(arr) {
     .reduce((prev, next) => prev + next, 0);
 }
 
+
 function FeesEstimateCard(props) {
-  const { classes, estimate, isArrears } = props;
+  
+  const { classes, estimate } = props;
   const total = estimate.totalAmount;
   const arrears = estimate.arrears;
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
+  let businessService=localStorage.getItem('pay-businessService')
 
-  if (estimate.fees&&estimate.fees.length>0&&estimate.fees[estimate.fees.length-1].info.labelName!="Arrears" && isArrears ) {
+  
+  function compare(a, b) {
+  
+    if (parseFloat(a.value) < parseFloat(b.value)) return 1;
+    if (parseFloat(b.value) < parseFloat(a.value)) return -1;
+  
+    return 0;
+  }
+  
+  estimate.fees.sort(compare);
+
+  
+  
+   
+    if(estimate && estimate.fees.length>0){
     estimate.fees.push({
       info: {
         labelKey: "COMMON_ARREARS",
@@ -96,6 +115,8 @@ function FeesEstimateCard(props) {
       value: parseInt(arrears)
     });
   }
+ 
+
 
   return (
     <Grid container>
