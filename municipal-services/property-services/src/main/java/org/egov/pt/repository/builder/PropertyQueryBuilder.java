@@ -68,7 +68,7 @@ public class PropertyQueryBuilder {
 			
 			+   " FROM EG_PT_PROPERTY property " 
 			
-			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid " 
+			+  INNER_JOIN + " EG_PT_ADDRESS address         ON property.id = address.propertyid " 
 			
 			+   LEFT_JOIN  +  " EG_PT_INSTITUTION institution ON property.id = institution.propertyid " 
 			
@@ -86,7 +86,7 @@ public class PropertyQueryBuilder {
 
 			+   " property.id FROM EG_PT_PROPERTY property "
 
-			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid "
+			+   INNER_JOIN + " EG_PT_ADDRESS address         ON property.id = address.propertyid "
 
 			+   LEFT_JOIN  +  " EG_PT_INSTITUTION institution ON property.id = institution.propertyid "
 
