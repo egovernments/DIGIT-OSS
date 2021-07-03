@@ -1,0 +1,41 @@
+SearchDefinitions:
+ moduleName: water-services
+ summary: Water Services Open API
+ version: 1.0.0
+ definitions:
+ - name: wateropensearch
+   query: 
+    baseQuery: Select row_to_json(result) from
+        (
+          select water.applicationtype, water.applicationno, water.connectionno, water.locality, water.createdtime, water.applicationstatus, water.status from eg_ws_connection as water 
+          INNER JOIN eg_pt_property pt ON pt.id = water.property_id $where
+        ) result
+    groupBy:    
+    orderBy:
+   searchParams: 
+    condition: AND
+    params:
+    - name: water.tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+    - name: pt.propertyid
+      isMandatory: false
+      jsonPath: $.searchCriteria.propertyId
+    - name: water.applicationno
+      isMandatory: false
+      jsonPath: $.searchCriteria.applicationno
+    - name: water.connectionno
+      isMandatory: false
+      jsonPath: $.searchCriteria.connectionno
+    - name: water.property_id
+      isMandatory: false
+      jsonPath: $.searchCriteria.uuid
+    - name: water.locality
+      isMandatory: true
+      jsonPath: $.searchCriteria.locality
+
+
+   output:
+    jsonFormat: {"ResponseInfo": {},"WaterConnection": []}
+    outJsonPath: $.WaterConnection
+    responseInfoPath: $.ResponseInfo

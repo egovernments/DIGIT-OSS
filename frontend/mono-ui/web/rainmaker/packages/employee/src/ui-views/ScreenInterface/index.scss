@@ -1,0 +1,295 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: #f4f7fb;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.container-padding {
+    margin: 8px;
+}
+
+.mihy-stepper-overide {
+    margin-top: 32px;
+}
+
+.apply-application-for-new {
+    color: #484848;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 29px;
+    text-align: left;
+    margin-bottom: 32px;
+}
+
+.common-div-css {
+    margin: 80px 16px 88px 16px;
+}
+
+.common-card-css {
+    background-color: #ffffff;
+    border: 0.5px solid rgba(255, 255, 255, 0.800000011920929);
+    border-radius: 2px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.23999999463558197), 0 0 2px 0 rgba(0, 0, 0, 0.11999999731779099);
+    /* width: 100%; */
+    margin-bottom: 24px;
+    /* margin-right: 24px; */
+    padding: 16px;
+}
+
+.mihy-subheader {
+    color: rgba(0, 0, 0, 0.8700000047683716);
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.83px;
+    line-height: 24px;
+    text-align: left;
+}
+
+.mihy-paragraph {
+    color: rgba(0, 0, 0, 0.6000000238418579);
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    width: 881px;
+    text-align: left;
+}
+
+.mihy-primary-button {
+    background-color: #fe7a51;
+    border-radius: 2px;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.23999999463558197), 0 0 8px 0 rgba(0, 0, 0, 0.11999999731779099), 0 2px 2px 0 rgba(0, 0, 0, 0.23999999463558197), 0 0 2px 0 rgba(0, 0, 0, 0.11999999731779099);
+    width: 200px;
+    height: 48px;
+}
+
+span[class^="MuiFormLabel-asterisk"] {
+    color: #e54d42;
+}
+
+.search-preview div[id^="material-ui-item"] div[id^="material-ui-cardContent"] {
+    padding: 8px 1px 1px 1px;
+}
+
+.search-preview div[id^="material-ui-item"] div[id^="material-ui-cardContent"] span[class^="MuiIconButton-label"] {
+    display: none;
+}
+
+.search-preview button[aria-label="Remove"] {
+    display: none;
+}
+
+div[class^="MuiTooltip-tooltip"] {
+    font-size: 14px;
+}
+
+
+/* div[class^="MuiGrid-item"]   {
+    padding-right: 80px
+} */
+
+.app-container-iframe {
+    div[class^="MuiCircularProgress"] {
+        position: sticky;
+        top: 90%;
+        left: 50%;
+    }
+    div[role^="progressbar"] {
+        left: 50%;
+        position: sticky;
+    }
+}
+
+.apply-success-footer {
+  background-color: #ffffff;
+  box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+  padding: 8px;
+  position: fixed !important;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  text-align: right;
+}
+
+@media only screen and (max-width: 768px) {
+  .framework-responsive-button {
+    border-radius: inherit;
+    width: 100%;
+    height: 48px;
+  }
+  .apply-success-footer {
+    width: 100vw;
+    height: 150px;
+    display: inline-block !important;
+    text-align: center;
+  }
+
+  .apply-wizard-footer {
+    position: fixed;
+    bottom: 0;
+    display: inline;
+    z-index: 1;
+    left: 0;
+    width: 100%;
+    overflow: inherit !important;
+  }
+  .pt-apply-wizard-footer {
+    position: fixed;
+    bottom: 0;
+    display: inline;
+    z-index: 1;
+    left: 0;
+    width: 100%;
+    overflow: inherit !important;
+  }
+  .button-wizard-footer {
+    min-width: 50%;
+    height: 48px;
+  }
+
+  .single-button-wizard-footer {
+    min-width: 100%;
+    height: 48px;
+  }
+}
+@media only screen and (min-width: 953px) {
+  .app-container-iframe {
+    position: fixed;
+    width: 83.5%;
+    height: calc(100vh - 64px);
+  }
+}
+@media only screen and (min-width: 768px) {
+  .common-div-css {
+    margin: 30px 16px 88px 16px;
+  }
+
+  .button-wizard-footer,
+  .single-button-wizard-footer {
+    min-width: 200px !important;
+    height: 48px !important;
+    margin-right: 45px !important;
+  }
+  .pt-apply-wizard-footer {
+    background-color: #ffffff;
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    padding: 8px;
+    position: fixed !important;
+    bottom: 0;
+    right: 0;
+    width:100%;
+    text-align: right;
+}
+  .apply-wizard-footer {
+    background-color: #ffffff;
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    padding: 8px;
+    position: fixed !important;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    text-align: right;
+}
+}
+
+@media only screen and (max-width: 768px) {
+    .framework-responsive-button {
+        border-radius: inherit;
+        width: 100%;
+        height: 48px;
+    }
+    .apply-success-footer {
+        width: 100vw;
+        height: 150px;
+        display: inline-block !important;
+        text-align: center;
+    }
+    .apply-wizard-footer {
+        position: fixed;
+        bottom: 0;
+        z-index: 1;
+        /* left: 35px; */
+        width: 100%;
+        overflow: inherit !important;
+    }
+    .apply-wizard-footer { button {
+       // min-width: 360px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+     }}
+     .pt-apply-wizard-footer {
+        position: fixed;
+        bottom: 0;
+        z-index: 1;
+        /* left: 35px; */
+        width: 100%;
+        overflow: inherit !important;
+    }
+    .pt-apply-wizard-footer { button {
+       // min-width: 360px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+     }}
+}
+
+@media only screen and (min-width: 953px) {
+    .app-container-iframe {
+        position: fixed;
+        width: 83.5%;
+        height: calc(100vh - 64px);
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .common-div-css {
+        margin: 30px 16px 88px 16px;
+    }
+    .apply-wizard-footer {
+        background-color: #ffffff;
+        box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+        padding: 8px;
+        position: fixed !important;
+        bottom: 0;
+        right: 0;
+        z-index: 1;
+        width: 100%;
+        text-align: right;
+        overflow: inherit !important;
+    }
+    .framework-responsive-button {
+        min-width: 200px;
+        height: 48px;
+        margin-right: 45px;
+        border-radius: inherit;
+    }
+}
+@media (max-width: 768px) {
+    .app-container-iframe {
+        border-width: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 32px 0 0 0;
+    }
+ }
+ @media (max-width: 375px) {
+ .app-container-iframe {
+        border-width: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 32px 0 0 0;
+    }
+ }
+
+ a:focus, a:active {
+    outline-style: solid;
+    outline-width: 3px;
+    outline-offset: 4px;
+    text-decoration: none;
+ }

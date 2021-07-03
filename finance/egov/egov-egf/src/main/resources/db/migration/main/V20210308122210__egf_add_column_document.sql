@@ -1,0 +1,1 @@
+ALTER TABLE egf_documents add column ismigrated boolean default false;

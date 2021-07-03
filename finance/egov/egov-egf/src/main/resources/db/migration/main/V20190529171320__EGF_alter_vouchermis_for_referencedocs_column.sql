@@ -1,0 +1,1 @@
+ALTER TABLE vouchermis add column referencedocument varchar(50) default '';

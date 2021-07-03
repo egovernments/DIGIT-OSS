@@ -1,0 +1,5 @@
+----Taxhead mater entry
+INSERT INTO egbs_taxheadmaster(id, tenantid, category,service, name, code, isdebit,isactualdemand, orderno,validfrom, validtill, createdby, createdtime,lastmodifiedby, lastmodifiedtime) VALUES (NEXTVAL('seq_egbs_taxheadmaster'), 'default', 'Application Fees','TRADELICENSE', 'Application Fee', 'NEWTRADEAPPLICATIONFEE', 'N', false, 1, (SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2011-04-01') * 1000), (SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2020-03-31') * 1000), 1, (SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2017-08-30')), 1, (SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2017-08-30')));
+
+-- GL Code entry
+insert into egbs_glcodemaster (id ,tenantid,taxhead , service,fromdate,todate,createdby ,createdtime ,lastmodifiedby , lastmodifiedtime , glcode) values(NEXTVAL('seq_egbs_glcodemaster'),'default','NEWTRADEAPPLICATIONFEE','TRADELICENSE',(SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2011-04-01') * 1000),(SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2020-03-31') * 1000),1,(SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2017-08-30')),1,(SELECT EXTRACT(EPOCH FROM TIMESTAMP  '2017-08-30')),'1401101');

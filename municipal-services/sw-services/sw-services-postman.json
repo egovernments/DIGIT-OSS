@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "1990db61-7771-4b9a-ad6b-d5beb219c960",
+		"name": "Dev-Sewerage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SW-Service Create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": 1513579888683,\n    \"ver\": \".01\",\n    \"authToken\": \"f6f7c7f0-d448-4eeb-bea2-121d3368822a\",\n    \"userInfo\": {\n      \"uuid\": \"malai da annamalai\",\n      \"tenantId\": \"pb.amritsar\"\n    }\n  },\n  \"SewerageConnection\": {\n    \"propertyId\": \"b5f2010b-446f-44ed-b6cf-c326621a79af\",\n    \"noOfWaterClosets\": 21,\n    \"processInstance\": {\n      \"action\": \"INITIATE\"\n    },\n    \"connectionType\": \"Non Metered\"\n  }\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/sw-services/swc/_create",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"sw-services",
+						"swc",
+						"_create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SW-Service Update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"Rainmaker\",\n        \"action\": \"\",\n        \"did\": 1,\n        \"key\": \"\",\n        \"msgId\": \"20170310130900|en_IN\",\n        \"requesterId\": \"\",\n        \"ts\": 1513579888683,\n        \"ver\": \".01\",\n        \"authToken\": \"342b7e7c-3388-4f52-8592-387a5185c36a\",\n        \"userInfo\": {\n            \"id\": 24226,\n            \"uuid\": \"11b0e02b-0145-4de2-bc42-c97b96264807\",\n            \"userName\": \"amr001\",\n            \"name\": \"leela\",\n            \"mobileNumber\": \"9814424443\",\n            \"emailId\": \"leela@llgmail.com\",\n            \"locale\": null,\n            \"type\": \"EMPLOYEE\",\n            \"roles\": [\n                {\n                    \"name\": \"CITIZEN\",\n                    \"code\": \"CITIZEN\",\n                    \"tenantId\": \"pb\"\n                },\n                {\n                    \"name\": \"SW Document Verifier\",\n                    \"code\": \"SW_DOC_VERIFIER\",\n                    \"tenantId\": \"pb\"\n                },\n                {\n                    \"name\": \"Employee\",\n                    \"code\": \"EMPLOYEE\",\n                    \"tenantId\": \"pb\"\n                },\n                {\n                    \"name\": \"SW Counter Employee\",\n                    \"code\": \"SW_CEMP\",\n                    \"tenantId\": \"pb\"\n                },\n                {\n                    \"name\": \"SW Field Inspector\",\n                    \"code\": \"SW_FIELD_INSPECTOR\",\n                    \"tenantId\": \"pb\"\n                }\n            ],\n            \"active\": true,\n            \"tenantId\": \"pb\"\n        }\n    },\n    \"SewerageConnection\": {\n        \"id\": \"c1267076-e385-42ef-9b92-d8b1a844b2ac\",\n        \"property\": {\n            \"id\": \"72658188-2ba8-49e7-ac47-850a3a5f5f73\",\n            \"propertyId\": \"PB-PT-2020-02-11-019300\",\n            \"surveyId\": null,\n            \"linkedProperties\": null,\n            \"tenantId\": \"pb.amritsar\",\n            \"accountId\": \"11b0e02b-0145-4de2-bc42-c97b96264807\",\n            \"oldPropertyId\": null,\n            \"status\": \"ACTIVE\",\n            \"address\": {\n                \"tenantId\": \"pb.amritsar\",\n                \"doorNo\": \"417/j\",\n                \"plotNo\": null,\n                \"id\": \"b1d63224-ec47-4d80-a9f6-f8c8b70e040a\",\n                \"landmark\": \" next to grand mercure exit gate\",\n                \"city\": \"amritsar\",\n                \"district\": null,\n                \"region\": null,\n                \"state\": null,\n                \"country\": null,\n                \"pincode\": \"560064\",\n                \"buildingName\": \"jumbedweepa\",\n                \"street\": \"bakery street\",\n                \"locality\": {\n                    \"code\": \"SUN11\",\n                    \"name\": \"Back Side 33 KVA Grid Patiala Road - Area1\",\n                    \"label\": \"Locality\",\n                    \"latitude\": null,\n                    \"longitude\": null,\n                    \"area\": \"Area1\",\n                    \"children\": [],\n                    \"materializedPath\": null\n                },\n                \"geoLocation\": {\n                    \"latitude\": 45.68,\n                    \"longitude\": 47.9\n                },\n                \"additionalDetails\": null\n            },\n            \"acknowldgementNumber\": \"PB-AC-2020-02-11-018635\",\n            \"propertyType\": \"BUILTUP\",\n            \"ownershipCategory\": \"INDIVIDUAL\",\n            \"owners\": [\n                {\n                    \"id\": null,\n                    \"uuid\": \"4595ab59-0260-40e9-987f-97333d00a7b0\",\n                    \"userName\": \"7382193319\",\n                    \"password\": null,\n                    \"salutation\": null,\n                    \"name\": \"Abhishek\",\n                    \"gender\": \"FEMALE\",\n                    \"mobileNumber\": \"7382193319\",\n                    \"emailId\": null,\n                    \"altContactNumber\": \"123456\",\n                    \"pan\": null,\n                    \"aadhaarNumber\": null,\n                    \"permanentAddress\": null,\n                    \"permanentCity\": null,\n                    \"permanentPinCode\": null,\n                    \"correspondenceCity\": null,\n                    \"correspondencePinCode\": null,\n                    \"correspondenceAddress\": null,\n                    \"active\": true,\n                    \"dob\": null,\n                    \"pwdExpiryDate\": 1589450572000,\n                    \"locale\": null,\n                    \"type\": \"CITIZEN\",\n                    \"signature\": null,\n                    \"accountLocked\": false,\n                    \"roles\": [\n                        {\n                            \"id\": null,\n                            \"name\": \"Citizen\",\n                            \"code\": \"CITIZEN\",\n                            \"tenantId\": \"pb\"\n                        }\n                    ],\n                    \"fatherOrHusbandName\": \"HUSBAND NAME\",\n                    \"bloodGroup\": null,\n                    \"identificationMark\": null,\n                    \"photo\": null,\n                    \"createdBy\": \"24226\",\n                    \"createdDate\": 1581405164000,\n                    \"lastModifiedBy\": \"1\",\n                    \"lastModifiedDate\": 1581915006000,\n                    \"tenantId\": \"pb\",\n                    \"ownerInfoUuid\": \"6a37cfa5-7642-4abc-abe9-4bb6c626da60\",\n                    \"isPrimaryOwner\": null,\n                    \"ownerShipPercentage\": 100.0,\n                    \"ownerType\": \"NONE\",\n                    \"institutionId\": null,\n                    \"status\": \"ACTIVE\",\n                    \"documents\": null,\n                    \"relationship\": \"HUSBAND\"\n                },\n                {\n                    \"id\": null,\n                    \"uuid\": \"389716a4-25a0-4d82-8eb0-9f84048ecdfd\",\n                    \"userName\": \"899522ee-0d6c-421b-8935-88bde3b4d2d0\",\n                    \"password\": null,\n                    \"salutation\": null,\n                    \"name\": \"Shriya\",\n                    \"gender\": \"FEMALE\",\n                    \"mobileNumber\": \"8840903463\",\n                    \"emailId\": null,\n                    \"altContactNumber\": \"123456\",\n                    \"pan\": null,\n                    \"aadhaarNumber\": null,\n                    \"permanentAddress\": null,\n                    \"permanentCity\": null,\n                    \"permanentPinCode\": null,\n                    \"correspondenceCity\": null,\n                    \"correspondencePinCode\": null,\n                    \"correspondenceAddress\": null,\n                    \"active\": true,\n                    \"dob\": null,\n                    \"pwdExpiryDate\": 1589450573000,\n                    \"locale\": null,\n                    \"type\": \"CITIZEN\",\n                    \"signature\": null,\n                    \"accountLocked\": false,\n                    \"roles\": [\n                        {\n                            \"id\": null,\n                            \"name\": \"Citizen\",\n                            \"code\": \"CITIZEN\",\n                            \"tenantId\": \"pb\"\n                        }\n                    ],\n                    \"fatherOrHusbandName\": \"HUSBAND NAME\",\n                    \"bloodGroup\": null,\n                    \"identificationMark\": null,\n                    \"photo\": null,\n                    \"createdBy\": \"24226\",\n                    \"createdDate\": 1581405165000,\n                    \"lastModifiedBy\": \"1\",\n                    \"lastModifiedDate\": 1581915007000,\n                    \"tenantId\": \"pb\",\n                    \"ownerInfoUuid\": \"2a796c26-8bae-4ac7-9abb-66ed8b7d2114\",\n                    \"isPrimaryOwner\": null,\n                    \"ownerShipPercentage\": 100.0,\n                    \"ownerType\": \"NONE\",\n                    \"institutionId\": null,\n                    \"status\": \"ACTIVE\",\n                    \"documents\": null,\n                    \"relationship\": \"HUSBAND\"\n                }\n            ],\n            \"institution\": null,\n            \"creationReason\": \"NEWPROPERTY\",\n            \"usageCategory\": \"RESIDENTIAL\",\n            \"noOfFloors\": 1,\n            \"landArea\": 1000.0,\n            \"superBuiltUpArea\": null,\n            \"source\": \"MUNICIPAL_RECORDS\",\n            \"channel\": \"SYSTEM\",\n            \"documents\": null,\n            \"units\": [\n                {\n                    \"id\": \"88a3786e-9d3d-4121-93cc-dfedc1b5027e\",\n                    \"tenantId\": null,\n                    \"floorNo\": 1,\n                    \"unitType\": \"Building, Room, Kitchen etc.\",\n                    \"usageCategory\": \"RESIDENTIAL\",\n                    \"occupancyType\": null,\n                    \"active\": true,\n                    \"occupancyDate\": 0,\n                    \"constructionDetail\": {\n                        \"carpetArea\": 0.0,\n                        \"builtUpArea\": 1.0,\n                        \"plinthArea\": 0.0,\n                        \"superBuiltUpArea\": 0.0,\n                        \"constructionType\": \"PUCCA\",\n                        \"constructionDate\": 0,\n                        \"dimensions\": null\n                    },\n                    \"additionalDetails\": null,\n                    \"auditDetails\": null,\n                    \"arv\": null\n                }\n            ],\n            \"additionalDetails\": null,\n            \"auditDetails\": {\n                \"createdBy\": \"11b0e02b-0145-4de2-bc42-c97b96264807\",\n                \"lastModifiedBy\": \"11b0e02b-0145-4de2-bc42-c97b96264807\",\n                \"createdTime\": 1581405164053,\n                \"lastModifiedTime\": 1581405164053\n            },\n            \"workflow\": null\n        },\n        \"applicationNo\": \"SW_AP/107/2019-20/060435\",\n        \"applicationStatus\": \"INITIATED\",\n        \"status\": \"Active\",\n        \"connectionNo\": null,\n        \"oldConnectionNo\": null,\n        \"documents\": null,\n        \"plumberInfo\": null,\n        \"roadType\": \"BERMCUTTINGKATCHA\",\n        \"roadCuttingArea\": 50,\n        \"action\": \"PAY\",\n        \"connectionExecutionDate\": null,\n        \"proposedWaterClosets\": null,\n        \"proposedToilets\": null,\n        \"noOfWaterClosets\": 21,\n        \"noOfToilets\": null,\n        \"uom\": \"Number\",\n        \"calculationAttribute\": \"No. of water closets\",\n        \"connectionType\": \"Non Metered\"\n    }\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/sw-services/swc/_update",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"sw-services",
+						"swc",
+						"_update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SW-Service Search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"Rainmaker\",\n        \"ver\": \".01\",\n        \"action\": \"_search\",\n        \"did\": \"1\",\n        \"key\": \"\",\n        \"msgId\": \"20170310130900|en_IN\",\n        \"requesterId\": \"\",\n        \"authToken\": \"test-731b-4f97-9614-d77e3afd3bc1\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/sw-services/swc/_search?tenantId=pb.amritsar&mobileNumber=9986757048",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"sw-services",
+						"swc",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "mobileNumber",
+							"value": "77907290453",
+							"disabled": true
+						},
+						{
+							"key": "propertyId",
+							"value": "PB-PT-2020-02-28-019538",
+							"disabled": true
+						},
+						{
+							"key": "connectionNumber",
+							"value": "WS/107/2019-20/060984",
+							"disabled": true
+						},
+						{
+							"key": "applicationStatus",
+							"value": "INITIATED",
+							"disabled": true
+						},
+						{
+							"key": "fromDate",
+							"value": "1583146870000",
+							"disabled": true
+						},
+						{
+							"key": "toDate",
+							"value": "1583232968000",
+							"disabled": true
+						},
+						{
+							"key": "tenantId",
+							"value": "pb.amritsar"
+						},
+						{
+							"key": "mobileNumber",
+							"value": "9986757048"
+						}
+					]
+				},
+				"description": "Water Search API"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

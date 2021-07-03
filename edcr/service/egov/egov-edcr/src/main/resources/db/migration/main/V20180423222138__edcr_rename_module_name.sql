@@ -1,0 +1,1 @@
+update eg_module  set name ='Digit DCR',displayname ='Digit DCR' where contextroot ='edcr';

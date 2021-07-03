@@ -1,0 +1,66 @@
+#material-ui-propertySearchTabs {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    margin-top: 0px !important; }
+    #material-ui-propertySearchTabs div div {
+      background-color: transparent; }
+  
+  #material-ui-popup {
+    height: 100%; }
+  
+  #material-ui-yearDetailsContainer div div fieldset div label span:nth-child(1) {
+    height: 20px !important; }
+  
+  #material-ui-yearDetailsContainer div div fieldset label span:nth-child(1) {
+    font-size: 15px;
+    font-weight: bolder; }
+  
+  #material-ui-yearDetailsContainer div div fieldset label {
+    padding-bottom: 10px; }
+  
+  #material-ui-searchPropertyDetails {
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-top: 10px;
+    background-color: white !important; }
+  
+  #material-ui-searchApplicationDetails {
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-top: 10px;
+    background-color: white !important; }
+  
+  @media only screen and (max-width: 768px) {
+    #material-ui-resetButton {
+      float: none !important;
+      margin: 0px 20px 10px!important; }
+    #material-ui-searchButton {
+      margin: 0px 20px!important;}
+    .ack-body, .ack-tail {
+      display: contents;
+      text-align: center; } }
+  
+  @media only screen and (min-width: 768px) {
+    .downloadprint-menu {
+      float: right;
+      margin-top: -50px; } }
+  
+  #material-ui-searchPropertyDetails div div div div div div button span span span span {
+    font-size: 14px !important; }
+  
+  .public-domain-search #material-ui-resetButton, .public-domain-search #material-ui-searchButton {
+    width: 100% !important;
+    margin: 8px 0px !important; }
+  
+    .autocomplete-dropdown {
+      min-width: 80% !important;
+      position: absolute !important;
+      z-index: 1900 !important;
+      max-height: 150px !important;
+      overflow: hidden !important;
+    }
+    .autocomplete-dropdown div {
+      min-width: 80% !important;
+      max-height: 150px !important;
+      overflow: auto !important;
+    }

@@ -1,0 +1,30 @@
+serviceMaps:
+ serviceName: pdf-service
+ mappings:
+ - version: 1.0
+   description: Update fileStoreIds
+   fromTopic: PDF_GEN_CREATE
+   isTransaction: true
+   queryMaps:
+
+
+       - query: UPDATE eg_tl_tradelicense SET filestoreid=? WHERE id = ? 
+         basePath: jobs.*
+         jsonMaps:
+
+          - jsonPath: $.jobs.*.filestoreids
+            type: ARRAY
+            dbType: STRING 
+
+          - jsonPath: $.jobs.*.entityid
+
+
+       - query: UPDATE egbs_bill_v1 SET filestoreid=? WHERE id = ? 
+         basePath: jobs.*
+         jsonMaps:
+
+          - jsonPath: $.jobs.*.filestoreids
+            type: ARRAY
+            dbType: STRING 
+
+          - jsonPath: $.jobs.*.entityid

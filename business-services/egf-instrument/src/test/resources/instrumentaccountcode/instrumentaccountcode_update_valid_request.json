@@ -1,0 +1,13 @@
+"instrumentAccountCodes": [
+   	{
+   		"id":"1",
+		"instrumentType":{
+			"name":"instrumenttype"
+		},
+		"accountCode":{
+			"glcode":"glcode"
+		},
+   		"tenantId":"default"
+   	}
+   	
+   	]

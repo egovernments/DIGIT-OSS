@@ -1,0 +1,16 @@
+{
+  "tenantId": "default",
+  "moduleName": "common-masters",
+  "CensusYear": [
+    {
+      "tenantId": "default",
+      "name": "2001",
+      "code": "2001"
+    },
+    {
+      "tenantId": "default",
+      "name": "2011",
+      "code": "2011"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "tenantId": "pb",
+  "moduleName": "egov-hrms",
+  "EmployeeStatus": [
+    {
+      "code": "EMPLOYED",
+      "active": true
+    },
+    {
+      "code": "RETIRED",
+      "active": true
+    },
+    {
+      "code": "RESIGNED",
+      "active": true
+    },
+    {
+      "code": "TERMINATED",
+      "active": true
+    },
+    {
+      "code": "DECEASED",
+      "active": true
+    },
+    {
+      "code": "SUSPENDED",
+      "active": true
+    },
+    {
+      "code": "TRANSFERRED",
+      "active": true
+    }
+  ]
+}

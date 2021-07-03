@@ -1,0 +1,1 @@
+INSERT into state.eg_userrole select (select id from eg_role  where name  = 'SYSTEM'),(select id from state.eg_user where username ='egovernments') where not exists(SELECT * FROM state.eg_userrole WHERE roleid in (select id from eg_role  where name  = 'SYSTEM'));

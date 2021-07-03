@@ -1,0 +1,1 @@
+ALTER TABLE accountdetailkey ALTER COLUMN detailname TYPE varchar(100);

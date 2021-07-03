@@ -1,0 +1,171 @@
+{
+    "key": "bpa-revocation",
+    "config": {
+        "defaultStyle": {
+            "font": "Cambay"
+        },
+        "content": [
+            {
+                "columns": [
+                    {
+                        "image": "{{logoImage}}",
+                        "width": 70,
+                        "height": 70,
+                        "alignment": "left"
+                    },
+                    {
+                        "stack": [
+                            {
+                                "text": "{{tenantName}} {{Muncipal_Council}}",
+                                "style": "header"
+                            },
+                            {
+                                "text": "{{Revocation_Title}}",
+                                "style": "sub-header"
+                            }
+                        ]
+                    },
+                    {
+                        "image": "{{logoImage}}",
+                        "width": 70,
+                        "height": 70,
+                        "alignment": "right"
+                    }
+                ]
+            },
+            {
+                "columns": [
+                    {
+                        "text": [
+                            {
+                                "text": "{{Dated}} : ",
+                                "bold": true
+                            },
+                            {
+                                "text": "{{createdDate}}",
+                                "bold": true
+                            }
+                        ],
+                        "alignment": "right"
+                    }
+                ],
+                "style": "top-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "{{SALUTATION}} "
+                    },
+                    {
+                        "text": "{{ownerName}},",
+                        "bold": true
+                    }
+                ],
+                "style": "top-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "{{Permision_Issued}}  "
+                    },
+                    {
+                        "text": "{{planPermissionNo}}",
+                        "bold": true,
+                        "font": "Roboto"
+                    },
+                    {
+                        "text": " {{WRT_APPNO}} "
+                    },
+                    {
+                        "text": "{{applicationNo}}",
+                        "bold": true,
+                        "font": "Roboto"
+                    },
+                    {   
+                        "text": " {{dated}} "
+                    },
+                    {
+                        "text": "{{createdDate}}",
+                        "bold": true
+                    },
+                    {
+                        "text": " {{isRevocated}}. "
+                    }
+                ],
+                "style": "top-low-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "{{revocationReasonIs}}"
+                    },
+                    {
+                        "text": " {{revocationReason}}.",
+                        "bold": true
+                    },
+                    {
+                        "text": " {{noAuthText}}."
+                    }
+                ],
+                "style": "top-low-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "{{contactULB}}."
+                    }
+                ],
+                "style": "top-low-margin"
+            },
+            {
+                "stack": [
+                    {
+                        "text": "{{BY_ORDER}}",
+                        "style": "top-margin"
+                    },
+                    {
+                        "text": "{{AUTH_OFFICER}}",
+                        "margin": 2
+                    },
+                    {
+                        "text": "{{revocatedBy}}",
+                        "margin": 2
+                    }
+                ],
+                "alignment": "right",
+                "style": "top-margin"
+            }
+        ],
+        "styles": {
+            "header": {
+                "bold": true,
+                "alignment": "center"
+            },
+            "sub-header": {
+                "alignment": "center",
+                "margin": [
+                    0,
+                    5,
+                    0,
+                    5
+                ]
+            },
+            "top-margin": {
+                "margin": [
+                    0,
+                    30,
+                    0,
+                    0
+                ]
+            },
+            "top-low-margin": {
+                "margin": [
+                    0,
+                    10,
+                    0,
+                    0
+                ]
+            }
+        }
+    }
+}

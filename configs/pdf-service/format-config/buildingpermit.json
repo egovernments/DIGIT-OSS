@@ -1,0 +1,349 @@
+{
+  "key": "buildingpermit",
+  "config": {
+    "defaultStyle": {
+      "font": "Cambay"
+    },
+    "content": [
+      {
+        "text" : "{{GENERATED_ON}} : ",
+        "absolutePosition" : {
+           "x" : 400,
+           "y" : 5
+        }
+      },
+      {
+        "text" : " {{orderGeneratedOn}}",
+        "absolutePosition" : {
+           "x" : 490,
+           "y" : 5
+        }
+      },
+      {
+        "columns": [
+          {
+            "image": "{{logoImage}}",
+            "width": 70,
+            "height": 70,
+            "alignment": "left"
+          },
+          {
+            "stack": [
+              {
+                "text": "{{tenantName}} {{Muncipal_Council}}",
+                "style": "header"
+              },
+              {
+                "text": "{{BPA_FORM}}",
+                "style": "sub-header"
+              },
+              {
+                "text": "{{BPA_FORM_APPROVAL}}",
+                "style": "header"
+              },
+              {
+                "text": "{{BPA_BYELAWS}}",
+                "style": "sub-header"
+              }
+            ]
+          },
+          {
+            "image": "{{logoImage}}",
+            "width": 70,
+            "height": 70,
+            "alignment": "right"
+          }
+        ]
+      },
+      {
+        "columns": [
+          {
+            "text": [
+              {
+                "text": "{{PLAN_PERMISION_NO}} : ",
+                "bold": true
+              },
+              {
+                "text": "{{planPermissionNo}}",
+                "bold": true,
+                "font": "Roboto"
+              }
+            ],
+            "alignment": "left",
+            "width": "*"
+          }
+        ],
+        "style": "top-margin"
+      },
+      {
+        "text": [
+          {
+            "text": "{{WRT_TXT}}"
+          },
+          {
+            "text": " {{applicationNo}}",
+            "bold": true,
+            "font": "Roboto"
+          },
+          {
+            "text": " {{dated}}"
+          },
+          {
+            "text": " {{applicationDate}}"
+          },
+          {
+            "text": ", {{PERMISSION_GRANT_TXT}} : "
+          }
+        ],
+        "style": "top-margin"
+      },
+      {
+        "text": [
+          {
+            "text": "{{SALUTATION}} "
+          },
+          {
+            "text": "{{favourOf}}",
+            "bold": true
+          },
+          {
+            "text": " {{FOR}} "
+          }
+        ],
+        "style": "top-margin"
+      },
+      {
+        "text": [
+          {
+            "text": "{{DSCR1}} {{PLOT_NO}} {{CS_PLOT}}"
+          },
+          {
+            "text": " {{plotNo}}",
+            "bold": true
+          },
+          {
+            "text": "  {{PLOT_NO}} {{MSP_PLOT}} "
+          },
+          {
+            "text": "{{plotNo}}",
+            "bold": true
+          },
+          {
+            "text": " {{KHATA_NO}} "
+          },
+          {
+            "text": "{{khataNo}}",
+            "bold": true
+          },
+          {
+            "text": " {{HOLDING_NO}} "
+          },
+          {
+            "text": "{{holdingNo}}",
+            "bold": true
+          },
+          {
+            "text": " {{SERVEY_NO}} "
+          },
+          {
+            "text": "{{reServeyPlotNo}}",
+            "bold": true
+          },
+          {
+            "text": " {{TOWNPLANNING_TXT}} "
+          },
+          {
+            "text": "{{townPlanningScheme}}",
+            "bold": true
+          },
+          {
+            "text": " {{PROPOSE_LAND}} "
+          },
+          {
+            "text": "{{proposedLandUse}}",
+            "bold": true
+          },
+          {
+            "text": " {{OF}} "
+          },
+          {
+            "text": "{{tenantName}} {{BPA_PDF_MUNCIPAL}}",
+            "bold": true
+          },
+          {
+            "text": "  {{CONDNS_TXT}}"
+          }
+        ]
+      },
+      {
+        "separator": ")",
+        "ol": [
+          "{{conditions}}"
+        ]
+      },
+      {
+        "stack": [
+          {
+            "text": "{{PERMIT_DETAILS_TXT}},"
+          }
+        ],
+        "bold": true,
+        "style": "top-margin"
+      },
+      {
+        "table": {
+          "widths": [
+            "auto",
+            "auto"
+          ],
+          "body": [
+            [
+              {
+                "text": "Fee Description",
+                "bold": true
+              },
+              {
+                "text": "Amount (Rs)",
+                "bold": true,
+                "alignment": "right"
+              }
+            ],
+            [
+              {
+                "text": "{{appHeadCode}}"
+              },
+              {
+                "text": "{{appFee}}",
+                "alignment": "right"
+              }
+            ],
+            [
+              {
+                "text": "{{sanHeadCode}}"
+              },
+              {
+                "text": "{{sanFee}}",
+                "alignment": "right"
+              }
+            ],
+            [
+              {
+                "text": "Total",
+                "bold": true
+              },
+              {
+                "text": "{{totalDue}}",
+                "bold": true,
+                "alignment": "right"
+              }
+            ]
+          ]
+        },
+        "margin": [
+          0,
+          5,
+          0,
+          0
+        ]
+      },
+      {
+        "stack": [
+          {
+            "text": "{{BY_ORDER}}",
+            "style": "top-margin"
+          },
+          {
+            "text": "{{AUTH_OFFICER}}",
+            "margin": 2
+          },
+          {
+            "text": "{{approvedBy}}",
+            "margin": 2
+          }
+        ],
+        "alignment": "right",
+        "style": "top-margin"
+      },
+      {
+        "text": [
+          {
+            "text": "{{VALIDITY_DSCR}} "
+          },
+          {
+            "text": "{{validityDate}}"
+          },
+          {
+            "text": " {{ONLY}}."
+          }
+        ],
+        "style": "top-margin",
+        "bold": true
+      },
+      {
+        "text": "{{NOTE}} : ",
+        "bold": true,
+        "style": "top-margin"
+      },
+      {
+        "text": [
+          {
+            "text": "{{SUMMARY1}}"
+          },
+          {
+            "text": " {{Bihar_Tenant}} "
+          },
+          {
+            "text": "{{SUMMARY2}}."
+          }
+        ],
+        "style": "top-margin"
+      },
+      {
+        "image": "{{qrCode}}",
+        "alignment": "right",
+        "width": 100,
+        "height": 100
+      },
+      {
+        "stack":[
+          {
+            "text" : "{{REPORT_RUNDATE}} : {{reportrunDate}}",
+            "alignment" : "right"              
+          }
+        ]
+      }
+    ],
+  "footer": "(function(currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount; })",
+	"styles": {
+      "header": {
+        "bold": true,
+        "alignment": "center"
+      },
+      "sub-header": {
+        "alignment": "center",
+        "margin": [
+          0,
+          5,
+          0,
+          5
+        ]
+      },
+      "top-margin": {
+        "margin": [
+          0,
+          10,
+          0,
+          0
+        ]
+      },
+      "top-high-margin": {
+        "margin": [
+          0,
+          30,
+          0,
+          0
+        ]
+      }
+    }
+  }
+}

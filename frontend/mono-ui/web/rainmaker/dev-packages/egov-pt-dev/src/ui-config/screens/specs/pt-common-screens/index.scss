@@ -1,0 +1,135 @@
+#material-ui-propertySearchTabs {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    margin-top: 0px !important;
+
+    div {
+        div {
+            background-color: transparent;
+        }
+    }
+}
+
+
+#material-ui-popup {
+    height: 100%;
+}
+
+#material-ui-yearDetailsContainer {
+    div {
+        div {
+            fieldset {
+                div {
+                    label {
+                        span:nth-child(1) {
+                            height: 20px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#material-ui-yearDetailsContainer {
+    div {
+        div {
+            fieldset {
+                label {
+                    span:nth-child(1) {
+                        font-size: 15px;
+                        font-weight: bolder;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#material-ui-yearDetailsContainer {
+    div {
+        div {
+            fieldset {
+                label {
+                    padding-bottom: 10px;
+                }
+            }
+        }
+    }
+}
+
+#material-ui-searchPropertyDetails {
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-top: 10px;
+    background-color: white !important;
+}
+
+#material-ui-searchApplicationDetails {
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-top: 10px;
+    background-color: white !important;
+}
+
+@media only screen and (max-width: 768px) {
+    #material-ui-resetButton {
+        float: none !important;
+        margin-left: 38px !important;
+    }
+
+    #material-ui-searchButton {
+        margin-left: 38px !important;
+    }
+
+    .ack-body,
+    .ack-tail {
+        display: contents;
+        text-align: center;
+    }
+
+    #custom-containers-genderRadioGroup {
+        div {
+            display: inline-flex !important;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+
+    .downloadprint-menu {
+        float: right;
+        margin-top: -50px;
+
+    }
+
+    #custom-containers-genderRadioGroup {
+        div {
+            display: inline-flex !important;
+        }
+    }
+}
+
+
+#material-ui-searchPropertyDetails div div div div div div button span span span span {
+    font-size: 14px !important;
+}
+
+.public-domain-search {
+
+    #material-ui-resetButton,
+    #material-ui-searchButton {
+        width: 100% !important;
+        margin: 8px 0px !important;
+    }
+}
+
+#custom-containers-genderRadioGroup {
+    div {
+        display: flex;
+    }
+}
+
+#material-ui-propertyAssemblyDetails {
+    overflow: visible !important;
+}

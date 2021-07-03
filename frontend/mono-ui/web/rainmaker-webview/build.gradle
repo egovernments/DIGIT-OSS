@@ -1,0 +1,214 @@
+apply plugin: 'com.android.application'
+
+buildscript {
+	repositories {
+		jcenter()
+		google()
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle:3.3.2'
+
+		// NOTE: Do not place your application dependencies here; they belong
+		// in the individual module build.gradle files
+	}
+}
+
+allprojects {
+	repositories {
+		jcenter()
+		google()
+	}
+}
+
+android {
+	compileSdkVersion 26
+
+	signingConfigs {
+		Citizen {
+			keyAlias 'your_key_alias'
+			keyPassword '123456'
+			storeFile file('your_key_name.keystore')
+			storePassword '123456'
+		}
+		Employee {
+			keyAlias 'your_key_alias'
+			keyPassword '123456'
+			storeFile file('your_key_name.keystore')
+			storePassword '123456'
+		}
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+			applicationVariants.all { variant ->
+				variant.outputs.all {
+					def date = new Date()
+					def formattedDate = date.format('ddMMMyyyy')
+
+					outputFileName = "${variant.name}_${variant.versionName}_${formattedDate}.apk"
+					if(variant.name.contains('Release')){
+						outputFileName = "${variant.name}_${variant.versionName}.apk"
+					}
+				}
+			}
+		}
+	}
+
+	lintOptions {
+		checkReleaseBuilds true
+		abortOnError false
+	}
+
+	flavorDimensions "default"
+	productFlavors {
+		CitizenProd {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Punjab"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
+
+			// Production
+			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/citizen/user/register"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+		EmployeeProd {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Punjab Employee"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
+
+			// Production
+			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/employee/user/login"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+		CitizenDEV {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Citizen-DEV"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
+
+			buildConfigField 'String', 'url', '"https://dev.digit.org/citizen/user/register"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+		EmployeeDEV {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Employee-DEV"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
+
+			buildConfigField 'String', 'url', '"https://dev.digit.org/employee/user/login"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+		CitizenQA{
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Citizen-QA"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
+
+			buildConfigField 'String', 'url', '"https://qa.digit.org/citizen/user/register"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+		EmployeeQA {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Employee-QA"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
+
+			buildConfigField 'String', 'url', '"https://qa.digit.org/employee/user/login"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+		CitizenUAT{
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Citizen-UAT"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
+
+			buildConfigField 'String', 'url', '"https://uat.digit.org/citizen/user/register"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+		EmployeeUAT {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Employee-UAT"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
+
+			buildConfigField 'String', 'url', '"https://uat.digit.org/employee/user/login"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+		CitizenSTAGING{
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Citizen-STAGING"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
+
+			buildConfigField 'String', 'url', '"https://staging.digit.org/citizen/user/register"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+		EmployeeSTAGING {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 14
+			versionName '2.3.0'
+			resValue "string", "app_name", "mSeva-Employee-STAGING"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
+
+			buildConfigField 'String', 'url', '"https://staging.digit.org//employee/user/login"'
+			buildConfigField 'String', 'gatewayHost', '"migs.mastercard.co.in"'
+		}
+	}
+}
+
+dependencies {
+	implementation 'com.android.support:appcompat-v7:26.1.0'
+	implementation 'com.google.android.gms:play-services-base:15.0.1'
+}

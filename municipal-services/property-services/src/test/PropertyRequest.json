@@ -1,0 +1,115 @@
+{
+  "RequestInfo": {
+    "apiId": "asset-services",
+    "userInfo": {
+      "id": "12"
+    }
+  },
+  "properties": [
+    {
+      "tenantId": "pb.amritsar",
+      "status": null,
+      "address": {
+        "latitude": 0,
+        "longitude": 0,
+        "addressNumber": null,
+        "type": "four",
+        "addressLine1": null,
+        "addressLine2": null,
+        "landmark": null,
+        "city": "amritsar",
+        "pincode": "321322",
+        "detail": null,
+        "doorNo":"11",
+        "buildingName": "antilla",
+        "street": "nariman point",
+        "locality": {
+          "code": "abc",
+          "name": null,
+          "label": null,
+          "latitude": null,
+          "longitude": null,
+          "children": [
+            null
+          ]
+        }
+      },
+      "oldPropertyId": "oldPropertyId",
+      "creationReason": "NEWPROPERTY",
+      "occupancyDate": 100000,
+      "propertyDetails": [
+        {
+          "financialYear": "2018-19",
+          "assessmentDate": null,
+          "propertyType": "P456",
+          "propertySubType": "prop2",
+          "ownershipCategory":"INDIVIDUAL",
+          "usageCategoryMajor": "NONRESIDENTIAL",
+          "owners": [
+            {
+              "password": "123456",
+              "salutation": "Ms",
+              "name": "test1",
+              "gender": "FEMALE",
+              "mobileNumber": "9999992914",
+              "emailId": "xyz@egovernments.org",
+              "altContactNumber": "",
+              "pan": "AITGC5624P",
+              "aadhaarNumber": "96a70",
+              "permanentAddress": "Dawakhana",
+              "permanentCity": "Kaikoo",
+              "permanentPinCode": "111111",
+              "correspondenceCity": "banglore",
+              "correspondencePinCode": "1234",
+              "correspondenceAddress": "correAddress",
+              "active": false,
+              "dob": "12321",
+              "pwdExpiryDate": null,
+              "locale": "string",
+              "type": "CITIZEN",
+              "signature": "",
+              "accountLocked": false,
+              "fatherOrHusbandName": "Arjun",
+              "bloodGroup": "O_POSITIVE",
+              "identificationMark": "Wears spects",
+              "photo": "a8a6cf1e-c84d-4a0c-b2d5-57ec8711ba25",
+              "otpReference": "14856",
+              "tenantId": "pb.amritsar",
+              "roles": [
+                {
+                  "code": "CITIZEN"
+                }
+              ]
+            }
+          ],
+          "source": "MUNICIPAL_RECORDS",
+          "usage": "usage",
+          "noOfFloors": 1,
+          "landArea": 10,
+          "buildUpArea":8,
+          "additionalDetails": " ",
+          "channel": "SYSTEM",
+          "units": [
+            {
+              "floorNo": 1,
+              "unitType": null,
+              "unitArea": 10,
+              "usageCategoryMajor": "NONRESIDENTIAL",
+              "usageCategoryMinor": "COMMERCIAL",
+              "usageCategorySubMinor": "RETAIL",
+              "usageCategoryDetail": "GROCERYSTORE",
+              "occupancyType": "RENTED",
+              "occupancyDate": 132321,
+              "constructionType": "PUCCA",
+              "constructionSubType": "COUNTRYTILED",
+              "arv": 100.1
+            }
+          ],
+          "documents": [
+            {}
+          ]
+        }
+      ]
+    }
+  ]
+}

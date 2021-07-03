@@ -1,0 +1,51 @@
+{
+  "name": "digit-ui",
+  "version": "1.1.0",
+  "private": true,
+  "workspaces": [
+    "digit-ui-internals/packages/*",
+    "digit-ui-internals/packages/modules/*"
+  ],
+  "homepage": "/digit-ui",
+  "dependencies": {
+    "@egovernments/digit-ui-css": "^1.0.0",
+    "@egovernments/digit-ui-libraries": "^1.0.0",
+    "@egovernments/digit-ui-module-common": "^1.0.0",
+    "@egovernments/digit-ui-module-core": "^1.0.0",
+    "@egovernments/digit-ui-module-fsm": "^1.0.0",
+    "@egovernments/digit-ui-module-pgr": "^1.0.0",
+    "@egovernments/digit-ui-module-pt": "^1.0.0",
+    "@egovernments/digit-ui-react-components": "^1.0.0",
+    "babel-loader": "8.1.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.1",
+    "web-vitals": "^1.0.1"
+  },
+  "devDependencies": {
+    "http-proxy-middleware": "^1.0.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "build:prepare": "./build.sh"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+SearchDefinitions:
+ moduleName: sewerage-services
+ summary: Sewerage Services Open API
+ version: 1.0.0
+ definitions:
+ - name: sewerageopensearch
+   query: 
+    baseQuery: Select row_to_json(result) from
+        (
+          select sewerage.applicationtype, sewerage.applicationno, sewerage.connectionno, sewerage.locality, sewerage.createdtime, sewerage.applicationstatus, sewerage.status from eg_sw_connection as sewerage 
+          INNER JOIN eg_pt_property pt ON pt.id = sewerage.property_id $where
+        ) result
+    groupBy:    
+    orderBy:
+   searchParams: 
+    condition: AND
+    params:
+    - name: sewerage.tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+    - name: pt.propertyid
+      isMandatory: false
+      jsonPath: $.searchCriteria.propertyId
+    - name: sewerage.applicationno
+      isMandatory: false
+      jsonPath: $.searchCriteria.applicationno
+    - name: sewerage.connectionno
+      isMandatory: false
+      jsonPath: $.searchCriteria.connectionno
+    - name: sewerage.property_id
+      isMandatory: false
+      jsonPath: $.searchCriteria.uuid
+    - name: sewerage.locality
+      isMandatory: true
+      jsonPath: $.searchCriteria.locality
+
+
+   output:
+    jsonFormat: {"ResponseInfo": {},"SewerageConnections": []}
+    outJsonPath: $.SewerageConnections
+    responseInfoPath: $.ResponseInfo

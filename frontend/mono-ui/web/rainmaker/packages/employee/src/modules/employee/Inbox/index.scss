@@ -1,0 +1,74 @@
+@media only screen and (max-width: 768px){
+.flex{
+    display: flex;
+   
+}
+.inbox-service-list{
+  margin:16px 16px 0px 16px!important;
+}
+.rainmaker-topHeader{
+    margin-top: 15px !important;
+    padding-top: 20px !important;
+}
+.quick-action-button{
+    display: none;
+}
+.landingPageHeader .label-text {
+     padding-top: 5px  !important;
+    
+  }
+  .landingPageUser .label-text {
+    color: rgba(0, 0, 0, 0.8700000047683716);
+    font-size: 24px !important;
+    padding-top: 5px  !important;
+    padding-left: 8px  !important;
+    padding-bottom: 5px;
+  }
+}
+
+.landingPageHeader .label-text {
+    color: rgba(0, 0, 0, 0.8700000047683716);
+    font-size: 24px !important;
+    padding-top: 20px;
+    
+  }
+
+  .inbox-service-list{
+    margin: 16px 5px 0px 11px;
+  }
+  .jk-spinner-wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 100;
+  }
+
+  .jk-inbox-loader {
+    border: 0.4em solid rgb(254, 122, 81);
+    border-radius: 50%;
+    border-top: 0.4em solid #FFFFFF;
+    width: 4em;
+    height: 4em;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+  }
+  .jk-sm-inbox-loader {
+    border: 0.2em solid rgb(254, 122, 81);
+    border-radius: 50%;
+    border-top: 0.2em solid #FFFFFF;
+    width: 2em;
+    height: 2em;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+  }
+  
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

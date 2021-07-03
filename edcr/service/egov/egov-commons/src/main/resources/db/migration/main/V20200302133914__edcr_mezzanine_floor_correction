@@ -1,0 +1,4 @@
+update state.egdcr_layername set value = 'BLK_%s_FLR_%s_BLT_UP_AREA_MEZ_%s' where key = 'LAYER_NAME_MEZZANINE_FLOOR_BLT_UP_AREA';
+
+update state.egdcr_layername set value = 'BLK_%s_FLR_%s_BLT_UP_AREA_DEDUCT_MEZ_%s' where key = 'LAYER_NAME_MEZZANINE_FLOOR_DEDUCTION';
+

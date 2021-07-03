@@ -1,0 +1,235 @@
+serviceMaps:
+ serviceName: noc-services
+ mappings:
+ - version: 1.0
+   description: Persists noc details in EG_NOC  table
+   fromTopic: save-noc-application
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO eg_Noc(id, applicationno, applicationstatus, tenantid, status, landid, Noctype, applicationtype, accountid, source, sourcerefid, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
+         basePath: Noc
+         jsonMaps:
+          - jsonPath: $.Noc.id
+
+          - jsonPath: $.Noc.applicationNo
+          
+          - jsonPath: $.Noc.applicationStatus          
+          
+          - jsonPath: $.Noc.tenantId
+          
+          - jsonPath: $.Noc.status
+
+          - jsonPath: $.Noc.landId
+          
+          - jsonPath: $.Noc.nocType
+          
+          - jsonPath: $.Noc.applicationType
+          
+          - jsonPath: $.Noc.accountId
+
+          - jsonPath: $.Noc.source
+
+          - jsonPath: $.Noc.sourceRefId
+
+          - jsonPath: $.Noc.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Noc.auditDetails.createdBy
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedBy
+
+          - jsonPath: $.Noc.auditDetails.createdTime
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_noc_auditdetails SELECT * FROM eg_noc WHERE id =?;
+         basePath: Noc
+         jsonMaps:
+
+          - jsonPath: $.Noc.id
+          
+       - query: INSERT INTO eg_noc_document(id, documentType, fileStoreId, nocid, documentUid, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  fileStoreId =?, additionalDetails=?, lastmodifiedby =?, lastmodifiedtime =?;
+         basePath: Noc.documents.*
+         jsonMaps:
+           
+          - jsonPath: $.Noc.documents.*.id
+  
+          - jsonPath: $.Noc.documents.*.documentType
+  
+          - jsonPath: $.Noc.documents.*.fileStoreId
+  
+          - jsonPath: $.Noc.id
+  
+          - jsonPath: $.Noc.documents.*.documentUid
+  
+          - jsonPath: $.Noc.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+  
+          - jsonPath: $.Noc.auditDetails.createdBy
+  
+          - jsonPath: $.Noc.auditDetails.lastModifiedBy
+  
+          - jsonPath: $.Noc.auditDetails.createdTime
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedTime
+
+          - jsonPath: $.Noc.documents.*.documentType
+
+          - jsonPath: $.Noc.documents.*.fileStoreId
+  
+          - jsonPath: $.Noc.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedBy
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedTime
+          
+          
+ - version: 1.0
+   description: update noc details in EG_NOC  table
+   fromTopic: update-noc-application
+   isTransaction: true
+   queryMaps:
+   
+      - query: UPDATE eg_noc SET nocNo=?, applicationStatus=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+        basePath: Noc
+        jsonMaps:          
+          - jsonPath: $.Noc.nocNo
+          
+          - jsonPath: $.Noc.applicationStatus
+
+          - jsonPath: $.Noc.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedBy
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedTime
+
+          - jsonPath: $.Noc.id
+          
+      - query: INSERT INTO eg_noc_auditdetails SELECT * FROM eg_noc WHERE id =?;
+        basePath: Noc
+        jsonMaps:
+
+          - jsonPath: $.Noc.id
+          
+      - query: INSERT INTO eg_noc_document(id, documentType, fileStoreId, nocid, documentUid, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  fileStoreId =?, additionalDetails=?, lastmodifiedby =?, lastmodifiedtime =?;
+        basePath: Noc.documents.*
+        jsonMaps:
+          
+          - jsonPath: $.Noc.documents.*.id
+  
+          - jsonPath: $.Noc.documents.*.documentType
+  
+          - jsonPath: $.Noc.documents.*.fileStoreId
+  
+          - jsonPath: $.Noc.id
+  
+          - jsonPath: $.Noc.documents.*.documentUid
+  
+          - jsonPath: $.Noc.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+  
+          - jsonPath: $.Noc.auditDetails.createdBy
+  
+          - jsonPath: $.Noc.auditDetails.lastModifiedBy
+  
+          - jsonPath: $.Noc.auditDetails.createdTime
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedTime
+
+          - jsonPath: $.Noc.documents.*.documentType
+
+          - jsonPath: $.Noc.documents.*.fileStoreId
+  
+          - jsonPath: $.Noc.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedBy
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedTime
+          
+          
+ - version: 1.0
+   description: update noc workflow details in EG_NOC  table
+   fromTopic: update-noc-workflow
+   isTransaction: true
+   queryMaps:
+   
+          
+       - query: INSERT INTO eg_noc_document(id, documentType, fileStoreId, nocid, documentUid, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  fileStoreId =?, additionalDetails=?, lastmodifiedby =?, lastmodifiedtime =?;
+         basePath: Noc.documents.*
+         jsonMaps:
+          
+           - jsonPath: $.Noc.documents.*.id
+  
+           - jsonPath: $.Noc.documents.*.documentType
+  
+           - jsonPath: $.Noc.documents.*.fileStoreId
+  
+           - jsonPath: $.Noc.id
+  
+           - jsonPath: $.Noc.documents.*.documentUid
+  
+           - jsonPath: $.Noc.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
+  
+           - jsonPath: $.Noc.auditDetails.createdBy
+  
+           - jsonPath: $.Noc.auditDetails.lastModifiedBy
+  
+           - jsonPath: $.Noc.auditDetails.createdTime
+
+           - jsonPath: $.Noc.auditDetails.lastModifiedTime
+
+           - jsonPath: $.Noc.documents.*.documentType
+
+           - jsonPath: $.Noc.documents.*.fileStoreId
+  
+           - jsonPath: $.Noc.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
+
+           - jsonPath: $.Noc.auditDetails.lastModifiedBy
+
+           - jsonPath: $.Noc.auditDetails.lastModifiedTime
+           
+           
+       - query: INSERT INTO eg_noc_auditdetails SELECT * FROM eg_noc WHERE id =?;
+         basePath: Noc
+         jsonMaps:
+
+           - jsonPath: $.Noc.id
+
+
+       - query: UPDATE eg_noc SET nocNo=?, status=?, applicationStatus=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+         basePath: Noc
+         jsonMaps:          
+          - jsonPath: $.Noc.nocNo
+          
+          - jsonPath: $.Noc.status
+          
+          - jsonPath: $.Noc.applicationStatus
+
+          - jsonPath: $.Noc.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedBy
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedTime
+
+          - jsonPath: $.Noc.id
+
+
+
+

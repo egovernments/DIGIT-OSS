@@ -1,0 +1,2 @@
+update egbpa_sub_occupancy set code = 'M-HOTHC',occupancy = (select id from egbpa_occupancy where code='M') where name = 'Hospital/Teritary Health care Centre';
+update egbpa_sub_occupancy set name = 'Veterinary Hospital for pet animals and birds' where code = 'M-VH';

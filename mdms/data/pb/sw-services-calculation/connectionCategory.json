@@ -1,0 +1,23 @@
+{
+  "tenantId": "pb",
+  "moduleName": "sw-services-calculation",
+  "connectionCategory": [
+    {
+      "name": "Temporary",
+      "code": "Temporary",
+      "active": true
+    },
+    {
+      "name": "Permanent",
+      "code": "Permanent",
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "active": true,
+      "type": "SW"
+    }
+  ]
+}

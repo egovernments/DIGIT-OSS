@@ -1,0 +1,518 @@
+{
+  "key": "ptmutationcertificate",
+  "config": {
+      "defaultStyle": {
+          "font": "Cambay"
+           },
+           "content": [
+            {
+              "style": "noc-head",
+              "table": {
+                "widths": [
+                  "*"
+                ],
+                "body": [
+                  [
+                    {
+                      "image": "{{ULB_LOGO}}",
+                      "width": 70,
+                      "height": 82,
+                      "alignment": "center",
+                      "margin": [
+                        0,
+                        10,
+                        0,
+                        10
+                      ]
+                    }
+                  ],
+                  [
+                    {
+                      "stack": [
+                        {
+                          "text": "{{ULB_CITY}} {{municipal_corportaion}}",
+                          "style": "receipt-logo-header"
+                        },
+                        {
+                          "text": "{{ULB_ADDRESS}}",
+                          "style": "receipt-logo-sub-header"
+                        },
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "*",
+                              "*"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{corporation_fax}} : {{CorporationContact_Value}} ",
+                                  "style": "receipt-sub-address-sub-header"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        },
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "*",
+                              "*"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{corporation_website}} : {{corporationWebsite}}",
+                                  "style": "receipt-sub-website-sub-header"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        },
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "*",
+                              "*"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{corporation_email}} : {{corporationEmail}}",
+                                  "style": "receipt-sub-email-sub-header"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        }
+                      ],
+                      "alignment": "left",
+                      "margin": [
+                        0,
+                        10,
+                        0,
+                        0
+                      ]
+                    }
+                  ],
+                  [
+                    {
+                      "stack": [
+                        {
+                          "text": "{{Mutation_Approval_Certificate}}",
+                          "style": "receipt-sub-logo-header"
+                        },
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "35%",
+                              "65%"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{Property_ID_Label}}",
+                                  "style": "receipt-content"
+                                },
+                                {
+                                  "text": "{{Property_ID}}",
+                                  "style": "receipt-content",
+                                  "font": "Roboto"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        },
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "35%",
+                              "65%"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{Mutation_Number_Label}}",
+                                  "style": "receipt-content"
+                                },
+                                {
+                                  "text": "{{Mutation_Number}}",
+                                  "style": "receipt-content",
+                                  "font": "Roboto"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        },
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "35%",
+                              "65%"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{Application_Number_Label}}",
+                                  "style": "receipt-content"
+                                },
+                                {
+                                  "text": "{{Application_Number}}",
+                                  "style": "receipt-content",
+                                  "font": "Roboto"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        },
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "35%",
+                              "65%"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{Receipt_Number_Label}}",
+                                  "style": "receipt-content"
+                                },
+                                {
+                                  "text": "{{Receipt_Number}}",
+                                  "style": "receipt-content",
+                                  "font": "Roboto"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        },
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "35%",
+                              "65%"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{Approval_Date_Label}}",
+                                  "style": "receipt-content"
+                                },
+                                {
+                                  "text": "{{Approval_Date}}",
+                                  "style": "receipt-content",
+                                  "font": "Roboto"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        }
+                      ],
+                      "alignment": "left",
+                      "margin": [
+                        0,
+                        10,
+                        0,
+                        0
+                      ]
+                    }
+                    
+                  ],
+                  [
+                    {
+                      "stack": [
+                        {
+                          "text": "{{Order_Label}}",
+                          "bold": true,
+                          "style": "receipt-order-header"
+                        },
+                        {
+                          "text": "{{Mutation_Declaration_Label}}",
+                          "style": "receipt-order-content"
+                        }
+                      ],
+                      "alignment": "left",
+                      "margin": [
+                        0,
+                        10,
+                        0,
+                        0
+                      ]
+                    }
+                  ],
+                  [
+                    {
+                      "stack": [
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "35%",
+                              "65%"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{Transferrer_Details_Label}}",
+                                  "style": "receipt-content"
+                                },
+                                {
+                                  "text": "{{Transferrer_Name}} {{Transferrer_Relation}} {{Transferrer_Relative_Name}}",
+                                  "style": "receipt-content"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        },
+                        {
+                          "style": "noc-head",
+                          "table": {
+                            "widths": [
+                              "35%",
+                              "65%"
+                            ],
+                            "body": [
+                              [
+                                {
+                                  "text": "{{Transferree_Details_Label}}",
+                                  "style": "receipt-content"
+                                },
+                                {
+                                  "text": "{{Transferree_Name}} {{Transferree_Relation}} {{Transferree_Relative_Name}}",
+                                  "style": "receipt-content"
+                                }
+                              ]
+                            ]
+                          },
+                          "layout": "noBorders"
+                        }
+                      ],
+                      "alignment": "left",
+                      "margin": [
+                        0,
+                        10,
+                        0,
+                        0
+                      ]
+                    }
+                    
+                  ],
+                  [
+                    {
+                      "stack": [
+                        {
+                          "text": "{{Mutation_To_Label}}",
+                          "bold": true,
+                          "style": "receipt-order-header"
+                        },
+                        {
+                          "text": "{{Shri_Smt_Label}} {{Transferree_Name}}",
+                          "style": "receipt-order-content"
+                        },
+                        {
+                          "text": "{{Transferree_Address}}",
+                          "style": "receipt-order-content"
+                        }
+                      ],
+                      "alignment": "left",
+                      "margin": [
+                        0,
+                        10,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                ]
+              },
+              "layout": "noBorders"
+            },
+            {
+              "style": "receipt-approver",
+              "columns": [
+                {
+                  "text": [
+                    {
+                      "text": "{{approved_by}} ",
+                      "bold": true
+                    },
+                    {
+                      "text": "{{approved_by_value}}",
+                      "bold": false
+                    }
+                  ],
+                  "alignment": "left"
+                },
+                {
+                  "text": [
+                    {
+                      "text": "{{commissioner}}",
+                      "bold": true
+                    }
+                  ],
+                  "alignment": "right"
+                }
+              ]
+            }
+          ],
+          "styles": {
+            "noc-head": {
+              "margin": [
+                -30,
+                -35,
+                0,
+                -2
+              ]
+            },
+            "receipt-approver": {
+              "color": "#000000",
+              "fontSize": 14,
+              "letterSpacing": 0.6,
+              "alignment": "center",
+              "margin": [
+                -10,
+                50,
+                0,
+                1
+              ]
+            },
+            "receipt-logo-header": {
+              "color": "#000000",
+              "fontSize": 20,
+              "letterSpacing": 0.74,
+              "alignment": "center",
+              "margin": [
+                0,
+                0,
+                0,
+                5
+              ]
+            },
+            "receipt-sub-logo-header": {
+              "color": "#000000",
+              "fontSize": 18,
+              "letterSpacing": 0.74,
+              "alignment": "center",
+              "margin": [
+                0,
+                5,
+                0,
+                10
+              ]
+            },
+            "receipt-logo-sub-header": {
+              "color": "#484848",
+              "fontSize": 14,
+              "letterSpacing": 0.6,
+              "alignment": "center",
+              "margin": [
+                0,
+                5,
+                0,
+                0
+              ]
+            },
+            "receipt-sub-logo-sub-header": {
+              "color": "#484848",
+              "fontSize": 14,
+              "letterSpacing": 0.6,
+              "alignment": "left",
+              "margin": [
+                50,
+                40,
+                0,
+                0
+              ]
+            },
+            "receipt-sub-address-sub-header": {
+              "color": "#484848",
+              "fontSize": 14,
+              "letterSpacing": 0.1,
+              "alignment": "right",
+              "margin": [
+                50,
+                30,
+                -80,
+                0
+              ]
+            },
+            "receipt-sub-website-sub-header": {
+              "color": "#484848",
+              "fontSize": 14,
+              "letterSpacing": 0.1,
+              "alignment": "right",
+              "margin": [
+                50,
+                30,
+                -120,
+                0
+              ]
+            },
+            "receipt-sub-email-sub-header": {
+              "color": "#484848",
+              "fontSize": 14,
+              "letterSpacing": 0.1,
+              "alignment": "right",
+              "margin": [
+                50,
+                30,
+                -110,
+                0
+              ]
+            },
+            "receipt-order-header": {
+              "color": "#000000",
+              "fontSize": 14,
+              "letterSpacing": 0.6,
+              "alignment": "left",
+              "margin": [
+                19,
+                0,
+                0,
+                1
+              ]
+            },
+            "receipt-order-content": {
+              "color": "#484848",
+              "fontSize": 14,
+              "letterSpacing": 0.4,
+              "alignment": "left",
+              "margin": [
+                19,
+                -2,
+                0,
+                1
+              ]
+            },
+            "receipt-content": {
+              "color": "#000000",
+              "fontSize": 14,
+              "letterSpacing": 0.4,
+              "alignment": "left",
+              "margin": [
+                50,
+                30,
+                0,
+                0
+              ]
+            }
+          }
+         }
+      }

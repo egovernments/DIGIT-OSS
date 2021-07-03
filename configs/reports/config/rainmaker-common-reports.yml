@@ -1,0 +1,127 @@
+ReportDefinitions:
+  - reportName: CollectionRegister
+    summary: Collection Register
+    version: 1.0.0
+    moduleName: rainmaker-common
+    externalService:
+    - entity: $.MdmsRes.BillingService.BusinessService[*] 
+      apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=pb&moduleName=BillingService&masterName=BusinessService&filter=[?(@.type=='Adhoc')]
+      keyOrder: code,businessService
+      tableName: tbl_businessserviceList
+    sourceColumns:
+      - name: service
+        label: reports.common.CollectionRegister.serviceResult
+        type: string
+        source: common
+        total: false
+      - name: channel
+        label: reports.common.CollectionRegister.channel
+        type: string
+        source: common
+        total: false
+      - name: cash_count
+        label: reports.common.CollectionRegister.transactions
+        type: number
+        source: common
+        total: true
+      - name: cash_sum
+        label: reports.common.CollectionRegister.cash
+        type: number
+        source: common
+        total: true
+      - name: cheque_count
+        label: reports.common.CollectionRegister.transactions
+        type: number
+        source: common
+        total: true
+      - name: cheque_sum
+        label: reports.common.CollectionRegister.cheque
+        type: number
+        source: common
+        total: true
+      - name: dd_count
+        label: reports.common.CollectionRegister.transactions
+        type: number
+        source: common
+        total: true
+      - name: dd_sum
+        label: reports.common.CollectionRegister.dd
+        type: number
+        source: common
+        total: true
+      - name: online_count
+        label: reports.common.CollectionRegister.transactions
+        type: number
+        source: common
+        total: true
+      - name: online_sum
+        label: reports.common.CollectionRegister.online
+        type: number
+        source: common
+        total: true
+      - name: card_count
+        label: reports.common.CollectionRegister.transactions
+        type: number
+        source: common
+        total: true
+      - name: card_sum
+        label: reports.common.CollectionRegister.card
+        type: number
+        source: common
+        total: true
+      - name: total
+        label: reports.common.CollectionRegister.total
+        type: number
+        source: common
+        total: true
+
+    searchParams:
+      - name: ulb
+        label: reports.common.CollectionRegister.ulb
+        type: singlevaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+        source: common
+        wrapper: true
+        isMandatory: true
+        searchClause: AND rt.tenantId = $ulb
+      - name: service
+        label: reports.common.CollectionRegister.service
+        type: multivaluelist
+        pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=BillingService&masterName=BusinessService&filter=[?(@.type=='Adhoc')]|$.MdmsRes.BillingService.BusinessService.*.code|$.MdmsRes.BillingService.BusinessService.*.businessService
+        source: common
+        wrapper: true
+        state: true
+        isMandatory: true
+        isLocalisationRequired: true
+        localisationPrefix: "BILLINGSERVICE_BUSINESSSERVICE_"
+        searchClause: AND REGEXP_REPLACE(rt.businessdetails,'\..*','') IN ($service)
+      - name: paymentMode
+        label: reports.common.CollectionRegister.mode
+        type: singlevaluelist
+        pattern: 'list://Cash:Cash,Online:Online,Card:Card,DD:DD,Cheque:Cheque'
+        source: common
+        isMandatory: false
+        searchClause: AND instrumenttype = $paymentMode
+      - name: channel
+        label: reports.common.CollectionRegister.channel
+        type: singlevaluelist
+        pattern: 'list://COUNTER:COUNTER,FIELD:FIELD'
+        source: common
+        isMandatory: false
+        searchClause: AND collectiontype = $channel
+      - name: fromDate
+        label: reports.common.CollectionRegister.fromdate
+        type: epoch
+        source: common
+        isMandatory: true
+        searchClause: AND receiptdate >= $fromDate
+      - name: toDate
+        label: reports.common.CollectionRegister.todate
+        type: epoch
+        source: common
+        isMandatory: true
+        searchClause: AND receiptdate <= $toDate
+
+    query: select COALESCE(message,REGEXP_REPLACE(businessdetails,'\..*','')) service,collectiontype channel,sum(case when instrumenttype='Cash' then 1 else 0 end) as cash_count, sum(case when instrumenttype='Cash' then ins.amount else 0 end) as cash_sum, sum(case when instrumenttype='Cheque' then 1 else 0 end) as cheque_count, sum(case when instrumenttype='Cheque' then ins.amount else 0 end) as cheque_sum, sum(case when instrumenttype='DD' then 1 else 0 end) as dd_count, sum(case when instrumenttype='DD' then ins.amount else 0 end) as dd_sum, sum(case when instrumenttype='Online' then 1 else 0 end) as online_count, sum(case when instrumenttype='Online' then ins.amount else 0 end) as online_sum, sum(case when instrumenttype='Card' then 1 else 0 end) as card_count, sum(case when instrumenttype='Card' then amount else 0 end) as card_sum,sum(amount) total from egcl_receiptheader_v1 rt inner join egcl_receiptinstrument_v1 ihead on rt.id=receiptheader inner join egcl_instrumentheader_v1 ins on instrumentheader=ins.id left outer join message on LOWER(concat('BILLINGSERVICE_BUSINESSSERVICE_',REGEXP_REPLACE(businessdetails,'\..*','')))=LOWER(code)  AND module='rainmaker-uc' where businessdetails IN (select code from (VALUES tbl_businessserviceList) AS serv_list(code,servicename))
+    groupby: group by service,collectiontype
+    orderby: order by service,collectiontype

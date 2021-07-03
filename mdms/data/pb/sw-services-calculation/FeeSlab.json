@@ -1,0 +1,14 @@
+{
+  "tenantId": "pb",
+  "moduleName": "sw-services-calculation",
+  "FeeSlab": [
+    {
+      "formFee": 25,
+      "scrutinyFee": 250,
+      "meterCost": 850,
+      "other": 325,
+      "taxpercentage": 5,
+      "isActive": true
+    }
+  ]
+}

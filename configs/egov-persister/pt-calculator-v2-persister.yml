@@ -1,0 +1,118 @@
+serviceMaps:
+ serviceName: PropertyTax Calculator
+ mappings:
+ - version: 1.0
+   name: pt-calculator
+   description: Persists the pt-calculator related records to db
+   fromTopic: save-pt-billingslab
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO eg_pt_Billingslab_v2(id, tenantid, propertyType, propertySubType, usageCategoryMajor, usageCategoryMinor, usageCategorySubMinor, usageCategoryDetail, ownerShipCategory, subOwnerShipCategory, fromFloor, toFloor, areaType, fromPlotSize, toPlotSize, occupancyType, unitRate, unbuiltunitrate, arvpercent, isPropertyMultiFloored, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, cast(? as double precision), cast(? as double precision), ?, ?, cast(? as double precision), ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: BillingSlab.*
+      jsonMaps:
+
+       - jsonPath: $.BillingSlab.*.id
+
+       - jsonPath: $.BillingSlab.*.tenantId
+
+       - jsonPath: $.BillingSlab.*.propertyType
+
+       - jsonPath: $.BillingSlab.*.propertySubType
+
+       - jsonPath: $.BillingSlab.*.usageCategoryMajor
+
+       - jsonPath: $.BillingSlab.*.usageCategoryMinor
+
+       - jsonPath: $.BillingSlab.*.usageCategorySubMinor
+
+       - jsonPath: $.BillingSlab.*.usageCategoryDetail
+
+       - jsonPath: $.BillingSlab.*.ownerShipCategory
+
+       - jsonPath: $.BillingSlab.*.subOwnerShipCategory
+
+       - jsonPath: $.BillingSlab.*.fromFloor
+
+       - jsonPath: $.BillingSlab.*.toFloor
+
+       - jsonPath: $.BillingSlab.*.areaType
+
+       - jsonPath: $.BillingSlab.*.fromPlotSize
+
+       - jsonPath: $.BillingSlab.*.toPlotSize
+       
+       - jsonPath: $.BillingSlab.*.occupancyType
+       
+       - jsonPath: $.BillingSlab.*.unitRate
+       
+       - jsonPath: $.BillingSlab.*.unBuiltUnitRate
+       
+       - jsonPath: $.BillingSlab.*.arvPercent
+       
+       - jsonPath: $.BillingSlab.*.isPropertyMultiFloored
+              
+       - jsonPath: $.BillingSlab.*.auditDetails.createdBy
+
+       - jsonPath: $.BillingSlab.*.auditDetails.createdTime
+
+       - jsonPath: $.BillingSlab.*.auditDetails.lastmodifiedBy
+
+       - jsonPath: $.BillingSlab.*.auditDetails.lastmodifiedTime
+
+
+ - version: 1.0
+   name: pt-calculator
+   description: Persists the pt-calculator related records to db
+   fromTopic: update-pt-billingslab
+   isTransaction: true
+   queryMaps:
+
+    - query: UPDATE eg_pt_Billingslab_v2 SET propertyType=?, propertySubType=?, usageCategoryMajor=?, usageCategoryMinor=?, usageCategorySubMinor=?, usageCategoryDetail=?, ownerShipCategory=?, subOwnerShipCategory=?, fromFloor=cast(? as double precision), toFloor=cast(? as double precision), areaType=?, fromPlotSize=?,  toPlotSize=cast(? as double precision), occupancyType=?, unitRate=?, unbuiltunitrate=?, arvpercent=?, isPropertyMultiFloored=?, lastmodifiedby=?, lastmodifiedtime=? WHERE tenantid=? AND id=?;
+
+      basePath: BillingSlab.*
+      jsonMaps:
+
+       - jsonPath: $.BillingSlab.*.propertyType
+
+       - jsonPath: $.BillingSlab.*.propertySubType
+
+       - jsonPath: $.BillingSlab.*.usageCategoryMajor
+
+       - jsonPath: $.BillingSlab.*.usageCategoryMinor
+
+       - jsonPath: $.BillingSlab.*.usageCategorySubMinor
+
+       - jsonPath: $.BillingSlab.*.usageCategoryDetail
+
+       - jsonPath: $.BillingSlab.*.ownerShipCategory
+
+       - jsonPath: $.BillingSlab.*.subOwnerShipCategory
+
+       - jsonPath: $.BillingSlab.*.fromFloor
+
+       - jsonPath: $.BillingSlab.*.toFloor
+
+       - jsonPath: $.BillingSlab.*.areaType
+
+       - jsonPath: $.BillingSlab.*.fromPlotSize
+
+       - jsonPath: $.BillingSlab.*.toPlotSize
+       
+       - jsonPath: $.BillingSlab.*.occupancyType
+
+       - jsonPath: $.BillingSlab.*.unitRate
+       
+       - jsonPath: $.BillingSlab.*.unBuiltUnitRate
+       
+       - jsonPath: $.BillingSlab.*.arvPercent
+       
+       - jsonPath: $.BillingSlab.*.isPropertyMultiFloored
+              
+       - jsonPath: $.BillingSlab.*.auditDetails.lastmodifiedBy
+
+       - jsonPath: $.BillingSlab.*.auditDetails.lastmodifiedTime
+
+       - jsonPath: $.BillingSlab.*.tenantId
+
+       - jsonPath: $.BillingSlab.*.id

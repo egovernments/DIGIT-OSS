@@ -1,0 +1,21 @@
+"bankBranches":[
+   {
+      "bank":{
+         "id":1
+      },
+      "code":"code",
+      "name":"name",
+      "address":"Bangalore",
+      "address2":"Bangalore",
+      "city":"Bangalore",
+      "state":"Bangalore",
+      "pincode":"Bangalore",
+      "phone":"Bangalore",
+      "fax":"Bangalore",
+      "contactPerson":"Bangalore",
+      "active":true,
+      "description":"Bangalore",
+      "micr":"Bangalore",
+      "tenantId":"default"
+   }
+]

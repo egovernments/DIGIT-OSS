@@ -1,0 +1,684 @@
+{
+  "key": "ws-consolidatedacknowlegment",
+  "DataConfigs": {
+    "serviceName": "rainmaker-common",
+    "version": "1.0.0",
+    "baseKeyPath": "$.WaterConnection.*",
+    "entityIdPath": "$.connectionNo",
+    "isCommonTableBorderRequired": true,
+    "mappings": [
+      {
+        "topic": "common-pdf-generation-3",
+        "mappings": [
+          {
+            "direct": [
+              {
+                "variable": "consumerNo",
+                "value": {
+                  "path": "$.connectionNo"
+                }
+              },
+              {
+                "variable": "status",
+                "value": {
+                  "path": "$.status"
+                }
+              },
+              {
+                "variable": "connectionCategory",
+                "value": {
+                  "path": "$.connectionCategory"
+                }
+              },
+              {
+                "variable": "connectionType",
+                "value": {
+                  "path": "$.connectionType"
+                }
+              },
+              {
+                "variable": "meterID",
+                "value": {
+                  "path": "$.meterId"
+                }
+              },
+              {
+                "variable": "pipeSize",
+                "value": {
+                  "path": "$.pipeSize"
+                }
+              },
+              {
+                "variable": "connectionExecutionDate",
+                "value": {
+                  "path": "$.connectionExecutionDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "rainwaterHarvestingFacility",
+                "value": {
+                  "path": "$.property.additionalDetails.isRainwaterHarvesting"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "HARVESTING",
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "waterSource",
+                "value": {
+                  "path": "$.waterSource"
+                }
+              },
+              {
+                "variable": "waterSubSource",
+                "value": {
+                  "path": "$.waterSubSource"
+                }
+              },
+              {
+                "variable": "propertyType",
+                "value": {
+                  "path": "$.property.propertyType"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "WS_PROPTYPE",
+                  "module": "rainmaker-ws"
+                }
+              },
+              {
+                "variable": "propertyUsageType",
+                "value": {
+                  "path": "$.property.usageCategory"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "WS_PROPUSGTYPE",
+                  "module": "rainmaker-ws"
+                }
+              },
+              {
+                "variable": "plotSize",
+                "value": {
+                  "path": "$.property.landArea"
+                }
+              },
+              {
+                "variable": "propertyID",
+                "value": {
+                  "path": "$.property.propertyId"
+                }
+              },
+              {
+                "variable": "city",
+                "value": {
+                  "path": "$.property.address.city"
+                }
+              },
+              {
+                "variable": "plot",
+                "value": {
+                  "path": "$.property.address.doorNo"
+                }
+              },
+              {
+                "variable": "building",
+                "value": {
+                  "path": "$.property.address.buildingName"
+                }
+              },
+              {
+                "variable": "streetName",
+                "value": {
+                  "path": "$.property.address.street"
+                }
+              },
+              {
+                "variable": "locality",
+                "value": {
+                  "path": "$.property.address.locality.name"
+                }
+              },
+              {
+                "variable": "pincode",
+                "value": {
+                  "path": "$.property.address.pincode"
+                }
+              },
+              {
+                "variable": "lat",
+                "value": {
+                  "path": "$.property.address.locality.latitude"
+                }
+              },
+              {
+                "variable": "long",
+                "value": {
+                  "path": "$.property.address.locality.longitude"
+                }
+              },
+              {
+                "variable": "ownerName",
+                "value": {
+                  "path": "$.property.owners[0].name"
+                }
+              },
+              {
+                "variable": "ownerMobileNumber",
+                "value": {
+                  "path": "$.property.owners[0].mobileNumber"
+                }
+              },
+              {
+                "variable": "gender",
+                "value": {
+                  "path": "$.property.owners[0].gender"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "COMMON_GENDER",
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "guardian",
+                "value": {
+                  "path": "$.property.owners[0].relationship"
+                }
+              },
+              {
+                "variable": "guardianName",
+                "value": {
+                  "path": "$.property.owners[0].fatherOrHusbandName"
+                }
+              },
+              {
+                "variable": "ownerCategory",
+                "value": {
+                  "path": "$.property.ownershipCategory"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "WS_OWNERSHIPCATEGORY",
+                  "module": "rainmaker-ws"
+                }
+              },
+              {
+                "variable": "email",
+                "value": {
+                  "path": "$.property.owners[0].emailId"
+                }
+              },
+              {
+                "variable": "correspondenceAddress",
+                "value": {
+                  "path": "$.property.owners[0].correspondenceAddress"
+                }
+              },
+              {
+                "variable": "Municipal_Corporation",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MDMS_MUNICIPAL_CORPORATION"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
+                "variable": "logo_sub_header",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "consumer_no",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONSUMER_NO"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "status_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_STATUS"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "service_details_header",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_SERVICE_DETAILS_HEADER"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "service",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_SERVICE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "connection_category",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_CAT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "connection_type",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_TYPE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "meter_id",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_METER_ID"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "pipe_size",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PIPE_SIZE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "connection_execution_date",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_EXECUTION_DATE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "rainwater_harvesting_facility",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_RAIN_HARV_FAC"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "water_source",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_WATER_SOURCE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "water_sub_source",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_WATER_SUB_SOURCE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "property_details_header",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_DETAILS_HEADER"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "property_type",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_TYPE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "property_usage_type",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_USAGE_TYPE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "plot_size",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PLOT_SIZE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "property_ID",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_ID"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "city_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CITY"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "plot_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PLOT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "building_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_BUILDING"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "street_name",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_STREET"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "locality_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOCALITY"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "pincode_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PINCODE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "location_on_map",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOCATION_ON_MAP"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "owner_details_header",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_DETAILS_HEADER"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "owner_name",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_NAME"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "owner_mobile_number",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_MOB_NUM"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "gender_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_GENDER"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "guardian_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_GUARDIAN"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "guardian_name",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_GUARDIAN_NAME"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "owner_category",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_CATEGORY"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "email_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_EMAIL"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "correspondence_address",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CORR_ADDRESS"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "water_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_WATER"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              }
+            ]
+          },
+          {
+            "externalAPI": [     
+              { 
+                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                  "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.property.tenantId}')%5D",
+                  "apiRequest": null,
+                  "responseMapping":[
+                    {
+                      "variable": "logoImage",
+                      "value":"$.MdmsRes.tenant.tenants[0].logoId",
+                      "type": "image"
+                    },
+                    {
+                      "variable": "logo_header",
+                      "value":"$.MdmsRes.tenant.tenants[0].code",
+                      "localisation":{
+                      "required":true,
+                      "prefix": "TENANT_TENANTS",
+                      "module":"rainmaker-common"
+                      }
+                    }
+                  ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

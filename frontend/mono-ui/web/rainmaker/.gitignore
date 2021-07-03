@@ -1,0 +1,25 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/packages/lib/*
+/packages/egov-ui-kit
+/packages/egov-ui-framework
+/packages/pgr-citizen
+/packages/pgr-employee
+/packages/pt-citizen
+/packages/pt-employee
+/packages/egov-tradelicence
+/packages/egov-pt
+/packages/egov-workflow
+/packages/egov-hrms
+/packages/egov-mp
+/packages/egov-uc
+/packages/egov-noc
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+index.css*

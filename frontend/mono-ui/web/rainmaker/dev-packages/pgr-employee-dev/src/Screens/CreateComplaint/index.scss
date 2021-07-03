@@ -1,0 +1,23 @@
+.common-padding-for-new-complaint-card {
+  padding: 0 8px 8px 8px !important;
+}
+
+.add-complaint-button-cont {
+  z-index: 1000;
+}
+
+.create-comp-csr-cont {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+.csr-create-comp-main-screen {
+  padding-bottom: 0 !important;
+  max-height: calc(100vh - 140px);
+}
+
+.fix-for-layout-break {
+  margin-bottom: 10px;
+  position: relative;
+}
