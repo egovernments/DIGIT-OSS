@@ -96,9 +96,9 @@ public class PropertyQueryBuilder {
 
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid "
 	
-
+	        + " WHERE  ";
 
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY plastmodifiedtime DESC, pid) offset_ FROM " + "({})" + " result) result_offset "
