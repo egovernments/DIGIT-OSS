@@ -1,15 +1,21 @@
-import commonConfig from "config/common.js";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+  toggleSnackbar,
+  toggleSpinner
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { downloadPdf, getPaymentSearchAPI, openPdf, printPdf } from "egov-ui-kit/utils/commons";
+import { getTransformedLocale, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import printJS from 'print-js';
+import axios from 'axios';
+import { getFinancialYearFromEPOCH } from "egov-ui-kit/redux/properties/actions";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -487,201 +493,36 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showConfirmation=false) => {
-  getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
-    if (fileRes && !fileRes[fileStoreId]) {
-      console.error('ERROR IN DOWNLOADING RECEIPT');
-      return;
-    }
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
     if (mode === 'download') {
-      if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
-        setTimeout(()=>{
-          const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
-          window.location.href = weblink
-        },1500)
-      }
-      downloadPdf(fileRes[fileStoreId]);
-      if(showConfirmation){
-        if(localStorage.getItem('receipt-channel')=='whatsapp'&&localStorage.getItem('receipt-redirectNumber')!=''){
-          setTimeout(() => {
-            const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
-            window.location.href = weblink
-          }, 1500)
-        }
-        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
-      , "success"));
-      }
-    } else if (mode === 'open') {
-      if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
-        setTimeout(()=>{
-          const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
-          window.location.href = weblink
-        },1500)
-      }
-      openPdf(fileRes[fileStoreId], '_self')
-      if(showConfirmation){
-        if(localStorage.getItem('receipt-channel')=='whatsapp'&&localStorage.getItem('receipt-redirectNumber')!=''){
-          setTimeout(() => {
-            const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
-            window.location.href = weblink
-          }, 1500)
-        }
-        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
-      , "success"));
+      var win = window.open(fileRes[fileStoreId], '_blank');
+      if(win){
+        win.focus();
       }
     }
     else {
-      printPdf(fileRes[fileStoreId]);
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+
     }
-  });
-}
-
-
-export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state,showConfirmation=false) => {
-  if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
-    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
-    configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
-  }
-
-  const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
-      ACTION: "_get",
-    },
-  };
-  let businessService = '';
-  receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
-    if (query.key == "businessService") {
-      businessService = query.value;
-    }
-  })
-  receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
-  try {
-    httpRequest("post", getPaymentSearchAPI(businessService), "_search", receiptQueryString).then((payloadReceiptDetails) => {
-      const queryStr = [
-        { key: "key", value: configKey },
-        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-      ]
-      if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
-        console.log("Could not find any receipts");
-        store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
-          , "error"));
-        return;
-      }
-      // Setting the Payer and mobile from Bill to reflect it in PDF
-      state = state ? state : {};
-      let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
-      if ((billDetails && !billDetails.payerName) || !billDetails) {
-        billDetails = {
-          payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
-          mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
-        };
-      }
-      if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
-        payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
-        // payloadReceiptDetails.Payments[0].paidBy = billDetails.payer;
-        payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
-      }
-
-      const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
-      if (oldFileStoreId) {
-        downloadReceiptFromFilestoreID(oldFileStoreId, mode,undefined,showConfirmation)
-      }
-      else {
-        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-          .then(res => {
-            res.filestoreIds[0]
-            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-              res.filestoreIds.map(fileStoreId => {
-                downloadReceiptFromFilestoreID(fileStoreId, mode,undefined,showConfirmation)
-              })
-            } else {
-              console.log('Some Error Occured while downloading Receipt!');
-              store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
-                , "error"));
-            }
-          });
-      }
-    })
-  } catch (exception) {
-    console.log('Some Error Occured while downloading Receipt!');
-    store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
-      , "error"));
-  }
-}
-
-
-export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
-  const searchCriteria = {
-    consumerCode,
-    tenantId
-  }
-  const FETCHBILL = {
-    GET: {
-      URL: url,
-      ACTION: "_get",
-    }
-  }
-  const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
-      ACTION: "_get",
-    },
-  };
-  try {
-    const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [], { searchCriteria });
-    const oldFileStoreId = get(billResponse.Bills[0], "fileStoreId")
-    if (oldFileStoreId) {
-      downloadReceiptFromFilestoreID(oldFileStoreId, 'download')
-    }
-    else {
-      const queryStr = [
-        { key: "key", value: configKey },
-        { key: "tenantId", value: commonConfig.tenantId }
-      ]
-      const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-      downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
-    }
-  } catch (error) {
-    console.log(error);
-  }
-
-}
-
-export const downloadMultipleBill = async (bills = [], configKey) => {
-  try {
-    const DOWNLOADRECEIPT = {
-      GET: {
-        URL: "/pdf-service/v1/_create",
-        ACTION: "_get",
-      },
-    };
-    const queryStr = [
-      { key: "key", value: configKey },
-      { key: "tenantId", value: commonConfig.tenantId }
-    ]
-    const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-    downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
-  } catch (error) {
-    console.log(error);
-
-  }
-
-}
-
-
-export const downloadMultipleFileFromFilestoreIds = (fileStoreIds = [], mode, tenantId) => {
-  getFileUrlFromAPI(fileStoreIds.join(','), tenantId).then(async (fileRes) => {
-    fileStoreIds.map(fileStoreId => {
-      if (mode === 'download') {
-        downloadPdf(fileRes[fileStoreId]);
-      } else if (mode === 'open') {
-        openPdf(fileRes[fileStoreId], '_self')
-      }
-      else {
-        printPdf(fileRes[fileStoreId]);
-      }
-    })
   });
 }
 
@@ -760,6 +601,7 @@ let getModifiedPayment = (payments) =>{
     }
   }
   })
+ 
   let totalAmount =   get(payments, `[0].paymentDetails[0].bill.totalAmount`,null);
   set(payments, `[0].paymentDetails[0].bill.totalAmount`, totalAmount.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax.toFixed(2));
@@ -871,6 +713,7 @@ else if(payments[0].paymentDetails[0].businessService === 'TL'){
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocPenalty`, adhocPenalty);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+  
 }
 
 set(payments, `[0].paymentDetails[0].bill.additionalDetails.financialYear`, getFinancialYearFromEPOCH(payments[0].transactionDate));
@@ -894,4 +737,93 @@ const getBankname = async(payment) =>{
     }
   }
   return payment;
+}
+export const download = (receiptQueryString, mode = "download") => {
+  const FETCHRECEIPT = {
+    GET: {
+      URL: "/collection-services/payments/_search",
+      ACTION: "_get",
+    },
+  };
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then(async(payloadReceiptDetails) => {
+      let queryStr = {};
+      payloadReceiptDetails.Payments = await getBankname(payloadReceiptDetails.Payments);
+      payloadReceiptDetails.Payments = getModifiedPayment(payloadReceiptDetails.Payments);
+      if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT') {
+        queryStr = [
+          { key: "key", value: "consolidatedreceipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
+      }
+      else   if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT.MUTATION') {
+        queryStr = [
+          { key: "key", value: "pt-mutation-reciept" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
+      }
+      else if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL') {
+        queryStr = [
+          { key: "key", value: "tl-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
+      }
+      else {
+        queryStr = [
+          { key: "key", value: "misc-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
+      }
+      if(payloadReceiptDetails&&payloadReceiptDetails.Payments&&payloadReceiptDetails.Payments.length==0){
+        console.log("Could not find any receipts");
+        return;
+      }
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          res.filestoreIds[0]
+          if(res&&res.filestoreIds&&res.filestoreIds.length>0){
+            res.filestoreIds.map(fileStoreId=>{
+              downloadReceiptFromFilestoreID(fileStoreId,mode)
+            })
+          }else{
+            console.log("Error In Receipt Download");
+          }
+        });
+    })
+  } catch (exception) {
+    alert('Some Error Occured while downloading Receipt!');
+  }
+}
+
+
+export const downloadBill = async (consumerCode ,tenantId) => {
+  const searchCriteria = {
+    consumerCode ,
+    tenantId
+  }
+  const FETCHBILL={
+    GET:{
+      URL:"egov-searcher/bill-genie/billswithaddranduser/_get",
+      ACTION: "_get",
+    }
+  }
+  const DOWNLOADRECEIPT = {
+      GET: {
+          URL: "/pdf-service/v1/_create",
+          ACTION: "_get",
+      },
+  };
+  const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
+  const queryStr = [
+            { key: "key", value: "consolidatedbill" },
+            { key: "tenantId", value: "pb" }
+        ]
+  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
 }
