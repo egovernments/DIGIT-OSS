@@ -201,6 +201,23 @@ function FeesEstimateCard(props) {
             </Grid>
           </Grid>
         </div>
+        { roleExists && estimate.businesService === 'PT'? 
+                (  <Grid item xs={12} className={classes.message} >
+                
+              <Typography variant="body2">  <LabelContainer
+                    labelName="If the amount seems to be incorrect, please reach out to the <contact no> or <email id>"
+                    labelKey="pt.amount.message"
+                    dynamicArray={[estimate.contactNumber, estimate.email]}
+                  /></Typography>
+                  <br></br>
+                  <Typography variant="body2">  <LabelContainer
+                    labelName="There might be an issue with PNB Bank cards, please use an alternative if possible."
+                    labelKey="NOC_PAYMENT_CAP_PMT_DISCLAIMER"
+                  /></Typography>
+                 
+                
+            </Grid> ):"" }             
+
       </Grid>
       <Grid xs={12} sm={5}>
         <Typography
