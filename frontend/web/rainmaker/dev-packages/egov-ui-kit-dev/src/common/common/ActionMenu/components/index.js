@@ -88,8 +88,8 @@ class ActionMenuComp extends Component {
     }
   }
 
-  componentDidMount() {
-    // for better reusability moving out
+  componentDidMount = async () => {
+        // for better reusability moving out
     this.initialMenuUpdate();
 
     let citywiseConfig = localStorage.getItem("citywiseConfig");
@@ -220,7 +220,7 @@ class ActionMenuComp extends Component {
       path,
     });
   };
-  menuChange = (pathParam) => {
+    menuChange = async (pathParam) => {
     let path = pathParam.path;
     let { role, actionListArr } = this.props;
     let actionList = actionListArr;
