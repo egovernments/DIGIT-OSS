@@ -14,7 +14,7 @@ class ActionMenu extends Component {
     const roles = get(userInfo, "roles");
     const roleCodes = roles
       ? roles.map((role) => {
-          if (role.tenantId == getTenantId() || role.tenantId == getTenantId().split(".")[0]) {
+          if (role.tenantId == getTenantId()) {
             return role.code;
           }
         })
@@ -52,7 +52,9 @@ class ActionMenu extends Component {
 const mapStateToProps = ({ app }) => {
   const actionListArr = app.menu || [];
   const activeRoutePath = app.activeRoutePath;
-
+  actionListArr.map(item=>{if(item.id==2024){
+    item.path= "bill-amend"
+  }})
   return { actionListArr, activeRoutePath };
 };
 

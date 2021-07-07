@@ -1,22 +1,17 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Icon, TextFieldIcon } from "components";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { fetchFromLocalStorage, getModuleName } from "egov-ui-kit/utils/commons";
+import { getLocale, getStoredModulesList, getTenantId, localStorageGet, localStorageSet, setModule, setStoredModulesList } from "egov-ui-kit/utils/localStorageUtils";
+import Label from "egov-ui-kit/utils/translationNode";
+import { orderBy, some, split } from "lodash";
+import get from "lodash/get";
 import Menu from "material-ui/Menu";
 import MenuItem from "material-ui/MenuItem";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Icon } from "components";
-import get from "lodash/get";
-import { split, orderBy, some } from "lodash";
-import { fetchFromLocalStorage } from "egov-ui-kit/utils/commons";
-import { TextFieldIcon } from "components";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import Tooltip from "@material-ui/core/Tooltip";
-import Label from "egov-ui-kit/utils/translationNode";
-import { localStorageSet, localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { Link } from "react-router-dom";
 import "./index.css";
-import commonConfig from "config/common.js";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const styles = {
   inputStyle: {
@@ -70,7 +65,6 @@ class ActionMenuComp extends Component {
       path: "",
       menuItems: [],
       selectedMenuIndex: 0,
-      citywiseconfig:null
     };
     this.setWrapperRef = this.setWrapperRef.bind(this);
   }
@@ -79,7 +73,23 @@ class ActionMenuComp extends Component {
     this.wrapperRef = node;
   }
 
-  componentDidMount = async () => {    // for better reusability moving out
+  fetchLocales = () => {
+    var storedModuleList = [];
+    if (getStoredModulesList() !== null) {
+      storedModuleList = JSON.parse(getStoredModulesList());
+    }
+    if (storedModuleList.includes(getModuleName()) === false) {
+      storedModuleList.includes(getModuleName());
+      var newList = JSON.stringify(storedModuleList);
+      setStoredModulesList(newList);
+      setModule(getModuleName());
+      const tenantId = getTenantId();
+      this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+    }
+  }
+
+  componentDidMount() {
+    // for better reusability moving out
     this.initialMenuUpdate();
 
     let citywiseConfig = localStorage.getItem("citywiseConfig");
@@ -151,7 +161,8 @@ class ActionMenuComp extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.activeRoutePath != this.props.activeRoutePath) {
+    if (nextProps && nextProps.activeRoutePath !== "null" && nextProps.activeRoutePath != this.props.activeRoutePath) {
+      this.fetchLocales();
       this.initialMenuUpdate();
       this.setState({
         searchText: "",
@@ -209,7 +220,7 @@ class ActionMenuComp extends Component {
       path,
     });
   };
-  menuChange = async(pathParam,state) => {
+  menuChange = (pathParam) => {
     let path = pathParam.path;
     let { role, actionListArr } = this.props;
     let actionList = actionListArr;
@@ -268,8 +279,8 @@ class ActionMenuComp extends Component {
             (leftIconArray.length > path.split(".").length
               ? leftIconArray[path.split(".").length]
               : leftIconArray.length >= 1
-              ? leftIconArray[leftIconArray.length - 1]
-              : null);
+                ? leftIconArray[leftIconArray.length - 1]
+                : null);
           this.addMenuItems(path, splitArray, menuItems, i, leftIcon);
         } else if (pathParam && pathParam.parentMenu && actionList[i].navigationURL) {
           let splitArray = actionList[i].path.split(".");
@@ -336,7 +347,7 @@ class ActionMenuComp extends Component {
   render() {
     let { role, actionListArr, activeRoutePath, updateActiveRoute, toggleDrawer, menuDrawerOpen } = this.props;
     let { searchText, path, menuItems } = this.state;
-    let { changeLevel, menuChange } = this;
+    let { changeLevel, menuChange, fetchLocales } = this;
     let actionList = actionListArr;
     let menuTitle = path.split(".");
     let activeItmem = localStorageGet("menuName");
@@ -367,15 +378,15 @@ class ActionMenuComp extends Component {
                       className="menuStyle with-childs menu-label-style"
                       //defaultLabel={item.name}
                       label={item.name ? `ACTION_TEST_${item.name.toUpperCase().replace(/[.:-\s\/]/g, "_")}` : ""}
-                      // color="rgba(255, 255, 255, 0.87)"
+                    // color="rgba(255, 255, 255, 0.87)"
                     />
                   }
                   rightIcon={
                     <Icon
                       name="chevron-right"
                       action="navigation"
-                  //  color="rgba(255, 255, 255, 0.87)"
-                    className="iconClassHover material-icons whiteColor menu-right-icon"
+                      //  color="rgba(255, 255, 255, 0.87)"
+                      className="iconClassHover material-icons whiteColor menu-right-icon"
                       style={styles.arrowIconStyle}
                     />
                   }
@@ -385,7 +396,7 @@ class ActionMenuComp extends Component {
                       parentPath: false,
                     };
                     toggleDrawer && toggleDrawer();
-                    menuChange(pathParam,this.state);
+                    menuChange(pathParam);
                   }}
                 />
                 {/* </Tooltip> */}
@@ -412,8 +423,19 @@ class ActionMenuComp extends Component {
                       id={item.name.toUpperCase().replace(/[\s]/g, "-") + "-" + index}
                       onClick={() => {
                         //  localStorageSet("menuPath", item.path);
-                        updateActiveRoute(item.path, item.name);
+                        if (item.navigationURL === "tradelicence/apply") {
+                          this.props.setRequiredDocumentFlag()
+                        }
+
                         document.title = item.name;
+                        if (item.navigationURL && item.navigationURL.includes('digit-ui')) {
+                          window.location.href = item.navigationURL
+                          return;
+                        }
+                        else {
+                          updateActiveRoute(item.path, item.name);
+                        }
+
                         toggleDrawer && toggleDrawer();
                         if (window.location.href.indexOf(item.navigationURL) > 0 && item.navigationURL.startsWith("integration")) {
                           window.location.reload();
@@ -425,7 +447,7 @@ class ActionMenuComp extends Component {
                           className="menuStyle"
                           //defaultLabel={item.name}
                           label={item.name ? `ACTION_TEST_${item.name.toUpperCase().replace(/[.:-\s\/]/g, "_")}` : ""}
-                     //   color="rgba(255, 255, 255, 0.87)"
+                        //   color="rgba(255, 255, 255, 0.87)"
                         />
                       }
                     />
@@ -457,7 +479,7 @@ class ActionMenuComp extends Component {
                           className="menuStyle"
                           //defaultLabel={item.name}
                           label={item.name ? `ACTION_TEST_${item.name.toUpperCase().replace(/[.:-\s\/]/g, "_")}` : ""}
-                         // color="rgba(255, 255, 255, 0.87)"
+                        // color="rgba(255, 255, 255, 0.87)"
                         />
                       }
                     />
@@ -505,7 +527,7 @@ class ActionMenuComp extends Component {
                             className="menuStyle"
                             //defaultLabel={item.displayName}
                             label={item.name ? `ACTION_TEST_${item.displayName.toUpperCase().replace(/[.:-\s\/]/g, "_")}` : ""}
-                         // color="rgba(255, 255, 255, 0.87)"
+                          // color="rgba(255, 255, 255, 0.87)"
                           />
                         }
                       />
@@ -525,7 +547,7 @@ class ActionMenuComp extends Component {
         <div className="whiteColor" />
         <div className="menu-item-title">
           <Label
-              className="menuStyle"
+            className="menuStyle"
             label={
               menuTitle && menuTitle[menuTitle.length - 1]
                 ? `ACTION_TEST_${menuTitle[menuTitle.length - 1].toUpperCase().replace(/[.:-\s\/]/g, "_")}`
@@ -570,7 +592,7 @@ class ActionMenuComp extends Component {
                 changeLevel(path);
               }}
             >
-              <Icon  className = "menu-right-icon" name="arrow-back" action="navigation" />
+              <Icon className="menu-right-icon" name="arrow-back" action="navigation" />
             </div>
           )}
           {path && (
@@ -587,7 +609,7 @@ class ActionMenuComp extends Component {
                 this.changeRoute("/");
               }}
             >
-              <Icon  className = "menu-label-style" name="home" action="action" />
+              <Icon className="menu-label-style" name="home" action="action" />
             </div>
             // </Tooltip>
           )}
@@ -595,41 +617,44 @@ class ActionMenuComp extends Component {
           <div className="clearfix" />
 
           <div style={{ paddingLeft: "-24px" }}>{showMenuItem()}</div>
-          {toggleDrawer ? (
-            <div className="sideMenuItem drawer-collapse-menu-item">
-              {/* <Tooltip
-                id={"menu-toggle-tooltip"}
-                title={<Label defaultLabel={"Expand Menu"} label={menuDrawerOpen ? "" : "COMMON_ACTION_TEST_EXPAND_MENU"} />}
-                placement="right"
-              > */}
-              <MenuItem
-                innerDivStyle={styles.defaultMenuItemStyle}
-                style={{ whiteSpace: "initial" }}
-                onClick={() => {
-                  toggleDrawer && toggleDrawer(false);
-                }}
-                leftIcon={
-                  menuDrawerOpen ? (
-                    <ChevronLeftIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
-                  ) : (
-                    <ChevronRightIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
-                  )
-                }
-                primaryText={
-                  <Label
-                    className="menuStyle"
-                    defaultLabel="COMMON_ACTION_TEST_COLLAPSE"
-                    label={menuDrawerOpen ? "COMMON_ACTION_TEST_COLLAPSE" : ""}
-                   //  color="rgba(255, 255, 255, 0.87)"
+          {
+            // toggleDrawer ? (
+            //   <div className="sideMenuItem drawer-collapse-menu-item">
+            //     {/* <Tooltip
+            //       id={"menu-toggle-tooltip"}
+            //       title={<Label defaultLabel={"Expand Menu"} label={menuDrawerOpen ? "" : "COMMON_ACTION_TEST_EXPAND_MENU"} />}
+            //       placement="right"
+            //     > */}
+            //     <MenuItem
+            //       innerDivStyle={styles.defaultMenuItemStyle}
+            //       style={{ whiteSpace: "initial" }}
+            //       onClick={() => {
+            //         toggleDrawer && toggleDrawer(false);
+            //       }}
+            //       leftIcon={
+            //         menuDrawerOpen ? (
+            //           <ChevronLeftIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
+            //         ) : (
+            //           <ChevronRightIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
+            //         )
+            //       }
+            //       primaryText={
+            //         <Label
+            //           className="menuStyle"
+            //           defaultLabel="COMMON_ACTION_TEST_COLLAPSE"
+            //           label={menuDrawerOpen ? "COMMON_ACTION_TEST_COLLAPSE" : ""}
+            //          //  color="rgba(255, 255, 255, 0.87)"
 
-                  />
-                }
-              />
-              {/* </Tooltip> */}
-            </div>
-          ) : (
-            ""
-          )}
+            //         />
+            //       }
+            //     />
+            //     {/* </Tooltip> */}
+            //   </div>
+            // ) : (
+            //   ""
+            // )
+          }
+
         </Menu>
       </div>
     ) : null;
@@ -639,7 +664,9 @@ class ActionMenuComp extends Component {
 const mapDispatchToProps = (dispatch) => ({
   handleToggle: (showMenu) => dispatch({ type: "MENU_TOGGLE", showMenu }),
   setRoute: (route) => dispatch({ type: "SET_ROUTE", route }),
-  setCityWiseConfig: (cityWiseData) => dispatch(prepareFinalObject("cityWiseConfigActionMenu",cityWiseData))
+  setCityWiseConfig: (cityWiseData) => dispatch(prepareFinalObject("cityWiseConfigActionMenu",cityWiseData)),
+  fetchLocalizationLabel: (locale, moduleName, tenantId) => dispatch(fetchLocalizationLabel(locale, moduleName, tenantId)),
+  setRequiredDocumentFlag: () => dispatch(prepareFinalObject("isRequiredDocuments", true))
 });
 export default connect(
   null,
