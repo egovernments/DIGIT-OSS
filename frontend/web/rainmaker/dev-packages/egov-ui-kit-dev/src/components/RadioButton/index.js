@@ -1,9 +1,11 @@
 import React from "react";
+import Label from "egov-ui-kit/utils/translationNode";
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
 
 const selectedIconStyle = {
   fill: "fe7a51",
 };
+
 const RadioButtonUi = ({
   options,
   valueSelected,
@@ -21,6 +23,8 @@ const RadioButtonUi = ({
   selectedLabelStyle,
   id,
   disabled,
+  showFloatingLabelText = false,
+  floatingLabelText
 }) => {
   const renderRadioButtons = () => {
     return options.map((option, index) => {
@@ -41,17 +45,51 @@ const RadioButtonUi = ({
     });
   };
 
+  const styles = {
+    labelStyle: {
+      font: "12px",
+      letterSpacing: 0.6,
+      marginBottom: 5,
+      marginTop: 14,
+    },
+
+  }
+
+  const getRadioComponent = () => {
+    if (showFloatingLabelText) {
+      return <div>
+        <Label label={floatingLabelText} fontSize={12} labelStyle={styles.labelStyle} bold={true} />
+
+        <RadioButtonGroup
+          valueSelected={valueSelected}
+          name={name}
+          className={`${className} RadioComp`}
+          onChange={handleChange}
+          defaultSelected={defaultValue}
+          style={style}
+        >
+          {renderRadioButtons()}
+        </RadioButtonGroup>
+      </div>
+
+    } else {
+      return (<RadioButtonGroup
+        valueSelected={valueSelected}
+        name={name}
+        className={`${className} RadioComp`}
+        onChange={handleChange}
+        defaultSelected={defaultValue}
+        style={style}
+      >
+        {renderRadioButtons()}
+      </RadioButtonGroup>)
+    }
+  }
+
   return (
-    <RadioButtonGroup
-      valueSelected={valueSelected}
-      name={name}
-      className={`${className} RadioComp`}
-      onChange={handleChange}
-      defaultSelected={defaultValue}
-      style={style}
-    >
-      {renderRadioButtons()}
-    </RadioButtonGroup>
+    <div>
+      {getRadioComponent()}
+    </div>
   );
 };
 
