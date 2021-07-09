@@ -36,13 +36,13 @@ public class FuzzySearchService {
 
     public List<Property> getProperties(RequestInfo requestInfo, PropertyCriteria criteria) {
 
-
+         System.out.println("criteria="+criteria);
         List<String> idsFromDB = propertyRepository.getPropertyIds(criteria);
-
+        System.out.println("id from db="+idsFromDB);
         validateFuzzySearchCriteria(criteria);
-
+    
         Object esResponse = elasticSearchRepository.fuzzySearchProperties(criteria, idsFromDB);
-
+        
         Map<String, Set<String>> tenantIdToPropertyId = getTenantIdToPropertyIdMap(esResponse);
 
         System.out.println(tenantIdToPropertyId);
