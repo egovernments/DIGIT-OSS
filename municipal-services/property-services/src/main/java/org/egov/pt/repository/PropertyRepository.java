@@ -78,6 +78,7 @@ public class PropertyRepository {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, false, true);
+		log.info(query);
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>());
 	}
 

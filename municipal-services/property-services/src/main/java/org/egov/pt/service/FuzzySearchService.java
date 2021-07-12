@@ -2,6 +2,9 @@ package org.egov.pt.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
@@ -18,6 +21,7 @@ import java.util.*;
 import static org.egov.pt.util.PTConstants.ES_DATA_PATH;
 
 @Component
+@Slf4j
 public class FuzzySearchService {
 
     private ElasticSearchRepository elasticSearchRepository;
@@ -36,9 +40,9 @@ public class FuzzySearchService {
 
     public List<Property> getProperties(RequestInfo requestInfo, PropertyCriteria criteria) {
 
-         System.out.println("criteria="+criteria);
+        log.info("criteria="+criteria);
         List<String> idsFromDB = propertyRepository.getPropertyIds(criteria);
-        System.out.println("id from db="+idsFromDB);
+        log.info("id from db="+idsFromDB);
         validateFuzzySearchCriteria(criteria);
     
         Object esResponse = elasticSearchRepository.fuzzySearchProperties(criteria, idsFromDB);

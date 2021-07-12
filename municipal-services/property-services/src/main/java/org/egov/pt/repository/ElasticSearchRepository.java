@@ -1,6 +1,9 @@
 package org.egov.pt.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.repository.builder.FuzzySearchQueryBuilder;
@@ -17,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Component
+@Slf4j
 public class ElasticSearchRepository {
 
 
@@ -53,6 +57,7 @@ public class ElasticSearchRepository {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> requestEntity = new HttpEntity<>(searchQuery, headers);
+        log.info("Url"+url+"reuest"+requestEntity);
         ResponseEntity response = null;
         try {
              response = restTemplate.postForEntity(url, requestEntity, Object.class);
