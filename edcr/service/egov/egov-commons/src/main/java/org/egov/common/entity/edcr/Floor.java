@@ -88,6 +88,7 @@ public class Floor extends Measurement {
     private Room bathRoomWaterClosets;
     private List<BigDecimal> heightFromTheFloorToCeiling;
     private List<BigDecimal> heightOfTheCeilingOfUpperBasement;
+    private List<BigDecimal> levelOfBasementUnderGround;
     private InteriorOpenSpace interiorOpenSpace = new InteriorOpenSpace();
     private MeasurementWithHeight verandah = new MeasurementWithHeight();
     private MeasurementWithHeight lightAndVentilation = new MeasurementWithHeight();
@@ -514,6 +515,15 @@ public class Floor extends Measurement {
 
     public void setHeightOfTheCeilingOfUpperBasement(List<BigDecimal> heightOfTheCeilingOfUpperBasement) {
         this.heightOfTheCeilingOfUpperBasement = heightOfTheCeilingOfUpperBasement;
+    }
+
+
+    public List<BigDecimal> getLevelOfBasementUnderGround() {
+        return levelOfBasementUnderGround;
+    }
+
+    public void setLevelOfBasementUnderGround(List<BigDecimal> levelOfBasementUnderGround) {
+        this.levelOfBasementUnderGround = levelOfBasementUnderGround;
     }
 
     public List<VehicleRamp> getVehicleRamps() {
