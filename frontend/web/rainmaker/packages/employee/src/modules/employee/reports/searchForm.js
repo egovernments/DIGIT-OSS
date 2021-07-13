@@ -20,6 +20,8 @@ import commonConfig from "config/common.js";
 import { getTenantId, setReturnUrl, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
+
 class ShowForm extends Component {
   state = {
     searchBtnText: <LabelContainer labelName="APPLY" labelKey="REPORTS_SEARCH_APPLY_LABEL" />,
@@ -63,6 +65,7 @@ class ShowForm extends Component {
   };
 
   checkForDependentSource = async (fieldIndex, field, selectedValue) => {
+    
     const { pattern: fieldPattern, mapping, type: fieldType, name: targetProperty, isMandatory, displayOnly } = field;
     const { metaData, setMetaData, handleChange } = this.props;
     let splitArray = fieldPattern.split("?");
@@ -83,9 +86,13 @@ class ShowForm extends Component {
     }
 
     try {
+     
+    
       const response = await commonApiPost(url, queryJSON);
+     
       let keys = jp.query(response, splitArray[1].split("|")[1]);
       let values = jp.query(response, splitArray[1].split("|")[2]);
+
       let defaultValue = {};
       for (var k = 0; k < keys.length; k++) {
         defaultValue[keys[k]] = values[k];
@@ -277,6 +284,7 @@ class ShowForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     let { changeButtonText, clearReportHistory, needDefaultSearch } = this.props;
+    const { showSpinner, hideSpinner } = this.props;
     let { dateError } = this.state;
 
     if (!_.isEqual(this.props.searchForm, nextProps.searchForm)) {
@@ -332,6 +340,7 @@ class ShowForm extends Component {
       }
       setForm(required);
       clearReportHistory();
+    
       if (!_.isEmpty(JSON.parse(localStorageGet("searchCriteria")))) {
         this.search(null, true, nextProps.metaData.reportDetails.reportName);
       } else if (needDefaultSearch) {
@@ -400,25 +409,30 @@ class ShowForm extends Component {
 
       clearReportHistory();
       let resulturl = getResultUrl(moduleName,rptName);
+     
       let response =
         resulturl &&
-        commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: rptName || this.state.reportName, searchParams }).then(
+        commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: rptName || this.state.reportName, searchParams}).then(
           function(response) {
             pushReportHistory({ tenantId: tenantId, reportName: self.state.reportName, searchParams });
             setReportResult(response);
+            
             showTable(true);
             setFlag(1);
           },
           function(err) {
+           
             showTable(false);
             alert("Something went wrong or try again later");
           }
         );
+       
     }
 
     changeButtonText(<LabelContainer labelName="APPLY" labelKey="REPORTS_SEARCH_APPLY_LABEL" />);
   };
   search = (e = null, isDrilldown = false, searchForm) => {
+
     if (e) {
       e.preventDefault();
     }
@@ -429,6 +443,8 @@ class ShowForm extends Component {
       setReportResult,
       metaData,
       setFlag,
+      showSpinner,
+      hideSpinner,
       setSearchParams,
       reportHistory,
       reportIndex,
@@ -441,6 +457,7 @@ class ShowForm extends Component {
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
     let self = this;
     let mandatoryfields=[]
+   
     metaData.reportDetails.searchParams.forEach(param=>{
       if(param.isMandatory){
         mandatoryfields.push(param.name);
@@ -518,46 +535,59 @@ class ShowForm extends Component {
       setSearchParams(searchParams);
 
       clearReportHistory();
+      showSpinner()
+    //  console.log("hereeeeee111333")
       let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
       let response =
         resulturl &&
-        commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
+        commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams,hideSpinner }).then(
           function(response) {
             pushReportHistory({ tenantId: tenantId, reportName: self.state.reportName, searchParams });
             setReportResult(response);
+            hideSpinner()
             showTable(true);
+           
             setFlag(1);
+            
           },
           function(err) {
+            hideSpinner()
             showTable(false);
             alert("Something went wrong or try again later");
           }
         );
+       
     } else {
       if (_.isEmpty(JSON.parse(localStorageGet("searchCriteria")))) {
         let reportData = reportHistory[reportIndex - 1 - 1];
         let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
+       
         let response =
           resulturl &&
           commonApiPost(resulturl, {}, { ...reportData }).then(
             function(response) {
               decreaseReportIndex();
               setReportResult(response);
-
+             
               showTable(true);
               setFlag(1);
             },
             function(err) {
+              
               showTable(false);
               alert("Something went wrong or try again later");
             }
           );
+          
       } else {
         var reportData = JSON.parse(localStorageGet("searchCriteria"));
         let resulturl = getResultUrl(localStorageGet("moduleName"));
+       
+       
         let response =
           resulturl &&
-          commonApiPost(resulturl, {}, { ...reportData }).then(
+
+          commonApiPost(resulturl, {}, { ...reportData}).then(
             function(response) {
               setReturnUrl("");
               localStorageSet("searchCriteria", JSON.stringify({}));
@@ -567,15 +597,18 @@ class ShowForm extends Component {
               }
               setSearchParams(reportData.searchParams);
               setReportResult(response);
-
+             
               showTable(true);
               setFlag(1);
+             
             },
             function(err) {
+             
               showTable(false);
               alert("Something went wrong or try again later");
             }
           );
+         
       }
     }
 
@@ -678,6 +711,7 @@ class ShowForm extends Component {
                         primary={true}
                         label={buttonText}
                       />
+
                       <RaisedButton
                         style={{ marginLeft: "8px" }}
                         type="button"
@@ -707,6 +741,7 @@ class ShowForm extends Component {
             <RaisedButton
               type="button"
               onClick={(e) => {
+               
                 search(e, true);
               }}
               primary={true}
@@ -737,7 +772,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
+  showSpinner: () => dispatch(showSpinner()),
+  hideSpinner: () => dispatch(hideSpinner()),
   setForm: (required = [], pattern = []) => {
+
     dispatch({
       type: "SET_FORM",
       formtemp: {},
@@ -756,14 +794,17 @@ const mapDispatchToProps = (dispatch) => ({
     });
   },
   handleChange: (e, property, isRequired, pattern) => {
+    
     dispatch({
       type: "HANDLE_CHANGE",
       property,
+      
       value: e.target.value,
       isRequired,
       pattern,
     });
   },
+ 
   resetForm: () => {
     dispatch({ type: "RESET_FORM" });
   },
@@ -780,11 +821,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch({ type: "SET_FLAG", flag });
   },
   toggleSnackbarAndSetText:(open,message,type)=>{
+    
    dispatch(toggleSnackbarAndSetText(
     open,message,type
   )) 
   },
   setMetaData: (metaData) => {
+  
     dispatch({ type: "SET_META_DATA", metaData });
   },
   setSearchParams: (searchParams) => {
