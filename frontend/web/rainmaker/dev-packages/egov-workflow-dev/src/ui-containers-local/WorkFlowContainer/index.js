@@ -318,7 +318,16 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION";
       baseUrl = "pt-mutation";
-    } else {
+    } 
+    else if(moduleName ==="NewTL"){
+      bservice = "TL";
+      baseUrl =process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
+    }
+    else if(moduleName ==="EDITRENEWAL"){
+      bservice = "TL";
+      baseUrl =process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
+    }
+    else {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
