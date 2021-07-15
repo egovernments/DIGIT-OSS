@@ -52,7 +52,32 @@ public class ElasticSearchRepository {
 
         String url = getESURL();
 
-        String searchQuery = queryBuilder.getFuzzySearchQuery(criteria, uuids);
+        String searchQuery = queryBuilder.getFuzzySearchQuery(criteria);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> requestEntity = new HttpEntity<>(searchQuery, headers);
+        log.info("Url"+url+"reuest"+requestEntity);
+        ResponseEntity response = null;
+        try {
+             response = restTemplate.postForEntity(url, requestEntity, Object.class);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CustomException("ES_ERROR","Failed to fetch data from ES");
+        }
+
+        return response.getBody();
+
+    }
+
+
+    public Object fuzzySearchForProperties(PropertyCriteria criteria) {
+
+
+        String url = getESURL();
+
+        String searchQuery = queryBuilder.getFuzzySearchQuery(criteria);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -70,7 +95,6 @@ public class ElasticSearchRepository {
         return response.getBody();
 
     }
-
 
     /**
      * Generates elasticsearch search url from application properties

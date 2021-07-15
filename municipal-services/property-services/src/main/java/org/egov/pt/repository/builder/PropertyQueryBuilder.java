@@ -84,7 +84,7 @@ public class PropertyQueryBuilder {
 
 	private static final String ID_QUERY = SELECT
 
-			+   " property.id FROM EG_PT_PROPERTY property "
+			+   " distinct property.id FROM EG_PT_PROPERTY property "
 
 			+   INNER_JOIN + " EG_PT_ADDRESS address         ON property.id = address.propertyid "
 
@@ -92,11 +92,11 @@ public class PropertyQueryBuilder {
 
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT pdoc           ON property.id = pdoc.entityid "
 
-			+   INNER_JOIN +  " EG_PT_OWNER owner             ON property.id = owner.propertyid "
+			+   INNER_JOIN +  " EG_PT_OWNER owner             ON property.id = owner.propertyid and owner.status='ACTIVE' "
 
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid "
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid and unit.active = 't' "
 	
 	        + " WHERE  ";
 
