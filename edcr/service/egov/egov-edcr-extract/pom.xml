@@ -80,11 +80,11 @@
 			<url>http://repository.jspresso.org/maven2/</url>
 		</repository>
 		<!-- Customized In Project Repository -->
-		<repository>
+		<!-- <repository>
 			<id>in-project</id>
 			<name>In Project Repo</name>
 			<url>file://${project.basedir}/lib</url>
-		</repository>
+		</repository> -->
 	</repositories>
 
 	<pluginRepositories>
@@ -114,19 +114,19 @@
 		</dependency>
 
 		<dependency>
-			<groupId>batik-custom</groupId>
+			<groupId>org.edcr</groupId>
 			<artifactId>batik-all</artifactId>
 			<version>1.0</version>
 		</dependency>
 
 		<dependency>
-			<groupId>kabeja-svg-custom</groupId>
+			<groupId>org.edcr</groupId>
 			<artifactId>kabeja-svg</artifactId>
 			<version>0.4</version>
 		</dependency>
 
 		<dependency>
-			<groupId>pdf-transcoder-custom</groupId>
+			<groupId>org.edcr</groupId>
 			<artifactId>pdf-transcoder</artifactId>
 			<version>1.1</version>
 		</dependency>
