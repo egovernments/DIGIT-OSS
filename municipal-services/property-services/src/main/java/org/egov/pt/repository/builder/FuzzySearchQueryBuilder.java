@@ -47,7 +47,7 @@ public class FuzzySearchQueryBuilder {
             "  \"from\": {{OFFSET}},\n" +
             "  \"size\": {{LIMIT}},\n" +
             "  \"sort\": {\n" +
-            "    \"_score\": {\n" +
+            "    \"Data.propertyId.keyword\": {\n" +
             "      \"order\": \"desc\"\n" +
             "    }\n" +
             "  },\n" +
