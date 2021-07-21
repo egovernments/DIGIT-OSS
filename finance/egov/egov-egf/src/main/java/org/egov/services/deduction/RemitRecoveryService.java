@@ -301,25 +301,25 @@ public class RemitRecoveryService {
 
         final StringBuilder query = new StringBuilder();
         final Map<String, Object> params = new HashMap<>();
-		query.append(" SELECT vh.NAME  AS col_0_0_,  vh.VOUCHERNUMBER AS col_1_0_,  vh.VOUCHERDATE   AS col_2_0_,")
-				.append(" egr.GLDTLAMT   AS col_3_0_,  gld.DETAILTYPEID  AS col_4_0_,  gld.DETAILKEYID   AS col_5_0_,")
-				.append(" egr.ID    AS col_6_0_, (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end")
-				.append(" from EG_REMITTANCE_GLDTL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh")
-				.append(" where vh.status!=4 and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.id=egd.remittancegldtlid ")
-				.append(" and egr1.id=egr.id) As col_7_0 , mis.departmentcode as col_8_0,mis.functionid as col_9_0")
-				.append("  FROM VOUCHERHEADER vh,  VOUCHERMIS mis,  GENERALLEDGER gl,  GENERALLEDGERDETAIL gld,")
-				.append("  EG_REMITTANCE_GLDTL egr,  TDS recovery5_")
-				.append(" WHERE recovery5_.GLCODEID  =gl.GLCODEID AND gld.ID =egr.GLDTLID AND gl.ID =gld.GENERALLEDGERID")
-				.append(" AND vh.ID =gl.VOUCHERHEADERID")
-				.append(" AND mis.VOUCHERHEADERID  =vh.ID AND vh.STATUS    =0 ")
-				.append(" and egr.id in (:selectedRows) and recovery5_.isactive=true AND egr.GLDTLAMT-")
-				.append(" (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end")
-				.append(" from EG_REMITTANCE_GLDTL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh")
-				.append(" where vh.status not in (1,2,4) and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id")
-				.append(" and egr1.id=egd.remittancegldtlid and egr1.id=egr.id) <>0  ")
-				.append(" ORDER BY vh.VOUCHERNUMBER,  vh.VOUCHERDATE");
+        query.append(" SELECT vh.NAME  AS col_0_0_,  vh.VOUCHERNUMBER AS col_1_0_,  vh.VOUCHERDATE   AS col_2_0_,")
+                .append(" egr.GLDTLAMT   AS col_3_0_,  gld.DETAILTYPEID  AS col_4_0_,  gld.DETAILKEYID   AS col_5_0_,")
+                .append(" egr.ID    AS col_6_0_, (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end")
+                .append(" from EG_REMITTANCE_GLDTL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh")
+                .append(" where vh.status!=4 and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.id=egd.remittancegldtlid ")
+                .append(" and egr1.id=egr.id) As col_7_0 , mis.departmentcode as col_8_0,mis.functionid as col_9_0")
+                .append("  FROM VOUCHERHEADER vh,  VOUCHERMIS mis,  GENERALLEDGER gl,  GENERALLEDGERDETAIL gld,")
+                .append("  EG_REMITTANCE_GLDTL egr,  TDS recovery5_")
+                .append(" WHERE recovery5_.GLCODEID  =gl.GLCODEID AND gld.ID =egr.GLDTLID AND gl.ID =gld.GENERALLEDGERID")
+                .append(" AND vh.ID =gl.VOUCHERHEADERID")
+                .append(" AND mis.VOUCHERHEADERID  =vh.ID AND vh.STATUS    =0 ")
+                .append(" and egr.id in (:selectedRows) and recovery5_.isactive=true AND egr.GLDTLAMT-")
+                .append(" (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end")
+                .append(" from EG_REMITTANCE_GLDTL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh")
+                .append(" where vh.status not in (1,2,4) and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id")
+                .append(" and egr1.id=egd.remittancegldtlid and egr1.id=egr.id) <>0  ")
+                .append(" ORDER BY vh.VOUCHERNUMBER,  vh.VOUCHERDATE");
 
-		params.put("selectedRows", selectedRows);
+        params.put("selectedRows", financialUtils.getStatuses(selectedRows));
 
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("RemitRecoveryService | getRecoveryDetails | query := " + query.toString());
@@ -437,12 +437,13 @@ public class RemitRecoveryService {
 		return misQuery.toString();
 	}
 
+    @SuppressWarnings({ "deprecation", "unchecked" })
     private void populateDetailsBySQL(final CVoucherHeader voucherHeader, final List<RemittanceBean> listRemitBean,
             final StringBuilder query, Map<String, Object> params) throws NumberFormatException, NoSuchMethodException, SecurityException {
         RemittanceBean remitBean;
-		final SQLQuery searchSQLQuery = persistenceService.getSession().createSQLQuery(query.toString());
-		params.entrySet().forEach(entry -> searchSQLQuery.setParameter(entry.getKey(), entry.getValue()));
-		final List<Object[]> list = searchSQLQuery.list();
+        final SQLQuery searchSQLQuery = persistenceService.getSession().createSQLQuery(query.toString());
+        persistenceService.populateQueryWithParams(searchSQLQuery, params);
+        final List<Object[]> list = searchSQLQuery.list();
         for (final Object[] element : list) {
             remitBean = new RemittanceBean();
             remitBean.setVoucherName(element[0].toString());
@@ -496,9 +497,9 @@ public class RemitRecoveryService {
     private void populateNonConrolledTdsDataBySQL(final CVoucherHeader voucherHeader, final List<RemittanceBean> listRemitBean,
             final StringBuilder query, Map<String, Object> params) {
         RemittanceBean remitBean;
-		final SQLQuery searchSQLQuery = persistenceService.getSession().createSQLQuery(query.toString());
-		persistenceService.populateQueryWithParams(searchSQLQuery, params);
-		final List<Object[]> list = searchSQLQuery.list();
+        final SQLQuery searchSQLQuery = persistenceService.getSession().createSQLQuery(query.toString());
+        persistenceService.populateQueryWithParams(searchSQLQuery, params);
+        final List<Object[]> list = searchSQLQuery.list();
         for (final Object[] element : list) {
             remitBean = new RemittanceBean();
             remitBean.setVoucherName(element[0].toString());
