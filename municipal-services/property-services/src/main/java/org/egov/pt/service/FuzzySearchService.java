@@ -33,6 +33,10 @@ public class FuzzySearchService {
     private ObjectMapper mapper;
 
     private PropertyRepository propertyRepository;
+    
+    @Autowired
+    private EnrichmentService enrichmentService;
+
 
     @Autowired
     public FuzzySearchService(ElasticSearchRepository elasticSearchRepository, ObjectMapper mapper, PropertyRepository repository) {
@@ -65,6 +69,10 @@ public class FuzzySearchService {
 
         }
 
+        properties.forEach(property -> {
+			enrichmentService.enrichBoundary(property, requestInfo);
+		});
+        
         List<Property> orderedProperties = orderByESScore(properties, esResponse);
 
         return orderedProperties;

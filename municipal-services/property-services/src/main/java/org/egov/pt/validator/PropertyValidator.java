@@ -592,7 +592,7 @@ public class PropertyValidator {
 				throw new CustomException("EG_PT_INVALID_SEARCH"," TenantId is mandatory for search by " + userType);
 			
 			if(criteria.getTenantId() != null && isCriteriaEmpty)
-				throw new CustomException("EG_PT_INVALID_SEARCH"," Search is not allowed on empty Criteria, Atleast one criteria should be provided with city name for " + userType);
+				throw new CustomException("EG_PT_INVALID_SEARCH"," Search is not allowed on empty Criteria, Atleast one criteria should be provided with city name.");
 			
 			allowedParams = Arrays.asList(configs.getEmployeeSearchParams().split(","));
 		}
