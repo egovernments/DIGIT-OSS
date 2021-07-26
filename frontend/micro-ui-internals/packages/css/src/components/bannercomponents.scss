@@ -1,4 +1,5 @@
-.success-wrap, .emp-success-wrap{
+.success-wrap,
+.emp-success-wrap {
   @apply block bg-success w-full text-center text-white pt-md pb-sm mb-md;
 
   header {
@@ -20,6 +21,12 @@
       @apply border border-solid border-white rounded-full h-16 w-16 bg-white mb-md;
     }
 
+    svg.payment-svg {
+      border: unset;
+      background-color: unset;
+      @apply rounded-full;
+    }
+
     h2 {
       @apply font-bold text-caption-m mb-sm;
     }
@@ -30,7 +37,8 @@
   }
 }
 
-.error-wrap, .emp-error-wrap{
+.error-wrap,
+.emp-error-wrap {
   @apply block bg-error w-full text-center text-white pt-md pb-sm mb-md;
 
   header {
@@ -54,27 +62,27 @@
 
 @screen dt {
   .success-wrap {
-    width: calc( 100% + 284px);
+    width: calc(100% + 284px);
     header {
       @apply text-heading-xl-dt;
     }
   }
-  .emp-success-wrap{
-    width: calc( 100%);
+  .emp-success-wrap {
+    width: calc(100%);
     header {
       @apply text-heading-xl-dt;
     }
   }
 
   .error-wrap {
-    width: calc( 100% + 284px);
+    width: calc(100% + 284px);
     header {
       @apply text-heading-xl-dt;
     }
   }
 
-  .emp-error-wrap{
-    width: calc( 100%);
+  .emp-error-wrap {
+    width: calc(100%);
     header {
       @apply text-heading-xl-dt;
     }

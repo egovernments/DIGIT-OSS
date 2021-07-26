@@ -1,43 +1,156 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import { Card, DetailsCard, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
+import { Card, DetailsCard, Loader, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
 import { FilterAction } from "@egovernments/digit-ui-react-components";
 import Filter from "./Filter";
 import SearchApplication from "./search";
+import SortBy from "./SortBy";
 
-export const ApplicationCard = ({ data, onFilterChange, onSearch, serviceRequestIdKey }) => {
-  const [popup, setPopup] = useState(false);
-  const [selectedComponent, setSelectedComponent] = useState(null);
+export const ApplicationCard = ({
+  t,
+  data,
+  onFilterChange,
+  onSearch,
+  onSort,
+  serviceRequestIdKey,
+  isFstpOperator,
+  isLoading,
+  isSearch,
+  searchParams,
+  searchFields,
+  sortParams,
+  linkPrefix,
+  removeParam,
+}) => {
+  const [type, setType] = useState(isSearch ? "SEARCH" : "");
+  const [popup, setPopup] = useState(isSearch ? true : false);
+  const [params, setParams] = useState(searchParams);
+  const [_sortparams, setSortParams] = useState(sortParams);
 
-  const handlePopupAction = (type) => {
-    console.log("option");
-    if (type === "SEARCH") {
-      setSelectedComponent(<SearchApplication type="mobile" onClose={handlePopupClose} onSearch={onSearch} />);
-    } else if (type === "FILTER") {
-      setSelectedComponent(<Filter onFilterChange={onFilterChange} onClose={handlePopupClose} type="mobile" />);
-    }
-    setPopup(true);
-    if (type === "SORT") {
-      setPopup(false);
-    }
+  const selectParams = (param) => {
+    setParams((o) => ({ ...o, ...param }));
   };
+
+  const clearParam = () => {
+    setParams({});
+  };
+
+  const onSearchPara = (param) => {
+    onFilterChange({ ...params, ...param });
+    setType("");
+    setPopup(false);
+  };
+
+  useEffect(() => {
+    if (type) setPopup(true);
+  }, [type]);
+
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
   const handlePopupClose = () => {
     setPopup(false);
-    setSelectedComponent(null);
+    setType("");
+    setParams(searchParams);
+    setSortParams(sortParams);
   };
+
+  const onSearchSortParams = (d) => {
+    setSortParams(d);
+    setPopup(false);
+    setType("");
+    onSort(d);
+  };
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  let result;
+  if (!data || data?.length === 0) {
+    result = (
+      <Card style={{ marginTop: 20 }}>
+        {t("CS_MYAPPLICATIONS_NO_APPLICATION")
+          .split("\\n")
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
+          ))}
+      </Card>
+    );
+  } else if (data && data?.length > 0) {
+    result = (
+      <DetailsCard
+        data={data}
+        serviceRequestIdKey={serviceRequestIdKey}
+        linkPrefix={linkPrefix ? linkPrefix : DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
+      />
+    );
+  }
 
   return (
     <React.Fragment>
       <div className="searchBox">
-        <SearchAction text="SEARCH" handleActionClick={() => handlePopupAction("SEARCH")} />
-        <FilterAction text="FILTER" handleActionClick={() => handlePopupAction("FILTER")} />
-        <FilterAction text="SORT" handleActionClick={() => handlePopupAction("SORT")} />
+        {onSearch && (
+          <SearchAction
+            text="SEARCH"
+            handleActionClick={() => {
+              setType("SEARCH");
+              setPopup(true);
+            }}
+          />
+        )}
+        {!isSearch && onFilterChange && (
+          <FilterAction
+            text="FILTER"
+            handleActionClick={() => {
+              setType("FILTER");
+              setPopup(true);
+            }}
+          />
+        )}
+        <FilterAction
+          text="SORT"
+          handleActionClick={() => {
+            setType("SORT");
+            setPopup(true);
+          }}
+        />
       </div>
-      <DetailsCard data={data} serviceRequestIdKey={serviceRequestIdKey} linkPrefix={"/digit-ui/employee/fsm/"} />
+      {result}
       {popup && (
         <PopUp>
-          <div className="popup-module">{selectedComponent}</div>
+          {type === "FILTER" && (
+            <div className="popup-module">
+              {
+                <Filter
+                  onFilterChange={selectParams}
+                  onClose={handlePopupClose}
+                  onSearch={onSearchPara}
+                  type="mobile"
+                  searchParams={params}
+                  removeParam={removeParam}
+                />
+              }
+            </div>
+          )}
+          {type === "SORT" && (
+            <div className="popup-module">
+              {<SortBy type="mobile" sortParams={sortParams} onClose={handlePopupClose} type="mobile" onSort={onSort} />}
+            </div>
+          )}
+          {type === "SEARCH" && (
+            <div className="popup-module">
+              <SearchApplication
+                type="mobile"
+                onClose={handlePopupClose}
+                onSearch={onSearch}
+                isFstpOperator={isFstpOperator}
+                searchParams={searchParams}
+                searchFields={searchFields}
+              />
+            </div>
+          )}
         </PopUp>
       )}
     </React.Fragment>

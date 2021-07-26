@@ -5,14 +5,15 @@ import { Link } from "react-router-dom";
 
 const MyApplication = ({ application }) => {
   const { t } = useTranslation();
+
   return (
     <Card>
-      <KeyNote keyValue={t("CS_MY_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
-      <KeyNote keyValue={t("CS_APPLICATION_DETAILS_SERVICE_CATEGORY")} note={application.serviceCategory || "FSM"} />
-      <KeyNote keyValue={t("CS_APPLICATION_DETAILS_APPLICATION_TYPE")} note={application.applicationType || "Desludging Request"} />
-      <KeyNote keyValue={t("CS_APPLICATION_DETAILS_STATUS")} note={t(application.applicationStatus)} />
-      <Link to={`/digit-ui/citizen/fsm/application-details/${application.applicationNo}`}>
-        <SubmitBar label={t("CS_MY_APPLICATION_VIEW")} />
+      <KeyNote keyValue={t("CS_FSM_APPLICATION_APPLICATION_NO")} note={application.applicationNo} />
+      <KeyNote keyValue={t("CS_FSM_APPLICATION_SERVICE_CATEGORY")} note={application.serviceCategory || t("CS_TITLE_FSM")} />
+      <KeyNote keyValue={t("CS_FSM_APPLICATION_TYPE")} note={application.applicationType || t("CS_FSM_APPLICATION_TYPE_DESLUDGING")} />
+      <KeyNote keyValue={t("CS_FSM_APPLICATION_DETAIL_STATUS")} note={t("CS_COMMON_" + application.applicationStatus)} />
+      <Link to={{ pathname: `/digit-ui/citizen/fsm/application-details/${application.applicationNo}`, state: { tenantId: application.tenantId } }}>
+        <SubmitBar label={t("CS_COMMON_VIEW")} />
       </Link>
     </Card>
   );

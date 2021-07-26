@@ -10,7 +10,7 @@ import Response from "../Response";
 
 const ReopenComplaint = ({ match, history, parentRoute }) => {
   // console.log("match:", match);
-  console.log("sddddddadasds", getRoute(match, PgrRoutes.ReasonPage), match, parentRoute);
+  // console.log("sddddddadasds", getRoute(match, PgrRoutes.ReasonPage), match, parentRoute);
   // const _match = useRouteMatch()
   return (
     <Switch>

@@ -1,9 +1,6 @@
 import React from "react";
 
 const CustomButton = ({ text, onClick, selected }) => {
-  {
-    console.log("selected::::::::::>", selected);
-  }
   return (
     <React.Fragment>
       <button tabIndex="0" type="button" className={selected ? "customBtn-selected" : "customBtn"} onClick={onClick}>

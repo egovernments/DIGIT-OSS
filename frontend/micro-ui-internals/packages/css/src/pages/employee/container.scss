@@ -12,7 +12,14 @@
 }
 
 .break-line {
-  @apply block h-0 w-full border border-border my-lg;
+  @apply border-border my-lg;
+}
+
+.employee-home-footer{
+  @apply flex fixed bottom-0 h-10 bg-grey-bg pb-md pt-sm justify-center w-full;
+  img{
+    @apply ml-sm
+  }
 }
 
 @screen dt {
@@ -26,5 +33,11 @@
   .break-line {
     margin-top: 40px;
     margin-bottom: 40px;
+  }
+  .employee-home-footer{
+    
+  }
+  .moduleCardWrapper{
+    @apply flex flex-row flex-wrap !important;
   }
 }

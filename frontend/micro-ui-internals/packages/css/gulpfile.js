@@ -37,7 +37,7 @@ function stylesLive() {
 
 function livereloadStyles() {
   livereload.listen();
-  watch("src/*.scss", series(stylesLive));
+  watch("src/**/*.scss", series(stylesLive));
 }
 
 exports.styles = styles;

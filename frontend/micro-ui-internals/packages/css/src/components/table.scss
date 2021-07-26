@@ -5,6 +5,9 @@
     th {
       padding: 20px 18px;
       @apply font-bold align-middle text-left;
+      &:first-child {
+        min-width: 256px;
+      }
     }
   }
 
@@ -27,12 +30,34 @@
   padding: 20px 40px 20px 0px;
   color: rgb(80, 90, 95);
 
-  svg{
-    fill: #505A5F;
+  svg {
+    fill: #505a5f;
     @apply ml-md;
   }
 }
 
-.pagination button:nth-child(1) span::after  {
+.pagination button:nth-child(1) span::after {
   content: "\f105";
+}
+
+.fullWidth {
+  width: 100% !important;
+}
+
+.customTable {
+  width: 100%;
+  th {
+    font-weight: bold;
+  }
+
+  th,
+  td {
+    text-align: left;
+    border-bottom: 1px solid #B1B4B6;
+    padding: 15px 10px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #EEEEEE;
+  }
 }

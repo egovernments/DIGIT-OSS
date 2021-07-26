@@ -46,3 +46,16 @@
   margin-left: 12px;
   @apply absolute top-0 left-0 h-full border-l border-solid border-border;
 }
+
+.checkpoint-comments-wrap {
+  max-width: 560px;
+  @apply bg-grey-mid p-sm mt-sm;
+
+  h4{
+    @apply text-text-primary text-heading-s;
+  }
+
+  p{
+    @apply text-text-secondary text-body-s-dt;
+  }
+}

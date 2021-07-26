@@ -1,7 +1,6 @@
-import { LocalizationService } from "../molecules/Localization/service";
+import { LocalizationService } from "./Localization/service";
 
 const ADMIN_CODE = ({ tenantId, hierarchyType }) => {
-  console.log("object", tenantId);
   return tenantId.replace(".", "_").toUpperCase() + "_" + hierarchyType.code;
 };
 
@@ -16,10 +15,11 @@ const getLocalities = (tenantBoundry) => {
   const adminCode = ADMIN_CODE(tenantBoundry);
   const localitiesWithLocalizationKeys = tenantBoundry.boundary.map((boundaryObj) => ({
     ...boundaryObj,
-    code: adminCode + "_" + boundaryObj.code,
+    i18nkey: adminCode + "_" + boundaryObj.code,
   }));
-  let I18nKeyMessage = getI18nKeys(localitiesWithLocalizationKeys);
-  LocalizationService.updateResources("en_IN", I18nKeyMessage);
+  // console.log("find translation data here", localitiesWithLocalizationKeys)
+  // let I18nKeyMessage = getI18nKeys(localitiesWithLocalizationKeys);
+  // LocalizationService.updateResources("en_IN", I18nKeyMessage);
   return localitiesWithLocalizationKeys;
 };
 

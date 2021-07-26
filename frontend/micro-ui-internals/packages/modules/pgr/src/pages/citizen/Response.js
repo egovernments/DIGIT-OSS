@@ -33,14 +33,23 @@ const BannerPicker = ({ response }) => {
   }
 };
 
+const TextPicker = ({ response }) => {
+  const { complaints } = response;
+  const { t } = useTranslation();
+  if (complaints && complaints.response && complaints.response.responseInfo) {
+    const { action } = complaints.response.ServiceWrappers[0].workflow;
+    return action === "RATE" ? <CardText>{t("CS_COMMON_RATING_SUBMIT_TEXT")}</CardText> : <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>;
+  }
+};
+
 const Response = (props) => {
   const { t } = useTranslation();
   const appState = useSelector((state) => state)["pgr"];
-  console.log("inside response", appState);
+  // console.log("inside response", appState);
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}
-      <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
+      {appState.complaints.response && <TextPicker response={appState} />}
       <Link to="/digit-ui/citizen">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

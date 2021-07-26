@@ -5,6 +5,7 @@ import SelectImages from "./Steps/SelectImages";
 import SelectLandmark from "./Steps/SelectLandmark";
 import SelectPincode from "./Steps/SelectPincode";
 import SelectSubType from "./Steps/SelectSubType";
+import SelectGeolocation from "./Steps/SelectGeolocation";
 
 export const config = {
   routes: {
@@ -14,7 +15,7 @@ export const config = {
         headerCaption: "",
         header: "CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER",
         cardText: "CS_COMPLAINT_TYPE_TEXT",
-        submitBarLabel: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
       },
       nextStep: "sub-type",
     },
@@ -23,17 +24,21 @@ export const config = {
       texts: {
         header: "CS_ADDCOMPLAINT_COMPLAINT_SUBTYPE_PLACEHOLDER",
         cardText: "CS_COMPLAINT_SUBTYPE_TEXT",
-        submitBarLabel: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
       },
+      nextStep: "map",
+    },
+    map: {
+      component: SelectGeolocation,
       nextStep: "pincode",
     },
     pincode: {
       component: SelectPincode,
       texts: {
         headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
-        header: "CS_ADDCOMPLAINT_PINCODE",
+        header: "CS_FILE_APPLICATION_PINCODE_LABEL",
         cardText: "CS_ADDCOMPLAINT_CHANGE_PINCODE_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
@@ -56,7 +61,7 @@ export const config = {
         headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
         header: "CS_ADDCOMPLAINT_PROVIDE_COMPLAINT_ADDRESS",
         cardText: "CS_ADDCOMPLAINT_CITY_MOHALLA_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
       },
       nextStep: "landmark",
     },
@@ -64,9 +69,9 @@ export const config = {
       component: SelectLandmark,
       texts: {
         headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
-        header: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK",
-        cardText: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE",
+        cardText: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE_TEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       inputs: [
@@ -83,7 +88,7 @@ export const config = {
       texts: {
         header: "CS_ADDCOMPLAINT_UPLOAD_PHOTO",
         cardText: "CS_ADDCOMPLAINT_UPLOAD_PHOTO_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
         skipText: "CORE_COMMON_SKIP_CONTINUE",
       },
       nextStep: "additional-details",
@@ -93,7 +98,7 @@ export const config = {
       texts: {
         header: "CS_ADDCOMPLAINT_PROVIDE_ADDITIONAL_DETAILS",
         cardText: "CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_TEXT",
-        nextText: "PT_COMMONS_NEXT",
+        submitBarLabel: "CS_COMMON_NEXT",
       },
       inputs: [
         {

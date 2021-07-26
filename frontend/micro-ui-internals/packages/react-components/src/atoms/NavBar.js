@@ -1,8 +1,39 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 
-const NavBar = ({ open, profileItem, menuItems, onClose }) => {
+const MenuItem = ({ item }) => {
+  let itemComponent;
+  if (item.type === "component") {
+    itemComponent = item.action;
+  } else {
+    itemComponent = item.text;
+  }
+  const Item = () => (
+    <span className="menu-item" {...item.populators}>
+      {item?.icon && item.icon}
+      <div className="menu-label">{itemComponent}</div>
+    </span>
+  );
+  if (item.type === "external-link") {
+    return (
+      <a href={item.link}>
+        <Item />
+      </a>
+    );
+  }
+  if (item.type === "link") {
+    return (
+      <Link to={item.link}>
+        <Item />
+      </Link>
+    );
+  }
+  return <Item />;
+};
+
+const NavBar = ({ open, profileItem, menuItems, onClose, Footer }) => {
   const node = useRef();
-  Digit.Hooks.useClickOutside(node, onClose);
+  Digit.Hooks.useClickOutside(node, open ? onClose : null, open);
 
   return (
     <React.Fragment>
@@ -29,38 +60,27 @@ const NavBar = ({ open, profileItem, menuItems, onClose }) => {
             display: "flex",
             flexDirection: "column",
             marginTop: "56px",
-            height: "100vh",
-            position: "absolute",
+            height: "calc(100vh - 56px)",
+            position: "fixed",
             top: 0,
             left: 0,
             transition: "transform 0.3s ease-in-out",
             background: "#fff",
             zIndex: "1999",
             width: "300px",
-            transform: `${open ? "translateX(0)" : "translateX(-310px)"}`,
+            transform: `${open ? "translateX(0)" : "translateX(-450px)"}`,
+            boxShadow: "rgb(0 0 0 / 16%) 8px 0px 16px",
           }}
         >
           {profileItem}
           <div className="drawer-list">
             {menuItems.map((item, index) => (
-              <div
-                key={index}
-                // style={{
-                //   marginLeft: 0,
-                //   padding: 0,
-                //   position: "relative",
-                //   display: "flex",
-                //   alignItems: "center",
-                //   justifyContent: "flex-start"
-                // }}
-              >
-                <span className="menu-item" {...item.populators}>
-                  {item?.icon && item.icon}
-                  <div className="menu-label">{item?.type && item.type === "component" ? item.action : item.text}</div>
-                </span>
+              <div key={index}>
+                <MenuItem item={item} />
               </div>
             ))}
           </div>
+          <div className="side-bar-footer">{Footer}</div>
         </div>
       </div>
     </React.Fragment>

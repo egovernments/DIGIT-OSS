@@ -6,11 +6,14 @@ const useInboxData = (searchParams) => {
   // const user = Digit.UserService.getUser();
   // const tenantId = user?.info?.tenantId;
 
+  // console.log("find search params here", searchParams);
+
   const fetchInboxData = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     let serviceIds = [];
     let commonFilters = { start: 1, end: 10 };
-    let appFilters = { ...commonFilters, ...searchParams.filters.pgrQuery, ...searchParams.search };
+    const { limit, offset } = searchParams;
+    let appFilters = { ...commonFilters, ...searchParams.filters.pgrQuery, ...searchParams.search, limit, offset };
     let wfFilters = { ...commonFilters, ...searchParams.filters.wfQuery };
     let complaintDetailsResponse = null;
     let combinedRes = [];

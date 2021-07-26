@@ -7,14 +7,16 @@ const useServiceDefs = (tenantId, moduleCode) => {
   const SessionStorage = Digit.SessionStorage;
   let { t } = useTranslation();
 
-  useEffect(async () => {
-    const serviceDefs = await Digit.MDMSService.getServiceDefs(tenantId, moduleCode);
-    SessionStorage.set("serviceDefs", serviceDefs);
+  useEffect(() => {
+    (async () => {
+      const serviceDefs = await Digit.MDMSService.getServiceDefs(tenantId, moduleCode);
+      SessionStorage.set("serviceDefs", serviceDefs);
 
-    const serviceDefsWithKeys = serviceDefs.map((def) => ({ ...def, i18nKey: t("SERVICEDEFS." + def.serviceCode.toUpperCase()) }));
-    console.log("serviceDefs:", serviceDefsWithKeys);
-    setLocalMenu(serviceDefsWithKeys);
-  }, []);
+      const serviceDefsWithKeys = serviceDefs.map((def) => ({ ...def, i18nKey: t("SERVICEDEFS." + def.serviceCode.toUpperCase()) }));
+      // console.log("find serviceDefs here", serviceDefsWithKeys);
+      setLocalMenu(serviceDefsWithKeys);
+    })();
+  }, [t, tenantId, moduleCode]);
 
   return localMenu;
 };

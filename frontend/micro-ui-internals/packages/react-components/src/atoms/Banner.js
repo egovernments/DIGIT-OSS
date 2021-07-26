@@ -2,8 +2,10 @@ import React from "react";
 import { SuccessSvg } from "./svgindex";
 import { ErrorSvg } from "./svgindex";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 const Successful = (props) => {
+  const { t } = useTranslation();
   const user_type = Digit.SessionStorage.get("userType");
 
   return (
@@ -11,8 +13,8 @@ const Successful = (props) => {
       <header>{props.props.message}</header>
       <div>
         {/* <img src={success} alt="successfull submition"/> */}
-        <SuccessSvg />
-        <h2>{props?.props?.complaintNumber ? "Complaint No." : props.props.info}</h2>
+        {props?.props?.svg || <SuccessSvg />}
+        <h2>{props?.props?.complaintNumber ? t("CS_PGR_COMPLAINT_NUMBER") : props.props.info}</h2>
         <p>{props?.props?.complaintNumber ? props?.props?.complaintNumber : props?.props?.applicationNumber}</p>
       </div>
     </div>
@@ -20,6 +22,7 @@ const Successful = (props) => {
 };
 
 const Error = (props) => {
+  const { t } = useTranslation();
   const user_type = Digit.SessionStorage.get("userType");
 
   return (
@@ -27,6 +30,8 @@ const Error = (props) => {
       <header>{props.props.message}</header>
       <ErrorSvg />
       {/* <img src={error} alt="error while submition"/> */}
+      <h2>{props?.props?.complaintNumber ? t("CS_PGR_COMPLAINT_NUMBER") : props.props.info}</h2>
+      <p>{props?.props?.complaintNumber ? props?.props?.complaintNumber : props?.props?.applicationNumber}</p>
     </div>
   );
 };

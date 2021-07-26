@@ -1,22 +1,22 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import PGRCard from "./components/PGRCard";
 
 import getRootReducer from "./redux/reducers";
 import CitizenApp from "./pages/citizen";
 
 import EmployeeApp from "./EmployeeApp";
-import { Header, HomeLink, Loader } from "@egovernments/digit-ui-react-components";
+import { ComplaintIcon, CitizenHomeCard, Loader } from "@egovernments/digit-ui-react-components";
 import { PGR_CITIZEN_CREATE_COMPLAINT } from "./constants/Citizen";
-
+import { useTranslation } from "react-i18next";
+import { LOCALE } from "./constants/Localization";
 export const PGRReducers = getRootReducer;
 
-export const PGRModule = ({ stateCode, userType, tenants }) => {
+const PGRModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "PGR";
-  const state = useSelector((state) => state["pgr"]);
-  const language = state?.common?.selectedLanguage;
-  const store = Digit.Services.useStore({ stateCode, moduleCode, language });
+  const language = Digit.StoreData.getCurrentLanguage();
+  const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
 
-  if (Object.keys(store).length === 0) {
+  if (isLoading) {
     return <Loader />;
   }
 
@@ -29,18 +29,36 @@ export const PGRModule = ({ stateCode, userType, tenants }) => {
   }
 };
 
-export const PGRLinks = ({ matchPath }) => {
+const PGRLinks = ({ matchPath }) => {
+  const { t } = useTranslation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
 
   useEffect(() => {
     clearParams();
   }, []);
 
-  return (
-    <React.Fragment>
-      <Header>Complaints</Header>
-      <HomeLink to={`${matchPath}/create-complaint/complaint-type`}>File a Complaint</HomeLink>
-      <HomeLink to={`${matchPath}/complaints`}>My Complaints</HomeLink>
-    </React.Fragment>
-  );
+  const links = [
+    {
+      link: `${matchPath}/create-complaint/complaint-type`,
+      i18nKey: t("CS_COMMON_FILE_A_COMPLAINT"),
+    },
+    {
+      link: `${matchPath}/complaints`,
+      i18nKey: t(LOCALE.MY_COMPLAINTS),
+    },
+  ];
+
+  return <CitizenHomeCard header={t("CS_COMMON_HOME_COMPLAINTS")} links={links} Icon={ComplaintIcon} />;
+};
+
+const componentsToRegister = {
+  PGRModule,
+  PGRLinks,
+  PGRCard,
+};
+
+export const initPGRComponents = () => {
+  Object.entries(componentsToRegister).forEach(([key, value]) => {
+    Digit.ComponentRegistryService.setComponent(key, value);
+  });
 };

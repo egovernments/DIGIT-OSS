@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import merge from "lodash.merge";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createComplaint } from "../../../redux/actions/index";
 import { PGR_CITIZEN_COMPLAINT_CONFIG, PGR_CITIZEN_CREATE_COMPLAINT } from "../../../constants/Citizen";
 import Response from "./Response";
@@ -18,7 +18,8 @@ export const CreateComplaint = () => {
   const history = useHistory();
   const registry = useContext(ComponentProvider);
   const dispatch = useDispatch();
-  const common = useSelector((state) => state.common);
+  const { data: storeData, isLoading } = Digit.Hooks.useStore.getInitData();
+  const { stateInfo } = storeData || {};
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_CREATE_COMPLAINT, {});
   // const [customConfig, setConfig] = Digit.Hooks.useSessionStorage(PGR_CITIZEN_COMPLAINT_CONFIG, {});
   const config = useMemo(() => merge(defaultConfig, Digit.Customizations.PGR.complaintConfig), [Digit.Customizations.PGR.complaintConfig]);
@@ -42,7 +43,11 @@ export const CreateComplaint = () => {
     let { nextStep } = config.routes[currentPath];
     let compType = Digit.SessionStorage.get(PGR_CITIZEN_CREATE_COMPLAINT);
     if (nextStep === "sub-type" && compType.complaintType.key === "Others") {
-      setParams({ ...params, subType: { key: "Others" } });
+      setParams({
+        ...params,
+        complaintType: { key: "Others", name: t("SERVICEDEFS.OTHERS") },
+        subType: { key: "Others", name: t("SERVICEDEFS.OTHERS") },
+      });
       nextStep = config.routes[nextStep].nextStep;
     }
     setNextStep(nextStep);
@@ -52,7 +57,6 @@ export const CreateComplaint = () => {
     if (paramState?.complaintType) {
       const { city_complaint, locality_complaint, uploadedImages, complaintType, subType, details, ...values } = paramState;
       const { code: cityCode, name: city } = city_complaint;
-
       const { code: localityCode, name: localityName } = locality_complaint;
       const _uploadImages = uploadedImages?.map((url) => ({
         documentType: "PHOTO",
@@ -71,7 +75,7 @@ export const CreateComplaint = () => {
         region: city,
         localityCode,
         localityName,
-        state: common.stateInfo.name,
+        state: stateInfo.name,
         uploadedImages: _uploadImages,
       };
 
@@ -93,11 +97,13 @@ export const CreateComplaint = () => {
     goNext();
   };
 
+  if (isLoading) return null;
+
   return (
     <Switch>
       {Object.keys(config.routes).map((route, index) => {
         const { component, texts, inputs } = config.routes[route];
-        const Component = typeof component === "string" ? registry.getComponent(component) : component;
+        const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${match.path}/${route}`} key={index}>
             <Component config={{ texts, inputs }} onSelect={handleSelect} onSkip={handleSkip} value={params} t={t} />

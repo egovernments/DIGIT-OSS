@@ -72,7 +72,7 @@
 
 .upload-file {
   height: 56px;
-  @apply relative border-2 border-input-border w-full;
+  @apply relative border border-input-border w-full;
 
   div {
     @apply flex flex-row h-full items-center pl-md;
@@ -82,7 +82,8 @@
     }
   }
   input {
-    @apply absolute top-0 left-0 opacity-0 h-full w-1/3;
+    width: 160px;
+    @apply absolute top-0 left-0 opacity-0 h-full;
   }
 }
 

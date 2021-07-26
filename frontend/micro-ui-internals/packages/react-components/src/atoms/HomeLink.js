@@ -9,7 +9,7 @@ const HomeLink = ({ to, children }) => (
 );
 
 HomeLink.propTypes = {
-  to: PropTypes.string,
+  to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   children: PropTypes.string,
 };
 

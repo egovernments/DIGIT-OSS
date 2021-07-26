@@ -18,6 +18,7 @@ export const ConnectingCheckPoints = (props) => {
   if (props.children && props.children.length >= 1) {
     return (
       <React.Fragment>
+        {/* {console.log("find connecting checkpoint children here",props.children)} */}
         {props.children.map((child, index) => {
           return props.children.length === ++index ? (
             <div key={index}>{child}</div>

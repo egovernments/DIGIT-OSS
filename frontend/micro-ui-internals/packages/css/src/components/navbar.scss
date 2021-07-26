@@ -86,3 +86,16 @@
 .navbar-subheader{
     @apply font-light px-sm border-solid border-l border-white border-opacity-100
 }*/
+
+.side-bar-footer{
+  width: 200px;
+  margin-left: 50px;
+  @apply absolute bottom-0;
+}
+
+.digit-footer{
+  @apply flex h-4 mb-sm;
+  img{
+    @apply mr-sm;
+  }
+}

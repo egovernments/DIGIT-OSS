@@ -14,7 +14,6 @@ const MiniUpload = (props) => {
 
 const UploadImages = (props) => {
   if (props.thumbnails && props.thumbnails.length > 0) {
-    console.log("%c 🏎️: props in Upload ", "font-size:36px;", props.thumbnails);
     return (
       <div className="multi-upload-wrap">
         {props.thumbnails.map((thumbnail, index) => {

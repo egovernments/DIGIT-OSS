@@ -24,7 +24,7 @@ const useComplaintStatus = () => {
         }));
       setComplaintStatus(applicationStatus);
     })();
-  }, []);
+  }, [t, tenantId]);
 
   return complaintStatus;
 };

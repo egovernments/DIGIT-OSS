@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { RatingCard } from "@egovernments/digit-ui-react-components";
 import { useParams, Redirect, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,7 +9,7 @@ const SelectRating = ({ parentRoute }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
-  console.log("parent route", parentRoute);
+  // console.log("parent route", parentRoute);
   const history = useHistory();
 
   let tenantId = Digit.ULBService.getCurrentTenantId();
@@ -25,7 +25,7 @@ const SelectRating = ({ parentRoute }) => {
         comments: data.comments,
         verificationDocuments: [],
       };
-      console.log("updtaed complaint details", complaintDetails);
+      // console.log("updtaed complaint details", complaintDetails);
       updateComplaint({ service: complaintDetails.service, workflow: complaintDetails.workflow });
       history.push(`${parentRoute}/response`);
     }
@@ -34,7 +34,7 @@ const SelectRating = ({ parentRoute }) => {
   const config = {
     texts: {
       header: "CS_COMPLAINT_RATE_HELP_TEXT",
-      submitBarLabel: "PT_COMMONS_NEXT",
+      submitBarLabel: "CS_COMMONS_NEXT",
     },
     inputs: [
       {

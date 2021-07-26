@@ -32,13 +32,15 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
   }, []);
 
   return (
-    <TimeLine
-      isLoading={workFlowDetails.isLoading}
-      data={workFlowDetails.data}
-      serviceRequestId={id}
-      complaintWorkflow={complaintDetails.workflow}
-      rating={complaintDetails.audit.rating}
-    />
+    !workFlowDetails.isLoading && (
+      <TimeLine
+        // isLoading={workFlowDetails.isLoading}
+        data={workFlowDetails.data}
+        serviceRequestId={id}
+        complaintWorkflow={complaintDetails.workflow}
+        rating={complaintDetails.audit.rating}
+      />
+    )
   );
 };
 
@@ -62,12 +64,14 @@ const ComplaintDetailsPage = (props) => {
 
   const [loader, setLoader] = useState(false);
 
-  useEffect(async () => {
-    if (complaintDetails) {
-      setLoader(true);
-      await revalidate();
-      setLoader(false);
-    }
+  useEffect(() => {
+    (async () => {
+      if (complaintDetails) {
+        setLoader(true);
+        await revalidate();
+        setLoader(false);
+      }
+    })();
   }, []);
 
   function zoomImage(imageSource, index) {
@@ -80,7 +84,7 @@ const ComplaintDetailsPage = (props) => {
   }
 
   const onWorkFlowChange = (data) => {
-    console.log("ssdsodososooo ==== ", data);
+    // console.log("ssdsodososooo ==== ", data);
     let timeline = data?.timeline;
     timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
   };
@@ -129,7 +133,7 @@ const ComplaintDetailsPage = (props) => {
                   text={
                     Array.isArray(complaintDetails.details[flag])
                       ? complaintDetails.details[flag].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
-                      : t(complaintDetails.details[flag])
+                      : t(complaintDetails.details[flag]) || "N/A"
                   }
                   last={index === arr.length - 1}
                 />
@@ -143,8 +147,8 @@ const ComplaintDetailsPage = (props) => {
           <Card>{complaintDetails?.service && <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} />}</Card>
           <Card>
             <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
-            <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name={""} />
-            <SubmitBar disabled={disableComment} onSubmit={submitComment} label="Send" />
+            <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name="" />
+            <SubmitBar disabled={disableComment || comment.length < 1} onSubmit={submitComment} label={t("CS_PGR_SEND_COMMENT")} />
           </Card>
           {toast && (
             <Toast

@@ -4,16 +4,7 @@ import { useQuery } from "react-query";
 import { StoreService } from "../services/molecules/Store/service";
 
 export const useStore = ({ stateCode, moduleCode, language }) => {
-  const [defaultStore, setDefaultStore] = useState({});
-  useEffect(() => {
-    StoreService.defaultData(stateCode, moduleCode, language)
-      .then((defaultData) => {
-        setDefaultStore({ loading: false, ...defaultData });
-      })
-      .catch((err) => console.log("err:", err));
-  }, [stateCode, moduleCode, language]);
-
-  return defaultStore;
+  return useQuery(["store", stateCode, moduleCode, language], () => StoreService.defaultData(stateCode, moduleCode, language));
 };
 
 export const useInitStore = (stateCode, enabledModules) => {

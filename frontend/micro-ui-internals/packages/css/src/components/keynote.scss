@@ -9,12 +9,19 @@
   p {
     @apply text-text-primary text-body-l;
   }
+  
+  .caption {
+    @apply text-body-l text-text-secondary;
+  }
 }
 
 @screen dt {
   .key-note-pair {
     p {
       @apply text-body-l-dt;
+    }
+    .caption {
+      @apply text-body-l-dt text-text-secondary;
     }
   }
 }

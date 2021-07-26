@@ -49,7 +49,7 @@ const ReasonPage = (props) => {
         ]}
       />
 
-      <SubmitBar label={t(`${LOCALIZATION_KEY.PT_COMMONS}_NEXT`)} onSubmit={onSave} />
+      <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={onSave} />
     </Card>
   );
 };

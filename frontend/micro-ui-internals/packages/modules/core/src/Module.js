@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { getI18n } from "react-i18next";
 import { Body, Loader } from "@egovernments/digit-ui-react-components";
 
-import { DigitApp } from "./components/App";
+import { DigitApp } from "./App";
 
 import getStore from "./redux/store";
 
@@ -40,14 +40,17 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: Infinity,
+        staleTime: 15 * 60 * 1000,
+        cacheTime: 30 * 60 * 1000,
       },
     },
   });
+
   const ComponentProvider = Digit.Contexts.ComponentProvider;
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
 
   return (
-    <div className={userType}>
+    <div>
       <QueryClientProvider client={queryClient}>
         <ComponentProvider.Provider value={registry}>
           <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />

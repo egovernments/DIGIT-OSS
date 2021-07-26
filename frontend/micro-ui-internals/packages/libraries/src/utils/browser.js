@@ -33,4 +33,4 @@ const mobileCheck = () => {
   return check;
 };
 
-export default { isWebview: checkWebview(), isMobile: mobileCheck() };
+export default { isWebview: checkWebview, isMobile: mobileCheck };

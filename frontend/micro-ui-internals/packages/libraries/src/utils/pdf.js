@@ -1,126 +1,229 @@
-var pdfMake = require("pdfmake/build/pdfmake.js");
-var pdfFonts = require("pdfmake/build/vfs_fonts.js");
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import { Fonts } from "./fonts";
+const pdfMake = require("pdfmake/build/pdfmake.js");
+// const pdfFonts = require("pdfmake/build/vfs_fonts.js");
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const jsPdfGenerator = ({ logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
+pdfMake.vfs = Fonts;
+
+pdfMake.fonts = {
+  //   Roboto: {
+  //     normal: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf",
+  //     bold: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf"
+  //   },
+  Hind: {
+    normal: "Hind-Regular.ttf",
+    bold: "Hind-Bold.ttf",
+  },
+};
+
+const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
+  if (
+    window &&
+    window.mSewaApp &&
+    window.mSewaApp.isMsewaApp &&
+    window.mSewaApp.isMsewaApp() &&
+    window.mSewaApp.downloadBase64File &&
+    window.Digit.Utils.browser.isMobile()
+  ) {
+    // we are running under webview
+    receiptPDF.getBase64((data) => {
+      window.mSewaApp.downloadBase64File(data, filename);
+    });
+  } else {
+    // we are running in browser
+    receiptPDF.download(filename);
+  }
+};
+
+function getBase64Image(tenantId) {
+  try {
+    const img = document.getElementById(`logo-${tenantId}`);
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    return canvas.toDataURL("image/png");
+  } catch (e) {
+    console.error("asd", e);
+    return "";
+  }
+}
+
+const defaultLogo =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABBtJREFUWAntV11oVEcUnjN3mzXm111toQ8lWOtLTbIG0YgpMdQ05CEv0iTU1hhR7EMRWYuKSkteVExJBRGkpaUk0ChRSYtpKam4sbE0ia7RSNaS0uIfWtT4E8Xs5u7O8Vy7c3f27t2fh4W+ZF7OmfN9c86Ze2bOvZex/3mAGv/RIU9xJCL2IWIdAS7C/Nyhtbm8l39XeVKfOrLcHZoOHmCA7zJkC6VdSmAQRoYBAHbCXZBzED726xKT0kwgGnyUgpdI0JBEEMD4B+4dV3pU+9Mvyl4NMTZKAV5X7cl0APC5P127BqBNqBwuJ5Gw2G8NbmDIGEcQR+9/u6pAcg0ZYtiRaXCDT75rHnT0bjF0dZgJkLP3VEDVEakcj58ti7MBJOWrPFUHJurUuaGbCVCd5llBdQ4Yw7GnUaM9Fal4JjptJCGGmQA964upnPBXHCYOTSciDMGcp1qnYpzBBXVu6LEEGHxOByViJURJX7m2+W+qmKax3cn4Kk/qdJgnnXOdHXIupZnA/B1jw5TP+wzgngSpLEhX6ahLy/dKm5Su7WODBK4l/I60JZPkJ0DcuvxPLvxr5ZjXUAL45crchxD00A12OR3apTyv/67E7CQerndOztwto9uymPI1N2RwOcMwgBYorigah5qBsN36WVtCCZI9kqqu8Td0DG2mhlJKdb8JGvQOrV86YMevPDZagjpuQoFLqPY3gDtOjawvH7TjZpRAZeelesHwON3jQtUJtej2kdalu1RbZZe/QSB0U6L5ph0AObB9wy0Vn5m2qJI2geWd19yI09eo8SywLjbmdMgaRjZ4+gx9RffV13BGD1BXNV5kCYMzrW641dOvAnGnVgVMHYLUPu2DGxxk4iPJFeFwfbLgL7lcfCi5UqZNgK7WIkm2k4AxHARLyaUSJuBpE6AtBuwCmzaAGM5Tc6neMW7UQdoEcnOdv9Cpv24GjFNAAPCvpalwTuFP1J5vy7kqqRtGOGjfqDZDT5vAQNPbzzTgzQmOAWZotXe4xXNeOj3T9OYTjUMzHU1Le4YQImwdaimndh8/0t4CSV/T83fR1PRUI9W8lALc4jla3x/ryv6UuCqrvh+bp+t6IwL81weQn6abMqFyZnX5BDIugVyQifT52hxD7HyVAFFKb8nreVg46K354bHd2qwn0H6u9i0dI9S2scIMSN8YHHDjnmrfz6YtqmQ1gZ7xxpyJ+5MX6ROYDqplADzPAc2zs/rXv1Qk7TVUyen0iclHDbbBjYWIc3UR3mb1kdUEQGC5NYA6p1dzAp7VBKjulgakhjf+sqwNKoNOGO8i9Uxz8H6KEkzKAvzRimX1Cex+58w/9O2/nT4S4v7/jKDUyo/vrfZ1WxPI6i2Qzvf/VrtKRMJbKewSeiI3aJcn96w++53EVfkCw79XQZYr/EsAAAAASUVORK5CYII=";
+const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
+  const emailLeftMargin =
+    email.length <= 15
+      ? 190
+      : email.length <= 20
+      ? 150
+      : email.length <= 25
+      ? 130
+      : email.length <= 30
+      ? 90
+      : email.length <= 35
+      ? 50
+      : email.length <= 40
+      ? 10
+      : email.length <= 45
+      ? 0
+      : email.length <= 50
+      ? -20
+      : email.length <= 55
+      ? -70
+      : email.length <= 60
+      ? -100
+      : -60;
+
   const dd = {
+    pageMargins: [40, 80, 40, 30],
     header: {
       columns: [
         {
-          image: logo,
+          image: logo || getBase64Image(tenantId) || defaultLogo,
           width: 50,
           margin: [10, 10],
         },
         {
           text: name,
           margin: [20, 25],
+          font: "Hind",
+          fontSize: 14,
           bold: true,
         },
         {
           text: email,
-          alignment: "right",
-          margin: [0, 25, 20],
-          fontSize: "10",
+          margin: [emailLeftMargin, 25, 0, 25],
+          font: "Hind",
+          fontSize: 11,
           color: "#464747",
+        },
+        {
+          text: phoneNumber,
+          color: "#6f777c",
+          font: "Hind",
+          fontSize: 11,
+          margin: [-65, 45, 0, 25],
         },
       ],
     },
+
+    footer: function (currentPage, pageCount) {
+      return {
+        columns: [
+          { text: `${name} / ${heading}`, margin: [15, 0, 0, 0], fontSize: 11, color: "#6f777c", width: 400, font: "Hind" },
+          { text: `Page ${currentPage}`, alignment: "right", margin: [0, 0, 25, 0], fontSize: 11, color: "#6f777c", font: "Hind" },
+        ],
+      };
+    },
     content: [
       {
-        text: phoneNumber,
-        alignment: "right",
-        margin: [-20, 0],
-        color: "#6f777c",
-        fontSize: 10,
-      },
-      {
         text: heading,
-        fontSize: 22,
+        font: "Hind",
+        fontSize: 24,
         bold: true,
-        margin: [-25, 32],
+        margin: [-25, 5, 0, 0],
       },
-      ...createContent(details),
+      ...createContent(details, phoneNumber),
       {
         text: t("PDF_SYSTEM_GENERATED_ACKNOWLEDGEMENT"),
+        font: "Hind",
         fontSize: 11,
         color: "#6f777c",
         margin: [-25, 32],
       },
     ],
+    defaultStyle: {
+      font: "Hind",
+    },
   };
-
-  pdfMake.createPdf(dd).open();
+  const generatedPDF = pdfMake.createPdf(dd);
+  downloadPDFFileUsingBase64(generatedPDF, "acknowledgement.pdf");
 };
 
 export default { generate: jsPdfGenerator };
 
-function createContent(details) {
+function createContent(details, phoneNumber) {
   const data = [];
 
-  details.forEach((detail) => {
-    let column1 = [];
-    let column2 = [];
-
-    data.push({
-      text: `${detail.title}`,
-      fontSize: 16,
-      bold: true,
-      margin: [-25, 20],
-    });
-
-    const newArray = [];
-    let count = 0;
-    let arrayNumber = 0;
-
-    detail.values.forEach((value, index) => {
-      if (count <= 3) {
-        if (!newArray[arrayNumber]) {
-          newArray[arrayNumber] = [];
-        }
-        if (value) {
-          newArray[arrayNumber].push(value);
-        }
-        count++;
-      }
-      if (count === 4) {
-        count = 0;
-        arrayNumber++;
-      }
-    });
-
-    newArray.forEach((value) => {
-      if (value?.length === 2) {
-        createContentForDetailsWithLengthOfTwo(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
-      } else if (value?.length === 1 || value?.length === 3) {
-        createContentForDetailsWithLengthOfOneAndThree(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
-      } else {
-        value.forEach((value, index) => {
-          let margin = [-25, 0, 0, 5];
-          if (index === 1) margin = [15, 0];
-          if (index === 2) margin = [30, 0];
-          if (index === 3) margin = [20, 0];
-          column1.push({
-            text: value.title,
-            fontSize: 11,
-            bold: true,
-            margin,
-          });
-          if (index === 1) margin = [15, 0, 0, 5];
-          if (index === 2) margin = [30, 0, 0, 5];
-          if (index === 3) margin = [20, 0, 0, 5];
-          column2.push({
-            text: value.value,
-            fontSize: 9,
-            margin,
-            color: "#1a1a1a",
-          });
+  details.forEach((detail, index) => {
+    if(detail?.values?.length > 0) {
+      let column1 = [];
+      let column2 = [];
+  
+      if ((index + 1) % 7 === 0) {
+        data.push({
+          text: "",
+          margin: [-25, 0, 0, 200],
         });
-        data.push({ columns: column1 });
-        data.push({ columns: column2 });
-        column1 = [];
-        column2 = [];
       }
-    });
+      
+      data.push({
+        text: `${detail.title}`,
+        font: "Hind",
+        fontSize: 18,
+        bold: true,
+        margin: [-25, 20, 0, 20],
+      });
+  
+      const newArray = [];
+      let count = 0;
+      let arrayNumber = 0;
+  
+      detail.values.forEach((value, index) => {
+        if (count <= 3) {
+          if (!newArray[arrayNumber]) {
+            newArray[arrayNumber] = [];
+          }
+          if (value) {
+            newArray[arrayNumber].push(value);
+          }
+          count++;
+        }
+        if (count === 4) {
+          count = 0;
+          arrayNumber++;
+        }
+      });
+  
+      newArray.forEach((value) => {
+        if (value?.length === 2) {
+          createContentForDetailsWithLengthOfTwo(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
+        } else if (value?.length === 1 || value?.length === 3) {
+          createContentForDetailsWithLengthOfOneAndThree(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
+        } else {
+          value.forEach((value, index) => {
+            let margin = [-25, 0, 0, 5];
+            if (index === 1) margin = [15, 0, 0, 5];
+            if (index === 2) margin = [26, 0, 0, 5];
+            if (index === 3) margin = [30, 0, 0, 5];
+            column1.push({
+              text: value.title,
+              font: "Hind",
+              fontSize: 11,
+              bold: true,
+              margin,
+            });
+            if (index === 1) margin = [15, 0, 0, 10];
+            if (index === 2) margin = [26, 0, 0, 10];
+            if (index === 3) margin = [30, 0, 0, 10];
+            column2.push({
+              text: value.value,
+              font: "Hind",
+              fontSize: 9,
+              margin,
+              color: "#1a1a1a",
+              width: "25%",
+            });
+          });
+          data.push({ columns: column1 });
+          data.push({ columns: column2 });
+          column1 = [];
+          column2 = [];
+        }
+      });
+    }
   });
 
   return data;
@@ -131,28 +234,34 @@ function createContentForDetailsWithLengthOfTwo(values, data, column1, column2, 
     if (index === 0) {
       column1.push({
         text: value.title,
+        font: "Hind",
         fontSize: 12,
         bold: true,
-        margin: [-25, num - 10],
+        margin: [-25, num - 10, -25, 0],
       });
       column2.push({
         text: value.value,
+        font: "Hind",
         fontSize: 9,
         margin: [-25, 5, 0, 0],
         color: "#1a1a1a",
+        width: "25%",
       });
     } else {
       column1.push({
         text: value.title,
+        font: "Hind",
         fontSize: 12,
         bold: true,
-        margin: [-115, num - 10],
+        margin: [-115, num - 10, -115, 0],
       });
       column2.push({
         text: value.value,
+        font: "Hind",
         fontSize: 9,
-        margin: [-115, 5, 0, 0],
+        margin: [15, 5, 0, 0],
         color: "#1a1a1a",
+        width: "25%",
       });
     }
   });
@@ -165,41 +274,50 @@ function createContentForDetailsWithLengthOfOneAndThree(values, data, column1, c
     if (index === 0) {
       column1.push({
         text: value.title,
+        font: "Hind",
         fontSize: 12,
         bold: true,
         margin: values.length > 1 ? [-25, -5, 0, 0] : [-25, 0, 0, 0],
       });
       column2.push({
         text: value.value,
+        font: "Hind",
         fontSize: 9,
         color: "#1a1a1a",
         margin: values.length > 1 ? [-25, 5, 0, 0] : [-25, 5, 0, 0],
+        width: "25%",
       });
     } else if (index === 2) {
       column1.push({
         text: value.title,
+        font: "Hind",
         fontSize: 12,
         bold: true,
         margin: [-60, -5, 0, 0],
       });
       column2.push({
         text: value.value,
+        font: "Hind",
         fontSize: 9,
-        margin: [-60, 5, 0, 0],
+        margin: [26, 5, 0, 0],
         color: "#1a1a1a",
+        width: "25%",
       });
     } else {
       column1.push({
         text: value.title,
+        font: "Hind",
         fontSize: 12,
         bold: true,
         margin: [-28, -5, 0, 0],
       });
       column2.push({
         text: value.value,
+        font: "Hind",
         fontSize: 9,
-        margin: [-28, 5, 0, 0],
+        margin: [15, 5, 0, 0],
         color: "#1a1a1a",
+        width: "25%",
       });
     }
   });

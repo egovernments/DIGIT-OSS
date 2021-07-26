@@ -1,5 +1,4 @@
 .checkbox-wrap {
-  height: 38px;
   @apply flex mb-md relative items-baseline;
 
   input {
@@ -17,7 +16,7 @@
   .custom-checkbox {
     width: 38px;
     height: 38px;
-    @apply absolute top-0 left-0 border-2 border-solid border-input-border z-0;
+    @apply absolute top-0 left-0 border border-solid border-input-border z-0;
 
     img {
       @apply opacity-0;
@@ -34,8 +33,9 @@
     height: 24px;
   }
 
-  input:checked ~ .custom-checkbox {
-    @apply border-4 border-primary-main;
+  input:checked ~ .custom-checkbox,
+  input:hover ~ .custom-checkbox {
+    @apply border-2 border-primary-main;
   }
 
   input:checked ~ .custom-checkbox img {
@@ -47,7 +47,7 @@
   }
 
   .label {
-    margin-left: 40px;
+    margin-left: 56px;
     @apply text-form-field text-text-primary;
   }
 }

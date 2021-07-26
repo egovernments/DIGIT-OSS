@@ -1,5 +1,4 @@
 import { FSMService } from "../../elements/FSM";
-import { UserService } from "../../molecules/User/index";
 
 export const FileDesludging = {
   create: async (tenantId, data) => {

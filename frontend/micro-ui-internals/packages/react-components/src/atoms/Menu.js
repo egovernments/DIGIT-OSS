@@ -2,12 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Menu = (props) => {
+  const keyPrefix = props.localeKeyPrefix || "CS_ACTION";
+
   return (
     <div className="menu-wrap">
       {props.options.map((option, index) => {
         return (
           <div key={index} onClick={() => props.onSelect(option)}>
-            <p>{props.t ? props.t(`CS_ACTION_${option}`) : option}</p>
+            <p>{props.t ? props.t(option.forcedName || `${keyPrefix}_${props.optionKey ? option[props.optionKey] : option}`) : option}</p>
           </div>
         );
       })}

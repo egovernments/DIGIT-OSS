@@ -2,7 +2,7 @@
   @apply mb-lg;
 
   input {
-    @apply border-2 border-solid border-input-border outline-none h-10 w-10 text-form-field text-text-primary text-center mr-md;
+    @apply border-2 border-solid border-input-border outline-none h-10 w-10 text-form-field text-text-primary mr-sm mb-sm text-center;
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {

@@ -2,14 +2,15 @@
   box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
   max-width: 480px;
   z-index: 100;
-  @apply sticky bottom-0 w-full bg-white py-sm px-sm text-right;
+
+  @apply left-0 bottom-0 w-full bg-white py-sm px-sm fixed text-right;
 
   div {
     @apply w-full;
   }
 
   .menu-wrap {
-    @apply absolute bg-white text-left mb-xs z-30;
+    @apply absolute bg-white text-left mb-xs z-30 cursor-pointer;
     bottom: 45px;
     box-shadow: rgba(0, 0, 0, 0.14) 0 8px 10px 1px, rgba(0, 0, 0, 0.12) 0 3px 14px 2px, rgba(0, 0, 0, 0.2) 0 5px 5px -3px;
     width: calc(100% - 16px);
@@ -23,15 +24,12 @@
       }
     }
   }
-
 }
-
 
 @screen dt {
   .action-bar-wrap {
     box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
-    left: 64px;
-    width: calc(100% - 64px);
+    left: 0;
     max-width: none;
     z-index: 20;
 

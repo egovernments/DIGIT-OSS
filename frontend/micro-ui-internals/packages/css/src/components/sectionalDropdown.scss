@@ -2,7 +2,7 @@
   @apply mb-lg relative;
 
   .sect-dropdown-input-wrap {
-    @apply block w-full h-10 border-2 border-solid border-input-border;
+    @apply block w-full h-10 border border-solid border-input-border;
 
     input[type="text"] {
       width: calc(100% - 32px);

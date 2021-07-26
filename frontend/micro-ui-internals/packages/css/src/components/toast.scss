@@ -1,10 +1,13 @@
 .toast-success {
-  width: 480px;
+  max-width: 480px;
+  width: calc(100% - 20px);
   bottom: 64px;
-  left: calc(50% - 240px);
+  left: 0;
+  margin: 0 10px;
   gap: 16px;
   border-radius: 4px;
-  @apply fixed flex bg-success h-12 z-20 items-center pl-md pr-sm;
+  min-height: 48px;
+  @apply fixed flex bg-success leading-7 z-20 items-center pl-md pr-sm;
 
   svg {
     height: 20px;
@@ -17,5 +20,12 @@
 
   h2 {
     @apply text-body-s-dt text-white;
+  }
+}
+
+@screen dt {
+  .toast-success {
+    width: 100%;
+    left: calc(50% - 240px);
   }
 }

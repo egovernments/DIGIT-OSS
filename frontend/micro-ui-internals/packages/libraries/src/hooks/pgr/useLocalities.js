@@ -6,14 +6,16 @@ const useLocalities = ({ city }) => {
   let locality = [];
   const [localityList, setLocalityList] = useState(null);
   const [localities, setLocalities] = useState(null);
-  useEffect(async () => {
-    let tenantId = Digit.ULBService.getCurrentTenantId();
-    let response = await Digit.LocationService.getLocalities({ tenantId: tenantId });
-    let __localityList = [];
-    if (response && response.TenantBoundary.length > 0) {
-      __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
-    }
-    setLocalityList(__localityList);
+  useEffect(() => {
+    (async () => {
+      let tenantId = Digit.ULBService.getCurrentTenantId();
+      let response = await Digit.LocationService.getLocalities(tenantId);
+      let __localityList = [];
+      if (response && response.TenantBoundary.length > 0) {
+        __localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
+      }
+      setLocalityList(__localityList);
+    })();
   }, [city]);
 
   useEffect(() => {

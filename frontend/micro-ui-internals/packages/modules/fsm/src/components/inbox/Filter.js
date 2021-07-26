@@ -1,172 +1,58 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  Dropdown,
-  CardLabel,
-  RadioButtons,
-  CardCaption,
-  CheckBox,
-  SubmitBar,
-  ActionBar,
-  RemoveableTag,
-} from "@egovernments/digit-ui-react-components";
-import { useSelector } from "react-redux";
+import React from "react";
+import { ActionBar, RemoveableTag, CloseSvg, Loader, Localities } from "@egovernments/digit-ui-react-components";
 import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
+import AssignedTo from "./AssignedTo";
 
-const Filter = (props) => {
-  let { uuid } = Digit.UserService.getUser().info;
-
+const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, removeParam, ...props }) => {
   const { t } = useTranslation();
-  const { pgr } = useSelector((state) => state);
 
-  const [selectAssigned, setSelectedAssigned] = useState("");
-  const [selectedApplicationType, setSelectedApplicationType] = useState(null);
-  const [selectedLocality, setSelectedLocality] = useState(null);
-  const [pendingApplicationCount, setPendingApplicationCount] = useState([]);
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
+  const isFstpOperator = Digit.UserService.hasAccess("FSTP") || false;
 
-  const [pgrfilters, setPgrFilters] = useState({
-    serviceCode: [],
-    locality: ["ALakapuri", "Railway medical Colony"],
-    applicationStatus: [],
-  });
+  // const hideLocalityFilter = Digit.UserService.hasAccess(["FSM_CREATOR_EMP", "FSM_VIEW_EMP"]);
 
-  const [wfFilters, setWfFilters] = useState({
-    assignee: [],
-  });
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const state = tenantId.split(".")[0];
 
-  //TODO change city fetch from user tenantid
-  // let localities = Digit.Hooks.pgr.useLocalities({ city: "Amritsar" });
-  let localities = ["Alakapuri", "Railway medical Colony"];
-  // let applicationStatus = Digit.Hooks.pgr.useApplicationStatus();
-  // let serviceDefs = Digit.Hooks.pgr.useServiceDefs();
+  const { data: roleStatuses, isFetched: isRoleStatusFetched } = Digit.Hooks.fsm.useMDMS(state, "DIGIT-UI", "RoleStatusMapping");
 
-  const onRadioChange = (value) => {
-    setSelectedAssigned(value);
-    uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
-    setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
-  };
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
 
-  let pgrQuery = {};
-  let wfQuery = {};
+  const userRoleDetails = roleStatuses?.filter((roleDetails) => userRoles.filter((role) => role === roleDetails.userRole)[0]);
 
-  useEffect(() => {
-    for (const property in pgrfilters) {
-      if (Array.isArray(pgrfilters[property])) {
-        let params = pgrfilters[property].map((prop) => prop.code).join();
-        if (params) {
-          pgrQuery[property] = params;
-        }
-      }
-    }
-    for (const property in wfFilters) {
-      if (Array.isArray(wfFilters[property])) {
-        let params = wfFilters[property].map((prop) => prop.code).join();
-        if (params) {
-          wfQuery[property] = params;
-        }
-      }
-    }
-    //queryString = queryString.substring(0, queryString.length - 1);
-    handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-  }, [pgrfilters, wfFilters]);
-
-  const ifExists = (list, key) => {
-    return list.filter((object) => object.code === key.code).length;
-  };
-
-  function applicationType(_type) {
-    const type = { key: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
-    if (!ifExists(pgrfilters.serviceCode, type)) {
-      setPgrFilters({ ...pgrfilters, serviceCode: [...pgrfilters.serviceCode, type] });
-    }
-  }
-
-  function onSelectLocality(value, type) {
-    // if (!ifExists(pgrfilters.locality, value)) {
-    //   setPgrFilters({ ...pgrfilters, locality: [...pgrfilters.locality, value] });
-    // }
-    setPgrFilters((prevState) => {
-      return { ...prevState, locality: [...prevState.locality.filter((item) => item !== value), value] };
-    });
-  }
-
-  useEffect(() => {
-    if (pgrfilters.serviceCode.length > 1) {
-      setSelectedApplicationType(`${pgrfilters.serviceCode.length} selected`);
-    } else {
-      setSelectedApplicationType(pgrfilters.serviceCode[0]);
-    }
-  }, [pgrfilters.serviceCode]);
-
-  useEffect(() => {
-    if (pgrfilters.locality.length > 1) {
-      setSelectedLocality(`${pgrfilters.locality.length} selected`);
-    } else {
-      setSelectedLocality(pgrfilters.locality[0]);
-    }
-  }, [pgrfilters.locality]);
-
-  const onRemove = (index, key) => {
-    let afterRemove = pgrfilters[key].filter((value, i) => {
-      return i !== index;
-    });
-    setPgrFilters({ ...pgrfilters, [key]: afterRemove });
-  };
-
-  const handleAssignmentChange = (e, type) => {
-    if (e.target.checked) {
-      setPgrFilters({ ...pgrfilters, applicationStatus: [...pgrfilters.applicationStatus, { code: type.code }] });
-    } else {
-      const filteredStatus = pgrfilters.applicationStatus.filter((value) => {
-        return value.code !== type.code;
-      })[0];
-      setPgrFilters({ ...pgrfilters, applicationStatus: [{ code: filteredStatus }] });
-    }
-  };
-
-  function clearAll() {
-    setPgrFilters({ serviceCode: [], locality: [], applicationStatus: [] });
-    setWfFilters({ assigned: [{ code: [] }] });
-    setSelectedAssigned("");
-    setSelectedApplicationType(null);
-    setSelectedLocality(null);
-  }
-
-  const handleFilterSubmit = () => {
-    props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-    //props.onClose();
-  };
-
-  const GetSelectOptions = (lable, options, selected, select, optionKey, onRemove, key, displayKey) => (
-    <div>
-      <div className="filter-label">{lable}</div>
-      <Dropdown
-        option={options}
-        selected={selected}
-        select={(value) => {
-          select(value, key);
-        }}
-      />
-      <div className="tag-container">
-        {pgrfilters[key].length > 0 &&
-          pgrfilters[key].map((value, index) => {
-            if (value[displayKey]) {
-              return <RemoveableTag key={index} text={`${value[displayKey].slice(0, 22)} ...`} onClick={() => onRemove(index, key)} />;
-            } else {
-              return <RemoveableTag key={index} text={`${value.slice(0, 22)} ...`} onClick={() => onRemove(index, key)} />;
-            }
-          })}
-      </div>
-    </div>
+  const mergedRoleDetails = userRoleDetails?.reduce(
+    (merged, details) => ({
+      fixed: details?.fixed && merged?.fixed,
+      statuses: [...merged?.statuses, ...details?.statuses].filter((item, pos, self) => self.indexOf(item) == pos),
+      zeroCheck: details?.zeroCheck || merged?.zeroCheck,
+    }),
+    { statuses: [] }
   );
+
+  // console.log("find use query localities here", localities)
+  const selectLocality = (d) => {
+    onFilterChange({ locality: [...searchParams?.locality, d] });
+  };
+
+  const onStatusChange = (e, type) => {
+    if (e.target.checked) onFilterChange({ applicationStatus: [...searchParams?.applicationStatus, type] });
+    else onFilterChange({ applicationStatus: searchParams?.applicationStatus.filter((option) => type.name !== option.name) });
+  };
+
+  const clearAll = () => {
+    onFilterChange({ applicationStatus: [], locality: [], uuid: { code: "ASSIGNED_TO_ME", name: "Assigned to Me" } });
+    props?.onClose?.();
+  };
 
   return (
     <React.Fragment>
-      <div className="filter">
+      <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
         <div className="filter-card">
           <div className="heading">
-            <div className="filter-label">{t("ES_INBOX_FILTER_BY")}:</div>
+            <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
             <div className="clearAll" onClick={clearAll}>
               {t("ES_COMMON_CLEAR_ALL")}
             </div>
@@ -175,33 +61,66 @@ const Filter = (props) => {
                 {t("ES_COMMON_CLEAR_ALL")}
               </span>
             )}
-            {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
+            {props.type === "mobile" && (
+              <span onClick={props.onClose}>
+                <CloseSvg />
+              </span>
+            )}
           </div>
           <div>
-            <RadioButtons
-              onSelect={onRadioChange}
-              selectedOption={selectAssigned}
-              optionsKey="name"
-              options={[
-                { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
-                { code: "ASSIGNED_TO_ALL", name: t("ES_INBOX_ASSIGNED_TO_ALL") },
-              ]}
-            />
+            {!DSO && !isFstpOperator && searchParams && (
+              <AssignedTo onFilterChange={onFilterChange} searchParams={searchParams} paginationParms={paginationParms} tenantId={tenantId} t={t} />
+            )}
             <div>
-              {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality", "name")}
+              {/* {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")} */}
             </div>
-            <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />
+            {/* <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={searchParams} /> */}
+          </div>
+
+          {mergedRoleDetails?.statuses?.length > 0 ? (
+            <div>
+              <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
+              {/* <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} /> */}
+              <Localities selectLocality={selectLocality} tenantId={tenantId} boundaryType="revenue" />
+              <div className="tag-container">
+                {searchParams?.locality.map((locality, index) => {
+                  return (
+                    <RemoveableTag
+                      key={index}
+                      text={locality.i18nkey}
+                      onClick={() => {
+                        onFilterChange({ locality: searchParams?.locality.filter((loc) => loc.code !== locality.code) });
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+          <div>
+            {isRoleStatusFetched && mergedRoleDetails ? (
+              <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} mergedRoleDetails={mergedRoleDetails} statusMap={props?.applications?.statuses} />
+            ) : (
+              <Loader />
+            )}
           </div>
         </div>
       </div>
-      <ActionBar>
-        {props.type === "mobile" && (
-          <ApplyFilterBar labelLink={t("CS_COMMON_CLEAR_ALL")} buttonLink={t("CS_COMMON_FILTER")} onClear={clearAll} onSubmit={props.onClose} />
-        )}
-      </ActionBar>
-      {/* <ActionBar>
-        <SubmitBar label="Take Action" />
-      </ActionBar> */}
+      {props.type === "mobile" && (
+        <ActionBar>
+          <ApplyFilterBar
+            submit={false}
+            labelLink={t("ES_COMMON_CLEAR_ALL")}
+            buttonLink={t("ES_COMMON_FILTER")}
+            onClear={clearAll}
+            onSubmit={() => {
+              if (props.type === "mobile") onSearch({ delete: ["applicationNos"] });
+              else onSearch();
+            }}
+            style={{ flex: 1 }}
+          />
+        </ActionBar>
+      )}
     </React.Fragment>
   );
 };

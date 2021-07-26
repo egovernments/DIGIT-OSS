@@ -1,38 +1,14 @@
-import { Header, LinkButton, Table } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
-import React from "react";
+import { Header, LinkButton, Loader, Table } from "@egovernments/digit-ui-react-components";
+import { Link, useParams } from "react-router-dom";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-const ApplicationAudit = () => {
+const ApplicationAudit = ({ parentRoute }) => {
   const { t } = useTranslation();
+  const { id } = useParams();
+  const { tenantId } = Digit.UserService.getUser().info;
 
-  const data = React.useMemo(
-    () => [
-      {
-        when: "12/08/2020, 12:50:34 AM",
-        who: "Ajit Singh (Citizen)",
-        what: (
-          <p>
-            New Request{" "}
-            <Link to={`/digit-ui/employee/fsm/collect-payment`}>
-              <LinkButton label={t("ES_VIEW_APPLICATION")} style={{ color: "#1671ba", marginLeft: "8px" }} />
-            </Link>
-          </p>
-        ),
-      },
-      {
-        when: "12/08/2020, 12:50:34 AM",
-        who: "Araavind (Employee)",
-        what: 'Pit Size - "1m x 1m x 1m',
-      },
-      {
-        when: "12/08/2020, 12:50:34 AM",
-        who: "Prakash (DSO)",
-        what: 'Volumne of SLudge - "223 ltrs"',
-      },
-    ],
-    []
-  );
+  const { data: auditResponse, isLoading } = Digit.Hooks.fsm.useApplicationAudit(tenantId, { applicationNo: id });
 
   const columns = React.useMemo(
     () => [
@@ -52,11 +28,60 @@ const ApplicationAudit = () => {
     []
   );
 
+  const whenList = auditResponse?.fsmAudit?.map((e) => new Date(e.when).toLocaleString());
+  const uuids = auditResponse?.fsmAudit?.map((e) => e.who);
+
+  const userList = Digit.Hooks.useUserSearch(
+    // tenantId.includes(".") ? tenantId.split(".")[0] : tenantId,
+    null,
+    { uuid: uuids },
+    {},
+    { enabled: uuids ? true : false }
+  );
+
+  const getUserFromUUID = (uuid) => {
+    let fetchedUsers = userList?.data?.user;
+    if (fetchedUsers?.length) return fetchedUsers.filter((e) => e.uuid === uuid)[0];
+    else return null;
+  };
+
+  const getWhat = (what) => {
+    const keys = Object.keys(what);
+    return keys.map((key, i) => (
+      <p key={i}>
+        <span>{key}</span> : <span>{what[key]}</span>
+      </p>
+    ));
+  };
+
+  const data = auditResponse?.fsmAudit?.map((el, index) => {
+    if (userList?.data) console.log("Find me", el.who);
+    const user = getUserFromUUID(el.who);
+    return {
+      when: whenList[index],
+      who: `${user?.name} (${user?.type})`,
+      what:
+        index === 0 ? (
+          <p>
+            New Request{" "}
+            <Link to={`/digit-ui/employee/fsm/application-details/${id}`}>
+              <LinkButton label={t("ES_VIEW_APPLICATION")} style={{ color: "#1671ba", marginLeft: "8px" }} />
+            </Link>
+          </p>
+        ) : (
+          <React.Fragment>{getWhat(el.what)}</React.Fragment>
+        ),
+    };
+  });
+
+  if (isLoading || userList.isLoading) return <Loader />;
+
   return (
-    <div>
+    <div style={{ overflow: "auto" }}>
       <Header>{t("ES_TITLE_APPLICATION_AUDIT")}</Header>
       <Table
-        data={data}
+        t={t}
+        data={data || []}
         columns={columns}
         getCellProps={(cellInfo) => {
           return {

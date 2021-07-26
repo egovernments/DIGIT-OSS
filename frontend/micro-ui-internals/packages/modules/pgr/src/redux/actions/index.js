@@ -15,7 +15,7 @@ import createComplaint from "./complaint";
 export const fetchLocalities = (city) => async (dispatch, getState) => {
   city = city.toLowerCase();
   const { stateInfo } = getState();
-  let response = await Digit.LocationService.getLocalities({ tenantId: `${stateInfo.code}.${city}` });
+  let response = await Digit.LocationService.getLocalities(`${stateInfo.code}.${city}`);
   let localityList = Digit.LocalityService.get(response.TenantBoundary[0]);
   dispatch({
     type: FETCH_LOCALITIES,

@@ -10,13 +10,18 @@
     }
 
     h2 {
-      width: 30%;
+      width: 40%;
       @apply font-bold text-heading-s;
     }
 
     .value {
-      width: 70%;
+      width: 50%;
       @apply text-heading-s;
+      word-break: break-all;
+    }
+    .caption {
+      width: 70%;
+      @apply text-heading-s text-text-secondary;
     }
   }
 
@@ -42,8 +47,13 @@
     }
 
     .value {
-      width: 70%;
+      width: 50%;
       @apply text-heading-s;
+    }
+
+    .caption {
+      width: 70%;
+      @apply text-heading-s text-text-secondary;
     }
   }
 
@@ -53,3 +63,9 @@
     margin: 0;
   }
 }
+
+
+
+.pt-citizen {.data-table {.row {
+  border: none;
+}}}

@@ -37,7 +37,7 @@ const Response = (props) => {
   return (
     <Card>
       {appState.complaints.response && <BannerPicker response={appState} />}
-      <CardText>{t("CS_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
+      <CardText>{t("ES_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
       <Link to="/digit-ui/employee">
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

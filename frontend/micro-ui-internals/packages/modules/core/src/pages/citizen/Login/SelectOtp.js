@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { ButtonSelector, CardText, FormStep, LinkButton, OTPInput } from "@egovernments/digit-ui-react-components";
+import { ButtonSelector, CardText, FormStep, LinkButton, OTPInput, CardLabelError } from "@egovernments/digit-ui-react-components";
 import useInterval from "../../../hooks/useInterval";
 
-const SelectOtp = ({ config, otp, onOtpChange, onResend, onSelect, t }) => {
+const SelectOtp = ({ config, otp, onOtpChange, onResend, onSelect, t, error }) => {
   const [timeLeft, setTimeLeft] = useState(30);
 
   useInterval(
@@ -18,15 +18,16 @@ const SelectOtp = ({ config, otp, onOtpChange, onResend, onSelect, t }) => {
   };
 
   return (
-    <FormStep onSelect={onSelect} config={config} t={t}>
+    <FormStep onSelect={onSelect} config={config} t={t} isDisabled={otp?.length !== 6}>
       <OTPInput length={6} onChange={onOtpChange} value={otp} />
       {timeLeft > 0 ? (
-        <CardText>Resend another otp in {timeLeft}</CardText>
+        <CardText>{`${t("CS_RESEND_ANOTHER_OTP")} ${timeLeft} ${t("CS_RESEND_SECONDS")}`}</CardText>
       ) : (
         <p className="card-text-button" onClick={handleResendOtp}>
-          Resend OTP
+          {t("CS_RESEND_OTP")}
         </p>
       )}
+      {!error && <CardLabelError>{t("CS_INVALID_OTP")}</CardLabelError>}
     </FormStep>
   );
 };

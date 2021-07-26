@@ -7,6 +7,11 @@
 
   .radio-btn-wrap {
     @apply block float-left relative;
+    &:hover {
+      .radio-btn-checkmark {
+        @apply border-primary-main;
+      }
+    }
   }
 
   .radio-btn {
@@ -14,7 +19,7 @@
   }
 
   .radio-btn-checkmark {
-    @apply h-10 w-10 border-2 border-input-border border-solid rounded-full block;
+    @apply h-10 w-10 border border-input-border border-solid rounded-full block;
   }
 
   label {
@@ -26,7 +31,7 @@
   }
 
   .radio-btn-wrap input:checked ~ .radio-btn-checkmark {
-    @apply border-primary-main;
+    @apply border-2 border-primary-main;
   }
 
   .radio-btn-wrap input:checked ~ .radio-btn-checkmark:after {

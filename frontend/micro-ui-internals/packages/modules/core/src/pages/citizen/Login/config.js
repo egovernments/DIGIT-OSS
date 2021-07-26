@@ -3,8 +3,8 @@ export const loginSteps = [
     texts: {
       header: "CS_LOGIN_PROVIDE_MOBILE_NUMBER",
       cardText: "CS_LOGIN_TEXT",
-      nextText: "PT_COMMONS_NEXT",
-      submitBarLabel: "PT_COMMONS_NEXT",
+      nextText: "CS_COMMONS_NEXT",
+      submitBarLabel: "CS_COMMONS_NEXT",
     },
     inputs: [
       {
@@ -13,7 +13,9 @@ export const loginSteps = [
         name: "mobileNumber",
         error: "ERR_HRMS_INVALID_MOB_NO",
         validation: {
+          required: true,
           minLength: 10,
+          maxLength: 10,
         },
       },
     ],
@@ -22,14 +24,16 @@ export const loginSteps = [
     texts: {
       header: "CS_LOGIN_OTP",
       cardText: "CS_LOGIN_OTP_TEXT",
-      nextText: "PT_COMMONS_NEXT",
+      nextText: "CS_COMMONS_NEXT",
+      submitBarLabel: "CS_COMMONS_NEXT",
     },
   },
   {
     texts: {
       header: "CS_LOGIN_PROVIDE_NAME",
       cardText: "CS_LOGIN_NAME_TEXT",
-      nextText: "PT_COMMONS_NEXT",
+      nextText: "CS_COMMONS_NEXT",
+      submitBarLabel: "CS_COMMONS_NEXT",
     },
     inputs: [
       {

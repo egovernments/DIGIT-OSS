@@ -20,7 +20,7 @@ export const newComplaintSteps = [
     path: "/pincode",
     texts: {
       headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
-      header: "CS_ADDCOMPLAINT_PINCODE",
+      header: "CS_FILE_APPLICATION_PINCODE_LABEL",
       cardText: "CS_ADDCOMPLAINT_CHANGE_PINCODE_TEXT",
       nextText: "PT_COMMONS_NEXT",
       skipText: "CORE_COMMON_SKIP_CONTINUE",
@@ -51,8 +51,8 @@ export const newComplaintSteps = [
     path: "/landmark",
     texts: {
       headerCaption: "CS_ADDCOMPLAINT_COMPLAINT_LOCATION",
-      header: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK",
-      cardText: "CS_ADDCOMPLAINT_PROVIDE_LANDMARK_TEXT",
+      header: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE",
+      cardText: "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE_TEXT",
       nextText: "PT_COMMONS_NEXT",
       skipText: "CORE_COMMON_SKIP_CONTINUE",
     },

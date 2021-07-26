@@ -6,7 +6,7 @@ import { PGR_EMPLOYEE_COMPLAINT_DETAILS, PGR_EMPLOYEE_CREATE_COMPLAINT } from ".
 
 export const PgrRoutes = {
   ComplaintsPage: "/complaints",
-  RatingAndFeedBack: "/rate/:id",
+  RatingAndFeedBack: "/rate/:id*",
   ComplaintDetailsPage: "/complaint/details/:id",
   ReasonPage: `/:id`,
   UploadPhoto: `/upload-photo/:id`,
@@ -31,6 +31,7 @@ export const Employee = {
   ComplaintDetails: PGR_EMPLOYEE_COMPLAINT_DETAILS,
   CreateComplaint: PGR_EMPLOYEE_CREATE_COMPLAINT,
   Response: "/response",
+  Home: "/digit-ui/employee",
 };
 
 export const getRoute = (match, route) => `${match.path}${route}`;

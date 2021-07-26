@@ -1,6 +1,6 @@
-import React from "react";
-import { useTable, useRowSelect, usePagination } from "react-table";
-import { ArrowBack, ArrowForward } from "./svgindex";
+import React, { useEffect } from "react";
+import { useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
+import { ArrowBack, ArrowForward, ArrowToFirst, ArrowToLast, SortDown, SortUp } from "./svgindex";
 
 // const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
 //   const defaultRef = React.useRef();
@@ -17,7 +17,31 @@ import { ArrowBack, ArrowForward } from "./svgindex";
 //   );
 // });
 
-const Table = ({ data, columns, getCellProps }) => {
+const noop = () => { };
+
+const Table = ({
+  className = "table",
+  t,
+  data,
+  columns,
+  getCellProps,
+  currentPage = 0,
+  pageSizeLimit = 10,
+  disableSort = true,
+  autoSort = false,
+  initSortId = "",
+  onSearch = false,
+  manualPagination = true,
+  totalRecords,
+  onNextPage,
+  onPrevPage,
+  globalSearch,
+  onSort = noop,
+  onPageSizeChange,
+  onLastPage,
+  onFirstPage,
+  sortParams = [],
+}) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -33,13 +57,32 @@ const Table = ({ data, columns, getCellProps }) => {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    setGlobalFilter,
+    state: { pageIndex, pageSize, sortBy, globalFilter },
   } = useTable(
     {
       columns,
       data,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: currentPage, pageSize: pageSizeLimit, sortBy: autoSort ? [{ id: initSortId, desc: false }] : sortParams },
+      pageCount: totalRecords > 0 ? Math.ceil(totalRecords / pageSizeLimit) : -1,
+      manualPagination: manualPagination,
+      disableMultiSort: false,
+      disableSortBy: disableSort,
+      manualSortBy: autoSort ? false : true,
+      autoResetPage: false,
+      autoResetSortBy: false,
+      disableSortRemove: true,
+      disableGlobalFilter: onSearch === false ? true : false,
+      globalFilter: globalSearch || "text",
+      useControlledState: (state) => {
+        return React.useMemo(() => ({
+          ...state,
+          pageIndex: manualPagination ? currentPage : state.pageIndex,
+        }));
+      },
     },
+    useGlobalFilter,
+    useSortBy,
     usePagination,
     useRowSelect
     // (hooks) => {
@@ -64,14 +107,22 @@ const Table = ({ data, columns, getCellProps }) => {
     // }
   );
 
+  useEffect(() => {
+    onSort(sortBy);
+  }, [onSort, sortBy]);
+
+  useEffect(() => setGlobalFilter(onSearch), [onSearch, setGlobalFilter]);
   return (
     <React.Fragment>
-      <table className="table" {...getTableProps()}>
+      <table className={className} {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render("Header")}
+                  <span>{column.isSorted ? column.isSortedDesc ? <SortDown /> : <SortUp /> : ""}</span>
+                </th>
               ))}
             </tr>
           ))}
@@ -110,36 +161,37 @@ const Table = ({ data, columns, getCellProps }) => {
           })}
         </tbody>
       </table>
-      <div className="pagination">
-        Rows Per Page{":"}
-        <select
-          value={pageSize}
-          style={{ marginRight: "15px" }}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              {pageSize}
-            </option>
-          ))}
-        </select>
-        <span>
+      {
+        <div className="pagination">
+          {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
+          <select
+            className="cp"
+            value={pageSize}
+            style={{ marginRight: "15px" }}
+            onChange={manualPagination ? onPageSizeChange : (e) => setPageSize(Number(e.target.value))}
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
           <span>
-            {pageIndex * 10 + 1}
-            {"-"}
-            {(pageIndex + 1) * 10} of {rows.length}
-          </span>{" "}
-        </span>
-        {/* <button style={{ marginLeft: "20px", marginRight: "20px" }} onClick={() => previousPage()} disabled={!canPreviousPage}>
-          <span>
-
+            <span>
+              {currentPage * pageSizeLimit + 1}
+              {"-"}
+              {(currentPage + 1) * pageSizeLimit > totalRecords ? totalRecords : (currentPage + 1) * pageSizeLimit}{" "}
+              {totalRecords ? `of ${totalRecords}` : ""}
+            </span>{" "}
           </span>
-        </button> */}
-        {canPreviousPage && <ArrowBack onClick={() => previousPage()} />}
-        {canNextPage && <ArrowForward onClick={() => nextPage()} />}
-      </div>
+          {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
+          {canPreviousPage && manualPagination && onFirstPage && <ArrowToFirst onClick={() => (manualPagination && onFirstPage())} className={"cp"} />}
+          {canPreviousPage && <ArrowBack onClick={() => (manualPagination ? onPrevPage() : previousPage())} className={"cp"} />}
+          {rows.length == pageSizeLimit && canNextPage && <ArrowForward onClick={() => (manualPagination ? onNextPage() : nextPage())} className={"cp"} />}
+          {rows.length == pageSizeLimit && canNextPage && manualPagination && onLastPage && <ArrowToLast onClick={() => (manualPagination && onLastPage())} className={"cp"} />}
+          {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
+        </div>
+      }
     </React.Fragment>
   );
 };

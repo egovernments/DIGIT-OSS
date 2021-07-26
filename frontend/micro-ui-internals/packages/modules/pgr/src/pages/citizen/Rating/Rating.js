@@ -67,7 +67,7 @@ const RatingAndFeedBack = () => {
             <CheckBox key={index} onChange={onSelect} label={t(`${LOCALIZATION_KEY.CS_FEEDBACK}${lable}`)} />
           ))}
           <CardLabel>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardLabel>
-          <TextArea onChange={onComments}></TextArea>
+          <TextArea name="" onChange={onComments}></TextArea>
           <SubmitBar label={t(`${LOCALIZATION_KEY.CS_COMMON}_SUBMIT`)} />
         </Card>
       </form>

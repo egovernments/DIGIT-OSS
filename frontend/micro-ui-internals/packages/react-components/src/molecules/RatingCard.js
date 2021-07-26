@@ -9,6 +9,7 @@ import CheckBox from "../atoms/CheckBox";
 import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
 import SubmitBar from "../atoms/SubmitBar";
+import RadioButtons from "../atoms/RadioButtons";
 
 const RatingCard = ({ config, onSelect, t }) => {
   const { register, watch, handleSubmit } = useForm();
@@ -39,7 +40,16 @@ const RatingCard = ({ config, onSelect, t }) => {
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
           {input.checkLabels &&
-            input.checkLabels.map((label, index) => <CheckBox key={index} name={input.label} label={label} inputRef={register} />)}
+            input.checkLabels.map((label, index) => <CheckBox key={index} name={input.label} label={t(label)} value={label} inputRef={register} />)}
+        </React.Fragment>
+      );
+    }
+
+    if (input.type === "radio") {
+      return (
+        <React.Fragment key={index}>
+          <CardLabel>{t(input.label)}</CardLabel>
+          <RadioButtons options={input.checkLabels} onSelect={input.onSelect} selectedOption={input.selectedOption} t={t} />
         </React.Fragment>
       );
     }

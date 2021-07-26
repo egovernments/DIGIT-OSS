@@ -22,7 +22,7 @@ export const UploadServices = {
       url: Urls.FileFetch,
       params: {
         tenantId: tenantId,
-        fileStoreIds: filesArray.join(","),
+        fileStoreIds: filesArray?.join(","),
       },
     };
     const res = await Axios(config);

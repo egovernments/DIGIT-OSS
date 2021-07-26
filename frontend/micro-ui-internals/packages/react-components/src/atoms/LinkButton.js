@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const LinkButton = (props) => {
   return (
-    <span className="card-link" onClick={props.onClick} style={props.style}>
+    <span className={`card-link cp ${props.className}`} onClick={props.onClick} style={props.style}>
       {props.label}
     </span>
   );

@@ -133,4 +133,7 @@ psd
 thumb
 sketch
 
+# vs code
+.vscode/
+
 # End of https://www.toptal.com/developers/gitignore/api/node,react

@@ -1,7 +1,13 @@
 import React from "react";
 
 const AppContainer = (props) => {
-  return <div className="app-container">{props.children}</div>;
+  return (
+    <React.Fragment>
+      <div className="app-container" style={props.style}>
+        {props.children}
+      </div>
+    </React.Fragment>
+  );
 };
 
 export default AppContainer;

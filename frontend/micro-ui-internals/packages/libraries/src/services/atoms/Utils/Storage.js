@@ -5,26 +5,39 @@ const localStoreSupport = () => {
     return false;
   }
 };
-const storageClass = window.sessionStorage;
+
 const k = (key) => `Digit.${key}`;
-export const Storage = {
+const getStorage = (storageClass) => ({
   get: (key) => {
     if (localStoreSupport() && key) {
       let valueInStorage = storageClass.getItem(k(key));
-      return valueInStorage && valueInStorage !== "undefined" ? JSON.parse(valueInStorage) : null;
+      if (!valueInStorage || valueInStorage === "undefined") {
+        return null;
+      }
+      const item = JSON.parse(valueInStorage);
+      if (Date.now() > item.expiry) {
+        storageClass.removeItem(k(key));
+        return null;
+      }
+      return item.value;
     } else if (typeof window !== "undefined") {
-      return window && window.eGov && window.eGov.Storage && window.eGov.Storage[k(key)];
+      return window?.eGov?.Storage && window.eGov.Storage[k(key)].value;
     } else {
       return null;
     }
   },
-  set: (key, value) => {
+  set: (key, value, ttl = 86400) => {
+    const item = {
+      value,
+      ttl,
+      expiry: Date.now() + ttl * 1000,
+    };
     if (localStoreSupport()) {
-      storageClass.setItem(k(key), JSON.stringify(value));
+      storageClass.setItem(k(key), JSON.stringify(item));
     } else if (typeof window !== "undefined") {
       window.eGov = window.eGov || {};
       window.eGov.Storage = window.eGov.Storage || {};
-      window.eGov.Storage[k(key)] = value;
+      window.eGov.Storage[k(key)] = item;
     }
   },
   del: (key) => {
@@ -36,4 +49,7 @@ export const Storage = {
       delete window.eGov.Storage[k(key)];
     }
   },
-};
+});
+
+export const Storage = getStorage(window.sessionStorage);
+export const PersistantStorage = getStorage(window.localStorage);

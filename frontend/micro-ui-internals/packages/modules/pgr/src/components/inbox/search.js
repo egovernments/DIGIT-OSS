@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { TextInput, Label, SubmitBar, LinkLabel, ActionBar } from "@egovernments/digit-ui-react-components";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg } from "@egovernments/digit-ui-react-components";
 
-const SearchComplaint = ({ onSearch, type, onClose }) => {
-  const [complaintNo, setComplaintNo] = useState("");
-  const [mobileNo, setMobileNo] = useState("");
+const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
+  const [complaintNo, setComplaintNo] = useState(searchParams?.search?.serviceRequestId || "");
+  const [mobileNo, setMobileNo] = useState(searchParams?.search?.mobileNumber || "");
   const { register, errors, handleSubmit, reset } = useForm();
   const { t } = useTranslation();
 
@@ -15,7 +15,10 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
         onSearch({ serviceRequestId: data.serviceRequestId });
       } else if (data.mobileNumber !== "") {
         onSearch({ mobileNumber: data.mobileNumber });
+      } else {
+        onSearch({});
       }
+
       if (type === "mobile") {
         onClose();
       }
@@ -31,8 +34,8 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
 
   const clearAll = () => {
     return (
-      <LinkLabel style={{ color: "#F47738", cursor: "pointer" }} onClick={clearSearch}>
-        {t("CS_COMMON_CLEAR_SEARCH")}
+      <LinkLabel className="clear-search-label" onClick={clearSearch}>
+        {t("ES_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
   };
@@ -46,25 +49,19 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmitInput)}>
+    <form onSubmit={handleSubmit(onSubmitInput)} style={{ marginLeft: "24px" }}>
       <React.Fragment>
         <div className="search-container" style={{ width: "auto" }}>
-          <div className="search-complaint-container" style={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
+          <div className="search-complaint-container">
             {type === "mobile" && (
-              <div
-                className="complaint-header"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  marginBottom: "20px",
-                }}
-              >
+              <div className="complaint-header">
                 <h2> {t("CS_COMMON_SEARCH_BY")}:</h2>
-                <span onClick={onClose}>x</span>
+                <span onClick={onClose}>
+                  <CloseSvg />
+                </span>
               </div>
             )}
-            <div className="complaint-input-container" style={{ width: "100%" }}>
+            <div className="complaint-input-container">
               <span className="complaint-input">
                 <Label>{t("CS_COMMON_COMPLAINT_NO")}.</Label>
                 <TextInput
@@ -74,7 +71,7 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
                   inputRef={register({
                     pattern: /(?!^$)([^\s])/,
                   })}
-                  style={{ width: "280px", marginBottom: "8px" }}
+                  style={{ marginBottom: "8px" }}
                 ></TextInput>
               </span>
               <span className="mobile-input">
@@ -86,12 +83,11 @@ const SearchComplaint = ({ onSearch, type, onClose }) => {
                   inputRef={register({
                     pattern: /^[6-9]\d{9}$/,
                   })}
-                  style={{ width: "280px" }}
                 ></TextInput>
               </span>
               {type === "desktop" && (
                 <SubmitBar
-                  style={{ marginTop: 32, marginLeft: "auto" }}
+                  style={{ marginTop: 32, marginLeft: "96px", maxWidth: "256px" }}
                   label={t("ES_COMMON_SEARCH")}
                   submit={true}
                   disabled={Object.keys(errors).filter((i) => errors[i]).length}

@@ -1,7 +1,8 @@
 "use strict";
 let map;
 var script = document.createElement("script");
-script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDdKOqX6EPEX9djPm-vL_8zv0HBF8z0Qjg&callback=initAutocomplete&libraries=places";
+const key = globalConfigs?.getConfig("GMAPS_API_KEY");
+script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initAutocomplete&libraries=places`;
 script.defer = true;
 window.initAutocomplete = function () {
   const map = new google.maps.Map(document.getElementById("map"), {

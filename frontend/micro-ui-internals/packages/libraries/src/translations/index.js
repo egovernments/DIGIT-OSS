@@ -2,8 +2,8 @@ import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import ReactPostprocessor from "i18next-react-postprocessor";
 
-const i18nextConfig = {
-  lng: "en_IN",
+const i18nextConfig = () => ({
+  lng: Digit.StoreData.getCurrentLanguage(),
   fallbackLng: "en_IN",
   debug: false,
   ns: ["translations"],
@@ -15,7 +15,7 @@ const i18nextConfig = {
     escapeValue: false,
     formatSeparator: ",",
   },
-  postProcess: [`reactPostprocessor`],
+  postProcess: [`reactPostprocessor`, "templatePostprocessor"],
   react: {
     wait: true,
     useSuspense: true,
@@ -29,8 +29,34 @@ const i18nextConfig = {
       },
     },
   },
+});
+
+function replaceLiterals(text = "", dynamicValues = {}) {
+  let returnText = text;
+  const regex = /[^\{\{][\{]\w+/;
+  if (regex.exec(text) !== null) {
+    Object.keys(dynamicValues).forEach((key) => {
+      returnText = returnText.replace(`{${key.toUpperCase()}}`, dynamicValues[key]);
+    });
+  }
+  return returnText;
+}
+
+const templatePostprocessor = {
+  type: "postProcessor",
+  name: "templatePostprocessor",
+  process: function (value, key, options, translator) {
+    return replaceLiterals(value, options);
+  },
 };
 
-export const initI18n = () => {
-  return i18next.use(new ReactPostprocessor()).use(initReactI18next).init(i18nextConfig);
+export const initI18n = (callback) => {
+  return i18next
+    .use(new ReactPostprocessor())
+    .use(templatePostprocessor)
+    .use(initReactI18next)
+    .init(i18nextConfig(), () => {
+      window.i18next = i18next;
+      callback();
+    });
 };

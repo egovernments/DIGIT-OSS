@@ -22,8 +22,10 @@
   @apply mb-lg relative;
 
   .select {
-    @apply relative block w-full h-10 border-2 border-solid border-input-border;
-
+    @apply relative block w-full h-10 border border-solid border-input-border;
+    &:hover {
+      @apply border-2 border-solid border-primary-main;
+    }
     input[type="text"] {
       width: calc(100% - 32px);
       background-color: transparent;
@@ -76,8 +78,8 @@
     width: 100% !important;
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
     max-height: 400px;
-    overflow: scroll;
-    @apply absolute z-20 mt-xs bg-white;
+    overflow: auto;
+    @apply absolute z-20 mt-xs bg-white max-w-full;
 
     p {
       padding-top: 14px;
@@ -90,11 +92,18 @@
   }
 }
 
+.employee-select-wrap--elipses {
+  width: 85% !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .select-wrap {
   @apply mb-lg relative;
 
   .select {
-    @apply relative block w-full h-10 border-2 border-solid border-input-border;
+    @apply relative block w-full h-10 border border-solid border-input-border;
 
     input[type="text"] {
       width: calc(100% - 32px);
@@ -160,14 +169,5 @@
   }
 }
 
-.select-wrap-emp {
-  @extend .select-wrap;
-  @apply mb-xs;
-}
-
 @screen dt {
-  .select-wrap {
-  }
-  .employee-select-wrap {
-  }
 }

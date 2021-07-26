@@ -5,7 +5,7 @@ import { RoundedCheck, DeleteBtn } from "./svgindex";
 const Toast = (props) => {
   if (props.error) {
     return (
-      <div className="toast-success" style={{ backgroundColor: "red" }}>
+      <div className="toast-success" style={{ backgroundColor: "red", ...props.style }}>
         <RoundedCheck />
         <h2>{props.label}</h2>
         <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} />
@@ -14,7 +14,7 @@ const Toast = (props) => {
   }
 
   return (
-    <div className="toast-success">
+    <div className="toast-success" style={{ ...props.style }}>
       <RoundedCheck />
       <h2>{props.label}</h2>
       <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} />

@@ -33,21 +33,25 @@ export const ComplaintsList = (props) => {
   let complaintsList;
   if (error) {
     complaintsList = (
-      <Card key={0}>
+      <Card>
         {t(LOCALE.ERROR_LOADING_RESULTS)
           .split("\\n")
-          .map((text) => (
-            <p style={{ textAlign: "center" }}>{text}</p>
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
           ))}
       </Card>
     );
   } else if (complaints.length === 0) {
     complaintsList = (
-      <Card key={0}>
+      <Card>
         {t(LOCALE.NO_COMPLAINTS)
           .split("\\n")
-          .map((text) => (
-            <p style={{ textAlign: "center" }}>{text}</p>
+          .map((text, index) => (
+            <p key={index} style={{ textAlign: "center" }}>
+              {text}
+            </p>
           ))}
       </Card>
     );

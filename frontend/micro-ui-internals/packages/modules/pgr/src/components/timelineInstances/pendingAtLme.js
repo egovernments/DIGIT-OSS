@@ -1,15 +1,13 @@
-import { TelePhone } from "@egovernments/digit-ui-react-components";
+import { TelePhone, CheckPoint } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-const PendingAtLME = ({ name, mobile, text }) => {
+const PendingAtLME = ({ name, isCompleted, mobile, text }) => {
   let { t } = useTranslation();
   return name && mobile ? (
-    <React.Fragment>
-      <TelePhone mobile={mobile} text={`${text} ${name}`} />
-    </React.Fragment>
+    <CheckPoint isCompleted={isCompleted} customChild={<TelePhone mobile={mobile} text={`${text} ${name}`} />} />
   ) : (
-    <span>{t("CS_COMMON_PENDINGATLME")}</span>
+    <CheckPoint label={t("CS_COMMON_PENDINGATLME")} />
   );
 };
 

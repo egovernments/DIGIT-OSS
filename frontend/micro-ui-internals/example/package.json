@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-example",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "main": "index.js",
   "license": "MIT",
   "private": true,
@@ -9,9 +9,14 @@
     "start": "react-scripts start"
   },
   "devDependencies": {
-    "@egovernments/digit-ui-libraries": "^1.0.0",
-    "@egovernments/digit-ui-module-fsm": "^1.0.0",
-    "@egovernments/digit-ui-module-pgr": "^1.0.0",
+    "@egovernments/digit-ui-libraries": "^1.3.0",
+    "@egovernments/digit-ui-module-common": "^1.3.0",
+    "@egovernments/digit-ui-module-fsm": "^1.3.0",
+    "@egovernments/digit-ui-module-pgr": "^1.3.0",
+    "@egovernments/digit-ui-module-pt": "^1.3.0",
+    "@egovernments/digit-ui-module-mcollect": "^1.3.0",
+    "@egovernments/digit-ui-module-tl":"^1.3.0",
+    "@egovernments/digit-ui-module-receipts":"^1.3.0",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",

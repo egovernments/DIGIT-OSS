@@ -1,38 +1,48 @@
-import React from "react";
-import { CheckBox } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
+import { Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import StatusCount from "./StatusCount";
 
-const Status = ({ applications, onAssignmentChange, pgrfilters }) => {
+const Status = ({ onAssignmentChange, fsmfilters, mergedRoleDetails, statusMap }) => {
   const { t } = useTranslation();
-  // const applicationsWithCount = useComplaintStatusCount(applications);
-  const applicationsWithCount = [
-    {
-      name: "Pending for Payment",
-      count: 4,
-    },
-    {
-      name: "Pending for DSO Assignment",
-      count: 2,
-    },
-    {
-      name: "Pending for Demand Generation",
-      count: 6,
-    },
-  ];
 
-  return (
+  const { data: applicationsWithCount, isLoading } = Digit.Hooks.fsm.useApplicationStatus(true, true, statusMap);
+  // console.log("find application stats", applicationsWithCount)
+
+  const [moreStatus, showMoreStatus] = useState(false);
+
+  const finalApplicationWithCount = mergedRoleDetails.statuses
+    .map((roleDetails) => applicationsWithCount?.filter((application) => application.code === roleDetails)[0])
+    .filter((status) => status?.code);
+
+  const moreApplicationWithCount = applicationsWithCount?.filter(
+    (application) => !finalApplicationWithCount.find((listedApplication) => listedApplication.code === application.code)
+  );
+
+  // console.log("find role status from here", applicationsWithCount , mergedRoleDetails, finalApplicationWithCount, moreApplicationWithCount);
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  return finalApplicationWithCount?.length > 0 ? (
     <div className="status-container">
       <div className="filter-label">{t("ES_INBOX_STATUS")}</div>
-      {applicationsWithCount.map((option, index) => (
-        <CheckBox
-          key={index}
-          onChange={(e) => onAssignmentChange(e, option)}
-          checked={pgrfilters.applicationStatus.filter((e) => e.name === option.name).length !== 0 ? true : false}
-          label={`${option.name} (${option.count})`}
-        />
+      {finalApplicationWithCount?.map((option, index) => (
+        <StatusCount key={index} onAssignmentChange={onAssignmentChange} status={option} fsmfilters={fsmfilters} statusMap={statusMap} />
       ))}
+      {moreStatus
+        ? moreApplicationWithCount?.map((option, index) => (
+            <StatusCount key={index} onAssignmentChange={onAssignmentChange} status={option} fsmfilters={fsmfilters} statusMap={statusMap} />
+          ))
+        : null}
+      {mergedRoleDetails.fixed === false ? (
+        <div className="filter-button" onClick={() => showMoreStatus(!moreStatus)}>
+          {" "}
+          {moreStatus ? t("ES_COMMON_LESS") : t("ES_COMMON_MORE")}{" "}
+        </div>
+      ) : null}
     </div>
-  );
+  ) : null;
 };
 
 export default Status;

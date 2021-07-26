@@ -1,20 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Dropdown, RadioButtons, ActionBar, RemoveableTag, RoundedLabel } from "@egovernments/digit-ui-react-components";
-import { ApplyFilterBar } from "@egovernments/digit-ui-react-components";
+import { ApplyFilterBar, CloseSvg } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
 
+let pgrQuery = {};
+let wfQuery = {};
+
 const Filter = (props) => {
   let { uuid } = Digit.UserService.getUser().info;
-
+  const { searchParams } = props;
   const { t } = useTranslation();
+  const isAssignedToMe = searchParams?.filters?.wfFilters?.assignee && searchParams?.filters?.wfFilters?.assignee[0]?.code ? true : false;
 
-  const [selectAssigned, setSelectedAssigned] = useState(null);
+  const assignedToOptions = useMemo(
+    () => [
+      { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
+      { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
+    ],
+    [t]
+  );
+
+  const [selectAssigned, setSelectedAssigned] = useState(isAssignedToMe ? assignedToOptions[0] : assignedToOptions[1]);
+
+  useEffect(() => setSelectedAssigned(isAssignedToMe ? assignedToOptions[0] : assignedToOptions[1]), [t]);
+
   const [selectedComplaintType, setSelectedComplaintType] = useState(null);
   const [selectedLocality, setSelectedLocality] = useState(null);
-
   const [pgrfilters, setPgrFilters] = useState(
-    Digit.SessionStorage.get("pgr_filters") || {
+    searchParams?.filters?.pgrfilters || {
       serviceCode: [],
       locality: [],
       applicationStatus: [],
@@ -22,23 +36,21 @@ const Filter = (props) => {
   );
 
   const [wfFilters, setWfFilters] = useState(
-    Digit.SessionStorage.get("pgr_wfFilters") || {
-      assignee: [],
+    searchParams?.filters?.wfFilters || {
+      assignee: [{ code: uuid }],
     }
   );
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  let localities = Digit.Hooks.pgr.useLocalities({ city: tenantId });
+  // let localities = Digit.Hooks.pgr.useLocalities({ city: tenantId });
+  const { data: localities } = Digit.Hooks.useBoundaryLocalities(tenantId, "admin", {}, t);
   let serviceDefs = Digit.Hooks.pgr.useServiceDefs(tenantId, "PGR");
 
   const onRadioChange = (value) => {
     setSelectedAssigned(value);
-    Digit.SessionStorage.set("pgr_assigned", value);
     uuid = value.code === "ASSIGNED_TO_ME" ? uuid : "";
     setWfFilters({ ...wfFilters, assignee: [{ code: uuid }] });
   };
-  let pgrQuery = {};
-  let wfQuery = {};
 
   useEffect(() => {
     let count = 0;
@@ -56,26 +68,28 @@ const Filter = (props) => {
         let params = wfFilters[property].map((prop) => prop.code).join();
         if (params) {
           wfQuery[property] = params;
+        } else {
+          wfQuery = {};
         }
       }
     }
     count += wfFilters?.assignee?.length || 0;
-    Digit.SessionStorage.set("pgr_filters", pgrfilters);
-    Digit.SessionStorage.set("pgr_wfFilters", wfFilters);
 
-    Digit.SessionStorage.set("pgr_filter_count", count);
-    //queryString = queryString.substring(0, queryString.length - 1);
-    handleFilterSubmit({ pgrQuery: pgrQuery, wfQuery: wfQuery });
-    // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
-    if (Digit.SessionStorage.get("pgr_assigned")) {
-      setSelectedAssigned(Digit.SessionStorage.get("pgr_assigned"));
+    if (props.type !== "mobile") {
+      handleFilterSubmit();
     }
+
+    Digit.inboxFilterCount = count;
+    // console.log("pgrQuery::::>", pgrQuery, "wfQuery::::>", wfQuery);
   }, [pgrfilters, wfFilters]);
 
   const ifExists = (list, key) => {
     return list.filter((object) => object.code === key.code).length;
   };
-
+  function applyFiltersAndClose() {
+    handleFilterSubmit();
+    props.onClose();
+  }
   function complaintType(_type) {
     const type = { i18nKey: t("SERVICEDEFS." + _type.serviceCode.toUpperCase()), code: _type.serviceCode };
     if (!ifExists(pgrfilters.serviceCode, type)) {
@@ -128,17 +142,15 @@ const Filter = (props) => {
     let wfRest = { assigned: [{ code: [] }] };
     setPgrFilters(pgrReset);
     setWfFilters(wfRest);
+    pgrQuery = {};
+    wfQuery = {};
     setSelectedAssigned("");
     setSelectedComplaintType(null);
     setSelectedLocality(null);
-
-    Digit.SessionStorage.set("pgr_filters", null);
-    Digit.SessionStorage.set("pgr_wfFilters", null);
-    Digit.SessionStorage.set("pgr_assigned", null);
   }
 
   const handleFilterSubmit = () => {
-    props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery });
+    props.onFilterChange({ pgrQuery: pgrQuery, wfQuery: wfQuery, wfFilters, pgrfilters });
   };
 
   const GetSelectOptions = (lable, options, selected = null, select, optionKey, onRemove, key) => {
@@ -163,27 +175,23 @@ const Filter = (props) => {
       <div className="filter">
         <div className="filter-card">
           <div className="heading">
-            <div className="filter-label">{t("FILTER_BY")}:</div>
+            <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
             <div className="clearAll" onClick={clearAll}>
-              {t("CS_COMMON_CLEAR_ALL")}
+              {t("ES_COMMON_CLEAR_ALL")}
             </div>
             {props.type === "desktop" && (
               <span className="clear-search" onClick={clearAll}>
-                {t("CS_COMMON_CLEAR_ALL")}
+                {t("ES_COMMON_CLEAR_ALL")}
               </span>
             )}
-            {props.type === "mobile" && <span onClick={props.onClose}>x</span>}
+            {props.type === "mobile" && (
+              <span onClick={props.onClose}>
+                <CloseSvg />
+              </span>
+            )}
           </div>
           <div>
-            <RadioButtons
-              onSelect={onRadioChange}
-              selectedOption={selectAssigned}
-              optionsKey="name"
-              options={[
-                { code: "ASSIGNED_TO_ME", name: t("ASSIGNED_TO_ME") },
-                { code: "ASSIGNED_TO_ALL", name: t("ASSIGNED_TO_ALL") },
-              ]}
-            />
+            <RadioButtons onSelect={onRadioChange} selectedOption={selectAssigned} optionsKey="name" options={assignedToOptions} />
             <div>
               {GetSelectOptions(
                 t("CS_COMPLAINT_DETAILS_COMPLAINT_SUBTYPE"),
@@ -195,14 +203,19 @@ const Filter = (props) => {
                 "serviceCode"
               )}
             </div>
-            <div>{GetSelectOptions(t("Locality"), localities, selectedLocality, onSelectLocality, "name", onRemove, "locality")}</div>
+            <div>{GetSelectOptions(t("CS_PGR_LOCALITY"), localities, selectedLocality, onSelectLocality, "i18nkey", onRemove, "locality")}</div>
             {<Status complaints={props.complaints} onAssignmentChange={handleAssignmentChange} pgrfilters={pgrfilters} />}
           </div>
         </div>
       </div>
       <ActionBar>
         {props.type === "mobile" && (
-          <ApplyFilterBar labelLink={t("CS_COMMON_CLEAR_ALL")} buttonLink={t("CS_COMMON_FILTER")} onClear={clearAll} onSubmit={props.onClose} />
+          <ApplyFilterBar
+            labelLink={t("ES_COMMON_CLEAR_ALL")}
+            buttonLink={t("ES_COMMON_FILTER")}
+            onClear={clearAll}
+            onSubmit={applyFiltersAndClose}
+          />
         )}
       </ActionBar>
     </React.Fragment>

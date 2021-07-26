@@ -2,11 +2,15 @@ import React from "react";
 import { HomeIcon, LanguageIcon } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "../components/ChangeLanguage";
 
-const SideBarMenu = (t) => [
+const SideBarMenu = (t, closeSidebar) => [
   {
+    type: "link",
     text: t("COMMON_BOTTOM_NAVIGATION_HOME"),
-    link: "/citizen/",
+    link: "/digit-ui/citizen/",
     icon: <HomeIcon className="icon" />,
+    populators: {
+      onClick: closeSidebar,
+    },
   },
   {
     type: "component",

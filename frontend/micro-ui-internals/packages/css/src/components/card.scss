@@ -31,7 +31,7 @@
   }
 
   .card-label {
-    @apply font-bold text-legend text-text-primary mb-md;
+    @apply text-legend text-text-primary mb-md;
   }
 
   .card-label-error {
@@ -43,12 +43,20 @@
   }
 
   .card-link {
-    @apply block text-center text-link text-link-normal mt-md cursor-pointer;
+    @apply block text-center text-link text-primary-main mt-md cursor-pointer;
   }
 }
 
+.docsDescription {
+  color: #0B0C0C !important;
+} 
+
+.field-container {
+  @apply flex justify-center items-center;
+}
+
 .employeeCard {
-  @apply bg-white shadow-card p-md;
+  @apply bg-white shadow-card p-md mb-xl;
   border-radius: 4px;
 
   .card-header {
@@ -85,7 +93,7 @@
   }
 
   .card-label {
-    @apply font-bold text-legend text-text-primary mb-md;
+    @apply text-legend text-text-primary mb-md;
   }
 
   .card-label-error {
@@ -155,11 +163,13 @@
   }
 
   .card {
-    margin-left: auto;
     margin-right: auto;
     padding-right: 300px;
     padding-left: 16px;
     padding-top: 16px;
+    max-width: 960px;
+    min-width: 640px;
+    margin-left: 0px;
 
     .card-header {
       @apply text-heading-xl-dt;
@@ -184,6 +194,8 @@
   }
 
   .employeeCard {
+    @apply mb-md mx-md !important;
+
     &.filter {
       margin-left: auto;
       margin-right: auto;
@@ -221,7 +233,7 @@
     }
 
     .label-field-pair {
-      @apply flex;
+      @apply flex items-center;
 
       h2 {
         width: 30%;
@@ -230,6 +242,9 @@
       .field {
         width: 50%;
         margin-right: 20%;
+        .field {
+          margin-right: unset;
+        }
       }
     }
 
@@ -262,4 +277,8 @@
       margin-left: auto;
     }
   }
+}
+
+.card-section-header {
+  @apply text-text-primary text-heading-m font-bold;
 }

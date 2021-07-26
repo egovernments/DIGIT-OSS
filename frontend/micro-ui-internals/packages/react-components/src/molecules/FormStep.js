@@ -7,12 +7,30 @@ import CardLabelError from "../atoms/CardLabelError";
 import TextInput from "../atoms/TextInput";
 import InputCard from "./InputCard";
 
-const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDisabled, forcedError }) => {
-  const { register, watch, errors, handleSubmit } = useForm();
+const FormStep = ({
+  t,
+  children,
+  config,
+  onSelect,
+  onSkip,
+  value,
+  onChange,
+  isDisabled,
+  _defaultValues = {},
+  forcedError,
+  componentInFront,
+  onAdd,
+  cardStyle = {},
+  isMultipleAllow = false,
+  showErrorBelowChildren = false,
+}) => {
+  const { register, watch, errors, handleSubmit } = useForm({
+    defaultValues: _defaultValues,
+  });
 
-  console.log("config", config);
+  // console.log("config", config);
   const goNext = (data) => {
-    console.log("data", data);
+    // console.log("data", data);
     onSelect(data);
   };
 
@@ -24,14 +42,22 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
           {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
-          <TextInput
-            key={index}
-            name={input.name}
-            value={value}
-            onChange={onChange}
-            inputRef={register(input.validation)}
-            isMandatory={errors[input.name]}
-          />
+          <div className="field-container">
+            {componentInFront ? <span className="citizen-card-input citizen-card-input--front">{componentInFront}</span> : null}
+            <TextInput
+              key={index}
+              name={input.name}
+              value={value}
+              onChange={onChange}
+              minlength={input.validation.minlength}
+              maxlength={input.validation.maxlength}
+              pattern={input.validation?.pattern}
+              title={input.validation?.title}
+              inputRef={register(input.validation)}
+              isMandatory={errors[input.name]}
+              disable={input.disable ? input.disable : false}
+            />
+          </div>
         </React.Fragment>
       );
     }
@@ -39,17 +65,25 @@ const FormStep = ({ t, children, config, onSelect, onSkip, value, onChange, isDi
       return (
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
-          <TextArea key={index} name={input.name} value={value} onChange={onChange} inputRef={register(input.validation)}></TextArea>
+          <TextArea key={index} name={input.name} value={value} onChange={onChange} inputRef={register(input.validation)} maxLength="1024"></TextArea>
         </React.Fragment>
       );
   });
 
   return (
     <form onSubmit={handleSubmit(goNext)}>
-      <InputCard {...{ isDisable: isDisable }} {...config} submit {...{ onSkip: onSkip }} t={t}>
+      <InputCard
+        {...{ isDisable: isDisable, isMultipleAllow: isMultipleAllow }}
+        {...config}
+        cardStyle={cardStyle}
+        submit
+        {...{ onSkip: onSkip, onAdd: onAdd }}
+        t={t}
+      >
         {inputs}
-        {forcedError && <CardLabelError>{t(forcedError)}</CardLabelError>}
+        {forcedError && !showErrorBelowChildren && <CardLabelError>{t(forcedError)}</CardLabelError>}
         {children}
+        {forcedError && showErrorBelowChildren && <CardLabelError>{t(forcedError)}</CardLabelError>}
       </InputCard>
     </form>
   );
@@ -59,6 +93,7 @@ FormStep.propTypes = {
   config: PropTypes.shape({}),
   onSelect: PropTypes.func,
   onSkip: PropTypes.func,
+  onAdd: PropTypes.func,
   t: PropTypes.func,
 };
 
@@ -66,6 +101,7 @@ FormStep.defaultProps = {
   config: {},
   onSelect: undefined,
   onSkip: undefined,
+  onAdd: undefined,
   t: (value) => value,
 };
 
