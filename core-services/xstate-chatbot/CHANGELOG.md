@@ -3,6 +3,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.0.2 - 2021-07-26
+- Messaging Experience Changes
+- Locality Selection - NLP integration
+- Application Flow - Push button changes
+
 ## 1.0.1 - 2021-05-11
 - Fixed security issue.
 

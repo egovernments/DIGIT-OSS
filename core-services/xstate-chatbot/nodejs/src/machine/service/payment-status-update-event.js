@@ -4,6 +4,7 @@ const fetch = require("node-fetch");
 const dialog = require('../util/dialog');
 const userService = require('../../session/user-service');
 const chatStateRepository = require('../../session/repo');
+const localisationService = require('../util/localisation-service');
 
 const consumerGroupOptions = require('../../session/kafka/kafka-consumer-group-options');
 
@@ -69,15 +70,21 @@ class PaymentStatusUpdateEventFormatter{
       tenantId = tenantId.split(".")[0]; 
 
       let businessService = payment.paymentDetails[0].businessService;
+      let consumerCode    = payment.paymentDetails[0].bill.consumerCode;
+      let isOwner = true;
       let key;
       if(businessService === 'TL')
         key = 'tradelicense-receipt';
 
-      else if(businessService === 'PT')
+      else if(businessService === 'PT'){
         key = 'property-receipt';
+        isOwner = await this.getPTOwnerDetails(consumerCode, payment.tenantId, payment.mobileNumber, user.authToken);
+      }
       
-      else if(businessService === 'WS' || businessService === 'SW')
+      else if(businessService === 'WS' || businessService === 'SW'){
         key = 'ws-onetime-receipt';
+        isOwner = await this.getWnsOwnerDeatils(consumerCode, payment.tenantId, businessService, payment.mobileNumber, user.authToken);
+      }
 
       else
         key = 'consolidatedreceipt';
@@ -118,32 +125,94 @@ class PaymentStatusUpdateEventFormatter{
           fileName: key
         };
 
-        let messages = await this.prepareSucessMessage(payment,responseBody.filestoreIds[0],locale);
-    
-        await valueFirst.sendMessageToUser(user, messages,extraInfo);
+        if(isOwner){
+          chatState.context.bills.paidBy = 'OWNER'
+        }
+        else
+          chatState.context.bills.paidBy = 'OTHER'
+
+        let active = !chatState.done;
+        await chatStateRepository.updateState(user.userId, active, JSON.stringify(chatState));
+
+
+        let waitMessage = [];
+        var messageContent = {
+          output: dialog.get_message(messageBundle.wait,locale),
+          type: "text"
+        };
+        waitMessage.push(messageContent);
+        await valueFirst.sendMessageToUser(user, waitMessage, extraInfo);
+
+        let message = [];
+        var pdfContent = {
+          output: responseBody.filestoreIds[0],
+          type: "pdf"
+        };
+        message.push(pdfContent);
+        await valueFirst.sendMessageToUser(user, message, extraInfo);
+
+        let payBillmessage = [];
+        let templateContent = await this.prepareSucessMessage(payment, locale, isOwner);
+        payBillmessage.push(templateContent);
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        await valueFirst.sendMessageToUser(user, payBillmessage, extraInfo);
+
+        if(!isOwner){
+          /*let question = dialog.get_message(messageBundle.registration,locale);
+          question = question.replace('{{consumerCode}}',consumerCode);
+          let localisationCode = "BILLINGSERVICE_BUSINESSSERVICE_"+businessService;
+          let localisationMessages = await localisationService.getMessageBundleForCode(localisationCode);
+          let service = dialog.get_message(localisationMessages,locale)
+          question = question.replace('{{service}}', service.toLowerCase());*/
+
+          let question = dialog.get_message(messageBundle.endStatement,locale);
+          var registrationMessage = {
+            output: question,
+            type: "text"
+          };
+
+          await new Promise(resolve => setTimeout(resolve, 3000));
+          await valueFirst.sendMessageToUser(user, [registrationMessage], extraInfo);
+        }
       }
     }
 
   }
 
-  async prepareSucessMessage(payment,filestoreId,locale){
-    let message=[];
-    let template = dialog.get_message(messageBundle.paymentSucess,locale);
-    template = template.replace('{{transaction_number}}',payment.transactionNumber);
+  async prepareSucessMessage(payment, locale, isOwner){
+    let templateList;
+    let params=[];
+    if(isOwner){
+      templateList =  config.valueFirstWhatsAppProvider.valuefirstNotificationOwnerBillSuccessTemplateid.split(',');
+      params.push(payment.transactionNumber);
+    }
+    else{
+      if(payment.paymentDetails[0].businessService === 'PT')
+        templateList =  config.valueFirstWhatsAppProvider.valuefirstNotificationOtherPTBillSuccessTemplateid.split(',');
 
-    var content = {
-      output:template,
-      type: "text"
+      if(payment.paymentDetails[0].businessService === 'WS' || payment.paymentDetails[0].businessService === 'SW')
+        templateList =  config.valueFirstWhatsAppProvider.valuefirstNotificationOtherWSBillSuccessTemplateid.split(',');
+      
+        params.push(payment.paymentDetails[0].bill.consumerCode);
+        params.push(payment.transactionNumber);
+    }
+    let localeList   =  config.supportedLocales.split(',');
+    let localeIndex  =  localeList.indexOf(locale);
+
+    let templateId;
+    if(templateList[localeIndex])
+      templateId = templateList[localeIndex];
+    else
+      templateId = templateList[0];
+
+
+    var templateContent = {
+      output: templateId,
+      type: "template",
+      params: params
     };
-    message.push(content);
-
-    var pdfContent = {
-      output: filestoreId,
-      type: "pdf"
-    };
-    message.push(pdfContent);
-
-    return message;
+    
+    return templateContent;
   }
 
   async prepareTransactionFailedMessage(request){
@@ -155,10 +224,10 @@ class PaymentStatusUpdateEventFormatter{
       locale = chatState.context.user.locale;
 
     let transactionNumber = request.Transaction.txnId;
-    let consumerCode = request.Transaction.consumerCode;
+    /*let consumerCode = request.Transaction.consumerCode;
     let tenantId = request.Transaction.tenantId;
     let businessService = request.Transaction.module;
-    let link = await this.getPaymentLink(consumerCode,tenantId,businessService,locale);
+    let link = await this.getPaymentLink(consumerCode,tenantId,businessService,locale);*/
 
     let user = {
       mobileNumber: request.Transaction.user.mobileNumber
@@ -171,12 +240,12 @@ class PaymentStatusUpdateEventFormatter{
     let message = [];
     let template = dialog.get_message(messageBundle.paymentFail,locale);
     template = template.replace('{{transaction_number}}',transactionNumber);
-    template = template.replace('{{link}}',link);
+    //template = template.replace('{{link}}',link);
     message.push(template);
     await valueFirst.sendMessageToUser(user, message,extraInfo);
   }
 
-  async getShortenedURL(finalPath){
+  /*async getShortenedURL(finalPath){
     var url = config.egovServices.egovServicesHost + config.egovServices.urlShortnerEndpoint;
     var request = {};
     request.url = finalPath; 
@@ -203,18 +272,124 @@ class PaymentStatusUpdateEventFormatter{
     var finalPath = UIHost + paymentPath;
     var link = await this.getShortenedURL(finalPath);
     return link;
+  }*/
+
+  async getWnsOwnerDeatils(consumerCode, tenantId, businessService, mobileNumber, authToken){
+    let requestBody = {
+      RequestInfo: {
+        authToken: authToken
+      }
+    };
+
+    let options = {
+      method: 'POST',
+      origin: '*',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    };
+
+    let url = config.egovServices.externalHost;    
+    if(businessService === 'WS'){
+      url = url + config.egovServices.waterConnectionSearch;
+    }
+    if(businessService === 'SW'){
+      url = url + config.egovServices.sewerageConnectionSearch;;
+    }
+
+    url = url + '&tenantId='+tenantId;
+    url = url + '&connectionNumber='+consumerCode;
+    let response = await fetch(url,options);
+    let searchResults;
+    
+    if(response.status === 200) {
+      searchResults = await response.json();
+      let connectionHolders;
+      let propertyId;
+
+      if(businessService === 'WS'){
+        connectionHolders = searchResults.WaterConnection[0].connectionHolders
+        propertyId = searchResults.WaterConnection[0].propertyId;
+      }
+      if(businessService === 'SW'){
+        connectionHolders = searchResults.SewerageConnections[0].connectionHolders
+        propertyId = searchResults.SewerageConnections[0].propertyId;
+      }
+
+      let isMobileNumberPresent = await this.getPTOwnerDetails(propertyId, tenantId, mobileNumber, authToken);
+      if(isMobileNumberPresent)
+        return true;
+      
+      if(connectionHolders != null){
+        for(let connectionHolder of connectionHolders){
+          if(connectionHolder.mobileNumber === mobileNumber)
+            return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  async getPTOwnerDetails(propertyId, tenantId, mobileNumber, authToken){
+
+    let isMobileNumberPresent = false;
+
+    let requestBody = {
+      RequestInfo: {
+        authToken: authToken
+      }
+    };
+
+    let options = {
+      method: 'POST',
+      origin: '*',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    };
+
+    let url = config.egovServices.externalHost + 'property-services/property/_search';
+    url = url + '?tenantId='+tenantId;
+    url = url + '&propertyIds='+propertyId;
+    let response = await fetch(url,options);
+    let searchResults;
+    
+    if(response.status === 200) {
+      searchResults = await response.json();
+      let ownerList = searchResults.Properties[0].owners;
+
+      for(let owner of ownerList){
+        if(owner.mobileNumber === mobileNumber)
+          isMobileNumberPresent = true;
+      }
+    }
+    return isMobileNumberPresent;
   }
 
 }
 
 let messageBundle = {
   paymentSucess:{
-    en_IN: "Thank you😃! You have successfully paid your bill through mSeva Punjab. Your transaction number is {{transaction_number}}.\n\nPlease find attached receipt for your reference.\n",
+    en_IN: "Bill Payment Successful ✅\n\nYour transaction number is {{transaction_number}}.\n\nYou can download the payment receipt from above.\n\n[Payment receipt in PDF format is attached with message]\n\nWe are happy to serve you 😃",
     hi_IN: "धन्यवाद😃! आपने mSeva पंजाब के माध्यम से अपने बिल का सफलतापूर्वक भुगतान किया है। आपका ट्रांजेक्शन नंबर {{transaction_number}} है। \n\n कृपया अपने संदर्भ के लिए संलग्न रसीद प्राप्त करें।"
   },
   paymentFail:{
-    en_IN: "Sorry😥! The Payment Transaction has failed due to authentication failure. Your transaction reference number is {{transaction_number}}.\n\nIf the amount is debited from your account please give us 2-3 hours to get confirmation on payment.\n\nIf the amount is  not deducted from your account you can retry using the following payment link:\n{{link}}",
-    hi_IN: "क्षमा करें 😥! प्रमाणीकरण विफलता के कारण भुगतान लेनदेन विफल हो गया है। आपका लेन-देन संदर्भ संख्या {{transaction_number}} है।\n\n यदि राशि आपके खाते से डेबिट होती है, तो कृपया भुगतान पर पुष्टि प्राप्त करने के लिए हमें 2-3 घंटे का समय दें।\n\n यदि आपके खाते से राशि नहीं काटी जाती है, तो आप निम्नलिखित भुगतान लिंक का उपयोग करके पुन: प्रयास कर सकते हैं:\n{{link}}"
+    en_IN: "Sorry 😥!  The Payment Transaction has failed due to authentication failure.\n\nYour transaction reference number is {{transaction_number}}.\n\nTo go back to the main menu, type and send mseva.",
+    hi_IN: "क्षमा करें 😥! प्रमाणीकरण विफलता के कारण भुगतान लेनदेन विफल हो गया है। आपका लेन-देन संदर्भ संख्या {{transaction_number}} है।\n\nमुख्य मेनू पर वापस जाने के लिए, टाइप करें और mseva भेजें।"
+  },
+  wait:{
+    en_IN: "Please wait while your receipt is being generated.",
+    hi_IN: "कृपया प्रतीक्षा करें जब तक कि आपकी रसीद उत्पन्न न हो जाए।"
+  },
+  registration:{
+    en_IN: 'If you want to receive {{service}} bill alerts for {{consumerCode}} on this mobile number type and send *1*\n\nElse type and send *2*',
+    hi_IN: 'यदि आप इस मोबाइल नंबर प्रकार पर {{उपभोक्ता कोड}} के लिए बिल अलर्ट प्राप्त करना चाहते हैं और भेजें *1*\n\nअन्यथा टाइप करें और *2* भेजें'
+  },
+  endStatement:{
+    en_IN: "👉 To go back to the main menu, type and send mseva.",
+    hi_IN: "👉 मुख्य मेनू पर वापस जाने के लिए, टाइप करें और mseva भेजें।"
   }
 
 };

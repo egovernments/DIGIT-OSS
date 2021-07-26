@@ -339,6 +339,10 @@ public class ColumnDetail extends ColumnDef {
         return isLocalisationRequired;
     }
 
+    public void setIsLocalisationRequired(Boolean isLocalisationRequired) {
+        this.isLocalisationRequired = isLocalisationRequired;
+    }
+
     public String getLocalisationPrefix() {
         return localisationPrefix;
     }

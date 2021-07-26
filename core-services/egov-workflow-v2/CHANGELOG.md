@@ -3,6 +3,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.0 2021-06-23
+- Added autoescalation feature
+- Added statelevel fallback feature at businessService level
+
 ## 1.1.5 2021-05-11
 - Inbox and processInstance count for each status
 
