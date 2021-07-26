@@ -13,25 +13,28 @@ const getLabelKey = () => {
     return "WS_COMMON_SEWERAGE_BILL_HEADER"
   }
 }
-export const header = getCommonContainer({
-  header: getCommonHeader({
-    labelName: ``,
-    labelKey: getLabelKey()
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-abg",
-    componentPath: "ApplicationContainer",
-    props: {
-      number: getQueryArg(window.location.href, "consumerNumber"),
-      label: {
-        labelValue: "Consumber No",
-        labelKey: "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CONSUMER_NO"
-      }
-    },
-    visible: true
+
+const getHeader = (applicationNumber) => {
+  return getCommonContainer({
+    header: getCommonHeader({
+      labelName: ``,
+      labelKey: getLabelKey()
+    }),
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-abg",
+      componentPath: "ApplicationContainer",
+      props: {
+        number: applicationNumber,
+        label: {
+          labelValue: "Consumber No",
+          labelKey: "WS_COMMON_CONSUMER_NO_LABEL"
+        }
+      },
+      visible: true
+    }
+  })
   }
-});
 
 const getAcknowledgementCard = (
   state,
@@ -41,12 +44,13 @@ const getAcknowledgementCard = (
   applicationNumber,
   secondNumber,
   tenant,
-  moduleName
+  moduleName,
+  consumerNumber
 ) => {
   if (purpose === "apply" && status === "failure") {
 
     return {
-      header: header,
+      header: getHeader(consumerNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -70,7 +74,7 @@ const getAcknowledgementCard = (
   }
   else if (purpose === "apply" && status === "success") {
     return {
-      header: header,
+      header: getHeader(consumerNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -119,6 +123,22 @@ const screenConfig = {
     const moduleName = getQueryArg(window.location.href, "moduleName");
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
+    const consumerNumber = getQueryArg(window.location.href, "consumerNumber");
+
+    const service = getQueryArg(window.location.href, "service");
+    if (service == "SEWERAGE") {
+      set(
+        action.screenConfig,
+        "components.div.children.header.children.header.children.key.props.labelKey",
+        "WS_COMMON_SEWERAGE_BILL_HEADER"
+      );
+    } else {
+      set(
+        action.screenConfig,
+        "components.div.children.header.children.header.children.key.props.labelKey",
+        "WS_COMMON_WATER_BILL_HEADER"
+      );
+    }
 
     const data = getAcknowledgementCard(
       state,
@@ -127,7 +147,9 @@ const screenConfig = {
       status,
       applicationNumber,
       secondNumber,
-      tenant, moduleName
+      tenant, 
+      moduleName,
+      consumerNumber
     );
 
     set(action, "screenConfig.components.div.children", data);

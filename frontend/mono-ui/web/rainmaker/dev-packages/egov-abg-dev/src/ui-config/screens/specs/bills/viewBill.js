@@ -328,6 +328,23 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.consumerCode.props.number",
       consumerCode
     );
+
+    const service = getQueryArg(window.location.href, "service");
+    if (service == "SEWERAGE") {
+      set(
+        action.screenConfig,
+        "components.div.children.headerDiv.children.header1.children.header.children.key.props.labelKey",
+        "WS_COMMON_SEWERAGE_BILL_HEADER"
+      );
+    } else {
+      set(
+        action.screenConfig,
+        "components.div.children.headerDiv.children.header1.children.header.children.key.props.labelKey",
+        "WS_COMMON_WATER_BILL_HEADER"
+      );
+    }
+    
+    
     // set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopupViewBill);
     beforeInitFn(action, state, dispatch, consumerCode);
     return action;
