@@ -311,5 +311,15 @@ public class PTConstants {
     public static final String ASMT_USER_EVENT_PAY = "pay";
 
     public static final String VIEW_APPLICATION_CODE = "View Application";
+
+
+    // Fuzzy Search
+    public static final String ES_DATA_PATH = "$..Data";
+
+    public static final String ES_DATA_TENANTID_PATH = "$.tenantData.code";
+
+    public static final String ES_DATA_PROPERTYID_PATH = "$.propertyId";
+
+
 }
 

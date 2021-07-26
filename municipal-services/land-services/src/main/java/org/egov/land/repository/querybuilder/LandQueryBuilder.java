@@ -71,7 +71,7 @@ public class LandQueryBuilder {
 			addToPreparedStatement(preparedStmtList, ids);
 		}
 
-		if (criteria.getMobileNumber() != null) {
+		if (criteria.getUserIds() != null && !criteria.getUserIds().isEmpty()) {
 			addClauseIfRequired(preparedStmtList, builder);
 			builder.append(" landInfoowner.uuid IN (").append(createQuery(criteria.getUserIds())).append(")");
 			addToPreparedStatement(preparedStmtList, criteria.getUserIds());

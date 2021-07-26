@@ -1,10 +1,13 @@
 package org.egov.echallan.web.controllers;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.echallan.model.Challan;
 import org.egov.echallan.model.ChallanRequest;
@@ -16,12 +19,7 @@ import org.egov.echallan.util.ResponseInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -65,6 +63,14 @@ public class ChallanController {
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		}
+
+	@PostMapping("/_count")
+	private ResponseEntity<?> count(@RequestParam("tenantId") String tenantId, @RequestBody RequestInfo requestInfo) {
+
+		Map<String,Object> response = new HashMap<>();
+		response = challanService.getChallanCountResponse(requestInfo,tenantId);
+		return new ResponseEntity<>(response,HttpStatus.OK);
+	}
 	
 
 }

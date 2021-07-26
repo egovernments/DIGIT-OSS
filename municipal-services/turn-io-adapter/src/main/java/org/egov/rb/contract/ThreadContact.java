@@ -14,7 +14,7 @@ import lombok.Setter;
 @Data
 public class ThreadContact {
 	
-	
+
 	@JsonProperty("contact")
 	@NotNull
 	private Contact contact;

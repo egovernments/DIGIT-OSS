@@ -62,16 +62,31 @@ public class MDMSValidator {
 	 * @param propertyType
 	 * @throws CustomException
 	 */
-	public void validateVehicleType(String vehicleType ) throws CustomException{
-		
+	public void validateVehicleType(VehicleRequest vehicleRequest ) throws CustomException{
+		String vehicleType = vehicleRequest.getVehicle().getType();
+		Double capacity = vehicleRequest.getVehicle().getTankCapacity();
 		Map<String, String> errorMap = new HashMap<>();
-		
-		if( !this.mdmsResMap.get(Constants.VEHICLE_MAKE_MODEL).contains(vehicleType) ) {
-			errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_TYPE," Vehicle Type is invalid");
+	
+		List<String> vehicleModel =  this.mdmsResMap.get(Constants.VEHICLE_MAKE_MODEL);
+		@SuppressWarnings("unchecked")
+		List<Map<String, String>> vehiclemap = (List<Map<String, String>>) JsonPath.parse(vehicleModel)
+				.read("$.[?(@.code=='" + vehicleType + "')]");
+		if (vehiclemap != null && vehiclemap.size() > 0) {
+			Map<String, String> Data = vehiclemap.get(0);
+			if (!(Data.get("code").equals(vehicleType))) {
+				errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_TYPE, "Vehicle is invalid");
+			}
+			if(Data.containsKey("capacity") && !(Data.get("capacity").equals(capacity))) {
+				String tankCapacity = Data.get("capacity");
+				vehicleRequest.getVehicle().setTankCapacity(Double.parseDouble(tankCapacity));
+			}
+		} else {
+			errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_TYPE, "Vehicle Type is invalid");
 		}
-
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
+		
+		
 	}
 	
 	/**

@@ -19,7 +19,7 @@ public class TradeLicenseSearchCriteria {
     private String tenantId;
 
     @JsonProperty("status")
-    private String status;
+    private List<String> status;
 
     @JsonProperty("applicationType")
     private String applicationType;
@@ -37,7 +37,7 @@ public class TradeLicenseSearchCriteria {
     private String oldLicenseNumber;
 
     @JsonProperty("mobileNumber")
-    private String mobileNumber;
+    private String mobileNumber = null;
 
     @JsonIgnore
     private String accountId;
@@ -61,6 +61,21 @@ public class TradeLicenseSearchCriteria {
     @JsonProperty("limit")
     private Integer limit;
 
+    @JsonProperty("locality")
+    private String locality = null;
+
+    @JsonProperty("tradeName")
+    private String tradeName = null;
+
+    @JsonProperty("ownerName")
+    private String ownerName = null;
+
+    @JsonProperty("issuedFrom")
+    private Long issuedFrom = null;
+
+    @JsonProperty("issuedTo")
+    private Long issuedTo = null;
+
     @JsonIgnore
     private List<String> ownerIds;
 
@@ -68,14 +83,16 @@ public class TradeLicenseSearchCriteria {
     public boolean isEmpty() {
         return (this.tenantId == null && this.status == null && this.applicationType == null && this.ids == null && this.applicationNumber == null
                 && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
-                this.fromDate == null && this.toDate == null && this.ownerIds == null
+                this.fromDate == null && this.toDate == null && this.ownerIds == null && this.locality == null && this.tradeName == null &&
+                this.ownerName == null && this.issuedFrom == null && this.issuedTo == null
         );
     }
 
     public boolean tenantIdOnly() {
         return (this.tenantId != null && this.status == null && this.applicationType == null && this.ids == null && this.applicationNumber == null
                 && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
-                this.fromDate == null && this.toDate == null && this.ownerIds == null
+                this.fromDate == null && this.toDate == null && this.ownerIds == null && this.locality == null && this.tradeName == null &&
+                this.ownerName == null && this.issuedFrom == null && this.issuedTo == null
         );
     }
 

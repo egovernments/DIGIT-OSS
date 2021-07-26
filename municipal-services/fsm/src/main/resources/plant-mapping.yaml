@@ -1,0 +1,62 @@
+serviceMaps:
+ serviceName: fsm
+ mappings:
+ - version: 1.0
+   description: Persists FSM Application details in eg_fsm_application  table
+   fromTopic: save-plant-map-application
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO  eg_fsm_application( id, tenantId,  status, employeeUuid, plantCode, createdBy, lastmodifiedBy, createdTime, lastmodifiedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: plantMapping
+         jsonMaps:
+          - jsonPath: $.plantMapping.id
+          
+          - jsonPath: $.plantMapping.tenantId
+          
+          - jsonPath: $.plantMapping.status
+          
+          - jsonPath: $.plantMapping.employeeUuid
+          
+          - jsonPath: $.plantMapping.plantCode
+
+          - jsonPath: $.plantMapping.auditDetails.createdBy
+
+          - jsonPath: $.plantMapping.auditDetails.lastModifiedBy
+
+          - jsonPath: $.plantMapping.auditDetails.createdTime
+
+          - jsonPath: $.plantMapping.auditDetails.lastModifiedTime
+          
+                    
+          
+ - version: 1.0
+   description: Persists FSM Application details in eg_fsm_application  table
+   fromTopic: update-fsm-application
+   isTransaction: true
+   queryMaps: 
+   
+       - query: INSERT INTO eg_fsm_application_auditlog SELECT * FROM eg_fsm_application WHERE id =?
+         basePath:  fsm
+         jsonMaps: 
+            - jsonPath: $.fsm.id
+             
+       - query: UPDATE  eg_fsm_application SET  status=?, employeeUuid=?, plantCode=?, createdby=?, lastmodifiedby=?, createdtime=?, lastmodifiedtime=? where id=? 
+         basePath: fsm
+         jsonMaps:                          
+                - jsonPath: $.fsm.status
+                
+                - jsonPath: $.fsm.employeeUuid
+                
+                - jsonPath: $.fsm.plantCode
+                  
+                - jsonPath: $.fsm.auditDetails.createdBy
+      
+                - jsonPath: $.fsm.auditDetails.lastModifiedBy
+      
+                - jsonPath: $.fsm.auditDetails.createdTime
+      
+                - jsonPath: $.fsm.auditDetails.lastModifiedTime
+                
+                - jsonPath: $.fsm.id
+      

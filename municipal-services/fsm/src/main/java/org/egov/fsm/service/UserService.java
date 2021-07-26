@@ -203,7 +203,7 @@ public class UserService {
 	 * @return Response from user service as parsed as userDetailResponse
 	 */
 	@SuppressWarnings("rawtypes")
-	UserDetailResponse userCall(Object userRequest, StringBuilder uri) {
+	public UserDetailResponse userCall(Object userRequest, StringBuilder uri) {
 		String dobFormat = null;
 		if (uri.toString().contains(config.getUserSearchEndpoint())
 				|| uri.toString().contains(config.getUserUpdateEndpoint()))

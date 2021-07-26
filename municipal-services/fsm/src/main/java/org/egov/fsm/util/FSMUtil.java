@@ -129,6 +129,8 @@ public class FSMUtil {
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_CHECKLIST).filter(activeFilter).build());
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_CONFIG).filter(activeFilter).build());
 		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_SLUM_NAME).filter(activeFilter).build());
+		fsmMasterDtls.add(MasterDetail.builder().name(FSMConstants.MDMS_FSTP_PLANT_INFO).filter(activeFilter).build());
+		
 		ModuleDetail fsmMasterMDtl = ModuleDetail.builder().masterDetails(fsmMasterDtls)
 				.moduleName(FSMConstants.FSM_MODULE_CODE).build();
 		

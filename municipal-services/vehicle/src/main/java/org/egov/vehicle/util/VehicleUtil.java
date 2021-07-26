@@ -116,22 +116,17 @@ public class VehicleUtil {
 
 		// filter to only get code field from master data
 				final String filterCode = "$.[?(@.active==true)].code";
+				final String activeFilter = "$.[?(@.active==true)]";
 		// master details for FSM module
 		List<MasterDetail> masterDtls = new ArrayList<>();
 		List<ModuleDetail> moduleDtls = new ArrayList<>();
-	
-		
+			
 		masterDtls = new ArrayList<>();
 		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_SUCTION_TYPE).filter(filterCode).build());
-		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_MAKE_MODEL).filter(filterCode).build());
+		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_MAKE_MODEL).filter(activeFilter).build());
 		moduleDtls.add(ModuleDetail.builder().masterDetails(masterDtls)
 				.moduleName(Constants.VEHICLE_MODULE_CODE).build());
 		
-		
-		
-		
-		
-
 		return moduleDtls;
 
 	}

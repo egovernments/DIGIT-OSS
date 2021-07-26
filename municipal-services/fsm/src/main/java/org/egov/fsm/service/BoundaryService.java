@@ -48,7 +48,7 @@ public class BoundaryService {
 	 * @param hierarchyTypeCode
 	 *            HierarchyTypeCode of the boundaries
 	 */
-	public void getAreaType(FSMRequest request, String hierarchyTypeCode) {
+	public void getAreaType(FSMRequest request, String hierarchyTypeCode) throws CustomException {
 		if (request.getFsm() == null) {
 			return;
 		}

@@ -34,6 +34,7 @@ import lombok.Setter;
 @Setter
 public class FSM   {
   @JsonProperty("citizen")
+  @Valid
   private User citizen ;
 
   @SafeHtml
@@ -135,6 +136,7 @@ public class FSM   {
   private Long possibleServiceDate ;
 
   @JsonProperty("pitDetail")
+  @Valid
   private PitDetail pitDetail ;
 
   @Valid

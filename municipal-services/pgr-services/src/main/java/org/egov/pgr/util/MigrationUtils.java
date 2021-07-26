@@ -141,7 +141,7 @@ public class MigrationUtils {
         url.append(config.getWfBusinessServiceSearchPath());
         url.append("?tenantId=");
         url.append(tenantId);
-        url.append("&businessservices=");
+        url.append("&businessServices=");
         url.append(businessService);
         return url;
     }
