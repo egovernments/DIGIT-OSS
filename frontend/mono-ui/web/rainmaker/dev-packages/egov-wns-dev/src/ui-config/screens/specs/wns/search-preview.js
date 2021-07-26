@@ -536,8 +536,11 @@ const screenConfig = {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    //Todo
+    const list = ["NewTL","ModifySWConnection","NewSW1","NewWS1","ModifyWSConnection"];
     const queryObject = [
       { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: list }
     ];
 
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);

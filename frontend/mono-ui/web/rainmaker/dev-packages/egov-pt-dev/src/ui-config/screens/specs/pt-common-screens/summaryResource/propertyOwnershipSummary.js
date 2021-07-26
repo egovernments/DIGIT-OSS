@@ -163,7 +163,7 @@ export const applicantSummary = getCommonGrayCard({
             labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS"
           },
           {
-            jsonPath: "Property.owners[0].sameAsPeropertyAddress",
+            jsonPath: "Property.owners[0].sameAsPropertyAddress",
             localePrefix: {
               moduleName: "common-masters",
               masterName: "OwnerType"
@@ -313,7 +313,7 @@ export const institutionSummary = getCommonGrayCard({
             labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS"
           },
           {
-            jsonPath: "Property.owners[0].sameAsPeropertyAddress",
+            jsonPath: "Property.owners[0].sameAsPropertyAddress",
             callBack: checkValueForNA
           }
         ),

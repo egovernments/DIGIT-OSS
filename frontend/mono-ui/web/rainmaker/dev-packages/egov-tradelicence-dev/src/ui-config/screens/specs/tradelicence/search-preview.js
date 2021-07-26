@@ -161,6 +161,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       { key: "licenseNumbers", value: licenseNumber }
     ];
     const payload = await getSearchResults(queryObjectSearch);
+    dispatch(prepareFinalObject("AllLicences", get(payload, `Licenses`, [])));
     const length = payload && payload.Licenses.length > 0 ? get(payload, `Licenses`, []).length : 0;
     dispatch(prepareFinalObject("licenseCount", length));
     get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&

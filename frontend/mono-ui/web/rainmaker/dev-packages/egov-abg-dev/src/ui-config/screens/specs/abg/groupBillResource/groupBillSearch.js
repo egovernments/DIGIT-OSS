@@ -7,7 +7,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { generateMultipleBill } from "../../utils/receiptPdf";
+// import { generateMultipleBill } from "../../utils/receiptPdf";
 import { searchApiCall } from "./functions";
 
 // const wsBillinData = [
@@ -375,34 +375,57 @@ export const mergeDownloadButton = {
   props: {
     className: "abg-button-container",
     style: {
-      textAlign: "right"
+      textAlign: "right",
+      display: "flex",
+      justifyContent : "flex-end"
     }
   },
   children: {
     mergeButton: {
-      componentPath: "Button",
+      uiFramework: "custom-molecules",
+      componentPath: "DownloadPrintButton",
       visible: false,
       props: {
-        variant: "contained",
-        color: "primary",
-        style: {
-          color: "white",
-          borderRadius: "2px",
-          width: "250px",
-          height: "48px"
+        data: {
+          label: { labelName: "MERGE & DOWNLOAD", labelKey: "ABG_GROUP_BILLS_MERGE_AND_DOWNLOAD_BUTTON" },
+          rightIcon: "arrow_drop_down",
+          props: { 
+            variant: "outlined", 
+            style: { 
+              height: "60px", 
+              backgroundColor: "#FE7A51",
+              color: "#ffffff", 
+              marginRight: 10,
+              width: "368px"
+            } },
+          menu: []
         }
-      },
-      children: {
-        buttonLabel: getLabel({
-          labelName: "MERGE & DOWNLOAD",
-          labelKey: "ABG_GROUP_BILLS_MERGE_AND_DOWNLOAD_BUTTON"
-        })
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: generateMultipleBill
-      },
-      visible: false
-    }
+      }
+    },
+    // mergeButton: {
+    //   componentPath: "Button",
+    //   visible: false,
+    //   props: {
+    //     variant: "contained",
+    //     color: "primary",
+    //     style: {
+    //       color: "white",
+    //       borderRadius: "2px",
+    //       width: "250px",
+    //       height: "48px"
+    //     }
+    //   },
+    //   children: {
+    //     buttonLabel: getLabel({
+    //       labelName: "MERGE & DOWNLOAD",
+    //       labelKey: "ABG_GROUP_BILLS_MERGE_AND_DOWNLOAD_BUTTON"
+    //     })
+    //   },
+    //   onClickDefination: {
+    //     action: "condition",
+    //     callBack: generateMultipleBill
+    //   },
+    //   visible: false
+    // }
   }
 };

@@ -420,7 +420,7 @@ class ShowForm extends Component {
       }
     });
     let filledMandatoryFieldsCount=searchForm ? Object.keys(searchForm)
-    .filter(param => mandatoryfields.includes(param)).length:0;
+    .filter(param => searchForm[param]&&mandatoryfields.includes(param)).length:0;
     if(filledMandatoryFieldsCount!=mandatoryfields.length)
     { 
       toggleSnackbarAndSetText(true,{labelKey:"COMMON_MANDATORY_MISSING_ERROR",labelName:"Please fill all mandatory fields to search"},

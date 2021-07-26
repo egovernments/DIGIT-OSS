@@ -4,7 +4,7 @@ import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/util
 import { ACTIONMENU, EVENTSCOUNT, LOCALATION, MDMS, NOTIFICATIONS } from "egov-ui-kit/utils/endPoints";
 import { getLocale, getTenantId, localStorageSet, setLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { debug } from "util";
-import { INBOXRECORDS, INBOXRECORDSCOUNT } from "../../utils/endPoints";
+import { INBOXESCALTEDRECORDS, INBOXRECORDS, INBOXRECORDSCOUNT } from "../../utils/endPoints";
 import { getLocalizationLabels, getModule, getStoredModulesList, setStoredModulesList } from "../../utils/localStorageUtils";
 import * as actionTypes from "./actionTypes";
 
@@ -356,8 +356,7 @@ export const fetchInboxRecordsCount = () => {
       const { app } = state;
       const { inboxRemData } = app;
       const { loaded: remainingDataLoaded = false } = inboxRemData || {};
-
-      remainingDataLoaded == false && payload>100 && dispatch(fetchRemRecords(payload))
+      remainingDataLoaded == false && payload > 100 && dispatch(fetchRemRecords(payload))
       dispatch(fetchInboxCount(payload));
     } catch (error) {
       dispatch(fetchInboxRecordsError(error.message));
@@ -371,7 +370,16 @@ export const fetchRecords = () => {
     try {
       const tenantId = getTenantId();
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: 100 }];
-      const payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
+      const escRequestBody = [{ key: "tenantId", value: tenantId }];
+      let payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
+      if (payload.ProcessInstances && payload.ProcessInstances.length > 0 && payload.ProcessInstances.length != 100) {
+        let escalatedPayload = await httpRequest(INBOXESCALTEDRECORDS.GET.URL, INBOXESCALTEDRECORDS.GET.ACTION, escRequestBody);
+        escalatedPayload.ProcessInstances && escalatedPayload.ProcessInstances.length > 0 &&
+          escalatedPayload.ProcessInstances.forEach(data => {
+            data.isEscalatedApplication = true;
+            payload.ProcessInstances.push(data);
+          })
+      }
       dispatch(fetchInboxRecords(payload.ProcessInstances));
     } catch (error) {
       dispatch(fetchInboxRecordsError(error.message));
@@ -385,7 +393,16 @@ export const fetchRemRecords = (count = 0) => {
       const tenantId = getTenantId();
       count = localStorage.getItem('jk-test-inbox-record-count') || count;
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 100 }, { key: "limit", value: count - 100 }];
-      const payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
+      const escRequestBody = [{ key: "tenantId", value: tenantId }];
+      let payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
+      if (payload.ProcessInstances && payload.ProcessInstances.length > 0) {
+        let escalatedPayload = await httpRequest(INBOXESCALTEDRECORDS.GET.URL, INBOXESCALTEDRECORDS.GET.ACTION, escRequestBody);
+        escalatedPayload.ProcessInstances && escalatedPayload.ProcessInstances.length > 0 &&
+          escalatedPayload.ProcessInstances.forEach(data => {
+            data.isEscalatedApplication = true;
+            payload.ProcessInstances.push(data);
+          })
+      }
       dispatch(fetchRemInboxRecords(payload.ProcessInstances));
     } catch (error) {
       dispatch(fetchRemInboxRecordsError(error.message));

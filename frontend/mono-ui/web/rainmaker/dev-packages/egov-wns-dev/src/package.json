@@ -1,6 +1,6 @@
 {
   "name": "egov-wns",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "license": "egov",
   "description": "",
   "main": "index.js",

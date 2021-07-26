@@ -130,6 +130,12 @@ export const INBOXRECORDSCOUNT = {
     ACTION: "_get",
   },
 };
+export const INBOXESCALTEDRECORDS = {
+  GET: {
+    URL: "/egov-workflow-v2/egov-wf/escalate/_search",
+    ACTION: "_search",
+  },
+}; 
 
 
 export const PROPERTY = {

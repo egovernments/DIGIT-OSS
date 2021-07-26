@@ -2,22 +2,19 @@ import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
 import {
-  LabelContainer,
-  TextFieldContainer
+  LabelContainer
 } from "egov-ui-framework/ui-containers";
+import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getFileUrlFromAPI,
-  handleFileUpload,
-  getTransformedLocale,
-  getFileUrl
+  getFileUrl, getFileUrlFromAPI, getTransformedLocale, handleFileUpload
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { UploadSingleFile } from "../../ui-molecules-local";
 import { AutosuggestContainer } from "../../ui-containers-local";
+import { UploadSingleFile } from "../../ui-molecules-local";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -123,8 +120,9 @@ const requiredIcon = (
 
 class DocumentList extends Component {
   state = {
-    uploadedDocIndex: 0,
-    loadedDocs:false
+    uploadedDocIndex: -1,
+    loadedDocs: false,
+    fileUploadingStatus: null
   };
 
   componentDidMount = () => {
@@ -132,7 +130,7 @@ class DocumentList extends Component {
       documentsList,
       documentsUploadRedux = {},
       prepareFinalObject,
-      documentsEditFlow={}
+      documentsEditFlow = {}
     } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
@@ -162,10 +160,10 @@ class DocumentList extends Component {
                   documentCode: card.name,
                   documentSubCode: subCard.name
                 };
-                if(documentsEditFlow&&documentsEditFlow[subCard.name]){
-                  documentsUploadRedux[index]['documents'] =[{...documentsEditFlow[subCard.name]}]
-                  documentsUploadRedux[index]['dropdown']={};
-                  documentsUploadRedux[index]['dropdown']["value"] =documentsEditFlow[subCard.name]["documentType"]
+                if (documentsEditFlow && documentsEditFlow[subCard.name]) {
+                  documentsUploadRedux[index]['documents'] = [{ ...documentsEditFlow[subCard.name] }]
+                  documentsUploadRedux[index]['dropdown'] = {};
+                  documentsUploadRedux[index]['dropdown']["value"] = documentsEditFlow[subCard.name]["documentType"]
                 }
               }
               index++;
@@ -188,10 +186,10 @@ class DocumentList extends Component {
                   ? card.dropdown.required
                   : false
               };
-              if(documentsEditFlow&&documentsEditFlow[card.name]){
-                documentsUploadRedux[index]['documents'] =[{...documentsEditFlow[card.name]}]
-                documentsUploadRedux[index]['dropdown']={};
-                documentsUploadRedux[index]['dropdown']["value"] =documentsEditFlow[card.name]["documentType"]
+              if (documentsEditFlow && documentsEditFlow[card.name]) {
+                documentsUploadRedux[index]['documents'] = [{ ...documentsEditFlow[card.name] }]
+                documentsUploadRedux[index]['dropdown'] = {};
+                documentsUploadRedux[index]['dropdown']["value"] = documentsEditFlow[card.name]["documentType"]
               }
             }
             index++;
@@ -199,7 +197,7 @@ class DocumentList extends Component {
         });
     });
     prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
-    this.setState({loadedDocs:true});
+    this.setState({ loadedDocs: true });
   };
 
   onUploadClick = uploadedDocIndex => {
@@ -224,7 +222,15 @@ class DocumentList extends Component {
         ]
       }
     });
+    this.hideLoading();
   };
+
+  showLoading = () => {
+    this.setState({ fileUploadingStatus: "uploading" });
+  }
+  hideLoading = () => {
+    this.setState({ fileUploadingStatus: null });
+  }
 
   removeDocument = remDocIndex => {
     const { prepareFinalObject } = this.props;
@@ -290,8 +296,8 @@ class DocumentList extends Component {
               required={true}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
-              className= "autocomplete-dropdown"
-              labelsFromLocalisation= {true}
+              className="autocomplete-dropdown"
+              labelsFromLocalisation={true}
             />
           )}
         </Grid>
@@ -303,9 +309,10 @@ class DocumentList extends Component {
           className={classes.fileUploadDiv}
         >
           <UploadSingleFile
+            id={`jk-document-id-${key}`}
             classes={this.props.classes}
             handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props)
+              handleFileUpload(e, this.handleDocument, this.props, this.showLoading)
             }
             uploaded={
               documentsUploadRedux[key] && documentsUploadRedux[key].documents
@@ -326,11 +333,14 @@ class DocumentList extends Component {
   };
 
   render() {
-    const { classes, documentsList } = this.props;
+    const { classes, documentsList, fileUploadStatus } = this.props;
     let index = 0;
-    const {loadedDocs}=this.state;
+    const { fileUploadingStatus } = this.state;
     return (
       <div>
+        {fileUploadingStatus == "uploading" &&
+          <div><LoadingIndicator></LoadingIndicator>
+          </div>}
         {documentsList &&
           documentsList.map(container => {
             return (
@@ -388,7 +398,7 @@ const mapStateToProps = state => {
     "documentsEditFlow",
     {}
   );
-  return { documentsUploadRedux,documentsEditFlow, moduleName };
+  return { documentsUploadRedux, documentsEditFlow, moduleName};
 };
 
 const mapDispatchToProps = dispatch => {

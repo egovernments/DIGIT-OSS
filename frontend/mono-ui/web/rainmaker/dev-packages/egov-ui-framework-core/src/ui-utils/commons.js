@@ -384,7 +384,7 @@ export const acceptedFiles = acceptedExt => {
   return acceptedFileTypes;
 };
 
-export const handleFileUpload = (event, handleDocument, props) => {
+export const handleFileUpload = (event, handleDocument, props,afterFileSelected) => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
@@ -406,6 +406,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
         uploadDocument = false;
       }
       if (uploadDocument) {
+        afterFileSelected&&typeof afterFileSelected=='function'&&afterFileSelected()
         if (file.type.match(/^image\//)) {
           const fileStoreId = await uploadFile(
             S3_BUCKET.endPoint,
@@ -703,7 +704,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity || commonConfig.tenantId : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: moduleDetails[0].moduleName === "ws-services-masters" ? commonConfig.tenantId : tenantId,
+      tenantId: moduleDetails[0].moduleName === "ws-services-masters" || moduleDetails[0].moduleName ===  "PropertyTax" ? commonConfig.tenantId : tenantId,
       moduleDetails: moduleDetails
     }
   };

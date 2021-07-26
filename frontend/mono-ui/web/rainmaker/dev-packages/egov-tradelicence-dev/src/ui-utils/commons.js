@@ -7,7 +7,7 @@ import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import {
   acceptedFiles, getFileUrl,
   getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage,
-  enableField, disableField ,enableFieldAndHideSpinner
+  enableField, disableField ,enableFieldAndHideSpinner, getObjectValues
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
@@ -182,14 +182,28 @@ export const updatePFOforSearchResults = async (
     dispatch(prepareFinalObject("LicensesTemp[0].oldOwners",  [...payload.Licenses[0].tradeLicenseDetail.owners]));
     const structureTypes=get(payload,'Licenses[0].tradeLicenseDetail.structureType','').split('.')||[];
     const structureType=structureTypes&&Array.isArray(structureTypes)&&structureTypes.length>0&&structureTypes[0]||'none';
+    const structureSubType=get(payload,'Licenses[0].tradeLicenseDetail.structureType','')||'none'
     const selectedValues=[{
       structureType:structureType,
-      structureSubType:get(payload,'Licenses[0].tradeLicenseDetail.structureType','')||'none'
+      structureSubType: structureSubType
     }]
-    // dispatch(
-    //   prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
-    //   dispatch(
-    //     prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType.${structureType}`,[])));
+    dispatch(
+      prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
+      // dispatch(
+        // prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", getObjectValues(get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType.structureTypesTransformed.${structureType}`,[]))));
+
+      let dropDownValues = getObjectValues(get(state.screenConfiguration.preparedFinalObject,`DynamicMdms.common-masters.structureTypes.structureTypesTransformed.${structureType}`,[]));
+      let structureSubTypeDropValues = [];
+      if (dropDownValues && dropDownValues.length === 0) {
+        dropDownValues = get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType`,[]);
+        if (dropDownValues && dropDownValues.length > 0) {
+          structureSubTypeDropValues = dropDownValues.filter(data => data.code.split('.')[0] === structType.split(".")[0]);
+          dispatch(prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", structureSubTypeDropValues));
+        }
+      } else {
+        dispatch(prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", dropDownValues));
+      }
+
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
@@ -205,7 +219,7 @@ export const updatePFOforSearchResults = async (
 
   createOwnersBackup(dispatch, payload);
 
-    
+
 };
 
 export const getBoundaryData = async (
@@ -629,7 +643,7 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 };
 
 
-export const handleFileUpload = (event, handleDocument, props) => {
+export const handleFileUpload = (event, handleDocument, props,afterFileSelected) => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
@@ -651,6 +665,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
         uploadDocument = false;
       }
       if (uploadDocument) {
+        afterFileSelected&&typeof afterFileSelected=='function'&&afterFileSelected();
         if (file.type.match(/^image\//)) {
           const fileStoreId = await uploadFile(
             S3_BUCKET.endPoint,

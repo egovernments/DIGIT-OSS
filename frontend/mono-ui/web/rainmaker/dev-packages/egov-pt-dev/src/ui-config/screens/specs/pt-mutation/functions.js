@@ -135,6 +135,9 @@ const searchApiCall = async (state, dispatch, index) => {
     "ptSearchScreen",
     {}
   );
+  Object.keys(searchScreenObject).map(key=>{
+    searchScreenObject[key]=searchScreenObject[key]&&typeof searchScreenObject[key]=='string'&&searchScreenObject[key].trim();
+  })
   if ((!searchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(
@@ -155,29 +158,7 @@ const searchApiCall = async (state, dispatch, index) => {
     query = {}
   }
 
-  let formValid = false;
-  if (index == 0) {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '') {
-      formValid = true;
-    }
-  } else {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
-      formValid = true;
-    }
-  }
-  if (!formValid) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to search",
-          labelKey: "ERR_PT_FILL_VALID_FIELDS"
-        },
-        "error"
-      )
-    );
-    return;
-  }
+
   let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertySearch");
   let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
@@ -196,7 +177,24 @@ const searchApiCall = async (state, dispatch, index) => {
     dispatch,
     "propertySearch"
   );
-
+  const isownerLocalityRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.locality == "";
+  const isownerDoorNoRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.doorNo == "";
+  const isownerNameRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.name == "";
 
   const isownerMobNoRowValid = validateFields(
     "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
@@ -217,7 +215,7 @@ const searchApiCall = async (state, dispatch, index) => {
     state,
     dispatch,
     "propertySearch"
-  ) || searchScreenObject.oldpropertyids == '';
+  ) || searchScreenObject.oldPropertyId == '';
   const ispropertyTaxApplicationNoRowValid = validateFields(
     "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
     state,
@@ -237,7 +235,29 @@ const searchApiCall = async (state, dispatch, index) => {
     "propertySearch"
   ) || searchScreenObject.ids == '';
 
-
+  let formValid = false;
+  if (index == 0) {
+    if (searchScreenObject.locality != "" && (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldPropertyId != '' || searchScreenObject.name != '' || searchScreenObject.doorNo != '')) {
+      formValid = true;
+    }
+  } else {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
+      formValid = true;
+    }
+  }
+  if (!formValid) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to search",
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
+        },
+        "error"
+      )
+    );
+    return;
+  }
 
 
   if (!(isSearchBoxFirstRowValid)) {
@@ -253,7 +273,7 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
   }
-  if (index == 0 && !(isSearchBoxFirstRowValid && isownerCityRowValid && ispropertyTaxUniqueIdRowValid && isexistingPropertyIdRowValid && isownerMobNoRowValid)) {
+  if (index == 0 && !(isSearchBoxFirstRowValid && isownerCityRowValid && ispropertyTaxUniqueIdRowValid && isexistingPropertyIdRowValid && isownerMobNoRowValid && isownerLocalityRowValid && isownerDoorNoRowValid && isownerNameRowValid)) {
     dispatch(
       toggleSnackbar(
         true,
@@ -319,15 +339,17 @@ const searchApiCall = async (state, dispatch, index) => {
     let queryObject = [];
     Object.keys(query).map(key => {
       queryObject.push({
-        key: key, value: query[key]
+        key: key, value: key=="doorNo"?encodeURIComponent(query[key]):query[key]
       })
     })
     try {
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
-      const response = await getSearchResults(queryObject);
-
-      // const response = searchSampleResponse();
+      
+      /* Fuzzy serach seperate API implementation */
+      /* const response = (searchScreenObject['doorNo'] || searchScreenObject['name']) && index == 0 ? await getSearchResults(queryObject, {}, "/property-services/property/fuzzy/_search") : await getSearchResults(queryObject); */
+      
+      const response =  await getSearchResults(queryObject);
 
       let propertyData = response.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:

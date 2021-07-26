@@ -78,19 +78,7 @@ export const waterDetails = () => {
       meterID: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_METER_ID" }, { jsonPath: "WaterConnection[0].meterId", callBack: checkValueForNA }),
       pipeSize: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_PIPE_SIZE" }, { jsonPath: "WaterConnection[0].pipeSize", callBack: checkValueForNA }),
       connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate", callBack: checkValueForNA }),
-      waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource", localePrefix: { moduleName: "WS_SERVICES_MASTERS", masterName: "WATERSOURCE" }, callBack: checkValueForNA }),
-      // waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
-      editSection: {
-        componentPath: "Button",
-        props: { color: "primary", style: { margin: "-16px" } },
-        visible: true,
-        gridDefination: { xs: 12, sm: 12, align: "left" },
-        children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
-        onClickDefination: {
-          action: "page_change",
-          path: `meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
-        }
-      },
+      waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource", localePrefix: { moduleName: "WS_SERVICES_MASTERS", masterName: "WATERSOURCE" }, callBack: checkValueForNA })
     })
   } else {
     return getCommonContainer({

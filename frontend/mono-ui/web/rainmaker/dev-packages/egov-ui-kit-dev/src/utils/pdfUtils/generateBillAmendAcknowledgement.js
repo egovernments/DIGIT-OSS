@@ -4,13 +4,31 @@ import { billAmendDemandRevisionContainer } from "egov-billamend/ui-config/scree
 import { generateKeyValue, generatePDF, getDocumentsCard, getEstimateCardDetails } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import { getFromObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { getEstimateCardDetailsBillAmend } from "./generatePDF";
 
 const getDate=(date)=>{
 
     let dateObj=new Date(date);
     return `${dateObj.getDate()}-${dateObj.getMonth()+1}-${dateObj.getYear()+1900}`;
     }
-
+    const updateEstimate = (fees = [], searchBillDetails = {}) => {
+        let amountType = "reducedAmount";
+    
+        let newFee = {};
+        fees && Array.isArray(fees) && fees.map(fee => {
+            amountType = fee.amountType;
+            newFee[fee.taxHeadMasterCode] = { ...fee }
+        })
+        let newFees = [];
+        Object.keys(searchBillDetails).map(key => {
+            if (key != 'TOTAL') {
+                newFees.push({ taxHeadMasterCode: key, taxAmount: getFromObject(newFee, `${key}.taxAmount`, 0) == 0 ? '0' : getFromObject(newFee, `${key}.taxAmount`, 0), amountType });
+            }
+    
+        })
+    
+        return newFees;
+    }
 export const generateBillAmendAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
 
     billAmendDemandRevisionContainer.demandRevisionBasis.localiseValue = true;
@@ -44,32 +62,44 @@ export const generateBillAmendAcknowledgement = (preparedFinalObject, fileName =
             delete modifiedDemand.dateEffectiveFrom
             delete modifiedDemand.govtNotificationNumber
     }
-    const demandDetails = getFromObject(preparedFinalObject, 'Amendment.demandDetails', []);
+    const searchBillDetails = getFromObject(preparedFinalObject, 'Amendment.additionalDetails.searchBillDetails', {});
+    let demandDetails = getFromObject(preparedFinalObject, 'Amendment.demandDetails', []);
     const estimateCardData = [{
         name: {
             labelName: 'BILL_TAX_HEADS',
             labelKey: 'BILL_TAX_HEADS'
         },
+        value1: getLocaleLabels('BILL_OLD_AMOUNT','BILL_OLD_AMOUNT'),
+        value2: getLocaleLabels('BILL_UPDATED_AMOUNT','BILL_UPDATED_AMOUNT'),
         value: getLocaleLabels('BILL_REDUCED_AMOUNT_RS','BILL_REDUCED_AMOUNT_RS')
     }]
+    demandDetails=updateEstimate(demandDetails,searchBillDetails);
+
+
+
     demandDetails.map(demand => {
-        if( demand.taxAmount > 0){
-            estimateCardData[0].value=getLocaleLabels('DEBIT_NOTE','DEBIT_NOTE');
-          }else{
-            estimateCardData[0].value=getLocaleLabels('CREDIT_NOTE','CREDIT_NOTE');
-          }
+        if(typeof demand.taxAmount== "number"){
+            if( demand.taxAmount > 0 ){
+                estimateCardData[0].value=getLocaleLabels('DEBIT_NOTE','DEBIT_NOTE');
+              }else{
+                estimateCardData[0].value=getLocaleLabels('CREDIT_NOTE','CREDIT_NOTE');
+              }
+        }
+       
         estimateCardData.push({
             name: {
                 labelName: demand.taxHeadMasterCode,
                 labelKey: demand.taxHeadMasterCode
             },
+            value1:getFromObject(searchBillDetails, demand.taxHeadMasterCode, 0),
+            value2:demand.taxAmount < 0 ? Number(getFromObject(searchBillDetails, demand.taxHeadMasterCode, 0)) - Math.abs(Number(demand.taxAmount)) : Number(getFromObject(searchBillDetails, demand.taxHeadMasterCode, 0)) + Number(demand.taxAmount),
             value: demand.taxAmount == 0 ? '0' : Math.abs(demand.taxAmount)
         })
     })
-
+    
     const documentsUploadRedux = getFromObject(preparedFinalObject, 'bill-amend-review-document-data', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
-    const estimateDetails = getEstimateCardDetails(estimateCardData, undefined, false, true,true)
+    const estimateDetails = getEstimateCardDetailsBillAmend(estimateCardData, undefined, false, true,true)
     const billAmendDemandRevisionSummary = generateKeyValue(preparedFinalObject, modifiedDemand);
 
     let pdfData = {

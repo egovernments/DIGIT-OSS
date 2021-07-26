@@ -128,6 +128,10 @@ export const employeeDetails = getCommonCard({
             code:"TRANSGENDER",
             name:"COMMON_GENDER_TRANSGENDER"
           }
+          // {
+          //   value: "OTHERS",
+          //   label: "COMMON_GENDER_OTHERS"
+          // }
         ],
         optionValue: "value",
         optionLabel: "label",

@@ -516,6 +516,29 @@ export const getFetchBill = async(state, dispatch, action, queryObject) => {
   }
 }
 
+export const searchBill = async(state, dispatch, action, queryObject) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_search",
+      "",
+      queryObject
+    );
+    const billdetails=get(response,'Bill[0].billDetails',[]);
+    set(response,'Bill[0].billDetails',billdetails.sort((x,y)=>y.fromPeriod-x.fromPeriod));
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "fetxh");
+  }
+}
+
 export const showApplyCityPicker = (state, dispatch) => {
   let toggle = get(
     state.screenConfiguration.screenConfig["apply"],

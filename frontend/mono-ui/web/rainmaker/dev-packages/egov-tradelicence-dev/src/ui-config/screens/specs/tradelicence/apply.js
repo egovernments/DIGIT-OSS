@@ -30,8 +30,7 @@ export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
       ? getCommonHeader({
-        labelName: `Apply for New Trade License ${
-          process.env.REACT_APP_NAME === "Citizen"
+        labelName: `Apply for New Trade License ${process.env.REACT_APP_NAME === "Citizen"
             ? "(" + getCurrentFinancialYear() + ")"
             : ""
           }`,
@@ -90,6 +89,7 @@ export const getMdmsData = async (action, state, dispatch) => {
             { name: "OwnerType" },
             { name: "DocumentType" },
             { name: "UOM" },
+            { name: "StructureType" }
           ]
         },
         {
@@ -327,7 +327,20 @@ const screenConfig = {
       );
 
     });
-
+    //hardcoding license type to permanent
+    if (getQueryArg(window.location.href, "action") == null) {
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear.props.disabled",
+        false
+      );
+    } else {
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear.props.disabled",
+        true
+      );
+    }
     return action;
   },
 

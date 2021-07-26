@@ -73,7 +73,7 @@ export const multiHttpRequest = async (
       }
       return instance.post(endPoint[index], wrapRequestBody(requestB, action, customRequestInfo))
     }))
-    const responseStatus = parseInt(response && response[0] && response[0].status, 10);
+    const responseStatus = parseInt(response && Array.isArray(response)&&response.length>0&&response[0] && response[0].status, 10);
     if (responseStatus === 200 || responseStatus === 201) {
       return response && response.map(resp => resp.data);
     }

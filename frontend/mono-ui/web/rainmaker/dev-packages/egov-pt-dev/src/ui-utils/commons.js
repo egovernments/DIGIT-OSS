@@ -46,18 +46,18 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   }
 };
 
-export const getSearchResults = async (queryObject, requestBody) => {
+export const getSearchResults = async (queryObject, requestBody,searchURL="/property-services/property/_search") => {
   try {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/property-services/property/_search",
+      searchURL,
       "",
       queryObject,
       requestBody
     );
     response && response.Properties && response.Properties.map(property => {
-      if (property.status == "INWORKFLOW") {
+    
         let newOwnerList = [];
         let oldOwnerList = [];
         property.owners.map(owner => {
@@ -67,8 +67,12 @@ export const getSearchResults = async (queryObject, requestBody) => {
             oldOwnerList.push(owner);
           }
         })
+      if (property.status == "INWORKFLOW") {
         oldOwnerList.push(...newOwnerList);
         property.owners = oldOwnerList;
+      }else{
+        newOwnerList.push(...oldOwnerList);
+        property.owners = newOwnerList;
       }
     })
     store.dispatch(toggleSpinner());

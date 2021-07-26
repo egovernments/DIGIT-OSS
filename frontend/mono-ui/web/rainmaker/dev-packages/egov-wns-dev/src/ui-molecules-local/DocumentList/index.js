@@ -2,22 +2,20 @@ import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
 import {
-  LabelContainer,
-  TextFieldContainer
+  LabelContainer
 } from "egov-ui-framework/ui-containers";
+import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getFileUrlFromAPI,
-  handleFileUpload,
-  getTransformedLocale
+  getFileUrlFromAPI, getTransformedLocale, handleFileUpload
 } from "egov-ui-framework/ui-utils/commons";
-import get from "lodash/get";
 import _ from "lodash";
+import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { UploadSingleFile } from "../../ui-molecules-local";
 import { AutosuggestContainer } from "../../ui-containers-local";
+import { UploadSingleFile } from "../../ui-molecules-local";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -123,7 +121,8 @@ const requiredIcon = (
 
 class DocumentList extends Component {
   state = {
-    uploadedDocIndex: 0
+    uploadedDocIndex: 0,
+    fileUploadingStatus: null
   };
 
   componentDidMount = () => {
@@ -185,6 +184,14 @@ class DocumentList extends Component {
     }
   };
 
+
+  showLoading = () => {
+    this.setState({ fileUploadingStatus: "uploading" });
+  }
+  hideLoading = () => {
+    this.setState({ fileUploadingStatus: null });
+  }
+
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
@@ -199,6 +206,7 @@ class DocumentList extends Component {
         ...documentsUploadRedux[uploadedDocIndex], documents: [{ fileName: file.name, fileStoreId, fileUrl: Object.values(fileUrl)[0] }]
       }
     });
+    this.hideLoading();
   };
 
   removeDocument = remDocIndex => {
@@ -238,10 +246,10 @@ class DocumentList extends Component {
               </Icon>
             </div>
           ) : (
-              <div className={classes.documentIcon}>
-                <span>{key + 1}</span>
-              </div>
-            )}
+            <div className={classes.documentIcon}>
+              <span>{key + 1}</span>
+            </div>
+          )}
         </Grid>
         <Grid
           item={true}
@@ -261,16 +269,16 @@ class DocumentList extends Component {
           {card.dropdown && (
             <AutosuggestContainer
               select={true}
-              label={{ labelKey: getTransformedLocale(card.dropdown.label), labelName:  getTransformedLocale(card.dropdown.label) }}
+              label={{ labelKey: getTransformedLocale(card.dropdown.label), labelName: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
               data={card.dropdown.menu}
               optionValue="code"
               optionLabel="label"
-              required={(card.required)?true:false}
+              required={(card.required) ? true : false}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
-              className= "autocomplete-dropdown"
-              labelsFromLocalisation= {true}
+              className="autocomplete-dropdown"
+              labelsFromLocalisation={true}
               isDisabled={card.disabled ? card.disabled : false}
               isClearable={true}
             />
@@ -284,9 +292,10 @@ class DocumentList extends Component {
           className={classes.fileUploadDiv}
         >
           <UploadSingleFile
+            id={`jk-document-id-${key}`}
             classes={this.props.classes}
             handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props)
+              handleFileUpload(e, this.handleDocument, this.props, this.showLoading)
             }
             uploaded={
               documentsUploadRedux[key] && documentsUploadRedux[key].documents
@@ -310,8 +319,12 @@ class DocumentList extends Component {
   render() {
     const { classes, documentsList } = this.props;
     let index = 0;
+    const { fileUploadingStatus } = this.state;
     return (
       <div>
+        {fileUploadingStatus == "uploading" &&
+          <div><LoadingIndicator></LoadingIndicator>
+          </div>}
         {documentsList &&
           documentsList.map(container => {
             return (

@@ -512,6 +512,7 @@ const commonApplicantInformation = () => {
             isClearable: true,
             labelsFromLocalisation: true,
             className: "autocomplete-dropdown",
+            defaultSort:false
           },
           required: true,
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",

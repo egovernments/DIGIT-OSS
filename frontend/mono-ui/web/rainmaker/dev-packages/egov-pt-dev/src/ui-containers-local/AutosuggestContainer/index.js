@@ -17,30 +17,34 @@ class AutoSuggestor extends Component {
     //Storing multiSelect values not handled yet
     onChange({ target: { value: value ? value.value : null } });
   };
-  shouldComponentUpdate = (nextProps, nextState) => {
+    shouldComponentUpdate = (nextProps, nextState) => {
     let {
       value,
       suggestions = [],
       disabled = false,
       locale,
-      required
+      required,
+      localizationLabels={}
     } = this.props;
     let {
       value: valueNew,
       suggestions: suggestionsNew = [],
       disabled: disabledNew = false,
       locale: localeNew,
-      required: requiredNew
+      required: requiredNew,
+      localizationLabels:localizationLabelsNew={}
     } = nextProps;
     if (locale != localeNew ||
       value != valueNew ||
       disabled != disabledNew ||
       required != requiredNew ||
       Array.isArray(suggestionsNew) != Array.isArray(suggestions) ||
-      suggestions.length != suggestionsNew.length) {
-      return true
+      suggestions.length != suggestionsNew.length||
+      Object.keys(localizationLabels).length!=Object.keys(localizationLabelsNew).length) {
+      // return true
     }
-    return false
+    // return false
+    return true
   }
 
   render() {

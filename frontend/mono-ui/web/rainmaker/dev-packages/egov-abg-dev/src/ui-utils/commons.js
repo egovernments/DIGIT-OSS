@@ -7,7 +7,7 @@ import {
   getFileUrlFromAPI, getQueryArg, setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -583,4 +583,217 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
       return arr[i];
     }
   }
+};
+
+export const getSearchResultsForCurrentBill = async (queryObject, filter = false) => {
+  try {
+      const response = await httpRequest(
+          "post",
+          "/ws-services/wc/_search",
+          "_search",
+          queryObject
+      );
+      if (response.WaterConnection && response.WaterConnection.length == 0) {
+          return response;
+      }
+      let currentTime = new Date().getTime();
+      if (filter) {
+          response.WaterConnection = response.WaterConnection.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+          response.WaterConnection = response.WaterConnection.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+      }
+
+      let result = findAndReplace(response, null, "NA");
+      result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
+      let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
+      let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
+      result.WaterConnection[0].waterSource = waterSource;
+      result.WaterConnection[0].waterSubSource = waterSubSource;
+      result.WaterConnection = await getPropertyObj(result.WaterConnection);
+      return result;
+  } catch (error) { console.log(error) }
+};
+
+export const getSearchResultsForSewerage = async (queryObject, dispatch, filter = false) => {
+  dispatch(toggleSpinner());
+  try {
+      const response = await httpRequest(
+          "post",
+          "/sw-services/swc/_search",
+          "_search",
+          queryObject
+      );
+      if (response.SewerageConnections && response.SewerageConnections.length == 0) {
+          dispatch(toggleSpinner());
+          return response;
+      }
+      let currentTime = new Date().getTime();
+      if (filter) {
+          response.SewerageConnections = response.SewerageConnections.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+          response.SewerageConnections = response.SewerageConnections.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+      }
+      let result = findAndReplace(response, null, "NA");
+      result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
+      dispatch(toggleSpinner());
+      return result;
+  } catch (error) {
+      dispatch(toggleSpinner());
+      console.log(error)
+  }
+};
+
+export const fetchBill = async (queryObject, dispatch) => {
+  dispatch(toggleSpinner());
+  try {
+      const response = await httpRequest(
+          "post",
+          "/billing-service/bill/v2/_fetchbill",
+          "_fetchBill",
+          queryObject
+      );
+      dispatch(toggleSpinner());
+      return findAndReplace(response, null, "NA");
+  } catch (error) {
+      dispatch(toggleSpinner());
+      store.dispatch(
+        toggleSnackbar(
+          true, { labelName: error.message, labelCode: error.message },
+          "error"
+        )
+      );
+  }
+};
+
+export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
+  dispatch(toggleSpinner());
+  try {
+      const response = await httpRequest(
+          "post",
+          "/egov-mdms-service/v1/_search",
+          "_search", [],
+          requestBody
+      );
+      dispatch(toggleSpinner());
+      return findAndReplace(response, null, "NA");
+  } catch (error) {
+      dispatch(toggleSpinner());
+      store.dispatch(
+          toggleSnackbar(
+              true, { labelName: error.message, labelCode: error.message },
+              "error"
+          )
+      );
+  }
+};
+
+export const getConsumptionDetails = async (queryObject, dispatch) => {
+  dispatch(toggleSpinner());
+  try {
+      const response = await httpRequest(
+          "post",
+          "/ws-calculator/meterConnection/_search",
+          "_search",
+          queryObject
+      );
+      dispatch(toggleSpinner());
+      return findAndReplace(response, null, "NA");
+  } catch (error) {
+      dispatch(toggleSpinner());
+      store.dispatch(
+          toggleSnackbar(
+              true, { labelName: error.message, labelCode: error.message },
+              "error"
+          )
+      );
+  }
+};
+
+export const serviceConst = {
+  "WATER": "WATER",
+  "SEWERAGE": "SEWERAGE"
+}
+
+export const findAndReplace = (obj, oldValue, newValue) => {
+  Object.keys(obj).forEach(key => {
+      if ((obj[key] instanceof Object) || (obj[key] instanceof Array)) findAndReplace(obj[key], oldValue, newValue)
+      obj[key] = obj[key] === oldValue ? newValue : obj[key]
+  })
+  return obj
+}
+
+export const getPropertyObj = async (waterConnection, locality, tenantId, isFromSearch) => {
+  let uuidsArray = [];
+  let uuids = "";
+  let propertyArr = [];
+  for (var i = 0; i < waterConnection.length; i++) {
+      if (waterConnection[i].propertyId && waterConnection[i].propertyId !== null && waterConnection[i].propertyId !== "NA") {
+          if (!uuidsArray.includes(waterConnection[i]['propertyId'])) {
+              uuidsArray.push(waterConnection[i]['propertyId']);
+              uuids += waterConnection[i]['propertyId'] + ",";
+          }
+          if (uuidsArray.length % 50 === 0 || (uuidsArray.length > 0 && i === (waterConnection.length - 1))) {
+              let queryObject1 = [];
+              uuids = uuids.substring(0, uuids.length - 1);
+              if (process.env.REACT_APP_NAME === "Citizen") {
+                  queryObject1 = [{ key: "propertyIds", value: uuids }];
+              } else {
+                  queryObject1 = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "propertyIds", value: uuids }];
+              }
+
+              if(locality) {
+                  queryObject1.push({key: "locality", value: locality})
+              }
+              if(tenantId) {
+                  queryObject1.push({key: "tenantId", value: tenantId})
+              }
+              if (!window.location.href.includes("propertyId") || isFromSearch) {
+                  let payload = await getPropertyResultsWODispatch(queryObject1);
+                  if (payload.Properties.length > 0) {
+                      for (var j = 0; j < payload.Properties.length; j++) {
+                          propertyArr[payload.Properties[j].propertyId] = payload.Properties[j]
+                      }
+                  }
+              }
+              uuids = "";
+              uuidsArray = [];
+          }
+      } else {
+          waterConnection[i].property = null;
+      }
+  }
+  let tempPropertyObj = null
+  if (Object.keys(propertyArr).length > 0) {
+      for (var i = 0; i < waterConnection.length; i++) {
+          if (waterConnection[i].propertyId && waterConnection[i].propertyId !== null && waterConnection[i].propertyId !== "NA") {
+              if (propertyArr[waterConnection[i].propertyId]) {
+                  tempPropertyObj = (propertyArr[waterConnection[i].propertyId]) ? propertyArr[waterConnection[i].propertyId] : null
+                  waterConnection[i].property = tempPropertyObj;
+                  waterConnection[i].tenantId = (tempPropertyObj && tempPropertyObj.tenantId) ? tempPropertyObj.tenantId : null;
+                  tempPropertyObj = null;
+              }
+          }
+      }
+  }
+  if(get(waterConnection[0], "property.owners")) {
+      waterConnection[0].property.owners = waterConnection[0].property.owners.filter(owner => owner.status == "ACTIVE");
+  }
+  if(get(waterConnection[0], "property.units") == "NA" && get(waterConnection[0], "property.additionalDetails") && get(waterConnection[0], "property.additionalDetails.subUsageCategory")) {
+      waterConnection[0].property.units = [];
+      waterConnection[0].property.units.push({usageCategory: get(waterConnection[0], "property.additionalDetails.subUsageCategory")})
+    } 
+  return waterConnection;
+}
+
+export const getPropertyResultsWODispatch = async (queryObject) => {
+  try {
+      const response = await httpRequest(
+          "post",
+          "/property-services/property/_search",
+          "_search",
+          queryObject
+      );
+      return findAndReplace(response, null, "NA");
+  } catch (error) {
+      console.log(error);
+  }
+
 };

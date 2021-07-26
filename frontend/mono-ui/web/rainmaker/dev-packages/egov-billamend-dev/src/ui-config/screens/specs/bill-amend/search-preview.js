@@ -447,6 +447,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
         set(amendments[0], 'additionalDetails.ownerName', consumerName);
         set(amendments[0], 'additionalDetails.ownerAddress', consumerAddress);
         dispatch(prepareFinalObject("Amendment", amendments[0]));
+        dispatch(prepareFinalObject("searchBillDetails-bill", get(amendments[0],"additionalDetails.searchBillDetails",{})));
         dispatch(prepareFinalObject("AmendmentUpdate", amendments[0]));
         adjustmentAmountDetails(state, dispatch, amendments[0]);
         documentDetailsPreview(state, dispatch, amendments[0]);

@@ -4,7 +4,8 @@ import {
   convertEpochToDate,
   getCommonCard,
   getCommonContainer,
-  getCommonHeader
+  getCommonHeader,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -375,6 +376,46 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           true
         )
       );
+
+      const service = getQueryArg(window.location.href, "service");
+      const connectionType = getQueryArg(window.location.href, "connectionType");
+      const getRedirectionURL = async (state, dispatch) => {
+        const getTenant = getQueryArg(window.location.href, "tenantId");
+        const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+        const environment = process.env.NODE_ENV === "production" ? process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee" : "";
+        const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+        window.location.assign(`${origin}${environment}/wns/meter-reading?connectionNos=${connectionNumber}&tenantId=${getTenant}`);
+      };
+      const editSection= {
+        componentPath: "Button",
+        props: { color: "primary", style: { margin: "-16px" } },
+        visible: true,
+        gridDefination: { xs: 12, sm: 12, align: "left" },
+        children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
+        onClickDefination: {
+          action: "condition",
+          callBack: getRedirectionURL
+        }
+      }
+      if( service === "WATER" && connectionType === "Metered") {
+      dispatch(
+        handleField(
+          "connection-details",
+          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.waterDetails.children",
+          "editSection",
+          editSection
+        )
+      );
+      } else {
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.waterDetails.children",
+            "editSection",
+            {}
+          )
+        );
+      }
     }
   }
 };
@@ -482,6 +523,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("WaterConnection[0]", {}));
     let connectionNo = getQueryArg(window.location.href, "connectionNumber");   
     getDataForBillAmendment(action, state, dispatch);
 
@@ -502,11 +544,11 @@ const screenConfig = {
       "screenConfig.components.div.children.getConnectionDetailsFooterAction.children.takeAction.props.connectionNumber",
       connectionNo
     );
-    set(
-      action,
-      "screenConfig.components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.onClickDefination.path",
-      `meter-reading?connectionNos=${connectionNo}&tenantId=${getQueryArg(window.location.href, "tenantId")}`
-    );
+    // set(
+    //   action,
+    //   "screenConfig.components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.onClickDefination.path",
+    //   `meter-reading?connectionNos=${connectionNo}&tenantId=${getQueryArg(window.location.href, "tenantId")}`
+    // );
     
     
 

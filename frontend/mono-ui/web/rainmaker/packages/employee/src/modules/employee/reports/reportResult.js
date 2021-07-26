@@ -40,10 +40,9 @@ if(typeof key!='string'){
 }
 key=key.trim&&key.trim()||key;
 key=key.toUpperCase&&key.toUpperCase()||key;
+key=key.replace(/[.:-\s\/]/g, "_")||key;
 return key;
 }
-
-
 
 class ShowField extends Component {
   constructor(props) {
@@ -319,7 +318,7 @@ class ShowField extends Component {
       ) {
         return this.addCommas(Number(val) % 1 === 0 ? Number(val) : Number(val).toFixed(2));
       }
-      else if (val && i && reportResult &&
+      else if (val && reportResult &&
         reportResult.reportHeader &&
         reportResult.reportHeader.length &&
         reportResult.reportHeader[i] &&

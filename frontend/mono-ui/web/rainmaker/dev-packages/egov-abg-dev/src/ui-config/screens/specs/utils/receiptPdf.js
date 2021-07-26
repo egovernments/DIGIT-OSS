@@ -9,6 +9,8 @@ import {
   loadMdmsData, loadPtBillData,
   loadUlbLogo
 } from "./receiptTransformer";
+import commonConfig from "config/common.js";
+import { downloadPdfFile } from "egov-ui-kit/utils/api" 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -214,6 +216,72 @@ export const generateMultipleBill = async (state, dispatch, type) => {
   filestoreids&&filestoreids.length>0&&downloadMultipleFileFromFilestoreIds(filestoreids,'download'); */
   dispatch(toggleSpinner());
 };
+
+export const downloadMultipleBills = async (bills = [], configKey, tenantId, locality, isConsolidated, businesService, consumerCode) => {
+  try {
+    const DOWNLOADRECEIPT = {
+      GET: {
+        URL: "/egov-pdf/download/WNS/wnsgroupbill",
+        ACTION: "_get",
+      },
+    };
+    const queryStr = [
+      { key: "key", value: configKey },
+      { key: "tenantId", value: tenantId || commonConfig.tenantId },
+      { key: "locality", value: locality },
+      { key: "isConsolidated", value: isConsolidated },
+    ];
+    if(businesService) {
+      queryStr.push({key: "bussinessService", value: businesService})
+    }
+    if(consumerCode) {
+      queryStr.push({key: "consumerCode", value: consumerCode})
+    }
+
+    downloadPdfFile(DOWNLOADRECEIPT.GET.URL,'post',queryStr,{},{},false, `${businesService}_${locality}`); //{ Bill: bills }
+  
+  } catch (error) {
+    console.log(error);
+
+  }
+
+}
+
+//generateMutlipleBills PDF
+export const generateMultipleBills = async (state, dispatch, tenantId, locality, isConsolidated, businesService, consumerCode) => {
+  dispatch(toggleSpinner());
+  let allBills = get(
+    state.screenConfiguration,
+    "preparedFinalObject.searchScreenMdmsData.billSearchResponse",
+    []
+  );
+  const commonPayDetails = get(
+    state.screenConfiguration,
+    "preparedFinalObject.searchScreenMdmsData.common-masters.uiCommonPay",
+    []
+  );
+  const businessService = get(
+    state.screenConfiguration,
+    "preparedFinalObject.searchCriteria.businesService",
+    ''
+  );
+
+  let billkey = ''
+  const index = commonPayDetails && commonPayDetails.findIndex((item) => {
+    return item.code == businessService;
+  });
+  if (index > -1) {
+    billkey = get(commonPayDetails[index], 'billKey', '');
+  } else {
+    const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
+    billkey = get(details, 'billKey', '');
+  }
+  allBills = allBills.filter(bill => bill.status === 'ACTIVE');
+  allBills && allBills.length > 0 && await downloadMultipleBills(allBills, billkey, tenantId, locality, isConsolidated, businesService, consumerCode);
+  dispatch(toggleSpinner());
+};
+
+
 /* await loadMdmsData(tenant);
 // data1 is for ULB logo from loadUlbLogo
 let data1 = get(

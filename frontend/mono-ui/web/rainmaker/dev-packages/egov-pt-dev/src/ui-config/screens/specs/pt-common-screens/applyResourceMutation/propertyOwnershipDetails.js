@@ -206,13 +206,13 @@ const institutionInformation = () => {
           gridDefination: { xs: 12, sm: 12, md: 12 },
           props: {
             labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
-            jsonPath: "Property.owners[0].sameAsPeropertyAddress",
+            jsonPath: "Property.owners[0].sameAsPropertyAddress",
             required: false,
             destinationJsonPath: "correspondenceAddress"
           },
           required:false,
           type: "array",
-          jsonPath: "Property.owners[0].sameAsPeropertyAddress"
+          jsonPath: "Property.owners[0].sameAsPropertyAddress"
         },
       })
     })
@@ -384,6 +384,7 @@ const commonApplicantInformation = () => {
             width: "100%",
             cursor: "pointer"
           },
+          className: "hr-generic-selectfield autocomplete-dropdown",
           label: {
             labelName: "Special Applicant Category",
             labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_LABEL"
@@ -425,7 +426,7 @@ const commonApplicantInformation = () => {
         pattern: getPattern("Address"),
         required: true,
         errorMessage: "Invalid Address",
-        jsonPath: "Property.owners[0].correspondenceAddress",
+        jsonPath: "Property.owners[0].permanentAddress",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -442,12 +443,12 @@ const commonApplicantInformation = () => {
         gridDefination: { xs: 12, sm: 12, md: 12 },
         props: {
           labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
-          jsonPath: "Property.owners[0].sameAsPeropertyAddress",
+          jsonPath: "Property.owners[0].sameAsPropertyAddress",
           required: false,
-          destinationJsonPath: "correspondenceAddress"
+          destinationJsonPath: "permanentAddress"
         },
         type: "array",
-        jsonPath: "Property.owners[0].sameAsPeropertyAddress"
+        jsonPath: "Property.owners[0].sameAsPropertyAddress"
       },
     })
   });

@@ -30,6 +30,8 @@ import React from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import { getWFConfig } from "./workflowRedirectionConfig";
+import Tooltip from '@material-ui/core/Tooltip';
+
 const actionsStyles = theme => ({
   root: {
     flexShrink: 0,
@@ -192,6 +194,18 @@ class InboxData extends React.Component {
   onHistoryClick = async (moduleNumber) => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const processInstances = await this.getProcessIntanceData(moduleNumber.text);
+    let exclamationMarkIndex;
+    if (processInstances && processInstances.length > 0) {
+      processInstances.map((data, index) => {
+        if (data.assigner && data.assigner.roles && data.assigner.roles.length > 0) {
+          data.assigner.roles.map(role => {
+            if (role.code === "AUTO_ESCALATE") return exclamationMarkIndex = index - 1;
+          })
+        }
+      });
+      if (exclamationMarkIndex) processInstances[exclamationMarkIndex].isExclamationMark = true;
+    }
+
     if (processInstances && processInstances.length > 0) {
       await addWflowFileUrl(processInstances, prepareFinalObject);
       this.setState({
@@ -347,7 +361,14 @@ class InboxData extends React.Component {
                           } else if (item.badge) {
                             return (
                               <TableCell className={classNames}>
-                                <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(item.text, row[2].text.props.label.split("_")[1]) }}>{item.text}</span>
+                                <div style= {item.isEscalatedApplication ? {width: "80%", display: "flex", justifyContent: "space-between"}: {}}>
+                                  <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(item.text, row[2].text.props.label.split("_")[1]) }}>{item.text}</span>
+                                    {item.isEscalatedApplication ?
+                                    <Tooltip title="Escalated" placement="top">
+                                      <span> <i class="material-icons" style={{color: "rgb(244, 67, 54)"}}>error</i> </span>
+                                    </Tooltip>
+                                    : ""}
+                                </div>
                               </TableCell>
                             );
                           } else if (item.historyButton) {
@@ -445,7 +466,9 @@ class InboxData extends React.Component {
                           <div className="card-sladiv-style">
                             <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1]) }}>{row[4].text}</span>
                           </div>
-
+                          {/* <div>
+                                <i class="material-icons">error</i>
+                          </div> */}
                           <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0])}>
                             <i class="material-icons">history</i>
                           </div>
