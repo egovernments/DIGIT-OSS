@@ -1,7 +1,9 @@
 package org.egov.hrms.repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -28,6 +30,9 @@ public class EmployeeRepository {
 	
 	@Autowired
 	private EmployeeRowMapper rowMapper;
+
+	@Autowired
+	private EmployeeCountRowMapper countRowMapper;
 
 	@Autowired
 	private HRMSUtils hrmsUtils;
@@ -93,6 +98,27 @@ public class EmployeeRepository {
 			log.error("query; "+query);
 		}
 		return id;
+	}
+
+	/**
+	 * DB Repository that makes jdbc calls to the db and fetches employee count.
+	 *
+	 * @param tenantId
+	 * @return
+	 */
+	public Map<String,String> fetchEmployeeCount(String tenantId){
+		Map<String,String> response = new HashMap<>();
+		List<Object> preparedStmtList = new ArrayList<>();
+
+		String query = queryBuilder.getEmployeeCountQuery(tenantId, preparedStmtList);
+		log.info("query; "+query);
+		try {
+			response=jdbcTemplate.query(query, preparedStmtList.toArray(),countRowMapper);
+		}catch(Exception e) {
+			log.error("Exception while making the db call: ",e);
+			log.error("query; "+query);
+		}
+		return response;
 	}
 
 }

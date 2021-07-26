@@ -69,10 +69,10 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
 
                 //If aggrPath is specified.
                 if(aggrsPaths.size()>0){
-                    processWithSpecifiedKeys(aggrsPaths, bucket, mappings, key, plotMap);
+                    processWithSpecifiedKeys(aggrsPaths, bucket, mappings, key, plotMap,chartNode);
 
                 } else {
-                    processNestedObjects(bucket, mappings, key, plotMap);
+                    processNestedObjects(bucket, mappings, key, plotMap,chartNode);
                 }
 
                 if (plotMap.size() > 0) {
@@ -103,12 +103,11 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
                 //
                 if(executeComputedFields){
                     try {
-
                         List<ComputedFields> computedFieldsList = mapper.readValue(computedFields.toString(), new TypeReference<List<ComputedFields>>(){});
                         computedFieldsList.forEach(cfs -> {
                             IComputedField computedFieldObject = computedFieldFactory.getInstance(cfs.getActionName());
                             computedFieldObject.set(requestDto, cfs.getPostAggregationTheory());
-                            computedFieldObject.add(data, cfs.getFields(), cfs.getNewField() );
+                            computedFieldObject.add(data, cfs.getFields(), cfs.getNewField(), chartNode );
 
                         });
                         // exclude the fields no to be displayed
@@ -128,6 +127,24 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
 
         });
         //dataList.sort((o1, o2) -> ((Integer) o1.getHeaderValue()).compareTo((Integer) o2.getHeaderValue()));
+       
+        if (chartNode.get(IResponseHandler.CHART_SPECIFIC)!=null) {
+            JsonNode specificData = chartNode.get(IResponseHandler.CHART_SPECIFIC);
+            JsonNode orderColumns = specificData.get(IResponseHandler.XTABLE_COLUMN);
+            if (orderColumns != null) {
+                dataList.forEach(finaldata -> {
+                    List<Plot> newDataList = new ArrayList<>();
+                    orderColumns.forEach(columnName -> {
+                        List<Plot> plotObj = finaldata.getPlots().stream()
+                                .filter(plot -> plot.getName().equals(columnName.asText()))
+                                .collect(Collectors.toList());
+                        newDataList.add(plotObj.get(0));
+                    });
+                    finaldata.setPlots(newDataList);
+                });
+            }
+        }
+        
         return getAggregatedDto(chartNode, dataList, requestDto.getVisualizationCode());
 
     }
@@ -141,10 +158,10 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
      * @param headerName
      * @param plotMap
      */
-    private void process(JsonNode bucketNode, Map<String, Map<String, Plot>> mappings, String key, String headerName, Map<String, Plot> plotMap){
+    private void process(JsonNode bucketNode, Map<String, Map<String, Plot>> mappings, String key, String headerName, Map<String, Plot> plotMap,JsonNode chartNode){
         JsonNode valNode = bucketNode.findValue(VALUE) != null ? bucketNode.findValue(VALUE) : bucketNode.findValue(DOC_COUNT);
         Double value = valNode.isDouble() ? valNode.asDouble() : valNode.asInt();
-        String dataType = valNode.isDouble() ? "amount" : "number"; // to move to config or constants
+        String dataType = getDataType(chartNode, headerName, valNode);
         //String headerName = bucketNode.findValue(KEY).asText();
         Plot plot = new Plot(headerName, value, dataType);
 
@@ -164,7 +181,7 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
      * @param key
      * @param plotMap
      */
-    private void processNestedObjects(JsonNode node, Map<String, Map<String, Plot>> mappings, String key, Map<String, Plot> plotMap ){
+    private void processNestedObjects(JsonNode node, Map<String, Map<String, Plot>> mappings, String key, Map<String, Plot> plotMap,JsonNode chartNode ){
 
         Iterator<String> fieldNames = node.fieldNames();
         while(fieldNames.hasNext()) {
@@ -172,14 +189,14 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
             if(node.get(fieldName).isArray()){
                 ArrayNode bucketNodes = (ArrayNode) node.get(fieldName);
                 bucketNodes.forEach(bucketNode -> {
-                    process(bucketNode, mappings, key, bucketNode.findValue(KEY).asText() , plotMap);
+                    process(bucketNode, mappings, key, bucketNode.findValue(KEY).asText() , plotMap,chartNode);
                 });
 
             } else if(node.get(fieldName).isObject() && node.get(fieldName).get(VALUE)!=null){
-                process(node.get(fieldName), mappings, key, fieldName , plotMap);
+                process(node.get(fieldName), mappings, key, fieldName , plotMap,chartNode);
 
             } else {
-                processNestedObjects(node.get(fieldName), mappings, key, plotMap );
+                processNestedObjects(node.get(fieldName), mappings, key, plotMap,chartNode );
             }
 
         }
@@ -187,7 +204,7 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
 
     }
 
-    private void processWithSpecifiedKeys(ArrayNode aggrsPaths, JsonNode bucket, Map<String, Map<String, Plot>> mappings, String key, Map<String, Plot> plotMap ){
+    private void processWithSpecifiedKeys(ArrayNode aggrsPaths, JsonNode bucket, Map<String, Map<String, Plot>> mappings, String key, Map<String, Plot> plotMap,JsonNode chartNode ){
 
         aggrsPaths.forEach(headerPath -> {
             JsonNode valueNode = bucket.findValue(headerPath.asText());
@@ -196,8 +213,11 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
             if(valueNode!=null)
                 doc_value = (null == valueNode.findValue(DOC_COUNT)) ? 0.0 : valueNode.findValue(DOC_COUNT).asDouble();
             Double value = (null == valueNode || null == valueNode.findValue(VALUE)) ? doc_value : valueNode.findValue(VALUE).asDouble();
-            String dataType = valueNode.findValue(VALUE)!=null? (valueNode.findValue(VALUE).isDouble() ? "amount" : "number") : "number" ;
-
+            String dataType = getDataType(chartNode, headerPath.asText(), valueNode);
+            
+            if(chartNode.get(IS_ROUND_OFF)!=null && chartNode.get(IS_ROUND_OFF).asBoolean()) {
+            	value =  (double) Math.round(value);
+            }
             Plot plot = new Plot(headerPath.asText(), value, dataType);
             if (mappings.containsKey(key)) {
                 double newval = mappings.get(key).get(headerPath.asText()) == null ? value : (mappings.get(key).get(headerPath.asText()).getValue() + value);
@@ -208,5 +228,17 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
             }
         });
     }
+    
+    
+    private String getDataType(JsonNode chartNode, String headerName, JsonNode valueNode) {
+		// TODO Auto-generated method stub
+		if (chartNode.get("pathDataTypeMapping") != null) {
+			JsonNode pathDataMapping = chartNode.get("pathDataTypeMapping");
+			JsonNode node = pathDataMapping.findValue(headerName);
+			return node.textValue();
+		} else {
+			return valueNode.isDouble() ? "amount" : "number";
+		}
+	}
 
 }

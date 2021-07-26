@@ -2,6 +2,9 @@ package org.egov.hrms.web.validator;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
@@ -254,7 +257,10 @@ public class EmployeeValidator {
 		validateConsistencyServiceHistory(existingEmp, employee, errorMap);
 		validateConsistencyEmployeeDocument(existingEmp, employee, errorMap);
 		validateConsistencyDeactivationDetails(existingEmp, employee, errorMap);
-		validateDeactivationDetails(existingEmp, employee, errorMap, mdmsData);
+		if(!employee.getIsActive())
+			validateDeactivationDetails(existingEmp, employee, errorMap, mdmsData);
+		if(employee.getIsActive() && employee.getReActivateEmployee())
+			validateReactivationDetails(existingEmp, employee, errorMap, mdmsData);
 	}
 
 	/**
@@ -308,8 +314,8 @@ public class EmployeeValidator {
 					errorMap.put(ErrorConstants.HRMS_INVALID_ROLE_CODE, ErrorConstants.HRMS_INVALID_ROLE_MSG );
 			}
 		}
-		if(!mdmsData.get(HRMSConstants.HRMS_MDMS_EMP_STATUS_CODE).contains(employee.getEmployeeStatus()))
-			errorMap.put(ErrorConstants.HRMS_INVALID_EMP_STATUS_CODE, ErrorConstants.HRMS_INVALID_EMP_STATUS_MSG);
+		/*if(!mdmsData.get(HRMSConstants.HRMS_MDMS_EMP_STATUS_CODE).contains(employee.getEmployeeStatus()))
+			errorMap.put(ErrorConstants.HRMS_INVALID_EMP_STATUS_CODE, ErrorConstants.HRMS_INVALID_EMP_STATUS_MSG);*/
 		if(!mdmsData.get(HRMSConstants.HRMS_MDMS_EMP_TYPE_CODE).contains(employee.getEmployeeType()))
 			errorMap.put(ErrorConstants.HRMS_INVALID_EMP_TYPE_CODE, ErrorConstants.HRMS_INVALID_EMP_TYPE_MSG);
 		if(null != employee.getDateOfAppointment() && employee.getDateOfAppointment() > new Date().getTime())
@@ -502,6 +508,9 @@ public class EmployeeValidator {
 	 */
 	private void validateDeactivationDetails(Employee existingEmp, Employee updatedEmployeeData, Map<String, String> errorMap, Map<String, List<String>> mdmsData){
 		if(!CollectionUtils.isEmpty(updatedEmployeeData.getDeactivationDetails())) {
+			Date date = new Date();
+			Date  currentDateStartTime = Date.from(date.toInstant().atZone(ZoneId.systemDefault())
+					.truncatedTo(ChronoUnit.DAYS).toInstant());
 			for (DeactivationDetails deactivationDetails : updatedEmployeeData.getDeactivationDetails()) {
 				if (deactivationDetails.getId()==null){
 					if(updatedEmployeeData.getIsActive()){
@@ -510,8 +519,24 @@ public class EmployeeValidator {
 				}
 				if(deactivationDetails.getEffectiveFrom() > new Date().getTime())
 					errorMap.put(ErrorConstants.HRMS_UPDATE_DEACT_DETAILS_INCORRECT_EFFECTIVEFROM_CODE, ErrorConstants.HRMS_UPDATE_DEACT_DETAILS_INCORRECT_EFFECTIVEFROM_MSG);
+
+				if(deactivationDetails.getEffectiveFrom() < currentDateStartTime.getTime())
+					errorMap.put(ErrorConstants.HRMS_UPDATE_DEACT_DETAILS_INCORRECT_EFFECTIVEFROM_CODE, ErrorConstants.HRMS_UPDATE_DEACT_DETAILS_INCORRECT_EFFECTIVEFROM_MSG);
+
 				if (! mdmsData.get(HRMSConstants.HRMS_MDMS_DEACT_REASON_CODE).contains(deactivationDetails.getReasonForDeactivation()))
 					errorMap.put(ErrorConstants.HRMS_INVALID_DEACT_REASON_CODE, ErrorConstants.HRMS_INVALID_DEACT_REASON_MSG);
+			}
+		}
+	}
+
+	private void validateReactivationDetails(Employee existingEmp, Employee updatedEmployeeData, Map<String, String> errorMap, Map<String, List<String>> mdmsData){
+		if(!CollectionUtils.isEmpty(updatedEmployeeData.getReactivationDetails())) {
+			for (ReactivationDetails reactivationDetails : updatedEmployeeData.getReactivationDetails()) {
+				Boolean isValidDetails = existingEmp.getDeactivationDetails().get(0).getEffectiveFrom() <= reactivationDetails.getEffectiveFrom()
+										 && reactivationDetails.getEffectiveFrom() <= new Date().getTime();
+				if(!isValidDetails)
+					errorMap.put(ErrorConstants.HRMS_UPDATE_REACT_DETAILS_INCORRECT_EFFECTIVEFROM_CODE, ErrorConstants.HRMS_UPDATE_REACT_DETAILS_INCORRECT_EFFECTIVEFROM_MSG);
+
 			}
 		}
 	}
@@ -727,6 +752,16 @@ public class EmployeeValidator {
 			}
 		}
 
+	}
+
+	public void validateEmployeeCountRequest(String tenantId){
+		Map<String, String> errorMap = new HashMap<>();
+		if(StringUtils.isEmpty(tenantId))
+			errorMap.put(ErrorConstants.HRMS_EMPLOYEE_COUNT_ERROR_CODE, ErrorConstants.HRMS_EMPLOYEE_COUNT_ERROR_MSG);
+
+		if(!CollectionUtils.isEmpty(errorMap.keySet())) {
+			throw new CustomException(errorMap);
+		}
 	}
 
 }

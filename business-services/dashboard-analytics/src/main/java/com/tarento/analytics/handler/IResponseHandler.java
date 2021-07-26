@@ -75,6 +75,12 @@ public interface IResponseHandler {
     public final String DOC_COUNT = "doc_count"; 
     
     public static final String POST_AGGREGATION_THEORY = "postAggregationTheory";
+    
+    public static final String CHART_SPECIFIC = "chartSpecificProperty";
+	
+	public static final String XTABLE_COLUMN = "XtableColumnOrder";
+
+	public static final String IS_ROUND_OFF = "isRoundOff";
 
 	public static Double BOUNDARY_VALUE = 50.0;
 
@@ -139,8 +145,11 @@ public interface IResponseHandler {
 	 * @param values
 	 * @return
 	 */
-	default Double percentageValue(List<Double> values) {
+	default Double percentageValue(List<Double> values, boolean isRoundOff) {
 		double val = (values.get(0)/values.get(1) * 100);
+		if(isRoundOff) {
+			val = Math.round(val);
+		}
 		return (values.size() > 1 && values.get(0) != 0.0 && values.get(1) != 0.0) ? val : 0.0;
 	}
 
@@ -151,9 +160,12 @@ public interface IResponseHandler {
 	 * @param values
 	 * @return
 	 */
-	default Double getPercentage(Map<String, Double> values, String partField, String wholeField) {
+	default Double getPercentage(Map<String, Double> values, String partField, String wholeField, boolean isRoundOff) {
 
 		double val = (values.get(partField)/ values.get(wholeField) * 100);
+		if(isRoundOff) {
+			val = Math.round(val);
+		}
 		return (values.size() > 1 && values.get(partField) != 0.0 && values.get(wholeField) != 0.0)  ? val: 0.0;
 	}
 

@@ -73,7 +73,6 @@ public class Employee {
     private String code;
 
     @SafeHtml
-    @NotNull
     @Size(max = 250)
     private String employeeStatus;
 

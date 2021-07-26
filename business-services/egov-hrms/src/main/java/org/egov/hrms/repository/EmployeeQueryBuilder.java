@@ -1,7 +1,9 @@
 package org.egov.hrms.repository;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.hrms.config.PropertiesManager;
 import org.egov.hrms.web.contract.EmployeeSearchCriteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -16,6 +18,9 @@ public class EmployeeQueryBuilder {
 	
 	@Value("${egov.hrms.default.pagination.limit}")
 	private Integer defaultLimit;
+
+	@Autowired
+	private PropertiesManager properties;
 	
 	/**
 	 * Returns query for searching employees
@@ -27,6 +32,20 @@ public class EmployeeQueryBuilder {
 		StringBuilder builder = new StringBuilder(EmployeeQueries.HRMS_GET_EMPLOYEES);
 		addWhereClause(criteria, builder, preparedStmtList);
 		return paginationClause(criteria, builder);
+	}
+
+	public String getEmployeeCountQuery(String tenantId, List <Object> preparedStmtList ) {
+		StringBuilder builder = new StringBuilder(EmployeeQueries.HRMS_COUNT_EMP_QUERY);
+		if(tenantId.equalsIgnoreCase(properties.stateLevelTenantId)){
+			builder.append("LIKE ? ");
+			preparedStmtList.add(tenantId+"%");
+		}
+		else{
+			builder.append("= ? ");
+			preparedStmtList.add(tenantId);
+		}
+		builder.append("GROUP BY active");
+		return builder.toString();
 	}
 	
 	public String getPositionSeqQuery() {
@@ -82,8 +101,10 @@ public class EmployeeQueryBuilder {
 		else
 			pagination = pagination.replace("$offset", "0");
 		
-		if(null != criteria.getLimit())
-			pagination = pagination.replace("$limit", criteria.getLimit().toString());
+		if(null != criteria.getLimit()){
+			Integer limit = criteria.getLimit() + criteria.getOffset();
+			pagination = pagination.replace("$limit", limit.toString());
+		}
 		else
 			pagination = pagination.replace("$limit", defaultLimit.toString());
 		

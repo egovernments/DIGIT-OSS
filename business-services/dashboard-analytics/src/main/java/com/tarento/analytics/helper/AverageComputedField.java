@@ -31,7 +31,7 @@ public class AverageComputedField implements IComputedField<ObjectNode> {
     }
 
     @Override
-    public void add(ObjectNode data, List<String> fields, String newField) {
+    public void add(ObjectNode data, List<String> fields, String newField,JsonNode chartNode ) {
         ObjectNode averageNode = JsonNodeFactory.instance.objectNode();
 
         try {

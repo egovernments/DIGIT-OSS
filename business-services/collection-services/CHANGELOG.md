@@ -3,6 +3,8 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.5 - 2021-07-26
+- Support for statelevel search
 
 ## 1.1.4 - 2021-05-11
 - RAIN-2515 Added regex pattern for paid by, payer name, email and mobilenumber

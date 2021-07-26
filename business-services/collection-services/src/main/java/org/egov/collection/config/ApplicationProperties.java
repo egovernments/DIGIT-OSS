@@ -257,6 +257,9 @@ public class ApplicationProperties {
 
     @Value("${egov.url.shortner.endpoint}")
     private String urlShortnerEndpoint;
+    
+    @Value("${egov.razorpay.url}")
+    private String razorPayUrl;
 
 
 }

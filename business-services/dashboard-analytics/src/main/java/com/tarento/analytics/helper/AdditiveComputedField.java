@@ -1,5 +1,6 @@
 package com.tarento.analytics.helper;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.tarento.analytics.dto.AggregateRequestDto;
 import com.tarento.analytics.dto.Data;
 import com.tarento.analytics.dto.Plot;
@@ -31,7 +32,7 @@ public class AdditiveComputedField implements IComputedField<Data> {
     }
 
     @Override
-    public void add(Data data, List<String> fields, String newField) {
+    public void add(Data data, List<String> fields, String newField,JsonNode chartNode ) {
         String dataType = "amount";
         try {
             Map<String, Plot> plotMap = data.getPlots().stream().parallel().collect(Collectors.toMap(Plot::getName, Function.identity()));

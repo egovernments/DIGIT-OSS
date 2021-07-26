@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.5 - 2021-07-23
+- Code changes related to new properties.
+- Here are the properties which are added 
+  - isRoundOff from configuration will round off the specific number value.
+  - chartSpecificProperty, XtableColumnOrder to give the xtable column order as we mention in this configuration
+
 ## 1.1.4 - 2021-05-11
 - security fixes
 

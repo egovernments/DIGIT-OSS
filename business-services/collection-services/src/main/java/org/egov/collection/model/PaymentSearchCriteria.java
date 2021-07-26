@@ -1,12 +1,15 @@
 package org.egov.collection.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 import java.util.Set;
+
+import javax.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -48,5 +51,8 @@ public class PaymentSearchCriteria {
     private Integer offset;
 
     private Integer limit;
+    
+    @Default
+    private Boolean isCountRequest = false;
 
 }

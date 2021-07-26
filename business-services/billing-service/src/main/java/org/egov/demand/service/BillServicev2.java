@@ -40,18 +40,19 @@
 
 package org.egov.demand.service;
 
+import static org.egov.demand.util.Constants.BUSINESS_SERVICE_URL_PARAMETER;
 import static org.egov.demand.util.Constants.CONSUMERCODES_REPLACE_TEXT;
-import static org.egov.demand.util.Constants.EG_BS_BILL_NO_DEMANDS_FOUND_KEY;
-import static org.egov.demand.util.Constants.EG_BS_BILL_NO_DEMANDS_FOUND_MSG;
 import static org.egov.demand.util.Constants.TENANTID_REPLACE_TEXT;
 import static org.egov.demand.util.Constants.URL_NOT_CONFIGURED_FOR_DEMAND_UPDATE_KEY;
 import static org.egov.demand.util.Constants.URL_NOT_CONFIGURED_FOR_DEMAND_UPDATE_MSG;
 import static org.egov.demand.util.Constants.URL_NOT_CONFIGURED_REPLACE_TEXT;
 import static org.egov.demand.util.Constants.URL_PARAMS_FOR_SERVICE_BASED_DEMAND_APIS;
+import static org.egov.demand.util.Constants.URL_PARAM_SEPERATOR;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -76,6 +77,8 @@ import org.egov.demand.model.DemandDetail;
 import org.egov.demand.model.GenerateBillCriteria;
 import org.egov.demand.model.TaxHeadMaster;
 import org.egov.demand.model.TaxHeadMasterCriteria;
+import org.egov.demand.model.UpdateBillCriteria;
+import org.egov.demand.model.UpdateBillRequest;
 import org.egov.demand.repository.BillRepositoryV2;
 import org.egov.demand.repository.IdGenRepo;
 import org.egov.demand.repository.ServiceRequestRepository;
@@ -140,6 +143,30 @@ public class BillServicev2 {
 	private String notifTopicName;
 	
 	/**
+	 * Cancell bill operation can be carried by this method, based on consumerCodes
+	 * and businessService.
+	 * 
+	 * Only ACTIVE bills will be cancelled as of now
+	 * 
+	 * @param cancelBillCriteria
+	 * @param requestInfoWrapper
+	 */
+	public Integer cancelBill(UpdateBillRequest updateBillRequest) {
+		
+		UpdateBillCriteria cancelBillCriteria = updateBillRequest.getUpdateBillCriteria();
+		Set<String> consumerCodes = cancelBillCriteria.getConsumerCodes();
+		cancelBillCriteria.setStatusToBeUpdated(BillStatus.CANCELLED);
+
+		if (!CollectionUtils.isEmpty(consumerCodes) && consumerCodes.size() > 1) {
+			
+			throw new CustomException("EG_BS_CANCEL_BILL_ERROR", "Only one consumer code can be provided in the Cancel request");
+		} else {
+
+			return billRepository.updateBillStatus(cancelBillCriteria);
+		}
+	}
+
+	/**
 	 * Fetches the bill for given parameters
 	 * 
 	 * Searches the respective bill
@@ -177,7 +204,7 @@ public class BillServicev2 {
 		 * consumerCodes against the service code
 		 */
  		List<String> cosnumerCodesNotFoundInBill = new ArrayList<>(billCriteria.getConsumerCode());
-		List<String> cosnumerCodesToBeExpired = new ArrayList<>();
+		Set<String> cosnumerCodesToBeExpired = new HashSet<>();
 		List<BillV2> billsToBeReturned = new ArrayList<>();
 		Boolean isBillExpired = false;
 		
@@ -208,9 +235,19 @@ public class BillServicev2 {
 			billCriteria.getConsumerCode().retainAll(cosnumerCodesToBeExpired);
 			billCriteria.getConsumerCode().addAll(cosnumerCodesNotFoundInBill);
 			updateDemandsForexpiredBillDetails(billCriteria.getBusinessService(), billCriteria.getConsumerCode(), billCriteria.getTenantId(), requestInfoWrapper);
-			billRepository.updateBillStatus(cosnumerCodesToBeExpired, BillStatus.EXPIRED);
+			
+			billRepository.updateBillStatus(
+					UpdateBillCriteria.builder()
+					.statusToBeUpdated(BillStatus.EXPIRED)
+					.businessService(billCriteria.getBusinessService())
+					.consumerCodes(cosnumerCodesToBeExpired)
+					.tenantId(billCriteria.getTenantId())
+					.build()
+					);
 			BillResponseV2 finalResponse = generateBill(billCriteria, requestInfo);
-			finalResponse.getBill().addAll(billsToBeReturned);
+			// gen bill returns immutable empty list incase of zero bills
+			billsToBeReturned.addAll(finalResponse.getBill());
+			finalResponse.setBill(billsToBeReturned);
 			return finalResponse;
 		}
 	}
@@ -239,6 +276,7 @@ public class BillServicev2 {
 					.append(URL_PARAMS_FOR_SERVICE_BASED_DEMAND_APIS.replace(TENANTID_REPLACE_TEXT, tenantId).replace(
 							CONSUMERCODES_REPLACE_TEXT, consumerCodesTobeUpdated.toString().replace("[", "").replace("]", "")));
 
+			completeUrl.append(URL_PARAM_SEPERATOR).append(BUSINESS_SERVICE_URL_PARAMETER).append(businessService);
 			log.info("the url : " + completeUrl);
 			restRepository.fetchResult(completeUrl.toString(), requestInfoWrapper);
 	}
@@ -297,7 +335,7 @@ public class BillServicev2 {
 		if (!demands.isEmpty())
 			bills = prepareBill(demands, requestInfo);
 		else
-			throw new CustomException(EG_BS_BILL_NO_DEMANDS_FOUND_KEY, EG_BS_BILL_NO_DEMANDS_FOUND_MSG);
+			return getBillResponse(Collections.emptyList());
 
 		BillRequestV2 billRequest = BillRequestV2.builder().bills(bills).requestInfo(requestInfo).build();
 		//kafkaTemplate.send(notifTopicName, null, billRequest);

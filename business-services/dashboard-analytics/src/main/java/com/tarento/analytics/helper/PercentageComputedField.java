@@ -1,8 +1,11 @@
 package com.tarento.analytics.helper;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.tarento.analytics.dto.AggregateRequestDto;
 import com.tarento.analytics.dto.Data;
 import com.tarento.analytics.dto.Plot;
+import com.tarento.analytics.handler.IResponseHandler;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +34,7 @@ public class PercentageComputedField implements IComputedField<Data>{
     }
 
     @Override
-    public void add(Data data, List<String> fields, String newField) {
+    public void add(Data data, List<String> fields, String newField, JsonNode chartNode ) {
         try {
             Map<String, Plot> plotMap = data.getPlots().stream().parallel().collect(Collectors.toMap(Plot::getName, Function.identity()));
 
@@ -41,7 +44,9 @@ public class PercentageComputedField implements IComputedField<Data>{
             } else {
                 double wholeValue = plotMap.get(fields.get(1)).getValue();
                 double fieldValue = plotMap.get(fields.get(0)).getValue() / plotMap.get(fields.get(1)).getValue() * 100;
-
+                if(chartNode.get(IResponseHandler.IS_ROUND_OFF)!=null && chartNode.get(IResponseHandler.IS_ROUND_OFF).asBoolean()) {
+                	fieldValue =  (double) Math.round(fieldValue);
+                }
 
                 if(postAggrTheoryName != null && !postAggrTheoryName.isEmpty()) {
                     ComputeHelper computeHelper = computeHelperFactory.getInstance(postAggrTheoryName);
