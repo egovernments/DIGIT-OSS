@@ -13,6 +13,9 @@ import org.egov.vehicle.trip.web.model.VehicleTripSearchCriteria;
 import org.egov.vehicle.util.ResponseInfoFactory;
 import org.egov.vehicle.util.VehicleUtil;
 import org.egov.vehicle.web.model.RequestInfoWrapper;
+import org.egov.vehicle.web.model.Vehicle;
+import org.egov.vehicle.web.model.VehicleResponse;
+import org.egov.vehicle.web.model.VehicleSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -69,6 +73,16 @@ public class VehicleTripController {
 		
 		response.setResponseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+	public ResponseEntity<VehicleTripResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+			@Valid @ModelAttribute VehicleTripSearchCriteria criteria) {
+		List<VehicleTrip> vehicleLogList = vehicleTripService.vehicleTripPlainSearch(criteria,requestInfoWrapper.getRequestInfo());
+		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLogList)				
+				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

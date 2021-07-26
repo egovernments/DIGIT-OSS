@@ -115,4 +115,17 @@ public class VendorConfiguration {
 
 	@Value("${egov.vendorregistory.max.limit}")
 	private Integer maxSearchLimit;
+
+	@Value("${dso.role}")
+	private String dsoRole;
+
+	@Value("${dso.driver}")
+	private String dsoDriver;
+
+	@Value("${dso.role.name}")
+	private String dsoRoleName;
+
+	@Value("${dso.driver.role.name}")
+	private String dsoDriverRoleName;
+
 }

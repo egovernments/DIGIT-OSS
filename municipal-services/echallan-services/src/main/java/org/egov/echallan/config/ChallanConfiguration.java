@@ -185,4 +185,8 @@ public class ChallanConfiguration {
 
     @Value("${egov.locality.search.endpoint}")
     private String fetchBoundaryEndpoint;
+
+    @Value("${state.level.tenant.id}")
+    public String stateLevelTenantId;
+
 }

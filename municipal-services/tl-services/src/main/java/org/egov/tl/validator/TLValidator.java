@@ -238,7 +238,7 @@ public class TLValidator {
             }
         });
         criteria.setTenantId(request.getLicenses().get(0).getTenantId());
-        criteria.setStatus(TLConstants.STATUS_APPROVED);
+        criteria.setStatus(Collections.singletonList(TLConstants.STATUS_APPROVED));
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
         criteria.setLicenseNumbers(licenseNumbers);
         List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
@@ -249,7 +249,13 @@ public class TLValidator {
         
         request.getLicenses().forEach(license -> {
             if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
-                if(licenseMap.containsKey(license.getLicenseNumber())){
+
+                if(license.getStatus().equalsIgnoreCase(TLConstants.STATUS_APPROVED)
+                        && licenseMap.containsKey(license.getLicenseNumber())
+                        && licenseMap.get(license.getLicenseNumber()).getId().equalsIgnoreCase(license.getId())){
+                    return;
+                }
+                else if(licenseMap.containsKey(license.getLicenseNumber())){
                     TradeLicense searchObj = licenseMap.get(license.getLicenseNumber());
                     Long currentFromDate = license.getValidFrom();
                     Long currentToDate = license.getValidTo();

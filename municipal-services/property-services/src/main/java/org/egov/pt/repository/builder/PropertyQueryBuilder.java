@@ -1,10 +1,12 @@
 package org.egov.pt.repository.builder;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.time.Instant;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.enums.Status;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -79,6 +81,22 @@ public class PropertyQueryBuilder {
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
 			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
+
+	private static final String ID_QUERY = SELECT
+
+			+   " property.id FROM EG_PT_PROPERTY property "
+
+			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid "
+
+			+   LEFT_JOIN  +  " EG_PT_INSTITUTION institution ON property.id = institution.propertyid "
+
+			+   LEFT_JOIN  +  " EG_PT_DOCUMENT pdoc           ON property.id = pdoc.entityid "
+
+			+   INNER_JOIN +  " EG_PT_OWNER owner             ON property.id = owner.propertyid "
+
+			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
+
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
 	
 
 
@@ -114,19 +132,28 @@ public class PropertyQueryBuilder {
 	 * @param preparedStmtList
 	 * @return
 	 */
-	public String getPropertySearchQuery(PropertyCriteria criteria, List<Object> preparedStmtList,Boolean isPlainSearch) {
+	public String getPropertySearchQuery(PropertyCriteria criteria, List<Object> preparedStmtList,Boolean isPlainSearch, Boolean onlyIds) {
 
 		Boolean isEmpty = CollectionUtils.isEmpty(criteria.getPropertyIds())
 					&& CollectionUtils.isEmpty(criteria.getAcknowledgementIds())
 					&& CollectionUtils.isEmpty(criteria.getOldpropertyids())
 					&& CollectionUtils.isEmpty(criteria.getUuids())
 					&& null == criteria.getMobileNumber()
-					&& null == criteria.getName();
+					&& null == criteria.getName()
+					&& null == criteria.getDoorNo()
+					&& null == criteria.getOldPropertyId()
+					&& CollectionUtils.isEmpty(criteria.getCreationReason());
 		
 		if(isEmpty)
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No criteria given for the property search");
-		
-		StringBuilder builder = new StringBuilder(QUERY);
+
+		StringBuilder builder;
+
+		if(onlyIds)
+			builder = new StringBuilder(ID_QUERY);
+		else
+			builder = new StringBuilder(QUERY);
+
 		Boolean appendAndQuery = false;
 		if(isPlainSearch)
 		{
@@ -167,11 +194,23 @@ public class PropertyQueryBuilder {
 			}
 		}
 
-		if (null != criteria.getStatus()) {
-
+		Set<String> statusStringList = new HashSet<>();
+		if (!CollectionUtils.isEmpty(criteria.getStatus())) {
+			criteria.getStatus().forEach(status -> {
+				statusStringList.add(status.toString());
+			});
 			addClauseIfRequired(preparedStmtList,builder);
-			builder.append("property.status = ?");
-			preparedStmtList.add(criteria.getStatus());
+			builder.append(" property.status IN ( ")
+				.append(createQuery(statusStringList))
+				.append(" )");
+			addToPreparedStatement(preparedStmtList, statusStringList);
+		}
+
+		Set<String> creationReasonsList = criteria.getCreationReason();
+		if(!CollectionUtils.isEmpty(creationReasonsList)){
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append("property.creationreason IN ( ").append(createQuery(creationReasonsList)).append(" )");
+			addToPreparedStatement(preparedStmtList, creationReasonsList);
 		}
 		
 		if (null != criteria.getLocality()) {
@@ -214,7 +253,11 @@ public class PropertyQueryBuilder {
 		}
 
 		String withClauseQuery = WITH_CLAUSE_QUERY.replace(REPLACE_STRING, builder);
-		return addPaginationWrapper(withClauseQuery, preparedStmtList, criteria);
+
+		if (onlyIds)
+			return builder.toString();
+		else
+			return addPaginationWrapper(withClauseQuery, preparedStmtList, criteria);
 	}
 
 

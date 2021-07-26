@@ -15,6 +15,7 @@ import org.egov.echallan.model.ChallanRequest;
 import org.egov.echallan.model.SearchCriteria;
 import org.egov.echallan.producer.Producer;
 import org.egov.echallan.repository.builder.ChallanQueryBuilder;
+import org.egov.echallan.repository.rowmapper.ChallanCountRowMapper;
 import org.egov.echallan.repository.rowmapper.ChallanRowMapper;
 import org.egov.echallan.web.models.collection.Bill;
 import org.egov.echallan.web.models.collection.PaymentDetail;
@@ -55,7 +56,11 @@ public class ChallanRepository {
 	private String fileStoreInactivePath;
 
     @Autowired
-	private ObjectMapper mapper; 
+	private ObjectMapper mapper;
+
+    @Autowired
+    private ChallanCountRowMapper countRowMapper;
+
     @Autowired
     public ChallanRepository(Producer producer, ChallanConfiguration config,ChallanQueryBuilder queryBuilder,
     		JdbcTemplate jdbcTemplate,ChallanRowMapper rowMapper,RestTemplate restTemplate) {
@@ -143,5 +148,26 @@ public class ChallanRepository {
 		jdbcTemplate.batchUpdate(CANCEL_RECEIPT_UPDATE_SQL,rows);
 		
 	}
+
+    /**
+     * DB Repository that makes jdbc calls to the db and fetches challan count.
+     *
+     * @param tenantId
+     * @return
+     */
+    public Map<String,String> fetchChallanCount(String tenantId){
+        Map<String,String> response = new HashMap<>();
+        List<Object> preparedStmtList = new ArrayList<>();
+
+        String query = queryBuilder.getChallanCountQuery(tenantId, preparedStmtList);
+        
+        try {
+            response=jdbcTemplate.query(query, preparedStmtList.toArray(),countRowMapper);
+        }catch(Exception e) {
+            log.error("Exception while making the db call: ",e);
+            log.error("query; "+query);
+        }
+        return response;
+    }
     
 }

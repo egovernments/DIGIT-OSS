@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -63,5 +64,15 @@ public class VendorController {
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		
+	}
+	
+	@RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+	public ResponseEntity<VendorResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+			@Valid @ModelAttribute VendorSearchCriteria criteria) {
+		List<Vendor> vendorList = vendorService.vendorPlainSearch(criteria,requestInfoWrapper.getRequestInfo());
+		VendorResponse response = VendorResponse.builder().vendor(vendorList).responseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+				.build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

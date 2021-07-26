@@ -33,14 +33,13 @@ public class HRMSUtil {
 
     /**
      * Gets the list of department for the given list of uuids of employees
-     * @param tenantId
      * @param uuids
      * @param requestInfo
      * @return
      */
-    public List<String> getDepartment(String tenantId, List<String> uuids, RequestInfo requestInfo){
+    public List<String> getDepartment(List<String> uuids, RequestInfo requestInfo){
 
-        StringBuilder url = getHRMSURI(tenantId, uuids);
+        StringBuilder url = getHRMSURI(uuids);
 
         RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 
@@ -56,7 +55,7 @@ public class HRMSUtil {
         }
 
         if(CollectionUtils.isEmpty(departments))
-            throw new CustomException("DEPARTMENT_NOT_FOUND","The Department of the user with uuid: "+uuids.toString()+" for tenantId: "+tenantId+" is not found");
+            throw new CustomException("DEPARTMENT_NOT_FOUND","The Department of the user with uuid: "+uuids.toString()+" is not found");
 
         return departments;
 
@@ -64,19 +63,16 @@ public class HRMSUtil {
 
     /**
      * Builds HRMS search URL
-     * @param tenantId
      * @param uuids
      * @return
      */
 
-    public StringBuilder getHRMSURI(String tenantId, List<String> uuids){
+    public StringBuilder getHRMSURI(List<String> uuids){
 
         StringBuilder builder = new StringBuilder(config.getHrmsHost());
         builder.append(config.getHrmsEndPoint());
         builder.append("?uuids=");
         builder.append(StringUtils.join(uuids, ","));
-        builder.append("&tenantId=");
-        builder.append(tenantId);
 
         return builder;
     }

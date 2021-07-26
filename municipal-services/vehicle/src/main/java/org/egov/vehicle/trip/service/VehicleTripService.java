@@ -1,12 +1,16 @@
 package org.egov.vehicle.trip.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
+import org.egov.vehicle.config.VehicleConfiguration;
 import org.egov.vehicle.trip.repository.VehicleTripRepository;
 import org.egov.vehicle.trip.util.VehicleTripConstants;
 import org.egov.vehicle.trip.validator.VehicleTripValidator;
@@ -46,6 +50,9 @@ public class VehicleTripService {
 	
 	@Autowired
 	private WorkflowService workflowService;
+    
+    @Autowired
+    private VehicleConfiguration config;
 	
 	public VehicleTrip create(VehicleTripRequest request) {
 		if (request.getVehicleTrip() == null) {
@@ -104,5 +111,36 @@ public class VehicleTripService {
 		});
 		vehicleLogEnrichmentService.enrichSearch(response.getVehicleTrip(), requestInfo);
 		return response;
+	}
+
+	public List<VehicleTrip> vehicleTripPlainSearch(@Valid VehicleTripSearchCriteria criteria,
+			RequestInfo requestInfo) {
+		List<VehicleTrip> vehicleLogList = getVehicleTripPlainSearch(criteria, requestInfo);
+		return vehicleLogList;
+	}
+
+	private List<VehicleTrip> getVehicleTripPlainSearch(@Valid VehicleTripSearchCriteria criteria,
+			RequestInfo requestInfo) {
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+            criteria.setLimit(config.getMaxSearchLimit());
+
+        List<String> ids = null;
+
+        if(criteria.getIds() != null && !criteria.getIds().isEmpty())
+            ids = criteria.getIds();
+        else
+            ids = vehicleLogRepository.fetchVehicleTripIds(criteria);
+
+        if(ids.isEmpty())
+            return Collections.emptyList();
+
+        VehicleTripSearchCriteria VehicleTripcriteria = VehicleTripSearchCriteria.builder().tenantId(criteria.getTenantId()).ids(ids).build();;
+
+        List<VehicleTrip> vehicleTripLogs = vehicleLogRepository.getVehicleTripPlainSearch(VehicleTripcriteria);
+        vehicleTripLogs.forEach(trip->{
+			trip.setTripDetails(vehicleLogRepository.getTrpiDetails(trip.getId()));
+		});
+        vehicleLogEnrichmentService.enrichSearch(vehicleTripLogs, requestInfo);
+        return vehicleTripLogs;
 	}
 }

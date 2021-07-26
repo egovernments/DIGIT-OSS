@@ -384,6 +384,7 @@ public class UserService{
         userSearchRequest.setRequestInfo(requestInfo);
         userSearchRequest.setTenantId(criteria.getTenantId());
         userSearchRequest.setMobileNumber(criteria.getMobileNumber());
+        userSearchRequest.setName(criteria.getOwnerName());
         userSearchRequest.setActive(true);
         userSearchRequest.setUserType("CITIZEN");
         if(!CollectionUtils.isEmpty(criteria.getOwnerIds()))

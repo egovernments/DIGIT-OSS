@@ -123,5 +123,14 @@ public class VehicleConfiguration {
 		@Value("${workflow.process.path}")
 		private String wfProcessPath;
 
+	    @Value("${egov.fsm.host}")
+	    private String fsmHost;
+
+	    @Value("${egov.fsm.plantmap.context.path}")
+	    private String fsmPlantmapContextPath;
+
+	    @Value("${egov.fsm.plantmap.search.endpoint}")
+	    private String fsmPlantmapSearchEndpoint;
+
 	
 }

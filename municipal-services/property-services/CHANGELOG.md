@@ -1,6 +1,10 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.6 - 2021-07-23
+
+- Added fuzzy search functionality
+
 ## 1.1.5 - 2021-05-11
 
 - Fixed security issue of untrusted data pass as user input.

@@ -16,10 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
 
@@ -78,7 +75,7 @@ public class TLBatchService {
         TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
                 .businessService(serviceName)
                 .validTo(validTill)
-                .status(STATUS_APPROVED)
+                .status(Collections.singletonList(STATUS_APPROVED))
                 .limit(config.getPaginationSize())
                 .build();
 

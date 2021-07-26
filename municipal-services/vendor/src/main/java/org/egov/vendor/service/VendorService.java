@@ -6,8 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
+import org.egov.vendor.config.VendorConfiguration;
 import org.egov.vendor.repository.VendorRepository;
 import org.egov.vendor.validator.VendorValidator;
 import org.egov.vendor.web.model.Vendor;
@@ -45,6 +48,9 @@ public class VendorService {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private VendorConfiguration config;
 	
 
 	public Vendor create(VendorRequest vendorRequest) {
@@ -120,6 +126,35 @@ public class VendorService {
 
 		return vendorList;
 
+	}
+
+	public List<Vendor> vendorPlainSearch(@Valid VendorSearchCriteria criteria, RequestInfo requestInfo) {
+		 List<Vendor> vendorList = getVendorPlainSearch(criteria, requestInfo);
+		return vendorList;
+	}
+
+	private List<Vendor> getVendorPlainSearch(@Valid VendorSearchCriteria criteria, RequestInfo requestInfo) {
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+            criteria.setLimit(config.getMaxSearchLimit());
+
+        List<String> ids = null;
+
+        if(criteria.getIds() != null && !criteria.getIds().isEmpty())
+            ids = criteria.getIds();
+        else
+            ids = repository.fetchVendorIds(criteria);
+
+        if(ids.isEmpty())
+            return Collections.emptyList();
+
+        VendorSearchCriteria vendorCriteria = VendorSearchCriteria.builder().ids(ids).build();
+
+        List<Vendor> vendorList = repository.getVendorPlainSearch(vendorCriteria);
+        if (!vendorList.isEmpty()) {
+			enrichmentService.enrichVendorSearch(vendorList, requestInfo, criteria.getTenantId());
+		}
+        
+        return vendorList;
 	}
 
 }

@@ -24,7 +24,6 @@ public class MessageRequest {
 	@NotNull
 	private RequestInfo requestInfo = null;
  
-	
 	@JsonProperty("contacts")
 	private List<Contacts> contacts;
 	

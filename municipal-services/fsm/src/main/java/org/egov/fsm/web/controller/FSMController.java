@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -92,6 +93,16 @@ public class FSMController {
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		
+	}
+	
+	@RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+	public ResponseEntity<FSMResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+			@Valid @ModelAttribute FSMSearchCriteria criteria) {
+		List<FSM> fsmList = fsmService.searchFSMPlainSearch(criteria,requestInfoWrapper.getRequestInfo());
+		FSMResponse response = FSMResponse.builder().fsm(fsmList)				
+				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+				.build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 }

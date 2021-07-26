@@ -72,7 +72,7 @@ public class WorkflowService {
 		url.append(config.getWfBusinessServiceSearchPath());
 		url.append("?tenantId=");
 		url.append(tenantId);
-		url.append("&businessservices=");
+		url.append("&businessServices=");
 		url.append(businessServiceId);
 		return url;
 	}
@@ -147,7 +147,7 @@ public class WorkflowService {
 			url.append(config.getWfProcessSearchPath());
 			url.append("?tenantId=");
 			url.append(tenantId);
-			url.append("&businessservices=");
+			url.append("&businessServices=");
 			url.append(businessServiceValue);
 			url.append("&businessIds=");
 			url.append(applicationNo);

@@ -603,7 +603,7 @@ public class BPAService {
 			byte[] byteChunck = new byte[1024];
 			int baLength;
 			readStream = downloadUrl.openStream();
-			while ((baLength = readStream.read(byteChunck)) != -1) {
+			while ((baLength = readStream.read(byteChunck, 0 , byteChunck.length)) != -1) {
 				writeStream.write(byteChunck, 0, baLength);
 			}
 		}catch (Exception e){
