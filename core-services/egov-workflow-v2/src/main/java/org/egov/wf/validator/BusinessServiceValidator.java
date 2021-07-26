@@ -123,7 +123,7 @@ public class BusinessServiceValidator {
                 }
             });
         });
-        criteria.setTenantIds(Collections.singletonList(tenantId));
+        criteria.setTenantId(tenantId);
         criteria.setBusinessServices(businessServiceCodes);
 
         List<BusinessService> businessServices = repository.getBusinessServices(criteria);

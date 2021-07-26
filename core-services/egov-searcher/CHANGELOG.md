@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.4 - 23-07-2021
+
+- Fixed the like operator issue
+
 ## 1.1.3 - 11-05-2021
 
 - Added finally block wherever required

@@ -159,7 +159,7 @@ public class TransitionService {
         BusinessServiceSearchCriteria criteria = new BusinessServiceSearchCriteria();
         String tenantId = processInstances.get(0).getTenantId();
         String businessService = processInstances.get(0).getBusinessService();
-        criteria.setTenantIds(Collections.singletonList(tenantId));
+        criteria.setTenantId(tenantId);
         criteria.setBusinessServices(Collections.singletonList(businessService));
         List<BusinessService> businessServices = businessServiceRepository.getBusinessServices(criteria);
         if(CollectionUtils.isEmpty(businessServices))

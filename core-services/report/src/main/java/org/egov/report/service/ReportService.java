@@ -98,6 +98,7 @@ public class ReportService {
                     sc.setShowColumn(cd.getShowColumn());
                     sc.setDefaultValue(cd.getPattern());
                     sc.setIsMandatory(cd.getIsMandatory());
+                    sc.setIsLocalisationRequired(cd.getLocalisationRequired());
 
                     sc.setColumnTotal(cd.getColumnTotal());
                     sc.setRowTotal(cd.getRowTotal());

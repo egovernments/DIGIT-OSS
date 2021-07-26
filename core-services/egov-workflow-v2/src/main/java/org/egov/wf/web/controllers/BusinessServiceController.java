@@ -50,15 +50,14 @@ public class BusinessServiceController {
 
     /**
      * Controller for searching BusinessService api
-     * @param criteria Object containing the search params
+     * @param searchCriteria Object containing the search params
      * @param requestInfoWrapper The requestInfoWrapper object containing requestInfo
      * @return List of businessServices from db based on search params
      */
     @RequestMapping(value="/businessservice/_search", method = RequestMethod.POST)
-    public ResponseEntity<BusinessServiceResponse> search(@Valid @RequestParam Map<String,String> criteria,
+    public ResponseEntity<BusinessServiceResponse> search(@Valid @ModelAttribute BusinessServiceSearchCriteria searchCriteria,
                                                           @Valid @RequestBody RequestInfoWrapper requestInfoWrapper) {
 
-        BusinessServiceSearchCriteria searchCriteria = mapper.convertValue(criteria,BusinessServiceSearchCriteria.class);
         List<BusinessService> businessServices = businessMasterService.search(searchCriteria);
         BusinessServiceResponse response = BusinessServiceResponse.builder().businessServices(businessServices)
                 .responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(),true))

@@ -60,6 +60,22 @@ public class UserService {
         return idToUserMap;
     }
 
+    public List<String> searchUserUuidsBasedOnRoleCodes(UserSearchRequest userSearchRequest){
+        StringBuilder url = new StringBuilder(config.getUserHost());
+        url.append(config.getUserSearchEndpoint());
+        UserDetailResponse userDetailResponse = userCall(userSearchRequest,url);
+        if(CollectionUtils.isEmpty(userDetailResponse.getUser()))
+            throw new CustomException("INVALID USER","No user found for the roleCodes: " + userSearchRequest.getRoleCodes());
+        List<String> roleSpecificUsersUuids = new ArrayList<>();
+        userDetailResponse.getUser().forEach(user -> {
+           roleSpecificUsersUuids.add(user.getUuid());
+        });
+        // ############ REMOVE ME LATER
+        log.info(roleSpecificUsersUuids.toString());
+        // ############################
+        return roleSpecificUsersUuids;
+    }
+
 
 
     /**

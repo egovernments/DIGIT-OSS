@@ -66,25 +66,24 @@ public class CreateBranchStream extends CreateStream {
             return chatNode;
         }).to(questionTopic, Produced.with(Serdes.String(), EgovChatSerdes.getSerde()));
 
-        for (int i = 1; i < kStreamBranches.length; i++) {
-            String targetNode = config.get(branchNames.get(i - 1)).asText();
-            String targetTopicName = topicNameGetter.getQuestionTopicNameForNode(targetNode);
-            kStreamBranches[i].flatMapValues(chatNode -> {
-                try {
-                    chatNode = answerExtractor.extractAnswer(config, chatNode);
+		for (int i = 1; i < kStreamBranches.length; i++) {
+			String targetNode = config.get(branchNames.get(i - 1)).asText();
+			String targetTopicName = topicNameGetter.getQuestionTopicNameForNode(targetNode);
+			kStreamBranches[i].flatMapValues(chatNode -> {
+				try {
+					chatNode = answerExtractor.extractAnswer(config, chatNode);
+					answerStore.saveAnswer(config, chatNode);
+					return Collections.singletonList(chatNode);
+				} catch (Exception e) {
+					log.error("error in branch stream", e);
+					commonAPIErrorMessage.resetFlowDuetoError(chatNode);
+					return Collections.emptyList();
+				}
+			}).to(targetTopicName, Produced.with(Serdes.String(), EgovChatSerdes.getSerde()));
 
-                    answerStore.saveAnswer(config, chatNode);
-
-                    return Collections.singletonList(chatNode);
-                } catch (Exception e) {
-                    log.error("error in branch stream", e);
-                    commonAPIErrorMessage.resetFlowDuetoError(chatNode);
-                    return Collections.emptyList();
-                }
-            }).to(targetTopicName, Produced.with(Serdes.String(), EgovChatSerdes.getSerde()));
-
-            log.info("Branch Stream started : " + streamName + ", from : " + answerInputTopic + ", to : " + targetTopicName);
-        }
+			log.info("Branch Stream started : " + streamName + ", from : " + answerInputTopic + ", to : "
+					+ targetTopicName);
+		}
 
         kafkaStreamsConfig.startStream(builder, streamConfiguration);
     }

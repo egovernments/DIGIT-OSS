@@ -1,5 +1,6 @@
 package org.egov.wf.service;
 
+import com.jayway.jsonpath.JsonPath;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
@@ -10,6 +11,7 @@ import org.egov.wf.repository.ServiceRequestRepository;
 import org.egov.wf.util.WorkflowConstants;
 import org.egov.wf.web.models.ProcessInstanceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,13 +25,63 @@ public class MDMSService {
 
    private ServiceRequestRepository serviceRequestRepository;
 
+   private WorkflowConfig workflowConfig;
 
-   @Autowired
-    public MDMSService(WorkflowConfig config, ServiceRequestRepository serviceRequestRepository) {
+   private Map<String,Boolean> stateLevelMapping;
+
+    @Autowired
+    public MDMSService(WorkflowConfig config, ServiceRequestRepository serviceRequestRepository, WorkflowConfig workflowConfig) {
         this.config = config;
         this.serviceRequestRepository = serviceRequestRepository;
+        this.workflowConfig = workflowConfig;
     }
 
+
+    public Map<String, Boolean> getStateLevelMapping() {
+        return this.stateLevelMapping;
+    }
+
+
+    @Bean
+    public void stateLevelMapping(){
+        Map<String, Boolean> stateLevelMapping = new HashMap<>();
+
+        Object mdmsData = getBusinessServiceMDMS();
+        List<HashMap<String, Object>> configs = JsonPath.read(mdmsData,JSONPATH_BUSINESSSERVICE_STATELEVEL);
+
+
+        for (Map map : configs){
+
+            String businessService = (String) map.get("businessService");
+            Boolean isStatelevel = Boolean.valueOf((String) map.get("isStatelevel"));
+
+            stateLevelMapping.put(businessService, isStatelevel);
+        }
+
+        this.stateLevelMapping = stateLevelMapping;
+    }
+
+
+    /**
+     * Calls MDMS service to fetch master data
+     * @param requestInfo
+     * @return
+     */
+    public Object mDMSCall(RequestInfo requestInfo){
+        MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo,workflowConfig.getStateLevelTenantId());
+        Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
+        return result;
+    }
+
+    /**
+     * Calls MDMS service to fetch master data
+     * @return
+     */
+    public Object getBusinessServiceMDMS(){
+        MdmsCriteriaReq mdmsCriteriaReq = getBusinessServiceMDMSRequest(new RequestInfo(), workflowConfig.getStateLevelTenantId());
+        Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
+        return result;
+    }
 
 
     /**
@@ -39,9 +91,31 @@ public class MDMSService {
      * @return MDMSCriteria for search call
      */
     private MdmsCriteriaReq getMDMSRequest(RequestInfo requestInfo, String tenantId){
-        ModuleDetail wfModuleDetail = getWorkflowMDMSDetail();
+        ModuleDetail escalationDetail = getAutoEscalationConfig();
+        ModuleDetail tenantDetail = getTenants();
 
-        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Collections.singletonList(wfModuleDetail))
+        List<ModuleDetail> moduleDetails = new LinkedList<>(Arrays.asList(escalationDetail,tenantDetail));
+
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails)
+                .tenantId(tenantId)
+                .build();
+
+        MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().mdmsCriteria(mdmsCriteria)
+                .requestInfo(requestInfo).build();
+        return mdmsCriteriaReq;
+    }
+
+    /**
+     * Creates MDMSCriteria
+     * @param requestInfo The RequestInfo of the request
+     * @param tenantId TenantId of the request
+     * @return MDMSCriteria for search call
+     */
+    private MdmsCriteriaReq getBusinessServiceMDMSRequest(RequestInfo requestInfo, String tenantId){
+        ModuleDetail wfMasterDetails = getBusinessServiceMasterConfig();
+
+
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Collections.singletonList(wfMasterDetails))
                 .tenantId(tenantId)
                 .build();
 
@@ -52,10 +126,10 @@ public class MDMSService {
 
 
     /**
-     * Creates MDMS ModuleDetail object for workflow
+     * Fetches BusinessServiceMasterConfig from MDMS
      * @return ModuleDetail for workflow
      */
-    private ModuleDetail getWorkflowMDMSDetail() {
+    private ModuleDetail getBusinessServiceMasterConfig() {
 
         // master details for WF module
         List<MasterDetail> wfMasterDetails = new ArrayList<>();
@@ -68,6 +142,39 @@ public class MDMSService {
         return wfModuleDtls;
     }
 
+    /**
+     * Creates MDMS ModuleDetail object for AutoEscalation
+     * @return ModuleDetail for AutoEscalation
+     */
+    private ModuleDetail getAutoEscalationConfig() {
+
+        // master details for WF module
+        List<MasterDetail> masterDetails = new ArrayList<>();
+
+        masterDetails.add(MasterDetail.builder().name(MDMS_AUTOESCALTION).build());
+
+        ModuleDetail wfModuleDtls = ModuleDetail.builder().masterDetails(masterDetails)
+                .moduleName(MDMS_WORKFLOW).build();
+
+        return wfModuleDtls;
+    }
+
+    /**
+     * Creates MDMS ModuleDetail object for tenants
+     * @return ModuleDetail for tenants
+     */
+    private ModuleDetail getTenants() {
+
+        // master details for WF module
+        List<MasterDetail> masterDetails = new ArrayList<>();
+
+        masterDetails.add(MasterDetail.builder().name(MDMS_TENANTS).build());
+
+        ModuleDetail wfModuleDtls = ModuleDetail.builder().masterDetails(masterDetails)
+                .moduleName(MDMS_MODULE_TENANT).build();
+
+        return wfModuleDtls;
+    }
 
 
 

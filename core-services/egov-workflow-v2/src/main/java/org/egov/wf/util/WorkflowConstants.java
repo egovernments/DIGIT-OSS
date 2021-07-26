@@ -14,7 +14,19 @@ public class WorkflowConstants {
 
     public static final String ALL_WF_JSONPATH_CODE = "$.MdmsRes.Workflow.BusinessService.*";
 
-    public static final String MDMS_BUSINESSSERVICE= "BusinessService";
+    public static final String MDMS_BUSINESSSERVICE= "BusinessServiceMasterConfig";
+
+    public static final String MDMS_AUTOESCALTION= "AutoEscalation";
+
+    public static final String JSONPATH_AUTOESCALTION = "$.MdmsRes.Workflow.AutoEscalation";
+
+    public static final String JSONPATH_BUSINESSSERVICE_STATELEVEL = "$.MdmsRes.Workflow.BusinessServiceMasterConfig";
+
+    public static final String JSONPATH_TEANANTIDS = "$.MdmsRes.tenant.tenants.*.code";
+
+    public static final String MDMS_MODULE_TENANT= "tenant";
+
+    public static final String MDMS_TENANTS= "tenants";
 
     public static final String MDMS_ALLOWED_ROLES_ALL_SERVICES = "$..roles";
 
@@ -29,5 +41,7 @@ public class WorkflowConstants {
     public static final String SENDBACKTOCITIZEN = "SENDBACKTOCITIZEN";
 
     public static final String RATE_ACTION = "RATE";
+
+    public static final String AUTO_ESC_EMPLOYEE_ROLE_CODE = "AUTO_ESCALATE";
 
 }

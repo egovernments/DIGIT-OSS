@@ -189,6 +189,103 @@ class PGRService {
     return { localities, messageBundle };
   }
 
+  async getCity(input, locale){
+    var url = config.egovServices.egovServicesHost+config.egovServices.cityFuzzySearch;
+
+    var requestBody = {
+      input_city: input,
+      input_lang: locale
+    };
+
+    var options = {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    }
+
+    let response = await fetch(url, options);
+
+
+    let predictedCity = null;
+    let predictedCityCode = null;
+    let isCityDataMatch = false;
+    if(response.status === 200) {
+      let responseBody = await response.json();
+      if(responseBody.match == 0)
+        return {predictedCityCode, predictedCity, isCityDataMatch };
+      else {
+        predictedCityCode = responseBody.city_detected[0];
+        let localisationMessages = await localisationService.getMessageBundleForCode(predictedCityCode);
+        predictedCity = dialog.get_message(localisationMessages,locale);
+        if(locale === 'en_IN'){
+          if(predictedCity.toLowerCase() === input.toLowerCase())
+            isCityDataMatch = true;
+        }
+        else{
+          if(predictedCity === input)
+            isCityDataMatch = true;
+        }
+        return { predictedCityCode, predictedCity, isCityDataMatch };
+      }
+    } else {
+      console.error('Error in fetching the city');
+      return { predictedCityCode, predictedCity, isCityDataMatch};
+    }
+
+  }
+
+  async getLocality(input, city, locale) {
+    var url = config.egovServices.egovServicesHost+config.egovServices.localityFuzzySearch;
+
+    var requestBody = {
+      city: city,
+      locality: input
+    };
+
+    var options = {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    };
+
+    let response = await fetch(url, options);
+
+    let predictedLocality= null;
+    let predictedLocalityCode = null;
+    let isLocalityDataMatch = false;
+    
+    if(response.status === 200) {
+      let responseBody = await response.json();
+      if(responseBody.predictions.length == 0)
+        return {predictedLocalityCode, predictedLocality, isLocalityDataMatch };
+      else{
+        let localityList = responseBody.predictions;
+        for(let locality of localityList){
+          if(locality.name.toLowerCase() === input.toLowerCase()){
+            predictedLocalityCode = locality.code;
+            predictedLocality = locality.name;
+            isLocalityDataMatch = true;
+            return { predictedLocalityCode, predictedLocality, isLocalityDataMatch };
+          }
+        }
+
+        predictedLocalityCode = localityList[0].code;
+        predictedLocality = localityList[0].name;
+        isLocalityDataMatch = false;
+        return { predictedLocalityCode, predictedLocality, isLocalityDataMatch };
+      }
+    }
+    else {
+      console.error('Error in fetching the locality');
+      return { predictedLocalityCode, predictedLocality, isLocalityDataMatch };
+    }
+
+  }
+
   async preparePGRResult(responseBody,locale){
     let serviceWrappers = responseBody.ServiceWrappers;
     var results = {};

@@ -9,11 +9,13 @@ var geturl = require("url");
 var path = require("path");
 require('url-search-params-polyfill');
 
-let valueFirstRequestBody = "{\"@VER\":\"1.2\",\"USER\":{\"@USERNAME\":\"\",\"@PASSWORD\":\"\",\"@UNIXTIMESTAMP\":\"\"},\"DLR\":{\"@URL\":\"\"},\"SMS\":[]}";
+let valueFirstRequestBody = "{\"@VER\":\"1.2\",\"USER\":{\"@USERNAME\":\"\",\"@PASSWORD\":\"\",\"@UNIXTIMESTAMP\":\"\",\"@CH_TYPE\":\"4\"},\"DLR\":{\"@URL\":\"\"},\"SMS\":[]}";
 
-let textMessageBody = "{\"@UDH\":\"0\",\"@CODING\":\"1\",\"@TEXT\":\"\",\"@TEMPLATEINFO\":\"\",\"@PROPERTY\":\"0\",\"@ID\":\"\",\"ADDRESS\":[{\"@FROM\":\"\",\"@TO\":\"\",\"@SEQ\":\"\",\"@TAG\":\"\"}]}";
+let textMessageBody = "{\"@UDH\":\"0\",\"@CODING\":\"1\",\"@TEXT\":\"\",\"@MSGTYPE\":\"1\",\"@TEMPLATEINFO\":\"\",\"@PROPERTY\":\"0\",\"@ID\":\"\",\"ADDRESS\":[{\"@FROM\":\"\",\"@TO\":\"\",\"@SEQ\":\"\",\"@TAG\":\"\"}]}";
 
-let imageMessageBody = "{\"@UDH\":\"0\",\"@CODING\":\"1\",\"@TEXT\":\"\",\"@CAPTION\":\"\",\"@TYPE\":\"image\",\"@CONTENTTYPE\":\"image\/png\",\"@TEMPLATEINFO\":\"\",\"@PROPERTY\":\"0\",\"@ID\":\"\",\"ADDRESS\":[{\"@FROM\":\"\",\"@TO\":\"\",\"@SEQ\":\"\",\"@TAG\":\"\"}]}";
+let imageMessageBody = "{\"@UDH\":\"0\",\"@CODING\":\"1\",\"@TEXT\":\"\",\"@MSGTYPE\":\"4\",\"@MEDIADATA\":\"\",\"@CAPTION\":\"\",\"@TYPE\":\"image\",\"@CONTENTTYPE\":\"image\/png\",\"@TEMPLATEINFO\":\"\",\"@PROPERTY\":\"0\",\"@ID\":\"\",\"ADDRESS\":[{\"@FROM\":\"\",\"@TO\":\"\",\"@SEQ\":\"\",\"@TAG\":\"\"}]}";
+
+let buttontemplateMessageBody = "{\"@UDH\":\"0\",\"@CODING\":\"1\",\"@TEXT\":\"\",\"@CAPTION\":\"\",\"@TYPE\":\"\",\"@CONTENTTYPE\":\"\",\"@TEMPLATEINFO\":\"\",\"@MSGTYPE\":\"3\",\"@B_URLINFO\":\"\",\"@PROPERTY\":\"0\",\"@ID\":\"\",\"ADDRESS\":[{\"@FROM\":\"\",\"@TO\":\"\",\"@SEQ\":\"1\",\"@TAG\":\"\"}]}"
 
 let templateMessageBody = "{\"@UDH\":\"0\",\"@CODING\":\"1\",\"@TEXT\":\"\",\"@CAPTION\":\"\",\"@TYPE\":\"\",\"@CONTENTTYPE\":\"\",\"@TEMPLATEINFO\":\"\",\"@PROPERTY\":\"0\",\"@ID\":\"\",\"ADDRESS\":[{\"@FROM\":\"\",\"@TO\":\"\",\"@SEQ\":\"1\",\"@TAG\":\"\"}]}"
 
@@ -83,23 +85,32 @@ class ValueFirstWhatsAppProvider {
         let reformattedMessage={};
         let type;
         let input;
-        if(requestBody.media_type)
-            type = requestBody.media_type;
-        else
-            type = "unknown";
 
-        if(type === "location") {
-            input = '(' + requestBody.latitude + ',' + requestBody.longitude + ')';
+        if(requestBody.buttonLabel && requestBody.buttonLabel != '$btnLabel'){
+            type = 'button'
+            input = requestBody.buttonLabel;
+            requestBody.from = requestBody.TO;
+            requestBody.to = config.whatsAppBusinessNumber;
+        }
+        else{
+            if(requestBody.media_type)
+                type = requestBody.media_type;
+            else
+                type = "unknown";
+
+            if(type === "location") {
+                input = '(' + requestBody.latitude + ',' + requestBody.longitude + ')';
+            } 
+            else if(type === 'image'){
+                var imageInBase64String = requestBody.MediaData;
+                input = await this.convertFromBase64AndStore(imageInBase64String);
+            }
+            else if(type === 'unknown' || type === 'document')
+                input = ' ';
+            else {
+                input = requestBody.text;
+            }
         } 
-        else if(type === 'image'){
-            var imageInBase64String = requestBody.media_data;
-            input = await this.convertFromBase64AndStore(imageInBase64String);
-        }
-        else if(type === 'unknown' || type === 'document')
-            input = ' ';
-        else {
-            input = requestBody.text;
-        }
 
         reformattedMessage.message = {
             input: input,
@@ -180,13 +191,13 @@ class ValueFirstWhatsAppProvider {
         let response = await fetch(url,options);
         response = await(response).json();
         var fileURL = response['fileStoreIds'][0]['url'].split(",");
-        var fileName = geturl.parse(fileURL[0]);
+        /*var fileName = geturl.parse(fileURL[0]);
         fileName = path.basename(fileName.pathname);
         fileName = fileName.substring(13);
         await this.downloadImage(fileURL[0].toString(),fileName);
         const file = fs.readFileSync(fileName,'base64');
-        fs.unlinkSync(fileName);
-        return file;
+        fs.unlinkSync(fileName);*/
+        return fileURL[0].toString();
     }
 
     async getTransformedResponse(user, messages, extraInfo){
@@ -218,12 +229,32 @@ class ValueFirstWhatsAppProvider {
                 messageBody = JSON.parse(textMessageBody);
                 let encodedMessage=urlencode(message, 'utf8');
                 messageBody['@TEXT'] = encodedMessage;
-            } else {
+            } 
+            else if(type == 'template'){
+
+                if(messages[i].bttnUrlComponent){
+                    messageBody = JSON.parse(buttontemplateMessageBody);
+                    messageBody['@B_URLINFO'] = messages[i].bttnUrlComponent;
+                }
+                else
+                    messageBody = JSON.parse(templateMessageBody);
+
+                let combinedStringForTemplateInfo = message;
+            
+                if(messages[i].params){
+                    let templateParams = messages[i].params;
+                    for(let param of templateParams)
+                        combinedStringForTemplateInfo = combinedStringForTemplateInfo + "~" + param;
+                }
+
+                messageBody['@TEMPLATEINFO'] = combinedStringForTemplateInfo;
+            }     
+            else {
                 // TODO for non-textual messages
                 let fileStoreId;
                 if(message)
                     fileStoreId = message;
-                const base64Image = await this.getFileForFileStoreId(fileStoreId);
+                var fileURL = await this.getFileForFileStoreId(fileStoreId);
                 var uniqueImageMessageId = uuid();
                 messageBody = JSON.parse(imageMessageBody);
                 if(type === 'pdf'){
@@ -231,7 +262,7 @@ class ValueFirstWhatsAppProvider {
                     messageBody['@CONTENTTYPE'] = 'application/pdf';
                     messageBody['@CAPTION'] = extraInfo.fileName+'-'+Date.now();
                 }
-                messageBody['@TEXT'] = base64Image;
+                messageBody['@MEDIADATA'] = fileURL;
                 messageBody['@ID'] = uniqueImageMessageId;
 
             }
@@ -249,6 +280,7 @@ class ValueFirstWhatsAppProvider {
 
         let headers = {
             'Content-Type': 'application/json',
+            'Authorization': config.valueFirstWhatsAppProvider.valuefirstLoginAuthorizationHeader
         }
 
         var request = {
@@ -281,12 +313,14 @@ class ValueFirstWhatsAppProvider {
         if(Object.keys(requestBody).length === 0)
             requestBody  = req.body; 
             
-        //var requestValidation= await this.isValid(requestBody);
-
-        //if(requestValidation){
+        if(requestBody.media_type && requestBody.media_type === 'button')
+            return null;
+        
+        if(requestBody.buttonLabel && requestBody.buttonLabel == '$btnLabel')
+            return null;
+        
         reformattedMessage = await this.getTransformedRequest(requestBody);
         return reformattedMessage;
-        //}
 
     }
 

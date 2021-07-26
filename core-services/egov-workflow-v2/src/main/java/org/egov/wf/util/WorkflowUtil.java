@@ -5,12 +5,14 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.wf.config.WorkflowConfig;
+import org.egov.wf.repository.BusinessServiceRepository;
 import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -20,12 +22,17 @@ public class WorkflowUtil {
 
     private WorkflowConfig config;
 
+    private BusinessServiceRepository businessServiceRepository;
+
 
     @Autowired
-    public WorkflowUtil(ObjectMapper mapper,WorkflowConfig config) {
+    public WorkflowUtil(ObjectMapper mapper, WorkflowConfig config, BusinessServiceRepository businessServiceRepository) {
         this.mapper = mapper;
         this.config = config;
+        this.businessServiceRepository = businessServiceRepository;
     }
+
+
 
     /**
      * Method to return auditDetails for create/update flows
@@ -149,13 +156,35 @@ public class WorkflowUtil {
 
 
     /**
+     * Gets the map of roles to tenantId the user is assigned
+     * @param requestInfo RequestInfo of the request
+     * @return Map of tenantId to roles for user in the requestInfo
+     */
+    public Map<String,List<String>> getRoleToTenantId(RequestInfo requestInfo){
+        Map<String,List<String>> roleToTenantId = new HashMap<>();
+        requestInfo.getUserInfo().getRoles().forEach(role -> {
+            if(roleToTenantId.containsKey(role.getCode())){
+                roleToTenantId.get(role.getCode()).add(role.getTenantId());
+            }
+            else {
+                List<String> tenants = new LinkedList<>();
+                tenants.add(role.getTenantId());
+                roleToTenantId.put(role.getCode(),tenants);
+            }
+        });
+        return roleToTenantId;
+    }
+
+
+
+    /**
      * Gets the list of status on which user from requestInfo can take action upon
      * @param requestInfo The RequestInfo Object of the request
      * @param businessServices List of all businessServices
      * @return List of status on which user from requestInfo can take action upon
      */
 
-    public List<String> getActionableStatusesForRole(RequestInfo requestInfo, List<BusinessService> businessServices,ProcessInstanceSearchCriteria criteria){
+/*    public List<String> getActionableStatusesForRole(RequestInfo requestInfo, List<BusinessService> businessServices,ProcessInstanceSearchCriteria criteria){
 
         String tenantId;
         List<String> userRoleCodes;
@@ -166,28 +195,130 @@ public class WorkflowUtil {
         
         for(Map.Entry<String,List<String>> entry : tenantIdToUserRolesMap.entrySet()){
             if(entry.getKey().equals(criteria.getTenantId())){
-                List<BusinessService> businessServicesByTenantId = new ArrayList();
+                List<BusinessService> businessServicesByTenantId ;
                 if(config.getIsStateLevel()){
                     businessServicesByTenantId = tenantIdToBuisnessSevicesMap.get(entry.getKey().split("\\.")[0]);
                 }else{
                     businessServicesByTenantId = tenantIdToBuisnessSevicesMap.get(entry.getKey());
                 }
-                if(businessServicesByTenantId != null ) {
-                	 businessServicesByTenantId.forEach(service -> {
-                         List<State> states = service.getStates();
-                         states.forEach(state -> {
-                             Set<String> stateRoles = stateToRoleMap.get(state.getUuid());
-                             if(!CollectionUtils.isEmpty(stateRoles) && !Collections.disjoint(stateRoles,entry.getValue())){
-                                 actionableStatuses.add(entry.getKey() + ':' + state.getUuid());
-                             }
+                businessServicesByTenantId.forEach(service -> {
+                    List<State> states = service.getStates();
+                    states.forEach(state -> {
+                        Set<String> stateRoles = stateToRoleMap.get(state.getUuid());
+                        if(!CollectionUtils.isEmpty(stateRoles) && !Collections.disjoint(stateRoles,entry.getValue())){
+                            actionableStatuses.add(entry.getKey() + ':' + state.getUuid());
+                        }
 
-                         });
-                     });
-                }
-               
+                    });
+                });
             }         
         }
         return actionableStatuses;
+    }*/
+
+
+    /**
+     * Have to find statuses on which the user can take action
+     * There are 4 possible scenarios that has to be covered:
+         * 1. user has tenantLevel Role and the config is also tenantLevel
+         * 2. user has tenantLevel Role and the config is  stateLevel
+         * 3. user has stateLevel Role and the config is tenantLevel
+         * 4. user has stateLevel Role and the config is also stateLevel
+     *
+     * roleTenantAndStatusMapping map captures the following sample data structure:
+     *
+     *  ROLE        TENANTID        STATUSES
+     *  TL_CEMP     pb.amritsar     UUID1,UUID2,....
+     *  TL_CEMP     pb.jalandhar    UUID3,UUID4,....
+     *  PT_CEMP     pb              UUID5,UUID6,....
+     *
+     * @param requestInfo
+     * @param criteria
+     * @return
+     */
+    public void enrichStatusesInSearchCriteria(RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria){
+
+        Map<String, Map<String,List<String>>> roleTenantAndStatusMapping = businessServiceRepository.getRoleTenantAndStatusMapping();
+        Map<String,List<String>> roleToTenantIdMap = getRoleToTenantId(requestInfo);
+
+        List<String> tenantSpecificStatuses = new LinkedList<>();
+        List<String> statusIrrespectiveOfTenant = new LinkedList<>();
+
+
+
+        for(Map.Entry<String, List<String>> entry : roleToTenantIdMap.entrySet()){
+
+            /**
+             * role: Role of the user
+             * tenantIds: Tenants for which he has the above particular role
+             */
+            String role = entry.getKey();
+            List<String> tenantIds = entry.getValue();
+
+
+            if(!roleTenantAndStatusMapping.containsKey(role))
+                continue;
+
+
+
+            Boolean isStatelevelRolePresent = false;
+
+            for (String tenantId : tenantIds) {
+                if (tenantId.equalsIgnoreCase(config.getStateLevelTenantId())){
+                    isStatelevelRolePresent = true;
+                    break;
+                }
+            }
+
+
+            Map<String,List<String>> tenantToStatuses = roleTenantAndStatusMapping.get(role);
+
+            for (Map.Entry<String, List<String>> tenantEntry : tenantToStatuses.entrySet()){
+
+                String tenantKey = tenantEntry.getKey();
+                List<String> statuses = tenantEntry.getValue();
+
+                /**
+                 * Handles Use Case 1:
+                 *  Example: role is TL_CEMP for tenantId pb.amritsar and config is tenant level. If the tenaantKey is equal to pb.amritsar
+                 *  we have to search all applications with status in statuses and tenantId = pb.amritsar. Since we do bulk search (we can't have multiple IN clause)
+                 *  we use derived column to search which is tenanat:statusUUID
+                 */
+                if(!isStatelevelRolePresent && tenantIds.contains(tenantKey))
+                    tenantSpecificStatuses.addAll(statuses.stream().map(s -> tenantKey+":"+s).collect(Collectors.toList()));
+
+
+                /**
+                 * Handles Use Case 2:
+                 * User has TL_CEMP role for pb.amritsar and pb.jalandhar and the config is statelevel. In this case we have to search all
+                 * applications having tenantId either pb.amritsar or pb.jalandhar and status in the list statuses
+                 *
+                 */
+                if(!isStatelevelRolePresent && tenantKey.equalsIgnoreCase(config.getStateLevelTenantId())){
+                    for (String tenantId : tenantIds){
+                        tenantSpecificStatuses.addAll(statuses.stream().map(s -> tenantId+":"+s).collect(Collectors.toList()));
+                    }
+                }
+
+                /**
+                 * Handles Use Case 3 and 4:
+                 * If the user has state level role he can take action all applications with status in statuses irrespective
+                 * of the tenantId of the application
+                 */
+                if(isStatelevelRolePresent){
+                    statusIrrespectiveOfTenant.addAll(statuses);
+                }
+            }
+
+        }
+
+        if(!CollectionUtils.isEmpty(tenantSpecificStatuses))
+            criteria.setTenantSpecifiStatus(tenantSpecificStatuses);
+
+        if(!CollectionUtils.isEmpty(statusIrrespectiveOfTenant))
+            criteria.setStatus(statusIrrespectiveOfTenant);
+
+
     }
     
      

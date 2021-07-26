@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 @Component
 public class WorkflowQueryBuilder {
@@ -32,11 +36,12 @@ public class WorkflowQueryBuilder {
             + "       eg_wf_assignee_v2 asg ON asg.processinstanceid = pi.id " + LEFT_OUTER_JOIN
             + "      eg_wf_document_v2 doc  ON doc.processinstanceid = pi.id " + INNER_JOIN
             + "       eg_wf_state_v2 st ON st.uuid = pi.status" + LEFT_OUTER_JOIN
-            + "       eg_wf_action_v2 ac ON ac.currentState = st.uuid " + "       WHERE ";
+            + "       eg_wf_action_v2 ac ON ac.currentState = st.uuid AND ac.active=TRUE " + "       WHERE ";
 
 
     private static final String WITH_CLAUSE = " select id from eg_wf_processinstance_v2 pi_outer WHERE " ;
 
+    private static final String STATUS_COUNT_WRAPPER = "select  count(DISTINCT wf_id),cq.applicationStatus,cq.PI_STATUS as statusId from ({INTERNAL_QUERY}) as cq GROUP BY cq.applicationStatus,cq.PI_STATUS";
 
 
     private final String paginationWrapper = "SELECT * FROM "
@@ -49,7 +54,6 @@ public class WorkflowQueryBuilder {
 
     private static final String COUNT_WRAPPER = "select count(DISTINCT wf_id) from ({INTERNAL_QUERY}) as count";
 
-    private static final String STATUS_COUNT_WRAPPER = "select  count(DISTINCT wf_id),cq.applicationStatus,cq.PI_STATUS as statusId from ({INTERNAL_QUERY}) as cq GROUP BY cq.applicationStatus,cq.PI_STATUS";
 
 
     private String getProcessInstanceSearchQueryWithoutPagination(ProcessInstanceSearchCriteria criteria, List<Object> preparedStmtList){
@@ -69,7 +73,7 @@ public class WorkflowQueryBuilder {
 
         List<String> ids = criteria.getIds();
         if (!CollectionUtils.isEmpty(ids)) {
-            builder.append("and tl.id IN (").append(createQuery(ids)).append(")");
+            builder.append("and pi.id IN (").append(createQuery(ids)).append(")");
             addToPreparedStatement(preparedStmtList, ids);
         }
 
@@ -79,14 +83,21 @@ public class WorkflowQueryBuilder {
             addToPreparedStatement(preparedStmtList, businessIds);
         }
         
+
         if(!StringUtils.isEmpty(criteria.getBusinessService())){
         	builder.append(" AND pi.businessservice =? ");
             preparedStmtList.add(criteria.getBusinessService());
         }
+
+        List<String> tenantSpecificStatuses = criteria.getTenantSpecifiStatus();
+        if (!CollectionUtils.isEmpty(tenantSpecificStatuses)) {
+            builder.append(" and CONCAT (pi.tenantid,':',pi.status)  IN (").append(createQuery(tenantSpecificStatuses)).append(")");
+            addToPreparedStatement(preparedStmtList, tenantSpecificStatuses);
+        }
         
         List<String> statuses = criteria.getStatus();
         if (!CollectionUtils.isEmpty(statuses)) {
-            builder.append(" and CONCAT (pi.tenantid,':',pi.status)  IN (").append(createQuery(statuses)).append(")");
+            builder.append(" and pi.status  IN (").append(createQuery(statuses)).append(")");
             addToPreparedStatement(preparedStmtList, statuses);
         }
 
@@ -230,7 +241,7 @@ public class WorkflowQueryBuilder {
 
 
 
-    public String getInboxIdQuery(ProcessInstanceSearchCriteria criteria, List<Object> preparedStmtList){
+    public String getInboxIdQuery(ProcessInstanceSearchCriteria criteria, List<Object> preparedStmtList, Boolean isPaginationRequired){
 
         String with_query = WITH_CLAUSE + " pi_outer.lastmodifiedTime = (" +
                 "SELECT max(lastmodifiedTime) from eg_wf_processinstance_v2 as pi_inner where pi_inner.businessid = pi_outer.businessid and tenantid = ? " +
@@ -238,13 +249,19 @@ public class WorkflowQueryBuilder {
 
         preparedStmtList.add(criteria.getTenantId());
         List<String> statuses = criteria.getStatus();
+        List<String> tenantSpecificStatus = criteria.getTenantSpecifiStatus();
         StringBuilder with_query_builder = new StringBuilder(with_query);
 
-        if(!config.getAssignedOnly() && !CollectionUtils.isEmpty(statuses)){
-            with_query_builder.append(" AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ) OR (pi_outer.tenantid || ':' || pi_outer.status) IN (").append(createQuery(statuses)).append("))");
+        if(!config.getAssignedOnly() && !CollectionUtils.isEmpty(tenantSpecificStatus)){
+            String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
+                    " AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )";
+
             preparedStmtList.add(criteria.getAssignee());
             preparedStmtList.add(criteria.getTenantId());
-            addToPreparedStatement(preparedStmtList,statuses);
+
+            String statusWhereCluse = getStatusRelatedWhereClause(statuses, tenantSpecificStatus, preparedStmtList);
+            clause = clause.replace("{{OR_CLUASE_PLACEHOLDER}}", statusWhereCluse);
+            with_query_builder.append(clause);
         }
         else {
             with_query_builder.append(" id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
@@ -259,12 +276,43 @@ public class WorkflowQueryBuilder {
 
         with_query_builder.append(" ORDER BY pi_outer.lastModifiedTime DESC ");
 
-        addPagination(with_query_builder,preparedStmtList,criteria);
+        if(isPaginationRequired)
+            addPagination(with_query_builder,preparedStmtList,criteria);
 
         StringBuilder builder = new StringBuilder(with_query_builder);
 
         return builder.toString();
     }
+
+
+    private String getStatusRelatedWhereClause(List<String> statuses, List<String> tenantSpecificStatus, List<Object> preparedStmtList)
+    {
+        StringBuilder innerQuery = new StringBuilder();
+
+        if(!CollectionUtils.isEmpty(tenantSpecificStatus)){
+            innerQuery.append(getTenantSpecificStatusClause(tenantSpecificStatus));
+            addToPreparedStatement(preparedStmtList, tenantSpecificStatus);
+        }
+
+        if(!CollectionUtils.isEmpty(statuses)){
+            innerQuery.append(getStatusClause(statuses));
+            addToPreparedStatement(preparedStmtList, statuses);
+        }
+
+        return innerQuery.toString();
+    }
+
+
+    private String getTenantSpecificStatusClause(List<String> tenantSpecificStatus){
+        StringBuilder builder = new StringBuilder(" OR (pi_outer.tenantid || ':' || pi_outer.status) IN (").append(createQuery(tenantSpecificStatus)).append(")");
+        return builder.toString();
+    }
+
+    private String getStatusClause(List<String> statuses){
+        StringBuilder builder = new StringBuilder(" OR pi_outer.status IN (").append(createQuery(statuses)).append(")");
+        return builder.toString();
+    }
+
 
     /**
      * Wraps pagination around the base query
@@ -299,31 +347,20 @@ public class WorkflowQueryBuilder {
      * @param preparedStmtList
      * @return
      */
-    public String getInboxCount(ProcessInstanceSearchCriteria criteria, List<Object> preparedStmtList, boolean statuCount){
+    public String getInboxCount(ProcessInstanceSearchCriteria criteria, List<Object> preparedStmtList,Boolean statuCount){
 
-        String query = QUERY + " pi.lastmodifiedTime IN  (SELECT max(lastmodifiedTime) from eg_wf_processinstance_v2 WHERE tenantid=? GROUP BY businessid)";
-        preparedStmtList.add(criteria.getTenantId());
-
-        List<String> statuses = criteria.getStatus();
-        StringBuilder builder = new StringBuilder(query);
-
-        if(!config.getAssignedOnly() && !CollectionUtils.isEmpty(statuses)){
-            builder.append(" AND ((asg.assignee = ?  AND pi.tenantid = ?) OR CONCAT (pi.tenantid,':',pi.status) IN (").append(createQuery(statuses)).append("))");
-            preparedStmtList.add(criteria.getAssignee());
-            preparedStmtList.add(criteria.getTenantId());
-            addToPreparedStatement(preparedStmtList,statuses);
-        }else {
-            builder.append(" AND asg.assignee = ?  AND pi.tenantid = ?");
-            preparedStmtList.add(criteria.getAssignee());
-            preparedStmtList.add(criteria.getTenantId());
-        }
+        String query = getInboxIdQuery(criteria, preparedStmtList, false);
 
         String countQuery = null;
-        
+
         if(statuCount) {
-        	countQuery =addStatusCountWrapper(builder.toString());
+        	countQuery = "select  count(DISTINCT cq.id),cq.applicationStatus,cq.businessservice,cq.PI_STATUS as statusId from  ( select ppi.id,ppi.businessservice,ppst.applicationstatus,ppi.status as PI_STATUS FROM eg_wf_processinstance_v2 ppi  JOIN eg_wf_state_v2 ppst ON ( ppst.uuid =ppi.status ) WHERE ppi.id IN ({INTERNAL_QUERY}) ) cq GROUP BY cq.applicationStatus,cq.businessservice,cq.PI_STATUS";
+
+            countQuery = countQuery.replace("{INTERNAL_QUERY}", query);
         }else {
-        	countQuery = addCountWrapper(builder.toString());
+        	 countQuery = "select count(DISTINCT id) from ({INTERNAL_QUERY}) as count";
+
+             countQuery = countQuery.replace("{INTERNAL_QUERY}", query);
         }
 
         return countQuery;
@@ -338,7 +375,6 @@ public class WorkflowQueryBuilder {
         }else {
         	countQuery = addCountWrapper(finalQuery);
         }
-        
         return countQuery;
     }
 
@@ -352,7 +388,71 @@ public class WorkflowQueryBuilder {
         String countQuery = COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
         return countQuery;
     }
-    
+
+
+    public String getInboxApplicationsBusinessIdsQuery(ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
+        StringBuilder query = new StringBuilder("SELECT DISTINCT businessid FROM eg_wf_processinstance_v2 ");
+
+        if(!isNull(criteria.getTenantId())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" tenantid = ? ");
+            preparedStmtList.add(criteria.getTenantId());
+        }
+
+        if(!isNull(criteria.getAssignee())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" createdby = ? ");
+            preparedStmtList.add(criteria.getAssignee());
+        }
+
+        if(!isNull(criteria.getBusinessService())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" businessservice = ? ");
+            preparedStmtList.add(criteria.getBusinessService());
+        }
+
+        return query.toString();
+    }
+
+    public String getAutoEscalatedApplicationsBusinessIdsQuery(ProcessInstanceSearchCriteria criteria, ArrayList<Object> preparedStmtList) {
+        StringBuilder query = new StringBuilder("SELECT DISTINCT businessid FROM eg_wf_processinstance_v2 ");
+
+        if(!isNull(criteria.getTenantId())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" tenantid = ? ");
+            preparedStmtList.add(criteria.getTenantId());
+        }
+
+        List<String> businessIds = criteria.getBusinessIds();
+        if(!CollectionUtils.isEmpty(criteria.getBusinessIds())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" businessid IN ( ").append(createQuery(businessIds)).append(" )");
+            addToPreparedStatement(preparedStmtList, businessIds);
+        }
+
+        List<String> uuidsOfAutoEscalationEmployees = criteria.getMultipleAssignees();
+        if(!CollectionUtils.isEmpty(uuidsOfAutoEscalationEmployees)){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" createdby IN ( ").append(createQuery(uuidsOfAutoEscalationEmployees)).append(" )");
+            addToPreparedStatement(preparedStmtList, uuidsOfAutoEscalationEmployees);
+        }
+
+        if(!isNull(criteria.getBusinessService())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" businessservice = ? ");
+            preparedStmtList.add(criteria.getBusinessService());
+        }
+
+        return query.toString();
+    }
+
+    private void addClauseIfRequired(StringBuilder query, List<Object> preparedStmtList){
+        if(preparedStmtList.isEmpty()){
+            query.append(" WHERE ");
+        }else{
+            query.append(" AND ");
+        }
+    }
     /**
      * Adds a count wrapper around the query
      * @param query
@@ -362,5 +462,4 @@ public class WorkflowQueryBuilder {
         String countQuery = STATUS_COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
         return countQuery;
     }
-
 }

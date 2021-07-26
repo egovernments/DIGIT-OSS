@@ -3,24 +3,27 @@ package org.egov.wf.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.mdms.model.ModuleDetail;
 import org.egov.tracer.model.CustomException;
 import org.egov.wf.util.WorkflowUtil;
-import org.egov.wf.web.models.Action;
-import org.egov.wf.web.models.AuditDetails;
-import org.egov.wf.web.models.BusinessService;
-import org.egov.wf.web.models.BusinessServiceRequest;
-import org.egov.wf.web.models.ProcessInstance;
-import org.egov.wf.web.models.ProcessInstanceRequest;
-import org.egov.wf.web.models.ProcessStateAndAction;
-import org.egov.wf.web.models.State;
+import org.egov.wf.web.models.*;
+import org.egov.wf.web.models.user.UserSearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
+import static org.egov.wf.util.WorkflowConstants.AUTO_ESC_EMPLOYEE_ROLE_CODE;
 import static org.egov.wf.util.WorkflowConstants.UUID_REGEX;
 
 
@@ -34,6 +37,15 @@ public class EnrichmentService {
     private UserService userService;
 
     private TransitionService transitionService;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("${egov.mdms.host}")
+    private String mdmsHost;
+
+    @Value("${egov.mdms.search.endpoint}")
+    private String mdmsUrl;
 
     @Autowired
     public EnrichmentService(WorkflowUtil util, UserService userService,TransitionService transitionService) {
@@ -227,6 +239,7 @@ public class EnrichmentService {
                         action.setUuid(UUID.randomUUID().toString());
                         action.setCurrentState(state.getUuid());
                         action.setTenantId(tenantId);
+                        action.setActive(true);
                     });
             });
             enrichNextState(businessService);
@@ -411,4 +424,63 @@ public class EnrichmentService {
     }
 
 
+    public Set<String> enrichUuidsOfAutoEscalationEmployees(RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria) {
+        List<String> roleCodes = new ArrayList<>();
+        Set<String> autoEscalationEmployeesUuids = new HashSet<>();
+        // ######## CHANGE THE VALUE OF THE ROLE CODE CONSTANT WITH THE VALUE DEFINED IN SYSTEM
+        roleCodes.add(AUTO_ESC_EMPLOYEE_ROLE_CODE);
+        // ####################################################################################
+        UserSearchRequest userSearchRequest = new UserSearchRequest();
+        userSearchRequest.setRequestInfo(requestInfo);
+        userSearchRequest.setTenantId(criteria.getTenantId());
+        userSearchRequest.setRoleCodes(roleCodes);
+
+        List<String> uuidsOfAutoEscalationEmployees = userService.searchUserUuidsBasedOnRoleCodes(userSearchRequest);
+        criteria.setMultipleAssignees(uuidsOfAutoEscalationEmployees);
+        uuidsOfAutoEscalationEmployees.forEach(uuid -> {
+            autoEscalationEmployeesUuids.add(uuid);
+        });
+        return autoEscalationEmployeesUuids;
+    }
+
+    public Set<String> fetchStatesToIgnoreFromMdms(RequestInfo requestInfo, String tenantId) {
+        Set<String> masterData = new HashSet<>();
+        StringBuilder uri = new StringBuilder();
+        uri.append(mdmsHost).append(mdmsUrl);
+        if(StringUtils.isEmpty(tenantId))
+            return masterData;
+        MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForStatesToIgnore(requestInfo, tenantId.split("\\.")[0]);
+
+        try {
+            //Object response = restTemplate.postForObject(uri.toString(), mdmsCriteriaReq, Map.class);
+            //masterData = JsonPath.read(response, "$.MdmsRes.Workflow.AutoEscalationStatesToIgnore.*.state");
+        }catch(Exception e) {
+            log.error("Exception while fetching workflow states to ignore: ",e);
+        }
+
+        return masterData;
+    }
+
+    private MdmsCriteriaReq getMdmsRequestForStatesToIgnore(RequestInfo requestInfo, String tenantId) {
+        MasterDetail masterDetail = new MasterDetail();
+        masterDetail.setName("AutoEscalationStatesToIgnore");
+        List<MasterDetail> masterDetailList = new ArrayList<>();
+        masterDetailList.add(masterDetail);
+
+        ModuleDetail moduleDetail = new ModuleDetail();
+        moduleDetail.setMasterDetails(masterDetailList);
+        moduleDetail.setModuleName("Workflow");
+        List<ModuleDetail> moduleDetailList = new ArrayList<>();
+        moduleDetailList.add(moduleDetail);
+
+        MdmsCriteria mdmsCriteria = new MdmsCriteria();
+        mdmsCriteria.setTenantId(tenantId);
+        mdmsCriteria.setModuleDetails(moduleDetailList);
+
+        MdmsCriteriaReq mdmsCriteriaReq = new MdmsCriteriaReq();
+        mdmsCriteriaReq.setMdmsCriteria(mdmsCriteria);
+        mdmsCriteriaReq.setRequestInfo(requestInfo);
+
+        return mdmsCriteriaReq;
+    }
 }

@@ -20,7 +20,7 @@ class BillService {
     let services = this.services;
     let messageBundle = {
       WS: {
-        en_IN: 'Water and Sewerage Bill',
+        en_IN: 'Water and Sewerage',
         hi_IN: 'पानी और सीवरेज बिल'
       },
       PT: {
@@ -80,15 +80,15 @@ class BillService {
     }
     let searchOptions = [];
     if(service === 'WS') {
-      searchOptions = [ 'mobile', 'connectionNumber', 'consumerNumber' ];
+      searchOptions = [ 'connectionNumber'];
     } else if(service === 'PT') {
-      searchOptions = [ 'mobile', 'propertyId', 'consumerNumber' ];
+      searchOptions = [ 'propertyId'];
     } else if(service === 'TL') {
-      searchOptions = [ 'mobile', 'tlApplicationNumber' ];
+      searchOptions = [ 'tlApplicationNumber' ];
     } else if(service === 'FIRENOC') {
-      searchOptions = [ 'mobile', 'nocApplicationNumber' ];
+      searchOptions = [ 'nocApplicationNumber' ];
     } else if(service === 'BPA') {
-      searchOptions = [ 'mobile', 'bpaApplicationNumber' ];
+      searchOptions = [ 'bpaApplicationNumber' ];
     }
 
     return { searchOptions, messageBundle };
@@ -121,12 +121,12 @@ class BillService {
 
     if(searchParamOption === 'connectionNumber'){
       option = {
-        en_IN: 'Connection Number',
+        en_IN: 'Connection No',
         hi_IN: 'कनेक्शन नंबर'
       };
       example = {
-       en_IN: ' ',
-       hi_IN: ' '
+       en_IN: '(Connection No must be in format\nWS/XXX/XX-XX/XXXXX)',
+       hi_IN: '(कनेक्शन नंबर WS/XXX/XX-XX/XXXXX प्रारूप में होना चाहिए)'
       }
     }
 
@@ -136,8 +136,8 @@ class BillService {
         hi_IN: 'संपत्ति आईडी'
       };
       example = {
-       en_IN: ' ',
-       hi_IN: ' '
+       en_IN: '(Property ID must be in format\nPB-PT-XXXX-XX-XX-XXXXX)',
+       hi_IN: '(प्रॉपर्टी आईडी प्रारूप में होनी चाहिए\nPB-PT-XXXX-XX-XX-XXXXX)'
       }
     }
 
@@ -248,6 +248,7 @@ class BillService {
         var data={
           service: dialog.get_message(serviceCode,locale),
           id: result.consumerCode,
+          payerName: result.payerName,
           secondaryInfo: 'Ajit Nagar,  Phagwara', //to do
           dueAmount: result.totalAmount,
           dueDate: dueDate,
@@ -256,17 +257,19 @@ class BillService {
           paymentLink: link,
           businessService: result.businessService
         };
-        tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
+        
+        /*tenantId = "TENANT_TENANTS_" + tenantId.toUpperCase().replace('.','_');
         if(!tenantIdList.includes(tenantId))
           tenantIdList.push(tenantId);
 
+        consumerCodeList.push(result.consumerCode);*/
+
         Bills['Bills'].push(data);
-        consumerCodeList.push(result.consumerCode);
         count = count + 1;
       } 
     }
 
-    if(Bills['Bills'].length>0){
+    /*if(Bills['Bills'].length>0){
       var stateLevelCode = "TENANT_TENANTS_"+config.rootTenantId.toUpperCase();
       var businessService = Bills['Bills'][0].businessService;
       tenantIdList.push(stateLevelCode);
@@ -294,7 +297,7 @@ class BillService {
         }
       }
 
-    }
+    }*/
     
     return Bills['Bills'];  
   }
@@ -372,12 +375,14 @@ class BillService {
 
   }
 
-  async fetchBillsForUser(user,service,locale){
+  async fetchBillsForUser(user,service){
     let billSupportedBussinessService;
 
     if(service){
       if(service === 'WS')
       billSupportedBussinessService = ['WS','SW'];
+      if(service === 'PT')
+      billSupportedBussinessService = ['PT'];
       if(service === 'BPA')
         billSupportedBussinessService = ['BPA.LOW_RISK_PERMIT_FEE', 'BPA.NC_APP_FEE', 'BPA.NC_SAN_FEE', 'BPA.NC_OC_APP_FEE', 'BPA.NC_OC_SAN_FEE'];
     }
@@ -599,6 +604,19 @@ class BillService {
     }
     
     return messageBundle;  
+  }
+
+  async getOpenSearchLink(service){
+    var UIHost = config.egovServices.externalHost;
+    var paymentPath;
+    if(service=='WS')
+      paymentPath = config.egovServices.wsOpenSearch;
+    else
+      paymentPath = config.egovServices.ptOpenSearch;
+
+    var finalPath = UIHost + paymentPath;
+    var link =  await this.getShortenedURL(finalPath);
+    return link;
   }
 
 }
