@@ -361,6 +361,8 @@ export const submitApplication = async (state, dispatch) => {
   //   billAmdDetails.dateEffectiveFrom = convertDateToEpoch(get(billAmdDetails, "dateEffectiveFrom"));
   // }
 
+  let searchBillDetails = get(state.screenConfiguration.preparedFinalObject, "searchBillDetails-bill", {});
+  set(billAmdDetails,'additionalDetails.searchBillDetails',{...searchBillDetails});
   try {
 
     let response = await httpRequest(

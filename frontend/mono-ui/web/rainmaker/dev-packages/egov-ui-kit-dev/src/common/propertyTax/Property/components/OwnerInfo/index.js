@@ -321,9 +321,9 @@ class OwnerInfo extends Component {
   }
   
   openDialog = async (dialogName) => {
-    const { properties } = this.props;
+    const { properties, waterDetails, sewerDetails } = this.props;
     const { propertyId, tenantId } = properties;
-    if (this.props.totalBillAmountDue === 0 && dialogName !== "viewHistory") {
+    if (this.props.totalBillAmountDue === 0 && waterDetails.length == 0 && sewerDetails.length == 0 && dialogName !== "viewHistory") {
       if (properties.status != "ACTIVE") {
         this.props.toggleSnackbarAndSetText(
           true,
@@ -346,7 +346,7 @@ class OwnerInfo extends Component {
       await this.getPropertyResponse(propertyId, tenantId, dialogName);
 
     }
-    else if(this.props.totalBillAmountDue !== 0){
+    else if(this.props.totalBillAmountDue !== 0 || waterDetails.length > 0 || sewerDetails.length > 0){
       this.setState({ pendingAmountDue: true });
     }
      else {
@@ -360,7 +360,7 @@ class OwnerInfo extends Component {
 
 
   render() {
-    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, mdmsMutationDocuments, OldProperty } = this.props;
+    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, waterDetails, sewerDetails, mdmsMutationDocuments, OldProperty } = this.props;
     let ownerInfo = [];
     let multipleOwner = false;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
@@ -450,6 +450,8 @@ class OwnerInfo extends Component {
           <PendingAmountDialog
             open={this.state.pendingAmountDue}
             amount={totalBillAmountDue}
+            waterDetails={waterDetails}
+            sewerDetails={sewerDetails}
             tenantId={properties.tenantId}
             consumerCode={properties.propertyId}
             closeDialogue={() => this.closeDialogue("pendingAmountDue")}

@@ -83,6 +83,9 @@ export const submitForm = (formKey, saveUrl) => {
         } else {
           formResponse = await httpRequest(saveUrl, action, [], formData);
         }
+        if(saveUrl=="/user/citizen/_create"&&formResponse&&formResponse.hasOwnProperty("UserRequest")){
+         localStorage.setItem("citizen.userRequestObject",JSON.stringify(formResponse.UserRequest));
+        }
         dispatch(submitFormComplete(formKey, formResponse, saveUrl));
       } catch (error) {
         const { message } = error;

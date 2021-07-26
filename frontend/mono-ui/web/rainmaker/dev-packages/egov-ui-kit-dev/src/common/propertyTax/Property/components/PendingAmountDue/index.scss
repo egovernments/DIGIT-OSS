@@ -84,3 +84,27 @@
           max-width: 45% !important;
         }
       }
+      .pending-dues {
+        button {
+          cursor: pointer !important;
+          div {
+              div, div:hover {
+                  height: auto !important;
+                  background-color: transparent !important;
+              }
+          }
+        }
+      }
+
+      .pending-dues {
+        button[disabled] {
+          background-color: transparent !important;
+          cursor: default !important;
+        }
+      }
+
+      .rupees-label {
+        color: rgba(0, 0, 0, 1);
+        font-weight: bold;
+        padding-right: 10px;
+      }

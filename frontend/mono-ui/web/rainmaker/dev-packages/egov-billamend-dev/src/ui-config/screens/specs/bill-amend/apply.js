@@ -29,8 +29,9 @@ import  summary from "./applyResource/summary"
 import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
 import { docdata } from "./applyResource/docData";
-import { getFetchBill, procedToNextStep, cancelPopUp } from "../utils";
+import { getFetchBill, procedToNextStep, cancelPopUp, searchBill } from "../utils";
 import "./index.scss";
+
 
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
@@ -96,12 +97,12 @@ export const formwizardThirdStep = {
   visible: false
 };
 
-export const setSearchResponse = async (state, dispatch, action) => {
+ const setSearchResponse = async (state, dispatch, action) => {
   const connectionNumber = getQueryArg( window.location.href, "connectionNumber");
   const businessService = getQueryArg( window.location.href, "businessService");
   const tenantId = getTenantId() || getQueryArg( window.location.href, "businessService");
 
-  let fetBill = await getFetchBill(state, dispatch, action, [
+  let fetBill = await searchBill(state, dispatch, action, [
     {
       key: "tenantId",
       value: tenantId
@@ -111,39 +112,28 @@ export const setSearchResponse = async (state, dispatch, action) => {
       value: connectionNumber
     },
     {
-      key: "businessService",
+      key: "service",
       value: businessService
     }
   ]);
   
   if(fetBill && fetBill.Bill && fetBill && fetBill.Bill.length > 0) {
     let billDetails = get(fetBill, "Bill[0].billDetails[0].billAccountDetails",[]);
-    billDetails.map(bill => {
-      bill.reducedAmountValue = 0;
-      bill.additionalAmountValue = 0;
-    });
-    dispatch(prepareFinalObject("fetchBillDetails", billDetails));
-    dispatch(prepareFinalObject("Amendment.consumerCode", connectionNumber));
-    dispatch(prepareFinalObject("Amendment.tenantId", tenantId));
-    dispatch(prepareFinalObject("Amendment.businessService", businessService));
-    dispatch(prepareFinalObject("BILL.AMOUNTTYPE", "reducedAmount"));
-    // dispatch(prepareFinalObject("Amendment.status", "ACTIVE"));
-
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.headerDiv.children.header.children.applicationNumber",
-        "props.number",
-        connectionNumber
-      )
-    );
-
+    let totalAmount=get(fetBill, "Bill[0].billDetails[0].amount",0);
+    
+    let searchedBill={"TOTAL":totalAmount}
+    billDetails&&billDetails.map&&billDetails.map(item=>{
+      searchedBill[item.taxHeadCode]=item.amount;
+    })
+    dispatch(prepareFinalObject("searchBillDetails-bill", searchedBill));
+  }else{
+    dispatch(prepareFinalObject("searchBillDetails-bill", {}));
   }
 }
 
 export const getData = async (action, state, dispatch) => {
   await getMdmsData(action, state, dispatch);
-  // await setSearchResponse(state, dispatch, action);
+  await setSearchResponse(state, dispatch, action);
 }
 
 export const getMdmsData = async (action, state, dispatch) => {

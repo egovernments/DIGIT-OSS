@@ -406,6 +406,7 @@ const screenConfig = {
     loadUlbLogo(tenantId);
     const queryObject = [
       { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: "PT.MUTATION" }
     ];
    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     // Hide edit buttons

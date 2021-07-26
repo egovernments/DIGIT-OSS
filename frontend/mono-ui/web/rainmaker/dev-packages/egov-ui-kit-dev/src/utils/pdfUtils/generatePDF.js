@@ -303,9 +303,9 @@ const getCustomCard = (body = [], width = [], layout = {}, color = 'grey') => {
         "layout": layout
     }
 }
-const totalAmount = (arr) => {
+const totalAmount = (arr,itmKey='value') => {
     return arr
-        .map(item => (item.value && !isNaN(Number(item.value)) ? Number(item.value) : 0))
+        .map(item => (item[itmKey] && !isNaN(Number(item[itmKey])) ? Number(item[itmKey]) : 0))
         .reduce((prev, next) => prev + next, 0);
 }
 export const getEstimateCardDetails = (fees = [], color, firstRowEnable = true, lastRowEnable = true, customForBillamend = false) => {
@@ -364,6 +364,77 @@ export const getEstimateCardDetails = (fees = [], color, firstRowEnable = true, 
 
 
     estimateCard = getCustomCard(card, [250, 150, 108], tableborder, color)
+
+    return estimateCard;
+}
+
+export const getEstimateCardDetailsBillAmend = (fees = [], color, firstRowEnable = true, lastRowEnable = true, customForBillamend = false) => {
+    let estimateCard = {};
+
+    let total = 0;
+    if (firstRowEnable || lastRowEnable) {
+        total = totalAmount(fees);
+    }
+
+
+    let card = [];
+    let row1 = []
+
+    let row2 = []
+
+    if (firstRowEnable) {
+        row1.push(getLabel(' ', 'amount'))
+        row1.push(getLabel(' ', 'amount'))
+        row1.push({ ...getLabel(getLocaleLabels('TL_COMMON_TOTAL_AMT', 'TL_COMMON_TOTAL_AMT'), 'amount'), "alignment": "right" })
+        card.push(row1);
+        row2.push(getLabel(' ', 'amount'))
+        row2.push(getLabel(' ', 'amount'))
+        row2.push({ ...getLabel(customForBillamend ? getLocaleLabels(total) : total, 'amount'), style: "pdf-application-no-value", "alignment": "right" })
+        card.push(row2);
+    }
+
+
+
+    let rowLast = []
+
+
+    fees.map((fee, i) => {
+        let row = []
+
+        if (customForBillamend) {
+            row.push(getLabel(getLocaleLabels(fee.name.labelName, fee.name.labelKey), i == 0 ? "value" : 'header'))
+            // row.push(getLabel(' ', 'header'));
+            row.push({ ...getLabel(customForBillamend ? getLocaleLabels(fee.value1) : fee.value1, i == 0 ? "value" : 'header'), "alignment": "right" })
+            
+            row.push({ ...getLabel(customForBillamend ? getLocaleLabels(fee.value) : fee.value, i == 0 ? "value" : 'header'), "alignment": "right" })
+            row.push({ ...getLabel(customForBillamend ? getLocaleLabels(fee.value2) : fee.value2, i == 0 ? "value" : 'header'), "alignment": "right" })
+            // customForBillamend?{}:row.push(getLabel(' ', 'header')) ;
+        } else {
+            row.push(getLabel(getLocaleLabels(fee.name.labelName, fee.name.labelKey), 'header'))
+            row.push({ ...getLabel(fee.value, 'header'), "alignment": "right" })
+            row.push(getLabel(' ', 'header'));
+        }
+
+        card.push(row);
+    })
+    if (lastRowEnable) {
+        rowLast.push(getLabel(getLocaleLabels('TL_COMMON_TOTAL_AMT', 'TL_COMMON_TOTAL_AMT'), 'totalAmount'))
+        customForBillamend ?rowLast.push( { ...getLabel(totalAmount(fees,'value1'), 'totalAmount'), "alignment": "right" }) : {}
+        if(customForBillamend){
+            rowLast.push({ ...getLabel(total, 'totalAmount'), "alignment": "right" }) 
+        }
+        rowLast.push({ ...getLabel(customForBillamend?totalAmount(fees,'value2'):total, 'totalAmount'), "alignment": "right" })
+        customForBillamend ? {} : rowLast.push(getLabel(' ', 'header'));
+        card.push(rowLast);
+    }
+
+
+    estimateCard = getCustomCard(card, customForBillamend&&fees[0].value1&&fees[0].value2? [
+        125,
+        125,
+        125,
+        125
+    ]:[250, 150, 108], tableborder, color)
 
     return estimateCard;
 }

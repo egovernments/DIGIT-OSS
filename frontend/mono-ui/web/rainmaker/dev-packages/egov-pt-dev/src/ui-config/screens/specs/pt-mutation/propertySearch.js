@@ -1,12 +1,11 @@
-import commonConfig from "config/common.js";
 import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject ,unMountScreen} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, getRequiredDocData,showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg, getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import "./index.css";
 import get from "lodash/get";
 import set from "lodash/set";
-import { resetFields } from "./mutation-methods";
+import "./index.css";
+import { cityChange, resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
 const hasButton = getQueryArg(window.location.href, "hasButton");
@@ -17,25 +16,25 @@ const tenant = getTenantId();
 //console.log(captureMutationDetails);
 
 const getMDMSData = async (action, dispatch) => {
-   const moduleDetails= [
-        {
-           moduleName: "PropertyTax", 
-           masterDetails: [
-             { name: "Documents" }
-            ] 
-          },
-        {
-          moduleName: "tenant",
-          masterDetails: [
-            {
-              name: "tenants"
-            }, { name: "citymodule" }
-          ]
-        } 
+  const moduleDetails = [
+    {
+      moduleName: "PropertyTax",
+      masterDetails: [
+        { name: "Documents" }
       ]
-   
+    },
+    {
+      moduleName: "tenant",
+      masterDetails: [
+        {
+          name: "tenants"
+        }, { name: "citymodule" }
+      ]
+    }
+  ]
+
   try {
-    getRequiredDocData(action, dispatch, moduleDetails).then((payload)=>{
+    getRequiredDocData(action, dispatch, moduleDetails).then((payload) => {
       if (process.env.REACT_APP_NAME != "Citizen") {
         dispatch(
           prepareFinalObject(
@@ -44,15 +43,16 @@ const getMDMSData = async (action, dispatch) => {
           )
         );
         set(action.screenConfig,
-            "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity.props.isDisabled",
-            true
+          "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity.props.isDisabled",
+          true
         );
         set(action.screenConfig,
-            "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity.isDisabled",
-            true
+          "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity.isDisabled",
+          true
         );
+        cityChange(dispatch, tenant)
       }
-      const tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
+      const tenants = get(payload, 'payload.MdmsRes.tenant.tenants', []).sort((t1, t2) => t1.code.localeCompare(t2.code))
       dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
     })
     // const payload = await httpRequest(
@@ -88,15 +88,15 @@ const getMDMSData = async (action, dispatch) => {
 
     // console.log("payload--", payload)
     // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-  //   if (process.env.REACT_APP_NAME != "Citizen") {
-  //     dispatch(
-  //       prepareFinalObject(
-  //         "ptSearchScreen.tenantId",
-  //         tenant
-  //       )
-  //     );
-  //   }
-  // }
+    //   if (process.env.REACT_APP_NAME != "Citizen") {
+    //     dispatch(
+    //       prepareFinalObject(
+    //         "ptSearchScreen.tenantId",
+    //         tenant
+    //       )
+    //     );
+    //   }
+    // }
   } catch (e) {
     console.log(e);
   }

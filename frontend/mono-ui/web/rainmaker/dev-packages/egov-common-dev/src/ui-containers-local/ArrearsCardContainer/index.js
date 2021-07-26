@@ -66,6 +66,7 @@ const formatTaxHeaders = (billDetail = {}) => {
   billAccountDetailsSorted.map((taxHead) => {
     formattedFees[taxHead.taxHeadCode] = { value: taxHead.amount, order: taxHead.order };
   })
+
   formattedFees['TL_COMMON_TOTAL_AMT'] = { value: billDetail.amount, order: 10 }
   return formattedFees;
 }
@@ -80,6 +81,10 @@ const mapStateToProps = (state, ownProps) => {
   sortedBillDetails.shift();
   sortedBillDetails.map(bill => {
     let fee = formatTaxHeaders(bill);
+    let expiryDate=new Date(bill.expiryDate);
+    // fee['CS_BILL_NO'] = { value: get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billNumber", 'NA'), order: -2 }
+    fee['CS_BILL_NO'] = { value: get(bill, "billNumber", 'NA'), order: -2 }
+    fee['CS_BILL_DUEDATE'] = { value: expiryDate&&expiryDate.toLocaleDateString&&expiryDate.toLocaleDateString()||'NA', order: -1 }
     fees[getBillingPeriod(bill.fromPeriod, bill.toPeriod)] = fee;
   })
 

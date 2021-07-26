@@ -82,6 +82,7 @@ const prepareSelectField = (uom, start, end) => {
       },
       required: true,
       isClearable: true,
+      defaultSort:uom=="NO_OF_FLOORS"?false:true,
       data: data,
       className:"applicant-details-error autocomplete-dropdown",
       jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,

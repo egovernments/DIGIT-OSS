@@ -54,6 +54,7 @@ class AutoSuggestor extends Component {
       localizationLabels,
       labelsFromLocalisation,
       localePrefix,
+      defaultSort=true,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -73,7 +74,8 @@ class AutoSuggestor extends Component {
       suggestions = getLocalisedSuggestions(
         JSON.parse(JSON.stringify(suggestions)),
         localePrefix,
-        localizationLabels
+        localizationLabels,
+        defaultSort
       );
     }
     //To find correct option object as per the value (for showing the selected value).
@@ -98,6 +100,7 @@ class AutoSuggestor extends Component {
           className={className}
           label={translatedLabel}
           placeholder={translatedPlaceholder}
+          defaultSort={defaultSort}
           {...rest}
         />
       </div>
@@ -105,8 +108,8 @@ class AutoSuggestor extends Component {
   }
 }
 
-const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
-  return (
+const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys,defaultSort) => {
+  suggestions=(
     suggestions &&
     Array.isArray(suggestions) &&
     suggestions.length > 0 &&
@@ -119,8 +122,10 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
         transfomedKeys
       );
       return option;
-    }).sort(sortDropdownNames)
+    })
   );
+  suggestions=defaultSort?suggestions.sort(sortDropdownNames):suggestions;
+  return suggestions;
 };
 
 const mapStateToProps = (state, ownprops) => {

@@ -11,10 +11,12 @@ import {
   getLocaleLabels, getQueryArg,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { multiHttpRequest } from "egov-ui-kit/utils/api";
 import { getUserSearchedResponse } from "egov-ui-kit/utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
+import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils/api";
 
 export const getCommonApplyFooter = children => {
@@ -522,6 +524,25 @@ export const getBill = async (queryObject, dispatch) => {
   }
 };
 
+export const getOtherBillDetails = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+  }
+};
 export const searchBill = async (dispatch, applicationNumber, tenantId) => {
   try {
     let queryObject = [
@@ -649,6 +670,70 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId) => {
     console.log(e);
   }
 };
+const loadArrearsDetails = async (dispatch, Bill = []) => {
+  if (Bill &&
+    Array.isArray(Bill) &&
+    Bill.length > 0 &&
+    Bill[0] &&
+    Bill[0].billDetails &&
+    Array.isArray(Bill[0].billDetails) &&
+    Bill[0].billDetails.length > 1) {
+    let queries = [];
+    let endpoints = [];
+    let rb = [];
+    Bill[0].billDetails.map(async (billDetail) => {
+
+      let query = [
+        {
+          key: "tenantId",
+          value: get(Bill[0], 'tenantId', "")
+        },
+        {
+          key: "consumerCode",
+          value: get(Bill[0], 'consumerCode', "")
+        }, {
+          key: "fromPeriod",
+          value: get(billDetail, 'fromPeriod', 0)
+        },
+        {
+          key: "toPeriod",
+          value: get(billDetail, 'toPeriod', 0)
+        }, {
+          key: "service",
+          value: get(Bill[0], 'businessService', "")
+        },
+        {
+          key: "retrieveOldest",
+          value: true
+        }
+      ]
+      rb.push([]);
+      queries.push(query);
+      endpoints.push("/billing-service/bill/v2/_search");
+    })
+
+    const resp = await multiHttpRequest(endpoints, "search", queries, rb)
+    resp && resp.map((res, ind) => {
+      if (res && res.Bill) {
+        if (res && res.Bill && res.Bill[0]) {
+          set(Bill[0].billDetails[ind], 'expiryDate', get(res, 'Bill[0].billDetails[0].expiryDate', 'NA'))
+          set(Bill[0].billDetails[ind], 'billNumber', get(res, 'Bill[0].billNumber', 'NA'))
+        }
+      }
+    });
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill", Bill));
+    const estimateData = createEstimateData(Bill[0], Bill[0].totalAmount);
+    estimateData &&
+      estimateData.length &&
+      dispatch(
+        prepareFinalObject(
+          "applyScreenMdmsData.estimateCardData",
+          estimateData
+        )
+      );
+  }
+}
+
 export const generateBill = async (dispatch, consumerCode, tenantId, businessService) => {
   try {
     if (consumerCode && tenantId) {
@@ -670,8 +755,10 @@ export const generateBill = async (dispatch, consumerCode, tenantId, businessSer
       }
       const payload = await getBill(queryObj, dispatch);
       // let payload = sampleGetBill();
+
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+        loadArrearsDetails(dispatch, payload.Bill);
         const estimateData = createEstimateData(payload.Bill[0], payload.Bill[0].totalAmount);
         estimateData &&
           estimateData.length &&

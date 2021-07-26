@@ -81,7 +81,7 @@ class App extends Component {
     const citizenMobileNo = get(userInfo, "mobileNumber");
 
     if (authenticated) {
-      if (mobileNumber === citizenMobileNo) {
+      if (mobileNumber === citizenMobileNo||(mobileNumber&&typeof mobileNumber=="string"&&mobileNumber.includes(citizenMobileNo))) {
         let redirectionURL = redirectionLink(href);
         if (redirectionURL && redirectionURL.includes && redirectionURL.includes('digit-ui')) {
           window.location.href = redirectionURL.startsWith('/digit') ? redirectionURL.split('&')[0] : `/${redirectionURL.split('&')[0]}`;
@@ -131,14 +131,19 @@ class App extends Component {
       loginScreens = true;
     }
     let sourceUrl = `${window.location.origin}/citizen`;
+     sourceUrl="https://s3.ap-south-1.amazonaws.com/egov-qa-assets";  // changes for the image configured in s3 bucket
     return (
       <div>
+            <div style={{minHeight:'calc(100vh - 3em)'}}>
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
+          </div>
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
         {!loginScreens && <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <img style={{ display: "inline-flex", height: '1.4em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"}></img>
+            <img style={{ display: "inline-flex", height: '1.4em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"} onClick={() => {
+              window.open('https://www.digit.org/', '_blank').focus();
+            }}></img>
           </div>
         </div>}
         {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>

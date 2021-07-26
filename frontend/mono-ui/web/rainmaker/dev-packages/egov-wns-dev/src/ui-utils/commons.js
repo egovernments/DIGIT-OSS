@@ -326,6 +326,17 @@ export const getPropertyResults = async (queryObject, dispatch) => {
             queryObject
         );
         dispatch(toggleSpinner());
+        if (response && response.Properties && response.Properties.length > 0) {
+            for (var k = 0; k < response.Properties.length; k++) {
+                if (response.Properties[k] && response.Properties[k].owners && response.Properties[k].owners.length > 0) {
+                    if (response.Properties[k].ownershipCategory == "INDIVIDUAL.SINGLEOWNER" || response.Properties[k].ownershipCategory == "INDIVIDUAL.MULTIPLEOWNERS") {
+                        for (var i = 0; i < response.Properties[k].owners.length; i++) {
+                            response.Properties[k].owners[i].correspondenceAddress = response.Properties[k].owners[i].permanentAddress
+                        }
+                    }
+                }
+            }
+        }
         return findAndReplace(response, null, "NA");
     } catch (error) {
         dispatch(toggleSpinner());
@@ -342,6 +353,17 @@ export const getPropertyResultsWODispatch = async (queryObject) => {
             "_search",
             queryObject
         );
+        if (response && response.Properties && response.Properties.length > 0) {
+            for (var k = 0; k < response.Properties.length; k++) {
+                if (response.Properties[k] && response.Properties[k].owners && response.Properties[k].owners.length > 0) {
+                    if (response.Properties[k].ownershipCategory == "INDIVIDUAL.SINGLEOWNER" || response.Properties[k].ownershipCategory == "INDIVIDUAL.MULTIPLEOWNERS") {
+                        for (var i = 0; i < response.Properties[k].owners.length; i++) {
+                            response.Properties[k].owners[i].correspondenceAddress = response.Properties[k].owners[i].permanentAddress
+                        }
+                    }
+                }
+            }
+        }
         return findAndReplace(response, null, "NA");
     } catch (error) {
         console.log(error);

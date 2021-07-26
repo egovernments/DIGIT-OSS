@@ -116,8 +116,9 @@ class TableData extends Component {
     showFilter: false,
     value: 0,
     totalRowCount: 0,
-    tabData: [{ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [0] }
-      , { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [0] }],
+    tabData: [{ label: "COMMON_INBOX_TAB_ALL", dynamicArray: [0] }
+      , { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [0] },
+      { label: "COMMON_INBOX_TAB_ESCALATED", dynamicArray: [0] }],
     taskboardData: [{ head: 0, body: "WF_TOTAL_TASK", color: "rgb(171,211,237)", baseColor: "rgb(53,152,219)" },
     { head: 0, body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
     { head: 0, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }],
@@ -214,11 +215,11 @@ class TableData extends Component {
     let ESCALATED_SLA = [];
     let NEARING_SLA = [];
     let totalRows = []
-    if (initialInboxData.length === 2) {
+    if (initialInboxData.length === 3) {
       initialInboxData.map((row, ind) => {
         row.rows = row.rows.filter((eachRow) => {
           let isValid = this.checkRow(eachRow, filter, searchFilter, taskboardLabel);
-          if (isValid && ind === 1) {
+          if (isValid && ind === 0) {
             let MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
             if (eachRow[4].text <= 0) {
               ESCALATED_SLA.push(eachRow[4].text);
@@ -238,7 +239,7 @@ class TableData extends Component {
       })
     }
 
-    if (initialInboxData.length === 2) {
+    if (initialInboxData.length === 3) {
       initialInboxData.map((row, ind) => {
         row.rows = row.rows.filter((eachRow) => {
           let isValid = this.checkSLA(taskboardLabel, eachRow);
@@ -259,8 +260,10 @@ class TableData extends Component {
     let counts = totalRowCount < 100 ? totalRowCount - 1 : 100;
     taskboardData[1].head = totalRows.length > counts || showLoadingTaskboard ? NEARING_SLA.length : 'LOADING';
     taskboardData[2].head = totalRows.length > counts || showLoadingTaskboard ? ESCALATED_SLA.length : 'LOADING';
-    tabData[0].dynamicArray = [initialInboxData[0].rows.length];
-    tabData[1].dynamicArray = [showLoadingTaskboard ? totalRows.length : totalRowCount];
+    tabData[0].dynamicArray = [showLoadingTaskboard ? totalRows.length : totalRowCount];
+    tabData[1].dynamicArray = [initialInboxData[1].rows.length];
+    tabData[2].dynamicArray = [initialInboxData[2].rows.length];
+
     this.hideLoading();
     return {
       inboxData: initialInboxData,
@@ -436,6 +439,7 @@ class TableData extends Component {
     let statusDropdownList = [];
 
     let assignedToMe = [];
+    let escalatedToMe = [];
     const initialData = data.map((item) => {
       const locality = this.state.showLocality && localitymap.find(locality => {
         return locality.referencenumber === item.businessId;
@@ -456,7 +460,7 @@ class TableData extends Component {
       };
 
       let row3 = { text: <Label label={get(item, 'assignes[0].name', 'NA')} color="#000000" /> };
-      let row4 = { text: Math.round(sla), badge: true };
+      let row4 = { text: Math.round(sla), badge: true, isEscalatedApplication: item.isEscalatedApplication  };
       let row5 = { historyButton: true };
 
       let localityDropdown = { label: getLocaleLabels("", row1.text.props.label, localizationLabels), value: row1.text.props.label };
@@ -484,6 +488,9 @@ class TableData extends Component {
       let assignes = get(item, 'assignes');
       if (get(assignes ? assignes[0] : {}, "uuid") === uuid) {
         assignedToMe.push([...dataRows])
+      }
+      if (get(item, "isEscalatedApplication", false)) {
+        escalatedToMe.push([...dataRows])
       }
       return dataRows;
     });
@@ -522,7 +529,7 @@ class TableData extends Component {
       });
 
     }
-    return { allData: initialData, assignedToMe: assignedToMe };
+    return { allData: initialData, assignedToMe: assignedToMe, escalatedToMe: escalatedToMe };
   };
 
   handleChange = (event, value) => {
@@ -568,6 +575,7 @@ class TableData extends Component {
 
   componentDidMount = async () => {
     this.loadInitialData();
+
     this.getMaxSLA();
     this.setState({loadedRemainingData:false,loadingLocality:false,loadedLocality:false});
   };
@@ -619,6 +627,7 @@ class TableData extends Component {
       const convertedData = await this.prepareInboxDataRows(allData, true, false)
       const allDataRows = convertedData.allData;
       const assignedDataRows = convertedData.assignedToMe;
+      const escalatedDataRows = convertedData.escalatedToMe;
 
       let headersList = [
         "WF_INBOX_HEADER_APPLICATION_NO",
@@ -628,13 +637,18 @@ class TableData extends Component {
         "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
       inboxData[0].headers = headersList;
-      inboxData[0].rows = assignedDataRows;
+      inboxData[0].rows = allDataRows;
 
-      tabData[0].dynamicArray = [assignedDataRows.length];
-      tabData[1].dynamicArray = [allDataRows.length];
+      tabData[0].dynamicArray = [allDataRows.length];
+      tabData[1].dynamicArray = [assignedDataRows.length];
+      tabData[2].dynamicArray = [escalatedDataRows.length];
       inboxData.push({
         headers: headersList,
-        rows: allDataRows,
+        rows: assignedDataRows,
+      });
+      inboxData.push({
+        headers: headersList,
+        rows: escalatedDataRows,
       });
       let NEARING_SLA = [];
       let ESCALATED_SLA = [];
@@ -671,6 +685,7 @@ class TableData extends Component {
       const convertedData = await this.prepareInboxDataRows(allData, true, false)
       const allDataRows = convertedData.allData;
       const assignedDataRows = convertedData.assignedToMe;
+      const escalatedDataRows = convertedData.escalatedToMe;
 
       let headersList = [
         "WF_INBOX_HEADER_APPLICATION_NO",
@@ -680,13 +695,19 @@ class TableData extends Component {
         "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
       inboxData[0].headers = headersList;
-      inboxData[0].rows = assignedDataRows;
+      inboxData[0].rows = allDataRows;
 
-      tabData[0].dynamicArray = [assignedDataRows.length];
-      tabData[1].dynamicArray = [allDataRows.length];
+      tabData[0].dynamicArray = [allDataRows.length];
+      tabData[1].dynamicArray = [assignedDataRows.length];
+      tabData[2].dynamicArray = [escalatedDataRows.length];
       inboxData.push({
         headers: headersList,
-        rows: allDataRows,
+        rows: assignedDataRows,
+      });
+
+      inboxData.push({
+        headers: headersList,
+        rows: escalatedDataRows
       });
       let NEARING_SLA = [];
       let ESCALATED_SLA = [];
@@ -717,6 +738,7 @@ class TableData extends Component {
       const convertedData = await this.prepareInboxDataRows(allData, true, true)
       const allDataRows = convertedData.allData;
       const assignedDataRows = convertedData.assignedToMe;
+      const escalatedDataRows = convertedData.escalatedToMe;
 
       let headersList = [
         "WF_INBOX_HEADER_APPLICATION_NO",
@@ -726,13 +748,19 @@ class TableData extends Component {
         "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
       inboxData[0].headers = headersList;
-      inboxData[0].rows = assignedDataRows;
+      inboxData[0].rows = allDataRows;
 
-      tabData[0].dynamicArray = [assignedDataRows.length];
-      tabData[1].dynamicArray = [allDataRows.length];
+      tabData[0].dynamicArray = [allDataRows.length];
+      tabData[1].dynamicArray = [assignedDataRows.length];
+      tabData[2].dynamicArray = [escalatedDataRows.length];
       inboxData.push({
         headers: headersList,
-        rows: allDataRows,
+        rows: assignedDataRows,
+      });
+
+      inboxData.push({
+        headers: headersList,
+        rows: escalatedDataRows,
       });
       let NEARING_SLA = [];
       let ESCALATED_SLA = [];
@@ -765,9 +793,10 @@ class TableData extends Component {
           }),
         };
       });
-
-      tabData[0] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length] };
-      tabData[1] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
+      
+      tabData[0] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[0].rows.length] };
+      tabData[1] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[1].rows.length] };
+      tabData[2] = { label: "COMMON_INBOX_TAB_ESCALATED", dynamicArray: [filteredData[2].rows.length] };
 
       this.setState({
         inboxData: filteredData,

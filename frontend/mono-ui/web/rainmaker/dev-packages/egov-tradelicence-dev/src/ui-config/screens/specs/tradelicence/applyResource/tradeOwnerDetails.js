@@ -392,6 +392,9 @@ export const OwnerInfoCard = {
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerType"
+          },
+          props:{
+            defaultSort:false
           }
         })
       })

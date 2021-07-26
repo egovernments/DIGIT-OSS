@@ -11,7 +11,7 @@
 #material-ui-ulbCityContainer {
   div{
     div{
-      background-color: white;
+      background-color: white!important;
     }
 }
 }
@@ -34,6 +34,10 @@ div[class^="NavPills-root"] {
 #material-ui-yearDetailsContainer{div{div{fieldset{label{
     padding-bottom: 10px;
 }}}}}
+
+#material-ui-ulbCityContainer{ div {p{
+  font-size: 14px;
+}}}
 
 
 // button[role=tab]{

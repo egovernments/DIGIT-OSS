@@ -42,11 +42,19 @@ export default class ShowField extends Component {
 
     if (typeof obj.defaultValue == "object") {
       for (var variable in obj.defaultValue) {
-        dropDownData.push({
-          value: variable,
-          label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:obj.defaultValue[variable],
+        if(obj.isLocalisationRequired){
+          dropDownData.push({
+            value: variable,
+            label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:obj.defaultValue[variable]&&getTransformedLocale(obj.defaultValue[variable]),
           // label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:`RT_${getTransformedLocale(variable)}`,
         });
+        }else{
+            dropDownData.push({
+            value: variable,
+            label: obj.defaultValue[variable]&&obj.defaultValue[variable]||"",
+        });
+        }
+       
       }
     }
 

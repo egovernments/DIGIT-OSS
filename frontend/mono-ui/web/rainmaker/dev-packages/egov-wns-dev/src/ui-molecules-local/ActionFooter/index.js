@@ -126,8 +126,8 @@ class Footer extends React.Component {
     //if(applicationType === "MODIFY"){
     downloadMenu && downloadMenu.push(editButton);
     if (
-      businessService.includes("ws-services-calculation") ||
-      businessService.includes("sw-services-calculation")
+      businessService && (businessService.includes("ws-services-calculation") ||
+      businessService.includes("sw-services-calculation"))
     ) {
       if (bill.Demands && bill.Demands.length > 0 &&isAmendmentInWorkflow) {
         downloadMenu && downloadMenu.push(BillAmendment);
@@ -203,7 +203,11 @@ const mapStateToProps = (state) => {
     connectionObj && connectionObj.length > 0
       ? connectionObj[0].applicationNo
       : "";
-  const businessService = connectDetailsData.BillingService.BusinessService.map(
+  const businessService = connectDetailsData 
+  && connectDetailsData.BillingService 
+  && connectDetailsData.BillingService.BusinessService 
+  && connectDetailsData.BillingService.BusinessService.length 
+  && connectDetailsData.BillingService.BusinessService.map(
     (item) => {
       return item.businessService;
     }

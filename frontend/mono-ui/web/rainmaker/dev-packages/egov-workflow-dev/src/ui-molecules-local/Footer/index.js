@@ -71,11 +71,11 @@ class Footer extends React.Component {
       handleFieldChange(`${dataPath}.comment`, "");
       handleFieldChange(`${dataPath}.wfDocuments`, []);
       handleFieldChange(`${dataPath}.assignees`, "");
-    } else  if (dataPath === "FireNOCs") {
+    } else if (dataPath === "FireNOCs") {
       handleFieldChange(`${dataPath}[0].fireNOCDetails.additionalDetail.comment`, "");
       handleFieldChange(`${dataPath}[0].fireNOCDetails.additionalDetail.assignee`, []);
       handleFieldChange(`${dataPath}[0].fireNOCDetails.additionalDetail.wfDocuments`, []);
-    } else  if (dataPath === "Property") {
+    } else if (dataPath === "Property") {
       handleFieldChange(`${dataPath}.workflow.comment`, "");
       handleFieldChange(`${dataPath}.workflow.assignes`, []);
       handleFieldChange(`${dataPath}.workflow.wfDocuments`, []);
@@ -111,7 +111,7 @@ class Footer extends React.Component {
         {
           key: "tenantId",
           value: tenantId
-        },{
+        }, {
           key: "isActive",
           value: true
         }
@@ -143,7 +143,7 @@ class Footer extends React.Component {
     });
   };
 
-  renewTradelicence = async (financialYear, tenantId) => {
+  renewTradelicence = async (financialYear, tenantId, routeUrl) => {
     const { setRoute, state, toggleSnackbar } = this.props;
     const licences = get(
       state.screenConfiguration.preparedFinalObject,
@@ -153,7 +153,32 @@ class Footer extends React.Component {
     const nextFinancialYear = await getNextFinancialYearForRenewal(
       financialYear
     );
+    const AllLicences = get(
+      state.screenConfiguration.preparedFinalObject,
+      `AllLicences`, []
+    );
 
+    if (nextFinancialYear && AllLicences && Array.isArray(AllLicences)) {
+      if (AllLicences.filter(licence => licence.financialYear == nextFinancialYear).length > 0) {
+        this.props.hideSpinner();
+
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please fill all the mandatory fields!",
+            labelKey: "TL_RENEWAL_APPLICATION_EXITS_ALREADY"
+          },
+          "error"
+        );
+        return;
+      }
+    }
+    if (routeUrl) {
+      this.props.setRoute(
+        routeUrl
+      );
+      return;
+    }
     const wfCode = "DIRECTRENEWAL";
     set(licences[0], "action", "INITIATE");
     set(licences[0], "workflowCode", wfCode);
@@ -279,9 +304,11 @@ class Footer extends React.Component {
               process.env.REACT_APP_NAME === "Citizen"
                 ? "/tradelicense-citizen/apply"
                 : "/tradelicence/apply";
-            this.props.setRoute(
-              `${baseURL}?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
-            );
+            const routeUrl = `${baseURL}?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`;
+            // this.props.setRoute(
+            //   `${baseURL}?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+            // );
+            this.renewTradelicence(financialYear, tenantId, routeUrl);
           }
         };
 
