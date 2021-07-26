@@ -86,6 +86,12 @@ const screenConfig = {
     }
     set(action.screenConfig, `${additionalDetailsJson}.props.value`, get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.additionalDetails', ''));
     set(action.screenConfig, `${additionalDetailsJson}.props.error`, false);
+    const consumerNumber = getQueryArg(window.location.href, "consumerNumber");
+    set(
+      action.screenConfig,
+      "components.div.children.headerDiv.children.header.children.applicationNumber.props.number",
+      consumerNumber
+    );
     return action;
   },
 
