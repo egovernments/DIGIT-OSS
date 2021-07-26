@@ -34,6 +34,7 @@ public class PerformanceChartResponeHandler implements IResponseHandler {
         String order = chartNode.get(ORDER).asText();
         int limit = chartNode.get(LIMIT).asInt();
 
+        boolean isRoundOff = (chartNode.get(IS_ROUND_OFF)!=null && chartNode.get(IS_ROUND_OFF).asBoolean()) ? true : false;
 
         ArrayNode aggrsPaths = (ArrayNode) chartNode.get(IResponseHandler.AGGS_PATH);
         Map<String, Map<String, Double>> mappings = new LinkedHashMap<>();//HashMap<>();
@@ -64,7 +65,7 @@ public class PerformanceChartResponeHandler implements IResponseHandler {
             });
         });
         logger.info("performance chart data mappings : "+mappings);
-        List<Plot> plotList = mappings.entrySet().stream().parallel().map(e -> new Plot(e.getKey(), getPercentage(e.getValue(), aggrsPaths.get(0).asText(),aggrsPaths.get(1).asText()), symbol)).collect(Collectors.toList());
+        List<Plot> plotList = mappings.entrySet().stream().parallel().map(e -> new Plot(e.getKey(), getPercentage(e.getValue(), aggrsPaths.get(0).asText(),aggrsPaths.get(1).asText(), isRoundOff), symbol)).collect(Collectors.toList());
         List<Plot> plots = plotList.stream().filter(plot -> plot.getValue() != 0.0).collect(Collectors.toList());
 
         plots.stream().parallel().forEach(item -> item.setLabel(plotLabel));

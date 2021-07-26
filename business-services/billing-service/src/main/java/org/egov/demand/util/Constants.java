@@ -155,4 +155,20 @@ public class Constants {
 	
 
 	private Constants() {}
+	
+	public static final String BUSINESS_SERVICE_URL_PARAMETER = "businessService=";
+
+	public static final String URL_PARAM_SEPERATOR = "&";
+	
+	public static final String RESPONSEINFO_STRING = "ResponseInfo";
+	
+	public static final String MESSAGE_STRING = "Message";
+	
+	public static final String SUCCESS_CANCEL_BILL_MSG = "Successfully cancelled {count} Active bills for given consumer codes";
+	
+	public static final String FAILURE_CANCEL_BILL_MSG = "No Active bills found for cancellation for the given criteria";
+	
+	public static final String PAID_CANCEL_BILL_MSG = "You cannot cancel the bill in the workflow";
+	
+	public static final String COUNT_REPLACE_CANCEL_BILL_MSG = "{count}";
 }

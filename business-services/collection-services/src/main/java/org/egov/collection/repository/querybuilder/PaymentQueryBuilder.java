@@ -3,8 +3,12 @@ package org.egov.collection.repository.querybuilder;
 import static java.util.stream.Collectors.toSet;
 
 import java.sql.SQLException;
-import java.time.Instant;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
@@ -22,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Service
 public class PaymentQueryBuilder {
@@ -36,6 +42,9 @@ public class PaymentQueryBuilder {
             "pyd.lastmodifiedtime as pyd_lastmodifiedtime,pyd.additionalDetails as pyd_additionalDetails" +
             " FROM egcl_payment py  " +
             " INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id ";
+    
+    public static final String SELECT_COUNT_PAYMENT_SQL = "SELECT count(distinct(py.id)) FROM egcl_payment py "
+    		+ "INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id where pyd.businessservice= :businessservice and pyd.tenantid= :tenantid ";
 
     /*public static final String ID_QUERY = "SELECT DISTINCT py.id as id,py.transactiondate as date " +
             " FROM egcl_payment py  " +
@@ -46,9 +55,9 @@ public class PaymentQueryBuilder {
     public static final String ID_QUERY = "WITH py_filtered as (" +
             "select id from egcl_payment as py_inner {{WHERE_CLAUSE}} ) " +
             " SELECT py.id as id FROM py_filtered as py " +
-            " INNER JOIN egcl_paymentdetail as pyd ON pyd.paymentid = py.id and pyd.tenantid= :tenantId " +
+            " INNER JOIN egcl_paymentdetail as pyd ON pyd.paymentid = py.id and pyd.tenantid {{operator}} :tenantId " +
             " INNER JOIN egcl_bill bill ON bill.id = pyd.billid " +
-            " INNER JOIN egcl_billdetial bd ON bd.billid = bill.id and bd.tenantid = :tenantId; ";
+            " INNER JOIN egcl_billdetial bd ON bd.billid = bill.id and bd.tenantid {{operator}} :tenantId; ";
 
     private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY py_id) offset_ FROM " +
@@ -170,7 +179,10 @@ public class PaymentQueryBuilder {
 			+ "WHERE b.id IN (:id);"; 
 
 
-
+	public static final String UPDATE_PAYMENT_BANKDETAIL_SQL = "UPDATE egcl_payment SET additionaldetails = jsonb_set(additionaldetails, '{bankDetails}', :additionaldetails, true) WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof( additionaldetails ::jsonb ) ='object' and ifsccode=:ifsccode ";
+	public static final String UPDATE_PAYMENT_BANKDETAIL_EMPTYADDTL_SQL = "UPDATE egcl_payment SET additionaldetails = :additionaldetails ::jsonb WHERE (length(additionaldetails :: text) is null or length(additionaldetails :: text) = 4) and ifsccode=:ifsccode ";
+	public static final String UPDATE_PAYMENT_BANKDETAIL_ARRAYADDTL_SQL = "UPDATE egcl_payment SET additionaldetails =  additionaldetails || :additionaldetails ::jsonb WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof(additionaldetails ::jsonb) ='array' and ifsccode=:ifsccode ";
+	
 	public static String getBillQuery() {
 		return BILL_BASE_QUERY;
 	}
@@ -308,9 +320,18 @@ public class PaymentQueryBuilder {
 
         return sqlParameterSource;
     }
+    
+    public String getPaymentCountQuery (String tenantId, String businessService, Map<String, Object> preparedStatementValues) {
+    	
+    	  StringBuilder selectQuery = new StringBuilder(SELECT_COUNT_PAYMENT_SQL);
+    	  preparedStatementValues.put("businessservice", businessService);
+    	  preparedStatementValues.put("tenantid", tenantId);
+    	  
+    	return selectQuery.toString();
+    }
 
 
-    public static String getPaymentSearchQuery(List<String> ids,
+    public String getPaymentSearchQuery(List<String> ids,
                                                Map<String, Object> preparedStatementValues) {
         StringBuilder selectQuery = new StringBuilder(SELECT_PAYMENT_SQL);
         addClauseIfRequired(preparedStatementValues, selectQuery);
@@ -339,6 +360,11 @@ public class PaymentQueryBuilder {
         whereClause.append(" ORDER BY py_inner.transactiondate DESC ").toString();
         addPagination(whereClause,preparedStatementValues,searchCriteria);
         String query = ID_QUERY.replace("{{WHERE_CLAUSE}}",whereClause.toString());
+        if(searchCriteria.getTenantId().split("\\.").length > 1){
+            query = query.replace("{{operator}}", "=");
+        }
+        else
+            query = query.replace("{{operator}}", "LIKE");
 
         return query;
     }
@@ -791,9 +817,25 @@ public class PaymentQueryBuilder {
     }
 
 
+	public static MapSqlParameterSource getParametersForBankDetailUpdate(JsonNode additionalDetails, String ifsccode) {
+		MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+		sqlParameterSource.addValue("additionaldetails", getJsonb(additionalDetails));
+		sqlParameterSource.addValue("ifsccode", ifsccode);
+		return sqlParameterSource;
 
+	}
 
+	public static MapSqlParameterSource getParametersEmptyDtlBankDetailUpdate(JsonNode additionalDetails,
+			String ifsccode) {
+		MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode objectNode = mapper.createObjectNode();
+		objectNode.set("bankDetails", additionalDetails);
+		sqlParameterSource.addValue("additionaldetails", getJsonb(objectNode));
+		sqlParameterSource.addValue("ifsccode", ifsccode);
+		return sqlParameterSource;
 
+	}
 
 
 

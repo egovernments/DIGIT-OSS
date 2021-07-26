@@ -81,6 +81,11 @@ public class PaymentService {
 
         return payments;
     }
+    
+    public Long getpaymentcountForBusiness (String tenantId, String businessService) {
+    	
+    	return paymentRepository.getPaymentsCount(tenantId, businessService);
+    }
 
 
     

@@ -66,6 +66,7 @@ import org.egov.demand.model.DemandApportionRequest;
 import org.egov.demand.model.DemandCriteria;
 import org.egov.demand.model.DemandDetail;
 import org.egov.demand.model.PaymentBackUpdateAudit;
+import org.egov.demand.model.UpdateBillCriteria;
 import org.egov.demand.repository.AmendmentRepository;
 import org.egov.demand.repository.BillRepositoryV2;
 import org.egov.demand.repository.DemandRepository;
@@ -170,8 +171,14 @@ public class DemandService {
 		if(!CollectionUtils.isEmpty(demandToBeUpdated))
 			update(new DemandRequest(requestInfo,demandToBeUpdated), null);
 		
-		billRepoV2.updateBillStatus(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toList()), BillStatus.EXPIRED);
-		
+		billRepoV2.updateBillStatus(
+				UpdateBillCriteria.builder()
+				.statusToBeUpdated(BillStatus.EXPIRED)
+				.businessService(businessService)
+				.consumerCodes(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toSet()))
+				.tenantId(demands.get(0).getTenantId())
+				.build()
+				);
 		return new DemandResponse(responseInfoFactory.getResponseInfo(requestInfo, HttpStatus.CREATED), demands);
 	}
 
@@ -259,12 +266,24 @@ public class DemandService {
 		generateAndSetIdsForNewDemands(newDemands, auditDetail);
 
 		update(demandRequest, paymentBackUpdateAudit);
-		if (ObjectUtils.isEmpty(paymentBackUpdateAudit))
-			billRepoV2.updateBillStatus(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toList()),
-					BillStatus.EXPIRED);
-		else
-			billRepoV2.updateBillStatus(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toList()),
-					BillStatus.PAID);
+		String businessService = demands.get(0).getBusinessService();
+		String tenantId = demands.get(0).getTenantId();
+		
+		UpdateBillCriteria updateBillCriteria = UpdateBillCriteria.builder()
+				.consumerCodes(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toSet()))
+				.businessService(businessService)
+				.tenantId(tenantId)
+				.build();
+		
+		if (ObjectUtils.isEmpty(paymentBackUpdateAudit)) {
+			
+			updateBillCriteria.setStatusToBeUpdated(BillStatus.EXPIRED);
+			billRepoV2.updateBillStatus(updateBillCriteria);
+		} else {
+			
+			updateBillCriteria.setStatusToBeUpdated(BillStatus.PAID);
+			billRepoV2.updateBillStatus(updateBillCriteria);
+		}
 		// producer.push(applicationProperties.getDemandIndexTopic(), demandRequest);
 		return new DemandResponse(responseInfoFactory.getResponseInfo(requestInfo, HttpStatus.CREATED), demands);
 	}

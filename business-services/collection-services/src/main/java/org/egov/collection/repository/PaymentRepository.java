@@ -24,6 +24,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -111,6 +113,13 @@ public class PaymentRepository {
         }
 
         return payments;
+    }
+    
+    public Long getPaymentsCount (String tenantId, String businessService) {
+    	
+    	Map<String, Object> preparedStatementValues = new HashMap<>();
+    	String query = paymentQueryBuilder.getPaymentCountQuery(tenantId, businessService, preparedStatementValues);
+    	return namedParameterJdbcTemplate.queryForObject(query, preparedStatementValues, Long.class);
     }
 
     public List<Payment> fetchPaymentsForPlainSearch(PaymentSearchCriteria paymentSearchCriteria) {
@@ -246,5 +255,60 @@ public class PaymentRepository {
         Map<String, Object> preparedStatementValues = new HashMap<>();
         String query = paymentQueryBuilder.getIdQuery(paymentSearchCriteria, preparedStatementValues);
         return namedParameterJdbcTemplate.query(query, preparedStatementValues, new SingleColumnRowMapper<>(String.class));
-    }
+	}
+
+	/**
+	 * API is to get the distinct ifsccode from payment
+	 * 
+	 * @return ifsccode list
+	 */
+	public List<String> fetchIfsccode() {
+
+		return namedParameterJdbcTemplate.query("SELECT distinct ifsccode from egcl_payment where ifsccode is not null ",
+				new SingleColumnRowMapper<>(String.class));
+
+	}
+
+	/**
+	 * API, All payments with @param ifsccode, additional details updated
+	 * with @param additionaldetails
+	 * 
+	 * @param additionaldetails
+	 * @param ifsccode
+	 */
+
+	@Transactional
+	public void updatePaymentBankDetail(JsonNode additionaldetails, String ifsccode) {
+		List<MapSqlParameterSource> parameterSource = new ArrayList<>();
+		parameterSource.add(getParametersForBankDetailUpdate(additionaldetails, ifsccode));
+
+		/**
+		 * UPDATE_PAYMENT_BANKDETAIL_SQL query adds the bankdetails data to
+		 * existing object type additionaldetails ex: object type
+		 * additionaldetails data {"isWhatsapp": false }
+		 */
+		namedParameterJdbcTemplate.batchUpdate(UPDATE_PAYMENT_BANKDETAIL_SQL,
+				parameterSource.toArray(new MapSqlParameterSource[0]));
+
+		List<MapSqlParameterSource> emptyAddtlParameterSource = new ArrayList<>();
+		emptyAddtlParameterSource.add(getParametersEmptyDtlBankDetailUpdate(additionaldetails, ifsccode));
+		/**
+		 * UPDATE_PAYMENT_BANKDETAIL_EMPTYADDTL_SQL query update the bankdetails
+		 * to empty/null additionaldetails. ex: empty or 'null'
+		 * additionaldetails data.
+		 */
+		namedParameterJdbcTemplate.batchUpdate(UPDATE_PAYMENT_BANKDETAIL_EMPTYADDTL_SQL,
+				emptyAddtlParameterSource.toArray(new MapSqlParameterSource[0]));
+
+		/**
+		 * UPDATE_PAYMENT_BANKDETAIL_ARRAYADDTL_SQL query adds bankdetails data
+		 * to existing array type additionaldetails. ex: array additional data
+		 * :[{"bankName": "State Bank of India", "branchName": "Chandigarh Main
+		 * Branch"}]
+		 * 
+		 */
+		namedParameterJdbcTemplate.batchUpdate(UPDATE_PAYMENT_BANKDETAIL_ARRAYADDTL_SQL,
+				emptyAddtlParameterSource.toArray(new MapSqlParameterSource[0]));
+
+	}
 }

@@ -97,7 +97,7 @@ public class LineChartResponseHandler implements IResponseHandler {
                                 for(ComputedFields cfs :computedFieldsList){
                                     IComputedField computedFieldObject = computedFieldFactory.getInstance(cfs.getActionName());
                                     computedFieldObject.set(requestDto, cfs.getPostAggregationTheory());
-                                    computedFieldObject.add(bucket, cfs.getFields(), cfs.getNewField());
+                                    computedFieldObject.add(bucket, cfs.getFields(), cfs.getNewField(),chartNode);
 
                                     if(symbol.equals(DAYS)){
 
@@ -118,6 +118,9 @@ public class LineChartResponseHandler implements IResponseHandler {
                         } else {
                             value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
 
+                            if(chartNode.get(IS_ROUND_OFF)!=null && chartNode.get(IS_ROUND_OFF).asBoolean()) {
+                            	value =  (double) Math.round(value);
+                            }
                         }
                         //double value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
 

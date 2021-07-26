@@ -133,7 +133,6 @@ public class User {
     @Valid
     private List<Role> roles;
 
-    @NotNull
     @Size(max=100)
     @JsonProperty("fatherOrHusbandName")
     private String fatherOrHusbandName;

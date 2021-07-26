@@ -45,6 +45,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.response.ResponseInfo;
 import org.egov.hrms.config.PropertiesManager;
 import org.egov.hrms.model.AuditDetails;
 import org.egov.hrms.model.Employee;
@@ -540,6 +541,24 @@ public class EmployeeService {
 		return EmployeeResponse.builder()
 				.responseInfo(factory.createResponseInfoFromRequestInfo(employeeRequest.getRequestInfo(), true))
 				.employees(employeeRequest.getEmployees()).build();
+	}
+
+	public Map<String,Object> getEmployeeCountResponse(RequestInfo requestInfo, String tenantId){
+		Map<String,Object> response = new HashMap<>();
+		Map<String,String> results = new HashMap<>();
+		ResponseInfo responseInfo = factory.createResponseInfoFromRequestInfo(requestInfo, true);
+
+		response.put("ResponseInfo",responseInfo);
+		results	= repository.fetchEmployeeCount(tenantId);
+
+		if(CollectionUtils.isEmpty(results) || results.get("totalEmployee").equalsIgnoreCase("0")){
+			Map<String,String> error = new HashMap<>();
+			error.put("NO_RECORDS","No records found for the tenantId: "+tenantId);
+			throw new CustomException(error);
+		}
+
+		response.put("EmployeCount",results);
+		return  response;
 	}
 
 }

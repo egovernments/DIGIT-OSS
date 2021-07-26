@@ -1,5 +1,6 @@
 package com.tarento.analytics.model;
 
+
 public class InsightsConfiguration {
 	private String chartResponseMap; 
 	private String action; 
@@ -7,7 +8,8 @@ public class InsightsConfiguration {
 	private String downwardIndicator; 
 	private String textMessage; 
 	private String colorCode;
-	private String insightInterval; 
+	private String insightInterval;
+	private Boolean isRoundOff;
 	
 	public String getInsightInterval() {
 		return insightInterval;
@@ -50,5 +52,11 @@ public class InsightsConfiguration {
 	}
 	public void setColorCode(String colorCode) {
 		this.colorCode = colorCode;
+	}
+	public Boolean getIsRoundOff() {
+		return isRoundOff;
+	}
+	public void setIsRoundOff(Boolean isRoundOff) {
+		this.isRoundOff = isRoundOff;
 	}
 }

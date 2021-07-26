@@ -85,7 +85,7 @@ public class Assignment {
 	private  String reportingTo;
 
 	@JsonProperty("isHOD")
-	private Boolean isHOD;
+	private Boolean isHOD=false;
 	
 	@NotNull
 	@JsonProperty("isCurrentAssignment")

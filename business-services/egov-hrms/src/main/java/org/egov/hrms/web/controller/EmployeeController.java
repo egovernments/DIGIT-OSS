@@ -41,6 +41,7 @@
 package org.egov.hrms.web.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.hrms.service.EmployeeService;
 import org.egov.hrms.web.contract.EmployeeRequest;
 import org.egov.hrms.web.contract.EmployeeResponse;
@@ -54,6 +55,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -115,6 +118,16 @@ public class EmployeeController {
 		validator.validateSearchRequest(requestInfoWrapper.getRequestInfo(), criteria);
 		EmployeeResponse employeeResponse = employeeService.search(criteria, requestInfoWrapper.getRequestInfo());
 		return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
+	}
+
+	@PostMapping("_count")
+	@ResponseBody
+	private ResponseEntity<?> count(@RequestParam("tenantId") String tenantId, @RequestBody RequestInfo requestInfo) {
+
+		Map<String,Object> response = new HashMap<>();
+		validator.validateEmployeeCountRequest(tenantId);
+		response = employeeService.getEmployeeCountResponse(requestInfo,tenantId);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
 

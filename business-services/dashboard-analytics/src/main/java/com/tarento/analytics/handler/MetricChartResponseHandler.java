@@ -1,6 +1,7 @@
 package com.tarento.analytics.handler;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.amazonaws.event.DeliveryMode.Check;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tarento.analytics.ConfigurationLoader;
@@ -69,7 +74,6 @@ public class MetricChartResponseHandler implements IResponseHandler{
         	chartNode = configurationLoader.get(API_CONFIG_JSON).get(request.getVisualizationCode());
         }
 
-
         List<Double> totalValues = new ArrayList<>();
         String chartName = chartNode.get(CHART_NAME).asText();
         String action = chartNode.get(ACTION).asText();
@@ -85,24 +89,44 @@ public class MetricChartResponseHandler implements IResponseHandler{
         /*
         * Sums all value of all aggrsPaths i.e all aggregations
         * */
+       boolean isRoundOff = (chartNode.get(IS_ROUND_OFF)!=null && chartNode.get(IS_ROUND_OFF).asBoolean()) ? true : false;
 
-        aggrsPaths.forEach(headerPath -> {
-            List<JsonNode> values =  aggregationNode.findValues(headerPath.asText());
-            values.stream().parallel().forEach(value -> {
-                List<JsonNode> valueNodes = value.findValues(VALUE).isEmpty() ? value.findValues(DOC_COUNT) : value.findValues(VALUE);
-                Double sum = valueNodes.stream().mapToDouble(o -> o.asDouble()).sum();
-                // Why is aggrsPaths.size()==2 required? Is there validation if action = PERCENTAGE and aggrsPaths > 2
-                if(action.equals(PERCENTAGE) && aggrsPaths.size()==2){
-                    percentageList.add(sum);
-                } else {
-                    totalValues.add(sum);
-                }
-            });
-        });
+		aggrsPaths.forEach(headerPath -> {
+			List<JsonNode> values = aggregationNode.findValues(headerPath.asText());
+			values.stream().parallel().forEach(value -> {
+				if (isRoundOff) {
+					ObjectMapper mapper = new ObjectMapper();
+					JsonNode node = value.get("value");
+					if(node != null) {
+						Double roundOff = 0.0d;
+						try {
+							roundOff = mapper.treeToValue(node, Double.class);
+						} catch (JsonProcessingException e) {
+							e.printStackTrace();
+						}
+						if(roundOff!=null) {
+							int finalvalue = (int) Math.round(roundOff);
+							((ObjectNode) value).put("value", finalvalue);
+						}
+					}
+					
+				}
+				List<JsonNode> valueNodes = value.findValues(VALUE).isEmpty() ? value.findValues(DOC_COUNT)
+						: value.findValues(VALUE);
+				Double sum = valueNodes.stream().mapToDouble(o -> o.asDouble()).sum();
+				// Why is aggrsPaths.size()==2 required? Is there validation if action =
+				// PERCENTAGE and aggrsPaths > 2
+				if (action.equals(PERCENTAGE) && aggrsPaths.size() == 2) {
+					percentageList.add(sum);
+				} else {
+					totalValues.add(sum);
+				}
+			});
+		});
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
         try{
-            Data data = new Data(chartName, action.equals(PERCENTAGE) && aggrsPaths.size()==2? percentageValue(percentageList) : (totalValues==null || totalValues.isEmpty())? 0.0 :totalValues.stream().reduce(0.0, Double::sum), symbol);
+            Data data = new Data(chartName, action.equals(PERCENTAGE) && aggrsPaths.size()==2? percentageValue(percentageList, isRoundOff) : (totalValues==null || totalValues.isEmpty())? 0.0 :totalValues.stream().reduce(0.0, Double::sum), symbol);
             responseRecorder.put(visualizationCode, request.getModuleLevel(), data);
             dataList.add(data);
             if(chartNode.get(POST_AGGREGATION_THEORY) != null) { 

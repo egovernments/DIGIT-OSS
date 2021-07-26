@@ -41,7 +41,9 @@
 package org.egov.collection.web.controller;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -57,10 +59,13 @@ import org.egov.collection.web.contract.factory.RequestInfoWrapper;
 import org.egov.collection.web.contract.factory.ResponseInfoFactory;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -87,13 +92,33 @@ public class PaymentController {
 
     @RequestMapping(path = {"/_search","/{moduleName}/_search"}, method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<PaymentResponse> search(@ModelAttribute PaymentSearchCriteria paymentSearchCriteria,
+    public ResponseEntity<?> search(@ModelAttribute PaymentSearchCriteria paymentSearchCriteria,
                                              @RequestBody @Valid final RequestInfoWrapper requestInfoWrapper,
                                              @PathVariable @Nullable String moduleName) {
 
-        final RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
-        List<Payment> payments = paymentService.getPayments(requestInfo, paymentSearchCriteria, moduleName);
-        return getSuccessResponse(payments, requestInfo);
+		final RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
+		if (paymentSearchCriteria.getIsCountRequest()) {
+
+			if (CollectionUtils.isEmpty(paymentSearchCriteria.getBusinessServices())
+					|| StringUtils.isEmpty(paymentSearchCriteria.getTenantId())) {
+				throw new CustomException("EGCL_PAYMENT_COUNT_ERROR",
+						"both of tenantid and businessServices is mandatory for count search");
+			}
+
+			Long count = paymentService.getpaymentcountForBusiness(paymentSearchCriteria.getTenantId(),
+					paymentSearchCriteria.getBusinessServices().iterator().next());
+			ResponseInfo responseInfo = ResponseInfoFactory.createResponseInfoFromRequestInfo(requestInfo, true);
+			responseInfo.setStatus(HttpStatus.OK.toString());
+			
+			Map<String, Object> responseMap = new HashMap<>();
+			responseMap.put("Count", count);
+			responseMap.put("ResponseInfo", responseInfo);
+			
+			return new ResponseEntity<>(responseMap, HttpStatus.OK);
+		} else {
+			List<Payment> payments = paymentService.getPayments(requestInfo, paymentSearchCriteria, moduleName);
+			return getSuccessResponse(payments, requestInfo);
+		}
     }
 
     @RequestMapping(value = "/_create", method = RequestMethod.POST)

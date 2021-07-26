@@ -183,9 +183,15 @@ public class ErrorConstants {
 	public static final String HRMS_BULK_CREATE_DUPLICATE_EMPCODE_MSG = "Bulk request has duplicate employee code ";
 
 	public static final String HRMS_UPDATE_DEACT_DETAILS_INCORRECT_EFFECTIVEFROM_CODE = "ERR_HRMS_UPDATE_DEACT_DETAILS_INCORRECT_EFFECTIVEFROM";
-	public static final String HRMS_UPDATE_DEACT_DETAILS_INCORRECT_EFFECTIVEFROM_MSG = "Employee deactivation effective date should not be future date.";
+	public static final String HRMS_UPDATE_DEACT_DETAILS_INCORRECT_EFFECTIVEFROM_MSG = "Employee deactivation effective date should be current date only.";
 
 	public static final String HRMS_GENERATE_ID_ERROR_CODE = "ERR_HRMS_GENERATE_ID_ERROR";
 	public static final String HRMS_GENERATE_ID_ERROR_MSG = "Unable to create ids " ;
+
+	public static final String HRMS_EMPLOYEE_COUNT_ERROR_CODE = "ERR_HRMS_COUNT_EMP";
+	public static final String HRMS_EMPLOYEE_COUNT_ERROR_MSG  = "Please provide tenantid to get count of the employee";
+
+	public static final String HRMS_UPDATE_REACT_DETAILS_INCORRECT_EFFECTIVEFROM_CODE = "ERR_HRMS_UPDATE_REACT_DETAILS_INCORRECT_EFFECTIVEFROM";
+	public static final String HRMS_UPDATE_REACT_DETAILS_INCORRECT_EFFECTIVEFROM_MSG = "Employee reactivation effective date should be between deactivation date and current date.";
 
 }

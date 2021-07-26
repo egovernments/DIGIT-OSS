@@ -4,17 +4,22 @@ import java.util.Collection;
 import java.util.List;
 
 import org.egov.demand.model.BillSearchCriteria;
+import org.egov.demand.model.BillV2.BillStatus;
+import org.egov.demand.model.UpdateBillCriteria;
+import org.egov.demand.util.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 @Component
 public class BillQueryBuilder {
 	
+	@Autowired
+	private Util util;
+	
 	public static final String REPLACE_STRING = "{replace}";
 	
-	public static final String BILL_STATUS_UPDATE_QUERY = "UPDATE egbs_bill_v1 SET status=? WHERE status='ACTIVE' ";
-	
-	public static final String BILL_STATUS_UPDATE_BATCH_QUERY = "UPDATE egbs_bill_v1 SET status=? WHERE id = ?";
+	public static final String BILL_STATUS_UPDATE_BASE_QUERY = "UPDATE egbs_bill_v1 SET status=? {replace} WHERE status='ACTIVE' AND tenantId = ? ";
 	
 	public static final String INSERT_BILL_QUERY = "INSERT into egbs_bill_v1 "
 			+"(id, tenantid, payername, payeraddress, payeremail, isactive, iscancelled, createdby, createddate, lastmodifiedby, lastmodifieddate, mobilenumber, status, additionaldetails)"
@@ -36,6 +41,10 @@ public class BillQueryBuilder {
 	public static final String BILL_MAX_QUERY = "WITH billresult AS ({replace}) SELECT * FROM billresult "
 			+ " INNER JOIN (SELECT bd_consumercode, max(b_createddate) as maxdate FROM billresult GROUP BY bd_consumercode) as uniqbill"
 			+ " ON uniqbill.bd_consumercode=billresult.bd_consumercode AND uniqbill.maxdate=billresult.b_createddate ";
+	
+	public static final String BILL_MIN_QUERY = "WITH billresult AS ({replace}) SELECT * FROM billresult "
+			+ " INNER JOIN (SELECT bd_consumercode, min(b_createddate) as mindate FROM billresult GROUP BY bd_consumercode) as uniqbill"
+			+ " ON uniqbill.bd_consumercode=billresult.bd_consumercode AND uniqbill.mindate=billresult.b_createddate ";
 	
 	public static final String BILL_BASE_QUERY = "SELECT b.id AS b_id,b.mobilenumber, b.tenantid AS b_tenantid,"
 			+ " b.payername AS b_payername, b.payeraddress AS b_payeraddress, b.payeremail AS b_payeremail,b.filestoreid AS b_fileStoreId,"
@@ -83,10 +92,15 @@ public class BillQueryBuilder {
 			appendListToQuery(searchBill.getBillId(), preparedStatementValues, selectQuery);
 		}
 
-		if (searchBill.getStatus() != null) {
-			selectQuery.append(" AND b.status = ?");
-			preparedStatementValues.add(searchBill.getStatus().toString());
-		}	
+		if (!searchBill.getRetrieveOldest()) {
+			if (searchBill.getStatus() != null) {
+				selectQuery.append(" AND b.status = ?");
+				preparedStatementValues.add(searchBill.getStatus().toString());
+			}
+		} else {
+			selectQuery.append(" AND b.status != ?");
+			preparedStatementValues.add(BillStatus.CANCELLED.toString());
+		}
 
 		if (searchBill.getEmail() != null) {
 			selectQuery.append(" AND b.payeremail = ?");
@@ -103,6 +117,16 @@ public class BillQueryBuilder {
 			preparedStatementValues.add(searchBill.getService());
 		}
 		
+		if (searchBill.getFromPeriod() != null) {
+			selectQuery.append(" AND bd.fromperiod = ?");
+			preparedStatementValues.add(searchBill.getFromPeriod());
+		}
+
+		if (searchBill.getToPeriod() != null) {
+			selectQuery.append(" AND bd.toperiod = ?");
+			preparedStatementValues.add(searchBill.getToPeriod());
+		}
+
 		if (searchBill.getBillNumber() != null) {
 			selectQuery.append(" AND bd.billno = ?");
 			preparedStatementValues.add(searchBill.getBillNumber());
@@ -118,25 +142,18 @@ public class BillQueryBuilder {
 	private StringBuilder addPagingClause(final StringBuilder selectQuery, final List preparedStatementValues,
 			final BillSearchCriteria searchBillCriteria) {
 		
-		StringBuilder maxQuery = new StringBuilder(BILL_MAX_QUERY.replace(REPLACE_STRING, selectQuery));
+		StringBuilder finalQuery;
 
-		if (searchBillCriteria.isOrderBy())
-			maxQuery.append(" ORDER BY billresult.bd_consumercode ");
+		if (searchBillCriteria.getRetrieveOldest())
+			finalQuery = new StringBuilder(BILL_MIN_QUERY.replace(REPLACE_STRING, selectQuery));
+		else
+			finalQuery = new StringBuilder(BILL_MAX_QUERY.replace(REPLACE_STRING, selectQuery));
 
-//		maxQuery.append(" LIMIT ?");
-//		long pageSize = Integer.parseInt(applicationProperties.getCommonSearchDefaultLimit());
-//		if (searchBillCriteria.getSize() != null)
-//			pageSize = searchBillCriteria.getSize();
-//		preparedStatementValues.add(pageSize); // Set limit to pageSize
-//
-//		// handle offset here
-//		maxQuery.append(" OFFSET ?");
-//		long pageNumber = 0; // Default pageNo is zero meaning first page
-//		if (searchBillCriteria.getOffset() != null)
-//			pageNumber = searchBillCriteria.getOffset() - 1;
-//		preparedStatementValues.add(pageNumber * pageSize); // Set offset to
-//															// pageNo * pageSize
-		return maxQuery;
+		if (searchBillCriteria.isOrderBy()) {
+			finalQuery.append(" ORDER BY billresult.bd_consumercode ");
+		}
+
+		return finalQuery;
 	}
 	
 	/**
@@ -145,23 +162,36 @@ public class BillQueryBuilder {
 	 * @param billIds
 	 * @param preparedStmtList
 	 */
-	public String getBillStatusUpdateQuery(List<String> consumerCodes, List<Object> preparedStmtList) {
+	public String getBillStatusUpdateQuery(UpdateBillCriteria updateBillCriteria, List<Object> preparedStmtList) {
 
-		StringBuilder builder = new StringBuilder(BILL_STATUS_UPDATE_QUERY);
+		String additionalDetailsQuery = ", additionaldetails = ?";
+		StringBuilder builder = new StringBuilder();
+		
+		preparedStmtList.add(updateBillCriteria.getStatusToBeUpdated().toString());
 
-		if (!CollectionUtils.isEmpty(consumerCodes)) {
+		if (updateBillCriteria.getStatusToBeUpdated().equals(BillStatus.CANCELLED)
+				&& updateBillCriteria.getAdditionalDetails() != null) {
 
-			builder.append(" AND id IN ( SELECT billid from egbs_billdetail_v1 where consumercode IN (");
-			appendListToQuery(consumerCodes, preparedStmtList, builder);
-			builder.append(")");
+			builder.append(BILL_STATUS_UPDATE_BASE_QUERY.replace(REPLACE_STRING, additionalDetailsQuery));
+			preparedStmtList.add(util.getPGObject(updateBillCriteria.getAdditionalDetails()));
+		} else
+			builder.append(BILL_STATUS_UPDATE_BASE_QUERY.replace(REPLACE_STRING, ""));
+
+		/*
+		 * where condition parameters
+		 */
+		preparedStmtList.add(updateBillCriteria.getTenantId());
+
+		if (!CollectionUtils.isEmpty(updateBillCriteria.getBillIds())) {
+
+			builder.append(" AND id IN ( ");
+			appendListToQuery(updateBillCriteria.getBillIds(), preparedStmtList, builder);
 		}
+
+
 		return builder.toString();
 	}
 	
-	public String getBillStatusUpdateBatchQuery() {
-		
-		return BILL_STATUS_UPDATE_BATCH_QUERY;
-	}
 	/**
 	 * @param billIds
 	 * @param preparedStmtList

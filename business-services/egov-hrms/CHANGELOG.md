@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.3 - 2021-07-26
+ - Fixed RAIN-3056: Able to re-activate employee by selecting the previous date
+
 ## 1.2.2 - 2021-05-11
  - VUL-WEB-L008
  - Added @SafeHtml annotaion on string fields

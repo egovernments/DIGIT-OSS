@@ -42,12 +42,13 @@ package org.egov.demand.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.egov.demand.model.BillV2.BillStatus;
-import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,7 +56,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.SafeHtml;
 
 @Setter
 @Getter
@@ -80,7 +80,7 @@ public class GenerateBillCriteria {
 	@NotNull
 	@Size(max = 256)
 	private String businessService;
-	
+
 	@Email
 	private String email;
 

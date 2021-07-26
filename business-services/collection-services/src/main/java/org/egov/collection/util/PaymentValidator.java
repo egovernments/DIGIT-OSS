@@ -40,6 +40,7 @@ import org.egov.collection.model.enums.InstrumentTypesEnum;
 import org.egov.collection.model.enums.PaymentModeEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.repository.PaymentRepository;
+import org.egov.collection.repository.ServiceRequestRepository;
 import org.egov.collection.service.PaymentWorkflowService;
 import org.egov.collection.web.contract.Bill;
 import org.egov.collection.web.contract.BillDetail;
@@ -50,6 +51,11 @@ import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,14 +69,17 @@ public class PaymentValidator {
     private PaymentWorkflowService paymentWorkflowService;
 
     private ApplicationProperties applicationProperties;
+    
+    private ServiceRequestRepository serviceRequestRepository;
 
 
     @Autowired
     public PaymentValidator(PaymentRepository paymentRepository, PaymentWorkflowService paymentWorkflowService,
-                            ApplicationProperties applicationProperties) {
+                            ApplicationProperties applicationProperties,ServiceRequestRepository serviceRequestRepository) {
         this.paymentRepository = paymentRepository;
         this.paymentWorkflowService = paymentWorkflowService;
         this.applicationProperties = applicationProperties;
+        this.serviceRequestRepository=serviceRequestRepository;
     }
 
 
@@ -90,6 +99,7 @@ public class PaymentValidator {
             validateIPaymentForBillPresent(payments,errorMap);
         }
 
+        validateIFSCCode(paymentRequest);
         // Loop through all bill details [one for each service], and perform various
         // validations
         for (PaymentDetail paymentDetail : paymentDetails) {
@@ -472,5 +482,39 @@ public class PaymentValidator {
 			}
 		}
     }
+    
+    /***
+	 * This method will validate the ifsc code and fetch the bank details and add
+	 * those details in payment additionaldetails
+	 * 
+	 * @param payments
+	 * @param errorMap
+	 */
+
+	private void validateIFSCCode(PaymentRequest paymentRequest) {
+		// TODO Auto-generated method stub
+		JsonNode razorPayIfscSearchResponse = null;
+		if (paymentRequest.getPayment().getIfscCode() != null) {
+
+			String response = serviceRequestRepository
+					.fetchGetResult(applicationProperties.getRazorPayUrl() + paymentRequest.getPayment().getIfscCode());
+			ObjectNode objectNode = (ObjectNode) paymentRequest.getPayment().getAdditionalDetails();
+			if (objectNode == null) {
+				ObjectMapper mapper = new ObjectMapper();
+				objectNode = mapper.createObjectNode();
+				
+					try {
+						razorPayIfscSearchResponse = mapper.readTree(response);
+					} catch (JsonProcessingException e) {
+						throw new CustomException("INVALID_PROCESS_EXCEPTION", e.getMessage());
+
+				} 
+				objectNode.set("bankDetails", razorPayIfscSearchResponse);
+				paymentRequest.getPayment().setAdditionalDetails(objectNode);
+			}
+
+		}
+
+	}
 
 }
