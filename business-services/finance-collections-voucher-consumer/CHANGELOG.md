@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.5 - 2021-07-27
+- minor bug fixes
+
 ## 1.1.4 - 2021-06-03
 - Passing business service value while consuming view receipt api
 - Fixed voucher creation issue in case of advance amount is collected
