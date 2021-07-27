@@ -47,21 +47,17 @@ const EditForm = ({ applicationData }) => {
       propertyType: data?.PropertyType?.code,
       source: "MUNICIPAL_RECORDS", // required
       channel: "CFC_COUNTER", // required
-      documents: data?.documents?.documents,
+      documents: applicationData?.documents.map((old) => {
+        let dt = old.documentType.split(".");
+        let newDoc = data?.documents?.documents?.find((e) => e.documentType.includes(dt[0] + "." + dt[1]));
+        return { ...old, ...newDoc };
+      }),
       units: data?.units,
       workflow: state.workflow,
       applicationStatus: "UPDATE",
     };
 
-    let keys = Object.keys(formData);
-    let unequalKeys = [];
-    keys.forEach((key) => {
-      if (!_.isEqual(formData[key], applicationData[key]) && applicationData[key])
-        unequalKeys.push({ key, app: applicationData[key], form: formData[key] });
-    });
-
-    console.log(unequalKeys, "inside submit edit");
-
+    // console.log(formData, "in submit");
     history.push("/digit-ui/employee/pt/response", { Property: formData, key: "UPDATE", action: "SUBMIT" });
   };
 
