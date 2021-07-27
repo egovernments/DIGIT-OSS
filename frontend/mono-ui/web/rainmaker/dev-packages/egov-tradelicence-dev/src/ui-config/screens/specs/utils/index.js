@@ -14,7 +14,6 @@ import "./index.css";
 import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
-import { downloadPdfFile } from "egov-ui-kit/utils/api";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -1028,7 +1027,7 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   ]
   const DOWNLOADRECEIPT = {
     GET: {
-      URL: "/pdf-service/v1/_createnosave",
+      URL: "/pdf-service/v1/_create",
       ACTION: "_get",
     },
   };
@@ -1039,7 +1038,6 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
       value: applicationNumber
     }
   ];
-
   const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "Licenses");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
@@ -1048,21 +1046,17 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   }
   else {
     try {
-      set(Licenses[0],'TradeTypeMessage',getLocaleLabels(
-        `TL_${get(Licenses[0],"tradeLicenseDetail.tradeUnits[0].tradeType",'NA')}`,
-        `TL_${get(Licenses[0],"tradeLicenseDetail.tradeUnits[0].tradeType",'NA')}`));
-      downloadPdfFile(DOWNLOADRECEIPT.GET.URL,'post',queryStr,{ Licenses },{},false,`TL-${applicationNumber}.pdf`,()=>{});
-      // httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-      //   .then(res => {
-      //     res.filestoreIds[0]
-      //     if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-      //       res.filestoreIds.map(fileStoreId => {
-      //         downloadReceiptFromFilestoreID(fileStoreId, mode)
-      //       })
-      //     } else {
-      //       console.log("Error In Acknowledgement form Download");
-      //     }
-      //   });
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          res.filestoreIds[0]
+          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+            res.filestoreIds.map(fileStoreId => {
+              downloadReceiptFromFilestoreID(fileStoreId, mode)
+            })
+          } else {
+            console.log("Error In Acknowledgement form Download");
+          }
+        });
     } catch (exception) {
       alert('Some Error Occured while downloading Acknowledgement form!');
     }
