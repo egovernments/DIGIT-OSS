@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.1 - 2021-07-26
+
+- Added fetch bill api for expired bill
+- Added new API for wns group bills
+
+
 ## 1.1.0 - 2021-05-12
 
 - Added rotes/middleware for amendment certificate, consolidate bill, TL bill and W&S bill and receipt PDF.

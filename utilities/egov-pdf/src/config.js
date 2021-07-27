@@ -71,6 +71,11 @@ module.exports = {
     bill_genie_getBill:"/egov-searcher/bill-genie/mcollectbills/_get",
     bill_ammendment_search: "/billing-service/amendment/_search",
     water_search: "ws-services/wc/_search",
-    sewerage_search: "sw-services/swc/_search"
+    sewerage_search: "sw-services/swc/_search",
+    searcher_water_open_search:"/egov-searcher/water-services/wateropensearch/_get",
+    searcher_sewerage_open_search:"/egov-searcher/sewerage-services/sewerageopensearch/_get",
+    bill_genie_waterBills:"/egov-searcher/bill-genie/waterbills/_get",
+    bill_genie_sewerageBills:"/egov-searcher/bill-genie/seweragebills/_get",
+    fetch_bill: "/billing-service/bill/v2/_fetchbill"
   },
 };
