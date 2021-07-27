@@ -7,6 +7,7 @@ All notable changes to this module will be documented in this file.
 - The new module named **egov-edcr-extract** has been added as part of **eGov-dcr-serivce** repo, it contains all extraction code.
 - Enhance river, to support with color code. The color code used to identify river type.
 - Capture the level of basement under the ground as dimension with color code 3
+- Capture height from floor to the bottom of beam of the stilt floor
 
 ## 1.2.0
 
