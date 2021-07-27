@@ -587,6 +587,7 @@ router.post(
           var pdfResponse;
           var pdfkey = config.pdf.wns_bill;
           try {
+            consolidatedResult.Bill = consolidatedResult.Bill.filter(function(e){return e});
             var billArray = { Bill: consolidatedResult.Bill };
             pdfResponse = await create_pdf(
               tenantId,
