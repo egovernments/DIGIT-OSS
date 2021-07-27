@@ -69,6 +69,8 @@ public class ParkingExtract extends FeatureExtract {
                 String stiltParkLayer = layerNames.getLayerName("LAYER_NAME_BLOCK_NAME_PREFIX") + block.getNumber()
                         + "_" + layerNames.getLayerName("LAYER_NAME_FLOOR_NAME_PREFIX") + floor.getNumber() + "_"
                         + layerNames.getLayerName("LAYER_NAME_STILT");
+                List<BigDecimal> heightFromFloorToBottomOfBeam = Util.getListOfDimensionValueByLayer(pl, stiltParkLayer);
+                floor.setHeightFromFloorToBottomOfBeam(heightFromFloorToBottomOfBeam);
                 List<String> stiltParkLayerNames = Util.getLayerNamesLike(pl.getDoc(), stiltParkLayer);
                 for (String s : stiltParkLayerNames)
                     Util.getPolyLinesByLayer(pl.getDoc(), s).forEach(
