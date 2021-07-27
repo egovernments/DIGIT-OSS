@@ -322,6 +322,15 @@ const screenConfig = {
   name: "viewBill",
   beforeInitScreen: (action, state, dispatch) => {
     consumerCode = getQueryArg(window.location.href, "connectionNumber");
+    dispatch(prepareFinalObject("WaterConnection[0]", {}));
+    dispatch(prepareFinalObject("billData", {}));
+    dispatch(prepareFinalObject("billingPeriodMDMS", {}));
+    dispatch(prepareFinalObject("consumptionDetails", []));
+    dispatch(prepareFinalObject("searchScreen", {}));
+    dispatch(prepareFinalObject("searchScreenMdmsData", {}));
+    dispatch(prepareFinalObject("viewBillToolipData", []));
+    dispatch(prepareFinalObject("UpdateBillCriteria", {}));
+
     // To set the application no. at the  top
     set(
       action.screenConfig,
