@@ -52,7 +52,7 @@
     <parent>
         <groupId>org.egov</groupId>
         <artifactId>egov-erp</artifactId>
-        <version>3.0.1-COE-SNAPSHOT</version>
+        <version>3.0.2-COE-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
