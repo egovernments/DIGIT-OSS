@@ -12,6 +12,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import "./index.css";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 const styles = {
   inputStyle: {
@@ -98,7 +99,7 @@ class ActionMenuComp extends Component {
     if(!citywiseConfig || citywiseConfig && citywiseConfig.length === 0){
       const tenantRequestBody = {
         MdmsCriteria: {
-          tenantId: commonConfig.tenantId,
+          tenantId: getTenantId(),
           moduleDetails: [
             {
               moduleName: "tenant",
@@ -235,7 +236,7 @@ class ActionMenuComp extends Component {
             if(!citywiseConfig || citywiseConfig && citywiseConfig.length === 0){
               const tenantRequestBody = {
                 MdmsCriteria: {
-                  tenantId: commonConfig.tenantId,
+                  tenantId: getTenantId(),
                   moduleDetails: [
                     {
                       moduleName: "tenant",
