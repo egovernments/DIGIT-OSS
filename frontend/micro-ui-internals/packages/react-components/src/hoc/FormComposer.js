@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, Fragment } from "react";
 import { useForm, Controller } from "react-hook-form";
 import BreakLine from "../atoms/BreakLine";
 import Card from "../atoms/Card";
@@ -129,7 +129,7 @@ export const FormComposer = (props) => {
                 return (
                   <React.Fragment key={index}>
                     {!field.withoutLabel && (
-                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable?"disabled":""}>
+                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable ? "disabled" : ""}>
                         {t(field.label)}
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
@@ -157,23 +157,27 @@ export const FormComposer = (props) => {
                   </React.Fragment>
                 );
               return (
-                <LabelFieldPair key={index}>
-                  {!field.withoutLabel && (
-                    <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
-                      {t(field.label)}
-                      {field.isMandatory ? " * " : null}
-                    </CardLabel>
-                  )}
-                  <div style={field.withoutLabel ? { width: "100%", ...props?.fieldStyle } : {}} className="field">
-                    {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
-                  </div>
+                <Fragment>
+                  <LabelFieldPair key={index}>
+                    {!field.withoutLabel && (
+                      <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }}>
+                        {t(field.label)}
+                        {field.isMandatory ? " * " : null}
+                      </CardLabel>
+                    )}
+                    <div style={field.withoutLabel ? { width: "100%", ...props?.fieldStyle } : {}} className="field">
+                      {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
+                    </div>
+                  </LabelFieldPair>
                   {field?.populators?.name && errors && errors[field?.populators?.name] && Object.keys(errors[field?.populators?.name]).length ? (
-                    <CardLabelError>{field?.populators?.error}</CardLabelError>
+                    <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>
+                      {field?.populators?.error}
+                    </CardLabelError>
                   ) : null}
-                </LabelFieldPair>
+                </Fragment>
               );
             })}
-            {!props.noBreakLine && (array.length - 1 === index ? null : <BreakLine style={props?.breaklineStyle ? props?.breaklineStyle : {}}/>)}
+            {!props.noBreakLine && (array.length - 1 === index ? null : <BreakLine style={props?.breaklineStyle ? props?.breaklineStyle : {}} />)}
           </React.Fragment>
         );
       }),
