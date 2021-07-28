@@ -12,6 +12,7 @@ const getSuggestions = suggestions => {
   return (
     suggestions &&
     suggestions.length > 0 &&
+    Array.isArray(suggestions) &&
     suggestions.map(suggestion => ({
       value: suggestion.code,
       label: suggestion.name
@@ -196,6 +197,7 @@ class IntegrationReactSelect extends React.Component {
       required = true,
       value,
       className,
+      disabled = false,
       inputLabelProps = {
         shrink: true
       },
@@ -224,6 +226,7 @@ class IntegrationReactSelect extends React.Component {
           menuProps={{
             className: className
           }}
+          isDisabled={disabled}
           options={getSuggestions(suggestions) || []}
           components={components}
           value={value}

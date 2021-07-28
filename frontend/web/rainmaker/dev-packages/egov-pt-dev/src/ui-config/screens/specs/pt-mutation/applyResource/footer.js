@@ -186,11 +186,6 @@ const callBackForApply = async (state, dispatch) => {
    
     
   }
-    set(propertyPayload,"additionalDetails.lateFee", 0 );
-  
- 
-  
-
 
     
 

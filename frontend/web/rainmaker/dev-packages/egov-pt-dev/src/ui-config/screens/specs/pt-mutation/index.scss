@@ -11,7 +11,7 @@
 #material-ui-ulbCityContainer {
   div{
     div{
-      background-color: white;
+     // background-color: white;
     }
 }
 }
@@ -47,11 +47,82 @@ div[class^="NavPills-root"] {
 //         }
 //     }
 // }
+@media only screen and (max-width: 1900px) {
+
+#material-ui-iulbCityContainer{
+  background-color: #fafafa;
+  border-radius: 5px;
+  padding-left: 10px;
+  border: 2px solid #aca9a9;
+  box-sizing: border-box;
+}
+
+  #custom-containers-ORButton
+  {
+    height: 50px;
+    width: 50px;
+    padding-left: 14px;
+    padding-top: 15px;
+    background-color: #245e75;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: -52px;
+    margin-top: 11px;
+    color: white;
+    margin-right: 19px;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+
+  #material-ui-iulbCityContainer{
+    background-color: #fafafa;
+    border-radius: 5px;
+    padding-left: 10px;
+    border: 2px solid #aca9a9;
+    box-sizing: border-box;
+  }
+  
+    #custom-containers-ORButton
+    {
+      height: 50px;
+      width: 50px;
+      padding-left: 14px;
+      padding-top: 15px;
+      background-color: #245e75;
+      border-radius: 50%;
+      display: inline-block;
+      margin-top: 10px;
+      color: white;
+      margin-right: 19px;
+      margin-left: 10px;
+    }
+    #material-ui-buttonContainer
+    { 
+    //  width:90% !important;
+    }
+        #material-ui-resetButton{
+          width:100% !important;
+          margin-left: 1px !important;
+      }
+      #material-ui-searchButton{
+        width:100% !important;
+        margin-left: 1px !important;
+
+      }
+      #custom-containers-genderRadioGroup {
+        div {
+            //display: inline-flex !important;
+            height: auto;
+        }
+    }
+  }
 #material-ui-searchPropertyDetails{
-    margin-right: -20px;
-    margin-left: -20px;
+   /*  margin-right: -20px;
+    margin-left: -20px; */
     margin-top: 10px;
     background-color: white !important;
+    overflow: unset;
    }
 
    #material-ui-searchApplicationDetails{
@@ -64,10 +135,10 @@ div[class^="NavPills-root"] {
    @media only screen and (max-width: 768px) {
     #material-ui-resetButton{
         float:none !important;
-        margin-left: 38px !important; 
+        //margin-left: 38px !important; 
     }
     #material-ui-searchButton{
-      margin-left: 38px !important; 
+      //margin-left: 38px !important; 
     }
     
     .ack-body, .ack-tail {

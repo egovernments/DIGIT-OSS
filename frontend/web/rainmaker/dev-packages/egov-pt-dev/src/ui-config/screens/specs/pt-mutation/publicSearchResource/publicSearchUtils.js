@@ -3,6 +3,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar,
+  toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { getSearchBillResult } from "../../../../../ui-utils/commons";
@@ -169,13 +170,20 @@ export const generateBill = async (
         key: "consumerCode",
         value: consumerCodes.join(","),
       });
+      queryObj.push({
+        key: "status",
+        value: "ACTIVE",
+      });
+
       if (businessService) {
         queryObj.push({
           key: "service",
           value: businessService,
         });
       }
+      dispatch(toggleSpinner());
       const payload = await getSearchBillResult(queryObj, dispatch);
+      dispatch(toggleSpinner());
       return payload;
     }
   } catch (e) {

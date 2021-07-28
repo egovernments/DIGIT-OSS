@@ -16,6 +16,7 @@ export const searchPropertyTable = {
       { labelName: "Property ID", labelKey: "PT_MUTATION_PID" },
       { labelName: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME" },
       { labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS" },
+      {labelName: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
       {
         labelName: "Property Status",
         labelKey: "PT_COMMON_TABLE_PROPERTY_STATUS",
@@ -80,7 +81,7 @@ export const searchPropertyTable = {
 };
 
 const payAmount = (tableMeta) => {
-    setRoute(`/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`);
+    setRoute(`/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[7]}&businessService=PT`);
 };
 
 const getPayButton = (tableMeta) => {

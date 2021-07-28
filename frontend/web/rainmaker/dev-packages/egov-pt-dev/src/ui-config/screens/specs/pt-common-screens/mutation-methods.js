@@ -62,7 +62,7 @@ export const resetFields = (state, dispatch) => {
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.oldpropertyids",
+    "searchScreen.oldPropertyId",
     ''
   ))
 
@@ -147,7 +147,7 @@ export const searchPropertyDetails = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.oldpropertyids"
+      jsonPath: "searchScreen.oldPropertyId"
     }),
     propertyTaxUniqueId: getTextField({
       label: {

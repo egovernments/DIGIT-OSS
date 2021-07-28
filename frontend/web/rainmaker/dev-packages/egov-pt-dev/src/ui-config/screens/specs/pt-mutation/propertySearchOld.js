@@ -4,20 +4,16 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg, getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
-import { resetFields } from "./publicMutationMethods";
-import iSearchTabs from "./propertySearch-tabs";
-import iCitizenSearchTabs from "./iCitizenSearchTabs";
-import { searchApplicationTable} from "./implementationSearchResources/searchResults";
+import { resetFields } from "./mutation-methods";
+import propertySearchOldTabs from "./property-search-tabs";
+import citizenSearchTabs from "./citizen-search-tabs";
+import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
 import { showHideAdhocPopup } from "../utils";
 import { httpRequest } from "../../../../ui-utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import set from "lodash/set";
-import { searchPropertyDetails} from "./publicMutationMethods";
-import { searchPropertyTable } from "./publicSearchResource/search-table";
-
-
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 const citizenSearch = getQueryArg(window.location.href, "citizenSearch");
@@ -77,7 +73,7 @@ const getMDMSData = async (action, dispatch) => {
     if(process.env.REACT_APP_NAME != "Citizen"){
       dispatch(
         prepareFinalObject(
-          "public-search-screen.tenantId",
+          "searchScreen.tenantId",
           tenant
         )
       );
@@ -110,7 +106,48 @@ const getMDMSData = async (action, dispatch) => {
           dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
         }
       }
+    // const payload = await httpRequest(
+    //   "post",
+    //   "/egov-mdms-service/v1/_search",
+    //   "_search",
+    //   [],
+    //   mdmsBody
+    // );
+    // payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
 
+
+    // let documents = get(
+    //   payload.MdmsRes,
+    //   "PropertyTax.Documents",
+    //   []
+    // );
+
+    // let documentUi = getRequiredDocuments(documents);
+    // set(documentUi, 'children.header.children.header.children.key.props.labelKey', 'PT_REQ_DOCS_HEADER')
+    // set(documentUi, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey', 'PT_COMMON_BUTTON_APPLY')
+    // set(documentUi, 'children.footer.children.footer.children.applyButton.onClickDefination', {
+    //   action: "condition",
+    //   callBack: startApplyFlow
+    // })
+    // set(
+    //   action,
+    //   "screenConfig.components.adhocDialog.children.popup",
+    //   documentUi
+    // );
+
+
+
+    // console.log("payload--", payload)
+    // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  //   if (process.env.REACT_APP_NAME != "Citizen") {
+  //     dispatch(
+  //       prepareFinalObject(
+  //         "searchScreen.tenantId",
+  //         tenant
+  //       )
+  //     );
+  //   }
+  // }
   
 };
 
@@ -120,24 +157,18 @@ const header = getCommonHeader({
 });
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "public-search",
+  name: "propertySearchOld",
 
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
     dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
 
-    set(
-        action.screenConfig,
-          "components.div.children.searchPropertyDetails.children.cardContent.children.selectionContainer.children.genderRadioGroup.props.value",
-          "OptionPID"
-        )
-
-   /*  if(citizenSearch) 
+    if(citizenSearch) 
      {
           set(
           action.screenConfig,
-            "components.div.children.iSearchTabs",
+            "components.div.children.propertySearchOldTabs",
             {}
           )
      }  
@@ -145,9 +176,9 @@ const screenConfig = {
       {
         set(
           action.screenConfig,
-              "components.div.children.iCitizenSearchTabs",
+              "components.div.children.citizenSearchTabs",
               {})
-      } */
+      }
  
 
     const tenantRequestBody = {
@@ -178,25 +209,13 @@ const screenConfig = {
         let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
         enableButton && dispatch(
           handleField(
-              "public-search",
+              "propertySearchOld",
               "components.div.children.headerDiv.children.newApplicationButton",
               "visible",
               enabledCities ? enabledCities.includes(tenant) : false
           )
         );
       });
-// showing fileds based on selection option
-
-   /*  dispatch(
-        handleField(
-            "iSearch",
-            "components.div.children.headerDiv.children.newApplicationButton",
-            "visible",
-            enabledCities ? enabledCities.includes(tenant) : false
-        )
-    ) */
-  
-
     return action;
   },
 
@@ -260,7 +279,7 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  showHideAdhocPopup(state, dispatch, "public-search");
+                  showHideAdhocPopup(state, dispatch, "propertySearchOld");
 
                 }
               },
@@ -272,12 +291,11 @@ const screenConfig = {
             }
           }
         },
-       // iCitizenSearchTabs,
-       searchPropertyDetails,
-       breakAfterSearch3: getBreak(),
-       searchPropertyTable,
-       breakAfterSearch4: getBreak()
-        //searchApplicationTable
+        citizenSearchTabs,
+        propertySearchOldTabs,
+        breakAfterSearch: getBreak(),
+        searchPropertyTable,
+        searchApplicationTable
 
       }
     },
@@ -287,7 +305,7 @@ const screenConfig = {
       props: {
         open: false,
         maxWidth: false,
-        screenKey: "public-search"
+        screenKey: "propertySearchOld"
       },
       children: {
         popup: {}

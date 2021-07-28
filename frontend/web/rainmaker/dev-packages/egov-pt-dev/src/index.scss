@@ -16,7 +16,9 @@ body {
 .mihy-stepper-overide {
   margin-top: 32px;
 }
-
+#custom-atoms-applicationSuccessFooter{
+  width:100% !important;
+}
 .apply-application-for-new {
   color: #484848;
   font-family: Roboto;
@@ -34,7 +36,7 @@ body {
   position: fixed !important;
   bottom: 0;
   left: 0;
-  width: 100%;
+  width: 100% !important;
   /* z-index: 1000; */
   /* height: 55px; */
   text-align: right;
@@ -128,7 +130,7 @@ input[type="date"]:valid::before {
 @media only screen and (max-width: 768px) {
   #custom-atoms-applicationSuccessFooter,
   #custom-atoms-paymentSuccessFooter {
-    width:3000px !important;
+    
     display: block;
     text-align: center;
   }
@@ -149,7 +151,6 @@ input[type="date"]:valid::before {
     margin-top: 16px;
   }
   .citizen-payment-confirmation .pt-apply-wizard-footer {
-    width:3000px !important;
     display: block;
     text-align: center;
   }
@@ -165,6 +166,7 @@ input[type="date"]:valid::before {
     font-size: 18px;
   }
   #custom-atoms-paymentSuccessFooter #material-ui-printReceiptButton {
+   
     margin-right: 16px !important;
   }
   #custom-atoms-applicationSuccessCard {
@@ -174,9 +176,25 @@ input[type="date"]:valid::before {
     width: 100% !important;
   } */
 }
+.pt-apply-wizard-footer{
+    width:100% !important;
+  
+  }
+  .apply-wizard-footer{
+    width:100% !important;
+  
+  }
+  .footer-com-style {
+    width:100% !important;
+  
+  }
 
 @media only screen and (min-width: 768px) {
   .common-div-css {
     margin: 30px 16px 88px 16px;
   }
+  #custom-atoms-applicationSuccessFooter{
+  width:100% !important;
+}
+  
 }

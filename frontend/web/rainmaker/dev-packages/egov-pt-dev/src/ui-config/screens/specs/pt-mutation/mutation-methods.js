@@ -13,9 +13,82 @@ import { propertySearch, applicationSearch } from "./functions";
 import { getTenantId, getUserInfo,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 // import "./index.css";
+import { getMohallaData } from "egov-ui-kit/utils/commons";
+
+export const ComponentJsonPath = {
+  ulbCity:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+  locality:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
+  ownerName:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+  ownerMobNo:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+  propertyID:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyID",
+    ownerName:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+    doorNo:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
+   
+  };
+const applyMohallaData = (mohallaData, tenantId, dispatch) => {
+  dispatch(
+    prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData)
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.locality,
+      "props.data",
+      mohallaData
+      // payload.TenantBoundary && payload.TenantBoundary[0].boundary
+    )
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "props.value", "")
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "props.error", false)
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "isFieldValid", true)
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "props.errorMessage", "")
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "props.helperText", "")
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.helperText", "")
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.error", false)
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.isFieldValid", true)
+  );
+  dispatch(prepareFinalObject("searchScreen.locality", ""));
+  const mohallaLocalePrefix = {
+    moduleName: tenantId,
+    masterName: "REVENUE",
+  };
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.locality,
+      "props.localePrefix",
+      mohallaLocalePrefix
+    )
+  );
+};
+
+
 
 
 export const resetFields = (state, dispatch) => {
@@ -113,13 +186,86 @@ export const resetFields = (state, dispatch) => {
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.oldpropertyids",
+    "searchScreen.oldPropertyId",
     ''
   ))
   dispatch(prepareFinalObject(
     "searchScreen.locality",
     ''
   ))
+  dispatch(prepareFinalObject(
+    "searchScreen.doorNo",
+    ''
+  ))
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.ownerName,
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.ownerName,
+      "props.error",
+      false
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.ownerName,
+      "props.helperText",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.ownerName,
+      "props.errorMessage",
+      ""
+    )
+  );
+  dispatch(prepareFinalObject(
+    "searchScreen.name",
+    ''
+  ))
+
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.doorNo,
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.doorNo,
+      "props.error",
+      false
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.doorNo,
+      "props.helperText",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.doorNo,
+      "props.errorMessage",
+      ""
+    )
+  );
   dispatch(prepareFinalObject(
     "searchScreen.doorNo",
     ''
@@ -169,6 +315,22 @@ export const citizenResetFields = (state, dispatch) => {
   ))
 
 };
+export const cityChange = async (dispatch, value = "") => {
+  try {
+    dispatch(fetchLocalizationLabel(getLocale(), value, value));
+    let payload = await httpRequest(
+      "post",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "_search",
+      [{ key: "tenantId", value: value }],
+      {}
+    );
+    const mohallaData = getMohallaData(payload, value);
+    applyMohallaData(mohallaData, value, dispatch);
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 
 
@@ -209,6 +371,9 @@ export const searchPropertyDetails = getCommonCard({
       },
     beforeFieldChange: async (action, state, dispatch) => {
       let tenant = action.value;
+      if (action.value) {
+        cityChange(dispatch, action.value)
+      }
 
       dispatch(
         handleField(
@@ -332,6 +497,7 @@ export const searchPropertyDetails = getCommonCard({
       
     },
   }),
+  
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",
@@ -344,6 +510,8 @@ export const searchPropertyDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4,
+
+
       },
       iconObj: {
         label: "+91 |",
@@ -353,6 +521,50 @@ export const searchPropertyDetails = getCommonCard({
       pattern: getPattern("MobileNo"),
       jsonPath: "searchScreen.mobileNumber",
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
+    }),
+    ownerName: getTextField({
+      label: {
+        labelName: "Owner Name",
+        labelKey: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
+      },
+      placeholder: {
+        labelName: "Enter Property Owner Name",
+        labelKey: "PT_SEARCH_OWNER_NAME_PLACEHOLDER"
+      },
+      pattern: getPattern("SearchOwnerName"),
+      errorMessage: "Invalid Name",
+      helperText:"PT_MIN_3CHAR",
+      jsonPath: "searchScreen.name",
+      props: {
+        className: "applicant-details-error"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      afterFieldChange: async (action, state, dispatch) => {
+        if (action.value.match(/^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i)||action.value.length==0) {
+          dispatch(
+            handleField("propertySearch", ComponentJsonPath.ownerName, "props.error", false)
+          );
+          dispatch(
+            handleField("propertySearch", ComponentJsonPath.ownerName, "isFieldValid", true)
+          );
+          dispatch(
+            handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage", "")
+          );
+          }else{
+          dispatch(
+            handleField("propertySearch", ComponentJsonPath.ownerName, "props.error", true)
+          );
+          dispatch(
+            handleField("propertySearch", ComponentJsonPath.ownerName, "isFieldValid", false)
+          );
+          dispatch(
+            handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage",action.value.length<3? getLocaleLabels("PT_ERR_MIN3CHAR","PT_ERR_MIN3CHAR"):getLocaleLabels("PT_ERR_INVALID_TEXT","PT_ERR_INVALID_TEXT"))
+          );
+        }
+      }
     }),
     propertyTaxUniqueId: getTextField({
       label: {
@@ -365,13 +577,14 @@ export const searchPropertyDetails = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,  
+        sm: 4,
+  
       },
       iconObj: {
        // label: "PT-",
         position: "start"
       },
-      required: true,
+      required: false,
       //pattern: /^[0-9]*$/i,
       pattern: getPattern("NewPropertyID"),
       errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
@@ -430,35 +643,17 @@ export const searchPropertyDetails = getCommonCard({
         errorMessage: "ERR_REQUIRED_FILED",    
         jsonPath: "searchScreen.locality",
         sourceJsonPath: "searchScreenMdmsData.tenant.localities",
-        required: true,
+        //required: true,
         props: {
-          required: true,
-          disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+          //required: true,
+    //      disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
         },
         gridDefination: {
           xs: 12,
           sm: 4
         }}),
 
-    houseNumber: getTextField({
-      label: {
-        labelName: "House/Shop No.",
-        labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
-      },
-      placeholder: {
-        labelName: "Enter House no.",
-        labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-        
-      },
-      required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.doorNo"
-    }),
+    
     existingPropertyId: getTextField({
       label: {
         labelName: "Existing Property ID",
@@ -476,8 +671,28 @@ export const searchPropertyDetails = getCommonCard({
       required: false,
       pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.oldpropertyids"
+      jsonPath: "searchScreen.oldPropertyId"
     })
+  }),
+  doorNo: getTextField({
+    label: {
+      labelName: "Owner Name",
+      labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
+    },
+    placeholder: {
+      labelName: "Enter Property Owner Name",
+      labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
+    },
+    pattern: getPattern("DoorHouseNo"),
+    errorMessage: "Invalid No",
+    jsonPath: "searchScreen.doorNo",
+    props: {
+      className: "applicant-details-error"
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 3
+    }
   }),
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
