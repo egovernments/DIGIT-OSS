@@ -150,7 +150,7 @@ const ApplicationDetails = () => {
               <Row
                 style={{ border: "none" }}
                 label={t("TL_COMMON_TABLE_COL_SLA_NAME")}
-                text={`${application?.SLA / (1000 * 60 * 60 * 24)} Days`}
+                text={`${Math.round(application?.SLA / (1000 * 60 * 60 * 24))} Days`}
                 textStyle={{ whiteSpace: "pre" }}
               />
               <Row

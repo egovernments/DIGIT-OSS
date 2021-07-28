@@ -1,30 +1,22 @@
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 
 const useTLSearch = (params, config) => {
   return async () => {
     const data = await Digit.TLService.search(params, config);
-    let tenantId = "";
-    let BusinessServices = {};
+    let UpdatedData = [];
+
     if (data && data?.Licenses && Array.isArray(data.Licenses) && data.Licenses.length > 0) {
-      data.Licenses?.map(async (service) => {
-        tenantId = service?.tenantId;
-        BusinessServices[service.workflowCode]=service.workflowCode;
-      });
-      let workflow = {};
-      const workflowdata = await Digit.WorkflowService.init(tenantId, Object.keys(BusinessServices)?.join(',')).then((workflowdata) => workflowdata);
-      workflowdata.BusinessServices.map(businessService => {
-        workflow[businessService.businessService] = businessService;
-        return businessService;
+    
+      return(UpdatedData = await Promise.all(
+        data.Licenses?.map(async (service) => {
+        const workflowdata = await Digit.WorkflowService.getDetailsById({ tenantId:service.tenantId, id : service.applicationNumber, moduleCode : "TL", role:"CITIZEN" }).then((workflowdata) => workflowdata);
+        const res = Object.assign({}, service, {
+          SLA: workflowdata?.processInstances[0].businesssServiceSla,
+        });
+        return res;
       })
-      const myPromise = new Promise((resolve, reject) => {
-        resolve(data.Licenses?.map((service) => {
-          const res = Object.assign({}, service, {
-            SLA: workflow ? workflow[service.workflowCode]?.businessServiceSla : 0,
-          });
-          return res;
-        }));
-      });
-      return myPromise;
+      ));
     }
   };
 }
@@ -40,7 +32,7 @@ export const useTLSearchApplication = (params, config = {}) => {
         TL_APPLICATION_CATEGORY: "ACTION_TEST_TRADE_LICENSE",
         TL_COMMON_TABLE_COL_OWN_NAME: i?.tradeLicenseDetail?.owners?.map((ele,index) => index == 0 ? multiownername = ele.name : multiownername = multiownername + " , " + ele.name),
         TL_COMMON_TABLE_COL_STATUS: `WF_NEWTL_${i?.status}`,
-        TL_COMMON_TABLE_COL_SLA_NAME: `${i?.SLA / (1000 * 60 * 60 * 24)} Days`,
+        TL_COMMON_TABLE_COL_SLA_NAME: `${Math.round(i?.SLA / (1000 * 60 * 60 * 24))} Days`,
         TL_COMMON_TABLE_COL_TRD_NAME: i?.tradeName,
         raw: i
       }))
