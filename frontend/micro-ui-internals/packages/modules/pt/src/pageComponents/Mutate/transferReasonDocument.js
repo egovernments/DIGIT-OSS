@@ -53,7 +53,7 @@ const TransferProof = ({ t, config, onSelect, userType, formData }) => {
           setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
-            const response = await Digit.UploadServices.Filestorage("property-upload", file, "pb");
+            const response = await Digit.UploadServices.Filestorage("property-upload", file, Digit.ULBService.getStateId());
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {

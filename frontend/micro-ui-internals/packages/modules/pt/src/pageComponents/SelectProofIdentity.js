@@ -49,7 +49,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
         } else {
           try {
             // TODO: change module in file storage
-            const response = await Digit.UploadServices.Filestorage("property-upload", file, "pb");
+            const response = await Digit.UploadServices.Filestorage("property-upload", file, Digit.ULBService.getStateId());
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {

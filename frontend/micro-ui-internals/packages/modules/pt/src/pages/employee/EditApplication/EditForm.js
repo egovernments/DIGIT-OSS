@@ -44,6 +44,7 @@ const EditForm = ({ applicationData }) => {
       propertyType: data?.PropertyType?.code,
       noOfFloors: Number(data?.noOfFloors),
       landArea: Number(data?.landarea),
+      superBuiltupArea: Number(data?.landarea),
       propertyType: data?.PropertyType?.code,
       source: "MUNICIPAL_RECORDS", // required
       channel: "CFC_COUNTER", // required

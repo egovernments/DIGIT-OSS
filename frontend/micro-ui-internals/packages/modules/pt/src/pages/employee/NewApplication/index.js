@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 
 const NewApplication = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   const defaultValues = {};
@@ -22,12 +23,21 @@ const NewApplication = () => {
 
   const onFormValueChange = (setValue, formData, formState) => {
     console.log(formData, formState.errors, "in new application");
+
     setSubmitValve(!Object.keys(formState.errors).length);
     if (Object.keys(formState.errors).length === 1 && formState.errors?.units?.message === "arv") {
       setSubmitValve(!formData?.units.some((unit) => unit.occupancyType === "RENTED" && !unit.arv));
     }
     if (formData?.ownershipCategory?.code?.includes("MULTIPLEOWNERS") && formData?.owners?.length < 2) {
       setSubmitValve(false);
+    }
+    let pincode = formData?.address?.pincode;
+    if (pincode) {
+      if (!Digit.Utils.getPattern("Pincode").test(pincode)) setSubmitValve(false);
+      const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item.toString() === pincode));
+      if (!foundValue) {
+        setSubmitValve(false);
+      }
     }
   };
 
@@ -43,6 +53,7 @@ const NewApplication = () => {
       usageCategoryMajor: data?.usageCategoryMajor?.code.split(".")[0],
       usageCategoryMinor: data?.usageCategoryMajor?.code.split(".")[1] || null,
       landArea: Number(data?.landarea),
+      superBuiltupArea: Number(data?.landarea),
       propertyType: data?.PropertyType?.code,
       noOfFloors: Number(data?.noOfFloors),
       ownershipCategory: data?.ownershipCategory?.code,

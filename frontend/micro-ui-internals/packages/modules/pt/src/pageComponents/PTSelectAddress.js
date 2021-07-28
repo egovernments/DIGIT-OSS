@@ -120,7 +120,7 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
 
       for (let key in formValue) {
         if (!formValue[key] && !localFormState?.errors[key]) {
-          setLocalError(key, { type: `${key.toUpperCase()}_REQUIRED`, message: `${key.toUpperCase()}_REQUIRED` });
+          setLocalError(key, { type: `${key.toUpperCase()}_REQUIRED`, message: t(`CORE_COMMON_REQUIRED_ERRMSG`) });
         } else if (formValue[key] && localFormState.errors[key]) {
           clearLocalErrors([key]);
         }

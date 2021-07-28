@@ -100,7 +100,7 @@ const ApplicationDetails = () => {
               redirectionUrl: {
                 pathname: `/digit-ui/employee/pt/property-details/${propertyId}`,
               },
-              tenantId: "pb",
+              tenantId: Digit.ULBService.getStateId(),
             },
             {
               action: "UPDATE",
@@ -108,7 +108,7 @@ const ApplicationDetails = () => {
                 pathname: `/digit-ui/employee/pt/modify-application/${propertyId}`,
                 state: { workflow: { action: "OPEN", moduleName: "PT", businessService } },
               },
-              tenantId: "pb",
+              tenantId: Digit.ULBService.getStateId(),
             },
           ],
         },
@@ -128,7 +128,7 @@ const ApplicationDetails = () => {
         pathname: `/digit-ui/employee/pt/modify-application/${propertyId}`,
         state: { workflow: { action: "REOPEN", moduleName: "PT", businessService } },
       },
-      tenantId: "pb",
+      tenantId: Digit.ULBService.getStateId(),
     });
   }
 

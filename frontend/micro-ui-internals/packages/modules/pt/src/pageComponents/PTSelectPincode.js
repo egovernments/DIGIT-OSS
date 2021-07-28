@@ -1,8 +1,8 @@
-import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, LabelFieldPair, CardLabelError } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, props }) => {
+const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, setError, formState, clearErrors }) => {
   const tenants = Digit.Hooks.pt.useTenants();
 
   const { pathname } = useLocation();
@@ -31,6 +31,7 @@ const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
     },
   ];
   const [pincodeServicability, setPincodeServicability] = useState(null);
+  const [error, setLocalError] = useState("");
 
   useEffect(() => {
     if (formData?.address?.pincode) {
@@ -41,15 +42,16 @@ const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
   function onChange(e) {
     setPincode(e.target.value);
     setPincodeServicability(null);
+    setLocalError("");
+    let validPincode = Digit.Utils.getPattern("Pincode").test(e.target.value);
+
     if (userType === "employee") {
-      const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item.toString() === e.target.value));
-      if (foundValue) {
-        const city = tenants.filter((obj) => obj.pincode?.find((item) => item == e.target.value))[0];
-        onSelect(config.key, { ...formData.address, city, pincode: e.target.value, slum: null });
-      } else {
-        onSelect(config.key, { ...formData.address, pincode: e.target.value });
-        setPincodeServicability("PT_COMMON_PINCODE_NOT_SERVICABLE");
+      if (e.target.value && !validPincode) setLocalError(t("ERR_DEFAULT_INPUT_FIELD_MSG"));
+      if (validPincode) {
+        const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item.toString() === e.target.value));
+        if (!foundValue) setLocalError(t("PT_COMMON_PINCODE_NOT_SERVICABLE"));
       }
+      onSelect(config.key, { ...formData.address, pincode: e.target.value });
     }
   }
 
@@ -65,12 +67,15 @@ const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
   if (userType === "employee") {
     return inputs?.map((input, index) => {
       return (
-        <LabelFieldPair key={index}>
-          <CardLabel className="card-label-smaller">{t(input.label)}</CardLabel>
-          <div className="field">
-            <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} autoFocus={presentInModifyApplication} />
-          </div>
-        </LabelFieldPair>
+        <React.Fragment>
+          <LabelFieldPair key={index}>
+            <CardLabel className="card-label-smaller">{t(input.label)}</CardLabel>
+            <div className="field">
+              <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} autoFocus={presentInModifyApplication} />
+            </div>
+          </LabelFieldPair>
+          {error ? <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>{error}</CardLabelError> : null}
+        </React.Fragment>
       );
     });
   }

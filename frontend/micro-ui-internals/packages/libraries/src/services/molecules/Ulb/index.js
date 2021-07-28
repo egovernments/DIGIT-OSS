@@ -19,6 +19,9 @@ export const ULBService = {
       user?.info?.type === "EMPLOYEE" && user?.info?.tenantId ? user?.info?.tenantId : globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
     return tenantId;
   },
+  getStateId: () => {
+    return ULBService.getCurrentTenantId()?.split(".")[0];
+  },
   getCurrentUlb: () => {
     const initData = StoreService.getInitData();
     const tenantId = ULBService.getCurrentTenantId();

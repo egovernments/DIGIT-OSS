@@ -39,7 +39,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     {},
     {
       details: {
-        tenantId: "pb",
+        tenantId: Digit.ULBService.getStateId(),
         moduleDetails: [{ moduleName: "egf-master", masterDetails: [{ name: "FinancialYear", filter: "[?(@.module == 'PT')]" }] }],
       },
     }
@@ -100,7 +100,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       if (uploadedFile)
         workflow["documents"] = [
           {
-            documentType: action?.action+" DOC",
+            documentType: action?.action + " DOC",
             fileName: file?.name,
             fileStoreId: uploadedFile,
           },
