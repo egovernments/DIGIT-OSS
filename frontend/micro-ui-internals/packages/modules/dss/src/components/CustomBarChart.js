@@ -11,7 +11,7 @@ const CustomLabel = ({ x, y, name, stroke, value }) => {
   return (
     <>
       <text x={x} y={y} dx={-65} dy={10} fill={stroke} width="30">
-        {`${value.toFixed(2)}%`}
+        {`${value}%`}
       </text>
       <text x={x} y={y} dx={-170} dy={10}>
         {t(name)}
