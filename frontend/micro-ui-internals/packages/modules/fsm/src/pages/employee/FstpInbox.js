@@ -94,7 +94,7 @@ const FstpInbox = () => {
       <div>
         <Header>{t("ES_COMMON_INBOX")}</Header>
         <DesktopInbox
-          data={vehicleLog}
+          data={{table: vehicleLog}}
           isLoading={isLoading}
           userRole={"FSM_EMP_FSTPO"}
           onFilterChange={handleFilterChange}

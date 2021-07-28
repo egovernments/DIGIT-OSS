@@ -188,7 +188,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     if (isMobile) {
       return (
         <MobileInbox
-          data={isInbox ? applications : data}
+          data={isInbox ? applications?.table : data}
           isLoading={isInbox ? isLoading || isIdle : isSearchLoading}
           isSearch={isSearch}
           searchFields={getSearchFields(userRoles)}

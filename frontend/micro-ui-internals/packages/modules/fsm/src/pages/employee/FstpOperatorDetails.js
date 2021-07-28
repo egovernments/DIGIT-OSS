@@ -46,7 +46,7 @@ const FstpOperatorDetails = () => {
   });
 
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
-  const { isLoading: isSearchLoading, isIdle, data: { data: tripDetails } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
+  const { isLoading: isSearchLoading, isIdle, data: { data: {table: tripDetails} = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
     enabled: !!isVehicleSearchCompleted,
   });
 
