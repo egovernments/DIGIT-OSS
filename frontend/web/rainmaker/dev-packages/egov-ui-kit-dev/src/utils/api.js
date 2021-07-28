@@ -1,8 +1,16 @@
 import axios from "axios";
-import { addQueryArg, hasTokenExpired, prepareForm } from "./commons";
+import { prepareForm, fetchFromLocalStorage, addQueryArg, hasTokenExpired } from "./commons";
 import some from "lodash/some";
 import commonConfig from "egov-ui-kit/config/common.js";
-import { getAccessToken, getLocale, getTenantId, localStorageGet, localStorageSet, setLocale, setTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  getTenantId,
+  getAccessToken,
+  setTenantId,
+  getLocale,
+  setLocale,
+  localStorageSet,
+  localStorageGet,
+} from "egov-ui-kit/utils/localStorageUtils";
 
 axios.interceptors.response.use(
   (response) => {

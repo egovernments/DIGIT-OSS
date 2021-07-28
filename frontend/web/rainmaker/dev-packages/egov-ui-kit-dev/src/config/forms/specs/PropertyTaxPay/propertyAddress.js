@@ -9,6 +9,8 @@ import sortBy from "lodash/sortBy";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import {getPattern} from "egov-ui-framework/ui-config/screens/specs/utils";
+
 
 var constructiontype =[{value : "road1" , label :"rd1" }]
 
@@ -153,6 +155,7 @@ const formConfig = {
       floatingLabelText: "PT_PROPERTY_DETAILS_DOOR_NUMBER",
       hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",
       numcols: 6,
+      pattern:getPattern("DoorHouseNo"),
       errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,

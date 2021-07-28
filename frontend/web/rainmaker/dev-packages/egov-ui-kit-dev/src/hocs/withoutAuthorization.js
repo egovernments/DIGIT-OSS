@@ -11,7 +11,7 @@ import { fetchLocalizationLabel, setLocalizationLabels } from "egov-ui-kit/redux
 import { DropDown, AppBar } from "components";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
-import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
+import msevaLogo from "egov-ui-kit/assets/images/logo.png";
 
 const getUlbGradeLabel = (ulbGrade) => {
   if (ulbGrade) {

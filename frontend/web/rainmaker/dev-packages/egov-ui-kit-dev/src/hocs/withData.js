@@ -12,17 +12,13 @@ import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-
 const withData = (Component) => {
   class Wrapper extends React.Component {
     componentDidMount() {
-      const { searchUser, fetchComplaintCategories, authenticated, fetchpgrConstants, fetchUiCommonConfig, fetchUiCommonConstants, fetchGeneralMDMSData } = this.props;
+      const { searchUser, fetchComplaintCategories, authenticated, fetchpgrConstants, fetchUiCommonConfig, fetchUiCommonConstants } = this.props;
       if (getAccessToken()) {
-        
-        searchUser();
-        fetchUiCommonConstants();
-/*         fetchpgrConstants();
-        fetchUiCommonConfig();
         fetchComplaintCategories();
-       fetchGeneralMDMSData(); 
-        */
-       
+        searchUser();
+        fetchpgrConstants();
+        fetchUiCommonConfig();
+        fetchUiCommonConstants();
       }
     }
 

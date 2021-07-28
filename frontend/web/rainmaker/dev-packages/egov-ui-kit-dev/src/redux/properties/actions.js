@@ -1,16 +1,21 @@
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
-import { getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import { transformById ,getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
-import { BOUNDARY, DOWNLOADRECEIPT, DRAFT, FETCHASSESSMENTS, FETCHBILL, FETCHRECEIPT, PGService, PROPERTY, RECEIPT } from "egov-ui-kit/utils/endPoints";
-import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
-import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
-import cloneDeep from "lodash/cloneDeep";
-import get from "lodash/get";
-import orderby from "lodash/orderBy";
 import * as actionTypes from "./actionTypes";
+import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL, FETCHRECEIPT,FETCHASSESSMENTS, DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { transformById } from "egov-ui-kit/utils/commons";
+import orderby from "lodash/orderBy";
+import get from "lodash/get";
+import set from "lodash/set";
+import FileSaver from 'file-saver';
+import cloneDeep from "lodash/cloneDeep";
+import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import {  getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import commonConfig from "config/common.js";
+import axios from "axios";
 
+const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
   return {
     type: actionTypes.RESET_PROPERTY_STATE,
@@ -273,21 +278,21 @@ const setMohallaInRedux = (dispatch, state, draftResponse) => {
     }, {});
   const queryObj = Object.keys(mohallaCodes).map((item) => {
     return [{
-      key: "tenantId",
-      value: item,
-    },
-    {
-      key: "hierarchyTypeCode",
-      value: "REVENUE"
-    },
-    {
-      key: "boundaryType",
-      value: "Locality"
-    },
-    {
-      key: "codes",
-      value: mohallaCodes[item].join(",")
-    },
+        key: "tenantId",
+        value: item,
+      },
+      {
+        key: "hierarchyTypeCode",
+        value: "REVENUE"
+      },
+      {
+        key: "boundaryType",
+        value: "Locality"
+      },
+      {
+        key: "codes",
+        value: mohallaCodes[item].join(",")
+      },
     ];
   });
   dispatch(fetchMohalla(queryObj));
@@ -309,22 +314,21 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
     if (queryObjectproperty) {
       dispatch(propertyFetchPending());
       try {
-        let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION, queryObjectproperty, {}, [], {}, true);
-        if (queryObjectDraft !== "citizen_search") {
-          if (payloadProperty && payloadProperty.Properties && payloadProperty.Properties.length > 0) {
-            let convertedProperties = payloadProperty.Properties.map(property => {
-              // property.owners.reverse(); // Owner is coming in reverse order from the API
-              let properties = getCreatePropertyResponse({ Properties: [property] });
-              return properties && properties.Properties && properties.Properties.length > 0 && properties.Properties[0];
+          let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty,{},[],{},true);
+        if(queryObjectDraft !== "citizen_search") {
+          if(payloadProperty&&payloadProperty.Properties&&payloadProperty.Properties.length>0){
+            let convertedProperties=payloadProperty.Properties.map(property=>{
+              let properties=getCreatePropertyResponse({Properties:[property]});
+             return properties&&properties.Properties&&properties.Properties.length>0&&properties.Properties[0];
             });
-            payloadProperty.Properties = convertedProperties;
-          }
-          if (payloadProperty.Properties && payloadProperty.Properties[0] && payloadProperty.Properties[0].documents && queryObjectproperty != []) {
+            payloadProperty.Properties=convertedProperties;
+          }      
+          if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents&&queryObjectproperty!=[]){
             payloadProperty.Properties[0].documentsUploaded = await setPTDocuments(
               payloadProperty,
               "Properties[0].documents",
               "documentsUploaded",
-              dispatch,
+              dispatch, 
               'PT'
             );
             dispatch(propertyFetchComplete(payloadProperty));
@@ -333,7 +337,7 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
           }
         } else {
           dispatch(propertyFetchComplete(payloadProperty));
-        }
+        }        
       } catch (error) {
         dispatch(propertyFetchError(error.message));
       }
@@ -393,7 +397,16 @@ const getFinancialYear = (fromDate, toDate) => {
   let financialYear = '';
   financialYear = (new Date(fromDate).getFullYear()) + '-' + String(new Date(toDate).getFullYear()).slice(2);
   return financialYear;
-}
+};
+export const getFinancialYearFromEPOCH = (epochTime) => {
+  let financialYear = "";
+  let date = new Date(epochTime);
+  if(date.getMonth()>=3)
+  financialYear = date.getFullYear() + "-" + String(date.getFullYear() + 1).slice(2);
+  else
+  financialYear = date.getFullYear()-1 + "-" + String(date.getFullYear()).slice(2);
+  return financialYear;
+};
 const getYearlyAssessments = (propertiesArray = []) => {
   let yearlyAssessments = [];
   propertiesArray && propertiesArray.map((property) => {
@@ -623,7 +636,7 @@ export const fetchTotalBillAmount = (fetchBillQueryObject) => {
         dispatch(toggleSnackbarAndSetText(
           true,
           { labelName: error.message, labelKey: error.message },
-          error.message&& error.message.includes&& error.message.includes("No Demands Found") ? "warning" : "error"
+          "error"
         ))
         dispatch(fetchBillError(error.message));
       }
@@ -664,9 +677,9 @@ export const fetchAssessments = (fetchAssessmentsQueryObject) => {
     }
   }
 }
-export const getFileUrlFromAPI = async fileStoreId => {
+export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
   const queryObject = [
-    { key: "tenantId", value: getCommonTenant() },
+    { key: "tenantId", value: tenantId || commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
@@ -683,70 +696,6 @@ export const getFileUrlFromAPI = async fileStoreId => {
   }
 };
 
-/* export const downloadReceipt = (receiptQueryString) => {
-  return async (dispatch) => {
-    if (receiptQueryString) {
-      // dispatch(downloadReceiptPending());
-      try {
-        let businessService = '';
-        receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
-          if (query.key == "businessService") {
-            businessService = query.value;
-          }
-        })
-        receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
-       
-        const payloadReceiptDetails = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
-  
-        const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
-        const paymentStatus = get(payloadReceiptDetails.Payments[0], "paymentStatus")
-        if (oldFileStoreId && paymentStatus!="CANCELLED") {
-          downloadReceiptFromFilestoreID(oldFileStoreId, "download")
-        }
-        else if(oldFileStoreId && paymentStatus=="CANCELLED"){
-          getFileUrlFromAPI(oldFileStoreId).then((fileRes) => {
-            if(fileRes&&fileRes[oldFileStoreId]){
-            var win = window.open(fileRes[oldFileStoreId], '_blank');
-            win.focus();}
-            else{
-              download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
-            }
-          });
-        }
-        else {
-          download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
-        }
-      } catch (error) {
-        dispatch(downloadReceiptError(error.message));
-      }
-    }
-  }
-} */
-
-const download =(Payments,tenant)=>{
-  const queryStr = [
-    { key: "key", value: "consolidatedreceipt" },
-    { key: "tenantId", value:tenant }
-  ]
-  httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-            .then(res => {
-              getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-                var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-                win.focus();
-              });
-
-            });
-}
-export const getFinancialYearFromEPOCH = (epochTime) => {
-  let financialYear = "";
-  let date = new Date(epochTime);
-  if(date.getMonth()>=3)
-  financialYear = date.getFullYear() + "-" + String(date.getFullYear() + 1).slice(2);
-  else
-  financialYear = date.getFullYear()-1 + "-" + String(date.getFullYear()).slice(2);
-  return financialYear;
-};
-/* 
 export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
   getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
     if (mode === 'download') {
@@ -940,7 +889,7 @@ const getBankname = async(payment) =>{
     }
   }
   return payment;
-} */
+}
 
 export const downloadReceipt = (receiptQueryString, mode = "download") => {
   return async (dispatch) => {

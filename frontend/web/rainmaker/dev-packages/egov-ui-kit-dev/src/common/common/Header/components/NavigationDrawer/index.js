@@ -54,6 +54,7 @@ const NavigationDrawer = ({
   isCSR,
   isADMIN,
 }) => {
+  let sourceUrl=`${window.location.origin}/employee`;
   return (
     <Drawer
       containerStyle={{ ...defaultContainerStyle, ...containerStyle }}
@@ -104,13 +105,11 @@ const NavigationDrawer = ({
             </div>
           );
         })}
-
-        <div className="rainmaker-displayInline" style={{ justifyContent: "left" ,marginLeft:"10px"}}>
-          <div style={{ marginTop: "42px" }}>
-            <img  src={logo} height="21px !important"/>
-          </div >
-          <div style={{ marginTop: "42px" ,marginLeft:"19px" }}>
-          <img src={digitLogo} height="14px !important" />
+        <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <img style={{ display: "inline-flex", height: '1em' ,cursor:'pointer'}} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"} onClick={() => {
+              window.open('https://www.digit.org/', '_blank').focus();
+            }}></img>
           </div>
         </div>
       </div>

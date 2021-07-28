@@ -5,8 +5,7 @@ import ActionMenuComp from "../ActionMenu/components";
 import "./index.css";
 import { fetchActionItems, updateActiveRoute } from "egov-ui-kit/redux/app/actions";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-//import commonConfig from "config/common.js";
-
+import commonConfig from "config/common.js";
 
 class ActionMenu extends Component {
   componentDidMount = async () => {
@@ -15,7 +14,7 @@ class ActionMenu extends Component {
     const roles = get(userInfo, "roles");
     const roleCodes = roles
       ? roles.map((role) => {
-          if (role.tenantId == getTenantId()) {
+          if (role.tenantId == getTenantId() || role.tenantId == getTenantId().split(".")[0]) {
             return role.code;
           }
         })
@@ -23,7 +22,7 @@ class ActionMenu extends Component {
     await fetchActionMenu(
       {
         roleCodes: roleCodes,
-        tenantId: getTenantId(),
+        tenantId: commonConfig.tenantId,
         actionMaster: "actions-test",
         enabled: true,
       },
@@ -53,9 +52,7 @@ class ActionMenu extends Component {
 const mapStateToProps = ({ app }) => {
   const actionListArr = app.menu || [];
   const activeRoutePath = app.activeRoutePath;
-  actionListArr.map(item=>{if(item.id==2024){
-    item.path= "bill-amend"
-  }})
+
   return { actionListArr, activeRoutePath };
 };
 

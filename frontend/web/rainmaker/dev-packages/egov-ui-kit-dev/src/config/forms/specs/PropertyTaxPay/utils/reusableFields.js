@@ -1089,6 +1089,7 @@ export const colony = {
       zIndex: 5
     },
     maxLength: 64,
+    pattern: "^([a-zA-Z0-9#() ])+$",
   },
 };
 

@@ -11,6 +11,7 @@ import SortDialog from "../common/common/Header/components/SortDialog";
 import { getLocale, getStoredModulesList, getTenantId, getUserInfo, setModule, setStoredModulesList } from "../utils/localStorageUtils";
 import "./index.css";
 import withData from "./withData";
+import IconButton from "material-ui/IconButton";
 
 const withAuthorization = (options = {}) => (Component) => {
   class Wrapper extends React.Component {
@@ -135,14 +136,14 @@ const withAuthorization = (options = {}) => (Component) => {
       const role = this.roleFromUserInfo(userInfo, "CITIZEN")
         ? "citizen"
         : this.roleFromUserInfo(userInfo, "GRO") || this.roleFromUserInfo(userInfo, "DGRO")
-          ? "ao"
-          : this.roleFromUserInfo(userInfo, "CSR")
-            ? "csr"
-            : this.roleFromUserInfo(userInfo, "EMPLOYEE")
-              ? "employee"
-              : this.roleFromUserInfo(userInfo, "PGR-ADMIN")
-                ? "pgr-admin"
-                : "";
+        ? "ao"
+        : this.roleFromUserInfo(userInfo, "CSR")
+        ? "csr"
+        : this.roleFromUserInfo(userInfo, "EMPLOYEE")
+        ? "employee"
+        : this.roleFromUserInfo(userInfo, "PGR-ADMIN")
+        ? "pgr-admin"
+        : "";
 
       //For restricting citizen to access employee url
 
