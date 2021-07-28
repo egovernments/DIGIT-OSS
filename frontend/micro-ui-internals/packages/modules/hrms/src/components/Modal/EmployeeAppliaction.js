@@ -22,7 +22,7 @@ export const configEmployeeApplication = ({ t, action, selectFile, uploadedFile,
             label: t("HR_ORDER_NO"),
             type: "text",
             populators: {
-              name: "orderNo",
+             name: "orderNo",
             },
           },
 
@@ -30,11 +30,13 @@ export const configEmployeeApplication = ({ t, action, selectFile, uploadedFile,
             label: t("HR_EFFECTIVE_DATE"),
             type: "date",
             isMandatory: true,
+            disable:true,   /* Disabled date and set defaultvalue */
             populators: {
               error: t("HR_EFFECTIVE_DATE_INVALID"),
               name: "effectiveFrom",
               min: convertEpochToDate(new Date().toJSON().slice(0, 10).replace(/-/g, "/")),
               max: convertEpochToDate(new Date().toJSON().slice(0, 10).replace(/-/g, "/")),
+              defaultValue: convertEpochToDate(new Date().toJSON().slice(0, 10).replace(/-/g, "/")),
             },
           },
           {

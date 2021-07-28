@@ -121,7 +121,7 @@ const EmployeeAction = ({ t, action, tenantId, closeModal, submitAction, applica
         applicationData.Employees[0]["documents"].push(documents);
       }
 
-      set(Employees[0], 'deactivationDetails[0].effectiveFrom', data?.effectiveFrom);
+      set(Employees[0], 'deactivationDetails[0].effectiveFrom', new Date()?.getTime());
       set(Employees[0], 'deactivationDetails[0].orderNo', data?.orderNo);
       set(Employees[0], 'deactivationDetails[0].reasonForDeactivation', data?.reasonForDeactivation);
       set(Employees[0], 'deactivationDetails[0].remarks', data?.remarks);
@@ -138,7 +138,7 @@ const EmployeeAction = ({ t, action, tenantId, closeModal, submitAction, applica
         applicationData.Employees[0]["documents"].push(documents);
       }
 
-      set(Employees[0], 'reactivationDetails[0].effectiveFrom', data?.effectiveFrom);
+      set(Employees[0], 'reactivationDetails[0].effectiveFrom', new Date()?.getTime());
       set(Employees[0], 'reactivationDetails[0].orderNo', data?.orderNo);
       set(Employees[0], 'reactivationDetails[0].reasonForDeactivation', data?.reasonForDeactivation);
       set(Employees[0], 'reactivationDetails[0].remarks', data?.remarks);

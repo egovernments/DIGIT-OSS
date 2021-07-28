@@ -108,7 +108,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
                 return (
                   <CheckBox
                     key={index + "service"}
-                    label={t(`CS_COMMON_INBOX_${e.businessservice.toUpperCase()}`)+"-"+t(`WF_NEWTL_${e.applicationstatus}`)+" "+`(${e.count})`}
+                    label={t(`CS_COMMON_INBOX_${e.businessservice.toUpperCase()}`)+" - "+t(`WF_NEWTL_${e.applicationstatus}`)+" "+`(${e.count})`}
                     value={e.statusid}
                     checked={checked}
                     onChange={(event) => onServiceSelect(event, e.statusid)}

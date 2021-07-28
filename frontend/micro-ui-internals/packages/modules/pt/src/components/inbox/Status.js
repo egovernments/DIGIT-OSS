@@ -19,7 +19,7 @@ const Status = ({ onAssignmentChange, searchParams, businessServices, statusMap,
   };
 
   const translateState = (state, t) => {
-    return `(${t(map[state.stateBusinessService])})` + " " + t(`ES_PT_COMMON_STATUS_${state.state || "CREATED"}`);
+    return `${t(map[state.stateBusinessService])}` + " - " + t(`ES_PT_COMMON_STATUS_${state.state || "CREATED"}`);
     // return t(`ES_PT_COMMON_STATUS_${state.state || "CREATED"}`);
   };
 
