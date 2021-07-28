@@ -29,6 +29,7 @@ const useTLInbox = ({ tenantId, filters, config }) => {
             table: data?.items.map( application => ({
                 applicationId: application.businessObject.applicationNumber,
                 date: application.businessObject.applicationDate,
+                businessService: application?.ProcessInstance?.businessService,
                 locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.tradeLicenseDetail?.address?.locality?.code?.toUpperCase()}`,
                 status: application.businessObject.status,
                 owner: application.ProcessInstance?.assigner?.name,

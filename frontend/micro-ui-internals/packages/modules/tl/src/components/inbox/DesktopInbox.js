@@ -47,6 +47,11 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, ...prop
         return GetCell(date)
       }
     },{
+      Header: t("TL_COMMON_TABLE_COL_APP_TYPE"),
+      Cell: ({ row }) => {
+        return GetCell(t(`CS_COMMON_INBOX_${row.original["businessService"]?.toUpperCase()}`));
+      },
+    },{
           Header: t("WF_INBOX_HEADER_LOCALITY"),
     Cell: ({ row }) => {
         return GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.original["locality"], row.original["tenantId"])));

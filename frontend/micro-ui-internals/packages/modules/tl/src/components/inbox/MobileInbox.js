@@ -30,6 +30,7 @@ const MobileInbox = ({
   const getData = () => data?.table.map(e => ({
       [t("WF_INBOX_HEADER_APPLICATION_NO")]:e?.["applicationId"],
       [t("TL_COMMON_TABLE_COL_APP_DATE")]:convertEpochToDateDMY(e?.["date"]),
+      [t("TL_COMMON_TABLE_COL_APP_TYPE")]:t(`CS_COMMON_INBOX_${e?.["businessService"]?.toUpperCase()}`),
       [t("WF_INBOX_HEADER_LOCALITY")]:t(Digit.Utils.locale.getRevenueLocalityCode(e?.["locality"], e?.["tenantId"])),
       [t("WF_INBOX_HEADER_STATUS")]:t(e?.["status"]),
       [t("WF_INBOX_HEADER_CURRENT_OWNER")]:t(e?.owner),
