@@ -215,12 +215,14 @@ public class RiverDistance extends FeatureProcess {
                 }
             }
 
-            if (distancesFromRiverProtectionWall.isEmpty() && distancesFromEmbankment.isEmpty()
-                    && distancesFromMainRiverEdge.isEmpty() && distancesFromSubRiver.isEmpty()) {
-                errors.put("Distance_From_River", NO_DISTANCT_MENTIONED);
-
-                pl.addErrors(errors);
-            }
+			/*
+			 * if (distancesFromRiverProtectionWall.isEmpty() &&
+			 * distancesFromEmbankment.isEmpty() && distancesFromMainRiverEdge.isEmpty() &&
+			 * distancesFromSubRiver.isEmpty()) { errors.put("Distance_From_River",
+			 * NO_DISTANCT_MENTIONED);
+			 * 
+			 * pl.addErrors(errors); }
+			 */
         }
         return pl;
     }
