@@ -12,7 +12,7 @@ export const filterFunctions = {
       searchFilters.applicationNumber = filtersArg?.acknowledgementIds;
     }
     if (filtersArg?.propertyIds) {
-      searchFilters.propertyIds = propertyIds;
+      searchFilters.propertyId = propertyIds;
     }
     if (filtersArg?.oldpropertyids) {
       searchFilters.oldpropertyids = filtersArg?.oldpropertyids;
