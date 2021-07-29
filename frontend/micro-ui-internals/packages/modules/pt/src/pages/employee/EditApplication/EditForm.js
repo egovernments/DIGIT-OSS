@@ -53,7 +53,11 @@ const EditForm = ({ applicationData }) => {
         let newDoc = data?.documents?.documents?.find((e) => e.documentType.includes(dt[0] + "." + dt[1]));
         return { ...old, ...newDoc };
       }),
-      units: data?.units,
+      units: applicationData?.units?.map((old, ind) => {
+        let _new = data?.units?.[ind];
+        if (!_new) return { ...old, active: false };
+        return { ...old, ..._new };
+      }),
       workflow: state.workflow,
       applicationStatus: "UPDATE",
     };

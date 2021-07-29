@@ -36,7 +36,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statusMap, 
   };
 
   const applyLocalFilters = () => {
-    if (_searchParams.services.length === 0) onFilterChange({ _searchParams, services: ApplicationTypeMenu.map((e) => e.value) });
+    if (_searchParams.services.length === 0) onFilterChange({ ..._searchParams, services: ApplicationTypeMenu.map((e) => e.value) });
     else onFilterChange(_searchParams);
   };
 
@@ -46,7 +46,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statusMap, 
 
   const clearAll = () => {
     setSearchParams({ ...defaultSearchParams, services: [] });
-    onFilterChange(defaultSearchParams);
+    onFilterChange({ ...defaultSearchParams });
   };
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
