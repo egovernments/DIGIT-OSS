@@ -44,6 +44,7 @@ import com.google.gson.JsonObject;
 import org.springframework.web.client.RestTemplate;
 
 import static org.egov.inbox.util.PTConstants.*;
+import static org.egov.inbox.util.TLConstants.TL;
 
 @Slf4j
 @Service
@@ -59,6 +60,9 @@ public class InboxService {
 
 	@Autowired
 	private PtInboxFilterService ptInboxFilterService;
+
+	@Autowired
+	private TLInboxFilterService tlInboxFilterService;
 
 	@Autowired
 	public InboxService(InboxConfiguration config, ServiceRequestRepository serviceRequestRepository,
@@ -133,6 +137,17 @@ public class InboxService {
 				List<String> acknowledgementNumbers = ptInboxFilterService.fetchAcknowledgementIdsFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				if(!CollectionUtils.isEmpty(acknowledgementNumbers)) {
 					moduleSearchCriteria.put(ACKNOWLEDGEMENT_IDS_PARAM, acknowledgementNumbers);
+					moduleSearchCriteria.remove(LOCALITY_PARAM);
+					moduleSearchCriteria.remove(OFFSET_PARAM);
+					moduleSearchCriteria.remove(LIMIT_PARAM);
+				}else{
+					isSearchResultEmpty = true;
+				}
+			}
+			if(!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(TL)) {
+				List<String> applicationNumbers = tlInboxFilterService.fetchApplicationNumbersFromSearcher(criteria, StatusIdNameMap, requestInfo);
+				if(!CollectionUtils.isEmpty(applicationNumbers)) {
+					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
 					moduleSearchCriteria.remove(LOCALITY_PARAM);
 					moduleSearchCriteria.remove(OFFSET_PARAM);
 					moduleSearchCriteria.remove(LIMIT_PARAM);
