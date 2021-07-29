@@ -50,12 +50,13 @@ public class User   {
         private String gender;
 
         @NotNull
-        @Pattern(regexp = "^[0-9]{10}$", message = "MobileNumber should be 10 digit number")
+        @Pattern(regexp = "^[6-9][0-9]{9}$", message = "Invalid mobile number")
         @JsonProperty("mobileNumber")
         private String mobileNumber;
 
         @Size(max=128)
         @JsonProperty("emailId")
+        @Pattern(regexp = "^$|^(?=^.{1,64}$)((([^<>()\\[\\]\\\\.,;:\\s$*@'\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@'\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,})))$", message = "Invalid emailId")
         private String emailId;
 
         @Size(max=50)

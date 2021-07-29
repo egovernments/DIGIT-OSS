@@ -135,6 +135,9 @@ public class PropertyDetail   {
         @JsonProperty("usageCategoryMajor")
         private String usageCategoryMajor;
 
+         @JsonProperty("usageCategoryMinor")
+         private String usageCategoryMinor;
+
         @NotEmpty
         @JsonProperty("ownershipCategory")
         private String ownershipCategory;

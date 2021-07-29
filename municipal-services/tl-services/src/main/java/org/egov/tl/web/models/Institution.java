@@ -3,6 +3,8 @@ package org.egov.tl.web.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -36,4 +38,20 @@ public class Institution {
   @JsonProperty("active")
   private Boolean active = null;
 
+  @Size(max=256)
+  @JsonProperty("instituionName")
+  private String instituionName;
+
+  @Size(max=64)
+  @JsonProperty("contactNo")
+  private String contactNo;
+
+
+  @Size(max=64)
+  @JsonProperty("organisationRegistrationNo")
+  private String organisationRegistrationNo;
+
+  @Size(max=512)
+  @JsonProperty("address")
+  private String address;
 }

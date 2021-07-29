@@ -122,4 +122,13 @@ public class CalculationUtils {
         return response.getLicenses().get(0);
     }
 
+    /**
+     * Returns the url for mdms search endpoint
+     *
+     * @return
+     */
+    public StringBuilder getMdmsSearchUrl() {
+        return new StringBuilder().append(config.getMdmsHost()).append(config.getMdmsSearchEndpoint());
+    }
+
 }

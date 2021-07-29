@@ -15,19 +15,15 @@ import static org.egov.pt.calculator.util.CalculatorConstants.TAXES_TO_BE_CONSID
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.web.models.TaxHeadEstimate;
 import org.egov.pt.calculator.web.models.collections.Payment;
-import org.egov.pt.calculator.web.models.demand.BillAccountDetail;
-import org.egov.pt.calculator.web.models.demand.Demand;
-import org.egov.pt.calculator.web.models.demand.DemandDetail;
-import org.egov.pt.calculator.web.models.demand.TaxPeriod;
+import org.egov.pt.calculator.web.models.collections.PaymentDetail;
+import org.egov.pt.calculator.web.models.demand.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -309,4 +305,51 @@ public class PayService {
 			return null;
 	}
 	
+
+	/**
+	 * Fetch the fromFY and take the starting year of financialYear
+	 * calculate the difference between the start of assessment financial year and fromFY
+	 * Add the difference in year to the year in the starting day
+	 * eg: Assessment year = 2017-18 and interestMap fetched from master due to fallback have fromFY = 2015-16
+	 * and startingDay = 01/04/2016. Then diff = 2017-2015 = 2
+	 * Therefore the starting day will be modified from 01/04/2016 to 01/04/2018
+	 * @param assessmentYear Year of the assessment
+	 * @param interestMap The applicable master data
+	 * @return list of string with 0'th element as day, 1'st as month and 2'nd as year
+	 */
+	private String[] getStartTime(String assessmentYear,Map<String, Object> interestMap){
+		String financialYearOfApplicableEntry = ((String) interestMap.get(CalculatorConstants.FROMFY_FIELD_NAME)).split("-")[0];
+		Integer diffInYear = Integer.valueOf(assessmentYear.split("-")[0]) - Integer.valueOf(financialYearOfApplicableEntry);
+		String startDay = ((String) interestMap.get(CalculatorConstants.STARTING_DATE_APPLICABLES));
+		Integer yearOfStartDayInApplicableEntry = Integer.valueOf((startDay.split("/")[2]));
+		startDay = startDay.replace(String.valueOf(yearOfStartDayInApplicableEntry),String.valueOf(yearOfStartDayInApplicableEntry+diffInYear));
+		String[] time = startDay.split("/");
+		return time;
+	}
+
+
+
+	/**
+	 * Calculates the interest based on the given parameters
+	 * @param numberOfDaysInMillies Time for which interest has to be calculated
+	 * @param applicableAmount The amount on which interest is applicable
+	 * @param interestMap The interest master data
+	 * @return interest calculated
+	 */
+	private BigDecimal calculateInterest(long numberOfDaysInMillies,BigDecimal applicableAmount,Map<String, Object> interestMap){
+
+		if(numberOfDaysInMillies<0) {
+			return new BigDecimal(0);
+		}
+
+		BigDecimal interestAmt;
+		BigDecimal noOfDays = BigDecimal.valueOf((TimeUnit.MILLISECONDS.toDays(Math.abs(numberOfDaysInMillies))));
+		if(BigDecimal.ONE.compareTo(noOfDays) <= 0) noOfDays = noOfDays.add(BigDecimal.ONE);
+		interestAmt = mDService.calculateApplicables(applicableAmount, interestMap);
+		return interestAmt.multiply(noOfDays.divide(BigDecimal.valueOf(365), 6, 5));
+	}
+
+
+
+
 }

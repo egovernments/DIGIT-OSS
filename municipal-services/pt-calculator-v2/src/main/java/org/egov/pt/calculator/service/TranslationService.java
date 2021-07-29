@@ -1,43 +1,29 @@
 package org.egov.pt.calculator.service;
 
-import java.math.BigDecimal;
-import java.time.Instant;
-// import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.calculator.repository.Repository;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
-import org.egov.pt.calculator.web.models.propertyV2.AssessmentRequestV2;
-import org.egov.pt.calculator.web.models.propertyV2.AssessmentV2;
-import org.egov.pt.calculator.web.models.propertyV2.PropertyResponseV2;
-import org.egov.pt.calculator.web.models.propertyV2.PropertyV2;
-import org.egov.pt.calculator.web.models.propertyV2.UnitUsage;
-import org.egov.pt.calculator.web.models.propertyV2.UnitV2;
+import org.egov.pt.calculator.web.models.propertyV2.*;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import lombok.extern.slf4j.Slf4j;
-
-// import static org.egov.pt.calculator.util.CalculatorConstants.*;
+import static org.egov.pt.calculator.util.CalculatorConstants.*;
 
 @Service
-@Slf4j
 public class TranslationService {
+
+
 
     @Value("${egov.pt.registry.host}")
     String ptRegistryHost;
@@ -55,17 +41,21 @@ public class TranslationService {
         this.repository = repository;
     }
 
+
+
     public CalculationReq translate(AssessmentRequestV2 assessmentRequestV2){
 
         RequestInfo requestInfo = assessmentRequestV2.getRequestInfo();
         AssessmentV2 assessment = assessmentRequestV2.getAssessment();
 
         PropertyV2 property = getProperty(assessmentRequestV2);
-        if(property==null)
-            throw new CustomException("INVALID_PROPERTYID","No property found for the given assessment");
 
         if(!CollectionUtils.isEmpty(assessment.getUnitUsageList()))
             enrichPropertyFromAssessment(property, assessment);
+
+
+        if(property==null)
+            throw new CustomException("INVALID_PROPERTYID","No property found for the given assessment");
 
         Map<String, Object> propertyMap = new HashMap();
         Map<String, Object> propertyDetail = new HashMap<>();
@@ -151,10 +141,11 @@ public class TranslationService {
                 if(masterData.length >= 1)
                     unitMap.put("usageCategoryMajor", masterData[0]);
 
-                if(masterData.length >= 2) {
+                if(masterData.length >= 2)
                     unitMap.put("usageCategoryMinor", masterData[1]);
-                    unitMap.put("usageCategorySubMinor", masterData[1]);
-                }
+
+                if(masterData.length >= 3)
+                    unitMap.put("usageCategorySubMinor", masterData[2]);
                     
                 if(masterData.length >= 4)
                     unitMap.put("usageCategoryDetail",masterData[3]);

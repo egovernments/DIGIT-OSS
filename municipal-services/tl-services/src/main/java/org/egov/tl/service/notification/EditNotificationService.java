@@ -1,6 +1,7 @@
 package org.egov.tl.service.notification;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.util.NotificationUtil;
 import org.egov.tl.web.models.Difference;
 import org.egov.tl.web.models.SMSRequest;
@@ -14,12 +15,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static org.egov.tl.util.TLConstants.businessService_BPA;
+import static org.egov.tl.util.TLConstants.businessService_TL;
+
 @Service
 public class EditNotificationService {
 
 
     private NotificationUtil util;
 
+    @Autowired
+    private TLConfiguration config;
 
     @Autowired
     public EditNotificationService(NotificationUtil util) {
@@ -28,7 +34,19 @@ public class EditNotificationService {
 
     public void sendEditNotification(TradeLicenseRequest request, Map<String, Difference> diffMap) {
         List<SMSRequest> smsRequests = enrichSMSRequest(request, diffMap);
-        util.sendSMS(smsRequests);
+        String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
+        if (businessService == null)
+            businessService = businessService_TL;
+        switch(businessService)
+        {
+            case businessService_TL:
+                util.sendSMS(smsRequests,config.getIsTLSMSEnabled());
+                break;
+
+//            case businessService_BPA:
+//                util.sendSMS(smsRequests,config.getIsBPASMSEnabled());
+//                break;
+        }
     }
 
     /**

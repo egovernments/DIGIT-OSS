@@ -7,12 +7,7 @@ import org.egov.pt.calculator.service.BillingSlabService;
 import org.egov.pt.calculator.service.MutationBillingSlabService;
 import org.egov.pt.calculator.validator.BillingSlabValidator;
 import org.egov.pt.calculator.validator.MutationBillingSlabValidator;
-import org.egov.pt.calculator.web.models.BillingSlabReq;
-import org.egov.pt.calculator.web.models.BillingSlabRes;
-import org.egov.pt.calculator.web.models.BillingSlabSearchCriteria;
-import org.egov.pt.calculator.web.models.MutationBillingSlabReq;
-import org.egov.pt.calculator.web.models.MutationBillingSlabRes;
-import org.egov.pt.calculator.web.models.MutationBillingSlabSearchCriteria;
+import org.egov.pt.calculator.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +34,19 @@ public class BillingSlabController {
 	private MutationBillingSlabService mutationService;
 	
 	@Autowired
+	private MutationBillingSlabService mutationService;
+	
+	@Autowired
 	private BillingSlabValidator billingSlabValidator;
 	
 	@Autowired
 	private MutationBillingSlabValidator mutationbillingSlabValidator;
 	
+	
 	/**
 	 * endpoint to create billing-slabs
 	 * 
-	 * @param BillingSlabReq
+	 * @param billingSlabReq
 	 * @author vishal
 	 */
 	@PostMapping("_create")
@@ -65,7 +64,7 @@ public class BillingSlabController {
 	/**
 	 * enpoint to update billing-slabs
 	 * 
-	 * @param BillingSlabReq
+	 * @param billingSlabReq
 	 * @author vishal
 	 */
 	@PostMapping("_update")
@@ -83,8 +82,8 @@ public class BillingSlabController {
 	/**
 	 * enpoint to search billing-slabs
 	 * 
-	 * @param RequestInfo
-	 * @param BillingSlabSearchCriteria
+	 * @param requestInfo
+	 * @param billingSlabSearcCriteria
 	 * @author vishal
 	 */
 	@PostMapping("_search")
@@ -122,7 +121,7 @@ public class BillingSlabController {
 	 */
 	@PostMapping("/mutation/_update")
 	@ResponseBody
-	private ResponseEntity<?> update(@RequestBody @Valid MutationBillingSlabReq billingSlabReq) {
+	private ResponseEntity<?> updateMutation(@RequestBody @Valid MutationBillingSlabReq billingSlabReq) {
 
 		long startTime = System.currentTimeMillis();
 		mutationbillingSlabValidator.validateUpdate(billingSlabReq);
@@ -140,7 +139,7 @@ public class BillingSlabController {
 	 */
 	@PostMapping("/mutation/_search")
 	@ResponseBody
-	private ResponseEntity<?> search(@RequestBody @Valid RequestInfo requestInfo,
+	private ResponseEntity<?> searchMutation(@RequestBody @Valid RequestInfo requestInfo,
 									 @ModelAttribute @Valid MutationBillingSlabSearchCriteria billingSlabSearcCriteria) {
 		long startTime = System.currentTimeMillis();
 		MutationBillingSlabRes billingSlabRes = mutationService.searchBillingSlabs(requestInfo, billingSlabSearcCriteria);

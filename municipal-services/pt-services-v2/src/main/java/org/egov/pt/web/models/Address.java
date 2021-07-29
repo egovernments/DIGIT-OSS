@@ -92,9 +92,11 @@ public class Address   {
         @JsonProperty("locality")
         private Boundary locality;
 
+        @JsonProperty
+        private Boundary ward;
+
         @JsonProperty("additionalDetails")
         private Object additionalDetails;
-
 
 }
 

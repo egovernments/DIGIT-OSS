@@ -2,7 +2,6 @@ package org.egov.pt.calculator.service;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -13,6 +12,7 @@ import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.util.Configurations;
 import org.egov.pt.calculator.validator.CalculationValidator;
 import org.egov.pt.calculator.web.models.*;
+import org.egov.pt.calculator.web.models.collections.Payment;
 import org.egov.pt.calculator.web.models.demand.*;
 import org.egov.pt.calculator.web.models.property.OwnerInfo;
 import org.egov.pt.calculator.web.models.property.Property;
@@ -257,6 +257,7 @@ public class DemandService {
 			// 	throw new CustomException(EMPTY_DEMAND_ERROR_CODE,
 			// 			"No demand found for the consumerCode: " + consumerCode);
 
+			for(Demand demand : demands){
 			if (demand.getStatus() != null
 					&& DEMAND_CANCELLED_STATUS.equalsIgnoreCase(demand.getStatus().toString()))
 				throw new CustomException(EG_PT_INVALID_DEMAND_ERROR,
@@ -267,7 +268,7 @@ public class DemandService {
 			roundOffDecimalForDemand(demand, requestInfoWrapper);
 
 			demandsToBeUpdated.add(demand);
-
+			}
 		}
 
 
@@ -326,7 +327,7 @@ public class DemandService {
 
 		if (BigDecimal.ZERO.compareTo(carryForward) > 0 || !cancelDemand) return carryForward;
 		
-		demand.setStatus(Demand.StatusEnum.CANCELLED);
+		demand.setStatus(Demand.DemandStatusEnum.CANCELLED);
 		DemandRequest request = DemandRequest.builder().demands(Arrays.asList(demand)).requestInfo(requestInfo).build();
 		StringBuilder updateDemandUrl = utils.getUpdateDemandUrl();
 		repository.fetchResult(updateDemandUrl, request);
@@ -378,10 +379,18 @@ public class DemandService {
 		String propertyType = detail.getPropertyType();
 		String consumerCode = property.getPropertyId();
 		OwnerInfo owner = null;
-		if (null != detail.getCitizenInfo())
+
+		for(OwnerInfo ownerInfo : detail.getOwners()){
+			if(ownerInfo.getStatus().toString().equalsIgnoreCase(OwnerInfo.OwnerStatus.ACTIVE.toString())){
+				owner = ownerInfo;
+				break;
+			}
+		}	
+
+		/*if (null != detail.getCitizenInfo())
 			owner = detail.getCitizenInfo();
 		else
-			owner = detail.getOwners().iterator().next();
+			owner = detail.getOwners().iterator().next();*/
 		
 	   // Demand demand = utils.getLatestDemandForCurrentFinancialYear(requestInfo, property);
 
@@ -391,7 +400,7 @@ public class DemandService {
 
 		return Demand.builder().tenantId(tenantId).businessService(configs.getPtModuleCode()).consumerType(propertyType)
 				.consumerCode(consumerCode).payer(owner.toCommonUser()).taxPeriodFrom(calculation.getFromDate())
-				.taxPeriodTo(calculation.getToDate()).status(Demand.StatusEnum.ACTIVE)
+				.taxPeriodTo(calculation.getToDate()).status(Demand.DemandStatusEnum.ACTIVE)
 				.minimumAmountPayable(BigDecimal.valueOf(configs.getPtMinAmountPayable())).demandDetails(details)
 				.build();
 	}

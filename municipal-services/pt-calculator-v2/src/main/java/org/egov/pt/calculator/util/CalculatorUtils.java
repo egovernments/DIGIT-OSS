@@ -58,16 +58,15 @@ import org.egov.pt.calculator.web.models.DemandSearchCriteria;
 import org.egov.pt.calculator.web.models.GetBillCriteria;
 import org.egov.pt.calculator.web.models.ReceiptSearchCriteria;
 import org.egov.pt.calculator.web.models.collections.Payment;
-import org.egov.pt.calculator.web.models.collections.PaymentSearchCriteria;
-import org.egov.pt.calculator.web.models.demand.BillAccountDetail;
-import org.egov.pt.calculator.web.models.demand.Demand;
-import org.egov.pt.calculator.web.models.demand.DemandDetail;
-import org.egov.pt.calculator.web.models.demand.DemandResponse;
-import org.egov.pt.calculator.web.models.demand.TaxPeriod;
+import org.egov.pt.calculator.web.models.collections.PaymentDetail;
+import org.egov.pt.calculator.web.models.demand.*;
 import org.egov.pt.calculator.web.models.property.AuditDetails;
 import org.egov.pt.calculator.web.models.property.OwnerInfo;
+import org.egov.pt.calculator.web.models.property.Property;
 import org.egov.pt.calculator.web.models.property.PropertyRequest;
+import org.egov.pt.calculator.web.models.property.PropertyResponse;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -597,30 +596,33 @@ public class CalculatorUtils {
      * @param payment
      * @return
      */
-    public BigDecimal getTaxAmtFromPaymentForApplicablesGeneration(Payment payment,TaxPeriod taxPeriod) {
+    public BigDecimal getTaxAmtFromPaymentForApplicablesGeneration(Payment payment, TaxPeriod taxPeriod) {
         BigDecimal taxAmt = BigDecimal.ZERO;
         BigDecimal amtPaid = BigDecimal.ZERO;
 
         List<BillAccountDetail> billAccountDetails = new LinkedList<>();
+        if(payment!=null) {
+            payment.getPaymentDetails().forEach(paymentDetail -> {
+                if (paymentDetail.getBusinessService().equalsIgnoreCase(SERVICE_FIELD_VALUE_PT)) {
+                    paymentDetail.getBill().getBillDetails().forEach(billDetail -> {
+                        if (billDetail.getFromPeriod().equals(taxPeriod.getFromDate())
+                                && billDetail.getToPeriod().equals(taxPeriod.getToDate())) {
+                            billAccountDetails.addAll(billDetail.getBillAccountDetails());
+                        }
+                    });
+                }
+            });
 
-        payment.getPaymentDetails().forEach(paymentDetail -> {
-            if(paymentDetail.getBusinessService().equalsIgnoreCase(SERVICE_FIELD_VALUE_PT)) {
-                paymentDetail.getBill().getBillDetails().forEach(billDetail -> {
-                    if (billDetail.getFromPeriod() == taxPeriod.getFromDate() && billDetail.getToPeriod() == taxPeriod.getToDate()) {
-                        billAccountDetails.addAll(billDetail.getBillAccountDetails());
-                    }
-                });
+            for (BillAccountDetail detail : billAccountDetails) {
+                if (TAXES_TO_BE_CONSIDERD.contains(detail.getTaxHeadCode())) {
+                    taxAmt = taxAmt.add(detail.getAmount());
+                    amtPaid = amtPaid.add(detail.getAdjustedAmount());
+                }
             }
-        });
-
-
-        for (BillAccountDetail detail : billAccountDetails) {
-            if (TAXES_TO_BE_CONSIDERD.contains(detail.getTaxHeadCode())) {
-                taxAmt = taxAmt.add(detail.getAmount());
-                amtPaid = amtPaid.add(detail.getAdjustedAmount());
-            }
+            return taxAmt.subtract(amtPaid);
+        }else {
+            return BigDecimal.ZERO;
         }
-        return taxAmt.subtract(amtPaid);
     }
 
 
@@ -741,6 +743,49 @@ public class CalculatorUtils {
 		}
 
 		return null;
+
+    /**
+     * Call PT-services to get Property object for the given applicationNumber and tenantID
+     * @param requestInfo The RequestInfo of the incoming request
+     * @param applicationNumber The applicationNumber whose Property details has to be fetched
+     * @param tenantId The tenantId of the property
+     * @return The property details for the particular applicationNumber
+     */
+    public List<Property> getProperty(RequestInfo requestInfo, String applicationNumber, String tenantId){
+        String url = getPropertySearchURL();
+        url = url.replace("{1}",tenantId).replace("{2}",applicationNumber);
+
+        Object result =repository.fetchResult(new StringBuilder(url),RequestInfoWrapper.builder().
+                requestInfo(requestInfo).build());
+
+        PropertyResponse response =null;
+        try {
+            response = mapper.convertValue(result,PropertyResponse.class);
+        }
+        catch (IllegalArgumentException e){
+            throw new CustomException("PARSING ERROR","Error while parsing response of TradeLicense Search");
+        }
+
+        if(response==null || CollectionUtils.isEmpty(response.getProperties()))
+            return null;
+
+        return response.getProperties();
+    }
+
+    /**
+     * Creates PT search url based on tenantId and applicationNumber
+     * @return PT search url
+     */
+    private String getPropertySearchURL(){
+        StringBuilder url = new StringBuilder(configurations.getPtHost());
+        url.append(configurations.getPtSearchEndpoint());
+        url.append("?");
+        url.append("tenantId=");
+        url.append("{1}");
+        url.append("&");
+        url.append("applicationNumber=");
+        url.append("{2}");
+        return url.toString();
 	}
 	
 	 public User getCommonContractUser(OwnerInfo owner){
@@ -798,4 +843,21 @@ public class CalculatorUtils {
 
 	        return mainNode;
 	    }
+    public Boolean isTaxPeriodAvaialble(Payment payment, TaxPeriod taxPeriod) {
+        Boolean isTaxPeriodPresent = false;
+        if (payment == null)
+            return false;
+        for (PaymentDetail paymentDetail : payment.getPaymentDetails()) {
+            if (paymentDetail.getBusinessService().equalsIgnoreCase(SERVICE_FIELD_VALUE_PT)) {
+                for (BillDetail billDetail : paymentDetail.getBill().getBillDetails()) {
+                    if (billDetail.getFromPeriod().equals(taxPeriod.getFromDate())
+                            && billDetail.getToPeriod().equals(taxPeriod.getToDate())) {
+                        isTaxPeriodPresent = true;
+                    }
+                }
+            }
+        }
+        return isTaxPeriodPresent;
+    }
+
 }

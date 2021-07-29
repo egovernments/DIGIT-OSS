@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
@@ -19,6 +21,7 @@ import org.egov.pt.web.models.PropertyCriteria;
 import org.egov.pt.web.models.PropertyDetail;
 import org.egov.pt.web.models.PropertyRequest;
 import org.egov.pt.web.models.SMSRequest;
+import org.egov.pt.web.models.ShortenRequest;
 import org.egov.pt.web.models.collection.Bill;
 import org.egov.pt.web.models.collection.Payment;
 import org.egov.pt.web.models.collection.PaymentDetail;
@@ -62,28 +65,54 @@ public class PaymentNotificationService {
     private ObjectMapper mapper;
 
     /**
-     * Generates message from the received object and sends SMSRequest to kafka queue
-     * @param record The Object received from kafka topic
-     * @param topic The topic name from which Object is received
+	 * Generates message from the received object and sends SMSRequest to kafka
+	 * queue
+	 * 
+	 * @param record
+	 *            The Object received from kafka topic
+	 * @param topic
+	 *            The topic name from which Object is received
      */
     public void process(HashMap<String, Object> record,String topic){
+
+		if (null == propertyConfiguration.getIsSMSNotificationEnabled())
+			propertyConfiguration.setIsSMSNotificationEnabled(true);
+
+		if (propertyConfiguration.getIsSMSNotificationEnabled()) {
 
         try{
             String jsonString = new JSONObject(record).toString();
             DocumentContext documentContext = JsonPath.parse(jsonString);
             RequestInfo requestInfo = mapper.convertValue(record.get("RequestInfo"),RequestInfo.class);
-        //    if(requestInfo==null)
 
-            List<Map<String,String>> valMaps = new LinkedList<>();
+				List<Map<String, String>> valMaps = new LinkedList<>();
 
-            if(topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()))
-                valMaps.addAll(getValuesFromPayment(record));
-            else
-                valMaps.add(getValuesFromTransaction(documentContext));
-
-            if(topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()) &&
-                    CollectionUtils.isEmpty(valMaps) || !valMaps.get(0).get("module").equalsIgnoreCase("PT"))
+				if (topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic())) {
+					valMaps.addAll(getValuesFromPayment(record));
+				}
+				else {
+					valMaps.add(getValuesFromTransaction(documentContext));
+				}
+				
+				if(!CollectionUtils.isEmpty(valMaps)) {
+					if(topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()) && null != valMaps.get(0).get("module")) {
+						if(!valMaps.get(0).get("module").equals(BUSINESSSERVICE_CODE)) {
                 return;
+						}
+					}else if(topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()) && null != valMaps.get(0).get("moduleId")) {
+						if(!valMaps.get(0).get("moduleId").contains(BUSINESSSERVICE_CODE)) {
+							return;
+						}
+					}else {
+						return;
+					}
+				}else {
+					return;
+				}
+
+				for (Map<String, String> valMap : valMaps) {
+
+					List<String> mobileNumbers = new LinkedList<>();
 
 
             for(Map<String,String> valMap : valMaps) {
@@ -95,23 +124,24 @@ public class PaymentNotificationService {
                 addUserNumber(topic, requestInfo, valMap, mobileNumbers);
                 valMap.put("financialYear", propertyAttributes.get("financialYear").get(0));
                 valMap.put("oldPropertyId", propertyAttributes.get("oldPropertyId").get(0));
-
-
                 StringBuilder uri = util.getUri(valMap.get("tenantId"), requestInfo);
                 LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, requestInfo);
                 String messagejson = new JSONObject(responseMap).toString();
                 List<SMSRequest> smsRequests = new ArrayList<>();
                 String customMessage = null;
-                if (topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()) ||
-                        (topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()) && "FAILURE".equalsIgnoreCase(valMap.get("txnStatus")))) {
+					if (topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic())
+							|| (topic.equalsIgnoreCase(propertyConfiguration.getPgTopic())
+									&& "FAILURE".equalsIgnoreCase(valMap.get("txnStatus")))) {
                     String path = getJsonPath(topic, valMap);
                     Object messageObj = JsonPath.parse(messagejson).read(path);
                     String message = ((ArrayList<String>) messageObj).get(0);
                     customMessage = getCustomizedMessage(valMap, message, path);
-                    smsRequests = getSMSRequests(mobileNumbers, customMessage);
+						smsRequests = getSMSRequests(mobileNumbers, customMessage, valMap);
                 }
-                if (valMap.get("oldPropertyId") == null && topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()))
-                    smsRequests.addAll(addOldpropertyIdAbsentSMS(messagejson, valMap, mobileNumbers));
+					/*if (valMap.get("oldPropertyId") == null
+							&& topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()))
+						smsRequests.addAll(addOldpropertyIdAbsentSMS(messagejson, valMap, mobileNumbers));*/
+					if (!CollectionUtils.isEmpty(smsRequests)) {
                 sendSMS(smsRequests);
                 if (null == propertyConfiguration.getIsUserEventsNotificationEnabled())
                     propertyConfiguration.setIsUserEventsNotificationEnabled(true);
@@ -123,10 +153,15 @@ public class PaymentNotificationService {
 
 
         }
-        catch(Exception e)
-        {throw new CustomException("LOCALIZATION ERROR","Unable to get message from localization");}
     }
-    
+			} catch (Exception e) {
+				log.error("Exception: ", e);
+				throw new CustomException("LOCALIZATION ERROR", "Unable to get message from localization");
+			}
+		} else {
+			log.info("SMS Notifications have been disabled.");
+		}
+	}
     
     /**
      * Prepares event to be sent to the user as notification and sends it.
@@ -136,31 +171,32 @@ public class PaymentNotificationService {
      * @param smsRequests
      * @param valMap
      */
-    public void sendEventNotification(RequestInfo requestInfo, String customMessage, List<SMSRequest> smsRequests, Map<String,String> valMap) {
+	public void sendEventNotification(RequestInfo requestInfo, String customMessage, List<SMSRequest> smsRequests,
+			Map<String, String> valMap) {
     	List<Event> events = new ArrayList<>();
-    	Set<String> listOfMobileNumber = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
+		Set<String> listOfMobileNumber = smsRequests.stream().map(SMSRequest::getMobileNumber)
+				.collect(Collectors.toSet());
     	PropertyRequest request = null;
     	List<Property> properties = new ArrayList<>();
     	List<PropertyDetail> propertyDetails = new ArrayList<>();
     	PropertyDetail detail = PropertyDetail.builder().assessmentNumber(valMap.get("assessmentNumber"))
     			.financialYear(valMap.get("financialYear")).build();
     	propertyDetails.add(detail);
-    	Property property = new Property().builder().propertyId(valMap.get("propertyId")).tenantId(valMap.get("tenantId"))
-    			.propertyDetails(propertyDetails).build();
+		Property property = new Property().builder().propertyId(valMap.get("propertyId"))
+				.tenantId(valMap.get("tenantId")).propertyDetails(propertyDetails).build();
     	properties.add(property);
     	request = PropertyRequest.builder().requestInfo(requestInfo).properties(properties).build();
     			
-    	List<Event> eventsForAProperty = notificationService.getEvents(listOfMobileNumber, customMessage, request, true);
+		List<Event> eventsForAProperty = notificationService.getEvents(listOfMobileNumber, customMessage, request,
+				true);
     	if(!CollectionUtils.isEmpty(eventsForAProperty)) {
             events.addAll(eventsForAProperty);
     	}
     	if(!CollectionUtils.isEmpty(events)) {
     		Role role = new Role();
-    		List<Role> roles = new ArrayList<>(); roles.add(role);
-            User user = User.builder()
-            		.tenantId("tenantId")
-            		.uuid("uuid")
-            		.roles(roles).build();
+			List<Role> roles = new ArrayList<>();
+			roles.add(role);
+			User user = User.builder().tenantId("tenantId").uuid("uuid").roles(roles).build();
             requestInfo.setUserInfo(user);
         	EventRequest eventRequest = EventRequest.builder().requestInfo(requestInfo).events(events).build();
         	notificationService.sendEventNotification(eventRequest);
@@ -170,24 +206,30 @@ public class PaymentNotificationService {
 
     /**
      * Generate and returns SMSRequest if oldPropertyId is not present
-     * @param messagejson The list of messages received from localization
-     * @param valMap The map containing all the values as key,value pairs
-     * @param mobileNumbers The list of mobileNumbers to which sms are to be sent
+	 * 
+	 * @param messagejson
+	 *            The list of messages received from localization
+	 * @param valMap
+	 *            The map containing all the values as key,value pairs
+	 * @param mobileNumbers
+	 *            The list of mobileNumbers to which sms are to be sent
      * @return List of SMS request to be sent
      */
-    private List<SMSRequest> addOldpropertyIdAbsentSMS(String messagejson,Map<String,String> valMap,List<String> mobileNumbers){
+	private List<SMSRequest> addOldpropertyIdAbsentSMS(String messagejson, Map<String, String> valMap,
+			List<String> mobileNumbers) {
         String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}",PTConstants.NOTIFICATION_OLDPROPERTYID_ABSENT);
         Object messageObj = JsonPath.parse(messagejson).read(path);
         String message = ((ArrayList<String>)messageObj).get(0);
         String customMessage = getCustomizedOldPropertyIdAbsentMessage(message,valMap);
-        return getSMSRequests(mobileNumbers,customMessage);
+		return getSMSRequests(mobileNumbers, customMessage, valMap);
     }
-
 
     /**
      * Returns the map of the values required from the record
-     * @param documentContext The DocumentContext of the record Object
+	 * 
+	 * @param documentContext
+	 *            The DocumentContext of the record Object
      * @return The required values as key,value pair
      */
     private Map<String,String> getValuesFromReceipt(DocumentContext documentContext){
@@ -195,10 +237,9 @@ public class PaymentNotificationService {
         String consumerCode,transactionId,paymentMode,tenantId,mobileNumber,module;
         Map<String,String> valMap = new HashMap<>();
 
-
-
         try{
-            totalAmount = new BigDecimal((Integer)documentContext.read("$.Receipt[0].Bill[0].billDetails[0].totalAmount"));
+			totalAmount = new BigDecimal(
+					(Integer) documentContext.read("$.Receipt[0].Bill[0].billDetails[0].totalAmount"));
             valMap.put("totalAmount",totalAmount.toString());
 
             amountPaid = new BigDecimal((Integer)documentContext.read("$.Receipt[0].instrument.amount"));
@@ -224,9 +265,7 @@ public class PaymentNotificationService {
 
             module = documentContext.read("$.Receipt[0].Bill[0].billDetails[0].businessService");
             valMap.put("module",module);
-        }
-        catch (Exception e)
-        {
+		} catch (Exception e) {
             throw new CustomException("PARSING ERROR","Failed to fetch values from the Receipt Object");
         }
 
@@ -288,7 +327,60 @@ public class PaymentNotificationService {
 
     /**
      * Returns the map of the values required from the record
-     * @param documentContext The DocumentContext of the record Object
+	 * 
+	 * @return The required values as key,value pair
+	 */
+	private List<Map<String, String>> getValuesFromPayment(HashMap<String, Object> record) {
+		BigDecimal totalAmount, amountPaid;
+		String consumerCode, transactionId, paymentMode, tenantId, mobileNumber, module;
+		Map<String, String> valMap = new HashMap<>();
+		PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
+		Payment payment = paymentRequest.getPayment();
+
+		List<Map<String, String>> listOfValMap = new LinkedList<>();
+
+		for (PaymentDetail paymentDetail : payment.getPaymentDetails()) {
+			if (paymentDetail.getBill().getBusinessService().equalsIgnoreCase(BUSINESSSERVICE_CODE)) {
+				Bill bill = paymentDetail.getBill();
+
+				totalAmount = bill.getTotalAmount();
+				valMap.put("totalAmount", totalAmount.toString());
+
+				amountPaid = bill.getAmountPaid();
+				valMap.put("amountPaid", amountPaid.toString());
+				valMap.put("amountDue", totalAmount.subtract(amountPaid).toString());
+
+				consumerCode = bill.getConsumerCode();
+				valMap.put("consumerCode", consumerCode);
+				valMap.put("propertyId", consumerCode);
+
+				transactionId = payment.getTransactionNumber();
+				valMap.put("transactionId", transactionId);
+
+				paymentMode = payment.getPaymentMode();
+				valMap.put("paymentMode", paymentMode);
+
+				tenantId = payment.getTenantId();
+				valMap.put("tenantId", tenantId);
+
+				mobileNumber = bill.getMobileNumber();
+				valMap.put("mobileNumber", mobileNumber);
+
+				module = bill.getBusinessService();
+				valMap.put("module", module);
+
+				listOfValMap.add(valMap);
+			}
+		}
+
+		return listOfValMap;
+	}
+
+	/**
+	 * Returns the map of the values required from the record
+	 * 
+	 * @param documentContext
+	 *            The DocumentContext of the record Object
      * @return The required values as key,value pair
      */
     private Map<String,String> getValuesFromTransaction(DocumentContext documentContext){
@@ -313,11 +405,11 @@ public class PaymentNotificationService {
             mobileNumber = documentContext.read("$.Transaction.user.mobileNumber");
             valMap.put("mobileNumber",mobileNumber);
 
-//            module = documentContext.read("$.Transaction.taxAndPayments[0].businessService");
-//            valMap.put("module",module);
-        }
-        catch (Exception e)
-        {   log.error("Transaction Object Parsing: ",e);
+			// module =
+			// documentContext.read("$.Transaction.taxAndPayments[0].businessService");
+			// valMap.put("module",module);
+		} catch (Exception e) {
+			log.error("Transaction Object Parsing: ", e);
             throw new CustomException("PARSING ERROR","Failed to fetch values from the Transaction Object");
         }
 
@@ -326,8 +418,11 @@ public class PaymentNotificationService {
 
     /**
      * Searches the property and extracts the needed values in map
-     * @param valMap The map of the required values
-     * @param requestInfo The requestInfo of the propertyRequest
+	 * 
+	 * @param valMap
+	 *            The map of the required values
+	 * @param requestInfo
+	 *            The requestInfo of the propertyRequest
      * @return Map of required values fetched from the property
      */
     private Map<String,List<String>> getPropertyAttributes(Map<String,String> valMap, RequestInfo requestInfo){
@@ -337,7 +432,8 @@ public class PaymentNotificationService {
         List<Property> properties = propertyService.getPropertiesWithOwnerInfo(propertyCriteria,requestInfo);
 
         if(CollectionUtils.isEmpty(properties))
-            throw new CustomException("ASSESSMENT NOT FOUND","The assessment for the given consumer code is not available");
+			throw new CustomException("ASSESSMENT NOT FOUND",
+					"The assessment for the given consumer code is not available");
 
         // Extracting all the mobileNumbers to which notification be sent
         Set<String> mobileNumbers = new HashSet<>();
@@ -362,24 +458,32 @@ public class PaymentNotificationService {
 
     /**
      * Adds MobileNumber of logged in user
-     * @param topic topic from which listening
-     * @param requestInfo RequestInfo of the request
-     * @param valMap The map of the required values
-     * @param mobileNumbers The list of mobileNumbers of owner of properties
+	 * 
+	 * @param topic
+	 *            topic from which listening
+	 * @param requestInfo
+	 *            RequestInfo of the request
+	 * @param valMap
+	 *            The map of the required values
+	 * @param mobileNumbers
+	 *            The list of mobileNumbers of owner of properties
      */
-     private void addUserNumber(String topic,RequestInfo requestInfo,Map<String,String> valMap,List<String> mobileNumbers)
-     {
+	private void addUserNumber(String topic, RequestInfo requestInfo, Map<String, String> valMap,
+			List<String> mobileNumbers) {
          // If the requestInfo is of citizen add citizen's MobileNumber
          if((topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic())
-                 || topic.equalsIgnoreCase(propertyConfiguration.getPgTopic())) && !mobileNumbers.contains(valMap.get("mobileNumber")))
+				|| topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()))
+				&& !mobileNumbers.contains(valMap.get("mobileNumber")))
              mobileNumbers.add(valMap.get("mobileNumber"));
      }
 
-
     /**
      *  Returns the jsonPath
-     * @param topic The topic name from which object is received
-     * @param valMap The map of the required values
+	 * 
+	 * @param topic
+	 *            The topic name from which object is received
+	 * @param valMap
+	 *            The map of the required values
      * @return  The jsonPath
      */
     private String getJsonPath(String topic,Map<String,String> valMap){
@@ -399,9 +503,13 @@ public class PaymentNotificationService {
 
     /**
      * Returns customized message for
-     * @param valMap The map of the required values
-     * @param message The message template from localization
-     * @param path The json path used to fetch message
+	 * 
+	 * @param valMap
+	 *            The map of the required values
+	 * @param message
+	 *            The message template from localization
+	 * @param path
+	 *            The json path used to fetch message
      * @return Customized message depending on values in valMap
      */
    private String getCustomizedMessage(Map<String,String> valMap,String message,String path){
@@ -418,8 +526,10 @@ public class PaymentNotificationService {
     }
 
     /**
-     * @param message The message template from localization
-     * @param valMap The map of the required values
+	 * @param message
+	 *            The message template from localization
+	 * @param valMap
+	 *            The map of the required values
      * @return Customized message depending on values in valMap
      */
    private String getCustomizedOnlinePaymentMessage(String message,Map<String,String> valMap){
@@ -427,29 +537,32 @@ public class PaymentNotificationService {
         message = message.replace("< insert payment transaction id from PG>",valMap.get("transactionId"));
         message = message.replace("<insert Property Tax Assessment ID>",valMap.get("propertyId"));
         message = message.replace("<pt due>.",valMap.get("amountDue"));
+		message = message.replace("<pay_link>", "$paylink");
    //     message = message.replace("<FY>",valMap.get("financialYear"));
         return message;
    }
 
-
     /**
-     * @param message The message template from localization
-     * @param valMap The map of the required values
+	 * @param message
+	 *            The message template from localization
+	 * @param valMap
+	 *            The map of the required values
      * @return Customized message depending on values in valMap
      */
    private String getCustomizedOfflinePaymentMessage(String message,Map<String,String> valMap){
         message = message.replace("<amount>",valMap.get("amountPaid"));
         message = message.replace("<insert mode of payment>",valMap.get("paymentMode"));
         message = message.replace("<Enter pending amount>",valMap.get("amountDue"));
-        message = message.replace("<insert inactive citizen application web URL>.",propertyConfiguration.getNotificationURL());
+		message = message.replace("<pay_link>", "$paylink");
   //      message = message.replace("<Insert FY>",valMap.get("financialYear"));
         return message;
     }
 
-
     /**
-     * @param message The message template from localization
-     * @param valMap The map of the required values
+	 * @param message
+	 *            The message template from localization
+	 * @param valMap
+	 *            The map of the required values
      * @return Customized message depending on values in valMap
      */
    private String getCustomizedPaymentFailMessage(String message,Map<String,String> valMap){
@@ -459,10 +572,11 @@ public class PaymentNotificationService {
         return message;
    }
 
-
     /**
-     * @param message The message template from localization
-     * @param valMap The map of the required values
+	 * @param message
+	 *            The message template from localization
+	 * @param valMap
+	 *            The map of the required values
      * @return Customized message depending on values in valMap
      */
    private String getCustomizedOldPropertyIdAbsentMessage(String message,Map<String,String> valMap){
@@ -471,38 +585,75 @@ public class PaymentNotificationService {
         return  message;
    }
 
-
     /**
      * Creates SMSRequest for the given mobileNumber with the given message
-     * @param mobileNumbers The set of mobileNumber for which SMSRequest has to be created
-     * @param customizedMessage The message to sent
+	 * 
+	 * @param mobileNumbers
+	 *            The set of mobileNumber for which SMSRequest has to be created
+	 * @param customizedMessage
+	 *            The message to sent
      * @return List of SMSRequest
      */
-    private List<SMSRequest> getSMSRequests(List<String> mobileNumbers, String customizedMessage){
+	private List<SMSRequest> getSMSRequests(List<String> mobileNumbers, String customizedMessage,
+			Map<String, String> valMap) {
         List<SMSRequest> smsRequests = new ArrayList<>();
-        mobileNumbers.forEach(mobileNumber-> {
-            if(mobileNumber!=null)
-            {
-                SMSRequest smsRequest = new SMSRequest(mobileNumber,customizedMessage);
+		for (String mobileNumber : mobileNumbers) {
+			log.info("mobNo: " + mobileNumber);
+			if (!StringUtils.isEmpty(mobileNumber)) {
+				String message = customizedMessage;
+				if (null != valMap.get("amountDue")) {
+					if (Double.valueOf(valMap.get("amountDue")) > 0) {
+						String link = propertyConfiguration.getPayLink()
+								.replace("$consumerCode", valMap.get("propertyId"))
+								.replace("$tenantId", valMap.get("tenantId")).replace("$mobile", mobileNumber);
+						link = propertyConfiguration.getUiAppHost() + link;
+						link = getShortenedURL(link);
+						message = message.replace("$paylink", "You can pay your Property Tax online here - " + link);
+					} else {
+						message = message.replace("$paylink", "");
+					}
+				}
+				SMSRequest smsRequest = new SMSRequest(mobileNumber, message);
+				log.info("smsRequests: " + smsRequests);
+
                 smsRequests.add(smsRequest);
             }
-        });
+		}
+
         return smsRequests;
     }
 
     /**
      * Send the SMSRequest on the SMSNotification kafka topic
-     * @param smsRequestList The list of SMSRequest to be sent
+	 * 
+	 * @param smsRequestList
+	 *            The list of SMSRequest to be sent
      */
     private void sendSMS(List<SMSRequest> smsRequestList){
-        if (propertyConfiguration.getIsSMSNotificationEnabled()) {
-            if (CollectionUtils.isEmpty(smsRequestList))
-                log.error("Messages from localization couldn't be fetched!");
+		log.info("Sending SMS.....");
             for(SMSRequest smsRequest: smsRequestList) {
                 producer.push(propertyConfiguration.getSmsNotifTopic(), smsRequest);
                 log.info(smsRequest.toString());
+		}
+	}
+
+	private String getShortenedURL(String longURL) {
+		ShortenRequest shortenRequest = ShortenRequest.builder().url(longURL).build();
+		StringBuilder uri = new StringBuilder();
+		uri.append(propertyConfiguration.getShortenerHost()).append(propertyConfiguration.getShortenerEndpoint());
+		String shortenedURL = null;
+		try {
+			shortenedURL = serviceRequestRepository.getShortenedURL(uri, shortenRequest);
+			if (StringUtils.isEmpty(shortenedURL)) {
+				log.info("Shortened URL generation failed.");
+				shortenedURL = longURL;
             }
+		} catch (Exception e) {
+			log.error("Shortened URL generation failed: ", e);
+			shortenedURL = longURL;
         }
+
+		return shortenedURL;
     }
 
 }

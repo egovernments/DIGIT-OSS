@@ -15,6 +15,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
+import static org.egov.tl.util.TLConstants.businessService_BPA;
+import static org.egov.tl.util.TLConstants.businessService_TL;
+
 
 @Component
 @Slf4j
@@ -61,55 +64,70 @@ public class MDMSValidator {
 
         licenseRequest.getLicenses().forEach(license -> {
 
-            if(!masterData.get(TLConstants.OWNERSHIP_CATEGORY)
-                    .contains(license.getTradeLicenseDetail().getSubOwnerShipCategory()))
-                errorMap.put("INVALID OWNERSHIPCATEGORY", "The SubOwnerShipCategory '"
-                        + license.getTradeLicenseDetail().getSubOwnerShipCategory() + "' does not exists");
+            String businessService = license.getBusinessService();
+            if (businessService == null)
+                businessService = businessService_TL;
+            switch(businessService)
+            {
+                case businessService_TL:
+                    if(!masterData.get(TLConstants.OWNERSHIP_CATEGORY)
+                            .contains(license.getTradeLicenseDetail().getSubOwnerShipCategory()))
+                        errorMap.put("INVALID OWNERSHIPCATEGORY", "The SubOwnerShipCategory '"
+                                + license.getTradeLicenseDetail().getSubOwnerShipCategory() + "' does not exists");
 
-            if(!masterData.get(TLConstants.STRUCTURE_TYPE).
-                    contains(license.getTradeLicenseDetail().getStructureType()))
-                errorMap.put("INVALID STRUCTURETYPE", "The structureType '"
-                        + license.getTradeLicenseDetail().getStructureType() + "' does not exists");
+                    if(!masterData.get(TLConstants.STRUCTURE_TYPE).
+                            contains(license.getTradeLicenseDetail().getStructureType()))
+                        errorMap.put("INVALID STRUCTURETYPE", "The structureType '"
+                                + license.getTradeLicenseDetail().getStructureType() + "' does not exists");
 
-               license.getTradeLicenseDetail().getTradeUnits().forEach(unit -> {
-                   if (!tradeTypeUomMap.containsKey(unit.getTradeType()))
-                    errorMap.put("INVALID TRADETYPE", "The Trade type '" + unit.getTradeType() + "' does not exists");
+                    license.getTradeLicenseDetail().getTradeUnits().forEach(unit -> {
+                        if (!tradeTypeUomMap.containsKey(unit.getTradeType()))
+                            errorMap.put("INVALID TRADETYPE", "The Trade type '" + unit.getTradeType() + "' does not exists");
 
-                    if(unit.getUom()!=null){
-                       if(!unit.getUom().equalsIgnoreCase(tradeTypeUomMap.get(unit.getTradeType())))
-                           errorMap.put("INVALID UOM","The UOM: "+unit.getUom()+" is not valid for tradeType: "+unit.getTradeType());
-                       else if(unit.getUom().equalsIgnoreCase(tradeTypeUomMap.get(unit.getTradeType()))
-                               && unit.getUomValue()==null)
-                           throw new CustomException("INVALID UOMVALUE","The uomValue cannot be null");
-                   }
-
-                   else if(unit.getUom()==null){
-                       if(tradeTypeUomMap.get(unit.getTradeType())!=null)
-                           errorMap.put("INVALID UOM","The UOM cannot be null for tradeType: "+unit.getTradeType());
-                   }
-                });
-
-               if(!CollectionUtils.isEmpty(license.getTradeLicenseDetail().getAccessories())){
-                    license.getTradeLicenseDetail().getAccessories().forEach(accessory -> {
-                        if (!accessoryeUomMap.containsKey(accessory.getAccessoryCategory()))
-                            errorMap.put("INVALID ACCESORRYCATEGORY",
-                                    "The Accessory Category '" + accessory.getAccessoryCategory() + "' does not exists");
-
-                         if(accessory.getUom()!=null){
-                            if(!accessory.getUom().equalsIgnoreCase(accessoryeUomMap.get(accessory.getAccessoryCategory())))
-                                errorMap.put("INVALID UOM","The UOM: "+accessory.getUom()+" is not valid for accessoryCategory: "
-                                        +accessory.getAccessoryCategory());
-                            else if(accessory.getUom().equalsIgnoreCase(accessoryeUomMap.get(accessory.getAccessoryCategory()))
-                                    && accessory.getUomValue()==null)
+                        if(unit.getUom()!=null){
+                            if(!unit.getUom().equalsIgnoreCase(tradeTypeUomMap.get(unit.getTradeType())))
+                                errorMap.put("INVALID UOM","The UOM: "+unit.getUom()+" is not valid for tradeType: "+unit.getTradeType());
+                            else if(unit.getUom().equalsIgnoreCase(tradeTypeUomMap.get(unit.getTradeType()))
+                                    && unit.getUomValue()==null)
                                 throw new CustomException("INVALID UOMVALUE","The uomValue cannot be null");
                         }
 
-                        else if(accessory.getUom()==null){
-                            if(accessoryeUomMap.get(accessory.getAccessoryCategory())!=null)
-                                errorMap.put("INVALID UOM","The UOM cannot be null for tradeType: "+accessory.getAccessoryCategory());
+                        else if(unit.getUom()==null){
+                            if(tradeTypeUomMap.get(unit.getTradeType())!=null)
+                                errorMap.put("INVALID UOM","The UOM cannot be null for tradeType: "+unit.getTradeType());
                         }
                     });
-               }
+
+                    if(!CollectionUtils.isEmpty(license.getTradeLicenseDetail().getAccessories())){
+                        license.getTradeLicenseDetail().getAccessories().forEach(accessory -> {
+                            if (!accessoryeUomMap.containsKey(accessory.getAccessoryCategory()))
+                                errorMap.put("INVALID ACCESORRYCATEGORY",
+                                        "The Accessory Category '" + accessory.getAccessoryCategory() + "' does not exists");
+
+                            if(accessory.getUom()!=null){
+                                if(!accessory.getUom().equalsIgnoreCase(accessoryeUomMap.get(accessory.getAccessoryCategory())))
+                                    errorMap.put("INVALID UOM","The UOM: "+accessory.getUom()+" is not valid for accessoryCategory: "
+                                            +accessory.getAccessoryCategory());
+                                else if(accessory.getUom().equalsIgnoreCase(accessoryeUomMap.get(accessory.getAccessoryCategory()))
+                                        && accessory.getUomValue()==null)
+                                    throw new CustomException("INVALID UOMVALUE","The uomValue cannot be null");
+                            }
+
+                            else if(accessory.getUom()==null){
+                                if(accessoryeUomMap.get(accessory.getAccessoryCategory())!=null)
+                                    errorMap.put("INVALID UOM","The UOM cannot be null for tradeType: "+accessory.getAccessoryCategory());
+                            }
+                        });
+                    }
+                    break;
+
+                case businessService_BPA:
+                    license.getTradeLicenseDetail().getTradeUnits().forEach(unit -> {
+                        if (!tradeTypeUomMap.containsKey(unit.getTradeType()))
+                            errorMap.put("INVALID TRADETYPE", "The Trade type '" + unit.getTradeType() + "' does not exist");
+                    });
+                    break;
+            }
 
         });
 

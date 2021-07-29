@@ -26,10 +26,14 @@ import org.egov.pt.calculator.web.models.demand.DemandRequest;
 import org.egov.pt.calculator.web.models.property.Property;
 import org.egov.pt.calculator.web.models.property.PropertyDetail;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
+import org.egov.pt.calculator.web.models.propertyV2.PropertyV2;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import static org.egov.pt.calculator.util.CalculatorConstants.*;
+import static org.egov.pt.calculator.util.CalculatorConstants.PT_DOCDATE_NULL_MSG;
 
 @Service
 public class CalculationValidator {
@@ -66,6 +70,37 @@ public class CalculationValidator {
 	}
 
 	/**
+	 * validates for the required information needed to do for mutation calculation
+	 *
+	 * @param additionalDetails property additionalDetails
+	 */
+	public void validatePropertyForMutationCalculation (Map<String,Object> additionalDetails) {
+
+		Map<String, String> error = new HashMap<>();
+		if(additionalDetails == null){
+			error.put(PT_ADDITIONALNDETAILS_NULL,PT_ADDITIONALNDETAILS_NULL_MSG);
+			throw new CustomException(error);
+		}
+		if(!additionalDetails.containsKey(MARKET_VALUE) || additionalDetails.get(MARKET_VALUE)== null){
+			error.put(PT_MARKETVALUE_NULL,PT_MARKETVALUE_NULL_MSG);
+		}
+		else{
+			boolean numeric = true;
+			String marketValue = additionalDetails.get(MARKET_VALUE).toString();
+			numeric = marketValue.matches(NUMERIC_REGEX);
+			if(!numeric)
+				error.put(PT_MARKETVALUE_NULL,PT_MARKETVALUE_NULL_MSG);
+		}
+		if(!additionalDetails.containsKey(DOCUMENT_DATE) || additionalDetails.get(DOCUMENT_DATE) == null)
+			error.put(PT_DOCDATE_NULL,PT_DOCDATE_NULL_MSG);
+		if (!CollectionUtils.isEmpty(error))
+			throw new CustomException(error);
+	}
+
+
+
+
+	/**
 	 * Validates the GetBillCriteria
 	 * 
 	 * @param getBillCriteria The Bill generation criteria
@@ -90,8 +125,8 @@ public class CalculationValidator {
 	 * @param criteria
 	 * @return
 	 */
-	public void getCarryForwardAndCancelOldDemand(BigDecimal newTax, CalculationCriteria criteria,
-			RequestInfo requestInfo, Demand demand) {
+	public void getCarryForwardAndCancelOldDemand(BigDecimal newTax, CalculationCriteria criteria, RequestInfo requestInfo
+			, Demand demand) {
 
 		Property property = criteria.getProperty();
 
@@ -99,14 +134,11 @@ public class CalculationValidator {
 
 		Boolean isPTDepriciated = false;
 
-		if (null == property.getPropertyId())
-			return;
+		if(null == property.getPropertyId()) return ;
 
-		// Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo,
-		// property);
+		//	Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
 
-		if (null == demand)
-			return;
+		if(null == demand) return ;
 
 		for (DemandDetail detail : demand.getDemandDetails()) {
 			if (detail.getTaxHeadMasterCode().equalsIgnoreCase(CalculatorConstants.PT_TAX))
@@ -114,8 +146,7 @@ public class CalculationValidator {
 		}
 
 		if (oldTaxAmt.compareTo(newTax) > 0) {
-			boolean isDepreciationAllowed = utils.isAssessmentDepreciationAllowed(demand,
-					new RequestInfoWrapper(requestInfo));
+			boolean isDepreciationAllowed = utils.isAssessmentDepreciationAllowed(demand,new RequestInfoWrapper(requestInfo));
 			if (!isDepreciationAllowed)
 				isPTDepriciated = true;
 		}
@@ -126,17 +157,15 @@ public class CalculationValidator {
 
 	}
 
-	/**
-	 * Validates demand before update or create
-	 * 
+
+    /**
+     * Validates demand before update or create
 	 * @param demand Demand to be validated
 	 */
 	public void validationsBeforeDemandUpdate(Demand demand) {
 
-		BigDecimal totalTaxAmount = demand.getDemandDetails().stream().map(DemandDetail::getTaxAmount)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
-		BigDecimal totalCollectionAmount = demand.getDemandDetails().stream().map(DemandDetail::getCollectionAmount)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal totalTaxAmount = demand.getDemandDetails().stream().map(DemandDetail::getTaxAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
+        BigDecimal totalCollectionAmount = demand.getDemandDetails().stream().map(DemandDetail::getCollectionAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
 
 		Map<String, String> errorMap = new HashMap<>();
 
