@@ -4,12 +4,15 @@ import useInbox from "../useInbox"
 const useTLInbox = ({ tenantId, filters, config }) => {
 
     const {applicationStatus, mobileNumber, applicationNumber, sortBy, sortOrder, locality, uuid, limit, offset } = filters
+    const USER_UUID = Digit.UserService.getUser()?.info?.uuid;
+    
     const _filters = {
         tenantId,
 		processSearchCriteria: {
             moduleName: "tl-services",
 			businessService: ["NewTL", "DIRECTRENEWAL","EDITRENEWAL"],
-            ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {})
+            ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
+            ...(uuid && Object.keys(uuid).length > 0 ? {assignee: uuid.code === "ASSIGNED_TO_ME" ? USER_UUID : ""} : {}),
         },
 		moduleSearchCriteria: {
             ...(mobileNumber ? {mobileNumber}: {}),
@@ -17,7 +20,6 @@ const useTLInbox = ({ tenantId, filters, config }) => {
             ...(sortBy ? {sortBy} : {}),
             ...(sortOrder ? {sortOrder} : {}),
             ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
-            ...(uuid && Object.keys(uuid).length > 0 ? {assignedToMe: uuid.code === "ASSIGNED_TO_ME" ? true : ""} : {}),
         },
         limit,
         offset

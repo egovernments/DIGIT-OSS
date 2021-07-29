@@ -42,6 +42,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, ...prop
       }
     },{
       Header: t("TL_COMMON_TABLE_COL_APP_DATE"),
+      accessor: "date",
       Cell: ({ row }) => {
         const date = convertEpochToDateDMY(row.original.date);
         return GetCell(date)
