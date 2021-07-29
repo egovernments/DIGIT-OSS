@@ -133,10 +133,12 @@ public class InboxService {
 //			}
 			// Redirect request to searcher in case of PT to fetch acknowledgement IDS
 			Boolean isSearchResultEmpty = false;
+			List<String> businessKeys = new ArrayList<>();
 			if(!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(PT)) {
 				List<String> acknowledgementNumbers = ptInboxFilterService.fetchAcknowledgementIdsFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				if(!CollectionUtils.isEmpty(acknowledgementNumbers)) {
 					moduleSearchCriteria.put(ACKNOWLEDGEMENT_IDS_PARAM, acknowledgementNumbers);
+					businessKeys.addAll(acknowledgementNumbers);
 					moduleSearchCriteria.remove(LOCALITY_PARAM);
 					moduleSearchCriteria.remove(OFFSET_PARAM);
 					moduleSearchCriteria.remove(LIMIT_PARAM);
@@ -148,6 +150,7 @@ public class InboxService {
 				List<String> applicationNumbers = tlInboxFilterService.fetchApplicationNumbersFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				if(!CollectionUtils.isEmpty(applicationNumbers)) {
 					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
+					businessKeys.addAll(applicationNumbers);
 					moduleSearchCriteria.remove(LOCALITY_PARAM);
 					moduleSearchCriteria.remove(OFFSET_PARAM);
 					moduleSearchCriteria.remove(LIMIT_PARAM);
@@ -245,13 +248,21 @@ public class InboxService {
 			List<ProcessInstance> processInstances = processInstanceResponse.getProcessInstances();
 			Map<String, ProcessInstance> processInstanceMap = processInstances.stream().collect(  Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
 			if(businessObjects.length() >0 && processInstances.size() > 0) {
-				
-				businessMap.keySet().forEach(busiessKey ->{
-					Inbox inbox = new Inbox();
-					inbox.setProcessInstance(processInstanceMap.get(busiessKey));
-					inbox.setBusinessObject(toMap((JSONObject) businessMap.get(busiessKey)));
-					inboxes.add(inbox);
-				});
+				if(CollectionUtils.isEmpty(businessKeys)) {
+					businessMap.keySet().forEach(busiessKey -> {
+						Inbox inbox = new Inbox();
+						inbox.setProcessInstance(processInstanceMap.get(busiessKey));
+						inbox.setBusinessObject(toMap((JSONObject) businessMap.get(busiessKey)));
+						inboxes.add(inbox);
+					});
+				}else{
+					businessKeys.forEach(busiessKey -> {
+						Inbox inbox = new Inbox();
+						inbox.setProcessInstance(processInstanceMap.get(busiessKey));
+						inbox.setBusinessObject(toMap((JSONObject) businessMap.get(busiessKey)));
+						inboxes.add(inbox);
+					});
+				}
 			}
 		}else {
 			processCriteria.setOffset(criteria.getOffset());
