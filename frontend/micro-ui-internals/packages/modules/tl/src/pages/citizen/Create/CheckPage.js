@@ -14,7 +14,7 @@ const ActionButton = ({ jumpTo }) => {
     sessionStorage.setItem("isDirectRenewal", false);
     history.push(jumpTo);
   }
-  return <LinkButton label={t("CS_COMMON_CHANGE")} className="check-page-link-button" onClick={routeTo} />;
+  return <LinkButton label={t("CS_COMMON_CHANGE")} className="check-page-link-button" style={jumpTo.includes("proof-of-identity")?{textAlign:"right",marginTop:"-32px"}:{}} onClick={routeTo} />;
 };
 
 const getPath = (path, params) => {
@@ -169,6 +169,7 @@ const CheckPage = ({ onSubmit, value }) => {
             </div>
           ))}
         <CardSubHeader>{t("TL_COMMON_DOCS")}</CardSubHeader>
+        <ActionButton jumpTo={`${routeLink}/proof-of-identity`} />
         <div>
           {owners?.documents["OwnerPhotoProof"] ? (
             <TLDocument value={value}></TLDocument>

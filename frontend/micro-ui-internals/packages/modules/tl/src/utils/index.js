@@ -295,7 +295,7 @@ export const convertToTrade = (data = {}) => {
           applicationDocuments: null,
           accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
           owners: getownerarray(data),
-          structureType: data?.TradeDetails?.VehicleType ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code,
+          structureType: data?.TradeDetails?.StructureType.code !=="IMMOVABLE" ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code,
           subOwnerShipCategory: data?.ownershipCategory?.code,
           tradeUnits: gettradeunits(data),
         },

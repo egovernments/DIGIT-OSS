@@ -45,6 +45,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   const onSkip = () => onSelect();
 
   function selectfile(e) {
+    setUploadedFile(null);
     setFile(e.target.files[0]);
   }
 
