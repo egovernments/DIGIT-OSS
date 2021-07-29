@@ -163,7 +163,6 @@ const TradeUnitForm = (_props) => {
     }, []);
 
     useEffect(() => {
-        console.log(formValue, "in formvalue chnage");
         const keys = Object.keys(formValue);
         const part = {};
         keys.forEach((key) => (part[key] = unit[key]));

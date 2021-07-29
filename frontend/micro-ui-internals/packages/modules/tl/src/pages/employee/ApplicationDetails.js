@@ -158,7 +158,6 @@ const ApplicationDetails = () => {
   }, []);
   const ownerdetails = applicationDetails?.applicationDetails.find(e => e.title === "ES_NEW_APPLICATION_OWNERSHIP_DETAILS");
   let appdetailsDocuments = ownerdetails?.additionalDetails?.documents;
-  console.log(wfDocs, workflowDetails, appdetailsDocuments, "wfDcs"); 
   if(appdetailsDocuments && wfDocs?.length && !(appdetailsDocuments.find(e => e.title === "TL_WORKFLOW_DOCS"))){
     ownerdetails.additionalDetails.documents = [...ownerdetails.additionalDetails.documents,{
       title: "TL_WORKFLOW_DOCS",

@@ -47,7 +47,6 @@ export const getDefaultReceiptService = () => {
 }
 
 export const getFinancialYears = (from, to) => {
-    console.log(from,to);
     const fromDate = new Date(from);
     const toDate = new Date(to);
     if (toDate.getYear() - fromDate.getYear() != 0) {

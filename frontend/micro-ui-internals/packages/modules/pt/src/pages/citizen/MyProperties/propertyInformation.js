@@ -7,7 +7,6 @@ import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle } from "../
 
 const setBillData = async (tenantId, propertyIds, updatefetchBillData, updateCanFetchBillData) => {
   const assessmentData = await Digit.PTService.assessmentSearch({ tenantId, filters: { propertyIds } });
-  console.log(assessmentData, "assessmentData");
   let billData = {};
   if (assessmentData?.Assessments?.length > 0) {
     billData = await Digit.PaymentService.fetchBill(tenantId, {

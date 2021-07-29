@@ -20,10 +20,6 @@ const CitizenSearchResults = (props) => {
     });
   }, [config]);
 
-  console.log(props, "config changes");
-
-  // return <p>{JSON.stringify(propConfig)}</p>;
-
   return (
     <Switch>
       <Route path={`${path}`} exact>

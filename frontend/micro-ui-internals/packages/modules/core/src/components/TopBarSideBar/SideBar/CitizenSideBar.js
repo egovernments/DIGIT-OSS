@@ -61,7 +61,6 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout }) =>
   const { t } = useTranslation();
 
   const closeSidebar = () => {
-    console.log();
     Digit.clikOusideFired = true;
     toggleSidebar(false);
   };

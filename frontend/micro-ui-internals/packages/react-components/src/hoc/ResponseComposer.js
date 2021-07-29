@@ -8,7 +8,6 @@ import { useTranslation } from "react-i18next";
 
 const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
   const { t } = useTranslation();
-  console.log({ data, template, actionButtonLabel });
   return (
     <div>
       {data.map((result, i) => {

@@ -24,7 +24,6 @@ const InputCard = ({
   cardStyle = {},
 }) => {
   // TODO: inputs handle
-  console.log("FIND ME", isDisable, isMultipleAllow);
   return (
     <Card style={cardStyle}>
       {texts.headerCaption && <CardCaption>{t(texts.headerCaption)}</CardCaption>}

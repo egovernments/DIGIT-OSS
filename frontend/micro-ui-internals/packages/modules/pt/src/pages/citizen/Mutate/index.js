@@ -27,14 +27,6 @@ const MutationCitizen = (props) => {
   //   const { control, formState, watch } = useForm();
   let config = [];
 
-  useEffect(() => {
-    console.log(mutationDocs, "MUTATION"), [isLoading];
-  });
-
-  useEffect(() => {
-    console.log(params, "useEffect in stepper");
-  }, [params]);
-
   newConfigMutate.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
@@ -57,7 +49,6 @@ const MutationCitizen = (props) => {
           .join("&")}`
       : "";
 
-    console.log(params, currentPath, "inside mutation form");
     if (!activeRouteObj.nextStep) {
       setSubmit(true);
     } else if (typeof activeRouteObj.nextStep === "string") {
@@ -128,7 +119,6 @@ const MutationCitizen = (props) => {
         documents: [
           ...originalProperty.documents.map((oldDoc) => {
             if (mutationDocs?.PropertyTax?.MutationDocuments.some((mut) => oldDoc.documentType.includes(mut.code))) {
-              console.log(oldDoc?.documentType, "old doc is inactive");
               return { ...oldDoc, status: "INACTIVE" };
             } else return oldDoc;
           }),

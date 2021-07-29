@@ -40,9 +40,6 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statusMap, 
     else onFilterChange(_searchParams);
   };
 
-  useEffect(() => {
-    console.log(_searchParams, "search params inside filter");
-  }, [_searchParams]);
 
   const clearAll = () => {
     setSearchParams({ ...defaultSearchParams, services: [] });

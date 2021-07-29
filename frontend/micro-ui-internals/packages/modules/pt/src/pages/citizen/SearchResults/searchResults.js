@@ -49,10 +49,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
     setOwners([]);
     clearParams();
     setLastPath("");
-    console.log(clearParams, "clear Params executed");
   }, []);
-
-  // console.log({ mobileNumber, propertyIds, oldPropertyIds, locality, city }, "inside search result");
 
   const auth = !!isMutation;
   const tenantId = Digit.ULBService.getCurrentTenantId();

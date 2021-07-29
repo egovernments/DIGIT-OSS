@@ -219,7 +219,6 @@ const AccessoriersForm = (_props) => {
 
 
     useEffect(() => {
-        console.log(formValue, "in formvalue chnage");
         const keys = Object.keys(formValue);
         if (!formValue?.accessoryCategory?.uom) {
             formValue.uomValue = "";

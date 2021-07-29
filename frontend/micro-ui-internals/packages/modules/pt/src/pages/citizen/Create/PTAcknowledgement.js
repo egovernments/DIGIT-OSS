@@ -53,9 +53,6 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
           : convertToProperty(data)
         : convertToUpdateProperty(data);
       formdata.Property.tenantId = formdata?.Property?.tenantId || tenantId;
-
-      console.log(formdata, "inside ack screen");
-
       mutation.mutate(formdata, {
         onSuccess,
       });

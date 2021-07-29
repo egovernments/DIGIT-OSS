@@ -20,8 +20,6 @@ const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: se
     "OwnerShipCategory",
   ]);
 
-  console.log(data);
-
   const propertyTaxDocuments = data?.PropertyTax?.Documents;
 
   const goNext = () => {

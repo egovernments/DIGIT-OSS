@@ -25,8 +25,6 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
     setOwnerType(value);
   }
 
-  console.log(formData, "inside " + url);
-
   function goNext() {
     let ownerDetails = formData.owners && formData.owners[index];
     ownerDetails["ownerType"] = ownerType;

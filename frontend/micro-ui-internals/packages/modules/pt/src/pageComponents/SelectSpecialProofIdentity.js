@@ -28,7 +28,6 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
     dropdownData.forEach((data) => {
       data.i18nKey = stringReplaceAll(data.code, ".", "_");
     });
-    console.log(formData?.owners[index]?.ownerType?.code, "owner type code");
     dropdownData = dropdownData?.filter((dropdown) => dropdown.parentValue.includes(formData?.owners[index]?.ownerType?.code));
     if (dropdownData.length == 1 && dropdownValue != dropdownData[0]) {
       setTypeOfDropdownValue(dropdownData[0]);

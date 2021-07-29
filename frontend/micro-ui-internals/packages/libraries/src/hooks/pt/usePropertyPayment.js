@@ -7,7 +7,6 @@ const usePropertyPayment = ({ tenantId, consumerCodes }) => {
     () => Digit.PTService.fetchPaymentDetails({ tenantId, consumerCodes }),
     {}
   );
-  console.log({ data }, "from usePropertySearch");
   return { isLoading, error, data, revalidate: () => client.invalidateQueries(["propertyPaymentList", tenantId, consumerCodes]) };
 };
 

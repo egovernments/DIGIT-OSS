@@ -39,7 +39,6 @@ const DashboardBox = ({ t = (val) => val, svgIcon, header, info, subHeader, link
         <div className="body ">
           <div className="employeeCard-info-box">
             {Object.keys(info).map((key, index) => {
-              console.log("key", key);
               return (
                 <div key={index} className="employeeCard-info-data">
                   <span>{t(info[key])}</span>

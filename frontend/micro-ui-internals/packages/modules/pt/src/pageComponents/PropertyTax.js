@@ -11,12 +11,7 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
 
   const { isLoading, data: Documentsob = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", docType);
 
-  // useEffect(() => {
-  //   if (Documentsob) console.log(Documentsob, "in propertyTax useEffect");
-  // }, [isLoading]);
-
   let docs = Documentsob?.PropertyTax?.[config?.isMutation ? docType[0] : docType];
-  console.log(docs, "in propertyTax");
   if (!config?.isMutation) docs = docs?.filter((doc) => doc["digit-citizen"]);
   function onSave() {}
 

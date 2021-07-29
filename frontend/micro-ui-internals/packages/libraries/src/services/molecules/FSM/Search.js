@@ -55,7 +55,6 @@ export const Search = {
       if (response?.vehicleId) {
         vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
       }
-      console.log("----------->>>>>>", vehicle);
     }
 
     const stateId = tenantId?.split(".")[0];

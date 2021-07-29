@@ -27,7 +27,6 @@ const ApplicationDetails = () => {
 
   const { data: paymentsHistory } = Digit.Hooks.tl.useTLPaymentHistory(tenantId, id);
   useEffect(() => {
-    console.log(application);
     if (application) {
       Digit.PaymentService.fetchBill(tenantId, {
         consumerCode: application[0]?.applicationNumber,
@@ -51,7 +50,6 @@ const ApplicationDetails = () => {
   const handleDownloadPdf = async () => {
     const tenantInfo = tenants.find((tenant) => tenant.code === application[0]?.tenantId);
     let res = application[0];
-    console.log(tenantInfo);
     const data = getPDFData({ ...res }, tenantInfo, t);
     data.then((ress) => Digit.Utils.pdf.generate(ress));
     setShowOptions(false);

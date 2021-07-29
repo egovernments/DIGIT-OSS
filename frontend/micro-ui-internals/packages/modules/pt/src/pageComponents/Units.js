@@ -308,7 +308,6 @@ function Unit({
     } else if (existingUsageCategory) {
       const codeArr = existingUsageCategory?.split(".");
       const val = usageCategoryMajorMenu(usagecat).filter((e) => e?.code === codeArr[0] + "." + codeArr[1])[0];
-      console.log(subUsageCategoryMenu(val), "inside usestate");
       return val;
     }
   });
@@ -326,10 +325,8 @@ function Unit({
 
   useEffect(() => {
     if (usageType?.code === "RESIDENTIAL") {
-      console.log("set value for usageCategory called");
       setValue("usageCategory", usageType);
     } else {
-      console.log(formValue.usageCategory, index, usageType?.code, "set value for usageCategory revoked");
       if (formValue.usageCategory?.code === "RESIDENTIAL") setValue("usageCategory", null);
     }
   }, [usageType]);

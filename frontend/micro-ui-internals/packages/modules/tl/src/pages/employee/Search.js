@@ -22,7 +22,7 @@ const Search = ({path}) => {
             ...(_data.toDate ? {toDate: toDate?.getTime()} : {}),
             ...(_data.fromDate ? {fromDate: fromDate?.getTime()} : {})
         }
-        console.log("find me",data);
+
         setPayload(Object.keys(data).filter( k => data[k] ).reduce( (acc, key) => ({...acc,  [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {} ))
     }
 

@@ -131,10 +131,6 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
     },
   ];
 
-  useEffect(() => {
-    console.log(data, columns, "inside desktop inbox....");
-  }, [data, columns]);
-
   let result;
   if (props.isLoading || props.isLoader) {
     result = <Loader />;

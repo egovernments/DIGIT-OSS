@@ -34,7 +34,6 @@ const EmployeeApp = ({ path, url, userType }) => {
     let consumerCode = searchData.map((e) => e.propertyId).join();
     try {
       const res = await Digit.PaymentService.fetchBill(tenantId, { consumerCode, businessService });
-      console.log(res, "in middleware");
       let obj = {};
       res.Bill.forEach((e) => {
         obj[e.consumerCode] = e.totalAmount;

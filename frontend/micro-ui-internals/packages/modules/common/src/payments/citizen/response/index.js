@@ -35,15 +35,12 @@ export const SuccessfulPayment = (props) => {
       tenantId,
       businessService: business_service,
       receiptNumbers: data?.payments?.Payments?.[0]?.paymentDetails[0].receiptNumber,
-      // receiptNumbers: "PT/107/2021-22/224890",
-      // receiptNumbers: "PT/107/2021-22/224891",
     },
     {
       retry: false,
       staleTime: Infinity,
       refetchOnWindowFocus: false,
       select: (dat) => {
-        console.log(dat, "from reciept search");
         return dat.Payments[0];
       },
       enabled: allowFetchBill,
@@ -67,7 +64,6 @@ export const SuccessfulPayment = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(data, "inside data useEffect");
     if (data && data.txnStatus && data.txnStatus !== "FAILURE") {
       setallowFetchBill(true);
     }

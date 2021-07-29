@@ -69,10 +69,6 @@ const Inbox = ({
       });
 
   useEffect(() => {
-    console.log(data, "data from the hook...");
-  }, [hookLoading, rest]);
-
-  useEffect(() => {
     setPageOffset(0);
   }, [searchParams]);
 
@@ -86,7 +82,6 @@ const Inbox = ({
 
   const handleFilterChange = (filterParam) => {
     let keys_to_delete = filterParam.delete;
-    console.log(keys_to_delete);
     let _new = { ...searchParams, ...filterParam };
     if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
     delete filterParam.delete;

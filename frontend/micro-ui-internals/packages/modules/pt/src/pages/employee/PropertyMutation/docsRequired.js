@@ -30,7 +30,6 @@ const RequiredDoc = () => {
   };
 
   useEffect(() => {
-    console.log(Documentsob);
     if (Documentsob) setDocs(Documentsob?.PropertyTax?.MutationDocuments);
   }, [Documentsob]);
 

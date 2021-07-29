@@ -132,7 +132,6 @@ const useInboxGeneral = ({
 
   const allowSearch = isInbox ? isFetched && wfSuccess && !!searchFilters[businessIdsParamForSearch] : true;
 
-  console.log({ isFetched, wfSuccess, third: !!!!searchFilters[businessIdsParamForSearch] }, ">>>>>>>>>>>>>>>>>>>>");
 
   const searchResult = useQuery(
     ["SEARCH_INBOX", businessService, searchFilters, workflowFilters, isInbox],
@@ -146,8 +145,6 @@ const useInboxGeneral = ({
     {
       enabled: allowSearch,
       select: (d) => {
-        console.log(d.length + " records fetched", "inside select");
-        console.log(!wfFetching && wfSuccess, "search called");
         return d.map((searchResult) => ({
           totalCount: d.totalCount,
           ...combineResponse(searchResult, processInstanceBuisnessIdMap?.[searchResult?.[businessIdAliasForSearch]]),

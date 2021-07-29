@@ -139,7 +139,6 @@ const OwnerCitizen = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("/////////");
     if (!allowMultipleOwners && owners.length > 1) {
       setOwners([owners[0]]);
       onSelect(propsConfig.key, [owners[0]]);
@@ -154,9 +153,6 @@ const OwnerCitizen = (props) => {
     }
   }, [pathname]);
 
-  // useEffect(() => {
-  //   if (pathname != `${path}${lastPath}` && lastPath != "") history.push(`${path}${lastPath}`);
-  // }, [lastPath]);
 
   const prevOwnerCount = useRef();
   useEffect(() => {
@@ -170,7 +166,6 @@ const OwnerCitizen = (props) => {
   };
 
   useEffect(() => {
-    console.log(owners, owners.length, prevOwnerLength, "owners in Owner component");
     if (owners.length > prevOwnerLength) history.push(`${path}/${owners.length - 1}/${config[0].route}`);
   }, [owners]);
 
@@ -208,10 +203,6 @@ const OwnerSteps = ({ owner, addNewOwner, removeOwner, setOwners, owners, ownerI
   const { pathname } = useLocation();
   const history = useHistory();
 
-  useEffect(() => {
-    console.log("rendered owner step");
-  }, []);
-
   const addOwner = (data) => {
     // handle submission of prev on click of add Owner
     setOwners((prev) => prev.map((o, index) => (o.key === owner.key ? { ...o, ...data } : o)));
@@ -233,7 +224,6 @@ const OwnerSteps = ({ owner, addNewOwner, removeOwner, setOwners, owners, ownerI
     const goToNext = skipStep ? history.replace : history.push;
 
     if (!activeRouteObj.nextStep) {
-      console.log(owners.length, "length of owners");
       if (ownerIndex !== owners.length - 1) {
         pathArray.pop();
         pathArray.push(ownerIndex + 1);

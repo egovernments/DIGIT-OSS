@@ -58,7 +58,6 @@ export const filterFunctions = {
   TL: (filtersArg) => {
     let { uuid } = Digit.UserService.getUser()?.info || {};
 
-    console.log(filtersArg.propertyIds);
     const searchFilters = {};
     const workflowFilters = {};
 

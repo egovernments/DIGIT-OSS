@@ -30,7 +30,6 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
     });
   }
 
-  console.log(formData, "form data inside identity proof");
 
   function setTypeOfDropdownValue(dropdownValue) {
     setDropdownValue(dropdownValue);
