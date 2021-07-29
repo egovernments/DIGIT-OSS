@@ -4,6 +4,7 @@ All notable changes to this module will be documented in this file.
 ## 1.1.6 - 2021-07-23
 
 - Added fuzzy search functionality
+- javers list compare as SET added
 
 ## 1.1.5 - 2021-05-11
 
