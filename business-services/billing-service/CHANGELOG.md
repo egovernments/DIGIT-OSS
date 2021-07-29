@@ -4,6 +4,7 @@ All notable changes to this module will be documented in this file.
 ## 1.3.3 - 2021-07-26
  - earliest bill search
  - bill cancellation
+ - state level bill gen fix added
 
 
 ## 1.3.2 - 2021-05-11
