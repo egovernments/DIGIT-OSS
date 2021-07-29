@@ -108,7 +108,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data }) => {
         },
         {
           Header: t("TL_COMMON_TABLE_COL_STATUS"),
-          accessor: (row) => GetCell(t(row.status) || ""),
+          accessor: (row) =>GetCell(t( row?.workflowCode&&row?.status&&`WF_${row?.workflowCode?.toUpperCase()}_${row.status}`|| "NA") ),
           disableSortBy: true,
         }
       ]), [] )
