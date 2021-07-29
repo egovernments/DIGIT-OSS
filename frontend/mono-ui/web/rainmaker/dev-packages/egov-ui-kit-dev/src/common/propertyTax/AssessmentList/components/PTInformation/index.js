@@ -45,7 +45,7 @@ class PTInformation extends React.Component {
     this.setState({businessServiceInfoItem});
     let requestObject = {
       MdmsCriteria: {
-        tenantId: "pb",
+        tenantId: commonConfig.tenantId,
         moduleDetails: [
           {
             moduleName: "PropertyTax",
@@ -67,7 +67,6 @@ class PTInformation extends React.Component {
     let waterDetails = [];
     let sewerDetails = [];
     let getDuesForPTMutation = payload && payload.MdmsRes.PropertyTax.DuesOnPTMutation;
-    console.log(getDuesForPTMutation, "rakesh getDuesForPTMutation");
     if (getDuesForPTMutation && getDuesForPTMutation.length > 0) {
       let queryObjectForConsumer = [];
       queryObjectForConsumer.push(
