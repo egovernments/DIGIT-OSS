@@ -34,6 +34,8 @@ const DsoDashboard = () => {
   }, [statusCodes]);
 
   const filters = {
+    limit:10,
+    offset:0,
     uuid: { code: "ASSIGNED_TO_ME", name: t("ES_INBOX_ASSIGNED_TO_ME") },
     sortBy: "createdTime",
     sortOrder: "DESC",
