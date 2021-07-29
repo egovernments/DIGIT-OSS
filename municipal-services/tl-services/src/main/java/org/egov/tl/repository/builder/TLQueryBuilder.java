@@ -129,9 +129,10 @@ public class TLQueryBuilder {
             }
 
             if (criteria.getApplicationNumber() != null) {
+                List<String> applicationNumber = Arrays.asList(criteria.getApplicationNumber().split(","));
                 addClauseIfRequired(preparedStmtList, builder);
-                builder.append("  LOWER(tl.applicationnumber) = LOWER(?) ");
-                preparedStmtList.add(criteria.getApplicationNumber());
+                builder.append(" LOWER(tl.applicationnumber) IN (").append(createQuery(applicationNumber)).append(")");
+                addToPreparedStatement(preparedStmtList, applicationNumber);
             }
 
             List<String> status = criteria.getStatus();
