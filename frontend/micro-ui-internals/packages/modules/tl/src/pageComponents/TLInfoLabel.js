@@ -6,8 +6,7 @@ const TLInfoLabel = ({ t, config, onSelect, userType, formData }) => {
   return (
     <React.Fragment>
       <div style={{width:"80%"}}>
-        {/* //TODO: :-(  add localization and find some better solution*/}
-        <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("If there are changes in the trade details, Please make changes in the respective fields.If there are no changes, please go ahead and submit the application.")} />
+        <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("TL_EDIT_INFO_CARD_INFORMATION_DETAILS_LABEL")} />
       </div>
     </React.Fragment>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Toast, CitizenInfoLabel, Header } from "@egovernments/digit-ui-react-components";
 import { newConfig } from "../../../config/config";
 import { useHistory } from "react-router-dom";
 import { convertDateToEpoch, stringReplaceAll, convertEpochToDate } from "../../../utils";
@@ -83,9 +83,9 @@ const ReNewApplication = (props) => {
   if (applicationData?.tradeLicenseDetail?.owners?.length > 0) {
     applicationData?.tradeLicenseDetail?.owners?.forEach((data, index) => {
       if (typeof data?.gender == "string") data.gender = { code: data?.gender, i18nKey: `TL_GENDER_${data?.gender}` };
-      if (typeof data?.relationship == "string") data.relationship = { code: data?.relationship, i18nKey: `COMMON_RELATION_${data?.relationship}` };
+      // if (typeof data?.relationship == "string") data.relationship = { code: data?.relationship, i18nKey: `COMMON_RELATION_${data?.relationship}` };
       if (typeof data?.ownerType == "string") data.ownerType = { code: data?.ownerType, i18nKey: data?.ownerType }
-      if (!data?.fatherOrHusbandName) data.fatherOrHusbandName = "";
+      // if (!data?.fatherOrHusbandName) data.fatherOrHusbandName = "";
       if (!data?.emailId) data.emailId = "";
       if (!data?.permanentAddress) data.permanentAddress = "";
       data.key = (Date.now() + ((index + 1) * 20))
@@ -136,7 +136,7 @@ const ReNewApplication = (props) => {
     if (data?.owners?.length > 0) {
       data?.owners.forEach(data => {
         data.gender = data?.gender?.code;
-        data.relationship = data?.relationship?.code;
+        // data.relationship = data?.relationship?.code;
         data.ownerType = data?.ownerType?.code;
       })
     };
@@ -302,8 +302,11 @@ const ReNewApplication = (props) => {
 
   return (
     <div>
+      <div style={{marginLeft: "15px"}}>
+        <Header>{window.location.href.includes("employee/tl/edit-application-details") ? t("ES_TITLE_RE_NEW_TRADE_LICESE_APPLICATION") : t("ES_TITLE_RENEW_TRADE_LICESE_APPLICATION")}</Header>
+      </div>
       <FormComposer
-        heading={props.header || t("ES_TITLE_RE_NEW_TRADE_LICESE_APPLICATION")}
+        heading={""}
         isDisabled={!canSubmit}
         label={t("ES_COMMON_APPLICATION_SUBMIT")}
         config={configs.map((config) => {

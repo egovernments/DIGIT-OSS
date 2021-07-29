@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Toast, Header } from "@egovernments/digit-ui-react-components";
 import { newConfig } from "../../../config/config";
 import { useHistory } from "react-router-dom";
 import { convertDateToEpoch } from "../../../utils";
@@ -77,12 +77,12 @@ const NewApplication = () => {
       data?.owners.map(data => {
         let obj = {};
         if (data?.dob) obj.dob = convertDateToEpoch(data?.dob);
-        if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
+        // if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
         if (data?.gender?.code) obj.gender = data?.gender?.code;
         if (data?.mobileNumber) obj.mobileNumber = Number(data?.mobileNumber);
         if (data?.name) obj.name = data?.name;
         if (data?.permanentAddress) obj.permanentAddress = data?.permanentAddress;
-        if (data?.relationship) obj.relationship = data?.relationship?.code;
+        // if (data?.relationship) obj.relationship = data?.relationship?.code;
         if (data?.emailId) obj.emailId = data?.emailId;
         if (data?.ownerType?.code) obj.ownerType = data?.ownerType?.code;
         owners.push(obj);
@@ -180,9 +180,12 @@ const NewApplication = () => {
   }
 
   return (
-    <div style={{marginLeft:"30px"}}>
+    <div>
+      <div style={{marginLeft: "15px"}}>
+        <Header>{t("ES_TITLE_NEW_TRADE_LICESE_APPLICATION")}</Header>
+      </div>
       <FormComposer
-        heading={t("ES_TITLE_NEW_TRADE_LICESE_APPLICATION")}
+        heading={t("")}
         isDisabled={!canSubmit}
         label={t("ES_COMMON_APPLICATION_SUBMIT")}
         config={configs.map((config) => {

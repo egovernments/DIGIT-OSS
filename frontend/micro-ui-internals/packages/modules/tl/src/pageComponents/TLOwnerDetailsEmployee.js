@@ -9,10 +9,10 @@ import { getPattern } from "../utils";
 const createOwnerDetails = () => ({
   name: "",
   mobileNumber: "",
-  fatherOrHusbandName: "",
+  // fatherOrHusbandName: "",
   emailId: "",
   permanentAddress: "",
-  relationship: "",
+  // relationship: "",
   ownerType: "",
   gender: "",
   // correspondenceAddress: "",
@@ -293,7 +293,7 @@ const OwnerForm = (_props) => {
             </div>
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.mobileNumber ? errors?.mobileNumber?.message : ""}</CardLabelError>
-          <LabelFieldPair>
+          {/* <LabelFieldPair>
             <CardLabel className="card-label-smaller">{`${t("TL_GUARDIAN_S_NAME_LABEL")} * :`}</CardLabel>
             <div className="field">
               <Controller
@@ -318,8 +318,8 @@ const OwnerForm = (_props) => {
               />
             </div>
           </LabelFieldPair>
-          <CardLabelError style={errorStyle}> {localFormState.touched.fatherOrHusbandName ? errors?.fatherOrHusbandName?.message : ""} </CardLabelError>
-          <LabelFieldPair>
+          <CardLabelError style={errorStyle}> {localFormState.touched.fatherOrHusbandName ? errors?.fatherOrHusbandName?.message : ""} </CardLabelError> */}
+          {/* <LabelFieldPair>
             <CardLabel className="card-label-smaller">{`${t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL")} * :`}</CardLabel>
             <Controller
               control={control}
@@ -347,7 +347,7 @@ const OwnerForm = (_props) => {
               )}
             />
           </LabelFieldPair>
-          <CardLabelError style={errorStyle}>{localFormState.touched.relationship ? errors?.relationship?.message : ""}</CardLabelError>
+          <CardLabelError style={errorStyle}>{localFormState.touched.relationship ? errors?.relationship?.message : ""}</CardLabelError> */}
           <LabelFieldPair>
             <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_GENDER_LABEL")} * :`}</CardLabel>
             <Controller
@@ -425,13 +425,12 @@ const OwnerForm = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.ownerType ? errors?.ownerType?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_ADDR_LABEL")} * :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_ADDR_LABEL")} :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
                 name={"permanentAddress"}
                 defaultValue={owner?.permanentAddress}
-                rules={{ required: "REQUIRED" }}
                 render={(props) => (
                   <TextInput
                     value={props.value}
@@ -448,7 +447,7 @@ const OwnerForm = (_props) => {
               />
             </div>
           </LabelFieldPair>
-          <CardLabelError style={errorStyle}>{localFormState.touched.correspondenceAddress ? errors?.correspondenceAddress?.message : ""}</CardLabelError>
+          <CardLabelError style={errorStyle}>{localFormState.touched.permanentAddress ? errors?.permanentAddress?.message : ""}</CardLabelError>
         </div>
       </div>
     </React.Fragment>

@@ -11,8 +11,8 @@ const getOwnerDetails = (application, t) => {
       values: [
         { title: t("TL_OWNER_S_NAME_LABEL"), value: application?.tradeLicenseDetail?.owners[0]?.name || "NA" },
         { title: t("TL_OWNER_S_MOBILE_NUM_LABEL"), value: application?.tradeLicenseDetail?.owners[0]?.mobileNumber || "NA" },
-        { title: t("TL_GUARDIAN_S_NAME_LABEL"), value: application?.tradeLicenseDetail?.owners[0]?.fatherOrHusbandName || "NA" },
-        { title: t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL"), value: application?.tradeLicenseDetail?.owners[0]?.relationship || "NA" },
+        // { title: t("TL_GUARDIAN_S_NAME_LABEL"), value: application?.tradeLicenseDetail?.owners[0]?.fatherOrHusbandName || "NA" },
+        // { title: t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL"), value: application?.tradeLicenseDetail?.owners[0]?.relationship || "NA" },
         { title: t("TL_NEW_OWNER_DETAILS_GENDER_LABEL"), value: application?.tradeLicenseDetail?.owners[0]?.gender || "NA" },
         { title: t("TL_NEW_OWNER_DETAILS_EMAIL_LABEL"), value: application?.tradeLicenseDetail?.owners[0]?.emailId || "NA" },
         { title: t("TL_OWNER_SPECIAL_CATEGORY"), value: application?.tradeLicenseDetail?.owners[0]?.ownerType ? t(`COMMON_MASTERS_OWNERTYPE_${application?.tradeLicenseDetail?.owners[0]?.ownerType}`) : "NA" },
@@ -25,8 +25,8 @@ const getOwnerDetails = (application, t) => {
       let indOwner = [
         { title: t("TL_OWNER_S_NAME_LABEL"), value: owner?.name || "NA" },
         { title: t("TL_OWNER_S_MOBILE_NUM_LABEL"), value: owner?.mobileNumber || "NA" },
-        { title: t("TL_GUARDIAN_S_NAME_LABEL"), value: owner?.fatherOrHusbandName || "NA" },
-        { title: t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL"), value: owner?.relationship || "NA" },
+        // { title: t("TL_GUARDIAN_S_NAME_LABEL"), value: owner?.fatherOrHusbandName || "NA" },
+        // { title: t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL"), value: owner?.relationship || "NA" },
         { title: t("TL_NEW_OWNER_DETAILS_GENDER_LABEL"), value: owner?.gender || "NA" },
         { title: t("TL_NEW_OWNER_DETAILS_EMAIL_LABEL"), value: owner?.emailId || "NA" },
         { title: t("TL_OWNER_SPECIAL_CATEGORY"), value: owner?.ownerType ? t(`COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}`) : "NA" },

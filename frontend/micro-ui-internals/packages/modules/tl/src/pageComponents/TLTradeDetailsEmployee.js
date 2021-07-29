@@ -103,9 +103,6 @@ const TLTradeDetailsEmployee = ({ config, onSelect, userType, formData, setError
       {tradedetils.map((tradedetail, index) => (
         <OwnerForm1 key={tradedetail.key} index={index} tradedetail={tradedetail} {...commonProps} />
       ))}
-      {formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS" ? (
-        <LinkButton label="Add Owner" onClick={addNewOwner} style={{ color: "orange" }} />
-      ) : null}
     </React.Fragment>
   );
 };
