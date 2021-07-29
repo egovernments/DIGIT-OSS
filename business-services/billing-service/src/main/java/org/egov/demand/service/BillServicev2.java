@@ -354,76 +354,82 @@ public class BillServicev2 {
 		
 		List<BillV2> bills = new ArrayList<>();
 		User payer = null != demands.get(0).getPayer() ?  demands.get(0).getPayer() : new User();
-		
-		/*
-		 * Fetching Required master data
-		 */
-		String tenantId = demands.get(0).getTenantId();
-		Set<String> businessCodes = new HashSet<>();
-		Set<String> taxHeadCodes = new HashSet<>();
 
-		for (Demand demand : demands) {
+		Map<String, List<Demand>> tenatIdDemandsList = demands.stream().collect(Collectors.groupingBy(Demand::getTenantId));
+		for (Entry<String, List<Demand>> demandTenantEntry : tenatIdDemandsList.entrySet()) {
 
-			businessCodes.add(demand.getBusinessService());
-			demand.getDemandDetails().forEach(detail -> taxHeadCodes.add(detail.getTaxHeadMasterCode()));
-		}
-		
-		Map<String, TaxHeadMaster> taxHeadMap = getTaxHeadMaster(taxHeadCodes, tenantId, requestInfo);
-		Map<String, BusinessServiceDetail> businessMap = getBusinessService(businessCodes, tenantId, requestInfo);
-		
-		
-		/*
-		 * Grouping the demands by their consumer code and generating a bill for each consumer code
-		 */
-		Map<String, List<Demand>> consumerCodeAndDemandsMap = demands.stream().collect(Collectors.groupingBy(Demand::getConsumerCode));
-		
-		for (Entry<String, List<Demand>> consumerCodeAndDemands : consumerCodeAndDemandsMap.entrySet()) {
-			
-			BigDecimal billAmount = BigDecimal.ZERO;
-			List<BillDetailV2> billDetails = new ArrayList<>();
-			
-			String consumerCode = consumerCodeAndDemands.getKey();
-			BigDecimal minimumAmtPayableForBill = BigDecimal.ZERO;
-			List<Demand> demandsForSingleCode = consumerCodeAndDemands.getValue();
-			BusinessServiceDetail business = businessMap.get(demandsForSingleCode.get(0).getBusinessService());
-			
-			String billId = UUID.randomUUID().toString();
-			String billNumber = getBillNumbers(requestInfo, tenantId, demands.get(0).getBusinessService(), 1).get(0);
-			
-			for (Demand demand : demandsForSingleCode) {
+			/*
+			 * Fetching Required master data
+			 */
+			String tenantId = demandTenantEntry.getKey();
+			List<Demand> demandForOneTenant = demandTenantEntry.getValue();
+			Set<String> businessCodes = new HashSet<>();
+			Set<String> taxHeadCodes = new HashSet<>();
 
-				minimumAmtPayableForBill = minimumAmtPayableForBill.add(demand.getMinimumAmountPayable());
-				String billDetailId = UUID.randomUUID().toString();
-				BillDetailV2 billDetail = getBillDetailForDemand(demand, taxHeadMap, billDetailId);
-				billDetail.setBillId(billId);
-				billDetail.setId(billDetailId);
-				billDetails.add(billDetail);
-				billAmount = billAmount.add(billDetail.getAmount());
+			for (Demand demand : demandForOneTenant) {
+
+				businessCodes.add(demand.getBusinessService());
+				demand.getDemandDetails().forEach(detail -> taxHeadCodes.add(detail.getTaxHeadMasterCode()));
 			}
 			
-			if (billAmount.compareTo(BigDecimal.ZERO) >= 0) {
-
-				BillV2 bill = BillV2.builder()
-					.auditDetails(util.getAuditDetail(requestInfo))
-					.payerAddress(payer.getPermanentAddress())
-					.mobileNumber(payer.getMobileNumber())
-					.billDate(System.currentTimeMillis())
-					.businessService(business.getCode())
-					.payerName(payer.getName())
-					.consumerCode(consumerCode)
-					.status(BillStatus.ACTIVE)
-					.billDetails(billDetails)
-					.totalAmount(billAmount)
-					.billNumber(billNumber)
-					.tenantId(tenantId)
-					.id(billId)
-					.build();
+			Map<String, TaxHeadMaster> taxHeadMap = getTaxHeadMaster(taxHeadCodes, tenantId, requestInfo);
+			Map<String, BusinessServiceDetail> businessMap = getBusinessService(businessCodes, tenantId, requestInfo);
 			
-			bills.add(bill);
+			
+			/*
+			 * Grouping the demands by their consumer code and generating a bill for each consumer code
+			 */
+			Map<String, List<Demand>> consumerCodeAndDemandsMap = demandForOneTenant.stream().collect(Collectors.groupingBy(Demand::getConsumerCode));
+			
+			for (Entry<String, List<Demand>> consumerCodeAndDemands : consumerCodeAndDemandsMap.entrySet()) {
+				
+				BigDecimal billAmount = BigDecimal.ZERO;
+				List<BillDetailV2> billDetails = new ArrayList<>();
+				
+				String consumerCode = consumerCodeAndDemands.getKey();
+				BigDecimal minimumAmtPayableForBill = BigDecimal.ZERO;
+				List<Demand> demandsForSingleCode = consumerCodeAndDemands.getValue();
+				BusinessServiceDetail business = businessMap.get(demandsForSingleCode.get(0).getBusinessService());
+				
+				String billId = UUID.randomUUID().toString();
+				String billNumber = getBillNumbers(requestInfo, tenantId, demandForOneTenant.get(0).getBusinessService(), 1).get(0);
+				
+				for (Demand demand : demandsForSingleCode) {
+
+					minimumAmtPayableForBill = minimumAmtPayableForBill.add(demand.getMinimumAmountPayable());
+					String billDetailId = UUID.randomUUID().toString();
+					BillDetailV2 billDetail = getBillDetailForDemand(demand, taxHeadMap, billDetailId);
+					billDetail.setBillId(billId);
+					billDetail.setId(billDetailId);
+					billDetails.add(billDetail);
+					billAmount = billAmount.add(billDetail.getAmount());
+				}
+				
+				if (billAmount.compareTo(BigDecimal.ZERO) >= 0) {
+
+					BillV2 bill = BillV2.builder()
+						.auditDetails(util.getAuditDetail(requestInfo))
+						.payerAddress(payer.getPermanentAddress())
+						.mobileNumber(payer.getMobileNumber())
+						.billDate(System.currentTimeMillis())
+						.businessService(business.getCode())
+						.payerName(payer.getName())
+						.consumerCode(consumerCode)
+						.status(BillStatus.ACTIVE)
+						.billDetails(billDetails)
+						.totalAmount(billAmount)
+						.billNumber(billNumber)
+						.tenantId(tenantId)
+						.id(billId)
+						.build();
+				
+					bills.add(bill);
+				}
+			}
+
 		}
+		return bills;
 	}
-	return bills;
-}
 
 	private List<String> getBillNumbers(RequestInfo requestInfo, String tenantId, String module, int count) {
 
