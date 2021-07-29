@@ -269,7 +269,6 @@ export const gettradeupdateaccessories = (data) => {
 }
 
 export const convertToTrade = (data = {}) => {
-  console.info("tradeformdata", data);
   let Financialyear = sessionStorage.getItem("CurrentFinancialYear");
   const formdata = {
     Licenses: [
@@ -281,6 +280,7 @@ export const convertToTrade = (data = {}) => {
         licenseType: "PERMANENT",
         tenantId: data?.address?.city?.code,
         tradeLicenseDetail: {
+          channel:"CITIZEN",
           address: {
             city: data?.address?.city?.code,
             locality: {
@@ -294,22 +294,9 @@ export const convertToTrade = (data = {}) => {
           },
           applicationDocuments: null,
           accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
-          // owners: [
-          //   {mobileNumber: "7878787878",
-          //    name: "testg",
-          //     fatherOrHusbandName: "DA",
-          //      relationship: "FATHER",
-          //      dob: 950380199000,
-          //      gender: "MALE",
-          //      permanentAddress: "VXF",
-          // }
-          // ],
           owners: getownerarray(data),
           structureType: data?.TradeDetails?.VehicleType ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code,
           subOwnerShipCategory: data?.ownershipCategory?.code,
-          // tradeUnits:[
-          //   {tradeType: "GOODS.MANUFACTURE.TST-18", uom: null, uomValue: null}
-          // ],
           tradeUnits: gettradeunits(data),
         },
         tradeName: data?.TradeDetails?.TradeName,
@@ -319,8 +306,6 @@ export const convertToTrade = (data = {}) => {
       },
     ],
   };
-
-  console.info("TradeCreated", formdata);
   return formdata;
 };
 
@@ -349,9 +334,6 @@ export const getwfdocuments = (data) => {
 }
 
 export const convertToUpdateTrade = (data = {}, datafromflow, tenantId) => {
-  //datafromflow = JSON.parse(sessionStorage.getItem("TL-CREATE-FORMDATA"));
-  console.log("data from create", data);
-  console.log("datafromflow", datafromflow);
   let formdata1 = {
     Licenses: [
     ]
@@ -362,27 +344,6 @@ export const convertToUpdateTrade = (data = {}, datafromflow, tenantId) => {
   formdata1.Licenses[0].action = "APPLY";
   formdata1.Licenses[0].wfDocuments = formdata1.Licenses[0].wfDocuments ? formdata1.Licenses[0].wfDocuments : getwfdocuments(datafromflow),
     formdata1.Licenses[0].tradeLicenseDetail.applicationDocuments = formdata1.Licenses[0].tradeLicenseDetail.applicationDocuments ? formdata1.Licenses[0].tradeLicenseDetail.applicationDocuments : getwfdocuments(datafromflow),
-    // let wfdoc = [];
-    // let doc = datafromflow ? datafromflow.owners.documents : [];
-    // doc && wfdoc.push({
-    //   fileName:doc["OwnerPhotoProof"].name,
-    //   fileStoreId:doc["OwnerPhotoProof"].fileStoreId,
-    //   documentType:"OWNERPHOTO",
-    //   tenantId:data.Licenses[0].tenantId,
-    // });
-    // doc && wfdoc.push({
-    //   fileName:doc["ProofOfIdentity"].name,
-    //   fileStoreId:doc["ProofOfIdentity"].fileStoreId,
-    //   documentType:"OWNERIDPROOF",
-    //   tenantId:data.Licenses[0].tenantId,
-    // });
-    // doc && wfdoc.push({
-    //   fileName:doc["ProofOfOwnership"].name,
-    //   fileStoreId:doc["ProofOfOwnership"].fileStoreId,
-    //   documentType:"OWNERSHIPPROOF",
-    //   tenantId:data.Licenses[0].tenantId,
-    // });
-    // formdata1.wfDocuments = wfdoc;
     console.info("formdata1", formdata1);
   return formdata1;
 }
@@ -432,9 +393,6 @@ export const convertToEditTrade = (data, fy = []) => {
   const currrentFYending = fy.filter(item => item.code === data?.financialYear)[0]
     .endingDate;
   const nextFinancialYearForRenewal = fy.filter(item => item.startingDate === currrentFYending)[0].code;
-
-
-  console.log("dataforedit", data);
   let isDirectrenewal = stringToBoolean(sessionStorage.getItem("isDirectRenewal"));
   let formdata = {
     Licenses: [
@@ -460,16 +418,12 @@ export const convertToEditTrade = (data, fy = []) => {
         tradeLicenseDetail: {
           address: data.tradeLicenseDetail.address,
           applicationDocuments: data.tradeLicenseDetail.applicationDocuments,
-          //accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
           accessories: isDirectrenewal ? data.tradeLicenseDetail.accessories : gettradeupdateaccessories(data),
-          //owners: getownerarray(data),
           owners: isDirectrenewal ? data.tradeLicenseDetail.owners : gettradeownerarray(data),
           structureType: isDirectrenewal ? data.tradeLicenseDetail.structureType : (data?.TradeDetails?.VehicleType ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code),
           subOwnerShipCategory: data?.ownershipCategory?.code,
-          //tradeUnits: gettradeunits(data),
           tradeUnits: gettradeupdateunits(data),
           additionalDetail: data.tradeLicenseDetail.additionalDetail,
-
           auditDetails: data.tradeLicenseDetail.auditDetails,
           channel: data.tradeLicenseDetail.channel,
           id: data.tradeLicenseDetail.id,
@@ -491,10 +445,6 @@ export const convertToEditTrade = (data, fy = []) => {
 
 //FinancialYear
 export const convertToResubmitTrade = (data) => {
-
-
-
-  console.log("dataforedit", data);
 
   let formdata = {
     Licenses: [
@@ -520,18 +470,12 @@ export const convertToResubmitTrade = (data) => {
         tradeLicenseDetail: {
           address: data.tradeLicenseDetail.address,
           applicationDocuments: data.tradeLicenseDetail.applicationDocuments,
-          //accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
           accessories: gettradeupdateaccessories(data),
-          //owners: getownerarray(data),
           owners: gettradeownerarray(data),
           structureType: (data?.TradeDetails?.VehicleType ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code),
           subOwnerShipCategory: data?.ownershipCategory?.code,
-          //tradeUnits: gettradeunits(data),
           tradeUnits: gettradeupdateunits(data),
-
-
           additionalDetail: data.tradeLicenseDetail.additionalDetail,
-
           auditDetails: data.tradeLicenseDetail.auditDetails,
           channel: data.tradeLicenseDetail.channel,
           id: data.tradeLicenseDetail.id,
@@ -540,210 +484,11 @@ export const convertToResubmitTrade = (data) => {
         calculation: null,
         auditDetails: data?.auditDetails,
         accountId: data?.accountId,
-
       }
     ]
   }
-  console.log("formdata", formdata);
   return formdata;
 }
-
-// export const setUpdateOwnerDetails = (data = []) => {
-//   const { institution, owners } = data;
-//   if (data?.ownershipCategory?.value === "INSTITUTIONALPRIVATE" || data?.ownershipCategory?.value === "INSTITUTIONALGOVERNMENT") {
-//     if (data?.ownershipCategory?.value === "INSTITUTIONALPRIVATE" || data?.ownershipCategory?.value === "INSTITUTIONALGOVERNMENT") {
-//       institution.designation = owners[0]?.designation;
-//       institution.name = owners[0]?.inistitutionName;
-//       institution.nameOfAuthorizedPerson = owners[0]?.name;
-//       institution.tenantId = data?.address?.city?.code;
-//       institution.type = owners[0]?.inistitutetype?.value;
-//       let document = [];
-//       if (owners[0]?.documents["proofIdentity"]?.fileStoreId && owners[0].documents["proofIdentity"].id) {
-//         document.push({
-//           fileStoreId: owners[0].documents["proofIdentity"].fileStoreId || "",
-//           documentType: owners[0].documents["proofIdentity"].documentType?.code || "",
-//           id: owners[0].documents["proofIdentity"].id || "",
-//           status: owners[0].documents["proofIdentity"].status || "",
-//         });
-//       } else {
-//         document.push({
-//           fileStoreId: owners[0].documents["proofIdentity"].fileStoreId || "",
-//           documentType: owners[0].documents["proofIdentity"].documentType?.code || "",
-//         });
-//       }
-//       data.owners.forEach((owner) => {
-//         owner.altContactNumber = owners[0]?.altContactNumber;
-//         owner.correspondenceAddress = owners[0]?.permanentAddress;
-//         owner.designation = owners[0]?.designation;
-//         owner.emailId = owners[0]?.emailId;
-//         owner.isCorrespondenceAddress = owners[0]?.isCorrespondenceAddress;
-//         owner.mobileNumber = owners[0]?.mobileNumber;
-//         owner.name = owners[0]?.name;
-//         owner.ownerType = owners[0]?.ownerType?.code || "NONE";
-//         owner.documents = document;
-//       });
-//       data.institution = institution;
-//     }
-//   } else {
-//     data.owners.forEach((owner) => {
-//       let document = [];
-//       if (owner?.ownerType?.code != "NONE") {
-//         if (owner.documents["specialProofIdentity"].id) {
-//           document.push({
-//             fileStoreId: owner.documents["specialProofIdentity"].fileStoreId || "",
-//             documentType: owner.documents["specialProofIdentity"].documentType?.code || "",
-//             id: owner.documents["specialProofIdentity"].id || "",
-//             status: owner.documents["specialProofIdentity"].status || "",
-//           });
-//         } else {
-//           document.push({
-//             fileStoreId: owner.documents["specialProofIdentity"].fileStoreId || "",
-//             documentType: owner.documents["specialProofIdentity"].documentType?.code || "",
-//           });
-//         }
-//       }
-//       if (owner?.documents["proofIdentity"]?.fileStoreId) {
-//         if (owner.documents["proofIdentity"].id) {
-//           document.push({
-//             fileStoreId: owner.documents["proofIdentity"].fileStoreId || "",
-//             documentType: owner.documents["proofIdentity"].documentType?.code || "",
-//             id: owner.documents["proofIdentity"].id || "",
-//             status: owner.documents["proofIdentity"].status || "",
-//           });
-//         } else {
-//           document.push({
-//             fileStoreId: owner.documents["proofIdentity"].fileStoreId || "",
-//             documentType: owner.documents["proofIdentity"].documentType?.code || "",
-//           });
-//         }
-//       }
-//       owner.gender = owner?.gender?.code;
-//       owner.ownerType = owner?.ownerType?.code;
-//       owner.relationship = owner?.relationship?.code;
-//       owner.documents = document;
-//     });
-//   }
-//   return data;
-// };
-// export const setUpdatedDocumentDetails = (data) => {
-//   const { address, owners } = data;
-//   let documents = [];
-//   if (address?.documents["ProofOfAddress"]?.id) {
-//     documents.push({
-//       fileStoreId: address?.documents["ProofOfAddress"]?.fileStoreId || "",
-//       documentType: address?.documents["ProofOfAddress"]?.documentType?.code || "",
-//       id: address?.documents["ProofOfAddress"]?.id || "",
-//       status: address?.documents["ProofOfAddress"]?.status || "",
-//     });
-//   } else {
-//     documents.push({
-//       fileStoreId: address?.documents["ProofOfAddress"]?.fileStoreId || "",
-//       documentType: address?.documents["ProofOfAddress"]?.documentType?.code || "",
-//     });
-//   }
-
-//   owners &&
-//     owners.length > 0 &&
-//     owners.map((owner) => {
-//       owner.documents.map((document) => {
-//         documents.push(document);
-//       });
-//     });
-//   data.documents = documents;
-//   return data;
-// };
-// export const convertToUpdateProperty = (data = {}) => {
-//   console.info("propertyFormData", data);
-//   let isResdential = data.isResdential;
-//   let propertyType = data.PropertyType;
-//   let selfOccupied = data.selfOccupied;
-//   let Subusagetypeofrentedarea = data.Subusagetypeofrentedarea || null;
-//   let subusagetype = data.subusagetype || null;
-//   let IsAnyPartOfThisFloorUnOccupied = data.IsAnyPartOfThisFloorUnOccupied || null;
-//   let builtUpArea = data?.floordetails?.builtUpArea || null;
-//   let noOfFloors = data?.noOfFloors;
-//   let noOofBasements = data?.noOofBasements;
-//   let unit = data?.units;
-//   let basement1 = Array.isArray(data?.units) && data?.units["-1"] ? data?.units["-1"] : null;
-//   let basement2 = Array.isArray(data?.units) && data?.units["-2"] ? data?.units["-2"] : null;
-//   data = setAddressDetails(data);
-//   data = setUpdateOwnerDetails(data);
-//   data = setUpdatedDocumentDetails(data);
-//   data = setPropertyDetails(data);
-
-//   const formdata = {
-//     Property: {
-//       id: data.id,
-//       accountId: data.accountId,
-//       acknowldgementNumber: data.acknowldgementNumber,
-//       propertyId: data.propertyId,
-//       status: data.status || "INWORKFLOW",
-//       tenantId: data.tenantId,
-//       address: data.address,
-
-//       ownershipCategory: data?.ownershipCategory?.value,
-//       owners: data.owners,
-//       institution: data.institution || null,
-
-//       documents: data.documents || [],
-//       ...data.propertyDetails,
-
-//       additionalDetails: {
-//         inflammable: false,
-//         heightAbove36Feet: false,
-//         isResdential: isResdential,
-//         propertyType: propertyType,
-//         selfOccupied: selfOccupied,
-//         Subusagetypeofrentedarea: Subusagetypeofrentedarea,
-//         subusagetype: subusagetype,
-//         IsAnyPartOfThisFloorUnOccupied: IsAnyPartOfThisFloorUnOccupied,
-//         builtUpArea: builtUpArea,
-//         noOfFloors: noOfFloors,
-//         noOofBasements: noOofBasements,
-//         unit: unit,
-//         basement1: basement1,
-//         basement2: basement2,
-//       },
-
-//       creationReason: getCreationReason(data),
-//       source: "MUNICIPAL_RECORDS",
-//       channel: "CITIZEN",
-//       workflow: getWorkflow(data),
-//     },
-//   };
-
-// let propertyInitialObject = JSON.parse(sessionStorage.getItem("propertyInitialObject"));
-// if (checkArrayLength(propertyInitialObject?.units) && checkIsAnArray(formdata.Property?.units) && data?.isEditProperty) {
-//   propertyInitialObject.units = propertyInitialObject.units.filter((unit) => unit.active);
-//   let oldUnits = propertyInitialObject.units.map((unit) => {
-//     return { ...unit, active: false };
-//   });
-//   formdata.Property?.units.push(...oldUnits);
-// }
-/* if (
-  checkArrayLength(propertyInitialObject?.owners) &&
-  checkIsAnArray(formdata.Property?.owners) &&
-  data?.isEditProperty &&
-  data.isUpdateProperty == false
-) {
-  propertyInitialObject.owners = propertyInitialObject.owners.filter((owner) => owner.status === "ACTIVE");
-  let oldOwners = propertyInitialObject.owners.map((owner) => {
-    return { ...owner, status: "INACTIVE" };
-  });
-  formdata.Property?.owners.push(...oldOwners);
-} else {
-  formdata.Property.owners = [...propertyInitialObject.owners];
-} */
-
-// if (checkArrayLength(propertyInitialObject?.owners) && checkIsAnArray(formdata.Property?.owners)) {
-//   formdata.Property.owners = [...propertyInitialObject.owners];
-// }
-// if (propertyInitialObject?.auditDetails) {
-//   formdata.Property["auditDetails"] = { ...propertyInitialObject.auditDetails };
-// }
-// console.info("propertyUpdated", formdata);
-//   return formdata;
-// };
 
 /*   method to check value  if not returns NA*/
 

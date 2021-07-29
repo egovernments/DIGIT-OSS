@@ -167,7 +167,7 @@ export const TLSearch = {
         title: "",
         values: [
           { title: "TL_COMMON_TABLE_COL_APP_NO", value: response?.applicationNumber || "NA" },
-          { title: "TL_APPLICATION_CHALLAN_LABEL", value: response?.tradeLicenseDetail?.channel || "NA" }
+          { title: "TL_APPLICATION_CHALLAN_LABEL", value: response?.tradeLicenseDetail?.channel&&`TL_CHANNEL_${response?.tradeLicenseDetail?.channel}` || "NA" }
         ],
       };
       response && employeeResponse.push(details);

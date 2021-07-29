@@ -112,6 +112,7 @@ const NewApplication = () => {
       tradeName,
       wfDocuments: [],
       tradeLicenseDetail: {
+        channel:"COUNTER",
         additionalDetail: {}
       }
     };

@@ -28,7 +28,6 @@ const HRMSCard = () => {
         ],
         links: [
             {
-                count: isLoading ? "-" : data?.EmployeCount?.totalEmployee,
                 label: t("HR_HOME_SEARCH_RESULTS_HEADING"),
                 link: `/digit-ui/employee/hrms/inbox`
             },
