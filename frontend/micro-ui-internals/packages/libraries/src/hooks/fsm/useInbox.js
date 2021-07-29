@@ -1,7 +1,7 @@
 import React from "react"
 import useInbox from "../useInbox"
 
-const useFSMInbox = (tenantId, filters, config = {}) => {
+const useFSMInbox = (tenantId, filters, config = {}, overRideUUID=false) => {
 
     const { applicationNos, mobileNumber, limit, offset, sortBy, sortOrder } = filters;
     const _filters = {
@@ -42,7 +42,7 @@ const useFSMInbox = (tenantId, filters, config = {}) => {
         }),
         ...config
     }})
-    if(filters?.uuid?.code === "ASSIGNED_TO_ME"){
+    if(filters?.uuid?.code === "ASSIGNED_TO_ME" && !overRideUUID){
         return {
             data:{
                 totalCount: 0,

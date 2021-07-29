@@ -31,7 +31,7 @@
     box-shadow: rgba(0, 0, 0, 0.16) 0 -2px 8px;
     left: 0;
     max-width: none;
-    z-index: 20;
+    z-index: 999;
 
     @apply fixed bottom-0 bg-white py-sm pr-lg text-right;
 

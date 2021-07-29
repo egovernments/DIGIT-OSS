@@ -54,7 +54,8 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     },
     {
       enabled: isInbox,
-    }
+    },
+    DSO ? true : false
   );
 
   const {
