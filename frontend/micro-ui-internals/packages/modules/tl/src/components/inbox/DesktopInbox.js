@@ -49,7 +49,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, ...prop
     },{
       Header: t("TL_COMMON_TABLE_COL_APP_TYPE"),
       Cell: ({ row }) => {
-        return GetCell(t(`CS_COMMON_INBOX_${row.original["businessService"]?.toUpperCase()}`));
+        return GetCell(t(row.original["businessService"]?`CS_COMMON_INBOX_${row.original["businessService"]?.toUpperCase()}`:"NA"));
       },
     },{
           Header: t("WF_INBOX_HEADER_LOCALITY"),
@@ -60,7 +60,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, ...prop
     {
       Header: t("WF_INBOX_HEADER_STATUS"),
       Cell: ({ row }) => {
-        return GetCell(t(`${row.original?.["status"]}`));
+        return GetCell(t(row.original["businessService"]?`WF_${row.original["businessService"]?.toUpperCase()}_${row.original?.["status"]}`:`NA`));
       },
     },
     {
