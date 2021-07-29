@@ -264,14 +264,14 @@ public class EnrichmentService {
      */
     public void enrichPropertyCriteriaWithOwnerids(PropertyCriteria criteria, List<Property> properties){
         Set<String> ownerids = new HashSet<>();
-        properties.forEach(property -> {
-            property.getPropertyDetails().forEach(propertyDetail -> propertyDetail.getOwners().forEach(owner -> ownerids.add(owner.getUuid())));
-        });
-        properties.forEach(property -> {
-            property.getPropertyDetails().forEach(propertyDetail -> {
-                ownerids.add(propertyDetail.getCitizenInfo().getUuid());
-            });
-        });
+        for(Property property : properties){
+            for(PropertyDetail detail : property.getPropertyDetails()){
+                ownerids.add(detail.getCitizenInfo().getUuid());
+                for(OwnerInfo ownerInfo : detail.getOwners()){
+                    ownerids.add(ownerInfo.getUuid());
+                }
+            }
+        }
         criteria.setOwnerids(ownerids);
     }
 

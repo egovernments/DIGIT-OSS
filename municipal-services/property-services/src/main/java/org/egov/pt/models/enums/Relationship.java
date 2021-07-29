@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * The relationship of gaurdian.
+ * The relationship of guardian.
  */
+
 public enum Relationship {
-  
-  FATHER("FATHER"),
-  
-  HUSBAND("HUSBAND");
+	
+	FATHER("FATHER"),
+    HUSBAND("HUSBAND");
 
   private String value;
 
@@ -34,4 +34,3 @@ public enum Relationship {
     return null;
   }
 }
-

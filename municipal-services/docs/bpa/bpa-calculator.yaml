@@ -1,0 +1,218 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: eGov Building Plan Application System v1.1
+  description: |
+    The bpa-calculator is one of the services in the building plan approval system which is used for fee calculation and demand generation.
+    
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: BPA
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml'
+paths:
+  
+  /bpa-calculator/v1/_calculate:
+    post:
+      summary: Calculate the Fee and create Demand for the building plan application
+      description: Calculate the Fee and create Demand for the building plan application
+      x-roles: 'EMPLOYEE'
+      responses:
+        '202':
+          description: Successfull
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CalculationRes'
+        '400':
+          description: Failed to process the application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      tags:
+        - BPA_APPLY
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculationReq'
+        description: Fill Bpa application details and submit the request.
+        required: true
+
+  
+servers:
+# Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/egov-foundation/BPA/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/egovernmets-faoundat/PT-2.0/1.0.0'
+  - url: 'https://egov-micro-dev.egovernments.org'
+components:
+  schemas:
+    BPA:
+      type: object
+      description: BPA application object to capture the details of land, land owners, and address of the land.
+      properties:
+        id:
+          type: string
+          description: Unique Identifier(UUID) of the bpa application for internal reference.
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+        applicationNo:
+          type: string
+          description: Generate formatted Unique Identifier of the building permit application. Keep the format in mdms
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+        approvalNo:
+          type: string
+          description: Generate Approval number based on wf status. When to generate approvalNo will be depends on wf state so make it configurable at  application level
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+        accountId:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Initiator User UUID 
+        edcrNumber:
+          type: string
+          description: Unique Identifier scrutinized edcr number
+          minLength: 1
+          maxLength: 64
+        riskType:
+          type: string
+          description: Risk type will be drived based on mdms configuration
+          minLength: 1
+          maxLength: 64
+          readOnly: true
+        landId:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Unique Identifier(UUID) of the land for internal reference.
+        tenantId:
+          type: string
+          description: Unique ULB identifier.
+          maxLength: 256
+          minLength: 2
+          nullable: false
+        status:
+          type: string
+          description: status of the application.
+          maxLength: 256
+          minLength: 2
+          readOnly: true
+        documents:
+              description: The documents attached by owner for exemption.
+              type: array
+              items:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/Document'
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/AuditDetails'
+        additionalDetails:
+          type: object
+          description: 'The json to capturing the custom fields'
+
+    Calculation:
+      type: object
+      description: Calculation object to capture the fees and application details
+      properties:
+        applicationNumber:
+          type: string
+          description: application number of bpa application
+        bpa:
+          $ref: '#/components/schemas/BPA'
+        tenantId:
+          type: string
+          description: Unique ULB identifier.
+          maxLength: 256
+          minLength: 2
+          nullable: false
+        taxHeadEstimates:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxHeadEstimate'  
+        feeType:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Fee Type            
+      required:
+        - tenantId
+
+
+    TaxHeadEstimate:
+      type: object
+      description: Tax head estimate.
+      properties:
+        taxHeadCode:
+          type: string
+          description: code of tax head
+        estimateAmount:
+          type: integer
+          format: int64
+        Category:
+          $ref: '#/components/schemas/Category'
+
+
+    Category:
+      title: Category
+      enum:
+        - TAX
+        - FEE
+        - REBATE
+        - EXEMPTION
+        - ADVANCE_COLLECTION
+        - PENALTY
+        - FINES
+        - CHARGES
+      type: string
+      description: category of the tax head
+
+    CalulationCriteria:
+      type: object
+      description: Calculation object to capture the fees and application details
+      properties:
+        applicationNo:
+          type: string
+          description: application number of bpa application
+        bpa:
+          $ref: '#/components/schemas/BPA'
+        tenantId:
+          type: string
+          description: Unique ULB identifier.
+          maxLength: 256
+          minLength: 2
+          nullable: false
+        feeType:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Fee Type            
+      required:
+        - tenantId
+        
+    CalculationReq:
+      description: Contract class to receive request. Array of Property items  are used in case of create . Where as single Property item is used for update
+      properties:
+        RequestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
+        CalculationCriteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalulationCriteria'
+      required:
+        - RequestInfo
+          
+    CalculationRes:
+      description: Contains the ResponseHeader and the created/updated property
+      properties:
+        ResponseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo'
+        Calculations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Calculation'

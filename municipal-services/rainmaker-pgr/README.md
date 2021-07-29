@@ -102,3 +102,71 @@ Note - The artifact id of this service is updated to 0.0.2-SNAPSHOT from 0.0.1-S
 2. 'is.update.on.inactive.categories.enabled' boolean key has been added. If it is true, validation of servicecodes will be disabled for update flow. if it is false, validation of servicecodes happens for the update flow.
     **Why?:**
         The key (a) has been added to support the functionality of searching servicodes as per the need. The key (b) is added because, v1.1 came up with a feature of disabling 'NoStreetlight' category from the system. However, there were a few complaints already filed under this category, if we mark all these complaints as invalid, it would be a bad UX to the users who have filed these complaints as they suddenly dissappear from their inbox. Therefore, the product decision was to allow these old complaints to go through the normal workflow but creating any new complaints under this category should be disabled. Since 'NoStreetlight' is marked as an inactive category in MDMS, if validation of servicecodes was allowed for update, no update could be performed on the old complaints. Also, bypassing the validation for update is wrong, therefore a boolean flag is added to enable and disable it as per our necessity.
+
+
+
+
+
+
+
+# rainmaker-pgr
+
+The objective of this service is to provide a service that enables users to file complaints and get them resolved. 
+PGR facilitates live tracking of status of the complaint, provides features to upload images, post comments, workflow for complaint resolution and more. 
+The system has a citizen interface and an employee interface.
+
+### DB UML Diagram
+
+- TBD
+
+### Service Dependencies
+
+- egov-mdms-service
+- egov-localization
+- egov-idgen
+- egov-searcher
+- egov-filestore
+- egov-hrms
+- egov-user
+
+### Swagger API Contract
+
+Link to the swagger API contract yaml and editor link like below
+
+http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/rainmaker-pgr/contracts/Pgr-V.3.0.yml#!/
+
+
+## Service Details
+
+PGR is the Public Grievance Redressal system on the DIGIT platform that exposes APIs to create, fetch and manage complaints filed by the citizen or CSR on behalf of 
+the citizen. This application also provides a assignment-resolution workflow with defined SLAs. Actors involved in PGR are GRO (Grievance Routing officer who assigns 
+complaints to the LME), DGRO (GRO at the Department level), LME (Last Mile Employee who resolves the complaint), CSR (Citizen Service Representative who can file and 
+act on complaints on behalf of the citizen.), CITIZEN (who files complaints.) 
+
+
+### API Details
+
+`/_create` - API to create complaints
+
+`/_update` - API to update complaints
+
+`/_search` - API to search complaints based on different criteria
+
+`/_count` - API to fetch count of complaints 
+
+### Reference Document
+
+All the details and configurations on the services are explained in the document `https://digit-discuss.atlassian.net/wiki/spaces/EPE/pages/239403013/rainmaker-pgr?atlOrigin=eyJpIjoiNTA4NzFkYmEyNWJlNDI0NTliN2E3ZTliNDM5ZTBjMzAiLCJwIjoiYyJ9`
+
+### Kafka Consumers
+
+`kafka.topics.save.service = save-pgr-service` : Pgr listens to this topic to fetch the PGR complaint data for SYSTEMGENERATED notifications.  
+`kafka.topics.update.service = update-pgr-service` : Pgr listens to this topic to fetch the updated PGR complaint data for SYSTEMGENERATED notifications.
+
+### Kafka Producers
+
+`kafka.topics.save.service = save-pgr-service` : This is the persister topic onto which pgr pushes records for persistence. This is for creating complaints.  
+`kafka.topics.update.service = update-pgr-service` : This is the persister topic onto which pgr pushes records for persistence. This is for updating complaints.
+`kafka.topics.save.index.service = save-pgr-index-service` : This is the indexer topic onto which pgr pushes records for indexing. This is for creating complaints.
+`kafka.topics.notification.complaint = pgr.complaint.notif` : Topic to which the pg-notification consumer is subscribed. PGR pushes records to this topic in order to send out sms notifs  
+`egov.usr.events.create.topic = persist-user-events-async` : Topic to which PGR builds and pushes the SYSTEMGENERATED user-events.

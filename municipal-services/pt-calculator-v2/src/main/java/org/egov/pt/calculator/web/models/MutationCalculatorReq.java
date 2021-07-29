@@ -25,7 +25,7 @@ import lombok.ToString;
 @ToString
 public class MutationCalculatorReq {
 	
-    @JsonProperty("requestInfo")
+    @JsonProperty("RequestInfo")
 	private RequestInfo requestInfo;
 	
     @JsonProperty("mutationCalculationCriteria")

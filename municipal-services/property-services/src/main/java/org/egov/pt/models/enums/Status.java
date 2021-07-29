@@ -7,12 +7,18 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * status of the Property
  */
 public enum Status {
-  
-  ACTIVE("ACTIVE"),
-  
-  INACTIVE("INACTIVE");
 
-  private String value;
+	ACTIVE ("ACTIVE"),
+
+	INACTIVE ("INACTIVE"),
+
+	INWORKFLOW ("INWORKFLOW"),
+	
+	CANCELLED ("CANCELLED"),
+	
+	REJECTED ("REJECTED");
+
+	private String value;
 
   Status(String value) {
     this.value = value;
@@ -34,4 +40,3 @@ public enum Status {
     return null;
   }
 }
-

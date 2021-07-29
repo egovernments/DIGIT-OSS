@@ -1,5 +1,6 @@
 package org.egov.pt.calculator.util;
 
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +19,15 @@ public class Configurations {
 	
 	@Value("${kafka.topics.billing-slab.update.service}")
 	public String billingSlabUpdatePersisterTopic;
+
+	@Value("${kafka.topics.mutation-billing-slab.save.service}")
+	public String mutationbillingSlabSavePersisterTopic;
+
+	@Value("${kafka.topics.mutation-billing-slab.update.service}")
+	public String mutationbillingSlabUpdatePersisterTopic;
+
+	@Value("${pt.mutation.deadline.month}")
+	public Integer mutationDeadlineMonth;
 	
 	//MDMS
 	@Value("${egov.mdms.host}")
@@ -30,6 +40,12 @@ public class Configurations {
 	/*
 	 * Calculator Configs
 	 */
+	//assessment service
+	@Value("${egov.assessmentservice.host}")
+	private String assessmentServiceHost;
+
+	@Value("${egov.assessmentservice.search.endpoint}")
+	private String	assessmentSearchEndpoint;
 	
 	// billing service
 	@Value("${egov.billingservice.host}")

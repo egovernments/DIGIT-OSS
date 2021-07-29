@@ -93,6 +93,7 @@ public class NotificationService {
 			if(StringUtils.isEmpty(serviceType))
 				serviceType = PGRUtils.splitCamelCase(serviceTypes.get(0));
 		} catch (Exception e) {
+			log.error("SERVICE_TYPE_EXCEPTION", e);
 			return null;
 		}
 		Integer sla = slaHours.get(0) / 24; //converting hours to days.
@@ -158,10 +159,12 @@ public class NotificationService {
 						department = departments.get(0); //Every serviceCode is mapped to always only one dept.
 					}
 				} catch (Exception e) {
+			log.error("DEPARTMENT_EXCEPTION", e);
 					 return department;
 				}
 			}
 		}catch (Exception e) {
+			log.error("DEPARTMENT_EXCEPTION", e);
 		    return department;
 		}
 		 return department;
@@ -182,11 +185,12 @@ public class NotificationService {
 		List<String> designations = null;
 		try {
 			Object result = serviceRequestRepository.fetchResult(uri, mdmsCriteriaReq);
-			log.info("Desg search: "+result);
+			log.info("Desgination search: " + result);
 			designations = JsonPath.read(result, PGRConstants.JSONPATH_DESIGNATIONS);
 			if (null == designations || designations.isEmpty())
 				return null;
 		} catch (Exception e) {
+			log.error("DESIGNATION_EXCEPTION", e);
 			return null;
 		}
 
@@ -251,7 +255,7 @@ public class NotificationService {
 					uuid = res.getUser().get(0).getUuid();
 				}
 			}catch(Exception e) {
-				log.error("Couldn't fetch user for id: "+userId+" error: " + e);
+				log.error("Couldn't fetch user for id: " + userId + " error: " + e);
 			}
 			return phoneNumber + "|" + uuid;
 		}else if(role.equals(PGRConstants.ROLE_EMPLOYEE)) {
@@ -281,13 +285,14 @@ public class NotificationService {
 				return null;
 			return actions.get(0).getAssignee();
 		}catch(Exception e) {
+			log.error("ASSIGNMENT_EXCEPTION", e);
 			return null;
 		}
 
 	}
 	
 	public Long getSlaHours() {
-		log.info("Returning default sla: "+egovDefaultServiceSla);
+		log.info("Returning default sla: " + egovDefaultServiceSla);
 		return egovDefaultServiceSla;
 	}
 

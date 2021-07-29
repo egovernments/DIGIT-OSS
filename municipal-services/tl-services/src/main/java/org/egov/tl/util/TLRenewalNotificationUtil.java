@@ -3,6 +3,7 @@ package org.egov.tl.util;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
@@ -29,13 +30,17 @@ public class TLRenewalNotificationUtil {
 
     private Producer producer;
 
+    private NotificationUtil notificationUtil;
+
     @Autowired
-    public TLRenewalNotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository,
-                            Producer producer) {
+    public TLRenewalNotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, NotificationUtil notificationUtil) {
         this.config = config;
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
+        this.notificationUtil = notificationUtil;
     }
+
+
 
     final String receiptNumberKey = "receiptNumber";
 
@@ -243,6 +248,18 @@ public class TLRenewalNotificationUtil {
         message = message.replace("<3>", license.getApplicationNumber());
         String date = epochToDate(license.getValidTo());
         message = message.replace("<4>", date);
+
+        String UIHost = config.getUiAppHost();
+
+        String paymentPath = config.getPayLinkSMS();
+        paymentPath = paymentPath.replace("$consumercode",license.getApplicationNumber());
+        paymentPath = paymentPath.replace("$tenantId",license.getTenantId());
+        paymentPath = paymentPath.replace("$businessservice",businessService_TL);
+
+        String finalPath = UIHost + paymentPath;
+
+        message = message.replace(PAYMENT_LINK_PLACEHOLDER,notificationUtil.getShortenedUrl(finalPath));
+
         return message;
     }
 

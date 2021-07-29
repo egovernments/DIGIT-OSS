@@ -527,7 +527,7 @@ public class TLValidator {
      * @param requestInfo The requestInfo of the incoming request
      * @param criteria The TradeLicenseSearch Criteria
      */
-    public void validateSearch(RequestInfo requestInfo, TradeLicenseSearchCriteria criteria, String serviceFromPath) {
+    public void validateSearch(RequestInfo requestInfo, TradeLicenseSearchCriteria criteria, String serviceFromPath, boolean isInterServiceCall) {
         String serviceInSearchCriteria = criteria.getBusinessService();
         if ((serviceInSearchCriteria != null) && (!StringUtils.equals(serviceFromPath, serviceInSearchCriteria))) {
             throw new CustomException("INVALID SEARCH", "Business service in Path param and requestbody not matching");
@@ -568,7 +568,7 @@ public class TLValidator {
             throw new CustomException("INVALID SEARCH","No search parameters are expected");
         else {
             List<String> allowedParams = Arrays.asList(allowedParamStr.split(","));
-            validateSearchParams(criteria, allowedParams);
+            validateSearchParams(criteria, allowedParams, isInterServiceCall, requestInfo);
         }
     }
 
@@ -578,7 +578,8 @@ public class TLValidator {
      * @param criteria TradeLicense search criteria
      * @param allowedParams Allowed Params for search
      */
-    private void validateSearchParams(TradeLicenseSearchCriteria criteria,List<String> allowedParams){
+    private void validateSearchParams(TradeLicenseSearchCriteria criteria, List<String> allowedParams, boolean isInterServiceCall
+            , RequestInfo requestInfo) {
 
         if(criteria.getApplicationNumber()!=null && !allowedParams.contains("applicationNumber"))
             throw new CustomException("INVALID SEARCH","Search on applicationNumber is not allowed");
@@ -599,7 +600,10 @@ public class TLValidator {
             throw new CustomException("INVALID SEARCH","Search on ids is not allowed");
 
         if(criteria.getMobileNumber()!=null && !allowedParams.contains("mobileNumber"))
+        {
+            if(!isInterServiceCall || !requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ))
             throw new CustomException("INVALID SEARCH","Search on mobileNumber is not allowed");
+        }
 
         if(criteria.getLicenseNumbers()!=null && !allowedParams.contains("licenseNumbers"))
             throw new CustomException("INVALID SEARCH","Search on licenseNumber is not allowed");

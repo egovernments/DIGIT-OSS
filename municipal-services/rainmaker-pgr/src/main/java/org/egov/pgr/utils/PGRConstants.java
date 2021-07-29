@@ -11,7 +11,7 @@ public class PGRConstants {
 	
 	private PGRConstants() {}
 
-	public static final String SERV_REQ_ID_NAME = "pgr.servicerequestid";
+	public static final String SERV_REQ_ID_NAME = "rainmaker.pgr.servicerequestid";
 	public static final String SERV_REQ_ID_FORMAT = "[cy:dd]/[cy:MM]/[cy:yyyy]/[SEQ_EG_PGR_SERVICEREQUESTID]";
 		
 	//Notification
@@ -106,6 +106,9 @@ public class PGRConstants {
 	public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 	public static final String  USREVENTS_EVENT_NAME = "Public Grievance Redressal";
 	public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-PGR";
+	
+	
+	public static final String  SERVICE_REQID_REGEX = "(^[0-9/]*$)";
 
 
 	

@@ -42,7 +42,7 @@ public class TLQueryBuilder {
     private static final String QUERY = "SELECT tl.*,tld.*,tlunit.*,tlacc.*,tlowner.*," +
             "tladdress.*,tlapldoc.*,tlverdoc.*,tlownerdoc.*,tlinsti.*,tl.id as tl_id,tl.tenantid as tl_tenantId,tl.lastModifiedTime as " +
             "tl_lastModifiedTime,tl.createdBy as tl_createdBy,tl.lastModifiedBy as tl_lastModifiedBy,tl.createdTime as " +
-            "tl_createdTime,tld.id as tld_id,tladdress.id as tl_ad_id,tld.createdBy as tld_createdBy," +
+            "tl_createdTime,tl.filestoreid as tl_fileStoreId,tld.id as tld_id,tladdress.id as tl_ad_id,tld.createdBy as tld_createdBy," +
             "tlowner.id as tlowner_uuid,tlowner.active as useractive," +
             "tld.createdTime as tld_createdTime,tld.lastModifiedBy as tld_lastModifiedBy,tld.createdTime as " +
             "tld_createdTime,tlunit.id as tl_un_id,tlunit.tradeType as tl_un_tradeType,tlunit.uom as tl_un_uom,tlunit.active as tl_un_active," +
@@ -130,7 +130,7 @@ public class TLQueryBuilder {
 
             if (criteria.getApplicationNumber() != null) {
                 addClauseIfRequired(preparedStmtList, builder);
-                builder.append("  tl.applicationnumber = ? ");
+                builder.append("  LOWER(tl.applicationnumber) = LOWER(?) ");
                 preparedStmtList.add(criteria.getApplicationNumber());
             }
 
@@ -149,7 +149,7 @@ public class TLQueryBuilder {
             List<String> licenseNumbers = criteria.getLicenseNumbers();
             if (!CollectionUtils.isEmpty(licenseNumbers)) {
                 addClauseIfRequired(preparedStmtList, builder);
-                builder.append(" tl.licensenumber IN (").append(createQuery(licenseNumbers)).append(")");
+                builder.append(" LOWER(tl.licensenumber) IN (").append(createQuery(licenseNumbers)).append(")");
                 addToPreparedStatement(preparedStmtList, licenseNumbers);
             }
             
@@ -208,7 +208,7 @@ public class TLQueryBuilder {
         StringBuilder builder = new StringBuilder();
         int length = ids.size();
         for( int i = 0; i< length; i++){
-            builder.append(" ?");
+            builder.append(" LOWER(?)");
             if(i != length -1) builder.append(",");
         }
         return builder.toString();
@@ -250,6 +250,19 @@ public class TLQueryBuilder {
         }
     }
 
+    public String getTLPlainSearchQuery(TradeLicenseSearchCriteria criteria, List<Object> preparedStmtList) {
+        StringBuilder builder = new StringBuilder(QUERY);
+
+        List<String> ids = criteria.getIds();
+        if (!CollectionUtils.isEmpty(ids)) {
+            addClauseIfRequired(preparedStmtList,builder);
+            builder.append(" tl.id IN (").append(createQuery(ids)).append(")");
+            addToPreparedStatement(preparedStmtList, ids);
+        }
+
+        return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
+
+    }
 
 
 

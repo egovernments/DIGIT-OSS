@@ -107,7 +107,7 @@ public class ActionValidator {
     private void validateDocumentsForUpdate(TradeLicenseRequest request){
         Map<String,String> errorMap = new HashMap<>();
         request.getLicenses().forEach(license -> {
-            if(ACTION_INITIATE.equalsIgnoreCase(license.getAction())){
+            if(ACTION_INITIATE.equalsIgnoreCase(license.getAction()) && !license.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
                 if(license.getTradeLicenseDetail().getApplicationDocuments()!=null)
                     errorMap.put("INVALID STATUS","Status cannot be INITIATE when application document are provided");
             }

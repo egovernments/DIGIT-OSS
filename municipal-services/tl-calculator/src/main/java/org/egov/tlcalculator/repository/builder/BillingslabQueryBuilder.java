@@ -53,11 +53,6 @@ public class BillingslabQueryBuilder {
 			preparedStmtList.add(billingSlabSearcCriteria.getLicenseType());
 		}
 		
-		if (!StringUtils.isEmpty(billingSlabSearcCriteria.getApplicationType())) {
-			queryBuilder.append(" AND applicationtype = ? ");
-			preparedStmtList.add(billingSlabSearcCriteria.getApplicationType());
-		}
-
 		if (!StringUtils.isEmpty(billingSlabSearcCriteria.getStructureType())) {
 			queryBuilder.append(" AND (structuretype = ? OR structuretype = 'ALL')");
 			preparedStmtList.add(billingSlabSearcCriteria.getStructureType());
@@ -98,6 +93,10 @@ public class BillingslabQueryBuilder {
 			preparedStmtList.add(billingSlabSearcCriteria.getUomValue());
 		}
 		
+		if(null != billingSlabSearcCriteria.getApplicationType()){
+			queryBuilder.append(" AND (applicationtype =? OR licensetype = 'ALL')");
+			preparedStmtList.add(billingSlabSearcCriteria.getApplicationType());
+		}
 	}
 
 	/**

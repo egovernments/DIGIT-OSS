@@ -13,7 +13,7 @@ public class TLCalculatorConstants {
 
     public static final String MDMS_BILLINGSERVICE  = "BillingService";
 
-    public static final String MDMS_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear[?(@.code==\"{}\")]";
+    public static final String MDMS_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear[?(@.code==\"{}\" && @.module == 'TL')]";
 
     public static final String MDMS_TL_RENEWAL_TAX_PERIODS = "$.MdmsRes.BillingService.TaxPeriod[?(@.financialYear==\"{}\")]";
 

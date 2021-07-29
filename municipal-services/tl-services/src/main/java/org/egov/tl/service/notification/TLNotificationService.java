@@ -181,17 +181,30 @@ public class TLNotificationService {
     			toUsers.add(mapOfPhnoAndUUIDs.get(mobile));
     			Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
     			List<String> payTriggerList = Arrays.asList(config.getPayTriggers().split("[,]"));
+				List<String> viewTriggerList = Arrays.asList(config.getViewApplicationTriggers().split("[,]"));
     			Action action = null;
     			if(payTriggerList.contains(license.getStatus())) {
                     List<ActionItem> items = new ArrayList<>();
         			String actionLink = config.getPayLink().replace("$mobile", mobile)
         						.replace("$applicationNo", license.getApplicationNumber())
-        						.replace("$tenantId", license.getTenantId());
+        						.replace("$tenantId", license.getTenantId())
+        						.replace("$businessService", license.getBusinessService());
         			actionLink = config.getUiAppHost() + actionLink;
         			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
         			items.add(item);
         			action = Action.builder().actionUrls(items).build();
     			}
+    			if(viewTriggerList.contains(license.getStatus())){
+					List<ActionItem> items = new ArrayList<>();
+					String actionLink = config.getViewApplicationLink().replace("$mobile", mobile)
+							.replace("$applicationNo", license.getApplicationNumber())
+							.replace("$tenantId", license.getTenantId());
+					actionLink = config.getUiAppHost() + actionLink;
+					ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getViewApplicationCode()).build();
+					items.add(item);
+					action = Action.builder().actionUrls(items).build();
+
+				}
 
 				
 				events.add(Event.builder().tenantId(license.getTenantId()).description(mobileNumberToMsg.get(mobile))
@@ -250,7 +263,8 @@ public class TLNotificationService {
 					List<ActionItem> items = new ArrayList<>();
 					String actionLink = config.getPayLink().replace("$mobile", mobile)
 							.replace("$applicationNo", license.getApplicationNumber())
-							.replace("$tenantId", license.getTenantId());
+							.replace("$tenantId", license.getTenantId())
+					        .replace("$businessService", license.getBusinessService());;
 					actionLink = config.getUiAppHost() + actionLink;
 					ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 					items.add(item);

@@ -308,6 +308,7 @@ public class CalculationService {
                BillingSlabSearchCriteria searchCriteria = new BillingSlabSearchCriteria();
                searchCriteria.setTenantId(license.getTenantId());
                searchCriteria.setAccessoryCategory(accessory.getAccessoryCategory());
+               searchCriteria.setApplicationType(license.getApplicationType().toString());
               if(accessory.getUomValue()!=null)
               {
                   searchCriteria.setUomValue(Double.parseDouble(accessory.getUomValue()));

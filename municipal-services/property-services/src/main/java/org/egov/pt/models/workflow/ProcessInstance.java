@@ -69,6 +69,9 @@ public class ProcessInstance {
 
 	@JsonProperty("state")
 	private State state;
+	
+	/* for use of notification service in property*/
+	private String notificationAction;
 
 	@JsonProperty("comment")
 	private String comment;
@@ -77,8 +80,8 @@ public class ProcessInstance {
 	@Valid
 	private List<Document> documents;
 
-	@JsonProperty("assignee")
-	private User assignee;
+	@JsonProperty("assignes")
+	private List<User> assignes;
 
 	public ProcessInstance addDocumentsItem(Document documentsItem) {
 		if (this.documents == null) {

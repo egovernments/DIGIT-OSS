@@ -1,0 +1,582 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: eGov Water and Sewerage(W&S)  System.
+  description: |
+    APIs for W&S module. This provide APIs for create new property, update existing property, search existing property.
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: WC & SWC
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml'
+paths:
+  /wc/_create:
+    post:
+      summary: Apply for new water connection.
+      description: | 
+        Citizen or employee can apply for new water connection.
+      x-roles: 'WC_CEMP,CITIZEN'
+      responses:
+        '201':
+          description: Water connection application is submitted sucessfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/WaterConnectionResponse'
+        '400':
+          description: Failed to submit application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      tags:
+        - Water
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WaterConnectionRequest'
+        description: Details for the new property + RequestHeader meta data.
+        required: true
+  /wc/_update:
+    post:
+      summary: Update existing water connection details.
+      description: Updates a given `water connection` with newer details.
+      x-roles: 'WC_CEMP,CITIZEN'
+      tags:
+        - Water
+      responses:
+        '200':
+          description: Water connection details has been submitted sucessfully with new details
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/WaterConnectionResponse'
+        '400':
+          description: Update water connection details failed
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WaterConnectionRequest'
+        description: Request of water connection details.
+        required: true
+  /wc/_search:
+    post:
+      summary: Get the list of exsting water connections.
+      description: |
+        Get the water connections list based on the input parameters.
+      x-roles: 'WC_CEMP,CITIZEN'
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/parameters/tenantId'
+        - name: ids
+          in: query
+          description: List of system generated ids of water connection.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: connectionNo
+          in: query
+          required: false
+          description: List of water connection numbers to search..
+          schema:
+            type: array
+            items:
+              type: string
+        - name: oldConnectionNo
+          in: query
+          required: false
+          description: List of old water connection numbers to search..
+          schema:
+            type: array
+            items:
+              type: string
+        - name: mobileNumber
+          in: query
+          description: MobileNumber of owner whose water connection is to be searched.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: fromDate
+          in: query
+          description: Fetches properties with created time after fromDate.
+          required: false
+          schema:
+            type: number
+        - name: toDate
+          in: query
+          description: Fetches properties with created time till toDate.
+          required: false
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/WaterConnectionResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      tags:
+        - Water
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
+        description: RequestHeader meta data.
+        required: true
+  
+  
+  /swc/_create:
+    post:
+      summary: Apply for new Sewerage connection.
+      description: | 
+        Citizen or employee can apply for new Sewerage connection.
+      x-roles: 'SWC_CEMP,CITIZEN'
+      responses:
+        '201':
+          description: Sewerage connection application is submitted sucessfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SewerageConnectionResponse'
+        '400':
+          description: Failed to submit application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      tags:
+        - Sewerage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SewerageConnectionRequest'
+        description: Details for the new Sewerage Connection + RequestHeader meta data.
+        required: true
+  /swc/_update:
+    post:
+      summary: Update existing Sewerage connection details.
+      description: Updates a given `Sewerage connection` with newer details.
+      x-roles: 'SWC_CEMP,CITIZEN'
+      tags:
+        - Sewerage
+      responses:
+        '200':
+          description: Sewerage connection details has been submitted sucessfully with new details
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SewerageConnectionResponse'
+        '400':
+          description: Update Sewerage connection details failed
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SewerageConnectionRequest'
+        description: Request of Sewerage connection details.
+        required: true
+  /swc/_search:
+    post:
+      summary: Get the list of exsting Sewerage connections.
+      description: |
+        Get the water connections list based on the input parameters.
+      x-roles: 'SWC_CEMP,CITIZEN'
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/parameters/tenantId'
+        - name: ids
+          in: query
+          description: List of system generated ids of Sewerage connection.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: connectionNo
+          in: query
+          required: false
+          description: List of Sewerage connection numbers to search..
+          schema:
+            type: array
+            items:
+              type: string
+        - name: oldConnectionNo
+          in: query
+          required: false
+          description: List of old Sewerage connection numbers to search..
+          schema:
+            type: array
+            items:
+              type: string
+        - name: mobileNumber
+          in: query
+          description: MobileNumber of owner whose Sewerage connection is to be searched.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: fromDate
+          in: query
+          description: Fetches Sewerage Connection with created time after fromDate.
+          required: false
+          schema:
+            type: number
+        - name: toDate
+          in: query
+          description: Fetches Sewerage Connection with created time till toDate.
+          required: false
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SewerageConnectionResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      tags:
+        - Sewerage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
+        description: RequestHeader meta data.
+        required: true
+servers:
+# Added by API Auto Mocking Plugin
+# Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/egov-foundation/Water-Sewerage-1.0/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/egovernmets-faoundat/Water-Sewerage-1.0/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/egovernmets-faundation/PT-2.0/1.0.0'
+  - url: 'https://egov-micro-dev.egovernments.org'
+components:
+  schemas:
+    
+    Connection:
+      description: This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.
+      properties:
+        id:
+          type: string
+          description: Unique Identifier of the connection for internal reference.
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+        tenantId:
+          type: string
+          description: Unique ULB identifier.
+          maxLength: 256
+          minLength: 2
+          nullable: false
+        propertyId:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: Property Unique Id
+        applicationNo:
+          type: string
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+          description: Formatted application number, which will be generated using ID-Gen at the time .
+        applicationStatus:
+          type: string
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+        status:
+          type: string
+          readOnly: true
+          enum: 
+            - Active
+            - Inactive
+        connectionNo:
+          type: string
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+          description: Formatted connection number, which will be generated using ID-Gen service after aproval of connection application in case of new application. If the source of data is "DATA_ENTRY" then application status will be considered as "APROVED" application.
+        oldConnectionNo:
+          type: string
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+          description: Mandatory if source is "DATA_ENTRY".
+        documents:
+          description: The documents attached by owner for exemption.
+          type: array
+          items:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/Document'
+        plumberInfo:
+          description: The documents attached by owner for exemption.
+          type: array
+          items:
+            $ref: '#/components/schemas/PlumberInfo'
+        roadCuttingInfo:
+          description: The details about road cutting fot the connection establishment.
+          type: array
+          items:
+            $ref: '#/components/schemas/RoadCuttingInfo'    
+        connectionExecutionDate:
+              type: integer
+              format: int64
+              readOnly: true
+              minLength: 1
+              maxLength: 64
+        connectionCategory:
+              type: string 
+              minLength: 2
+              maxLength: 32
+              description: It is a master data, defined in MDMS
+        connectionType:
+              type: string
+              minLength: 2
+              maxLength: 32
+              description: It is a master data, defined in MDMS.
+        additionalDetails:
+          type: object
+          description: Json object to capture any extra information which is not accommodated of model
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/AuditDetails'
+      required:
+        - connectionType
+        - connectionCategory
+    
+  
+    PlumberInfo:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          description: Unique ULB identifier.
+          maxLength: 256
+          minLength: 2
+          nullable: false
+        name:
+          type: string
+          description: The name of the user.
+          maxLength: 256
+        licenseNo:
+          type: string
+          description: Plumber unique license number.
+          maxLength: 256
+        mobileNumber:
+          type: string
+          description: MobileNumber of the user.
+          maxLength: 256
+        gender:
+          type: string
+          description: Gender of the user.
+          maxLength: 256
+        fatherOrHusbandName:
+          type: string
+          description: Father or Husband name of the user.
+          maxLength: 256
+        correspondenceAddress:
+          type: string
+          description: The current address of the owner for correspondence.
+          maxLength: 1024
+        relationship:
+          type: string
+          description: The relationship of gaurdian.
+          enum:
+            - FATHER
+            - HUSBAND
+        
+        additionalDetails:
+          type: object
+          description: Json object to capture any extra information which is not accommodated of model
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/AuditDetails'
+    RoadCuttingInfo:
+      type: object
+      properties:
+        roadType:
+            type: string 
+            minLength: 2
+            maxLength: 32
+            description: It is a master data, defined in MDMS. If road cutting is required to established the connection then we need to capture the details of road type.
+        roadCuttingArea:
+            type: number
+            format: float
+            description: Capture the road cutting area in sqft.
+        
+
+    WaterConnection:
+      allOf:
+        - $ref: '#/components/schemas/Connection'
+        - type: object
+
+          description: This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.
+          properties:
+            rainWaterHarvesting:
+              type: boolean
+            waterSource:
+              type: string
+              minLength: 2
+              maxLength: 64
+              description: It is a namespaced master data, defined in MDMS
+            meterId:
+              type: string
+              minLength: 2
+              maxLength: 64
+              description: Unique id of the meter.
+            meterInstallationDate:
+              type: integer
+              format: int64
+              description: The date of meter installation date.
+            proposedPipeSize:
+              type: number
+              format: double
+              minLength: 1
+              maxLength: 64
+              description: proposed size of the pipe which will be use to provide the connection.
+            actualPipeSize:
+              type: number
+              format: double
+              minLength: 1
+              maxLength: 64
+              description: Actual pipe size which used in the water connection.
+            proposedTaps:
+              type: number
+              format: double
+              minLength: 1
+              maxLength: 64
+              description: proposed number of the taps.
+            actualTaps:
+              type: number
+              format: double
+              minLength: 1
+              maxLength: 64
+              description: Actual number of the taps
+            documents:
+              description: The documents attached by owner for exemption.
+              type: array
+              items:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/Document'
+          required:
+            - connectionType
+            - waterSource
+            - connectionCategory
+        
+    SewerageConnection:
+      allOf:
+        - $ref: '#/components/schemas/Connection'
+        - type: object
+
+          description: This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.
+          properties:
+            noOfWaterClosets:
+              type: number
+              format: int64
+              minLength: 1
+              maxLength: 64
+            proposedWaterClosets:
+              type: number
+              format: int64
+              minLength: 1
+              maxLength: 64
+            noOfToilets:
+              type: number
+              format: int64
+              minLength: 1
+              maxLength: 64
+            proposedToilets:
+              type: number
+              format: int64
+              minLength: 1
+              maxLength: 64
+          
+        
+    WaterConnectionRequest:
+      description: Contract class to receive request. Array of Property items  are used in case of create . Where as single Property item is used for update
+      properties:
+        RequestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
+        WaterConnection:
+          $ref: '#/components/schemas/WaterConnection'
+    WaterConnectionResponse:
+      description: Contains the ResponseHeader and the created/updated property
+      properties:
+        ResponseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+        WaterConnection:
+          type: array
+          items:
+            $ref: '#/components/schemas/WaterConnection'
+          
+    SewerageConnectionRequest:
+      description: Contract class to receive request. Array of Property items  are used in case of create . Where as single Property item is used for update
+      properties:
+        RequestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
+        SewerageConnection:
+          $ref: '#/components/schemas/SewerageConnection'
+          
+    SewerageConnectionResponse:
+      description: Contains the ResponseHeader and the created/updated property
+      properties:
+        ResponseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+        SewerageConnections:
+          type: array
+          items:
+            $ref: '#/components/schemas/SewerageConnection'
+
+####################### Master data schema(MDMS) #######################     
+      
+    ConnectionCategory:
+      type: object
+      properties:
+        code:
+          type: string
+          description: code of the connection category
+          maxLength: 64
+          minLength: 2
+        active:
+          type: boolean
+          description: describes Whether propertyType is Active or not.
+      required:
+        - code
+        
+    ConnectionType:
+      type: object
+      properties:
+        code:
+          type: string
+          description: code of the connection type
+          maxLength: 64
+          minLength: 2
+        active:
+          type: boolean
+          description: Whether UsageCategoryMajor is Active or not.
+      required:
+        - code
