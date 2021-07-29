@@ -20,7 +20,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
       nextPage;
     let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null) {
-      if (nextStep[sessionStorage.getItem("isAccessories")]) {
+      if (nextStep[sessionStorage.getItem("isAccessories")] && (nextStep[sessionStorage.getItem("isAccessories")]==="accessories-details" || nextStep[sessionStorage.getItem("isAccessories")]==="map")) {
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
       } else if (nextStep[sessionStorage.getItem("StructureType")]) {
         nextStep = `${nextStep[sessionStorage.getItem("StructureType")]}`;

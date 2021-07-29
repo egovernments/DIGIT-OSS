@@ -333,7 +333,100 @@ export const getwfdocuments = (data) => {
   return wfdoc;
 }
 
+export const getEditTradeDocumentUpdate = (data) => {
+  let updateddocuments=[];
+  let doc = data ? data.owners.documents : [];
+  data.tradeLicenseDetail.applicationDocuments.map((olddoc) => {
+    if(olddoc.documentType === "OWNERPHOTO" && olddoc.fileStoreId === data.owners.documents["OwnerPhotoProof"].fileStoreId ||
+    olddoc.documentType === "OWNERSHIPPROOF" && olddoc.fileStoreId == data.owners.documents["ProofOfOwnership"].fileStoreId ||
+    olddoc.documentType === "OWNERIDPROOF" && olddoc.fileStoreId === data.owners.documents["ProofOfIdentity"].fileStoreId)
+    {
+      updateddocuments.push(olddoc);
+    }
+    else{
+    if(olddoc.documentType === "OWNERPHOTO" && olddoc.fileStoreId !== data.owners.documents["OwnerPhotoProof"].fileStoreId)
+    {
+      updateddocuments.push({
+        fileName: doc["OwnerPhotoProof"].name,
+        fileStoreId: doc["OwnerPhotoProof"].fileStoreId,
+        documentType: "OWNERPHOTO",
+        tenantId: data?.tenantId,
+      });
+      updateddocuments.push({...olddoc, active :"false"});
+    }
+    if(olddoc.documentType === "OWNERSHIPPROOF" && olddoc.fileStoreId !== data.owners.documents["ProofOfOwnership"].fileStoreId)
+    {
+      updateddocuments.push({
+        fileName: doc["ProofOfOwnership"].name,
+        fileStoreId: doc["ProofOfOwnership"].fileStoreId,
+        documentType: "OWNERSHIPPROOF",
+        tenantId: data?.tenantId,
+      });
+      updateddocuments.push({...olddoc,active:"false"});
+    }
+    if(olddoc.documentType === "OWNERIDPROOF" && olddoc.fileStoreId !== data.owners.documents["ProofOfIdentity"].fileStoreId)
+    {
+      updateddocuments.push({
+        fileName: doc["ProofOfIdentity"].name,
+        fileStoreId: doc["ProofOfIdentity"].fileStoreId,
+        documentType: "OWNERIDPROOF",
+        tenantId: data?.tenantId,
+      });
+      updateddocuments.push({...olddoc,active:"false"});
+    }
+  }
+  });
+  return updateddocuments;
+}
+
+export const getEditRenewTradeDocumentUpdate = (data,datafromflow) => {
+  let updateddocuments=[];
+  let doc = datafromflow ? datafromflow.owners.documents : [];
+  data.tradeLicenseDetail.applicationDocuments.map((olddoc) => {
+    if(olddoc.documentType === "OWNERPHOTO" && olddoc.fileStoreId === datafromflow.owners.documents["OwnerPhotoProof"].fileStoreId ||
+    olddoc.documentType === "OWNERSHIPPROOF" && olddoc.fileStoreId == datafromflow.owners.documents["ProofOfOwnership"].fileStoreId ||
+    olddoc.documentType === "OWNERIDPROOF" && olddoc.fileStoreId === datafromflow.owners.documents["ProofOfIdentity"].fileStoreId)
+    {
+      updateddocuments.push(olddoc);
+    }
+    else{
+    if(olddoc.documentType === "OWNERPHOTO" && olddoc.fileStoreId !== datafromflow.owners.documents["OwnerPhotoProof"].fileStoreId)
+    {
+      updateddocuments.push({
+        fileName: doc["OwnerPhotoProof"].name,
+        fileStoreId: doc["OwnerPhotoProof"].fileStoreId,
+        documentType: "OWNERPHOTO",
+        tenantId: data?.tenantId,
+      });
+      updateddocuments.push({...olddoc, active :"false"});
+    }
+    if(olddoc.documentType === "OWNERSHIPPROOF" && olddoc.fileStoreId !== datafromflow.owners.documents["ProofOfOwnership"].fileStoreId)
+    {
+      updateddocuments.push({
+        fileName: doc["ProofOfOwnership"].name,
+        fileStoreId: doc["ProofOfOwnership"].fileStoreId,
+        documentType: "OWNERSHIPPROOF",
+        tenantId: data?.tenantId,
+      });
+      updateddocuments.push({...olddoc,active:"false"});
+    }
+    if(olddoc.documentType === "OWNERIDPROOF" && olddoc.fileStoreId !== datafromflow.owners.documents["ProofOfIdentity"].fileStoreId)
+    {
+      updateddocuments.push({
+        fileName: doc["ProofOfIdentity"].name,
+        fileStoreId: doc["ProofOfIdentity"].fileStoreId,
+        documentType: "OWNERIDPROOF",
+        tenantId: data?.tenantId,
+      });
+      updateddocuments.push({...olddoc,active:"false"});
+    }
+  }
+  });
+  return updateddocuments;
+}
+
 export const convertToUpdateTrade = (data = {}, datafromflow, tenantId) => {
+  const isEdit = window.location.href.includes("renew-trade");
   let formdata1 = {
     Licenses: [
     ]
@@ -342,8 +435,8 @@ export const convertToUpdateTrade = (data = {}, datafromflow, tenantId) => {
     ...data.Licenses[0],
   }
   formdata1.Licenses[0].action = "APPLY";
-  formdata1.Licenses[0].wfDocuments = formdata1.Licenses[0].wfDocuments ? formdata1.Licenses[0].wfDocuments : getwfdocuments(datafromflow),
-    formdata1.Licenses[0].tradeLicenseDetail.applicationDocuments = formdata1.Licenses[0].tradeLicenseDetail.applicationDocuments ? formdata1.Licenses[0].tradeLicenseDetail.applicationDocuments : getwfdocuments(datafromflow),
+  formdata1.Licenses[0].wfDocuments = formdata1.Licenses[0].wfDocuments ? formdata1.Licenses[0].wfDocuments:[],
+    formdata1.Licenses[0].tradeLicenseDetail.applicationDocuments = !isEdit ? (formdata1.Licenses[0].tradeLicenseDetail.applicationDocuments ? formdata1.Licenses[0].tradeLicenseDetail.applicationDocuments : getwfdocuments(datafromflow)):getEditRenewTradeDocumentUpdate(data?.Licenses[0],datafromflow),
     console.info("formdata1", formdata1);
   return formdata1;
 }
@@ -469,7 +562,7 @@ export const convertToResubmitTrade = (data) => {
         status: data?.status,
         tradeLicenseDetail: {
           address: data.tradeLicenseDetail.address,
-          applicationDocuments: data.tradeLicenseDetail.applicationDocuments,
+          applicationDocuments: getEditTradeDocumentUpdate(data),
           accessories: gettradeupdateaccessories(data),
           owners: gettradeownerarray(data),
           structureType: (data?.TradeDetails?.VehicleType ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code),

@@ -60,7 +60,7 @@ const CheckPage = ({ onSubmit, value }) => {
         />
         <Row
           label={t("TL_STRUCTURE_SUB_TYPE")}
-          text={t(TradeDetails?.VehicleType ? TradeDetails?.VehicleType.i18nKey : TradeDetails?.BuildingType.i18nKey)}
+          text={t( TradeDetails?.StructureType.code !=="IMMOVABLE" ? TradeDetails?.VehicleType.i18nKey : TradeDetails?.BuildingType.i18nKey)}
           actionButton={
             <ActionButton
               jumpTo={

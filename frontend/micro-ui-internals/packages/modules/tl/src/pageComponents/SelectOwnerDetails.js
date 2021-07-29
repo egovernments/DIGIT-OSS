@@ -16,6 +16,20 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   );
   let ismultiple = formData?.ownershipCategory?.code.includes("SINGLEOWNER") ? false : true;
 
+  useEffect(() => {
+    fields.map((ob) => {
+      if(ob.name && ob.mobilenumber && ob.gender)
+      {
+        setCanmovenext(false);
+      }
+      else
+      {
+        setCanmovenext(true);
+      }
+    })
+  },[fields])
+
+
   const isUpdateProperty = formData?.isUpdateProperty || false;
   let isEditProperty = formData?.isEditProperty || false;
   const { pathname: url } = useLocation();
