@@ -240,7 +240,7 @@ const OwnerForm = (_props) => {
             </div>
           ) : null}
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_OWNER_S_NAME_LABEL")}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_OWNER_S_NAME_LABEL")} * :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -269,7 +269,7 @@ const OwnerForm = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_OWNER_S_MOBILE_NUM_LABEL")}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_OWNER_S_MOBILE_NUM_LABEL")} * :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -295,7 +295,7 @@ const OwnerForm = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.mobileNumber ? errors?.mobileNumber?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_GUARDIAN_S_NAME_LABEL")}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_GUARDIAN_S_NAME_LABEL")} * :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -321,7 +321,7 @@ const OwnerForm = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}> {localFormState.touched.fatherOrHusbandName ? errors?.fatherOrHusbandName?.message : ""} </CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL")}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL")} * :`}</CardLabel>
             <Controller
               control={control}
               name={"relationship"}
@@ -350,7 +350,7 @@ const OwnerForm = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.relationship ? errors?.relationship?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_GENDER_LABEL")}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_GENDER_LABEL")} * :`}</CardLabel>
             <Controller
               control={control}
               name={"gender"}
@@ -375,7 +375,7 @@ const OwnerForm = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.gender ? errors?.gender?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_EMAIL_LABEL")}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_EMAIL_LABEL")} :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -401,12 +401,12 @@ const OwnerForm = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.emailId ? errors?.emailId?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_OWNER_SPECIAL_CATEGORY")}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_OWNER_SPECIAL_CATEGORY")} :`}</CardLabel>
             <Controller
               control={control}
               name={"ownerType"}
               defaultValue={owner?.ownerType}
-              rules={{ required: "required" }}
+              // rules={}
               render={(props) => (
                 <Dropdown
                   className="form-field"
@@ -426,13 +426,13 @@ const OwnerForm = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.ownerType ? errors?.ownerType?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_ADDR_LABEL")}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_ADDR_LABEL")} * :`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
                 name={"permanentAddress"}
                 defaultValue={owner?.permanentAddress}
-                rules={isIndividualTypeOwner ? {} : { required: "REQUIRED" }}
+                rules={{ required: "REQUIRED" }}
                 render={(props) => (
                   <TextInput
                     value={props.value}

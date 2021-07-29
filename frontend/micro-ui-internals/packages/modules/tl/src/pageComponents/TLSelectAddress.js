@@ -158,7 +158,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
     return (
       <div>
         <LabelFieldPair>
-          <CardLabel className="card-label-smaller">{`${t("MYCITY_CODE_LABEL")}:`}</CardLabel>
+          <CardLabel className="card-label-smaller">{`${t("MYCITY_CODE_LABEL")} * :`}</CardLabel>
           <Controller
             name={"city"}
             defaultValue={cities?.length === 1 ? cities[0] : selectedCity}
@@ -180,7 +180,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.city ? errors?.city?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel className="card-label-smaller">{`${t("TL_LOCALIZATION_LOCALITY")}:`}</CardLabel>
+          <CardLabel className="card-label-smaller">{`${t("TL_LOCALIZATION_LOCALITY")} * :`}</CardLabel>
           <Controller
             name="locality"
             defaultValue={checkingLocationForRenew ? formData.address.locality : null}
