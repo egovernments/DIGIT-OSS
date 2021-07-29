@@ -819,22 +819,26 @@ const pgr =  {
             cond: (context, event) => {
               return event.data.length>0;
             },
-            actions: assign((context, event) => {     
-              let complaints = event.data;
-              var preamble =  dialog.get_message(messages.trackComplaint.results.preamble, context.user.locale);
-              dialog.sendMessage(context, preamble, false);
-              for(let i = 0; i < complaints.length; i++) {
-                let template = dialog.get_message(messages.trackComplaint.results.complaintTemplate, context.user.locale);
-                let complaint = complaints[i];
-                template = template.replace('{{complaintType}}',complaint.complaintType);
-                template = template.replace('{{filedDate}}', complaint.filedDate);
-                template = template.replace('{{complaintStatus}}', complaint.complaintStatus);
-                template = template.replace('{{complaintLink}}', complaint.complaintLink);
+            actions: assign((context, event) => {
+              (async() => {   
+                let complaints = event.data;
+                var preamble =  dialog.get_message(messages.trackComplaint.results.preamble, context.user.locale);
+                dialog.sendMessage(context, preamble, true);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                for(let i = 0; i < complaints.length; i++) {
+                  let template = dialog.get_message(messages.trackComplaint.results.complaintTemplate, context.user.locale);
+                  let complaint = complaints[i];
+                  template = template.replace('{{complaintType}}',complaint.complaintType);
+                  template = template.replace('{{filedDate}}', complaint.filedDate);
+                  template = template.replace('{{complaintStatus}}', complaint.complaintStatus);
+                  template = template.replace('{{complaintLink}}', complaint.complaintLink);
 
-                dialog.sendMessage(context, template, false);
-              }
-              var closingStatement = dialog.get_message(messages.trackComplaint.results.closingStatement, context.user.locale);
-              dialog.sendMessage(context, closingStatement);
+                  dialog.sendMessage(context, template, true);
+                }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                var closingStatement = dialog.get_message(messages.trackComplaint.results.closingStatement, context.user.locale);
+                dialog.sendMessage(context, closingStatement, true);
+              })();
             })
           },
           {
