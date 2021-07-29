@@ -19,8 +19,8 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
   };
 
   const clearAll = () => {
-    setSearchParams(defaultSearchParams);
-    onFilterChange(defaultSearchParams);
+    setSearchParams({});
+    onFilterChange({});
   };
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -72,7 +72,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
           <div>
             <RadioButtons
               onSelect={(d) => localParamChange({ uuid: d })}
-              selectedOption={_searchParams?.uuid}
+              selectedOption={_searchParams?.uuid || { code: "ASSIGNED_TO_ALL", name: "ES_INBOX_ASSIGNED_TO_ALL" }}
               t={t}
               optionsKey="name"
               options={[
