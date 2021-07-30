@@ -74,7 +74,9 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                     caption={value.caption}
                     className="border-none"
                     // TODO, Later will move to classes
-                    rowContainerStyle={checkLocation ? { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" } : {}}
+                    rowContainerStyle={
+                      checkLocation ? { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" } : {}
+                    }
                   />
                 );
               })}
@@ -91,40 +93,44 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
           )}
         </React.Fragment>
       ))}
-      <BreakLine />
-      {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
-      {!workflowDetails?.isLoading && !isDataLoading && (
-        <Fragment>
-          <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
-            {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
-          </CardSectionHeader>
-          {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
-            <CheckPoint
-              isCompleted={true}
-              label={t(`${timelineStatusPrefix}${workflowDetails?.data?.timeline[0]?.state}`)}
-              customChild={getTimelineCaptions(workflowDetails?.data?.timeline[0])}
-            />
-          ) : (
-            <ConnectingCheckPoints>
-              {workflowDetails?.data?.timeline &&
-                workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <CheckPoint
-                        keyValue={index}
-                        isCompleted={index === 0}
-                        info={checkpoint.comment}
-                        label={t(
-                          `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint.state}`
-                        )}
-                        customChild={getTimelineCaptions(checkpoint)}
-                      />
-                    </React.Fragment>
-                  );
-                })}
-            </ConnectingCheckPoints>
+      {workflowDetails?.data?.timeline?.length > 0 && (
+        <React.Fragment>
+          <BreakLine />
+          {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
+          {!workflowDetails?.isLoading && !isDataLoading && (
+            <Fragment>
+              <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
+                {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+              </CardSectionHeader>
+              {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
+                <CheckPoint
+                  isCompleted={true}
+                  label={t(`${timelineStatusPrefix}${workflowDetails?.data?.timeline[0]?.state}`)}
+                  customChild={getTimelineCaptions(workflowDetails?.data?.timeline[0])}
+                />
+              ) : (
+                <ConnectingCheckPoints>
+                  {workflowDetails?.data?.timeline &&
+                    workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <CheckPoint
+                            keyValue={index}
+                            isCompleted={index === 0}
+                            info={checkpoint.comment}
+                            label={t(
+                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint.state}`
+                            )}
+                            customChild={getTimelineCaptions(checkpoint)}
+                          />
+                        </React.Fragment>
+                      );
+                    })}
+                </ConnectingCheckPoints>
+              )}
+            </Fragment>
           )}
-        </Fragment>
+        </React.Fragment>
       )}
     </Card>
   );

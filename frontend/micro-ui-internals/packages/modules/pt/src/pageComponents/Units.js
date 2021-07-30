@@ -60,25 +60,27 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
   useEffect(() => {
     if (!isLoading && presentInModifyApplication && Menu) {
       // usage subUsage unit Occupancy
-      let defaultUnits = formData?.originalData?.units?.map((unit, index) => {
-        let { occupancyType, usageCategory: uc, constructionDetail, floorNo, arv } = unit;
-        occupancyType = occupencyOptions.filter((e) => e?.code === occupancyType)[0];
-        let usageCategory = usageCategoryMajorMenu(usagecat).filter((e) => e?.code === uc)[0];
-        floorNo = getfloorlistdata(floorlist).filter((e) => e?.code == floorNo)[0];
-        let key = Date.now() + index;
-        let order = index + 1;
-        let builtUpArea = constructionDetail.builtUpArea;
-        return {
-          floorNo,
-          occupancyType,
-          usageCategory,
-          key,
-          order,
-          builtUpArea,
-          existingUsageCategory: uc,
-          arv,
-        };
-      });
+      let defaultUnits = formData?.originalData?.units
+        ?.filter((e) => e.active)
+        ?.map((unit, index) => {
+          let { occupancyType, usageCategory: uc, constructionDetail, floorNo, arv } = unit;
+          occupancyType = occupencyOptions.filter((e) => e?.code === occupancyType)[0];
+          let usageCategory = usageCategoryMajorMenu(usagecat).filter((e) => e?.code === uc)[0];
+          floorNo = getfloorlistdata(floorlist).filter((e) => e?.code == floorNo)[0];
+          let key = Date.now() + index;
+          let order = index + 1;
+          let builtUpArea = constructionDetail.builtUpArea;
+          return {
+            floorNo,
+            occupancyType,
+            usageCategory,
+            key,
+            order,
+            builtUpArea,
+            existingUsageCategory: uc,
+            arv,
+          };
+        });
       setUnits(defaultUnits || []);
       setLoader(false);
     }

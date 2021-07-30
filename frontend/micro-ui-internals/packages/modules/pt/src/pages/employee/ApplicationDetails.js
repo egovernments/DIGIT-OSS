@@ -100,14 +100,6 @@ const ApplicationDetails = () => {
               },
               tenantId: Digit.ULBService.getStateId(),
             },
-            // {
-            //   action: "UPDATE",
-            //   redirectionUrl: {
-            //     pathname: `/digit-ui/employee/pt/modify-application/${propertyId}`,
-            //     state: { workflow: { action: "OPEN", moduleName: "PT", businessService: "PT.UPDATE" } },
-            //   },
-            //   tenantId: Digit.ULBService.getStateId(),
-            // },
           ],
         },
       },
@@ -150,7 +142,6 @@ const ApplicationDetails = () => {
           action: "PAY",
           forcedName: "WF_EMPLOYEE_PT.MUTATION_PAY",
           redirectionUrl: { pathname: `/digit-ui/employee/payment/collect/PT.MUTATION/${appDetailsToShow?.applicationData?.acknowldgementNumber}` },
-          // redirectionUrl: { pathname: `/digit-ui/employee/payment/collect/PT/${propertyId}` },
         };
       }
       return act;

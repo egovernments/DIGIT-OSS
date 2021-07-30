@@ -36,6 +36,7 @@ export const PTSearch = {
         ],
         additionalDetails: {
           floors: response?.units
+            ?.filter((e) => e.active)
             ?.sort?.((a, b) => a.floorNo - b.floorNo)
             ?.map((unit, index) => {
               let floorName = `PROPERTYTAX_FLOOR_${unit.floorNo}`;
