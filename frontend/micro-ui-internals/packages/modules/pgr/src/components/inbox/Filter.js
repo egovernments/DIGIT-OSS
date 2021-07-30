@@ -61,6 +61,9 @@ const Filter = (props) => {
         if (params) {
           pgrQuery[property] = params;
         }
+        else{
+          delete pgrQuery?.[property]
+        }
       }
     }
     for (const property in wfFilters) {

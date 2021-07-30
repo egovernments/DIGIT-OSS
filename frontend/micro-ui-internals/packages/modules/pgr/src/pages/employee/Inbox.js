@@ -16,12 +16,13 @@ const Inbox = () => {
 
   useEffect(() => {
     (async () => {
-      let response = await Digit.PGRService.count(tenantId, {});
+      const applicationStatus = searchParams?.filters?.pgrfilters?.applicationStatus?.map(e => e.code).join(",")
+      let response = await Digit.PGRService.count(tenantId, applicationStatus?.length > 0  ? {applicationStatus} : {} );
       if (response?.count) {
         setTotalRecords(response.count);
       }
     })();
-  }, []);
+  }, [searchParams]);
 
   const fetchNextPage = () => {
     setPageOffset((prevState) => prevState + 10);
@@ -45,13 +46,9 @@ const Inbox = () => {
   };
 
   // let complaints = Digit.Hooks.pgr.useInboxData(searchParams) || [];
-  let { data: complaints, isLoading, revalidate } = Digit.Hooks.pgr.useInboxData({ ...searchParams, offset: pageOffset, limit: pageSize }) || [];
+  let { data: complaints, isLoading } = Digit.Hooks.pgr.useInboxData({ ...searchParams, offset: pageOffset, limit: pageSize }) ;
 
   let isMobile = Digit.Utils.browser.isMobile();
-
-  useEffect(() => {
-    revalidate();
-  }, []);
 
   if (complaints?.length !== null) {
     if (isMobile) {

@@ -87,7 +87,7 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
               </span>
               {type === "desktop" && (
                 <SubmitBar
-                  style={{ marginTop: 32, marginLeft: "96px", maxWidth: "256px" }}
+                  style={{ marginTop: 32, marginLeft: "16px", width: "calc( 100% - 16px )" }}
                   label={t("ES_COMMON_SEARCH")}
                   submit={true}
                   disabled={Object.keys(errors).filter((i) => errors[i]).length}
