@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { RatingCard } from "@egovernments/digit-ui-react-components";
+import { RatingCard, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useParams, Redirect, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { updateComplaints } from "../../../redux/actions/index";
@@ -15,9 +15,10 @@ const SelectRating = ({ parentRoute }) => {
   let tenantId = Digit.ULBService.getCurrentTenantId();
   const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
   const updateComplaint = useCallback((complaintDetails) => dispatch(updateComplaints(complaintDetails)), [dispatch]);
-
+  const [submitError, setError] = useState(false)
+  
   function log(data) {
-    if (complaintDetails) {
+    if (complaintDetails && data.rating > 0 ) {
       complaintDetails.service.rating = data.rating;
       complaintDetails.service.additionalDetail = data.CS_FEEDBACK_WHAT_WAS_GOOD.join(",");
       complaintDetails.workflow = {
@@ -28,6 +29,9 @@ const SelectRating = ({ parentRoute }) => {
       // console.log("updtaed complaint details", complaintDetails);
       updateComplaint({ service: complaintDetails.service, workflow: complaintDetails.workflow });
       history.push(`${parentRoute}/response`);
+    }
+    else{
+      setError(true)
     }
   }
 
@@ -41,6 +45,7 @@ const SelectRating = ({ parentRoute }) => {
         type: "rate",
         maxRating: 5,
         label: t("CS_COMPLAINT_RATE_TEXT"),
+        error: submitError ? <CardLabelError>{t("CS_FEEDBACK_ENTER_RATING_ERROR")}</CardLabelError> : null
       },
       {
         type: "checkbox",
