@@ -144,6 +144,7 @@ export const TableConfig = (t) => ({
       },
       {
         Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
+        accessor: "createdTime",
         Cell: ({ row }) => {
           const wf = row.original.workflowData;
           const math = Math.round((wf?.businesssServiceSla || 0) / (24 * 60 * 60 * 1000)) || "-";

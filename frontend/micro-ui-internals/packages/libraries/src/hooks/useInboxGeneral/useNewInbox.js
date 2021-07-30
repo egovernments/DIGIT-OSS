@@ -53,7 +53,7 @@ const useNewInboxGeneral = ({ tenantId, ModuleCode, filters, middleware = [], co
     ["INBOX", workflowFilters, searchFilters, ModuleCode, limit, offset, sortBy, sortOrder],
     () =>
       InboxGeneral.Search({
-        inbox: { tenantId, processSearchCriteria: workflowFilters, moduleSearchCriteria: searchFilters, limit, offset, sortBy, sortOrder },
+        inbox: { tenantId, processSearchCriteria: workflowFilters, moduleSearchCriteria: {...searchFilters, sortBy, sortOrder}, limit, offset },
       }),
     {
       select: (data) => {
