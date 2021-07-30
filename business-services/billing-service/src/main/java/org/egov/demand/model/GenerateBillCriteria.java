@@ -47,7 +47,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.egov.demand.model.BillV2.BillStatus;
 import org.hibernate.validator.constraints.SafeHtml;
 
 import lombok.AllArgsConstructor;
@@ -99,6 +98,7 @@ public class GenerateBillCriteria {
 				.businessService(businessService)
 				.consumerCode(consumerCodeSet)
 				.mobileNumber(mobileNumber)
+				.isPaymentCompleted(true)
 				.demandId(demandIdSet)
 				.tenantId(tenantId)
 				.email(email)
@@ -115,7 +115,6 @@ public class GenerateBillCriteria {
 		return BillSearchCriteria.builder()
 				.consumerCode(consumerCode)
 				.mobileNumber(mobileNumber)
-				.status(BillStatus.ACTIVE)
 				.service(businessService)
 				.tenantId(tenantId)
 				.isOrderBy(true)

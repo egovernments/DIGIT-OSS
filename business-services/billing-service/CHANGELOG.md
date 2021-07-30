@@ -2,10 +2,11 @@
 All notable changes to this module will be documented in this file.
 
 ## 1.3.3 - 2021-07-26
- - earliest bill search
- - bill cancellation
- - state level bill gen fix added
 
+ - Earliest bill search
+ - Bill cancellation
+ - State level bill gen fix added
+ - Provision to add unbilled demands to bill generate
 
 ## 1.3.2 - 2021-05-11
 - apportion fix

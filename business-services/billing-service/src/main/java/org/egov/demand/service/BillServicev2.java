@@ -194,6 +194,17 @@ public class BillServicev2 {
 		if (CollectionUtils.isEmpty(bills))
 			return generateBill(billCriteria, requestInfo);
 		
+		/*
+		 * Adding consumer-codes of unbilled demands to generate criteria
+		 */
+		if (!(StringUtils.isEmpty(billCriteria.getMobileNumber()) && StringUtils.isEmpty(billCriteria.getEmail()))) {
+
+			List<Demand> demands = demandService.getDemands(billCriteria.toDemandCriteria(), requestInfo);
+			billCriteria.getConsumerCode().addAll(
+					demands.stream().map(Demand::getConsumerCode).collect(Collectors.toSet()));
+		}
+
+		log.debug("fetchBill--------going to generate new bill-------------------");
 		Map<String, BillV2> consumerCodeAndBillMap = bills.stream().collect(Collectors.toMap(BillV2::getConsumerCode, Function.identity()));
 		billCriteria.getConsumerCode().addAll(consumerCodeAndBillMap.keySet());
 		/*
