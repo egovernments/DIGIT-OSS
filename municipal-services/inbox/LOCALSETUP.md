@@ -8,23 +8,19 @@ To setup the inbox in your local system, clone the [Muncipal Service repository]
 
 - [X] Postgres DB
 - [ ] Redis
-- [X] Elastic search
-- [X] Kafka
-  - [X] Consumer
-  - [X] Producer
+- [ ] Kafka
+  - [ ] Consumer
+  - [ ] Producer
 
 ## Running Locally
 
 To run the inbox localy, you need to port forward below services locally
 
 ```bash
-mdms-service
-workflow-v2
-boundary-service
+egov-workflow-v2
 user-service
-idgen-service
-vehicle
-fsm
+egov-searcher
+Municipal service for which inbox config is defined
 ```
 
 To run the inbox locally, update below listed properties in `application.properties` prior to running the project:
