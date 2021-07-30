@@ -228,10 +228,16 @@ const TradeUnitForm = (_props) => {
     return (
         <React.Fragment>
             <div style={{ marginBottom: "16px" }}>
-                <div style={{ border: "1px solid #E3E3E3", padding: "16px", marginTop: "8px" }}>
+                <div style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", background: "#FAFAFA" }}>
                     {allUnits?.length > 1 ? (
-                        <div onClick={() => removeUnit(unit)} style={{ marginBottom: "16px", padding: "5px", cursor: "pointer", textAlign: "right" }}>
-                            X
+                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <div onClick={() => removeUnit(unit)} style={{ padding: "5px", cursor: "pointer", textAlign: "right" }}>
+                                <span>
+                                    <svg style={{ float: "right", position: "relative", bottom: "5px" }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill="#494848" />
+                                    </svg>
+                                </span>
+                            </div>
                         </div>
                     ) : null}
                     <LabelFieldPair>
@@ -374,6 +380,7 @@ const TradeUnitForm = (_props) => {
                                         }}
                                         disable={true}
                                         onBlur={props.onBlur}
+                                        style={{ background: "#FAFAFA" }}
                                     />
                                 )}
                             />
@@ -400,6 +407,7 @@ const TradeUnitForm = (_props) => {
                                         }}
                                         disable={!(unit?.tradeSubType?.uom)}
                                         onBlur={props.onBlur}
+                                        style={{ background: "#FAFAFA" }}
                                     />
                                 )}
                             />

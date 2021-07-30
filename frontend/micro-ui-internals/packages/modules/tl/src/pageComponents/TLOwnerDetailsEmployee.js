@@ -131,7 +131,7 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
   return (
     <React.Fragment>
       {owners.map((owner, index) => (
-        <OwnerForm  index={index} owner={owner} {...commonProps} />
+        <OwnerForm key={owner.key} index={index} owner={owner} {...commonProps} />
       ))}
       {formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS" ? (
         <div>
@@ -229,13 +229,21 @@ const OwnerForm = (_props) => {
   }, [errors]);
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
+  let isMulitpleOwners = false;
+  if (formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS") isMulitpleOwners = true;
   return (
     <React.Fragment>
-      <div style={{ marginBottom: "16px" }}>
-        <div style={formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS" ? { border: "1px solid #E3E3E3", padding: "16px", marginTop: "8px", borderRadius: "4px" } : {}}>
+      <div style={{ marginBottom: "16px" }} >
+        <div style={formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS" ? { border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", borderRadius: "4px", background: "#FAFAFA" } : {}}>
           {allOwners?.length > 1 ? (
-            <div onClick={() => removeOwner(owner)} style={{ marginBottom: "16px", padding: "5px", cursor: "pointer", textAlign: "right" }}>
-              X
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <div onClick={() => removeOwner(owner)} style={{ padding: "5px", cursor: "pointer", textAlign: "right" }}>
+                <span>
+                  <svg style={{ float: "right", position: "relative", bottom: "5px" }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill="#494848" />
+                  </svg>
+                </span>
+              </div>
             </div>
           ) : null}
           <LabelFieldPair>
@@ -261,6 +269,7 @@ const OwnerForm = (_props) => {
                       setFocusIndex({ index: -1 });
                       props.onBlur(e);
                     }}
+                    style={ isMulitpleOwners ? { background: "#FAFAFA" }: ""}
                   />
                 )}
               />
@@ -287,6 +296,7 @@ const OwnerForm = (_props) => {
                     labelStyle={{ marginTop: "unset", border: "1px solid #464646", borderRight: "none" }}
                     onBlur={props.onBlur}
                     errorStyle={(localFormState.touched.mobileNumber && errors?.mobileNumber?.message) ? true : false}
+                    style={ isMulitpleOwners ? { background: "#FAFAFA" }: ""}
                   />
                 )}
               />
@@ -393,6 +403,7 @@ const OwnerForm = (_props) => {
                     }}
                     labelStyle={{ marginTop: "unset" }}
                     onBlur={props.onBlur}
+                    style={ isMulitpleOwners ? { background: "#FAFAFA" }: ""}
                   />
                 )}
               />
@@ -442,6 +453,7 @@ const OwnerForm = (_props) => {
                       setFocusIndex({ index: owner.key, type: "permanentAddress" });
                     }}
                     onBlur={props.onBlur}
+                    style={ isMulitpleOwners ? { background: "#FAFAFA" }: ""}
                   />
                 )}
               />
