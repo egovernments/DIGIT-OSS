@@ -132,14 +132,14 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
       {fields.map((field, index) => {
         return (
           <div key={`${field}-${index}`}>
-            <div style={ismultiple ? {border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3"}:{}}>
+            <div style={ismultiple ? {border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA"}:{}}>
             <CardLabel style={ismultiple?{marginBottom:"-15px"}: {}}>{`${t("TL_NEW_OWNER_DETAILS_NAME_LABEL")}`}</CardLabel>
            {ismultiple && <LinkButton
             label={
             <div >
             <span>
             <svg style={{float:"right", position:"relative",bottom:"5px"  }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill="#494848"/>
+            <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill={!(fields.length == 1)?"#494848":"#FAFAFA"}/>
             </svg>
             </span>
             </div>
@@ -148,6 +148,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
               onClick={(e) => handleRemove(index)}
            />}
             <TextInput
+              style={ismultiple?{background:"#FAFAFA"}:{}}
               t={t}
               type={"text"}
               isMandatory={false}
@@ -182,6 +183,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 +91
               </span>
               <TextInput
+                style={ismultiple?{background:"#FAFAFA"}:{}}
                 type={"text"}
                 t={t}
                 isMandatory={false}

@@ -74,8 +74,8 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile || error}>
-      <CardLabelDesc>{t(`TL_UPLOAD_PHOTO_RESTRICTIONS_TYPES`)}</CardLabelDesc>
-      <CardLabelDesc>{t(`TL_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
+      <CardLabelDesc style={{fontWeight:"unset"}}>{t(`TL_UPLOAD_PHOTO_RESTRICTIONS_TYPES`)}</CardLabelDesc>
+      <CardLabelDesc style={{fontWeight:"unset"}}>{t(`TL_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <CardLabel>{`${t("TL_CATEGORY_DOCUMENT_TYPE")}`}</CardLabel>
       {/* <Dropdown
         t={t}

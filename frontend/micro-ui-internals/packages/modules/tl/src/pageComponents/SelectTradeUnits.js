@@ -152,14 +152,14 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
       {fields.map((field, index) => {
         return (
           <div key={`${field}-${index}`}>
-            <div style={{border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3"}}>
+            <div style={{border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA"}}>
             <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL")}`}</CardLabel>
             <LinkButton
             label={
             <div>
             <span>
             <svg style={{float:"right", position:"relative",bottom:"32px"  }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill="#494848"/>
+            <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z" fill={!(fields.length == 1)?"#494848":"#FAFAFA"}/>
             </svg>
             </span>
             </div>
@@ -193,6 +193,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
               select={(e) => selectTradeType(index, e)}
             />
             <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}`}</CardLabel>
+             <div className={"form-pt-dropdown-only"}>
             <Dropdown
               t={t}
               optionKey="i18nKey"
@@ -204,8 +205,10 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
               selected={field?.tradesubtype}
               select={(e) => selectTradeSubType(index, e)}
             />
+            </div>
             <CardLabel>{`${t("TL_UNIT_OF_MEASURE_LABEL")}`}</CardLabel>
             <TextInput
+              style={{background:"#FAFAFA"}}
               t={t}
               type={"text"}
               isMandatory={false}
@@ -224,6 +227,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
             />
             <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}`}</CardLabel>
             <TextInput
+              style={{background:"#FAFAFA"}}
               t={t}
               type={"text"}
               isMandatory={false}

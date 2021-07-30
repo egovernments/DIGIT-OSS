@@ -31,6 +31,7 @@ const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => 
         onSelect={goNext}
         onSkip={onSkip}
         t={t}
+        isDisabled={!TradeName}
       >
         <CardLabel>{`${t("TL_LOCALIZATION_TRADE_NAME")}`}</CardLabel>
         <TextInput

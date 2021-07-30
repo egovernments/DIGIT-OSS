@@ -200,13 +200,15 @@ export const gettradeupdateunits = (data) => {
         }
         else
         {
-          TLunits.push(oldunit);
+          let found = TLunits.length > 0 ? TLunits.some(el => el.id === oldunit.id):false;
+          if(!found)TLunits.push(oldunit);
         }
 
       }
       else
       {
-        TLunits.push({...oldunit,active:false});   
+        let found = TLunits.length > 0 ? TLunits.some(el => el.id === oldunit.id):false;
+        if(!found)TLunits.push({...oldunit,active:false});   
       }
     })
   })
@@ -247,13 +249,15 @@ export const gettradeupdateaccessories = (data) => {
         }
         else
         {
-          TLaccessories.push(oldunit);
+          let found = TLaccessories.length > 0 ? TLaccessories.some(el => el.id === oldunit.id):false;
+          if(!found)TLaccessories.push(oldunit);
         }
 
       }
       else
       {
-          TLaccessories.push({...oldunit,active:false});
+          let found = TLaccessories.length > 0 ? TLaccessories.some(el => el.id === oldunit.id):false;
+          if(!found)TLaccessories.push({...oldunit,active:false});
         
       }
     })
