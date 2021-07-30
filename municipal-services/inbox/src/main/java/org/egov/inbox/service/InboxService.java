@@ -141,25 +141,25 @@ public class InboxService {
 			Boolean isSearchResultEmpty = false;
 			List<String> businessKeys = new ArrayList<>();
 			if(!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(PT)) {
+				totalCount = ptInboxFilterService.fetchAcknowledgementIdsCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				List<String> acknowledgementNumbers = ptInboxFilterService.fetchAcknowledgementIdsFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				if(!CollectionUtils.isEmpty(acknowledgementNumbers)) {
 					moduleSearchCriteria.put(ACKNOWLEDGEMENT_IDS_PARAM, acknowledgementNumbers);
 					businessKeys.addAll(acknowledgementNumbers);
 					moduleSearchCriteria.remove(LOCALITY_PARAM);
 					moduleSearchCriteria.remove(OFFSET_PARAM);
-					moduleSearchCriteria.remove(LIMIT_PARAM);
 				}else{
 					isSearchResultEmpty = true;
 				}
 			}
 			if(!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(TL)) {
+				totalCount = tlInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				List<String> applicationNumbers = tlInboxFilterService.fetchApplicationNumbersFromSearcher(criteria, StatusIdNameMap, requestInfo);
 				if(!CollectionUtils.isEmpty(applicationNumbers)) {
 					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
 					businessKeys.addAll(applicationNumbers);
 					moduleSearchCriteria.remove(LOCALITY_PARAM);
 					moduleSearchCriteria.remove(OFFSET_PARAM);
-					moduleSearchCriteria.remove(LIMIT_PARAM);
 				}else{
 					isSearchResultEmpty = true;
 				}

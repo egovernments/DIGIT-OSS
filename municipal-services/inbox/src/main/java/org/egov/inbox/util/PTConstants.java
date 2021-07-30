@@ -17,4 +17,6 @@ public class PTConstants {
     public static final String REQUESTINFO_PARAM = "RequestInfo";
     public static final String SEARCH_CRITERIA_PARAM = "searchCriteria";
     public static final String USERID_PARAM = "userid";
+    public static final String SORT_ORDER_PARAM = "sortOrder";
+    public static final String DESC_PARAM = "DESC";
 }
