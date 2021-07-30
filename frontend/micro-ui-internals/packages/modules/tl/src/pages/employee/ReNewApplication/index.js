@@ -146,6 +146,7 @@ const ReNewApplication = (props) => {
       if (filteredArray?.length == 0) {
         let removedOwner = data?.tradedetils1?.tradeLicenseDetail?.owners[i];
         removedOwner.active = false;
+        removedOwner.userActive = false;
         data?.owners.push(removedOwner);
         EDITRENEWAL = true;
       }

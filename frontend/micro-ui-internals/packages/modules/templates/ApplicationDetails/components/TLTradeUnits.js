@@ -7,10 +7,11 @@ function TLTradeUnits({ units }) {
   return (
     <React.Fragment>
       {units.map((unit, index) => (
-        <div key={t(unit?.title)} style={{ marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", width: "40%" }}>
-          <CardSubHeader style={{ marginBottom: "8px", color: "#505A5F", fontSize: "24px" }}>{`${t(unit?.title)} ${index + 1}`}</CardSubHeader>
+        // TODO, Later will move to classes
+        <div key={t(unit?.title)} style={{ marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "600px", minWidth: "280px" }}>
+          <CardSubHeader style={{ marginBottom: "9px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{`${t(unit?.title)} ${index + 1}`}</CardSubHeader>
           <React.Fragment key={index}>
-            <StatusTable style={{ position: "relative", padding: "8px" }}>
+            <StatusTable style={{ position: "relative", marginTop: "19px" }}>
               <div
                 style={{
                   position: "absolute",
@@ -34,7 +35,8 @@ function TLTradeUnits({ units }) {
                     last={index === value?.values?.length - 1}
                     caption={value.caption}
                     className="border-none"
-                    rowContainerStyle={{justifyContent: "space-between"}}
+                    // TODO, Later will move to classes
+                    rowContainerStyle={{justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C"}}
                   />
                 );
               })}

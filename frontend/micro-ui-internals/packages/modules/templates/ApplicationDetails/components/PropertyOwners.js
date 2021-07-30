@@ -10,17 +10,18 @@ function PropertyOwners({ owners }) {
   let cardStyles = { marginTop: "19px" };
   let statusTableStyles = { position: "relative", padding: "8px" };
   if (checkLocation && Number(checkOwnerLength) > 1) {
-    cardStyles = { marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", width: "40%" };
+    cardStyles = { marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
   } else if (checkLocation && !(Number(checkOwnerLength) > 1)) {
-     cardStyles = { marginTop: "19px", lineHeight: "19px", width: "40%" };
-     statusTableStyles = { position: "relative"};
+     cardStyles = { marginTop: "19px", lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
+     statusTableStyles = { position: "relative", marginTop: "19px",};
   }
   
   return (
     <React.Fragment>
       {owners.map((owner, index) => (
         <div key={t(owner?.title)} style={cardStyles}>
-          <CardSubHeader style={{ marginBottom: "8px", color: "#505A5F", fontSize: "24px" }}>{(checkLocation && Number(checkOwnerLength) > 1) ? `${t(owner?.title)} ${index+1}` : t(owner?.title)}</CardSubHeader>
+          {/* TODO, Later will move to classes */}
+          <CardSubHeader style={checkLocation && Number(checkOwnerLength) > 1 ? { marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" } : { marginBottom: "8px", color: "#505A5F", fontSize: "24px" }}>{(checkLocation && Number(checkOwnerLength) > 1) ? `${t(owner?.title)} ${index+1}` : t(owner?.title)}</CardSubHeader>
           <React.Fragment key={index}>
             <StatusTable style={statusTableStyles}>
               <div
@@ -46,7 +47,8 @@ function PropertyOwners({ owners }) {
                     last={index === value?.values?.length - 1}
                     caption={value.caption}
                     className="border-none"
-                    rowContainerStyle={checkLocation ? {justifyContent: "space-between"}: {}}
+                    // TODO, Later will move to classes
+                    rowContainerStyle={checkLocation ? {justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C"}: {}}
                   />
                 );
               })}
