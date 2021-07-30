@@ -170,7 +170,7 @@ const PropertyDetails = () => {
                 delete data.customFunctionToExecute;
                 history.push({ pathname: `/digit-ui/employee/pt/assessment-details/${applicationNumber}`, state: { ...data } });
               },
-              tenantId: "pb",
+              tenantId: Digit.ULBService.getStateId(),
             },
             {
               action: !fetchBillData?.Bill[0]?.totalAmount ? "MUTATE_PROPERTY" : "PT_TOTALDUES_PAY",
@@ -182,7 +182,7 @@ const PropertyDetails = () => {
                 // state: { workflow: { action: "OPEN", moduleName: "PT", businessService } },
                 state: null,
               },
-              tenantId: "pb",
+              tenantId: Digit.ULBService.getStateId(),
             },
           ],
         },
@@ -197,9 +197,9 @@ const PropertyDetails = () => {
         action: "UPDATE",
         redirectionUrl: {
           pathname: `/digit-ui/employee/pt/modify-application/${applicationNumber}`,
-          state: { workflow: { action: "OPEN", moduleName: "PT", businessService } },
+          state: { workflow: { action: "OPEN", moduleName: "PT", businessService: "PT.UPDATE" } },
         },
-        tenantId: "pb",
+        tenantId: Digit.ULBService.getStateId(),
       });
     }
   }

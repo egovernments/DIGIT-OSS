@@ -53,7 +53,7 @@ const NewApplication = () => {
       usageCategoryMajor: data?.usageCategoryMajor?.code.split(".")[0],
       usageCategoryMinor: data?.usageCategoryMajor?.code.split(".")[1] || null,
       landArea: Number(data?.landarea),
-      superBuiltupArea: Number(data?.landarea),
+      superBuiltUpArea: Number(data?.landarea),
       propertyType: data?.PropertyType?.code,
       noOfFloors: Number(data?.noOfFloors),
       ownershipCategory: data?.ownershipCategory?.code,
@@ -105,7 +105,6 @@ const NewApplication = () => {
       channel: "CFC_COUNTER", // required
       creationReason: "CREATE", // required
       source: "MUNICIPAL_RECORDS", // required
-      superBuiltUpArea: null,
       units: data?.PropertyType?.code !== "VACANT" ? data?.units : [],
       documents: data?.documents?.documents,
       applicationStatus: "CREATE",

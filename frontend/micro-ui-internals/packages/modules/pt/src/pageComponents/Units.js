@@ -180,7 +180,7 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
       constructionDetail: {
         builtUpArea: unit?.builtUpArea,
       },
-      tenantId: unit?.tenantId,
+      tenantId: Digit.ULBService.getCurrentTenantId(),
       usageCategory: unit?.usageCategory?.code,
     }));
     unitsData = unitsData?.map((unit, index) => {

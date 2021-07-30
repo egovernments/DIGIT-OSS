@@ -80,7 +80,8 @@ const Area = ({ t, config, onSelect, value, userType, formData, setError: setFor
 
   useEffect(() => {
     if (userType === "employee") {
-      if (!floorarea) setFormError(config.key, { type: "required", message: t("CORE_COMMON_REQUIRED_ERRMSG") });
+      if (!Number(floorarea)) setFormError(config.key, { type: "required", message: t("CORE_COMMON_REQUIRED_ERRMSG") });
+      else if (isNaN(floorarea)) setFormError(config.key, { type: "invalid", message: t("ERR_DEFAULT_INPUT_FIELD_MSG") });
       else clearFormErrors(config.key);
       onSelect(config.key, floorarea);
     }

@@ -32,9 +32,6 @@ export const filterFunctions = {
     if (mobileNumber) {
       searchFilters.mobileNumber = mobileNumber;
     }
-    if (propertyIds) {
-      searchFilters.propertyIds = propertyIds;
-    }
     if (services) {
       workflowFilters.businessService = services;
     }

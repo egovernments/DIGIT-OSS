@@ -100,14 +100,14 @@ const ApplicationDetails = () => {
               },
               tenantId: Digit.ULBService.getStateId(),
             },
-            {
-              action: "UPDATE",
-              redirectionUrl: {
-                pathname: `/digit-ui/employee/pt/modify-application/${propertyId}`,
-                state: { workflow: { action: "OPEN", moduleName: "PT", businessService } },
-              },
-              tenantId: Digit.ULBService.getStateId(),
-            },
+            // {
+            //   action: "UPDATE",
+            //   redirectionUrl: {
+            //     pathname: `/digit-ui/employee/pt/modify-application/${propertyId}`,
+            //     state: { workflow: { action: "OPEN", moduleName: "PT", businessService: "PT.UPDATE" } },
+            //   },
+            //   tenantId: Digit.ULBService.getStateId(),
+            // },
           ],
         },
       },
