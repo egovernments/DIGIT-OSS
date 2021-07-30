@@ -122,7 +122,7 @@ class PaymentStatusUpdateEventFormatter{
         };
         let extraInfo = {
           whatsAppBusinessNumber: config.whatsAppBusinessNumber.slice(2),
-          fileName: key
+          fileName: consumerCode
         };
 
         if(isOwner){
