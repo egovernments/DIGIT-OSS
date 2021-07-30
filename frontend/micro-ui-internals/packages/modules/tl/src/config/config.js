@@ -252,8 +252,8 @@ export const newConfig = [
         hideInEmployee: true,
         //nextStep: "property-usage-type",
         nextStep: {
-          "TL_COMMON_YES": "vehicle-type",
-          "TL_COMMON_NO": "Building-type",
+          "TL_COMMON_YES": "Building-type",
+          "TL_COMMON_NO": "vehicle-type",
         },
       },
       {
