@@ -13,7 +13,7 @@ const useApplicationDetail = (t, tenantId, propertyIds, config = {}, userType, a
       }
       return obj;
     });
-
+    data.applicationData.units=data?.applicationData?.units?.filter(unit=>unit?.active)||[];
     return { ...data, applicationDetails };
   };
 

@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "react-query";
 
-const usePropertySearch = ({ tenantId, filters, auth }, config = {}) => {
+const usePropertySearch = ({ tenantId, filters, auth,searchedFrom="" }, config = {}) => {
   const client = useQueryClient();
 
   const args = tenantId ? { tenantId, filters, auth } : { filters, auth };
@@ -9,7 +9,11 @@ const usePropertySearch = ({ tenantId, filters, auth }, config = {}) => {
     data.Properties[0].units = data.Properties[0].units || [];
     data.Properties[0].units = data.Properties[0].units.filter((unit) => unit.active);
     data.Properties[0].owners = data.Properties[0].owners || [];
-    data.Properties[0].owners = data.Properties[0].owners.filter((owner) => owner.status === "ACTIVE");
+    if(searchedFrom=="myPropertyCitizen"){
+      data.Properties.map(property=>{
+        property.owners =property.owners.filter((owner) => owner.status ===(property.creationReason=="MUTATION" ?"INACTIVE": "ACTIVE"));
+      })
+    }  
     return data;
   };
 

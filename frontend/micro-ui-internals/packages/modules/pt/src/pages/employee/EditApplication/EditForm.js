@@ -53,11 +53,13 @@ const EditForm = ({ applicationData }) => {
         let newDoc = data?.documents?.documents?.find((e) => e.documentType.includes(dt[0] + "." + dt[1]));
         return { ...old, ...newDoc };
       }),
-      units: [...(applicationData?.units?.map((old) => ({ ...old, active: false })) || []), ...(data?.units || [])],
+      units: [...(applicationData?.units?.map((old) => ({ ...old, active: false })) || []), ...(data?.units?.map(unit=>{return {...unit,active:true}}) || [])],
       workflow: state.workflow,
       applicationStatus: "UPDATE",
     };
-
+    if(state?.workflow?.action==="OPEN"){
+      formData.units=formData.units.filter(unit=>unit.active);
+    }
     // console.log(formData, "in submit");
     history.push("/digit-ui/employee/pt/response", { Property: formData, key: "UPDATE", action: "SUBMIT" });
   };
