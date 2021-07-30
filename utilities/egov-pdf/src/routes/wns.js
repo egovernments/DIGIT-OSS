@@ -438,7 +438,8 @@ router.post(
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
                 else{
-                  consolidatedResult.Bill.push(waterBill);
+                  if(waterBill.status ==='ACTIVE')
+                    consolidatedResult.Bill.push(waterBill);
                 }
               }
             }
@@ -452,7 +453,8 @@ router.post(
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
                 else{
-                  consolidatedResult.Bill.push(sewerageBill);
+                  if(sewerageBill.status ==='ACTIVE')
+                    consolidatedResult.Bill.push(sewerageBill);
                 }
               }
             }
@@ -511,7 +513,8 @@ router.post(
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
                 else{
-                  consolidatedResult.Bill.push(waterBill);
+                  if(waterBill.status ==='ACTIVE')
+                    consolidatedResult.Bill.push(waterBill);
                 }
               }
             }
@@ -566,7 +569,8 @@ router.post(
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
                 else{
-                  consolidatedResult.Bill.push(sewerageBill);
+                  if(sewerageBill.status ==='ACTIVE')
+                    consolidatedResult.Bill.push(sewerageBill);
                 }
               }
             }
