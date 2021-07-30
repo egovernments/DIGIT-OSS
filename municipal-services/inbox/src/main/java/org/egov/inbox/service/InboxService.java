@@ -84,10 +84,16 @@ public class InboxService {
 		List<String> inputStatuses = new ArrayList<>();
 		if(!CollectionUtils.isEmpty(processCriteria.getStatus()))
 			inputStatuses = new ArrayList<>(processCriteria.getStatus());
-		// Since we want the whole status count map regardless of the status filter being passed
+		StringBuilder assigneeUuid = new StringBuilder();
+		if(!ObjectUtils.isEmpty(processCriteria.getAssignee())){
+			assigneeUuid = assigneeUuid.append(processCriteria.getAssignee());
+		}
+		// Since we want the whole status count map regardless of the status filter and assignee filter being passed
 		processCriteria.setStatus(null);
+		processCriteria.setAssignee(null);
 		List<HashMap<String,Object>> statusCountMap = workflowService.getProcessStatusCount( requestInfo, processCriteria);
 		processCriteria.setStatus(inputStatuses);
+		processCriteria.setAssignee(assigneeUuid.toString());
 		List<String> businessServiceName = processCriteria.getBusinessService();
 		List<Inbox> inboxes = new ArrayList<Inbox>();
 		InboxResponse response = new InboxResponse();
