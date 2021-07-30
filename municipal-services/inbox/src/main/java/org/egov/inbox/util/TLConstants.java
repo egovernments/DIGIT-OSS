@@ -15,4 +15,6 @@ public class TLConstants {
     public static final String USERID_PARAM = "userid";
     public static final String LICENSE_NUMBER_PARAM = "licenseNumber";
     public static final String APPLICATION_NUMBER_PARAM = "applicationNumber";
+    public static final String SORT_ORDER_PARAM = "sortOrder";
+    public static final String DESC_PARAM = "DESC";
 }
