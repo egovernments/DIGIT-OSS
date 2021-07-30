@@ -36,7 +36,8 @@ class UserService {
     let response = await fetch(url, options);
     if(response.status === 200) {
       let body = await response.json();
-      user.userInfo.name = body.name
+      user.userInfo.name = body.name;
+      user.userInfo.locale = body.locale;
     } 
     return user;
   }

@@ -50,7 +50,7 @@ class PdfService {
               };
             let extraInfo = {
                 whatsAppBusinessNumber: config.whatsAppBusinessNumber.slice(2),
-                fileName: key
+                fileName: payment.paymentDetails[0].bill.consumerCode
             };
 
             let message = [];
