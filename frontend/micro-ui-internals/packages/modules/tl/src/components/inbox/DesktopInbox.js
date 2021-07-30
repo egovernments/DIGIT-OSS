@@ -42,7 +42,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, ...prop
       }
     },{
       Header: t("TL_COMMON_TABLE_COL_APP_DATE"),
-      accessor: "date",
+      accessor: "applicationDate",
       Cell: ({ row }) => {
         const date = convertEpochToDateDMY(row.original.date);
         return GetCell(date)
@@ -53,8 +53,8 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, ...prop
         return GetCell(t(row.original["businessService"]?`CS_COMMON_INBOX_${row.original["businessService"]?.toUpperCase()}`:"NA"));
       },
     },{
-          Header: t("WF_INBOX_HEADER_LOCALITY"),
-    Cell: ({ row }) => {
+      Header: t("WF_INBOX_HEADER_LOCALITY"),
+      Cell: ({ row }) => {
         return GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.original["locality"], row.original["tenantId"])));
       },
     },
