@@ -79,7 +79,7 @@ const getTradeEditDetails = (data) => {
   data.TradeDetails = {
     BuildingType: { code: `${data?.tradeLicenseDetail?.structureType}`, i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}` },
     CommencementDate: getCommencementDataFormat(data?.commencementDate),
-    StructureType: { code: `${data.tradeLicenseDetail?.structureType.split(".")[0]}`, i18nKey: `${data.tradeLicenseDetail?.structureType.includes("IMMOVABLE") ? "TL_COMMON_NO" : "TL_COMMON_YES"}` },
+    StructureType: { code: `${data.tradeLicenseDetail?.structureType.split(".")[0]}`, i18nKey: `${data.tradeLicenseDetail?.structureType.includes("IMMOVABLE") ? "TL_COMMON_YES" : "TL_COMMON_NO"}` },
     TradeName: data?.tradeName,
     accessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories),
     isAccessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories).length > 0 ? { code: `ACCESSORY`, i18nKey: "TL_COMMON_YES" } : { code: `NONACCESSORY`, i18nKey: "TL_COMMON_NO" },

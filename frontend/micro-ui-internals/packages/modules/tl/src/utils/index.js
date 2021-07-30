@@ -123,7 +123,7 @@ export const getownerarray = (data) => {
 
 export const gettradeownerarray = (data) => {
   let tradeownerarray = [];
-
+  const isEditRenew = window.location.href.includes("renew-trade");
   data.tradeLicenseDetail.owners.map((oldowner) => {
     data?.owners?.owners.map((newowner) => {
       if(oldowner.id === newowner.id)
@@ -157,7 +157,7 @@ export const gettradeownerarray = (data) => {
       }
     })
   })
-  data.tradeLicenseDetail.owners.map((oldowner) => {
+  !isEditRenew && data.tradeLicenseDetail.owners.map((oldowner) => {
     let found = tradeownerarray.length > 0 ? tradeownerarray.some(el => el.id === oldowner.id):false;
     if(!found)tradeownerarray.push({...oldowner,active:false});   
   })
@@ -188,7 +188,7 @@ export const gettradeunits = (data) => {
 
 export const gettradeupdateunits = (data) => {
   let TLunits = [];
-
+  const isEditRenew = window.location.href.includes("renew-trade");
   data.tradeLicenseDetail.tradeUnits.map((oldunit) => {
     data.TradeDetails.units.map((newunit) => {
       if(oldunit.id === newunit.id)
@@ -207,8 +207,10 @@ export const gettradeupdateunits = (data) => {
       }
       else
       {
+        if(!isEditRenew){
         let found = TLunits.length > 0 ? TLunits.some(el => el.id === oldunit.id):false;
-        if(!found)TLunits.push({...oldunit,active:false});   
+        if(!found)TLunits.push({...oldunit,active:false});  
+        } 
       }
     })
   })
@@ -231,6 +233,7 @@ export const getaccessories = (data) => {
 
 export const gettradeupdateaccessories = (data) => {
   let TLaccessories = [];
+  const isEditRenew = window.location.href.includes("renew-trade");
   if(data?.TradeDetails?.isAccessories?.i18nKey.includes("NO"))
   {
     data?.tradeLicenseDetail?.accessories && data.tradeLicenseDetail.accessories.map((oldunit) => {
@@ -256,8 +259,10 @@ export const gettradeupdateaccessories = (data) => {
       }
       else
       {
+        if(!isEditRenew){
           let found = TLaccessories.length > 0 ? TLaccessories.some(el => el.id === oldunit.id):false;
           if(!found)TLaccessories.push({...oldunit,active:false});
+        }
         
       }
     })
