@@ -88,6 +88,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     let units = [...fields];
     units[i].tradetype = value;
     setTradeType(value);
+    selectTradeSubType(i, null);
     setFeilds(units);
   }
   function selectTradeSubType(i, value) {

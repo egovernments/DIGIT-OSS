@@ -19,6 +19,7 @@ const SearchChallan = ({ config: propsConfig, formData }) => {
   const [Servicecateogry, setServicecateogry] = useState(formData?.Servicecateogry || "");
   const [city, setcity] = useState(formData?.city || "");
   const allCities = Digit.Hooks.mcollect.usemcollectTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
+  const [mobileNumberError, setmobileNumberError] = useState(null);
   // moduleCode, type, config = {}, payload = []
 
   const { data: Menu, isLoading } = Digit.Hooks.mcollect.useMCollectMDMS(tenantId, "BillingService", "BusinessService");
@@ -52,6 +53,12 @@ const SearchChallan = ({ config: propsConfig, formData }) => {
     });
 
   function setMobileNo(e) {
+    setmobileNumberError(null)
+    let validation = "^\\d{10}$";
+    if(!e.target.value.match(validation))
+    {
+      setmobileNumberError("CORE_COMMON_PHONENO_INVALIDMSG");
+    }
     setMobileNumber(e.target.value);
   }
 
@@ -91,6 +98,7 @@ const SearchChallan = ({ config: propsConfig, formData }) => {
         onSelect={onChallanSearch}
         componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>}
         isDisabled={!Servicecateogry || !city.code}
+        forcedError={t(mobileNumberError)}
         //onSkip={onSkip}
         t={t}
       >

@@ -87,14 +87,14 @@ const MyChallanResult = ({ template, header, actionButtonLabel }) => {
   });
 
   return (
-    <div className="static" style={{ marginTop: "16px" }}>
-      <div className="static-wrapper">
+    <div style={{ marginTop: "16px" }}>
+      <div >
         {header && (
           <Header style={{ marginLeft: "8px" }}>
             {t(header)} ({searchResults?.length})
           </Header>
         )}
-        <div style={{ maxHeight: "calc(100vh - 10em)", overflowY: "auto" }}>
+        <div >
           <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel} onSubmit={onSubmit} />
         </div>
       </div>

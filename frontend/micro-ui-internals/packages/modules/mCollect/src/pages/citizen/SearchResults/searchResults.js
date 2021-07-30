@@ -74,8 +74,8 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
   });
 
   return (
-    <div className="static" style={{ marginTop: "16px" }}>
-      <div className="static-wrapper">
+    <div style={{ marginTop: "16px" }}>
+      <div >
         {header && (
           <Header style={{ marginLeft: "8px" }}>
             {t(header)} ({searchResults?.length})

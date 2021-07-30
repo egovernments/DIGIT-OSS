@@ -12,11 +12,12 @@ import SearchTradeComponent from "./SearchTrade";
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
+  let isSuccessScreen = window.location.href.includes("acknowledgement");
   return (
     <span className={"tl-citizen"}>
       <Switch>
         <AppContainer>
-          <BackButton /* style={{ position: "fixed", top: "55px" }} */>Back</BackButton>
+          <BackButton /* style={{ position: "fixed", top: "55px" }} */ isSuccessScreen={isSuccessScreen}  >Back</BackButton>
           <PrivateRoute path={`${path}/tradelicence/new-application`} component={CreateTradeLicence} />
           <PrivateRoute path={`${path}/tradelicence/edit-application/:id/:tenantId`} component={EditTrade} />
           <PrivateRoute path={`${path}/tradelicence/renew-trade/:id/:tenantId`} component={RenewTrade} />
