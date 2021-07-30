@@ -46,13 +46,16 @@ const PropertyDetails = () => {
       tenantId,
       filters: { propertyIds: applicationNumber, audit: true },
     },
-    { enabled: enableAudit, select: (data) => data.Properties.filter((e) => e.status === "ACTIVE") }
+    {
+      enabled: enableAudit,
+      select: (data) => data.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => a.auditDetails.createdTime - b.auditDetails.createdTime),
+    }
   );
 
   useEffect(() => {
     if (applicationDetails && !enableAudit) {
       setAppDetailsToShow(_.cloneDeep(applicationDetails));
-      if (applicationDetails?.applicationData?.status !== "ACTIVE" && applicationDetails?.applicationData?.creationReason === "MUTATION") {
+      if (applicationDetails?.applicationData?.status !== "ACTIVE") {
         setEnableAudit(true);
       }
     }
@@ -60,52 +63,13 @@ const PropertyDetails = () => {
 
   useEffect(() => {
     if (enableAudit && auditData?.length && Object.keys(appDetailsToShow).length) {
-      let owners = auditData[0].owners.filter((e) => e.status === "ACTIVE");
-      let applicationDetails = appDetailsToShow.applicationDetails.map((obj) => {
-        const { additionalDetails, title } = obj;
-        if (title === "PT_OWNERSHIP_INFO_SUB_HEADER") {
-          additionalDetails.owners = owners?.map((owner, index) => {
-            return {
-              status: owner.status,
-              title: "ES_OWNER",
-              values: [
-                { title: "PT_OWNERSHIP_INFO_NAME", value: owner?.name },
-                { title: "PT_OWNERSHIP_INFO_GENDER", value: owner?.gender },
-                { title: "PT_OWNERSHIP_INFO_MOBILE_NO", value: owner?.mobileNumber },
-                { title: "PT_OWNERSHIP_INFO_USER_CATEGORY", value: `COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}` || "NA" },
-                { title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", value: owner?.fatherOrHusbandName },
-                { title: "PT_FORM3_OWNERSHIP_TYPE", value: auditData[0]?.ownershipCategory },
-                { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId },
-                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.permanentAddress },
-              ],
-            };
-          });
-
-          additionalDetails.documents = [
-            {
-              title: "PT_COMMON_DOCS",
-              values: auditData[0].documents
-                .filter((e) => e.status === "ACTIVE")
-                .map((document) => {
-                  return {
-                    title: `PT_${document?.documentType.replace(".", "_")}`,
-                    documentType: document?.documentType,
-                    documentUid: document?.documentUid,
-                    fileStoreId: document?.fileStoreId,
-                    status: document.status,
-                  };
-                }),
-            },
-          ];
-
-          return { ...obj, additionalDetails };
-        }
-        return obj;
-      });
-
-      setAppDetailsToShow({ ...appDetailsToShow, applicationDetails });
+      const lastActiveProperty = auditData?.[0];
+      if (lastActiveProperty) {
+        let applicationDetails = appDetailsToShow?.transformToAppDetailsForEmployee({ property: lastActiveProperty, t });
+        setAppDetailsToShow({ ...appDetailsToShow, applicationDetails });
+      }
     }
-  }, [auditData, enableAudit]);
+  }, [auditData, enableAudit, applicationDetails]);
 
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,

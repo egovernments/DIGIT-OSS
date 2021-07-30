@@ -3,19 +3,19 @@ import { Loader } from "../atoms/Loader";
 import Dropdown from "../atoms/Dropdown";
 import { useTranslation } from "react-i18next";
 
-const Localities = ({ selectLocality, tenantId, boundaryType, keepNull, selected, optionCardStyles, style, disable, disableLoader }) => {
+const Localities = ({ selectLocality, tenantId, boundaryType, keepNull, selected, optionCardStyles, style, disable, disableLoader, sortFn }) => {
   // console.log("find localities here", tenantId)
   const { t } = useTranslation();
 
   const { data: tenantlocalties, isLoading } = Digit.Hooks.useBoundaryLocalities(tenantId, boundaryType, { enabled: !disable }, t);
-  // console.log("find data here", tenantlocalties);
+  console.log("find data here local", tenantlocalties);
   if (isLoading && !disableLoader) {
     return <Loader />;
   }
 
   return (
     <Dropdown
-      option={tenantlocalties}
+      option={sortFn ? tenantlocalties?.sort(sortFn) : tenantlocalties}
       keepNull={keepNull === false ? false : true}
       selected={selected}
       select={selectLocality}

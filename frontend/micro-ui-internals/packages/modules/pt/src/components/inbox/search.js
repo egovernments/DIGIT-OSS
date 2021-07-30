@@ -26,6 +26,7 @@ const fieldComponents = {
       boundaryType="revenue"
       selected={props.value}
       disableLoader={true}
+      sortFn={(a, b) => (a.i18nkey < b.i18nkey ? -1 : 1)}
     />
   ),
 };

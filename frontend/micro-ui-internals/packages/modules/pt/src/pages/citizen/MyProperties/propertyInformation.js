@@ -1,5 +1,5 @@
 import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import PropertyDocument from "../../../pageComponents/PropertyDocument";
@@ -32,17 +32,44 @@ const PropertyInformation = () => {
   const { t } = useTranslation();
   const { propertyIds } = useParams();
 
+  const [enableAudit, setEnableAudit] = useState(false);
+
   const tenantId = Digit.ULBService.getCurrentTenantId();
+
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ filters: { propertyIds } }, { filters: { propertyIds } });
+
+  const { isLoading: auditDataLoading, isError: isAuditError, data: auditData } = Digit.Hooks.pt.usePropertySearch(
+    {
+      tenantId,
+      filters: { propertyIds, audit: true },
+    },
+    {
+      enabled: enableAudit,
+      select: (d) => d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => a.auditDetails.createdTime - b.auditDetails.createdTime),
+    }
+  );
 
   const [billData, updateCanFetchBillData] = useState({
     loading: false,
     loaded: false,
     canLoad: false,
   });
+
   const [fetchBillData, updatefetchBillData] = useState({});
 
-  const property = data?.Properties[0] || " ";
+  const [property, setProperty] = useState(() => data?.Properties[0] || " ");
+
+  useEffect(() => {
+    if (data) {
+      setProperty(data?.Properties[0]);
+      if (data?.Properties[0]?.status !== "ACTIVE") setEnableAudit(true);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (auditData?.[0]) setProperty(auditData?.[0]);
+  }, [enableAudit, auditData]);
+
   sessionStorage.setItem("pt-property", JSON.stringify(property));
   let docs = [];
   docs = property?.documents;
@@ -66,9 +93,11 @@ const PropertyInformation = () => {
         return -1;
       }
     });
+
   if (isLoading) {
     return <Loader />;
   }
+
   if (property?.status == "ACTIVE" && !billData.loading && !billData.loaded && !billData.canLoad) {
     updateCanFetchBillData({
       loading: false,
