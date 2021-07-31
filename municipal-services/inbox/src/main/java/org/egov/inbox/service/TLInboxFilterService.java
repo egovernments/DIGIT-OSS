@@ -76,6 +76,7 @@ public class TLInboxFilterService {
             Map<String, Object> searchCriteria = new HashMap<>();
 
             searchCriteria.put(TENANT_ID_PARAM,criteria.getTenantId());
+            searchCriteria.put(BUSINESS_SERVICE_PARAM,processCriteria.getBusinessService());
 
             // Accomodating module search criteria in searcher request
             if(moduleSearchCriteria.containsKey(MOBILE_NUMBER_PARAM) && !CollectionUtils.isEmpty(userUUIDs)){

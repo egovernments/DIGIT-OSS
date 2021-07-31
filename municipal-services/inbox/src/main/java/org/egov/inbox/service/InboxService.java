@@ -19,6 +19,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.inbox.config.InboxConfiguration;
 import org.egov.inbox.repository.ServiceRequestRepository;
 import org.egov.inbox.util.ErrorConstants;
+import org.egov.inbox.util.TLConstants;
 import org.egov.inbox.web.model.Inbox;
 import org.egov.inbox.web.model.InboxResponse;
 import org.egov.inbox.web.model.InboxSearchCriteria;
@@ -158,6 +159,7 @@ public class InboxService {
 				if(!CollectionUtils.isEmpty(applicationNumbers)) {
 					moduleSearchCriteria.put(APPLICATION_NUMBER_PARAM, applicationNumbers);
 					businessKeys.addAll(applicationNumbers);
+					moduleSearchCriteria.remove(TLConstants.STATUS_PARAM);
 					moduleSearchCriteria.remove(LOCALITY_PARAM);
 					moduleSearchCriteria.remove(OFFSET_PARAM);
 				}else{

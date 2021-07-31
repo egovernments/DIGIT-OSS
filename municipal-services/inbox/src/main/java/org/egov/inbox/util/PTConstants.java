@@ -4,6 +4,7 @@ public class PTConstants {
 
     public static final String PT = "PT";
     public static final String MOBILE_NUMBER_PARAM = "mobileNumber";
+    public static final String BUSINESS_SERVICE_PARAM = "businessservice";
     public static final String TENANT_ID_PARAM = "tenantId";
     public static final String LOCALITY_PARAM = "locality";
     public static final String PROPERTY_ID_PARAM = "propertyId";
