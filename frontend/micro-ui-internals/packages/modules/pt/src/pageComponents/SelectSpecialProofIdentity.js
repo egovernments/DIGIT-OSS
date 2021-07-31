@@ -34,10 +34,6 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
     }
   }
 
-  useEffect(() => {
-    console.log(uploadedFile, formData, "Find Docsob");
-  }, [Documentsob, uploadedFile]);
-
   function setTypeOfDropdownValue(dropdownValue) {
     setDropdownValue(dropdownValue);
   }

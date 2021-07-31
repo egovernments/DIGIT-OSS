@@ -1,10 +1,9 @@
-import { FormStep, TextInput, CardLabel, LabelFieldPair, CardLabelError } from "@egovernments/digit-ui-react-components";
-import React, { useState, useEffect } from "react";
+import { CardLabel, CardLabelError, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, setError, formState, clearErrors }) => {
   const tenants = Digit.Hooks.pt.useTenants();
-
   const { pathname } = useLocation();
   const presentInModifyApplication = pathname.includes("modify");
 
@@ -71,7 +70,7 @@ const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
           <LabelFieldPair key={index}>
             <CardLabel className="card-label-smaller">{t(input.label)}</CardLabel>
             <div className="field">
-              <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} autoFocus={presentInModifyApplication} />
+              <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} disable={presentInModifyApplication} autoFocus={presentInModifyApplication} />
             </div>
           </LabelFieldPair>
           {error ? <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>{error}</CardLabelError> : null}

@@ -2,7 +2,6 @@ export const filterFunctions = {
   PT: (filtersArg) => {
     let { uuid } = Digit.UserService.getUser()?.info || {};
 
-    console.log(filtersArg.propertyIds);
     const searchFilters = {};
     const workflowFilters = {};
 

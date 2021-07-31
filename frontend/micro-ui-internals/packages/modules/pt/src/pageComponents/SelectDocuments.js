@@ -318,12 +318,6 @@ function SelectDocument({
 
   if (doc.code === "OWNER.TRANSFERREASONDOCUMENT") {
     dropDownData = dropDownData.filter((e) => e.code?.split(".")[2] === formData?.additionalDetails?.reasonForTransfer?.code);
-    console.log(
-      dropDownData,
-      formData?.additionalDetails?.reasonForTransfer,
-      formData?.additionalDetails?.reasonForTransfer?.code?.split(".")[2],
-      "dropdown data"
-    );
   }
 
   return (

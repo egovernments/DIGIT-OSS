@@ -5,7 +5,6 @@ import { newConfigMutate } from "../../../config/Mutate/config";
 import { useHistory } from "react-router-dom";
 
 const MutationForm = ({ applicationData, tenantId }) => {
-  //   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
 
@@ -22,14 +21,9 @@ const MutationForm = ({ applicationData, tenantId }) => {
     clearSuccessData();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(mutationDocs, "MUTATION"), [isLoading];
-  // });
-
   const history = useHistory();
 
   const onFormValueChange = (setValue, formData, formState) => {
-    console.log(formData, formState.errors, "in mutate property");
     setSubmitValve(!Object.keys(formState.errors).length);
     if (!Object.keys(formState.errors).length) {
       let { additionalDetails } = formData;
@@ -60,7 +54,7 @@ const MutationForm = ({ applicationData, tenantId }) => {
   };
 
   const onSubmit = (data) => {
-    console.log(data, "in submit");
+    data.originalData.owners=data.originalData?.owners?.filter(owner=>owner.status=="ACTIVE");
     let { additionalDetails } = data;
     const submitData = {
       Property: {
@@ -125,8 +119,6 @@ const MutationForm = ({ applicationData, tenantId }) => {
         type: data.owners[0].institution.type.code,
       };
     }
-
-    console.log(submitData, "in submit later");
 
     history.replace("/digit-ui/employee/pt/response", { Property: submitData.Property, key: "UPDATE", action: "SUBMIT" });
   };

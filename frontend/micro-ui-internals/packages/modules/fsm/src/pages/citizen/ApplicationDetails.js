@@ -29,10 +29,6 @@ const ApplicationDetails = () => {
 
   const [showOptions, setShowOptions] = useState(false);
 
-  useEffect(() => {
-    console.log(application?.pdfData, errorApplication);
-  }, [application, errorApplication]);
-
   if (isLoading || !application) {
     return <Loader />;
   }
@@ -49,7 +45,6 @@ const ApplicationDetails = () => {
   };
 
   const downloadPaymentReceipt = async () => {
-    // console.log("print payment receipt", paymentsHistory)
     const receiptFile = { filestoreIds: [paymentsHistory.Payments[0]?.fileStoreId] };
 
     if (!receiptFile?.fileStoreIds?.[0]) {

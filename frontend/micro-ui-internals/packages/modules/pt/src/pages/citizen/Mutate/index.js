@@ -7,15 +7,12 @@ import { useTranslation } from "react-i18next";
 
 const MutationCitizen = (props) => {
   const { t } = useTranslation();
-  //   const queryClient = useQueryClient();
   const match = useRouteMatch();
   const { pathname } = useLocation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_MUTATE_PROPERTY", {});
   const history = useHistory();
   const [submit, setSubmit] = useState(false);
   const [formData, setFormData] = useState(null);
-
-  // const [count, setCount] = useState(0);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
@@ -24,7 +21,6 @@ const MutationCitizen = (props) => {
   const selectParams = (key, data) => {
     setParams((prev) => ({ ...prev, [key]: data }));
   };
-  //   const { control, formState, watch } = useForm();
   let config = [];
 
   newConfigMutate.forEach((obj) => {
@@ -86,7 +82,7 @@ const MutationCitizen = (props) => {
     });
 
     const newDocs = [...ownerDocs, ...otherDocs];
-
+    originalProperty.owners=originalProperty?.owners.filter(owner=>owner.status=="ACTIVE");
     const data = {
       Property: {
         ...params.searchResult.property,
@@ -143,7 +139,6 @@ const MutationCitizen = (props) => {
     } else {
       delete data.Property.institution;
     }
-    // console.log(data, "mutation submit");
     setFormData(data);
   };
 
@@ -152,16 +147,13 @@ const MutationCitizen = (props) => {
   }, [formData]);
 
   const handleSkip = () => {};
-
   config.indexRoute = "search-property";
-
   return (
     <React.Fragment>
       <Switch>
         {config.map((routeObj, index) => {
           const { component } = routeObj;
           const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
-          // console.log(typeof component, Digit.ComponentRegistryService.getComponent(component), component);
           return (
             <Route path={`${match.path}/${routeObj.route}`} key={index}>
               {Component ? (

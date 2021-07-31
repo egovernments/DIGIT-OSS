@@ -19,7 +19,6 @@ const MobileInbox = ({
   filterComponent,
   allLinks,
 }) => {
-  console.log(data);
   const { t } = useTranslation();
   // const getData = () => {
   //   return data?.Employees?.map((dataObj) => {

@@ -5,7 +5,6 @@ const SelectImages = ({ t, config, onSelect, onSkip, value }) => {
   // const __initImages = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
   const [uploadedImages, setUploadedImagesIds] = useState(() => {
     // __initImages ? __initImages : null
-    console.log("%c 🏎️: props in selectImages ", "font-size:16px;background-color:#c239cc;color:white;", value);
     const { uploadedImages } = value;
     return uploadedImages ? uploadedImages : null;
   });

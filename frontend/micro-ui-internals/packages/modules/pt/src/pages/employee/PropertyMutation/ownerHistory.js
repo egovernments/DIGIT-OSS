@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-// import { Mo } from "@egovernments/digit-ui-react-components";
-
+import React from "react";
 import PropertyOwnerHistory from "../../citizen/MyProperties/propertyOwnerHistory";
 
 const OwnerHistory = (props) => {
   const { propertyId, userType } = props;
-
   return <PropertyOwnerHistory propertyId={propertyId} userType={userType} />;
 };
 

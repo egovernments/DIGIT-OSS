@@ -1,16 +1,8 @@
-import React, { useEffect, useState } from "react";
 import {
-  Card,
-  CardHeader,
-  CardSubHeader,
-  CardText,
-  Loader,
-  SubmitBar,
-  Header,
-  CardSectionHeader,
-  CardLabel,
-  ActionBar,
+  ActionBar, Card, CardLabel, CardSectionHeader, CardText, Header, Loader,
+  SubmitBar
 } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
 
@@ -20,11 +12,8 @@ const RequiredDoc = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const { id } = useParams();
-
   const [docs, setDocs] = useState([]);
-
   const { isLoading, data: Documentsob } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", ["MutationDocuments"]);
-
   const OnSubmit = () => {
     history.push(`/digit-ui/employee/pt/property-mutate/${id}`);
   };

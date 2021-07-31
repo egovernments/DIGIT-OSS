@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import PropertyDocument from "../../../pageComponents/PropertyDocument";
-import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle } from "../../../utils";
+import { getCityLocale, getPropertyTypeLocale } from "../../../utils";
 
 const setBillData = async (tenantId, propertyIds, updatefetchBillData, updateCanFetchBillData) => {
   const assessmentData = await Digit.PTService.assessmentSearch({ tenantId, filters: { propertyIds } });
@@ -45,7 +45,7 @@ const PropertyInformation = () => {
     },
     {
       enabled: enableAudit,
-      select: (d) => d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => a.auditDetails.createdTime - b.auditDetails.createdTime),
+      select: (d) => d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
 
@@ -67,7 +67,11 @@ const PropertyInformation = () => {
   }, [data]);
 
   useEffect(() => {
-    if (auditData?.[0]) setProperty(auditData?.[0]);
+    if (auditData?.[0]) {
+      const property = auditData?.[0] || {};
+      property.owners = property?.owners?.filter(owner => owner.status == "ACTIVE");
+      setProperty(property)
+    };
   }, [enableAudit, auditData]);
 
   sessionStorage.setItem("pt-property", JSON.stringify(property));
@@ -125,7 +129,6 @@ const PropertyInformation = () => {
     }
     return <LinkButton label={t("PT_OWNER_HISTORY")} className="check-page-link-button" onClick={routeTo} />;
   };
-  /****  Total Property Due code valeu is hardcoded , integrate with fetch bill api  */
   return (
     <React.Fragment>
       <Header>{t("PT_PROPERTY_INFORMATION")}</Header>
@@ -150,7 +153,7 @@ const PropertyInformation = () => {
               text={
                 `${t(
                   (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                    (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory)
+                  (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory)
                 )}` || "NA"
               }
             />
@@ -158,24 +161,6 @@ const PropertyInformation = () => {
             <Row label={t("PT_ASSESMENT1_PLOT_SIZE")} text={`${property.landArea} sq.ft` || "NA"} />
             <Row label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${property.noOfFloors || "NA"}`} />
           </StatusTable>
-          {/* <CardSubHeader>{t("Ground Floor")}</CardSubHeader>
-          <CardSubHeader>{t("Unit 1")}</CardSubHeader>
-          <div style={{ border: "groove" }}>
-            <StatusTable>
-              <Row
-                label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")}
-                text={`${(Array.isArray(property) && property.units[0].usageCategory.toLowerCase()) || "NA"}`}
-              />
-              <Row
-                label={t("PT_OCCUPANY_TYPE_LABEL")}
-                text={`${(Array.isArray(property) && property.units[0].occupancyType.toLowerCase()) || "NA"}`}
-              />
-              <Row
-                label={t("PT_BUILTUP_AREA_LABEL")}
-                text={`${(Array.isArray(property) && property.units[0].constructionDetail?.builtUpArea) || "NA"}`}
-              />
-            </StatusTable>
-          </div> */}
           <div>
             {Array.isArray(units) &&
               units.length > 0 &&
@@ -195,8 +180,8 @@ const PropertyInformation = () => {
                           text={
                             `${t(
                               (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                                (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) +
-                                (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                              (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) +
+                              (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
                             )}` || "NA"
                           }
                         />
@@ -256,7 +241,7 @@ const PropertyInformation = () => {
             )}
           </div>
           <div>
-            {property?.status === "ACTIVE" && (
+            {property?.status === "ACTIVE" && !enableAudit && (
               <div style={{ marginTop: "1em", bottom: "0px", width: "100%", marginBottom: "1.2em" }}>
                 <Link to={{ pathname: `/digit-ui/citizen/pt/property/edit-application/action=UPDATE/${property.propertyId}` }}>
                   <SubmitBar label={t("PT_UPDATE_PROPERTY_BUTTON")} />

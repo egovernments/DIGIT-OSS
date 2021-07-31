@@ -11,7 +11,6 @@ const ReasonForTransfer = (props) => {
   useEffect(() => {
     if (data) {
       let opt = data.PropertyTax.ReasonForTransfer.map((e) => ({ ...e, i18nKey: "PROPERTYTAX_REASONFORTRANSFER_" + e.code }));
-      console.log(opt, "inside reason");
       setMenu(opt);
     }
   }, [data]);

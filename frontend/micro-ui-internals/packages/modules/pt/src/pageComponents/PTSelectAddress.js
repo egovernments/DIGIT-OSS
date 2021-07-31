@@ -1,29 +1,27 @@
-import { CardLabel, Dropdown, FormStep, LabelFieldPair, RadioOrSelect, RadioButtons, CardLabelError } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { cardBodyStyle } from "../utils";
+import { CardLabel, CardLabelError, Dropdown, FormStep, LabelFieldPair, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 
 const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, clearErrors, formState }) => {
   const allCities = Digit.Hooks.pt.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
-
   const { pathname } = useLocation();
   const presentInModifyApplication = pathname.includes("modify");
 
   let isEditProperty = formData?.isEditProperty || false;
+  if (presentInModifyApplication) isEditProperty = true;
   if (formData?.isUpdateProperty) isEditProperty = true;
   const { pincode, city } = formData?.address || "";
   const cities =
     userType === "employee"
       ? allCities.filter((city) => city.code === tenantId)
       : pincode
-      ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
-      : allCities;
+        ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
+        : allCities;
 
   const [selectedCity, setSelectedCity] = useState(() => {
-    // if (userType === "employee" && presentInModifyApplication) return formData?.originalData?.address;
     return formData?.address?.city || null;
   });
 
@@ -69,11 +67,6 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
         if (!formData?.address?.locality) setSelectedLocality();
       }
-
-      // if (userType === "employee") {
-      //   onSelect(config.key, { ...formData[config.key], city: selectedCity });
-      // }
-
       setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
 
       if (filteredLocalityList.length === 1) {
@@ -115,9 +108,7 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
       let keys = Object.keys(formValue);
       const part = {};
       keys.forEach((key) => (part[key] = formData[config.key]?.[key]));
-
       if (!_.isEqual(formValue, part)) onSelect(config.key, { ...formData[config.key], ...formValue });
-
       for (let key in formValue) {
         if (!formValue[key] && !localFormState?.errors[key]) {
           setLocalError(key, { type: `${key.toUpperCase()}_REQUIRED`, message: t(`CORE_COMMON_REQUIRED_ERRMSG`) });

@@ -4,7 +4,6 @@ import { CustomButton, Menu } from "@egovernments/digit-ui-react-components";
 
 const ChangeLanguage = (prop) => {
   const isDropdown = prop.dropdown || false;
-  console.log({ isDropdown });
   const { data: storeData, isLoading } = Digit.Hooks.useStore.getInitData();
   const { languages, stateInfo } = storeData || {};
   const selectedLanguage = Digit.StoreData.getCurrentLanguage();

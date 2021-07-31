@@ -147,7 +147,6 @@ const OwnerForm = (_props) => {
   const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
   const institutionTypeMenu = useMemo(() => {
-    if (mdmsData) console.log(mdmsData, formData?.ownershipCategory, "property tax mdms");
     const code = formData?.ownershipCategory?.code;
     const arr = mdmsData?.PropertyTax?.OwnerShipCategory?.filter((e) => e.code != code && e.code?.includes(code));
     return arr?.map((e) => ({ ...e, i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${e.code?.replaceAll(".", "_")}` }));

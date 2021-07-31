@@ -969,7 +969,6 @@ const GetPostFields = (MdmsRes) => MdmsRes["FSM"].PostFieldsConfig;
 const GetFSTPPlantInfo = (MdmsRes) => MdmsRes["FSM"].FSTPPlantInfo;
 
 const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
-  console.log(type, "type");
   switch (type) {
     case "citymodule":
       return GetCitiesWithi18nKeys(MdmsRes, moduleCode);
@@ -1144,7 +1143,6 @@ export const MdmsService = {
   getDataByCriteria: async (tenantId, mdmsDetails, moduleCode) => {
     const key = `MDMS.${tenantId}.${moduleCode}.${mdmsDetails.type}.${JSON.stringify(mdmsDetails.details)}`;
     const inStoreValue = PersistantStorage.get(key);
-    console.log(inStoreValue);
     if (inStoreValue) {
       return inStoreValue;
     }

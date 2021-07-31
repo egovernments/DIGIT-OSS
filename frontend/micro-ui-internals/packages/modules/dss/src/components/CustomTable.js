@@ -71,7 +71,6 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
         }
         if (row?.name === "CapacityUtilization" && chartKey === "fsmVehicleLogReportByVehicleNo") {
           const tankCapcity = rows?.plots.find(plot => plot?.name === "TankCapacity");
-          console.log(tankCapcity, 'tank capacity');
           cellValue = calculateFSTPCapacityUtilization(cellValue, tankCapcity?.value);
           prevData = calculateFSTPCapacityUtilization(prevData, tankCapcity?.value);
         }

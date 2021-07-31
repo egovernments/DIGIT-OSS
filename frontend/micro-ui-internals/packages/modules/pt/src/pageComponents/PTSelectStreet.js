@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
-import { useForm, Controller } from "react-hook-form";
+import { CardLabel, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 const PTSelectStreet = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors }) => {
   const onSkip = () => onSelect();
-
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
-
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
   const checkLocation = window.location.href.includes("tl/new-application") || window.location.href.includes("tl/renew-application-details");
   const isRenewal = window.location.href.includes("edit-application") || window.location.href.includes("tl/renew-application-details");
-  
+
   let inputs;
   if (window.location.href.includes("tl")) {
     inputs = config.inputs;

@@ -23,7 +23,6 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
     onSelect(config.key, propertyType);
   };
   function selectedValue(value) {
-    console.log("find propertyType here", value);
     setPropertyType(value);
   }
   function selectedType(value) {

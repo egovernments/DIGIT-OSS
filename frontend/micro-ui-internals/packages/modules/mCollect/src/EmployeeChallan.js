@@ -93,7 +93,6 @@ const EmployeeChallan = (props) => {
       });
       billDetails.sort((a, b) => a.order - b.order);
       setChallanBillDetails(billDetails);
-      console.log(res, "resresresres");
     }
     if (data?.challans && data?.challans?.length > 0) {
       fetchMyAPI();

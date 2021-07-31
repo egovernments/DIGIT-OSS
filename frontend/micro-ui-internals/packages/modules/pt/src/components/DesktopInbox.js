@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-
 import { Card, Loader } from "@egovernments/digit-ui-react-components";
-import InboxLinks from "./inbox/InboxLink";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ApplicationTable from "./inbox/ApplicationTable";
+import InboxLinks from "./inbox/InboxLink";
 import SearchApplication from "./inbox/search";
 
 const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
@@ -18,10 +17,6 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
   const [clearSearchCalled, setClearSearchCalled] = useState(false);
 
   const columns = React.useMemo(() => (props.isSearch ? tableConfig.searchColumns(props) : tableConfig.inboxColumns(props) || []), []);
-
-  useEffect(() => {
-    console.log(data, columns, "inside inbox....");
-  }, [data, columns]);
 
   let result;
   if (props.isLoading) {

@@ -154,8 +154,6 @@ const FSMModule = ({ stateCode, userType, tenants }) => {
   if (isLoading) {
     return <Loader />;
   }
-
-  console.log("fsm", userType, path, store);
   Digit.SessionStorage.set("FSM_TENANTS", tenants);
 
   if (userType === "citizen") {

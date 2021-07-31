@@ -22,7 +22,6 @@ const EmployeeLogin = () => {
     )
   );
 
-  console.log({ loginParams });
   return (
     <Switch>
       <AppContainer>

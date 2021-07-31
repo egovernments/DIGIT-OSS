@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const useComplaintTable = ({ data }) => {
-  console.log("usetable:", data);
   const { t } = useTranslation();
   const [details, setDetails] = useState([]);
 

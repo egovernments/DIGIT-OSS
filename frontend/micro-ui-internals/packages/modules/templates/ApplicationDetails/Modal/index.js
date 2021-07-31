@@ -4,7 +4,6 @@ import PTActionModal from "./PTActionModal";
 import TLActionModal from "./TLActionModal";
 
 const ActionModal = (props) => {
-  console.log(props.action, "inside action modal index");
   if (props?.businessService.includes("PT")) {
     return <PTActionModal {...props} />;
   }

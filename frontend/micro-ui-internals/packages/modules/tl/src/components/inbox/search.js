@@ -21,11 +21,6 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   const mobileView = innerWidth <= 640;
 
   useEffect(() => {
-    // setError("mobileNumber", { type: "maxLength", message: "new" });
-    console.log(formState.errors, "inside form");
-  }, [formState, form]);
-
-  useEffect(() => {
     searchFields.forEach(({ pattern, name, maxLength, minLength, errorMessages, ...el }) => {
       const value = form[name];
       const error = formState.errors[name];

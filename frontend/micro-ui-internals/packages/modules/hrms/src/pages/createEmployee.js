@@ -72,7 +72,6 @@ const CreateEmployee = () => {
     }
     for (let i = 0; i < formData?.Jurisdictions?.length; i++) {
       let key = formData?.Jurisdictions[i];
-      console.log(key?.roles?.length)
       if (!(key?.boundary && key?.boundaryType && key?.hierarchy && key?.tenantId && key?.roles?.length > 0)) {
         setcheck(false);
         break;

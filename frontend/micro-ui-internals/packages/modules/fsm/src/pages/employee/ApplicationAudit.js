@@ -55,7 +55,6 @@ const ApplicationAudit = ({ parentRoute }) => {
   };
 
   const data = auditResponse?.fsmAudit?.map((el, index) => {
-    if (userList?.data) console.log("Find me", el.who);
     const user = getUserFromUUID(el.who);
     return {
       when: whenList[index],

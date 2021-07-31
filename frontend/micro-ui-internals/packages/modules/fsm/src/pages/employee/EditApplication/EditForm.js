@@ -73,8 +73,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     //   }
     // })();
     // // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
-
-    console.log("find form data here", formData);
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -105,7 +103,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   // }, [propertyType, subType, vehicle]);
 
   const onSubmit = (data) => {
-    console.log("find submit data", data);
     const applicationChannel = data.channel;
     const sanitationtype = data?.pitType?.code;
     const pitDimension = data?.pitDetail;

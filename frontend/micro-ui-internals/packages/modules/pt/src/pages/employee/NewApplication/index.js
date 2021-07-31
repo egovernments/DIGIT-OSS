@@ -22,8 +22,6 @@ const NewApplication = () => {
   }, []);
 
   const onFormValueChange = (setValue, formData, formState) => {
-    console.log(formData, formState.errors, "in new application");
-
     setSubmitValve(!Object.keys(formState.errors).length);
     if (Object.keys(formState.errors).length === 1 && formState.errors?.units?.message === "arv") {
       setSubmitValve(!formData?.units.some((unit) => unit.occupancyType === "RENTED" && !unit.arv));

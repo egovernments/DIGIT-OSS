@@ -36,9 +36,6 @@ const ApplicationDetails = (props) => {
     timelineStatusPrefix,
     forcedActionPrefix,
   } = props;
-
-  console.log(workflowDetails.data, "inside applicaiondetails Template");
-
   useEffect(() => {
     if (showToast) {
       workflowDetails.revalidate();
@@ -64,10 +61,6 @@ const ApplicationDetails = (props) => {
   }
 
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    console.log(selectedAction, "here is selected action");
-  }, [selectedAction]);
 
   const closeModal = () => {
     setSelectedAction(null);

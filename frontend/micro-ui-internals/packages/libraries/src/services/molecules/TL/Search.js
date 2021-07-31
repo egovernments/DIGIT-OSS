@@ -50,7 +50,6 @@ export const TLSearch = {
       const filters = { licenseNumbers, offset: 0 };
       numOfApplications = await TLSearch.numberOfApplications(tenantId, filters);
     }
-    console.log(response, "from hookfrom hookfrom hookfrom hookfrom hookfrom hook");
 
     let employeeResponse = [];
     const tradedetails = {

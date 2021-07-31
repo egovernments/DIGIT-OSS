@@ -8,7 +8,6 @@ const Localities = ({ selectLocality, tenantId, boundaryType, keepNull, selected
   const { t } = useTranslation();
 
   const { data: tenantlocalties, isLoading } = Digit.Hooks.useBoundaryLocalities(tenantId, boundaryType, { enabled: !disable }, t);
-  console.log("find data here local", tenantlocalties);
   if (isLoading && !disableLoader) {
     return <Loader />;
   }

@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { Header, LinkLabel, Loader, Modal } from "@egovernments/digit-ui-react-components";
+import _ from "lodash";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-
+import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 import OwnerHistory from "./PropertyMutation/ownerHistory";
-
-import { useParams, useHistory, Link } from "react-router-dom";
-import { Header, Loader, LinkLabel, Modal } from "@egovernments/digit-ui-react-components";
-import _ from "lodash";
 
 const Close = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
@@ -48,7 +46,7 @@ const PropertyDetails = () => {
     },
     {
       enabled: enableAudit,
-      select: (data) => data.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => a.auditDetails.createdTime - b.auditDetails.createdTime),
+      select: (data) => data.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
 
@@ -64,6 +62,7 @@ const PropertyDetails = () => {
   useEffect(() => {
     if (enableAudit && auditData?.length && Object.keys(appDetailsToShow).length) {
       const lastActiveProperty = auditData?.[0];
+      lastActiveProperty.owners = lastActiveProperty?.owners?.filter(owner => owner.status == "ACTIVE");
       if (lastActiveProperty) {
         let applicationDetails = appDetailsToShow?.transformToAppDetailsForEmployee({ property: lastActiveProperty, t });
         setAppDetailsToShow({ ...appDetailsToShow, applicationDetails });
@@ -84,7 +83,6 @@ const PropertyDetails = () => {
 
   useEffect(() => {
     if (workflowDetails?.data?.applicationBusinessService) {
-      console.log(workflowDetails?.data, "workflowDetaisl");
       setBusinessService(workflowDetails?.data?.applicationBusinessService);
     }
   }, [workflowDetails.data]);

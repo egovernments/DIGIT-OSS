@@ -72,7 +72,6 @@ const Assignments = ({ t, config, onSelect, userType, formData }) => {
 
     assignments.map((ele) => {
       if (ele.isCurrentAssignment) {
-        console.log(ele.fromDate);
         setCurrentAssiginmentDate(ele.fromDate);
       }
     });

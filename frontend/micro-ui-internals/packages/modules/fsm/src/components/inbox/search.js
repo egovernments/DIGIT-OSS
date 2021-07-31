@@ -19,7 +19,6 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   const watchSearch = watch(["applicationNos", "mobileNumber"]);
 
   const onSubmitInput = (data) => {
-    console.log("data", data);
     if (!data.mobileNumber) {
       delete data.mobileNumber;
     }
