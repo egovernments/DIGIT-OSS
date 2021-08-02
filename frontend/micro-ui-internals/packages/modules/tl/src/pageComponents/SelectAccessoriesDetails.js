@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, RadioOrSelect, LinkButton } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 import {sortDropdownNames} from "../utils/index";
+import isUndefined from "lodash/isUndefined";
+import { getUniqueItemsFromArray, commonTransform, stringReplaceAll, getPattern } from "../utils";
 
 const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) => {
   let validation = {};
@@ -12,6 +14,8 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   const [fields, setFeilds] = useState(
     formData?.TradeDetails && formData?.TradeDetails?.accessories && formData?.TradeDetails?.accessories.length>0? (formData?.TradeDetails?.accessories) : [{ accessory: "", accessorycount: "", unit: null, uom: null }]
   );
+  const [ AccCountError, setAccCountError ] = useState(null);
+  const TenantId = Digit.UserService.getUser()?.info.permanentCity;
 
   //const isUpdateProperty = formData?.isUpdateProperty || false;
   //let isEditProperty = formData?.isEditProperty || false;
@@ -23,6 +27,70 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   const stateId = tenantId.split(".")[0];
 
   const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "AccessoryCategory");
+  const [ accessories, SetAccessories] = useState([]);
+  const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId:TenantId, filters: {} });
+
+  useEffect(() => {
+    if (billingSlabData && billingSlabData?.billingSlab && billingSlabData?.billingSlab?.length > 0) {
+        const processedData =
+            billingSlabData.billingSlab &&
+            billingSlabData.billingSlab.reduce(
+                (acc, item) => {
+                    let accessory = { active: true };
+                    let tradeType = { active: true };
+                    if (item.accessoryCategory && item.tradeType === null) {
+                        accessory.code = item.accessoryCategory;
+                        accessory.uom = item.uom;
+                        accessory.rate = item.rate;
+                        item.rate && item.rate > 0 && acc.accessories.push(accessory);
+                    } else if (item.accessoryCategory === null && item.tradeType) {
+                        tradeType.code = item.tradeType;
+                        tradeType.uom = item.uom;
+                        tradeType.structureType = item.structureType;
+                        tradeType.licenseType = item.licenseType;
+                        tradeType.rate = item.rate;
+                        !isUndefined(item.rate) &&
+                            item.rate !== null &&
+                            acc.tradeTypeData.push(tradeType);
+                    }
+                    return acc;
+                },
+                { accessories: [], tradeTypeData: [] }
+            );
+
+
+        const accessories = getUniqueItemsFromArray(
+            processedData.accessories,
+            "code"
+        );
+        let structureTypes = getUniqueItemsFromArray(
+            processedData.tradeTypeData,
+            "structureType"
+        );
+        structureTypes = commonTransform(
+            {
+                StructureType: structureTypes.map(item => {
+                    return { code: item.structureType, active: true };
+                })
+            },
+            "StructureType"
+        );
+        let licenseTypes = getUniqueItemsFromArray(
+            processedData.tradeTypeData,
+            "licenseType"
+        );
+        licenseTypes = licenseTypes.map(item => {
+            return { code: item.licenseType, active: true };
+        });
+
+        accessories.forEach(data => {
+            data.i18nKey = t(`TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(data?.code?.toUpperCase(), "-", "_")}`);
+        });
+
+        // sessionStorage.setItem("TLlicenseTypes", JSON.stringify(licenseTypes));
+        SetAccessories(accessories);
+    }
+}, [billingSlabData]);
 
   function getAccessoryCategoryDropDown() {
     let AccessoryCategoryMenu = [];
@@ -62,6 +130,9 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     });
   }
   function selectAccessoryCount(i, e) {
+    setAccCountError(null);
+    if(isNaN(e.target.value))
+    setAccCountError("TL_ONLY_NUM_ALLOWED");
     let acc = [...fields];
     acc[i].accessorycount = e.target.value;
     setAccessoryCount(e.target.value);
@@ -74,6 +145,9 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     setFeilds(acc);
   }
   function selectUomValue(i, e) {
+    setAccCountError(null);
+    if(isNaN(e.target.value))
+    setAccCountError("TL_ONLY_NUM_ALLOWED");
     let acc = [...fields];
     acc[i].uom = e.target.value;
     setUomValue(e.target.value);
@@ -97,7 +171,8 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
       onSelect={goNext}
       onSkip={onSkip}
       t={t}
-      isDisabled={!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || !fields?.[0]?.uom}
+      forcedError={t(AccCountError)}
+      isDisabled={!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || !fields?.[0]?.uom ||AccCountError }
     >
       {fields.map((field, index) => {
         return (
@@ -122,7 +197,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
               optionKey="i18nKey"
               isMandatory={config.isMandatory}
               //options={[{ i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }]}
-              options={sortDropdownNames(getAccessoryCategoryDropDown(),"i18nKey",t)}
+              options={sortDropdownNames(accessories.length !== 0?accessories:getAccessoryCategoryDropDown(),"i18nKey",t)}
               selectedOption={field.accessory}
               onSelect={(e) => selectAccessory(index, e)}
             />
