@@ -1,15 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Select from "react-select";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import { sortDropdownLabels } from "egov-ui-framework/ui-utils/commons";
+import PropTypes from "prop-types";
+import React from "react";
+import Select from "react-select";
 import "./index.css";
-import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
-const getSuggestions = (suggestions,defaultSort) => {
-  suggestions= (
+const getSuggestions = (suggestions, defaultSort) => {
+  suggestions = (
     suggestions &&
     suggestions.length > 0 &&
     suggestions.map(suggestion => ({
@@ -17,7 +17,7 @@ const getSuggestions = (suggestions,defaultSort) => {
       label: suggestion.name
     }))
   );
-  suggestions=defaultSort&&suggestions&&Array.isArray(suggestions)?suggestions.sort(sortDropdownLabels):suggestions||[];
+  suggestions = defaultSort && suggestions && Array.isArray(suggestions) ? suggestions.sort(sortDropdownLabels) : suggestions || [];
   return suggestions;
 };
 
@@ -197,7 +197,7 @@ class IntegrationReactSelect extends React.Component {
       fullwidth = true,
       required = true,
       value,
-      defaultSort=true,
+      defaultSort = true,
       className,
       inputLabelProps = {
         shrink: true
@@ -227,7 +227,7 @@ class IntegrationReactSelect extends React.Component {
           menuProps={{
             className: className
           }}
-          options={getSuggestions(suggestions,defaultSort) || []}
+          options={getSuggestions(suggestions, defaultSort) || []}
           components={components}
           value={value}
           placeholder={placeholder}
