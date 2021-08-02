@@ -1,4 +1,4 @@
-import { pdfDocumentName, pdfDownloadLink, stringReplaceAll } from "./index";
+import { pdfDocumentName, pdfDownloadLink, stringReplaceAll,getTransaltedLocality } from "./index";
 
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
@@ -44,7 +44,7 @@ const getTradeDetails = (application, t) => {
   return {
     title: t("TL_COMMON_TR_DETAILS"),
     values: [
-      { title: t("TL_APPLICATION_TYPE"), value: application?.applicationType || "NA" },
+      { title: t("TL_APPLICATION_TYPE"), value: t(`TRADELICENSE_APPLICATIONTYPE_${application?.applicationType}`) || "NA" },
       { title: t("TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL"), value: application?.licenseType ? t(`TRADELICENSE_LICENSETYPE_${application?.licenseType}`) : "NA" },
       { title: t("TL_COMMON_TABLE_COL_TRD_NAME"), value: application?.tradeName || "NA" },
       { title: t("reports.tl.fromDate"), value: application?.validFrom ? Digit.DateUtils.ConvertTimestampToDate(application?.validFrom, "dd/MM/yyyy") : "NA" },
@@ -111,7 +111,7 @@ const getAddressDetails = (application, t) => {
     values: [
       { title: t("CORE_COMMON_PINCODE"), value: application?.tradeLicenseDetail?.address?.pincode || "NA" },
       { title: t("MYCITY_CODE_LABEL"), value: t(application?.tradeLicenseDetail?.address?.city) || "NA" },
-      { title: t("TL_LOCALIZATION_LOCALITY"), value: t(`TENANTS_MOHALLA_${application?.tradeLicenseDetail?.address?.locality?.code}`) || "NA" },
+      { title: t("TL_LOCALIZATION_LOCALITY"), value: t(getTransaltedLocality(application?.tradeLicenseDetail?.address)) || "NA" },
       { title: t("TL_LOCALIZATION_BUILDING_NO"), value: application?.tradeLicenseDetail?.address?.doorNo || "NA" },
       { title: t("TL_LOCALIZATION_STREET_NAME"), value: application?.tradeLicenseDetail?.address?.street || "NA" }
     ],

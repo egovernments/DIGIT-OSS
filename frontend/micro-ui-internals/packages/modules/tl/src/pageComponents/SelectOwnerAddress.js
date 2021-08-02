@@ -20,14 +20,14 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
         doorNo: formData?.address?.doorNo,
         street: formData?.address?.street,
         landmark: formData?.address?.landmark,
-        locality: formData?.address?.locality?.name,
-        city: formData?.address?.city?.name,
+        locality: formData?.address?.locality?.i18nkey,
+        city: formData?.address?.city?.code,
         pincode: formData?.address?.pincode,
       };
       let addressDetails = "";
       for (const key in obj) {
         if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
-        else addressDetails += obj[key] ? obj[key] + ", " : "";
+        else addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
       }
       setPermanentAddress(addressDetails);
     } else {

@@ -15,7 +15,7 @@ const MyApplications = ({view}) => {
     }
   ) : Digit.Hooks.tl.useTLSearchApplication({}, {
     enabled: view !== "bills"
-  });
+  },t);
 
   if (isLoading) {
     return <Loader />;

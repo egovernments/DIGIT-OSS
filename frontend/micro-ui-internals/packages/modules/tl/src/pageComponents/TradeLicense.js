@@ -34,7 +34,7 @@ const TradeLicense = ({ t, config, onSelect, userType, formData }) => {
           </div>
         </div>
         <span>
-          <SubmitBar label="Next" onSubmit={onSelect} />
+          <SubmitBar label={t("CS_COMMON_NEXT")} onSubmit={onSelect} />
         </span>
       </Card>
       {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("TL_DOCUMENT_SIZE_INFO_MSG")} />}

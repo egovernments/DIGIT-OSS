@@ -202,7 +202,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
             </div>
             {ismultiple && (
               <CheckBox
-                label={t("Primary Owner")}
+                label={t("TL_PRIMARY_OWNER_LABEL")}
                 onChange={(e) => setPrimaryOwner(index, e)}
                 value={field.isprimaryowner}
                 checked={field.isprimaryowner}
@@ -219,7 +219,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
           {/* <hr color="#d6d5d4" className="break-line"></hr> */}
           <div style={{ justifyContent: "center", display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
             <button type="button" style={{paddingTop:"10px"}} onClick={() => handleAdd()}>
-              Add Owner
+              {t("TL_ADD_OWNER_LABEL")}
             </button>
           </div>
         </div>

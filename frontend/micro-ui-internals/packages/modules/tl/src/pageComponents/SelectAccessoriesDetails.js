@@ -15,6 +15,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     formData?.TradeDetails && formData?.TradeDetails?.accessories && formData?.TradeDetails?.accessories.length>0? (formData?.TradeDetails?.accessories) : [{ accessory: "", accessorycount: "", unit: null, uom: null }]
   );
   const [ AccCountError, setAccCountError ] = useState(null);
+  const [ AccUOMError, setAccUOMError] = useState(null);
   const TenantId = Digit.UserService.getUser()?.info.permanentCity;
 
   //const isUpdateProperty = formData?.isUpdateProperty || false;
@@ -145,9 +146,9 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     setFeilds(acc);
   }
   function selectUomValue(i, e) {
-    setAccCountError(null);
+    setAccUOMError(null);
     if(isNaN(e.target.value))
-    setAccCountError("TL_ONLY_NUM_ALLOWED");
+    setAccUOMError("TL_ONLY_NUM_ALLOWED");
     let acc = [...fields];
     acc[i].uom = e.target.value;
     setUomValue(e.target.value);
@@ -171,8 +172,8 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
       onSelect={goNext}
       onSkip={onSkip}
       t={t}
-      forcedError={t(AccCountError)}
-      isDisabled={!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || !fields?.[0]?.uom ||AccCountError }
+      forcedError={t(AccCountError) || t(AccUOMError)}
+      isDisabled={!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || !fields?.[0]?.uom ||AccCountError ||AccUOMError }
     >
       {fields.map((field, index) => {
         return (
