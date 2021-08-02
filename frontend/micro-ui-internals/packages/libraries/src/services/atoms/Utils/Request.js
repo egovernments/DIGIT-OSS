@@ -39,7 +39,7 @@ export const Request = async ({
   auth,
   urlParams = {},
   userService,
-  reciept = false,
+  locale = false,
   authHeader = false,
   setTimeParam = true,
   userDownload = false,
@@ -61,7 +61,7 @@ export const Request = async ({
     if (userService) {
       data.RequestInfo = { ...data.RequestInfo, ...userServiceData() };
     }
-    if (reciept) {
+    if (locale) {
       data.RequestInfo = { ...data.RequestInfo, msgId: `string|${Digit.StoreData.getCurrentLanguage()}` };
     }
   }

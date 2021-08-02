@@ -1,8 +1,8 @@
-import PDFUtil from "./pdf";
 import BrowserUtil from "./browser";
-import * as locale from "./locale";
 import * as date from "./date";
 import * as dss from "./dss";
+import * as locale from "./locale";
+import PDFUtil, { downloadReceipt } from "./pdf";
 
 const GetParamFromUrl = (key, fallback, search) => {
   if (typeof window !== "undefined") {
@@ -180,6 +180,7 @@ const hrmsAccess = () => {
 
 export default {
   pdf: PDFUtil,
+  downloadReceipt,
   browser: BrowserUtil,
   locale,
   date,

@@ -96,6 +96,7 @@ const Urls = {
     billingslab: "/tl-calculator/billingslab/_search"
   },
   receipts: {
+    receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
     payments: "/collection-services/payments",
     count: "/egov-hrms/employees/_count"
   },

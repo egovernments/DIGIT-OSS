@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
-import TransfererDetails from "../../pageComponents/Mutate/TransfererDetails";
-import { newConfigMutate } from "../../config/Mutate/config";
-
-import { useParams } from "react-router-dom";
 import { Header } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
+import { newConfigMutate } from "../../config/Mutate/config";
+import TransfererDetails from "../../pageComponents/Mutate/TransfererDetails";
+
 
 const ApplicationDetails = () => {
   const { t } = useTranslation();
@@ -126,6 +126,7 @@ const ApplicationDetails = () => {
     appDetailsToShow?.applicationDetails?.unshift({
       values: [
         { title: "PT_PROPERTY_APPLICATION_NO", value: appDetailsToShow?.applicationData?.acknowldgementNumber },
+        { title: "PT_SEARCHPROPERTY_TABEL_PTUID", value: appDetailsToShow?.applicationData?.propertyId },
         { title: "ES_APPLICATION_CHANNEL", value: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${appDetailsToShow?.applicationData?.channel}` },
       ],
     });

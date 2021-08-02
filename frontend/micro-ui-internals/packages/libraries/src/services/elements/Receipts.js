@@ -11,7 +11,18 @@ const ReceiptsService = {
             userService: true,
             params: { tenantId, ...filters, ...searchParams },
         }),
-
+    receipt_download: (bussinessService, consumerCode, tenantId,pdfKey) =>
+        Request({
+            url: Urls.receipts.receipt_download,
+            data: {},
+            useCache: true,
+            method: "POST",
+            params: { bussinessService, consumerCode, tenantId,pdfKey },
+            auth: true,
+            userService: true,
+            locale: true,
+            userDownload: true,
+        }),
     update: (data, tenantId, businessService) =>
         Request({
             data: data,

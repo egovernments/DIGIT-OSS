@@ -67,7 +67,7 @@ const PTApplicationDetails = () => {
           <StatusTable>
             <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={application?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
             <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={application?.propertyId} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text="online" />
+            <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${application?.channel}`)} />
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
@@ -84,7 +84,7 @@ const PTApplicationDetails = () => {
               text={
                 `${t(
                   (application.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                    (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application.usageCategory)
+                  (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application.usageCategory)
                 )}` || t("CS_NA")
               }
             />
@@ -111,8 +111,8 @@ const PTApplicationDetails = () => {
                           text={
                             `${t(
                               (application.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                                (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application.usageCategory) +
-                                (application.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                              (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application.usageCategory) +
+                              (application.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
                             )}` || t("CS_NA")
                           }
                         />

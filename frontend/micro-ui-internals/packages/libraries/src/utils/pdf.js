@@ -57,24 +57,24 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
     email.length <= 15
       ? 190
       : email.length <= 20
-      ? 150
-      : email.length <= 25
-      ? 130
-      : email.length <= 30
-      ? 90
-      : email.length <= 35
-      ? 50
-      : email.length <= 40
-      ? 10
-      : email.length <= 45
-      ? 0
-      : email.length <= 50
-      ? -20
-      : email.length <= 55
-      ? -70
-      : email.length <= 60
-      ? -100
-      : -60;
+        ? 150
+        : email.length <= 25
+          ? 130
+          : email.length <= 30
+            ? 90
+            : email.length <= 35
+              ? 50
+              : email.length <= 40
+                ? 10
+                : email.length <= 45
+                  ? 0
+                  : email.length <= 50
+                    ? -20
+                    : email.length <= 55
+                      ? -70
+                      : email.length <= 60
+                        ? -100
+                        : -60;
 
   const dd = {
     pageMargins: [40, 80, 40, 30],
@@ -148,17 +148,17 @@ function createContent(details, phoneNumber) {
   const data = [];
 
   details.forEach((detail, index) => {
-    if(detail?.values?.length > 0) {
+    if (detail?.values?.length > 0) {
       let column1 = [];
       let column2 = [];
-  
+
       if ((index + 1) % 7 === 0) {
         data.push({
           text: "",
           margin: [-25, 0, 0, 200],
         });
       }
-      
+
       data.push({
         text: `${detail.title}`,
         font: "Hind",
@@ -166,11 +166,11 @@ function createContent(details, phoneNumber) {
         bold: true,
         margin: [-25, 20, 0, 20],
       });
-  
+
       const newArray = [];
       let count = 0;
       let arrayNumber = 0;
-  
+
       detail.values.forEach((value, index) => {
         if (count <= 3) {
           if (!newArray[arrayNumber]) {
@@ -186,7 +186,7 @@ function createContent(details, phoneNumber) {
           arrayNumber++;
         }
       });
-  
+
       newArray.forEach((value) => {
         if (value?.length === 2) {
           createContentForDetailsWithLengthOfTwo(value, data, column1, column2, detail.values.length > 3 ? 10 : 0);
@@ -385,3 +385,27 @@ function createContentForDetailsWithLengthOfOneAndThree(values, data, column1, c
 // >
 //   Download PDF
 // </button>,
+
+const downloadPdf = (blob, fileName) => {
+  const link = document.createElement("a");
+  // create a blobURI pointing to our Blob
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  // some browser needs the anchor to be in the doc
+  document.body.append(link);
+  link.click();
+  link.remove();
+  // in case the Blob uses a lot of memory
+  setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+};
+
+/* Download Receipts */
+
+export const downloadReceipt = async (consumerCode, businessService, pdfKey = "consolidatedreceipt") => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey);
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 201 || responseStatus === 200) {
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), `consumer-${consumerCode}.pdf`);
+  }
+};
