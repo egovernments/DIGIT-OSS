@@ -1043,11 +1043,6 @@
                 <artifactId>wsdl4j</artifactId>
                 <version>${wsdl4j-version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.egov.ap</groupId>
-                <artifactId>apfonts</artifactId>
-                <version>${ap-fonts-version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1352,10 +1347,6 @@
         <dependency>
             <groupId>wsdl4j</groupId>
             <artifactId>wsdl4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.egov.ap</groupId>
-            <artifactId>apfonts</artifactId>
         </dependency>
 
         <!-- NETFLIX ZUUL START -->
