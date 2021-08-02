@@ -163,7 +163,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
             name={"city"}
             defaultValue={cities?.length === 1 ? cities[0] : selectedCity}
             control={control}
-            rules={{required: "Required"}}
+            rules={{required: t("REQUIRED_FIELD")}}
             render={(props) => (
               <Dropdown
                 className="form-field"
@@ -185,7 +185,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
             name="locality"
             defaultValue={checkingLocationForRenew ? formData.address.locality : null}
             control={control}
-            rules={{required: "Required"}}
+            rules={{required: t("REQUIRED_FIELD")}}
             render={(props) => (
               <Dropdown
                 className="form-field"

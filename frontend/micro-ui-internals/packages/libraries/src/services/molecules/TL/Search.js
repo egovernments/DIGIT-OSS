@@ -54,7 +54,7 @@ export const TLSearch = {
     let employeeResponse = [];
     const tradedetails = {
       title: "TL_COMMON_TR_DETAILS",
-      // asSectionHeader: true,
+      asSectionHeader: true,
       values: [
         { title: "TL_FINANCIAL_YEAR_LABEL", value: response?.financialYear ? `FY${response?.financialYear}` : "NA" },
         { title: "TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL", value: response?.licenseType ? `TRADELICENSE_LICENSETYPE_${response?.licenseType}` : "NA" },

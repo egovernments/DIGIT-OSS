@@ -53,7 +53,7 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
               <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
-                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
+                <CardSectionHeader style={(index == 0 && checkLocation) ? { marginBottom: "16px" } : { marginBottom: "16px", marginTop: "32px" }}>
                   {t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>

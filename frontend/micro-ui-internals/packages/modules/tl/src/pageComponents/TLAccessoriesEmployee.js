@@ -328,7 +328,7 @@ const AccessoriersForm = (_props) => {
                                 control={control}
                                 name={"uomValue"}
                                 defaultValue={accessor?.uomValue}
-                                rules={accessor?.accessoryCategory?.uom && { required: "Required", validate: (e) => ((e && getPattern("UOMValue").test(e)) || !e ? true : "ERR_DEFAULT_INPUT_FIELD_MSG") }}
+                                rules={accessor?.accessoryCategory?.uom && { required: t("REQUIRED_FIELD"), validate: (e) => ((e && getPattern("UOMValue").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
                                 render={(props) => (
                                     <TextInput
                                         value={getValues("uomValue")}
@@ -355,7 +355,7 @@ const AccessoriersForm = (_props) => {
                                 control={control}
                                 name={"count"}
                                 defaultValue={accessor?.count}
-                                rules={accessor?.accessoryCategory?.code && { required: "Required", validate: (e) => ((e && getPattern("NoOfEmp").test(e)) || !e ? true : "ERR_DEFAULT_INPUT_FIELD_MSG") }}
+                                rules={accessor?.accessoryCategory?.code && { required: t("REQUIRED_FIELD"), validate: (e) => ((e && getPattern("NoOfEmp").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
                                 // rules={accessor?.accessoryCategory?.code ? { required: "ERR_DEFAULT_INPUT_FIELD_MSG" } : {}}
                                 render={(props) => (
                                     <TextInput

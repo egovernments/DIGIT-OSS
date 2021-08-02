@@ -90,7 +90,8 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
                   return (
                     <RemoveableTag
                       key={index}
-                      text={locality.name}
+                      // text={locality.name}
+                      text={t(`${locality.i18nkey}`)}
                       onClick={() => {
                         localParamChange({ locality: _searchParams?.locality.filter((loc) => loc.code !== locality.code) });
                       }}

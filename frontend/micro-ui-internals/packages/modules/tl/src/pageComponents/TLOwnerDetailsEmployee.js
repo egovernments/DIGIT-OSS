@@ -253,7 +253,7 @@ const OwnerForm = (_props) => {
                 control={control}
                 name={"name"}
                 defaultValue={owner?.name}
-                rules={{ required: "NAME_REQUIRED", validate: { pattern: (val) => (/^\w+( +\w+)*$/.test(val) ? true : t("INVALID_NAME")) } }}
+                rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^\w+( +\w+)*$/.test(val) ? true : t("INVALID_NAME")) } }}
                 render={(props) => (
                   <TextInput
                     value={props.value}
@@ -283,7 +283,7 @@ const OwnerForm = (_props) => {
                 control={control}
                 name={"mobileNumber"}
                 defaultValue={owner?.mobileNumber}
-                rules={{ required: "Required", validate: (v) => (/^[6789]\d{9}$/.test(v) ? true : "invalid Phone") }}
+                rules={{ required: t("REQUIRED_FIELD"), validate: (v) => (/^[6789]\d{9}$/.test(v) ? true : t("INVALID_NUMBER")) }}
                 render={(props) => (
                   <MobileNumber
                     value={props.value}
@@ -364,7 +364,7 @@ const OwnerForm = (_props) => {
               control={control}
               name={"gender"}
               defaultValue={owner?.gender}
-              rules={{ required: "REQUIRED" }}
+              rules={{ required: t("REQUIRED_FIELD") }}
               render={(props) => (
                 <Dropdown
                   className="form-field"
@@ -390,7 +390,7 @@ const OwnerForm = (_props) => {
                 control={control}
                 name={"emailId"}
                 defaultValue={owner?.emailId}
-                rules={{ validate: (e) => ((e && getPattern("Email").test(e)) || !e ? true : "INVALID_EMAIL") }}
+                rules={{ validate: (e) => ((e && getPattern("Email").test(e)) || !e ? true : t("INVALID_EMAIL")) }}
                 render={(props) => (
                   <TextInput
                     value={props.value}

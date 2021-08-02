@@ -338,7 +338,7 @@ const OwnerForm1 = (_props) => {
                 control={control}
                 name={"tradeName"}
                 defaultValue={tradedetail?.tradeName}
-                rules={{ required: "NAME_REQUIRED", validate: { pattern: (val) => (/^[-@.\/#&+\w\s]*$/.test(val) ? true : t("INVALID_NAME")) } }}
+                rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[-@.\/#&+\w\s]*$/.test(val) ? true : t("INVALID_NAME")) } }}
                 render={(props) => (
                   <TextInput
                     value={props.value}
@@ -427,7 +427,7 @@ const OwnerForm1 = (_props) => {
             <div className="field">
               <Controller
                 name="commencementDate"
-                rules={{ required: t("ERR_DEFAULT_INPUT_FIELD_MSG") }}
+                rules={{ required: t("REQUIRED_FIELD") }}
                 defaultValue={tradedetail?.commencementDate}
                 control={control}
                 render={(props) => (
@@ -450,7 +450,7 @@ const OwnerForm1 = (_props) => {
                 control={control}
                 name="gstNo"
                 defaultValue={tradedetail?.gstNo}
-                rules={{ validate: (e) => ((e && getPattern("GSTNo").test(e)) || !e ? true : "ERR_DEFAULT_INPUT_FIELD_MSG") }}
+                rules={{ validate: (e) => ((e && getPattern("GSTNo").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
                 render={(props) => (
                   <TextInput
                     value={props.value}
@@ -474,7 +474,7 @@ const OwnerForm1 = (_props) => {
             <div className="field">
               <Controller
                 name="operationalArea"
-                rules={{ validate: (e) => ((e && getPattern("OperationalArea").test(e)) || !e ? true : "ERR_DEFAULT_INPUT_FIELD_MSG") }}
+                rules={{ validate: (e) => ((e && getPattern("OperationalArea").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
                 defaultValue={tradedetail?.operationalArea}
                 control={control}
                 render={(props) => (
@@ -499,7 +499,7 @@ const OwnerForm1 = (_props) => {
             <div className="field">
               <Controller
                 name="noOfEmployees"
-                rules={{ validate: (e) => ((e && getPattern("NoOfEmp").test(e)) || !e ? true : "ERR_DEFAULT_INPUT_FIELD_MSG") }}
+                rules={{ validate: (e) => ((e && getPattern("NoOfEmp").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
                 defaultValue={tradedetail?.noOfEmployees}
                 control={control}
                 render={(props) => (

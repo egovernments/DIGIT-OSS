@@ -246,7 +246,7 @@ const TradeUnitForm = (_props) => {
                             control={control}
                             name={"tradeCategory"}
                             defaultValue={unit?.tradeCategory}
-                            rules={{ required: "Required" }}
+                            rules={{ required: t("REQUIRED_FIELD") }}
                             render={(props) => (
                                 <Dropdown
                                     className="form-field"
@@ -294,7 +294,7 @@ const TradeUnitForm = (_props) => {
                             control={control}
                             name={"tradeType"}
                             defaultValue={unit?.tradeType}
-                            rules={{ required: "Required" }}
+                            rules={{ required: t("REQUIRED_FIELD") }}
                             render={(props) => (
                                 <Dropdown
                                     className="form-field"
@@ -337,7 +337,7 @@ const TradeUnitForm = (_props) => {
                             control={control}
                             name={"tradeSubType"}
                             defaultValue={unit?.tradeSubType}
-                            rules={{ required: "Required" }}
+                            rules={{ required: t("REQUIRED_FIELD") }}
                             render={(props) => (
                                 <Dropdown
                                     className="form-field"
@@ -394,7 +394,7 @@ const TradeUnitForm = (_props) => {
                                 control={control}
                                 name={"uomValue"}
                                 defaultValue={unit?.uomValue}
-                                rules={unit?.tradeSubType?.uom && { required: "ERR_DEFAULT_INPUT_FIELD_MSG", validate: { pattern: (val) => (/^(0)*[1-9][0-9]{0,5}$/.test(val) ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) } } }
+                                rules={unit?.tradeSubType?.uom && { required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^(0)*[1-9][0-9]{0,5}$/.test(val) ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) } } }
                                 render={(props) => (
                                     <TextInput
                                         value={getValues("uomValue")}
