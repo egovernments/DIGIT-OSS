@@ -92,7 +92,7 @@ const EmployeeApp = ({ path, url, userType }) => {
                 middlewareSearch={searchMW}
                 initialStates={inboxInitialState}
                 isInbox={false}
-                EmptyResultInboxComp={"EmptyResultInbox"}
+                EmptyResultInboxComp={"PTEmptyResultInbox"}
               />
             )}
           />

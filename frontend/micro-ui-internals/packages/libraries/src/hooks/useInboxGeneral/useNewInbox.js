@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "react-query";
 import { FSMService } from "../../services/elements/FSM";
 import { PTService } from "../../services/elements/PT";
-import { TableConfig } from "./tableConfig";
+
 import { filterFunctions } from "./newFilterFn";
 import { getSearchFields } from "./searchFields";
 import { InboxGeneral } from "../../services/elements/InboxService";
@@ -53,7 +53,7 @@ const useNewInboxGeneral = ({ tenantId, ModuleCode, filters, middleware = [], co
     ["INBOX", workflowFilters, searchFilters, ModuleCode, limit, offset, sortBy, sortOrder],
     () =>
       InboxGeneral.Search({
-        inbox: { tenantId, processSearchCriteria: workflowFilters, moduleSearchCriteria: {...searchFilters, sortBy, sortOrder}, limit, offset },
+        inbox: { tenantId, processSearchCriteria: workflowFilters, moduleSearchCriteria: { ...searchFilters, sortBy, sortOrder }, limit, offset },
       }),
     {
       select: (data) => {
@@ -86,7 +86,6 @@ const useNewInboxGeneral = ({ tenantId, ModuleCode, filters, middleware = [], co
     searchResponseKey,
     businessIdsParamForSearch,
     businessIdAliasForSearch,
-    tableConfig: TableConfig(t)[ModuleCode],
     searchFields: getSearchFields(true)[ModuleCode],
   };
 };

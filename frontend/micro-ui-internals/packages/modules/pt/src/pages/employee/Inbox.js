@@ -25,23 +25,12 @@ const Inbox = ({
 
   const { t } = useTranslation();
   const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
-
-  // const [pageOffset, setPageOffset] = Digit.Hooks.useSessionStorage("PT_INBOX_PAGE_OFFSET", initialStates.pageOffset || 0);
-  // const [pageSize, setPageSize] = Digit.Hooks.useSessionStorage("PT_INBOX_PAGESIZE", initialStates.pageSize || 10);
-  // const [sortParams, setSortParams] = Digit.Hooks.useSessionStorage(
-  //   "PT_INBOX_SORTPARAMS",
-  //   initialStates.sortParams || [{ id: "createdTime", desc: false }]
-  // );
-  // const [searchParams, setSearchParams] = Digit.Hooks.useSessionStorage("PT_INBOX_SEARCHPARAMS", initialStates.searchParams || {});
-
+  const [TableConfig, setTableConfig] = useState(() => Digit.ComponentRegistryService?.getComponent("PTInboxTableConfig"));
+  // const [getSearchFi]
   const [pageOffset, setPageOffset] = useState(initialStates.pageOffset || 0);
   const [pageSize, setPageSize] = useState(initialStates.pageSize || 10);
   const [sortParams, setSortParams] = useState(initialStates.sortParams || [{ id: "createdTime", desc: false }]);
   const [searchParams, setSearchParams] = useState(initialStates.searchParams || {});
-
-  const [allowSearch, setAllowSearch] = useState(() => {
-    return isInbox ? {} : { enabled: false };
-  });
 
   let isMobile = window.Digit.Utils.browser.isMobile();
   let paginationParams = isMobile
@@ -127,7 +116,7 @@ const Inbox = ({
           <DesktopInbox
             moduleCode={moduleCode}
             data={data}
-            tableConfig={rest?.tableConfig}
+            tableConfig={TableConfig(t)["PT"]}
             isLoading={hookLoading}
             defaultSearchParams={initialStates.searchParams}
             isSearch={!isInbox}

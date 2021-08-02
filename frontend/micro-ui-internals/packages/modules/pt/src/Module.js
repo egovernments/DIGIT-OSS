@@ -57,6 +57,7 @@ import EmployeeApp from "./pages/employee";
 import PTCard from "./components/PTCard";
 import InboxFilter from "./components/inbox/NewInboxFilter";
 import EmptyResultInbox from "./components/empty-result";
+import { TableConfig } from "./config/inbox-table-config";
 
 const componentsToRegister = {
   PropertyTax,
@@ -174,5 +175,6 @@ export const PTComponents = {
   PTModule,
   PTLinks,
   PT_INBOX_FILTER: (props) => <InboxFilter {...props} />,
-  EmptyResultInbox,
+  PTEmptyResultInbox: EmptyResultInbox,
+  PTInboxTableConfig: TableConfig,
 };

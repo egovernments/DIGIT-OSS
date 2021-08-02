@@ -83,6 +83,9 @@ const NewApplication = () => {
             emailId,
           };
         }
+
+        if (!__owner.correspondenceAddress) __owner.correspondenceAddress = "";
+
         const _owner = {
           ...__owner,
           ownerType: owner?.ownerType?.code,
@@ -94,7 +97,6 @@ const NewApplication = () => {
             data?.documents?.documents?.find((e) => e.documentType?.includes("OWNER.IDENTITYPROOF")),
           ];
         } else {
-          // console.log("owner docs setted");
           _owner.documents = [data?.documents?.documents?.find((e) => e.documentType?.includes("OWNER.IDENTITYPROOF"))];
         }
         return _owner;

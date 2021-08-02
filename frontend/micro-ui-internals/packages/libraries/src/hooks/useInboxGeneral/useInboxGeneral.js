@@ -2,10 +2,10 @@ import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "react-query";
 import { FSMService } from "../../services/elements/FSM";
 import { PTService } from "../../services/elements/PT";
-import { TableConfig } from "./tableConfig";
+
 import { filterFunctions } from "./filterFn";
 import { getSearchFields } from "./searchFields";
-import { TLService } from "../../services/elements/TL"
+import { TLService } from "../../services/elements/TL";
 
 const inboxConfig = (tenantId, filters) => ({
   PT: {
@@ -132,7 +132,6 @@ const useInboxGeneral = ({
 
   const allowSearch = isInbox ? isFetched && wfSuccess && !!searchFilters[businessIdsParamForSearch] : true;
 
-
   const searchResult = useQuery(
     ["SEARCH_INBOX", businessService, searchFilters, workflowFilters, isInbox],
     () => {
@@ -167,7 +166,7 @@ const useInboxGeneral = ({
     searchResponseKey,
     businessIdsParamForSearch,
     businessIdAliasForSearch,
-    tableConfig: TableConfig(t)[businessService],
+
     searchFields: getSearchFields(isInbox)[businessService],
     wfFetching,
   };

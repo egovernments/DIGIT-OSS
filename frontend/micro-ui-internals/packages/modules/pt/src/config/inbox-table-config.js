@@ -41,11 +41,6 @@ export const TableConfig = (t) => ({
           const _owner = status === "INWORKFLOW" && creationReason === "MUTATION" ? sortedOwners.reverse() : sortedOwners;
 
           return GetCell(`${_owner?.[0].name}`);
-          return (
-            <Link to={`${props.parentRoute}/property-mutate-docs-required/` + row.original?.searchData?.["propertyId"]}>
-              {row.original?.searchData?.["propertyId"]}
-            </Link>
-          );
         },
         mobileCell: (original) => GetMobCell(original?.searchData?.["owners"]?.[0].name),
       },
