@@ -1,6 +1,6 @@
+import { CardLabel, CheckBox, DatePicker, Dropdown, LabelFieldPair, Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import cleanup from "../Utils/cleanup";
-import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, DatePicker, CheckBox, Loader } from "@egovernments/digit-ui-react-components";
 import { convertEpochToDate } from "../Utils/index";
 
 const Assignments = ({ t, config, onSelect, userType, formData }) => {
@@ -49,17 +49,17 @@ const Assignments = ({ t, config, onSelect, userType, formData }) => {
     var promises = assignments?.map((assignment) => {
       return assignment
         ? cleanup({
-            id: assignment?.id,
-            position: assignment?.position,
-            govtOrderNumber: assignment?.govtOrderNumber,
-            tenantid: assignment?.tenantid,
-            auditDetails: assignment?.auditDetails,
-            fromDate: assignment?.fromDate ? new Date(assignment?.fromDate).getTime() : undefined,
-            toDate: assignment?.toDate ? new Date(assignment?.toDate).getTime() : undefined,
-            isCurrentAssignment: assignment?.isCurrentAssignment,
-            department: assignment?.department?.code,
-            designation: assignment?.designation?.code,
-          })
+          id: assignment?.id,
+          position: assignment?.position,
+          govtOrderNumber: assignment?.govtOrderNumber,
+          tenantid: assignment?.tenantid,
+          auditDetails: assignment?.auditDetails,
+          fromDate: assignment?.fromDate ? new Date(assignment?.fromDate).getTime() : undefined,
+          toDate: assignment?.toDate ? new Date(assignment?.toDate).getTime() : undefined,
+          isCurrentAssignment: assignment?.isCurrentAssignment,
+          department: assignment?.department?.code,
+          designation: assignment?.designation?.code,
+        })
         : [];
     });
 
@@ -158,9 +158,9 @@ function Assignment({
         pre.map((item) =>
           item.key === assignment.key
             ? {
-                ...item,
-                toDate: null,
-              }
+              ...item,
+              toDate: null,
+            }
             : item
         )
       );
@@ -197,14 +197,14 @@ function Assignment({
         </LabelFieldPair>
 
         <LabelFieldPair>
-          <CardLabel className={assignment?.id?"card-label-smaller disabled":"card-label-smaller"}> {`${t("HR_ASMT_FROM_DATE_LABEL")} * `} </CardLabel>
+          <CardLabel className={assignment?.id ? "card-label-smaller disabled" : "card-label-smaller"}> {`${t("HR_ASMT_FROM_DATE_LABEL")} * `} </CardLabel>
           <div className="field">
             <DatePicker
               type="date"
               name="fromDate"
               max={currentassignemtDate ? currentassignemtDate : convertEpochToDate(new Date())}
               min={formData?.SelectDateofEmployment?.dateOfAppointment}
-              disabled={assignment?.id?true:false}
+              disabled={assignment?.id ? true : false}
               onChange={(e) => {
                 setassignments((pre) => pre.map((item) => (item.key === assignment.key ? { ...item, fromDate: e } : item)));
                 setFocusIndex(index);
@@ -215,7 +215,7 @@ function Assignment({
           </div>
         </LabelFieldPair>
         <LabelFieldPair>
-          <CardLabel className={assignment?.isCurrentAssignment?"card-label-smaller disabled":"card-label-smaller"}>
+          <CardLabel className={assignment?.isCurrentAssignment ? "card-label-smaller disabled" : "card-label-smaller"}>
             {t("HR_ASMT_TO_DATE_LABEL")}
             {assignment?.isCurrentAssignment ? "" : " * "}{" "}
           </CardLabel>
@@ -249,11 +249,11 @@ function Assignment({
           </div>
         </LabelFieldPair>
         <LabelFieldPair>
-          <CardLabel className={assignment?.id?"card-label-smaller disabled":"card-label-smaller"}> {`${t("HR_DEPT_LABEL")} * `}</CardLabel>
+          <CardLabel className={assignment?.id ? "card-label-smaller disabled" : "card-label-smaller"}> {`${t("HR_DEPT_LABEL")} * `}</CardLabel>
           <Dropdown
             className="form-field"
             selected={assignment?.department}
-            disable={assignment?.id?true:false}
+            disable={assignment?.id ? true : false}
             optionKey={"i18key"}
             option={getdepartmentdata(department) || []}
             select={selectDepartment}
@@ -262,11 +262,11 @@ function Assignment({
         </LabelFieldPair>
 
         <LabelFieldPair>
-          <CardLabel className={assignment?.id?"card-label-smaller disabled":"card-label-smaller"}>{`${t("HR_DESG_LABEL")} * `}</CardLabel>
+          <CardLabel className={assignment?.id ? "card-label-smaller disabled" : "card-label-smaller"}>{`${t("HR_DESG_LABEL")} * `}</CardLabel>
           <Dropdown
             className="form-field"
             selected={assignment?.designation}
-            disable={assignment?.id?true:false}
+            disable={assignment?.id ? true : false}
             option={getdesignationdata(designation) || []}
             select={selectDesignation}
             optionKey={"i18key"}

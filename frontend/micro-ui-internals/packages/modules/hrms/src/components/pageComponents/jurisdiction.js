@@ -1,7 +1,6 @@
+import { CardLabel, Dropdown, LabelFieldPair, Loader, MultiSelectDropdown, RemoveableTag } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import { CardLabel, LabelFieldPair, Dropdown, MultiSelectDropdown, Loader, LinkButton, RemoveableTag } from "@egovernments/digit-ui-react-components";
 import cleanup from "../Utils/cleanup";
-import { unset } from "lodash";
 
 const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -102,7 +101,7 @@ const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
   }
 
   function getroledata() {
-    return data?.MdmsRes?.["ACCESSCONTROL-ROLES"].roles.map(role=>{return {code:role.code,name:'ACCESSCONTROL_ROLES_ROLES_'+role.code}});
+    return data?.MdmsRes?.["ACCESSCONTROL-ROLES"].roles.map(role => { return { code: role.code, name: 'ACCESSCONTROL_ROLES_ROLES_' + role.code } });
   }
 
   if (isLoading) {
@@ -158,12 +157,12 @@ function Jurisdiction({
         .filter((ele) => {
           return ele?.hierarchyType?.code == jurisdiction?.hierarchy?.code;
         })
-        .map((item) => item.boundary)
+        .map((item) => { return { ...item.boundary, i18text: Digit.Utils.locale.convertToLocale(item.boundary.label, 'EGOV_LOCATION_BOUNDARYTYPE') } })
     );
   }, [jurisdiction?.hierarchy, data?.MdmsRes]);
   const tenant = Digit.ULBService.getCurrentTenantId();
   useEffect(() => {
-    selectboundary(data?.MdmsRes?.tenant?.tenants.filter(city=>city.code!=tenant.split('.')[0]));
+    selectboundary(data?.MdmsRes?.tenant?.tenants.filter(city => city.code != tenant.split('.')[0]).map(city => { return { ...city, i18text: Digit.Utils.locale.getCityLocale(city.code) } }));
   }, [jurisdiction?.boundaryType, data?.MdmsRes]);
 
   useEffect(() => {
@@ -191,7 +190,7 @@ function Jurisdiction({
       jurisdiction?.roles.splice(jurisdiction?.roles.indexOf(index[0]), 1);
       res = jurisdiction.roles;
     } else {
-      res = [{...data}, ...jurisdiction?.roles];
+      res = [{ ...data }, ...jurisdiction?.roles];
     }
 
     // if (checked) selectULB(data.code);
@@ -246,7 +245,7 @@ function Jurisdiction({
             disable={BoundaryType?.length === 0}
             option={BoundaryType}
             select={selectboundaryType}
-            optionKey="label"
+            optionKey="i18text"
             t={t}
           />
         </LabelFieldPair>
@@ -259,13 +258,13 @@ function Jurisdiction({
             disable={Boundary?.length === 0}
             option={Boundary}
             select={selectedboundary}
-            optionKey="name"
+            optionKey="i18text"
             t={t}
           />
         </LabelFieldPair>
 
         <LabelFieldPair>
-          <CardLabel className="card-label-smaller">Roles *</CardLabel>
+          <CardLabel className="card-label-smaller">{t("HR_COMMON_TABLE_COL_ROLE")} *</CardLabel>
           <div className="form-field">
             <MultiSelectDropdown
               className="form-field"
@@ -277,16 +276,14 @@ function Jurisdiction({
               optionsKey="name"
               t={t}
             />
-               <div className="tag-container">
-          {jurisdiction?.roles.length > 0 &&
-            jurisdiction?.roles.map((value, index) => {
-              return <RemoveableTag key={index} text={`${t(value["name"]).slice(0, 22)} ...`} onClick={() => onRemove(index, value)} />;
-            })}
-        </div>
+            <div className="tag-container">
+              {jurisdiction?.roles.length > 0 &&
+                jurisdiction?.roles.map((value, index) => {
+                  return <RemoveableTag key={index} text={`${t(value["name"]).slice(0, 22)} ...`} onClick={() => onRemove(index, value)} />;
+                })}
+            </div>
           </div>
-
         </LabelFieldPair>
-
       </div>
     </div>
   );

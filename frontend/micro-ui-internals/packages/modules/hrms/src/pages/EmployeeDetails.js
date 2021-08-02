@@ -1,10 +1,9 @@
-import { Card, CardSubHeader, Header, Loader, Row, SubmitBar, ActionBar, Menu, StatusTable } from "@egovernments/digit-ui-react-components";
+import { ActionBar, Card, CardSubHeader, DocumentSVG, Header, Loader, Menu, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ActionModal from "../components/Modal";
-import { DocumentSVG } from "@egovernments/digit-ui-react-components";
-import { convertEpochFormateToDate, pdfDownloadLink, pdfDocumentName } from "../components/Utils";
+import { convertEpochFormateToDate, pdfDownloadLink } from "../components/Utils";
 
 const Details = () => {
   const activeworkflowActions = ["DEACTIVATE_EMPLOYEE_HEAD", "COMMON_EDIT_EMPLOYEE_HEADER"];
@@ -27,7 +26,7 @@ const Details = () => {
     clearSuccessData();
     clearError();
   }, []);
-  
+
   function onActionSelect(action) {
     setSelectedAction(action);
     setDisplayMenu(false);
@@ -87,9 +86,9 @@ const Details = () => {
               <Row label={t("HR_EMAIL_LABEL")} text={data?.Employees?.[0]?.user?.emailId || "NA"} />
               <Row label={t("HR_CORRESPONDENCE_ADDRESS_LABEL")} text={data?.Employees?.[0]?.user?.correspondenceAddress || "NA"} />
             </StatusTable>
-            <CardSubHeader className="card-section-header">{t("Employee Details")}</CardSubHeader>
+            <CardSubHeader className="card-section-header">{t("HR_NEW_EMPLOYEE_FORM_HEADER")}</CardSubHeader>
             <StatusTable>
-              <Row label={t("HR_EMPLOYMENT_TYPE_LABEL")} text={t(data?.Employees?.[0]?.employeeType?`EGOV_HRMS_EMPLOYEETYPE_${data?.Employees?.[0]?.employeeType}`:"NA")} textStyle={{ whiteSpace: "pre" }} />
+              <Row label={t("HR_EMPLOYMENT_TYPE_LABEL")} text={t(data?.Employees?.[0]?.employeeType ? `EGOV_HRMS_EMPLOYEETYPE_${data?.Employees?.[0]?.employeeType}` : "NA")} textStyle={{ whiteSpace: "pre" }} />
               <Row
                 label={t("HR_APPOINTMENT_DATE_LABEL")}
                 text={convertEpochFormateToDate(data?.Employees?.[0]?.dateOfAppointment) || "NA"}
@@ -155,12 +154,12 @@ const Details = () => {
                       {" "}
                       {t("HR_JURISDICTION")} {index + 1}
                     </div>
-                    <Row label={t("HR_HIERARCHY_LABEL")} text={t(element?.hierarchy?`EGOV_LOCATION_TENANTBOUNDARY_${element?.hierarchy}`:"NA")} textStyle={{ whiteSpace: "pre" }} />
+                    <Row label={t("HR_HIERARCHY_LABEL")} text={t(element?.hierarchy ? `EGOV_LOCATION_TENANTBOUNDARY_${element?.hierarchy}` : "NA")} textStyle={{ whiteSpace: "pre" }} />
                     <Row label={t("HR_BOUNDARY_TYPE_LABEL")} text={element?.boundaryType} textStyle={{ whiteSpace: "pre" }} />
                     <Row label={t("HR_BOUNDARY_LABEL")} text={t(element?.boundary)} />
                     <Row
                       label={t("HR_ROLE_LABEL")}
-                      text={data?.Employees?.[0]?.user.roles.filter((ele) => ele.tenantId == element?.boundary).map((ele) => t(`ACCESSCONTROL_ROLES_ROLES_`+ele?.code))}
+                      text={data?.Employees?.[0]?.user.roles.filter((ele) => ele.tenantId == element?.boundary).map((ele) => t(`ACCESSCONTROL_ROLES_ROLES_` + ele?.code))}
                     />
                   </StatusTable>
                 );
