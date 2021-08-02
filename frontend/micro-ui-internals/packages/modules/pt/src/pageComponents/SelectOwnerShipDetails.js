@@ -122,7 +122,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
 
   useEffect(() => {
     if (userType === "employee") {
-      if (!ownershipCategory) setError(config.key, { type: "required", message: `CORE_COMMON_REQUIRED_ERRMSG` });
+      if (!ownershipCategory) setError(config.key, { type: "required", message: t(`CORE_COMMON_REQUIRED_ERRMSG`) });
       else clearErrors(config.key);
       goNext();
     }

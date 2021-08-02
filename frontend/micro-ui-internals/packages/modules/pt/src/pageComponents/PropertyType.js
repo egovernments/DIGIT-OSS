@@ -66,7 +66,7 @@ const PropertyType = ({ t, config, onSelect, userType, formData, setError, clear
   useEffect(() => {
     if (userType === "employee") {
       goNext();
-      if (!BuildingType) setError(config.key, { type: "required", message: `${config.key.toUpperCase()}_REQUIRED` });
+      if (!BuildingType) setError(config.key, { type: "required", message: t("CORE_COMMON_REQUIRED_ERRMSG") });
       else clearErrors(config.key);
     }
   }, [BuildingType]);

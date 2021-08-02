@@ -89,7 +89,7 @@ const PropertyUsageType = ({ t, config, onSelect, userType, formData, formState,
   useEffect(() => {
     if (userType === "employee") {
       if (!usageCategoryMajor) {
-        setError(config.key, { type: "required", message: `${config.key.toUpperCase()}_REQUIRED` });
+        setError(config.key, { type: "required", message: t(`CORE_COMMON_REQUIRED_ERRMSG`) });
       } else {
         clearErrors(config.key);
       }
