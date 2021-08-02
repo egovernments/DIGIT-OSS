@@ -54,7 +54,7 @@ class AutoSuggestor extends Component {
       localizationLabels,
       labelsFromLocalisation,
       localePrefix,
-      defaultSort=true,
+      defaultSort = true,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -108,8 +108,8 @@ class AutoSuggestor extends Component {
   }
 }
 
-const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys,defaultSort) => {
-  suggestions=(
+const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys, defaultSort) => {
+  suggestions = (
     suggestions &&
     Array.isArray(suggestions) &&
     suggestions.length > 0 &&
@@ -124,7 +124,7 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys,defau
       return option;
     })
   );
-  suggestions=defaultSort?suggestions.sort(sortDropdownNames):suggestions;
+  suggestions = defaultSort && suggestions && Array.isArray(suggestions) ? suggestions.sort(sortDropdownNames) : suggestions || [];
   return suggestions;
 };
 
