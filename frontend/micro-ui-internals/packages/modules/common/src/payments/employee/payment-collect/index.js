@@ -52,7 +52,7 @@ export const CollectPayment = (props) => {
   };
 
   useEffect(() => {
-    props.setLink("Collect Payment");
+    props.setLink(t("PAYMENT_COLLECT_LABEL"));
   }, []);
 
   const getPaymentModes = () => defaultPaymentModes;

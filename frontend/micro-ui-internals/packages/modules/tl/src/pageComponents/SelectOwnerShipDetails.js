@@ -87,7 +87,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
 
   useEffect(() => {
     if (userType === "employee") {
-      if (!ownershipCategory) setError(config.key, { type: "required", message: `${config.key.toUpperCase()}_REQUIRED` });
+      if (!ownershipCategory) setError(config.key, { type: "required", message: t(`REQUIRED_FIELD`) }); //message: `${config.key.toUpperCase()}_REQUIRED` }
       else clearErrors(config.key);
       goNext();
     }

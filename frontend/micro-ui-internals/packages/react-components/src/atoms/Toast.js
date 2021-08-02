@@ -8,7 +8,7 @@ const Toast = (props) => {
       <div className="toast-success" style={{ backgroundColor: "red", ...props.style }}>
         <RoundedCheck />
         <h2>{props.label}</h2>
-        <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} />
+        {/* <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> */}
       </div>
     );
   }
