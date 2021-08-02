@@ -28,14 +28,14 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
         doorNo: address?.doorNo,
         street: address?.street,
         landmark: address?.landmark,
-        locality: address?.locality?.name,
-        city: address?.city?.name,
+        locality: address?.locality?.i18nkey,
+        city: address?.city?.code,
         pincode: address?.pincode,
       };
       let addressDetails = "";
       for (const key in obj) {
         if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
-        else addressDetails += obj[key] ? obj[key] + ", " : "";
+        else addressDetails += obj[key] ? t(obj[key]) + ", " : "";
       }
       setPermanentAddress(addressDetails);
     } else {

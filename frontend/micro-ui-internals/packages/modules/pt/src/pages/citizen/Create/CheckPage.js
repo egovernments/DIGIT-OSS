@@ -535,7 +535,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           //disabled={!agree}
         />
       </div>
-      <SubmitBar label="Submit" onSubmit={onSubmit} disabled={!agree} />
+      <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
     </Card>
   );
 };

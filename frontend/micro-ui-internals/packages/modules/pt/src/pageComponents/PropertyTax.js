@@ -60,7 +60,7 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
           </div>
         </div>
         <span>
-          <SubmitBar label="Next" onSubmit={onSelect} />
+          <SubmitBar label={t("PT_COMMON_NEXT")} onSubmit={onSelect} />
         </span>
       </Card>
     </React.Fragment>

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import getPTAcknowledgementData from "../../getPTAcknowledgementData";
 import PropertyDocument from "../../pageComponents/PropertyDocument";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
-import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle } from "../../utils";
+import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle,getMohallaLocale } from "../../utils";
 
 const PTApplicationDetails = () => {
   const { t } = useTranslation();
@@ -71,11 +71,11 @@ const PTApplicationDetails = () => {
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
-            <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={`${t(application?.address?.pincode)}` || "NA"} />
-            <Row label={t("PT_COMMON_CITY")} text={`${t(getCityLocale(application?.tenantId))}` || "NA"} />
-            <Row label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text={`${t(application?.address?.locality?.name)}` || "NA"} />
-            <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={`${t(application?.address?.street)}` || "NA"} />
-            <Row label={t("PT_PROPERTY_ADDRESS_COLONY_NAME")} text={`${t(application?.address?.buildingName)}` || "NA"} />
+            <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={`${t(application?.address?.pincode)}` || t("CS_NA")} />
+            <Row label={t("PT_COMMON_CITY")} text={`${t(getCityLocale(application?.tenantId))}` || t("CS_NA")} />
+            <Row label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text=/* {`${t(application?.address?.locality?.name)}` || t("CS_NA")} */{t(`${getMohallaLocale(application?.address?.locality?.code, application?.tenantId)}`) || t("CS_NA")} />
+            <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={`${t(application?.address?.street)}` || t("CS_NA")} />
+            <Row label={t("PT_PROPERTY_ADDRESS_COLONY_NAME")} text={`${t(application?.address?.buildingName)}` || t("CS_NA")} />
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
           <StatusTable>
@@ -85,12 +85,12 @@ const PTApplicationDetails = () => {
                 `${t(
                   (application.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
                     (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application.usageCategory)
-                )}` || "NA"
+                )}` || t("CS_NA")
               }
             />
-            <Row label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(application?.propertyType))}` || "NA"} />
-            <Row label={t("PT_ASSESMENT1_PLOT_SIZE")} text={(application?.landArea && `${t(`${application?.landArea} sq.ft`)}`) || "NA"} />
-            <Row label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${t(application?.noOfFloors)}` || "NA"} />
+            <Row label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(application?.propertyType))}` || t("CS_NA")} />
+            <Row label={t("PT_ASSESMENT1_PLOT_SIZE")} text={(application?.landArea && `${t(`${application?.landArea} sq.ft`)}`) || t("CS_NA")} />
+            <Row label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${t(application?.noOfFloors)}` || t("CS_NA")} />
           </StatusTable>
           <div>
             {Array.isArray(units) &&
@@ -113,13 +113,13 @@ const PTApplicationDetails = () => {
                               (application.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
                                 (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application.usageCategory) +
                                 (application.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
-                            )}` || "NA"
+                            )}` || t("CS_NA")
                           }
                         />
-                        <Row label={t("PT_OCCUPANY_TYPE_LABEL")} text={`${t("PROPERTYTAX_OCCUPANCYTYPE_" + unit?.occupancyType)}` || "NA"} />
-                        <Row label={t("PT_BUILTUP_AREA_LABEL")} text={`${`${unit?.constructionDetail?.builtUpArea} sq.ft` || "NA"}`} />
+                        <Row label={t("PT_OCCUPANY_TYPE_LABEL")} text={`${t("PROPERTYTAX_OCCUPANCYTYPE_" + unit?.occupancyType)}` || t("CS_NA")} />
+                        <Row label={t("PT_BUILTUP_AREA_LABEL")} text={`${`${unit?.constructionDetail?.builtUpArea} sq.ft` || t("CS_NA")}`} />
                         {unit.occupancyType == "RENTED" && (
-                          <Row label={t("PT_FORM2_TOTAL_ANNUAL_RENT")} text={`${(unit?.arv && `₹${unit?.arv}`) || "NA"}`} />
+                          <Row label={t("PT_FORM2_TOTAL_ANNUAL_RENT")} text={`${(unit?.arv && `₹${unit?.arv}`) || t("CS_NA")}`} />
                         )}
                       </StatusTable>
                     )}
@@ -140,17 +140,17 @@ const PTApplicationDetails = () => {
                     )}
                   </CardSubHeader>
                   <StatusTable>
-                    <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(owner?.name)}` || "NA"} />
-                    <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${t(owner?.fatherOrHusbandName)}` || "NA"} />
-                    <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(owner?.gender)}` || "NA"} />
+                    <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(owner?.name)}` || t("CS_NA")} />
+                    <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${t(owner?.fatherOrHusbandName)}` || t("CS_NA")} />
+                    <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(owner?.gender)}` || t("CS_NA")} />
                     <Row
                       label={t("PT_FORM3_OWNERSHIP_TYPE")}
-                      text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${application?.ownershipCategory}`) : "NA"}`}
+                      text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${application?.ownershipCategory}`) : t("CS_NA")}`}
                     />
                     <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owner?.mobileNumber)}`} />
-                    <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t("NA")}`} />
+                    <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t(t("CS_NA"))}`} />
                     <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(owner?.ownerType).toLowerCase()}`} />
-                    <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owner?.correspondenceAddress)}` || "NA"} />
+                    <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owner?.correspondenceAddress)}` || t("CS_NA")} />
                   </StatusTable>
                 </div>
               ))}

@@ -33,26 +33,26 @@ const propertyOwnerHistory = ({ userType, propertyId: propertyIdFromProp }) => {
       let owner = {};
       if (institution) {
         owner = {
-          PT_COMMON_INSTITUTION_NAME: institution.name || "NA",
-          PT_TYPE_OF_INSTITUTION: institution.type || "NA",
-          PT_OWNER_NAME: institution.nameOfAuthorizedPerson || "NA",
-          PT_COMMON_AUTHORISED_PERSON_DESIGNATION: institution.designation || "NA",
-          PT_FORM3_MOBILE_NUMBER: item.mobileNumber || "NA",
-          PT_OWNERSHIP_INFO_TEL_PHONE_NO: item.altContactNumber || "NA",
-          PT_FORM3_EMAIL_ID: item.emailId || "NA",
-          PT_OWNERSHIP_INFO_CORR_ADDR: item.correspondenceAddress || "NA",
-          PT_FORM3_OWNERSHIP_TYPE: t(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory.split(".")[0]}`) || "NA",
+          PT_COMMON_INSTITUTION_NAME: institution.name || t("CS_NA"),
+          PT_TYPE_OF_INSTITUTION: t(institution.type) || t("CS_NA"),
+          PT_OWNER_NAME: institution.nameOfAuthorizedPerson || t("CS_NA"),
+          PT_COMMON_AUTHORISED_PERSON_DESIGNATION: t(institution.designation) || t("CS_NA"),
+          PT_FORM3_MOBILE_NUMBER: item.mobileNumber || t("CS_NA"),
+          PT_OWNERSHIP_INFO_TEL_PHONE_NO: item.altContactNumber || t("CS_NA"),
+          PT_FORM3_EMAIL_ID: item.emailId || t("CS_NA"),
+          PT_OWNERSHIP_INFO_CORR_ADDR: item.correspondenceAddress || t("CS_NA"),
+          PT_FORM3_OWNERSHIP_TYPE: t(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory.split(".")[0]}`) || t("CS_NA"),
         };
       } else {
         owner = {
-          PT_OWNER_NAME: item.name || "NA",
-          PT_FORM3_GENDER: item.gender || "NA",
-          PT_FORM3_MOBILE_NUMBER: item.mobileNumber || "NA",
-          PT_FORM3_GUARDIAN_NAME: item.fatherOrHusbandName || "NA",
-          PT_FORM3_RELATIONSHIP: item.relationship || "NA",
-          PT_SPECIAL_OWNER_CATEGORY: item.ownerType || "NA",
-          PT_MUTATION_AUTHORISED_EMAIL: item.emailId || "NA",
-          PT_OWNERSHIP_INFO_CORR_ADDR: item.permanentAddress || "NA",
+          PT_OWNER_NAME: item.name || t("CS_NA"),
+          PT_FORM3_GENDER: t(item.gender) || t("CS_NA"),
+          PT_FORM3_MOBILE_NUMBER: item.mobileNumber || t("CS_NA"),
+          PT_FORM3_GUARDIAN_NAME: item.fatherOrHusbandName || t("CS_NA"),
+          PT_FORM3_RELATIONSHIP: t(item.relationship) || t("CS_NA"),
+          PT_SPECIAL_OWNER_CATEGORY: t(item.ownerType === "NONE"?"CS_NA":item.ownerType) || t("CS_NA"),
+          PT_MUTATION_AUTHORISED_EMAIL: item.emailId || t("CS_NA"),
+          PT_OWNERSHIP_INFO_CORR_ADDR: item.permanentAddress || t("CS_NA"),
         };
       }
       itemKey.push(owner);
