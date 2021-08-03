@@ -393,8 +393,8 @@ export const OwnerInfoCard = {
             moduleName: "common-masters",
             masterName: "OwnerType"
           },
-          props:{
-            defaultSort:false
+          props: {
+            defaultSort: false
           }
         })
       })
@@ -791,7 +791,7 @@ export const tradeOwnerDetails = getCommonCard({
       }
     }
   },
-    { style: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? { "pointer-events": "none" } : {} }
+    { style: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? { "pointer-events": "none" } : {} }
   ),
 
   OwnerInfoCard,
