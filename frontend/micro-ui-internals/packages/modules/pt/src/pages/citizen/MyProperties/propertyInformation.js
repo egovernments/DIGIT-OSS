@@ -171,7 +171,7 @@ const PropertyInformation = () => {
                   )}
                   <div style={{ border: "groove" }}>
                     <CardSubHeader>
-                      {t("Unit")} {i}
+                      {t("ES_APPLICATION_DETAILS_UNIT")} {i}
                     </CardSubHeader>
                     {(flrno = unit?.floorNo) > -5 && (
                       <StatusTable>
