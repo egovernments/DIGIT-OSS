@@ -1,20 +1,12 @@
 import {
-  getCommonCard,
-  getTextField,
-  getCommonHeader,
-  getDateField,
-  getSelectField,
-  getCommonContainer,
-  getPattern,
-  getCommonSubHeader,
-  getCommonParagraph,
+  getCommonCard, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonSubHeader, getDateField, getPattern, getSelectField, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { footer, getSingleMessage, getMdmsData, getDeleteButton } from "../utils";
+import { footer, getDeleteButton, getMdmsData, getSingleMessage } from "../utils";
 
 const header = getCommonHeader({
   labelName: getQueryArg(window.location.href, "uuid") ? "Edit Public Message" : "Add New Public Message",
@@ -68,7 +60,7 @@ export const createForm = getCommonCard({
         labelKey: "EVENTS_TITLE_LABEL_PLACEHOLDER",
       },
       required: true,
-      pattern: getPattern("eventName"),
+      pattern: getPattern("Name"),
       jsonPath: "events[0].name",
       gridDefination: {
         xs: 12,
@@ -100,7 +92,7 @@ export const createForm = getCommonCard({
         labelKey: "EVENTS_DESCRIPTION_LIMIT_PLACEHOLDER",
       },
       required: true,
-      pattern: getPattern("eventDescription"),
+      pattern: getPattern("Address"),
       jsonPath: "events[0].description",
       props: {
         multiline: true,
@@ -247,6 +239,7 @@ const screenConfig = {
     const tenantId = getTenantId();
     const uuid = getQueryArg(window.location.href, "uuid");
     const messageTenant = getQueryArg(window.location.href, "tenantId");
+    dispatch(handleField("search", "components.div.children.searchResults", "visible", false));
     getMdmsData(action, state, dispatch);
     let props = get(
       action.screenConfig,

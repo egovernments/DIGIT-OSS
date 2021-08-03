@@ -1,17 +1,16 @@
-import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  epochToYmd,
-  getUserDataFromUuid,
-  transformById,
-  getStatusKey
+  epochToYmd, getStatusKey, getUserDataFromUuid,
+  transformById
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getEventsByType, sortByEpoch, getEpochForDate } from "../utils";
 import get from "lodash/get";
+import React from "react";
+import { getEpochForDate, getEventsByType, sortByEpoch } from "../utils";
 
 export const searchApiCall = async (state, dispatch) => {
+  dispatch(handleField("search", "components.div.children.searchResults", "visible", false));
   const queryObject = [
     {
       key: "tenantId",
@@ -39,16 +38,17 @@ export const searchApiCall = async (state, dispatch) => {
       events.map((item) => {
         //const status = item.eventDetails && item.eventDetails.toDate > currentDate ? item.status : "INACTIVE";
         return {
-          ["EVENTS_MESSAGE_LABEL"]: item&&item.name,
-          ["EVENTS_POSTING_DATE_LABEL"]: item&&item.auditDetails&&epochToYmd(item.auditDetails.lastModifiedTime),
-          ["EVENTS_START_DATE_LABEL"]: item&&item.eventDetails ? epochToYmd(item.eventDetails.fromDate) : "-",
-          ["EVENTS_END_DATE_LABEL"]: item&&item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
-          ["EVENTS_POSTEDBY_LABEL"]: get(userResponse, item&&item.auditDetails.lastModifiedBy,{}).name,
-          ["EVENTS_STATUS_LABEL"]: item&&item.status,
-          ["ID"]: item&&item.id,
-          ["TENANT_ID"]: item&&item.tenantId,
+          ["EVENTS_MESSAGE_LABEL"]: item && item.name,
+          ["EVENTS_POSTING_DATE_LABEL"]: item && item.auditDetails && epochToYmd(item.auditDetails.lastModifiedTime),
+          ["EVENTS_START_DATE_LABEL"]: item && item.eventDetails ? epochToYmd(item.eventDetails.fromDate) : "-",
+          ["EVENTS_END_DATE_LABEL"]: item && item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
+          ["EVENTS_POSTEDBY_LABEL"]: get(userResponse, item && item.auditDetails.lastModifiedBy, {}).name,
+          ["EVENTS_STATUS_LABEL"]: item && item.status,
+          ["ID"]: item && item.id,
+          ["TENANT_ID"]: item && item.tenantId,
         };
       });
+    dispatch(handleField("search", "components.div.children.searchResults", "visible", true));
     dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
     dispatch(handleField("search", "components.div.children.searchResults", "props.rows", data.length));
   } catch (error) {
@@ -65,16 +65,18 @@ export const searchResults = () => {
   return {
     uiFramework: "custom-molecules",
     componentPath: "Table",
+    visible: false,
     props: {
+
       columns: [
-        {labelName:"Message", labelKey:"EVENTS_MESSAGE_LABEL"},
-        {labelName:"Posting Date", labelKey:"EVENTS_POSTING_DATE_LABEL"},
-        {labelName:"Start Date", labelKey:"EVENTS_START_DATE_LABEL"},
-        {labelName:"End Date", labelKey:"EVENTS_END_DATE_LABEL"},
-        {labelName:"Posted By", labelKey:"EVENTS_POSTEDBY_LABEL"},
+        { labelName: "Message", labelKey: "EVENTS_MESSAGE_LABEL" },
+        { labelName: "Posting Date", labelKey: "EVENTS_POSTING_DATE_LABEL" },
+        { labelName: "Start Date", labelKey: "EVENTS_START_DATE_LABEL" },
+        { labelName: "End Date", labelKey: "EVENTS_END_DATE_LABEL" },
+        { labelName: "Posted By", labelKey: "EVENTS_POSTEDBY_LABEL" },
         {
-          labelName:"Status", 
-          labelKey:"EVENTS_STATUS_LABEL",
+          labelName: "Status",
+          labelKey: "EVENTS_STATUS_LABEL",
           options: {
             filter: false,
             customBodyRender: value => (
@@ -103,7 +105,7 @@ export const searchResults = () => {
           },
         },
       ],
-      title: {labelName: "Uploaded Messages", labelKey: "EVENTS_UPLOADED_MESSAGES_HEADER" },
+      title: { labelName: "Uploaded Messages", labelKey: "EVENTS_UPLOADED_MESSAGES_HEADER" },
       rows: "",
       options: {
         filter: true,

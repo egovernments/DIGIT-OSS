@@ -1,19 +1,13 @@
 import {
-  getCommonCard,
-  getTextField,
-  getCommonHeader,
-  getDateField,
-  getSelectField,
-  getCommonContainer,
-  getPattern,
-  getTimeField,
+  getCommonCard, getCommonContainer, getCommonHeader,
+  getDateField, getPattern, getSelectField, getTextField, getTimeField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { footer, getSingleMessage, getMdmsData, getMapLocator, showHideMapPopup, getDeleteButton } from "../utils";
+import { footer, getDeleteButton, getMapLocator, getMdmsData, getSingleMessage, showHideMapPopup } from "../utils";
 
 const header = getCommonHeader({
   labelName: getQueryArg(window.location.href, "uuid") ? "Edit Event" : "Add New Event",
@@ -67,7 +61,7 @@ export const createForm = getCommonCard({
         labelKey: "EVENTS_NAME_PLACEHOLDER",
       },
       required: true,
-      pattern: getPattern("eventName"),
+      pattern: getPattern("Name"),
       jsonPath: "events[0].name",
       gridDefination: {
         xs: 12,
@@ -129,7 +123,7 @@ export const createForm = getCommonCard({
         labelName: "Description (Max Char Limit : 500)",
         labelKey: "EVENTS_DESCRIPTION_LIMIT_PLACEHOLDER",
       },
-      pattern: getPattern("eventDescription"),
+      pattern: getPattern("Address"),
       required: true,
       jsonPath: "events[0].description",
       props: {
@@ -204,7 +198,7 @@ export const createForm = getCommonCard({
           // },
           // iconObj: { position: "end", iconName: " access_time" },
           defaultValue: "00:00",
-          style: {  paddingRight: 80 },
+          style: { paddingRight: 80 },
         },
       }),
     },
@@ -436,6 +430,7 @@ const screenConfig = {
       "components.div.children.createCard.children.createForm.children.cardContent.children.createContainer.children.ulb.props",
       props
     );
+    dispatch(handleField("search", "components.div.children.searchResults", "visible", false));
     dispatch(prepareFinalObject("events[0].tenantId", tenantId));
     if (uuid) {
       getSingleMessage(state, dispatch, messageTenant, uuid);

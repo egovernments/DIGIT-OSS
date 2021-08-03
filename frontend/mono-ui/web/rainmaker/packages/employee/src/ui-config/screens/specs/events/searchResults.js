@@ -1,17 +1,16 @@
-import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  epochToYmd,
-  getUserDataFromUuid,
-  transformById,
-  getStatusKey
+  epochToYmd, getStatusKey, getUserDataFromUuid,
+  transformById
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getEventsByType, sortByEpoch, getEpochForDate } from "../utils";
 import get from "lodash/get";
+import React from "react";
+import { getEpochForDate, getEventsByType, sortByEpoch } from "../utils";
 
 export const searchApiCall = async (state, dispatch) => {
+  dispatch(handleField("search", "components.div.children.searchResults", "visible", false));
   const queryObject = [
     {
       key: "tenantId",
@@ -38,23 +37,24 @@ export const searchApiCall = async (state, dispatch) => {
       events.map((item) => {
         //const status = item.eventDetails.toDate > currentDate ? item.status : "INACTIVE";
         return {
-          ["EVENTS_EVENT_NAME_LABEL"]: item&&item.name,
-          ["EVENTS_EVENT_CATEGORY_LABEL"]: item&&item.eventCategory
+          ["EVENTS_EVENT_NAME_LABEL"]: item && item.name,
+          ["EVENTS_EVENT_CATEGORY_LABEL"]: item && item.eventCategory
             ? (<LabelContainer
-            labelKey={`MSEVA_EVENTCATEGORIES_${item.eventCategory}`}
-            labelName={item.eventCategory}
-          />)
+              labelKey={`MSEVA_EVENTCATEGORIES_${item.eventCategory}`}
+              labelName={item.eventCategory}
+            />)
             : "-",
-          ["EVENTS_START_DATE_LABEL"]: item&&item.eventDetails
+          ["EVENTS_START_DATE_LABEL"]: item && item.eventDetails
             ? epochToYmd(item.eventDetails.fromDate)
             : "-",
-          ["EVENTS_END_DATE_LABEL"]: item&&item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
-          ["EVENTS_POSTEDBY_LABEL"]: get(userResponse, item&&item.auditDetails.lastModifiedBy,{}).name,
-          ["EVENTS_STATUS_LABEL"]: item&&item.status,
-          ["ID"]: item&&item.id,
-          ["TENANT_ID"]: item&&item.tenantId,
+          ["EVENTS_END_DATE_LABEL"]: item && item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
+          ["EVENTS_POSTEDBY_LABEL"]: get(userResponse, item && item.auditDetails.lastModifiedBy, {}).name,
+          ["EVENTS_STATUS_LABEL"]: item && item.status,
+          ["ID"]: item && item.id,
+          ["TENANT_ID"]: item && item.tenantId,
         };
       });
+    dispatch(handleField("search", "components.div.children.searchResults", "visible", true));
     dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
     dispatch(handleField("search", "components.div.children.searchResults", "props.rows", data.length));
   } catch (error) {
@@ -71,15 +71,16 @@ export const searchResults = () => {
   return {
     uiFramework: "custom-molecules",
     componentPath: "Table",
+    visible: false,
     props: {
       columns: [
-        {labelName: "Event Name", labelKey: "EVENTS_EVENT_NAME_LABEL"},
-        {labelName: "Event Category", labelKey: "EVENTS_EVENT_CATEGORY_LABEL"},
-        {labelName: "Start Date", labelKey: "EVENTS_START_DATE_LABEL"},
-        {labelName: "End Date", labelKey: "EVENTS_END_DATE_LABEL"},
-        {labelName: "Posted By", labelKey: "EVENTS_POSTEDBY_LABEL"},
+        { labelName: "Event Name", labelKey: "EVENTS_EVENT_NAME_LABEL" },
+        { labelName: "Event Category", labelKey: "EVENTS_EVENT_CATEGORY_LABEL" },
+        { labelName: "Start Date", labelKey: "EVENTS_START_DATE_LABEL" },
+        { labelName: "End Date", labelKey: "EVENTS_END_DATE_LABEL" },
+        { labelName: "Posted By", labelKey: "EVENTS_POSTEDBY_LABEL" },
         {
-          labelName: "Status", 
+          labelName: "Status",
           labelKey: "EVENTS_STATUS_LABEL",
           options: {
             filter: false,
@@ -109,7 +110,7 @@ export const searchResults = () => {
           },
         },
       ],
-      title: {labelName: "Created Events", labelKey: "EVENTS_CREATED_EVENTS_HEADER" },
+      title: { labelName: "Created Events", labelKey: "EVENTS_CREATED_EVENTS_HEADER" },
       rows: "",
 
       options: {
