@@ -40,7 +40,6 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statusMap, 
     else onFilterChange(_searchParams);
   };
 
-
   const clearAll = () => {
     setSearchParams({ ...defaultSearchParams, services: [] });
     onFilterChange({ ...defaultSearchParams });
@@ -118,7 +117,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statusMap, 
                   return (
                     <RemoveableTag
                       key={index}
-                      text={locality.name}
+                      text={t(locality.i18nkey)}
                       onClick={() => {
                         localParamChange({ locality: _searchParams?.locality.filter((loc) => loc.code !== locality.code) });
                       }}

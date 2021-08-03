@@ -37,7 +37,8 @@ const PropertyMarketValue = (props) => {
   return (
     <React.Fragment>
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!marketValue}>
-        <div>
+        <div className="field-container">
+          <span className="citizen-card-input citizen-card-input--front">₹</span>
           <TextInput type={"number"} min={0} onChange={(e) => setSelected(e.target.value)} value={marketValue} />
         </div>
       </FormStep>

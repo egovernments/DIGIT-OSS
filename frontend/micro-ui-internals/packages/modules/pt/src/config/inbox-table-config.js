@@ -46,8 +46,10 @@ export const TableConfig = (t) => ({
       },
       {
         Header: t("ES_INBOX_LOCALITY"),
-
-        Cell: ({ row }) => GetCell(`${row.original?.searchData?.address?.locality?.name}`),
+        Cell: ({ row }) => {
+          const tenantId = row.original?.searchData?.tenantId;
+          return GetCell(t(`${tenantId.replace(".", "_").toUpperCase()}_REVENUE_${row.original?.searchData?.address?.locality?.code}`));
+        },
         disableSortBy: true,
         mobileCell: (original) => GetMobCell(original?.searchData?.address?.locality?.name),
       },
@@ -55,7 +57,7 @@ export const TableConfig = (t) => ({
         Header: t("ES_SEARCH_PROPERTY_STATUS"),
         Cell: ({ row }) => {
           // console.log(row.original?.searchData?.status,">>>>>>>>>")
-          return GetCell(row.original?.searchData?.status);
+          return GetCell(t(row.original?.searchData?.status));
         },
         disableSortBy: true,
         mobileCell: (original) => GetMobCell(original?.searchData?.status),

@@ -68,8 +68,8 @@ export const ChequeDetailsComponent = (props) => {
               type="text"
               name="instrumentNumber"
               onChange={(e) => setChequeNo(e.target.value)}
-              minlength="6"
-              maxLength="6"
+              // minlength="6"
+              // maxLength="6"
             />
           </div>
         </div>
