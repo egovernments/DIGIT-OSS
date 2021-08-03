@@ -412,7 +412,7 @@ const CreateChallen = ({ ChallanData }) => {
                 isMandatory
                 selected={selectedLocality}
                 disable={isEdit}
-                optionKey="name"
+                optionKey="i18nkey"
                 id="locality"
                 option={localities}
                 select={selectLocality}
@@ -513,7 +513,7 @@ const CreateChallen = ({ ChallanData }) => {
     ];
     if (TaxHeadMasterFields.length > 0 && config.length > 0) {
       const tempConfig = config;
-      if ((config[1].head == "Service Details") | (config[1].head == "SERVICEDETAILS")) {
+      if ((config[1].head == "Service Details") | (config[1].head == t("SERVICEDETAILS"))) {
         const temp = TaxHeadMasterFields.map((ele) => ({
           label: t(ele.name.split(".").join("_")),
           isMandatory: ele.isRequired,

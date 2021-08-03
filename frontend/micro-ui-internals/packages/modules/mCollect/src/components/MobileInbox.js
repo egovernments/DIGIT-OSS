@@ -60,7 +60,7 @@ const MobileInbox = ({
     },
     {
       Header: t("UC_DUE_DATE"),
-      mobileCell: (original) => GetMobCell(original?.dueDate === "NA" ? "NA" : convertEpochToDate(original?.dueDate)),
+      mobileCell: (original) => GetMobCell(original?.dueDate === "NA" ? t("CS_NA") : convertEpochToDate(original?.dueDate)),
     },
     {
       Header: t("UC_TOTAL_AMOUNT"),
@@ -113,7 +113,7 @@ const MobileInbox = ({
             </div>
           );
         } else {
-          return GetMobCell(t(`${"NA"}`));
+          return GetMobCell(t(`${"CS_NA"}`));
         }
       },
     },

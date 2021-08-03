@@ -71,7 +71,7 @@ const MyChallanResult = ({ template, header, actionButtonLabel }) => {
     return {
       businesService: bill.businessService,
       total_due: bill.status === "PAID" ? 0 : bill.totalAmount,
-      OwnerName: bill.payerName || "NA",
+      OwnerName: bill.payerName || t("CS_NA"),
       BillingPeriod: getBillingPeriod(bill.billDetails[0].fromPeriod, bill.billDetails[0].toPeriod),
       //bil_due__date: bill.billDetails[0].expiryDate || 0,
       bil_due__date: `${
@@ -81,8 +81,8 @@ const MyChallanResult = ({ template, header, actionButtonLabel }) => {
         "/" +
         new Date(bill.billDetails[0].expiryDate).getFullYear().toString()
       }`,
-      ChannelNo: bill?.consumerCode || "NA",
-      ServiceCategory: bill.businessService ? bill.businessService.split(".")[bill.businessService.split(".").length - 1] : "NA",
+      ChannelNo: bill?.consumerCode || t("CS_NA"),
+      ServiceCategory: bill.businessService ? bill.businessService.split(".")[bill.businessService.split(".").length - 1] : t("CS_NA"),
     };
   });
 

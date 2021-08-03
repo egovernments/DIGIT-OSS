@@ -113,7 +113,7 @@ const Inbox = ({
       applicationStatus: data?.applicationStatus,
       businessService: data?.businessService,
       totalAmount: businessIdToOwnerMappings[data.challanNo]?.totalAmount || 0,
-      dueDate: businessIdToOwnerMappings[data.challanNo]?.dueDate || "NA",
+      dueDate: businessIdToOwnerMappings[data.challanNo]?.dueDate || t("CS_NA"),
       tenantId: data?.tenantId,
     });
   });

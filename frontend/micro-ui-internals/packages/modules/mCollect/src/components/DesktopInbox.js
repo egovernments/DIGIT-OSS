@@ -77,7 +77,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
     {
       Header: t("UC_DUE_DATE"),
       Cell: ({ row }) => {
-        const dueDate = row.original?.dueDate === "NA" ? "NA" : convertEpochToDate(row.original?.dueDate);
+        const dueDate = row.original?.dueDate === "NA" ? t("CS_NA") : convertEpochToDate(row.original?.dueDate);
         return GetCell(t(`${dueDate}`));
       },
       mobileCell: (original) => GetMobCell(convertEpochToDate(original?.["dueDate"])),
@@ -124,7 +124,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
             </div>
           );
         } else {
-          return GetCell(t(`${"NA"}`));
+          return GetCell(t(`${"CS_NA"}`));
         }
       },
       mobileCell: (original) => GetMobCell(original?.workflowData?.state?.["state"]),

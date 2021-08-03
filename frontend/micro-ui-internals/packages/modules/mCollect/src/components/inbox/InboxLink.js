@@ -24,7 +24,7 @@ const InboxLinks = ({ parentRoute, businessService }) => {
       <span className="logo">
         <AnnouncementIcon />
       </span>{" "}
-      <span className="text">{t("mCollect")}</span>
+      <span className="text">{t("UC_COMMON_HEADER_SEARCH")}</span>
     </div>
   );
 

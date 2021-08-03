@@ -160,27 +160,27 @@ const EmployeeChallan = (props) => {
           <StatusTable>
             <Row
               label={`${t("UC_SERVICE_CATEGORY_LABEL")}:`}
-              text={`${t(`BILLINGSERVICE_BUSINESSSERVICE_${stringReplaceAll(challanDetails?.businessService?.toUpperCase(), ".", "_")}` || "NA")}`}
+              text={`${t(`BILLINGSERVICE_BUSINESSSERVICE_${stringReplaceAll(challanDetails?.businessService?.toUpperCase(), ".", "_")}` || t("CS_NA"))}`}
               textStyle={{ whiteSpace: "pre" }}
             />
-            <Row label={`${t("UC_FROM_DATE_LABEL")}:`} text={convertEpochToDate(challanDetails?.taxPeriodFrom) || "NA"} />
-            <Row label={`${t("UC_TO_DATE_LABEL")}:`} text={convertEpochToDate(challanDetails?.taxPeriodTo) || "NA"} />
-            <Row label={`${t("UC_COMMENT_LABEL")}:`} text={`${challanDetails?.description || "NA"}`} />
-            <Row label={`${t("CS_INBOX_STATUS_FILTER")}:`} text={t(`UC_${challanDetails?.applicationStatus || "NA"}`)} />
+            <Row label={`${t("UC_FROM_DATE_LABEL")}:`} text={convertEpochToDate(challanDetails?.taxPeriodFrom) || t("CS_NA")} />
+            <Row label={`${t("UC_TO_DATE_LABEL")}:`} text={convertEpochToDate(challanDetails?.taxPeriodTo) || t("CS_NA")} />
+            <Row label={`${t("UC_COMMENT_LABEL")}:`} text={`${challanDetails?.description || t("CS_NA")}`} />
+            <Row label={`${t("CS_INBOX_STATUS_FILTER")}:`} text={t(`UC_${challanDetails?.applicationStatus || t("CS_NA")}`)} />
           </StatusTable>
           <div style={{ fontSize: "24px", padding: "10px 0px", fontWeight: "700" }}>{t("UC_CONSUMER_DETAILS_LABEL")}</div>
           <StatusTable>
-            <Row label={`${t("UC_CONS_NAME_LABEL")}:`} text={challanDetails?.citizen.name || "NA"} />
-            <Row label={`${t("UC_MOBILE_NUMBER")}:`} text={challanDetails?.citizen.mobileNumber || "NA"} />
-            <Row label={`${t("UC_DOOR_NO_LABEL")}:`} text={challanDetails?.address.doorNo || "NA"} />
-            <Row label={`${t("UC_BUILDING_NAME_LABEL")}:`} text={challanDetails?.address.buildingName || "NA"} />
-            <Row label={`${t("UC_STREET_NAME_LABEL")}:`} text={challanDetails?.address.street || "NA"} />
+            <Row label={`${t("UC_CONS_NAME_LABEL")}:`} text={challanDetails?.citizen.name || t("CS_NA")} />
+            <Row label={`${t("UC_MOBILE_NUMBER")}:`} text={challanDetails?.citizen.mobileNumber || t("CS_NA")} />
+            <Row label={`${t("UC_DOOR_NO_LABEL")}:`} text={challanDetails?.address.doorNo || t("CS_NA")} />
+            <Row label={`${t("UC_BUILDING_NAME_LABEL")}:`} text={challanDetails?.address.buildingName || t("CS_NA")} />
+            <Row label={`${t("UC_STREET_NAME_LABEL")}:`} text={challanDetails?.address.street || t("CS_NA")} />
             <Row
               label={`${t("UC_MOHALLA_LABEL")}:`}
               text={`${t(
                 `${stringReplaceAll(challanDetails?.address?.tenantId?.toUpperCase(), ".", "_")}_REVENUE_${
                   challanDetails?.address?.locality?.code
-                }` || "NA"
+                }` || t("CS_NA")
               )}`}
             />
           </StatusTable>
