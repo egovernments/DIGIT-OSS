@@ -333,6 +333,18 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch(
         prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
       );
+      const summaryLocalPrefix = {
+        masterName: "REVENUE",
+        moduleName: get( state.screenConfiguration.preparedFinalObject, "Licenses[0].tenantId", "" ).replace('.', '_').toUpperCase()
+      };
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewTradeDetails.children.cardContent.children.viewFour.children.reviewMohalla.children.value.children.key",
+          "props.localePrefix",
+          summaryLocalPrefix
+        )
+      );      
     }
   }
   if (activeStep === 3) {
