@@ -8,7 +8,7 @@ export const SuccessfulPayment = (props) => {
   const { addParams, clearParams } = props;
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  props.setLink("Response");
+  props.setLink(t("PAYMENT_LOCALIZATION_RESPONSE"));
   let { consumerCode, receiptNumber, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   receiptNumber = receiptNumber.replace(/%2F/g, "/");
@@ -30,15 +30,15 @@ export const SuccessfulPayment = (props) => {
   const printCertificate = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const state = tenantId?.split(".")[0];
-    const applicationDetails = await Digit.TLService.search({applicationNumber: consumerCode, tenantId});
-    const generatePdfKeyForTL = "tlcertificate"
+    const applicationDetails = await Digit.TLService.search({ applicationNumber: consumerCode, tenantId });
+    const generatePdfKeyForTL = "tlcertificate";
 
     if (applicationDetails) {
       let response = await Digit.PaymentService.generatePdf(state, { Licenses: applicationDetails?.Licenses }, generatePdfKeyForTL);
       const fileStore = await Digit.PaymentService.printReciept(state, { fileStoreIds: response.filestoreIds[0] });
       window.open(fileStore[response.filestoreIds[0]], "_blank");
     }
-  }
+  };
   const printReciept = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const state = tenantId?.split(".")[0];
@@ -56,10 +56,10 @@ export const SuccessfulPayment = (props) => {
   return (
     <React.Fragment>
       <Card>
-        <Banner message={getMessage()} info="Receipt No." applicationNumber={receiptNumber} successful={true} />
+        <Banner message={getMessage()} info={t("PAYMENT_LOCALIZATION_RECIEPT_NO")} applicationNumber={receiptNumber} successful={true} />
         <CardText>{t("ES_PAYMENT_SUCCESSFUL_DESCRIPTION")}</CardText>
         {generatePdfKey ? (
-          <div style={{display:"flex"}}>
+          <div style={{ display: "flex" }}>
             <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginRight: "20px" }} onClick={printReciept}>
               <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
                 <path d="M0 0h24v24H0z" fill="none" />
@@ -78,7 +78,6 @@ export const SuccessfulPayment = (props) => {
             ) : null}
           </div>
         ) : null}
-        
       </Card>
       <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
         <Link to="/digit-ui/employee">
