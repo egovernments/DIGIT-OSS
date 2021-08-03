@@ -171,7 +171,7 @@ export const generateBill = async (
       });
       if (businessService) {
         queryObj.push({
-          key: "service",
+          key: "businessService",
           value: businessService,
         });
       }

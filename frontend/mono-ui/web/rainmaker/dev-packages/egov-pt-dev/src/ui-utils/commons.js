@@ -625,7 +625,7 @@ export const getSearchBillResult = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_search",
+      "/billing-service/bill/v2/_fetchbill",
       "",
       queryObject
     );
