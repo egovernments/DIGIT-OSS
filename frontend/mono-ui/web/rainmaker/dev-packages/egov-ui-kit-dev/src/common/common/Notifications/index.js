@@ -56,7 +56,7 @@ const Notifications = ({ notifications = [], history }) => {
               className="update"
               onClick={() => (type === "EVENTSONGROUND" ? history.push(`/event-details?uuid=${id}&tenantId=${tenantId}`) : {})}
             >
-              <Label fontSize={16} color="rgba(0, 0, 0, 0.87)" label={getTransformedLocale(name)} containerStyle={{ marginBottom: 10 }} />
+              <Label fontSize={16} color="rgba(0, 0, 0, 0.87)" label={type == "SYSTEMGENERATED" ?getTransformedLocale(name):name} containerStyle={{ marginBottom: 10 }} />
 
               {type != "EVENTSONGROUND" && (
                 <div>
