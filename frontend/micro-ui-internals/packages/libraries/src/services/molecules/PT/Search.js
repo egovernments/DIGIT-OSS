@@ -86,7 +86,7 @@ export const PTSearch = {
                 { title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", value: owner?.fatherOrHusbandName },
                 { title: "PT_FORM3_OWNERSHIP_TYPE", value: response?.ownershipCategory },
                 { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId },
-                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.permanentAddress },
+                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.correspondenceAddress },
               ],
             };
           }),
