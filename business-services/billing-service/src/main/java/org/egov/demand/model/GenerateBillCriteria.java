@@ -99,7 +99,7 @@ public class GenerateBillCriteria {
 				.businessService(businessService)
 				.consumerCode(consumerCodeSet)
 				.mobileNumber(mobileNumber)
-				.isPaymentCompleted(true)
+				.isPaymentCompleted(false)
 				.demandId(demandIdSet)
 				.tenantId(tenantId)
 				.email(email)
