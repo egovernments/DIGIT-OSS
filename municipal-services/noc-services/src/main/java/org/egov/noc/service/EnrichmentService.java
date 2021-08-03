@@ -30,7 +30,6 @@ import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
 @Service
 public class EnrichmentService {
-	
 
 	@Autowired
 	private NOCConfiguration config;
@@ -40,11 +39,14 @@ public class EnrichmentService {
 
 	@Autowired
 	private IdGenRepository idGenRepository;
-	
+
 	@Autowired
 	private WorkflowService workflowService;
+
 	/**
-	 * Enriches the nocReuqest object with puplating the id field with the uuids and the auditDetails
+	 * Enriches the nocReuqest object with puplating the id field with the uuids and
+	 * the auditDetails
+	 * 
 	 * @param nocRequest
 	 * @param mdmsData
 	 */
@@ -52,20 +54,22 @@ public class EnrichmentService {
 		RequestInfo requestInfo = nocRequest.getRequestInfo();
 		AuditDetails auditDetails = nocUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		nocRequest.getNoc().setAuditDetails(auditDetails);
-		nocRequest.getNoc().setId(UUID.randomUUID().toString());	
-		nocRequest.getNoc().setAccountId(nocRequest.getNoc().getAuditDetails().getCreatedBy());		
+		nocRequest.getNoc().setId(UUID.randomUUID().toString());
+		nocRequest.getNoc().setAccountId(nocRequest.getNoc().getAuditDetails().getCreatedBy());
 		setIdgenIds(nocRequest);
 		if (!CollectionUtils.isEmpty(nocRequest.getNoc().getDocuments()))
 			nocRequest.getNoc().getDocuments().forEach(document -> {
 				if (document.getId() == null) {
 					document.setId(UUID.randomUUID().toString());
 				}
-		});
-		if(!ObjectUtils.isEmpty(nocRequest.getNoc().getWorkflow()) && !StringUtils.isEmpty(nocRequest.getNoc().getWorkflow().getAction())
+			});
+		if (!ObjectUtils.isEmpty(nocRequest.getNoc().getWorkflow())
+				&& !StringUtils.isEmpty(nocRequest.getNoc().getWorkflow().getAction())
 				&& nocRequest.getNoc().getWorkflow().getAction().equals(NOCConstants.ACTION_INITIATE)) {
-		
+
 		}
 	}
+
 	/**
 	 * sets the ids for all the child objects of NOCRequest
 	 * @param request
@@ -85,7 +89,7 @@ public class EnrichmentService {
 
 		noc.setApplicationNo(itr.next());
 	}
-	
+
 	/**
 	 * fetch the list of ids based on the params passed
 	 * @param requestInfo
@@ -95,26 +99,26 @@ public class EnrichmentService {
 	 * @return
 	 */
 	private List<String> getIdList(RequestInfo requestInfo, String tenantId, String idKey, int count) {
-		List<IdResponse> idResponses = idGenRepository.getId(requestInfo, tenantId, idKey, count)
-				.getIdResponses();
+		List<IdResponse> idResponses = idGenRepository.getId(requestInfo, tenantId, idKey, count).getIdResponses();
 
 		if (CollectionUtils.isEmpty(idResponses))
 			throw new CustomException("IDGEN ERROR", "No ids returned from idgen Service");
 
 		return idResponses.stream().map(IdResponse::getId).collect(Collectors.toList());
-	}	
+	}
+
 	/**
-	 * encriches the udpateRequest request Object populating the ids for documents, auditDetails 
+	 * encriches the udpateRequest request Object populating the ids for documents, auditDetails
 	 * @param nocRequest
 	 * @param searchResult
 	 */
 	public void enrichNocUpdateRequest(NocRequest nocRequest, Noc searchResult) {
 
 		RequestInfo requestInfo = nocRequest.getRequestInfo();
-		AuditDetails auditDetails = nocUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), false);		
+		AuditDetails auditDetails = nocUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), false);
 		nocRequest.getNoc().setAuditDetails(auditDetails);
 		nocRequest.getNoc().getAuditDetails().setLastModifiedTime(auditDetails.getLastModifiedTime());
-		
+
 		// Noc Documents
 		if (!CollectionUtils.isEmpty(nocRequest.getNoc().getDocuments()))
 			nocRequest.getNoc().getDocuments().forEach(document -> {
@@ -122,7 +126,8 @@ public class EnrichmentService {
 					document.setId(UUID.randomUUID().toString());
 				}
 			});
-		if (!ObjectUtils.isEmpty(nocRequest.getNoc().getWorkflow()) && !CollectionUtils.isEmpty(nocRequest.getNoc().getWorkflow().getDocuments())) {
+		if (!ObjectUtils.isEmpty(nocRequest.getNoc().getWorkflow())
+				&& !CollectionUtils.isEmpty(nocRequest.getNoc().getWorkflow().getDocuments())) {
 			nocRequest.getNoc().getWorkflow().getDocuments().forEach(document -> {
 				if (document.getId() == null) {
 					document.setId(UUID.randomUUID().toString());
@@ -130,15 +135,15 @@ public class EnrichmentService {
 			});
 		}
 		nocRequest.getNoc().setApplicationNo(searchResult.getApplicationNo());
-		nocRequest.getNoc().getAuditDetails()
-				.setCreatedBy(searchResult.getAuditDetails().getCreatedBy());
-		nocRequest.getNoc().getAuditDetails()
-				.setCreatedTime(searchResult.getAuditDetails().getCreatedTime());
+		nocRequest.getNoc().getAuditDetails().setCreatedBy(searchResult.getAuditDetails().getCreatedBy());
+		nocRequest.getNoc().getAuditDetails().setCreatedTime(searchResult.getAuditDetails().getCreatedTime());
 
 	}
+
 	/**
-	 * called on success of the workflow action.
-	 * setting the staus based on applicationStatus updated by workflow and generting the noc number
+	 * called on success of the workflow action. setting the staus based on
+	 * applicationStatus updated by workflow and generting the noc number
+	 * 
 	 * @param nocRequest
 	 * @param businessServiceValue
 	 */
@@ -146,36 +151,40 @@ public class EnrichmentService {
 	public void postStatusEnrichment(NocRequest nocRequest, String businessServiceValue) {
 		Noc noc = nocRequest.getNoc();
 
-		BusinessService businessService = workflowService.getBusinessService(noc, nocRequest.getRequestInfo(), businessServiceValue);
-		
-		State stateObj = workflowService.getCurrentState(noc.getApplicationStatus(), businessService);
-		String state = stateObj!=null ? stateObj.getState() : StringUtils.EMPTY;
-		
-		
-		if (state.equalsIgnoreCase(NOCConstants.APPROVED_STATE) || state.equalsIgnoreCase(NOCConstants.AUTOAPPROVED_STATE)) {
-			
-			Map<String, Object> additionalDetail = null;
-			if(noc.getAdditionalDetails() != null) {
-				additionalDetail = (Map) noc.getAdditionalDetails();
-			} else {
-				additionalDetail = new HashMap<String, Object>();
-				noc.setAdditionalDetails(additionalDetail);
-			}
+		BusinessService businessService = workflowService.getBusinessService(noc, nocRequest.getRequestInfo(),
+				businessServiceValue);
 
-			List<IdResponse> idResponses = idGenRepository.getId(nocRequest.getRequestInfo(), noc.getTenantId(),
-					config.getApplicationNoIdgenName(), 1).getIdResponses();
-			noc.setNocNo(idResponses.get(0).getId());
+		if (businessService != null) {
+
+			State stateObj = workflowService.getCurrentState(noc.getApplicationStatus(), businessService);
+			String state = stateObj != null ? stateObj.getState() : StringUtils.EMPTY;
+
+			if (state.equalsIgnoreCase(NOCConstants.APPROVED_STATE)
+					|| state.equalsIgnoreCase(NOCConstants.AUTOAPPROVED_STATE)) {
+
+				Map<String, Object> additionalDetail = null;
+				if (noc.getAdditionalDetails() != null) {
+					additionalDetail = (Map) noc.getAdditionalDetails();
+				} else {
+					additionalDetail = new HashMap<String, Object>();
+					noc.setAdditionalDetails(additionalDetail);
+				}
+
+				List<IdResponse> idResponses = idGenRepository
+						.getId(nocRequest.getRequestInfo(), noc.getTenantId(), config.getApplicationNoIdgenName(), 1)
+						.getIdResponses();
+				noc.setNocNo(idResponses.get(0).getId());
+			}
+			if (state.equalsIgnoreCase(NOCConstants.VOIDED_STATUS)) {
+				noc.setStatus(Status.INACTIVE);
+			}
 		}
-		if (state.equalsIgnoreCase(NOCConstants.VOIDED_STATUS)) {
-			noc.setStatus(Status.INACTIVE);
-		}
-		if(noc.getWorkflow().getAction().equals(NOCConstants.ACTION_INITIATE)) {
-			Map<String,String> details = (Map<String, String>) noc.getAdditionalDetails();
+		
+		if (noc.getWorkflow() != null && noc.getWorkflow().getAction().equals(NOCConstants.ACTION_INITIATE)) {
+			Map<String, String> details = (Map<String, String>) noc.getAdditionalDetails();
 			details.put(NOCConstants.INITIATED_TIME, Long.toString(System.currentTimeMillis()));
-			noc.setAdditionalDetails(details);			
+			noc.setAdditionalDetails(details);
 		}
-		
-	  }
-		
+	}
 
 }
