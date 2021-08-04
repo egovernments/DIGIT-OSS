@@ -19,8 +19,8 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
   };
 
   const clearAll = () => {
-    setSearchParams({});
-    onFilterChange({});
+    setSearchParams({applicationStatus:[]});
+    onFilterChange({applicationStatus:[]});
   };
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
