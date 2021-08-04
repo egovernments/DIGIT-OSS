@@ -114,6 +114,28 @@ paths:
       tags:
         - eChallan APIs
   
+  /eChallan/v1/_count:
+    post:
+      summary: Get the list of count of paid, active, cancelled and total number of challan 
+      description: |
+        Get the list of count of paid, active, cancelled and total number of challan for given tenant Id.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+      responses:
+        '200':
+          description: Successful response, present the list of count of challans for given tenant Id.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ChallanCountResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      tags:
+        - eChallan APIs    
       
 components:
   schemas:
@@ -216,8 +238,32 @@ components:
       description: Response to the service request
       properties:
         responseInfo:
-          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseInfo'
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseHeader'
         challans:
           type: array
           items:
             $ref: '#/components/schemas/Challan'
+    ChallanCount:
+      type: object
+      description: Capture the challan count details
+      properties:
+        paidChallan:
+          type: string
+          description: Number of paid challan present in the system
+        cancelledChallan:
+          type: string
+          description: Number of cancelled challan present in the system
+        activeChallan:
+          type: string
+          description: Number of active challan present in the system
+        totalChallan:
+          type: string
+          description: Number of total challan present in the system
+    ChallanCountResponse:
+      type: object
+      description: Response to the service request
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseHeader'
+        ChallanCount:
+            $ref: '#/components/schemas/ChallanCount'
