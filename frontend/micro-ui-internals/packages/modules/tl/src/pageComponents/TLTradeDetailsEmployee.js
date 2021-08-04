@@ -5,11 +5,21 @@ import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { useLocation } from "react-router-dom";
 import isUndefined from "lodash/isUndefined";
-import { getUniqueItemsFromArray, commonTransform, stringReplaceAll,getPattern } from "../utils";
+import { getUniqueItemsFromArray, commonTransform, stringReplaceAll,getPattern, convertEpochToDate } from "../utils";
 
-
+const defaultFinancialYear = () => {
+  const data = convertEpochToDate(Date.now());
+  const splitData = data.split("-")[0];
+  const year = splitData.slice(2, 4);
+  const currentFinancialYear = `${Number(splitData)}-${Number(year) + 1}`;
+  return { 
+    code: currentFinancialYear, 
+    i18nKey: `FY${currentFinancialYear}`, 
+    id: currentFinancialYear?.split('-')[0] 
+  }
+}
 const createTradeDetailsDetails = () => ({
-  financialYear: "",
+  financialYear: defaultFinancialYear(),
   licenseType: "",
   structureType: "",
   structureSubType: "",

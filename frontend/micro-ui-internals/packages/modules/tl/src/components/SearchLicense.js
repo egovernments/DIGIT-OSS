@@ -5,6 +5,24 @@ import { Link } from "react-router-dom";
 import { convertEpochToDateDMY, stringReplaceAll } from "../utils";
 
 const SearchLicense = ({tenantId, t, onSubmit, data }) => {
+  let applications = {};
+    const applicationsList = data;
+    let newapplicationlist = [];
+    if (applicationsList && applicationsList.length > 0) {
+        applicationsList.filter((response) => response.licenseNumber).map((ob) => {
+            if (applications[ob.licenseNumber]) {
+                if (applications[ob.licenseNumber].applicationDate < ob.applicationDate)
+                    applications[ob.licenseNumber] = ob
+            }
+            else
+                applications[ob.licenseNumber] = ob;
+        })
+        newapplicationlist = Object.values(applications);
+        newapplicationlist = newapplicationlist ? newapplicationlist.filter(ele => ele.financialYear != "2021-22" && (ele.status == "EXPIRED" || ele.status == "APPROVED")) : [];
+    }
+
+    sessionStorage.setItem("previuosPage", window.location.href);
+
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
         defaultValues: {
             offset: 0,
@@ -137,7 +155,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
         </Card>
         : <Table
             t={t}
-            data={data}
+            data={newapplicationlist}
             columns={columns}
             getCellProps={(cellInfo) => {
             return {

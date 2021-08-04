@@ -210,7 +210,7 @@ function SelectDocument({
   return (
     <div style={{ marginBottom: "24px" }}>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{window.location.href.includes("tl/new-application") ? `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} * :` : `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} :`}</CardLabel>
+        <CardLabel className="card-label-smaller">{!window.location.href.includes("renew-application-details") ? `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} * :` : `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} :`}</CardLabel>
         <div className="field">
           <UploadFile
             onUpload={(e) => { selectfile(e, doc?.documentType.replaceAll(".", "_")) }}
