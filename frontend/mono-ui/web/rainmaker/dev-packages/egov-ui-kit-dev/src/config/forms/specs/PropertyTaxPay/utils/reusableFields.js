@@ -465,7 +465,7 @@ export const beforeInitFormForPlot = {
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 1));
     }
     if (propertyType == "SHAREDPROPERTY") {
-      dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 2));
+      dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 1));
       // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].floorNo`, -1));
     }
     if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED") {

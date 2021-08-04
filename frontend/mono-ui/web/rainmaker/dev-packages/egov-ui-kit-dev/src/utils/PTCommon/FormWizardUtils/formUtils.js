@@ -180,7 +180,9 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.auditDetails = newProperty.auditDetails;
   propertyDetails.calculation = null;
   propertyDetails.channel = newProperty.channel;
+  let floorArray = {};
   propertyDetails.units = propertyDetails.units && propertyDetails.units.map(unit => {
+    floorArray[unit.floorNo] = unit.floorNo;
     // unit.usageCategory;
     // propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
     // propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
@@ -196,6 +198,7 @@ export const convertToOldPTObject = (newObject) => {
   })
   localStorageSet("previousFloorNo", newProperty.noOfFloors)
   property["propertyDetails"] = [propertyDetails];
+  newProperty.noOfFloors = newProperty.propertyType.includes("SHAREDPROPERTY") ? Object.keys(floorArray).length : newProperty.noOfFloors;
   Properties[0] = { ...newProperty, ...property };
   return Properties;
 };
@@ -386,7 +389,7 @@ export const getPTApplicationTypes = async (prepareFinalObject) => {
       [],
       requestBody
     );
-    let ptApplication = get(payload, 'MdmsRes.PropertyTax.PTApplication',  [{
+    let ptApplication = get(payload, 'MdmsRes.PropertyTax.PTApplication', [{
       "creationReason": "MUTATION",
       "businessService": "PT.MUTATION",
       "action": "OPEN",
@@ -408,7 +411,7 @@ export const getPTApplicationTypes = async (prepareFinalObject) => {
       "action": "OPEN",
       "editAction": "REOPEN"
     }
-  ]);
+    ]);
     let ptWorkflow = {};
 
     ptApplication.map(application => {
@@ -417,6 +420,6 @@ export const getPTApplicationTypes = async (prepareFinalObject) => {
     prepareFinalObject("ptApplication", ptWorkflow)
     return payload;
   } catch (e) {
-      console.error(JSON.stringify(e))
+    console.error(JSON.stringify(e))
   }
 };
