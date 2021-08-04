@@ -198,7 +198,11 @@ export const convertToOldPTObject = (newObject) => {
   })
   localStorageSet("previousFloorNo", newProperty.noOfFloors)
   property["propertyDetails"] = [propertyDetails];
-  newProperty.noOfFloors = newProperty.propertyType.includes("SHAREDPROPERTY") ? Object.keys(floorArray).length : newProperty.noOfFloors;
+  if (newProperty.propertyType.includes("SHAREDPROPERTY")) {
+    newProperty.noOfFloors = Object.keys(floorArray).length;
+    newProperty.landArea = newProperty.superBuiltUpArea;
+  }
+
   Properties[0] = { ...newProperty, ...property };
   return Properties;
 };
