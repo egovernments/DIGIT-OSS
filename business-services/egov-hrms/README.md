@@ -14,7 +14,7 @@ The objective of HRMS is to provide a service that manages all the employees enr
 - egov-filestore
 
 ### Swagger API Contract
-- Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/rainmaker/egov-hrms/v1-0-0.yml#!/) for HRMS service to understand the structure of APIs and to have visualization of all internal APIs.
+- Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/business-services/master/Docs/hrms-v1.0.0.yaml#!/) for HRMS service to understand the structure of APIs and to have visualization of all internal APIs.
 
 
 ## Service Details
@@ -57,6 +57,11 @@ The objective of HRMS is to provide a service that manages all the employees enr
   
    - **Constraints:**
         1. Deactivation details are compulsory while deactivating an employee.
+
+**f) Reactivation Details:** Details of reactivation of the employee, which captures reason for reactivation, the effective date from when reactivation take place and other necessary details. 
+  
+   - **Constraints:**
+        1. Reactivation details are compulsory while reactivating an employee.
    
 
 
@@ -92,6 +97,8 @@ Deactivation is a part of the update API where the employee is marked inactive. 
 
 **c) Search Employee `POST /_search` :** API to search the employee in the system on the following criteria: Id, UUID, Name, Code, Status, Type, Department, Designation, Position. All of them being arrays, at a time more than one employees can be fetched.
 Constraints: a. Open Search is enabled only for a set of users. Currently it is enabled only for SUPERUSER, if it has to be enabled for other roles, add those roles to the parameter 'open.search.enabled.roles' in app.properties with values(role codes) separated by comma.
+
+**d) Count of Employee `POST /_count` :** This API is use to get list of active and inactive employee present in the system.
 
 ### Kafka Consumers
 
