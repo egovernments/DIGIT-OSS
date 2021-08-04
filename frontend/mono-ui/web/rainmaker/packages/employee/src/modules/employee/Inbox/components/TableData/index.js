@@ -309,6 +309,37 @@ class TableData extends Component {
     });
   }
   prepareInboxDataRows = async (data, all, loadLocality = false) => {
+    
+    // to avoid duplicate applications.
+    let inboxTotalData = cloneDeep(data);
+    let flags = [], output = [], l = inboxTotalData.length, i;
+    for (let i = 0; i < l; i++) {
+      if (flags[inboxTotalData[i].businessId]) continue;
+      flags[inboxTotalData[i].businessId] = true;
+      output.push(inboxTotalData[i]);
+    }
+
+    const lookup = inboxTotalData.reduce((a, e) => {
+      a[e.businessId] = ++a[e.businessId] || 0;
+      return a;
+    }, {});
+
+    const duplicateData = inboxTotalData.filter(e => lookup[e.businessId]);
+    let filteredDuplicateData = [];
+    if (duplicateData && duplicateData.length > 0) {
+      filteredDuplicateData = duplicateData.filter(data => data.businessId && data.isEscalatedApplication)
+    }
+
+    for (let j = 0; j < output.length; j++) {
+      for (let k = 0; k < filteredDuplicateData.length; k++) {
+        if (filteredDuplicateData[k].businessId == output[j].businessId) {
+          output[j] = filteredDuplicateData[k]
+        }
+      }
+    }
+    data = output;
+
+    
     const { toggleSnackbarAndSetText } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
     if (isEmpty(data)) return { allData: [], assignedToMe: [] };
