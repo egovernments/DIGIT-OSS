@@ -88,7 +88,8 @@ const TLTradeUnitsEmployee = ({ config, onSelect, userType, formData, setError, 
         setIsErrors,
         previousLicenseDetails, 
         setPreviousLicenseDetails,
-        isRenewal
+        isRenewal,
+        isLoading
     };
 
     if (isEditScreen) {
@@ -134,7 +135,8 @@ const TradeUnitForm = (_props) => {
         setIsErrors,
         previousLicenseDetails, 
         setPreviousLicenseDetails,
-        isRenewal
+        isRenewal,
+        isLoading
     } = _props;
 
     const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
@@ -156,7 +158,7 @@ const TradeUnitForm = (_props) => {
             const filterTradeCategoryList = getUniqueItemsFromArray(tradeCatogoryList, "code");
             setTradeCategoryValues(filterTradeCategoryList);
         }
-    }, [formData?.tradedetils?.[0]?.structureType?.code]);
+    }, [formData?.tradedetils?.[0]?.structureType?.code, !isLoading, tradeMdmsData]);
 
     useEffect(() => {
         trigger();
@@ -193,7 +195,7 @@ const TradeUnitForm = (_props) => {
     let ckeckingLocation = window.location.href.includes("renew-application-details");
     if (window.location.href.includes("edit-application-details")) ckeckingLocation = true;
     useEffect(() => {
-        if (tradeTypeMdmsData?.length > 0 && ckeckingLocation) {
+        if (tradeTypeMdmsData?.length > 0 && ckeckingLocation && !isLoading) {
             let tradeType = cloneDeep(tradeTypeMdmsData);
             let filteredTradeType = tradeType.filter(data => data?.code?.split('.')[0] === unit?.tradeCategory?.code)
             let tradeTypeOptions = [];
@@ -206,10 +208,10 @@ const TradeUnitForm = (_props) => {
             const filterTradeCategoryList = getUniqueItemsFromArray(filteredTradeType, "code");
             setTradeTypeOptionsList(filterTradeCategoryList);
         }
-    }, [tradeTypeMdmsData]);
+    }, [tradeTypeMdmsData, !isLoading, tradeMdmsData]);
 
     useEffect(() => {
-        if (tradeTypeMdmsData?.length > 0 && ckeckingLocation) {
+        if (tradeTypeMdmsData?.length > 0 && ckeckingLocation && !isLoading) {
             let tradeType = cloneDeep(tradeTypeMdmsData);
             let filteredTradeSubType = tradeType.filter(data => data?.code?.split('.')[1] === unit?.tradeType?.code)
             let tradeSubTypeOptions = [];
@@ -221,7 +223,7 @@ const TradeUnitForm = (_props) => {
             const filterTradeSubTypeList = getUniqueItemsFromArray(tradeSubTypeOptions, "code");
             setTradeSubTypeOptionsList(filterTradeSubTypeList);
         }
-    }, [tradeTypeMdmsData]);
+    }, [tradeTypeMdmsData, !isLoading, tradeMdmsData]);
 
 
     const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };

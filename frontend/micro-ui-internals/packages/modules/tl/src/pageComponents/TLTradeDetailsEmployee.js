@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, CardLabelError, MobileNumber, DatePicker } from "@egovernments/digit-ui-react-components";
+import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, CardLabelError, MobileNumber, DatePicker, Loader } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -45,7 +45,7 @@ const TLTradeDetailsEmployee = ({ config, onSelect, userType, formData, setError
   const [licenseTypeList, setLicenseTypeList] = useState([]);
   const [licenseTypeValue, setLicenseTypeValue] = useState([]);
 
-  const { isLoading, data: Menu = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "StructureType");
+  const { isLoading : menuLoading, data: Menu = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "StructureType");
 
   const { data: FinaceMenu = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "egf-master", ["FinancialYear"]);
 
@@ -101,7 +101,8 @@ const TLTradeDetailsEmployee = ({ config, onSelect, userType, formData, setError
     previousLicenseDetails, 
     setPreviousLicenseDetails,
     licenseTypeValue,
-    setLicenseTypeValue
+    setLicenseTypeValue,
+    menuLoading
   };
 
   if (isEditScreen) {
@@ -145,7 +146,8 @@ const OwnerForm1 = (_props) => {
     previousLicenseDetails, 
     setPreviousLicenseDetails,
     licenseTypeValue,
-    setLicenseTypeValue
+    setLicenseTypeValue,
+    menuLoading
   } = _props;
 
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
@@ -238,7 +240,7 @@ const OwnerForm1 = (_props) => {
 
 
   useEffect(() => {
-    if (isRenewal && structureTypeOptions?.length > 0) {
+    if (isRenewal && structureTypeOptions?.length > 0 && !menuLoading) {
       let selectedOption = tradedetail?.structureType?.code?.split('.')[0];
       let structureSubTypeOption = [];
       structureTypeOptions.map(data => {
@@ -252,7 +254,7 @@ const OwnerForm1 = (_props) => {
       // setValue("structureSubType", "");
       setStructureSubTypeOptions(structureSubTypeOption);
     }
-}, [tradedetail?.structureType]);
+}, [tradedetail?.structureType, !menuLoading]);
 
 
   const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
