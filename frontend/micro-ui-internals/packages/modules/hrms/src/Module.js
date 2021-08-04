@@ -19,7 +19,7 @@ import SelectEmployeeCorrespondenceAddress from "./components/pageComponents/Sel
 import SelectEmployeeGender from "./components/pageComponents/SelectEmployeeGender";
 import SelectDateofBirthEmployment from "./components/pageComponents/EmployeeDOB";
 import Response from "./pages/Response";
-import Banner from "./components/pageComponents/Banner";
+import HRBanner from "./components/pageComponents/Banner";
 import Details from "./pages/EmployeeDetails";
 import ActionModal from "./components/Modal";
 
@@ -86,7 +86,7 @@ const componentsToRegister = {
   Jurisdictions,
   Assignments,
   ActionModal,
-  Banner,
+  HRBanner,
   SelectEmployeePhoneNumber,
   SelectDateofEmployment,
   SelectEmployeeType,

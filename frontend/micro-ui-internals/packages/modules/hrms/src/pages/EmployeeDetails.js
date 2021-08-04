@@ -111,6 +111,13 @@ const Details = () => {
                       .reasonForDeactivation) || "NA"
                   }
                 />
+                  <Row
+                  label={t("HR_REMARKS")}
+                  text={
+                   data?.Employees?.[0]?.deactivationDetails?.sort((a, b) => new Date(a.effectiveFrom) - new Date(b.effectiveFrom))[0].remarks || "NA"
+                  }
+                />
+                
                 <Row
                   label={t("HR_ORDER_NO")}
                   text={data?.Employees?.[0]?.deactivationDetails?.sort((a, b) => new Date(a.effectiveFrom) - new Date(b.effectiveFrom))[0]?.orderNo || "NA"}

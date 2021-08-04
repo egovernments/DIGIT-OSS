@@ -92,10 +92,11 @@ export const newConfig = [
     body: [
       {
         type: "component",
-        component: "Banner",
+        component: "HRBanner",
         key: "Banner2",
         withoutLabel: true,
         texts: {
+          nosideText:true,
           headerCaption: "Info",
           header: "HR_ASSIGN_DET_SUB_HEADER",
         },

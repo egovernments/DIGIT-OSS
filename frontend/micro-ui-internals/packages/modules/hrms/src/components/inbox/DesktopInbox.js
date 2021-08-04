@@ -38,7 +38,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
         },
       },
       {
-        Header: t("HR_ROLE_LABEL"),
+        Header: t("HR_ROLE_NO_LABEL"),
         Cell: ({ row }) => {
           return (
             <div className="tooltip">
