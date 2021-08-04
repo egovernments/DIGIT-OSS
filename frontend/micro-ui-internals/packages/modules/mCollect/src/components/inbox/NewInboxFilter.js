@@ -11,8 +11,10 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, ...props })
   const { t } = useTranslation();
 
   const [_searchParams, setSearchParams] = useState(() => searchParams);
+  const [ clearCheck, setclearCheck] = useState(false);
 
   const localParamChange = (filterParam) => {
+    setclearCheck(false);
     let keys_to_delete = filterParam.delete;
     let _new = { ..._searchParams, ...filterParam };
     if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
@@ -23,6 +25,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, ...props })
   const clearAll = () => {
     setSearchParams(defaultSearchParams);
     onFilterChange(defaultSearchParams);
+    setclearCheck(true);
   };
 
   return (
@@ -66,6 +69,8 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, ...props })
               <Status
                 _searchParams={_searchParams}
                 businessServices={_searchParams.services}
+                clearCheck={clearCheck}
+                setclearCheck={setclearCheck}
                 onAssignmentChange={(e, status) => {
                   if (e.target.checked) localParamChange({ status: [..._searchParams?.status, status?.code] });
                   else localParamChange({ status: _searchParams?.status.filter((e) => e !== status?.code) });
@@ -75,7 +80,9 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, ...props })
             <div>
               <ServiceCategory
                 _searchParams={_searchParams}
+                setclearCheck={setclearCheck}
                 businessServices={_searchParams.services}
+                clearCheck={clearCheck}
                 onAssignmentChange={(e, businessService) => {
                   if (e.target.checked) localParamChange({ businessService: [..._searchParams?.businessService, businessService?.code] });
                   else localParamChange({ businessService: _searchParams?.businessService.filter((e) => e !== businessService?.code) });

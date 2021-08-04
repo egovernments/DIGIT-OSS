@@ -3,7 +3,7 @@ import { Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import StatusCount from "./StatusCount";
 
-const Status = ({ onAssignmentChange, searchParams, businessServices }) => {
+const Status = ({ onAssignmentChange, searchParams, businessServices,clearCheck,setclearCheck }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
@@ -25,6 +25,8 @@ const Status = ({ onAssignmentChange, searchParams, businessServices }) => {
         return (
           <StatusCount
             key={index}
+            clearCheck={clearCheck}
+            setclearCheck={setclearCheck}
             onAssignmentChange={onAssignmentChange}
             status={{ name: translateState(option), code: option.code }}
             searchParams={searchParams}

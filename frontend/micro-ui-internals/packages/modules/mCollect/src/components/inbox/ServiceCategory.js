@@ -3,7 +3,7 @@ import { Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import ServiceCategoryCount from "./ServiceCategoryCount";
 
-const ServiceCategory = ({ onAssignmentChange, searchParams, businessServices }) => {
+const ServiceCategory = ({ onAssignmentChange, searchParams, businessServices,clearCheck,setclearCheck }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
@@ -45,6 +45,8 @@ const ServiceCategory = ({ onAssignmentChange, searchParams, businessServices })
       {menuFirst?.map((option, index) => {
         return (
           <ServiceCategoryCount
+            clearCheck={clearCheck}
+            setclearCheck={setclearCheck}
             key={index}
             onAssignmentChange={onAssignmentChange}
             status={{ name: translateState(option), code: option.code }}
@@ -56,6 +58,8 @@ const ServiceCategory = ({ onAssignmentChange, searchParams, businessServices })
         meuSecond?.map((option, index) => {
           return (
             <ServiceCategoryCount
+              clearCheck={clearCheck}
+              setclearCheck={setclearCheck}
               key={index}
               onAssignmentChange={onAssignmentChange}
               status={{ name: translateState(option), code: option.code }}

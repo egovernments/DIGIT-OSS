@@ -4,6 +4,7 @@ import { Dropdown, DatePicker, Toast } from "@egovernments/digit-ui-react-compon
 import * as func from "./Utils/Category";
 import { FormComposer } from "../../components/FormComposer";
 import { sortDropdownNames } from "./Utils/Sortbyname";
+import { stringReplaceAll } from "../../utils/index";
 import { useParams, useHistory, useRouteMatch } from "react-router-dom";
 const CreateChallen = ({ ChallanData }) => {
   const childRef = useRef();
@@ -207,7 +208,7 @@ const CreateChallen = ({ ChallanData }) => {
     Digit.MDMSService.getPaymentRules(tenantId, "[?(@.type=='Adhoc')]").then((value) => {
       setAPIcategories(
         func.setServiceCategory(value.MdmsRes.BillingService.BusinessService).map((ele) => {
-          ele.code = "BILLINGSERVICE_BUSINESSSERVICE_" + ele.code.toUpperCase();
+          ele.code = "BILLINGSERVICE_BUSINESSSERVICE_" +stringReplaceAll(ele.code.toUpperCase()," ","_");
           return ele;
         })
       );
