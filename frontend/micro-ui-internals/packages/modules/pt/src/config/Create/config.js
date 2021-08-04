@@ -89,7 +89,7 @@ export const newConfig = [
         withoutLabel: true,
         texts: {
           headerCaption: "PT_PROPERTY_LOCATION_CAPTION",
-          header: "Proof of Address",
+          header: "PT_PROOF_OF_ADDRESS_HEADER",
           cardText: "",
           nextText: "PT_COMMONS_NEXT",
           submitBarLabel: "PT_COMMONS_NEXT",

@@ -202,7 +202,7 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
               optionKey="i18nkey"
               onSelect={selectLocality}
               t={t}
-              isDependent={true}
+              //isDependent={true}
               labelKey=""
               disabled={isEditProperty}
             />
