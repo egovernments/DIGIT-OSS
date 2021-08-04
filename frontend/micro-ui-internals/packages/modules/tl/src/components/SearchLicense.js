@@ -21,8 +21,6 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
         newapplicationlist = newapplicationlist ? newapplicationlist.filter(ele => ele.financialYear != "2021-22" && (ele.status == "EXPIRED" || ele.status == "APPROVED")) : [];
     }
 
-    sessionStorage.setItem("previuosPage", window.location.href);
-
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
         defaultValues: {
             offset: 0,

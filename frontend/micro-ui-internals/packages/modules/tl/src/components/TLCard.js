@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { checkForEmployee } from "../utils";
 
 const TLCard = () => {
+    sessionStorage.setItem("breadCrumbUrl", "home");
     if (!Digit.Utils.tlAccess()) {
         return null;
     }

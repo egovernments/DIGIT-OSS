@@ -16,6 +16,7 @@ const ApplicationDetails = () => {
   const [businessService, setBusinessService] = useState("NewTL"); //DIRECTRENEWAL
   const [numberOfApplications, setNumberOfApplications] = useState([]);
   const [allowedToNextYear, setAllowedToNextYear] = useState(false);
+  sessionStorage.setItem("applicationNumber", applicationNumber)
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.tl.useApplicationDetail(t, tenantId, applicationNumber);
   
