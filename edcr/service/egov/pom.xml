@@ -56,9 +56,9 @@
             <url>https://repository.jboss.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>JSPRESSO</id>
-            <url>https://mvnrepository.com/artifact</url>
-        </repository>
+			<id>javaxt.com</id>
+			<url>http://www.javaxt.com/maven</url>
+		</repository>
     </repositories>
 
     <pluginRepositories>
