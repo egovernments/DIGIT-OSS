@@ -155,7 +155,9 @@ const EmployeeApp = ({ path, url, userType }) => {
     <Switch>
       <React.Fragment>
         <div className="ground-container" style={locationCheck ? {width: "100%"} : {}}>
-         <TLBreadCrumb location={location} />
+          <div style={locationCheck ? {marginLeft: "15px"} : {}}>
+            <TLBreadCrumb location={location} />
+          </div>
           {/* <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : !locationCheck ? "revert": "15px" }}>
             <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
               {t("ES_COMMON_HOME")}
