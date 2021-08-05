@@ -641,7 +641,7 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch, filter 
   }
 };
 
-export const fetchBill = async (queryObject, dispatch) => {
+export const fetchBill = async (queryObject, dispatch,replaceWithNA=true) => {
   dispatch(toggleSpinner());
   try {
       const response = await httpRequest(
@@ -651,6 +651,9 @@ export const fetchBill = async (queryObject, dispatch) => {
           queryObject
       );
       dispatch(toggleSpinner());
+      if(!replaceWithNA){
+        return response;
+      }
       return findAndReplace(response, null, "NA");
   } catch (error) {
       dispatch(toggleSpinner());
