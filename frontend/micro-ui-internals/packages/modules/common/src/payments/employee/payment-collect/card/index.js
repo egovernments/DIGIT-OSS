@@ -55,6 +55,7 @@ const CardDetailsComponent = ({ ...props }) => {
               name="instrumentNumber"
               maxLength="4"
               minLength="4"
+              required
               onChange={(e) => setLast4Digits(e.target.value)}
             />
           </div>
@@ -69,6 +70,7 @@ const CardDetailsComponent = ({ ...props }) => {
               value={transactionNumber}
               type="text"
               name="instrumentNumber"
+              required
               onChange={(e) => setTransactionNumber(e.target.value)}
             />
           </div>
@@ -83,6 +85,7 @@ const CardDetailsComponent = ({ ...props }) => {
               value={reTransanctionNumber}
               type="text"
               name="instrumentNumber"
+              required
               onChange={(e) => setReTransanctionNumber(e.target.value)}
             />
           </div>
