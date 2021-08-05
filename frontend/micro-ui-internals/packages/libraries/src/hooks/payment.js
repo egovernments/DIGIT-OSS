@@ -34,13 +34,13 @@ export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...fi
 
 export const useFetchBillsForBuissnessService = ({ tenantId, businessService, ...filters }, config = {}) => {
   const queryClient = useQueryClient();
-
+  let isPTAccessDone = sessionStorage.getItem("IsPTAccessDone");
   const params = { businessService, ...filters };
 
   const _tenantId = tenantId || Digit.UserService.getUser()?.info?.tenantId;
 
   const { isLoading, error, isError, data, status } = useQuery(
-    ["billsForBuisnessService", businessService, { ...filters }, config],
+    ["billsForBuisnessService", businessService, { ...filters }, config,isPTAccessDone],
     () => Digit.PaymentService.fetchBill(_tenantId, params),
     {
       retry: (count, err) => {

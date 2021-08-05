@@ -6,6 +6,7 @@ import { convertEpochToDateDMY, stringReplaceAll } from "../utils";
 
 const SearchLicense = ({tenantId, t, onSubmit, data }) => {
   let applications = {};
+  let validation = {};
     const applicationsList = data;
     let newapplicationlist = [];
     if (applicationsList && applicationsList.length > 0) {
@@ -113,7 +114,15 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
             </SearchField>
             <SearchField>
                 <label>{t("TL_TRADE_OWNER_S_NUMBER_LABEL")}</label>
-                <TextInput name="mobileNumber" inputRef={register({})}/>
+                <TextInput name="mobileNumber" inputRef={register({})} 
+                type="mobileNumber"
+                componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>} 
+                maxlength={10}
+            {...(validation = {
+                  pattern: "[6-9]{1}[0-9]{9}",
+                  type: "tel",
+                  title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+                })}/>
             </SearchField>
             <SearchField>
                 <label>{t("TL_SEARCH_TRADE_LICENSE_ISSUED_FROM")}</label>

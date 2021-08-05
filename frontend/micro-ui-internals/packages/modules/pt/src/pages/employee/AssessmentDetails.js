@@ -75,6 +75,7 @@ const AssessmentDetails = () => {
             setTimeout(closeToast, 5000);
           },
           onSuccess: (data, variables) => {
+            sessionStorage.setItem("IsPTAccessDone",data?.Assessments?.[0]?.auditDetails?.lastModifiedTime);
             setShowToast({ key: "success", action: { action: "ASSESSMENT" } });
             setTimeout(closeToast, 5000);
             queryClient.setQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear], true);
