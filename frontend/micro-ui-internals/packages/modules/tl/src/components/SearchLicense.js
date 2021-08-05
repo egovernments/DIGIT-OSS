@@ -137,7 +137,22 @@ const SearchLicense = ({tenantId, t, onSubmit, data }) => {
             </SearchField>
             <SearchField className="submit">
                 <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
-                <p onClick={() => reset({ licenseNumbers: "", mobileNumber: "", fromDate: "",toDate: ""   })}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
+                <p onClick={() => 
+                  {
+                    reset({ 
+                      licenseNumbers: "", 
+                      mobileNumber: "", 
+                      fromDate: "",
+                      toDate: "",
+                      offset: 0,
+                      limit: 10,
+                      sortBy: "commencementDate",
+                      sortOrder: "DESC",
+                      status: "APPROVED"
+                  });
+                  previousPage ();
+                  }
+                }>{t(`ES_COMMON_CLEAR_ALL`)}</p>
             </SearchField>
         </SearchForm>
         {data?.display ?<Card style={{ marginTop: 20 }}>

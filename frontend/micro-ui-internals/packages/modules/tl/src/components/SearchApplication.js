@@ -204,14 +204,21 @@ const SearchApplication = ({tenantId, t, onSubmit, data }) => {
                 </SearchField>
                 <SearchField className="submit">
                     <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
-                    <p onClick={() => reset({ 
+                    <p onClick={() => {
+                        reset({ 
                             applicationType: "", 
                             fromDate: "", 
                             toDate: "",
                             licenseNumbers: "",
                             status: "",
-                            tradeName: ""
-                        })}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
+                            tradeName: "",
+                            offset: 0,
+                            limit: 10,
+                            sortBy: "commencementDate",
+                            sortOrder: "DESC"
+                        });
+                        previousPage();
+                    }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
                 </SearchField>
             </SearchForm>
             {data?.display ? <Card style={{ marginTop: 20 }}>
