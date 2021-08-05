@@ -16,7 +16,11 @@ const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ")
 
 const getOwner = (application, t, customTitle) => {
   console.log(customTitle, application, "inside owner details");
-  let owners = [...(application?.owners.filter((owner) => owner.status == "ACTIVE") || [])];
+  let owners = [];
+  if(customTitle.includes("TRANSFEROR"))
+  owners = [...(application?.owners.filter((owner) => owner.status == "INACTIVE") || [])];
+  else
+  owners = [...(application?.owners.filter((owner) => owner.status == "ACTIVE") || [])];
   if (application?.ownershipCategory == "INDIVIDUAL.SINGLEOWNER") {
     return {
       title: t(customTitle || "PT_OWNERSHIP_INFO_SUB_HEADER"),
@@ -47,7 +51,7 @@ const getOwner = (application, t, customTitle) => {
       values.push(...doc);
     });
     return {
-      title: t("PT_OWNERSHIP_INFO_SUB_HEADER"),
+      title: t(customTitle || "PT_OWNERSHIP_INFO_SUB_HEADER"),
       values: values,
     };
   } else if (application?.ownershipCategory.includes("INSTITUTIONAL")) {
@@ -222,7 +226,7 @@ const getPTAcknowledgementData = async (application, tenantInfo, t) => {
             { title: t("PT_PROPERTY_ADDRESS_LANDMARK"), value: application?.address?.landmark || t("CS_NA") },
           ],
         },
-        getOwner(application?.auditData?.[0], t, "PT_MUTATION_TRANSFEROR_DETAILS"),
+        getOwner(application, t, "PT_MUTATION_TRANSFEROR_DETAILS"),
         getOwner(application, t, "PT_MUTATION_TRANSFEREE_DETAILS_HEADER"),
         getMutationDetails(application, t),
         mutationRegistrationDetails(application, t),

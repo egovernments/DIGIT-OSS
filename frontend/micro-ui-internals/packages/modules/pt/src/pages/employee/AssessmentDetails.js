@@ -45,7 +45,7 @@ const AssessmentDetails = () => {
 
   appDetailsToShow?.applicationDetails?.shift();
   appDetailsToShow?.applicationDetails?.unshift({
-    title: "PT_APPLICATION_SUMMARY",
+    title: "PT_ESTIMATE_DETAILS_HEADER",
     values: [
       {
         title: "PT_PROPERTY_PTUID",

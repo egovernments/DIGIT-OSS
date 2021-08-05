@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card } from "@egovernments/digit-ui-react-components";
+import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { useQueryClient } from "react-query";
@@ -301,9 +301,10 @@ export const CollectPayment = (props) => {
 
   return (
     <React.Fragment>
+      <Header>{t("PAYMENT_COLLECT")}</Header>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
-        heading={t("PAYMENT_COLLECT")}
+        //heading={t("PAYMENT_COLLECT")}
         label={t("PAYMENT_COLLECT_LABEL")}
         config={getFormConfig()}
         onSubmit={onSubmit}
