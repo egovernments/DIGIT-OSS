@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.4
+
+- Fixed the inbox related assignee issue
+
 ## 1.1.3 - 2021-05-11
 
 - Fixed security issue of untrusted data pass as user input.
