@@ -1,7 +1,7 @@
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getGroupBillSearch } from "../../../../../ui-utils/commons";
+import { fetchBill, getGroupBillSearch } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
 import { convertEpochToDate } from "../../utils/index";
 
@@ -71,8 +71,8 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
       if (searchScreenObject.hasOwnProperty(key) &&
-        searchScreenObject[key] =="") {
-          delete searchScreenObject[key];
+        searchScreenObject[key] == "") {
+        delete searchScreenObject[key];
       }
     }
     let serviceObject = get(
@@ -96,17 +96,33 @@ export const searchApiCall = async (state, dispatch) => {
       return;
     }
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
-    const responseFromAPI = await getGroupBillSearch(dispatch, searchScreenObject)
-    const bills = (responseFromAPI && responseFromAPI.Bills) || [];
+    const responseFromAPI = await getGroupBillSearch(dispatch, searchScreenObject);
+    let bills = (responseFromAPI && responseFromAPI.Bills) || [];
+    bills = bills.filter(bill => bill.status === "ACTIVE");
+    let expiredConsumers = []
+    let billObject = {};
+    bills.map(bill => {
+      billObject[bill.consumerCode] = bill;
+      if (bill.billDetails[0].expiryDate < new Date().getTime()) {
+        expiredConsumers.push(bill.consumerCode);
+      }
+    })
+    if (expiredConsumers.length > 0) {
+      const fetchbillResponse = await fetchBill([{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: expiredConsumers.join(',') }, { key: "businessService", value: searchScreenObject.businesService }], dispatch, false)
+      fetchbillResponse.Bill.map(bill => {
+        billObject[bill.consumerCode] = bill;
+      })
+    }
+    bills = Object.values(billObject);
     const billTableData = [];
     for (let i = 0; i < bills.length; i++) {
-      if(get(bills[i], "status") === "ACTIVE"){
+      if (get(bills[i], "status") === "ACTIVE") {
         billTableData.push({
           billNumber: get(bills[i], "billNumber"),
           billId: get(bills[i], "id"),
           consumerCode: get(bills[i], "consumerCode"),
           consumerName: get(bills[i], "payerName"),
-          billDate: get(bills[i], "billDate"),
+          billDate: get(bills[i], "billDetails[0].expiryDate"),
           billAmount: get(bills[i], "totalAmount"),
           status: get(bills[i], "status"),
           action: getActionItem(get(bills[i], "status")),
@@ -119,20 +135,20 @@ export const searchApiCall = async (state, dispatch) => {
     );
     const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "searchScreenMdmsData.common-masters.uiCommonPay");
     const configObject = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
-    
+
     try {
       let data = billTableData.map(item => ({
         ['ABG_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
         ["PAYMENT_COMMON_CONSUMER_CODE"]: item.consumerCode || "-",
         ['ABG_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
-        ['ABG_COMMON_TABLE_COL_BILL_DATE']:
+        ['ABG_COMMON_TABLE_COL_BILL_EXP_DATE']:
           convertEpochToDate(item.billDate) || "-",
-        ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: (item.billAmount || item.billAmount===0) ? item.billAmount : "-",
+        ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: (item.billAmount || item.billAmount === 0) ? item.billAmount : "-",
         ['ABG_COMMON_TABLE_COL_STATUS']: item.status || "-",
         ['ABG_COMMON_TABLE_COL_ACTION']: item.action || "-",
         ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
-        ["RECEIPT_KEY"]: get(configObject[0], "receiptKey","consolidatedreceipt")||"consolidatedreceipt",
-        ["BILL_KEY"]: get(configObject[0], "billKey","consolidatedbill")||"consolidatedbill",
+        ["RECEIPT_KEY"]: get(configObject[0], "receiptKey", "consolidatedreceipt") || "consolidatedreceipt",
+        ["BILL_KEY"]: get(configObject[0], "billKey", "consolidatedbill") || "consolidatedbill",
         ["TENANT_ID"]: item.tenantId,
         ["BILL_ID"]: item.billId,
         ["BILL_SEARCH_URL"]: searchScreenObject.url,
