@@ -40,7 +40,7 @@ export const searchResults = {
       },
       {
         labelName: "Bill Date",
-        labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_EXP_DATE"
       },
       {
         labelName: "Bill Amount(Rs)",
