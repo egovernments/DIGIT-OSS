@@ -1,41 +1,40 @@
-import React, { useMemo, useEffect, useState } from "react";
-import { Route, BrowserRouter as Router, Switch, useRouteMatch, useLocation, Link, useHistory } from "react-router-dom";
-import { BackButton, BreadCrumb, Header, Loader, PrivateRoute, CitizenHomeCard, DropIcon } from "@egovernments/digit-ui-react-components";
+import { BackButton, BreadCrumb, CitizenHomeCard, CitizenTruck, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
-import SelectRating from "./pages/citizen/Rating/SelectRating";
-import { MyApplications } from "./pages/citizen/MyApplications";
-import ApplicationDetails from "./pages/citizen/ApplicationDetails";
-
-import { NewApplication } from "./pages/employee/NewApplication";
-import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
-import ApplicationAudit from "./pages/employee/ApplicationAudit";
-import Response from "./pages/Response";
-import EditApplication from "./pages/employee/EditApplication";
-import Inbox from "./pages/employee/Inbox";
-import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
-import DsoDashboard from "./pages/employee/DsoDashboard";
-
-import FstpInbox from "./pages/employee/FstpInbox";
-
+import { Link, Redirect, Switch, useLocation, useRouteMatch } from "react-router-dom";
+import FSMCard from "./components/FsmCard";
+import CheckSlum from "./pageComponents/CheckSlum";
+import SelectAddress from "./pageComponents/SelectAddress";
+import SelectChannel from "./pageComponents/SelectChannel";
+import SelectGeolocation from "./pageComponents/SelectGeolocation";
+import SelectLandmark from "./pageComponents/SelectLandmark";
+import SelectName from "./pageComponents/SelectName";
+import SelectPincode from "./pageComponents/SelectPincode";
+import SelectPitType from "./pageComponents/SelectPitType";
 import SelectPropertySubtype from "./pageComponents/SelectPropertySubtype";
 import SelectPropertyType from "./pageComponents/SelectPropertyType";
-import SelectAddress from "./pageComponents/SelectAddress";
-import SelectStreet from "./pageComponents/SelectStreet";
-import SelectLandmark from "./pageComponents/SelectLandmark";
-import SelectPincode from "./pageComponents/SelectPincode";
-import SelectTankSize from "./pageComponents/SelectTankSize";
-import SelectPitType from "./pageComponents/SelectPitType";
-import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectSlumName from "./pageComponents/SelectSlumName";
-import CheckSlum from "./pageComponents/CheckSlum";
-import SelectChannel from "./pageComponents/SelectChannel";
-import SelectName from "./pageComponents/SelectName";
+import SelectStreet from "./pageComponents/SelectStreet";
+import SelectTankSize from "./pageComponents/SelectTankSize";
 import SelectTripData from "./pageComponents/SelectTripData";
-import FSMCard from "./components/FsmCard";
-import { Redirect } from "react-router-dom";
+import ApplicationDetails from "./pages/citizen/ApplicationDetails";
+import { MyApplications } from "./pages/citizen/MyApplications";
+import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
 import RateView from "./pages/citizen/Rating/RateView";
+import SelectRating from "./pages/citizen/Rating/SelectRating";
+import ApplicationAudit from "./pages/employee/ApplicationAudit";
+import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
+import DsoDashboard from "./pages/employee/DsoDashboard";
+import EditApplication from "./pages/employee/EditApplication";
+import FstpInbox from "./pages/employee/FstpInbox";
+import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
+import Inbox from "./pages/employee/Inbox";
+import { NewApplication } from "./pages/employee/NewApplication";
+import Response from "./pages/Response";
+
+
+
+
 
 const FsmBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -206,7 +205,7 @@ const FSMLinks = ({ matchPath, userType }) => {
         });
     });
 
-    return <CitizenHomeCard header={t("CS_HOME_FSM_SERVICES")} links={links} Icon={DropIcon} />;
+    return <CitizenHomeCard header={t("CS_HOME_FSM_SERVICES")} links={links} Icon={CitizenTruck} />;
   } else {
     return (
       <div className="employee-app-container">

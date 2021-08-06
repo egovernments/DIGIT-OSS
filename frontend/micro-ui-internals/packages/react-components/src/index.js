@@ -1,134 +1,101 @@
-import Body from "./atoms/Body";
-import { Loader } from "./atoms/Loader";
-import TopBar from "./atoms/TopBar";
+import ActionBar from "./atoms/ActionBar";
+import ActionLinks from "./atoms/ActionLinks";
 import AppContainer from "./atoms/AppContainer";
-import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
-import Header from "./atoms/Header";
-import LinkLabel from "./atoms/LinkLabel";
+import ApplyFilterBar from "./atoms/ApplyFilterBar";
 import BackButton from "./atoms/BackButton";
+import Banner from "./atoms/Banner";
+import Body from "./atoms/Body";
+import BreadCrumb from "./atoms/BreadCrumb";
 import BreakLine from "./atoms/BreakLine";
+import ButtonSelector from "./atoms/ButtonSelector";
 import Card from "./atoms/Card";
 import CardCaption from "./atoms/CardCaption";
 import CardHeader from "./atoms/CardHeader";
-import CardSectionHeader from "./atoms/CardSectionHeader";
-import CardText from "./atoms/CardText";
 import CardLabel from "./atoms/CardLabel";
 import CardLabelDesc from "./atoms/CardLabelDesc";
 import CardLabelError from "./atoms/CardLabelError";
-import CardTextButton from "./atoms/CardTextButton";
-import RadioButtons from "./atoms/RadioButtons";
-import Dropdown from "./atoms/Dropdown";
-import TextInput from "./atoms/TextInput";
-import TextArea from "./atoms/TextArea";
-import Banner from "./atoms/Banner";
+import CardSectionHeader from "./atoms/CardSectionHeader";
 import CardSubHeader from "./atoms/CardSubHeader";
-import SubmitBar from "./atoms/SubmitBar";
-import ButtonSelector from "./atoms/ButtonSelector";
-import LinkButton from "./atoms/LinkButton";
-import { StatusTable, Row, LastRow, MediaRow } from "./atoms/StatusTable";
-import DisplayPhotos from "./atoms/DisplayPhotos";
-import { ConnectingCheckPoints, CheckPoint } from "./atoms/ConnectingCheckPoints";
-import Rating from "./atoms/Rating";
+import CardText from "./atoms/CardText";
+import CardTextButton from "./atoms/CardTextButton";
 import CheckBox from "./atoms/CheckBox";
-import OTPInput from "./atoms/OTPInput";
+import CitizenHomeCard from "./atoms/CitizenHomeCard";
+import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
+import { CheckPoint, ConnectingCheckPoints } from "./atoms/ConnectingCheckPoints";
+import CustomButton from "./atoms/CustomButton";
+import DatePicker from "./atoms/DatePicker";
+import DateWrap from "./atoms/DateWrap";
+import DisplayPhotos from "./atoms/DisplayPhotos";
+import Dropdown from "./atoms/Dropdown";
+import EllipsisMenu from "./atoms/EllipsisMenu";
+import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
+import EmployeeModuleCard from "./atoms/EmployeeModuleCard";
+import GreyOutText from "./atoms/GreyOutText";
+import Hamburger from "./atoms/Hamburger";
+import Header from "./atoms/Header";
+import HeaderBar from "./atoms/HeaderBar";
+import HomeLink from "./atoms/HomeLink";
+import { ImageUploadHandler } from "./atoms/ImageUploadHandler";
+import ImageViewer from "./atoms/ImageViewer";
+import InfoBanner from "./atoms/InfoBanner";
+import KeyNote from "./atoms/KeyNote";
+import Label from "./atoms/Label";
+import LabelFieldPair from "./atoms/LabelFieldPair";
+import LinkButton from "./atoms/LinkButton";
+import LinkLabel from "./atoms/LinkLabel";
+import { Loader } from "./atoms/Loader";
 import LocationSearch from "./atoms/LocationSearch";
+import Menu from "./atoms/Menu";
+import MobileNumber from "./atoms/MobileNumber";
+import MultiLink from "./atoms/MultiLink";
+import MultiSelectDropdown from "./atoms/MultiSelectDropdown";
+import NavBar from "./atoms/NavBar";
+import OTPInput from "./atoms/OTPInput";
+import PopUp from "./atoms/PopUp";
+import { PrivateRoute } from "./atoms/PrivateRoute";
+import RadioButtons from "./atoms/RadioButtons";
+import Rating from "./atoms/Rating";
+import RoundedLabel from "./atoms/RoundedLabel";
+import SectionalDropdown from "./atoms/SectionalDropdown";
+import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
+import SubmitBar from "./atoms/SubmitBar";
+import {
+  AnnouncementIcon, ArrowDown, ArrowLeft, ArrowRightInbox, Calender, CaseIcon, CitizenTruck, CloseSvg, ComplaintIcon, Details, DocumentSVG, DownloadIcon, DownwardArrow, DropIcon, Ellipsis, EmailIcon, FilterIcon, GetApp, HomeIcon,
+  LanguageIcon,
+  LogoutIcon, Person, PersonIcon, Poll, PrintIcon, PropertyHouse, PTIcon, ReceiptIcon, RefreshIcon, RupeeIcon, SearchIconSvg, ShareIcon, ShippingTruck, SortDown,
+  SortUp, UpwardArrow, WhatsappIcon
+} from "./atoms/svgindex";
+import Table from "./atoms/Table";
+import TelePhone from "./atoms/TelePhone";
+import TextArea from "./atoms/TextArea";
+import TextInput from "./atoms/TextInput";
+import Toast from "./atoms/Toast";
+import TopBar from "./atoms/TopBar";
 import UploadFile from "./atoms/UploadFile";
 import UploadImages from "./atoms/UploadImages";
-import ImageViewer from "./atoms/ImageViewer";
-import { ImageUploadHandler } from "./atoms/ImageUploadHandler";
-import ActionLinks from "./atoms/ActionLinks";
-import ActionBar from "./atoms/ActionBar";
-import Menu from "./atoms/Menu";
-import Table from "./atoms/Table";
-import Label from "./atoms/Label";
-import PopUp from "./atoms/PopUp";
-import HeaderBar from "./atoms/HeaderBar";
-import Toast from "./atoms/Toast";
-import DateWrap from "./atoms/DateWrap";
-import KeyNote from "./atoms/KeyNote";
-import TelePhone from "./atoms/TelePhone";
-import GreyOutText from "./atoms/GreyOutText";
-import HomeLink from "./atoms/HomeLink";
-import SectionalDropdown from "./atoms/SectionalDropdown";
-import LabelFieldPair from "./atoms/LabelFieldPair";
-import ApplyFilterBar from "./atoms/ApplyFilterBar";
-import NavBar from "./atoms/NavBar";
-import Hamburger from "./atoms/Hamburger";
-import { PrivateRoute } from "./atoms/PrivateRoute";
-import {
-  GetApp,
-  ArrowLeft,
-  ArrowDown,
-  DownloadIcon,
-  FilterIcon,
-  PrintIcon,
-  Ellipsis,
-  RefreshIcon,
-  Poll,
-  Details,
-  HomeIcon,
-  LanguageIcon,
-  LogoutIcon,
-  ArrowRightInbox,
-  SortDown,
-  SortUp,
-  ShippingTruck,
-  CloseSvg,
-  UpwardArrow,
-  DownwardArrow,
-  PropertyHouse,
-  ShareIcon,
-  Calender,
-  DropIcon,
-  RupeeIcon,
-  ComplaintIcon,
-  Person,
-  WhatsappIcon,
-  EmailIcon,
-  DocumentSVG,
-  CaseIcon,
-  PersonIcon,
-  ReceiptIcon,
-  AnnouncementIcon,
-  PTIcon,
-} from "./atoms/svgindex";
-import CustomButton from "./atoms/CustomButton";
-import CitizenInfoLabel from "./atoms/CitizenInfoLabel";
-import RoundedLabel from "./atoms/RoundedLabel";
-import BreadCrumb from "./atoms/BreadCrumb";
-import DatePicker from "./atoms/DatePicker";
-import MultiLink from "./atoms/MultiLink";
-import InfoBanner from "./atoms/InfoBanner";
-import { SearchIconSvg } from "./atoms/svgindex";
-import MobileNumber from "./atoms/MobileNumber";
-import MultiSelectDropdown from "./atoms/MultiSelectDropdown";
-import EllipsisMenu from "./atoms/EllipsisMenu";
-import CitizenHomeCard from "./atoms/CitizenHomeCard";
-import EmployeeModuleCard from "./atoms/EmployeeModuleCard";
-
-import RemoveableTag from "./molecules/RemoveableTag";
-import TypeSelectCard from "./molecules/TypeSelectCard";
-import LocationSearchCard from "./molecules/LocationSearchCard";
-import TextInputCard from "./molecules/TextInputCard";
+import { FormComposer } from "./hoc/FormComposer";
+import Modal from "./hoc/Modal";
+import ResponseComposer from "./hoc/ResponseComposer";
 import CityMohalla from "./molecules/CityMohalla";
+import DashboardBox from "./molecules/DashboardBox";
 import DetailsCard from "./molecules/DetailsCard";
-import InputCard from "./molecules/InputCard";
-import FormStep from "./molecules/FormStep";
-import RatingCard from "./molecules/RatingCard";
-import SearchAction from "./molecules/SearchAction";
 import FilterAction from "./molecules/FilterAction";
+import FormStep from "./molecules/FormStep";
+import InputCard from "./molecules/InputCard";
+import Localities from "./molecules/Localities";
+import LocationSearchCard from "./molecules/LocationSearchCard";
 import PitDimension from "./molecules/PitDimension";
 import RadioOrSelect from "./molecules/RadioOrSelect";
-import DashboardBox from "./molecules/DashboardBox";
-import Localities from "./molecules/Localities";
-import {SearchForm, SearchField} from "./molecules/SearchForm";
+import RatingCard from "./molecules/RatingCard";
+import RemoveableTag from "./molecules/RemoveableTag";
+import SearchAction from "./molecules/SearchAction";
+import { SearchField, SearchForm } from "./molecules/SearchForm";
+import TextInputCard from "./molecules/TextInputCard";
+import TypeSelectCard from "./molecules/TypeSelectCard";
 
-import { FormComposer } from "./hoc/FormComposer";
-import ResponseComposer from "./hoc/ResponseComposer";
-import Modal from "./hoc/Modal";
+
 
 export {
-  // Atoms
   Body,
   Loader,
   TopBar,
@@ -261,5 +228,7 @@ export {
   DocumentSVG,
   PersonIcon,
   ReceiptIcon,
-  AnnouncementIcon
+  AnnouncementIcon,
+  CitizenTruck
 };
+
