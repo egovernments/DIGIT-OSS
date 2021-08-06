@@ -6,7 +6,7 @@ const TLSelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
   const [geoLocation, setGeoLocation] = useState(formData?.address?.geoLocation || {});
   const tenants = Digit.Hooks.tl.useTenants();
   const [pincodeServicability, setPincodeServicability] = useState(null);
-  const isEditProperty = formData?.isEditProperty || false;
+  let isEditProperty = window.location.href.includes("edit-application")||window.location.href.includes("renew-trade");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = tenantId.split(".")[0];
   const { data: defaultConfig = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "MapConfig");

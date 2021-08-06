@@ -94,13 +94,10 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
         accessoriesList,
         billingSlabData,
         setUomvalues,
-        uomvalues,
-        isRenewal
+        uomvalues
     };
 
-    if (isEditScreen) {
-        return <React.Fragment />;
-    }
+
 
     return (
         <React.Fragment>

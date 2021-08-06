@@ -1,14 +1,13 @@
+import { FormComposer, Header, Toast } from "@egovernments/digit-ui-react-components";
+import cloneDeep from "lodash/cloneDeep";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast, CitizenInfoLabel, Header } from "@egovernments/digit-ui-react-components";
-import { newConfig } from "../../../config/config";
 import { useHistory } from "react-router-dom";
-import { convertDateToEpoch, stringReplaceAll, convertEpochToDate } from "../../../utils";
-import cloneDeep from "lodash/cloneDeep";
+import { newConfig } from "../../../config/config";
+import { convertDateToEpoch, convertEpochToDate, stringReplaceAll } from "../../../utils";
 
 
 const ReNewApplication = (props) => {
-
   const applicationData = cloneDeep(props?.location?.state?.applicationData) || {};
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -26,7 +25,7 @@ const ReNewApplication = (props) => {
 
   let financialYear = cloneDeep(applicationData?.financialYear);
   let financialYearDate = applicationData?.financialYear?.split('-')[1];
-  let finalFinancialYear = `20${Number(financialYearDate)}-${Number(financialYearDate)+1}`
+  let finalFinancialYear = `20${Number(financialYearDate)}-${Number(financialYearDate) + 1}`
   if (window.location.href.includes("edit-application-details")) finalFinancialYear = financialYear;
 
   const tradeDetails = [
@@ -68,7 +67,7 @@ const ReNewApplication = (props) => {
       if (typeof data?.accessoryCategory == "string") data.accessoryCategory = { code: accessory1, i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(accessory1, "-", "_")}`, uom: data?.uom };
       data.uom = data?.uom;
       data.uomValue = data?.uomValue || "";
-      data.count= data?.count || "";
+      data.count = data?.count || "";
       data.key = (Date.now() + ((index + 1) * 20))
     })
   }
@@ -130,7 +129,7 @@ const ReNewApplication = (props) => {
       EDITRENEWAL = false;
       sendBackToCitizen = true;
     }
-    
+
 
     if (data?.owners?.length > 0) {
       data?.owners.forEach(data => {
@@ -153,7 +152,7 @@ const ReNewApplication = (props) => {
 
     if (data?.tradeUnits?.length > 0) {
       data?.tradeUnits.forEach(data => {
-          data.tradeType = data?.tradeSubType?.code || null,
+        data.tradeType = data?.tradeSubType?.code || null,
           data.uom = data?.tradeSubType?.uom || null,
           data.uomValue = Number(data?.uomValue) || null
       });
@@ -171,20 +170,41 @@ const ReNewApplication = (props) => {
 
     let accessoriesFlag = false;
     if (data?.accessories?.length > 0) {
-      if (data?.accessories?.length === 1 && !data?.accessories?.[0]?.accessoryCategory?.code ) accessoriesFlag = true;
+      if (data?.accessories?.length === 1 && !data?.accessories?.[0]?.accessoryCategory?.code) accessoriesFlag = true;
       data?.accessories?.forEach(data => {
         const accessoryCategory1 = cloneDeep(data?.accessoryCategory);
         const accessoryCategory2 = cloneDeep(data?.accessoryCategory);
         data.accessoryCategory = accessoryCategory1?.code || null,
-        data.uom = accessoryCategory2?.uom || null,
-        data.count = Number(data?.count) || null,
-        data.uomValue = Number(data?.uomValue) || null
+          data.uom = accessoryCategory2?.uom || null,
+          data.count = Number(data?.count) || null,
+          data.uomValue = Number(data?.uomValue) || null
       });
     };
-    if(accessoriesFlag) data.accessories = null;
+    if (accessoriesFlag) data.accessories = null;
 
+
+    for (let i = 0; i < data?.tradedetils1?.tradeLicenseDetail?.accessories?.length; i++) {
+      let filteredArrayAcc = data?.accessories?.filter(unit => unit.id === data?.tradedetils1?.tradeLicenseDetail?.accessories[i]?.id);
+      if (filteredArrayAcc?.length == 0) {
+        let removedUnitAcc = data?.tradedetils1?.tradeLicenseDetail?.accessories[i];
+        removedUnitAcc.active = false;
+        data.accessories = data?.accessories ? data.accessories : [];
+        data.accessories.push(removedUnitAcc);
+        EDITRENEWAL = true;
+      }
+    }
+    if (data?.tradedetils1?.tradeLicenseDetail && data?.tradedetils1?.tradeLicenseDetail?.accessories == null && data.accessories) {
+      EDITRENEWAL = true;
+    }
     data.address.city = data?.address?.city?.code || null;
 
+    if (data?.tradedetils1?.tradeLicenseDetail.address.doorNo !==data?.address?.doorNo) {
+      EDITRENEWAL = true;
+    }
+    if (data?.tradedetils1?.tradeLicenseDetail.address.street !==data?.address?.street) {
+      EDITRENEWAL = true;
+    }
+    
     let applicationDocuments = data?.documents?.documents || [];
     let commencementDate = convertDateToEpoch(data?.tradedetils?.["0"]?.commencementDate);
     let financialYear = data?.tradedetils?.["0"]?.financialYear?.code;
@@ -200,9 +220,9 @@ const ReNewApplication = (props) => {
       let formData = cloneDeep(data.tradedetils1);
 
       formData.action = sendBackToCitizen ? "RESUBMIT" : "INITIATE",
-      formData.applicationType = sendBackToCitizen ? data?.tradedetils1?.applicationType :"RENEWAL",
-      formData.workflowCode = sendBackToCitizen ? data?.tradedetils1?.workflowCode : "DIRECTRENEWAL",
-      formData.commencementDate = commencementDate;
+        formData.applicationType = sendBackToCitizen ? data?.tradedetils1?.applicationType : "RENEWAL",
+        formData.workflowCode = sendBackToCitizen ? data?.tradedetils1?.workflowCode : "DIRECTRENEWAL",
+        formData.commencementDate = commencementDate;
       formData.financialYear = financialYear;
       formData.licenseType = licenseType;
       formData.tenantId = tenantId;
@@ -214,33 +234,32 @@ const ReNewApplication = (props) => {
       if (data?.accessories?.length > 0) formData.tradeLicenseDetail.accessories = data?.accessories;
       if (data?.tradeUnits?.length > 0) formData.tradeLicenseDetail.tradeUnits = data?.tradeUnits;
       if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
-      if (data?.address) formData.tradeLicenseDetail.address = data?.address;
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
       if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
-    
+
       Digit.TLService.update({ Licenses: [formData] }, tenantId)
-      .then((result, err) => {
-        if (result?.Licenses?.length > 0) {
+        .then((result, err) => {
           if (result?.Licenses?.length > 0) {
-            history.replace(
-              `/digit-ui/employee/tl/response`,
-              { data: result?.Licenses }
-            );
+            if (result?.Licenses?.length > 0) {
+              history.replace(
+                `/digit-ui/employee/tl/response`,
+                { data: result?.Licenses }
+              );
+            }
           }
-        }
-      })
-      .catch((e) => {
-        setShowToast({ key: "error" });
-        setError(e?.response?.data?.Errors[0]?.message || null);
-      });
+        })
+        .catch((e) => {
+          setShowToast({ key: "error" });
+          setError(e?.response?.data?.Errors[0]?.message || null);
+        });
 
     } else {
       let formData = cloneDeep(data.tradedetils1);
 
       formData.action = "INITIATE",
-      formData.applicationType = "RENEWAL",
-      formData.workflowCode = "EDITRENEWAL",
-      formData.commencementDate = commencementDate;
+        formData.applicationType = "RENEWAL",
+        formData.workflowCode = "EDITRENEWAL",
+        formData.commencementDate = commencementDate;
       formData.financialYear = financialYear;
       formData.licenseType = licenseType;
       formData.tenantId = tenantId;
@@ -258,27 +277,27 @@ const ReNewApplication = (props) => {
       if (applicationDocuments) formData.tradeLicenseDetail.applicationDocuments = applicationDocuments;
 
       Digit.TLService.update({ Licenses: [formData] }, tenantId)
-      .then((result, err) => {
-        if (result?.Licenses?.length > 0) {
-          let licenses = result?.Licenses?.[0];
-          licenses.action = "APPLY";
-          Digit.TLService.update({ Licenses: [licenses] }, tenantId).then((response) => {
-            if (response?.Licenses?.length > 0) {
-              history.replace(
-                `/digit-ui/employee/tl/response`,
-                { data: response?.Licenses }
-              );
-            }
-          }).catch((e) => {
-            setShowToast({ key: "error" });
-            setError(e?.response?.data?.Errors[0]?.message || null);
-          });
-        }
-      })
-      .catch((e) => {
-        setShowToast({ key: "error" });
-        setError(e?.response?.data?.Errors[0]?.message || null);
-      });
+        .then((result, err) => {
+          if (result?.Licenses?.length > 0) {
+            let licenses = result?.Licenses?.[0];
+            licenses.action = "APPLY";
+            Digit.TLService.update({ Licenses: [licenses] }, tenantId).then((response) => {
+              if (response?.Licenses?.length > 0) {
+                history.replace(
+                  `/digit-ui/employee/tl/response`,
+                  { data: response?.Licenses }
+                );
+              }
+            }).catch((e) => {
+              setShowToast({ key: "error" });
+              setError(e?.response?.data?.Errors[0]?.message || null);
+            });
+          }
+        })
+        .catch((e) => {
+          setShowToast({ key: "error" });
+          setError(e?.response?.data?.Errors[0]?.message || null);
+        });
     }
   };
 
@@ -302,7 +321,7 @@ const ReNewApplication = (props) => {
 
   return (
     <div>
-      <div style={{marginLeft: "15px"}}>
+      <div style={{ marginLeft: "15px" }}>
         <Header>{window.location.href.includes("employee/tl/edit-application-details") ? t("ES_TITLE_RE_NEW_TRADE_LICESE_APPLICATION") : t("ES_TITLE_RENEW_TRADE_LICESE_APPLICATION")}</Header>
       </div>
       <FormComposer
@@ -326,7 +345,6 @@ const ReNewApplication = (props) => {
       />
       {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
     </div>
-
   );
 };
 

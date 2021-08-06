@@ -112,7 +112,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
                     _props.onChange(e.target.value);
                   }}
                   onBlur={_props.onBlur}
-                  disable={isRenewal}
+                  // disable={isRenewal}
                   autoFocus={focusIndex?.index == index}
                   {...input.validation}
                 />
