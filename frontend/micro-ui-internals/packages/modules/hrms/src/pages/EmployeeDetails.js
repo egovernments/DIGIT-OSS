@@ -162,7 +162,7 @@ const Details = () => {
                       {t("HR_JURISDICTION")} {index + 1}
                     </div>
                     <Row label={t("HR_HIERARCHY_LABEL")} text={t(element?.hierarchy ? `EGOV_LOCATION_TENANTBOUNDARY_${element?.hierarchy}` : "NA")} textStyle={{ whiteSpace: "pre" }} />
-                    <Row label={t("HR_BOUNDARY_TYPE_LABEL")} text={element?.boundaryType} textStyle={{ whiteSpace: "pre" }} />
+                    <Row label={t("HR_BOUNDARY_TYPE_LABEL")} text={t(Digit.Utils.locale.convertToLocale(element?.boundaryType, 'EGOV_LOCATION_BOUNDARYTYPE'))} textStyle={{ whiteSpace: "pre" }} />
                     <Row label={t("HR_BOUNDARY_LABEL")} text={t(element?.boundary)} />
                     <Row
                       label={t("HR_ROLE_LABEL")}

@@ -19,23 +19,37 @@ const TLCard = () => {
 
     const [isStateLocalisation, setIsStateLocalisation] = useState(true);
 
-    useEffect (() => {
-      if(tenantId && isStateLocalisation) {
-        setIsStateLocalisation(false);
-        Digit.LocalizationService.getLocale({modules: [`rainmaker-${tenantId}`], locale: Digit.StoreData.getCurrentLanguage(), tenantId: `${tenantId}`});
-      }
-    },[tenantId]);
+    useEffect(() => {
+        if (tenantId && isStateLocalisation) {
+            setIsStateLocalisation(false);
+            Digit.LocalizationService.getLocale({ modules: [`rainmaker-${tenantId}`], locale: Digit.StoreData.getCurrentLanguage(), tenantId: `${tenantId}` });
+        }
+    }, [tenantId]);
 
-    const counterEmployeeExtraLinks = checkForEmployee("TL_CEMP") ? [
+
+    let links = [
         {
-            label: t("TL_SEARCH_LICENSE"),
-            link: `/digit-ui/employee/tl/search/license`
+            count: isLoading ? "-" : inboxData?.totalCount,
+            label: t("ES_COMMON_INBOX"),
+            link: `/digit-ui/employee/tl/inbox`,
         },
         {
             label: t("TL_NEW_APPLICATION"),
             link: "/digit-ui/employee/tl/new-application",
+            role: "TL_CEMP"
+        },
+        {
+            label: t("TL_SEARCH_APPLICATIONS"),
+            link: `/digit-ui/employee/tl/search/application`
+        },
+        {
+            label: t("TL_SEARCH_LICENSE"),
+            link: `/digit-ui/employee/tl/search/license`,
+            role: "TL_CEMP"
         }
-    ] : []
+    ]
+
+    links = links.filter(link => link.role ? checkForEmployee(link.role) : true);
 
     const propsForModuleCard = {
         Icon: <CaseIcon />,
@@ -51,18 +65,7 @@ const TLCard = () => {
                 link: `/digit-ui/employee/tl/inbox`
             }
         ],
-        links: [
-        {
-            count: isLoading ? "-" : inboxData?.totalCount,
-            label: t("ES_COMMON_INBOX"),
-            link: `/digit-ui/employee/tl/inbox`
-        },
-        ...counterEmployeeExtraLinks,
-        {
-            label: t("TL_SEARCH_APPLICATIONS"),
-            link: `/digit-ui/employee/tl/search/application`
-        }
-        ]
+        links: links
     }
     return <EmployeeModuleCard {...propsForModuleCard} />
 };
