@@ -188,13 +188,15 @@ const CreateChallen = ({ ChallanData }) => {
   }, [selectedCategory]);
 
   useEffect(() => {
+    let selectedCatBusinesService = selectedCategoryType?stringReplaceAll(selectedCategoryType?.businessService.split(".")[1]," ","_"):"";
     setTaxHeadMasterFields(
       TaxHeadMaster.filter((ele) => {
         let temp = selectedCategory.code.replace("BILLINGSERVICE_BUSINESSSERVICE_", "");
         return (
           selectedCategoryType &&
           selectedCategoryType.code.split(temp + "_")[1] &&
-          ele.service == temp + "." + humanize(selectedCategoryType.code.split(temp + "_")[1].toLowerCase())
+          (ele.service == temp + "." + humanize(selectedCategoryType.code.split(temp + "_")[1].toLowerCase()) ||
+          ele.service == temp + "." + selectedCatBusinesService)
         );
       })
     );
@@ -253,7 +255,8 @@ const CreateChallen = ({ ChallanData }) => {
           name: data.name,
           mobileNumber: data.mobileNumber,
         },
-        businessService: selectedCategoryType ? temp + "." + humanized(selectedCategoryType.code, temp) : "",
+        //businessService: selectedCategoryType ? temp + "." + humanized(selectedCategoryType.code, temp) : "",
+        businessService:selectedCategoryType?(temp + "." + stringReplaceAll(selectedCategoryType?.businessService.split(".")[1]," ","_")) : "",
         consumerType: temp,
         description: data.comments,
         taxPeriodFrom: Date.parse(fromDate),
