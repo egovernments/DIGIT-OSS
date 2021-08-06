@@ -124,8 +124,14 @@ public class NotificationUtil {
 		String templateId = null;
 		HashMap<String, String> msgDetail = new HashMap<String, String>();
 		Object result = null;
-		String locale = requestInfo.getMsgId().split("[|]")[1]; // Conventionally locale is sent in the first index of msgid split by |
-		if(StringUtils.isEmpty(locale))
+		String locale; // Conventionally locale is sent in the first index of msgid split by |
+		String msgId = requestInfo.getMsgId();
+		if(!StringUtils.isEmpty(msgId)){
+			locale = requestInfo.getMsgId().split("[|]")[1];
+			if(StringUtils.isEmpty(locale))
+				locale = NOTIFICATION_LOCALE;
+		}
+		else
 			locale = NOTIFICATION_LOCALE;
 		StringBuilder uri = new StringBuilder();
 		uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
