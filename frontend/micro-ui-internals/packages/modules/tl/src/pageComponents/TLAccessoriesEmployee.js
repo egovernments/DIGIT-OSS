@@ -94,7 +94,8 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
         accessoriesList,
         billingSlabData,
         setUomvalues,
-        uomvalues
+        uomvalues,
+        isRenewal
     };
 
 
@@ -285,7 +286,7 @@ const AccessoriersForm = (_props) => {
                                     option={sortDropdownNames(accessories,"i18nKey",t) || []}
                                     optionKey="i18nKey"
                                     t={t}
-                                    disable={isRenewal}
+                                  
                                 />
                             )}
                         />
@@ -336,7 +337,7 @@ const AccessoriersForm = (_props) => {
                                             props.onChange(e.target.value);
                                             setFocusIndex({ index: accessor.key, type: "uomValue" });
                                         }}
-                                        disable={!(accessor?.accessoryCategory?.uom) || isRenewal}
+                                        disable={getValues("uomValue")?!(accessor?.accessoryCategory?.uom) || accessor?.id:!(accessor?.accessoryCategory?.uom) }
                                         onBlur={props.onBlur}
                                         style={{ background: "#FAFAFA" }}
                                     />
@@ -364,7 +365,7 @@ const AccessoriersForm = (_props) => {
                                             setFocusIndex({ index: accessor.key, type: "count" });
                                         }}
                                         onBlur={props.onBlur}
-                                        disable={isRenewal}
+                                        disable={accessor?.id}
                                         style={{ background: "#FAFAFA" }}
                                     />
                                 )}

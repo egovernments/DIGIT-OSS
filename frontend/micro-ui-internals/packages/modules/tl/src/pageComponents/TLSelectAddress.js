@@ -46,7 +46,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
     if (formData?.address) {
       let flag = true;;
         Object.keys(formData?.address).map(dta => {
-          if (dta != "key" && formData?.address[dta] != undefined && formData?.address[dta] != "" && formData?.address[dta] != null) {
+          if (dta != "key" || formData?.address[dta] != undefined || formData?.address[dta] != "" || formData?.address[dta] != null) {
 
           } else {
             if (flag) setSelectedCity(cities[0]);
