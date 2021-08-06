@@ -120,7 +120,7 @@ const CreateChallen = ({ ChallanData }) => {
     };
     if (fetchBillData.Bill[0].billDetails[0].billAccountDetails.length > 0) {
       fetchBillData.Bill[0].billDetails[0].billAccountDetails.map(
-        (ele) => (defaultval[`${ele.taxHeadCode.replaceAll(".", "_").toUpperCase()}`] = `${ele.amount}`)
+        (ele) => (defaultval[`${ele.taxHeadCode.replaceAll(".", "_")}`] = `${ele.amount}`)
       );
     }
   }
@@ -245,7 +245,7 @@ const CreateChallen = ({ ChallanData }) => {
 
   const onSubmit = (data) => {
     TaxHeadMasterFields.map((ele) => {
-      return { taxHeadCode: ele.code, amount: data[ele] };
+      return { taxHeadCode: ele.code, amount: data[ele.code.split(".").join("_")] };
     });
     let Challan = {};
     if (!isEdit) {
@@ -271,7 +271,7 @@ const CreateChallen = ({ ChallanData }) => {
         amount: TaxHeadMasterFields.map((ele) => {
           return {
             taxHeadCode: ele.code,
-            amount: data[ele.code.split(".").join("_").toUpperCase()] ? data[ele.code.split(".").join("_").toUpperCase()] : 0,
+            amount: data[ele.code.split(".").join("_")] ? data[ele.code.split(".").join("_")] : 0,
           };
         }),
       };
@@ -293,7 +293,7 @@ const CreateChallen = ({ ChallanData }) => {
         amount: TaxHeadMasterFields.map((ele) => {
           return {
             taxHeadCode: ele.code,
-            amount: data[ele.code.split(".").join("_").toUpperCase()] ? data[ele.code.split(".").join("_").toUpperCase()] : 0,
+            amount: data[ele.code.split(".").join("_")] ? data[ele.code.split(".").join("_")] : 0,
           };
         }),
       };
@@ -523,7 +523,7 @@ const CreateChallen = ({ ChallanData }) => {
           isMandatory: ele.isRequired,
           type: "text",
           populators: {
-            name: ele.name.split(".").join("_"),
+            name: ele.code.split(".").join("_"),
             validation: { required: ele.isRequired, pattern: /^(0|[1-9][0-9]*)$/ },
             error: t("UC_COMMON_FIELD_ERROR"),
             componentInFront: <div className="employee-card-input employee-card-input--front">₹</div>,
