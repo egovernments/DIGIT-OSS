@@ -334,9 +334,12 @@ public class PlanFeatureRepository {
         pf = new PlanFeature(Ventilation.class);
         features.add(pf);
         
-        pf = new PlanFeature(Verandah.class);
+        pf = new PlanFeature(VehicleRamp.class);
         features.add(pf);
         
+        pf = new PlanFeature(Verandah.class);
+        features.add(pf);
+                
         pf = new PlanFeature(InteriorOpenSpaceService.class);
         features.add(pf);
         
@@ -376,8 +379,6 @@ public class PlanFeatureRepository {
         pf = new PlanFeature(InfoCommsTechService.class);
         features.add(pf);
         
-        pf = new PlanFeature(VehicleRamp.class);
-        features.add(pf);
         
         
         return features;

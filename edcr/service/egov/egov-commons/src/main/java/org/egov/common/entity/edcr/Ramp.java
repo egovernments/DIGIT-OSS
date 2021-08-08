@@ -48,6 +48,7 @@
 package org.egov.common.entity.edcr;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ramp extends Measurement {
@@ -60,6 +61,8 @@ public class Ramp extends Measurement {
 
     private transient List<Measurement> ramps;  
 
+    private List<Flight> flights = new ArrayList<>();
+
     private Boolean rampClosed = false;  
 
     private BigDecimal floorHeight;
@@ -67,7 +70,18 @@ public class Ramp extends Measurement {
     public BigDecimal getFloorHeight() {
         return floorHeight;
     }
+    
+	public List<Flight> getFlights() {
+		return flights;
+	}
 
+	public void setFlights(List<Flight> flights) {
+		this.flights = flights;
+	}
+
+	public void addFlights(Flight flight) {
+		this.flights.add(flight);
+	}
     public void setFloorHeight(BigDecimal floorHeight) {
         this.floorHeight = floorHeight;
     }
