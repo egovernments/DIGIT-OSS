@@ -129,17 +129,18 @@ public class RampServiceExtract extends FeatureExtract {
 	private BigDecimal extractSlope(PlanDetail pl, String rampLayerName) {
 		String text = Util.getMtextByLayerName(pl.getDoc(), rampLayerName);
 		BigDecimal slope = BigDecimal.ZERO;
-		if (text != null && !text.isEmpty()) {
+		if (text != null && !text.isEmpty() && text.contains("=")) {
 		    String[] textArray = text.split("=", 2);
 		    String slopeText = textArray[1];
-		    String[] slopeDividendAndDivisor = slopeText.toUpperCase().split("IN", 2);
-		    if (slopeDividendAndDivisor != null && slopeDividendAndDivisor[0] != null
-		            && slopeDividendAndDivisor[1] != null) {
-		        slopeDividendAndDivisor[0] = slopeDividendAndDivisor[0].replaceAll("[^\\d.]", "");
-		        slopeDividendAndDivisor[1] = slopeDividendAndDivisor[1].replaceAll("[^\\d.]", "");
-		        slope = BigDecimal.valueOf(Double.valueOf(slopeDividendAndDivisor[0])).divide(
-		                BigDecimal.valueOf(Double.valueOf(slopeDividendAndDivisor[1])), 2,
-		                RoundingMode.HALF_UP);
+		    if(slopeText!=null) {
+				String[] slopeDividendAndDivisor = slopeText.toUpperCase().split("IN", 2);
+				if (slopeDividendAndDivisor != null && slopeDividendAndDivisor.length == 2
+						&& slopeDividendAndDivisor[0] != null && slopeDividendAndDivisor[1] != null) {
+					slopeDividendAndDivisor[0] = slopeDividendAndDivisor[0].replaceAll("[^\\d.]", "");
+					slopeDividendAndDivisor[1] = slopeDividendAndDivisor[1].replaceAll("[^\\d.]", "");
+					slope = BigDecimal.valueOf(Double.valueOf(slopeDividendAndDivisor[0])).divide(
+							BigDecimal.valueOf(Double.valueOf(slopeDividendAndDivisor[1])), 2, RoundingMode.HALF_UP);
+				}
 		    }
 		}
 		return slope;
