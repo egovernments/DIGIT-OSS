@@ -58,13 +58,11 @@ class SessionManager {
         if(!state.context.sessionId && !state.context.timestamp){
             state.context.sessionId = uuid.v4();
             state.context.timestamp = new Date().getTime();
-            console.log("\ndiff--->0\n");
         }
         else{
             var currenttime = new Date().getTime();
             var diff = currenttime - state.context.timestamp;
             var minutesDifference = Math.floor(diff/1000/60);
-            console.log("\nminutesDifference--->"+minutesDifference+"\n");
             if(minutesDifference>1){
                 state.context.sessionId = uuid.v4();
             }
@@ -89,12 +87,12 @@ class SessionManager {
             if(state.changed) {
                 let userId = state.context.user.userId;
                 let stateStrings = state.toStrings()
-                telemetry.log(userId, 'transition', {destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: state.context.sessionId, timestamp: state.context.timestamp});
 
                 let active = !state.done && !state.forcedClose;
                 let saveState = JSON.parse(JSON.stringify(state));      // deep copy
                 saveState = this.removeUserDataFromState(saveState);
                 chatStateRepository.updateState(userId, active, JSON.stringify(saveState));
+                telemetry.log(userId, 'transition', {destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: saveState.context.sessionId, timestamp: saveState.context.timestamp});
             }
         });
 
