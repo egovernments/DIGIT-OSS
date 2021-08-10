@@ -1,0 +1,197 @@
+/*
+ *    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+ *    accountability and the service delivery of the government  organizations.
+ *
+ *     Copyright (C) 2017  eGovernments Foundation
+ *
+ *     The updated version of eGov suite of products as by eGovernments Foundation
+ *     is available at http://www.egovernments.org
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program. If not, see http://www.gnu.org/licenses/ or
+ *     http://www.gnu.org/licenses/gpl.html .
+ *
+ *     In addition to the terms of the GPL license to be adhered to in using this
+ *     program, the following additional terms are to be complied with:
+ *
+ *         1) All versions of this program, verbatim or modified must carry this
+ *            Legal Notice.
+ *            Further, all user interfaces, including but not limited to citizen facing interfaces,
+ *            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
+ *            derived works should carry eGovernments Foundation logo on the top right corner.
+ *
+ *            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
+ *            For any further queries on attribution, including queries on brand guidelines,
+ *            please contact contact@egovernments.org
+ *
+ *         2) Any misrepresentation of the origin of the material is prohibited. It
+ *            is required that all modified versions of this material be marked in
+ *            reasonable ways as different from the original version.
+ *
+ *         3) This license does not grant any rights to any user of the program
+ *            with regards to rights under trademark law for use of the trade names
+ *            or trademarks of eGovernments Foundation.
+ *
+ *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
+ *
+ */
+
+package org.egov.commons.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+
+import org.egov.commons.Fund;
+import org.egov.commons.contracts.FundSearchRequest;
+import org.egov.commons.repository.FundRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional(readOnly = true)
+public class FundService {
+
+	private final FundRepository fundRepository;
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	@Autowired
+	public FundService(final FundRepository fundRepository) {
+		this.fundRepository = fundRepository;
+	}
+
+	@Transactional
+	public Fund create(final Fund fund) {
+		if (fund.getParentId() != null && fund.getParentId().getId() == null)
+			fund.setParentId(null);
+		return fundRepository.save(fund);
+	}
+
+	public List<Fund> getByIsActive(final Boolean isActive) {
+		return fundRepository.findByIsactive(isActive);
+	}
+
+	@Transactional
+	public Fund update(final Fund fund) {
+		return fundRepository.save(fund);
+	}
+
+	public List<Fund> findAll() {
+		return fundRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+	}
+
+	public Fund findByName(final String name) {
+		return fundRepository.findByName(name);
+	}
+
+	public Fund findByCode(final String code) {
+		return fundRepository.findByCode(code);
+	}
+
+	public Fund findOne(final Long id) {
+		return fundRepository.findOne(id);
+	}
+
+	public List<Fund> search(final FundSearchRequest fundSearchRequest) {
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<Fund> createQuery = cb.createQuery(Fund.class);
+		final Root<Fund> funds = createQuery.from(Fund.class);
+		createQuery.select(funds);
+		final Metamodel m = entityManager.getMetamodel();
+		final EntityType<Fund> fundEntityType = m.entity(Fund.class);
+
+		final List<Predicate> predicates = new ArrayList<>();
+		if (fundSearchRequest.getName() != null) {
+			final String name = "%" + fundSearchRequest.getName().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(funds.get("name")));
+			predicates.add(cb.like(
+					cb.lower(funds.get(fundEntityType.getDeclaredSingularAttribute("name", String.class))), name));
+		}
+		if (fundSearchRequest.getCode() != null) {
+			final String code = "%" + fundSearchRequest.getCode().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(funds.get("code")));
+			predicates.add(cb.like(
+					cb.lower(funds.get(fundEntityType.getDeclaredSingularAttribute("code", String.class))), code));
+		}
+		if (fundSearchRequest.getIsactive().booleanValue())
+			predicates.add(cb.equal(funds.get("isactive"), true));
+		if (fundSearchRequest.getParentId() != null)
+			predicates.add(cb.equal(funds.get("parentId"), fundSearchRequest.getParentId()));
+
+		createQuery.where(predicates.toArray(new Predicate[] {}));
+		final TypedQuery<Fund> query = entityManager.createQuery(createQuery);
+		return query.getResultList();
+
+	}
+
+	public List<Fund> search(final Fund fund, List<Integer> ids, String sortBy, Integer offset, Integer pageSize) {
+
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<Fund> createQuery = cb.createQuery(Fund.class);
+		final Root<Fund> funds = createQuery.from(Fund.class);
+		createQuery.select(funds);
+		final Metamodel m = entityManager.getMetamodel();
+		final EntityType<Fund> fundEntityType = m.entity(Fund.class);
+
+		final List<Predicate> predicates = new ArrayList<>();
+		if (fund.getName() != null) {
+			final String name = "%" + fund.getName().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(funds.get("name")));
+			predicates.add(cb.like(
+					cb.lower(funds.get(fundEntityType.getDeclaredSingularAttribute("name", String.class))), name));
+		}
+		if (fund.getCode() != null) {
+			final String code = "%" + fund.getCode().toLowerCase() + "%";
+			predicates.add(cb.isNotNull(funds.get("code")));
+			predicates.add(cb.like(
+					cb.lower(funds.get(fundEntityType.getDeclaredSingularAttribute("code", String.class))), code));
+		}
+		if (fund.getIsactive().booleanValue())
+			predicates.add(cb.equal(funds.get("isactive"), true));
+		if (fund.getParentId() != null)
+			predicates.add(cb.equal(funds.get("parentId"), fund.getParentId()));
+
+		if (!ids.isEmpty())
+			predicates.add(funds.get("id").in(ids));
+
+		createQuery.where(predicates.toArray(new Predicate[] {}));
+		createQuery.orderBy(cb.asc(funds.get(sortBy)));
+
+		final TypedQuery<Fund> query = entityManager.createQuery(createQuery).setFirstResult(offset)
+				.setMaxResults(pageSize);
+
+		return query.getResultList();
+
+	}
+
+	public List<Fund> findByIsnotleaf() {
+		return fundRepository.findByIsnotleaf(true);
+	}
+
+	public List<Fund> findAllActiveAndIsnotleaf() {
+		return fundRepository.findByIsactiveAndIsnotleaf(true, false);
+	}
+
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+
+<!--
+  ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+  ~    accountability and the service delivery of the government  organizations.
+  ~
+  ~     Copyright (C) 2017  eGovernments Foundation
+  ~
+  ~     The updated version of eGov suite of products as by eGovernments Foundation
+  ~     is available at http://www.egovernments.org
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program. If not, see http://www.gnu.org/licenses/ or
+  ~     http://www.gnu.org/licenses/gpl.html .
+  ~
+  ~     In addition to the terms of the GPL license to be adhered to in using this
+  ~     program, the following additional terms are to be complied with:
+  ~
+  ~         1) All versions of this program, verbatim or modified must carry this
+  ~            Legal Notice.
+  ~            Further, all user interfaces, including but not limited to citizen facing interfaces,
+  ~            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
+  ~            derived works should carry eGovernments Foundation logo on the top right corner.
+  ~
+  ~            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
+  ~            For any further queries on attribution, including queries on brand guidelines,
+  ~            please contact contact@egovernments.org
+  ~
+  ~         2) Any misrepresentation of the origin of the material is prohibited. It
+  ~            is required that all modified versions of this material be marked in
+  ~            reasonable ways as different from the original version.
+  ~
+  ~         3) This license does not grant any rights to any user of the program
+  ~            with regards to rights under trademark law for use of the trade names
+  ~            or trademarks of eGovernments Foundation.
+  ~
+  ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
+  ~
+  -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 10, 2008 12:54:43 PM by Hibernate Tools 3.2.0.b9 -->
+<hibernate-mapping>
+    <class name="org.egov.model.payment.Paymentheader" table="PAYMENTHEADER">        
+        <id name="id" type="long">
+            <column name="ID" precision="10" scale="0" />
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">SEQ_PAYMENTHEADER</param>
+            </generator>
+        </id>
+        <many-to-one name="voucherheader" class="org.egov.commons.CVoucherHeader" fetch="select">
+            <column name="VOUCHERHEADERID" precision="22" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="bankaccount" class="org.egov.commons.Bankaccount" fetch="select">
+            <column name="BANKACCOUNTNUMBERID" precision="22" scale="0" />
+        </many-to-one>
+        <property name="type" type="string">
+            <column name="TYPE" length="50" not-null="true" />
+        </property>
+         <property name="concurrenceDate" type="date">
+            <column name="concurrenceDate"  />
+        </property>
+        
+        <many-to-one name="state" class="org.egov.infra.workflow.entity.State" cascade="all">
+            <column name="STATE_ID"/>
+        </many-to-one>
+         <property name="createdBy" type="long"><column name="CREATEDBY"></column></property>
+        <property name="lastModifiedBy" type="long" column="LASTMODIFIEDBY"/>
+        <property name="paymentAmount">
+			<column name="PAYMENTAMOUNT"/>
+		</property>	
+	   <many-to-one name="drawingOfficer" class="org.egov.eis.entity.DrawingOfficer" fetch="select">
+          <column name="DRAWINGOFFICER_ID" precision="22" scale="0" />
+       </many-to-one>
+    </class>
+</hibernate-mapping>

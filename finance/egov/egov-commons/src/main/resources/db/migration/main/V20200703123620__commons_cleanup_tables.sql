@@ -1,0 +1,15 @@
+drop table IF EXISTS eg_authorization_rule;
+drop table IF EXISTS eg_appl_domain;
+drop table IF EXISTS eg_chairperson;
+drop table IF EXISTS eg_object_history;
+drop table IF EXISTS eg_uomcategory;
+drop table IF EXISTS eg_uom;
+drop table IF EXISTS eg_regionalheirarchy;
+drop table IF EXISTS eg_object_type;
+drop table IF EXISTS eg_location;
+drop table IF EXISTS egw_contractor_grade;
+drop SEQUENCE IF EXISTS seq_eg_chairperson;
+drop SEQUENCE IF EXISTS seq_eg_uomcategory;
+drop SEQUENCE IF EXISTS seq_eg_uom;
+drop SEQUENCE IF EXISTS seq_eg_location;
+drop SEQUENCE IF EXISTS seq_egw_contractor_grade;

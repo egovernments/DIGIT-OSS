@@ -1,0 +1,3 @@
+update eg_wf_matrix set nextstate = 'Created' where objecttype = 'CVoucherHeader' and (currentstate= 'NEW' or currentstate = 'Rejected');
+update eg_wf_matrix set currentstate = 'Created',nextstate = 'END',nextaction = 'END', nextdesignation = null,nextstatus = null,validactions='Approve,Reject' where objecttype = 'CVoucherHeader' and currentstate= 'Accounts Officer Approved';
+delete from eg_wf_matrix where objecttype = 'CVoucherHeader' and (currentstate= 'Examiner of Accounts Approved' or currentstate='Cancelled');
