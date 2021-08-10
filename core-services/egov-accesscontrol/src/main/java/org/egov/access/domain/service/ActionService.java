@@ -21,6 +21,7 @@ import org.egov.access.web.contract.action.Module;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.*;
@@ -80,25 +81,58 @@ public class ActionService {
 	}
 
 	public List<Action> getAllActions(final ActionRequest actionRequest) {
-         
+
 		return actionRepository.getAllActions(actionRequest);
-		
+
 	}
 	public List<Action> getAllMDMSActions(final ActionRequest actionRequest) throws JSONException, UnsupportedEncodingException{
-        
+
 		return actionRepository.getAllMDMSActions(actionRequest);
 	}
 
-    /**
-     * Authorize the request
-     *
-     * @param authorizeRequest URI and role to be authorized
-     * @return true when authorized, false when unauthorized
-     */
+	/**
+	 * Authorize the request
+	 *
+	 * @param authorizeRequest URI and role to be authorized
+	 * @return true when authorized, false when unauthorized
+	 */
 	public boolean isAuthorized(AuthorizationRequest authorizeRequest){
 
-		Map<String, ActionContainer>  roleActions = mdmsRepository.fetchRoleActionData(getStateLevelTenant
-                (authorizeRequest.getTenantIds().iterator().next()));
+		String inputTenantId = authorizeRequest.getTenantIds().iterator().next();
+
+		List<String> listOfMdmsTenantIdsToCheck = fetchListOfTenantIdsForAuthorizationCheck(inputTenantId);
+
+		boolean isAuthorized = false;
+
+		for(String tenantId : listOfMdmsTenantIdsToCheck) {
+			if(isAuthorizedOnGivenTenantLevel(authorizeRequest, tenantId)){
+				isAuthorized = true;
+				break;
+			}
+		}
+
+		return isAuthorized;
+	}
+
+	private List<String> fetchListOfTenantIdsForAuthorizationCheck(String tenantId){
+		List<String> listOfMdmsTenantIdsToCheck = new ArrayList<>();
+		// Adding city specific tenant Id
+		listOfMdmsTenantIdsToCheck.add(tenantId);
+		// Adding state specific tenant Id
+		if(tenantId.contains("."))
+			listOfMdmsTenantIdsToCheck.add(tenantId.substring(0, tenantId.lastIndexOf(".")));
+		// Adding country central instance specific tenant Id
+		if(tenantId.contains("."))
+			listOfMdmsTenantIdsToCheck.add(tenantId.split("\\.", 2)[0]);
+
+		log.info(listOfMdmsTenantIdsToCheck.toString());
+
+		return listOfMdmsTenantIdsToCheck;
+	}
+
+	private boolean isAuthorizedOnGivenTenantLevel(AuthorizationRequest authorizeRequest, String tenantId){
+
+		Map<String, ActionContainer>  roleActions = mdmsRepository.fetchRoleActionData(tenantId);
 
 		String uriToBeAuthorized = authorizeRequest.getUri();
 		Set<String> applicableRoles = getApplicableRoles(authorizeRequest);
@@ -117,19 +151,27 @@ public class ActionService {
 
 		log.info("Request tenant ids:  " + authorizeRequest.getTenantIds());
 		log.info("Role {} has access to requested URI {} : {}", applicableRoles, uriToBeAuthorized,
-                isAuthorized);
+				isAuthorized);
 
 		return isAuthorized;
 	}
 
 	private Set<String> getApplicableRoles(AuthorizationRequest authorizationRequest){
 		Set<String> requestTenantIds = authorizationRequest.getTenantIds();
-		String stateLevelTenantId = getStateLevelTenant(requestTenantIds.iterator().next());
+		String centralInstanceLevelTenantId = getCentralInstanceLevelTenant(requestTenantIds.iterator().next());
+		String tenantId = requestTenantIds.iterator().next();
+		String stateLevelTenantId = "";
+		if(tenantId.contains(".")){
+			stateLevelTenantId = tenantId.substring(0, tenantId.lastIndexOf("."));
+		}
 		Set<Role> roles = authorizationRequest.getRoles();
 		Set<Role> applicableRoles = new HashSet<>();
 
 		for(Role role : roles){
 			if(requestTenantIds.contains(role.getTenantId()) || role.getTenantId().equalsIgnoreCase(stateLevelTenantId)){
+				applicableRoles.add(role);
+			}
+			if(!ObjectUtils.isEmpty(stateLevelTenantId) && role.getTenantId().equalsIgnoreCase(centralInstanceLevelTenantId)){
 				applicableRoles.add(role);
 			}
 		}
@@ -138,14 +180,14 @@ public class ActionService {
 	}
 
 	private boolean containsRegexUri(List<String> actionUris, String requestUri){
-	    for(String actionUri : actionUris){
-            if(Utils.isRegexUriMatch(actionUri, requestUri))
-                return true;
-        }
-        return false;
-    }
+		for(String actionUri : actionUris){
+			if(Utils.isRegexUriMatch(actionUri, requestUri))
+				return true;
+		}
+		return false;
+	}
 
-    private String getStateLevelTenant(String tenantId){
-            return tenantId.split("\\.")[0];
-    }
+	private String getCentralInstanceLevelTenant(String tenantId){
+		return tenantId.split("\\.")[0];
+	}
 }
