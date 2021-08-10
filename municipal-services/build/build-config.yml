@@ -78,7 +78,7 @@ config:
       - work-dir: "firenoc-calculator/migration"
         image-name: "firenoc-calculator-db"
 
-  - name: "builds/municipal-services/ws-services"
+  - name: "builds/digit-impel-builds/municipal-services/ws-services"
     build:
       - work-dir: "ws-services"
         image-name: "ws-services"
@@ -171,7 +171,7 @@ config:
         image-name: "fsm-db"
 
 
-  - name: "builds/municipal-services/vehicle"
+  - name: "builds/digit-impel-builds/municipal-services/vehicle"
     build:
       - work-dir: "vehicle"
         image-name: "vehicle"
